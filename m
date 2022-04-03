@@ -2,138 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B9B24F0812
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 08:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E284F0821
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 08:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244261AbiDCGfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 02:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58242 "EHLO
+        id S233174AbiDCGpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 02:45:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiDCGfK (ORCPT
+        with ESMTP id S1349469AbiDCGpc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 02:35:10 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3008B850;
-        Sat,  2 Apr 2022 23:33:17 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id ku13-20020a17090b218d00b001ca8fcd3adeso226790pjb.2;
-        Sat, 02 Apr 2022 23:33:17 -0700 (PDT)
+        Sun, 3 Apr 2022 02:45:32 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F7B11142
+        for <linux-kernel@vger.kernel.org>; Sat,  2 Apr 2022 23:43:35 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id dr20so13851070ejc.6
+        for <linux-kernel@vger.kernel.org>; Sat, 02 Apr 2022 23:43:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id;
-        bh=nNYh9c9ygtGkMhE+lF3e5BAb42jdUgtNB+p2T9trf0I=;
-        b=mRV6cSFU9vw/UoccggTlBWnVGV11ANuzMiDrnND6Yc6MUJk9/+jx2VqYYc0qGiCFL9
-         GSn5ryg0/sjuqWs0f2qewkN7bXrfoafSlu4WRDLtj4KyDXr8WFwEmOky6RG5r3pCptA8
-         yHiE5D6LypYVFAVf9AOeIFlT/MZ8KMmn+IH4sH7d+RQhwCfiQ1q/8OumQDq7KDzjef1t
-         aW1dr5ZlR9J4IjR9oWLFrn8Lpzz7+jGTxYh3bJOI52ruEc9gdMMjw2JMiJR4iyirQ3Zr
-         zm6WXShSDzyIHshPfNlMl/NEPduLdjSAj0A9yG9kRkWZ4KnXD+LAtYQDPmVUjPG6zi2E
-         Ca2w==
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=3Xx2ErVMBxvM/FsKeVuUk3St6Mlwp0omh3F7AKnqaSI=;
+        b=i9rDzybQOX37P+qV8TaQQg/OWkO8nhv8kgK42pzWL139Z8Xu9iSCKQwDblvXomhQdz
+         erv8P/h9REJoC4eMGW651lYjvDDBy3NA7QOPQL8DfMmtPpvkbCZ6n7//UrRniEAi29yw
+         4tSlQ1bvLmKZJeBSJwKQV45geF/xfvB/Lm3lHTu/WbIlhhLZQ8DqrR+FpcUJpM2zaJZm
+         LRVQ0cFP1rJPYw3si2S3se7+ZTQmjcFLpmEc4dDx+6seXPz/iiZziII8dEb84JGicwcN
+         IuS8ILoduby5VIzBgGJF+E7viQ/8AwAUImqesCBKIfbnxqlXVNc4drxfJZAMlQi7wTS2
+         SACQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=nNYh9c9ygtGkMhE+lF3e5BAb42jdUgtNB+p2T9trf0I=;
-        b=GUL0oVZGEZL1m7bCuQ8Gn1epaYRbqsC5kp7XpaDOntd+KKOcgamLdy6XgSYLJfqXk5
-         jou//X8XmU21Mn2BIQCyrXQl12bUoK7GHl0w1+EVEWhOfm6z5Ry8eycRw0wJKGvjKIOi
-         XTo3LKGmIPDDzLieqK1/ziZVQ8WQ8auQqDOLAYhDpljUdZp3ffPVWoUaa6zYniCtMpmP
-         NJJG6IXxBfOOnWCd4AU3v/Q8diFHB6D1vdwrVdBrZ3o/wKWA/fIHDAz9CLerSO4Kg4LZ
-         6uceILjE5uEuJ98XkizpaXbRqOaS7JxOKlHzLcT1xkyqiV55sF1XobrSiWxUmLSBeDCs
-         F5Hg==
-X-Gm-Message-State: AOAM531Q+4gAH2N+bkin1Lsw6OxqFH8vihQJr8kn4x/rxrSkcr7gGr2b
-        P4CkHqE5zHfOehFSozmciJU=
-X-Google-Smtp-Source: ABdhPJwsbh4L7YbRKVYTF/NUFII2EoYJhc6Wa9Z9B+I5SrdL7yC1/KX2hAnVliW3fx3GG5py2lk7jw==
-X-Received: by 2002:a17:90b:4a01:b0:1c9:a552:f487 with SMTP id kk1-20020a17090b4a0100b001c9a552f487mr20443830pjb.68.1648967597114;
-        Sat, 02 Apr 2022 23:33:17 -0700 (PDT)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id u25-20020a62ed19000000b004f140515d56sm8128049pfh.46.2022.04.02.23.33.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Apr 2022 23:33:16 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Eric Anholt <eric@anholt.net>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Annaliese McDermond <nh6z@nh6z.net>, linux-i2c@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: bcm2835: Fix error handling in bcm2835_i2c_probe
-Date:   Sun,  3 Apr 2022 06:33:08 +0000
-Message-Id: <20220403063310.7525-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=3Xx2ErVMBxvM/FsKeVuUk3St6Mlwp0omh3F7AKnqaSI=;
+        b=kdCCalhM2m+6mbBwRlC3gv9WculdPC4hVoDezrLl2tMPbPJO50LQ5eLWokWSkagmCl
+         iN226t3p+XnEXcCiC2HPOegQWGtiLFHC5ZVoQ9nxFIrmlZpS4ODGci7HvzmBmY4ap1nO
+         wAo+xbLUXJL7f2rqw+//+JHgiUxNppL5yGPlWniRlwNm4OIzM6Bz8w8VI2TOZtOAZ4fx
+         lUxYOE7IzYRtS9AV6TTWdee+IARE/OMPEUDXx8LS0Cp6A66dc+nFTpZtix5NOsmfPKku
+         WSXoi+7dB7lA96C0kMn+1n7UtnoShjkuwmercQvrcoG5FSAhxqOKRbshThA88Ia7SLcR
+         5chg==
+X-Gm-Message-State: AOAM531Hb8Lhh9818khGR33adsg2GE8vgUsLtzoWy9S9wSzeWZF6pb89
+        mgQf0qlVPC+RXTmDwyQo/iCqe0M6S+pUZOgEagc=
+X-Google-Smtp-Source: ABdhPJx/3YPNiIHFwcdTaaNlKfTfaMhjgdlgvxJs/3tX27AB4qh3X5TrQZv3Z73xqSyo00fOZ3JUVsT4gKwvPn2U1js=
+X-Received: by 2002:a17:907:6e06:b0:6e4:dae7:9574 with SMTP id
+ sd6-20020a1709076e0600b006e4dae79574mr6451508ejc.540.1648968213486; Sat, 02
+ Apr 2022 23:43:33 -0700 (PDT)
+MIME-Version: 1.0
+From:   Duke Abbaddon <duke.abbaddon@gmail.com>
+Date:   Sun, 3 Apr 2022 07:43:37 +0100
+Message-ID: <CAHpNFcNqkhWQ3xpSw1+MowYrVWii8FMjVOzv_DViCPSBMAHz0g@mail.gmail.com>
+Subject: VecSR Compression (HDMI & DP) & X-OR DSC1.2C & Along with our
+ brilliant security features in NTP Folder (Security bat & WebHSM) & Default
+ JS VESA_BT sure to please all on their servers
+To:     torvalds@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the error handling path, the clk_prepare_enable() function
-call should be balanced by a corresponding 'clk_disable_unprepare()'
-call. And clk_set_rate_exclusive calls clk_rate_exclusive_get(),
-it should be balanced with call to clk_rate_exclusive_put().
-, as already done in the remove function.
+VecSR Compression (HDMI  & DP) & X-OR DSC1.2C & Along with our
+brilliant security features in NTP Folder (Security bat & WebHSM) &
+Default JS https://bit.ly/VESA_BT sure to please all on their servers
 
-Fixes: bebff81fb8b9 ("i2c: bcm2835: Model Divider in CCF")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/i2c/busses/i2c-bcm2835.c | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
+is QFT a Zero compression or low level compression version of DSC
+1.2b? Maybe X-OR X=3D1 New Data & X=3D0 being not sent ? Therefore Masking
+The Frame Buffer!
 
-diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm2835.c
-index 5149454eef4a..d794448866a7 100644
---- a/drivers/i2c/busses/i2c-bcm2835.c
-+++ b/drivers/i2c/busses/i2c-bcm2835.c
-@@ -454,18 +454,21 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
- 	ret = clk_prepare_enable(i2c_dev->bus_clk);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Couldn't prepare clock");
--		return ret;
-+		goto err_put_clk;
- 	}
- 
- 	i2c_dev->irq = platform_get_irq(pdev, 0);
--	if (i2c_dev->irq < 0)
--		return i2c_dev->irq;
-+	if (i2c_dev->irq < 0) {
-+		ret =  i2c_dev->irq;
-+		goto err_disable_clk;
-+	}
- 
- 	ret = request_irq(i2c_dev->irq, bcm2835_i2c_isr, IRQF_SHARED,
- 			  dev_name(&pdev->dev), i2c_dev);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Could not request IRQ\n");
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto err_disable_clk;
- 	}
- 
- 	adap = &i2c_dev->adapter;
-@@ -489,8 +492,16 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
- 
- 	ret = i2c_add_adapter(adap);
- 	if (ret)
--		free_irq(i2c_dev->irq, i2c_dev);
-+		goto err_free_irq;
-+
-+	return ret;
- 
-+err_free_irq:
-+	free_irq(i2c_dev->irq, i2c_dev);
-+err_disable_clk:
-+	clk_disable_unprepare(i2c_dev->bus_clk);
-+err_put_clk:
-+	clk_rate_exclusive_put(i2c_dev->bus_clk);
- 	return ret;
- }
- 
--- 
-2.17.1
+If not i dually submit it for inclusion in the standard along with
+Vector Compression VESA Standard Display protocol 3
+https://lkml.org/lkml/2022/4/2/328
+https://lkml.org/lkml/2022/4/2/295
 
+Include vector today *important* RS
+https://vesa.org/vesa-display-compression-codecs/
+
+"QFT transports each frame at a higher rate to decrease =E2=80=9Cdisplay
+latency=E2=80=9D, which is the amount of time between a frame being ready f=
+or
+transport in the GPU and that frame being completely displayed. This
+latency is the sum of the transport time through the source=E2=80=99s outpu=
+t
+circuits, the transport time across the interface, the processing of
+the video data in the display, and the painting of the screen with the
+new data. This overall latency affects the responsiveness of games:
+how long it appears between a button is pressed to the time at which
+the resultant action is observed on the screen.
+
+While there are a lot of variables in this equation, not many are
+adjustable from an HDMI specification perspective. QFT operates on the
+transport portion of this equation by reducing the time it takes to
+send only the active video across the cable. This results in reduced
+display latency and increased responsiveness."
+
+*****
+
+VecSR - Vector Standard Render
+
+VESA Standards : Vector Graphics, Boxes, Ellipses, Curves & Fonts :
+Consolas & other brilliant fonts : (c)RS
+
+SiMD Render - Vector Graphics, Boxes, Ellipses, Curves & Fonts
+
+OT-SVG Fonts & TT-SVG Obviously Rendered in Direct X 9+ & OpenGL 3+
+Mode & Desktop Rendering modes
+
+Improve Console & TV & BIOS & General Animated Render
+
+Vector Display Standards with low relative CPU Weight
+SiMD Polygon Font Method Render
+
+Default option point scaling (the space) : Metadata Vector Fonts with
+Curl mathematical vector :
+
+16 Bit : SiMD 1 width
+32 Bit : SiMD Double Width
+
+High precision for AVX 32Bit to 256Bit width precision.
+
+Vectoring with SiMD allows traditional CPU mastered VESA Emulation
+desktops & safe mode to be super fast & displays to conform to VESA
+render standards with little effort & a 1MB Table ROM.
+
+Though the VESA & HDMI & DisplayPort standards Facilitates direct low
+bandwidth transport of and transformation of 3D & 2D graphics & fonts
+into directly Rendered Super High Fidelity SiMD & AVX Rendering Vector
+
+Display Standards Vector Render : DSVR-SiMD Can and will be directly
+rendered to a Surface for visual element : SfVE-Vec
+
+As such transport of Vectors & transformation onto display (Monitor,
+3D Unit, Render, TV, & Though HDMI, PCI Port & DP & RAM)
+
+Directly resolve The total graphics pipeline into high quality output
+or input & allow communication of almost infinite Floating point
+values for all rendered 3D & 2D Elements on a given surface (RAM
+Render Page or Surface)
+
+In high precision that is almost unbeatable & yet consumes many levels
+less RAM & Transport Protocol bandwidth,
+
+Further more can also render Vector 3D & 2D Audio & other elements
+though Vector 'Fonting' Systems, Examples exist : 3D Wave Tables,
+Harmonic reproduction units for example Yamaha and Casio keyboards.
+
+(c)Rupert S
+
+https://science.n-helix.com/2016/04/3d-desktop-virtualization.html
+
+https://science.n-helix.com/2019/06/vulkan-stack.html
+
+https://science.n-helix.com/2019/06/kernel.html
+
+https://science.n-helix.com/2022/03/fsr-focal-length.html
+
+https://science.n-helix.com/2018/01/integer-floats-with-remainder-theory.ht=
+ml
+
+https://bit.ly/VESA_BT
+
+*
+
+*Application of SiMD Polygon Font Method Render
+*3D Render method with Console input DEMO : RS
+
+3D Display access to correct display of fonts at angles in games &
+apps without Utilizing 3rd Axis maths on a simple Shape polygon Vector
+font or shape. (c)Rupert S
+
+3rd dimensional access with vector fonts by a simple method:
+
+Render text to virtual screen layer AKA a fully rendered monochrome, 2
+colour or multi colour..
+
+Bitmap/Texture,
+
+Due to latency we have 3 frames ahead to render to bitmap DPT 3 / Dot 5
+
+Can be higher resolution & we can sub sample with closer view priority...
+
+We then rotate the texture on our output polygon & factor size differential=
+.
+
+The maths is simple enough to implement in games on an SSE configured
+Celeron D (depending on resolution and Bilinear filter & resize
+
+Why ? Because rotating a polygon is harder than subtracting or adding
+width, Hight & direction to fully complex polygon Fonts & Polygon
+lines or curves...
+
+The maths is simple enough to implement in games on an SSE configured
+Celeron D (depending on resolution and Bilinear filter & resize.
+
+*
+
+VecSR is really good for secondary loading of sprites & text; In these
+terms very good for pre loading on for example the X86, RISC, AMIGA &
+Famicon type devices,
+With appropriate loading into Sprite buffers or Emulated Secondaries
+(Special Animations) or Font Buffers.
+
+Although Large TT-SVG & OT-SVG fonts load well in 8MB Ram on the Amiga
+with Integer & Emulated Float (Library); Traditional BitMap fonts work
+well in a Set Size & can resize well if cached!
+
+The full process leads upto the terminal & how to optimise CON,
+We can & will need to exceed capacities of any system & To improve them!
+
+presenting: Dev-Con-VectorE=C2=B2
+Fast/dev/CON 3DText & Audio Almost any CPU & GPU ''SiMD & Float/int"
+Class VESA Console +
+
+With Console in VecSR you can 3DText & Audio,
+
+VecSR Firmware update 2022 For immediate implementation in all
+operating systems & ROM's
+
+Potential is fast & useful.
+
+*
+
+https://science.n-helix.com/2022/04/vecsr.html

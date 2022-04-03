@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C364F0C46
+	by mail.lfdr.de (Postfix) with ESMTP id E04264F0C47
 	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 21:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376291AbiDCTTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 15:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58740 "EHLO
+        id S1376328AbiDCTT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 15:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231417AbiDCTTK (ORCPT
+        with ESMTP id S1376308AbiDCTTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 15:19:10 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF29538D93
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 12:17:16 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id 88-20020a9d0ee1000000b005d0ae4e126fso3904415otj.5
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 12:17:16 -0700 (PDT)
+        Sun, 3 Apr 2022 15:19:24 -0400
+Received: from mail-oa1-x44.google.com (mail-oa1-x44.google.com [IPv6:2001:4860:4864:20::44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD7838D9E
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 12:17:28 -0700 (PDT)
+Received: by mail-oa1-x44.google.com with SMTP id 586e51a60fabf-e1dcc0a327so3783388fac.1
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 12:17:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zZOpoW+EgxvMAo7hvmBoOUeiQEc5COuYjcGcZDOKzLc=;
-        b=JQK1FwAb9d8bTgZVd7v9+TEI8+adbyUbMJ5BEuAaJsT0lGtcNpU2uyNrENyCyfk1hC
-         081WHP4dXs60RAGaLrweRKW2n2Lx2/vmpjO7aWMwBRln654nYBlMBYGocuuA+eEZn75V
-         HZuhkr8Yche0813E2nDbH//ZXW2MV+tCQITD9syD5I2l2wE27vCQ+YYyHzGUcRvHLx91
-         L0wLk1lkbWLV8gqPU7ooFUebiAcwQBwKGNxg0v5RRmQLwCWcA9J/aDYefl2n9rpR/4FX
-         JP0xBTuXJ9w1hUA5KTQXRjt75oFCHRg0yLstvgxasV4KQbWdcOS6k0/T1Fd5ulGq1qE5
-         FZkg==
+        bh=rsazcajhwAV1pXduS7vg1S4Bv/a0jWiLu0YfVDB4Bpc=;
+        b=fD8XtscC62a8RjjvUesg11cshBRy2kBxbHskMpib/MzQ9FOgvf7cHyh8QcNxhdMypf
+         tW0BxL0psdUKT0v5VoFGFiYGhxy79v/Ek70I848q9TNL1Tchadv04Tcah2LMHHO61FwW
+         n+DzV5BP/TWXXil5iFO2DY9d1SFcjSx+DP5nKaMKeng4zk9riZSPWDCEV9BlCAQ9hiU0
+         4EPzGpF4qiPkz97BE3crZvbpuftS7hfp8DNi9nuphTPIhI1xhAcWpVHvnG+n00lFKKdA
+         65XaQNgY28zJ/OqMB1I9qD+X4VJ40Tjzx1oqpzUyYU1bDz+x0ewiRzwVQLwILPnyly1K
+         f76w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zZOpoW+EgxvMAo7hvmBoOUeiQEc5COuYjcGcZDOKzLc=;
-        b=Hr8MllL5AuE/nEjDbA5euTA710mOFU12eWtL9rmjIn1dhZjMUKvTLd/k3rqeMxejea
-         P4Ie861UOEL9n4IdYGlK5s02RsIn0R4hrp06+Qu2y2Hj6UVQKwlvBnoYBxylURAyLM1v
-         g1uRDNdQ/K28S3LNMgfCN/TfIRrsBmt3hHXD6Rup3auv6XX/0Q49D8CX8nUE3ELDgNy3
-         MDB/Gj+y3ZMehmlZXNln688vfa2c4th6oCmt/RzB4zcPmqJ8gqbVouUJtShGd4HLrPl8
-         5FmueGh8pkL+q/DJUM21HAdFU9n8xLnAeMRyYOdwhjBff0skkUrxQ23YJ64wbgBPhn4r
-         +8Rw==
-X-Gm-Message-State: AOAM531pMqI+HgKDfEn6lrqys5qle5lvhmkZqkEy3OOSv6O/mM/KUjq6
-        GaGBuTh9J3vDQKnmBxR0Ebg=
-X-Google-Smtp-Source: ABdhPJyjmxClNgj0VKMCSAgVoFaHxPSSnWmsCRFSbROZnjNlk493xlFpDF25J2s1BXfg5F1yQiWMLQ==
-X-Received: by 2002:a05:6830:907:b0:5c9:54e8:8e0a with SMTP id v7-20020a056830090700b005c954e88e0amr10711310ott.103.1649013436199;
-        Sun, 03 Apr 2022 12:17:16 -0700 (PDT)
+        bh=rsazcajhwAV1pXduS7vg1S4Bv/a0jWiLu0YfVDB4Bpc=;
+        b=KesBkM1PKxmJYtZA/lXhp1Uffgb8ejL+ztxrcCHtw39JvJoLUUH66SsG1tjingkNIP
+         K/jaGCgQxAt4E7se3H/TeWN/MWJ1MZeQmwffCvLFBqDXPMXY4EcxXmVWvqSMZw5DIJLt
+         AzZ3XrBfdoIQ+PZG+wb69vSYC6hf1JCen2xHm4WfVJoFGNItEaVvIFlWfg+1MXjfEyWy
+         cLjTSD4EV3tllBJCZDXo43iEny6ZPywPXW6fvNYG48dZ7pI3ioEOfIFRFNgQOHbt0v2v
+         mS70vgssM96rHpfblRwORSCrvS4sw8wjxb2roXelbfe5qKpdY3Gg5fo/hWFLymu81Ugo
+         GSWw==
+X-Gm-Message-State: AOAM5333Wg0rXTtmOH3FOYq9qce+iLEjTyC7aW+8QynaJ+XPlvydXdRD
+        9ecQbz3RDNjdKXqDIHjn7Jg=
+X-Google-Smtp-Source: ABdhPJwGX4CftSqnUovbKALARqMBw6hWHNEfEj6l0gI+yMEG/eiqtanlkfbDx2i0Tt6Ta4ZH/sDo8A==
+X-Received: by 2002:a05:6870:61c8:b0:e1:a94d:d5da with SMTP id b8-20020a05687061c800b000e1a94dd5damr6961613oah.271.1649013439676;
+        Sun, 03 Apr 2022 12:17:19 -0700 (PDT)
 Received: from bertie (072-190-140-117.res.spectrum.com. [72.190.140.117])
-        by smtp.gmail.com with ESMTPSA id r23-20020a056830237700b005b2610517c8sm3808634oth.56.2022.04.03.12.17.15
+        by smtp.gmail.com with ESMTPSA id m5-20020a056870194500b000d9a0818925sm3305786oak.25.2022.04.03.12.17.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 12:17:15 -0700 (PDT)
+        Sun, 03 Apr 2022 12:17:19 -0700 (PDT)
 From:   Rebecca Mckeever <remckee0@gmail.com>
 To:     outreachy@lists.linux.dev
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -56,9 +56,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Rebecca Mckeever <remckee0@gmail.com>,
         Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH 1/3] staging: r8188eu: remove handlerOS independent comment
-Date:   Sun,  3 Apr 2022 14:17:04 -0500
-Message-Id: <7d0d2253d86f46bc0def0447de424727d70f03a7.1649011311.git.remckee0@gmail.com>
+Subject: [PATCH 2/3] staging: r8188eu: combine both sides of conditional statement
+Date:   Sun,  3 Apr 2022 14:17:05 -0500
+Message-Id: <d33c51bc3a20fa25e4737b258f3b1c42cc8124e3.1649011311.git.remckee0@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <cover.1649011311.git.remckee0@gmail.com>
 References: <cover.1649011311.git.remckee0@gmail.com>
@@ -74,28 +74,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "need to make timeout handlerOS independent" comment is incorrect.
-Remove the comment to avoid misleading developers.
+Both sides of conditional statement are the same except for the comment.
 Additional instance found with git grep.
 
 Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_cmd.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/staging/r8188eu/core/rtw_cmd.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
-index 8b24330e97c1..da455eb4d8cb 100644
+index da455eb4d8cb..2d316a6c8294 100644
 --- a/drivers/staging/r8188eu/core/rtw_cmd.c
 +++ b/drivers/staging/r8188eu/core/rtw_cmd.c
-@@ -1447,7 +1447,6 @@ void rtw_joinbss_cmd_callback(struct adapter *padapter,  struct cmd_obj *pcmd)
+@@ -1411,11 +1411,9 @@ void rtw_survey_cmd_callback(struct adapter *padapter,  struct cmd_obj *pcmd)
+ {
+ 	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
  
- 	if (pcmd->res == H2C_DROPPED) {
+-	if (pcmd->res == H2C_DROPPED) {
++	if (pcmd->res != H2C_SUCCESS) {
  		/* TODO: cancel timer and do timeout handler directly... */
--		/* need to make timeout handlerOS independent */
+ 		_set_timer(&pmlmepriv->scan_to_timer, 1);
+-	} else if (pcmd->res != H2C_SUCCESS) {
+-		_set_timer(&pmlmepriv->scan_to_timer, 1);
+ 	}
+ 
+ 	/*  free cmd */
+@@ -1445,11 +1443,9 @@ void rtw_joinbss_cmd_callback(struct adapter *padapter,  struct cmd_obj *pcmd)
+ {
+ 	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
+ 
+-	if (pcmd->res == H2C_DROPPED) {
++	if (pcmd->res != H2C_SUCCESS) {
+ 		/* TODO: cancel timer and do timeout handler directly... */
  		_set_timer(&pmlmepriv->assoc_timer, 1);
- 	} else if (pcmd->res != H2C_SUCCESS) {
- 		_set_timer(&pmlmepriv->assoc_timer, 1);
+-	} else if (pcmd->res != H2C_SUCCESS) {
+-		_set_timer(&pmlmepriv->assoc_timer, 1);
+ 	}
+ 
+ 	rtw_free_cmd_obj(pcmd);
 -- 
 2.32.0
 

@@ -2,105 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B18B34F0B37
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 18:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EE6E4F0B3E
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 18:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239433AbiDCQZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 12:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
+        id S1359412AbiDCQb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 12:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239092AbiDCQZG (ORCPT
+        with ESMTP id S238951AbiDCQbY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 12:25:06 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43CD837BE2
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 09:23:12 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id d142so5915679qkc.4
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 09:23:12 -0700 (PDT)
+        Sun, 3 Apr 2022 12:31:24 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E7D1ADAA
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 09:29:29 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id p15so13144207lfk.8
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 09:29:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=owGcLPcPA8pCKHTXfjrJbH6tlONJOWdLBDMya4XOEgo=;
-        b=gLPvMkcf2YsDRZMVErBXUUlDFihRtsWI4go0Nx1C/1/NWadip1qzEwURuDLJhbw1NK
-         OGl1uPG0bIQBJO9TQ/FsUaLIV8ZSFJgF4HkJ1rmBv+RMcjCd5fGhhk8YtqyVz/TfiA04
-         F4Z7eVq7EO4qlg9q3Z6nzWNj0zSt8QSwx8yUz1BhuLQ/bCFWavKkRqlCE3rjNpvpwPYf
-         eTEBGsvxS5xubco0hB58Xe+ReKph9N48w+Om9aCeePmM1/MIQHJzvaUbbJ2rIhHu+vu7
-         3yiqivfMrHUGgZoiiy4A0JsbdFizaoM49RzchqMyfYBm696ASPATJL9KLEvxxvSAD2mL
-         uTsw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=d2J0F/M8DIzyhTgGvxfaytAbecsNZqv35sEaJSm/sx0=;
+        b=ENlukbJM0kdQRUlborIRKBAU/dBCcX4b5oHma468C8us8C0JDA2lFRaQxUZhIhjonM
+         SvxkMaT0cbi3hgQMiwRZqUZfrlq/FJLqap1YiFqat0sr6bG3vDdDEPMveflyjsfcIgOK
+         w4/ETqdK1k8ck1sA3WeABKSNILWWh6f+y/5KiERlMT2Q7CvRmL9i4FsTB0AE+KJg/iTw
+         /vLm49MG6E7T0DcX5fLmQ7MljtweLCAF1XAAxqnpETTIRqELy1PGliA22pOPhCV5CO+S
+         fUD/rBAiPojxhaFdZTlsc4Y+rpx90JfkSGVd7VZ+9hxjWeVIdvkjj/r7lZuopDeG+5Vq
+         qzcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=owGcLPcPA8pCKHTXfjrJbH6tlONJOWdLBDMya4XOEgo=;
-        b=3tOAe9dzT8vqVQ2poGzNVCRriBWKmajQW8G12SUPItQ3/ZqVOcdEGGG1lWibStrwki
-         U5syoiC2gLRHAY5iFaj+bPcM474V4qqjCWge5NEtiapgq7vh7x0Z4FHNTTGVgR5fB50z
-         Kn8efiQAh9vdCHJGfZhqqFK09ZkNW9Ve9A6qFOON5GPqN3tNo5ggIRMuEJE/bD0Wl0r/
-         fQ+f7XNj2fYOz+da1GlQDr01Pa6yMNr0GUKaGG9J7DsRe2G7oTpUNQRXtX3GT58r/Ruj
-         M0wyffYv08YJI3gHBK0MSrOJNPoR00FDpDSOvhLizTN0/hl/ROYtZmhsWMQsSlOK118v
-         1Emw==
-X-Gm-Message-State: AOAM5325CR0HCvDOBIDircSq1SJiNgn2cIU2zKCzCGyrSbnaUT6/NRjW
-        pPUk3rUH7yuRaJLpY6KlIzmPClV8Hlwx3W2KW8s=
-X-Google-Smtp-Source: ABdhPJwZfvbCI4tO/Id1gNsTpws8gKqIekhZoVvbXgaFcyHUZ/iG7idCKaaIjmI8AQjN2kQ7ibojQZDiKw5FPcvxCFk=
-X-Received: by 2002:a37:6cd:0:b0:67b:118d:81e8 with SMTP id
- 196-20020a3706cd000000b0067b118d81e8mr11739547qkg.88.1649002990988; Sun, 03
- Apr 2022 09:23:10 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=d2J0F/M8DIzyhTgGvxfaytAbecsNZqv35sEaJSm/sx0=;
+        b=kB4LpYtlWu5yOLhrfLc+7jVhX1Qu1Hxu5OnvTQHwmbReGQU8vvOpeiigzmjRzO7cqA
+         hunuASmQWYVVaAS0guXwQ9Pz7rXHgJTCjFWJB2nHqI3V3viTSbwxcnHeYCCz2ZPR1Xgp
+         Bb7qV1p5Inf132lUxexdwJBnvmlmVZMaTqnoxYynJkGsFUPwiG60FAabh+WbPZGcSUqh
+         ze4Lcw0nBN8UXgCUAMU5gECdcjRjzgx/xrrM9RNqO1AFGTnaBBDZkor3N5SHgWBcn8I/
+         /Hvcrd9b5LcDOV6Qzeq2qO01A6CBpqPCwBEG691aHZXtnzUA64jboIBj3yukt3GBiL9p
+         2kDw==
+X-Gm-Message-State: AOAM533l9ztCw9+kuLKoq55cr2hHjXqOV72zlGMTcAjWqIINB78igav4
+        6d7ZG+1lNrKl2XSBuFATSU498SbuefH0TjVLlfE=
+X-Google-Smtp-Source: ABdhPJzspbTWjthhK4DIGjLuINz97YrCBTm+yb0x56rItHjeruKN086joJ/vE7j+WHekkwUciZrHG4Jv+4PJ7eN69oM=
+X-Received: by 2002:a19:7501:0:b0:44a:2f6f:3ae8 with SMTP id
+ y1-20020a197501000000b0044a2f6f3ae8mr19313960lfe.143.1649003368137; Sun, 03
+ Apr 2022 09:29:28 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6214:242c:0:0:0:0 with HTTP; Sun, 3 Apr 2022 09:23:10
- -0700 (PDT)
-Reply-To: syemoh_med@yahoo.com
-From:   Mohammed Syed <mohsyed.med@gmail.com>
-Date:   Sun, 3 Apr 2022 12:23:10 -0400
-Message-ID: <CABfuGTor2OUJo0pgGQQPhxTdBGwy3sP4NuMXdtuKt_HxC90Vgg@mail.gmail.com>
-Subject: Corporate/Personal Loan Proposal.
-To:     undisclosed-recipients:;
+References: <20220403155111.GA333187@euclid> <ed0e9f7b-9ba9-b0c8-8261-397bf793b9b9@gmail.com>
+ <CAMWRUK6K77KpRkCkruL=RQcmA1opbvapyPJOA-EFpYdXxY8ujQ@mail.gmail.com> <4ccc9ac3-c542-cd32-0cbb-7cdabbf0dbf9@gmail.com>
+In-Reply-To: <4ccc9ac3-c542-cd32-0cbb-7cdabbf0dbf9@gmail.com>
+From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+Date:   Sun, 3 Apr 2022 12:29:16 -0400
+Message-ID: <CAMWRUK7g7BqUL1NziBfbc6Epx7G8Xos47sKAtcimDZYmG-hVgA@mail.gmail.com>
+Subject: Re: [PATCH] staging: r8188eu: simplify control flow
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM,URIBL_ABUSE_SURBL autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:730 listed in]
-        [list.dnswl.org]
-        *  1.2 URIBL_ABUSE_SURBL Contains an URL listed in the ABUSE SURBL
-        *      blocklist
-        *      [URIs: internationalwc.com]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5027]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mohsyed.med[at]gmail.com]
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.8 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: ******
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Mr.,
+On Sun, Apr 3, 2022 at 12:16 PM Pavel Skripkin <paskripkin@gmail.com> wrote=
+:
+>
+> Hi Sevinj,
+>
+> On 4/3/22 19:12, Sevinj Aghayeva wrote:
+> >>
+> >> Looks good, but let's not introduce new checkpatch issue:
+> >>
+> >> CHECK: Alignment should match open parenthesis
+> >> #62: FILE: drivers/staging/r8188eu/core/rtw_mlme.c:1645:
+> >> +               if ((p->PMKIDList[i].bUsed) &&
+> >> +                               (!memcmp(p->PMKIDList[i].Bssid, bssid,=
+ ETH_ALEN)))
+> >
+> > Thanks for catching this. I wasn't seeing this in my checkpatch
+> > output, and after some digging, I could reproduce it with --strict
+> > option. I think the tutorial at
+> > https://kernelnewbies.org/PatchPhilosophy doesn't mention this option,
+> > so perhaps we should update it?!
+> >
+>
+> To be honest, I am not checkpatch expert, but checkpatch on my PC shows
+> this warning w/o any additional options:
+>
+> =E2=94=94=E2=94=80=E2=94=80$ ./scripts/checkpatch.pl
+> ./20220403_sevinj_aghayeva_staging_r8188eu_simplify_control_flow.mbx |
+> rg Alignment
+> CHECK: Alignment should match open parenthesis
 
-We are offering Corporate and Personal Loan at 3% Interest Rate for a
-duration of 15 years.
+Ah, I see. You run it on an email file that contains the patch. I
+could reproduce what you saw when I ran checkpatch without any options
+on an email file. But my usual workflow is to modify a file, e.g.
+rtw_mlme.c and then run "checkpatch.pl -f rtw_mlme.c", in which case I
+cannot see the "Alignment should match" error. So it looks like if you
+do not specify -f then checkpatch.pl enables --strict option.
 
-We also pay 1% commission to brokers who introduce project owners for
-finance or other opportunities.
+>
+>
+>
+>
+>
+> With regards,
+> Pavel Skripkin
 
-Yours faithfully,
 
-Mr. Mohammed Syed.
-Director.
-Website: https://www.internationalwc.com
+
+--=20
+
+Sevinj.Aghayeva

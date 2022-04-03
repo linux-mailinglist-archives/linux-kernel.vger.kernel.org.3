@@ -2,81 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B664F0A1E
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 16:10:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3BE4F0A27
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 16:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358985AbiDCOL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 10:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36454 "EHLO
+        id S1358994AbiDCOWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 10:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358991AbiDCOLz (ORCPT
+        with ESMTP id S236161AbiDCOWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 10:11:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF4322519;
-        Sun,  3 Apr 2022 07:10:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20689611B5;
-        Sun,  3 Apr 2022 14:10:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B695C340ED;
-        Sun,  3 Apr 2022 14:10:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1648995000;
-        bh=joIH5I0zGHIhBrW3DT6hA5M33SXiiCdtvH0QJ6/Q8Nc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=uwMR5LJ/MsEe/XQwmNGm8cUPtx9ch4fHxiwRv1l3MmYaQ51WpO60+js1dnIl2kuW6
-         7LGukAAInEzOWV1IG5oJg0lf6JThRgnpVzxUGV+r5OiO7CVOCmy0Q0gfFEP445OS2F
-         F6CEM6446sqfCloc6OLCo95mibAAEEb2hqotTNYYxHP63UecV5UuUfT1OwLumPt+a1
-         IGOjWA2QYUnFL/+ZN+OnBv59PeR+3bLeCiSVN2DFFjdFyAT6wgOZ0aUZdb+yWoKk5v
-         u9M+pwyc60hlbZHqEHVicGt24yjp1JaE1Om8dhS50gDVGTUtZBND7BcmyyWyHtuM8/
-         hNxAE9iKzcewA==
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] one more clk change for the merge window
-Date:   Sun,  3 Apr 2022 07:09:59 -0700
-Message-Id: <20220403140959.113778-1-sboyd@kernel.org>
-X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 3 Apr 2022 10:22:33 -0400
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF93396A1;
+        Sun,  3 Apr 2022 07:20:38 -0700 (PDT)
+Received: by mail-ot1-f44.google.com with SMTP id n19-20020a9d7113000000b005cd9cff76c3so5577360otj.1;
+        Sun, 03 Apr 2022 07:20:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=IhdvutP6+1VN96Sw+l5rljGDZzsDxpR3h7q1f/N7UZo=;
+        b=ifeO/0nr8m0s/2shOX7IKX9aVXd9LriBiEeK8vAvxvajBL2YfxBGMPaGG9TnLH++Lh
+         a3eSo1M+FpOfH52OT5Xhg4Hq5TK/De3JoUwl2UVFClqwSae3y7twKwFwy7BQ9uTJLFPq
+         PeS7RvKArYT6euY3wovGMLfXtXMP+DjxDXZ3ukIo2iIuCInJnYSMDUzs4UXEXe9/lTky
+         ZIqsUL3n36OB/qAqNLGnCKFLJes0+w8bubK32p28pHCWdoAfmPC/jWy4KK7aO7LPNLOP
+         K+dwfR3ExaMVLQ63JWw5pnMtM2MvLzmyLflRuXqfr38aO8fk9MPvv5URaVpX2aVDIzVD
+         k1FA==
+X-Gm-Message-State: AOAM531sLtIZHVpY1R9J+C1hVPBL8XvfYVwBUBSMLWMVxOCY+EAOLdZu
+        VTns3u/sgGr9nRotFVhZ/w==
+X-Google-Smtp-Source: ABdhPJwL6nKTkad4e13KB87xfRjBKcTmMkYqLyj+VlysWvRbdX14GGrw5+09grM+gkgg3WSF68Touw==
+X-Received: by 2002:a05:6830:34a1:b0:5c4:3dca:b666 with SMTP id c33-20020a05683034a100b005c43dcab666mr10640719otu.328.1648995637852;
+        Sun, 03 Apr 2022 07:20:37 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 190-20020a4a0dc7000000b003244ae0bbd5sm3032383oob.7.2022.04.03.07.20.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Apr 2022 07:20:37 -0700 (PDT)
+Received: (nullmailer pid 3013370 invoked by uid 1000);
+        Sun, 03 Apr 2022 14:20:36 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-spi@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20220402184011.132465-8-krzysztof.kozlowski@linaro.org>
+References: <20220402184011.132465-1-krzysztof.kozlowski@linaro.org> <20220402184011.132465-8-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 7/9] dt-bindings: serial: qcom,msm-uartdm: convert to dtschema
+Date:   Sun, 03 Apr 2022 09:20:36 -0500
+Message-Id: <1648995636.595500.3013369.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit cf683abd3913d5e6e51169de75d65ea193452fbd:
+On Sat, 02 Apr 2022 20:40:09 +0200, Krzysztof Kozlowski wrote:
+> Convert the Qualcomm MSM Serial UARTDM bindings to DT Schema.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/serial/qcom,msm-uartdm.txt       |  81 -------------
+>  .../bindings/serial/qcom,msm-uartdm.yaml      | 112 ++++++++++++++++++
+>  2 files changed, 112 insertions(+), 81 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/serial/qcom,msm-uartdm.txt
+>  create mode 100644 Documentation/devicetree/bindings/serial/qcom,msm-uartdm.yaml
+> 
 
-  Merge branches 'clk-sifive' and 'clk-visconti' into clk-next (2022-03-29 10:19:52 -0700)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-are available in the Git repository at:
+yamllint warnings/errors:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-for-linus
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/serial/qcom,msm-uartdm.example.dt.yaml: serial@f991e000: dma-names:0: 'tx' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/serial/qcom,msm-uartdm.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/serial/qcom,msm-uartdm.example.dt.yaml: serial@f991e000: dma-names:1: 'rx' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/serial/qcom,msm-uartdm.yaml
 
-for you to fetch changes up to 859c2c7b1d0623a6f523f970043db85ce0e5aa60:
+doc reference errors (make refcheckdocs):
+Warning: Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt references a file that doesn't exist: Documentation/devicetree/bindings/spi/qcom,spi-qup.txt
+Warning: Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt references a file that doesn't exist: Documentation/devicetree/bindings/serial/qcom,msm-uartdm.txt
+Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt: Documentation/devicetree/bindings/spi/qcom,spi-qup.txt
+Documentation/devicetree/bindings/soc/qcom/qcom,gsbi.txt: Documentation/devicetree/bindings/serial/qcom,msm-uartdm.txt
 
-  Revert "clk: Drop the rate range on clk_put()" (2022-04-02 19:28:53 -0700)
+See https://patchwork.ozlabs.org/patch/
 
-----------------------------------------------------------------
-A single revert to fix a boot regression seen when clk_put() started
-dropping rate range requests. It's best to keep various systems booting
-so we'll kick this out and try again next time.
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-----------------------------------------------------------------
-Stephen Boyd (1):
-      Revert "clk: Drop the rate range on clk_put()"
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
- drivers/clk/clk.c      |  42 +++++++------------
- drivers/clk/clk_test.c | 108 -------------------------------------------------
- 2 files changed, 14 insertions(+), 136 deletions(-)
+pip3 install dtschema --upgrade
 
--- 
-https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+Please check and re-submit.
+

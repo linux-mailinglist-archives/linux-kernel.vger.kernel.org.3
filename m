@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB45D4F0C41
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 21:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1794F0C44
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 21:17:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359855AbiDCTDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 15:03:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60662 "EHLO
+        id S1376271AbiDCTTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 15:19:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231417AbiDCTDd (ORCPT
+        with ESMTP id S231417AbiDCTTH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 15:03:33 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E9D369C3;
-        Sun,  3 Apr 2022 12:01:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=K3d1qBuy7MJtwG6Zn9t9UXN1/76SstYxaTumemvMUcw=; b=eAJGKiESBQGu1X8y5Wlu+0i2aR
-        tPTBAvvx46UzcSKsfrzsOcvQ5D952+IUBIqR1xdY8cD+Aodj9jSZV4ZMBAzqsg60USMFfgr9+ScTS
-        LsGSKayxtXQdM3XhZM0sbiudxLJoQqi1AMQFEGqi1RKrY3bVIO4B+NCwAEcEBpOug9MPl+YVJnsw9
-        /GyIplKBAQhxbjh1NN5guAYYoh7ufXGZ81htkOIfEV+Qgl6Q6mPRfTH+ED+2dP0cwjK98QjzJfnc/
-        jvXlvLJ/5/PdYOJRaUgJfwEIxTn1BpxyLxYTxOKcH7VjmA11IYSiwDT+xnxKnO4APgaikt4Wohq/i
-        vxgekIEQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58110)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1nb5Tk-00084R-F8; Sun, 03 Apr 2022 20:01:36 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1nb5Th-0002Ur-Vo; Sun, 03 Apr 2022 20:01:33 +0100
-Date:   Sun, 3 Apr 2022 20:01:33 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Stijn Tintel <stijn@linux-ipv6.be>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pali@kernel.org, kabel@kernel.org, pabeni@redhat.com,
-        kuba@kernel.org, davem@davemloft.net, hkallweit1@gmail.com,
-        andrew@lunn.ch
-Subject: Re: [PATCH] net: phy: marvell: add 88E1543 support
-Message-ID: <YknvDRbRznWZpstM@shell.armlinux.org.uk>
-References: <20220403172936.3213998-1-stijn@linux-ipv6.be>
- <YknlRh7MLgLllb9q@shell.armlinux.org.uk>
- <fa04f389-df01-4838-7304-2fb43b919b98@linux-ipv6.be>
+        Sun, 3 Apr 2022 15:19:07 -0400
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EACB38D89
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 12:17:13 -0700 (PDT)
+Received: by mail-ot1-x341.google.com with SMTP id 88-20020a9d0ee1000000b005d0ae4e126fso3904345otj.5
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 12:17:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0ehcFmg+Mkg9BnKgNhNCCaDn3+8UpDGuCPAmWgTV0xw=;
+        b=YKTq66ofeUUwKoqp5vOZiShoH+aW48zisWmikLKh+2/pNnuy+Sq3L5f1JfYnmq+rND
+         YikeRuZquyRGJb55UpvV8eB2GWRvSKBpPfc4JAWJctpfN4Kv5tou9Y8Gz7i8PwQ5SKHP
+         R4tfxSyasVtG80BeJCjd4qryX2ZIS79aZDOPDKsUUAEagXD95AkzWX+Jjij2mZikYHQN
+         pHJcRPeisrDgoY5Tlwq0zxCMLhroapa0bzZt0c/7Qr6unzXe3PyqcT8cr92ROYyFzpnE
+         gIsZbGPyZj99+8GHK7/DFDOR5cAryDy6avc/49z0c0dry6oh00xshkW0/0gBpwAaj0wM
+         ZGKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0ehcFmg+Mkg9BnKgNhNCCaDn3+8UpDGuCPAmWgTV0xw=;
+        b=kTKgCHC1o1be23o9k7xKdv2GH2mcp6Jl9XyOxgqy7iat4wfmN1H7pNnecQq3Os58zW
+         sCp5R79W0qzu01JKHnOoe8cx3stGmibMMCKbd8SWodljUYui/B5NT3m7sm/rdBGQVcin
+         rlWSGuaGNjEeO9gHa9RsymrE01stCkl8kSNSJ77JKrMhoi+t4xzZXHDKyDl1asSNfeXy
+         J9E9S+nsufw206YMUolWzpuONYdivEQfCw/2QiPxbZAdqkBnX9nCtU/6e5N2YjKchXvQ
+         C+Dq2Ymv0qEZrfkWx/kg1xAlepIv2Y+c5qq5Y3U8b7HDHuRvfgH5m0WspZk2duxojkXN
+         6FXA==
+X-Gm-Message-State: AOAM533Z68E6mi9nvWJccTbzjvcbvmXJ5UhMZIjTPf2OAZ7VmzX6P0jW
+        XQW6rOy5sSH+plOLO4VC5ao=
+X-Google-Smtp-Source: ABdhPJw341HdbepkpPDc7e7UxbgjrgppKpNGL8k43XY3kuFhgG+2GIpXxIszbSIiJu7No+boSil2mA==
+X-Received: by 2002:a05:6830:1e8d:b0:5cf:b0e6:82ed with SMTP id n13-20020a0568301e8d00b005cfb0e682edmr4231382otr.177.1649013432655;
+        Sun, 03 Apr 2022 12:17:12 -0700 (PDT)
+Received: from bertie (072-190-140-117.res.spectrum.com. [72.190.140.117])
+        by smtp.gmail.com with ESMTPSA id m23-20020a4add17000000b0032489ab619esm3208837oou.45.2022.04.03.12.17.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Apr 2022 12:17:12 -0700 (PDT)
+From:   Rebecca Mckeever <remckee0@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Rebecca Mckeever <remckee0@gmail.com>
+Subject: [PATCH 0/3] staging: r8188eu: clean up two *_cmd_callback() functions in rtw_cmd.c
+Date:   Sun,  3 Apr 2022 14:17:03 -0500
+Message-Id: <cover.1649011311.git.remckee0@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <fa04f389-df01-4838-7304-2fb43b919b98@linux-ipv6.be>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,24 +71,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 03, 2022 at 09:30:06PM +0300, Stijn Tintel wrote:
-> On 3/04/2022 21:19, Russell King (Oracle) wrote:
-> > Hi,
-> >
-> > On Sun, Apr 03, 2022 at 08:29:36PM +0300, Stijn Tintel wrote:
-> >> Add support for the Marvell Alaska 88E1543 PHY used in the WatchGuard
-> >> Firebox M200 and M300.
-> > Looking at the IDs, this PHY should already be supported - reporting as
-> > an 88E1545. Why do you need this patch?
-> >
-> Thanks for pointing that out, you're right. Please disregard the patch. 
-> Would it be acceptable to change the name member to "Marvell
-> 88E1543/88E1545" to make this more obvious?
+These patches perform cleanup in/around functions 
+rtw_survey_cmd_callback() and rtw_joinbss_cmd_callback().
 
-Unfortuantely not, the driver name is used in sysfs, and as I'm sure
-you're aware, "/" is a pathname element separator and thus can't be
-used.
+Rebecca Mckeever (3):
+  staging: r8188eu: remove handlerOS independent comment
+  staging: r8188eu: combine both sides of conditional statement
+  staging: r8188eu: add blank line between functions
+
+ drivers/staging/r8188eu/core/rtw_cmd.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.32.0
+

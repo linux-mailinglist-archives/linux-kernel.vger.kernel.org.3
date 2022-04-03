@@ -2,237 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85CD94F091D
-	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 13:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0212B4F091E
+	for <lists+linux-kernel@lfdr.de>; Sun,  3 Apr 2022 13:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357037AbiDCLqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 07:46:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
+        id S1357049AbiDCLqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 07:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355109AbiDCLq2 (ORCPT
+        with ESMTP id S1354322AbiDCLqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 07:46:28 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B105724BEE
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 04:44:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1648986274; x=1680522274;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lrXU+HMPPEqckxHX2gkclbUBQj3uyp9ZlIOK+EDPYRc=;
-  b=m71vvKmpetRJaet5jWFjRPijwV/vKwjcYexi0dVCdL51zfDpLJxY2OgP
-   Ta8AwRwozal1YPtDPQLhdR3Ep7CTk+PmYtjLiMyIzj8wE5SwhfdLNVvg8
-   AyefaBsbNTIkw0xTm2npVojBZwSC/z1BGTF4OGjZAKMjPaveN2JaQpgYp
-   ssEW9kRSxe1270Pzg8Tv/ESqL5DO1OoqzSdc/tqhb8zB4UmsERqSZyXOI
-   6ClJMoRZMFHRhWsaG5bfOwzFshj7RJoP33lqGUDvrZ5XLNlcoFbGsHbDn
-   yrYZzIUmYLuQRAa7VFH0SoGAMo7WTs0v6OSbaPQ/llPG0SfzBnnicrxLN
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10305"; a="242520301"
-X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="242520301"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2022 04:44:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,231,1643702400"; 
-   d="scan'208";a="640972370"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 03 Apr 2022 04:44:29 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nayei-0000vl-BG;
-        Sun, 03 Apr 2022 11:44:28 +0000
-Date:   Sun, 3 Apr 2022 19:43:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
-        <ville.syrjala@linux.intel.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Lyude Paul <lyude@redhat.com>, Inki Dae <inki.dae@samsung.com>,
-        Yakir Yang <kuankuan.y@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org
-Subject: Re: [PATCH] drm/bridge: Fix error handling in analogix_dp_probe
-Message-ID: <202204031935.5SkYsM2M-lkp@intel.com>
-References: <20220403051714.21212-1-linmq006@gmail.com>
+        Sun, 3 Apr 2022 07:46:48 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AAE240AF
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 04:44:54 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id d10so3114137edj.0
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 04:44:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IZLmfYYiHMASMGiAaySluaKm3Ejc/bYH6rI1Fy0LecM=;
+        b=pkHFF8vKDj0+bhl66MmU7CW3T++RKKps8T9B0LNFT0LjtxsV2/VWWxR7nF2BYj8kF/
+         3BCIL4Dq8VPQbwilS9qWko4juT4O06Fq10ypwMkPKFxecmp4D3GcNYVxTBR+H/Sa+l0K
+         qW6poCDQtwbqHtSiyZSKq5YvxVffCkqfkcrJMElwvr+8x++TjM15/hRNmwAhAysFPTDC
+         L1UxxCAKXA8ugt6QyMc51q1qfpjQqXfoDZXZ7JCQJ7u0V4j4E+z+rUAifSdWKG5yt7Cl
+         r0QKgoHu4jQkzIeDLPiOBsdGtuMC3FVM6jauv8VpLaAm5unZCq0rcwiEnwOINcFH64pm
+         Q8hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IZLmfYYiHMASMGiAaySluaKm3Ejc/bYH6rI1Fy0LecM=;
+        b=B8HPKsmSK2UjGd93l/GBYQF9FHyZTjnkta/LTLsJK8yO6Hyr8ViL+RR6iMkeo/s5at
+         fpwUCl2ItjmqRobfwAyiE9HvImz/a7n4jtA84sXn6qFia9hcNKzexH93l8IkMqi/G8ea
+         1UrwdApr7y8cp/wFtgCQW9vNTF7Xmw1hzFhEM23YEugdvyHYvQn2KBaqVD5f14A+32C9
+         zW3hRj3PoTcsehc07KsScxRRxKrvOlcWmKlusDRlK4FslG/ovkAZOqLsnsV6O/2Hs5XA
+         cWSASWJGh579+RcR0aHUjCNwVyFkVlVLbezuAZQczdZszKudU6ojMXcPAAuPWfWD0oMA
+         MBAA==
+X-Gm-Message-State: AOAM531w7w6beInjGG8Sb7+WTW1KN+KZ/TniSQW3MF90RXlzN6Ri2QFl
+        w2AypkjuGEBIwKBWFitbGMvO/JPNMMM=
+X-Google-Smtp-Source: ABdhPJyebQIFACE7Zr/M6pV2MjsfmyEJEUN7XCMOOuJn14VZOlfBnhcMR2wstjmC10ZaJ+3T97Q0Hw==
+X-Received: by 2002:a05:6402:1a54:b0:41c:cddb:3142 with SMTP id bf20-20020a0564021a5400b0041ccddb3142mr952751edb.106.1648986293319;
+        Sun, 03 Apr 2022 04:44:53 -0700 (PDT)
+Received: from [192.168.0.253] (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
+        by smtp.gmail.com with ESMTPSA id kw5-20020a170907770500b006db075e5358sm3095226ejc.66.2022.04.03.04.44.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 03 Apr 2022 04:44:52 -0700 (PDT)
+Message-ID: <6250c266-f00b-6062-9864-ef78d5c4a04b@gmail.com>
+Date:   Sun, 3 Apr 2022 13:44:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220403051714.21212-1-linmq006@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: staging: r8188eu: how to handle nested mutex under spinlock
+Content-Language: en-US
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <356c24cf-625b-eea2-2c04-ce132d881cac@gmail.com>
+ <942bbcb6-725d-9b47-5dfe-f105d30ea6b7@gmail.com> <7365301.EvYhyI6sBW@leap>
+ <3097543.5fSG56mABF@leap>
+From:   Michael Straube <straube.linux@gmail.com>
+In-Reply-To: <3097543.5fSG56mABF@leap>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miaoqian,
+On 4/3/22 13:24, Fabio M. De Francesco wrote:
+> [PATCH 5.10 67/99] tty: n_hdlc: make n_hdlc_tty_wakeup() asynchronous
+> https://lore.kernel.org/lkml/20211220143031.649396763@linuxfoundation.org/
+> 
+> I hope it helps,
+> 
 
-Thank you for the patch! Perhaps something to improve:
+Thank you for the link. :)
 
-[auto build test WARNING on drm/drm-next]
-[also build test WARNING on v5.17 next-20220401]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Miaoqian-Lin/drm-bridge-Fix-error-handling-in-analogix_dp_probe/20220403-131916
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20220403/202204031935.5SkYsM2M-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-New smatch warnings:
-drivers/gpu/drm/bridge/analogix/analogix_dp_core.c:1705 analogix_dp_probe() warn: inconsistent indenting
-drivers/gpu/drm/bridge/analogix/analogix_dp_core.c:1705 analogix_dp_probe() warn: passing zero to 'ERR_CAST'
-drivers/gpu/drm/bridge/analogix/analogix_dp_core.c:1707 analogix_dp_probe() warn: ignoring unreachable code.
-
-Old smatch warnings:
-drivers/gpu/drm/bridge/analogix/analogix_dp_core.c:1846 analogix_dp_resume() warn: 'dp->clock' from clk_prepare_enable() not released on lines: 1842.
-
-vim +1705 drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-
-0d97ad03f4220c Tomeu Vizoso     2016-08-24  1638  
-6b2d8fd98d051f Jeffy Chen       2018-01-10  1639  struct analogix_dp_device *
-152cce0006abf7 Marek Szyprowski 2020-03-10  1640  analogix_dp_probe(struct device *dev, struct analogix_dp_plat_data *plat_data)
-3424e3a4f844c0 Yakir Yang       2016-03-29  1641  {
-3424e3a4f844c0 Yakir Yang       2016-03-29  1642  	struct platform_device *pdev = to_platform_device(dev);
-3424e3a4f844c0 Yakir Yang       2016-03-29  1643  	struct analogix_dp_device *dp;
-3424e3a4f844c0 Yakir Yang       2016-03-29  1644  	struct resource *res;
-3424e3a4f844c0 Yakir Yang       2016-03-29  1645  	unsigned int irq_flags;
-3424e3a4f844c0 Yakir Yang       2016-03-29  1646  	int ret;
-3424e3a4f844c0 Yakir Yang       2016-03-29  1647  
-3424e3a4f844c0 Yakir Yang       2016-03-29  1648  	if (!plat_data) {
-3424e3a4f844c0 Yakir Yang       2016-03-29  1649  		dev_err(dev, "Invalided input plat_data\n");
-6b2d8fd98d051f Jeffy Chen       2018-01-10  1650  		return ERR_PTR(-EINVAL);
-3424e3a4f844c0 Yakir Yang       2016-03-29  1651  	}
-3424e3a4f844c0 Yakir Yang       2016-03-29  1652  
-3424e3a4f844c0 Yakir Yang       2016-03-29  1653  	dp = devm_kzalloc(dev, sizeof(struct analogix_dp_device), GFP_KERNEL);
-3424e3a4f844c0 Yakir Yang       2016-03-29  1654  	if (!dp)
-6b2d8fd98d051f Jeffy Chen       2018-01-10  1655  		return ERR_PTR(-ENOMEM);
-3424e3a4f844c0 Yakir Yang       2016-03-29  1656  
-3424e3a4f844c0 Yakir Yang       2016-03-29  1657  	dp->dev = &pdev->dev;
-3424e3a4f844c0 Yakir Yang       2016-03-29  1658  	dp->dpms_mode = DRM_MODE_DPMS_OFF;
-3424e3a4f844c0 Yakir Yang       2016-03-29  1659  
-0b8b059a75b08f Sean Paul        2016-08-08  1660  	mutex_init(&dp->panel_lock);
-0b8b059a75b08f Sean Paul        2016-08-08  1661  	dp->panel_is_modeset = false;
-0b8b059a75b08f Sean Paul        2016-08-08  1662  
-3424e3a4f844c0 Yakir Yang       2016-03-29  1663  	/*
-3424e3a4f844c0 Yakir Yang       2016-03-29  1664  	 * platform dp driver need containor_of the plat_data to get
-3424e3a4f844c0 Yakir Yang       2016-03-29  1665  	 * the driver private data, so we need to store the point of
-3424e3a4f844c0 Yakir Yang       2016-03-29  1666  	 * plat_data, not the context of plat_data.
-3424e3a4f844c0 Yakir Yang       2016-03-29  1667  	 */
-3424e3a4f844c0 Yakir Yang       2016-03-29  1668  	dp->plat_data = plat_data;
-3424e3a4f844c0 Yakir Yang       2016-03-29  1669  
-793ce4eb84ea2f Yakir Yang       2016-02-15  1670  	ret = analogix_dp_dt_parse_pdata(dp);
-793ce4eb84ea2f Yakir Yang       2016-02-15  1671  	if (ret)
-6b2d8fd98d051f Jeffy Chen       2018-01-10  1672  		return ERR_PTR(ret);
-3424e3a4f844c0 Yakir Yang       2016-03-29  1673  
-3424e3a4f844c0 Yakir Yang       2016-03-29  1674  	dp->phy = devm_phy_get(dp->dev, "dp");
-3424e3a4f844c0 Yakir Yang       2016-03-29  1675  	if (IS_ERR(dp->phy)) {
-3424e3a4f844c0 Yakir Yang       2016-03-29  1676  		dev_err(dp->dev, "no DP phy configured\n");
-3424e3a4f844c0 Yakir Yang       2016-03-29  1677  		ret = PTR_ERR(dp->phy);
-3424e3a4f844c0 Yakir Yang       2016-03-29  1678  		if (ret) {
-3424e3a4f844c0 Yakir Yang       2016-03-29  1679  			/*
-3424e3a4f844c0 Yakir Yang       2016-03-29  1680  			 * phy itself is not enabled, so we can move forward
-3424e3a4f844c0 Yakir Yang       2016-03-29  1681  			 * assigning NULL to phy pointer.
-3424e3a4f844c0 Yakir Yang       2016-03-29  1682  			 */
-3424e3a4f844c0 Yakir Yang       2016-03-29  1683  			if (ret == -ENOSYS || ret == -ENODEV)
-3424e3a4f844c0 Yakir Yang       2016-03-29  1684  				dp->phy = NULL;
-3424e3a4f844c0 Yakir Yang       2016-03-29  1685  			else
-6b2d8fd98d051f Jeffy Chen       2018-01-10  1686  				return ERR_PTR(ret);
-3424e3a4f844c0 Yakir Yang       2016-03-29  1687  		}
-3424e3a4f844c0 Yakir Yang       2016-03-29  1688  	}
-3424e3a4f844c0 Yakir Yang       2016-03-29  1689  
-3424e3a4f844c0 Yakir Yang       2016-03-29  1690  	dp->clock = devm_clk_get(&pdev->dev, "dp");
-3424e3a4f844c0 Yakir Yang       2016-03-29  1691  	if (IS_ERR(dp->clock)) {
-3424e3a4f844c0 Yakir Yang       2016-03-29  1692  		dev_err(&pdev->dev, "failed to get clock\n");
-6b2d8fd98d051f Jeffy Chen       2018-01-10  1693  		return ERR_CAST(dp->clock);
-3424e3a4f844c0 Yakir Yang       2016-03-29  1694  	}
-3424e3a4f844c0 Yakir Yang       2016-03-29  1695  
-3424e3a4f844c0 Yakir Yang       2016-03-29  1696  	clk_prepare_enable(dp->clock);
-3424e3a4f844c0 Yakir Yang       2016-03-29  1697  
-3424e3a4f844c0 Yakir Yang       2016-03-29  1698  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-3424e3a4f844c0 Yakir Yang       2016-03-29  1699  
-3424e3a4f844c0 Yakir Yang       2016-03-29  1700  	dp->reg_base = devm_ioremap_resource(&pdev->dev, res);
-af6df465625fb3 Miaoqian Lin     2022-04-03  1701  	if (IS_ERR(dp->reg_base)) {
-af6df465625fb3 Miaoqian Lin     2022-04-03  1702  		ret = PTR_ERR(dp->reg_base);
-af6df465625fb3 Miaoqian Lin     2022-04-03  1703  		goto err_disable_clk;
-af6df465625fb3 Miaoqian Lin     2022-04-03  1704  	}
-6b2d8fd98d051f Jeffy Chen       2018-01-10 @1705  		return ERR_CAST(dp->reg_base);
-3424e3a4f844c0 Yakir Yang       2016-03-29  1706  
-5cff007c58b710 Yakir Yang       2016-02-15 @1707  	dp->force_hpd = of_property_read_bool(dev->of_node, "force-hpd");
-5cff007c58b710 Yakir Yang       2016-02-15  1708  
-5b038dcf9d0aa0 Linus Walleij    2019-06-10  1709  	/* Try two different names */
-5b038dcf9d0aa0 Linus Walleij    2019-06-10  1710  	dp->hpd_gpiod = devm_gpiod_get_optional(dev, "hpd", GPIOD_IN);
-5b038dcf9d0aa0 Linus Walleij    2019-06-10  1711  	if (!dp->hpd_gpiod)
-5b038dcf9d0aa0 Linus Walleij    2019-06-10  1712  		dp->hpd_gpiod = devm_gpiod_get_optional(dev, "samsung,hpd",
-5b038dcf9d0aa0 Linus Walleij    2019-06-10  1713  							GPIOD_IN);
-5b038dcf9d0aa0 Linus Walleij    2019-06-10  1714  	if (IS_ERR(dp->hpd_gpiod)) {
-5b038dcf9d0aa0 Linus Walleij    2019-06-10  1715  		dev_err(dev, "error getting HDP GPIO: %ld\n",
-5b038dcf9d0aa0 Linus Walleij    2019-06-10  1716  			PTR_ERR(dp->hpd_gpiod));
-af6df465625fb3 Miaoqian Lin     2022-04-03  1717  		ret = PTR_ERR(dp->hpd_gpiod);
-af6df465625fb3 Miaoqian Lin     2022-04-03  1718  		goto err_disable_clk;
-5b038dcf9d0aa0 Linus Walleij    2019-06-10  1719  	}
-3424e3a4f844c0 Yakir Yang       2016-03-29  1720  
-5b038dcf9d0aa0 Linus Walleij    2019-06-10  1721  	if (dp->hpd_gpiod) {
-3424e3a4f844c0 Yakir Yang       2016-03-29  1722  		/*
-3424e3a4f844c0 Yakir Yang       2016-03-29  1723  		 * Set up the hotplug GPIO from the device tree as an interrupt.
-3424e3a4f844c0 Yakir Yang       2016-03-29  1724  		 * Simply specifying a different interrupt in the device tree
-3424e3a4f844c0 Yakir Yang       2016-03-29  1725  		 * doesn't work since we handle hotplug rather differently when
-3424e3a4f844c0 Yakir Yang       2016-03-29  1726  		 * using a GPIO.  We also need the actual GPIO specifier so
-3424e3a4f844c0 Yakir Yang       2016-03-29  1727  		 * that we can get the current state of the GPIO.
-3424e3a4f844c0 Yakir Yang       2016-03-29  1728  		 */
-5b038dcf9d0aa0 Linus Walleij    2019-06-10  1729  		dp->irq = gpiod_to_irq(dp->hpd_gpiod);
-3424e3a4f844c0 Yakir Yang       2016-03-29  1730  		irq_flags = IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING;
-3424e3a4f844c0 Yakir Yang       2016-03-29  1731  	} else {
-3424e3a4f844c0 Yakir Yang       2016-03-29  1732  		dp->irq = platform_get_irq(pdev, 0);
-3424e3a4f844c0 Yakir Yang       2016-03-29  1733  		irq_flags = 0;
-3424e3a4f844c0 Yakir Yang       2016-03-29  1734  	}
-3424e3a4f844c0 Yakir Yang       2016-03-29  1735  
-3424e3a4f844c0 Yakir Yang       2016-03-29  1736  	if (dp->irq == -ENXIO) {
-3424e3a4f844c0 Yakir Yang       2016-03-29  1737  		dev_err(&pdev->dev, "failed to get irq\n");
-af6df465625fb3 Miaoqian Lin     2022-04-03  1738  		ret = -ENODEV;
-af6df465625fb3 Miaoqian Lin     2022-04-03  1739  		goto err_disable_clk;
-3424e3a4f844c0 Yakir Yang       2016-03-29  1740  	}
-3424e3a4f844c0 Yakir Yang       2016-03-29  1741  
-7b4b7a8db439dc Yakir Yang       2016-02-15  1742  	ret = devm_request_threaded_irq(&pdev->dev, dp->irq,
-7b4b7a8db439dc Yakir Yang       2016-02-15  1743  					analogix_dp_hardirq,
-7b4b7a8db439dc Yakir Yang       2016-02-15  1744  					analogix_dp_irq_thread,
-3424e3a4f844c0 Yakir Yang       2016-03-29  1745  					irq_flags, "analogix-dp", dp);
-3424e3a4f844c0 Yakir Yang       2016-03-29  1746  	if (ret) {
-3424e3a4f844c0 Yakir Yang       2016-03-29  1747  		dev_err(&pdev->dev, "failed to request irq\n");
-af6df465625fb3 Miaoqian Lin     2022-04-03  1748  		goto err_disable_clk;
-3424e3a4f844c0 Yakir Yang       2016-03-29  1749  	}
-3424e3a4f844c0 Yakir Yang       2016-03-29  1750  	disable_irq(dp->irq);
-3424e3a4f844c0 Yakir Yang       2016-03-29  1751  
-152cce0006abf7 Marek Szyprowski 2020-03-10  1752  	return dp;
-af6df465625fb3 Miaoqian Lin     2022-04-03  1753  
-af6df465625fb3 Miaoqian Lin     2022-04-03  1754  err_disable_clk:
-af6df465625fb3 Miaoqian Lin     2022-04-03  1755  	clk_disable_unprepare(dp->clock);
-af6df465625fb3 Miaoqian Lin     2022-04-03  1756  	return ERR_PTR(ret);
-152cce0006abf7 Marek Szyprowski 2020-03-10  1757  }
-152cce0006abf7 Marek Szyprowski 2020-03-10  1758  EXPORT_SYMBOL_GPL(analogix_dp_probe);
-152cce0006abf7 Marek Szyprowski 2020-03-10  1759  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+thanks,
+Michael

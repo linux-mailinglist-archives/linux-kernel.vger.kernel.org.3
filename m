@@ -2,70 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E9F4F1EA1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3253D4F1E9C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381468AbiDDVuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34596 "EHLO
+        id S1378709AbiDDVqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380394AbiDDT7v (ORCPT
+        with ESMTP id S1380403AbiDDUER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 15:59:51 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0342FE42
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 12:57:53 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-ddfa38f1c1so11983891fac.11
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 12:57:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TkOj47m3NIAXN7Y2Vl/oLURlRLC9Yzh32pg7qVKr6tc=;
-        b=Dziv3JNSINXqZhhCZm8NMbWDDVHGFTwq8qQY5I4K6du6wGYur35Cz3jlsRBVF5OKij
-         G+NA6yDpn+BOkVmRhu7tPykJfFgJXJuYbQD2ka84fDH9vMox2xsyJUPjkU0k/edzoNj5
-         /bymzVl9m11MjdnzDLhnYrgzE1orMHGsxQD9rsMHQ8pA33vL6+jbW1Fc2qXbYDMYiH+p
-         q7UTFxzB/OCks/Ns2/T+8CDd6c2sLlxj/CB4mNXp5RoDPd8GvkR8qZzE3it+/QxBYHf2
-         e8XAgkVSSoCvSINTxQKasKDi5Tqsj8N3jZJLW+GSYwX2cc0yS1yaXEu4t6G0dj6Sp4mq
-         MffA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TkOj47m3NIAXN7Y2Vl/oLURlRLC9Yzh32pg7qVKr6tc=;
-        b=wOHgbtU30tdc/Pjg8s5pVeRixtH8ll+X+hhBYxlEUtIOh7LIOn7SAFaDa1unciS/CE
-         ZQ5oSkl7Nm/N2o0mGXaI1LvizXjaS7iF0hjiO5aHOlSLHPq3lbLlGsfR3zfppybKRzW5
-         7gv6giZZDruv7Hccwndxj1QHfqQR2+mf0EFhd7jquzJp9+JrJ/UxKwuE+B6ZyxgJ9y0c
-         QSXTjXOobjGAAQEYJnk9lsdC0MC3WaLJeGVajtk0WDJjiUBmJnF33Li0McUfna7PGxDM
-         JXnITWXPmed2HodE4ttSEOFKC76tFiDdsnFemmE7l2NVyRlgKz+MFpp4RaXjQ4p6VrdD
-         Zr5Q==
-X-Gm-Message-State: AOAM532LZcrMM53Hu6FH7hreuMZZMKGMZd6orTdbHZNv9HZQ22fKYhq5
-        A7swQJY7OU+kkjhkMAsrMzTRcQ==
-X-Google-Smtp-Source: ABdhPJyhJM5jTJxZsMABqBAJUE8+OMMH0JTJjH8W90MwXAYKcWFCIe+mg3D+WCWqVPr6xUC5HldkKw==
-X-Received: by 2002:a05:6871:92:b0:d9:abe2:936e with SMTP id u18-20020a056871009200b000d9abe2936emr449661oaa.83.1649102272437;
-        Mon, 04 Apr 2022 12:57:52 -0700 (PDT)
-Received: from eze-laptop ([190.194.87.200])
-        by smtp.gmail.com with ESMTPSA id s10-20020a4a3b0a000000b0032486bc11d0sm4430044oos.39.2022.04.04.12.57.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 12:57:51 -0700 (PDT)
-Date:   Mon, 4 Apr 2022 16:57:46 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     mchehab@kernel.org, hverkuil@xs4all.nl,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jernej.skrabec@gmail.com, p.zabel@pengutronix.de,
-        nicolas@ndufresne.ca, kernel@collabora.com,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Subject: Re: [PATCH] media: Add P010 video format
-Message-ID: <YktNur601fjyCt9i@eze-laptop>
-References: <20220404090116.353034-1-benjamin.gaignard@collabora.com>
+        Mon, 4 Apr 2022 16:04:17 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2077.outbound.protection.outlook.com [40.107.212.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8802B30F57;
+        Mon,  4 Apr 2022 13:02:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aed1xY76nschRfiHriCNKQacMsb/uQ5xwmsxvXID+ixQPAV3U2+GENsR1Wt/PREqu/IKxW+lRhEmJyme6C/TZMNfSMg359QKJdD10akYsaoeUUwqIzNNU3yCmQedCu8sRgqps4b+L1rz5kLhLUpVTbNLrx86fMPH1rxTigeLiIY7HY6AfWESpgVwQx73E6stjEHabtkK4Sc0z/qRdVEGehcbK6/ovkJSKCmIX+4DnxHaHwNbxwFrrq8xdzLsLMDwQP9vNwQEBW3wWWZMHZBIww8NepC2LZnBn7bWIArffV1oeYxfmLn6VGYI8wVU1GtEnWfAj5aGdLMaybVyKZMebQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KvKJUxGCVwCOv/sIfseWhgW89G83DX52GAsINugKg+w=;
+ b=KBM4UhKn2WcHUWDtTmIoaydzDO98RfceTIV7Tffa8pB3sMGN1F72BDb9x0yqqCNumZ5MM+NrGjy1oYoXC+Sk9ki0PDU/8vF3f3koVhAng58I38tfL40G/ur+3x3c2yVzlFsiNPTJBY5XpUhYZosWm+6Rt2B0yt0OTuiQaz9q+pq3veQUnCG4EJ6rvX2Mq2Ahaf5o8NRr0No9IBfhaVvC9GHtTcSfOtUvA8kFVpRTtux9i8WLyku+XKrI9rUJB2ln64NxKmkDSNnoa3k+l4lNSIdt57K4ptjMSc5Qth/OctMihZjlsrUvUp9yVVNDGgpd3Z+lnM+EZeV4agSa4SuHHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=opensource.wdc.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KvKJUxGCVwCOv/sIfseWhgW89G83DX52GAsINugKg+w=;
+ b=N9ZPa2GwhmgkLZcSeVKgtpC7/skIQAJEQM4klcatAWH3j70C8I9GN9y5GU3ErVJ11n3naD3Dea2kK3fuLeB7TbMy3G/701KzIEPnNPVAiYk39oyC97SPV9LKiiGne4R5QG/llO00zvmCHUU6bTnA30SUauTTCRPh5xPR5/H2tRk=
+Received: from DS7PR07CA0023.namprd07.prod.outlook.com (2603:10b6:5:3af::28)
+ by CH0PR12MB5137.namprd12.prod.outlook.com (2603:10b6:610:bc::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Mon, 4 Apr
+ 2022 20:02:16 +0000
+Received: from DM6NAM11FT068.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3af:cafe::35) by DS7PR07CA0023.outlook.office365.com
+ (2603:10b6:5:3af::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31 via Frontend
+ Transport; Mon, 4 Apr 2022 20:02:16 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT068.mail.protection.outlook.com (10.13.173.67) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5123.19 via Frontend Transport; Mon, 4 Apr 2022 20:02:16 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 4 Apr
+ 2022 15:02:15 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+CC:     "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        <hdegoede@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v2 1/2] ata: Kconfig: Update SATA_LPM_POLICY default to "3"
+Date:   Mon, 4 Apr 2022 15:02:01 -0500
+Message-ID: <20220404200202.9388-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220404090116.353034-1-benjamin.gaignard@collabora.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: dba1677e-7ae1-42f2-0f25-08da167604a0
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5137:EE_
+X-Microsoft-Antispam-PRVS: <CH0PR12MB51371CDE56AEC785729FD44AE2E59@CH0PR12MB5137.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FmN9DVfXttgWzrmFI/3UCIpTntwYdxZE/jBvV630w83y6D7gxDeHbM5h1kjIrA9H31sSFoVEPdK1xOrXONOMXTEJ5WaDgHHxMB92Z3/DyVLPy9Tgt6fGx5IJ3tpw2cp7h1QHUA6N4dmuTzN0NGSgxUANonsO33VOf9wAPLxLJIeuKLTdJkMpx2ox83lDSJsNaDSmDzHPrvowqB6lsqeKUPoHnlVjAd9yhikxnnw2tReq3yXGeMS/Y4XJOo0zlwE3tmwi5zjB2DdsVj+nVf4igDrI2u8Xd4UViH2dSxPewmMY2BQeOSXefGjWQT8H+xw2LXK983M+zxofblXWZ5BHDTqtqLEg2Up7Px/xqClTfsFUNpXutPe49USKmCxt+tTFBfZwGBLMW4G3WrZyV7RzwraPUu3A6wqVn0grwlJJxOWSUplDKzVrU+aYL5aLBtHqnv31QD7HFHD3i6ziuq0f62WRzwgNT9pnbpeCetX0LwK1+IA6HKjGqmekkPspLE1C/8q3cvd9GZFlQy0d5Q8aNesOGB6m3wwhE0lj0lbM32A1iCRaTKeQpdOJYqmKffjrZ1sqynoYJQm7+Pj5fL90ZKscIbuBp9cqGreZmP4o3nCHdhtTOHmWXb3Ut0UrqWBv0PZUYTtXA5icNMZlzsmeEufOS80gG3/AAmGNSmMbx4tcO4H2vZs9jlHfrmvU1Pb4ZoW7FV0rZtpX18mq5RKOBg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(4326008)(356005)(40460700003)(8676002)(426003)(336012)(81166007)(70586007)(70206006)(2616005)(8936002)(86362001)(7696005)(316002)(16526019)(82310400004)(15650500001)(2906002)(5660300002)(508600001)(44832011)(1076003)(6916009)(36756003)(54906003)(47076005)(6666004)(83380400001)(26005)(186003)(36860700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2022 20:02:16.4803
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: dba1677e-7ae1-42f2-0f25-08da167604a0
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT068.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5137
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,165 +101,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 11:01:16AM +0200, Benjamin Gaignard wrote:
-> P010 is a YUV format with 10-bits per pixel with interleaved UV.
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+SATA_LPM_POLICY is a "new" configuration item, but it was renamed from
+SATA_LPM_MOBILE_POLICY in commit 4dd4d3deb502 ("ata: ahci: Rename
+CONFIG_SATA_LPM_MOBILE_POLICY configuration item")
 
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Since the configuration item was renamed it was mentioned that people
+might invisibly lose their chosen defaults for it.  This means it's a
+good time to evaluate whether those defaults make sense still.
 
-> ---
-> Note that P010 is already known in GStreamer, only the mapping with
-> v4l2 pixel format is missing.
-> 
-> This patch has been acked in this series but never merged:
-> https://patchwork.kernel.org/project/linux-rockchip/patch/20210618131526.566762-5-benjamin.gaignard@collabora.com/
-> After rebased it on v5.18-rc1, resend in standalone mode.
-> 
->  .../media/v4l/pixfmt-yuv-planar.rst           | 76 +++++++++++++++++++
->  drivers/media/v4l2-core/v4l2-common.c         |  1 +
->  drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
->  include/uapi/linux/videodev2.h                |  1 +
->  4 files changed, 79 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> index 8dff5906639b..6d65c8ac44f0 100644
-> --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> @@ -102,6 +102,13 @@ All components are stored with the same number of bits per component.
->        - 64x32 tiles
->  
->          Horizontal Z order
-> +    * - V4L2_PIX_FMT_P010
-> +      - 'P010'
-> +      - 16
-> +      - 4:2:0
-> +      - Cb, Cr
-> +      - No
-> +      - Linear
->      * - V4L2_PIX_FMT_NV12MT_16X16
->        - 'VM12'
->        - 8
-> @@ -171,6 +178,7 @@ horizontally.
->  .. _V4L2-PIX-FMT-NV21:
->  .. _V4L2-PIX-FMT-NV12M:
->  .. _V4L2-PIX-FMT-NV21M:
-> +.. _V4L2-PIX-FMT-P010:
->  
->  NV12, NV21, NV12M and NV21M
->  ---------------------------
-> @@ -519,6 +527,74 @@ number of lines as the luma plane.
->        - Cb\ :sub:`33`
->        - Cr\ :sub:`33`
->  
-> +.. _V4L2_PIX_FMT_P010:
-> +
-> +P010
-> +----
-> +
-> +The number of bytes in one luminance row must be divisible by 16,
-> +which means there will be padded 0 in the right edge when necessary.
-> +
-> +.. raw:: latex
-> +
-> +    \begingroup
-> +    \small
-> +    \setlength{\tabcolsep}{2pt}
-> +
-> +.. tabularcolumns:: |p{2.6cm}|p{0.70cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|
-> +
-> +.. flat-table:: P010 16 Bits per component
-> +    :header-rows:  2
-> +    :stub-columns: 0
-> +
-> +    * - Identifier
-> +      - Code
-> +      - :cspan:`7` Byte 0 in memory
-> +
-> +      - :cspan:`7` Byte 1
-> +    * -
-> +      -
-> +      - 7
-> +      - 6
-> +      - 5
-> +      - 4
-> +      - 3
-> +      - 2
-> +      - 1
-> +      - 0
-> +
-> +      - 7
-> +      - 6
-> +      - 5
-> +      - 4
-> +      - 3
-> +      - 2
-> +      - 1
-> +      - 0
-> +    * - ``V4L2_PIX_FMT_P010``
-> +      - 'P010'
-> +
-> +      - Y\ :sub:`9`
-> +      - Y\ :sub:`8`
-> +      - Y\ :sub:`7`
-> +      - Y\ :sub:`6`
-> +      - Y\ :sub:`5`
-> +      - Y\ :sub:`4`
-> +      - Y\ :sub:`3`
-> +      - Y\ :sub:`2`
-> +
-> +      - Y\ :sub:`1`
-> +      - Y\ :sub:`0`
-> +      - 0
-> +      - 0
-> +      - 0
-> +      - 0
-> +      - 0
-> +      - 0
-> +
-> +.. raw:: latex
-> +
-> +    \endgroup
->  
->  Fully Planar YUV Formats
->  ========================
-> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-> index df34b2a283bc..1e38ad8906a2 100644
-> --- a/drivers/media/v4l2-core/v4l2-common.c
-> +++ b/drivers/media/v4l2-core/v4l2-common.c
-> @@ -266,6 +266,7 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
->  		{ .format = V4L2_PIX_FMT_NV61,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
->  		{ .format = V4L2_PIX_FMT_NV24,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
->  		{ .format = V4L2_PIX_FMT_NV42,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_P010,    .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 2, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
->  
->  		{ .format = V4L2_PIX_FMT_YUV410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
->  		{ .format = V4L2_PIX_FMT_YVU410,  .pixel_enc = V4L2_PIXEL_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
-> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-> index 96e307fe3aab..e14d7e1a038e 100644
-> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> @@ -1301,6 +1301,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
->  	case V4L2_PIX_FMT_NV61:		descr = "Y/CrCb 4:2:2"; break;
->  	case V4L2_PIX_FMT_NV24:		descr = "Y/CbCr 4:4:4"; break;
->  	case V4L2_PIX_FMT_NV42:		descr = "Y/CrCb 4:4:4"; break;
-> +	case V4L2_PIX_FMT_P010:		descr = "10-bit Y/CrCb 4:2:0"; break;
->  	case V4L2_PIX_FMT_NV12_4L4:	descr = "Y/CbCr 4:2:0 (4x4 Linear)"; break;
->  	case V4L2_PIX_FMT_NV12_16L16:	descr = "Y/CbCr 4:2:0 (16x16 Linear)"; break;
->  	case V4L2_PIX_FMT_NV12_32L32:   descr = "Y/CbCr 4:2:0 (32x32 Linear)"; break;
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> index 4c09969e7112..2e451c454db3 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -601,6 +601,7 @@ struct v4l2_pix_format {
->  #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y/CrCb 4:2:2  */
->  #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/CbCr 4:4:4  */
->  #define V4L2_PIX_FMT_NV42    v4l2_fourcc('N', 'V', '4', '2') /* 24  Y/CrCb 4:4:4  */
-> +#define V4L2_PIX_FMT_P010    v4l2_fourcc('P', '0', '1', '0') /* 15  Y/CbCr 4:2:0 10-bit per pixel*/
->  
->  /* two non contiguous planes - one Y, one Cr + Cb interleaved  */
->  #define V4L2_PIX_FMT_NV12M   v4l2_fourcc('N', 'M', '1', '2') /* 12  Y/CbCr 4:2:0  */
-> -- 
-> 2.32.0
-> 
+Historically this was set to "0" to prevent problems with power management
+on very old drives.  However it's been observed that almost all modern
+Linux distributions either set the policy to "3" in the kernel
+configuration or update it to this via userspace policy changes. Update
+the policy default in the kernel to "3" to match that behavior as well.
+
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+v1->v2:
+ * Rebase on 5.18-rc1
+ drivers/ata/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+index e5641e6c52ee..3ffe14057ed2 100644
+--- a/drivers/ata/Kconfig
++++ b/drivers/ata/Kconfig
+@@ -118,7 +118,7 @@ config SATA_AHCI
+ config SATA_LPM_POLICY
+ 	int "Default SATA Link Power Management policy for low power chipsets"
+ 	range 0 4
+-	default 0
++	default 3
+ 	depends on SATA_AHCI
+ 	help
+ 	  Select the Default SATA Link Power Management (LPM) policy to use
+-- 
+2.34.1
+

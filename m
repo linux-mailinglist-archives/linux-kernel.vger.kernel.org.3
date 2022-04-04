@@ -2,70 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3551E4F1E4E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6444F1E40
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232690AbiDDVxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
+        id S1379522AbiDDWGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 18:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380127AbiDDS4c (ORCPT
+        with ESMTP id S1380204AbiDDTOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 14:56:32 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377E513D6E
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 11:54:35 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id l36so11848831ybj.12
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 11:54:35 -0700 (PDT)
+        Mon, 4 Apr 2022 15:14:14 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A660377E3
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 12:12:17 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id i11-20020a9d4a8b000000b005cda3b9754aso7870526otf.12
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 12:12:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i8mit+XlQ6apyh1F4jfrqqHIA4eEylIGf1MuyIy7G0w=;
-        b=PM4i8G7PuyPWh/Jh9WnN4Tc/zwjQEad3lXcESc58rdhEMEtNtrfp3EvtKDzn33YGLL
-         Ah9HMvzVmk+19QgvIdPGm2Qy8B+5Bhymxchtuhd4gi3ACCM9Vk6ox4xbJUDzI844mU3o
-         fI3DGkcyZEWjORi53NCXSOrNZ3mBIVSmiqvn2RR4iWr5D66CHx+vr0yBBrDtXk03BVF3
-         uPByraxCdF6tH8BpXS/H5eUklX5UmhgLB8rhQBRdrCCrvLc58/EOzFLiJqDDoYunDsnW
-         OGBag5j0nhEE+u/AshEBp5mRkboIy4PSRoM3H5qXf5bRGE7sehTqwo1Q/y/kjMEki0+b
-         GJ3g==
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=HaBSCtvM0Wy0SP5zUFXCSh2FNwBC2ZpaaXakEoGwFXA=;
+        b=QRbaJLGqfSytgeLDMDaMo3pFIvgnJhK7msg48BshQ/1jFwC2lmeFIpeANmoKV1C0Dh
+         QmZjrgbS5ILg8xTOkr/r9cRrhri5vMI0bOo6Sj7Zhay+EAnjeM5tHaAHiSDnO6ippfYC
+         SNuYSPC01YTnGkFxL2M9JzpVppdEvEyc1sd+n9sMfgFDDEeH2msq14bKRtHb3gUfpuM4
+         j6QBQ4pB3LUxFwi1zJmuMLj30FRsqd1iGipjHqua8F0j9obgvzV+H8yVvYb1Y/IOSpCd
+         KL37R65BysmpaksgZOIkWdkcLEcTXU0SFFWmWBDUrla9NhEuBcGpoqSgC+Rh7RKfq7M7
+         GAyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i8mit+XlQ6apyh1F4jfrqqHIA4eEylIGf1MuyIy7G0w=;
-        b=yiL3eFiEhPz6U5QSIMKN5nNIRIp5TMkiXehJhLP5bB4Ay7Ldik9U8Gk/l1zwRaSpsf
-         hOx5TktSHXenb+YdU2EzV6EFxp/WxHHRuSXJF8+WBMJZxZqWJbxEn3FSki1/GAsXr5pe
-         PdPYdV1dBCVtokG8iweaCfJPOFlKkerP53JfenHCrZT6S8mqZIpLYG5WAQiY0yAdg1XK
-         T6MwPTe+vzbRT6N+Oi0qCpld3uRcQOlM9Z0mkUvUCZvgACIOTm0dsLQtfrCY0sVZZfuv
-         /j8yng12VGVKSJc6ilUyekNgXO65qSxwS8HmGKeD+vFNdXEMUEPK3oyY3/6hqNFYCr9E
-         CMWg==
-X-Gm-Message-State: AOAM531caGMuDQf+1EUYgGAd9/o+prGi+iOxOyJcDwnOSvbnTsza7Moe
-        u+corik3dbc8f3DsNyAaUOC8zeDJTVYu40v5xSBypw==
-X-Google-Smtp-Source: ABdhPJwjJQ5m+emITxY/LAnT5oJzYuka5uam0lN2TpPbt6LFR63y589nSovGkoW5FpbIS60tBIHHrrrIU9o7chH6ft4=
-X-Received: by 2002:a25:ab6b:0:b0:63d:a27b:8bcd with SMTP id
- u98-20020a25ab6b000000b0063da27b8bcdmr1033768ybi.391.1649098474246; Mon, 04
- Apr 2022 11:54:34 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=HaBSCtvM0Wy0SP5zUFXCSh2FNwBC2ZpaaXakEoGwFXA=;
+        b=Wa8G+9gFcaB+l56ZhlzVsOUZ6RX7oDn+pY4Kzh+V475upOBNqcJtcemBUfnnV/nyAz
+         sY2kR4PNiRhvII+7n15XtMGHxprihwUgwBRWcOHQmlq0cRUHk4zPP3lM8N9SipbhvUEp
+         LujlgABS+AC/b60S07ipX0Ny3ZwueJtd2/WvqZLkrpiak9D5E9kQMaGRMMmqumBYM+oy
+         4REnjgxhRgORRLOnHlGNQLP+gzHv28rHLHNnYGQq6C5k+gGHJgpWWsNxG6LPpaMbGANI
+         vkf2I5J7jW8G8WeiIxHlN4sHJxH3fP51g+bG1uywGafrFEbQEIjoHgNEoR5iiy5ibqLe
+         wW/A==
+X-Gm-Message-State: AOAM530UOMh83Uqh2wyxBWghIsEmNlh/dvCUdzF+riZprcatpSygOUUK
+        vEBV9jABrXvNNuHAgceH9Kv3u9t+G5k3kLRZ17JJoA==
+X-Google-Smtp-Source: ABdhPJx53qVjugPFtagCZ/vg5SciUqxZhWJ8+WqD50ec1zmxvdqxeCVjEmx4wXSm3ZFYN/d0UAvZ/O81KzKS1ewGUc0=
+X-Received: by 2002:a9d:1729:0:b0:5b2:3828:c84c with SMTP id
+ i41-20020a9d1729000000b005b23828c84cmr406189ota.362.1649099535465; Mon, 04
+ Apr 2022 12:12:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220401063636.2414200-1-mizhang@google.com> <20220401063636.2414200-2-mizhang@google.com>
- <CANgfPd9OqV35BGfRCvJZNK_kemgqDWPx8TKKObfyGb0iiC-uxg@mail.gmail.com> <Yks2ymJzY4S9x4zx@google.com>
-In-Reply-To: <Yks2ymJzY4S9x4zx@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Mon, 4 Apr 2022 11:54:23 -0700
-Message-ID: <CANgfPd-rOActegQ-c2frr0RnseT5am1tfvswhWqDRWWgW+9RqQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/6] KVM: x86/mmu: Set lpage_disallowed in TDP MMU
- before setting SPTE
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Mingwei Zhang <mizhang@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Peter Xu <peterx@redhat.com>
+From:   Evan Green <evgreen@google.com>
+Date:   Mon, 4 Apr 2022 12:11:39 -0700
+Message-ID: <CAE=gft4a-QL82iFJE_xRQ3JrMmz-KZKWREtz=MghhjFbJeK=8A@mail.gmail.com>
+Subject: Lost MSIs during hibernate
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatja@chromium.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -78,34 +66,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 4, 2022 at 11:20 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Mon, Apr 04, 2022, Ben Gardon wrote:
-> > On Thu, Mar 31, 2022 at 11:36 PM Mingwei Zhang <mizhang@google.com> wrote:
-> > > diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> > > index 1bff453f7cbe..4a0087efa1e3 100644
-> > > --- a/arch/x86/kvm/mmu/mmu_internal.h
-> > > +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> > > @@ -168,7 +168,7 @@ void disallowed_hugepage_adjust(struct kvm_page_fault *fault, u64 spte, int cur_
-> > >
-> > >  void *mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
-> > >
-> > > -void account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
-> > > +void __account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
-> >
-> > I believe we need to modify the usage of this function in
-> > paging_tmpl.h as well, at which point there should be no users of
-> > account_huge_nx_page, so we can just modify the function directly
-> > instead of adding a __helper.
-> > (Disregard if the source I was looking at was out of date. Lots of
-> > churn in this code recently.)
->
-> paging_tmpl.h is shadow paging only, i.e. will always handled page faults with
-> mmu_lock held for write and it also needs the check for sp->lpage_disallowed
-> already being set.  Only the TDP MMU code is special in that (a) it holds mmu_lock
-> for read and (b) never reuses shadow pages when inserting into the page tables.
->
-> Or did I completely misunderstand what you meant by "need to modify the usage"?
+Hi Thomas et al,
+To my surprise, I'm back with another MSI problem, and hoping to get
+some advice on how to approach fixing it.
 
-Ah right duh. For some reason I thought we were modifying __direct_map
-in this commit too. Nevermind, no change needed.
+Summary: I think MSIs are lost across the hibernate freeze/thaw
+transition on the way down because __pci_write_msi_msg() drops the
+write if the device is not in D0.
+
+Details:
+I've been playing with hibernation on an Alderlake device, and have
+been running into problems where the freeze/thaw transition that
+should generate the hibernate image ends up hanging (eg before we even
+start writing the image out to disk). When it hangs I find it in
+usb_kill_urb(), an error path that comes out of a failed attempt to
+send a control packet to a hub port coming from usb_resume().
+Occasionally, I see the classic "HC died; cleaning up" message
+instead. XHCI in general appears to be very sensitive to lost MSIs, so
+I started down that road.
+
+I printed the three major paths through __pci_write_msi_msg() so I
+could see what the XHCI controller was ending up with when it hung.
+You can see a full boot and hibernate attempt sequence that results in
+a hang here (sorry there's other cruft in there):
+
+https://pastebin.com/PFd3x1k0
+
+What worries me is those IRQ "no longer affine" messages, as well as
+my "EVAN don't touch hw" prints, indicating that requests to change
+the MSI are being dropped. These ignored requests are coming in when
+we try to migrate all IRQs off of the non-boot CPU, and they get
+ignored because all devices are "frozen" at this point, and presumably
+not in D0.
+
+So my theory is XHCI for whatever reason boots affinitized to a
+non-boot CPU. We go through pci_pm_freeze(), then try to take the
+non-boot CPUs down. The request to move the MSI off of the dead CPU is
+ignored, and then XHCI generates an interrupt during the period while
+that non-boot CPU is dead.
+
+To further try and prove that theory, I wrote a script to do the
+hibernate prepare image step in a loop, but messed with XHCI's IRQ
+affinity beforehand. If I move the IRQ to core 0, so far I have never
+seen a hang. But if I move it to another core, I can usually get a
+hang in the first attempt. I also very occasionally see wifi splats
+when trying this, and those "no longer affine" prints are all the wifi
+queue IRQs. So I think a wifi packet coming in at the wrong time can
+do the same thing.
+
+I wanted to see what thoughts you might have on this. Should I try to
+make a patch that moves all IRQs to CPU 0 *before* the devices all
+freeze? Sounds a little unpleasant. Or should PCI be doing something
+different to avoid this combination of "you're not allowed to modify
+my MSIs, but I might still generate interrupts that must not be lost"?
+
+-Evan

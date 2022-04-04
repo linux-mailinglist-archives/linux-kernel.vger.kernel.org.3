@@ -2,123 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BEE14F1FF4
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD44B4F200C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242773AbiDDXN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 19:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
+        id S242884AbiDDXOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 19:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241783AbiDDXKq (ORCPT
+        with ESMTP id S243569AbiDDXLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 19:10:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4705524BD3;
-        Mon,  4 Apr 2022 15:47:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D268B616B1;
-        Mon,  4 Apr 2022 22:47:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AE20C2BBE4;
-        Mon,  4 Apr 2022 22:47:19 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="StADTOFj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1649112437;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=f03Sgznwk70QYZSWwxV+lkMyUN0TDnERCd80Ff7+eOo=;
-        b=StADTOFj1BKH5L0K/Z5hEWL6S9XdFR1mQey631hUwzfWEzSdtgOcm1gqrPMYGihCL+uPc7
-        4/L2tmXryqIqx0SXAwvR0AEXTT19Wl5EO++YJyAxB0eadcN8gF3MyAoWDDo3zVj3CUFnr9
-        jZDSK8q2lGxMT4Kp6BGMZlfRLLxFFrw=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b4fa201b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Mon, 4 Apr 2022 22:47:17 +0000 (UTC)
-Date:   Tue, 5 Apr 2022 00:47:14 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, PaX Team <pageexec@freemail.hu>
-Subject: Re: [PATCH v2] gcc-plugins: latent_entropy: use /dev/urandom
-Message-ID: <Ykt1cj0wPKEsHL2q@zx2c4.com>
-References: <CAHmME9otYi4pCzZwSGnK40dp1QMRVPxp+DBysVuLXUKkXinAxg@mail.gmail.com>
- <20220403204036.1269562-1-Jason@zx2c4.com>
- <202204041144.96FC64A8@keescook>
+        Mon, 4 Apr 2022 19:11:41 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A19113E
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 15:48:44 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id l26so6681262ejx.1
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 15:48:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vmQtSeoAc+Nq1zeZ+fcOy7GISIYvQy3s9Qy54NdzuHU=;
+        b=o04wJ+0ZKldbQAUg1OrIlnIW+Sx2rrgZN889EJaxXOUiYl1aFr9M2h/mAs5Hq/qfKP
+         TTsqt/3k7wIv4hpJjvaqoJLYI8N+Bs3w+hQCNbH+TXLubgXpeWh9UMVwIGRxTbT+0HRe
+         OYkEmZn4RdjGxdIuFmDsnKDyQOrtx7luLwYQu2jkxEZvv0Yiu0qJGhOT3Zb7QdH6VHX4
+         lyfyTbnXIgPDJjdPXj+suT0Ge2pmL/GV7WS9mY3h2pmqDceIKSocUZYNRQa/uR3YhX2e
+         7ywzIGVVVuGNqcwOXumeP3m+tRQvyS2P01JKNHoObHinqn6TKWcZZ9J4CRbY+KGcDH/K
+         P29A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vmQtSeoAc+Nq1zeZ+fcOy7GISIYvQy3s9Qy54NdzuHU=;
+        b=u2VC2Q8FvrmK0hv6TqhaN4mlLizaMOyoqXVWT6xwGjils3642n2etu9d+DbjRMj3fN
+         edZPcC4v88wqZlo3QnKUaIO7q+K5HueqY/b2b51tSAxbxh6soYT/Oa4NDSn5xywPwXmC
+         VvOJpcFXXbgOXjgl7T0QBhNBM0EdioaxhaLMDc3hecgcFyRPSniIeasbndfrpIuP/7CQ
+         lY0kCuoWPCzKAxK4ZGzp5Fn2zNf+b+LpOKSJ5CU9uyfr4NUsqXRQj7io0A1jBsjTKI1a
+         SmxFX6SK8KbZdlSV980LZaz1wdoK/zJd+9koklvTfJFZNCPeTYrTNMHVCDh9d/9ufl4W
+         fHhg==
+X-Gm-Message-State: AOAM533NAmA642EWWS1/0uaJW1TvPpLw32MtIMlngT2x/mYI6Xwiv0A2
+        p+HVfcMrJ/hOZjmJtjcQyek7DP1W7QphOUUnBBHR9A==
+X-Google-Smtp-Source: ABdhPJzdIQ4vB761RUi6v1HI1p4UzqyOOA0GSKBjTMp6EdtjdhHQq8XELB1I6aQFcv0w/hp4QKxJhGCbQx/1j27ysbA=
+X-Received: by 2002:a17:906:37cd:b0:6e0:bdb6:f309 with SMTP id
+ o13-20020a17090637cd00b006e0bdb6f309mr500240ejc.394.1649112523031; Mon, 04
+ Apr 2022 15:48:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202204041144.96FC64A8@keescook>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220311072859.2174624-1-brendanhiggins@google.com> <1e1472e8-1813-3903-f934-cb0ae7f09864@linuxfoundation.org>
+In-Reply-To: <1e1472e8-1813-3903-f934-cb0ae7f09864@linuxfoundation.org>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 4 Apr 2022 18:48:31 -0400
+Message-ID: <CAFd5g46JiiddNxHW_jK6fjdfjGMjWsXsFuvL6H9xcZc98HWQyQ@mail.gmail.com>
+Subject: Re: [PATCH v1] kunit: add support for kunit_suites that reference
+ init code
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
+        martin.fernandez@eclypsium.com, daniel.gutson@eclypsium.com,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        jk@codeconstruct.com.au
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
-
-On Mon, Apr 4, 2022 at 8:49 PM Kees Cook <keescook@chromium.org> wrote:
-> This mixes two changes: the pRNG change and the "use urandom if
-> non-deterministic" change. I think these should be split, so the pRNG
-> change can be explicitly justified.
-
-Alright, I'll split those. Or, more probably, just drop the xorshift
-thing. There's not actually a strong reason for preferring xorshift. I
-did it because it produces more uniformity and is faster to compute and
-all that. But none of that stuff actually matters here. It was just a
-sort of "well I'm at it..." thing.
-
-> >  static struct plugin_info latent_entropy_plugin_info = {
-> > -     .version        = "201606141920vanilla",
-> > +     .version        = "202203311920vanilla",
+On Mon, Apr 4, 2022 at 6:37 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
 >
-> This doesn't really need to be versioned. We can change this to just
-> "vanilla", IMO.
-
-Okay. I suppose you want it to be in a different patch too, right? In
-which case I'll leave it out and maybe get to it later. (I suppose one
-probably needs to double check whether it's used for anything
-interesting like dwarf debug info or whatever, where maybe it's
-helpful?)
-
-> > +     if (deterministic_seed) {
-> > +             unsigned HOST_WIDE_INT w = deterministic_seed;
-> > +             w ^= w << 13;
-> > +             w ^= w >> 7;
-> > +             w ^= w << 17;
-> > +             deterministic_seed = w;
-> > +             return deterministic_seed;
+> Hi Brendan,
 >
-> While seemingly impossible, perhaps don't reset "deterministic_seed",
-> and just continue to use "seed", so that it can never become "0" again.
+> On 3/11/22 12:28 AM, Brendan Higgins wrote:
+> > Add support for a new kind of kunit_suite registration macro called
+> > kunit_test_init_suite(); this new registration macro allows the
+> > registration of kunit_suites that reference functions marked __init and
+> > data marked __initdata.
+> >
+> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> > Tested-by: Martin Fernandez <martin.fernandez@eclypsium.com>
+> > Reviewed-by: Kees Cook <keescook@chromium.org>
+> > Reviewed-by: David Gow <davidgow@google.com>
+> > ---
+> >
+>
+> I almost applied it ...
+>
+> > This is a follow-up to the RFC here[1].
+> >
+> > This patch is in response to a KUnit user issue[2] in which the user was
+> > attempting to test some init functions; although this is a functional
+> > solution as long as KUnit tests only run during the init phase, we will
+> > need to do more work if we ever allow tests to run after the init phase
+> > is over; it is for this reason that this patch adds a new registration
+> > macro rather than simply modifying the existing macros.
+> >
+> > Changes since last version:
+> >   - I added more to the kunit_test_init_suites() kernel-doc comment
+> >     detailing "how" the modpost warnings are suppressed in addition to
+> >     the existing information regarding "why" it is OK for the modpost
+> >     warnings to be suppressed.
+> >
+> > [1] https://lore.kernel.org/linux-kselftest/20220310210210.2124637-1-brendanhiggins@google.com/
+> > [2] https://groups.google.com/g/kunit-dev/c/XDjieRHEneg/m/D0rFCwVABgAJ
+> >
+> > ---
+> >   include/kunit/test.h | 26 ++++++++++++++++++++++++++
+> >   1 file changed, 26 insertions(+)
+> >
+> > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > index b26400731c02..7f303a06bc97 100644
+> > --- a/include/kunit/test.h
+> > +++ b/include/kunit/test.h
+> > @@ -379,6 +379,32 @@ static inline int kunit_run_all_tests(void)
+> >
+> >   #define kunit_test_suite(suite)     kunit_test_suites(&suite)
+> >
+> > +/**
+> > + * kunit_test_init_suites() - used to register one or more &struct kunit_suite
+> > + *                         containing init functions or init data.
+> > + *
+> > + * @__suites: a statically allocated list of &struct kunit_suite.
+> > + *
+> > + * This functions identically as &kunit_test_suites() except that it suppresses
+> > + * modpost warnings for referencing functions marked __init or data marked
+> > + * __initdata; this is OK because currently KUnit only runs tests upon boot
+> > + * during the init phase or upon loading a module during the init phase.
+> > + *
+> > + * NOTE TO KUNIT DEVS: If we ever allow KUnit tests to be run after boot, these
+> > + * tests must be excluded.
+> > + *
+> > + * The only thing this macro does that's different from kunit_test_suites is
+> > + * that it suffixes the array and suite declarations it makes with _probe;
+> > + * modpost suppresses warnings about referencing init data for symbols named in
+> > + * this manner.
+> > + */
+> > +#define kunit_test_init_suites(__suites...)                          \
+> > +     __kunit_test_suites(CONCATENATE(__UNIQUE_ID(array), _probe),    \
+> > +                         CONCATENATE(__UNIQUE_ID(suites), _probe),   \
+> > +                         ##__suites)
+> > +
+> > +#define kunit_test_init_suite(suite) kunit_test_init_suites(&suite)
+> > +
+> >   #define kunit_suite_for_each_test_case(suite, test_case)            \
+> >       for (test_case = suite->test_cases; test_case->run_case; test_case++)
+> >
+> >
+>
+> The naming of the function and macro are rather confusing and can become
+> error prone. Let's find better naming scheme.
 
-Not sure I follow. It's an LFSR. The "L" is important. It'll never become
-zero. It's not "seemingly". We can prove it trivially in Magma:
+Yeah, I wasn't sure about the name. I didn't have any better ideas
+initially though. Any suggestions?
 
-    > w := 64;
-    > K := GF(2);
-    > I := IdentityMatrix(K, w);
-    > SHL := HorizontalJoin(RemoveColumn(I, 1), ZeroMatrix(K, w, 1));
-    > SHR := HorizontalJoin(ZeroMatrix(K, w, 1), RemoveColumn(I, w));
-    > M :=  (I + SHL^17) * (I + SHR^7) * (I + SHL^13);
-    > Order(M) eq 2^64 - 1;
-    true
-    > P<x> := MinimalPolynomial(M);
-    > IsPrimitive(P);
-    true
-    > IsInvertible(M);
-    true 
-    > Rank(M);
-    64
-
-And more obviously, splitting this into "seed" and "deterministic_seed",
-as you suggested, wouldn't actually do much in the case when seed=0,
-since 0<<N==0 and 0^0==0.
-
-Jason
+> > base-commit: 330f4c53d3c2d8b11d86ec03a964b86dc81452f5
+> >
+>
+> thanks,
+> -- Shuah

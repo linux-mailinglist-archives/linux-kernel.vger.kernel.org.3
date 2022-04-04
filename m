@@ -2,104 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBB2D4F1DDC
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2109F4F1E55
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387362AbiDDVnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53756 "EHLO
+        id S1380519AbiDDVsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380720AbiDDVMW (ORCPT
+        with ESMTP id S1378924AbiDDQFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 17:12:22 -0400
-Received: from smtp.gentoo.org (dev.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171882F3B4;
-        Mon,  4 Apr 2022 14:10:25 -0700 (PDT)
-Subject: Re: [PATCH] MIPS: pgalloc: fix memory leak caused by pgd_free()
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Andrew Holmes <aholmes@omnom.net>
-Cc:     yaliang.wang@windriver.com, rppt@kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        huangpei@loongson.cn, Andrew Morton <akpm@linux-foundation.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        anshuman.khandual@arm.com, penberg@kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>
-References: <20220310113116.2068859-1-yaliang.wang@windriver.com>
- <alpine.DEB.2.21.2204021446370.47162@angie.orcam.me.uk>
- <9cc88b1c-8a8c-95ea-2cf7-31be3b771495@omnom.net>
- <alpine.DEB.2.21.2204031122020.47162@angie.orcam.me.uk>
-From:   Joshua Kinard <kumba@gentoo.org>
-Message-ID: <4094bbe0-27b0-d83b-3b22-36d0d53769b5@gentoo.org>
-Date:   Mon, 4 Apr 2022 17:10:19 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.12.1
+        Mon, 4 Apr 2022 12:05:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71930427D2;
+        Mon,  4 Apr 2022 09:03:07 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3CFA21474;
+        Mon,  4 Apr 2022 09:03:07 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D6ED33F73B;
+        Mon,  4 Apr 2022 09:03:06 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 17:03:05 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        Pierre.Gondois@arm.com, viresh.kumar@linaro.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+        mka@chromium.org, nm@ti.com, sboyd@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, cristian.marussi@arm.com,
+        sudeep.holla@arm.com, matthias.bgg@gmail.com
+Subject: Re: [RESEND][PATCH 8/8] powercap: DTPM: Check for Energy Model type
+Message-ID: <YksWubveJv2ei2pp@arm.com>
+References: <20220321095729.20655-1-lukasz.luba@arm.com>
+ <20220321095729.20655-9-lukasz.luba@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <alpine.DEB.2.21.2204031122020.47162@angie.orcam.me.uk>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321095729.20655-9-lukasz.luba@arm.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/3/2022 06:37, Maciej W. Rozycki wrote:
-> On Sun, 3 Apr 2022, Andrew Holmes wrote:
+On Monday 21 Mar 2022 at 09:57:29 (+0000), Lukasz Luba wrote:
+> The Energy Model power values might be artificial. In such case
+> it's safe to bail out during the registration, since the PowerCap
+> framework supports only micro-Watts.
 > 
->> MIPS64 has essentially been broken/unusable for 8 kernel releases,
->> including two LTS kernels, since the original commit landed. Should
->> there not have been CI/tests that caught this? It's pretty major!
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  drivers/powercap/dtpm_cpu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->  AFAIK the MIPS port is only maintained on the best effort basis nowadays 
-> I'm afraid.  I.e. it's enthusiasts investing their free time for the joy 
-> of fiddling with things.  So things are bound to break from time to time 
-> and remain unnoticed for a while.  We're doing our best, but our resources 
-> are limited.
+> diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
+> index bca2f912d349..f5eced0842b3 100644
+> --- a/drivers/powercap/dtpm_cpu.c
+> +++ b/drivers/powercap/dtpm_cpu.c
+> @@ -211,7 +211,7 @@ static int __dtpm_cpu_setup(int cpu, struct dtpm *parent)
+>  		return 0;
+>  
+>  	pd = em_cpu_get(cpu);
+> -	if (!pd)
+> +	if (!pd || em_is_artificial(pd))
+>  		return -EINVAL;
+>  
+>  	dtpm_cpu = kzalloc(sizeof(*dtpm_cpu), GFP_KERNEL);
+
+Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
+
+> -- 
+> 2.17.1
 > 
->  Taking these limitations into account I think Thomas has been doing a 
-> tremendous job maintaining the MIPS port, but he hasn't been cc-ed on the 
-> submission of the original change and it's very easy to miss stuff in the 
-> flood that has only been posted to a mailing list.
-> 
->   Maciej
-> 
-
-FWIW, hot off the presses is RFC9225:
-https://datatracker.ietf.org/doc/html/rfc9225
-
-4.  Best Current Practises
-
-   1.  Authors MUST NOT implement bugs.
-
-   2.  If bugs are introduced in code, they MUST be clearly documented.
-
-   3.  When implementing specifications that are broken by design, it is
-       RECOMMENDED to aggregate multiple smaller bugs into one larger
-       bug.  This will be easier to document: rather than having a lot
-       of hard-to-track inconsequential bugs, there will be only a few
-       easy-to-recognise significant bugs.
-
-   4.  The aphorism "It's not a bug, it's a feature" is considered rude.
-
-   5.  Assume all external input is the result of (a series of) bugs.
-       (Especially in machine-to-machine applications such as
-       implementations of network protocols.)
-
-   6.  In fact, assume all internal inputs also are the result of bugs.
-
--- 
-Joshua Kinard
-Gentoo/MIPS
-kumba@gentoo.org
-rsa6144/5C63F4E3F5C6C943 2015-04-27
-177C 1972 1FB8 F254 BAD0 3E72 5C63 F4E3 F5C6 C943
-
-"The past tempts us, the present confuses us, the future frightens us.  And
-our lives slip away, moment by moment, lost in that vast, terrible in-between."
-
---Emperor Turhan, Centauri Republic

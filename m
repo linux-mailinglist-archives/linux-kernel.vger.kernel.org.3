@@ -2,51 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA6294F1692
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 15:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62BC04F1684
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 15:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376431AbiDDNzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 09:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60734 "EHLO
+        id S1377331AbiDDNxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 09:53:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346907AbiDDNzF (ORCPT
+        with ESMTP id S1359315AbiDDNwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 09:55:05 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16AA03EABC;
-        Mon,  4 Apr 2022 06:53:08 -0700 (PDT)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nbN8k-0007Bt-C0; Mon, 04 Apr 2022 15:53:06 +0200
-Message-ID: <539ff0c5-a95b-836d-e1c6-39f64ee2a418@leemhuis.info>
-Date:   Mon, 4 Apr 2022 15:53:05 +0200
+        Mon, 4 Apr 2022 09:52:49 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C992A71B
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 06:50:52 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so10689132fac.7
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 06:50:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UJ7ifLL/vt7TzqWMHfr/T5EroEWr8e059AicCh65jwE=;
+        b=XdBxqwZ6hlXamq+EWOsWwZc2zeRgoCwCqOUQwsgb5NTwPspoxxb1w0Onbn4/IwsWXN
+         oBhYY2EniOXswlpd6EFCV4DGAHPIQoHZ4DR9HBGivSxgA1BXhRRqli935/RvYWgb2xGu
+         wKKnsPEUP/7Be2RBiFDzI2nwvmjM4sKPcBRZVZE/WeAQnxANwpd002AeQ5K8cbw+HO8t
+         YP+jzRVuWISNKa0QLHasAEGOQSW1OHcw16BCf77kPpieQPPywEnX0F5Ea/fD/sdno8B3
+         0sQ6zqlIs0nnhgLJgZtSec5Ze8eEOxP/sIVmHUuseH9VJYI5LkYMD2Aq/496qBPfXQm5
+         gzDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UJ7ifLL/vt7TzqWMHfr/T5EroEWr8e059AicCh65jwE=;
+        b=Hnuodn08n50OzL//dC1emFK/y24oX8SRl1Nqes7Un8wihCd6m6whBULVq3w+a8X1tu
+         I8bVKl7ugrx5r2HyNRByei/p2zpP1xPlJt10PloqiIPmSU+Q1iGDD7wFyYxi/0Pk1zL1
+         r5XLGS76HjK7WgZ5JBFS6xyXLg0q9RCubAtAxs3OGny5pfvXaLFVyVIEWu96CLuM/lgu
+         IP0mjZycjSUmtb13M32HzX2156Ps/Et8MtWakDqMq4b4i8vJJfuGOr3Sy/XzNuEqgfbD
+         tTvZnpjszHIaiLutjkbVI5PchumyFNOkygNBI1SX2xGb7+/zZNZn7I5E3hXePUZLwM+9
+         IPMA==
+X-Gm-Message-State: AOAM533u1fYYX7s7OJov2jl+QJnUcvgxjlKf5c2McsweO1kGfyqZZudi
+        ffv/IJ4SCWhFD9tC+ZPVNZCjcw==
+X-Google-Smtp-Source: ABdhPJz20MpJx7LSy5moQ816FyGIBvEreDKN4HMKOHtNCOu/4APRQAt0B1hh6o4oY3S/Sn+csHU31g==
+X-Received: by 2002:a05:6870:3113:b0:d3:473b:3f1d with SMTP id v19-20020a056870311300b000d3473b3f1dmr3732oaa.116.1649080251783;
+        Mon, 04 Apr 2022 06:50:51 -0700 (PDT)
+Received: from ripper ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id 14-20020a056870134e00b000ddaf3927b1sm4218569oac.32.2022.04.04.06.50.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 06:50:51 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 06:53:16 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Andy Gross <agross@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Wilczy??ski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] PCI: qcom: Fix pipe clock imbalance
+Message-ID: <Ykr4TOYYh4X8o02E@ripper>
+References: <20220401133351.10113-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: Bug 215744 - input from the accelerometer disappeared, regression
- on amd_sfh on kernel 5.17
-Content-Language: en-US
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     Basavaraj Natikar <bnatikar@amd.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-Cc:     Jiri Kosina <jkosina@suse.cz>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Marco <rodomar705@protonmail.com>
-References: <048ef583-4a8f-96b0-68a3-45ab9ec8d6df@leemhuis.info>
- <0499f8ae-6966-be4b-5af8-e7e568bfcd5f@amd.com>
- <6fe27103-5e35-5f16-d213-29bd71412f5b@leemhuis.info>
- <7dfb121f-848c-873e-f3cc-43239c264f21@amd.com>
- <0a33735c-dd43-4305-ff92-7b9ac2c6a0d9@leemhuis.info>
-In-Reply-To: <0a33735c-dd43-4305-ff92-7b9ac2c6a0d9@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1649080389;1ce2c595;
-X-HE-SMSGID: 1nbN8k-0007Bt-C0
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220401133351.10113-1-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,149 +76,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04.04.22 09:25, Thorsten Leemhuis wrote:
-> On 04.04.22 09:18, Basavaraj Natikar wrote:
->>
->>
->> On 4/4/2022 12:05 PM, Thorsten Leemhuis wrote:
->>> On 01.04.22 21:47, Basavaraj Natikar wrote:
->>>> Committed patch is disabling the interrupt mode and does not cause any
->>>> functionality or working issues.
->>> Well, for the reporter it clearly does cause problems, unless something
->>> in testing went sideways.
->>>
->>>> I also cross verified on 3 system and working fine on 5.17 and not able
->>>> to reproduce or recreate.
->>>> [...]
->>>> ------------------------------------------------
->>>>
->>>> Looks like this is not regression. May be some hardware/firmware bug.
->>> Well, from the point of the kernel development process it afaics is a
->>> regression, unless the testing went sideways. It doesn't matter if the
->>> root cause is in fact a hardware/firmware bug, as what matters in the
->>> scope of the kernel development is: things worked, and now they don't.
->>> For details please check this file and read the quotes from Linus:
->>
->> can you help to answer the below questions:
+On Fri 01 Apr 06:33 PDT 2022, Johan Hovold wrote:
+
+> Commit ed8cc3b1fc84 ("PCI: qcom: Add support for SDM845 PCIe
+> controller") introduced a clock imbalance by enabling the pipe clock
+> both in init() and in post_init() but only disabling in post_deinit().
 > 
-> Me? No, I'm just the Linux kernels regression tracker trying to make
-> sure all regressions are handled appropriately. :-D
+> Note that the pipe clock was also never disabled in the init() error
+> paths and that enabling the clock before powering up the PHY looks
+> questionable.
 > 
-> Marco, can you help out here?
+> Fixes: ed8cc3b1fc84 ("PCI: qcom: Add support for SDM845 PCIe controller")
+> Cc: stable@vger.kernel.org      # 5.6
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Marco replied in private and allowed me to forward his reply:
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-```
-I can't since, as mentioned previously, this is the only AMD laptop
-device that I have.
-I am sure this is a regression for me, even if the issue is firmware
-related. I have tested the 5.17 stock arch kernel and the sensor is
-gone. With the last three patches reverted the sensor is back and
-working fine.
-
-I would love to verify if the issue is hardware or software related, but
-being outside of AMD and with AMD not releasing any public information
-with datasheet/specification on their Sensor Fusion Hub I really can't
-say anything specific.
-
-This still remains a regression, since the hardware was working before
-and now it doesn't.
-
-By the way, I already have seen also this rework of this specific driver
-https://github.com/conqp/amd-sfh-hid-dkms that even added a still
-missing handler for the lid sensor switch for disabling touchpad and
-keyboard, and all efforts tried to merge it upstream with all sorts of
-issues.
-
-Regardless of everything, this is a driver supported in kernel by AMD
-engineers, so all of this doesn't matter. On my hardware this three
-patches break a previously working hardware.
-```
-
-Ciao, Thorsten
-
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
 > 
-> P.S.: As the Linux kernel's regression tracker I'm getting a lot of
-> reports on my table. I can only look briefly into most of them and lack
-> knowledge about most of the areas they concern. I thus unfortunately
-> will sometimes get things wrong or miss something important. I hope
-> that's not the case here; if you think it is, don't hesitate to tell me
-> in a public reply, it's in everyone's interest to set the public record
-> straight.
+> Changes in v2
+>  - Capitalise "Fix" in subject line according to PCI subsystem
+>    convention
 > 
->> Did you attempt to test it multiple times on the tip of the git to see
->> if the problems goes away?
->>
->> if same test is performed multiple times with or without reverting patch
->> on same platform (laptop/hardware/firmware) on which issue is observed
->> we may see same working/issue behavior. if it is regressing then always
->> it should work with or without reverting patches on same laptop. is this
->> the case here?
->>
->> I don't see any regression here. I requested to retest with other
->> hardware/platform/system also as per my above test (output) all working
->> fine in 3 different platforms and not able to reproduce or recreate for
->> my side on 5.17.
->>
->> Thanks,
->>
->> Basavaraj
->>
->>>
->>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fnext%2Flinux-next.git%2Fplain%2FDocumentation%2Fprocess%2Fhandling-regressions.rst&amp;data=04%7C01%7CBasavaraj.Natikar%40amd.com%7Ca64876e42c174bf2df5608da16054550%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637846509153638366%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=nv4ZzNeRgRCrjnEgh5wHGcqSAHaCffdWxGm%2BsjiPu0Y%3D&amp;reserved=0
->>>
->>> Ciao, Thorsten
->>>
->>>> Just curious reverting this patch how it is working just suspecting
->>>> firmware undefined behavior.
->>>>
->>>> If possible, please check on other platform/system also if same behavior
->>>> occurs.
->>>>
->>>> Could you please provide me platform/system details so that I can check
->>>> this behavior?
->>>>
->>>> Thanks,
->>>> Basavaraj
->>>>
->>>> On 4/1/2022 1:36 PM, Thorsten Leemhuis wrote:
->>>>> Hi, this is your Linux kernel regression tracker.
->>>>>
->>>>> I noticed a regression report in bugzilla.kernel.org that afaics nobody
->>>>> acted upon since it was reported about a week ago, that's why I decided
->>>>> to forward it to the lists and all people that seemed to be relevant
->>>>> here. It looks to me like this is something for Basavaraj, as it seems
->>>>> to be caused by	b300667b33b2 ("HID: amd_sfh: Disable the interrupt for
->>>>> all command"). But I'm not totally sure, I only looked briefly into the
->>>>> details. Or was this discussed somewhere else already? Or even fixed?
->>>>>
->>>>> To quote from https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbugzilla.kernel.org%2Fshow_bug.cgi%3Fid%3D215744&amp;data=04%7C01%7CBasavaraj.Natikar%40amd.com%7Ca64876e42c174bf2df5608da16054550%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637846509153638366%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=jXu50hKBHkHzjOrfEQ0sXme3%2BdliBd%2FleA%2F9oE61EpI%3D&amp;reserved=0 :
->>>>>
->>>>>>  Marco 2022-03-25 15:22:19 UTC
->>>>>>
->>>>>> After updating to 5.17, the input from the accelerometer disappeared, completely. No devices available from IIO tree. First bad commit causing it is https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Ftorvalds%2Flinux.git%2Fcommit%2Fdrivers%2Fhid%2Famd-sfh-hid%2Famd_sfh_pcie.c%3Fid%3Db300667b33b2b5a2c8e5f8f22826befb3d7f4f2b&amp;data=04%7C01%7CBasavaraj.Natikar%40amd.com%7Ca64876e42c174bf2df5608da16054550%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637846509153638366%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=o443EB8xRW%2BwEi7pxB82A8B0oty64pBSQwAEU4sF2UA%3D&amp;reserved=0. Reverting this and the the other two on top fixed this. Tried to not revert only the above mentioned commit, but it's still not working.
->>>>>>
->>>>>> Marco.
->>>>> Anyway, to get this tracked:
->>>>>
->>>>> #regzbot introduced: b300667b33b2b5a2c8e5f8f22826befb3d7f4
->>>>> #regzbot from: Marco <rodomar705@protonmail.com>
->>>>> #regzbot title: input: hid: input from the accelerometer disappeared due
->>>>> to changes to amd_sfh
->>>>> #regzbot link: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbugzilla.kernel.org%2Fshow_bug.cgi%3Fid%3D215744&amp;data=04%7C01%7CBasavaraj.Natikar%40amd.com%7Ca64876e42c174bf2df5608da16054550%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637846509153638366%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=jXu50hKBHkHzjOrfEQ0sXme3%2BdliBd%2FleA%2F9oE61EpI%3D&amp;reserved=0
->>>>>
->>>>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->>>>>
->>>>> P.S.: As the Linux kernel's regression tracker I'm getting a lot of
->>>>> reports on my table. I can only look briefly into most of them and lack
->>>>> knowledge about most of the areas they concern. I thus unfortunately
->>>>> will sometimes get things wrong or miss something important. I hope
->>>>> that's not the case here; if you think it is, don't hesitate to tell me
->>>>> in a public reply, it's in everyone's interest to set the public record
->>>>> straight.
->>>>>
->>>>
->>
->>
->>
+> 
+>  drivers/pci/controller/dwc/pcie-qcom.c | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index b79d98e5e228..20a0e6533a1c 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -1238,12 +1238,6 @@ static int qcom_pcie_init_2_7_0(struct qcom_pcie *pcie)
+>  		goto err_disable_clocks;
+>  	}
+>  
+> -	ret = clk_prepare_enable(res->pipe_clk);
+> -	if (ret) {
+> -		dev_err(dev, "cannot prepare/enable pipe clock\n");
+> -		goto err_disable_clocks;
+> -	}
+> -
+>  	/* Wait for reset to complete, required on SM8450 */
+>  	usleep_range(1000, 1500);
+>  
+> -- 
+> 2.35.1
+> 

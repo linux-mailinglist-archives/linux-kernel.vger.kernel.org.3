@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B034F13E1
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5584F13E0
 	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 13:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359739AbiDDLfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 07:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45942 "EHLO
+        id S1359795AbiDDLfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 07:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349295AbiDDLfD (ORCPT
+        with ESMTP id S1359792AbiDDLfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 07:35:03 -0400
+        Mon, 4 Apr 2022 07:35:09 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497183C73A
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 04:33:07 -0700 (PDT)
-Received: from fraeml703-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KX7rT4dzdz67Lnh;
-        Mon,  4 Apr 2022 19:31:05 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6652E3D1F6
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 04:33:10 -0700 (PDT)
+Received: from fraeml702-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KX7rX4qvzz67Lqc;
+        Mon,  4 Apr 2022 19:31:08 +0800 (CST)
 Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml703-chm.china.huawei.com (10.206.15.52) with Microsoft SMTP Server
+ fraeml702-chm.china.huawei.com (10.206.15.51) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Mon, 4 Apr 2022 13:33:05 +0200
+ 15.1.2375.24; Mon, 4 Apr 2022 13:33:08 +0200
 Received: from localhost.localdomain (10.69.192.58) by
  lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 4 Apr 2022 12:33:01 +0100
+ 15.1.2375.24; Mon, 4 Apr 2022 12:33:05 +0100
 From:   John Garry <john.garry@huawei.com>
 To:     <joro@8bytes.org>, <will@kernel.org>, <robin.murphy@arm.com>
 CC:     <mst@redhat.com>, <jasowang@redhat.com>,
@@ -34,9 +34,9 @@ CC:     <mst@redhat.com>, <jasowang@redhat.com>,
         <chenxiang66@hisilicon.com>, <thunder.leizhen@huawei.com>,
         <jean-philippe@linaro.org>, <linuxarm@huawei.com>,
         John Garry <john.garry@huawei.com>
-Subject: [PATCH RESEND v5 2/5] iova: Allow rcache range upper limit to be flexible
-Date:   Mon, 4 Apr 2022 19:27:11 +0800
-Message-ID: <1649071634-188535-3-git-send-email-john.garry@huawei.com>
+Subject: [PATCH RESEND v5 3/5] iommu: Allow iommu_change_dev_def_domain() realloc same default domain type
+Date:   Mon, 4 Apr 2022 19:27:12 +0800
+Message-ID: <1649071634-188535-4-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1649071634-188535-1-git-send-email-john.garry@huawei.com>
 References: <1649071634-188535-1-git-send-email-john.garry@huawei.com>
@@ -55,128 +55,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some low-level drivers may request DMA mappings whose IOVA length exceeds
-that of the current rcache upper limit.
+Allow iommu_change_dev_def_domain() to create a new default domain, keeping
+the same as current.
 
-This means that allocations for those IOVAs will never be cached, and
-always must be allocated and freed from the RB tree per DMA mapping cycle.
-This has a significant effect on performance, more so since commit
-4e89dce72521 ("iommu/iova: Retry from last rb tree node if iova search
-fails"), as discussed at [0].
-
-As a first step towards allowing the rcache range upper limit be
-configured, hold this value in the IOVA rcache structure, and allocate
-the rcaches separately.
-
-Delete macro IOVA_RANGE_CACHE_MAX_SIZE in case it's reused by mistake.
-
-[0] https://lore.kernel.org/linux-iommu/20210129092120.1482-1-thunder.leizhen@huawei.com/
+Also remove comment about the function purpose, which will become stale.
 
 Signed-off-by: John Garry <john.garry@huawei.com>
 ---
- drivers/iommu/iova.c | 20 ++++++++++----------
- include/linux/iova.h |  3 +++
- 2 files changed, 13 insertions(+), 10 deletions(-)
+ drivers/iommu/iommu.c | 49 ++++++++++++++++++++++---------------------
+ include/linux/iommu.h |  1 +
+ 2 files changed, 26 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-index db77aa675145..5c22b9187b79 100644
---- a/drivers/iommu/iova.c
-+++ b/drivers/iommu/iova.c
-@@ -15,8 +15,6 @@
- /* The anchor node sits above the top of the usable address space */
- #define IOVA_ANCHOR	~0UL
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index 0dd766030baf..10bb10c2a210 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -2863,6 +2863,7 @@ u32 iommu_sva_get_pasid(struct iommu_sva *handle)
+ }
+ EXPORT_SYMBOL_GPL(iommu_sva_get_pasid);
  
--#define IOVA_RANGE_CACHE_MAX_SIZE 6	/* log of max cached IOVA range size (in pages) */
++
+ /*
+  * Changes the default domain of an iommu group that has *only* one device
+  *
+@@ -2873,10 +2874,6 @@ EXPORT_SYMBOL_GPL(iommu_sva_get_pasid);
+  *
+  * Returns 0 on success and error code on failure
+  *
+- * Note:
+- * 1. Presently, this function is called only when user requests to change the
+- *    group's default domain type through /sys/kernel/iommu_groups/<grp_id>/type
+- *    Please take a closer look if intended to use for other purposes.
+  */
+ static int iommu_change_dev_def_domain(struct iommu_group *group,
+ 				       struct device *prev_dev, int type)
+@@ -2929,28 +2926,32 @@ static int iommu_change_dev_def_domain(struct iommu_group *group,
+ 		goto out;
+ 	}
+ 
+-	dev_def_dom = iommu_get_def_domain_type(dev);
+-	if (!type) {
++	if (type == __IOMMU_DOMAIN_SAME) {
++		type = prev_dom->type;
++	} else {
++		dev_def_dom = iommu_get_def_domain_type(dev);
++		if (!type) {
++			/*
++			 * If the user hasn't requested any specific type of domain and
++			 * if the device supports both the domains, then default to the
++			 * domain the device was booted with
++			 */
++			type = dev_def_dom ? : iommu_def_domain_type;
++		} else if (dev_def_dom && type != dev_def_dom) {
++			dev_err_ratelimited(prev_dev, "Device cannot be in %s domain\n",
++					    iommu_domain_type_str(type));
++			ret = -EINVAL;
++			goto out;
++		}
++
+ 		/*
+-		 * If the user hasn't requested any specific type of domain and
+-		 * if the device supports both the domains, then default to the
+-		 * domain the device was booted with
++		 * Switch to a new domain only if the requested domain type is different
++		 * from the existing default domain type
+ 		 */
+-		type = dev_def_dom ? : iommu_def_domain_type;
+-	} else if (dev_def_dom && type != dev_def_dom) {
+-		dev_err_ratelimited(prev_dev, "Device cannot be in %s domain\n",
+-				    iommu_domain_type_str(type));
+-		ret = -EINVAL;
+-		goto out;
+-	}
 -
- static bool iova_rcache_insert(struct iova_domain *iovad,
- 			       unsigned long pfn,
- 			       unsigned long size);
-@@ -443,7 +441,7 @@ alloc_iova_fast(struct iova_domain *iovad, unsigned long size,
- 	 * rounding up anything cacheable to make sure that can't happen. The
- 	 * order of the unadjusted size will still match upon freeing.
- 	 */
--	if (size < (1 << (IOVA_RANGE_CACHE_MAX_SIZE - 1)))
-+	if (size < (1 << (iovad->rcache_max_size - 1)))
- 		size = roundup_pow_of_two(size);
+-	/*
+-	 * Switch to a new domain only if the requested domain type is different
+-	 * from the existing default domain type
+-	 */
+-	if (prev_dom->type == type) {
+-		ret = 0;
+-		goto out;
++		if (prev_dom->type == type) {
++			ret = 0;
++			goto out;
++		}
+ 	}
  
- 	iova_pfn = iova_rcache_get(iovad, size, limit_pfn + 1);
-@@ -713,13 +711,15 @@ int iova_domain_init_rcaches(struct iova_domain *iovad)
- 	unsigned int cpu;
- 	int i, ret;
+ 	/* We can bring up a flush queue without tearing down the domain */
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index 9208eca4b0d1..b141cf71c7af 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -63,6 +63,7 @@ struct iommu_domain_geometry {
+ 					      implementation              */
+ #define __IOMMU_DOMAIN_PT	(1U << 2)  /* Domain is identity mapped   */
+ #define __IOMMU_DOMAIN_DMA_FQ	(1U << 3)  /* DMA-API uses flush queue    */
++#define __IOMMU_DOMAIN_SAME	(1U << 4)  /* Keep same type (internal)   */
  
--	iovad->rcaches = kcalloc(IOVA_RANGE_CACHE_MAX_SIZE,
-+	iovad->rcache_max_size = 6; /* Arbitrarily high default */
-+
-+	iovad->rcaches = kcalloc(iovad->rcache_max_size,
- 				 sizeof(struct iova_rcache),
- 				 GFP_KERNEL);
- 	if (!iovad->rcaches)
- 		return -ENOMEM;
- 
--	for (i = 0; i < IOVA_RANGE_CACHE_MAX_SIZE; ++i) {
-+	for (i = 0; i < iovad->rcache_max_size; ++i) {
- 		struct iova_cpu_rcache *cpu_rcache;
- 		struct iova_rcache *rcache;
- 
-@@ -816,7 +816,7 @@ static bool iova_rcache_insert(struct iova_domain *iovad, unsigned long pfn,
- {
- 	unsigned int log_size = order_base_2(size);
- 
--	if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE)
-+	if (log_size >= iovad->rcache_max_size)
- 		return false;
- 
- 	return __iova_rcache_insert(iovad, &iovad->rcaches[log_size], pfn);
-@@ -872,7 +872,7 @@ static unsigned long iova_rcache_get(struct iova_domain *iovad,
- {
- 	unsigned int log_size = order_base_2(size);
- 
--	if (log_size >= IOVA_RANGE_CACHE_MAX_SIZE || !iovad->rcaches)
-+	if (log_size >= iovad->rcache_max_size || !iovad->rcaches)
- 		return 0;
- 
- 	return __iova_rcache_get(&iovad->rcaches[log_size], limit_pfn - size);
-@@ -888,7 +888,7 @@ static void free_iova_rcaches(struct iova_domain *iovad)
- 	unsigned int cpu;
- 	int i, j;
- 
--	for (i = 0; i < IOVA_RANGE_CACHE_MAX_SIZE; ++i) {
-+	for (i = 0; i < iovad->rcache_max_size; ++i) {
- 		rcache = &iovad->rcaches[i];
- 		if (!rcache->cpu_rcaches)
- 			break;
-@@ -916,7 +916,7 @@ static void free_cpu_cached_iovas(unsigned int cpu, struct iova_domain *iovad)
- 	unsigned long flags;
- 	int i;
- 
--	for (i = 0; i < IOVA_RANGE_CACHE_MAX_SIZE; ++i) {
-+	for (i = 0; i < iovad->rcache_max_size; ++i) {
- 		rcache = &iovad->rcaches[i];
- 		cpu_rcache = per_cpu_ptr(rcache->cpu_rcaches, cpu);
- 		spin_lock_irqsave(&cpu_rcache->lock, flags);
-@@ -935,7 +935,7 @@ static void free_global_cached_iovas(struct iova_domain *iovad)
- 	unsigned long flags;
- 	int i, j;
- 
--	for (i = 0; i < IOVA_RANGE_CACHE_MAX_SIZE; ++i) {
-+	for (i = 0; i < iovad->rcache_max_size; ++i) {
- 		rcache = &iovad->rcaches[i];
- 		spin_lock_irqsave(&rcache->lock, flags);
- 		for (j = 0; j < rcache->depot_size; ++j) {
-diff --git a/include/linux/iova.h b/include/linux/iova.h
-index 320a70e40233..02f7222fa85a 100644
---- a/include/linux/iova.h
-+++ b/include/linux/iova.h
-@@ -38,6 +38,9 @@ struct iova_domain {
- 
- 	struct iova_rcache	*rcaches;
- 	struct hlist_node	cpuhp_dead;
-+
-+	/* log of max cached IOVA range size (in pages) */
-+	unsigned long	rcache_max_size;
- };
- 
- static inline unsigned long iova_size(struct iova *iova)
+ /*
+  * This are the possible domain-types
 -- 
 2.26.2
 

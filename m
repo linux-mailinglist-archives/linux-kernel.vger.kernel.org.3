@@ -2,173 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B224F2049
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F57B4F2050
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbiDDXeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 19:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41636 "EHLO
+        id S231808AbiDDXfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 19:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231635AbiDDXem (ORCPT
+        with ESMTP id S231308AbiDDXfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 19:34:42 -0400
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DB154196
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 16:32:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1649115161; x=1680651161;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=pLgGUw+vPL0f2qNaYJgXPaqC3PncPyo5PXkVMywvCnI=;
-  b=DVRvWniR2+3E/29XNogJL/e9N5x19ei4GGc23plDmYpNTPvmUan1xEUd
-   YTzepQbZVRNluJ2Dc75yXlZANmd4w+7q9PAOdt9DB8NZZv1EQXfKLe89R
-   9H7sccS5ToLe8Ohya/oXNgpjWKp1Kqqq57lKRdyqYpzbYd+aFyjLRlkz3
-   SzxFbDBul0qRbNy7MasMX0+l6vD3tId0DZzZhWvZxH8CqZDqaLPE7BJSi
-   QPSX17MmwpIUD9Aqx5cuqfOnxoHvJWk2qd7HqYgeKXa0vXIyNxa8U0Xs4
-   VZOr5QO3eyR40M6qlDgbWAkmVIXIkmMdZPn3C6qmqeEQ9HCL7P0HZIEVQ
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,235,1643644800"; 
-   d="scan'208";a="197083903"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 05 Apr 2022 07:32:39 +0800
-IronPort-SDR: Cai2V4EP1g9axCi1yiauD7J5laomq+AcqY9h7XgnvlDySY14N+zyIOwDYEgPL9MCgsgcwF3OjG
- wPqzX1J+gz/ISR3fmkXolveGtd6xxmvz+AR3KlVzJQmND3MaHEF8s16G3ultAOrL7bdgYChveK
- jW6IEoVHZC4VHFh6+6+qlteE+OwUzZ6ILanc8tS1ehgiLWeI8KJKx/vaTAHaNcUfAHu3kor7v6
- YkRK6s8cF5D72JPIPNn2IuSLbWSaxztdjjcYvWlU9MXcytfElhtlxJYG6rPWmENKnZwrpDt0iN
- 4nN6mDuLaB7jCc6Q++BJploX
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Apr 2022 16:04:14 -0700
-IronPort-SDR: vSoaCJYEw0SZGsp7PGjm+9PVq/VGv3amAozAcqq2034m4JajySmURURmcfswA26qiNy1tEHFTw
- TfvRxELrbKvhX28x4R5qPL78cR2DuDBZQglAmStg62+uvYu98nxptgmhTixD0p+w5dCcxZl98D
- oLRVs8JIjXTOOne8sN80TV06bV8ew4QRRU4o0bP4Y21h5AJD2t6kri0IJvgt/jmPeAzvFF1uPn
- Ojc1/8+fd2YZcXLjCnQOLUxOKB9euCNXoST6TiBrpwXJybCmxlsRMBJE7mgYjEt612yYp7VHK7
- NsE=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Apr 2022 16:32:40 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KXRs33ZHGz1SVp5
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 16:32:39 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1649115158; x=1651707159; bh=pLgGUw+vPL0f2qNaYJgXPaqC3PncPyo5PXk
-        VMywvCnI=; b=DsQwEUOHxmoyYjbqt0O4dSEqkX6mn74teU8i5hG7gGn19np5Ssm
-        GIE656sjlT9QTO3LfPnL96yX2h8GQmo+jZkabPUKMYyiiamMchLR0GjFhoTnbt7g
-        oIbfU5S45I5mjqIj61A0TuY78vyQxp1vqMtubbVkB1juisa1031oQi7wbhIxApAP
-        PAG5Yx1VSgEoWuALJtCtcayHafDyEFR7YD5eTEJWmU5Zgj3mZHTH6jhqQd6FYPZD
-        9a6e2IhJLN5XGMJ3eK+8g5G1VN/EUfgvifjiux9bfsgE6vdYi3pLEjjvCVIGM7+X
-        i6X8v1nLKnVL1NVU/Sr+/ilU+zfNKL956BA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id h3jVid1IlvMI for <linux-kernel@vger.kernel.org>;
-        Mon,  4 Apr 2022 16:32:38 -0700 (PDT)
-Received: from [10.225.163.2] (unknown [10.225.163.2])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KXRs01Sxyz1Rvlx;
-        Mon,  4 Apr 2022 16:32:36 -0700 (PDT)
-Message-ID: <ff20532f-7399-5fcb-d867-772a3e0fc8f1@opensource.wdc.com>
-Date:   Tue, 5 Apr 2022 08:32:35 +0900
+        Mon, 4 Apr 2022 19:35:11 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3B952E76
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 16:33:07 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id bn33so14951263ljb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 16:33:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DYcF2JgiKO3iyobrkCuRU5Bwnqu8GY+UYkhCntyAAkw=;
+        b=W1gAsjOXHXd5TL2PafVBKwCAzkY5HfXPciUHtw1CalSECJqoaulG5OpfGOFU6p8NDy
+         WyRAfCqNTNvossP5rgO2UsgamRarvNLZT5iTzFh+Yk2lgq+pO3AWFoogPTY0QXJIZht+
+         nWcPj56EJ/8wIcZhixgkbOh2IcPoFJDoyROWr67l5a2t1Wmqwsu4xiUbmzNr6v9k7Q1K
+         jiL6q6HTyO+QfkeKgAUnGrUtID/t7HGLmaKMegtkckswGfLDe7qTLDDffudxsi6Y+sjD
+         Ik3iqZXbJAAS8DSuF1v31KJmP2FzQiUS+ZJN/Otf7Tk68v0BMaGss7YgRr4x/dLdXa6p
+         5cdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DYcF2JgiKO3iyobrkCuRU5Bwnqu8GY+UYkhCntyAAkw=;
+        b=jDFF12RFgUOWTvg2SCDtinvI0ISMJ6h+E8e8zLxF+FCYu+QfHtQ5BPF/4qc5GbY014
+         C0LfGaTTvJYIvJQ50XcK/KWJUPrVa+Ol0zrvD+KMwc8lqEYjpa2BmerOk8bXg29tXl9S
+         kUdViMmJAllknRs3novncoIIRfo8kSYDiO8QP6IpGfMZGaA1QSyAtaqr9aQpHNCS9rlF
+         FQbm3AdgcRZuEz+fEjZvyfz9GlXV/isNW4eTe6OPL3pWI5sWFmZqknxazCE/ApyjLNsa
+         ImG6w31hM0kA1Nze9WEqkAt1PDh4k/MBYaxJeXFMZ5zq2PWOnuka4tQjpMY/LDx9j/YU
+         Hieg==
+X-Gm-Message-State: AOAM532DnW+foOnvMzUqZCPLtNGS89C+aV9ywyHPhOiqYeyfpPd7ynej
+        2owqlK+U+LuPT2Qz8+OhcY8=
+X-Google-Smtp-Source: ABdhPJwRP8euVP8PJVykYTC47Km7db9gS6a+mK1PxM84xFd0Qefdqyn7QAmC+Mm+J/tUMjvzOrUWvg==
+X-Received: by 2002:a2e:9d91:0:b0:24b:a3:d784 with SMTP id c17-20020a2e9d91000000b0024b00a3d784mr292752ljj.461.1649115185641;
+        Mon, 04 Apr 2022 16:33:05 -0700 (PDT)
+Received: from noname.. ([2a02:2698:8c2a:1093:6d9:f5ff:fecb:a8ab])
+        by smtp.googlemail.com with ESMTPSA id e11-20020a2e984b000000b00249b8b68f61sm1196639ljj.74.2022.04.04.16.33.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 16:33:05 -0700 (PDT)
+From:   Grigory Vasilyev <h0tc0d3@gmail.com>
+To:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Melissa Wen <mwen@igalia.com>
+Cc:     Grigory Vasilyev <h0tc0d3@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Claudio Suarez <cssk@net-c.es>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/amdgpu: Junk code
+Date:   Tue,  5 Apr 2022 02:33:04 +0300
+Message-Id: <20220404233306.2207-1-h0tc0d3@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PULL] remove arch/h8300
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "moderated list:H8/300 ARCHITECTURE" 
-        <uclinux-h8-devel@lists.sourceforge.jp>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, Max Filippov <jcmvbkbc@gmail.com>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-References: <Yib9F5SqKda/nH9c@infradead.org>
- <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
- <YkmWh2tss8nXKqc5@infradead.org>
- <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/4/22 22:07, Arnd Bergmann wrote:
-> On Sun, Apr 3, 2022 at 2:43 PM Christoph Hellwig <hch@infradead.org> wrote:
->>
->> On Tue, Mar 08, 2022 at 09:19:16AM +0100, Arnd Bergmann wrote:
->>> If there are no other objections, I'll just queue this up for 5.18 in
->>> the asm-generic
->>> tree along with the nds32 removal.
->>
->> So it is the last day of te merge window and arch/h8300 is till there.
->> And checking nw the removal has also not made it to linux-next.  Looks
->> like it is so stale that even the removal gets ignored :(
-> 
-> I was really hoping that someone else would at least comment.
-> I've queued it up now for 5.19.
-> 
-> Should we garbage-collect some of the other nommu platforms where
-> we're here? Some of them are just as stale:
-> 
-> 1. xtensa nommu has does not compile in mainline and as far as I can
-> tell never did
->    (there was https://github.com/jcmvbkbc/linux-xtensa/tree/xtensa-5.6-esp32,
-> which
->    worked at some point, but I don't think there was enough interest
-> to get in merged)
-> 
-> 2. arch/sh Hitachi/Renesas sh2 (non-j2) support appears to be in a similar state
->     to h8300, I don't think anyone would miss it
-> 
-> 8<----- This may we where we want to draw the line ----
-> 
-> 3. arch/sh j2 support was added in 2016 and doesn't see a lot of
-> changes, but I think
->     Rich still cares about it and wants to add J32 support (with MMU)
-> in the future
-> 
-> 4. m68k Dragonball, Coldfire v2 and Coldfire v3 are just as obsolete as SH2 as
->    hardware is concerned, but Greg Ungerer keeps maintaining it, along with the
->    newer Coldfire v4 (with MMU)
-> 
-> 5. K210 was added in 2020. I assume you still want to keep it.
+Variable igp_lane_info always is 0. 0 & any value = 0 and false.
+In this way, all сonditional statements will false.
+Therefore, it is not clear what this code does.
 
-Still working on this one, I would like to keep it.
+Signed-off-by: Grigory Vasilyev <h0tc0d3@gmail.com>
+---
+ .../gpu/drm/amd/amdgpu/atombios_encoders.c    | 21 -------------------
+ 1 file changed, 21 deletions(-)
 
-> 
-> 7. Arm32 has several Cortex-M based platforms that are mainly kept for
->     legacy users (in particular stm32) or educational value.
-> 
-> 
->        Arnd
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
-
-
+diff --git a/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c b/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
+index 2b0cc793291c..100bad2f5901 100644
+--- a/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
++++ b/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
+@@ -769,7 +769,6 @@ amdgpu_atombios_encoder_setup_dig_transmitter(struct drm_encoder *encoder, int a
+ 	int dp_clock = 0;
+ 	int dp_lane_count = 0;
+ 	int connector_object_id = 0;
+-	int igp_lane_info = 0;
+ 	int dig_encoder = dig->dig_encoder;
+ 	int hpd_id = AMDGPU_HPD_NONE;
+ 
+@@ -852,26 +851,6 @@ amdgpu_atombios_encoder_setup_dig_transmitter(struct drm_encoder *encoder, int a
+ 			else
+ 				args.v1.ucConfig |= ATOM_TRANSMITTER_CONFIG_DIG1_ENCODER;
+ 
+-			if ((adev->flags & AMD_IS_APU) &&
+-			    (amdgpu_encoder->encoder_id == ENCODER_OBJECT_ID_INTERNAL_UNIPHY)) {
+-				if (is_dp ||
+-				    !amdgpu_dig_monitor_is_duallink(encoder, amdgpu_encoder->pixel_clock)) {
+-					if (igp_lane_info & 0x1)
+-						args.v1.ucConfig |= ATOM_TRANSMITTER_CONFIG_LANE_0_3;
+-					else if (igp_lane_info & 0x2)
+-						args.v1.ucConfig |= ATOM_TRANSMITTER_CONFIG_LANE_4_7;
+-					else if (igp_lane_info & 0x4)
+-						args.v1.ucConfig |= ATOM_TRANSMITTER_CONFIG_LANE_8_11;
+-					else if (igp_lane_info & 0x8)
+-						args.v1.ucConfig |= ATOM_TRANSMITTER_CONFIG_LANE_12_15;
+-				} else {
+-					if (igp_lane_info & 0x3)
+-						args.v1.ucConfig |= ATOM_TRANSMITTER_CONFIG_LANE_0_7;
+-					else if (igp_lane_info & 0xc)
+-						args.v1.ucConfig |= ATOM_TRANSMITTER_CONFIG_LANE_8_15;
+-				}
+-			}
+-
+ 			if (dig->linkb)
+ 				args.v1.ucConfig |= ATOM_TRANSMITTER_CONFIG_LINKB;
+ 			else
 -- 
-Damien Le Moal
-Western Digital Research
+2.35.1
+

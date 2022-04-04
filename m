@@ -2,72 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C6F4F0F63
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 08:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1704D4F0F75
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 08:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377461AbiDDGdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 02:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35508 "EHLO
+        id S1377491AbiDDGhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 02:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356348AbiDDGdH (ORCPT
+        with ESMTP id S1346384AbiDDGhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 02:33:07 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF80237E7
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 23:31:11 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id t4so7558021pgc.1
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 23:31:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=y+VXxsT6THaGvtYBQ2XPCpo4cTnwoiIggmrcpY+1QP8=;
-        b=l8M2qPfzkgUF7BhuhabG62rYPwc0UwvNUguXqYtqYr+rSNCSia8pkiydfHtVZgBS/F
-         rSfPdwoOhpmst13t8L49sqd19WFzHiUQwi17pXyDnNR2tQCeG7uLLP0L2+vgu7JBHriF
-         szcHDpYs6tuUxFnv1ioqAFMLebG+UIDEfXHT/Cxa4ZdUVy5OTPvJO8Nss2fz0zz1UBcL
-         JmS9mk7i+qdpwLyYdlevEWAQpXReIZJsiy2hJYLciZ6CZH884gXXeiTganj+uuTjyHN+
-         xGbd08rvPhXzFx3kAW8KosiABNC/Cackt6kXj3aV1x45cCrvLwOTvGBVp3Khy645spAh
-         T5kQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=y+VXxsT6THaGvtYBQ2XPCpo4cTnwoiIggmrcpY+1QP8=;
-        b=hWnycpf2e1fPXvqy12DmN8XShKYWGSjagOUoG2AWy4gcPRTUbKC/DxIk1p3erUWyyN
-         VO3X+TveuuWfesfRvhCttYil5brGGbFdtKrWLCuQD1G9lJTO6tl4DoSp9fJtZs2Hwn7A
-         0/0FplTjY6ebVACxrzccssKu8vzg8YX3AZgaObYyZxPx/MbqR6mWsCXFV/dMb9El8Qwd
-         XXqGDPD3a62dywdUm4OWtjWCpUhMJDRIqT/iXTNUfvfwwV5OkRLhNUzxjUlzsBMsQ8PC
-         VTNHMKAZSirKF1r3hmhB82sjsCmQ9nX7Z4YDRD6ktt0e59qArA331Gs8DdjQVenVjwyw
-         IYhg==
-X-Gm-Message-State: AOAM533SsPEtN3pTRLYzlK+1CuAZzd2L5AM5onqM5uBNUIdyaCCzjskC
-        rTRZBCBiEIVf0uuSTv3Nmv4NaQ==
-X-Google-Smtp-Source: ABdhPJxxYHaGmwkaFtLwFUWBTwEQ9DsmKkJ8Qos8ZSN9eMn2uWvNwYsD5oWRgUBZjZKlX0oafKAU/Q==
-X-Received: by 2002:a05:6a00:21c2:b0:4fe:81f:46c7 with SMTP id t2-20020a056a0021c200b004fe081f46c7mr3433106pfj.5.1649053870710;
-        Sun, 03 Apr 2022 23:31:10 -0700 (PDT)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id h13-20020a056a00230d00b004f427ffd485sm11597109pfh.143.2022.04.03.23.31.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 23:31:10 -0700 (PDT)
-Date:   Mon, 4 Apr 2022 12:01:08 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PM: opp: Fix NULL pointer exception on a v2 table
- combined with v1 opps
-Message-ID: <20220404063108.kwvq3lpqs32vkyqu@vireshk-i7>
-References: <20220401120325.820763-1-krzysztof.kozlowski@linaro.org>
- <20220404062618.jtqlb4cfkerctpas@vireshk-i7>
- <bf02f917-2c3d-f098-0d34-fbe664d40433@linaro.org>
+        Mon, 4 Apr 2022 02:37:08 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D69013D54;
+        Sun,  3 Apr 2022 23:35:12 -0700 (PDT)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nbGIu-0001O9-25; Mon, 04 Apr 2022 08:35:09 +0200
+Message-ID: <6fe27103-5e35-5f16-d213-29bd71412f5b@leemhuis.info>
+Date:   Mon, 4 Apr 2022 08:35:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bf02f917-2c3d-f098-0d34-fbe664d40433@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: Bug 215744 - input from the accelerometer disappeared, regression
+ on amd_sfh on kernel 5.17
+Content-Language: en-US
+To:     Basavaraj Natikar <bnatikar@amd.com>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+Cc:     Jiri Kosina <jkosina@suse.cz>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Marco <rodomar705@protonmail.com>
+References: <048ef583-4a8f-96b0-68a3-45ab9ec8d6df@leemhuis.info>
+ <0499f8ae-6966-be4b-5af8-e7e568bfcd5f@amd.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <0499f8ae-6966-be4b-5af8-e7e568bfcd5f@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1649054112;4b776a7c;
+X-HE-SMSGID: 1nbGIu-0001O9-25
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,14 +51,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04-04-22, 08:28, Krzysztof Kozlowski wrote:
-> I understand this is not a proper use case, but it is easy to trigger
-> (UFS driver adds opps manually, DTS also adds one). Maybe you prefer to
-> handle it differently - exit with ERRNO? Because NULL pointer exception
-> in case of proper, but unexpected DTB is not a good way to handle it.
+On 01.04.22 21:47, Basavaraj Natikar wrote:
+> 
+> Committed patch is disabling the interrupt mode and does not cause any
+> functionality or working issues.
 
-Yeah, sure. I agree that we can return a proper error in that case.
-Will look forward to that patch :)
+Well, for the reporter it clearly does cause problems, unless something
+in testing went sideways.
 
--- 
-viresh
+> I also cross verified on 3 system and working fine on 5.17 and not able
+> to reproduce or recreate.
+
+> [...]
+
+> ------------------------------------------------
+> 
+> Looks like this is not regression. May be some hardware/firmware bug.
+
+Well, from the point of the kernel development process it afaics is a
+regression, unless the testing went sideways. It doesn't matter if the
+root cause is in fact a hardware/firmware bug, as what matters in the
+scope of the kernel development is: things worked, and now they don't.
+For details please check this file and read the quotes from Linus:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/plain/Documentation/process/handling-regressions.rst
+
+Ciao, Thorsten
+
+> Just curious reverting this patch how it is working just suspecting
+> firmware undefined behavior.
+> 
+> If possible, please check on other platform/system also if same behavior
+> occurs.
+> 
+> Could you please provide me platform/system details so that I can check
+> this behavior?
+> 
+> Thanks,
+> Basavaraj
+> 
+> On 4/1/2022 1:36 PM, Thorsten Leemhuis wrote:
+>> Hi, this is your Linux kernel regression tracker.
+>>
+>> I noticed a regression report in bugzilla.kernel.org that afaics nobody
+>> acted upon since it was reported about a week ago, that's why I decided
+>> to forward it to the lists and all people that seemed to be relevant
+>> here. It looks to me like this is something for Basavaraj, as it seems
+>> to be caused by	b300667b33b2 ("HID: amd_sfh: Disable the interrupt for
+>> all command"). But I'm not totally sure, I only looked briefly into the
+>> details. Or was this discussed somewhere else already? Or even fixed?
+>>
+>> To quote from https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbugzilla.kernel.org%2Fshow_bug.cgi%3Fid%3D215744&amp;data=04%7C01%7CBasavaraj.Natikar%40amd.com%7C9155f6987d45479f721208da13b682f9%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637843972013904577%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=HbQ5LymDwsc94RZhNuzN83%2F0BUplqRUG7bB%2BXymViP0%3D&amp;reserved=0 :
+>>
+>>>  Marco 2022-03-25 15:22:19 UTC
+>>>
+>>> After updating to 5.17, the input from the accelerometer disappeared, completely. No devices available from IIO tree. First bad commit causing it is https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Ftorvalds%2Flinux.git%2Fcommit%2Fdrivers%2Fhid%2Famd-sfh-hid%2Famd_sfh_pcie.c%3Fid%3Db300667b33b2b5a2c8e5f8f22826befb3d7f4f2b&amp;data=04%7C01%7CBasavaraj.Natikar%40amd.com%7C9155f6987d45479f721208da13b682f9%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637843972013904577%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=odHA0EIxLb0xpSJJ9ShzgGL0%2BOAJ6tbG68lQe0QOqLY%3D&amp;reserved=0. Reverting this and the the other two on top fixed this. Tried to not revert only the above mentioned commit, but it's still not working.
+>>>
+>>> Marco.
+>> Anyway, to get this tracked:
+>>
+>> #regzbot introduced: b300667b33b2b5a2c8e5f8f22826befb3d7f4
+>> #regzbot from: Marco <rodomar705@protonmail.com>
+>> #regzbot title: input: hid: input from the accelerometer disappeared due
+>> to changes to amd_sfh
+>> #regzbot link: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fbugzilla.kernel.org%2Fshow_bug.cgi%3Fid%3D215744&amp;data=04%7C01%7CBasavaraj.Natikar%40amd.com%7C9155f6987d45479f721208da13b682f9%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637843972013904577%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=HbQ5LymDwsc94RZhNuzN83%2F0BUplqRUG7bB%2BXymViP0%3D&amp;reserved=0
+>>
+>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>>
+>> P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+>> reports on my table. I can only look briefly into most of them and lack
+>> knowledge about most of the areas they concern. I thus unfortunately
+>> will sometimes get things wrong or miss something important. I hope
+>> that's not the case here; if you think it is, don't hesitate to tell me
+>> in a public reply, it's in everyone's interest to set the public record
+>> straight.
+>>
+> 
+> 

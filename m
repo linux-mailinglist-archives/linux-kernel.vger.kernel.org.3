@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F19214F0DDA
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 06:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF804F0DE0
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 06:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239232AbiDDEEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 00:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
+        id S1377058AbiDDEEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 00:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbiDDEEG (ORCPT
+        with ESMTP id S1376996AbiDDEEL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 00:04:06 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEAA393FC;
-        Sun,  3 Apr 2022 21:02:08 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id s8so7763394pfk.12;
-        Sun, 03 Apr 2022 21:02:08 -0700 (PDT)
+        Mon, 4 Apr 2022 00:04:11 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC36393FC;
+        Sun,  3 Apr 2022 21:02:16 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id s14-20020a17090a880e00b001caaf6d3dd1so36001pjn.3;
+        Sun, 03 Apr 2022 21:02:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gApwyK6UJMIHFi8j3HHI6lVYvVDscNhbn/b45ZD8vYw=;
-        b=PpAMX76Z/yH5s5E86XWDfdb0tshq5E8aUG6vKlOuwz+RxiadMZC6gwVk8hp/IvSKdy
-         pWDbVcIvhaAzCuy6MyDBJG2dxgKFmd2PUF157wQmlFwd1dygPQr7kpgfjuJPSZpZeV8W
-         KJ8XB6IA9wYH8pFUDUrggUJW7xHL4Z3Jfto/zT/xPYv3oFpJgBXB6AOYoiNplFnNBxhi
-         QjnpR9G8KK2BCcUi5zT0OooJ64wrDp1LHF79wrS/9T9wiMGZ5Lrpbk8fcfgAtt+rvBGB
-         f/JIRwKjXsgZbcHHbbAEl/MMqr5KGQN35kxhWJzqNfO2wjz9Wqyu3wTfB+BG6AbwBbg9
-         CU7g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=/Oa+8byNWNKKPzQUi9Ts2CajVA6iBJj5SCfhXQT0Kjo=;
+        b=X/Y5YHGZW9tWJ+B9jlEAAJWG+dmynG23Ldbowkbt071qsod4+Nod/haYkCzrENf8Ar
+         sEhtn5BucB36zCep41qVSWZHCOTktzTgx3RBuwizi3SW73tQMnmBLXHeP8AycXUUJcZj
+         wUHWlOBVW0s27lHlormQyPUchXW5ys5Tc7AaAeqyyNy7/AO+xcqWgp90yTCJUH3qCiYx
+         Q/2pOM4bTnbqyA+KICTsySdkiZrki207AcDjqeZAxJUqZrs81BnOrcMy8/3LMYNVZ6zA
+         k5rwuVGdtbLZUv9qv/gObf6yAOiW+yvqP3oEStnV2t/Hk2KmonD0TFsaExVHpkJ8Ko4s
+         sQrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gApwyK6UJMIHFi8j3HHI6lVYvVDscNhbn/b45ZD8vYw=;
-        b=YtwCYkmCJjnhBamtZ+HjiXz6yVUc3JrjGDJ6kSRaH4zBKfH70a4NgOYbkhC+uUltMW
-         wAYsFRmGCGfEFSi26dgmIcFNU5Cjybf2b3MSkJAc2+QcWuqVA8t69Z4YJ9sF7viD2s4c
-         0UFogWRbhMvYCdYpbMS8WvLXMz1WaXXoW5EJwSmG2nmZlD0gsE38D5v49tXpM0dGkQOh
-         86DjsKJhsj3bfNmVSrFBGwGdtk/M+2te8dZ++CsxDNO0QobHWJSToh7ClWGVtCytGzJX
-         YDNafHx9iyc9NWMkQdgK+AXchJDF/TwgNuAe0ZGRoBia4yiefoxFlviyF0262WcznLEU
-         ilqA==
-X-Gm-Message-State: AOAM530/4kzd+gh/+4M5wjfg4gDmNBqzqvjZVk96zvwMT21dKE65Bed7
-        FT9IQNGfJkNwc9JmzEvRfbKwryZ7SjtVrmUfpZLhIw==
-X-Google-Smtp-Source: ABdhPJzYjDiKmixeywLrVGsyvmxU0FRdWO7nMbcfY2jZXT0DudGOSkM6UFaGrSEgSvmTt6mXFmBOzQ==
-X-Received: by 2002:aa7:88c2:0:b0:4fa:ba98:4f6f with SMTP id k2-20020aa788c2000000b004faba984f6fmr22013214pff.41.1649044928130;
-        Sun, 03 Apr 2022 21:02:08 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=/Oa+8byNWNKKPzQUi9Ts2CajVA6iBJj5SCfhXQT0Kjo=;
+        b=LPEEOATjgUPYvNrLqt3SC/7e6QNS8FkALCWtkgU1N+MhLzZFEWpmO2LwN7EtR/HikA
+         YeMZL+r3TJua7ZhR9c1tKaxaPLWWpkTITvJ5C2VggvKwhjg0Lp6zWoRWX4OWlCxlPsAk
+         jFZmsD+zeb6rGFNo8SH4vwkYruRgKfNkB9qahtjEd1z5x5GyCAbXYi+0ilxLdOkfD2mK
+         D2AXD7ODxpp+rMuQdVbTSVnB1GJ0CLBUqxQnnKs3uAzGX/s7+BbJ7H+ua8p6VFrTK6Xx
+         q0iK5CRRasRBbjFYrPpWhgJbSMsiNZTM1vYF1AoebUGvOlwGKYBQQH5G5FjLDrTZM91P
+         IvwQ==
+X-Gm-Message-State: AOAM5302LKHbSJXEk5sjGuCkw9R2EZsdPtnZvpOHxtlGMsrwM7N4BnyH
+        ajiFrm2QSUckzI8ZJTjGuuF8CfshaO/uUO3kF5Q+CQ==
+X-Google-Smtp-Source: ABdhPJyez1j8M8EU8wBC4daK2EdE3R5g7YnIA5VP3b4jqFeO/EPK99JHzzzxw9a6LhitJTZtxqAtlw==
+X-Received: by 2002:a17:90b:1bc9:b0:1c7:228a:95ce with SMTP id oa9-20020a17090b1bc900b001c7228a95cemr24273683pjb.3.1649044935542;
+        Sun, 03 Apr 2022 21:02:15 -0700 (PDT)
 Received: from guoguo-omen.lan ([2401:c080:1400:4da2:b701:47d5:9291:4cf9])
-        by smtp.gmail.com with ESMTPSA id j70-20020a638b49000000b003985b5ddaa1sm8756191pge.49.2022.04.03.21.02.00
+        by smtp.gmail.com with ESMTPSA id j70-20020a638b49000000b003985b5ddaa1sm8756191pge.49.2022.04.03.21.02.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 21:02:07 -0700 (PDT)
+        Sun, 03 Apr 2022 21:02:15 -0700 (PDT)
 From:   Chuanhong Guo <gch981213@gmail.com>
 To:     linux-spi@vger.kernel.org
 Cc:     Chuanhong Guo <gch981213@gmail.com>,
@@ -73,10 +73,12 @@ Cc:     Chuanhong Guo <gch981213@gmail.com>,
         linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
         support), linux-kernel@vger.kernel.org (open list),
         linux-mtd@lists.infradead.org (open list:NAND FLASH SUBSYSTEM)
-Subject: [PATCH v2 0/5] spi: add support for Mediatek SPI-NAND controller
-Date:   Mon,  4 Apr 2022 12:01:48 +0800
-Message-Id: <20220404040153.1509966-1-gch981213@gmail.com>
+Subject: [PATCH v2 1/5] mtd: nand: make mtk_ecc.c a separated module
+Date:   Mon,  4 Apr 2022 12:01:49 +0800
+Message-Id: <20220404040153.1509966-2-gch981213@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220404040153.1509966-1-gch981213@gmail.com>
+References: <20220404040153.1509966-1-gch981213@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -89,46 +91,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mediatek has an extended version of their NAND Flash Interface which
-has a SPI-NAND mode. In this mode, the controller can perform 1-bit
-spi-mem ops for up-to 0xa0 bytes and typical SPI-NAND single, dual
-and quad IO page cache ops with 2-byte address. Additionally, the
-page cache ops can be performed with ECC and auto data formatting
-using the ECC engine of the controller.
+this code will be used in mediatek snfi spi-mem controller with
+pipelined ECC engine.
 
-This patchset implements support of this mode as a separated SPI-MEM
-driver with piplined ECC engine.
+Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+---
 
-Changes since v1:
- add a blank line between properties in dt binding doc
- rename ecc-engine to nand-ecc-engine for the generic properties
- fix warnings/errors from the CI
+Change since v1:
+  actually make it a module instead of a part of nandcore.o
+    (ECC_MXIC probablly needs a similar fix.)
 
-Chuanhong Guo (5):
-  mtd: nand: make mtk_ecc.c a separated module
-  spi: add driver for MTK SPI NAND Flash Interface
-  mtd: nand: mtk-ecc: also parse nand-ecc-engine if available
-  dt-bindings: spi: add binding doc for spi-mtk-snfi
-  arm64: dts: mediatek: add mtk-snfi for mt7622
-
- .../bindings/spi/mediatek,spi-mtk-snfi.yaml   |   88 ++
- arch/arm64/boot/dts/mediatek/mt7622.dtsi      |   12 +
- drivers/mtd/nand/Kconfig                      |    7 +
- drivers/mtd/nand/Makefile                     |    1 +
- drivers/mtd/nand/{raw/mtk_ecc.c => ecc-mtk.c} |    8 +-
- drivers/mtd/nand/raw/Kconfig                  |    1 +
- drivers/mtd/nand/raw/Makefile                 |    2 +-
- drivers/mtd/nand/raw/mtk_nand.c               |    2 +-
- drivers/spi/Kconfig                           |   10 +
- drivers/spi/Makefile                          |    1 +
- drivers/spi/spi-mtk-snfi.c                    | 1351 +++++++++++++++++
- .../linux/mtd/nand-ecc-mtk.h                  |    0
- 12 files changed, 1478 insertions(+), 5 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml
- rename drivers/mtd/nand/{raw/mtk_ecc.c => ecc-mtk.c} (98%)
- create mode 100644 drivers/spi/spi-mtk-snfi.c
+ drivers/mtd/nand/Kconfig                                   | 7 +++++++
+ drivers/mtd/nand/Makefile                                  | 1 +
+ drivers/mtd/nand/{raw/mtk_ecc.c => ecc-mtk.c}              | 3 +--
+ drivers/mtd/nand/raw/Kconfig                               | 1 +
+ drivers/mtd/nand/raw/Makefile                              | 2 +-
+ drivers/mtd/nand/raw/mtk_nand.c                            | 2 +-
+ .../nand/raw/mtk_ecc.h => include/linux/mtd/nand-ecc-mtk.h | 0
+ 7 files changed, 12 insertions(+), 4 deletions(-)
+ rename drivers/mtd/nand/{raw/mtk_ecc.c => ecc-mtk.c} (99%)
  rename drivers/mtd/nand/raw/mtk_ecc.h => include/linux/mtd/nand-ecc-mtk.h (100%)
 
+diff --git a/drivers/mtd/nand/Kconfig b/drivers/mtd/nand/Kconfig
+index 9b249826ef93..2f3e02ab72ed 100644
+--- a/drivers/mtd/nand/Kconfig
++++ b/drivers/mtd/nand/Kconfig
+@@ -53,6 +53,13 @@ config MTD_NAND_ECC_MXIC
+ 	help
+ 	  This enables support for the hardware ECC engine from Macronix.
+ 
++config MTD_NAND_ECC_MEDIATEK
++	tristate "Mediatek hardware ECC engine"
++	depends on HAS_IOMEM
++	select MTD_NAND_ECC
++	help
++	  This enables support for the hardware ECC engine from Mediatek.
++
+ endmenu
+ 
+ endmenu
+diff --git a/drivers/mtd/nand/Makefile b/drivers/mtd/nand/Makefile
+index a4e6b7ae0614..19e1291ac4d5 100644
+--- a/drivers/mtd/nand/Makefile
++++ b/drivers/mtd/nand/Makefile
+@@ -2,6 +2,7 @@
+ 
+ nandcore-objs := core.o bbt.o
+ obj-$(CONFIG_MTD_NAND_CORE) += nandcore.o
++obj-$(CONFIG_MTD_NAND_ECC_MEDIATEK) += ecc-mtk.o
+ 
+ obj-y	+= onenand/
+ obj-y	+= raw/
+diff --git a/drivers/mtd/nand/raw/mtk_ecc.c b/drivers/mtd/nand/ecc-mtk.c
+similarity index 99%
+rename from drivers/mtd/nand/raw/mtk_ecc.c
+rename to drivers/mtd/nand/ecc-mtk.c
+index 49ab3448b9b1..74ddaa46ba7c 100644
+--- a/drivers/mtd/nand/raw/mtk_ecc.c
++++ b/drivers/mtd/nand/ecc-mtk.c
+@@ -15,8 +15,7 @@
+ #include <linux/of.h>
+ #include <linux/of_platform.h>
+ #include <linux/mutex.h>
+-
+-#include "mtk_ecc.h"
++#include <linux/mtd/nand-ecc-mtk.h>
+ 
+ #define ECC_IDLE_MASK		BIT(0)
+ #define ECC_IRQ_EN		BIT(0)
+diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
+index 9b078e78f3fa..8b6d7a515445 100644
+--- a/drivers/mtd/nand/raw/Kconfig
++++ b/drivers/mtd/nand/raw/Kconfig
+@@ -374,6 +374,7 @@ config MTD_NAND_QCOM
+ 
+ config MTD_NAND_MTK
+ 	tristate "MTK NAND controller"
++	depends on MTD_NAND_ECC_MEDIATEK
+ 	depends on ARCH_MEDIATEK || COMPILE_TEST
+ 	depends on HAS_IOMEM
+ 	help
+diff --git a/drivers/mtd/nand/raw/Makefile b/drivers/mtd/nand/raw/Makefile
+index 88a566513c56..fa1d00120310 100644
+--- a/drivers/mtd/nand/raw/Makefile
++++ b/drivers/mtd/nand/raw/Makefile
+@@ -48,7 +48,7 @@ obj-$(CONFIG_MTD_NAND_SUNXI)		+= sunxi_nand.o
+ obj-$(CONFIG_MTD_NAND_HISI504)	        += hisi504_nand.o
+ obj-$(CONFIG_MTD_NAND_BRCMNAND)		+= brcmnand/
+ obj-$(CONFIG_MTD_NAND_QCOM)		+= qcom_nandc.o
+-obj-$(CONFIG_MTD_NAND_MTK)		+= mtk_ecc.o mtk_nand.o
++obj-$(CONFIG_MTD_NAND_MTK)		+= mtk_nand.o
+ obj-$(CONFIG_MTD_NAND_MXIC)		+= mxic_nand.o
+ obj-$(CONFIG_MTD_NAND_TEGRA)		+= tegra_nand.o
+ obj-$(CONFIG_MTD_NAND_STM32_FMC2)	+= stm32_fmc2_nand.o
+diff --git a/drivers/mtd/nand/raw/mtk_nand.c b/drivers/mtd/nand/raw/mtk_nand.c
+index 66f04c693c87..d540454cbbdf 100644
+--- a/drivers/mtd/nand/raw/mtk_nand.c
++++ b/drivers/mtd/nand/raw/mtk_nand.c
+@@ -17,7 +17,7 @@
+ #include <linux/iopoll.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
+-#include "mtk_ecc.h"
++#include <linux/mtd/nand-ecc-mtk.h>
+ 
+ /* NAND controller register definition */
+ #define NFI_CNFG		(0x00)
+diff --git a/drivers/mtd/nand/raw/mtk_ecc.h b/include/linux/mtd/nand-ecc-mtk.h
+similarity index 100%
+rename from drivers/mtd/nand/raw/mtk_ecc.h
+rename to include/linux/mtd/nand-ecc-mtk.h
 -- 
 2.35.1
 

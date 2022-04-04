@@ -2,65 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D874F1EB9
+	by mail.lfdr.de (Postfix) with ESMTP id D039A4F1EBB
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355175AbiDDWFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
+        id S1381725AbiDDWIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 18:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380062AbiDDSvu (ORCPT
+        with ESMTP id S1380077AbiDDSzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 14:51:50 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A28931501
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 11:49:52 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id p8so9804568pfh.8
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 11:49:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OgBmai9kBCjlr9aFO4p03+ZvCT3qEl4N4BMmkwU41WQ=;
-        b=LTyjDcUYrrGKFD7zBZax9Kejc3M/VxotNH1SBr++BxXDPlIByWs5a8wElJ4CvLKUjn
-         JyRCaI0dzCSpvP/ALFTbNMuJKz1OE+gnZT2yLPLFrixzAKAECrJRPEHlCeASyItdvWGg
-         5xsPixVA5PWT4eWxCZ6OapeXiV8KI2KpoPsxA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OgBmai9kBCjlr9aFO4p03+ZvCT3qEl4N4BMmkwU41WQ=;
-        b=YFGrzZeCdtXKeajfeq8B6sSONQBI0lbYdv/fshUBKqdF0/b5BpGUrb4oV7vqlfx6I+
-         +lCdH1bAujiJ6CNrRVd3bOOcr7tdtbrOUSqwPxkFMXrF+Dd2ef+4hPIATroH8FR6qB8n
-         W4saK4FK4oeoXilrBmmetF+f4BWN52B6tfrfKFq0mN2ccmVFdkoJNIKEC3cbAfxamY0I
-         9vYEahnGq8uhEkxgxKDaroe9y8DnArtikSYbq214HCsjyTCAPWvJbCaq/0TNTSZ26CEh
-         1vqL2AQbbRZPVL7R285JfPDCe0/szuFgcHNnGWrqNjlkRlDjQIoA9T0sUHGG3uk9Ny0S
-         2faA==
-X-Gm-Message-State: AOAM533W7Eg3y89ipNy9oWBfpOkkDhX1qSWGuzOjn+UCQlFZ3R0WwScw
-        juYIFO8Mwcl0VBScHpkdVuQThw==
-X-Google-Smtp-Source: ABdhPJy+Asj1IhIbA7G/rhnlb2Kxzq17/p8QVmR/14Zr/TJmyt+KN+/Wq9xSl0Xoz+XlLAUuAApNng==
-X-Received: by 2002:a63:5756:0:b0:36c:67bc:7f3f with SMTP id h22-20020a635756000000b0036c67bc7f3fmr1042587pgm.389.1649098191979;
-        Mon, 04 Apr 2022 11:49:51 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c63-20020a624e42000000b004fa9ee41b7bsm12701353pfb.217.2022.04.04.11.49.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 11:49:51 -0700 (PDT)
-Date:   Mon, 4 Apr 2022 11:49:50 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, PaX Team <pageexec@freemail.hu>
-Subject: Re: [PATCH v2] gcc-plugins: latent_entropy: use /dev/urandom
-Message-ID: <202204041144.96FC64A8@keescook>
-References: <CAHmME9otYi4pCzZwSGnK40dp1QMRVPxp+DBysVuLXUKkXinAxg@mail.gmail.com>
- <20220403204036.1269562-1-Jason@zx2c4.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220403204036.1269562-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Mon, 4 Apr 2022 14:55:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FAB10ED
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 11:53:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E625B60DB5
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 18:53:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F245FC340F3;
+        Mon,  4 Apr 2022 18:53:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1649098414;
+        bh=bYc4+MnhRyUZvvG3xV2Z/0MMfIXFk8Y9boux0z/HsrQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZIuIXzk8J8KGwxOyL9hJ1cNBUn/IZ+LRc/Rs24gYR0RFSoypqfqgAAEmPu449Je5/
+         WOzKsmRcBu76tozGhdbBzA4TiwWDT+XzuXNjNWxA8E2d2flj88tdbaEU+EcB0lElrJ
+         xOOhH3eUgb2DxsqofuPMvzPKtFJn4ERUnNS+Wmdo=
+Date:   Mon, 4 Apr 2022 11:53:33 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+Cc:     linux-mm@kvack.org, Mike Kravetz <mike.kravetz@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6] mm/hwpoison: fix race between hugetlb free/demotion
+ and memory_failure_hugetlb()
+Message-Id: <20220404115333.8cf80b9d3a7a55993ed60c57@linux-foundation.org>
+In-Reply-To: <20220404092131.751733-1-naoya.horiguchi@linux.dev>
+References: <20220404092131.751733-1-naoya.horiguchi@linux.dev>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,149 +56,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 03, 2022 at 10:40:36PM +0200, Jason A. Donenfeld wrote:
-> While the latent entropy plugin mostly doesn't derive entropy from
-> get_random_const() for measuring the call graph, when __latent_entropy is
-> applied to a constant, then it's initialized statically to output from
-> get_random_const(). In that case, this data is derived from a 64-bit
-> seed, which means a buffer of 512 bits doesn't really have that amount
-> of compile-time entropy.
-> 
-> This patch fixes that shortcoming by just buffering chunks of
-> /dev/urandom output and doling it out as requested.
-> 
-> At the same time, it's important that we don't break the use of
-> -frandom-seed, for people who want the runtime benefits of the latent
-> entropy plugin, while still having compile-time determinism. In that
-> case, we detect whether gcc's set_random_seed() has been called by
-> making a call to get_random_seed(noinit=true) in the plugin init
-> function, which is called after set_random_seed() is called but before
-> anything that calls get_random_seed(noinit=false), and seeing if it's
-> zero or not. If it's not zero, we're in deterministic mode, and so we
-> just generate numbers with a basic xorshift prng.
+On Mon,  4 Apr 2022 18:21:31 +0900 Naoya Horiguchi <naoya.horiguchi@linux.dev> wrote:
 
-This mixes two changes: the pRNG change and the "use urandom if
-non-deterministic" change. I think these should be split, so the pRNG
-change can be explicitly justified.
+> There is a race condition between memory_failure_hugetlb() and hugetlb
+> free/demotion, which causes setting PageHWPoison flag on the wrong page.
+> The one simple result is that wrong processes can be killed, but another
+> (more serious) one is that the actual error is left unhandled, so no one
+> prevents later access to it, and that might lead to more serious results
+> like consuming corrupted data.
 
-More notes below...
-
-> 
-> Fixes: 38addce8b600 ("gcc-plugins: Add latent_entropy plugin")
-> Cc: stable@vger.kernel.org
-> Cc: PaX Team <pageexec@freemail.hu>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
-> Changes v1->v2:
-> - Pipacs pointed out that using /dev/urandom unconditionally would break
->   the use of -frandom-seed, so now we check for that and keep with
->   something deterministic in that case.
-> 
-> I'm not super familiar with this plugin or its conventions, so pointers
-> would be most welcome if something here looks amiss. The decision to
-> buffer 2k at a time is pretty arbitrary too; I haven't measured usage.
-> 
->  scripts/gcc-plugins/latent_entropy_plugin.c | 48 +++++++++++++--------
->  1 file changed, 30 insertions(+), 18 deletions(-)
-> 
-> diff --git a/scripts/gcc-plugins/latent_entropy_plugin.c b/scripts/gcc-plugins/latent_entropy_plugin.c
-> index 589454bce930..042442013ae1 100644
-> --- a/scripts/gcc-plugins/latent_entropy_plugin.c
-> +++ b/scripts/gcc-plugins/latent_entropy_plugin.c
-> @@ -82,29 +82,37 @@ __visible int plugin_is_GPL_compatible;
->  static GTY(()) tree latent_entropy_decl;
->  
->  static struct plugin_info latent_entropy_plugin_info = {
-> -	.version	= "201606141920vanilla",
-> +	.version	= "202203311920vanilla",
-
-This doesn't really need to be versioned. We can change this to just
-"vanilla", IMO.
-
->  	.help		= "disable\tturn off latent entropy instrumentation\n",
->  };
->  
-> -static unsigned HOST_WIDE_INT seed;
-> -/*
-> - * get_random_seed() (this is a GCC function) generates the seed.
-> - * This is a simple random generator without any cryptographic security because
-> - * the entropy doesn't come from here.
-> - */
-> +static unsigned HOST_WIDE_INT deterministic_seed;
-> +static unsigned HOST_WIDE_INT rnd_buf[256];
-> +static size_t rnd_idx = ARRAY_SIZE(rnd_buf);
-> +static int urandom_fd = -1;
-> +
->  static unsigned HOST_WIDE_INT get_random_const(void)
->  {
-> -	unsigned int i;
-> -	unsigned HOST_WIDE_INT ret = 0;
-> -
-> -	for (i = 0; i < 8 * sizeof(ret); i++) {
-> -		ret = (ret << 1) | (seed & 1);
-> -		seed >>= 1;
-> -		if (ret & 1)
-> -			seed ^= 0xD800000000000000ULL;
-> +	if (deterministic_seed) {
-> +		unsigned HOST_WIDE_INT w = deterministic_seed;
-> +		w ^= w << 13;
-> +		w ^= w >> 7;
-> +		w ^= w << 17;
-> +		deterministic_seed = w;
-> +		return deterministic_seed;
-
-While seemingly impossible, perhaps don't reset "deterministic_seed",
-and just continue to use "seed", so that it can never become "0" again.
-
->  	}
->  
-> -	return ret;
-> +	if (urandom_fd < 0) {
-> +		urandom_fd = open("/dev/urandom", O_RDONLY);
-> +		if (urandom_fd < 0)
-> +			abort();
-> +	}
-> +	if (rnd_idx >= ARRAY_SIZE(rnd_buf)) {
-> +		if (read(urandom_fd, rnd_buf, sizeof(rnd_buf)) != sizeof(rnd_buf))
-> +			abort();
-> +		rnd_idx = 0;
-> +	}
-> +	return rnd_buf[rnd_idx++];
->  }
->  
->  static tree tree_get_random_const(tree type)
-> @@ -537,8 +545,6 @@ static void latent_entropy_start_unit(void *gcc_data __unused,
->  	tree type, id;
->  	int quals;
->  
-> -	seed = get_random_seed(false);
-> -
->  	if (in_lto_p)
->  		return;
->  
-> @@ -573,6 +579,12 @@ __visible int plugin_init(struct plugin_name_args *plugin_info,
->  	const struct plugin_argument * const argv = plugin_info->argv;
->  	int i;
->  
-> +	/*
-> +	 * Call get_random_seed() with noinit=true, so that this returns
-> +	 * 0 in the case where no seed has been passed via -frandom-seed.
-> +	 */
-> +	deterministic_seed = get_random_seed(true);
-
-i.e. have this be:
-
-	deterministic_seed = get_random_seed(true);
-	if (deterministic_seed)
-		seed = get_random_seed(false);
-
-> +
->  	static const struct ggc_root_tab gt_ggc_r_gt_latent_entropy[] = {
->  		{
->  			.base = &latent_entropy_decl,
-> -- 
-> 2.35.1
-> 
-
--- 
-Kees Cook
+Should this fix be backported into stable kernels?

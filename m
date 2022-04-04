@@ -2,157 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4284F18CF
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE594F18D2
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378670AbiDDPuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 11:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35902 "EHLO
+        id S1378680AbiDDPuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 11:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235747AbiDDPuE (ORCPT
+        with ESMTP id S1378663AbiDDPuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 11:50:04 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6266FBB5;
-        Mon,  4 Apr 2022 08:48:07 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 2E1F0419BC;
-        Mon,  4 Apr 2022 15:48:01 +0000 (UTC)
-To:     Rob Herring <robh@kernel.org>, Sven Peter <sven@svenpeter.dev>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Arnd Bergmann <arnd@arndb.de>, Keith Busch <kbusch@kernel.org>,
-        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        Marc Zyngier <maz@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org
-References: <20220321165049.35985-1-sven@svenpeter.dev>
- <20220321165049.35985-6-sven@svenpeter.dev>
- <5eed58a1-ee56-8aee-e73b-76b162d59873@kernel.org>
- <35f5fdbf-faac-457b-a225-35d7141f6b2e@www.fastmail.com>
- <YksIhWQIUHsoWEMi@robh.at.kernel.org>
-From:   Hector Martin <marcan@marcan.st>
-Subject: Re: [PATCH 5/9] soc: apple: Add RTKit IPC library
-Message-ID: <5441c5a7-5535-a8c3-c6ad-71d81754b9b1@marcan.st>
-Date:   Tue, 5 Apr 2022 00:47:59 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Mon, 4 Apr 2022 11:50:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D096A60E7
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:48:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649087298;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ACaAB1t0vMWb3pX2ELgBqL+jg9CnsBzljXi5Wr6J60o=;
+        b=ahQIZJveoaR+Y6dsDE5k2DBuix4glwxgmWuUbkU0t6K4znyfEdZbQU0DnSa5F71Xd5sait
+        JYdGNQBlf25YwkWQPb2M6fY5lX/sqaQucXMv7nxKHSdttWiCSza4IweLIWkf7wOz7rCqeN
+        W5yW13uy+n5yMyAAHFYJZPiq4Sals0o=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-515-yjwlPog5NYGEaFUPCdV_gg-1; Mon, 04 Apr 2022 11:48:17 -0400
+X-MC-Unique: yjwlPog5NYGEaFUPCdV_gg-1
+Received: by mail-wr1-f70.google.com with SMTP id e4-20020adfa444000000b002060b7347f8so986263wra.6
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 08:48:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ACaAB1t0vMWb3pX2ELgBqL+jg9CnsBzljXi5Wr6J60o=;
+        b=PiIxbbsfc6Ikq9gaOCcYpL/TFewqWJOjQNJVje0NwfaU+t0GRIlSru/DN63L8MjfP5
+         WzzMSEhfw17jmbywLFK/fU9SLcxRdG8gx9rQgC6b5t++OinhSW0cmSEWEiIixyrXlO7t
+         FMdKMjTKTWMAKFaWLFSgvYk9zJzaeHFJNM8A45pZwdqo7jnVUCBMcKBkCwAXeZn8In8Z
+         6/YWsSfNLqvq6tzAZusOFrXTdeCEZtiZDyqoAZnSv3Ndvr8k9FtBOH7rvUzKQwhOXRhK
+         zx5xa+wq4KK0zqXIAvjvQO+GvBL7wCMK65arwI1kNvKyjA28D0YtOj4RzIKJc8xvx/QF
+         6zSg==
+X-Gm-Message-State: AOAM531YEoS+4MKpukkimLug+mGlNz6dIU+YUNjuEh8xMbFzp7t201IB
+        Phwl005QYLQNKYRKm8GwazCTWuCBGPMe07busjOj3Ri6QWD2ZcrexlTZajekb/uO66BSXs4O/0e
+        Cl0rz8VyXswbbuyh2Z2QOtKrF
+X-Received: by 2002:adf:f188:0:b0:206:e20:1b65 with SMTP id h8-20020adff188000000b002060e201b65mr259493wro.363.1649087296377;
+        Mon, 04 Apr 2022 08:48:16 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz+jBXSnytEUbHzPD7PrJYBhDtVRIkCeBYl9hIqrrHNXMn+EkEqSV4Kzkt4zlwuYyU9ugLZaA==
+X-Received: by 2002:adf:f188:0:b0:206:e20:1b65 with SMTP id h8-20020adff188000000b002060e201b65mr259479wro.363.1649087296112;
+        Mon, 04 Apr 2022 08:48:16 -0700 (PDT)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id v14-20020a7bcb4e000000b0034492fa24c6sm9737099wmj.34.2022.04.04.08.48.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Apr 2022 08:48:15 -0700 (PDT)
+Message-ID: <92a46ea2-e23e-b7c8-ea5f-35d458ee1b76@redhat.com>
+Date:   Mon, 4 Apr 2022 17:48:14 +0200
 MIME-Version: 1.0
-In-Reply-To: <YksIhWQIUHsoWEMi@robh.at.kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: es-ES
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH 2/4] dt-bindings: display: ssd1307fb: Add entry for SINO
+ WEALTH SH1106
+Content-Language: en-US
+To:     wens@kernel.org, Javier Martinez Canillas <javier@dowhile0.org>
+Cc:     Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+References: <20220330190846.13997-1-wens@kernel.org>
+ <20220330190846.13997-3-wens@kernel.org>
+ <CABxcv==csvqsxM46ce2LecDh4E-UxxD2DG+3E-hCFoyrdtRv7A@mail.gmail.com>
+ <CAGb2v64VQPjan=EUkd8UhRZfV0g1GqBwPqhxQakS=7YhgvVDQA@mail.gmail.com>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <CAGb2v64VQPjan=EUkd8UhRZfV0g1GqBwPqhxQakS=7YhgvVDQA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04/2022 00.02, Rob Herring wrote:
-> On Sat, Apr 02, 2022 at 03:51:46PM +0200, Sven Peter wrote:
->> On Wed, Mar 23, 2022, at 12:19, Krzysztof Kozlowski wrote:
->>> On 21/03/2022 17:50, Sven Peter wrote:
->>>> Apple SoCs such as the M1 come with multiple embedded co-processors
->>>> running proprietary firmware. Communication with those is established
->>>> over a simple mailbox using the RTKit IPC protocol.
->>>>
->>>> Signed-off-by: Sven Peter <sven@svenpeter.dev>
->>>> ---
->>>>  drivers/soc/apple/Kconfig          |  13 +
->>>>  drivers/soc/apple/Makefile         |   3 +
->>>>  drivers/soc/apple/rtkit-crashlog.c | 147 +++++
->>>>  drivers/soc/apple/rtkit-internal.h |  76 +++
->>>>  drivers/soc/apple/rtkit.c          | 842 +++++++++++++++++++++++++++++
->>>>  include/linux/soc/apple/rtkit.h    | 203 +++++++
->>>>  6 files changed, 1284 insertions(+)
->>>
->>> Isn't this some implementation of a mailbox? If so, it should be in
->>> drivers/mailbox. Please don't put all stuff in soc/apple, that's not how
->>> Linux is organized. To drivers/soc usually we put drivers which do not
->>> fit regular subsystems.
->>>
+Hello Chen-Yu,
+
+On 4/4/22 17:06, Chen-Yu Tsai wrote:
+
+[snip]
+
+>>>      enum:
+>>> +      - sinowealth,sh1106-i2c
 >>
->> I put this into soc/apple because I don't think it fits within the mailbox
->> framework very well.
->> (It actually uses the mailbox framework for the actual communication
->> with the hardware with a driver that's already upstream.)
+>> I like that you didn't include a "fb" suffix for this, the existing
+>> ones are cargo culting from the previous fbdev driver to make existing
+>> DTBs compatible with the DRM driver.
 >>
->> Essentially, the mailbox subsystem provides a common API to send and
->> receive messages over indepedent hardware channels and devicetree bindings
->> to describe the relationship between those channels and other drivers.
+>> I've been thinking if I should post a patch to compatible strings
+>> without the "fb" and mark the current ones as deprecated...
 >>
->> One of the features that doesn't really fit is that we need to be able
->> to start, shutdown and re-start these co-processors. The NVMe driver
+>> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 > 
-> remoteproc does that. Did you look at it? Most remoteproc drivers use 
-> some combination of mailboxes and shared memory.
+> I also thought about dropping the "-i2c" suffix, but then thought
+> there might be a case where someone wanted to search the device
+> tree specifically for an I2C connected node using said compatible
+> string.
+> 
+> What do you think?
+> 
+>
 
-Remoteproc seems to be mostly about providing a standard interface for
-loading firmware images and kickstarting somewhat generic remote
-processors, as well as some high-level stuff for virtio. None of that is
-useful to us as far as I can tell, because Linux doesn't load the
-firmware for these things, it is pre-loaded by the bootloader and
-therefore they might as well be fixed-function hardware as far as we're
-concerned.
+tl; dr: unfortunately we can't do it due how SPI and I2C report module
+aliases. Otherwise module auto loading will not work. I wrote a much
+longer explanation with some details not so long ago:
 
-I can certainly see some similarities between the resourceproc API and
-what we're doing, but I don't see what it would do for us other than
-cause an impedance mismatch. Does it actually *do* something we can use?
-Keep in mind these are Apple copros running Apple firmware that will
-only ever talk to drivers we write for Apple machines, and we don't
-control the firmware.
+https://patchwork.kernel.org/project/dri-devel/patch/20220209091204.2513437-1-javierm@redhat.com/#24730793
 
-Impediance mismatches on first glance:
+BTW, I bought a SSD1306 SPI controller and go it working this weekend.
 
-- The assumption that firmware is loaded by Linux seems to be hard-coded
-into the subsystem
-- Only one boot/shutdown path, while we need different power states and
-boot modes depending on the specific instance
-- The concept of the "resource table"; we have something similar for at
-least one copro, but it's brokered via exchanged messages after it is
-booted, and not something we can just look up in the firmware (our plan
-was to just put the requested regions in the DT reg node and name them;
-the firmware then *after boot* provides a list of mappings it wants from
-that list and they can be mapped at that point). At least one other
-copro does a subset of this an entirely different way altogether. Apple
-aren't consistent and we can't do anything about that.
-- Rproc trace buffers: Apple does syslogs but a different, incompatible way.
-- ELF coredumps: even if this were useful for the blobs we get, the
-blobs loaded by the bootloader themselves are Mach-O binaries, not ELF,
-so that'd require some funny binary format conversion on one end or the
-other to be able to line them up for postmortem debugging. And Apple's
-crashdump format is a custom tag/value type thing.
+I plan to post the patches once yours land, to avoid in-flight series
+that may conflict. And what I did is mark the -fb as deprecated, then
+added "ssd130x-i2c" and "ssd130x-spi" compatibles strings.
 
-I'm certainly willing to be convinced to use a kernel subsystem if it
-actually does something useful for us, but last time we did that when it
-wasn't entirely clear we should (mailbox, for the hardware underlying
-these coprocessors) it just resulted in a bunch of headaches because
-that subsystem is poorly designed and doesn't seem to have bought us
-anything other than limitations. e.g. it is using suboptimal queueing
-right now, and we had to switch to the atomic API to make SMC work,
-which ends up even lower level, and isn't even properly documented and
-different drivers interpret differently, so now it's just pure added
-complexity and confusion for ~no gain over just reading/writing the
-mailbox registers, which would've been *much* simpler (and more
-performant than introducing additional queuing, since the hardware
-*does* queuing now which we can't use because mailbox doesn't support
-it). Remoteproc kind of seems like an even worse fit here...
+The WIP patches can be found here in case you are interested:
 
-Oh, and these device producer/consumer relations cannot be computed
-statically as far as I can tell, so each one we introduce is another
-special case in distro initramfs image building, since they need to
-encode magic additional device-specific module dependency information
-somehow since it isn't available in depmod, but only encoded in DTs
-which are not necessarily known at initramfs build time.
+https://github.com/martinezjavier/linux/tree/drm-ssd130x-spi
+
+> ChenYu
+> 
 
 -- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

@@ -2,173 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 995D24F1B1D
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B8A4F1BCF
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:25:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359095AbiDDVTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48920 "EHLO
+        id S1381621AbiDDVX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380522AbiDDUVJ (ORCPT
+        with ESMTP id S1380525AbiDDUVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 16:21:09 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1A62AE9
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 13:19:11 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id f18so7436241edc.5
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 13:19:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=+IOD94qLZON7z5cpIIeb+KlBMTXlMtRyTG6pq9z/7sE=;
-        b=1XznDSFaeBL43LgBjOmEUUMnMaSzLra1EE4nshzUAR1prsSMutPqf14uLfx3FS29gE
-         /zkI90HkCOuxsuRP2wKobkOzkJoRkH4aGE/Ck197Xe6RG0BH3GbKpttQc1ooL8Q9e3yg
-         +gLc3YjjJaB4aSDB5M+CDRi94nmWY2YeNvMhm2V4ldT2wRMrwG69n0hS4g+7W7GUAJQZ
-         2Ok60fbFu7wN2BdPXmcfCY2S+BwuORU9QSDwOHElcoDt1LiLztnLrMft5lJCLqwObQx+
-         7IPdIEx2J94GEZ64jxysK9JK7eKTu9bq9aEBOteC/fYv0ksWMBgJ+dj9RQveG/satKBv
-         RT5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=+IOD94qLZON7z5cpIIeb+KlBMTXlMtRyTG6pq9z/7sE=;
-        b=X66+OCDj2zKf+dHk4nG88orCgjfp/3KpRJwdXuSCVJo4yhBg7WfQFCDifeaFX+A5Jm
-         t/AzpCb2vMdQmgIxslf5bZ2OXkAwoTP5VTilp8gR89UHUSSVYdjKRA9ASdcYwlBdhG++
-         ADOcDjCqKD8MtG+UVtQz0B4wAh6FMTMekJY0A8oy2sQeiE7UUsxC17ZnFD2WlvE/f3Kz
-         cAJlzZE8k70Uueb5HAYP3gh3KyqGuj7SJGCya7PZdlc98UVywxgRluIINoUsTvzh+bUH
-         u+MQheTiNVMCXlvYhuQMR+hXrHMMqGdERouwrYBc6/CsmqTWoyWYP4q0XJSQl8nMKctg
-         RZbw==
-X-Gm-Message-State: AOAM5326WiGnhVrWPLAu6fN5lnPpZCQla3EhDhJ6gg7U3A3rGqXupur+
-        iQ/T1tXOGXk6S4Az9ysbdTJ54T5D9MzR9CeTShBdwLPJdw==
-X-Google-Smtp-Source: ABdhPJz7lr2QA4pAedBicmWoNNd3dV+nYeSKLZcGV0j1cS/xio7wu3dCf3exaEW4/+2Wf2hvpNbYqREZigKGexmGcxo=
-X-Received: by 2002:a05:6402:350d:b0:419:547f:134a with SMTP id
- b13-20020a056402350d00b00419547f134amr1969103edd.405.1649103550207; Mon, 04
- Apr 2022 13:19:10 -0700 (PDT)
+        Mon, 4 Apr 2022 16:21:12 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A832AE9;
+        Mon,  4 Apr 2022 13:19:14 -0700 (PDT)
+Date:   Mon, 04 Apr 2022 20:19:11 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649103552;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WNOBe1vWppvbexr1o50poyMJPOCbE2eiR5qK3R+vlbI=;
+        b=T067flIDohX2+TyixlVRL8HA7ygMbllJ/gZcGsZfe8mZPfN79lqkR9KxUfpTGzmqjJetPf
+        NQQlklPvSYAdShldT+ZnRCizyZqt/Bq3yhbKU3yNf3XtWHLBNyGpPVMi01N9OFJDTXtbnl
+        gTJJ0qn8JBntelxYiYhT2+Ap2NrMLSYRiMspZ5Z33caZEvi8BMHHJv4ACfFCf/ub6l9OPR
+        J6CA/x/gXgKPaoXNeGfy0ay2Lc0Eo22fjmzIfC/1SjmYPIFtMIS+EDpIyUk8nMAqbKqWQ9
+        Poe2552ePa/NNrGfzq+hPCWA4voDqbYvXehoWtSq1HA9zRYgnKzRnVg7ZvtHzg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649103552;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WNOBe1vWppvbexr1o50poyMJPOCbE2eiR5qK3R+vlbI=;
+        b=Gc1nLM+EMvKNKUZ3Taubma8zjwasPWNQuC5Pm7+tt1Ye65s0W1SoLAV2JwtHnydm6+E3Q9
+        Fyy7DMYiOsP1miCQ==
+From:   "tip-bot2 for Mike Travis" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/platform] x86/platform/uv: Log gap hole end size
+Cc:     Mike Travis <mike.travis@hpe.com>, Borislav Petkov <bp@suse.de>,
+        Steve Wahl <steve.wahl@hpe.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220318224304.174967-4-mike.travis@hpe.com>
+References: <20220318224304.174967-4-mike.travis@hpe.com>
 MIME-Version: 1.0
-References: <20220217143457.75229-1-cgzones@googlemail.com> <20220308170928.58040-1-cgzones@googlemail.com>
-In-Reply-To: <20220308170928.58040-1-cgzones@googlemail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 4 Apr 2022 16:18:59 -0400
-Message-ID: <CAHC9VhSiqvCbKQHYTGAj3vqECNto6eNm0MyzLd92kcJnvZSw1A@mail.gmail.com>
-Subject: Re: [PATCH v2] selinux: log anon inode class name
-To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Cc:     selinux@vger.kernel.org, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Richard Guy Briggs <rgb@redhat.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <164910355134.389.13915883561213298641.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 12:09 PM Christian G=C3=B6ttsche
-<cgzones@googlemail.com> wrote:
->
-> Log the anonymous inode class name in the security hook
-> inode_init_security_anon.  This name is the key for name based type
-> transitions on the anon_inode security class on creation.  Example:
->
->     type=3DAVC msg=3Daudit(02/16/22 22:02:50.585:216) : avc:  granted \
->         { create } for  pid=3D2136 comm=3Dmariadbd anonclass=3D"[io_uring=
-]" \
->         scontext=3Dsystem_u:system_r:mysqld_t:s0 \
->         tcontext=3Dsystem_u:system_r:mysqld_iouring_t:s0 tclass=3Danon_in=
-ode
->
-> Add a new LSM audit data type holding the inode and the class name.
->
-> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
->
-> ---
-> v2:
->   - drop dev=3D and name=3D output for anonymous inodes, and hence simpli=
-fy
->     the common_audit_data union member.
->   - drop WARN_ON() on empty name passed to inode_init_security_anon hook
-> ---
->  include/linux/lsm_audit.h | 2 ++
->  security/lsm_audit.c      | 4 ++++
->  security/selinux/hooks.c  | 4 ++--
->  3 files changed, 8 insertions(+), 2 deletions(-)
->
-> diff --git a/include/linux/lsm_audit.h b/include/linux/lsm_audit.h
-> index 17d02eda9538..97a8b21eb033 100644
-> --- a/include/linux/lsm_audit.h
-> +++ b/include/linux/lsm_audit.h
-> @@ -76,6 +76,7 @@ struct common_audit_data {
->  #define LSM_AUDIT_DATA_IBENDPORT 14
->  #define LSM_AUDIT_DATA_LOCKDOWN 15
->  #define LSM_AUDIT_DATA_NOTIFICATION 16
-> +#define LSM_AUDIT_DATA_ANONINODE       17
->         union   {
->                 struct path path;
->                 struct dentry *dentry;
-> @@ -96,6 +97,7 @@ struct common_audit_data {
->                 struct lsm_ibpkey_audit *ibpkey;
->                 struct lsm_ibendport_audit *ibendport;
->                 int reason;
-> +               const char *anonclass;
->         } u;
->         /* this union contains LSM specific data */
->         union {
-> diff --git a/security/lsm_audit.c b/security/lsm_audit.c
-> index 1897cbf6fc69..981f6a4e4590 100644
-> --- a/security/lsm_audit.c
-> +++ b/security/lsm_audit.c
-> @@ -433,6 +433,10 @@ static void dump_common_audit_data(struct audit_buff=
-er *ab,
->                 audit_log_format(ab, " lockdown_reason=3D\"%s\"",
->                                  lockdown_reasons[a->u.reason]);
->                 break;
-> +       case LSM_AUDIT_DATA_ANONINODE:
-> +               audit_log_format(ab, " anonclass=3D");
-> +               audit_log_untrustedstring(ab, a->u.anonclass);
+The following commit has been merged into the x86/platform branch of tip:
 
-My apologies, I didn't notice this in the previous patch ... I don't
-think we need to log this as an untrusted string as the string value
-is coming from the kernel, not userspace, so we could rewrite the
-above as the following:
+Commit-ID:     f93ba85de0d1ce1924b0752b6a7a784c11c36414
+Gitweb:        https://git.kernel.org/tip/f93ba85de0d1ce1924b0752b6a7a784c11c36414
+Author:        Mike Travis <mike.travis@hpe.com>
+AuthorDate:    Fri, 18 Mar 2022 17:43:04 -05:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Mon, 04 Apr 2022 20:21:47 +02:00
 
-  audit_log_format(ab, " anonclass=3D%s", a->u.anonclass);
+x86/platform/uv: Log gap hole end size
 
-... if you are okay with that, I can make the change when I merge the
-patch or you can submit another revision, let me know which you would
-prefer.
+Show value of gap end in the kernel log which equates to number of physical
+address bits used by system.  The end address of the gap holds PA bits 56:26
+which gives the range up to 64PB max size with 64MB of granularity.
 
-The rest of the patch looks good, thanks!
+Signed-off-by: Mike Travis <mike.travis@hpe.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
+Link: https://lore.kernel.org/r/20220318224304.174967-4-mike.travis@hpe.com
+---
+ arch/x86/kernel/apic/x2apic_uv_x.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-> +               break;
->         } /* switch (a->type) */
->  }
->
-> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index b12e14b2797b..49c0abfd2f6a 100644
-> --- a/security/selinux/hooks.c
-> +++ b/security/selinux/hooks.c
-> @@ -2965,8 +2965,8 @@ static int selinux_inode_init_security_anon(struct =
-inode *inode,
->          * allowed to actually create this type of anonymous inode.
->          */
->
-> -       ad.type =3D LSM_AUDIT_DATA_INODE;
-> -       ad.u.inode =3D inode;
-> +       ad.type =3D LSM_AUDIT_DATA_ANONINODE;
-> +       ad.u.anonclass =3D name ? (const char *)name->name : "?";
->
->         return avc_has_perm(&selinux_state,
->                             tsec->sid,
-> --
-> 2.35.1
-
---=20
-paul-moore.com
+diff --git a/arch/x86/kernel/apic/x2apic_uv_x.c b/arch/x86/kernel/apic/x2apic_uv_x.c
+index 387d653..146f0f6 100644
+--- a/arch/x86/kernel/apic/x2apic_uv_x.c
++++ b/arch/x86/kernel/apic/x2apic_uv_x.c
+@@ -1346,7 +1346,7 @@ static void __init decode_gam_params(unsigned long ptr)
+ static void __init decode_gam_rng_tbl(unsigned long ptr)
+ {
+ 	struct uv_gam_range_entry *gre = (struct uv_gam_range_entry *)ptr;
+-	unsigned long lgre = 0;
++	unsigned long lgre = 0, gend = 0;
+ 	int index = 0;
+ 	int sock_min = 999999, pnode_min = 99999;
+ 	int sock_max = -1, pnode_max = -1;
+@@ -1380,6 +1380,9 @@ static void __init decode_gam_rng_tbl(unsigned long ptr)
+ 			flag, size, suffix[order],
+ 			gre->type, gre->nasid, gre->sockid, gre->pnode);
+ 
++		if (gre->type == UV_GAM_RANGE_TYPE_HOLE)
++			gend = (unsigned long)gre->limit << UV_GAM_RANGE_SHFT;
++
+ 		/* update to next range start */
+ 		lgre = gre->limit;
+ 		if (sock_min > gre->sockid)
+@@ -1397,7 +1400,8 @@ static void __init decode_gam_rng_tbl(unsigned long ptr)
+ 	_max_pnode	= pnode_max;
+ 	_gr_table_len	= index;
+ 
+-	pr_info("UV: GRT: %d entries, sockets(min:%x,max:%x) pnodes(min:%x,max:%x)\n", index, _min_socket, _max_socket, _min_pnode, _max_pnode);
++	pr_info("UV: GRT: %d entries, sockets(min:%x,max:%x), pnodes(min:%x,max:%x), gap_end(%d)\n",
++	  index, _min_socket, _max_socket, _min_pnode, _max_pnode, fls64(gend));
+ }
+ 
+ /* Walk through UVsystab decoding the fields */

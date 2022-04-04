@@ -2,111 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5EC04F1150
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFCA4F1130
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245564AbiDDIug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 04:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49866 "EHLO
+        id S239501AbiDDItX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 04:49:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242301AbiDDItv (ORCPT
+        with ESMTP id S239405AbiDDItU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 04:49:51 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109873B540;
-        Mon,  4 Apr 2022 01:47:56 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id gt4so2239587pjb.4;
-        Mon, 04 Apr 2022 01:47:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=99A9a3hHeLpuMdZogws2agT3Pd/9V9gAGhJHXsYptTw=;
-        b=FEWaJFqHiORNV4n3ITN4hvIxL/s/r/ujDrwxJkvlaNB8kwZiS7A/KFs0C6nSH9Fjj6
-         hNV2GTIYaKbOjwploqMSVC3IkiQ05w14dN/RGAB8X+ZUWmFvKEk5sV3bc6Bx758tPqHO
-         U2reaV4WrwQFVFhhL69S6ey2NDHe74btKudCdicMuTYguS0WMfO/xMb5nQ9CIifNSOkA
-         TMPenuoIkkxwusMIeBOg0m7n7IG3XCVpVwQtNJBYiCUz+ujG6hh/6zX8ne+OduhAujW1
-         MmPUHKNB2dDspHO3g9QYl+owLNVEgfl8hubi9rQ1xusjDFxsx1kIdlwZfP//ZNtzqbKA
-         M9oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=99A9a3hHeLpuMdZogws2agT3Pd/9V9gAGhJHXsYptTw=;
-        b=e61PPw0t9fu3LPv+vKMQzUD/zjz0UXoB4wE4Blzk9nHQ66C5g7SLrv8whpyYuG12QO
-         1fv0SJJRjRL8SKmkyrtbZFUXkMM69L28tvTizptGieWOPCP0ZiYtPcnzjutZ2itbdYWt
-         xiv670I6BKbRAjHhJrNJ23VAOycJSB3pNoNWXEAoUSJmEAoLptYlqeSFfW9upLj0HxLt
-         TWtOEbLfpITkErbYHooLFrSAWyPYMjq6OjmpwasIZeCUHxZul5w7i190ZEUr/hr351j3
-         MLsdRpo3BzG47FYZdRcLJlPVQELVQEY7RcM+hIQd+5ABCtzd9L5XYQh5EfEseLTyxt2Q
-         M6tA==
-X-Gm-Message-State: AOAM532pGMOuqokwsDgdpPgpEOxUqOC+2/A9t6H0Guvp8Jzk7nQ+BI1L
-        uV+C2VEmppdQrSe1sMECQQ==
-X-Google-Smtp-Source: ABdhPJzHEpK7iQlUi2JXa05S2CyzF7s2BEpWcpFng5mVwfJfydFQGtfX42aZdvVbPwni/HDOC/K2tw==
-X-Received: by 2002:a17:90a:7288:b0:1ca:6e77:84a0 with SMTP id e8-20020a17090a728800b001ca6e7784a0mr9647359pjg.60.1649062075558;
-        Mon, 04 Apr 2022 01:47:55 -0700 (PDT)
-Received: from localhost.localdomain ([144.202.91.207])
-        by smtp.gmail.com with ESMTPSA id u6-20020a17090a3fc600b001ca88b0bdfesm3991960pjm.13.2022.04.04.01.47.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 01:47:55 -0700 (PDT)
-From:   Zheyu Ma <zheyuma97@gmail.com>
-To:     deller@gmx.de
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>
-Subject: [PATCH 4/7] video: fbdev: vt8623fb: Error out if 'pixclock' equals zero
-Date:   Mon,  4 Apr 2022 16:47:20 +0800
-Message-Id: <20220404084723.79089-5-zheyuma97@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220404084723.79089-1-zheyuma97@gmail.com>
-References: <20220404084723.79089-1-zheyuma97@gmail.com>
+        Mon, 4 Apr 2022 04:49:20 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 990EC3AA5A
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 01:47:24 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id DD4EBC0009;
+        Mon,  4 Apr 2022 08:47:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1649062042;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hJ0vCytaTI0HqUjXr+swIRK6As2mValu0X3WcDyz8EE=;
+        b=TkSpf/VOzEw9QZNfw2t3lr6Z4cC0H3IeOmv5WlXO9f0rSBgNHgsXndLJS8Tk4G2HPZPqc0
+        qHEIF8+D3ETz/s2qJ9H3nVKlc6JlqAKk0cV+jcnV7a4TvgeDfp1h/Lk4ERZSBb5NeO7OY9
+        9n5yd6nKETrqXqIc/qSgL5R54q/nZGuaWvVHmDXEt514WVucs/GcVH+j0z/eDudcP1bhVA
+        WKr1EoVLGqEaxmHAMHDw/xrLAgRB+emNdC9Lu9yFwEUIsMdj1WYZFfib5uX6HP90gyMpmm
+        GRQPEFczg/9XOloh80hIDDl7sVeE3G9c6edjWixnYvrWdaM8AtcC8xN3dD50Xg==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Chuanhong Guo <gch981213@gmail.com>, linux-mtd@lists.infradead.org
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Reto Schneider <reto.schneider@husqvarnagroup.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Stefan Roese <sr@denx.de>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: Re: [PATCH 2/5] mtd: spinand: gigadevice: add support for GD5FxGQ4xExxG
+Date:   Mon,  4 Apr 2022 10:47:21 +0200
+Message-Id: <20220404084721.1202925-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220320100001.247905-3-gch981213@gmail.com>
+References: 
 MIME-Version: 1.0
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'573eec222bc82fb5e724586267fbbb1aed9ffd03'
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The userspace program could pass any values to the driver through
-ioctl() interface. If the driver doesn't check the value of 'pixclock',
-it may cause divide error.
+On Sun, 2022-03-20 at 09:59:58 UTC, Chuanhong Guo wrote:
+> Add support for:
+>  GD5F1GQ4RExxG
+>  GD5F2GQ4{U,R}ExxG
+> 
+> These chips differ from GD5F1GQ4UExxG only in chip ID, voltage
+> and capacity.
+> 
+> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
 
-Fix this by checking whether 'pixclock' is zero in the function
-vt8623fb_check_var().
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
 
-The following log reveals it:
-
-[   47.778727] divide error: 0000 [#1] PREEMPT SMP KASAN PTI
-[   47.778803] RIP: 0010:vt8623fb_set_par+0xecd/0x2210
-[   47.778870] Call Trace:
-[   47.778872]  <TASK>
-[   47.778909]  fb_set_var+0x604/0xeb0
-[   47.778995]  do_fb_ioctl+0x234/0x670
-[   47.779041]  fb_ioctl+0xdd/0x130
-[   47.779048]  do_syscall_64+0x3b/0x90
-
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
----
- drivers/video/fbdev/vt8623fb.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/video/fbdev/vt8623fb.c b/drivers/video/fbdev/vt8623fb.c
-index 7a959e5ba90b..a92a8c670cf0 100644
---- a/drivers/video/fbdev/vt8623fb.c
-+++ b/drivers/video/fbdev/vt8623fb.c
-@@ -321,6 +321,9 @@ static int vt8623fb_check_var(struct fb_var_screeninfo *var, struct fb_info *inf
- {
- 	int rv, mem, step;
- 
-+	if (!var->pixclock)
-+		return -EINVAL;
-+
- 	/* Find appropriate format */
- 	rv = svga_match_format (vt8623fb_formats, var, NULL);
- 	if (rv < 0)
--- 
-2.25.1
-
+Miquel

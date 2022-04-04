@@ -2,349 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1086F4F1319
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 12:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F307D4F131B
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 12:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357770AbiDDKae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 06:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
+        id S1357842AbiDDKao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 06:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237099AbiDDKac (ORCPT
+        with ESMTP id S1357896AbiDDKam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 06:30:32 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87332263D;
-        Mon,  4 Apr 2022 03:28:33 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 399F524000B;
-        Mon,  4 Apr 2022 10:28:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649068109;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HCsUi7kOI3d6Xo1Mm1jD9G/wtU6d4VrhYaApfm09KZI=;
-        b=gbwGaNha7rEyqNkTaxQbeooF06FS+a4ZuW9tSlSN+P/9d25inyojXEX05W4+wQ30vvrXWu
-        P5dme+NQYjzbThTQ+GaAKh9EhHFG2eI4w7kYqefsxf5lpvcV8TzTa8UrPfqtfNGkHMFjVc
-        ZFGBPby619uiBHPpESgx7+HRU39TAIHjRhReYvti2QHS5rKUtMU5o8mDBnA9AgfBVNU6xL
-        Rwzowagr2P1dk76ve5wQz6BBx+b1dma1beoBR5Sghf0UCyQXIwtjBJ+9anfxb0noEA6329
-        vqEORxQb7TJ7AFCXOmglRk8d/qbchxUB32ymQ6qiD6I4hcn9hEFI899uDT5qEQ==
-Date:   Mon, 4 Apr 2022 12:28:24 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Chuanhong Guo <gch981213@gmail.com>
-Cc:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
-Subject: Re: [PATCH v2 2/5] spi: add driver for MTK SPI NAND Flash Interface
-Message-ID: <20220404122824.63a1c857@xps13>
-In-Reply-To: <CAJsYDVK6ya7FR90CtAjbpbF-_+c0GVnsKsN=1wYaoBFx=ysUtQ@mail.gmail.com>
-References: <20220404040153.1509966-1-gch981213@gmail.com>
-        <20220404040153.1509966-3-gch981213@gmail.com>
-        <20220404095937.20089db7@xps13>
-        <CAJsYDVK6ya7FR90CtAjbpbF-_+c0GVnsKsN=1wYaoBFx=ysUtQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mon, 4 Apr 2022 06:30:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0CD5580;
+        Mon,  4 Apr 2022 03:28:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 99365B812A4;
+        Mon,  4 Apr 2022 10:28:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D9F0C3411D;
+        Mon,  4 Apr 2022 10:28:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649068121;
+        bh=zwUK1d+i5RXTJlC+Adlf8bRHaBsi5j9oBLcZmbARNm8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=u4dSFjGSpxeBVGAvXWQzGvUL6K7TQjhSHgVk8lztuwj8tcx4m1KBz3SgHZNKdBNCq
+         RkPWMP1i4E2I1HAkxFNP8aRfSKsf2wfPKMHTKAyvUsbrkkei9VwBYTKIdiRZp/QKfV
+         QRnbhPz6AmERszYevwrQ7zuVac/siEyzDl/jtvNO4QZXm4ZynlJ+u6GirFFyNzbC6E
+         y6RXT139lJZzdpOF/JXOmP1nRDdiHthJmaxrP1Mph8nM91pNKJGel+VrnTlNlEOg9B
+         jnKmDShWDNYasHR/roiRPvu/cfsWxAkSQmukax8snjwlwLmIz+lSMmKmgDc/Rzi2Oc
+         RGKb5W7HLx8BQ==
+Received: by mail-vs1-f43.google.com with SMTP id u207so8711625vsu.10;
+        Mon, 04 Apr 2022 03:28:41 -0700 (PDT)
+X-Gm-Message-State: AOAM533XOEKIuvxRAgs2IDtV4/WXJFEREENeeJLt0IxT+AxY73Ye5rGW
+        ldgZZRMo7X5BsOmRWBcj1noWeSUcdyT7yqPoqXY=
+X-Google-Smtp-Source: ABdhPJx6e/VYOA2WWRLC+sB4i7fzBVJ1DvExFTqsC4UIP3lN3bWU9HoW+rJb6BZz/2iFzWa6yDJhtpd1cSTN4vx0DrM=
+X-Received: by 2002:a67:efc3:0:b0:325:4fcf:60bf with SMTP id
+ s3-20020a67efc3000000b003254fcf60bfmr6380956vsp.51.1649068120257; Mon, 04 Apr
+ 2022 03:28:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CA+G9fYu_ZHOeOPDiwzXGL6Re8aFYW3K+JSL2Dozw=VHwaUFxyQ@mail.gmail.com>
+In-Reply-To: <CA+G9fYu_ZHOeOPDiwzXGL6Re8aFYW3K+JSL2Dozw=VHwaUFxyQ@mail.gmail.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 4 Apr 2022 18:28:29 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTS_uhdujc_9+mrqKi=41eyURtffqrd067zo7ew3s4-dwQ@mail.gmail.com>
+Message-ID: <CAJF2gTS_uhdujc_9+mrqKi=41eyURtffqrd067zo7ew3s4-dwQ@mail.gmail.com>
+Subject: Re: [next] riscv: Linux next-20220404 riscv defconfig builds failed.
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chuanhong,
+It caused by:
 
-gch981213@gmail.com wrote on Mon, 4 Apr 2022 17:13:55 +0800:
+commit 03248addadf1a5ef0a03cbcd5ec905b49adb9658
+Author: Eric W. Biederman <ebiederm@xmission.com>
+Date:   Wed Feb 9 12:20:45 2022 -0600
 
-> Hi!
->=20
-> On Mon, Apr 4, 2022 at 3:59 PM Miquel Raynal <miquel.raynal@bootlin.com> =
-wrote:
-> >
-> > Hi Chuanhong,
-> >
-> > gch981213@gmail.com wrote on Mon,  4 Apr 2022 12:01:50 +0800:
-> > =20
-> > > This driver implements support for the SPI-NAND mode of MTK NAND Flash
-> > > Interface as a SPI-MEM controller with piplined ECC capability.
-> > >
-> > > Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-> > > ---
-> > >
-> > > Change since v1:
-> > >   fix CI warnings
-> > >
-> > >  drivers/spi/Kconfig        |   10 +
-> > >  drivers/spi/Makefile       |    1 +
-> > >  drivers/spi/spi-mtk-snfi.c | 1351 ++++++++++++++++++++++++++++++++++=
-++
-> > >  3 files changed, 1362 insertions(+)
-> > >  create mode 100644 drivers/spi/spi-mtk-snfi.c
-> > >
-> > > diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-> > > index d2815eb361c0..739eec7d0c15 100644
-> > > --- a/drivers/spi/Kconfig
-> > > +++ b/drivers/spi/Kconfig
-> > > @@ -590,6 +590,16 @@ config SPI_MTK_NOR
-> > >         SPI interface as well as several SPI NOR specific instructions
-> > >         via SPI MEM interface.
-> > >
-> > > +config SPI_MTK_SNFI
-> > > +     tristate "MediaTek SPI NAND Flash Interface"
-> > > +     depends on ARCH_MEDIATEK || COMPILE_TEST
-> > > +     depends on MTD_NAND_ECC_MEDIATEK
-> > > +     help
-> > > +       This enables support for SPI-NAND mode on the MediaTek NAND
-> > > +       Flash Interface found on MediaTek ARM SoCs. This controller
-> > > +       is implemented as a SPI-MEM controller with pipelined ECC
-> > > +       capcability.
-> > > +
-> > >  config SPI_NPCM_FIU
-> > >       tristate "Nuvoton NPCM FLASH Interface Unit"
-> > >       depends on ARCH_NPCM || COMPILE_TEST
-> > > diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-> > > index 3aa28ed3f761..51541ff17e67 100644
-> > > --- a/drivers/spi/Makefile
-> > > +++ b/drivers/spi/Makefile
-> > > @@ -76,6 +76,7 @@ obj-$(CONFIG_SPI_MPC52xx)           +=3D spi-mpc52x=
-x.o
-> > >  obj-$(CONFIG_SPI_MT65XX)                +=3D spi-mt65xx.o
-> > >  obj-$(CONFIG_SPI_MT7621)             +=3D spi-mt7621.o
-> > >  obj-$(CONFIG_SPI_MTK_NOR)            +=3D spi-mtk-nor.o
-> > > +obj-$(CONFIG_SPI_MTK_SNFI)           +=3D spi-mtk-snfi.o
-> > >  obj-$(CONFIG_SPI_MXIC)                       +=3D spi-mxic.o
-> > >  obj-$(CONFIG_SPI_MXS)                        +=3D spi-mxs.o
-> > >  obj-$(CONFIG_SPI_NPCM_FIU)           +=3D spi-npcm-fiu.o
-> > > diff --git a/drivers/spi/spi-mtk-snfi.c b/drivers/spi/spi-mtk-snfi.c
-> > > new file mode 100644
-> > > index 000000000000..e8f8f30bd7ee
-> > > --- /dev/null
-> > > +++ b/drivers/spi/spi-mtk-snfi.c =20
-> >
-> > [...]
-> > =20
-> > > +static struct mtk_snand *nand_to_mtk_snand(struct nand_device *nand)
-> > > +{
-> > > +     struct nand_ecc_engine *eng =3D nand->ecc.engine;
-> > > +
-> > > +     return container_of(eng, struct mtk_snand, ecc_eng);
-> > > +}
-> > > +
-> > > +static inline int snand_prepare_bouncebuf(struct mtk_snand *snf, siz=
-e_t size)
-> > > +{
-> > > +     if (snf->buf_len >=3D size)
-> > > +             return 0;
-> > > +     if (snf->buf)
-> > > +             dmam_free_coherent(snf->dev, snf->buf_len, snf->buf,
-> > > +                                snf->buf_dma); =20
-> >
-> > Can't we use a single coherent buffer once for all? =20
->=20
-> This only reallocates when the page size changes to a larger one,
-> so there's at most two allocations: one during probe and the other
-> one in the first call to init_ctx. The other solution is to allocate a
-> buffer for the maximum supported page size but I think that's a
-> waste of memory.
+    resume_user_mode: Move to resume_user_mode.h
 
-Ok, fine.
+    Move set_notify_resume and tracehook_notify_resume into resume_user_mode.h.
+    While doing that rename tracehook_notify_resume to resume_user_mode_work.
 
->=20
-> > =20
-> > > +     snf->buf =3D
-> > > +             dmam_alloc_coherent(snf->dev, size, &snf->buf_dma, GFP_=
-KERNEL);
-> > > +     if (!snf->buf)
-> > > +             return -ENOMEM;
-> > > +     snf->buf_len =3D size;
-> > > +     memset(snf->buf, 0xff, snf->buf_len);
-> > > +     return 0;
-> > > +}
-> > > + =20
-> >
-> > [...]
-> > =20
-> > > +static int mtk_snand_ecc_init_ctx(struct nand_device *nand)
-> > > +{
-> > > +     struct mtk_snand *snf =3D nand_to_mtk_snand(nand);
-> > > +     struct nand_ecc_props *conf =3D &nand->ecc.ctx.conf;
-> > > +     struct mtd_info *mtd =3D nanddev_to_mtd(nand);
-> > > +     int ret;
-> > > +
-> > > +     ret =3D mtk_snand_setup_pagefmt(snf, nand->memorg.pagesize,
-> > > +                                   nand->memorg.oobsize);
-> > > +     if (ret)
-> > > +             return ret;
-> > > +
-> > > +     mtd_set_ooblayout(mtd, &mtk_snand_ooblayout);
-> > > +
-> > > +     // This driver ignores any ECC capability configured by user or
-> > > +     // requested by the nand chip because the BootROM and MTK bootl=
-oader
-> > > +     // expects the page format to be the exact one as calculated in
-> > > +     // setup_pagefmt. =20
-> >
-> > I don't like this :)
-> >
-> > I understand that the boot partition might have specific constraints,
-> > but other partitions (or if we don't use the NAND to boot?) should
-> > probably be usable with other ECC schemes. =20
->=20
-> In this controller, the ECC step size is fixed and it can only change
-> ECC strength.
+    Update all of the places that included tracehook.h for these functions to
+    include resume_user_mode.h instead.
 
-That's fine.
+    Update all of the callers of tracehook_notify_resume to call
+    resume_user_mode_work.
 
-> The calculated ECC correction capability is the max
-> possible one supported by the controller.
-> I still want the default behavior to match the boot partition
-> requirement,
+    Reviewed-by: Kees Cook <keescook@chromium.org>
+    Link: https://lkml.kernel.org/r/20220309162454.123006-12-ebiederm@xmission.com
+    Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 
-That is okay, but that does not mean you can only support this one.
+I would solve it.
 
-> because we can't just tell end-users to customize
-> their dts by taking apart their device and figure out which flash
-> is used.
-
-They don't have to do so. In theory they should not request anything,
-the core would take care of all of that. But they can request specific
-values by using the DT and you must follow them in the driver.
-
-On his side the core is responsible of telling you which strength
-should be used otherwise and the driver is expected to use it.
-
-> I can implement the following:
-
-You should take the user requirements first. If there are no
-user inputs, you should in theory look at the device's requirements.
-
-> 1. select the minimum capability exceeding ecc.user_conf
-> 2. If that doesn't exist, use the calculated one and warn
->    if it doesn't meet ecc.requirements
-> Is this OK?
->=20
-> > =20
-> > > +     conf->step_size =3D snf->caps->sector_size;
-> > > +     conf->strength =3D snf->ecc_cfg.strength;
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static int mtk_snand_ecc_prepare_io_req(struct nand_device *nand,
-> > > +                                     struct nand_page_io_req *req)
-> > > +{
-> > > +     struct mtk_snand *snf =3D nand_to_mtk_snand(nand);
-> > > +     int ret;
-> > > +
-> > > +     ret =3D mtk_snand_setup_pagefmt(snf, nand->memorg.pagesize,
-> > > +                                   nand->memorg.oobsize);
-> > > +     if (ret)
-> > > +             return ret;
-> > > +     snf->autofmt =3D true;
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static int mtk_snand_ecc_finish_io_req(struct nand_device *nand,
-> > > +                                    struct nand_page_io_req *req)
-> > > +{
-> > > +     struct mtk_snand *snf =3D nand_to_mtk_snand(nand);
-> > > +     struct mtd_info *mtd =3D nanddev_to_mtd(nand);
-> > > +
-> > > +     snf->autofmt =3D false;
-> > > +     if ((req->mode =3D=3D MTD_OPS_RAW) || (req->type !=3D NAND_PAGE=
-_READ))
-> > > +             return 0;
-> > > +
-> > > +     if (snf->ecc_stats.failed)
-> > > +             mtd->ecc_stats.failed +=3D snf->ecc_stats.failed;
-> > > +     mtd->ecc_stats.corrected +=3D snf->ecc_stats.corrected;
-> > > +     return snf->ecc_stats.failed ? -EBADMSG : snf->ecc_stats.bitfli=
-ps; =20
-> >
-> > Did you verify that nandbiterrs -i succeeds? =20
->=20
-> I did a insmod mtd_nandbiterrs.ko dev=3Dx and the reported bitflips in
-> kernel log is correct.
->=20
-> Is there a userspace tool for this? I'd like to use that instead of a
-> kernel module in the future.
-
-Yes, you can give the mtd-utils test suite a try. Almost all the tools
-have been migrated there. There even is a Buildroot package.
-
-> > > +}
-> > > +
-> > > +static struct nand_ecc_engine_ops mtk_snfi_ecc_engine_ops =3D {
-> > > +     .init_ctx =3D mtk_snand_ecc_init_ctx,
-> > > +     .prepare_io_req =3D mtk_snand_ecc_prepare_io_req,
-> > > +     .finish_io_req =3D mtk_snand_ecc_finish_io_req, =20
-> >
-> > I believe you need to take care of the bounce buffer in the exit path? =
-=20
->=20
-> No. The buffer should be left there for non-ecc spi-mem operations.
-
-AFAIR you initialize the buffer in the ECC part, so if it must be used
-without ECC you should probably allocate it for the SPI controller. In
-any way, you need to free that memory at some point (when removing the
-driver).
-
->=20
-> > =20
-> > > +};
-> > > +
-> > > +static void mtk_snand_read_fdm(struct mtk_snand *snf, uint8_t *buf)
-> > > +{
-> > > +     uint32_t vall, valm;
-> > > +     uint8_t *oobptr =3D buf;
-> > > +     int i, j;
-> > > +
-> > > +     for (i =3D 0; i < snf->nfi_cfg.nsectors; i++) {
-> > > +             vall =3D nfi_read32(snf, NFI_FDML(i));
-> > > +             valm =3D nfi_read32(snf, NFI_FDMM(i));
-> > > +
-> > > +             for (j =3D 0; j < snf->caps->fdm_size; j++)
-> > > +                     oobptr[j] =3D (j >=3D 4 ? valm : vall) >> ((j %=
- 4) * 8);
-> > > +
-> > > +             oobptr +=3D snf->caps->fdm_size;
-> > > +     }
-> > > +} =20
-> >
-> > Thanks,
-> > Miqu=C3=A8l =20
->=20
->=20
->=20
+On Mon, Apr 4, 2022 at 5:58 PM Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
+> Linux next-20220404 riscv defconfig builds failed.
+>
+> Regressions found on riscv:
+>    - riscv-riscv-clang-14-defconfig
+>    - riscv-riscv-gcc-10-defconfig
+>    - riscv-riscv-clang-13-defconfig
+>    - riscv-riscv-clang-12-defconfig
+>    - riscv-riscv-clang-11-defconfig
+>    - riscv-riscv-gcc-11-defconfig
+>    - riscv-riscv-gcc-8-defconfig
+>    - riscv-riscv-gcc-9-defconfig
+>    - riscv-riscv-clang-nightly-defconfig
+>
+>
+> arch/riscv/kernel/compat_signal.c:7:10: fatal error:
+> linux/tracehook.h: No such file or directory
+>   7 | #include <linux/tracehook.h>
+>     |          ^~~~~~~~~~~~~~~~~~~
+> compilation terminated.
+> make[3]: *** [scripts/Makefile.build:289:
+> arch/riscv/kernel/compat_signal.o] Error 1
+>
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> metadata:
+>     git_describe: next-20220404
+>     git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+>     git_sha: 696206280c5e5c028caf9fd259999cb72b1f6127
+>     kconfig: defconfig
+>     target_arch: riscv
+>     toolchain: gcc-11
+>
+> steps to reproduce:
+>   # To install tuxmake on your system globally:
+>   # sudo pip3 install -U tuxmake
+>   #
+>
+>   tuxmake --runtime podman --target-arch riscv --toolchain gcc-11
+> --kconfig defconfig
+>
+>
 > --
-> Regards,
-> Chuanhong Guo
+> Linaro LKFT
+> https://lkft.linaro.org
+>
+>
+> [1]  https://builds.tuxbuild.com/27JdBBUbSHIhFJ9Wsq3Z6ssitb6/
 
 
-Thanks,
-Miqu=C3=A8l
+
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

@@ -2,120 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 724FF4F1E7A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C84CB4F1E66
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379688AbiDDVrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:47:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
+        id S1350059AbiDDWLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 18:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380724AbiDDVPM (ORCPT
+        with ESMTP id S241092AbiDDVat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 17:15:12 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013512FE41
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 14:13:15 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id hu11so8530663qvb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 14:13:15 -0700 (PDT)
+        Mon, 4 Apr 2022 17:30:49 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AD79FEA
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 14:14:00 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id b15so12642052edn.4
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 14:14:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=u+Jl9J4Gm7LRQGPX5xoLGqpAHPcvyGzQPr6d5j6QMTw=;
-        b=TSVbunOXvXaI2j2cflfId/dz86MOvQN6HmifvKQzyMoyxFrWDUVNTxEyuubl+ejr4R
-         zA9m49+KVYvUsOMAta6F+9tdVJZ/vKCkbS8xyhpV0n/uVXtOO/UsV4qYC3Kr/oOI7Xr5
-         3wfySfQxeOD/O4I7pReuqjLOKIvlS+Ml8h7zo8aYZA80gVZzBSUl5WyfC9CR7sCGpM6u
-         He2I+Fl9jeEQbU7mNZemR/K1VxoCzZUDn9O1zI27hzFdksqd1in94CCmiOnmrqNGd/8W
-         X9E9lNYcqdYSrMDM/PfEkmMqPgEkIYuusTAJ8Gl4KN3ZhvfYFhmQYNC7JqIDuVW3qbB1
-         XfSA==
+        bh=S5JDtmIs58TRR3YM1MH2n9ydceKzu8ZMJYE0EAd1fdA=;
+        b=mXu+kbIOllUFvjcA3fMxHjtto4SRHNogC5DNMGt298LCEFBZj/4pCFusAyxJJwXDFE
+         aknCc84+LN9asN3z8ABlK1Neu52RGYbDbxQ/x7wMjt8hgDbCi8gC3h63ehV3//RUcjEQ
+         uXd8VnYduxNmDzxwkqs5cArm2NvcR5NWQ29lBNGTdYvQoscK7mpNXBKQ0tLJIvZZx8EK
+         UHAQPh+V4qvmOeqTkgtiZtN6T1lQfPOOloeTXFuwpCBWe7cbtmQqJ4Ou8yw7CeR2UsF3
+         4uTo3/Qh87ML1kHT+0XUbhJ3pDx3kqchZRWH52MVse9/W3tOmLVYxXkyLWDShcPe6WYR
+         SzQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=u+Jl9J4Gm7LRQGPX5xoLGqpAHPcvyGzQPr6d5j6QMTw=;
-        b=fa0BSif5opTSmlYke38h8Dqp7xMJaIzHrxfEZlJ4c04cat5lkR+wEzUHk4R1yveLvV
-         wBLdmjuI/dHaxJtw8R8GHsGU+MWot6tIZND0NVom+JYQumKyW0hF0zieDqerpu1DS8HN
-         wTsjSbnd5Kq0fNwDfK8gUzPtzSAXGcH3xC07j0/AjQb00+9gZi32PpolKRnyN1tWtc57
-         vqwtn07kswodeCdADq5InhjYzSRKdxbdxS3VeJrotc6pxEyMcROcBTlvhkblSblNaM/I
-         Fbfd8SW11YcqKtjpppsqB8uoRZjF58lkMLM7/yh4Zs1Eb+U5VdXBZcnolzBcIDDMyUAh
-         oUGA==
-X-Gm-Message-State: AOAM530iUnOSZwJe3wX3JIOgHcxEyG/Wa9waBoLuM70bk/VC6ciSs3sJ
-        jrS/rcf+uUbRkZrIaD2oV2+1dR2TvyyWDvfyClvwsg==
-X-Google-Smtp-Source: ABdhPJwxrjD9HfPuwGXMP4Ljy/6xQzhveU0JXd34jHXZBeF11vt01nwh3cDZ3iNbPGbLP6JSVzGT4riqsvKmCJkH474=
-X-Received: by 2002:a05:6214:20e4:b0:441:7bed:5ccd with SMTP id
- 4-20020a05621420e400b004417bed5ccdmr1456463qvk.119.1649106794685; Mon, 04 Apr
- 2022 14:13:14 -0700 (PDT)
+        bh=S5JDtmIs58TRR3YM1MH2n9ydceKzu8ZMJYE0EAd1fdA=;
+        b=FYo0ptW9J9lodM0KqAEDb2aBZE9Y0gPVMsaf27lai586I+Z9LK6ktU4bVpNMy/iPvK
+         ZTiCkU2ZynCl5qGZUUjPQhg+t0KZz+XyHFZh6IfI0FBHGIkfDz6zVJZG6ejN1DjxXRUn
+         hzlFq/7p6GNP+fytmaBsVSXt6Fjyg2lKqyAzCchcLfu63wTS2Soq7lOr5TOnO5NcEmNs
+         dqAvfrd5LuTT0nYhPBq1xdp1nX/t4wTRDw+jfaI+Tnku8ovKjmpf1CTDkIOGoNZtExom
+         PUXNii/ao1p/v4xLomRYTVxOmY7OHGLExwK4oOWm5XngwFIzCJc7rf2vECYPOmY4IDVV
+         4+cw==
+X-Gm-Message-State: AOAM532BFCyrIAmVUfq52JZPzUKzl5o5f8vm6pl5I1ymnFuXCKp0ZrJ+
+        FxCh3aS2OnfaORjPM+78yuUuSdkRIIxfraIz7Z5PEQ==
+X-Google-Smtp-Source: ABdhPJyMO0ydKmS0siYdaHdVOwsHoBm4w6Sf5vzl64BwKlS1ZlQJjG/60KDSEZUZzhTTg4BvzwEuDDfUH50t+IgZaN8=
+X-Received: by 2002:a05:6402:d0a:b0:418:ec3b:2242 with SMTP id
+ eb10-20020a0564020d0a00b00418ec3b2242mr83168edb.229.1649106839033; Mon, 04
+ Apr 2022 14:13:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <1648656179-10347-1-git-send-email-quic_sbillaka@quicinc.com>
- <1648656179-10347-7-git-send-email-quic_sbillaka@quicinc.com>
- <CAD=FV=UX9Mg71EKvgNp_wNG5q7_ugBgVPbcFWFX5XBG+cQCi8Q@mail.gmail.com> <MW4PR02MB718631182DC72076DC794C1DE1E59@MW4PR02MB7186.namprd02.prod.outlook.com>
-In-Reply-To: <MW4PR02MB718631182DC72076DC794C1DE1E59@MW4PR02MB7186.namprd02.prod.outlook.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 5 Apr 2022 00:13:03 +0300
-Message-ID: <CAA8EJpqOzn4xh1N9GhEbH6YY5uHPdeqhiDnSNMM+ZQ3GdaWFrA@mail.gmail.com>
-Subject: Re: [PATCH v6 6/8] drm/msm/dp: remove unnecessary delay during boot
-To:     "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        quic_kalyant <quic_kalyant@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        quic_vproddut <quic_vproddut@quicinc.com>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>
+References: <20220318021314.3225240-1-davidgow@google.com> <20220318021314.3225240-3-davidgow@google.com>
+In-Reply-To: <20220318021314.3225240-3-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 4 Apr 2022 16:13:47 -0500
+Message-ID: <CAGS_qxqtMpjKX+CMF6eBUWfsc-TKR9-Bk+hYM=PHa0_wUtQQuA@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/2] kunit: expose ftrace-based API for stubbing out
+ functions during tests
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Apr 2022 at 16:53, Sankeerth Billakanti (QUIC)
-<quic_sbillaka@quicinc.com> wrote:
->
-> Hi Doug,
->
-> > On Wed, Mar 30, 2022 at 9:04 AM Sankeerth Billakanti
-> > <quic_sbillaka@quicinc.com> wrote:
-> > >
-> > > Remove the unnecessary delay in executing the EV_HPD_INIT_SETUP
-> > event.
-> >
-> > Tell me more and put it in the commit message! Why did it used to be
-> > necessary and why is it no longer necessary? Inquiring minds want to know.
-> >
->
-> Okay. I will add proper description. The DP phy is shared with usb and executing the
-> dp phy_init before the usb phy_init was causing usb devices to not function.
+On Thu, Mar 17, 2022 at 9:13 PM David Gow <davidgow@google.com> wrote:
+> +
+> +/** KUNIT_STUBBABLE - marks a function as stubbable when stubbing support is
+> + * enabled.
+> + *
+> + * Stubbing uses ftrace internally, so we can only stub out functions when they
+> + * are not inlined. This macro eavlautes to noinline when stubbing support is
 
-I always wondered, how does this work for the 4-lane DP dongles, where
-there is no USB mode/lanes?
+Just noting a couple typos lest they be forgotten:
+*evaluates
 
-> Earlier, enabling phy_init was done when the EV_HPD_INIT_SETUP event was executed.
-> So, we had scheduled it to execute after 10 second to let the usb driver complete the phy_init first.
->
-> Kuogee made the below change to move the DP phy_init to execute after the DP is connected
-> https://patchwork.kernel.org/project/linux-arm-msm/patch/1642531648-8448-2-git-send-email-quic_khsieh@quicinc.com/
->
-> So, there is no need for the DP driver to wait 10 seconds for the phy initialization anymore.
->
-> eDP PHY is not shared with usb. So, it can be programmed anytime, hence not needing any delay.
+> + * enabled to thus make it safe.
+> + *
 
+<snip>
 
+> + *
+> + *     void replacement_func(int n)
+> + *     {
+> + *             pr_info("replacement_func() called with %d", n);
+> + *             return 42;
+> + *     }
+> + *
+> + *     void example_test(struct kunit *test)
+> + *     {
+> + *             kunit_active_ftrace_stub(test, real_func, replacement_func);
 
--- 
-With best wishes
-Dmitry
+*activate

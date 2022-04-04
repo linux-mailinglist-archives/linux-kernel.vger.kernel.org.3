@@ -2,69 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADED94F0FAB
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 08:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7EC4F0FBA
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 09:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358661AbiDDGy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 02:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43862 "EHLO
+        id S1377578AbiDDHEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 03:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbiDDGy0 (ORCPT
+        with ESMTP id S230348AbiDDHEK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 02:54:26 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBC92F013
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 23:52:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649055150; x=1680591150;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=d4EJgpI31PmWN0B47m6JWWP0qRkrjMfsasKfOoqk9Po=;
-  b=nG0xrc+JDqNF1TOsBEUHdsJnwhLcdXUY4PomUG+N9+V/fnk7mJcfSWGd
-   6HzcmlwEgUiDGwkS5nElGX/POJBnwfa1JyoQAprx8Kx4R7iAbZDpnllU8
-   cY6DaV4he6bObRXdPtMmAYkOmd2wpZ7qsxBGzmrORyZSCuw5+CBCfqQdF
-   KWwFnHwHgOC8q+AQvDeqTV5GjsLsL9xdIqoRyu/Bu+zpFY7pKgswnnX3V
-   e6TnECwYoJyaIgSO3CAAc/xG5YNl0J7U+BvxKiHZ7HdxsLbd1rWafFk/l
-   Esdkw8D77OYQNrkz+vl4MLyLBC0fqx9spJAluLicAyWUX+XzxgRCMT6ws
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="285399005"
-X-IronPort-AV: E=Sophos;i="5.90,233,1643702400"; 
-   d="scan'208";a="285399005"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2022 23:52:30 -0700
-X-IronPort-AV: E=Sophos;i="5.90,233,1643702400"; 
-   d="scan'208";a="548545493"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.214.140]) ([10.254.214.140])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2022 23:52:27 -0700
-Message-ID: <970aac17-5ea5-881f-47df-4c66595917d8@linux.intel.com>
-Date:   Mon, 4 Apr 2022 14:52:24 +0800
+        Mon, 4 Apr 2022 03:04:10 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21624326D4
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 00:02:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=4DehWVmqtNmqk3InZz8gMRe+DXyKq9QiQKFXiTH2z0A=;
+        t=1649055735; x=1650265335; b=hy/mc69DKyHGeRNJv1pil+cT7UtB3CodN/ycw7gdhb86Fwq
+        /x84kxAq25NPHvlR0XoUoaho4+XVEOlhkQQJN9EVW9I6BwWEtE+pqgQ9/rUq5XeaBaP5glEIV++W9
+        LtpNaxNEJCDrMzKnXZAU99b0bdkkofj1d+cS3f111mT9ZI16JPAlEz+9EjLrsAtX92PVmVnd+LwcL
+        6cE8EWLyzxDPBl9omFjeS9ulwc8pPb89fHJ1TizOgLQ6dyHuREWqkelISU8FuEIZMsNLWitNcgtL4
+        NaliMR4dd18UUt+nS8QJLS39wLfEyvHOyP3SSZDJalQlc7j+pgT1FcIqq6k8Yc7w==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1nbGj4-004h3H-IN;
+        Mon, 04 Apr 2022 09:02:10 +0200
+Message-ID: <ff314e8556aba7e231ab80c46b30701142e82a43.camel@sipsolutions.net>
+Subject: Re: UML time-travel warning from __run_timers
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Frederic Weisbecker <frederic@kernel.org>
+Date:   Mon, 04 Apr 2022 09:02:09 +0200
+In-Reply-To: <87pmlykksj.ffs@tglx>
+References: <20220330110156.GA9250@axis.com>
+         <84f9d627092660c38400b607198c3b83f795be7f.camel@sipsolutions.net>
+         <877d86m978.ffs@tglx>
+         <32423b7c0e3a490093ceaca750e8669ac67902c6.camel@sipsolutions.net>
+         <87pmlykksj.ffs@tglx>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC v2 06/11] iommu/vt-d: Add SVA domain support
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20220329053800.3049561-1-baolu.lu@linux.intel.com>
- <20220329053800.3049561-7-baolu.lu@linux.intel.com>
- <20220330190956.GD2120790@nvidia.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220330190956.GD2120790@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,54 +59,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/3/31 3:09, Jason Gunthorpe wrote:
-> On Tue, Mar 29, 2022 at 01:37:55PM +0800, Lu Baolu wrote:
->> Add support for SVA domain allocation and provide an SVA-specific
->> iommu_domain_ops.
->>
->> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
->>   include/linux/intel-iommu.h |  1 +
->>   drivers/iommu/intel/iommu.c | 10 ++++++++++
->>   drivers/iommu/intel/svm.c   | 37 +++++++++++++++++++++++++++++++++++++
->>   3 files changed, 48 insertions(+)
->>
->> diff --git a/include/linux/intel-iommu.h b/include/linux/intel-iommu.h
->> index 2f9891cb3d00..c14283137fb5 100644
->> +++ b/include/linux/intel-iommu.h
->> @@ -744,6 +744,7 @@ void intel_svm_unbind(struct iommu_sva *handle);
->>   u32 intel_svm_get_pasid(struct iommu_sva *handle);
->>   int intel_svm_page_response(struct device *dev, struct iommu_fault_event *evt,
->>   			    struct iommu_page_response *msg);
->> +extern const struct iommu_domain_ops intel_svm_domain_ops;
->>   
->>   struct intel_svm_dev {
->>   	struct list_head list;
->> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
->> index c1b91bce1530..5eae7cf9bee5 100644
->> +++ b/drivers/iommu/intel/iommu.c
->> @@ -4318,6 +4318,16 @@ static struct iommu_domain *intel_iommu_domain_alloc(unsigned type)
->>   		return domain;
->>   	case IOMMU_DOMAIN_IDENTITY:
->>   		return &si_domain->domain;
->> +#ifdef CONFIG_INTEL_IOMMU_SVM
->> +	case IOMMU_DOMAIN_SVA:
->> +		dmar_domain = alloc_domain(type);
->> +		if (!dmar_domain)
->> +			return NULL;
->> +		domain = &dmar_domain->domain;
->> +		domain->ops = &intel_svm_domain_ops;
->> +
->> +		return domain;
->> +#endif /* CONFIG_INTEL_IOMMU_SVM */
+On Sun, 2022-04-03 at 21:51 +0200, Thomas Gleixner wrote:
 > 
-> If this is the usual pattern for drivers I would prefer to see an
-> alloc_sva op instead of more and more types.
+> > There was no timer. If there's ever a timer on this base (BASE_DEF) then
+> > this doesn't happen.
 > 
-> Multiplexing functions is often not a great idea...
+> You said:
+> 
+> > > > init_timer_cpu(0) base 0 clk=0xffff8ad0, next_expiry=0x13fff8acf
+> > > > init_timer_cpu(0) base 1 clk=0xffff8ad0, next_expiry=0x13fff8acf
+> 
+> which confused me. It's actually initialized to:
+> 
+>       base->clk + NEXT_TIMER_MAX_DELTA
+> 
+> but that's fine and it is overwritten by every timer which is inserted
+> to expire before that. So that's not an issue as the prandom timer is
+> firing and rearmed.
 
-Robin mentioned that the iommu domain alloc/free interfaces are under
-reforming. These cleanups need to wait to see what the final code looks
-like.
+No, as I said before, there's never any timer with base 1 (BASE_DEF) in
+the config we have. The prandom timer is not TIMER_DEFERRABLE (it
+probably could be, but it's not now). There's no deferrable timer at
+all. Once there is at least one, the warning goes away.
 
-Best regards,
-baolu
+> That would not happen if next_expiry would stay at 0x13fff8acf. The
+> first one in your trace expires at 5339070200, i.e.  0x13e3bbef8, which
+> is way before that.
+
+But it's not a deferrable timer, so it's on another timer wheel (base),
+so it doesn't affect the "base 1" part above.
+
+> Can you please apply the debug patch below and run with the same
+> parameters as before?
+> 
+> Thanks,
+> 
+>         tglx
+> ---
+> Hint: I tried to figure out how to use that time travel muck, but did
+>       not get to the point where I bothered to try myself. Might be
+>       either my incompetence or lack of documentation. Clearly the bug
+>       report lacks any hint how to reproduce that problem.
+
+Well, the original bug report did have all the information, I gave the
+link to it before:
+
+https://lore.kernel.org/r/20220330110156.GA9250@axis.com
+
+With that kernel config and command line, you can reproduce it easily.
+All you need to know is to use "make ARCH=um" with that .config file :)
+
+
+> +	trace_printk("RUN: now=%lu clk=%lu next_expiry=%lu
+> recalc=%d\n",
+> +		     jiffies, base->clk, base->next_expiry,
+> +		     base->next_expiry_recalc);
+
+IMHO all of this extra debug is a waste of time since you're not
+differentiating the two bases anywhere. You'll just get confused (as
+above) since timers do happen on BASE_STD, just not on BASE_DEF.
+
+johannes

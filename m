@@ -2,146 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8695C4F1E14
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6764F1ED3
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380976AbiDDWHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44714 "EHLO
+        id S1380931AbiDDWHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 18:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379039AbiDDQXD (ORCPT
+        with ESMTP id S1379042AbiDDQXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 12:23:03 -0400
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A24BC0B;
-        Mon,  4 Apr 2022 09:21:07 -0700 (PDT)
-Received: by mail-oo1-f47.google.com with SMTP id w20-20020a4ae9f4000000b003243aa2c71aso1843365ooc.0;
-        Mon, 04 Apr 2022 09:21:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=r0w3/IM/DK8MLze3NA1pY1MLeIm5PKANbh8od1nv6a8=;
-        b=4mP9vbh5nbMmPCqmNPaZBRonRx5Tdx0wBIN7/kONuYAz/Rx+88VFPo2hetx5WeSgOU
-         4bIYZbuRojDGY8fmx1Yc70rvFMRAwGRm3tVqL8whcmg9s25d1tyi0z6//zziu3kxJ6w6
-         tyLnx7a+SWCTRIdxOqC+8jPLNhyHtpbGQ8kyC4STCOV7P8vzZSyMye5wIFKmD4g7KGNO
-         jlX6B5WS9TsHskznIb654GTrwOrEI6HfkftOJ80IkizHM7wqeATh7bD46mgrwqJBwcgT
-         qEWdduRKw6DlKuMY3hfYIAq7GBPvxzR54dyBqokQyNPvomMuuyw17S1fU1mKj/BTj1Pi
-         Nr7A==
-X-Gm-Message-State: AOAM531YQLzA25DRSP3RyT3wJGgHBKYgOet7KmkCt4sSKhXRYAcLYcol
-        YknM9M1wt2yfHDCfIhEmUg==
-X-Google-Smtp-Source: ABdhPJxZ2lRegJdMFkA7tUuOd3c5O6j+eHuUYGOmr3EKlhr7AoxqAk3be7/vjFqAeCZEN/co7BV85A==
-X-Received: by 2002:a4a:3e02:0:b0:320:fdab:dcfd with SMTP id t2-20020a4a3e02000000b00320fdabdcfdmr149477oot.16.1649089266803;
-        Mon, 04 Apr 2022 09:21:06 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q203-20020acad9d4000000b002f8ee3f69e2sm4391548oig.52.2022.04.04.09.21.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 09:21:06 -0700 (PDT)
-Received: (nullmailer pid 1458009 invoked by uid 1000);
-        Mon, 04 Apr 2022 16:21:05 -0000
-Date:   Mon, 4 Apr 2022 11:21:05 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     rafael@kernel.org, viresh.kumar@linaro.org, krzk+dt@kernel.org,
-        treding@nvidia.com, jonathanh@nvidia.com, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ksitaraman@nvidia.com,
-        sanjayc@nvidia.com, bbasu@nvidia.com
-Subject: Re: [Patch v3 1/4] dt-bindings: Document Tegra CCPLEX Cluster
-Message-ID: <Yksa8cvCvB2Zn7tn@robh.at.kernel.org>
-References: <20220404121713.22461-1-sumitg@nvidia.com>
- <20220404121713.22461-2-sumitg@nvidia.com>
+        Mon, 4 Apr 2022 12:23:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819A2BC0B
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 09:21:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46B8AB8182F
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 16:21:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E8ECC2BBE4;
+        Mon,  4 Apr 2022 16:21:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649089307;
+        bh=12OqAgUFqo0o0nuRsjoOTKREg/x8VwVcYoOLde88fz8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LwWB/0q9+NvxDslstiuPLQ3SRqHNZAv1ybSR1/YtRUtS4E6SdC5geH9/JV3SkXo29
+         RE1fmiDc8vAP9AyVDSP+VWhhAzyRhkGHOnIlWCoy0AGFZCUrhjMkTWOjm6gdbPvrUY
+         tw8MdE3Jfprd/JMoRgO1sq6EE9vSewPWXlbQsm8Y=
+Date:   Mon, 4 Apr 2022 18:21:43 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Oded Gabbay <ogabbay@kernel.org>, Jiri Slaby <jslaby@suse.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux 5.18-rc1
+Message-ID: <YksbF4BIy3ZoEZCB@kroah.com>
+References: <CAHk-=wg6FWL1xjVyHx7DdjD2dHZETA5_=FqqW17Z19X-WTfWSg@mail.gmail.com>
+ <20220404022239.GA1186352@roeck-us.net>
+ <CAHk-=wimc7V9mi=P+6p2nnctPYtSM55OSPVERUeJor7fkD_EVg@mail.gmail.com>
+ <aba387bd-9799-e0b5-40e3-1bcb552ac74c@roeck-us.net>
+ <CAHk-=witgMUS8To6wijxdbQ+QEH0gcHSYV6Y=yzOdb=Q4h9PJA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220404121713.22461-2-sumitg@nvidia.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=witgMUS8To6wijxdbQ+QEH0gcHSYV6Y=yzOdb=Q4h9PJA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 05:47:10PM +0530, Sumit Gupta wrote:
-> The Tegra CPU COMPLEX CLUSTER area contains memory-mapped
-> registers that initiate CPU frequency/voltage transitions.
+On Mon, Apr 04, 2022 at 08:32:16AM -0700, Linus Torvalds wrote:
+> On Sun, Apr 3, 2022 at 9:23 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > Oops. Sorry, I thought it was big endian. No idea why. I'll update
+> > subject and description and resend.
 > 
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
-
-Changes from v2? None perhaps because you ignored my comments there.
-
->  .../tegra/nvidia,tegra-ccplex-cluster.yaml    | 52 +++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
+> I see your updated patch, but for some reason 'b4' is unhappy about it, with
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
-> new file mode 100644
-> index 000000000000..d89457e0bd7d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
-> @@ -0,0 +1,52 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/arm/tegra/nvidia,tegra-ccplex-cluster.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: NVIDIA Tegra CPU COMPLEX CLUSTER area device tree bindings
-> +
-> +maintainers:
-> +  - Sumit Gupta <sumitg@nvidia.com>
-> +  - Mikko Perttunen <mperttunen@nvidia.com>
-> +  - Jon Hunter <jonathanh@nvidia.com>
-> +  - Thierry Reding <thierry.reding@gmail.com>
-> +
-> +description: |+
-> +  The Tegra CPU COMPLEX CLUSTER area contains memory-mapped
-> +  registers that initiate CPU frequency/voltage transitions.
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "ccplex@([0-9a-f]+)$"
-> +
-> +  compatible:
-> +    enum:
-> +      - nvidia,tegra186-ccplex-cluster
-> +      - nvidia,tegra234-ccplex-cluster
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  nvidia,bpmp:
-> +    $ref: '/schemas/types.yaml#/definitions/phandle'
-> +    description: |
-> +      Specifies the BPMP node that needs to be queried to get
-> +      operating point data for all CPUs.
-> +
-> +additionalProperties: true
-
-Additionally, true is only allowed for incomplete, common bindings which 
-this is not.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - nvidia,bpmp
-> +  - status
-> +
-> +examples:
-> +  - |
-> +    ccplex@e000000 {
-> +      compatible = "nvidia,tegra234-ccplex-cluster";
-> +      reg = <0x0 0x0e000000 0x0 0x5ffff>;
-> +      nvidia,bpmp = <&bpmp>;
-> +      status = "okay";
-> +    };
-> -- 
-> 2.17.1
+>   $ b4 am 20220404134338.3276991-1-linux@roeck-us.net
 > 
+> causing
 > 
+>   ✗ [PATCH v3] staging: r8188eu: Fix PPPoE tag insertion on little
+> endian systems
+>   ---
+>   ✗ BADSIG: DKIM/roeck-us.net
+> 
+> your DKIM looks fine on the messages I see, but now that I look at it
+> on the mailing list, I notice that your DKIM really is very wrong, and
+> has a lot of headers that a DKIM signature should *not* have.
+> 
+> Your DKIM signature includes header names that are very much for list
+> management, so by definition DKIM will fail for any email you send
+> through a mailing list. Headers like
+> "Resent-From:Resent-Sender:Resent-To:Resent-Cc
+> :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe" etc.
+> 
+> The DKIM setup should protect the meaningful headers that matter to
+> the sender, not things that the mail system will validly add when it
+> passes through.
+> 
+> So the DKIM header list should be things like
+> ":To:From:Cc:Message-Id:Date:Subject:"
+> 
+> Not things like "Sender" or mailing list things.
+> 
+> Anyway, I was going to just commit it directly, but with the DKIM
+> verification failing, I was a bit less eager to. And then I noticed
+> that you used "be16_to_cpu()" - which is technically correct - which
+> doesn't match the other code in that file.
+
+I've taken this in my tree now and will get it to you for -rc2 if you
+don't want to take it.  And yes, I see the dkim issue as well, I haven't
+started complaining about to people yet as lots of people have problem
+email setups.  Should we start pushing back?
+
+thanks,
+
+greg k-h

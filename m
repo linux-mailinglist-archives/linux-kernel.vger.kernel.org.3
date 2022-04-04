@@ -2,49 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0685A4F1736
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9637D4F1770
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347374AbiDDOkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 10:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
+        id S1378198AbiDDOql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 10:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377993AbiDDOjD (ORCPT
+        with ESMTP id S1378938AbiDDOoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 10:39:03 -0400
-Received: from srv6.fidu.org (srv6.fidu.org [159.69.62.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555B83F88A;
-        Mon,  4 Apr 2022 07:36:27 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by srv6.fidu.org (Postfix) with ESMTP id 643E1C800A2;
-        Mon,  4 Apr 2022 16:36:25 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
-Received: from srv6.fidu.org ([127.0.0.1])
-        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id FgWi6ci6Q9W0; Mon,  4 Apr 2022 16:36:25 +0200 (CEST)
-Received: from [192.168.178.30] (host-212-18-30-247.customer.m-online.net [212.18.30.247])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        Mon, 4 Apr 2022 10:44:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BAAB7C3
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 07:38:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: wse@tuxedocomputers.com)
-        by srv6.fidu.org (Postfix) with ESMTPSA id E02D5C8009C;
-        Mon,  4 Apr 2022 16:36:24 +0200 (CEST)
-Message-ID: <1754062e-0d2a-9400-fe41-5434933fb9ca@tuxedocomputers.com>
-Date:   Mon, 4 Apr 2022 16:36:24 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AA9D614E2
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 14:38:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD67FC34114
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 14:38:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649083136;
+        bh=XlJz6nqbt7DjoTGH/YZm/uYhk4Fzk2jZzYYIbhnu7tU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=b/BpcpuIQyA66RP3b3+fwhSBV2aZeMb8MbmB6wcieItmRbE9hFMpupA9LOvdbW7m9
+         RIuhyId/Q9JhAUUv8LhgC2FbOHOGW88Z41HLTTVN1WMwt5jBXJoxr966I/nlz0xqLQ
+         8YQlmC5TWXqAF8lQ10TQgAKSRKk6QKlMqBeJzgKgp8+3LSjOu8mAu5igq/2m2FqhV3
+         IXeJmBdjYxltv9fR2qKvJflcKo8LwH+y9pKYPVI4zhzmvzV7/M4ZdIfoO3+KJREmT2
+         an2l8fuDuXoYWwqqdHtQ5Irg/MvapQSRIHR1QiIsWWx2GOh7tAtEKkdgIDKCo6AjaA
+         RU6nX7OOL2eEQ==
+Received: by mail-yb1-f180.google.com with SMTP id f38so17986474ybi.3
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 07:38:56 -0700 (PDT)
+X-Gm-Message-State: AOAM531xl8TXbtKBybejE57PEuIqkXdP7jFDgOh43ckvOqjSIRTyyxky
+        UzPCcrz+Lio7C+QPwqIrqyxxvBE1oGSwbmUKPU4=
+X-Google-Smtp-Source: ABdhPJwyJxCjXq4QAZtDUpNHCQTjKXqZ+R3EJFnuPsF+yohUVFZbV8wPHSDkOxFq119l9+bjlK95RGdK+/EgFrJ+jWk=
+X-Received: by 2002:a05:6902:572:b0:63d:a52c:d144 with SMTP id
+ a18-20020a056902057200b0063da52cd144mr68991ybt.403.1649083135924; Mon, 04 Apr
+ 2022 07:38:55 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v5] input/i8042: Rework quirk tables
-Content-Language: de-DE
-To:     Hans de Goede <hdegoede@redhat.com>, dmitry.torokhov@gmail.com,
-        tiwai@suse.de, mpdesouza@suse.com, arnd@arndb.de, samuel@cavoj.net,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220329143622.31394-1-wse@tuxedocomputers.com>
- <8a430ab7-024f-51a9-d785-07e03f163261@redhat.com>
-From:   Werner Sembach <wse@tuxedocomputers.com>
-In-Reply-To: <8a430ab7-024f-51a9-d785-07e03f163261@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+References: <20220404134859.3278599-1-linux@roeck-us.net>
+In-Reply-To: <20220404134859.3278599-1-linux@roeck-us.net>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Mon, 4 Apr 2022 17:38:29 +0300
+X-Gmail-Original-Message-ID: <CAFCwf10Nbpr1H1-qTx4kSyC6YFdeAb=xOfq6uKzejJKLuyKw5A@mail.gmail.com>
+Message-ID: <CAFCwf10Nbpr1H1-qTx4kSyC6YFdeAb=xOfq6uKzejJKLuyKw5A@mail.gmail.com>
+Subject: Re: [PATCH v2] habanalabs: Fix test build failures
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        Ohad Sharabi <osharabi@habana.ai>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,49 +64,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 4, 2022 at 4:49 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> allmodconfig builds on 32-bit architectures fail with the following error.
+>
+> drivers/misc/habanalabs/common/memory.c: In function 'alloc_device_memory':
+> drivers/misc/habanalabs/common/memory.c:153:49: error:
+>         cast from pointer to integer of different size
+>
+> Fix the typecast. While at it, drop other unnecessary typecasts associated
+> with the same commit.
+>
+> Fixes: e8458e20e0a3c ("habanalabs: make sure device mem alloc is page aligned")
+> Cc: Ohad Sharabi <osharabi@habana.ai>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+> v2: Drop unnecessary (u64) typecasts
+>
+>  drivers/misc/habanalabs/common/memory.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+> index e008d82e4ba3..a13506dd8119 100644
+> --- a/drivers/misc/habanalabs/common/memory.c
+> +++ b/drivers/misc/habanalabs/common/memory.c
+> @@ -111,10 +111,10 @@ static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
+>
+>         if (contiguous) {
+>                 if (is_power_of_2(page_size))
+> -                       paddr = (u64) (uintptr_t) gen_pool_dma_alloc_align(vm->dram_pg_pool,
+> -                                                               total_size, NULL, page_size);
+> +                       paddr = (uintptr_t) gen_pool_dma_alloc_align(vm->dram_pg_pool,
+> +                                                                    total_size, NULL, page_size);
+>                 else
+> -                       paddr = (u64) (uintptr_t) gen_pool_alloc(vm->dram_pg_pool, total_size);
+> +                       paddr = gen_pool_alloc(vm->dram_pg_pool, total_size);
+>                 if (!paddr) {
+>                         dev_err(hdev->dev,
+>                                 "failed to allocate %llu contiguous pages with total size of %llu\n",
+> @@ -150,12 +150,12 @@ static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
+>                 for (i = 0 ; i < num_pgs ; i++) {
+>                         if (is_power_of_2(page_size))
+>                                 phys_pg_pack->pages[i] =
+> -                                               (u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
+> -                                                                               page_size, NULL,
+> -                                                                               page_size);
+> +                                       (uintptr_t)gen_pool_dma_alloc_align(vm->dram_pg_pool,
+> +                                                                           page_size, NULL,
+> +                                                                           page_size);
+>                         else
+> -                               phys_pg_pack->pages[i] = (u64) gen_pool_alloc(vm->dram_pg_pool,
+> -                                                                               page_size);
+> +                               phys_pg_pack->pages[i] = gen_pool_alloc(vm->dram_pg_pool,
+> +                                                                       page_size);
+>                         if (!phys_pg_pack->pages[i]) {
+>                                 dev_err(hdev->dev,
+>                                         "Failed to allocate device memory (out of memory)\n");
+> --
+> 2.35.1
+>
 
-Am 02.04.22 um 12:47 schrieb Hans de Goede:
-> Hi,
->
-> On 3/29/22 16:36, Werner Sembach wrote:
->> Revision 5 with some fixes based on feedback by Hans de Goede.
->>
->> The 1st patch is minor housekeeping.
->>
->> The 2nd patch merges the tables together. Minor fixes in 5th revision and
->> no more duplication of ASUS devices
->>
->> The 3rd patch add optional debug output to see which quirks get applied. In
->> 5th revision this no longer breaks compilation on non x86 platforms.
->>
->> The 4th patch adds a list of Clevo devices that need multiple quirks.
->> With the reworked table they don't need to be inserted multiple times now,
->> which was required in v1 and v2 of this patch.
->>
->> I also included the extra quirk for the Clevo NS7xMU, which was a separate
->> patch before.
->>
->> The added Clevo devices are now only identified by their board name as this
->> is the only somewhat reliable string that might not be changed by resellers.
-> Thanks, the entire series looks good to me:
->
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
->
-> for the series.
->
-> Regards,
->
-> Hans
->
->
->
-> p.s.
->
-> In the future if you get a Reviewed-by to a previous version of a patch
-> and the patch does not change (or does not change much, e.g. only
-> small code-style / comment typo tweaks) you can keep that Reviewed-by
-> for next versions of the patch, just copy it over to your commit
-> msg and put it directly above your own S-o-b line.
->
->
-OK, thanks
+Hi Guenter,
+Thanks for the patch, but Greg already merged a patch that was sent to him.
+Oded

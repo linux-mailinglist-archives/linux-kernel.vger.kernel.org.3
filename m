@@ -2,64 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B204F4F129C
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 12:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A894F12A5
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 12:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355664AbiDDKIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 06:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44788 "EHLO
+        id S1355802AbiDDKJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 06:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239305AbiDDKIU (ORCPT
+        with ESMTP id S1355711AbiDDKJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 06:08:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 387973C4A8
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 03:06:24 -0700 (PDT)
+        Mon, 4 Apr 2022 06:09:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B99163C4A0
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 03:07:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649066783;
+        s=mimecast20190719; t=1649066845;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=0Xe46S5f34nJv0CRL++zPQUatYLF7Rj2oPh8nWt9kps=;
-        b=dBZ75bqz3Jp0Jur+vwg6wf82AdksSN6FLt/k1EcYnyEVIkzUOnk+V1ERxXwPfUT3Bjx289
-        wQICsQFYTwNnXSg9JyzriXuS1HrsQ155yApxbvE2/adMGsr5KfDTx97dta2zBtpZNho42F
-        1byljsmrXaAjn/qio2Ln7YA6l8TkMN0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pv8OoKRdFjXQbDX4JYeV6ZuQuSyl9uJKmj0c+9CeVOc=;
+        b=Hx3FrZKoEnS8grCGAc4HfGjELLxOrwjsuiCm3N3t4LrvI12YNbO713gusOGfgn9MNRXhNs
+        Ndio6MDYhNuw9swEEs8ThG70F8ZVr02XReY/cMM1nTvjTGh1hio3XSKCyB6VuWGcWW66zw
+        zQFo11vZu4pa4lhZLiyElYgNhniX/4k=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-133-gRNEeTqEMMevNdTVX-Ew5Q-1; Mon, 04 Apr 2022 06:06:18 -0400
-X-MC-Unique: gRNEeTqEMMevNdTVX-Ew5Q-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1B67480419D;
-        Mon,  4 Apr 2022 10:06:18 +0000 (UTC)
-Received: from ceranb.redhat.com (unknown [10.40.192.123])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CD75B40F907E;
-        Mon,  4 Apr 2022 10:06:15 +0000 (UTC)
-From:   Ivan Vecera <ivecera@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     poros@redhat.com, mschmidt@redhat.com,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Madhu Chittim <madhu.chittim@intel.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        Brett Creeley <brett.creeley@intel.com>,
-        intel-wired-lan@lists.osuosl.org (moderated list:INTEL ETHERNET DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH net] ice: Fix use-after-free
-Date:   Mon,  4 Apr 2022 12:06:14 +0200
-Message-Id: <20220404100615.23525-1-ivecera@redhat.com>
+ us-mta-648-8LZVWXfZPAO8__ZZZpWL9Q-1; Mon, 04 Apr 2022 06:07:24 -0400
+X-MC-Unique: 8LZVWXfZPAO8__ZZZpWL9Q-1
+Received: by mail-ej1-f72.google.com with SMTP id sb14-20020a1709076d8e00b006e7eb9719b9so1099869ejc.21
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 03:07:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=pv8OoKRdFjXQbDX4JYeV6ZuQuSyl9uJKmj0c+9CeVOc=;
+        b=Vg3JHm3ogWSDy8oWOksK71k7GMXeNG+ITOZDNnoiUK1xWdqkVoF6l01zRbIlVAtP21
+         XJG5qK5Fpcc1XIRIeCX9oHMoJvIOMhz5NiuQLj7RySXKWNnZl1G2T8pFJF7urSz/HBgo
+         Gnz0tDYP1NNvArsmDPBDNT0iApfyF9iCikbZ/SnvdTLeYnstTrXtYyxaU7BhOrhN6Wqo
+         VKovrKkeeqVK8ujP8MdfvG5rF6zuGMpt1Nk74SkVsIGkM3r1KnVv7D3EkQq10SbHIAmq
+         Zg8i54mE7FAG7nTdz30Bp+QFRTFPfSKf9WrMVcQdKr6EYvoayIc6orxqsVgoQxVHsdIf
+         AyrQ==
+X-Gm-Message-State: AOAM531Fpd6aFO92illATZu5ZZGCKkxYQTwiuNA4lkkBwCep6MFkP0vf
+        SRAnSVEd5LS7FZiY9jMdXeOMaTB9TvyPKdReUtrpd0/emULPtk+HBkhUwX44RzS5rp1xScfod1l
+        8vnme7UD0hRGU+DngNlgQVXuq
+X-Received: by 2002:a17:907:3f02:b0:6e7:7172:4437 with SMTP id hq2-20020a1709073f0200b006e771724437mr5891264ejc.361.1649066843512;
+        Mon, 04 Apr 2022 03:07:23 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxbzNnq6xDg6xaIk2lOHiQOtS6CK8M7Dubq1ALrzmzc+o7DvCW7O3X6AtMek+euG0eo067lZg==
+X-Received: by 2002:a17:907:3f02:b0:6e7:7172:4437 with SMTP id hq2-20020a1709073f0200b006e771724437mr5891238ejc.361.1649066843166;
+        Mon, 04 Apr 2022 03:07:23 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id z1-20020a170906434100b006e7efa329fbsm1219386ejm.109.2022.04.04.03.07.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Apr 2022 03:07:22 -0700 (PDT)
+Message-ID: <8308a830-3096-3f94-4f12-5fd2c290524e@redhat.com>
+Date:   Mon, 4 Apr 2022 12:07:21 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH v2 5/6] platform/x86: intel_tdx_attest: Add TDX Guest
+ attestation interface driver
+Content-Language: en-US
+To:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Mark Gross <mgross@linux.intel.com>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+References: <cover.1648664666.git.sathyanarayanan.kuppuswamy@intel.com>
+ <054b22e81e88379a5a8459c19e89a335531c1bdd.1648664666.git.sathyanarayanan.kuppuswamy@intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <054b22e81e88379a5a8459c19e89a335531c1bdd.1648664666.git.sathyanarayanan.kuppuswamy@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,142 +92,457 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CONFIG_RFS_ACCEL is enabled the driver uses CPU affinity
-reverse-maps that set CPU affinity notifier in the background.
+Hi,
 
-If the interface is put down then ice_vsi_free_irq() is called
-via ice_vsi_close() and this clears affinity notifiers of IRQs
-associated with the VSI and old notifier's release callback
-is called - for this case this is cpu_rmap_release() that
-frees allocated cpu_rmap.
+On 3/31/22 00:18, Kuppuswamy Sathyanarayanan wrote:
+> TDX guest supports encrypted disk as root or secondary drives.
+> Decryption keys required to access such drives are usually maintained
+> by 3rd party key servers. Attestation is required by 3rd party key
+> servers to get the key for an encrypted disk volume, or possibly other
+> encrypted services. Attestation is used to prove to the key server that
+> the TD guest is running in a valid TD and the kernel and virtual BIOS
+> and other environment are secure.
+> 
+> During the boot process various components before the kernel accumulate
+> hashes in the TDX module, which can then combined into a report. This
+> would typically include a hash of the bios, bios configuration, boot
+> loader, command line, kernel, initrd.  After checking the hashes the
+> key server will securely release the keys.
+> 
+> The actual details of the attestation protocol depend on the particular
+> key server configuration, but some parts are common and need to
+> communicate with the TDX module.
+> 
+> This communication is implemented in the attestation driver.
+> 
+> The supported steps are:
+> 
+>   1. TD guest generates the TDREPORT that contains version information
+>      about the Intel TDX module, measurement of the TD, along with a
+>      TD-specified nonce.
+>   2. TD guest shares the TDREPORT with TD host via GetQuote hypercall
+>      which is used by the host to generate a quote via quoting
+>      enclave (QE).
+>   3. Quote generation completion notification is sent to TD OS via
+>      callback interrupt vector configured by TD using
+>      SetupEventNotifyInterrupt hypercall.
+>   4. After receiving the generated TDQUOTE, a remote verifier can be
+>      used to verify the quote and confirm the trustworthiness of the
+>      TD.
+> 
+> Attestation agent uses IOCTLs implemented by the attestation driver to
+> complete the various steps of the attestation process.
+> 
+> Also note that, explicit access permissions are not enforced in this
+> driver because the quote and measurements are not a secret. However
+> the access permissions of the device node can be used to set any
+> desired access policy. The udev default is usually root access
+> only.
+> 
+> TDX_CMD_GEN_QUOTE IOCTL can be used to create an computation on the
+> host, but TDX assumes that the host is able to deal with malicious
+> guest flooding it anyways.
+> 
+> The interaction with the TDX module is like a RPM protocol here. There
+> are several operations (get tdreport, get quote) that need to input a
+> blob, and then output another blob. It was considered to use a sysfs
+> interface for this, but it doesn't fit well into the standard sysfs
+> model for configuring values. It would be possible to do read/write on
+> files, but it would need multiple file descriptors, which would be
+> somewhat messy. ioctls seems to be the best fitting and simplest model
+> here. There is one ioctl per operation, that takes the input blob and
+> returns the output blob, and as well as auxiliary ioctls to return the
+> blob lengths. The ioctls are documented in the header file. 
+> 
+> [Chenyi Qiang: Proposed struct tdx_gen_quote for passing user buffer]
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> Reviewed-by: Andi Kleen <ak@linux.intel.com>
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Acked-by: Hans de Goede <hdegoede@redhat.com>
+> Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> ---
+>  drivers/platform/x86/intel/Kconfig            |   1 +
+>  drivers/platform/x86/intel/Makefile           |   1 +
+>  drivers/platform/x86/intel/tdx/Kconfig        |  13 +
+>  drivers/platform/x86/intel/tdx/Makefile       |   3 +
+>  .../platform/x86/intel/tdx/intel_tdx_attest.c | 230 ++++++++++++++++++
+>  include/uapi/misc/tdx.h                       |  42 ++++
+>  6 files changed, 290 insertions(+)
+>  create mode 100644 drivers/platform/x86/intel/tdx/Kconfig
+>  create mode 100644 drivers/platform/x86/intel/tdx/Makefile
+>  create mode 100644 drivers/platform/x86/intel/tdx/intel_tdx_attest.c
+>  create mode 100644 include/uapi/misc/tdx.h
+> 
+> diff --git a/drivers/platform/x86/intel/Kconfig b/drivers/platform/x86/intel/Kconfig
+> index 8e65086bb6c8..a2ed17d67052 100644
+> --- a/drivers/platform/x86/intel/Kconfig
+> +++ b/drivers/platform/x86/intel/Kconfig
+> @@ -12,6 +12,7 @@ source "drivers/platform/x86/intel/pmt/Kconfig"
+>  source "drivers/platform/x86/intel/speed_select_if/Kconfig"
+>  source "drivers/platform/x86/intel/telemetry/Kconfig"
+>  source "drivers/platform/x86/intel/wmi/Kconfig"
+> +source "drivers/platform/x86/intel/tdx/Kconfig"
+>  
+>  config INTEL_HID_EVENT
+>  	tristate "Intel HID Event"
+> diff --git a/drivers/platform/x86/intel/Makefile b/drivers/platform/x86/intel/Makefile
+> index 35f2066578b2..27a6c6c5a83f 100644
+> --- a/drivers/platform/x86/intel/Makefile
+> +++ b/drivers/platform/x86/intel/Makefile
+> @@ -11,6 +11,7 @@ obj-$(CONFIG_INTEL_SKL_INT3472)		+= int3472/
+>  obj-$(CONFIG_INTEL_PMC_CORE)		+= pmc/
+>  obj-$(CONFIG_INTEL_PMT_CLASS)		+= pmt/
+>  obj-$(CONFIG_INTEL_SPEED_SELECT_INTERFACE) += speed_select_if/
+> +obj-$(CONFIG_INTEL_TDX_GUEST)		+= tdx/
+>  obj-$(CONFIG_INTEL_TELEMETRY)		+= telemetry/
+>  obj-$(CONFIG_INTEL_WMI)			+= wmi/
+>  
+> diff --git a/drivers/platform/x86/intel/tdx/Kconfig b/drivers/platform/x86/intel/tdx/Kconfig
+> new file mode 100644
+> index 000000000000..853e3a34c889
+> --- /dev/null
+> +++ b/drivers/platform/x86/intel/tdx/Kconfig
+> @@ -0,0 +1,13 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +#
+> +# X86 TDX Platform Specific Drivers
+> +#
+> +
+> +config INTEL_TDX_ATTESTATION
+> +	tristate "Intel TDX attestation driver"
+> +	depends on INTEL_TDX_GUEST
+> +	help
+> +	  The TDX attestation driver provides IOCTL interfaces to the user to
+> +	  request TDREPORT from the TDX module or request quote from the VMM
+> +	  or to get quote buffer size. It is mainly used to get secure disk
+> +	  decryption keys from the key server.
+> diff --git a/drivers/platform/x86/intel/tdx/Makefile b/drivers/platform/x86/intel/tdx/Makefile
+> new file mode 100644
+> index 000000000000..124d6b7b20a0
+> --- /dev/null
+> +++ b/drivers/platform/x86/intel/tdx/Makefile
+> @@ -0,0 +1,3 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +obj-$(CONFIG_INTEL_TDX_ATTESTATION)	+= intel_tdx_attest.o
+> diff --git a/drivers/platform/x86/intel/tdx/intel_tdx_attest.c b/drivers/platform/x86/intel/tdx/intel_tdx_attest.c
+> new file mode 100644
+> index 000000000000..0bf78d30e057
+> --- /dev/null
+> +++ b/drivers/platform/x86/intel/tdx/intel_tdx_attest.c
+> @@ -0,0 +1,230 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * intel_tdx_attest.c - TDX guest attestation interface driver.
+> + *
+> + * Implements user interface to trigger attestation process and
+> + * read the TD Quote result.
+> + *
+> + * Copyright (C) 2021-2022 Intel Corporation
+> + *
+> + * Author:
+> + *     Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> + */
+> +
+> +#define pr_fmt(fmt) "x86/tdx: attest: " fmt
+> +
+> +#include <linux/module.h>
+> +#include <linux/miscdevice.h>
+> +#include <linux/uaccess.h>
+> +#include <linux/fs.h>
+> +#include <linux/mm.h>
+> +#include <linux/slab.h>
+> +#include <linux/set_memory.h>
+> +#include <linux/dma-mapping.h>
+> +#include <linux/jiffies.h>
+> +#include <linux/io.h>
+> +#include <asm/apic.h>
+> +#include <asm/tdx.h>
+> +#include <asm/irq_vectors.h>
+> +#include <uapi/misc/tdx.h>
+> +
+> +/* Used in Quote memory allocation */
+> +#define QUOTE_SIZE			(2 * PAGE_SIZE)
+> +/* Used in Get Quote request memory allocation */
+> +#define GET_QUOTE_MAX_SIZE		(4 * PAGE_SIZE)
+> +/* Get Quote timeout in msec */
+> +#define GET_QUOTE_TIMEOUT		(5000)
+> +
+> +/* Mutex to synchronize attestation requests */
+> +static DEFINE_MUTEX(attestation_lock);
+> +/* Completion object to track attestation status */
+> +static DECLARE_COMPLETION(attestation_done);
+> +/* Buffer used to copy report data in attestation handler */
+> +static u8 report_data[TDX_REPORT_DATA_LEN] __aligned(64);
+> +/* Data pointer used to get TD Quote data in attestation handler */
+> +static void *tdquote_data;
+> +/* Data pointer used to get TDREPORT data in attestation handler */
+> +static void *tdreport_data;
+> +/* DMA handle used to allocate and free tdquote DMA buffer */
+> +dma_addr_t tdquote_dma_handle;
+> +
+> +static void attestation_callback_handler(void)
+> +{
+> +	complete(&attestation_done);
+> +}
+> +
+> +static long tdx_attest_ioctl(struct file *file, unsigned int cmd,
+> +			     unsigned long arg)
+> +{
+> +	void __user *argp = (void __user *)arg;
+> +	struct tdx_gen_quote tdquote_req;
+> +	long ret = 0;
+> +
+> +	mutex_lock(&attestation_lock);
+> +
+> +	switch (cmd) {
+> +	case TDX_CMD_GET_TDREPORT:
+> +		if (copy_from_user(report_data, argp, TDX_REPORT_DATA_LEN)) {
+> +			ret = -EFAULT;
+> +			break;
+> +		}
+> +
+> +		/* Generate TDREPORT_STRUCT */
+> +		if (tdx_mcall_tdreport(tdreport_data, report_data)) {
+> +			ret = -EIO;
+> +			break;
+> +		}
+> +
+> +		if (copy_to_user(argp, tdreport_data, TDX_TDREPORT_LEN))
+> +			ret = -EFAULT;
+> +		break;
+> +	case TDX_CMD_GEN_QUOTE:
+> +		reinit_completion(&attestation_done);
+> +
+> +		/* Copy TDREPORT data from user buffer */
+> +		if (copy_from_user(&tdquote_req, argp, sizeof(struct tdx_gen_quote))) {
+> +			ret = -EFAULT;
+> +			break;
+> +		}
+> +
+> +		if (tdquote_req.len <= 0 || tdquote_req.len > GET_QUOTE_MAX_SIZE) {
+> +			ret = -EINVAL;
+> +			break;
+> +		}
+> +
+> +		if (copy_from_user(tdquote_data, tdquote_req.buf, tdquote_req.len)) {
+> +			ret = -EFAULT;
+> +			break;
+> +		}
+> +
+> +		/* Submit GetQuote Request */
+> +		if (tdx_hcall_get_quote(tdquote_data, GET_QUOTE_MAX_SIZE)) {
+> +			ret = -EIO;
+> +			break;
+> +		}
+> +
+> +		/* Wait for attestation completion */
+> +		ret = wait_for_completion_interruptible_timeout(
+> +				&attestation_done,
+> +				msecs_to_jiffies(GET_QUOTE_TIMEOUT));
+> +		if (ret <= 0) {
+> +			ret = -EIO;
+> +			break;
+> +		}
+> +
+> +		/* ret will be positive if completed. */
+> +		ret = 0;
+> +
+> +		if (copy_to_user(tdquote_req.buf, tdquote_data, tdquote_req.len))
+> +			ret = -EFAULT;
+> +
+> +		break;
+> +	case TDX_CMD_GET_QUOTE_SIZE:
+> +		ret = put_user(QUOTE_SIZE, (u64 __user *)argp);
+> +		break;
+> +	default:
+> +		pr_err("cmd %d not supported\n", cmd);
+> +		break;
+> +	}
+> +
+> +	mutex_unlock(&attestation_lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct file_operations tdx_attest_fops = {
+> +	.owner		= THIS_MODULE,
+> +	.unlocked_ioctl	= tdx_attest_ioctl,
+> +	.llseek		= no_llseek,
+> +};
+> +
+> +static struct miscdevice tdx_attest_device = {
+> +	.minor          = MISC_DYNAMIC_MINOR,
+> +	.name           = "tdx-attest",
+> +	.fops           = &tdx_attest_fops,
+> +};
+> +
+> +static int __init tdx_attest_init(void)
+> +{
+> +	dma_addr_t handle;
+> +	long ret = 0;
+> +
+> +	mutex_lock(&attestation_lock);
+> +
+> +	ret = misc_register(&tdx_attest_device);
+> +	if (ret) {
+> +		pr_err("misc device registration failed\n");
+> +		mutex_unlock(&attestation_lock);
+> +		return ret;
+> +	}
 
-During device removal (ice_remove()) free_irq_cpu_rmap() is called
-and it tries to free already de-allocated cpu_rmap.
+Why not do this as the last thing of the probe?
 
-Do not clear IRQ affinity notifier in ice_vsi_free_irq() when
-CONFIG_RFS_ACCEL is enabled. This is a code-path that
-commit 28bf26724fdb ("ice: Implement aRFS") forgot to handle.
+That will avoid the need to unregister this again in all
+the error-exit paths and also fixes a possible deadlock.
 
-Reproducer:
-[root@host ~]# ip link set ens7f0 up
-[root@host ~]# ip link set ens7f0 down
-[root@host ~]# rmmod ice
+Right now you possibly have:
 
-Result:
-[  538.173276] =================================================================
-[  538.180615] BUG: KASAN: use-after-free in free_irq_cpu_rmap+0x13b/0x173
-[  538.187236] Read of size 4 at addr ff110022d1f9e300 by task rmmod/16218
-[  538.193849]
-[  538.195350] CPU: 0 PID: 16218 Comm: rmmod Kdump: loaded Not tainted 4.18.0-31
-[  538.205613] Hardware name: Dell Inc. PowerEdge R750/06V45N, BIOS 1.4.4 10/071
-[  538.213089] Call Trace:
-[  538.215544]  dump_stack+0x5c/0x80
-[  538.218873]  print_address_description.constprop.6+0x1a/0x150
-[  538.233182]  kasan_report.cold.11+0x7f/0x118
-[  538.241739]  free_irq_cpu_rmap+0x13b/0x173
-[  538.245852]  ice_free_cpu_rx_rmap.part.2+0x58/0xa0 [ice]
-[  538.251208]  ice_remove_arfs+0xb2/0xf0 [ice]
-[  538.255506]  ice_remove+0x4e7/0x620 [ice]
-[  538.259553]  pci_device_remove+0xf3/0x290
-[  538.275025]  device_release_driver_internal+0x204/0x4b0
-[  538.280263]  driver_detach+0xf8/0x1ba
-[  538.283937]  bus_remove_driver+0x117/0x2db
-[  538.288047]  pci_unregister_driver+0x30/0x230
-[  538.297650]  ice_module_exit+0xc/0x2b [ice]
-[  538.301864]  __x64_sys_delete_module+0x2cc/0x4a0
-[  538.320373]  do_syscall_64+0xa5/0x450
-[  538.324046]  entry_SYSCALL_64_after_hwframe+0x6a/0xdf
-[  538.329103] RIP: 0033:0x7f7a2498c05b
-[  538.332686] Code: 73 01 c3 48 8b 0d 2d 4e 38 00 f7 d8 64 89 01 48 83 c8 ff c8
-[  538.351437] RSP: 002b:00007ffed8b6f3e8 EFLAGS: 00000206 ORIG_RAX: 00000000000
-[  538.359012] RAX: ffffffffffffffda RBX: 000055d81e2547a0 RCX: 00007f7a2498c05b
-[  538.366145] RDX: 000000000000000a RSI: 0000000000000800 RDI: 000055d81e254808
-[  538.373279] RBP: 0000000000000000 R08: 00007ffed8b6e361 R09: 0000000000000000
-[  538.380411] R10: 00007f7a24ac3480 R11: 0000000000000206 R12: 00007ffed8b6f618
-[  538.387544] R13: 00007ffed8b712ba R14: 000055d81e2542a0 R15: 000055d81e2547a0
-[  538.394695]
-[  538.396193] Allocated by task 469:
-[  538.399599]  kasan_save_stack+0x19/0x40
-[  538.403437]  __kasan_kmalloc+0x7d/0xa0
-[  538.407192]  kmem_cache_alloc_trace+0x188/0x2b0
-[  538.411732]  irq_cpu_rmap_add+0x4a/0x2e0
-[  538.415659]  ice_set_cpu_rx_rmap+0x28a/0x490 [ice]
-[  538.420476]  ice_probe+0x1f9c/0x43d0 [ice]
-[  538.424594]  local_pci_probe+0xd8/0x170
-[  538.428433]  work_for_cpu_fn+0x51/0xa0
-[  538.432186]  process_one_work+0x919/0x17d0
-[  538.436284]  worker_thread+0x541/0xb40
-[  538.440038]  kthread+0x30d/0x3c0
-[  538.443269]  ret_from_fork+0x24/0x50
-[  538.446850]
-[  538.448350] Freed by task 16217:
-[  538.451582]  kasan_save_stack+0x19/0x40
-[  538.455420]  kasan_set_track+0x1c/0x30
-[  538.459172]  kasan_set_free_info+0x20/0x30
-[  538.463272]  __kasan_slab_free+0xdf/0x110
-[  538.467284]  slab_free_freelist_hook+0xc6/0x190
-[  538.471818]  kfree+0xd9/0x2b0
-[  538.474791]  irq_set_affinity_notifier+0x246/0x2c0
-[  538.479583]  ice_vsi_free_irq+0x719/0xad0 [ice]
-[  538.484142]  ice_vsi_close+0x28/0x50 [ice]
-[  538.488258]  ice_stop+0x66/0x90 [ice]
-[  538.491942]  __dev_close_many+0x19c/0x2c0
-[  538.495956]  __dev_change_flags+0x1fd/0x580
-[  538.500142]  dev_change_flags+0x7c/0x150
-[  538.504068]  do_setlink+0x97d/0x2e70
-[  538.507646]  __rtnl_newlink+0x9b7/0x1210
-[  538.511573]  rtnl_newlink+0x61/0x90
-[  538.515064]  rtnetlink_rcv_msg+0x34e/0x8d0
-[  538.519164]  netlink_rcv_skb+0x123/0x390
-[  538.523090]  netlink_unicast+0x40f/0x5d0
-[  538.527016]  netlink_sendmsg+0x73d/0xb60
-[  538.530944]  sock_sendmsg+0xde/0x110
-[  538.534531]  ____sys_sendmsg+0x593/0x840
-[  538.538458]  ___sys_sendmsg+0xe9/0x160
-[  538.542210]  __sys_sendmsg+0xd3/0x170
-[  538.545876]  do_syscall_64+0xa5/0x450
-[  538.549542]  entry_SYSCALL_64_after_hwframe+0x6a/0xdf
-[  538.554594]
-[  538.556093] The buggy address belongs to the object at ff110022d1f9e300
-[  538.556093]  which belongs to the cache kmalloc-192 of size 192
-[  538.568601] The buggy address is located 0 bytes inside of
-[  538.568601]  192-byte region [ff110022d1f9e300, ff110022d1f9e3c0)
-[  538.580152] The buggy address belongs to the page:
-[  538.584946] page:ffd400008b47e780 refcount:1 mapcount:0 mapping:0000000000000
-[  538.597538] flags: 0x57ffffc0008100(slab|head|node=1|zone=2|lastcpupid=0x1ff)
-[  538.604931] raw: 0057ffffc0008100 dead000000000100 dead000000000200 ff1100010
-[  538.612670] raw: 0000000000000000 0000000000200020 00000001ffffffff 000000000
-[  538.620408] page dumped because: kasan: bad access detected
-[  538.625983]
-[  538.627480] Memory state around the buggy address:
-[  538.632276]  ff110022d1f9e200: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 0
-[  538.639493]  ff110022d1f9e280: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc c
-[  538.646712] >ff110022d1f9e300: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb b
-[  538.653931]                    ^
-[  538.657164]  ff110022d1f9e380: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc c
-[  538.664386]  ff110022d1f9e400: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 0
-[  538.671603] =================================================================
+1. probe() locks attestation_lock
+2. probe() registers misc-device
+3. userspace calls tdx_attest_ioctl
+4. tdx_attest_ioctl blocks waiting for attestastion_lock
+5. Something goes wrong in probe, probe calls
+   misc_deregister()
+6. misc_deregister waits for the ioctl to finish
+7. deadlock
 
-Fixes: 28bf26724fdb ("ice: Implement aRFS")
-Signed-off-by: Ivan Vecera <ivecera@redhat.com>
----
- drivers/net/ethernet/intel/ice/ice_lib.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+I'm not sure about 6, but if 6 does not happen then
+instead we now have tdx_attest_ioctl running
+after the misc_deregister, with tdquote_data and
+tdreport_data as NULL, or pointing to free-ed memory
+leading to various crash scenarios.
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
-index 6d6233204388..34bc7710a6b5 100644
---- a/drivers/net/ethernet/intel/ice/ice_lib.c
-+++ b/drivers/net/ethernet/intel/ice/ice_lib.c
-@@ -2701,7 +2701,8 @@ void ice_vsi_free_irq(struct ice_vsi *vsi)
- 			continue;
- 
- 		/* clear the affinity notifier in the IRQ descriptor */
--		irq_set_affinity_notifier(irq_num, NULL);
-+		if (!IS_ENABLED(CONFIG_RFS_ACCEL))
-+			irq_set_affinity_notifier(irq_num, NULL);
- 
- 		/* clear the affinity_mask in the IRQ descriptor */
- 		irq_set_affinity_hint(irq_num, NULL);
--- 
-2.35.1
+TL;DR: you must always delay registering any
+interfaces for userspace until your code is
+ready to deal with userspace calls.
+
+Regards,
+
+Hans
+
+p.s.
+
+As I mentioned with v1:
+
+
+> +
+> +	/*
+> +	 * tdreport_data needs to be 64-byte aligned.
+> +	 * Full page alignment is more than enough.
+> +	 */
+> +	tdreport_data = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO, 0);
+> +	if (!tdreport_data) {
+> +		ret = -ENOMEM;
+> +		goto failed;
+> +	}
+> +
+> +	ret = dma_set_coherent_mask(tdx_attest_device.this_device,
+> +				    DMA_BIT_MASK(64));
+> +	if (ret) {
+> +		pr_err("dma set coherent mask failed\n");
+> +		goto failed;
+> +	}
+> +
+> +	/* Allocate DMA buffer to get TDQUOTE data from the VMM */
+> +	tdquote_data = dma_alloc_coherent(tdx_attest_device.this_device,
+> +					  GET_QUOTE_MAX_SIZE, &handle,
+> +					  GFP_KERNEL | __GFP_ZERO);
+> +	if (!tdquote_data) {
+> +		ret = -ENOMEM;
+> +		goto failed;
+> +	}
+> +
+> +	tdquote_dma_handle =  handle;
+> +
+> +	/* Register attestation event notify handler */
+> +	tdx_setup_ev_notify_handler(attestation_callback_handler);
+> +
+> +	mutex_unlock(&attestation_lock);
+> +
+> +	pr_debug("module initialization success\n");
+> +
+> +	return 0;
+> +
+> +failed:
+> +	if (tdreport_data)
+> +		free_pages((unsigned long)tdreport_data, 0);
+> +
+> +	misc_deregister(&tdx_attest_device);
+> +
+> +	mutex_unlock(&attestation_lock);
+> +
+> +	pr_debug("module initialization failed\n");
+> +
+> +	return ret;
+> +}
+> +
+> +static void __exit tdx_attest_exit(void)
+> +{
+> +	mutex_lock(&attestation_lock);
+> +
+> +	dma_free_coherent(tdx_attest_device.this_device, GET_QUOTE_MAX_SIZE,
+> +			  tdquote_data, tdquote_dma_handle);
+> +	free_pages((unsigned long)tdreport_data, 0);
+> +	misc_deregister(&tdx_attest_device);
+> +	/* Unregister attestation event notify handler */
+> +	tdx_remove_ev_notify_handler();
+> +	mutex_unlock(&attestation_lock);
+> +	pr_debug("module is successfully removed\n");
+> +}
+> +
+> +module_init(tdx_attest_init);
+> +module_exit(tdx_attest_exit);
+> +
+> +MODULE_AUTHOR("Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>");
+> +MODULE_DESCRIPTION("TDX attestation driver");
+> +MODULE_LICENSE("GPL");
+> diff --git a/include/uapi/misc/tdx.h b/include/uapi/misc/tdx.h
+> new file mode 100644
+> index 000000000000..839b9a220022
+> --- /dev/null
+> +++ b/include/uapi/misc/tdx.h
+> @@ -0,0 +1,42 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +#ifndef _UAPI_MISC_TDX_H
+> +#define _UAPI_MISC_TDX_H
+> +
+> +#include <linux/types.h>
+> +#include <linux/ioctl.h>
+> +
+> +/* Input report data length for TDX_CMD_GET_TDREPORT IOCTL request */
+> +#define TDX_REPORT_DATA_LEN		64
+> +
+> +/* Output TD report data length after TDX_CMD_GET_TDREPORT IOCTL execution */
+> +#define TDX_TDREPORT_LEN		1024
+> +
+> +/*
+> + * TDX_CMD_GET_TDREPORT IOCTL is used to get TDREPORT data from the TDX
+> + * Module. Users should pass report data of size TDX_REPORT_DATA_LEN bytes
+> + * via user input buffer of size TDX_TDREPORT_LEN. Once IOCTL is successful
+> + * TDREPORT data is copied to the user buffer.
+> + */
+> +#define TDX_CMD_GET_TDREPORT		_IOWR('T', 0x01, __u64)
+> +
+> +/*
+> + * TDX_CMD_GEN_QUOTE IOCTL is used to request TD QUOTE from the VMM. User
+> + * should pass TD report data of size TDX_TDREPORT_LEN bytes via user input
+> + * buffer of quote size. Once IOCTL is successful quote data is copied back to
+> + * the user buffer.
+> + */
+> +#define TDX_CMD_GEN_QUOTE		_IOR('T', 0x02, __u64)
+> +
+> +/*
+> + * TDX_CMD_GET_QUOTE_SIZE IOCTL is used to get the TD Quote size info in bytes.
+> + * This will be used for determining the input buffer allocation size when
+> + * using TDX_CMD_GEN_QUOTE IOCTL.
+> + */
+> +#define TDX_CMD_GET_QUOTE_SIZE		_IOR('T', 0x03, __u64)
+> +
+> +struct tdx_gen_quote {
+> +	void *buf __user;
+> +	size_t len;
+> +};
+> +
+> +#endif /* _UAPI_MISC_TDX_H */
 

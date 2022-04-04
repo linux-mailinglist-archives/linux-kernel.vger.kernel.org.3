@@ -2,217 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1094F1E3C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 174BA4F1E02
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380706AbiDDVsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
+        id S1381530AbiDDWIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 18:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379750AbiDDSAr (ORCPT
+        with ESMTP id S1379761AbiDDSCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 14:00:47 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D1D1CB3E
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 10:58:50 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-2e64a6b20eeso109115607b3.3
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 10:58:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zDeo6fXGhg6EAiuUbbF5arvW/VwJQGLFv7Esfpjiwxc=;
-        b=KkEd+zIJGYIpQxzBTpFyiBcZU0CtUucN0HlhH1+mWsOgvtliSRhxHGU01qfdjbCPXl
-         M+v6/rlX3V4kkx8NjJq3uUWjXpldT9HlQVluNXz3M5q4+zltAsteY2zHJ7CHhD+7C4jd
-         9DsoRA18YEYvpvnmQLejLB222cRfZzYRzyHeynvrLqjXN7jB2aPftkAWcR0MHd+ZGrj+
-         tLjiXyoOmVjheLm+2ITrQY1UT50HKL9+OE1VDcE5OgnGX7gVbwJQkx31e8wpgZSVLcRp
-         aFcNh7up3NffSS18OMap4bOELYj+gM+QY2nbCRTmyhnpV+N9rZo6ktiNa1zr/9TlaHNA
-         JDlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zDeo6fXGhg6EAiuUbbF5arvW/VwJQGLFv7Esfpjiwxc=;
-        b=iSNHmr5ykqdagJ/nabY9MJe2TRROi37ZGjwN9iQRN4jUP0rcLQzl0dZE3rvYfAhHYG
-         NkXe0pesJksHs83A6IziPBanDHjGlkTVPhS84PkQm6cAXSZCgnYfo3L5IrFePagfwxyX
-         E9qCTUGXtrfDIDWmWO3r4vXeZQDuw+NvHBUbLmNaToXUER8SFs2Rs7nb+d1994Af1XIP
-         3e4FizAVZV9yxmP1adH4+n4KRlJuuM9a8z+AAANxEFtP/3XnNyvTrXDwKEKnbb3VNMyc
-         xHcwVUiAOe7B5HZ9xpavIECggPMINsrRAtJa15oOSBjuziQg0bxffnd9TE5fce7fTt27
-         juRA==
-X-Gm-Message-State: AOAM5335nl9r5CFA5uq8ZpaHYTbJW4b8uKZBNd8ytrZgT4Xfr2MggHwE
-        0kath+DSGIahGMtvGrqeaMMZ9FHYHnhX75at4ul+/VXGHek=
-X-Google-Smtp-Source: ABdhPJyTF9OVOfpvezGKNXupF8hmRYE///GfHCK9sr2nsheioCf9CrdPzSGJAhtIalNOhxQfvb3IlDmJuJmulPVIYKk=
-X-Received: by 2002:a81:15ce:0:b0:2e5:e189:7366 with SMTP id
- 197-20020a8115ce000000b002e5e1897366mr1163853ywv.188.1649095129129; Mon, 04
- Apr 2022 10:58:49 -0700 (PDT)
+        Mon, 4 Apr 2022 14:02:23 -0400
+Received: from mx.msync.work (mx.msync.work [51.91.38.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D3B369EA
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 11:00:26 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CC3A73B01F;
+        Mon,  4 Apr 2022 18:00:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lexina.in; s=dkim;
+        t=1649095223; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+         content-transfer-encoding:content-language:in-reply-to:references;
+        bh=e4rEEW1CHNAO9Rw05pMKLdvrOaRjn2nB0lWvqsJB/YE=;
+        b=AGxfBeyUsX2CJvgiIWm9xFYwWlrarsTY0GIWhYZj3CYvlEOgR/Gnws76052KycThOR4h14
+        wuwBMur/eJ80gpveFSKQ7w1BktIOziBXSN3lkTYY1RiqxaSubjGpKDzcTL9bWxxGne/dZ5
+        N0J4K+Zrf/lJzIQqlmNDohShl1c6I2+EveF4ikgLmfWrAUpJ4ktvniMl9PJwY30VEqI/zf
+        lUEJctuhA3h2WDs3q2rJ+nyu5x/Iaz9KjCxUg+G0YW5/8uc3I099BtVMke8n5hKlRloAtk
+        Rd0cThQGLCujPT7NYNy0lcv+3Hz7Rt+ZE/W2C5hFk5wb9rDU5BTH8+9ooAIlwA==
+Message-ID: <d4ebfe84-2948-8270-32f4-6cfc55047600@lexina.in>
+Date:   Mon, 4 Apr 2022 21:00:20 +0300
 MIME-Version: 1.0
-References: <20220401063636.2414200-1-mizhang@google.com> <20220401063636.2414200-2-mizhang@google.com>
-In-Reply-To: <20220401063636.2414200-2-mizhang@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Mon, 4 Apr 2022 10:58:38 -0700
-Message-ID: <CANgfPd9OqV35BGfRCvJZNK_kemgqDWPx8TKKObfyGb0iiC-uxg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/6] KVM: x86/mmu: Set lpage_disallowed in TDP MMU
- before setting SPTE
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Peter Xu <peterx@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 0/3] Ensure Low period of SCL is correct
+Content-Language: ru
+To:     Neil Armstrong <narmstrong@baylibre.com>, tanure@linux.com,
+        Kevin Hilman <khilman@baylibre.com>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220326102229.421718-1-tanure@linux.com>
+ <7hee2lu82n.fsf@baylibre.com>
+ <CAJX_Q+1tz7BYL+CvXnc=zAamPiZDEFAASv9a7YoWGmzqYL+cUg@mail.gmail.com>
+ <8986ec34-616b-d497-29d1-6f7896c26e37@baylibre.com>
+From:   Vyacheslav <adeep@lexina.in>
+In-Reply-To: <8986ec34-616b-d497-29d1-6f7896c26e37@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 11:36 PM Mingwei Zhang <mizhang@google.com> wrote:
->
-> From: Sean Christopherson <seanjc@google.com>
->
-> Set lpage_disallowed in TDP MMU shadow pages before making the SP visible
-> to other readers, i.e. before setting its SPTE.  This will allow KVM to
-> query lpage_disallowed when determining if a shadow page can be replaced
-> by a NX huge page without violating the rules of the mitigation.
->
-> Reviewed-by: Mingwei Zhang <mizhang@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c          | 14 ++++++++++----
->  arch/x86/kvm/mmu/mmu_internal.h |  2 +-
->  arch/x86/kvm/mmu/tdp_mmu.c      | 20 ++++++++++++--------
->  3 files changed, 23 insertions(+), 13 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 1361eb4599b4..5cb845fae56e 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -812,14 +812,20 @@ static void account_shadowed(struct kvm *kvm, struct kvm_mmu_page *sp)
->         kvm_mmu_gfn_disallow_lpage(slot, gfn);
->  }
->
-> -void account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp)
-> +void __account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp)
->  {
-> -       if (sp->lpage_disallowed)
-> -               return;
-> -
->         ++kvm->stat.nx_lpage_splits;
->         list_add_tail(&sp->lpage_disallowed_link,
->                       &kvm->arch.lpage_disallowed_mmu_pages);
-> +}
-> +
-> +static void account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp)
-> +{
-> +       if (sp->lpage_disallowed)
-> +               return;
-> +
-> +       __account_huge_nx_page(kvm, sp);
-> +
->         sp->lpage_disallowed = true;
->  }
->
-> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> index 1bff453f7cbe..4a0087efa1e3 100644
-> --- a/arch/x86/kvm/mmu/mmu_internal.h
-> +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> @@ -168,7 +168,7 @@ void disallowed_hugepage_adjust(struct kvm_page_fault *fault, u64 spte, int cur_
->
->  void *mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
->
-> -void account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
-> +void __account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
-
-I believe we need to modify the usage of this function in
-paging_tmpl.h as well, at which point there should be no users of
-account_huge_nx_page, so we can just modify the function directly
-instead of adding a __helper.
-(Disregard if the source I was looking at was out of date. Lots of
-churn in this code recently.)
 
 
->  void unaccount_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
->
->  #endif /* __KVM_X86_MMU_INTERNAL_H */
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index b3b6426725d4..f05423545e6d 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -1122,16 +1122,13 @@ static int tdp_mmu_map_handle_target_level(struct kvm_vcpu *vcpu,
->   * @kvm: kvm instance
->   * @iter: a tdp_iter instance currently on the SPTE that should be set
->   * @sp: The new TDP page table to install.
-> - * @account_nx: True if this page table is being installed to split a
-> - *              non-executable huge page.
->   * @shared: This operation is running under the MMU lock in read mode.
->   *
->   * Returns: 0 if the new page table was installed. Non-0 if the page table
->   *          could not be installed (e.g. the atomic compare-exchange failed).
->   */
->  static int tdp_mmu_link_sp(struct kvm *kvm, struct tdp_iter *iter,
-> -                          struct kvm_mmu_page *sp, bool account_nx,
-> -                          bool shared)
-> +                          struct kvm_mmu_page *sp, bool shared)
->  {
->         u64 spte = make_nonleaf_spte(sp->spt, !shadow_accessed_mask);
->         int ret = 0;
-> @@ -1146,8 +1143,6 @@ static int tdp_mmu_link_sp(struct kvm *kvm, struct tdp_iter *iter,
->
->         spin_lock(&kvm->arch.tdp_mmu_pages_lock);
->         list_add(&sp->link, &kvm->arch.tdp_mmu_pages);
-> -       if (account_nx)
-> -               account_huge_nx_page(kvm, sp);
->         spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
->
->         return 0;
-> @@ -1160,6 +1155,7 @@ static int tdp_mmu_link_sp(struct kvm *kvm, struct tdp_iter *iter,
->  int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->  {
->         struct kvm_mmu *mmu = vcpu->arch.mmu;
-> +       struct kvm *kvm = vcpu->kvm;
->         struct tdp_iter iter;
->         struct kvm_mmu_page *sp;
->         int ret;
-> @@ -1210,10 +1206,18 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->                         sp = tdp_mmu_alloc_sp(vcpu);
->                         tdp_mmu_init_child_sp(sp, &iter);
->
-> -                       if (tdp_mmu_link_sp(vcpu->kvm, &iter, sp, account_nx, true)) {
-> +                       sp->lpage_disallowed = account_nx;
-> +
-> +                       if (tdp_mmu_link_sp(kvm, &iter, sp, true)) {
->                                 tdp_mmu_free_sp(sp);
->                                 break;
->                         }
-> +
-> +                       if (account_nx) {
-> +                               spin_lock(&kvm->arch.tdp_mmu_pages_lock);
-> +                               __account_huge_nx_page(kvm, sp);
-> +                               spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
-> +                       }
->                 }
->         }
->
-> @@ -1501,7 +1505,7 @@ static int tdp_mmu_split_huge_page(struct kvm *kvm, struct tdp_iter *iter,
->          * correctness standpoint since the translation will be the same either
->          * way.
->          */
-> -       ret = tdp_mmu_link_sp(kvm, iter, sp, false, shared);
-> +       ret = tdp_mmu_link_sp(kvm, iter, sp, shared);
->         if (ret)
->                 goto out;
->
-> --
-> 2.35.1.1094.g7c7d902a7c-goog
->
+04.04.2022 11:01, Neil Armstrong wrote:
+> Hi,
+> 
+> On 29/03/2022 00:31, Lucas Tanure wrote:
+>> On Mon, 28 Mar 2022, 21:37 Kevin Hilman, <khilman@baylibre.com> wrote:
+>>>
+>>> Hi Lucas,
+>>>
+>>> Lucas Tanure <tanure@linux.com> writes:
+>>>
+>>>> The default duty cycle of 33% is less than the required
+>>>> by the I2C specs for the LOW period of the SCL clock.
+>>>>
+>>>> So, for 100Khz or less, use 50%H/50%L duty cycle, and
+>>>> for the clock above 100Khz, use 40%H/60%L duty cycle.
+>>>> That ensures the low period of SCL is always more than
+>>>> the minimum required by the specs at any given frequency.
+>>>
+>>> Thanks for the fixes!
+>>>
+>>> This is going to affect all SoCs, so ould you please summarize how your
+>>> changes were tested, and on which SoCs & boards?
+>>>
+>>> Thanks,
+>>>
+>>> Kevin
+>>
+>> Hi,
+>>
+>> I only tested against the vim3 board, measured the bus with a Saleae
+>> logic pro 16.
+>> The measurements were with 100k, 400k, and a few in-between frequencies.
+> 
+> Thanks, it's a great addition to have !
+> 
+>>
+>> Is that enough?
+> 
+> A test on GXL/GXM (VIM1 or VIM2) & GXBB (Odroid-C2) devices is lacking 
+> before we
+> can merge this.
+> 
+> If I find some time, I'll have a try, but everyone is welcome testing 
+> this serie
+> and report if it still works fine for them.
+> 
+> Vyacheslav, do you think you can test on your JetHub devices ? it would 
+> validate GXL & AXG.
+
+It builds ok on 5.17. JetHub H1/D1 has only rtc clock (pcf8563) and 
+1-wire controller (ds2482) on i2c bus. I did't see any difference with 
+or without patches. all works at first look.
+
+Vyacheslav
+

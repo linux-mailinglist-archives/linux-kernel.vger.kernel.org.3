@@ -2,188 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BA1F4F1819
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E9D4F1820
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378485AbiDDPSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 11:18:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51100 "EHLO
+        id S1378490AbiDDPUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 11:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378487AbiDDPR4 (ORCPT
+        with ESMTP id S230438AbiDDPUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 11:17:56 -0400
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8662C652;
-        Mon,  4 Apr 2022 08:16:00 -0700 (PDT)
-Received: by mail-oi1-f173.google.com with SMTP id r8so10391610oib.5;
-        Mon, 04 Apr 2022 08:16:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=w0TYTDCl2b2Z4blu+zCKIcUNIe20JrsvaCgfIx0hYQ0=;
-        b=G+WRNlGovbAFASv0w2mF5CZ4WmccHVjwbtb9ka0857Xwd9ILPnhTJiHjcTM1kYLl/N
-         NICthUTQspOrlzsb+VFDZC1LhsDx20pAV6GMeYrw+4v8Z/Uu9WVAxi6ffmRoWyYG8El7
-         4Yi3NpV2tICd+S3gtZjNovHPfJvxh87Wq2Z8l6Vt6615Wgn0OlomDhYwyyhopaYJoggD
-         SnGWOIELQWUJ+buCsSebHUNhn9XY1ywCG6p1m7vozuMl74xztlITflV5HiJ9evy0+oTk
-         Dws4LpafjQV8xQ2F+eBEIePb658ldrxpyCHON8PctRmiWIl7q6rb+sUOIJrOWbPdoLKy
-         Rk6Q==
-X-Gm-Message-State: AOAM5334cuGFaTqOr0jw30h+bjJ6JoMZM62CjR4OcRKruwEZsa9pgV85
-        VCe1lcCOqPTOsNaBLhaI7w==
-X-Google-Smtp-Source: ABdhPJw/UeiNa/TNOL111ajz5ykV/iRwx/NMUA0QKwx+VAvJD/2hePRPcQyIxNnM2OP/ds4d+1MCpQ==
-X-Received: by 2002:a54:470f:0:b0:2ef:8a55:b94f with SMTP id k15-20020a54470f000000b002ef8a55b94fmr23909oik.243.1649085359902;
-        Mon, 04 Apr 2022 08:15:59 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q39-20020a4a88ea000000b0032165eb3af8sm4121702ooh.42.2022.04.04.08.15.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 08:15:58 -0700 (PDT)
-Received: (nullmailer pid 1346118 invoked by uid 1000);
-        Mon, 04 Apr 2022 15:15:57 -0000
-Date:   Mon, 4 Apr 2022 10:15:57 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Stefano Stabellini <stefanos@xilinx.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "wg@grandegger.com" <wg@grandegger.com>,
-        "mkl@pengutronix.de" <mkl@pengutronix.de>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 0/4] dt-bindings: imx: add nvmem property
-Message-ID: <YksLrXDVWYk1R1Jp@robh.at.kernel.org>
-References: <20220324042024.26813-1-peng.fan@oss.nxp.com>
- <20220324111104.cd7clpkzzedtcrja@pengutronix.de>
- <YkZEIR1XqJ6sseto@robh.at.kernel.org>
- <DU0PR04MB94179B979091FC517FB8AEC388E39@DU0PR04MB9417.eurprd04.prod.outlook.com>
+        Mon, 4 Apr 2022 11:20:06 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2342528E34
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:18:10 -0700 (PDT)
+Date:   Tue, 5 Apr 2022 00:18:05 +0900
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1649085488;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LZ2miKBTVPr3F+L5ojFoVTTDrRk5AYtrEEP/TQPrTdw=;
+        b=iaj9dlWqaS7vybtNKFDB++49DZVieYTAJhxXSpIM6itTj+7vhMoGhgS47O1lXtt1WUFHvx
+        OvjqHtyuLtXvPlGbr04YmWmDG31ijAiXNElchjylQ86whJp5pD/k1Riw9Nzpr3iz7OE3m0
+        L1nuSJjpjQ+uk7brFUkI/iuXgWggRm8=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>
+Subject: Re: v5.18-rc1: migratepages triggers
+ VM_BUG_ON_FOLIO(folio_nr_pages(old) != nr_pages)
+Message-ID: <20220404151805.GA800317@u2004>
+References: <20220404132908.GA785673@u2004>
+ <F3E3F1AE-B421-4463-B032-3F58DF89A5E2@nvidia.com>
+ <YksAub9UccPZa9DI@casper.infradead.org>
+ <C4792D17-A7F6-4803-B8FC-B8682F50E044@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DU0PR04MB94179B979091FC517FB8AEC388E39@DU0PR04MB9417.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <C4792D17-A7F6-4803-B8FC-B8682F50E044@nvidia.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 02, 2022 at 01:52:28AM +0000, Peng Fan wrote:
-> > Subject: Re: [PATCH 0/4] dt-bindings: imx: add nvmem property
-> > 
-> > On Thu, Mar 24, 2022 at 12:11:04PM +0100, Uwe Kleine-König wrote:
-> > > Hello,
-> > >
-> > > On Thu, Mar 24, 2022 at 12:20:20PM +0800, Peng Fan (OSS) wrote:
-> > > > From: Peng Fan <peng.fan@nxp.com>
-> > > >
-> > > > To i.MX SoC, there are many variants, such as i.MX8M Plus which
-> > > > feature 4 A53, GPU, VPU, SDHC, FLEXCAN, FEC, eQOS and etc.
-> > > > But i.MX8M Plus has many parts, one part may not have FLEXCAN, the
-> > > > other part may not have eQOS or GPU.
-> > > > But we use one device tree to support i.MX8MP including its parts,
-> > > > then we need update device tree to mark the disabled IP status
-> > "disabled".
-> > > >
-> > > > In NXP U-Boot, we hardcoded node path and runtime update device tree
-> > > > status in U-Boot according to fuse value. But this method is not
-> > > > scalable and need encoding all the node paths that needs check.
-> > > >
-> > > > By introducing nvmem property for each node that needs runtime
-> > > > update status property accoridng fuse value, we could use one
-> > > > Bootloader code piece to support all i.MX SoCs.
-> > > >
-> > > > The drawback is we need nvmem property for all the nodes which maybe
-> > > > fused out.
-> > >
-> > > I'd rather not have that in an official binding as the syntax is
-> > > orthogonal to status = "..." but the semantic isn't. Also if we want
-> > > something like that, I'd rather not want to adapt all bindings, but
-> > > would like to see this being generic enough to be described in a
-> > > single catch-all binding.
-> > >
-> > > I also wonder if it would be nicer to abstract that as something like:
-> > >
-> > > 	/ {
-> > > 		fuse-info {
-> > > 			compatible = "otp-fuse-info";
-> > >
-> > > 			flexcan {
-> > > 				devices = <&flexcan1>, <&flexcan2>;
-> > > 				nvmem-cells = <&flexcan_disabled>;
-> > > 				nvmem-cell-names = "disabled";
-> > > 			};
-> > >
-> > > 			m7 {
-> > > 				....
-> > > 			};
-> > > 		};
-> > > 	};
-> > >
-> > > as then the driver evaluating this wouldn't need to iterate over the
-> > > whole dtb but just over this node. But I'd still keep this private to
-> > > the bootloader and not describe it in the generic binding.
-> > 
-> > There's been discussions (under the system DT umbrella mostly) about
-> > bindings for peripheral enable/disable control/status. Most of the time it is in
-> > context of device assignment to secure/non-secure world or partitions in a
-> > system (via a partitioning hypervisor).
-> > 
-> > This feels like the same thing and could use the same binding. But someone
-> > has to take into account all the uses and come up with something. One off
-> > solutions are a NAK.
+On Mon, Apr 04, 2022 at 10:47:20AM -0400, Zi Yan wrote:
+> On 4 Apr 2022, at 10:29, Matthew Wilcox wrote:
 > 
-> Loop Stefano.
+> > On Mon, Apr 04, 2022 at 10:05:00AM -0400, Zi Yan wrote:
+> >> On 4 Apr 2022, at 9:29, Naoya Horiguchi wrote:
+> >>> I found that the below VM_BUG_ON_FOLIO is triggered on v5.18-rc1
+> >>> (and also reproducible with mmotm on 3/31).
+> >>> I have no idea about the bug's mechanism, but it seems not to be
+> >>> shared in LKML yet, so let me just share. config.gz is attached.
+> >>>
+> >>> [   48.206424] page:0000000021452e3a refcount:6 mapcount:0 mapping:000000003aaf5253 index:0x0 pfn:0x14e600
+> >>> [   48.213316] head:0000000021452e3a order:9 compound_mapcount:0 compound_pincount:0
+> >>> [   48.218830] aops:xfs_address_space_operations [xfs] ino:dee dentry name:"libc.so.6"
+> >>> [   48.225098] flags: 0x57ffffc0012027(locked|referenced|uptodate|active|private|head|node=1|zone=2|lastcpupid=0x1fffff)
+> >>> [   48.232792] raw: 0057ffffc0012027 0000000000000000 dead000000000122 ffff8a0dc9a376b8
+> >>> [   48.238464] raw: 0000000000000000 ffff8a0dc6b23d20 00000006ffffffff 0000000000000000
+> >>> [   48.244109] page dumped because: VM_BUG_ON_FOLIO(folio_nr_pages(old) != nr_pages)
+> >>> [   48.249196] ------------[ cut here ]------------
+> >>> [   48.251240] kernel BUG at mm/memcontrol.c:6857!
+> >>> [   48.260535] RIP: 0010:mem_cgroup_migrate+0x217/0x320
+> >>> [   48.286942] Call Trace:
+> >>> [   48.287665]  <TASK>
+> >>> [   48.288255]  iomap_migrate_page+0x64/0x190
+> >>> [   48.289366]  move_to_new_page+0xa3/0x470
+> >>
+> >> Is it because migration code assumes all THPs have order=HPAGE_PMD_ORDER?
+> >> Would the patch below fix the issue?
+
+I briefly confirmed that this bug didn't reproduce with your change,
+thank you very much!
+
+- Naoya Horiguchi
+
+> >
+> > This looks entirely plausible to me!  I do have changes in this area,
+> > but clearly I should have submitted them earlier.  Let's get these fixes
+> > in as they are.
+> >
+> > Is there a test suite that tests page migration?  I usually use xfstests
+> > and it does no page migration at all (at least 'git grep migrate'
+> > finds nothing useful).
 > 
-> Per my understanding, system device tree is not a runtime generated device
-> tree, in case I am wrong.
+> https://github.com/linux-test-project/ltp has some migrate_pages and move_pages
+> tests. You can run them after install ltp:
+> sudo ./runltp -f syscalls -s migrate_pages and
+> sudo ./runltp -f sys calls -s move_pages
 
-I said it was part of 'system DT' discussions, not that you need 'system 
-DT'. There's been binding patches on the list from ST for the 'trustzone 
-protection controller' if I remember the name right. I think there was 
-another proposal too.
-
-
-> To i.MX, one SoC has many different parts, one kind part may not have
-> VPU, another part may not have GPU, another part may be a full feature
-> one. We have a device tree for the full feature one, but we not wanna
-> introduce other static device tree files for non-full feature parts.
-> 
-> So we let bootloader to runtime setting status of a device node according
-> to fuse info that read out by bootloader at runtime.
-
-Sounds like the same problem for the OS perspective. A device may or may 
-not be available to the OS. The reason being because the device is 
-assigned to TZ or another core vs. fused off doesn't matter.
-
-
-> I think my case is different with system device tree, and maybe NXP i.MX
-> specific. So I would introduce a vendor compatible node, following Uwe's
-> suggestion. We Just need such binding doc and device node in Linux kernel
-> tree. The code to scan this node is in U-Boot.
-
-Again, device assignment is a common problem. I'm only going to accept a 
-common solution.
-
-Rob

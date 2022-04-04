@@ -2,95 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DED4F1F52
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:48:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8954F1F56
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238436AbiDDWt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:49:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60410 "EHLO
+        id S239207AbiDDWu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 18:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236118AbiDDWtq (ORCPT
+        with ESMTP id S241870AbiDDWuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 18:49:46 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6830E5EDF5;
-        Mon,  4 Apr 2022 15:02:51 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KXPsP63fqz4xXK;
-        Tue,  5 Apr 2022 08:02:49 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649109770;
-        bh=yiSBoGqlvTThDCgo44GBRLmKbS5VR7RXDH9cnFaLqjw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=PrqA6zsXH4ZHulc64QKE2mrpHYvUCOX/M0JE2CPd6YXgCOKCy1IwiROLBoBf37I4T
-         B3f8Ja5FOTWmVluq48I9txQOdQZdzifBqAl+g3HSPdOs6MmYzsT4P3PBA7rrVgOlRt
-         SuztaR3QeyNO562PV9ecngdj8inPwFn/p9Dnt7k0UIvnt0KHQ6y/RMQkxSVWT6alvn
-         3UmGCTT+yOkfhmrxGwwa15x22DCbn32fx6dM2vxxddgc5pHXrvwkSWBwsuNGvN+kkq
-         Cn9U3s7q1R4pdueFOaVhZS9fkmPm0WjIuPY1wPJB6VelVxYCIeBO7mjRvJiA0elj38
-         hHJgX2jRv4HCQ==
-Date:   Tue, 5 Apr 2022 08:02:48 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Cristian Marussi <cristian.marussi@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the scmi tree
-Message-ID: <20220405080248.1cc96ea1@canb.auug.org.au>
+        Mon, 4 Apr 2022 18:50:07 -0400
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645685FF31;
+        Mon,  4 Apr 2022 15:03:22 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id qh7so12790956ejb.11;
+        Mon, 04 Apr 2022 15:03:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hmBtyCSBQacoipPmCsuxywFD7dGIDZdmjd0lU4ylOC0=;
+        b=pazOs1LZxFd2QSm53DZDOmnlSGL7KVTCzaflxn6GZaEfIhOmBo2eYNSD3QyaUBlMmF
+         PDvUVKoKWwkTjbOfqyeXnfh9Jgb82xStxac7ZU875JYlSRaNL589m0Eag3qEXKtfl0Rt
+         u3jfzSQdgDMP49rqHXDyezikswxxal3NDEn2EC3i1e+ZnwP+8OW4gIJAU20PTAye15h1
+         jJ4guY3Hh9bfSmL6OtBSx96yWxu6cVNe54f7A1DuQn2NdDa2gTWtnqlvzq0PIH6p3Jx8
+         GsYc4yBDYZTLS7lPy2kRe/oLtBaTn3OdMYAmbUjkb6mC0CMBRlKFcb3b7uDsDCA7fP7c
+         fQug==
+X-Gm-Message-State: AOAM533VVEVS3sx303nMNd4gvHwft/JbswCrWXKcHggDLOF3Z9HWFSjU
+        Wj6L3Kj/MBrQMbMntLG8cJ3gixiuGD0=
+X-Google-Smtp-Source: ABdhPJxKA6fBw682sFl4Rl5c6DEScQABE7R7uLVGQ9ljvzFS17MEqGICnW1ZnXnU+j/LkFmf4Gl7rw==
+X-Received: by 2002:a17:907:9482:b0:6da:a24e:e767 with SMTP id dm2-20020a170907948200b006daa24ee767mr292233ejc.479.1649109800676;
+        Mon, 04 Apr 2022 15:03:20 -0700 (PDT)
+Received: from t490s.teknoraver.net (net-93-144-169-96.cust.dsl.teletu.it. [93.144.169.96])
+        by smtp.gmail.com with ESMTPSA id q16-20020a170906145000b006bdaf981589sm4806743ejc.81.2022.04.04.15.03.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 15:03:20 -0700 (PDT)
+From:   Matteo Croce <mcroce@linux.microsoft.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] bpf: make unprivileged BPF a compile time choice
+Date:   Tue,  5 Apr 2022 00:03:14 +0200
+Message-Id: <20220404220314.112912-1-mcroce@linux.microsoft.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Ii6j=cnxd9AcAwkJjzz0Nyi";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Ii6j=cnxd9AcAwkJjzz0Nyi
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+From: Matteo Croce <mcroce@microsoft.com>
 
-Hi all,
+Add a compile time option to permanently disable unprivileged BPF and
+the corresponding sysctl handler so that there's absolutely no
+concern about unprivileged BPF being enabled from userspace during
+runtime. Special purpose kernels can benefit from the build-time
+assurance that unprivileged eBPF is disabled in all of their kernel
+builds rather than having to rely on userspace to permanently disable
+it at boot time.
+The default behaviour is left unchanged, which is: unprivileged BPF
+compiled in but disabled at boot.
 
-In commit
+Signed-off-by: Matteo Croce <mcroce@microsoft.com>
+---
+ kernel/bpf/Kconfig   | 10 +++++++++-
+ kernel/bpf/syscall.c |  4 +++-
+ kernel/sysctl.c      |  4 ++++
+ 3 files changed, 16 insertions(+), 2 deletions(-)
 
-  1b855727f915 ("firmware: arm_scmi: Fix sorting of retrieved clock rates")
+diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
+index d56ee177d5f8..dfaef1ac1516 100644
+--- a/kernel/bpf/Kconfig
++++ b/kernel/bpf/Kconfig
+@@ -67,10 +67,18 @@ config BPF_JIT_DEFAULT_ON
+ 	def_bool ARCH_WANT_DEFAULT_BPF_JIT || BPF_JIT_ALWAYS_ON
+ 	depends on HAVE_EBPF_JIT && BPF_JIT
+ 
++config BPF_UNPRIV
++	bool "Unprivileged BPF"
++	default y
++	depends on BPF_SYSCALL
++	help
++	  Enables unprivileged BPF and the corresponding
++	  /proc/sys/kernel/unprivileged_bpf_disabled knob.
++
+ config BPF_UNPRIV_DEFAULT_OFF
+ 	bool "Disable unprivileged BPF by default"
+ 	default y
+-	depends on BPF_SYSCALL
++	depends on BPF_UNPRIV
+ 	help
+ 	  Disables unprivileged BPF by default by setting the corresponding
+ 	  /proc/sys/kernel/unprivileged_bpf_disabled knob to 2. An admin can
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index cdaa1152436a..b7e6aca87a18 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -53,7 +53,9 @@ static DEFINE_IDR(link_idr);
+ static DEFINE_SPINLOCK(link_idr_lock);
+ 
+ int sysctl_unprivileged_bpf_disabled __read_mostly =
+-	IS_BUILTIN(CONFIG_BPF_UNPRIV_DEFAULT_OFF) ? 2 : 0;
++	IS_BUILTIN(CONFIG_BPF_UNPRIV) ?
++		(IS_BUILTIN(CONFIG_BPF_UNPRIV_DEFAULT_OFF) ? 2 : 0)
++		: 1;
+ 
+ static const struct bpf_map_ops * const bpf_map_types[] = {
+ #define BPF_PROG_TYPE(_id, _name, prog_ctx_type, kern_ctx_type)
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 830aaf8ca08e..a5b6e960ca58 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -184,6 +184,7 @@ void __weak unpriv_ebpf_notify(int new_state)
+ {
+ }
+ 
++#ifdef CONFIG_BPF_UNPRIV
+ static int bpf_unpriv_handler(struct ctl_table *table, int write,
+ 			      void *buffer, size_t *lenp, loff_t *ppos)
+ {
+@@ -206,6 +207,7 @@ static int bpf_unpriv_handler(struct ctl_table *table, int write,
+ 
+ 	return ret;
+ }
++#endif /* CONFIG_BPF_UNPRIV */
+ #endif /* CONFIG_BPF_SYSCALL && CONFIG_SYSCTL */
+ 
+ /*
+@@ -2300,6 +2302,7 @@ static struct ctl_table kern_table[] = {
+ 	},
+ #endif
+ #ifdef CONFIG_BPF_SYSCALL
++#ifdef CONFIG_BPF_UNPRIV
+ 	{
+ 		.procname	= "unprivileged_bpf_disabled",
+ 		.data		= &sysctl_unprivileged_bpf_disabled,
+@@ -2309,6 +2312,7 @@ static struct ctl_table kern_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_TWO,
+ 	},
++#endif
+ 	{
+ 		.procname	= "bpf_stats_enabled",
+ 		.data		= &bpf_stats_enabled_key.key,
+-- 
+2.35.1
 
-Fixes tag
-
-  Fixes: dccec73de91 ("firmware: arm_scmi: Keep the discrete clock rates so=
-rted")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    This can be fixed for the future by setting core.abbrev to 12 (or
-    more) or (for git v2.11 or later) just making sure it is not set
-    (or set to "auto").
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Ii6j=cnxd9AcAwkJjzz0Nyi
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJLawgACgkQAVBC80lX
-0GwNMQf+PZP9kyrDhh2ACqGLNYabB8DfiHrnpY1NF7Mfg8iBxuWRw6vXODOtRl4D
-PF/7MBE4Gy8CeGehcWkfcNn3GW6oFRtNot9ZtEUM5i3ZYF2tDpOdPRW+6QxgwVb2
-iTmpm4PeWdds9x9lanWKdi8rhYeYhngYv+oHIeGYqR4U6Pvu2ZYTwB3zChDiUD+E
-47Oz0//MJvCbpGUczFoPK0/gtANxNZWRJyZCb2fr4fBbPJypJHICq4WPOfS8uCzU
-5sYwmim3zyzsKWXXLVLE2BfgITlLWz4hXQAnxN4Y5hwzVjJJIvgGJn86UGt3ozmo
-tzLN51+PpL7GxACcRI2R4S3ya8XZTw==
-=w/TJ
------END PGP SIGNATURE-----
-
---Sig_/Ii6j=cnxd9AcAwkJjzz0Nyi--

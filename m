@@ -2,175 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3DDE4F1E75
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9CB4F1E6B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380606AbiDDWHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46292 "EHLO
+        id S1382721AbiDDWKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 18:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379148AbiDDQhq (ORCPT
+        with ESMTP id S1379142AbiDDQh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 12:37:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1584415A3C;
-        Mon,  4 Apr 2022 09:35:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C142AB8185A;
-        Mon,  4 Apr 2022 16:35:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BADBC34112;
-        Mon,  4 Apr 2022 16:35:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649090147;
-        bh=3b1F2B8ms+UwG0xj2WiyH5qONSrPe+dWWcXNb6zQy0o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nTtiZGf4j3527eIXyN6IBwA6tFHTmzoFd6AXHs0oS4piaexE4NBzSdqQA0f5D+f0T
-         p1ijOowJXQHOl0JwYzm3J3s+lyW/MVzwkTslJkdyBjLIeg34IMOsnSTAQPTeWtJ9Fd
-         ettqslusBGsL7ERlFhDesNKQqYulYFggNhCRJgwOQxjLIYOc7Z5LF/qqVadYK3uxtu
-         c5NeRsy/xwF5JOW720Iudqzz8L9Q7YGRA3y+Jn1z/DDoyCYeXCN4Gh6eHsX7qL8hjO
-         O/wni6rH18ZW4HsLJReVlw3jbB5aKGxsUJ0lUTWCPF7RfC6HDeT89xKllW/GRzQCi4
-         yZLaOurXRI2Qg==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org
-Subject: [PATCH v6 13/14] drm/msm: Update generated headers
-Date:   Mon,  4 Apr 2022 22:04:35 +0530
-Message-Id: <20220404163436.956875-14-vkoul@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220404163436.956875-1-vkoul@kernel.org>
-References: <20220404163436.956875-1-vkoul@kernel.org>
+        Mon, 4 Apr 2022 12:37:26 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B6C15A3C
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 09:35:30 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id z6so12020935iot.0
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 09:35:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u2tjCgL5q60NGSsrT51lKaR05T0paQW81C5vQQ853wY=;
+        b=LU/LuEgYuinqEj95G4H6JtZIbQpHE6Wkox3vsqOb7m7lngKeo8ezZjUZB4v+fMzrXu
+         i7Mox9Hha2YBG2+eHgJc2l9JEC4zF8ZM6xXEbdc37VoB58K8gfNWoq8c3Odp3BA/21Wj
+         8xx8CnXdvah5jZ4gGbPfynV1of+K7wveZu6ohsinc1J4F7G1fu9EQEwU4GwH50u0dX/R
+         tIVVPOC3JjPkru7Ee/eKnl5+bJQJ3/AshfySEgepXYEt9Ba7CQGsGL2IeBF9/KuX9IrP
+         JbX5rZg2SYWlWHW9g+t4sfQ+vuvn6EP/KTcrv8ic5QexGre+YCX3K/iPVS+gp28DNVr7
+         JX+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u2tjCgL5q60NGSsrT51lKaR05T0paQW81C5vQQ853wY=;
+        b=GKDdG4O7eb2NJvt/pLjqf0v68c1tSend6atfV71/tt0GXUfXTR/P52Pa7KZSxyygUY
+         ZGYroRc+M8IBXA6ga6vD1+9g7PpAO9TpPLwvTIe1prReR679brRKowFxzxu8lEIfxBTn
+         mHv6CuV4+Gq850yVv2mowvyR+aJAAqlrqLNJj/UOfkaA4RLtm7L9x306zrpn/SNVbZ1u
+         bxlkqVgi1tgqMZqXx/AFYEAC9e+z+7cI8jvaYCT/FpvEKjXql32cwB9+Qz44I/Y8cxTw
+         M9OQ6IETqIF3HRtv3y4YYdENplw1blk6dqCmhnO7yEydenNYaCECZxZNxxpUsSMXaFis
+         HB2g==
+X-Gm-Message-State: AOAM532gu8CuIPf2pT/fLPyVuNTDkZeGmB+nb+YIw0TTVaQHb2J0TbnW
+        OjpInD5nIjnwhM8L2GU43E0Rh0eRMjKEp/WslBPzjTvDRbRFVtxOub4=
+X-Google-Smtp-Source: ABdhPJxGPGo6ZeYMtrmrzTqcFfxOkAJo2j1ZjwZE5kyqJVyLQGVWZDw37xIK3ZrpEfi7IjV6VOZwuUlNmhvG7sZ1KNI=
+X-Received: by 2002:a05:6602:15d1:b0:649:1ed6:edcf with SMTP id
+ f17-20020a05660215d100b006491ed6edcfmr506912iow.74.1649090129391; Mon, 04 Apr
+ 2022 09:35:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220404105324.13810-1-straube.linux@gmail.com>
+In-Reply-To: <20220404105324.13810-1-straube.linux@gmail.com>
+From:   Robert Marko <robert.marko@sartura.hr>
+Date:   Mon, 4 Apr 2022 18:35:18 +0200
+Message-ID: <CA+HBbNHEK=CbyeeyPG=s=D2xofdSbk8Lxx5R9nij_cp6t7ybDA@mail.gmail.com>
+Subject: Re: [PATCH] ath11k: do not return random value
+To:     Michael Straube <straube.linux@gmail.com>
+Cc:     kvalo@kernel.org, David Miller <davem@davemloft.net>,
+        kuba@kernel.org, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update headers from mesa commit:
+On Mon, Apr 4, 2022 at 12:54 PM Michael Straube <straube.linux@gmail.com> wrote:
+>
+> Function ath11k_qmi_assign_target_mem_chunk() returns a random value
+> if of_parse_phandle() fails because the return variable ret is not
+> initialized before calling of_parse_phandle(). Return -EINVAL to avoid
+> possibly returning 0, which would be wrong here.
+>
+> Issue found by smatch.
+>
+> Signed-off-by: Michael Straube <straube.linux@gmail.com>
+> ---
+>  drivers/net/wireless/ath/ath11k/qmi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/wireless/ath/ath11k/qmi.c b/drivers/net/wireless/ath/ath11k/qmi.c
+> index 65d3c6ba35ae..81b2304b1fde 100644
+> --- a/drivers/net/wireless/ath/ath11k/qmi.c
+> +++ b/drivers/net/wireless/ath/ath11k/qmi.c
+> @@ -1932,7 +1932,7 @@ static int ath11k_qmi_assign_target_mem_chunk(struct ath11k_base *ab)
+>                         if (!hremote_node) {
+>                                 ath11k_dbg(ab, ATH11K_DBG_QMI,
+>                                            "qmi fail to get hremote_node\n");
+> -                               return ret;
+> +                               return -EINVAL;
+>                         }
+>
+>                         ret = of_address_to_resource(hremote_node, 0, &res);
+> --
+> 2.35.1
 
-  commit 28ae397be111c37c6ced397e12d453a7695701bd
-  Author: Vinod Koul <vkoul@kernel.org>
-  Date:   Fri Apr 1 16:53:04 2022 +0530
+Hi Michael,
+This is already solved in ath-next and 5.18-rc1:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/net/wireless/ath/ath11k/qmi.c?h=v5.18-rc1&id=c9b41832dc080fa59bad597de94865b3ea2d5bab
 
-      freedreno/registers: update dsi registers to support dsc
+Regards,
+Robert
+>
+>
+> --
+> ath11k mailing list
+> ath11k@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/ath11k
 
-      Display Stream compression (DSC) compresses the display stream in
-      host which is later decoded by panel. This requires addition of 3 new
-      DSI registers to support DSC over DSI.
 
-      Signed-off-by: Vinod Koul <vkoul@kernel.org>
-      Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/14967>
 
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
----
- drivers/gpu/drm/msm/dsi/dsi.xml.h | 80 +++++++++++++++++++++++++++++++
- 1 file changed, 80 insertions(+)
-
-diff --git a/drivers/gpu/drm/msm/dsi/dsi.xml.h b/drivers/gpu/drm/msm/dsi/dsi.xml.h
-index 4dee6f0bdda6..d1b2a17b0a66 100644
---- a/drivers/gpu/drm/msm/dsi/dsi.xml.h
-+++ b/drivers/gpu/drm/msm/dsi/dsi.xml.h
-@@ -704,5 +704,85 @@ static inline uint32_t DSI_VERSION_MAJOR(uint32_t val)
- 
- #define REG_DSI_CPHY_MODE_CTRL					0x000002d4
- 
-+#define REG_DSI_VIDEO_COMPRESSION_MODE_CTRL			0x0000029c
-+#define DSI_VIDEO_COMPRESSION_MODE_CTRL_WC__MASK		0xffff0000
-+#define DSI_VIDEO_COMPRESSION_MODE_CTRL_WC__SHIFT		16
-+static inline uint32_t DSI_VIDEO_COMPRESSION_MODE_CTRL_WC(uint32_t val)
-+{
-+	return ((val) << DSI_VIDEO_COMPRESSION_MODE_CTRL_WC__SHIFT) & DSI_VIDEO_COMPRESSION_MODE_CTRL_WC__MASK;
-+}
-+#define DSI_VIDEO_COMPRESSION_MODE_CTRL_DATATYPE__MASK		0x00003f00
-+#define DSI_VIDEO_COMPRESSION_MODE_CTRL_DATATYPE__SHIFT		8
-+static inline uint32_t DSI_VIDEO_COMPRESSION_MODE_CTRL_DATATYPE(uint32_t val)
-+{
-+	return ((val) << DSI_VIDEO_COMPRESSION_MODE_CTRL_DATATYPE__SHIFT) & DSI_VIDEO_COMPRESSION_MODE_CTRL_DATATYPE__MASK;
-+}
-+#define DSI_VIDEO_COMPRESSION_MODE_CTRL_PKT_PER_LINE__MASK	0x000000c0
-+#define DSI_VIDEO_COMPRESSION_MODE_CTRL_PKT_PER_LINE__SHIFT	6
-+static inline uint32_t DSI_VIDEO_COMPRESSION_MODE_CTRL_PKT_PER_LINE(uint32_t val)
-+{
-+	return ((val) << DSI_VIDEO_COMPRESSION_MODE_CTRL_PKT_PER_LINE__SHIFT) & DSI_VIDEO_COMPRESSION_MODE_CTRL_PKT_PER_LINE__MASK;
-+}
-+#define DSI_VIDEO_COMPRESSION_MODE_CTRL_EOL_BYTE_NUM__MASK	0x00000030
-+#define DSI_VIDEO_COMPRESSION_MODE_CTRL_EOL_BYTE_NUM__SHIFT	4
-+static inline uint32_t DSI_VIDEO_COMPRESSION_MODE_CTRL_EOL_BYTE_NUM(uint32_t val)
-+{
-+	return ((val) << DSI_VIDEO_COMPRESSION_MODE_CTRL_EOL_BYTE_NUM__SHIFT) & DSI_VIDEO_COMPRESSION_MODE_CTRL_EOL_BYTE_NUM__MASK;
-+}
-+#define DSI_VIDEO_COMPRESSION_MODE_CTRL_EN			0x00000001
-+
-+#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL			0x000002a4
-+#define DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM1_DATATYPE__MASK	0x3f000000
-+#define DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM1_DATATYPE__SHIFT	24
-+static inline uint32_t DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM1_DATATYPE(uint32_t val)
-+{
-+	return ((val) << DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM1_DATATYPE__SHIFT) & DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM1_DATATYPE__MASK;
-+}
-+#define DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM1_PKT_PER_LINE__MASK	0x00c00000
-+#define DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM1_PKT_PER_LINE__SHIFT	22
-+static inline uint32_t DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM1_PKT_PER_LINE(uint32_t val)
-+{
-+	return ((val) << DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM1_PKT_PER_LINE__SHIFT) & DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM1_PKT_PER_LINE__MASK;
-+}
-+#define DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM1_EOL_BYTE_NUM__MASK	0x00300000
-+#define DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM1_EOL_BYTE_NUM__SHIFT	20
-+static inline uint32_t DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM1_EOL_BYTE_NUM(uint32_t val)
-+{
-+	return ((val) << DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM1_EOL_BYTE_NUM__SHIFT) & DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM1_EOL_BYTE_NUM__MASK;
-+}
-+#define DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM1_EN		0x00010000
-+#define DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_DATATYPE__MASK	0x00003f00
-+#define DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_DATATYPE__SHIFT	8
-+static inline uint32_t DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_DATATYPE(uint32_t val)
-+{
-+	return ((val) << DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_DATATYPE__SHIFT) & DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_DATATYPE__MASK;
-+}
-+#define DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_PKT_PER_LINE__MASK	0x000000c0
-+#define DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_PKT_PER_LINE__SHIFT	6
-+static inline uint32_t DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_PKT_PER_LINE(uint32_t val)
-+{
-+	return ((val) << DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_PKT_PER_LINE__SHIFT) & DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_PKT_PER_LINE__MASK;
-+}
-+#define DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_EOL_BYTE_NUM__MASK	0x00000030
-+#define DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_EOL_BYTE_NUM__SHIFT	4
-+static inline uint32_t DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_EOL_BYTE_NUM(uint32_t val)
-+{
-+	return ((val) << DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_EOL_BYTE_NUM__SHIFT) & DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_EOL_BYTE_NUM__MASK;
-+}
-+#define DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_EN		0x00000001
-+
-+#define REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2			0x000002a8
-+#define DSI_COMMAND_COMPRESSION_MODE_CTRL2_STREAM1_SLICE_WIDTH__MASK	0xffff0000
-+#define DSI_COMMAND_COMPRESSION_MODE_CTRL2_STREAM1_SLICE_WIDTH__SHIFT	16
-+static inline uint32_t DSI_COMMAND_COMPRESSION_MODE_CTRL2_STREAM1_SLICE_WIDTH(uint32_t val)
-+{
-+	return ((val) << DSI_COMMAND_COMPRESSION_MODE_CTRL2_STREAM1_SLICE_WIDTH__SHIFT) & DSI_COMMAND_COMPRESSION_MODE_CTRL2_STREAM1_SLICE_WIDTH__MASK;
-+}
-+#define DSI_COMMAND_COMPRESSION_MODE_CTRL2_STREAM0_SLICE_WIDTH__MASK	0x0000ffff
-+#define DSI_COMMAND_COMPRESSION_MODE_CTRL2_STREAM0_SLICE_WIDTH__SHIFT	0
-+static inline uint32_t DSI_COMMAND_COMPRESSION_MODE_CTRL2_STREAM0_SLICE_WIDTH(uint32_t val)
-+{
-+	return ((val) << DSI_COMMAND_COMPRESSION_MODE_CTRL2_STREAM0_SLICE_WIDTH__SHIFT) & DSI_COMMAND_COMPRESSION_MODE_CTRL2_STREAM0_SLICE_WIDTH__MASK;
-+}
- 
- #endif /* DSI_XML */
 -- 
-2.34.1
-
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura Ltd.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr

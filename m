@@ -2,89 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C764F1577
+	by mail.lfdr.de (Postfix) with ESMTP id 3C15C4F1575
 	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 15:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232374AbiDDNGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 09:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41208 "EHLO
+        id S1349149AbiDDNHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 09:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240415AbiDDNGi (ORCPT
+        with ESMTP id S1348961AbiDDNHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 09:06:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2685FB9D
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 06:04:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649077481;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 4 Apr 2022 09:07:10 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACD62C0;
+        Mon,  4 Apr 2022 06:05:14 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 0A892210EE;
+        Mon,  4 Apr 2022 13:05:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1649077513; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=bKLcnrXpl+KcZQr63lS1etgImM+Jisa8A4Tv6u94WeY=;
-        b=LpZpYnJWLfiBRI5iwOr6GsZvvPjrrVRniAK7Pn6w/9e+J361t/68NyNr+e3ZKNzgdrUPyl
-        h7nnAuXnGhiASXS5/E5Hkjt0j8sNU7rjYbKGBh70UEPOXBbCN9u+NCu/JknPLVS7D4Cv6J
-        901qOBSdcR5/XC8Y5ctcffnkeuT1L+Q=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-57-Oo_20ewZPt6HHbMiceYzhg-1; Mon, 04 Apr 2022 09:04:31 -0400
-X-MC-Unique: Oo_20ewZPt6HHbMiceYzhg-1
-Received: by mail-wr1-f70.google.com with SMTP id i64-20020adf90c6000000b00203f2b5e090so1719825wri.9
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 06:04:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=bKLcnrXpl+KcZQr63lS1etgImM+Jisa8A4Tv6u94WeY=;
-        b=qQ0u97ZGY6tYpVTzSxwkelM3hPynxjppnppe81URqqwBiVLZJY6gJnneCpqmpqJCfo
-         KnLwy5RZWDh+ItnxxtYLJJ9V9kglnIz2SCOGDO9EcvZDxcQSM/h8Eez1jQ+BuSjyjeCq
-         3m7zn423KTX72zCZDgt6a9sDjSJY6qeBsnlE4IfxWacIeQfk/GL4C7QkBa5CdtEXaF7N
-         C9BtMQkTWzp3HpRFmnNSPweK6/K3dZrdsDkbrUVKldj0DZeZvr6veJZoXzJ6Uz5uGSHU
-         utLTjoIbdHpyrO5JqRLo+QldFNhZkuTyUUnvdpi/tKgZd0Ru9PWViarH41rbTjzQCXr7
-         Vutw==
-X-Gm-Message-State: AOAM532hgsKuvqdsikstU3dHO/WJvTGVR4CdNiujMdiNptjJHI+wIns7
-        spKqWQFO+wkStUIYokcpyaEcYcvZ9s1Hg92jJIPS2gDNmkfuu4WVNuWPp8s84HdODfDUIv4i/fc
-        p0G1PBaJ18Q/RQCuZGB4T10zp
-X-Received: by 2002:a5d:6b0f:0:b0:1e7:9432:ee8c with SMTP id v15-20020a5d6b0f000000b001e79432ee8cmr16587423wrw.216.1649077469856;
-        Mon, 04 Apr 2022 06:04:29 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwxtY/OPGax1qO/sx2WuexL7oOLf1eJuj6oF4bfJe58bEmh/NxbXjXnOtYCPACR/NKBsTM8ZA==
-X-Received: by 2002:a5d:6b0f:0:b0:1e7:9432:ee8c with SMTP id v15-20020a5d6b0f000000b001e79432ee8cmr16587382wrw.216.1649077469430;
-        Mon, 04 Apr 2022 06:04:29 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:4100:c220:ede7:17d4:6ff4? (p200300cbc7044100c220ede717d46ff4.dip0.t-ipconnect.de. [2003:cb:c704:4100:c220:ede7:17d4:6ff4])
-        by smtp.gmail.com with ESMTPSA id u7-20020a5d6da7000000b00203d9d1875bsm10501373wrs.73.2022.04.04.06.04.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 06:04:28 -0700 (PDT)
-Message-ID: <99cf9e14-7608-8e72-0c8e-0dd9b0047319@redhat.com>
-Date:   Mon, 4 Apr 2022 15:04:28 +0200
+        bh=wC86gbUg8Q4G9+5Yh9zn7w8RySmSqCqeIm64QO9mOtE=;
+        b=RRl3Ow3dGGV/s0GtOYqND8FDvBjDPcuucOKEmxJhaBcg62IE3bwOhSXMJciuwie00la3Dt
+        vIfvgni/VDrCBhutbnKt8xpngOFzHx/wcKTCF8tYsbDVCtNQg+wwBylUkJIqgBiNZBAaT7
+        Sh95Qo2GYHO9iiR89s0vrUg4OpctFYA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1649077513;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wC86gbUg8Q4G9+5Yh9zn7w8RySmSqCqeIm64QO9mOtE=;
+        b=97OjsjXSzuzMn9M2iOy1/9cSLKyhZw16LE9piwwkUvv526LZ2e1h0R4Z7Gx6tzk2drEP5w
+        WAJgVKn6SFSswSAQ==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id E2D46A3B82;
+        Mon,  4 Apr 2022 13:05:12 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id DD60CA0615; Mon,  4 Apr 2022 15:05:11 +0200 (CEST)
+Date:   Mon, 4 Apr 2022 15:05:11 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Willy Tarreau <w@1wt.eu>, Jan Kara <jack@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org
+Subject: Re: Is it time to remove reiserfs?
+Message-ID: <20220404130511.rq7evchtxk7s7dre@quack3.lan>
+References: <YhIwUEpymVzmytdp@casper.infradead.org>
+ <20220222100408.cyrdjsv5eun5pzij@quack3.lan>
+ <20220402105454.GA16346@amd>
+ <20220404085535.g2qr4s7itfunlrqb@quack3.lan>
+ <20220404100732.GB1476@duo.ucw.cz>
+ <20220404101802.GB8279@1wt.eu>
+ <20220404105828.GA7162@duo.ucw.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Content-Language: en-US
-To:     Nadav Amit <nadav.amit@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
-        Hugh Dickins <hughd@google.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-References: <20220401101334.68859-1-david@redhat.com>
- <8A6AF878-D5D7-4D88-A736-0FEF71439D44@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1 mmotm] mm/mprotect: try avoiding write faults for
- exclusive anonynmous pages when changing protection
-In-Reply-To: <8A6AF878-D5D7-4D88-A736-0FEF71439D44@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220404105828.GA7162@duo.ucw.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,147 +71,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.04.22 21:15, Nadav Amit wrote:
-> [ +Rick ]
+Hello!
+
+On Mon 04-04-22 12:58:28, Pavel Machek wrote:
+> > So maybe you're right and there are still a bit more than expected out
+> > there. However I really think that most users who still have one are in
+> > the same situation as I am, they're not aware of it. So aside big fat
+> > warnings at mount time (possibly with an extra delay), there's nothing
+> > that will make that situation change.
+> > 
+> > At the very least disabling it by default in Kconfig and in distros
+> > should be effective. I really don't think that there are still users
+> > who regularly update their system and who have it on their rootfs, but
+> > still having data on it, yes, possibly. The earlier they're warned,
+> > the better.
 > 
->> On Apr 1, 2022, at 3:13 AM, David Hildenbrand <david@redhat.com> wrote:
->>
->> Similar to our MM_CP_DIRTY_ACCT handling for shared, writable mappings, we
->> can try mapping anonymous pages writable if they are exclusive,
->> the PTE is already dirty, and no special handling applies. Mapping the
->> PTE writable is essentially the same thing the write fault handler would do
->> in this case.
+> I guess we should start by making sure that distributions don't use it
+> by default. Big fat warning + delay is a bit harsh for that, talking
+> to them should be enough at this point :-).
 > 
-> In general I am all supportive for such a change.
-> 
-> I do have some mostly-minor concerns.
+> Someone start with Arch Linux ARM.
 
-Hi Nadav,
+Yeah, I will write them and CC you. Thanks for notifying me.
 
-thanks a lot for your review!
-
-> 
->>
->> +static inline bool can_change_pte_writable(struct vm_area_struct *vma,
->> +					   unsigned long addr, pte_t pte,
->> +					   unsigned long cp_flags)
->> +{
->> +	struct page *page;
->> +
->> +	if ((vma->vm_flags & VM_SHARED) && !(cp_flags & MM_CP_DIRTY_ACCT))
->> +		/*
->> +		 * MM_CP_DIRTY_ACCT is only expressive for shared mappings;
->> +		 * without MM_CP_DIRTY_ACCT, there is nothing to do.
->> +		 */
->> +		return false;
->> +
->> +	if (!(vma->vm_flags & VM_WRITE))
->> +		return false;
->> +
->> +	if (pte_write(pte) || pte_protnone(pte) || !pte_dirty(pte))
->> +		return false;
-> 
-> If pte_write() is already try then return false? I understand you want
-> to do so because the page is already writable, but it is confusing.
-
-
-I thought about just doing outside of the function
-
-if ((vma->vm_flags & VM_WRITE) && !pte_write(pte) &&
-    can_change_pte_writable()...
-
-	
-I refrained from doing so because the sequence of checks might be
-sub-optimal. But most probably we don't really care about that and it
-might make the code easier to grasp.
-
-Would that make it clearer?
-
-> 
-> In addition, I am not sure about the pte_dirty() check is really robust.
-> I mean I think it is ok, but is there any issue with shadow-stack? 
-
-Judging that it's already used that way for VMAs with dirty tracking, I
-assume it's ok. Without checking that the PTE is dirty, we'd have to do a:
-
-pte_mkwrite(pte_mkwrite(ptent));
-
-Which would set the pte and consequently the page dirty, although there
-might not even be a write access. That's what we want to avoid here.
-
-> 
-> And this also assumes the kernel does not clear the dirty bit without
-> clearing the present, as otherwise the note in Intel SDM section 4.8
-> ("Accessed and Dirty Flags”) will be relevant and dirty bit might be
-> set unnecessarily. I think it is ok.
-
-Yeah, I think so as well.
-
-> 
->> +
->> +	/* Do we need write faults for softdirty tracking? */
->> +	if (IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) && !pte_soft_dirty(pte) &&
->> +	    (vma->vm_flags & VM_SOFTDIRTY))
-> 
-> If !IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) then VM_SOFTDIRTY == 0. So I do not
-> think the IS_ENABLED() is necessary (unless you think it is clearer this
-> way).
-
-Right, we can just do
-
-if ((vma->vm_flags & VM_SOFTDIRTY) && !pte_soft_dirty(pte))
-
-and it should get fully optimized out. Thanks!
-
-> 
->> +		return false;
->> +
->> +	/* Do we need write faults for uffd-wp tracking? */
->> +	if (userfaultfd_pte_wp(vma, pte))
->> +		return false;
->> +
->> +	if (!(vma->vm_flags & VM_SHARED)) {
->> +		/*
->> +		 * We can only special-case on exclusive anonymous pages,
->> +		 * because we know that our write-fault handler similarly would
->> +		 * map them writable without any additional checks while holding
->> +		 * the PT lock.
->> +		 */
->> +		page = vm_normal_page(vma, addr, pte);
-> 
-> I guess we cannot call vm_normal_page() twice, once for prot_numa and once
-> here, in practice...
-
-I guess we could, but it doesn't necessarily make the code easier to
-read :) And we want to skip protnone either way.
-
-> 
->> +		if (!page || !PageAnon(page) || !PageAnonExclusive(page))
->> +			return false;
->> +	}
->> +
->> +	return true;
->> +}
-> 
-> Note that there is a small downside to all of that. Assume you mprotect()
-> a single page from RO to RW and you have many threads.
-> 
-> With my pending patch you would avoid the TLB shootdown (and get a PF).
-> With this patch you would get a TLB shootdown and save the PF. IOW, I
-> think it is worthy to skip the shootdown as well in such a case and
-> instead flush the TLB on spurious page-faults. But I guess that’s for
-> another patch.
-
-Just so I understand correctly: your optimization avoids the flush when
-effectively, nothing changed (R/O -> R/O).
-
-And the optimization for this case here would be, to avoid the TLB flush
-when similarly not required (R/O -> R/W).
-
-Correct?
-
+								Honza
 -- 
-Thanks,
-
-David / dhildenb
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

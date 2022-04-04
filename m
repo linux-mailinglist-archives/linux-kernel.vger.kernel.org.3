@@ -2,155 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B414F13CD
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 13:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E7A84F13D5
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 13:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359500AbiDDL23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 07:28:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34666 "EHLO
+        id S1359500AbiDDLe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 07:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235756AbiDDL2Z (ORCPT
+        with ESMTP id S1349295AbiDDLe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 07:28:25 -0400
-Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B78286F4;
-        Mon,  4 Apr 2022 04:26:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description; bh=LnoUpy8pxIXgWxR6IblJWmslcB05NK68pxcDoWJlSfk=; b=DS0Ou
-        KQrIxO23qLzQ+DvY1bPnIzGjxCX+gnmtE3eBpqcpIXxFZjFSi0XgG2mnhdIc4Ik7fv8qpH+1Rgp+N
-        bQAnGfv54pnAWgdwYR1UMrCb9NdGt+QiiVIqgiNUo92tROAqdINZ3OmjptNRJAHgYZjzg5ApcVHgF
-        8qi5gA8zjgnPzlvpFLmA4qADwJOYI+N1gZVF1k9AmJVnnNoySJHIcnq0XUMJuDM7rDIdn+zyxYOyP
-        WRSJp0L+JBAhncHRrGKPhcBvUAs4WOLn31lJ2K4mOzr81hAXgB6yJ+DI8y9+qs/yI9COakF74xcid
-        XUYRM30D38syFfuDQtjFlGRJoQvXw==;
-Received: from [81.174.171.191] (helo=donbot)
-        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <john@metanate.com>)
-        id 1nbKqe-0004ue-SJ; Mon, 04 Apr 2022 12:26:16 +0100
-Date:   Mon, 4 Apr 2022 12:26:15 +0100
-From:   John Keeping <john@metanate.com>
-To:     Corentin Labbe <clabbe@baylibre.com>
-Cc:     heiko@sntech.de, herbert@gondor.apana.org.au, krzk+dt@kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v4 06/33] crypto: rockchip: add fallback for cipher
-Message-ID: <YkrV1z5GPVXc+d/X@donbot>
-References: <20220401201804.2867154-1-clabbe@baylibre.com>
- <20220401201804.2867154-7-clabbe@baylibre.com>
+        Mon, 4 Apr 2022 07:34:57 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E063C739
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 04:33:01 -0700 (PDT)
+Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KX7rM1QGyz67Lnh;
+        Mon,  4 Apr 2022 19:30:59 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Mon, 4 Apr 2022 13:32:58 +0200
+Received: from localhost.localdomain (10.69.192.58) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 4 Apr 2022 12:32:55 +0100
+From:   John Garry <john.garry@huawei.com>
+To:     <joro@8bytes.org>, <will@kernel.org>, <robin.murphy@arm.com>
+CC:     <mst@redhat.com>, <jasowang@redhat.com>,
+        <iommu@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>,
+        <chenxiang66@hisilicon.com>, <thunder.leizhen@huawei.com>,
+        <jean-philippe@linaro.org>, <linuxarm@huawei.com>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH RESEND v5 0/5] iommu: Allow IOVA rcache range be configured
+Date:   Mon, 4 Apr 2022 19:27:09 +0800
+Message-ID: <1649071634-188535-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220401201804.2867154-7-clabbe@baylibre.com>
-X-Authenticated: YES
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 08:17:37PM +0000, Corentin Labbe wrote:
-> The hardware does not handle 0 size length request, let's add a
-> fallback.
-> Furthermore fallback will be used for all unaligned case the hardware
-> cannot handle.
-> 
-> Fixes: ce0183cb6464b ("crypto: rockchip - switch to skcipher API")
-> Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-> ---
-> diff --git a/drivers/crypto/rockchip/rk3288_crypto_skcipher.c b/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
-> index bbd0bf52bf07..c6b601086c04 100644
-> --- a/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
-> +++ b/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
-> @@ -13,6 +13,71 @@
->  
->  #define RK_CRYPTO_DEC			BIT(0)
->  
-> +static int rk_cipher_need_fallback(struct skcipher_request *req)
-> +{
-> +	struct scatterlist *sgs, *sgd;
-> +	unsigned int todo, len;
-> +	unsigned int bs = crypto_skcipher_blocksize(tfm);
-> +
-> +	if (!req->cryptlen)
-> +		return true;
-> +
-> +	len = req->cryptlen;
-> +	sgs = req->src;
-> +	while (sgs) {
-> +		if (!IS_ALIGNED(sgs->offset, sizeof(u32))) {
-> +			return true;
-> +		}
-> +		todo = min(len, sgs->length);
-> +		if (todo % bs) {
-> +			return true;
-> +		}
-> +		len -= todo;
-> +		sgs = sg_next(sgs);
-> +	}
-> +	len = req->cryptlen;
-> +	sgd = req->dst;
-> +	while (sgd) {
-> +		if (!IS_ALIGNED(sgd->offset, sizeof(u32))) {
-> +			return true;
-> +		}
-> +		todo = min(len, sgd->length);
-> +		if (todo % bs) {
-> +			return true;
-> +		}
-> +		len -= todo;
-> +		sgd = sg_next(sgd);
-> +	}
-> +	sgs = req->src;
-> +	sgd = req->dst;
-> +	while (sgs && sgd) {
-> +		if (sgs->length != sgd->length)
+For streaming DMA mappings involving an IOMMU and whose IOVA len regularly
+exceeds the IOVA rcache upper limit (meaning that they are not cached),
+performance can be reduced. 
 
-This check still seems to be triggering the fallback when it is not
-needed.
+This may be much more pronounced from commit 4e89dce72521 ("iommu/iova:
+Retry from last rb tree node if iova search fails"), as discussed at [0].
 
-I've done some testing with fscrypt and the series is working great, but
-the stats show the fallback triggering more than I'd expect.  With some
-extra logging here I see output like:
+IOVAs which cannot be cached are highly involved in the IOVA ageing issue,
+as discussed at [1].
 
-	sgs->length=32 sgd->length=255 req->cryptlen=16
+This series allows the IOVA rcache range be configured, so that we may
+cache all IOVAs per domain, thus improving performance.
 
-In this case sgs and sgd are both the first (and only) entries in the
-list.  Should this take account of req->cryptlen as well?
+A new IOMMU group sysfs file is added - max_opt_dma_size - which is used
+indirectly to configure the IOVA rcache range:
+/sys/kernel/iommu_groups/X/max_opt_dma_size
 
-In fact, can't this whole function be folded into one loop over src and
-dst at the same time, since all the checks must be the same?  Something
-like this (untested):
+This file is updated same as how the IOMMU group default domain type is
+updated, i.e. must unbind the only device in the group first.
 
-	while (sgs && sgd) {
-		if (!IS_ALIGNED(sgs->offset, sizeof(u32)) ||
-		    !IS_ALIGNED(sgd->offset, sizeof(u32)))
-			return true;
+The inspiration here comes from block layer request queue sysfs
+"optimal_io_size" file, in /sys/block/sdX/queue/optimal_io_size
 
-		todo = min(len, sgs->length);
-		if (todo % bs)
-			return true;
+Some old figures* for storage scenario (when increasing IOVA rcache range
+to cover all DMA mapping sizes from the LLD):
+v5.13-rc1 baseline:			1200K IOPS
+With series:				1800K IOPS
 
-		if (sgd->length < todo)
-			return true;
+All above are for IOMMU strict mode. Non-strict mode gives ~1800K IOPS in
+all scenarios.
 
-		len -= todo;
-		sgs = sg_next(sgs);
-		sgd = sg_next(sgd);
-	}
+Based on v5.18-rc1
+* I lost my high data throughout test setup
 
-	if (len)
-		return true;
+Differences to v4:
+https://lore.kernel.org/linux-iommu/1626259003-201303-1-git-send-email-john.garry@huawei.com/
+- Major rebase
+- Change the "Refactor iommu_group_store_type()" to not use a callback
+  and an op type enum instead
+  - I didn't pick up Will's Ack as it has changed so much
+- Use a domain feature flag to keep same default group type
+- Add wrapper for default IOVA rcache range
+- Combine last 2x patches
 
-> +			return true;
-> +		sgs = sg_next(sgs);
-> +		sgd = sg_next(sgd);
-> +	}
-> +	return false;
-> +}
+[0] https://lore.kernel.org/linux-iommu/20210129092120.1482-1-thunder.leizhen@huawei.com/
+[1] https://lore.kernel.org/linux-iommu/1607538189-237944-1-git-send-email-john.garry@huawei.com/
+
+John Garry (5):
+  iommu: Refactor iommu_group_store_type()
+  iova: Allow rcache range upper limit to be flexible
+  iommu: Allow iommu_change_dev_def_domain() realloc same default domain
+    type
+  iommu: Allow max opt DMA len be set for a group via sysfs
+  iova: Add iova_len argument to iova_domain_init_rcaches()
+
+ .../ABI/testing/sysfs-kernel-iommu_groups     |  16 ++
+ drivers/iommu/dma-iommu.c                     |  15 +-
+ drivers/iommu/iommu.c                         | 202 +++++++++++++-----
+ drivers/iommu/iova.c                          |  37 ++--
+ drivers/vdpa/vdpa_user/iova_domain.c          |   4 +-
+ include/linux/iommu.h                         |   7 +
+ include/linux/iova.h                          |   6 +-
+ 7 files changed, 212 insertions(+), 75 deletions(-)
+
+-- 
+2.26.2
+

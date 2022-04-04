@@ -2,145 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0804F1E6D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3A34F1E1B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:24:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379855AbiDDVrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
+        id S1346051AbiDDVzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380646AbiDDUth (ORCPT
+        with ESMTP id S1380652AbiDDUuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 16:49:37 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2058.outbound.protection.outlook.com [40.107.94.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFF9205CE
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 13:47:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dbfIaPjxTV2sW62awVpJbYlhaajeW6O4MYvV5f8ktZ2VhsfDDk0SegGzZRoZWriqv/BJNi+lnPicapYSsNYrinQdynGNvIGgvxftt8va27C2xD5A48QNKhQ+3P3qGEX52TWJ1J53otFtG6eAivzFSr+JygOODosjUhocd7AVDMIptP8KgVAAYYjvCSFubC4Y7M2wHaBxSEV0uTgkl3ZD8aYZ7rFtgvshJNB3k0RQrmgmN+3LARXTEWkGgzq/HcHY7jyGEb8gCDqREQJ5Mcmo2Cd1DrdMuNVyJMumwgVdKq9g06gQfge2mxMeExfbEVdpY3QMA8EbggFQsNGOTSBJFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cDY8rceRpGa3zaQsjeriXFqtawkmJXs+Bnz070b7r4U=;
- b=YgYtmMvsw+jCI9lJeVC2HMMoCAg0OdAKQs2HpDscYfploLSzn1tlEdG47ye7BPJEPmmKJSEGa14IxDiHQH2EuiVc5uqGC41OhGHvaRjpJHCEAo/+JXKn5PC6o5pwnrR4pHEnZPs5t581RBi44Lt1YaUKmRU14Stn9oP4iQWEoIbqICRUA2dJl2j8kjYpVuKaKTdxXjFtC2PVjVJ9hzozwois4aJFI0Le2tpjEDjuQ88ds/cWgd40hnbNO5vaJQQ8SbyagJPA/AJTdP5Or+pgzddZWHHIeOh0WkBE9OWetxmTZwQUqPHWFVgqdNImUxDgeM2xrg7jPIWwI/6Y5hMFgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=8bytes.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cDY8rceRpGa3zaQsjeriXFqtawkmJXs+Bnz070b7r4U=;
- b=5ksGPDvdKv/MEKsOucF/TskflQSYSFr5yFy7ltl4oprcRgNZ4BwrSx/Ik8egquyFfUS3Y1gqBoYG7k6HuAMef84vZCU4Y50EI7agR+FfOZdDqkWFt/Ftl8NWpgbg3milR+WW6xB/QPgqJhTfj4EPMCYaVKjSmEGseTFXcI7Yo8E=
-Received: from BN9PR03CA0501.namprd03.prod.outlook.com (2603:10b6:408:130::26)
- by MWHPR12MB1839.namprd12.prod.outlook.com (2603:10b6:300:10b::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Mon, 4 Apr
- 2022 20:47:35 +0000
-Received: from BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:130:cafe::8c) by BN9PR03CA0501.outlook.office365.com
- (2603:10b6:408:130::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31 via Frontend
- Transport; Mon, 4 Apr 2022 20:47:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT039.mail.protection.outlook.com (10.13.177.169) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5123.19 via Frontend Transport; Mon, 4 Apr 2022 20:47:33 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 4 Apr
- 2022 15:47:32 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>
-CC:     Christoph Hellwig <hch@infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        Suthikulpanit Suravee <Suravee.Suthikulpanit@amd.com>,
-        Hegde Vasant <Vasant.Hegde@amd.com>,
-        "open list" <linux-kernel@vger.kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v2 0/2] Fix issues with untrusted devices and AMD IOMMU
-Date:   Mon, 4 Apr 2022 15:47:21 -0500
-Message-ID: <20220404204723.9767-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 4 Apr 2022 16:50:32 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFB75FD0
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 13:48:34 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id q26so4940971edc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 13:48:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=oSPKjJEXpR8ZygxdI2fFCg0aO4+x2fKb+7cSs9wJlWA=;
+        b=pbvAQYx+hG9bKJMK4uwgVCaQEMZOIUeLgvpTtPPPCWEqnX3yvZ7V3a7fs3rqgDrvIe
+         cpwsBHqT6X7uTknE2lA4tw4szXj8YpqBYNLLGG+vjXnjw0EWTPaYSGTLWPzNoesu+x08
+         lWNSR7tPXjmZHAgkK42SuabRStHU5/XDx1rbseciQD8xyuqj1vh02MfaKp4DjRu6mJAo
+         Yy/POyg/bLGuYqmR9eB2yZOPqVbc6O3JXnGzW3FGLWQgRe6Ccs3tADsY0F2iw+V+ZZBV
+         o0y9S0IAPTfx6cFW+WUZFjrSdVcxzQW8oP8rUwizjiM3IgaeiOG1J2WvGGBrfPNokeWs
+         cu0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=oSPKjJEXpR8ZygxdI2fFCg0aO4+x2fKb+7cSs9wJlWA=;
+        b=lqFLm9u2FnC5Cb5A0X2HjV9Wj5oZ2K3X8LVhkjkFVu67m6IGuBsed+jWhlKSwpCbkd
+         fc3hIpMAbdrRcG5eZUcZLihaOI1Z19jA163p67nQ5h3UKCYYFCRzrfcPpOb3Qfd18Rug
+         tOJf2fQ7BlyvOtuJ8I4lDKHCPESWGLKktu5BWitCWD6X3AZk5jMaiH4l+nZH8nx25Jnv
+         TgKOSdvCgg95XORWfJkJxLu7gW8yJU2biatXsp0bjE5TlK802ecq06WGwjdFgvOVnHtx
+         WP2iRa/bUvheL82SMKkfhAih7J9m4EwRROUQ+cdSQMvMo20CbtgJzBHiQaitMLX7smYo
+         xiJw==
+X-Gm-Message-State: AOAM531kVBLi/A8YXF8b/22ywDgDMw6A9li+LIhm8+w9ssjGFsILFVAI
+        Wb0E+9jKAKwvvnTkjF47gupyDaU9Vo4=
+X-Google-Smtp-Source: ABdhPJzaOScMIpUbkzhVH+5rt+NUH42tP5lvytCaMcRvvdxICEaZDlT4kyZQT1SUfUUSlqkuPLmyyg==
+X-Received: by 2002:a05:6402:3593:b0:419:7a2d:4b0b with SMTP id y19-20020a056402359300b004197a2d4b0bmr2044719edc.39.1649105312661;
+        Mon, 04 Apr 2022 13:48:32 -0700 (PDT)
+Received: from matrix-ESPRIMO-P710 (p54a074e9.dip0.t-ipconnect.de. [84.160.116.233])
+        by smtp.gmail.com with ESMTPSA id y17-20020a056402359100b0041926ea1e12sm5960734edc.53.2022.04.04.13.48.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 13:48:31 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 22:48:30 +0200
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Forest Bond <forest@alittletooquiet.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/6] staging: vt6655: Fix CamelCase in upc.h and started
+ in mac.h
+Message-ID: <cover.1649103348.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ee9ee406-8356-40b9-5bd7-08da167c5858
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1839:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR12MB18396E8B3BAB1796E8155F7CE2E59@MWHPR12MB1839.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: plesJ/uUXjc2ZTat2zLTXVBktm1Skt9hkMM1pfv554bP9QxOfamovFGiQ80Nd14+25H7GsVYu/VHPEJRCwd0vLXmuHTODfnSUNNZdncSWPsphSLZBbmjn5pVO3Tqf6OZrp7V8SkaDvM2HK3KSltPuXF5viYIrNSSdsjKqLb5Ia0mQdZ29AM7u7nq2gfGvB1WhIA/gPbFq38L/VbcTqrsdIw6woioUguI64Y9bftRj+gAcWR0TXTYhjFuOBrctaGTBhMjcfm7s+gike2wfiU49Wl6JeB3Pez8IwR5uqtdZUKDpQsnBjZS3UyjKyn7z3pX+vMLR2/SdyxDIjSV94m+eO5W94/C75X2hjJ2j2W2ENQT1X8w5PlVb4pM763SA0Bv1BtpIrGIgLOEm/uVufJ+y9PI16cgQxtuzPjWnb42J4os3noyNnf0gaqOM8yJsufC+phJ4e/Bc7Jg8XbBIY9ZQf/EN9AkkKzYgNSQGEReOyyaqY4iEGSYRw1j0LJ9CkvofEfOA/M18LYHSh8qABpV4VAbMqyvCl9y3KpOB+RYpo+8P4u2A3grBsyyZtmxARTD16HmuKwW8LPmdVJV0RX2EUA0X4te9wgpWmCic8fumJ5YINUBEuoVPBq5ldLYpfdYEs60w+BpLw/kAUoLHFdpoFCqpiUadDNB+Mn9PwraJY1Era0uXnP3L2brYOsysAoz05llupbs6+oNoknd8ecgvA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(54906003)(8936002)(5660300002)(356005)(44832011)(81166007)(6666004)(508600001)(110136005)(70206006)(86362001)(40460700003)(316002)(8676002)(70586007)(4326008)(336012)(426003)(186003)(16526019)(2616005)(26005)(1076003)(47076005)(83380400001)(7696005)(2906002)(36860700001)(82310400004)(36756003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2022 20:47:33.9506
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ee9ee406-8356-40b9-5bd7-08da167c5858
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1839
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's been observed that plugging in a TBT3 NVME device to a port marked
-with ExternalFacingPort that some DMA transactions occur that are not a
-full page and so the DMA API attempts to use software bounce buffers
-instead of relying upon the IOMMU translation.
+Start fix CamelCase or do-while{0} issues in macros by
+- removing
+- renaming
+as both issues are not accepted by checkpatch.pl
 
-This doesn't work and leads to messaging like:
+---
+V1 -> V2: Merged first two patches into one.
+          Patch 6/6: changed from (macro to function) to delete macro
+          Updated cover-letter description
 
-swiotlb buffer is full (sz: 4096 bytes), total 0 (slots), used 0 (slots)
+Tested with vt6655 on mini PCI Module
+Transferred this patch over vt6655
 
-The bounce buffers were originally set up, but torn down during
-the boot process.
-* This happens because as part of IOMMU initialization
-  `amd_iommu_init_dma_ops` gets called and resets the global swiotlb to 0.
-* When late_init gets called `pci_swiotlb_late_init` `swiotlb_exit` is
-  called and the buffers are torn down.
+Philipp Hortmann (6):
+  staging: vt6655: Remove unused macros in mac.h
+  staging: vt6655: Rename constant definitions with CamelCase
+  staging: vt6655: Rename macro arguments with CamelCase
+  staging: vt6655: Rename macros VNSvInPortB,W,D
+  staging: vt6655: Rename macros VNSvOutPortB,W,D
+  staging: vt6655: Remove macro PCAvDelayByIO
 
-This can be observed in the logs:
-```
-[    0.407286] AMD-Vi: Extended features (0x246577efa2254afa): PPR NX GT [5] IA GA PC GA_vAPIC
-[    0.407291] AMD-Vi: Interrupt remapping enabled
-[    0.407292] AMD-Vi: Virtual APIC enabled
-[    0.407872] software IO TLB: tearing down default memory pool
-```
-This series fixes the behavior of AMD IOMMU to enable swiotlb so that
-non-page aligned DMA goes through a bounce buffer.
-
-It also adds a message to help with debugging similar problems in the
-future.
-
-Mario Limonciello (2):
-  iommu/amd: Enable swiotlb in all cases
-  dma-iommu: Check that swiotlb is active before trying to use it
-
- drivers/iommu/amd/iommu.c | 7 -------
- drivers/iommu/dma-iommu.c | 5 +++++
- 2 files changed, 5 insertions(+), 7 deletions(-)
+ drivers/staging/vt6655/baseband.c    |  16 +-
+ drivers/staging/vt6655/card.c        |  60 +++---
+ drivers/staging/vt6655/channel.c     |   4 +-
+ drivers/staging/vt6655/device_main.c |  30 +--
+ drivers/staging/vt6655/mac.h         | 293 ++++++++-------------------
+ drivers/staging/vt6655/power.c       |   4 +-
+ drivers/staging/vt6655/rf.c          |  14 +-
+ drivers/staging/vt6655/rxtx.c        |   4 +-
+ drivers/staging/vt6655/srom.c        |  18 +-
+ drivers/staging/vt6655/upc.h         |  47 ++---
+ 10 files changed, 172 insertions(+), 318 deletions(-)
 
 -- 
-2.34.1
+2.25.1
 

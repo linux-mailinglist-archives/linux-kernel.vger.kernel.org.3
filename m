@@ -2,64 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F434F0FBF
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 09:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21B04F0FC3
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 09:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377588AbiDDHHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 03:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41536 "EHLO
+        id S1377593AbiDDHIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 03:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377585AbiDDHHo (ORCPT
+        with ESMTP id S238837AbiDDHIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 03:07:44 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F83335AB4
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 00:05:48 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id k14so7650750pga.0
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 00:05:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9RGv/LS+O2kSbyuxARrBEe2LVUddokYjQQ+aO586TDo=;
-        b=QYIsZEs0UGdLrC0ERwEndhrqseOZ352Yv5Lld/YINfgm+IR1Wagq9ChtL85zJcY0be
-         HL/llDeOtvM36bW4wU7hZE1qRIjnyTyRqqQj3DpFUY0u2KZav+PvH/6lx3vs3MC2p6T/
-         +RiZrQTbaeH9sG3LfWtFn5AgpG2dDiiv7MAxpf6IIPKMdLp+XJSdQ3RWx/u8+7kIhIi1
-         /jFglwi6Rg5vhkdnSCEQQiIWTUcSZj2X9DF7ADNMyCkPNzNZzZEQpEC/07t4xyq+xPJw
-         p3uaYKKZY6XqQ14vUEgYh0Z1Xnvg+shEfK8gVca8wqe3I3cNt9s5Zk5IVZEN1DdvLyMC
-         iFHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9RGv/LS+O2kSbyuxARrBEe2LVUddokYjQQ+aO586TDo=;
-        b=2X5jur38rB4VCcKRJTP7NwWJ83NdLeBL7XhKIo9DHcVbpw2Qz6TdL0AO3Ux4zynIzk
-         Xi+ypzm54hfGFoF/IQXnNnYDVs4DLkIQ36IfFKKG+Vb4eCIllU+3u581BJvc37te/1pe
-         Ki7MOfZMikDvuncW2k/MtwokHZNUIOt1bX0hSNm9sZWU2bOcocrYRbxjQDK/z+p+sXca
-         UgIveNeX3tENEKSqtWHTk7gT1ddgCdrBRqcDV1z+noDo3Nf86anq9DS/abbhut1wKF3T
-         6g7+M0vTicxocLZMlVjGO/4ae8R7tNUK6kFUu00crQ4U6w5QqqUJw81JUKvWc6p6KWt6
-         IU0Q==
-X-Gm-Message-State: AOAM530uu8JXiPveEyigaPqUhr9fykchEylN2jYd21028eZJhAZw943g
-        Sk8hALNDq+jvyWYrCM39BOOXzaH2GfsIglFVSqECmg==
-X-Google-Smtp-Source: ABdhPJyr4EJ2GdaFWB3CtMS0IRaG/2gAwTeGZSFZmtrO3ONGcy5UJ5F/eR3/A5L+mlokCqLTIzlFUAiUQIlnWsqQYpw=
-X-Received: by 2002:a63:5747:0:b0:381:54b9:b083 with SMTP id
- h7-20020a635747000000b0038154b9b083mr24407473pgm.178.1649055947667; Mon, 04
- Apr 2022 00:05:47 -0700 (PDT)
+        Mon, 4 Apr 2022 03:08:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C7B340E0;
+        Mon,  4 Apr 2022 00:06:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F7B361223;
+        Mon,  4 Apr 2022 07:06:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23734C340EE;
+        Mon,  4 Apr 2022 07:06:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649056007;
+        bh=kBUstR3J4ItDnVp87evnZA04BHghVTsaKKXGf6QdOCs=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=Tg/FdtHFmcrmCnSrrTX6e2TfhXvy+gFfSfrRcwTmUN+vOL+1fUZr1X+O9oNBsK77G
+         j4ChIZ0Ix083n7qG+D3ZNnSEM8lrbY4Uq3iQQwrHJu+meR56KfXxfiJHs7vQ0XMaRk
+         fs/xuIsVC64ZovxMTZFxb0Tw+iN2In5PF1eiIeLwqk3rpM4LanwAswPaJvK+0x2CiS
+         MilTbKqH2arAIBqv8rfpBfv+e2GfoR0r67Dkn2opw6HL32p6G8fiuQHRuvMLUXjWyT
+         +oqJlrBF0Hw7yZayJMq9oMj2UWYAhFUjmc4NY19QxRoDLi/oFTzx4cvE4JrEUOgsol
+         lXXzkUj2VF3vA==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ath11k: select QRTR for AHB as well
+References: <20220401093554.360211-1-robimarko@gmail.com>
+        <87ilrsuab4.fsf@kernel.org>
+        <CAOX2RU4pCn8C-HhhuOzyikjk2Ax3VDcjMKh7N6X5HeMN4xLMEg@mail.gmail.com>
+Date:   Mon, 04 Apr 2022 10:06:40 +0300
+In-Reply-To: <CAOX2RU4pCn8C-HhhuOzyikjk2Ax3VDcjMKh7N6X5HeMN4xLMEg@mail.gmail.com>
+        (Robert Marko's message of "Sat, 2 Apr 2022 11:52:21 +0200")
+Message-ID: <87zgl1s4xr.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220404064149.59634-1-manivannan.sadhasivam@linaro.org>
-In-Reply-To: <20220404064149.59634-1-manivannan.sadhasivam@linaro.org>
-From:   Loic Poulain <loic.poulain@linaro.org>
-Date:   Mon, 4 Apr 2022 09:05:11 +0200
-Message-ID: <CAMZdPi9LppZCpf3zvbSXEtmwSEip4VqBN3Z+JLLqbLrz1HtHiA@mail.gmail.com>
-Subject: Re: [PATCH] bus: mhi: host: pci_generic: Add missing poweroff() PM callback
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     mhi@lists.linux.dev, quic_hemantk@quicinc.com,
-        quic_bbhatt@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,45 +58,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Apr 2022 at 08:41, Manivannan Sadhasivam
-<manivannan.sadhasivam@linaro.org> wrote:
->
-> During hibernation process, once thaw() stage completes, the MHI endpoint
-> devices will be in M0 state post recovery. After that, the devices will be
-> powered down so that the system can enter the target sleep state. During
-> this stage, the PCI core will put the devices in D3hot. But this transition
-> is allowed by the MHI spec. The devices can only enter D3hot when it is in
-> M3 state.
->
-> So for fixing this issue, let's add the poweroff() callback that will get
-> executed before putting the system in target sleep state during
-> hibernation. This callback will put the device in M3 state and that would
-> allow it to receive the D3hot afterwards.
->
-> Cc: stable@vger.kernel.org
-> Fixes: 5f0c2ee1fe8d ("bus: mhi: pci-generic: Fix hibernation")
-> Reported-by: Hemant Kumar <quic_hemantk@quicinc.com>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Robert Marko <robimarko@gmail.com> writes:
 
-Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
-
-
-> ---
->  drivers/bus/mhi/host/pci_generic.c | 1 +
->  1 file changed, 1 insertion(+)
+> On Fri, 1 Apr 2022 at 16:51, Kalle Valo <kvalo@kernel.org> wrote:
+>>
+>> Robert Marko <robimarko@gmail.com> writes:
+>>
+>> > Currently, ath11k only selects QRTR if ath11k PCI is selected, however
+>> > AHB support requires QRTR, more precisely QRTR_SMD because it is using
+>> > QMI as well which in turn uses QRTR.
+>> >
+>> > Without QRTR_SMD AHB does not work, so select QRTR in ATH11K and then
+>> > select QRTR_SMD for ATH11K_AHB and QRTR_MHI for ATH11K_PCI.
+>> >
+>> > Tested-on: IPQ8074 hw2.0 AHB WLAN.HK.2.5.0.1-01208-QCAHKSWPL_SILICONZ-1
+>> >
+>> > Signed-off-by: Robert Marko <robimarko@gmail.com>
+>> > ---
+>> >  drivers/net/wireless/ath/ath11k/Kconfig | 3 ++-
+>> >  1 file changed, 2 insertions(+), 1 deletion(-)
+>> >
+>> > diff --git a/drivers/net/wireless/ath/ath11k/Kconfig b/drivers/net/wireless/ath/ath11k/Kconfig
+>> > index ad5cc6cac05b..b45baad184f6 100644
+>> > --- a/drivers/net/wireless/ath/ath11k/Kconfig
+>> > +++ b/drivers/net/wireless/ath/ath11k/Kconfig
+>> > @@ -5,6 +5,7 @@ config ATH11K
+>> >       depends on CRYPTO_MICHAEL_MIC
+>> >       select ATH_COMMON
+>> >       select QCOM_QMI_HELPERS
+>> > +     select QRTR
+>> >       help
+>> >         This module adds support for Qualcomm Technologies 802.11ax family of
+>> >         chipsets.
+>> > @@ -15,6 +16,7 @@ config ATH11K_AHB
+>> >       tristate "Atheros ath11k AHB support"
+>> >       depends on ATH11K
+>> >       depends on REMOTEPROC
+>> > +     select QRTR_SMD
+>> >       help
+>> >         This module adds support for AHB bus
+>> >
+>> > @@ -22,7 +24,6 @@ config ATH11K_PCI
+>> >       tristate "Atheros ath11k PCI support"
+>> >       depends on ATH11K && PCI
+>> >       select MHI_BUS
+>> > -     select QRTR
+>> >       select QRTR_MHI
+>> >       help
+>> >         This module adds support for PCIE bus
+>>
+>> I now see a new warning:
+>>
+>> WARNING: unmet direct dependencies detected for QRTR_SMD
+>>   Depends on [n]: NET [=y] && QRTR [=m] && (RPMSG [=n] || COMPILE_TEST [=n] && RPMSG [=n]=n)
+>>   Selected by [m]:
+>>   - ATH11K_AHB [=m] && NETDEVICES [=y] && WLAN [=y] && WLAN_VENDOR_ATH [=y] && ATH11K [=m] && REMOTEPROC [=y]
 >
-> diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
-> index 9527b7d63840..b1c0a8887496 100644
-> --- a/drivers/bus/mhi/host/pci_generic.c
-> +++ b/drivers/bus/mhi/host/pci_generic.c
-> @@ -1085,6 +1085,7 @@ static const struct dev_pm_ops mhi_pci_pm_ops = {
->         .resume = mhi_pci_resume,
->         .freeze = mhi_pci_freeze,
->         .thaw = mhi_pci_restore,
-> +       .poweroff = mhi_pci_suspend,
->         .restore = mhi_pci_restore,
->  #endif
->  };
-> --
-> 2.25.1
->
+> Ahh yeah, since it's SMD then it requires RPMGS which in turn requires
+> more stuff. What do you think about making it depend on QRTR_SMD
+> instead, because without it AHB literally does not work?
+
+To be honest I don't know qrtr well enough to comment right now :)
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

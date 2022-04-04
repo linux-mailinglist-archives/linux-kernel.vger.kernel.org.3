@@ -2,125 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A325F4F15E6
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 15:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 464334F15CE
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 15:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353100AbiDDNcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 09:32:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39564 "EHLO
+        id S1351411AbiDDN0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 09:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352768AbiDDNcL (ORCPT
+        with ESMTP id S241154AbiDDN0G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 09:32:11 -0400
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD7421839;
-        Mon,  4 Apr 2022 06:30:15 -0700 (PDT)
-Received: by mail-ot1-f44.google.com with SMTP id 88-20020a9d0ee1000000b005d0ae4e126fso5223142otj.5;
-        Mon, 04 Apr 2022 06:30:15 -0700 (PDT)
+        Mon, 4 Apr 2022 09:26:06 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8078BF4
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 06:24:08 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id q200so7552209qke.7
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 06:24:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Dj909oRaNRb7301+COOAr97OsAL18eivV1Pl1t4/Y+Y=;
+        b=R2BOiI73bs4bhzycM+H031R9LnpSNDl9hKlfXb/Dsoc/YoMnaNNRKuQM34krIxm7bA
+         UdsRcGSrXdyKB/quZlwiHCdQaKXaV+f12rnrSF+IMmSYVRVeRgWOr1Rs7fay6xmOVLY8
+         gSTwID3IsnJpPaf4UShy9BcWjNLRqILCMZ+ILJ3BbBwQLna9/74cnfwKsp8+RXQ6WYz9
+         dITlk4nDyLpanZaCHbh4P8ed9NWhbgc+yoMtAyXPlBDSHqcsPyowJ4JOOSG3rDrQZvfw
+         sFTcXv/Ie18QUyJRu8j5PZ+bBcdiGYnl/hzo2dqUc/Yc3Pwe1Ut+ImfYz41fTLY4VEPS
+         sT9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZellbTNVDmTMxAgtDVNk9zjzT/qb3sIv3YZKoTrbp+w=;
-        b=1KfbxEDz38L5R9KdesZHkY5ynl/UX0AnY9Fyb+czL6Gbvf3vJ/l2ULBhZgg/uHwL4T
-         aykgjcV25Ib2yaccgxUc4diqfj/MqbPGkkPEiPGHcE+4yBd9m7kyCEVeHvw2TGvmOEvq
-         jBzRsZ90h/zHC8aeMlIfVceZPGzhILwdE9WK9YOGJCdeudOUDnxlW7OyQwT5Dby+qsBT
-         SvY2q6wQZEw9y9/gSwlgQrlTanTDU4YlQLCSAHeRLCxxDgCCTxp9cRAstQABcd0vAbLQ
-         V3ogOPtlBFtU5em14L0DYTLK0nyCIChIoUigZGOF2Ed3/8xfjbD/o3ColF1oOYXZeNxp
-         gZiA==
-X-Gm-Message-State: AOAM533cm4bpClOPyYrkfJGhw7j831GpmeTV/+J3+tdysiN0zhjNQYbj
-        oRjkJBDz8uYZlUA+bJkiV6wmVyAvA0yotQ==
-X-Google-Smtp-Source: ABdhPJwfzMcr7Vf5J9Ba+NiuXJokEEdlN7dIQtrMSP2AO/+MkLtbJL7dhYZeavgWHKEtMv4vV+iZUA==
-X-Received: by 2002:a9d:1b68:0:b0:5c9:5da1:3752 with SMTP id l95-20020a9d1b68000000b005c95da13752mr5858otl.354.1649079014713;
-        Mon, 04 Apr 2022 06:30:14 -0700 (PDT)
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com. [209.85.210.41])
-        by smtp.gmail.com with ESMTPSA id o2-20020a05687072c200b000d9ae3e1fabsm4144385oak.12.2022.04.04.06.30.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 06:30:14 -0700 (PDT)
-Received: by mail-ot1-f41.google.com with SMTP id n19-20020a9d7113000000b005cd9cff76c3so7242708otj.1;
-        Mon, 04 Apr 2022 06:30:14 -0700 (PDT)
-X-Received: by 2002:a25:45:0:b0:633:96e2:2179 with SMTP id 66-20020a250045000000b0063396e22179mr20945994yba.393.1649078582711;
- Mon, 04 Apr 2022 06:23:02 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Dj909oRaNRb7301+COOAr97OsAL18eivV1Pl1t4/Y+Y=;
+        b=8JJO1VagTtySTKI1xARiU4cbqzIygDROW9/97ElmxK4hxHNgHdpuLWhaDNJetpjvXW
+         qi57n36sPxL7W/eP9jprPiEcEfZBB1yL/pmirFsJjPZJVgRmnpDv2P5yJ9xlZlqvLEN0
+         bAMLK7uvF9iyKcIVYejLy1B8S43zjyhNX/WPULJBgjE67vKM/Ug8phFQbEvEcYixDWRq
+         u2hcrg1j0PbqMUPb9mNywC4NUerdP9eM46IeUd7gA7Y46T5GE2n0mArPYkARlJOdyD/G
+         NmP71tQoaw3w6FQ8ICpYuzmCIz1W5OcfCqZb8ZCnYctBya95oRY48HHrWcRCIJp4HVYg
+         o9oQ==
+X-Gm-Message-State: AOAM532YHObsEFrwLeItdzmtSLI12Xg+pui68XkXtADgavflcLhtqzi3
+        LiQKkZ6AL0DI7QkU/d4+0xrG/g==
+X-Google-Smtp-Source: ABdhPJwd0cXQeoez8xJ261ZBrwRTk36GjcX534AnDsLUP+ScvuOwmJyyalnuuG5orGBA0Q0zQDNBsg==
+X-Received: by 2002:a37:c4c:0:b0:67b:2b35:762 with SMTP id 73-20020a370c4c000000b0067b2b350762mr13415114qkm.6.1649078647740;
+        Mon, 04 Apr 2022 06:24:07 -0700 (PDT)
+Received: from ziepe.ca ([206.223.160.26])
+        by smtp.gmail.com with ESMTPSA id d126-20020a37b484000000b0067e60283d08sm6476475qkf.40.2022.04.04.06.24.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 06:24:07 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1nbMgf-00CAIu-Pe; Mon, 04 Apr 2022 10:24:05 -0300
+Date:   Mon, 4 Apr 2022 10:24:05 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     xieming <xieming@kylinos.cn>, sashal@kernel.org,
+        catalin.marinas@arm.com, linux@armlinux.org.uk,
+        linux-kernel@vger.kernel.org, alex.williamson@redhat.com,
+        will@kernel.org, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] kvm/arm64: fixed passthrough gpu into vm on arm64
+Message-ID: <20220404132405.GQ64706@ziepe.ca>
+References: <20220401090828.614167-1-xieming@kylinos.cn>
+ <87tubcbvgk.wl-maz@kernel.org>
 MIME-Version: 1.0
-References: <Yib9F5SqKda/nH9c@infradead.org> <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
- <YkmWh2tss8nXKqc5@infradead.org> <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 4 Apr 2022 15:22:51 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWcg+171ggdVC4gwbQ=RUf+cYrX3o9uSpDxo-XXEJ5Qgw@mail.gmail.com>
-Message-ID: <CAMuHMdWcg+171ggdVC4gwbQ=RUf+cYrX3o9uSpDxo-XXEJ5Qgw@mail.gmail.com>
-Subject: Re: [RFC PULL] remove arch/h8300
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "moderated list:H8/300 ARCHITECTURE" 
-        <uclinux-h8-devel@lists.sourceforge.jp>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, Max Filippov <jcmvbkbc@gmail.com>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Rich Felker <dalias@libc.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87tubcbvgk.wl-maz@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Fri, Apr 01, 2022 at 05:48:59PM +0100, Marc Zyngier wrote:
 
-On Mon, Apr 4, 2022 at 3:09 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> On Sun, Apr 3, 2022 at 2:43 PM Christoph Hellwig <hch@infradead.org> wrote:
-> > On Tue, Mar 08, 2022 at 09:19:16AM +0100, Arnd Bergmann wrote:
-> > > If there are no other objections, I'll just queue this up for 5.18 in
-> > > the asm-generic
-> > > tree along with the nds32 removal.
-> >
-> > So it is the last day of te merge window and arch/h8300 is till there.
-> > And checking nw the removal has also not made it to linux-next.  Looks
-> > like it is so stale that even the removal gets ignored :(
->
-> I was really hoping that someone else would at least comment.
+> NAK. For a start, there is no such thing as 'write-combine' in the ARM
+> architecture, and I'm not convinced you can equate WC to Normal-NC.
+> See the previous discussion at [1].
+> 
+> [1] https://lore.kernel.org/r/20210429162906.32742-1-sdonthineni@nvidia.com
 
-Doh, I hadn't seen this patch before ;-)
-Nevertheless, I do not have access to H8/300 hardware.
+We've had a lot of discussions with ARM related to how this works with
+drivers like mlx5 that use WC.
 
-> 3. arch/sh j2 support was added in 2016 and doesn't see a lot of
-> changes, but I think
->     Rich still cares about it and wants to add J32 support (with MMU)
-> in the future
+ARM has now published some guidance on this:
 
-Yep, when the SH4 patents will have expired.
-I believe that's planned for 2016 (Islamic calendar? ;-)
+https://community.arm.com/arm-research/m/resources/1012
 
-BTW, the unresponsiveness of the SH maintainers is also annoying.
-Patches are sent to the list (sometimes multiple people are solving
-the same recurring issue), but ignored.
+As an ecosystem we seem to be drifting toward Normal-NC for this
+behavior (largely because it is what Linux does). At least that is
+what we are testing and qualifing ARM CPUs against mlx5 with.
 
-Anyway, I do regular boot tests on SH4.
+I'm guessing it will turn into a SBSA like thing where the ARM ARM is
+kind of vauge but a SOC has to implement Normal-NC in a certain way to
+be functional for the server market.
 
-> 5. K210 was added in 2020. I assume you still want to keep it.
-
-FTR, I do regular boot tests on K210.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Jason

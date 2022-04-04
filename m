@@ -2,119 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9331D4F1AF2
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:17:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 242AF4F1BE9
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379318AbiDDVTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:19:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51676 "EHLO
+        id S1381933AbiDDVY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379477AbiDDROL (ORCPT
+        with ESMTP id S1379479AbiDDROc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 13:14:11 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E28513D16;
-        Mon,  4 Apr 2022 10:12:14 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id B2D27221D4;
-        Mon,  4 Apr 2022 19:12:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1649092332;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=r1V391gXkrq+wObnVOltoNfX4nAIN03QikBJ+WLh+HA=;
-        b=hiHm2MFMnw2dS46c9Bx40pbU3T9Oh6eRxc5v8NhA0omQRL9qVl9YftXxiVzQdFk+QCntjR
-        PbUnAPOSLZQV73qG0DGGmcLb+2AmkZxUwjxa7fxWKLUd1xUS1/e1jJHIV/ZYNJ2par2R7n
-        nCgN1ChQj27AQitOJ8boPhF5BN6k14M=
+        Mon, 4 Apr 2022 13:14:32 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A9913D16
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 10:12:34 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id bx37so10053113ljb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 10:12:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to;
+        bh=oo8RE32nCoCnJcNuvIDU6kj6dR7jI6fh9JBXKwfUBHo=;
+        b=S/DawjrTHpwGGbpG+dCODzMvOUlxdV8xj+b4tNbbVnOQuZy5XLBD7WPUTkCNRvNY6R
+         FjlWtNIJBDmHMR5WwBu4mG1DnHYCI3RvDeLIzVDyyuEmjWshmiJeAA1pVUNwNWKOiAvS
+         JuIcVMYunN+8EAr90Ft4D2gZOyowPTsiLhhnrMFqllFu+5ggIrS7xV9GBHHuzt7KFCfW
+         EGV+CVqzCvD9ybtuiz7J+M0jO16h7+rT14kkzOCemY3l2PO+HYWna55A9K0TH9yJDDBv
+         NW1fL0lCh9uOnoOJ39tcwG85zKMX5bhGicPqm8MUxNo0boipgt/Lmy/ChFcZoE+0cUBL
+         0a+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to;
+        bh=oo8RE32nCoCnJcNuvIDU6kj6dR7jI6fh9JBXKwfUBHo=;
+        b=DtCu947YiJt7F1SfnNzYJbrBTQ48Se7MusVQqtb2ICXeKT5esVq0cUqGF/K9ng+UGe
+         sUcV+UiCQFPDPr+WgYT6tO/lT16Aj+PyCIkXtXrZ0ILt73CdhqIycQxR/LSTy/L2iePs
+         pskP5Z0Qm6IGZETBs3A48L3GnsfPd+E0ztcqi2re/um5+gHUXlaS2c2Ewx7xIsiszK0I
+         zH1dkIZmL1VsIrTj6GPboaxReIm5lTbj9GTGNn3COfKdwg8TmNVjN7WKVMxmA2unO/Jg
+         dSdg7B35aPcEH5dtUZBXLem/xwc4Ypt9koDWq+8gJJhzkLS4h8KoZW6Ytg5G4PU2p2RK
+         A3PQ==
+X-Gm-Message-State: AOAM530HWH2d0JPHZpIgo1bg+xgr1qrReiSR9dsF6GOheWzt2Br2eMsl
+        qoa8wQSSZG5NWUJec9ifw+o=
+X-Google-Smtp-Source: ABdhPJx81uhHW84j2KnF0Ehait9D2NCQPoIz8xM0zxXJuwkk2hiBcst8/kwCDgqf0hKfQ17VHOlSPA==
+X-Received: by 2002:a2e:bf12:0:b0:249:3a3b:e91a with SMTP id c18-20020a2ebf12000000b002493a3be91amr359298ljr.343.1649092353019;
+        Mon, 04 Apr 2022 10:12:33 -0700 (PDT)
+Received: from [192.168.1.11] ([46.235.67.247])
+        by smtp.gmail.com with ESMTPSA id p15-20020a19f10f000000b0044a36e3cc33sm1188334lfh.298.2022.04.04.10.12.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Apr 2022 10:12:32 -0700 (PDT)
+Message-ID: <6771d68a-5251-4fb1-cecb-a0d2f32faf36@gmail.com>
+Date:   Mon, 4 Apr 2022 20:12:31 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 04 Apr 2022 19:12:11 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     richardcochran@gmail.com, davem@davemloft.net,
-        grygorii.strashko@ti.com, kuba@kernel.org, kurt@linutronix.de,
-        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
-        mlichvar@redhat.com, netdev@vger.kernel.org,
-        qiangqing.zhang@nxp.com, vladimir.oltean@nxp.com
-Subject: Re: [PATCH RFC V1 net-next 3/4] net: Let the active time stamping
- layer be selectable.
-In-Reply-To: <YksMvHgXZxA+YZci@lunn.ch>
-References: <20220104014215.GA20062@hoboy.vegasvil.org>
- <20220404150508.3945833-1-michael@walle.cc> <YksMvHgXZxA+YZci@lunn.ch>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <e5a6f6193b86388ed7a081939b8745be@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: staging: r8188eu: how to handle nested mutex under spinlock
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        Michael Straube <straube.linux@gmail.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <356c24cf-625b-eea2-2c04-ce132d881cac@gmail.com>
+ <4412825.cEBGB3zze1@leap> <26ac4c2d-91cf-656d-2b7e-21a95e500e70@gmail.com>
+ <2029549.KlZ2vcFHjT@leap> <7d3d23c3-1839-3e6a-27bf-85bad384e5e4@gmail.com>
+ <942c0fbd-f8b2-4cae-dd21-79bc55c54902@gmail.com>
+ <26a91705-f721-03d1-f4c8-7f00ce0e65a8@gmail.com>
+ <4ef1e90716e64fd78ebbc222bbb7e597@AcuMS.aculab.com>
+ <3c8b6454-6b52-fe62-8db1-c76bdbeb2df0@gmail.com>
+ <e1ab34f940234eecb91b9b262062eda5@AcuMS.aculab.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <e1ab34f940234eecb91b9b262062eda5@AcuMS.aculab.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------ojgS2yDN6b8jEpOHeVgba6OW"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-04-04 17:20, schrieb Andrew Lunn:
-> On Mon, Apr 04, 2022 at 05:05:08PM +0200, Michael Walle wrote:
->> Sorry for digging out this older thread, but it seems to be discussed
->> in [1].
->> 
->> > IMO, the default should be PHY because up until now the PHY layer was
->> > prefered.
->> >
->> > Or would you say the MAC layer should take default priority?
->> >
->> > (that may well break some existing systems)
->> 
->> Correct me if I'm wrong, but for systems with multiple interfaces,
->> in particular switches, you'd need external circuits to synchronize
->> the PHCs within in the PHYs.
-> 
-> If the PHYs are external. There are switches with internal PHYs, so
-> they might already have the needed synchronisation.
-> 
->> (And if you use a time aware scheduler
->> you'd need to synchronize the MAC, too). Whereas for switches there
->> is usually just one PHC in the MAC which just works.
-> 
-> And there could be switches with the MACs being totally
-> independent. In theory.
-> 
->> On these systems, pushing the timestamping to the PHY would mean
->> that this external circuitry must exist and have to be in use/
->> supported. MAC timestamping will work in all cases without any
->> external dependencies.
-> 
-> And if the MAC are independent, you need the external dependency.
-> 
->> I'm working on a board with the LAN9668 switch which has one LAN8814
->> PHY and two GPY215 PHYs and two internal PHYs. The LAN9668 driver
->> will forward all timestamping ioctls to the PHY if it supports
->> timestamping (unconditionally). As soon as the patches to add ptp
->> support to the LAN8814 will be accepted, I guess it will break the
->> PTP/TAS support because there is no synchronization between all the
->> PHCs on that board. Thus, IMHO MAC timestamping should be the default.
-> 
-> There are arguments for MAC being the defaults. But we must have the
-> option to do different, see above. But the real problem here is
-> history. It is very hard to change a default without breaking systems
-> which depend on that default. I believe Russell has a system which
-> will break if the default is changed.
-> 
-> So i suspect the default cannot be changed, but maybe we need a
-> mechanism where an interface or a board can express a preference it
-> would prefer be used when there are multiple choices, in addition to
-> the user space API to make the selection.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------ojgS2yDN6b8jEpOHeVgba6OW
+Content-Type: multipart/mixed; boundary="------------f4ntLhnd0DATl3FwdBkEaOwo";
+ protected-headers="v1"
+From: Pavel Skripkin <paskripkin@gmail.com>
+To: David Laight <David.Laight@ACULAB.COM>,
+ Michael Straube <straube.linux@gmail.com>,
+ "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>,
+ Larry Finger <Larry.Finger@lwfinger.net>,
+ Phillip Potter <phil@philpotter.co.uk>,
+ "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Message-ID: <6771d68a-5251-4fb1-cecb-a0d2f32faf36@gmail.com>
+Subject: Re: staging: r8188eu: how to handle nested mutex under spinlock
+References: <356c24cf-625b-eea2-2c04-ce132d881cac@gmail.com>
+ <4412825.cEBGB3zze1@leap> <26ac4c2d-91cf-656d-2b7e-21a95e500e70@gmail.com>
+ <2029549.KlZ2vcFHjT@leap> <7d3d23c3-1839-3e6a-27bf-85bad384e5e4@gmail.com>
+ <942c0fbd-f8b2-4cae-dd21-79bc55c54902@gmail.com>
+ <26a91705-f721-03d1-f4c8-7f00ce0e65a8@gmail.com>
+ <4ef1e90716e64fd78ebbc222bbb7e597@AcuMS.aculab.com>
+ <3c8b6454-6b52-fe62-8db1-c76bdbeb2df0@gmail.com>
+ <e1ab34f940234eecb91b9b262062eda5@AcuMS.aculab.com>
+In-Reply-To: <e1ab34f940234eecb91b9b262062eda5@AcuMS.aculab.com>
 
-That would make sense. I guess what bothers me with the current
-mechanism is that a feature addition to the PHY in the *future* (the
-timestamping support) might break a board - or at least changes the
-behavior by suddenly using PHY timestamping.
+--------------f4ntLhnd0DATl3FwdBkEaOwo
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
--michael
+SGkgRGF2aWQsDQoNCk9uIDQvNC8yMiAxOTo1OSwgRGF2aWQgTGFpZ2h0IHdyb3RlOg0KPiBG
+cm9tOiBQYXZlbCBTa3JpcGtpbg0KPj4gU2VudDogMDQgQXByaWwgMjAyMiAxNzozOQ0KPj4g
+DQo+PiBIaSBEYXZpZCwNCj4+IA0KPj4gT24gNC80LzIyIDExOjUwLCBEYXZpZCBMYWlnaHQg
+d3JvdGU6DQo+PiA+Pg0KPj4gPj4gPiAJCXdoaWxlIChwd3Jwcml2LT5iSW5TdXNwZW5kICYm
+DQo+PiA+Pg0KPj4gPj4gSSd2ZSBsb29rZWQgaW50byB3aGF0IGdjYzExIHByb2R1Y2VkIGZy
+b20gdGhpcyBmdW5jdGlvbiBhbmQgbG9va3MgbGlrZQ0KPj4gPj4gbXkgY29tcGlsZXIgaXMg
+c21hcnQgZW5vdWdoIHRvIG5vdCBjYWNoZSB0aGF0IHZhbHVlLCBidXQgSSBhbSBhZnJhaWQg
+bm90DQo+PiA+PiBhbGwgY29tcGlsZXJzIGFyZSB0aGF0IHNtYXJ0Lg0KPj4gPg0KPj4gPiBU
+aGUgY29tcGlsZXIgY2FuJ3QgY2FjaGUgdGhlIHZhbHVlIGJlY2F1c2Ugb2YgdGhlIGZ1bmN0
+aW9uIGNhbGwuDQo+PiA+DQo+PiANCj4+IEhtLCBJIGFtIGEgbmV3YmllIGluIGNvbXBpbGVy
+cywgc28gY2FuIHlvdSwgcGxlYXNlLCBleHBsYWluIChvciBnaXZlIGENCj4+IGxpbmsgdG8g
+YW55IHJlc291cmNlIHdoZXJlIEkgY2FuIHJlYWQgYWJvdXQgaXQpIGhvdyBmdW5jdGlvbiBj
+YWxsIGhlcmUNCj4+IHByZXZlbnQgY2FjaGluZy4NCj4+IA0KPj4gSUlVQyBjb21waWxlciBn
+ZW5lcmF0ZXMgY29kZSB0aGF0IHdvcmtzIHdlbGwgaW4gc2NvcGUgb2Ygc2luZ2xlLXRocmVh
+ZGVkDQo+PiBhcHBsaWNhdGlvbiwgc28gd2h5IGNhbid0IGNvbXBpbGVyIGNhY2hlIHRoYXQg
+dmFsdWUgaW5zdGVhZCBvZiBhY2Nlc3NpbmcNCj4+IG1lbW9yeSBvbiBlYWNoIGl0ZXJhdGlv
+bi4uLiBJc24ndCByZWdpc3RlciBhY2Nlc3MgYSB3YXkgZmFzdGVyIHRoYW4gZXZlbg0KPj4g
+Y2FjaGUgaGl0Pw0KPiANCj4gQmVjYXVzZSBjYWxscyB0byBleHRlcm5hbCBmdW5jdGlvbnMg
+YXJlIGFsbG93ZWQgdG8gY2hhbmdlDQo+IGFueSBkYXRhIHZpYSAnb3RoZXInIHJlZmVyZW5j
+ZXMuDQo+IEZvciBpbnN0YW5jZSB0aGUgc3RydWN0dXJlIHBvaW50ZXIgdGhlIGZ1bmN0aW9u
+IGhhcyBjb3VsZA0KPiBhbHNvIGJlIGluIGdsb2JhbCBkYXRhIHNvbWV3aGVyZS4NCj4gDQoN
+Ck1ha2Ugc2Vuc2UsIHRoYW5rIHlvdSBmb3IgZXhwbGFuYXRpb24hDQoNCg0KDQoNCldpdGgg
+cmVnYXJkcywNClBhdmVsIFNrcmlwa2luDQo=
+
+--------------f4ntLhnd0DATl3FwdBkEaOwo--
+
+--------------ojgS2yDN6b8jEpOHeVgba6OW
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEER3XL3TplLQE8Qi40bk1w61LbBA0FAmJLJv8FAwAAAAAACgkQbk1w61LbBA2Y
+FQ/+JO/v68k6xBMFzpBxhJLs8DsUg3auoVNTFLCilloTOAqlQVIp3JfgCf2tnc3i89vjphOtAYh5
+6QbtMCJyMigxcAIYq/AVEFHVMg1IuX2fiCYF0l7QFLSyuzZi4hya4WEQoXO762mR2wgpBqBbcySj
+uJ2nWSDPJaqBp5HXEYoV6/8mTSgTfIZfGax1PxLAIC+/aPb3CD37wkRGT3yH5d70gvSUku3zfD6f
+Ije3k4ypAoVTo6SPOwVxt0zNDgWeKkmlqIrvi6XD96vHmJujTmDyIPT5Vln3K1iHpzf6Mi3HpL9D
+dttDjLexS/WIpNrmDY3ks8O8FJlkMvymizj4EeCGg2F+SDVqEodU+bUZ7T/25rR7C0cUuVdSxgT8
+WYvNqr4HXI9bVEYjtNCL9OF4b0X7DXPOq0nY8ZvoyN+QAIaJcHWOdoLns9weqgNNmFTcQ70L+2Wz
++TKEsfOfLE9wtoOSeHweDUmO2GqJ/obwHELXHvB5KYBgITdl2kvFJiuZ5mE62Q8VqS62oTmqnMxE
+TIKh2WkvckIWoMIvIWmuacF/dZL9bjelNvYoF3H7FnKR1/8Qua3rTrtEWzQ/Z+h1MTKe3kRIU+ho
+6/YxgL646R9SLNt1rk9xj8ZJCz4eCTzbM+Xyu4c8WsHcCMH65IAxZi4xm0Vz851FrTnD3wrvC619
+Lfo=
+=7pMo
+-----END PGP SIGNATURE-----
+
+--------------ojgS2yDN6b8jEpOHeVgba6OW--

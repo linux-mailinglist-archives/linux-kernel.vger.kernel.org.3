@@ -2,66 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A1D4F154D
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 14:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 611474F1551
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 14:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348257AbiDDM5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 08:57:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
+        id S1348254AbiDDM6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 08:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232979AbiDDM5l (ORCPT
+        with ESMTP id S232979AbiDDM6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 08:57:41 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F78C32993;
-        Mon,  4 Apr 2022 05:55:45 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 5D3321F383;
-        Mon,  4 Apr 2022 12:55:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649076944; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=U3rOkje7vch6OHbrYJ0OvYxnuQPxmcNpHEJB0u8Qkeo=;
-        b=jLQaNRdG16A4I7HlMjmhmGbqipWfw8HoPbj0sYe1zdA9gQzepbZjMvsXK+7FmWvZbiu0QM
-        YkRsyF7Ka+ITBycmCNvjX2XwfXM1QOScSGvfPwLXMQ7kbeojDaXlobPbhkaH09VJgIkpHB
-        X2SoBvm0OcyVOdywseln8APbAnX33lI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649076944;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=U3rOkje7vch6OHbrYJ0OvYxnuQPxmcNpHEJB0u8Qkeo=;
-        b=/7j7eqSsuy1ByoK8OQCMIYmGxnK5Ari3ADITvwr5gVHr0e1ZTLuOlNo6P8+o2qIpBbS5cj
-        4Ox1x3RhfBXigQAg==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 0948DA3BA7;
-        Mon,  4 Apr 2022 12:55:44 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 0A42BA0615; Mon,  4 Apr 2022 14:55:41 +0200 (CEST)
-Date:   Mon, 4 Apr 2022 14:55:41 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Pavel Machek <pavel@ucw.cz>, Jan Kara <jack@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org
-Subject: Re: Is it time to remove reiserfs?
-Message-ID: <20220404125541.tvcf3dwyfvxsnurz@quack3.lan>
-References: <YhIwUEpymVzmytdp@casper.infradead.org>
- <20220222100408.cyrdjsv5eun5pzij@quack3.lan>
- <20220402105454.GA16346@amd>
- <20220404085535.g2qr4s7itfunlrqb@quack3.lan>
- <20220404100732.GB1476@duo.ucw.cz>
- <20220404101802.GB8279@1wt.eu>
+        Mon, 4 Apr 2022 08:58:34 -0400
+Received: from esa.hc3962-90.iphmx.com (esa.hc3962-90.iphmx.com [216.71.142.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E84D3C739;
+        Mon,  4 Apr 2022 05:56:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
+  t=1649076997; x=1649681797;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=nHoIgWxHWBrhLNwVPFcj3lJeBG5FRRCK/mwwmO808dU=;
+  b=a5/BwemLK7Rglm76NRdVbGNbdN+cOQk4GvrmKtXkisEWF9/yk1O1vsVk
+   CDJyNaXUb91tqKJdY3GUOlimYuq/HQ/7Ebat2t1NftLMDiEyFTz2NZ+mZ
+   2lyNvLbanbU+lwvKe6q7pfUW13+uAEIPVJ8dhP+CZ8G738RvSqPvda5lI
+   0=;
+Received: from mail-bn7nam10lp2106.outbound.protection.outlook.com (HELO NAM10-BN7-obe.outbound.protection.outlook.com) ([104.47.70.106])
+  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 12:56:35 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LHCbvWtsdNI6ZfUYT3cDg4brd3hfyGdG9+H7Xj3VS8/kAdfd0Q1x2HYkww2/RSI3ls901u9XN9MH+gFKknVTRGmNxSt7noWHdMdGdKW4Kyt/RwlT5BgvI2H4NuvuYsq8Hqb4sYkGiVYXE+TfHkqUthF4VuBOUjVqKOtnVNpAnseqADyLaqJJm+ZEKYPwrdMIVAtCOkYfcaJ7W9PhPEylmFxyJaCvTh4Nhzdk+DbrgCh7hUX98i2IhqsABEQLIrD+JLfR6+M2KWHpdp4AnO8sdrQTuDvAnjenPLAH3DWlXYE6F5Kod6POv7Q3BkkMhoAu00S8bOipjVq/V05IZltO+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nHoIgWxHWBrhLNwVPFcj3lJeBG5FRRCK/mwwmO808dU=;
+ b=e/IlU/xtkiWFNc7tW+bFCzhSHmppsyopigfv008h3++bHE9YRMG6bPdbRrALbWoCh+9m/19IDt8337IXwOZ7CgjvKt/VMsHTjMIM9G0Yxo9i0mXi7HfnQuATMDtPL4X/+KT2Kod7ApkU9Fpqbm0ltKZmDrC50ANMAkAiDoQ8cCHW4OygRlLZxCwtTIkCAk1vPMv08zgGjsWHd6avOxAWLLH7jCWRaQmJmranlYBSkU4awXQWAlCCGq+hP/NQu3We6wVuOfSx7C5akmh+QpKpdD4HN86D+H1NUzHqZ3ecLqekatb0ew+DWdO750HG0LRdUip/yQWb6Pg5qg5orRAMLw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=quicinc.com; dmarc=pass action=none header.from=quicinc.com;
+ dkim=pass header.d=quicinc.com; arc=none
+Received: from MW4PR02MB7186.namprd02.prod.outlook.com (2603:10b6:303:73::6)
+ by SN1PR02MB3694.namprd02.prod.outlook.com (2603:10b6:802:2c::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Mon, 4 Apr
+ 2022 12:56:33 +0000
+Received: from MW4PR02MB7186.namprd02.prod.outlook.com
+ ([fe80::9485:c59c:6877:f492]) by MW4PR02MB7186.namprd02.prod.outlook.com
+ ([fe80::9485:c59c:6877:f492%6]) with mapi id 15.20.5123.031; Mon, 4 Apr 2022
+ 12:56:33 +0000
+From:   "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>
+To:     Doug Anderson <dianders@chromium.org>,
+        "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>
+CC:     dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        quic_kalyant <quic_kalyant@quicinc.com>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
+        quic_vproddut <quic_vproddut@quicinc.com>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>
+Subject: RE: [PATCH v6 3/8] drm/msm/dp: Support only IRQ_HPD and REPLUG
+ interrupts for eDP
+Thread-Topic: [PATCH v6 3/8] drm/msm/dp: Support only IRQ_HPD and REPLUG
+ interrupts for eDP
+Thread-Index: AQHYRE+9Cw2uVhnbAEW7x0TCoIRCqqzaI9UAgAWaWhA=
+Date:   Mon, 4 Apr 2022 12:56:32 +0000
+Message-ID: <MW4PR02MB71864A396097B9DB1E4032B3E1E59@MW4PR02MB7186.namprd02.prod.outlook.com>
+References: <1648656179-10347-1-git-send-email-quic_sbillaka@quicinc.com>
+ <1648656179-10347-4-git-send-email-quic_sbillaka@quicinc.com>
+ <CAD=FV=X_ULva3J-Y7EF+0VPRRoFXSmtuKcXG9H=041Kmwa=W4A@mail.gmail.com>
+In-Reply-To: <CAD=FV=X_ULva3J-Y7EF+0VPRRoFXSmtuKcXG9H=041Kmwa=W4A@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=quicinc.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 26288556-3843-4806-6738-08da163a8b7c
+x-ms-traffictypediagnostic: SN1PR02MB3694:EE_
+x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
+x-microsoft-antispam-prvs: <SN1PR02MB3694B9460A6683D6903BBA6C9DE59@SN1PR02MB3694.namprd02.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1OSh3Regv2B6LeF2/sTgU68GDy/r4cIivjFJXZNEASgTHhC+KJlhLKaQstCUmuxXBxj2ff72bJkR6jOxuqJhMu32cA7OaFIGqx66tGDSQCtb8q6lPh+6ceGiIPwq2xGsfGI1tIi/EPDDt2U3PJpC/Z6FIzdPIoUoToKeqNN4EcPL+6c3THG5rQDIGjS5EJaKrVk/Ctf+gTogox+kOo/FjvX7sn4Xn3Ij8O6FzsLZKL4F4X/+wnAYbn77kZap+17nMh+TKNOXvz/hYQF7RYlfU5o0x5RSAXyIBqyc98PEfdb1WO7Rfei9b+N86feGJ4YTGz+XSzmbQuedo7LBInfgv+Jr28JElNXV5Q7W0RXz0K4NiWiNfz+wEG8FmX/VkT9e193xUo+MMQf3P7KAaR80fUvqxvvkwieKQbv8NojNnb1KD7Xw9Zb923B7bUaHrkFk1vnokfMG6R4YLCaRipUlCBZQQqtV/lXJcmkt8scv6Zql2cVJxmX+qRwwXakveSQeuUfQIl8OORH7ykt9Eq6zWjQIWzREqBtcjWHE3rny7yMcEkn7FvNSN4Tp7uqwEMl82//3V/H9MrmfAlppT2sc1cjJks4upVz40F+MxRITQKAmcGftF6ZH9jmP470XjrOST6HHOm2X6BIZPlYkCCT0e8ax0ZODjW8ZIO2tDYXGKR76gMS4+bY47d/Eu1R1a/VIOtBMhBTy7U+gOO/4Zcsyhw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR02MB7186.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(76116006)(2906002)(66476007)(66946007)(66556008)(64756008)(66446008)(5660300002)(7416002)(52536014)(86362001)(7696005)(6506007)(186003)(53546011)(508600001)(4326008)(8676002)(26005)(33656002)(9686003)(107886003)(8936002)(83380400001)(110136005)(54906003)(122000001)(38070700005)(71200400001)(38100700002)(316002)(55016003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aDRHV3hJS0MyNFFmeHpaVDNkY0lTb3o3RUpKN0NCNS95MzJ6SnBPL2ZWTVFW?=
+ =?utf-8?B?Y1FQeDBjZHJXYmRHa1dSVDBCU3ZyN1pQYUNHbW9Kak1YSlo5cWM5TlNUMENi?=
+ =?utf-8?B?OVVtaSsxeWt6dlc5Zy9QQW5xV1IvRjhVWnlPaDd2TXFieHNFOE80VjZMekk2?=
+ =?utf-8?B?QVhvQ09KY1ZKbFRZRlVWbDdXQ2x4Q0JiTkV4SmEwUEZTM3ZoZ1NLRDFMT2ti?=
+ =?utf-8?B?VUVaVlJ1SmUrQ1ZsZFMva2ZyY0xiZ0l0bVA3cWpCZ0FxU1JBSHZmVi91Nmdv?=
+ =?utf-8?B?WHVxdVI4dENJSTNhVVZZUjlpdHQ2UW9qT2tLM2dPTnE1VzFsUEllSFpZNDhH?=
+ =?utf-8?B?bGpqWjQ0TGI2VTdqdVdlRXpCUXZZQVRMd09CVmtFbjdGbFJjSXlhcmhCQXRG?=
+ =?utf-8?B?V1ZwYU1rR3QxVmZSY0JUdHVpWnk3ZEd4eDdFaTZLRTVkVDVjZ3dRT1hwbVRH?=
+ =?utf-8?B?c0xkaldFTDFQVXlOS25GSzZZbjcwS015cWp3ODJVNlFYbnBXMi85ODdzeDBl?=
+ =?utf-8?B?L3V2M3hmWXFGS1h3UWFLYzRQUzNUdFI0REtDdkpUYU5PekNsbkRNazhIckpU?=
+ =?utf-8?B?OTdWWlpqUU00aHhXTm02K3RZQUNML0Q1cnljemt0eUJYaUh6OVRjWkN5YmNy?=
+ =?utf-8?B?ZlFuOU9qdENYSVNYa1JjSG54dExLRitVb0h3TkFJRDRUVlFNT3kwdkZ0V1d0?=
+ =?utf-8?B?Y09lNkNYc051L2FoWFBXeVUyYnl2bHF0RjhsY2RUQTBSMlJ6VVBZanpKbEdi?=
+ =?utf-8?B?Lyt2d2RtaUdNVy82ODdRcGM0aTlrZnBTazJMaWxnbG9yTExGemlOQTRmeVhQ?=
+ =?utf-8?B?SjFkTWdWSU0zdTNPWlMxNzUra2RnaHdRdkorc2ZNVnlBcHdzNEFoU0FqRDlq?=
+ =?utf-8?B?V3MrZGwxYXpwblBBVWMvYVhvaU5pRDBZZ21VbHFPZ1R2RERwVFFxNjRVZ2xx?=
+ =?utf-8?B?S2VGd1VKeENHdVVCRjBTUFBFL3VaSERTUTcrT1NSaG1kVDFUTUNGTTE5MW1w?=
+ =?utf-8?B?NGxsdjhKdUNyWmpJOWpZTG5LZk8rNlZMY2RZMWlqL2tsMkxQQ0xNTGJqditt?=
+ =?utf-8?B?a2tRTWVVMEs2S2JUamtOUXFvWDBSaDBJeXpiTWRjZG1mNHBHZXVVVFUraG80?=
+ =?utf-8?B?cUNNNnJLdDVEVkhsanlLcEJQZ1grTDVubEx2Q0wyNzZoZEcxa0tQampwdTZy?=
+ =?utf-8?B?WVhhd0FyZU5BNjBLUXdyY0Jmc1E4bWpZckVzSXRteXpxbDZsSmhZR2dyMFls?=
+ =?utf-8?B?K2Noa2t6bi9heWwwR1RVUU4vdS9MbWNjWkFNWlZEaURzUWhEYVd1UUdRcUZH?=
+ =?utf-8?B?UTlRbUZWY04wcEpPMk1PUGdMNVNueGZ6US9TVDA1UmloTXpyeUVCOWkweTls?=
+ =?utf-8?B?dm16VnJnZS96bEIvTU1meS9KRzRDaDdNeFZVbmlsaFYxdVVvdmNSTnVvSFRM?=
+ =?utf-8?B?eGpmU3k0L2h0Q3pDaWFLOFpRejFxNlZheitWamZkU1BlL3NLM0RwRHBwb01t?=
+ =?utf-8?B?WXY3bWEySlBjWnhVeFdMalFncnRNa1lxVWJMczBzODlhNGZuYmpKM2VOWURM?=
+ =?utf-8?B?K2V4bjNYYXZOcGN4aFdJSmlqdUdJQnJLKzRLeUNQQytyUGRqMTEvc3pxSjY1?=
+ =?utf-8?B?RGZJSFJ3aTFaUENaTVhzbkhjcFhndGV5Ykp5ZE9IY1Z1UnUyVWlEQUNhNTgv?=
+ =?utf-8?B?OStrdzVxaVV0UVNrVnFFM0FsM0RsZ05JT0NRWUdDSm80V1M0eEEvRXRmVUpP?=
+ =?utf-8?B?b3ZlcnRFWFFXU0xlYW5ZYUpFZjZidWtHUFZOL09ReHBkTllnQkZVTUZibXJn?=
+ =?utf-8?B?Mmk2YUNyK1lNSzVaTU5YQXdaejFQMVJ0YXNrVXY0WFJ0YmtldUdEa2dEdXda?=
+ =?utf-8?B?L0NvdG5KclhFUzZuY1dBWXNwYmkzaTJuNkFxa0ZFSCtKUnE5bzZ3Mjh4Y0Ri?=
+ =?utf-8?B?Vm9DRmFnTlpYWFpUNmpxQVptOXFEU1ROMXhNQ1hPS252Z1doT3kxWHl5RHVX?=
+ =?utf-8?B?ZkhWY0FyQ0xHZlJXRFlkWDJEWHBFSWlVWnI3dGZUblp3dllsbUYrVXF5bE9u?=
+ =?utf-8?B?VThtNzN0ODV4NVdyYTR6WWROWEZmSDJRYk1VMlBOTEw2UzA3OXd5VnUrUG1M?=
+ =?utf-8?B?THJRaHdEWDJXVmhjZ3R6dDZ4Z1hVMlhsWDFJVDNjRFU5RlpvMEpLTnhERVl1?=
+ =?utf-8?B?ZWZYRCsvaXZEYm5oWVZLY1FnT0w4YTNYYVVQVTJQdjlsWU1HemxMRXAxUnQw?=
+ =?utf-8?B?a1VrUlJPUDBmQ0g2Qm5KY2dxMGFJYTI0cEFOU2IydXdoQnMwSGVqOFo0aFZn?=
+ =?utf-8?B?eWhoY1ZuNVZaR0hTcy9IWWdSQjBSdUcrMk50MjE5QjhWUzVUcUxKdz09?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220404101802.GB8279@1wt.eu>
+X-OriginatorOrg: quicinc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR02MB7186.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 26288556-3843-4806-6738-08da163a8b7c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Apr 2022 12:56:32.9196
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: OqcQiYLcs61RxHRDNi6eV48LJMsQDPQC1ZM3stX0w+wADByszb7sl/mH1nKtU0hB6KJIFkxc0h86Ma1RyKP02WKLwnrrWYDPyPZ9nZKmEMg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN1PR02MB3694
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,58 +158,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 04-04-22 12:18:02, Willy Tarreau wrote:
-> Hi Pavel,
-> 
-> On Mon, Apr 04, 2022 at 12:07:32PM +0200, Pavel Machek wrote:
-> > > Well, if someone uses Reiserfs they better either migrate to some other
-> > > filesystem or start maintaining it. It is as simple as that because
-> > > currently there's nobody willing to invest resources in it for quite a few
-> > > years and so it is just a question of time before it starts eating people's
-> > > data (probably it already does in some cornercases, as an example there are
-> > > quite some syzbot reports for it)...
-> > 
-> > Yes people should migrate away from Reiserfs. I guess someone should
-> > break the news to Arch Linux ARM people.
-> > 
-> > But I believe userbase is bigger than you think and it will not be
-> > possible to remove reiserfs anytime soon.
-> 
-> I was about to say the opposite until I noticed that one of my main
-> dev machine has its kernel git dir on it because it's an old FS from
-> a previous instance of this machine before an upgrade and it turns out
-> that this FS still had lots of available space to store git trees :-/
-
-:)
-
-> So maybe you're right and there are still a bit more than expected out
-> there. However I really think that most users who still have one are in
-> the same situation as I am, they're not aware of it. So aside big fat
-> warnings at mount time (possibly with an extra delay), there's nothing
-> that will make that situation change.
-> 
-> At the very least disabling it by default in Kconfig and in distros
-> should be effective. I really don't think that there are still users
-> who regularly update their system and who have it on their rootfs, but
-> still having data on it, yes, possibly. The earlier they're warned,
-> the better.
-
-Yes, we start with a warning now. Say a year before we really do remove it,
-my plan is to refuse to mount it unless you pass a "I really know what I'm
-doing" mount option so that we make sure people who possibly missed a
-warning until that moment are aware of the deprecation and still have an
-easy path and some time to migrate.
-
-Regarding distros, I know that SUSE (and likely RH) do not offer reiserfs
-in their installers for quite some time, it is unsupported for the
-enterprise offerings (so most if not all paying customers have migrated
-away from it). The notice was in LWN, Slashdot, and perhaps other news
-sites so perhaps other distro maintainers do notice sooner rather than
-later. I can specifically try to reach to Arch Linux given Pavel's notice
-to give them some early warning.
-
-								Honza
-
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+SGkgRG91ZywNCg0KPiBPbiBXZWQsIE1hciAzMCwgMjAyMiBhdCA5OjAzIEFNIFNhbmtlZXJ0aCBC
+aWxsYWthbnRpDQo+IDxxdWljX3NiaWxsYWthQHF1aWNpbmMuY29tPiB3cm90ZToNCj4gPg0KPiA+
+IEBAIC0xMzc0LDYgKzEzODIsMTIgQEAgc3RhdGljIGludCBkcF9wbV9yZXN1bWUoc3RydWN0IGRl
+dmljZSAqZGV2KQ0KPiA+ICAgICAgICAgZHBfY2F0YWxvZ19jdHJsX2hwZF9jb25maWcoZHAtPmNh
+dGFsb2cpOw0KPiA+DQo+ID4NCj4gPiArICAgICAgIGlmIChkcC0+ZHBfZGlzcGxheS5jb25uZWN0
+b3JfdHlwZSA9PQ0KPiBEUk1fTU9ERV9DT05ORUNUT1JfRGlzcGxheVBvcnQpDQo+ID4gKyAgICAg
+ICAgICAgICAgIGRwX2NhdGFsb2dfaHBkX2NvbmZpZ19pbnRyKGRwLT5jYXRhbG9nLA0KPiA+ICsg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgRFBfRFBfSFBEX1BMVUdfSU5UX01BU0sgfA0K
+PiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgRFBfRFBfSFBEX1VOUExVR19JTlRf
+TUFTSywNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHRydWUpOw0KPiA+ICsN
+Cj4gDQo+IG5pdDogd2h5IGFyZSB0aGVyZSB0d28gYmxhbmsgbGluZXMgYWJvdmU/DQo+IA0KPg0K
+DQpXaWxsIHJlbW92ZSBhIGJsYW5rIGxpbmUuDQogDQo+ID4gQEAgLTE2MzksNiArMTY1Myw5IEBA
+IHZvaWQgZHBfYnJpZGdlX2VuYWJsZShzdHJ1Y3QgZHJtX2JyaWRnZQ0KPiAqZHJtX2JyaWRnZSkN
+Cj4gPiAgICAgICAgICAgICAgICAgcmV0dXJuOw0KPiA+ICAgICAgICAgfQ0KPiA+DQo+ID4gKyAg
+ICAgICBpZiAoZHAtPmNvbm5lY3Rvcl90eXBlID09IERSTV9NT0RFX0NPTk5FQ1RPUl9lRFApDQo+
+ID4gKyAgICAgICAgICAgICAgIGRwX2hwZF9wbHVnX2hhbmRsZShkcF9kaXNwbGF5LCAwKTsNCj4g
+PiArDQo+IA0KPiBTaG91bGQgeW91IGFkZCBhICJwcmVfZW5hYmxlIiBhbmQgZG8gaXQgdGhlcmU/
+IFRoYXQgd291bGQgbWFrZSBpdCBtb3JlDQo+IHN5bW1ldHJpYyB3aXRoIHRoZSBmYWN0IHRoYXQg
+eW91IGhhdmUgdGhlIGNvdW50ZXJ0cGFydCBpbiAicG9zdF9kaXNhYmxlIi4NCj4NCg0KV2Ugd2Fu
+dCB0byBoYW5kbGUgdGhlIHNjcmVlbiBvZmYgb3IgZURQIGRpc2FibGUgbGlrZSBhIGNhYmxlIHVu
+cGx1ZyBzbyB0aGF0IGl0IGNhbiBiZSBpbnRlZ3JhdGVkIGludG8gdGhlIGRwIGNvZGUuDQpTbywg
+d2UgY2FuIG1vdmUgcGx1Z19oYW5kbGUgaW50byBwcmVfZW5hYmxlIGFuZCB0aGUgdW5wbHVnX2hh
+bmRsZSB0byBwcmVfZGlzYWJsZS4NCg0KSWYgd2UgZG8gdW5wbHVnIGluIHBvc3RfZGlzYWJsZSwg
+d2UgbmVlZCB0byBoYW5kbGUgdGhlIHN0YXRlIGNoYW5nZXMgYWxzby4gSXQgd2lsbCBjb21wbGlj
+YXRlIHRoZSBkcml2ZXIgY29kZS4NCg0KPiANCj4gT3ZlcmFsbDogSSdtIHByb2JhYmx5IG5vdCBm
+YW1pbGlhciBlbm91Z2ggd2l0aCB0aGlzIGNvZGUgdG8gZ2l2ZSBpdCBhIGZ1bGwNCj4gcmV2aWV3
+LiBJJ20gaG9waW5nIHRoYXQgRG1pdHJ5IGtub3dzIGl0IHdlbGwgZW5vdWdoLi4uIDstKQ0KPiAN
+Cj4gDQo+IC1Eb3VnDQoNClRoYW5rIHlvdSwNClNhbmtlZXJ0aA0K

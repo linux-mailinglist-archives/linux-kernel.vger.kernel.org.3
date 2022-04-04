@@ -2,102 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9056B4F1837
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DAA54F183C
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355913AbiDDPY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 11:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36852 "EHLO
+        id S1378543AbiDDPZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 11:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378523AbiDDPYx (ORCPT
+        with ESMTP id S1378539AbiDDPZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 11:24:53 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10B63E5E3
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:22:53 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id y10so9277078pfa.7
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 08:22:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wyDte6u49XuZOEDhbioS92IXz+R+MU1mBAkIHexEyo8=;
-        b=FI5XYFXXfXWe79T9qLsB6oiy2Bkf+dsXAJ1igK83khhqqLP2t3ELJRa06GFl0sDWKi
-         VfcyzNTleGdnCa+/S2thk88pRmxjYBqC/ERN9xUKYMHzZq6jA+4hGdCEAfS5cC/NZ9pU
-         LfRkGXbMG8YodiJzxbPPPidNkjKCU5j3IldHeadEOboyGo4/mJ1sSQsRsFUAseGOKwpJ
-         cNoAVwtsd1VdYFaKnb7QjGvD7qAOmlFOqk8nwniOrLKqM4HhDIiwCGME/jRLXP4niJFs
-         V4Q4+JFO81ladTPCvBbGPIzI9HYaDhdvi+8f0UbO9+dk8E/rY7SGSlWgHD3txVZATu7B
-         twqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wyDte6u49XuZOEDhbioS92IXz+R+MU1mBAkIHexEyo8=;
-        b=kjm1PmMYw7QpKGuePitm0cjmkjGykqXXFZRtSLErWD/ft815+Cd3nbCkIr1WBJtgbo
-         qmUzHu7a6wKsUNJMLpV4n2iALhXXEL+3FT+VWrCXv5CuCKtNWwbIsthtlET0lpB3Dhag
-         JB0D9I4K9B7ksSrOyi1ZLBTLJhpIpP+T/2kpbrVx+KhmrCOTbq77sxE/kgLp4/uKUvYZ
-         drzslIKud2vHBJnnEoRnSXtO3RlxHIxRnu5kjipxMqoI/ekKehOJPdnCBSk9mZjOCZtT
-         J8LCA3F4d5oB3+xcaqrGdtrFI26nJcE7oSlpjiuhxjNNDBCIQVIVFSdp2b0jilMJnILC
-         WGPA==
-X-Gm-Message-State: AOAM530VIIQZ3MpeU2fIyantKHQFy49UpAAa6xym7/DVKJ29NwA/vxMU
-        HZket5rqzq/13xccqTwnknBbkw==
-X-Google-Smtp-Source: ABdhPJyuEOrM3uDz7VUMJ+shlo4iDFFBC7PYOBsACm3opqHftv1Rgh5WDiCiU4V6mAm84QapvgrW9g==
-X-Received: by 2002:a05:6a00:1581:b0:4fa:e6d4:c3e6 with SMTP id u1-20020a056a00158100b004fae6d4c3e6mr94158pfk.84.1649085773408;
-        Mon, 04 Apr 2022 08:22:53 -0700 (PDT)
-Received: from C02GD5ZHMD6R.bytedance.net ([139.177.225.245])
-        by smtp.gmail.com with ESMTPSA id n14-20020a17090a394e00b001c670d67b8esm11079971pjf.32.2022.04.04.08.22.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 08:22:53 -0700 (PDT)
-From:   Jinke Han <hanjinke.666@bytedance.com>
-X-Google-Original-From: Jinke Han <hnajinke.666@bytedance>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jinke Han <hanjinke.666@bytedance.com>
-Subject: [PATCH] ext4: remove unnecessary code in __mb_check_buddy
-Date:   Mon,  4 Apr 2022 23:22:43 +0800
-Message-Id: <20220404152243.13556-1-hanjinke.666@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        Mon, 4 Apr 2022 11:25:03 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452393E5E8;
+        Mon,  4 Apr 2022 08:23:04 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id BB1741F44DDE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649085782;
+        bh=qbJezh9FVSlhATk9a76wow3aDuv/GZNqoYfnfWao4EU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R7qKfLTC3UmDAuTrk7Sdcc/sJ1Lpxi0Ca5GwE67PS2YO22fgBBcDd0D7TpqZadE8o
+         XGDCbTylFJGGnGuT2B1b5F0SyoKVcubPoi/pJOq0/9RPpumwbMmIHknuX6MErUo7PQ
+         sLZZIzPmq2//Lu3qhFR4NxGCkryoWI+uzVu0NcE3TZGh/MYJqcAB1A4V4naOrLYoJ0
+         byW0eSj7opuZOsNgMm1+mAPtiplmrzw0nErUW0A6B93An+DljdSfvKGtMStmEi+3oU
+         XDuDd/hThpRzIbLLMZ3QmMcuh7bvAhDzkh5daBThqVAzEh1FGIbuMa8i2qNTUN1d5j
+         SPd2y3bEPXEmg==
+Date:   Mon, 4 Apr 2022 11:22:56 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org, linux-usb@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v1 0/3] Fixes for Mediatek dt-bindings
+Message-ID: <20220404152256.mkksr4oqjt65ytlf@notapiano>
+References: <20220225225854.81038-1-nfraprado@collabora.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220225225854.81038-1-nfraprado@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinke Han <hanjinke.666@bytedance.com>
+Hi Matthias,
 
-When enter elseif branch, the the MB_CHECK_ASSERT will never fail.
-In addtion, the only illegal combination is 0/0, which can be caught
-by the first if branch.
+Maybe you could pick this series through your tree? It addresses some dtc
+warnings that are introduced with the new nodes in mt8192.dtsi that you just
+picked up on your v5.18-next/dts64 branch.
 
-Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
----
- fs/ext4/mballoc.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Thanks,
+Nícolas
 
-diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-index e5d43d2ee474..eba650b31870 100644
---- a/fs/ext4/mballoc.c
-+++ b/fs/ext4/mballoc.c
-@@ -576,13 +576,10 @@ static int __mb_check_buddy(struct ext4_buddy *e4b, char *file,
- 		for (i = 0; i < max; i++) {
- 
- 			if (mb_test_bit(i, buddy)) {
--				/* only single bit in buddy2 may be 1 */
-+				/* only single bit in buddy2 may be 0 */
- 				if (!mb_test_bit(i << 1, buddy2)) {
- 					MB_CHECK_ASSERT(
- 						mb_test_bit((i<<1)+1, buddy2));
--				} else if (!mb_test_bit((i << 1) + 1, buddy2)) {
--					MB_CHECK_ASSERT(
--						mb_test_bit(i << 1, buddy2));
- 				}
- 				continue;
- 			}
--- 
-2.20.1
-
+On Fri, Feb 25, 2022 at 05:58:51PM -0500, Nícolas F. R. A. Prado wrote:
+> 
+> This series has some fixes for Mediatek dt-bindings. It solves some
+> warnings printed by dtbs_check, both for already merged Devicetrees, as
+> well as some that would be introduced by the changes to mt8192.dtsi in
+> [1].
+> 
+> [1] https://lore.kernel.org/all/20220218091633.9368-1-allen-kh.cheng@mediatek.com/
+> 
+> 
+> Nícolas F. R. A. Prado (3):
+>   dt-bindings: remoteproc: mediatek: Add interrupts property to mtk,scp
+>   dt-bindings: usb: mtk-xhci: Allow wakeup interrupt-names to be
+>     optional
+>   media: dt-bindings: mtk-vcodec-encoder: Add power-domains property
+> 
+>  .../devicetree/bindings/media/mediatek,vcodec-encoder.yaml     | 3 +++
+>  Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml      | 3 +++
+>  Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml   | 1 +
+>  3 files changed, 7 insertions(+)
+> 
+> -- 
+> 2.35.1

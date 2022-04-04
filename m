@@ -2,94 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FAB44F1FC6
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6854F1FC9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238202AbiDDXFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 19:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45192 "EHLO
+        id S234554AbiDDXGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 19:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241388AbiDDXFe (ORCPT
+        with ESMTP id S242036AbiDDXFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 19:05:34 -0400
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1376EB0F;
-        Mon,  4 Apr 2022 15:27:49 -0700 (PDT)
-Received: by mail-oi1-f182.google.com with SMTP id k10so11621780oia.0;
-        Mon, 04 Apr 2022 15:27:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=21RYx1siUXFRLcSMfYzZjQ6/E/QTCX038TIQLde76lI=;
-        b=7d5l8+rrTgeuOPwvzBZ5TVDccqB/y5/2pR8xe4Yl3dc39EBQTQxXvd14T95JRya3kQ
-         pgPqbz5ew54u01E8PM6AICug5z1vSyDAZoeXS/juKKaiYrL9XOLlv5+mKNdWjX4V2Fxd
-         l+vHMw94EdbkKu9pCWGdyz6EH6iU3WRTS6lcQStVpW6qiHs79Kx4ebd4g4+TBftkwEBD
-         4DrpXuuEHmwM+R28+sUQ0Ay/YsRQVgBf6gewZtdgn2UWd+9dDNLbMXl4ZhLx2kgERPsl
-         wWxDtyKqhdxllr74svRe8uxGA51T2r6DRmkTiTH1vgi/w5MB/EnaquxJ/Hmh12BzZQea
-         rEWA==
-X-Gm-Message-State: AOAM53077qKhIIAWuYXKwbEpidC6LyB5uDL8GmX7FX0zH0eLSevRv3Xg
-        WpkGLXKNzwkAG/mNegmYXw==
-X-Google-Smtp-Source: ABdhPJyWF91xQnODnm0DqGriBHyrjc+a5lRFRjRBgVc75n8XH2jeXM4ob5qMfO6szxo4J8zdWEKH2g==
-X-Received: by 2002:aca:f10:0:b0:2ef:9dd9:79fb with SMTP id 16-20020aca0f10000000b002ef9dd979fbmr229194oip.282.1649111268742;
-        Mon, 04 Apr 2022 15:27:48 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 11-20020a05687013cb00b000dd9b5dd71csm4731995oat.56.2022.04.04.15.27.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 15:27:48 -0700 (PDT)
-Received: (nullmailer pid 2113248 invoked by uid 1000);
-        Mon, 04 Apr 2022 22:27:47 -0000
-Date:   Mon, 4 Apr 2022 17:27:47 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Kathiravan T <kathirav@codeaurora.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-remoteproc@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Subject: Re: [PATCH 08/10] dt-bindings: soc: qcom,smd: convert to dtschema
-Message-ID: <Yktw42ujYEJQH2l9@robh.at.kernel.org>
-References: <20220401201035.189106-1-krzysztof.kozlowski@linaro.org>
- <20220401201035.189106-9-krzysztof.kozlowski@linaro.org>
+        Mon, 4 Apr 2022 19:05:37 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA84B51E7C
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 15:28:24 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R301e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0V9EPvpq_1649111299;
+Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0V9EPvpq_1649111299)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 05 Apr 2022 06:28:21 +0800
+Date:   Tue, 5 Apr 2022 06:28:17 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Nick Terrell <terrelln@fb.com>, Guo Xuenan <guoxuenan@huawei.com>,
+        Chengyang Fan <cy.fan@huawei.com>, Yann Collet <cyan@fb.com>,
+        "fangwei1@huawei.com" <fangwei1@huawei.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "syzbot+63d688f1d899c588fb71@syzkaller.appspotmail.com" 
+        <syzbot+63d688f1d899c588fb71@syzkaller.appspotmail.com>,
+        "wangli74@huawei.com" <wangli74@huawei.com>
+Subject: Re: [PATCH v3] lz4: fix LZ4_decompress_safe_partial read out of bound
+Message-ID: <YktxATidpH2A1QJu@B-P7TQMD6M-0146.local>
+References: <20211111085058.1940591-1-guoxuenan@huawei.com>
+ <20211111105048.2006070-1-guoxuenan@huawei.com>
+ <CCE83845-DC40-4E14-9105-6319C048FACB@fb.com>
+ <YkfXSzePVEhlajCU@B-P7TQMD6M-0146.local>
+ <20220404142123.7de8d3a291d6484e7fb4c8a0@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220401201035.189106-9-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220404142123.7de8d3a291d6484e7fb4c8a0@linux-foundation.org>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 01 Apr 2022 22:10:33 +0200, Krzysztof Kozlowski wrote:
-> Convert the Qualcomm Shared Memory Driver bindings to DT Schema.
+On Mon, Apr 04, 2022 at 02:21:23PM -0700, Andrew Morton wrote:
+> On Sat, 2 Apr 2022 12:55:39 +0800 Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
 > 
-> Changes against original bindings: enforce only specific names of child
-> nodes, instead of any names.
+> > On Fri, Nov 19, 2021 at 06:23:24PM +0000, Nick Terrell wrote:
+> > > 
+> > > 
+> > > > On Nov 11, 2021, at 2:50 AM, Guo Xuenan <guoxuenan@huawei.com> wrote:
+> > > > 
+> > > > When partialDecoding, it is EOF if we've either, filled the output
+> > > > buffer or can't proceed with reading an offset for following match.
+> > > > 
+> > > > In some extreme corner cases when compressed data is crusted corrupted,
+> > > > UAF will occur. As reported by KASAN [1], LZ4_decompress_safe_partial
+> > > > may lead to read out of bound problem during decoding. lz4 upstream has
+> > > > fixed it [2] and this issue has been disscussed here [3] before.
+> > > > 
+> > > > current decompression routine was ported from lz4 v1.8.3, bumping lib/lz4
+> > > > to v1.9.+ is certainly a huge work to be done later, so, we'd better fix
+> > > > it first.
+> > > > 
+> > > > [1] https://lore.kernel.org/all/000000000000830d1205cf7f0477@google.com/
+> > > > [2] https://github.com/lz4/lz4/commit/c5d6f8a8be3927c0bec91bcc58667a6cfad244ad#
+> > > > [3] https://lore.kernel.org/all/CC666AE8-4CA4-4951-B6FB-A2EFDE3AC03B@fb.com/
+> > > > 
+> > > > Reported-by: syzbot+63d688f1d899c588fb71@syzkaller.appspotmail.com
+> > > > Cc: hsiangkao@linux.alibaba.com
+> > > > Cc: terrelln@fb.com
+> > > > Cc: cyan@fb.com
+> > > > Cc: cy.fan@huawei.com
+> > > > Signed-off-by: Guo Xuenan <guoxuenan@huawei.com>
+> > > 
+> > > Sorry I’m a bit late to the party, but this looks good to me!
+> > > 
+> > > Reviewed-by: Nick Terrell <terrelln@fb.com>
+> > 
+> > Acked-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> > 
+> > Hi Andrew,
+> > 
+> > This patch has already been pending for 2 release cycles.. Would you
+> > mind submitting it upstream? Or are there other concerns about this?
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../regulator/qcom,smd-rpm-regulator.yaml     |   2 +-
->  .../bindings/remoteproc/qcom,q6v5.txt         |   2 +-
->  .../bindings/remoteproc/qcom,wcnss-pil.txt    |   2 +-
->  .../bindings/soc/qcom/qcom,smd-rpm.yaml       |   4 +-
->  .../devicetree/bindings/soc/qcom/qcom,smd.txt |  98 -------------
->  .../bindings/soc/qcom/qcom,smd.yaml           | 137 ++++++++++++++++++
->  6 files changed, 142 insertions(+), 103 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,smd.txt
->  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,smd.yaml
+> Sorry, I'd not noticed that this was from lz4 upstream.
 > 
+> I'll put a cc:stable in there and shall send it upstream this week.
+> 
+> In the changelog, can someone please explain what "crusted corrupted"
+> is saying?
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Er.. It sounds like "well-designed corrupted". I think it was a typo
+though.
+
+Thanks,
+Gao Xiang

@@ -2,89 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6554F1B8B
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE044F1DB6
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380071AbiDDVVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33464 "EHLO
+        id S1386815AbiDDVja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380017AbiDDSk2 (ORCPT
+        with ESMTP id S1380032AbiDDSl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 14:40:28 -0400
+        Mon, 4 Apr 2022 14:41:58 -0400
 Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1023CFE;
-        Mon,  4 Apr 2022 11:38:29 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id b13so9849861pfv.0;
-        Mon, 04 Apr 2022 11:38:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88DB5F85
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 11:40:01 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id s8so9750547pfk.12
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 11:40:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Nh9EyiWG8bH88pOKO/orB2F1BTvp8RdXpao3o9qIKVU=;
-        b=WBk4YURv2n8mR4BnXBU5Co6GREGNq67cVLsjtFkSEOSQuBtp7c01VP50uOrhbYLJPT
-         CqBeVN/1wSte8uHk32P8jXVsYJDeywIe9VkOv9ou4GlVC8eGl3s2vOZ6dPVd7to9PZ25
-         GLuLtWi1rwnq7eIDsZnL7Az8zcZ5GoTEOIM+bO20cjKMWl3Nqu1t2ygB/trM1CuVEfa4
-         64FbsfPid5Ruwn4bHoxZpxasH4CiFBp+dIpDSaYH9nAnLad99vgpaX8u6ZwYsmNPpptp
-         KCoY+/7fArKV0uZq+VitvyHLN3VRfulzY5FPASlKrIKbzC8lbWPKpe1CwIaem7Q3z1yb
-         JxVA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=dVG8SdKJh3lNF5aMlMn0lGtL8TsUuGiy0ylcJGnwrLQ=;
+        b=mX37UAkizZPJSLK5nuleOQGUHlnzGzVIX7n8Ey1L438YuOI2RXx1GF5cjewpiTeFfb
+         NEZ5/iVMlRh6ZJghqjttF4FVrgeWQQRSBDnKhGJlGSusXLPVP9/IzJTcC6cJyGhipMEZ
+         NN5pT8S0RD/wR/TL2mC3KHhfGSWO55u10Bk6M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Nh9EyiWG8bH88pOKO/orB2F1BTvp8RdXpao3o9qIKVU=;
-        b=jmJIc982aPyUaP/zMxL2HSVke2YaJdblaEqdrPwcRFg/jQY7zVOYWaI5hwLI8UbPAI
-         F+jpbWSq6Ahf1iZk5DuvEi+26c8MkXFHeuHZwy8WuoWHxnC+7DMBhML6/UWll7abz39e
-         tiXlv3lkHZu4fsrUjzPigBlQzVO2obQEEHy6S4QhyKkSDkx42llgMnAr2zmn+npHvNIL
-         EnR6KwDuT7FSUpdKBvlod4AWRCbkNzXNfoDaljYeONqOU2vuYhghhDCRPRVN57jAQZ1b
-         73NxpTfwr3qZFJvv5Iumh4siciLhAAJ4Fupx82z+wvgGumrllwz/yhZAZLzguWN+wdEv
-         IoBA==
-X-Gm-Message-State: AOAM532BtKZqaCakuFiY7vW7IMpc/MACLM46xTyoJbGFdecWX4ofmYvM
-        4aSiMvJHe9nXyUEmKYxyEkw=
-X-Google-Smtp-Source: ABdhPJyNsk+WMwaHYVwRYd772qQ7duJlLvu0R5roVGPfesWBXzLoafNx4P3mRx7QfElxwmvfP88n9g==
-X-Received: by 2002:a05:6a00:c8e:b0:4fb:18a6:18f9 with SMTP id a14-20020a056a000c8e00b004fb18a618f9mr1042559pfv.47.1649097509345;
-        Mon, 04 Apr 2022 11:38:29 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id 34-20020a17090a0fa500b001cabffcab2csm155161pjz.55.2022.04.04.11.38.27
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=dVG8SdKJh3lNF5aMlMn0lGtL8TsUuGiy0ylcJGnwrLQ=;
+        b=XyJfA3xX9dJin6dsS4mv6AohJh1LBDlijvtT9TKV8yRSbaUg3lVL5SolOVGIxaM1y/
+         aoB4yWjxK/DtDUasjnTda8Z6S3mkJdJQEJ0no1dkthMT4rGcV2IsgfQyFK/qk+FVoZvl
+         op2iE+YdyJns9vrZsE7Z3Bfc8xva7Kf+pKiTCvpv7RCaasusHR4BwzcDjqO1tevOj4XU
+         8LJZP9uVviV3szwyr6atFRO9TSMRchEFOuFs76herLYNnBeg1VpfCZkK9/rwPbnHqyep
+         GnfqcdwjBUER5yyuGALz8PYc7m0eTN8mZm6CRGiaBPw4VNLgJwjuOeR4BSIGtKgkoljV
+         MfSw==
+X-Gm-Message-State: AOAM530Dp43lgtptUPCszcDVvsRwlDHr1qWRgVUEum1GB/1jac976TDy
+        PKhv6opZrugizIzBf6kBK4hJXw==
+X-Google-Smtp-Source: ABdhPJx3WYIgYP8Ex9on1q2aw9dCFrPaAv+SqDaCN+xEoGXLlI1AISWPm+KJ14/yd+3EV0nxg5JGCg==
+X-Received: by 2002:a05:6a00:1252:b0:4fa:afcc:7d24 with SMTP id u18-20020a056a00125200b004faafcc7d24mr911536pfi.85.1649097601437;
+        Mon, 04 Apr 2022 11:40:01 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id ay9-20020a056a00300900b004fae1346aa1sm12196740pfb.122.2022.04.04.11.40.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 11:38:28 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        =?iso-8859-9?b?QXL9bucg3E5BTA==?= <arinc.unal@arinc9.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        =?iso-8859-2?q?Rafa=B3_Mi=B3ecki?= <rafal@milecki.pl>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Scott Branden <scott.branden@broadcom.com>,
-        Christian Lamparter <chunkeey@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] dt-bindings: arm: bcm: add bindings for Asus RT-AC88U
-Date:   Mon,  4 Apr 2022 11:38:26 -0700
-Message-Id: <20220404183826.2317943-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220402204622.3360-4-arinc.unal@arinc9.com>
-References: <20220402204622.3360-1-arinc.unal@arinc9.com> <20220402204622.3360-4-arinc.unal@arinc9.com>
+        Mon, 04 Apr 2022 11:40:01 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 11:40:00 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Heimes <christian@python.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Morris <jmorris@namei.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Steve Dower <steve.dower@python.org>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [GIT PULL] Add trusted_for(2) (was O_MAYEXEC)
+Message-ID: <202204041130.F649632@keescook>
+References: <20220321161557.495388-1-mic@digikod.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220321161557.495388-1-mic@digikod.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat,  2 Apr 2022 23:46:22 +0300, Arınç ÜNAL <arinc.unal@arinc9.com> wrote:
-> Add Asus RT-AC88U under BCM47094 based boards.
+On Mon, Mar 21, 2022 at 05:15:57PM +0100, Micka�l Sala�n wrote:
+> [...]
+> For further details, please see the latest cover letter:
+> https://lore.kernel.org/r/20220104155024.48023-1-mic@digikod.net
 > 
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
+> Commit dae71698b6c5 ("printk: Move back proc_dointvec_minmax_sysadmin()
+> to sysctl.c") was recently added due to the sysctl refactoring.
+> 
+> Commit e674341a90b9 ("selftests/interpreter: fix separate directory
+> build") will fix some test build cases as explained here:
+> https://lore.kernel.org/r/20220119101531.2850400-1-usama.anjum@collabora.com
+> Merging this commit without the new KHDR_INCLUDES is not an issue.
+> The upcoming kselftest pull request is ready:
+> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=next
+> 
+> This patch series has been open for review for more than three years and
+> got a lot of feedbacks (and bikeshedding) which were all considered.
+> Since I heard no objection, please consider to pull this code for
+> v5.18-rc1 .  These five patches have been successfully tested in the
+> latest linux-next releases for several weeks.
 
-Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
---
-Florian
+Hi Linus,
+
+It looks like this didn't get pulled for -rc1 even though it was sent
+during the merge window and has been in -next for a while. It would be
+really nice to get this landed since userspace can't make any forward
+progress without the kernel support.
+
+Was there some issue blocking this from being merged? All the feedback I
+can find on prior versions was addressed.
+
+-Kees
+
+-- 
+Kees Cook

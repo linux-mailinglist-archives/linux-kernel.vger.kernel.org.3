@@ -2,65 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 640514F0DA7
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 05:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E318E4F0DAC
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 05:18:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376979AbiDDDM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 23:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51000 "EHLO
+        id S1376983AbiDDDUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 23:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376978AbiDDDMz (ORCPT
+        with ESMTP id S1346706AbiDDDUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 23:12:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858472CE16;
-        Sun,  3 Apr 2022 20:11:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC0BE61001;
-        Mon,  4 Apr 2022 03:10:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42DA2C34111;
-        Mon,  4 Apr 2022 03:10:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649041859;
-        bh=WnI3wJJrpF3J4fgQkw88XFffWu+S8qyrSAo4X5/dF0Q=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=HUw26i7MdMdgoWEFHNvBZFE2ceBT6BU9p8GnN0cRseX8y0FuRfraODG8omFqQBN5U
-         SaUCbZREmqM+fiWeA22cx2Ec95aPlaG42eJnipXcG5D3hYyGgLG4vy68jsg0mWQXtR
-         BAJw07xio8A/+v+GF4p9tvsjuN/vgOuV8wHYgqEL07OR2Q6OykY9Vmrwy2gaS0EgYG
-         My8lMHSKBWin2cgveX0jbMJZcn7sVG40xQBAaxbB0nQ7nf+PTfhEs9gGsRgZ264Ior
-         KYgWzE1z78l+6esE2WZ5dHEtqbpwEWsQA9jLusOqDNzpBYZnrZYHFw4SMA5wHa5Tl0
-         2m4s/t++IwoHg==
-Received: by mail-wr1-f47.google.com with SMTP id w21so12472174wra.2;
-        Sun, 03 Apr 2022 20:10:59 -0700 (PDT)
-X-Gm-Message-State: AOAM531fduVBjsFrItfEzgLXuPhlqpOL7YrznOw2M7fJ1A0Fm+8BVH73
-        0Zir4ukOrHUMhbZ5DbV2q3ZhqDqFN02vfz7fpvc=
-X-Google-Smtp-Source: ABdhPJzBgFK/zNrvvxfmgebxuYtV+t3d0QoITB3yhHk4SiYCDLeM0rZdEKTqeElDWXPUWmCdK22mQ3XvuqG1Cdb/cHY=
-X-Received: by 2002:a05:6000:1184:b0:203:ff46:1d72 with SMTP id
- g4-20020a056000118400b00203ff461d72mr15722276wrx.165.1649041857496; Sun, 03
- Apr 2022 20:10:57 -0700 (PDT)
+        Sun, 3 Apr 2022 23:20:18 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73CF82D1FB
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 20:18:23 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 033D01FB;
+        Sun,  3 Apr 2022 20:18:23 -0700 (PDT)
+Received: from a077893.arm.com (unknown [10.163.36.163])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CEEE73F73B;
+        Sun,  3 Apr 2022 20:18:20 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 0/2] mm: protection_map[] cleanups
+Date:   Mon,  4 Apr 2022 08:48:38 +0530
+Message-Id: <20220404031840.588321-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a05:6000:2c1:0:0:0:0 with HTTP; Sun, 3 Apr 2022 20:10:56
- -0700 (PDT)
-In-Reply-To: <HK2PR04MB3891851AB34913F3CC2561F2811A9@HK2PR04MB3891.apcprd04.prod.outlook.com>
-References: <HK2PR04MB3891851AB34913F3CC2561F2811A9@HK2PR04MB3891.apcprd04.prod.outlook.com>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Mon, 4 Apr 2022 12:10:56 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd8ztRK9bOo3dtEjx+3sZoFLpa2yfdCczND3bFvrQ=i9Nw@mail.gmail.com>
-Message-ID: <CAKYAXd8ztRK9bOo3dtEjx+3sZoFLpa2yfdCczND3bFvrQ=i9Nw@mail.gmail.com>
-Subject: Re: [PATCH 0/2] fix referencing wrong parent dir info after renaming
-To:     "Yuezhang.Mo@sony.com" <Yuezhang.Mo@sony.com>
-Cc:     "sj1557.seo@samsung.com" <sj1557.seo@samsung.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Andy.Wu@sony.com" <Andy.Wu@sony.com>,
-        "Wataru.Aoyama@sony.com" <Wataru.Aoyama@sony.com>,
-        "Kohada.Tetsuhiro@dc.MitsubishiElectric.co.jp" 
-        <Kohada.Tetsuhiro@dc.mitsubishielectric.co.jp>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,25 +41,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022-03-25 18:42 GMT+09:00, Yuezhang.Mo@sony.com <Yuezhang.Mo@sony.com>:
-> exfat_update_parent_info() is a workaround for the bug, but it only
-> fixes the rename system call, not by fixing the root cause, the bug
-> still causes other system calls to fail.
->
-> In this patch series, the first patch fixes the bug by fixing the root
-> cause. After it, exfat_update_parent_info() is no longer needed. So the
-> second patch removes exfat_update_parent_info().
->
-> Yuezhang Mo (2):
->   exfat: fix referencing wrong parent directory information after
->     renaming
->   exfat: remove exfat_update_parent_info()
->
->  fs/exfat/namei.c | 27 +--------------------------
->  1 file changed, 1 insertion(+), 26 deletions(-)
-Applied, Thanks for your patch!
->
-> --
-> 2.25.1
->
->
+This is a split series from an earlier work which tried to drop the array
+protection_map[] on various platforms. This series applies on v5.18-rc1.
+
+https://lore.kernel.org/all/1646045273-9343-1-git-send-email-anshuman.khandual@arm.com/
+
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+
+Anshuman Khandual (2):
+  mm/debug_vm_pgtable: Drop protection_map[] usage
+  mm/mmap: Clarify protection_map[] indices
+
+ mm/debug_vm_pgtable.c | 31 +++++++++++++++++++------------
+ mm/mmap.c             | 18 ++++++++++++++++--
+ 2 files changed, 35 insertions(+), 14 deletions(-)
+
+-- 
+2.25.1
+

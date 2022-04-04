@@ -2,56 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC5D4F0EF2
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 07:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6388C4F0EFF
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 07:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353119AbiDDFJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 01:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48770 "EHLO
+        id S1358322AbiDDFOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 01:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377363AbiDDFJc (ORCPT
+        with ESMTP id S239685AbiDDFOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 01:09:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5CF3AA71;
-        Sun,  3 Apr 2022 22:07:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30C866116F;
-        Mon,  4 Apr 2022 05:07:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01954C2BBE4;
-        Mon,  4 Apr 2022 05:07:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649048848;
-        bh=rQVIxA1afwJ+h3SVM7T+uP8DlSo28TtyzvT0bkF0qPo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l27SCTbH51/9XHHwDMydw7JG/oLhbLYQ588ZhIfA75G40vgj6H/pir4pDPKTMqB58
-         2DbZNJbqPzXnRBhFjNBUWfQOBHRTe6fJnlHTxcOWyn9MH/Ejl81vmJi0Ee2SL9A85k
-         J3vEiEVWFml/0oyJjbBE0QoESQdzrFzKmEPNvnKY=
-Date:   Mon, 4 Apr 2022 07:07:23 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
-        stable-commits@vger.kernel.org,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: Patch "can: isotp: add local echo tx processing for consecutive
- frames" has been added to the 5.15-stable tree
-Message-ID: <Ykp9CxBncgUv7inJ@kroah.com>
-References: <20220402160350.2129531-1-sashal@kernel.org>
- <020deca3-6560-ab5c-8794-ec06f2a8498a@hartkopp.net>
- <4ee9edd1-f805-b125-32d6-13b06d38bedc@hartkopp.net>
- <YknZSon6bikrS7ij@sashalap>
- <33688c0b-f90f-15cc-d098-c21a23b285ff@hartkopp.net>
- <YkowdppmGGMSPjNB@sashalap>
+        Mon, 4 Apr 2022 01:14:37 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAFE381AA;
+        Sun,  3 Apr 2022 22:12:41 -0700 (PDT)
+Received: from fsav119.sakura.ne.jp (fsav119.sakura.ne.jp [27.133.134.246])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 2345CHiA029025;
+        Mon, 4 Apr 2022 14:12:17 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav119.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp);
+ Mon, 04 Apr 2022 14:12:17 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 2345CGDP029017
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 4 Apr 2022 14:12:17 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <67179a84-8be7-4c93-e355-2ca50666f960@I-love.SAKURA.ne.jp>
+Date:   Mon, 4 Apr 2022 14:12:14 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkowdppmGGMSPjNB@sashalap>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [syzbot] INFO: task can't die in blkdev_common_ioctl
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     syzbot <syzbot+4f1a237abaf14719db49@syzkaller.appspotmail.com>,
+        axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        Jan Kara <jack@suse.cz>
+References: <0000000000007a4a2d05dba6baa6@google.com>
+ <d3213c1a-f82a-02f6-b5b2-0d3242e0242a@I-love.SAKURA.ne.jp>
+ <Ykp63pk7aSj/bNRT@infradead.org>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <Ykp63pk7aSj/bNRT@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,79 +57,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 03, 2022 at 07:40:38PM -0400, Sasha Levin wrote:
-> On Sun, Apr 03, 2022 at 08:24:04PM +0200, Oliver Hartkopp wrote:
-> > Hi Sasha,
-> > 
-> > On 03.04.22 19:28, Sasha Levin wrote:
-> > > On Sun, Apr 03, 2022 at 11:26:30AM +0200, Oliver Hartkopp wrote:
-> > > > Hello Sasha/Greg,
-> > > > 
-> > > > the way how the can-isotp patches are currently applied to the
-> > > > stable trees 5.17/5.16/5.15/5.10 is FINE.
-> > > > 
-> > > > This means 5.15 now has a functional improvement (as only stable
-> > > > tree). But that should be fine too.
-> > > 
-> > > Are they all a functional improvement? or are some fixes?
-> > > 
-> > 
-> > Only upstream commit 4b7fe92c06901f4563af0e36d25223a5ab343782 ("can:
-> > isotp: add local echo tx processing for consecutive frames") is an
-> > improvement, see:
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git/tree/queue-5.15/can-isotp-add-local-echo-tx-processing-for-consecuti.patch?id=c0c51980438b5e5b0d758dc28eef5947e57c9c1e
-> > 
-> > All others are fixes.
-> > 
-> > You now added this improvement to 5.15 which then needs this original
-> > fix, which you correctly applied:
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git/tree/queue-5.15/can-isotp-sanitize-can-id-checks-in-isotp_bind.patch?id=c0c51980438b5e5b0d758dc28eef5947e57c9c1e
-> > 
-> > The other stable kernels 5.17, 5.16, 5.10 do not contain the improvement
-> > and for that reason I sent an adapted fix, which Greg applied to those
-> > kernels, e.g. in 5.17:
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git/tree/queue-5.17/can-isotp-sanitize-can-id-checks-in-isotp_bind.patch?id=c0c51980438b5e5b0d758dc28eef5947e57c9c1e
-> > 
-> > I originally sent this adapted patch to both of you on 02.04.22 11:12
-> > ("[PATCH stable v5.10-v5.17] can: isotp: sanitize CAN ID checks in
-> > isotp_bind()")
-> > 
-> > So you could either leave it as-as and only the 5.15 has the improvement
-> > OR you remove the two first referenced patches from the 5.15-queue and
-> > add only the *adapted* "sanitized CAN ID ..." patch which is applied in
-> > 5.17 and the other series. Your choice ;-)
+On 2022/04/04 13:58, Christoph Hellwig wrote:
+> On Sat, Apr 02, 2022 at 08:26:23PM +0900, Tetsuo Handa wrote:
+>>> git tree:       linux-next
+>>> console output: https://syzkaller.appspot.com/x/log.txt?x=168d578db00000
+>>> kernel config:  https://syzkaller.appspot.com/x/.config?x=be9183de0824e4d7
+>>> dashboard link: https://syzkaller.appspot.com/bug?extid=4f1a237abaf14719db49
+>>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>>>
+>>> Unfortunately, I don't have any reproducer for this issue yet.
+>>
+>> This is a known problem, and Christoph does not like a mitigation patch.
+>> https://lkml.kernel.org/r/YgoQBTzb3b0l1SzP@infradead.org
 > 
-> Looks like we had a mismerge in 5.15. I've dropped the feature patch and
-> picked up your backport instead of the one that was in the tree.
-> 
-> > Sorry for this big pile of patches this time :-/
-> 
-> Fixes are good :)
-> 
-> > Finally another hint:
-> > 
-> > All stable trees (5.10, 5.15, 5.16, 5.17) already contain the patch
-> > "can: isotp: support MSG_TRUNC flag when reading from socket" (upstream
-> > commit 42bf50a1795a185).
-> > 
-> > E.g. see
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git/tree/queue-5.17/can-isotp-support-msg_trunc-flag-when-reading-from-s.patch?id=c0c51980438b5e5b0d758dc28eef5947e57c9c1e
-> > 
-> > This patch is needed but unfortunately introduced a regression which is
-> > fixed with this follow up patch here:
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=e382fea8ae54f5bb62869c6b69b33993d43adeca
-> > 
-> > "can: isotp: restore accidentally removed MSG_PEEK feature"
-> > 
-> > So this last patch needs to be added to 5.10, 5.15, 5.16, 5.17 too.
-> 
-> I've queued it up for the above trees.
+> And this report shows why: your patch makes the lock acquisition in
+> blkdev_fallocate killable.  Which would not help with this problem at
+> all, as it does not come through blkdev_fallocate.
 
-Thanks for fixing up my merge mess here, much appreciated.
+My patch proposes filemap_invalidate_lock_killable() and converts only
+blkdev_fallocate() case as a starting point. Nothing prevents us from
+converting e.g. blk_ioctl_zeroout() case as well. The "not come through
+blkdev_fallocate" is bogus.
 
-greg k-h
+>                                                     The problem is that
+> the loop writing actual zeroes to the disk can take forever, and we
+> hold the invalidate_lock over that.
+
+There can be several locations which cannot be converted to
+filemap_invalidate_lock_killable() (like we had to use mutex_lock(&lo->lo_mutex)
+for lo_release() case). But many locations can be converted to
+filemap_invalidate_lock_killable() (like we use mutex_lock_killable(&lo->lo_mutex)
+for almost all locations).
+
+Being responsive to SIGKILL is good (even if we cannot afford making all locks
+killable). I made many locations killable. Therefore, I wonder why not?
+

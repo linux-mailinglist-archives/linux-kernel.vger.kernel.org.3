@@ -2,99 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4AED4F1C97
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 781AE4F1DA0
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344790AbiDDV2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
+        id S1382996AbiDDVci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379721AbiDDR7K (ORCPT
+        with ESMTP id S1379720AbiDDR7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 13:59:10 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187E334BB9;
-        Mon,  4 Apr 2022 10:57:14 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id bq8so21564259ejb.10;
-        Mon, 04 Apr 2022 10:57:14 -0700 (PDT)
+        Mon, 4 Apr 2022 13:59:01 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2C234BB9;
+        Mon,  4 Apr 2022 10:57:04 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-df22f50e0cso11624114fac.3;
+        Mon, 04 Apr 2022 10:57:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LbauJjsyWfyUgbBcVSH3nfrWUAPSnEOj9xP8Lf2uMQc=;
-        b=UG944lrMDFa46xw5mJXf3ez+C/4ds1SQUW0we6U55dMyhEZZ7nlsdZThXtaE9WVYzw
-         Jfy65lB6zabNtWssWwmJd9J4VR9M1BfJ3erzVCwXOfMJvwO00IoZn6aX0ZU8yKagMGIT
-         m/2efF5EDkOSKH0VH5qjuwCWsiLJzSMR4adJbiFDFKN/kHS+ytNGd9JEIUJq19xGg53J
-         v1ltJfw45hvtfnHqx3K3wH9zjB7RDEdktgzKQk1rnDUvWEpt6DLklfwHBAJ+DIePeLH+
-         MY/AkXEjvBAlDwOi3r2ud91AVrcXv7wmi2UD5ZZ37GjYD6yw1xgCIhWoiGcMF3s7g6z7
-         +EDA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AEWP21GM4E9cyOoL3qIS0CoFdLbJpmk5WXVV+auexAQ=;
+        b=A8fxSPNmIfaWYKrHBlZaLXcvOYLu9Vrcb+u7TNHqeRxaF/O8WR7cLJCST+Tc1H7is6
+         K61aviSX1tCeV7jaQPXPb4zsKtFjWO9V4ZXkcZMWTBJbX5E7+DtBaM2KQaQxQ4NXy12M
+         VggI/cg9xK/1reYGYov8SHIDOSbJxUe7LPJ70ptMywxwLmYO7nPkjdCIwb76sGskIGsH
+         uALkaOGEGL7Osw6CrmiCAlUGaa+Ld0GAWKTdFSdsJJFtyGoF9Cedmf4VX1KsJR0DU3WP
+         lSoHhWrB/Lqqtfj3cJlLUISYxaA/U8U70C+up7rODwk8A65eKh/FQz1Nf3MoeGSfayNz
+         4a9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LbauJjsyWfyUgbBcVSH3nfrWUAPSnEOj9xP8Lf2uMQc=;
-        b=rMra94lm9dtre0XiDam+8gKrQWUORlRgC2DySihnWEZwxItH7/XnCXSQEQHlsf0lf9
-         Q8epiWf3Sge21TEoK+ZWNG9P9CV+Lys1KP8IMdyFq7/SoW9UtK7RCl269DH5/EslDVpE
-         xcgni/1t0VMjhoj/9bAuTsQJBd1U3X/khjo6G0kyPhNa0vUYxG89K7Yb9DqXdMUM4jKj
-         BXc245x4cMdvjm0Aw2BKQCQ0Mw5VRujkN7fbmGz+ItvmcsRtWD01rvB5CCAxD2c/TOWH
-         IIi97y84dpuRbhA2RuMiHlwfvR1jUzRshAHzNjBtL7K7aqBAQatdBRDxX6iOZiyMpDu4
-         HMCw==
-X-Gm-Message-State: AOAM533SuTLde/FWYCzsJNd3zL0P/H7eAd9XFppxa2ws/r+SgezJy+34
-        6MySgJYmjwrtGxORsJewxgZKrq9QdQUT97bM+vE=
-X-Google-Smtp-Source: ABdhPJz6VPW+goa8wHgWwkrJ9LveFINVQNnHYtPycIFT9TB7eAJpR4uYm/cUBC6mR+k35uivnhYmWtrACl6sZDox9MU=
-X-Received: by 2002:a17:906:64ca:b0:6e0:1648:571c with SMTP id
- p10-20020a17090664ca00b006e01648571cmr1191237ejn.477.1649095032585; Mon, 04
- Apr 2022 10:57:12 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AEWP21GM4E9cyOoL3qIS0CoFdLbJpmk5WXVV+auexAQ=;
+        b=gE96Z0MC6NmgPP/v47aYW3XQgJdH0McAT5AHeornhtrL32tWtJ9+JKKgwQVN/Ywjl3
+         KV2rpbe9/U9rHQo+U0IFvXubIZ276ygcFvPAjSAKhj4c5sK469k9lHwOFnhj6MqGnwrG
+         qu828fLS8W6Vq21PurYpALr07EuIu/Z2SeGNgTEGa1BRrmNk1m4y5cBtHiT8QcTyNG68
+         KyrbyVOULaBt6pXj97gft2Css1Xb/jXmoukrSWEwhVSUhf0Q7uQWgPcY/idsSDwK1eCX
+         uPt/p+77Q5+DFxMWo/yEUM/hJ70Al+2BonwBtislWkWxtMHNYH85fI2q4rCUmUrb+5CP
+         GHrQ==
+X-Gm-Message-State: AOAM532r/aPrPeXZzol95uJSoqNyZ5a3F/nsgGq6KqSCCzkNLxmSrjdc
+        7OhPDja/kkN3pENK2+ldQ08=
+X-Google-Smtp-Source: ABdhPJx18shL1wpUax/xhz8105BoWa0G7HpdbNUzdvsDRLqA5/2ZEilu8wWMeQGrEG3upCgBtBI+yA==
+X-Received: by 2002:a05:6870:f719:b0:d6:e0c0:af42 with SMTP id ej25-20020a056870f71900b000d6e0c0af42mr187736oab.165.1649095024221;
+        Mon, 04 Apr 2022 10:57:04 -0700 (PDT)
+Received: from t14s.localdomain ([2001:1284:f013:bc01:5a2:a886:8487:b8de])
+        by smtp.gmail.com with ESMTPSA id r23-20020a056830237700b005b2610517c8sm4930201oth.56.2022.04.04.10.57.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 10:57:03 -0700 (PDT)
+Received: by t14s.localdomain (Postfix, from userid 1000)
+        id 1B7191DB7C2; Mon,  4 Apr 2022 14:57:02 -0300 (-03)
+Date:   Mon, 4 Apr 2022 14:57:02 -0300
+From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+To:     Jamie Bainbridge <jamie.bainbridge@gmail.com>
+Cc:     Vlad Yasevich <vyasevich@gmail.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 net] sctp: count singleton chunks in assoc user stats
+Message-ID: <YksxbrRhtngGlERY@t14s.localdomain>
+References: <c9ba8785789880cf07923b8a5051e174442ea9ee.1649029663.git.jamie.bainbridge@gmail.com>
 MIME-Version: 1.0
-References: <Yib9F5SqKda/nH9c@infradead.org> <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
- <YkmWh2tss8nXKqc5@infradead.org> <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Mon, 4 Apr 2022 10:57:01 -0700
-Message-ID: <CAMo8BfKgn0T5RtUTb89fPvygNJJYLy7r1=RZTmTTm=jiDfx1hQ@mail.gmail.com>
-Subject: Re: [RFC PULL] remove arch/h8300
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "moderated list:H8/300 ARCHITECTURE" 
-        <uclinux-h8-devel@lists.sourceforge.jp>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c9ba8785789880cf07923b8a5051e174442ea9ee.1649029663.git.jamie.bainbridge@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Mon, Apr 04, 2022 at 09:47:48AM +1000, Jamie Bainbridge wrote:
+> Singleton chunks (INIT, HEARTBEAT PMTU probes, and SHUTDOWN-
+> COMPLETE) are not counted in SCTP_GET_ASOC_STATS "sas_octrlchunks"
+> counter available to the assoc owner.
+> 
+> These are all control chunks so they should be counted as such.
+> 
+> Add counting of singleton chunks so they are properly accounted for.
+> 
+> Fixes: 196d67593439 ("sctp: Add support to per-association statistics via a new SCTP_GET_ASSOC_STATS call")
+> Signed-off-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
 
-On Mon, Apr 4, 2022 at 6:07 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> 1. xtensa nommu has does not compile in mainline and as far as I can
-> tell never did
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 
-I have a different picture here. If you look at the logs at
-  https://kerneltests.org/builders/qemu-xtensa-master/
-
-there's a line for noMMU config in every one of them:
-  Building xtensa:de212:kc705-nommu:nommu_kc705_defconfig ... running
-............ passed
-
-Please let me know if you observe any specific build/runtime issues.
-
--- 
-Thanks.
--- Max
+Thanks Jamie.

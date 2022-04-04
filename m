@@ -2,195 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B63974F0D8A
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 04:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA584F0D8C
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 04:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376912AbiDDCgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 22:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39008 "EHLO
+        id S1376920AbiDDChL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 22:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbiDDCgW (ORCPT
+        with ESMTP id S1376915AbiDDChJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 22:36:22 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E5827CF9;
-        Sun,  3 Apr 2022 19:34:26 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id i4so6677828qti.7;
-        Sun, 03 Apr 2022 19:34:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pet6Cd8QN+6E9l7Pe1i1Z7DRHGjXc6tw1i1GJeHwKHY=;
-        b=V8puzvltQxJL9XxR1kuxmEAcD3nniE6lMtpldsHM3CWZnj98229LnpMFRFmvNCdLIc
-         moyLXNsc9st9sioCsMmdz0/GGQN5Riv0xseZ+y8ddA++5tQPSYdT7lsO5AwpMUGQ+3fv
-         aPu1D/FWGC/M8vNVOW0SsD/Vs6D+8Me3yL2uWFnAdFn+BqMwRyQtMlVetUXY93IofmU8
-         xvWKhEoJr0Z9S5l7ikgVgk/iDFKvJvfhM1BFOSyWQVJsF7/79VzbpGnf8q/dIn1hDvqP
-         whl+uX0h6pwSI2KO/KDgQ1ExFhL5orJ0O5YiOipx/C/A3DUaWPPyFGpZThuTalX3Lvf7
-         T/tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pet6Cd8QN+6E9l7Pe1i1Z7DRHGjXc6tw1i1GJeHwKHY=;
-        b=QRRZSZTy5GxTqWlCGTkvZwN1qosFChfoJ1XG5Q6UdaOcvF55t6RYTXaPqmDVL2Pfgv
-         jqmWK+0XPD40g5viYIWkt4IR+OfaJOsTlXk4INB8dAqAj/gKNlKNlHl0uwuJ4s3bSieW
-         JJFaapdBpO9LHH7srd7fAC2WlTZjPCnNhbvfEDI6SHjCFceNrPIe9Rn26ulISUL3Ajr1
-         KA59w/QshoVLbd4w/FRfpNLxKqZjWYHePAIGMjMyx6zFl+pRkRIV2ZbvRGrJr9HV95x/
-         ne1Z7utgpLCfg0u3AuUFcvQvCbgLQsH4eYdBADf0290lB9eXv8OtysH3crRMrtBE0vhl
-         qpAw==
-X-Gm-Message-State: AOAM531v7qdiDfMoqqpQhdBbs3HkAkldl/kBxQ8HAzQ5dB0VHW1ODmQm
-        pMFYSQ8YmuIN2MC2X/KiYnQomKKXNRpSqziW4Wk=
-X-Google-Smtp-Source: ABdhPJyAdARiOzxgBRjGfjOxZyVkyOhu8EUSQdQ140UXpKmWbiF4Mf5SGUwoCIVpjWRFagFwo5HlCRsi/sF1OOhz/5k=
-X-Received: by 2002:a05:622a:1013:b0:2e1:c9c0:9831 with SMTP id
- d19-20020a05622a101300b002e1c9c09831mr15898965qte.245.1649039665610; Sun, 03
- Apr 2022 19:34:25 -0700 (PDT)
+        Sun, 3 Apr 2022 22:37:09 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847EC27FDC
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 19:35:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1649039713; x=1680575713;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=t8pKoysiMu4CyqIOrFEHeeHkKgTktH08bg5oAT6+jus=;
+  b=Bu70rB1HcwOBRdwJLAZVya4WAU7D5GCbV4LbvuCPgPy1vItQMzXPfU9R
+   cpEaWYEzLBFWpdLZmiadccZnqca3JxgB6d4Dq1rwwl/Bjruy//7Miqra0
+   SC7HSlUD5fuueaGWQbBipIEpNpk0Nfqj9QjxPk+sgKQaRIc6TXzsBg/8I
+   wiGhgbLIM8hdvDmGPWNsi0DkuhlOk6VVko6z1Purc4xmNrn3M3mv9Z5mz
+   wrpkZAhhzLMXbnYQE8sIcDdNYTrKsOD9hRxUcuj6T8wxDrl/TVDGMdFmr
+   oYrppR2VDTeA30hw2pDHM92IMMEBFknjFXyQYloWy8cHr3m6IWfrrGQVh
+   w==;
+X-IronPort-AV: E=Sophos;i="5.90,233,1643644800"; 
+   d="scan'208";a="196997927"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 04 Apr 2022 10:35:11 +0800
+IronPort-SDR: 1xCrVq+afmysn5cOH45Nd3x1WXDuK7033nmg3E2ZPZMNH14kFd9IF2OWc2GDfi3qJ/PCNK6rB3
+ xkLfH7HRPzxNC8tQV5nrnWPYT+kl7Ru6lFeeRnWX2bsKXt4rSymQpI9AfoEt7CTSlcQfbbF+VZ
+ 9JJS8pVi3wJnb7SakKSMrMVYbvUr9jjeIm0QcgwQMzsgMkJLUwUgE9UEQdygb3+SqIUrlNgNpM
+ F3TfU//jlddphEw1PeSzmu+A4oUnWz3g69XkfH6UzROmR93RZJXuJzt8XOfcX48VyUfJZsp3P7
+ REQuUrX/tEjaEHKoMqS7JkNy
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Apr 2022 19:06:48 -0700
+IronPort-SDR: WkvwSOR23D/SE4EQLEBRgqn9l7KXsq5ZXUnjJzmx5xPGffkLRQ7a7dniN8lg6IHsUiOASn6/R2
+ YneDvKgEvxJpsA6KGO4yiNi5vt2uvak3RDUAAF5IGwzbSCnugJw/MvTXCXaWpRCm0qsTJ6aeB8
+ B6skqk2FocnLCXtJ4YUcXRYbxadncuWdbNsBmXxeentMJFb8Ah6chUpo9yNLwTJw+mO7oZ6xb1
+ YJTbxU4d+H4j22L+Z5wmeWeLc3LLTeDeN9hugM2givBeV+35gOw06YQVLzeC6oShwsSMpXk1nl
+ 0LA=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Apr 2022 19:35:12 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KWvy7543yz1Rwrw
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 19:35:11 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1649039711; x=1651631712; bh=t8pKoysiMu4CyqIOrFEHeeHkKgTktH08bg5
+        oAT6+jus=; b=F+KrbcDXCl595enPQhpArA5xX6uMJLhsQSZi1X61hvqk54AYyxW
+        FUSLdN0qFnnVIrHyuT+PcYHxpqxTx/nSD/xJCPhDI/nRkKqhU5R6dXR2CdDWmw78
+        8bUs7bEkumWC87iW1QfWCYRU8nDCQ2pLfLy480uHkbLQUL8uDc2DcfpIRZXRavF2
+        DpWnUTGclLlrLRBZuKWk7XlsDUS+EmTnkUvzyIngWq3jZ8KcgNJNDWLuyBey4cvz
+        4bmHcTRK3Y5ubksNE6HPS2D4ThGeJ/HPg2uTQjCxUUojIBrgCwRWLPtT1lCV8gTE
+        g7N9gs2MqGYX5NPb9dWPrwl4JLdlMko3hbA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Lgykm2V3sjlX for <linux-kernel@vger.kernel.org>;
+        Sun,  3 Apr 2022 19:35:11 -0700 (PDT)
+Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KWvy62Pbxz1Rvlx;
+        Sun,  3 Apr 2022 19:35:10 -0700 (PDT)
+Message-ID: <cba0d4aa-94ae-694e-6203-d4e56b21645c@opensource.wdc.com>
+Date:   Mon, 4 Apr 2022 11:35:08 +0900
 MIME-Version: 1.0
-References: <1648713656-24254-1-git-send-email-zhaoyang.huang@unisoc.com>
- <YkVt0m+VxnXgnulq@dhcp22.suse.cz> <CAGWkznF4qb2EP3=xVamKO8qk08vaFg9JeHD7g80xvBfxm39Hkg@mail.gmail.com>
- <YkWR8t8yEe6xyzCM@dhcp22.suse.cz> <CAGWkznHxAD0757m1i1Csw1CVRDtQddfCL08dYf12fa47=-uYYQ@mail.gmail.com>
- <YkbjNYMY8VjHoSHR@dhcp22.suse.cz> <CAGWkznF7cSyPU0ceYwH6zweJzf-X1bQnS6AJ2-J+WEL0u8jzng@mail.gmail.com>
- <CAJuCfpHneDZMXO_MmQDPA+igAOdAPRUChiq+zftFXGfDzPHNhQ@mail.gmail.com>
-In-Reply-To: <CAJuCfpHneDZMXO_MmQDPA+igAOdAPRUChiq+zftFXGfDzPHNhQ@mail.gmail.com>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Mon, 4 Apr 2022 10:33:58 +0800
-Message-ID: <CAGWkznFTQCm0cusVxA_55fu2WfT-w2coVHrT=JA1D_9_2728mQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        cgroups mailinglist <cgroups@vger.kernel.org>,
-        Ke Wang <ke.wang@unisoc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] ata: pata_mpc52xx: Prepare cleanup of powerpc's
+ asm/prom.h
+Content-Language: en-US
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org
+References: <cefae2882f3b07917da18ac1d644d7307f06fe31.1648833422.git.christophe.leroy@csgroup.eu>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <cefae2882f3b07917da18ac1d644d7307f06fe31.1648833422.git.christophe.leroy@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 3, 2022 at 11:04 PM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Fri, Apr 1, 2022 at 10:18 PM Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
-> >
-> > On Fri, Apr 1, 2022 at 7:34 PM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Fri 01-04-22 09:34:02, Zhaoyang Huang wrote:
-> > > > On Thu, Mar 31, 2022 at 7:35 PM Michal Hocko <mhocko@suse.com> wrote:
-> > > > >
-> > > > > On Thu 31-03-22 19:18:58, Zhaoyang Huang wrote:
-> > > > > > On Thu, Mar 31, 2022 at 5:01 PM Michal Hocko <mhocko@suse.com> wrote:
-> > > > > > >
-> > > > > > > On Thu 31-03-22 16:00:56, zhaoyang.huang wrote:
-> > > > > > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> > > > > > > >
-> > > > > > > > For some kind of memcg, the usage is varies greatly from scenarios. Such as
-> > > > > > > > multimedia app could have the usage range from 50MB to 500MB, which generated
-> > > > > > > > by loading an special algorithm into its virtual address space and make it hard
-> > > > > > > > to protect the expanded usage without userspace's interaction.
-> > > > > > >
-> > > > > > > Do I get it correctly that the concern you have is that you do not know
-> > > > > > > how much memory your workload will need because that depends on some
-> > > > > > > parameters?
-> > > > > > right. such as a camera APP will expand the usage from 50MB to 500MB
-> > > > > > because of launching a special function(face beauty etc need special
-> > > > > > algorithm)
-> > > > > > >
-> > > > > > > > Furthermore, fixed
-> > > > > > > > memory.low is a little bit against its role of soft protection as it will response
-> > > > > > > > any system's memory pressure in same way.
-> > > > > > >
-> > > > > > > Could you be more specific about this as well?
-> > > > > > As the camera case above, if we set memory.low as 200MB to keep the
-> > > > > > APP run smoothly, the system will experience high memory pressure when
-> > > > > > another high load APP launched simultaneously. I would like to have
-> > > > > > camera be reclaimed under this scenario.
-> > > > >
-> > > > > OK, so you effectivelly want to keep the memory protection when there is
-> > > > > a "normal" memory pressure but want to relax the protection on other
-> > > > > high memory utilization situations?
-> > > > >
-> > > > > How do you exactly tell a difference between a steady memory pressure
-> > > > > (say stream IO on the page cache) from "high load APP launched"? Should
-> > > > > you reduce the protection on the stram IO situation as well?
-> > > > We can take either system's io_wait or PSI_IO into consideration for these.
-> > >
-> > > I do not follow. Let's say you have a stream IO workload which is mostly
-> > > RO. Reclaiming those pages means effectivelly to drop them from the
-> > > cache so there is no IO involved during the reclaim. This will generate
-> > > a constant flow of reclaim that shouldn't normally affect other
-> > > workloads (as long as kswapd keeps up with the IO pace). How does your
-> > > scheme cope with this scenario? My understanding is that it will simply
-> > > relax the protection.
-> > You are right. This scheme treats the system's memory pressure
-> > equally, no matter if it comes from in-kernel page allocation with
-> > high order or cache drop by IO like things. The decay_factor composed
-> > of PSI_SOME and PSI_FULL which represent the system is tight on
-> > memory, every entity has the obligation to donate to solve this issue.
-> > >
-> > > > > [...]
-> > > > > > > One very important thing that I am missing here is the overall objective of this
-> > > > > > > tuning. From the above it seems that you want to (ab)use memory->low to
-> > > > > > > protect some portion of the charged memory and that the protection
-> > > > > > > shrinks over time depending on the the global PSI metrict and time.
-> > > > > > > But why this is a good thing?
-> > > > > > 'Good' means it meets my original goal of keeping the usage during a
-> > > > > > period of time and responding to the system's memory pressure. For an
-> > > > > > android like system, memory is almost forever being in a tight status
-> > > > > > no matter how many RAM it has. What we need from memcg is more than
-> > > > > > control and grouping, we need it to be more responsive to the system's
-> > > > > > load and could  sacrifice its usage  under certain criteria.
-> > > > >
-> > > > > Why existing tools/APIs are insufficient for that? You can watch for
-> > > > > both global and memcg memory pressure including PSI metrics and update
-> > > > > limits dynamically. Why is it necessary to put such a logic into the
-> > > > > kernel?
-> > > > Poll and then React method in userspace requires a polling interval
-> > > > and response time. Take PSI as an example, it polls ten times during
-> > > > POLLING_INTERVAL while just report once, which introduce latency in
-> > > > some extend.
-> > >
-> > > Do workload transitions happen so often in your situation that the
-> > > interval really matters? As Suren already pointed out starting a new
-> > > application is usually an explicit event which can pro-activelly update
-> > > limits.
-> > Yes. As my reply to Suren's comment, even a positive monitor service
-> > which could be aware of the activity starting(APP launching etc) at
-> > the very first time, has to 1. read PSI and memcg->watermark/usage 2.
-> > make a decision. 3. write memcg->memory.low to adjust memory
-> > allowance. Furthermore, monitors could not supervise the APP for whole
-> > life time, while the reclaiming could arise at any time.
->
-> Ok, sounds like you want this dynamic limit to be active all the time,
-> not only at specific points in the process's life cycle.
-Not sure yet. I think it would be better to cooperate with AMS like
-things which could distinguish scenarios. Such as place
-foreground/background processes into different memcgs with different
-decay configurations OR dynamic set up the parameters to a specific
-memcg.
-> One thing that I don't understand in this approach is: why memory.low
-> should depend on the system's memory pressure. It seems you want to
-> allow a process to allocate more when memory pressure is high. That is
-> very counter-intuitive to me. Could you please explain the underlying
-> logic of why this is the right thing to do, without going into
-> technical details?
-What I want to achieve is make memory.low be positive correlation with
-timing and negative to memory pressure, which means the protected
-memcg should lower its protection(via lower memcg.low) for helping
-system's memory pressure when it's high. The concept behind is memcg's
-fault back of dropped memory is less important than system's latency
-on high memory pressure. Please refer to my new version's test data
-for more detail.
->
-> >
-> > > --
-> > > Michal Hocko
-> > > SUSE Labs
+On 4/2/22 02:18, Christophe Leroy wrote:
+> powerpc's asm/prom.h brings some headers that it doesn't
+> need itself.
+> 
+> In order to clean it up, first add missing headers in
+> users of asm/prom.h
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+
+Applied to for-5.19. Thanks !
+
+> ---
+>   drivers/ata/pata_mpc52xx.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/ata/pata_mpc52xx.c b/drivers/ata/pata_mpc52xx.c
+> index 3250ef317df6..03b6ae37a578 100644
+> --- a/drivers/ata/pata_mpc52xx.c
+> +++ b/drivers/ata/pata_mpc52xx.c
+> @@ -19,11 +19,12 @@
+>   #include <linux/gfp.h>
+>   #include <linux/delay.h>
+>   #include <linux/libata.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_irq.h>
+>   #include <linux/of_platform.h>
+>   #include <linux/types.h>
+>   
+>   #include <asm/cacheflush.h>
+> -#include <asm/prom.h>
+>   #include <asm/mpc52xx.h>
+>   
+>   #include <linux/fsl/bestcomm/bestcomm.h>
+
+
+-- 
+Damien Le Moal
+Western Digital Research

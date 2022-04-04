@@ -2,95 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C23FA4F1545
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 14:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A1D4F154D
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 14:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348025AbiDDM4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 08:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
+        id S1348257AbiDDM5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 08:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236085AbiDDM4w (ORCPT
+        with ESMTP id S232979AbiDDM5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 08:56:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FE92275F7
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 05:54:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649076895;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 4 Apr 2022 08:57:41 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F78C32993;
+        Mon,  4 Apr 2022 05:55:45 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 5D3321F383;
+        Mon,  4 Apr 2022 12:55:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1649076944; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=J7oPoHpR753mUEaQDFGWtJcBiuJoSf0bjw6p8TVCqQs=;
-        b=fRHty2D6zLCOVkw2FUbbfvlli6Z1M/2oa7Tqzm7VNCYRZeeptalJliu650pkTWo4SWYTof
-        23GLEZconCC/IW0L+1Th41r8GwFSWPGjeRAUyGODFVTo5jZWYodBdaQTVdDaoTNgIV5XMb
-        keFuL8WpDQw1oQVNLoR4xr1rM9E/fto=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-347-SD0pniW2NVy60IPhdQivKg-1; Mon, 04 Apr 2022 08:54:54 -0400
-X-MC-Unique: SD0pniW2NVy60IPhdQivKg-1
-Received: by mail-ed1-f72.google.com with SMTP id l24-20020a056402231800b00410f19a3103so5454138eda.5
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 05:54:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=J7oPoHpR753mUEaQDFGWtJcBiuJoSf0bjw6p8TVCqQs=;
-        b=JN6V4vnhtdzHGU+eaRnEUgEN5VOV6wdWM1AYgLCK8z+YoB457U98WPtVKMuJ37aNJW
-         56VtwGV8k8OvaGL+mzgXUmjzIks35PBbt7WoO9OvfKMgdoRbuTp6rz3yyuE+NBcKKR3D
-         /gmuwYEBdZO9yYLfJuA6rTjpE62/75GEEhn5KzVyJ1PRfdpsRQLBkgoDlKX1/lJBjjvS
-         zL680iiOzmycH4+5ZhG9aG0m70n4PkBeCb2cHgJjBz74SBtrOoe9RIpmui6F2aWFPKzo
-         iCYDqv+HGfkHQmwV23cHcDXp7MumdNgLy8awhrtY7+jB3ncPf5qqhF41bWWOyPwKmLEr
-         3AGQ==
-X-Gm-Message-State: AOAM532wNHgFTphxm1fKHSMFaRW5RnH3Wu4m6yq18k2X+OcUQrNDuikC
-        mJDHq8dnysQI7ba+3Z10ElU0VDixBhxan++DSF1PaopnlIpQqWBSIurMiGyNXM3JS6AWl6gABye
-        fJhVk8Yb6rM9gxw48t2nqKA9J
-X-Received: by 2002:a17:906:4786:b0:6e7:f7ec:632 with SMTP id cw6-20020a170906478600b006e7f7ec0632mr2276289ejc.751.1649076892791;
-        Mon, 04 Apr 2022 05:54:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzvov1jpOKaeEwyUrj0fOsPGoGjwYppw++2R0YiyHa8nXrQANmD5A66X2w1avIYxZlkSKY/Fw==
-X-Received: by 2002:a17:906:4786:b0:6e7:f7ec:632 with SMTP id cw6-20020a170906478600b006e7f7ec0632mr2276262ejc.751.1649076892536;
-        Mon, 04 Apr 2022 05:54:52 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id 22-20020a17090600d600b006dfbc46efabsm4323463eji.126.2022.04.04.05.54.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 05:54:52 -0700 (PDT)
-Message-ID: <4df1fc93-2a2a-3482-085f-3a88970440ff@redhat.com>
-Date:   Mon, 4 Apr 2022 14:54:51 +0200
+        bh=U3rOkje7vch6OHbrYJ0OvYxnuQPxmcNpHEJB0u8Qkeo=;
+        b=jLQaNRdG16A4I7HlMjmhmGbqipWfw8HoPbj0sYe1zdA9gQzepbZjMvsXK+7FmWvZbiu0QM
+        YkRsyF7Ka+ITBycmCNvjX2XwfXM1QOScSGvfPwLXMQ7kbeojDaXlobPbhkaH09VJgIkpHB
+        X2SoBvm0OcyVOdywseln8APbAnX33lI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1649076944;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=U3rOkje7vch6OHbrYJ0OvYxnuQPxmcNpHEJB0u8Qkeo=;
+        b=/7j7eqSsuy1ByoK8OQCMIYmGxnK5Ari3ADITvwr5gVHr0e1ZTLuOlNo6P8+o2qIpBbS5cj
+        4Ox1x3RhfBXigQAg==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 0948DA3BA7;
+        Mon,  4 Apr 2022 12:55:44 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 0A42BA0615; Mon,  4 Apr 2022 14:55:41 +0200 (CEST)
+Date:   Mon, 4 Apr 2022 14:55:41 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Pavel Machek <pavel@ucw.cz>, Jan Kara <jack@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org
+Subject: Re: Is it time to remove reiserfs?
+Message-ID: <20220404125541.tvcf3dwyfvxsnurz@quack3.lan>
+References: <YhIwUEpymVzmytdp@casper.infradead.org>
+ <20220222100408.cyrdjsv5eun5pzij@quack3.lan>
+ <20220402105454.GA16346@amd>
+ <20220404085535.g2qr4s7itfunlrqb@quack3.lan>
+ <20220404100732.GB1476@duo.ucw.cz>
+ <20220404101802.GB8279@1wt.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: unexpected indentation warning in
- Documentation/ABI/testing/sysfs-*
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org,
-        'Linux Kernel' <linux-kernel@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org, Dell.Client.Kernel@dell.com,
-        linux-iio@vger.kernel.org
-Cc:     Gao Xiang <hsiangkao@linux.alibaba.com>,
-        Huang Jianan <huangjianan@oppo.com>, Chao Yu <chao@kernel.org>,
-        Divya Bharathi <divya.bharathi@dell.com>,
-        Mark Pearson <markpearson@lenovo.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "David E. Box" <david.e.box@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>
-References: <564f87a9-dd57-d3a1-d476-d81350baf75d@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <564f87a9-dd57-d3a1-d476-d81350baf75d@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220404101802.GB8279@1wt.eu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,67 +70,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 4/4/22 13:58, Bagas Sanjaya wrote:
-> Hi,
+On Mon 04-04-22 12:18:02, Willy Tarreau wrote:
+> Hi Pavel,
 > 
-> Doing "make htmldocs" for Linux v5.18-rc1, I get new warnings:
+> On Mon, Apr 04, 2022 at 12:07:32PM +0200, Pavel Machek wrote:
+> > > Well, if someone uses Reiserfs they better either migrate to some other
+> > > filesystem or start maintaining it. It is as simple as that because
+> > > currently there's nobody willing to invest resources in it for quite a few
+> > > years and so it is just a question of time before it starts eating people's
+> > > data (probably it already does in some cornercases, as an example there are
+> > > quite some syzbot reports for it)...
+> > 
+> > Yes people should migrate away from Reiserfs. I guess someone should
+> > break the news to Arch Linux ARM people.
+> > 
+> > But I believe userbase is bigger than you think and it will not be
+> > possible to remove reiserfs anytime soon.
 > 
-> <path/to/linux>/Documentation/ABI/testing/sysfs-driver-intel_sdsi:2: WARNING: Unexpected indentation.
-> <path/to/linux>/Documentation/ABI/testing/sysfs-driver-intel_sdsi:2: WARNING: Block quote ends without a blank line; unexpected unindent.
-> <path/to/linux>/Documentation/ABI/testing/sysfs-driver-intel_sdsi:2: WARNING: Definition list ends without a blank line; unexpected unindent.
-> <path/to/linux>/Documentation/ABI/testing/sysfs-class-firmware-attributes:130: WARNING: Unexpected indentation.
-> <path/to/linux>/Documentation/ABI/testing/sysfs-class-firmware-attributes:130: WARNING: Unexpected indentation.
-> <path/to/linux>/Documentation/ABI/testing/sysfs-class-firmware-attributes:130: WARNING: Unexpected indentation.
+> I was about to say the opposite until I noticed that one of my main
+> dev machine has its kernel git dir on it because it's an old FS from
+> a previous instance of this machine before an upgrade and it turns out
+> that this FS still had lots of available space to store git trees :-/
 
-These 6 are all fixed in this series:
+:)
 
-> <path/to/linux>/Documentation/ABI/testing/sysfs-class-firmware-attributes:130: WARNING: Unexpected indentation.
-> <path/to/linux>/Documentation/ABI/testing/sysfs-class-firmware-attributes:130: WARNING: Unexpected indentation.
-> <path/to/linux>/Documentation/ABI/testing/sysfs-class-firmware-attributes:130: WARNING: Unexpected indentation.
-
-https://lore.kernel.org/platform-driver-x86/20220324164737.21765-1-hdegoede@redhat.com/T/#t
-
-Which will be included in my next fixes pull-req to Linus.
-
-> <path/to/linux>/Documentation/ABI/testing/sysfs-fs-erofs:10: WARNING: Unexpected indentation.
-> <path/to/linux>/Documentation/ABI/testing/sysfs-fs-erofs:10: WARNING: Block quote ends without a blank line; unexpected unindent.
-
-These 2 are fixed by this (pending) patch:
-https://lore.kernel.org/linux-kernel/20220324165918.22005-4-hdegoede@redhat.com/
-
-And I also have this pending patch for a pre-existing warning:
-https://lore.kernel.org/linux-kernel/20220324165918.22005-3-hdegoede@redhat.com/
-
-I'm not sure who should pick these 2 up ?
-
-> <path/to/linux>/Documentation/ABI/testing/sysfs-bus-iio-sx9324:2: WARNING: Unexpected indentation.
-> <path/to/linux>/Documentation/ABI/testing/sysfs-bus-nvdimm:11: WARNING: Unexpected indentation.
-
-These 2 warnings are new to me (I tested with pdx86/for-next, so they probably
-came in through another tree).
-
-Regards,
-
-HaNS
-
-
-
-
-
+> So maybe you're right and there are still a bit more than expected out
+> there. However I really think that most users who still have one are in
+> the same situation as I am, they're not aware of it. So aside big fat
+> warnings at mount time (possibly with an extra delay), there's nothing
+> that will make that situation change.
 > 
-> Introduced by 2546c60004309e (platform/x86: Add Intel Software Defined
-> Silicon driver, 2022-02-11), 2bec6d9aa89cbe (docs: ABI: sysfs-bus-nvdimm:
-> Document sysfs event format entries for nvdimm pmu, 2022-02-25),
-> e8a60aa7404bfe (platform/x86: Introduce support for Systems Management
-> Driver over WMI for Dell Systems), 40452ffca3c1a0 (erofs: add sysfs
-> node to control sync decompression strategy, 2021-12-06), and
-> 4c18a890dff8d9 (iio:proximity:sx9324: Add SX9324 support, 2022-01-01).
-> 
-> Presumably because Sphinx mistakes these documentation files without
-> extensions for .rst files? I dunno.
-> 
-> Reported-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> 
+> At the very least disabling it by default in Kconfig and in distros
+> should be effective. I really don't think that there are still users
+> who regularly update their system and who have it on their rootfs, but
+> still having data on it, yes, possibly. The earlier they're warned,
+> the better.
 
+Yes, we start with a warning now. Say a year before we really do remove it,
+my plan is to refuse to mount it unless you pass a "I really know what I'm
+doing" mount option so that we make sure people who possibly missed a
+warning until that moment are aware of the deprecation and still have an
+easy path and some time to migrate.
+
+Regarding distros, I know that SUSE (and likely RH) do not offer reiserfs
+in their installers for quite some time, it is unsupported for the
+enterprise offerings (so most if not all paying customers have migrated
+away from it). The notice was in LWN, Slashdot, and perhaps other news
+sites so perhaps other distro maintainers do notice sooner rather than
+later. I can specifically try to reach to Arch Linux given Pavel's notice
+to give them some early warning.
+
+								Honza
+
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

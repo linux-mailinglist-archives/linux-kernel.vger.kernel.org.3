@@ -2,72 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A9E64F17EC
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5034F17EE
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378413AbiDDPId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 11:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
+        id S1378425AbiDDPIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 11:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236667AbiDDPIc (ORCPT
+        with ESMTP id S1378427AbiDDPIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 11:08:32 -0400
+        Mon, 4 Apr 2022 11:08:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A202B3AA7A;
-        Mon,  4 Apr 2022 08:06:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D7D3B3C2;
+        Mon,  4 Apr 2022 08:06:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FB81615CD;
-        Mon,  4 Apr 2022 15:06:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCFEAC340EE;
-        Mon,  4 Apr 2022 15:06:34 +0000 (UTC)
-Date:   Mon, 4 Apr 2022 11:06:33 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Sebastian Fricke <sebastian.fricke@collabora.com>,
-        linux-trace-devel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Amit Daniel Kachhap <amit.kachhap@arm.com>,
-        Torsten Duwe <duwe@suse.de>
-Subject: Re: Corrupted function tracer in 5.17.0-rc1
-Message-ID: <20220404110633.1b246d55@gandalf.local.home>
-In-Reply-To: <YksG6LXUCwIZhK8k@FVFF77S0Q05N>
-References: <20220404125212.tuby556kara5t56c@basti-XPS-13-9310>
-        <20220404102607.5c9cb515@gandalf.local.home>
-        <YksG6LXUCwIZhK8k@FVFF77S0Q05N>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2686E615BC;
+        Mon,  4 Apr 2022 15:06:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B663C34110;
+        Mon,  4 Apr 2022 15:06:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649084807;
+        bh=D5SqivvBcrkLIAlJEKoRxR7gXZmRxdwZIlV/L7hNxSE=;
+        h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc:From;
+        b=F7MMaRlNg6erqL7nmAoLc8zssL9GQmA3OR3XLnWqKXIlJi3nMtzPaciAVYc0vnYTV
+         ooAFaMiOLutbCl1TNMFQGAe+y7RD9bX2FYb7QC9pwEOb269Ftj61MtYs+NuNg2ndff
+         TcU3Nhr65sAmZIETGGBdtlpqX/div6ssRsmTDc/wprwT4ph5aW8p4ndBKVMvhZ0wFh
+         PCP+cq4S2XZQHQQjxRschY3RJvXVIknmKiE6fRB5eB4cwZ/t2fmkCy49lELIF7jrib
+         bW2X8Af8UdCeEUmJu8zkMMCjfAydcV0NAD+5/rKYMahkrqwZiDBmvHVHndz3uIPjk/
+         ONMNYZUAARHMA==
+Received: by mail-vs1-f48.google.com with SMTP id k15so9488633vsr.11;
+        Mon, 04 Apr 2022 08:06:47 -0700 (PDT)
+X-Gm-Message-State: AOAM531kgvf8P1/Rx9vSuQfMZ74FKAeh6ndrf32sqRoKzt2Qduo7KnU5
+        PIgqxbCTv34X/u40Zf0yewb3cOLVk/12A24hDJg=
+X-Google-Smtp-Source: ABdhPJwmU7gIASrjGhhrLCfmfAPZc/p/+8NdSNqqSQ5KLV2TpnqKxuegUxeFQJKUlzKa/LtOa2j5Pm6Ktk5vKczG3pA=
+X-Received: by 2002:a05:6102:3a52:b0:325:5520:d16c with SMTP id
+ c18-20020a0561023a5200b003255520d16cmr120679vsu.22.1649084806482; Mon, 04 Apr
+ 2022 08:06:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220330190846.13997-1-wens@kernel.org> <20220330190846.13997-3-wens@kernel.org>
+ <CABxcv==csvqsxM46ce2LecDh4E-UxxD2DG+3E-hCFoyrdtRv7A@mail.gmail.com>
+In-Reply-To: <CABxcv==csvqsxM46ce2LecDh4E-UxxD2DG+3E-hCFoyrdtRv7A@mail.gmail.com>
+Reply-To: wens@kernel.org
+From:   Chen-Yu Tsai <wens@kernel.org>
+Date:   Mon, 4 Apr 2022 23:06:36 +0800
+X-Gmail-Original-Message-ID: <CAGb2v64VQPjan=EUkd8UhRZfV0g1GqBwPqhxQakS=7YhgvVDQA@mail.gmail.com>
+Message-ID: <CAGb2v64VQPjan=EUkd8UhRZfV0g1GqBwPqhxQakS=7YhgvVDQA@mail.gmail.com>
+Subject: Re: [PATCH 2/4] dt-bindings: display: ssd1307fb: Add entry for SINO
+ WEALTH SH1106
+To:     Javier Martinez Canillas <javier@dowhile0.org>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Apr 2022 15:55:36 +0100
-Mark Rutland <mark.rutland@arm.com> wrote:
+On Fri, Apr 1, 2022 at 5:32 PM Javier Martinez Canillas
+<javier@dowhile0.org> wrote:
+>
+> Hello Chen-Yu,
+>
+> Thanks a lot for your patch.
+>
+> On Wed, Mar 30, 2022 at 9:09 PM Chen-Yu Tsai <wens@kernel.org> wrote:
+> >
+> > From: Chen-Yu Tsai <wens@csie.org>
+> >
+> > The SINO WEALTH SH1106 is an OLED display driver that is somewhat
+> > compatible with the SSD1306. It supports a slightly wider display,
+> > at 132 instead of 128 pixels. The basic commands are the same, but
+> > the SH1106 doesn't support the horizontal or vertical address modes.
+> >
+> > Add a compatible string for it.
+> >
+> > Signed-off-by: Chen-Yu Tsai <wens@csie.org>
+> > ---
+> >  Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
+> > index 9baafd0c42dd..1ac016a2d847 100644
+> > --- a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
+> > +++ b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
+> > @@ -13,6 +13,7 @@ maintainers:
+> >  properties:
+> >    compatible:
+> >      enum:
+> > +      - sinowealth,sh1106-i2c
+>
+> I like that you didn't include a "fb" suffix for this, the existing
+> ones are cargo culting from the previous fbdev driver to make existing
+> DTBs compatible with the DRM driver.
+>
+> I've been thinking if I should post a patch to compatible strings
+> without the "fb" and mark the current ones as deprecated...
+>
+> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
-> From the title, this is v5.17-rc1, which is known broken due to the mcount sort
-> issue that was subsequently fixed in commit:
+I also thought about dropping the "-i2c" suffix, but then thought
+there might be a case where someone wanted to search the device
+tree specifically for an I2C connected node using said compatible
+string.
 
-Ah, yes. I was thinking of 5.18-rc1 (which has just been released)
+What do you think?
 
-> 
->   4ed308c445a1e3ab ("ftrace: Have architectures opt-in for mcount build time sorting")
-> 
-> Is it possible to try with the final v5.17? Or at least try with that patch
-> cherry-picked?
 
-Right, 5.17-rc1 is known broken. Please try the latest, 5.17 and let us
-know if it is still an issue.
-
-Thanks,
-
--- Steve
+ChenYu

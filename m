@@ -2,183 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9CB74F13DE
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 13:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 999514F13D1
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 13:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376282AbiDDLf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 07:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
+        id S1359573AbiDDLdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 07:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376275AbiDDLfO (ORCPT
+        with ESMTP id S235756AbiDDLdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 07:35:14 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858E53D1FA
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 04:33:17 -0700 (PDT)
-Received: from fraeml745-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KX7qh0hzfz67tf3;
-        Mon,  4 Apr 2022 19:30:24 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml745-chm.china.huawei.com (10.206.15.226) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 4 Apr 2022 13:33:15 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 4 Apr 2022 12:33:11 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <joro@8bytes.org>, <will@kernel.org>, <robin.murphy@arm.com>
-CC:     <mst@redhat.com>, <jasowang@redhat.com>,
-        <iommu@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>,
-        <chenxiang66@hisilicon.com>, <thunder.leizhen@huawei.com>,
-        <jean-philippe@linaro.org>, <linuxarm@huawei.com>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH RESEND v5 5/5] iova: Add iova_len argument to iova_domain_init_rcaches()
-Date:   Mon, 4 Apr 2022 19:27:14 +0800
-Message-ID: <1649071634-188535-6-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1649071634-188535-1-git-send-email-john.garry@huawei.com>
-References: <1649071634-188535-1-git-send-email-john.garry@huawei.com>
+        Mon, 4 Apr 2022 07:33:11 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382AC3C732;
+        Mon,  4 Apr 2022 04:31:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649071875; x=1680607875;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ErXKJwnxX8hclXQqvYKDIF2ZZ3KufEcKMWs1slKVfPY=;
+  b=aqWWVANRfW6tRnubDWdO6j7jy0kxKl8xbvrBYM3sb5UJWB9VkrF7AeTM
+   rSxVJ8PFembyJom9T3RiOFtLPXdAiZoGxZ5MUeEhRPoyAPz5bkGwuI4ht
+   Ijev9M+w2dM2ZFTkRyrJ9cjxeJLJnMtvnbKYrJyLurkEAZBE169fIVe77
+   R9313lQ1DcxqcDW3FdJIwpUaCkkBZ/6Y/IRsOFz5oc6mw2GLJ/qkpx66y
+   TX9qUwnC4CWqob1avAVXWWoU7Twdt9muazRRpVX6kGf5esjDWrEfchcJe
+   uLvwuduWMgTV7Q5PEJ6gL6UC96wRMEt7KvO+L1vKxPqiSpptUmbj7QyEO
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="242634145"
+X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
+   d="scan'208";a="242634145"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 04:31:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
+   d="scan'208";a="556127945"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 04 Apr 2022 04:31:12 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbKvP-00020N-Ri;
+        Mon, 04 Apr 2022 11:31:11 +0000
+Date:   Mon, 4 Apr 2022 19:30:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH 7/8] posix_types.h: add __kernel_uintptr_t to UAPI
+ posix_types.h
+Message-ID: <202204041919.bIUKxOch-lkp@intel.com>
+References: <20220404061948.2111820-8-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220404061948.2111820-8-masahiroy@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add max opt argument to iova_domain_init_rcaches(), and use it to set the
-rcaches range.
+Hi Masahiro,
 
-Also fix up all users to set this value (at 0, meaning use default),
-including a wrapper for that, iova_domain_init_rcaches_default().
+I love your patch! Perhaps something to improve:
 
-For dma-iommu.c we derive the iova_len argument from the IOMMU group
-max opt DMA size.
+[auto build test WARNING on linus/master]
+[also build test WARNING on linux/master v5.18-rc1 next-20220404]
+[cannot apply to soc/for-next drm/drm-next powerpc/next uclinux-h8/h8300-next s390/features arnd-asm-generic/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- drivers/iommu/dma-iommu.c            | 15 ++++++++++++++-
- drivers/iommu/iova.c                 | 19 ++++++++++++++++---
- drivers/vdpa/vdpa_user/iova_domain.c |  4 ++--
- include/linux/iova.h                 |  3 ++-
- 4 files changed, 34 insertions(+), 7 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Masahiro-Yamada/UAPI-make-more-exported-headers-self-contained-and-put-them-into-test-coverage/20220404-142226
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git be2d3ecedd9911fbfd7e55cc9ceac5f8b79ae4cf
+config: i386-randconfig-a006 (https://download.01.org/0day-ci/archive/20220404/202204041919.bIUKxOch-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/e8154d995f34b79843e473d85645fb543d554e7f
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Masahiro-Yamada/UAPI-make-more-exported-headers-self-contained-and-put-them-into-test-coverage/20220404-142226
+        git checkout e8154d995f34b79843e473d85645fb543d554e7f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash sound/soc/fsl/
 
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index 42ca42ff1b5d..19f35624611c 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -525,6 +525,8 @@ static int iommu_dma_init_domain(struct iommu_domain *domain, dma_addr_t base,
- 	struct iommu_dma_cookie *cookie = domain->iova_cookie;
- 	unsigned long order, base_pfn;
- 	struct iova_domain *iovad;
-+	size_t max_opt_dma_size;
-+	unsigned long iova_len = 0;
- 	int ret;
- 
- 	if (!cookie || cookie->type != IOMMU_DMA_IOVA_COOKIE)
-@@ -560,7 +562,18 @@ static int iommu_dma_init_domain(struct iommu_domain *domain, dma_addr_t base,
- 	}
- 
- 	init_iova_domain(iovad, 1UL << order, base_pfn);
--	ret = iova_domain_init_rcaches(iovad);
-+
-+	max_opt_dma_size = iommu_group_get_max_opt_dma_size(dev->iommu_group);
-+	if (max_opt_dma_size) {
-+		unsigned long shift = __ffs(1UL << order);
-+
-+		iova_len = roundup_pow_of_two(max_opt_dma_size);
-+		iova_len >>= shift;
-+		if (!iova_len)
-+			iova_len = 1;
-+	}
-+
-+	ret = iova_domain_init_rcaches(iovad, iova_len);
- 	if (ret)
- 		return ret;
- 
-diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-index 5c22b9187b79..d65e79e132ee 100644
---- a/drivers/iommu/iova.c
-+++ b/drivers/iommu/iova.c
-@@ -706,12 +706,20 @@ static void iova_magazine_push(struct iova_magazine *mag, unsigned long pfn)
- 	mag->pfns[mag->size++] = pfn;
- }
- 
--int iova_domain_init_rcaches(struct iova_domain *iovad)
-+static unsigned long iova_len_to_rcache_max(unsigned long iova_len)
-+{
-+	return order_base_2(iova_len) + 1;
-+}
-+
-+int iova_domain_init_rcaches(struct iova_domain *iovad, unsigned long iova_len)
- {
- 	unsigned int cpu;
- 	int i, ret;
- 
--	iovad->rcache_max_size = 6; /* Arbitrarily high default */
-+	if (iova_len)
-+		iovad->rcache_max_size = iova_len_to_rcache_max(iova_len);
-+	else
-+		iovad->rcache_max_size = 6; /* Arbitrarily high default */
- 
- 	iovad->rcaches = kcalloc(iovad->rcache_max_size,
- 				 sizeof(struct iova_rcache),
-@@ -755,7 +763,12 @@ int iova_domain_init_rcaches(struct iova_domain *iovad)
- 	free_iova_rcaches(iovad);
- 	return ret;
- }
--EXPORT_SYMBOL_GPL(iova_domain_init_rcaches);
-+
-+int iova_domain_init_rcaches_default(struct iova_domain *iovad)
-+{
-+	return iova_domain_init_rcaches(iovad, 0);
-+}
-+EXPORT_SYMBOL_GPL(iova_domain_init_rcaches_default);
- 
- /*
-  * Try inserting IOVA range starting with 'iova_pfn' into 'rcache', and
-diff --git a/drivers/vdpa/vdpa_user/iova_domain.c b/drivers/vdpa/vdpa_user/iova_domain.c
-index 6daa3978d290..3a2acef98a4a 100644
---- a/drivers/vdpa/vdpa_user/iova_domain.c
-+++ b/drivers/vdpa/vdpa_user/iova_domain.c
-@@ -514,12 +514,12 @@ vduse_domain_create(unsigned long iova_limit, size_t bounce_size)
- 	spin_lock_init(&domain->iotlb_lock);
- 	init_iova_domain(&domain->stream_iovad,
- 			PAGE_SIZE, IOVA_START_PFN);
--	ret = iova_domain_init_rcaches(&domain->stream_iovad);
-+	ret = iova_domain_init_rcaches_default(&domain->stream_iovad);
- 	if (ret)
- 		goto err_iovad_stream;
- 	init_iova_domain(&domain->consistent_iovad,
- 			PAGE_SIZE, bounce_pfns);
--	ret = iova_domain_init_rcaches(&domain->consistent_iovad);
-+	ret = iova_domain_init_rcaches_default(&domain->consistent_iovad);
- 	if (ret)
- 		goto err_iovad_consistent;
- 
-diff --git a/include/linux/iova.h b/include/linux/iova.h
-index 02f7222fa85a..56281434ce0c 100644
---- a/include/linux/iova.h
-+++ b/include/linux/iova.h
-@@ -95,7 +95,8 @@ struct iova *reserve_iova(struct iova_domain *iovad, unsigned long pfn_lo,
- 	unsigned long pfn_hi);
- void init_iova_domain(struct iova_domain *iovad, unsigned long granule,
- 	unsigned long start_pfn);
--int iova_domain_init_rcaches(struct iova_domain *iovad);
-+int iova_domain_init_rcaches(struct iova_domain *iovad, unsigned long iova_len);
-+int iova_domain_init_rcaches_default(struct iova_domain *iovad);
- struct iova *find_iova(struct iova_domain *iovad, unsigned long pfn);
- void put_iova_domain(struct iova_domain *iovad);
- #else
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/fsl/imx-audmux.c:148:40: warning: format specifies type 'unsigned long' but the argument has type 'uintptr_t' (aka 'unsigned int') [-Wformat]
+                   snprintf(buf, sizeof(buf), "ssi%lu", i);
+                                                  ~~~   ^
+                                                  %u
+   1 warning generated.
+
+
+vim +148 sound/soc/fsl/imx-audmux.c
+
+7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  139  
+b8909783a22b4f sound/soc/fsl/imx-audmux.c    Lars-Peter Clausen 2014-04-24  140  static void audmux_debugfs_init(void)
+7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  141  {
+e5f89768e9bc1f sound/soc/fsl/imx-audmux.c    Mark Brown         2014-08-01  142  	uintptr_t i;
+7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  143  	char buf[20];
+7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  144  
+7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  145  	audmux_debugfs_root = debugfs_create_dir("audmux", NULL);
+7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  146  
+409b78cc17a4a3 sound/soc/fsl/imx-audmux.c    Torben Hohn        2012-07-18  147  	for (i = 0; i < MX31_AUDMUX_PORT7_SSI_PINS_7 + 1; i++) {
+e5f89768e9bc1f sound/soc/fsl/imx-audmux.c    Mark Brown         2014-08-01 @148  		snprintf(buf, sizeof(buf), "ssi%lu", i);
+227ab8baa15bdd sound/soc/fsl/imx-audmux.c    Greg Kroah-Hartman 2019-06-14  149  		debugfs_create_file(buf, 0444, audmux_debugfs_root,
+227ab8baa15bdd sound/soc/fsl/imx-audmux.c    Greg Kroah-Hartman 2019-06-14  150  				    (void *)i, &audmux_debugfs_fops);
+7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  151  	}
+7b4e08a77f0cbf arch/arm/plat-mxc/audmux-v2.c Mark Brown         2010-01-11  152  }
+3bc34a6143359d arch/arm/plat-mxc/audmux.c    Richard Zhao       2012-03-05  153  
+
 -- 
-2.26.2
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

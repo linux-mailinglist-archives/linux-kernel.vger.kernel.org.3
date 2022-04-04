@@ -2,150 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AACC4F1E0D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E8B74F1EF8
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355423AbiDDWLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55914 "EHLO
+        id S1357256AbiDDWLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 18:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383010AbiDDVcj (ORCPT
+        with ESMTP id S1384453AbiDDVfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 17:32:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1C8125C5
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 14:23:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649107401;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DfDyjcnnLyc2bSZ6jJAVhGllQHcKHgp84LgGIl4EXgM=;
-        b=O/xKp+aaN01eINcwTDKyUl7NxBl5p8xF0gD53R5bsy6IveDGmG5wJhuJ1FY8pX4TQNnSEF
-        BY09Z92CyZkTnant4pRtPKTIUgibfxGkyCJmn0gXOYOxJiI5fG7nh7tryVBjjLADr6vDDe
-        zS0WUN6tlzAVqVXbH0JbuJGTUYEs2KE=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-91-XgC7n7FANbSBzhYDzNhhrg-1; Mon, 04 Apr 2022 17:23:20 -0400
-X-MC-Unique: XgC7n7FANbSBzhYDzNhhrg-1
-Received: by mail-qv1-f72.google.com with SMTP id ke13-20020a056214300d00b00443901b0386so8912364qvb.14
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 14:23:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=DfDyjcnnLyc2bSZ6jJAVhGllQHcKHgp84LgGIl4EXgM=;
-        b=SPGxmuT8uTmfTYtt/hf3O05wPTzleezG5xeXXVTeqOxZn2OotkH8PhIBR/HbgdIYJ0
-         UUAP8SQH11JW0jjzFkB9unnN767fH+RjvlXAKomQu2AF9PPIrly9f8xxRAruyRo3neH0
-         9LQqrX1P7l4QHNt0/974PZgxLCXlNnD/aKkTnVzQkERlXucXQ7jOq2whRzH5LRmldbqQ
-         fuJokKXhNQnIQRsDX/yTNHFbtrIN+z8nAeiM3eA1BsRYRjqEJWTwd9a7EJOm5mFCAvMt
-         nmlI6BfPuS5DmU4b2JWy3CpUmDjpLo1M+W/rGd6I2Js2pZdTDi3rA9Z1klTd1IN2Wh0O
-         4uIw==
-X-Gm-Message-State: AOAM533z+JhDEBcKlYWtm4W0p+vyf8qfvOYOSmq4shy98RJH0gWO2jGO
-        3E7bZLMw8VtlHIaM5Y/Z5qfwHulwVXeYeRdYruqfWtICkZz2yF9dUM/jEGYOKIVy1iREsDkCMbd
-        aRLy8kWfhk6zcztX9vqzfPOba
-X-Received: by 2002:a05:620a:2487:b0:67b:3113:f83f with SMTP id i7-20020a05620a248700b0067b3113f83fmr179301qkn.604.1649107399545;
-        Mon, 04 Apr 2022 14:23:19 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwA/j5T9RBShOaLAqidOK7ozpdzXqamqb+Gc1f+d2xjbvub/SnKUIk0rJFYk2A/f+j9+SQqNg==
-X-Received: by 2002:a05:620a:2487:b0:67b:3113:f83f with SMTP id i7-20020a05620a248700b0067b3113f83fmr179283qkn.604.1649107399340;
-        Mon, 04 Apr 2022 14:23:19 -0700 (PDT)
-Received: from [192.168.8.138] (pool-71-126-244-162.bstnma.fios.verizon.net. [71.126.244.162])
-        by smtp.gmail.com with ESMTPSA id x6-20020ac86b46000000b002e02be9c0easm8354800qts.69.2022.04.04.14.23.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 14:23:18 -0700 (PDT)
-Message-ID: <74509d19d84b879b624fa9f40bc8186fd09e750a.camel@redhat.com>
-Subject: Re: [PATCH] clk: base: fix an incorrect NULL check on list iterator
-From:   Lyude Paul <lyude@redhat.com>
-To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>, bskeggs@redhat.com,
-        kherbst@redhat.com, airlied@linux.ie, daniel@ffwll.ch
-Cc:     martin.peres@free.fr, dri-devel@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Date:   Mon, 04 Apr 2022 17:23:17 -0400
-In-Reply-To: <20220327075824.11806-1-xiam0nd.tong@gmail.com>
-References: <20220327075824.11806-1-xiam0nd.tong@gmail.com>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.DarkModeFix.fc35) 
+        Mon, 4 Apr 2022 17:35:45 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE8A48335;
+        Mon,  4 Apr 2022 14:26:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1649107514;
+        bh=Ro4B9BImMndeuI5KT1TcwaX2nQXOXMqp5IujRLN9o60=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=Q+UG0XJUFefJviD9xFpD2w/hLKt8PtLpC5JXKtomSoqPbnaKMOdUdjI2aXg5odyYO
+         HoE4i99Gu85QGXAD+TQHdZJLZn3inhtM8KHDu+pgqooCSjhqaZyn3NFR0ZfmPnhcOO
+         Iix0rQ4oyJEYp2RVJqrJtGELhsv6dsSWIRzqv0X8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost ([62.216.209.4]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MqJm5-1oNB4T0I9z-00nPsq; Mon, 04
+ Apr 2022 23:25:14 +0200
+Date:   Mon, 4 Apr 2022 23:25:12 +0200
+From:   Peter Seiderer <ps.report@gmx.net>
+To:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@toke.dk>
+Cc:     linux-wireless@vger.kernel.org, Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Felix Fietkau <nbd@nbd.name>
+Subject: Re: [PATCH v1 2/2] mac80211: minstrel_ht: fill all requested rates
+Message-ID: <20220404232512.4fdd7eb9@gmx.net>
+In-Reply-To: <87fsmseml7.fsf@toke.dk>
+References: <20220402153014.31332-1-ps.report@gmx.net>
+        <20220402153014.31332-2-ps.report@gmx.net>
+        <87fsmseml7.fsf@toke.dk>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:KZKJ2B/82F/1PI1nVtiO1SFg08+X1scy2oosau6ElqX5HcXlYRR
+ 7aFO78O4JQX2wXL16Pd8iuXAZDyrfMiHqzbgKpRmhhLmpnSwS85TVVBGUzBl/OvVTKZ9qvJ
+ cyibel71SBEkWUsQdvmwnLlP6vdkMo1IWaN82rtvcpe+9p+kD7wNrZzfn5ejPrVV4+GUnYE
+ hlb1aWqtyKSmDYu47Eo2Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:SzPVeetkwDI=:aW9kEi57qgJAIiTgaZjWIL
+ V8gq/L9Adw4YrEXegqCIVPfMJt6qi/lM5lQWYUdYzDajnOaa1DGNHPIONZriS/mOAHVSoS3P7
+ CgzUJtdenZx/F6f1IOy/XutSWCVWh9qsS8+7Olv0uG+5DSLe0AQpjb0agSP3oMRQbCcKlUvku
+ u5DO5+foiEeeWAO2C+GJzyBDoozcMNo8xovd9FK+GbdSYr88rAU+sjoa1GymiBo53J5fUVUq/
+ X6gkNs4VcFqs9nvz4E1HUfVWGXqqEzCjaVYFmRbEsrnizQ2J7zX0RSPYawPyr7+nHoTXfteOH
+ mKB7z4TIUBo8ssLX+3kJzUQpx1JJxiAPfwxbM7bzUdOWLZbLV4D+jvwCM9gjKz5tVwhWqmtso
+ BV6tUNQT1KtzuLaZ05OKbsJCIJJ2n8GizzjUkvTOfK2POZ0CJPxach1mFOJQ2nn9UVA9p/f9s
+ P58I9IFiP1eWuFl6xD1veWMm5B4qeYUNEvA+1kUV/N6zOwZwwWZov3hSD+yKdLApz+gQYapy7
+ O4gkkPutObcAeZkDPmAYsjgj+LvZGpyLtNXyk7Fx8PUf8YLlkG4Lj+mAARnQFSSHRoDow+IeJ
+ YUE0FETs0sG90g3TUsMnou8LAqWVY8BJj2o7Vc++WgT4laPg16Jlw1vbDiYFfUx3/9C+UXIxp
+ aUJjp32KcH9/5GhUdBpSil28uKj1h2d/V6/aIvssuRiAxjEaAKNj9XAvsCc/O+ls3eTtML+Y9
+ q03+UM2QaMzbR6uqAWoT0uNboM/h1Zotje1FpiTNt4lDdSaXEb6L5zvQqLthNAfcU5tf6RIwB
+ U+CPNEPhvRpgrwvDqv8xru8hvwp5kJAP59WNS4qv//rwI8FSzbYwH3e9RB8Xo5jDkZaEq4unw
+ gY/EEPGoclZZLMqBtceH6/+RE1JDIsu4wwnXO5MuZACpFwiF1srhB43UP2vyijLzl3IW42Ldr
+ g0OuDqJwRm4tZQkb8ly7Rek/O+JhKGEh7hDxLqCkZzYEn1kN/IeQ79aF8msjiZQN8R1nLsR+o
+ j95FjOePmEakOLJxi1wa5/GOwPphWWbruk0GKh8ditPIa4XD8967KdJIUT2em00hqO93Quijl
+ 51HtC25MRhq59Q=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This should probably be prefixed with the title "drm/nouveau/clk:", but I can
-fix that before pushing it.
+Hello Toke, Felix,
 
-Reviewed-by: Lyude Paul <lyude@redhat.com>
+On Mon, 04 Apr 2022 20:21:24 +0200, Toke H=C3=B8iland-J=C3=B8rgensen <toke@=
+toke.dk> wrote:
 
-Will push it to the appropriate repository shortly
+> +Felix
+>=20
+> Peter Seiderer <ps.report@gmx.net> writes:
+>=20
+> > Fill all requested rates (in case of ath9k 4 rate slots are
+> > available, so fill all 4 instead of only 3), improves throughput in
+> > noisy environment. =20
+>=20
+> How did you test this? Could you quantify the gains in throughput you saw?
 
+Investigating some performance degradation of a wifi system original with a=
+th5k
+cards using a legacy kernel and madwifi driver compared against the=20
+performance using a ath9k card running IBSS mode over long distance/with
+additional amplifier and using iperf for measurement...
 
-On Sun, 2022-03-27 at 15:58 +0800, Xiaomeng Tong wrote:
-> The bug is here:
->         if (nvkm_cstate_valid(clk, cstate, max_volt, clk->temp))
->                 return cstate;
-> 
-> The list iterator value 'cstate' will *always* be set and non-NULL
-> by list_for_each_entry_from_reverse(), so it is incorrect to assume
-> that the iterator value will be unchanged if the list is empty or no
-> element is found (In fact, it will be a bogus pointer to an invalid
-> structure object containing the HEAD). Also it missed a NULL check
-> at callsite and may lead to invalid memory access after that.
-> 
-> To fix this bug, just return 'encoder' when found, otherwise return
-> NULL. And add the NULL check.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 1f7f3d91ad38a ("drm/nouveau/clk: Respect voltage limits in
-> nvkm_cstate_prog")
-> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-> ---
->  drivers/gpu/drm/nouveau/nvkm/subdev/clk/base.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/clk/base.c
-> b/drivers/gpu/drm/nouveau/nvkm/subdev/clk/base.c
-> index 57199be082fd..c2b5cc5f97ed 100644
-> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/clk/base.c
-> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/clk/base.c
-> @@ -135,10 +135,10 @@ nvkm_cstate_find_best(struct nvkm_clk *clk, struct
-> nvkm_pstate *pstate,
->  
->         list_for_each_entry_from_reverse(cstate, &pstate->list, head) {
->                 if (nvkm_cstate_valid(clk, cstate, max_volt, clk->temp))
-> -                       break;
-> +                       return cstate;
->         }
->  
-> -       return cstate;
-> +       return NULL;
->  }
->  
->  static struct nvkm_cstate *
-> @@ -169,6 +169,8 @@ nvkm_cstate_prog(struct nvkm_clk *clk, struct
-> nvkm_pstate *pstate, int cstatei)
->         if (!list_empty(&pstate->list)) {
->                 cstate = nvkm_cstate_get(clk, pstate, cstatei);
->                 cstate = nvkm_cstate_find_best(clk, pstate, cstate);
-> +               if (!cstate)
-> +                       return -EINVAL;
->         } else {
->                 cstate = &pstate->base;
->         }
+With the ath5k cards under bad conditions the throughput is going down below
+10 Mbits/s but with stable throughput..., with the ath9k card and the exact=
+ same
+setup there are short periods with good throughput values and periods up to=
+ 10-15
+seconds with 0 Mbits/s...
 
--- 
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
+The actual in-door/laboratory test setup is a wired connection between the
+two wifi systems (with fixed attenuators in between) and an adjustable nois=
+e/
+disturb signal induced by a signal generator...
+
+Without this patch the 0 Mbits/s periods from the field test are reproducib=
+le,
+with this patch applied we see a more or less stable throughput of 1-5 Mbit=
+s/s...
+
+Regards,
+Peter
+
+>=20
+> -Toke
+>=20
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> >  net/mac80211/rc80211_minstrel_ht.c | 14 +++++++-------
+> >  1 file changed, 7 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/net/mac80211/rc80211_minstrel_ht.c b/net/mac80211/rc80211_=
+minstrel_ht.c
+> > index 9c6ace858107..cd6a0f153688 100644
+> > --- a/net/mac80211/rc80211_minstrel_ht.c
+> > +++ b/net/mac80211/rc80211_minstrel_ht.c
+> > @@ -1436,17 +1436,17 @@ minstrel_ht_update_rates(struct minstrel_priv *=
+mp, struct minstrel_ht_sta *mi)
+> >  	/* Start with max_tp_rate[0] */
+> >  	minstrel_ht_set_rate(mp, mi, rates, i++, mi->max_tp_rate[0]);
+> > =20
+> > -	if (mp->hw->max_rates >=3D 3) {
+> > -		/* At least 3 tx rates supported, use max_tp_rate[1] next */
+> > -		minstrel_ht_set_rate(mp, mi, rates, i++, mi->max_tp_rate[1]);
+> > -	}
+> > +	/* Fill up remaining, keep one entry for max_probe_rate */
+> > +	for (; i < (mp->hw->max_rates - 1); i++)
+> > +		minstrel_ht_set_rate(mp, mi, rates, i, mi->max_tp_rate[i]);
+> > =20
+> > -	if (mp->hw->max_rates >=3D 2) {
+> > +	if (i < mp->hw->max_rates)
+> >  		minstrel_ht_set_rate(mp, mi, rates, i++, mi->max_prob_rate);
+> > -	}
+> > +
+> > +	if (i < IEEE80211_TX_RATE_TABLE_SIZE)
+> > +		rates->rate[i].idx =3D -1;
+> > =20
+> >  	mi->sta->max_rc_amsdu_len =3D minstrel_ht_get_max_amsdu_len(mi);
+> > -	rates->rate[i].idx =3D -1;
+> >  	rate_control_set_rates(mp->hw, mi->sta, rates);
+> >  }
+> > =20
+> > --=20
+> > 2.35.1 =20
 

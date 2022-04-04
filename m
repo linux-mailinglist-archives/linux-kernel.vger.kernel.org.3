@@ -2,136 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D96E04F10C1
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE9A4F10CB
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244341AbiDDIVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 04:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47950 "EHLO
+        id S1347686AbiDDIXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 04:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243316AbiDDIVO (ORCPT
+        with ESMTP id S244280AbiDDIXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 04:21:14 -0400
-Received: from smtp2.infineon.com (smtp2.infineon.com [IPv6:2a00:18f0:1e00:4::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA653B543;
-        Mon,  4 Apr 2022 01:19:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1649060357; x=1680596357;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6g5F7vqMqbm8qvjj6KZ0nEFUne1Z/PQPj4eHWzChsVw=;
-  b=HsBE7eIAm2v0Elk237xPOOX55zJOmSeLJZMRwNj76ueMthVKXwPndRlT
-   5VeA34OUR28xWwqK+aBedY4G22beOxIV5k93heyEQ6cOSg5Ou0Z/+hjQP
-   bGg0YW7TR4oLflV9Yj9SHnOkq1x6Hz/WHty4I8BywmyFps2hJBrsVcbPw
-   A=;
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="172160987"
-X-IronPort-AV: E=Sophos;i="5.90,233,1643670000"; 
-   d="scan'208";a="172160987"
-Received: from unknown (HELO mucxv003.muc.infineon.com) ([172.23.11.20])
-  by smtp2.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 10:19:15 +0200
-Received: from MUCSE819.infineon.com (MUCSE819.infineon.com [172.23.29.45])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mucxv003.muc.infineon.com (Postfix) with ESMTPS;
-        Mon,  4 Apr 2022 10:19:15 +0200 (CEST)
-Received: from ISCN5CG1067W80.infineon.com (172.23.8.247) by
- MUCSE819.infineon.com (172.23.29.45) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 4 Apr 2022 10:19:15 +0200
-From:   Johannes Holland <johannes.holland@infineon.com>
-To:     <peterhuewe@gmx.de>, <jarkko@kernel.org>, <jgg@ziepe.ca>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <amirmizi6@gmail.com>, <robh@kernel.org>,
-        Johannes Holland <johannes.holland@infineon.com>
-Subject: [PATCH 4/4] tpm: Add YAML schema for the TPM TIS I2C options
-Date:   Mon, 4 Apr 2022 10:18:35 +0200
-Message-ID: <20220404081835.495-4-johannes.holland@infineon.com>
-X-Mailer: git-send-email 2.31.1.windows.1
-In-Reply-To: <20220404081835.495-1-johannes.holland@infineon.com>
-References: <20220404081835.495-1-johannes.holland@infineon.com>
+        Mon, 4 Apr 2022 04:23:43 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050BC3B3EF
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 01:21:48 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id qh7so8225976ejb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 01:21:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eJEB66crM8wka6AgbPIlBAB85bR3Q+QeItJHEO/CkzY=;
+        b=NSgjwg2RoYh/+XpTr3R5TuCkjFX7yNEIK6jdvNow+Uy/BPh6WeL7PfrqC5NpmQFN6V
+         TelmxfCQ/KFvOfqfsH6gzy7zRs9zA8Zz5PboVLrnXPGZm9IP+HswrSrvqB6EBwbMz6Zi
+         4GneTshZWbcpGWX1qGUipZdUTf5wRtITojxe+LQfDFGOSbzBOShsrRm3vDMUlIaGCCuJ
+         MGmwRCVHlbfDnhSe01HS5+62ISDc+l21f2V7Qwi0RbEWQ38TWw41phOXhH0bgxScBH4A
+         1NKoOTS0jBBZKLmZuKHvaeNlqzVN5aKUCT4khsEShLZ/CcCGiM4NBRHeGvK14+87gpgv
+         evPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eJEB66crM8wka6AgbPIlBAB85bR3Q+QeItJHEO/CkzY=;
+        b=sfQHjFAX6Qsc545u8Q8k8geXGlyFMsw0mvK4zJYu/tewF33riztVQbQ/V2C0812GKp
+         pBozdKIiYdXAysBpC9V8uh4Hh+vE+6GgYxA13hLjeok9ENbpflQuJEb3VuO32Ldd4Eua
+         NVijg9ROct889GC1xdBRyeAlbZsOCJxPt1DU25qqQKXGqqXH4MOzyrMcKCszCryt8Jxp
+         ACBmaB+5FM0e8qd7px1f8uid+jyjFsOzfHrsFOJFSxLB6fON9X17LCvsIyjvKa0LmM/H
+         /a0qEGhKAcTiio0mxCBH4NU92+XejMSyLOo5XT0p+jLa0HaQdZ8xLgZXqGRq9I/DM9Kt
+         57Xw==
+X-Gm-Message-State: AOAM530uRfwI3Qb2eAkaUb5NFM9uxWjxwxhx6HihEegK0tcV9sOTLXIP
+        c9R+1AJ7Nb/BfyGyC1m+gk0=
+X-Google-Smtp-Source: ABdhPJyt7ZSqeKdu9FtZ2+rGfh9A8mbIzAD/JBSfhBsVbLrrdCic58UP9MD2382z25K+xJXpO5FVgw==
+X-Received: by 2002:a17:906:37cd:b0:6e0:bdb6:f309 with SMTP id o13-20020a17090637cd00b006e0bdb6f309mr9792863ejc.394.1649060506624;
+        Mon, 04 Apr 2022 01:21:46 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
+        by smtp.gmail.com with ESMTPSA id n3-20020a1709061d0300b006da94efcc7esm4047336ejh.204.2022.04.04.01.21.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 01:21:46 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH 0/5] staging: r8188eu: clean up struct pwrctrl_priv
+Date:   Mon,  4 Apr 2022 10:21:37 +0200
+Message-Id: <20220404082142.4639-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.23.8.247]
-X-ClientProxiedBy: MUCSE812.infineon.com (172.23.29.38) To
- MUCSE819.infineon.com (172.23.29.45)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a YAML schema to support device tree bindings for the generic I2C
-physical layer. Refer to the TCG PC Client Platform TPM Profile (PTP)
-Specification for TPM 2.0 v1.04 Revision 14.
+Tis series removes unused and set but never changed fields from the
+pwrctrl_priv structure.
 
-Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
----
- .../bindings/security/tpm/tpm-tis-i2c.yaml    | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+Tested on x86_64 with Inter-Tech DMG-02.
 
-diff --git a/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml b/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
-new file mode 100644
-index 000000000000..7948867ff3f7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
-@@ -0,0 +1,48 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/security/tpm/tpm-tis-i2c.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: I2C PTP based TPM Device Tree Bindings
-+
-+maintainers:
-+  - Johannes Holland <johannes.holland@infineon.com>
-+
-+description:
-+  Device Tree Bindings for I2C based Trusted Platform Module (TPM).
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          # Infineon's Trusted Platform Module (TPM) (SLB9673)
-+          - infineon,slb9673
-+          # Nuvoton's Trusted Platform Module (TPM) (NPCT75x)
-+          - nuvoton,npct75x
-+      - const: tcg,tpm-tis-i2c
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupt:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      tpm@2e {
-+        compatible = "infineon,slb9673", "nuvoton,npct75x", "tcg,tpm-tis-i2c";
-+        reg = <0x2e>;
-+      };
-+    };
-+...
+Michael Straube (5):
+  staging: r8188eu: remove unused fields from struct pwrctrl_priv
+  staging: r8188eu: reg_rfoff is never set
+  staging: r8188eu: pnp_bstop_trx is never set
+  staging: r8188eu: pwr_state_check_cnts is always zero
+  staging: r8188eu: ps_flag is never set
+
+ drivers/staging/r8188eu/core/rtw_pwrctrl.c     |  4 +---
+ drivers/staging/r8188eu/hal/usb_halinit.c      |  4 ----
+ drivers/staging/r8188eu/hal/usb_ops_linux.c    |  7 +++----
+ drivers/staging/r8188eu/include/rtw_pwrctrl.h  | 14 --------------
+ drivers/staging/r8188eu/os_dep/os_intfs.c      | 10 ----------
+ drivers/staging/r8188eu/os_dep/usb_ops_linux.c |  3 +--
+ 6 files changed, 5 insertions(+), 37 deletions(-)
+
 -- 
-2.31.1.windows.1
+2.35.1
 

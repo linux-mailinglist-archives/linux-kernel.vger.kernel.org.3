@@ -2,243 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF6BA4F177B
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50A104F177A
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378261AbiDDOrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 10:47:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
+        id S243107AbiDDOra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 10:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379674AbiDDOpI (ORCPT
+        with ESMTP id S1379689AbiDDOpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 10:45:08 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA71A40A08;
-        Mon,  4 Apr 2022 07:41:15 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 8A4D11F381;
-        Mon,  4 Apr 2022 14:41:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1649083274; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Mon, 4 Apr 2022 10:45:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8B13389
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 07:42:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649083337;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=c1hUy9Z7t/TX9ZMrDfSqRcc30TzPK6DZa4A2U57uryQ=;
-        b=lb4vB1fhyBQGU3jebbX7RlDvjfDoGQEjomdeljJ0NfL0i9i42/cLNXiwdAyoDd+PKSUho8
-        gVfhBn9AMJMX6oAspaWNbNARQ59DJUbV+2pv/Nm2+Wd6yshafJFamigARCIieUqQvdx6BA
-        YKoS6VZzAyPqvvErJKMiyy/LRfVzeNg=
-Received: from suse.cz (pathway.suse.cz [10.100.12.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 07258A3B82;
-        Mon,  4 Apr 2022 14:41:14 +0000 (UTC)
-Date:   Mon, 4 Apr 2022 16:41:13 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Lecopzer Chen <lecopzer.chen@mediatek.com>
-Cc:     linux-kernel@vger.kernel.org, acme@kernel.org,
-        akpm@linux-foundation.org, alexander.shishkin@linux.intel.com,
-        catalin.marinas@arm.com, davem@davemloft.net, jolsa@redhat.com,
-        jthierry@redhat.com, keescook@chromium.org, kernelfans@gmail.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
-        masahiroy@kernel.org, matthias.bgg@gmail.com, maz@kernel.org,
-        mcgrof@kernel.org, mingo@redhat.com, namhyung@kernel.org,
-        nixiaoming@huawei.com, peterz@infradead.org,
-        sparclinux@vger.kernel.org, sumit.garg@linaro.org,
-        wangqing@vivo.com, will@kernel.org, yj.chiang@mediatek.com
-Subject: Re: [PATCH v3 4/5] kernel/watchdog: Adapt the watchdog_hld interface
- for async model
-Message-ID: <20220404144113.GB26840@pathway.suse.cz>
-References: <20220324141405.10835-1-lecopzer.chen@mediatek.com>
- <20220324141405.10835-5-lecopzer.chen@mediatek.com>
+        bh=hXiWPffxpHbWQ2eIaoK3c/FiSIjbtVnbbyc5wOi1X2k=;
+        b=KC0T5noqfmU2spQqb8t9kaEs+S7HaGie9N7S7YS4L3iF8FyrM0TRZWnYz1DrrRnWf5tsFe
+        onRxrsAubXGO+S19rhqwlZnV2lxCV/j+P7qHws2F1S0ghfdKN2bG9DdFKuFzt4N4Yr/r5G
+        xGrhaYBRtxHMKRBjCQxKQwbLU57GNJU=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-100-iuZBHrvUNPGLHF6zZUm4uQ-1; Mon, 04 Apr 2022 10:42:16 -0400
+X-MC-Unique: iuZBHrvUNPGLHF6zZUm4uQ-1
+Received: by mail-wm1-f72.google.com with SMTP id t2-20020a7bc3c2000000b003528fe59cb9so5074384wmj.5
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 07:42:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hXiWPffxpHbWQ2eIaoK3c/FiSIjbtVnbbyc5wOi1X2k=;
+        b=JsFtD10Dl2Dd53VNSTwcTG2mbeV7Hoou/liAyBPgHVLOUXUKKjc2ruz+lVzj+W3XnI
+         Lwm+4g+msI1a6/36IIlwbVOr380TRt0sowd2H4nx7VSf9kItxbG3Drj63uuRccNK0H4q
+         UYMnnaDiK0I30mR4EPPD+1lIPbsqXHB+VicLsftK+QTXCn4zqi1yN7Qlq5ea67OgIuHQ
+         jI3dNsfUDD3NcEBeqARvnxZvaT3WXKiqAYqXUOk5/KssQ42Ffwhv6+lrbdNoXnwY2UkL
+         RFIvf7iz59B28w/BASy6J+Grrh6nClyLDpMF74k11h2nG2b3Bt75s1CBFSkS60neov+l
+         CZLw==
+X-Gm-Message-State: AOAM530itp5SL+CBCnnziQ6l/y5/Zd/8MO1D8iTMYzTcezlbK3zdzzwL
+        pThNsmVlptMvuv0TIjAOaFZJ0MkXRVj/MmTuU9svwF7DaeW9sgrf3AZtCvgYcyogKzE1Gz25Zgl
+        dJWO3PyxPvwbmC4bygvcUaZtvK1fBdg3mdzj8sGiX
+X-Received: by 2002:a5d:4684:0:b0:206:160d:e0c9 with SMTP id u4-20020a5d4684000000b00206160de0c9mr2639821wrq.493.1649083334825;
+        Mon, 04 Apr 2022 07:42:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyg+AfJaKH2047sRS+vqJejShKW3qlU7AVJoJsOCrGfYlFDGBqiqqYdurFN8nbwtgyAQlaX7ImMjM46ne0LI5w=
+X-Received: by 2002:a5d:4684:0:b0:206:160d:e0c9 with SMTP id
+ u4-20020a5d4684000000b00206160de0c9mr2639801wrq.493.1649083334618; Mon, 04
+ Apr 2022 07:42:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220324141405.10835-5-lecopzer.chen@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220331223857.902911-1-jakobkoschel@gmail.com> <20220331223857.902911-2-jakobkoschel@gmail.com>
+In-Reply-To: <20220331223857.902911-2-jakobkoschel@gmail.com>
+From:   Andreas Gruenbacher <agruenba@redhat.com>
+Date:   Mon, 4 Apr 2022 16:42:03 +0200
+Message-ID: <CAHc6FU41FSZHGx+H1zBsBEnLo2s2fViDKJV4P-LJXg3s5xP4WA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] gfs2: replace usage of found with dedicated list
+ iterator variable
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     Bob Peterson <rpeterso@redhat.com>,
+        cluster-devel <cluster-devel@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2022-03-24 22:14:04, Lecopzer Chen wrote:
-> When lockup_detector_init()->watchdog_nmi_probe(), PMU may be not ready
-> yet. E.g. on arm64, PMU is not ready until
-> device_initcall(armv8_pmu_driver_init).  And it is deeply integrated
-> with the driver model and cpuhp. Hence it is hard to push this
-> initialization before smp_init().
-> 
-> But it is easy to take an opposite approach and try to initialize
-> the watchdog once again later.
-> The delayed probe is called using workqueues. It need to allocate
-> memory and must be proceed in a normal context.
-> The delayed probe is queued only when the early one returns -EBUSY.
-> It is the return code returned when PMU is not ready yet.
-> 
-> Provide an API - retry_lockup_detector_init() for anyone who needs
-> to delayed init lockup detector.
-> 
-> The original assumption is: nobody should use delayed probe after
-> lockup_detector_check() which has __init attribute.
-> That is, anyone uses this API must call between lockup_detector_init()
-> and lockup_detector_check(), and the caller must have __init attribute
-> 
-> Co-developed-by: Pingfan Liu <kernelfans@gmail.com>
-> Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
-> Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
-> Suggested-by: Petr Mladek <pmladek@suse.com>
+Jakob,
+
+On Fri, Apr 1, 2022 at 12:40 AM Jakob Koschel <jakobkoschel@gmail.com> wrote:
+> To move the list iterator variable into the list_for_each_entry_*()
+> macro in the future it should be avoided to use the list iterator
+> variable after the loop body.
+>
+> To *never* use the list iterator variable after the loop it was
+> concluded to use a separate iterator variable instead of a
+> found boolean [1].
+>
+> This removes the need to use a found variable and simply checking if
+> the variable was set, can determine if the break/goto was hit.
+>
+> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 > ---
->  include/linux/nmi.h |  3 ++
->  kernel/watchdog.c   | 69 +++++++++++++++++++++++++++++++++++++++++++--
->  2 files changed, 70 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/nmi.h b/include/linux/nmi.h
-> index b7bcd63c36b4..1d84c9a8b460 100644
-> --- a/include/linux/nmi.h
-> +++ b/include/linux/nmi.h
-> @@ -118,6 +118,9 @@ static inline int hardlockup_detector_perf_init(void) { return 0; }
->  
->  void watchdog_nmi_stop(void);
->  void watchdog_nmi_start(void);
-> +
-> +extern bool allow_lockup_detector_init_retry;
-> +void retry_lockup_detector_init(void);
->  int watchdog_nmi_probe(void);
->  void watchdog_nmi_enable(unsigned int cpu);
->  void watchdog_nmi_disable(unsigned int cpu);
-> diff --git a/kernel/watchdog.c b/kernel/watchdog.c
-> index b71d434cf648..308ba29f8f0f 100644
-> --- a/kernel/watchdog.c
-> +++ b/kernel/watchdog.c
-> @@ -103,7 +103,13 @@ void __weak watchdog_nmi_disable(unsigned int cpu)
->  	hardlockup_detector_perf_disable();
->  }
->  
-> -/* Return 0, if a NMI watchdog is available. Error code otherwise */
-> +/*
-> + * Arch specific API.
-> + *
-> + * Return 0 when NMI watchdog is available, negative value otherwise.
-> + * The error code -EBUSY is special. It means that a deferred probe
-> + * might succeed later.
-> + */
->  int __weak __init watchdog_nmi_probe(void)
+>  fs/gfs2/quota.c    | 13 ++++++-------
+>  fs/gfs2/recovery.c | 22 ++++++++++------------
+>  2 files changed, 16 insertions(+), 19 deletions(-)
+>
+> diff --git a/fs/gfs2/quota.c b/fs/gfs2/quota.c
+> index be0997e24d60..dafd04fb9164 100644
+> --- a/fs/gfs2/quota.c
+> +++ b/fs/gfs2/quota.c
+> @@ -443,7 +443,7 @@ static int qd_check_sync(struct gfs2_sbd *sdp, struct gfs2_quota_data *qd,
+>
+>  static int qd_fish(struct gfs2_sbd *sdp, struct gfs2_quota_data **qdp)
 >  {
->  	return hardlockup_detector_perf_init();
-> @@ -839,16 +845,75 @@ static void __init watchdog_sysctl_init(void)
->  #define watchdog_sysctl_init() do { } while (0)
->  #endif /* CONFIG_SYSCTL */
->  
-> +static void lockup_detector_delay_init(struct work_struct *work);
-> +bool allow_lockup_detector_init_retry __initdata;
-> +
-> +static struct work_struct detector_work __initdata =
-> +		__WORK_INITIALIZER(detector_work, lockup_detector_delay_init);
-> +
-> +static void __init lockup_detector_delay_init(struct work_struct *work)
-> +{
-> +	int ret;
-> +
-> +	ret = watchdog_nmi_probe();
-> +	if (ret) {
-> +		pr_info("Delayed init of the lockup detector failed: %d\n", ret);
-> +		pr_info("Perf NMI watchdog permanently disabled\n");
-> +		return;
-> +	}
-> +
-> +	nmi_watchdog_available = true;
-> +	lockup_detector_setup();
+> -       struct gfs2_quota_data *qd = NULL;
+> +       struct gfs2_quota_data *qd = NULL, *iter;
+>         int error;
+>         int found = 0;
+>
+> @@ -454,15 +454,14 @@ static int qd_fish(struct gfs2_sbd *sdp, struct gfs2_quota_data **qdp)
+>
+>         spin_lock(&qd_lock);
+>
+> -       list_for_each_entry(qd, &sdp->sd_quota_list, qd_list) {
+> -               found = qd_check_sync(sdp, qd, &sdp->sd_quota_sync_gen);
+> -               if (found)
+> +       list_for_each_entry(iter, &sdp->sd_quota_list, qd_list) {
+> +               found = qd_check_sync(sdp, iter, &sdp->sd_quota_sync_gen);
+> +               if (found) {
+> +                       qd = iter;
 
-The name of the variable "allow_lockup_detector_init_retry" is
-slightly confusing in this context. I suggest to add a comment:
+we might as well get rid of 'found' here like in the below two
+changes. Let me fix that up.
 
-	/* Retry is not needed any longer. */
-> +	allow_lockup_detector_init_retry = false;
+>                         break;
+> +               }
+>         }
+>
+> -       if (!found)
+> -               qd = NULL;
+> -
+>         spin_unlock(&qd_lock);
+>
+>         if (qd) {
+> diff --git a/fs/gfs2/recovery.c b/fs/gfs2/recovery.c
+> index 016ed1b2ca1d..2bb085a72e8e 100644
+> --- a/fs/gfs2/recovery.c
+> +++ b/fs/gfs2/recovery.c
+> @@ -55,17 +55,16 @@ int gfs2_replay_read_block(struct gfs2_jdesc *jd, unsigned int blk,
+>  int gfs2_revoke_add(struct gfs2_jdesc *jd, u64 blkno, unsigned int where)
+>  {
+>         struct list_head *head = &jd->jd_revoke_list;
+> -       struct gfs2_revoke_replay *rr;
+> -       int found = 0;
+> +       struct gfs2_revoke_replay *rr = NULL, *iter;
+>
+> -       list_for_each_entry(rr, head, rr_list) {
+> -               if (rr->rr_blkno == blkno) {
+> -                       found = 1;
+> +       list_for_each_entry(iter, head, rr_list) {
+> +               if (iter->rr_blkno == blkno) {
+> +                       rr = iter;
+>                         break;
+>                 }
+>         }
+>
+> -       if (found) {
+> +       if (rr) {
+>                 rr->rr_where = where;
+>                 return 0;
+>         }
+> @@ -83,18 +82,17 @@ int gfs2_revoke_add(struct gfs2_jdesc *jd, u64 blkno, unsigned int where)
+>
+>  int gfs2_revoke_check(struct gfs2_jdesc *jd, u64 blkno, unsigned int where)
+>  {
+> -       struct gfs2_revoke_replay *rr;
+> +       struct gfs2_revoke_replay *rr = NULL, *iter;
+>         int wrap, a, b, revoke;
+> -       int found = 0;
+>
+> -       list_for_each_entry(rr, &jd->jd_revoke_list, rr_list) {
+> -               if (rr->rr_blkno == blkno) {
+> -                       found = 1;
+> +       list_for_each_entry(iter, &jd->jd_revoke_list, rr_list) {
+> +               if (iter->rr_blkno == blkno) {
+> +                       rr = iter;
+>                         break;
+>                 }
+>         }
+>
+> -       if (!found)
+> +       if (!rr)
+>                 return 0;
+>
+>         wrap = (rr->rr_where < jd->jd_replay_tail);
+> --
+> 2.25.1
+>
 
+Thanks,
+Andreas
 
-> +}
-> +
-> +/*
-> + * retry_lockup_detector_init - retry init lockup detector if possible.
-> + *
-> + * Only take effect when allow_lockup_detector_init_retry is true, which
-> + * means it must call between lockup_detector_init() and lockup_detector_check().
-> + * Be aware that caller must have __init attribute, relative functions
-> + * will be freed after kernel initialization.
-> + */
-> +void __init retry_lockup_detector_init(void)
-> +{
-> +	if (!allow_lockup_detector_init_retry)
-> +		return;
-> +
-> +	queue_work_on(__smp_processor_id(), system_wq, &detector_work);
-> +}
-> +
-> +/* Ensure the check is called after the initialization of driver */
-> +static int __init lockup_detector_check(void)
-> +{
-> +	/* Make sure no work is pending. */
-> +	flush_work(&detector_work);
-
-This is racy. We should first disable
-"allow_lockup_detector_init_retry" to make sure
-that retry_lockup_detector_init() will not queue
-the work any longer.
-
-> +	if (!allow_lockup_detector_init_retry)
-> +		return 0;
-> +
-> +	allow_lockup_detector_init_retry = false;
-> +	pr_info("Delayed init checking failed, please check your driver.\n");
-
-This prints that the init failed without checking the state
-of the watchdog. I guess that it works but it is far from
-obvious and any further change might break it.
-
-Is the message really needed?
-Does it help?
-What exact driver needs checking?
-
-IMHO, it just makes the code more complicated and
-it is not worth it.
-
-I suggest to keep it simple:
-
-/*
- * Ensure the check is called after the initialization of driver
- * and before removing init code.
- */
-static int __init lockup_detector_check(void)
-{
-	allow_lockup_detector_init_retry = false;
-	flush_work(&detector_work);
-
-	return 0;
-}
-
-or if you really want that message then I would do:
-
-/*
- * Ensure the check is called after the initialization of driver
- * and before removing init code.
- */
-static int __init lockup_detector_check(void)
-{
-	bool delayed_init_allowed = allow_lockup_detector_init_retry;
-
-	allow_lockup_detector_init_retry = false;
-	flush_work(&detector_work);
-
-	if (delayed_init_allowed && !nmi_watchdog_available)
-		pr_info("Delayed init failed. Please, check your driver.\n");
-
-	return 0;
-}
-
-Best Regards,
-Petr

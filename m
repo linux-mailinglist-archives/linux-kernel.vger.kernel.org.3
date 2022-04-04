@@ -2,73 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781AE4F1DA0
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDAF04F1B75
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382996AbiDDVci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52360 "EHLO
+        id S1379646AbiDDVU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379720AbiDDR7B (ORCPT
+        with ESMTP id S1379725AbiDDR7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 13:59:01 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2C234BB9;
-        Mon,  4 Apr 2022 10:57:04 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-df22f50e0cso11624114fac.3;
-        Mon, 04 Apr 2022 10:57:04 -0700 (PDT)
+        Mon, 4 Apr 2022 13:59:30 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5A234BB9
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 10:57:33 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id m18so8786031plx.3
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 10:57:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=AEWP21GM4E9cyOoL3qIS0CoFdLbJpmk5WXVV+auexAQ=;
-        b=A8fxSPNmIfaWYKrHBlZaLXcvOYLu9Vrcb+u7TNHqeRxaF/O8WR7cLJCST+Tc1H7is6
-         K61aviSX1tCeV7jaQPXPb4zsKtFjWO9V4ZXkcZMWTBJbX5E7+DtBaM2KQaQxQ4NXy12M
-         VggI/cg9xK/1reYGYov8SHIDOSbJxUe7LPJ70ptMywxwLmYO7nPkjdCIwb76sGskIGsH
-         uALkaOGEGL7Osw6CrmiCAlUGaa+Ld0GAWKTdFSdsJJFtyGoF9Cedmf4VX1KsJR0DU3WP
-         lSoHhWrB/Lqqtfj3cJlLUISYxaA/U8U70C+up7rODwk8A65eKh/FQz1Nf3MoeGSfayNz
-         4a9w==
+        bh=o6hLZdUb/ReT0m7dHtzUEMCrOQA61jDt0sJYjNLeFrM=;
+        b=bjGFzmKzBzOkEsGB0baOcb7bfray3F9t5FC2XDPDR25MOdKcPAtOKZplJ3FsM9Myko
+         pvDpp5tbpgIb2RTE5S5CLdctjR75ngAbg2862ZMtImR4p5Dm5g/dHuDVoE+W5X4ThfUr
+         x+bSrUBWZtWfGJeSUyWeVJwmucmfsgVn1QCkhnuD19SifeUUzCHtBWa8M7oGW9wyBnSL
+         X85uNUvUkXpoMyy1BhPAdP5QABgg0bWooDgCUrZPW1OKXzuVYi5SSLBx3QRJZgk522Vo
+         Y0bXK4820hvyI+0ks5eoz1oa8mYPmQd8uc96lHBRf86w48NziVyW2Z9bdXfHNCeUW2UQ
+         hwTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=AEWP21GM4E9cyOoL3qIS0CoFdLbJpmk5WXVV+auexAQ=;
-        b=gE96Z0MC6NmgPP/v47aYW3XQgJdH0McAT5AHeornhtrL32tWtJ9+JKKgwQVN/Ywjl3
-         KV2rpbe9/U9rHQo+U0IFvXubIZ276ygcFvPAjSAKhj4c5sK469k9lHwOFnhj6MqGnwrG
-         qu828fLS8W6Vq21PurYpALr07EuIu/Z2SeGNgTEGa1BRrmNk1m4y5cBtHiT8QcTyNG68
-         KyrbyVOULaBt6pXj97gft2Css1Xb/jXmoukrSWEwhVSUhf0Q7uQWgPcY/idsSDwK1eCX
-         uPt/p+77Q5+DFxMWo/yEUM/hJ70Al+2BonwBtislWkWxtMHNYH85fI2q4rCUmUrb+5CP
-         GHrQ==
-X-Gm-Message-State: AOAM532r/aPrPeXZzol95uJSoqNyZ5a3F/nsgGq6KqSCCzkNLxmSrjdc
-        7OhPDja/kkN3pENK2+ldQ08=
-X-Google-Smtp-Source: ABdhPJx18shL1wpUax/xhz8105BoWa0G7HpdbNUzdvsDRLqA5/2ZEilu8wWMeQGrEG3upCgBtBI+yA==
-X-Received: by 2002:a05:6870:f719:b0:d6:e0c0:af42 with SMTP id ej25-20020a056870f71900b000d6e0c0af42mr187736oab.165.1649095024221;
-        Mon, 04 Apr 2022 10:57:04 -0700 (PDT)
-Received: from t14s.localdomain ([2001:1284:f013:bc01:5a2:a886:8487:b8de])
-        by smtp.gmail.com with ESMTPSA id r23-20020a056830237700b005b2610517c8sm4930201oth.56.2022.04.04.10.57.03
+        bh=o6hLZdUb/ReT0m7dHtzUEMCrOQA61jDt0sJYjNLeFrM=;
+        b=qqsErYonQRQfIJZbZL94+pWr00P0Rvd62h+B0DsU4aCOMdln5YFCSkWcRV3Y+udH/W
+         iNjT9mxtc3g57XU8QWO+KgdlqfqZCbCdvPJN98svsEl0kWSyxqj8URSqYFOhDN2IjFdN
+         K2NV+WuhtW1+dD6Y5K+9L2N2xjsJyKVtSiOEkshw9fqDFZ1kec4v7rR7pbDnMhgHFR6u
+         SL8jXPmWE2cmarqXWeFAljen0bOAFmENHBpWMsg4/30SyaWt6jJizyo104MrYpR+cX73
+         a0qHuYLZX2t6R1y/6SonqCg8YClAlVMxUQ5dFXZHxBWG6N9+wfJwZTIyK0A3VeyMqAEY
+         g1wQ==
+X-Gm-Message-State: AOAM531UH+DhrI8xrkekOY0+6bKmuFXbSscw2pUFqlEaa3h6EQjkh4Bu
+        NQqJSWNrnr4cb9G0Su++WjQahA==
+X-Google-Smtp-Source: ABdhPJxGWxMtvYIkXrWp3S8TgNg54CUcJ7KsRzi4hwRORB9mUYDQrIppA9nyHmO18bePjSyjyq/LQA==
+X-Received: by 2002:a17:90a:4604:b0:1bc:8bdd:4a63 with SMTP id w4-20020a17090a460400b001bc8bdd4a63mr361154pjg.147.1649095052573;
+        Mon, 04 Apr 2022 10:57:32 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id 21-20020a630115000000b00382a0895661sm11019145pgb.11.2022.04.04.10.57.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 10:57:03 -0700 (PDT)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-        id 1B7191DB7C2; Mon,  4 Apr 2022 14:57:02 -0300 (-03)
-Date:   Mon, 4 Apr 2022 14:57:02 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Jamie Bainbridge <jamie.bainbridge@gmail.com>
-Cc:     Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-sctp@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 net] sctp: count singleton chunks in assoc user stats
-Message-ID: <YksxbrRhtngGlERY@t14s.localdomain>
-References: <c9ba8785789880cf07923b8a5051e174442ea9ee.1649029663.git.jamie.bainbridge@gmail.com>
+        Mon, 04 Apr 2022 10:57:31 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 17:57:28 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zeng Guang <guang.zeng@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hu, Robert" <robert.hu@intel.com>,
+        "Gao, Chao" <chao.gao@intel.com>
+Subject: Re: [PATCH v7 8/8] KVM: VMX: enable IPI virtualization
+Message-ID: <YksxiAnNmdR2q65S@google.com>
+References: <20220304080725.18135-1-guang.zeng@intel.com>
+ <20220304080725.18135-9-guang.zeng@intel.com>
+ <YkZlhI7nAAqDhT0D@google.com>
+ <54df6da8-ad68-cc75-48db-d18fc87430e9@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c9ba8785789880cf07923b8a5051e174442ea9ee.1649029663.git.jamie.bainbridge@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <54df6da8-ad68-cc75-48db-d18fc87430e9@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,18 +92,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 09:47:48AM +1000, Jamie Bainbridge wrote:
-> Singleton chunks (INIT, HEARTBEAT PMTU probes, and SHUTDOWN-
-> COMPLETE) are not counted in SCTP_GET_ASOC_STATS "sas_octrlchunks"
-> counter available to the assoc owner.
+On Sun, Apr 03, 2022, Zeng Guang wrote:
 > 
-> These are all control chunks so they should be counted as such.
+> On 4/1/2022 10:37 AM, Sean Christopherson wrote:
+> > > @@ -4219,14 +4226,21 @@ static void vmx_refresh_apicv_exec_ctrl(struct kvm_vcpu *vcpu)
+> > >   	pin_controls_set(vmx, vmx_pin_based_exec_ctrl(vmx));
+> > >   	if (cpu_has_secondary_exec_ctrls()) {
+> > > -		if (kvm_vcpu_apicv_active(vcpu))
+> > > +		if (kvm_vcpu_apicv_active(vcpu)) {
+> > >   			secondary_exec_controls_setbit(vmx,
+> > >   				      SECONDARY_EXEC_APIC_REGISTER_VIRT |
+> > >   				      SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
+> > > -		else
+> > > +			if (enable_ipiv)
+> > > +				tertiary_exec_controls_setbit(vmx,
+> > > +						TERTIARY_EXEC_IPI_VIRT);
+> > > +		} else {
+> > >   			secondary_exec_controls_clearbit(vmx,
+> > >   					SECONDARY_EXEC_APIC_REGISTER_VIRT |
+> > >   					SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
+> > > +			if (enable_ipiv)
+> > > +				tertiary_exec_controls_clearbit(vmx,
+> > > +						TERTIARY_EXEC_IPI_VIRT);
+> > Oof.  The existing code is kludgy.  We should never reach this point without
+> > enable_apicv=true, and enable_apicv should be forced off if APICv isn't supported,
+> > let alone seconary exec being support.
+> > 
+> > Unless I'm missing something, throw a prep patch earlier in the series to drop
+> > the cpu_has_secondary_exec_ctrls() check, that will clean this code up a smidge.
 > 
-> Add counting of singleton chunks so they are properly accounted for.
-> 
-> Fixes: 196d67593439 ("sctp: Add support to per-association statistics via a new SCTP_GET_ASSOC_STATS call")
-> Signed-off-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
+> cpu_has_secondary_exec_ctrls() check can avoid wrong vmcs write in case mistaken
+> invocation.
 
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+KVM has far bigger problems on buggy invocation, and in that case the resulting
+printk + WARN from the failed VMWRITE is a good thing.
 
-Thanks Jamie.
+> > > +
+> > > +	if (!pages)
+> > > +		return -ENOMEM;
+> > > +
+> > > +	kvm_vmx->pid_table = (void *)page_address(pages);
+> > > +	kvm_vmx->pid_last_index = kvm_vmx->kvm.arch.max_vcpu_id - 1;
+> > No need to cache pid_last_index, it's only used in one place (initializing the
+> > VMCS field).  The allocation/free paths can use max_vcpu_id directly.  Actually,
+> 
+> In previous design, we don't forbid to change max_vcpu_id after vCPU creation
+> or for other purpose in future. Thus it's safe to decouple them and make ipiv
+> usage independent. If it can be sure that max_vcpu_id won't be modified , we
+> can totally remove pid_last_index and use max_vcpu_id directly even for
+> initializing the VMCD field.
+
+max_vcpu_id asolutely needs to be constant after the first vCPU is created.
+
+> > > @@ -7123,6 +7176,22 @@ static int vmx_create_vcpu(struct kvm_vcpu *vcpu)
+> > >   			goto free_vmcs;
+> > >   	}
+> > > +	/*
+> > > +	 * Allocate PID-table and program this vCPU's PID-table
+> > > +	 * entry if IPI virtualization can be enabled.
+> > Please wrap comments at 80 chars.  But I'd just drop this one entirely, the code
+> > is self-explanatory once the allocation and setting of the vCPU's entry are split.
+> > 
+> > > +	 */
+> > > +	if (vmx_can_use_ipiv(vcpu->kvm)) {
+> > > +		struct kvm_vmx *kvm_vmx = to_kvm_vmx(vcpu->kvm);
+> > > +
+> > > +		mutex_lock(&vcpu->kvm->lock);
+> > > +		err = vmx_alloc_pid_table(kvm_vmx);
+> > > +		mutex_unlock(&vcpu->kvm->lock);
+> > This belongs in vmx_vm_init(), doing it in vCPU creation is a remnant of the
+> > dynamic resize approach that's no longer needed.
+> 
+> We cannot allocate pid table in vmx_vm_init() as userspace has no chance to
+> set max_vcpu_ids at this stage. That's the reason we do it in vCPU creation
+> instead.
+
+Ah, right.  Hrm.  And that's going to be a recurring problem if we try to use the
+dynamic kvm->max_vcpu_ids to reduce other kernel allocations.
+
+Argh, and even kvm_arch_vcpu_precreate() isn't protected by kvm->lock.
+
+Taking kvm->lock isn't problematic per se, I just hate doing it so deep in a
+per-vCPU flow like this.
+
+A really gross hack/idea would be to make this 64-bit only and steal the upper
+32 bits of @type in kvm_create_vm() for the max ID.
+
+I think my first choice would be to move kvm_arch_vcpu_precreate() under kvm->lock.
+None of the architectures that have a non-nop implemenation (s390, arm64 and x86)
+do significant work, so holding kvm->lock shouldn't harm performance.  s390 has to
+acquire kvm->lock in its implementation, so we could drop that.  And looking at
+arm64, I believe its logic should also be done under kvm->lock.
+
+It'll mean adding yet another kvm_x86_ops, but I like that more than burying the
+code deep in vCPU creation.
+
+Paolo, any thoughts on this?

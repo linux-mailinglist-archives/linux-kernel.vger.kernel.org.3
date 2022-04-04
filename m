@@ -2,214 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 746D24F18B4
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E7574F18B8
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359856AbiDDPpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 11:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57766 "EHLO
+        id S1378705AbiDDPqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 11:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238450AbiDDPpu (ORCPT
+        with ESMTP id S1377305AbiDDPpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 11:45:50 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41EA2BB3;
-        Mon,  4 Apr 2022 08:43:53 -0700 (PDT)
-Received: (Authenticated sender: i.maximets@ovn.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id C0B1A1C000C;
-        Mon,  4 Apr 2022 15:43:47 +0000 (UTC)
-From:   Ilya Maximets <i.maximets@ovn.org>
-To:     netdev@vger.kernel.org
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>, dev@openvswitch.org,
-        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Pravin B Shelar <pshelar@ovn.org>,
-        Thomas Graf <tgraf@suug.ch>,
-        Ilya Maximets <i.maximets@ovn.org>,
-        =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@ubuntu.com>
-Subject: [PATCH net] net: openvswitch: fix leak of nested actions
-Date:   Mon,  4 Apr 2022 17:43:45 +0200
-Message-Id: <20220404154345.2980792-1-i.maximets@ovn.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 4 Apr 2022 11:45:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A5134BB3
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:43:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649087035;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MFdg+LnJ0TABxRLem5IqgEGzvZGFYgN4hu7GWdYjiLI=;
+        b=ScROs40n5XtkGUG6OAB29/dVh8zjp2vsWzcvzppKY9Sgwzdw5kQbUERkZuL+pujT3743me
+        7jtWBH6y6VO5UkEeBUBOBNiCdfcoRyMP4oMAB2CcQNc4deeN+mgBJ1bBzuvtC/8UuV60Gf
+        1fQwmwjvm4D9bYW9NE7IY/7DyEwybyE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-484-rOrK76ugMiKeVB37w3Intw-1; Mon, 04 Apr 2022 11:43:54 -0400
+X-MC-Unique: rOrK76ugMiKeVB37w3Intw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6A64785A5BE;
+        Mon,  4 Apr 2022 15:43:53 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 718AF145BEF3;
+        Mon,  4 Apr 2022 15:43:52 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     stable@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>
+Subject: [PATCH 4.14] KVM: x86: Forbid VMM to set SYNIC/STIMER MSRs when SynIC wasn't activated
+Date:   Mon,  4 Apr 2022 11:43:49 -0400
+Message-Id: <20220404154352.477059-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While parsing user-provided actions, openvswitch module may dynamically
-allocate memory and store pointers in the internal copy of the actions.
-So this memory has to be freed while destroying the actions.
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-Currently there are only two such actions: ct() and set().  However,
-there are many actions that can hold nested lists of actions and
-ovs_nla_free_flow_actions() just jumps over them leaking the memory.
+commit b1e34d325397a33d97d845e312d7cf2a8b646b44 upstream.
 
-For example, removal of the flow with the following actions will lead
-to a leak of the memory allocated by nf_ct_tmpl_alloc():
+Setting non-zero values to SYNIC/STIMER MSRs activates certain features,
+this should not happen when KVM_CAP_HYPERV_SYNIC{,2} was not activated.
 
-  actions:clone(ct(commit),0)
+Note, it would've been better to forbid writing anything to SYNIC/STIMER
+MSRs, including zeroes, however, at least QEMU tries clearing
+HV_X64_MSR_STIMER0_CONFIG without SynIC. HV_X64_MSR_EOM MSR is somewhat
+'special' as writing zero there triggers an action, this also should not
+happen when SynIC wasn't activated.
 
-Non-freed set() action may also leak the 'dst' structure for the
-tunnel info including device references.
-
-Under certain conditions with a high rate of flow rotation that may
-cause significant memory leak problem (2MB per second in reporter's
-case).  The problem is also hard to mitigate, because the user doesn't
-have direct control over the datapath flows generated by OVS.
-
-Fix that by iterating over all the nested actions and freeing
-everything that needs to be freed recursively.
-
-New build time assertion should protect us from this problem if new
-actions will be added in the future.
-
-Unfortunately, openvswitch module doesn't use NLA_F_NESTED, so all
-attributes has to be explicitly checked.  sample() and clone() actions
-are mixing extra attributes into the user-provided action list.  That
-prevents some code generalization too.
-
-Fixes: 34ae932a4036 ("openvswitch: Make tunnel set action attach a metadata dst")
-Link: https://mail.openvswitch.org/pipermail/ovs-dev/2022-March/392922.html
-Reported-by: Stéphane Graber <stgraber@ubuntu.com>
-Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Message-Id: <20220325132140.25650-4-vkuznets@redhat.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 ---
- net/openvswitch/flow_netlink.c | 95 ++++++++++++++++++++++++++++++++--
- 1 file changed, 90 insertions(+), 5 deletions(-)
+ arch/x86/kvm/hyperv.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/net/openvswitch/flow_netlink.c b/net/openvswitch/flow_netlink.c
-index dbdcaaa27f5b..7176156d3844 100644
---- a/net/openvswitch/flow_netlink.c
-+++ b/net/openvswitch/flow_netlink.c
-@@ -2317,6 +2317,62 @@ static struct sw_flow_actions *nla_alloc_flow_actions(int size)
- 	return sfa;
- }
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index dc97f2544b6f..dbe43b9345a6 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -260,6 +260,9 @@ static int synic_set_msr(struct kvm_vcpu_hv_synic *synic,
+ 	case HV_X64_MSR_EOM: {
+ 		int i;
  
-+static void ovs_nla_free_nested_actions(const struct nlattr *actions, int len);
-+
-+static void ovs_nla_free_check_pkt_len_action(const struct nlattr *action)
-+{
-+	const struct nlattr *a;
-+	int rem;
-+
-+	nla_for_each_nested(a, action, rem) {
-+		switch (nla_type(a)) {
-+		case OVS_CHECK_PKT_LEN_ATTR_ACTIONS_IF_LESS_EQUAL:
-+		case OVS_CHECK_PKT_LEN_ATTR_ACTIONS_IF_GREATER:
-+			ovs_nla_free_nested_actions(nla_data(a), nla_len(a));
++		if (!synic->active)
 +			break;
-+		}
-+	}
-+}
 +
-+static void ovs_nla_free_clone_action(const struct nlattr *action)
-+{
-+	const struct nlattr *a = nla_data(action);
-+	int rem = nla_len(action);
-+
-+	switch (nla_type(a)) {
-+	case OVS_CLONE_ATTR_EXEC:
-+		/* The real list of actions follows this attribute. */
-+		a = nla_next(a, &rem);
-+		ovs_nla_free_nested_actions(a, rem);
-+		break;
-+	}
-+}
-+
-+static void ovs_nla_free_dec_ttl_action(const struct nlattr *action)
-+{
-+	const struct nlattr *a = nla_data(action);
-+
-+	switch (nla_type(a)) {
-+	case OVS_DEC_TTL_ATTR_ACTION:
-+		ovs_nla_free_nested_actions(nla_data(a), nla_len(a));
-+		break;
-+	}
-+}
-+
-+static void ovs_nla_free_sample_action(const struct nlattr *action)
-+{
-+	const struct nlattr *a = nla_data(action);
-+	int rem = nla_len(action);
-+
-+	switch (nla_type(a)) {
-+	case OVS_SAMPLE_ATTR_ARG:
-+		/* The real list of actions follows this attribute. */
-+		a = nla_next(a, &rem);
-+		ovs_nla_free_nested_actions(a, rem);
-+		break;
-+	}
-+}
-+
- static void ovs_nla_free_set_action(const struct nlattr *a)
+ 		for (i = 0; i < ARRAY_SIZE(synic->sint); i++)
+ 			kvm_hv_notify_acked_sint(vcpu, i);
+ 		break;
+@@ -520,6 +523,12 @@ static int stimer_start(struct kvm_vcpu_hv_stimer *stimer)
+ static int stimer_set_config(struct kvm_vcpu_hv_stimer *stimer, u64 config,
+ 			     bool host)
  {
- 	const struct nlattr *ovs_key = nla_data(a);
-@@ -2330,25 +2386,54 @@ static void ovs_nla_free_set_action(const struct nlattr *a)
- 	}
- }
++	struct kvm_vcpu *vcpu = stimer_to_vcpu(stimer);
++	struct kvm_vcpu_hv_synic *synic = vcpu_to_synic(vcpu);
++
++	if (!synic->active && (!host || config))
++		return 1;
++
+ 	trace_kvm_hv_stimer_set_config(stimer_to_vcpu(stimer)->vcpu_id,
+ 				       stimer->index, config, host);
  
--void ovs_nla_free_flow_actions(struct sw_flow_actions *sf_acts)
-+static void ovs_nla_free_nested_actions(const struct nlattr *actions, int len)
+@@ -534,6 +543,12 @@ static int stimer_set_config(struct kvm_vcpu_hv_stimer *stimer, u64 config,
+ static int stimer_set_count(struct kvm_vcpu_hv_stimer *stimer, u64 count,
+ 			    bool host)
  {
- 	const struct nlattr *a;
- 	int rem;
- 
--	if (!sf_acts)
-+	/* Whenever new actions are added, the need to update this
-+	 * function should be considered.
-+	 */
-+	BUILD_BUG_ON(OVS_ACTION_ATTR_MAX != 23);
++	struct kvm_vcpu *vcpu = stimer_to_vcpu(stimer);
++	struct kvm_vcpu_hv_synic *synic = vcpu_to_synic(vcpu);
 +
-+	if (!actions)
- 		return;
- 
--	nla_for_each_attr(a, sf_acts->actions, sf_acts->actions_len, rem) {
-+	nla_for_each_attr(a, actions, len, rem) {
- 		switch (nla_type(a)) {
--		case OVS_ACTION_ATTR_SET:
--			ovs_nla_free_set_action(a);
-+		case OVS_ACTION_ATTR_CHECK_PKT_LEN:
-+			ovs_nla_free_check_pkt_len_action(a);
-+			break;
++	if (!synic->active && (!host || count))
++		return 1;
 +
-+		case OVS_ACTION_ATTR_CLONE:
-+			ovs_nla_free_clone_action(a);
- 			break;
-+
- 		case OVS_ACTION_ATTR_CT:
- 			ovs_ct_free_action(a);
- 			break;
-+
-+		case OVS_ACTION_ATTR_DEC_TTL:
-+			ovs_nla_free_dec_ttl_action(a);
-+			break;
-+
-+		case OVS_ACTION_ATTR_SAMPLE:
-+			ovs_nla_free_sample_action(a);
-+			break;
-+
-+		case OVS_ACTION_ATTR_SET:
-+			ovs_nla_free_set_action(a);
-+			break;
- 		}
- 	}
-+}
-+
-+void ovs_nla_free_flow_actions(struct sw_flow_actions *sf_acts)
-+{
-+	if (!sf_acts)
-+		return;
- 
-+	ovs_nla_free_nested_actions(sf_acts->actions, sf_acts->actions_len);
- 	kfree(sf_acts);
- }
+ 	trace_kvm_hv_stimer_set_count(stimer_to_vcpu(stimer)->vcpu_id,
+ 				      stimer->index, count, host);
  
 -- 
-2.34.1
+2.31.1
 

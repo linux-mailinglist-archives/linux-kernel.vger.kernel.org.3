@@ -2,110 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7744F11F5
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D78C44F1200
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353918AbiDDJ3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 05:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
+        id S1353978AbiDDJbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 05:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353794AbiDDJ26 (ORCPT
+        with ESMTP id S1353794AbiDDJbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 05:28:58 -0400
-Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F8523BBCB;
-        Mon,  4 Apr 2022 02:27:02 -0700 (PDT)
-Received: from dread.disaster.area (pa49-180-43-123.pa.nsw.optusnet.com.au [49.180.43.123])
-        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 29B8410E55FB;
-        Mon,  4 Apr 2022 19:26:57 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1nbIz9-00Dc5C-Sq; Mon, 04 Apr 2022 19:26:55 +1000
-Date:   Mon, 4 Apr 2022 19:26:55 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        linux-rdma@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-media@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-xfs@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-s390@vger.kernel.org
-Subject: Re: Build regressions/improvements in v5.18-rc1
-Message-ID: <20220404092655.GR1544202@dread.disaster.area>
-References: <CAHk-=wg6FWL1xjVyHx7DdjD2dHZETA5_=FqqW17Z19X-WTfWSg@mail.gmail.com>
- <20220404074734.1092959-1-geert@linux-m68k.org>
- <alpine.DEB.2.22.394.2204041006230.1941618@ramsan.of.borg>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2204041006230.1941618@ramsan.of.borg>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=624ab9e5
-        a=MV6E7+DvwtTitA3W+3A2Lw==:117 a=MV6E7+DvwtTitA3W+3A2Lw==:17
-        a=kj9zAlcOel0A:10 a=z0gMJWrwH1QA:10 a=6Fu7hv2xAAAA:8 a=7-415B0cAAAA:8
-        a=L05BbbQJD6-TbP0LrSsA:9 a=CjuIK1q_8ugA:10 a=OCr_TKDY-yBPQKLGgHr3:22
-        a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 4 Apr 2022 05:31:06 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A048220CF
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 02:29:10 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id b130so7826799pga.13
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 02:29:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id;
+        bh=25rklRbKCPsv/fRQUYfQLO06IirkCoUcr/CH2yXPlg0=;
+        b=nBv0RJtYmfjSnEU9JW7F8vPjVAc38XVKIiB+Nv1Pyj/2Kl3CbuQTBfdZsewPPKnt6m
+         eRu9uOkrg/e9NhZhQ15shTFSGJfOzGjQatHbtfehqNJ5f4GhoTGlVd3F/RrWhucFZneO
+         WU6vJl0X1XI03mve7bJACyyr2/piw3Ai+Xh/ApNfdN6YuT2F0+o/kbmFKiRRrXd5ibzz
+         S0mgTCO0YWRYrIhQbc+xuAnvYmZHWVRzAdljZuvh3i2qDf4JPYR7qGxiVal1ii7mWz76
+         t/V8vil3Q32bQhtdLFQNEN8AHLnhaZ1LIXIdbvZDLNmkwEpWugRXsYsJYgrUa9u9h+mi
+         /+HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id;
+        bh=25rklRbKCPsv/fRQUYfQLO06IirkCoUcr/CH2yXPlg0=;
+        b=inoNKOwmOYxnJnAYrN+V/Ia2MaFMm+vhwkedEP4LfPZzsv+CDMPxdwvcdcB5SlFHVq
+         N+1NFTOORu5ZWVTNdlwXAC89tI/4mNnypTRdeYONCmzDtjRQ/NtEkUV57BIaY+oBLwbm
+         qvuwEYGqFNCSqQdVqJHjaBe03t6ZfFScBRoRH3VM1QWOY7KYVbwi4ll/fwAAuBYe2BaZ
+         tlbGoNPDLRe3QjCLOsqwF0X8f/giOxbYqh33LuOT4+W6dndtYXXiE/m837pR/ahePT3E
+         yL6ACANQNwBMUGfAA6XpW5jaw30bYkZJW3ndpD0J2ShAvrK/39EExkqWlGPwRNEbe8Im
+         6LiA==
+X-Gm-Message-State: AOAM530Mrdqteo8SmtZ8BSEbo9quK/WEDRFM92Pl/wyBMxylaiCC5ByY
+        e9zXNmH0wB0Mg3MYri1kDe4=
+X-Google-Smtp-Source: ABdhPJzDhNqYIqvfdG6d/FBo1eOl6xSsWZwI4Iti4exghBFyDjhz9X/Fg/iKNHzjDK0eLF6hNJVhjA==
+X-Received: by 2002:a63:3344:0:b0:398:2527:a122 with SMTP id z65-20020a633344000000b003982527a122mr25559649pgz.140.1649064549916;
+        Mon, 04 Apr 2022 02:29:09 -0700 (PDT)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id h189-20020a636cc6000000b0039841f669bcsm10063032pgc.78.2022.04.04.02.29.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 02:29:09 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Koro Chen <koro.chen@mediatek.com>,
+        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: mediatek: Fix error handling in mt8173_max98090_dev_probe
+Date:   Mon,  4 Apr 2022 09:29:01 +0000
+Message-Id: <20220404092903.26725-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 10:16:08AM +0200, Geert Uytterhoeven wrote:
-> On Mon, 4 Apr 2022, Geert Uytterhoeven wrote:
-> > Below is the list of build error/warning regressions/improvements in
-> > v5.18-rc1[1] compared to v5.17[2].
-> > 
-> > Summarized:
-> >  - build errors: +36/-15
-> >  - build warnings: +5/-38
-> > 
-> > Happy fixing! ;-)
+Call of_node_put(platform_node) to avoid refcount leak in
+the error path.
 
-Well....
+Fixes: 94319ba10eca ("ASoC: mediatek: Use platform_of_node for machine drivers")
+Fixes: 493433785df0 ("ASoC: mediatek: mt8173: fix device_node leak")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ sound/soc/mediatek/mt8173/mt8173-max98090.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-> >  + /kisskb/src/fs/xfs/xfs_buf.h: error: initializer element is not constant:  => 46:23
-
-Looking at:
-
-http://kisskb.ellerman.id.au/kisskb/buildresult/14714961/
-
-The build error is:
-
-/kisskb/src/fs/xfs/./xfs_trace.h:432:2: note: in expansion of macro 'TP_printk'
-  TP_printk("dev %d:%d daddr 0x%llx bbcount 0x%x hold %d pincount %d "
-  ^
-/kisskb/src/fs/xfs/./xfs_trace.h:440:5: note: in expansion of macro '__print_flags'
-     __print_flags(__entry->flags, "|", XFS_BUF_FLAGS),
-     ^
-/kisskb/src/fs/xfs/xfs_buf.h:67:4: note: in expansion of macro 'XBF_UNMAPPED'
-  { XBF_UNMAPPED,  "UNMAPPED" }
-    ^
-/kisskb/src/fs/xfs/./xfs_trace.h:440:40: note: in expansion of macro 'XFS_BUF_FLAGS'
-     __print_flags(__entry->flags, "|", XFS_BUF_FLAGS),
-                                        ^
-/kisskb/src/fs/xfs/./xfs_trace.h: In function 'trace_raw_output_xfs_buf_flags_class':
-/kisskb/src/fs/xfs/xfs_buf.h:46:23: error: initializer element is not constant
- #define XBF_UNMAPPED  (1 << 31)/* do not map the buffer */
-
-This doesn't make a whole lotta sense to me. It's blown up in a
-tracepoint macro in XFS that was not changed at all in 5.18-rc1, nor
-was any of the surrounding XFS code or contexts.  Perhaps something
-outside XFS changed to cause this on these platforms?
-
-Can you bisect this, please?
-
-Cheers,
-
-Dave.
+diff --git a/sound/soc/mediatek/mt8173/mt8173-max98090.c b/sound/soc/mediatek/mt8173/mt8173-max98090.c
+index 4cb90da89262..58778cd2e61b 100644
+--- a/sound/soc/mediatek/mt8173/mt8173-max98090.c
++++ b/sound/soc/mediatek/mt8173/mt8173-max98090.c
+@@ -167,7 +167,8 @@ static int mt8173_max98090_dev_probe(struct platform_device *pdev)
+ 	if (!codec_node) {
+ 		dev_err(&pdev->dev,
+ 			"Property 'audio-codec' missing or invalid\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_platform_node;
+ 	}
+ 	for_each_card_prelinks(card, i, dai_link) {
+ 		if (dai_link->codecs->name)
+@@ -179,6 +180,8 @@ static int mt8173_max98090_dev_probe(struct platform_device *pdev)
+ 	ret = devm_snd_soc_register_card(&pdev->dev, card);
+ 
+ 	of_node_put(codec_node);
++
++put_platform_node:
+ 	of_node_put(platform_node);
+ 	return ret;
+ }
 -- 
-Dave Chinner
-david@fromorbit.com
+2.17.1
+

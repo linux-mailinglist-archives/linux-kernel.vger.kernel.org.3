@@ -2,92 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FAF44F0DBE
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 05:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47D234F0DC1
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 05:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348230AbiDDDlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 23:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
+        id S1377018AbiDDDnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 23:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233007AbiDDDlL (ORCPT
+        with ESMTP id S1352591AbiDDDns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 23:41:11 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC8439805;
-        Sun,  3 Apr 2022 20:39:16 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 3 Apr 2022 23:43:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A770239805
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 20:41:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KWxN25d4Mz4xL3;
-        Mon,  4 Apr 2022 13:39:14 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649043555;
-        bh=Xv/VYrN3nnzwh73foVTRVc0CU1Gv4Sr+YLzYnCdE+9M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=druhi48TJmt4+Y4HoUuNnEQ/FyKzqgFdsHSWf8oy33E+4LPx/J0uJtyFgjJwTzYaR
-         TwRssAGv6tWysu9PP9PhJYuWNCIzFZMEWtILOsnu+MN6tu0n6mqJYLxo4ybpzxJ2bX
-         t3/wEyFH2yt/s7912WwLKh5sxpW3eAUt7vntP3O4UzgPvevb5E3ea92bruFjBIpO78
-         65S/rTsxipjamcNPyOe9aDMBF/V3TcUa7ES5S8KA3/maapZZy883lqLxJD8mGAJxPy
-         cZ/hd9/VGv9aQ6lTIrYTYbm0cXSpHnCzb0CVGCK7UVfS9vCdPBvVyp4sfVKdgSNm6l
-         0kzJSFu2gXRzQ==
-Date:   Mon, 4 Apr 2022 13:39:14 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Wei Xiao <xiaowei66@huawei.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the sysctl tree
-Message-ID: <20220404133914.09f23f65@canb.auug.org.au>
-In-Reply-To: <YkpOBykNOI6YjMon@bombadil.infradead.org>
-References: <20220330115617.4d694d11@canb.auug.org.au>
-        <20220404102617.572de1d8@canb.auug.org.au>
-        <YkpOBykNOI6YjMon@bombadil.infradead.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D5646111D
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 03:41:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82258C2BBE4;
+        Mon,  4 Apr 2022 03:41:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649043711;
+        bh=HuBthyv0jlhrroQ/LbSxvCBXHiEnHO5N2vwpPIkoOMY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ZzJqhWSbkVqK6dP9xY2JerJ2vjOlAaYARla7uHaDDxi6G0zFPTY0GDAcSYsIDF5du
+         +D84dDA1gZ2zFlC9uwS5Xn529dpLK1n60rcw5APR+AZ4v/5lQsF46eigjd79nx3OJZ
+         Jb/ZrTJWiyfVORCCv+VMkTPbWCaPelpE1eVklMhD7QAePq3yZToKcSy+KSnodGF747
+         iGbSy6llmS9hEOaaggKUP++KD+2o1fWjE01NSu4HIEpkcyAXsR/BCiefam9YtevesS
+         +ewFnmpteAjhdsahNKi4BBZSEVSCkfAe4Kbq9kJ05TbEYI0V1BUh1kwLQaoXwBpQCU
+         WxGv2foSPGQVg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 2B4BB5C08B7; Sun,  3 Apr 2022 20:41:51 -0700 (PDT)
+Date:   Sun, 3 Apr 2022 20:41:51 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [ammarfaizi2-block:paulmck/linux-rcu/fastexp.2022.04.01a
+ 136/158] WARNING: modpost: vmlinux.o(.text+0x28d3a): Section mismatch in
+ reference from the function cpu_in_idle() to the variable .init.text:.LVL79
+Message-ID: <20220404034151.GS4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <202204040803.eMjcdkZh-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//yZav+sQmN2xonWSV/CNKp7";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202204040803.eMjcdkZh-lkp@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_//yZav+sQmN2xonWSV/CNKp7
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Apr 04, 2022 at 08:18:59AM +0800, kernel test robot wrote:
+> tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/fastexp.2022.04.01a
+> head:   d9f3e7d671416fdf5b61f094765754269b652db0
+> commit: 4a8d065a72d07894b2d9f976ffa9ee4ab1f8abb4 [136/158] refscale: Allow refscale without RCU Tasks
+> config: riscv-randconfig-r002-20220403 (https://download.01.org/0day-ci/archive/20220404/202204040803.eMjcdkZh-lkp@intel.com/config)
+> compiler: riscv32-linux-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/ammarfaizi2/linux-block/commit/4a8d065a72d07894b2d9f976ffa9ee4ab1f8abb4
+>         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+>         git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/fastexp.2022.04.01a
+>         git checkout 4a8d065a72d07894b2d9f976ffa9ee4ab1f8abb4
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>, old ones prefixed by <<):
+> 
+> >> WARNING: modpost: vmlinux.o(.text+0x28d3a): Section mismatch in reference from the function cpu_in_idle() to the variable .init.text:.LVL79
+> The function cpu_in_idle() references
+> the variable __init .LVL79.
+> This is often because cpu_in_idle lacks a __init
+> annotation or the annotation of .LVL79 is wrong.
 
-Hi Luis,
+This added information is much nicer, thank you!
 
-On Sun, 3 Apr 2022 18:46:47 -0700 Luis Chamberlain <mcgrof@kernel.org> wrot=
-e:
->
-> I have fixed these issues in a new push to sysctl-next just now.
-> This all goes tested through 0-day with no issues found there.
-> Sorry for the delay in fixing this.
+But I cannot make cpu_in_idle()  as __init because it is invoked at
+runtime by nmi_cpu_backtrace().
 
-OK, thanks.  I will pick it up tomorrow.
+Also, I do not see any .LVL79.  Might this be a compiler temporary?
 
---=20
-Cheers,
-Stephen Rothwell
+And I cannot see how this patch could have affected cpu_in_idle().
 
---Sig_//yZav+sQmN2xonWSV/CNKp7
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Might this instead be a false positive caused by the fact that
+cpu_in_idle() references __cpuidle_text_start and __cpuidle_text_end,
+both of which are defined in vmlinux.lds.h?
 
------BEGIN PGP SIGNATURE-----
+							Thanx, Paul
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJKaGIACgkQAVBC80lX
-0Gwplwf+Mlrg2R7W7zYQQZ1cOGCgefMTLx+FQTz88KBh+cO3mq2F0Xj7mFI4bZNQ
-zBSud0iOSmKuvf+IHOB1u7CtJDuSLj6j8vXLNCu3WyxqjuzV86/MUFNIU3RHe6nZ
-jNzC7XOUcBpqS8KEncN1L9/sa/eu8vUwrmWBHuipoxpQwIXgMfMDzCZKDsBAr3YJ
-aYUEdm4cDBU3f1V/cq/wzAZhe0Tq21toMIOgkwY6657D5CVnZaMWT4LJEezdb1Lt
-3U14e7sVgM8lID3mVEaw1FneuDbDrIHFKiQqZnPwqiQ8ccJRHfDLxnL3Wt0+thw4
-v4wn1MNwD0GencF58qmET5daYhfNmw==
-=28fX
------END PGP SIGNATURE-----
-
---Sig_//yZav+sQmN2xonWSV/CNKp7--
+> --
+> >> WARNING: modpost: vmlinux.o(.text+0x81fe66): Section mismatch in reference from the function pccard_sysfs_remove_socket() to the variable .init.text:.LVL163
+> The function pccard_sysfs_remove_socket() references
+> the variable __init .LVL163.
+> This is often because pccard_sysfs_remove_socket lacks a __init
+> annotation or the annotation of .LVL163 is wrong.
+> --
+> >> WARNING: modpost: vmlinux.o(.text+0x967e84): Section mismatch in reference from the function rproc_report_crash() to the variable .init.text:.L0
+> The function rproc_report_crash() references
+> the variable __init .L0 .
+> This is often because rproc_report_crash lacks a __init
+> annotation or the annotation of .L0 is wrong.
+> --
+> >> WARNING: modpost: vmlinux.o(.text+0x97395c): Section mismatch in reference from the function sdw_debugfs_exit() to the variable .init.text:.L0
+> The function sdw_debugfs_exit() references
+> the variable __init .L0 .
+> This is often because sdw_debugfs_exit lacks a __init
+> annotation or the annotation of .L0 is wrong.
+> --
+> >> WARNING: modpost: vmlinux.o(.text+0xa3373a): Section mismatch in reference from the function snd_pcm_period_elapsed() to the variable .init.text:.L0
+> The function snd_pcm_period_elapsed() references
+> the variable __init .L0 .
+> This is often because snd_pcm_period_elapsed lacks a __init
+> annotation or the annotation of .L0 is wrong.
+> --
+> >> WARNING: modpost: vmlinux.o(.text+0xb54e76): Section mismatch in reference from the function br_vlan_tunnel_info() to the variable .init.text:.L0
+> The function br_vlan_tunnel_info() references
+> the variable __init .L0 .
+> This is often because br_vlan_tunnel_info lacks a __init
+> annotation or the annotation of .L0 is wrong.
+> --
+> >> WARNING: modpost: vmlinux.o(.text+0xbd1d50): Section mismatch in reference from the function batadv_v_mesh_free() to the variable .init.text:.L0
+> The function batadv_v_mesh_free() references
+> the variable __init .L0 .
+> This is often because batadv_v_mesh_free lacks a __init
+> annotation or the annotation of .L0 is wrong.
+> --
+> >> WARNING: modpost: vmlinux.o(.text+0xd24c8): Section mismatch in reference from the function wb_wakeup_delayed() to the variable .exit.text:.L0
+> The function wb_wakeup_delayed() references a variable in an exit section.
+> Often the variable .L0 has valid usage outside the exit section
+> and the fix is to remove the __exit annotation of .L0 .
+> --
+> >> WARNING: modpost: vmlinux.o(.text+0x378a4a): Section mismatch in reference from the function drm_mode_equal() to the variable .init.text:.LBB506
+> The function drm_mode_equal() references
+> the variable __init .LBB506.
+> This is often because drm_mode_equal lacks a __init
+> annotation or the annotation of .LBB506 is wrong.
+> --
+> >> WARNING: modpost: vmlinux.o(.text+0x378a54): Section mismatch in reference from the function drm_mode_equal_no_clocks() to the variable .init.text:.LBB506
+> The function drm_mode_equal_no_clocks() references
+> the variable __init .LBB506.
+> This is often because drm_mode_equal_no_clocks lacks a __init
+> annotation or the annotation of .LBB506 is wrong.
+> 
+> Note: the below error/warnings can be found in parent commit:
+> << WARNING: modpost: vmlinux.o(.text+0x17f74): Section mismatch in reference from the function wq_watchdog_touch() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x2ad3a): Section mismatch in reference from the function calc_load_nohz_stop() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x1816f8): Section mismatch in reference from the function autofs_clean_ino() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x26987c): Section mismatch in reference from the function zstd_find_frame_compressed_size() to the variable .init.text:.L0
+> << WARNING: modpost: vmlinux.o(.text+0x477170): Section mismatch in reference from the function radeon_audio_init() to the variable .init.text:.LVL153
+> << WARNING: modpost: vmlinux.o(.text+0x6a44d4): Section mismatch in reference from the function gf100_gr_wait_idle() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x96a4ee): Section mismatch in reference from the function rpmsg_create_channel() to the variable .init.text:.L0
+> << WARNING: modpost: vmlinux.o(.text+0x96a502): Section mismatch in reference from the function rpmsg_release_channel() to the variable .init.text:.L6
+> << WARNING: modpost: vmlinux.o(.text+0x96a51a): Section mismatch in reference from the function rpmsg_create_ept() to the variable .init.text:.L13
+> << WARNING: modpost: vmlinux.o(.text+0x96a660): Section mismatch in reference from the function rpmsg_destroy_ept() to the variable .init.text:.L25
+> << WARNING: modpost: vmlinux.o(.text+0x17f74): Section mismatch in reference from the function wq_watchdog_touch() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x2ad3a): Section mismatch in reference from the function calc_load_nohz_stop() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x1816f8): Section mismatch in reference from the function autofs_clean_ino() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x26987c): Section mismatch in reference from the function zstd_find_frame_compressed_size() to the variable .init.text:.L0
+> << WARNING: modpost: vmlinux.o(.text+0x477170): Section mismatch in reference from the function radeon_audio_init() to the variable .init.text:.LVL153
+> << WARNING: modpost: vmlinux.o(.text+0x6a44d4): Section mismatch in reference from the function gf100_gr_wait_idle() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x96a4ee): Section mismatch in reference from the function rpmsg_create_channel() to the variable .init.text:.L0
+> << WARNING: modpost: vmlinux.o(.text+0x96a502): Section mismatch in reference from the function rpmsg_release_channel() to the variable .init.text:.L6
+> << WARNING: modpost: vmlinux.o(.text+0x96a51a): Section mismatch in reference from the function rpmsg_create_ept() to the variable .init.text:.L13
+> << WARNING: modpost: vmlinux.o(.text+0x96a660): Section mismatch in reference from the function rpmsg_destroy_ept() to the variable .init.text:.L25
+> << WARNING: modpost: vmlinux.o(.text+0x17f74): Section mismatch in reference from the function wq_watchdog_touch() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x2ad3a): Section mismatch in reference from the function calc_load_nohz_stop() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x1816f8): Section mismatch in reference from the function autofs_clean_ino() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x26987c): Section mismatch in reference from the function zstd_find_frame_compressed_size() to the variable .init.text:.L0
+> << WARNING: modpost: vmlinux.o(.text+0x477170): Section mismatch in reference from the function radeon_audio_init() to the variable .init.text:.LVL153
+> << WARNING: modpost: vmlinux.o(.text+0x6a44d4): Section mismatch in reference from the function gf100_gr_wait_idle() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x96a4ee): Section mismatch in reference from the function rpmsg_create_channel() to the variable .init.text:.L0
+> << WARNING: modpost: vmlinux.o(.text+0x96a502): Section mismatch in reference from the function rpmsg_release_channel() to the variable .init.text:.L6
+> << WARNING: modpost: vmlinux.o(.text+0x96a51a): Section mismatch in reference from the function rpmsg_create_ept() to the variable .init.text:.L13
+> << WARNING: modpost: vmlinux.o(.text+0x96a660): Section mismatch in reference from the function rpmsg_destroy_ept() to the variable .init.text:.L25
+> << WARNING: modpost: vmlinux.o(.text+0x17f74): Section mismatch in reference from the function wq_watchdog_touch() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x2ad3a): Section mismatch in reference from the function calc_load_nohz_stop() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x1816f8): Section mismatch in reference from the function autofs_clean_ino() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x26987c): Section mismatch in reference from the function zstd_find_frame_compressed_size() to the variable .init.text:.L0
+> << WARNING: modpost: vmlinux.o(.text+0x477170): Section mismatch in reference from the function radeon_audio_init() to the variable .init.text:.LVL153
+> << WARNING: modpost: vmlinux.o(.text+0x6a44d4): Section mismatch in reference from the function gf100_gr_wait_idle() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x96a4ee): Section mismatch in reference from the function rpmsg_create_channel() to the variable .init.text:.L0
+> << WARNING: modpost: vmlinux.o(.text+0x96a502): Section mismatch in reference from the function rpmsg_release_channel() to the variable .init.text:.L6
+> << WARNING: modpost: vmlinux.o(.text+0x96a51a): Section mismatch in reference from the function rpmsg_create_ept() to the variable .init.text:.L13
+> << WARNING: modpost: vmlinux.o(.text+0x96a660): Section mismatch in reference from the function rpmsg_destroy_ept() to the variable .init.text:.L25
+> << WARNING: modpost: vmlinux.o(.text+0x17f74): Section mismatch in reference from the function wq_watchdog_touch() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x2ad3a): Section mismatch in reference from the function calc_load_nohz_stop() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x1816f8): Section mismatch in reference from the function autofs_clean_ino() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x26987c): Section mismatch in reference from the function zstd_find_frame_compressed_size() to the variable .init.text:.L0
+> << WARNING: modpost: vmlinux.o(.text+0x477170): Section mismatch in reference from the function radeon_audio_init() to the variable .init.text:.LVL153
+> << WARNING: modpost: vmlinux.o(.text+0x6a44d4): Section mismatch in reference from the function gf100_gr_wait_idle() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x96a4ee): Section mismatch in reference from the function rpmsg_create_channel() to the variable .init.text:.L0
+> << WARNING: modpost: vmlinux.o(.text+0x96a502): Section mismatch in reference from the function rpmsg_release_channel() to the variable .init.text:.L6
+> << WARNING: modpost: vmlinux.o(.text+0x96a51a): Section mismatch in reference from the function rpmsg_create_ept() to the variable .init.text:.L13
+> << WARNING: modpost: vmlinux.o(.text+0x96a660): Section mismatch in reference from the function rpmsg_destroy_ept() to the variable .init.text:.L25
+> << WARNING: modpost: vmlinux.o(.text+0x17f74): Section mismatch in reference from the function wq_watchdog_touch() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x2ad3a): Section mismatch in reference from the function calc_load_nohz_stop() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x1816f8): Section mismatch in reference from the function autofs_clean_ino() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x26987c): Section mismatch in reference from the function zstd_find_frame_compressed_size() to the variable .init.text:.L0
+> << WARNING: modpost: vmlinux.o(.text+0x477170): Section mismatch in reference from the function radeon_audio_init() to the variable .init.text:.LVL153
+> << WARNING: modpost: vmlinux.o(.text+0x6a44d4): Section mismatch in reference from the function gf100_gr_wait_idle() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x96a4ee): Section mismatch in reference from the function rpmsg_create_channel() to the variable .init.text:.L0
+> << WARNING: modpost: vmlinux.o(.text+0x96a502): Section mismatch in reference from the function rpmsg_release_channel() to the variable .init.text:.L6
+> << WARNING: modpost: vmlinux.o(.text+0x96a51a): Section mismatch in reference from the function rpmsg_create_ept() to the variable .init.text:.L13
+> << WARNING: modpost: vmlinux.o(.text+0x96a660): Section mismatch in reference from the function rpmsg_destroy_ept() to the variable .init.text:.L25
+> << WARNING: modpost: vmlinux.o(.text+0x17f74): Section mismatch in reference from the function wq_watchdog_touch() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x2ad3a): Section mismatch in reference from the function calc_load_nohz_stop() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x1816f8): Section mismatch in reference from the function autofs_clean_ino() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x26987c): Section mismatch in reference from the function zstd_find_frame_compressed_size() to the variable .init.text:.L0
+> << WARNING: modpost: vmlinux.o(.text+0x477170): Section mismatch in reference from the function radeon_audio_init() to the variable .init.text:.LVL153
+> << WARNING: modpost: vmlinux.o(.text+0x6a44d4): Section mismatch in reference from the function gf100_gr_wait_idle() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x96a4ee): Section mismatch in reference from the function rpmsg_create_channel() to the variable .init.text:.L0
+> << WARNING: modpost: vmlinux.o(.text+0x96a502): Section mismatch in reference from the function rpmsg_release_channel() to the variable .init.text:.L6
+> << WARNING: modpost: vmlinux.o(.text+0x96a51a): Section mismatch in reference from the function rpmsg_create_ept() to the variable .init.text:.L13
+> << WARNING: modpost: vmlinux.o(.text+0x96a660): Section mismatch in reference from the function rpmsg_destroy_ept() to the variable .init.text:.L25
+> << WARNING: modpost: vmlinux.o(.text+0x17f74): Section mismatch in reference from the function wq_watchdog_touch() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x2ad3a): Section mismatch in reference from the function calc_load_nohz_stop() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x1816f8): Section mismatch in reference from the function autofs_clean_ino() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x26987c): Section mismatch in reference from the function zstd_find_frame_compressed_size() to the variable .init.text:.L0
+> << WARNING: modpost: vmlinux.o(.text+0x477170): Section mismatch in reference from the function radeon_audio_init() to the variable .init.text:.LVL153
+> << WARNING: modpost: vmlinux.o(.text+0x6a44d4): Section mismatch in reference from the function gf100_gr_wait_idle() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x96a4ee): Section mismatch in reference from the function rpmsg_create_channel() to the variable .init.text:.L0
+> << WARNING: modpost: vmlinux.o(.text+0x96a502): Section mismatch in reference from the function rpmsg_release_channel() to the variable .init.text:.L6
+> << WARNING: modpost: vmlinux.o(.text+0x96a51a): Section mismatch in reference from the function rpmsg_create_ept() to the variable .init.text:.L13
+> << WARNING: modpost: vmlinux.o(.text+0x96a660): Section mismatch in reference from the function rpmsg_destroy_ept() to the variable .init.text:.L25
+> << WARNING: modpost: vmlinux.o(.text+0x17f74): Section mismatch in reference from the function wq_watchdog_touch() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x2ad3a): Section mismatch in reference from the function calc_load_nohz_stop() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x1816f8): Section mismatch in reference from the function autofs_clean_ino() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x26987c): Section mismatch in reference from the function zstd_find_frame_compressed_size() to the variable .init.text:.L0
+> << WARNING: modpost: vmlinux.o(.text+0x477170): Section mismatch in reference from the function radeon_audio_init() to the variable .init.text:.LVL153
+> << WARNING: modpost: vmlinux.o(.text+0x6a44d4): Section mismatch in reference from the function gf100_gr_wait_idle() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x96a4ee): Section mismatch in reference from the function rpmsg_create_channel() to the variable .init.text:.L0
+> << WARNING: modpost: vmlinux.o(.text+0x96a502): Section mismatch in reference from the function rpmsg_release_channel() to the variable .init.text:.L6
+> << WARNING: modpost: vmlinux.o(.text+0x96a51a): Section mismatch in reference from the function rpmsg_create_ept() to the variable .init.text:.L13
+> << WARNING: modpost: vmlinux.o(.text+0x96a660): Section mismatch in reference from the function rpmsg_destroy_ept() to the variable .init.text:.L25
+> << WARNING: modpost: vmlinux.o(.text+0x17f74): Section mismatch in reference from the function wq_watchdog_touch() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x2ad3a): Section mismatch in reference from the function calc_load_nohz_stop() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x1816f8): Section mismatch in reference from the function autofs_clean_ino() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x26987c): Section mismatch in reference from the function zstd_find_frame_compressed_size() to the variable .init.text:.L0
+> << WARNING: modpost: vmlinux.o(.text+0x477170): Section mismatch in reference from the function radeon_audio_init() to the variable .init.text:.LVL153
+> << WARNING: modpost: vmlinux.o(.text+0x6a44d4): Section mismatch in reference from the function gf100_gr_wait_idle() to the variable .init.text:.LBB317
+> << WARNING: modpost: vmlinux.o(.text+0x96a4ee): Section mismatch in reference from the function rpmsg_create_channel() to the variable .init.text:.L0
+> << WARNING: modpost: vmlinux.o(.text+0x96a502): Section mismatch in reference from the function rpmsg_release_channel() to the variable .init.text:.L6
+> << WARNING: modpost: vmlinux.o(.text+0x96a51a): Section mismatch in reference from the function rpmsg_create_ept() to the variable .init.text:.L13
+> << WARNING: modpost: vmlinux.o(.text+0x96a660): Section mismatch in reference from the function rpmsg_destroy_ept() to the variable .init.text:.L25
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp

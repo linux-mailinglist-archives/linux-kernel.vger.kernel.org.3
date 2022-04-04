@@ -2,74 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 913444F1ED1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D269F4F1E32
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237659AbiDDVz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47140 "EHLO
+        id S243805AbiDDVym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378955AbiDDQIY (ORCPT
+        with ESMTP id S1378962AbiDDQK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 12:08:24 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C6313F42
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 09:06:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DEQK48DTwuMTMNUTpLWwhw+3ZXcCifB/CeMmKRj1wOY=; b=DAFAD08Dvu2jDB3R/moESGFvEY
-        Qm/1sjjfXx8+Dbu/JriCkI2v/nHfqxIR3/zQ14SmSywHcDSXwXuiktZlD/CIbcT1jyYBGUljAV77+
-        1pzvYO/rOvLU9dQDRxCnzq1P++ZpREsTjxFXOHzz+quDx4Mc6MIBYZ9dTflIdAstJXUEhkTf84IP0
-        pJ6RhSlHpWUcsMzoqBMnr+bRMJhxECh9GBRoKgxe/9JtY7xjjaVHq40lvRP4zCpUJHRehexqvCtbx
-        3peHdoR4IikvuNN7WwxM+FUwcHx3YizY9zb166RCLkGfzLZvjtHoJKWLaQ+g0dG+vW1CX9h8xFine
-        5qQ7q7Lg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nbPDh-005sCJ-7u; Mon, 04 Apr 2022 16:06:21 +0000
-Date:   Mon, 4 Apr 2022 17:06:21 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Zi Yan <ziy@nvidia.com>
-Cc:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>
-Subject: Re: v5.18-rc1: migratepages triggers
- VM_BUG_ON_FOLIO(folio_nr_pages(old) != nr_pages)
-Message-ID: <YksXfckGevTN1QD+@casper.infradead.org>
-References: <20220404132908.GA785673@u2004>
- <F3E3F1AE-B421-4463-B032-3F58DF89A5E2@nvidia.com>
- <YksAub9UccPZa9DI@casper.infradead.org>
- <C4792D17-A7F6-4803-B8FC-B8682F50E044@nvidia.com>
- <20220404151805.GA800317@u2004>
- <857E3E12-5C2D-4990-A667-79E1FC000291@nvidia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <857E3E12-5C2D-4990-A667-79E1FC000291@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 4 Apr 2022 12:10:56 -0400
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC01DF47;
+        Mon,  4 Apr 2022 09:08:59 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-ddfa38f1c1so11187055fac.11;
+        Mon, 04 Apr 2022 09:08:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=Kx6ERCrj+RAX4ftx3ARMDh8uvUSQAfGf8UrRWwljjyQ=;
+        b=VKbUPMt4ypzLMRW0Bj4M5MoMtZ0AQA2Ni4ImfNxVgsZrIvC8jpZWcifgPW2Umg32dN
+         VDx+crCsfJLjI+8d40MN8odTLjtpDN99wQtqLhXKeWVB759RVtwaQBbsE6MaOKLT2q9I
+         WKrOlTQJJo9X9mLQwVH99nGEls+bELTFKTfZIijh2E24WZXKObK3+wp57tPJfiHJOmv8
+         OFAmCH8mtzs44TGsLF4saC6GAHVqQwHfRTiqtldxkGAX+Yc26hiPvpAKlGe0LfrkPmaB
+         uIb+FVsM8Xrhs6/0EwQCG/Y3sWgmr+LG99fhLAWEYCSw7FSre6T16oIi67QuNzjJ3yTx
+         NeCw==
+X-Gm-Message-State: AOAM531jA6ChDqp887vLEjwlr0OuT7x1EPKu4sPy7ZvvTkBlsAp+rzFp
+        y/1/AaN8W6sYi0odLIEk0g==
+X-Google-Smtp-Source: ABdhPJwjEFDANYI87q+T1m/cxlD9OPVLWfDti/NALdasQ/YIMK9xAtUQhLRRf8DokcYSDllKErUj0Q==
+X-Received: by 2002:a05:6870:6188:b0:e1:e3ed:b39a with SMTP id a8-20020a056870618800b000e1e3edb39amr324317oah.271.1649088539072;
+        Mon, 04 Apr 2022 09:08:59 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i21-20020a056830011500b005cdc3cdacb5sm4730227otp.57.2022.04.04.09.08.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 09:08:58 -0700 (PDT)
+Received: (nullmailer pid 1436945 invoked by uid 1000);
+        Mon, 04 Apr 2022 16:08:58 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Johannes Holland <johannes.holland@infineon.com>
+Cc:     devicetree@vger.kernel.org, peterhuewe@gmx.de, jarkko@kernel.org,
+        jgg@ziepe.ca, amirmizi6@gmail.com, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+In-Reply-To: <20220404081835.495-4-johannes.holland@infineon.com>
+References: <20220404081835.495-1-johannes.holland@infineon.com> <20220404081835.495-4-johannes.holland@infineon.com>
+Subject: Re: [PATCH 4/4] tpm: Add YAML schema for the TPM TIS I2C options
+Date:   Mon, 04 Apr 2022 11:08:58 -0500
+Message-Id: <1649088538.021063.1436944.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 11:44:39AM -0400, Zi Yan wrote:
-> I am wondering if my change is the right fix or not. folios with order>0
-> are still available when CONFIG_TRANSPARENT_HUGEPAGE is not set, right?
+On Mon, 04 Apr 2022 10:18:35 +0200, Johannes Holland wrote:
+> Add a YAML schema to support device tree bindings for the generic I2C
+> physical layer. Refer to the TCG PC Client Platform TPM Profile (PTP)
+> Specification for TPM 2.0 v1.04 Revision 14.
+> 
+> Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+> ---
+>  .../bindings/security/tpm/tpm-tis-i2c.yaml    | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+> 
 
-That's the eventual plan, but it's not possible today.  We need to
-be able to split large folios (eg in truncation) and that functionality
-is still under CONFIG_TRANSPARENT_HUGEPAGE in mm/huge_memory.c.  So
-large folios depend on CONFIG_TRANSPARENT_HUGEPAGE instead of having a
-clean separation between functionality-to-support-PMD-mapping and
-functionality-to-support-order>0.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-So I preferred your earlier patch because it's more obvious.  I mean,
-we could pull in the two or three patches from my tree that convert
-these functions and their callers to folios ... we're only at rc1.
-I can post them and see what others think.
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.example.dt.yaml: tpm@2e: compatible:1: 'tcg,tpm-tis-i2c' was expected
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.example.dt.yaml: tpm@2e: compatible: ['infineon,slb9673', 'nuvoton,npct75x', 'tcg,tpm-tis-i2c'] is too long
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

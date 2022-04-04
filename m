@@ -2,96 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0B14F1363
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 12:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9062C4F136F
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 12:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358600AbiDDKzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 06:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
+        id S1358621AbiDDK4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 06:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358537AbiDDKz2 (ORCPT
+        with ESMTP id S1358571AbiDDK4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 06:55:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD826205
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 03:53:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649069607;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nmzUc45Prh1+ExDpLCMwSGqWxkU2qU0qcCSpLdKeeqE=;
-        b=HHODCq6R6rVhfA9/7DYTxix82oJS4zX/GXO73D/jNWfzFOBDUghSiAnpEklbgy5fuAib/v
-        C2ysV2cl1U7AqCqXjEBjp68zxvas5TwS+75meyH6OzeR+j81l60VN+yshGKBbj/1D2tMxZ
-        Kh10E/pdqVdkLyahVl1HJYfBK8gEEMQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-329-TgDyIROjNeS1TDN_4ihA_Q-1; Mon, 04 Apr 2022 06:53:24 -0400
-X-MC-Unique: TgDyIROjNeS1TDN_4ihA_Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6B7EA3C01B86;
-        Mon,  4 Apr 2022 10:53:23 +0000 (UTC)
-Received: from [10.72.12.126] (ovpn-12-126.pek2.redhat.com [10.72.12.126])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0B62AC584FA;
-        Mon,  4 Apr 2022 10:53:15 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v6 00/18] Support SDEI Virtualization
-To:     Oliver Upton <oupton@google.com>
-Cc:     kvmarm@lists.cs.columbia.edu, maz@kernel.org,
-        linux-kernel@vger.kernel.org, eauger@redhat.com,
-        shan.gavin@gmail.com, Jonathan.Cameron@huawei.com,
-        pbonzini@redhat.com, vkuznets@redhat.com, will@kernel.org,
-        James Morse <james.morse@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shannon Zhao <shannon.zhaosl@gmail.com>
-References: <20220403153911.12332-1-gshan@redhat.com>
- <a3bf5b44-0ab8-fd85-5557-6c496fd68bc1@redhat.com>
- <YkqLtYquZQAKjbAk@google.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <6f9b7597-f559-8218-a3ea-12da37c4c10f@redhat.com>
-Date:   Mon, 4 Apr 2022 18:53:12 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Mon, 4 Apr 2022 06:56:15 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD402C131;
+        Mon,  4 Apr 2022 03:54:18 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id qh7so9025670ejb.11;
+        Mon, 04 Apr 2022 03:54:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rS2vrUQCqgIxoLaF1HFbbKKb3g/Rll3Hg3bNlGXWWFU=;
+        b=ZAx3AW9FCKPXQ+1FGU6mGDUl1IVpQ4wMwtwj6DSs2ypTFDomv2BzAG6MBG/NPa6TtU
+         DmoF7im1yJipBSKOiduBGIq0o1/KoWntvkA7iw32NZBl9+PvWnTQusrJR//uhPAzRUMV
+         FQ87WHbcQfvTVBjuaNiwTZvhzrpkXV9U7zNuvWAXppDNRh5hIsWlanX0Gq9TlQH0vYhx
+         o91pOje2KRe5ez/u2e44jjsEL2+PX0q9+qvJzA3z0zr/Ph2Uqvlaf3QpKhoSueGn/6C8
+         dQlqZTZ3zTwaPaWKjPaACF1Dk4Q5zgnaQEfs5W8ibPsXfIN62CATcO9emI3VftyTBlmx
+         OPAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rS2vrUQCqgIxoLaF1HFbbKKb3g/Rll3Hg3bNlGXWWFU=;
+        b=0/p8W216QqplCNWTzUk6UENGUb26S+bkGvcrwBmrwtArt+hnO4FFs7R7Zmtze9GwAr
+         WdqapkS9LJ5L0viJzCmro+ZbJ8CXI4+B6M4QJHrdG+Yr0ZkbQ1Q+eV8cBXLvsR26bEI5
+         dE8FUazcfA9sfuSeDcaoKcqVkAXlS/IUsspyFFPfqDXzRgIhCpyA2kxcVoiVOeCciFG1
+         vbqY7o+eKBXSYsclMMA1B1ItSY8p+F02FF0NDY6BQgq+1jK89g7xHoW/l69ipIwWDo4M
+         HXlysg0lbv7e9zPe+kCj0I8eGo+e0iVWefWYlAx81E9ZqQLAcsb8wAn2oQd/NNpH5bRk
+         HQTQ==
+X-Gm-Message-State: AOAM530hyuqr5uPQqHm1SP92HLdK7/KkaFuFrXup+xEG/KTtiOJ56J+W
+        nrJMt3sCkZKcXMT8AqlmDzQ=
+X-Google-Smtp-Source: ABdhPJy6OPm3Dpjp6lG1jC2bFmA2drnES4LgmLg6gDlTOw3cssB9sithUubMN20eC2fLccxnrfb0Ew==
+X-Received: by 2002:a17:907:8687:b0:6da:824e:c8b8 with SMTP id qa7-20020a170907868700b006da824ec8b8mr10315919ejc.428.1649069656910;
+        Mon, 04 Apr 2022 03:54:16 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
+        by smtp.gmail.com with ESMTPSA id qa30-20020a170907869e00b006df9ff41154sm4273210ejc.141.2022.04.04.03.54.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 03:54:16 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     kvalo@kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH] ath11k: do not return random value
+Date:   Mon,  4 Apr 2022 12:53:24 +0200
+Message-Id: <20220404105324.13810-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-In-Reply-To: <YkqLtYquZQAKjbAk@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oliver,
+Function ath11k_qmi_assign_target_mem_chunk() returns a random value
+if of_parse_phandle() fails because the return variable ret is not
+initialized before calling of_parse_phandle(). Return -EINVAL to avoid
+possibly returning 0, which would be wrong here.
 
-On 4/4/22 2:09 PM, Oliver Upton wrote:
-> On Sun, Apr 03, 2022 at 11:47:07PM +0800, Gavin Shan wrote:
->> I'm explicitly copying Oliver, James, Mark and Shannon to avoid resending this series.
->> It seems they have been skipped even I explicitly copied them by 'git send-email --cc=<email-addr>'.
-> 
-> Dunno about others, but FWIW your first crack at sending this series out
-> arrived in my inbox just fine :)
-> 
-> Thanks for cc'ing me, I'll find some time this week to take a look.
-> 
+Issue found by smatch.
 
-Thanks for letting me know the emails and patches have been delivered
-correctly. Please take your time to review and thanks for your comments
-again :)
+Signed-off-by: Michael Straube <straube.linux@gmail.com>
+---
+ drivers/net/wireless/ath/ath11k/qmi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-Gavin
-
+diff --git a/drivers/net/wireless/ath/ath11k/qmi.c b/drivers/net/wireless/ath/ath11k/qmi.c
+index 65d3c6ba35ae..81b2304b1fde 100644
+--- a/drivers/net/wireless/ath/ath11k/qmi.c
++++ b/drivers/net/wireless/ath/ath11k/qmi.c
+@@ -1932,7 +1932,7 @@ static int ath11k_qmi_assign_target_mem_chunk(struct ath11k_base *ab)
+ 			if (!hremote_node) {
+ 				ath11k_dbg(ab, ATH11K_DBG_QMI,
+ 					   "qmi fail to get hremote_node\n");
+-				return ret;
++				return -EINVAL;
+ 			}
+ 
+ 			ret = of_address_to_resource(hremote_node, 0, &res);
+-- 
+2.35.1
 

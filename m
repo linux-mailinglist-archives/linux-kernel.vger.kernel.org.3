@@ -2,75 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD8454F1664
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 15:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2896B4F167B
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 15:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358481AbiDDNsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 09:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45734 "EHLO
+        id S1358676AbiDDNvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 09:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346734AbiDDNsh (ORCPT
+        with ESMTP id S1356949AbiDDNvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 09:48:37 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DAF31360
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 06:46:41 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id bg10so20085826ejb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 06:46:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=vfQJmcM0qrYi49vcCG2B2KxC0x5r/jsGZIFrh4niQZc=;
-        b=sfdjINLCI7yuAvcOi9KAnb6V86j9QN3KifvcftXLDut+PGBdMIQThW4FvRrmxJqLmd
-         QFcTxZRQ3/UbrId+SsClV+HVS1KzpmLCM2iKMQm+JCVEAxQeVapEVO9WQ+rT8ObVNev7
-         KfCdHN00ZjbcQy9yqhVrf3I2SJ/F+dmwz3zIFy0oqzrcW71CB/ivFoNuFmhqUffhA/tF
-         RSYMJEB6NKp33l3dBxF5Sj1vhQ7Ooe9UViHI7cN2Aihf9Jxvww4j0ktZo9tacyj/mqbn
-         p0hwt93y85vKyrVBkxArcMZb04g9v7UAG9oFrpm5lZHdMCgdetLR7WnUUFPuG30IBR7W
-         Ye7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=vfQJmcM0qrYi49vcCG2B2KxC0x5r/jsGZIFrh4niQZc=;
-        b=cQA9FCAavZcEoMMpVRWWHbwd6Fk7vpBzTuEjyEAacV/CtYwaaEHso7l8AgMpdVdsix
-         X9mnC3YlJfpcoKCvoREOuy57niM+PPu5qaWCgPbN5De3FnPAEwJuSuuOcMb3kiKDuPv0
-         6G/NOffsJNqq9Jk7ibF1K1KTffxpsAOrNkkvV4dW9Ct80MdZZmQJXZH3Ka+n2oqxBLJc
-         fF1A2zuxMyBAjrOfTUNaJ48DW3LGLTuDVG/FBwLuctT5LTJF4UB1fCX3Ww1Np6egglRx
-         SH4JdryiE+kv3WeV8c/jhm75pIYgvljQC9SNSyrqosBGyh2kpZXqxXYPc7W3seucaDEN
-         F9rw==
-X-Gm-Message-State: AOAM531JCOkyJUGaar7LSoQ/0K3hxWiIq1bpi8bD9toapkDoTvFpOi6y
-        2TEB9CW4iyW3AB9NEaTk74/QSw==
-X-Google-Smtp-Source: ABdhPJz/Fl/ycPt27uPD1jfBCnT7L/KvY41FuL5OomKqLLI6JcbOroETTemTgVbLNByEEPw/1Ty4xQ==
-X-Received: by 2002:a17:907:6d11:b0:6df:f38b:b698 with SMTP id sa17-20020a1709076d1100b006dff38bb698mr48232ejc.711.1649079999583;
-        Mon, 04 Apr 2022 06:46:39 -0700 (PDT)
-Received: from [192.168.0.176] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id ke11-20020a17090798eb00b006e7fbf53398sm697669ejc.129.2022.04.04.06.46.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 06:46:39 -0700 (PDT)
-Message-ID: <d470dd28-8084-2cda-10b4-006bb90c552a@linaro.org>
-Date:   Mon, 4 Apr 2022 15:46:38 +0200
+        Mon, 4 Apr 2022 09:51:00 -0400
+Received: from gateway31.websitewelcome.com (gateway31.websitewelcome.com [192.185.144.96])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181EE29829
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 06:49:04 -0700 (PDT)
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway31.websitewelcome.com (Postfix) with ESMTP id 8A2E5129A4D
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:49:03 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id bN4pnuLj19AGSbN4pnXqco; Mon, 04 Apr 2022 08:49:03 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=uf3+N2Jmm9SwnY5qhYETfam054vBqdkvozLaomc7hz0=; b=1ZT/r09h8QC0WMF3tvhhrgVcmJ
+        IUkUaJYBk+5iwqB4YLez8EuFK7D6NweQ+hnWA1uW9U4CTT4OSz2ARj4FjZpruhiLhBzGx6jHb+kfv
+        Rg80cdduBZX7QjW8sZGpQ0AtN7GRxjtBHUD+Y5t7EA7Ub9CZb2BODO7XtH/eZAWV+9ZkK1vegt1vR
+        BMDdGBAjujj01kFD3nzAmn8cTIRzFjWKGCElTtIZVVQqaQVdp3QYASA4bSnHzSicij9HoAItIYFo5
+        SO3vHDOYzquB+tfXiX2NUpqgU+/jgQr5sToxdNQOjEghujsOOHGehOCsfU3K5K3y+PRnkxsbqrKWR
+        /M81Z62Q==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57846 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nbN4p-000gqQ-2P; Mon, 04 Apr 2022 13:49:03 +0000
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Oded Gabbay <ogabbay@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Ohad Sharabi <osharabi@habana.ai>
+Subject: [PATCH v2] habanalabs: Fix test build failures
+Date:   Mon,  4 Apr 2022 06:48:59 -0700
+Message-Id: <20220404134859.3278599-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 0/2] MAINTAINERS/dt-bindings: changes to my emails
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        netdev@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nfc@lists.01.org
-Cc:     Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>
-References: <20220330074016.12896-1-krzysztof.kozlowski@linaro.org>
- <164907989905.809631.16161802401962719876.b4-ty@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <164907989905.809631.16161802401962719876.b4-ty@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nbN4p-000gqQ-2P
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57846
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 13
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,23 +78,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/04/2022 15:45, Krzysztof Kozlowski wrote:
-> On Wed, 30 Mar 2022 09:40:14 +0200, Krzysztof Kozlowski wrote:
->> From: Krzysztof Kozlowski <krzk@kernel.org>
->>
->> Hi,
->>
->> I can take both patches via my Samsung SoC tree, if that's ok.
->>
->> Best regards,
->> Krzysztof
->>
->> [...]
-> 
-> Applied, thanks!
+allmodconfig builds on 32-bit architectures fail with the following error.
 
-Applied to fixes, as Rob asked for.
+drivers/misc/habanalabs/common/memory.c: In function 'alloc_device_memory':
+drivers/misc/habanalabs/common/memory.c:153:49: error:
+	cast from pointer to integer of different size
 
+Fix the typecast. While at it, drop other unnecessary typecasts associated
+with the same commit.
 
-Best regards,
-Krzysztof
+Fixes: e8458e20e0a3c ("habanalabs: make sure device mem alloc is page aligned")
+Cc: Ohad Sharabi <osharabi@habana.ai>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+v2: Drop unnecessary (u64) typecasts
+
+ drivers/misc/habanalabs/common/memory.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+index e008d82e4ba3..a13506dd8119 100644
+--- a/drivers/misc/habanalabs/common/memory.c
++++ b/drivers/misc/habanalabs/common/memory.c
+@@ -111,10 +111,10 @@ static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
+ 
+ 	if (contiguous) {
+ 		if (is_power_of_2(page_size))
+-			paddr = (u64) (uintptr_t) gen_pool_dma_alloc_align(vm->dram_pg_pool,
+-								total_size, NULL, page_size);
++			paddr = (uintptr_t) gen_pool_dma_alloc_align(vm->dram_pg_pool,
++								     total_size, NULL, page_size);
+ 		else
+-			paddr = (u64) (uintptr_t) gen_pool_alloc(vm->dram_pg_pool, total_size);
++			paddr = gen_pool_alloc(vm->dram_pg_pool, total_size);
+ 		if (!paddr) {
+ 			dev_err(hdev->dev,
+ 				"failed to allocate %llu contiguous pages with total size of %llu\n",
+@@ -150,12 +150,12 @@ static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
+ 		for (i = 0 ; i < num_pgs ; i++) {
+ 			if (is_power_of_2(page_size))
+ 				phys_pg_pack->pages[i] =
+-						(u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
+-										page_size, NULL,
+-										page_size);
++					(uintptr_t)gen_pool_dma_alloc_align(vm->dram_pg_pool,
++									    page_size, NULL,
++									    page_size);
+ 			else
+-				phys_pg_pack->pages[i] = (u64) gen_pool_alloc(vm->dram_pg_pool,
+-										page_size);
++				phys_pg_pack->pages[i] = gen_pool_alloc(vm->dram_pg_pool,
++									page_size);
+ 			if (!phys_pg_pack->pages[i]) {
+ 				dev_err(hdev->dev,
+ 					"Failed to allocate device memory (out of memory)\n");
+-- 
+2.35.1
+

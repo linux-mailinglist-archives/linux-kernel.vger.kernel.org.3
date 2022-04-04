@@ -2,138 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B1F74F13F1
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 13:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F38D54F13F7
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 13:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376379AbiDDLod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 07:44:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36330 "EHLO
+        id S1376387AbiDDLqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 07:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238787AbiDDLob (ORCPT
+        with ESMTP id S1348762AbiDDLqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 07:44:31 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69492616B
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 04:42:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649072555; x=1680608555;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qZ249cS9BHhypOiO6l0ngEL97rK/THlJmqIZmeCvttM=;
-  b=MrJykNzQM0CO9g+tKo0HqIvtSVSXdxKbVBS0YZhF8JmKlRpAXpVZ9Zi2
-   lBiwClj+nFB6u6SFwPVUSO1zaZmlDapUeeJlcWPIMjVhNh02aUkL1qxli
-   DIPBsoO/0RX3UOau7AGf9OF9GA9Zo2ayVwhx02rLosbrcTx+x2SNSIju0
-   PtqEWjC6hWcs9bj++B3V7riKymUu7OAmokDxwO+B3ASRv6G39Nbj/ZAqC
-   RiLWXD7+ckqPPkIFWOxD+0YpN0oWIMaFTlHWSDlGLC/UqhBoVXuMV7uhi
-   z41umwUnpiULPrcm+4GnacwtrNNjUboDMaXwMzYNhxq1i9voUnPnpGCfZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="240431096"
-X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="240431096"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 04:42:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="548620396"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 04 Apr 2022 04:42:12 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbL64-00020j-3U;
-        Mon, 04 Apr 2022 11:42:12 +0000
-Date:   Mon, 4 Apr 2022 19:41:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Miles Chen <miles.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>
-Subject: drivers/clk/mediatek/clk-pll.c:418:23: warning: variable 'base' set
- but not used
-Message-ID: <202204041904.XbBQEwTe-lkp@intel.com>
+        Mon, 4 Apr 2022 07:46:04 -0400
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9CB1B7A7;
+        Mon,  4 Apr 2022 04:44:08 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id cs16so1456035qvb.8;
+        Mon, 04 Apr 2022 04:44:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nYvQ/9sOxTrqd5FO05k5YTA5C/LjNCLjagWPfQG2994=;
+        b=TBjThrjyTVGV54MpL6ZIexcyW0rJu6yhTulv5b07N1fqiwyVK4VfBz8lIB1/nwLR+m
+         zvsbVMjV88OurfMyzYhQpmLw44taIJYnnZI9mAf7t4fno50TQAXD5grCHNSJE2eyZE2N
+         oAwOmgIGYwG1c1OZzWJ2d7BLjQoBhla4/XO8/0Y6FSfPhe2P7x0CTXxmYTv8xp8cKomQ
+         ePmQeKr37Ks5CZmW7nAustErX5QbB51D0nx7cbcBmN9SlqBdI9g+/G7KHEiNPJPQsvEn
+         /kZy46eQ9JMH5B5x1/zezm8lUCt8yvhol/ZxoQF7RJvNLGqmqwhD/AbDpKIvpoItuP7v
+         m4ww==
+X-Gm-Message-State: AOAM532HMyNGTYI+vJNPRtQdsUkbBwt8AzfqTydAMjhQvoYEMDS59aiM
+        7LOX1SShTI/v7GZAQrts/BTSdHCZuqoxfA==
+X-Google-Smtp-Source: ABdhPJwdMakYhtdX8SLs2XnS0r8JzMTRUuj7J4cA8fynCYCjUd89wsDtWFurjirFgAHi4fKX92+/EQ==
+X-Received: by 2002:a05:6214:c44:b0:443:c09c:b15c with SMTP id r4-20020a0562140c4400b00443c09cb15cmr7518017qvj.30.1649072646773;
+        Mon, 04 Apr 2022 04:44:06 -0700 (PDT)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id e20-20020ac84e54000000b002e06753cf70sm9416199qtw.6.2022.04.04.04.44.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Apr 2022 04:44:06 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2e5e9025c20so95510687b3.7;
+        Mon, 04 Apr 2022 04:44:05 -0700 (PDT)
+X-Received: by 2002:a81:618b:0:b0:2db:d952:8a39 with SMTP id
+ v133-20020a81618b000000b002dbd9528a39mr22035506ywb.132.1649072645615; Mon, 04
+ Apr 2022 04:44:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220404111204.935357-1-elver@google.com>
+In-Reply-To: <20220404111204.935357-1-elver@google.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 4 Apr 2022 13:43:54 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdURqaCYDt5SJg0GLKqEs92JgUhHAhVa8B4RKextRH43aQ@mail.gmail.com>
+Message-ID: <CAMuHMdURqaCYDt5SJg0GLKqEs92JgUhHAhVa8B4RKextRH43aQ@mail.gmail.com>
+Subject: Re: [PATCH] signal: Deliver SIGTRAP on perf event asynchronously if blocked
+To:     Marco Elver <elver@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chen-Yu,
+On Mon, Apr 4, 2022 at 1:30 PM Marco Elver <elver@google.com> wrote:
+> With SIGTRAP on perf events, we have encountered termination of
+> processes due to user space attempting to block delivery of SIGTRAP.
+> Consider this case:
+>
+>     <set up SIGTRAP on a perf event>
+>     ...
+>     sigset_t s;
+>     sigemptyset(&s);
+>     sigaddset(&s, SIGTRAP | <and others>);
+>     sigprocmask(SIG_BLOCK, &s, ...);
+>     ...
+>     <perf event triggers>
+>
+> When the perf event triggers, while SIGTRAP is blocked, force_sig_perf()
+> will force the signal, but revert back to the default handler, thus
+> terminating the task.
+>
+> This makes sense for error conditions, but not so much for explicitly
+> requested monitoring. However, the expectation is still that signals
+> generated by perf events are synchronous, which will no longer be the
+> case if the signal is blocked and delivered later.
+>
+> To give user space the ability to clearly distinguish synchronous from
+> asynchronous signals, introduce siginfo_t::si_perf_flags and
+> TRAP_PERF_FLAG_ASYNC (opted for flags in case more binary information is
+> required in future).
+>
+> The resolution to the problem is then to (a) no longer force the signal
+> (avoiding the terminations), but (b) tell user space via si_perf_flags
+> if the signal was synchronous or not, so that such signals can be
+> handled differently (e.g. let user space decide to ignore or consider
+> the data imprecise).
+>
+> The alternative of making the kernel ignore SIGTRAP on perf events if
+> the signal is blocked may work for some usecases, but likely causes
+> issues in others that then have to revert back to interception of
+> sigprocmask() (which we want to avoid). [ A concrete example: when using
+> breakpoint perf events to track data-flow, in a region of code where
+> signals are blocked, data-flow can no longer be tracked accurately.
+> When a relevant asynchronous signal is received after unblocking the
+> signal, the data-flow tracking logic needs to know its state is
+> imprecise. ]
+>
+> Link: https://lore.kernel.org/all/Yjmn%2FkVblV3TdoAq@elver.google.com/
+> Fixes: 97ba62b27867 ("perf: Add support for SIGTRAP on perf events")
+> Reported-by: Dmitry Vyukov <dvyukov@google.com>
+> Signed-off-by: Marco Elver <elver@google.com>
 
-FYI, the error/warning still remains.
+>  arch/m68k/kernel/signal.c          |  1 +
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3123109284176b1532874591f7c81f3837bbdc17
-commit: 6dd199064dd86127030b5bc59d4058370b6c8310 clk: mediatek: pll: Implement unregister API
-date:   7 weeks ago
-config: sh-buildonly-randconfig-r002-20220404 (https://download.01.org/0day-ci/archive/20220404/202204041904.XbBQEwTe-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6dd199064dd86127030b5bc59d4058370b6c8310
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 6dd199064dd86127030b5bc59d4058370b6c8310
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash drivers/clk/mediatek/
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Gr{oetje,eeting}s,
 
-All warnings (new ones prefixed by >>):
+                        Geert
 
-   drivers/clk/mediatek/clk-pll.c: In function 'mtk_clk_unregister_plls':
->> drivers/clk/mediatek/clk-pll.c:418:23: warning: variable 'base' set but not used [-Wunused-but-set-variable]
-     418 |         __iomem void *base = NULL;
-         |                       ^~~~
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-
-vim +/base +418 drivers/clk/mediatek/clk-pll.c
-
-   414	
-   415	void mtk_clk_unregister_plls(const struct mtk_pll_data *plls, int num_plls,
-   416				     struct clk_onecell_data *clk_data)
-   417	{
- > 418		__iomem void *base = NULL;
-   419		int i;
-   420	
-   421		if (!clk_data)
-   422			return;
-   423	
-   424		for (i = num_plls; i > 0; i--) {
-   425			const struct mtk_pll_data *pll = &plls[i - 1];
-   426	
-   427			if (IS_ERR_OR_NULL(clk_data->clks[pll->id]))
-   428				continue;
-   429	
-   430			/*
-   431			 * This is quite ugly but unfortunately the clks don't have
-   432			 * any device tied to them, so there's no place to store the
-   433			 * pointer to the I/O region base address. We have to fetch
-   434			 * it from one of the registered clks.
-   435			 */
-   436			base = mtk_clk_pll_get_base(clk_data->clks[pll->id], pll);
-   437	
-   438			mtk_clk_unregister_pll(clk_data->clks[pll->id]);
-   439			clk_data->clks[pll->id] = ERR_PTR(-ENOENT);
-   440		}
-   441	
-   442		iounmap(base);
-   443	}
-   444	EXPORT_SYMBOL_GPL(mtk_clk_unregister_plls);
-   445	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

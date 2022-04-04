@@ -2,126 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22454F1EE1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A404F1ED7
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240479AbiDDWDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49498 "EHLO
+        id S240464AbiDDVwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379597AbiDDRoL (ORCPT
+        with ESMTP id S1379592AbiDDRng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 13:44:11 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A8A31DF0;
-        Mon,  4 Apr 2022 10:42:14 -0700 (PDT)
-Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
-        by mx0a-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 234GjdVc003316;
-        Mon, 4 Apr 2022 17:41:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pps0720;
- bh=EqEV7oOPRCwvP9zFRtxS2amJ0sojOOK340QCkQmT5GQ=;
- b=EV0Vr4+6eloFzWx5Y1ZMrKC5Px9evjvYC7Z4dxkoQLYxRnv7UzMwAxlrsr7NnwpOKpnV
- VoW37agoBOd20YXvRgnY3Mx6POmmLawnAg2RhtvBOe6m/HoRB+YWLzIdkw0d+N5sdLWN
- k6t2X6heFO1Tvtj/8UP0zNwh7Kd93QcU9jaOD6xLa6To6yBNg8zawkMVnM75dnd31xdZ
- aLxL9jzgW+EGdD8omvyPhF6rwHEm8YCBxywmt4zRgMbLLxwVQBVW8V1EdcqJoFDbx5Ec
- mMAvm28AiG6/OyB4213RhN2m/0LhMrDWX8VkuP073MHNT6RQnbyCQ4vkJOx4wgvcyXhz SA== 
-Received: from g9t5009.houston.hpe.com (g9t5009.houston.hpe.com [15.241.48.73])
-        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3f84f6rmjf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Apr 2022 17:41:38 +0000
-Received: from g9t2301.houston.hpecorp.net (g9t2301.houston.hpecorp.net [16.220.97.129])
-        by g9t5009.houston.hpe.com (Postfix) with ESMTP id 038E755;
-        Mon,  4 Apr 2022 17:41:38 +0000 (UTC)
-Received: from dog.eag.rdlabs.hpecorp.net (dog.eag.rdlabs.hpecorp.net [128.162.243.181])
-        by g9t2301.houston.hpecorp.net (Postfix) with ESMTP id 2682C5C;
-        Mon,  4 Apr 2022 17:41:37 +0000 (UTC)
-From:   Mike Travis <mike.travis@hpe.com>
-To:     Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steve Wahl <steve.wahl@hpe.com>, x86@kernel.org
-Cc:     Mike Travis <mike.travis@hpe.com>,
-        Andy Shevchenko <andy@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Russ Anderson <russ.anderson@hpe.com>,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Subject: [PATCH v3 3/3] x86/platform/uv: Log gap hole end size
-Date:   Mon,  4 Apr 2022 12:41:11 -0500
-Message-Id: <20220404174111.262414-4-mike.travis@hpe.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20220404174111.262414-1-mike.travis@hpe.com>
-References: <20220404174111.262414-1-mike.travis@hpe.com>
+        Mon, 4 Apr 2022 13:43:36 -0400
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29ADE31DE7;
+        Mon,  4 Apr 2022 10:41:39 -0700 (PDT)
+Received: by mail-oi1-f173.google.com with SMTP id 12so10784259oix.12;
+        Mon, 04 Apr 2022 10:41:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Gm8Q9IkyRhAeqdPU+N8JCDzIc1jnZK1MiElDRAVrowg=;
+        b=IUBHRZUR1CP3Z09zzwDN8OLdIU3U07bDFgwfp9DzAfLqHZSjUyvTkYVKDifPWhJDEY
+         HgqG9FLdyQi2fqiXqgbicwQbZMmFUM11LmAPO+n2SXPgHr9O0D6HSBmpoCMoVhyBIZDn
+         9Sk/WyQ9G4n2IGYP5rlMdVnx/1qlvpb293G/i8NtkNHMXb8KdLkxdaSJo6IUeLf3tmuX
+         W+qOksGIRnDK41UUGBq8Y1YP+Uw1AGiHGySiPenYLMiCZr5mthIBFSUOAKJS7CO2oFe3
+         enx5ldHm+i9K15O0+x0RXLqcupcO+9KdXHTvYIMcm+F4ueuvTVb3F5ifLAlJJTqOvAe9
+         RBvQ==
+X-Gm-Message-State: AOAM531zyOtAi5B5SKJweFoAFCSTnnHGT4vx/JXULeGC/nShkQWZ+4Ns
+        A8ISAZey8ULra68Ig6B0Mw==
+X-Google-Smtp-Source: ABdhPJzSZ9WfFV7feWqE4tE2BP8FLwzfupkBO4Pv3m1nUPLK+RrkI1IoCe9ioNTKSDmYmbnfBAqL3Q==
+X-Received: by 2002:a05:6808:b0f:b0:2ec:f51d:ae0b with SMTP id s15-20020a0568080b0f00b002ecf51dae0bmr131491oij.67.1649094098466;
+        Mon, 04 Apr 2022 10:41:38 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r37-20020a05687108a500b000e20bfd86casm901587oaq.11.2022.04.04.10.41.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 10:41:37 -0700 (PDT)
+Received: (nullmailer pid 1597042 invoked by uid 1000);
+        Mon, 04 Apr 2022 17:41:37 -0000
+Date:   Mon, 4 Apr 2022 12:41:37 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] add fwnode support to reset subsystem
+Message-ID: <Ykst0Vb4fk+iALzc@robh.at.kernel.org>
+References: <20220324141237.297207-1-clement.leger@bootlin.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: kTl_aozcDXnjKZ6sWmQ_-q3atMRYhzkm
-X-Proofpoint-GUID: kTl_aozcDXnjKZ6sWmQ_-q3atMRYhzkm
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-04_06,2022-03-31_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 suspectscore=0 priorityscore=1501 clxscore=1015
- spamscore=0 mlxlogscore=911 phishscore=0 mlxscore=0 bulkscore=0
- malwarescore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2202240000 definitions=main-2204040100
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220324141237.297207-1-clement.leger@bootlin.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Show value of gap end in the kernel log which equates to number of physical
-address bits used by system.  The end address of the gap holds PA bits 56:26
-which gives the range up to 64PB max size with 64MB of granularity.
+On Thu, Mar 24, 2022 at 03:12:34PM +0100, Clément Léger wrote:
+> This series is part of a larger series which aims at adding fwnode
+> support in multiple subsystems [1]. The goal of this series was to
+> add support for software node in various subsystem but in a first
+> time only the fwnode support had gained consensus and will be added
+> to multiple subsystems.
 
-Signed-off-by: Mike Travis <mike.travis@hpe.com>
-Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
----
-v2: Update patch description to be more explanatory.
----
- arch/x86/kernel/apic/x2apic_uv_x.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+The goal is describing a solution. What is the problem?
 
-diff --git a/arch/x86/kernel/apic/x2apic_uv_x.c b/arch/x86/kernel/apic/x2apic_uv_x.c
-index 387d6533549a..146f0f63a43b 100644
---- a/arch/x86/kernel/apic/x2apic_uv_x.c
-+++ b/arch/x86/kernel/apic/x2apic_uv_x.c
-@@ -1346,7 +1346,7 @@ static void __init decode_gam_params(unsigned long ptr)
- static void __init decode_gam_rng_tbl(unsigned long ptr)
- {
- 	struct uv_gam_range_entry *gre = (struct uv_gam_range_entry *)ptr;
--	unsigned long lgre = 0;
-+	unsigned long lgre = 0, gend = 0;
- 	int index = 0;
- 	int sock_min = 999999, pnode_min = 99999;
- 	int sock_max = -1, pnode_max = -1;
-@@ -1380,6 +1380,9 @@ static void __init decode_gam_rng_tbl(unsigned long ptr)
- 			flag, size, suffix[order],
- 			gre->type, gre->nasid, gre->sockid, gre->pnode);
- 
-+		if (gre->type == UV_GAM_RANGE_TYPE_HOLE)
-+			gend = (unsigned long)gre->limit << UV_GAM_RANGE_SHFT;
-+
- 		/* update to next range start */
- 		lgre = gre->limit;
- 		if (sock_min > gre->sockid)
-@@ -1397,7 +1400,8 @@ static void __init decode_gam_rng_tbl(unsigned long ptr)
- 	_max_pnode	= pnode_max;
- 	_gr_table_len	= index;
- 
--	pr_info("UV: GRT: %d entries, sockets(min:%x,max:%x) pnodes(min:%x,max:%x)\n", index, _min_socket, _max_socket, _min_pnode, _max_pnode);
-+	pr_info("UV: GRT: %d entries, sockets(min:%x,max:%x), pnodes(min:%x,max:%x), gap_end(%d)\n",
-+	  index, _min_socket, _max_socket, _min_pnode, _max_pnode, fls64(gend));
- }
- 
- /* Walk through UVsystab decoding the fields */
--- 
-2.26.2
+What's the scenario where you have a reset provider not described by 
+firmware providing resets to devices (consumers) also not described by 
+firmware.
 
+> For the moment ACPI node support is excluded from the fwnode support
+> to avoid creating an unspecified ACPI reset device description. With
+> these modifications, both driver that uses the fwnode_ API or the of_
+> API to register the reset controller will be usable by consumer
+> whatever the type of node that is used.
+
+Good, because controlling reset lines directly isn't how the ACPI device 
+model works AFAIK.
+
+> One question raised by this series is that I'm not sure if all reset
+> drivers should be modified to use the new fwnode support or keep the
+> existing device-tree support. Maintainer advice on that particular
+> question will be welcome.
+
+That would be pointless churn IMO. Why do we need to convert drivers 
+which the vast majority will never use anything but DT?
+
+Rob

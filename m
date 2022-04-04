@@ -2,96 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 875AE4F0E2A
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 06:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF974F0E2F
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 06:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377114AbiDDEgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 00:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34248 "EHLO
+        id S1377127AbiDDEoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 00:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233038AbiDDEf5 (ORCPT
+        with ESMTP id S233038AbiDDEoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 00:35:57 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F0C30574
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 21:34:01 -0700 (PDT)
+        Mon, 4 Apr 2022 00:44:01 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154F2329AA;
+        Sun,  3 Apr 2022 21:42:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649046841; x=1680582841;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PlM82ilcyWV+em0tkIVkqDixm5NaYWMzl45Hg+Pc/dw=;
-  b=OceOar/bAynpz4bMHCJ2HVwtY2vE6O/p36VFdbk1VrQ8aiEyS11H6HRt
-   udP4oKrbjV3yeeoHzZaU74FWFBrY/14BpQILxtjqaQa8mFGBP15+CQQE6
-   XkoYj8M+7US7zT4qT492pOICvS/nXyj9JnsPqOhNy19bhPB88AB7uOry2
-   nVkCe0HE/wTh7wfonwiahagdtdIErDrbWLRNJ48gr080G3Dzho+bs0n48
-   DwMk44KYuefP0ESRkUC+Q3Flz5lDu0iH037Dega07HQEu0zvIhyfXBhCK
-   11ezJC2QDhtOCtR0iaTu6rx9l5KVmQ41hOi/MRPI+hwJYVcohco0xpmZh
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="323610656"
+  t=1649047326; x=1680583326;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2SWGyekWbm1WpT9pdBiZkc9bxDcv2hhKwhV12QIkak0=;
+  b=FfCePAS4GgE19J8eXjNppsRlQOfW75Vm1rabb6gaRzrkY5vk0tJTXwrY
+   8jLsfzN7BQ1/RX4NA+2q5SWHCCSqwlsf/NSd0ei0IxkfjJM0YHTsq6gY6
+   jJaU15s2g7f1wMDbhbCYFj2Y5urL57vHCDoRXmHv0lrxK6P6E26P+UV7a
+   Bx5XvSWiERJMZsjlOI0FWvv86zVM2dqPYlKL7tDdB3pgLgeeUzxqaUm6Z
+   wjvxs+prBcAIYMkI6NFOmmPObEGntn3o9deimyejnG1v1qXtHxmKw2B5S
+   7XOphqTRgMP9ua37JKHbfdVtNWotz6hlCur1T9jDXhVcHihe9JqhR2jhb
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="258018007"
 X-IronPort-AV: E=Sophos;i="5.90,233,1643702400"; 
-   d="scan'208";a="323610656"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2022 21:34:00 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="258018007"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2022 21:42:05 -0700
 X-IronPort-AV: E=Sophos;i="5.90,233,1643702400"; 
-   d="scan'208";a="721510786"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 03 Apr 2022 21:33:59 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbEPf-0001aX-5I;
-        Mon, 04 Apr 2022 04:33:59 +0000
-Date:   Mon, 4 Apr 2022 12:33:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/gpu/drm/i915/i915.prelink.o: warning: objtool:
- __intel_wait_for_register_fw.cold()+0xce: relocation to !ENDBR:
- vlv_allow_gt_wake.cold+0x0
-Message-ID: <202204041241.Hw855BWm-lkp@intel.com>
+   d="scan'208";a="569228322"
+Received: from ysandami-mobl2.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.39.83])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2022 21:42:01 -0700
+Message-ID: <9914dba4-7ff0-b6a3-cf6e-bdc426bc594c@intel.com>
+Date:   Mon, 4 Apr 2022 07:41:59 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH] perf test tsc: Fix error message report when not
+ supported.
+Content-Language: en-US
+To:     Chengdong Li <brytonlee01@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, peterz@infradead.org,
+        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org
+Cc:     ak@linux.intel.com, likexu@tencent.com, chengdongli@tencent.com
+References: <20220402114218.14131-1-chengdongli@tencent.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220402114218.14131-1-chengdongli@tencent.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3123109284176b1532874591f7c81f3837bbdc17
-commit: d31ed5d767c0452b4f49846d80a0bfeafa3a4ded kbuild: Fixup the IBT kbuild changes
-date:   12 days ago
-config: x86_64-randconfig-a011-20220404 (https://download.01.org/0day-ci/archive/20220404/202204041241.Hw855BWm-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d31ed5d767c0452b4f49846d80a0bfeafa3a4ded
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d31ed5d767c0452b4f49846d80a0bfeafa3a4ded
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/
+On 02/04/2022 14.42, Chengdong Li wrote:
+> By default `perf test tsc` does not return the error message
+> when child process detected kernel does not support. Instead, child
+> process print error message to stderr, unfortunately the stderr is
+> redirected to /dev/null when verbose <= 0.
+> This patch add a helper function test__perf_test_tsc_skip_reason() to
+> help parent process to get the appropriate error message and force child
+> process returns TEST_SKIP instead of TEST_OK.
+> 
+> Signed-off-by: Chengdong Li <chengdongli@tencent.com>
+> ---
+>  tools/perf/tests/builtin-test.c     |  3 +++
+>  tools/perf/tests/perf-time-to-tsc.c | 17 +++++++++++------
+>  tools/perf/tests/tests.h            |  1 +
+>  3 files changed, 15 insertions(+), 6 deletions(-)
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Please base on current source, for example perf/core branch of:
 
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/i915.prelink.o: warning: objtool: __intel_wait_for_register_fw.cold()+0xce: relocation to !ENDBR: vlv_allow_gt_wake.cold+0x0
-   drivers/gpu/drm/i915/i915.prelink.o: warning: objtool: gen6_alloc_va_range.cold()+0x1c6: relocation to !ENDBR: i915_vma_unpin.cold+0x0
->> drivers/gpu/drm/i915/i915.prelink.o: warning: objtool: fence_update.cold()+0x14a: relocation to !ENDBR: i915_vma_revoke_fence.cold+0x0
-   drivers/gpu/drm/i915/i915.prelink.o: warning: objtool: eb_move_to_gpu.cold()+0x52: relocation to !ENDBR: i915_reset_gen7_sol_offsets.cold+0x0
->> drivers/gpu/drm/i915/i915.prelink.o: warning: objtool: __i915_gem_object_release_mmap_gtt.cold()+0xce: relocation to !ENDBR: i915_gem_mmap.cold+0x0
-   drivers/gpu/drm/i915/i915.prelink.o: warning: objtool: i915_ttm_io_mem_pfn.cold()+0x52: relocation to !ENDBR: i915_ttm_delayed_free.cold+0x0
->> drivers/gpu/drm/i915/i915.prelink.o: warning: objtool: ttm_vm_close.cold()+0x52: relocation to !ENDBR: ttm_vm_open.cold+0x0
-   drivers/gpu/drm/i915/i915.prelink.o: warning: objtool: ttm_vm_open.cold()+0x52: relocation to !ENDBR: i915_ttm_shrinker_release_pages.cold+0x0
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+	git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git

@@ -2,179 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8A24F20B7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 04:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C078C4F216C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbiDECBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 22:01:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
+        id S229707AbiDEC0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 22:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiDECBj (ORCPT
+        with ESMTP id S229668AbiDEC0D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 22:01:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF48C462B01;
-        Mon,  4 Apr 2022 18:18:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30A9060DC6;
-        Tue,  5 Apr 2022 01:08:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31008C2BBE4;
-        Tue,  5 Apr 2022 01:08:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649120887;
-        bh=Jpz+Jv4Xaf7lFDh2SyosScKUc58hWmkQlsew08yht+o=;
-        h=From:To:Cc:Subject:Date:From;
-        b=gXub8KIAxJdu63/6MTrPAGneJXnd33dv3jqT5/0InvZyfMvDdsjypiJF0mto6q6Cv
-         YWCf8Tb872r+2Rl4K9dpQUcB0YJk+XoyfGUjkRiSq1wT7U65peaU4UbicSrtviTo8W
-         bKrnRxxCVyVNqiaycQ0H+MvUz/I08bwaZjFP+K+YB68g0lBYcBZPCap2uO3Um6Rr1H
-         31i+hM6JhR63/nOoS0nS25pbmjnnod8+BTvHDo0btkMBCDBxLEzm+X8BmKfzrn5mVr
-         hP8iJuyoWGAAyVcn2uyRCX0dpaOgNLWjJX73pEa9FAxZ6EIuT9Gx0YdUddFU/a11Oz
-         lO9XgGO2Tr/5Q==
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [RT][PATCH 1/2] rcutorture: Also force sched priority to timersd on boosting test
-Date:   Tue,  5 Apr 2022 03:07:51 +0200
-Message-Id: <20220405010752.1347437-1-frederic@kernel.org>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
+        Mon, 4 Apr 2022 22:26:03 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2113.outbound.protection.outlook.com [40.107.94.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE49218115B;
+        Mon,  4 Apr 2022 18:21:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=f5ce0ZmtwjqeiK0dTFOlX60Jg2MOtJER2RQGvcSW8ekYBV7P+ZVhqG9YHLGKDNug+ZRpiHueXle0NQvhhKRs9fVumbGYs6wdT6R44vJ6VU1Zb1lZc6Gs0Y8xtmmqceAVO+mnfG13tb6CgEdbLJbs0JKhzPYXn1oH/NK7xeUsAbT7FQogNTwaJe6oY377o3aMWZL9m6t2Ihccn55B7/vl6j3jEZE1h8lukZxx2HDJ5sijWn4BOLN29Hn7OnQwG6lxFmVOLSUutqmH7CjUYvFV+HGj1bbLguEloQVa07RY8v5UCE3RDb1ljz+3q1k8Hm2cmrgvX5sEsnFHZMr//Hm8Kg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qah2VP26lCPgl7TStyEOv0eJ1Wooz3QrsG8GA1UEhWk=;
+ b=GcUTA2OQI+IVOAQDZ78HRGni/LjsOTJv8yz8iGt27QRj3P4+aE7c5Id5H9u+nacAkTTvOFAL/OMEEA9+qn2tpgtiQOwQjJdRDH+OsiwalBZRqmHeU5n8ln4FZ/tD9EMrlLCmzYURzSjYs+7zamY5YxG1YLFdbI+HXOE+1akdl8K9f6yrgEPYOj6iDxBj8ixkyELj1jxppJwfvhRchZV2hyllIh3wUFOnj5Ao54aXKV2ohC3LAP6RaZtKEb5TosyWlKWz6OzqKt6KGmvJbDGyERd6G12yj5opZwkvdPjbsJ9Wgje2t7xNbAVTx3ZigfMXXgk/2hsnKvkEar5SXcIA5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qah2VP26lCPgl7TStyEOv0eJ1Wooz3QrsG8GA1UEhWk=;
+ b=CfkheW32b02gieNOHfbkHTcM9Vn98e4tR0z9SRvzwmrr9BgzTZoIR61+t/k3i8Kq+8P6Vb+VhF1MDrkJfBjImNsatk7d/VjkJxnBrnaoeUkC01JFXD5uDgjv1Dt8KCsHlKaalTy86MjXkwR7w9Fr9Py/Ej+BLmNlIKWFHFax/R4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SA0PR01MB6329.prod.exchangelabs.com (2603:10b6:806:ee::12) by
+ DM6PR01MB4924.prod.exchangelabs.com (2603:10b6:5:5e::14) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5123.25; Mon, 4 Apr 2022 23:42:10 +0000
+Received: from SA0PR01MB6329.prod.exchangelabs.com
+ ([fe80::f56a:e18f:b6c4:ddb5]) by SA0PR01MB6329.prod.exchangelabs.com
+ ([fe80::f56a:e18f:b6c4:ddb5%9]) with mapi id 15.20.5123.031; Mon, 4 Apr 2022
+ 23:42:09 +0000
+From:   Darren Hart <darren@os.amperecomputing.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Arm <linux-arm-kernel@lists.infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        "D . Scott Phillips" <scott@os.amperecomputing.com>,
+        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        Carl Worth <carl@os.amperecomputing.com>,
+        stable@vger.kernel.org
+Subject: [PATCH v4] topology: make core_mask include at least cluster_siblings
+Date:   Mon,  4 Apr 2022 16:40:37 -0700
+Message-Id: <3d58dc946a4fa1cc696d05baad1cf05ae686a86d.1649115057.git.darren@os.amperecomputing.com>
+X-Mailer: git-send-email 2.31.1
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: BL0PR0102CA0058.prod.exchangelabs.com
+ (2603:10b6:208:25::35) To SA0PR01MB6329.prod.exchangelabs.com
+ (2603:10b6:806:ee::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7dd126a3-40c3-48b6-203f-08da1694bc28
+X-MS-TrafficTypeDiagnostic: DM6PR01MB4924:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR01MB49242D28631759932364C53AF7E59@DM6PR01MB4924.prod.exchangelabs.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1RWxmMY+3t0l7cnd4efZqtkUZhcJF8Py97HiMpvwzO+Vqlt3tKwN18BiWStgJfmAAgnS/1uyTYiLFEgMf3tJOW4Bnr1PO9dP7QP6y62WkHcP8LyeFa4yBTOkvrhiMtZ+RGBw0JZzMKMYLig4bK54/jTSRxfLx0j7fg8Dj8h0970rpjrMLxEHLpkO5jdSy4RpiJcZyKbXSBMyksonwX+8Nbs5IRC2+A70qDDQX+4rWz4wm+8OX+Bny123waJnvSgqCZ+uOR+yFVb1Ca1uJVm8F+5ITraYEwOgDUS84dILPy2etqXYxBLQMnwcuJVW9GuJWF5ug8HZ/zRWvOkKKMxae+k+S/ZLav/BIOVisItCJbzy+qmxrgOGMS6jcP1jXp9PSnUCdMy3qJjDwyTG5ktVwQ2XBPvihE8YCveG48JZOBzE9KyNH7LgWnhOZS24gMVPtcuMzLuimFNPnwaSZvJ1Ddkbu1DShuAbopIofHE2EOFpmHjl+V0gvA1hPydmvTvzsAdHMtWs0Hx2sjGSPoQtJPGM+HLRgs6+DuCYbOkhLt58yH4AoAqJIiQgsrKUUt7YS1juroKe+ohE85ZFFh5x09ER9jcoYQyO46N4FmwRtvAg5/9gBx1tBXnZw2Sc/fgGyUunN18lhuYxvOoJIvDRAS9Jc9brp38lOW3DVXTYFXAJ0HHq6IqKkJsrls9tPG98kZ7zIV7Kpreq+Hl1uRsYgg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR01MB6329.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38350700002)(38100700002)(316002)(508600001)(52116002)(6512007)(6506007)(6666004)(110136005)(54906003)(4326008)(8676002)(66946007)(66476007)(7416002)(2616005)(2906002)(83380400001)(186003)(26005)(8936002)(86362001)(66556008)(5660300002)(6486002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?u9FYvcF4OVivJMCF6SdXqoGC4B8LzKlrAXrqy53m5pHe4VjjGUORJ96ywqp0?=
+ =?us-ascii?Q?92NtH/SezYFjXHhQfmFsobtTOAdaxxxSZ7fjB9Yukc8c0hw/wm4w6ZtZeOlJ?=
+ =?us-ascii?Q?KE4p19kUyv0Vb0E8UZqxNGtEkfLFQkQYv89zEhOBHrFIuf4E1gb0JsWsk123?=
+ =?us-ascii?Q?FrhU/mu8Nfm562I+0YYku7+quZEkL+yJ88E1sCJWWvH6ME9ca0vX0i8QuQy5?=
+ =?us-ascii?Q?Wu2OVw5f7baTuIKFvgrsse7gJW9ph6nt7KOnjyoOKPrdiUn0VZPYu9Ew2GS8?=
+ =?us-ascii?Q?tdp5HnOsC+a0TbNlS+KkZL3+nPAu38Y4RiRqtpqdLU2wgRPeIpgqhyUhHu1b?=
+ =?us-ascii?Q?G5jO6v/Sb+g6euYRY0kj86ydFaUq8glztiE7ujZx6W0vLT7RUZg9E+kyuptv?=
+ =?us-ascii?Q?6qr3kg1mDcek3hjartWLRTKS8i2+4m1auU86i86+6gs8o9TgGhim2VyHGH6A?=
+ =?us-ascii?Q?A7/Ph1RAoVDspCJ+xh4If1xCo+VInyvjycV9gzq7jH0kScWKKYBQvFlgEhwq?=
+ =?us-ascii?Q?MVDSTOlbjTSO7zdUaD92+At7seSWjxdpv7u12LoZVDxOpRwRmm43as7mGIRd?=
+ =?us-ascii?Q?RU0SUMpmZ+/KD5y9PpEv7Jci9zsD7rUUFjBZm6MYvx35av9CYk2RPVN7KFqb?=
+ =?us-ascii?Q?u630GSOWAnxDQthEz6BMO7HPbq2Dha1cUN0AmBFgfJAhTH99aMWcxKCKNTZN?=
+ =?us-ascii?Q?sWzymci6J5TV0V39BkAALbCk3tR3GTPzo/oPeKvU99UIUWmQiw5fff/f7BLi?=
+ =?us-ascii?Q?It2XKpU5FdwqDwXub8IijKsWK4hTkcbL0iYz+hfz0jNZPgvq1GcJZhbi8fYM?=
+ =?us-ascii?Q?pNxM6mlEaKpJjLsGEVxQb36zler6tanCk+CTdjGChKONS1GIeNaBSRM8A3Bt?=
+ =?us-ascii?Q?Rk9PF2MWXwN75COsMIPqOyyXZuB3Aj2p4twMZhmfzszYOIzAc6t/9ubkH9Xz?=
+ =?us-ascii?Q?8MwCbi2De3GejBOQULwp71PxbHIlgbRgFmJ59Ed+qrYc/RdiJqC53RT6yJfz?=
+ =?us-ascii?Q?vX8SDLkKxLmyOo5cUEypTkxUCZGfmWfeEprp5xdu10NktV7oZ27NS54c+g+q?=
+ =?us-ascii?Q?H++flMKIdEwbPgNb/Lv43bx+CZWPROma9yb5fypJNOK44lWgH85gZS3lVa6E?=
+ =?us-ascii?Q?2vp89+j7k43Sjm7qWHfnYrxeHFGi7VMXHQNxvtsc+zzuS3V/nhL/bja0URow?=
+ =?us-ascii?Q?itdMwENdxtCaUkRnXVDj16h9A2CAvLqGYMpWtVym8ZEaqfokfoOw+cSgUDat?=
+ =?us-ascii?Q?OY3CzNwOBj3Bvs6gzH6FL/WaB1UXIMyBCFfXVhL2ABv4Gzulv5xMC3sQ1fuE?=
+ =?us-ascii?Q?k+HI+hZrpUdR4q41Y9UrM8nyrtZzFTWnd1npZKQuEXr3S8EoUIK/o66RKo3a?=
+ =?us-ascii?Q?u8eiFusQq98HaMe39WNjLOEym6pmo4782Wjh6F6q/ymc9v+RmbzuFHVsO8Uf?=
+ =?us-ascii?Q?lVoIFBLTan820pHuCrHPZ2zWYt5hrdP1xQUd/vd3rIk8qX2iexGXSABHmSk+?=
+ =?us-ascii?Q?fnbk05sPwoi2odm+5REq+icAsjwT2E3rCWVXRXCU7uEyZS9b5oTAQKDaizEy?=
+ =?us-ascii?Q?eeHP/zPqMth6yZ9BtqatHWu8e4u+fuUv29Bss1BhF50m2McrqCnhU6HTPbXH?=
+ =?us-ascii?Q?OQPaeaXYHcCiBt8z//iE2hzLy2psECdFahWM6/f6IjDyePTtDKze4dwog4hX?=
+ =?us-ascii?Q?NjceRMp/Oz2k8rVE3kfPmvs14sdSGOhVaWmVdTjtoEXTBOuGnYXt7EDkSOWj?=
+ =?us-ascii?Q?Dv9/elOP/cOIdwIshD3LU7ukgdEKoP4VO2DRBOSR19qg1o7F4WqY?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7dd126a3-40c3-48b6-203f-08da1694bc28
+X-MS-Exchange-CrossTenant-AuthSource: SA0PR01MB6329.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2022 23:42:09.7031
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IHSxCvSOAKReUhC9CghMureSWfof0gidUUF2ZMV4JwLYK3Uj6vKlcMZJE9XTf8gtDOcYGSLNFDLs3pko+z0sCZt/PcVGYVOYIQ3UooY99B9Ja8d0Wufm+vEbiuOsudOI
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR01MB4924
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ksoftirqd is statically boosted to the priority level right above the
-one of rcu_torture_boost() so that timers, which torture readers rely on,
-get a chance to run while rcu_torture_boost() is polling.
+Ampere Altra defines CPU clusters in the ACPI PPTT. They share a Snoop
+Control Unit, but have no shared CPU-side last level cache.
 
-However timers processing got split from ksoftirqd into their own kthread
-(timersd) that isn't boosted. It has the same SCHED_FIFO low prio as
-rcu_torture_boost() and therefore timers can't preempt it and may
-starve.
+cpu_coregroup_mask() will return a cpumask with weight 1, while
+cpu_clustergroup_mask() will return a cpumask with weight 2.
 
-The issue can be triggered in practice on v5.17.1-rt17 using:
+As a result, build_sched_domain() will BUG() once per CPU with:
 
-	./kvm.sh --allcpus --configs TREE04 --duration 10m --kconfig "CONFIG_EXPERT=y CONFIG_PREEMPT_RT=y"
+BUG: arch topology borken
+the CLS domain not a subset of the MC domain
 
-triggering the following:
+The MC level cpumask is then extended to that of the CLS child, and is
+later removed entirely as redundant. This sched domain topology is an
+improvement over previous topologies, or those built without
+SCHED_CLUSTER, particularly for certain latency sensitive workloads.
+With the current scheduler model and heuristics, this is a desirable
+default topology for Ampere Altra and Altra Max system.
 
-	 rcu-torture: rcu_torture_boost boosting failed
-	 Boost inversion thread ->rt_priority 1 gp_state 12908 jiffies 3501
-	 rcu: rcu_preempt: wait state: RCU_GP_WAIT_FQS(5) ->state: 0x402 ->rt_priority 2 delta ->gp_start 3502 ->gp_activity 3502 ->gp_req_activity 3502 ->gp_wake_time 3502 ->gp_wake_seq 12897 ->gp_seq 12901 ->gp_seq_needed 12904 ->gp_max 4057 ->gp_flags 0x0
-	 rcu:     rcu_node 0:7 ->gp_seq 12901 ->gp_seq_needed 12904 ->qsmask 0x2 .... ->n_boosts 0
-	 rcu:     rcu_node 0:3 ->gp_seq 12901 ->gp_seq_needed 12908 ->qsmask 0x0 b... ->n_boosts 22
-	 rcu:     cpu 0 ->gp_seq_needed 12904
-	 rcu:     rcu_node 4:7 ->gp_seq 12901 ->gp_seq_needed 12908 ->qsmask 0x0 b..G ->n_boosts 6
-	 rcu:     cpu 5 ->gp_seq_needed 12904
-	 rcu:    CB 1^0->2 KbclSW F5089 L5089 C1 ..... q0 S CPU 0
-	 rcu:    CB 2^0->3 KbclSW F16859 L16859 C1 ..... q0 S CPU 0
-	 rcu:    CB 3^0->-1 KbclSW F3502 L3502 C2 .W12908.N. q4 S CPU 0
-	 rcu: nocb GP 4 KldtS .[W.] .G:12904 rnp 4:7 1459 S CPU 0
-	 rcu:    CB 4^4->5 KbclSW F9918 L10534 C4 ..... q0 S CPU 0
-	 rcu:    CB 5^4->6 KbclSW F2550 L2550 C2 .W12904.N. q8 S CPU 0
-	 rcu:    CB 6^4->7 KbclSW F6639 L7253 C0 ..... q0 S CPU 0
-	 rcu:    CB 7^4->-1 KbclSW F30685 L30685 C1 ..... q0 S CPU 0
-	 rcu: RCU callbacks invoked since boot: 236075
-	 rcu_tasks: RTGS_WAIT_CBS(11) since 409853 g:0 i:0/0 k.
-	 rcu_tasks_rude: RTGS_WAIT_CBS(11) since 409851 g:0 i:0/0 k.
-	 rcu_tasks_trace: RTGS_WAIT_CBS(11) since 409848 g:0 i:0/0 k. N0 h:0/0/0
-	 Boost inversion: GP 12908 still pending.
-	 rcu-torture: rtc: 0000000093327eb2 ver: 1504 tfle: 0 rta: 1505 rtaf: 0 rtf: 1493 rtmbe: 0 rtmbkf: 0/782 rtbe: 0 rtbke: 0 rtbre: 0 rtbf: 1 rtb: 7 nt: 66220 onoff: 6/6:11/12 40,763:29,5050 1537:11766 (HZ=1000) barrier: 239/240:0 read-exits: 67 nocb-toggles: 0:0
-	 rcu-torture: !!!
-	 ------------[ cut here ]------------
-	 WARNING: CPU: 5 PID: 121 at kernel/rcu/rcutorture.c:1870 rcu_torture_stats_print+0x5ad/0x610
-	 Modules linked in:
-	 CPU: 5 PID: 121 Comm: rcu_torture_sta Not tainted 5.17.1-rt17 #63
-	 Hardware name: QEMU Standard PC (Q35 + ICH9, 2009)
-	 RIP: 0010:rcu_torture_stats_print+0x5ad/0x610
-	 Code: c7 01 02 00 74 02 0f 0b 48 83 3d 35 c7 01 02 00 74 02 0f 0b 48 83 3d 21 c7 01 02 00 74 02 0f 0b 48 83 3d 0d c7 01 02 00 74 02 <0f> 0b 83 eb 01 0f 8e ba fc ff ff 0f 0b e9 b3 fc ff ff 8b 05 8f c6
-	 RSP: 0018:ffffa7560041fdf8 EFLAGS: 00010202
-	 RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000001
-	 RDX: 0000000000000000 RSI: 40000000ffffe735 RDI: 00000000ffffffff
-	 RBP: 00000000000005d5 R08: ffffffffaf65f6e0 R09: ffffffffafee3a7c
-	 R10: ffffa75600427d58 R11: 0000000020212121 R12: ffffa7560041fe20
-	 R13: ffffa7560041fe78 R14: 0000000000000000 R15: 000000000001bd20
-	 FS:  0000000000000000(0000) GS:ffff9fe7df540000(0000) knlGS:0000000000000000
-	 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-	 CR2: 0000000000000000 CR3: 0000000014216000 CR4: 00000000000006e0
-	 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-	 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-	 Call Trace:
-	  <TASK>
-	  ? lock_timer_base+0x62/0x80
-	  ? rcu_torture_stats_print+0x610/0x610
-	  rcu_torture_stats+0x29/0x70
-	  kthread+0x118/0x130
-	  ? kthread_complete_and_exit+0x20/0x20
-	  ret_from_fork+0x22/0x30
-	  </TASK>
+Rather than create a custom sched domains topology structure and
+introduce new logic in arch/arm64 to detect these systems, update the
+core_mask so coregroup is never a subset of clustergroup, extending it
+to cluster_siblings if necessary. Only do this if CONFIG_SCHED_CLUSTER
+is enabled to avoid also changing the topology (MC) when
+CONFIG_SCHED_CLUSTER is disabled.
 
-Fix this with statically boosting timersd just like is done with ksoftirqd.
+This has the added benefit over a custom topology of working for both
+symmetric and asymmetric topologies. It does not address systems where
+the CLUSTER topology is above a populated MC topology, but these are not
+considered today and can be addressed separately if and when they
+appear.
 
-Suggested-by: Mel Gorman <mgorman@suse.de>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+The final sched domain topology for a 2 socket Ampere Altra system is
+unchanged with or without CONFIG_SCHED_CLUSTER, and the BUG is avoided:
+
+For CPU0:
+
+CONFIG_SCHED_CLUSTER=y
+CLS  [0-1]
+DIE  [0-79]
+NUMA [0-159]
+
+CONFIG_SCHED_CLUSTER is not set
+DIE  [0-79]
+NUMA [0-159]
+
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Barry Song <song.bao.hua@hisilicon.com>
+Cc: Valentin Schneider <valentin.schneider@arm.com>
+Cc: D. Scott Phillips <scott@os.amperecomputing.com>
+Cc: Ilkka Koskinen <ilkka@os.amperecomputing.com>
+Cc: Carl Worth <carl@os.amperecomputing.com>
+Cc: <stable@vger.kernel.org> # 5.16.x
+Suggested-by: Barry Song <song.bao.hua@hisilicon.com>
+Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
 ---
- include/linux/interrupt.h | 1 +
- kernel/rcu/rcutorture.c   | 6 ++++++
- kernel/softirq.c          | 2 +-
- 3 files changed, 8 insertions(+), 1 deletion(-)
+v1: Drop MC level if coregroup weight == 1
+v2: New sd topo in arch/arm64/kernel/smp.c
+v3: No new topo, extend core_mask to cluster_siblings
+v4: Rebase on 5.18-rc1 for GregKH to pull. Add IS_ENABLED(CONFIG_SCHED_CLUSTER).
 
-diff --git a/include/linux/interrupt.h b/include/linux/interrupt.h
-index db4a23d07a57..e4b8a04e67ce 100644
---- a/include/linux/interrupt.h
-+++ b/include/linux/interrupt.h
-@@ -606,6 +606,7 @@ extern void raise_softirq_irqoff(unsigned int nr);
- extern void raise_softirq(unsigned int nr);
- 
- #ifdef CONFIG_PREEMPT_RT
-+DECLARE_PER_CPU(struct task_struct *, timersd);
- extern void raise_timer_softirq(void);
- extern void raise_hrtimer_softirq(void);
- 
-diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-index 422f7e4cc08d..ac9715ed58ba 100644
---- a/kernel/rcu/rcutorture.c
-+++ b/kernel/rcu/rcutorture.c
-@@ -3283,6 +3283,12 @@ rcu_torture_init(void)
- 				WARN_ON_ONCE(!t);
- 				sp.sched_priority = 2;
- 				sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
-+#ifdef CONFIG_PREEMPT_RT
-+				t = per_cpu(timersd, cpu);
-+				WARN_ON_ONCE(!t);
-+				sp.sched_priority = 2;
-+				sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
-+#endif
- 			}
- 		}
+ drivers/base/arch_topology.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index 1d6636ebaac5..5497c5ab7318 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -667,6 +667,15 @@ const struct cpumask *cpu_coregroup_mask(int cpu)
+ 			core_mask = &cpu_topology[cpu].llc_sibling;
  	}
-diff --git a/kernel/softirq.c b/kernel/softirq.c
-index 22948c2109f5..89eb45614af6 100644
---- a/kernel/softirq.c
-+++ b/kernel/softirq.c
-@@ -624,7 +624,7 @@ static inline void tick_irq_exit(void)
- #endif
+ 
++	/*
++	 * For systems with no shared cpu-side LLC but with clusters defined,
++	 * extend core_mask to cluster_siblings. The sched domain builder will
++	 * then remove MC as redundant with CLS if SCHED_CLUSTER is enabled.
++	 */
++	if (IS_ENABLED(CONFIG_SCHED_CLUSTER) &&
++	    cpumask_subset(core_mask, &cpu_topology[cpu].cluster_sibling))
++		core_mask = &cpu_topology[cpu].cluster_sibling;
++
+ 	return core_mask;
  }
  
--static DEFINE_PER_CPU(struct task_struct *, timersd);
-+DEFINE_PER_CPU(struct task_struct *, timersd);
- static DEFINE_PER_CPU(unsigned long, pending_timer_softirq);
- 
- static unsigned int local_pending_timers(void)
 -- 
-2.25.1
+2.31.1
 

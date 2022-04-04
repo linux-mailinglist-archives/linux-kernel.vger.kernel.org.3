@@ -2,126 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC46E4F169E
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 15:57:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE744F169F
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 15:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376645AbiDDN7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 09:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40916 "EHLO
+        id S1376643AbiDDN7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 09:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376436AbiDDN7O (ORCPT
+        with ESMTP id S1345774AbiDDN7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 09:59:14 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141FD3EAAF;
-        Mon,  4 Apr 2022 06:57:18 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id c42so3757093edf.3;
-        Mon, 04 Apr 2022 06:57:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=DZAZVBwAShxU5u7fT6BbCZ+cQt51H9PsjF/8xPB3ZlU=;
-        b=i8qh5fhg0UqgwGRnh95t8swhhyAwQY2n/t9uOBy+TL89eBpm/rFs0b39QbPRrf8MGn
-         WyOxmYfG8fd5ON21qte4eGvOQmOnE+tCvuGeriTqHv300iGTrxnqlgDH3pW7+I8toGLQ
-         ZAvBD4gnhRsSUDCW3o4yQzbJpNrXaSIAgL+xQCv0kjnWXXp0JL+7bx1ZsliHqX3kwV/J
-         YqezPusqC4W5SV/QchoesphLGHmNn3DA9tWBJiVcqNBEQaTrCdjZW/1V/F963/zevopW
-         QneM6SOZ+mrRzdSn3WGfRxf6zPkO/5wjF2QqKdXGBsGFvqDr8cEY8Fwgpy5/sJSsO9LH
-         s0Pw==
+        Mon, 4 Apr 2022 09:59:48 -0400
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE313E5F5
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 06:57:49 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id o15so6343390qtv.8
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 06:57:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=DZAZVBwAShxU5u7fT6BbCZ+cQt51H9PsjF/8xPB3ZlU=;
-        b=6zL5C9WY1/aKTqi4u5ruyHOT8OuIPTO7KCDdIDK8Vo7ywsn+rvOzKJ+yUwKlbCLMrv
-         fvJt1o09fp5rC3oQZew/eqyTlmMs6fIjvTbzL383FhyVs/1AX8177ovqWCPL2P1kS4gm
-         d1M0DxRK9ucqzwIAaZajlriHRMf+X8vLZs3lYsB/wAUqi6mKK/6lpB7KI4r4BI4omZcF
-         dZlji2TJWbb09sanUTI6XUQcnf4AK3h7LPldIQHvtDCt2aYTci5us07YJlOiv8fWqeMK
-         fY7qWWebhldNxwZNqj1yM4PzuJYFPTRcCQa96TZctGle3vByQwI5NSlftupv33lAwYR7
-         qBoQ==
-X-Gm-Message-State: AOAM530G6amyhW4/f6O3x4kbQBZ/cjZXtyhXKaTJh85MvGf+KR45rKlX
-        h9BoZwHmCvQzCMKbFwp5qBg=
-X-Google-Smtp-Source: ABdhPJzlykMaag65xiPEIcEggH138cKd7VNLVaGqUsbaxrVKIVw51ya7IQZECt8xidWF+jQQhsJTqQ==
-X-Received: by 2002:a05:6402:1d4e:b0:419:5a50:75f6 with SMTP id dz14-20020a0564021d4e00b004195a5075f6mr110694edb.403.1649080636593;
-        Mon, 04 Apr 2022 06:57:16 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:cc83:eef0:7bf1:a0f8:a9aa:ac98? (ptr-dtfv0pmq82wc9dcpm6w.18120a2.ip6.access.telenet.be. [2a02:1811:cc83:eef0:7bf1:a0f8:a9aa:ac98])
-        by smtp.gmail.com with ESMTPSA id dm11-20020a170907948b00b006cf488e72e3sm4457482ejc.25.2022.04.04.06.57.15
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=D3y+W+WKQd7hPp6d6usVi59eLjz9RE6hzmPFo/q5LYE=;
+        b=Z7m3IGQOWxEQ6wb4iVBGeG++3wXZfta6HY7K4JiG0d3POhLqBT4vbOceRkr5zrUPLy
+         O4gi86Lj9mqotWTTem24S0OPcioMGv2y3wcNuOBuS48KJ3s6ucNfYCQiyIBTV4PbF9Fc
+         U3GWXQKcHaiJ2ReurjHphYZWiYQYazs9Qbe/+Xeag+aknvVHc9gvn5vUqGADaYH4yjwP
+         Dh4ULsJCiOhTm1omJdeSP5El5/1fdeIrH6C93d9uYcf2OdBQXg0oDM7gIM1r2AsRElQr
+         FkM9AciYYxCZLyVgsP+3m6k4dGQ3YV3Ao5ktki11NbwT9rIghpJzo4El7VVqkEzFi1g/
+         e+UQ==
+X-Gm-Message-State: AOAM531ddcfPR0gvE/bxsXsnVly8SJ49gUIm05zZl3VBOKYYjOB8xWIg
+        lOy3BrUH7XpbBbJBrL1drODXEYt/rSsFjw==
+X-Google-Smtp-Source: ABdhPJwgkIAK8Bgwh+VX6P0VnvvAJ+WPFhB2SSHlsLFN8nDUQ7SVTxClL3a5rpXbFDIajf5t6piTaQ==
+X-Received: by 2002:ac8:7d03:0:b0:2e0:66e9:e43a with SMTP id g3-20020ac87d03000000b002e066e9e43amr80518qtb.561.1649080668059;
+        Mon, 04 Apr 2022 06:57:48 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id q123-20020a378e81000000b0067eb3d6f605sm6282597qkd.0.2022.04.04.06.57.47
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 06:57:16 -0700 (PDT)
-Message-ID: <743c57bd-514e-d17f-ba43-607e3cb83a95@gmail.com>
-Date:   Mon, 4 Apr 2022 15:57:14 +0200
+        Mon, 04 Apr 2022 06:57:47 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id f23so17718689ybj.7
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 06:57:47 -0700 (PDT)
+X-Received: by 2002:a5b:24e:0:b0:63d:cba0:3d55 with SMTP id
+ g14-20020a5b024e000000b0063dcba03d55mr4760604ybp.613.1649080667232; Mon, 04
+ Apr 2022 06:57:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH net-next v2] ipv6: fix locking issues with loops over
- idev->addr_list
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-References: <20220403231523.45843-1-dossche.niels@gmail.com>
- <Ykro/s5+kd+po26e@lunn.ch>
-From:   Niels Dossche <dossche.niels@gmail.com>
-In-Reply-To: <Ykro/s5+kd+po26e@lunn.ch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220403222510.12670-1-rdunlap@infradead.org>
+In-Reply-To: <20220403222510.12670-1-rdunlap@infradead.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 4 Apr 2022 15:57:35 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUCdGKE04U4yMqv7TPUztwfih7aLwoTfEP5vcATW=CCxw@mail.gmail.com>
+Message-ID: <CAMuHMdUCdGKE04U4yMqv7TPUztwfih7aLwoTfEP5vcATW=CCxw@mail.gmail.com>
+Subject: Re: [PATCH v2] sound/oss/dmasound: fix build when drivers are mixed =y/=m
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        kernel test robot <lkp@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/04/2022 14:47, Andrew Lunn wrote:
-> On Mon, Apr 04, 2022 at 01:15:24AM +0200, Niels Dossche wrote:
->> idev->addr_list needs to be protected by idev->lock. However, it is not
->> always possible to do so while iterating and performing actions on
->> inet6_ifaddr instances. For example, multiple functions (like
->> addrconf_{join,leave}_anycast) eventually call down to other functions
->> that acquire the idev->lock. The current code temporarily unlocked the
->> idev->lock during the loops, which can cause race conditions. Moving the
->> locks up is also not an appropriate solution as the ordering of lock
->> acquisition will be inconsistent with for example mc_lock.
-> 
-> Hi Niels
-> 
-> What sort of issues could the race result in?
+Hi Randy,
 
-Hi Andrew
+On Mon, Apr 4, 2022 at 12:25 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+> When CONFIG_DMASOUND_ATARI=m and CONFIG_DMASOUND_Q40=y (or vice versa),
+> dmasound_core.o can be built without dmasound_deinit() being defined,
+> causing a build error:
+>
+> ERROR: modpost: "dmasound_deinit" [sound/oss/dmasound/dmasound_atari.ko] undefined!
+>
+> Modify dmasound_core.c so that dmasound_deinit() is always available.
+>
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 
-The issue is that the protection of the address list is lifted inside of the loop for a brief moment.
-Therefore, the looping over the list loses its atomicity.
-I believe the list's entries might become corrupted in case of a race occurring.
+Thanks for spending more time on this ;-)
 
-> 
-> I've been chasing a netdev reference leak, when using the GNS3
-> simulator. Shutting down the system can result in one interface having
-> a netdev reference count of 5, and it never gets destroyed. Using the
-> tracker code Eric recently added, i found one of the leaks is idev,
-> its reference count does not go to 0, and hence the reference it holds
-> on the netdev is never released.> 
-> I will test this patch out, see if it helps, but i'm just wondering if
-> you think the issue i'm seeing is theoretically possible because of
-> this race? If it is, we might want this applied to stable, not just
-> net-next.
+> --- linux-next-20220401.orig/sound/oss/dmasound/dmasound_core.c
+> +++ linux-next-20220401/sound/oss/dmasound/dmasound_core.c
+> @@ -1424,27 +1424,29 @@ int dmasound_init(void)
+>         return 0;
+>  }
+>
+> -#ifdef MODULE
+> -
+>  void dmasound_deinit(void)
+>  {
+> +#ifdef MODULE
 
-I am not sure, but I believe that it may be related, although I believe it would be unlikely to happen.
-In your case, it could be because of this non-atomic handling of the list entries:
-this could perhaps, for example, result in skipping an instance of ifaddr in the loop if
-there is another change happening to the list in the meantime. Then the instance would've never been put,
-hence not changing its refcount. But again, I'm not sure about this for your case.
+I think this #ifdef must not be added: if the modular subdriver
+calls dmasound_deinit(), the resources should be freed, else a subsequent
+reload of the subdriver will not work.  This does mean all variables
+protected by "#ifdef MODULE" must exist unconditionally.
 
-> 
-> Thanks
-> 	Andrew
+Alternatively, the test can be replaced by "#ifdef CONFIG_MODULES".
 
-Kind regards
-Niels
+One big caveat below...
+
+>         if (irq_installed) {
+>                 sound_silence();
+>                 dmasound.mach.irqcleanup();
+>                 irq_installed = 0;
+>         }
+> +#endif
+>
+>         write_sq_release_buffers();
+>
+> +#ifdef MODULE
+
+Likewise.
+
+>         if (mixer_unit >= 0)
+>                 unregister_sound_mixer(mixer_unit);
+>         if (state_unit >= 0)
+>                 unregister_sound_special(state_unit);
+>         if (sq_unit >= 0)
+>                 unregister_sound_dsp(sq_unit);
+> +#endif
+>  }
+>
+> -#else /* !MODULE */
+> +#ifndef MODULE
+>
+>  static int dmasound_setup(char *str)
+>  {
+
+> --- linux-next-20220401.orig/sound/oss/dmasound/dmasound.h
+> +++ linux-next-20220401/sound/oss/dmasound/dmasound.h
+> @@ -88,11 +88,7 @@ static inline int ioctl_return(int __use
+>       */
+>
+>  extern int dmasound_init(void);
+> -#ifdef MODULE
+>  extern void dmasound_deinit(void);
+> -#else
+> -#define dmasound_deinit()      do { } while (0)
+> -#endif
+>
+>  /* description of the set-up applies to either hard or soft settings */
+
+... Below, there is:
+
+    typedef struct {
+        [...]
+    #ifdef MODULE
+        void (*irqcleanup)(void);
+    #endif
+        [...]
+    } MACHINE;
+
+This means the MACHINE struct is not compatible between builtin
+and modular code :-(  Hence the "#ifdef MODULE" should be removed,
+or replaced by "#ifdef CONFIG_MODULES", too.
+
+P.S. I think the younger myself is responsible for this mess.
+     Please accept my apologies, after +25 years...
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

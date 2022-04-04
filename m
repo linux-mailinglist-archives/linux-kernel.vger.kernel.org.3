@@ -2,219 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7C84F0FE7
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 09:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817E24F0FDC
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 09:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377633AbiDDHTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 03:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
+        id S1377623AbiDDHOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 03:14:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234334AbiDDHTk (ORCPT
+        with ESMTP id S1352972AbiDDHOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 03:19:40 -0400
-Received: from smtpout2.mo529.mail-out.ovh.net (smtpout2.mo529.mail-out.ovh.net [79.137.123.220])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC2033EA8
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 00:17:44 -0700 (PDT)
-Received: from mxplan5.mail.ovh.net (unknown [10.108.16.128])
-        by mo529.mail-out.ovh.net (Postfix) with ESMTPS id 00501F2F594E;
-        Mon,  4 Apr 2022 09:11:36 +0200 (CEST)
-Received: from kaod.org (37.59.142.95) by DAG4EX1.mxp5.local (172.16.2.31)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 4 Apr
- 2022 09:11:34 +0200
-Authentication-Results: garm.ovh; auth=pass (GARM-95G0016a9dc02d-dd94-4cad-8a52-00a717b27f96,
-                    193BEDB8EED17CFBFC1316EE01F9191BF107EB6B) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 82.64.250.170
-Message-ID: <3e5ea70d-805a-ff30-663b-e802d9116a49@kaod.org>
-Date:   Mon, 4 Apr 2022 09:11:33 +0200
+        Mon, 4 Apr 2022 03:14:39 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E78381BA;
+        Mon,  4 Apr 2022 00:12:43 -0700 (PDT)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nbGtF-0001hp-JK; Mon, 04 Apr 2022 09:12:41 +0200
+Message-ID: <9fd4d3df-ef82-4a9b-1ba9-289181eb0d0a@leemhuis.info>
+Date:   Mon, 4 Apr 2022 09:12:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v4 04/11] spi: aspeed: Add support for direct mapping
 Content-Language: en-US
-To:     Pratyush Yadav <p.yadav@ti.com>
-CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
-        Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-aspeed@lists.ozlabs.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
-        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Tao Ren <rentao.bupt@gmail.com>
-References: <20220325100849.2019209-1-clg@kaod.org>
- <20220325100849.2019209-5-clg@kaod.org>
- <20220330194548.zldbkaoctlhgwcl2@ti.com>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <20220330194548.zldbkaoctlhgwcl2@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.59.142.95]
-X-ClientProxiedBy: DAG5EX1.mxp5.local (172.16.2.41) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: 392fb3cf-682b-418f-9b6e-8d88ba5d0c6b
-X-Ovh-Tracer-Id: 11108128482050476871
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejuddguddukecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgihesthekredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpeekleejfeevjeehiefhgeelgeeludduleeuvdffteduieegvdfgteevfeetkeetfeenucffohhmrghinhepsghufhdrihhnnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrdelheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehrvghnthgrohdrsghuphhtsehgmhgrihhlrdgtohhm
+To:     Michele Ballabio <ballabio.m@gmail.com>,
+        linux-kernel@vger.kernel.org, regressions@lists.linux.dev,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <20220403132152.23330380@darkstar.example.org>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: Possible regression in 5.16-stable
+In-Reply-To: <20220403132152.23330380@darkstar.example.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1649056363;710e6f2d;
+X-HE-SMSGID: 1nbGtF-0001hp-JK
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/30/22 21:45, Pratyush Yadav wrote:
-> On 25/03/22 11:08AM, Cédric Le Goater wrote:
->> Use direct mapping to read the flash device contents. This operation
->> mode is called "Command mode" on Aspeed SoC SMC controllers. It uses a
->> Control Register for the settings to apply when a memory operation is
->> performed on the flash device mapping window.
->>
->> If the window is not big enough, fall back to the "User mode" to
->> perform the read.
->>
->> Since direct mapping now handles all reads of the flash device
->> contents, also use memcpy_fromio for other address spaces, such as
->> SFDP.
->>
->> Direct mapping for writes will come later when validated.
->>
->> Reviewed-by: Joel Stanley <joel@jms.id.au>
->> Tested-by: Joel Stanley <joel@jms.id.au>
->> Tested-by: Tao Ren <rentao.bupt@gmail.com>
->> Signed-off-by: Cédric Le Goater <clg@kaod.org>
->> ---
->>   drivers/spi/spi-aspeed-smc.c | 67 ++++++++++++++++++++++++++++++++++--
->>   1 file changed, 65 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/spi/spi-aspeed-smc.c b/drivers/spi/spi-aspeed-smc.c
->> index 997ec2e45118..0951766baef4 100644
->> --- a/drivers/spi/spi-aspeed-smc.c
->> +++ b/drivers/spi/spi-aspeed-smc.c
->> @@ -322,8 +322,8 @@ static int do_aspeed_spi_exec_op(struct spi_mem *mem, const struct spi_mem_op *o
->>   		if (!op->addr.nbytes)
->>   			ret = aspeed_spi_read_reg(chip, op);
->>   		else
->> -			ret = aspeed_spi_read_user(chip, op, op->addr.val,
->> -						   op->data.nbytes, op->data.buf.in);
->> +			memcpy_fromio(op->data.buf.in, chip->ahb_base + op->addr.val,
->> +				      op->data.nbytes);
+Hi, this is your Linux kernel regression tracker.
+
+On 03.04.22 13:22, Michele Ballabio wrote:
+>
+> 	I think I hit a regression in 5.16-stable.
+> It is difficult to reproduce, and I'm not sure if it's
+> still present in 5.17 and/or if it's caused by flaky hardware.
+>
+> The machine is a Ryzen 5 1600 with AMD graphics (RX 560).
 > 
-> I think I commented on this earlier too, though I failed to respond to
-> your reply. Let me bring the topic back up. I think this can cause an
-> invalid memory address to be accessed. Not all SPI MEM consumers will
-> use dirmap APIs, and they won't use them all the time. For example, SPI
-> NOR can perform some operations to reset the flash before shutting down.
-> For example, SPI NOR turns off 4byte address mode during shutdown. This
-> will be a register read/write operation, which usually has a different
-> opcode.
+> Kernels 5.16.10 do not have the following regression, 5.16.11-16
 
-It's only a small optimization for startup when the SFDP probing is done.
-There are quite a few reads which are large :
+5.16.11-16 sounds like this is a distro kernel that might or might not
+be patched. Or is 11-16 just meant as a range. Could you clarify?
 
-   spi-aspeed-smc 1e630000.spi: CE0 read OP 0x5a mode:1.1.1.1 naddr:0x3 ndummies:0x1 len:0x10
-   spi-aspeed-smc 1e630000.spi: CE0 read OP 0x5a mode:1.1.1.1 naddr:0x3 ndummies:0x1 len:0x10
-   spi-aspeed-smc 1e630000.spi: CE0 read OP 0x5a mode:1.1.1.1 naddr:0x3 ndummies:0x1 len:0x120
-   spi-aspeed-smc 1e630000.spi: CE0 read OP 0x5a mode:1.1.1.1 naddr:0x3 ndummies:0x1 len:0x40
-   spi-aspeed-smc 1e630000.spi: CE0 read OP 0x5a mode:1.1.1.1 naddr:0x3 ndummies:0x1 len:0x8
+> do. My machine would freeze completely about once a week, no oops in
+> the logs, sysrq won't work either. I managed to log only the
+> following (and only once) with netconsole, while running kernel 5.16.16.
+> I could not reproduce the problem since.
 
+Hmmm. Of course ideally all regressions get fixed, but that beeing said:
+5.16 will likely be EOL in round about two weeks anway and getting to
+the root of this problem might take some time and effort. That's why I'm
+not sure myself what's the best way forward here. Maybe testing 5.17 to
+see if the problem still shows up would be good; bisection would help,
+but I guess that will be hard here. But I guess there is one thing that
+could help: could you maybe decode the panic you have as described in
+this document:
+https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
+
+Ciao, Thorsten
+
+> ----------
+> 4,1490,11865947234,-;ieee80211 phy0: rt2x00usb_watchdog_tx_dma: Warning - TX queue 2 DMA timed out, invoke forced reset
+>  SUBSYSTEM=ieee80211
+>  DEVICE=+ieee80211:phy0
+> 4,1491,11872348272,-;ieee80211 phy0: rt2x00usb_watchdog_tx_dma: Warning - TX queue 2 DMA timed out, invoke forced reset
+>  SUBSYSTEM=ieee80211
+>  DEVICE=+ieee80211:phy0
+> 0,1493,12767657117,-;traps: PANIC: double fault, error_code: 0x0
+> 4,1494,12767657121,-;double fault: 0000 [#1] PREEMPT SMP NOPTI
+> 4,1495,12767657123,-;CPU: 4 PID: 16786 Comm: MediaPD~der #12 Not tainted 5.16.16 #1
+> 4,1496,12767657126,-;Hardware name: System manufacturer System Product Name/PRIME B350-PLUS, BIOS 4011 04/19/2018
+> 4,1497,12767657127,-;RIP: 0010:entry_SYSCALL_64+0x3/0x29
+> 4,1498,12767657133,-;Code: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc 0f 01 f8 <65> 48 89 24 25 14 60 00 00 eb 12 0f 20 dc 0f 1f 44 00 00 48 81 e4
+> 4,1499,12767657134,-;RSP: 0018:00007f2a8bcbd438 EFLAGS: 00010002
+> 4,1500,12767657136,-;RAX: 00000000000000ca RBX: 000000000000005d RCX: 00007f2aa45e8aab
+> 4,1501,12767657138,-;RDX: 0000000000000002 RSI: 0000000000000080 RDI: 00007f2aa4400018
+> 4,1502,12767657139,-;RBP: 00007f2aa4400018 R08: 0000000000000000 R09: 00007f2a8ed00000
+> 4,1503,12767657140,-;R10: 0000000000000000 R11: 0000000000000282 R12: 00000000000000a8
+> 4,1504,12767657141,-;R13: 0000000000000003 R14: 0000000000000030 R15: 00007f2aa4400000
+> 4,1505,12767657142,-;FS:  00007f2a8bcbe640(0000) GS:ffff8b110ed00000(0000) knlGS:0000000000000000
+> 4,1506,12767657143,-;CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> 4,1507,12767657144,-;CR2: 00007f2a8bcbd428 CR3: 00000002953f2000 CR4: 00000000003506e0
+> 4,1508,12767657146,-;Call Trace:
+> 4,1509,12767657146,-,ncfrag=0/986;Modules linked in: nfnetlink_queue nfnetlink_log nfnetlink bluetooth ecdh_generic ecc netconsole uas usb_storage snd_seq_dummy snd_hrtimer snd_seq snd_seq_device iptable_filter xt_tcpudp ip_tables
+>  x_tables hwmon_vid 8021q garp mrp stp llc ipv6 fuse rt73usb rt2x00usb rt2x00lib mac80211 hid_logitech cfg80211 joydev hid_generic usbhid hid amdgpu intel_rapl_msr iommu_v2 intel_rapl_common gpu_sched eeepc_wmi asus_wmi drm_ttm_helper
+>  ttm platform_profile battery drm_kms_helper sparse_keymap edac_mce_amd rfkill drm kvm_amd snd_hda_codec_realtek video snd_hda_codec_generic ledtrig_audio kvm snd_hda_codec_hdmi snd_hda_intel agpgart snd_intel_dspcfg snd_intel_sdw_acpi
+>  wmi_bmof snd_hda_codec evdev i2c_algo_bit snd_hda_core fb_sys_fops syscopyarea sysfillrect sysimgblt snd_hwdep mfd_core snd_pcm r8169 irqbypass snd_timer realtek snd xhci_pci xhci_pci_renesas xhci_hcd mdio_devres crct10dif_pclmul
+>  crc32_pclmul i2c_piix4 soundcore ccp libphy ghash_clmulni_intel i2c_co4,1509,12767657146,-,ncfrag=966/986;re rapl k10temp wmi
+> 4,1510,12767657189,c; acpi_cpufreq gpio_amdpt button gpio_generic loop [last unloaded: netconsole]
+> 4,1511,12767657207,-;------------[ cut here ]------------
+> 4,1512,12767657207,-;WARNING: CPU: 4 PID: 16786 at kernel/softirq.c:362 __local_bh_enable_ip+0x43/0x70
+> 4,1513,12767657212,-,ncfrag=0/986;Modules linked in: nfnetlink_queue nfnetlink_log nfnetlink bluetooth ecdh_generic ecc netconsole uas usb_storage snd_seq_dummy snd_hrtimer snd_seq snd_seq_device iptable_filter xt_tcpudp ip_tables
+>  x_tables hwmon_vid 8021q garp mrp stp llc ipv6 fuse rt73usb rt2x00usb rt2x00lib mac80211 hid_logitech cfg80211 joydev hid_generic usbhid hid amdgpu intel_rapl_msr iommu_v2 intel_rapl_common gpu_sched eeepc_wmi asus_wmi drm_ttm_helper
+>  ttm platform_profile battery drm_kms_helper sparse_keymap edac_mce_amd rfkill drm kvm_amd snd_hda_codec_realtek video snd_hda_codec_generic ledtrig_audio kvm snd_hda_codec_hdmi snd_hda_intel agpgart snd_intel_dspcfg snd_intel_sdw_acpi
+>  wmi_bmof snd_hda_codec evdev i2c_algo_bit snd_hda_core fb_sys_fops syscopyarea sysfillrect sysimgblt snd_hwdep mfd_core snd_pcm r8169 irqbypass snd_timer realtek snd xhci_pci xhci_pci_renesas xhci_hcd mdio_devres crct10dif_pclmul
+>  crc32_pclmul i2c_piix4 soundcore ccp libphy ghash_clmulni_intel i2c_co4,1513,12767657212,-,ncfrag=966/986;re rapl k10temp wmi
+> 4,1514,12767657248,c; acpi_cpufreq gpio_amdpt button gpio_generic loop [last unloaded: netconsole]
+> 4,1515,12767657252,-;CPU: 4 PID: 16786 Comm: MediaPD~der #12 Not tainted 5.16.16 #1
+> 4,1516,12767657254,-;Hardware name: System manufacturer System Product Name/PRIME B350-PLUS, BIOS 4011 04/19/2018
+> 4,1517,12767657255,-;RIP: 0010:__local_bh_enable_ip+0x43/0x70
+> 4,1518,12767657257,-;Code: 01 35 61 1d f3 7d 65 8b 05 5a 1d f3 7d a9 00 ff ff 00 74 1a bf 01 00 00 00 e8 99 b5 02 00 65 8b 05 42 1d f3 7d 85 c0 74 25 c3 <0f> 0b eb cc 48 c7 c7 d9 53 42 83 e8 4d ec a6 00 65 66 8b 05 25 19
+> 4,1519,12767657259,-;RSP: 0018:fffffe00000f69a0 EFLAGS: 00010006
+> 4,1520,12767657260,-;RAX: 0000000080110203 RBX: ffff8b0e05bd2000 RCX: ffff8b0e05bd2000
+> 4,1521,12767657261,-;RDX: ffff8b0e0ac28000 RSI: 0000000000000201 RDI: ffffffffc12f12c3
+> 4,1522,12767657262,-;RBP: ffff8b0e0c977a30 R08: fffffe00000f69e8 R09: ffff8b0e0d085000
+> 4,1523,12767657263,-;R10: ffff8b0e03234300 R11: 0000000000000fff R12: ffff8b0e0d0850d0
+> 4,1524,12767657264,-;R13: fffffe00000f69e8 R14: ffff8b0e0ddfc980 R15: ffff8b0e0d085a58
+> 4,1525,12767657265,-;FS:  00007f2a8bcbe640(0000) GS:ffff8b110ed00000(0000) knlGS:0000000000000000
+> 4,1526,12767657266,-;CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> ----------
 > 
-> So I think you should keep dirmap and exec_op() independent of each
-> other.
-
-OK. I understand. It's not a problem as it works either way.
-
-Thanks,
-
-C.
-
-
->>   	} else {
->>   		if (!op->addr.nbytes)
->>   			ret = aspeed_spi_write_reg(chip, op);
->> @@ -403,10 +403,73 @@ static int aspeed_spi_chip_set_default_window(struct aspeed_spi_chip *chip)
->>   	return chip->ahb_window_size ? 0 : -1;
->>   }
->>   
->> +static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)
->> +{
->> +	struct aspeed_spi *aspi = spi_controller_get_devdata(desc->mem->spi->master);
->> +	struct aspeed_spi_chip *chip = &aspi->chips[desc->mem->spi->chip_select];
->> +	struct spi_mem_op *op = &desc->info.op_tmpl;
->> +	u32 ctl_val;
->> +	int ret = 0;
->> +
->> +	chip->clk_freq = desc->mem->spi->max_speed_hz;
->> +
->> +	/* Only for reads */
->> +	if (op->data.dir != SPI_MEM_DATA_IN)
->> +		return -EOPNOTSUPP;
->> +
->> +	if (desc->info.length > chip->ahb_window_size)
->> +		dev_warn(aspi->dev, "CE%d window (%dMB) too small for mapping",
->> +			 chip->cs, chip->ahb_window_size >> 20);
->> +
->> +	/* Define the default IO read settings */
->> +	ctl_val = readl(chip->ctl) & ~CTRL_IO_CMD_MASK;
->> +	ctl_val |= aspeed_spi_get_io_mode(op) |
->> +		op->cmd.opcode << CTRL_COMMAND_SHIFT |
->> +		CTRL_IO_DUMMY_SET(op->dummy.nbytes / op->dummy.buswidth) |
->> +		CTRL_IO_MODE_READ;
->> +
->> +	/* Tune 4BYTE address mode */
->> +	if (op->addr.nbytes) {
->> +		u32 addr_mode = readl(aspi->regs + CE_CTRL_REG);
->> +
->> +		if (op->addr.nbytes == 4)
->> +			addr_mode |= (0x11 << chip->cs);
->> +		else
->> +			addr_mode &= ~(0x11 << chip->cs);
->> +		writel(addr_mode, aspi->regs + CE_CTRL_REG);
->> +	}
->> +
->> +	/* READ mode is the controller default setting */
->> +	chip->ctl_val[ASPEED_SPI_READ] = ctl_val;
->> +	writel(chip->ctl_val[ASPEED_SPI_READ], chip->ctl);
->> +
->> +	dev_info(aspi->dev, "CE%d read buswidth:%d [0x%08x]\n",
->> +		 chip->cs, op->data.buswidth, chip->ctl_val[ASPEED_SPI_READ]);
->> +
->> +	return ret;
->> +}
->> +
->> +static ssize_t aspeed_spi_dirmap_read(struct spi_mem_dirmap_desc *desc,
->> +				      u64 offset, size_t len, void *buf)
->> +{
->> +	struct aspeed_spi *aspi = spi_controller_get_devdata(desc->mem->spi->master);
->> +	struct aspeed_spi_chip *chip = &aspi->chips[desc->mem->spi->chip_select];
->> +
->> +	/* Switch to USER command mode if mapping window is too small */
->> +	if (chip->ahb_window_size < offset + len)
->> +		aspeed_spi_read_user(chip, &desc->info.op_tmpl, offset, len, buf);
->> +	else
->> +		memcpy_fromio(buf, chip->ahb_base + offset, len);
->> +
->> +	return len;
->> +}
->> +
->>   static const struct spi_controller_mem_ops aspeed_spi_mem_ops = {
->>   	.supports_op = aspeed_spi_supports_op,
->>   	.exec_op = aspeed_spi_exec_op,
->>   	.get_name = aspeed_spi_get_name,
->> +	.dirmap_create = aspeed_spi_dirmap_create,
->> +	.dirmap_read = aspeed_spi_dirmap_read,
->>   };
->>   
->>   static void aspeed_spi_chip_set_type(struct aspeed_spi *aspi, unsigned int cs, int type)
->> -- 
->> 2.34.1
->>
 > 
-

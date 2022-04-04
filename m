@@ -2,69 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 469EA4F1248
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B43084F1256
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354684AbiDDJrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 05:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34846 "EHLO
+        id S1354787AbiDDJww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 05:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354620AbiDDJrD (ORCPT
+        with ESMTP id S1354718AbiDDJwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 05:47:03 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFF931356
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 02:45:07 -0700 (PDT)
-Received: from dude03.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::39])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nbJGj-0007M5-Tr; Mon, 04 Apr 2022 11:45:05 +0200
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] reset: ti-sci: allow building under COMPILE_TEST
-Date:   Mon,  4 Apr 2022 11:45:00 +0200
-Message-Id: <20220404094500.2708816-1-p.zabel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        Mon, 4 Apr 2022 05:52:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 026FA3AA44
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 02:50:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649065854;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UnGPjnMk0HWFLFp7dnhS2WarhT53NPNrXRrJQZdc19E=;
+        b=MinpBI2axfVZFolEm+PRQCI+bqDdPBQFjrQ1kTqGmEzYIfbaAbtLA4mrb1SPM+Yak612Zx
+        UV1uwne+O9YoZV7qRFo18kQYE/14PYF6qbhLvLqzYFT6u8ufGfACjUaGF1VBQAT0e4935K
+        frLdTF+bHe2vuPKuY2vnHka1LQpCQKI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-606-hwBMZr7cPFq81Zbfr0yabA-1; Mon, 04 Apr 2022 05:50:48 -0400
+X-MC-Unique: hwBMZr7cPFq81Zbfr0yabA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AA0813C14CC3;
+        Mon,  4 Apr 2022 09:50:47 +0000 (UTC)
+Received: from starship (unknown [10.40.194.231])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3DBCB2156732;
+        Mon,  4 Apr 2022 09:50:44 +0000 (UTC)
+Message-ID: <c28620cdf5d1ce37b30e39355631fda0f3e6324a.camel@redhat.com>
+Subject: Re: [PATCH 1/5] KVM: nSVM: Sync next_rip field from vmcb12 to vmcb02
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Jon Grimm <Jon.Grimm@amd.com>,
+        David Kaplan <David.Kaplan@amd.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Liam Merwick <liam.merwick@oracle.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 04 Apr 2022 12:50:43 +0300
+In-Reply-To: <Ykdz4GVF4C+S/LGg@google.com>
+References: <cover.1646944472.git.maciej.szmigiero@oracle.com>
+         <19c757487eeeff5344ff3684fe9c090235b07d05.1646944472.git.maciej.szmigiero@oracle.com>
+         <YkdFSuezZ1XNTTfx@google.com>
+         <ff29e77c-f16d-d9ef-9089-0a929d3c2fbf@maciej.szmigiero.name>
+         <Ykdz4GVF4C+S/LGg@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::39
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 043cfff99a18 ("firmware: ti_sci: Fix compilation failure
-when CONFIG_TI_SCI_PROTOCOL is not defined") it is possible to build
-reset-ti-sci under CONFIG_COMPILE_TEST.
+On Fri, 2022-04-01 at 21:51 +0000, Sean Christopherson wrote:
+> On Fri, Apr 01, 2022, Maciej S. Szmigiero wrote:
+> > On 1.04.2022 20:32, Sean Christopherson wrote:
+> > > On Thu, Mar 10, 2022, Maciej S. Szmigiero wrote:
+> > > > +	/* The return address pushed on stack by the CPU for some injected events */
+> > > > +	svm->vmcb->control.next_rip            = svm->nested.ctl.next_rip;
+> > > 
+> > > This needs to be gated by nrips being enabled _and_ exposed to L1, i.e.
+> > > 
+> > > 	if (svm->nrips_enabled)
+> > > 		vmcb02->control.next_rip    = svm->nested.ctl.next_rip;
+> > 
+> > It can be done, however what if we run on a nrips-capable CPU,
+> > but don't expose this capability to the L1?
+> 
+> Oh, right, because the field will be populated by the CPU on VM-Exit.  Ah, the
+> correct behavior is to grab RIP from vmcb12 to emulate nrips=0 hardware simply
+> not updating RIP.  E.g. zeroing it out would send L2 into the weeds on IRET due
+> the CPU pushing '0' on the stack when vectoring the injected event.
+> 
+> 	if (svm->nrips_enabled)
+> 		vmcb02->control.next_rip    = svm->nested.ctl.next_rip;
+> 	else if (boot_cpu_has(X86_FEATURE_NRIPS))
+> 		vmcb02->control.next_rip    = vmcb12_rip;
+> 
+> > The CPU will then push whatever value was left in this field as
+> > the return address for some L1 injected events.
 
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
----
- drivers/reset/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This makes sense.
 
-diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-index b496028b6bfa..d6cb52a1dce7 100644
---- a/drivers/reset/Kconfig
-+++ b/drivers/reset/Kconfig
-@@ -240,7 +240,7 @@ config RESET_SUNXI
- 
- config RESET_TI_SCI
- 	tristate "TI System Control Interface (TI-SCI) reset driver"
--	depends on TI_SCI_PROTOCOL
-+	depends on TI_SCI_PROTOCOL || COMPILE_TEST
- 	help
- 	  This enables the reset driver support over TI System Control Interface
- 	  available on some new TI's SoCs. If you wish to use reset resources
--- 
-2.30.2
+Note that even AMD's PRM has a note about this:
+
+"
+15.20 Event Injection
+...
+Software interrupts cannot be properly injected if the processor does not support the NextRIP field.
+Support is indicated by CPUID Fn8000_000A_EDX[NRIPS] = 1. Hypervisor software should
+emulate the event injection of software interrupts if NextRIP is not supported
+"
+
+
+
+> > 
+> > Although without nrips feature the L1 shouldn't even attempt event
+> > injection, copying this field anyway will make it work if L1 just
+> > expects this capability based on the current CPU model rather than
+> > by checking specific CPUID feature bits.
+
+The guest really ought to check CPUID bits. Plus the CPU model is also
+usually virtualized (for named machine types in Qemu for example).
+
+> 
+> L1 may still inject the exception, it just advances the RIP manually.  As above,
+> the really messy thing is that, because there's no flag to say "don't use NextRIP!",
+> the CPU will still consume NextRIP and push '0' on the stack for the return RIP
+> from the INTn/INT3/INTO.  Yay.
+> 
+> I found that out the hard way (patch in-progress).  The way to handle event
+> injection if KVM is loaded with nrips=0 but nrips is supported in hardware is to
+> stuff NextRIP on event injection even if nrips=0, otherwise the guest is hosed.
+> 
+> > > > +	u64 next_rip;
+> > > >   	u64 nested_cr3;
+> > > >   	u64 virt_ext;
+> > > >   	u32 clean;
+> > > 
+> > > I don't know why this struct has
+> > > 
+> > > 	u8 reserved_sw[32];
+> > > 
+> > > but presumably it's for padding, i.e. probably should be reduced to 24 bytes.
+> > 
+> > Apparently the "reserved_sw" field stores Hyper-V enlightenments state -
+> > see commit 66c03a926f18 ("KVM: nSVM: Implement Enlightened MSR-Bitmap feature")
+> > and nested_svm_vmrun_msrpm() in nested.c.
+> 
+> Argh, that's a terrible name.  Thanks for doing the homework, I was being lazy.
+
+
+That was added around the commit 
+
+1183646a67d01 ("KVM: SVM: hyper-v: Direct Virtual Flush support")
+
+Seems to be used by HV to store 'struct hv_enlightenments',
+but I don't know 100% if that is the only thing that can be stored
+in this area.
+
+
+
+Best regards,
+	Maxim Levitsky
+
+
+> 
+
 

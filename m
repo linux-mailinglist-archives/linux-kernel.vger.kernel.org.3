@@ -2,133 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 234E74F106A
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A1764F1072
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355033AbiDDIDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 04:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39576 "EHLO
+        id S1377884AbiDDIEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 04:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377899AbiDDIDC (ORCPT
+        with ESMTP id S1377882AbiDDIED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 04:03:02 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AE12FE47
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 01:01:06 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id d29so7090724wra.10
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 01:01:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=Fchq955hbINLxP1mfvpxKWtqMLR29zfsjFGO0tToAUc=;
-        b=3kCbDAxruWLN43MM2kRlB4Gp+rcWnHK1FlJNINZdCpVw9O5zlIrvIad52lO+tYJzIv
-         xj/VH2a9SXY4/53T7yF8x/p7TtX18Bp58ouR6Kdphjc6OA6aInZhSIF0wklOprZfgjUu
-         VolqyD+gBeRHMN09uVqYaH66HnemWGcVyJEYLFGPITL55dtYt9JToehywBwKCZQuqCsE
-         J1yyv5mCGH8MYKKl1f0b4p9sfBv+tGrbyFjSgfI3sxlWUeA2bqi9VnTcrVsbBdu0HSNy
-         CzhPFlKxpyqM+POwVHH3QqjZnJWklwkNbKm2mzmB9Fep3r2kanhWq0rH6oREg8YmblkW
-         CVdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=Fchq955hbINLxP1mfvpxKWtqMLR29zfsjFGO0tToAUc=;
-        b=0nmE05+64pn9/sI70gMowrLglKNLA+gHeGuElu+gGMP3c5AIQWoAe1y1m8nv/2/Ty1
-         mXjrLGZgya4gxaqwqYnVG7APi3pCmZrgiWm57xHr2XKyiXCfFLKrZxI41W4ZMiWxe4Wg
-         R1Hj2mTp3yWdhDXWKoTvgel2zKhS75RJ6Ly1IpSU9qevD2WdKHLl3MMdHsiFs+9QVIa6
-         S0STX2pN51YHNzWXpGgXU1TQN9yrMNSLzZwTgic2QXTpSBS4QmsUE5h4GsRKp0y+Ou/y
-         R/bnrNz8s2jzDHRNs2llY5FqapnGQaLVPaT5dKuAsEWTETPsLnta2fXAoVa2bcchgGv7
-         t1Ww==
-X-Gm-Message-State: AOAM532bPy977h1sgWwZ7QFnIcB5cu14Uhz1S7HiJiwAjxSuhmzf4y0c
-        9tXlP178Ac3fZxzhCNYj3PQu/g==
-X-Google-Smtp-Source: ABdhPJw8Y+rzIATLf/wu5PrpGYSpAlB9L5KuCHMGGdLeH+iefS3uvrM9XgZfxeA/DFgCXhCdpQnV3Q==
-X-Received: by 2002:a05:6000:156e:b0:206:1205:166c with SMTP id 14-20020a056000156e00b002061205166cmr2588330wrz.37.1649059264921;
-        Mon, 04 Apr 2022 01:01:04 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:1add:1b28:2457:eb46? ([2001:861:44c0:66c0:1add:1b28:2457:eb46])
-        by smtp.gmail.com with ESMTPSA id l3-20020a1ced03000000b0038ce57d28a1sm8563313wmh.26.2022.04.04.01.01.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 01:01:04 -0700 (PDT)
-Message-ID: <8986ec34-616b-d497-29d1-6f7896c26e37@baylibre.com>
-Date:   Mon, 4 Apr 2022 10:01:03 +0200
+        Mon, 4 Apr 2022 04:04:03 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462963B2BB;
+        Mon,  4 Apr 2022 01:02:07 -0700 (PDT)
+Received: from mail-wr1-f43.google.com ([209.85.221.43]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MIxJq-1nH0x52y5q-00KLsF; Mon, 04 Apr 2022 10:02:05 +0200
+Received: by mail-wr1-f43.google.com with SMTP id c7so13268308wrd.0;
+        Mon, 04 Apr 2022 01:02:05 -0700 (PDT)
+X-Gm-Message-State: AOAM532517R/lSVGLXAwA+N5AKi/nm029RBFReXMZngAg6CGv5ne444x
+        T8XwKcxBHDYQhah1che4FV8J/iwRIPC/IeBYapk=
+X-Google-Smtp-Source: ABdhPJxfJvKKixoejzphmCX0GQJtCAcdZjnwkNDn/9M06aiYqWjmBipXxJ1GIcogwlUWxIq3sw2sGEnVe8T8dDL1brk=
+X-Received: by 2002:a5d:6505:0:b0:205:9a98:e184 with SMTP id
+ x5-20020a5d6505000000b002059a98e184mr15347532wru.317.1649059325250; Mon, 04
+ Apr 2022 01:02:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 0/3] Ensure Low period of SCL is correct
-Content-Language: en-US
-To:     tanure@linux.com, Kevin Hilman <khilman@baylibre.com>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Vyacheslav Bocharov <adeep@lexina.in>
-References: <20220326102229.421718-1-tanure@linux.com>
- <7hee2lu82n.fsf@baylibre.com>
- <CAJX_Q+1tz7BYL+CvXnc=zAamPiZDEFAASv9a7YoWGmzqYL+cUg@mail.gmail.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <CAJX_Q+1tz7BYL+CvXnc=zAamPiZDEFAASv9a7YoWGmzqYL+cUg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220404061948.2111820-1-masahiroy@kernel.org>
+ <20220404061948.2111820-3-masahiroy@kernel.org> <YkqhQhJIQEL2qh8C@infradead.org>
+In-Reply-To: <YkqhQhJIQEL2qh8C@infradead.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 4 Apr 2022 10:01:49 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0+fxiQGTu_XAOtNMkO91fZ7fQg3MZZahUjdNJCFaUxfw@mail.gmail.com>
+Message-ID: <CAK8P3a0+fxiQGTu_XAOtNMkO91fZ7fQg3MZZahUjdNJCFaUxfw@mail.gmail.com>
+Subject: Re: [PATCH 2/8] kbuild: prevent exported headers from including
+ <stdlib.h>, <stdbool.h>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:3CUoZQ9i738Pk1BDtFcQ17q6rJoOWZGhlf4AebmA6cuYFvtjqBY
+ hWIGBvUybTD30MNo/igW2cL/K2IJWxgooaSR0MaxllcDW6BYCYoTrxem4uxL2+FQwEc8YhX
+ ER1VPY7PouqNcWbtdXXbAXaf5bhddZbiGmfbryls7ezODnm7Fl5VrJ631sNPOBRUFyeTuLX
+ 9qFnAB9IaO7SrYhhSW8fQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:r/J0NwWuQF8=:oSO9ZQsNRoYQwcgkMf5vQB
+ 3cQdSgt4HRCdc0EYK2Po/M1kMIDRxlRecyLaq/jdKrKjCF8xcWCnhPSwoq/Virt8AH1YhpCEM
+ 1urqSSOAH3vFaOpY97gPg6sTXDK9yL5uJ2Gw8iBTE1vzY3384dm6Ce3/F0VubMjVppok5pOsx
+ 5xtMzj1Gy2Ec76onRuA3eucjqNv3nLjXMqfyDHh9nhzfDeq44FmMP4tPG8z7xe8TtK95SYGQw
+ fCD70LEqnQEJVuE4XacWc1+GLbn4YWtCmOiQ1ggSpWUkyAWeUPyH2r4oCqW2iakhcfnLKjUN8
+ ZdTOVlVWp0leXJ+Eu9xo4ZtGZXJyLZtjWTyi5scy3xP9AKWl4kAPhOQma4UxdG8d2yCmjnPBg
+ cyGaw8vkgW3ZskAAJS2Dn1i277HvS7qYMrTAxqd4hD1ab2dBsUf/9fWb1apZmWbie504wHKNQ
+ cJ57zSpgCQz8DpFSJvzwG49zizD9+/8nWM9s0KzB72XWHvTlWRLs3dtPddWoSuhKTipheW8JA
+ 2g5DtsmQxUKrWPtOCpoYiT1h0xQATo8I57lihjvRQgNC8Lk92O2FO4w2IX+U7M74B0w5Vs2yN
+ RGwsNyDkVOihEkWDbgvgrZsUaI7u7Ru67HUXNPd/l8RG2+zcSkAlexTnDTGIxtAlLCbsMvITM
+ D/yYnU2cFzc/SUlO8rcHft6jI0tELUCfZXI0DMvXSum9SXLZBp4+1PUjAux5buoyVGiw=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Apr 4, 2022 at 9:41 AM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Mon, Apr 04, 2022 at 03:19:42PM +0900, Masahiro Yamada wrote:
+> > If we can make kernel headers self-contained (that is, none of exported
+> > kernel headers includes system headers), we will be able to add the
+> > -nostdinc flag, but that is much far from where we stand now.
+>
+> What is still missing for that?
 
-On 29/03/2022 00:31, Lucas Tanure wrote:
-> On Mon, 28 Mar 2022, 21:37 Kevin Hilman, <khilman@baylibre.com> wrote:
->>
->> Hi Lucas,
->>
->> Lucas Tanure <tanure@linux.com> writes:
->>
->>> The default duty cycle of 33% is less than the required
->>> by the I2C specs for the LOW period of the SCL clock.
->>>
->>> So, for 100Khz or less, use 50%H/50%L duty cycle, and
->>> for the clock above 100Khz, use 40%H/60%L duty cycle.
->>> That ensures the low period of SCL is always more than
->>> the minimum required by the specs at any given frequency.
->>
->> Thanks for the fixes!
->>
->> This is going to affect all SoCs, so ould you please summarize how your
->> changes were tested, and on which SoCs & boards?
->>
->> Thanks,
->>
->> Kevin
-> 
-> Hi,
-> 
-> I only tested against the vim3 board, measured the bus with a Saleae
-> logic pro 16.
-> The measurements were with 100k, 400k, and a few in-between frequencies.
+One case that I don't know how to solve is
 
-Thanks, it's a great addition to have !
+include/uapi/sound/asound.h:typedef struct { unsigned char
+pad[sizeof(time_t) - sizeof(int)]; } __time_pad;
 
-> 
-> Is that enough?
+Here we define a structure layout based on a libc-provided type. There are two
+possible variants (32-bit and 64-bit time_t), and the kernel interface
+can handle
+both versions because they get different ioctl command numbers, but user space
+must see the one that matches its normal time_t.
 
-A test on GXL/GXM (VIM1 or VIM2) & GXBB (Odroid-C2) devices is lacking before we
-can merge this.
+There are a couple of similar cases like this, but I think the other ones don't
+need to define architecture specific padding like this.
 
-If I find some time, I'll have a try, but everyone is welcome testing this serie
-and report if it still works fine for them.
-
-Vyacheslav, do you think you can test on your JetHub devices ? it would validate GXL & AXG.
-
-Neil
-
-> 
-> Thanks
-> Lucas
-
+       Arnd

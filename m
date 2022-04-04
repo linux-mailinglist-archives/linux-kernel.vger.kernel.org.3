@@ -2,178 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70FE44F15CA
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 15:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A325F4F15E6
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 15:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351320AbiDDNYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 09:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54842 "EHLO
+        id S1353100AbiDDNcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 09:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241154AbiDDNY3 (ORCPT
+        with ESMTP id S1352768AbiDDNcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 09:24:29 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B433DA68;
-        Mon,  4 Apr 2022 06:22:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649078553; x=1680614553;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Brz0s4RVmiMzt+dQ6G1J1x2m39pVMxu2cjfDv6ZP0GY=;
-  b=V8uuSgVueNzgtiss+RJHWC9yRUETh8f3X8B1BGXy3dDQn0cARQUDqKf0
-   OiaMBVK3CD1j5bi06k9BQCBYwyb5A+iNK5vsMUzk2YrOrLaa6+yox0j5h
-   89esj7ZRGL5HXlKE8/phfGKg5SiFKN6LqOiyP1QYbbSZH0Hu0vzNP42Pt
-   4wOCb22pVzjHY6GcAaNGfhBmdUdB0aKuMDqrEbn5PGYLnPgfgMPPmN3TT
-   dXKJNoJldE4tPxzBmsTPXu6qKjE0ydzAVYa8dyR8UBn+LiV+Pf7dI4Isl
-   nirmhReLgDEMpLKzK6W/LOmzoPtOmhbAJFUDcVThBb6eHpCkW6x6RnqYi
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="285461893"
-X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="285461893"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 06:22:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="696568285"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 04 Apr 2022 06:22:25 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 04 Apr 2022 16:22:25 +0300
-Date:   Mon, 4 Apr 2022 16:22:25 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sven Peter <sven@svenpeter.dev>,
-        Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>,
-        Angus Ainslie <angus@akkea.ca>,
-        Hector Martin <marcan@marcan.st>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-kernel@vger.kernel.org, kernel@puri.sm
-Subject: Re: [PATCH 1/7] usb: typec: tipd: Only update power status on IRQ
-Message-ID: <YkrxEU8nZxkY8txk@kuha.fi.intel.com>
-References: <20220317154518.4082046-1-sebastian.krzyszkowiak@puri.sm>
- <20220317154518.4082046-2-sebastian.krzyszkowiak@puri.sm>
+        Mon, 4 Apr 2022 09:32:11 -0400
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD7421839;
+        Mon,  4 Apr 2022 06:30:15 -0700 (PDT)
+Received: by mail-ot1-f44.google.com with SMTP id 88-20020a9d0ee1000000b005d0ae4e126fso5223142otj.5;
+        Mon, 04 Apr 2022 06:30:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZellbTNVDmTMxAgtDVNk9zjzT/qb3sIv3YZKoTrbp+w=;
+        b=1KfbxEDz38L5R9KdesZHkY5ynl/UX0AnY9Fyb+czL6Gbvf3vJ/l2ULBhZgg/uHwL4T
+         aykgjcV25Ib2yaccgxUc4diqfj/MqbPGkkPEiPGHcE+4yBd9m7kyCEVeHvw2TGvmOEvq
+         jBzRsZ90h/zHC8aeMlIfVceZPGzhILwdE9WK9YOGJCdeudOUDnxlW7OyQwT5Dby+qsBT
+         SvY2q6wQZEw9y9/gSwlgQrlTanTDU4YlQLCSAHeRLCxxDgCCTxp9cRAstQABcd0vAbLQ
+         V3ogOPtlBFtU5em14L0DYTLK0nyCIChIoUigZGOF2Ed3/8xfjbD/o3ColF1oOYXZeNxp
+         gZiA==
+X-Gm-Message-State: AOAM533cm4bpClOPyYrkfJGhw7j831GpmeTV/+J3+tdysiN0zhjNQYbj
+        oRjkJBDz8uYZlUA+bJkiV6wmVyAvA0yotQ==
+X-Google-Smtp-Source: ABdhPJwfzMcr7Vf5J9Ba+NiuXJokEEdlN7dIQtrMSP2AO/+MkLtbJL7dhYZeavgWHKEtMv4vV+iZUA==
+X-Received: by 2002:a9d:1b68:0:b0:5c9:5da1:3752 with SMTP id l95-20020a9d1b68000000b005c95da13752mr5858otl.354.1649079014713;
+        Mon, 04 Apr 2022 06:30:14 -0700 (PDT)
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com. [209.85.210.41])
+        by smtp.gmail.com with ESMTPSA id o2-20020a05687072c200b000d9ae3e1fabsm4144385oak.12.2022.04.04.06.30.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Apr 2022 06:30:14 -0700 (PDT)
+Received: by mail-ot1-f41.google.com with SMTP id n19-20020a9d7113000000b005cd9cff76c3so7242708otj.1;
+        Mon, 04 Apr 2022 06:30:14 -0700 (PDT)
+X-Received: by 2002:a25:45:0:b0:633:96e2:2179 with SMTP id 66-20020a250045000000b0063396e22179mr20945994yba.393.1649078582711;
+ Mon, 04 Apr 2022 06:23:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220317154518.4082046-2-sebastian.krzyszkowiak@puri.sm>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <Yib9F5SqKda/nH9c@infradead.org> <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
+ <YkmWh2tss8nXKqc5@infradead.org> <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 4 Apr 2022 15:22:51 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWcg+171ggdVC4gwbQ=RUf+cYrX3o9uSpDxo-XXEJ5Qgw@mail.gmail.com>
+Message-ID: <CAMuHMdWcg+171ggdVC4gwbQ=RUf+cYrX3o9uSpDxo-XXEJ5Qgw@mail.gmail.com>
+Subject: Re: [RFC PULL] remove arch/h8300
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "moderated list:H8/300 ARCHITECTURE" 
+        <uclinux-h8-devel@lists.sourceforge.jp>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>, Max Filippov <jcmvbkbc@gmail.com>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Rich Felker <dalias@libc.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 04:45:12PM +0100, Sebastian Krzyszkowiak wrote:
-> From: Guido Günther <agx@sigxcpu.org>
-> 
-> Instead of refetching power status cache it and only update it when a
-> change is signalled via irq. This simplifies tracing and adding more
-> supply properties in follow up patches.
-> 
-> Signed-off-by: Guido Günther <agx@sigxcpu.org>
-> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+Hi Arnd,
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+On Mon, Apr 4, 2022 at 3:09 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> On Sun, Apr 3, 2022 at 2:43 PM Christoph Hellwig <hch@infradead.org> wrote:
+> > On Tue, Mar 08, 2022 at 09:19:16AM +0100, Arnd Bergmann wrote:
+> > > If there are no other objections, I'll just queue this up for 5.18 in
+> > > the asm-generic
+> > > tree along with the nds32 removal.
+> >
+> > So it is the last day of te merge window and arch/h8300 is till there.
+> > And checking nw the removal has also not made it to linux-next.  Looks
+> > like it is so stale that even the removal gets ignored :(
+>
+> I was really hoping that someone else would at least comment.
 
-> ---
->  drivers/usb/typec/tipd/core.c | 32 ++++++++++++--------------------
->  1 file changed, 12 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index 16b4560216ba..dfbba5ae9487 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -93,6 +93,8 @@ struct tps6598x {
->  	struct power_supply *psy;
->  	struct power_supply_desc psy_desc;
->  	enum power_supply_usb_type usb_type;
-> +
-> +	u16 pwr_status;
->  };
->  
->  static enum power_supply_property tps6598x_psy_props[] = {
-> @@ -230,17 +232,12 @@ static int tps6598x_connect(struct tps6598x *tps, u32 status)
->  {
->  	struct typec_partner_desc desc;
->  	enum typec_pwr_opmode mode;
-> -	u16 pwr_status;
->  	int ret;
->  
->  	if (tps->partner)
->  		return 0;
->  
-> -	ret = tps6598x_read16(tps, TPS_REG_POWER_STATUS, &pwr_status);
-> -	if (ret < 0)
-> -		return ret;
-> -
-> -	mode = TPS_POWER_STATUS_PWROPMODE(pwr_status);
-> +	mode = TPS_POWER_STATUS_PWROPMODE(tps->pwr_status);
->  
->  	desc.usb_pd = mode == TYPEC_PWR_MODE_PD;
->  	desc.accessory = TYPEC_ACCESSORY_NONE; /* XXX: handle accessories */
-> @@ -455,6 +452,7 @@ static bool tps6598x_read_power_status(struct tps6598x *tps)
->  		dev_err(tps->dev, "failed to read power status: %d\n", ret);
->  		return false;
->  	}
-> +	tps->pwr_status = pwr_status;
->  	trace_tps6598x_power_status(pwr_status);
->  
->  	return true;
-> @@ -601,15 +599,8 @@ static const struct regmap_config tps6598x_regmap_config = {
->  static int tps6598x_psy_get_online(struct tps6598x *tps,
->  				   union power_supply_propval *val)
->  {
-> -	int ret;
-> -	u16 pwr_status;
-> -
-> -	ret = tps6598x_read16(tps, TPS_REG_POWER_STATUS, &pwr_status);
-> -	if (ret < 0)
-> -		return ret;
-> -
-> -	if (TPS_POWER_STATUS_CONNECTION(pwr_status) &&
-> -	    TPS_POWER_STATUS_SOURCESINK(pwr_status)) {
-> +	if (TPS_POWER_STATUS_CONNECTION(tps->pwr_status) &&
-> +	    TPS_POWER_STATUS_SOURCESINK(tps->pwr_status)) {
->  		val->intval = 1;
->  	} else {
->  		val->intval = 0;
-> @@ -622,15 +613,11 @@ static int tps6598x_psy_get_prop(struct power_supply *psy,
->  				 union power_supply_propval *val)
->  {
->  	struct tps6598x *tps = power_supply_get_drvdata(psy);
-> -	u16 pwr_status;
->  	int ret = 0;
->  
->  	switch (psp) {
->  	case POWER_SUPPLY_PROP_USB_TYPE:
-> -		ret = tps6598x_read16(tps, TPS_REG_POWER_STATUS, &pwr_status);
-> -		if (ret < 0)
-> -			return ret;
-> -		if (TPS_POWER_STATUS_PWROPMODE(pwr_status) == TYPEC_PWR_MODE_PD)
-> +		if (TPS_POWER_STATUS_PWROPMODE(tps->pwr_status) == TYPEC_PWR_MODE_PD)
->  			val->intval = POWER_SUPPLY_USB_TYPE_PD;
->  		else
->  			val->intval = POWER_SUPPLY_USB_TYPE_C;
-> @@ -837,6 +824,11 @@ static int tps6598x_probe(struct i2c_client *client)
->  	fwnode_handle_put(fwnode);
->  
->  	if (status & TPS_STATUS_PLUG_PRESENT) {
-> +		ret = tps6598x_read16(tps, TPS_REG_POWER_STATUS, &tps->pwr_status);
-> +		if (ret < 0) {
-> +			dev_err(tps->dev, "failed to read power status: %d\n", ret);
-> +			goto err_role_put;
-> +		}
->  		ret = tps6598x_connect(tps, status);
->  		if (ret)
->  			dev_err(&client->dev, "failed to register partner\n");
-> -- 
-> 2.35.1
+Doh, I hadn't seen this patch before ;-)
+Nevertheless, I do not have access to H8/300 hardware.
 
--- 
-heikki
+> 3. arch/sh j2 support was added in 2016 and doesn't see a lot of
+> changes, but I think
+>     Rich still cares about it and wants to add J32 support (with MMU)
+> in the future
+
+Yep, when the SH4 patents will have expired.
+I believe that's planned for 2016 (Islamic calendar? ;-)
+
+BTW, the unresponsiveness of the SH maintainers is also annoying.
+Patches are sent to the list (sometimes multiple people are solving
+the same recurring issue), but ignored.
+
+Anyway, I do regular boot tests on SH4.
+
+> 5. K210 was added in 2020. I assume you still want to keep it.
+
+FTR, I do regular boot tests on K210.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

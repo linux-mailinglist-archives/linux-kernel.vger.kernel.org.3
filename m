@@ -2,146 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE104F1DB5
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6D84F1BF2
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377979AbiDDVko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
+        id S1382070AbiDDVYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380667AbiDDUyX (ORCPT
+        with ESMTP id S1380674AbiDDU5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 16:54:23 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0516A2D1F3;
-        Mon,  4 Apr 2022 13:52:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1649105533;
-        bh=BRKu84tk/JvDo38djPwWov/dR2ILWXWhz5k0A0S7YxU=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=NjjsN5DTj0nPw4L1Ik74rVE35L1w1U32M/99gYi0opd0MsznEcZvKi/h+tZGBbUMH
-         KVOnrG6pd4xJp1tta5bw+0S+MeB80gYMrJatKQX9I9CNJNaZERA79GbpXHWtYmv633
-         lrItyuAK97GCdZnHvLw8dlrP3NXk+ayUkEtcRVA0=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost ([62.216.209.4]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MQ5vW-1nOBzB3Hbk-00M32k; Mon, 04
- Apr 2022 22:52:13 +0200
-Date:   Mon, 4 Apr 2022 22:52:12 +0200
-From:   Peter Seiderer <ps.report@gmx.net>
-To:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@toke.dk>
-Cc:     linux-wireless@vger.kernel.org, Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] ath9k: fix ath_get_rate_txpower() to respect the
- rate list end tag
-Message-ID: <20220404225212.2876091a@gmx.net>
-In-Reply-To: <87ilroemo4.fsf@toke.dk>
-References: <20220402153014.31332-1-ps.report@gmx.net>
-        <87ilroemo4.fsf@toke.dk>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-suse-linux-gnu)
+        Mon, 4 Apr 2022 16:57:23 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2073.outbound.protection.outlook.com [40.107.243.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9752630F6D;
+        Mon,  4 Apr 2022 13:55:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OyiHtIN51ZIr6u3JJIH4UopzES/YZegUXVhFWEceZ5pABcsguhIJxdZ/LwXGD05go4uilHVHAqzhdfzBi1pp4xLAbg3GVw8DxKD2QWnkMTDU516LQOS90Epqha8O/r+/9rivfgnzqL2hFilCN1KkT3f3LG/L0MHOywSHL0SBLgeNbkNrBFXygKwsEootmFU9HltntuiszeXmmGMvKP9TnVf5FX7qCYQuGT01Ad0lacIqTdnNKE01i8GcIRW95Pi4KWICfOpxluQOqfOfzKVolGVKHNOD3o+20a45YifW9aiezC/YAwXdmL218+Y2yNO+xrFaMZ1qo0b1X/b1Oo0bAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xE4Kx8Zxm1pfKjTwd69TUsC+c+JPyNXIkKaoVu7RgOE=;
+ b=V+xCtqCrqaA+3o3l4FtdBLDEd0fegNPUiwzwrh0LW51z0dz9qxIdB5XH4VrL3Y5a6hed8A7orPxft1+2dByjI1m0wFfWlAXwI808DjrG3kbOkHdj6X6pk/zBFStXWPAR8XjVHU9zaAmXsw5EIci6kcv/JfzBC0ti76C7m8fYmhrcfpE49LyBNbmYnNzS+w/i3St3ERFLzsHnS53dStCwV8Hx/LDbEPpcMMUkFLhJBnnU8TT6qelp8roD/Z6XoIUvTmMaVxHMfq1kYChvy0CCnbgOqXm1QS7CN48Zbf0TSFTdoS6V4UeOAUx4enkQXbMxZz2vL34mIYymcScYQcQ4Mw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xE4Kx8Zxm1pfKjTwd69TUsC+c+JPyNXIkKaoVu7RgOE=;
+ b=G/4CpGK4FGP7feNIRrR4SCijnrB+L3sPnZ5sa9g242MwmVbSRJWYBiK7Slcp2T/YYIHnBZT7zaMqOViZXDqI2nOTuur0sd2GAbZmpXAHqR5D+XyoyQ2E189u5KuAfQZ3MzspO0fyEYQwFbZo2Q0TVani2So32u7Eu2pYi4g+o9U=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB2869.namprd12.prod.outlook.com (2603:10b6:a03:132::30)
+ by DM6PR12MB4283.namprd12.prod.outlook.com (2603:10b6:5:211::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Mon, 4 Apr
+ 2022 20:55:23 +0000
+Received: from BYAPR12MB2869.namprd12.prod.outlook.com
+ ([fe80::482f:9ad2:91d9:ddf4]) by BYAPR12MB2869.namprd12.prod.outlook.com
+ ([fe80::482f:9ad2:91d9:ddf4%7]) with mapi id 15.20.5123.030; Mon, 4 Apr 2022
+ 20:55:23 +0000
+Message-ID: <54599d6c-204e-d7f6-21b6-15df7acad53d@amd.com>
+Date:   Mon, 4 Apr 2022 13:55:21 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 2/3] x86/mce: Define function to extract ErrorAddr from
+ MCA_ADDR
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     x86@kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+References: <20220225193342.215780-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20220225193342.215780-3-Smita.KoralahalliChannabasappa@amd.com>
+ <YkWrlTIK/ZxsQekX@zn.tnic> <YkmeJFXXbu3aLzzw@zn.tnic>
+ <Yknsbp+zMh8Uev8+@zn.tnic> <87mth2kkhc.ffs@tglx> <YkoHKTuGaFfsF6qb@zn.tnic>
+From:   Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+In-Reply-To: <YkoHKTuGaFfsF6qb@zn.tnic>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SJ0PR13CA0071.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c4::16) To BYAPR12MB2869.namprd12.prod.outlook.com
+ (2603:10b6:a03:132::30)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:NnPRZIjfNaVJZkTj7ApVieAk1MB2agUzzNV92mwZAI+hi5wjXJS
- jXCOhQXmMkBnmA8a6EDqUodUItITKqTePCSDfD/C0oTbzpg9SuZfWNaV41go8A9cJzyPxN1
- LKabCB9n+YuWnOECdwZ9jqua5cI3qDgSSIS+Uhg5wBofAem10ndrzZrVqZKyxx/VSauoE1k
- 40e/m6+fDRIIEMawHmSRg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:WwctLXs7RJo=:8ukKxlh0/t1eW2vnPQLVZE
- 8e1had8xvP0OL0tFnV5qXHRWSTxwk4O3YP7CBnvJ2moBYpvwNhDnnGyzreIDugHLbWFqsHvpE
- OLpDQj5wby7wkzPqr9iDRTNUY96lTcAMq6z8nHQNtvYuxUW6gXkV1lzlrnbMTu4xKqJTwBWSs
- 199cHzaBCCiJ63qvuI8SsnB0OivkeOznG1/9l9z6f/6OE/Y8PqhR4gon6NhRPnPNUUhJw03GV
- hnTpBzGfTWowaEqChXrRM8uiDrDUS8Qa53inyULcc7eiO08hb+YBdTkQ5WBY7+dLyCQUeZjEC
- tP/qXPaHABq7doy1v28EG6zjewSIV2ClND+mR8Jp8CkAK4exBfQUKsAnby4g9dS4jvIApFLB7
- COQH4Q6fGyg6ddpAiFkWvmK4kPwWsnbI5Io5ECOJ2e/shgwD6iCh6AhZCDS7gh+FV+cvZbBrB
- pm3A//PzqnNbWB2TatArebUxVmlGLiDjiVu4yfPkajQjbV15A2yUuYrj6U8gB1dEdBvJn24CN
- Cp73w6TtwH1oWtnnL07NRO9eS5cfY4JhJi3nzNJDmiLLs6wUoa90xCHtuiKVO16RVwGxj/M9G
- g3bd1+uJouwcx09w0aSKOu564BWHVQhtWmCdCiOa0Yxs0gSRiFRRcC2BXs3Z2FtCRz8FeWLTO
- CyofkFDZCqWeGy5jg193fHMcEqtP9//J0UvsgEdMd5zBlT3QhmD6cgLN6w4xiDEvJ23k/idtq
- Xg/IHhbkqQHRxulde8QpwRMiFncur3yRMIYUu3mdDZhZAZqYGCFaYf2t6URE3StrEVb2Rmx1L
- uLAqG5F3r0/RHlYuoFplFl605bwh8t9csic35YcAxTdm/BnX+m7s46+dlRGR3TzCE/1VSo4+a
- SSXkEJi3cTBCQy7pXB/GFld/21EWJ/FDYO8rXLTtEfqPr37rCbg/StC50cJvG5QiAwvPPJOCm
- 82GaXuSOFvlIwg0AwETSW4sUPLaEQbfVLRwZV3h9k7oqaqshgfS7b+RuPh++ac+OuD8v/GkFl
- ag9nAiv0sf3lpqIOlQnpG5Otc+UONeePTMNk8zihAVBuuVlArnJbgE/y2qDV8/tN+7YY/WcxB
- 42bLxPrumSJz5U=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 940635a2-e618-499e-8998-08da167d7036
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4283:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB4283F74C149A82A2305EA9C290E59@DM6PR12MB4283.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: S9h9ELtjAkMmvrvIdO1QWPznPb6xVFq1+LMmHIbrTqmQT5+lm+unN0iPif40MPDErpERKBUjYABpMG20+R/uXVvb5G+089xRmS3ddON6tTNnJIPEybmsyMdZWEkyDh14T8toXi849P8BIOc0JAeMh/Vp6Y0zVlrD+3ZqFT2V1tLggA5LSF8FEeI/o4shS1K4lsiDZgyU6BECCLObG7UMGSburEl0xqnaUPBrJgNYythRbLJMULz95YieIF3FXAO6Sv+y0bmhOabhHWoYLHd4Rbx2xXRx3c/JepQY/s1OmG0aNEzWEHkuY3e3rlJqHRS/cIGunD3jSwPMsC2J+2Bo7AbsWXD30one+2QSdHaKZmNBFj8Z966kLPbMg5U+79+YCvVWvArqTHVnHsiGKGJUAIfK58LhQkwATzi6RHH2ZzD1gHwDsNkt5j/FkJsevGQP3HFwo/44dTylTzlpTS9hvUSkGKQXc4gpJLkM4DEPqF1zhDq4wZR8oVqvOX1Ua2C/sGtkzZIp6yTJEvc92nigjcVUQt/EArBjE7c/ryw5etiJbL8zOgejvG8PiGXV9/ppwLiLqpVX/sf7qnQhWwmABpl1Osd8EqdRv8PkZVW7R2wo6cJrpA+vp+jMCJpUbd21qXj6GKuVdAZVCMs88ro922mf1zK8kAFQ/XayFhAtjkTgPiCfFfNgbscSO5x/oBT73ohcX+zIlEIp2twiwnwLXe6LEArFLAttivt4L37ekKA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB2869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6506007)(2906002)(110136005)(66556008)(66476007)(66946007)(31686004)(36756003)(8676002)(4326008)(316002)(6512007)(53546011)(5660300002)(31696002)(54906003)(7416002)(2616005)(38100700002)(4744005)(6486002)(186003)(508600001)(26005)(8936002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RzVsVjQ5eVRzRWtrT1p3TklOUDducUhBWnlqdklqc2F3NGlxODZBTVZhR3Vn?=
+ =?utf-8?B?bWJOMXhUVVR3eCtMOEZ0M0Z6dWVuTWJpN1hmOUx0dHVhRzBZWnNXZTVxTVQv?=
+ =?utf-8?B?MkF3bFp1SkRQVXRKZlpCaDhrblNkdWwrZzlYbit3ZEJ5a2JDTUwzcUhtbjUr?=
+ =?utf-8?B?TE1jL1JuYXd0OENVZlN6czZwaS9xcVR0OWlRSWpKUWtHQTVpYVZET082dXRF?=
+ =?utf-8?B?RDllbVRqTTdWSkk4ZkZjOVJjbmpnaVZ6NWsvQ1dtRnBTclJ4WUdSUTJhYmJm?=
+ =?utf-8?B?bXVveXJ4aGplVndaU1kvS1dwV2JTU2hVeTQ0YTk2MTE0d0JrbU0rR0s1Y3Nh?=
+ =?utf-8?B?K3pvQUVYUFZYRDkyellVV0M2b1ZVK2RjbG94a1NVclZwZWdNWlN0QUwwSCtV?=
+ =?utf-8?B?OE1lOE4vejQrMHh3NlBMUWNZYnNmZXZiN3dpT0FiMGFuTmlFNHY0VkQ0Z2JE?=
+ =?utf-8?B?SE1tdk1FYnJWQ1VuU09talNKMGdGeHR6NXh1ZERHdW9lQUQ1S3Z4TlR5ekdD?=
+ =?utf-8?B?M2tUMGY2amxRUk13SXNWZ1hSTDhnOVdHMDc5VHhCKytpZGdWUFIyazUyWFZH?=
+ =?utf-8?B?NDF6b0tLa1dieVg5djJaTWh4WkMrVHI0NnA2cVJJMjdPbTJzSDhuczZScFZ6?=
+ =?utf-8?B?bXBFUTBQbW9sMHRQNWNKVyt3SGtrTSt1cVRIUVVib0g1ZUxPRDUwTXR1WjFx?=
+ =?utf-8?B?R1VibmpvSnV1TFA4UVJOSGJpM1NmVWV5ajNkNmNaTmxnNHpKSzRhLzFHNW5F?=
+ =?utf-8?B?NWt6NGxnMTcwcy84VjgvUWFxV0hULzRIZUZGK005OVg4cFdDd3k4MVI4MlFm?=
+ =?utf-8?B?bzlrSFU2MmZNcnVkNVNCWm1lN05kd2p3VXNWcE5tWHNuVElmczgzczRGb0pq?=
+ =?utf-8?B?Zmxkd1ltK1NlK2UwZVluVXl4U2sxREdMRUUxeE03SVNWM1NkcVgzVy9YbzlP?=
+ =?utf-8?B?SEFhcWFsWml2OEVFTS8wTTA3ZHIzNW1FK0pnMUhKWWlTMDl1UHBHOHFaY1RU?=
+ =?utf-8?B?dVNXQitFSXJhamVyaTlBc1Fya3FlMW0vNEtMUC9MTmN4SWI5YlBESEs2Vmdm?=
+ =?utf-8?B?MkVqZ1JXTGZlU1J2cTJYeTlSbG9YTENaYjk5L0lwamo0WmM4ckNwRW5ObkNr?=
+ =?utf-8?B?V1lqWnB0N0Y2ZXVMd2ZoTVMwWk5LcmkvU2ExUGpldVN6Z1B5bGFJa094MW9t?=
+ =?utf-8?B?V2hRZmU4enlJTzdUbmJjaklPTC9YcDAvQnVzQXNMeG5veWozM0ZCRDMzbmFj?=
+ =?utf-8?B?aUw2aFVDUnZsZEJUdE1SWm5IYVc3bERVVWtMZGNnTUZIQis2dHp1Yml4NVdH?=
+ =?utf-8?B?NFora0pRYVRmemhNYWg5dTJiSm02UjRzWlIzanhmdi9hMmc0dkJ3VVRVelpo?=
+ =?utf-8?B?alY5dmNQUFNRUU5uMHJVcG1QNHhLWWVUeXJ6ZGg3M3U5OVhsR3lFT0VxOUho?=
+ =?utf-8?B?bCtvdFh2aEI1ZXM3elJqVTdCc2dvZUdRaG5WRmVMVkRUeXFvWHNybTYydm1L?=
+ =?utf-8?B?SnF6NzRWanhvNHArOXJIMXpDR3QweGdHMU1NRXpXTDQ0SUJYNUtWQ0xZNEha?=
+ =?utf-8?B?NU9hdW9hUk9ETklTazloNFdjSkZEbmZ6LzJEcjNBMDJ4U3B5RkdPRkxpS2Q5?=
+ =?utf-8?B?Q3IzRFNpT3lCQU50Rm9QZWVwOFZMZ2ZKTFE5NUU2V2txaUVJbGJRNzNkQnBp?=
+ =?utf-8?B?ZDkrZ1NLYzF5ZGw1WittUzdUVGhpVHZRT3dwaHBtNU5MVU1wdkZRQ1lia01C?=
+ =?utf-8?B?cUJhb3Z1R0M5TGdBay9hNEx4anVwTmxCalMwWWJmd0g1bVZKTTJYT1kxemVh?=
+ =?utf-8?B?cjdUS2FmOURUSWROS3ZsRGRNS3BJMHBzWlN0RWNRNlRJOUpsYzFpdDIxbWdt?=
+ =?utf-8?B?Z2FVQWZvVkNMK1I0emoyVWdWV04xVzRyVWRRQy9sVzRFb3ptS2xacDBFa2U0?=
+ =?utf-8?B?QnB2SFhXSjVDNUpyelNEQjV4VmpHdmtFZ1VPSjg4MURMSGh6WFdDOW5WWW1y?=
+ =?utf-8?B?ZEIrTHNmaGNNZ1JxbEx2VGxUZnpMY204ZUpTb2RzUkovUVlmZjF5TGdXWXl5?=
+ =?utf-8?B?dy92S2hWTkRuL0Npby9XZGd0QUJYYlgrTWxSL1ZMMGdNY256WEphRTZmTnF0?=
+ =?utf-8?B?Y243aDV1bU5hWi9RQnI3WlJBY3EyL0x2SWRna0hKNHFOVEx2OGYvanhsdkVp?=
+ =?utf-8?B?NkV4MFFib21yaGpWejI2Zko1dUlWSnBTcFRkbU9zazU3ZEdJYzV4QklHcVEr?=
+ =?utf-8?B?amxtUThmVVNVQ0tZdzRvQUtJTjhlVk55eWExaFgyL2JLZkhNMXVLMlRPU09F?=
+ =?utf-8?B?RnlLb0ROcS9xVTFPRnQ2K1FudU93YVZBaFJDcWYzU2tiUkRDdTgzUT09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 940635a2-e618-499e-8998-08da167d7036
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB2869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2022 20:55:23.8191
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Di7Grt9knniVjrsVsh4PXFnnuKo/81TyGlc5BRxxmtIsthFN/iiiZrfwg6dE63HiZZIFaQfncZ/Ej4Ui9EotCQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4283
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Toke,
+On 4/3/2022 1:44 PM, Borislav Petkov wrote:
+> On Sun, Apr 03, 2022 at 09:58:07PM +0200, Thomas Gleixner wrote:
+>> How is __always_inline supposed to work across compilation units w/o
+>> LTO? The callsite is in core.c ...
+> Hmm, right.
+>
+> So even with patch 3 adding more changes to that function I think it is
+> still simple enough so that we can move it up into the mce/internal.h
+> header so that the inlining can work.
+Ok will incorporate all changes.
 
-On Mon, 04 Apr 2022 20:19:39 +0200, Toke H=C3=B8iland-J=C3=B8rgensen <toke@=
-toke.dk> wrote:
-
-> Peter Seiderer <ps.report@gmx.net> writes:
->=20
-> > Stop reading (and copying) from ieee80211_tx_rate to ath_tx_info.rates
-> > after list end tag (count =3D=3D 0, idx < 0), prevents copying of garba=
-ge
-> > to card registers. =20
->=20
-> In the normal case I don't think this patch does anything, since any
-> invalid rate entries will already be skipped (just one at a time instead
-> of all at once). So this comment is a bit misleading.
-
-Save some (minimal) compute time? Found it something misleading while
-debugging to see random values written out to the card and found this
-comment in net/mac80211/rate.c:
-
- 648                 /*
- 649                  * make sure there's no valid rate following
- 650                  * an invalid one, just in case drivers don't
- 651                  * take the API seriously to stop at -1.
- 652                  */
-
-and multiple places doing the same check (count =3D=3D 0, idx < 0) for vali=
-dation
-e.g.:
-
- 723                 if (i < ARRAY_SIZE(info->control.rates) &&
- 724                     info->control.rates[i].idx >=3D 0 &&
- 725                     info->control.rates[i].count) {
-
-or=20
-
- 742                 if (rates[i].idx < 0 || !rates[i].count)
- 743                         break;
-
->=20
-> Also, Minstrel could in principle produce a rate sequence where the
-> indexes are all positive, but there's one in the middle with a count of
-> 0, couldn't it? With this patch, the last entries of such a sequence
-> would now be skipped...
-
-According to net/mac80211/rc80211_minstrel_ht.c:
-
-1128 static bool
-1129 minstrel_ht_txstat_valid(struct minstrel_priv *mp, struct minstrel_ht_=
-sta *     mi,
-1130                          struct ieee80211_tx_rate *rate)
-1131 {
-1132         int i;
-1133=20
-1134         if (rate->idx < 0)
-1135                 return false;
-1136=20
-1137         if (!rate->count)
-1138                 return false;
-1139=20
-
-minstrel although evaluates a rate count of zero as invalid...
-
-Regards,
-Peter
-
->=20
-> -Toke
-
+I didn't quite understand what needs to be moved to mce/internal.h. Was that
+addressed to me?  The function call smca_extract_err_addr() is in mce/core.c
+and the definition in mce.h
+>
+> Thx.
+>

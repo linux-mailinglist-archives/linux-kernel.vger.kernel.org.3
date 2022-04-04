@@ -2,83 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245B24F1BF7
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C7C4F1DB7
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382152AbiDDVZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
+        id S1387024AbiDDVkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380049AbiDDSqP (ORCPT
+        with ESMTP id S1380133AbiDDS7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 14:46:15 -0400
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413411C117;
-        Mon,  4 Apr 2022 11:44:18 -0700 (PDT)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-df02f7e2c9so11733934fac.10;
-        Mon, 04 Apr 2022 11:44:18 -0700 (PDT)
+        Mon, 4 Apr 2022 14:59:05 -0400
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F09C2C102;
+        Mon,  4 Apr 2022 11:57:08 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-2eb3db5b172so64775667b3.6;
+        Mon, 04 Apr 2022 11:57:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+DVZa9rgC7XCqVmwQpif8MjcfgqohlHJqzZVbT4NdPA=;
-        b=6JF+JH6wd0/7ywTfr5v3ryTISkOXdlpaCcfqq+v+gSqf6hBI+8vk8ngOOlYaDhAbb4
-         WAy3YTXsYLkb1vr+wbPrDfOsGJfX3f+9W9bHS9uLBVL5MZY00DQ9MZCrEU7Ls0vJ4m0z
-         72hpsvSSTG+VINgD/AfqXSudkPVbKrNNyb5Gmz8/SnMgmR7yyL6xzU3T8eZC1oqqavmB
-         ZPWoP/q3+pS1OtwM0s71ApPn5GFqc2Mbytkvjze2+3hPAhLDiGmSwm3ezOUseinYdxRR
-         hDE7GZh5u59AgOui+SX1NM9BhXol1Wx/eP0/kHfd6EZJg8sI3hyUfmNV7Lw6uqrXD+DP
-         1U2g==
-X-Gm-Message-State: AOAM530hZi/cwbYGnskuyb3YyqLikeh4mmXx3JWiXYwGQOiUrpvfSLnd
-        3xNLPVVPw3NXJbBciNqLfA==
-X-Google-Smtp-Source: ABdhPJxQfrcUZKKhBzVlnqfwkA2XRgYhsqJUmARYpgm43Nh3Hvc35k/tV+fKp7H5hXzW0gHNQ64G6g==
-X-Received: by 2002:a05:6870:c353:b0:de:d908:3e6d with SMTP id e19-20020a056870c35300b000ded9083e6dmr323176oak.190.1649097857541;
-        Mon, 04 Apr 2022 11:44:17 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t3-20020a05680800c300b002f935a7daa9sm4505802oic.19.2022.04.04.11.44.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 11:44:17 -0700 (PDT)
-Received: (nullmailer pid 1703057 invoked by uid 1000);
-        Mon, 04 Apr 2022 18:44:16 -0000
-Date:   Mon, 4 Apr 2022 13:44:16 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: PCI: uniphier: Convert
- uniphier-pcie.txt to json-schema
-Message-ID: <Yks8gNN0wp7xJDST@robh.at.kernel.org>
-References: <1648617814-9217-1-git-send-email-hayashi.kunihiko@socionext.com>
- <1648617814-9217-2-git-send-email-hayashi.kunihiko@socionext.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=myPVoCqtsI8E3yDzZq2k0LtGHfhc8/v0BCP25SPN5jA=;
+        b=XW0pudLE5S2mdxsLuQTQkMiyisnc41yFjaiOin5vouIvDeAkmE+sxM/qIm+NkNzWxX
+         5ItOOhahtGXd4AqNewIZBMd75ZAdkIQBBy9OjUVkgoBecIv0tAJ4+svu9G8eKyE/FwPR
+         KWDRe1grbORoPDGxDje7Bnw7ZrrI1yAgzvqRFFesTzUMisKnWCEf7G146QtTCo9PVwfq
+         lg1h4uJ5WSFlotdXUQL6uDl/SpAMPvyO1jEdhglJcQ7xDo7pyP8LF8GdgoPDWxJ1KtUK
+         EabcANBEkblQnUSsnHWOdiEfTIUcVA1N1wN5lgECe9L8fwuL5XHFMiFIjxnUbAnDO1LC
+         zCAQ==
+X-Gm-Message-State: AOAM532/rsRWx7nxoUuWlFmVZcLQTM27o40Mh0p/2tT0SI6O4O+wq1EW
+        7qrV4m3elf1NqqRJQfqWHwNmeUfuiI8nffLxi7w+vQvlOWU=
+X-Google-Smtp-Source: ABdhPJxLubOyIWPyzSiezqjgyNhGaeZMpXGj7I20PJkJS25VOxo/KAE7xiWFmyDpQxZxhz+RUsNJ1xt77HyGjplGRW0=
+X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
+ b145-20020a811b97000000b002db640f49d8mr1309564ywb.326.1649098627877; Mon, 04
+ Apr 2022 11:57:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1648617814-9217-2-git-send-email-hayashi.kunihiko@socionext.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220403062322.3168-1-akihiko.odaki@gmail.com>
+ <CAJZ5v0gaRr-r8VFCEGSP1nTX0CwrOi35DXZB5Z8A9tiLufNxPg@mail.gmail.com> <4d6307d0-cd67-dfb2-6d6d-2f37bf4a271b@gmail.com>
+In-Reply-To: <4d6307d0-cd67-dfb2-6d6d-2f37bf4a271b@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 4 Apr 2022 20:56:56 +0200
+Message-ID: <CAJZ5v0gu4VsC7P6276p=S3ZyOg-BWP_dG6rzou2GDYA4TTMsSw@mail.gmail.com>
+Subject: Re: [PATCH] Revert "ACPI: processor: idle: Only flush cache on
+ entering C3"
+To:     Akihiko Odaki <akihiko.odaki@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022 14:23:33 +0900, Kunihiko Hayashi wrote:
-> Convert the file into a JSON description at the yaml format.
-> 
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> ---
->  .../bindings/pci/socionext,uniphier-pcie.yaml | 96 +++++++++++++++++++
->  .../devicetree/bindings/pci/uniphier-pcie.txt | 82 ----------------
->  MAINTAINERS                                   |  2 +-
->  3 files changed, 97 insertions(+), 83 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/pci/socionext,uniphier-pcie.yaml
->  delete mode 100644 Documentation/devicetree/bindings/pci/uniphier-pcie.txt
-> 
+On Mon, Apr 4, 2022 at 8:25 PM Akihiko Odaki <akihiko.odaki@gmail.com> wrote:
+>
+> On 2022/04/05 3:13, Rafael J. Wysocki wrote:
+> > On Sun, Apr 3, 2022 at 8:25 AM Akihiko Odaki <akihiko.odaki@gmail.com> wrote:
+> >>
+> >> This reverts commit 87ebbb8c612b1214f227ebb8f25442c6d163e802.
+> >>
+> >> ACPI processor power states can be transitioned in two distinct
+> >> situations: 1. when CPU goes idle and 2. before CPU goes offline
+> >> ("playing dead") to suspend or hibernate. Case 1 is handled by
+> >> acpi_idle_enter or acpi_idle_enter_s2idle. Case 2 is handled by
+> >> acpi_idle_play_dead.
+> >>
+> >> It is necessary to flush CPU caches in case 2 even if it is not
+> >> required to transit ACPI processor power states as CPU will go
+> >> offline soon. However, the reverted commit incorrectly removed CPU
+> >> cache flushing in such a condition.
+> >
+> > I think what you mean is that the CPU cache must always be flushed in
+> > acpi_idle_play_dead(), regardless of the target C-state that is going
+> > to be requested, because this is likely to be part of a CPU offline
+> > procedure or preparation for entering a system-wide sleep state and
+> > the stale cache contents may lead to problems going forward, for
+> > example when the CPU is taken back online.
+> >
+> > If so, I will put the above information into the patch changelog.
+>
+> I guess it is causing problems because the dirty caches will not get
+> written back and the RAM becomes stale if they are not flushed. From my
+> understanding, the CPU should have an empty cache and read back contents
+> from RAM when it is taken back online.
 
-Applied, thanks!
+OK, please see if the changelog I've added to the patch is looking good:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=bleeding-edge&id=dfbba2518aac4204203b0697a894d3b2f80134d3

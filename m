@@ -2,128 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9637D4F1770
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 124424F1771
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378198AbiDDOql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 10:46:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
+        id S1378190AbiDDOqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 10:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378938AbiDDOoE (ORCPT
+        with ESMTP id S1378920AbiDDOoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 10:44:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BAAB7C3
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 07:38:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AA9D614E2
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 14:38:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD67FC34114
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 14:38:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649083136;
-        bh=XlJz6nqbt7DjoTGH/YZm/uYhk4Fzk2jZzYYIbhnu7tU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=b/BpcpuIQyA66RP3b3+fwhSBV2aZeMb8MbmB6wcieItmRbE9hFMpupA9LOvdbW7m9
-         RIuhyId/Q9JhAUUv8LhgC2FbOHOGW88Z41HLTTVN1WMwt5jBXJoxr966I/nlz0xqLQ
-         8YQlmC5TWXqAF8lQ10TQgAKSRKk6QKlMqBeJzgKgp8+3LSjOu8mAu5igq/2m2FqhV3
-         IXeJmBdjYxltv9fR2qKvJflcKo8LwH+y9pKYPVI4zhzmvzV7/M4ZdIfoO3+KJREmT2
-         an2l8fuDuXoYWwqqdHtQ5Irg/MvapQSRIHR1QiIsWWx2GOh7tAtEKkdgIDKCo6AjaA
-         RU6nX7OOL2eEQ==
-Received: by mail-yb1-f180.google.com with SMTP id f38so17986474ybi.3
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 07:38:56 -0700 (PDT)
-X-Gm-Message-State: AOAM531xl8TXbtKBybejE57PEuIqkXdP7jFDgOh43ckvOqjSIRTyyxky
-        UzPCcrz+Lio7C+QPwqIrqyxxvBE1oGSwbmUKPU4=
-X-Google-Smtp-Source: ABdhPJwyJxCjXq4QAZtDUpNHCQTjKXqZ+R3EJFnuPsF+yohUVFZbV8wPHSDkOxFq119l9+bjlK95RGdK+/EgFrJ+jWk=
-X-Received: by 2002:a05:6902:572:b0:63d:a52c:d144 with SMTP id
- a18-20020a056902057200b0063da52cd144mr68991ybt.403.1649083135924; Mon, 04 Apr
- 2022 07:38:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220404134859.3278599-1-linux@roeck-us.net>
-In-Reply-To: <20220404134859.3278599-1-linux@roeck-us.net>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Mon, 4 Apr 2022 17:38:29 +0300
-X-Gmail-Original-Message-ID: <CAFCwf10Nbpr1H1-qTx4kSyC6YFdeAb=xOfq6uKzejJKLuyKw5A@mail.gmail.com>
-Message-ID: <CAFCwf10Nbpr1H1-qTx4kSyC6YFdeAb=xOfq6uKzejJKLuyKw5A@mail.gmail.com>
-Subject: Re: [PATCH v2] habanalabs: Fix test build failures
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        Ohad Sharabi <osharabi@habana.ai>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 4 Apr 2022 10:44:02 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100CA6448;
+        Mon,  4 Apr 2022 07:38:49 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id n6-20020a17090a670600b001caa71a9c4aso2097379pjj.1;
+        Mon, 04 Apr 2022 07:38:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id;
+        bh=/OOC2V7xZiaknaBKj4i3q7VnOh6KcuMP7wXUOuaSHIk=;
+        b=XbFFVR/b5q9T/ccQwMNV7oS8jmz/8ydhO2wbuZ4dnTMtjIzB6jdnZMtjVA+gVPOlNi
+         Fh3L/YtSRG0H+pWEhoLWfqjheiDJivSt2rc02u/dwUeHsKoBGABxJRp9Jbb48MYAIpim
+         O64PfE/ok5JMyRZ3CQZiEICQ5VUUxCnwUPfrsPhqA1dALFfBxFleTbQd5I0odX5BNO59
+         lKbzkBuY3TkjHZXaiTT997YZJcB8tyMTKt+oGo6mJ+/QS2cIoRy8bam9Qw/r6vdNGJhI
+         sSITUz76YsxGcaKHQZJ+gQ3pAf+eeVfQMh7bey9qc6JpwoJpJoEYlSE3bBgYBWIehayO
+         Q7kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:subject:date:message-id;
+        bh=/OOC2V7xZiaknaBKj4i3q7VnOh6KcuMP7wXUOuaSHIk=;
+        b=BoydGO77atrjfF2zcrlWfOxz4jHY7/z1y0+TejU4z15VG817H8yF+f9YNTmaSDazEl
+         j0RCnMfoZ6EVrAUqtcIwT/CgQwdrStcWLHqH2wRLM4Hs67i2iHTHwnci3Icon0+nxyfa
+         kSVLJJAS5d1eEbHWlJsWNl+UOl/Rue7K7hN8qnKUZkBH53Q02VgqNNyYfuUSPzU5MfaR
+         PVYG8GvoR/Pppfjz7X4uN28SLgVgj7zbgaAAmh1eBWAsOHi0csIUuxEZXVI4/tFsEU9D
+         7wlgmB8asKAJTW5h7yZ/2vbVTRUkyyYGhcNu7fLV5T3N0UAt3zEH7vX0MbA5HjUWSt8/
+         qD9g==
+X-Gm-Message-State: AOAM53364hQU/fJaYqKwG6wXB177NjAOCu446Wf+E7TfOFXZguvkOUhe
+        dAgbMnNR8itbPBUU4uq2UyM=
+X-Google-Smtp-Source: ABdhPJyhtOBPPj1peqOQfSYtTssZudXWivrHTu/PMrPp1u6em61raME54CbKsHs/3PFKQmSppHnJWA==
+X-Received: by 2002:a17:90b:4d85:b0:1c7:3933:d810 with SMTP id oj5-20020a17090b4d8500b001c73933d810mr27001609pjb.129.1649083128678;
+        Mon, 04 Apr 2022 07:38:48 -0700 (PDT)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id a11-20020a056a000c8b00b004fade889fb3sm13135860pfv.18.2022.04.04.07.38.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 07:38:48 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Zev Weiss <zev@bewilderbeest.net>,
+        Johan Hovold <johan@kernel.org>,
+        Yang Guang <yang.guang5@zte.com.cn>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] serial: 8250_aspeed_vuart: Fix potential NULL dereference in aspeed_vuart_probe
+Date:   Mon,  4 Apr 2022 14:38:40 +0000
+Message-Id: <20220404143842.16960-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 4, 2022 at 4:49 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> allmodconfig builds on 32-bit architectures fail with the following error.
->
-> drivers/misc/habanalabs/common/memory.c: In function 'alloc_device_memory':
-> drivers/misc/habanalabs/common/memory.c:153:49: error:
->         cast from pointer to integer of different size
->
-> Fix the typecast. While at it, drop other unnecessary typecasts associated
-> with the same commit.
->
-> Fixes: e8458e20e0a3c ("habanalabs: make sure device mem alloc is page aligned")
-> Cc: Ohad Sharabi <osharabi@habana.ai>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
-> v2: Drop unnecessary (u64) typecasts
->
->  drivers/misc/habanalabs/common/memory.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
-> index e008d82e4ba3..a13506dd8119 100644
-> --- a/drivers/misc/habanalabs/common/memory.c
-> +++ b/drivers/misc/habanalabs/common/memory.c
-> @@ -111,10 +111,10 @@ static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
->
->         if (contiguous) {
->                 if (is_power_of_2(page_size))
-> -                       paddr = (u64) (uintptr_t) gen_pool_dma_alloc_align(vm->dram_pg_pool,
-> -                                                               total_size, NULL, page_size);
-> +                       paddr = (uintptr_t) gen_pool_dma_alloc_align(vm->dram_pg_pool,
-> +                                                                    total_size, NULL, page_size);
->                 else
-> -                       paddr = (u64) (uintptr_t) gen_pool_alloc(vm->dram_pg_pool, total_size);
-> +                       paddr = gen_pool_alloc(vm->dram_pg_pool, total_size);
->                 if (!paddr) {
->                         dev_err(hdev->dev,
->                                 "failed to allocate %llu contiguous pages with total size of %llu\n",
-> @@ -150,12 +150,12 @@ static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
->                 for (i = 0 ; i < num_pgs ; i++) {
->                         if (is_power_of_2(page_size))
->                                 phys_pg_pack->pages[i] =
-> -                                               (u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
-> -                                                                               page_size, NULL,
-> -                                                                               page_size);
-> +                                       (uintptr_t)gen_pool_dma_alloc_align(vm->dram_pg_pool,
-> +                                                                           page_size, NULL,
-> +                                                                           page_size);
->                         else
-> -                               phys_pg_pack->pages[i] = (u64) gen_pool_alloc(vm->dram_pg_pool,
-> -                                                                               page_size);
-> +                               phys_pg_pack->pages[i] = gen_pool_alloc(vm->dram_pg_pool,
-> +                                                                       page_size);
->                         if (!phys_pg_pack->pages[i]) {
->                                 dev_err(hdev->dev,
->                                         "Failed to allocate device memory (out of memory)\n");
-> --
-> 2.35.1
->
+platform_get_resource() may fail and return NULL, so we should
+better check it's return value to avoid a NULL pointer dereference.
 
-Hi Guenter,
-Thanks for the patch, but Greg already merged a patch that was sent to him.
-Oded
+Fixes: 54da3e381c2b ("serial: 8250_aspeed_vuart: use UPF_IOREMAP to set up register mapping")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/tty/serial/8250/8250_aspeed_vuart.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/tty/serial/8250/8250_aspeed_vuart.c b/drivers/tty/serial/8250/8250_aspeed_vuart.c
+index 93fe10c680fb..9d2a7856784f 100644
+--- a/drivers/tty/serial/8250/8250_aspeed_vuart.c
++++ b/drivers/tty/serial/8250/8250_aspeed_vuart.c
+@@ -429,6 +429,8 @@ static int aspeed_vuart_probe(struct platform_device *pdev)
+ 	timer_setup(&vuart->unthrottle_timer, aspeed_vuart_unthrottle_exp, 0);
+ 
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!res)
++		return -EINVAL;
+ 
+ 	memset(&port, 0, sizeof(port));
+ 	port.port.private_data = vuart;
+-- 
+2.17.1
+

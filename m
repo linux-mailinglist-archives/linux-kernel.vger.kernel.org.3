@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8547D4F1BED
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 083894F1C48
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381991AbiDDVYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
+        id S1351900AbiDDV0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379277AbiDDQv5 (ORCPT
+        with ESMTP id S1379266AbiDDQvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 12:51:57 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C657A340C8;
-        Mon,  4 Apr 2022 09:49:59 -0700 (PDT)
+        Mon, 4 Apr 2022 12:51:51 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0DE3135B;
+        Mon,  4 Apr 2022 09:49:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649090999; x=1680626999;
+  t=1649090994; x=1680626994;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=7X1aCi5DDK6Esmu+a7vuR1EYuuv8NMxxyboZYaop/vA=;
-  b=Qt1hctxOKJ3/rY6+R/9HowpYFdZ5XRvaJaULBftNQMrs/uGSVV+E2lZt
-   H7UY3U2Nu32HemQtKkidAYWgcsR7FOw+uzNdAygGl1j5AXQ+DwLuo8diy
-   wN3W5XH87QjADu5XnciEC1g0EOFwqVUyEMnFl/wfTEWuEnjBsArw2/NM9
-   EYBjMYcnBkELWmdfK2SYb8dtzwc40nQ5YCLlgDaPNWjqXqfsvEqifEFNj
-   cKouE/BOtaQfmZWyra6SEwl9zQJqW/ux53coOht0ZOPmUVdErktu4BZiu
-   5Ym5y1GAXK0/hVLoCcq5oq/CTU9Y/MV/25Kqz0Inl/AX+ykPDNkx8h4FD
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="323734057"
+  bh=m4/HuKY7IlIZ1WPP9o98DA/8FnlmNMaQ5SjeGB/v9kw=;
+  b=Uf/YH24IJr0PAevLGgz5daig1Tj1sz9kOOZE8evuLzVuDnikPPsejIMM
+   +xVQhEXIYhcabKMyiH73y1ozu5a4FK/Z4Rkcyo1FB/pZqbO4ixJI3IElQ
+   fLD1hm8PLkuEB6gj8MGroS8Z5GRAUgOrJgfUIUGyBkEzDh6Tc/xDVSVFe
+   GdnwWrIu8Vzt5PahgDiHXjn69fCJi36p5PyDBJu9+Sw11l42rtADB5IPN
+   7keRW69PK74CSzIgWUSSh5mS2UlGS9FCiYf28dyPE2msR0wpRojeLr6x5
+   mF3vX25TZChLlAB3h+S1lkiZbhQV3wRB/mYmxFwC/91jO9VqsPtIaTaoi
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="259390789"
 X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="323734057"
+   d="scan'208";a="259390789"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 09:49:51 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 09:49:51 -0700
 X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="523105218"
+   d="scan'208";a="523105220"
 Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
   by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 09:49:50 -0700
 From:   Reinette Chatre <reinette.chatre@intel.com>
@@ -45,16 +45,16 @@ Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
         cedric.xing@intel.com, haitao.huang@intel.com,
         mark.shanahan@intel.com, hpa@zytor.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V3 23/30] selftests/sgx: Test two different SGX2 EAUG flows
-Date:   Mon,  4 Apr 2022 09:49:31 -0700
-Message-Id: <88e32e88efc118dc699a6385fc06ceb0cc768633.1648847675.git.reinette.chatre@intel.com>
+Subject: [PATCH V3 24/30] selftests/sgx: Introduce dynamic entry point
+Date:   Mon,  4 Apr 2022 09:49:32 -0700
+Message-Id: <a3fe0be22afdde289966b87861ff1c141f9ef512.1648847675.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1648847675.git.reinette.chatre@intel.com>
 References: <cover.1648847675.git.reinette.chatre@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,307 +63,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enclave pages can be added to an initialized enclave when an address
-belonging to the enclave but without a backing page is accessed from
-within the enclave.
+The test enclave (test_encl.elf) is built with two initialized
+Thread Control Structures (TCS) included in the binary. Both TCS are
+initialized with the same entry point, encl_entry, that correctly
+computes the absolute address of the stack based on the stack of each
+TCS that is also built into the binary.
 
-Accessing memory without a backing enclave page from within an enclave
-can be in different ways:
-1) Pre-emptively run ENCLU[EACCEPT]. Since the addition of a page
-   always needs to be accepted by the enclave via ENCLU[EACCEPT] this
-   flow is efficient since the first execution of ENCLU[EACCEPT]
-   triggers the addition of the page and when execution returns to the
-   same instruction the second execution would be successful as an
-   acceptance of the page.
+A new TCS can be added dynamically to the enclave and requires to be
+initialized with an entry point used to enter the enclave. Since the
+existing entry point, encl_entry, assumes that the TCS and its stack
+exists at particular offsets within the binary it is not able to handle
+a dynamically added TCS and its stack.
 
-2) A direct read or write. The flow where a direct read or write
-   triggers the page addition execution cannot resume from the
-   instruction (read/write) that triggered the fault but instead
-   the enclave needs to be entered at a different entry point to
-   run needed ENCLU[EACCEPT] before execution can return to the
-   original entry point and the read/write instruction that faulted.
-
-Add tests for both flows.
+Introduce a new entry point, encl_dyn_entry, that initializes the
+absolute address of that thread's stack to the address immediately
+preceding the TCS itself. It is now possible to dynamically add a
+contiguous memory region to the enclave with the new stack preceding
+the new TCS. With the new TCS initialized with encl_dyn_entry as entry
+point the absolute address of the stack is computed correctly on entry.
 
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
-Changes since v2:
-- Add inline comment to the mmap() call used in both EAUG tests
-  to explain why the mmap() is expected to succeed. (Jarkko)
+No changes since V2
 
-Changes since v1:
-- Replace __cpuid() definition and usage with __cpuid_count(). (Reinette)
-- Fix accuracy of comments.
+No changes since V1
 
- tools/testing/selftests/sgx/main.c | 250 +++++++++++++++++++++++++++++
- 1 file changed, 250 insertions(+)
+ tools/testing/selftests/sgx/test_encl_bootstrap.S | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-index 59573c1128c8..d52637eb5131 100644
---- a/tools/testing/selftests/sgx/main.c
-+++ b/tools/testing/selftests/sgx/main.c
-@@ -86,6 +86,15 @@ static bool vdso_get_symtab(void *addr, struct vdso_symtab *symtab)
- 	return true;
- }
+diff --git a/tools/testing/selftests/sgx/test_encl_bootstrap.S b/tools/testing/selftests/sgx/test_encl_bootstrap.S
+index 82fb0dfcbd23..03ae0f57e29d 100644
+--- a/tools/testing/selftests/sgx/test_encl_bootstrap.S
++++ b/tools/testing/selftests/sgx/test_encl_bootstrap.S
+@@ -45,6 +45,12 @@ encl_entry:
+ 	# TCS #2. By adding the value of encl_stack to it, we get
+ 	# the absolute address for the stack.
+ 	lea	(encl_stack)(%rbx), %rax
++	jmp encl_entry_core
++encl_dyn_entry:
++	# Entry point for dynamically created TCS page expected to follow
++	# its stack directly.
++	lea -1(%rbx), %rax
++encl_entry_core:
+ 	xchg	%rsp, %rax
+ 	push	%rax
  
-+static inline int sgx2_supported(void)
-+{
-+	unsigned int eax, ebx, ecx, edx;
-+
-+	__cpuid_count(SGX_CPUID, 0x0, eax, ebx, ecx, edx);
-+
-+	return eax & 0x2;
-+}
-+
- static unsigned long elf_sym_hash(const char *name)
- {
- 	unsigned long h = 0, high;
-@@ -847,4 +856,245 @@ TEST_F(enclave, epcm_permissions)
- 	EXPECT_EQ(self->run.exception_addr, 0);
- }
- 
-+/*
-+ * Test the addition of pages to an initialized enclave via writing to
-+ * a page belonging to the enclave's address space but was not added
-+ * during enclave creation.
-+ */
-+TEST_F(enclave, augment)
-+{
-+	struct encl_op_get_from_addr get_addr_op;
-+	struct encl_op_put_to_addr put_addr_op;
-+	struct encl_op_eaccept eaccept_op;
-+	size_t total_size = 0;
-+	void *addr;
-+	int i;
-+
-+	if (!sgx2_supported())
-+		SKIP(return, "SGX2 not supported");
-+
-+	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
-+
-+	memset(&self->run, 0, sizeof(self->run));
-+	self->run.tcs = self->encl.encl_base;
-+
-+	for (i = 0; i < self->encl.nr_segments; i++) {
-+		struct encl_segment *seg = &self->encl.segment_tbl[i];
-+
-+		total_size += seg->size;
-+	}
-+
-+	/*
-+	 * Actual enclave size is expected to be larger than the loaded
-+	 * test enclave since enclave size must be a power of 2 in bytes
-+	 * and test_encl does not consume it all.
-+	 */
-+	EXPECT_LT(total_size + PAGE_SIZE, self->encl.encl_size);
-+
-+	/*
-+	 * Create memory mapping for the page that will be added. New
-+	 * memory mapping is for one page right after all existing
-+	 * mappings.
-+	 * Kernel will allow new mapping using any permissions if it
-+	 * falls into the enclave's address range but not backed
-+	 * by existing enclave pages.
-+	 */
-+	addr = mmap((void *)self->encl.encl_base + total_size, PAGE_SIZE,
-+		    PROT_READ | PROT_WRITE | PROT_EXEC,
-+		    MAP_SHARED | MAP_FIXED, self->encl.fd, 0);
-+	EXPECT_NE(addr, MAP_FAILED);
-+
-+	self->run.exception_vector = 0;
-+	self->run.exception_error_code = 0;
-+	self->run.exception_addr = 0;
-+
-+	/*
-+	 * Attempt to write to the new page from within enclave.
-+	 * Expected to fail since page is not (yet) part of the enclave.
-+	 * The first #PF will trigger the addition of the page to the
-+	 * enclave, but since the new page needs an EACCEPT from within the
-+	 * enclave before it can be used it would not be possible
-+	 * to successfully return to the failing instruction. This is the
-+	 * cause of the second #PF captured here having the SGX bit set,
-+	 * it is from hardware preventing the page from being used.
-+	 */
-+	put_addr_op.value = MAGIC;
-+	put_addr_op.addr = (unsigned long)addr;
-+	put_addr_op.header.type = ENCL_OP_PUT_TO_ADDRESS;
-+
-+	EXPECT_EQ(ENCL_CALL(&put_addr_op, &self->run, true), 0);
-+
-+	EXPECT_EQ(self->run.function, ERESUME);
-+	EXPECT_EQ(self->run.exception_vector, 14);
-+	EXPECT_EQ(self->run.exception_addr, (unsigned long)addr);
-+
-+	if (self->run.exception_error_code == 0x6) {
-+		munmap(addr, PAGE_SIZE);
-+		SKIP(return, "Kernel does not support adding pages to initialized enclave");
-+	}
-+
-+	EXPECT_EQ(self->run.exception_error_code, 0x8007);
-+
-+	self->run.exception_vector = 0;
-+	self->run.exception_error_code = 0;
-+	self->run.exception_addr = 0;
-+
-+	/* Handle AEX by running EACCEPT from new entry point. */
-+	self->run.tcs = self->encl.encl_base + PAGE_SIZE;
-+
-+	eaccept_op.epc_addr = self->encl.encl_base + total_size;
-+	eaccept_op.flags = SGX_SECINFO_R | SGX_SECINFO_W | SGX_SECINFO_REG | SGX_SECINFO_PENDING;
-+	eaccept_op.ret = 0;
-+	eaccept_op.header.type = ENCL_OP_EACCEPT;
-+
-+	EXPECT_EQ(ENCL_CALL(&eaccept_op, &self->run, true), 0);
-+
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.exception_vector, 0);
-+	EXPECT_EQ(self->run.exception_error_code, 0);
-+	EXPECT_EQ(self->run.exception_addr, 0);
-+	EXPECT_EQ(eaccept_op.ret, 0);
-+
-+	/* Can now return to main TCS to resume execution. */
-+	self->run.tcs = self->encl.encl_base;
-+
-+	EXPECT_EQ(vdso_sgx_enter_enclave((unsigned long)&put_addr_op, 0, 0,
-+					 ERESUME, 0, 0,
-+					 &self->run),
-+		  0);
-+
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.exception_vector, 0);
-+	EXPECT_EQ(self->run.exception_error_code, 0);
-+	EXPECT_EQ(self->run.exception_addr, 0);
-+
-+	/*
-+	 * Read memory from newly added page that was just written to,
-+	 * confirming that data previously written (MAGIC) is present.
-+	 */
-+	get_addr_op.value = 0;
-+	get_addr_op.addr = (unsigned long)addr;
-+	get_addr_op.header.type = ENCL_OP_GET_FROM_ADDRESS;
-+
-+	EXPECT_EQ(ENCL_CALL(&get_addr_op, &self->run, true), 0);
-+
-+	EXPECT_EQ(get_addr_op.value, MAGIC);
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.exception_vector, 0);
-+	EXPECT_EQ(self->run.exception_error_code, 0);
-+	EXPECT_EQ(self->run.exception_addr, 0);
-+
-+	munmap(addr, PAGE_SIZE);
-+}
-+
-+/*
-+ * Test for the addition of pages to an initialized enclave via a
-+ * pre-emptive run of EACCEPT on page to be added.
-+ */
-+TEST_F(enclave, augment_via_eaccept)
-+{
-+	struct encl_op_get_from_addr get_addr_op;
-+	struct encl_op_put_to_addr put_addr_op;
-+	struct encl_op_eaccept eaccept_op;
-+	size_t total_size = 0;
-+	void *addr;
-+	int i;
-+
-+	if (!sgx2_supported())
-+		SKIP(return, "SGX2 not supported");
-+
-+	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
-+
-+	memset(&self->run, 0, sizeof(self->run));
-+	self->run.tcs = self->encl.encl_base;
-+
-+	for (i = 0; i < self->encl.nr_segments; i++) {
-+		struct encl_segment *seg = &self->encl.segment_tbl[i];
-+
-+		total_size += seg->size;
-+	}
-+
-+	/*
-+	 * Actual enclave size is expected to be larger than the loaded
-+	 * test enclave since enclave size must be a power of 2 in bytes while
-+	 * test_encl does not consume it all.
-+	 */
-+	EXPECT_LT(total_size + PAGE_SIZE, self->encl.encl_size);
-+
-+	/*
-+	 * mmap() a page at end of existing enclave to be used for dynamic
-+	 * EPC page.
-+	 *
-+	 * Kernel will allow new mapping using any permissions if it
-+	 * falls into the enclave's address range but not backed
-+	 * by existing enclave pages.
-+	 */
-+
-+	addr = mmap((void *)self->encl.encl_base + total_size, PAGE_SIZE,
-+		    PROT_READ | PROT_WRITE | PROT_EXEC, MAP_SHARED | MAP_FIXED,
-+		    self->encl.fd, 0);
-+	EXPECT_NE(addr, MAP_FAILED);
-+
-+	self->run.exception_vector = 0;
-+	self->run.exception_error_code = 0;
-+	self->run.exception_addr = 0;
-+
-+	/*
-+	 * Run EACCEPT on new page to trigger the #PF->EAUG->EACCEPT(again
-+	 * without a #PF). All should be transparent to userspace.
-+	 */
-+	eaccept_op.epc_addr = self->encl.encl_base + total_size;
-+	eaccept_op.flags = SGX_SECINFO_R | SGX_SECINFO_W | SGX_SECINFO_REG | SGX_SECINFO_PENDING;
-+	eaccept_op.ret = 0;
-+	eaccept_op.header.type = ENCL_OP_EACCEPT;
-+
-+	EXPECT_EQ(ENCL_CALL(&eaccept_op, &self->run, true), 0);
-+
-+	if (self->run.exception_vector == 14 &&
-+	    self->run.exception_error_code == 4 &&
-+	    self->run.exception_addr == self->encl.encl_base + total_size) {
-+		munmap(addr, PAGE_SIZE);
-+		SKIP(return, "Kernel does not support adding pages to initialized enclave");
-+	}
-+
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.exception_vector, 0);
-+	EXPECT_EQ(self->run.exception_error_code, 0);
-+	EXPECT_EQ(self->run.exception_addr, 0);
-+	EXPECT_EQ(eaccept_op.ret, 0);
-+
-+	/*
-+	 * New page should be accessible from within enclave - attempt to
-+	 * write to it.
-+	 */
-+	put_addr_op.value = MAGIC;
-+	put_addr_op.addr = (unsigned long)addr;
-+	put_addr_op.header.type = ENCL_OP_PUT_TO_ADDRESS;
-+
-+	EXPECT_EQ(ENCL_CALL(&put_addr_op, &self->run, true), 0);
-+
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.exception_vector, 0);
-+	EXPECT_EQ(self->run.exception_error_code, 0);
-+	EXPECT_EQ(self->run.exception_addr, 0);
-+
-+	/*
-+	 * Read memory from newly added page that was just written to,
-+	 * confirming that data previously written (MAGIC) is present.
-+	 */
-+	get_addr_op.value = 0;
-+	get_addr_op.addr = (unsigned long)addr;
-+	get_addr_op.header.type = ENCL_OP_GET_FROM_ADDRESS;
-+
-+	EXPECT_EQ(ENCL_CALL(&get_addr_op, &self->run, true), 0);
-+
-+	EXPECT_EQ(get_addr_op.value, MAGIC);
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.exception_vector, 0);
-+	EXPECT_EQ(self->run.exception_error_code, 0);
-+	EXPECT_EQ(self->run.exception_addr, 0);
-+
-+	munmap(addr, PAGE_SIZE);
-+}
-+
- TEST_HARNESS_MAIN
 -- 
 2.25.1
 

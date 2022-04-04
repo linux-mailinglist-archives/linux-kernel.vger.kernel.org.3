@@ -2,136 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51C7D4F1F9D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA7BC4F1FA9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344497AbiDDW4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38858 "EHLO
+        id S234153AbiDDW7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 18:59:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236194AbiDDWxj (ORCPT
+        with ESMTP id S1348353AbiDDW5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 18:53:39 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E834C436;
-        Mon,  4 Apr 2022 15:12:24 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id r2so13042614iod.9;
-        Mon, 04 Apr 2022 15:12:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TBuUg5HYufdLmJmO7llDJ0ZgAOW1xjLS+Cy/OQQ/Wyg=;
-        b=GooeJiC4ZAPspVuTVNQvv7NdlE5ceHPrkdLYDEsWRdXY8uUa9uEfz0v0hHFkV6WnR0
-         cxBSQMM8nsvhiOvoMznzysX07jXQSYv82sgr0LIZfmAQqccZ2ZGZ2UVc0xPuOCYqH0x5
-         3gKT8wWJUJ+qDJU4JM8NfVisrZ0f2cCi8flD0lcm4sGTpwoE0POkWhnvuQm1QtZciCLw
-         E6jP67cP2I8LtloDMnKaMLJ/atr+huF1Ovmo5IBcNG/MdmsQV39CcEYvZ7JdMUMNl+pL
-         St8Hy5/Ap9zYAP/zyJtVV7G0MsIp51are0I7jyabYzmxGCaOelY4Z+E/MR9mHHUGUZ7C
-         W2kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TBuUg5HYufdLmJmO7llDJ0ZgAOW1xjLS+Cy/OQQ/Wyg=;
-        b=smSloOTFy++wIRfp87QlQqvdo4c+M/q14OI1TtCmNJGCwC3kwnKO7370yYsg3myj07
-         zBT8KLg7eUqAtwe4tAsPyTNyt8scOTrvdJtScEAlkig7l+aK3knamh6e9WyDPOtbYKD0
-         4wGG2R/VPb35v2FzhnY/iRz+gRxEqwpWhGT8X3fPuVDCPX0tNYAvnBw1f8DtF/tBaPkg
-         sI5KlOrNZpidxyCJu9Vsr6uILPkkvY++EyueBcvzwnelan9pG9zyCgOLXGEqED67DUkY
-         Ps5c+EFbG/nN4KeHX2Ye/udNdwS9kIB2KhYZLXH5HUoF9x/yPiRYWGhMbXCiXizYc8Kc
-         GTbA==
-X-Gm-Message-State: AOAM5301cJABUliuraEGREZmopDKeI6ZFxJTRRM873NBZFsy3Qj2YC4X
-        OxC+kndkHAyz7KC1TrqHCvPEsmJbQruwugWW3Ky4ePib
-X-Google-Smtp-Source: ABdhPJypb05hTKSqXsPjjhYi8r7X55BK378TLiKhUw9uXejM4tFODx+of0bQoY0eZj0w9Amg00/oqsFioCzH1K21/bo=
-X-Received: by 2002:a05:6602:3c6:b0:63d:cac9:bd35 with SMTP id
- g6-20020a05660203c600b0063dcac9bd35mr231062iov.144.1649110344198; Mon, 04 Apr
- 2022 15:12:24 -0700 (PDT)
+        Mon, 4 Apr 2022 18:57:19 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911AE647C
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 15:13:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649110426; x=1680646426;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IxXGkm32fmUmacCwJXHc2Kk/bukrG4SQABKoDYWW/7I=;
+  b=X+xo89USouQ68q2ujLZX9PkBLznQh4j4GPrt7YddC/l2/w01yyJuNHPI
+   mMg3pyFtuZq70HF4+cqzpyuJjZqbnAUlvnZtBYTOtBdQzgDnKiP3Vu6e8
+   dKm9a9INiPLrVyeCZZ1tF0ydTndZcuS5nbJZ/Ui14uAST8/H37Ij8IRjL
+   vesRi0o9Rmyy90PfhVmsVQ2B+/EFqCFmN2ZDi3scCzys7G5osxhol9r+x
+   wnVDcVUk59IsKZgCOv3I0vQfyuvJe5r2E9Q3qKSAuAriIqIdf5BP7syEP
+   sxYrp6yvUmNM7T0I2o1Gq+zcMRmNuVqvJuM1NTRV1pnVrNTRPp12xeWpp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="242761441"
+X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
+   d="scan'208";a="242761441"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 15:13:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
+   d="scan'208";a="523749629"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 04 Apr 2022 15:13:36 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbUx5-0002Ot-AG;
+        Mon, 04 Apr 2022 22:13:35 +0000
+Date:   Tue, 5 Apr 2022 06:12:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     YunQiang Su <yunqiang.su@cipunited.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: arch/mips/boot/compressed/uart-16550.c:44:6: warning: no previous
+ prototype for 'putc'
+Message-ID: <202204050616.vblP4zPu-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220404164514.1814897-1-ytcoode@gmail.com>
-In-Reply-To: <20220404164514.1814897-1-ytcoode@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 4 Apr 2022 15:12:13 -0700
-Message-ID: <CAEf4BzZrc=wr4FLkWkOSEeprzybA8JTipsnr_U1kYA0785WkTw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix issues in parse_num_list()
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 4, 2022 at 9:45 AM Yuntao Wang <ytcoode@gmail.com> wrote:
->
-> There are some issues in parse_num_list():
->
-> 1. The end variable is assigned twice when parsing_end is true.
-> 2. The function does not check that parsing_end should finally be false.
->
-> Clean up parse_num_list() and fix these issues.
+Hi YunQiang,
 
-It would be great to also explain user-visible bug. What do you do to
-trigger bugs? Can you please put that into the commit message, in a
-before/after fashion? Thanks!
+FYI, the error/warning still remains.
 
->
-> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-> ---
->  tools/testing/selftests/bpf/testing_helpers.c | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
-> index 795b6798ccee..82f0e2d99c23 100644
-> --- a/tools/testing/selftests/bpf/testing_helpers.c
-> +++ b/tools/testing/selftests/bpf/testing_helpers.c
-> @@ -20,16 +20,16 @@ int parse_num_list(const char *s, bool **num_set, int *num_set_len)
->                 if (errno)
->                         return -errno;
->
-> -               if (parsing_end)
-> -                       end = num;
-> -               else
-> +               if (!parsing_end) {
->                         start = num;
-> +                       if (*next == '-') {
-> +                               s = next + 1;
-> +                               parsing_end = true;
-> +                               continue;
-> +                       }
-> +               }
->
-> -               if (!parsing_end && *next == '-') {
-> -                       s = next + 1;
-> -                       parsing_end = true;
-> -                       continue;
-> -               } else if (*next == ',') {
-> +               if (*next == ',') {
->                         parsing_end = false;
->                         s = next + 1;
->                         end = num;
-> @@ -60,7 +60,7 @@ int parse_num_list(const char *s, bool **num_set, int *num_set_len)
->                         set[i] = true;
->         }
->
-> -       if (!set)
-> +       if (!set || parsing_end)
->                 return -EINVAL;
->
->         *num_set = set;
-> --
-> 2.35.1
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3123109284176b1532874591f7c81f3837bbdc17
+commit: 31b2f3dc851c65fee288612432c4fc956f1a264e MIPS: enable both vmlinux.gz.itb and vmlinuz for generic
+date:   3 months ago
+config: mips-randconfig-r033-20220404 (https://download.01.org/0day-ci/archive/20220405/202204050616.vblP4zPu-lkp@intel.com/config)
+compiler: mipsel-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=31b2f3dc851c65fee288612432c4fc956f1a264e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 31b2f3dc851c65fee288612432c4fc956f1a264e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/mips/boot/compressed/uart-16550.c:44:6: warning: no previous prototype for 'putc' [-Wmissing-prototypes]
+      44 | void putc(char c)
+         |      ^~~~
+
+
+vim +/putc +44 arch/mips/boot/compressed/uart-16550.c
+
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14  43  
+1b93b3c3e94be2 Wu Zhangjin 2009-10-14 @44  void putc(char c)
+
+:::::: The code at line 44 was first introduced by commit
+:::::: 1b93b3c3e94be2605759735a89fc935ba5f58dcf MIPS: Add support for GZIP / BZIP2 / LZMA compressed kernel images
+
+:::::: TO: Wu Zhangjin <wuzhangjin@gmail.com>
+:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

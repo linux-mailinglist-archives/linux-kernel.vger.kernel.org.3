@@ -2,156 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C37204F1E5D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C874F1E6E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379077AbiDDWGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
+        id S233282AbiDDVvk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 4 Apr 2022 17:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379412AbiDDRIp (ORCPT
+        with ESMTP id S1379415AbiDDRJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 13:08:45 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF75F40A23
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 10:06:48 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id m12-20020a17090b068c00b001cabe30a98dso1057530pjz.4
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 10:06:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gIH+kCrSXmFI+fUc29mzPw+H1akkAs2ZuFoVFSP0vxU=;
-        b=Rr+FaoMffwErSOq6pRJ5Va7RKsFxClc5D23MZTexTKDgRmNLw+QXPH7HgVaF+gPlsH
-         VVR7VJA+skjtzQ0GECeuU2WVaa0asrNgHkDBl6tstbwCf7C6oMyBne0DAlcAXCdcVL7g
-         YrXAno9IHlxoD/YmxzSY5HC12atdMPGZ+Q8N6kZHZabK4TNxokJ7fJfCa2Z4Dji8u6pl
-         3dHXlOPQbLuOhlHnPj7HtE/XDcufKULa7gV7RWaa0It/x7X/ULWQS6QyjSSWicyoNFMA
-         ahGu94J7u389AK59eb7k4Mps25d3P18aXb3oZxp/f/pFl16fpYmLG3tkL22HLs/vsOZL
-         l1Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gIH+kCrSXmFI+fUc29mzPw+H1akkAs2ZuFoVFSP0vxU=;
-        b=JNEdSVc7vul+D6OCtvDj8qcP3Oz/Bxu2EwSV+cEB9WB5Z2UztFuUIrqb4r+DboS8Wm
-         KO53dfkXgEd9WpYCjdtQ7EWRV7qq6eFKggMwTzU/p0qwzc64jooY28eRkW5GK7wyYdzV
-         2jEcbZew6pvXLZ1rzAwKUwm6w9i8WTyiIzrYOsb0rAd5yqGVJIyEqYwqTHYeLwLkBTE+
-         8vM2BrNM4QmORY9rOMnduUkovoz6N+kGtHhP+dPKsVDfzjxDqonFMHtbC16wue/GPyte
-         Tp8k05LARD6nhSTL8NwtZ7cemKsEbBB5s3+u6JSvUwgrcW6CM4/3pRdpgm85z5VQ20d0
-         6Diw==
-X-Gm-Message-State: AOAM530Ffk5JBDPGIPPm4XSH5O6yjvmu7zth3iA7Ma9aDtuWAsVi+1Wu
-        zH6M4Nl0HtlOM8B+mO3tcTRZVw==
-X-Google-Smtp-Source: ABdhPJxR0cMYn6++nMtTapD/RTNavycubKSgeugDdrZDDJ6GPqebAjtiOfHHZgX3JbxNGnvGjPUvmw==
-X-Received: by 2002:a17:902:7247:b0:156:9d3d:756d with SMTP id c7-20020a170902724700b001569d3d756dmr687366pll.6.1649092007999;
-        Mon, 04 Apr 2022 10:06:47 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id x9-20020a17090a970900b001ca6c59b350sm428753pjo.2.2022.04.04.10.06.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 10:06:47 -0700 (PDT)
-Date:   Mon, 4 Apr 2022 17:06:43 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Quentin Perret <qperret@google.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v5 00/13] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <Ykslo2eo2eRXrpFR@google.com>
-References: <YkH32nx+YsJuUbmZ@google.com>
- <YkIFW25WgV2WIQHb@google.com>
- <YkM7eHCHEBe5NkNH@google.com>
- <88620519-029e-342b-0a85-ce2a20eaf41b@arm.com>
- <YkQzfjgTQaDd2E2T@google.com>
- <YkSaUQX89ZEojsQb@google.com>
- <80aad2f9-9612-4e87-a27a-755d3fa97c92@www.fastmail.com>
- <YkcTTY4YjQs5BRhE@google.com>
- <83fd55f8-cd42-4588-9bf6-199cbce70f33@www.fastmail.com>
- <YksIQYdG41v3KWkr@google.com>
+        Mon, 4 Apr 2022 13:09:14 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 69EB340A22
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 10:07:17 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-170-mCYWs2NyMrqY9YLkljzOvg-1; Mon, 04 Apr 2022 18:07:14 +0100
+X-MC-Unique: mCYWs2NyMrqY9YLkljzOvg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Mon, 4 Apr 2022 18:07:11 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Mon, 4 Apr 2022 18:07:11 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Maciej W. Rozycki'" <macro@orcam.me.uk>,
+        Kees Cook <keescook@chromium.org>
+CC:     James Jones <linux@theinnocuous.com>,
+        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] x86: Remove a.out support
+Thread-Topic: [PATCH] x86: Remove a.out support
+Thread-Index: AQHYSBOog1urTOlT506l8VY6NMoEJKzf++oQ
+Date:   Mon, 4 Apr 2022 17:07:11 +0000
+Message-ID: <08c095230941445f9139ab89bc70da43@AcuMS.aculab.com>
+References: <4c449fab-8135-5057-7d2c-7b948ce130cc@theinnocuous.com>
+ <0b31b1d3-852d-6cab-82ae-5eecaec05679@theinnocuous.com>
+ <202203151150.1CDB1D8DA@keescook>
+ <bfbd9394-161b-0e70-00c5-79d0dd722e08@theinnocuous.com>
+ <alpine.DEB.2.21.2204022255430.47162@angie.orcam.me.uk>
+ <67CF27C5-5013-4EF4-B24C-8D9EB52536FB@chromium.org>
+ <alpine.DEB.2.21.2204041135210.47162@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2204041135210.47162@angie.orcam.me.uk>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YksIQYdG41v3KWkr@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022, Quentin Perret wrote:
-> On Friday 01 Apr 2022 at 12:56:50 (-0700), Andy Lutomirski wrote:
-> FWIW, there are a couple of reasons why I'd like to have in-place
-> conversions:
+From: Maciej W. Rozycki
+> Sent: 04 April 2022 12:04
 > 
->  - one goal of pKVM is to migrate some things away from the Arm
->    Trustzone environment (e.g. DRM and the likes) and into protected VMs
->    instead. This will give Linux a fighting chance to defend itself
->    against these things -- they currently have access to _all_ memory.
->    And transitioning pages between Linux and Trustzone (donations and
->    shares) is fast and non-destructive, so we really do not want pKVM to
->    regress by requiring the hypervisor to memcpy things;
+> On Sat, 2 Apr 2022, Kees Cook wrote:
+> 
+> > > Chiming in late as I'm scanning outstanding mailing list traffic: if this
+> > >is as you say all statically linked stuff, then converting from a.out to
+> > >ELF might be as easy as:
+> > >
+> > >$ objcopy -I a.out-i386-linux -O elf32-i386 a.out-binary elf-binary
+> >
+> > Based on my research (and the wrapper I ended up writing), I don't think
+> > this is sufficient because entry point handling is different between ELF
+> > and a.out (specifically the stack layout and initial sp register value).
+> 
+>  Fair enough.  I guess the exact value of %esp doesn't matter that much
+> (why would it?), but the arguments and environment may well be structured
+> differently (and indeed based on a glance over binfmt_aout.c there's extra
+> indirection involved compared to the ELF i386 psABI).
 
-Is there actually a _need_ for the conversion to be non-destructive?  E.g. I assume
-the "trusted" side of things will need to be reworked to run as a pKVM guest, at
-which point reworking its logic to understand that conversions are destructive and
-slow-ish doesn't seem too onerous.
+You could write a custom 'elf interpreter'.
+Hacking at those isn't for the faint-hearted :-)
 
->  - it can be very useful for protected VMs to do shared=>private
->    conversions. Think of a VM receiving some data from the host in a
->    shared buffer, and then it wants to operate on that buffer without
->    risking to leak confidential informations in a transient state. In
->    that case the most logical thing to do is to convert the buffer back
->    to private, do whatever needs to be done on that buffer (decrypting a
->    frame, ...), and then share it back with the host to consume it;
+	David
 
-If performance is a motivation, why would the guest want to do two conversions
-instead of just doing internal memcpy() to/from a private page?  I would be quite
-surprised if multiple exits and TLB shootdowns is actually faster, especially at
-any kind of scale where zapping stage-2 PTEs will cause lock contention and IPIs.
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
->  - similar to the previous point, a protected VM might want to
->    temporarily turn a buffer private to avoid ToCToU issues;
-
-Again, bounce buffer the page in the guest.
-
->  - once we're able to do device assignment to protected VMs, this might
->    allow DMA-ing to a private buffer, and make it shared later w/o
->    bouncing.
-
-Exposing a private buffer to a device doesn't requring in-place conversion.  The
-proper way to handle this would be to teach e.g. VFIO to retrieve the PFN from
-the backing store.  I don't understand the use case for sharing a DMA'd page at a
-later time; with whom would the guest share the page?  E.g. if a NIC has access to
-guest private data then there should never be a need to convert/bounce the page.

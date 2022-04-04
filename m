@@ -2,46 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 748A14F1BD7
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EBCA4F1B88
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:23:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381872AbiDDVYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58356 "EHLO
+        id S233810AbiDDVUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380689AbiDDVBX (ORCPT
+        with ESMTP id S1380690AbiDDVCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 17:01:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A1538A3
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 13:59:26 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1nbTnI-0004FN-Ih; Mon, 04 Apr 2022 22:59:24 +0200
-Message-ID: <5f862219-2e48-72d0-af27-3ab2b5820a95@pengutronix.de>
-Date:   Mon, 4 Apr 2022 22:59:23 +0200
+        Mon, 4 Apr 2022 17:02:14 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E65A38A3
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 14:00:16 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id d29so10317844wra.10
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 14:00:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Zg14HKB8Tn7Zkt9AnuTFrogrSTPKR6syFIM0HfENyTw=;
+        b=AvMyV1kK4/g5y5+g/++IKdQ13rHCkaFko6oOh2JFQkN5qcmS604s5CoC3yRwIaMUiM
+         CvsXSoFK0wdmbhy6+s/+0Jjeidr/vkQ6+M6fyCH1XZaFZbnU/Sv8dbqUd6GimVLhDNzA
+         0Mroa5MzT6lFnfkfFQbAM3X741eYAd6JfFFCfBOwaAtfQP/Hovfyk3mWq14kAhzEYg0G
+         XECSOKeH+wHp56JAzSNBO4VtcX3lkjXiycz1bTxU6G8WPaVeXtuKFD+RtSZVj7G3um+x
+         DEtblWoM8zMNLj/ailnkMBvfxH50JdzfV9x6MTA5x+cf6cysy6vAZQN3gEVWmVZ3Qs/s
+         r0MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Zg14HKB8Tn7Zkt9AnuTFrogrSTPKR6syFIM0HfENyTw=;
+        b=xrgoQxBoExGVk/NrwFacCZi1GsMC+Xc9us+7Px1G34XZrU3fAm376AfWY4TCafhNfa
+         iru1E1aLpiYzR+MotFSyekUulQy4pyFIUonBjTGVk60/PxTd0MrzYsYFAEVfJiLdSbv0
+         hdCfZ2c0Geuk3y+qMMGi8hZOEJshh4xENrM95z6MyDrKQsukeZ4Uo5vCB2SdmDoes+0j
+         0UTYMpkhuhxIAbkMIYJZ2qTsbamwbQcM00cYcdgpgs5QMFMjWlK5KtrhDSU0Vunz6kMw
+         pA8S1+aQw2SQ4iD0HaGy9hAjWeqNvVKUji+l+e5ZVCVSCF+yzM+pZCliXROkilektTKG
+         NnhQ==
+X-Gm-Message-State: AOAM533mZuRRpw4qDj/9BTJfj/NhS/lFbzpm1/o32uWH/Ja8uMeb+oXz
+        f3q39b4tq45OAn9g2NBgHrVLrfuMb/k=
+X-Google-Smtp-Source: ABdhPJyYfvJ6npuFsstgJYWJ0aTV/xG8rAhVsj7Yzhv6TKaA0uRCh4m9BcqLhEy+4OSAIOZcuLVDjw==
+X-Received: by 2002:a5d:59a1:0:b0:204:1777:fc08 with SMTP id p1-20020a5d59a1000000b002041777fc08mr57988wrr.545.1649106014971;
+        Mon, 04 Apr 2022 14:00:14 -0700 (PDT)
+Received: from alaa-emad ([41.42.174.117])
+        by smtp.gmail.com with ESMTPSA id g16-20020a05600c4ed000b0038ceb0b21b4sm120757wmq.24.2022.04.04.14.00.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 14:00:13 -0700 (PDT)
+From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, eng.alaamohamedsoliman.am@gmail.com
+Subject: [PATCH] staging: rtl8712: Fix multiple line dereference
+Date:   Mon,  4 Apr 2022 23:00:10 +0200
+Message-Id: <20220404210010.9795-1-eng.alaamohamedsoliman.am@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: Possible performance regression with
- CONFIG_SQUASHFS_DECOMP_SINGLE
-Content-Language: en-US
-To:     Phillip Lougher <phillip@squashfs.org.uk>
-Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        squashfs-devel@lists.sourceforge.net, phillip.lougher@gmail.com
-References: <c22a0f1c-883d-5122-ef88-0d7c57ab4e66@pengutronix.de>
- <20220316053428.5758-1-phillip@squashfs.org.uk>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <20220316053428.5758-1-phillip@squashfs.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,58 +69,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Phillip,
+Reported by checkpatch:
 
-On 16.03.22 06:34, Phillip Lougher wrote:
-> Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
-> 
->> Hello,
->>
->> This an issue we had with v5.15 that we have since successfully worked around.
->> I am reporting it here as a pointer in case someone else runs into this and as
->> a heads up that there seems to be an underlying performance regression, so
->> here it goes:
->>
-> 
-> [snip]
-> 
->>
->> Looking through the original kernel configuration we found that it has
->>  CONFIG_SQUASHFS_DECOMP_SINGLE=y and CONFIG_SQUASHFS_FILE_CACHE=y.
->>
->> Once changed to CONFIG_SQUASHFS_FILE_DIRECT=y and
->> CONFIG_SQUASHFS_DECOMP_MULTI_PERCPU=y, we were below 40s as we want.
-> 
-> This sounds like the slow-down that was introduced by commit c1f6925e1091
-> "mm: put readahead pages in cache earlier" (Linux V5.8)
-> 
-> This commit prevents Squashfs from doing it's own readahead, which
-> causes a slow-down in performance.  The slow-down is noticable when
-> using a single decompressor (CONFIG_SQUASHFS_DECOMP_SINGLE=y), and
-> can be solved by moving to a multi-decompressor configuration, because
-> it removes contention on a single buffer in the single decompressor case.
-> 
-> This has been already been fixed by commit 9eec1d897139
-> "squashfs: provide backing_dev_info in order to disable read-ahead"
-> which is in Linux 5.17-rc1.
+WARNING: Avoid multiple line dereference
 
-I just updated to v5.17.1 and I can confirm that this commit fixes the
-performance regression. Single decompressor case is now nearly as fast
-as multi decompressor. Reverting the fix increased boot time from
-30s~ to 2min30s.
+Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+---
+ drivers/staging/rtl8712/rtl871x_mlme.c | 77 +++++++++-----------------
+ 1 file changed, 25 insertions(+), 52 deletions(-)
 
-Thanks for clearing this up!
-
-Cheers,
-Ahmad
-
-> 
-> Phillip
-> 
-
-
+diff --git a/drivers/staging/rtl8712/rtl871x_mlme.c b/drivers/staging/rtl8712/rtl871x_mlme.c
+index 92b7c9c07df6..6406132ca5ea 100644
+--- a/drivers/staging/rtl8712/rtl871x_mlme.c
++++ b/drivers/staging/rtl8712/rtl871x_mlme.c
+@@ -431,8 +431,7 @@ static int is_desired_network(struct _adapter *adapter,
+ 		bselected = false;
+ 	if (check_fwstate(&adapter->mlmepriv, WIFI_ADHOC_STATE)) {
+ 		if (pnetwork->network.InfrastructureMode !=
+-			adapter->mlmepriv.cur_network.network.
+-			InfrastructureMode)
++			adapter->mlmepriv.cur_network.network.InfrastructureMode)
+ 			bselected = false;
+ 	}
+ 	return bselected;
+@@ -539,8 +538,7 @@ void r8712_surveydone_event_callback(struct _adapter *adapter, u8 *pbuf)
+ 					struct wlan_bssid_ex *pdev_network =
+ 					  &(adapter->registrypriv.dev_network);
+ 					u8 *pibss =
+-						 adapter->registrypriv.
+-							dev_network.MacAddress;
++						 adapter->registrypriv.dev_network.MacAddress;
+ 					pmlmepriv->fw_state ^= _FW_UNDER_SURVEY;
+ 					memcpy(&pdev_network->Ssid,
+ 						&pmlmepriv->assoc_ssid,
+@@ -688,11 +686,9 @@ void r8712_joinbss_event_callback(struct _adapter *adapter, u8 *pbuf)
+ 	pnetwork->network.Configuration.DSConfig =
+ 		 le32_to_cpu(pnetwork->network.Configuration.DSConfig);
+ 	pnetwork->network.Configuration.FHConfig.DwellTime =
+-		 le32_to_cpu(pnetwork->network.Configuration.FHConfig.
+-			     DwellTime);
++		 le32_to_cpu(pnetwork->network.Configuration.FHConfig.DwellTime);
+ 	pnetwork->network.Configuration.FHConfig.HopPattern =
+-		 le32_to_cpu(pnetwork->network.Configuration.
+-			     FHConfig.HopPattern);
++		 le32_to_cpu(pnetwork->network.Configuration.FHConfig.HopPattern);
+ 	pnetwork->network.Configuration.FHConfig.HopSet =
+ 		 le32_to_cpu(pnetwork->network.Configuration.FHConfig.HopSet);
+ 	pnetwork->network.Configuration.FHConfig.Length =
+@@ -717,36 +713,29 @@ void r8712_joinbss_event_callback(struct _adapter *adapter, u8 *pbuf)
+ 			if (check_fwstate(pmlmepriv, _FW_LINKED)) {
+ 				if (the_same_macaddr) {
+ 					ptarget_wlan =
+-					    r8712_find_network(&pmlmepriv->
+-					    scanned_queue,
++					    r8712_find_network(&pmlmepriv->scanned_queue,
+ 					    cur_network->network.MacAddress);
+ 				} else {
+ 					pcur_wlan =
+-					     r8712_find_network(&pmlmepriv->
+-					     scanned_queue,
++					     r8712_find_network(&pmlmepriv->scanned_queue,
+ 					     cur_network->network.MacAddress);
+ 					if (pcur_wlan)
+ 						pcur_wlan->fixed = false;
+ 
+ 					pcur_sta = r8712_get_stainfo(pstapriv,
+ 					     cur_network->network.MacAddress);
+-					spin_lock_irqsave(&pstapriv->
+-						sta_hash_lock, irqL2);
++					spin_lock_irqsave(&pstapriv->sta_hash_lock, irqL2);
+ 					r8712_free_stainfo(adapter, pcur_sta);
+-					spin_unlock_irqrestore(&(pstapriv->
+-						sta_hash_lock), irqL2);
++					spin_unlock_irqrestore(&(pstapriv->sta_hash_lock), irqL2);
+ 
+ 					ptarget_wlan =
+-						 r8712_find_network(&pmlmepriv->
+-						 scanned_queue,
+-						 pnetwork->network.
+-						 MacAddress);
++						 r8712_find_network(&pmlmepriv->scanned_queue,
++						 pnetwork->network.MacAddress);
+ 					if (ptarget_wlan)
+ 						ptarget_wlan->fixed = true;
+ 				}
+ 			} else {
+-				ptarget_wlan = r8712_find_network(&pmlmepriv->
+-						scanned_queue,
++				ptarget_wlan = r8712_find_network(&pmlmepriv->scanned_queue,
+ 						pnetwork->network.MacAddress);
+ 				if (ptarget_wlan)
+ 					ptarget_wlan->fixed = true;
+@@ -779,39 +768,25 @@ void r8712_joinbss_event_callback(struct _adapter *adapter, u8 *pbuf)
+ 					ptarget_sta->aid = pnetwork->join_res;
+ 					ptarget_sta->qos_option = 1;
+ 					ptarget_sta->mac_id = 5;
+-					if (adapter->securitypriv.
+-					    AuthAlgrthm == 2) {
+-						adapter->securitypriv.
+-							binstallGrpkey =
+-							 false;
+-						adapter->securitypriv.
+-							busetkipkey =
+-							 false;
+-						adapter->securitypriv.
+-							bgrpkey_handshake =
+-							 false;
+-						ptarget_sta->ieee8021x_blocked
+-							 = true;
+-						ptarget_sta->XPrivacy =
+-							 adapter->securitypriv.
+-							 PrivacyAlgrthm;
+-						memset((u8 *)&ptarget_sta->
+-							 x_UncstKey,
++					if (adapter->securitypriv.AuthAlgrthm == 2) {
++						adapter->securitypriv.binstallGrpkey = false;
++						adapter->securitypriv.busetkipkey = false;
++						adapter->securitypriv.bgrpkey_handshake = false;
++						ptarget_sta->ieee8021x_blocked = true;
++						ptarget_sta->XPrivacy = adapter->
++						securitypriv.PrivacyAlgrthm;
++						memset((u8 *)&ptarget_sta->x_UncstKey,
+ 							 0,
+ 							 sizeof(union Keytype));
+-						memset((u8 *)&ptarget_sta->
+-							 tkiprxmickey,
++						memset((u8 *)&ptarget_sta->tkiprxmickey,
+ 							 0,
+ 							 sizeof(union Keytype));
+-						memset((u8 *)&ptarget_sta->
+-							 tkiptxmickey,
++						memset((u8 *)&ptarget_sta->tkiptxmickey,
+ 							 0,
+ 							 sizeof(union Keytype));
+-						memset((u8 *)&ptarget_sta->
+-							 txpn, 0,
++						memset((u8 *)&ptarget_sta->txpn, 0,
+ 							 sizeof(union pn48));
+-						memset((u8 *)&ptarget_sta->
+-							 rxpn, 0,
++						memset((u8 *)&ptarget_sta->rxpn, 0,
+ 							 sizeof(union pn48));
+ 					}
+ 				} else {
+@@ -942,8 +917,7 @@ void r8712_stadel_event_callback(struct _adapter *adapter, u8 *pbuf)
+ 			pdev_network = &(adapter->registrypriv.dev_network);
+ 			pibss = adapter->registrypriv.dev_network.MacAddress;
+ 			memcpy(pdev_network, &tgt_network->network,
+-				r8712_get_wlan_bssid_ex_sz(&tgt_network->
+-							network));
++				r8712_get_wlan_bssid_ex_sz(&tgt_network->network));
+ 			memcpy(&pdev_network->Ssid,
+ 				&pmlmepriv->assoc_ssid,
+ 				sizeof(struct ndis_802_11_ssid));
+@@ -1092,8 +1066,7 @@ int r8712_select_and_join_from_scan(struct mlme_priv *pmlmepriv)
+ 			src_ssid = pmlmepriv->assoc_bssid;
+ 			if (!memcmp(dst_ssid, src_ssid, ETH_ALEN)) {
+ 				if (check_fwstate(pmlmepriv, _FW_LINKED)) {
+-					if (is_same_network(&pmlmepriv->
+-					    cur_network.network,
++					if (is_same_network(&pmlmepriv->cur_network.network,
+ 					    &pnetwork->network)) {
+ 						_clr_fwstate_(pmlmepriv,
+ 							_FW_UNDER_LINKING);
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.35.1
+

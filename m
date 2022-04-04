@@ -2,177 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D55DC4F1BEE
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E85074F1BB3
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382007AbiDDVYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:24:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
+        id S1380960AbiDDVWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380390AbiDDT4b (ORCPT
+        with ESMTP id S1380392AbiDDT6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 15:56:31 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A68D26557
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 12:54:34 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id ch16-20020a17090af41000b001ca867ef52bso642174pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 12:54:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wSGFvmojAE5Wwgdbskjebmb4GWisI7pCGYJOHtj8+hU=;
-        b=Qz5IOLZhPNYeCPsVpAhskFI+r2Iuy3QXVCHEY1QCqMYBRhOwgYmS0AMm99n3NnRPia
-         Yjper3dbJkfse7JwU1MKcByxmmwW8PzSJ5JxCcGfnp13TIeQLlVzucqsPhD6A6mCt+9L
-         o12xQLwyBe70MNcbJV3eUQn29qKrr2D1HMqueaAHU4MmsigisnbZPFNGDEa7QVAftA69
-         fqbgrLxQ+xR62z7sxtVv2KCOsywxnM1S00uow9DPnu85svo7TYWl6X9/S6ovR/or5mTO
-         C2Futupmxny7LGpRDZjjiQo2MdvKNgUJL1nAbv/7IO14t0jo28GgjAr8WAcxduaN+gXJ
-         vM7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wSGFvmojAE5Wwgdbskjebmb4GWisI7pCGYJOHtj8+hU=;
-        b=4T0lzJ2UrK7tzqaHbZuvCgzneQ5y3XzY4iI/NWGdBjTqmuySlBqnG/duwKk0/i2BjN
-         RNkb+07dDyRgIQShHZIH1BpoXH1LdlETZDhQlBv/mTAP+W0jgOp+e14ViTb9SnXt/auo
-         A5yv4AxHDRJ/pFZ0sJGj7Hj8L13GBqCpfjg1b/ePuv+8DOhU/uJD5zzNKoq/kxU8NOXI
-         3VQlrahPqhiLuZDum5UYzb2ykZ52EFKia6+gwyEQXBQhj8azxoAHQkeseADQNjwf2TIQ
-         7yc4IhhbgTV0hPHZ+GPj4oShGsKWgyyFY1Ztmt5Os1KtByWLDIZkMaET+N9uMRwaVXxR
-         yKRg==
-X-Gm-Message-State: AOAM531rjOSbQGWPrKQd1f4i4DaAcmEeLFSSk5tEd80++th7qSYXIkEo
-        OMProoke/do5zOiRoNnDkA7WaA==
-X-Google-Smtp-Source: ABdhPJzYd5qGqcdcbgXRffJjoqjRSzQKEO+Ppnb1RMDP/Ru/Ihpz61dNyUTO8sZaJa00jsz5bvvgbA==
-X-Received: by 2002:a17:90b:3ec3:b0:1c7:24c4:e28f with SMTP id rm3-20020a17090b3ec300b001c724c4e28fmr840341pjb.191.1649102073832;
-        Mon, 04 Apr 2022 12:54:33 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id y16-20020a17090a6c9000b001c993d935e7sm245836pjj.56.2022.04.04.12.54.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 12:54:33 -0700 (PDT)
-Date:   Mon, 4 Apr 2022 19:54:29 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/8] KVM: SVM: Re-inject INT3/INTO instead of retrying
- the instruction
-Message-ID: <YktM9bnq5HaTMKkV@google.com>
-References: <20220402010903.727604-1-seanjc@google.com>
- <20220402010903.727604-6-seanjc@google.com>
- <a47217da0b6db4f1b6b6c69a9dc38350b13ac17c.camel@redhat.com>
- <YkshgrUaF4+MrrXf@google.com>
- <a3cf781b-0b1a-0bba-6b37-12666c7fc154@maciej.szmigiero.name>
- <YktIGHM86jHkzGdF@google.com>
+        Mon, 4 Apr 2022 15:58:33 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC9B2FE42;
+        Mon,  4 Apr 2022 12:56:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649102196; x=1680638196;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=qVd2+lCgjElgVwX9Ld2sTZVzh1JVcgMBp6qK+c5LCoo=;
+  b=cCdp8jrmCBythpZyyT6LT89aC5fwDremHSG/wm+26i64/4TyA8S+31Cg
+   cQtlBlHddCIOlAbrBjUHGwwImYJmVAZOBJbavQWHIxpgKcsQIxaZvOjly
+   kx/K7fHyHIVBXOsLm/n1l7fF7UeWC3kLn/+DKcKx/EWCrOrPB/IEFXDKf
+   U6EK/YGD/0fatA4/Kkp0vj0w+SZ995FwAflTTZU0IWNi0XfEVPpAHIres
+   yMDjhz7TvvK7YL4OeMGw36BXLPibzVsH4Bq3gvtjDsCp+GR1WpxTTwFtL
+   vD4yrZAFAafHJIQYhvL5aTVH7Is9eiFlhLYJ3FBOkVZtBW6uUAuAUNx75
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="241183795"
+X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
+   d="scan'208";a="241183795"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 12:56:36 -0700
+X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
+   d="scan'208";a="721773941"
+Received: from skokoori-mobl1.amr.corp.intel.com (HELO [10.209.7.74]) ([10.209.7.74])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 12:56:35 -0700
+Message-ID: <aece84e1-2c90-2c18-993a-96f8fed7bb46@linux.intel.com>
+Date:   Mon, 4 Apr 2022 12:56:35 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YktIGHM86jHkzGdF@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH v2 5/6] platform/x86: intel_tdx_attest: Add TDX Guest
+ attestation interface driver
+Content-Language: en-US
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Mark Gross <mgross@linux.intel.com>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+References: <cover.1648664666.git.sathyanarayanan.kuppuswamy@intel.com>
+ <054b22e81e88379a5a8459c19e89a335531c1bdd.1648664666.git.sathyanarayanan.kuppuswamy@intel.com>
+ <8308a830-3096-3f94-4f12-5fd2c290524e@redhat.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <8308a830-3096-3f94-4f12-5fd2c290524e@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022, Sean Christopherson wrote:
-> On Mon, Apr 04, 2022, Maciej S. Szmigiero wrote:
-> > > > > index 47e7427d0395..a770a1c7ddd2 100644
-> > > > > --- a/arch/x86/kvm/svm/svm.h
-> > > > > +++ b/arch/x86/kvm/svm/svm.h
-> > > > > @@ -230,8 +230,8 @@ struct vcpu_svm {
-> > > > >   	bool nmi_singlestep;
-> > > > >   	u64 nmi_singlestep_guest_rflags;
-> > > > > -	unsigned int3_injected;
-> > > > > -	unsigned long int3_rip;
-> > > > > +	unsigned soft_int_injected;
-> > > > > +	unsigned long soft_int_linear_rip;
-> > > > >   	/* optional nested SVM features that are enabled for this guest  */
-> > > > >   	bool nrips_enabled                : 1;
-> > > > 
-> > > > 
-> > > > I mostly agree with this patch, but think that it doesn't address the
-> > > > original issue that Maciej wanted to address:
-> > > > 
-> > > > Suppose that there is *no* instruction in L2 code which caused the software
-> > > > exception, but rather L1 set arbitrary next_rip, and set EVENTINJ to software
-> > > > exception with some vector, and that injection got interrupted.
-> > > > 
-> > > > I don't think that this code will support this.
-> > > 
-> > > Argh, you're right.  Maciej's selftest injects without an instruction, but it doesn't
-> > > configure the scenario where that injection fails due to an exception+VM-Exit that
-> > > isn't intercepted by L1 and is handled by L0.  The event_inj test gets the coverage
-> > > for the latter, but always has a backing instruction.
-> > 
-> > Still reviewing the whole patch set, but want to clear this point quickly:
-> > The selftest does have an implicit intervening NPF (handled by L0) while
-> > injecting the first L1 -> L2 event.
+Hi Hans,
+
+On 4/4/22 3:07 AM, Hans de Goede wrote:
+>> +static int __init tdx_attest_init(void)
+>> +{
+>> +	dma_addr_t handle;
+>> +	long ret = 0;
+>> +
+>> +	mutex_lock(&attestation_lock);
+>> +
+>> +	ret = misc_register(&tdx_attest_device);
+>> +	if (ret) {
+>> +		pr_err("misc device registration failed\n");
+>> +		mutex_unlock(&attestation_lock);
+>> +		return ret;
+>> +	}
+> Why not do this as the last thing of the probe?
+
+We need misc device reference in dma_alloc_coherent() and
+dma_set_coherent_mask() calls. This is the reason for keeping
+misc_register() at the beginining of the init function.
+
 > 
-> I'll do some debug to figure out why the test passes for me.  I'm guessing I either
-> got lucky, e.g. IDT was faulted in already, or I screwed up and the test doesn't
-> actually pass.
+> That will avoid the need to unregister this again in all
+> the error-exit paths and also fixes a possible deadlock.
+> 
 
-Well that was easy.  My code is indeed flawed and skips the wrong instruction,
-the skipped instruction just so happens to be a (spurious?) adjustment of RSP.  The
-L2 guest function never runs to completion and so the "bad" RSP is never consumed.
- 
-   KVM: incomplete injection for L2, vector 32 @ 401c70.  next_rip = 0
-   KVM: injecting for L2, vector 0 @ 401c70.  next_rip = 401c74
+Agree. But, unless we create another device locally, I don't
+think we can avoid this. Do you prefer this approach?
 
-0000000000401c70 <l2_guest_code>:
-  401c70:       48 83 ec 08             sub    $0x8,%rsp
-  401c74:       83 3d 75 a7 0e 00 01    cmpl   $0x1,0xea775(%rip)        # 4ec3f0 <int_fired>
-  401c7b:       74 1e                   je     401c9b <l2_guest_code+0x2b>
-  401c7d:       45 31 c0                xor    %r8d,%r8d
-  401c80:       b9 32 00 00 00          mov    $0x32,%ecx
-  401c85:       ba 90 40 4b 00          mov    $0x4b4090,%edx
-  401c8a:       31 c0                   xor    %eax,%eax
-  401c8c:       be 02 00 00 00          mov    $0x2,%esi
-  401c91:       bf 02 00 00 00          mov    $0x2,%edi
-  401c96:       e8 05 ae 00 00          call   40caa0 <ucall>
-  401c9b:       0f 01 d9                vmmcall 
-  401c9e:       0f 0b                   ud2    
-  401ca0:       83 3d 4d a7 0e 00 01    cmpl   $0x1,0xea74d(%rip)        # 4ec3f4 <bp_fired>
-  401ca7:       74 1e                   je     401cc7 <l2_guest_code+0x57>
-  401ca9:       45 31 c0                xor    %r8d,%r8d
-  401cac:       b9 36 00 00 00          mov    $0x36,%ecx
-  401cb1:       ba b8 40 4b 00          mov    $0x4b40b8,%edx
-  401cb6:       31 c0                   xor    %eax,%eax
-  401cb8:       be 02 00 00 00          mov    $0x2,%esi
-  401cbd:       bf 02 00 00 00          mov    $0x2,%edi
-  401cc2:       e8 d9 ad 00 00          call   40caa0 <ucall>
-  401cc7:       f4                      hlt    
-  401cc8:       48 83 c4 08             add    $0x8,%rsp
-  401ccc:       c3                      ret    
-  401ccd:       0f 1f 00                nopl   (%rax)
+> Right now you possibly have:
+> 
+> 1. probe() locks attestation_lock
+> 2. probe() registers misc-device
+> 3. userspace calls tdx_attest_ioctl
+> 4. tdx_attest_ioctl blocks waiting for attestastion_lock
+> 5. Something goes wrong in probe, probe calls
+>     misc_deregister()
+> 6. misc_deregister waits for the ioctl to finish
+> 7. deadlock
+> 
+> I'm not sure about 6, but if 6 does not happen then
+> instead we now have tdx_attest_ioctl running
+> after the misc_deregister, with tdquote_data and
+> tdreport_data as NULL, or pointing to free-ed memory
+> leading to various crash scenarios.
 
-I don't see why the compiler is creating room for a single variable, but it doesn't
-really matter, the easiest way to detect this bug is to assert that the return RIP
-in the INT 0x20 handler points at l2_guest_code, e.g. this fails:
+Makes sense. But as I have mentioned above, we have reason
+for keeping the misc_register() at the begining of the
+init function.
 
-diff --git a/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c b/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c
-index d39be5d885c1..257aa2280b5c 100644
---- a/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c
-@@ -40,9 +40,13 @@ static void guest_bp_handler(struct ex_regs *regs)
- }
+One way to avoid this deadlock is to use global initalization
+check.
 
- static unsigned int int_fired;
-+static void l2_guest_code(void);
+--- a/drivers/platform/x86/intel/tdx/intel_tdx_attest.c
++++ b/drivers/platform/x86/intel/tdx/intel_tdx_attest.c
+@@ -48,6 +48,8 @@ static void *tdreport_data;
+  /* DMA handle used to allocate and free tdquote DMA buffer */
+  dma_addr_t tdquote_dma_handle;
+
++static bool device_initialized;
 +
- static void guest_int_handler(struct ex_regs *regs)
- {
-        int_fired++;
-+       GUEST_ASSERT_2(regs->rip == (unsigned long)l2_guest_code,
-+                      regs->rip, (unsigned long)l2_guest_code);
- }
+  static void attestation_callback_handler(void)
+  {
+         complete(&attestation_done);
+@@ -60,6 +62,9 @@ static long tdx_attest_ioctl(struct file *file, 
+unsigned int cmd,
+         struct tdx_gen_quote tdquote_req;
+         long ret = 0;
 
- static void l2_guest_code(void)
++       if (!device_initialized)
++               return -ENODEV;
++
+         mutex_lock(&attestation_lock);
+
+         switch (cmd) {
+@@ -191,6 +196,8 @@ static int __init tdx_attest_init(void)
+
+         mutex_unlock(&attestation_lock);
+
++       device_initialized = true;
++
+         pr_debug("module initialization success\n");
+
+         return 0;
+
+Please let me know your comment on above solution.
+
+> 
+> TL;DR: you must always delay registering any
+> interfaces for userspace until your code is
+> ready to deal with userspace calls.
+> 
+> Regards,
+> 
+> Hans
+> 
+> p.s.
+> 
+> As I mentioned with v1:
+> 
+> 
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

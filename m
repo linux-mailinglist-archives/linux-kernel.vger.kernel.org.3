@@ -2,103 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E9D4F1820
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 910F54F1823
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:19:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378490AbiDDPUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 11:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54378 "EHLO
+        id S1378502AbiDDPU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 11:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230438AbiDDPUG (ORCPT
+        with ESMTP id S1356457AbiDDPUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 11:20:06 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2342528E34
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:18:10 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 00:18:05 +0900
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1649085488;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LZ2miKBTVPr3F+L5ojFoVTTDrRk5AYtrEEP/TQPrTdw=;
-        b=iaj9dlWqaS7vybtNKFDB++49DZVieYTAJhxXSpIM6itTj+7vhMoGhgS47O1lXtt1WUFHvx
-        OvjqHtyuLtXvPlGbr04YmWmDG31ijAiXNElchjylQ86whJp5pD/k1Riw9Nzpr3iz7OE3m0
-        L1nuSJjpjQ+uk7brFUkI/iuXgWggRm8=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     Zi Yan <ziy@nvidia.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>
-Subject: Re: v5.18-rc1: migratepages triggers
- VM_BUG_ON_FOLIO(folio_nr_pages(old) != nr_pages)
-Message-ID: <20220404151805.GA800317@u2004>
-References: <20220404132908.GA785673@u2004>
- <F3E3F1AE-B421-4463-B032-3F58DF89A5E2@nvidia.com>
- <YksAub9UccPZa9DI@casper.infradead.org>
- <C4792D17-A7F6-4803-B8FC-B8682F50E044@nvidia.com>
+        Mon, 4 Apr 2022 11:20:49 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4273E1EEED
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:18:53 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id y38so18179484ybi.8
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 08:18:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2VxKE2AF5CaxNXJB6azVDEKw7atOLqH2N7X5sbmlz7w=;
+        b=qgvOKqP7mwT72Kdyn1pQiRXBm1hg7vV8g9aRSrPJRBem1N/PNdhCbaZFMjvQba3l0m
+         /ejLnk37Q8AR/Pnqvv2j6S40dC7+fktYVmQKnKDpvE095ZhaFtR/Ln4k4zV1BYEQp1FE
+         OZSrDzRnpm4Ms5Rel+ZWDk5KLGuh82BzzgPhMvDH9YW4b7fKg/DCWeCR47z2kOP82KaG
+         O5Fx8Im2o/doRmeONC+aSTvCWD7ASBDNGD4gu+WFNXR3BJuWGnfGHxQOApZuMDNmNaN0
+         0GDpG8i5CkGswIxCzYAx/yZxs/2HBqXQ+CX6ay/OP1Qig0XkLHQHm4Lzc5B4eqRNK87L
+         OtVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2VxKE2AF5CaxNXJB6azVDEKw7atOLqH2N7X5sbmlz7w=;
+        b=M3TUpmxhJ9mt83IGwy5pafkFYK0g99+PxFP1VvL5SJ6ILEr+2dH9QG/W3vgv6Vfd6k
+         xmEQFM7zH42H9ZAgkuF1K8RZawiZh0bA8f1LFfZ26gvuv9T9Icrce/aIusbSYFvnwqSK
+         NHYEtw2hhlw0NjtQZvvHtUdRbcSbU2gGpYM0Xji5n89ldZ7vKeh6PGlZCV2FiBBBELvc
+         4eEfDjtHDvCLHZ8TDRDVjnlZidDtTd4JvS4znjbJMy538BlLZXT2YyTAAckwGiWtceNG
+         7TDfY2QaBszoxhahMKX09U+I642dIRs9Rvp2B3NXBQwxWO1Nv5jg46e3v9tu6s+wKnlr
+         0pJg==
+X-Gm-Message-State: AOAM532WSbouFH4fWX886UrSgJIwSg9HmJb/8fvI6VnWo4SNe2/a/zSl
+        AOJylQ1EuvOR8+bZuSOlrtSEA6orHwY49QuYLPLz+w==
+X-Google-Smtp-Source: ABdhPJwf6GddFAzNwff1T7O2bqehRsev2EcIU/mkMhEyZkZKubk/JJpVqk9zSQE96tAMKHwTLfyuokDLG3uiAHKMnOE=
+X-Received: by 2002:a25:9b85:0:b0:63d:ad6c:aae8 with SMTP id
+ v5-20020a259b85000000b0063dad6caae8mr223324ybo.609.1649085532340; Mon, 04 Apr
+ 2022 08:18:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <C4792D17-A7F6-4803-B8FC-B8682F50E044@nvidia.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220323090520.GG16885@xsang-OptiPlex-9020> <20220324095218.GA2108184@odroid>
+ <YkcfNjZJSXNsAlLt@hyeyoo> <YkpgjgM/aSXd29uj@hyeyoo> <Ykqn2z9UVfxFwiU+@elver.google.com>
+ <8368021e-86c3-a93f-b29d-efed02135c41@suse.cz>
+In-Reply-To: <8368021e-86c3-a93f-b29d-efed02135c41@suse.cz>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 4 Apr 2022 17:18:16 +0200
+Message-ID: <CANpmjNMupGGbTDD-ZEY=acTbqguvWgLzb1ZVRbG9TyuF50Ch+Q@mail.gmail.com>
+Subject: Re: [mm/slub] 555b8c8cb3: WARNING:at_lib/stackdepot.c:#stack_depot_fetch
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        kernel test robot <oliver.sang@intel.com>,
+        Oliver Glitta <glittao@gmail.com>, lkp@lists.01.org,
+        lkp@intel.com, LKML <linux-kernel@vger.kernel.org>,
+        Imran Khan <imran.f.khan@oracle.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Zqiang <qiang.zhang@windriver.com>, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 10:47:20AM -0400, Zi Yan wrote:
-> On 4 Apr 2022, at 10:29, Matthew Wilcox wrote:
-> 
-> > On Mon, Apr 04, 2022 at 10:05:00AM -0400, Zi Yan wrote:
-> >> On 4 Apr 2022, at 9:29, Naoya Horiguchi wrote:
-> >>> I found that the below VM_BUG_ON_FOLIO is triggered on v5.18-rc1
-> >>> (and also reproducible with mmotm on 3/31).
-> >>> I have no idea about the bug's mechanism, but it seems not to be
-> >>> shared in LKML yet, so let me just share. config.gz is attached.
-> >>>
-> >>> [   48.206424] page:0000000021452e3a refcount:6 mapcount:0 mapping:000000003aaf5253 index:0x0 pfn:0x14e600
-> >>> [   48.213316] head:0000000021452e3a order:9 compound_mapcount:0 compound_pincount:0
-> >>> [   48.218830] aops:xfs_address_space_operations [xfs] ino:dee dentry name:"libc.so.6"
-> >>> [   48.225098] flags: 0x57ffffc0012027(locked|referenced|uptodate|active|private|head|node=1|zone=2|lastcpupid=0x1fffff)
-> >>> [   48.232792] raw: 0057ffffc0012027 0000000000000000 dead000000000122 ffff8a0dc9a376b8
-> >>> [   48.238464] raw: 0000000000000000 ffff8a0dc6b23d20 00000006ffffffff 0000000000000000
-> >>> [   48.244109] page dumped because: VM_BUG_ON_FOLIO(folio_nr_pages(old) != nr_pages)
-> >>> [   48.249196] ------------[ cut here ]------------
-> >>> [   48.251240] kernel BUG at mm/memcontrol.c:6857!
-> >>> [   48.260535] RIP: 0010:mem_cgroup_migrate+0x217/0x320
-> >>> [   48.286942] Call Trace:
-> >>> [   48.287665]  <TASK>
-> >>> [   48.288255]  iomap_migrate_page+0x64/0x190
-> >>> [   48.289366]  move_to_new_page+0xa3/0x470
+On Mon, 4 Apr 2022 at 16:20, Vlastimil Babka <vbabka@suse.cz> wrote:
+>
+> On 4/4/22 10:10, Marco Elver wrote:
+> > On Mon, Apr 04, 2022 at 12:05PM +0900, Hyeonggon Yoo wrote:
+> > (Maybe CONFIG_KCSAN_STRICT=y is going to yield something? I still doubt
+> > it thought, this bug is related to corrupted stackdepot handle
+> > somewhere...)
+> >
+> >> I noticed that it is not reproduced when KASAN=y and KFENCE=n (reproduced 0 of 181).
+> >> and it was reproduced 56 of 196 when KASAN=n and KFENCE=y
 > >>
-> >> Is it because migration code assumes all THPs have order=HPAGE_PMD_ORDER?
-> >> Would the patch below fix the issue?
+> >> maybe this issue is related to kfence?
+>
+> Hmm kfence seems to be a good lead. If I understand kfence_guarded_alloc()
+> correctly, it tries to set up something that really looks like a normal slab
+> page? Especially the part with comment /* Set required slab fields. */
+> But it doesn't seem to cover the debugging parts that SLUB sets up with
+> alloc_debug_processing(). This includes alloc stack saving, thus, after
+> commit 555b8c8cb3, a stackdepot handle setting. It probably normally doesn't
+> matter as is_kfence_address() redirects processing of kfence-allocated
+> objects so we don't hit any slub code that expects the debugging parts to be
+> properly initialized.
+>
+> But here we are in mem_dump_obj() -> kmem_dump_obj() -> kmem_obj_info().
+> Because kmem_valid_obj() returned true, fooled by folio_test_slab()
+> returning true because of the /* Set required slab fields. */ code.
+> Yet the illusion is not perfect and we read garbage instead of a valid
+> stackdepot handle.
+>
+> IMHO we should e.g. add the appropriate is_kfence_address() test into
+> kmem_valid_obj(), to exclude kfence-allocated objects? Sounds much simpler
+> than trying to extend the illusion further to make kmem_dump_obj() work?
+> Instead kfence could add its own specific handler to mem_dump_obj() to print
+> its debugging data?
 
-I briefly confirmed that this bug didn't reproduce with your change,
-thank you very much!
+I think this explanation makes sense!  Indeed, KFENCE already records
+allocation stacks internally anyway, so it should be straightforward
+to convince it to just print that.
 
-- Naoya Horiguchi
-
-> >
-> > This looks entirely plausible to me!  I do have changes in this area,
-> > but clearly I should have submitted them earlier.  Let's get these fixes
-> > in as they are.
-> >
-> > Is there a test suite that tests page migration?  I usually use xfstests
-> > and it does no page migration at all (at least 'git grep migrate'
-> > finds nothing useful).
-> 
-> https://github.com/linux-test-project/ltp has some migrate_pages and move_pages
-> tests. You can run them after install ltp:
-> sudo ./runltp -f syscalls -s migrate_pages and
-> sudo ./runltp -f sys calls -s move_pages
-
+Thanks,
+-- Marco

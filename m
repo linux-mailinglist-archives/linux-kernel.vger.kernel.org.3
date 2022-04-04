@@ -2,85 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5FE4F1FDE
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A104F1FE7
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241126AbiDDXKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 19:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
+        id S239028AbiDDXKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 19:10:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241148AbiDDXJz (ORCPT
+        with ESMTP id S242761AbiDDXJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 19:09:55 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618401262B;
-        Mon,  4 Apr 2022 15:43:56 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-dacc470e03so12494960fac.5;
-        Mon, 04 Apr 2022 15:43:56 -0700 (PDT)
+        Mon, 4 Apr 2022 19:09:57 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877C1DF48;
+        Mon,  4 Apr 2022 15:45:43 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id m18so9353056plx.3;
+        Mon, 04 Apr 2022 15:45:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9XkilyyUYNIu4Q3RHDNyf31taWeKWC5BkvBL21mWPSU=;
+        b=eSZSA29OSTSEp0kOl2zS4g6nxJQr1PmTHuIJuKFN0sFB3K3wZHIznyN+FdNPLcOxkS
+         A0Zr2FjxOGOUIOx9eX91ldEQ0Xd5EoghPmsoqtF80tfVPBTL4roiZKFWffzrk28CpynL
+         OfXuBzS73RLhxuu4gb2w+U+HC1TruFekGweBautH0MOYw99qC20jRZ+Z0OZXPYmc57pY
+         NZ31uZpw4xk3IYZgJ+VINlpf/f2hy+FbSzPZMJ8pf+moIsN32xOzam3c8xK4y6vH3Ltg
+         CxGWwV/NO2MJn1aCC73shwF7jRpDbinNmPBUtMbQNNja7hlKz9d9n+qdrOhz4M+YrKyJ
+         MfhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7MZNmrOPOsOL2UrSRa9LdE+XzxijYmU0GespTjTlx7M=;
-        b=hCy28eNtQuE2H1UIgO/JQ5BiCFibikmGn8mQTgfT4UjtoX4Q13rVulzKhyHl3am0Bc
-         TlYp/shP1VxTS0vdYar1m7lrBvSmHJCBnm7Yv0FXbZL11p9bIfW/Fuz5PtVdELtyAYR3
-         AeEPB4ANg0n6UIJIEJklfLQnevGUCr/CBrjhW15//E3HaZ7KDRx/LtX8dlbiDe2Mh+NC
-         lAVOH9DTwn9MAYr9dZcdKYCcppIcTmsYAeaVaJAZaE9TEjKzbi4vEvVzP8nV5GDn7qVU
-         FEOHkpMseZKXnw4RNcZSl1cJjMQgVA5Gw6/tOlg8engyWV3zowRYeCw3ZBXEZ7ZU4/7T
-         XfPw==
-X-Gm-Message-State: AOAM531IFB3Y6I+ojauPJyN2Drj7OwmlW9XBQUap9NifFRhpsCQZ0Ocu
-        vnfEw+Yk+M4V25RZx5955vAVya1F7Q==
-X-Google-Smtp-Source: ABdhPJxI2qYP8FTA84VhMS4ZS8EQWBheTKYOfNK4sGVlhVe6Nl3N6j/Mje0RQ4wJ3TR97W4CIYp1sg==
-X-Received: by 2002:a05:6870:80d1:b0:e2:1c70:782f with SMTP id r17-20020a05687080d100b000e21c70782fmr201375oab.69.1649112235557;
-        Mon, 04 Apr 2022 15:43:55 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id m17-20020a0568301e7100b005b256697d7csm4997932otr.72.2022.04.04.15.43.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 15:43:55 -0700 (PDT)
-Received: (nullmailer pid 2140401 invoked by uid 1000);
-        Mon, 04 Apr 2022 22:43:54 -0000
-Date:   Mon, 4 Apr 2022 17:43:54 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] dt-bindings: soc: qcom,wcnss: convert to dtschema
-Message-ID: <Ykt0qgHpmr7BLPGN@robh.at.kernel.org>
-References: <20220402093919.50084-1-krzysztof.kozlowski@linaro.org>
- <20220402093919.50084-3-krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9XkilyyUYNIu4Q3RHDNyf31taWeKWC5BkvBL21mWPSU=;
+        b=BQOP9x9vg0DNVouHYVgFjVWNrVrXIDVWr5/YCGh5HWDPE+q8SjsFRQQKCGITDFAiiX
+         ptOqnrodtUzCwhiefgt5kgm2FIJIUEhsX1RJcBBegvqsjbeAi/VW8EZmPvdnu7RmVqVe
+         CQdLkVDJz95abFJClPQp5Snz7PZWPlpIMGQ1pIcE10HZ31GlDEPjxjDMoVKU6Dy7ZHc5
+         10/i+FVUZ+zsFr2UBBfy8IsoImaBPNhHCByqHTlDONgggnS863RaDW6FOq3pKLN4uwbz
+         mcQXEGrATTnu8oSP3jCv8s2v73hVPY9hC8MADlBCp3FoS0DLEp8CuCtgZxGWe6c7If6b
+         6Edg==
+X-Gm-Message-State: AOAM533bZehBUEvg9Dvj2wC9kbHL4kGd2ZUiK1rd+6R2QicxJ+65LHIQ
+        Telnoo13wJPE1nNFjxs+fHBbFISp50nOba9uwmU=
+X-Google-Smtp-Source: ABdhPJxiCKFfkcGMtFQZjMAwER612fac8KxMOafNFnyc2DT2VWuVuz1b/99RZz1O5gO1awPLAGGbTnsEAJTMcBdy4BE=
+X-Received: by 2002:a17:902:ba83:b0:154:727e:5fc5 with SMTP id
+ k3-20020a170902ba8300b00154727e5fc5mr463137pls.55.1649112342937; Mon, 04 Apr
+ 2022 15:45:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220402093919.50084-3-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220404220314.112912-1-mcroce@linux.microsoft.com>
+In-Reply-To: <20220404220314.112912-1-mcroce@linux.microsoft.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 4 Apr 2022 15:45:31 -0700
+Message-ID: <CAADnVQLqXKPpfe3M1fnrUj=Cq91KucX9R95eSF+ExavWo2Wv_Q@mail.gmail.com>
+Subject: Re: [PATCH] bpf: make unprivileged BPF a compile time choice
+To:     Matteo Croce <mcroce@linux.microsoft.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 02 Apr 2022 11:39:19 +0200, Krzysztof Kozlowski wrote:
-> Convert the Qualcomm WCNSS bindings to DT Schema.
-> 
-> Changes against original bindings: fix qcom,smd-channels and
-> qcom,smem-states names (how they are used in DTS and driver), enforce
-> child node naming of bluetooth and wifi.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/soc/qcom/qcom,wcnss.txt          | 131 -----------------
->  .../bindings/soc/qcom/qcom,wcnss.yaml         | 139 ++++++++++++++++++
->  2 files changed, 139 insertions(+), 131 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,wcnss.txt
->  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,wcnss.yaml
-> 
+On Mon, Apr 4, 2022 at 3:03 PM Matteo Croce <mcroce@linux.microsoft.com> wrote:
+>
+> From: Matteo Croce <mcroce@microsoft.com>
+>
+> Add a compile time option to permanently disable unprivileged BPF and
+> the corresponding sysctl handler so that there's absolutely no
+> concern about unprivileged BPF being enabled from userspace during
+> runtime. Special purpose kernels can benefit from the build-time
+> assurance that unprivileged eBPF is disabled in all of their kernel
+> builds rather than having to rely on userspace to permanently disable
+> it at boot time.
+> The default behaviour is left unchanged, which is: unprivileged BPF
+> compiled in but disabled at boot.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+That is an insane level of "security" paranoia.
+If you're so concerned about bpf do CONFIG_BPF_SYSCALL=n

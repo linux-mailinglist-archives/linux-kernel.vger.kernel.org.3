@@ -2,115 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C51B4F0D48
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 02:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A957B4F0D4C
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 02:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376826AbiDDAnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 20:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
+        id S1376836AbiDDAzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 20:55:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241444AbiDDAnR (ORCPT
+        with ESMTP id S240987AbiDDAzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 20:43:17 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81F223150;
-        Sun,  3 Apr 2022 17:41:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649032880; x=1680568880;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=AQY0RgB1apu3f3OnS0H9ItCK1wYR3RZozmXjysWHgPs=;
-  b=QJp0fL+Da3hubl9IgHYFLEIeeJd0N3fpNbHVEln206FMdcN6S+cbE8Zc
-   3LucWdIiz7wXIfiBrHrFHOlh5RekSxafsIgX982ezZqeuz9WTr7pgheRv
-   cmb0K/8iamr9wTh/KJKm2Gt4alnBX2J3w40BV7wvOrEdho9JcMO+AXX+k
-   j+GYr4Q6XfLKKZpnshwlvyMamRYBM6NWxlwPon88iVGkcCcnDWh79lG/3
-   FVQjKCc9XzWXdvOhuDePtJ8vC2Mn1ZBWYeziaNF4izWH92Mxo/RW2JwiO
-   Bzn0y205FkQzd2GqKX4F8Trb7AmL0P/Dwa+3koM+8cZ5Jv2LuJDszQFkH
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="285364336"
-X-IronPort-AV: E=Sophos;i="5.90,233,1643702400"; 
-   d="scan'208";a="285364336"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2022 17:41:20 -0700
-X-IronPort-AV: E=Sophos;i="5.90,233,1643702400"; 
-   d="scan'208";a="789338501"
-Received: from bthorroc-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.251.132.176])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2022 17:41:18 -0700
-Message-ID: <039c9eada49e9eeca48c39c5bea0fac0ab68c673.camel@intel.com>
-Subject: Re: [RFC PATCH v5 038/104] KVM: x86/mmu: Allow per-VM override of
- the TDP max page level
-From:   Kai Huang <kai.huang@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>
-Date:   Mon, 04 Apr 2022 12:41:16 +1200
-In-Reply-To: <YkeUDJP1AWKU/ixG@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
-         <5cc4b1c90d929b7f4f9829a42c0b63b52af0c1ed.1646422845.git.isaku.yamahata@intel.com>
-         <c6fb151ced1675d1c93aa18ad8c57c2ffc4e9fcb.camel@intel.com>
-         <YkcHZo3i+rki+9lK@google.com>
-         <43098446667829fc592b7cc7d5fd463319d37562.camel@intel.com>
-         <YkeUDJP1AWKU/ixG@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Sun, 3 Apr 2022 20:55:35 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DEB639B;
+        Sun,  3 Apr 2022 17:53:39 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id y10so7506674pfa.7;
+        Sun, 03 Apr 2022 17:53:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=yNiMC9MxNAVqib+SZgJ64s5pZC15kZoqX/VkezsKZbU=;
+        b=A7WqEwsD/aUvHQ8X6WMd/LHTc2iOpLbQ6RzOtzK+70OO4r0OV1gzSUvIJ/eUBN/kZm
+         LbDrm7jb3wjUd6pK3xKf3Brk2/rfiNQSMcag3JOEunkqcdFrlpV84yDNeZEl6R2p63fX
+         vDenSLEN+t+QqnvXbjtyCT58Orv1T5ldIX3I9XNcELLSe1C+zDQsOX3I3QQeIWOvI1Os
+         OD6IoUwl+jLZA7M6J2+VAr+oB15JkdTZ5m613Uf/MpgHc074HxXytLwVoo1L/36DNMTB
+         IF+B92/88WWTfhi2YE+K0VDHPXA9z3GWoXkIo+qR+dn29G7i/EuOtOpKOJ97vIk7XwsP
+         l7XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=yNiMC9MxNAVqib+SZgJ64s5pZC15kZoqX/VkezsKZbU=;
+        b=O+NpRXd8pziBh59mwKT+z+t2ND9VYjQQ93n9BfTdNIELCLmTaBjYR1iDRJ7Uoj70zY
+         0CdgjoML7pHLNTbLgl3TIaNdWnnOaNQszgyP6ADqaPIo3NeCqWFdcNpHSs1mVJ1IFyqZ
+         p0nLdS4D7olzPkHiVKsMDdOZT1w9lIbdVO8P9y6HfjDlbTRkl842bMFWaIHnsF6XUslU
+         34b72HblCNd7cWkw+Du1LZg2iAhGYE/86WAxFOEQcDv16cXUQ32bgS1YFE2IPeCqINH+
+         nMtEZ3kbloPnBYYyXo6ypIRikYQ14WNbaxm5kMvBEgTmYDMwrV96Vz68mruvkTE5coty
+         oBgA==
+X-Gm-Message-State: AOAM53210pCQ5qOP7eBge3c8aXjNYpROWp8AT/Ku6qBZPGYRAhA2BvPF
+        PAMSEelwcE5q2WpPwMLmGGU=
+X-Google-Smtp-Source: ABdhPJw/x073w6Z90xT359YpAOS5KIyzJB+bmchOhwkplxvv3ruSfxcQNW6brmHxBlUTfbm+oZaLtQ==
+X-Received: by 2002:a05:6a00:1581:b0:4fa:e6d4:c3e6 with SMTP id u1-20020a056a00158100b004fae6d4c3e6mr21250956pfk.84.1649033619443;
+        Sun, 03 Apr 2022 17:53:39 -0700 (PDT)
+Received: from localhost.localdomain ([223.74.191.143])
+        by smtp.gmail.com with ESMTPSA id d24-20020a637358000000b003823aefde04sm8658355pgn.86.2022.04.03.17.53.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Apr 2022 17:53:38 -0700 (PDT)
+From:   Yuntao Wang <ytcoode@gmail.com>
+To:     andrii.nakryiko@gmail.com
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com, toke@redhat.com,
+        yhs@fb.com, ytcoode@gmail.com
+Subject: [PATCH bpf-next v3] libbpf: Don't return -EINVAL if hdr_len < offsetofend(core_relo_len)
+Date:   Mon,  4 Apr 2022 08:53:20 +0800
+Message-Id: <20220404005320.1723055-1-ytcoode@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <CAEf4Bzbi1E_-yojgJQevM1rdhXF4EzU4dgPsGDT7F5uuDPOE7Q@mail.gmail.com>
+References: <CAEf4Bzbi1E_-yojgJQevM1rdhXF4EzU4dgPsGDT7F5uuDPOE7Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-04-02 at 00:08 +0000, Sean Christopherson wrote:
-> On Sat, Apr 02, 2022, Kai Huang wrote:
-> > On Fri, 2022-04-01 at 14:08 +0000, Sean Christopherson wrote:
-> > > On Fri, Apr 01, 2022, Kai Huang wrote:
-> > > > On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
-> > > > > From: Sean Christopherson <sean.j.christopherson@intel.com>
-> > > > > 
-> > > > > In the existing x86 KVM MMU code, there is already max_level member in
-> > > > > struct kvm_page_fault with KVM_MAX_HUGEPAGE_LEVEL initial value.  The KVM
-> > > > > page fault handler denies page size larger than max_level.
-> > > > > 
-> > > > > Add per-VM member to indicate the allowed maximum page size with
-> > > > > KVM_MAX_HUGEPAGE_LEVEL as default value and initialize max_level in struct
-> > > > > kvm_page_fault with it.
-> > > > > 
-> > > > > For the guest TD, the set per-VM value for allows maximum page size to 4K
-> > > > > page size.  Then only allowed page size is 4K.  It means large page is
-> > > > > disabled.
-> > > > 
-> > > > Do not support large page for TD is the reason that you want this change, but
-> > > > not the result.  Please refine a little bit.
-> > > 
-> > > Not supporting huge pages was fine for the PoC, but I'd prefer not to merge TDX
-> > > without support for huge pages.  Has any work been put into enabling huge pages?
-> > > If so, what's the technical blocker?  If not...
-> > 
-> > Hi Sean,
-> > 
-> > Is there any reason large page support must be included in the initial merge of
-> > TDX?  Large page is more about performance improvement I think.  Given this
-> > series is already very big, perhaps we can do it later.
-> 
-> I'm ok punting 1gb for now, but I want to have a high level of confidence that 2mb
-> pages will work without requiring significant churn in KVM on top of the initial
-> TDX support.  I suspect gaining that level of confidence will mean getting 95%+ of
-> the way to a fully working code base.  IIRC, 2mb wasn't expected to be terrible, it
-> was 1gb support where things started to get messy.
+Since core relos is an optional part of the .BTF.ext ELF section, we should
+skip parsing it instead of returning -EINVAL if header size is less than
+offsetofend(struct btf_ext_header, core_relo_len).
 
-OK no argument here :)
+Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+---
+v1 -> v2: skip core relos if hdr_len < offsetofend(core_relo_len)
+v2 -> v3: fix comment style
 
+ tools/lib/bpf/btf.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 1383e26c5d1f..d124e9e533f0 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -2826,10 +2826,8 @@ struct btf_ext *btf_ext__new(const __u8 *data, __u32 size)
+ 	if (err)
+ 		goto done;
+ 
+-	if (btf_ext->hdr->hdr_len < offsetofend(struct btf_ext_header, core_relo_len)) {
+-		err = -EINVAL;
+-		goto done;
+-	}
++	if (btf_ext->hdr->hdr_len < offsetofend(struct btf_ext_header, core_relo_len))
++		goto done; /* skip core relos parsing */
+ 
+ 	err = btf_ext_setup_core_relos(btf_ext);
+ 	if (err)
 -- 
-Thanks,
--Kai
-
+2.35.1
 

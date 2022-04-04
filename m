@@ -2,220 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CA14F121C
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9A14F121E
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354278AbiDDJgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 05:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
+        id S1354392AbiDDJhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 05:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354239AbiDDJgx (ORCPT
+        with ESMTP id S1343889AbiDDJhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 05:36:53 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E522026AFC
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 02:34:55 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id m67-20020a1ca346000000b0038e6a1b218aso2730380wme.2
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 02:34:55 -0700 (PDT)
+        Mon, 4 Apr 2022 05:37:35 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4DF2AE37
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 02:35:39 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id n6-20020a17090a670600b001caa71a9c4aso1324659pjj.1
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 02:35:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xry0fvSIyDxjB2H9TftOM1VVr7Z84GMJx65XGE7l1g8=;
-        b=QyIkbrvP3PXHYn8SZb3YFGNOU4YEWKwijKbTOMes2v3n/iFjy3E0l83+3PU1OyKdiC
-         28W9oIBBI4K+hraVFUC4rWiUr33rPk2ySKcvsAeR22WUXi4iM2aHnZd8Fn1GeAeirYrD
-         vpYCRqjh9PypWsECcQ9s8YJ0IOwuqrtnIou1JtT8aMLsJeQiP8+/F14BOx45Pzoc5hOs
-         zFVa0z20WuRvfR9IM3W6B7NXFHL5NIRr3q2/9wWYRFFUZeBeGzMux4sUyMGNAuZjF3t0
-         mwwwBGsWFJCRgizWUZXY7qrl7cdc2T3DX58d8hKruK4mcWNDpPeP1QmPVvKj4hi4kGzf
-         uymg==
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id;
+        bh=NFJoHT6EmGTYBUPOupG38cbbiA5NqTvKVPy1Pb3g8l0=;
+        b=hqie0VxbYc6jPuFUDUUWm1ttjYV4p5WiT7ENtpsiDJIZxfyFn8KEFNdFEfMWRv7WlT
+         s4gwzU9BbT8f7aP01MHVF85zFMbgqlHDUL3hg3KSpHA88D7qEyQN8o9S1mZRK2HTupsz
+         pjLzKJCvhIICpDKDOqz4Au81BgUEMVRv/nxup5iZJBKY6fktTyWz2ww03AWmpaPE8TVy
+         SyzKdH5qTb00ZfGBjVS5/XU1AQBJ1SPMpZ2Od2UUpqxrDw4MvEGj1R8nbyqfxHiJ3FiZ
+         Hw8k2PMX0hgXLjfsdoKXvPWmHxc/U07vws0xXytgr0GA+Y6fL1626W5leKk1qWV1VFfo
+         87Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xry0fvSIyDxjB2H9TftOM1VVr7Z84GMJx65XGE7l1g8=;
-        b=E1hWAgNARVVTzcnpO5oMjvQt96ohcdbLaLA5I+m4gk+QPDCiNizMr58sE/Zd+DMcoj
-         F9yjF9BZpj8AUkxY05b/7LV56X0Y6vNmpD+bM99haWsdtPmXHB9Bb2qpheyQyNLXqOQy
-         qXLtJ0Xs0BK9qxlxcn/GG+Fg7atkiOkp/4BaJ7b28/2idfVxDCBEWk+7D7M+SO2fqbzO
-         t6c6em9EkXrw3X3DjrKLwjWA70WQ2naRlwxEbSeCfXJeu0YU+QFvQUMQSvmBUH0SueLf
-         npSZMvBbwZIaPQngDKk1tRd+mQgzITDN8RRQbMOzvfiHiGHP0+2noosQFsx7wGREDIKf
-         gZYQ==
-X-Gm-Message-State: AOAM530k/6wHeREbKsQIta0cs1XBszGrRTqP+7a+w4dkB80/gCO+ojvr
-        VEo1rMFKe2GD82Hx04HzM1LJoQ==
-X-Google-Smtp-Source: ABdhPJw+vbnPc6vft6RqA6zSnbRtvDlS1NwlZFp269pvENQ083BNJ7dEdI8BO5JpR9Ta6ymEkaX/jQ==
-X-Received: by 2002:a05:600c:3487:b0:38c:9a42:4d49 with SMTP id a7-20020a05600c348700b0038c9a424d49mr18900226wmq.29.1649064894420;
-        Mon, 04 Apr 2022 02:34:54 -0700 (PDT)
-Received: from [192.168.0.173] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id o4-20020a5d6484000000b002057ad822d4sm9143811wri.48.2022.04.04.02.34.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 02:34:54 -0700 (PDT)
-Message-ID: <2976f4f9-4fda-c04f-45cf-351518f88ec0@linaro.org>
-Date:   Mon, 4 Apr 2022 11:34:52 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v6 01/12] driver: platform: Add helper for safer setting
- of driver_override
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Andy Gross <agross@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-References: <20220403183758.192236-1-krzysztof.kozlowski@linaro.org>
- <20220403183758.192236-2-krzysztof.kozlowski@linaro.org>
- <CAHp75Vczm9f9Bx_w4nW31cnBgwEzPiN-Eqn-7DKZuB+Hew0F=Q@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAHp75Vczm9f9Bx_w4nW31cnBgwEzPiN-Eqn-7DKZuB+Hew0F=Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:subject:date:message-id;
+        bh=NFJoHT6EmGTYBUPOupG38cbbiA5NqTvKVPy1Pb3g8l0=;
+        b=r0eJSFyN29QzkGM1t8f+ofwX5hpiRj3IEIMe1YkFUXzxuUR5QMZ3G6dtkL/KBkEB8Y
+         XGkD8cp/6Zgqn5x9ZCP+f4BTU5+kiRmbub2L6OMNCqxN71WwovoW0xFr1sMAaPr7gMU+
+         JXPheB7D7bG/5mrlFJnbumnb0L9XZ9DK6KABOVaGdMkDTbBsJ20YzuiqovkfULyviCkR
+         tPXy/qFAJvkVkMnF3XYV97yu4rzv1gvSsp7DD6LQ/UWwdNVjdOIkFwsyYNKWWAa7E/DL
+         vshOSDjhjnAH+jJkBbhWpgTeW3NXxuu15Fd7XNerJSvE/65oQ3rqXFkp37aq5YurotVJ
+         Vqeg==
+X-Gm-Message-State: AOAM533jz/miKj0bX+QpwzSJOQ3XLd7/qHkodDx6HRFCL7/0noIKyZpX
+        fXmeEXLkZUlRKRKJ56FzGvhUaE62iMSOxTfj
+X-Google-Smtp-Source: ABdhPJw99iosJV9nPCTMTX9k/SsOa92D4Q8eA8BMrDxaMJ3zDelyoQIOKd0hFHAqFwuNdvPttgVplA==
+X-Received: by 2002:a17:90b:164f:b0:1c7:8d20:ff6d with SMTP id il15-20020a17090b164f00b001c78d20ff6dmr25522757pjb.64.1649064938871;
+        Mon, 04 Apr 2022 02:35:38 -0700 (PDT)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id j20-20020a62e914000000b004fa3bd9bef0sm11032863pfh.110.2022.04.04.02.35.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 02:35:38 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] ASoC: mediatek: Fix missing of_node_put in mt2701_wm8960_machine_probe
+Date:   Mon,  4 Apr 2022 09:35:25 +0000
+Message-Id: <20220404093526.30004-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/04/2022 11:16, Andy Shevchenko wrote:
-> On Sun, Apr 3, 2022 at 9:38 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> Several core drivers and buses expect that driver_override is a
->> dynamically allocated memory thus later they can kfree() it.
->>
->> However such assumption is not documented, there were in the past and
->> there are already users setting it to a string literal. This leads to
->> kfree() of static memory during device release (e.g. in error paths or
->> during unbind):
->>
->>     kernel BUG at ../mm/slub.c:3960!
->>     Internal error: Oops - BUG: 0 [#1] PREEMPT SMP ARM
->>     ...
->>     (kfree) from [<c058da50>] (platform_device_release+0x88/0xb4)
->>     (platform_device_release) from [<c0585be0>] (device_release+0x2c/0x90)
->>     (device_release) from [<c0a69050>] (kobject_put+0xec/0x20c)
->>     (kobject_put) from [<c0f2f120>] (exynos5_clk_probe+0x154/0x18c)
->>     (exynos5_clk_probe) from [<c058de70>] (platform_drv_probe+0x6c/0xa4)
->>     (platform_drv_probe) from [<c058b7ac>] (really_probe+0x280/0x414)
->>     (really_probe) from [<c058baf4>] (driver_probe_device+0x78/0x1c4)
->>     (driver_probe_device) from [<c0589854>] (bus_for_each_drv+0x74/0xb8)
->>     (bus_for_each_drv) from [<c058b48c>] (__device_attach+0xd4/0x16c)
->>     (__device_attach) from [<c058a638>] (bus_probe_device+0x88/0x90)
->>     (bus_probe_device) from [<c05871fc>] (device_add+0x3dc/0x62c)
->>     (device_add) from [<c075ff10>] (of_platform_device_create_pdata+0x94/0xbc)
->>     (of_platform_device_create_pdata) from [<c07600ec>] (of_platform_bus_create+0x1a8/0x4fc)
->>     (of_platform_bus_create) from [<c0760150>] (of_platform_bus_create+0x20c/0x4fc)
->>     (of_platform_bus_create) from [<c07605f0>] (of_platform_populate+0x84/0x118)
->>     (of_platform_populate) from [<c0f3c964>] (of_platform_default_populate_init+0xa0/0xb8)
->>     (of_platform_default_populate_init) from [<c01031f8>] (do_one_initcall+0x8c/0x404)
->>
->> Provide a helper which clearly documents the usage of driver_override.
->> This will allow later to reuse the helper and reduce the amount of
->> duplicated code.
->>
->> Convert the platform driver to use a new helper and make the
->> driver_override field const char (it is not modified by the core).
-> 
-> ...
-> 
->> +int driver_set_override(struct device *dev, const char **override,
->> +                       const char *s, size_t len)
->> +{
->> +       const char *new, *old;
->> +       char *cp;
-> 
->> +       if (!override || !s)
->> +               return -EINVAL;
-> 
-> Still not sure if we should distinguish (s == NULL && len == 0) from
-> (s != NULL && len == 0).
-> Supplying the latter seems confusing (yes, I see that in the old code). Perhaps
-> !s test, in case you want to leave it, should be also commented.
+This node pointer is returned by of_parse_phandle() with
+refcount incremented in this function.
+Calling of_node_put() to avoid the refcount leak.
 
-The old semantics were focused on sysfs usage, so clearing is by passing
-an empty string. In the case of sysfs empty string is actually "\n". I
-intend to keep the semantics also for the in-kernel usage and in such
-case empty string can be also "".
+Fixes: 8625c1dbd876 ("ASoC: mediatek: Add mt2701-wm8960 machine driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ sound/soc/mediatek/mt2701/mt2701-wm8960.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-If I understand your comment correctly, you propose to change it to NULL
-for in-kernel usage, but that would change the semantics.
+diff --git a/sound/soc/mediatek/mt2701/mt2701-wm8960.c b/sound/soc/mediatek/mt2701/mt2701-wm8960.c
+index f56de1b918bf..0cdf2ae36243 100644
+--- a/sound/soc/mediatek/mt2701/mt2701-wm8960.c
++++ b/sound/soc/mediatek/mt2701/mt2701-wm8960.c
+@@ -129,7 +129,8 @@ static int mt2701_wm8960_machine_probe(struct platform_device *pdev)
+ 	if (!codec_node) {
+ 		dev_err(&pdev->dev,
+ 			"Property 'audio-codec' missing or invalid\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto put_platform_node;
+ 	}
+ 	for_each_card_prelinks(card, i, dai_link) {
+ 		if (dai_link->codecs->name)
+@@ -140,7 +141,7 @@ static int mt2701_wm8960_machine_probe(struct platform_device *pdev)
+ 	ret = snd_soc_of_parse_audio_routing(card, "audio-routing");
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "failed to parse audio-routing: %d\n", ret);
+-		return ret;
++		goto put_codec_node;
+ 	}
+ 
+ 	ret = devm_snd_soc_register_card(&pdev->dev, card);
+@@ -148,6 +149,10 @@ static int mt2701_wm8960_machine_probe(struct platform_device *pdev)
+ 		dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n",
+ 			__func__, ret);
+ 
++put_codec_node:
++	of_node_put(codec_node);
++put_platform_node:
++	of_node_put(platform_node);
+ 	return ret;
+ }
+ 
+-- 
+2.17.1
 
-> Another approach is to split above to two checks and move !s after !len.
-
-I don't follow why... The !override and !s are invalid uses. !len is a
-valid user for internal callers, just like "\n" is for sysfs.
-
-> 
->> +       /*
->> +        * The stored value will be used in sysfs show callback (sysfs_emit()),
->> +        * which has a length limit of PAGE_SIZE and adds a trailing newline.
->> +        * Thus we can store one character less to avoid truncation during sysfs
->> +        * show.
->> +        */
->> +       if (len >= (PAGE_SIZE - 1))
->> +               return -EINVAL;
-> 
-> Perhaps explain the case in the comment here?
-
-You mean the case we discuss here (to clear override with "")? Sure.
-
-> 
->> +       if (!len) {
->> +               device_lock(dev);
->> +               old = *override;
->> +               *override = NULL;
-> 
->> +               device_unlock(dev);
->> +               goto out_free;
-> 
-> You may deduplicate this one, by
-> 
->                goto out_unlock_free;
-> 
-> But I understand your intention to keep lock-unlock in one place, so
-> perhaps dropping that label would be even better in this case and
-> keeping it
-
-Yes, exactly.
-
-> 
->        kfree(old);
->        return 0;
-> 
-> here instead of goto.
-
-Slightly more code, but indeed maybe easier to follow. I'll do like this.
-
-
-Best regards,
-Krzysztof

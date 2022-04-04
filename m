@@ -2,169 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E894F1E85
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1C24F1E6A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346755AbiDDVvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
+        id S1379041AbiDDVqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379984AbiDDScQ (ORCPT
+        with ESMTP id S1379979AbiDDSbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 14:32:16 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1A728E28;
-        Mon,  4 Apr 2022 11:30:20 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id k14so9088490pga.0;
-        Mon, 04 Apr 2022 11:30:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yU/npQkA3tjufXIoz/2Bj10BQJGtOZiLPnmEjB7l/dM=;
-        b=ICgAi3qviwX7vleQkAxB61BLj3mLfdEss7OzH78FZDGf35Cpga1E+CqY+p2e1zQDcw
-         qeKn0CA1rU6pnk8CoQVs3hfU2TUpj7aUCHEKopnGWEetguKqcmY3xd5c6f1mPnp/5jmx
-         FZkEMskFvUsZzr6WU19y/XWgAQZ0cF2gRDCaa3Zoj29RrPgdtayt+STm9jzxLes6Retk
-         5XnMiWmPxSsOjOEYekNdacc7aQiXcDSss807fWkZ8oIGDjJ/pS0M5zphnN+KvWYiUnd9
-         olDzikcWwL1XQK5ek0xaidSf+q+62l0IrsXO5Lgm3S+CucHteoVTrw4+ecxQjY6biyFl
-         cvZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yU/npQkA3tjufXIoz/2Bj10BQJGtOZiLPnmEjB7l/dM=;
-        b=unRFdMMJp6GocyvLGLfai4fPSCYLr0h2TwBYC5Da7qwMbTcqcyn0GRb61ryrOI1CUy
-         0q9pYdnrA547WdkSiZ67MYPdktJYuRju0nbfUn2pFuwZKO1uQG7MisMpL8RSnTA/JKrN
-         B4t7U4ui6sbGbpR2w8S2FqyuLUWZVmgm6XOOyjJL09fYx15/+M7h13/c1iiTvdTivLO/
-         vMVKfWVOs3l93WToZAWjObr649stbaiJw459cfv0IWPwNnsq46463ffIE3mQaRT+QUwP
-         iVtHZ8rJUvlsnwh2lsnoYWUcHjqz/sxkqAJuLmYHozeHCNJDzSGeTO9JtLYbDaCVw5UV
-         2ywA==
-X-Gm-Message-State: AOAM53137IF1LRkGzmib7acQ8HGTWM0HAt69wgPsYPosu7zyxTmuxpOc
-        ThWZjcK1/2Vy1KvnLrLeFFk=
-X-Google-Smtp-Source: ABdhPJxWF7mQvPZJfqXvzCtthm6voXtsVkttbFSl2dJZgRQnAFhQWVCu0L0KurK5VHKVI0UQ4LOOJg==
-X-Received: by 2002:a63:5317:0:b0:399:58e9:882b with SMTP id h23-20020a635317000000b0039958e9882bmr165065pgb.306.1649097019502;
-        Mon, 04 Apr 2022 11:30:19 -0700 (PDT)
-Received: from localhost.localdomain ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id kk11-20020a17090b4a0b00b001c73933d803sm162656pjb.10.2022.04.04.11.30.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 11:30:19 -0700 (PDT)
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mukesh Savaliya <msavaliy@codeaurora.org>,
-        Akash Asthana <akashast@codeaurora.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v2 4/4] dt-bindings: qcom: geni-se: Update UART schema reference
-Date:   Mon,  4 Apr 2022 23:59:37 +0530
-Message-Id: <20220404182938.29492-5-singh.kuldeep87k@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220404182938.29492-1-singh.kuldeep87k@gmail.com>
-References: <20220404182938.29492-1-singh.kuldeep87k@gmail.com>
+        Mon, 4 Apr 2022 14:31:46 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040562124F;
+        Mon,  4 Apr 2022 11:29:50 -0700 (PDT)
+Date:   Mon, 04 Apr 2022 18:29:47 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649096988;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=K9EfMuuRqtyS8P2Al6pBaSFlQtqnpeScM1f+WbcKzbs=;
+        b=xIpDlXA8iQhMDtdQ0BssdtIAhyFRpoHdLK81scXP+zYDrs2rB2iIMC7JhKmnqV4Ci6tfan
+        dcjpBHmayGZwKR7R9i1WOHdaA8qJRs0E+0MEElzBs0vXm5pckOlXmZlbFcgRlxgZd+LJ+8
+        LVvig5vReZC3ocyNEZ0tCMfQHGmQ2EgKCKCpvTQ977e6Bg/S5/p6pt/YTea2atH7J7JCRZ
+        F5gL8RAIDrDtSstIw1UttgBKO+X/yhGKiVORojSrz/fy/B9jmlhtQqlEF6Flqs5YwyM8vv
+        lUxMXZUzx/BD3IuvdaSChvOOPSH+89ZLsK8aUDEgCQX8coD843PIoSYkoLPD4Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649096988;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=K9EfMuuRqtyS8P2Al6pBaSFlQtqnpeScM1f+WbcKzbs=;
+        b=yCBR+tgPbz4EcaGWRNpwYhdv4H4skG+PQrWJ6D44gEo446AH3Bl6hxssjJNk8YfE0rEg4N
+        QgMrU4wrovrpT3Dw==
+From:   "tip-bot2 for Lukas Bulwahn" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/mm] x86/fault: Cast an argument to the proper address space
+ in prefetch()
+Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Borislav Petkov <bp@suse.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220201144055.5670-1-lukas.bulwahn@gmail.com>
+References: <20220201144055.5670-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <164909698735.389.10476346049745259502.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We now have geni based QUP UART controller individual binding, update
-reference in parent schema and remove properties from common wrapper.
+The following commit has been merged into the x86/mm branch of tip:
 
-With removal of last child node schema, remove common properties of all
-the controllers as they have become obsolete now.
+Commit-ID:     944fad4583bc8a6d7dd80fbe39db50141da95793
+Gitweb:        https://git.kernel.org/tip/944fad4583bc8a6d7dd80fbe39db50141da95793
+Author:        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+AuthorDate:    Tue, 01 Feb 2022 15:40:55 +01:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Mon, 04 Apr 2022 20:08:26 +02:00
 
-Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+x86/fault: Cast an argument to the proper address space in prefetch()
+
+Commit in Fixes uses accessors based on the access mode, i.e., it
+distinguishes its access if instr carries a user address or a kernel
+address.
+
+Since that commit, sparse complains about passing an argument without
+__user annotation to get_user(), which expects a pointer of the __user
+address space:
+
+  arch/x86/mm/fault.c:152:29: warning: incorrect type in argument 1 (different address spaces)
+  arch/x86/mm/fault.c:152:29:    expected void const volatile [noderef] __user *ptr
+  arch/x86/mm/fault.c:152:29:    got unsigned char *[assigned] instr
+
+Cast instr to __user when accessing user memory.
+
+No functional change. No change in the generated object code.
+
+  [ bp: Simplify commit message. ]
+
+Fixes: 35f1c89b0cce ("x86/fault: Fix AMD erratum #91 errata fixup for user code")
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20220201144055.5670-1-lukas.bulwahn@gmail.com
 ---
-v2:
-- s/uart/UART
-- Reword commit description
-- Add Krzysztof's Rb tag
-- Merge patch 5/5 of v1 series to this one:
-  https://lore.kernel.org/lkml/20220402051206.6115-6-singh.kuldeep87k@gmail.com/
----
- .../bindings/soc/qcom/qcom,geni-se.yaml       | 51 +------------------
- 1 file changed, 1 insertion(+), 50 deletions(-)
+ arch/x86/mm/fault.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
-index e6073923e03a..c8e1a4a87ba8 100644
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
-@@ -64,39 +64,6 @@ required:
-   - ranges
+diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+index d0074c6..fad8faa 100644
+--- a/arch/x86/mm/fault.c
++++ b/arch/x86/mm/fault.c
+@@ -149,7 +149,7 @@ is_prefetch(struct pt_regs *regs, unsigned long error_code, unsigned long addr)
+ 		unsigned char opcode;
  
- patternProperties:
--  "^.*@[0-9a-f]+$":
--    type: object
--    description: Common properties for GENI Serial Engine based I2C, SPI and
--                 UART controller.
--
--    properties:
--      reg:
--        description: GENI Serial Engine register address and length.
--        maxItems: 1
--
--      clock-names:
--        const: se
--
--      clocks:
--        description: Serial engine core clock needed by the device.
--        maxItems: 1
--
--      interconnects:
--        minItems: 2
--        maxItems: 3
--
--      interconnect-names:
--        minItems: 2
--        items:
--          - const: qup-core
--          - const: qup-config
--          - const: qup-memory
--
--    required:
--      - reg
--      - clock-names
--      - clocks
--
-   "spi@[0-9a-f]+$":
-     type: object
-     description: GENI serial engine based SPI controller. SPI in master mode
-@@ -133,23 +100,7 @@ patternProperties:
-   "serial@[0-9a-f]+$":
-     type: object
-     description: GENI Serial Engine based UART Controller.
--    $ref: /schemas/serial.yaml#
--
--    properties:
--      compatible:
--        enum:
--          - qcom,geni-uart
--          - qcom,geni-debug-uart
--
--      interrupts:
--        minItems: 1
--        items:
--          - description: UART core irq
--          - description: Wakeup irq (RX GPIO)
--
--    required:
--      - compatible
--      - interrupts
-+    $ref: /schemas/serial/qcom,serial-geni-qcom.yaml#
- 
- additionalProperties: false
- 
--- 
-2.25.1
-
+ 		if (user_mode(regs)) {
+-			if (get_user(opcode, instr))
++			if (get_user(opcode, (unsigned char __user *) instr))
+ 				break;
+ 		} else {
+ 			if (get_kernel_nofault(opcode, instr))

@@ -2,41 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7632E4F139E
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 13:10:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E774F139C
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 13:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359322AbiDDLMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 07:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36164 "EHLO
+        id S1359257AbiDDLMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 07:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359282AbiDDLMN (ORCPT
+        with ESMTP id S243187AbiDDLME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 07:12:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 996B53B54F;
-        Mon,  4 Apr 2022 04:10:17 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5010BD6E;
-        Mon,  4 Apr 2022 04:10:17 -0700 (PDT)
-Received: from donnerap.arm.com (donnerap.cambridge.arm.com [10.1.196.172])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DC8853F718;
-        Mon,  4 Apr 2022 04:10:15 -0700 (PDT)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] irqchip/gic/gic-v3: prevent GSI to SGI translations
-Date:   Mon,  4 Apr 2022 12:08:42 +0100
-Message-Id: <20220404110842.2882446-1-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 4 Apr 2022 07:12:04 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569DC3AA50;
+        Mon,  4 Apr 2022 04:10:06 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: usama.anjum)
+        with ESMTPSA id 231F71F44F1C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649070605;
+        bh=uJM/eBYziCRkGOrHOqJSiL8T5PL06TZOxD1+cp1k4lI=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=WcxVAn7bem/ad7tCGkNyhTYZGuTiG9TbACZ2HKZn3kk0abKkB6mCKQ86B5fNfagf8
+         2cogEYTERRbxiCrtblpFqezTh9SfWlVYOj2qhYrEpyvvRPuSQEI6MV/AnUNc8Zv2ER
+         l2BywD1pTw1bzWtfKqPRbvgRGO2cL4ctwqk8QjbmBnMD5xp8/YneID54IGN4bWto2R
+         oI1hwKhzaCBut0lQ6kP08E+JitpPC1bi8S9xnWNAUl4NjcIHQdGmT1OHyEzjDLeIAB
+         BOzJFo317z0D7tOS7JnJOwgQAt5mAzGU8Cw2NHny8n+YXErlUq8/j7KgEdQwfJ2EcH
+         71dHdcJuu36Mg==
+Message-ID: <d10a70cf-24a5-997a-09df-0bb2f4146b86@collabora.com>
+Date:   Mon, 4 Apr 2022 16:09:57 +0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Cc:     usama.anjum@collabora.com, Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        kernel@collabora.com, kernelci@groups.io,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] Makefile: Fix separate output directory build of
+ kselftests
+Content-Language: en-US
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+References: <20220223191016.1658728-1-usama.anjum@collabora.com>
+ <63c5d7ad-b0b2-9b37-16c3-354ac10858b6@collabora.com>
+ <CAK7LNATkTPEBPWBSv6Rum0siHiHcJ0Q7VvPVoUQFH=S0M1fqow@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CAK7LNATkTPEBPWBSv6Rum0siHiHcJ0Q7VvPVoUQFH=S0M1fqow@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,78 +63,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At the moment the GIC IRQ domain translation routine happily converts
-ACPI table GSI numbers below 16 to GIC SGIs (Software Generated
-Interrupts aka IPIs). On the Devicetree side we explicitly forbid this
-translation, actually the function will never return HWIRQs below 16 when
-using a DT based domain translation.
+From [Makefile](https://elixir.bootlin.com/linux/latest/source/Makefile):
+```
+ifeq ($(abs_srctree),$(abs_objtree))
+        # building in the source tree
+        srctree := .
+	building_out_of_srctree :=
+else
+        ifeq ($(abs_srctree)/,$(dir $(abs_objtree)))
+                # building in a subdirectory of the source tree
+                srctree := ..
+        else
+                srctree := $(abs_srctree)
+        endif
+	building_out_of_srctree := 1
+endif
+```
+`ifeq ($(abs_srctree)/,$(dir $(abs_objtree)))` condition is setting
+`srctree` to `..`. This is wrong. This condition isn't considering that
+`header_install` doesn't depend on `abs_srctree and abs_objtree`. This
+condition needs to be tweaked or removed for the `install_headers` to
+work fine and fix this issue. I've added `KBUILD_ABS_SRCTREE=1` to the
+kselftest target which sets the `srctree` to `abs_srctree` and thus
+forcefully affecting only kselftest targets. This seems like the clean
+fix. Alternatively we should remove this condition `ifeq
+($(abs_srctree)/,$(dir $(abs_objtree)))` but it'll affect other targets
+as well.
 
-We expect SGIs to be handled in the first part of the function, and any
-further occurrence should be treated as a firmware bug, so add a check
-and print to report this explicitly and avoid lengthy debug sessions.
+Complete details of investigation can be found here:
+https://github.com/kernelci/kernelci-project/issues/92#issuecomment-1087406222
 
-Fixes: 64b499d8df40 ("irqchip/gic-v3: Configure SGIs as standard interrupts")
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
----
-Hi,
+On 3/17/22 11:08 PM, Masahiro Yamada wrote:
+> On Thu, Mar 17, 2022 at 7:49 PM Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>>
+>> Reminder. Shuah is okay with this patch. Any thoughts?
+> 
+> I do not think this is the right fix,
+> but something you just happen to find working.
+> 
+> 
+> The Make is working in a wrong directory, that is why
+> the relative path does not work
+> (and you use the absolute path to work around it)
+> 
+`ifeq ($(abs_srctree)/,$(dir $(abs_objtree))) \ srctree := ..` has
+broken the `make headers_install` when called through
+selftests/Makefile. We can remove it or use the absolute path each time.
 
-marking this as an RFC because:
-- I don't know if we really can forbid IPIs in ACPI tables. We certainly
-  pushed back against this multiple times on the DT side.
-- I don't know if this is the right place to filter this out.
-
-This was triggered by an SSDT table wrongly containing an interrupt
-resource entry of "0", for a debug UART without an interrupt line
-connected [1] (about to be fixed). This overwrote the IPI0 trigger method
-to "level", which prevented SGI0 to be enabled again *after* a CPU
-offline/online cycle.
-It required some debugging to find this firmware problem, so I am
-proposing an explicit error message, and to actually deny registering
-this interrupt.
-
-[1] https://github.com/tianocore/edk2-platforms/blob/master/Platform/ARM/Morello/ConfigurationManager/ConfigurationManagerDxe/ConfigurationManager.c#L150-L157
-
-Cheers,
-Andre
-
- drivers/irqchip/irq-gic-v3.c | 6 ++++++
- drivers/irqchip/irq-gic.c    | 6 ++++++
- 2 files changed, 12 insertions(+)
-
-diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-index 0efe1a9a9f3b..c946ef3067d2 100644
---- a/drivers/irqchip/irq-gic-v3.c
-+++ b/drivers/irqchip/irq-gic-v3.c
-@@ -1466,6 +1466,12 @@ static int gic_irq_domain_translate(struct irq_domain *d,
- 		if(fwspec->param_count != 2)
- 			return -EINVAL;
- 
-+		if (fwspec->param[0] < 16) {
-+			pr_err(FW_BUG "Illegal GSI%d translation request\n",
-+			       fwspec->param[0]);
-+			return -EINVAL;
-+		}
-+
- 		*hwirq = fwspec->param[0];
- 		*type = fwspec->param[1];
- 
-diff --git a/drivers/irqchip/irq-gic.c b/drivers/irqchip/irq-gic.c
-index 58ba835bee1f..09c710ecc387 100644
---- a/drivers/irqchip/irq-gic.c
-+++ b/drivers/irqchip/irq-gic.c
-@@ -1123,6 +1123,12 @@ static int gic_irq_domain_translate(struct irq_domain *d,
- 		if(fwspec->param_count != 2)
- 			return -EINVAL;
- 
-+		if (fwspec->param[0] < 16) {
-+			pr_err(FW_BUG "Illegal GSI%d translation request\n",
-+			       fwspec->param[0]);
-+			return -EINVAL;
-+		}
-+
- 		*hwirq = fwspec->param[0];
- 		*type = fwspec->param[1];
- 
 -- 
-2.25.1
-
+Muhammad Usama Anjum

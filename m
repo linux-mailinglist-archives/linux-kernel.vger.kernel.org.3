@@ -2,118 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 233FF4F18E7
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 237D94F18E9
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378748AbiDDPyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 11:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47414 "EHLO
+        id S1378753AbiDDPzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 11:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357418AbiDDPyi (ORCPT
+        with ESMTP id S1347996AbiDDPzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 11:54:38 -0400
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177504249E;
-        Mon,  4 Apr 2022 08:52:42 -0700 (PDT)
-Received: by mail-qv1-f49.google.com with SMTP id e22so7759299qvf.9;
-        Mon, 04 Apr 2022 08:52:42 -0700 (PDT)
+        Mon, 4 Apr 2022 11:55:16 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A164842495;
+        Mon,  4 Apr 2022 08:53:19 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id qh7so10849021ejb.11;
+        Mon, 04 Apr 2022 08:53:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=OmtvB1Xni4XcAR/AuctQxx0e+3Qbn5XIYUFCQaI+LJU=;
+        b=IErH6U0tNhUU8vEfXOEKllxvqP6wDQePPXjFRl5gQAFvyCiAE+c1BLD7aj7n1hlLnK
+         +dEDAUOSXj+tbMoP8aMJywR3DucL6MOnODJgN/4icDWumqxEFCX2hv91uDZiOBfRDkNp
+         OLQTZM/0mRPaQFObQvNz9CpM3jp3dv8HyhI3h21pGSRrrmELiHFxmZt7FXdcEeSI5SZb
+         GVdHAgv14c2mK7KEF6r1ss72VzUXIAN8O5+JhDr66lWa6MYGOknvFL3ZHqag3xGIETmA
+         SFjpSiMOOX4IJiZLDeLvkGPyFEUxXOi58wFEnfiGBSTsrmwBmhC4F2se1jXGIGxNBNm4
+         oKLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AoKMmslTq9vAMf9fgCFPDKuPR8Y+Dj4j8nKqoiHe7eI=;
-        b=orYEe3782pb7f3scdOPHBOTx+0G9AEkrzmuxJv9y1NWBUaqrgkk5IfLOELobgXdy9o
-         j+URwLav6QWmpw0kt9hYjScd090q0FdIzjB+Ms2e6i846tNR0JqEIbb6YjHPrnxw5bOI
-         UwJN6HGKi+dzUoIiqCBYQx+JY/14CyOoHwqDv01gRr5pOWJYBQ0HYq8U4Qrrp7BCjkPL
-         sFw04VwsNJmtqvKPtd3ZTn4adXnEm1d2WnylaGbbuV8N2ssEAjH5tNVEodgrP+ykRrKM
-         RVfwRKYUADHAdUd36rJdv0UOHRG7t6eFtw32mHMZSC+5dgayyui6NQTKDmd6HRv76h3/
-         qALA==
-X-Gm-Message-State: AOAM5312CkqCa5Mv4NNj0bn9ucWdz+zE7PbFFNR85PnWR2nLN0uKLu1m
-        nLRrWaHwIC3BqynQyGUqDmNP3e3MDXo6kQ==
-X-Google-Smtp-Source: ABdhPJxE9NZvLyJHKIRUcxfuOkTBItCEwNAampQqm0sgfoFr5hp1GXWROph/W0nr8XtNtPJe5VbSOw==
-X-Received: by 2002:a0c:cd05:0:b0:443:cd52:7829 with SMTP id b5-20020a0ccd05000000b00443cd527829mr399048qvm.98.1649087560944;
-        Mon, 04 Apr 2022 08:52:40 -0700 (PDT)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id u62-20020a379241000000b0067ed2b0994dsm6592293qkd.54.2022.04.04.08.52.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 08:52:40 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id d138so10015512ybc.13;
-        Mon, 04 Apr 2022 08:52:40 -0700 (PDT)
-X-Received: by 2002:a25:c049:0:b0:634:6751:e8d2 with SMTP id
- c70-20020a25c049000000b006346751e8d2mr437586ybf.6.1649087560296; Mon, 04 Apr
- 2022 08:52:40 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=OmtvB1Xni4XcAR/AuctQxx0e+3Qbn5XIYUFCQaI+LJU=;
+        b=ebx/dPIRjVzKB5jYuokWNQZt0GvUSFkbl4Yi/kYPY58QmXRq+R0t1t3JtoM0hTGkxF
+         NddB0DFhMYdRqmGp9tFq6de3oQXnwVC5dlsKGfm0VKegeqW+KiZ26ewb+m9NOZjX2xee
+         6XiLHehnpCIVCYvbcGa/Z75Vv1WVC4TKwOw6UYcOpZTy0fGQaK3wW1dX2sE7w6yNX4oK
+         i0UYWaNS40tu6V4XJSla5T39xEBL9nl2KXe5mBsrRC+nRTB5TUGc6HF7qu3wfPSJJm1l
+         2AOlmuHxXZohvE1zjhc9XkMuye84CNv3LEFX4SKQCHvuQo7Y31TuBGHQ9+6+p7bRlVWT
+         fYkA==
+X-Gm-Message-State: AOAM531PtynaMefMYAV2aSy00qHGitRxDVClC9KpPb4C2o9lfYm30X58
+        0l+Go3dFv359EVPqNq5v2sr2CjhJg9g=
+X-Google-Smtp-Source: ABdhPJzwJeGc1YsWyZ3XejtT7WJTyL7+GNgDVEBCrVG0A1kNQ2ykFToGbKHEcYTmznych0HjS5D5TA==
+X-Received: by 2002:a17:907:d13:b0:6e0:b799:8fcc with SMTP id gn19-20020a1709070d1300b006e0b7998fccmr769623ejc.11.1649087596477;
+        Mon, 04 Apr 2022 08:53:16 -0700 (PDT)
+Received: from standask-GA-A55M-S2HP ([188.123.115.255])
+        by smtp.gmail.com with ESMTPSA id a5-20020aa7cf05000000b0041919e52a38sm5532723edy.46.2022.04.04.08.53.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 08:53:16 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 17:53:14 +0200
+From:   Stanislav Jakubek <stano.jakubek@gmail.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-unisoc@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] dt-bindings: timer: Convert rda,8810pl-timer to YAML
+Message-ID: <20220404155314.GA2944@standask-GA-A55M-S2HP>
 MIME-Version: 1.0
-References: <20220404084723.79089-1-zheyuma97@gmail.com> <20220404084723.79089-8-zheyuma97@gmail.com>
-In-Reply-To: <20220404084723.79089-8-zheyuma97@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 4 Apr 2022 17:52:29 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXz0z2wARniaLqLqp-Oc6HMgoMpbL3D9Fg57W-wkLWBhw@mail.gmail.com>
-Message-ID: <CAMuHMdXz0z2wARniaLqLqp-Oc6HMgoMpbL3D9Fg57W-wkLWBhw@mail.gmail.com>
-Subject: Re: [PATCH 7/7] video: fbdev: s3fb: Error out if 'pixclock' equals zero
-To:     Zheyu Ma <zheyuma97@gmail.com>
-Cc:     Helge Deller <deller@gmx.de>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 4, 2022 at 3:50 PM Zheyu Ma <zheyuma97@gmail.com> wrote:
-> The userspace program could pass any values to the driver through
-> ioctl() interface. If the driver doesn't check the value of 'pixclock',
-> it may cause divide error.
->
-> Fix this by checking whether 'pixclock' is zero in s3fb_check_var().
->
-> The following log reveals it:
->
-> [  511.141561] divide error: 0000 [#1] PREEMPT SMP KASAN PTI
-> [  511.141607] RIP: 0010:s3fb_check_var+0x3f3/0x530
-> [  511.141693] Call Trace:
-> [  511.141695]  <TASK>
-> [  511.141716]  fb_set_var+0x367/0xeb0
-> [  511.141815]  do_fb_ioctl+0x234/0x670
-> [  511.141876]  fb_ioctl+0xdd/0x130
-> [  511.141888]  do_syscall_64+0x3b/0x90
->
-> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-> ---
->  drivers/video/fbdev/s3fb.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/video/fbdev/s3fb.c b/drivers/video/fbdev/s3fb.c
-> index 5c74253e7b2c..b93c8eb02336 100644
-> --- a/drivers/video/fbdev/s3fb.c
-> +++ b/drivers/video/fbdev/s3fb.c
-> @@ -549,6 +549,9 @@ static int s3fb_check_var(struct fb_var_screeninfo *var, struct fb_info *info)
->         int rv, mem, step;
->         u16 m, n, r;
->
-> +       if (!var->pixclock)
-> +               return -EINVAL;
-> +
+Convert RDA Micro Timer bindings to DT schema format.
 
-When passed an invalid value, .check_var() is supposed to
-round up the invalid value to a valid value, if possible.
+Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+Changes in v2:
+  - Collect Krzysztof's and Manivannan's R-b's
+  
+ .../bindings/timer/rda,8810pl-timer.txt       | 20 --------
+ .../bindings/timer/rda,8810pl-timer.yaml      | 47 +++++++++++++++++++
+ MAINTAINERS                                   |  2 +-
+ 3 files changed, 48 insertions(+), 21 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/timer/rda,8810pl-timer.txt
+ create mode 100644 Documentation/devicetree/bindings/timer/rda,8810pl-timer.yaml
 
->         /* Find appropriate format */
->         rv = svga_match_format (s3fb_formats, var, NULL);
+diff --git a/Documentation/devicetree/bindings/timer/rda,8810pl-timer.txt b/Documentation/devicetree/bindings/timer/rda,8810pl-timer.txt
+deleted file mode 100644
+index 4db542c9a0fd..000000000000
+--- a/Documentation/devicetree/bindings/timer/rda,8810pl-timer.txt
++++ /dev/null
+@@ -1,20 +0,0 @@
+-RDA Micro RDA8810PL Timer
+-
+-Required properties:
+-- compatible      :  "rda,8810pl-timer"
+-- reg             :  Offset and length of the register set for the device.
+-- interrupts      :  Should contain two interrupts.
+-- interrupt-names :  Should be "hwtimer", "ostimer".
+-
+-Example:
+-
+-		apb@20900000 {
+-			compatible = "simple-bus";
+-			...
+-			timer@10000 {
+-				compatible = "rda,8810pl-timer";
+-				reg = <0x10000 0x1000>;
+-				interrupts = <16 IRQ_TYPE_LEVEL_HIGH>,
+-					     <17 IRQ_TYPE_LEVEL_HIGH>;
+-				interrupt-names = "hwtimer", "ostimer";
+-			};
+diff --git a/Documentation/devicetree/bindings/timer/rda,8810pl-timer.yaml b/Documentation/devicetree/bindings/timer/rda,8810pl-timer.yaml
+new file mode 100644
+index 000000000000..f9043a4488d6
+--- /dev/null
++++ b/Documentation/devicetree/bindings/timer/rda,8810pl-timer.yaml
+@@ -0,0 +1,47 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/timer/rda,8810pl-timer.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: RDA Micro RDA8810PL Timer
++
++maintainers:
++  - Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
++
++properties:
++  compatible:
++    const: rda,8810pl-timer
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    minItems: 2
++    maxItems: 2
++
++  interrupt-names:
++    items:
++      - const: hwtimer
++      - const: ostimer
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - interrupt-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    timer@20910000 {
++      compatible = "rda,8810pl-timer";
++      reg = <0x20910000 0x1000>;
++      interrupts = <16 IRQ_TYPE_LEVEL_HIGH>,
++                   <17 IRQ_TYPE_LEVEL_HIGH>;
++      interrupt-names = "hwtimer", "ostimer";
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 6d5c2c035f82..cbf91f0ecbfb 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2563,7 +2563,7 @@ F:	Documentation/devicetree/bindings/arm/rda.yaml
+ F:	Documentation/devicetree/bindings/gpio/gpio-rda.yaml
+ F:	Documentation/devicetree/bindings/interrupt-controller/rda,8810pl-intc.txt
+ F:	Documentation/devicetree/bindings/serial/rda,8810pl-uart.yaml
+-F:	Documentation/devicetree/bindings/timer/rda,8810pl-timer.txt
++F:	Documentation/devicetree/bindings/timer/rda,8810pl-timer.yaml
+ F:	arch/arm/boot/dts/rda8810pl-*
+ F:	drivers/clocksource/timer-rda.c
+ F:	drivers/gpio/gpio-rda.c
+-- 
+2.25.1
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

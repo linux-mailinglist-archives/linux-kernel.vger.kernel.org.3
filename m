@@ -2,49 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C3B4F10A6
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5BA74F10AB
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:16:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239203AbiDDISY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 04:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42618 "EHLO
+        id S240896AbiDDISw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 04:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237801AbiDDISR (ORCPT
+        with ESMTP id S237801AbiDDISu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 04:18:17 -0400
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73573B2B4
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 01:16:19 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:6d4d:d9ec:3c70:7c2c])
-        by baptiste.telenet-ops.be with bizsmtp
-        id EYG82700R40M8zK01YG8cT; Mon, 04 Apr 2022 10:16:17 +0200
-Received: from geert (helo=localhost)
-        by ramsan.of.borg with local-esmtp (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1nbHse-0089Aj-Eu; Mon, 04 Apr 2022 10:16:08 +0200
-Date:   Mon, 4 Apr 2022 10:16:08 +0200 (CEST)
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-X-X-Sender: geert@ramsan.of.borg
-To:     linux-kernel@vger.kernel.org
-cc:     linux-m68k@lists.linux-m68k.org, linux-parisc@vger.kernel.org,
-        sparclinux@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        linux-rdma@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-media@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-xfs@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-s390@vger.kernel.org
-Subject: Re: Build regressions/improvements in v5.18-rc1
-In-Reply-To: <20220404074734.1092959-1-geert@linux-m68k.org>
-Message-ID: <alpine.DEB.2.22.394.2204041006230.1941618@ramsan.of.borg>
-References: <CAHk-=wg6FWL1xjVyHx7DdjD2dHZETA5_=FqqW17Z19X-WTfWSg@mail.gmail.com> <20220404074734.1092959-1-geert@linux-m68k.org>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Mon, 4 Apr 2022 04:18:50 -0400
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90082.outbound.protection.outlook.com [40.107.9.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6593B3E2;
+        Mon,  4 Apr 2022 01:16:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XKbOFYT3LmUumMw/fLaDwb+waG/WAMs2UCyuLMheeEu6+QkQ0mBOXLRcsVAH9Tv+O+zxmomi8eFIigFaX/JoQFIHrxCS9xTsCW3d4+j0JnLc4r32rBc8fZDrTituHx2/9DIRK69ZDbjswekPiGWBIs8rZm+KkIKGbEogBJqbacyJLWy5O4+waLrA+8/l9O0CBH7FVpBaOJWZeD//EUXy8dVDgx/DdheqQW8SZaWAH0M8sL4veOmWbKDdjj6Pk16otE16s7XxhSB5RXF03Xr9XlniwJ3XPGarI5BwHY/nxEQhl55lxaBxK6H4liQhwYvT+PzDrJi0TgBOylmXtE5sgA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0Q3jKhbYZvY9iV8pJcG9Woyf7YgAVsyANCpm/poU6kI=;
+ b=VBqZZn1i/yg22bNqB6SDiwh3R2OT5uAybmXxtJlh0RZpUDWjmnhX2d31mOIog2Xhlw6VxGVR8pK4K66Ntb1PT6h2xYAlHtSRU9nDPwnhJ7REjwd/0khVmdizQxb6LRNws06S+tYFQndgBOKLoQq2Udu++Zo6JBSKM3lle+VWy8/VGwD0OBvdhXVX/2KCcS8H0/MuMu7Wdg+xuY3SWkf6tZ+k9/S3s1GKq+tD4LdYzEOZY7wH4o7tSWY1NJngJxNf2T6JZGKRcAnpTypf3psu2eaMURb2PRwUffVkNxZSj3Kl0Oka0gN3ve5etvPyjX7OZIJzoeNAFU1uCrQxjSqxXw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR1P264MB2245.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1b1::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Mon, 4 Apr
+ 2022 08:16:48 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::59c:ae33:63c1:cb1c]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::59c:ae33:63c1:cb1c%7]) with mapi id 15.20.5123.031; Mon, 4 Apr 2022
+ 08:16:48 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Rob Herring <robh+dt@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: What means "sysfs: cannot create duplicate filename
+ '/devices/platform/ff000100.localbus/d0000044.gpio-controller'"
+Thread-Topic: What means "sysfs: cannot create duplicate filename
+ '/devices/platform/ff000100.localbus/d0000044.gpio-controller'"
+Thread-Index: AQHYR/xUyPpICbYGlkyr3dOIDaK7Jw==
+Date:   Mon, 4 Apr 2022 08:16:48 +0000
+Message-ID: <35ceac23-2841-7def-d963-484d1a489836@csgroup.eu>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 74823217-649d-40e2-6972-08da161376e7
+x-ms-traffictypediagnostic: PR1P264MB2245:EE_
+x-microsoft-antispam-prvs: <PR1P264MB2245F7343C35E90C00441318EDE59@PR1P264MB2245.FRAP264.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: y4onuXOnzB5It8vAvnJy3nqQhNhp9nDsLcwekficfdc0fjTS0YVjj9KVTH6tnwdDahC2ao13npfPzM27UAYLXPt5muqxIOmrT160U1odeoAWyWBlZJkHiP9hO+ojYUBmiUKvLTk+w2rhP3VIC+9A8QG7nWgFBnMb5B0y0MPDR51ePccrmQhwCVGuX5m1BXe+1ZRIAHnpKhOuu2ccpKM+gC3IpDg7iLYCl/gkt7rC4Es4/ykAg+k5JqUL2PmP/vUH8MWSMgG0/cT+uRwdue1MNs0do/1YdhiKl7nw3jKjNKr0GqRShnnYr1sNQSl0YpjxPJwM/AXqqovSe0LkWmq0VNJ17QWTQW0fHr4QA8kAt3wOLfny4GTxYww2Aam38GKgYH7mQ8vKrLBGbgj2ARMpcW5XvzwIVhmV9S9oHEDjHjGvXMP8xshIlVOfRxfI2ZJxS6PI5hIo0YMgEvhpF2x/frwZ5dPqbEywkdMxjvV53TIKSH/fpsJBnuTZo203KnFdMGMBkRThG7Jq7Ka0alU/5r9DNdslDqnw8C6r6NeZRKPwYfJXlBz5agSN9Dw3ni/83Ci/Y4QvMGEnbMvwFEriwqKL1uqzzL/4pGZbTiYVPerkJuI5cmSvvpipJXceStM6SzxF6eBtddw1FfeR7Q1aAfZt4a1XDVSTtERRBSIJP+TbZSclXBIyDDg43sJh7CbyVTwtKgwbaKBaOuX/5UGr5+Dz/BY49oeaGHfFfCfBs/JPdIC0Hf2hS8eBD7qiX7RnKpJoUwNgTLBs8GNXYpQ2Lg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(6506007)(54906003)(31696002)(44832011)(8936002)(6512007)(2906002)(38100700002)(71200400001)(508600001)(86362001)(316002)(122000001)(2616005)(38070700005)(83380400001)(186003)(31686004)(8676002)(66476007)(66556008)(66946007)(66446008)(64756008)(76116006)(36756003)(6486002)(4326008)(91956017)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?K2NxTTdsOURRdXVTWFZzVkpqdkpmQlV3QmNBSWR1NXlKbnNkSkVHNGN1NXRj?=
+ =?utf-8?B?LzRhTUllYnQzTWQ0MnB4YzdiREY4TG9KZ3NTYk10U1hTbFVhOEdWMzJ4QjNU?=
+ =?utf-8?B?WjJDSWRPY0tLOXlZWWx0TVAxVFhMYlVUNXV4ZTZMTVdybEVKekNSTVoxWlpk?=
+ =?utf-8?B?c1g0VW8yOHJZNnh3b0NIem9TdFZGM0MyN3VMbnk4NTNac0Nxd21OWEdWMkIz?=
+ =?utf-8?B?MFJoM3d1SDZ4NFBlWEJDejIwdFpXMk5XWDVOMkNBK2I3VTNVUHd1R0VxZkRi?=
+ =?utf-8?B?TTZ3QzdVNUdrRWJVUUZ2dDZranFQSUMrZCs4ZXEvMUdBRHI2dzBCYTJINDVU?=
+ =?utf-8?B?Rk1PMzJvdnEvbSswbzZtRnEzT2xHc1JhZFdFWStEdExvZFFhU1lYckNxQThV?=
+ =?utf-8?B?Z1FJQm12Mjl2Q1F2VUZYZk5uSmxKc05nWFJZMnNreC9hcGFFRTA5dmN4MlFN?=
+ =?utf-8?B?S1FtVkVOVDBxZVRPaktteU9iYkV5ZlpQRzVQZFRwc3FWZ0pUM2R6NXJGU0x3?=
+ =?utf-8?B?VVJLck1Eek1yMHZzaVFxckZYS1BUOUZHMWZzRVBTbUNVaFlCUXRuc3FZNFRv?=
+ =?utf-8?B?bzdYVCtTUmpLZnBwZnYwVlFhL0VKL0dJdjdmS1J5WDVVNU1yeEFyb0NhL2Vq?=
+ =?utf-8?B?anNoczNwTjdkc21paUJIaG4rb0lrVCtGczFCZnBOTEwzWUxhWjE5b1pzbTBo?=
+ =?utf-8?B?LytobWJocHc2RFIycWVxeitkWGtTbjh5NFk3Wi9WSE10elRvbURVQmlZTlly?=
+ =?utf-8?B?OFVUemZlUTR4RnJENmtsZmxMUUEveG96ajNielVxSzNWNHVIRkUxbjhkN2dX?=
+ =?utf-8?B?K0E1ejBrVnRrQisyemVTM2lXaTdtWndDVjNoKzg0b05rV2tYNVlJbzNlbi9I?=
+ =?utf-8?B?N0ZJVitXN1pSRlFlcU8rZUVSL29HSHhQdHVsSlZwZW1SWnVNY1Rabzl2WURN?=
+ =?utf-8?B?VXdaME5UMmVxRHNzYVpaUnJKYXFBMnI1N2dpSFhWdzJWeWwrZThWcXNjM25T?=
+ =?utf-8?B?KzJpUGhWbVZQcnJOeWdTVjA1QlpqcGVXRzFLSHJwV3Z1VGJubXNlZnpNMHhn?=
+ =?utf-8?B?Yzc3QmFYWUlweU5EU2g3QlpySGxXVnhDYy9zVzJqc2U4N1hOVDFyV3lkRTZh?=
+ =?utf-8?B?dmU3WFZhRGN6Q3BHZDk2R28zVnhmTjdURXZyVzJjOTl6aENUQlhkQjQ2bndM?=
+ =?utf-8?B?MC9FdjBRaExQNVcrUVdrdDhGbVlxN3pNbC9tb1NXZEtnbTEra2tjUWFsb1l2?=
+ =?utf-8?B?TWpMbGZBcVF0NktoS3JIaXNzQlMwcjQxUGVuQk1ESjNtNDRGYmxZemZwRVZC?=
+ =?utf-8?B?blVydTA2S3NDbWdRaVh2TVg3ZEpEaWRjbENTUHFWTVRwM2dsaGZQVFlFUXUz?=
+ =?utf-8?B?Q1FGWEtEUTRZZ28vekxWaVQ3WjJqVG4rNmlRdTNmMHhsNTc0RlRqbUJJQkZx?=
+ =?utf-8?B?K3dtMnFzdldRRWNMaDF5ZnZYSFBDTnpGU21kbTR1V2diLzF6Ui9QWGlvbzBl?=
+ =?utf-8?B?UzdoQ3pWTTc0Zi8xcStDcnZSUnJFWFdQVW5CNFRydTM1Mnk2UzNvakNVM2lt?=
+ =?utf-8?B?czJaWXVoY1ZEZ1pBdjFIMEJlOThBcWhMWVdWaStzLzFmMVQycmZReURweUZl?=
+ =?utf-8?B?dGQxRjdtdzJVS3VET0VpQUFKN3YxOXA0bmd0L0F0cVJzRVNST09VRW9hbGJr?=
+ =?utf-8?B?Mks5aWhQMkNQRHdaT1RTTWpxZ0FIclNodDg3cFNscmxjaHcyZVNkQ3N6NzQ3?=
+ =?utf-8?B?NWpXcUYxR09aUEJBT2dCUlUrMFJ3Q2FncVpwZ1dudUljR1J3WjNKNDNQV0Zj?=
+ =?utf-8?B?UjRsQk0vZWVJMzFWRElHOUxWNkdGSWRKalR1TnhDTVpReE53MTF4Nm1UMWRz?=
+ =?utf-8?B?QkJHOEErdCsrK2tDZGdyQ3pBekMvb1FGdVJhb3hnaklJMWlKcU9wb051bjk1?=
+ =?utf-8?B?UjFJZUVEWm5kelBQczlyR3RsdzZZcjlPbXpGTk1BSS9hTXFJMS9CUkMwb3Y4?=
+ =?utf-8?B?Mmw4ZzFIRDZuTDhXN1F2WHdTeENaSzVWVXNTNTFvdGNRT3BqdzVObXpjQlhj?=
+ =?utf-8?B?SStRQ293R0cyRjZ6TWd5T0N3Wlo4bFU3a0FvNWlYYVkvQ1J5OE8zZklVUzNj?=
+ =?utf-8?B?TG1ZaVUxOC9aMEJwSE9CZkhEUGNiSlhPZ2VuK2JRdlNhWWlPUU1ReG16eTRW?=
+ =?utf-8?B?SUhZbXVRZnU1YVQwdzU5Mkd4bVA5ZGdUOTEramJzV3haYUJGdG44UXlOLzdN?=
+ =?utf-8?B?RGVEUzFpclFkZTM0bDVGcmZSL3BaMVR5dVA1V1dWYTJWcHJHdGlRNlJnK3pv?=
+ =?utf-8?B?VCtLYi9kdnpxalByc2xnRDFSSXNlR05pRWNiVHNEOTVYM3EybFovcTM3ZWsz?=
+ =?utf-8?Q?zDATbpGSQcwx97JSOz4jMT11kwrVN/RCsRPxr?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <E8CB7632F2FC6640A4DB87CBA4FB5270@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 74823217-649d-40e2-6972-08da161376e7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Apr 2022 08:16:48.0788
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: I3pMJCY5bGI+pbkl8qa1wU6Tq+bHdO58vq/+tmi1HJDPfVlBazsAnWOM8H8K3XU3SjMeYL9mxcftPU/D4TNg/d9ejK7Z8YjRcix7zWMBcSA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB2245
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,160 +127,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Apr 2022, Geert Uytterhoeven wrote:
-> Below is the list of build error/warning regressions/improvements in
-> v5.18-rc1[1] compared to v5.17[2].
->
-> Summarized:
->  - build errors: +36/-15
->  - build warnings: +5/-38
->
-> Happy fixing! ;-)
->
-> Thanks to the linux-next team for providing the build service.
->
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/3123109284176b1532874591f7c81f3837bbdc17/ (all 96 configs)
-> [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/f443e374ae131c168a065ea1748feac6b2e76613/ (all 96 configs)
->
->
-> *** ERRORS ***
->
-> 36 error regressions:
->  + /kisskb/src/arch/m68k/include/asm/bitops.h: error: array subscript 2 is above array bounds of 'long unsigned int[1]' [-Werror=array-bounds]:  => 329:20
-
-m68k-gcc8/m68k-allmodconfig (assumed gcc8 bug)
-
->  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: .cfi_endproc without corresponding .cfi_startproc:  => 32
->  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: bad or irreducible absolute expression:  => 16
->  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: junk at end of line, first unrecognized character is `:':  => 16
->  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `be 0x100(%sr2,%r0)':  => 29
->  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `ldi 0,%r20':  => 30
->  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `ldw 0(%sp),%r31':  => 26
->  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ble 0x100(%sr2,%r0)':  => 51, 46
->  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 0,%r25':  => 44
->  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 1,%r25':  => 49
->  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 173,%r20':  => 45, 50
->  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.callinfo':  => 40
->  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.entry':  => 41
->  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.exit':  => 54
->  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.proc':  => 39
->  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.procend':  => 55
->  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.stringz':  => 76
-
-parisc64-gcc8/generic-64bit_defconfig
-parisc-gcc8/generic-32bit_defconfig
-parisc-gcc8/parisc-allmodconfig
-parisc-gcc8/parisc-allnoconfig
-
->  + /kisskb/src/arch/sparc/kernel/irq_32.c: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]:  => 262:14, 261:46, 259:14, 258:14, 263:14
-
-sparc64-gcc11/sparc-allmodconfig
-
->  + /kisskb/src/drivers/gpu/drm/r128/r128_cce.c: error: case label does not reduce to an integer constant:  => 417:2, 418:2
-
-arm64-gcc5.4/arm64-allmodconfig
-mipsel/mips-allmodconfig
-powerpc-gcc5/powerpc-allmodconfig
-powerpc-gcc5/powerpc-allyesconfig
-powerpc-gcc5/ppc32_allmodconfig
-powerpc-gcc5/ppc64_book3e_allmodconfig
-powerpc-gcc5/ppc64le_allmodconfig
-
->  + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'X86_VENDOR_AMD' undeclared (first use in this function):  => 149:37
->  + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'struct cpuinfo_um' has no member named 'x86_vendor':  => 149:22
->  + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: control reaches end of non-void function [-Werror=return-type]:  => 150:1
->  + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size':  => 88:22
->  + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]:  => 89:1
->  + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]:  => 100:2
-
-um-x86_64/um-allmodconfig
-um-x86_64/um-allyesconfig
-
->  + /kisskb/src/drivers/media/platform/nxp/imx-pxp.h: error: initializer element is not constant:  => 582:38
-
-arm64-gcc5.4/arm64-allmodconfig
-powerpc-gcc5/powerpc-allmodconfig
-
->  + /kisskb/src/drivers/misc/habanalabs/common/memory.c: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]:  => 153:49, 153:7
-
-mipsel/mips-allmodconfig
-mips-gcc8/mips-allmodconfig
-sparc64/sparc-allmodconfig
-xtensa-gcc11/xtensa-allmodconfig
-
->  + /kisskb/src/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c: error: case label does not reduce to an integer constant:  => 4917:4
->  + /kisskb/src/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c: error: case label does not reduce to an integer constant:  => 3798:2, 3809:2
-
-arm64-gcc5.4/arm64-allmodconfig
-powerpc-gcc5/powerpc-allmodconfig
-powerpc-gcc5/ppc64_book3e_allmodconfig
-
->  + /kisskb/src/drivers/scsi/aacraid/commsup.c: error: case label does not reduce to an integer constant:  => 1983:2
-
-arm64-gcc5.4/arm64-allmodconfig
-powerpc-gcc5/powerpc-allmodconfig
-powerpc-gcc5/ppc64_book3e_allmodconfig
-powerpc-gcc5/ppc64le_allmodconfig
-
->  + /kisskb/src/drivers/tty/serial/mpc52xx_uart.c: error: initialization from incompatible pointer type [-Werror=incompatible-pointer-types]:  => 1004:12, 1005:12, 1006:14, 970:12, 968:16, 971:14, 969:12, 1002:16, 1003:16, 967:16
-
-powerpc-gcc5/ppc32_allmodconfig
-
->  + /kisskb/src/drivers/usb/typec/tcpm/tcpm.c: error: case label does not reduce to an integer constant:  => 4724:3
-
-arm64-gcc5.4/arm64-allmodconfig
-powerpc-gcc5/powerpc-allmodconfig
-powerpc-gcc5/ppc64_book3e_allmodconfig
-
->  + /kisskb/src/fs/xfs/xfs_buf.h: error: initializer element is not constant:  => 46:23
->  + /kisskb/src/sound/usb/midi.c: error: case label does not reduce to an integer constant:  => 1389:2
-
-arm64-gcc5.4/arm64-allmodconfig
-mipsel/mips-allmodconfig
-powerpc-gcc5/powerpc-allmodconfig
-powerpc-gcc5/powerpc-allyesconfig
-powerpc-gcc5/ppc32_allmodconfig
-powerpc-gcc5/ppc64_book3e_allmodconfig
-powerpc-gcc5/ppc64le_allmodconfig
-
->  + /kisskb/src/include/linux/compiler_types.h: error: call to '__compiletime_assert_402' declared with attribute error: FIELD_PREP: mask is not constant:  => 352:38
->  + /kisskb/src/include/linux/compiler_types.h: error: call to '__compiletime_assert_404' declared with attribute error: FIELD_PREP: mask is not constant:  => 352:38
-
-powerpc-gcc5/powerpc-allmodconfig
-
-
-> *** WARNINGS ***
->
-> 5 warning regressions:
->  + /kisskb/src/arch/m68k/include/asm/string.h: warning: '__builtin_memset' offset [0, 11] is out of the bounds [0, 0] [-Warray-bounds]:  => 68:25
-
-m68k-gcc11/sun3_defconfig
-
->  + /kisskb/src/arch/s390/kernel/machine_kexec.c: warning: 'memcpy' offset [0, 511] is out of the bounds [0, 0] [-Warray-bounds]:  => 57:9
-
-s390x-gcc11/s390-defconfig
-
->  + /kisskb/src/drivers/net/ethernet/i825xx/sun3_82586.c: warning: array subscript 1 is above array bounds of 'volatile struct transmit_cmd_struct *[1]' [-Warray-bounds]:  => 989:108, 989:122
-
-m68k-gcc11/sun3_defconfig
-m68k-gcc8/sun3_defconfig
-
->  + /kisskb/src/drivers/scsi/mpt3sas/mpt3sas_base.c: warning: array subscript 'Mpi2SasIOUnitPage1_t {aka struct _MPI2_CONFIG_PAGE_SASIOUNIT_1}[0]' is partly outside array bounds of 'unsigned char[20]' [-Warray-bounds]:  => 5400:40, 5403:43, 5396:40
-
-powerpc-gcc11/skiroot_defconfig
-
->  + modpost: WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation failed, symbol will not be versioned.:  => N/A
-
-sparc64-gcc11/sparc64-defconfig
-sparc64/sparc64-defconfig
-
-Gr{oetje,eeting}s,
-
- 						Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
- 							    -- Linus Torvalds
+SGksDQoNCkR1cmluZyBib290IEknbSBnZXR0aW5nICJzeXNmczogY2Fubm90IGNyZWF0ZSBkdXBs
+aWNhdGUgZmlsZW5hbWUgDQonL2RldmljZXMvcGxhdGZvcm0vZmYwMDAxMDAubG9jYWxidXMvZDAw
+MDAwNDQuZ3Bpby1jb250cm9sbGVyJyINCg0KQmVsb3cgaXMgYSBncmVwIG9mICJkMDAwMDA0NC5n
+cGlvLWNvbnRyb2xsZXIiIGluIHRoZSBsb2cuDQoNCkFueSBvZiB3aGF0IHRoZSBwcm9ibGVtIGNh
+biBiZSBhbmQgd2hhdCBJIGhhdmUgdG8gbG9vayBmb3IgYW5kIGRvIHRvIA0KYXZvaWQgaXQgPw0K
+DQoNClsgICAgMi4xNTA5NTRdIGRldmljZTogJ2QwMDAwMDQ0LmdwaW8tY29udHJvbGxlcic6IGRl
+dmljZV9hZGQNClsgICAgMi4xNTYzNThdIGJ1czogJ3BsYXRmb3JtJzogYWRkIGRldmljZSBkMDAw
+MDA0NC5ncGlvLWNvbnRyb2xsZXINClsgICAgMi4xNjI3MjVdIGJ1czogJ3BsYXRmb3JtJzogX19k
+cml2ZXJfcHJvYmVfZGV2aWNlOiBtYXRjaGVkIGRldmljZSANCmQwMDAwMDQ0LmdwaW8tY29udHJv
+bGxlciB3aXRoIGRyaXZlciB1MTYtZ3Bpbw0KWyAgICAyLjE3MjgzM10gcGxhdGZvcm0gZDAwMDAw
+NDQuZ3Bpby1jb250cm9sbGVyOiBlcnJvciAtRVBST0JFX0RFRkVSOiANCndhaXQgZm9yIHN1cHBs
+aWVyIHBpY0AyMg0KWyAgICAyLjE4MTAxOV0gcGxhdGZvcm0gZDAwMDAwNDQuZ3Bpby1jb250cm9s
+bGVyOiBBZGRlZCB0byBkZWZlcnJlZCBsaXN0DQpbICAgIDIuNDcxOTgxXSBkZXZpY2U6IA0KJ3Bs
+YXRmb3JtOmQwMDAwMDAwLnBpYy0tcGxhdGZvcm06ZDAwMDAwNDQuZ3Bpby1jb250cm9sbGVyJzog
+ZGV2aWNlX2FkZA0KWyAgICAyLjQ4MDYzOV0gZGV2aWNlc19rc2V0OiBNb3ZpbmcgZDAwMDAwNDQu
+Z3Bpby1jb250cm9sbGVyIHRvIGVuZCBvZiBsaXN0DQpbICAgIDIuNDg3MTQyXSBwbGF0Zm9ybSBk
+MDAwMDA0NC5ncGlvLWNvbnRyb2xsZXI6IExpbmtlZCBhcyBhIGNvbnN1bWVyIA0KdG8gZDAwMDAw
+MDAucGljDQpbICAgIDIuNTc1Njc3XSBkZXZpY2U6IA0KJ3BsYXRmb3JtOmQwMDAwMDQ0LmdwaW8t
+Y29udHJvbGxlci0tcGxhdGZvcm06ZmYwMDAxMDAubG9jYWxidXM6bGVkX3B3cic6IA0KZGV2aWNl
+X2FkZA0KWyAgICAyLjU5MTk2NF0gcGxhdGZvcm0gZmYwMDAxMDAubG9jYWxidXM6bGVkX3B3cjog
+TGlua2VkIGFzIGEgY29uc3VtZXIgDQp0byBkMDAwMDA0NC5ncGlvLWNvbnRyb2xsZXINClsgICAg
+Mi42NDg2NjJdIGRldmljZTogDQoncGxhdGZvcm06ZDAwMDAwNDQuZ3Bpby1jb250cm9sbGVyLS1w
+bGF0Zm9ybTpkMDAwMDA0Mi5HUElPJzogZGV2aWNlX2FkZA0KWyAgICAyLjY2Mjg3N10gcGxhdGZv
+cm0gZDAwMDAwNDIuR1BJTzogTGlua2VkIGFzIGEgY29uc3VtZXIgdG8gDQpkMDAwMDA0NC5ncGlv
+LWNvbnRyb2xsZXINClsgICAgMi43ODU5NDFdIGRldmljZTogJ2QwMDAwMDQ0LmdwaW8tY29udHJv
+bGxlcic6IGRldmljZV9hZGQNClsgICAgMi43OTE2MTRdIHN5c2ZzOiBjYW5ub3QgY3JlYXRlIGR1
+cGxpY2F0ZSBmaWxlbmFtZSANCicvZGV2aWNlcy9wbGF0Zm9ybS9mZjAwMDEwMC5sb2NhbGJ1cy9k
+MDAwMDA0NC5ncGlvLWNvbnRyb2xsZXInDQpbICAgIDIuOTAwMjI4XSBrb2JqZWN0X2FkZF9pbnRl
+cm5hbCBmYWlsZWQgZm9yIGQwMDAwMDQ0LmdwaW8tY29udHJvbGxlciANCndpdGggLUVFWElTVCwg
+ZG9uJ3QgdHJ5IHRvIHJlZ2lzdGVyIHRoaW5ncyB3aXRoIHRoZSBzYW1lIG5hbWUgaW4gdGhlIA0K
+c2FtZSBkaXJlY3RvcnkuDQpbICAgIDkuNzk3NDAyXSBwbGF0Zm9ybSBmZjAwMDEwMC5sb2NhbGJ1
+czpsZWRfcHdyOiBlcnJvciAtRVBST0JFX0RFRkVSOiANCnN1cHBsaWVyIGQwMDAwMDQ0LmdwaW8t
+Y29udHJvbGxlciBub3QgcmVhZHkNClsgICAxMS4yMjk5MjddIGRldmljZXNfa3NldDogTW92aW5n
+IGQwMDAwMDQ0LmdwaW8tY29udHJvbGxlciB0byBlbmQgb2YgbGlzdA0KWyAgIDExLjI0ODc5OV0g
+cGxhdGZvcm0gZDAwMDAwNDQuZ3Bpby1jb250cm9sbGVyOiBSZXRyeWluZyBmcm9tIGRlZmVycmVk
+IA0KbGlzdA0KWyAgIDExLjI1NTgwNl0gYnVzOiAncGxhdGZvcm0nOiBfX2RyaXZlcl9wcm9iZV9k
+ZXZpY2U6IG1hdGNoZWQgZGV2aWNlIA0KZDAwMDAwNDQuZ3Bpby1jb250cm9sbGVyIHdpdGggZHJp
+dmVyIHUxNi1ncGlvDQpbICAgMTEuMjY1ODYyXSBidXM6ICdwbGF0Zm9ybSc6IHJlYWxseV9wcm9i
+ZTogcHJvYmluZyBkcml2ZXIgdTE2LWdwaW8gDQp3aXRoIGRldmljZSBkMDAwMDA0NC5ncGlvLWNv
+bnRyb2xsZXINClsgICAxMS4zMjE0MjJdIGRyaXZlcjogJ3UxNi1ncGlvJzogZHJpdmVyX2JvdW5k
+OiBib3VuZCB0byBkZXZpY2UgDQonZDAwMDAwNDQuZ3Bpby1jb250cm9sbGVyJw0KWyAgIDExLjMz
+MTczMl0gYnVzOiAncGxhdGZvcm0nOiByZWFsbHlfcHJvYmU6IGJvdW5kIGRldmljZSANCmQwMDAw
+MDQ0LmdwaW8tY29udHJvbGxlciB0byBkcml2ZXIgdTE2LWdwaW8NCg0KVGhhbmtzDQpDaHJpc3Rv
+cGhl

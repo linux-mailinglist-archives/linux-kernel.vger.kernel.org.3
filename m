@@ -2,109 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BB04F1E8D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A454F1E87
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381892AbiDDWJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:09:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43304 "EHLO
+        id S1359672AbiDDV5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379964AbiDDS1m (ORCPT
+        with ESMTP id S1379963AbiDDS1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 14:27:42 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616C213F4A;
-        Mon,  4 Apr 2022 11:25:45 -0700 (PDT)
-Date:   Mon, 4 Apr 2022 11:25:35 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1649096743;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Og7JJS97Y7kZpeaH/i0wuDH1r4Ru5n8sJ0IhUTsaTkc=;
-        b=IFf94GWr/6nr/4HgPNIQTPJGHrC3WBKmIpRxtM36jz9zsR04NOjeL/8OfSzqcvZG0zgjq5
-        bxiztvliLfe6bwYLU/TybmMsDuIL3Dv81VLiVs4OB9hzOhwlSPvHK8CDaU4e7vrJKGzg2u
-        I0k54olorsvEY4ZnPZLQZx8TVXRhjg8=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Yosry Ahmed <yosryahmed@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>
-Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
-Message-ID: <Yks4H1pQx1YN37gH@carbon.dhcp.thefacebook.com>
-References: <20220331084151.2600229-1-yosryahmed@google.com>
- <YkXkA+Oh1Bx33PrU@carbon.dhcp.thefacebook.com>
- <YkcC3z5ReeQ5vdg9@dhcp22.suse.cz>
- <YkcvU2hosJV3cL8F@carbon.dhcp.thefacebook.com>
- <Ykqv1CvGwgmF2jlT@dhcp22.suse.cz>
+        Mon, 4 Apr 2022 14:27:40 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E890413F48;
+        Mon,  4 Apr 2022 11:25:43 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id i11so8816648plg.12;
+        Mon, 04 Apr 2022 11:25:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=nW+R2aELHMuslWsI+4yUFjr+ad8rO4vRUmzN+6iX3w0=;
+        b=AGsQ4XN/coB22xLf2XWLJpswQIPEHRILCm8rV/x6fdotpjLDbSMr5O6RsPD0mJwPSk
+         BmUe8xb/Sotcl0zH3GihiocxLus2PZRfGgIf2wZjoiYtQH4pFRrCfmAMGeyzLAqwUjGJ
+         zUalFPHQ/eoadYCmrmUXIKRxpm1JYh8e1hyPd4uB5d23VQVp3Z3/95RmQ+Nk+jwrzqoO
+         BRt9pBBWrgr9kMdf+5M96ORy0GXKltQbyqkBFNY+hBrfjybpEOBGaaNs/2QWDsx1Lohp
+         OE54gIPTzWtBpnL/+e7aMXKdDogYJ4OdsKu62+8lshXLOXBDjsunRQnUKGtPKXgQsh7Q
+         RP8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nW+R2aELHMuslWsI+4yUFjr+ad8rO4vRUmzN+6iX3w0=;
+        b=3uR0qIwPYoQmSP5yh7EEq1HaIij7nuXZqBndTx2U/g98ZiVlrET1hkn7+UBfNkaYMQ
+         4JfkJJAb/2UGrwpSsYJqCeLGEz6oDT0MCUuHfWSdTC6ajHTFlXxlRcJBQSe1Rwmmo8FX
+         PEViqmOAS4pfCte0L8oQnnJvz2UmU2qzPqlZzhTR9Z9JlX6Ay+xwIJwS4xJ/UIOV4UCD
+         u+rL4ErVfZcQHlUkL4I0ajwQ517LRLQmdlGvW+t7E34TNnSaKS+Gd+FywI4LzboQv6f1
+         uk/bAe6hIrTSlWaZBTJ0j5NGFkY2luobEh8NXg7kgCRYpYzUiyuMRGN8KP218E3d9ZTw
+         XCzw==
+X-Gm-Message-State: AOAM532XaZa+O6vshSmBN1tqVeBMCoVv7DHc8P2mPbs1gdXrgm9bGVa5
+        RjS7FdaHJKLmBcS9MYA/RvU=
+X-Google-Smtp-Source: ABdhPJxf3ByNCA70KyPk6gBFS1sJ43qJGOvIwwj+jQn+oMAAxXF8VTs004VDAXGv/34dW0LUB4Wa4Q==
+X-Received: by 2002:a17:902:a510:b0:156:6cf9:9a7c with SMTP id s16-20020a170902a51000b001566cf99a7cmr952088plq.151.1649096743340;
+        Mon, 04 Apr 2022 11:25:43 -0700 (PDT)
+Received: from [192.168.66.3] (p912131-ipoe.ipoe.ocn.ne.jp. [153.243.13.130])
+        by smtp.gmail.com with ESMTPSA id k23-20020a17090a591700b001ca00b46cf9sm158807pji.18.2022.04.04.11.25.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Apr 2022 11:25:42 -0700 (PDT)
+Message-ID: <4d6307d0-cd67-dfb2-6d6d-2f37bf4a271b@gmail.com>
+Date:   Tue, 5 Apr 2022 03:25:37 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ykqv1CvGwgmF2jlT@dhcp22.suse.cz>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] Revert "ACPI: processor: idle: Only flush cache on
+ entering C3"
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>,
+        the arch/x86 maintainers <x86@kernel.org>
+References: <20220403062322.3168-1-akihiko.odaki@gmail.com>
+ <CAJZ5v0gaRr-r8VFCEGSP1nTX0CwrOi35DXZB5Z8A9tiLufNxPg@mail.gmail.com>
+From:   Akihiko Odaki <akihiko.odaki@gmail.com>
+In-Reply-To: <CAJZ5v0gaRr-r8VFCEGSP1nTX0CwrOi35DXZB5Z8A9tiLufNxPg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 10:44:04AM +0200, Michal Hocko wrote:
-> On Fri 01-04-22 09:58:59, Roman Gushchin wrote:
-> > On Fri, Apr 01, 2022 at 03:49:19PM +0200, Michal Hocko wrote:
-> > > On Thu 31-03-22 10:25:23, Roman Gushchin wrote:
-> > > > On Thu, Mar 31, 2022 at 08:41:51AM +0000, Yosry Ahmed wrote:
-> > > [...]
-> > > > > - A similar per-node interface can also be added to support proactive
-> > > > >   reclaim and reclaim-based demotion in systems without memcg.
-> > > > 
-> > > > Maybe an option to specify a timeout? That might simplify the userspace part.
-> > > 
-> > > What do you mean by timeout here? Isn't
-> > > timeout $N echo $RECLAIM > ....
-> > > 
-> > > enough?
-> > 
-> > It's nice and simple when it's a bash script, but when it's a complex
-> > application trying to do the same, it quickly becomes less simple and
-> > likely will require a dedicated thread to avoid blocking the main app
-> > for too long and a mechanism to unblock it by timer/when the need arises.
-> > 
-> > In my experience using correctly such semi-blocking interfaces (semi- because
-> > it's not clearly defined how much time the syscall can take and whether it
-> > makes sense to wait longer) is tricky.
+On 2022/04/05 3:13, Rafael J. Wysocki wrote:
+> On Sun, Apr 3, 2022 at 8:25 AM Akihiko Odaki <akihiko.odaki@gmail.com> wrote:
+>>
+>> This reverts commit 87ebbb8c612b1214f227ebb8f25442c6d163e802.
+>>
+>> ACPI processor power states can be transitioned in two distinct
+>> situations: 1. when CPU goes idle and 2. before CPU goes offline
+>> ("playing dead") to suspend or hibernate. Case 1 is handled by
+>> acpi_idle_enter or acpi_idle_enter_s2idle. Case 2 is handled by
+>> acpi_idle_play_dead.
+>>
+>> It is necessary to flush CPU caches in case 2 even if it is not
+>> required to transit ACPI processor power states as CPU will go
+>> offline soon. However, the reverted commit incorrectly removed CPU
+>> cache flushing in such a condition.
 > 
-> We have the same approach to setting other limits which need to perform
-> the reclaim. Have we ever hit that as a limitation that would make
-> userspace unnecessarily too complex?
+> I think what you mean is that the CPU cache must always be flushed in
+> acpi_idle_play_dead(), regardless of the target C-state that is going
+> to be requested, because this is likely to be part of a CPU offline
+> procedure or preparation for entering a system-wide sleep state and
+> the stale cache contents may lead to problems going forward, for
+> example when the CPU is taken back online.
+> 
+> If so, I will put the above information into the patch changelog.
 
-The difference here is that some limits are most likely set once and
-never adjusted, e.g. memory.max or memory.low.
-I do definitely remember some issues around memory.high, but as I recall,
-we've fixed them on the kernel side. We've even had a private memory.high.tmp
-interface with a value and a timeout, which later was replaced with
-a memory.reclaim interface similar to what we discuss here.
-But with memory.high we set the limit first, so if a user tries to reclaim
-a lot of hot memory, it will soon put all processes in the cgroup into
-the sleep/direct reclaim. So it's not expected to block for too long.
+I guess it is causing problems because the dirty caches will not get 
+written back and the RAM becomes stale if they are not flushed. From my 
+understanding, the CPU should have an empty cache and read back contents 
+from RAM when it is taken back online.
 
-In general it all comes to the question how hard the kernel should try to
-reclaim the memory before giving up. The userspace might have different
-needs in different cases. But if the interface is defined very vaguely like
-it tries for an undefined amount of time and then gives up, it's hard to
-use it in a predictive manner.
+> 
+>> In fact, it made resuming from
+>> suspend-to-RAM occasionally fail on Lenovo ThinkPad C13 Yoga.
+> 
+> So this probably means that resume from suspend-to-RAM occasionally
+> fails on Lenovo ThinkPad C13 Yoga and reverting the commit in question
+> fixes this problem.  Is that correct?
 
-Thanks!
+Yes, that is what I meant.
+
+Regards,
+Akihiko Odaki
+
+> 
+>> Signed-off-by: Akihiko Odaki <akihiko.odaki@gmail.com>
+>> ---
+>>   drivers/acpi/processor_idle.c | 3 +--
+>>   1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
+>> index f8e9fa82cb9b..05b3985a1984 100644
+>> --- a/drivers/acpi/processor_idle.c
+>> +++ b/drivers/acpi/processor_idle.c
+>> @@ -570,8 +570,7 @@ static int acpi_idle_play_dead(struct cpuidle_device *dev, int index)
+>>   {
+>>          struct acpi_processor_cx *cx = per_cpu(acpi_cstate[index], dev->cpu);
+>>
+>> -       if (cx->type == ACPI_STATE_C3)
+>> -               ACPI_FLUSH_CPU_CACHE();
+>> +       ACPI_FLUSH_CPU_CACHE();
+>>
+>>          while (1) {
+>>
+>> --
+>> 2.35.1
+>>
+

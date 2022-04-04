@@ -2,117 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F07B4F0D22
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 02:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03CEA4F0D24
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 02:04:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376766AbiDDAE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 20:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
+        id S1376765AbiDDAGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 20:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiDDAEy (ORCPT
+        with ESMTP id S236076AbiDDAGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 20:04:54 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FE532EDF;
-        Sun,  3 Apr 2022 17:02:59 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id 14so5730001ily.11;
-        Sun, 03 Apr 2022 17:02:59 -0700 (PDT)
+        Sun, 3 Apr 2022 20:06:32 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240BE2CC95
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 17:04:35 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id i27so9505807ejd.9
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 17:04:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tIgHyqz4/1sXAHyLaXGAJ7Tj9MXYOswEHmYuO4dH3gU=;
-        b=Px6/sfJAAtEoSKD0CVO1B4ZRLpKaIJHiDZoNGpmq+5Y5oHAehZsqm5OoKB4XKSzqA2
-         HmQ455NW9KXiJp163PyBCcq2mGmwQPu6oZwkO8aqo3WKpOFaVUdvgxEZgtV5UcabAlSj
-         eEKFVaLBNAw+FqL4aYqYLrMw9nWsY0BpJaZJnKUEDxPKuEB1cEEW1OIqgRhabwqb3lWy
-         r1XYJD2+x3OaTcYqECEVZW3pqi2Z5jVV6nY8w7R2K3prpixyP7yIKMbWz3ZhqRmUMQ5Y
-         NL7RK2NxveFQRc1fYLe0rEWYXt2WHlfbRnlp6ryJyIpDOLqLOgIIt5cuSmb9ZqQeEn7x
-         ih9g==
+         :cc:content-transfer-encoding;
+        bh=YlBtLMwXDp/2aSzEQXf/0+zL7sSyqtfpT0RHI0yBN90=;
+        b=P4r/SoegNEr9VInkvurtF58MXhKjhQiVDqJpUu4jIYfBoM7fRxXVKY3XimQ8p1+Ht6
+         QBOFuh3Er8IF7Ud0cd5Xph7UWZWsfPQR5uHHwn5n0I3Yc0at8BiFSTRkaaC4oufeami/
+         5VT7CdnmzoYGC85b5eY4nGaPTbdnq/ly8bzjtQJQz4A5cxqfFEueUWK9t39IyI6VgB57
+         vs+NUn8s7BKAKtSom9Kxi3C8wAdXSgJEu4I09ncRbzTdHG0lWlPK1o5iTjjwEV/764Ja
+         RzMgmb4UMNgQF6Phj26OB1pum/i0O66B04Qdx+Y9Cx8bXB5LrJM5c3+a29wVh+J11wlo
+         c4JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tIgHyqz4/1sXAHyLaXGAJ7Tj9MXYOswEHmYuO4dH3gU=;
-        b=IvuGLZwd3oZCKxsqxlFbjOXWD4mM2Ur1lDD+MsUmYmI1I7p4lhZlsUso7/dunN22RU
-         DBTmXO7bDA3smLO/FhH8o1DSTEEWMwJf8KGPK2FWaVJOJ/WNp7C2IzelBW8lBEp1pimB
-         z5Icb3KRlSjdzEqrAUquhRmGF9+0byXxHMBpG8UDGPXCFgvnuCsIUywPVF2+PDk3ROIT
-         YDPsl+2HzXie2K/EnpVgWBkXWiTKz86yYmZn9t/tJ9ieRAVBeddqPKPgA05WFe7EVQ+n
-         3AFe3kK9CWBqTbHaJD6YJWFCz+UwWN07S9mkZkSfoK8vrYqTvGpBKZf5zew/Oj071VPS
-         jlIw==
-X-Gm-Message-State: AOAM532NXFoyP8k9iZI3M7DGAKZ/DyIVjMIZ0qts1+KPs/mGDWoleci3
-        8TMDz/+5FZkWOrsJlIR2urINLf4LBTgWpSk4PTGcZfhi
-X-Google-Smtp-Source: ABdhPJyGeIL2M2pyJE/TM1f7L6G8mvS+ud9UGoXNIx14xnnd1qaOsX3Q2Rgwa69DBIPBCKANonkPpaa5aUIAnycD5e8=
-X-Received: by 2002:a92:cd89:0:b0:2c9:bdf3:c5dd with SMTP id
- r9-20020a92cd89000000b002c9bdf3c5ddmr4035472ilb.252.1649030579155; Sun, 03
- Apr 2022 17:02:59 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YlBtLMwXDp/2aSzEQXf/0+zL7sSyqtfpT0RHI0yBN90=;
+        b=m/MR8YWC1stX1E5gNLb4NbOcb0+TnYnjs2+NCvNIEtQ02Fq+s5gyCOHUfwLmRdEuE+
+         uItNR3zGi2QAB4PxzEYwGn+7UAB9y7SsyFXqjvUoMaE76VBlgiiDpoGwsceMIO//rg0b
+         tU75RCR27K28V1hcvHGHRcTXpjNnM3JqDQbB8AHlyB7LiMgw4EfE2b5CWlIVQsu6rhse
+         Uc2kIdq7aDR7Ah1HsEBkgP57dQ9CgTTLCjAWjxbOC6IMiU5EjxR74Vii37dKhgsyKv8u
+         GBHN5u7qO9rHdlgzy9pPgG9ROo0lYz6SF30EgNDfXCKGbjvHGwHYZGjEa4wmU/GSYkR1
+         rALQ==
+X-Gm-Message-State: AOAM533g6ZuJnUC/EoZ9p0pK7mOJaKvdGkwGayEnOKJaaQdGP5dYCLPx
+        3TDM0BVHovHrTSFxqhk1JvV/msmBR07AgdARUOW1Vg==
+X-Google-Smtp-Source: ABdhPJzV+fEMQ3b/d/a51/OGIg4GPl4a5ZojCGV9lwpP+gO59cT8hdkP5KKDh0yB0UMK8Iu+Tweu2xuIv/PiG9bs28M=
+X-Received: by 2002:a17:906:4785:b0:6df:6784:a7f8 with SMTP id
+ cw5-20020a170906478500b006df6784a7f8mr9035751ejc.301.1649030673654; Sun, 03
+ Apr 2022 17:04:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220403135245.1713283-1-ytcoode@gmail.com>
-In-Reply-To: <20220403135245.1713283-1-ytcoode@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Sun, 3 Apr 2022 17:02:48 -0700
-Message-ID: <CAEf4BzbcXAhRakTAvh8PC2QTnr+zO7U-NbL4VO+VY7QZd_8Ezw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix cd_flavor_subdir() of test_progs
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+References: <20220227144926.3006585-1-jernej.skrabec@gmail.com>
+ <20220227144926.3006585-3-jernej.skrabec@gmail.com> <1b2ce01fb04f29cca58d40bd81d9f4cc46dcebf8.camel@ndufresne.ca>
+In-Reply-To: <1b2ce01fb04f29cca58d40bd81d9f4cc46dcebf8.camel@ndufresne.ca>
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date:   Sun, 3 Apr 2022 21:04:22 -0300
+Message-ID: <CAAEAJfCA1ef5+KZHU4ZTJvuqdCAEUkvpDY9HTy1fp3M+0QxqPg@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/8] media: Add P010 format
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-sunxi@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 3, 2022 at 6:53 AM Yuntao Wang <ytcoode@gmail.com> wrote:
->
-> Currently, when we run test_progs with just executable file name, for
-> example 'PATH=. test_progs-no_alu32', cd_flavor_subdir() will not check
+Hi Nicolas, Benjamin,
 
-First time seeing this PATH=. trick just to avoid
-./test_progs-no_alu32, but sure, the fix makes sense. Applied to
-bpf-next.
+On Mon, Feb 28, 2022 at 9:48 AM Nicolas Dufresne <nicolas@ndufresne.ca> wro=
+te:
+>
+> Le dimanche 27 f=C3=A9vrier 2022 =C3=A0 15:49 +0100, Jernej Skrabec a =C3=
+=A9crit :
+> > Add P010 format, which is commonly used for 10-bit videos.
+>
+> There is a much more complete patch that was sent previously (with docume=
+ntation
+> and all):
+>
+> https://patchwork.kernel.org/project/linux-rockchip/patch/20210618131526.=
+566762-5-benjamin.gaignard@collabora.com/
+>
 
-> if test_progs is running as a flavored test runner and switch into
-> corresponding sub-directory.
->
-> This will cause test_progs-no_alu32 executed by the
-> 'PATH=. test_progs-no_alu32' command to run in the wrong directory and
-> load the wrong BPF objects.
->
-> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-> ---
->  tools/testing/selftests/bpf/test_progs.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-> index 2ecb73a65206..0a4b45d7b515 100644
-> --- a/tools/testing/selftests/bpf/test_progs.c
-> +++ b/tools/testing/selftests/bpf/test_progs.c
-> @@ -761,8 +761,10 @@ int cd_flavor_subdir(const char *exec_name)
->         const char *flavor = strrchr(exec_name, '/');
->
->         if (!flavor)
-> -               return 0;
-> -       flavor++;
-> +               flavor = exec_name;
-> +       else
-> +               flavor++;
-> +
->         flavor = strrchr(flavor, '-');
->         if (!flavor)
->                 return 0;
-> --
-> 2.35.1
->
+I believe "media: Add P010 video format" should be good to go, I think
+we could merge it.
+
+I can't find it on my gmail inbox, for some reason.. can you guys
+please repost it,
+and/or reply to with a gently ping for Hans (and please Cc me on this mail)=
+ ?
+
+Thanks!
+Ezequiel

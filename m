@@ -2,121 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CFD4F1D92
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F2A4F1C1A
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:26:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383329AbiDDVdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
+        id S1381828AbiDDVYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:24:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379310AbiDDQ7T (ORCPT
+        with ESMTP id S1379352AbiDDRCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 12:59:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD8A3B3EC;
-        Mon,  4 Apr 2022 09:57:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8988160C95;
-        Mon,  4 Apr 2022 16:57:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 235B7C2BBE4;
-        Mon,  4 Apr 2022 16:57:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649091441;
-        bh=3DwgQQibm4QtCGLBPHzzEvuy5aoVnSuQo3AjjdM3vbs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fk4AO+Sm8xS1TVN83Ht+dupzgBCUyMwmk3BdxRedx7gSUjUC8tNpe6fkePJnDCgvn
-         6z1ffAw+tRmbJc42ieFu4+y8g6Py2fjyb6A9BWRheaeI2tn5z4tAHTbLbEp2080+S9
-         CxB1WsVq5EIoeUe1he75gyGAxOSSKUfgy6CHbfw+TkSwcXK04OcBTqJ0zH0UGN8jud
-         gmLhXFq4Iv4cp4M9T+2ayVMUt/M0PSzt/xTjSrezEkmuwfcU4AMwGoj8W8UL1mjetC
-         QdQOK6sowskP4tRwiSnLlB0DFDguDCHON0Eg949oEq3JMuR6oVLAgcBK5/sITPY06j
-         QtceSyWGBreOw==
-Date:   Mon, 4 Apr 2022 09:57:19 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Guo Ren <guoren@kernel.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Subject: Re: [next] riscv: Linux next-20220404 riscv defconfig builds failed.
-Message-ID: <Yksjb9Mkq658k4YJ@dev-arch.thelio-3990X>
-References: <CA+G9fYu_ZHOeOPDiwzXGL6Re8aFYW3K+JSL2Dozw=VHwaUFxyQ@mail.gmail.com>
+        Mon, 4 Apr 2022 13:02:20 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86C940A20
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 10:00:23 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id d5so18439499lfj.9
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 10:00:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lpp/ozNVnLdvnoTjipCF69sWorB9Ss1eoVxFTqOHzco=;
+        b=qAhAC/REUCwi7i3+1Gzc40RTeFOiNy1TlboqLpEisLYhnCJAXa/9lqOZs0rTOp+HJE
+         QoU2M14FdHiKF46PXJpMy1tdEME2DFFpHWb7R01Fa04jlSB8cySJIUtzZoqBqslP6nmr
+         yKULXcsaq4XnX1xzQAML0+xQc/vc6at+3asgvxssszq0WDVIRxlQU8KubeeFk3eA/Ll2
+         Mg0PXahhIMhtmt+u0ePYuOvJaiVjbD9xDfxtjauRZBKq+4VFE3uVKNqz2FvjJ2q27T49
+         M2EFZ0XvWrd3dWcLtLtIXVHHA6KTPWHYNIB/IwiG3jfccSUrfHKl+CaSCriKsjK9BF9v
+         s5dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lpp/ozNVnLdvnoTjipCF69sWorB9Ss1eoVxFTqOHzco=;
+        b=scQEBTwkeizB27G58LzKHVt7cqyVr4OX1dckcdT9h2P/my2ZX+yGeB3/6MRK5UHvnR
+         1dK5K2//efiw7EMF2pjbCsdjIsbYCv82jBre6OeE1/sxr47iOVlwt4RJFgsgT3LM4T5Y
+         Kr+ZXbwxK3+7x8t+GG7vAWNDcAwkeEpY4N97UhO+NTs2aqOp5EGFypbs4sqXBw1HL3Ge
+         gXOKe/2Ps5J2bRvvi1rh54TFG1UBy7MY+HoPDWD0vrAnHXQCD2WklufoJB9VxHmzCwcg
+         C7JB/OZ5f6S5K01A5PU0V9YzL/RBNsxqjFzf019qgA842vF+QzG1v18QdoxCt5OiazMl
+         RO1Q==
+X-Gm-Message-State: AOAM5314WnDecSs80R6OVNfI5DVZdxv7s4ZeDrZfuJdn5bNA+9S5siaS
+        2FESKJxcL3DqXY+6IX0J2GLqBNGYLP0qv3EqaygbuQ==
+X-Google-Smtp-Source: ABdhPJyfnr321gXYxKVcADF7Mg84CJzjSsJG4frp9zc4ju7G/kp2QnXbgnN2lQQYDP3G7rnSfh9tJ0Rm+JoS9AD+qKE=
+X-Received: by 2002:a05:6512:3092:b0:44a:e7bb:e961 with SMTP id
+ z18-20020a056512309200b0044ae7bbe961mr303801lfd.190.1649091618372; Mon, 04
+ Apr 2022 10:00:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYu_ZHOeOPDiwzXGL6Re8aFYW3K+JSL2Dozw=VHwaUFxyQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220402130014.1417773-1-masahiroy@kernel.org>
+In-Reply-To: <20220402130014.1417773-1-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 4 Apr 2022 10:00:07 -0700
+Message-ID: <CAKwvOd=0-dka3RwFSZoizccotYkYZjZf3eyj1nQGKJu65M+S3A@mail.gmail.com>
+Subject: Re: [PATCH 1/2] modpost: remove useless export_from_sec()
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 03:28:41PM +0530, Naresh Kamboju wrote:
-> Linux next-20220404 riscv defconfig builds failed.
-> 
-> Regressions found on riscv:
->    - riscv-riscv-clang-14-defconfig
->    - riscv-riscv-gcc-10-defconfig
->    - riscv-riscv-clang-13-defconfig
->    - riscv-riscv-clang-12-defconfig
->    - riscv-riscv-clang-11-defconfig
->    - riscv-riscv-gcc-11-defconfig
->    - riscv-riscv-gcc-8-defconfig
->    - riscv-riscv-gcc-9-defconfig
->    - riscv-riscv-clang-nightly-defconfig
-> 
-> 
-> arch/riscv/kernel/compat_signal.c:7:10: fatal error:
-> linux/tracehook.h: No such file or directory
->   7 | #include <linux/tracehook.h>
->     |          ^~~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> make[3]: *** [scripts/Makefile.build:289:
-> arch/riscv/kernel/compat_signal.o] Error 1
+On Sat, Apr 2, 2022 at 6:00 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> With commit 1743694eb235 ("modpost: stop symbol preloading for
+> modversion CRC") applied, now export_from_sec() is useless.
+>
+> handle_symbol() is called for every symbol in the ELF.
+>
+> When 'symname' does not start with "__ksymtab", export_from_sec() is
+> called, and the returned value is stored in 'export'.
+>
+> It is used in the last part of handle_symbol():
+>
+>                 if (strstarts(symname, "__ksymtab_")) {
+>                         name = symname + strlen("__ksymtab_");
+>                         sym_add_exported(name, mod, export);
+>                 }
+>
+> 'export' is used only when 'symname' starts with "__ksymtab_".
+>
+> So, the value returned by export_from_sec() is never used.
+>
+> Remove this useless function. This makes further cleanups possible.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-For what it's worth, I also see:
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-$ make -skj"$(nproc)" ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- defconfig all
-arch/riscv/kernel/compat_vdso/compat_vdso.lds.S:3:10: fatal error: ../vdso/vdso.lds.S: No such file or directory
-    3 | #include <../vdso/vdso.lds.S>
-      |          ^~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[2]: *** [scripts/Makefile.build:462: arch/riscv/kernel/compat_vdso/compat_vdso.lds] Error 1
-arch/riscv/kernel/compat_vdso/rt_sigreturn.S:3:10: fatal error: ../vdso/rt_sigreturn.S: No such file or directory
-    3 | #include <../vdso/rt_sigreturn.S>
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-arch/riscv/kernel/compat_vdso/note.S:3:10: fatal error: ../vdso/note.S: No such file or directory
-    3 | #include <../vdso/note.S>
-      |          ^~~~~~~~~~~~~~~~
-compilation terminated.
-arch/riscv/kernel/compat_vdso/getcpu.S:3:10: fatal error: ../vdso/getcpu.S: No such file or directory
-    3 | #include <../vdso/getcpu.S>
-      |          ^~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/rt_sigreturn.o] Error 1
-make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/note.o] Error 1
-make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/getcpu.o] Error 1
-arch/riscv/kernel/compat_vdso/flush_icache.S:3:10: fatal error: ../vdso/flush_icache.S: No such file or directory
-    3 | #include <../vdso/flush_icache.S>
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[2]: *** [arch/riscv/kernel/compat_vdso/Makefile:43: arch/riscv/kernel/compat_vdso/flush_icache.o] Error 1
+> ---
+>
+>  scripts/mod/modpost.c | 17 +----------------
+>  scripts/mod/modpost.h |  4 ----
+>  2 files changed, 1 insertion(+), 20 deletions(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index ed9d056d2108..194ca9083c7a 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -369,16 +369,6 @@ static enum export export_from_secname(struct elf_info *elf, unsigned int sec)
+>                 return export_unknown;
+>  }
+>
+> -static enum export export_from_sec(struct elf_info *elf, unsigned int sec)
+> -{
+> -       if (sec == elf->export_sec)
+> -               return export_plain;
+> -       else if (sec == elf->export_gpl_sec)
+> -               return export_gpl;
+> -       else
+> -               return export_unknown;
+> -}
+> -
+>  static const char *namespace_from_kstrtabns(const struct elf_info *info,
+>                                             const Elf_Sym *sym)
+>  {
+> @@ -576,10 +566,7 @@ static int parse_elf(struct elf_info *info, const char *filename)
+>                                 fatal("%s has NOBITS .modinfo\n", filename);
+>                         info->modinfo = (void *)hdr + sechdrs[i].sh_offset;
+>                         info->modinfo_len = sechdrs[i].sh_size;
+> -               } else if (strcmp(secname, "__ksymtab") == 0)
+> -                       info->export_sec = i;
+> -               else if (strcmp(secname, "__ksymtab_gpl") == 0)
+> -                       info->export_gpl_sec = i;
+> +               }
+>
+>                 if (sechdrs[i].sh_type == SHT_SYMTAB) {
+>                         unsigned int sh_link_idx;
+> @@ -702,8 +689,6 @@ static void handle_symbol(struct module *mod, struct elf_info *info,
+>
+>         if (strstarts(symname, "__ksymtab"))
+>                 export = export_from_secname(info, get_secindex(info, sym));
+> -       else
+> -               export = export_from_sec(info, get_secindex(info, sym));
+>
+>         switch (sym->st_shndx) {
+>         case SHN_COMMON:
+> diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+> index 0c47ff95c0e2..a85dcec3669a 100644
+> --- a/scripts/mod/modpost.h
+> +++ b/scripts/mod/modpost.h
+> @@ -25,7 +25,6 @@
+>  #define Elf_Sym     Elf32_Sym
+>  #define Elf_Addr    Elf32_Addr
+>  #define Elf_Sword   Elf64_Sword
+> -#define Elf_Section Elf32_Half
+>  #define ELF_ST_BIND ELF32_ST_BIND
+>  #define ELF_ST_TYPE ELF32_ST_TYPE
+>
+> @@ -40,7 +39,6 @@
+>  #define Elf_Sym     Elf64_Sym
+>  #define Elf_Addr    Elf64_Addr
+>  #define Elf_Sword   Elf64_Sxword
+> -#define Elf_Section Elf64_Half
+>  #define ELF_ST_BIND ELF64_ST_BIND
+>  #define ELF_ST_TYPE ELF64_ST_TYPE
+>
+> @@ -138,8 +136,6 @@ struct elf_info {
+>         Elf_Shdr     *sechdrs;
+>         Elf_Sym      *symtab_start;
+>         Elf_Sym      *symtab_stop;
+> -       Elf_Section  export_sec;
+> -       Elf_Section  export_gpl_sec;
+>         char         *strtab;
+>         char         *modinfo;
+>         unsigned int modinfo_len;
+> --
+> 2.32.0
+>
 
-I am guessing this code was never tested with $(srctree) == $(objtree).
 
-Cheers,
-Nathan
+-- 
+Thanks,
+~Nick Desaulniers

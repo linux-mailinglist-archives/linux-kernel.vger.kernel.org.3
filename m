@@ -2,128 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1AE94F11AA
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5BED4F11AB
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349592AbiDDJJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 05:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
+        id S1349735AbiDDJKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 05:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244472AbiDDJJy (ORCPT
+        with ESMTP id S1349554AbiDDJJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 05:09:54 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B113BA61;
-        Mon,  4 Apr 2022 02:07:58 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id 85so7057106qkm.9;
-        Mon, 04 Apr 2022 02:07:58 -0700 (PDT)
+        Mon, 4 Apr 2022 05:09:56 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C713BA61
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 02:07:59 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id b15so8372575pfm.5
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 02:07:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4bEukbCR9Nhs/phBw9CHkxQ3EgSEHMJ/cxKPyV/U1Lc=;
-        b=J5KW87ePrm1kVWM8zimS7BHw2Mzubr83uLPX1ZBEuTOjvvs+UkzK/GsTYtS+rkeeh6
-         Ge2jgAndu7+Zy91oVbelB/tQnEdNrikZagGfuskZmImTjrfeZFKVfsqjT4l6uBHJSGVZ
-         VY7S7PBo+y7RdG666XUW2bx1aEo7G3ouf2K51+rUsGOhwYYyquxLNq9RdgI6zt+EI6Oq
-         QogUEwbMxBtv/3Hc+6E7ikZQLShJTywcEZtzSZ40mqOmq5LwKkAGxigcH/x8JoioykXi
-         D2BAEjI17KvY0X1MbUap3yVxXSGf+QKh6gAAsi1h7CMfZADAjRdbrxbuASmFKV+ZXIG/
-         gb5Q==
+        h=from:to:subject:date:message-id;
+        bh=c4R3JJ+tk9qsvcjavAHFJ5wC1KGmyFCCYT/LvM1hEqY=;
+        b=Ls68uvoOUR/HvzGT3MRTxlpWthdhU3tUNF4aOjl3xdUp65uTfi76PUS5jI+dbUcdaE
+         cLqp5xrLy8rSPsGcnMlgnpN4FGY87jpzjfwKBcoSpAIvp8077bk/dLMbdcPZNmlgU3YJ
+         Gy7EHuqAPdmftELz1JUVT39LOb58ukBenvxVttHwsiBVBpdl0y+q+lVu3fz0jWtIyvn8
+         3bewdHaw5karz0Xr984lJIj29A0n0qfwxZP+QOVKOCndJIgBoPDAyJ2YchI81zG3j1Rr
+         0NIMD9rUBcoFYrsQJwFKPMHEHBp0rC0m/6x96Vp2X02CYlNN4hSO8FqhDsL3flxSfPUR
+         RRig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4bEukbCR9Nhs/phBw9CHkxQ3EgSEHMJ/cxKPyV/U1Lc=;
-        b=H4MVPRHZpoZkOQgT7Fhaa1Rt7ZKwHQoVYSuvI/MzfOgPoCUCtWoedhLCjcIHK2UvZn
-         FFo6VPNUn1+HghjFfgooWer0TcmLIIu5TlwUQuSnP1/fWu9WgTvlXNynJREobB3WjxGx
-         2geSWQ7d6iYeqIU0OkuwG8ahNzOVe26XLrE5H13S27tXyu6Et9TUKlzq6XIt2Wack4t/
-         KVDIYipR24ADFQRxE2+LI455QTtJqyeDggYxnrL8PgyTcm9xwQ8DUKhRTITvnQL1QGYK
-         gGlNQ9i7k4hvx5CtIQbHbjc0IxzisCr7EBTmdbWs9JOv82fxpF7NmfQ2p69zNYs2chNQ
-         C74Q==
-X-Gm-Message-State: AOAM530yn+s7L3M8Gn31G1uvY+AOhKky0KVM5UsClMM29v3qfDN0Wy8n
-        ZYBeSjN0NLnNaxsvM+15EEpKUXtGWlso0myLDYcscShav4dA7A==
-X-Google-Smtp-Source: ABdhPJzxhreJVMKs5S5FdXqt1xixG6+tcI/PtSb1hJfCARG67fDZF716ric68cm5HwCcmcK69tuvoAk4ghPFTca0/L0=
-X-Received: by 2002:a05:620a:108f:b0:67b:465f:56ba with SMTP id
- g15-20020a05620a108f00b0067b465f56bamr13401510qkk.297.1649063277536; Mon, 04
- Apr 2022 02:07:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <1648713656-24254-1-git-send-email-zhaoyang.huang@unisoc.com>
- <YkVt0m+VxnXgnulq@dhcp22.suse.cz> <CAGWkznF4qb2EP3=xVamKO8qk08vaFg9JeHD7g80xvBfxm39Hkg@mail.gmail.com>
- <YkWR8t8yEe6xyzCM@dhcp22.suse.cz> <CAGWkznHxAD0757m1i1Csw1CVRDtQddfCL08dYf12fa47=-uYYQ@mail.gmail.com>
- <YkbjNYMY8VjHoSHR@dhcp22.suse.cz> <CAGWkznF7cSyPU0ceYwH6zweJzf-X1bQnS6AJ2-J+WEL0u8jzng@mail.gmail.com>
- <CAJuCfpHneDZMXO_MmQDPA+igAOdAPRUChiq+zftFXGfDzPHNhQ@mail.gmail.com>
- <CAGWkznFTQCm0cusVxA_55fu2WfT-w2coVHrT=JA1D_9_2728mQ@mail.gmail.com> <YkqxpEW4m6iU3zMq@dhcp22.suse.cz>
-In-Reply-To: <YkqxpEW4m6iU3zMq@dhcp22.suse.cz>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Mon, 4 Apr 2022 17:07:30 +0800
-Message-ID: <CAGWkznG4L3w=9bpZp8TjyWHmqFyZQk-3m4xCZ96zhHCLPawBgQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        cgroups mailinglist <cgroups@vger.kernel.org>,
-        Ke Wang <ke.wang@unisoc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:subject:date:message-id;
+        bh=c4R3JJ+tk9qsvcjavAHFJ5wC1KGmyFCCYT/LvM1hEqY=;
+        b=tUqMzsLdc+74TKbshbgvUU+DVCeGiieULW/Ha+vrf4JEu4pBBeQOCPBzrQEQo+Mciy
+         TOghjyMpkwFJqOercHdTC+vMwRERuz32fgEz6eY76Ji2yDkbPIVi5gMK+jGVk5sEbe11
+         xgav8O8dAnGcZPCoDgn2KZ98SBrOPiN61FSOdJd+fAH0QOjsMZRlPBQjjywHwHVHIc+e
+         SpIrZ22FHlNV0SmxNW2uHy4vasq6jMEqMcB7u7CF2POA7gECCwM8dWqGMpIDYy8q2CHL
+         ELLot/VVGB6vFSBEvLwhE/AxeXOYeuS506rXrWOgaUGbNTgFBv8bXKhXlkYb7VoRtSzo
+         2Xvw==
+X-Gm-Message-State: AOAM533xRzvfF2a5uG2oY8oBTBKibYul28oj2i7BWlGlJ5ULSC12wgd+
+        H39xET27clCaTPwYHpSyWpxm5s5gFpXkHug7
+X-Google-Smtp-Source: ABdhPJwG/xqzf7aCqAccqVqlycrMHQinGLZjwncodMQzeZKwvCOhlCagKN8TZY2f/EDfyzitWZjPmA==
+X-Received: by 2002:a63:f515:0:b0:384:1f78:34b0 with SMTP id w21-20020a63f515000000b003841f7834b0mr24941626pgh.67.1649063279411;
+        Mon, 04 Apr 2022 02:07:59 -0700 (PDT)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id e12-20020a056a001a8c00b004fab88d7de8sm11299922pfv.132.2022.04.04.02.07.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 02:07:59 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        Colin Ian King <colin.king@intel.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ASoC: rk817: Use devm_clk_get() in rk817_platform_probe
+Date:   Mon,  4 Apr 2022 09:07:46 +0000
+Message-Id: <20220404090753.17940-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 4, 2022 at 4:51 PM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Mon 04-04-22 10:33:58, Zhaoyang Huang wrote:
-> [...]
-> > > One thing that I don't understand in this approach is: why memory.low
-> > > should depend on the system's memory pressure. It seems you want to
-> > > allow a process to allocate more when memory pressure is high. That is
-> > > very counter-intuitive to me. Could you please explain the underlying
-> > > logic of why this is the right thing to do, without going into
-> > > technical details?
-> > What I want to achieve is make memory.low be positive correlation with
-> > timing and negative to memory pressure, which means the protected
-> > memcg should lower its protection(via lower memcg.low) for helping
-> > system's memory pressure when it's high.
->
-> I have to say this is still very confusing to me. The low limit is a
-> protection against external (e.g. global) memory pressure. Decreasing
-> the protection based on the external pressure sounds like it goes right
-> against the purpose of the knob. I can see reasons to update protection
-> based on refaults or other metrics from the userspace but I still do not
-> see how this is a good auto-magic tuning done by the kernel.
->
-> > The concept behind is memcg's
-> > fault back of dropped memory is less important than system's latency
-> > on high memory pressure.
->
-> Can you give some specific examples?
-For both of the above two comments, please refer to the latest test
-result in Patchv2 I have sent. I prefer to name my change as focus
-transfer under pressure as protected memcg is the focus when system's
-memory pressure is low which will reclaim from root, this is not
-against current design. However, when global memory pressure is high,
-then the focus has to be changed to the whole system, because it
-doesn't make sense to let the protected memcg out of everybody, it
-can't
-do anything when the system is trapped in the kernel with reclaiming work.
->
-> > Please refer to my new version's test data
-> > for more detail.
->
-> Please note that sending new RFCs will just make the discussion spread
-> over several email threads which will get increasingly hard to follow.
-> So do not post another version until it is really clear what is the
-> actual semantic you are proposing.
-ok, I will hold until all question done.
->
-> --
-> Michal Hocko
-> SUSE Labs
+We need to call clk_put() to undo clk_get() in the error path.
+Use devm_clk_get() to obtain a reference to the clock, It has
+the benefit that clk_put() is no longer required.
+
+Fixes: 0d6a04da9b25 ("ASoC: Add Rockchip rk817 audio CODEC support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ sound/soc/codecs/rk817_codec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sound/soc/codecs/rk817_codec.c b/sound/soc/codecs/rk817_codec.c
+index 8fffe378618d..cce6f4e7992f 100644
+--- a/sound/soc/codecs/rk817_codec.c
++++ b/sound/soc/codecs/rk817_codec.c
+@@ -489,7 +489,7 @@ static int rk817_platform_probe(struct platform_device *pdev)
+ 
+ 	rk817_codec_parse_dt_property(&pdev->dev, rk817_codec_data);
+ 
+-	rk817_codec_data->mclk = clk_get(pdev->dev.parent, "mclk");
++	rk817_codec_data->mclk = devm_clk_get(pdev->dev.parent, "mclk");
+ 	if (IS_ERR(rk817_codec_data->mclk)) {
+ 		dev_dbg(&pdev->dev, "Unable to get mclk\n");
+ 		ret = -ENXIO;
+-- 
+2.17.1
+

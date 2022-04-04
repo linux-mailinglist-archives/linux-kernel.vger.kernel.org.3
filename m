@@ -2,119 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E54004F18DF
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8127F4F18E3
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:52:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378729AbiDDPxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 11:53:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
+        id S1378736AbiDDPyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 11:54:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378822AbiDDPxQ (ORCPT
+        with ESMTP id S1357418AbiDDPyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 11:53:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1442F42487
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:51:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649087479;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ztkMzR6AFKFUbWj3TFBCPhwIkZT9lK3mwv6qAxrBqJQ=;
-        b=JBDUJ1GxCHT9QCr1f/s65/VverP7Qll7hY9l5L2xvyGPwopde+Bx/0mU720r9AKap2Yay3
-        5MJbEwLxhZny7LkwBR6otjVP6GFO4j5oB0IdvqAkIgqdK4wWY9wVYykMW9WljiQvEWq3R8
-        z34xRJK+pMmEfKqkzfXjE54R2Zx4L/g=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-542-A-li_wFZNTG85ufnnoH2vw-1; Mon, 04 Apr 2022 11:51:18 -0400
-X-MC-Unique: A-li_wFZNTG85ufnnoH2vw-1
-Received: by mail-wm1-f71.google.com with SMTP id r64-20020a1c2b43000000b0038b59eb1940so155875wmr.0
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 08:51:17 -0700 (PDT)
+        Mon, 4 Apr 2022 11:54:14 -0400
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69944248A;
+        Mon,  4 Apr 2022 08:52:18 -0700 (PDT)
+Received: by mail-qv1-f47.google.com with SMTP id kc20so7782720qvb.3;
+        Mon, 04 Apr 2022 08:52:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ztkMzR6AFKFUbWj3TFBCPhwIkZT9lK3mwv6qAxrBqJQ=;
-        b=O5zcURxTX378rT9qEDN2/DPWZbaIDCRZavX1OXig9480gxYR/Y6+qrzx6DrBg4iEoY
-         6WwfRFzc/YSJrAOQRKrjkDjnqZBxnX0ear6i04eRqDo6ZcsZQQZZmcaPYC5KCY77HlYu
-         ubeg/VAelI5vegdNQdet5NfKWBkSAuwxYE97tFIWhtmMGownX2FWnHz1GHYCDLIs7Lp8
-         7Tjn1sK4OlN7W6yZ2KiegqZfZOt+gRjn4ipUmEtncvJ+7P/OZBVeNaOl95Lz+a1Qjb97
-         TAQSoqicY5ShJ1Pnti6105zVFxY89gCYTLcki+oLO8Csy3XZz37B5Ewcnr4b/wpgv5ne
-         VDNQ==
-X-Gm-Message-State: AOAM530UOgTiXlYs0NNA5Un/c/1f7CRgnRKZmmo5GMsJju8RtyxkeTlE
-        KH/2Qgoxn/fn5FeaMh4Zh8FsPZFAi3jpoizIccXvAou4laLFUKE+rFcZDP6F9DdWCzViIZDpaSi
-        4GRdEV6p+3sG2pcu5Dzb4KE2h
-X-Received: by 2002:a1c:7204:0:b0:38e:70f4:edf1 with SMTP id n4-20020a1c7204000000b0038e70f4edf1mr171672wmc.18.1649087476769;
-        Mon, 04 Apr 2022 08:51:16 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwqPFQoBH+n99pHf4G9kdT6j9HVXw0NXVS9LNUOgzNhNzUFeYqWv2Xi/awInhum+eCt95wBfA==
-X-Received: by 2002:a1c:7204:0:b0:38e:70f4:edf1 with SMTP id n4-20020a1c7204000000b0038e70f4edf1mr171657wmc.18.1649087476512;
-        Mon, 04 Apr 2022 08:51:16 -0700 (PDT)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id w12-20020adf8bcc000000b002060e3da33fsm4500411wra.66.2022.04.04.08.51.15
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=o3vs63IC1K0uTiORv1QjqWD3HYAAr5eIqR2CDFPF9J0=;
+        b=bs8HT2woZ9zZUjvs+v0jgUzAjNHMF2DxTJa2qCzwhenqWvYnBCvm/d05RcQOchrTzl
+         FFTZZASiESxHBtxy2KGj8NvQSyVcnofSaa7QlEAV6yzkOXEk/LGFGOtLW2kjTScMzACY
+         1C++IkdDZBBgyCNIdLqqVrWpVLK6x24UuCpTid2N2vvg1G8rwXMmSGegLsr5kbZcry3j
+         SpkLWAG6dTFvoICIkECpnh3tIeTAJDy3orhLIGeZ1HHRuYfFKMELmi+fh1io10SsB8m0
+         CHqZs65l2jIGnoEcso9GKG6emUQEhNpDmeXPePoLfNFrmKVvEDJ0rAUNBDSrDJY89n+h
+         VTGA==
+X-Gm-Message-State: AOAM530DH8+PaDKYyESL8Ik9SBoMUgAiCJL5nmJmzOQ+0tEMp1HPNf3a
+        7ldxfC13FCFLnybt+bVLPDnv1qfaZEZbUQ==
+X-Google-Smtp-Source: ABdhPJwHhm14nbRRysQUT+2cpvW25cR7oWmtyjuun6ucCzxVsejyBeGgTi85BsV1NRawMbqXwJMncg==
+X-Received: by 2002:a0c:bf12:0:b0:42c:536d:52d7 with SMTP id m18-20020a0cbf12000000b0042c536d52d7mr183374qvi.33.1649087537741;
+        Mon, 04 Apr 2022 08:52:17 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id o28-20020a05620a111c00b0067d3b9ef388sm6219572qkk.98.2022.04.04.08.52.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 08:51:15 -0700 (PDT)
-Message-ID: <bf917bf0-a380-6689-95cd-77ff0317f578@redhat.com>
-Date:   Mon, 4 Apr 2022 17:51:15 +0200
+        Mon, 04 Apr 2022 08:52:17 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id w134so10564401ybe.10;
+        Mon, 04 Apr 2022 08:52:17 -0700 (PDT)
+X-Received: by 2002:a25:45:0:b0:633:96e2:2179 with SMTP id 66-20020a250045000000b0063396e22179mr386892yba.393.1649087536915;
+ Mon, 04 Apr 2022 08:52:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH] drm/format_helper: fix a kernel-doc typo
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org
-References: <20220403232902.1753-1-rdunlap@infradead.org>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220403232902.1753-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220404084723.79089-1-zheyuma97@gmail.com> <20220404084723.79089-7-zheyuma97@gmail.com>
+In-Reply-To: <20220404084723.79089-7-zheyuma97@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 4 Apr 2022 17:52:05 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW4ynAyE9sey17f1iP_0nSJexWOB+nYdfRFXPbQXfCksA@mail.gmail.com>
+Message-ID: <CAMuHMdW4ynAyE9sey17f1iP_0nSJexWOB+nYdfRFXPbQXfCksA@mail.gmail.com>
+Subject: Re: [PATCH 6/7] video: fbdev: arkfb: Error out if 'pixclock' equals zero
+To:     Zheyu Ma <zheyuma97@gmail.com>
+Cc:     Helge Deller <deller@gmx.de>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Randy,
-
-On 4/4/22 01:29, Randy Dunlap wrote:
-> It looks like the incorrect name of a function parameter was used
-> in the kernel-doc notation, so just change it to the function's
-> parameter name to quell the kernel-doc warning.
-> 
-> drivers/gpu/drm/drm_format_helper.c:640: warning: Function parameter or member 'vaddr' not described in 'drm_fb_xrgb8888_to_mono_reversed'
-> drivers/gpu/drm/drm_format_helper.c:640: warning: Excess function parameter 'src' description in 'drm_fb_xrgb8888_to_mono_reversed'
-> 
-> Fixes: bcf8b616deb8 ("drm/format-helper: Add drm_fb_xrgb8888_to_mono_reversed()")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: David Airlie <airlied@linux.ie>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: Javier Martinez Canillas <javierm@redhat.com>
-> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> CC: Maxime Ripard <mripard@kernel.org>
-> CC: Thomas Zimmermann <tzimmermann@suse.de>
-> ---
->  drivers/gpu/drm/drm_format_helper.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, Apr 4, 2022 at 3:10 PM Zheyu Ma <zheyuma97@gmail.com> wrote:
+> The userspace program could pass any values to the driver through
+> ioctl() interface. If the driver doesn't check the value of 'pixclock',
+> it may cause divide error.
 >
+> Fix this by checking whether 'pixclock' is zero.
+>
+> The following log reveals it:
+>
+> [   76.603696] divide error: 0000 [#1] PREEMPT SMP KASAN PTI
+> [   76.603712] RIP: 0010:arkfb_set_par+0x10fc/0x24f0
+> [   76.603762] Call Trace:
+> [   76.603764]  <TASK>
+> [   76.603773]  fb_set_var+0x604/0xeb0
+> [   76.603827]  do_fb_ioctl+0x234/0x670
+> [   76.603873]  fb_ioctl+0xdd/0x130
+> [   76.603881]  do_syscall_64+0x3b/0x90
+>
+> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
 
-Thanks for the patch.
+Thanks for your patch!
 
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> --- a/drivers/video/fbdev/arkfb.c
+> +++ b/drivers/video/fbdev/arkfb.c
+> @@ -566,6 +566,9 @@ static int arkfb_check_var(struct fb_var_screeninfo *var, struct fb_info *info)
+>  {
+>         int rv, mem, step;
+>
+> +       if (!var->pixclock)
+> +               return -EINVAL;
 
--- 
-Best regards,
+When passed an invalid value, .check_var() is supposed to
+round up the invalid to a valid value, if possible.
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+> +
+>         /* Find appropriate format */
+>         rv = svga_match_format (arkfb_formats, var, NULL);
+>         if (rv < 0)
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

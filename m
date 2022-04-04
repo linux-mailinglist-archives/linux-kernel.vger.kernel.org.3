@@ -2,122 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C9FD4F1400
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 13:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3084F1402
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 13:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376492AbiDDLs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 07:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
+        id S1376553AbiDDLtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 07:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376455AbiDDLsZ (ORCPT
+        with ESMTP id S234624AbiDDLtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 07:48:25 -0400
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029273D1EF;
-        Mon,  4 Apr 2022 04:46:30 -0700 (PDT)
-Received: by mail-qt1-f175.google.com with SMTP id j21so7466948qta.0;
-        Mon, 04 Apr 2022 04:46:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0vrtxx97wpbMiIv6dqlYr09ni3VUiuon0GQZYjngD7U=;
-        b=Y4yaAmm3bSfP7/yoAfy7Ex0tI04wuGvwDBxTEIj5sr1nMU/oAcYBs+GLAnT6SfMCmf
-         PGaQLyYVn+vV2xoIRDc6S8digk6hJLpfjA3+L8XfjDc/evZkXHL9SKFVoANvQTjJ6wji
-         L+ZUe2gyKR/VRhVDSuQdt9duwHNioSwquWB+JF/6fhmJHV/J3yDvH15rsDnzcVPMdUdK
-         41oL/l2fFN1tquVqvDJ7u1c7Qexn/ZXM+aU3F9Fw+HjOqiRl3y5PJXY27ZGmrKERrJP2
-         WwI9fU0+n/9b6/Z3Qhs1cbSS25aK9A5I0DZmeLWlhyq1PNAneb42+77alcZsPKMQj2ok
-         6Mag==
-X-Gm-Message-State: AOAM533ofFBGwiPsJMXN/oETRkDjF9BVzc7l6qCBtbYOrSk/EElHCveG
-        vbNqMrRk2wRfxAyazxwgWarPgAhbs579KQ==
-X-Google-Smtp-Source: ABdhPJz2ewvGsYibxNfE7bXjCReetrEhDdrHZe8K30OJ33aDtA4KVrpgTnhxm/BQbAUOm818Erjc0Q==
-X-Received: by 2002:a05:622a:1051:b0:2e1:eb06:ecc2 with SMTP id f17-20020a05622a105100b002e1eb06ecc2mr16957921qte.171.1649072788539;
-        Mon, 04 Apr 2022 04:46:28 -0700 (PDT)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id m4-20020ac85b04000000b002e1dcaed228sm7840681qtw.7.2022.04.04.04.46.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 04:46:28 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2eb43ad7909so44370057b3.2;
-        Mon, 04 Apr 2022 04:46:27 -0700 (PDT)
-X-Received: by 2002:a81:5c2:0:b0:2e5:e4eb:c3e7 with SMTP id
- 185-20020a8105c2000000b002e5e4ebc3e7mr22191370ywf.62.1649072787360; Mon, 04
- Apr 2022 04:46:27 -0700 (PDT)
+        Mon, 4 Apr 2022 07:49:10 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59803D1EF
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 04:47:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649072834; x=1680608834;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=eFJ4rhPclLPd5glv4epq+OWh9osXIpM8HhnGfD2DM4E=;
+  b=QoyGAHRgi/I1Au0S1YWxzGVAri/gpsqqmXjm2YSprbqlGdF2AhPsvsRG
+   ecbXw3rn5nbtf5DuJVmazSYUqKdTiSmttGNELFSzpzYmFLHSexpUa7bC+
+   e5RLJ0+FOnI0slG4ULPQP97ZYK/8BgqryW1fZCDN4GQs3AGuHN9NJUldk
+   qGbxnV96Xkd5YGHPdHUEANGyvLOPxifDrqTeeHdIc3G/2xCCbRqfGJJME
+   sp7boLd3p9lrqROehEe6ku2fureA2y6nDTUuU/+dGzQsqnRvqDcndm/jC
+   oTgVJRptyUM0+5UGqSeejuwOFequqnKmC9j/p7If6EecibUnxFeRfjAdG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="285443801"
+X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
+   d="scan'208";a="285443801"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 04:47:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
+   d="scan'208";a="721618454"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 04 Apr 2022 04:47:13 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbLAu-000216-9P;
+        Mon, 04 Apr 2022 11:47:12 +0000
+Date:   Mon, 04 Apr 2022 19:46:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2022.04.03b] BUILD SUCCESS
+ 4e459bba45570d8f4aec2a9f18fca30e1d9472fc
+Message-ID: <624ada9f.2+4KbN5gUU9tHCdy%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <CAMhUBjmFhqTLBscHHVZ1VTSqrJBT1VEevA+KkjY+y9_ZtdRkMg@mail.gmail.com>
- <631f03bd-0fdf-9cc8-bf37-89235fb84162@gmx.de>
-In-Reply-To: <631f03bd-0fdf-9cc8-bf37-89235fb84162@gmx.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 4 Apr 2022 13:46:16 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUiEo8q9x0C0x5zOM=ax1=S06=s0JjcJvZYD4aMGLmEaQ@mail.gmail.com>
-Message-ID: <CAMuHMdUiEo8q9x0C0x5zOM=ax1=S06=s0JjcJvZYD4aMGLmEaQ@mail.gmail.com>
-Subject: =?UTF-8?B?UmU6IFtCVUddIGZiZGV2OiBpNzQwZmI6IERpdmlkZSBlcnJvciB3aGVuIOKAmHZhci0+cA==?=
-        =?UTF-8?B?aXhjbG9ja+KAmSBpcyB6ZXJv?=
-To:     Helge Deller <deller@gmx.de>
-Cc:     Zheyu Ma <zheyuma97@gmail.com>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Helge,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.04.03b
+branch HEAD: 4e459bba45570d8f4aec2a9f18fca30e1d9472fc  fixup! rcu: Make UP-vacuous normal grace period advance sequence
 
-On Sun, Apr 3, 2022 at 5:41 PM Helge Deller <deller@gmx.de> wrote:
-> On 4/3/22 13:26, Zheyu Ma wrote:
-> > I found a bug in the function i740fb_set_par().
->
-> Nice catch!
->
-> > When the user calls the ioctl system call without setting the value to
-> > 'var->pixclock', the driver will throw a divide error.
-> >
-> > This bug occurs because the driver uses the value of 'var->pixclock'
-> > without checking it, as the following code snippet show:
-> >
-> > if ((1000000 / var->pixclock) > DACSPEED8) {
-> >      dev_err(info->device, "requested pixclock %i MHz out of range
-> > (max. %i MHz at 8bpp)\n",
-> >          1000000 / var->pixclock, DACSPEED8);
-> >     return -EINVAL;x
-> > }
-> >
-> > We can fix this by checking the value of 'var->pixclock' in the
-> > function i740fb_check_var() similar to commit
-> > b36b242d4b8ea178f7fd038965e3cac7f30c3f09, or we should set the lowest
-> > supported value when this field is zero.
-> > I have no idea about which solution is better.
->
-> Me neither.
-> I think a solution like commit b36b242d4b8ea178f7fd038965e3cac7f30c3f09
-> is sufficient.
->
-> Note that i740fb_set_par() is called in i740fb_resume() as well.
-> Since this doesn't comes form userspace I think adding a check for
-> the return value there isn't necessary.
->
-> Would you mind sending a patch like b36b242d4b8ea178f7fd038965e3cac7f30c3f09 ?
+elapsed time: 723m
 
-When passed an invalid value, .check_var() is supposed to
-round up the invalid to a valid value, if possible.
+configs tested: 168
+configs skipped: 3
 
-Commit b36b242d4b8ea178 ("video: fbdev: asiliantfb: Error out if
-'pixclock' equals zero") does not do that.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Gr{oetje,eeting}s,
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+i386                 randconfig-c001-20220404
+arm                          gemini_defconfig
+mips                        vocore2_defconfig
+parisc64                         alldefconfig
+sh                 kfr2r09-romimage_defconfig
+powerpc                           allnoconfig
+sh                          rsk7269_defconfig
+sh                          rsk7264_defconfig
+arm                           sama5_defconfig
+powerpc                    klondike_defconfig
+sh                        edosk7705_defconfig
+m68k                          hp300_defconfig
+sh                           se7722_defconfig
+arm                           h3600_defconfig
+h8300                               defconfig
+sh                  sh7785lcr_32bit_defconfig
+mips                            ar7_defconfig
+mips                  maltasmvp_eva_defconfig
+arm                          simpad_defconfig
+arm                           stm32_defconfig
+parisc                           alldefconfig
+alpha                               defconfig
+sh                             sh03_defconfig
+powerpc                     taishan_defconfig
+ia64                        generic_defconfig
+arc                            hsdk_defconfig
+sh                     sh7710voipgw_defconfig
+arm                        oxnas_v6_defconfig
+powerpc                        cell_defconfig
+sh                          rsk7203_defconfig
+powerpc                 mpc834x_itx_defconfig
+arc                              alldefconfig
+sh                        sh7763rdp_defconfig
+powerpc                      ppc6xx_defconfig
+sh                          r7785rp_defconfig
+sh                            migor_defconfig
+xtensa                generic_kc705_defconfig
+arm                        spear6xx_defconfig
+parisc                generic-64bit_defconfig
+x86_64                              defconfig
+sh                         ecovec24_defconfig
+sh                   sh7770_generic_defconfig
+arm                         cm_x300_defconfig
+arm                        clps711x_defconfig
+arc                          axs101_defconfig
+arm                        mvebu_v7_defconfig
+mips                         rt305x_defconfig
+mips                    maltaup_xpa_defconfig
+arm                          pxa910_defconfig
+sh                          rsk7201_defconfig
+m68k                        mvme147_defconfig
+sh                      rts7751r2d1_defconfig
+sh                   secureedge5410_defconfig
+sh                               j2_defconfig
+x86_64               randconfig-c001-20220404
+arm                  randconfig-c002-20220404
+arm                  randconfig-c002-20220403
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+x86_64               randconfig-a015-20220404
+x86_64               randconfig-a011-20220404
+x86_64               randconfig-a014-20220404
+x86_64               randconfig-a016-20220404
+x86_64               randconfig-a012-20220404
+x86_64               randconfig-a013-20220404
+i386                 randconfig-a013-20220404
+i386                 randconfig-a011-20220404
+i386                 randconfig-a014-20220404
+i386                 randconfig-a012-20220404
+i386                 randconfig-a015-20220404
+i386                 randconfig-a016-20220404
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220404
+s390                 randconfig-r044-20220404
+riscv                randconfig-r042-20220404
+arc                  randconfig-r043-20220403
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                               defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                                  kexec
+x86_64                          rhel-8.3-func
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
 
-                        Geert
+clang tested configs:
+mips                 randconfig-c004-20220403
+arm                  randconfig-c002-20220403
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220403
+i386                          randconfig-c001
+s390                 randconfig-c005-20220403
+riscv                randconfig-c006-20220403
+powerpc                      obs600_defconfig
+mips                           ip22_defconfig
+mips                   sb1250_swarm_defconfig
+arm                         socfpga_defconfig
+arm                           sama7_defconfig
+mips                        workpad_defconfig
+arm                          pcm027_defconfig
+riscv                             allnoconfig
+powerpc                  mpc866_ads_defconfig
+powerpc                   bluestone_defconfig
+arm                          imote2_defconfig
+mips                     loongson1c_defconfig
+arm                       imx_v4_v5_defconfig
+powerpc                 mpc8315_rdb_defconfig
+powerpc                      ppc44x_defconfig
+x86_64               randconfig-a006-20220404
+x86_64               randconfig-a002-20220404
+x86_64               randconfig-a001-20220404
+x86_64               randconfig-a005-20220404
+x86_64               randconfig-a003-20220404
+x86_64               randconfig-a004-20220404
+i386                 randconfig-a006-20220404
+i386                 randconfig-a002-20220404
+i386                 randconfig-a001-20220404
+i386                 randconfig-a004-20220404
+i386                 randconfig-a003-20220404
+i386                 randconfig-a005-20220404
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+hexagon              randconfig-r045-20220403
+riscv                randconfig-r042-20220403
+hexagon              randconfig-r041-20220403
+hexagon              randconfig-r045-20220404
+hexagon              randconfig-r041-20220404
+s390                 randconfig-r044-20220403
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

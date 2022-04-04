@@ -2,431 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6704F21A1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79FF34F2193
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiDECkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 22:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45068 "EHLO
+        id S231607AbiDEDKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 23:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbiDECkJ (ORCPT
+        with ESMTP id S231470AbiDEDJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 22:40:09 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E57294A19
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 18:42:27 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id k23so20154403ejd.3
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 18:42:27 -0700 (PDT)
+        Mon, 4 Apr 2022 23:09:51 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA5834755D;
+        Mon,  4 Apr 2022 19:54:22 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 234JIs8o012575;
+        Mon, 4 Apr 2022 23:48:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=eFU89ZSlyTSv0WOP9BHEZELJQz6ttCmN9y+37h1f3Ks=;
+ b=0Am9GJOiM+d06KiVEy6Jth4cYGyovuV86pR76QaGs727zw1aiAHoROz8k/YdqWGtRJgD
+ bJrIStganPOGHkm/MOSK4W2BDDV3cI0mvB6UUIXjtbQPsXO3fUiPXKen8mh5i1nlKJrv
+ G89pWpGyuQStC41kCQpY5Ie8Venr8DsPmmC7PnWjUpCZrq5QJ9zRLNMINrJqrXxx6Ucl
+ lwxKqjDrrKDQCBDDLM50Xn8+roSI4VPLno6VzNGIuPU/njy6JjNzHrMj2b5+WGvuA8xH
+ ZcIVlHP83I9EYppHhdikIpwpcrKR8RZvhNdbhEKBI56M6qSq+Z6Olss5dGOGO3h42qov cQ== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3f6cwcckm6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 04 Apr 2022 23:48:42 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 234NgKmE014150;
+        Mon, 4 Apr 2022 23:48:41 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2107.outbound.protection.outlook.com [104.47.55.107])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f6cx2ya5k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 04 Apr 2022 23:48:41 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QDv5/oi/x0GGjz98Rbry6355KBj+YrS1xjMo7GnjdXgn6B17RwfE7mrbqbKPSXTTtIROp592WkjHCAzli/ZGhGhJf0ibHjmW34cDjQRYiE9D+9TCdswUJDJPbKUbypOsvQ5vD1efwiB2Xy8b25WkfG19KKpP3sdGBn8jEpVufebz5/TfgMXHTYDAqOsK68v2zi/ak6nsw6R02r1JYWM0G9D26yV3FxKGJoKlgmZeiAsRzK6SeizUsU9pD0pDPR0ZKCYn2DWVgpKrNsQgLVwTwyJAAQBzseaObRPGSfVgq1jkcTsrKNMLlQZVmjJXJRNiR4rgI7AhIPGXOyhTOrUdjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eFU89ZSlyTSv0WOP9BHEZELJQz6ttCmN9y+37h1f3Ks=;
+ b=aRNf7SOVtnDtQXcU8sef4smBj6ouPFRlO1rEUygO9ceNQ47R/Uje8DrGMyLEaUAx25cxxTmO2+4yY2on8ssS45hT+O0ydRhz/PZIPJh8IqoMCfloCoLV5Ov+SwXwR0apTOsRNzy9L2WvOH43k3jR+RK0jRLKblvfS1l7KJNHkPY1mGnzXU0icCxF6JvrtA3QL7w3gBCVMHJUXz9QuYODeKH4nAY+o1ZzMratuxUTIM+1ERZP7/Vp6Feqfce8s/JoWcXHiCIhryHxdbqD2w6JnrN4LK/buwjs2xMonsIc1vFkqlA+8geIIsjy5vURBD1WHVN1+IOSj+71ie0NbSETIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=CWwE63Uj70Dz+evqLhQ44oFva+2asIsEVowZ5R1Hj4s=;
-        b=MTLi0SN2/CtQ9VsgDxb4iZw37Af+lcedVzKzwlt/rmiU3szSaf1Mv3N/u9xi3EjKW4
-         As58Mj2xb6L0b04HBhREhOF8LOwlWJtKm6vySkVCOclR11PWOC6bhMTYqgE05YJhtBdb
-         5OQ3jY3GywxxqaPBCQtQbevm0MzOCT72UjiWNZM4dmLvb5WJEN1gYU8dQ6hroNZA1ZCP
-         S8AMDnex+b44bPoRiKsyTACN7qHEPi1mkQP3F4JZWO4U0iSsQNR5wQRuyMUb73/7G4qF
-         n6uxWWdRtzpkW2SMWrnLG/oq95ZvLjK62GJT9FntZmFsCbAyqgHqvFNdWlyOAPhHY5mH
-         T0OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=CWwE63Uj70Dz+evqLhQ44oFva+2asIsEVowZ5R1Hj4s=;
-        b=SbOC+pCvAYLvFVE3ibRB8dgP1+rEzzR/UwqAzyijWztXgE0vrES0q7LbWDH/nt2j5q
-         bPPlOhrDc6Bw8jxB+O9Zc94HjQ4eKKjI/yh9UrXBjjOhp2m0yJuUdO8KcCXYGCzuE9sH
-         rQIbEK1tCSyOQTjqn2EauQgk809VkX9QpLHuiVoKtVKb7kzQAfdqbBXf09R2URBPcgp0
-         JdKC+XyAb05gZam8Lb4Ek37IUkDh52w1ma8T8+cSnVKq8kG3j8gz38We1r+3WJyfLvl8
-         nrjvdSoRBLtQDPJ1n/vgkWnes134F2gAXMnD0HGiz4OfNZr880bVA9aYxeIfD0dqPVbN
-         xc9w==
-X-Gm-Message-State: AOAM532FW6fg4+puTuq/4frjeDwfw8kIcOJDApnrmwTNoMN3TgiMK7ck
-        W8xTBWcRClwtnFtTAVZlyO+QvOtgEva3FD8EsIkUoRS5uwi/BCDa
-X-Google-Smtp-Source: ABdhPJzBsKO2j9MyoYnx+NlhM7baoEAm89DrhoHnN5DW27ua2r0tUJkiTippVbrs/IZPEpxjLGP1OVm7wmko/9JjohY=
-X-Received: by 2002:a05:6402:3604:b0:41c:c4e6:2988 with SMTP id
- el4-20020a056402360400b0041cc4e62988mr631649edb.157.1649115815748; Mon, 04
- Apr 2022 16:43:35 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eFU89ZSlyTSv0WOP9BHEZELJQz6ttCmN9y+37h1f3Ks=;
+ b=PeEOoRaERNtzWaJwC5Hd1wSgZvYszZE0SR+B1Zmz2h+MOue2UT+3zSLYaNuKRAhOAOtdMdnmyocvnpMbd3WjGIn5FtgGCSxkv9OYo7E9FVEEZvW24R5af16CSaYXI4q8b3UpFjgDoox53eycmV68mUnYAJSVgtQzq6U9bo/q518=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by CY4PR10MB1253.namprd10.prod.outlook.com (2603:10b6:910:7::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.25; Mon, 4 Apr
+ 2022 23:48:39 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::245f:e3b1:35fd:43c5]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::245f:e3b1:35fd:43c5%9]) with mapi id 15.20.5123.031; Mon, 4 Apr 2022
+ 23:48:39 +0000
+Message-ID: <d3b98e2b-2148-172a-358c-e7ab1e444c3b@oracle.com>
+Date:   Mon, 4 Apr 2022 16:48:35 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/2] hugetlb: Fix hugepages_setup when deal with
+ pernode
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        Peng Liu <liupeng256@huawei.com>, akpm@linux-foundation.org,
+        yaozhenguo1@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20220401101232.2790280-1-liupeng256@huawei.com>
+ <20220401101232.2790280-2-liupeng256@huawei.com>
+ <0aefbc18-4232-0bae-b37a-d4c6995e3d00@redhat.com>
+ <508fd247-b809-27d7-6bc8-a08c4c73cbb5@oracle.com>
+ <e3889061-4681-0618-5291-05b9559e0e10@redhat.com>
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+In-Reply-To: <e3889061-4681-0618-5291-05b9559e0e10@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4PR04CA0362.namprd04.prod.outlook.com
+ (2603:10b6:303:81::7) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-From:   Duke Abbaddon <duke.abbaddon@gmail.com>
-Date:   Tue, 5 Apr 2022 00:43:24 +0100
-Message-ID: <CAHpNFcPWphMzXVYiPtkyUVBUQKWUc_cW4NkG4k4xeiGbUYBHhA@mail.gmail.com>
-Subject: Parallax Cryptographic Processing Unit: RS AES-CCM & AES-GCM & Other
- Cypher Modulus + CCM & GCM can be accelerated with a joint AES Crypto module
- : Modulus Dual Encrypt & Decrypt package : Processor feature
-To:     torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8be609d5-b36f-457d-e8c5-08da1695a414
+X-MS-TrafficTypeDiagnostic: CY4PR10MB1253:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR10MB1253862089C0BB29D52ED7C8E2E59@CY4PR10MB1253.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JbJuwFiKr1GbXkKELdMhDoeAkEP2sISI9SkdVYLxU9r7q8+xhbC5A6tiUOfpTq61psNTRkyViu5ECC/5OWjgsWlBCjpzbMuY6zT4tGoLDS03eUziuCmcr3I9/Hb3dbH5t5QVNG7FdlltVusGSaJYLfAVqWlpGr3hHedw1Q1JyJWDEJaE07XzH6QHFSjgqwrb54gvH8xIZEhvSii/6rPKtsbBzdGZ4jyBOqRyTqr0j+UkeAZottiir08b0IrvznW+VzyQE5shUKhRPZO3jlnArHETa+ahaq0EYHrtLT3aXhpJO7sdW7JIZpBPdCDSHMqtm9/yW01LIiOiQ3VVxJ/kyJfNepbREDWP9mYSk/r6VT6LtMaGPHvdiuUiALlVvagcHdffG8OZMaXTjfjTym90gyforQp97vXYSnEHx6VOxBRC0xA/qgwWRyoBAabDGywD0ab5Jjxtmeeg3kIfP0i2dDfG4NbNCDmD4R0e4ZcHHRPVRSb4EFHjPaF1+re9Cfv0/miKDlA496HvyAKuyXtQK35+YFY4t7EV0vE/fEbFN3oJAgz9IERUz2cAfV1ucuucuyuzfV3lVRuoW2ZP1VDCR3FtCeHLhkI6EL7/EBRgwOPA+OJ8bF3t32V5ZeWchAXOiloBX4zB1Ws9mDo3m+H2FRKQa22EQvNrlHQ/T6VbirIB8XU4F26KUfRNUW8fforVgKrbMPfVXFZYYWbnWU4bxaqUTDsgtL5CFeO4HEnF2cXUFpZlEsWcEiyBrYpowxIh5yalAaB9uLWEHqSOYAW21OY2jI612/5dmLt7HQGYh0DFtYRmfCR8FI8NPXf5o726FgsZI3lOS/Pt3XeoNwDjh78sZwOMCObGwOIzlqexVF0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8936002)(31686004)(508600001)(86362001)(36756003)(83380400001)(2616005)(6506007)(53546011)(52116002)(6512007)(26005)(186003)(44832011)(2906002)(66556008)(38350700002)(8676002)(6666004)(38100700002)(966005)(6486002)(5660300002)(31696002)(110136005)(66476007)(316002)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R0QzT3lWUm9OMVFyWFJxT0V4SGE5Um5mdGZPRGZHZ2MxdFFoVXptQXIrSWZl?=
+ =?utf-8?B?cndTTmwwWmRQKzdZS2h4SUNxa2JyUkQ0TW1YV2ZIZ2dvR2t1ZHJCU09McGhV?=
+ =?utf-8?B?RVRENENGU1NLMWN4RXFaSjFwN2FNaWVhNXM5Ums3YVRqbFY5dFpkdHRzSXJH?=
+ =?utf-8?B?NTFJR2FLMDNGZnlJY3NjL2pXYk9wdG1OU3hWSUY1S0pxWXZ0M0pLSDZmbTlB?=
+ =?utf-8?B?bm1MZkVQaURQT0s5dk0ybkZodTFqekN4akQ0bkcxM01wZTlGSHlSdE9CQ0ds?=
+ =?utf-8?B?VXgxZHZ3V1o3N1V0bm44Sy9vYmJMVFQvOFlkdFk2cmo5ditIaGl0M2tXb214?=
+ =?utf-8?B?MGpteit5S1dSaXRvVm9qaDl6eU1mOGZkR2pSeC9Nb2tsRmkzQTRGRGU2cGFs?=
+ =?utf-8?B?Y1QwaHNtZXVHNWlhZDJjTHdIOW1ZSVFKY2hsLzNvanZ1QWRIdDVIamhnUU10?=
+ =?utf-8?B?dnpxNkhSMWl2K0p4dXZHbWJlWHFhMXpuNVZlandPbjRTcWRhWWpPMDRzNTR1?=
+ =?utf-8?B?Z0dsWUtpaklZbjVBSkNIb3FybEVCSU40M05WUHZnY1ZaeWs4SFdmdjRJWStl?=
+ =?utf-8?B?MzFlSkhOWVYrbHFXeUNFSDVsb0d4MDN2VlhJSVBPUnd1LzFtKzg5cjJ2azcz?=
+ =?utf-8?B?SnJyaXFKZ3BNdUhNeTZmU0VxemptTU5Qdkg2K1gxaThIV1dXVldacG1Gblcr?=
+ =?utf-8?B?ckdOWEw2UHVWTmxHQlhieGZVYkFMQ0lzbyt0RWJKS1kyaHd2MUFxYWdjUmM4?=
+ =?utf-8?B?dm85V21vNWZRSndySWdDS3BQVjhtNkFqeHFYN3JEdWY0N1laWFRpZG41ZkhB?=
+ =?utf-8?B?d1N3MFVvTnZETW41UGZSdWlCOW1RUTZjK1M0YXlVMGVrVHh4YVl0OTA4a2pR?=
+ =?utf-8?B?aGg1Z1h0OXhITmh0cXpObXhGMjhudHNwcW5yYXNZNjlXaUd4Wkk3VVdrUCtY?=
+ =?utf-8?B?bE11VlJZbWJzV2NUUUJ0UkgxdnlPcmZFTWR6RWwzYko1OEJrWVBJSGxUNVZi?=
+ =?utf-8?B?NzhnclhpSCtkcnBFNlF6eHl1SUJ6bEtoMjM0b2R1YmlKbUFiY0Zrc1I1ekVQ?=
+ =?utf-8?B?Y0h6cklPYjR0TlZSU3NCLzNCS1d0VE1URmoxRDB6WkgvZmdnT1NVN1RWbWVu?=
+ =?utf-8?B?SjVVUkhNQ3RPd0FCWnB2MTFaT3h0WWQwUTU2Q3F4ZUFDTHR3RzVicXpDZ25x?=
+ =?utf-8?B?eFN4Smw1RFpLOWNRR0NuZXBaR2RiSUxCRXJBdEFBUUhRRVBVZXZsSXQyVWFV?=
+ =?utf-8?B?MXdZYlFXQTJiTGx4dkxPRVhzaXJUblBucXhEdWJ2N3Ewd3VWR3Q0SFBJeVVS?=
+ =?utf-8?B?dHZUUEZYMGo3TFpHc0tQcG1lNjNwSjZhd0FzeXZjQ29FbzFNWXVpSWpJUDBl?=
+ =?utf-8?B?Q2ZYQy95LzNyR3ZWbnpMV1liVzhTbUVIcFhlVCtZQ2VVMS9wQXBEMzBEbmRq?=
+ =?utf-8?B?OExxZ09QUzk3eWZYS1NEUWgzWVZVMVp2bFdRd3Y1Z0lFbkRucnNGam9IT254?=
+ =?utf-8?B?ZFZvR2V3N1d3eUNXY2dWUC9WYnR5SFBUMGJyR3hYQytuZkYweXNoMGJYMm1R?=
+ =?utf-8?B?L2M0ZVhmdG9lSEo5TWUvbEJEMGFySWFha1VzMmFPUlFDTkNGVGtHMURRWU5r?=
+ =?utf-8?B?UUpmQU1FYnRXZHAzamJGWFo3Y1k3NHhEaS9SZ3I1eTA5K3ZkaGx3VEY5NldS?=
+ =?utf-8?B?SUpjcktqK2srVlNPMXBvRkZDdmh1L29Sc1BUaTFzSWZPUjk5Ty9aZFIrSzRy?=
+ =?utf-8?B?VGg1bzh6TWpjYk1xTENzOHEvUkdRRXVHOGxoQi9rbS9kYnpFSkZVbTJDUWFz?=
+ =?utf-8?B?cnY0b1RpQkN3eWJEdEhWOCtuUEtiSUFPdUlvK01UUmxCN3RwVkZBQ0gzMUdi?=
+ =?utf-8?B?cGdtRjdPQnlMWERWaFhDTEhITmtIbHM0VGducXB0RTdMV2ovWlU2QXRTcUhz?=
+ =?utf-8?B?Nks2QVR0QStKVW1HckpzR0dWZGNuOEwrQkd6NFAzSklYMUZTVUluYkh0S3ll?=
+ =?utf-8?B?bzk3bzNBTjFaemFGRkJtcHNDN2pWNWNVNCtvQy9CbzVBaUlIMm1GaEFCczlG?=
+ =?utf-8?B?K2dzOGZTODBWZ1FDYUJsSVNxTm90WjRSMVY3dUthY1UzajFUKzR2cWo2YVUw?=
+ =?utf-8?B?OEUzc3ZKeDhTSkMvTEdYK3VyUFRyWGtENkZBQ1oyclo4bFhRR1FIaDdGUElE?=
+ =?utf-8?B?YWQzNXRFY0Zmejdpa1RxbzdGeU52SXdlTGg4VURCcWM0TXM3Ukh4eDhvNGds?=
+ =?utf-8?B?S3hrTWZHUm5HS3p6OFd1Z2hJclVPQ3FlQmtRMGo5TnY0OU5hWmpsWEFtNVVo?=
+ =?utf-8?B?cE9xWThqRDVXb05RbEExZXI0YzFFUzBEM2hybW5reTM3VHJlRTJycEU4dVFL?=
+ =?utf-8?Q?y6RWmJfSbS0UqQzw=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8be609d5-b36f-457d-e8c5-08da1695a414
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2022 23:48:39.3866
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kiVq0tk442ku+E/f+YGhbFrJvjmCSB0biqZ9iIBRYxDHE2DUMy3S4aOBf3MdZGAR+qHy/glJe0bUM9Z1xIaqYg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1253
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.850
+ definitions=2022-04-04_09:2022-03-30,2022-04-04 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 bulkscore=0
+ adultscore=0 mlxscore=0 phishscore=0 suspectscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204040131
+X-Proofpoint-ORIG-GUID: a4FxPHORTJYFIdIXt07_Rcek9Q8HkT6o
+X-Proofpoint-GUID: a4FxPHORTJYFIdIXt07_Rcek9Q8HkT6o
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Duke Abbaddon <duke.abbaddon@gmail.com>
-Mon, Apr 4, 10:41 AM (13 hours ago)
-to torvalds, bcc: heiko, bcc: guoren, bcc: atish.patra, bcc: hch, bcc:
-Anup, bcc: :, bcc: Dennis, bcc: ebiggers@kernel.org, bcc: Emil, bcc:
-jarkko@kernel.org, bcc: Jonathan, bcc: keyrings@vger.kernel.org, bcc:
-kvalo@kernel.org, bcc: linux-crypto@vger.kernel.org, bcc:
-linux-iio@vger.kernel.org, bcc: linux-integrity@vger.kernel.org, bcc:
-linux-kernel@vger.kernel.org, bcc: linux-mips@vger.kernel.org, bcc:
-linux-security-module@vger.kernel.org, bcc:
-linux-wireless@vger.kernel.org, bcc: luto@kernel.org, bcc: Nathan,
-bcc: netdev@vger.kernel.org, bcc: sultan@kerneltoast.com, bcc:
-ak@linux.intel.com, bcc: Andrew, bcc: Andy, bcc:
-development@linux.org, bcc: feedback@linux.org, bcc:
-geert@linux-m68k.org, bcc: Greg, bcc: hostmaster+ntp@linux-ia64.org,
-bcc: jejb@linux.ibm.com, bcc: kirill.shutemov@linux.intel.com, bcc:
-linus@linux.org, bcc: linux-m68k@lists.linux-m68k.org, bcc:
-linux-riscv@lists.infradead.org, bcc: linux@dominikbrodowski.net, bcc:
-Micha=C5=82, bcc: press@linux.org, bcc: Rasmus, bcc:
-sathyanarayanan.kuppuswamy@linux.intel.com, bcc: security@linux.org,
-bcc: support@linux.org, bcc: torvalds@linux-foundation.org, bcc:
-webmaster@linux.org, bcc: zohar@linux.ibm.com, bcc:
-info@vialicensing.com, bcc: corpcomm@qualcomm.com, bcc:
-rukikaire@un.org, bcc: virt-owner@lists.fedoraproject.org, bcc:
-martin@strongswan.org, bcc: security@microsoft.com, bcc:
-sotonino@un.org, bcc: security@ubuntu.com, bcc:
-opencode@microsoft.com, bcc: moses.osani@un.org, bcc:
-webmaster@playstation.com, bcc: webmaster@amazon.com, bcc:
-Corporate.Secretary@amd.com, bcc: haqf@un.org, bcc:
-Copyright_Agent@spe.sony.com, bcc: tremblay@un.org, bcc:
-webmaster@sony.com, bcc: dujarric@un.org, bcc: consul@ps.mofa.go.jp,
-bcc: press@eu.sony.com, bcc: agriculture@rusemb.org.uk, bcc:
-suzuki.poulose@arm.com, bcc: grovesn@un.org, bcc: kaneko@un.org, bcc:
-media.help@apple.com, bcc: security@asus.com, bcc:
-visa@egyptconsulate.co.uk, bcc: help.redhat.com, bcc:
-cirrus_logic@pr-tocs.co.jp, bcc: customercare@logitech.com, bcc: Logi,
-bcc: logitech@feverpr.com, bcc: logitech@vertigo6.nl, bcc:
-logitech@wellcom.fr, bcc: mediarelations@logitech.com, bcc:
-morchard@scottlogic.co.uk, bcc: samasaki@logitech.com, bcc:
-slan@logitech.com, bcc: support@logitech.com, bcc: pctech@realtek.com,
-bcc: press@google.com, bcc: Nintendo, bcc: tech.support@amd.com, bcc:
-Nvidia, bcc: security@intel.com, bcc: saporit@us.ibm.com, bcc:
-Gabriel.Kerneis@ssi.gouv.fr, bcc: hughsient@gmail.com, bcc:
-ksuzuki@polyphony.co.jp, bcc: uchimura@polyphony.co.jp, bcc:
-mario.limonciello@amd.com, bcc: thomas.lendacky@amd.com, bcc:
-john.allen@amd.com, bcc: herbert@gondor.apana.org.au
-
-Modulus Dual Encrypt & Decrypt package : Processor feature (c)RS
-
-AES-CCM & AES-GCM & Other Cypher Modulus + CCM & GCM can be
-accelerated with a joint AES Crypto module,
-
-Processor feature & package : Module list:
-
-2 Decryption pipelines working in parallel,
-With a Shared cache & RAM Module
-Modulus & Semi-parallel modulating decryption & Encryption combined
-with Encapsulation Cypher IP Protocol packet
-
-Parallax Cryptographic Processing Unit: RS
-
-The capacity To Multiply decryption on specific hardware in situations
-such as lower Bit precision is to be implemented as follows:
-
-On AES-NI & ARM Cryptographic processors; In particular PPS(ARM+) & SiMD ..
-
-The capacity to exploit the fact that the nonce is 16Bit to 64Bit &
-full float upto 128Bit for legal decryption (client) means there is a
-simple method to use:
-
-In situations that a AES-NI & ARM Cryptographic unit can process 2
-threads on a 256Bit Function we can do both the main 128Bit/192Bit &
-the nonce 16Bit to 64Bit & Enable a single instruction Roll to
-Synchronise both The main HASH & Nonce.
-
-AES & Crypto hardware can utilise the CPU/GPU/Processor FPU & SiMD to
-decrypt the nonce (smaller so fast) & in the same 8bto to 64Bits of
-code; Inline & parallax the cryptographic function.
-
-With a 256Bit AES-NI & Cryptographic unit : Parallel Decryption &
-Return Encryption by using 2x 128Bit & a Processor Enciphered Nonce.
-
-(c)Rupert S
-
-*reference* https://bit.ly/VESA_BT
-
-Performance Comparison of AES-CCM and AES-GCM Authenticated Encryption Mode=
-s
-http://worldcomp-proceedings.com/proc/p2016/SAM9746.pdf
-
-Basic comparison of Modes for Authenticated-Encryption -IAPM, XCBC,
-OCB, CCM, EAX, CWC, GCM, PCFB, CS
-https://www.fi.muni.cz/~xsvenda/docs/AE_comparison_ipics04.pdf
-
-*****
-ICE-SSRTP GEA Replacement 2022 + (c)RS
-
-"GEA-1 and GEA-2, which are very similar (GEA-2 is just an extension
-of GEA-1 with a higher amount of processing, and apparently not
-weakened) are bit-oriented stream ciphers."
-
-GEA-2 > GEA-3 is therefor 64Bit Safe (Mobile calls) & 128Bit Safe
-(Reasonable security)
-SHA2, SHA3therefor 128Bit Safe (Reasonable security Mobile) ++
-AES & PolyChaCha both provide a premise of 128Bit++
-
-So by reason alone GEA has a place in our hearts.
-
-*
-
-ICE-SSRTP GEA Replacement 2022 + (c)RS
-
-IiCE-SSR for digital channel infrastructure can help heal GPRS+ 3G+ 4G+ 5G+
-
-Time NTP Protocols : is usable in 2G+ <> 5G+LTE Network SIM
-
-ICE-SSRTP Encryption AES,Blake2, Poly ChaCha, SM4, SHA2, SHA3, GEA-1 and GE=
-A-2
-'Ideal for USB Dongle & Radio' in Rust RS ' Ideal for Quality TPM
-Implementation'
-
-"GEA-1 and GEA-2, which are very similar (GEA-2 is just an extension
-of GEA-1 with a higher amount of processing, and apparently not
-weakened) are bit-oriented stream ciphers."
-
-IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protoc=
-ol
-
-Interleaved signals help Isolate noise from a Signal Send & Receive ...
-
-Overlapping inverted waves are a profile for complex audio & FFT is the res=
-ult.
-
-Interleaved, Inverted & Compressed & a simple encryption?
-
-*
-
-Time differentiated : Interleave, Inversion & differentiating Elliptic curv=
-e.
-
-We will be able to know and test the Cypher : PRINCIPLE OF INTENT TO TRUST
-
-We know of a cypher but : (Principle RS)
-
-We blend the cypher..
-Interleaved pages of a cypher obfuscate : PAL CScam does this
-
-Timed : Theoretically unique to you in principle for imprecision, But
-we cannot really have imprecise in Crypto!
-
-But we can have a set time & in effect Elliptic curve a transient variable =
-T,
-With this, Interleave the resulting pages (RAM Buffer Concept)
-
-Invert them over Time Var =3D T
-
-We can do all & principally this is relatively simple.
-
-(c)RS
-
-*
-
-Modulus Dual Encrypt & Decrypt package : Processor feature (c)RS
-
-AES-CCM & AES-GCM & Other Cypher Modulus + CCM & GCM can be
-accelerated with a joint AES Crypto module,
-
-Processor feature & package : Module list:
-
-2 Decryption pipelines working in parallel,
-With a Shared cache & RAM Module
-Modulus & Semi-parallel modulating decryption & Encryption combined
-with Encapsulation Cypher IP Protocol packet
-
-Parallax Cryptographic Processing Unit: RS
-
-The capacity To Multiply decryption on specific hardware in situations
-such as lower Bit precision is to be implemented as follows:
-
-On AES-NI & ARM Cryptographic processors; In particular PSP+PPS(ARM+) & SiM=
-D ..
-
-The capacity to exploit the fact that the nonce is 16Bit to 64Bit &
-full float upto 128Bit for legal decryption (client) means there is a
-simple method to use:
-
-In situations that a AES-NI & ARM Cryptographic unit can process 2
-threads on a 256Bit Function we can do both the main 128Bit/192Bit &
-the nonce 16Bit to 64Bit & Enable a single instruction Roll to
-Synchronise both The main HASH & Nonce.
-
-AES & Crypto hardware can utilise the CPU/GPU/Processor FPU & SiMD to
-decrypt the nonce (smaller so fast) & in the same 8bto to 64Bits of
-code; Inline & parallax the cryptographic function.
-
-With a 256Bit AES-NI & Cryptographic unit : Parallel Decryption &
-Return Encryption by using 2x 128Bit & a Processor Enciphered Nonce.
-
-(c)Rupert S
-
-*reference*
-
-Performance Comparison of AES-CCM and AES-GCM Authenticated Encryption Mode=
-s
-http://worldcomp-proceedings.com/proc/p2016/SAM9746.pdf
-
-Basic comparison of Modes for Authenticated-Encryption -IAPM, XCBC,
-OCB, CCM, EAX, CWC, GCM, PCFB, CS
-https://www.fi.muni.cz/~xsvenda/docs/AE_comparison_ipics04.pdf
-
-
-*
-
-Example of use:
-
-Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade ma=
-rker
-
-Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
-Interleaved channel BAND.
-
-Microchip clock and 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
-Coprocessor digital channel selector &
-
-channel Key selection based on unique..
-
-Crystal time Quartz with Synced Tick (Regulated & modular)
-
-All digital interface and resistor ring channel & sync selector with
-micro band tuning firmware.
-
-(c)Rupert S
-
-*
-
-Good for cables ? and noise ?
-
-Presenting :  IiCE-SSR for digital channel infrastructure & cables
-<Yes Even The Internet &+ Ethernet 5 Band>
-
-So the question of interleaved Bands & or signal inversion is a simple
-question but we have,
-
-SSD & HDD Cables & does signal inversion help us? Do interleaving bands hel=
-p us?
-
-In Audio inversion would be a strange way to hear! but the inversion
-does help alleviate ...
-
-Transistor emission fatigue...
-
-IiCE-SSRTP : Interleaved Inverted Signal Send & Receive Time Crystal Protoc=
-ol
-
-Interleaved signals help Isolate noise from a Signal Send & Receive ...
-
-Overlapping inverted waves are a profile for complex audio & FFT is the res=
-ult.
-
-Interleaved, Inverted & Compressed & a simple encryption?
-
-Good for cables ? and noise ?
-
-Presenting : IiCE for digital channel infrastructure & cables <Yes
-Even The Internet &+ Ethernet 5 Band>
-
-(c) Rupert S
-
-https://science.n-helix.com/2018/12/rng.html
-
-https://science.n-helix.com/2022/02/rdseed.html
-
-https://science.n-helix.com/2017/04/rng-and-random-web.html
-
-https://science.n-helix.com/2022/02/interrupt-entropy.html
-
-https://science.n-helix.com/2021/11/monticarlo-workload-selector.html
-
-https://science.n-helix.com/2022/03/security-aspect-leaf-hash-identifiers.h=
-tml
-
-
-Audio, Visual & Bluetooth & Headset & mobile developments only go so far:
-
-https://science.n-helix.com/2022/02/visual-acuity-of-eye-replacements.html
-
-https://science.n-helix.com/2022/03/ice-ssrtp.html
-
-https://science.n-helix.com/2021/11/ihmtes.html
-
-https://science.n-helix.com/2021/10/eccd-vr-3datmos-enhanced-codec.html
-https://science.n-helix.com/2021/11/wave-focus-anc.html
-https://science.n-helix.com/2021/12/3d-audio-plugin.html
-
-Integral to Telecoms Security TRNG
-
-*RAND OP Ubuntu :
-https://manpages.ubuntu.com/manpages/trusty/man1/pollinate.1.html
-
-https://pollinate.n-helix.com
-
-*
-
-***** Dukes Of THRUST ******
-
-Nostalgic TriBand : Independence RADIO : Send : Receive :Rebel-you trade ma=
-rkerz
-
-Nostalgic TriBand 5hz banding 2 to 5 bands, Close proximity..
-Interleaved channel BAND.
-
-Microchip clock and 50Mhz Risc Rio processor : 8Bit : 16Bit : 18Bit
-Coprocessor digital channel selector &
-
-channel Key selection based on unique..
-
-Crystal time Quartz with Synced Tick (Regulated & modular)
-
-All digital interface and resistor ring channel & sync selector with
-micro band tuning firmware.
-
-(c)Rupert S
-
-Dev/Random : Importance
-
-Dev/Random : Importance : Our C/T/RNG Can Help GEA-2 Open Software
-implementation of 3 Bits (T/RNG) Not 1 : We need Chaos : GEA-1 and
-GEA-2 Implementations we will improve with our /Dev/Random
-
-Our C/T/RNG Can Help GEA-2 Open Software implementation of 3 Bits
-(T/RNG) Not 1 : We need Chaos : GEA-1 and GEA-2 Implementations we
-will improve with our /Dev/Random
-
-We can improve GPRS 2G to 5G networks still need to save power, GPRS
-Doubles a phones capacity to run all day,
-
-Code can and will be improved, Proposals include:
-
-Blake2
-ChaCha
-SM4
-SHA2
-SHA3
-
-Elliptic Encipher
-AES
-Poly ChaCha
-
-Firstly we need a good solid & stable /dev/random
-
-So we can examine the issue with a true SEED!
-
-Rupert S https://science.n-helix.com/2022/02/interrupt-entropy.html
-
-TRNG Samples & Method DRAND Proud!
-
-https://drive.google.com/file/d/1b_Sl1oI7qTlc6__ihLt-N601nyLsY7QU/view?usp=
-=3Ddrive_web
-https://drive.google.com/file/d/1yi4ERt0xdPc9ooh9vWrPY1LV_eXV-1Wc/view?usp=
-=3Ddrive_web
-https://drive.google.com/file/d/11dKUNl0ngouSIJzOD92lO546tfGwC0tu/view?usp=
-=3Ddrive_web
-https://drive.google.com/file/d/10a0E4Gh5S-itzBVh0fOaxS7JS9ru-68T/view?usp=
-=3Ddrive_web
-
-https://github.com/P1sec/gea-implementation
+On 4/4/22 03:41, David Hildenbrand wrote:
+> On 01.04.22 19:23, Mike Kravetz wrote:
+>> On 4/1/22 03:43, David Hildenbrand wrote:
+>>> On 01.04.22 12:12, Peng Liu wrote:
+>>>> Hugepages can be specified to pernode since "hugetlbfs: extend
+>>>> the definition of hugepages parameter to support node allocation",
+>>>> but the following problem is observed.
+>>>>
+>>>> Confusing behavior is observed when both 1G and 2M hugepage is set
+>>>> after "numa=off".
+>>>>  cmdline hugepage settings:
+>>>>   hugepagesz=1G hugepages=0:3,1:3
+>>>>   hugepagesz=2M hugepages=0:1024,1:1024
+>>>>  results:
+>>>>   HugeTLB registered 1.00 GiB page size, pre-allocated 0 pages
+>>>>   HugeTLB registered 2.00 MiB page size, pre-allocated 1024 pages
+>>>>
+>>>> Furthermore, confusing behavior can be also observed when invalid
+>>>> node behind valid node.
+>>>>
+>>>> To fix this, hugetlb_hstate_alloc_pages should be called even when
+>>>> hugepages_setup going to invalid.
+>>>
+>>> Shouldn't we bail out if someone requests node-specific allocations but
+>>> we are not running with NUMA?
+>>
+>> I thought about this as well, and could not come up with a good answer.
+>> Certainly, nobody SHOULD specify both 'numa=off' and ask for node specific
+>> allocations on the same command line.  I would have no problem bailing out
+>> in such situations.  But, I think that would also require the hugetlb command
+>> line processing to look for such situations.
+> 
+> Yes. Right now I see
+> 
+> if (tmp >= nr_online_nodes)
+> 	goto invalid;
+> 
+> Which seems a little strange, because IIUC, it's the number of online
+> nodes, which is completely wrong with a sparse online bitmap. Just
+> imagine node 0 and node 2 are online, and node 1 is offline. Assuming
+> that "node < 2" is valid is wrong.
+> 
+> Why don't we check for node_online() and bail out if that is not the
+> case? Is it too early for that check? But why does comparing against
+> nr_online_nodes() work, then?
+> 
+> 
+> Having that said, I'm not sure if all usage of nr_online_nodes in
+> mm/hugetlb.c is wrong, with a sparse online bitmap. Outside of that,
+> it's really just used for "nr_online_nodes > 1". I might be wrong, though.
+
+I think you are correct.  My bad for not being more thorough in reviewing
+the original patch that added this code.  My incorrect assumption was that
+a sparse node map was only possible via offline operations which could not
+happen this early in boot.  I now see that a sparse map can be presented
+by fw/bios/etc.  So, yes I do believe we need to check for online nodes.
+
+-- 
+Mike Kravetz
+
+> 
+>>
+>> One could also argue that if there is only a single node (not numa=off on
+>> command line) and someone specifies node local allocations we should bail.
+> 
+> I assume "numa=off" is always parsed before hugepages_setup() is called,
+> right? So we can just rely on the actual numa information.
+> 
+> 
+>>
+>> I was 'thinking' about a situation where we had multiple nodes and node
+>> local allocations were 'hard coded' via grub or something.  Then, for some
+>> reason one node fails to come up on a reboot.  Should we bail on all the
+>> hugetlb allocations, or should we try to allocate on the still available
+>> nodes?
+> 
+> Depends on what "bail" means. Printing a warning and stopping to
+> allocate further is certainly good enough for my taste :)
+> 
+>>
+>> When I went back and reread the reason for this change, I see that it is
+>> primarily for 'some debugging and test cases'.
+>>
+>>>
+>>> What's the result after your change?
+>>>
+>>>>
+>>>> Cc: <stable@vger.kernel.org>
+>>>
+>>> I am not sure if this is really stable material.
+>>
+>> Right now, we partially and inconsistently process node specific allocations
+>> if there are missing nodes.  We allocate 'regular' hugetlb pages on existing
+>> nodes.  But, we do not allocate gigantic hugetlb pages on existing nodes.
+>>
+>> I believe this is worth fixing in stable.
+> 
+> I am skeptical.
+> 
+> https://www.kernel.org/doc/Documentation/process/stable-kernel-rules.rst
+> 
+> " - It must fix a real bug that bothers people (not a, "This could be a
+>    problem..." type thing)."
+> 
+> While the current behavior is suboptimal, it's certainly not an urgent
+> bug (?) and the kernel will boot and work just fine. As you mentioned
+> "nobody SHOULD specify both 'numa=off' and ask for node specific
+> allocations on the same command line.", this is just a corner case.
+> 
+> Adjusting it upstream -- okay. Backporting to stable? I don't think so.
+> 

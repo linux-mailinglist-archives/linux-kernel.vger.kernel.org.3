@@ -2,116 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 451064F1855
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B636B4F1857
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378571AbiDDP1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 11:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
+        id S1348121AbiDDP3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 11:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378619AbiDDP1m (ORCPT
+        with ESMTP id S245461AbiDDP3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 11:27:42 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A911E3EB;
-        Mon,  4 Apr 2022 08:25:45 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 125so281424pgc.11;
-        Mon, 04 Apr 2022 08:25:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=C7kc0WBXzki7SKGLSUPjAVPvpQOiseE27/OA4Hb8PjU=;
-        b=CM7bruVNar6ViIQtL5n44QYXZE1Uvm8jsK5oP95zGN41v0xkZ3xDN2Z0O1LhhLWcth
-         yeHjhi+BLqb3YtgH9k8FJF8fHFLNgt92VqN9avK5xON8iKnrWLJ68OVH2dWAtuVclOt2
-         zdDQ7u6f3kROW8veWKQgnCg7wfnfIck08sVMm4tQX2MUUvJfx350164m5clvR6NwOCii
-         klydz0jLwiWkkOOlIB2sXoBsHLmq43RgWgVUej5+ZB7nxVRT2b05w5HhVP7i1DwMXwPX
-         UqC5oA5oai9l5YIERIli0KXdpdTrzBI+gbvyVoT6BtUQbBNUT4Bc6MBwv9kN+ejPA5NV
-         gkGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=C7kc0WBXzki7SKGLSUPjAVPvpQOiseE27/OA4Hb8PjU=;
-        b=Z6ztcXaCK3iPa8j9FKlaELhmmdWtxKYWbevULB9UGMIMrmLgJIbonwIBOECDY6hvJZ
-         1idWoyZlO9kTB/e+sEOBVQXSM6TUN3l0zi1COpRru4tlVl4Ml7pnCZhAEI0t9kS6WJKs
-         /9ogNfbAuTp4js368eGc74VVyV6cWiAdXtmW3nD/XczlTagNPAbOV+mAwL3bc3I73iwO
-         mbzJNC71G7QchSiVbsgJgkQh+FfE7hRsm+Vg2lK12yYGDBGsJQLG3rpnlFgqoAJ6reV+
-         eo1Z/BA9pCHKPsOLNHZ91cuNzUNFQlk0WKUuS4WUQU+i6kGMUl/ZXdaB5+v0LMu7bnzC
-         gfjQ==
-X-Gm-Message-State: AOAM533Y3JwsO0R9wav1Gkp5hu7Mc7+ZtomZBS9OSFv/vTGy2GYLZWIB
-        bo9FSnDeOXkvfsnIuBT4pGE=
-X-Google-Smtp-Source: ABdhPJyX1HGc5HkE1B4GZBABO2GZpRStGi3sYjqdjfv7Puk6FAmTQOSVQpHoLIdgEJmPNQaOj7MB3g==
-X-Received: by 2002:a65:654f:0:b0:378:b8f6:ebe4 with SMTP id a15-20020a65654f000000b00378b8f6ebe4mr306781pgw.399.1649085944813;
-        Mon, 04 Apr 2022 08:25:44 -0700 (PDT)
-Received: from VICKYMQLIN-NB1.localdomain ([106.39.148.25])
-        by smtp.gmail.com with ESMTPSA id v17-20020a63b951000000b0038644f62aeesm10772528pgo.68.2022.04.04.08.25.40
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 04 Apr 2022 08:25:44 -0700 (PDT)
-Date:   Mon, 4 Apr 2022 23:25:38 +0800
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jiri Slaby <jirislaby@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Zev Weiss <zev@bewilderbeest.net>,
-        Johan Hovold <johan@kernel.org>,
-        Yang Guang <yang.guang5@zte.com.cn>,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] serial: 8250_aspeed_vuart: Fix potential NULL
- dereference in aspeed_vuart_probe
-Message-ID: <20220404152538.GA35@VICKYMQLIN-NB1.localdomain>
-References: <20220404143842.16960-1-linmq006@gmail.com>
- <YksEnnyJDoL+fE5d@kroah.com>
+        Mon, 4 Apr 2022 11:29:16 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE8133370
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:27:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649086040; x=1680622040;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=yU/nrfZ263LR5VUhJwSEVaYnpMgbfMGsS35R5MUtslE=;
+  b=Pk3wm5SZx3ZEjLwr2ph5MtheWVddxvcuMCy87rv8PBxMCzW9/LF1fgfG
+   02zdPOD+D2N/bIzyqnBZhy6Gpbm75yu7kP/zrd76m8saNJNy8SKT0jsNr
+   NScOetvdzbzc6TkP2K7Fq4KIwQeBIUiWV7hJRSwcoeILN5u9IOEt8SySd
+   boNuMd+q08NM1Z/LnaP3TiUm78y5XbcXi30Ul/Bjsb40+37Z4PjPPdxlc
+   rvO2RwdpoMlgjMi0e7zOrA61Tbn3CLZJnrAtFjW+GOtW2Wc8HVv177TRD
+   0qdFFQpimklBUU06jvVnSmyj6QbLzgCcm1axQ5phlLpnfhDcEalCxiio0
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="346979034"
+X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
+   d="scan'208";a="346979034"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 08:27:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
+   d="scan'208";a="657540959"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 04 Apr 2022 08:27:18 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbObt-00029g-EE;
+        Mon, 04 Apr 2022 15:27:17 +0000
+Date:   Mon, 4 Apr 2022 23:27:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: arch/arm/mach-iop32x/cp6.c:10:6: warning: no previous prototype for
+ 'iop_enable_cp6'
+Message-ID: <202204042312.fVSuandr-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YksEnnyJDoL+fE5d@kroah.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 04:45:50PM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Apr 04, 2022 at 02:38:40PM +0000, Miaoqian Lin wrote:
-> > platform_get_resource() may fail and return NULL, so we should
-> > better check it's return value to avoid a NULL pointer dereference.
-> > 
-> > Fixes: 54da3e381c2b ("serial: 8250_aspeed_vuart: use UPF_IOREMAP to set up register mapping")
-> > Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> > ---
-> >  drivers/tty/serial/8250/8250_aspeed_vuart.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/tty/serial/8250/8250_aspeed_vuart.c b/drivers/tty/serial/8250/8250_aspeed_vuart.c
-> > index 93fe10c680fb..9d2a7856784f 100644
-> > --- a/drivers/tty/serial/8250/8250_aspeed_vuart.c
-> > +++ b/drivers/tty/serial/8250/8250_aspeed_vuart.c
-> > @@ -429,6 +429,8 @@ static int aspeed_vuart_probe(struct platform_device *pdev)
-> >  	timer_setup(&vuart->unthrottle_timer, aspeed_vuart_unthrottle_exp, 0);
-> >  
-> >  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > +	if (!res)
-> > +		return -EINVAL;
-> 
-> How did you test this change was correct?
+Hi Arnd,
 
-Hi,
+FYI, the error/warning still remains.
 
-   I look into the implementation of platform_get_resource(),
-and do cross-check the usages of it in the codebase, especially
-the usages in other probe function. 
-And I go through some simliar bugfix commits in the revision history——
-add check for return value of platform_get_resource() in probe
-functions，to learn the way to fix this kind of bugs. 
-But sorry I don't have the corresponding device for running test.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3123109284176b1532874591f7c81f3837bbdc17
+commit: 6f5d248d05db9c4991366154f1a657a630faa583 ARM: iop32x: use GENERIC_IRQ_MULTI_HANDLER
+date:   4 months ago
+config: arm-randconfig-r002-20220404 (https://download.01.org/0day-ci/archive/20220404/202204042312.fVSuandr-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6f5d248d05db9c4991366154f1a657a630faa583
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 6f5d248d05db9c4991366154f1a657a630faa583
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/arm/mach-iop32x/cp6.c:10:6: warning: no previous prototype for 'iop_enable_cp6' [-Wmissing-prototypes]
+      10 | void iop_enable_cp6(void)
+         |      ^~~~~~~~~~~~~~
+   arch/arm/mach-iop32x/cp6.c:43:13: warning: no previous prototype for 'iop_init_cp6_handler' [-Wmissing-prototypes]
+      43 | void __init iop_init_cp6_handler(void)
+         |             ^~~~~~~~~~~~~~~~~~~~
+
+
+vim +/iop_enable_cp6 +10 arch/arm/mach-iop32x/cp6.c
+
+     9	
+  > 10	void iop_enable_cp6(void)
+    11	{
+    12		u32 temp;
+    13	
+    14	        /* enable cp6 access */
+    15	        asm volatile (
+    16			"mrc	p15, 0, %0, c15, c1, 0\n\t"
+    17			"orr	%0, %0, #(1 << 6)\n\t"
+    18			"mcr	p15, 0, %0, c15, c1, 0\n\t"
+    19			"mrc	p15, 0, %0, c15, c1, 0\n\t"
+    20			"mov	%0, %0\n\t"
+    21			"sub	pc, pc, #4  @ cp_wait\n\t"
+    22			: "=r"(temp));
+    23	}
+    24	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

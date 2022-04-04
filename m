@@ -2,106 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A957B4F0D4C
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 02:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 365D54F0D55
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 03:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376836AbiDDAzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 20:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
+        id S1348602AbiDDBL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 21:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240987AbiDDAzf (ORCPT
+        with ESMTP id S240336AbiDDBLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 20:55:35 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DEB639B;
-        Sun,  3 Apr 2022 17:53:39 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id y10so7506674pfa.7;
-        Sun, 03 Apr 2022 17:53:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yNiMC9MxNAVqib+SZgJ64s5pZC15kZoqX/VkezsKZbU=;
-        b=A7WqEwsD/aUvHQ8X6WMd/LHTc2iOpLbQ6RzOtzK+70OO4r0OV1gzSUvIJ/eUBN/kZm
-         LbDrm7jb3wjUd6pK3xKf3Brk2/rfiNQSMcag3JOEunkqcdFrlpV84yDNeZEl6R2p63fX
-         vDenSLEN+t+QqnvXbjtyCT58Orv1T5ldIX3I9XNcELLSe1C+zDQsOX3I3QQeIWOvI1Os
-         OD6IoUwl+jLZA7M6J2+VAr+oB15JkdTZ5m613Uf/MpgHc074HxXytLwVoo1L/36DNMTB
-         IF+B92/88WWTfhi2YE+K0VDHPXA9z3GWoXkIo+qR+dn29G7i/EuOtOpKOJ97vIk7XwsP
-         l7XQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yNiMC9MxNAVqib+SZgJ64s5pZC15kZoqX/VkezsKZbU=;
-        b=O+NpRXd8pziBh59mwKT+z+t2ND9VYjQQ93n9BfTdNIELCLmTaBjYR1iDRJ7Uoj70zY
-         0CdgjoML7pHLNTbLgl3TIaNdWnnOaNQszgyP6ADqaPIo3NeCqWFdcNpHSs1mVJ1IFyqZ
-         p0nLdS4D7olzPkHiVKsMDdOZT1w9lIbdVO8P9y6HfjDlbTRkl842bMFWaIHnsF6XUslU
-         34b72HblCNd7cWkw+Du1LZg2iAhGYE/86WAxFOEQcDv16cXUQ32bgS1YFE2IPeCqINH+
-         nMtEZ3kbloPnBYYyXo6ypIRikYQ14WNbaxm5kMvBEgTmYDMwrV96Vz68mruvkTE5coty
-         oBgA==
-X-Gm-Message-State: AOAM53210pCQ5qOP7eBge3c8aXjNYpROWp8AT/Ku6qBZPGYRAhA2BvPF
-        PAMSEelwcE5q2WpPwMLmGGU=
-X-Google-Smtp-Source: ABdhPJw/x073w6Z90xT359YpAOS5KIyzJB+bmchOhwkplxvv3ruSfxcQNW6brmHxBlUTfbm+oZaLtQ==
-X-Received: by 2002:a05:6a00:1581:b0:4fa:e6d4:c3e6 with SMTP id u1-20020a056a00158100b004fae6d4c3e6mr21250956pfk.84.1649033619443;
-        Sun, 03 Apr 2022 17:53:39 -0700 (PDT)
-Received: from localhost.localdomain ([223.74.191.143])
-        by smtp.gmail.com with ESMTPSA id d24-20020a637358000000b003823aefde04sm8658355pgn.86.2022.04.03.17.53.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 17:53:38 -0700 (PDT)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     andrii.nakryiko@gmail.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, john.fastabend@gmail.com, kafai@fb.com,
-        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com, toke@redhat.com,
-        yhs@fb.com, ytcoode@gmail.com
-Subject: [PATCH bpf-next v3] libbpf: Don't return -EINVAL if hdr_len < offsetofend(core_relo_len)
-Date:   Mon,  4 Apr 2022 08:53:20 +0800
-Message-Id: <20220404005320.1723055-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <CAEf4Bzbi1E_-yojgJQevM1rdhXF4EzU4dgPsGDT7F5uuDPOE7Q@mail.gmail.com>
-References: <CAEf4Bzbi1E_-yojgJQevM1rdhXF4EzU4dgPsGDT7F5uuDPOE7Q@mail.gmail.com>
+        Sun, 3 Apr 2022 21:11:51 -0400
+Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9100032EEF
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 18:09:53 -0700 (PDT)
+Received: from dread.disaster.area (pa49-180-43-123.pa.nsw.optusnet.com.au [49.180.43.123])
+        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 30D0A10E562F;
+        Mon,  4 Apr 2022 11:09:49 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1nbBE4-00DTdp-CR; Mon, 04 Apr 2022 11:09:48 +1000
+Date:   Mon, 4 Apr 2022 11:09:48 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Roman Gushchin <roman.gushchin@linux.dev>, MM <linux-mm@kvack.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Yu Zhao <yuzhao@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC] mm/vmscan: add periodic slab shrinker
+Message-ID: <20220404010948.GV1609613@dread.disaster.area>
+References: <20220402072103.5140-1-hdanton@sina.com>
+ <20220403005618.5263-1-hdanton@sina.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220403005618.5263-1-hdanton@sina.com>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=624a4560
+        a=MV6E7+DvwtTitA3W+3A2Lw==:117 a=MV6E7+DvwtTitA3W+3A2Lw==:17
+        a=kj9zAlcOel0A:10 a=z0gMJWrwH1QA:10 a=7-415B0cAAAA:8
+        a=xEwM7xfV6nKN0_kzd_YA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since core relos is an optional part of the .BTF.ext ELF section, we should
-skip parsing it instead of returning -EINVAL if header size is less than
-offsetofend(struct btf_ext_header, core_relo_len).
+On Sun, Apr 03, 2022 at 08:56:18AM +0800, Hillf Danton wrote:
+> On Sat, 2 Apr 2022 10:54:36 -0700 Roman Gushchin wrote:
+> > Hello Hillf!
+> > 
+> Hello Roman,
+> 
+> > Thank you for sharing it, really interesting! I=E2=80=99m actually working o=
+> > n the same problem.=20
+> 
+> Good to know you have some interest in it.
+> Feel free to let me know you would like to take it over to avoid
+> repeated works on both sides.
+> 
+> > 
+> > No code to share yet, but here are some of my thoughts:
+> > 1) If there is a =E2=80=9Cnatural=E2=80=9D memory pressure, no additional sl=
+> > ab scanning is needed.
+> 
+> Agree - the periodic shrinker can be canceled once kswapd wakes up.
 
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
----
-v1 -> v2: skip core relos if hdr_len < offsetofend(core_relo_len)
-v2 -> v3: fix comment style
+I think we should be waking up per-node kswapd to do the periodic
+shrinking, not adding yet another way of executing (thousands of)
+shrinkers (across hundreds of nodes) from a single threaded context.
 
- tools/lib/bpf/btf.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Indeed, the problem of "no reclaim when there is no memory
+pressure" also affects the page cache, not just shrinkable caches
+and we really don't want periodic reclaim to have a compeltely
+different behaviour to general memory reclaim.
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 1383e26c5d1f..d124e9e533f0 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -2826,10 +2826,8 @@ struct btf_ext *btf_ext__new(const __u8 *data, __u32 size)
- 	if (err)
- 		goto done;
- 
--	if (btf_ext->hdr->hdr_len < offsetofend(struct btf_ext_header, core_relo_len)) {
--		err = -EINVAL;
--		goto done;
--	}
-+	if (btf_ext->hdr->hdr_len < offsetofend(struct btf_ext_header, core_relo_len))
-+		goto done; /* skip core relos parsing */
- 
- 	err = btf_ext_setup_core_relos(btf_ext);
- 	if (err)
+i.e. the amount of work that shrinkers need to do in a periodic scan
+is largerly determined by the rate of shrinkable cache memory usage
+growth rather than memory reclaim priority as it is now. Hence there
+needs to be different high level "shrinker needs to do X amount of
+work" calculation for periodic reclaim than there is now.
+
+e.g. we calculate a rolling average of the size of the cache and a
+rate of change over a series of polling operations (i.e. calling
+->scan_count) and then when sustained growth is detected we start
+trying to shrink the cache to limit the rate of growth of the cache.
+
+If the cache keeps growing, then it's objects are being repeatedly
+referenced and it *should* keep growing. If it's one-off objects
+that are causing the growth of the cache and so objects are being
+reclaimed by the shrinker, then matching the periodic shrink scan to
+the growth rate will substantially reduce the rate of growth of that
+cache.
+
+And if it's integrated into the existing do_shrink_slab
+calculations, the moment actual memory reclaim calls the shrinker
+the periodic scan calculations can be reset back to zero and it
+starts again...
+
+> > 2) =46rom a power perspective it=E2=80=99s better to scan more at once, but l=
+> > ess often.
+> 
+> The shrinker proposed is a catapult on the vmscan side without knowing
+> where the cold slab objects are piling up in Dave's backyard but he is
+> free to take different actions than the regular shrinker - IOW this
+> shrinker alone does not make much sense wrt shooting six birds without
+> the stone on the slab owner side.
+> 
+> It is currently scanning *every* slab cache at an arbitrary frequency,
+> once 30 seconds - I am open to a minute or whatever.
+
+Sorry, I don't understand what "Dave's backyard" is or why it would
+ever need to be special cased?
+
+> > 3) Maybe we need a feedback loop with the slab allocator: e.g. if slabs are a=
+> > lmost full there is more sense to do a proactive scanning and free up some m=
+> > emory, otherwise we=E2=80=99ll end up allocating more slabs. But it=E2=80=99=
+> > s tricky.
+> 
+> There are 31 bits available in the periodic flag added to shrink control.
+> 
+> > 4) If the scanning is not resulting in any memory reclaim, maybe we should (=
+> > temporarily) exclude the corresponding shrinker from the scanning.
+> 
+> Given the periodic flag, Dave is free to ignore the scan request and the
+> scan result is currently dropped on the vmscan side because what is
+> considered is the cold slab objects that for instance have been inactive
+> for more than 30 seconds in every slab cache, rather than kswapd's cake.
+
+I don't understand how passing a "periodic" flag to individual
+shrinkers is really useful here. How does the shrinker
+implementation use this to determine how much work it needs to do?
+
+i.e. The amount of work a shrinker needs to perform is calculated by
+the high level slab scanning code based on relative cache size and
+reclaim priority.  If there's a periodic scanner, it should be
+calculating a specific amount of work for the shrinkers to do way up
+in do_shrink_slab() and then asking the shrinker to perform that
+work in exactly the way it does now - the shrinker itself doesn't
+need to know anything about whether it's a periodic memory reclaim
+scan or whether there's actual memory pressure - it just needs to
+scan the oldest objects in it's cache to try to reclaim them.
+
+Cheers,
+
+Dave.
 -- 
-2.35.1
-
+Dave Chinner
+david@fromorbit.com

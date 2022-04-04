@@ -2,68 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A19DB4F1092
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBE64F1094
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377925AbiDDIOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 04:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58714 "EHLO
+        id S1377940AbiDDIOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 04:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377923AbiDDIOj (ORCPT
+        with ESMTP id S1377924AbiDDIOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 4 Apr 2022 04:14:39 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F6031DF6
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 01:12:39 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 123-20020a1c1981000000b0038b3616a71aso5080040wmz.4
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 01:12:39 -0700 (PDT)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D7D30F7F
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 01:12:41 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id i6-20020a1c3b06000000b0038e710da2dcso778395wma.1
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 01:12:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=jlztPl2Mn5Z9b75a8aDKzDu8XcFOxiCHfCOqKuF/Txc=;
-        b=WaqThE047oI6XlBTwAMpdom+WsP5k066IK7/CLPkUOSQ9DSj54oUqeP4dEyciYqu6A
-         Ld71Kl93t4tS2ymQPTBpFA68E8RqJaIbscIAFuNTbhoHcA3f6RdHc4loEj5QHaAGzYfM
-         YM7FtjhHoJUpn3ZCSpaJI422roKG8l7M221GcOckTYNlmTFkqqDHOqBZDBtBCIo7giOZ
-         5Jur2Udwfel1nM1Xhm5isqjPCaXueaFSZkFaeqqtP5YBejcTYWh/fV8hQVZ2DQ+cCiol
-         E/pHDax6+q7DAzl0k9GumrYme4gC5ImRZU0peR0QtEBDX78zIJD1ka23XW5HiUCQnSra
-         wwug==
+        bh=U1Fdq0DczHkP3YF2vj5LPcppX6TH/kpuXtMffHmyoZQ=;
+        b=ccWa7BZsRyHZFk7vojdgTbQYkDBDeSyof2uyKirvXqz3ERteAC5pvLBFmlrdNffaDj
+         p+h/6RjcW3bvMEt4clBiGuxS4MnUtbhEuG6ULWRAL2wzcrUkKm7nekYS/fEmLz/nNeNu
+         rv9ohiz3Y5OUaUaCiliDT7BFQiWeSfvOCBU4JEOkxtTWkO+lb2KjOob3dSsPWNC+WSym
+         Xz41jfw5uuRnvhkaF78QwpwQTRVkpeaag5/JyFtzF18D3ufw8rxZ/9ZKSIGOMCBuaqHz
+         1aFgwncugW9a6H6tmYi7vFWdcmEJ0e0LgjX57qkWrFqFewDBYMps4GhpSaLFvMGpi787
+         jtLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jlztPl2Mn5Z9b75a8aDKzDu8XcFOxiCHfCOqKuF/Txc=;
-        b=lPZ6c48UbMg2bCcFbDIJT+j4dacWavC6p4ouWLGWL6fT8r2jzr97tJ8hxeqAvWm8eM
-         OzRXi0O9qR/xooU4ZwHlP9sdDRqr4OVxvECw8U6H50WUxfq5umIrJvyTJE21/l/vBVPb
-         M3vCLQ//fpbPMVMhJ2Prst+vy0NKGL/6KNCpJM9UTEhm7lyYjAV0OQYuoB7HekagKWPF
-         b9Ebslrj9BPH/kfeHPw48akgHy/PIV3bTaXBClq4x7GLdIjM1ie4J3EkvUr0itE8/FXo
-         zS77zxkbV9A5sJPmkxWTKd9DNDCNfBvQYj0LKFocuS4t4M5Ec+k+7GgK3A9eXRLm24mg
-         iIyg==
-X-Gm-Message-State: AOAM533tcmZdt2g5WdXT3dc0dBFTw12rn2v9apA9psJC2sF+DrhJNYE2
-        7lFAWRJgXBLgdcd66YcwT8cc3A==
-X-Google-Smtp-Source: ABdhPJyl7Y99PyLWCJ09Fd3yDwSg/hDgVeGVWjBXSX9o5YLMjDvlRHKIofbJGxYdJQ6gzvUMTNIn7A==
-X-Received: by 2002:a05:600c:2213:b0:38e:7138:de13 with SMTP id z19-20020a05600c221300b0038e7138de13mr2975996wml.26.1649059958397;
-        Mon, 04 Apr 2022 01:12:38 -0700 (PDT)
+        bh=U1Fdq0DczHkP3YF2vj5LPcppX6TH/kpuXtMffHmyoZQ=;
+        b=0FsGAc7bOb+w2Mi/la6XBUeMBoOMEZ6QrlNA10ZR/lITKmIGO15m+yzYfvYuaVHUes
+         axFL+dkND7R7oSXuJCZ7BsG34y9HEJfj0wXJcmKcJYH/QkGfSNEPOJ02XwFlVKHxZx/R
+         l6xu7ognkzeceW21bQa47g1i3fkYhpqOPv5ZkKKrLTz928UZml2Ea5HLM9d4NIRjCRVL
+         OnNXtY0/1zfWGalmMB2/GSQA/KiinYsJwtOLVMcwo2vddrpG5k0TFWnKBPju6XVKEmg+
+         6F8opbT/TlwBjbhBDBHzlsY7AU606DYcnQzz7Maf5F1BmcVHogmNjmuWbUkJZXYpMmUL
+         v96g==
+X-Gm-Message-State: AOAM531Bp1YqP4Lr6+N/QjOxv7h2essNdoLMOMXn/iGAq7+NUR5c/V6e
+        o7vQzXC1xw+5oZqhNU0pUqwkEQ==
+X-Google-Smtp-Source: ABdhPJwWjslOc4kHuu+OQclfFY0BZN3W5Rz/UbNzTFSp4pRRp+RHXzsaOZB05j1V4cEt05SxETfHWg==
+X-Received: by 2002:a7b:cb87:0:b0:38e:7464:f796 with SMTP id m7-20020a7bcb87000000b0038e7464f796mr1674221wmi.133.1649059959885;
+        Mon, 04 Apr 2022 01:12:39 -0700 (PDT)
 Received: from localhost.localdomain ([2001:861:44c0:66c0:1add:1b28:2457:eb46])
-        by smtp.gmail.com with ESMTPSA id s12-20020a7bc38c000000b0038e708d163dsm3297510wmj.0.2022.04.04.01.12.37
+        by smtp.gmail.com with ESMTPSA id s12-20020a7bc38c000000b0038e708d163dsm3297510wmj.0.2022.04.04.01.12.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 01:12:37 -0700 (PDT)
+        Mon, 04 Apr 2022 01:12:39 -0700 (PDT)
 From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Qianggui Song <qianggui.song@amlogic.com>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-amlogic@lists.infradead.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: meson-s4: add pinctrl node
-Date:   Mon,  4 Apr 2022 10:12:33 +0200
-Message-Id: <164905994876.1805420.17725203100639956158.b4-ty@baylibre.com>
+To:     krzk+dt@kernel.org, khilman@baylibre.com,
+        Shunzhou Jiang <shunzhou.jiang@amlogic.com>, robh+dt@kernel.org
+Cc:     Neil Armstrong <narmstrong@baylibre.com>, jbrunet@baylibre.com,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        devicetree@vger.kernel.org, martin.blumenstingl@googlemail.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH V0] arm64: dts: add support for S4 power domain controller
+Date:   Mon,  4 Apr 2022 10:12:34 +0200
+Message-Id: <164905994877.1805420.15799716011771473596.b4-ty@baylibre.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220310030410.718-1-qianggui.song@amlogic.com>
-References: <20220310030410.718-1-qianggui.song@amlogic.com>
+In-Reply-To: <20220401110306.3364551-1-shunzhou.jiang@amlogic.com>
+References: <20220401110306.3364551-1-shunzhou.jiang@amlogic.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -78,15 +75,15 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On Thu, 10 Mar 2022 11:04:10 +0800, Qianggui Song wrote:
-> Add pinctrl node for mesonn-s4
+On Fri, 1 Apr 2022 19:03:06 +0800, Shunzhou Jiang wrote:
+> Enable power domain controller for Meson s4 SoC
 > 
 > 
 
 Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v5.19/dt64)
 
-[1/1] arm64: dts: meson-s4: add pinctrl node
-      https://git.kernel.org/amlogic/c/6383f5a212a6b569ff15bc98ba8b3041a35db6ee
+[1/1] arm64: dts: add support for S4 power domain controller
+      https://git.kernel.org/amlogic/c/085f7a298a14ed2a088c8ba01d2feda2499cbc72
 
 -- 
 Neil

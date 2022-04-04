@@ -2,91 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08444F1BD8
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 490AC4F1DA4
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381888AbiDDVYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
+        id S1383612AbiDDVds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:33:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379506AbiDDRSM (ORCPT
+        with ESMTP id S1379508AbiDDRSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 13:18:12 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F0E13F77;
-        Mon,  4 Apr 2022 10:16:13 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1nbQJC-0002Kh-2L; Mon, 04 Apr 2022 19:16:06 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        patchwork-bot+chrome-platform@kernel.org
-Cc:     lee.jones@linaro.org, robh+dt@kernel.org, bleung@chromium.org,
-        groeck@chromium.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, matthias.bgg@gmail.com,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        dianders@chromium.org, devicetree@vger.kernel.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH 0/4] mfd/pwm: dt-bindings: google,cros-ec: include generic pwm schema
-Date:   Mon, 04 Apr 2022 19:16:03 +0200
-Message-ID: <2259298.ElGaqSPkdT@diego>
-In-Reply-To: <164909246180.14329.3397709419938843373.git-patchwork-notify@kernel.org>
-References: <20220214081916.162014-1-krzysztof.kozlowski@canonical.com> <164909246180.14329.3397709419938843373.git-patchwork-notify@kernel.org>
+        Mon, 4 Apr 2022 13:18:54 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF7814019
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 10:16:58 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id by7so13913144ljb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 10:16:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=42+DYObs0d//YPwipHE3d3izqDTdKuFvDHGNlUWoBx4=;
+        b=ryB3WQniryeQTcsabtEMlk77sINOiDMjNnKxQIAPWIDWkgT2HeYr5YNp6DI6AxlrBR
+         8fCQ5/lZHreREixoEVspMKO0H9IWt5XPvMwwVhey1g+3nGovFlOSfkDV0fB+9JHSyYww
+         MfOlG9ttuJqR+MT95v3VjjepW6WKMqyiEifEd4jSbTESt3OkiuCI9dtDpTgNAJdCfa52
+         52rZGeBuik8PbNlp7p70U2xxAl9hUAFZLO3frntLBrwofTgyaMBYv01U5bBe80qh7Dre
+         A5puCYMeYPj9WlgAEVQoKrpAdNhAm82ngof0dDWWwAWwi9Ke06cvxAHP01nxxBjhXxtI
+         /thg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=42+DYObs0d//YPwipHE3d3izqDTdKuFvDHGNlUWoBx4=;
+        b=C/y6XJAAd5hmeIZK5LPpXob1WEX944WHbfhnUhDPxl/VWW0pnjn/QwP5hW1fpm4ZJm
+         aQm+zD7jJP84W7tZY6D/H9wIFKxJCdF4IolhnYzcBOqZHQzQc6edY8OcriPxs8ui52Xr
+         jQ3DdXs3F0AUFSpEyHCkECs4TRm2Qjb4SjJ4OKueBdaWq67RYQPZbUKOLvtR7QAukW13
+         zy7v4fjmcoFvtziR/caKaoEvwIhGqHsJX6WPuPeKHzmEIaGMOfiUUwZ/KCcrm6qtFEFs
+         3FzBHgLOoBZD+LCxSnzpIBQTu180Q9KjfmtlyfcMO2cYENv8/c/O01R8OJYLnHIhQ9D6
+         rqaQ==
+X-Gm-Message-State: AOAM530kG3Hgcf+vD4wi7no2GhRFAQP3vgUI6AGzOIpTaaC3GjjsBJ1n
+        t5iaLaoXa5ICFYnG+4t4EqlHlLQYtpfxLAvXN7Q5SA==
+X-Google-Smtp-Source: ABdhPJzCr2hVN0gAAJB3yXGwvjHdQ4zEVxVEi7K2YofZ59SQ5b8dfqk23Flzm5EuxCaAEcQZt2M7qWFk0KKWja6DeYg=
+X-Received: by 2002:a05:651c:555:b0:24b:15b7:74ad with SMTP id
+ q21-20020a05651c055500b0024b15b774admr361740ljp.239.1649092616178; Mon, 04
+ Apr 2022 10:16:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220402084746.2413549-1-lv.ruyi@zte.com.cn>
+In-Reply-To: <20220402084746.2413549-1-lv.ruyi@zte.com.cn>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 4 Apr 2022 10:16:44 -0700
+Message-ID: <CAKwvOdk=_a98oaJxmYJsk_sjeBg1yELmpFeOKe1Cbox2vnVi4Q@mail.gmail.com>
+Subject: Re: [PATCH] fs/buffer.c: remove unneeded code
+To:     cgel.zte@gmail.com
+Cc:     viro@zeniv.linux.org.uk, nathan@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Montag, 4. April 2022, 19:14:21 CEST schrieb patchwork-bot+chrome-platform@kernel.org:
-> Hello:
-> 
-> This series was applied to chrome-platform/linux.git (for-next)
-> by Heiko Stuebner <heiko@sntech.de>:
+On Sat, Apr 2, 2022 at 1:47 AM <cgel.zte@gmail.com> wrote:
+>
+> From: Lv Ruyi <lv.ruyi@zte.com.cn>
+>
+> fix clang warning: Value stored to 'err' is never read in line 2944.
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-does someone know what goes on here?
+The change LGTM, but next time please consider putting the exact text
+of the warning observed in the commit message.  For instance, it's not
+clear to me whether this was a compiler warning via -W flag, or a
+DeadStore warning from clang-tidy.
 
-I did apply only patch4 back in feburary and I definitly don't have any
-access to a chrome-platform tree ;-)
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-
-Heiko
-
-> On Mon, 14 Feb 2022 09:19:12 +0100 you wrote:
-> > Hi,
-> > 
-> > DTS patches are independent. Not tested, but I really hope no downstream kernel
-> > depends on pwm node naming... If it does, please change it to compatible. :)
-> > 
-> > Best regards,
-> > Krzysztof
-> > 
-> > [...]
-> 
-> Here is the summary with links:
->   - [1/4] dt-bindings: pwm: google,cros-ec: include generic pwm schema
->     https://git.kernel.org/chrome-platform/c/6b94ee669e8a
->   - [2/4] arm64: dts: mt8183: align Google CROS EC PWM node name with dtschema
->     (no matching commit)
->   - [3/4] arm64: dts: qcom: align Google CROS EC PWM node name with dtschema
->     https://git.kernel.org/chrome-platform/c/1e49defb8636
->   - [4/4] arm64: dts: rk3399: align Google CROS EC PWM node name with dtschema
->     https://git.kernel.org/chrome-platform/c/a0024f55eb5b
-> 
-> You are awesome, thank you!
-> 
+> ---
+>  fs/buffer.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/fs/buffer.c b/fs/buffer.c
+> index bfc566de36e5..b2045871e81c 100644
+> --- a/fs/buffer.c
+> +++ b/fs/buffer.c
+> @@ -2941,7 +2941,6 @@ int block_truncate_page(struct address_space *mapping,
+>                 pos += blocksize;
+>         }
+>
+> -       err = 0;
+>         if (!buffer_mapped(bh)) {
+>                 WARN_ON(bh->b_size != blocksize);
+>                 err = get_block(inode, iblock, bh, 0);
+> --
+> 2.25.1
+>
 
 
-
-
+-- 
+Thanks,
+~Nick Desaulniers

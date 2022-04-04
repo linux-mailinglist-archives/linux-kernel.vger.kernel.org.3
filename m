@@ -2,76 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED9064F1FB9
+	by mail.lfdr.de (Postfix) with ESMTP id 32F714F1FB8
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234865AbiDDXEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 19:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
+        id S229907AbiDDXE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 19:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349652AbiDDXCh (ORCPT
+        with ESMTP id S1349767AbiDDXCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 19:02:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B8C6CA7C
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 15:22:43 -0700 (PDT)
+        Mon, 4 Apr 2022 19:02:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1181CFED
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 15:22:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 164E1B81A55
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 22:22:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58232C2BBE4;
-        Mon,  4 Apr 2022 22:22:39 +0000 (UTC)
-Date:   Mon, 4 Apr 2022 18:22:36 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Ben Young Tae Kim <ytkim@qca.qualcomm.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH] Bluetooth: hci_qca: Use del_timer_sync() before freeing
-Message-ID: <20220404182236.1caa174e@rorschach.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CCA461683
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 22:22:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37DEBC2BBE4;
+        Mon,  4 Apr 2022 22:22:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1649110973;
+        bh=/OEcMz0jdUh8BECJfpc1/XPI/AqNgsW05n8DDoGH5yg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dI9HQbt8uVpF984go+rwahRF0pZzHRQgjlBESFHQpNtEmWt0c2vcDKI0vERleFyXn
+         DSuizM0AeZ065Nw5dOmGssDA9thbr1iW6H3A4/UMgjQ2bP/pqrUDUnN8tcONHvR/Pz
+         jAFGeAzvFqOvfuf9qAvTRzJcqKCrHDHxXzi3TOo4=
+Date:   Mon, 4 Apr 2022 15:22:52 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Aleksandr Nogikh <nogikh@google.com>
+Cc:     kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        dvyukov@google.com, andreyknvl@gmail.com, elver@google.com,
+        glider@google.com, tarasmadan@google.com, bigeasy@linutronix.de
+Subject: Re: [PATCH v3] kcov: don't generate a warning on vm_insert_page()'s
+ failure
+Message-Id: <20220404152252.af0c9c9127455e9cf5e632fb@linux-foundation.org>
+In-Reply-To: <20220401182512.249282-1-nogikh@google.com>
+References: <20220401182512.249282-1-nogikh@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Resending due to cut and paste failure of email address ]
+On Fri,  1 Apr 2022 18:25:12 +0000 Aleksandr Nogikh <nogikh@google.com> wrote:
 
-From: Steven Rostedt (Google) <rostedt@goodmis.org>
+> vm_insert_page()'s failure is not an unexpected condition, so don't do
+> WARN_ONCE() in such a case.
+> 
+> Instead, print a kernel message and just return an error code.
+> 
+> ...
+>
+> --- a/kernel/kcov.c
+> +++ b/kernel/kcov.c
+> @@ -475,8 +475,11 @@ static int kcov_mmap(struct file *filep, struct vm_area_struct *vma)
+>  	vma->vm_flags |= VM_DONTEXPAND;
+>  	for (off = 0; off < size; off += PAGE_SIZE) {
+>  		page = vmalloc_to_page(kcov->area + off);
+> -		if (vm_insert_page(vma, vma->vm_start + off, page))
+> -			WARN_ONCE(1, "vm_insert_page() failed");
+> +		res = vm_insert_page(vma, vma->vm_start + off, page);
+> +		if (res) {
+> +			pr_warn_once("kcov: vm_insert_page() failed\n");
+> +			return res;
+> +		}
+>  	}
+>  	return 0;
+>  exit:
 
-While looking at a crash report on a timer list being corrupted, which
-usually happens when a timer is freed while still active. This is
-commonly triggered by code calling del_timer() instead of
-del_timer_sync() just before freeing.
+Can you explain the rationale here?  If vm_insert_page() failure is an
+expected condition, why warn at all?
 
-One possible culprit is the hci_qca driver, which does exactly that.
+I'm struggling to understand why a condition is worth a printk, but not
+a WARN.
 
-Cc: stable@vger.kernel.org
-Fixes: 0ff252c1976da ("Bluetooth: hciuart: Add support QCA chipset for
-UART") Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index f6e91fb432a3..73a8c72b5aae 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -696,8 +696,8 @@ static int qca_close(struct hci_uart *hu)
- 	skb_queue_purge(&qca->tx_wait_q);
- 	skb_queue_purge(&qca->txq);
- 	skb_queue_purge(&qca->rx_memdump_q);
--	del_timer(&qca->tx_idle_timer);
--	del_timer(&qca->wake_retrans_timer);
-+	del_timer_sync(&qca->tx_idle_timer);
-+	del_timer_sync(&qca->wake_retrans_timer);
- 	destroy_workqueue(qca->workqueue);
- 	qca->hu = NULL;
- 
+Some explanation of what leads to the vm_insert_page() failure would
+have been helpful.
+

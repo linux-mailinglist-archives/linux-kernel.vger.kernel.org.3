@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46D844F0D2C
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 02:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A6D4F0D2B
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 02:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376787AbiDDAMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 20:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
+        id S1376775AbiDDAMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 20:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240577AbiDDAMI (ORCPT
+        with ESMTP id S241240AbiDDAMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 3 Apr 2022 20:12:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FF06416;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E9D13F6B;
         Sun,  3 Apr 2022 17:10:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 952BF60FEC;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2B8460FF5;
         Mon,  4 Apr 2022 00:10:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E48ACC340F3;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F1260C340F2;
         Mon,  4 Apr 2022 00:10:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1649031012;
-        bh=Z9X249NGSLfcozOTrs8dqrPsOAjfMVEpU43qN71Dvow=;
+        bh=MpObaTh3p43VrwtDFP8tfQ8niteSKrlB7UujmJqAZ10=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ZbnrxaoFWg0cPz5MJ9/WcfhMz5XaAaiHmNLnuIE8gUcsla93h1QGi9XAZeVyFMZj+
-         p7g1slYvSvL0psneA2awXtTA9ehkPn1OS9gk1wjTVgIbJIA5JiZsxyR5NF4HINEGMt
-         oAYXF6O5Dog/UC9T1dbBOzEUYSPzvOxwavNa8zM7ob7l/7WqF/WnLKuXxEuV2LCpiI
-         brP5FWUaclQClLeQbqLyY3Dd3FMxdncInkjDELeQj7nN1C4yBV6suX138VReqOnZVz
-         XijO0vg26UXsj28JPWvq3OVOBq23dK6Cnw1T+nfkBfolLGnsZWEZpUv6K7tXMKFI9U
-         Mh4EbqSrkUrXA==
+        b=IwJ731gWL1I6R8EngP+PapPvbKBNs1HV/KESeWUVU3WxIJZKE5oNHJHDLFKJ9NrRE
+         At2Cju6EYqye+t2OwTiKiIq6Z634Qc6HomoJO8gxYi9jJ3MM1mcCbWhHI8srHBiiiN
+         Jg7rgAZmCFVGnmYB+aMv4BFmQMNQAqfOOtY3KFqA/oK57r2nqsDSfYA0YCR5Sq023r
+         5daYGLGhtPa5FI2ReVEAFcgxRevXW8yvWtSZMbCseE+rbB+qXI3ObGm7bpHOu85baz
+         QjB4muSBCQWovmZd0CfeywgfYQ3gaaWgMA9QtOTBDf1Xd59I60Wi/eC5Iak1ayhHKS
+         iWnBagclqrgMA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B80C3E85BCB;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CAEE3E85AE7;
         Mon,  4 Apr 2022 00:10:11 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] bpf: correct the comment for BTF kind bitfield
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix cd_flavor_subdir() of test_progs
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164903101174.15203.3501993959808666885.git-patchwork-notify@kernel.org>
+Message-Id: <164903101181.15203.10673780637284892563.git-patchwork-notify@kernel.org>
 Date:   Mon, 04 Apr 2022 00:10:11 +0000
-References: <20220403115327.205964-1-haiyue.wang@intel.com>
-In-Reply-To: <20220403115327.205964-1-haiyue.wang@intel.com>
-To:     Haiyue Wang <haiyue.wang@intel.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220403135245.1713283-1-ytcoode@gmail.com>
+In-Reply-To: <20220403135245.1713283-1-ytcoode@gmail.com>
+To:     Yuntao Wang <ytcoode@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, shuah@kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,19 +65,21 @@ Hello:
 This patch was applied to bpf/bpf-next.git (master)
 by Andrii Nakryiko <andrii@kernel.org>:
 
-On Sun,  3 Apr 2022 19:53:26 +0800 you wrote:
-> The commit 8fd886911a6a ("bpf: Add BTF_KIND_FLOAT to uapi") has extended
-> the BTF kind bitfield from 4 to 5 bits, correct the comment.
+On Sun,  3 Apr 2022 21:52:45 +0800 you wrote:
+> Currently, when we run test_progs with just executable file name, for
+> example 'PATH=. test_progs-no_alu32', cd_flavor_subdir() will not check
+> if test_progs is running as a flavored test runner and switch into
+> corresponding sub-directory.
 > 
-> Signed-off-by: Haiyue Wang <haiyue.wang@intel.com>
-> ---
-> v2: update the btf.h under tools directory.
+> This will cause test_progs-no_alu32 executed by the
+> 'PATH=. test_progs-no_alu32' command to run in the wrong directory and
+> load the wrong BPF objects.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2] bpf: correct the comment for BTF kind bitfield
-    https://git.kernel.org/bpf/bpf-next/c/66df0fdb5981
+  - [bpf-next] selftests/bpf: Fix cd_flavor_subdir() of test_progs
+    https://git.kernel.org/bpf/bpf-next/c/9bbad6dab827
 
 You are awesome, thank you!
 -- 

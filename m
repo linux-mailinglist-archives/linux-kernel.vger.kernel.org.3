@@ -2,114 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0713D4F0FFF
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 09:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 792704F1004
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 09:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377676AbiDDHbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 03:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
+        id S1377683AbiDDHcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 03:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353761AbiDDHa7 (ORCPT
+        with ESMTP id S1347284AbiDDHc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 03:30:59 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272A61403D;
-        Mon,  4 Apr 2022 00:29:04 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 3A2103201F82;
-        Mon,  4 Apr 2022 03:29:03 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 04 Apr 2022 03:29:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; bh=h/d4R0yINpQf3Q
-        7huFHq02rHS+Y8FhIyy0w0l8JY2tg=; b=wJV1LbKgjGW4zSvwVvZwGV0gBKwOUd
-        4Hvnl6tYTtE+Is19GtTLAvsUywA/wFR9B1Y+31ol00bWBsXwzbHkjmF8txvKOIiE
-        gw7xTEGdigaAIiDVv0sYMubY/ZjgGf8lafmpX1ptAPdL1vRXBLameWiRr9lxuHj6
-        gSK1XZnEfv4oUBX9Z5s2bdtvdfzFF3BdtVOyY18sK2FNu6bmJb7cp2tVymOMsixU
-        k5CX1ePxn7dGLFR6/kef5SEm9Kwefej5JhANQ197nQeFdxfaQl3ynJWqcFNcrdL7
-        wG++dwQ1IrNVUgm2Eix6bAPdugK1cfivrsEHOiiSYC4oHcxHlWM40rSg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=h/d4R0yINpQf3Q7huFHq02rHS+Y8FhIyy0w0l8JY2
-        tg=; b=oe1jeF16vbKRkBCCOQDVCYEOlBHji4TO2zGmJ7fPjjF2APxdZJ1R58kZN
-        2yJ9zTUCtg+1Zpf2k+hIYHPUFT02plhqKo9V19VmP664tH8iq7WpryVc1iWhPXFG
-        bkHU9tyuwNKgUi73EvwtJh9v/nH3u2wkMxi2vCkGY+oOYI+of3BqVJxyat20/uPA
-        0bBP2VpJ03H5bgZHIG/DEteZMp+8wj1aWkLU78/C7faqdLLs7HvUzt4BrdDKA24D
-        5vurEg3nLno+nfFrzzZxE+4NNq52nbQD4xWOcmvgkJ8IP8f0tZZHBwG4Cjo5Iyis
-        e4nyIxyrmDydt7WsS1Mt3lcIV26jA==
-X-ME-Sender: <xms:Pp5KYrG19Pa3WLROU3UvleaPzJ09j3EJKPppJ942WL2jdZg-vnIThw>
-    <xme:Pp5KYoV-kEbfLN0P0zE5u-b633aIEQB2E4Kr1IS-5CM9kSq-hsZm2juNgCc6WbSyw
-    7w2w66sn5CGCTnrKLE>
-X-ME-Received: <xmr:Pp5KYtK0Lc19uYrx_L8QPZOKirM1YYb1aBpQQ-9Q0Uwt9X2HUnR1IkauJRyoI7IEkAA6xrYsTqKgTl4_kOwRq6zAGy2NS21wg6r663E>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudejuddguddvvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepkeeileetveejffegueetjeeigffgfefgkeeuueetfffhheegveefhfek
-    heevkedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgv
-    tghh
-X-ME-Proxy: <xmx:Pp5KYpEVZn9bpmrlC44RNMKXF-f0sjQFXQ6Ie-LeBguJHulmbGPBnQ>
-    <xmx:Pp5KYhU5x9EKg4Z15QyshDkquQajYk7KkYF2CzuOt4l7rtfS8UnOKQ>
-    <xmx:Pp5KYkPIXqWMszVCPKh2C7G-4-Lva-3SAHT5UYEUzH9zHw6ZxYtEXw>
-    <xmx:Pp5KYjLpLv13KlGrIZ94r1bl6gA2EuU_ex19hYrOCTJ-5gBm2YBB9Q>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 4 Apr 2022 03:29:01 -0400 (EDT)
-Date:   Mon, 4 Apr 2022 09:29:00 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Subject: Re: [PATCH] Revert "clk: Drop the rate range on clk_put()"
-Message-ID: <20220404072900.35jca2o26gopi2qb@houat>
-References: <20220403022818.39572-1-sboyd@kernel.org>
+        Mon, 4 Apr 2022 03:32:27 -0400
+Received: from 1.mo552.mail-out.ovh.net (1.mo552.mail-out.ovh.net [178.32.96.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A61377D9
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 00:30:30 -0700 (PDT)
+Received: from mxplan5.mail.ovh.net (unknown [10.109.146.192])
+        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id 13CB5224F4;
+        Mon,  4 Apr 2022 07:30:27 +0000 (UTC)
+Received: from kaod.org (37.59.142.101) by DAG4EX1.mxp5.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 4 Apr
+ 2022 09:30:26 +0200
+Authentication-Results: garm.ovh; auth=pass (GARM-101G0041c6325e6-010e-462f-a9ff-e43c6fe6fcff,
+                    193BEDB8EED17CFBFC1316EE01F9191BF107EB6B) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 82.64.250.170
+Message-ID: <8c88e726-0ddb-e2ba-35df-676cfc3d0475@kaod.org>
+Date:   Mon, 4 Apr 2022 09:30:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220403022818.39572-1-sboyd@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 08/11] spi: aspeed: Calibrate read timings
+Content-Language: en-US
+To:     Pratyush Yadav <p.yadav@ti.com>
+CC:     <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        Mark Brown <broonie@kernel.org>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-aspeed@lists.ozlabs.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>,
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Tao Ren <rentao.bupt@gmail.com>
+References: <20220325100849.2019209-1-clg@kaod.org>
+ <20220325100849.2019209-9-clg@kaod.org>
+ <20220331164115.w5q3wxlmwcg3w4ns@ti.com>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <20220331164115.w5q3wxlmwcg3w4ns@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [37.59.142.101]
+X-ClientProxiedBy: DAG4EX1.mxp5.local (172.16.2.31) To DAG4EX1.mxp5.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: 06f63634-85ae-4b96-a96f-c3ad2ae45158
+X-Ovh-Tracer-Id: 11426476679860161351
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejuddguddvvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgihesthekredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpeeigedvffekgeeftedutddttdevudeihfegudffkeeitdekkeetkefhffelveelleenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddruddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehrvghnthgrohdrsghuphhtsehgmhgrihhlrdgtohhm
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 02, 2022 at 07:28:18PM -0700, Stephen Boyd wrote:
-> This reverts commit 7dabfa2bc4803eed83d6f22bd6f045495f40636b. There are
-> multiple reports that this breaks boot on various systems. The common
-> theme is that orphan clks are having rates set on them when that isn't
-> expected. Let's revert it out for now so that -rc1 boots.
->=20
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Reported-by: Tony Lindgren <tony@atomide.com>
-> Reported-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Link: https://lore.kernel.org/r/366a0232-bb4a-c357-6aa8-636e398e05eb@sams=
-ung.com
-> Cc: Maxime Ripard <maxime@cerno.tech>
-> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+On 3/31/22 18:41, Pratyush Yadav wrote:
+> Hi,
+> 
+> On 25/03/22 11:08AM, Cédric Le Goater wrote:
+>> To accommodate the different response time of SPI transfers on different
+>> boards and different SPI NOR devices, the Aspeed controllers provide a
+>> set of Read Timing Compensation registers to tune the timing delays
+>> depending on the frequency being used. The AST2600 SoC has one of these
+>> registers per device. On the AST2500 and AST2400 SoCs, the timing
+>> register is shared by all devices which is problematic to get good
+>> results other than for one device.
+>>
+>> The algorithm first reads a golden buffer at low speed and then performs
+>> reads with different clocks and delay cycle settings to find a breaking
+>> point. This selects a default good frequency for the CEx control register.
+>> The current settings are a bit optimistic as we pick the first delay giving
+>> good results. A safer approach would be to determine an interval and
+>> choose the middle value.
+>>
+>> Calibration is performed when the direct mapping for reads is created.
+>> Since the underlying spi-nor object needs to be initialized to create
+>> the spi_mem operation for direct mapping, we should be fine. Having a
+>> specific API would clarify the requirements though.
+>>
+>> Cc: Pratyush Yadav <p.yadav@ti.com>
+>> Reviewed-by: Joel Stanley <joel@jms.id.au>
+>> Tested-by: Joel Stanley <joel@jms.id.au>
+>> Tested-by: Tao Ren <rentao.bupt@gmail.com>
+>> Signed-off-by: Cédric Le Goater <clg@kaod.org>
+>> ---
+>>   drivers/spi/spi-aspeed-smc.c | 281 +++++++++++++++++++++++++++++++++++
+>>   1 file changed, 281 insertions(+)
+>>
+> [...]
+>> @@ -517,6 +527,8 @@ static int aspeed_spi_chip_adjust_window(struct aspeed_spi_chip *chip,
+>>   	return 0;
+>>   }
+>>   
+>> +static int aspeed_spi_do_calibration(struct aspeed_spi_chip *chip);
+>> +
+>>   static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)
+>>   {
+>>   	struct aspeed_spi *aspi = spi_controller_get_devdata(desc->mem->spi->master);
+>> @@ -565,6 +577,8 @@ static int aspeed_spi_dirmap_create(struct spi_mem_dirmap_desc *desc)
+>>   	chip->ctl_val[ASPEED_SPI_READ] = ctl_val;
+>>   	writel(chip->ctl_val[ASPEED_SPI_READ], chip->ctl);
+>>   
+>> +	ret = aspeed_spi_do_calibration(chip);
+>> +
+> 
+> I am still not convinced this is a good idea. The API does not say
+> anywhere what dirmap_create must be called after the flash is completely
+> initialized, though that is what is done currently in practice. 
 
-I really like the attention it's getting now that it's broken, we can
-fix a lot of things :)
+Yes because we wouldn't have a correct 'spi_mem_dirmap_info' if it wasn't
+the case. May be change the documentation ?
 
-It doesn't seem to be restricted to orphan clocks though :/
+> I think
+> an explicit API to mark flash as "ready for calibration" would be a
+> better idea.
 
-But obviously,
-Acked-by: Maxime Ripard <maxime@cerno.tech>
+OK. Since the above is a oneliner, it should not be a problem to move
+it under a new handler if needed.
 
-Thanks!
-Maxime
+The dirmap_create() handler expects the spi-mem descriptor and the field
+'desc->info.op_tmpl' to be correctly initialized in order to compute the
+control register value, which is a requirement for dirmap_read(). The
+calibration sequence simply comes after.
+
+AFAICT, there is nothing incorrect today.
+
+> Tudor/Mark/Miquel, what do you think?
+
+
+Thanks,
+
+C.

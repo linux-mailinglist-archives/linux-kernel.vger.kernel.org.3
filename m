@@ -2,96 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0D24F12BB
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 12:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF5C54F12C4
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 12:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356187AbiDDKLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 06:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
+        id S1356273AbiDDKLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 06:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237721AbiDDKLN (ORCPT
+        with ESMTP id S239456AbiDDKLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 06:11:13 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5174526106
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 03:09:16 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id g22so10442421edz.2
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 03:09:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linbit-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ORm7IEBhnE2whN6dFEeIM9GRceZWora10T4zNnlPwD0=;
-        b=dq/Q0yNyookqIqWLL1mbsAP5y+ehqLOz4Xe2poFaTKCEmLA7+boLhXgWXyvaPz+DqW
-         3fSwdLC7oEUlvl3oXPSA+jb65XPElLuE7pmBm6XxxjKy+N5RRD5oVnqzqoncxMHqHuI7
-         ZZkBpt3MNOfoCJhvjmDXsje2NI9bgS0OcgZS76J3pxdgpITw8J+2j7Xt6DkpFoJWX1QB
-         qVtR3k3m/GLi2E454fajVHtGdFC/WFk9SP1wqMpFcWc2USbYyAr49iA5FlBtDAgF+MlQ
-         MHnewTR7gDKn1xpLpJS89eSunFslrIynkb/FvsEGCZv3b4xZMMA7ivYj9QzISp8T5Q3M
-         suIw==
+        Mon, 4 Apr 2022 06:11:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B157255B1
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 03:09:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649066989;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=r2auGM2TB1AM3HEKB6SIDRfPtgarOCPALoc7tLqerik=;
+        b=aAZR2fDs4DMupzKhUJQTDWWy5tRbz0U2eGatHGPDCmKX87tZANY2NBgtotGcwZDR7maWx0
+        1+MQSKqy269aihhNxrE9pDrfzs3Tc6snJpReqzobOqHewzKlgUT4wPMsN74S/GJWDPSJ/3
+        dCdevAoVpX6RCcQueEqQSMRdQid7ADg=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-591-yeyhHIXMOnChypV-kYXF-A-1; Mon, 04 Apr 2022 06:09:48 -0400
+X-MC-Unique: yeyhHIXMOnChypV-kYXF-A-1
+Received: by mail-pl1-f200.google.com with SMTP id w14-20020a1709027b8e00b0015386056d2bso3237756pll.5
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 03:09:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ORm7IEBhnE2whN6dFEeIM9GRceZWora10T4zNnlPwD0=;
-        b=hlaM3Ba6FATuPO23G3c6ITNxmfHxtV6XVGGhRiSuW5ITY7v3kQEWE6iZqzYZXA9VMB
-         u8lf5ekbgTZ1Zd/Z/KbDPnF/u93HUEXNcZDsnY+nxsrI7X8x/yirzqwOiqDMYYnMQRbr
-         UtKhCXPYCHM2CDj1TxvW+x0iSXovc3fWECqTeuMA0RPY8vqsJgqOXog1q6LW0daS9N+t
-         HlWPKoMHxAJQa/vpzdLaJ0vDbT5I9ImIWEoRe9EeJVg6VR5/3GXw/lAYwnSdtdLLXTPK
-         fl+6HiV3g83z1N3xkdWv3TpwehxAO7G1VoqggKcmaSGZ1i9cDzY4N67Fz+RTLAJjIzg4
-         FJFQ==
-X-Gm-Message-State: AOAM533a7+G2Q5FR0eG8pWPZ1AgJD0/c4iyZ+pTx1Nb+Qoxe0X6OOpTw
-        LA8H6wi46kxLL8VEQCGOsuvTAyfuUpX+3kta
-X-Google-Smtp-Source: ABdhPJwX7lzYCamvN0+upaYm7/Lq6+W8sbYskyV64EstO8xeM/cNpVU9qYYWx98JUFHBVHf7wLyjjA==
-X-Received: by 2002:a05:6402:2707:b0:419:5b7d:fd21 with SMTP id y7-20020a056402270700b004195b7dfd21mr32453301edd.51.1649066954876;
-        Mon, 04 Apr 2022 03:09:14 -0700 (PDT)
-Received: from [192.168.178.55] (85-127-190-169.dsl.dynamic.surfer.at. [85.127.190.169])
-        by smtp.gmail.com with ESMTPSA id og13-20020a1709071dcd00b006e7fdf0a687sm282708ejc.76.2022.04.04.03.09.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 03:09:14 -0700 (PDT)
-Message-ID: <3fcfce19-ccb9-28ae-28de-2e62c12bcd23@linbit.com>
-Date:   Mon, 4 Apr 2022 12:09:13 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=r2auGM2TB1AM3HEKB6SIDRfPtgarOCPALoc7tLqerik=;
+        b=V4SpIhDHPSfl7JoTSWl/OOQYWcSl+Bfw77G7u8C/4Qb6v4WvqQ1ptt1Vld6kZeo1JT
+         11nUtFXPJo2FTp4BrWDvzjP4dMsIlbrzShh5C5rGLkYE78/SMAPc1rC1R+SN+erWmFEi
+         afpMoyz8d/OXX1q2VqjVPqN1se/LoMrI9JaGLwxXfSstYTO6lisaH0lX3FKC331KRIXM
+         G9aRF61AGYiKyRBuBpvY4lc+FzzS52Gdd89rwEMH+1fnnmW4sIr4ow4F30oZF0mh06h5
+         kDKi3qFeXAanfW/ux3sVrdUEjaplX8xLLkdG6mi87ehiHvT6gFw4B/IX8F2ba8Rt+PyD
+         SlVg==
+X-Gm-Message-State: AOAM531cH4HnbglKw1zYji90dg7G8EbmFfbJJyVhwJ/eb6ue35apE4u9
+        jkRA29X58N/EUoUUhxVimgOjex3aOQxSVvJquNXoHp0GHSQqV/E4tZRk1fZBwmJQLO9/jCT3Kj+
+        qiCj3SvnCNFgUanpD0maozuKQjCb8woCv/XCsRazL
+X-Received: by 2002:a17:90b:224b:b0:1c6:f027:90b1 with SMTP id hk11-20020a17090b224b00b001c6f02790b1mr25423415pjb.173.1649066986969;
+        Mon, 04 Apr 2022 03:09:46 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy+h90XXAkBxlJPjBFuLx4qxEOIdjAEdrdK7/no9eE8WTxd9QEgUhDWaO3mq+sKV8Jb4/qGr0egPLtc8H2fF9Y=
+X-Received: by 2002:a17:90b:224b:b0:1c6:f027:90b1 with SMTP id
+ hk11-20020a17090b224b00b001c6f02790b1mr25423383pjb.173.1649066986556; Mon, 04
+ Apr 2022 03:09:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] MAINTAINERS: add drbd co-maintainer
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        linux-block@vger.kernel.org
-References: <20220331134236.776524-1-christoph.boehmwalder@linbit.com>
- <8dbb5fc7-7170-d190-ba24-2ef13dc73623@kernel.dk>
-From:   =?UTF-8?Q?Christoph_B=c3=b6hmwalder?= 
-        <christoph.boehmwalder@linbit.com>
-In-Reply-To: <8dbb5fc7-7170-d190-ba24-2ef13dc73623@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <CO6PR03MB6241CB276FCDC7F4CEDC34F6E1E29@CO6PR03MB6241.namprd03.prod.outlook.com>
+In-Reply-To: <CO6PR03MB6241CB276FCDC7F4CEDC34F6E1E29@CO6PR03MB6241.namprd03.prod.outlook.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Mon, 4 Apr 2022 12:09:35 +0200
+Message-ID: <CAO-hwJKTi6A=3nw6yFbvASgSqH_UwED7MEabiKKEnbFUB55UXg@mail.gmail.com>
+Subject: Re: [PATCH] HID: multitouch: add quirks to enable Lenovo X12 trackpoint
+To:     Tao Jin <tao-j@outlook.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 31.03.22 um 15:48 schrieb Jens Axboe:
-> On 3/31/22 7:42 AM, Christoph Böhmwalder wrote:
->> In light of the recent controversy surrounding the (lack of)
->> maintenance of the in-tree DRBD driver, we have decided to add myself
->> as co-maintainer. This allows us to better distribute the workload and
->> reduce the chance of patches getting lost.
->>
->> I will be keeping an eye on the mailing list in order to ensure that all
->> patches get the attention they need.
-> 
-> Can you go over the ones I already listed? That'd be a good start.
-> 
+Hi,
 
-We are going through that list (and others) internally now and reviewing 
-them. I will prepare a pull request.
+On Sun, Apr 3, 2022 at 6:58 PM Tao Jin <tao-j@outlook.com> wrote:
+>
+> This applies the similar quirks used by previous generation devices
+> such as X1 tablet for X12 tablet, so that the trackpoint and buttons
+> can work.
+>
+> This patch was applied and tested working on 5.17.1 .
+>
+> Signed-off-by: Tao Jin <tao-j@outlook.com>
 
-   Christoph
+Thanks a lot for the patch.
+
+I have added the CC: stable@vger.kernel.org tag and pushed the patch
+to for-5.18/upstream-fixes
+
+Cheers,
+Benjamin
+
+> ---
+>  drivers/hid/hid-ids.h        | 1 +
+>  drivers/hid/hid-multitouch.c | 6 ++++++
+>  2 files changed, 7 insertions(+)
+>
+> diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+> index 78bd3dd..aca7909 100644
+> --- a/drivers/hid/hid-ids.h
+> +++ b/drivers/hid/hid-ids.h
+> @@ -760,6 +760,7 @@
+>  #define USB_DEVICE_ID_LENOVO_X1_COVER  0x6085
+>  #define USB_DEVICE_ID_LENOVO_X1_TAB    0x60a3
+>  #define USB_DEVICE_ID_LENOVO_X1_TAB3   0x60b5
+> +#define USB_DEVICE_ID_LENOVO_X12_TAB   0x60fe
+>  #define USB_DEVICE_ID_LENOVO_OPTICAL_USB_MOUSE_600E    0x600e
+>  #define USB_DEVICE_ID_LENOVO_PIXART_USB_MOUSE_608D     0x608d
+>  #define USB_DEVICE_ID_LENOVO_PIXART_USB_MOUSE_6019     0x6019
+> diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
+> index 99eabfb..0dece60 100644
+> --- a/drivers/hid/hid-multitouch.c
+> +++ b/drivers/hid/hid-multitouch.c
+> @@ -2034,6 +2034,12 @@ static const struct hid_device_id mt_devices[] = {
+>                            USB_VENDOR_ID_LENOVO,
+>                            USB_DEVICE_ID_LENOVO_X1_TAB3) },
+>
+> +       /* Lenovo X12 TAB Gen 1 */
+> +       { .driver_data = MT_CLS_WIN_8_FORCE_MULTI_INPUT,
+> +               HID_DEVICE(BUS_USB, HID_GROUP_MULTITOUCH_WIN_8,
+> +                          USB_VENDOR_ID_LENOVO,
+> +                          USB_DEVICE_ID_LENOVO_X12_TAB) },
+> +
+>         /* MosArt panels */
+>         { .driver_data = MT_CLS_CONFIDENCE_MINUS_ONE,
+>                 MT_USB_DEVICE(USB_VENDOR_ID_ASUS,
+> --
+> 2.35.1
+>
+

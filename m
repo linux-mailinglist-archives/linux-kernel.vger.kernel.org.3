@@ -2,103 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FFE24F1CDD
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 245B24F1BF7
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380867AbiDDV3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
+        id S1382152AbiDDVZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380041AbiDDSpq (ORCPT
+        with ESMTP id S1380049AbiDDSqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 14:45:46 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50C8B854;
-        Mon,  4 Apr 2022 11:43:49 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id BD12822247;
-        Mon,  4 Apr 2022 20:43:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1649097827;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8T4Bmbwsv7HCxQnqjaUsg1Pjf07n8QjfD124DBCrwKE=;
-        b=IurJXUG25bhPilYCCBfmeUPhauzDFfAmbDGTvGpbzV87Pfvm9OMFw56sP1L/G50l0nFZAG
-        Rpgaewev/u9rnaleVFZCUFYqIQyB/jcgmXcVc0M71yBnJfxZO8q3ZMY734vwg/DZNkHr5O
-        oLlj2w9j2sEZSQO/rz9/Wq4geqtZJms=
-From:   Michael Walle <michael@walle.cc>
-To:     Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, David Laight <David.Laight@ACULAB.COM>,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH v3 2/2] hwmon: intel-m10-bmc-hwmon: use devm_hwmon_sanitize_name()
-Date:   Mon,  4 Apr 2022 20:43:40 +0200
-Message-Id: <20220404184340.3973329-3-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220404184340.3973329-1-michael@walle.cc>
-References: <20220404184340.3973329-1-michael@walle.cc>
+        Mon, 4 Apr 2022 14:46:15 -0400
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413411C117;
+        Mon,  4 Apr 2022 11:44:18 -0700 (PDT)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-df02f7e2c9so11733934fac.10;
+        Mon, 04 Apr 2022 11:44:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+DVZa9rgC7XCqVmwQpif8MjcfgqohlHJqzZVbT4NdPA=;
+        b=6JF+JH6wd0/7ywTfr5v3ryTISkOXdlpaCcfqq+v+gSqf6hBI+8vk8ngOOlYaDhAbb4
+         WAy3YTXsYLkb1vr+wbPrDfOsGJfX3f+9W9bHS9uLBVL5MZY00DQ9MZCrEU7Ls0vJ4m0z
+         72hpsvSSTG+VINgD/AfqXSudkPVbKrNNyb5Gmz8/SnMgmR7yyL6xzU3T8eZC1oqqavmB
+         ZPWoP/q3+pS1OtwM0s71ApPn5GFqc2Mbytkvjze2+3hPAhLDiGmSwm3ezOUseinYdxRR
+         hDE7GZh5u59AgOui+SX1NM9BhXol1Wx/eP0/kHfd6EZJg8sI3hyUfmNV7Lw6uqrXD+DP
+         1U2g==
+X-Gm-Message-State: AOAM530hZi/cwbYGnskuyb3YyqLikeh4mmXx3JWiXYwGQOiUrpvfSLnd
+        3xNLPVVPw3NXJbBciNqLfA==
+X-Google-Smtp-Source: ABdhPJxQfrcUZKKhBzVlnqfwkA2XRgYhsqJUmARYpgm43Nh3Hvc35k/tV+fKp7H5hXzW0gHNQ64G6g==
+X-Received: by 2002:a05:6870:c353:b0:de:d908:3e6d with SMTP id e19-20020a056870c35300b000ded9083e6dmr323176oak.190.1649097857541;
+        Mon, 04 Apr 2022 11:44:17 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t3-20020a05680800c300b002f935a7daa9sm4505802oic.19.2022.04.04.11.44.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 11:44:17 -0700 (PDT)
+Received: (nullmailer pid 1703057 invoked by uid 1000);
+        Mon, 04 Apr 2022 18:44:16 -0000
+Date:   Mon, 4 Apr 2022 13:44:16 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: PCI: uniphier: Convert
+ uniphier-pcie.txt to json-schema
+Message-ID: <Yks8gNN0wp7xJDST@robh.at.kernel.org>
+References: <1648617814-9217-1-git-send-email-hayashi.kunihiko@socionext.com>
+ <1648617814-9217-2-git-send-email-hayashi.kunihiko@socionext.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1648617814-9217-2-git-send-email-hayashi.kunihiko@socionext.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of open-coding the bad characters replacement in the hwmon name,
-use the new devm_hwmon_sanitize_name().
+On Wed, 30 Mar 2022 14:23:33 +0900, Kunihiko Hayashi wrote:
+> Convert the file into a JSON description at the yaml format.
+> 
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> ---
+>  .../bindings/pci/socionext,uniphier-pcie.yaml | 96 +++++++++++++++++++
+>  .../devicetree/bindings/pci/uniphier-pcie.txt | 82 ----------------
+>  MAINTAINERS                                   |  2 +-
+>  3 files changed, 97 insertions(+), 83 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/pci/socionext,uniphier-pcie.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/pci/uniphier-pcie.txt
+> 
 
-Signed-off-by: Michael Walle <michael@walle.cc>
-Acked-by: Xu Yilun <yilun.xu@intel.com>
----
- drivers/hwmon/intel-m10-bmc-hwmon.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
-
-diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
-index 7a08e4c44a4b..29370108fa1c 100644
---- a/drivers/hwmon/intel-m10-bmc-hwmon.c
-+++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
-@@ -515,7 +515,6 @@ static int m10bmc_hwmon_probe(struct platform_device *pdev)
- 	struct intel_m10bmc *m10bmc = dev_get_drvdata(pdev->dev.parent);
- 	struct device *hwmon_dev, *dev = &pdev->dev;
- 	struct m10bmc_hwmon *hw;
--	int i;
- 
- 	hw = devm_kzalloc(dev, sizeof(*hw), GFP_KERNEL);
- 	if (!hw)
-@@ -528,14 +527,10 @@ static int m10bmc_hwmon_probe(struct platform_device *pdev)
- 	hw->chip.info = hw->bdata->hinfo;
- 	hw->chip.ops = &m10bmc_hwmon_ops;
- 
--	hw->hw_name = devm_kstrdup(dev, id->name, GFP_KERNEL);
-+	hw->hw_name = devm_hwmon_sanitize_name(dev, id->name);
- 	if (!hw->hw_name)
- 		return -ENOMEM;
- 
--	for (i = 0; hw->hw_name[i]; i++)
--		if (hwmon_is_bad_char(hw->hw_name[i]))
--			hw->hw_name[i] = '_';
--
- 	hwmon_dev = devm_hwmon_device_register_with_info(dev, hw->hw_name,
- 							 hw, &hw->chip, NULL);
- 	return PTR_ERR_OR_ZERO(hwmon_dev);
--- 
-2.30.2
-
+Applied, thanks!

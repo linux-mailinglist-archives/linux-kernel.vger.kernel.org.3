@@ -2,51 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32F714F1FB8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A14934F1FBB
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbiDDXE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 19:04:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
+        id S233658AbiDDXEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 19:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349767AbiDDXCi (ORCPT
+        with ESMTP id S234810AbiDDXEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 19:02:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1181CFED
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 15:22:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CCA461683
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 22:22:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37DEBC2BBE4;
-        Mon,  4 Apr 2022 22:22:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1649110973;
-        bh=/OEcMz0jdUh8BECJfpc1/XPI/AqNgsW05n8DDoGH5yg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dI9HQbt8uVpF984go+rwahRF0pZzHRQgjlBESFHQpNtEmWt0c2vcDKI0vERleFyXn
-         DSuizM0AeZ065Nw5dOmGssDA9thbr1iW6H3A4/UMgjQ2bP/pqrUDUnN8tcONHvR/Pz
-         jAFGeAzvFqOvfuf9qAvTRzJcqKCrHDHxXzi3TOo4=
-Date:   Mon, 4 Apr 2022 15:22:52 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Aleksandr Nogikh <nogikh@google.com>
-Cc:     kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        dvyukov@google.com, andreyknvl@gmail.com, elver@google.com,
-        glider@google.com, tarasmadan@google.com, bigeasy@linutronix.de
-Subject: Re: [PATCH v3] kcov: don't generate a warning on vm_insert_page()'s
- failure
-Message-Id: <20220404152252.af0c9c9127455e9cf5e632fb@linux-foundation.org>
-In-Reply-To: <20220401182512.249282-1-nogikh@google.com>
-References: <20220401182512.249282-1-nogikh@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Mon, 4 Apr 2022 19:04:16 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1B231370
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 15:25:22 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id w7so10282641pfu.11
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 15:25:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=gk7YExpjD17yvmNb1YnkwGsNAfvivwtdanWcpr+eU8Y=;
+        b=b4kGzhYdOOBuJA+ydGgqp1rlD/EHbApMFe6NjPa2BcD1b0AjYblro2TW6cHiJwXv1j
+         cIHnWLN+29p+1lVvytOTxUDuVRYGoz8mHzrqWSCMqfa4dNIB3FqIE70xRvHTuuJ9+Prg
+         IMeR3KfPWdMGhvmBnaqnoUY8yhUtgAAzPiOJQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=gk7YExpjD17yvmNb1YnkwGsNAfvivwtdanWcpr+eU8Y=;
+        b=JBKwUMvVbCG5OJjtFbI4i7Cz4otaDGxptYc/Qx7SFg5Hu+0W1tAJC+ORWeBhWWDIDY
+         K+2AqnneqgKn0lN9z82AvkORG6BBWT3aXA22AZp4nVLM5tYAK2Lu428/lRymHYhzcJcs
+         XY9/Xeedqziql3uGRQEklTI542LwFCYtKVEbD1E44oYg4a2WeYjncKDUR0qgdnbSXGWI
+         OGoSOIN7Zj+Fo+iLFmTc5njPCKA45nQb//OZ6phV/ewpF3ea9izMYNvIFLXOBkJ8gmb/
+         AUPC3NTHd7KHAnOkZONFrX3dPU2Q6uCvObm9MVQNHiTpIxLb/B1RA50Kq3QNRfEQ9xcs
+         9TaQ==
+X-Gm-Message-State: AOAM532c3xSzzPFy9pv2i5Cni1Bqd+Dof9TX43hDnA/dcn8M7eir/xm7
+        0rIOz5ufscrp0X4ca8wveBr1hw==
+X-Google-Smtp-Source: ABdhPJxRptxXnfZI/YYw0ccjtfFSL+7+tWY8HL5HqZoAtkFBK4XdlYUkLt5bpzJtf2Kd+v7xUr+vhw==
+X-Received: by 2002:a62:7b43:0:b0:4fa:6936:6986 with SMTP id w64-20020a627b43000000b004fa69366986mr318150pfc.13.1649111121830;
+        Mon, 04 Apr 2022 15:25:21 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q9-20020a056a0002a900b004fde4893cf8sm8710271pfs.200.2022.04.04.15.25.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 15:25:21 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 15:25:19 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Heimes <christian@python.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Morris <jmorris@namei.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Steve Dower <steve.dower@python.org>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [GIT PULL] Add trusted_for(2) (was O_MAYEXEC)
+Message-ID: <202204041451.CC4F6BF@keescook>
+References: <20220321161557.495388-1-mic@digikod.net>
+ <202204041130.F649632@keescook>
+ <CAHk-=wgoC76v-4s0xVr1Xvnx-8xZ8M+LWgyq5qGLA5UBimEXtQ@mail.gmail.com>
+ <816667d8-2a6c-6334-94a4-6127699d4144@digikod.net>
+ <CAHk-=wjPuRi5uYs9SuQ2Xn+8+RnhoKgjPEwNm42+AGKDrjTU5g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wjPuRi5uYs9SuQ2Xn+8+RnhoKgjPEwNm42+AGKDrjTU5g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,38 +92,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  1 Apr 2022 18:25:12 +0000 Aleksandr Nogikh <nogikh@google.com> wrote:
-
-> vm_insert_page()'s failure is not an unexpected condition, so don't do
-> WARN_ONCE() in such a case.
+On Mon, Apr 04, 2022 at 02:28:19PM -0700, Linus Torvalds wrote:
+> Now, what I *think* you mean is
 > 
-> Instead, print a kernel message and just return an error code.
+>  (1) user-space executable loaders want to be able to test the *same*
+> policy as the kernel does for execve()
+
+Right. The script interpreter wants to ask "if this file were actually
+an ELF going through execve(), would the kernel allow it?"
+
+>  (2) access(path, EXECVE_OK) will do the same permission checks as
+> "execve()" would do for that path
+
+Maybe. I defer to Mickaël here, but my instinct is to avoid creating an
+API that can be accidentally misused. I'd like this to be fd-only based,
+since that removes path name races. (e.g. trusted_for() required an fd.)
+
+>  (3) if you already have the fd open, use "faccess(fd, NULL,
+> F_OK_TO_EXECUTE, AT_EMPTY_PATH)"
+
+Yes, specifically faccessat2(). (And continuing the race thought above,
+yes, there could still be races if the content of the file could be
+changed, but that case is less problematic under real-world conditions.)
+
+>  (4) maybe we want to add a flag for the "euid vs real uid", and that
+> would be in the "flags" field, since that changes the actual *lookup*
+> semantics
 > 
-> ...
->
-> --- a/kernel/kcov.c
-> +++ b/kernel/kcov.c
-> @@ -475,8 +475,11 @@ static int kcov_mmap(struct file *filep, struct vm_area_struct *vma)
->  	vma->vm_flags |= VM_DONTEXPAND;
->  	for (off = 0; off < size; off += PAGE_SIZE) {
->  		page = vmalloc_to_page(kcov->area + off);
-> -		if (vm_insert_page(vma, vma->vm_start + off, page))
-> -			WARN_ONCE(1, "vm_insert_page() failed");
-> +		res = vm_insert_page(vma, vma->vm_start + off, page);
-> +		if (res) {
-> +			pr_warn_once("kcov: vm_insert_page() failed\n");
-> +			return res;
-> +		}
->  	}
->  	return 0;
->  exit:
+> Note that that (4) is something that some normal user space has wanted
+> in the past too (GNU libcs has a "eaccess()" thing for "effective uid
+> access").
 
-Can you explain the rationale here?  If vm_insert_page() failure is an
-expected condition, why warn at all?
+I think this already exists as AT_EACCESS? It was added with
+faccessat2() itself, if I'm reading the history correctly.
 
-I'm struggling to understand why a condition is worth a printk, but not
-a WARN.
+And I just need to say that the thought of setuid script interpreters
+still makes me sad. :)
 
-Some explanation of what leads to the vm_insert_page() failure would
-have been helpful.
+>  - I really want the exact semantics very clearly defined. I think
+> it's ok to say "exact same security check as for 'execve()'", but even
+> then we need to have that discussion about
+> 
+>     (a) "what about suid bits that user space cannot react to"
 
+What do you mean here? Do you mean setid bits on the file itself?
+
+>     (b) that whole "effective vs real" discussion
+
+I think this is handled with AT_EACCESS?
+
+-- 
+Kees Cook

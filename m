@@ -2,140 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9418A4F1E26
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C364F1E33
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359152AbiDDWGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
+        id S1380405AbiDDWDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 18:03:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379495AbiDDRQU (ORCPT
+        with ESMTP id S1379494AbiDDRQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 13:16:20 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A024E13F77
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 10:14:24 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id o5-20020a17090ad20500b001ca8a1dc47aso3995366pju.1
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 10:14:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=f7CZTXIAAoKnaeTzl2cBEFXf6R/B35g02/GjhJjJB74=;
-        b=eBZWszMfrYAS1A0VrXpWNQWYDljGRJ+69p04Uob5nwN5mkb+RRRbhGQtuSACDJkmvd
-         JzPqoBdgGu43CiEvMKn6MoJcRQCsl7Owmu3MNRPIYKMky87OkSaEID6ZI70cN+xFHfx5
-         ZxAL+FJLp9ve4zSfapVXowsj+6Ldxi2KIv9zTO/Uf8ZtGfgDzG/o8faLsk22qy3LIdgI
-         2FPf//bfqpfCAuXBJpK7xeekXuFiEuJ24MyqK4BXHra2TdclI296/kmZ9f5cwYj4K+7B
-         g9g8MWWBtQB00iQfM4jblH3lazcS3nWsLZzRPoAvtYHlPcGNcHEHkXEhancJVBtgTKuU
-         /Smg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=f7CZTXIAAoKnaeTzl2cBEFXf6R/B35g02/GjhJjJB74=;
-        b=lAZSfNGND8uo4mQ+v7Zwv3RT46LTTxHcA1GJChC3kNsQ74Hbi9Ro0F/iKY7OeY0KcB
-         OoJ9WLqUA92P2XN0owP9IFb770qJ5ndUYVo0RRiYDWC5fAfFB1B0wi3HibyK/aHrzqFN
-         wHyzQ9lsyxX7b1Rt4jqyI19FkXs69SbKEuMtMBL8Gtor4wnWMclCHMbvAKI8yxdOfwYs
-         gdELMKETrdqrLjQNfXFg0OtIKUVzucZs7pUUfBrY8qAm++42/Hc7d1Tok7DH7x4PUq7x
-         +gsYEUptu2SXJ4OnOhb/ZJT0YUImcdgmhpaxpOvQ8TxhOFrCKPEm+NFqw/D3AWWQfhgC
-         Lqsw==
-X-Gm-Message-State: AOAM532LCfBUf12h8i6dTibEU/aj/fv1STKtuVP3j4Ws9fjgv1NTSqJv
-        ICzepemHbmZDcc0Yje04loUixA==
-X-Google-Smtp-Source: ABdhPJzu6dtSeMV3rRz4ufVwNX4oy3lmvg6rRBEM4WSW1CYCt5tL39H9tp7VwplJzx+C40xvVWwSwg==
-X-Received: by 2002:a17:90b:713:b0:1c6:c8f5:6138 with SMTP id s19-20020a17090b071300b001c6c8f56138mr207055pjz.138.1649092463964;
-        Mon, 04 Apr 2022 10:14:23 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id o11-20020a17090aac0b00b001cab1712455sm50391pjq.40.2022.04.04.10.14.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 10:14:23 -0700 (PDT)
-Date:   Mon, 4 Apr 2022 17:14:19 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>
-Subject: Re: [PATCH 6/8] KVM: SVM: Re-inject INTn instead of retrying the
- insn on "failure"
-Message-ID: <Yksna20cSyO8MvOq@google.com>
-References: <20220402010903.727604-1-seanjc@google.com>
- <20220402010903.727604-7-seanjc@google.com>
+        Mon, 4 Apr 2022 13:16:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1056914019;
+        Mon,  4 Apr 2022 10:14:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CF5C60DDD;
+        Mon,  4 Apr 2022 17:14:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E3919C3410F;
+        Mon,  4 Apr 2022 17:14:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649092462;
+        bh=RvGj2Q18LJfQT9XlPp3IkvaWjSaTqyvITK0kRJD8u9Q=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=UXPYPaMHgSRwaVFvCkHj2vb20E9SLLRr7qYSmd1t2Pp64ld5EJLNs6jp6f6syeEJ3
+         O2tjaIF+Jles/YBIhjLBLdjEHvDwg4bv9Q/1++Ro5JHPWrdlOA3yx6U+Mta/6YtM5t
+         oA8Fs2sopE/LDLB0XfZUsrXovAv9VDP334L6x0PtooO3iE42BCnKpFrlvwj5g5ZLSa
+         OVQXxQTJwDHuME0PD3rRb8Kt27OOvFoVEjchpbQQOuUJU8obz4vaJ8dFFKckzVjDuL
+         bBLZZ2Rq89wtyoMtfekJ6zngldJQVsYtOmg1jjOuhlzaaPMny1ZgKR0kmYxUFYbhTT
+         ZjYkpjbHMRh7g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C68F5E85AE7;
+        Mon,  4 Apr 2022 17:14:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220402010903.727604-7-seanjc@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 0/4] mfd/pwm: dt-bindings: google,cros-ec: include generic pwm
+ schema
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <164909246180.14329.3397709419938843373.git-patchwork-notify@kernel.org>
+Date:   Mon, 04 Apr 2022 17:14:21 +0000
+References: <20220214081916.162014-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220214081916.162014-1-krzysztof.kozlowski@canonical.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     lee.jones@linaro.org, robh+dt@kernel.org, bleung@chromium.org,
+        groeck@chromium.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, matthias.bgg@gmail.com,
+        agross@kernel.org, bjorn.andersson@linaro.org, heiko@sntech.de,
+        dianders@chromium.org, devicetree@vger.kernel.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 02, 2022, Sean Christopherson wrote:
-> Re-inject INTn software interrupts instead of retrying the instruction if
-> the CPU encountered an intercepted exception while vectoring the INTn,
-> e.g. if KVM intercepted a #PF when utilizing shadow paging.  Retrying the
-> instruction is architecturally wrong e.g. will result in a spurious #DB
-> if there's a code breakpoint on the INT3/O, and lack of re-injection also
-> breaks nested virtualization, e.g. if L1 injects a software interrupt and
-> vectoring the injected interrupt encounters an exception that is
-> intercepted by L0 but not L1.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/svm/svm.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index ecc828d6921e..00b1399681d1 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -3425,14 +3425,24 @@ static void svm_inject_nmi(struct kvm_vcpu *vcpu)
->  static void svm_inject_irq(struct kvm_vcpu *vcpu)
->  {
->  	struct vcpu_svm *svm = to_svm(vcpu);
-> +	u32 type;
->  
->  	WARN_ON(!gif_set(svm));
->  
-> +	if (vcpu->arch.interrupt.soft) {
-> +		if (svm_update_soft_interrupt_rip(vcpu))
-> +			return;
-> +
-> +		type = SVM_EVTINJ_TYPE_SOFT;
-> +	} else {
-> +		type = SVM_EVTINJ_TYPE_INTR;
-> +	}
-> +
->  	trace_kvm_inj_virq(vcpu->arch.interrupt.nr);
->  	++vcpu->stat.irq_injections;
->  
->  	svm->vmcb->control.event_inj = vcpu->arch.interrupt.nr |
-> -		SVM_EVTINJ_VALID | SVM_EVTINJ_TYPE_INTR;
-> +				       SVM_EVTINJ_VALID | type;
->  }
->  
->  void svm_complete_interrupt_delivery(struct kvm_vcpu *vcpu, int delivery_mode,
-> @@ -3787,9 +3797,13 @@ static void svm_complete_interrupts(struct kvm_vcpu *vcpu)
->  	case SVM_EXITINTINFO_TYPE_INTR:
->  		kvm_queue_interrupt(vcpu, vector, false);
->  		break;
-> +	case SVM_EXITINTINFO_TYPE_SOFT:
-> +		kvm_queue_interrupt(vcpu, vector, true);
+Hello:
 
-I believe this patch is wrong, it needs to also tweak the soft_int_injected logic
-to look for SVM_EXITINTINFO_TYPE_EXEPT _or_ SVM_EXITINTINFO_TYPE_SOFT, e.g. if the
-SOFT-type interrupt doesn't complete due to a non-legacy-exception exit, e.g. #NPF.
+This series was applied to chrome-platform/linux.git (for-next)
+by Heiko Stuebner <heiko@sntech.de>:
 
-> +		break;
->  	default:
->  		break;
->  	}
-> +
->  }
+On Mon, 14 Feb 2022 09:19:12 +0100 you wrote:
+> Hi,
+> 
+> DTS patches are independent. Not tested, but I really hope no downstream kernel
+> depends on pwm node naming... If it does, please change it to compatible. :)
+> 
+> Best regards,
+> Krzysztof
+> 
+> [...]
+
+Here is the summary with links:
+  - [1/4] dt-bindings: pwm: google,cros-ec: include generic pwm schema
+    https://git.kernel.org/chrome-platform/c/6b94ee669e8a
+  - [2/4] arm64: dts: mt8183: align Google CROS EC PWM node name with dtschema
+    (no matching commit)
+  - [3/4] arm64: dts: qcom: align Google CROS EC PWM node name with dtschema
+    https://git.kernel.org/chrome-platform/c/1e49defb8636
+  - [4/4] arm64: dts: rk3399: align Google CROS EC PWM node name with dtschema
+    https://git.kernel.org/chrome-platform/c/a0024f55eb5b
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

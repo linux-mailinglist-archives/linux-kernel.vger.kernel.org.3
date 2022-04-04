@@ -2,78 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 229524F1440
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 14:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 250354F1445
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 14:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234821AbiDDMD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 08:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56984 "EHLO
+        id S235739AbiDDMEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 08:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234569AbiDDMDy (ORCPT
+        with ESMTP id S235737AbiDDME2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 08:03:54 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67D93526B
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 05:01:58 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2eb3db5b172so50099777b3.6
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 05:01:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qiD2DiGzP9w26sYqe+Qe9/hDnbh5oNwQt5iQwmO4JSw=;
-        b=f0Q/WVKIXSIDfrftxANHLkiSt8cLGcIxC2CKNOOHR1qG5zVRc6lm6AKe9sz79acMOl
-         o2eMNhB+4khUHjghxea1XC3y2YB/ZKAHo4/aJv2HQQ9m83CByvZyEP3G64oxzlG0vO8F
-         8/8Ni0EIF6svCJYvrABjqP3Mq8lJdQZyK7M9voCo8A2QF5/wy7cXX6n689kSTuEHQdsy
-         uWkaq+Px33gmCtC/pZB7GE7Qf+EoxpvqsZfCo1fEZiBVFvFKk/CQ76EHwjgohkYr2HIs
-         df/HzJZ3KqkcSOVJP+cMXxOA9vRoUvH+IybMVW0g+ol8aymnpDd2O6/4MFMaaEG5q/rP
-         gSSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qiD2DiGzP9w26sYqe+Qe9/hDnbh5oNwQt5iQwmO4JSw=;
-        b=cUVnXdbfuzes5MAT9iYwmj8+qecxX5FAdgjov+EW/cb4yD1RjXX1X3cyuXN/ADl6BJ
-         i42T720l+kmO6pJ3vTT0Nq/ScryT2fEPs6Ru8sftziMizzpxhj4OLzileIT6rKyGl1pv
-         JOhHjyDOJn43JoYjFzXNbtWp2BHApf2Cwe8MxzXdzg0FTK2+AxVdO752t9SdvBS6xMJz
-         nn3fS9jozcRVclsxVqkZ/KBt0Pw7WqYROtdlEyjcuh9x9rYeIht7ZdFtuy6bSz4RNXPx
-         dOsIbue/v0+brierku/z3Xm8nMg4LnRLm+46qTris9Z1KlyedCCCKR4hoDKDQ8BfdbXU
-         EE7w==
-X-Gm-Message-State: AOAM532dN8TnW+a8IcMzQ2J5VqsevUwlJrnxRUdHQOoqQZ1jCeJK0FuX
-        EVmr+GxeL0u3Q3HRkqI+tDAVujbLwgkJ2dHfWiQghw==
-X-Google-Smtp-Source: ABdhPJzlpsN0VsnXmKmAJkc1075L7eWicj13X0fkmppuQ3CoZUy2le5DGuweiF9leR/SLew6G9M1rG+BHnj3ZDFxaTU=
-X-Received: by 2002:a81:1196:0:b0:2eb:897a:7b5 with SMTP id
- 144-20020a811196000000b002eb897a07b5mr868948ywr.31.1649073716376; Mon, 04 Apr
- 2022 05:01:56 -0700 (PDT)
+        Mon, 4 Apr 2022 08:04:28 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4626D3DA55
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 05:02:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649073752; x=1680609752;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wyMYjzXV6+0+TVWShJ+QuSmrkdWB2HoclgKdHoctNEk=;
+  b=NqHQZqvr+4eNQDTwy8wVOZ4cFEJ/sMqbQa2Cew9HtbuxY51Y9O6/lO2G
+   o0rspg/gkEnrCVeCGZ8MvaNbbS0O1kBuxwrtqqCFwfeSGcKeuVNWvGWtQ
+   GdODfnphhr+1hUiwwJ02d5rCICOpzpXqJ92lXPzdtPL7iaNcm4NpbluAK
+   4YOg4pnssCafeygTOHXcuNk+wj1/yqfNtyYp109HxbWVqq28qaoxt2vqt
+   cgmwLbvB+rY85qXNLq2pm/ssmnyVkeYH9cQThguFrSllWbj2MdYicImfv
+   29+Ry1TDMk4rFPAAp17OXgppwP3w43tU5GGTuagLsad0kRUEW2lbiBI9T
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="248010567"
+X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
+   d="scan'208";a="248010567"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 05:02:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
+   d="scan'208";a="587546022"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 04 Apr 2022 05:02:14 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbLPQ-00021p-QQ;
+        Mon, 04 Apr 2022 12:02:12 +0000
+Date:   Mon, 4 Apr 2022 20:02:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [asahilinux:nvme-v2 5/6] drivers/soc/apple/rtkit.c:591:21: warning:
+ no previous prototype for function 'apple_rtkit_init'
+Message-ID: <202204041952.mbL4QEVS-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220331065640.5777-1-songmuchun@bytedance.com>
- <20220331065640.5777-2-songmuchun@bytedance.com> <dd980687-a1ef-f4b5-bb29-da14f89c087e@arm.com>
-In-Reply-To: <dd980687-a1ef-f4b5-bb29-da14f89c087e@arm.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Mon, 4 Apr 2022 20:01:20 +0800
-Message-ID: <CAMZfGtX5NXudeAsYKU8mDtPn0+bw_3FhCsAW0PMBTqTTkp-fQQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] arm64: mm: hugetlb: Enable HUGETLB_PAGE_FREE_VMEMMAP
- for arm64
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        "Bodeddula, Balasubramaniam" <bodeddub@amazon.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        David Rientjes <rientjes@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>, james.morse@arm.com,
-        Barry Song <21cnbao@gmail.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Fam Zheng <fam.zheng@bytedance.com>,
-        Muchun Song <smuchun@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,36 +63,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 4, 2022 at 5:25 PM Anshuman Khandual
-<anshuman.khandual@arm.com> wrote:
->
-> Hello Muchun,
->
-> On 3/31/22 12:26, Muchun Song wrote:
-> > The feature of minimizing overhead of struct page associated with each
-> > HugeTLB page aims to free its vmemmap pages (used as struct page) to
-> > save memory, where is ~14GB/16GB per 1TB HugeTLB pages (2MB/1GB type).
->
-> Enabling this feature saves us around 1.4/1.6 % memory but looking from
-> other way around, unavailability of vmemmap backing pages (~1.4GB) when
-> freeing up a corresponding HugeTLB page, could prevent ~1TB memory from
-> being used as normal page form (requiring their own struct pages), thus
-> forcing the HugeTLB page to remain as such ? Is not this problematic ?
->
-> These additional 1TB memory in normal pages, from a HugeTLB dissolution
-> could have eased the system's memory pressure without this feature being
-> enabled.
+tree:   https://github.com/AsahiLinux/linux nvme-v2
+head:   76835054c23e3e3505f5967d8580d86618aca6ec
+commit: 689dd69e59bb68b19066104c34670d5dc272c946 [5/6] soc: apple: Add RTKit IPC library
+config: arm64-randconfig-r005-20220404 (https://download.01.org/0day-ci/archive/20220404/202204041952.mbL4QEVS-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/AsahiLinux/linux/commit/689dd69e59bb68b19066104c34670d5dc272c946
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux nvme-v2
+        git checkout 689dd69e59bb68b19066104c34670d5dc272c946
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/soc/apple/
 
-You are right. If the system is already under heavy memory pressure, it could
-prevent the user from freeing HugeTLB pages to the buddy allocator. If the
-HugeTLB page are allocated from non-movable zone, this scenario may be
-not problematic since once a HugeTLB page is freed, then the system will
-have memory to be allocated to be used as vmemmap pages, subsequent
-freeing of HugeTLB pages may be getting easier.  However, if the HUgeTLB
-pages are allocated from the movable zone, then the thing becomes terrible,
-which is documented in Documentation/admin-guide/mm/memory-hotplug.rst.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-So there is a cmdline "hugetlb_free_vmemmap" to control if enabling this
-feature.  The user should enable/disable this depending on their workload.
+All warnings (new ones prefixed by >>):
 
-Thanks.
+>> drivers/soc/apple/rtkit.c:591:21: warning: no previous prototype for function 'apple_rtkit_init' [-Wmissing-prototypes]
+   struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
+                       ^
+   drivers/soc/apple/rtkit.c:591:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
+   ^
+   static 
+>> drivers/soc/apple/rtkit.c:805:6: warning: no previous prototype for function 'apple_rtkit_free' [-Wmissing-prototypes]
+   void apple_rtkit_free(struct apple_rtkit *rtk)
+        ^
+   drivers/soc/apple/rtkit.c:805:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void apple_rtkit_free(struct apple_rtkit *rtk)
+   ^
+   static 
+   2 warnings generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for VIDEO_V4L2_SUBDEV_API
+   Depends on MEDIA_SUPPORT && VIDEO_DEV && MEDIA_CONTROLLER
+   Selected by
+   - VIDEO_IMX_MIPI_CSIS && MEDIA_SUPPORT && MEDIA_PLATFORM_SUPPORT && MEDIA_PLATFORM_DRIVERS && (ARCH_MXC || COMPILE_TEST
+
+
+vim +/apple_rtkit_init +591 drivers/soc/apple/rtkit.c
+
+   590	
+ > 591	struct apple_rtkit *apple_rtkit_init(struct device *dev, void *cookie,
+   592					     const char *mbox_name, int mbox_idx,
+   593					     const struct apple_rtkit_ops *ops)
+   594	{
+   595		struct apple_rtkit *rtk;
+   596		int ret;
+   597	
+   598		if (!ops)
+   599			return ERR_PTR(-EINVAL);
+   600	
+   601		rtk = kzalloc(sizeof(*rtk), GFP_KERNEL);
+   602		if (!rtk)
+   603			return ERR_PTR(-ENOMEM);
+   604	
+   605		rtk->dev = dev;
+   606		rtk->cookie = cookie;
+   607		rtk->ops = ops;
+   608	
+   609		init_completion(&rtk->epmap_completion);
+   610		init_completion(&rtk->reinit_completion);
+   611		init_completion(&rtk->iop_pwr_ack_completion);
+   612		init_completion(&rtk->ap_pwr_ack_completion);
+   613	
+   614		bitmap_zero(rtk->endpoints, APPLE_RTKIT_MAX_ENDPOINTS);
+   615		set_bit(APPLE_RTKIT_EP_MGMT, rtk->endpoints);
+   616	
+   617		rtk->mbox_name = mbox_name;
+   618		rtk->mbox_idx = mbox_idx;
+   619		rtk->mbox_cl.dev = dev;
+   620		rtk->mbox_cl.tx_block = true;
+   621		rtk->mbox_cl.knows_txdone = false;
+   622		rtk->mbox_cl.rx_callback = &apple_rtkit_rx_callback;
+   623	
+   624		ret = apple_rtkit_request_mbox_chan(rtk);
+   625		if (ret)
+   626			return (struct apple_rtkit *)ERR_PTR(ret);
+   627	
+   628		return rtk;
+   629	}
+   630	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

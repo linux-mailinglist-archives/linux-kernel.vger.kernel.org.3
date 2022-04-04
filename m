@@ -2,179 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA474F1DA5
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F3144F1C13
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386965AbiDDVjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
+        id S1381651AbiDDVXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379767AbiDDSDV (ORCPT
+        with ESMTP id S1379825AbiDDSLb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 14:03:21 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B3937BCA;
-        Mon,  4 Apr 2022 11:01:25 -0700 (PDT)
-Date:   Mon, 04 Apr 2022 18:01:22 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649095283;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wX8w8FV4yP7/hACZ/Dkubahfg7SLkix1Wjx+nmRLJUU=;
-        b=LaMADLt/l4qyMI5pC7WKkpqmut6W0mjP5aAozvaZhOgI6Nb/vWEGSLXaX9Ou/ra0VhFFD5
-        JcMdWTtMeyf2Lyoky7F4TMn1QugrvFlxiGVBqj5aLwzGW0ucMdHpCnJzEJI5EaLAf/EkN6
-        Wao2LLBBsVg5AvvSTZf2hqhVVGJJ7DlIvC6EBq1K61sW09GxnGC7X2dAqOWffGw+jR64WA
-        N8Uw3Pl0BgGhaaH3rn54j7vdfztDomPx+mtDVybJrFcU+LgiJn9505PaA3iyySQx4zmPzu
-        G46aDWd2gIJSLx6KPfqbYtg/QkB8PUio8NezQznRxfWtSeiKVW1iprtJ/c34pA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649095283;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wX8w8FV4yP7/hACZ/Dkubahfg7SLkix1Wjx+nmRLJUU=;
-        b=E+K+bx2uZut2Ke6OKYm5DsmLWzcL8IvtlAaOAcxsvb+LSi85vslkt2jx2Y6XN3OowESBuJ
-        vQ6dK5r6QwggCMDQ==
-From:   "tip-bot2 for Dave Hansen" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/mm/tlb: Revert retpoline avoidance approach
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@suse.de>, Nadav Amit <namit@vmware.com>,
-        <stable@vger.kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <164874672286.389.7021457716635788197.tip-bot2@tip-bot2>
-References: <164874672286.389.7021457716635788197.tip-bot2@tip-bot2>
+        Mon, 4 Apr 2022 14:11:31 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613993A1BB
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 11:09:34 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id by7so14106292ljb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 11:09:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Uz4lPE2rdo2tRM1taU9hjtHkKN6cEscjMgtJGGpCZK0=;
+        b=AKh+Xx8Jri22FLpKBD4E3RoftVzjoBrDVxvOksJJs1GiZpvdGJdEX2vPXJvyGWVcDC
+         Tsws7vziNMKhEc1zFl/txeNmPo/Wx7XJU0EJZq+3mQ6ntGZLXmpSi8w6nhlFDGUBzWmX
+         Yq+MB4VarfRzItJWG71o6LZ/2bUZ5IMRLDkDDxXbx8gBkWa58++9ibIS0lfl8QXbFYIc
+         e6nDCpIHZIZkDQigSykJm8MIxAStv7nYv6rs85ZIHdGzECyEPFVpFeNZslA0YGNsgm/J
+         vb7bEkgtvx02wVWUHzX1C4z68lOmkxFEyA4y4BJ3/zRjlRU1yBfRbZ5ORhOrFwx5FwrM
+         BsDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Uz4lPE2rdo2tRM1taU9hjtHkKN6cEscjMgtJGGpCZK0=;
+        b=bc4GBUiNShsejMNaP/uJXtehM69fw0cRqMkq1dEwkJ14Z9jrk6S1ln/kKj/Ytrk3E6
+         ae2lfaAIlNxoPdDdBXqBMXMHSpDYsOlVSFHP5TASyzvvOmaJCORQk9VfybEjIpfwSGqn
+         Ba2HzaMP9hKWTFC8mMAmDPRc/4mUUg1YsmFz3VqkKI8OUEorCi06ScDG98tAOfRggtli
+         uo0uq1BlBPmsXPNUXxARH/fh4po888ooQoDMot+JIjMvqgC/cKG4+SRFSkpWnLjDAszj
+         LNviWeflSaKAD/cJwjut0feeNwUnbWD6TNY+Z9BTQbnPD1PWKzGTgMf23B3Umlvu7lqH
+         Sleg==
+X-Gm-Message-State: AOAM533kRuDyM042CYznj740177FGkwU3AgLSaR7hZXgGeOoUEWkA9KS
+        S+9tEpTvKEbM4UZOVsuQjSUqVFLSQR7e/UoyKiFFQkcJWRmStg==
+X-Google-Smtp-Source: ABdhPJyEamkccvVwsWuiMfR8yOe39RymGH9/TLP+zLi/6TZpWH3im6mHt1c9jyr67LnqZRKEZnZwcP1sY9HjUQIPna4=
+X-Received: by 2002:a05:651c:1588:b0:249:b90d:253c with SMTP id
+ h8-20020a05651c158800b00249b90d253cmr525887ljq.408.1649095772447; Mon, 04 Apr
+ 2022 11:09:32 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <164909528267.389.5092308187702493426.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220318000055.79280-1-colin.i.king@gmail.com>
+In-Reply-To: <20220318000055.79280-1-colin.i.king@gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 4 Apr 2022 11:09:21 -0700
+Message-ID: <CAKwvOd=GRBTs43JcwMBS=aEYtOXLP+SVEj3d89LjcfJJZLOZ5Q@mail.gmail.com>
+Subject: Re: [PATCH] amd64-agp: remove redundant assignment to variable i
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     David Airlie <airlied@linux.ie>, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On Thu, Mar 17, 2022 at 5:01 PM Colin Ian King <colin.i.king@gmail.com> wrote:
+>
+> Variable i is being assigned a value that is never read, it is being
+> re-assigned later in a for-loop. The assignment is redundant and can
+> be removed.
+>
+> Cleans up clang scan build warning:
+> drivers/char/agp/amd64-agp.c:336:2: warning: Value stored to 'i' is
+> never read [deadcode.DeadStores]
+>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Commit-ID:     d39268ad24c0fd0665d0c5cf55a7c1a0ebf94766
-Gitweb:        https://git.kernel.org/tip/d39268ad24c0fd0665d0c5cf55a7c1a0ebf94766
-Author:        Dave Hansen <dave.hansen@linux.intel.com>
-AuthorDate:    Fri, 18 Mar 2022 06:52:59 -07:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Mon, 04 Apr 2022 19:41:36 +02:00
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-x86/mm/tlb: Revert retpoline avoidance approach
+> ---
+>  drivers/char/agp/amd64-agp.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/char/agp/amd64-agp.c b/drivers/char/agp/amd64-agp.c
+> index dc78a4fb879e..5f64991c73bf 100644
+> --- a/drivers/char/agp/amd64-agp.c
+> +++ b/drivers/char/agp/amd64-agp.c
+> @@ -333,7 +333,6 @@ static int cache_nbs(struct pci_dev *pdev, u32 cap_ptr)
+>         if (!amd_nb_has_feature(AMD_NB_GART))
+>                 return -ENODEV;
+>
+> -       i = 0;
+>         for (i = 0; i < amd_nb_num(); i++) {
+>                 struct pci_dev *dev = node_to_amd_nb(i)->misc;
+>                 if (fix_northbridge(dev, pdev, cap_ptr) < 0) {
+> --
+> 2.35.1
+>
+>
 
-0day reported a regression on a microbenchmark which is intended to
-stress the TLB flushing path:
 
-	https://lore.kernel.org/all/20220317090415.GE735@xsang-OptiPlex-9020/
-
-It pointed at a commit from Nadav which intended to remove retpoline
-overhead in the TLB flushing path by taking the 'cond'-ition in
-on_each_cpu_cond_mask(), pre-calculating it, and incorporating it into
-'cpumask'.  That allowed the code to use a bunch of earlier direct
-calls instead of later indirect calls that need a retpoline.
-
-But, in practice, threads can go idle (and into lazy TLB mode where
-they don't need to flush their TLB) between the early and late calls.
-It works in this direction and not in the other because TLB-flushing
-threads tend to hold mmap_lock for write.  Contention on that lock
-causes threads to _go_ idle right in this early/late window.
-
-There was not any performance data in the original commit specific
-to the retpoline overhead.  I did a few tests on a system with
-retpolines:
-
-	https://lore.kernel.org/all/dd8be93c-ded6-b962-50d4-96b1c3afb2b7@intel.com/
-
-which showed a possible small win.  But, that small win pales in
-comparison with the bigger loss induced on non-retpoline systems.
-
-Revert the patch that removed the retpolines.  This was not a
-clean revert, but it was self-contained enough not to be too painful.
-
-Fixes: 6035152d8eeb ("x86/mm/tlb: Open-code on_each_cpu_cond_mask() for tlb_is_not_lazy()")
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Nadav Amit <namit@vmware.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lkml.kernel.org/r/164874672286.389.7021457716635788197.tip-bot2@tip-bot2
----
- arch/x86/mm/tlb.c | 37 +++++--------------------------------
- 1 file changed, 5 insertions(+), 32 deletions(-)
-
-diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-index 6eb4d91..d400b6d 100644
---- a/arch/x86/mm/tlb.c
-+++ b/arch/x86/mm/tlb.c
-@@ -855,13 +855,11 @@ done:
- 			nr_invalidate);
- }
- 
--static bool tlb_is_not_lazy(int cpu)
-+static bool tlb_is_not_lazy(int cpu, void *data)
- {
- 	return !per_cpu(cpu_tlbstate_shared.is_lazy, cpu);
- }
- 
--static DEFINE_PER_CPU(cpumask_t, flush_tlb_mask);
--
- DEFINE_PER_CPU_SHARED_ALIGNED(struct tlb_state_shared, cpu_tlbstate_shared);
- EXPORT_PER_CPU_SYMBOL(cpu_tlbstate_shared);
- 
-@@ -890,36 +888,11 @@ STATIC_NOPV void native_flush_tlb_multi(const struct cpumask *cpumask,
- 	 * up on the new contents of what used to be page tables, while
- 	 * doing a speculative memory access.
- 	 */
--	if (info->freed_tables) {
-+	if (info->freed_tables)
- 		on_each_cpu_mask(cpumask, flush_tlb_func, (void *)info, true);
--	} else {
--		/*
--		 * Although we could have used on_each_cpu_cond_mask(),
--		 * open-coding it has performance advantages, as it eliminates
--		 * the need for indirect calls or retpolines. In addition, it
--		 * allows to use a designated cpumask for evaluating the
--		 * condition, instead of allocating one.
--		 *
--		 * This code works under the assumption that there are no nested
--		 * TLB flushes, an assumption that is already made in
--		 * flush_tlb_mm_range().
--		 *
--		 * cond_cpumask is logically a stack-local variable, but it is
--		 * more efficient to have it off the stack and not to allocate
--		 * it on demand. Preemption is disabled and this code is
--		 * non-reentrant.
--		 */
--		struct cpumask *cond_cpumask = this_cpu_ptr(&flush_tlb_mask);
--		int cpu;
--
--		cpumask_clear(cond_cpumask);
--
--		for_each_cpu(cpu, cpumask) {
--			if (tlb_is_not_lazy(cpu))
--				__cpumask_set_cpu(cpu, cond_cpumask);
--		}
--		on_each_cpu_mask(cond_cpumask, flush_tlb_func, (void *)info, true);
--	}
-+	else
-+		on_each_cpu_cond_mask(tlb_is_not_lazy, flush_tlb_func,
-+				(void *)info, 1, cpumask);
- }
- 
- void flush_tlb_multi(const struct cpumask *cpumask,
+-- 
+Thanks,
+~Nick Desaulniers

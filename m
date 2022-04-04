@@ -2,97 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B254F1DA2
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6820C4F1CB0
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383078AbiDDVco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53642 "EHLO
+        id S1379371AbiDDV2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379990AbiDDSee (ORCPT
+        with ESMTP id S1379991AbiDDSfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 14:34:34 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0AAD2E0AA
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 11:32:37 -0700 (PDT)
-Date:   Mon, 4 Apr 2022 11:32:30 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1649097155;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5IsweEeUbsElKZD0uikDx4gCNoAFrfsB9CrofDq2qRE=;
-        b=jvMkrX8vqP7/6XUII3CE5QBflW54+SsisBbJkPe+I9km44PwKBiuijeRIo4Jn8SGEEZ+at
-        A4iMa9I9uzAuG1/K5DG1GB/g53VoZdXsvlgEdTLthIje6DkcfKwXM+3jyGQbyIT7drTQyg
-        bTMXZXLyMwuc9NcwlLIpbjYJKVDTYzg=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Dave Chinner <david@fromorbit.com>, MM <linux-mm@kvack.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        Yu Zhao <yuzhao@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC] mm/vmscan: add periodic slab shrinker
-Message-ID: <Yks5vmptVnVFopnr@carbon.dhcp.thefacebook.com>
-References: <20220402072103.5140-1-hdanton@sina.com>
- <20220403005618.5263-1-hdanton@sina.com>
- <20220404051442.5419-1-hdanton@sina.com>
+        Mon, 4 Apr 2022 14:35:14 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7498B2E0AA;
+        Mon,  4 Apr 2022 11:33:17 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id nt14-20020a17090b248e00b001ca601046a4so171417pjb.0;
+        Mon, 04 Apr 2022 11:33:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=VX36O/eZvePOVXNXSBF6wdkEoqZXyVTUQTus33r+ZLM=;
+        b=Jhi/m3HKdiGTMNmkPf5/IrS8tqIn7BB3PQz4dCz8wsIKHrcI9VonrT+jshZjvR1D2Y
+         gZQIvWaiPpb0+mDRElRwfXipdX2RNh+Jb/3ctTU4NdbRWYZI7cGDUSfaA/USDvArb4ig
+         +xUxqpbegNbNMvXnHaXweqbb6lqWE4t2JOK8VNGBALOD30nLnDdfsggKqKKzKRScLH1q
+         U61hO7U2Z13BDegN5qKzi2eNImhkSOJEg0ghkPe0Eq0KB37+cFM8xT+R42EuZV9Hl56d
+         mCoQO+x0AmxMO58teRYmy8LIg9qOM4MbboSebePuOJuSi+M1iGUqeETmyBFMNAOfQm7I
+         gORw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=VX36O/eZvePOVXNXSBF6wdkEoqZXyVTUQTus33r+ZLM=;
+        b=kEK2JAPNokFrDWMG+cAjTIUNajiwcz68/kow+O9bygDkYg5O50y4DkhddADyic0rL/
+         /FqdNnMN0JavuaE6/7TOT826vMwYR2KfQyOAiiC5oYhrj37hrD13LGNdKqYd9q/l9PaV
+         iW6ap3rKhHrM+F5Tb/9ORTI5lWkLUpp5tHKau6YKCY9loV3rTe03rIDu3Z/Flwm1WwC3
+         0PGWDzHFipPucHOU1TI9TYbs0bOwU2pKMF+WmpkGhQJgQa2qwgpcSrHYs6xrLp591xK/
+         UW1GU8298uiIF2Qb4uZhqVCDDmthto6V9m7siBimusgingV4dnnSsGvDAzo/BTHPgC+7
+         0/Sg==
+X-Gm-Message-State: AOAM5312S0fheYwp7O7Uh9VtIR2FIf3WZ8yBy8nBzBqNYCijXBZ1uUkA
+        AJ+kxW5KVr9PYLqM/S0sqgU=
+X-Google-Smtp-Source: ABdhPJyjzPk/Y9vMf+i8TBGcz920f/PKNrlqh4kdhA3wSJBIHQ0Ba38XDLX3ubdJQZyY3wZP6/PISg==
+X-Received: by 2002:a17:90b:3b8c:b0:1c6:eb72:24b4 with SMTP id pc12-20020a17090b3b8c00b001c6eb7224b4mr510870pjb.171.1649097196928;
+        Mon, 04 Apr 2022 11:33:16 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id b7-20020a056a00114700b004f7be3231d6sm13069546pfm.7.2022.04.04.11.33.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 11:33:16 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     bcm-kernel-feedback-list@broadcom.com,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: bcm-cygnus: Update spi clock properties
+Date:   Mon,  4 Apr 2022 11:33:14 -0700
+Message-Id: <20220404183314.2316058-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220311084114.16408-1-singh.kuldeep87k@gmail.com>
+References: <20220311084114.16408-1-singh.kuldeep87k@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220404051442.5419-1-hdanton@sina.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 01:14:42PM +0800, Hillf Danton wrote:
-> On Mon, 4 Apr 2022 11:09:48 +1000 Dave Chinner wrote:
-> > On Sun, Apr 03, 2022 at 08:56:18AM +0800, Hillf Danton wrote:
-> > > On Sat, 2 Apr 2022 10:54:36 -0700 Roman Gushchin wrote:
-> > > > Hello Hillf!
-> > > > 
-> > > Hello Roman,
-> > > 
-> > > > Thank you for sharing it, really interesting! I=E2=80=99m actually working o=
-> > > > n the same problem.=20
-> > > 
-> > > Good to know you have some interest in it.
-> > > Feel free to let me know you would like to take it over to avoid
-> > > repeated works on both sides.
-
-Only if you've something more exciting to work on. It seems like at this
-point it's not really clear what exactly we need to do and how to approach it,
-so I don't think we're doing any repeated work. The more
-ideas/opinions/suggestions, then better.
-
-> > > 
-> > > > 
-> > > > No code to share yet, but here are some of my thoughts:
-> > > > 1) If there is a =E2=80=9Cnatural=E2=80=9D memory pressure, no additional sl=
-> > > > ab scanning is needed.
-> > > 
-> > > Agree - the periodic shrinker can be canceled once kswapd wakes up.
-> > 
-> > I think we should be waking up per-node kswapd to do the periodic
-> > shrinking, not adding yet another way of executing (thousands of)
-> > shrinkers (across hundreds of nodes) from a single threaded context.
+On Fri, 11 Mar 2022 14:11:14 +0530, Kuldeep Singh <singh.kuldeep87k@gmail.com> wrote:
+> PL022 binding require two clocks to be defined but broadcom cygnus
+> platform doesn't comply with bindings and define only one clock.
 > 
-> Kswapd is majorly responsible for keeping the high water mark, a
-> different target from cold slab objects - I am inclined to staying a
-> safe distance from any code churn in that area.
+> Update spi clocks and clocks-names property by adding appropriate clock
+> reference to make it compliant with bindings.
+> 
+> CC: Florian Fainelli <f.fainelli@gmail.com>
+> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+> ---
 
-The problem is that kswapd is also doing slab shrinking and we can't
-simple ignore it, so it has to interact in some way.
-
-Thanks!
+Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
+--
+Florian

@@ -2,150 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE574F1C08
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 507E54F1D84
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:41:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379954AbiDDVVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
+        id S1382614AbiDDVbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379517AbiDDRVQ (ORCPT
+        with ESMTP id S1379525AbiDDRWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 13:21:16 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72B6E098
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 10:19:19 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id y6so8713492plg.2
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 10:19:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uhZvWBIYSPxrHtL/UXP4sOCKqMqAgTQ5cHbzprIzUlI=;
-        b=rzW4aaUe8wJHBTW/ExLvJddgYRg1t4YhtSpQVQScLfUwXMUjqtSxLLNi52Rpn5/B9e
-         4fm33kwEjNNC8PObxWVWNVFke/MshRfAUZolEP0oeRGIcWs1cMZ8dqnCMHUOTSSXF2R+
-         Nxc7bj+ITBZAcBUCg6yEKcw6zz2obIN/RDEpBS+4YLPJ4AjvRWmQYm9ga69a1RiY4EDX
-         oGzty137ABa8Ztyvwr1RlrkdXRpVcepr1eO0rJxfGr76K3XVs6VQ3L6PIza3Wro/7erv
-         oZSbbPlhDhdZagCPj0TuB4euNN0h0a1bfMWvh80WoOYfDkjShCEByhv1m6HFJ/OrDhaM
-         E/NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uhZvWBIYSPxrHtL/UXP4sOCKqMqAgTQ5cHbzprIzUlI=;
-        b=pM66YnWM8SHnkgDiqATaY1RBFeNN2dFvjerTM2zOmrj2Rq5MkMu7IhigSXLm4ntf2A
-         GBvmUJCG0kTTMevSZ9mcRhY5VhnN9dKMYU/le2QisR0ZsrdYCXVrp/WA8PEX5lfttq9S
-         wQrPQK0SJJS3VTcN/Y8TJ/SnWL8p8j39qYjKMfYph/qZXtW13nQc5HztlAh6vRhiR0ZC
-         KNpG9KAdTDUBAMZBTOJ7rP/B9V/bzycf42IjucncNu0MK8ZVENoeLG4QSR/p0+Y4KWVp
-         K3MADm967jX8ozeJdk4UHJnrX0b/9N3LRnBAj0/iJSbtGXZ0nT/yF2u5fTZRtJJ8tMMO
-         4hWA==
-X-Gm-Message-State: AOAM532+9NfYQnfN3HStcPM7gM5/JCjhdxN/3YFJpD53WhHwFrinBkUn
-        i4cZYDYyWXPyXtQLKUI3hwc0XV9sA0w4WcRG8doBcA==
-X-Google-Smtp-Source: ABdhPJz50EolXnmloOFRdflV7luhmQEbXQ6TLx1sRiAzjczB5dC9hpz0y8SCGJwdMY8U2thvWleWIxvnBRXFYbPjKbA=
-X-Received: by 2002:a17:903:2351:b0:156:a562:b3f8 with SMTP id
- c17-20020a170903235100b00156a562b3f8mr670651plh.81.1649092759112; Mon, 04 Apr
- 2022 10:19:19 -0700 (PDT)
+        Mon, 4 Apr 2022 13:22:55 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BDDE1E3E9;
+        Mon,  4 Apr 2022 10:20:58 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 8AE2C22246;
+        Mon,  4 Apr 2022 19:20:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1649092856;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fiuc10BmQ8FCYumv3/mTGwuX/cjcFoEPXhSP8kK6PCg=;
+        b=WVy6B8bxp6qvBT9VjDxW2ZwquzLSrYjAOaw3xmKLS/jVoUOlRTtrgZFLao794Zl5r5UdDt
+        CfbCFnR/Y5tmllb2MyALaL24UBOwDe+7ueZemyqdS/yD6uyd3a/g56rwQ0mZ5BNoMsDXZ1
+        GyzpR8lu64sWFOFj+d/FMrx8z1WzLts=
 MIME-Version: 1.0
-References: <20220331084151.2600229-1-yosryahmed@google.com>
- <874k3d6vuq.fsf@vajain21.in.ibm.com> <CAJD7tka1UstKYBVrie-_1CgvtaLtVD1uwgzfk5SifxW4FQbOVw@mail.gmail.com>
- <871qyd7bif.fsf@vajain21.in.ibm.com>
-In-Reply-To: <871qyd7bif.fsf@vajain21.in.ibm.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Mon, 4 Apr 2022 10:18:42 -0700
-Message-ID: <CAJD7tka01bKnxQuizxTN7MtHj_hYu+dSztC2fY0jUPCcvk-9JA@mail.gmail.com>
-Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
-To:     Vaibhav Jain <vaibhav@linux.ibm.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, Jonathan Corbet <corbet@lwn.net>,
-        Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 04 Apr 2022 19:20:56 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com
+Subject: Re: [PATCH net-next v3 0/4] net: lan966x: Add support for FDMA
+In-Reply-To: <20220404130655.4004204-1-horatiu.vultur@microchip.com>
+References: <20220404130655.4004204-1-horatiu.vultur@microchip.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <57b1a196d25cf5d989611fea4f590333@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 3, 2022 at 8:50 PM Vaibhav Jain <vaibhav@linux.ibm.com> wrote:
->
->
-> Apologies for the delayed response,
->
-> Yosry Ahmed <yosryahmed@google.com> writes:
->
-> > On Fri, Apr 1, 2022 at 1:39 AM Vaibhav Jain <vaibhav@linux.ibm.com> wrote:
-> >>
-> >>
-> >> Yosry Ahmed <yosryahmed@google.com> writes:
-> >> > From: Shakeel Butt <shakeelb@google.com>
-> >> >
-> >> > Introduce an memcg interface to trigger memory reclaim on a memory cgroup.
-> >> <snip>
-> >>
-> >> > +
-> >> > +     while (nr_reclaimed < nr_to_reclaim) {
-> >> > +             unsigned long reclaimed;
-> >> > +
-> >> > +             if (signal_pending(current))
-> >> > +                     break;
-> >> > +
-> >> > +             reclaimed = try_to_free_mem_cgroup_pages(memcg,
-> >> > +                                             nr_to_reclaim - nr_reclaimed,
-> >> > +                                             GFP_KERNEL, true);
-> >> > +
-> >> > +             if (!reclaimed && !nr_retries--)
-> >> > +                     break;
-> >> > +
-> >> > +             nr_reclaimed += reclaimed;
-> >>
-> >> I think there should be a cond_resched() in this loop before
-> >> try_to_free_mem_cgroup_pages() to have better chances of reclaim
-> >> succeding early.
-> >>
-> > Thanks for taking the time to look at this!
-> >
-> > I believe this loop is modeled after the loop in memory_high_write()
-> > for the memory.high interface. Is there a reason why it should be
-> > needed here but not there?
-> >
->
-> memory_high_write() calls drain_all_stock() atleast once before calling
-> try_to_free_mem_cgroup_pages(). This would drain all percpu stocks
-> for the given memcg and its descendents, giving a high chance
-> try_to_free_mem_cgroup_pages() to succeed quickly. Such a functionality
-> is missing from this patch.
->
-> Adding a cond_resched() would atleast give chance to other processess
-> within the memcg to run and make forward progress thereby making more
-> pages available for reclaim.
->
-> Suggestion is partly based on __perform_reclaim() issues a cond_resche()
-> as it may get called repeatedly during direct reclaim path.
->
-As Michal pointed out, there is already a call to cond_resched() in
-shrink_node_memcgs().
->
-> >> <snip>
-> >>
-> >> --
-> >> Cheers
-> >> ~ Vaibhav
-> >
->
-> --
-> Cheers
-> ~ Vaibhav
+Am 2022-04-04 15:06, schrieb Horatiu Vultur:
+> Currently when injecting or extracting a frame from CPU, the frame
+> is given to the HW each word at a time. There is another way to
+> inject/extract frames from CPU using FDMA(Frame Direct Memory Access).
+> In this way the entire frame is given to the HW. This improves both
+> RX and TX bitrate.
+> 
+> v2->v3:
+> - move skb_tx_timestamp before the IFH is inserted, because in case of 
+> PHY
+>   timestamping, the PHY should not see the IFH.
+> - use lower/upper_32_bits()
+> - reimplement the RX path in case of memory pressure.
+> - use devm_request_irq instead of devm_request_threaded_irq
+> - add various checks for return values.
+> 
+> v1->v2:
+> - fix typo in commit message in last patch
+> - remove first patch as the changes are already there
+> - make sure that there is space in skb to put the FCS
+> - move skb_tx_timestamp closer to the handover of the frame to the HW
+> 
+> Horatiu Vultur (4):
+>   net: lan966x: Add registers that are used for FDMA.
+>   net: lan966x: Expose functions that are needed by FDMA
+>   net: lan966x: Add FDMA functionality
+>   net: lan966x: Update FDMA to change MTU.
+> 
+>  .../net/ethernet/microchip/lan966x/Makefile   |   2 +-
+>  .../ethernet/microchip/lan966x/lan966x_fdma.c | 783 ++++++++++++++++++
+>  .../ethernet/microchip/lan966x/lan966x_main.c |  49 +-
+>  .../ethernet/microchip/lan966x/lan966x_main.h | 121 +++
+>  .../ethernet/microchip/lan966x/lan966x_port.c |   3 +
+>  .../ethernet/microchip/lan966x/lan966x_regs.h | 106 +++
+>  6 files changed, 1052 insertions(+), 12 deletions(-)
+>  create mode 100644 
+> drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+
+For this series:
+Tested-by: Michael Walle <michael@walle.cc> # on kontron-kswitch-d10
+
+-michael

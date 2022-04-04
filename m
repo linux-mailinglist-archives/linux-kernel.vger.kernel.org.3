@@ -2,162 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0913B4F1FDF
+	by mail.lfdr.de (Postfix) with ESMTP id 79E744F1FE0
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbiDDXIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 19:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
+        id S240150AbiDDXKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 19:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236768AbiDDXIU (ORCPT
+        with ESMTP id S242627AbiDDXJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 19:08:20 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CBF55740
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 15:37:18 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id x4so13128706iop.7
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 15:37:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=8RkDTj+tVN/WuUnfdI9iKChyCQMganXuCI7qsE2bz9c=;
-        b=fl075IfJf1jFfYAqt/jIkBDHdk2V+ognrp14WSdgOENUk0zwZkldU73FG4kjEG89nQ
-         AC2rm+mA8uK7mf+rlpMteKCHFgukgBdjtbeeGfDHXFWJhphX1/uWlqMSjzSwaDkucHs1
-         8MV8GXFEyLyB4ljN2AUCdsxJgPXhamItAKzxs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=8RkDTj+tVN/WuUnfdI9iKChyCQMganXuCI7qsE2bz9c=;
-        b=qaC0tXM4smMpGgEG5DYmGpmjJI/6Z+sQcf6CUrfOEePSUjRk9LStnSy71XkKG3Jjoh
-         DnvmIa26Zm67rtr2n3Yp+09XgrKigZqJodqUTHZP0UkvLU4AFfC6bJNlXMojJM/vnEV1
-         EA7ExhBQsSa6JleGtW9cQNh2TlYynatCY92U7j3krykXgDWtj5GlSl/WuAFKJXPBfwmr
-         C5El27rAiHJ3V/SrEby6oevjYBkCmNDMCOyfm2OdtLJT8JxswgzlGLH6m5B4duoO92B3
-         9r1RSOWsQ57S+1pDz6qWorFVUq1+Rpa29yMAetAgj6amlsh2RA21YpN7IkpPvmmFrmlq
-         V4gA==
-X-Gm-Message-State: AOAM531/SlGCvP5NqN9kQdr+WFzCuoYE38WSlm+XwG67ER2KEwk4lOP+
-        hbTAuk7mIsBfV2x23K6oMStR+A==
-X-Google-Smtp-Source: ABdhPJxq1S3ZTjvUQA+jVJjFM/ASzkVMPIFn4zHDxx7UmXfInOKsSjD8OUTK2yJCqULxYcOkISjnkA==
-X-Received: by 2002:a05:6602:122a:b0:649:5df1:36f0 with SMTP id z10-20020a056602122a00b006495df136f0mr268677iot.214.1649111837395;
-        Mon, 04 Apr 2022 15:37:17 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id x3-20020a056e021ca300b002ca049c9530sm6663151ill.7.2022.04.04.15.37.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 15:37:17 -0700 (PDT)
-Subject: Re: [PATCH v1] kunit: add support for kunit_suites that reference
- init code
-To:     Brendan Higgins <brendanhiggins@google.com>, shuah@kernel.org,
-        davidgow@google.com, dlatypov@google.com,
-        martin.fernandez@eclypsium.com, daniel.gutson@eclypsium.com
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        jk@codeconstruct.com.au, Shuah Khan <skhan@linuxfoundation.org>
-References: <20220311072859.2174624-1-brendanhiggins@google.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <1e1472e8-1813-3903-f934-cb0ae7f09864@linuxfoundation.org>
-Date:   Mon, 4 Apr 2022 16:37:15 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Mon, 4 Apr 2022 19:09:55 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E618213F81
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 15:43:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649112236; x=1680648236;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5e39dNMdImcnXbZ2CwzasEyjKU2yhmpc1+hsC4TnQSc=;
+  b=bnoWDxmfpMtU89y79vo3Tul5RJd2M2mzsQfYK7XeOZ5UkuuNQh03PxFc
+   ueTOAjMQea44PJd/RDm+hx9R3S+NHiHF2n1veGywmX/m5guRQIolRGCiV
+   3naeed4FMHzD9GPBOAwqCThTOEPvidEYHDVXtqW7rgwTFZ0smekjhdstU
+   qqBHAZA3fSAEIzIpcNsydb4uhFp1Rx5SocQT7uX7VrRmIwuTIl5JkWWiV
+   mGCzVj2gApsqV8k49050k5o4dKdmB49uOco+CiKllPfnLmiWEEPd4pxsC
+   M60QcMWsiSi3wsT0Y1aIpVvgUvb5nKcU6OdHEGCsY578pJhyKXZVhX4dQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="240559089"
+X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
+   d="scan'208";a="240559089"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 15:43:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
+   d="scan'208";a="641392286"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 04 Apr 2022 15:43:36 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbVQ7-0002Pj-RP;
+        Mon, 04 Apr 2022 22:43:35 +0000
+Date:   Tue, 5 Apr 2022 06:42:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kan Liang <kan.liang@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andi Kleen <ak@linux.intel.com>
+Subject: arch/x86/events/core.c:1869:25: warning: Local variable 'pmu'
+ shadows outer variable [shadowVariable]
+Message-ID: <202204050659.ScGUNmKk-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220311072859.2174624-1-brendanhiggins@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Brendan,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3123109284176b1532874591f7c81f3837bbdc17
+commit: a9c81ccdf52dd73a20178c40bca34cf52991fdea perf/x86: Add structures for the attributes of Hybrid PMUs
+date:   12 months ago
+compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
 
-On 3/11/22 12:28 AM, Brendan Higgins wrote:
-> Add support for a new kind of kunit_suite registration macro called
-> kunit_test_init_suite(); this new registration macro allows the
-> registration of kunit_suites that reference functions marked __init and
-> data marked __initdata.
-> 
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> Tested-by: Martin Fernandez <martin.fernandez@eclypsium.com>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Reviewed-by: David Gow <davidgow@google.com>
-> ---
-> 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I almost applied it ...
 
-> This is a follow-up to the RFC here[1].
-> 
-> This patch is in response to a KUnit user issue[2] in which the user was
-> attempting to test some init functions; although this is a functional
-> solution as long as KUnit tests only run during the init phase, we will
-> need to do more work if we ever allow tests to run after the init phase
-> is over; it is for this reason that this patch adds a new registration
-> macro rather than simply modifying the existing macros.
-> 
-> Changes since last version:
->   - I added more to the kunit_test_init_suites() kernel-doc comment
->     detailing "how" the modpost warnings are suppressed in addition to
->     the existing information regarding "why" it is OK for the modpost
->     warnings to be suppressed.
-> 
-> [1] https://lore.kernel.org/linux-kselftest/20220310210210.2124637-1-brendanhiggins@google.com/
-> [2] https://groups.google.com/g/kunit-dev/c/XDjieRHEneg/m/D0rFCwVABgAJ
-> 
-> ---
->   include/kunit/test.h | 26 ++++++++++++++++++++++++++
->   1 file changed, 26 insertions(+)
-> 
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index b26400731c02..7f303a06bc97 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -379,6 +379,32 @@ static inline int kunit_run_all_tests(void)
->   
->   #define kunit_test_suite(suite)	kunit_test_suites(&suite)
->   
-> +/**
-> + * kunit_test_init_suites() - used to register one or more &struct kunit_suite
-> + *			      containing init functions or init data.
-> + *
-> + * @__suites: a statically allocated list of &struct kunit_suite.
-> + *
-> + * This functions identically as &kunit_test_suites() except that it suppresses
-> + * modpost warnings for referencing functions marked __init or data marked
-> + * __initdata; this is OK because currently KUnit only runs tests upon boot
-> + * during the init phase or upon loading a module during the init phase.
-> + *
-> + * NOTE TO KUNIT DEVS: If we ever allow KUnit tests to be run after boot, these
-> + * tests must be excluded.
-> + *
-> + * The only thing this macro does that's different from kunit_test_suites is
-> + * that it suffixes the array and suite declarations it makes with _probe;
-> + * modpost suppresses warnings about referencing init data for symbols named in
-> + * this manner.
-> + */
-> +#define kunit_test_init_suites(__suites...)				\
-> +	__kunit_test_suites(CONCATENATE(__UNIQUE_ID(array), _probe),	\
-> +			    CONCATENATE(__UNIQUE_ID(suites), _probe),	\
-> +			    ##__suites)
-> +
-> +#define kunit_test_init_suite(suite)	kunit_test_init_suites(&suite)
-> +
->   #define kunit_suite_for_each_test_case(suite, test_case)		\
->   	for (test_case = suite->test_cases; test_case->run_case; test_case++)
->   
-> 
+cppcheck warnings: (new ones prefixed by >>)
+                                         ^
+   arch/x86/events/core.c:766:20: note: Using pointer that is a temporary.
+    if (WARN_ON_ONCE(!cpuc->pmu))
+                      ^
+>> arch/x86/events/core.c:1869:25: warning: Local variable 'pmu' shadows outer variable [shadowVariable]
+    struct x86_hybrid_pmu *pmu;
+                           ^
+   arch/x86/events/core.c:48:19: note: Shadowed declaration
+   static struct pmu pmu;
+                     ^
+   arch/x86/events/core.c:1869:25: note: Shadow variable
+    struct x86_hybrid_pmu *pmu;
+                           ^
 
-The naming of the function and macro are rather confusing and can become
-error prone. Let's find better naming scheme.
+cppcheck possible warnings: (new ones prefixed by >>, may not real problems)
 
-> base-commit: 330f4c53d3c2d8b11d86ec03a964b86dc81452f5
-> 
+                                         ^
+   arch/x86/events/core.c:766:20: note: Using pointer that is a temporary.
+    if (WARN_ON_ONCE(!cpuc->pmu))
+                      ^
+   arch/x86/events/core.c:769:9: warning: Using pointer that is a temporary. [danglingTemporaryLifetime]
+    return cpuc->pmu;
+           ^
+   arch/x86/events/core.c:760:31: note: Address of variable taken here.
+    struct cpu_hw_events *cpuc = &per_cpu(cpu_hw_events, cpu);
+                                 ^
+   arch/x86/events/core.c:766:18: note: Assuming condition is false
+    if (WARN_ON_ONCE(!cpuc->pmu))
+                    ^
+   arch/x86/events/core.c:760:39: note: Temporary created here.
+    struct cpu_hw_events *cpuc = &per_cpu(cpu_hw_events, cpu);
+                                         ^
+   arch/x86/events/core.c:769:9: note: Using pointer that is a temporary.
+    return cpuc->pmu;
+           ^
+   arch/x86/events/core.c:1561:56: warning: Using pointer that is a temporary. [danglingTemporaryLifetime]
+    pr_info("CPU#%d: active:     %016llxn", cpu, *(u64 *)cpuc->active_mask);
+                                                          ^
+   arch/x86/events/core.c:1529:31: note: Address of variable taken here.
+    struct cpu_hw_events *cpuc = &per_cpu(cpu_hw_events, cpu);
+                                 ^
+   arch/x86/events/core.c:1536:6: note: Assuming condition is false
+    if (!num_counters)
+        ^
+   arch/x86/events/core.c:1529:39: note: Temporary created here.
+    struct cpu_hw_events *cpuc = &per_cpu(cpu_hw_events, cpu);
+                                         ^
+   arch/x86/events/core.c:1561:56: note: Using pointer that is a temporary.
+    pr_info("CPU#%d: active:     %016llxn", cpu, *(u64 *)cpuc->active_mask);
+                                                          ^
+   arch/x86/events/core.c:1577:35: warning: Using pointer that is a temporary. [danglingTemporaryLifetime]
+     if (fixed_counter_disabled(idx, cpuc->pmu))
+                                     ^
+   arch/x86/events/core.c:1529:31: note: Address of variable taken here.
+    struct cpu_hw_events *cpuc = &per_cpu(cpu_hw_events, cpu);
+                                 ^
+   arch/x86/events/core.c:1536:6: note: Assuming condition is false
+    if (!num_counters)
+        ^
+   arch/x86/events/core.c:1529:39: note: Temporary created here.
+    struct cpu_hw_events *cpuc = &per_cpu(cpu_hw_events, cpu);
+                                         ^
+   arch/x86/events/core.c:1577:35: note: Using pointer that is a temporary.
+     if (fixed_counter_disabled(idx, cpuc->pmu))
+                                     ^
+   arch/x86/events/core.c:1760:3: warning: Using pointer that is a temporary. [danglingTemporaryLifetime]
+     cpuc->kfree_on_online[i] = NULL;
+     ^
+   arch/x86/events/core.c:1756:31: note: Address of variable taken here.
+    struct cpu_hw_events *cpuc = &per_cpu(cpu_hw_events, cpu);
+                                 ^
+   arch/x86/events/core.c:1756:39: note: Temporary created here.
+    struct cpu_hw_events *cpuc = &per_cpu(cpu_hw_events, cpu);
+                                         ^
+   arch/x86/events/core.c:1760:3: note: Using pointer that is a temporary.
+     cpuc->kfree_on_online[i] = NULL;
+     ^
+   arch/x86/events/core.c:1779:9: warning: Using pointer that is a temporary. [danglingTemporaryLifetime]
+     kfree(cpuc->kfree_on_online[i]);
+           ^
+   arch/x86/events/core.c:1775:31: note: Address of variable taken here.
+    struct cpu_hw_events *cpuc = &per_cpu(cpu_hw_events, cpu);
+                                 ^
+   arch/x86/events/core.c:1775:39: note: Temporary created here.
+    struct cpu_hw_events *cpuc = &per_cpu(cpu_hw_events, cpu);
+                                         ^
+   arch/x86/events/core.c:1779:9: note: Using pointer that is a temporary.
+     kfree(cpuc->kfree_on_online[i]);
+           ^
+   arch/x86/events/core.c:1780:3: warning: Using pointer that is a temporary. [danglingTemporaryLifetime]
+     cpuc->kfree_on_online[i] = NULL;
+     ^
+   arch/x86/events/core.c:1775:31: note: Address of variable taken here.
+    struct cpu_hw_events *cpuc = &per_cpu(cpu_hw_events, cpu);
+                                 ^
+   arch/x86/events/core.c:1775:39: note: Temporary created here.
+    struct cpu_hw_events *cpuc = &per_cpu(cpu_hw_events, cpu);
+                                         ^
+   arch/x86/events/core.c:1780:3: note: Using pointer that is a temporary.
+     cpuc->kfree_on_online[i] = NULL;
+     ^
+   arch/x86/events/core.c:2113:3: warning: Same expression on both sides of '-'. [duplicateExpression]
+     __EVENT_CONSTRAINT(0, (1ULL << x86_pmu.num_counters) - 1,
+     ^
+   arch/x86/events/core.c:2163:26: warning: Local variable 'hybrid_pmu' shadows outer function [shadowFunction]
+     struct x86_hybrid_pmu *hybrid_pmu;
+                            ^
+   arch/x86/events/perf_event.h:660:47: note: Shadowed declaration
+   static __always_inline struct x86_hybrid_pmu *hybrid_pmu(struct pmu *pmu)
+                                                 ^
+   arch/x86/events/core.c:2163:26: note: Shadow variable
+     struct x86_hybrid_pmu *hybrid_pmu;
+                            ^
 
-thanks,
--- Shuah
+vim +/pmu +1869 arch/x86/events/core.c
+
+  1862	
+  1863	ssize_t events_hybrid_sysfs_show(struct device *dev,
+  1864					 struct device_attribute *attr,
+  1865					 char *page)
+  1866	{
+  1867		struct perf_pmu_events_hybrid_attr *pmu_attr =
+  1868			container_of(attr, struct perf_pmu_events_hybrid_attr, attr);
+> 1869		struct x86_hybrid_pmu *pmu;
+  1870		const char *str, *next_str;
+  1871		int i;
+  1872	
+  1873		if (hweight64(pmu_attr->pmu_type) == 1)
+  1874			return sprintf(page, "%s", pmu_attr->event_str);
+  1875	
+  1876		/*
+  1877		 * Hybrid PMUs may support the same event name, but with different
+  1878		 * event encoding, e.g., the mem-loads event on an Atom PMU has
+  1879		 * different event encoding from a Core PMU.
+  1880		 *
+  1881		 * The event_str includes all event encodings. Each event encoding
+  1882		 * is divided by ";". The order of the event encodings must follow
+  1883		 * the order of the hybrid PMU index.
+  1884		 */
+  1885		pmu = container_of(dev_get_drvdata(dev), struct x86_hybrid_pmu, pmu);
+  1886	
+  1887		str = pmu_attr->event_str;
+  1888		for (i = 0; i < x86_pmu.num_hybrid_pmus; i++) {
+  1889			if (!(x86_pmu.hybrid_pmu[i].cpu_type & pmu_attr->pmu_type))
+  1890				continue;
+  1891			if (x86_pmu.hybrid_pmu[i].cpu_type & pmu->cpu_type) {
+  1892				next_str = strchr(str, ';');
+  1893				if (next_str)
+  1894					return snprintf(page, next_str - str + 1, "%s", str);
+  1895				else
+  1896					return sprintf(page, "%s", str);
+  1897			}
+  1898			str = strchr(str, ';');
+  1899			str++;
+  1900		}
+  1901	
+  1902		return 0;
+  1903	}
+  1904	EXPORT_SYMBOL_GPL(events_hybrid_sysfs_show);
+  1905	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

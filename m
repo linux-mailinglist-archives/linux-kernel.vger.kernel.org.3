@@ -2,58 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7684F18D6
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E54004F18DF
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:51:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378713AbiDDPvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 11:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
+        id S1378729AbiDDPxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 11:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352307AbiDDPvR (ORCPT
+        with ESMTP id S1378822AbiDDPxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 11:51:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31B7D1FCF3
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:49:21 -0700 (PDT)
+        Mon, 4 Apr 2022 11:53:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1442F42487
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:51:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649087360;
+        s=mimecast20190719; t=1649087479;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Lih7ptoPycxcOj7GRw8MqHSfHs35MpyiN5qQLV2av7Y=;
-        b=EgAM3BjJoijh5zHFiy5F7c+Gzt4G8DQ4jc1aJLr1UkdXEMAq+GtYneoObzfzLQKpzK6zfb
-        8y74kOeqp2jT+EvxBauTy6WCbRODYrvpj2CRee0x39yh+oAqwOf+Y4DOVfbwHnnlrrb0KS
-        CfZF696/RM7Ym7SwVEIhc5rFPmCwRsM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ztkMzR6AFKFUbWj3TFBCPhwIkZT9lK3mwv6qAxrBqJQ=;
+        b=JBDUJ1GxCHT9QCr1f/s65/VverP7Qll7hY9l5L2xvyGPwopde+Bx/0mU720r9AKap2Yay3
+        5MJbEwLxhZny7LkwBR6otjVP6GFO4j5oB0IdvqAkIgqdK4wWY9wVYykMW9WljiQvEWq3R8
+        z34xRJK+pMmEfKqkzfXjE54R2Zx4L/g=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-AKySnxs4MWyKR3nKUTIraQ-1; Mon, 04 Apr 2022 11:49:15 -0400
-X-MC-Unique: AKySnxs4MWyKR3nKUTIraQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8E753899EC2;
-        Mon,  4 Apr 2022 15:49:14 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E9A8C2166B25;
-        Mon,  4 Apr 2022 15:49:13 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     stable@vger.kernel.org, Qiuhao Li <qiuhao@sysec.org>,
-        Gaoning Pan <pgn@zju.edu.cn>, Yongkang Jia <kangel@zju.edu.cn>,
-        syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Subject: [PATCH 5.4 v2] KVM: x86/mmu: do compare-and-exchange of gPTE via the user address
-Date:   Mon,  4 Apr 2022 11:49:13 -0400
-Message-Id: <20220404154913.482520-1-pbonzini@redhat.com>
+ us-mta-542-A-li_wFZNTG85ufnnoH2vw-1; Mon, 04 Apr 2022 11:51:18 -0400
+X-MC-Unique: A-li_wFZNTG85ufnnoH2vw-1
+Received: by mail-wm1-f71.google.com with SMTP id r64-20020a1c2b43000000b0038b59eb1940so155875wmr.0
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 08:51:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ztkMzR6AFKFUbWj3TFBCPhwIkZT9lK3mwv6qAxrBqJQ=;
+        b=O5zcURxTX378rT9qEDN2/DPWZbaIDCRZavX1OXig9480gxYR/Y6+qrzx6DrBg4iEoY
+         6WwfRFzc/YSJrAOQRKrjkDjnqZBxnX0ear6i04eRqDo6ZcsZQQZZmcaPYC5KCY77HlYu
+         ubeg/VAelI5vegdNQdet5NfKWBkSAuwxYE97tFIWhtmMGownX2FWnHz1GHYCDLIs7Lp8
+         7Tjn1sK4OlN7W6yZ2KiegqZfZOt+gRjn4ipUmEtncvJ+7P/OZBVeNaOl95Lz+a1Qjb97
+         TAQSoqicY5ShJ1Pnti6105zVFxY89gCYTLcki+oLO8Csy3XZz37B5Ewcnr4b/wpgv5ne
+         VDNQ==
+X-Gm-Message-State: AOAM530UOgTiXlYs0NNA5Un/c/1f7CRgnRKZmmo5GMsJju8RtyxkeTlE
+        KH/2Qgoxn/fn5FeaMh4Zh8FsPZFAi3jpoizIccXvAou4laLFUKE+rFcZDP6F9DdWCzViIZDpaSi
+        4GRdEV6p+3sG2pcu5Dzb4KE2h
+X-Received: by 2002:a1c:7204:0:b0:38e:70f4:edf1 with SMTP id n4-20020a1c7204000000b0038e70f4edf1mr171672wmc.18.1649087476769;
+        Mon, 04 Apr 2022 08:51:16 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwqPFQoBH+n99pHf4G9kdT6j9HVXw0NXVS9LNUOgzNhNzUFeYqWv2Xi/awInhum+eCt95wBfA==
+X-Received: by 2002:a1c:7204:0:b0:38e:70f4:edf1 with SMTP id n4-20020a1c7204000000b0038e70f4edf1mr171657wmc.18.1649087476512;
+        Mon, 04 Apr 2022 08:51:16 -0700 (PDT)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id w12-20020adf8bcc000000b002060e3da33fsm4500411wra.66.2022.04.04.08.51.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Apr 2022 08:51:15 -0700 (PDT)
+Message-ID: <bf917bf0-a380-6689-95cd-77ff0317f578@redhat.com>
+Date:   Mon, 4 Apr 2022 17:51:15 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] drm/format_helper: fix a kernel-doc typo
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org
+References: <20220403232902.1753-1-rdunlap@infradead.org>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20220403232902.1753-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,151 +83,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 2a8859f373b0a86f0ece8ec8312607eacf12485d upstream.
+Hello Randy,
 
-FNAME(cmpxchg_gpte) is an inefficient mess.  It is at least decent if it
-can go through get_user_pages_fast(), but if it cannot then it tries to
-use memremap(); that is not just terribly slow, it is also wrong because
-it assumes that the VM_PFNMAP VMA is contiguous.
+On 4/4/22 01:29, Randy Dunlap wrote:
+> It looks like the incorrect name of a function parameter was used
+> in the kernel-doc notation, so just change it to the function's
+> parameter name to quell the kernel-doc warning.
+> 
+> drivers/gpu/drm/drm_format_helper.c:640: warning: Function parameter or member 'vaddr' not described in 'drm_fb_xrgb8888_to_mono_reversed'
+> drivers/gpu/drm/drm_format_helper.c:640: warning: Excess function parameter 'src' description in 'drm_fb_xrgb8888_to_mono_reversed'
+> 
+> Fixes: bcf8b616deb8 ("drm/format-helper: Add drm_fb_xrgb8888_to_mono_reversed()")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: Javier Martinez Canillas <javierm@redhat.com>
+> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> CC: Maxime Ripard <mripard@kernel.org>
+> CC: Thomas Zimmermann <tzimmermann@suse.de>
+> ---
+>  drivers/gpu/drm/drm_format_helper.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
 
-The right way to do it would be to do the same thing as
-hva_to_pfn_remapped() does since commit add6a0cd1c5b ("KVM: MMU: try to
-fix up page faults before giving up", 2016-07-05), using follow_pte()
-and fixup_user_fault() to determine the correct address to use for
-memremap().  To do this, one could for example extract hva_to_pfn()
-for use outside virt/kvm/kvm_main.c.  But really there is no reason to
-do that either, because there is already a perfectly valid address to
-do the cmpxchg() on, only it is a userspace address.  That means doing
-user_access_begin()/user_access_end() and writing the code in assembly
-to handle any exception correctly.  Worse, the guest PTE can be 8-byte
-even on i686 so there is the extra complication of using cmpxchg8b to
-account for.  But at least it is an efficient mess.
+Thanks for the patch.
 
-Reported-by: Qiuhao Li <qiuhao@sysec.org>
-Reported-by: Gaoning Pan <pgn@zju.edu.cn>
-Reported-by: Yongkang Jia <kangel@zju.edu.cn>
-Reported-by: syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
-Debugged-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-Tested-by: Maxim Levitsky <mlevitsk@redhat.com>
-Cc: stable@vger.kernel.org
-Fixes: bd53cb35a3e9 ("X86/KVM: Handle PFNs outside of kernel reach when touching GPTEs")
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/kvm/paging_tmpl.h | 77 ++++++++++++++++++--------------------
- 1 file changed, 37 insertions(+), 40 deletions(-)
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
 
-diff --git a/arch/x86/kvm/paging_tmpl.h b/arch/x86/kvm/paging_tmpl.h
-index 97b21e7fd013..13b5c424adb2 100644
---- a/arch/x86/kvm/paging_tmpl.h
-+++ b/arch/x86/kvm/paging_tmpl.h
-@@ -34,9 +34,8 @@
- 	#define PT_HAVE_ACCESSED_DIRTY(mmu) true
- 	#ifdef CONFIG_X86_64
- 	#define PT_MAX_FULL_LEVELS PT64_ROOT_MAX_LEVEL
--	#define CMPXCHG cmpxchg
-+	#define CMPXCHG "cmpxchgq"
- 	#else
--	#define CMPXCHG cmpxchg64
- 	#define PT_MAX_FULL_LEVELS 2
- 	#endif
- #elif PTTYPE == 32
-@@ -52,7 +51,7 @@
- 	#define PT_GUEST_DIRTY_SHIFT PT_DIRTY_SHIFT
- 	#define PT_GUEST_ACCESSED_SHIFT PT_ACCESSED_SHIFT
- 	#define PT_HAVE_ACCESSED_DIRTY(mmu) true
--	#define CMPXCHG cmpxchg
-+	#define CMPXCHG "cmpxchgl"
- #elif PTTYPE == PTTYPE_EPT
- 	#define pt_element_t u64
- 	#define guest_walker guest_walkerEPT
-@@ -65,8 +64,10 @@
- 	#define PT_GUEST_DIRTY_SHIFT 9
- 	#define PT_GUEST_ACCESSED_SHIFT 8
- 	#define PT_HAVE_ACCESSED_DIRTY(mmu) ((mmu)->ept_ad)
--	#define CMPXCHG cmpxchg64
- 	#define PT_MAX_FULL_LEVELS 4
-+	#ifdef CONFIG_X86_64
-+	#define CMPXCHG "cmpxchgq"
-+	#endif
- #else
- 	#error Invalid PTTYPE value
- #endif
-@@ -132,43 +133,39 @@ static int FNAME(cmpxchg_gpte)(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
- 			       pt_element_t __user *ptep_user, unsigned index,
- 			       pt_element_t orig_pte, pt_element_t new_pte)
- {
--	int npages;
--	pt_element_t ret;
--	pt_element_t *table;
--	struct page *page;
--
--	npages = get_user_pages_fast((unsigned long)ptep_user, 1, FOLL_WRITE, &page);
--	if (likely(npages == 1)) {
--		table = kmap_atomic(page);
--		ret = CMPXCHG(&table[index], orig_pte, new_pte);
--		kunmap_atomic(table);
--
--		kvm_release_page_dirty(page);
--	} else {
--		struct vm_area_struct *vma;
--		unsigned long vaddr = (unsigned long)ptep_user & PAGE_MASK;
--		unsigned long pfn;
--		unsigned long paddr;
--
--		down_read(&current->mm->mmap_sem);
--		vma = find_vma_intersection(current->mm, vaddr, vaddr + PAGE_SIZE);
--		if (!vma || !(vma->vm_flags & VM_PFNMAP)) {
--			up_read(&current->mm->mmap_sem);
--			return -EFAULT;
--		}
--		pfn = ((vaddr - vma->vm_start) >> PAGE_SHIFT) + vma->vm_pgoff;
--		paddr = pfn << PAGE_SHIFT;
--		table = memremap(paddr, PAGE_SIZE, MEMREMAP_WB);
--		if (!table) {
--			up_read(&current->mm->mmap_sem);
--			return -EFAULT;
--		}
--		ret = CMPXCHG(&table[index], orig_pte, new_pte);
--		memunmap(table);
--		up_read(&current->mm->mmap_sem);
--	}
-+	int r = -EFAULT;
-+
-+	if (!user_access_begin(ptep_user, sizeof(pt_element_t)))
-+		return -EFAULT;
-+
-+#ifdef CMPXCHG
-+	asm volatile("1:" LOCK_PREFIX CMPXCHG " %[new], %[ptr]\n"
-+		     "mov $0, %[r]\n"
-+		     "setnz %b[r]\n"
-+		     "2:"
-+		     _ASM_EXTABLE_UA(1b, 2b)
-+		     : [ptr] "+m" (*ptep_user),
-+		       [old] "+a" (orig_pte),
-+		       [r] "+q" (r)
-+		     : [new] "r" (new_pte)
-+		     : "memory");
-+#else
-+	asm volatile("1:" LOCK_PREFIX "cmpxchg8b %[ptr]\n"
-+		     "movl $0, %[r]\n"
-+		     "jz 2f\n"
-+		     "incl %[r]\n"
-+		     "2:"
-+		     _ASM_EXTABLE_UA(1b, 2b)
-+		     : [ptr] "+m" (*ptep_user),
-+		       [old] "+A" (orig_pte),
-+		       [r] "+rm" (r)
-+		     : [new_lo] "b" ((u32)new_pte),
-+		       [new_hi] "c" ((u32)(new_pte >> 32))
-+		     : "memory");
-+#endif
- 
--	return (ret != orig_pte);
-+	user_access_end();
-+	return r;
- }
- 
- static bool FNAME(prefetch_invalid_gpte)(struct kvm_vcpu *vcpu,
 -- 
-2.31.1
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

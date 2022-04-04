@@ -2,168 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157DA4F0DC8
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 05:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B9D4F0DCB
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 05:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242301AbiDDDxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 23:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44424 "EHLO
+        id S1377032AbiDDDxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 23:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244598AbiDDDwp (ORCPT
+        with ESMTP id S1347096AbiDDDxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 23:52:45 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376CE2B25E;
-        Sun,  3 Apr 2022 20:50:49 -0700 (PDT)
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23421a85025755;
-        Mon, 4 Apr 2022 03:50:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=9dfEKjiqJk7peBrMbPWk18ZVy+8Q9UvJWWfMRHUvo6k=;
- b=BmhSMTkV4aoD1xA4JdlOkFBk33G1s0UQNOSavGiLW4aOEhSuC4jwUg+FABcgc7aDxbru
- H99MrhYeN6HqwAnTKjoB1W/DYRIh+k21qapAByc6gB1Bh+IKiJakFbKrVvtKrZPsWUiT
- 89KRrpPtO00R3pq0xYQHFUwaoo33d8Lw4J7BKawk1bHjIK/4915rerisvd5q2145wg2I
- 9/8lkLGYhs1ntgmr0Rs48coRyVl+KGHaExQuQbfKR7nvvBNo1JhzWNvyvH7i1M8QtM5w
- S+U5wecnCelw0GhRnO26XBS1kwbZuL60JZcAKt1x6sL0bC/lifhVhPu/EN99gbmamj0D GA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f6nfpvp53-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Apr 2022 03:50:38 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2343UtTf008172;
-        Mon, 4 Apr 2022 03:50:37 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f6nfpvp4u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Apr 2022 03:50:37 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2343l1Cw003155;
-        Mon, 4 Apr 2022 03:50:35 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3f6drhjr7g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Apr 2022 03:50:35 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2343oXk827066768
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 4 Apr 2022 03:50:33 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 67E074203F;
-        Mon,  4 Apr 2022 03:50:33 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 253F542047;
-        Mon,  4 Apr 2022 03:50:19 +0000 (GMT)
-Received: from vajain21.in.ibm.com (unknown [9.163.10.247])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Mon,  4 Apr 2022 03:50:18 +0000 (GMT)
-Received: by vajain21.in.ibm.com (sSMTP sendmail emulation); Mon, 04 Apr 2022 09:20:16 +0530
-From:   Vaibhav Jain <vaibhav@linux.ibm.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>
-Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
-In-Reply-To: <CAJD7tka1UstKYBVrie-_1CgvtaLtVD1uwgzfk5SifxW4FQbOVw@mail.gmail.com>
-References: <20220331084151.2600229-1-yosryahmed@google.com>
- <874k3d6vuq.fsf@vajain21.in.ibm.com>
- <CAJD7tka1UstKYBVrie-_1CgvtaLtVD1uwgzfk5SifxW4FQbOVw@mail.gmail.com>
-Date:   Mon, 04 Apr 2022 09:20:16 +0530
-Message-ID: <871qyd7bif.fsf@vajain21.in.ibm.com>
+        Sun, 3 Apr 2022 23:53:34 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1128A30F5B
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 20:51:38 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id b19so12479168wrh.11
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 20:51:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=r5K6b0sc6oOdX9PQxMtrYXV8USG1YlONAxoBoZNU3l4=;
+        b=KK3qDVtl6tM1RC0vWJnjyjAOaBy9HeE8/J3cKTugiWs6TNndA8Vg82MGSJiu79ETZ9
+         X+G314yykqvPYI2h4vxy4qqe0E8bDEu6Pk23l8xjJMUNi4sSsIUwyXUPZb3codKUinnS
+         7eLz56OFMh+1h+AdCdVcpMxwkT0tCike5pComkqD4oMYKXMz8k3wGwwT7UrbveBFjtRV
+         Ql3xXEdAWWyf/cRgLKSfwCvFdjvS0exmaL4XX1iOCKrs/N84Me5KcmEyAJsWdb4YGTs4
+         8yDSipiD22wqji5E7+BXbjOGj1jhfghTr1RjRNbedQ0BdvxbxVt2GRKJULuUKAon/jNy
+         T/Zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=r5K6b0sc6oOdX9PQxMtrYXV8USG1YlONAxoBoZNU3l4=;
+        b=tpuaIEULTzxCjIycLr6/OR2SY/z7SBAkhSB12YlkeglrFDOuh8BzZwJeQpLZW+5Kap
+         uPpbAQoEGP7Cj+BY038Oyc65OVCLFmys/v+24k3TDz8u7SKY6YwtjErYdMIceUv6uxqA
+         tYmIe1Ypxa8VzBVYig0otWnWQXWDGGX7iJOpBi+ofjRFkubyHiMmnKdaTt5U9/4ynB0I
+         JAj2hZTZnj80pgD21hgB2TYpHREL5jXsRQWdeaFBBxnpcVullouritmSQi8UjX5q2Djm
+         lb2VDXphnI2qIfR04901gS3vVE++lwz5LyLIXvn5kZMNJ460xCwGQHluQsj8bIyVtTKy
+         gU+w==
+X-Gm-Message-State: AOAM530A/NGNXcpTLgGc2dpywo56bbN34JoXIY7mT/uQ5PNzDX+ShK/L
+        1EaWr4MAzRF66Uk+HORQtTW17Z/cbhEX83QZ41kDOA==
+X-Google-Smtp-Source: ABdhPJy03E7/LbI9hh3U5hDa7d5BQW5aEeRI/tPy/1Eq7sLg6T5XYwIswOiGCVJ6FybEoaUugQyf7PY6NWQ6q5tyzFU=
+X-Received: by 2002:a5d:6c6b:0:b0:1ea:77ea:dde8 with SMTP id
+ r11-20020a5d6c6b000000b001ea77eadde8mr15660633wrz.690.1649044297423; Sun, 03
+ Apr 2022 20:51:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: ybb_MQUKKWwZFcBFzRMKgA5MhWXOPkvA
-X-Proofpoint-GUID: tW5oG1MSxam5HKOk6A0N5UjV35bOag7j
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-04_01,2022-03-31_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- spamscore=0 mlxscore=0 malwarescore=0 phishscore=0 mlxlogscore=593
- impostorscore=0 lowpriorityscore=0 priorityscore=1501 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204040018
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220317035521.272486-1-apatel@ventanamicro.com>
+In-Reply-To: <20220317035521.272486-1-apatel@ventanamicro.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 4 Apr 2022 09:20:27 +0530
+Message-ID: <CAAhSdy35a5PrdSzonK6EeH0nynFxvvUzScaYRPeA=CmG5yuz+Q@mail.gmail.com>
+Subject: Re: [PATCH] RISC-V: KVM: Don't clear hgatp CSR in kvm_arch_vcpu_put()
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        KVM General <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Apologies for the delayed response,
-
-Yosry Ahmed <yosryahmed@google.com> writes:
-
-> On Fri, Apr 1, 2022 at 1:39 AM Vaibhav Jain <vaibhav@linux.ibm.com> wrote:
->>
->>
->> Yosry Ahmed <yosryahmed@google.com> writes:
->> > From: Shakeel Butt <shakeelb@google.com>
->> >
->> > Introduce an memcg interface to trigger memory reclaim on a memory cgroup.
->> <snip>
->>
->> > +
->> > +     while (nr_reclaimed < nr_to_reclaim) {
->> > +             unsigned long reclaimed;
->> > +
->> > +             if (signal_pending(current))
->> > +                     break;
->> > +
->> > +             reclaimed = try_to_free_mem_cgroup_pages(memcg,
->> > +                                             nr_to_reclaim - nr_reclaimed,
->> > +                                             GFP_KERNEL, true);
->> > +
->> > +             if (!reclaimed && !nr_retries--)
->> > +                     break;
->> > +
->> > +             nr_reclaimed += reclaimed;
->>
->> I think there should be a cond_resched() in this loop before
->> try_to_free_mem_cgroup_pages() to have better chances of reclaim
->> succeding early.
->>
-> Thanks for taking the time to look at this!
+On Thu, Mar 17, 2022 at 9:25 AM Anup Patel <apatel@ventanamicro.com> wrote:
 >
-> I believe this loop is modeled after the loop in memory_high_write()
-> for the memory.high interface. Is there a reason why it should be
-> needed here but not there?
+> We might have RISC-V systems (such as QEMU) where VMID is not part
+> of the TLB entry tag so these systems will have to flush all TLB
+> entries upon any change in hgatp.VMID.
 >
-
-memory_high_write() calls drain_all_stock() atleast once before calling
-try_to_free_mem_cgroup_pages(). This would drain all percpu stocks
-for the given memcg and its descendents, giving a high chance
-try_to_free_mem_cgroup_pages() to succeed quickly. Such a functionality
-is missing from this patch.
-
-Adding a cond_resched() would atleast give chance to other processess
-within the memcg to run and make forward progress thereby making more
-pages available for reclaim.
-
-Suggestion is partly based on __perform_reclaim() issues a cond_resche()
-as it may get called repeatedly during direct reclaim path.
-
-
->> <snip>
->>
->> --
->> Cheers
->> ~ Vaibhav
+> Currently, we zero-out hgatp CSR in kvm_arch_vcpu_put() and we
+> re-program hgatp CSR in kvm_arch_vcpu_load(). For above described
+> systems, this will flush all TLB entries whenever VCPU exits to
+> user-space hence reducing performance.
 >
+> This patch fixes above described performance issue by not clearing
+> hgatp CSR in kvm_arch_vcpu_put().
+>
+> Fixes: 34bde9d8b9e6 ("RISC-V: KVM: Implement VCPU world-switch")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 
--- 
-Cheers
-~ Vaibhav
+I have queued this patch for RC fixes.
+
+Thanks,
+Anup
+
+> ---
+>  arch/riscv/kvm/vcpu.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+> index 624166004e36..6785aef4cbd4 100644
+> --- a/arch/riscv/kvm/vcpu.c
+> +++ b/arch/riscv/kvm/vcpu.c
+> @@ -653,8 +653,6 @@ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
+>                                      vcpu->arch.isa);
+>         kvm_riscv_vcpu_host_fp_restore(&vcpu->arch.host_context);
+>
+> -       csr_write(CSR_HGATP, 0);
+> -
+>         csr->vsstatus = csr_read(CSR_VSSTATUS);
+>         csr->vsie = csr_read(CSR_VSIE);
+>         csr->vstvec = csr_read(CSR_VSTVEC);
+> --
+> 2.25.1
+>

@@ -2,100 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECD14F1E52
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A8F4F1E2B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:24:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiDDWFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
+        id S1380298AbiDDVsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379925AbiDDSXW (ORCPT
+        with ESMTP id S1379936AbiDDSYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 14:23:22 -0400
-Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F21122B20;
-        Mon,  4 Apr 2022 11:21:26 -0700 (PDT)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
-        t=1649096484; bh=SLo9d96mThar86dgaQcYX5QHm8tQkuqDH+jBwfpMzbI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=aWF3yN5E1EG5YjRBbEsUeRcqbRiOYTHkZ9dONDIoQqc+LuZqSWTWvU+fcoWY3KdZ5
-         vPUwr6sugS5CjsDG+nVkDYCp1XvAZa7AzTsmXJm8x6j1yBBOhQgg4jxTtB5AdNmeEW
-         Nk/3U1T776AwYYHFrX9RDoDQEkqom7Neh12ITsXxpTOtr2ZI20eaAaeT4HFz6/mlrB
-         uOtQWxEplrTgaSoy/oTqMP4E96Xudy+6X2byJ9uHq1kOt4lJwbNkVgm2iOrayYGZFq
-         ytGzGC6JaGqHlpkOVmYLuju4kGDcS9JE1dhNPkwd9VXbolkDfex+G13UfrycHbUi0C
-         Z0web2oOgDHGg==
-To:     Peter Seiderer <ps.report@gmx.net>, linux-wireless@vger.kernel.org
-Cc:     Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Felix Fietkau <nbd@nbd.name>
-Subject: Re: [PATCH v1 2/2] mac80211: minstrel_ht: fill all requested rates
-In-Reply-To: <20220402153014.31332-2-ps.report@gmx.net>
-References: <20220402153014.31332-1-ps.report@gmx.net>
- <20220402153014.31332-2-ps.report@gmx.net>
-Date:   Mon, 04 Apr 2022 20:21:24 +0200
-X-Clacks-Overhead: GNU Terry Pratchett
-Message-ID: <87fsmseml7.fsf@toke.dk>
+        Mon, 4 Apr 2022 14:24:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D450F22B20;
+        Mon,  4 Apr 2022 11:22:20 -0700 (PDT)
+Date:   Mon, 04 Apr 2022 18:22:18 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649096539;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=C3w/yAJpOjhAW4Wz4L7tzqhvuIJL/yoS7z64bdUfVlo=;
+        b=fM2IqwhWVs5WEO4dPP2InNrIDr6iPi8W3+eXYVQ/jDFTNoJBvDMHNsT5cgktCBAcnLgHVj
+        I/dt7TpFrlI6+euW2C2LSJr5YtWee3O1ngtjoSTgKX4lIysF5A9TX220wxoIBhrOPyGihq
+        KOgkD5+ye9PemR1+jzzFn78KVgw9Jvqs7xuFyZhvKUojzW29lhLF3VFhil+mDJwViyGxBK
+        5jzZEgWQvynFDPzrcy5M8Nr/PQ4RNIME99pF6gVbBSwLBGwc2ApHL+fBUiS8ZUQUMM5o5H
+        BkyHHHRX1d/28fClqGYjPwH3Z86HKdjL6qS4KEAAw4xf42/bog4EkCiwfftigg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649096539;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=C3w/yAJpOjhAW4Wz4L7tzqhvuIJL/yoS7z64bdUfVlo=;
+        b=edx0y1BQwJYFEZA/+QGVlmu5NUBQYqfIOvgtAaaIiW8bFMJnzTHsczLp30WbEdR3pMZpXS
+        onjZTfSuS9lJ5OBA==
+From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cpu] x86/cpu: Remove "nosmep"
+Cc:     Borislav Petkov <bp@suse.de>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Kees Cook <keescook@chromium.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220127115626.14179-5-bp@alien8.de>
+References: <20220127115626.14179-5-bp@alien8.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <164909653849.389.15352587748803921438.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Felix
+The following commit has been merged into the x86/cpu branch of tip:
 
-Peter Seiderer <ps.report@gmx.net> writes:
+Commit-ID:     385d2ae0a1b5efacb30e13a0f0e521490441d9bb
+Gitweb:        https://git.kernel.org/tip/385d2ae0a1b5efacb30e13a0f0e521490441d9bb
+Author:        Borislav Petkov <bp@suse.de>
+AuthorDate:    Thu, 27 Jan 2022 12:56:24 +01:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Mon, 04 Apr 2022 10:17:00 +02:00
 
-> Fill all requested rates (in case of ath9k 4 rate slots are
-> available, so fill all 4 instead of only 3), improves throughput in
-> noisy environment.
+x86/cpu: Remove "nosmep"
 
-How did you test this? Could you quantify the gains in throughput you saw?
+There should be no need to disable SMEP anymore.
 
--Toke
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Lai Jiangshan <jiangshanlai@gmail.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20220127115626.14179-5-bp@alien8.de
+---
+ Documentation/admin-guide/kernel-parameters.txt | 2 +-
+ Documentation/x86/cpuinfo.rst                   | 4 ++--
+ arch/x86/kernel/cpu/common.c                    | 7 -------
+ 3 files changed, 3 insertions(+), 10 deletions(-)
 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  net/mac80211/rc80211_minstrel_ht.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/net/mac80211/rc80211_minstrel_ht.c b/net/mac80211/rc80211_minstrel_ht.c
-> index 9c6ace858107..cd6a0f153688 100644
-> --- a/net/mac80211/rc80211_minstrel_ht.c
-> +++ b/net/mac80211/rc80211_minstrel_ht.c
-> @@ -1436,17 +1436,17 @@ minstrel_ht_update_rates(struct minstrel_priv *mp, struct minstrel_ht_sta *mi)
->  	/* Start with max_tp_rate[0] */
->  	minstrel_ht_set_rate(mp, mi, rates, i++, mi->max_tp_rate[0]);
->  
-> -	if (mp->hw->max_rates >= 3) {
-> -		/* At least 3 tx rates supported, use max_tp_rate[1] next */
-> -		minstrel_ht_set_rate(mp, mi, rates, i++, mi->max_tp_rate[1]);
-> -	}
-> +	/* Fill up remaining, keep one entry for max_probe_rate */
-> +	for (; i < (mp->hw->max_rates - 1); i++)
-> +		minstrel_ht_set_rate(mp, mi, rates, i, mi->max_tp_rate[i]);
->  
-> -	if (mp->hw->max_rates >= 2) {
-> +	if (i < mp->hw->max_rates)
->  		minstrel_ht_set_rate(mp, mi, rates, i++, mi->max_prob_rate);
-> -	}
-> +
-> +	if (i < IEEE80211_TX_RATE_TABLE_SIZE)
-> +		rates->rate[i].idx = -1;
->  
->  	mi->sta->max_rc_amsdu_len = minstrel_ht_get_max_amsdu_len(mi);
-> -	rates->rate[i].idx = -1;
->  	rate_control_set_rates(mp->hw, mi->sta, rates);
->  }
->  
-> -- 
-> 2.35.1
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index e0bb710..39ac2c1 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3465,7 +3465,7 @@
+ 			Disable SMAP (Supervisor Mode Access Prevention)
+ 			even if it is supported by processor.
+ 
+-	nosmep		[X86,PPC64s]
++	nosmep		[PPC64s]
+ 			Disable SMEP (Supervisor Mode Execution Prevention)
+ 			even if it is supported by processor.
+ 
+diff --git a/Documentation/x86/cpuinfo.rst b/Documentation/x86/cpuinfo.rst
+index 12fbe2b..08246e8 100644
+--- a/Documentation/x86/cpuinfo.rst
++++ b/Documentation/x86/cpuinfo.rst
+@@ -140,8 +140,8 @@ from #define X86_FEATURE_UMIP (16*32 + 2).
+ 
+ In addition, there exists a variety of custom command-line parameters that
+ disable specific features. The list of parameters includes, but is not limited
+-to, nofsgsbase, and nosmep. 5-level paging can also be disabled using
+-"no5lvl". SMEP is disabled with the aforementioned parameter.
++to, nofsgsbase, nosgx, noxsave, etc. 5-level paging can also be disabled using
++"no5lvl".
+ 
+ e: The feature was known to be non-functional.
+ ----------------------------------------------
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 747df07..5791f69 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -369,13 +369,6 @@ static inline void squash_the_stupid_serial_number(struct cpuinfo_x86 *c)
+ }
+ #endif
+ 
+-static __init int setup_disable_smep(char *arg)
+-{
+-	setup_clear_cpu_cap(X86_FEATURE_SMEP);
+-	return 1;
+-}
+-__setup("nosmep", setup_disable_smep);
+-
+ static __always_inline void setup_smep(struct cpuinfo_x86 *c)
+ {
+ 	if (cpu_has(c, X86_FEATURE_SMEP))

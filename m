@@ -2,145 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 151254F1BA6
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7CF04F1BEA
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380759AbiDDVWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39956 "EHLO
+        id S1381950AbiDDVY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379223AbiDDQro (ORCPT
+        with ESMTP id S1379250AbiDDQvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 12:47:44 -0400
-Received: from gateway33.websitewelcome.com (gateway33.websitewelcome.com [192.185.146.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6342635DFF
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 09:45:48 -0700 (PDT)
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway33.websitewelcome.com (Postfix) with ESMTP id D043FD847F8
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 11:45:47 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id bPprn4FwC22u3bPprnBDnR; Mon, 04 Apr 2022 11:45:47 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=PvOuKe3VYlx98pU3fvtPHpnIy8LCRmoajzdinROj5NE=; b=Xu8onfvEDpQdIZ3BVod020rxdk
-        tQMu8IrsOWj9aZFbzzsFOZnlmA29iNKCQ6c1nMx79xcLNdnlK7J91JWQU/E0Yiq4KMSzVa42m6wS4
-        oARlfvK6KKH6KbmihrQcVYSM9/xDxnLCcKlQ01Y7MqpU7UNS4hCRUsBcK7hgVfKnDNWJY0sdMQfER
-        aI5afOQSQbSl1aQGH1puQRYg9WCO1Gkhkt4w3u/F6zTDYwvzWLCmymt4xDLbaE2soHpQN54duS1+l
-        qy+mOCrPCSNzHPNvk3MM29YZoZsMu1Rpyghp+9/Na5H8UdWxfskJG6C5eTZZqjhnmh1m88KOjC2Vj
-        nqXc5fUA==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54722)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nbPpr-002TwF-Fk; Mon, 04 Apr 2022 16:45:47 +0000
-Message-ID: <ea840ab9-0c20-8c06-f7d4-bb9642a63500@roeck-us.net>
-Date:   Mon, 4 Apr 2022 09:45:46 -0700
+        Mon, 4 Apr 2022 12:51:10 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B7913D78
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 09:49:12 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id k14so8856015pga.0
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 09:49:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GyyWXXgVY41si06TKKxTl4RrtLtSdAhIwBpd0+Qeq8M=;
+        b=YpLe7N7FCmdWzRckwigPohHpFLT/ewO+3vpdF3cOsR7PRQnnsZHAxVS2ZCCSGZU1jT
+         ZUcdY5c52zKivBK9xojZ4U9VUl0Tt/zlrvHqVFr7BW6DBGJ+JcmCe/oOT7Dg39IywNTP
+         Lc0sbC+8WKcihbGFYJJxQlL9N/+aQYvGr+gV9maw+vEdKLe8hYCYs7FBw8T2d3CrbKZp
+         99cX/mEXmI6ernwHjdoEb9oYoQpnkC26f5mwF+HWrCyIl0DghUM6qgCptbyYUT063qQt
+         0gbSHfTYMh7lSfWO0KvNP6SysKXWKvpkEIQwpEZOjNlDSl59zBr/3GlQ8uWBprvMTDjm
+         nqCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GyyWXXgVY41si06TKKxTl4RrtLtSdAhIwBpd0+Qeq8M=;
+        b=ohQIyFYggtkg9+VNq0K+FIU+FnG+y/DF0deNTvnU+XI89TYvZpHf1jHgzFneHnsoaZ
+         AqxMTDE16jvAAMpCkvTq0nmBeK/3M3uMFOWhIjErffz2+Hfc6cIlvkdv6j1XvxiFYLUI
+         bMfkw/nWGj+2LyIUeSDusfNyjb7PUFh4s0XQBYbWVl35uGUTtGML31lp3nS9KiFUxmTJ
+         XI2SbnG9D+DI2oaBFT+7eUuATkuhh9AFIAC8wG+KwegN0h7/5DdZcGR0Z/iCDgUsB3RR
+         sqridTkoBSJoNemBXKo7GhT/qx/lH8AfztcABIjm2Ii7y6bpJZdtfLQUCJ4wIign2tBd
+         6wCw==
+X-Gm-Message-State: AOAM530egUXBikfoutuQY8O1yM2+pzOTTgMKZDJAksja/m4UzUDlEYeH
+        d+0yv2uhRVlE159gGPL3O5psxg==
+X-Google-Smtp-Source: ABdhPJxoIpw0mkzWg9K4htc4vK/0bU5V7y0SAUFi9LMaYIzetd2Rczan9yCPRTTZ5YPyLcdQ6TJErQ==
+X-Received: by 2002:a05:6a00:8c5:b0:4fe:134d:30d3 with SMTP id s5-20020a056a0008c500b004fe134d30d3mr946238pfu.3.1649090952121;
+        Mon, 04 Apr 2022 09:49:12 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id y2-20020a056a00190200b004fa865d1fd3sm12837962pfi.86.2022.04.04.09.49.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 09:49:11 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 16:49:06 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>
+Subject: Re: [PATCH 5/8] KVM: SVM: Re-inject INT3/INTO instead of retrying
+ the instruction
+Message-ID: <YkshgrUaF4+MrrXf@google.com>
+References: <20220402010903.727604-1-seanjc@google.com>
+ <20220402010903.727604-6-seanjc@google.com>
+ <a47217da0b6db4f1b6b6c69a9dc38350b13ac17c.camel@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Oded Gabbay <ogabbay@kernel.org>, Jiri Slaby <jslaby@suse.cz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <CAHk-=wg6FWL1xjVyHx7DdjD2dHZETA5_=FqqW17Z19X-WTfWSg@mail.gmail.com>
- <20220404022239.GA1186352@roeck-us.net>
- <CAHk-=wimc7V9mi=P+6p2nnctPYtSM55OSPVERUeJor7fkD_EVg@mail.gmail.com>
- <aba387bd-9799-e0b5-40e3-1bcb552ac74c@roeck-us.net>
- <CAHk-=witgMUS8To6wijxdbQ+QEH0gcHSYV6Y=yzOdb=Q4h9PJA@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: Linux 5.18-rc1
-In-Reply-To: <CAHk-=witgMUS8To6wijxdbQ+QEH0gcHSYV6Y=yzOdb=Q4h9PJA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nbPpr-002TwF-Fk
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54722
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 7
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a47217da0b6db4f1b6b6c69a9dc38350b13ac17c.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/4/22 08:32, Linus Torvalds wrote:
-> On Sun, Apr 3, 2022 at 9:23 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> Oops. Sorry, I thought it was big endian. No idea why. I'll update
->> subject and description and resend.
-> 
-> I see your updated patch, but for some reason 'b4' is unhappy about it, with
-> 
->    $ b4 am 20220404134338.3276991-1-linux@roeck-us.net
-> 
-> causing
-> 
->    ✗ [PATCH v3] staging: r8188eu: Fix PPPoE tag insertion on little
-> endian systems
->    ---
->    ✗ BADSIG: DKIM/roeck-us.net
-> 
-> your DKIM looks fine on the messages I see, but now that I look at it
-> on the mailing list, I notice that your DKIM really is very wrong, and
-> has a lot of headers that a DKIM signature should *not* have.
-> 
-> Your DKIM signature includes header names that are very much for list
-> management, so by definition DKIM will fail for any email you send
-> through a mailing list. Headers like
-> "Resent-From:Resent-Sender:Resent-To:Resent-Cc
-> :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe" etc.
-> 
-> The DKIM setup should protect the meaningful headers that matter to
-> the sender, not things that the mail system will validly add when it
-> passes through.
-> 
-> So the DKIM header list should be things like
-> ":To:From:Cc:Message-Id:Date:Subject:"
-> 
-> Not things like "Sender" or mailing list things.
+On Mon, Apr 04, 2022, Maxim Levitsky wrote:
+> On Sat, 2022-04-02 at 01:09 +0000, Sean Christopherson wrote:
+> > Re-inject INT3/INTO instead of retrying the instruction if the CPU
+> > encountered an intercepted exception while vectoring the software
+> > exception, e.g. if vectoring INT3 encounters a #PF and KVM is using
+> > shadow paging.  Retrying the instruction is architecturally wrong, e.g.
+> > will result in a spurious #DB if there's a code breakpoint on the INT3/O,
+> > and lack of re-injection also breaks nested virtualization, e.g. if L1
+> > injects a software exception and vectoring the injected exception
+> > encounters an exception that is intercepted by L0 but not L1.
+> > 
+> > Due to, ahem, deficiencies in the SVM architecture, acquiring the next
+> > RIP may require flowing through the emulator even if NRIPS is supported,
+> > as the CPU clears next_rip if the VM-Exit is due to an exception other
+> > than "exceptions caused by the INT3, INTO, and BOUND instructions".  To
+> > deal with this, "skip" the instruction to calculate next_ript, and then
+> > unwind the RIP write and any side effects (RFLAGS updates).
 
-I tried to tell my provider, but to no avail. Until now I used gmail,
-but gmail will disable that ability by end of this month, leaving me
-in the dark. Lose-lose situation for me. Right now I don't have a
-useful alternative that doesn't require me to change my e-mail
-address completely (or setting up my own e-mail server which
-is a pita).
+...
 
+> > @@ -3698,6 +3737,18 @@ static void svm_complete_interrupts(struct kvm_vcpu *vcpu)
+> >  	if (!(exitintinfo & SVM_EXITINTINFO_VALID))
+> >  		return;
+> >  
+> > +	/*
+> > +	 * If NextRIP isn't enabled, KVM must manually advance RIP prior to
+> > +	 * injecting the soft exception/interrupt.  That advancement needs to
+> > +	 * be unwound if vectoring didn't complete.  Note, the _new_ event may
+> > +	 * not be the injected event, e.g. if KVM injected an INTn, the INTn
+> > +	 * hit a #NP in the guest, and the #NP encountered a #PF, the #NP will
+> > +	 * be the reported vectored event, but RIP still needs to be unwound.
+> > +	 */
+> > +	if (soft_int_injected &&
+> > +	    kvm_is_linear_rip(vcpu, to_svm(vcpu)->soft_int_linear_rip))
+> > +		kvm_rip_write(vcpu, kvm_rip_read(vcpu) - soft_int_injected);
+
+Doh, I botched my last minute rebase.  This is duplicate code and needs to be
+dropped.
+
+> > +
+> >  	kvm_make_request(KVM_REQ_EVENT, vcpu);
+> >  
+> >  	vector = exitintinfo & SVM_EXITINTINFO_VEC_MASK;
+> > @@ -3711,9 +3762,9 @@ static void svm_complete_interrupts(struct kvm_vcpu *vcpu)
+> >  	 * hit a #NP in the guest, and the #NP encountered a #PF, the #NP will
+> >  	 * be the reported vectored event, but RIP still needs to be unwound.
+> >  	 */
+> > -	if (int3_injected && type == SVM_EXITINTINFO_TYPE_EXEPT &&
+> > -	   kvm_is_linear_rip(vcpu, svm->int3_rip))
+> > -		kvm_rip_write(vcpu, kvm_rip_read(vcpu) - int3_injected);
+> > +	if (soft_int_injected && type == SVM_EXITINTINFO_TYPE_EXEPT &&
+> > +	   kvm_is_linear_rip(vcpu, svm->soft_int_linear_rip))
+> > +		kvm_rip_write(vcpu, kvm_rip_read(vcpu) - soft_int_injected);
+> >  
+> >  	switch (type) {
+> >  	case SVM_EXITINTINFO_TYPE_NMI:
+> > @@ -3726,14 +3777,6 @@ static void svm_complete_interrupts(struct kvm_vcpu *vcpu)
+> >  		if (vector == X86_TRAP_VC)
+> >  			break;
+> >  
+> > -		/*
+> > -		 * In case of software exceptions, do not reinject the vector,
+> > -		 * but re-execute the instruction instead. Rewind RIP first
+> > -		 * if we emulated INT3 before.
+> > -		 */
+> > -		if (kvm_exception_is_soft(vector))
+> > -			break;
+> > -
+> >  		if (exitintinfo & SVM_EXITINTINFO_VALID_ERR) {
+> >  			u32 err = svm->vmcb->control.exit_int_info_err;
+> >  			kvm_requeue_exception_e(vcpu, vector, err);
+> > diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> > index 47e7427d0395..a770a1c7ddd2 100644
+> > --- a/arch/x86/kvm/svm/svm.h
+> > +++ b/arch/x86/kvm/svm/svm.h
+> > @@ -230,8 +230,8 @@ struct vcpu_svm {
+> >  	bool nmi_singlestep;
+> >  	u64 nmi_singlestep_guest_rflags;
+> >  
+> > -	unsigned int3_injected;
+> > -	unsigned long int3_rip;
+> > +	unsigned soft_int_injected;
+> > +	unsigned long soft_int_linear_rip;
+> >  
+> >  	/* optional nested SVM features that are enabled for this guest  */
+> >  	bool nrips_enabled                : 1;
 > 
-> Anyway, I was going to just commit it directly, but with the DKIM
-> verification failing, I was a bit less eager to. And then I noticed
-> that you used "be16_to_cpu()" - which is technically correct - which
-> doesn't match the other code in that file.
 > 
-Another lose-lose situation. Larry tells me I should use
-be16_to_cpu(), you tell me I should not.
+> I mostly agree with this patch, but think that it doesn't address the
+> original issue that Maciej wanted to address:
+> 
+> Suppose that there is *no* instruction in L2 code which caused the software
+> exception, but rather L1 set arbitrary next_rip, and set EVENTINJ to software
+> exception with some vector, and that injection got interrupted.
+> 
+> I don't think that this code will support this.
 
-Either case, https://lore.kernel.org/r/YkPK/QmLAp3BkygY@sckzor-linux.localdomain
-is a more complete solution, so you might want to pick that one.
+Argh, you're right.  Maciej's selftest injects without an instruction, but it doesn't
+configure the scenario where that injection fails due to an exception+VM-Exit that
+isn't intercepted by L1 and is handled by L0.  The event_inj test gets the coverage
+for the latter, but always has a backing instruction. 
 
-Thanks,
-Guenter
+> I think that svm_complete_interrupts should store next_rip it in some field
+> like VMX does (vcpu->arch.event_exit_inst_len).
+
+Yeah.  The ugly part is that because next_rip is guaranteed to be cleared on exit
+(the exit is gauranteed to be due to a fault-like exception), KVM has to snapshot
+next_rip during the "original" injection and use the linear_rip matching heuristic
+to detect this scenario.
+
+> That field also should be migrated, or we must prove that it works anyway.
+> E.g, what happens when we tried to inject event,
+> injection was interrupted by other exception, and then we migrate?
+
+Ya, should Just Work if control.next_rip is used to cache the next rip.
+
+Handling this doesn't seem to be too awful (haven't tested yet), it's largely the
+same logic as the existing !nrips code.
+
+In svm_update_soft_interrupt_rip(), snapshot all information regardless of whether
+or not nrips is enabled:
+
+	svm->soft_int_injected = true;
+	svm->soft_int_csbase = svm->vmcb->save.cs.base;
+	svm->soft_int_old_rip = old_rip;
+	svm->soft_int_next_rip = rip;
+
+	if (nrips)
+		kvm_rip_write(vcpu, old_rip);
+
+	if (static_cpu_has(X86_FEATURE_NRIPS))
+		svm->vmcb->control.next_rip = rip;
+
+and then in svm_complete_interrupts(), change the linear RIP matching code to look
+for the old rip in the nrips case and stuff svm->vmcb->control.next_rip on match.
+
+	bool soft_int_injected = svm->soft_int_injected;
+	unsigned soft_int_rip;
+
+	svm->soft_int_injected = false;
+
+	if (soft_int_injected) {
+		if (nrips)
+			soft_int_rip = svm->soft_int_old_rip;
+		else
+			soft_int_rip = svm->soft_int_next_rip;
+	}
+
+	...
+
+	if soft_int_injected && type == SVM_EXITINTINFO_TYPE_EXEPT &&
+	   kvm_is_linear_rip(vcpu, soft_int_rip + svm->soft_int_csbase)) {
+		if (nrips)
+			svm->vmcb->control.next_rip = svm->soft_int_next_rip;
+		else
+			kvm_rip_write(vcpu, svm->soft_int_old_rip);
+	}
+
+
+

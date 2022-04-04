@@ -2,105 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 611CC4F0D43
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 02:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C51B4F0D48
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 02:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376819AbiDDA2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 20:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40464 "EHLO
+        id S1376826AbiDDAnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 20:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242059AbiDDA2Q (ORCPT
+        with ESMTP id S241444AbiDDAnR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 20:28:16 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8BC38D93;
-        Sun,  3 Apr 2022 17:26:20 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KWs5Q39kjz4xNl;
-        Mon,  4 Apr 2022 10:26:18 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649031979;
-        bh=vkEydrZ8KYUUbt4hWGk3zyh3sYWeOUuzb4/bDpe8168=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Yv4PhXPfPXqBER8LKEOsoBHo6jtU79PVXkONfInMbtSWutYj1rkkSbLRnZ/eZm+l6
-         fOqfxATcNUvdrMmmixY3KrwKTAGjEv1szgJgkUp/WxxpGB/4/0wvbdF120oPyC62GX
-         zWGhWYNUw4B3tmWZkhnHxlXQi421va3VSHZd9TaxiT3EwvcdKOakHtpC0bFvHBLrLr
-         G/FuiCA7tvDZRg/lYc9MzFpSUI1D6PHB4rr7gfG8NTUerBufV/NoEr8MrIknADY6Rd
-         qSSUBuhVXyMeo5BTge+8tSwxNtuDevfh2IuuFmrvByhRDzSg8GTUU8RNgrsB/eAcjh
-         XTv5vNQkYy9gg==
-Date:   Mon, 4 Apr 2022 10:26:17 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Wei Xiao <xiaowei66@huawei.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the sysctl tree
-Message-ID: <20220404102617.572de1d8@canb.auug.org.au>
-In-Reply-To: <20220330115617.4d694d11@canb.auug.org.au>
-References: <20220330115617.4d694d11@canb.auug.org.au>
+        Sun, 3 Apr 2022 20:43:17 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81F223150;
+        Sun,  3 Apr 2022 17:41:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649032880; x=1680568880;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=AQY0RgB1apu3f3OnS0H9ItCK1wYR3RZozmXjysWHgPs=;
+  b=QJp0fL+Da3hubl9IgHYFLEIeeJd0N3fpNbHVEln206FMdcN6S+cbE8Zc
+   3LucWdIiz7wXIfiBrHrFHOlh5RekSxafsIgX982ezZqeuz9WTr7pgheRv
+   cmb0K/8iamr9wTh/KJKm2Gt4alnBX2J3w40BV7wvOrEdho9JcMO+AXX+k
+   j+GYr4Q6XfLKKZpnshwlvyMamRYBM6NWxlwPon88iVGkcCcnDWh79lG/3
+   FVQjKCc9XzWXdvOhuDePtJ8vC2Mn1ZBWYeziaNF4izWH92Mxo/RW2JwiO
+   Bzn0y205FkQzd2GqKX4F8Trb7AmL0P/Dwa+3koM+8cZ5Jv2LuJDszQFkH
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="285364336"
+X-IronPort-AV: E=Sophos;i="5.90,233,1643702400"; 
+   d="scan'208";a="285364336"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2022 17:41:20 -0700
+X-IronPort-AV: E=Sophos;i="5.90,233,1643702400"; 
+   d="scan'208";a="789338501"
+Received: from bthorroc-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.251.132.176])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Apr 2022 17:41:18 -0700
+Message-ID: <039c9eada49e9eeca48c39c5bea0fac0ab68c673.camel@intel.com>
+Subject: Re: [RFC PATCH v5 038/104] KVM: x86/mmu: Allow per-VM override of
+ the TDP max page level
+From:   Kai Huang <kai.huang@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>
+Date:   Mon, 04 Apr 2022 12:41:16 +1200
+In-Reply-To: <YkeUDJP1AWKU/ixG@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+         <5cc4b1c90d929b7f4f9829a42c0b63b52af0c1ed.1646422845.git.isaku.yamahata@intel.com>
+         <c6fb151ced1675d1c93aa18ad8c57c2ffc4e9fcb.camel@intel.com>
+         <YkcHZo3i+rki+9lK@google.com>
+         <43098446667829fc592b7cc7d5fd463319d37562.camel@intel.com>
+         <YkeUDJP1AWKU/ixG@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.826Wd/eyfK8gDkf=r_gnft";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/.826Wd/eyfK8gDkf=r_gnft
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sat, 2022-04-02 at 00:08 +0000, Sean Christopherson wrote:
+> On Sat, Apr 02, 2022, Kai Huang wrote:
+> > On Fri, 2022-04-01 at 14:08 +0000, Sean Christopherson wrote:
+> > > On Fri, Apr 01, 2022, Kai Huang wrote:
+> > > > On Fri, 2022-03-04 at 11:48 -0800, isaku.yamahata@intel.com wrote:
+> > > > > From: Sean Christopherson <sean.j.christopherson@intel.com>
+> > > > > 
+> > > > > In the existing x86 KVM MMU code, there is already max_level member in
+> > > > > struct kvm_page_fault with KVM_MAX_HUGEPAGE_LEVEL initial value.  The KVM
+> > > > > page fault handler denies page size larger than max_level.
+> > > > > 
+> > > > > Add per-VM member to indicate the allowed maximum page size with
+> > > > > KVM_MAX_HUGEPAGE_LEVEL as default value and initialize max_level in struct
+> > > > > kvm_page_fault with it.
+> > > > > 
+> > > > > For the guest TD, the set per-VM value for allows maximum page size to 4K
+> > > > > page size.  Then only allowed page size is 4K.  It means large page is
+> > > > > disabled.
+> > > > 
+> > > > Do not support large page for TD is the reason that you want this change, but
+> > > > not the result.  Please refine a little bit.
+> > > 
+> > > Not supporting huge pages was fine for the PoC, but I'd prefer not to merge TDX
+> > > without support for huge pages.  Has any work been put into enabling huge pages?
+> > > If so, what's the technical blocker?  If not...
+> > 
+> > Hi Sean,
+> > 
+> > Is there any reason large page support must be included in the initial merge of
+> > TDX?  Large page is more about performance improvement I think.  Given this
+> > series is already very big, perhaps we can do it later.
+> 
+> I'm ok punting 1gb for now, but I want to have a high level of confidence that 2mb
+> pages will work without requiring significant churn in KVM on top of the initial
+> TDX support.  I suspect gaining that level of confidence will mean getting 95%+ of
+> the way to a fully working code base.  IIRC, 2mb wasn't expected to be terrible, it
+> was 1gb support where things started to get messy.
 
-Hi all,
+OK no argument here :)
 
-On Wed, 30 Mar 2022 11:56:17 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Hi all,
->=20
-> After merging the sysctl tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
->=20
-> kernel/sysctl.c:1776:36: error: 'C_A_D' undeclared here (not in a functio=
-n)
->  1776 |                 .data           =3D &C_A_D,
->       |                                    ^~~~~
->=20
-> Caused by commit
->=20
->   84053cc7ef2f ("ftrace: move sysctl_ftrace_enabled to ftrace.c")
->=20
-> I can't imagine how that happened (though I do note that the whole branch
-> has been rebased and not tested :-( ).
->=20
-> I have used the sysctl tree from next-20220329 for today.
+-- 
+Thanks,
+-Kai
 
-I am still getting this failure.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/.826Wd/eyfK8gDkf=r_gnft
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJKOykACgkQAVBC80lX
-0GxMvggAn8cFamOuwoy3+EiT5ilkrMlCAkidsDCOPv5hN5MGKjmw7aPx/LMf1ZUq
-P3+i2skyY8hapx180oYRdrBAEjv4EWSrSSFNDQVtT4C7WdErsVx1SzpH2JMnVyG6
-cEB9HqbaEu57YyuUk0UxBp+8VDxVXpvGyJU2Vkm3XrDZCYx5h0KJfx7kHIdLFDc8
-kn0Gym0j2nq8/BGP00IsrfuI9zICkAu3jVsSzhtqTA7obCKRzfGE43SMvjmyNGZO
-jM37zULLIuMB3IaYPL9iZfFVJ+XPfCZFss/oZ+DEZ+iAImJ3F2JcebnZG6PAFQpx
-3CExtXMmJc3zAGHlu9NHO/NxK769Aw==
-=bLaf
------END PGP SIGNATURE-----
-
---Sig_/.826Wd/eyfK8gDkf=r_gnft--

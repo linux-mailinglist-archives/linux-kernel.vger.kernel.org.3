@@ -2,126 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2EF74F0D9D
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 04:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D6C4F0DA2
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 05:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376950AbiDDCyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 22:54:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48892 "EHLO
+        id S1346821AbiDDDHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 23:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238893AbiDDCyG (ORCPT
+        with ESMTP id S238893AbiDDDH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 22:54:06 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD6B396A1
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 19:52:10 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id q200so6637190qke.7
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 19:52:10 -0700 (PDT)
+        Sun, 3 Apr 2022 23:07:28 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD5924BC8
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 20:05:33 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id w4so12378189wrg.12
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 20:05:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=northvilleschools.net; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=otqIVowhU2obuVpjI9J66qJe/tdtEeQSkuJxEFFPVfw=;
-        b=CYdW/tHTao9xYQkkEgM4OgPB4UeamwEomjOcg8DPUI8rOX8OH9QPHQ9pwOsr3PXen5
-         uAoZiT0jzn3JqOp1nHTNaYsBpTOPvoeGiFQ++RJcdVPEPZ+91aHTB4CtoS2pak06daaJ
-         QgPNxuNn6qntkYIpS2zkLnxKPNVhP17KX2nnmUurTGUxczde02cM9z25fwMRYZwLD1oP
-         ntk07CnKq2q5ATZllrLXCxFu5CEvZYhg8VQmvD8MEXF5PkoOfskZcjV0CzNDfgW2EnGO
-         B1EceoKeBOszPct6xmvGEa4PKtxV0iMuttAIPfThwMiBzcpNB9C9M7guISP9/8l55LjE
-         ET0A==
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Zd1t2Pkuz698pTtgUjJwnowpfooSne/24mXVqKShj+c=;
+        b=NWiwe7Qw5ka9+CSZ1/qW67wTbrDFP0cDPbwGe/J6FWhHkb5Sxt4n4xmacvf/7NvIH8
+         3w6RbfIRqVnT0UVbdtZeYqpV++c6S7BJnbyeh3/r9cnceCAZ9bWsutuz1HNLVXV+B8uo
+         WhUgw+dUJeLh2DaqquPfW5OTuHBZzGhP/etJ8eNt/CBog7GE5wgIna9JPIVP12BBtc9a
+         j7hLtaTWSsgqX/RtFKbXHtAuOSFuiYC7ZkffF+ba1HIzMvzzjjKqxoxGTvAOU77ohyFv
+         ccKHaokZjQ8KLKN9m4xBNPzefa9WxtUlnoU6N9iFI2xzCtFbZ767HuPX9Hv2vykF46/q
+         YduA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=otqIVowhU2obuVpjI9J66qJe/tdtEeQSkuJxEFFPVfw=;
-        b=gLnFJt4XDBzfkGDq1U+nJbZIFzq/Y3ifwU4CpicpAZd7Lnhfy2ek+C29sL3Zdgfaiy
-         5XqPSPU7fKCV51RIFnkH3yZnQwMb46UI6SS1ZNjHv6CUgKmp/iV6QHRznY2LdgfeSISI
-         fOFKHsi4CaNDXFYqPd2R97/f0a7iTyzJvze3XNYI3BvYwXjo8wjgF5+VZIb2twWsgvdO
-         4xIbRbgWcUmHKaNb6K1yNjuTIpme4Bej99x3FuIWoewB7BVIV0/ds+guX7iMjH4i/S3E
-         dnF95v50xVOZk10NiHLgUnGQF0XIrQP5VGX/qk8tPYUghEXvxfKsUpuCiMxXHwo8qpn1
-         4cTw==
-X-Gm-Message-State: AOAM533ZeVtJ/UHetnhwdE8K6T/r6ok0tE68LvUCV77de2Gx9kH0Tsgs
-        0kDWQ4YRP9FSp8oa0jynPDWOzw==
-X-Google-Smtp-Source: ABdhPJwFMLKJkNF7xvI5cuv4J44M713fbdKhh8CxD5KdS58mIW4cgGnX17hUpDsJgB+iM1RsQDVJmg==
-X-Received: by 2002:a37:781:0:b0:67e:11a2:7d00 with SMTP id 123-20020a370781000000b0067e11a27d00mr12997820qkh.218.1649040729273;
-        Sun, 03 Apr 2022 19:52:09 -0700 (PDT)
-Received: from sckzor-linux (d4-50-247-168.col.wideopenwest.com. [50.4.168.247])
-        by smtp.gmail.com with ESMTPSA id k13-20020a05622a03cd00b002e21621c243sm7872961qtx.39.2022.04.03.19.52.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 19:52:08 -0700 (PDT)
-Date:   Sun, 3 Apr 2022 22:52:07 -0400
-From:   Charlie Sands <sandsch@northvilleschools.net>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        paskripkin@gmail.com
-Subject: [PATCH V2] Fix unsafe memory access by memcmp
-Message-ID: <YkpdVyuQguGzPSNE@sckzor-linux.localdomain>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Zd1t2Pkuz698pTtgUjJwnowpfooSne/24mXVqKShj+c=;
+        b=pJXen/E5hN85S+8/GZ7nFoZpEsec+Xb8VT8RNgeSLswPPGsdfA8sFTuQp3zhZPG3rQ
+         9uqjg9MV6gWedPDxqF28hPRqcEhDw2ZurLeSdwzOrl3imDAO2N5RSasl6lft3Sn3g8PM
+         szvPG998CVLMpZNnKDa8fRMAKVeCHVuYWQMTkFJ4qunkKAgYHh5hh5Ge6Z+VMVm9FQbR
+         bGKMmJP97yTFqNRI6sx4siZWqSKZsRdG94zGNtmDqm2wPqoUA44eQjfuGiGq92bPdeSW
+         fHOif8mWac7GL1XDWE0CsW03KsBfhxVuzWqG/qf6z3iYFvZ9e1E2YludFH57QmCFOmyw
+         YMxQ==
+X-Gm-Message-State: AOAM532o2t1fBBMmf/wNlZ14MFuw4ka4IgZlQwJvvhfuN3mjs8UhMCEg
+        b7SHoOj8/rt7kmyX5g0xhb6s3sBCk034c/B40fBTPA==
+X-Google-Smtp-Source: ABdhPJyGYpZSUqo724IzShlVtF1ee3pTpacTkhreTLjXWB9AK2Sv6hBJilqv9BLYZ4/IwHSaMW2EmCu5gefIZKnIk60=
+X-Received: by 2002:a5d:6e54:0:b0:204:635:42ba with SMTP id
+ j20-20020a5d6e54000000b00204063542bamr15548840wrz.214.1649041531815; Sun, 03
+ Apr 2022 20:05:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220403031355.20894-1-rdunlap@infradead.org>
+In-Reply-To: <20220403031355.20894-1-rdunlap@infradead.org>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 4 Apr 2022 08:35:19 +0530
+Message-ID: <CAAhSdy2CJMeD_JhvwkEKShtYxyLGVRme8rE4cmCcDFfO90_D-Q@mail.gmail.com>
+Subject: Re: [PATCH -next] cpuidle: riscv: support non-SMP config
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes sparse warnings about the memcmp function unsafely
-accessing userspace memory without first copying it to kernel space.
+(Removed my WDC email because it does not exist anymore)
 
-Signed-off-by: Charlie Sands <sandsch@northvilleschools.net>
----
+On Sun, Apr 3, 2022 at 8:44 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> Add <asm/smp.h> for cpuid_to_hartid_map etc.
+> This is needed for both SMP and non-SMP builds, but not having it
+> causes a build error for non-SMP:
+>
+> drivers/cpuidle/cpuidle-riscv-sbi.c: In function 'sbi_cpuidle_init_cpu':
+> drivers/cpuidle/cpuidle-riscv-sbi.c:350:26: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror=implicit-function-declaration]
+>
+> Fixes: 6abf32f1d9c5 ("cpuidle: Add RISC-V SBI CPU idle driver")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Anup Patel <anup.patel@wdc.com>
+> Cc: Anup Patel <anup@brainfault.org>
+> Cc: Anup Patel <apatel@ventanamicro.com>
+> Cc: Atish Patra <atishp@rivosinc.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-riscv@lists.infradead.org
+> Cc: Palmer Dabbelt <palmer@rivosinc.com>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> ---
+>  drivers/cpuidle/cpuidle-riscv-sbi.c |    1 +
+>  1 file changed, 1 insertion(+)
+>
+> --- linux-next-20220401.orig/drivers/cpuidle/cpuidle-riscv-sbi.c
+> +++ linux-next-20220401/drivers/cpuidle/cpuidle-riscv-sbi.c
+> @@ -22,6 +22,7 @@
+>  #include <linux/pm_runtime.h>
+>  #include <asm/cpuidle.h>
+>  #include <asm/sbi.h>
+> +#include <asm/smp.h>
 
-V2: Fixed checkpatch.pl warning and changed variable name as suggested
-by Greg K. H. and improved error checking on the "copy_from_user" function as
-suggested by Pavel Skripkin.
+I suggest include linux/smp.h here instead of asm/smp.h
 
- drivers/staging/r8188eu/os_dep/ioctl_linux.c | 21 ++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+Otherwise it looks good to me.
 
-diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-index 7df213856d66..4b4eec2bde96 100644
---- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-@@ -3233,23 +3233,28 @@ static int rtw_p2p_get(struct net_device *dev,
- 			       struct iw_request_info *info,
- 			       union iwreq_data *wrqu, char *extra)
- {
--	if (!memcmp(wrqu->data.pointer, "status", 6)) {
-+	char wrqu_data[9];
-+
-+	if (copy_from_user(wrqu_data, wrqu->data.pointer, 9) != 0)
-+		return 0;
-+
-+	if (!memcmp(wrqu_data, "status", 6)) {
- 		rtw_p2p_get_status(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "role", 4)) {
-+	} else if (!memcmp(wrqu_data, "role", 4)) {
- 		rtw_p2p_get_role(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "peer_ifa", 8)) {
-+	} else if (!memcmp(wrqu_data, "peer_ifa", 8)) {
- 		rtw_p2p_get_peer_ifaddr(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "req_cm", 6)) {
-+	} else if (!memcmp(wrqu_data, "req_cm", 6)) {
- 		rtw_p2p_get_req_cm(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "peer_deva", 9)) {
-+	} else if (!memcmp(wrqu_data, "peer_deva", 9)) {
- 		/*	Get the P2P device address when receiving the provision discovery request frame. */
- 		rtw_p2p_get_peer_devaddr(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "group_id", 8)) {
-+	} else if (!memcmp(wrqu_data, "group_id", 8)) {
- 		rtw_p2p_get_groupid(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "peer_deva_inv", 9)) {
-+	} else if (!memcmp(wrqu_data, "peer_deva_inv", 9)) {
- 		/*	Get the P2P device address when receiving the P2P Invitation request frame. */
- 		rtw_p2p_get_peer_devaddr_by_invitation(dev, info, wrqu, extra);
--	} else if (!memcmp(wrqu->data.pointer, "op_ch", 5)) {
-+	} else if (!memcmp(wrqu_data, "op_ch", 5)) {
- 		rtw_p2p_get_op_ch(dev, info, wrqu, extra);
- 	}
- 	return 0;
--- 
-2.35.1
+Reviewed-by: Anup Patel <anup@brainfault.org>
 
+Regards,
+Anup
+
+>  #include <asm/suspend.h>
+>
+>  #include "dt_idle_states.h"

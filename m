@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839784F1F12
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E894F1E85
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381258AbiDDVtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50606 "EHLO
+        id S1346755AbiDDVvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:51:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379981AbiDDScE (ORCPT
+        with ESMTP id S1379984AbiDDScQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 14:32:04 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9E5255B5;
-        Mon,  4 Apr 2022 11:30:07 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id r66so218148pgr.3;
-        Mon, 04 Apr 2022 11:30:07 -0700 (PDT)
+        Mon, 4 Apr 2022 14:32:16 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1A728E28;
+        Mon,  4 Apr 2022 11:30:20 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id k14so9088490pga.0;
+        Mon, 04 Apr 2022 11:30:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=urMa/+8sUVuJZ09fHlKhlvouX/0Bx6mJ/aPV5M7nHpA=;
-        b=CwXiWYL4WVHs83y/rIg3mMyE/Na8xTwQ3BQAUEZilzE8s++8dcmEl7GfOZH+Z+rxk3
-         Vh2jmcdiqDjtk/5MMerHmeBIhcZZQQEm4wffOdCHSNw52tI8j8hFgS9t/wJ9pZBQWnxV
-         dV5E+2wGA9Wj6KUsRiBxK3xc5i7j1AmAANDUlILXZRDR4CAe/D/zlejgCpKGsZfJjZXm
-         RnGzX7gRjVVP9QL/uqGafQE8KsL7IMuytb17NWG2TVripMc1MUcZdpceslZbbGxdxRMT
-         TPfv4VoECAZD1UeObpIrYRC7+pC6b/N9/fx0tgUcWtutqFsa2t8cNlL//6Th97bs5m5R
-         m0Tg==
+        bh=yU/npQkA3tjufXIoz/2Bj10BQJGtOZiLPnmEjB7l/dM=;
+        b=ICgAi3qviwX7vleQkAxB61BLj3mLfdEss7OzH78FZDGf35Cpga1E+CqY+p2e1zQDcw
+         qeKn0CA1rU6pnk8CoQVs3hfU2TUpj7aUCHEKopnGWEetguKqcmY3xd5c6f1mPnp/5jmx
+         FZkEMskFvUsZzr6WU19y/XWgAQZ0cF2gRDCaa3Zoj29RrPgdtayt+STm9jzxLes6Retk
+         5XnMiWmPxSsOjOEYekNdacc7aQiXcDSss807fWkZ8oIGDjJ/pS0M5zphnN+KvWYiUnd9
+         olDzikcWwL1XQK5ek0xaidSf+q+62l0IrsXO5Lgm3S+CucHteoVTrw4+ecxQjY6biyFl
+         cvZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=urMa/+8sUVuJZ09fHlKhlvouX/0Bx6mJ/aPV5M7nHpA=;
-        b=74tRhXneNAeO0TqHgwTtdqjgpRRyDAXDqSRKpaWlvq2X72nFSn4Zx3eRnrGR+kd71q
-         hO2BCsd5k+hpwPTPqGX6v5oqRFthRmZmiZR/IvY69fot8ub7+4glWGmT7ps8Wwb5QFqx
-         i3S8NwmPEZtZ6N5bPCxp5yfFmwhOySGVEaT+mjUcZSwc1Nz+nDqdAtFrm3Q8gQE260K9
-         MdMMNLU6D78lwSl+ytih77xqTueAfSus3GhNufdFj2oWt//zr2vM8cWRFdxAONkQjgzA
-         cuBnUWSy79a//YoZo1QSeSDw9e0gkKsrxXPzgAahZx93yHfFxMpsvFBZeLFBPIY3BGQd
-         BQrg==
-X-Gm-Message-State: AOAM533fTLaIaljzVmasOambdXup7xIZRg2Aqci7pucEMwaJTkA+rhv9
-        lPJyxd9kTvDEQlHFfJAhujM=
-X-Google-Smtp-Source: ABdhPJyexofxEeNsyOJDnUtFE9S/Yrdks28SgrDutO8qxrncoJ/sbErZKTkfBxo5sxM5K00tS8B67A==
-X-Received: by 2002:a63:2cc8:0:b0:398:36ed:c12e with SMTP id s191-20020a632cc8000000b0039836edc12emr1013655pgs.290.1649097007297;
-        Mon, 04 Apr 2022 11:30:07 -0700 (PDT)
+        bh=yU/npQkA3tjufXIoz/2Bj10BQJGtOZiLPnmEjB7l/dM=;
+        b=unRFdMMJp6GocyvLGLfai4fPSCYLr0h2TwBYC5Da7qwMbTcqcyn0GRb61ryrOI1CUy
+         0q9pYdnrA547WdkSiZ67MYPdktJYuRju0nbfUn2pFuwZKO1uQG7MisMpL8RSnTA/JKrN
+         B4t7U4ui6sbGbpR2w8S2FqyuLUWZVmgm6XOOyjJL09fYx15/+M7h13/c1iiTvdTivLO/
+         vMVKfWVOs3l93WToZAWjObr649stbaiJw459cfv0IWPwNnsq46463ffIE3mQaRT+QUwP
+         iVtHZ8rJUvlsnwh2lsnoYWUcHjqz/sxkqAJuLmYHozeHCNJDzSGeTO9JtLYbDaCVw5UV
+         2ywA==
+X-Gm-Message-State: AOAM53137IF1LRkGzmib7acQ8HGTWM0HAt69wgPsYPosu7zyxTmuxpOc
+        ThWZjcK1/2Vy1KvnLrLeFFk=
+X-Google-Smtp-Source: ABdhPJxWF7mQvPZJfqXvzCtthm6voXtsVkttbFSl2dJZgRQnAFhQWVCu0L0KurK5VHKVI0UQ4LOOJg==
+X-Received: by 2002:a63:5317:0:b0:399:58e9:882b with SMTP id h23-20020a635317000000b0039958e9882bmr165065pgb.306.1649097019502;
+        Mon, 04 Apr 2022 11:30:19 -0700 (PDT)
 Received: from localhost.localdomain ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id kk11-20020a17090b4a0b00b001c73933d803sm162656pjb.10.2022.04.04.11.30.04
+        by smtp.gmail.com with ESMTPSA id kk11-20020a17090b4a0b00b001c73933d803sm162656pjb.10.2022.04.04.11.30.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 11:30:07 -0700 (PDT)
+        Mon, 04 Apr 2022 11:30:19 -0700 (PDT)
 From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mukesh Savaliya <msavaliy@codeaurora.org>,
+        Akash Asthana <akashast@codeaurora.org>
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: [PATCH v2 1/4] dt-bindings: I2C: Add Qualcomm Geni based QUP I2C bindings
-Date:   Mon,  4 Apr 2022 23:59:34 +0530
-Message-Id: <20220404182938.29492-2-singh.kuldeep87k@gmail.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v2 4/4] dt-bindings: qcom: geni-se: Update UART schema reference
+Date:   Mon,  4 Apr 2022 23:59:37 +0530
+Message-Id: <20220404182938.29492-5-singh.kuldeep87k@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220404182938.29492-1-singh.kuldeep87k@gmail.com>
 References: <20220404182938.29492-1-singh.kuldeep87k@gmail.com>
@@ -74,133 +77,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GENI(generic interface) based Qualcomm Universal Peripheral controller
-can support multiple serial interfaces like SPI,UART and I2C.
+We now have geni based QUP UART controller individual binding, update
+reference in parent schema and remove properties from common wrapper.
 
-Unlike other I2C controllers, QUP I2C bindings are present in parent
-schema. Move it out from parent to an individual binding and let parent
-refer to child schema later on.
-
-Please note, current schema isn't complete as it misses out few
-properties and thus, add these missing properties along the process.
+With removal of last child node schema, remove common properties of all
+the controllers as they have become obsolete now.
 
 Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
 v2:
-- Change compatible from enum to const
-- Drop clock-frequency description
-- Sort nodes
+- s/uart/UART
+- Reword commit description
+- Add Krzysztof's Rb tag
+- Merge patch 5/5 of v1 series to this one:
+  https://lore.kernel.org/lkml/20220402051206.6115-6-singh.kuldeep87k@gmail.com/
 ---
- .../bindings/i2c/qcom,i2c-geni-qcom.yaml      | 100 ++++++++++++++++++
- 1 file changed, 100 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
+ .../bindings/soc/qcom/qcom,geni-se.yaml       | 51 +------------------
+ 1 file changed, 1 insertion(+), 50 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-new file mode 100644
-index 000000000000..0e7ed00562e2
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/qcom,i2c-geni-qcom.yaml
-@@ -0,0 +1,100 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/i2c/qcom,i2c-geni-qcom.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Qualcomm Geni based QUP I2C Controller
-+
-+maintainers:
-+  - Andy Gross <agross@kernel.org>
-+  - Bjorn Andersson <bjorn.andersson@linaro.org>
-+
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml#
-+
-+properties:
-+  compatible:
-+    const: qcom,geni-i2c
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    const: se
-+
-+  clock-frequency:
-+    default: 100000
-+
-+  dmas:
-+    maxItems: 2
-+
-+  dma-names:
-+    items:
-+      - const: tx
-+      - const: rx
-+
-+  interconnects:
-+    maxItems: 3
-+
-+  interconnect-names:
-+    items:
-+      - const: qup-core
-+      - const: qup-config
-+      - const: qup-memory
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  pinctrl-0: true
-+  pinctrl-1: true
-+
-+  pinctrl-names:
-+    minItems: 1
-+    items:
-+      - const: default
-+      - const: sleep
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  reg:
-+    maxItems: 1
-+
-+  required-opps:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/clock/qcom,gcc-sc7180.h>
-+    #include <dt-bindings/interconnect/qcom,sc7180.h>
-+    #include <dt-bindings/power/qcom-rpmpd.h>
-+
-+    i2c@88000 {
-+        compatible = "qcom,geni-i2c";
-+        reg = <0x00880000 0x4000>;
-+        clock-names = "se";
-+        clocks = <&gcc GCC_QUPV3_WRAP0_S0_CLK>;
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&qup_i2c0_default>;
-+        interrupts = <GIC_SPI 601 IRQ_TYPE_LEVEL_HIGH>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        interconnects = <&qup_virt MASTER_QUP_CORE_0 0 &qup_virt SLAVE_QUP_CORE_0 0>,
-+                        <&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_QUP_0 0>,
-+                        <&aggre1_noc MASTER_QUP_0 0 &mc_virt SLAVE_EBI1 0>;
-+        interconnect-names = "qup-core", "qup-config", "qup-memory";
-+        power-domains = <&rpmhpd SC7180_CX>;
-+        required-opps = <&rpmhpd_opp_low_svs>;
-+    };
-+...
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+index e6073923e03a..c8e1a4a87ba8 100644
+--- a/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,geni-se.yaml
+@@ -64,39 +64,6 @@ required:
+   - ranges
+ 
+ patternProperties:
+-  "^.*@[0-9a-f]+$":
+-    type: object
+-    description: Common properties for GENI Serial Engine based I2C, SPI and
+-                 UART controller.
+-
+-    properties:
+-      reg:
+-        description: GENI Serial Engine register address and length.
+-        maxItems: 1
+-
+-      clock-names:
+-        const: se
+-
+-      clocks:
+-        description: Serial engine core clock needed by the device.
+-        maxItems: 1
+-
+-      interconnects:
+-        minItems: 2
+-        maxItems: 3
+-
+-      interconnect-names:
+-        minItems: 2
+-        items:
+-          - const: qup-core
+-          - const: qup-config
+-          - const: qup-memory
+-
+-    required:
+-      - reg
+-      - clock-names
+-      - clocks
+-
+   "spi@[0-9a-f]+$":
+     type: object
+     description: GENI serial engine based SPI controller. SPI in master mode
+@@ -133,23 +100,7 @@ patternProperties:
+   "serial@[0-9a-f]+$":
+     type: object
+     description: GENI Serial Engine based UART Controller.
+-    $ref: /schemas/serial.yaml#
+-
+-    properties:
+-      compatible:
+-        enum:
+-          - qcom,geni-uart
+-          - qcom,geni-debug-uart
+-
+-      interrupts:
+-        minItems: 1
+-        items:
+-          - description: UART core irq
+-          - description: Wakeup irq (RX GPIO)
+-
+-    required:
+-      - compatible
+-      - interrupts
++    $ref: /schemas/serial/qcom,serial-geni-qcom.yaml#
+ 
+ additionalProperties: false
+ 
 -- 
 2.25.1
 

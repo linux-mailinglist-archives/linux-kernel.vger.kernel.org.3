@@ -2,196 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A104F177A
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 235C84F1782
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243107AbiDDOra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 10:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
+        id S1378305AbiDDOtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 10:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379689AbiDDOpJ (ORCPT
+        with ESMTP id S1378639AbiDDOsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 10:45:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8B13389
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 07:42:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649083337;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hXiWPffxpHbWQ2eIaoK3c/FiSIjbtVnbbyc5wOi1X2k=;
-        b=KC0T5noqfmU2spQqb8t9kaEs+S7HaGie9N7S7YS4L3iF8FyrM0TRZWnYz1DrrRnWf5tsFe
-        onRxrsAubXGO+S19rhqwlZnV2lxCV/j+P7qHws2F1S0ghfdKN2bG9DdFKuFzt4N4Yr/r5G
-        xGrhaYBRtxHMKRBjCQxKQwbLU57GNJU=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-100-iuZBHrvUNPGLHF6zZUm4uQ-1; Mon, 04 Apr 2022 10:42:16 -0400
-X-MC-Unique: iuZBHrvUNPGLHF6zZUm4uQ-1
-Received: by mail-wm1-f72.google.com with SMTP id t2-20020a7bc3c2000000b003528fe59cb9so5074384wmj.5
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 07:42:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hXiWPffxpHbWQ2eIaoK3c/FiSIjbtVnbbyc5wOi1X2k=;
-        b=JsFtD10Dl2Dd53VNSTwcTG2mbeV7Hoou/liAyBPgHVLOUXUKKjc2ruz+lVzj+W3XnI
-         Lwm+4g+msI1a6/36IIlwbVOr380TRt0sowd2H4nx7VSf9kItxbG3Drj63uuRccNK0H4q
-         UYMnnaDiK0I30mR4EPPD+1lIPbsqXHB+VicLsftK+QTXCn4zqi1yN7Qlq5ea67OgIuHQ
-         jI3dNsfUDD3NcEBeqARvnxZvaT3WXKiqAYqXUOk5/KssQ42Ffwhv6+lrbdNoXnwY2UkL
-         RFIvf7iz59B28w/BASy6J+Grrh6nClyLDpMF74k11h2nG2b3Bt75s1CBFSkS60neov+l
-         CZLw==
-X-Gm-Message-State: AOAM530itp5SL+CBCnnziQ6l/y5/Zd/8MO1D8iTMYzTcezlbK3zdzzwL
-        pThNsmVlptMvuv0TIjAOaFZJ0MkXRVj/MmTuU9svwF7DaeW9sgrf3AZtCvgYcyogKzE1Gz25Zgl
-        dJWO3PyxPvwbmC4bygvcUaZtvK1fBdg3mdzj8sGiX
-X-Received: by 2002:a5d:4684:0:b0:206:160d:e0c9 with SMTP id u4-20020a5d4684000000b00206160de0c9mr2639821wrq.493.1649083334825;
-        Mon, 04 Apr 2022 07:42:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyg+AfJaKH2047sRS+vqJejShKW3qlU7AVJoJsOCrGfYlFDGBqiqqYdurFN8nbwtgyAQlaX7ImMjM46ne0LI5w=
-X-Received: by 2002:a5d:4684:0:b0:206:160d:e0c9 with SMTP id
- u4-20020a5d4684000000b00206160de0c9mr2639801wrq.493.1649083334618; Mon, 04
- Apr 2022 07:42:14 -0700 (PDT)
+        Mon, 4 Apr 2022 10:48:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B442740907;
+        Mon,  4 Apr 2022 07:44:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32424B8171B;
+        Mon,  4 Apr 2022 14:44:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E2E7C340EE;
+        Mon,  4 Apr 2022 14:44:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649083485;
+        bh=hfIqoM3h/gz+tByTCRoRc0EQZSOX5qfDE+fO89hWlj0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=GcAaiI9iWaGMwggzARvbZP6s+jScCgB92HITxahAIxTos8ySrkjWS/7/FF8ZEgcsI
+         iR1iTIb8FgwbkVquVEBOtQI7RnuJdMJaAAs2yW5z1XXNcZPBIe54tKTE51YhV+ry/U
+         4nt4LiXVwXc5U+Nkj76JzQlY+Miq7LOtFet/isPZZD+ymi87TzMk0L+x5wPwzspAdR
+         7+FT2JnNqfSQ6jse9ENuHWnJEft40JBlld49Oa54b8FAQ4z0mzISE0u1z0WUbVnJUR
+         vnGs81zo/1e4dYke+kN6l3AtWJ6vn2Nqq7DswY/BATuMfM8AdO56sn2o3E8VcMNG2Z
+         kt8P09vYiulWQ==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, arnd@arndb.de
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: [PATCH] csky: optimize memcpy_{from,to}io() and memset_io()
+Date:   Mon,  4 Apr 2022 22:44:27 +0800
+Message-Id: <20220404144427.2793051-1-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220331223857.902911-1-jakobkoschel@gmail.com> <20220331223857.902911-2-jakobkoschel@gmail.com>
-In-Reply-To: <20220331223857.902911-2-jakobkoschel@gmail.com>
-From:   Andreas Gruenbacher <agruenba@redhat.com>
-Date:   Mon, 4 Apr 2022 16:42:03 +0200
-Message-ID: <CAHc6FU41FSZHGx+H1zBsBEnLo2s2fViDKJV4P-LJXg3s5xP4WA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] gfs2: replace usage of found with dedicated list
- iterator variable
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     Bob Peterson <rpeterso@redhat.com>,
-        cluster-devel <cluster-devel@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jakob,
+From: Guo Ren <guoren@linux.alibaba.com>
 
-On Fri, Apr 1, 2022 at 12:40 AM Jakob Koschel <jakobkoschel@gmail.com> wrote:
-> To move the list iterator variable into the list_for_each_entry_*()
-> macro in the future it should be avoided to use the list iterator
-> variable after the loop body.
->
-> To *never* use the list iterator variable after the loop it was
-> concluded to use a separate iterator variable instead of a
-> found boolean [1].
->
-> This removes the need to use a found variable and simply checking if
-> the variable was set, can determine if the break/goto was hit.
->
-> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-> ---
->  fs/gfs2/quota.c    | 13 ++++++-------
->  fs/gfs2/recovery.c | 22 ++++++++++------------
->  2 files changed, 16 insertions(+), 19 deletions(-)
->
-> diff --git a/fs/gfs2/quota.c b/fs/gfs2/quota.c
-> index be0997e24d60..dafd04fb9164 100644
-> --- a/fs/gfs2/quota.c
-> +++ b/fs/gfs2/quota.c
-> @@ -443,7 +443,7 @@ static int qd_check_sync(struct gfs2_sbd *sdp, struct gfs2_quota_data *qd,
->
->  static int qd_fish(struct gfs2_sbd *sdp, struct gfs2_quota_data **qdp)
->  {
-> -       struct gfs2_quota_data *qd = NULL;
-> +       struct gfs2_quota_data *qd = NULL, *iter;
->         int error;
->         int found = 0;
->
-> @@ -454,15 +454,14 @@ static int qd_fish(struct gfs2_sbd *sdp, struct gfs2_quota_data **qdp)
->
->         spin_lock(&qd_lock);
->
-> -       list_for_each_entry(qd, &sdp->sd_quota_list, qd_list) {
-> -               found = qd_check_sync(sdp, qd, &sdp->sd_quota_sync_gen);
-> -               if (found)
-> +       list_for_each_entry(iter, &sdp->sd_quota_list, qd_list) {
-> +               found = qd_check_sync(sdp, iter, &sdp->sd_quota_sync_gen);
-> +               if (found) {
-> +                       qd = iter;
+Optimize memcpy_{from,to}io() and memset_io() by transferring in
+64 bit as much as possible with minimized barrier usage.  This
+simplest optimization brings faster throughput compare to current
+byte-by-byte read and write with barrier in the loop. Code's
+skeleton is taken from the powerpc & arm64.
 
-we might as well get rid of 'found' here like in the below two
-changes. Let me fix that up.
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+---
+ arch/csky/include/asm/io.h | 11 +++++
+ arch/csky/kernel/io.c      | 91 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 102 insertions(+)
+ create mode 100644 arch/csky/kernel/io.c
 
->                         break;
-> +               }
->         }
->
-> -       if (!found)
-> -               qd = NULL;
-> -
->         spin_unlock(&qd_lock);
->
->         if (qd) {
-> diff --git a/fs/gfs2/recovery.c b/fs/gfs2/recovery.c
-> index 016ed1b2ca1d..2bb085a72e8e 100644
-> --- a/fs/gfs2/recovery.c
-> +++ b/fs/gfs2/recovery.c
-> @@ -55,17 +55,16 @@ int gfs2_replay_read_block(struct gfs2_jdesc *jd, unsigned int blk,
->  int gfs2_revoke_add(struct gfs2_jdesc *jd, u64 blkno, unsigned int where)
->  {
->         struct list_head *head = &jd->jd_revoke_list;
-> -       struct gfs2_revoke_replay *rr;
-> -       int found = 0;
-> +       struct gfs2_revoke_replay *rr = NULL, *iter;
->
-> -       list_for_each_entry(rr, head, rr_list) {
-> -               if (rr->rr_blkno == blkno) {
-> -                       found = 1;
-> +       list_for_each_entry(iter, head, rr_list) {
-> +               if (iter->rr_blkno == blkno) {
-> +                       rr = iter;
->                         break;
->                 }
->         }
->
-> -       if (found) {
-> +       if (rr) {
->                 rr->rr_where = where;
->                 return 0;
->         }
-> @@ -83,18 +82,17 @@ int gfs2_revoke_add(struct gfs2_jdesc *jd, u64 blkno, unsigned int where)
->
->  int gfs2_revoke_check(struct gfs2_jdesc *jd, u64 blkno, unsigned int where)
->  {
-> -       struct gfs2_revoke_replay *rr;
-> +       struct gfs2_revoke_replay *rr = NULL, *iter;
->         int wrap, a, b, revoke;
-> -       int found = 0;
->
-> -       list_for_each_entry(rr, &jd->jd_revoke_list, rr_list) {
-> -               if (rr->rr_blkno == blkno) {
-> -                       found = 1;
-> +       list_for_each_entry(iter, &jd->jd_revoke_list, rr_list) {
-> +               if (iter->rr_blkno == blkno) {
-> +                       rr = iter;
->                         break;
->                 }
->         }
->
-> -       if (!found)
-> +       if (!rr)
->                 return 0;
->
->         wrap = (rr->rr_where < jd->jd_replay_tail);
-> --
-> 2.25.1
->
-
-Thanks,
-Andreas
+diff --git a/arch/csky/include/asm/io.h b/arch/csky/include/asm/io.h
+index f82654053dc0..adb64e26194f 100644
+--- a/arch/csky/include/asm/io.h
++++ b/arch/csky/include/asm/io.h
+@@ -32,6 +32,17 @@
+ #define writel(v,c)		({ wmb(); writel_relaxed((v),(c)); mb(); })
+ #endif
+ 
++/*
++ * String version of I/O memory access operations.
++ */
++extern void __memcpy_fromio(void *, const volatile void __iomem *, size_t);
++extern void __memcpy_toio(volatile void __iomem *, const void *, size_t);
++extern void __memset_io(volatile void __iomem *, int, size_t);
++
++#define memset_io(c,v,l)        __memset_io((c),(v),(l))
++#define memcpy_fromio(a,c,l)    __memcpy_fromio((a),(c),(l))
++#define memcpy_toio(c,a,l)      __memcpy_toio((c),(a),(l))
++
+ /*
+  * I/O memory mapping functions.
+  */
+diff --git a/arch/csky/kernel/io.c b/arch/csky/kernel/io.c
+new file mode 100644
+index 000000000000..5883f13fa2b1
+--- /dev/null
++++ b/arch/csky/kernel/io.c
+@@ -0,0 +1,91 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/export.h>
++#include <linux/types.h>
++#include <linux/io.h>
++
++/*
++ * Copy data from IO memory space to "real" memory space.
++ */
++void __memcpy_fromio(void *to, const volatile void __iomem *from, size_t count)
++{
++	while (count && !IS_ALIGNED((unsigned long)from, 4)) {
++		*(u8 *)to = __raw_readb(from);
++		from++;
++		to++;
++		count--;
++	}
++
++	while (count >= 4) {
++		*(u32 *)to = __raw_readl(from);
++		from += 4;
++		to += 4;
++		count -= 4;
++	}
++
++	while (count) {
++		*(u8 *)to = __raw_readb(from);
++		from++;
++		to++;
++		count--;
++	}
++}
++EXPORT_SYMBOL(__memcpy_fromio);
++
++/*
++ * Copy data from "real" memory space to IO memory space.
++ */
++void __memcpy_toio(volatile void __iomem *to, const void *from, size_t count)
++{
++	while (count && !IS_ALIGNED((unsigned long)to, 4)) {
++		__raw_writeb(*(u8 *)from, to);
++		from++;
++		to++;
++		count--;
++	}
++
++	while (count >= 4) {
++		__raw_writel(*(u32 *)from, to);
++		from += 4;
++		to += 4;
++		count -= 4;
++	}
++
++	while (count) {
++		__raw_writeb(*(u8 *)from, to);
++		from++;
++		to++;
++		count--;
++	}
++}
++EXPORT_SYMBOL(__memcpy_toio);
++
++/*
++ * "memset" on IO memory space.
++ */
++void __memset_io(volatile void __iomem *dst, int c, size_t count)
++{
++	u32 qc = (u8)c;
++
++	qc |= qc << 8;
++	qc |= qc << 16;
++
++	while (count && !IS_ALIGNED((unsigned long)dst, 4)) {
++		__raw_writeb(c, dst);
++		dst++;
++		count--;
++	}
++
++	while (count >= 4) {
++		__raw_writel(qc, dst);
++		dst += 4;
++		count -= 4;
++	}
++
++	while (count) {
++		__raw_writeb(c, dst);
++		dst++;
++		count--;
++	}
++}
++EXPORT_SYMBOL(__memset_io);
+-- 
+2.25.1
 

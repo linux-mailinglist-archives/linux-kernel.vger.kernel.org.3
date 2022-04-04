@@ -2,128 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D5054F2051
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E80C4F2057
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230202AbiDDXi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 19:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
+        id S229746AbiDDXoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 19:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiDDXi4 (ORCPT
+        with ESMTP id S229611AbiDDXoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 19:38:56 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4365F4E0
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 16:36:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649115415; x=1680651415;
-  h=message-id:subject:from:to:cc:in-reply-to:references:
-   mime-version:date:content-transfer-encoding;
-  bh=DPU95H2DKWoSP7VPSRVpTSI4950WpQfYUoUy2BB/Up0=;
-  b=iSl8n8Q51Ck9WLVXs43bSAM40ZcjrrEBYiMgFBNmm+dUkbgOTz6FF9Sb
-   36BXksBQIy7VZWzMGni4ZeOh8Aam2kwuBuOlO/Ml3bdNrj077ZY7V5RSb
-   YopC4IDWnhDHut8Ji2oGwA0qxh9r8s526kEnm/3CHLm1w2cYv87ovTDTB
-   cJhCpQKYYv2QyvQV0tK6a1tUCc1y+c7vGDidVE53ic9HDrcZfxPfSTJdC
-   SNHx1rhRMEXfqQniFDhjx6Oj/tL5gMbONC6ADmopJPQ5bjtU4sdL1l96M
-   ljcxIqU9seGNFgqQpTkgwkkzqelf9pott2K/3V4/ihsdhcKaKRuor5uPB
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="248145731"
-X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
-   d="scan'208";a="248145731"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 16:36:54 -0700
-X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
-   d="scan'208";a="505080145"
-Received: from cwebber-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.54.91])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 16:36:48 -0700
-Message-ID: <2fcd12bb42c7d30f0e7bd09a7f66d76122493b32.camel@intel.com>
-Subject: Re: [PATCHv7.1 02/30] x86/tdx: Provide common base for SEAMCALL
- and TDCALL C wrappers
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        bp@alien8.de
-Cc:     aarcange@redhat.com, ak@linux.intel.com, brijesh.singh@amd.com,
-        dan.j.williams@intel.com, dave.hansen@linux.intel.com,
-        david@redhat.com, hpa@zytor.com, jgross@suse.com,
-        jmattson@google.com, joro@8bytes.org, jpoimboe@redhat.com,
-        knsathya@kernel.org, linux-kernel@vger.kernel.org, luto@kernel.org,
-        mingo@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
-        seanjc@google.com, tglx@linutronix.de, thomas.lendacky@amd.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org
-In-Reply-To: <dd5c52ad-9c61-54c3-6654-7a30c56b1917@intel.com>
-References: <YjXtK4awY6utz3wE@zn.tnic>
-         <20220321160245.42886-1-kirill.shutemov@linux.intel.com>
-         <9f8f57fdbbf76e70471541dc42b04f8a89be4a56.camel@intel.com>
-         <dd5c52ad-9c61-54c3-6654-7a30c56b1917@intel.com>
+        Mon, 4 Apr 2022 19:44:00 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6812366AFB
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 16:41:58 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id y189-20020a6264c6000000b004faecedcb81so6798710pfb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 16:41:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=c548FhlQVCeLASWi2SW4ftOYWvDCDMWewdhtv6ZW6gY=;
+        b=pZ5ptiPrn0E9ZV+xzv07J81V/0Zux8TrUyo6jMG4kpMMh0K7HX28tDLAThcepAu89X
+         jpvZME1VMw6StSg5iiL/4rPgoHaOxfhzFjG6Snu6piKhp/k5UnX283JNxefdJX944xjq
+         dNQfi90BLutn0DfEG7mlMm2Q+X1nCiE7OwmJnyx4JdCOIINKCLdZ/jPNWkqEpBocJEIh
+         opdie5q3vplCxy3ps+0zsh181ABEsygF6O+I5ntyX2TeFYBAowthwCCfrcrvIyt4xUPT
+         YzaaaPuGx7wC1EbgwXE/pGRx1wcfad8pnHtkgPcUufqXShC2RupXspVY6eHOUw0hoU4Q
+         Aygw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=c548FhlQVCeLASWi2SW4ftOYWvDCDMWewdhtv6ZW6gY=;
+        b=pRSUGywHSrm2ZZZvoDQqbMy348/QV11Bvr0/9uVLLeUfk1jsLPwtIKRAUBj5Bg7aGG
+         v5YLYi+s0g9YGv+eidpVBoz1UPSclkwDBmaeMtcuRgFHQf9zwXTzaTjXyIOcDY1nHiSQ
+         LlaqSNZbO+IgKNzhVxt0suuJYue5e1o9t5+XaidoTmpUcgsPTKqddoglVk4b9qSstl/Y
+         JKfiMtegaz32DAB54eDNgNlBbJVIgChbr5f3WNUoduyugQz/BprTpMEs1HpcDOA1hxC4
+         oKJCzWNA+HeKBXqGIz8NE53l3amuBkR28EKEynq0wqVviVLR6srEya++u4+a6oo9ByLh
+         akaw==
+X-Gm-Message-State: AOAM531AAPef6EIxsk1HiCB/39aZt/vUMavMJae2Vvj0ORgWF8SE/pOW
+        /RDie4YfF5+QjGFCmggFF78i3KqF9mMvJe41
+X-Google-Smtp-Source: ABdhPJzje5soq4C+73JHuqeLRvcYbRyyXekrcv2pJ3NUiCSG6xvCvoMeUjg8LbTBhyVFW5mEm2HJbc0MPJNQoep5
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:aa7:9019:0:b0:4fa:7532:9551 with SMTP
+ id m25-20020aa79019000000b004fa75329551mr553545pfo.26.1649115717724; Mon, 04
+ Apr 2022 16:41:57 -0700 (PDT)
+Date:   Mon,  4 Apr 2022 23:41:49 +0000
+Message-Id: <20220404234154.1251388-1-yosryahmed@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
+Subject: [PATCH v2 0/5] KVM: mm: count KVM page table pages in pagetable stats
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+Cc:     mizhang@google.com, David Matlack <dmatlack@google.com>,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-mips@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yosry Ahmed <yosryahmed@google.com>
 Content-Type: text/plain; charset="UTF-8"
-MIME-Version: 1.0
-Date:   Tue, 05 Apr 2022 11:35:39 +1200
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-04-04 at 06:51 -0700, Dave Hansen wrote:
-> On 4/3/22 20:19, Kai Huang wrote:
-> > Btw, I previous suggested perhaps we can just use -1ULL instead of above value
-> > for TDX_SEAMCALL_VMFAILINVALID, but didn't get response.  The reason is this
-> > value will only be used when detecting P-SEAMLDR using P-SEAMLDR's SEAMLDR.INFO
-> > SEAMCALL.  Note your above SW-defined error codes is based on error code
-> > definition for TDX module, but actually P-SEAMLDR has different error code
-> > definition:
-> 
-> I suggested moving away from the -1 because it didn't really carry any
-> additional information.  For folks that have the spec open day in and
-> day out, it's easy for you to go look up what the components of that -1
-> _mean_.
-> 
-> It sounds like there's a bug here (mixing up the P-SEAMLDR and TDX
-> module error ABIs), but that doesn't mean that moving to -1 is the right
-> answer.
+We keep track of several kernel memory stats (total kernel memory, page
+tables, stack, vmalloc, etc) on multiple levels (global, per-node,
+per-memcg, etc). These stats give insights to users to how much memory
+is used by the kernel and for what purposes.
 
-I think it doesn't need to carry any additional information.  The error code is
-used to represent VMfailInvalid, which happens before any P-SEAMLDR and TDX
-module internal functionality is reached.  We just need a value which will
-*never* conflict with actual error code returned by P-SEAMLDR and TDX module to
-represent this case.
+Currently, memory used by kvm for its page tables is not accounted in
+the pagetable stats. This patch series accounts the memory pages used by
+KVM for page tables in those stats.
 
-Both error code formats defined by P-SEAMLDR and TDX module has some reserved
-bits which will never be set to 1.  I think we can just add a simple comment
-explaining that and choose a value which has 1 set for those reserved bits (even
-doesn't have to be -1). For example:
+The riscv and mips patches are not tested properly due to lack of
+resources. Feel free to test or drop them.
 
-	/*
-	 * Use -1ULL which will never conflict with any actual error code
-	 * returned by both the P-SEAMLDR and the TDX module to represent
-	 * VMfailInvalid.  Both error code definitions defined by the
-	 * P-SEAMLDR and the TDX module have some reserved bits which will
-	 * never be set to 1.
-	 */
-	#define TDX_SEAMCALL_VMFAILINVALID	GENMASK_ULL(63, 0)
+Yosry Ahmed (5):
+  KVM: mm: add a helper to account page table pages used by KVM.
+  KVM: x86: mm: count KVM page table pages in pagetable stats
+  KVM: arm64: mm: count KVM page table pages in pagetable stats
+  KVM: riscv: mm: count KVM page table pages in pagetable stats
+  KVM: mips: mm: count KVM page table pages in pagetable stats
 
-> 
-> Please just build up an error value the same way it was done for the
-> software-defined TDX module error codes.
-
-In this way the assembly code will need to set different value based on whether
-%rax is a P-SEAMLDR leaf function and TDX module leaf function.  I think it's
-unnecessary.  As I said above, I think this error doesn't need to have any
-additional information.  We just need a value which will never conflict with any
-actual error code from P-SEAMLDR and TDX module.
+ arch/arm64/kernel/image-vars.h |  3 ++
+ arch/arm64/kvm/hyp/pgtable.c   | 50 +++++++++++++++++++++-------------
+ arch/mips/kvm/mips.c           |  1 +
+ arch/mips/kvm/mmu.c            |  9 +++++-
+ arch/riscv/kvm/mmu.c           | 26 +++++++++++++-----
+ arch/x86/kvm/mmu/mmu.c         | 16 +++++++++--
+ arch/x86/kvm/mmu/tdp_mmu.c     | 16 +++++++++--
+ include/linux/kvm_host.h       |  9 ++++++
+ 8 files changed, 99 insertions(+), 31 deletions(-)
 
 -- 
-Thanks,
--Kai
-
+2.35.1.1094.g7c7d902a7c-goog
 

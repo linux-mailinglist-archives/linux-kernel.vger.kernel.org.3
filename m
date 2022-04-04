@@ -2,122 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B8A4F1BCF
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0554B4F1A4F
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381621AbiDDVX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:23:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
+        id S1355653AbiDDVRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380525AbiDDUVM (ORCPT
+        with ESMTP id S1380531AbiDDUYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 16:21:12 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A832AE9;
-        Mon,  4 Apr 2022 13:19:14 -0700 (PDT)
-Date:   Mon, 04 Apr 2022 20:19:11 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649103552;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WNOBe1vWppvbexr1o50poyMJPOCbE2eiR5qK3R+vlbI=;
-        b=T067flIDohX2+TyixlVRL8HA7ygMbllJ/gZcGsZfe8mZPfN79lqkR9KxUfpTGzmqjJetPf
-        NQQlklPvSYAdShldT+ZnRCizyZqt/Bq3yhbKU3yNf3XtWHLBNyGpPVMi01N9OFJDTXtbnl
-        gTJJ0qn8JBntelxYiYhT2+Ap2NrMLSYRiMspZ5Z33caZEvi8BMHHJv4ACfFCf/ub6l9OPR
-        J6CA/x/gXgKPaoXNeGfy0ay2Lc0Eo22fjmzIfC/1SjmYPIFtMIS+EDpIyUk8nMAqbKqWQ9
-        Poe2552ePa/NNrGfzq+hPCWA4voDqbYvXehoWtSq1HA9zRYgnKzRnVg7ZvtHzg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649103552;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WNOBe1vWppvbexr1o50poyMJPOCbE2eiR5qK3R+vlbI=;
-        b=Gc1nLM+EMvKNKUZ3Taubma8zjwasPWNQuC5Pm7+tt1Ye65s0W1SoLAV2JwtHnydm6+E3Q9
-        Fyy7DMYiOsP1miCQ==
-From:   "tip-bot2 for Mike Travis" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/platform] x86/platform/uv: Log gap hole end size
-Cc:     Mike Travis <mike.travis@hpe.com>, Borislav Petkov <bp@suse.de>,
-        Steve Wahl <steve.wahl@hpe.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220318224304.174967-4-mike.travis@hpe.com>
-References: <20220318224304.174967-4-mike.travis@hpe.com>
-MIME-Version: 1.0
-Message-ID: <164910355134.389.13915883561213298641.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+        Mon, 4 Apr 2022 16:24:37 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B4C36B60;
+        Mon,  4 Apr 2022 13:22:39 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 234JAKmi006195;
+        Mon, 4 Apr 2022 20:22:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=sfw2RrUtmje6BGoULsQ9WojX8/18w10SSX3CBcUtUug=;
+ b=FHk85IwWXeICJJHsltU4Mnj2ucXrR/O+B4aqoKOECxHXgFB4U9JMQ4dpGh7SJdGcf3ac
+ xqTbwyiZvq+XKo+rDkje/qDdisV8/v1eMyn+/R/VVi1EXdsvrI8Ou25CaYsnygbitBV7
+ oPrbIXdJ1IOqN8d08u95JL1VbLKlrwnWfDw0D6toATNVjbgOQlJADJaxunRcrzcI34m9
+ J315msLcf+TGth0oLwvQI2Rpd/OHoZjppqWJ22b1G30xERvGVnewT27IM10YUTKBqI1T
+ 1730DRjfPxpIkSo38bFmP2cwOR3u4xqJKJMK+jLyJz4FlFWrsOuq1+QAtcpBzfCatZLY uw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3f6yupg9e1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 04 Apr 2022 20:22:26 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 234KMQXf027173;
+        Mon, 4 Apr 2022 20:22:26 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3f6yupg9dj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 04 Apr 2022 20:22:25 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 234KJ58o029900;
+        Mon, 4 Apr 2022 20:22:24 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3f6drhm91e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 04 Apr 2022 20:22:23 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 234KMLIh50266436
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 4 Apr 2022 20:22:21 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8E7E7A4053;
+        Mon,  4 Apr 2022 20:22:21 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7D2F2A4040;
+        Mon,  4 Apr 2022 20:22:20 +0000 (GMT)
+Received: from sig-9-65-92-200.ibm.com (unknown [9.65.92.200])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  4 Apr 2022 20:22:20 +0000 (GMT)
+Message-ID: <5c3565f5a46f5728873c9aedd634699ba171fe98.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: remove template "ima" as the compiled default
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     GUO Zihua <guozihua@huawei.com>, linux-integrity@vger.kernel.org
+Cc:     dmitry.kasatkin@gmail.com, roberto.sassu@huawei.com,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xiujianfeng@huawei.com,
+        wangweiyang2@huawei.com
+Date:   Mon, 04 Apr 2022 16:22:19 -0400
+In-Reply-To: <20220321074737.138002-1-guozihua@huawei.com>
+References: <20220321074737.138002-1-guozihua@huawei.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: pl8UE3lgklOhzRkfLPc-oB8xj5cwxfhv
+X-Proofpoint-ORIG-GUID: JwuNMqeC0dx2dXPMiAMUKqbUJwEakXWi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-04_09,2022-03-31_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ phishscore=0 adultscore=0 clxscore=1011 mlxlogscore=999 lowpriorityscore=0
+ impostorscore=0 suspectscore=0 priorityscore=1501 spamscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204040111
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/platform branch of tip:
+Hi Guo,
 
-Commit-ID:     f93ba85de0d1ce1924b0752b6a7a784c11c36414
-Gitweb:        https://git.kernel.org/tip/f93ba85de0d1ce1924b0752b6a7a784c11c36414
-Author:        Mike Travis <mike.travis@hpe.com>
-AuthorDate:    Fri, 18 Mar 2022 17:43:04 -05:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Mon, 04 Apr 2022 20:21:47 +02:00
+The Subject line above sounds like the default template is currently
+"ima", which it isn't.   Perhaps "ima: remove the IMA_TEMPLATE Kconfig
+option" is more accurate.
 
-x86/platform/uv: Log gap hole end size
+On Mon, 2022-03-21 at 15:47 +0800, GUO Zihua wrote:
+> Template "ima" is a legacy template which limits the hash algorithm to
+> either sha1 or md5. None of them should be considered "strong" these
+> days. Besides, allowing template "ima" as the compiled default would
+> also cause the following issue: the cmdline option "ima_hash=" must be
+> behind "ima_template=", otherwise "ima_hash=" might be rejected.
+> 
 
-Show value of gap end in the kernel log which equates to number of physical
-address bits used by system.  The end address of the gap holds PA bits 56:26
-which gives the range up to 64PB max size with 64MB of granularity.
+True "ima" is a legacy template, but the purpose of removing the
+IMA_TEMPLATE from the Kconfig is to address the remaining boot command
+line ordering issue not previously addressed.  This is reasonable
+because the "ima" template is limited to SHA1 and MD5.  If someone
+still needs to use the "ima" template, "ima_template=ima" could still
+be specified on the boot command line.
 
-Signed-off-by: Mike Travis <mike.travis@hpe.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
-Link: https://lore.kernel.org/r/20220318224304.174967-4-mike.travis@hpe.com
----
- arch/x86/kernel/apic/x2apic_uv_x.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+> The root cause of this issue is that during the processing of ima_hash,
+> we would try to check whether the hash algorithm is compatible with the
+> template. If the template is not set at the moment we do the check, we
+> check the algorithm against the compiled default template. If the
+> complied default template is "ima", then we reject any hash algorithm
+> other than sha1 and md5.
+> 
+> For example, if the compiled default template is "ima", and the default
+> algorithm is sha1 (which is the current default). In the cmdline, we put
+> in "ima_hash=sha256 ima_template=ima-ng". The expected behavior would be
+> that ima starts with ima-ng as the template and sha256 as the hash
+> algorithm. However, during the processing of "ima_hash=",
+> "ima_template=" has not been processed yet, and hash_setup would check
+> the configured hash algorithm against the compiled default: ima, and
+> reject sha256. So at the end, the hash algorithm that is actually used
+> will be sha1.
+> 
+> With template "ima" removed from the compiled default, we ensure that the
+> default tempalte would at least be "ima-ng" which allows for basically
+> any hash algorithm.
+> 
+> This change would not break the algorithm compatibility checking for
+> IMA.
+> 
+> Fixes: 4286587dccd43 ("ima: add Kconfig default measurement list template")
+> Signed-off-by: GUO Zihua <guozihua@huawei.com>
+> ---
+>  security/integrity/ima/Kconfig | 14 +++++---------
+>  1 file changed, 5 insertions(+), 9 deletions(-)
+> 
+> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+> index f3a9cc201c8c..9513df2ac19e 100644
+> --- a/security/integrity/ima/Kconfig
+> +++ b/security/integrity/ima/Kconfig
+> @@ -65,14 +65,11 @@ choice
+>  	help
+>  	  Select the default IMA measurement template.
+>  
+> -	  The original 'ima' measurement list template contains a
+> -	  hash, defined as 20 bytes, and a null terminated pathname,
+> -	  limited to 255 characters.  The 'ima-ng' measurement list
+> -	  template permits both larger hash digests and longer
+> -	  pathnames.
+> -
+> -	config IMA_TEMPLATE
+> -		bool "ima"
+> +	  The 'ima-ng' measurement list template permits various hash
+> +	  digests and long pathnames. The compiled default template
+> +	  can be overwritten using the kernel command line
+> +	  'ima_template=' option.
+> +
+>  	config IMA_NG_TEMPLATE
+>  		bool "ima-ng (default)"
+>  	config IMA_SIG_TEMPLATE
+> @@ -82,7 +79,6 @@ endchoice
+>  config IMA_DEFAULT_TEMPLATE
+>  	string
+>  	depends on IMA
+> -	default "ima" if IMA_TEMPLATE
+>  	default "ima-ng" if IMA_NG_TEMPLATE
+>  	default "ima-sig" if IMA_SIG_TEMPLATE
+>  
 
-diff --git a/arch/x86/kernel/apic/x2apic_uv_x.c b/arch/x86/kernel/apic/x2apic_uv_x.c
-index 387d653..146f0f6 100644
---- a/arch/x86/kernel/apic/x2apic_uv_x.c
-+++ b/arch/x86/kernel/apic/x2apic_uv_x.c
-@@ -1346,7 +1346,7 @@ static void __init decode_gam_params(unsigned long ptr)
- static void __init decode_gam_rng_tbl(unsigned long ptr)
- {
- 	struct uv_gam_range_entry *gre = (struct uv_gam_range_entry *)ptr;
--	unsigned long lgre = 0;
-+	unsigned long lgre = 0, gend = 0;
- 	int index = 0;
- 	int sock_min = 999999, pnode_min = 99999;
- 	int sock_max = -1, pnode_max = -1;
-@@ -1380,6 +1380,9 @@ static void __init decode_gam_rng_tbl(unsigned long ptr)
- 			flag, size, suffix[order],
- 			gre->type, gre->nasid, gre->sockid, gre->pnode);
- 
-+		if (gre->type == UV_GAM_RANGE_TYPE_HOLE)
-+			gend = (unsigned long)gre->limit << UV_GAM_RANGE_SHFT;
-+
- 		/* update to next range start */
- 		lgre = gre->limit;
- 		if (sock_min > gre->sockid)
-@@ -1397,7 +1400,8 @@ static void __init decode_gam_rng_tbl(unsigned long ptr)
- 	_max_pnode	= pnode_max;
- 	_gr_table_len	= index;
- 
--	pr_info("UV: GRT: %d entries, sockets(min:%x,max:%x) pnodes(min:%x,max:%x)\n", index, _min_socket, _max_socket, _min_pnode, _max_pnode);
-+	pr_info("UV: GRT: %d entries, sockets(min:%x,max:%x), pnodes(min:%x,max:%x), gap_end(%d)\n",
-+	  index, _min_socket, _max_socket, _min_pnode, _max_pnode, fls64(gend));
- }
- 
- /* Walk through UVsystab decoding the fields */
+The IMA_TEMPLATE definition is removed, but leaves a few references to
+it.
+-- 
+thanks,
+
+Mimi
+
+

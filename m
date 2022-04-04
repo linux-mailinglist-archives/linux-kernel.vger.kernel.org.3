@@ -2,118 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79AB84F1174
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2A34F1176
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244934AbiDDI5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 04:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42240 "EHLO
+        id S245160AbiDDI6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 04:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232881AbiDDI5f (ORCPT
+        with ESMTP id S1345085AbiDDI5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 04:57:35 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345DC3BA4D;
-        Mon,  4 Apr 2022 01:55:40 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id E9B8E1F37E;
-        Mon,  4 Apr 2022 08:55:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649062538; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kY/sFAjkRuSr9SzS2qZmCVG0Hlopzp38fTG/CHvJ2jc=;
-        b=TasKbmu/n1IUYJFmDMQsEy+BBf3khn33iVJQT4VKf1BUvZ6y9RYPl3jrQtydsBTyZ6Vrej
-        9FpJoEEEK6OT9t5N42XWn7mRDNA5SfT8q6AuIgLePIxjgbZZdyG6tfrTClIg6tv/9D2DbT
-        wuKm0s58O8sp9fJ31BgOw7dyo1NjC94=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649062538;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kY/sFAjkRuSr9SzS2qZmCVG0Hlopzp38fTG/CHvJ2jc=;
-        b=eiURE+SEuasfHCDv84WkUWVOz4SY7GwrBlnkFdDdLy1TWbcahItaOBrtdGeWX17VdDI6VF
-        QQBX9OE4Lmc6GgDA==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id DC6B4A3B83;
-        Mon,  4 Apr 2022 08:55:38 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 8C4E9A0615; Mon,  4 Apr 2022 10:55:35 +0200 (CEST)
-Date:   Mon, 4 Apr 2022 10:55:35 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Jan Kara <jack@suse.cz>, Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org
-Subject: Re: Is it time to remove reiserfs?
-Message-ID: <20220404085535.g2qr4s7itfunlrqb@quack3.lan>
-References: <YhIwUEpymVzmytdp@casper.infradead.org>
- <20220222100408.cyrdjsv5eun5pzij@quack3.lan>
- <20220402105454.GA16346@amd>
+        Mon, 4 Apr 2022 04:57:55 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BFC3BA58
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 01:55:59 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id u3so13398177wrg.3
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 01:55:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=faLsoLtHlkBu3pNNbIthqX5/njZ9MiXmJRjYICVNcY0=;
+        b=ndfQUGIXhKO9kp5VAuPx7fPIl4GIfF+kUupydTzcCgbIwOr+JD3/rxRA8abqvv7Gky
+         xmEI2Re3fZECC4rfFp1YDJI8hlFcgUkXMaxbNqakdyXetEJAaD3Jt/wHUjUeLtZsIl2c
+         zIM7jDG8YzXJPTlz1rcL36QxuNjl5PsGsWdpO2sy8R6HfllMBBpPASFgZZdbd6PQjf2U
+         L1b7WFu2XL548B98enndlyto5g9urgPt8nT/F1i8oyqiX1Y/L+42t4H6ClKp8yOH1waf
+         Yoh+S0LXMCeUHxSOQlzQplE5STogmL1EqXmp499bssV5EsXEMmuKr5Rm77hbOdkNvn+D
+         Uh+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=faLsoLtHlkBu3pNNbIthqX5/njZ9MiXmJRjYICVNcY0=;
+        b=AEPD0ZUnyttfJ0QG/WgLedLjsR9wZ+ufW0EYlnHKT7ntK39MwGpkcKcbCp7kk0U+zz
+         3geIXwujLUn3tUOWrEICJP6ETXO0xL0xot136Jz6wJ3pTNKAYk2p5Cvq8J+HlYCTnUqE
+         YStrn4GeyVtSuDJaQYcB6T5iI3vnRsOFY0fSgSPRaiudFqEAQhSjLojU4GL/l50QssYN
+         4kv/SRrGgv85uxKZTcaXWX0E7WQlVD6qeb+520mYWF4IbnNIVvIjaaEndFlFOhIMSSso
+         G6unjcU8fUVaRe29MFAQ2qiKMf7sxtDdRrbBU6iOMt26aaLjZrNUMRV8VetiSukZA/us
+         ktEw==
+X-Gm-Message-State: AOAM530vZ/4K/FFpB9AD55TByFs/cbFf3JV75RlWG8D9MijiwRb+FcmD
+        1Ckq8LK6KyZ3SVBoI6sDi/4ggQ==
+X-Google-Smtp-Source: ABdhPJxBnQzLI9AcBq3qkiePfZ/KkRX2Yyx/9vt6YR9cK1gSqXlBy6BgfvSxUTrpxmja0DsUSw5Kiw==
+X-Received: by 2002:a05:6000:1c6:b0:206:12be:840f with SMTP id t6-20020a05600001c600b0020612be840fmr2416238wrx.98.1649062557991;
+        Mon, 04 Apr 2022 01:55:57 -0700 (PDT)
+Received: from [192.168.0.173] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id q17-20020adff951000000b00205c1b97ac4sm8724650wrr.20.2022.04.04.01.55.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Apr 2022 01:55:57 -0700 (PDT)
+Message-ID: <79a6d4a4-f018-b85e-6385-1432dc23324c@linaro.org>
+Date:   Mon, 4 Apr 2022 10:55:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220402105454.GA16346@amd>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 2/2] dt-bindings: mfd: syscon: Add support for regmap
+ fast-io
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, lee.jones@linaro.org
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, arnd@arndb.de,
+        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, nfraprado@collabora.com,
+        kernel@collabora.com
+References: <20220404084732.14096-1-angelogioacchino.delregno@collabora.com>
+ <20220404084732.14096-3-angelogioacchino.delregno@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220404084732.14096-3-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
-
-On Sat 02-04-22 12:54:55, Pavel Machek wrote:
-> > > Keeping reiserfs in the tree has certain costs.  For example, I would
-> > > very much like to remove the 'flags' argument to ->write_begin.  We have
-> > > the infrastructure in place to handle AOP_FLAG_NOFS differently, but
-> > > AOP_FLAG_CONT_EXPAND is still around, used only by reiserfs.
-> > > 
-> > > Looking over the patches to reiserfs over the past couple of years, there
-> > > are fixes for a few syzbot reports and treewide changes.  There don't
-> > > seem to be any fixes for user-spotted bugs since 2019.  Does reiserfs
-> > > still have a large install base that is just very happy with an old
-> > > stable filesystem?  Or have all its users migrated to new and exciting
-> > > filesystems with active feature development?
-> > > 
-> > > We've removed support for senescent filesystems before (ext, xiafs), so
-> > > it's not unprecedented.  But while I have a clear idea of the benefits to
-> > > other developers of removing reiserfs, I don't have enough information to
-> > > weigh the costs to users.  Maybe they're happy with having 5.15 support
-> > > for their reiserfs filesystems and can migrate to another filesystem
-> > > before they upgrade their kernel after 5.15.
-> > > 
-> > > Another possibility beyond outright removal would be to trim the kernel
-> > > code down to read-only support for reiserfs.  Most of the quirks of
-> > > reiserfs have to do with write support, so this could be a useful way
-> > > forward.  Again, I don't have a clear picture of how people actually
-> > > use reiserfs, so I don't know whether it is useful or not.
-> > > 
-> > > NB: Please don't discuss the personalities involved.  This is purely a
-> > > "we have old code using old APIs" discussion.
-> > 
-> > So from my distro experience installed userbase of reiserfs is pretty small
-> > and shrinking. We still do build reiserfs in openSUSE / SLES kernels but
-> > for enterprise offerings it is unsupported (for like 3-4 years) and the module
-> > is not in the default kernel rpm anymore.
+On 04/04/2022 10:47, AngeloGioacchino Del Regno wrote:
+> The syscon driver now enables the .fast_io regmap configuration when
+> the 'fast-io' property is found in a syscon node.
 > 
-> I believe I've seen reiserfs in recent Arch Linux ARM installation on
-> PinePhone. I don't really think you can remove a feature people are
-> using.
+> Keeping in mind that, in regmap, fast_io is checked only if we are
+> not using hardware spinlocks, allow the fast-io property only if
+> there is no hwlocks reference (and vice-versa).
+> 
 
-Well, if someone uses Reiserfs they better either migrate to some other
-filesystem or start maintaining it. It is as simple as that because
-currently there's nobody willing to invest resources in it for quite a few
-years and so it is just a question of time before it starts eating people's
-data (probably it already does in some cornercases, as an example there are
-quite some syzbot reports for it)...
+Please do not send a v2 yet, because we did not finish the discussion
+from v1.
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Best regards,
+Krzysztof

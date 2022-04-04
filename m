@@ -2,55 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1815B4F187C
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EE54F1880
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378604AbiDDPfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 11:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
+        id S1378616AbiDDPfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 11:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357519AbiDDPfR (ORCPT
+        with ESMTP id S1378605AbiDDPfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 11:35:17 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0326D3E5EA
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:33:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=OnBCkMmBPPOBtIWh/Duqp5NItm2NKh26ZhP/uoq2yR4=; b=EvfhXNVxdGLMWTwUQw07fQOoGH
-        N6B2YrEAEi3UMOlIMjh+LGbYwQ1P2XziGkhoLi0k0V2on+uKNmeSG1yazyid0Oe2vKSyStPa5MAYp
-        jrnL0kBGT2L5rIoFkWWrrRBzSp0Pi7G1mMh8UspnVGGAGgpc5CoZ2yUBxeGjeI3/MaKWZb6i6Rf+B
-        k7Udy0LzpGwdrgG2lNvj4OLa+pMpeyThIehoDJDWjxwI0ZZ7FnAhw0QxhnfkkF/X62aPbA3JJqYTd
-        0TY2TUI7GoQRf7diDEeb0P+gC2pC4ZoKzxOafVpCp4vaVSQd29Xw+EEPTrwO6P+sAi3ecwdqlGb76
-        7zkEgQwg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nbOhg-001ZyH-TY; Mon, 04 Apr 2022 15:33:17 +0000
-Message-ID: <db007d26-95d0-ff59-788a-0339d119224e@infradead.org>
-Date:   Mon, 4 Apr 2022 08:33:08 -0700
+        Mon, 4 Apr 2022 11:35:45 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B8E1EAE0
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:33:48 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id g24so13389545lja.7
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 08:33:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0BaM8mE0ADfMYlXtw7vleG40fbepoqGgL/4MX4webNM=;
+        b=ksDgHMx2Bwif416kkxyTK83wbuEWqRC/SQPlHJuG9GB8hDgBz44MZMx/1HGX678eDC
+         2wnh9ws+cUzeMzUdTaIyPQtYnoElHOckaTUs5tcDi/avbQ1x6JIoh4RvUzQOcbefBFYP
+         POlWTz3c4d6YS1O0FNwvfPTZvfop8awZKXrfXMrZX16BNQ0qSZfcr86eDyI6BKWogCZ3
+         DmyA08M1g8ZGRvb+ZjxFdcrjs7y9CNRW1GUgHQ5pk94DWguaGetZDh3W5V1yB6beKXIi
+         u8vgw/L+145ltC71pdu+f2k4braelrsCFxwLBBG0l4ADlpwbtqqXFl4MDxcnX79WDnYY
+         0xxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0BaM8mE0ADfMYlXtw7vleG40fbepoqGgL/4MX4webNM=;
+        b=a+BwGT13IX/6/pMzE1zwA+bId+ln2GVyuUU/f6HpcJ2qYMAVZz2zVmF7iAQaRn/hQR
+         amu9VLOkvFFbL2K4r2r/aVPlJ/KZPqWXRw/M1kKTH7z3k9TkJIi/pFkomnC9cICmLHjQ
+         pKW5Zb74jVWnzAq7jAhxQEa/UScs3g6W3UVkEx/JTqNjLXqvpt9ZXPb0F2O3lKjMSLt1
+         OXKRuR+cYwWhsg5ZPdEL8bDfMDo+SydEuxzuqxnGt0FAeDDHaHWdqs8YgEtFyevhgdwV
+         jXI3LNWtlwXM/rF2Kc6ghlRCGELmPiPJJjqgZ2Vxuc6sFr2bEATQuJV2IPP9aHcup49A
+         SegQ==
+X-Gm-Message-State: AOAM530gcYmyq+o+pWh6e6l1CRlptuuSvAzlTk/mC7d35mG8pk3fsS+o
+        a5d+tv1N+Xh3oAYLAmQw1EABaG8VyeK30kaPQ8TIGw==
+X-Google-Smtp-Source: ABdhPJyJFY5IsdzIsRzag1xsA1I+Oi7D6rt+gN+XZTY4yAeNA4Wv9+v4zOmYqngowRK8wWY2VLqvd6/DtzNfEQUcpQo=
+X-Received: by 2002:a2e:a268:0:b0:24b:1296:a1ab with SMTP id
+ k8-20020a2ea268000000b0024b1296a1abmr89360ljm.169.1649086427030; Mon, 04 Apr
+ 2022 08:33:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] drm/scheduler: quieten kernel-doc warnings
-Content-Language: en-US
-To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        linux-kernel@vger.kernel.org
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Nayan Deshmukh <nayan26deshmukh@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Jiawei Gu <Jiawei.Gu@amd.com>, dri-devel@lists.freedesktop.org
-References: <20220404042509.13455-1-rdunlap@infradead.org>
- <6f89be90-50fe-729c-028c-978044e6840a@amd.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <6f89be90-50fe-729c-028c-978044e6840a@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220324134106.103588-1-krzk@kernel.org> <YkZFgGNRPUqJIY6x@robh.at.kernel.org>
+In-Reply-To: <YkZFgGNRPUqJIY6x@robh.at.kernel.org>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Mon, 4 Apr 2022 18:33:35 +0300
+Message-ID: <CAPLW+4k4RwOcUiKZU05nb7tcpM2MTxdJ_m=8byyGvHdJbHRbRw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: soc: samsung: usi: refer to dtschema for SPI
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,110 +70,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 1 Apr 2022 at 03:21, Rob Herring <robh@kernel.org> wrote:
+>
+> On Thu, 24 Mar 2022 14:41:06 +0100, Krzysztof Kozlowski wrote:
+> > After adding DT schema for Samsung SPI controller, the Samsung USI
+> > bindings can reference it directly for proper schema validation.
+> >
+> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> > ---
 
+Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 
-On 4/4/22 07:34, Andrey Grodzovsky wrote:
-> On 2022-04-04 00:25, Randy Dunlap wrote:
->> Fix kernel-doc warnings in gpu_scheduler.h and sched_main.c.
->>
->> Quashes these warnings:
->>
->> include/drm/gpu_scheduler.h:316: warning: Function parameter or member 'work' not described in 'drm_sched_job'
-> 
-> Looks good to me except one point is that I already commited a fix for the above warning to drm-misc-next.
-> 
-
-OK. Do I need to send a v2 without the header file fix?
-
-thanks.
-
-> 
->> include/drm/gpu_scheduler.h:332: warning: missing initial short description on line:
->>   * struct drm_sched_backend_ops
->> include/drm/gpu_scheduler.h:412: warning: missing initial short description on line:
->>   * struct drm_gpu_scheduler
->>
->> include/drm/gpu_scheduler.h:461: warning: Function parameter or member 'dev' not described in 'drm_gpu_scheduler'
->> drivers/gpu/drm/scheduler/sched_main.c:201: warning: missing initial short description on line:
->>   * drm_sched_dependency_optimized
->> drivers/gpu/drm/scheduler/sched_main.c:995: warning: Function parameter or member 'dev' not described in 'drm_sched_init'
->>
->> Fixes: 2d33948e4e00 ("drm/scheduler: add documentation")
->> Fixes: 8ab62eda177b ("drm/sched: Add device pointer to drm_gpu_scheduler")
->> Fixes: 542cff7893a3 ("drm/sched: Avoid lockdep spalt on killing a processes")
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->> Cc: David Airlie <airlied@linux.ie>
->> Cc: Daniel Vetter <daniel@ffwll.ch>
->> Cc: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
->> Cc: Nayan Deshmukh <nayan26deshmukh@gmail.com>
->> Cc: Alex Deucher <alexander.deucher@amd.com>
->> Cc: Christian König <christian.koenig@amd.com>
->> Cc: Jiawei Gu <Jiawei.Gu@amd.com>
->> Cc: dri-devel@lists.freedesktop.org
->> ---
->> Feel free to make changes or suggest changes...
->>
->>   drivers/gpu/drm/scheduler/sched_main.c |    3 ++-
->>   include/drm/gpu_scheduler.h            |   10 ++++++----
->>   2 files changed, 8 insertions(+), 5 deletions(-)
->>
->> --- linux-next-20220401.orig/drivers/gpu/drm/scheduler/sched_main.c
->> +++ linux-next-20220401/drivers/gpu/drm/scheduler/sched_main.c
->> @@ -198,7 +198,7 @@ static void drm_sched_job_done_cb(struct
->>   }
->>     /**
->> - * drm_sched_dependency_optimized
->> + * drm_sched_dependency_optimized - test if the dependency can be optimized
->>    *
->>    * @fence: the dependency fence
->>    * @entity: the entity which depends on the above fence
->> @@ -984,6 +984,7 @@ static int drm_sched_main(void *param)
->>    *        used
->>    * @score: optional score atomic shared with other schedulers
->>    * @name: name used for debugging
->> + * @dev: target &struct device
->>    *
->>    * Return 0 on success, otherwise error code.
->>    */
->> --- linux-next-20220401.orig/include/drm/gpu_scheduler.h
->> +++ linux-next-20220401/include/drm/gpu_scheduler.h
->> @@ -270,6 +270,7 @@ struct drm_sched_fence *to_drm_sched_fen
->>    * @sched: the scheduler instance on which this job is scheduled.
->>    * @s_fence: contains the fences for the scheduling of job.
->>    * @finish_cb: the callback for the finished fence.
->> + * @work: scheduler work queue
->>    * @id: a unique id assigned to each job scheduled on the scheduler.
->>    * @karma: increment on every hang caused by this job. If this exceeds the hang
->>    *         limit of the scheduler then the job is marked guilty and will not
->> @@ -328,10 +329,10 @@ enum drm_gpu_sched_stat {
->>   };
->>     /**
->> - * struct drm_sched_backend_ops
->> + * struct drm_sched_backend_ops - Define the backend operations
->> + *    called by the scheduler
->>    *
->> - * Define the backend operations called by the scheduler,
->> - * these functions should be implemented in driver side.
->> + * These functions should be implemented in the driver side.
->>    */
->>   struct drm_sched_backend_ops {
->>       /**
->> @@ -408,7 +409,7 @@ struct drm_sched_backend_ops {
->>   };
->>     /**
->> - * struct drm_gpu_scheduler
->> + * struct drm_gpu_scheduler - scheduler instance-specific data
->>    *
->>    * @ops: backend operations provided by the driver.
->>    * @hw_submission_limit: the max size of the hardware queue.
->> @@ -434,6 +435,7 @@ struct drm_sched_backend_ops {
->>    * @_score: score used when the driver doesn't provide one
->>    * @ready: marks if the underlying HW is ready to work
->>    * @free_guilty: A hit to time out handler to free the guilty job.
->> + * @dev: system &struct device
->>    *
->>    * One scheduler is implemented for each hardware ring.
->>    */
-
--- 
-~Randy
+> >  Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+>
+> Acked-by: Rob Herring <robh@kernel.org>

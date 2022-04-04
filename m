@@ -2,67 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A05574F11EC
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7744F11F5
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353814AbiDDJ26 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 05:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48082 "EHLO
+        id S1353918AbiDDJ3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 05:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240935AbiDDJ2x (ORCPT
+        with ESMTP id S1353794AbiDDJ26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 05:28:53 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCCE3BA56
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 02:26:58 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id s21so198233pgs.4
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 02:26:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LQIPC102LBY8jsfQ5+qALRGAiWnT6kIWTeL9/Fu7QJM=;
-        b=DGlTsrmu7goQJGUavSpKmdPrHp4B3llVMMT9zPOcTCKW48MU5eANIbfNI6xaq+bBI1
-         ZSA9YgagXDwZ3x/XpDDJOhM1Sv1c2U3f7Wml/5OB1BISYzYoQJaz8eVID13M4hORLISy
-         M7xV6Q1ofulxLqcdzyY5FcVIW/Qf0jGRxRhnCzCzVJmA1wwd386MDsf1JsAVfZ+5Ucvs
-         mgRPt4lGK4NH0/1JeDUEggRZ7v8Bm3pTMQuIEB9MXPGVPQ+SabeecNq6/OlQJisxJwPs
-         cQeW8kKo2xzKRubHX4lO6ZU8GYY0QNamW1KyyLJndgs9s4ENkybMhM6RfW3GOqYDmso0
-         YFLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LQIPC102LBY8jsfQ5+qALRGAiWnT6kIWTeL9/Fu7QJM=;
-        b=QdG4RnLNXV57CC16+BUPSFLXhI3ii5U5lVvfF1gYLKWHR/9NiLFuRd00vsP0hHHNPa
-         i4XpfgKSG4vSIcJNAX3KfccGqhncGQzTIEMo8gw1WQ8kVpxW2gjkE5ZQzN9Sgre1Nezm
-         NBnsfymwIIKhXfFuSkqtyPnTCbjmu8sk5fxBKRjFqVgndlTJlU4kuOfqUmpOAxoWW1an
-         btnjoeaQkIu4oWp3Y9Q1k5jMXHmlo85SuA/qByKE9gdfKJO9r9aWDR+5ErrngSE14Rbe
-         22nCdYtEmFV+xcOgpSMJ8vAZJ8NABYE09uXaiCPifFG3OeE+VQMgzknZDfKdimWOy5HE
-         bPYQ==
-X-Gm-Message-State: AOAM531gxWF+LPFHdvMqDNvCeDSNYPe5WTIOznxkXuqMEAnFKgg8u4Eh
-        Y8JM0M9o4oG8vbPWPs1i09ojjPpsfTQT1iEHoBzl1Q==
-X-Google-Smtp-Source: ABdhPJw6OzrP/tqzilx2s0kEtrxnMuJo9dLpMBCZ0dCkwT/JEhpzNRmDgzrjJwTn1Q6SB9b0/nSi9vG/C105lJ9DU7Q=
-X-Received: by 2002:a63:5747:0:b0:381:54b9:b083 with SMTP id
- h7-20020a635747000000b0038154b9b083mr24763452pgm.178.1649064417542; Mon, 04
- Apr 2022 02:26:57 -0700 (PDT)
+        Mon, 4 Apr 2022 05:28:58 -0400
+Received: from mail105.syd.optusnet.com.au (mail105.syd.optusnet.com.au [211.29.132.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F8523BBCB;
+        Mon,  4 Apr 2022 02:27:02 -0700 (PDT)
+Received: from dread.disaster.area (pa49-180-43-123.pa.nsw.optusnet.com.au [49.180.43.123])
+        by mail105.syd.optusnet.com.au (Postfix) with ESMTPS id 29B8410E55FB;
+        Mon,  4 Apr 2022 19:26:57 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1nbIz9-00Dc5C-Sq; Mon, 04 Apr 2022 19:26:55 +1000
+Date:   Mon, 4 Apr 2022 19:26:55 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        linux-rdma@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-media@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-xfs@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-s390@vger.kernel.org
+Subject: Re: Build regressions/improvements in v5.18-rc1
+Message-ID: <20220404092655.GR1544202@dread.disaster.area>
+References: <CAHk-=wg6FWL1xjVyHx7DdjD2dHZETA5_=FqqW17Z19X-WTfWSg@mail.gmail.com>
+ <20220404074734.1092959-1-geert@linux-m68k.org>
+ <alpine.DEB.2.22.394.2204041006230.1941618@ramsan.of.borg>
 MIME-Version: 1.0
-References: <20220401015828.2959505-1-victor.liu@nxp.com> <CAMty3ZC6pLJXP=kxwFeZj6CF87ASvoxz9+8Z-7O+DCNwtcLHcQ@mail.gmail.com>
-In-Reply-To: <CAMty3ZC6pLJXP=kxwFeZj6CF87ASvoxz9+8Z-7O+DCNwtcLHcQ@mail.gmail.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 4 Apr 2022 11:26:46 +0200
-Message-ID: <CAG3jFys1O2ZT8_kf_VPQ7kCQAED13qNCfe8oqjgF9EsC4LX43g@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: nwl-dsi: Drop the drm_of_panel_bridge_remove()
- function call
-To:     Jagan Teki <jagan@amarulasolutions.com>
-Cc:     Liu Ying <victor.liu@nxp.com>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Guido_G=C3=BCnther?= <agx@sigxcpu.org>,
-        NXP Linux Team <linux-imx@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.22.394.2204041006230.1941618@ramsan.of.borg>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=624ab9e5
+        a=MV6E7+DvwtTitA3W+3A2Lw==:117 a=MV6E7+DvwtTitA3W+3A2Lw==:17
+        a=kj9zAlcOel0A:10 a=z0gMJWrwH1QA:10 a=6Fu7hv2xAAAA:8 a=7-415B0cAAAA:8
+        a=L05BbbQJD6-TbP0LrSsA:9 a=CjuIK1q_8ugA:10 a=OCr_TKDY-yBPQKLGgHr3:22
+        a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,25 +59,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Apr 2022 at 16:52, Jagan Teki <jagan@amarulasolutions.com> wrote:
->
-> On Fri, Apr 1, 2022 at 7:26 AM Liu Ying <victor.liu@nxp.com> wrote:
-> >
-> > Since this driver has been changed to use the resource managed
-> > devm_drm_of_get_bridge() to get bridge from ->attach(), it's
-> > unnecessary to call drm_of_panel_bridge_remove() to remove the
-> > bridge from ->detach().  So, let's drop the drm_of_panel_bridge_remove(=
-)
-> > function call.  As nwl_dsi_bridge_detach() only calls
-> > drm_of_panel_bridge_remove(), it can also be dropped.
-> >
-> > Cc: Robert Foss <robert.foss@linaro.org>
-> > Cc: Guido G=C3=BCnther <agx@sigxcpu.org>
-> > Cc: Jagan Teki <jagan@amarulasolutions.com>
-> > Cc: NXP Linux Team <linux-imx@nxp.com>
-> > Signed-off-by: Liu Ying <victor.liu@nxp.com>
-> > ---
->
-> Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
+On Mon, Apr 04, 2022 at 10:16:08AM +0200, Geert Uytterhoeven wrote:
+> On Mon, 4 Apr 2022, Geert Uytterhoeven wrote:
+> > Below is the list of build error/warning regressions/improvements in
+> > v5.18-rc1[1] compared to v5.17[2].
+> > 
+> > Summarized:
+> >  - build errors: +36/-15
+> >  - build warnings: +5/-38
+> > 
+> > Happy fixing! ;-)
 
-Applied to drm-misc-next.
+Well....
+
+> >  + /kisskb/src/fs/xfs/xfs_buf.h: error: initializer element is not constant:  => 46:23
+
+Looking at:
+
+http://kisskb.ellerman.id.au/kisskb/buildresult/14714961/
+
+The build error is:
+
+/kisskb/src/fs/xfs/./xfs_trace.h:432:2: note: in expansion of macro 'TP_printk'
+  TP_printk("dev %d:%d daddr 0x%llx bbcount 0x%x hold %d pincount %d "
+  ^
+/kisskb/src/fs/xfs/./xfs_trace.h:440:5: note: in expansion of macro '__print_flags'
+     __print_flags(__entry->flags, "|", XFS_BUF_FLAGS),
+     ^
+/kisskb/src/fs/xfs/xfs_buf.h:67:4: note: in expansion of macro 'XBF_UNMAPPED'
+  { XBF_UNMAPPED,  "UNMAPPED" }
+    ^
+/kisskb/src/fs/xfs/./xfs_trace.h:440:40: note: in expansion of macro 'XFS_BUF_FLAGS'
+     __print_flags(__entry->flags, "|", XFS_BUF_FLAGS),
+                                        ^
+/kisskb/src/fs/xfs/./xfs_trace.h: In function 'trace_raw_output_xfs_buf_flags_class':
+/kisskb/src/fs/xfs/xfs_buf.h:46:23: error: initializer element is not constant
+ #define XBF_UNMAPPED  (1 << 31)/* do not map the buffer */
+
+This doesn't make a whole lotta sense to me. It's blown up in a
+tracepoint macro in XFS that was not changed at all in 5.18-rc1, nor
+was any of the surrounding XFS code or contexts.  Perhaps something
+outside XFS changed to cause this on these platforms?
+
+Can you bisect this, please?
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com

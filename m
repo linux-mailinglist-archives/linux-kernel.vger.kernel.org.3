@@ -2,78 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B38C4F1BEB
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4FB44F1A88
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381963AbiDDVYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59246 "EHLO
+        id S1379022AbiDDVSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380265AbiDDTZG (ORCPT
+        with ESMTP id S1380344AbiDDTiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 15:25:06 -0400
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76FA73B037;
-        Mon,  4 Apr 2022 12:23:09 -0700 (PDT)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-d39f741ba0so11854884fac.13;
-        Mon, 04 Apr 2022 12:23:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wIFxnat34WFgpybFJIb4ucsy9v2GfYyVlHzTRVzu9II=;
-        b=p7sgaV1KkwcHjxp/vlyfRnDI4Vp19yAtiHdnadEPBuaLtMRE0cozlz9SGmnysgPT/p
-         p1r6sAlZedh1OdlgUkuGQhncDpb+2s/gaQu2TKC4Q7/ZqX/rzWHeB6Laj4zeDTlwHtlW
-         MiS4cEWCMq7AOXFTjw5AQ6SCQ0J5/+Mu03tii6+MCqz0kXad9K5eUAFj3iScKKnePHCU
-         fWKqRFR7wM8SNHzzuTDFxdaI/GYxZ+agePVBisig0GPKibeZSgjuxJ5JmpM1LAeFemMY
-         yKEZ0a8Fxp3XgV2IaI0n6gqZxlfFH5N3vqJIsxVEpC6O1C7YJklX8ZkGsvDJ14XfaEUm
-         5/Nw==
-X-Gm-Message-State: AOAM530Lgnw5HiMQ5q4hLjsjpoU6G4l/YND++tyR2gvg5FEYNj+L0Wll
-        WTSSzrPhx0zHbNf3zH3Kwg==
-X-Google-Smtp-Source: ABdhPJxGvYRMISdRC5MROfVxG4x2VQDddPAJcrf4fiX749Isc/0j1TL+GUY/U5TzrMlxzPaIiijgSg==
-X-Received: by 2002:a05:6870:46a4:b0:e1:f307:c1a2 with SMTP id a36-20020a05687046a400b000e1f307c1a2mr412329oap.238.1649100188792;
-        Mon, 04 Apr 2022 12:23:08 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id k8-20020a544688000000b002f90678740esm4638093oic.37.2022.04.04.12.23.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 12:23:08 -0700 (PDT)
-Received: (nullmailer pid 1802528 invoked by uid 1000);
-        Mon, 04 Apr 2022 19:23:07 -0000
-Date:   Mon, 4 Apr 2022 14:23:07 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linus.walleij@linaro.org,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, heiko@sntech.de,
-        linux-gpio@vger.kernel.org, krzk+dt@kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org
-Subject: Re: [PATCH v1 1/2] dt-bindings: pinctrl: add rockchip,rk3036-pinctrl
- compatible string
-Message-ID: <YktFmxYK76/W1N2A@robh.at.kernel.org>
-References: <20220330133952.1949-1-jbx6244@gmail.com>
+        Mon, 4 Apr 2022 15:38:03 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C9E13F10;
+        Mon,  4 Apr 2022 12:36:05 -0700 (PDT)
+Received: from mail-wm1-f51.google.com ([209.85.128.51]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MCbMx-1njTEW44DD-009jfe; Mon, 04 Apr 2022 21:36:04 +0200
+Received: by mail-wm1-f51.google.com with SMTP id n38-20020a05600c502600b0038e4a0fc5easo213006wmr.3;
+        Mon, 04 Apr 2022 12:36:03 -0700 (PDT)
+X-Gm-Message-State: AOAM530e3QZh9j+3Ooh3C0vd1rJqdVrpEYpJ4xevEjcsg9wHhQ/FD8IZ
+        EK41q4GhFhMNvGHap+YyW6nhSnhr8aPX/mbmF/4=
+X-Google-Smtp-Source: ABdhPJxpqVUnzSThWxFis0+czy1waV2fEyvClqHAXtfCqV11EeZgFuDvKELwz3h19yH6dPE8NNhk9binn9y/5RzmubM=
+X-Received: by 2002:a7b:cd13:0:b0:38b:f39c:1181 with SMTP id
+ f19-20020a7bcd13000000b0038bf39c1181mr626838wmj.20.1649100963560; Mon, 04 Apr
+ 2022 12:36:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220330133952.1949-1-jbx6244@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <Yib9F5SqKda/nH9c@infradead.org> <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
+ <YkmWh2tss8nXKqc5@infradead.org> <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
+ <CAMo8BfKgn0T5RtUTb89fPvygNJJYLy7r1=RZTmTTm=jiDfx1hQ@mail.gmail.com>
+ <CAK8P3a0J1--WSyWY+TptFa0nn5d-mOxapadCE1csGRkfhSPbVw@mail.gmail.com> <CAMo8BfLT8vMw3aGQPs1+9ry7W63SQphmDc4Tt4A3JvADHJhxiQ@mail.gmail.com>
+In-Reply-To: <CAMo8BfLT8vMw3aGQPs1+9ry7W63SQphmDc4Tt4A3JvADHJhxiQ@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 4 Apr 2022 21:35:47 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3iFb+ZacZ40d8PC_xcJpLVFXT0Qc-oYEZNkFqXdsfNZw@mail.gmail.com>
+Message-ID: <CAK8P3a3iFb+ZacZ40d8PC_xcJpLVFXT0Qc-oYEZNkFqXdsfNZw@mail.gmail.com>
+Subject: Re: [RFC PULL] remove arch/h8300
+To:     Max Filippov <jcmvbkbc@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "moderated list:H8/300 ARCHITECTURE" 
+        <uclinux-h8-devel@lists.sourceforge.jp>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:Na3Qbp5Gp6zqpmOBXFOCu/SbbvSoNPqbD2qfv/xtPRYs5dDgRg8
+ mIdvfyyz7e473bmnPVXYgmko/IBAFkN0E/0D7L82k9H4z0qRYeIYCVhV+iBQaif2iegOb1n
+ G5GibOdTpi5drETUpiRkAyzxuEliV1e4OIvYnLs7V+EvzmsZHy+EQlKk4xe7MwQlb5by+Gj
+ apal2zq108Xa8Zht5qXpA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:48eYd4DVt+g=:4SxC9dH5qGnv0NPa9/lmmK
+ UAUr1kr+bxQ+cT9ipiNeobPoYMARqZ1sXLPPb3RBuM/FeNM7LQl77+5LxFq0kVfxe8KDYB4vN
+ Z8JggpZz9US2JF8u4D1euzH3LMC0rUGjLA6xk2QeqlKzQNxztcyfiaKL7kCPK5lvF7/NhjJjm
+ Swp1pisPzQ9HvqHjNeMJkJ2a4rD3LV4/lQCYUUTteh05i3GBs1z3KUY9h+u4vOJsahunt9u/7
+ UEWXIJ5FHaY+Kg5OddLjsQNqdG/IzYDl2M90gSCz3do1klkpweaHIPLfcDxJ0vetqH/Vggist
+ 5lDFBLF4Wo25IJOCBa18M/BKIdtH8rl23rqLFf5Fvcet2m0VvUD7U8HP6yKV8ymGG6/ov8aZe
+ gQxJKJbIENHMLnE5megUW5rVZtr354v9QVUuFdzh9dagMhLLpKUEKs8vTJ7BN+3gE8GYdZGpL
+ Bo/xYSaz0uLLPNOpOqG1kfthmEe7l3+plFBLCIIazo+4Mcqx+7ZNShmqkypDmA/xIcKtBQ8dc
+ NmzLqnCgrQ9/2IVEmwctfWzPjKTtnUCedPdKJSdQ/qssI4tEDRqVpkxp1acvz5NNBTgTxUELX
+ uqB979KDMIR3cGeZugP1tN4TZ38aXn7B5irg5iPGIrQPRCO1/vd6dfEbrSnw5BZRpfnYXyDcq
+ u3A3XldZFbTmEWmghOVIWe9qIjVUliUudF01SMdQYIT6uzOIqWyXXpOOsCI+qcaB35QVCkt9O
+ uF4Lu3l3rij+1BQ33ZXHCR2EL9GONZ8qmcUv3u8ZH3cy1aJCehhrzUJ5EUkg2iRvthWeHiHVf
+ YjqmX4js+KyPmAuMSzHGB2eGmBBtP1KClfsYLfBtY2d0HB90eQ=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 30 Mar 2022 15:39:51 +0200, Johan Jonker wrote:
-> Add the compatible string "rockchip,rk3036-pinctrl" in already
-> in use in rk3036.dtsi to rockchip,pinctrl.yaml.
-> 
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> ---
->  Documentation/devicetree/bindings/pinctrl/rockchip,pinctrl.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+On Mon, Apr 4, 2022 at 9:14 PM Max Filippov <jcmvbkbc@gmail.com> wrote:
+> On Mon, Apr 4, 2022 at 12:01 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Mon, Apr 4, 2022 at 7:57 PM Max Filippov <jcmvbkbc@gmail.com> wrote:
+> > > Please let me know if you observe any specific build/runtime issues.
+> > xtensa-linux-gcc-11.1.0 -DKCONFIG_SEED=
+> ...
+> > /git/arm-soc/arch/xtensa/kernel/head.S: Assembler messages:
+> > /git/arm-soc/arch/xtensa/kernel/head.S:87: Error: invalid register
+> > 'atomctl' for 'wsr' instruction
+>
+> Sure, one cannot use an arbitrary xtensa compiler for the kernel
+> build, the compiler configuration must match the core variant selected
+> in the linux configuration. Specifically, for the nommu_kc705_defconfig
+> the following compiler can be used:
+>
+> https://github.com/foss-xtensa/toolchain/releases/download/2020.07/x86_64-2020.07-xtensa-de212-elf.tar.gz
+>
+> If you build the toolchain yourself using crosstool-ng or buildroot they
+> accept the 'configuration overlay' parameter that does the compiler
+> customization.
+>
+> Perhaps the documentation for this part is what needs to be improved.
 
-Acked-by: Rob Herring <robh@kernel.org>
+It sounds like a bug in the kernel Makefile. On all other architectures,
+you can generally just pick any (recent) compiler and build any kernel,
+as the compiler arguments set the exact target machine type based
+on the kernel config. You can't normally rely on the compiler defaults
+for kernel builds.
+
+         Arnd

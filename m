@@ -2,84 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D7C4F133A
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 12:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 588DD4F1341
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 12:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356949AbiDDKlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 06:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
+        id S1358102AbiDDKn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 06:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245317AbiDDKls (ORCPT
+        with ESMTP id S245317AbiDDKnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 06:41:48 -0400
-Received: from mx.msync.work (mx.msync.work [51.91.38.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88C13CA76;
-        Mon,  4 Apr 2022 03:39:51 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 4965C3964D;
-        Mon,  4 Apr 2022 10:39:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lexina.in; s=dkim;
-        t=1649068790; h=from:subject:date:message-id:to:mime-version:content-type:
-         content-transfer-encoding:content-language:in-reply-to:references:
-         disposition-notification-to; bh=K8y6f0ZyIOvwaXnDqPqMX/eCkxRTN6+lglp1GjSsoF0=;
-        b=WbQ5fDISwpYYjCwTRN06a2PF9QC4E6eLyo2UaFMa1S3Rz8yBnghyulWkLF9hlcaPXLyG6U
-        jYEJAVSgXcUx7gh6m+zS0IN3Djz/fVBzj5JHvNY0FfhbP5iq8vj5nNNQK/zhZFYrenOjlj
-        FdeUu70vEO3hGdGidGVvRRtvXl9M423wkhaDE8wFc5fKIMjonbdN7FHDvPt5GxyVN8Qr3h
-        eQqJnj49aH06xMEfPrWieUC5oaN0G+QBMpnfFtO9k0dLlkQyDOnlvxe1ViSuCeT6FyeL27
-        eZ6o1NUdebQJt5Jj0+dm7Sz4cV2DVzbjUlDuZKYbp9vpU5YWQ2YXfvd3L9Wpeg==
-Subject: Re: [PATCH v2 0/4] arm64: meson: update dts for JetHub devices
-To:     Neil Armstrong <narmstrong@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220326075110.1462301-1-adeep@lexina.in>
- <164905930207.1797085.9678466232916244683.b4-ty@baylibre.com>
-From:   Vyacheslav <adeep@lexina.in>
-Message-ID: <d53b8c6f-6bc2-5445-c426-5409d324fac1@lexina.in>
-Date:   Mon, 4 Apr 2022 13:39:47 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Mon, 4 Apr 2022 06:43:55 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BBED3CA77;
+        Mon,  4 Apr 2022 03:41:59 -0700 (PDT)
+Received: (Authenticated sender: i.maximets@ovn.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id E15841C000C;
+        Mon,  4 Apr 2022 10:41:54 +0000 (UTC)
+From:   Ilya Maximets <i.maximets@ovn.org>
+To:     netdev@vger.kernel.org
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>, dev@openvswitch.org,
+        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Pravin B Shelar <pshelar@ovn.org>, Andy Zhou <azhou@ovn.org>,
+        Yifeng Sun <pkusunyifeng@gmail.com>,
+        Ilya Maximets <i.maximets@ovn.org>
+Subject: [PATCH net] net: openvswitch: don't send internal clone attribute to the userspace.
+Date:   Mon,  4 Apr 2022 12:41:50 +0200
+Message-Id: <20220404104150.2865736-1-i.maximets@ovn.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <164905930207.1797085.9678466232916244683.b4-ty@baylibre.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-04.04.2022 11:01, Neil Armstrong wrote:
-> Hi,
-> 
-> On Sat, 26 Mar 2022 10:51:06 +0300, Vyacheslav Bocharov wrote:
->> Update dts for JetHub H1:
->> - add bluetooth node for RTL8822CS uart port
->>
->> Update dts for JetHub D1:
->> - add ZigBee serial alias (ttyAML2) for backward compatibility
->> - update voltage regulators and SDIO config to match board's reference design
->> - update max freq for WiFi SDIO
->>
->> [...]
-> 
-> Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v5.19/dt64)
+'OVS_CLONE_ATTR_EXEC' is an internal attribute that is used for
+performance optimization inside the kernel.  It's added by the kernel
+while parsing user-provided actions and should not be sent during the
+flow dump as it's not part of the uAPI.
 
-Thanks.
+The issue doesn't cause any significant problems to the ovs-vswitchd
+process, because reported actions are not really used in the
+application lifecycle and only supposed to be shown to a human via
+ovs-dpctl flow dump.  However, the action list is still incorrect
+and causes the following error if the user wants to look at the
+datapath flows:
 
-> 
-> [1/4] arm64: meson: add dts bluetooth node for JetHub H1
->        https://git.kernel.org/amlogic/c/2bda08dfc501967a7a7bd6f77f04afef14dc7271
-> [2/4] arm64: meson: dts: update serial alias in dts for JetHub D1
->        https://git.kernel.org/amlogic/c/cf94e26508ad411c2a618b00dfaae515affd0ca7
-> [3/4] arm64: meson: update SDIO voltage in dts for JetHub D1
->        https://git.kernel.org/amlogic/c/81bbd2bd24a9ebac3871b293060df50445458c79
-> [4/4] arm64: meson: update WiFi SDIO in dts for JetHub D1
->        https://git.kernel.org/amlogic/c/87a87657249316616138c103c2bdb7525c34d987
-> 
+  # ovs-dpctl add-dp system@ovs-system
+  # ovs-dpctl add-flow "<flow match>" "clone(ct(commit),0)"
+  # ovs-dpctl dump-flows
+  <flow match>, packets:0, bytes:0, used:never,
+    actions:clone(bad length 4, expected -1 for: action0(01 00 00 00),
+                  ct(commit),0)
+
+With the fix:
+
+  # ovs-dpctl dump-flows
+  <flow match>, packets:0, bytes:0, used:never,
+    actions:clone(ct(commit),0)
+
+Additionally fixed an incorrect attribute name in the comment.
+
+Fixes: b233504033db ("openvswitch: kernel datapath clone action")
+Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+---
+ net/openvswitch/actions.c      | 2 +-
+ net/openvswitch/flow_netlink.c | 4 +++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/net/openvswitch/actions.c b/net/openvswitch/actions.c
+index 7056cb1b8ba0..1b5d73079dc9 100644
+--- a/net/openvswitch/actions.c
++++ b/net/openvswitch/actions.c
+@@ -1051,7 +1051,7 @@ static int clone(struct datapath *dp, struct sk_buff *skb,
+ 	int rem = nla_len(attr);
+ 	bool dont_clone_flow_key;
+ 
+-	/* The first action is always 'OVS_CLONE_ATTR_ARG'. */
++	/* The first action is always 'OVS_CLONE_ATTR_EXEC'. */
+ 	clone_arg = nla_data(attr);
+ 	dont_clone_flow_key = nla_get_u32(clone_arg);
+ 	actions = nla_next(clone_arg, &rem);
+diff --git a/net/openvswitch/flow_netlink.c b/net/openvswitch/flow_netlink.c
+index cc282a58b75b..dbdcaaa27f5b 100644
+--- a/net/openvswitch/flow_netlink.c
++++ b/net/openvswitch/flow_netlink.c
+@@ -3458,7 +3458,9 @@ static int clone_action_to_attr(const struct nlattr *attr,
+ 	if (!start)
+ 		return -EMSGSIZE;
+ 
+-	err = ovs_nla_put_actions(nla_data(attr), rem, skb);
++	/* Skipping the OVS_CLONE_ATTR_EXEC that is always the first attribute. */
++	attr = nla_next(nla_data(attr), &rem);
++	err = ovs_nla_put_actions(attr, rem, skb);
+ 
+ 	if (err)
+ 		nla_nest_cancel(skb, start);
+-- 
+2.34.1
 

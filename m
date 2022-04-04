@@ -2,195 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F624F1F55
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 041EB4F1F5E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:51:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239694AbiDDWuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38690 "EHLO
+        id S234948AbiDDWvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 18:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234412AbiDDWtj (ORCPT
+        with ESMTP id S236500AbiDDWvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 18:49:39 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9444A5EBD4
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 15:02:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649109758; x=1680645758;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=f4bKop7Rq7P0wPLbvkUf65W9ddFoX3orAke3r8suEp8=;
-  b=C0g0scDbZEBBtcfEmhyLFwexDKPke6ovDxx+8asygAPTeqCMGNvZ2gIC
-   cE+R/SJo7ngVch53AmtPpzHg5G3wUBsgOnnlwrXuz39QExF8BU23oWE2v
-   YMTara4Xv8rMyjfgxWZbXCj/adeND/7/wJ6UbalM+uDe11OZ2HdPrJ3iG
-   vFa6jaQGDlOrMNvrPoTnJhhJgKQMCN2v4FHjJlDzjd0e5vsYu3UcqdPA1
-   esc1KZOEq6e9MgMclz8EBw/nw8GKQ0fU6Y+H96Ns1kCMJuOtd2S4pYoWV
-   KOKa0SaTza+pTZE+Kdg3JC0ZdFyB5V1M+LBOT6j0sq2lR1XIvuUe/k6vu
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="260605583"
-X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
-   d="scan'208";a="260605583"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 15:02:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
-   d="scan'208";a="523746911"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 04 Apr 2022 15:02:35 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbUmR-0002ON-3k;
-        Mon, 04 Apr 2022 22:02:35 +0000
-Date:   Tue, 5 Apr 2022 06:02:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Sasha Levin <sashal@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [linux-stable-rc:queue/5.4 9697/9999] include/linux/blk-mq.h:62:33:
- error: field 'kobj' has incomplete type
-Message-ID: <202204050517.U9PdCKfa-lkp@intel.com>
+        Mon, 4 Apr 2022 18:51:11 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E368860AB3;
+        Mon,  4 Apr 2022 15:04:23 -0700 (PDT)
+Received: from mail-wr1-f52.google.com ([209.85.221.52]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MD5fd-1njz7M38Cn-009C2u; Tue, 05 Apr 2022 00:04:21 +0200
+Received: by mail-wr1-f52.google.com with SMTP id d3so5744377wrb.7;
+        Mon, 04 Apr 2022 15:04:21 -0700 (PDT)
+X-Gm-Message-State: AOAM533QYF+EyWTSfyR8ZiDNfwEG+BhLFmBlNEZSpZN6IHOzlOEcS2Xz
+        7UM4LdInLrK6AQeCHtIxWDqunivIu7cRtSViggE=
+X-Google-Smtp-Source: ABdhPJxdB4SXEExhGLOnNOou5PzL8CTbrHl2NxdVHZQrrPYcJQIoUaGDfpVns8hWsOV0sMm8eIe8VQFd/8q9TF2PhCI=
+X-Received: by 2002:adf:cd02:0:b0:206:ff2:236 with SMTP id w2-20020adfcd02000000b002060ff20236mr254545wrm.192.1649109861434;
+ Mon, 04 Apr 2022 15:04:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220310195229.109477-1-nick.hawkins@hpe.com> <20220310195229.109477-9-nick.hawkins@hpe.com>
+ <eb66cc83-2da9-8e19-db69-633e34fef946@canonical.com> <PH0PR84MB1718C31DB71AA2A67FEC5F6E88119@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <b1cc2566-cd78-7cb4-f8a5-d6fc8065fe6e@canonical.com> <PH0PR84MB1718292B1C11F4FE83326A5388119@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <fb4def96-4b20-604f-d15d-fef87eb2232d@canonical.com> <PH0PR84MB1718A2CFBFC90C9C0CAA5515881E9@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <CAK8P3a0fCE_NM=z68d1m9BTfuKixh1pKLw3gn+Sr7SxKb6UJAg@mail.gmail.com>
+ <PH0PR84MB17181C316E55073EBC28C386881E9@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <PH0PR84MB17185ADBA824F9CC9EB3E022881F9@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <CAK8P3a1080yz9jggOrwz2iQ1sAB2Xe2Emh22uCuqRok60BQSiA@mail.gmail.com>
+ <PH0PR84MB17186189F5025374AA39584D88E19@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <CAK8P3a2b+ESAAkc=_2hqx0kOxwYVS6mNjMGBKhhipaSj_5jV9g@mail.gmail.com>
+ <PH0PR84MB17182115D57EF6032782659C88E09@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+ <CAK8P3a1Cc+2oY9djdp11PuOW+TBQ0zf+p8QaDY3aerk1QqaG-g@mail.gmail.com> <PH0PR84MB1718925AA3C8FA998C486D7C88E59@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+In-Reply-To: <PH0PR84MB1718925AA3C8FA998C486D7C88E59@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 5 Apr 2022 00:02:10 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3RSST6yvv8Oy13RFd6eZ6cS5yX9TOuK6wxXKUO-qdQ=Q@mail.gmail.com>
+Message-ID: <CAK8P3a3RSST6yvv8Oy13RFd6eZ6cS5yX9TOuK6wxXKUO-qdQ=Q@mail.gmail.com>
+Subject: Re: [PATCH v3 09/10] arch: arm: boot: dts: Introduce HPE GXP Device tree
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        Olof Johansson <olof@lixom.net>,
+        "soc@kernel.org" <soc@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:5mTdGkH/49wqOo83wH+vgQVSb0gA/5UG3vD+/btypz62HoNOEGM
+ kx3NCgQlGT5qR0EfyLQUU54zAdqX1dqWIY++F2lw4OXnYvIi3QZtLa3h7FNADk73m54HPr8
+ gHsJBnEwWPfhIJj1gKUH9QoaLd5+k1cCDJOrgLwoyFPt8wfRx0GFcSE/iehSEKUxZNnR2uB
+ qTat294ukRn9bFlKYWUFA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:k4SWwC7ut8s=:L1ttrIkbRe2fOl4oXOy+YD
+ 9Jh4orANoVF+dc6ZUffgwzHoi1UoXHzAowT3QvYzu2T+l4YOZdpjcjVLxLYeXdlSmrj5rYZNj
+ q6C5nTmFENHhJGZj47TUcTPPKZLlAq+fN581y8XdIxCLDF0RBBsw4PuUZM0PdRLtWPQrYpTTj
+ pZyP6D9IZgCMkxAm0EWJryIyg9xX5L/TV0bqzlKviICl9k1CizcaA1tXlhs9Zj6lAKhgcvtoU
+ bfQHSkswd2wyMM84EmLIq+ctAYnJ/B2xKMCUniSY3uF2HKj4Ggq7zUxxCX1VoPD4dMyoqh/C3
+ 4i0XlibTzoko5PI8env/1uk3JVTAypSsa0rK9gtz+UhRyht1IT5AnjSxX0XP36ez9KVyTV08v
+ +xIaGzNK9WoYMh/5iyzmcTVs02MKeWLgoZHeVYUghgOGlUbkxsnxppZaIVQxhmgIPcQS8ZpRN
+ S3waWSJl9Ig3wM0yz51TVsdX6I6XUpkNY5N9JpsQ+pAqXl2iGiRqngyDk7EnQRDusphtJSRZw
+ Vt/CCWxmwhZ1P4FQj6c9MO+Km2WCI8LEidVmTq+jev70JVSQcC0zdcRMr25Hiyb/a/sj27Y/i
+ qYbYcrckJBtunXVseQQjpzP/pupsybjiZ/aOC2VabHQIiZoPWmFeaePIgKjOPW8bG4fWpT9K/
+ ziumd4ohmDNMduGDYF6IyZB1UVnpxsLo9/stlcS1xPVH/O+o8u4Hx5v8t+Zws1u8L/gw=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.4
-head:   336570623f4c87024cb5937f243daba45774a0f0
-commit: f990ca652d25eff602546c126a71b3810a21acee [9697/9999] block: don't merge across cgroup boundaries if blkcg is enabled
-config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20220405/202204050517.U9PdCKfa-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=f990ca652d25eff602546c126a71b3810a21acee
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/5.4
-        git checkout f990ca652d25eff602546c126a71b3810a21acee
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 prepare
+On Mon, Apr 4, 2022 at 10:22 PM Hawkins, Nick <nick.hawkins@hpe.com> wrote:
+> > > I would put it into drivers/clocksource/, I don't think drivers/mtd would be any better, but there is a chance that the clocksource maintainers don't want to have the watchdog code in their tree.
+>
+> While trying to discover how to creating two devices in one driver I ran across an interesting .dtsi and I was wondering if this would be a valid approach for my situation as well. The pertinent files are:
+> 1) drivers/clocksource/timer-digicolor.c
+> 2) arch/arm/boot/dts/cx92755.dtsi
+> 3) drivers/watchdog/digicolor_wdt.c
+>
+> Here they are just sharing the same register area:
+>
+> timer@f0000fc0 {
+>         compatible = "cnxt,cx92755-timer";
+>         reg = <0xf0000fc0 0x40>;
+>         interrupts = <19>, <31>, <34>, <35>, <52>, <53>, <54>, <55>;
+>         clocks = <&main_clk>;
+> };
+>
+> rtc@f0000c30 {
+>         compatible = "cnxt,cx92755-rtc";
+>         reg = <0xf0000c30 0x18>;
+>         interrupts = <25>;
+> };
+>
+> watchdog@f0000fc0 {
+>         compatible = "cnxt,cx92755-wdt";
+>         reg = <0xf0000fc0 0x8>;
+>         clocks = <&main_clk>;
+>         timeout-sec = <15>;
+> };
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Right, it is possible to make this work, but it's not recommended, and you have
+to work around the sanity checks in the code that try to keep you from doing it
+wrong, as well as any tooling that tries to check for these in the DT.
 
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/blk-cgroup.h:25,
-                    from include/linux/writeback.h:14,
-                    from include/linux/memcontrol.h:22,
-                    from include/linux/swap.h:9,
-                    from include/linux/suspend.h:5,
-                    from arch/x86/kernel/asm-offsets.c:13:
->> include/linux/blk-mq.h:62:33: error: field 'kobj' has incomplete type
-      62 |         struct kobject          kobj;
-         |                                 ^~~~
-   include/linux/blk-mq.h: In function 'blk_mq_rq_from_pdu':
-   include/linux/blk-mq.h:352:29: error: invalid application of 'sizeof' to incomplete type 'struct request'
-     352 |         return pdu - sizeof(struct request);
-         |                             ^~~~~~
-   include/linux/blk-mq.h: In function 'blk_mq_rq_to_pdu':
-   include/linux/blk-mq.h:356:19: error: invalid use of undefined type 'struct request'
-     356 |         return rq + 1;
-         |                   ^
-   include/linux/blk-mq.h: In function 'request_to_qc_t':
-   include/linux/blk-mq.h:370:15: error: invalid use of undefined type 'struct request'
-     370 |         if (rq->tag != -1)
-         |               ^~
-   include/linux/blk-mq.h:371:26: error: invalid use of undefined type 'struct request'
-     371 |                 return rq->tag | (hctx->queue_num << BLK_QC_T_SHIFT);
-         |                          ^~
-   include/linux/blk-mq.h:373:18: error: invalid use of undefined type 'struct request'
-     373 |         return rq->internal_tag | (hctx->queue_num << BLK_QC_T_SHIFT) |
-         |                  ^~
-   include/linux/blk-mq.h: In function 'blk_mq_cleanup_rq':
-   include/linux/blk-mq.h:379:15: error: invalid use of undefined type 'struct request'
-     379 |         if (rq->q->mq_ops->cleanup_rq)
-         |               ^~
-   include/linux/blk-mq.h:380:19: error: invalid use of undefined type 'struct request'
-     380 |                 rq->q->mq_ops->cleanup_rq(rq);
-         |                   ^~
-   make[2]: *** [scripts/Makefile.build:99: arch/x86/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1135: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:179: sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +/kobj +62 include/linux/blk-mq.h
-
-320ae51feed5c2 Jens Axboe        2013-10-24  11  
-fe644072dfee06 Linus Walleij     2018-04-20  12  /**
-fe644072dfee06 Linus Walleij     2018-04-20  13   * struct blk_mq_hw_ctx - State for a hardware queue facing the hardware block device
-fe644072dfee06 Linus Walleij     2018-04-20  14   */
-320ae51feed5c2 Jens Axboe        2013-10-24  15  struct blk_mq_hw_ctx {
-320ae51feed5c2 Jens Axboe        2013-10-24  16  	struct {
-320ae51feed5c2 Jens Axboe        2013-10-24  17  		spinlock_t		lock;
-320ae51feed5c2 Jens Axboe        2013-10-24  18  		struct list_head	dispatch;
-8d354f133e86dd Jens Axboe        2016-08-25  19  		unsigned long		state;		/* BLK_MQ_S_* flags */
-320ae51feed5c2 Jens Axboe        2013-10-24  20  	} ____cacheline_aligned_in_smp;
-320ae51feed5c2 Jens Axboe        2013-10-24  21  
-9f993737906b30 Jens Axboe        2017-04-10  22  	struct delayed_work	run_work;
-e4043dcf30811f Jens Axboe        2014-04-09  23  	cpumask_var_t		cpumask;
-506e931f92defd Jens Axboe        2014-05-07  24  	int			next_cpu;
-506e931f92defd Jens Axboe        2014-05-07  25  	int			next_cpu_batch;
-320ae51feed5c2 Jens Axboe        2013-10-24  26  
-320ae51feed5c2 Jens Axboe        2013-10-24  27  	unsigned long		flags;		/* BLK_MQ_F_* flags */
-320ae51feed5c2 Jens Axboe        2013-10-24  28  
-bd166ef183c263 Jens Axboe        2017-01-17  29  	void			*sched_data;
-320ae51feed5c2 Jens Axboe        2013-10-24  30  	struct request_queue	*queue;
-f70ced09170761 Ming Lei          2014-09-25  31  	struct blk_flush_queue	*fq;
-320ae51feed5c2 Jens Axboe        2013-10-24  32  
-320ae51feed5c2 Jens Axboe        2013-10-24  33  	void			*driver_data;
-320ae51feed5c2 Jens Axboe        2013-10-24  34  
-88459642cba452 Omar Sandoval     2016-09-17  35  	struct sbitmap		ctx_map;
-1429d7c9467e1e Jens Axboe        2014-05-19  36  
-b347689ffbca74 Ming Lei          2017-10-14  37  	struct blk_mq_ctx	*dispatch_from;
-6e768717304bdb Ming Lei          2018-07-03  38  	unsigned int		dispatch_busy;
-b347689ffbca74 Ming Lei          2017-10-14  39  
-f31967f0e455d0 Jens Axboe        2018-10-29  40  	unsigned short		type;
-f31967f0e455d0 Jens Axboe        2018-10-29  41  	unsigned short		nr_ctx;
-6e768717304bdb Ming Lei          2018-07-03  42  	struct blk_mq_ctx	**ctxs;
-4bb659b156996f Jens Axboe        2014-05-09  43  
-5815839b3ca16b Ming Lei          2018-06-25  44  	spinlock_t		dispatch_wait_lock;
-ac6424b981bce1 Ingo Molnar       2017-06-20  45  	wait_queue_entry_t	dispatch_wait;
-8537b12034cf1f Alexander Gordeev 2014-06-17  46  	atomic_t		wait_index;
-320ae51feed5c2 Jens Axboe        2013-10-24  47  
-320ae51feed5c2 Jens Axboe        2013-10-24  48  	struct blk_mq_tags	*tags;
-bd166ef183c263 Jens Axboe        2017-01-17  49  	struct blk_mq_tags	*sched_tags;
-320ae51feed5c2 Jens Axboe        2013-10-24  50  
-320ae51feed5c2 Jens Axboe        2013-10-24  51  	unsigned long		queued;
-320ae51feed5c2 Jens Axboe        2013-10-24  52  	unsigned long		run;
-8d354f133e86dd Jens Axboe        2016-08-25  53  #define BLK_MQ_MAX_DISPATCH_ORDER	7
-320ae51feed5c2 Jens Axboe        2013-10-24  54  	unsigned long		dispatched[BLK_MQ_MAX_DISPATCH_ORDER];
-320ae51feed5c2 Jens Axboe        2013-10-24  55  
-320ae51feed5c2 Jens Axboe        2013-10-24  56  	unsigned int		numa_node;
-17ded320706c63 Jens Axboe        2015-01-07  57  	unsigned int		queue_num;
-320ae51feed5c2 Jens Axboe        2013-10-24  58  
-0d2602ca30e410 Jens Axboe        2014-05-13  59  	atomic_t		nr_active;
-0d2602ca30e410 Jens Axboe        2014-05-13  60  
-9467f85960a31d Thomas Gleixner   2016-09-22  61  	struct hlist_node	cpuhp_dead;
-320ae51feed5c2 Jens Axboe        2013-10-24 @62  	struct kobject		kobj;
-05229beeddf7e7 Jens Axboe        2015-11-05  63  
-6e219353afa1f6 Stephen Bates     2016-09-13  64  	unsigned long		poll_considered;
-05229beeddf7e7 Jens Axboe        2015-11-05  65  	unsigned long		poll_invoked;
-05229beeddf7e7 Jens Axboe        2015-11-05  66  	unsigned long		poll_success;
-9c1051aacde828 Omar Sandoval     2017-05-04  67  
-
-:::::: The code at line 62 was first introduced by commit
-:::::: 320ae51feed5c2f13664aa05a76bec198967e04d blk-mq: new multi-queue block IO queueing mechanism
-
-:::::: TO: Jens Axboe <axboe@kernel.dk>
-:::::: CC: Jens Axboe <axboe@kernel.dk>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+         Arnd

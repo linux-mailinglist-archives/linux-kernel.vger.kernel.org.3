@@ -2,102 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16ED64F1BC7
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32FCA4F1DE0
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381346AbiDDVWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51218 "EHLO
+        id S1350410AbiDDVn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380379AbiDDTxG (ORCPT
+        with ESMTP id S1380381AbiDDTxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 15:53:06 -0400
-Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC18559A;
-        Mon,  4 Apr 2022 12:51:08 -0700 (PDT)
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1nbSj5-0003Uu-05; Mon, 04 Apr 2022 21:50:59 +0200
-Message-ID: <53a9ac0a-fce5-69a0-41e5-9a1a2dab9317@maciej.szmigiero.name>
-Date:   Mon, 4 Apr 2022 21:50:53 +0200
+        Mon, 4 Apr 2022 15:53:30 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62ED45F4B
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 12:51:31 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id l26so5892418ejx.1
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 12:51:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=lFAH71l5hLiHoLrZZzcQ02KILOzB/xZrhEV5P4Wdld0=;
+        b=Qtgc6aj81PF27HwqIjmLraR6kbD2g1Edk4JH8jLfIYET3iNb8qoEFoYXBH7BjQQ4GM
+         8tI8gHZon9drp8BlL8xeRuAcE5a116BvXuPVakbHx/K7tjVwbPt2Iv0EgfnkErFL7ZKb
+         GNPkfF0lafnWM+sKawmBrReiH9Tf1xoDFXKhOshkxy3PvO+49x7jxaf+NtrpcqbqDN0u
+         HF9O5wopaviUM8YsGqJWOON5RVGwN4Hc+4xtI+iR3JwhkL3kDBu86Vv5xOpzCU2D+Oi6
+         xN8IfSCARpRBNSNax9wqlfP4rVBgL6u1JtzjiRUMQAoOcFfi1RpuPbk7nXbPj+R2zLB6
+         Z+KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=lFAH71l5hLiHoLrZZzcQ02KILOzB/xZrhEV5P4Wdld0=;
+        b=zncB0SiOGMZcAD52GBExE0JGdDLSalPhLNluvAONZrqQgQlY/rH8lYvr10H/LxcCiA
+         Zy4QYPl0pfPjyowwtvoI6BKKu2+GfCirfBfpWtxUrXa+KpVck6lpW/xne24iIJRTWtY+
+         BGu/4RENTKr0oJV6+LcVpPlMUy49u0AkN0uCVwMTfni7Hv+PatgN/DyhZO3ZPyjx+G9g
+         Gy/BJiBjDkXS23vBYaalvn8zAqrbRlqoUU7/6oV6qNpImvbfp7jI0hp33m4PcR2Y/PYT
+         yHf02Q9sbCA1Ye5ubbiQpuUps/DqvUaB54QPsb1Y4twltAWICWs7Q0Rsl+P6ylgNS7xv
+         K2dw==
+X-Gm-Message-State: AOAM533KLVKWePvflubTM22jb5lOcxhTAPvHCHr2QakCM/liJPsMx1wv
+        i7mvNMBMEVUbWpn7i6Jx7FtoHxZyA7kL1W05SOTr
+X-Google-Smtp-Source: ABdhPJzZaJUJ9iytdCtow0Lr48mbggrWmuIS5YY0v6kb4vhoY/DawljwRSvPi9PvR8qF8W/yV7rYMKSCXNkibAXEfJE=
+X-Received: by 2002:a17:907:216f:b0:6ce:d85f:35cf with SMTP id
+ rl15-20020a170907216f00b006ced85f35cfmr1720054ejb.517.1649101889842; Mon, 04
+ Apr 2022 12:51:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220402010903.727604-1-seanjc@google.com>
- <20220402010903.727604-6-seanjc@google.com>
- <a47217da0b6db4f1b6b6c69a9dc38350b13ac17c.camel@redhat.com>
- <YkshgrUaF4+MrrXf@google.com>
- <a3cf781b-0b1a-0bba-6b37-12666c7fc154@maciej.szmigiero.name>
- <YktIGHM86jHkzGdF@google.com>
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Subject: Re: [PATCH 5/8] KVM: SVM: Re-inject INT3/INTO instead of retrying the
- instruction
-In-Reply-To: <YktIGHM86jHkzGdF@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 4 Apr 2022 15:51:19 -0400
+Message-ID: <CAHC9VhT2fgrZ5Kcv=-xizUnv0kpr0x+v827YsHYGfos88LjkcQ@mail.gmail.com>
+Subject: Re: [PATCH 4/5] selinux: Remove redundant assignments
+To:     michalorzel.eng@gmail.com
+Cc:     Eric Paris <eparis@parisplace.org>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Paul Moore <paul@paul-moore.com>, selinux@vger.kernel.org,
+        Stephen Smalley <stephen.smalley.work@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4.04.2022 21:33, Sean Christopherson wrote:
-> On Mon, Apr 04, 2022, Maciej S. Szmigiero wrote:
->>>>> index 47e7427d0395..a770a1c7ddd2 100644
->>>>> --- a/arch/x86/kvm/svm/svm.h
->>>>> +++ b/arch/x86/kvm/svm/svm.h
->>>>> @@ -230,8 +230,8 @@ struct vcpu_svm {
->>>>>    	bool nmi_singlestep;
->>>>>    	u64 nmi_singlestep_guest_rflags;
->>>>> -	unsigned int3_injected;
->>>>> -	unsigned long int3_rip;
->>>>> +	unsigned soft_int_injected;
->>>>> +	unsigned long soft_int_linear_rip;
->>>>>    	/* optional nested SVM features that are enabled for this guest  */
->>>>>    	bool nrips_enabled                : 1;
->>>>
->>>>
->>>> I mostly agree with this patch, but think that it doesn't address the
->>>> original issue that Maciej wanted to address:
->>>>
->>>> Suppose that there is *no* instruction in L2 code which caused the software
->>>> exception, but rather L1 set arbitrary next_rip, and set EVENTINJ to software
->>>> exception with some vector, and that injection got interrupted.
->>>>
->>>> I don't think that this code will support this.
->>>
->>> Argh, you're right.  Maciej's selftest injects without an instruction, but it doesn't
->>> configure the scenario where that injection fails due to an exception+VM-Exit that
->>> isn't intercepted by L1 and is handled by L0.  The event_inj test gets the coverage
->>> for the latter, but always has a backing instruction.
->>
->> Still reviewing the whole patch set, but want to clear this point quickly:
->> The selftest does have an implicit intervening NPF (handled by L0) while
->> injecting the first L1 -> L2 event.
-> 
-> I'll do some debug to figure out why the test passes for me.  I'm guessing I either
-> got lucky, e.g. IDT was faulted in already, or I screwed up and the test doesn't
-> actually pass.
+For some reason this patch never hit my inbox, despite all the other
+patches in this series arriving ... who knows ... ?
 
-Try applying Maxim's proposed change to this test (adding two additional ud2s at the
-start of L2 guest code and adjusting just the next_rip field accordingly).
+Regardless, it looks good to me so I've just merged it into
+selinux/next, thanks!
 
-We might have been lucky in the patched KVM code and have next_rip = rip at this
-re-injection case now (the next_rip field was zero in the original KVM code).
-
-Thanks,
-Maciej
+-- 
+paul-moore.com

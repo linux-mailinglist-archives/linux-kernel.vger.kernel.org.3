@@ -2,313 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ADC64F1E79
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EBC84F1EF5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:26:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358473AbiDDVqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59722 "EHLO
+        id S1346113AbiDDVwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379201AbiDDQnS (ORCPT
+        with ESMTP id S1379197AbiDDQnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 12:43:18 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9F235854
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 09:41:22 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 86147210FD;
-        Mon,  4 Apr 2022 16:41:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649090480; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jpdRyaAI44RLfX/6gtHESfD63hZ9rkC3wwwCds7xcYg=;
-        b=WUaMCf4+SIZAa7qgDV19Emis9/gV04ss1pFTH2GTghWsDT2TL3ZLsmxl9YS+iGRBXB99kh
-        hCNxKYGBj0ZRdriGiC6ouHD2ycYGJrNFpOMnjbEKrhHOe/KVib0wfLZ/8SI8fNdPj2al7c
-        c+myLykvduVuKQnL6zFseQc5zdx5m68=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649090480;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jpdRyaAI44RLfX/6gtHESfD63hZ9rkC3wwwCds7xcYg=;
-        b=OJvO09OaFxMg/K6X3fl4crIlKTfYnDkiliURiU/JbuH/GgsVKOfzdq5zIjk5VLKArQTDq7
-        nuivuyGF2v9UOUCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 55FFD13A89;
-        Mon,  4 Apr 2022 16:41:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sDdtFLAfS2LjfAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 04 Apr 2022 16:41:20 +0000
-From:   Vlastimil Babka <vbabka@suse.cz>
-To:     David Rientjes <rientjes@google.com>,
-        Christoph Lameter <cl@linux.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Marco Elver <elver@google.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Imran Khan <imran.f.khan@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: [PATCH v3 3/6] mm/slub: use stackdepot to save stack trace in objects
-Date:   Mon,  4 Apr 2022 18:41:09 +0200
-Message-Id: <20220404164112.18372-4-vbabka@suse.cz>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220404164112.18372-1-vbabka@suse.cz>
-References: <20220404164112.18372-1-vbabka@suse.cz>
+        Mon, 4 Apr 2022 12:43:07 -0400
+Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.49.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1871D35851
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 09:41:10 -0700 (PDT)
+Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
+        by gateway23.websitewelcome.com (Postfix) with ESMTP id 8356817B0
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 11:41:10 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id bPlOniZjTXvvJbPlOnlmnL; Mon, 04 Apr 2022 11:41:10 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=7WgjofAA6KFtyuYFlmhFU6JlXq3dpm5LRTI1JLbUZtg=; b=FMYEuEthHu16SlxBpkJ9Y62rkl
+        ZAL8MaU5uy/Wxs3EZw1O32MFghfHwIujE26AM+k6K1Co2g9GpdujuFgRaJcPSLrhjUinomr+fdPwo
+        yeHUee7zaDnix6gGkNCSt4JTaooROeu+QBVjeGOUJgyP7d015RpCzh6cMl+0xXxT3IOZnTWpHE831
+        kqVoSgiwpS02FVQX4dJHY5lFaacAQdcfOPDJdGZj9GdAjOnogzqG62lBShqTkvCS2zUTRX+oZ+GSS
+        GZNilg36MeKDFofhJXMTnQi7inTusG7VUfqpGU2dsSQSsFafMipHssDQDMiUJ88S9mu1UOzTLrdPb
+        65MAOlMg==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54720)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nbPlO-002RIp-5r; Mon, 04 Apr 2022 16:41:10 +0000
+Message-ID: <817c20de-3ebc-e444-a14e-b18773da9f19@roeck-us.net>
+Date:   Mon, 4 Apr 2022 09:41:09 -0700
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7688; i=vbabka@suse.cz; h=from:subject; bh=U1uM2D7lNWodW4RBkGX+ViWCyz7KIYcT6hc4NWYCO/k=; b=owEBbQGS/pANAwAIAeAhynPxiakQAcsmYgBiSx+kNJewmzPQWpQjcKCSVCqUh4VDue97pxQIl0By c4M79m2JATMEAAEIAB0WIQSNS5MBqTXjGL5IXszgIcpz8YmpEAUCYksfpAAKCRDgIcpz8YmpEB5jB/ 9eld+0oGKhvE7J+KbV5jdhgBU3yOm9u8wkzwgDLGKZYN1co9zlcvNXYDNMpCxzVnzenDaQemO1HFlH oOvwXs3bpn8/FZHr6qKVeD06Wy8+YG4nWpTog2AGhxAndCjhkuones0q1/ZQSsmizxAAlpJOR23CRV i4yJx1dPms1KuKCOvB/8OK5e2tI3yJTD/o3Vv1SQw2JPMzHjD77IKL1jJyW48KWVa3v9WPorkUCTq6 asC0fLqpi7kWThrZE2t4NdtExO6wHffnewYPcc/zlbr6NlHNvU3K4kMFg37Js/T5rxwWB2tsT2y96A pyFQNKOk30A/Jd5exyhn/AH0ig7bQG
-X-Developer-Key: i=vbabka@suse.cz; a=openpgp; fpr=A940D434992C2E8E99103D50224FA7E7CC82A664
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 03/10] drivers: wdt: Introduce HPE GXP SoC Watchdog
+Content-Language: en-US
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+References: <20220310195229.109477-1-nick.hawkins@hpe.com>
+ <20220310195229.109477-3-nick.hawkins@hpe.com>
+ <20220404142830.GA3289074@roeck-us.net>
+ <PH0PR84MB171847EBCFEF79A06434CE8488E59@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <PH0PR84MB171847EBCFEF79A06434CE8488E59@PH0PR84MB1718.NAMPRD84.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nbPlO-002RIp-5r
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54720
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 2
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Glitta <glittao@gmail.com>
+On 4/4/22 09:25, Hawkins, Nick wrote:
+> 
+> 
+> -----Original Message-----
+> From: Guenter Roeck [mailto:linux@roeck-us.net]
+> Sent: Monday, April 4, 2022 9:29 AM
+> To: Hawkins, Nick <nick.hawkins@hpe.com>
+> Cc: Verdun, Jean-Marie <verdun@hpe.com>; Wim Van Sebroeck <wim@linux-watchdog.org>; linux-kernel@vger.kernel.org; linux-watchdog@vger.kernel.org
+> Subject: Re: [PATCH v3 03/10] drivers: wdt: Introduce HPE GXP SoC Watchdog
+> 
+> On Thu, Mar 10, 2022 at 01:52:22PM -0600, nick.hawkins@hpe.com wrote:
+>>> From: Nick Hawkins <nick.hawkins@hpe.com>
+>>>
+>>> Adding support for the HPE GXP Watchdog. It is new to the linux
+>>> community and this along with several other patches is the first
+>>> support for it. The GXP asic contains a full compliment of timers one
+>>> of which is the watchdog timer. The watchdog timer is 16 bit and has
+>>> 10ms resolution.
+>>>
+>>> Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+>>> ---
+>>>   drivers/watchdog/Kconfig   |   8 ++
+>>>   drivers/watchdog/Makefile  |   1 +
+>>>   drivers/watchdog/gxp-wdt.c | 191
+>>> +++++++++++++++++++++++++++++++++++++
+>>>   3 files changed, 200 insertions(+)
+>>>   create mode 100644 drivers/watchdog/gxp-wdt.c
+>>>
+>>> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig index
+>>> c8fa79da23b3..cb210d2978d2 100644
+>>> --- a/drivers/watchdog/Kconfig
+>>> +++ b/drivers/watchdog/Kconfig
+>>> @@ -1820,6 +1820,14 @@ config RALINK_WDT
+>>>   	help
+>>>   	  Hardware driver for the Ralink SoC Watchdog Timer.
+>>>   
+>>> +config GXP_WATCHDOG
+>>> +	tristate "HPE GXP watchdog support"
+>>> +	depends on ARCH_HPE_GXP
+>>> +	select WATCHDOG_CORE
+>>> +	help
+>>> +	  Say Y here to include support for the watchdog timer
+>>> +	  in HPE GXP SoCs.
+>>> +
+>>>   config MT7621_WDT
+>>>   	tristate "Mediatek SoC watchdog"
+>>>   	select WATCHDOG_CORE
+>>> diff --git a/drivers/watchdog/Makefile b/drivers/watchdog/Makefile
+>>> index f7da867e8782..e2acf3a0d0fc 100644
+>>> --- a/drivers/watchdog/Makefile
+>>> +++ b/drivers/watchdog/Makefile
+>>> @@ -92,6 +92,7 @@ obj-$(CONFIG_RTD119X_WATCHDOG) += rtd119x_wdt.o
+>>>   obj-$(CONFIG_SPRD_WATCHDOG) += sprd_wdt.o
+>>>   obj-$(CONFIG_PM8916_WATCHDOG) += pm8916_wdt.o
+>>>   obj-$(CONFIG_ARM_SMC_WATCHDOG) += arm_smc_wdt.o
+>>> +obj-$(CONFIG_GXP_WATCHDOG) += gxp-wdt.o
+>>>   obj-$(CONFIG_VISCONTI_WATCHDOG) += visconti_wdt.o
+>>>   obj-$(CONFIG_MSC313E_WATCHDOG) += msc313e_wdt.o
+>>>   obj-$(CONFIG_APPLE_WATCHDOG) += apple_wdt.o diff --git
+>>> a/drivers/watchdog/gxp-wdt.c b/drivers/watchdog/gxp-wdt.c new file
+>>> mode 100644 index 000000000000..d2b489cb4774
+>>> --- /dev/null
+>>> +++ b/drivers/watchdog/gxp-wdt.c
+>>> @@ -0,0 +1,191 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +/* Copyright (C) 2022 Hewlett-Packard Enterprise Development Company, L.P.
+>>> + *
+>>> + *
+>>> + * This program is free software; you can redistribute it and/or
+>>> +modify
+>>> + * it under the terms of the GNU General Public License version 2 as
+>>> + * published by the Free Software Foundation.
+>>> + */
+>>> +
+>>> +#include <linux/delay.h>
+>>> +#include <linux/io.h>
+>>> +#include <linux/module.h>
+>>> +#include <linux/platform_device.h>
+>>> +#include <linux/of_address.h>
+>>> +#include <linux/of_platform.h>
+>>> +#include <linux/types.h>
+>>> +#include <linux/watchdog.h>
+>>> +
+>>> +#define MASK_WDGCS_ENABLE	0x01
+>>> +#define MASK_WDGCS_RELOAD	0x04
+>>> +#define MASK_WDGCS_NMIEN	0x08
+>>> +#define MASK_WDGCS_WARN		0x80
+>>> +
+>>> +#define WDT_MAX_TIMEOUT_MS	655000
+>>> +#define WDT_DEFAULT_TIMEOUT	30
+>>> +#define SECS_TO_WDOG_TICKS(x) ((x) * 100) #define
+>>> +WDOG_TICKS_TO_SECS(x) ((x) / 100)
+>>> +
+>>> +struct gxp_wdt {
+>>> +	void __iomem	*counter;
+>>> +	void __iomem	*control;
+>>> +	struct watchdog_device	wdd;
+> 
+>> Odd variable alignment. Might as well just use spaces before the variable names.
+> 
+> Fixed
+> 
+>>> +};
+>>> +
+>>> +static void gxp_wdt_enable_reload(struct gxp_wdt *drvdata) {
+>>> +	uint8_t val;
+>>> +
+>>> +	val = readb(drvdata->control);
+>>> +	val |= (MASK_WDGCS_ENABLE | MASK_WDGCS_RELOAD);
+>>> +	writeb(val, drvdata->control);
+>>> +}
+>>> +
+>>> +static int gxp_wdt_start(struct watchdog_device *wdd) {
+>>> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
+>>> +
+>>> +	writew((SECS_TO_WDOG_TICKS(wdd->timeout)), drvdata->counter);
+> 
+>> Unnecessary iand confusing () around SECS_TO_WDOG_TICKS().
+> 
+> Fixed
+> 
+>>> +	gxp_wdt_enable_reload(drvdata);
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static int gxp_wdt_stop(struct watchdog_device *wdd) {
+>>> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
+>>> +	uint8_t val;
+>>> +
+>>> +	val = readb_relaxed(drvdata->control);
+>>> +	val &= ~MASK_WDGCS_ENABLE;
+>>> +	writeb(val, drvdata->control);
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static int gxp_wdt_set_timeout(struct watchdog_device *wdd,
+>>> +			       unsigned int timeout)
+>>> +{
+>>> +	struct gxp_wdt *drvdata = watchdog_get_drvdata(wdd);
+>>> +	uint32_t actual;
+> 
+>> Please use u32 as suggested by checkpatch. Same everywhere.
+> 
+> Fixed, checkpatch did not flag this, is there an option I should be using with checkpatch.pl?
 
-Many stack traces are similar so there are many similar arrays.
-Stackdepot saves each unique stack only once.
+--strict
 
-Replace field addrs in struct track with depot_stack_handle_t handle.  Use
-stackdepot to save stack trace.
-
-The benefits are smaller memory overhead and possibility to aggregate
-per-cache statistics in the following patch using the stackdepot handle
-instead of matching stacks manually.
-
-[ vbabka@suse.cz: rebase to 5.17-rc1 and adjust accordingly ]
-
-This was initially merged as commit 788691464c29 and reverted by commit
-ae14c63a9f20 due to several issues, that should now be fixed.
-The problem of unconditional memory overhead by stackdepot has been
-addressed by commit 2dba5eb1c73b ("lib/stackdepot: allow optional init
-and stack_table allocation by kvmalloc()"), so the dependency on
-stackdepot will result in extra memory usage only when a slab cache
-tracking is actually enabled, and not for all CONFIG_SLUB_DEBUG builds.
-The build failures on some architectures were also addressed, and the
-reported issue with xfs/433 test did not reproduce on 5.17-rc1 with this
-patch.
-
-Signed-off-by: Oliver Glitta <glittao@gmail.com>
-Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-Reviewed-and-tested-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Christoph Lameter <cl@linux.com>
-Cc: Pekka Enberg <penberg@kernel.org>
-Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
----
- init/Kconfig      |  1 +
- lib/Kconfig.debug |  1 +
- mm/slab_common.c  |  5 ++++
- mm/slub.c         | 71 ++++++++++++++++++++++++++---------------------
- 4 files changed, 47 insertions(+), 31 deletions(-)
-
-diff --git a/init/Kconfig b/init/Kconfig
-index ddcbefe535e9..adc57f989d87 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1875,6 +1875,7 @@ config SLUB_DEBUG
- 	default y
- 	bool "Enable SLUB debugging support" if EXPERT
- 	depends on SLUB && SYSFS
-+	select STACKDEPOT if STACKTRACE_SUPPORT
- 	help
- 	  SLUB has extensive debug support features. Disabling these can
- 	  result in significant savings in code size. This also disables
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 075cd25363ac..78d6139111cd 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -709,6 +709,7 @@ config DEBUG_SLAB
- config SLUB_DEBUG_ON
- 	bool "SLUB debugging on by default"
- 	depends on SLUB && SLUB_DEBUG
-+	select STACKDEPOT_ALWAYS_INIT if STACKTRACE_SUPPORT
- 	default n
- 	help
- 	  Boot with debugging on by default. SLUB boots by default with
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 6ee64d6208b3..73943479a2b7 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -24,6 +24,7 @@
- #include <asm/tlbflush.h>
- #include <asm/page.h>
- #include <linux/memcontrol.h>
-+#include <linux/stackdepot.h>
- 
- #define CREATE_TRACE_POINTS
- #include <trace/events/kmem.h>
-@@ -314,9 +315,13 @@ kmem_cache_create_usercopy(const char *name,
- 	 * If no slub_debug was enabled globally, the static key is not yet
- 	 * enabled by setup_slub_debug(). Enable it if the cache is being
- 	 * created with any of the debugging flags passed explicitly.
-+	 * It's also possible that this is the first cache created with
-+	 * SLAB_STORE_USER and we should init stack_depot for it.
- 	 */
- 	if (flags & SLAB_DEBUG_FLAGS)
- 		static_branch_enable(&slub_debug_enabled);
-+	if (flags & SLAB_STORE_USER)
-+		stack_depot_init();
- #endif
- 
- 	mutex_lock(&slab_mutex);
-diff --git a/mm/slub.c b/mm/slub.c
-index cd4fd0159911..98c1450c23f0 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -26,6 +26,7 @@
- #include <linux/cpuset.h>
- #include <linux/mempolicy.h>
- #include <linux/ctype.h>
-+#include <linux/stackdepot.h>
- #include <linux/debugobjects.h>
- #include <linux/kallsyms.h>
- #include <linux/kfence.h>
-@@ -264,8 +265,8 @@ static inline bool kmem_cache_has_cpu_partial(struct kmem_cache *s)
- #define TRACK_ADDRS_COUNT 16
- struct track {
- 	unsigned long addr;	/* Called from address */
--#ifdef CONFIG_STACKTRACE
--	unsigned long addrs[TRACK_ADDRS_COUNT];	/* Called from address */
-+#ifdef CONFIG_STACKDEPOT
-+	depot_stack_handle_t handle;
- #endif
- 	int cpu;		/* Was running on cpu */
- 	int pid;		/* Pid context */
-@@ -724,22 +725,19 @@ static struct track *get_track(struct kmem_cache *s, void *object,
- 	return kasan_reset_tag(p + alloc);
- }
- 
--static void set_track(struct kmem_cache *s, void *object,
-+static void noinline set_track(struct kmem_cache *s, void *object,
- 			enum track_item alloc, unsigned long addr)
- {
- 	struct track *p = get_track(s, object, alloc);
- 
--#ifdef CONFIG_STACKTRACE
-+#ifdef CONFIG_STACKDEPOT
-+	unsigned long entries[TRACK_ADDRS_COUNT];
- 	unsigned int nr_entries;
- 
--	metadata_access_enable();
--	nr_entries = stack_trace_save(kasan_reset_tag(p->addrs),
--				      TRACK_ADDRS_COUNT, 3);
--	metadata_access_disable();
--
--	if (nr_entries < TRACK_ADDRS_COUNT)
--		p->addrs[nr_entries] = 0;
-+	nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 3);
-+	p->handle = stack_depot_save(entries, nr_entries, GFP_NOWAIT);
- #endif
-+
- 	p->addr = addr;
- 	p->cpu = smp_processor_id();
- 	p->pid = current->pid;
-@@ -759,20 +757,19 @@ static void init_tracking(struct kmem_cache *s, void *object)
- 
- static void print_track(const char *s, struct track *t, unsigned long pr_time)
- {
-+	depot_stack_handle_t handle __maybe_unused;
-+
- 	if (!t->addr)
- 		return;
- 
- 	pr_err("%s in %pS age=%lu cpu=%u pid=%d\n",
- 	       s, (void *)t->addr, pr_time - t->when, t->cpu, t->pid);
--#ifdef CONFIG_STACKTRACE
--	{
--		int i;
--		for (i = 0; i < TRACK_ADDRS_COUNT; i++)
--			if (t->addrs[i])
--				pr_err("\t%pS\n", (void *)t->addrs[i]);
--			else
--				break;
--	}
-+#ifdef CONFIG_STACKDEPOT
-+	handle = READ_ONCE(t->handle);
-+	if (handle)
-+		stack_depot_print(handle);
-+	else
-+		pr_err("object allocation/free stack trace missing\n");
- #endif
- }
- 
-@@ -1532,6 +1529,8 @@ static int __init setup_slub_debug(char *str)
- 			global_slub_debug_changed = true;
- 		} else {
- 			slab_list_specified = true;
-+			if (flags & SLAB_STORE_USER)
-+				stack_depot_want_early_init();
- 		}
- 	}
- 
-@@ -1549,6 +1548,8 @@ static int __init setup_slub_debug(char *str)
- 	}
- out:
- 	slub_debug = global_flags;
-+	if (slub_debug & SLAB_STORE_USER)
-+		stack_depot_want_early_init();
- 	if (slub_debug != 0 || slub_debug_string)
- 		static_branch_enable(&slub_debug_enabled);
- 	else
-@@ -4342,18 +4343,26 @@ void kmem_obj_info(struct kmem_obj_info *kpp, void *object, struct slab *slab)
- 	objp = fixup_red_left(s, objp);
- 	trackp = get_track(s, objp, TRACK_ALLOC);
- 	kpp->kp_ret = (void *)trackp->addr;
--#ifdef CONFIG_STACKTRACE
--	for (i = 0; i < KS_ADDRS_COUNT && i < TRACK_ADDRS_COUNT; i++) {
--		kpp->kp_stack[i] = (void *)trackp->addrs[i];
--		if (!kpp->kp_stack[i])
--			break;
--	}
-+#ifdef CONFIG_STACKDEPOT
-+	{
-+		depot_stack_handle_t handle;
-+		unsigned long *entries;
-+		unsigned int nr_entries;
-+
-+		handle = READ_ONCE(trackp->handle);
-+		if (handle) {
-+			nr_entries = stack_depot_fetch(handle, &entries);
-+			for (i = 0; i < KS_ADDRS_COUNT && i < nr_entries; i++)
-+				kpp->kp_stack[i] = (void *)entries[i];
-+		}
- 
--	trackp = get_track(s, objp, TRACK_FREE);
--	for (i = 0; i < KS_ADDRS_COUNT && i < TRACK_ADDRS_COUNT; i++) {
--		kpp->kp_free_stack[i] = (void *)trackp->addrs[i];
--		if (!kpp->kp_free_stack[i])
--			break;
-+		trackp = get_track(s, objp, TRACK_FREE);
-+		handle = READ_ONCE(trackp->handle);
-+		if (handle) {
-+			nr_entries = stack_depot_fetch(handle, &entries);
-+			for (i = 0; i < KS_ADDRS_COUNT && i < nr_entries; i++)
-+				kpp->kp_free_stack[i] = (void *)entries[i];
-+		}
- 	}
- #endif
- #endif
--- 
-2.35.1
-
+Guenter

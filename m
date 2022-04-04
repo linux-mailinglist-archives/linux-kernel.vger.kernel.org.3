@@ -2,109 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA7BC4F1FA9
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4AA4F1FAB
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234153AbiDDW7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
+        id S241689AbiDDXAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 19:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348353AbiDDW5T (ORCPT
+        with ESMTP id S241112AbiDDW7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 18:57:19 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911AE647C
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 15:13:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649110426; x=1680646426;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IxXGkm32fmUmacCwJXHc2Kk/bukrG4SQABKoDYWW/7I=;
-  b=X+xo89USouQ68q2ujLZX9PkBLznQh4j4GPrt7YddC/l2/w01yyJuNHPI
-   mMg3pyFtuZq70HF4+cqzpyuJjZqbnAUlvnZtBYTOtBdQzgDnKiP3Vu6e8
-   dKm9a9INiPLrVyeCZZ1tF0ydTndZcuS5nbJZ/Ui14uAST8/H37Ij8IRjL
-   vesRi0o9Rmyy90PfhVmsVQ2B+/EFqCFmN2ZDi3scCzys7G5osxhol9r+x
-   wnVDcVUk59IsKZgCOv3I0vQfyuvJe5r2E9Q3qKSAuAriIqIdf5BP7syEP
-   sxYrp6yvUmNM7T0I2o1Gq+zcMRmNuVqvJuM1NTRV1pnVrNTRPp12xeWpp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="242761441"
-X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
-   d="scan'208";a="242761441"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 15:13:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
-   d="scan'208";a="523749629"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 04 Apr 2022 15:13:36 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbUx5-0002Ot-AG;
-        Mon, 04 Apr 2022 22:13:35 +0000
-Date:   Tue, 5 Apr 2022 06:12:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     YunQiang Su <yunqiang.su@cipunited.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: arch/mips/boot/compressed/uart-16550.c:44:6: warning: no previous
- prototype for 'putc'
-Message-ID: <202204050616.vblP4zPu-lkp@intel.com>
+        Mon, 4 Apr 2022 18:59:51 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A320868338;
+        Mon,  4 Apr 2022 15:15:34 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KXQ816Y3Zz4xXl;
+        Tue,  5 Apr 2022 08:15:29 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1649110530;
+        bh=hSld1OtloNUlGP1u1Kfudxjz3bzQNeJmyMD73S0cr9Y=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OByxMCWOpsI93eJl8pTrnm5j5D4GmQY0YdL+bahp3Z2t9EQLSpfVu2pA6I4j0aDS7
+         4F55xdUsbREAODAq82apo8tdB/FmvqWIPJS7jFgF8OXxm5AdAIt6nfyAIDGBITMYqo
+         sphJPDseod9G/RsWVPGNgrUsinilYc+qJAz9PKql3meYTVvREs/7x2+CU25U9W245w
+         aJd80Hqt4dcOgyuo2fSyPNA4JBu7Z8m4ooEiNKap59VLkN9ERxjOcHkOkvbcPloeE8
+         HvCf5J3urmVhE6mvQRs8ryybilzqpiXQsTq2TK1IgeqoRAUo03qOAvY8vKQQtMI0Cs
+         VDNGKQfP6P2wA==
+Date:   Tue, 5 Apr 2022 08:15:29 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Aaron Tomlin <atomlin@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the modules tree
+Message-ID: <20220405081529.28925a1f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/ozG8sG927w5RS7u2QYNrcLY";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi YunQiang,
+--Sig_/ozG8sG927w5RS7u2QYNrcLY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-FYI, the error/warning still remains.
+Hi all,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3123109284176b1532874591f7c81f3837bbdc17
-commit: 31b2f3dc851c65fee288612432c4fc956f1a264e MIPS: enable both vmlinux.gz.itb and vmlinuz for generic
-date:   3 months ago
-config: mips-randconfig-r033-20220404 (https://download.01.org/0day-ci/archive/20220405/202204050616.vblP4zPu-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=31b2f3dc851c65fee288612432c4fc956f1a264e
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 31b2f3dc851c65fee288612432c4fc956f1a264e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+In commit
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+  450f0134ccf0 ("module: Make internal.h and decompress.c more compliant")
 
-All warnings (new ones prefixed by >>):
+Fixes tag
 
->> arch/mips/boot/compressed/uart-16550.c:44:6: warning: no previous prototype for 'putc' [-Wmissing-prototypes]
-      44 | void putc(char c)
-         |      ^~~~
+  Fixes: f314dfea16a ("modsign: log module name in the event of an error")
 
+has these problem(s):
 
-vim +/putc +44 arch/mips/boot/compressed/uart-16550.c
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
 
-1b93b3c3e94be2 Wu Zhangjin 2009-10-14  43  
-1b93b3c3e94be2 Wu Zhangjin 2009-10-14 @44  void putc(char c)
+--=20
+Cheers,
+Stephen Rothwell
 
-:::::: The code at line 44 was first introduced by commit
-:::::: 1b93b3c3e94be2605759735a89fc935ba5f58dcf MIPS: Add support for GZIP / BZIP2 / LZMA compressed kernel images
+--Sig_/ozG8sG927w5RS7u2QYNrcLY
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-:::::: TO: Wu Zhangjin <wuzhangjin@gmail.com>
-:::::: CC: Ralf Baechle <ralf@linux-mips.org>
+-----BEGIN PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJLbgEACgkQAVBC80lX
+0Gzvawf9FUl9NsJQqmtaYCeYWbkpVDp8bDdCdAsiIG+LCUB9Tl7w8tkPf6Pn+vCs
+frFYcGdjHWvSz74ttbIUrPMYSLEmLZOt2SF6EqII5019jTSvtb+EyxBC1slRV5Uq
+K7e6G9OCSq1BfjnQ5U3z+XQU1GeyuSHmXIt6K8DEZhHe78OzIL8Qf+NGY5TXutt4
+OoPKom0hAqyS0wjoSUYxRW82fUr7E6iVS+9Ys65mN3bLA36Ot1NZKutneYrKxl3T
+N/AyNt2n928AlUKHlryLYTqz72aV9/o8TvyJhstA0aCzO28GOlttiviUr8rf0ATH
+JWTpSsBj4RobGLKGzqwZhx0LdQATFQ==
+=k1r2
+-----END PGP SIGNATURE-----
+
+--Sig_/ozG8sG927w5RS7u2QYNrcLY--

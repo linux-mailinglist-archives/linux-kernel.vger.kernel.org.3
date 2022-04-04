@@ -2,161 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C264F204E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5054F2051
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232225AbiDDXgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 19:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48914 "EHLO
+        id S230202AbiDDXi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 19:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231953AbiDDXgY (ORCPT
+        with ESMTP id S229503AbiDDXi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 19:36:24 -0400
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F81C3F8B7
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 16:34:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1649115267; x=1680651267;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+5MMmPyU6ZJJ0lTiy81U+nJ/FsY36S456cHlcxHKPSc=;
-  b=GZ3sQW0Dt2G/vJUHhRBpCfLQQqZdIinr4M4odtJPhbp7NxZOQB+BmwoD
-   9+05I9fZJeciULNJntaHLxZU+bCJJDilDRaC6HcyGm+xKwUOWcAdhtnIC
-   enAilUlJtrLpQ/0ibjja74atkfZ4EMlmrezX3AgqcxJF0niS5pDBpSW5p
-   2SteKK/yAkiRZnnL1bjoTMg+cm9WpWgfXX/4MNKXnZ/0te7DASvlN4I4O
-   q1EQL/p87bnPm8VK5qQVc61DhI3vt2k9bN/LOIove1rfL5+odBp3Ps3ey
-   sP4XnWdDYObxiqb2qyS7cEdmMUPkYbxUiESBGb2Pjh9WvUrw78BgyOQCm
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,235,1643644800"; 
-   d="scan'208";a="301247868"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 05 Apr 2022 07:34:25 +0800
-IronPort-SDR: 51iFTQh1un3CsfZQU4YxnYa1yfwYJTy5LGbNtjFdhCIERZmuayl3fde0bNOJN5AjNX7WZZCE20
- JSgLot+QXXnY7s3vl8Ki5tqeEJV7EoVY0RYdfhc/UG2wh96tORloFMhkvILNgRi/pasGWdodc9
- VWUddfz576LH1YEUwZVfeIs3bosZKs7ZYuoD1QaxXkpQTTTwmQAutMgwVpTQd5kVeS9lq8QfF+
- G/J/WHIN5FefsfGb/tSYXUooYzDeqJc0kv+Z3QkOTL1A+5phY9IpRHFpI2TF6G9PvrtW5GWbaG
- cLatrkuC/4MC6fJigCGUrD/d
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Apr 2022 16:05:59 -0700
-IronPort-SDR: uUWoZEJP+1U0+y99uJdI1vUAgFQMY3XelGqU5otXUNvR7xGheSbTL8wNr9a6kcj4bnW8y+rtkm
- SzeXsg4uPxA4bJaKP2wRiPujaxF62YiPGTPx8SzZqfni6u8JNYVXL3QYNabhL0X6avTTAYph2q
- 0OEMLZi2Txiw7LUkYjREmE3EtdUg4sFVv/hS7C8U+2uMxe1SUlzdtLtk92u0FAtcslhhZSSYdD
- DvFqLVyefz/hYOR0Co0r2nEMzhfM8NQrP8rc0wlfizatbd8y4MN6XXvNDIznhT9OyWCFK5U9hz
- 4Oc=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Apr 2022 16:34:26 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4KXRv54DnKz1SVp1
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 16:34:25 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1649115264; x=1651707265; bh=+5MMmPyU6ZJJ0lTiy81U+nJ/FsY36S456cH
-        lcxHKPSc=; b=NmXGSpihtKJypsJDwlOSBugs5bzoYpMuuBDgh/oBqIn+/Eb8mMq
-        lI6D/MptbIBjXUVDl/UMgUaRdw4yZZvwum/7IJjbVyOrmgTT+k/7Pf/TIW2Szu6k
-        gc7mfbb8PoLSzmV7Wh2r1w3TskdGFURxSc8XADmTZENiyab6u+3Ep2eTIOdqdSF6
-        NWkS2OD25F1vSAjy1UWzi5Cy3L1OuNi1q6ge7xGAumKL2x02HwBUCiLi9eXMfRNm
-        SiZfFUOR8TizSU1svfJKmtFfvy1CHmvgomNA5aLGazPZojpQLhdHYFwFf34/zQHz
-        XYUG2Wmpho9kURuveUVhewHi9fGM2cECXOw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 4P81XT2p8JJk for <linux-kernel@vger.kernel.org>;
-        Mon,  4 Apr 2022 16:34:24 -0700 (PDT)
-Received: from [10.225.163.2] (unknown [10.225.163.2])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4KXRv20dN1z1Rvlx;
-        Mon,  4 Apr 2022 16:34:21 -0700 (PDT)
-Message-ID: <5245096f-6003-39a9-6e5e-db2fc4f567fd@opensource.wdc.com>
-Date:   Tue, 5 Apr 2022 08:34:20 +0900
+        Mon, 4 Apr 2022 19:38:56 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4365F4E0
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 16:36:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649115415; x=1680651415;
+  h=message-id:subject:from:to:cc:in-reply-to:references:
+   mime-version:date:content-transfer-encoding;
+  bh=DPU95H2DKWoSP7VPSRVpTSI4950WpQfYUoUy2BB/Up0=;
+  b=iSl8n8Q51Ck9WLVXs43bSAM40ZcjrrEBYiMgFBNmm+dUkbgOTz6FF9Sb
+   36BXksBQIy7VZWzMGni4ZeOh8Aam2kwuBuOlO/Ml3bdNrj077ZY7V5RSb
+   YopC4IDWnhDHut8Ji2oGwA0qxh9r8s526kEnm/3CHLm1w2cYv87ovTDTB
+   cJhCpQKYYv2QyvQV0tK6a1tUCc1y+c7vGDidVE53ic9HDrcZfxPfSTJdC
+   SNHx1rhRMEXfqQniFDhjx6Oj/tL5gMbONC6ADmopJPQ5bjtU4sdL1l96M
+   ljcxIqU9seGNFgqQpTkgwkkzqelf9pott2K/3V4/ihsdhcKaKRuor5uPB
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="248145731"
+X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
+   d="scan'208";a="248145731"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 16:36:54 -0700
+X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
+   d="scan'208";a="505080145"
+Received: from cwebber-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.54.91])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 16:36:48 -0700
+Message-ID: <2fcd12bb42c7d30f0e7bd09a7f66d76122493b32.camel@intel.com>
+Subject: Re: [PATCHv7.1 02/30] x86/tdx: Provide common base for SEAMCALL
+ and TDCALL C wrappers
+From:   Kai Huang <kai.huang@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        bp@alien8.de
+Cc:     aarcange@redhat.com, ak@linux.intel.com, brijesh.singh@amd.com,
+        dan.j.williams@intel.com, dave.hansen@linux.intel.com,
+        david@redhat.com, hpa@zytor.com, jgross@suse.com,
+        jmattson@google.com, joro@8bytes.org, jpoimboe@redhat.com,
+        knsathya@kernel.org, linux-kernel@vger.kernel.org, luto@kernel.org,
+        mingo@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
+        seanjc@google.com, tglx@linutronix.de, thomas.lendacky@amd.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org
+In-Reply-To: <dd5c52ad-9c61-54c3-6654-7a30c56b1917@intel.com>
+References: <YjXtK4awY6utz3wE@zn.tnic>
+         <20220321160245.42886-1-kirill.shutemov@linux.intel.com>
+         <9f8f57fdbbf76e70471541dc42b04f8a89be4a56.camel@intel.com>
+         <dd5c52ad-9c61-54c3-6654-7a30c56b1917@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PULL] remove arch/h8300
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "moderated list:H8/300 ARCHITECTURE" 
-        <uclinux-h8-devel@lists.sourceforge.jp>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, Max Filippov <jcmvbkbc@gmail.com>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Rich Felker <dalias@libc.org>
-References: <Yib9F5SqKda/nH9c@infradead.org>
- <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
- <YkmWh2tss8nXKqc5@infradead.org>
- <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
- <CAMuHMdWcg+171ggdVC4gwbQ=RUf+cYrX3o9uSpDxo-XXEJ5Qgw@mail.gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <CAMuHMdWcg+171ggdVC4gwbQ=RUf+cYrX3o9uSpDxo-XXEJ5Qgw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 05 Apr 2022 11:35:39 +1200
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/4/22 22:22, Geert Uytterhoeven wrote:
-> Hi Arnd,
+On Mon, 2022-04-04 at 06:51 -0700, Dave Hansen wrote:
+> On 4/3/22 20:19, Kai Huang wrote:
+> > Btw, I previous suggested perhaps we can just use -1ULL instead of above value
+> > for TDX_SEAMCALL_VMFAILINVALID, but didn't get response.  The reason is this
+> > value will only be used when detecting P-SEAMLDR using P-SEAMLDR's SEAMLDR.INFO
+> > SEAMCALL.  Note your above SW-defined error codes is based on error code
+> > definition for TDX module, but actually P-SEAMLDR has different error code
+> > definition:
 > 
-> On Mon, Apr 4, 2022 at 3:09 PM Arnd Bergmann <arnd@arndb.de> wrote:
->> On Sun, Apr 3, 2022 at 2:43 PM Christoph Hellwig <hch@infradead.org> wrote:
->>> On Tue, Mar 08, 2022 at 09:19:16AM +0100, Arnd Bergmann wrote:
->>>> If there are no other objections, I'll just queue this up for 5.18 in
->>>> the asm-generic
->>>> tree along with the nds32 removal.
->>>
->>> So it is the last day of te merge window and arch/h8300 is till there.
->>> And checking nw the removal has also not made it to linux-next.  Looks
->>> like it is so stale that even the removal gets ignored :(
->>
->> I was really hoping that someone else would at least comment.
+> I suggested moving away from the -1 because it didn't really carry any
+> additional information.  For folks that have the spec open day in and
+> day out, it's easy for you to go look up what the components of that -1
+> _mean_.
 > 
-> Doh, I hadn't seen this patch before ;-)
-> Nevertheless, I do not have access to H8/300 hardware.
-> 
->> 3. arch/sh j2 support was added in 2016 and doesn't see a lot of
->> changes, but I think
->>     Rich still cares about it and wants to add J32 support (with MMU)
->> in the future
-> 
-> Yep, when the SH4 patents will have expired.
-> I believe that's planned for 2016 (Islamic calendar? ;-)
-> 
-> BTW, the unresponsiveness of the SH maintainers is also annoying.
-> Patches are sent to the list (sometimes multiple people are solving
-> the same recurring issue), but ignored.
-> 
-> Anyway, I do regular boot tests on SH4.
-> 
->> 5. K210 was added in 2020. I assume you still want to keep it.
-> 
-> FTR, I do regular boot tests on K210.
+> It sounds like there's a bug here (mixing up the P-SEAMLDR and TDX
+> module error ABIs), but that doesn't mean that moving to -1 is the right
+> answer.
 
-FYI, we identified the problem that makes userspace execution unreliable.
-Working on a fix.
+I think it doesn't need to carry any additional information.  The error code is
+used to represent VMfailInvalid, which happens before any P-SEAMLDR and TDX
+module internal functionality is reached.  We just need a value which will
+*never* conflict with actual error code returned by P-SEAMLDR and TDX module to
+represent this case.
 
+Both error code formats defined by P-SEAMLDR and TDX module has some reserved
+bits which will never be set to 1.  I think we can just add a simple comment
+explaining that and choose a value which has 1 set for those reserved bits (even
+doesn't have to be -1). For example:
+
+	/*
+	 * Use -1ULL which will never conflict with any actual error code
+	 * returned by both the P-SEAMLDR and the TDX module to represent
+	 * VMfailInvalid.  Both error code definitions defined by the
+	 * P-SEAMLDR and the TDX module have some reserved bits which will
+	 * never be set to 1.
+	 */
+	#define TDX_SEAMCALL_VMFAILINVALID	GENMASK_ULL(63, 0)
+
+> 
+> Please just build up an error value the same way it was done for the
+> software-defined TDX module error codes.
+
+In this way the assembly code will need to set different value based on whether
+%rax is a P-SEAMLDR leaf function and TDX module leaf function.  I think it's
+unnecessary.  As I said above, I think this error doesn't need to have any
+additional information.  We just need a value which will never conflict with any
+actual error code from P-SEAMLDR and TDX module.
 
 -- 
-Damien Le Moal
-Western Digital Research
+Thanks,
+-Kai
+
+

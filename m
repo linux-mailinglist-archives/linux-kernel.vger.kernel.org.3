@@ -2,140 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0F14F1E07
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD41A4F1E88
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379265AbiDDV6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:58:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
+        id S1379222AbiDDVrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378971AbiDDQNP (ORCPT
+        with ESMTP id S1378994AbiDDQQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 12:13:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347A22F007;
-        Mon,  4 Apr 2022 09:11:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E5981B816F4;
-        Mon,  4 Apr 2022 16:11:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B083AC34114;
-        Mon,  4 Apr 2022 16:11:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649088676;
-        bh=g1nATVvrfRA9UAWKcn8TEmGbzT1FkE4IRDRHu7qz7aY=;
-        h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc:From;
-        b=VSwR8cvth3rhQoDHXpPFJOTOxqEMHXQlSUTLUXb6RU4wYcgV0/JdJTLvfUj+2GHvt
-         DH9Z/OFmu4v3KNmFPlfRokAjww5feArkOCxkKzSAtIlwEdW/MPKcdUhxU5pC4f0WMR
-         oDYrDEEzr6HfdW8z9VvnabvqiUuTBQqNyblE/ngmsW27V/1IfZPTW6V8gV5nNyY3vn
-         2jl4u5TdOtN8U3UnSPCjJBl+8KZJ/izn2Yg6xTdxx7vorsB8uoS9taApuSBSjWpMHa
-         kTxb3m+TgOLzQXTk7xka6axCXQRtEXwjdnxPtAHSfOB4c9S6rjWOKQeDZodyzVz9ys
-         qiCFE3gOxbjNw==
-Received: by mail-vk1-f178.google.com with SMTP id g41so5082020vkd.4;
-        Mon, 04 Apr 2022 09:11:16 -0700 (PDT)
-X-Gm-Message-State: AOAM5310VxWnTeTw8D4wTKZEJSAf1T+YA90tsWQ89pAg9dBu5ZBL+8EG
-        4GdWFwGT0ltl05xL2HDrS1ZFPMVp7KAKhyCxuFQ=
-X-Google-Smtp-Source: ABdhPJw9D7xPURqCUzoTlu6KIHOEiOsweC/UpZ/sYIxrlCQYGzUkCyEMyxVMLWLuRCg1LkZf9inwiirxn0cn5uiwIiU=
-X-Received: by 2002:a1f:6a82:0:b0:33f:7eeb:5989 with SMTP id
- f124-20020a1f6a82000000b0033f7eeb5989mr276390vkc.29.1649088675514; Mon, 04
- Apr 2022 09:11:15 -0700 (PDT)
+        Mon, 4 Apr 2022 12:16:59 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEC131922
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 09:15:00 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id nt14-20020a17090b248e00b001ca601046a4so5516631pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 09:15:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UDaFc/gCWuOOIEIKSF8jU4oDzdusj5ZcLS5tUBZDl7k=;
+        b=frLsqAzRoYQqPwY+LRr2+HLI4jsKjK8C88V/3rKXepEUVWcXYPUnN5f9Pbs3dFMgDM
+         Fc30h7pCDhpRwEn5077MIjbu8eQViUZ4qp9RmklJtufdy1qVzWiDv1Gf/LObmGzWqjTS
+         HCWymOlS/s7S1a2yT6yWZEAkvMUp+M3Hn8h4fTif3xSBCHn8nTYGCaCA67mey8IOTRKj
+         vgrzwhMT9QUNrAUPk8GLVatbpq5t5kFHea5ElJA4/aZLkOiQZjJu3Isr9yB1FhxvX0wn
+         zipj7LrlHsMAnXmylLn31UO3wAqFnLGS4noeL4O/zzmPw6SE2DvaX+X/D9LvxWpUoqdH
+         nPfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UDaFc/gCWuOOIEIKSF8jU4oDzdusj5ZcLS5tUBZDl7k=;
+        b=Plm0ijT7p7uOnrS3LzJ7bxIfCG150rqP4mCftTBDAUmmWwAStskTDjNkJXL8PNR1RF
+         MQ1P02Rq5zV8enmNOWA0UxJYEjaiXAl2ryvAWOfe3U3oZZKxqgCHp655UCR+QzY5K+Io
+         F1W9uXG3NpwMOpj77sZfZYrWnUEQK122WCR5acCpI0F9v+lI84okp+SHQqLCXBsVOO/b
+         SQMThI5gP9UNfGvN1NNmLf7mzQUHfcVmLV2NJEC3sVaZEDPpZm6MlGOFMmFuq951mq5P
+         59OEbLaFe40P+scmEK3C/jSzAxYz6rEcu5Ruz9TUICI+/kXj2M04nIyE3OO0jnqPkc6B
+         oF4A==
+X-Gm-Message-State: AOAM533jkM2nS3tCy0KkzRVOUsmJYubWrUhTs/7USMO+tVYnrPKgXiQq
+        WthyN3Z13d1SERq31rVoaBRI1w==
+X-Google-Smtp-Source: ABdhPJxce26+IV6N/hp+MS7aKDXMfZboRNVcH0s2b8IdhwQqCgufgWGYQ6gNex6ufjHM6ZKhk0Gwlg==
+X-Received: by 2002:a17:902:7615:b0:156:1859:2d00 with SMTP id k21-20020a170902761500b0015618592d00mr612139pll.126.1649088898855;
+        Mon, 04 Apr 2022 09:14:58 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id q18-20020aa78432000000b004fb0a5aa2c7sm13195487pfn.183.2022.04.04.09.14.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 09:14:58 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 16:14:54 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>
+Subject: Re: [PATCH 7/8] KVM: x86: Trace re-injected exceptions
+Message-ID: <YksZfqZr4SyEUk6H@google.com>
+References: <20220402010903.727604-1-seanjc@google.com>
+ <20220402010903.727604-8-seanjc@google.com>
+ <df8e53474fb161f83c8cb8b9816995b23798545b.camel@redhat.com>
 MIME-Version: 1.0
-References: <20220330190846.13997-1-wens@kernel.org> <20220330190846.13997-3-wens@kernel.org>
- <CABxcv==csvqsxM46ce2LecDh4E-UxxD2DG+3E-hCFoyrdtRv7A@mail.gmail.com>
- <CAGb2v64VQPjan=EUkd8UhRZfV0g1GqBwPqhxQakS=7YhgvVDQA@mail.gmail.com> <92a46ea2-e23e-b7c8-ea5f-35d458ee1b76@redhat.com>
-In-Reply-To: <92a46ea2-e23e-b7c8-ea5f-35d458ee1b76@redhat.com>
-Reply-To: wens@kernel.org
-From:   Chen-Yu Tsai <wens@kernel.org>
-Date:   Tue, 5 Apr 2022 00:11:05 +0800
-X-Gmail-Original-Message-ID: <CAGb2v66zj4x7zx4ht+6ojjKRxEe+M4bTc_mKRgf8wd_TK+Wf4g@mail.gmail.com>
-Message-ID: <CAGb2v66zj4x7zx4ht+6ojjKRxEe+M4bTc_mKRgf8wd_TK+Wf4g@mail.gmail.com>
-Subject: Re: [PATCH 2/4] dt-bindings: display: ssd1307fb: Add entry for SINO
- WEALTH SH1106
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Javier Martinez Canillas <javier@dowhile0.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <df8e53474fb161f83c8cb8b9816995b23798545b.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 4, 2022 at 11:48 PM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
->
-> Hello Chen-Yu,
->
-> On 4/4/22 17:06, Chen-Yu Tsai wrote:
->
-> [snip]
->
-> >>>      enum:
-> >>> +      - sinowealth,sh1106-i2c
-> >>
-> >> I like that you didn't include a "fb" suffix for this, the existing
-> >> ones are cargo culting from the previous fbdev driver to make existing
-> >> DTBs compatible with the DRM driver.
-> >>
-> >> I've been thinking if I should post a patch to compatible strings
-> >> without the "fb" and mark the current ones as deprecated...
-> >>
-> >> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-> >
-> > I also thought about dropping the "-i2c" suffix, but then thought
-> > there might be a case where someone wanted to search the device
-> > tree specifically for an I2C connected node using said compatible
-> > string.
-> >
-> > What do you think?
-> >
-> >
->
-> tl; dr: unfortunately we can't do it due how SPI and I2C report module
-> aliases. Otherwise module auto loading will not work. I wrote a much
-> longer explanation with some details not so long ago:
->
-> https://patchwork.kernel.org/project/dri-devel/patch/20220209091204.2513437-1-javierm@redhat.com/#24730793
+On Mon, Apr 04, 2022, Maxim Levitsky wrote:
+> On Sat, 2022-04-02 at 01:09 +0000, Sean Christopherson wrote:
+> > Trace exceptions that are re-injected, not just those that KVM is
+> > injecting for the first time.  Debugging re-injection bugs is painful
+> > enough as is, not having visibility into what KVM is doing only makes
+> > things worse.
+> > 
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >  arch/x86/kvm/x86.c | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > index 7a066cf92692..384091600bc2 100644
+> > --- a/arch/x86/kvm/x86.c
+> > +++ b/arch/x86/kvm/x86.c
+> > @@ -9382,6 +9382,10 @@ int kvm_check_nested_events(struct kvm_vcpu *vcpu)
+> >  
+> >  static void kvm_inject_exception(struct kvm_vcpu *vcpu)
+> >  {
+> > +	trace_kvm_inj_exception(vcpu->arch.exception.nr,
+> > +				vcpu->arch.exception.has_error_code,
+> > +				vcpu->arch.exception.error_code);
+> > +
+> 
+> Can we use a {new tracepoint / new parameter for this tracepoint} for this to
+> avoid confusion?
 
-Right. I think that crossed my mind at some point, but didn't stick.
-Thanks for raising it again. :)
-
-> BTW, I bought a SSD1306 SPI controller and go it working this weekend.
->
-> I plan to post the patches once yours land, to avoid in-flight series
-> that may conflict. And what I did is mark the -fb as deprecated, then
-> added "ssd130x-i2c" and "ssd130x-spi" compatibles strings.
->
-> The WIP patches can be found here in case you are interested:
->
-> https://github.com/martinezjavier/linux/tree/drm-ssd130x-spi
-
-I took a quick look and a couple things stood out:
-
-1. Would 3-wire SPI ever be considered? If so, might want to
-   rename some of variables/functions as *_spi_4wire_* to
-   begin with.
-
-2. Maybe we should move the ssd130x_deviceinfo stuff into the
-   core module, and define an enum to use for matching compatible
-   strings across the modules to their respective device info
-   entries? FYI we are doing this in drivers/mfd/axp20x* .
-
-I think a friend of mine has a SPI based SH1106 module that I
-could borrow and test/work on, but that's a big if.
-
-
-Regards
-ChenYu
+Good idea, a param to capture re-injection would be very helpful.

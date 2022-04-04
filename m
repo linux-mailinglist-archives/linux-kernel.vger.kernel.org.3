@@ -2,108 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6764F1ED3
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49184F1E54
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:24:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380931AbiDDWHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44942 "EHLO
+        id S1382686AbiDDWJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 18:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379042AbiDDQXp (ORCPT
+        with ESMTP id S1379078AbiDDQ3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 12:23:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819A2BC0B
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 09:21:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46B8AB8182F
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 16:21:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E8ECC2BBE4;
-        Mon,  4 Apr 2022 16:21:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649089307;
-        bh=12OqAgUFqo0o0nuRsjoOTKREg/x8VwVcYoOLde88fz8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LwWB/0q9+NvxDslstiuPLQ3SRqHNZAv1ybSR1/YtRUtS4E6SdC5geH9/JV3SkXo29
-         RE1fmiDc8vAP9AyVDSP+VWhhAzyRhkGHOnIlWCoy0AGFZCUrhjMkTWOjm6gdbPvrUY
-         tw8MdE3Jfprd/JMoRgO1sq6EE9vSewPWXlbQsm8Y=
-Date:   Mon, 4 Apr 2022 18:21:43 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Oded Gabbay <ogabbay@kernel.org>, Jiri Slaby <jslaby@suse.cz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux 5.18-rc1
-Message-ID: <YksbF4BIy3ZoEZCB@kroah.com>
-References: <CAHk-=wg6FWL1xjVyHx7DdjD2dHZETA5_=FqqW17Z19X-WTfWSg@mail.gmail.com>
- <20220404022239.GA1186352@roeck-us.net>
- <CAHk-=wimc7V9mi=P+6p2nnctPYtSM55OSPVERUeJor7fkD_EVg@mail.gmail.com>
- <aba387bd-9799-e0b5-40e3-1bcb552ac74c@roeck-us.net>
- <CAHk-=witgMUS8To6wijxdbQ+QEH0gcHSYV6Y=yzOdb=Q4h9PJA@mail.gmail.com>
+        Mon, 4 Apr 2022 12:29:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 34A543464D
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 09:27:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649089641;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=P7hJ01+Z8CTQmsHFJdXv1elOc2Pqcj7fQA/ZIutEB5E=;
+        b=i0TTI0Sv3Gi0njaigApTcHR/tyQK4TjtuSbfUu4IrmjpvdBtEtt2WRmeBriThyMaLnVBLZ
+        EyYEIrp4SFmwmYmbAP40186KULcGFSrhUJp9vglfjc9Z02eVud7zH1Zm93rjVQ68ggQ8VF
+        5tqkja9eIYQLAUClUfoLEMwbe+7lyFk=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-619-2SdOY_9iM-WuCDXvykkonw-1; Mon, 04 Apr 2022 12:27:20 -0400
+X-MC-Unique: 2SdOY_9iM-WuCDXvykkonw-1
+Received: by mail-wr1-f71.google.com with SMTP id j67-20020adf9149000000b00203e6b7d151so1907942wrj.13
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 09:27:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=P7hJ01+Z8CTQmsHFJdXv1elOc2Pqcj7fQA/ZIutEB5E=;
+        b=V7MZSJkP7GrpOEBbAD+ogvq/3U4PzUyGGr1Jlh9N1EnIAODIFqkiFuhq8m4+gAIH1A
+         lcvqJhAWBICubR0fmimuFRcZ2iODeBZj9qlhGIyvNLw8MamAZOk2CB/9zadz7FOEsPD7
+         nzekuqTfnnEI6c8uIbkqJ1tHzzHlDx+lkejgfVsQeYw6Asf9y8CEpOunbazEO6EPOhj3
+         oS4vhLujdPG/WTZXKAUltnsNeG138iGnjnD9cWnM7AJ+aFZFnkftdMs4U3R1EIYVOvsa
+         AaLRc87Fq6PRmLlv2zkaOyp4lHV/quFpjgMRxtB4e8MAaNCzR3PHH9Yy3dSn3LYER+zr
+         /piw==
+X-Gm-Message-State: AOAM531Cp65SbxmjPvEgI96zUsNaOBG1HqC/nCONLnKYlUpWJbUpvEwg
+        +8KZI98U+NcCQdx45G7I1ImvMbPT3rwj51KJz8ismmY0Hbq6ZxtGpaixwAP46kCOTM/wIZdrAXG
+        Brx2bEOzsRAwPCsofbfPogWdR
+X-Received: by 2002:adf:c10b:0:b0:1ed:c40f:7f91 with SMTP id r11-20020adfc10b000000b001edc40f7f91mr432724wre.276.1649089639382;
+        Mon, 04 Apr 2022 09:27:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwuDmOwegjvGJFl7L9LJ7bym2qL/D7kmZ5IhcobdoiPO6Grj58r50Xw6ksaa9Y+iOv1AFo58Q==
+X-Received: by 2002:adf:c10b:0:b0:1ed:c40f:7f91 with SMTP id r11-20020adfc10b000000b001edc40f7f91mr432713wre.276.1649089639209;
+        Mon, 04 Apr 2022 09:27:19 -0700 (PDT)
+Received: from redhat.com ([2.52.17.211])
+        by smtp.gmail.com with ESMTPSA id az19-20020a05600c601300b0038cadf3aa69sm26246102wmb.36.2022.04.04.09.27.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 09:27:18 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 12:27:15 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Xianting Tian <xianting.tian@linux.alibaba.com>
+Cc:     Stefano Garzarella <sgarzare@redhat.com>, jasowang@redhat.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] virtio_ring: add unlikely annotation for free descs
+ check
+Message-ID: <20220404122707-mutt-send-email-mst@kernel.org>
+References: <20220328105817.1028065-1-xianting.tian@linux.alibaba.com>
+ <20220328105817.1028065-2-xianting.tian@linux.alibaba.com>
+ <20220329075024.eoajm5ufrcfytug4@sgarzare-redhat>
+ <073dc28b-1707-cd04-daba-13aa4fac5a85@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=witgMUS8To6wijxdbQ+QEH0gcHSYV6Y=yzOdb=Q4h9PJA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <073dc28b-1707-cd04-daba-13aa4fac5a85@linux.alibaba.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 08:32:16AM -0700, Linus Torvalds wrote:
-> On Sun, Apr 3, 2022 at 9:23 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > Oops. Sorry, I thought it was big endian. No idea why. I'll update
-> > subject and description and resend.
-> 
-> I see your updated patch, but for some reason 'b4' is unhappy about it, with
-> 
->   $ b4 am 20220404134338.3276991-1-linux@roeck-us.net
-> 
-> causing
-> 
->   ✗ [PATCH v3] staging: r8188eu: Fix PPPoE tag insertion on little
-> endian systems
->   ---
->   ✗ BADSIG: DKIM/roeck-us.net
-> 
-> your DKIM looks fine on the messages I see, but now that I look at it
-> on the mailing list, I notice that your DKIM really is very wrong, and
-> has a lot of headers that a DKIM signature should *not* have.
-> 
-> Your DKIM signature includes header names that are very much for list
-> management, so by definition DKIM will fail for any email you send
-> through a mailing list. Headers like
-> "Resent-From:Resent-Sender:Resent-To:Resent-Cc
-> :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe" etc.
-> 
-> The DKIM setup should protect the meaningful headers that matter to
-> the sender, not things that the mail system will validly add when it
-> passes through.
-> 
-> So the DKIM header list should be things like
-> ":To:From:Cc:Message-Id:Date:Subject:"
-> 
-> Not things like "Sender" or mailing list things.
-> 
-> Anyway, I was going to just commit it directly, but with the DKIM
-> verification failing, I was a bit less eager to. And then I noticed
-> that you used "be16_to_cpu()" - which is technically correct - which
-> doesn't match the other code in that file.
+On Mon, Apr 04, 2022 at 11:11:16PM +0800, Xianting Tian wrote:
+> I can't find it in next branch, will you apply this patch?
 
-I've taken this in my tree now and will get it to you for -rc2 if you
-don't want to take it.  And yes, I see the dkim issue as well, I haven't
-started complaining about to people yet as lots of people have problem
-email setups.  Should we start pushing back?
+yes, thanks!
 
-thanks,
-
-greg k-h

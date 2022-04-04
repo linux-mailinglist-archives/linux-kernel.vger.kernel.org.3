@@ -2,64 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6CAF4F1579
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 15:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4C764F1577
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 15:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349311AbiDDNHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 09:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
+        id S232374AbiDDNGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 09:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349194AbiDDNHN (ORCPT
+        with ESMTP id S240415AbiDDNGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 09:07:13 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE3013F9B;
-        Mon,  4 Apr 2022 06:05:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649077517; x=1680613517;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KpMYCfde85sh/66ugKEnZNtNPom49Jb6tJDgfq2nsdk=;
-  b=ZJU9xlvBGroD1ZW37BhbcVP8MEGckhAMfQh4hcXgYaiJUc6T0ewP1wHh
-   zomN5DUhfHo4gMNg1O/m3noipdDXbt6U7vVWAx20kGSeTIpMCj2ufIahM
-   C/vvsWisbf6/7sbQmxwJJiboWZ3iepv4vZxoHy+azBodHjqQP++dotHYL
-   bLOhsNCPxhVpy1DZstkS7TZWrDyihjH9YXwSh8bWyH1P8LfPaCETYZSSS
-   4Jy0CPNwL5mf6lHcwRre7lfj2D3/n0jGdsjshoD6ZgtO90i7mn2dpz7RW
-   Tfjocv4d+x2YLXsHltXf2bu3/qNUmdXX+fmF/uBfJozSpYV5oSplnfkYH
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="242650042"
-X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="242650042"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 06:05:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="721639506"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 04 Apr 2022 06:05:14 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbMOQ-00024D-2b;
-        Mon, 04 Apr 2022 13:05:14 +0000
-Date:   Mon, 4 Apr 2022 21:04:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH 7/8] posix_types.h: add __kernel_uintptr_t to UAPI
- posix_types.h
-Message-ID: <202204042058.5Kr6q6YX-lkp@intel.com>
-References: <20220404061948.2111820-8-masahiroy@kernel.org>
+        Mon, 4 Apr 2022 09:06:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2685FB9D
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 06:04:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649077481;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bKLcnrXpl+KcZQr63lS1etgImM+Jisa8A4Tv6u94WeY=;
+        b=LpZpYnJWLfiBRI5iwOr6GsZvvPjrrVRniAK7Pn6w/9e+J361t/68NyNr+e3ZKNzgdrUPyl
+        h7nnAuXnGhiASXS5/E5Hkjt0j8sNU7rjYbKGBh70UEPOXBbCN9u+NCu/JknPLVS7D4Cv6J
+        901qOBSdcR5/XC8Y5ctcffnkeuT1L+Q=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-57-Oo_20ewZPt6HHbMiceYzhg-1; Mon, 04 Apr 2022 09:04:31 -0400
+X-MC-Unique: Oo_20ewZPt6HHbMiceYzhg-1
+Received: by mail-wr1-f70.google.com with SMTP id i64-20020adf90c6000000b00203f2b5e090so1719825wri.9
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 06:04:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=bKLcnrXpl+KcZQr63lS1etgImM+Jisa8A4Tv6u94WeY=;
+        b=qQ0u97ZGY6tYpVTzSxwkelM3hPynxjppnppe81URqqwBiVLZJY6gJnneCpqmpqJCfo
+         KnLwy5RZWDh+ItnxxtYLJJ9V9kglnIz2SCOGDO9EcvZDxcQSM/h8Eez1jQ+BuSjyjeCq
+         3m7zn423KTX72zCZDgt6a9sDjSJY6qeBsnlE4IfxWacIeQfk/GL4C7QkBa5CdtEXaF7N
+         C9BtMQkTWzp3HpRFmnNSPweK6/K3dZrdsDkbrUVKldj0DZeZvr6veJZoXzJ6Uz5uGSHU
+         utLTjoIbdHpyrO5JqRLo+QldFNhZkuTyUUnvdpi/tKgZd0Ru9PWViarH41rbTjzQCXr7
+         Vutw==
+X-Gm-Message-State: AOAM532hgsKuvqdsikstU3dHO/WJvTGVR4CdNiujMdiNptjJHI+wIns7
+        spKqWQFO+wkStUIYokcpyaEcYcvZ9s1Hg92jJIPS2gDNmkfuu4WVNuWPp8s84HdODfDUIv4i/fc
+        p0G1PBaJ18Q/RQCuZGB4T10zp
+X-Received: by 2002:a5d:6b0f:0:b0:1e7:9432:ee8c with SMTP id v15-20020a5d6b0f000000b001e79432ee8cmr16587423wrw.216.1649077469856;
+        Mon, 04 Apr 2022 06:04:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwxtY/OPGax1qO/sx2WuexL7oOLf1eJuj6oF4bfJe58bEmh/NxbXjXnOtYCPACR/NKBsTM8ZA==
+X-Received: by 2002:a5d:6b0f:0:b0:1e7:9432:ee8c with SMTP id v15-20020a5d6b0f000000b001e79432ee8cmr16587382wrw.216.1649077469430;
+        Mon, 04 Apr 2022 06:04:29 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:4100:c220:ede7:17d4:6ff4? (p200300cbc7044100c220ede717d46ff4.dip0.t-ipconnect.de. [2003:cb:c704:4100:c220:ede7:17d4:6ff4])
+        by smtp.gmail.com with ESMTPSA id u7-20020a5d6da7000000b00203d9d1875bsm10501373wrs.73.2022.04.04.06.04.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Apr 2022 06:04:28 -0700 (PDT)
+Message-ID: <99cf9e14-7608-8e72-0c8e-0dd9b0047319@redhat.com>
+Date:   Mon, 4 Apr 2022 15:04:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220404061948.2111820-8-masahiroy@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Content-Language: en-US
+To:     Nadav Amit <nadav.amit@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>,
+        Hugh Dickins <hughd@google.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+References: <20220401101334.68859-1-david@redhat.com>
+ <8A6AF878-D5D7-4D88-A736-0FEF71439D44@gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1 mmotm] mm/mprotect: try avoiding write faults for
+ exclusive anonynmous pages when changing protection
+In-Reply-To: <8A6AF878-D5D7-4D88-A736-0FEF71439D44@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,127 +92,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masahiro,
+On 01.04.22 21:15, Nadav Amit wrote:
+> [ +Rick ]
+> 
+>> On Apr 1, 2022, at 3:13 AM, David Hildenbrand <david@redhat.com> wrote:
+>>
+>> Similar to our MM_CP_DIRTY_ACCT handling for shared, writable mappings, we
+>> can try mapping anonymous pages writable if they are exclusive,
+>> the PTE is already dirty, and no special handling applies. Mapping the
+>> PTE writable is essentially the same thing the write fault handler would do
+>> in this case.
+> 
+> In general I am all supportive for such a change.
+> 
+> I do have some mostly-minor concerns.
 
-I love your patch! Perhaps something to improve:
+Hi Nadav,
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on linux/master v5.18-rc1 next-20220404]
-[cannot apply to soc/for-next drm/drm-next powerpc/next uclinux-h8/h8300-next s390/features arnd-asm-generic/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+thanks a lot for your review!
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Masahiro-Yamada/UAPI-make-more-exported-headers-self-contained-and-put-them-into-test-coverage/20220404-142226
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git be2d3ecedd9911fbfd7e55cc9ceac5f8b79ae4cf
-config: arm-randconfig-r016-20220404 (https://download.01.org/0day-ci/archive/20220404/202204042058.5Kr6q6YX-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/e8154d995f34b79843e473d85645fb543d554e7f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Masahiro-Yamada/UAPI-make-more-exported-headers-self-contained-and-put-them-into-test-coverage/20220404-142226
-        git checkout e8154d995f34b79843e473d85645fb543d554e7f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/misc/ sound/soc/fsl/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/misc/fastrpc.c:1639:43: warning: format specifies type 'unsigned long' but the argument has type 'uintptr_t' (aka 'unsigned int') [-Wformat]
-                   dev_dbg(dev, "unmmap\tpt 0x%09lx OK\n", buf->raddr);
-                                              ~~~~~        ^~~~~~~~~~
-                                              %09x
-   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
-                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
-                                                       ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
-                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-                                           ~~~    ^~~~~~~~~~~
-   drivers/misc/fastrpc.c:1645:46: warning: format specifies type 'unsigned long' but the argument has type 'uintptr_t' (aka 'unsigned int') [-Wformat]
-                   dev_err(dev, "unmmap\tpt 0x%09lx ERROR\n", buf->raddr);
-                                              ~~~~~           ^~~~~~~~~~
-                                              %09x
-   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
-           dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
-                                ~~~    ^~~~~~~~~~~
-   drivers/misc/fastrpc.c:1737:3: warning: format specifies type 'unsigned long' but the argument has type 'uintptr_t' (aka 'unsigned int') [-Wformat]
-                   buf->raddr, buf->size);
-                   ^~~~~~~~~~
-   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
-                   dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
-                                                       ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
-                   _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-                                           ~~~    ^~~~~~~~~~~
-   3 warnings generated.
---
->> sound/soc/fsl/imx-audmux.c:148:40: warning: format specifies type 'unsigned long' but the argument has type 'uintptr_t' (aka 'unsigned int') [-Wformat]
-                   snprintf(buf, sizeof(buf), "ssi%lu", i);
-                                                  ~~~   ^
-                                                  %u
-   1 warning generated.
+> 
+>>
+>> +static inline bool can_change_pte_writable(struct vm_area_struct *vma,
+>> +					   unsigned long addr, pte_t pte,
+>> +					   unsigned long cp_flags)
+>> +{
+>> +	struct page *page;
+>> +
+>> +	if ((vma->vm_flags & VM_SHARED) && !(cp_flags & MM_CP_DIRTY_ACCT))
+>> +		/*
+>> +		 * MM_CP_DIRTY_ACCT is only expressive for shared mappings;
+>> +		 * without MM_CP_DIRTY_ACCT, there is nothing to do.
+>> +		 */
+>> +		return false;
+>> +
+>> +	if (!(vma->vm_flags & VM_WRITE))
+>> +		return false;
+>> +
+>> +	if (pte_write(pte) || pte_protnone(pte) || !pte_dirty(pte))
+>> +		return false;
+> 
+> If pte_write() is already try then return false? I understand you want
+> to do so because the page is already writable, but it is confusing.
 
 
-vim +1639 drivers/misc/fastrpc.c
+I thought about just doing outside of the function
 
-6c16fd8bdd4058 Jeya R              2022-02-14  1604  
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1605  static int fastrpc_req_munmap_impl(struct fastrpc_user *fl,
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1606  				   struct fastrpc_req_munmap *req)
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1607  {
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1608  	struct fastrpc_invoke_args args[1] = { [0] = { 0 } };
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1609  	struct fastrpc_buf *buf, *b;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1610  	struct fastrpc_munmap_req_msg req_msg;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1611  	struct device *dev = fl->sctx->dev;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1612  	int err;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1613  	u32 sc;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1614  
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1615  	spin_lock(&fl->lock);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1616  	list_for_each_entry_safe(buf, b, &fl->mmaps, node) {
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1617  		if ((buf->raddr == req->vaddrout) && (buf->size == req->size))
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1618  			break;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1619  		buf = NULL;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1620  	}
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1621  	spin_unlock(&fl->lock);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1622  
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1623  	if (!buf) {
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1624  		dev_err(dev, "mmap not in list\n");
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1625  		return -EINVAL;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1626  	}
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1627  
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1628  	req_msg.pgid = fl->tgid;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1629  	req_msg.size = buf->size;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1630  	req_msg.vaddr = buf->raddr;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1631  
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1632  	args[0].ptr = (u64) (uintptr_t) &req_msg;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1633  	args[0].length = sizeof(req_msg);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1634  
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1635  	sc = FASTRPC_SCALARS(FASTRPC_RMID_INIT_MUNMAP, 1, 0);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1636  	err = fastrpc_internal_invoke(fl, true, FASTRPC_INIT_HANDLE, sc,
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1637  				      &args[0]);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1638  	if (!err) {
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09 @1639  		dev_dbg(dev, "unmmap\tpt 0x%09lx OK\n", buf->raddr);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1640  		spin_lock(&fl->lock);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1641  		list_del(&buf->node);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1642  		spin_unlock(&fl->lock);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1643  		fastrpc_buf_free(buf);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1644  	} else {
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1645  		dev_err(dev, "unmmap\tpt 0x%09lx ERROR\n", buf->raddr);
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1646  	}
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1647  
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1648  	return err;
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1649  }
-2419e55e532de1 Jorge Ramirez-Ortiz 2019-10-09  1650  
+if ((vma->vm_flags & VM_WRITE) && !pte_write(pte) &&
+    can_change_pte_writable()...
+
+	
+I refrained from doing so because the sequence of checks might be
+sub-optimal. But most probably we don't really care about that and it
+might make the code easier to grasp.
+
+Would that make it clearer?
+
+> 
+> In addition, I am not sure about the pte_dirty() check is really robust.
+> I mean I think it is ok, but is there any issue with shadow-stack? 
+
+Judging that it's already used that way for VMAs with dirty tracking, I
+assume it's ok. Without checking that the PTE is dirty, we'd have to do a:
+
+pte_mkwrite(pte_mkwrite(ptent));
+
+Which would set the pte and consequently the page dirty, although there
+might not even be a write access. That's what we want to avoid here.
+
+> 
+> And this also assumes the kernel does not clear the dirty bit without
+> clearing the present, as otherwise the note in Intel SDM section 4.8
+> ("Accessed and Dirty Flags”) will be relevant and dirty bit might be
+> set unnecessarily. I think it is ok.
+
+Yeah, I think so as well.
+
+> 
+>> +
+>> +	/* Do we need write faults for softdirty tracking? */
+>> +	if (IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) && !pte_soft_dirty(pte) &&
+>> +	    (vma->vm_flags & VM_SOFTDIRTY))
+> 
+> If !IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) then VM_SOFTDIRTY == 0. So I do not
+> think the IS_ENABLED() is necessary (unless you think it is clearer this
+> way).
+
+Right, we can just do
+
+if ((vma->vm_flags & VM_SOFTDIRTY) && !pte_soft_dirty(pte))
+
+and it should get fully optimized out. Thanks!
+
+> 
+>> +		return false;
+>> +
+>> +	/* Do we need write faults for uffd-wp tracking? */
+>> +	if (userfaultfd_pte_wp(vma, pte))
+>> +		return false;
+>> +
+>> +	if (!(vma->vm_flags & VM_SHARED)) {
+>> +		/*
+>> +		 * We can only special-case on exclusive anonymous pages,
+>> +		 * because we know that our write-fault handler similarly would
+>> +		 * map them writable without any additional checks while holding
+>> +		 * the PT lock.
+>> +		 */
+>> +		page = vm_normal_page(vma, addr, pte);
+> 
+> I guess we cannot call vm_normal_page() twice, once for prot_numa and once
+> here, in practice...
+
+I guess we could, but it doesn't necessarily make the code easier to
+read :) And we want to skip protnone either way.
+
+> 
+>> +		if (!page || !PageAnon(page) || !PageAnonExclusive(page))
+>> +			return false;
+>> +	}
+>> +
+>> +	return true;
+>> +}
+> 
+> Note that there is a small downside to all of that. Assume you mprotect()
+> a single page from RO to RW and you have many threads.
+> 
+> With my pending patch you would avoid the TLB shootdown (and get a PF).
+> With this patch you would get a TLB shootdown and save the PF. IOW, I
+> think it is worthy to skip the shootdown as well in such a case and
+> instead flush the TLB on spurious page-faults. But I guess that’s for
+> another patch.
+
+Just so I understand correctly: your optimization avoids the flush when
+effectively, nothing changed (R/O -> R/O).
+
+And the optimization for this case here would be, to avoid the TLB flush
+when similarly not required (R/O -> R/W).
+
+Correct?
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+
+David / dhildenb
+

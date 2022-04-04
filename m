@@ -2,125 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 179984F1706
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F24F4F1709
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359377AbiDDOeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 10:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
+        id S1377441AbiDDOfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 10:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349018AbiDDOeR (ORCPT
+        with ESMTP id S1349018AbiDDOfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 10:34:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543FB3EF3F
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 07:32:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E42CF61475
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 14:32:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E958DC2BBE4;
-        Mon,  4 Apr 2022 14:32:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649082740;
-        bh=Dj36icQ5FGKXlBd/rFO86IF80muiRSiYMEcz20M5cfE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=05KayeMn4CSJCwMj1m7ue4qAKCZbP/RK52o9OIj8pJUEvbaaPyjn3kIL+sUaNnuEH
-         O9pTzYMPV7e06rn0viw1qigtk4U2ByMyMnmY8h6NCyN9kiGOxIcmRWxBiw3Q8LdGGf
-         hnz7EVRjZS5kxyvxx1UQZ/xPUOz/4qDQFwj+p3lA=
-Date:   Mon, 4 Apr 2022 16:32:17 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Michael Straube <straube.linux@gmail.com>
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] staging: r8188eu: remove HAL_DEF_IS_SUPPORT_ANT_DIV
-Message-ID: <YksBcUBXbgzXmEBO@kroah.com>
-References: <20220403165255.6900-1-straube.linux@gmail.com>
- <20220403165255.6900-2-straube.linux@gmail.com>
+        Mon, 4 Apr 2022 10:35:34 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7600CB36;
+        Mon,  4 Apr 2022 07:33:34 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id p15so20346773ejc.7;
+        Mon, 04 Apr 2022 07:33:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=A6ZKWiB8I5M3lzcB/2FclWNwcHmfaxvPuNrwRz+p3L0=;
+        b=DDBYGAa8jgRjFHHIRay7N+XCJqZbhF+ucEYop10+z0gj4BmoSIePmHHqnTGduLv6x8
+         88/UDzxtXvDJpoqgPb7SFb7FF2QymMIQL7Z8ftS5kDDbbyg13kP65audUjsi8jAu0kXH
+         cp4ffBJU3nSRtaJ8qgDcaHkQkluAUZ2JunmFEXF3slHRgK4c7MQDMeqMycJKOEquGRiq
+         1qFaYON7/nmgRQZO0UzE5ORSWmW7EckOjuJ01LHGew4Qdw+PFyWy/qMbgfHTySLkeh7/
+         DfoB0m2r2hJXPe27bMOgGmj21e4awfXJOGUuUanrdOK2lhW3nX45E/zMfYgFUzqhby7t
+         s2UQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=A6ZKWiB8I5M3lzcB/2FclWNwcHmfaxvPuNrwRz+p3L0=;
+        b=Ybezob/9xNwPSH6VaTWuMg+VVQ+qBZrhsNM+p4AH0/qDmcstCu+9s/x++EFniyOGiW
+         tCqqyA7FyfE+6pAIWu1TBuvZN+wnO+8ZTHKQEPVGbEJ3i3kFO97Bbwa8Q3IcuALBr33L
+         2vZDcDiYZXGdxuoonWbJQuH0FlN7bJE0rXR9dvjeT6kBRhWSGZYX3PfAUyDHOIltaMWt
+         KpH1Z4i0tn8KmXBJkJj6TaoBan6yT7ERAvUUDNk4lQoTftRtVm9KjFR3rw3YY9Q7Vx3I
+         Bxmp3LgcViEvqMK89Pld2QEF5Z309Q2b8XM2j1tsRCCEjirbfs/51IB1KNT1OnUEd3re
+         6yhQ==
+X-Gm-Message-State: AOAM5310you5mCAo3VDiQ9dUdEYgPK3KrkOdcAe7hLRxUfHTHt1gh0P8
+        /crEnCMrvWB+i3LDgvGn01U=
+X-Google-Smtp-Source: ABdhPJyV6jFP4PFp0F4ukAS+Pz3sVvHdOiTpHInr1obDz5xfyJi4fNElteCbEWhIBo/NNCZtjj8frw==
+X-Received: by 2002:a17:907:6d15:b0:6e7:7c12:b06d with SMTP id sa21-20020a1709076d1500b006e77c12b06dmr347815ejc.594.1649082812812;
+        Mon, 04 Apr 2022 07:33:32 -0700 (PDT)
+Received: from fedora ([95.180.24.23])
+        by smtp.gmail.com with ESMTPSA id sa19-20020a170906edb300b006e7fd5bfd51sm635338ejb.177.2022.04.04.07.33.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 07:33:32 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 16:33:30 +0200
+From:   Aleksa Savic <savicaleksa83@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] hwmon: (aquacomputer_d5next) Add support for
+ Aquacomputer Octo
+Message-ID: <YksBulZ/zU/4aB+N@fedora>
+References: <20220404134212.9690-1-savicaleksa83@gmail.com>
+ <20220404135707.GA3283128@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220403165255.6900-2-straube.linux@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220404135707.GA3283128@roeck-us.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 03, 2022 at 06:52:51PM +0200, Michael Straube wrote:
-> In order to get rid of the function GetHalDefVar8188EUsb(), remove
-> the HAL_DEF_IS_SUPPORT_ANT_DIV case from it and move the functionality
-> into a new function. This is part of the ongoing effort to get rid of
-> the unwanted hal layer.
-> 
-> Signed-off-by: Michael Straube <straube.linux@gmail.com>
-> ---
->  drivers/staging/r8188eu/core/rtw_cmd.c     |  4 +---
->  drivers/staging/r8188eu/core/rtw_mlme.c    |  4 +---
->  drivers/staging/r8188eu/hal/usb_halinit.c  | 10 +++++++---
->  drivers/staging/r8188eu/include/hal_intf.h |  3 ++-
->  4 files changed, 11 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
-> index 8b24330e97c1..c286485e6a40 100644
-> --- a/drivers/staging/r8188eu/core/rtw_cmd.c
-> +++ b/drivers/staging/r8188eu/core/rtw_cmd.c
-> @@ -1099,11 +1099,9 @@ u8 rtw_antenna_select_cmd(struct adapter *padapter, u8 antenna, u8 enqueue)
->  	struct cmd_obj		*ph2c;
->  	struct drvextra_cmd_parm	*pdrvextra_cmd_parm;
->  	struct cmd_priv	*pcmdpriv = &padapter->cmdpriv;
-> -	u8	support_ant_div;
->  	u8	res = _SUCCESS;
->  
-> -	GetHalDefVar8188EUsb(padapter, HAL_DEF_IS_SUPPORT_ANT_DIV, &support_ant_div);
-> -	if (!support_ant_div)
-> +	if (!support_ant_div(padapter))
->  		return res;
->  
->  	if (enqueue) {
-> diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-> index f94b1536a177..b6ed5fb5b281 100644
-> --- a/drivers/staging/r8188eu/core/rtw_mlme.c
-> +++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-> @@ -1458,7 +1458,6 @@ int rtw_select_and_join_from_scanned_queue(struct mlme_priv *pmlmepriv)
->  	struct __queue *queue	= &pmlmepriv->scanned_queue;
->  	struct	wlan_network	*pnetwork = NULL;
->  	struct	wlan_network	*candidate = NULL;
-> -	u8	supp_ant_div = false;
->  
->  	spin_lock_bh(&pmlmepriv->scanned_queue.lock);
->  	phead = get_list_head(queue);
-> @@ -1485,8 +1484,7 @@ int rtw_select_and_join_from_scanned_queue(struct mlme_priv *pmlmepriv)
->  		rtw_free_assoc_resources(adapter, 0);
->  	}
->  
-> -	GetHalDefVar8188EUsb(adapter, HAL_DEF_IS_SUPPORT_ANT_DIV, &supp_ant_div);
-> -	if (supp_ant_div) {
-> +	if (support_ant_div(adapter)) {
->  		u8 cur_ant;
->  		GetHalDefVar8188EUsb(adapter, HAL_DEF_CURRENT_ANTENNA, &cur_ant);
->  	}
-> diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-> index 4bc6b08fb282..31ec88b7a400 100644
-> --- a/drivers/staging/r8188eu/hal/usb_halinit.c
-> +++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-> @@ -481,6 +481,13 @@ static void _BBTurnOnBlock(struct adapter *Adapter)
->  	rtl8188e_PHY_SetBBReg(Adapter, rFPGA0_RFMOD, bOFDMEn, 0x1);
->  }
->  
-> +bool support_ant_div(struct adapter *adapter)
+Hi Guenter,
 
-That's a very odd function name to add to the kernel's global namespace
-:(
+Thank you!
 
-Pleas emake it more obvious what this is for, with the driver name as
-part of the prefix?
-
-thanks,
-
-greg k-h
+Aleksa

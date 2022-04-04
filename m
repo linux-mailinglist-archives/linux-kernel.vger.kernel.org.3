@@ -2,132 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D000E4F1FAE
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A1A4F1FB2
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242211AbiDDXBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 19:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36148 "EHLO
+        id S241737AbiDDXDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 19:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233001AbiDDXAd (ORCPT
+        with ESMTP id S235850AbiDDXBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 19:00:33 -0400
-Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C1CA69712;
-        Mon,  4 Apr 2022 15:16:11 -0700 (PDT)
-Received: from dread.disaster.area (pa49-180-43-123.pa.nsw.optusnet.com.au [49.180.43.123])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id B6385534A83;
-        Tue,  5 Apr 2022 08:16:07 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1nbUzV-00Dp8B-4K; Tue, 05 Apr 2022 08:16:05 +1000
-Date:   Tue, 5 Apr 2022 08:16:05 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>
-Subject: Re: Build regressions/improvements in v5.18-rc1
-Message-ID: <20220404221605.GS1544202@dread.disaster.area>
-References: <CAHk-=wg6FWL1xjVyHx7DdjD2dHZETA5_=FqqW17Z19X-WTfWSg@mail.gmail.com>
- <20220404074734.1092959-1-geert@linux-m68k.org>
- <alpine.DEB.2.22.394.2204041006230.1941618@ramsan.of.borg>
- <20220404092655.GR1544202@dread.disaster.area>
- <CAMuHMdWgqdR1o3wT9pjB=w8z=2xaDFv5DJX58-HPHOFRm3Tr8Q@mail.gmail.com>
- <CAK8P3a0QrihBR_2FQ7uZ5w2JmLjv7czfrrarCMmJOhvNdJ3p9g@mail.gmail.com>
+        Mon, 4 Apr 2022 19:01:13 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF9250071;
+        Mon,  4 Apr 2022 15:17:16 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id r11so7949499ila.1;
+        Mon, 04 Apr 2022 15:17:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y62nuGBTp1BwXRLTPK0MTfi2+bcWh+jbJdeI4VEAus4=;
+        b=jmWynQT6KeLJ3YajiU/UKDkUn+np2iQukGQt3jAJtqb6Hpsc0iEcRDipdrr7PI7Otq
+         pK0+0CKx+OHoNm6pSNzz0q5rRKb2zMlpYHcsODOLdowZTw4PS8iHEWcfM9avY9SAKe9K
+         aMiREkRCDpXpKsbQzh9pv9et957oDZoIzBmPZKN+l4KYdBD3PMHssYnzW519jCoUc6qP
+         f/sEJZ0y1FmSMAcAVrD3R9aoE5+QOBtM7a+/hF0H2BKIwl0n4fuPhMNCF4MLX/s9r4Fd
+         bSerRNCYYk1tcunMSEqpy4O53Mh05pcBnngKFbGK+93QYddGZ50ZXOQkb4hT+kyyqllQ
+         GiKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y62nuGBTp1BwXRLTPK0MTfi2+bcWh+jbJdeI4VEAus4=;
+        b=3Y66+LYvSjKSXAgE8fFAIab7H1mSOog5I3T603x3rP0YX+KahctN7Za5fAisvyzG0h
+         0+glmM6zlFHvEoQWPWAiJmtWtyBVbS4xmkv9kc/8REwY26mN+iXB7zYZFF5eQNhHYW+1
+         kfrULPleh81q5acWRbvgWEG01jXCR5KQn5rFgVk+GYe9al+pmzSt+nQdEu59odU+dFq6
+         QP8rh/YNa1PZZwsXWaalegfL/iOGk6wFyuGEzi+EZWnj7MS6alZqndr7Ta5KBafNorSj
+         9vYGFmMC/QpEeY/XBWhvcxa/4exv5VuNUNbkhux5LEOUGXHMIuSGHFC19kUpbnrSqa8H
+         Fydg==
+X-Gm-Message-State: AOAM533/tHekDevrDdWQNeeFPLUCFjoith2ZRUMZOWjfYzwofs1C3fi8
+        K0PUooBf1myi7XVCEHuw1Jtj9ksdlcktvRW5+Uc=
+X-Google-Smtp-Source: ABdhPJxZD9enUCLektYr7Zm19bPdE8uxgKo52+OrvqfPRVVmnQB0ALF/mHz6V5/+RhMc3+GuVh1PPOKQx5BfdVgihTk=
+X-Received: by 2002:a05:6e02:1a8f:b0:2c9:da3d:e970 with SMTP id
+ k15-20020a056e021a8f00b002c9da3de970mr208239ilv.239.1649110635427; Mon, 04
+ Apr 2022 15:17:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a0QrihBR_2FQ7uZ5w2JmLjv7czfrrarCMmJOhvNdJ3p9g@mail.gmail.com>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=deDjYVbe c=1 sm=1 tr=0 ts=624b6e2a
-        a=MV6E7+DvwtTitA3W+3A2Lw==:117 a=MV6E7+DvwtTitA3W+3A2Lw==:17
-        a=kj9zAlcOel0A:10 a=z0gMJWrwH1QA:10 a=tBb2bbeoAAAA:8 a=7-415B0cAAAA:8
-        a=oQ5jPsdEZ40rj4-7sxsA:9 a=CjuIK1q_8ugA:10 a=Oj-tNtZlA1e06AYgeCfH:22
-        a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1648777246-21352-1-git-send-email-chensong_2000@189.cn>
+In-Reply-To: <1648777246-21352-1-git-send-email-chensong_2000@189.cn>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 4 Apr 2022 15:17:04 -0700
+Message-ID: <CAEf4Bzbo=DU_LqJ=sXgawP9-O4VR84jDdhuf9Xto=T3LSsrySA@mail.gmail.com>
+Subject: Re: [PATCH] sample: bpf: syscall_tp_kern: add dfd before filename
+To:     Song Chen <chensong_2000@189.cn>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 01:45:05PM +0200, Arnd Bergmann wrote:
-> On Mon, Apr 4, 2022 at 12:19 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> 
-> > >
-> > > /kisskb/src/fs/xfs/./xfs_trace.h:432:2: note: in expansion of macro 'TP_printk'
-> > >   TP_printk("dev %d:%d daddr 0x%llx bbcount 0x%x hold %d pincount %d "
-> > >   ^
-> > > /kisskb/src/fs/xfs/./xfs_trace.h:440:5: note: in expansion of macro '__print_flags'
-> > >      __print_flags(__entry->flags, "|", XFS_BUF_FLAGS),
-> > >      ^
-> > > /kisskb/src/fs/xfs/xfs_buf.h:67:4: note: in expansion of macro 'XBF_UNMAPPED'
-> > >   { XBF_UNMAPPED,  "UNMAPPED" }
-> > >     ^
-> > > /kisskb/src/fs/xfs/./xfs_trace.h:440:40: note: in expansion of macro 'XFS_BUF_FLAGS'
-> > >      __print_flags(__entry->flags, "|", XFS_BUF_FLAGS),
-> > >                                         ^
-> > > /kisskb/src/fs/xfs/./xfs_trace.h: In function 'trace_raw_output_xfs_buf_flags_class':
-> > > /kisskb/src/fs/xfs/xfs_buf.h:46:23: error: initializer element is not constant
-> > >  #define XBF_UNMAPPED  (1 << 31)/* do not map the buffer */
-> > >
-> > > This doesn't make a whole lotta sense to me. It's blown up in a
-> > > tracepoint macro in XFS that was not changed at all in 5.18-rc1, nor
-> > > was any of the surrounding XFS code or contexts.  Perhaps something
-> > > outside XFS changed to cause this on these platforms?
-> >
-> > Upon closer look, all builds showing this issue are using gcc-5...
-> >
-> > > Can you bisect this, please?
-> >
-> > Fortunately I still have gcc-5 installed on an older machine,
-> > and I could reproduce the issue on amd64 with
-> > "make allmodconfig fs/xfs/xfs_trace.o".
-> >
-> > Bisection points to commit e8c07082a810fbb9 ("Kbuild: move to
-> > -std=gnu11").
-> >
-> > [1] gcc version 5.5.0 20171010 (Ubuntu 5.5.0-12ubuntu1
-> 
-> Thanks for the report. I've produced it and can see that the problem
-> is assigning
-> the value of "(1 << 31)" to an 'unsigned long' struct member. Since this is
-> a signed integer overflow, the result is technically undefined behavior,
-> which gcc-5 does not accept as an integer constant.
-> 
-> The patch below fixes it for me, but I have not checked if there are any
-> other instances. This could also be done using the 'BIT()' macro if the
-> XFS maintainers prefer:
+On Thu, Mar 31, 2022 at 6:34 PM Song Chen <chensong_2000@189.cn> wrote:
+>
+> When i was writing my eBPF program, i copied some pieces of code from
+> syscall_tp, syscall_tp_kern only records how many files are opened, but
+> mine needs to print file name.I reused struct syscalls_enter_open_args,
+> which is defined as:
+>
+> struct syscalls_enter_open_args {
+>         unsigned long long unused;
+>         long syscall_nr;
+>         long filename_ptr;
+>         long flags;
+>         long mode;
+> };
+>
+> I tried to use filename_ptr, but it's not the pointer of filename, flags
+> turns out to be the pointer I'm looking for, there might be something
+> missed in the struct.
+>
+> I read the ftrace log, found the missed one is dfd, which is supposed to be
+> placed in between syscall_nr and filename_ptr.
+>
+> Actually syscall_tp has nothing to do with dfd, it can run anyway without
+> it, but it's better to have it to make it a better eBPF sample, especially
+> to new eBPF programmers, then i fixed it.
+>
+> Signed-off-by: Song Chen <chensong_2000@189.cn>
+> ---
+>  samples/bpf/syscall_tp_kern.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/samples/bpf/syscall_tp_kern.c b/samples/bpf/syscall_tp_kern.c
+> index 50231c2eff9c..e4ac818aee57 100644
+> --- a/samples/bpf/syscall_tp_kern.c
+> +++ b/samples/bpf/syscall_tp_kern.c
+> @@ -7,6 +7,7 @@
+>  struct syscalls_enter_open_args {
+>         unsigned long long unused;
+>         long syscall_nr;
+> +       long dfd_ptr;
+>         long filename_ptr;
+>         long flags;
+>         long mode;
 
-So XFS only uses these flags in unsigned int fields that are
-typed via:
+Here's what I see on latest bpf-next:
 
-typedef unsigned int xfs_buf_flags_t;
+# cat /sys/kernel/debug/tracing/events/syscalls/sys_enter_open/format
+name: sys_enter_open
+ID: 613
+format:
+        field:unsigned short common_type;       offset:0;
+size:2; signed:0;
+        field:unsigned char common_flags;       offset:2;
+size:1; signed:0;
+        field:unsigned char common_preempt_count;       offset:3;
+ size:1; signed:0;
+        field:int common_pid;   offset:4;       size:4; signed:1;
 
-So on the surface, declaring the flag values as ULONG and then writing
-them into a UINT field is not a nice thing to be doing.
+        field:int __syscall_nr; offset:8;       size:4; signed:1;
+        field:const char * filename;    offset:16;      size:8; signed:0;
+        field:int flags;        offset:24;      size:8; signed:0;
+        field:umode_t mode;     offset:32;      size:8; signed:0;
 
-I really don't want to change the xfs_buf_flags_t type to an
-unsigned long, because that changes the packing of the first
-cacheline of the struct xfs_buf and the contents of that cacheline
-are performance critical for the lookup fastpath....
+This layout doesn't correspond either to before or after state of
+syscalls_enter_open_args. Not sure what's going on, but it doesn't
+seem that struct syscalls_enter_open_args is correct anyways.
 
-Looking at __print_flags, the internal array type declaration is:
 
-struct trace_print_flags {
-        unsigned long           mask;
-        const char              *name;
-};
-
-and that's the source of the problem.  I notice __print_flags_u64()
-exists, but __print_flags_u32() does not. Should it?
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+> --
+> 2.25.1
+>

@@ -2,319 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 501344F1104
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A6F4F1109
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238608AbiDDIdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 04:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48442 "EHLO
+        id S239052AbiDDIeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 04:34:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238183AbiDDIci (ORCPT
+        with ESMTP id S232144AbiDDIep (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 04:32:38 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D1F3584C;
-        Mon,  4 Apr 2022 01:30:40 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id A5B9D2000D;
-        Mon,  4 Apr 2022 08:30:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649061038;
+        Mon, 4 Apr 2022 04:34:45 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A7A35268
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 01:32:49 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649061167;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=c0zr7u2ZGW8b7dHqUeFZDVs8y9pfDOaTguMgL52CwSQ=;
-        b=mNvAz6VXb3UrSawFLoHLhwcW5kR0Ctm1Y4waL3DSwT6opGruoUUiAuaqXA6kibzEb1O9Ah
-        ZYAd/WILTHfI41H4Cy4QCswuL5xBcLurwaeDRWrqp/QXKd+jcsD9e0XzI7R87MAfgV3VIR
-        y1BrI/WIhto3s06zapyK0ngt2z7U1XXyle05/VL1Sgqm34jjFxf4HL/Wsti3YvV+V6Lwgq
-        Vlqf/3D99xE6KrMFxFGcThuJFqssnri/hlMcGIR3fVp5dL4vBBZ7eiHgbtzWNS7SxSWTPo
-        phdpK/cQT7YprV1vf4oi3sXNN4Dn3detD3qkvxH9S6Ft/y/RwCUGbCxEv6NcXg==
-Date:   Mon, 4 Apr 2022 10:30:34 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Liang Yang <liang.yang@amlogic.com>
-Cc:     <linux-mtd@lists.infradead.org>, Rob Herring <robh+dt@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v4 1/2] mtd: rawnand: meson: discard the common MMC sub
- clock framework
-Message-ID: <20220404103034.48ec16b1@xps13>
-In-Reply-To: <20220402074921.13316-2-liang.yang@amlogic.com>
-References: <20220402074921.13316-1-liang.yang@amlogic.com>
-        <20220402074921.13316-2-liang.yang@amlogic.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        bh=QD9Nb7yJabZzo/4wQdWDUvSpWf7rTbKauGlMZ2wI9I4=;
+        b=BDdixwPuv6Sc1CB0q0w75VqdaMnSHVZhfcGr1zxwC+BJn+oDayYQ9hIPWw3z8vUz+8IGWS
+        h4rBqMyo15a9gaabE7WiT8CpfO3n/5dYuNAMwlNp8hn1IAqBuHTiFcjvfUVVUVLAN+o0oS
+        LJLgLyhCrwN45JSBN2b0Mrn+Bwpta6sxcq/BXA+Nb1G61WYDoIRgAbel1QNk1ssVKCW6Mw
+        xjzgDQv+Fnc1XWd4XnNSl7L8YXIBuHM8oLPyhZ+OjDBFx4LSdBdtyg5oTP17v4zWz0lNMZ
+        rPuBRS9eYXpZo126u4zR6dxFWX1C5IYjkxgX0WHkOflbuC60kQgqbgvvozc+0w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649061167;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QD9Nb7yJabZzo/4wQdWDUvSpWf7rTbKauGlMZ2wI9I4=;
+        b=lRWZ7MgFKxPyOkDySzlC40J/O5OtqKbz8MwSLvMjPf+lUNANwIHw+OpklTwEvotsJ4cX0q
+        1M6eI6d32cKXu7Bg==
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Anna-Maria Gleixner <anna-maria@linutronix.de>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: UML time-travel warning from __run_timers
+In-Reply-To: <ff314e8556aba7e231ab80c46b30701142e82a43.camel@sipsolutions.net>
+References: <20220330110156.GA9250@axis.com>
+ <84f9d627092660c38400b607198c3b83f795be7f.camel@sipsolutions.net>
+ <877d86m978.ffs@tglx>
+ <32423b7c0e3a490093ceaca750e8669ac67902c6.camel@sipsolutions.net>
+ <87pmlykksj.ffs@tglx>
+ <ff314e8556aba7e231ab80c46b30701142e82a43.camel@sipsolutions.net>
+Date:   Mon, 04 Apr 2022 10:32:46 +0200
+Message-ID: <87ee2dl041.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Liang,
+On Mon, Apr 04 2022 at 09:02, Johannes Berg wrote:
+> On Sun, 2022-04-03 at 21:51 +0200, Thomas Gleixner wrote:
+>> but that's fine and it is overwritten by every timer which is inserted
+>> to expire before that. So that's not an issue as the prandom timer is
+>> firing and rearmed.
+>
+> No, as I said before, there's never any timer with base 1 (BASE_DEF) in
+> the config we have. The prandom timer is not TIMER_DEFERRABLE (it
+> probably could be, but it's not now). There's no deferrable timer at
+> all. Once there is at least one, the warning goes away.
 
-liang.yang@amlogic.com wrote on Sat, 2 Apr 2022 15:49:19 +0800:
-
-> EMMC and NAND have the same clock control register named 'SD_EMMC_CLOCK' =
-which is
-> defined in EMMC port internally. bit0~5 of 'SD_EMMC_CLOCK' is the divider=
- and
-> bit6~7 is the mux for fix pll and xtal.A common MMC and NAND sub-clock ha=
-s been
-> implemented and can be used by the eMMC and NAND controller (which are mu=
-tually
-> exclusive anyway). Let's use this new clock.
->=20
-> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
-> ---
->  drivers/mtd/nand/raw/meson_nand.c | 89 +++++++++++++++----------------
->  1 file changed, 42 insertions(+), 47 deletions(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/mes=
-on_nand.c
-> index ac3be92872d0..1b1a9407fb2f 100644
-> --- a/drivers/mtd/nand/raw/meson_nand.c
-> +++ b/drivers/mtd/nand/raw/meson_nand.c
-> @@ -10,6 +10,7 @@
->  #include <linux/dma-mapping.h>
->  #include <linux/interrupt.h>
->  #include <linux/clk.h>
-> +#include <linux/clk-provider.h>
->  #include <linux/mtd/rawnand.h>
->  #include <linux/mtd/mtd.h>
->  #include <linux/mfd/syscon.h>
-> @@ -19,6 +20,7 @@
->  #include <linux/iopoll.h>
->  #include <linux/of.h>
->  #include <linux/of_device.h>
-> +#include <linux/of_address.h>
->  #include <linux/sched/task_stack.h>
-> =20
->  #define NFC_REG_CMD		0x00
-> @@ -104,6 +106,9 @@
-> =20
->  #define PER_INFO_BYTE		8
-> =20
-> +#define CLK_DIV_SHIFT		0
-> +#define CLK_DIV_WIDTH		6
-> +
->  struct meson_nfc_nand_chip {
->  	struct list_head node;
->  	struct nand_chip nand;
-> @@ -151,15 +156,15 @@ struct meson_nfc {
->  	struct nand_controller controller;
->  	struct clk *core_clk;
->  	struct clk *device_clk;
-> -	struct clk *phase_tx;
-> -	struct clk *phase_rx;
-> +	struct clk *nand_clk;
-> +	struct clk_divider nand_divider;
-> =20
->  	unsigned long clk_rate;
->  	u32 bus_timing;
-> =20
->  	struct device *dev;
->  	void __iomem *reg_base;
-> -	struct regmap *reg_clk;
-> +	void __iomem *sd_emmc_clock;
->  	struct completion completion;
->  	struct list_head chips;
->  	const struct meson_nfc_data *data;
-> @@ -235,7 +240,7 @@ static void meson_nfc_select_chip(struct nand_chip *n=
-and, int chip)
->  	nfc->timing.tbers_max =3D meson_chip->tbers_max;
-> =20
->  	if (nfc->clk_rate !=3D meson_chip->clk_rate) {
-> -		ret =3D clk_set_rate(nfc->device_clk, meson_chip->clk_rate);
-> +		ret =3D clk_set_rate(nfc->nand_clk, meson_chip->clk_rate);
->  		if (ret) {
->  			dev_err(nfc->dev, "failed to set clock rate\n");
->  			return;
-> @@ -406,7 +411,6 @@ static int meson_nfc_queue_rb(struct meson_nfc *nfc, =
-int timeout_ms)
->  	cmd =3D NFC_CMD_RB | NFC_CMD_RB_INT
->  		| nfc->param.chip_select | nfc->timing.tbers_max;
->  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
-> -
-
-Please avoid these spacing changes in the middle of a commit.
-
->  	ret =3D wait_for_completion_timeout(&nfc->completion,
->  					  msecs_to_jiffies(timeout_ms));
->  	if (ret =3D=3D 0)
-> @@ -985,9 +989,11 @@ static const struct mtd_ooblayout_ops meson_ooblayou=
-t_ops =3D {
->  	.free =3D meson_ooblayout_free,
->  };
-> =20
-> +struct clk_parent_data nfc_divider_parent_data[1];
->  static int meson_nfc_clk_init(struct meson_nfc *nfc)
->  {
->  	int ret;
-> +	struct clk_init_data init =3D {0};
-> =20
->  	/* request core clock */
->  	nfc->core_clk =3D devm_clk_get(nfc->dev, "core");
-> @@ -1002,21 +1008,26 @@ static int meson_nfc_clk_init(struct meson_nfc *n=
-fc)
->  		return PTR_ERR(nfc->device_clk);
->  	}
-> =20
-> -	nfc->phase_tx =3D devm_clk_get(nfc->dev, "tx");
-> -	if (IS_ERR(nfc->phase_tx)) {
-> -		dev_err(nfc->dev, "failed to get TX clk\n");
-> -		return PTR_ERR(nfc->phase_tx);
-> -	}
-> -
-> -	nfc->phase_rx =3D devm_clk_get(nfc->dev, "rx");
-> -	if (IS_ERR(nfc->phase_rx)) {
-> -		dev_err(nfc->dev, "failed to get RX clk\n");
-> -		return PTR_ERR(nfc->phase_rx);
-> -	}
-> +	init.name =3D devm_kstrdup(nfc->dev, "nfc#div", GFP_KERNEL);
-> +	init.ops =3D &clk_divider_ops;
-> +	nfc_divider_parent_data[0].fw_name =3D "device";
-> +	init.parent_data =3D nfc_divider_parent_data;
-> +	init.num_parents =3D 1;
-> +	nfc->nand_divider.reg =3D nfc->sd_emmc_clock;
-> +	nfc->nand_divider.shift =3D CLK_DIV_SHIFT;
-> +	nfc->nand_divider.width =3D CLK_DIV_WIDTH;
-> +	nfc->nand_divider.hw.init =3D &init;
-> +	nfc->nand_divider.flags =3D CLK_DIVIDER_ONE_BASED |
-> +				  CLK_DIVIDER_ROUND_CLOSEST |
-> +				  CLK_DIVIDER_ALLOW_ZERO;
-> +
-> +	nfc->nand_clk =3D devm_clk_register(nfc->dev, &nfc->nand_divider.hw);
-> +	if (IS_ERR(nfc->nand_clk))
-> +		return PTR_ERR(nfc->nand_clk);
-> =20
->  	/* init SD_EMMC_CLOCK to sane defaults w/min clock rate */
-> -	regmap_update_bits(nfc->reg_clk,
-> -			   0, CLK_SELECT_NAND, CLK_SELECT_NAND);
-> +	writel(CLK_SELECT_NAND | readl(nfc->sd_emmc_clock),
-> +	       nfc->sd_emmc_clock);
-> =20
->  	ret =3D clk_prepare_enable(nfc->core_clk);
->  	if (ret) {
-> @@ -1030,29 +1041,21 @@ static int meson_nfc_clk_init(struct meson_nfc *n=
-fc)
->  		goto err_device_clk;
->  	}
-> =20
-> -	ret =3D clk_prepare_enable(nfc->phase_tx);
-> +	ret =3D clk_prepare_enable(nfc->nand_clk);
->  	if (ret) {
-> -		dev_err(nfc->dev, "failed to enable TX clock\n");
-> -		goto err_phase_tx;
-> +		dev_err(nfc->dev, "pre enable NFC divider fail\n");
-> +		goto err_nand_clk;
->  	}
-> =20
-> -	ret =3D clk_prepare_enable(nfc->phase_rx);
-> -	if (ret) {
-> -		dev_err(nfc->dev, "failed to enable RX clock\n");
-> -		goto err_phase_rx;
-> -	}
-> -
-> -	ret =3D clk_set_rate(nfc->device_clk, 24000000);
-> +	ret =3D clk_set_rate(nfc->nand_clk, 24000000);
-
-Is this rename really useful?
-
->  	if (ret)
-> -		goto err_disable_rx;
-> +		goto err_disable_clk;
-> =20
->  	return 0;
-> =20
-> -err_disable_rx:
-> -	clk_disable_unprepare(nfc->phase_rx);
-> -err_phase_rx:
-> -	clk_disable_unprepare(nfc->phase_tx);
-> -err_phase_tx:
-> +err_disable_clk:
-> +	clk_disable_unprepare(nfc->nand_clk);
-> +err_nand_clk:
->  	clk_disable_unprepare(nfc->device_clk);
->  err_device_clk:
->  	clk_disable_unprepare(nfc->core_clk);
-> @@ -1061,8 +1064,7 @@ static int meson_nfc_clk_init(struct meson_nfc *nfc)
-> =20
->  static void meson_nfc_disable_clk(struct meson_nfc *nfc)
->  {
-> -	clk_disable_unprepare(nfc->phase_rx);
-> -	clk_disable_unprepare(nfc->phase_tx);
-> +	clk_disable_unprepare(nfc->nand_clk);
->  	clk_disable_unprepare(nfc->device_clk);
->  	clk_disable_unprepare(nfc->core_clk);
->  }
-> @@ -1374,7 +1376,6 @@ static int meson_nfc_probe(struct platform_device *=
-pdev)
->  {
->  	struct device *dev =3D &pdev->dev;
->  	struct meson_nfc *nfc;
-> -	struct resource *res;
->  	int ret, irq;
-> =20
->  	nfc =3D devm_kzalloc(dev, sizeof(*nfc), GFP_KERNEL);
-> @@ -1388,21 +1389,15 @@ static int meson_nfc_probe(struct platform_device=
- *pdev)
->  	nand_controller_init(&nfc->controller);
->  	INIT_LIST_HEAD(&nfc->chips);
->  	init_completion(&nfc->completion);
-> -
-
-Please don't modify spacing in this commit.
-
->  	nfc->dev =3D dev;
-> =20
-> -	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	nfc->reg_base =3D devm_ioremap_resource(dev, res);
-> +	nfc->reg_base =3D devm_platform_ioremap_resource_byname(pdev, "nfc");
-
-This change seems unrelated.
-
->  	if (IS_ERR(nfc->reg_base))
->  		return PTR_ERR(nfc->reg_base);
-> =20
-> -	nfc->reg_clk =3D
-> -		syscon_regmap_lookup_by_phandle(dev->of_node,
-> -						"amlogic,mmc-syscon");
-> -	if (IS_ERR(nfc->reg_clk)) {
-> -		dev_err(dev, "Failed to lookup clock base\n");
-> -		return PTR_ERR(nfc->reg_clk);
-> -	}
-> +	nfc->sd_emmc_clock =3D devm_platform_ioremap_resource_byname(pdev, "emm=
-c");
-> +	if (IS_ERR(nfc->sd_emmc_clock))
-> +		return PTR_ERR(nfc->sd_emmc_clock);
-
-While I agree this is much better than the previous solution, we cannot
-break DT compatibility, so you need to try getting the emmc clock, but
-if it fails you should fallback to the regmap lookup.
-
-> =20
->  	irq =3D platform_get_irq(pdev, 0);
->  	if (irq < 0)
-
+Groan. I overlooked the deferrable part. Yes, you are right. next_expiry
+of the deferrable base is stale when there is no timer queued up to the
+point where base->clk reaches the initial next_expiry value. So the
+check is bogus.
 
 Thanks,
-Miqu=C3=A8l
+
+        tglx
+---
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -1724,9 +1724,8 @@ static inline void __run_timers(struct t
+ 		/*
+ 		 * The only possible reason for not finding any expired
+ 		 * timer at this clk is that all matching timers have been
+-		 * dequeued.
++		 * dequeued or no timer has been ever queued.
+ 		 */
+-		WARN_ON_ONCE(!levels && !base->next_expiry_recalc);
+ 		base->clk++;
+ 		base->next_expiry = __next_timer_interrupt(base);
+ 
+
+
+
+
+

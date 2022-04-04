@@ -2,117 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 022194F11A6
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1AE94F11AA
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347499AbiDDJI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 05:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34492 "EHLO
+        id S1349592AbiDDJJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 05:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350670AbiDDJIH (ORCPT
+        with ESMTP id S244472AbiDDJJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 05:08:07 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD84D3B01F;
-        Mon,  4 Apr 2022 02:06:09 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2348XLNH031939;
-        Mon, 4 Apr 2022 11:06:01 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=O+gcTxP8Y7/69E7pLornS/X2ErAQMSV70Z+BZNSQjeM=;
- b=4C0obPbxainwH3jY/z7OwKk/dV2tPb2NRod8y3P1i/6M/wRVI6x3FwacnEUVCQvTptA0
- SPKWy2XI9Chw1QGzkY2ZIbJcIBtP1k9tMVAC8MYLQMSXRPOUIZGCWP/XETueYZZ1pAsR
- FzlE2+Ee8MzfKM6kl55jN9C37xU6lyPZ6sjsQouI71FKwmQ6VtbmoO0K+E7tny++0/Y5
- FpwfYIk+jJ6cOuy9nHUxJFtUiHX2Unf3/lFgKODnxOVe57+zL1dRfhJ4pO1ssG/wNnuf
- v9zi8whcU5Cjj3t7G/ibRWptPI6GE9RuTThBtv76qjLrD4/mMSMCDHDkbjFAtheWUB+K ZA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f7a91vusa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Apr 2022 11:06:01 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B27DB10002A;
-        Mon,  4 Apr 2022 11:06:00 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 28F4C2138EE;
-        Mon,  4 Apr 2022 11:06:00 +0200 (CEST)
-Received: from localhost (10.75.127.47) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 4 Apr 2022 11:05:59
- +0200
-From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        <linux-riscv@lists.infradead.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     <arnaud.pouliquen@foss.st.com>, <linux-kernel@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        Anup Patel <anup@brainfault.org>
-Subject: [PATCH] RISC-V: configs: Configs that had RPMSG_CHAR now get RPMSG_CTRL
-Date:   Mon, 4 Apr 2022 11:05:27 +0200
-Message-ID: <20220404090527.582217-1-arnaud.pouliquen@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 4 Apr 2022 05:09:54 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B113BA61;
+        Mon,  4 Apr 2022 02:07:58 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id 85so7057106qkm.9;
+        Mon, 04 Apr 2022 02:07:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4bEukbCR9Nhs/phBw9CHkxQ3EgSEHMJ/cxKPyV/U1Lc=;
+        b=J5KW87ePrm1kVWM8zimS7BHw2Mzubr83uLPX1ZBEuTOjvvs+UkzK/GsTYtS+rkeeh6
+         Ge2jgAndu7+Zy91oVbelB/tQnEdNrikZagGfuskZmImTjrfeZFKVfsqjT4l6uBHJSGVZ
+         VY7S7PBo+y7RdG666XUW2bx1aEo7G3ouf2K51+rUsGOhwYYyquxLNq9RdgI6zt+EI6Oq
+         QogUEwbMxBtv/3Hc+6E7ikZQLShJTywcEZtzSZ40mqOmq5LwKkAGxigcH/x8JoioykXi
+         D2BAEjI17KvY0X1MbUap3yVxXSGf+QKh6gAAsi1h7CMfZADAjRdbrxbuASmFKV+ZXIG/
+         gb5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4bEukbCR9Nhs/phBw9CHkxQ3EgSEHMJ/cxKPyV/U1Lc=;
+        b=H4MVPRHZpoZkOQgT7Fhaa1Rt7ZKwHQoVYSuvI/MzfOgPoCUCtWoedhLCjcIHK2UvZn
+         FFo6VPNUn1+HghjFfgooWer0TcmLIIu5TlwUQuSnP1/fWu9WgTvlXNynJREobB3WjxGx
+         2geSWQ7d6iYeqIU0OkuwG8ahNzOVe26XLrE5H13S27tXyu6Et9TUKlzq6XIt2Wack4t/
+         KVDIYipR24ADFQRxE2+LI455QTtJqyeDggYxnrL8PgyTcm9xwQ8DUKhRTITvnQL1QGYK
+         gGlNQ9i7k4hvx5CtIQbHbjc0IxzisCr7EBTmdbWs9JOv82fxpF7NmfQ2p69zNYs2chNQ
+         C74Q==
+X-Gm-Message-State: AOAM530yn+s7L3M8Gn31G1uvY+AOhKky0KVM5UsClMM29v3qfDN0Wy8n
+        ZYBeSjN0NLnNaxsvM+15EEpKUXtGWlso0myLDYcscShav4dA7A==
+X-Google-Smtp-Source: ABdhPJzxhreJVMKs5S5FdXqt1xixG6+tcI/PtSb1hJfCARG67fDZF716ric68cm5HwCcmcK69tuvoAk4ghPFTca0/L0=
+X-Received: by 2002:a05:620a:108f:b0:67b:465f:56ba with SMTP id
+ g15-20020a05620a108f00b0067b465f56bamr13401510qkk.297.1649063277536; Mon, 04
+ Apr 2022 02:07:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-04_03,2022-03-31_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <1648713656-24254-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <YkVt0m+VxnXgnulq@dhcp22.suse.cz> <CAGWkznF4qb2EP3=xVamKO8qk08vaFg9JeHD7g80xvBfxm39Hkg@mail.gmail.com>
+ <YkWR8t8yEe6xyzCM@dhcp22.suse.cz> <CAGWkznHxAD0757m1i1Csw1CVRDtQddfCL08dYf12fa47=-uYYQ@mail.gmail.com>
+ <YkbjNYMY8VjHoSHR@dhcp22.suse.cz> <CAGWkznF7cSyPU0ceYwH6zweJzf-X1bQnS6AJ2-J+WEL0u8jzng@mail.gmail.com>
+ <CAJuCfpHneDZMXO_MmQDPA+igAOdAPRUChiq+zftFXGfDzPHNhQ@mail.gmail.com>
+ <CAGWkznFTQCm0cusVxA_55fu2WfT-w2coVHrT=JA1D_9_2728mQ@mail.gmail.com> <YkqxpEW4m6iU3zMq@dhcp22.suse.cz>
+In-Reply-To: <YkqxpEW4m6iU3zMq@dhcp22.suse.cz>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Mon, 4 Apr 2022 17:07:30 +0800
+Message-ID: <CAGWkznG4L3w=9bpZp8TjyWHmqFyZQk-3m4xCZ96zhHCLPawBgQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        cgroups mailinglist <cgroups@vger.kernel.org>,
+        Ke Wang <ke.wang@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the patch 617d32938d1b: "rpmsg: Move the rpmsg control device
-from rpmsg_char to rpmsg_ctrl", we split the rpmsg_char driver in two.
-By default give everyone who had the old driver enabled the rpmsg_ctrl
-driver too.
-
-Fixes: 617d32938d1b ("rpmsg: Move the rpmsg control device from rpmsg_char to rpmsg_ctrl", 2022-01-24)
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Reviewed-by: Anup Patel <anup@brainfault.org>
----
-this patch is extracted from the series [1] that has been partially
-integrated in the Linux Kernel 5.18-rc1.
-
-[1]https://lore.kernel.org/lkml/15be2f08-ba03-2b80-6f53-2056359d5c41@gmail.com/T/
----
- arch/riscv/configs/defconfig      | 1 +
- arch/riscv/configs/rv32_defconfig | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-index 30e3017f22bc..0cc17db8aaba 100644
---- a/arch/riscv/configs/defconfig
-+++ b/arch/riscv/configs/defconfig
-@@ -101,6 +101,7 @@ CONFIG_VIRTIO_BALLOON=y
- CONFIG_VIRTIO_INPUT=y
- CONFIG_VIRTIO_MMIO=y
- CONFIG_RPMSG_CHAR=y
-+CONFIG_RPMSG_CTRL=y
- CONFIG_RPMSG_VIRTIO=y
- CONFIG_EXT4_FS=y
- CONFIG_EXT4_FS_POSIX_ACL=y
-diff --git a/arch/riscv/configs/rv32_defconfig b/arch/riscv/configs/rv32_defconfig
-index 7e5efdc3829d..6cd9d84d3e13 100644
---- a/arch/riscv/configs/rv32_defconfig
-+++ b/arch/riscv/configs/rv32_defconfig
-@@ -93,6 +93,7 @@ CONFIG_VIRTIO_BALLOON=y
- CONFIG_VIRTIO_INPUT=y
- CONFIG_VIRTIO_MMIO=y
- CONFIG_RPMSG_CHAR=y
-+CONFIG_RPMSG_CTRL=y
- CONFIG_RPMSG_VIRTIO=y
- CONFIG_EXT4_FS=y
- CONFIG_EXT4_FS_POSIX_ACL=y
--- 
-2.25.1
-
+On Mon, Apr 4, 2022 at 4:51 PM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Mon 04-04-22 10:33:58, Zhaoyang Huang wrote:
+> [...]
+> > > One thing that I don't understand in this approach is: why memory.low
+> > > should depend on the system's memory pressure. It seems you want to
+> > > allow a process to allocate more when memory pressure is high. That is
+> > > very counter-intuitive to me. Could you please explain the underlying
+> > > logic of why this is the right thing to do, without going into
+> > > technical details?
+> > What I want to achieve is make memory.low be positive correlation with
+> > timing and negative to memory pressure, which means the protected
+> > memcg should lower its protection(via lower memcg.low) for helping
+> > system's memory pressure when it's high.
+>
+> I have to say this is still very confusing to me. The low limit is a
+> protection against external (e.g. global) memory pressure. Decreasing
+> the protection based on the external pressure sounds like it goes right
+> against the purpose of the knob. I can see reasons to update protection
+> based on refaults or other metrics from the userspace but I still do not
+> see how this is a good auto-magic tuning done by the kernel.
+>
+> > The concept behind is memcg's
+> > fault back of dropped memory is less important than system's latency
+> > on high memory pressure.
+>
+> Can you give some specific examples?
+For both of the above two comments, please refer to the latest test
+result in Patchv2 I have sent. I prefer to name my change as focus
+transfer under pressure as protected memcg is the focus when system's
+memory pressure is low which will reclaim from root, this is not
+against current design. However, when global memory pressure is high,
+then the focus has to be changed to the whole system, because it
+doesn't make sense to let the protected memcg out of everybody, it
+can't
+do anything when the system is trapped in the kernel with reclaiming work.
+>
+> > Please refer to my new version's test data
+> > for more detail.
+>
+> Please note that sending new RFCs will just make the discussion spread
+> over several email threads which will get increasingly hard to follow.
+> So do not post another version until it is really clear what is the
+> actual semantic you are proposing.
+ok, I will hold until all question done.
+>
+> --
+> Michal Hocko
+> SUSE Labs

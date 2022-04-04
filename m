@@ -2,120 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A06C4F1E04
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C974F1F0C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381448AbiDDWIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49046 "EHLO
+        id S1381365AbiDDVtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379541AbiDDR1S (ORCPT
+        with ESMTP id S1379584AbiDDRgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 13:27:18 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC9A31909
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 10:25:22 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id i11so8686332plg.12
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 10:25:22 -0700 (PDT)
+        Mon, 4 Apr 2022 13:36:33 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7AE28E20
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 10:34:36 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id u14so5619822pjj.0
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 10:34:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=mgnV7xI4qUCKfrqlWFwfqK4AIab4DaYNplYu5ZnU12A=;
-        b=h6IOoYbeGqsTOT85hNSp30Z6S3z/0oyrH77ylDcQCzYqAx2ZHRLm2YfmqSFB6NClJu
-         kJcZx7FPEq1+GT1+BVhpf6hwXjOBLbp1YTYM8YeAerFOwniYHATjFWcncbG6zs4uc6lH
-         D88N/qv4s8ZVGSl86KP8gRLyF0TEI/eJIvNpSlCtRlVqEnCJ37G+eGGqZ6VKZiksrR7/
-         f975k9mhAdFYWZ6szHTXhJ8FN8tFh7MppB6ZV6jJSdiwgzfuf9i/XV/f4wxmXlEauKwx
-         Jdu6TE4dO0MoCr/z3O/HM6LiRiNFGaXRzJlLG1c4sNEbtr1FVbATJkiOaKRHQaYmNWJG
-         QSpw==
+         :content-disposition:in-reply-to;
+        bh=V1fiQ+TpCWz9aW9batEAHSpfr5r9dyK3Q/lTwaH3lR0=;
+        b=n5mRgSQ8y20acZ/nK6OhYxxGJzwZSGfgcaIV5gwWcarOIpZUaCExb23hDcba/FfujR
+         xFNvpv34nq2Hj6fGtwvQQenG/CsfvSWly7w85pOa2sG503FmKvshqI9P5cFMoVE3Aar/
+         UQu5P8WN1WRQr6qVnpL2fGXvjFr5cmxhUxxebpUNcv68zXidJPUkPwuQpB2cgSdry9M0
+         eLkTMCOhfou4kVQgZxaauYZqxvKoMSlmivMsJ7IiJDCkOcBgoxX2LkJHmM3A/XGrPuQZ
+         2pPiCkDFuX+TqlPuqM3RY9B1nPG/O5uu9L/f2k9jXWu9RJ6qGXKz05KdOk77e14RcYjY
+         VMzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=mgnV7xI4qUCKfrqlWFwfqK4AIab4DaYNplYu5ZnU12A=;
-        b=uTfwXtvSGoW/AeDF0Ln6A1kDN7+CuADSbrsajJOjc/CuRGRzWxxHED8ZauE3gCL/vm
-         1iy+FyISdsdfPj2O06bNKQFkjgItWfmytivNSWrORMrnSGsX+havCmciF8m4uBojInM6
-         kGIrTGjWd2VOERCts1DMh1du0X/hcE251nZfQ2TxbYiWUQD4b+PgJrER4FelHYzNXZQD
-         m2Ler/BCwiX4oB8oeX9E/ZJK2sXBb+oVFg5dyf6/asaDiqNi2exXwseO0lcYpPiuoQ+b
-         dR27Skw9kGHYaMTevdsR4cmg9K66ZVtYi8n38xrtrIrEdpcqczXKSrYei9hyKZslhSKL
-         sC8g==
-X-Gm-Message-State: AOAM530s8Wiho4eaJjfMnxMFunoKs58cKaf6Usuy5hvDwPVoSYvaoiaC
-        yAuAmjb9KzbfNvSZPfMjJyiaPA==
-X-Google-Smtp-Source: ABdhPJyLI0a6Ip/thHpTPRIhpEWNh1fk6lFS2o3mWz/SM4TxmeP+4fejjowg5XpABQqXkGYoEg44EQ==
-X-Received: by 2002:a17:90b:38cd:b0:1ca:64dd:4747 with SMTP id nn13-20020a17090b38cd00b001ca64dd4747mr232081pjb.55.1649093121770;
-        Mon, 04 Apr 2022 10:25:21 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id bx22-20020a056a00429600b004fa936a64b0sm12144176pfb.196.2022.04.04.10.25.20
+         :mime-version:content-disposition:in-reply-to;
+        bh=V1fiQ+TpCWz9aW9batEAHSpfr5r9dyK3Q/lTwaH3lR0=;
+        b=V48zJMWFDViA9Vb+sOdAGjmI+DEfY5Og7trgyRRtkxOxz4jXxWDWh+Tu4ht5ffPxBI
+         HwnyWOlJoUlB3HQRBJ9dmTQu649SqCJgBGxb56xoRzPVNsZOjY4AHRvsm2lUn29/sXKn
+         /xp4jNF4oAvTx2S1fLL6ybDR2XuUT0sVYhHoVhCwPYvLGOrI7j1+gre20/LlyefG+6Py
+         KDqmpdMZvDzEI7gu9N5yLJxM9ZVqJPwtBGb+oKm5Mh8R8kT5pOaTMz2eMZGq4UQXy3dv
+         aANlRJmSPYxyrKy6mlD8xHB3M7E1FyRRHhj9sri9H4dwy172pYkyjqK7yLY5k1mgW/2e
+         R3kg==
+X-Gm-Message-State: AOAM530rgoGv5oTW6u+jaDSYHVPG5Sp/pGcdv+lVRJnUhgfuEMsVooU7
+        CZawFDQKtmO6s27W7Y9/L90yc7/9CVafejhM
+X-Google-Smtp-Source: ABdhPJwHq/HMWfqJNWl3Tmj7ZD7tbsm4BjEdWB/ICSYcy3kVA2KslfNYCV0z25OGCfSV48YcTJj1nA==
+X-Received: by 2002:a17:903:20c:b0:154:b58:d424 with SMTP id r12-20020a170903020c00b001540b58d424mr704902plh.45.1649093675449;
+        Mon, 04 Apr 2022 10:34:35 -0700 (PDT)
+Received: from google.com ([2620:15c:211:202:9d5:9b93:ffb4:574a])
+        by smtp.gmail.com with ESMTPSA id f66-20020a62db45000000b004fa8a7b8ad3sm12748136pfg.77.2022.04.04.10.34.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 10:25:20 -0700 (PDT)
-Date:   Mon, 4 Apr 2022 17:25:17 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Zeng Guang <guang.zeng@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hu, Robert" <robert.hu@intel.com>,
-        "Gao, Chao" <chao.gao@intel.com>
-Subject: Re: [PATCH v7 7/8] KVM: x86: Allow userspace set maximum VCPU id for
- VM
-Message-ID: <Yksp/Q1a24r85wAY@google.com>
-References: <20220304080725.18135-1-guang.zeng@intel.com>
- <20220304080725.18135-8-guang.zeng@intel.com>
- <YkZc7cMsDaR5S2hM@google.com>
- <60879468-c54f-e7f1-2123-ba4cf4128ac3@intel.com>
+        Mon, 04 Apr 2022 10:34:34 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 10:34:27 -0700
+From:   Nick Desaulniers <ndesaulniers@google.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 2/8] kbuild: prevent exported headers from including
+ <stdlib.h>, <stdbool.h>
+Message-ID: <YkssI2uDHRq41zjw@google.com>
+References: <20220404061948.2111820-1-masahiroy@kernel.org>
+ <20220404061948.2111820-3-masahiroy@kernel.org>
+ <YkqhQhJIQEL2qh8C@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <60879468-c54f-e7f1-2123-ba4cf4128ac3@intel.com>
+In-Reply-To: <YkqhQhJIQEL2qh8C@infradead.org>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 03, 2022, Zeng Guang wrote:
+On Mon, Apr 04, 2022 at 12:41:54AM -0700, Christoph Hellwig wrote:
+> On Mon, Apr 04, 2022 at 03:19:42PM +0900, Masahiro Yamada wrote:
+> > If we can make kernel headers self-contained (that is, none of exported
+> > kernel headers includes system headers), we will be able to add the
+> > -nostdinc flag, but that is much far from where we stand now.
+
+This is something I'd like to see done. IMO, the kernel headers should
+be the independent variable of which the libc is the dependendent
+variable.
+
+Android's libc, Bionic, is making use of the UAPI headers. They are
+doing some rewriting of UAPI headers, but I'd like to see what needs to
+be upstreamed from there. I just noticed
+include/uapi/linux/libc-compat.h, which seems like a good place for such
+compat related issues.
+
+In particular, having UAPI_HEADER_TESTS depend on CC_CAN_LINK is
+something I think we can works towards removing. The header tests
+themselves don't link; they force a dependency on a prebuilt libc
+sysroot, and they only need the headers from the sysroot because of this
+existing circular dependency between kernel headers and libc headers.
+
+I'd be happy to be explicitly cc'ed on changes like this series, going
+forward. Masahiro, if there's parts you'd like me to help with besides
+just code review, please let me know how I can help.
+
 > 
-> On 4/1/2022 10:01 AM, Sean Christopherson wrote:
-> > Amusingly, I think we also need a capability to enumerate that KVM_CAP_MAX_VCPU_ID
-> > is writable.
-> 
-> IIUC, KVM_CAP_*  has intrinsic writable attribute. KVM will return invalid
-> If not implemented.
-
-Yes, but forcing userspace to do a dummy write to detect support is rather ugly.
-I'm not totally opposed to it.  Probably a Paolo question.
-
-Paolo?
-
-> > > +		if (cap->args[0] <= KVM_MAX_VCPU_IDS) {
-> > > +			kvm->arch.max_vcpu_id = cap->args[0];
-> > This needs to be rejected if kvm->created_vcpus > 0, and that check needs to be
-> > done under kvm_lock, otherwise userspace can bump the max ID after KVM allocates
-> > per-VM structures and trigger buffer overflow.
-> 
-> Is it necessary to use kvm_lock ? Seems no use case to call it from multi-threads.
-
-There's no sane use case, but userspace is untrusted, i.e. KVM can't assume that
-userspace will do the right/desired thing.
+> What is still missing for that?

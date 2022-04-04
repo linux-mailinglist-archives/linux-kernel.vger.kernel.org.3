@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C89074F2060
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 144264F205B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbiDDXog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 19:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54596 "EHLO
+        id S231193AbiDDXoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 19:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiDDXof (ORCPT
+        with ESMTP id S229839AbiDDXow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 19:44:35 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F14356428
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 16:42:30 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id j1-20020a170903028100b0014b1f9e0068so4029914plr.8
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 16:42:30 -0700 (PDT)
+        Mon, 4 Apr 2022 19:44:52 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4A969CEB
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 16:42:47 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id q13-20020a638c4d000000b003821725ad66so6328647pgn.23
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 16:42:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=J9JdczjCflhADAkwzg8dC3TDq1QsxwIOBSphHHb7CsE=;
-        b=SaWbXJ+eSFTVQL00bJErXWshHip0oHjDBJJ3CIjnu+HT1vgtdjTOKQ5DbQ/ufD1TV0
-         KjV/tA6YYnA81ykCQC3j//faUYtVWANYG3TWqO5vvleQIOaF1wMwH6CIx9OarPSJijtl
-         N+NrDkerr2DpDmOf14B1eQHC03/3lJhoA+J6XEex9Gke9EWDb63M83lHmpeUDSeirv38
-         Bw/oONKyFCZRdQ3jATywM7tgwYQ9e7o6Jz9JGpPKOqLpFTMvm8mz1gMR24/R5Rsuc0A/
-         2r+sC5P+gQ7BrHrHJYLzRQKzF2SgfzAsiq9kAWb+a5gOV1n4QSezrxgW+PCrKtynH9BG
-         sPFQ==
+        bh=iUBYYnkU7CJchuxR3lOvqoVPphRBCh0qszifS0z2hb0=;
+        b=Th3RchuViiwMrL8xEdUyolWaFP9EHSqtrabMVLsluz6Av0uhtq0l+VPtlLLz3wm8/F
+         R/FvuzzEQBfvNteCCxMg5ChL99EycnrtbVDuzFwhO/N9ywIXjaALM7iS2czWfkUwCQPc
+         VnSh+Ou3eJmBmHVIzcBbbSNO4q/sDfJ4m9f4yCJ78hDQMANblW8yG3ZzlUKxk1zngy7x
+         OC6JlSI/+wrVKGsU7vn/X0JFA+RTNtP5XZ03RyrkX9CHOI93tk/ukhW1dEv1u958SGoZ
+         XIVNqQqYPyZNWupqD5UFI2OeMGaSCgod0Eh41gbF6IOaN5+iePHefJrADl+kn4qXBzlZ
+         SCzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=J9JdczjCflhADAkwzg8dC3TDq1QsxwIOBSphHHb7CsE=;
-        b=IGj2oYUGu5h+sxIMZAoILjZfddISNodWER5TT6k0Sh6J/lQk+rxVXDaOm/HmtYwOKB
-         quZ90e4u9eF7z1er7H6Ggkub8IYF4WFJ37tP0rysFcbsnb4ew4edVzxYx5UgiqsfoJSo
-         H5CunUNhjWcl2upwezLXS5rVEKbJjAUNvqJZ6UOO/76KKioI9ZDFC2vqB3RnC4zSmWIx
-         F1n81uOrZOwncABKEGdvM26RPpA22G6U1SRA3atG1a3OHgGpU300jhKyqPCBEbXLBmEs
-         RZAa2CVz+a+E+EvlgrQgxkfDIJOPX3v4n37z1yQ1NOAq16eavut9Jy+KsjKx8SWJy69R
-         BVRg==
-X-Gm-Message-State: AOAM532NwVLIsltAtYrG1Alp4vr0EY8uHYNN7CMs9JDfupzbj8a81zT0
-        ZUgYfkJvv56HxUfZpKsoybEYVcy+eYQGCIOx
-X-Google-Smtp-Source: ABdhPJxUcLxVvHcungJ/u8mKlomdmSoM+z9Z0/wfx0EDKoCLliJIJcUmyYrzylj+sfx8Tmyi4TDgZPNYbu5dQXeU
+        bh=iUBYYnkU7CJchuxR3lOvqoVPphRBCh0qszifS0z2hb0=;
+        b=awfCqYG6VxUfUfjaChOlPh5HelKq83yJh14bVry40xWYzaKJ2lliR0+rAv9WqEpBim
+         TUUlbQpmBn5PnQAVyjSvzcnsIiMwB5i4UaAxjDQ3xc04RO753uJfqngny4PyxEzIMdyd
+         kKyzmmoxjAF+qzHSMK9D9LyFv5o4LEg0JClyd5e2cl8uk5xEfqABdXwoqF4MdEh6x1Q9
+         YdUk4lsNsdUQe+3vyrdZSsTUnH5KP4AExXezLqJi58yyeYixJq9doOOnBUEuFhM/yefX
+         4Teyn3Il8RmrOgtUGuXPWyW37wPpOyGC2OTOPnw+WtZv93kGGXOGIpjqp8y15x6aOY2A
+         E7jw==
+X-Gm-Message-State: AOAM532wbtMq67F6QZBKYGdC/VKAPpvGb7bDGJth2/8H1kOLeHULTID5
+        NOSKJJ2QJylSxaE98oJ2tsIvQcykOtDgTLsR
+X-Google-Smtp-Source: ABdhPJymGpqpZQotLwNvi6g82KDcXAiQqYHQzWEZeJFKQrAz7QzxfdlcOk5WyldaIY67+U8rZh3KFnCR84iDU0dQ
 X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a17:90b:1e4e:b0:1c7:3512:c2ac with SMTP
- id pi14-20020a17090b1e4e00b001c73512c2acmr817714pjb.61.1649115727218; Mon, 04
- Apr 2022 16:42:07 -0700 (PDT)
-Date:   Mon,  4 Apr 2022 23:41:52 +0000
+ (user=yosryahmed job=sendgmr) by 2002:a17:90a:db48:b0:1ca:ab67:d75 with SMTP
+ id u8-20020a17090adb4800b001caab670d75mr73985pjx.1.1649115729756; Mon, 04 Apr
+ 2022 16:42:09 -0700 (PDT)
+Date:   Mon,  4 Apr 2022 23:41:53 +0000
 In-Reply-To: <20220404234154.1251388-1-yosryahmed@google.com>
-Message-Id: <20220404234154.1251388-4-yosryahmed@google.com>
+Message-Id: <20220404234154.1251388-5-yosryahmed@google.com>
 Mime-Version: 1.0
 References: <20220404234154.1251388-1-yosryahmed@google.com>
 X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
-Subject: [PATCH v2 3/5] KVM: arm64: mm: count KVM page table pages in
+Subject: [PATCH v2 4/5] KVM: riscv: mm: count KVM page table pages in
  pagetable stats
 From:   Yosry Ahmed <yosryahmed@google.com>
 To:     Huacai Chen <chenhuacai@kernel.org>,
@@ -82,205 +82,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Count the pages used by KVM in arm64 for page tables in pagetable stats.
-
-Account pages allocated for PTEs in pgtable init functions and
-kvm_set_table_pte().
-
-Since most page table pages are freed using put_page(), add a helper
-function put_pte_page() that checks if this is the last ref for a pte
-page before putting it, and unaccounts stats accordingly.
+Count the pages used by KVM in riscv for page tables in pagetable stats.
 
 Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 ---
- arch/arm64/kernel/image-vars.h |  3 ++
- arch/arm64/kvm/hyp/pgtable.c   | 50 +++++++++++++++++++++-------------
- 2 files changed, 34 insertions(+), 19 deletions(-)
+ arch/riscv/kvm/mmu.c | 26 +++++++++++++++++++-------
+ 1 file changed, 19 insertions(+), 7 deletions(-)
 
-diff --git a/arch/arm64/kernel/image-vars.h b/arch/arm64/kernel/image-vars.h
-index 884844849c70..4c87a718ccf0 100644
---- a/arch/arm64/kernel/image-vars.h
-+++ b/arch/arm64/kernel/image-vars.h
-@@ -139,6 +139,9 @@ KVM_NVHE_ALIAS(__hyp_rodata_end);
- /* pKVM static key */
- KVM_NVHE_ALIAS(kvm_protected_mode_initialized);
+diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+index f80a34fbf102..fcfb75713750 100644
+--- a/arch/riscv/kvm/mmu.c
++++ b/arch/riscv/kvm/mmu.c
+@@ -152,6 +152,7 @@ static int stage2_set_pte(struct kvm *kvm, u32 level,
+ 			next_ptep = kvm_mmu_memory_cache_alloc(pcache);
+ 			if (!next_ptep)
+ 				return -ENOMEM;
++			kvm_account_pgtable_pages((void *)next_ptep, +1);
+ 			*ptep = pfn_pte(PFN_DOWN(__pa(next_ptep)),
+ 					__pgprot(_PAGE_TABLE));
+ 		} else {
+@@ -229,6 +230,7 @@ static void stage2_op_pte(struct kvm *kvm, gpa_t addr,
+ 	pte_t *next_ptep;
+ 	u32 next_ptep_level;
+ 	unsigned long next_page_size, page_size;
++	struct page *p;
  
-+/* Called by kvm_account_pgtable_pages() to update pagetable stats */
-+KVM_NVHE_ALIAS(__mod_lruvec_page_state);
-+
- #endif /* CONFIG_KVM */
- 
- #endif /* __ARM64_KERNEL_IMAGE_VARS_H */
-diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-index 2cb3867eb7c2..53e13c3313e9 100644
---- a/arch/arm64/kvm/hyp/pgtable.c
-+++ b/arch/arm64/kvm/hyp/pgtable.c
-@@ -152,6 +152,7 @@ static void kvm_set_table_pte(kvm_pte_t *ptep, kvm_pte_t *childp,
- 
- 	WARN_ON(kvm_pte_valid(old));
- 	smp_store_release(ptep, pte);
-+	kvm_account_pgtable_pages((void *)childp, +1);
- }
- 
- static kvm_pte_t kvm_init_valid_leaf_pte(u64 pa, kvm_pte_t attr, u32 level)
-@@ -326,6 +327,14 @@ int kvm_pgtable_get_leaf(struct kvm_pgtable *pgt, u64 addr,
- 	return ret;
- }
- 
-+static void put_pte_page(kvm_pte_t *ptep, struct kvm_pgtable_mm_ops *mm_ops)
-+{
-+	/* If this is the last page ref, decrement pagetable stats first. */
-+	if (!mm_ops->page_count || mm_ops->page_count(ptep) == 1)
-+		kvm_account_pgtable_pages((void *)ptep, -1);
-+	mm_ops->put_page(ptep);
-+}
-+
- struct hyp_map_data {
- 	u64				phys;
- 	kvm_pte_t			attr;
-@@ -488,10 +497,10 @@ static int hyp_unmap_walker(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
- 
- 	dsb(ish);
- 	isb();
--	mm_ops->put_page(ptep);
-+	put_pte_page(ptep, mm_ops);
- 
- 	if (childp)
--		mm_ops->put_page(childp);
-+		put_pte_page(childp, mm_ops);
- 
- 	return 0;
- }
-@@ -522,6 +531,7 @@ int kvm_pgtable_hyp_init(struct kvm_pgtable *pgt, u32 va_bits,
- 	pgt->pgd = (kvm_pte_t *)mm_ops->zalloc_page(NULL);
- 	if (!pgt->pgd)
- 		return -ENOMEM;
-+	kvm_account_pgtable_pages((void *)pgt->pgd, +1);
- 
- 	pgt->ia_bits		= va_bits;
- 	pgt->start_level	= KVM_PGTABLE_MAX_LEVELS - levels;
-@@ -541,10 +551,10 @@ static int hyp_free_walker(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
- 	if (!kvm_pte_valid(pte))
- 		return 0;
- 
--	mm_ops->put_page(ptep);
-+	put_pte_page(ptep, mm_ops);
- 
- 	if (kvm_pte_table(pte, level))
--		mm_ops->put_page(kvm_pte_follow(pte, mm_ops));
-+		put_pte_page(kvm_pte_follow(pte, mm_ops), mm_ops);
- 
- 	return 0;
- }
-@@ -558,7 +568,7 @@ void kvm_pgtable_hyp_destroy(struct kvm_pgtable *pgt)
- 	};
- 
- 	WARN_ON(kvm_pgtable_walk(pgt, 0, BIT(pgt->ia_bits), &walker));
--	pgt->mm_ops->put_page(pgt->pgd);
-+	put_pte_page(pgt->pgd, pgt->mm_ops);
- 	pgt->pgd = NULL;
- }
- 
-@@ -694,7 +704,7 @@ static void stage2_put_pte(kvm_pte_t *ptep, struct kvm_s2_mmu *mmu, u64 addr,
- 		kvm_call_hyp(__kvm_tlb_flush_vmid_ipa, mmu, addr, level);
- 	}
- 
--	mm_ops->put_page(ptep);
-+	put_pte_page(ptep, mm_ops);
- }
- 
- static bool stage2_pte_cacheable(struct kvm_pgtable *pgt, kvm_pte_t pte)
-@@ -795,7 +805,7 @@ static int stage2_map_walk_leaf(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
- 
- 	if (data->anchor) {
- 		if (stage2_pte_is_counted(pte))
--			mm_ops->put_page(ptep);
-+			put_pte_page(ptep, mm_ops);
- 
- 		return 0;
- 	}
-@@ -848,8 +858,8 @@ static int stage2_map_walk_table_post(u64 addr, u64 end, u32 level,
- 		childp = kvm_pte_follow(*ptep, mm_ops);
- 	}
- 
--	mm_ops->put_page(childp);
--	mm_ops->put_page(ptep);
-+	put_pte_page(childp, mm_ops);
-+	put_pte_page(ptep, mm_ops);
- 
- 	return ret;
- }
-@@ -962,7 +972,7 @@ static int stage2_unmap_walker(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
- 	if (!kvm_pte_valid(pte)) {
- 		if (stage2_pte_is_counted(pte)) {
- 			kvm_clear_pte(ptep);
--			mm_ops->put_page(ptep);
-+			put_pte_page(ptep, mm_ops);
- 		}
- 		return 0;
- 	}
-@@ -988,7 +998,7 @@ static int stage2_unmap_walker(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
- 					       kvm_granule_size(level));
- 
- 	if (childp)
--		mm_ops->put_page(childp);
-+		put_pte_page(childp, mm_ops);
- 
- 	return 0;
- }
-@@ -1177,16 +1187,17 @@ int __kvm_pgtable_stage2_init(struct kvm_pgtable *pgt, struct kvm_s2_mmu *mmu,
- 			      enum kvm_pgtable_stage2_flags flags,
- 			      kvm_pgtable_force_pte_cb_t force_pte_cb)
+ 	ret = stage2_level_to_page_size(ptep_level, &page_size);
+ 	if (ret)
+@@ -252,8 +254,13 @@ static void stage2_op_pte(struct kvm *kvm, gpa_t addr,
+ 		for (i = 0; i < PTRS_PER_PTE; i++)
+ 			stage2_op_pte(kvm, addr + i * next_page_size,
+ 					&next_ptep[i], next_ptep_level, op);
+-		if (op == STAGE2_OP_CLEAR)
+-			put_page(virt_to_page(next_ptep));
++		if (op == STAGE2_OP_CLEAR) {
++			p = virt_to_page(next_ptep);
++			if (page_count(p) == 1)
++				kvm_account_pgtable_pages((void *)next_ptep,
++							  -1);
++			put_page(p);
++		}
+ 	} else {
+ 		if (op == STAGE2_OP_CLEAR)
+ 			set_pte(ptep, __pte(0));
+@@ -700,25 +707,27 @@ int kvm_riscv_stage2_map(struct kvm_vcpu *vcpu,
+ int kvm_riscv_stage2_alloc_pgd(struct kvm *kvm)
  {
--	size_t pgd_sz;
-+	u32 pgd_num;
- 	u64 vtcr = mmu->arch->vtcr;
- 	u32 ia_bits = VTCR_EL2_IPA(vtcr);
- 	u32 sl0 = FIELD_GET(VTCR_EL2_SL0_MASK, vtcr);
- 	u32 start_level = VTCR_EL2_TGRAN_SL0_BASE - sl0;
+ 	struct page *pgd_page;
++	int order;
  
--	pgd_sz = kvm_pgd_pages(ia_bits, start_level) * PAGE_SIZE;
--	pgt->pgd = mm_ops->zalloc_pages_exact(pgd_sz);
-+	pgd_num = kvm_pgd_pages(ia_bits, start_level);
-+	pgt->pgd = mm_ops->zalloc_pages_exact(pgd_num * PAGE_SIZE);
- 	if (!pgt->pgd)
+ 	if (kvm->arch.pgd != NULL) {
+ 		kvm_err("kvm_arch already initialized?\n");
+ 		return -EINVAL;
+ 	}
+ 
+-	pgd_page = alloc_pages(GFP_KERNEL | __GFP_ZERO,
+-				get_order(stage2_pgd_size));
++	order = get_order(stage2_pgd_size);
++	pgd_page = alloc_pages(GFP_KERNEL | __GFP_ZERO, order);
+ 	if (!pgd_page)
  		return -ENOMEM;
-+	kvm_account_pgtable_pages((void *)pgt->pgd, +pgd_num);
- 
- 	pgt->ia_bits		= ia_bits;
- 	pgt->start_level	= start_level;
-@@ -1210,17 +1221,17 @@ static int stage2_free_walker(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
- 	if (!stage2_pte_is_counted(pte))
- 		return 0;
- 
--	mm_ops->put_page(ptep);
-+	put_pte_page(ptep, mm_ops);
- 
- 	if (kvm_pte_table(pte, level))
--		mm_ops->put_page(kvm_pte_follow(pte, mm_ops));
-+		put_pte_page(kvm_pte_follow(pte, mm_ops), mm_ops);
- 
+ 	kvm->arch.pgd = page_to_virt(pgd_page);
+ 	kvm->arch.pgd_phys = page_to_phys(pgd_page);
+-
++	kvm_account_pgtable_pages((void *)kvm->arch.pgd, +(1UL << order));
  	return 0;
  }
  
- void kvm_pgtable_stage2_destroy(struct kvm_pgtable *pgt)
+ void kvm_riscv_stage2_free_pgd(struct kvm *kvm)
  {
--	size_t pgd_sz;
-+	u32 pgd_num;
- 	struct kvm_pgtable_walker walker = {
- 		.cb	= stage2_free_walker,
- 		.flags	= KVM_PGTABLE_WALK_LEAF |
-@@ -1229,7 +1240,8 @@ void kvm_pgtable_stage2_destroy(struct kvm_pgtable *pgt)
- 	};
+ 	void *pgd = NULL;
++	int order;
  
- 	WARN_ON(kvm_pgtable_walk(pgt, 0, BIT(pgt->ia_bits), &walker));
--	pgd_sz = kvm_pgd_pages(pgt->ia_bits, pgt->start_level) * PAGE_SIZE;
--	pgt->mm_ops->free_pages_exact(pgt->pgd, pgd_sz);
-+	pgd_num = kvm_pgd_pages(pgt->ia_bits, pgt->start_level);
-+	kvm_account_pgtable_pages((void *)pgt->pgd, -pgd_num);
-+	pgt->mm_ops->free_pages_exact(pgt->pgd, pgd_num * PAGE_SIZE);
- 	pgt->pgd = NULL;
+ 	spin_lock(&kvm->mmu_lock);
+ 	if (kvm->arch.pgd) {
+@@ -729,8 +738,11 @@ void kvm_riscv_stage2_free_pgd(struct kvm *kvm)
+ 	}
+ 	spin_unlock(&kvm->mmu_lock);
+ 
+-	if (pgd)
+-		free_pages((unsigned long)pgd, get_order(stage2_pgd_size));
++	if (pgd) {
++		order = get_order(stage2_pgd_size);
++		kvm_account_pgtable_pages((void *)pgd, -(1UL << order));
++		free_pages((unsigned long)pgd, order);
++	}
  }
+ 
+ void kvm_riscv_stage2_update_hgatp(struct kvm_vcpu *vcpu)
 -- 
 2.35.1.1094.g7c7d902a7c-goog
 

@@ -2,74 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38454F1DD8
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED0E84F1BFF
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386675AbiDDVmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
+        id S1379771AbiDDVU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379389AbiDDREB (ORCPT
+        with ESMTP id S1379381AbiDDRD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 13:04:01 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C74F40A2D
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 10:02:02 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id bq8so21252831ejb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 10:02:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wlQmbWsbwLY4Jm0uWTn3f9S3+SAlsRt/5TjBscaW/ec=;
-        b=Q++fS72PqHfuYFjBF7/g/8eYmp6uBJVDEGuLQRS6akI68tCD9V7hqUoKuQx8eCMGP2
-         LY111E0bOeFLm1f7/gaAgmur6VHUqL9f+t4L/k2UCtejxKn+AhoPu+s0vZsFqldsCa9Y
-         jiY4+moa33mqZ+Z8MEl4DVy/sxOYPiL/F+3Ua7Xr2zesZuXmPMVQRpaH53WjmQmGjX5E
-         ghG1kjTtNoQxofdWzIUVj98HP8MQIhPj8LIDnwgxfB1576G4uN+iKtqe9fW+SgqvK1CY
-         4RgTKoJZdrU4tcnSGEMZj7gdrGmcwfF+R/nP0xLzY2/r+4C+UsEVAAzEkgwmWOuqjVw7
-         PdVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wlQmbWsbwLY4Jm0uWTn3f9S3+SAlsRt/5TjBscaW/ec=;
-        b=SvaQxYHhIQnmBnS99ch3ojnWxZy4Lu5DQsGod5oxCdQMMwGUbQ9JTkjKh2IeI4DNDg
-         4xbTbgbL6LIAzDeHMcQpSUT2bQ42M27NPEbv50sh5wdJkdVX3CFOqBaaoBMsOzjK3qut
-         cK5eoHOx1HxaQo22kqncyaFTnjCwBpdIQVEKCb1gJ7ulJo8eoXfcCZpi3+/xZbzsYMVN
-         +pvB5V4OdrinOkGZQwl3RBJvgqKcNXJGFLlF1YvYchUc14mBFWmRTPpKjYNMiiYrZ1a5
-         jeRLCwhuWPiIFoaYdIIYn7eekep7ORnAFFiXJ4e+8vt+8vK0ojBTe8s+tZ8m1nqd1/JE
-         Pkcw==
-X-Gm-Message-State: AOAM533PCMJqpcLYO20kLbw85Lv+bbprWsvTzZMuF2tRmwnd8AL0jQEX
-        UWuSXLYeW5FSj4ElMK3BwnNPrw==
-X-Google-Smtp-Source: ABdhPJxsy+zfihA7Fi6o4Ei91Fm+4NalCj1W+rFnZ60rDuEKgLQ1M2JebdUfl1JFAwblr1YXiYMxjw==
-X-Received: by 2002:a17:906:4787:b0:6e1:409f:8deb with SMTP id cw7-20020a170906478700b006e1409f8debmr1081940ejc.80.1649091720949;
-        Mon, 04 Apr 2022 10:02:00 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id c5-20020a170906d18500b006ce371f09d4sm4557770ejz.57.2022.04.04.10.01.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 10:02:00 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: (subset) [PATCH v2 3/4] arm64: dts: exynos: add a specific compatible to MCT
-Date:   Mon,  4 Apr 2022 19:01:48 +0200
-Message-Id: <164909169270.1688455.15004420209137649762.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220304122424.307885-4-krzysztof.kozlowski@canonical.com>
-References: <20220304122424.307885-1-krzysztof.kozlowski@canonical.com> <20220304122424.307885-4-krzysztof.kozlowski@canonical.com>
-MIME-Version: 1.0
+        Mon, 4 Apr 2022 13:03:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998A540A29;
+        Mon,  4 Apr 2022 10:02:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0873760DBE;
+        Mon,  4 Apr 2022 17:02:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 51705C34110;
+        Mon,  4 Apr 2022 17:02:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649091720;
+        bh=04frVOBorwVRLC9iR0TJrmOXUmgPLE7sifjv285UBqY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=u4wKiB3cMuSr8X85DCWSAFYjooVhda9cApTtmkp7tZRxtQTB+pgUau+XD8HAdu9co
+         oxThbzXsle2iXHmd+iemZT0F0XHev26IPwYM4iI1hbroEUz17L+D8nm6vD0/CoCNIY
+         J/21dCexLvUqK0WwftAOMKgJpGSwNk7nglnDRs06SRyKGXGlM3OTFjNFbnDAlA2Q/g
+         WxrStf87q5tvCOcufEqKt9tTU4ATyPF2w4MTGfNeZBT5Ju1Na5o1C+nSOI4ojUtpe9
+         Z1fpj/klB5G7TabOuiLNZF9qS0Hw4zFloxHqr5WmL1IjlaRcg2esfmHuVUGF94Rzuq
+         tCqb83VI/qWcQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2AAA7E85B8C;
+        Mon,  4 Apr 2022 17:02:00 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Subject: Re: [PATCH 0/4] mfd/pwm: dt-bindings: google,cros-ec: include generic pwm
+ schema
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <164909172016.14329.4245687704208123308.git-patchwork-notify@kernel.org>
+Date:   Mon, 04 Apr 2022 17:02:00 +0000
+References: <20220214081916.162014-1-krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20220214081916.162014-1-krzysztof.kozlowski@canonical.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     lee.jones@linaro.org, robh+dt@kernel.org, bleung@chromium.org,
+        groeck@chromium.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, matthias.bgg@gmail.com,
+        agross@kernel.org, bjorn.andersson@linaro.org, heiko@sntech.de,
+        dianders@chromium.org, devicetree@vger.kernel.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,19 +65,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Mar 2022 13:24:23 +0100, Krzysztof Kozlowski wrote:
-> One compatible is used for the Multi-Core Timer on most of the Samsung
-> Exynos SoCs, which is correct but not specific enough.  These MCT blocks
-> have different number of interrupts, so add a second specific
-> compatible to Exynos5433 and Exynos850.
+Hello:
+
+This series was applied to chrome-platform/linux.git (for-kernelci)
+by Heiko Stuebner <heiko@sntech.de>:
+
+On Mon, 14 Feb 2022 09:19:12 +0100 you wrote:
+> Hi,
 > 
+> DTS patches are independent. Not tested, but I really hope no downstream kernel
+> depends on pwm node naming... If it does, please change it to compatible. :)
 > 
+> Best regards,
+> Krzysztof
+> 
+> [...]
 
-Applied, thanks!
+Here is the summary with links:
+  - [1/4] dt-bindings: pwm: google,cros-ec: include generic pwm schema
+    https://git.kernel.org/chrome-platform/c/6b94ee669e8a
+  - [2/4] arm64: dts: mt8183: align Google CROS EC PWM node name with dtschema
+    (no matching commit)
+  - [3/4] arm64: dts: qcom: align Google CROS EC PWM node name with dtschema
+    https://git.kernel.org/chrome-platform/c/1e49defb8636
+  - [4/4] arm64: dts: rk3399: align Google CROS EC PWM node name with dtschema
+    https://git.kernel.org/chrome-platform/c/a0024f55eb5b
 
-[3/4] arm64: dts: exynos: add a specific compatible to MCT
-      commit: 2616922241706ec5c2c5ae95d5ac1d3120575ded
-
-Best regards,
+You are awesome, thank you!
 -- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

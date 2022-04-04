@@ -2,99 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FCE64F1592
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 15:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FD7B4F1596
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 15:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349709AbiDDNLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 09:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54530 "EHLO
+        id S1349270AbiDDNOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 09:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbiDDNLq (ORCPT
+        with ESMTP id S230064AbiDDNOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 09:11:46 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129E32BF;
-        Mon,  4 Apr 2022 06:09:49 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1nbMSf-00426f-IX; Mon, 04 Apr 2022 15:09:37 +0200
-Received: from dynamic-077-183-077-178.77.183.pool.telefonica.de ([77.183.77.178] helo=[192.168.1.9])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.2)
-          tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1nbMSf-0001in-BQ; Mon, 04 Apr 2022 15:09:37 +0200
-Message-ID: <9c99caa1-d92d-2527-0918-17ee22a46637@physik.fu-berlin.de>
-Date:   Mon, 4 Apr 2022 15:09:36 +0200
+        Mon, 4 Apr 2022 09:14:15 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E74338798
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 06:12:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649077938; x=1680613938;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mLeLk+TY9IQjm7utjonSWTga6wHL4SBIewhETDaa6f0=;
+  b=jy7cG2efMba/g6Q0BCKtx+/TRDSvbJYAtKcbxoYbzx509GvB9qPOmZ0O
+   j5wsYKHvoYuSbT7L+JONLB2wU3+NUS2Dq+/f+bI0b88N7F2+AyAWOjZhf
+   AexeVBsdLyJ7RPsmI1vZygUr+whwTWV4+ayiwYTvYG/s0zWe4MbMEGUfL
+   Mdl2bZXXPIWIUgMZ1C2JCSzIqIWysldmFqQBnp6Cpb3OC6UzkvmpTy5Cw
+   /86JuQCKn1yRFrmXq7XjyPsWM78mm28trSAHnS3Rm05P15JI7AlPy7+MB
+   mwoDUcVUWCR1njSVLY4NsbTiu/t9X0FfwAS60gOTMMVe/VHsOPnofCONK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="260208155"
+X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
+   d="scan'208";a="260208155"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 06:12:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
+   d="scan'208";a="721641949"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 04 Apr 2022 06:12:14 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbMVC-00024L-4j;
+        Mon, 04 Apr 2022 13:12:14 +0000
+Date:   Mon, 4 Apr 2022 21:11:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yusuf Khan <yusisamerican@gmail.com>, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, jasowang@redhat.com,
+        mikelley@microsoft.com, mst@redhat.com, gregkh@linuxfoundation.org,
+        javier@javigon.com, arnd@arndb.de, will@kernel.org,
+        axboe@kernel.dk, Yusuf Khan <yusisamerican@gmail.com>,
+        Christoph Grenz <christophg+lkml@grenz-bonn.de>
+Subject: [PATCH] drivers: ddcci: fix platform_no_drv_owner.cocci warnings
+Message-ID: <YkrugvQSZY0CDZlK@998e223f1083>
+References: <20220403230850.2986-2-yusisamerican@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PULL] remove arch/h8300
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "moderated list:H8/300 ARCHITECTURE" 
-        <uclinux-h8-devel@lists.sourceforge.jp>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, Max Filippov <jcmvbkbc@gmail.com>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-References: <Yib9F5SqKda/nH9c@infradead.org>
- <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
- <YkmWh2tss8nXKqc5@infradead.org>
- <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-In-Reply-To: <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 77.183.77.178
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220403230850.2986-2-yusisamerican@gmail.com>
+X-Patchwork-Hint: ignore
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Arnd!
+From: kernel test robot <lkp@intel.com>
 
-On 4/4/22 15:07, Arnd Bergmann wrote:
-> 2. arch/sh Hitachi/Renesas sh2 (non-j2) support appears to be in a similar state
->     to h8300, I don't think anyone would miss it
-> 
-> 8<----- This may we where we want to draw the line ----
-> 
-> 3. arch/sh j2 support was added in 2016 and doesn't see a lot of
-> changes, but I think
->     Rich still cares about it and wants to add J32 support (with MMU)
-> in the future
-> 
-> 4. m68k Dragonball, Coldfire v2 and Coldfire v3 are just as obsolete as SH2 as
->    hardware is concerned, but Greg Ungerer keeps maintaining it, along with the
->    newer Coldfire v4 (with MMU)
+drivers/char/ddcci.c:1721:3-8: No need to set .owner here. The core will do it.
 
-I'm always interested in everything m68k and SH, so if something needs attention,
-I'm happy to help. I actually have SH-2 hardware at home although I haven't tried
-a recent kernel.
+ Remove .owner field if calls are used which set it automatically
 
-Adrian
+Generated by: scripts/coccinelle/api/platform_no_drv_owner.cocci
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer - glaubitz@debian.org
-`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+CC: Yusuf Khan <yusisamerican@gmail.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Yusuf-Khan/drivers-ddcci-add-drivers-for-DDCCI/20220404-080905
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 37fd83916da2e4cae03d350015c82a67b1b334c4
+:::::: branch date: 13 hours ago
+:::::: commit date: 13 hours ago
+
+ drivers/char/ddcci.c |    1 -
+ 1 file changed, 1 deletion(-)
+
+--- a/drivers/char/ddcci.c
++++ b/drivers/char/ddcci.c
+@@ -1718,7 +1718,6 @@ MODULE_DEVICE_TABLE(i2c, ddcci_idtable);
+ static struct i2c_driver ddcci_driver = {
+ 	.driver = {
+ 		.name	= "ddcci",
+-		.owner	= THIS_MODULE,
+ 	},
+ 
+ 	.id_table	= ddcci_idtable,

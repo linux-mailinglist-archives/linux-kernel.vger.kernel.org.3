@@ -2,97 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839D24F16B4
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA7394F16B7
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376805AbiDDOFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 10:05:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52042 "EHLO
+        id S1358530AbiDDOGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 10:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349617AbiDDOFf (ORCPT
+        with ESMTP id S244291AbiDDOGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 10:05:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8653DF94;
-        Mon,  4 Apr 2022 07:03:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84513B816A6;
-        Mon,  4 Apr 2022 14:03:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8E28C2BBE4;
-        Mon,  4 Apr 2022 14:03:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649081016;
-        bh=AEmWPvqVQn1yx8cH2eWg94/7riYkWEIyAZw3zc0gW3s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oek85EHdiVttdQkx+aSBWnCKE8vfjdHMFTOgGF6hEJMZg21N7bhBBxmp1Xb6SlZZ2
-         2vq9D3ZdaZ0E4vbRzvqrPa62TO3C10DaWxyZ5QhUMbUaSmqqE4e3zqjo6D3YAYpxsC
-         DpDpMo2vJjCzkkOyzAq0BWQ0ogrQ+jF0wiaKlZfY=
-Date:   Mon, 4 Apr 2022 16:03:33 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        stable@vger.kernel.org, Qiuhao Li <qiuhao@sysec.org>,
-        Gaoning Pan <pgn@zju.edu.cn>, Yongkang Jia <kangel@zju.edu.cn>,
-        syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Subject: Re: [PATCH 5.16] KVM: x86/mmu: do compare-and-exchange of gPTE via
- the user address
-Message-ID: <Ykr6tQao7513d3tv@kroah.com>
-References: <20220404134141.427397-3-pbonzini@redhat.com>
+        Mon, 4 Apr 2022 10:06:13 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386F914020;
+        Mon,  4 Apr 2022 07:04:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649081056; x=1680617056;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=IaLjVCjn5OCwpTld4VqPhcL+KM4VHWB3lKaf3AttWrs=;
+  b=M7MszzmEz+o3j8imtTXSYsClGfxDw/3rnolH1ZxA/IwnWx8LDKiVHpFT
+   atawTdbIazPCvlSiF8329OVbFcNlak9An8CMTnBbU1wOtuYYArmjClujd
+   DcDqDbJE5ZKAVdhJ0GuZOu0sGJixZIiv66ArcVwRIFsqX6reVzHFdfOBB
+   GQD+qT4QV1zxYSQZL6rodEdlUTsciHxgMcLHyyhLdy5GjL9fBWxuyh72Q
+   IgTCycnXF9ckNR/mFt95WhzBE28KMVPvyo6eg9yHlBgWkbJMC6tPwl0nK
+   sYcd36iNJmKYEa+nFeINQiT4kBv7M4dsvL1UBRzGycIxGNTlQj75zDVaJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="285469767"
+X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
+   d="scan'208";a="285469767"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 07:03:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
+   d="scan'208";a="696577924"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 04 Apr 2022 07:03:51 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 04 Apr 2022 17:03:51 +0300
+Date:   Mon, 4 Apr 2022 17:03:51 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>,
+        Angus Ainslie <angus@akkea.ca>,
+        Hector Martin <marcan@marcan.st>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-kernel@vger.kernel.org, kernel@puri.sm
+Subject: Re: [PATCH 6/7] usb: typec: tipd: Add debugfs entries for customer
+ use word
+Message-ID: <Ykr6x/YwAwg/KUma@kuha.fi.intel.com>
+References: <20220317154518.4082046-1-sebastian.krzyszkowiak@puri.sm>
+ <20220317154518.4082046-7-sebastian.krzyszkowiak@puri.sm>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220404134141.427397-3-pbonzini@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220317154518.4082046-7-sebastian.krzyszkowiak@puri.sm>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 09:41:40AM -0400, Paolo Bonzini wrote:
-> commit 2a8859f373b0a86f0ece8ec8312607eacf12485d upstream.
+On Thu, Mar 17, 2022 at 04:45:17PM +0100, Sebastian Krzyszkowiak wrote:
+> From: Guido Günther <agx@sigxcpu.org>
 > 
-> FNAME(cmpxchg_gpte) is an inefficient mess.  It is at least decent if it
-> can go through get_user_pages_fast(), but if it cannot then it tries to
-> use memremap(); that is not just terribly slow, it is also wrong because
-> it assumes that the VM_PFNMAP VMA is contiguous.
+> This allows to verify that a sane firmware is on the device.
 > 
-> The right way to do it would be to do the same thing as
-> hva_to_pfn_remapped() does since commit add6a0cd1c5b ("KVM: MMU: try to
-> fix up page faults before giving up", 2016-07-05), using follow_pte()
-> and fixup_user_fault() to determine the correct address to use for
-> memremap().  To do this, one could for example extract hva_to_pfn()
-> for use outside virt/kvm/kvm_main.c.  But really there is no reason to
-> do that either, because there is already a perfectly valid address to
-> do the cmpxchg() on, only it is a userspace address.  That means doing
-> user_access_begin()/user_access_end() and writing the code in assembly
-> to handle any exception correctly.  Worse, the guest PTE can be 8-byte
-> even on i686 so there is the extra complication of using cmpxchg8b to
-> account for.  But at least it is an efficient mess.
-> 
-> Reported-by: Qiuhao Li <qiuhao@sysec.org>
-> Reported-by: Gaoning Pan <pgn@zju.edu.cn>
-> Reported-by: Yongkang Jia <kangel@zju.edu.cn>
-> Reported-by: syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
-> Debugged-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-> Tested-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Cc: stable@vger.kernel.org
-> Fixes: bd53cb35a3e9 ("X86/KVM: Handle PFNs outside of kernel reach when touching GPTEs")
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> Signed-off-by: Guido Günther <agx@sigxcpu.org>
+> Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
 > ---
->  arch/x86/kvm/mmu/paging_tmpl.h | 77 ++++++++++++++++------------------
->  1 file changed, 37 insertions(+), 40 deletions(-)
+>  drivers/usb/typec/tipd/core.c | 65 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 65 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index 874528b02a99..d3c70aaf1a0c 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -6,6 +6,7 @@
+>   * Author: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+>   */
+>  
+> +#include <linux/debugfs.h>
+>  #include <linux/i2c.h>
+>  #include <linux/acpi.h>
+>  #include <linux/module.h>
+> @@ -22,6 +23,7 @@
+>  /* Register offsets */
+>  #define TPS_REG_VID			0x00
+>  #define TPS_REG_MODE			0x03
+> +#define TPS_REG_CUSTOMER_USE		0x06
+>  #define TPS_REG_CMD1			0x08
+>  #define TPS_REG_DATA1			0x09
+>  #define TPS_REG_INT_EVENT1		0x14
+> @@ -99,10 +101,15 @@ struct tps6598x {
+>  	struct power_supply *psy;
+>  	struct power_supply_desc psy_desc;
+>  	enum power_supply_usb_type usb_type;
+> +
+>  	struct tps6598x_pdo terms;
+>  
+>  	u32 data_status;
+>  	u16 pwr_status;
+> +#ifdef CONFIG_DEBUG_FS
+> +	struct dentry *dev_dentry;
+> +	struct dentry *customer_user_dentry;
+> +#endif
+>  };
+>  
+>  static enum power_supply_property tps6598x_psy_props[] = {
+> @@ -239,6 +246,62 @@ static void tps6598x_set_data_role(struct tps6598x *tps,
+>  	typec_set_data_role(tps->port, role);
+>  }
+>  
+> +#ifdef CONFIG_DEBUG_FS
+> +static struct dentry *rootdir;
+> +
+> +static int tps6598x_debug_customer_use_show(struct seq_file *s, void *v)
+> +{
+> +	struct tps6598x *tps = (struct tps6598x *)s->private;
+> +	u64 mode64;
+> +	int ret;
+> +
+> +	mutex_lock(&tps->lock);
+> +
+> +	ret =  tps6598x_block_read(tps, TPS_REG_CUSTOMER_USE, &mode64, sizeof(mode64));
+> +	if (!ret)
+> +		seq_printf(s, "0x%016llx\n", mode64);
+> +
+> +	mutex_unlock(&tps->lock);
+> +
+> +	return 0;
+> +}
+> +DEFINE_SHOW_ATTRIBUTE(tps6598x_debug_customer_use);
+> +
+> +static void tps6598x_debugfs_init(struct tps6598x *tps)
+> +{
+> +	struct dentry *dentry;
+> +
+> +	if (!rootdir)
+> +		rootdir = debugfs_create_dir("tps6598x", NULL);
+> +
+> +	dentry = debugfs_create_dir(dev_name(tps->dev), rootdir);
+> +	if (IS_ERR(dentry))
+> +		return;
+> +	tps->dev_dentry = dentry;
+> +
+> +	dentry = debugfs_create_file("customer_use",
+> +				     S_IFREG | 0444, tps->dev_dentry,
+> +				     tps, &tps6598x_debug_customer_use_fops);
+> +	if (IS_ERR(dentry))
+> +		return;
+> +	tps->customer_user_dentry = dentry;
+> +}
+> +
+> +static void tps6598x_debugfs_exit(struct tps6598x *tps)
+> +{
+> +	debugfs_remove(tps->customer_user_dentry);
+> +	debugfs_remove(tps->dev_dentry);
+> +	debugfs_remove(rootdir);
+> +	rootdir = NULL;
+> +}
+> +
+> +#else
+> +
+> +static void tps6598x_debugfs_init(const struct tps6598x *tps) { }
+> +static void tps6598x_debugfs_exit(const struct tps6598x *tps) { }
+> +
+> +#endif
+> +
+>  static int tps6598x_connect(struct tps6598x *tps, u32 status)
+>  {
+>  	struct typec_partner_desc desc;
+> @@ -995,6 +1058,7 @@ static int tps6598x_probe(struct i2c_client *client)
+>  	}
+>  
+>  	i2c_set_clientdata(client, tps);
+> +	tps6598x_debugfs_init(tps);
+>  
+>  	return 0;
+>  
+> @@ -1011,6 +1075,7 @@ static int tps6598x_remove(struct i2c_client *client)
+>  {
+>  	struct tps6598x *tps = i2c_get_clientdata(client);
+>  
+> +	tps6598x_debugfs_exit(tps);
+>  	tps6598x_disconnect(tps, 0);
+>  	typec_unregister_port(tps->port);
+>  	usb_role_switch_put(tps->role_sw);
+> -- 
+> 2.35.1
 
-This, and the 5.15, and 5.10 patches now applied.  5.4 did not apply
-cleanly.
-
-thanks,
-
-greg k-h
+-- 
+heikki

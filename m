@@ -2,228 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D054F1DD0
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5274F1D96
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:41:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383508AbiDDVl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
+        id S1383546AbiDDVdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380639AbiDDUqa (ORCPT
+        with ESMTP id S1380643AbiDDUso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 16:46:30 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7619713E9A;
-        Mon,  4 Apr 2022 13:44:31 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 234IsfJ7000752;
-        Mon, 4 Apr 2022 20:43:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=+TKFxFAQJo+5O5mPo0UcDTX19wiJC0HX9Ic0l9u6fDk=;
- b=NCPLxLHFPhRm7HwykbLDsHy/yjoDhbh8OTXbhgmzJiBjBl3eYlL7c5cbxKqqbtMYU9t3
- PHTzm32+RgtdAfYN+vBuhQR38C97JGEUMyVSpyJX1Ef7xm/dJnOHYsgsDE0PtZgiyL0e
- HKYN9tDA4TwRKlhxfeItxLF8/44x+76XY1Jsa/zwl13zjmV9ela5tcFDgkUUqFtFPY9Y
- kcWRaHGhhABY+HT/mBt5EITHlaAoTNHtHVxAJ6v3y/XgYHvT9Ms06UKxM0w8fMc4q72p
- TZdB2/XQSaDBKD0zbEtH+FxKvTPRCQ21dNFg68I7Tv0GAy6v2Jv5aUOGBmR968SrzTZ3 Ag== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3f6e3smbxs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 04 Apr 2022 20:43:41 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 234KZXf0014519;
-        Mon, 4 Apr 2022 20:43:41 GMT
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2169.outbound.protection.outlook.com [104.47.55.169])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f6cx2s38m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 04 Apr 2022 20:43:40 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=auuas6q5MjzsaMlzj9qgZLk1i7+FQAQ6ZvScBd/r8l3lSXW6wp09lqILaAoc8aCzBZDp9eDm6vrLYMCNgjSa03ZjqPbbyzfai5FQRt3K6x8Nsd5bib93izDdTMaWAAt2EkZRh/Bp7beHgpicJvg4n4z6rHQvFAERRAARUYXwG7w0wak0rp5lpZvpVdUkpRtEms8QQUL6DS+2cPZyMZ4bPIw26XlFUdBUOWEWzSSbPK2b8pc+3ZZMfI90zbCXAsTr6At7cgWMmdc22RsTMf42IJRZWO9YhX+9igU3YoTBkPqePVjXjUAjOpeGmxG7X6V5ab87Jm0JmbiBStdewsAc3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+TKFxFAQJo+5O5mPo0UcDTX19wiJC0HX9Ic0l9u6fDk=;
- b=TJx3xebQDOhDOeyB4eYg99V4Aek8JOc+Lx46HAPFWyjgmk3sMnP73StLYISS2AB3H4pu7s9b4Lk8NCsz3HSdvOkHnSpfV9Zg+tvI+2vIdekwZ95qCz+zrbBIrnxLB/wRql+jln8BykIHl6eoYM2U4w5woy/f0bZ1eGC4mdoJfLO7I6O6rzLKcwlpx9PLH1jITzPd0a8x/udTl4MJ9MXXsxbUL8ve/VB6+KNQcZCQ5bixXHrAsA5JFer8kWTpvE1IR/uGbR1Kq7W06SSE8pkcZNGKv4pKUhASc5HFEpakb37yp/PEqNMBZdjO/ncv6dFM5W1BXwFZsIoJnMWmxmwSzw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+TKFxFAQJo+5O5mPo0UcDTX19wiJC0HX9Ic0l9u6fDk=;
- b=BcR0B8tOnqzH4LOhKYVdhK9caqra1pf6tAR/NE2HkAUUF+zgI9dpYqoKDVEoaVhZ8O4/LMEUvBHKsoFfeF+S/IIIoA6mvPTAynBj3gg0cRw9cG07jFpipDeuWcDW2+mmOymeFioaVfdtkvvYQV3PQ5cdNOHRIG3mNnz6AQ0jzzM=
-Received: from SA1PR10MB5866.namprd10.prod.outlook.com (2603:10b6:806:22b::19)
- by CY4PR10MB1317.namprd10.prod.outlook.com (2603:10b6:903:28::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Mon, 4 Apr
- 2022 20:43:38 +0000
-Received: from SA1PR10MB5866.namprd10.prod.outlook.com
- ([fe80::25e3:38e5:fb02:34c1]) by SA1PR10MB5866.namprd10.prod.outlook.com
- ([fe80::25e3:38e5:fb02:34c1%5]) with mapi id 15.20.5123.031; Mon, 4 Apr 2022
- 20:43:38 +0000
-Message-ID: <d6d05430-aa55-6317-0916-b60232dde339@oracle.com>
-Date:   Mon, 4 Apr 2022 16:43:34 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+        Mon, 4 Apr 2022 16:48:44 -0400
+Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B3D713E9A;
+        Mon,  4 Apr 2022 13:46:47 -0700 (PDT)
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1nbTav-0003dN-Sm; Mon, 04 Apr 2022 22:46:37 +0200
+Message-ID: <fde9cf47-b420-23c7-f974-480eb95da221@maciej.szmigiero.name>
+Date:   Mon, 4 Apr 2022 22:46:32 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [RFC 0/1] Add sysctl entry for controlling
- crash_kexec_post_notifiers
+Subject: Re: [PATCH 5/8] KVM: SVM: Re-inject INT3/INTO instead of retrying the
+ instruction
 Content-Language: en-US
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>, corbet@lwn.net,
-        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     akpm@linux-foundation.org, linux@rasmusvillemoes.dk,
-        ebiggers@google.com, peterz@infradead.org, ying.huang@intel.com,
-        mchehab+huawei@kernel.org, Jason@zx2c4.com, daniel@iogearbox.net,
-        robh@kernel.org, wangqing@vivo.com, prestwoj@gmail.com,
-        dsahern@kernel.org, stephen.s.brennan@oracle.com
-References: <20220401202300.12660-1-alejandro.j.jimenez@oracle.com>
- <f2fe220f-70c9-7b95-a9cb-4709752e4bdc@igalia.com>
-From:   Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
-Organization: Oracle Corporation
-In-Reply-To: <f2fe220f-70c9-7b95-a9cb-4709752e4bdc@igalia.com>
+References: <20220402010903.727604-1-seanjc@google.com>
+ <20220402010903.727604-6-seanjc@google.com>
+ <a47217da0b6db4f1b6b6c69a9dc38350b13ac17c.camel@redhat.com>
+ <YkshgrUaF4+MrrXf@google.com>
+ <a3cf781b-0b1a-0bba-6b37-12666c7fc154@maciej.szmigiero.name>
+ <YktIGHM86jHkzGdF@google.com> <YktM9bnq5HaTMKkV@google.com>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+In-Reply-To: <YktM9bnq5HaTMKkV@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN4PR0501CA0125.namprd05.prod.outlook.com
- (2603:10b6:803:42::42) To SA1PR10MB5866.namprd10.prod.outlook.com
- (2603:10b6:806:22b::19)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 56fe2840-1ecf-48c3-846b-08da167bcbbd
-X-MS-TrafficTypeDiagnostic: CY4PR10MB1317:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR10MB13171CAB424DD000CC052DE2C7E59@CY4PR10MB1317.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FCrfKADTufALI9gUZ/R3v2tQnXTdtANScWpbd9av6g+wCHp1sjKvJzFydWjXlAo+fxtP8Biy34kneX8xu7WNVhaalhBuEHL8zLEaxZ7tSDme9KhdaLh0ggNCwajXmIquTBvSiC1xUfOGi5umD4beB/A3GMq8aQKBeRf9IC+bsMGy3Ey3E0jHvAMBTcxka1Fj4W3lQ3k/xtgw6DJOW8WeIPAT1pj/Lw5hTypSX8P4Mi1mzIUwJ0/FUxbQ8+ImfWX5Fb8rMEgWZDV19RmnmoLsBsayhFzQspZJhkrUobce5lyUjSo3Zx241xXeTodqLix+x42bRy9o5CBbvT2KpPFNVXESMykP6MFJ09lp8tCzgfrSactoN9FskhdYsXFf2dB3G3dYICU9KjF4Trhd5rfAOS+HhmA0bPHRqr7+o9eFFN8iA2OY1o34q7EYIk+N8K9e7BYL6KQkq0ceetkiHE+jySgloiZtHdNGSUZgWe8bztYZyYmy2Lv9v1HAdr/5yAjV/P8Jparj9bvJ0b+fSdeefQhk1G2Byq9PJiwzjYMhZfE9UGjrMfEPIbw56wyDFfPvH8SOTqFS4Iq+njW4n+ZYUnx0V/ct/+BXirzmyEz8Umm70BzTQffvtd8NxkgvHdiiLBKajZcfG5YeohrO2GJXf/d99cqS09wckjFGggbcVQml1m46LDbt73e1NE24klYWdD0es7pqDWsrnMhXi7u7PClL8FoBEoCslvRlBTWz5kKkm1ei9T3GFNVIT1su73kKRhZrqz39iL/US48j0fJAT7y3WWAJPTXLND32MjOmtHrfrWn3JzaDKZrcfAP2EAgx
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR10MB5866.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2906002)(6512007)(316002)(53546011)(31686004)(6506007)(86362001)(36756003)(31696002)(36916002)(6666004)(107886003)(2616005)(8936002)(966005)(6486002)(8676002)(7416002)(4326008)(508600001)(186003)(26005)(66946007)(66556008)(66476007)(38100700002)(5660300002)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NDhIWTd3T2g5elVLOCtiT0h2d2dzNGpya1pLMXR1NmlKeFNxZlp0dkw3dmkw?=
- =?utf-8?B?RWNVc0ZsK2ZiRjBGSzV2REw4eWRWbnB4T29OUHFObVZkUUJaWWFOdmt5Y1Iz?=
- =?utf-8?B?eHkyY2JxRzA5c2Zrc2UvazJuMVo0THV5eWJXdmNiMkZERDhxWVJZS2piN0NJ?=
- =?utf-8?B?K2l4MTRWNTBQUjhFMlY1YjdiSThBRjhKcDF6amEwT1FtSXhYWVpXc2lzcXZr?=
- =?utf-8?B?QVFvS25QSjNvQks1eTZERCt2MUduTGtobUFOOGZGRE1RaUN3cFVNMmljZGFR?=
- =?utf-8?B?SUNyL2tJZDBBRFN0dG9MeWFkaWgzb0RpZWlWbWExekE3WnFoMngwTm9ZWTdD?=
- =?utf-8?B?cU5UMEd6LzJrNmJ1UVc2VGJEWVpyTnJTRHZCNEY4aFRONWh4bGRGWmNiTzI0?=
- =?utf-8?B?KzUxbkZxZmNNNW9Jdk1uUEd4VUdNTWh1Z2FoZ2R5SDhWNENrY0dHZk0zclFS?=
- =?utf-8?B?QzRvTG5keHUvZEFRU090azIrVlViRlV5YWdyQ1FnTDFqV1ZySisrS2piZ0JI?=
- =?utf-8?B?QjFYNFdCbGo4UVVXazdIUVJjVDZVMSt6VkFodXBTZ0U5d29yblJCSTBzdTA2?=
- =?utf-8?B?a1ROZHY1ZUhTNzdlV3RDQkYrS0o5Y2lnaGUxSDhFbDRxaVg1aGtwTU50UUNV?=
- =?utf-8?B?aXBnUlhVZWxMaWdMdU5vdm5pc1p1V3lJVU94MTRndE4vQmM5NmRyckJxcSty?=
- =?utf-8?B?UVdteWpaOC9pbmZ2MEdmRkJsdzd0T21CVSsrY0FpMlZQWWVpMnUwekdJZWZF?=
- =?utf-8?B?T2lNeWJHYkxjQ2FrMjVFMDdrTWVZV3I4c1dST1dsTHl0bVFvWjJvZ0hWMGZ5?=
- =?utf-8?B?ZlpKQWgvSW51WTY5NnRWVWQ0Q3dxSUxwWElvUkhRbVhhN25IMmMwQU5lajlZ?=
- =?utf-8?B?NnBFZ3FLZUZOeSttMzdvM2dVaHYyaDJjRm1IaFEwUE9TRmJtVXF1T29vQlpI?=
- =?utf-8?B?SXF2dE1FZGtKaUFZOXhZWk1sdmRSQUVGT29pcVpVWXBzZnJPQkxCSnJSS25O?=
- =?utf-8?B?Q2R2dDNCYTExOFJzN3JUYktFUERqUFYvdUE2bFhPNXlsOW9pbWowYjVveXR5?=
- =?utf-8?B?QjRXQ0hoVnZFZUZLNnBlaDJOWC9jWkZTMXdZTUxmYmE0cVBoaWF0dGg0dTgx?=
- =?utf-8?B?MnpuMmQrdC9Ub2tWUklSYmN2a0NNMUx4YUlkZGdGeGxHSkM1cWxuR3puTFUy?=
- =?utf-8?B?QXhBRUUzRGFhYmxOWXYwRDBaQkhPblRBMUhaQi96c1ZmSjBEd01uWTRwYTZr?=
- =?utf-8?B?ZGQ2M0dXSWRzQmcvcmpTUGFvS25RTXN0c0VzZWVHVHd3RjZ0Z2JkZW5TMzhJ?=
- =?utf-8?B?YnVaOFNCbmJOdWcxelhMMDZ0dHJqSCtzWWJvZk52NnI0bkJYcjZEV0IxVnBy?=
- =?utf-8?B?N0hNOEtjR09CMnhNa2sxSkgvMWoybm9aS2swMnIzUVM5c0xZRVdFSG1IWThB?=
- =?utf-8?B?R3pyb3RET0RTUWRIVEdTTGZyV2k4Nkd4UG1lSXpsSjNMdVE3YlUzdVcwS3hT?=
- =?utf-8?B?SXZ5N0phZ1FjdmJmTi92WmRoWmJNZDlxUW9VRUs0MGhIV3ByWjB3bnpXZ1E1?=
- =?utf-8?B?V09jMFQ2Wmk3VnJZdnJtL1RabjlqUEFJaGwzMDV3bnhSZm9hMHF4eGRyWTdQ?=
- =?utf-8?B?WWU3d3R1UmlMQUdlencxWEVZMXpCL3pnbUk4YzF3R1VSR08xa0srQmZiNFZM?=
- =?utf-8?B?dFcrSVd0aDFkNlhidTlLZDJnVFJ6OGNsVHVTUEEyYjBOck9Jb3pOcElFbUF2?=
- =?utf-8?B?MWhsVE9zekxXNmJIVkgvUTIzZHhweXpLTVRMVDV6MkVVSFVYTEkvTFhoQkFr?=
- =?utf-8?B?SjBjWkE2NjdhMGtJSDJYd2paakhtWlI4cWVqOFNiTnh1b1RIQVAwZTBqc2VI?=
- =?utf-8?B?dldZQld1aHZJdjEyTk1meVIwYysyUEw4OEVJV0MwN0R2azZzTnBCckRJejF2?=
- =?utf-8?B?MytsMHdaaTEyT2dxb082RENUZ09jbGJPTHd5QVI1dCt4bHZVN1dmRU03WnV3?=
- =?utf-8?B?WkE0WUc2Q3JCR0Z1TEZHZDBLdGRFN1ZjY2s4OXJoZE5kK0x6Wjl5T084d2ov?=
- =?utf-8?B?RGhKODE2MjErQTMxQW9hZXlmd0VuV3lJQ20xTU1KTDRDRE0wNG9WakpRZGEy?=
- =?utf-8?B?Mk8vOW1MQWFXVFBNMTNiQnRwOUQ1clpSQ1J2OWRWMnFyakwyeXJZczRMT3ho?=
- =?utf-8?B?RGViVnJYdzVlcnhZL3l3MlVDVy9QZnVDRHc0Q2prTUJ0OW5lNERZNHhZYytD?=
- =?utf-8?B?UzVOOXlQcDUvMDdaTzBsNU1nUnZMZlBRWUpmRTFFRkd0WWNGeVlYei9sL2Q3?=
- =?utf-8?B?Vk10VjlQQ09hMktkSmtzWlFTTjdBb2N5bXhZWHdaQUhlUCtPdkhlWkFNbUdP?=
- =?utf-8?Q?xcyIfCiYASGcmhuU=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 56fe2840-1ecf-48c3-846b-08da167bcbbd
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR10MB5866.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2022 20:43:38.2892
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 25imOyJCKqhAFJqD4VVGX2/24GP75k6Oe41eAFdxlQqfFCEs6BG0BWEwjnJHDh6HXd2X+hFzMuks2nz6VeOmsKoaRdJmZglXlro6WQFv+ZE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR10MB1317
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.850
- definitions=2022-04-04_09:2022-03-30,2022-04-04 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0 mlxscore=0
- bulkscore=0 suspectscore=0 spamscore=0 mlxlogscore=999 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204040117
-X-Proofpoint-ORIG-GUID: 4TNzhfDhBDQbEObJj7ixPBaZOYrgCe1H
-X-Proofpoint-GUID: 4TNzhfDhBDQbEObJj7ixPBaZOYrgCe1H
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guilherme,
-
-On 4/2/2022 10:01 AM, Guilherme G. Piccoli wrote:
-> On 01/04/2022 17:22, Alejandro Jimenez wrote:
->> I noticed that in contrast to other kernel core parameters (e.g. kernel.panic,
->> kernel.panic_on_warn, kernel.panic_print) crash_kexec_post_notifiers is not
->> available as a sysctl tunable. I am aware that because it is a kernel core
->> parameter, there is already an entry under:
+On 4.04.2022 21:54, Sean Christopherson wrote:
+> On Mon, Apr 04, 2022, Sean Christopherson wrote:
+>> On Mon, Apr 04, 2022, Maciej S. Szmigiero wrote:
+>>>>>> index 47e7427d0395..a770a1c7ddd2 100644
+>>>>>> --- a/arch/x86/kvm/svm/svm.h
+>>>>>> +++ b/arch/x86/kvm/svm/svm.h
+>>>>>> @@ -230,8 +230,8 @@ struct vcpu_svm {
+>>>>>>    	bool nmi_singlestep;
+>>>>>>    	u64 nmi_singlestep_guest_rflags;
+>>>>>> -	unsigned int3_injected;
+>>>>>> -	unsigned long int3_rip;
+>>>>>> +	unsigned soft_int_injected;
+>>>>>> +	unsigned long soft_int_linear_rip;
+>>>>>>    	/* optional nested SVM features that are enabled for this guest  */
+>>>>>>    	bool nrips_enabled                : 1;
+>>>>>
+>>>>>
+>>>>> I mostly agree with this patch, but think that it doesn't address the
+>>>>> original issue that Maciej wanted to address:
+>>>>>
+>>>>> Suppose that there is *no* instruction in L2 code which caused the software
+>>>>> exception, but rather L1 set arbitrary next_rip, and set EVENTINJ to software
+>>>>> exception with some vector, and that injection got interrupted.
+>>>>>
+>>>>> I don't think that this code will support this.
+>>>>
+>>>> Argh, you're right.  Maciej's selftest injects without an instruction, but it doesn't
+>>>> configure the scenario where that injection fails due to an exception+VM-Exit that
+>>>> isn't intercepted by L1 and is handled by L0.  The event_inj test gets the coverage
+>>>> for the latter, but always has a backing instruction.
+>>>
+>>> Still reviewing the whole patch set, but want to clear this point quickly:
+>>> The selftest does have an implicit intervening NPF (handled by L0) while
+>>> injecting the first L1 -> L2 event.
 >>
->>    /sys/module/kernel/parameters/crash_kexec_post_notifiers
->>
->> and that allows us to read/modify it at runtime. However, I thought it should
->> also be available via sysctl, since users that want to read/set this value at
->> runtime might look there first.
->>
->> I believe there is an ongoing effort to clean up kernel/sysctl.c, but it wasn't
->> clear to me if this entry (and perhaps the other panic related entries too)
->> should be placed on kernel/panic.c. I wanted to verify first that this change
->> would be welcomed before doing additional refactoring work.
->>
->> I'd appreciate any comments or suggestions.
->>
->> Thank you,
->> Alejandro
-> Hi Alejandro, thanks for you patch. I have a "selfish" concern though,
-> I'll expose it here.
->
-> I'm working a panic refactor, in order to split the panic notifiers in
-> more lists - good summary of this discussion at [0].
-> I'm in the half of the patches, hopefully next 2 weeks I have something
-> ready to submit (I'll be out next week).
->
-> As part of this effort, I plan to have a more fine-grained control of
-> this parameter, and it's going to be a sysctl, but not
-> "crash_kexec_post_notifiers" - this one should be kept I guess due to
-> retro-compatibility, but it'd be a layer on top oh the new one.
-It would be great to provide finer control and isolate the riskier 
-modifiers.
+>> I'll do some debug to figure out why the test passes for me.  I'm guessing I either
+>> got lucky, e.g. IDT was faulted in already, or I screwed up and the test doesn't
+>> actually pass.
+> 
+> Well that was easy.  My code is indeed flawed and skips the wrong instruction,
+> the skipped instruction just so happens to be a (spurious?) adjustment of RSP.  The
+> L2 guest function never runs to completion and so the "bad" RSP is never consumed.
+>   
+>     KVM: incomplete injection for L2, vector 32 @ 401c70.  next_rip = 0
+>     KVM: injecting for L2, vector 0 @ 401c70.  next_rip = 401c74
+> 
+> 0000000000401c70 <l2_guest_code>:
+>    401c70:       48 83 ec 08             sub    $0x8,%rsp
+>    401c74:       83 3d 75 a7 0e 00 01    cmpl   $0x1,0xea775(%rip)        # 4ec3f0 <int_fired>
+>    401c7b:       74 1e                   je     401c9b <l2_guest_code+0x2b>
+>    401c7d:       45 31 c0                xor    %r8d,%r8d
+>    401c80:       b9 32 00 00 00          mov    $0x32,%ecx
+>    401c85:       ba 90 40 4b 00          mov    $0x4b4090,%edx
+>    401c8a:       31 c0                   xor    %eax,%eax
+>    401c8c:       be 02 00 00 00          mov    $0x2,%esi
+>    401c91:       bf 02 00 00 00          mov    $0x2,%edi
+>    401c96:       e8 05 ae 00 00          call   40caa0 <ucall>
+>    401c9b:       0f 01 d9                vmmcall
+>    401c9e:       0f 0b                   ud2
+>    401ca0:       83 3d 4d a7 0e 00 01    cmpl   $0x1,0xea74d(%rip)        # 4ec3f4 <bp_fired>
+>    401ca7:       74 1e                   je     401cc7 <l2_guest_code+0x57>
+>    401ca9:       45 31 c0                xor    %r8d,%r8d
+>    401cac:       b9 36 00 00 00          mov    $0x36,%ecx
+>    401cb1:       ba b8 40 4b 00          mov    $0x4b40b8,%edx
+>    401cb6:       31 c0                   xor    %eax,%eax
+>    401cb8:       be 02 00 00 00          mov    $0x2,%esi
+>    401cbd:       bf 02 00 00 00          mov    $0x2,%edi
+>    401cc2:       e8 d9 ad 00 00          call   40caa0 <ucall>
+>    401cc7:       f4                      hlt
+>    401cc8:       48 83 c4 08             add    $0x8,%rsp
+>    401ccc:       c3                      ret
+>    401ccd:       0f 1f 00                nopl   (%rax)
+> 
+> I don't see why the compiler is creating room for a single variable, but it doesn't
+> really matter, the easiest way to detect this bug is to assert that the return RIP
+> in the INT 0x20 handler points at l2_guest_code, e.g. this fails:
+> 
+> diff --git a/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c b/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c
+> index d39be5d885c1..257aa2280b5c 100644
+> --- a/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c
+> @@ -40,9 +40,13 @@ static void guest_bp_handler(struct ex_regs *regs)
+>   }
+> 
+>   static unsigned int int_fired;
+> +static void l2_guest_code(void);
+> +
+>   static void guest_int_handler(struct ex_regs *regs)
+>   {
+>          int_fired++;
+> +       GUEST_ASSERT_2(regs->rip == (unsigned long)l2_guest_code,
+> +                      regs->rip, (unsigned long)l2_guest_code);
+>   }
+> 
+>   static void l2_guest_code(void)
 
-I am using crash_kexec_post_notifiers to control behavior of pvpanic and 
-pstore and there is not an urgent need for my change, so I don't mind 
-waiting for the new interface to evolve. Please copy me if possible on 
-future submissions.
+It totally makes sense to add the above as an additional assert to the
+self test - the more checks the test have the better at catching bugs
+it is.
 
-Thank you,
-Alejandro
-
-> With that said, unless you have urgent needs for this patch to be
-> reviewed/merged , I'd like to ask you to wait the series and I can loop
-> you there, so you may review/comment and see if it fits your use case.
->
-> Thanks,
->
->
-> Guilherme
->
->
-> [0] https://lore.kernel.org/lkml/YfPxvzSzDLjO5ldp@alley/
-
+Thanks,
+Maciej

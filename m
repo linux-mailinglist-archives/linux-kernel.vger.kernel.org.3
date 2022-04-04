@@ -2,93 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1794F1E70
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDB554F1ECF
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382654AbiDDWJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58682 "EHLO
+        id S1382703AbiDDWJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 18:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379346AbiDDRBZ (ORCPT
+        with ESMTP id S1379349AbiDDRBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 13:01:25 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91B203DDE3
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 09:59:28 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-153-svU6RoGOM7Wtws3q4TmOTA-1; Mon, 04 Apr 2022 17:59:26 +0100
-X-MC-Unique: svU6RoGOM7Wtws3q4TmOTA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Mon, 4 Apr 2022 17:59:23 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Mon, 4 Apr 2022 17:59:23 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Pavel Skripkin' <paskripkin@gmail.com>,
-        Michael Straube <straube.linux@gmail.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-CC:     Greg KH <gregkh@linuxfoundation.org>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Subject: RE: staging: r8188eu: how to handle nested mutex under spinlock
-Thread-Topic: staging: r8188eu: how to handle nested mutex under spinlock
-Thread-Index: AQHYR5/sp6xWhoDQCkym8rTDVxAmY6zfcjRQgAByu4CAABWc8A==
-Date:   Mon, 4 Apr 2022 16:59:23 +0000
-Message-ID: <e1ab34f940234eecb91b9b262062eda5@AcuMS.aculab.com>
-References: <356c24cf-625b-eea2-2c04-ce132d881cac@gmail.com>
- <4412825.cEBGB3zze1@leap> <26ac4c2d-91cf-656d-2b7e-21a95e500e70@gmail.com>
- <2029549.KlZ2vcFHjT@leap> <7d3d23c3-1839-3e6a-27bf-85bad384e5e4@gmail.com>
- <942c0fbd-f8b2-4cae-dd21-79bc55c54902@gmail.com>
- <26a91705-f721-03d1-f4c8-7f00ce0e65a8@gmail.com>
- <4ef1e90716e64fd78ebbc222bbb7e597@AcuMS.aculab.com>
- <3c8b6454-6b52-fe62-8db1-c76bdbeb2df0@gmail.com>
-In-Reply-To: <3c8b6454-6b52-fe62-8db1-c76bdbeb2df0@gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 4 Apr 2022 13:01:38 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC693ED39
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 09:59:41 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id b15so11885390edn.4
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 09:59:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=K9yJQc0wkhnwMDhgXpgCEfPM9bu3vOLPPiNhGs87tdw=;
+        b=cgzwMQNJrkEkuA/TSpVw6ciE+AieAtsIUBAX0inodIP9kosF+epgt0L0EnhY8Z9Dq9
+         kXrcX81qBx3Q7UBgZbAOjmYZrAOZGfpwoQF1NvDKCCGvlkvhvcuHO4WrBHhz2U74SaEY
+         yGz9bYq2L1EQDNZ8orhmVvYivWFaRt8lrvnUF+f0K4ElLK6f4wUydgxDANLzF3m5Ygcx
+         0nO5acxv0nuE1jwJcjwhow5VDytwsOkLCOobrY5Yl+b1js/TQF1HfysRSxsxIc6Oics8
+         j1ITZLN/ltYeBvypuH7UAWz5bTKtDIVObpgrMNbtPPy1wtf/uHmOzEGEB886B+n8kAh5
+         Vctw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=K9yJQc0wkhnwMDhgXpgCEfPM9bu3vOLPPiNhGs87tdw=;
+        b=0Mpu/SjGFZ68EQd1TgjYB8rZ1ULiGVwjpbbF7qDy2fLil3C9YGbISRd2/6Qd3wDhVw
+         +pIznzPgytaKKA0p8ZyzawF/U8NGCZFrdvX0HXkiOy+BEQPoyo9Flk98E/KSUhEnrl1O
+         ApnWL5cMzd8Q4bL2fdMyRnHRFlizCt9dVWOQX6qaRZB9ytA5lr/UXSpj2i8JLoO2xrEM
+         e0nC8eSRmEB3h0iC/Y1a6mfJBvCXBDGpDDGu0AgKXYNY4d8GZDn1i08vCrjgFF+5lzUD
+         Ci/4LbNMCOXDIT1H/pVjTN2JUS5vlNKteMB6o9KeCc2dn4I435OXx0Zr98V3slq65jg0
+         JSgA==
+X-Gm-Message-State: AOAM532J9XRdh7ASP7Bkr0PQq7qGf5/AzqxZEdKoCGkZrnBK85Kft51C
+        tQmyQaSfUIMGqiFVqC0KdgxQrw==
+X-Google-Smtp-Source: ABdhPJzBhdE3FgiK+1M2zu1kC8mpq7C8emkC1dljmr9hgg9ou7CPhZBlTrACZ/AtTHyx2qnVlgtpJg==
+X-Received: by 2002:aa7:c1cd:0:b0:419:fdb:e17e with SMTP id d13-20020aa7c1cd000000b004190fdbe17emr1156256edp.364.1649091579797;
+        Mon, 04 Apr 2022 09:59:39 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id bp11-20020a170907918b00b006e6d451dc36sm2938072ejb.49.2022.04.04.09.59.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 09:59:39 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Ajay Kumar <ajaykumar.rs@samsung.com>,
+        linux-gpio@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-kernel@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] pinctrl: samsung: staticize fsd_pin_ctrl
+Date:   Mon,  4 Apr 2022 18:59:33 +0200
+Message-Id: <164909156896.1676419.11230425886960608496.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220331194526.52444-1-krzysztof.kozlowski@linaro.org>
+References: <20220331194526.52444-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogUGF2ZWwgU2tyaXBraW4NCj4gU2VudDogMDQgQXByaWwgMjAyMiAxNzozOQ0KPiANCj4g
-SGkgRGF2aWQsDQo+IA0KPiBPbiA0LzQvMjIgMTE6NTAsIERhdmlkIExhaWdodCB3cm90ZToNCj4g
-Pj4NCj4gPj4gPiAJCXdoaWxlIChwd3Jwcml2LT5iSW5TdXNwZW5kICYmDQo+ID4+DQo+ID4+IEkn
-dmUgbG9va2VkIGludG8gd2hhdCBnY2MxMSBwcm9kdWNlZCBmcm9tIHRoaXMgZnVuY3Rpb24gYW5k
-IGxvb2tzIGxpa2UNCj4gPj4gbXkgY29tcGlsZXIgaXMgc21hcnQgZW5vdWdoIHRvIG5vdCBjYWNo
-ZSB0aGF0IHZhbHVlLCBidXQgSSBhbSBhZnJhaWQgbm90DQo+ID4+IGFsbCBjb21waWxlcnMgYXJl
-IHRoYXQgc21hcnQuDQo+ID4NCj4gPiBUaGUgY29tcGlsZXIgY2FuJ3QgY2FjaGUgdGhlIHZhbHVl
-IGJlY2F1c2Ugb2YgdGhlIGZ1bmN0aW9uIGNhbGwuDQo+ID4NCj4gDQo+IEhtLCBJIGFtIGEgbmV3
-YmllIGluIGNvbXBpbGVycywgc28gY2FuIHlvdSwgcGxlYXNlLCBleHBsYWluIChvciBnaXZlIGEN
-Cj4gbGluayB0byBhbnkgcmVzb3VyY2Ugd2hlcmUgSSBjYW4gcmVhZCBhYm91dCBpdCkgaG93IGZ1
-bmN0aW9uIGNhbGwgaGVyZQ0KPiBwcmV2ZW50IGNhY2hpbmcuDQo+IA0KPiBJSVVDIGNvbXBpbGVy
-IGdlbmVyYXRlcyBjb2RlIHRoYXQgd29ya3Mgd2VsbCBpbiBzY29wZSBvZiBzaW5nbGUtdGhyZWFk
-ZWQNCj4gYXBwbGljYXRpb24sIHNvIHdoeSBjYW4ndCBjb21waWxlciBjYWNoZSB0aGF0IHZhbHVl
-IGluc3RlYWQgb2YgYWNjZXNzaW5nDQo+IG1lbW9yeSBvbiBlYWNoIGl0ZXJhdGlvbi4uLiBJc24n
-dCByZWdpc3RlciBhY2Nlc3MgYSB3YXkgZmFzdGVyIHRoYW4gZXZlbg0KPiBjYWNoZSBoaXQ/DQoN
-CkJlY2F1c2UgY2FsbHMgdG8gZXh0ZXJuYWwgZnVuY3Rpb25zIGFyZSBhbGxvd2VkIHRvIGNoYW5n
-ZQ0KYW55IGRhdGEgdmlhICdvdGhlcicgcmVmZXJlbmNlcy4NCkZvciBpbnN0YW5jZSB0aGUgc3Ry
-dWN0dXJlIHBvaW50ZXIgdGhlIGZ1bmN0aW9uIGhhcyBjb3VsZA0KYWxzbyBiZSBpbiBnbG9iYWwg
-ZGF0YSBzb21ld2hlcmUuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNp
-ZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsN
-ClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+On Thu, 31 Mar 2022 21:45:26 +0200, Krzysztof Kozlowski wrote:
+> struct fsd_pin_ctrl is not used outside of the file, so it can be made
+> static.  This fixes sparse warning:
+> 
+>   drivers/pinctrl/samsung/pinctrl-exynos-arm64.c:773:31: sparse:
+>     symbol 'fsd_pin_ctrl' was not declared. Should it be static?
+> 
+> 
+> [...]
 
+Applied, thanks!
+
+[1/1] pinctrl: samsung: staticize fsd_pin_ctrl
+      commit: abb860ac7e3f022a233f34b12d035d49abfc114d
+
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>

@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5844F1C2B
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A411A4F1DE1
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377743AbiDDVZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
+        id S1353688AbiDDVnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379146AbiDDQhk (ORCPT
+        with ESMTP id S1379152AbiDDQht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 12:37:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A29E094;
-        Mon,  4 Apr 2022 09:35:44 -0700 (PDT)
+        Mon, 4 Apr 2022 12:37:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6886E094;
+        Mon,  4 Apr 2022 09:35:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04AA460C88;
-        Mon,  4 Apr 2022 16:35:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBDA4C34110;
-        Mon,  4 Apr 2022 16:35:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 51F1860C88;
+        Mon,  4 Apr 2022 16:35:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D90BC34110;
+        Mon,  4 Apr 2022 16:35:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649090143;
-        bh=rzOQqeQjTPMlc735N7xJrYNzCHkjJGD3CLA4kWFFXVc=;
+        s=k20201202; t=1649090151;
+        bh=47jA1Ev4IsrYaM1Gs1b3o0JyHpaOmmzhpkTOzLXnPfA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sNNk1iPR8zGcjUZ3rPovnqCsMdigf9WY0l+h+xt4j4UbX6MAglAahjh4LT69jBUqw
-         5P7vYrqGuPTlyZR54nmgJU9Ab8z5ZNJ8B8pRPQhuxiKAAhfgkNq8QeYG8dX3xK3I1Y
-         ZnANlWBv2WB8AXvtIJqGpXo/7BpMpUg6GKtQkJr4fM+NScEyDbDzbNjcGHbsHayMCR
-         D1Rqi9bILbEYn4ibgj4pVYnvQ4z511fjqbJhMinsObDneDhmoXPiD/+VF89DwI15JG
-         CPUtymsCr9xT71hd+6WgrCkRaood8o4DMc+GeuQzejYPVUonvA3Z8vsGu/MJ4qqZuc
-         hgPPFeVDFg2eQ==
+        b=D9VzfeBhCzkblhtFKUarLZIHTKNpC6ACVcRSsTcLYflUQRAMhPjCVHVVPrhzAKnOA
+         Up4KaXd8YC2DfTBgfwsIZQh+2Uzc5chVqPk2HJABC5nH1jFYN+u4QVEhssRA8woG5F
+         McjrVJEtSVrHqypJi/UWj9KDR/oHBgWqHTIlpL1duMTHo0RAizmordAvh6cngr3frk
+         1wRU1zgTR4WJWdy9YuPgfkfSPHVxU408X0kl35CZT0VXYyksMNTpn8ZeRmzJxrtpG5
+         eflMQxottua0/Y4eck35tuiVCHQAtitsAulicC34GXU/Hz09PLLDhWI6up4s8h7ruG
+         A27E3jSPOZkgg==
 From:   Vinod Koul <vkoul@kernel.org>
 To:     Rob Clark <robdclark@gmail.com>
 Cc:     linux-arm-msm@vger.kernel.org,
@@ -43,9 +43,9 @@ Cc:     linux-arm-msm@vger.kernel.org,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org
-Subject: [PATCH v6 12/14] drm/msm/dsi: add mode valid callback for dsi_mgr
-Date:   Mon,  4 Apr 2022 22:04:34 +0530
-Message-Id: <20220404163436.956875-13-vkoul@kernel.org>
+Subject: [PATCH v6 14/14] drm/msm/dsi: Add support for DSC configuration
+Date:   Mon,  4 Apr 2022 22:04:36 +0530
+Message-Id: <20220404163436.956875-15-vkoul@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220404163436.956875-1-vkoul@kernel.org>
 References: <20220404163436.956875-1-vkoul@kernel.org>
@@ -61,99 +61,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a mode valid callback for dsi_mgr for checking mode being valid in
-case of DSC. For DSC the height and width needs to be multiple of slice,
-so we check that here
+When DSC is enabled, we need to configure DSI registers accordingly and
+configure the respective stream compression registers.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Add support to calculate the register setting based on DSC params and
+timing information and configure these registers.
+
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 ---
- drivers/gpu/drm/msm/dsi/dsi.h         |  2 ++
- drivers/gpu/drm/msm/dsi/dsi_host.c    | 26 ++++++++++++++++++++++++++
- drivers/gpu/drm/msm/dsi/dsi_manager.c | 12 ++++++++++++
- 3 files changed, 40 insertions(+)
+ drivers/gpu/drm/msm/dsi/dsi_host.c | 98 +++++++++++++++++++++++++++++-
+ 1 file changed, 97 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/dsi/dsi.h b/drivers/gpu/drm/msm/dsi/dsi.h
-index 16cd9b2fce86..580a1e6358bf 100644
---- a/drivers/gpu/drm/msm/dsi/dsi.h
-+++ b/drivers/gpu/drm/msm/dsi/dsi.h
-@@ -114,6 +114,8 @@ int msm_dsi_host_power_on(struct mipi_dsi_host *host,
- int msm_dsi_host_power_off(struct mipi_dsi_host *host);
- int msm_dsi_host_set_display_mode(struct mipi_dsi_host *host,
- 				  const struct drm_display_mode *mode);
-+enum drm_mode_status msm_dsi_host_check_dsc(struct mipi_dsi_host *host,
-+					    const struct drm_display_mode *mode);
- struct drm_panel *msm_dsi_host_get_panel(struct mipi_dsi_host *host);
- unsigned long msm_dsi_host_get_mode_flags(struct mipi_dsi_host *host);
- struct drm_bridge *msm_dsi_host_get_bridge(struct mipi_dsi_host *host);
 diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-index cb2e179127ea..eb0be34add45 100644
+index eb0be34add45..f3ed6c40b9e1 100644
 --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
 +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-@@ -2554,6 +2554,32 @@ int msm_dsi_host_set_display_mode(struct mipi_dsi_host *host,
- 	return 0;
+@@ -912,6 +912,65 @@ static void dsi_ctrl_config(struct msm_dsi_host *msm_host, bool enable,
+ 		dsi_write(msm_host, REG_DSI_CPHY_MODE_CTRL, BIT(0));
  }
  
-+enum drm_mode_status msm_dsi_host_check_dsc(struct mipi_dsi_host *host,
-+					    const struct drm_display_mode *mode)
++static void dsi_update_dsc_timing(struct msm_dsi_host *msm_host, bool is_cmd_mode, u32 hdisplay)
 +{
-+	struct msm_dsi_host *msm_host = to_msm_dsi_host(host);
 +	struct msm_display_dsc_config *dsc = msm_host->dsc;
-+	int pic_width = mode->hdisplay;
-+	int pic_height = mode->vdisplay;
++	u32 reg, intf_width, reg_ctrl, reg_ctrl2;
++	u32 slice_per_intf, total_bytes_per_intf;
++	u32 pkt_per_line;
++	u32 bytes_in_slice;
++	u32 eol_byte_num;
 +
-+	if (!msm_host->dsc)
-+		return MODE_OK;
++	/* first calculate dsc parameters and then program
++	 * compress mode registers
++	 */
++	intf_width = hdisplay;
++	slice_per_intf = DIV_ROUND_UP(intf_width, dsc->drm->slice_width);
 +
-+	if (pic_width % dsc->drm->slice_width) {
-+		pr_err("DSI: pic_width %d has to be multiple of slice %d\n",
-+		       pic_width, dsc->drm->slice_width);
-+		return MODE_H_ILLEGAL;
++	/* If slice_per_pkt is greater than slice_per_intf
++	 * then default to 1. This can happen during partial
++	 * update.
++	 */
++	if (slice_per_intf > dsc->drm->slice_count)
++		dsc->drm->slice_count = 1;
++
++	slice_per_intf = DIV_ROUND_UP(hdisplay, dsc->drm->slice_width);
++	bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width * dsc->drm->bits_per_pixel, 8);
++
++	dsc->drm->slice_chunk_size = bytes_in_slice;
++
++	total_bytes_per_intf = bytes_in_slice * slice_per_intf;
++
++	eol_byte_num = total_bytes_per_intf % 3;
++	pkt_per_line = slice_per_intf / dsc->drm->slice_count;
++
++	if (is_cmd_mode) /* packet data type */
++		reg = DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_DATATYPE(MIPI_DSI_DCS_LONG_WRITE);
++	else
++		reg = DSI_VIDEO_COMPRESSION_MODE_CTRL_DATATYPE(MIPI_DSI_COMPRESSED_PIXEL_STREAM);
++
++	/* DSI_VIDEO_COMPRESSION_MODE & DSI_COMMAND_COMPRESSION_MODE
++	 * registers have similar offsets, so for below common code use
++	 * DSI_VIDEO_COMPRESSION_MODE_XXXX for setting bits
++	 */
++	reg |= DSI_VIDEO_COMPRESSION_MODE_CTRL_PKT_PER_LINE(pkt_per_line >> 1);
++	reg |= DSI_VIDEO_COMPRESSION_MODE_CTRL_EOL_BYTE_NUM(eol_byte_num);
++	reg |= DSI_VIDEO_COMPRESSION_MODE_CTRL_EN;
++
++	if (is_cmd_mode) {
++		reg_ctrl = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL);
++		reg_ctrl2 = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2);
++
++		reg_ctrl |= reg;
++		reg_ctrl2 |= DSI_COMMAND_COMPRESSION_MODE_CTRL2_STREAM0_SLICE_WIDTH(bytes_in_slice);
++
++		dsi_write(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL, reg);
++		dsi_write(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2, reg_ctrl2);
++	} else {
++		dsi_write(msm_host, REG_DSI_VIDEO_COMPRESSION_MODE_CTRL, reg);
 +	}
-+
-+	if (pic_height % dsc->drm->slice_height) {
-+		pr_err("DSI: pic_height %d has to be multiple of slice %d\n",
-+		       pic_height, dsc->drm->slice_height);
-+		return MODE_V_ILLEGAL;
-+	}
-+
-+	return MODE_OK;
 +}
 +
- struct drm_panel *msm_dsi_host_get_panel(struct mipi_dsi_host *host)
+ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
  {
- 	return of_drm_find_panel(to_msm_dsi_host(host)->device_node);
-diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
-index 0c1b7dde377c..100a8fcbddee 100644
---- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
-+++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
-@@ -573,6 +573,17 @@ static void dsi_mgr_bridge_mode_set(struct drm_bridge *bridge,
- 	dsi_mgr_bridge_power_on(bridge);
- }
+ 	struct drm_display_mode *mode = msm_host->mode;
+@@ -944,7 +1003,38 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+ 		hdisplay /= 2;
+ 	}
  
-+static enum drm_mode_status dsi_mgr_bridge_mode_valid(struct drm_bridge *bridge,
-+						      const struct drm_display_info *info,
-+						      const struct drm_display_mode *mode)
-+{
-+	int id = dsi_mgr_bridge_get_id(bridge);
-+	struct msm_dsi *msm_dsi = dsi_mgr_get_dsi(id);
-+	struct mipi_dsi_host *host = msm_dsi->host;
++	if (msm_host->dsc) {
++		struct msm_display_dsc_config *dsc = msm_host->dsc;
 +
-+	return msm_dsi_host_check_dsc(host, mode);
-+}
++		/* update dsc params with timing params */
++		if (!dsc || !mode->hdisplay || !mode->vdisplay) {
++			pr_err("DSI: invalid input: pic_width: %d pic_height: %d\n",
++			       mode->hdisplay, mode->vdisplay);
++			return;
++		}
 +
- static const struct drm_connector_funcs dsi_mgr_connector_funcs = {
- 	.detect = dsi_mgr_connector_detect,
- 	.fill_modes = drm_helper_probe_single_connector_modes,
-@@ -593,6 +604,7 @@ static const struct drm_bridge_funcs dsi_mgr_bridge_funcs = {
- 	.disable = dsi_mgr_bridge_disable,
- 	.post_disable = dsi_mgr_bridge_post_disable,
- 	.mode_set = dsi_mgr_bridge_mode_set,
-+	.mode_valid = dsi_mgr_bridge_mode_valid,
- };
++		dsc->drm->pic_width = mode->hdisplay;
++		dsc->drm->pic_height = mode->vdisplay;
++		DBG("Mode %dx%d\n", dsc->drm->pic_width, dsc->drm->pic_height);
++
++		/* we do the calculations for dsc parameters here so that
++		 * panel can use these parameters
++		 */
++		dsi_populate_dsc_params(dsc);
++
++		/* Divide the display by 3 but keep back/font porch and
++		 * pulse width same
++		 */
++		h_total -= hdisplay;
++		hdisplay /= 3;
++		h_total += hdisplay;
++		ha_end = ha_start + hdisplay;
++	}
++
+ 	if (msm_host->mode_flags & MIPI_DSI_MODE_VIDEO) {
++		if (msm_host->dsc)
++			dsi_update_dsc_timing(msm_host, false, mode->hdisplay);
++
+ 		dsi_write(msm_host, REG_DSI_ACTIVE_H,
+ 			DSI_ACTIVE_H_START(ha_start) |
+ 			DSI_ACTIVE_H_END(ha_end));
+@@ -963,8 +1053,14 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+ 			DSI_ACTIVE_VSYNC_VPOS_START(vs_start) |
+ 			DSI_ACTIVE_VSYNC_VPOS_END(vs_end));
+ 	} else {		/* command mode */
++		if (msm_host->dsc)
++			dsi_update_dsc_timing(msm_host, true, mode->hdisplay);
++
+ 		/* image data and 1 byte write_memory_start cmd */
+-		wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 + 1;
++		if (!msm_host->dsc)
++			wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 + 1;
++		else
++			wc = mode->hdisplay / 2 + 1;
  
- /* initialize connector when we're connected to a drm_panel */
+ 		dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_CTRL,
+ 			DSI_CMD_MDP_STREAM0_CTRL_WORD_COUNT(wc) |
 -- 
 2.34.1
 

@@ -2,214 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83574F1E4D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:24:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 895664F1E4A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382629AbiDDVv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49412 "EHLO
+        id S1382257AbiDDVu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379593AbiDDRnx (ORCPT
+        with ESMTP id S1379617AbiDDRp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 13:43:53 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFA931DE7;
-        Mon,  4 Apr 2022 10:41:56 -0700 (PDT)
-Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KXJ2M5Zdkz683S6;
-        Tue,  5 Apr 2022 01:40:11 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 4 Apr 2022 19:41:53 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Mon, 4 Apr 2022 19:41:53 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     KP Singh <kpsingh@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     "corbet@lwn.net" <corbet@lwn.net>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
-        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF
- programs
-Thread-Topic: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF
- programs
-Thread-Index: AQHYQsxoL5kXhl8+JE6PJPNWV+NOTqzYppqAgABrSsCAAo7zgIAAEt0AgARYGMA=
-Date:   Mon, 4 Apr 2022 17:41:53 +0000
-Message-ID: <b702f57ee63640d987055438ec77a016@huawei.com>
-References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
- <20220331022727.ybj4rui4raxmsdpu@MBP-98dd607d3435.dhcp.thefacebook.com>
- <b9f5995f96da447c851f7c9db8232a9b@huawei.com>
- <20220401235537.mwziwuo4n53m5cxp@MBP-98dd607d3435.dhcp.thefacebook.com>
- <CACYkzJ5QgkucL3HZ4bY5Rcme4ey6U3FW4w2Gz-9rdWq0_RHvgA@mail.gmail.com>
-In-Reply-To: <CACYkzJ5QgkucL3HZ4bY5Rcme4ey6U3FW4w2Gz-9rdWq0_RHvgA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.81.208.245]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 4 Apr 2022 13:45:59 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A95CDFAE;
+        Mon,  4 Apr 2022 10:44:02 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 234HGoqZ022632;
+        Mon, 4 Apr 2022 17:44:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=26DzA4aFqds7fgbERdV4ExmyHxLRuGQQwohfv296qkc=;
+ b=q1ccYrLH0kReQTyGCVdp1vJGUbcx578VOvyFA9Za8Ld1Cs+mWSJtWoKLjxyrkv7Tl4JQ
+ IiQmB1XWj95uM/KYbft8vt9ImZf2SSTHluApprbNEMRttKyCZWsMcIBrg+bTgvkTc5xe
+ /qj40nVaSCDx7rymPTrDlzAoscu9J4gZuP4aGG5esp/l6eNjMmi+xiv2tdXwauPzv+rO
+ BWA+TeJULvtFFFvIepE0Polz9EP81k9yN7kicMmcTanUy7e4D4K+exLsoLCmx5sEoZUB
+ c6V8E3AMBegmdJ65eJWseGZJ61oNHuKbJV/j+yORijdQbl18mVjCxbPVEApWdp56jKOC 7w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f84xcrvyw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 04 Apr 2022 17:44:00 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 234HdJEX012471;
+        Mon, 4 Apr 2022 17:43:59 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3f84xcrvyj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 04 Apr 2022 17:43:59 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 234HgsK2013878;
+        Mon, 4 Apr 2022 17:43:59 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma02wdc.us.ibm.com with ESMTP id 3f6e49980r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 04 Apr 2022 17:43:59 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 234HhwLn6816232
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 4 Apr 2022 17:43:58 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E561C136059;
+        Mon,  4 Apr 2022 17:43:57 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C5301136051;
+        Mon,  4 Apr 2022 17:43:55 +0000 (GMT)
+Received: from li-c92d2ccc-254b-11b2-a85c-a700b5bfb098.ibm.com.com (unknown [9.211.32.125])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon,  4 Apr 2022 17:43:55 +0000 (GMT)
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+To:     linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        schnelle@linux.ibm.com, farman@linux.ibm.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
+        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH v5 00/21] KVM: s390: enable zPCI for interpretive execution
+Date:   Mon,  4 Apr 2022 13:43:28 -0400
+Message-Id: <20220404174349.58530-1-mjrosato@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: potVyKhCtF10a60WuRE1wKDAkAB_0aej
+X-Proofpoint-ORIG-GUID: tADtqZcx0f4mxrrj70xb3oiOthZS4PFb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-04_06,2022-03-31_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=1 priorityscore=1501
+ adultscore=0 mlxlogscore=200 malwarescore=0 spamscore=1 impostorscore=0
+ bulkscore=0 phishscore=0 lowpriorityscore=0 clxscore=1015 mlxscore=1
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204040099
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBLUCBTaW5naCBbbWFpbHRvOmtwc2luZ2hAa2VybmVsLm9yZ10NCj4gU2VudDogU2F0
-dXJkYXksIEFwcmlsIDIsIDIwMjIgMzowMyBBTQ0KPiBPbiBTYXQsIEFwciAyLCAyMDIyIGF0IDE6
-NTUgQU0gQWxleGVpIFN0YXJvdm9pdG92DQo+IDxhbGV4ZWkuc3Rhcm92b2l0b3ZAZ21haWwuY29t
-PiB3cm90ZToNCj4gPg0KPiA+IE9uIFRodSwgTWFyIDMxLCAyMDIyIGF0IDA4OjI1OjIyQU0gKzAw
-MDAsIFJvYmVydG8gU2Fzc3Ugd3JvdGU6DQo+ID4gPiA+IEZyb206IEFsZXhlaSBTdGFyb3ZvaXRv
-diBbbWFpbHRvOmFsZXhlaS5zdGFyb3ZvaXRvdkBnbWFpbC5jb21dDQo+ID4gPiA+IFNlbnQ6IFRo
-dXJzZGF5LCBNYXJjaCAzMSwgMjAyMiA0OjI3IEFNDQo+ID4gPiA+IE9uIE1vbiwgTWFyIDI4LCAy
-MDIyIGF0IDA3OjUwOjE1UE0gKzAyMDAsIFJvYmVydG8gU2Fzc3Ugd3JvdGU6DQo+ID4gPiA+ID4g
-ZUJQRiBhbHJlYWR5IGFsbG93cyBwcm9ncmFtcyB0byBiZSBwcmVsb2FkZWQgYW5kIGtlcHQgcnVu
-bmluZw0KPiB3aXRob3V0DQo+ID4gPiA+ID4gaW50ZXJ2ZW50aW9uIGZyb20gdXNlciBzcGFjZS4g
-VGhlcmUgaXMgYSBkZWRpY2F0ZWQga2VybmVsIG1vZHVsZQ0KPiBjYWxsZWQNCj4gPiA+ID4gPiBi
-cGZfcHJlbG9hZCwgd2hpY2ggY29udGFpbnMgdGhlIGxpZ2h0IHNrZWxldG9uIG9mIHRoZSBpdGVy
-YXRvcnNfYnBmDQo+IGVCUEYNCj4gPiA+ID4gPiBwcm9ncmFtLiBJZiB0aGlzIG1vZHVsZSBpcyBl
-bmFibGVkIGluIHRoZSBrZXJuZWwgY29uZmlndXJhdGlvbiwgaXRzDQo+IGxvYWRpbmcNCj4gPiA+
-ID4gPiB3aWxsIGJlIHRyaWdnZXJlZCB3aGVuIHRoZSBicGYgZmlsZXN5c3RlbSBpcyBtb3VudGVk
-ICh1bmxlc3MgdGhlDQo+IG1vZHVsZSBpcw0KPiA+ID4gPiA+IGJ1aWx0LWluKSwgYW5kIHRoZSBs
-aW5rcyBvZiBpdGVyYXRvcnNfYnBmIGFyZSBwaW5uZWQgaW4gdGhhdCBmaWxlc3lzdGVtDQo+ID4g
-PiA+ID4gKHRoZXkgd2lsbCBhcHBlYXIgYXMgdGhlIHByb2dzLmRlYnVnIGFuZCBtYXBzLmRlYnVn
-IGZpbGVzKS4NCj4gPiA+ID4gPg0KPiA+ID4gPiA+IEhvd2V2ZXIsIHRoZSBjdXJyZW50IG1lY2hh
-bmlzbSwgaWYgdXNlZCB0byBwcmVsb2FkIGFuIExTTSwgd291bGQNCj4gbm90DQo+ID4gPiA+IG9m
-ZmVyDQo+ID4gPiA+ID4gdGhlIHNhbWUgc2VjdXJpdHkgZ3VhcmFudGVlcyBvZiBMU01zIGludGVn
-cmF0ZWQgaW4gdGhlIHNlY3VyaXR5DQo+ID4gPiA+IHN1YnN5c3RlbS4NCj4gPiA+ID4gPiBBbHNv
-LCBpdCBpcyBub3QgZ2VuZXJpYyBlbm91Z2ggdG8gYmUgdXNlZCBmb3IgcHJlbG9hZGluZyBhcmJp
-dHJhcnkgZUJQRg0KPiA+ID4gPiA+IHByb2dyYW1zLCB1bmxlc3MgdGhlIGJwZl9wcmVsb2FkIGNv
-ZGUgaXMgaGVhdmlseSBtb2RpZmllZC4NCj4gPiA+ID4gPg0KPiA+ID4gPiA+IE1vcmUgc3BlY2lm
-aWNhbGx5LCB0aGUgc2VjdXJpdHkgcHJvYmxlbXMgYXJlOg0KPiA+ID4gPiA+IC0gYW55IHByb2dy
-YW0gY2FuIGJlIHBpbm5lZCB0byB0aGUgYnBmIGZpbGVzeXN0ZW0gd2l0aG91dCBsaW1pdGF0aW9u
-cw0KPiA+ID4gPiA+ICAgKHVubGVzcyBhIE1BQyBtZWNoYW5pc20gZW5mb3JjZXMgc29tZSByZXN0
-cmljdGlvbnMpOw0KPiA+ID4gPiA+IC0gcHJvZ3JhbXMgYmVpbmcgZXhlY3V0ZWQgY2FuIGJlIHRl
-cm1pbmF0ZWQgYXQgYW55IHRpbWUgYnkgZGVsZXRpbmcNCj4gdGhlDQo+ID4gPiA+ID4gICBwaW5u
-ZWQgb2JqZWN0cyBvciB1bm1vdW50aW5nIHRoZSBicGYgZmlsZXN5c3RlbS4NCj4gPiA+ID4NCj4g
-PiA+ID4gU28gbWFueSB0aGluZ3MgdG8gdW50YW5nbGUgaGVyZS4NCj4gPiA+DQo+ID4gPiBIaSBB
-bGV4ZWkNCj4gPiA+DQo+ID4gPiB0aGFua3MgZm9yIHRha2luZyB0aGUgdGltZSB0byBwcm92aWRl
-IHN1Y2ggZGV0YWlsZWQNCj4gPiA+IGV4cGxhbmF0aW9uLg0KPiA+ID4NCj4gPiA+ID4gVGhlIGFi
-b3ZlIHBhcmFncmFwaHMgYXJlIG1pc2xlYWRpbmcgYW5kIGluY29ycmVjdC4NCj4gPiA+ID4gVGhl
-IGNvbW1pdCBsb2cgc291bmRzIGxpa2UgdGhlcmUgYXJlIHNlY3VyaXR5IGlzc3VlcyB0aGF0IHRo
-aXMNCj4gPiA+ID4gcGF0Y2ggc2V0IGlzIGZpeGluZy4NCj4gPiA+ID4gVGhpcyBpcyBub3QgdHJ1
-ZS4NCj4gDQo+ICsxIHRoZXNlIGFyZSBub3Qgc2VjdXJpdHkgaXNzdWVzLiBUaGV5IGFyZSBsaW1p
-dGF0aW9ucyBvZiB5b3VyIE1BQyBwb2xpY3kuDQo+IA0KPiA+ID4NCj4gPiA+IEkgcmVpdGVyYXRl
-IHRoZSBnb2FsOiBlbmZvcmNlIGEgbWFuZGF0b3J5IHBvbGljeSB3aXRoDQo+ID4gPiBhbiBvdXQt
-b2YtdHJlZSBMU00gKGEga2VybmVsIG1vZHVsZSBpcyBmaW5lKSwgd2l0aCB0aGUNCj4gPiA+IHNh
-bWUgZ3VhcmFudGVlcyBvZiBMU01zIGludGVncmF0ZWQgaW4gdGhlIHNlY3VyaXR5DQo+ID4gPiBz
-dWJzeXN0ZW0uDQo+ID4NCj4gPiBUbyBtYWtlIGl0IDEwMCUgY2xlYXI6DQo+ID4gQW55IGluLWtl
-cm5lbCBmZWF0dXJlIHRoYXQgYmVuZWZpdHMgb3V0LW9mLXRyZWUgbW9kdWxlIHdpbGwgYmUgcmVq
-ZWN0ZWQuDQo+ID4NCj4gPiA+IFRoZSByb290IHVzZXIgaXMgbm90IHBhcnQgb2YgdGhlIFRDQiAo
-aS5lLiBpcyB1bnRydXN0ZWQpLA0KPiA+ID4gYWxsIHRoZSBjaGFuZ2VzIHRoYXQgdXNlciB3YW50
-cyB0byBtYWtlIG11c3QgYmUgc3ViamVjdA0KPiA+ID4gb2YgZGVjaXNpb24gYnkgdGhlIExTTSBl
-bmZvcmNpbmcgdGhlIG1hbmRhdG9yeSBwb2xpY3kuDQo+ID4gPg0KPiA+ID4gSSB0aG91Z2h0IGFi
-b3V0IGFkZGluZyBzdXBwb3J0IGZvciBMU01zIGZyb20ga2VybmVsDQo+ID4gPiBtb2R1bGVzIHZp
-YSBhIG5ldyBidWlsdC1pbiBMU00gKGNhbGxlZCBMb2FkTFNNKSwgYnV0DQo+IA0KPiBLZXJuZWwg
-bW9kdWxlcyBjYW5ub3QgaW1wbGVtZW50IExTTXMsIHRoaXMgaGFzIGFscmVhZHkgYmVlbg0KPiBw
-cm9wb3NlZCBvbiB0aGUgbGlzdHMgYW5kIGhhcyBiZWVuIHJlamVjdGVkLg0KDQpMb29raW5nIGF0
-IGNvbW1pdCBjYjgwZGRjNjcxNTIgKCJicGY6IENvbnZlcnQgYnBmX3ByZWxvYWQua28NCnRvIHVz
-ZSBsaWdodCBza2VsZXRvbi4iKSwgSSBnb3QgdGhhdCBpdCBpcyB0aGUgbW9zdCBlZmZpY2llbnQg
-d2F5DQp0byBsb2FkIGFuIGVCUEYgcHJvZ3JhbSAoZG9lcyBub3QgZXZlbiByZXF1aXJlIGxpYmJw
-ZikuDQoNCkFub3RoZXIgYWR2YW50YWdlIHdhcyB0aGF0IHdlIGdldCBpbnRlZ3JpdHkgdmVyaWZp
-Y2F0aW9uDQpmcm9tIHRoZSBtb2R1bGUgaW5mcmFzdHJ1Y3R1cmUuIFRoaXMgd291bGQgaGF2ZSBi
-ZWVuIHRoZQ0Kb3B0aW1hbCBzb2x1dGlvbiBpbiB0ZXJtcyBvZiBkZXBlbmRlbmNpZXMuIEVuZm9y
-Y2luZw0KaW50ZWdyaXR5IGNvdWxkIGJlIHR1cm5lZCBvbiB3aXRoIHRoZSBtb2R1bGUuc2lnX2Vu
-Zm9yY2UNCmtlcm5lbCBvcHRpb24uDQoNCklmIHdlIHN3aXRjaCB0byB1c2VyIHNwYWNlLCB0aGUg
-Y2hvaWNlIHdvdWxkIGJlIElNQS4NCkhvd2V2ZXIsIGluIG15IHVzZSBjYXNlIChESUdMSU0pIGl0
-IHdvdWxkIGJlIHVzZWQganVzdA0KZm9yIHRoZSBwdXJwb3NlIG9mIGRvaW5nIGludGVncml0eSB2
-ZXJpZmljYXRpb25zIHByZS1pbml0Lg0KDQpUaGlua2luZyB3aGljaCBwb2xpY3kgY291bGQgYmUg
-aW1wbGVtZW50ZWQgZm9yIHN1Y2ggcHVycG9zZSwNCm1heWJlIHNvbWV0aGluZyBsaWtlIGFwcHJh
-aXNlIGV2ZXJ5IHByb2Nlc3MgdGhhdCBpcyBub3QgbGlua2VkDQp0byBhbiBleGVjdXRhYmxlPyBB
-bmQgc2luY2UgdGhlcmUgYXJlIG5vIHhhdHRycyBpbiB0aGUgaW5pdGlhbA0KcmFtIGRpc2ssIGNv
-dWxkIEkgYXBwZW5kIGEgbW9kdWxlIHNpZ25hdHVyZSB0byBhbiBFTEYgYmluYXJ5Pw0KDQpUaGFu
-a3MNCg0KUm9iZXJ0bw0KDQpIVUFXRUkgVEVDSE5PTE9HSUVTIER1ZXNzZWxkb3JmIEdtYkgsIEhS
-QiA1NjA2Mw0KTWFuYWdpbmcgRGlyZWN0b3I6IExpIFBlbmcsIFpob25nIFJvbmdodWENCg0KPiA+
-IFN1Y2ggYXBwcm9hY2ggd2lsbCBiZSByZWplY3RlZC4gU2VlIGFib3ZlLg0KPiA+DQo+ID4gPiA+
-IEkgc3VzcGVjdCB0aGVyZSBpcyBodWdlIGNvbmZ1c2lvbiBvbiB3aGF0IHRoZXNlIHR3byAicHJv
-Z3MuZGVidWciDQo+ID4gPiA+IGFuZCAibWFwcy5kZWJ1ZyIgZmlsZXMgYXJlIGluIGEgYnBmZnMg
-aW5zdGFuY2UuDQo+ID4gPiA+IFRoZXkgYXJlIGRlYnVnIGZpbGVzIHRvIHByZXR0eSBwcmluZyBs
-b2FkZWQgbWFwcyBhbmQgcHJvZ3MgZm9yIGZvbGtzDQo+IHdobw0KPiA+ID4gPiBsaWtlIHRvIHVz
-ZSAnY2F0JyB0byBleGFtaW5lIHRoZSBzdGF0ZSBvZiB0aGUgc3lzdGVtIGluc3RlYWQgb2YgJ2Jw
-ZnRvb2wnLg0KPiA+ID4gPiBUaGUgcm9vdCBjYW4gcmVtb3ZlIHRoZXNlIGZpbGVzIGZyb20gYnBm
-ZnMuDQo+ID4gPiA+DQo+ID4gPiA+IFRoZXJlIGlzIG5vIHJlYXNvbiBmb3Iga2VybmVsIG1vZHVs
-ZSB0byBwaW4gaXRzIGJwZiBwcm9ncy4NCj4gPiA+ID4gSWYgeW91IHdhbnQgdG8gZGV2ZWxvcCBE
-SUdMSU0gYXMgYSBrZXJuZWwgbW9kdWxlIHRoYXQgdXNlcyBsaWdodA0KPiBza2VsZXRvbg0KPiA+
-ID4gPiBqdXN0IGRvOg0KPiA+ID4gPiAjaW5jbHVkZSA8bGludXgvaW5pdC5oPg0KPiA+ID4gPiAj
-aW5jbHVkZSA8bGludXgvbW9kdWxlLmg+DQo+ID4gPiA+ICNpbmNsdWRlICJkaWdsaW0ubHNrZWwu
-aCINCj4gPiA+ID4NCj4gPiA+ID4gc3RhdGljIHN0cnVjdCBkaWdsaW1fYnBmICpza2VsOw0KPiA+
-ID4gPg0KPiA+ID4gPiBzdGF0aWMgaW50IF9faW5pdCBsb2FkKHZvaWQpDQo+ID4gPiA+IHsNCj4g
-PiA+ID4gICAgICAgICBza2VsID0gZGlnbGltX2JwZl9fb3Blbl9hbmRfbG9hZCgpOw0KPiA+ID4g
-PiAgICAgICAgIGVyciA9IGRpZ2xpbV9icGZfX2F0dGFjaChza2VsKTsNCj4gPiA+ID4gfQ0KPiA+
-ID4gPiAvKiBkZXRhY2ggc2tlbCBpbiBfX2ZpbmkgKi8NCj4gPiA+ID4NCj4gPiA+ID4gSXQncyBy
-ZWFsbHkgdGhhdCBzaG9ydC4NCj4gPiA+ID4NCj4gPiA+ID4gVGhlbiB5b3Ugd2lsbCBiZSBhYmxl
-IHRvDQo+ID4gPiA+IC0gaW5zbW9kIGRpZ2xpbS5rbyAtPiB3aWxsIGxvYWQgYW5kIGF0dGFjaCBi
-cGYgcHJvZ3MuDQo+ID4gPiA+IC0gcm1tb2QgZGlnbGltIC0+IHdpbGwgZGV0YWNoIHRoZW0uDQo+
-ID4gPg0KPiA+ID4gcm9vdCBjYW4gc3RvcCB0aGUgTFNNIHdpdGhvdXQgY29uc3VsdGluZyB0aGUg
-c2VjdXJpdHkNCj4gPiA+IHBvbGljeS4gVGhlIGdvYWwgb2YgaGF2aW5nIHJvb3QgdW50cnVzdGVk
-IGlzIG5vdCBhY2hpZXZlZC4NCj4gDQo+IE9mY291cnNlLCB0aGlzIGlzIGFuIGlzc3VlLCBpZiB5
-b3UgYXJlIHVzaW5nIEJQRiB0byBkZWZpbmUgYSBNQUMNCj4gcG9saWN5LCB0aGUgcG9saWN5DQo+
-IG5lZWRzIHRvIGJlIGNvbXByZWhlbnNpdmUgdG8gcHJldmVudCBpdHNlbGYgZnJvbSBiZWluZyBv
-dmVycmlkZGVuLiBUaGlzIGlzDQo+IHdoeQ0KPiBXZSBoYXZlIHNvIG1hbnkgTFNNIGhvb2tzLiBJ
-ZiB5b3UgdGhpbmsgc29tZSBhcmUgbWlzc2luZywgbGV0J3MgYWRkIHRoZW0uDQo+IA0KPiBUaGlz
-IGlzIHdoeSBpbXBsZW1lbnRpbmcgYSBwb2xpY3kgaXMgbm90IHRyaXZpYWwsIGJ1dCB3ZSBuZWVk
-IHRvIGFsbG93DQo+IHVzZXJzIHRvIGJ1aWxkDQo+IHN1Y2ggcG9saWNpZXMgd2l0aCB0aGUgaGVs
-cCBmcm9tIHRoZSBrZXJuZWwgYW5kIG5vdCBieSB1c2luZw0KPiBvdXQtb2YtdHJlZSBtb2R1bGVz
-Lg0KPiANCj4gSSBkbyB0aGluayB3ZSBjYW4gYWRkIHNvbWUgbW9yZSBoZWxwZXJzIChlLmcuIGZv
-ciBtb2RpZnlpbmcgeGF0dHJzDQo+IGZyb20gQlBGKSB0aGF0DQo+IHdvdWxkIGhlbHAgdXMgYnVp
-bGQgY29tcGxleCBwb2xpY2llcy4NCj4gDQo+ID4NCj4gPiBPdXQtb2YtdHJlZSBtb2R1bGUgY2Fu
-IGRvIGFueSBoYWNrLg0KPiA+IEZvciBleGFtcGxlOg0KPiA+IDEuIGRvbid0IGRvIGRldGFjaCBz
-a2VsIGluIF9fZmluaQ0KPiA+ICAgcm1tb2Qgd2lsbCByZW1vdmUgdGhlIG1vZHVsZSwgYnV0IGJw
-ZiBwcm9ncyB3aWxsIGtlZXAgcnVubmluZy4NCj4gPiAyLiBkbyBtb2R1bGVfZ2V0KFRISVNfTU9E
-VUxFKSBpbiBfX2luaXQNCj4gPiAgIHJtbW9kIHdpbGwgcmV0dXJuIEVCVVNZDQo+ID4gICBhbmQg
-aGF2ZSBzb21lIG91dC1vZi1iYW5kIHdheSBvZiBkcm9wcGluZyBtb2QgcmVmY250Lg0KPiA+IDMu
-IGhhY2sgaW50byBzeXNfZGVsZXRlX21vZHVsZS4gaWYgbW9kdWxlX25hbWU9PWRpZ2xlbSByZXR1
-cm4gRUJVU1kuDQo+ID4gNC4gYWRkIHByb3BlciBMU00gaG9vayB0byBkZWxldGVfbW9kdWxlDQo+
-IA0KPiArMSBJIHJlY29tbWVuZCB0aGlzIChidXQgbm90IGZyb20gYW4gb3V0IG9mIHRyZWUgbW9k
-dWxlKQ0KPiANCj4gPg0KPiA+ID4gTXkgcG9pbnQgd2FzIHRoYXQgcGlubmluZyBwcm9ncyBzZWVt
-cyB0byBiZSB0aGUNCj4gPiA+IHJlY29tbWVuZGVkIHdheSBvZiBrZWVwaW5nIHRoZW0gcnVubmlu
-Zy4NCj4gPg0KPiA+IE5vdCBxdWl0ZS4gYnBmX2xpbmsgcmVmY250IGlzIHdoYXQga2VlcHMgcHJv
-Z3MgYXR0YWNoZWQuDQo+ID4gYnBmZnMgaXMgbWFpbmx5IHVzZWQgZm9yOg0KPiA+IC0gdG8gcGFz
-cyBtYXBzL2xpbmtzIGZyb20gb25lIHByb2Nlc3MgdG8gYW5vdGhlcg0KPiA+IHdoZW4gcGFzc2lu
-ZyBmZCBpcyBub3QgcG9zc2libGUuDQo+ID4gLSB0byBzb2x2ZSB0aGUgY2FzZSBvZiBjcmFzaGlu
-ZyB1c2VyIHNwYWNlLg0KPiA+IFRoZSB1c2VyIHNwYWNlIGFnZW50IHdpbGwgcmVzdGFydCBhbmQg
-d2lsbCBwaWNrIHVwIHdoZXJlDQo+ID4gaXQncyBsZWZ0IGJ5IHJlYWRpbmcgbWFwLCBsaW5rLCBw
-cm9nIEZEcyBmcm9tIGJwZmZzLg0KPiA+IC0gcGlubmluZyBicGYgaXRlcmF0b3JzIHRoYXQgYXJl
-IGxhdGVyIHVzZWQgdG8gJ2NhdCcgc3VjaCBmaWxlcy4NCj4gPiBUaGF0IGlzIHdoYXQgYnBmX3By
-ZWxvYWQgaXMgZG9pbmcgYnkgY3JlYXRpbmcgdHdvIGRlYnVnDQo+ID4gZmlsZXMgIm1hcHMuZGVi
-dWciIGFuZCAicHJvZ3MuZGVidWciLg0KPiA+DQo+ID4gPiBQaW5uaW5nDQo+ID4gPiB0aGVtIHRv
-IHVucmVhY2hhYmxlIGlub2RlcyBpbnR1aXRpdmVseSBsb29rZWQgdGhlDQo+ID4gPiB3YXkgdG8g
-Z28gZm9yIGFjaGlldmluZyB0aGUgc3RhdGVkIGdvYWwuDQo+ID4NCj4gPiBXZSBjYW4gY29uc2lk
-ZXIgaW5vZGVzIGluIGJwZmZzIHRoYXQgYXJlIG5vdCB1bmxpbmthYmxlIGJ5IHJvb3QNCj4gPiBp
-biB0aGUgZnV0dXJlLCBidXQgY2VydGFpbmx5IG5vdCBmb3IgdGhpcyB1c2UgY2FzZS4NCj4gDQo+
-IENhbiB0aGlzIG5vdCBiZSBhbHJlYWR5IGRvbmUgYnkgYWRkaW5nIGEgQlBGX0xTTSBwcm9ncmFt
-IHRvIHRoZQ0KPiBpbm9kZV91bmxpbmsgTFNNIGhvb2s/DQo+IA0KPiA+DQo+ID4gPiBPciBtYXli
-ZSBJDQo+ID4gPiBzaG91bGQganVzdCBpbmNyZW1lbnQgdGhlIHJlZmVyZW5jZSBjb3VudCBvZiBs
-aW5rcw0KPiA+ID4gYW5kIGRvbid0IGRlY3JlbWVudCBkdXJpbmcgYW4gcm1tb2Q/DQo+ID4NCj4g
-PiBJIHN1Z2dlc3QgdG8gYWJhbmRvbiBvdXQtb2YtdHJlZSBnb2FsLg0KPiA+IE9ubHkgdGhlbiB3
-ZSBjYW4gaGVscCBhbmQgY29udGludWUgdGhpcyBkaXNjdXNzaW9uLg0KPiANCj4gKzENCg==
+Note: in this version, all IOMMU changes have been removed to be pursued
+as a follow-on / in conjunction with IOMMUFD.  This series proposes to
+add only exploitation of the interpretive execution facilities.
+
+Enable interpretive execution of zPCI instructions + adapter interruption
+forwarding for s390x KVM vfio-pci.  This is done by triggering a routine
+when the VFIO group is associated with the KVM guest, transmitting to
+firmware a special token (GISA designation) to enable that specific guest
+for interpretive execution on that zPCI device.  Load/store interpreation
+enablement is then controlled by userspace (based upon whether or not a
+SHM bit is placed in the virtual function handle).  Adapter Event
+Notification interpretation is controlled from userspace via a new KVM
+ioctl.
+
+By allowing intepretation of zPCI instructions and firmware delivery of
+interrupts to guests, we can reduce the frequency of guest SIE exits for
+zPCI.  
+
+From the perspective of guest configuration, you passthrough zPCI devices
+in the same manner as before, with intepretation support being used by
+default if available in kernel+qemu.
+
+Will reply with a link to the associated QEMU series.
+
+Changelog v4->v5:
+- Remove all IOMMU changes - this series will continue to use vfio type1
+  for mapping; RPCIT enhancements will be pursued as a follow-on in
+  coordination with the IOMMUFD project
+- Remove most of the ops from the proposed KVM ioctl -- combine the notion
+  of 'start' and 'enable interpretation' into a single operation that
+  occurs in response to assigning a KVM association to the VFIO group
+- a new kvm ioctl is still being used to register/unregister for adapter
+  event notification forwarding.  But teach it to use pin_user_pages
+  instead of gfn_to_page and perform accounting.
+- Because we now attempt to enable interpretation for all devices (even
+  if the virtual PCI device has a SHM bit on) avoid setting the GISA for
+  the device and the ECB bits for the guest on hardware without SHM.
+- found a bug with "s390/pci: stash associated GISA designation", namely
+  that CLP SET PCI FN (disable) expects the gisa designation to always be
+  0.  Now that we set the gisa earlier, vfio-pci can trip this when
+  triggering restore for ISM.
+- Add a single routine to determine if interpretation support is usable
+  on this host, to be used in multiple spots.
+- eliminated arch/s390/include/asm/kvm_pci.h, moving most elements into
+  arch/s390/kvm/pci.h with one exception to asm/kvm_host.h
+
+Matthew Rosato (21):
+  s390/sclp: detect the zPCI load/store interpretation facility
+  s390/sclp: detect the AISII facility
+  s390/sclp: detect the AENI facility
+  s390/sclp: detect the AISI facility
+  s390/airq: pass more TPI info to airq handlers
+  s390/airq: allow for airq structure that uses an input vector
+  s390/pci: externalize the SIC operation controls and routine
+  s390/pci: stash associated GISA designation
+  s390/pci: stash dtsm and maxstbl
+  KVM: s390: pci: add basic kvm_zdev structure
+  KVM: s390: pci: do initial setup for AEN interpretation
+  KVM: s390: pci: enable host forwarding of Adapter Event Notifications
+  KVM: s390: mechanism to enable guest zPCI Interpretation
+  KVM: s390: pci: provide routines for enabling/disabling interrupt
+    forwarding
+  KVM: s390: pci: add routines to start/stop interpretive execution
+  KVM: vfio: add s390x hook to register KVM guest designation
+  vfio-pci/zdev: add function handle to clp base capability
+  vfio-pci/zdev: different maxstbl for interpreted devices
+  KVM: s390: add KVM_S390_ZPCI_OP to manage guest zPCI devices
+  KVM: s390: introduce CPU feature for zPCI Interpretation
+  MAINTAINERS: additional files related kvm s390 pci passthrough
+
+ Documentation/virt/kvm/api.rst   |  45 +++
+ MAINTAINERS                      |   1 +
+ arch/s390/include/asm/airq.h     |   7 +-
+ arch/s390/include/asm/kvm_host.h |  16 +
+ arch/s390/include/asm/pci.h      |  10 +
+ arch/s390/include/asm/pci_clp.h  |   9 +-
+ arch/s390/include/asm/pci_insn.h |  29 +-
+ arch/s390/include/asm/sclp.h     |   4 +
+ arch/s390/include/asm/tpi.h      |  13 +
+ arch/s390/include/uapi/asm/kvm.h |   1 +
+ arch/s390/kvm/Makefile           |   1 +
+ arch/s390/kvm/interrupt.c        |  95 ++++-
+ arch/s390/kvm/kvm-s390.c         |  81 +++-
+ arch/s390/kvm/kvm-s390.h         |  10 +
+ arch/s390/kvm/pci.c              | 666 +++++++++++++++++++++++++++++++
+ arch/s390/kvm/pci.h              |  86 ++++
+ arch/s390/pci/pci.c              |  15 +
+ arch/s390/pci/pci_clp.c          |   7 +
+ arch/s390/pci/pci_insn.c         |   4 +-
+ arch/s390/pci/pci_irq.c          |  48 ++-
+ drivers/s390/char/sclp_early.c   |   4 +
+ drivers/s390/cio/airq.c          |  12 +-
+ drivers/s390/cio/qdio_thinint.c  |   6 +-
+ drivers/s390/crypto/ap_bus.c     |   9 +-
+ drivers/s390/virtio/virtio_ccw.c |   6 +-
+ drivers/vfio/pci/vfio_pci_zdev.c |  11 +-
+ include/uapi/linux/kvm.h         |  31 ++
+ include/uapi/linux/vfio_zdev.h   |   7 +
+ virt/kvm/vfio.c                  |  35 +-
+ 29 files changed, 1216 insertions(+), 53 deletions(-)
+ create mode 100644 arch/s390/kvm/pci.c
+ create mode 100644 arch/s390/kvm/pci.h
+
+-- 
+2.27.0
+

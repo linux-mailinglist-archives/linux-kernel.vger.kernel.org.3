@@ -2,129 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 490E14F1ABD
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:17:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 151254F1BA6
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359211AbiDDVSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
+        id S1380759AbiDDVWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379222AbiDDQrT (ORCPT
+        with ESMTP id S1379223AbiDDQro (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 12:47:19 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2053335DFF;
-        Mon,  4 Apr 2022 09:45:22 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id y10so9499225pfa.7;
-        Mon, 04 Apr 2022 09:45:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+vlroJ+nQTT4IB9+qowpCJrEHHMQMZEYFyVaBXOw9cA=;
-        b=K+zWzR4ruy+ZtnYKb3uQ8qPZ1rB96be4f9KbPJeqM2bII/wOKRfwJBp9khKYpdzZNw
-         p/HQY9ehgjEtNQA3UubppVVM2P3enmFvLuFNI2VYINSU8+ehqH1PUud6XiJrJ31Fx+1N
-         9Mw4kdlWm8JhkOo4TWsGUExTMTrl3ji9q4OyAg57DWOcT4X54WgiyRHSF39tOum+DFz/
-         PCtuDEaRjqI075K956dVofjVavlxFPT9gfTJwGH1zzpqTw6kmRYZ/vPvlJ9mLorG7VCX
-         xOWeFzQd44DIsWpLNCyHiCC/aZXwnF4wxYBBg6HkBljldJPYGG7drQ/eGiaJ8MNzP9Y2
-         FmlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+vlroJ+nQTT4IB9+qowpCJrEHHMQMZEYFyVaBXOw9cA=;
-        b=H5VRk/Lfvm1WmWeEu5Pj03YQ5HzxULNix3HL42gNovU5fKBi7Gfq+4c+wbHof6fnQm
-         XNFPEXGTD4+ynVRz5sjhefZVBQyCYni/zgBfZYZUlauvUF/0TlubP1Jh5HD6J0w1uzEA
-         xd+EsaBE8kaUTeJkP4xEkm1smhchDjCdWWLO9spfK5Get9tmPKA+UK2KARrZKkd5J54Z
-         3C8qSmi7WsaVpUGd7j/jOMgXw7eSee1bLrXhYiURwlQG6KXACPCPqR+9Z99RAjE5y/Ez
-         PMSn7+A7K7JP7cers2kBKctOca37cPsDIPpa0YYGxMFJcX8aVp7UepO0VS5ODfbJriG+
-         +8jg==
-X-Gm-Message-State: AOAM531Tm4Rj2wahuchYVJh2nL1TtMys4h6x3Z/TGjhGiKRNMZW8wLJb
-        yAZMKXk5NrOJadGD9Sg/reo=
-X-Google-Smtp-Source: ABdhPJykjuTWmrEFansk8XIVGuyt/Galx5GJ9a/oS+WxZ9T0MRsu62DxJHiJKdurLYFsP8Kx1hHJDA==
-X-Received: by 2002:a63:338e:0:b0:398:4302:c503 with SMTP id z136-20020a63338e000000b003984302c503mr633219pgz.217.1649090721580;
-        Mon, 04 Apr 2022 09:45:21 -0700 (PDT)
-Received: from localhost.localdomain ([223.212.58.71])
-        by smtp.gmail.com with ESMTPSA id np8-20020a17090b4c4800b001c70aeab380sm11035pjb.41.2022.04.04.09.45.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 09:45:21 -0700 (PDT)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Yuntao Wang <ytcoode@gmail.com>
-Subject: [PATCH bpf-next] selftests/bpf: Fix issues in parse_num_list()
-Date:   Tue,  5 Apr 2022 00:45:14 +0800
-Message-Id: <20220404164514.1814897-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 4 Apr 2022 12:47:44 -0400
+Received: from gateway33.websitewelcome.com (gateway33.websitewelcome.com [192.185.146.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6342635DFF
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 09:45:48 -0700 (PDT)
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway33.websitewelcome.com (Postfix) with ESMTP id D043FD847F8
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 11:45:47 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id bPprn4FwC22u3bPprnBDnR; Mon, 04 Apr 2022 11:45:47 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:Subject:From:References:Cc:To:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=PvOuKe3VYlx98pU3fvtPHpnIy8LCRmoajzdinROj5NE=; b=Xu8onfvEDpQdIZ3BVod020rxdk
+        tQMu8IrsOWj9aZFbzzsFOZnlmA29iNKCQ6c1nMx79xcLNdnlK7J91JWQU/E0Yiq4KMSzVa42m6wS4
+        oARlfvK6KKH6KbmihrQcVYSM9/xDxnLCcKlQ01Y7MqpU7UNS4hCRUsBcK7hgVfKnDNWJY0sdMQfER
+        aI5afOQSQbSl1aQGH1puQRYg9WCO1Gkhkt4w3u/F6zTDYwvzWLCmymt4xDLbaE2soHpQN54duS1+l
+        qy+mOCrPCSNzHPNvk3MM29YZoZsMu1Rpyghp+9/Na5H8UdWxfskJG6C5eTZZqjhnmh1m88KOjC2Vj
+        nqXc5fUA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54722)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nbPpr-002TwF-Fk; Mon, 04 Apr 2022 16:45:47 +0000
+Message-ID: <ea840ab9-0c20-8c06-f7d4-bb9642a63500@roeck-us.net>
+Date:   Mon, 4 Apr 2022 09:45:46 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Oded Gabbay <ogabbay@kernel.org>, Jiri Slaby <jslaby@suse.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <CAHk-=wg6FWL1xjVyHx7DdjD2dHZETA5_=FqqW17Z19X-WTfWSg@mail.gmail.com>
+ <20220404022239.GA1186352@roeck-us.net>
+ <CAHk-=wimc7V9mi=P+6p2nnctPYtSM55OSPVERUeJor7fkD_EVg@mail.gmail.com>
+ <aba387bd-9799-e0b5-40e3-1bcb552ac74c@roeck-us.net>
+ <CAHk-=witgMUS8To6wijxdbQ+QEH0gcHSYV6Y=yzOdb=Q4h9PJA@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: Linux 5.18-rc1
+In-Reply-To: <CAHk-=witgMUS8To6wijxdbQ+QEH0gcHSYV6Y=yzOdb=Q4h9PJA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nbPpr-002TwF-Fk
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54722
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 7
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are some issues in parse_num_list():
+On 4/4/22 08:32, Linus Torvalds wrote:
+> On Sun, Apr 3, 2022 at 9:23 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> Oops. Sorry, I thought it was big endian. No idea why. I'll update
+>> subject and description and resend.
+> 
+> I see your updated patch, but for some reason 'b4' is unhappy about it, with
+> 
+>    $ b4 am 20220404134338.3276991-1-linux@roeck-us.net
+> 
+> causing
+> 
+>    ✗ [PATCH v3] staging: r8188eu: Fix PPPoE tag insertion on little
+> endian systems
+>    ---
+>    ✗ BADSIG: DKIM/roeck-us.net
+> 
+> your DKIM looks fine on the messages I see, but now that I look at it
+> on the mailing list, I notice that your DKIM really is very wrong, and
+> has a lot of headers that a DKIM signature should *not* have.
+> 
+> Your DKIM signature includes header names that are very much for list
+> management, so by definition DKIM will fail for any email you send
+> through a mailing list. Headers like
+> "Resent-From:Resent-Sender:Resent-To:Resent-Cc
+> :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe" etc.
+> 
+> The DKIM setup should protect the meaningful headers that matter to
+> the sender, not things that the mail system will validly add when it
+> passes through.
+> 
+> So the DKIM header list should be things like
+> ":To:From:Cc:Message-Id:Date:Subject:"
+> 
+> Not things like "Sender" or mailing list things.
 
-1. The end variable is assigned twice when parsing_end is true.
-2. The function does not check that parsing_end should finally be false.
+I tried to tell my provider, but to no avail. Until now I used gmail,
+but gmail will disable that ability by end of this month, leaving me
+in the dark. Lose-lose situation for me. Right now I don't have a
+useful alternative that doesn't require me to change my e-mail
+address completely (or setting up my own e-mail server which
+is a pita).
 
-Clean up parse_num_list() and fix these issues.
+> 
+> Anyway, I was going to just commit it directly, but with the DKIM
+> verification failing, I was a bit less eager to. And then I noticed
+> that you used "be16_to_cpu()" - which is technically correct - which
+> doesn't match the other code in that file.
+> 
+Another lose-lose situation. Larry tells me I should use
+be16_to_cpu(), you tell me I should not.
 
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
----
- tools/testing/selftests/bpf/testing_helpers.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+Either case, https://lore.kernel.org/r/YkPK/QmLAp3BkygY@sckzor-linux.localdomain
+is a more complete solution, so you might want to pick that one.
 
-diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
-index 795b6798ccee..82f0e2d99c23 100644
---- a/tools/testing/selftests/bpf/testing_helpers.c
-+++ b/tools/testing/selftests/bpf/testing_helpers.c
-@@ -20,16 +20,16 @@ int parse_num_list(const char *s, bool **num_set, int *num_set_len)
- 		if (errno)
- 			return -errno;
- 
--		if (parsing_end)
--			end = num;
--		else
-+		if (!parsing_end) {
- 			start = num;
-+			if (*next == '-') {
-+				s = next + 1;
-+				parsing_end = true;
-+				continue;
-+			}
-+		}
- 
--		if (!parsing_end && *next == '-') {
--			s = next + 1;
--			parsing_end = true;
--			continue;
--		} else if (*next == ',') {
-+		if (*next == ',') {
- 			parsing_end = false;
- 			s = next + 1;
- 			end = num;
-@@ -60,7 +60,7 @@ int parse_num_list(const char *s, bool **num_set, int *num_set_len)
- 			set[i] = true;
- 	}
- 
--	if (!set)
-+	if (!set || parsing_end)
- 		return -EINVAL;
- 
- 	*num_set = set;
--- 
-2.35.1
-
+Thanks,
+Guenter

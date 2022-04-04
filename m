@@ -2,158 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5843D4F1E74
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 424DF4F1E7F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379148AbiDDWMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:12:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45244 "EHLO
+        id S1379772AbiDDWM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 18:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386739AbiDDVjR (ORCPT
+        with ESMTP id S1380582AbiDDVj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 17:39:17 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AC64D9C0
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 14:30:33 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id w141so8824101qkb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 14:30:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IxUdjcC4It/JwdPOTj9qf8Z2Z9qsMxlLajpUd7Bfk/o=;
-        b=POnOfkKB5D3FdXZ3FUx89riusD8I3RIEffDsh+KNc9BBUacT82hSW46tJsWf5CUr4Z
-         9tCpUVA2vzJ6RNSV/hyhPsGW4fXWyimM+aqGrXtvHqFWENOgXa0eSohh92R0UixG7UKr
-         1bjSfBJUFUZn1kS8Ji0hY0DtdpXo4oXUVxihn5JotQ+VNqNImvdCWoCrPC97P5Sn1i66
-         EM927H4AOz07RCNVWrzp6LqIsP/DQjPaOUctdkXuIL4EbpcA1zIiGPByFm/qCWWMZg3F
-         ImgWoGm+3GVLuS8Nr1Bt8asoBnKLtm3VyUMwZrECsO5hKNb4WDBZrLmIQDDHYNzG+3fS
-         VnTg==
+        Mon, 4 Apr 2022 17:39:28 -0400
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBB762D5;
+        Mon,  4 Apr 2022 14:30:53 -0700 (PDT)
+Received: by mail-ot1-f45.google.com with SMTP id i11-20020a9d4a8b000000b005cda3b9754aso8089621otf.12;
+        Mon, 04 Apr 2022 14:30:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IxUdjcC4It/JwdPOTj9qf8Z2Z9qsMxlLajpUd7Bfk/o=;
-        b=kwnhbHbv2pi0FLmlg/IifjKmFgwwueiwxPTrdB8+yu+7lCb5ZyiusSEYwJNToXe0LS
-         Lh4V8pZQDnMMav/r15BfI/WsVCSUVHJlQC4AjXZEDHGIlnJ7lSoS+x0v0xTd6kEBZ1WA
-         xiQ7p/XRPsBjibvkeq1/nDZYgqYA8mFoxCqrqmlYOSlixmhFdKHKZ+x8m+x1Dm00oq89
-         U5w70YbpjvM3tqSOYOU+8NSZmPRHPTI7J4D9ZRayAlQ8YGCxC4J2ZPf8JaHghp4MWg2Q
-         D+31XRsNQ+aKqQ4rPskX8hKt4nBvJZQYDDTOzgNFnXmkOApxADmsvQkGh+lt68KI5tKT
-         JENg==
-X-Gm-Message-State: AOAM532qVu4wmeC8+gTbeHSv0zu8JXoQGjtf9Ng3MSHP2frDJLnD1o9F
-        b+6sWvNs6NxhZQK5LxlWwOpuPkpnoJQBlEiniUPeGA==
-X-Google-Smtp-Source: ABdhPJyyRMlOkHW8q1Mhm5p13Qfm1ifyp2XYVK5SyJAhakAFTtHNbQGpzkKzG2wqiZ5LZOfnuNwc68wkA3oO+hVOi0A=
-X-Received: by 2002:a05:620a:2453:b0:67d:9539:495c with SMTP id
- h19-20020a05620a245300b0067d9539495cmr215335qkn.30.1649107782604; Mon, 04 Apr
- 2022 14:29:42 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=b9wwey9wuXrqTYmL5LovEHPsQHQwTlggC3S8jKSb4ns=;
+        b=GWz30ebiKeIxVZKH899pFkanFUpb9Fbf/8+jZ6u4QAxtiv3VP/oNrS6CpkIhWZdtpV
+         XTYrySxJDw6SQFZ33hkL1bEUlQbc8DoDQc44V4PFLM496abfoBHbzaTyO7E9LKn9n8fi
+         /qXA+cXy/6fIP0TICFCy5bmrXreYYn8jFUYPxi5rltSweAMMRCZ/LOl2OTOxgLJEshCD
+         SnnaQ7BxXuAgDCOEPgG10L6pJ4fcMZIrCErzeuRvtI77aCFZmzcmzoDQ+VS/8OdTDZ6S
+         V96vXJmYry+WJwsaAX9YkKbwC3MpXsJIUlLuKfPlgnjn9T6dTKDFawM7R0Kobh7fUbRD
+         kDMw==
+X-Gm-Message-State: AOAM533RteEARLfVkQ0CrKgTKiUj1UtSBWBP35SOBV6jV8ECOlKtKyRv
+        cAlAfhsaZDwOB5GiAogDgg==
+X-Google-Smtp-Source: ABdhPJx+s+eTM1npBYS8mqdR8sb1Ff6dAakzIAXsNmPfXBn853KX39fvIdVHvMdojukhEQpNOpjHWw==
+X-Received: by 2002:a9d:3e14:0:b0:5b2:5647:8891 with SMTP id a20-20020a9d3e14000000b005b256478891mr112440otd.22.1649107801571;
+        Mon, 04 Apr 2022 14:30:01 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id m13-20020a056820050d00b003297b35bc63sm599769ooj.40.2022.04.04.14.30.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 14:30:01 -0700 (PDT)
+Received: (nullmailer pid 2017375 invoked by uid 1000);
+        Mon, 04 Apr 2022 21:30:00 -0000
+Date:   Mon, 4 Apr 2022 16:30:00 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v3 8/9] dt-bindings: i2c: qcom,i2c-qup: convert to
+ dtschema
+Message-ID: <YktjWOS4U1qtzJve@robh.at.kernel.org>
+References: <20220402184011.132465-1-krzysztof.kozlowski@linaro.org>
+ <20220402184011.132465-9-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <1648656179-10347-1-git-send-email-quic_sbillaka@quicinc.com>
- <1648656179-10347-9-git-send-email-quic_sbillaka@quicinc.com>
- <CAA8EJprvE31ex3fCQHZ-=x+EWHK4UZ0qqHRh+rH4dk5TPhmVyw@mail.gmail.com>
- <MW4PR02MB71867220A90FCFED295830D0E1E19@MW4PR02MB7186.namprd02.prod.outlook.com>
- <CAD=FV=VK0D_GzYBv+u+o6-ks-UAsw97__0mWsSn9OycX72LJFg@mail.gmail.com> <MW4PR02MB71865B8E17F3D194B05013EDE1E59@MW4PR02MB7186.namprd02.prod.outlook.com>
-In-Reply-To: <MW4PR02MB71865B8E17F3D194B05013EDE1E59@MW4PR02MB7186.namprd02.prod.outlook.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 5 Apr 2022 00:29:31 +0300
-Message-ID: <CAA8EJpqFh7c9ohDbR_0kG5t106-djE7TYfaoAbiT-W4-294jTw@mail.gmail.com>
-Subject: Re: [PATCH v6 8/8] drm/msm/dp: Handle eDP mode_valid differently from dp
-To:     "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "robdclark@gmail.com" <robdclark@gmail.com>,
-        "seanpaul@chromium.org" <seanpaul@chromium.org>,
-        "swboyd@chromium.org" <swboyd@chromium.org>,
-        quic_kalyant <quic_kalyant@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "sean@poorly.run" <sean@poorly.run>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        quic_vproddut <quic_vproddut@quicinc.com>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220402184011.132465-9-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Apr 2022 at 21:21, Sankeerth Billakanti (QUIC)
-<quic_sbillaka@quicinc.com> wrote:
->
-> Hi Doug,
->
-> > On Wed, Mar 30, 2022 at 11:02 PM Sankeerth Billakanti (QUIC)
-> > <quic_sbillaka@quicinc.com> wrote:
-> > >
-> > > Hi Dmitry,
-> > >
-> > > > On Wed, 30 Mar 2022 at 19:04, Sankeerth Billakanti
-> > > > <quic_sbillaka@quicinc.com> wrote:
-> > > > >
-> > > > > The panel-edp driver modes needs to be validated differently from
-> > > > > DP because the link capabilities are not available for EDP by that time.
-> > > > >
-> > > > > Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-> > > >
-> > > > This should not be necessary after
-> > > >
-> > https://patchwork.freedesktop.org/patch/479261/?series=101682&rev=1.
-> > > > Could you please check?
-> > > >
-> > >
-> > > The check for DP_MAX_PIXEL_CLK_KHZ is not necessary anymore but we
-> > > need to return early for eDP because unlike DP, eDP context will not
-> > > have the information about the number of lanes and link clock.
-> > >
-> > > So, I will modify the patch to return after the DP_MAX_PIXEL_CLK_KHZ
-> > check if is_eDP is set.
-> >
-> > I haven't walked through all the relevant code but something you said above
-> > sounds strange. You say that for eDP we don't have info about the number
-> > of lanes? We _should_.
-> >
-> > It's certainly possible to have a panel that supports _either_ 1 or 2 lanes but
-> > then only physically connect 1 lane to it. ...or you could have a panel that
-> > supports 2 or 4 lanes and you only connect 1 lane.
-> > See, for instance, ti_sn_bridge_parse_lanes. There we assume 4 lanes but if
-> > a "data-lanes" property is present then we can use that to know that fewer
-> > lanes are physically connected.
-> >
-> > It's also possible to connect more lanes to a panel than it supports.
-> > You could connect 2 lanes to it but then it only supports 1. This case needs to
-> > be handled as well...
-> >
->
-> I was referring to the checks we do for DP in dp_bridge_mode_valid. We check if the
-> Link bandwidth can support the pixel bandwidth. For an external DP connection, the
-> Initial DPCD/EDID read after cable connection will return the sink capabilities like link
-> rate, lane count and bpp information that are used to we filter out the unsupported
-> modes from the list of modes from EDID.
->
-> For eDP case, the dp driver performs the first dpcd read during bridge_enable. The
-> dp_bridge_mode_valid function is executed before bridge_enable and hence does
-> not have the full link or the sink capabilities information like external DP connection,
-> by then.
+On Sat, 02 Apr 2022 20:40:10 +0200, Krzysztof Kozlowski wrote:
+> Convert the Qualcomm Universal Peripheral (QUP) I2C controller to DT
+> Schema.
+> 
+> Add missing properties: dma and dma-names, pinctrl states (to indicate
+> support for sleep pinctrl).
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../devicetree/bindings/i2c/qcom,i2c-qup.txt  | 40 ---------
+>  .../devicetree/bindings/i2c/qcom,i2c-qup.yaml | 89 +++++++++++++++++++
+>  2 files changed, 89 insertions(+), 40 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-qup.txt
+>  create mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-qup.yaml
+> 
 
-It sounds to me like we should emulate the HPD event for eDP to be
-handled earlier than the get_modes()/prepare() calls are attempted.
-However this might open another can of worms.
-
-> So, we need to proceed with the reported mode for eDP.
-
-Well... Even if during the first call to get_modes() the DPCD is not
-read, during subsequent calls the driver has necessary information, so
-it can proceed with all the checks, can't it?
-
--- 
-With best wishes
-Dmitry
+Reviewed-by: Rob Herring <robh@kernel.org>

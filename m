@@ -2,110 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 490AC4F1DA4
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE574F1C08
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383612AbiDDVds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60004 "EHLO
+        id S1379954AbiDDVVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379508AbiDDRSy (ORCPT
+        with ESMTP id S1379517AbiDDRVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 13:18:54 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF7814019
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 10:16:58 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id by7so13913144ljb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 10:16:58 -0700 (PDT)
+        Mon, 4 Apr 2022 13:21:16 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72B6E098
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 10:19:19 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id y6so8713492plg.2
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 10:19:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=42+DYObs0d//YPwipHE3d3izqDTdKuFvDHGNlUWoBx4=;
-        b=ryB3WQniryeQTcsabtEMlk77sINOiDMjNnKxQIAPWIDWkgT2HeYr5YNp6DI6AxlrBR
-         8fCQ5/lZHreREixoEVspMKO0H9IWt5XPvMwwVhey1g+3nGovFlOSfkDV0fB+9JHSyYww
-         MfOlG9ttuJqR+MT95v3VjjepW6WKMqyiEifEd4jSbTESt3OkiuCI9dtDpTgNAJdCfa52
-         52rZGeBuik8PbNlp7p70U2xxAl9hUAFZLO3frntLBrwofTgyaMBYv01U5bBe80qh7Dre
-         A5puCYMeYPj9WlgAEVQoKrpAdNhAm82ngof0dDWWwAWwi9Ke06cvxAHP01nxxBjhXxtI
-         /thg==
+        bh=uhZvWBIYSPxrHtL/UXP4sOCKqMqAgTQ5cHbzprIzUlI=;
+        b=rzW4aaUe8wJHBTW/ExLvJddgYRg1t4YhtSpQVQScLfUwXMUjqtSxLLNi52Rpn5/B9e
+         4fm33kwEjNNC8PObxWVWNVFke/MshRfAUZolEP0oeRGIcWs1cMZ8dqnCMHUOTSSXF2R+
+         Nxc7bj+ITBZAcBUCg6yEKcw6zz2obIN/RDEpBS+4YLPJ4AjvRWmQYm9ga69a1RiY4EDX
+         oGzty137ABa8Ztyvwr1RlrkdXRpVcepr1eO0rJxfGr76K3XVs6VQ3L6PIza3Wro/7erv
+         oZSbbPlhDhdZagCPj0TuB4euNN0h0a1bfMWvh80WoOYfDkjShCEByhv1m6HFJ/OrDhaM
+         E/NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=42+DYObs0d//YPwipHE3d3izqDTdKuFvDHGNlUWoBx4=;
-        b=C/y6XJAAd5hmeIZK5LPpXob1WEX944WHbfhnUhDPxl/VWW0pnjn/QwP5hW1fpm4ZJm
-         aQm+zD7jJP84W7tZY6D/H9wIFKxJCdF4IolhnYzcBOqZHQzQc6edY8OcriPxs8ui52Xr
-         jQ3DdXs3F0AUFSpEyHCkECs4TRm2Qjb4SjJ4OKueBdaWq67RYQPZbUKOLvtR7QAukW13
-         zy7v4fjmcoFvtziR/caKaoEvwIhGqHsJX6WPuPeKHzmEIaGMOfiUUwZ/KCcrm6qtFEFs
-         3FzBHgLOoBZD+LCxSnzpIBQTu180Q9KjfmtlyfcMO2cYENv8/c/O01R8OJYLnHIhQ9D6
-         rqaQ==
-X-Gm-Message-State: AOAM530kG3Hgcf+vD4wi7no2GhRFAQP3vgUI6AGzOIpTaaC3GjjsBJ1n
-        t5iaLaoXa5ICFYnG+4t4EqlHlLQYtpfxLAvXN7Q5SA==
-X-Google-Smtp-Source: ABdhPJzCr2hVN0gAAJB3yXGwvjHdQ4zEVxVEi7K2YofZ59SQ5b8dfqk23Flzm5EuxCaAEcQZt2M7qWFk0KKWja6DeYg=
-X-Received: by 2002:a05:651c:555:b0:24b:15b7:74ad with SMTP id
- q21-20020a05651c055500b0024b15b774admr361740ljp.239.1649092616178; Mon, 04
- Apr 2022 10:16:56 -0700 (PDT)
+        bh=uhZvWBIYSPxrHtL/UXP4sOCKqMqAgTQ5cHbzprIzUlI=;
+        b=pM66YnWM8SHnkgDiqATaY1RBFeNN2dFvjerTM2zOmrj2Rq5MkMu7IhigSXLm4ntf2A
+         GBvmUJCG0kTTMevSZ9mcRhY5VhnN9dKMYU/le2QisR0ZsrdYCXVrp/WA8PEX5lfttq9S
+         wQrPQK0SJJS3VTcN/Y8TJ/SnWL8p8j39qYjKMfYph/qZXtW13nQc5HztlAh6vRhiR0ZC
+         KNpG9KAdTDUBAMZBTOJ7rP/B9V/bzycf42IjucncNu0MK8ZVENoeLG4QSR/p0+Y4KWVp
+         K3MADm967jX8ozeJdk4UHJnrX0b/9N3LRnBAj0/iJSbtGXZ0nT/yF2u5fTZRtJJ8tMMO
+         4hWA==
+X-Gm-Message-State: AOAM532+9NfYQnfN3HStcPM7gM5/JCjhdxN/3YFJpD53WhHwFrinBkUn
+        i4cZYDYyWXPyXtQLKUI3hwc0XV9sA0w4WcRG8doBcA==
+X-Google-Smtp-Source: ABdhPJz50EolXnmloOFRdflV7luhmQEbXQ6TLx1sRiAzjczB5dC9hpz0y8SCGJwdMY8U2thvWleWIxvnBRXFYbPjKbA=
+X-Received: by 2002:a17:903:2351:b0:156:a562:b3f8 with SMTP id
+ c17-20020a170903235100b00156a562b3f8mr670651plh.81.1649092759112; Mon, 04 Apr
+ 2022 10:19:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220402084746.2413549-1-lv.ruyi@zte.com.cn>
-In-Reply-To: <20220402084746.2413549-1-lv.ruyi@zte.com.cn>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 4 Apr 2022 10:16:44 -0700
-Message-ID: <CAKwvOdk=_a98oaJxmYJsk_sjeBg1yELmpFeOKe1Cbox2vnVi4Q@mail.gmail.com>
-Subject: Re: [PATCH] fs/buffer.c: remove unneeded code
-To:     cgel.zte@gmail.com
-Cc:     viro@zeniv.linux.org.uk, nathan@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
+References: <20220331084151.2600229-1-yosryahmed@google.com>
+ <874k3d6vuq.fsf@vajain21.in.ibm.com> <CAJD7tka1UstKYBVrie-_1CgvtaLtVD1uwgzfk5SifxW4FQbOVw@mail.gmail.com>
+ <871qyd7bif.fsf@vajain21.in.ibm.com>
+In-Reply-To: <871qyd7bif.fsf@vajain21.in.ibm.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Mon, 4 Apr 2022 10:18:42 -0700
+Message-ID: <CAJD7tka01bKnxQuizxTN7MtHj_hYu+dSztC2fY0jUPCcvk-9JA@mail.gmail.com>
+Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
+To:     Vaibhav Jain <vaibhav@linux.ibm.com>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, Jonathan Corbet <corbet@lwn.net>,
+        Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 2, 2022 at 1:47 AM <cgel.zte@gmail.com> wrote:
+On Sun, Apr 3, 2022 at 8:50 PM Vaibhav Jain <vaibhav@linux.ibm.com> wrote:
 >
-> From: Lv Ruyi <lv.ruyi@zte.com.cn>
 >
-> fix clang warning: Value stored to 'err' is never read in line 2944.
+> Apologies for the delayed response,
 >
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-
-The change LGTM, but next time please consider putting the exact text
-of the warning observed in the commit message.  For instance, it's not
-clear to me whether this was a compiler warning via -W flag, or a
-DeadStore warning from clang-tidy.
-
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-> ---
->  fs/buffer.c | 1 -
->  1 file changed, 1 deletion(-)
+> Yosry Ahmed <yosryahmed@google.com> writes:
 >
-> diff --git a/fs/buffer.c b/fs/buffer.c
-> index bfc566de36e5..b2045871e81c 100644
-> --- a/fs/buffer.c
-> +++ b/fs/buffer.c
-> @@ -2941,7 +2941,6 @@ int block_truncate_page(struct address_space *mapping,
->                 pos += blocksize;
->         }
+> > On Fri, Apr 1, 2022 at 1:39 AM Vaibhav Jain <vaibhav@linux.ibm.com> wrote:
+> >>
+> >>
+> >> Yosry Ahmed <yosryahmed@google.com> writes:
+> >> > From: Shakeel Butt <shakeelb@google.com>
+> >> >
+> >> > Introduce an memcg interface to trigger memory reclaim on a memory cgroup.
+> >> <snip>
+> >>
+> >> > +
+> >> > +     while (nr_reclaimed < nr_to_reclaim) {
+> >> > +             unsigned long reclaimed;
+> >> > +
+> >> > +             if (signal_pending(current))
+> >> > +                     break;
+> >> > +
+> >> > +             reclaimed = try_to_free_mem_cgroup_pages(memcg,
+> >> > +                                             nr_to_reclaim - nr_reclaimed,
+> >> > +                                             GFP_KERNEL, true);
+> >> > +
+> >> > +             if (!reclaimed && !nr_retries--)
+> >> > +                     break;
+> >> > +
+> >> > +             nr_reclaimed += reclaimed;
+> >>
+> >> I think there should be a cond_resched() in this loop before
+> >> try_to_free_mem_cgroup_pages() to have better chances of reclaim
+> >> succeding early.
+> >>
+> > Thanks for taking the time to look at this!
+> >
+> > I believe this loop is modeled after the loop in memory_high_write()
+> > for the memory.high interface. Is there a reason why it should be
+> > needed here but not there?
+> >
 >
-> -       err = 0;
->         if (!buffer_mapped(bh)) {
->                 WARN_ON(bh->b_size != blocksize);
->                 err = get_block(inode, iblock, bh, 0);
+> memory_high_write() calls drain_all_stock() atleast once before calling
+> try_to_free_mem_cgroup_pages(). This would drain all percpu stocks
+> for the given memcg and its descendents, giving a high chance
+> try_to_free_mem_cgroup_pages() to succeed quickly. Such a functionality
+> is missing from this patch.
+>
+> Adding a cond_resched() would atleast give chance to other processess
+> within the memcg to run and make forward progress thereby making more
+> pages available for reclaim.
+>
+> Suggestion is partly based on __perform_reclaim() issues a cond_resche()
+> as it may get called repeatedly during direct reclaim path.
+>
+As Michal pointed out, there is already a call to cond_resched() in
+shrink_node_memcgs().
+>
+> >> <snip>
+> >>
+> >> --
+> >> Cheers
+> >> ~ Vaibhav
+> >
+>
 > --
-> 2.25.1
->
-
-
--- 
-Thanks,
-~Nick Desaulniers
+> Cheers
+> ~ Vaibhav

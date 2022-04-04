@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84CB94F10CD
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 632964F10CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351530AbiDDIXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 04:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
+        id S1353719AbiDDIX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 04:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346885AbiDDIXo (ORCPT
+        with ESMTP id S1348387AbiDDIXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 04:23:44 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0AB3B3EF
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 01:21:49 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id q26so2452066edc.7
+        Mon, 4 Apr 2022 04:23:45 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4AC3B3F5
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 01:21:50 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id yy13so18274459ejb.2
         for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 01:21:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=rPYO2pNz1/bQYKjtDRXcH0Ioe3wPwK7iSBX0zehzbLA=;
-        b=bW+zOzhElyJjyfZ1pCtxqO+5Rxzf71rGe6k+bvGlQw/+vog2QsXeE0jO71lEN2ZPD9
-         NXMw0+4wwcl1726YfkVv/yAyLNHhG6SmZlbej41yuAP4QSuktnxwZyiahDXTXfDJKnpN
-         3/8a8Lu1SYTahPOSi788Pw8lmFh04Nzd+IsdlQ0FzCiBW2VKSSJd6B9M/qsU3+BLzGVN
-         BVlHSlAx5BDrd9kMN69qUdvFCNJQtWr89o05UsNrMIk6mqJvPp8sJm6E9Oaq6ThONREc
-         kVOFnYn23Ct2nhHqqSBPQ7vUUq8OrtiGrx79Tk1iIqCV6Yu1aIEZD4kTcIR1jjemLHRn
-         P1Sw==
+        bh=xwsH1XHMhYpHAHuQYTzJcbJHbl5Y3E62Se4odAiOvro=;
+        b=hcw7OiTZegjMnjMYOc3Mf29TNrKx3WvEthqQm+u5PwM2QoI6gw3bDB7EgjauRW9bXp
+         5E7SGUiqsm/80TQPDyWKtMPvaO1pNHMR8j/vUADxtlbRGe8jc4X5//LEq/qL6myYrbVH
+         vbaGsw9uKaaDGN0tM0YrXnxEFr/OdBrq9yyxVn9DgZyZGmbEyFo3SVBPHb+nFzuOdANi
+         1eW9yHCMqawuSShT09VcCegPYwGbkNTDxA+DcjCPY+Z0WG9CsR/RBc7uXQjM2BjW07Fp
+         AnBJP8plRqwr8wNiXG5xnkvYtJG8jE1kqrQsIaJhXdg2XzkxZGk6v+0/08ptfdz3Qxms
+         YUdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=rPYO2pNz1/bQYKjtDRXcH0Ioe3wPwK7iSBX0zehzbLA=;
-        b=r6VCbf6F61CUCfyc9bCU6FvgdWmr/DcXdSFDf5i1sIenfZV3Gtbmc4kW2f0fV97uwu
-         RuW9+RfIO1R/aKrrTR2p5mUDbC5HurV1BZtBhvsMe89MHbDo2JFqPShCdS3SJ9bU1XuS
-         FOHrSGRI7OqPlOcRgLXW7tqVNhv4znYy/XHkpmy9HHVDLOCmSLx8vTuYlDHGDo8Ri+8U
-         52lUlzCXAjiOLFcs+MIrj30Zk1M1HC6Fd1u4me1QJDC5ezuXO3rmddEJvh1Y/bdFQ+mA
-         2qMQ3oxRkivEKYIMNrBKdTxT+upczJJ+No0XEqXIIufSzsbds8WqlEJo4uE6YGD8KPYQ
-         VRVg==
-X-Gm-Message-State: AOAM532+/1Mgd4yJOmTzCoW/bXyxT1Ru0gfEP/6LqNwrYhzod7hTtTvi
-        ur5XXWqVDCUeIXw/Jt9hQb/v0sE+NSU=
-X-Google-Smtp-Source: ABdhPJxjBWCVSr/nrkBPG4q1VP7TIbF432eF+5z2b2SNwo8uaHyxyRcy8peP+Wp4Nz3NPMF2YbhVRw==
-X-Received: by 2002:aa7:d495:0:b0:41c:c46a:550f with SMTP id b21-20020aa7d495000000b0041cc46a550fmr4713672edr.305.1649060507963;
-        Mon, 04 Apr 2022 01:21:47 -0700 (PDT)
+        bh=xwsH1XHMhYpHAHuQYTzJcbJHbl5Y3E62Se4odAiOvro=;
+        b=DzJegehb9uefLcoYM+AG9d1Mx1qM949ba7CodNoLTx4QPrPmifinuwLE0usqlGSLZ0
+         FsVZTPoW0hHdkmLssAcPzZKzgmqTr2X2zgRAWdSlfRc76VA3+HtRCnRdrJk8YMQMMZHK
+         JEB4qeqOGfSkII8NNlROoFusuc4x/43yd40mpqoqbDwxe7milqV8pwiY63UaF6YKvchc
+         rR6zLVcrmYyfVHi3OgILq/wfr7jDU4/bTja4NNJgsSuhdKr7dNxCLQv8GFZuJLRbVPEV
+         lybavkDfpznSYalO/XiOjVPQjPmd2TDSYeGV4vxmQfUs6eCOJBdoPSk2RqvfjNPwTGnN
+         lbew==
+X-Gm-Message-State: AOAM533mzN2lVv38GK2iaM6y/o7koMfMdc5FuQE+iMimwXc3K9OSDn8M
+        W8SM2zrl8qVMOz8IqiTqQr8=
+X-Google-Smtp-Source: ABdhPJwzrg6vSJfu2vqfp9sme37FQrq1ZQPDetPp5e6ytHFpurajaA91xJ/Srr+MycaqokQkem0SGg==
+X-Received: by 2002:a17:907:6da1:b0:6e7:efbe:d217 with SMTP id sb33-20020a1709076da100b006e7efbed217mr3381401ejc.119.1649060508614;
+        Mon, 04 Apr 2022 01:21:48 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
-        by smtp.gmail.com with ESMTPSA id n3-20020a1709061d0300b006da94efcc7esm4047336ejh.204.2022.04.04.01.21.47
+        by smtp.gmail.com with ESMTPSA id n3-20020a1709061d0300b006da94efcc7esm4047336ejh.204.2022.04.04.01.21.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 01:21:47 -0700 (PDT)
+        Mon, 04 Apr 2022 01:21:48 -0700 (PDT)
 From:   Michael Straube <straube.linux@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 2/5] staging: r8188eu: reg_rfoff is never set
-Date:   Mon,  4 Apr 2022 10:21:39 +0200
-Message-Id: <20220404082142.4639-3-straube.linux@gmail.com>
+Subject: [PATCH 3/5] staging: r8188eu: pnp_bstop_trx is never set
+Date:   Mon,  4 Apr 2022 10:21:40 +0200
+Message-Id: <20220404082142.4639-4-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220404082142.4639-1-straube.linux@gmail.com>
 References: <20220404082142.4639-1-straube.linux@gmail.com>
@@ -71,43 +71,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The field reg_rfoff in struct pwrctrl_priv is never set. It stays at
-its default value 0. Remove it and remove related dead code.
+The field pnp_bstop_trx in struct pwrctrl_priv is never set. It stays
+at its default value 0. Remove it and remove related dead code.
 
 Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- drivers/staging/r8188eu/hal/usb_halinit.c     | 4 ----
- drivers/staging/r8188eu/include/rtw_pwrctrl.h | 2 --
- 2 files changed, 6 deletions(-)
+ drivers/staging/r8188eu/hal/usb_ops_linux.c    | 7 +++----
+ drivers/staging/r8188eu/include/rtw_pwrctrl.h  | 1 -
+ drivers/staging/r8188eu/os_dep/usb_ops_linux.c | 3 +--
+ 3 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/hal/usb_halinit.c b/drivers/staging/r8188eu/hal/usb_halinit.c
-index 4bc6b08fb282..21ab6881796e 100644
---- a/drivers/staging/r8188eu/hal/usb_halinit.c
-+++ b/drivers/staging/r8188eu/hal/usb_halinit.c
-@@ -539,10 +539,6 @@ u32 rtl8188eu_hal_init(struct adapter *Adapter)
- 	/*  Save target channel */
- 	haldata->CurrentChannel = 6;/* default set to 6 */
+diff --git a/drivers/staging/r8188eu/hal/usb_ops_linux.c b/drivers/staging/r8188eu/hal/usb_ops_linux.c
+index e5d6cd6228f2..6a65dcf57112 100644
+--- a/drivers/staging/r8188eu/hal/usb_ops_linux.c
++++ b/drivers/staging/r8188eu/hal/usb_ops_linux.c
+@@ -16,7 +16,7 @@ static int usb_read(struct intf_hdl *intf, u16 value, void *data, u8 size)
+ 	int status;
+ 	u8 io_buf[4];
  
--	if (pwrctrlpriv->reg_rfoff) {
--		pwrctrlpriv->rf_pwrstate = rf_off;
--	}
--
- 	/*  2010/08/09 MH We need to check if we need to turnon or off RF after detecting */
- 	/*  HW GPIO pin. Before PHY_RFConfig8192C. */
- 	/*  2010/08/26 MH If Efuse does not support sective suspend then disable the function. */
+-	if (adapt->bSurpriseRemoved || adapt->pwrctrlpriv.pnp_bstop_trx)
++	if (adapt->bSurpriseRemoved)
+ 		return -EPERM;
+ 
+ 	status = usb_control_msg_recv(udev, 0, REALTEK_USB_VENQT_CMD_REQ,
+@@ -59,7 +59,7 @@ static int usb_write(struct intf_hdl *intf, u16 value, void *data, u8 size)
+ 	int status;
+ 	u8 io_buf[VENDOR_CMD_MAX_DATA_LEN];
+ 
+-	if (adapt->bSurpriseRemoved || adapt->pwrctrlpriv.pnp_bstop_trx)
++	if (adapt->bSurpriseRemoved)
+ 		return -EPERM;
+ 
+ 	memcpy(io_buf, data, size);
+@@ -414,8 +414,7 @@ u32 rtw_read_port(struct adapter *adapter, u8 *rmem)
+ 	size_t alignment = 0;
+ 	u32 ret = _SUCCESS;
+ 
+-	if (adapter->bDriverStopped || adapter->bSurpriseRemoved ||
+-	    adapter->pwrctrlpriv.pnp_bstop_trx)
++	if (adapter->bDriverStopped || adapter->bSurpriseRemoved)
+ 		return _FAIL;
+ 
+ 	if (!precvbuf)
 diff --git a/drivers/staging/r8188eu/include/rtw_pwrctrl.h b/drivers/staging/r8188eu/include/rtw_pwrctrl.h
-index b0d48106fe56..3efcc65b2f6e 100644
+index 3efcc65b2f6e..94a65056a77e 100644
 --- a/drivers/staging/r8188eu/include/rtw_pwrctrl.h
 +++ b/drivers/staging/r8188eu/include/rtw_pwrctrl.h
-@@ -49,8 +49,6 @@ struct pwrctrl_priv {
+@@ -64,7 +64,6 @@ struct pwrctrl_priv {
+ 	u8	power_mgnt;
+ 	u8	bFwCurrentInPSMode;
+ 	u32	DelayLPSLastTimeStamp;
+-	u8		pnp_bstop_trx;
  
- 	bool	bpower_saving;
+ 	u8		bInSuspend;
+ 	u8		bSupportRemoteWakeup;
+diff --git a/drivers/staging/r8188eu/os_dep/usb_ops_linux.c b/drivers/staging/r8188eu/os_dep/usb_ops_linux.c
+index c4b6dbc8d66d..8ca16861bfcc 100644
+--- a/drivers/staging/r8188eu/os_dep/usb_ops_linux.c
++++ b/drivers/staging/r8188eu/os_dep/usb_ops_linux.c
+@@ -106,8 +106,7 @@ u32 rtw_write_port(struct adapter *padapter, u32 addr, u32 cnt, u8 *wmem)
+ 	struct xmit_frame *pxmitframe = (struct xmit_frame *)pxmitbuf->priv_data;
+ 	struct usb_device *pusbd = pdvobj->pusbdev;
  
--	u8	reg_rfoff;
--
- 	uint	ips_enter_cnts;
- 	uint	ips_leave_cnts;
- 
+-	if ((padapter->bDriverStopped) || (padapter->bSurpriseRemoved) ||
+-	    (padapter->pwrctrlpriv.pnp_bstop_trx)) {
++	if (padapter->bDriverStopped || padapter->bSurpriseRemoved) {
+ 		rtw_sctx_done_err(&pxmitbuf->sctx, RTW_SCTX_DONE_TX_DENY);
+ 		goto exit;
+ 	}
 -- 
 2.35.1
 

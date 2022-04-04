@@ -2,42 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC6E4F1FEB
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0BA4F2011
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240909AbiDDXNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 19:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57850 "EHLO
+        id S232204AbiDDXPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 19:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350869AbiDDXNE (ORCPT
+        with ESMTP id S243154AbiDDXOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 19:13:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497591EAE0
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 15:54:01 -0700 (PDT)
+        Mon, 4 Apr 2022 19:14:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8971E24BD8;
+        Mon,  4 Apr 2022 15:55:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D623D616C6
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 22:54:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F070C2BBE4;
-        Mon,  4 Apr 2022 22:54:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 482E0B819DE;
+        Mon,  4 Apr 2022 22:55:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B060DC2BBE4;
+        Mon,  4 Apr 2022 22:55:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1649112840;
-        bh=qdF66H42BPEgvH1SOyYChQ8fvKv8/tr1wPWHNAXLe8s=;
+        s=korg; t=1649112918;
+        bh=YJPKmsV50zrBbXBnSBP0IPEb8ro9ZtjvwhW0Jj1bEm8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lQ+qVXCM3MvVO39DD3EqJUXPA/OLav4OqnGe3qPOZ3ChJerjjcwo6FuJ+X4ge0Jgq
-         xrEs0YtKXLMUQQXuQ4QqX8snp6bGndn/oeEkGZUfUnoI5GJgCK7axYv3pKBr4av/80
-         vmosjtQCFKTRsnspJ1/2iQ+w1jmWsxFJl0uKEsCY=
-Date:   Mon, 4 Apr 2022 15:53:59 -0700
+        b=pMccEIrlU08djbT7wpa1ZN4nuH6BttjslEaHrMrXBm3RIBKlSfoT0f/FcYT2iS3ls
+         IYcRnNyMZ2Ls6Geib4sGfeWHOyVNPrHRYk5vsSDvKGz4SQVWlct+pYgglSnVLUFkJ2
+         f9M0YKMLgA0eGO3o2jNb33HftQnjOIzmrwYzIOVU=
+Date:   Mon, 4 Apr 2022 15:55:16 -0700
 From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mm/swapfile: unuse_pte can map random data if swap read
- fails
-Message-Id: <20220404155359.d4867fb8717fe40b5a11647c@linux-foundation.org>
-In-Reply-To: <20220401072926.45051-1-linmiaohe@huawei.com>
-References: <20220401072926.45051-1-linmiaohe@huawei.com>
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: Re: [PATCH] fs/proc/kcore.c: remove check of list iterator against
+ head past the loop body
+Message-Id: <20220404155516.a5fb4c23ee017a7212e4b22c@linux-foundation.org>
+In-Reply-To: <A23914B0-BFD7-48D6-ADCF-42062E1D9887@gmail.com>
+References: <20220331223700.902556-1-jakobkoschel@gmail.com>
+        <20220331164843.b531fbf00d6e7afd6cdfe113@linux-foundation.org>
+        <A23914B0-BFD7-48D6-ADCF-42062E1D9887@gmail.com>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -52,34 +60,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Apr 2022 15:29:26 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
+On Fri, 1 Apr 2022 09:19:57 +0200 Jakob Koschel <jakobkoschel@gmail.com> wrote:
 
-> There is a bug in unuse_pte(): when swap page happens to be unreadable,
-> page filled with random data is mapped into user address space. The fix
-> is to check for PageUptodate and fail swapoff in case of error.
+> > Speaking of limiting scope...
 > 
-> ...
->
-> --- a/mm/swapfile.c
-> +++ b/mm/swapfile.c
-> @@ -1795,6 +1795,10 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
->  		ret = 0;
->  		goto out;
->  	}
-> +	if (unlikely(!PageUptodate(page))) {
-> +		ret = -EIO;
-> +		goto out;
-> +	}
->  
->  	dec_mm_counter(vma->vm_mm, MM_SWAPENTS);
->  	inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
+> Fair point :-)
+> 
+> I see you have applied this already to the -mm tree. Shall I still move the iterator?
+> The hope is to remove the 'iter' variable altogether when there are no uses after
+> the loop anymore.
 
-Failing the swapoff after -EIO seems a bit rude.  The user ends up with
-a permanently mounted swap because a sector was bad?
+I don't really understand the question.
 
-That would be like failing truncate() or close() or umount after -EIO
-on a regular file.  Somewhat.
+My plan is to merge your patch with my fixlet immediately prior to
+sending upstream.
 
-Can we do something better?  Such as shooting down the page anyway and
-permitting the swapoff to proceed?  Worst case, just leak the dang page
-with an apologetic message.

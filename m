@@ -2,139 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 989644F0D87
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 04:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B63974F0D8A
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 04:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376905AbiDDCa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 22:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57428 "EHLO
+        id S1376912AbiDDCgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 22:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbiDDCa5 (ORCPT
+        with ESMTP id S230517AbiDDCgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 22:30:57 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D563A5DE
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 19:29:02 -0700 (PDT)
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220404022900epoutp02d3714f8e6e1ecb4b7036a497b12b818f~ikIrzdSmt3172531725epoutp02N
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 02:29:00 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220404022900epoutp02d3714f8e6e1ecb4b7036a497b12b818f~ikIrzdSmt3172531725epoutp02N
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1649039340;
-        bh=DO7cgGgTHvQMHO2GGJ8drJXd4TGsXZIl9hBqmml2nKE=;
-        h=Subject:Reply-To:From:To:CC:Date:References:From;
-        b=MYqdWOhx8hbOZ73orzX9YurUI567HMmbgIGfv4GB5QtPdvcqe4s4uPTJ4n4N+PWfY
-         QBvvhmw8sRadPTupaUx6BzX3O6d4S1+RGnuYO0cd10A2bebW2GSDW56M5vT7XS7eeO
-         jrs3TT9GEXfh9c4GlWDALtK9I7VILPZHs32oF8bA=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220404022859epcas1p2534f9bb1d4f81265dd56e830c0bcaff5~ikIrRX2wq1815818158epcas1p23;
-        Mon,  4 Apr 2022 02:28:59 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.36.70]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4KWvpy10X0z4x9Q7; Mon,  4 Apr
-        2022 02:28:58 +0000 (GMT)
-X-AuditID: b6c32a38-93fff700000255ac-c8-624a57e90621
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        DB.BC.21932.9E75A426; Mon,  4 Apr 2022 11:28:58 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH] dt-bindings: net: snps: remove duplicate name
-Reply-To: dj76.yang@samsung.com
-Sender: Dongjin Yang <dj76.yang@samsung.com>
-From:   Dongjin Yang <dj76.yang@samsung.com>
-To:     "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Moon-Ki Jun <moonki.jun@samsung.com>,
-        Dongjin Yang <dj76.yang@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220404022857epcms1p6e6af1a6a86569f339e50c318abde7d3c@epcms1p6>
-Date:   Mon, 04 Apr 2022 11:28:57 +0900
-X-CMS-MailID: 20220404022857epcms1p6e6af1a6a86569f339e50c318abde7d3c
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 101P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHJsWRmVeSWpSXmKPExsWy7bCmge6rcK8kg3tLmC1eHtK0mHO+hcVi
-        /pFzrBa7Zyxnsng56x6bxd7XW9ktLmzrY7W4vGsOm8W5xZkWxxaIWXw7/YbRonXvEXYHHo8t
-        K28yeWxa1cnmcefaHjaP9/uusnn0bVnF6PF5k1wAW1S2TUZqYkpqkUJqXnJ+SmZeuq2Sd3C8
-        c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QhUoKZYk5pUChgMTiYiV9O5ui/NKSVIWM/OIS
-        W6XUgpScAvMCveLE3OLSvHS9vNQSK0MDAyNToMKE7Iz9Z/sZC+ZxVUybtoepgfEeexcjJ4eE
-        gInE92+L2UBsIYEdjBLLG1S7GDk4eAUEJf7uEAYJCwvYSTz4+ZsNJCwkIC/xeWIlRFhHouPt
-        UxaQMJuAlsTs/sQuRi4OEYFDzBKzp/xiAqlhFgiQWLrzJxPEJl6JGe0g9SC2tMT25VsZIWwN
-        iR/LepkhbFGJm6vfssPY74/Nh6oRkWi9dxaqRhDonN1QcSmJR80HoOxqiXPtvewgR0gINDBK
-        HPy8EexmCQF9iR3XjUFqeAV8JaY1/mcFsVkEVCVOPl/ECtHrIjH/3UIWiJvlJba/ncMM0sos
-        oCmxfpc+xBRliSO3WGA+adj4mx2dzSzAJ/Huaw8rTHzHvCdQnytLfG5+DdUrKbF48kzmCYxK
-        sxDBPAvJ3lkIexcwMq9iFEstKM5NTy02LDCBR2xyfu4mRnBC1bLYwTj37Qe9Q4xMHIyHGCU4
-        mJVEeHOCPJOEeFMSK6tSi/Lji0pzUosPMZoCfTyRWUo0OR+Y0vNK4g1NLA1MzIxMTQ0NLEyU
-        xHl7p55OFBJITyxJzU5NLUgtgulj4uCUamCqV/6jk/7vv9evVN6DcZ5FD5x+ir6ui6tcqB78
-        7NS/6FdJq7b9/n63P1LnEqsxi5VHdf4mkyBZqc1pqr8lw18y3DFyrzy9dK/vLS2hb2kV60sf
-        LhbJ+8XyvnS2RtlWu2o+kzX1Gy69De8rX/n/+XXtPzdmy/w9N2+mR8G6AOUFZ26ePXawXLs5
-        8M5jnZ8sMfV1z66LTlD9b6T/d4dkK8P2zNtsOydV3zC32nk4XTspfXda/q8dJcqhu1vO5uXK
-        Mf/bXMh8U/exfMXuw1LSU3bEaM/6dWZNtcrv90ufbYzZr6VvXZuf8Pzo7eglPgvvnXJRVlnA
-        t9fmXkCW5vx+7Vttjx7dT7n/6qv2ks3nNZzclViKMxINtZiLihMBFMumYjEEAAA=
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220404022857epcms1p6e6af1a6a86569f339e50c318abde7d3c
-References: <CGME20220404022857epcms1p6e6af1a6a86569f339e50c318abde7d3c@epcms1p6>
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 3 Apr 2022 22:36:22 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E5827CF9;
+        Sun,  3 Apr 2022 19:34:26 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id i4so6677828qti.7;
+        Sun, 03 Apr 2022 19:34:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pet6Cd8QN+6E9l7Pe1i1Z7DRHGjXc6tw1i1GJeHwKHY=;
+        b=V8puzvltQxJL9XxR1kuxmEAcD3nniE6lMtpldsHM3CWZnj98229LnpMFRFmvNCdLIc
+         moyLXNsc9st9sioCsMmdz0/GGQN5Riv0xseZ+y8ddA++5tQPSYdT7lsO5AwpMUGQ+3fv
+         aPu1D/FWGC/M8vNVOW0SsD/Vs6D+8Me3yL2uWFnAdFn+BqMwRyQtMlVetUXY93IofmU8
+         xvWKhEoJr0Z9S5l7ikgVgk/iDFKvJvfhM1BFOSyWQVJsF7/79VzbpGnf8q/dIn1hDvqP
+         whl+uX0h6pwSI2KO/KDgQ1ExFhL5orJ0O5YiOipx/C/A3DUaWPPyFGpZThuTalX3Lvf7
+         T/tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pet6Cd8QN+6E9l7Pe1i1Z7DRHGjXc6tw1i1GJeHwKHY=;
+        b=QRRZSZTy5GxTqWlCGTkvZwN1qosFChfoJ1XG5Q6UdaOcvF55t6RYTXaPqmDVL2Pfgv
+         jqmWK+0XPD40g5viYIWkt4IR+OfaJOsTlXk4INB8dAqAj/gKNlKNlHl0uwuJ4s3bSieW
+         JJFaapdBpO9LHH7srd7fAC2WlTZjPCnNhbvfEDI6SHjCFceNrPIe9Rn26ulISUL3Ajr1
+         KA59w/QshoVLbd4w/FRfpNLxKqZjWYHePAIGMjMyx6zFl+pRkRIV2ZbvRGrJr9HV95x/
+         ne1Z7utgpLCfg0u3AuUFcvQvCbgLQsH4eYdBADf0290lB9eXv8OtysH3crRMrtBE0vhl
+         qpAw==
+X-Gm-Message-State: AOAM531v7qdiDfMoqqpQhdBbs3HkAkldl/kBxQ8HAzQ5dB0VHW1ODmQm
+        pMFYSQ8YmuIN2MC2X/KiYnQomKKXNRpSqziW4Wk=
+X-Google-Smtp-Source: ABdhPJyAdARiOzxgBRjGfjOxZyVkyOhu8EUSQdQ140UXpKmWbiF4Mf5SGUwoCIVpjWRFagFwo5HlCRsi/sF1OOhz/5k=
+X-Received: by 2002:a05:622a:1013:b0:2e1:c9c0:9831 with SMTP id
+ d19-20020a05622a101300b002e1c9c09831mr15898965qte.245.1649039665610; Sun, 03
+ Apr 2022 19:34:25 -0700 (PDT)
+MIME-Version: 1.0
+References: <1648713656-24254-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <YkVt0m+VxnXgnulq@dhcp22.suse.cz> <CAGWkznF4qb2EP3=xVamKO8qk08vaFg9JeHD7g80xvBfxm39Hkg@mail.gmail.com>
+ <YkWR8t8yEe6xyzCM@dhcp22.suse.cz> <CAGWkznHxAD0757m1i1Csw1CVRDtQddfCL08dYf12fa47=-uYYQ@mail.gmail.com>
+ <YkbjNYMY8VjHoSHR@dhcp22.suse.cz> <CAGWkznF7cSyPU0ceYwH6zweJzf-X1bQnS6AJ2-J+WEL0u8jzng@mail.gmail.com>
+ <CAJuCfpHneDZMXO_MmQDPA+igAOdAPRUChiq+zftFXGfDzPHNhQ@mail.gmail.com>
+In-Reply-To: <CAJuCfpHneDZMXO_MmQDPA+igAOdAPRUChiq+zftFXGfDzPHNhQ@mail.gmail.com>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Mon, 4 Apr 2022 10:33:58 +0800
+Message-ID: <CAGWkznFTQCm0cusVxA_55fu2WfT-w2coVHrT=JA1D_9_2728mQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        cgroups mailinglist <cgroups@vger.kernel.org>,
+        Ke Wang <ke.wang@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-snps,dwmac has duplicated name for loongson,ls2k-dwmac and
-loongson,ls7a-dwmac.
-
-Signed-off-by: Dongjin Yang <dj76.yang@samsung.com>
----
- Documentation/devicetree/bindings/net/snps,dwmac.yaml | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-index 2d5248f..36c85eb 100644
---- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-+++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-@@ -53,20 +53,18 @@ properties:
-         - allwinner,sun8i-r40-gmac
-         - allwinner,sun8i-v3s-emac
-         - allwinner,sun50i-a64-emac
--        - loongson,ls2k-dwmac
--        - loongson,ls7a-dwmac
-         - amlogic,meson6-dwmac
-         - amlogic,meson8b-dwmac
-         - amlogic,meson8m2-dwmac
-         - amlogic,meson-gxbb-dwmac
-         - amlogic,meson-axg-dwmac
--        - loongson,ls2k-dwmac
--        - loongson,ls7a-dwmac
-         - ingenic,jz4775-mac
-         - ingenic,x1000-mac
-         - ingenic,x1600-mac
-         - ingenic,x1830-mac
-         - ingenic,x2000-mac
-+        - loongson,ls2k-dwmac
-+        - loongson,ls7a-dwmac
-         - rockchip,px30-gmac
-         - rockchip,rk3128-gmac
-         - rockchip,rk3228-gmac
--- 
-2.9.5
+On Sun, Apr 3, 2022 at 11:04 PM Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> On Fri, Apr 1, 2022 at 10:18 PM Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
+> >
+> > On Fri, Apr 1, 2022 at 7:34 PM Michal Hocko <mhocko@suse.com> wrote:
+> > >
+> > > On Fri 01-04-22 09:34:02, Zhaoyang Huang wrote:
+> > > > On Thu, Mar 31, 2022 at 7:35 PM Michal Hocko <mhocko@suse.com> wrote:
+> > > > >
+> > > > > On Thu 31-03-22 19:18:58, Zhaoyang Huang wrote:
+> > > > > > On Thu, Mar 31, 2022 at 5:01 PM Michal Hocko <mhocko@suse.com> wrote:
+> > > > > > >
+> > > > > > > On Thu 31-03-22 16:00:56, zhaoyang.huang wrote:
+> > > > > > > > From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> > > > > > > >
+> > > > > > > > For some kind of memcg, the usage is varies greatly from scenarios. Such as
+> > > > > > > > multimedia app could have the usage range from 50MB to 500MB, which generated
+> > > > > > > > by loading an special algorithm into its virtual address space and make it hard
+> > > > > > > > to protect the expanded usage without userspace's interaction.
+> > > > > > >
+> > > > > > > Do I get it correctly that the concern you have is that you do not know
+> > > > > > > how much memory your workload will need because that depends on some
+> > > > > > > parameters?
+> > > > > > right. such as a camera APP will expand the usage from 50MB to 500MB
+> > > > > > because of launching a special function(face beauty etc need special
+> > > > > > algorithm)
+> > > > > > >
+> > > > > > > > Furthermore, fixed
+> > > > > > > > memory.low is a little bit against its role of soft protection as it will response
+> > > > > > > > any system's memory pressure in same way.
+> > > > > > >
+> > > > > > > Could you be more specific about this as well?
+> > > > > > As the camera case above, if we set memory.low as 200MB to keep the
+> > > > > > APP run smoothly, the system will experience high memory pressure when
+> > > > > > another high load APP launched simultaneously. I would like to have
+> > > > > > camera be reclaimed under this scenario.
+> > > > >
+> > > > > OK, so you effectivelly want to keep the memory protection when there is
+> > > > > a "normal" memory pressure but want to relax the protection on other
+> > > > > high memory utilization situations?
+> > > > >
+> > > > > How do you exactly tell a difference between a steady memory pressure
+> > > > > (say stream IO on the page cache) from "high load APP launched"? Should
+> > > > > you reduce the protection on the stram IO situation as well?
+> > > > We can take either system's io_wait or PSI_IO into consideration for these.
+> > >
+> > > I do not follow. Let's say you have a stream IO workload which is mostly
+> > > RO. Reclaiming those pages means effectivelly to drop them from the
+> > > cache so there is no IO involved during the reclaim. This will generate
+> > > a constant flow of reclaim that shouldn't normally affect other
+> > > workloads (as long as kswapd keeps up with the IO pace). How does your
+> > > scheme cope with this scenario? My understanding is that it will simply
+> > > relax the protection.
+> > You are right. This scheme treats the system's memory pressure
+> > equally, no matter if it comes from in-kernel page allocation with
+> > high order or cache drop by IO like things. The decay_factor composed
+> > of PSI_SOME and PSI_FULL which represent the system is tight on
+> > memory, every entity has the obligation to donate to solve this issue.
+> > >
+> > > > > [...]
+> > > > > > > One very important thing that I am missing here is the overall objective of this
+> > > > > > > tuning. From the above it seems that you want to (ab)use memory->low to
+> > > > > > > protect some portion of the charged memory and that the protection
+> > > > > > > shrinks over time depending on the the global PSI metrict and time.
+> > > > > > > But why this is a good thing?
+> > > > > > 'Good' means it meets my original goal of keeping the usage during a
+> > > > > > period of time and responding to the system's memory pressure. For an
+> > > > > > android like system, memory is almost forever being in a tight status
+> > > > > > no matter how many RAM it has. What we need from memcg is more than
+> > > > > > control and grouping, we need it to be more responsive to the system's
+> > > > > > load and could  sacrifice its usage  under certain criteria.
+> > > > >
+> > > > > Why existing tools/APIs are insufficient for that? You can watch for
+> > > > > both global and memcg memory pressure including PSI metrics and update
+> > > > > limits dynamically. Why is it necessary to put such a logic into the
+> > > > > kernel?
+> > > > Poll and then React method in userspace requires a polling interval
+> > > > and response time. Take PSI as an example, it polls ten times during
+> > > > POLLING_INTERVAL while just report once, which introduce latency in
+> > > > some extend.
+> > >
+> > > Do workload transitions happen so often in your situation that the
+> > > interval really matters? As Suren already pointed out starting a new
+> > > application is usually an explicit event which can pro-activelly update
+> > > limits.
+> > Yes. As my reply to Suren's comment, even a positive monitor service
+> > which could be aware of the activity starting(APP launching etc) at
+> > the very first time, has to 1. read PSI and memcg->watermark/usage 2.
+> > make a decision. 3. write memcg->memory.low to adjust memory
+> > allowance. Furthermore, monitors could not supervise the APP for whole
+> > life time, while the reclaiming could arise at any time.
+>
+> Ok, sounds like you want this dynamic limit to be active all the time,
+> not only at specific points in the process's life cycle.
+Not sure yet. I think it would be better to cooperate with AMS like
+things which could distinguish scenarios. Such as place
+foreground/background processes into different memcgs with different
+decay configurations OR dynamic set up the parameters to a specific
+memcg.
+> One thing that I don't understand in this approach is: why memory.low
+> should depend on the system's memory pressure. It seems you want to
+> allow a process to allocate more when memory pressure is high. That is
+> very counter-intuitive to me. Could you please explain the underlying
+> logic of why this is the right thing to do, without going into
+> technical details?
+What I want to achieve is make memory.low be positive correlation with
+timing and negative to memory pressure, which means the protected
+memcg should lower its protection(via lower memcg.low) for helping
+system's memory pressure when it's high. The concept behind is memcg's
+fault back of dropped memory is less important than system's latency
+on high memory pressure. Please refer to my new version's test data
+for more detail.
+>
+> >
+> > > --
+> > > Michal Hocko
+> > > SUSE Labs

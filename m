@@ -2,90 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC0E4F1861
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B64FA4F186F
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356192AbiDDPbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 11:31:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53426 "EHLO
+        id S1378551AbiDDPb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 11:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349937AbiDDPbQ (ORCPT
+        with ESMTP id S1378548AbiDDPbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 11:31:16 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFE525289
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:29:19 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id s21so954150pgs.4
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 08:29:19 -0700 (PDT)
+        Mon, 4 Apr 2022 11:31:53 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E06125C46
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:29:55 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id n6-20020a17090a670600b001caa71a9c4aso2249433pjj.1
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 08:29:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WwaoVUBFVj9j7YaVgwWeUQJL/8oOimF01hIs03GSwEs=;
-        b=KZsqHqLKTZjQ/n4pzslaH4ezeqg3fhSolbXjJDiLWpQ/F7MVzuHnt9f78kdKHToQch
-         G70BhWHUbPG0PFNkIq0GPgyX81ktwvl+QHt8S/DabeaSL0+Iwo61HVAvu1HIBIY8S5yp
-         tBulvFhDY/WVo/ktoFXDlHK0vM9E0BPOGCq4frsH67nAc9UFAmZQVYyLIZX1GWYJbVIo
-         Qp9I2Ss9mAvRnWQ0sfLgx6U7mHlf1V5UPYz7zTqeXdXYXYAnZrrD7z8mYc2jz+gy5AQ6
-         9bRf4e6+0bJXpY3TR7YpsYxf50s9DZmxdEuNLIbT70dw6bLeUEjGMqzhAOlx0x3+Rlg5
-         Yn8Q==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NYdLkpnPyZngOUeZn/lWuqKTc6z7uKg+rCuaLMiMRSc=;
+        b=ZlGFBz+QAxW6mc1NL3lIxSAx855Zk+iZwgoqXuomMIcEcJoR8BzxRfrpd34fRuKg44
+         X13qx0BYfm9/Mt3mW3wjTJh1hI4v3dFMmcwtp/8kk+/f7rWYN9oGt2zMFPm/8CsNUk6w
+         GklHiSRfDYcCfYUvs7Fwq/SeaVkmrjlXBI16fRQylzfva90ac9g5ZXssdASocEnzvVNT
+         WOvxVz5glovklgt1eTwh4IHje1EGFqRrlU4LJ590a2MSDuEuMxOLmVqNX3xVHUsOksxb
+         ekewxmzbJVBMpsS22MVS/OdAmPo2+oYeD4yJMBeEkImJtrz/udmJOCHJBs3gw+JKDN3V
+         Xewg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WwaoVUBFVj9j7YaVgwWeUQJL/8oOimF01hIs03GSwEs=;
-        b=EV/V/xxCySEIHV29+vXOf/ny42uuowgm6Zu6lWbslI5g4i+DdePS8Pzn8mvc5URqLY
-         /pqHK5Yxw/SZ9SYUNaG2ZCtbblYhSHZQZv92ACLkX+0qYchFSjc6B9JUReRswwGJRS5w
-         ykp559/NXhR64o577iOauGoBGc490sGAbcl1W1u6ltWsneUtVKKseGF88Xhihvtn5/Pv
-         dzHCPhlgmS5TSr+NuUMBGr8+/mhiqYgstAd7HCoArs6/JydmJuIcBxb06QuoAURrjujz
-         KFAVg3p6ME3zzZJ32D+8b3QdpVHxeiJ5FwKaz1Uu+vxkhGyznU6tV/+XEg3c3qnRaL0T
-         iaIA==
-X-Gm-Message-State: AOAM530B1964sgAsnL2zBIQfUIXBfRW68+Dtgp0uoPgGhjrKvjrOnhLw
-        5lrOK+5eNKfJzsA4F2Jst+G0SA==
-X-Google-Smtp-Source: ABdhPJwChen+B+MRC8z3HtJ9ZPqGfIpYJlCB7ilek3qAIXp3MkMC00v5kKiyVolwyc8KYvTSZ9Tagg==
-X-Received: by 2002:a63:d456:0:b0:399:4c5a:2682 with SMTP id i22-20020a63d456000000b003994c5a2682mr308856pgj.573.1649086158737;
-        Mon, 04 Apr 2022 08:29:18 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id u11-20020a056a00158b00b004fb07effe2esm13383793pfk.130.2022.04.04.08.29.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 08:29:17 -0700 (PDT)
-Date:   Mon, 4 Apr 2022 15:29:13 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Zeng Guang <guang.zeng@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hu, Robert" <robert.hu@intel.com>,
-        "Gao, Chao" <chao.gao@intel.com>
-Subject: Re: [PATCH v7 5/8] KVM: x86: Add support for vICR APIC-write
- VM-Exits in x2APIC mode
-Message-ID: <YksOyUQd3N/inHMo@google.com>
-References: <20220304080725.18135-1-guang.zeng@intel.com>
- <20220304080725.18135-6-guang.zeng@intel.com>
- <YkY0MvAIPiISfk4u@google.com>
- <ce0261c0-a8f2-a9b8-6d99-88a33556d7cb@intel.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NYdLkpnPyZngOUeZn/lWuqKTc6z7uKg+rCuaLMiMRSc=;
+        b=Vu/zML5eFkK2TzSPb/p8fTJ+rosYXun/ZS40keJZBjUN2oCh2f6m2TcmMM0weiTsnP
+         v9NcSxQo2nrqvKAM+GPunr9PmaF0c/tRydATSjN/8rSFcB5j0abq59j2gbneXx2skFfS
+         11R+wsgVLc4B6k5HWhG38gkFSVOwpd4eOvFTUULRKFND840BhKDj1xqqJor12JETF4fG
+         FFF066yZb0rqNdsE43Skqy9UaFhD7VKsCcbLuLX7h9IuqHoROifIEVmqT1P7Yvsxkic+
+         UD+ImgjaKm+ZJxVyx3AXz/SvSIDibJ2e0WXlLx9J7GnCGKNiaEe3xMyO0+x6eeAeyLwu
+         3Oyw==
+X-Gm-Message-State: AOAM5322nJi2EFaF+I+oKD1PoZQ0gUVytatP291qp4s3ULW5zawOA9Ec
+        y/hIFYbwwswRdwU3N1jfrx6ci6b35gc3sgE///k=
+X-Google-Smtp-Source: ABdhPJw9XMoIfKMRbk3XIvNIhtAvrlb2TSOCmuuImlQkXykuazD6i7HUF6W5/gXUNTZblUIirnDGjH+/dp4KBlxWLPI=
+X-Received: by 2002:a17:902:d88f:b0:155:e660:b769 with SMTP id
+ b15-20020a170902d88f00b00155e660b769mr231842plz.36.1649086194452; Mon, 04 Apr
+ 2022 08:29:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ce0261c0-a8f2-a9b8-6d99-88a33556d7cb@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+References: <20220404150442.934496-1-jan.varho@gmail.com> <YksMxDLxPZtuYlFm@zx2c4.com>
+In-Reply-To: <YksMxDLxPZtuYlFm@zx2c4.com>
+From:   Jan Varho <jan.varho@gmail.com>
+Date:   Mon, 4 Apr 2022 18:29:18 +0300
+Message-ID: <CAE2X=SxCwoKa1OpNAsy5FN1Ugeos3gaM4YX4K4uTWfkKBEr0pA@mail.gmail.com>
+Subject: Re: [PATCH] random: fix add_hwgenerator_randomness entropy accounting
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,52 +65,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 02, 2022, Zeng Guang wrote:
-> 
-> > > -	/* TODO: optimize to just emulate side effect w/o one more write */
-> > > -	kvm_lapic_reg_write(vcpu->arch.apic, offset, val);
-> > > +		kvm_lapic_msr_read(apic, offset, &val);
-> > > +		kvm_apic_send_ipi(apic, (u32)val, (u32)(val >> 32));
-> > This needs to clear the APIC_ICR_BUSY bit.  It'd also be nice to trace this write.
-> > The easiest thing is to use kvm_x2apic_icr_write().  Kinda silly as it'll generate
-> > an extra write, but on the plus side the TODO comment doesn't have to move :-D
-> > 
-> > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> > index c4c3155d98db..58bf296ee313 100644
-> > --- a/arch/x86/kvm/lapic.c
-> > +++ b/arch/x86/kvm/lapic.c
-> > @@ -2230,6 +2230,7 @@ void kvm_apic_write_nodecode(struct kvm_vcpu *vcpu, u32 offset)
-> >          struct kvm_lapic *apic = vcpu->arch.apic;
-> >          u64 val;
-> > 
-> > +       /* TODO: optimize to just emulate side effect w/o one more write */
-> >          if (apic_x2apic_mode(apic)) {
-> >                  /*
-> >                   * When guest APIC is in x2APIC mode and IPI virtualization
-> > @@ -2240,10 +2241,9 @@ void kvm_apic_write_nodecode(struct kvm_vcpu *vcpu, u32 offset)
-> >                          return;
-> > 
-> >                  kvm_lapic_msr_read(apic, offset, &val);
-> > -               kvm_apic_send_ipi(apic, (u32)val, (u32)(val >> 32));
-> > +               kvm_x2apic_icr_write(apic, val);
-> 
-> As SDM section 10.12.9 "ICR Operation in X2APIC mode" says "Delivery status
-> bit is removed since it is not needed in x2APIC mode" , so that's not
-> necessary to clear the APIC_ICR_BUSY bit here. Alternatively we can add trace
-> to this write by hardware.
+Hi,
 
-That same section later says 
+On Mon, Apr 4, 2022 at 6:20 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> > Fix by not crediting entropy if any input was consumed for fast init.
+>
+> Yea, I'd seen this and wasn't really sure what the correct fix was. My
+> recent addition of `&& entropy < POOL_MIN_BITS` is a step in the right
+> direction of making your fix the desirable path, since it makes it less
+> likely that we'd wind up throwing away "good" entropy. So maybe it's
+> time we do that.
 
-  With the removal of the Delivery Status bit, system software no longer has a
-  reason to read the ICR. It remains readable only to aid in debugging; however,
-  software should not assume the value returned by reading the ICR is the last
-  written value.
+Yes, but since it's a hwrng, hopefully it will supply more soon.
 
-which means that it's at least legal for a hypervisor to clear the busy bit.  That
-might be useful for debugging IPI issues?  Probably a bit of a stretch, e.g. I doubt
-any kernels set the busy bit.  But, I do think the tracing would be helpful, and at
-that point, the extra code should be an AND+MOV.
+And like you say, the new condition makes it less likely to happen.
 
-I don't have a super strong opinion, and I'm being somewhat hypocritical (see commit
-b51818afdc1d ("KVM: SVM: Don't rewrite guest ICR on AVIC IPI virtualization failure"),
-though that has dedicated tracing), so either approach works for me.
+> This is untested, but if you want to test it and submit it at v2, I
+> think it might be an okay incarnation of the lazy approach.
+
+I thought about doing it that way, but the return value allows
+checking that any input was actually used instead of fast init
+completing in the mean time.
+
+If you want I can do that.
+
+Jan

@@ -2,65 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 926214F0D84
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 04:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 989644F0D87
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 04:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376897AbiDDC1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 22:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
+        id S1376905AbiDDCa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 22:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbiDDC1t (ORCPT
+        with ESMTP id S230517AbiDDCa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 22:27:49 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A13939825
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 19:25:54 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d15so1657179pll.10
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 19:25:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ingics-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Zc8F1O8AMZwy+suRWlAfauAc49+2wfvQoa4MDCey320=;
-        b=n/qUoYvyvWkXr4Uhh98s/5URTAd7DySEceWVmkQ2F+Nm3NOUGZXWqYnegOk5SXZpyc
-         dS33WkG/lgeS5dfhlbbJuXxkSRHPX4s6hx9l21rbzjRJEU6QZBk33ZcpheQuNsYOXKjd
-         X9t2ZZTJ+CedW7R85bq+UZPQ9uyk24U3Bf2xXtSoYTk4JcaJX23Wj0wIuKS2u5+Ka5z6
-         sir1hSINxUMnGALd6G5fiCmJWO28eDaqp3cU2Ich6fSdCuUpENghxtQAFbVjVqxgoT2w
-         N3qySd3BfopZ/FDaCxH1ET5L+BWczeesu/9TAfWyBrKBtWzbZ5CBYXm6yCb7J0e7oOzK
-         Gu6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Zc8F1O8AMZwy+suRWlAfauAc49+2wfvQoa4MDCey320=;
-        b=2X1T1jgmJiWFUObAkrizAAmcsdBSJAb9ZMR00p5fMmy2sghiPLoHAqDJbl2bZaEEaP
-         W0uUqAVZ/Q92bkWftDRs1tPtkWi+r2J/7iA1Ej2BCjiOjCcU1r4+kRybZJ77gEK+ZUHV
-         8fx4XJXJO4DCiqbjs88aKoujzkefqnTLRPvg7NFpz/XLklOScaXpMfwvazsNLJ3i6rBw
-         mOZbJczHNv2lO5a9ctHWcNyGRZhDGnjIf5j/mRXj+lrdN6x4CWmEaJJYt5776RunfnZ5
-         p+TrDhLo49aDPnR07qLAMWoD3LpH9ge22ocm5bYf1FSOnJScmN+NQt0d2wkW3oWBtwYO
-         lb+A==
-X-Gm-Message-State: AOAM530ebkb8WU9SjP3lLc2UvCuhTf5+4p+ANy/EeKgu6m+jCeDuYfuV
-        BZB7u+4PpiA1Px5Um6UbxKvhyT37VenHPQ==
-X-Google-Smtp-Source: ABdhPJyQlogUWMitCIX8q42HIDAQANJWrxQlm3wzNnvvqi2soVV9P86dIYsJKo8QGds6nrEoLQoyTA==
-X-Received: by 2002:a17:902:c94c:b0:154:45c6:fbea with SMTP id i12-20020a170902c94c00b0015445c6fbeamr21323592pla.117.1649039153462;
-        Sun, 03 Apr 2022 19:25:53 -0700 (PDT)
-Received: from alpha.. (122-117-179-2.hinet-ip.hinet.net. [122.117.179.2])
-        by smtp.googlemail.com with ESMTPSA id j13-20020a056a00130d00b004f1025a4361sm10239540pfu.202.2022.04.03.19.25.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 19:25:52 -0700 (PDT)
-From:   Axel Lin <axel.lin@ingics.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        linux-kernel@vger.kernel.org, Axel Lin <axel.lin@ingics.com>
-Subject: [PATCH] regulator: rtq2134: Fix missing active_discharge_on setting
-Date:   Mon,  4 Apr 2022 10:25:14 +0800
-Message-Id: <20220404022514.449231-1-axel.lin@ingics.com>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        Sun, 3 Apr 2022 22:30:57 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D563A5DE
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 19:29:02 -0700 (PDT)
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220404022900epoutp02d3714f8e6e1ecb4b7036a497b12b818f~ikIrzdSmt3172531725epoutp02N
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 02:29:00 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220404022900epoutp02d3714f8e6e1ecb4b7036a497b12b818f~ikIrzdSmt3172531725epoutp02N
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1649039340;
+        bh=DO7cgGgTHvQMHO2GGJ8drJXd4TGsXZIl9hBqmml2nKE=;
+        h=Subject:Reply-To:From:To:CC:Date:References:From;
+        b=MYqdWOhx8hbOZ73orzX9YurUI567HMmbgIGfv4GB5QtPdvcqe4s4uPTJ4n4N+PWfY
+         QBvvhmw8sRadPTupaUx6BzX3O6d4S1+RGnuYO0cd10A2bebW2GSDW56M5vT7XS7eeO
+         jrs3TT9GEXfh9c4GlWDALtK9I7VILPZHs32oF8bA=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220404022859epcas1p2534f9bb1d4f81265dd56e830c0bcaff5~ikIrRX2wq1815818158epcas1p23;
+        Mon,  4 Apr 2022 02:28:59 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.36.70]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4KWvpy10X0z4x9Q7; Mon,  4 Apr
+        2022 02:28:58 +0000 (GMT)
+X-AuditID: b6c32a38-93fff700000255ac-c8-624a57e90621
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        DB.BC.21932.9E75A426; Mon,  4 Apr 2022 11:28:58 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH] dt-bindings: net: snps: remove duplicate name
+Reply-To: dj76.yang@samsung.com
+Sender: Dongjin Yang <dj76.yang@samsung.com>
+From:   Dongjin Yang <dj76.yang@samsung.com>
+To:     "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Moon-Ki Jun <moonki.jun@samsung.com>,
+        Dongjin Yang <dj76.yang@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220404022857epcms1p6e6af1a6a86569f339e50c318abde7d3c@epcms1p6>
+Date:   Mon, 04 Apr 2022 11:28:57 +0900
+X-CMS-MailID: 20220404022857epcms1p6e6af1a6a86569f339e50c318abde7d3c
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 101P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHJsWRmVeSWpSXmKPExsWy7bCmge6rcK8kg3tLmC1eHtK0mHO+hcVi
+        /pFzrBa7Zyxnsng56x6bxd7XW9ktLmzrY7W4vGsOm8W5xZkWxxaIWXw7/YbRonXvEXYHHo8t
+        K28yeWxa1cnmcefaHjaP9/uusnn0bVnF6PF5k1wAW1S2TUZqYkpqkUJqXnJ+SmZeuq2Sd3C8
+        c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QhUoKZYk5pUChgMTiYiV9O5ui/NKSVIWM/OIS
+        W6XUgpScAvMCveLE3OLSvHS9vNQSK0MDAyNToMKE7Iz9Z/sZC+ZxVUybtoepgfEeexcjJ4eE
+        gInE92+L2UBsIYEdjBLLG1S7GDk4eAUEJf7uEAYJCwvYSTz4+ZsNJCwkIC/xeWIlRFhHouPt
+        UxaQMJuAlsTs/sQuRi4OEYFDzBKzp/xiAqlhFgiQWLrzJxPEJl6JGe0g9SC2tMT25VsZIWwN
+        iR/LepkhbFGJm6vfssPY74/Nh6oRkWi9dxaqRhDonN1QcSmJR80HoOxqiXPtvewgR0gINDBK
+        HPy8EexmCQF9iR3XjUFqeAV8JaY1/mcFsVkEVCVOPl/ECtHrIjH/3UIWiJvlJba/ncMM0sos
+        oCmxfpc+xBRliSO3WGA+adj4mx2dzSzAJ/Huaw8rTHzHvCdQnytLfG5+DdUrKbF48kzmCYxK
+        sxDBPAvJ3lkIexcwMq9iFEstKM5NTy02LDCBR2xyfu4mRnBC1bLYwTj37Qe9Q4xMHIyHGCU4
+        mJVEeHOCPJOEeFMSK6tSi/Lji0pzUosPMZoCfTyRWUo0OR+Y0vNK4g1NLA1MzIxMTQ0NLEyU
+        xHl7p55OFBJITyxJzU5NLUgtgulj4uCUamCqV/6jk/7vv9evVN6DcZ5FD5x+ir6ui6tcqB78
+        7NS/6FdJq7b9/n63P1LnEqsxi5VHdf4mkyBZqc1pqr8lw18y3DFyrzy9dK/vLS2hb2kV60sf
+        LhbJ+8XyvnS2RtlWu2o+kzX1Gy69De8rX/n/+XXtPzdmy/w9N2+mR8G6AOUFZ26ePXawXLs5
+        8M5jnZ8sMfV1z66LTlD9b6T/d4dkK8P2zNtsOydV3zC32nk4XTspfXda/q8dJcqhu1vO5uXK
+        Mf/bXMh8U/exfMXuw1LSU3bEaM/6dWZNtcrv90ufbYzZr6VvXZuf8Pzo7eglPgvvnXJRVlnA
+        t9fmXkCW5vx+7Vttjx7dT7n/6qv2ks3nNZzclViKMxINtZiLihMBFMumYjEEAAA=
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220404022857epcms1p6e6af1a6a86569f339e50c318abde7d3c
+References: <CGME20220404022857epcms1p6e6af1a6a86569f339e50c318abde7d3c@epcms1p6>
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,27 +101,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The active_discharge_on setting was missed, so output discharge resistor
-is always disabled. Fix it.
+snps,dwmac has duplicated name for loongson,ls2k-dwmac and
+loongson,ls7a-dwmac.
 
-Fixes: 0555d41497de ("regulator: rtq2134: Add support for Richtek RTQ2134 SubPMIC")
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Signed-off-by: Dongjin Yang <dj76.yang@samsung.com>
 ---
- drivers/regulator/rtq2134-regulator.c | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/devicetree/bindings/net/snps,dwmac.yaml | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/regulator/rtq2134-regulator.c b/drivers/regulator/rtq2134-regulator.c
-index f21e3f8b21f2..8e13dea354a2 100644
---- a/drivers/regulator/rtq2134-regulator.c
-+++ b/drivers/regulator/rtq2134-regulator.c
-@@ -285,6 +285,7 @@ static const unsigned int rtq2134_buck_ramp_delay_table[] = {
- 		.enable_mask = RTQ2134_VOUTEN_MASK, \
- 		.active_discharge_reg = RTQ2134_REG_BUCK##_id##_CFG0, \
- 		.active_discharge_mask = RTQ2134_ACTDISCHG_MASK, \
-+		.active_discharge_on = RTQ2134_ACTDISCHG_MASK, \
- 		.ramp_reg = RTQ2134_REG_BUCK##_id##_RSPCFG, \
- 		.ramp_mask = RTQ2134_RSPUP_MASK, \
- 		.ramp_delay_table = rtq2134_buck_ramp_delay_table, \
+diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+index 2d5248f..36c85eb 100644
+--- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
++++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+@@ -53,20 +53,18 @@ properties:
+         - allwinner,sun8i-r40-gmac
+         - allwinner,sun8i-v3s-emac
+         - allwinner,sun50i-a64-emac
+-        - loongson,ls2k-dwmac
+-        - loongson,ls7a-dwmac
+         - amlogic,meson6-dwmac
+         - amlogic,meson8b-dwmac
+         - amlogic,meson8m2-dwmac
+         - amlogic,meson-gxbb-dwmac
+         - amlogic,meson-axg-dwmac
+-        - loongson,ls2k-dwmac
+-        - loongson,ls7a-dwmac
+         - ingenic,jz4775-mac
+         - ingenic,x1000-mac
+         - ingenic,x1600-mac
+         - ingenic,x1830-mac
+         - ingenic,x2000-mac
++        - loongson,ls2k-dwmac
++        - loongson,ls7a-dwmac
+         - rockchip,px30-gmac
+         - rockchip,rk3128-gmac
+         - rockchip,rk3228-gmac
 -- 
-2.32.0
-
+2.9.5

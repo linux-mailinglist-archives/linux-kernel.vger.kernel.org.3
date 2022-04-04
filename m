@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DACCF4F1132
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE334F113A
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240258AbiDDItb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 04:49:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48872 "EHLO
+        id S241070AbiDDIts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 04:49:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239878AbiDDItY (ORCPT
+        with ESMTP id S240952AbiDDIte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 04:49:24 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BBD3AA74
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 01:47:28 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 1D7D2C0003;
-        Mon,  4 Apr 2022 08:47:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649062047;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CN1L5JMzqSJ+k18AcK0l2a4ZU5bLh8AcVNfN1XQQ0W4=;
-        b=R2ej3LROgUy4NFcFjYBZBe2JlZHew4uPRHPCJlb2E68dnyM+RBSvtzwT9tPskEi98Tbibu
-        vrft3h3fLHaYKyX+KGKE4CfjkrycZ+8JFJRPXLgPD60tHCWmd0TH3F+SAprzbCvuZgUlYl
-        donTKVzKkGCKUP/GYI+h+FYB3zbbZXrqGplqfV3Xzk3VpSyLOyG7dQ92GefsWOp1xOQO6o
-        KtzZibzzT6a+rWbnehPL3qtoSh8tu4/YVc7CJ6sN/fnMyYsejLp6fI1KI5UyVXZSpGucvO
-        /QT3O9Yboc0UX6tx61vmLOc0UFWCU5pL5zjM4teo+ovuS0kIVQCpZZglzkKsgQ==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Chuanhong Guo <gch981213@gmail.com>, linux-mtd@lists.infradead.org
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Reto Schneider <reto.schneider@husqvarnagroup.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Stefan Roese <sr@denx.de>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: Re: [PATCH 1/5] mtd: spinand: gigadevice: fix Quad IO for GD5F1GQ5UExxG
-Date:   Mon,  4 Apr 2022 10:47:25 +0200
-Message-Id: <20220404084725.1203270-1-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220320100001.247905-2-gch981213@gmail.com>
-References: 
+        Mon, 4 Apr 2022 04:49:34 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B6E3B556;
+        Mon,  4 Apr 2022 01:47:38 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 8BFF21F452D1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649062057;
+        bh=3UIISyiLSZ8K6gmvRQuDQuLFelVg3UGlVkHow3UoeQk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=enBFx/JaBuPKXI7wDee99Ze+TGz2rPTKEAqnfVK5YW9Zi9XhnCBSEYnkDF5CVemF9
+         1a+5Rt5gu5Aza2sXAaF0gQ5nU+fqqs0pcMePAsEd4qTfW8XOuvgn8beZcmt1khZnSg
+         xaa5cQMaipAwpb6HoZcjuXMTZt+qy4D+sHgfyO7o3dj7VnmNn6Jyrq7iMmOvibxlyH
+         ExGoDVfK7pok3sg0nCVDLYWMkTO84V7UdOa1eAYNo6WRd0A+AlydrB0OToA92FaODT
+         pTU6GaGMPJxSdm5tfmV07hEENI8i+IIikNjvkz1SOoWA9JQ8yc0nfV9yciCuIjYkz+
+         ATw86AmN4sSyQ==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     lee.jones@linaro.org
+Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, arnd@arndb.de,
+        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, nfraprado@collabora.com,
+        kernel@collabora.com, krzysztof.kozlowski@linaro.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 0/2] Allow syscon to use spinlocks with regmap fast_io
+Date:   Mon,  4 Apr 2022 10:47:30 +0200
+Message-Id: <20220404084732.14096-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'a4f9dd55c5e1bb951db6f1dee20e62e0103f3438'
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2022-03-20 at 09:59:57 UTC, Chuanhong Guo wrote:
-> Read From Cache Quad IO (EBH) uses 2 dummy bytes on this chip according
-> to page 23 of the datasheet[0].
-> 
-> [0]: https://www.gigadevice.com/datasheet/gd5f1gq5xexxg/
-> 
-> Fixes: 469b99248985 ("mtd: spinand: gigadevice: Support GD5F1GQ5UExxG")
-> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+This series adds support for enabling the regmap's fast_io configuration
+option for SoCs featuring very fast MMIO operations, for which mutexes
+are introducing a lot of overhead / latency.
 
-Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
+This has been tested locally on some MediaTek Chromebooks (but, of course,
+that requires devicetree patches that are not included in this series).
 
-Miquel
+Changes in v2:
+- Reworded dt-bindings fast-io description to remove references
+  to regmap, making it generic, as per Krzysztof's suggestion.
+
+AngeloGioacchino Del Regno (2):
+  mfd: syscon: Allow using spinlocks with regmap fast_io
+  dt-bindings: mfd: syscon: Add support for regmap fast-io
+
+ Documentation/devicetree/bindings/mfd/syscon.yaml | 15 +++++++++++++++
+ drivers/mfd/syscon.c                              |  4 ++++
+ 2 files changed, 19 insertions(+)
+
+-- 
+2.35.1
+

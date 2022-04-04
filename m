@@ -2,112 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994074F17D7
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9B84F17DA
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378351AbiDDPE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 11:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48958 "EHLO
+        id S1378194AbiDDPEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 11:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiDDPE1 (ORCPT
+        with ESMTP id S1378393AbiDDPEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 11:04:27 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DB42F394;
-        Mon,  4 Apr 2022 08:02:31 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-de3ca1efbaso10949415fac.9;
-        Mon, 04 Apr 2022 08:02:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vtiMNVEoYZXoi1GNMLStyUsaBQPuI1mPKxVFdAdwSEw=;
-        b=Pslnr2ImvM3WVLnIlH47MEGJQwwh9NiO3rUvbwwq5gDTSH2LqKY3ju8kzN4fHH0SFU
-         fn+hkuuVC0ag9sAJhUKY8/iVcUBeT6B03aNwRUudfILoFUqvCe27TbtoaiI+42YFImtL
-         8rnE/26J/Fpj4bq3nvsQjm13kY/o9H+G0W8V86L20/lCS1YOt2X0V8pGKR13B5Z3Bbu0
-         1Agil9VVdyL0clKi9Sd2rrCcn0MGviWDFIyp4nftBFnJ7tfjLrSDkwdIw8nSqeIhOuzY
-         dLIDNhYkGsMVpROMae82yqpVzC3Bo8K+JLLr/GhWmOn/jSJ/efcZQoEGSlhh8izKkgD2
-         hKUg==
-X-Gm-Message-State: AOAM532m59xHdWqE29Z3DA9C9qbZYp5pre3YbyH+Aspd+g3Te4dKZsOz
-        DsjwOt+w2gdsn0t2FjCh8w==
-X-Google-Smtp-Source: ABdhPJxE84xSZeC7rzs41J9r830YaWpOHzkIguHr+Y1O8sOgXGMHMwvgtdOZDcMpMkcvMM7Alx9j8w==
-X-Received: by 2002:a05:6870:f109:b0:da:b3f:2b4c with SMTP id k9-20020a056870f10900b000da0b3f2b4cmr11024410oac.235.1649084550501;
-        Mon, 04 Apr 2022 08:02:30 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bm51-20020a0568081ab300b002da5c44e0bdsm4200166oib.28.2022.04.04.08.02.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 08:02:30 -0700 (PDT)
-Received: (nullmailer pid 1321618 invoked by uid 1000);
-        Mon, 04 Apr 2022 15:02:29 -0000
-Date:   Mon, 4 Apr 2022 10:02:29 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Arnd Bergmann <arnd@arndb.de>, Keith Busch <kbusch@kernel.org>,
-        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        Marc Zyngier <maz@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org
-Subject: Re: [PATCH 5/9] soc: apple: Add RTKit IPC library
-Message-ID: <YksIhWQIUHsoWEMi@robh.at.kernel.org>
-References: <20220321165049.35985-1-sven@svenpeter.dev>
- <20220321165049.35985-6-sven@svenpeter.dev>
- <5eed58a1-ee56-8aee-e73b-76b162d59873@kernel.org>
- <35f5fdbf-faac-457b-a225-35d7141f6b2e@www.fastmail.com>
+        Mon, 4 Apr 2022 11:04:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494DA2FE4F
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:02:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E465BB81807
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 15:02:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0444CC340EE;
+        Mon,  4 Apr 2022 15:02:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649084564;
+        bh=DSyr/AuapRImCrjmRCEvAPYtyLzoTPYJz8OafeBekS8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=naW15HUkpTiiBzJlkVtO0Zfifg/rwX7VjL5I0XYYjQwKRzdSELAEoyb1vCu9IfsoU
+         57VWRv5Qrlx0ICiAVzuCPD/A9yEZAAZv4/VXth5pJmPYkgQjc5+tlu+zce7/ujv972
+         uffGmFB/hwk/8I+Pe+IZp6wCtQ1vTYrRA8ityj8s=
+Date:   Mon, 4 Apr 2022 17:02:41 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     ogabbay@kernel.org, linux-riscv@lists.infradead.org,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        osharabi@habana.ai
+Subject: Re: [PATCH] habanalabs: Elide a warning on 32-bit targets
+Message-ID: <YksIkY0l8k7mmnzJ@kroah.com>
+References: <CAFCwf13-o=kUR61xjWt=F-Q-Vfy=kF6fpMP7iB+83Gfqw7+2HA@mail.gmail.com>
+ <mhng-89bfa679-14d3-436e-80e1-439ab154beb2@palmer-mbp2014>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <35f5fdbf-faac-457b-a225-35d7141f6b2e@www.fastmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <mhng-89bfa679-14d3-436e-80e1-439ab154beb2@palmer-mbp2014>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 02, 2022 at 03:51:46PM +0200, Sven Peter wrote:
-> On Wed, Mar 23, 2022, at 12:19, Krzysztof Kozlowski wrote:
-> > On 21/03/2022 17:50, Sven Peter wrote:
-> >> Apple SoCs such as the M1 come with multiple embedded co-processors
-> >> running proprietary firmware. Communication with those is established
-> >> over a simple mailbox using the RTKit IPC protocol.
-> >> 
-> >> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-> >> ---
-> >>  drivers/soc/apple/Kconfig          |  13 +
-> >>  drivers/soc/apple/Makefile         |   3 +
-> >>  drivers/soc/apple/rtkit-crashlog.c | 147 +++++
-> >>  drivers/soc/apple/rtkit-internal.h |  76 +++
-> >>  drivers/soc/apple/rtkit.c          | 842 +++++++++++++++++++++++++++++
-> >>  include/linux/soc/apple/rtkit.h    | 203 +++++++
-> >>  6 files changed, 1284 insertions(+)
-> >
-> > Isn't this some implementation of a mailbox? If so, it should be in
-> > drivers/mailbox. Please don't put all stuff in soc/apple, that's not how
-> > Linux is organized. To drivers/soc usually we put drivers which do not
-> > fit regular subsystems.
-> >
+On Fri, Apr 01, 2022 at 11:36:53AM -0700, Palmer Dabbelt wrote:
+> On Fri, 01 Apr 2022 11:13:48 PDT (-0700), ogabbay@kernel.org wrote:
+> > On Fri, Apr 1, 2022 at 7:41 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+> > > 
+> > > From: Palmer Dabbelt <palmer@rivosinc.com>
+> > > 
+> > > This double-cast pattern looks a bit awkward, but it already exists
+> > > elsewhere in the driver.  Without this patch I get
+> > > 
+> > > drivers/misc/habanalabs/common/memory.c: In function ‘alloc_device_memory’:
+> > > drivers/misc/habanalabs/common/memory.c:153:49: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+> > >   153 |                                                 (u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
+> > >       |                                                 ^
+> > > 
+> > > which ends up promoted to a build error in my test setup.
+> > > 
+> > > Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > > 
+> > > ---
+> > > 
+> > > I don't know anything about this driver, I'm just pattern-matching the
+> > > warning away.
+> > > ---
+> > >  drivers/misc/habanalabs/common/memory.c | 10 +++++-----
+> > >  1 file changed, 5 insertions(+), 5 deletions(-)
+> > > 
+> > > diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+> > > index e008d82e4ba3..f1fc79c1fc10 100644
+> > > --- a/drivers/misc/habanalabs/common/memory.c
+> > > +++ b/drivers/misc/habanalabs/common/memory.c
+> > > @@ -150,12 +150,12 @@ static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
+> > >                 for (i = 0 ; i < num_pgs ; i++) {
+> > >                         if (is_power_of_2(page_size))
+> > >                                 phys_pg_pack->pages[i] =
+> > > -                                               (u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
+> > > -                                                                               page_size, NULL,
+> > > -                                                                               page_size);
+> > > +                                               (u64) (uintptr_t) gen_pool_dma_alloc_align(vm->dram_pg_pool,
+> > > +                                                                                          page_size, NULL,
+> > > +                                                                                          page_size);
+> > >                         else
+> > > -                               phys_pg_pack->pages[i] = (u64) gen_pool_alloc(vm->dram_pg_pool,
+> > > -                                                                               page_size);
+> > > +                               phys_pg_pack->pages[i] = (u64) (uintptr_t) gen_pool_alloc(vm->dram_pg_pool,
+> > > +                                                                                         page_size);
+> > >                         if (!phys_pg_pack->pages[i]) {
+> > >                                 dev_err(hdev->dev,
+> > >                                         "Failed to allocate device memory (out of memory)\n");
+> > > --
+> > > 2.34.1
+> > > 
+> > 
+> > This patch is:
+> > Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+> > 
+> > Greg,
+> > Could you please apply this directly to your misc tree and send it to
+> > Linus at your next pull request ?
+> > I don't have any other fixes pending for 5.18.
+> > 
+> > For 5.19 we will do a more elegant solution that Arnd has recommended.
 > 
-> I put this into soc/apple because I don't think it fits within the mailbox
-> framework very well.
-> (It actually uses the mailbox framework for the actual communication
-> with the hardware with a driver that's already upstream.)
+> Thanks.
 > 
-> Essentially, the mailbox subsystem provides a common API to send and
-> receive messages over indepedent hardware channels and devicetree bindings
-> to describe the relationship between those channels and other drivers.
+> Assuming this is too late for rc1, would it be possibe to have it in
+> something I can take into my fixes/for-next without too much diff?  I put
+> this on top of the offending commit with a
 > 
-> One of the features that doesn't really fit is that we need to be able
-> to start, shutdown and re-start these co-processors. The NVMe driver
+> Fixes: e8458e20e0a3 ("habanalabs: make sure device mem alloc is page aligned")
+> 
+> at kernel.org/palmer/habana , if that helps any.  No big deal if it goes in
+> another way, it's just nice to keep allyesconfig building on my branches
+> directly.
 
-remoteproc does that. Did you look at it? Most remoteproc drivers use 
-some combination of mailboxes and shared memory.
+Looks like Guenter sent in a "more complete" version of this.  I'll
+queue it up to my tree and get it to Linus for -rc2.
 
-Rob
+thanks,
+greg k-h
+

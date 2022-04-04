@@ -2,76 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDB554F1ECF
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC1D4F1E27
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382703AbiDDWJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
+        id S1379448AbiDDVrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:47:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379349AbiDDRBi (ORCPT
+        with ESMTP id S1379350AbiDDRBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 13:01:38 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC693ED39
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 09:59:41 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id b15so11885390edn.4
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 09:59:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=K9yJQc0wkhnwMDhgXpgCEfPM9bu3vOLPPiNhGs87tdw=;
-        b=cgzwMQNJrkEkuA/TSpVw6ciE+AieAtsIUBAX0inodIP9kosF+epgt0L0EnhY8Z9Dq9
-         kXrcX81qBx3Q7UBgZbAOjmYZrAOZGfpwoQF1NvDKCCGvlkvhvcuHO4WrBHhz2U74SaEY
-         yGz9bYq2L1EQDNZ8orhmVvYivWFaRt8lrvnUF+f0K4ElLK6f4wUydgxDANLzF3m5Ygcx
-         0nO5acxv0nuE1jwJcjwhow5VDytwsOkLCOobrY5Yl+b1js/TQF1HfysRSxsxIc6Oics8
-         j1ITZLN/ltYeBvypuH7UAWz5bTKtDIVObpgrMNbtPPy1wtf/uHmOzEGEB886B+n8kAh5
-         Vctw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=K9yJQc0wkhnwMDhgXpgCEfPM9bu3vOLPPiNhGs87tdw=;
-        b=0Mpu/SjGFZ68EQd1TgjYB8rZ1ULiGVwjpbbF7qDy2fLil3C9YGbISRd2/6Qd3wDhVw
-         +pIznzPgytaKKA0p8ZyzawF/U8NGCZFrdvX0HXkiOy+BEQPoyo9Flk98E/KSUhEnrl1O
-         ApnWL5cMzd8Q4bL2fdMyRnHRFlizCt9dVWOQX6qaRZB9ytA5lr/UXSpj2i8JLoO2xrEM
-         e0nC8eSRmEB3h0iC/Y1a6mfJBvCXBDGpDDGu0AgKXYNY4d8GZDn1i08vCrjgFF+5lzUD
-         Ci/4LbNMCOXDIT1H/pVjTN2JUS5vlNKteMB6o9KeCc2dn4I435OXx0Zr98V3slq65jg0
-         JSgA==
-X-Gm-Message-State: AOAM532J9XRdh7ASP7Bkr0PQq7qGf5/AzqxZEdKoCGkZrnBK85Kft51C
-        tQmyQaSfUIMGqiFVqC0KdgxQrw==
-X-Google-Smtp-Source: ABdhPJzBhdE3FgiK+1M2zu1kC8mpq7C8emkC1dljmr9hgg9ou7CPhZBlTrACZ/AtTHyx2qnVlgtpJg==
-X-Received: by 2002:aa7:c1cd:0:b0:419:fdb:e17e with SMTP id d13-20020aa7c1cd000000b004190fdbe17emr1156256edp.364.1649091579797;
-        Mon, 04 Apr 2022 09:59:39 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id bp11-20020a170907918b00b006e6d451dc36sm2938072ejb.49.2022.04.04.09.59.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 09:59:39 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-samsung-soc@vger.kernel.org,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Ajay Kumar <ajaykumar.rs@samsung.com>,
-        linux-gpio@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] pinctrl: samsung: staticize fsd_pin_ctrl
-Date:   Mon,  4 Apr 2022 18:59:33 +0200
-Message-Id: <164909156896.1676419.11230425886960608496.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220331194526.52444-1-krzysztof.kozlowski@linaro.org>
-References: <20220331194526.52444-1-krzysztof.kozlowski@linaro.org>
+        Mon, 4 Apr 2022 13:01:50 -0400
+Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8548C3FD99;
+        Mon,  4 Apr 2022 09:59:53 -0700 (PDT)
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1nbQ3J-0002uy-3w; Mon, 04 Apr 2022 18:59:41 +0200
+Message-ID: <eecfc868-d217-198f-5752-3f59aad59de6@maciej.szmigiero.name>
+Date:   Mon, 4 Apr 2022 18:59:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 8/8] KVM: selftests: nSVM: Add svm_nested_soft_inject_test
+Content-Language: en-US
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220402010903.727604-1-seanjc@google.com>
+ <20220402010903.727604-9-seanjc@google.com>
+ <2401bf729beab6d9348fda18f55e90ed9c1f7583.camel@redhat.com>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+In-Reply-To: <2401bf729beab6d9348fda18f55e90ed9c1f7583.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,21 +51,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 31 Mar 2022 21:45:26 +0200, Krzysztof Kozlowski wrote:
-> struct fsd_pin_ctrl is not used outside of the file, so it can be made
-> static.  This fixes sparse warning:
+On 4.04.2022 14:27, Maxim Levitsky wrote:
+> On Sat, 2022-04-02 at 01:09 +0000, Sean Christopherson wrote:
+>> From: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+>>
+>> Add a KVM self-test that checks whether a nSVM L1 is able to successfully
+>> inject a software interrupt and a soft exception into its L2 guest.
+>>
+>> In practice, this tests both the next_rip field consistency and
+>> L1-injected event with intervening L0 VMEXIT during its delivery:
+>> the first nested VMRUN (that's also trying to inject a software interrupt)
+>> will immediately trigger a L0 NPF.
+>> This L0 NPF will have zero in its CPU-returned next_rip field, which if
+>> incorrectly reused by KVM will trigger a #PF when trying to return to
+>> such address 0 from the interrupt handler.
+>>
+>> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+>> Signed-off-by: Sean Christopherson <seanjc@google.com>
+>> ---
+>>   tools/testing/selftests/kvm/.gitignore        |   1 +
+>>   tools/testing/selftests/kvm/Makefile          |   1 +
+>>   .../selftests/kvm/include/x86_64/svm_util.h   |   2 +
+>>   .../kvm/x86_64/svm_nested_soft_inject_test.c  | 147 ++++++++++++++++++
+>>   4 files changed, 151 insertions(+)
+>>   create mode 100644 tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c
+>>
+(..)
+>> diff --git a/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c b/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c
+>> new file mode 100644
+>> index 000000000000..d39be5d885c1
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c
+>> @@ -0,0 +1,147 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright (C) 2022 Oracle and/or its affiliates.
+>> + *
+>> + * Based on:
+>> + *   svm_int_ctl_test
+>> + *
+>> + *   Copyright (C) 2021, Red Hat, Inc.
+>> + *
+>> + */
+>> +
+>> +#include "test_util.h"
+>> +#include "kvm_util.h"
+>> +#include "processor.h"
+>> +#include "svm_util.h"
+>> +
+>> +#define VCPU_ID		0
+>> +#define INT_NR			0x20
+>> +#define X86_FEATURE_NRIPS	BIT(3)
+>> +
+>> +#define vmcall()		\
+>> +	__asm__ __volatile__(	\
+>> +		"vmmcall\n"	\
+>> +		)
+>> +
+>> +#define ud2()			\
+>> +	__asm__ __volatile__(	\
+>> +		"ud2\n"	\
+>> +		)
+>> +
+>> +#define hlt()			\
+>> +	__asm__ __volatile__(	\
+>> +		"hlt\n"	\
+>> +		)
 > 
->   drivers/pinctrl/samsung/pinctrl-exynos-arm64.c:773:31: sparse:
->     symbol 'fsd_pin_ctrl' was not declared. Should it be static?
+> Minor nitpick: I guess it would be nice to put these in some common header file.
+
+Will move these to include/x86_64/processor.h (that's probably the most
+matching header file).
+
+>> +
+>> +static void l1_guest_code(struct svm_test_data *svm)
+>> +{
+>> +	#define L2_GUEST_STACK_SIZE 64
+>> +	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
+>> +	struct vmcb *vmcb = svm->vmcb;
+>> +
+>> +	/* Prepare for L2 execution. */
+>> +	generic_svm_setup(svm, l2_guest_code,
+>> +			  &l2_guest_stack[L2_GUEST_STACK_SIZE]);
+>> +
+>> +	vmcb->control.intercept_exceptions |= BIT(PF_VECTOR) | BIT(UD_VECTOR);
+>> +	vmcb->control.intercept |= BIT(INTERCEPT_HLT);
+>> +
+>> +	vmcb->control.event_inj = INT_NR | SVM_EVTINJ_VALID | SVM_EVTINJ_TYPE_SOFT;
+>> +	/* The return address pushed on stack */
+>> +	vmcb->control.next_rip = vmcb->save.rip;
+> 
+> I'll would be putting even something more spicy here just to see that KVM preserves this field
+> like say put two ud2 in the start of guest code, and here have
+> 
+> vmcb->control.next_rip = vmcb->save.rip + 4; // skip over two ud2 instructions.
+> 
+> That way KVM won't be able to skip over a single instruction to get correct next_rip
+
+Good point, will add these two additional ud2s at the start of L2 guest code.
+
 > 
 > 
-> [...]
+> Other that nitpicks:
+> 
+> Reviewed-by: Maxim levitsky <mlevitsk@redhat.com>
+> 
+> Best regards,
+> 	Maxim Levitsky
+> 
+> 
 
-Applied, thanks!
-
-[1/1] pinctrl: samsung: staticize fsd_pin_ctrl
-      commit: abb860ac7e3f022a233f34b12d035d49abfc114d
-
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Thanks,
+Maciej

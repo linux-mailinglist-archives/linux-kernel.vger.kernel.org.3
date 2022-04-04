@@ -2,125 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 401664F111A
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06F7A4F111E
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236395AbiDDImh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 04:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41438 "EHLO
+        id S237420AbiDDIpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 04:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232894AbiDDIme (ORCPT
+        with ESMTP id S229629AbiDDIpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 04:42:34 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7907C3AA52;
-        Mon,  4 Apr 2022 01:40:38 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 78AFE1F45934
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649061637;
-        bh=cyY2WRTj47ZWJuah+bRJ1PD2Fc40hBw+zYOhIhaJPuc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=WqS3FMiZNnwkL8MZxuq/MhThpgxdfwDs9pYEIBv5FN3ri911cZtLdCTcJVlJzxuzy
-         iRqq4fZsV0V8rXFv2HFLar3p4+l/83ofGVGKyT7cNLAEl/dh14TygAFNTF+zDONvxE
-         k1vN+MTKfWJPlcBoHSleLh7cB+bp0I16OncVTp/n9o9zdRa2UWxNMAKPe+O9QFyQp7
-         IYCqq0eFrC2mBy2W7jEKN+kRfaIs5gduNuC86JSGUyDKtPgGKSVUkGFlOp9BgsGIqO
-         TcDxXLq9BJPCHYGxAOnKY7WimvWh6Cwa2SzfDg6Mzq3poZRWMSjS9lNXSNKCwwfp6L
-         lr7HVyV3odKpw==
-Message-ID: <7775eb70-692f-3f1b-f226-f7e0fad47e37@collabora.com>
-Date:   Mon, 4 Apr 2022 10:40:34 +0200
+        Mon, 4 Apr 2022 04:45:09 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A043AA55
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 01:43:13 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id E743FE0006;
+        Mon,  4 Apr 2022 08:43:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1649061791;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=M0NzH/HJyQRA7JlgyykSLC9DM46fl6l8PCLhNaZ3vcc=;
+        b=jZF818wUKjfz+K5hrYSg9ySnJtZQ8Xb/TfxgsB5Ttp0WLRiuRbcYGsHsItXtbJo6GsKF17
+        Jkv8p14dEwBqiDWt68Er5GrsTqWB7TC5VFyeCXnLB/b3WMkN4aaJqFOslm79BPhVpLStfO
+        2slDUf1LV+puUm0QLb7p49oXL3RfxGeskvZ2zjV/TnCd06HdVngpflTbJzU7e51SnPLqGM
+        oRukwRc3FPTzH9B9xkYt2u9ftnxCTocwVzp/6rY4m0hH0AyDgzfImGyd9oRuk9s5/UkTMb
+        /r4LVFZ/Lh5USgOUMXFHkhOfo68ebzBCdf5W0FP01SHJ5gVUJUURACAhseJ62A==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Chuanhong Guo <gch981213@gmail.com>, linux-mtd@lists.infradead.org
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Yu Kuai <yukuai3@huawei.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        RogerCC Lin <rogercc.lin@mediatek.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
+        support),
+        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
+        support), linux-kernel@vger.kernel.org (open list)
+Subject: Re: [PATCH] mtd: rawnand: fix ecc parameters for mt7622
+Date:   Mon,  4 Apr 2022 10:43:06 +0200
+Message-Id: <20220404084306.1055176-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220402160315.919094-1-gch981213@gmail.com>
+References: 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 2/2] dt-bindings: mfd: syscon: Add support for regmap
- fast-io
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        lee.jones@linaro.org
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, arnd@arndb.de,
-        matthias.bgg@gmail.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nfraprado@collabora.com,
-        kernel@collabora.com
-References: <20220401135048.23245-1-angelogioacchino.delregno@collabora.com>
- <20220401135048.23245-3-angelogioacchino.delregno@collabora.com>
- <8588a941-6d3e-9e14-cb21-d7af29b4b2bd@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <8588a941-6d3e-9e14-cb21-d7af29b4b2bd@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'9fe4e0d3cbfe90152137963cc024ecb63db6e8e6'
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 02/04/22 13:38, Krzysztof Kozlowski ha scritto:
-> On 01/04/2022 15:50, AngeloGioacchino Del Regno wrote:
->> The syscon driver now enables the .fast_io regmap configuration when
->> the 'fast-io' property is found in a syscon node.
->>
->> Keeping in mind that, in regmap, fast_io is checked only if we are
->> not using hardware spinlocks, allow the fast-io property only if
->> there is no hwlocks reference (and vice-versa).
+On Sat, 2022-04-02 at 16:03:13 UTC, Chuanhong Guo wrote:
+> According to the datasheet, mt7622 only has 5 ECC capabilities instead
+> of 7, and the decoding error register is arranged  as follows:
+> +------+---------+---------+---------+---------+
+> | Bits |  19:15  |  14:10  |   9:5   |   4:0   |
+> +------+---------+---------+---------+---------+
+> | Name | ERRNUM3 | ERRNUM2 | ERRNUM1 | ERRNUM0 |
+> +------+---------+---------+---------+---------+
+> This means err_mask should be 0x1f instead of 0x3f and the number of
+> bits shifted in mtk_ecc_get_stats should be 5 instead of 8.
 > 
-> I have doubts you need a property for this. "fast" is subjective in
-> terms of hardware, so this looks more like a software property, not
-> hardware.
+> This commit introduces err_shift for the difference in this register
+> and fix other existing parameters.
 > 
-> I think most of MMIOs inside a SoC are considered fast. Usually also the
-> syscon/regmap consumer knows which regmap it gets, so knows that it is
-> fast or not.
+> Public MT7622 reference manual can be found on [0] and the info this
+> commit is based on is from page 656 and page 660.
 > 
-
-Hello Krzysztof,
-
-well yes, this property is changing how software behaves - specifically,
-as you've correctly understood, what regmap does.
-
-It's true that most of MMIOs inside a SoC are considered fast.. the word "most" is
-the exact reason why I haven't proposed simply hardcoding '.fast_io = true' in
-syscon, or in regmap-mmio...
-There are too many different SoCs around, and I didn't want to end up breaking
-anything (even if it should be unlikely, since MMIO is fast by principle).
-
-
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> ---
->>   Documentation/devicetree/bindings/mfd/syscon.yaml | 15 +++++++++++++++
->>   1 file changed, 15 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
->> index 13baa452cc9d..85a2e83b5861 100644
->> --- a/Documentation/devicetree/bindings/mfd/syscon.yaml
->> +++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
->> @@ -83,11 +83,26 @@ properties:
->>       $ref: /schemas/types.yaml#/definitions/uint32
->>       enum: [1, 2, 4, 8]
->>   
->> +  fast-io:
->> +    description:
->> +      Indicates that this bus has a very fast IO, for which
->> +      acquiring a mutex would be significant overhead.
->> +      When present, regmap will use a spinlock instead.
+> [0]: https://wiki.banana-pi.org/Banana_Pi_BPI-R64#Documents
 > 
-> Regmap is current implementation behind this, but it's not related to
-> hardware, so how about removing it from the description? Something like:
-> "..., for which different locking methods should be used to reduce
-> overhead (e.g. spinlock instead of mutex)."
-> 
+> Fixes: 98dea8d71931 ("mtd: nand: mtk: Support MT7622 NAND flash controller.")
+> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
 
-That's a very good point. I didn't think about any future in which the
-implementation would be changed from regmap to *new-name-here*... but
-anyway it makes a lot more sense to "speak generic".
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/fixes, thanks.
 
-I'll change the description to match your proposal, thank you!
-
-Regards,
-Angelo
+Miquel

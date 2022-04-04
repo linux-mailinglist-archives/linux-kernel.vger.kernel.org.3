@@ -2,105 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C974F1F0C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC93A4F1E7E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381365AbiDDVtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
+        id S1354967AbiDDVx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379584AbiDDRgd (ORCPT
+        with ESMTP id S1379586AbiDDRjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 13:36:33 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7AE28E20
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 10:34:36 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id u14so5619822pjj.0
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 10:34:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=V1fiQ+TpCWz9aW9batEAHSpfr5r9dyK3Q/lTwaH3lR0=;
-        b=n5mRgSQ8y20acZ/nK6OhYxxGJzwZSGfgcaIV5gwWcarOIpZUaCExb23hDcba/FfujR
-         xFNvpv34nq2Hj6fGtwvQQenG/CsfvSWly7w85pOa2sG503FmKvshqI9P5cFMoVE3Aar/
-         UQu5P8WN1WRQr6qVnpL2fGXvjFr5cmxhUxxebpUNcv68zXidJPUkPwuQpB2cgSdry9M0
-         eLkTMCOhfou4kVQgZxaauYZqxvKoMSlmivMsJ7IiJDCkOcBgoxX2LkJHmM3A/XGrPuQZ
-         2pPiCkDFuX+TqlPuqM3RY9B1nPG/O5uu9L/f2k9jXWu9RJ6qGXKz05KdOk77e14RcYjY
-         VMzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=V1fiQ+TpCWz9aW9batEAHSpfr5r9dyK3Q/lTwaH3lR0=;
-        b=V48zJMWFDViA9Vb+sOdAGjmI+DEfY5Og7trgyRRtkxOxz4jXxWDWh+Tu4ht5ffPxBI
-         HwnyWOlJoUlB3HQRBJ9dmTQu649SqCJgBGxb56xoRzPVNsZOjY4AHRvsm2lUn29/sXKn
-         /xp4jNF4oAvTx2S1fLL6ybDR2XuUT0sVYhHoVhCwPYvLGOrI7j1+gre20/LlyefG+6Py
-         KDqmpdMZvDzEI7gu9N5yLJxM9ZVqJPwtBGb+oKm5Mh8R8kT5pOaTMz2eMZGq4UQXy3dv
-         aANlRJmSPYxyrKy6mlD8xHB3M7E1FyRRHhj9sri9H4dwy172pYkyjqK7yLY5k1mgW/2e
-         R3kg==
-X-Gm-Message-State: AOAM530rgoGv5oTW6u+jaDSYHVPG5Sp/pGcdv+lVRJnUhgfuEMsVooU7
-        CZawFDQKtmO6s27W7Y9/L90yc7/9CVafejhM
-X-Google-Smtp-Source: ABdhPJwHq/HMWfqJNWl3Tmj7ZD7tbsm4BjEdWB/ICSYcy3kVA2KslfNYCV0z25OGCfSV48YcTJj1nA==
-X-Received: by 2002:a17:903:20c:b0:154:b58:d424 with SMTP id r12-20020a170903020c00b001540b58d424mr704902plh.45.1649093675449;
-        Mon, 04 Apr 2022 10:34:35 -0700 (PDT)
-Received: from google.com ([2620:15c:211:202:9d5:9b93:ffb4:574a])
-        by smtp.gmail.com with ESMTPSA id f66-20020a62db45000000b004fa8a7b8ad3sm12748136pfg.77.2022.04.04.10.34.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 10:34:34 -0700 (PDT)
-Date:   Mon, 4 Apr 2022 10:34:27 -0700
-From:   Nick Desaulniers <ndesaulniers@google.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-arch@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 2/8] kbuild: prevent exported headers from including
- <stdlib.h>, <stdbool.h>
-Message-ID: <YkssI2uDHRq41zjw@google.com>
-References: <20220404061948.2111820-1-masahiroy@kernel.org>
- <20220404061948.2111820-3-masahiroy@kernel.org>
- <YkqhQhJIQEL2qh8C@infradead.org>
+        Mon, 4 Apr 2022 13:39:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614B2B7F1
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 10:37:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06785B818BF
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 17:37:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4610DC2BBE4
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 17:37:34 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="YGT7BojP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1649093851;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yZVI1KAOo1mIBeRHAVz7zVPMeySuOMMLVutZjfFGwmA=;
+        b=YGT7BojP7UhaK1QBT/H6nRsBMWzPvvoguKJvfMepZsZCWsexGttYt41qXsW74j6M/EfrQx
+        WjjcPSZMzDixI5TaOZRpbmw8sxljUct9zUjh1rmFWUb030gyTNn5r0NZvPL2eVl1h+fiRl
+        +L67bEbKJTiPQGi1qDslrH2tG/FHiu8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f3643630 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Mon, 4 Apr 2022 17:37:31 +0000 (UTC)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2db2add4516so108651807b3.1
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 10:37:31 -0700 (PDT)
+X-Gm-Message-State: AOAM5331MfzYd5HVNIT4VqF0hhm0LQSgG5rS6//ZqFZ+4BRr2PgfUJZ5
+        wDMBDJdxlUbEs+63R5DETGY24q6Xc1Uo5tRC21o=
+X-Google-Smtp-Source: ABdhPJxMSD0Fg//duXs1NqBFDgEau1qxkscj0IJ/Sh+Bs2C+0BqS3hWuh/BOXZms4G7YRDAg+ztp17SRwMOCaeHwP/Q=
+X-Received: by 2002:a81:f00c:0:b0:2e9:d949:c189 with SMTP id
+ p12-20020a81f00c000000b002e9d949c189mr1023301ywm.2.1649093850853; Mon, 04 Apr
+ 2022 10:37:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkqhQhJIQEL2qh8C@infradead.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220404162039.961926-1-jan.varho@gmail.com> <20220404164230.968514-1-jan.varho@gmail.com>
+In-Reply-To: <20220404164230.968514-1-jan.varho@gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Mon, 4 Apr 2022 19:37:19 +0200
+X-Gmail-Original-Message-ID: <CAHmME9o9JE4TA8_h0AKPCHStE4Sy7XxLc4wUwA=BjHsjRjeOkg@mail.gmail.com>
+Message-ID: <CAHmME9o9JE4TA8_h0AKPCHStE4Sy7XxLc4wUwA=BjHsjRjeOkg@mail.gmail.com>
+Subject: Re: [PATCH v3] random: fix add_hwgenerator_randomness entropy accounting
+To:     Jan Varho <jan.varho@gmail.com>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 12:41:54AM -0700, Christoph Hellwig wrote:
-> On Mon, Apr 04, 2022 at 03:19:42PM +0900, Masahiro Yamada wrote:
-> > If we can make kernel headers self-contained (that is, none of exported
-> > kernel headers includes system headers), we will be able to add the
-> > -nostdinc flag, but that is much far from where we stand now.
+Hi Jan,
 
-This is something I'd like to see done. IMO, the kernel headers should
-be the independent variable of which the libc is the dependendent
-variable.
+On Mon, Apr 4, 2022 at 6:43 PM Jan Varho <jan.varho@gmail.com> wrote:
+>
+> add_hwgenerator_randomness tries to only use the required amound of input
+> for fast init, but credits all the entropy if even a byte was left over.
+>
+> Fix by not crediting entropy when using the input for fast init.
 
-Android's libc, Bionic, is making use of the UAPI headers. They are
-doing some rewriting of UAPI headers, but I'd like to see what needs to
-be upstreamed from there. I just noticed
-include/uapi/linux/libc-compat.h, which seems like a good place for such
-compat related issues.
+Looks good, thanks. Applied as
+https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?id=527a9867
 
-In particular, having UAPI_HEADER_TESTS depend on CC_CAN_LINK is
-something I think we can works towards removing. The header tests
-themselves don't link; they force a dependency on a prebuilt libc
-sysroot, and they only need the headers from the sysroot because of this
-existing circular dependency between kernel headers and libc headers.
-
-I'd be happy to be explicitly cc'ed on changes like this series, going
-forward. Masahiro, if there's parts you'd like me to help with besides
-just code review, please let me know how I can help.
-
-> 
-> What is still missing for that?
+Jason

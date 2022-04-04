@@ -2,276 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64FCA4F17C3
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E34C14F17A8
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:54:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378333AbiDDPBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 11:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
+        id S1378043AbiDDO4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 10:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378296AbiDDPAz (ORCPT
+        with ESMTP id S238922AbiDDO4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 11:00:55 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35112BF6F;
-        Mon,  4 Apr 2022 07:58:59 -0700 (PDT)
-Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KXDQM5WYWz67ms2;
-        Mon,  4 Apr 2022 22:57:15 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 4 Apr 2022 16:58:57 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 4 Apr 2022 15:58:54 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <damien.lemoal@opensource.wdc.com>, <hch@lst.de>
-CC:     <linux-kernel@vger.kernel.org>, <linux-ide@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH v2 2/2] libata: Inline ata_qc_new_init() in ata_scsi_qc_new()
-Date:   Mon, 4 Apr 2022 22:53:10 +0800
-Message-ID: <1649083990-207133-3-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1649083990-207133-1-git-send-email-john.garry@huawei.com>
-References: <1649083990-207133-1-git-send-email-john.garry@huawei.com>
+        Mon, 4 Apr 2022 10:56:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F92E165BF
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 07:54:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59A16B8171B
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 14:54:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CA8CC340EE;
+        Mon,  4 Apr 2022 14:54:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649084060;
+        bh=jRHy+GXAC3zuNkC3uM1peyEb3H7RENRAgLkCCDpiIsI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ui605pWet5IuuA4MRs2Kd3swyBPeo7B4wNGOCpdrk+HHsXTnYHEsLsEuAoilhGAMe
+         xajTcskeLAqB5lo8YdrRYMV6fV8ElOFLKcSEA4ZWvpg+KUMq73du0ZDu2D5UCBWY9L
+         fVzH9iHRnKK72W93nz5C5TJmhAmGsllWzq5mbDhY=
+Date:   Mon, 4 Apr 2022 16:54:17 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Oded Gabbay <ogabbay@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>, Arnd Bergmann <arnd@arndb.de>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        Ohad Sharabi <osharabi@habana.ai>
+Subject: Re: [PATCH v2] habanalabs: Fix test build failures
+Message-ID: <YksGmW0S7rSJJkDC@kroah.com>
+References: <20220404134859.3278599-1-linux@roeck-us.net>
+ <CAFCwf10Nbpr1H1-qTx4kSyC6YFdeAb=xOfq6uKzejJKLuyKw5A@mail.gmail.com>
+ <YksErB5hwrQGIiIO@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YksErB5hwrQGIiIO@kroah.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+On Mon, Apr 04, 2022 at 04:46:04PM +0200, Greg Kroah-Hartman wrote:
+> On Mon, Apr 04, 2022 at 05:38:29PM +0300, Oded Gabbay wrote:
+> > On Mon, Apr 4, 2022 at 4:49 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> > >
+> > > allmodconfig builds on 32-bit architectures fail with the following error.
+> > >
+> > > drivers/misc/habanalabs/common/memory.c: In function 'alloc_device_memory':
+> > > drivers/misc/habanalabs/common/memory.c:153:49: error:
+> > >         cast from pointer to integer of different size
+> > >
+> > > Fix the typecast. While at it, drop other unnecessary typecasts associated
+> > > with the same commit.
+> > >
+> > > Fixes: e8458e20e0a3c ("habanalabs: make sure device mem alloc is page aligned")
+> > > Cc: Ohad Sharabi <osharabi@habana.ai>
+> > > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> > > ---
+> > > v2: Drop unnecessary (u64) typecasts
+> > >
+> > >  drivers/misc/habanalabs/common/memory.c | 16 ++++++++--------
+> > >  1 file changed, 8 insertions(+), 8 deletions(-)
+> > >
+> > > diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+> > > index e008d82e4ba3..a13506dd8119 100644
+> > > --- a/drivers/misc/habanalabs/common/memory.c
+> > > +++ b/drivers/misc/habanalabs/common/memory.c
+> > > @@ -111,10 +111,10 @@ static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
+> > >
+> > >         if (contiguous) {
+> > >                 if (is_power_of_2(page_size))
+> > > -                       paddr = (u64) (uintptr_t) gen_pool_dma_alloc_align(vm->dram_pg_pool,
+> > > -                                                               total_size, NULL, page_size);
+> > > +                       paddr = (uintptr_t) gen_pool_dma_alloc_align(vm->dram_pg_pool,
+> > > +                                                                    total_size, NULL, page_size);
+> > >                 else
+> > > -                       paddr = (u64) (uintptr_t) gen_pool_alloc(vm->dram_pg_pool, total_size);
+> > > +                       paddr = gen_pool_alloc(vm->dram_pg_pool, total_size);
+> > >                 if (!paddr) {
+> > >                         dev_err(hdev->dev,
+> > >                                 "failed to allocate %llu contiguous pages with total size of %llu\n",
+> > > @@ -150,12 +150,12 @@ static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
+> > >                 for (i = 0 ; i < num_pgs ; i++) {
+> > >                         if (is_power_of_2(page_size))
+> > >                                 phys_pg_pack->pages[i] =
+> > > -                                               (u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
+> > > -                                                                               page_size, NULL,
+> > > -                                                                               page_size);
+> > > +                                       (uintptr_t)gen_pool_dma_alloc_align(vm->dram_pg_pool,
+> > > +                                                                           page_size, NULL,
+> > > +                                                                           page_size);
+> > >                         else
+> > > -                               phys_pg_pack->pages[i] = (u64) gen_pool_alloc(vm->dram_pg_pool,
+> > > -                                                                               page_size);
+> > > +                               phys_pg_pack->pages[i] = gen_pool_alloc(vm->dram_pg_pool,
+> > > +                                                                       page_size);
+> > >                         if (!phys_pg_pack->pages[i]) {
+> > >                                 dev_err(hdev->dev,
+> > >                                         "Failed to allocate device memory (out of memory)\n");
+> > > --
+> > > 2.35.1
+> > >
+> > 
+> > Hi Guenter,
+> > Thanks for the patch, but Greg already merged a patch that was sent to him.
+> 
+> I did?  Where?
 
-It is a bit pointless to have ata_qc_new_init() in libata-core.c since it
-pokes scsi internals, so inline it in ata_scsi_qc_new() (in libata-scsi.c).
+This fix looks more "correct" than Palmer's, so I'll go queue this one
+up now.
 
-<Christoph, please provide signed-off-by>
-[jpg, Take Christoph's change from list and form into a patch]
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- Documentation/driver-api/libata.rst | 11 -------
- drivers/ata/libata-core.c           | 44 +---------------------------
- drivers/ata/libata-sata.c           |  8 -----
- drivers/ata/libata-scsi.c           | 45 ++++++++++++++++++++++-------
- drivers/ata/libata.h                | 12 --------
- 5 files changed, 35 insertions(+), 85 deletions(-)
+thanks,
 
-diff --git a/Documentation/driver-api/libata.rst b/Documentation/driver-api/libata.rst
-index d477e296bda5..311af516a3fd 100644
---- a/Documentation/driver-api/libata.rst
-+++ b/Documentation/driver-api/libata.rst
-@@ -424,12 +424,6 @@ How commands are issued
- -----------------------
- 
- Internal commands
--    First, qc is allocated and initialized using :c:func:`ata_qc_new_init`.
--    Although :c:func:`ata_qc_new_init` doesn't implement any wait or retry
--    mechanism when qc is not available, internal commands are currently
--    issued only during initialization and error recovery, so no other
--    command is active and allocation is guaranteed to succeed.
--
-     Once allocated qc's taskfile is initialized for the command to be
-     executed. qc currently has two mechanisms to notify completion. One
-     is via ``qc->complete_fn()`` callback and the other is completion
-@@ -447,11 +441,6 @@ SCSI commands
-     translated. No qc is involved in processing a simulated scmd. The
-     result is computed right away and the scmd is completed.
- 
--    For a translated scmd, :c:func:`ata_qc_new_init` is invoked to allocate a
--    qc and the scmd is translated into the qc. SCSI midlayer's
--    completion notification function pointer is stored into
--    ``qc->scsidone``.
--
-     ``qc->complete_fn()`` callback is used for completion notification. ATA
-     commands use :c:func:`ata_scsi_qc_complete` while ATAPI commands use
-     :c:func:`atapi_qc_complete`. Both functions end up calling ``qc->scsidone``
-diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-index 1067b2e2be28..5e7d6ccad5da 100644
---- a/drivers/ata/libata-core.c
-+++ b/drivers/ata/libata-core.c
-@@ -4563,43 +4563,6 @@ void swap_buf_le16(u16 *buf, unsigned int buf_words)
- #endif /* __BIG_ENDIAN */
- }
- 
--/**
-- *	ata_qc_new_init - Request an available ATA command, and initialize it
-- *	@dev: Device from whom we request an available command structure
-- *	@scmd: scmd for which to get qc
-- *
-- *	LOCKING:
-- *	None.
-- */
--
--struct ata_queued_cmd *ata_qc_new_init(struct ata_device *dev, struct scsi_cmnd *scmd)
--{
--	int tag = scsi_cmd_to_rq(scmd)->tag;
--	struct ata_port *ap = dev->link->ap;
--	struct ata_queued_cmd *qc;
--
--	/* no command while frozen */
--	if (unlikely(ap->pflags & ATA_PFLAG_FROZEN))
--		return NULL;
--
--	/* libsas case */
--	if (ap->flags & ATA_FLAG_SAS_HOST) {
--		tag = ata_sas_get_tag(scmd);
--		if (tag < 0)
--			return NULL;
--	}
--
--	qc = __ata_qc_from_tag(ap, tag);
--	qc->tag = qc->hw_tag = tag;
--	qc->scsicmd = NULL;
--	qc->ap = ap;
--	qc->dev = dev;
--
--	ata_qc_reinit(qc);
--
--	return qc;
--}
--
- /**
-  *	ata_qc_free - free unused ata_queued_cmd
-  *	@qc: Command to complete
-@@ -4612,13 +4575,8 @@ struct ata_queued_cmd *ata_qc_new_init(struct ata_device *dev, struct scsi_cmnd
-  */
- void ata_qc_free(struct ata_queued_cmd *qc)
- {
--	unsigned int tag;
--
--	WARN_ON_ONCE(qc == NULL); /* ata_qc_from_tag _might_ return NULL */
--
- 	qc->flags = 0;
--	tag = qc->tag;
--	if (ata_tag_valid(tag))
-+	if (ata_tag_valid(qc->tag))
- 		qc->tag = ATA_TAG_POISON;
- }
- 
-diff --git a/drivers/ata/libata-sata.c b/drivers/ata/libata-sata.c
-index c3e9fd7d920c..7a5fe41aa5ae 100644
---- a/drivers/ata/libata-sata.c
-+++ b/drivers/ata/libata-sata.c
-@@ -1268,14 +1268,6 @@ int ata_sas_queuecmd(struct scsi_cmnd *cmd, struct ata_port *ap)
- }
- EXPORT_SYMBOL_GPL(ata_sas_queuecmd);
- 
--int ata_sas_get_tag(struct scsi_cmnd *scmd)
--{
--	if (WARN_ON_ONCE(scmd->budget_token >= ATA_MAX_QUEUE))
--		return -1;
--
--	return scmd->budget_token;
--}
--
- /**
-  *	sata_async_notification - SATA async notification handler
-  *	@ap: ATA port where async notification is received
-diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
-index 61dd7f7c7743..50ef132ec48c 100644
---- a/drivers/ata/libata-scsi.c
-+++ b/drivers/ata/libata-scsi.c
-@@ -638,24 +638,47 @@ EXPORT_SYMBOL_GPL(ata_scsi_ioctl);
- static struct ata_queued_cmd *ata_scsi_qc_new(struct ata_device *dev,
- 					      struct scsi_cmnd *cmd)
- {
-+	struct ata_port *ap = dev->link->ap;
- 	struct ata_queued_cmd *qc;
-+	int tag;
- 
--	qc = ata_qc_new_init(dev, cmd);
--	if (qc) {
--		qc->scsicmd = cmd;
--		qc->scsidone = scsi_done;
--
--		qc->sg = scsi_sglist(cmd);
--		qc->n_elem = scsi_sg_count(cmd);
-+	if (unlikely(ap->pflags & ATA_PFLAG_FROZEN))
-+		goto fail;
- 
--		if (scsi_cmd_to_rq(cmd)->rq_flags & RQF_QUIET)
--			qc->flags |= ATA_QCFLAG_QUIET;
-+	if (ap->flags & ATA_FLAG_SAS_HOST) {
-+		/*
-+		 * SAS hosts may queue > ATA_MAX_QUEUE commands so use
-+		 * unique per-device budget token as a tag.
-+		 */
-+		if (WARN_ON_ONCE(cmd->budget_token >= ATA_MAX_QUEUE))
-+			goto fail;
-+		tag = cmd->budget_token;
- 	} else {
--		cmd->result = (DID_OK << 16) | SAM_STAT_TASK_SET_FULL;
--		scsi_done(cmd);
-+		tag = scsi_cmd_to_rq(cmd)->tag;
- 	}
- 
-+	qc = __ata_qc_from_tag(ap, tag);
-+	qc->tag = qc->hw_tag = tag;
-+	qc->scsicmd = NULL;
-+	qc->ap = ap;
-+	qc->dev = dev;
-+
-+	ata_qc_reinit(qc);
-+
-+	qc->scsicmd = cmd;
-+	qc->scsidone = scsi_done;
-+
-+	qc->sg = scsi_sglist(cmd);
-+	qc->n_elem = scsi_sg_count(cmd);
-+
-+	if (scsi_cmd_to_rq(cmd)->rq_flags & RQF_QUIET)
-+		qc->flags |= ATA_QCFLAG_QUIET;
- 	return qc;
-+
-+fail:
-+	cmd->result = (DID_OK << 16) | SAM_STAT_TASK_SET_FULL;
-+	scsi_done(cmd);
-+	return NULL;
- }
- 
- static void ata_qc_set_pc_nbytes(struct ata_queued_cmd *qc)
-diff --git a/drivers/ata/libata.h b/drivers/ata/libata.h
-index 92e52090165b..926a7f41303d 100644
---- a/drivers/ata/libata.h
-+++ b/drivers/ata/libata.h
-@@ -44,7 +44,6 @@ static inline void ata_force_cbl(struct ata_port *ap) { }
- #endif
- extern u64 ata_tf_to_lba(const struct ata_taskfile *tf);
- extern u64 ata_tf_to_lba48(const struct ata_taskfile *tf);
--extern struct ata_queued_cmd *ata_qc_new_init(struct ata_device *dev, struct scsi_cmnd *scmd);
- extern int ata_build_rw_tf(struct ata_taskfile *tf, struct ata_device *dev,
- 			   u64 block, u32 n_block, unsigned int tf_flags,
- 			   unsigned int tag, int class);
-@@ -91,17 +90,6 @@ extern unsigned int ata_read_log_page(struct ata_device *dev, u8 log,
- 
- #define to_ata_port(d) container_of(d, struct ata_port, tdev)
- 
--/* libata-sata.c */
--#ifdef CONFIG_SATA_HOST
--int ata_sas_get_tag(struct scsi_cmnd *scmd);
--#else
--static inline int ata_sas_get_tag(struct scsi_cmnd *scmd)
--{
--	return -EOPNOTSUPP;
--}
--static inline void ata_sas_free_tag(unsigned int tag, struct ata_port *ap) { }
--#endif
--
- /* libata-acpi.c */
- #ifdef CONFIG_ATA_ACPI
- extern unsigned int ata_acpi_gtf_filter;
--- 
-2.26.2
-
+greg k-h

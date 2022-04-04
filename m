@@ -2,122 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B1B4F16C3
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 026CE4F16AF
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358647AbiDDOJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 10:09:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
+        id S1376765AbiDDOEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 10:04:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241862AbiDDOJS (ORCPT
+        with ESMTP id S1358744AbiDDOEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 10:09:18 -0400
-X-Greylist: delayed 1212 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Apr 2022 07:07:22 PDT
-Received: from gateway34.websitewelcome.com (gateway34.websitewelcome.com [192.185.147.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E2A3ED2F
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 07:07:22 -0700 (PDT)
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id 7065119CA3
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:47:10 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id bN30nlQDQRnrrbN30nofIY; Mon, 04 Apr 2022 08:47:10 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=sBTcpRo+ZmNBLuHykhWfL9kt+ZTCEKXYU6cLW6tiBi4=; b=3WdW7Q9IouJVO/MkGYqsYWrmWQ
-        nnr5k+jVmzZ11583WBJ4vbe64g6OtIk8Gd2Z/ZvmqEGcuER4XId8UdZiXFOaKFqCgqIGDdvsxzDHk
-        eBaqCKoxZgrCjpNcBG9GpIAmOv2Zj2JusoWCR4ti+Dpa53KidF8icLeDjLfwMha6EVnoZVn07ntXx
-        c6hWf32Ox/IuU4lOW4X24Gqzd4cDKstIqT9kEVqg3FYfY5XNdgj2LeU48XzhckEMeEtkZatbmUC5t
-        HpvnCpYhFcnHU91o6tN1t3L492QGn6FgVhfWkSGYpYhV/L6PPCHehYeqf5ZU3tB1si+G+zvcI5vW6
-        fwbWKyvg==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54714)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nbN2z-000fkX-NC; Mon, 04 Apr 2022 13:47:09 +0000
-Message-ID: <c4f6452c-d3b4-3eb7-c0a9-1dbbd4cd50e1@roeck-us.net>
-Date:   Mon, 4 Apr 2022 06:47:08 -0700
+        Mon, 4 Apr 2022 10:04:44 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676CB3335E;
+        Mon,  4 Apr 2022 07:02:48 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id F11D132008FD;
+        Mon,  4 Apr 2022 10:02:44 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Mon, 04 Apr 2022 10:02:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; bh=6KOpj6HHf7ZdB/fmMbJ1eNtVMkAmnCG9g1i8uG
+        nnAxw=; b=Ep8uRukAD+PvFuRP3HUgmxLUnNuZN+8on28NTktsQbQoBO7NYQRStn
+        4ObvWEk4uma4CE/Dua8gmWTsQJPjkLm8bsyRbBfD5xK8TKWz5GdLN9Nx6dhdfjxP
+        mKIPJ4NEPKR8posPN7ZtH+wNTZmMso3evm6X8o1ejBg2lDel1SDG1bIB+acdVgN5
+        B65u9hLpb69+Y3vwBNiv+TFdOyeMEl0oC/5/CDkTc52t3MbTMaUl5w9L19tqlF2o
+        xHYrdFfj9fr6vBO4xK7ym/Fd1vLNoqjArqTeVl9xSLfM3RsUPCxIz+u1epbYFPQW
+        hESgvNX7vtemhvZt1/4tiVcsUmRJYN0A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=6KOpj6HHf7ZdB/fmM
+        bJ1eNtVMkAmnCG9g1i8uGnnAxw=; b=gmxdqIrmKPq6asef4ARj1i7AgGlEko5ri
+        RKq3hc9S0d3GmTbBA18cdqEVwDRIRPEI3IBqEv5obDTEL3x81ySRxjcxAkwpTxaV
+        DV8lxEMZ7Dqz/y+V62F4Wwa+7OMgp29Ej6EGVLHSUcpl58/S/U0fL1uoaAK4kRf8
+        Wwz/em2nYSFLuZZV1N0bMtpagGyUufTjoxvV25BFy5RfdNQIzChjIM7qukM/Tg6e
+        zJr0LI5LXOmOPXoz/erlrc0NLszRwhp/pfU2ykrLtn5DGy+PxFm2sX9PQFwMmLOv
+        h0deFPurXdqM3HNIkR1kQzMaUer4EwiQ2hPC+rVvWHFHOrG5jK9Jg==
+X-ME-Sender: <xms:g_pKYtTK17tecqsSQJLT5t0OoMnwrwcNrieVtSbaj2SnAqINQ9e0Wg>
+    <xme:g_pKYmzwgfal3FN8e1yqwT8MRM7c1e3ZltWv-H7VB4uQWoJyC1fY5bdDjlQk--VT-
+    WFkGLPc0AgK4w>
+X-ME-Received: <xmr:g_pKYi2-RPbaLRzpPTkLW2YG1nIo817xfEjVCx-9zlw07xB485126jt0QKzvh3WvFtfoPH6zcnE47M_MC2YZBWONtMaUjJ5M>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudejvddgieeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
+    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:g_pKYlDTgDqR65f_Sjjk4S3U8SHqaS-r-Ku-XTWWCUEF5iVOij2z2Q>
+    <xmx:g_pKYmidtxAWOyQTUm5B6Ka2UsoXJ8pIlmvN4n4kjEMojHo75nhKgQ>
+    <xmx:g_pKYpoRYOJnQ50UemFTIv44MIEcWshECIxFBmQTt3Bak65YXNS17w>
+    <xmx:hPpKYvaLNvfa1nFKM1pA96u2Mwj9eN1F1fpe9qr2MgTJtVUaFXiV8A>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 4 Apr 2022 10:02:42 -0400 (EDT)
+Date:   Mon, 4 Apr 2022 16:02:40 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        stable@vger.kernel.org, Qiuhao Li <qiuhao@sysec.org>,
+        Gaoning Pan <pgn@zju.edu.cn>, Yongkang Jia <kangel@zju.edu.cn>,
+        syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com,
+        Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Subject: Re: [PATCH 5.4] KVM: x86/mmu: do compare-and-exchange of gPTE via
+ the user address
+Message-ID: <Ykr6gA6o+oLqDXMi@kroah.com>
+References: <20220404134141.427397-4-pbonzini@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] staging: r8188eu: Fix PPPoE tag insertion on big endian
- systems
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20220401151257.3414576-1-linux@roeck-us.net>
- <782f0115-e45f-1aff-a152-5d403c990b31@lwfinger.net>
- <dcba377b-1fce-92e6-680a-77c5567cd06c@roeck-us.net>
- <8e68501c-24fd-cfbc-60f2-ec3e277159ab@lwfinger.net>
- <0c646d80-3198-06c1-e8aa-442b245ffb3e@roeck-us.net>
- <20220404095312.GV3293@kadam>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220404095312.GV3293@kadam>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nbN2z-000fkX-NC
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54714
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 6
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220404134141.427397-4-pbonzini@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/4/22 02:53, Dan Carpenter wrote:
-> On Sat, Apr 02, 2022 at 02:18:22PM -0700, Guenter Roeck wrote:
->> On 4/1/22 13:25, Larry Finger wrote:
->>> On 4/1/22 14:25, Guenter Roeck wrote:
->>>> The rest of the code uses htons/ntohs, so I prefer to follow that lead.
->>>
->>> You just proved my point. It is hard to get be16_to_cpu() wrong. Sparse will flag the error when you use cpu_to_be16() instead. I expect that your htons/ntohs problem would also have shown up with Sparse.
->>>
->>
->> Ok, you made your point. I'll use be16_to_cpu() - the driver
->> already uses it elsewhere anyway. As for the other problems,
->> I am not sure if the driver ever worked. The function we are
->> looking at can't really have worked on a little endian system
->> because of the missing conversion, and the same is true for the
->> other code flagged by sparse. I think I'll just add a note
->> to this patch and let the driver authors decide what to do
->> about those problems.
->>
->> Guenter
+On Mon, Apr 04, 2022 at 09:41:41AM -0400, Paolo Bonzini wrote:
+> commit 2a8859f373b0a86f0ece8ec8312607eacf12485d upstream.
 > 
-> This is already fixed along with a couple related bugs in commit
-> 2d959a842a8f ("staging: r8188eu: Fix sparse endianness warnings.").
+> FNAME(cmpxchg_gpte) is an inefficient mess.  It is at least decent if it
+> can go through get_user_pages_fast(), but if it cannot then it tries to
+> use memremap(); that is not just terribly slow, it is also wrong because
+> it assumes that the VM_PFNMAP VMA is contiguous.
 > 
-> https://lore.kernel.org/r/YkPK/QmLAp3BkygY@sckzor-linux.localdomain
+> The right way to do it would be to do the same thing as
+> hva_to_pfn_remapped() does since commit add6a0cd1c5b ("KVM: MMU: try to
+> fix up page faults before giving up", 2016-07-05), using follow_pte()
+> and fixup_user_fault() to determine the correct address to use for
+> memremap().  To do this, one could for example extract hva_to_pfn()
+> for use outside virt/kvm/kvm_main.c.  But really there is no reason to
+> do that either, because there is already a perfectly valid address to
+> do the cmpxchg() on, only it is a userspace address.  That means doing
+> user_access_begin()/user_access_end() and writing the code in assembly
+> to handle any exception correctly.  Worse, the guest PTE can be 8-byte
+> even on i686 so there is the extra complication of using cmpxchg8b to
+> account for.  But at least it is an efficient mess.
 > 
-> It's in staging-next but hasn't hit linux-next yet.
+> Reported-by: Qiuhao Li <qiuhao@sysec.org>
+> Reported-by: Gaoning Pan <pgn@zju.edu.cn>
+> Reported-by: Yongkang Jia <kangel@zju.edu.cn>
+> Reported-by: syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
+> Debugged-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+> Tested-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Cc: stable@vger.kernel.org
+> Fixes: bd53cb35a3e9 ("X86/KVM: Handle PFNs outside of kernel reach when touching GPTEs")
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/paging_tmpl.h | 77 ++++++++++++++++++--------------------
+>  1 file changed, 37 insertions(+), 40 deletions(-)
 > 
+> diff --git a/arch/x86/kvm/paging_tmpl.h b/arch/x86/kvm/paging_tmpl.h
+> index 97b21e7fd013..13b5c424adb2 100644
+> --- a/arch/x86/kvm/paging_tmpl.h
+> +++ b/arch/x86/kvm/paging_tmpl.h
+> @@ -34,9 +34,8 @@
+>  	#define PT_HAVE_ACCESSED_DIRTY(mmu) true
+>  	#ifdef CONFIG_X86_64
+>  	#define PT_MAX_FULL_LEVELS 4
+> -	#define CMPXCHG cmpxchg
+> +	#define CMPXCHG "cmpxchgq"
+>  	#else
+> -	#define CMPXCHG cmpxchg64
+>  	#define PT_MAX_FULL_LEVELS 2
+>  	#endif
+>  #elif PTTYPE == 32
+> @@ -52,7 +51,7 @@
 
-Good to hear. Too bad I got it a minute too late - I just sent v3.
+This chunk does not apply, are you sure you made this against 5.4.y?
 
-Guenter
+thanks,
+
+greg k-h

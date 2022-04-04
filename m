@@ -2,118 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D65C74F1E6C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 929CE4F1E3F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380601AbiDDVsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47510 "EHLO
+        id S1355229AbiDDVyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380339AbiDDTfs (ORCPT
+        with ESMTP id S1380361AbiDDTqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 15:35:48 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9A763FF
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 12:33:50 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id c23so9031894plo.0
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 12:33:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kB7kulErLH1kl+/AkfN+Aryh9y9jz6Qw47u7OIjWlmM=;
-        b=T8vdp5Vd2LrsNPs6YvCZuqgogEONB0T2IO+VEUWJ5yMRSwDYr2kk/GwmMrzzCucSes
-         q82jwU9p39/ooLngHkw4d+W43XpFKkGy96Hcx7DwKvdeowr0P5edl3Kgaep0e8G7CWYb
-         CKOvtOPXCZrbiLi/l5lwqLW3NZLzfl2HLXZZfa1ptnEWSs/Bv0w9PqXVw5xCh0GOoZce
-         ZWHzLFMb2mak0znwGeqe+emmfKTPk7lf7qXOTaTUZRRqfz7b13htM5P0HRUWfu1j4sC/
-         8QCGQSmdY5ivg+WrU5Q9LuCPBcLlcZC5hMOkVd4osPzd3V06zpXl6JGW6mIJanhMmdnT
-         jD3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kB7kulErLH1kl+/AkfN+Aryh9y9jz6Qw47u7OIjWlmM=;
-        b=YRjykHHfFDKVxr4e9yNve6wVluBTUgHVc7B831NU00Uj9btBP6NHDFUaHICOAg9dZm
-         jRI1gvanSLn4HphCdxgXfmnzksEC0OBFy+UP143sYsTEtyIUYesJ3Sp0cyMjv8NmpVpE
-         5lLOKMLRkFfz7C77+hm0KK+zo3SN6Jye8oQGiSTAoJtoHlKKEiUyCVhZxLkcGX62Fyix
-         MoZA9gcEezFOD6a3+5LJftn6N6L2VANZt9/Rs2XKrpqqhPKKg/5O+8zPzjbMD9/L49HR
-         QH+VeSCAOi9imFAfFGB8WGyUmUxUEIsOqe/RwhC/8DDfW/ol7/lUgsz+bKQUOdPnzLiU
-         vhWA==
-X-Gm-Message-State: AOAM530QtUv2qpUrdTSHujdXienMg+Mtt8SM8WRNrf1nLy+ps2ViecM9
-        nrxuAbPxeNkIOqo4tgiZtFJGFQ==
-X-Google-Smtp-Source: ABdhPJxC/X5ZTY4Tf/eOli9bCS5k8iEBk8BofOU/FLMR8VrlKPxKF25FGRMVYBJMtdAi5f5RjwQLSQ==
-X-Received: by 2002:a17:902:b613:b0:156:7d82:c09b with SMTP id b19-20020a170902b61300b001567d82c09bmr1229152pls.80.1649100829838;
-        Mon, 04 Apr 2022 12:33:49 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 77-20020a621450000000b004fa923bb57asm12500493pfu.201.2022.04.04.12.33.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 12:33:49 -0700 (PDT)
-Date:   Mon, 4 Apr 2022 19:33:44 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/8] KVM: SVM: Re-inject INT3/INTO instead of retrying
- the instruction
-Message-ID: <YktIGHM86jHkzGdF@google.com>
-References: <20220402010903.727604-1-seanjc@google.com>
- <20220402010903.727604-6-seanjc@google.com>
- <a47217da0b6db4f1b6b6c69a9dc38350b13ac17c.camel@redhat.com>
- <YkshgrUaF4+MrrXf@google.com>
- <a3cf781b-0b1a-0bba-6b37-12666c7fc154@maciej.szmigiero.name>
+        Mon, 4 Apr 2022 15:46:44 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB5C31225;
+        Mon,  4 Apr 2022 12:44:47 -0700 (PDT)
+Received: from mail-wr1-f43.google.com ([209.85.221.43]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1N17cq-1nzCXH2wKw-012bHf; Mon, 04 Apr 2022 21:44:45 +0200
+Received: by mail-wr1-f43.google.com with SMTP id w4so16093476wrg.12;
+        Mon, 04 Apr 2022 12:44:45 -0700 (PDT)
+X-Gm-Message-State: AOAM531bPpPiXsyBuu1Yr8dOuiJWOEbyTNC5wCcidziOUplTMbkUXomW
+        wRILfUd3mFBk2LOwTW6lxnZEaQTZU7t70MvZnAk=
+X-Google-Smtp-Source: ABdhPJyRqH0qibkfjPRGnJDcURrE8ZPrQIGLNSwn/9l1FUg/Sz1o5iKs76jxTh4W551VdZ+S32lMVfdTx28z5w2iC30=
+X-Received: by 2002:a05:6000:10c7:b0:206:135e:c84e with SMTP id
+ b7-20020a05600010c700b00206135ec84emr984244wrx.12.1649101485314; Mon, 04 Apr
+ 2022 12:44:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a3cf781b-0b1a-0bba-6b37-12666c7fc154@maciej.szmigiero.name>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <Yib9F5SqKda/nH9c@infradead.org> <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
+ <YkmWh2tss8nXKqc5@infradead.org> <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
+ <CAMo8BfKgn0T5RtUTb89fPvygNJJYLy7r1=RZTmTTm=jiDfx1hQ@mail.gmail.com>
+ <CAK8P3a0J1--WSyWY+TptFa0nn5d-mOxapadCE1csGRkfhSPbVw@mail.gmail.com>
+ <CAMo8BfLT8vMw3aGQPs1+9ry7W63SQphmDc4Tt4A3JvADHJhxiQ@mail.gmail.com> <CAK8P3a3iFb+ZacZ40d8PC_xcJpLVFXT0Qc-oYEZNkFqXdsfNZw@mail.gmail.com>
+In-Reply-To: <CAK8P3a3iFb+ZacZ40d8PC_xcJpLVFXT0Qc-oYEZNkFqXdsfNZw@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 4 Apr 2022 21:44:29 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1goN3c772xiFtz13kHZs0XEDSxfXX=ub7OH3S98Mddsw@mail.gmail.com>
+Message-ID: <CAK8P3a1goN3c772xiFtz13kHZs0XEDSxfXX=ub7OH3S98Mddsw@mail.gmail.com>
+Subject: Re: [RFC PULL] remove arch/h8300
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Max Filippov <jcmvbkbc@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "moderated list:H8/300 ARCHITECTURE" 
+        <uclinux-h8-devel@lists.sourceforge.jp>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:Qw+lTynQ9FdEIf/dV0Hp8dxBMWgXsLK2Hu91jlgCSXci/9G/4Qc
+ LhhlwV8BuRehAQq6IqnNWf8tdRoO1iPeJrjM21R41fRtfu83xVpvU2pqw5CdITVmh8XS0Lk
+ 3XNIJxiYBwAGyXKzZWz0mIOxTUV7ApES9AyWxPi+JQCvTVxx4xxA2YAu9KCgIyADBkf8RPP
+ 15kIpgfD1xMa9hbZDD3KA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8B+XYFobVuQ=:9dNh0l+zhbsBsyfsmjDetF
+ t09Tnj6ird7kCuEKoLpCBUo6Sl+7KzqmNJ4Fb4YmFJevUKFBA9NKFYIrSnGRMnauCp40cULvm
+ Diw38BGNYWCiKoAhXJbz0RKPtHdq+zqx58oWsFwIZ/Lbgh4UiOY0g0V925e8eQWaj/4iVajN8
+ 9sUo4HkUcRFFYS0ax+5bwB6CO87e06MRTmYFzS9f+3VlRcqKDxejmGvelEuDASJ0bfSLgDDR3
+ mKvnax+e/VNeWOlp2yBPwLztUTEXo81O+oeh6UTiVJemBAduOef3K7oUTfrjoNyrmvlKsDXb5
+ v6kS8Kxm/TITqpnCsk4QpIp/GHF86SYKemT9E5gslt3Jom7Ii9rgFYoMqQXFnVgPRe8kDkxfN
+ Om5DxEjB9KrDYBJSlFw+vCtsxj+GNK4RUToFDC6nR9bXRVu02Kljr30xaQCMbo7sor6+q2PMh
+ aas5WrGIjG8nFxN7Z/hIA+kq4vDggcfEFoFwUQ6Njg1JGHlSxig3mep/yGI414qOMetQ55Q+u
+ Pb+C5yFR6sMBsVt8nwV4KQKxHId8/MYTVIcsHq2KuwGFud/CeFPqmUMWewDZoB0Fe8VjhZFhx
+ Ih2QrOtLgE4w1p62yki7mhccVS5LTWPCU5FKuu6lEuD8eMU7I7DSVjm8bjdkxfNYduU72ZTkB
+ LbULHP7j1Ox/UCi9AHHW10IXpLthI1elT++Kev+3GlaQyu7y2DriiMAwF2LqHj+o9+9CT2UAn
+ TgX3/N46OXL/SnWHuY00AV62H3sBOSblleHiMTwEPwWkv3IEuAHGYMUn5tn0ouDUpLkOIwkH4
+ /kgor7hwSb5nKlOgx6S8Ht5+fpC6oARD8C8QLTR/JvkZZtDxoA=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022, Maciej S. Szmigiero wrote:
-> > > > index 47e7427d0395..a770a1c7ddd2 100644
-> > > > --- a/arch/x86/kvm/svm/svm.h
-> > > > +++ b/arch/x86/kvm/svm/svm.h
-> > > > @@ -230,8 +230,8 @@ struct vcpu_svm {
-> > > >   	bool nmi_singlestep;
-> > > >   	u64 nmi_singlestep_guest_rflags;
-> > > > -	unsigned int3_injected;
-> > > > -	unsigned long int3_rip;
-> > > > +	unsigned soft_int_injected;
-> > > > +	unsigned long soft_int_linear_rip;
-> > > >   	/* optional nested SVM features that are enabled for this guest  */
-> > > >   	bool nrips_enabled                : 1;
-> > > 
-> > > 
-> > > I mostly agree with this patch, but think that it doesn't address the
-> > > original issue that Maciej wanted to address:
-> > > 
-> > > Suppose that there is *no* instruction in L2 code which caused the software
-> > > exception, but rather L1 set arbitrary next_rip, and set EVENTINJ to software
-> > > exception with some vector, and that injection got interrupted.
-> > > 
-> > > I don't think that this code will support this.
-> > 
-> > Argh, you're right.  Maciej's selftest injects without an instruction, but it doesn't
-> > configure the scenario where that injection fails due to an exception+VM-Exit that
-> > isn't intercepted by L1 and is handled by L0.  The event_inj test gets the coverage
-> > for the latter, but always has a backing instruction.
-> 
-> Still reviewing the whole patch set, but want to clear this point quickly:
-> The selftest does have an implicit intervening NPF (handled by L0) while
-> injecting the first L1 -> L2 event.
+On Mon, Apr 4, 2022 at 9:35 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Mon, Apr 4, 2022 at 9:14 PM Max Filippov <jcmvbkbc@gmail.com> wrote:
+> > On Mon, Apr 4, 2022 at 12:01 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > On Mon, Apr 4, 2022 at 7:57 PM Max Filippov <jcmvbkbc@gmail.com> wrote:
+> > > > Please let me know if you observe any specific build/runtime issues.
+> > > xtensa-linux-gcc-11.1.0 -DKCONFIG_SEED=
+> > ...
+> > > /git/arm-soc/arch/xtensa/kernel/head.S: Assembler messages:
+> > > /git/arm-soc/arch/xtensa/kernel/head.S:87: Error: invalid register
+> > > 'atomctl' for 'wsr' instruction
+> >
+> > Sure, one cannot use an arbitrary xtensa compiler for the kernel
+> > build, the compiler configuration must match the core variant selected
+> > in the linux configuration. Specifically, for the nommu_kc705_defconfig
+> > the following compiler can be used:
+> >
+> > https://github.com/foss-xtensa/toolchain/releases/download/2020.07/x86_64-2020.07-xtensa-de212-elf.tar.gz
+> >
+> > If you build the toolchain yourself using crosstool-ng or buildroot they
+> > accept the 'configuration overlay' parameter that does the compiler
+> > customization.
+> >
+> > Perhaps the documentation for this part is what needs to be improved.
+>
+> It sounds like a bug in the kernel Makefile. On all other architectures,
+> you can generally just pick any (recent) compiler and build any kernel,
+> as the compiler arguments set the exact target machine type based
+> on the kernel config. You can't normally rely on the compiler defaults
+> for kernel builds.
 
-I'll do some debug to figure out why the test passes for me.  I'm guessing I either
-got lucky, e.g. IDT was faulted in already, or I screwed up and the test doesn't
-actually pass.
+FWIW, the compiler I used is the one I built for kernel.org [1] using unmodified
+upstream sources The config I used for this is
+
+${SRCTREE}/configure ../log-gcc-configure /home/arnd/git/gcc/configure
+--target=xtensa-linux --enable-targets=all
+--prefix=/home/arnd/cross/x86_64/gcc-11.1.0-nolibc/xtensa-linux
+--enable-languages=c --without-headers --disable-bootstrap
+--disable-nls --disable-threads --disable-shared --disable-libmudflap
+--disable-libssp --disable-libgomp --disable-decimal-float
+--disable-libquadmath --disable-libatomic --disable-libcc1
+--disable-libmpx --enable-checking=release
+
+Let me know if I need to enable additional options to get a compiler
+that works for all xtensa targets. Usually the --enable-targets=all
+is meant to be sufficient.
+
+        Arnd
+
+[1] https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64/11.1.0/

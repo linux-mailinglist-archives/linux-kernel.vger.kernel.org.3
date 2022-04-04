@@ -2,85 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0917D4F1226
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 040FE4F122B
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354445AbiDDJiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 05:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
+        id S1354562AbiDDJiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 05:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355515AbiDDJiO (ORCPT
+        with ESMTP id S1354650AbiDDJil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 05:38:14 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D6730542;
-        Mon,  4 Apr 2022 02:36:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649064979; x=1680600979;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=z66BBs6gd1wX1NuShMNR221afgtnYZTW8DgJ5qOqV3Y=;
-  b=eT2H/knZ5YlHmkJk+RzuJgnTRWX2TyaouWHm49QnsSONrCnPSHL+XXAn
-   6+8oaezJ81FhVrvhuKGn3Mo3ldy5QZKtL0aEa2mHAueoWyByqjYjoaEGg
-   lVR6TR9LEqTQpCYe/rDYKssj0yYTjW0lfWIvdaRzwtGeqpmb5fcAR8OHA
-   LZZ08SO400FjgOULaH+uc90nnU9vl2+Ad9h9kSsn/7ripy2FGAlP2d+IN
-   c0A/KCuQwTeLjtUODdwJpPKIui0nMiVXXPSpI8aQnX7mn1rLPQ03PHL7/
-   T2f/SmCv8k9anbYwcJ1v41vJ0eST1/GFjO6TY0FE/PSNbReSXpaio4ptY
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="247988806"
-X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="247988806"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 02:36:18 -0700
-X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="504845794"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 02:36:15 -0700
-Received: by lahna (sSMTP sendmail emulation); Mon, 04 Apr 2022 12:36:12 +0300
-Date:   Mon, 4 Apr 2022 12:36:12 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [PATCH] thunderbolt: replace usage of found with dedicated list
- iterator variable
-Message-ID: <Ykq8DEz6/kQBMzmF@lahna>
-References: <20220324072700.63787-1-jakobkoschel@gmail.com>
+        Mon, 4 Apr 2022 05:38:41 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B73D3BFBC;
+        Mon,  4 Apr 2022 02:36:36 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 0F7091F37E;
+        Mon,  4 Apr 2022 09:36:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649064995; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LpYoL6AgjzJZ4tpGv3/xyzDAd+WQcpBXKtpN+zEEZ6M=;
+        b=URZHSoRiL8o7b+yMQLyfEwpcnDVBQxC25DaiTXuXyRDL0IVDsBLTG0R5+BoVe4h2RwHe+8
+        846rB9SKsGl/yDW1VzKHMBpdDywbpp7qqlqIszK75ScfGaGQ/nc4UbHX9VFyfjHiaxZssh
+        AyAChWqakgt161TVz0sPrchh0q2dSMg=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id CC8C7A3B92;
+        Mon,  4 Apr 2022 09:36:34 +0000 (UTC)
+Date:   Mon, 4 Apr 2022 11:36:33 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        cgroups mailinglist <cgroups@vger.kernel.org>,
+        Ke Wang <ke.wang@unisoc.com>
+Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
+Message-ID: <Ykq8IXstIKoW8JE2@dhcp22.suse.cz>
+References: <YkWR8t8yEe6xyzCM@dhcp22.suse.cz>
+ <CAGWkznHxAD0757m1i1Csw1CVRDtQddfCL08dYf12fa47=-uYYQ@mail.gmail.com>
+ <YkbjNYMY8VjHoSHR@dhcp22.suse.cz>
+ <CAGWkznF7cSyPU0ceYwH6zweJzf-X1bQnS6AJ2-J+WEL0u8jzng@mail.gmail.com>
+ <CAJuCfpHneDZMXO_MmQDPA+igAOdAPRUChiq+zftFXGfDzPHNhQ@mail.gmail.com>
+ <CAGWkznFTQCm0cusVxA_55fu2WfT-w2coVHrT=JA1D_9_2728mQ@mail.gmail.com>
+ <YkqxpEW4m6iU3zMq@dhcp22.suse.cz>
+ <CAGWkznG4L3w=9bpZp8TjyWHmqFyZQk-3m4xCZ96zhHCLPawBgQ@mail.gmail.com>
+ <CAGWkznGMRohE2_at4Qh8KbwSqNmNqOAG2N1EM+7uE9wKqzRm0A@mail.gmail.com>
+ <Ykq7KUleuAg5QnNU@dhcp22.suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220324072700.63787-1-jakobkoschel@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Ykq7KUleuAg5QnNU@dhcp22.suse.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 08:27:00AM +0100, Jakob Koschel wrote:
-> To move the list iterator variable into the list_for_each_entry_*()
-> macro in the future it should be avoided to use the list iterator
-> variable after the loop body.
+On Mon 04-04-22 11:32:28, Michal Hocko wrote:
+> On Mon 04-04-22 17:23:43, Zhaoyang Huang wrote:
+> > On Mon, Apr 4, 2022 at 5:07 PM Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
+> > >
+> > > On Mon, Apr 4, 2022 at 4:51 PM Michal Hocko <mhocko@suse.com> wrote:
+> > > >
+> > > > On Mon 04-04-22 10:33:58, Zhaoyang Huang wrote:
+> > > > [...]
+> > > > > > One thing that I don't understand in this approach is: why memory.low
+> > > > > > should depend on the system's memory pressure. It seems you want to
+> > > > > > allow a process to allocate more when memory pressure is high. That is
+> > > > > > very counter-intuitive to me. Could you please explain the underlying
+> > > > > > logic of why this is the right thing to do, without going into
+> > > > > > technical details?
+> > > > > What I want to achieve is make memory.low be positive correlation with
+> > > > > timing and negative to memory pressure, which means the protected
+> > > > > memcg should lower its protection(via lower memcg.low) for helping
+> > > > > system's memory pressure when it's high.
+> > > >
+> > > > I have to say this is still very confusing to me. The low limit is a
+> > > > protection against external (e.g. global) memory pressure. Decreasing
+> > > > the protection based on the external pressure sounds like it goes right
+> > > > against the purpose of the knob. I can see reasons to update protection
+> > > > based on refaults or other metrics from the userspace but I still do not
+> > > > see how this is a good auto-magic tuning done by the kernel.
+> > > >
+> > > > > The concept behind is memcg's
+> > > > > fault back of dropped memory is less important than system's latency
+> > > > > on high memory pressure.
+> > > >
+> > > > Can you give some specific examples?
+> > > For both of the above two comments, please refer to the latest test
+> > > result in Patchv2 I have sent. I prefer to name my change as focus
+> > > transfer under pressure as protected memcg is the focus when system's
+> > > memory pressure is low which will reclaim from root, this is not
+> > > against current design. However, when global memory pressure is high,
+> > > then the focus has to be changed to the whole system, because it
+> > > doesn't make sense to let the protected memcg out of everybody, it
+> > > can't
+> > > do anything when the system is trapped in the kernel with reclaiming work.
+> > Does it make more sense if I describe the change as memcg will be
+> > protect long as system pressure is under the threshold(partially
+> > coherent with current design) and will sacrifice the memcg if pressure
+> > is over the threshold(added change)
 > 
-> To *never* use the list iterator variable after the loop it was
-> concluded to use a separate iterator variable instead of a
-> found boolean [1].
-> 
-> This removes the need to use a found variable and simply checking if
-> the variable was set, can determine if the break/goto was hit.
-> 
-> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+> No, not really. For one it is still really unclear why there should be any
+> difference in the semantic between global and external memory pressure
+> in general. The low limit is always a protection from the external
+> pressure. And what should be the actual threshold? Amount of the reclaim
+> performed, effectivness of the reclaim or what?
 
-Applied to thunderbolt.git/next, thanks!
+Btw. you might want to have a look at http://lkml.kernel.org/r/20220331084151.2600229-1-yosryahmed@google.com
+where a new interface to allow pro-active memory reclaim is discussed.
+I think that this might turn out to be a better fit then an automagic
+kernel manipulation with a low limit. It will require a user agent to
+drive the reclaim though.
+-- 
+Michal Hocko
+SUSE Labs

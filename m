@@ -2,252 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDCC34F14C0
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 14:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 718894F14C2
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 14:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344270AbiDDM3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 08:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49652 "EHLO
+        id S1344719AbiDDM3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 08:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343964AbiDDM3k (ORCPT
+        with ESMTP id S1344134AbiDDM3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 08:29:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3D03E0E5;
-        Mon,  4 Apr 2022 05:27:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 4 Apr 2022 08:29:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86A943DDC2
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 05:27:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649075264;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JZiet0gB7y1qw4wqhk346odVlcAtOgQHPxIoN3iAWRg=;
+        b=EUG8cfN5H803CPQxy28VMChoEgYlIdQTdCPp7z8u5d6MWv0shbMKNnB/LtzmhA/V+vwAEn
+        xYquSUWwyvIs5I/NwH6KkR9HnJrY0nLOzvpA7DZ18RcZlVnH5OpK1CK99qN4ZpQqzRxJ9z
+        F2YBTTThvP2nSebq1AMYHY1b/DwYbvI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-171-gCUorG1sOe-xsBcOv9_2dQ-1; Mon, 04 Apr 2022 08:27:41 -0400
+X-MC-Unique: gCUorG1sOe-xsBcOv9_2dQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE839B8165E;
-        Mon,  4 Apr 2022 12:27:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0223C2BBE4;
-        Mon,  4 Apr 2022 12:27:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649075260;
-        bh=Fjyu3Mm43bmPbpUEJYRQuHeGgiet8bhGJPq1YPIhX04=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R3TxaXpksoyQHTxqc5NbOXuxvtrmhNcFJfYHOxB3DUiGlNdwM0APQ8jT2M/KdZvTz
-         Pz3Gv08NE2yi1ixceLHnDn3mP5dy1U3bJfz0cXo1JJGaZfZhhPZ5OgbgN5b79dUo7v
-         s8Rt5b+/Wzs5JfGb2/XTMowickBIda/7Mkg3miOKFVKIK/JLdeW4ztWM0qatBWkb0B
-         J3jXenWEupWpPHGah/gdME39YPP8PwWUUyTkLyGIe0iWwBHQ4R5NHoAO3XcbtE7kcr
-         IVhP1Dc19XELR9Ppz2QdVKHU1QdIlcT/+lPp2FYFTgITQczHWHqZgHrz/3TKKQlI6e
-         cj69aQFojXBAg==
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Patrisious Haddad <phaddad@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        Mark Zhang <markzhang@nvidia.com>
-Subject: [PATCH rdma-next 2/2] RDMA/core: Add a netevent notifier to cma
-Date:   Mon,  4 Apr 2022 15:27:27 +0300
-Message-Id: <8c85028f89a877e9b4e6bb58bdd8a7f2cb4567a9.1649075034.git.leonro@nvidia.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1649075034.git.leonro@nvidia.com>
-References: <cover.1649075034.git.leonro@nvidia.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8F24A101A52C;
+        Mon,  4 Apr 2022 12:27:38 +0000 (UTC)
+Received: from starship (unknown [10.40.194.231])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7CF1F407E1C3;
+        Mon,  4 Apr 2022 12:27:33 +0000 (UTC)
+Message-ID: <2401bf729beab6d9348fda18f55e90ed9c1f7583.camel@redhat.com>
+Subject: Re: [PATCH 8/8] KVM: selftests: nSVM: Add
+ svm_nested_soft_inject_test
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>
+Date:   Mon, 04 Apr 2022 15:27:31 +0300
+In-Reply-To: <20220402010903.727604-9-seanjc@google.com>
+References: <20220402010903.727604-1-seanjc@google.com>
+         <20220402010903.727604-9-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrisious Haddad <phaddad@nvidia.com>
+On Sat, 2022-04-02 at 01:09 +0000, Sean Christopherson wrote:
+> From: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+> 
+> Add a KVM self-test that checks whether a nSVM L1 is able to successfully
+> inject a software interrupt and a soft exception into its L2 guest.
+> 
+> In practice, this tests both the next_rip field consistency and
+> L1-injected event with intervening L0 VMEXIT during its delivery:
+> the first nested VMRUN (that's also trying to inject a software interrupt)
+> will immediately trigger a L0 NPF.
+> This L0 NPF will have zero in its CPU-returned next_rip field, which if
+> incorrectly reused by KVM will trigger a #PF when trying to return to
+> such address 0 from the interrupt handler.
+> 
+> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  tools/testing/selftests/kvm/.gitignore        |   1 +
+>  tools/testing/selftests/kvm/Makefile          |   1 +
+>  .../selftests/kvm/include/x86_64/svm_util.h   |   2 +
+>  .../kvm/x86_64/svm_nested_soft_inject_test.c  | 147 ++++++++++++++++++
+>  4 files changed, 151 insertions(+)
+>  create mode 100644 tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c
+> 
+> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+> index 1f1b6c978bf7..1354d3f4a362 100644
+> --- a/tools/testing/selftests/kvm/.gitignore
+> +++ b/tools/testing/selftests/kvm/.gitignore
+> @@ -33,6 +33,7 @@
+>  /x86_64/state_test
+>  /x86_64/svm_vmcall_test
+>  /x86_64/svm_int_ctl_test
+> +/x86_64/svm_nested_soft_inject_test
+>  /x86_64/sync_regs_test
+>  /x86_64/tsc_msrs_test
+>  /x86_64/userspace_io_test
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index c9cdbd248727..cef6d583044b 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -66,6 +66,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/state_test
+>  TEST_GEN_PROGS_x86_64 += x86_64/vmx_preemption_timer_test
+>  TEST_GEN_PROGS_x86_64 += x86_64/svm_vmcall_test
+>  TEST_GEN_PROGS_x86_64 += x86_64/svm_int_ctl_test
+> +TEST_GEN_PROGS_x86_64 += x86_64/svm_nested_soft_inject_test
+>  TEST_GEN_PROGS_x86_64 += x86_64/tsc_scaling_sync
+>  TEST_GEN_PROGS_x86_64 += x86_64/sync_regs_test
+>  TEST_GEN_PROGS_x86_64 += x86_64/userspace_io_test
+> diff --git a/tools/testing/selftests/kvm/include/x86_64/svm_util.h b/tools/testing/selftests/kvm/include/x86_64/svm_util.h
+> index a25aabd8f5e7..d49f7c9b4564 100644
+> --- a/tools/testing/selftests/kvm/include/x86_64/svm_util.h
+> +++ b/tools/testing/selftests/kvm/include/x86_64/svm_util.h
+> @@ -16,6 +16,8 @@
+>  #define CPUID_SVM_BIT		2
+>  #define CPUID_SVM		BIT_ULL(CPUID_SVM_BIT)
+>  
+> +#define SVM_EXIT_EXCP_BASE	0x040
+> +#define SVM_EXIT_HLT		0x078
+>  #define SVM_EXIT_MSR		0x07c
+>  #define SVM_EXIT_VMMCALL	0x081
+>  
+> diff --git a/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c b/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c
+> new file mode 100644
+> index 000000000000..d39be5d885c1
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c
+> @@ -0,0 +1,147 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2022 Oracle and/or its affiliates.
+> + *
+> + * Based on:
+> + *   svm_int_ctl_test
+> + *
+> + *   Copyright (C) 2021, Red Hat, Inc.
+> + *
+> + */
+> +
+> +#include "test_util.h"
+> +#include "kvm_util.h"
+> +#include "processor.h"
+> +#include "svm_util.h"
+> +
+> +#define VCPU_ID		0
+> +#define INT_NR			0x20
+> +#define X86_FEATURE_NRIPS	BIT(3)
+> +
+> +#define vmcall()		\
+> +	__asm__ __volatile__(	\
+> +		"vmmcall\n"	\
+> +		)
+> +
+> +#define ud2()			\
+> +	__asm__ __volatile__(	\
+> +		"ud2\n"	\
+> +		)
+> +
+> +#define hlt()			\
+> +	__asm__ __volatile__(	\
+> +		"hlt\n"	\
+> +		)
 
-Add a netevent callback for cma, mainly to catch NETEVENT_NEIGH_UPDATE.
+Minor nitpick: I guess it would be nice to put these in some common header file.
 
-Previously, when a system with failover MAC mechanism change its MAC address
-during a CM connection attempt, the RDMA-CM would take a lot of time till
-it disconnects and timesout due to the incorrect MAC address.
 
-Now when we get a NETEVENT_NEIGH_UPDATE we check if it is due to a failover
-MAC change and if so, we instantly destroy the CM and notify the user in order
-to spare the unnecessary waiting for the timeout.
+> +
+> +static unsigned int bp_fired;
+> +static void guest_bp_handler(struct ex_regs *regs)
+> +{
+> +	bp_fired++;
+> +}
+> +
+> +static unsigned int int_fired;
+> +static void guest_int_handler(struct ex_regs *regs)
+> +{
+> +	int_fired++;
+> +}
+> +
+> +static void l2_guest_code(void)
+> +{
+> +	GUEST_ASSERT(int_fired == 1);
+> +	vmcall();
+> +	ud2();
+> +
+> +	GUEST_ASSERT(bp_fired == 1);
+> +	hlt();
+> +}
 
-Signed-off-by: Patrisious Haddad <phaddad@nvidia.com>
-Reviewed-by: Mark Zhang <markzhang@nvidia.com>
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
----
- drivers/infiniband/core/cma.c | 104 ++++++++++++++++++++++++++++++++++
- 1 file changed, 104 insertions(+)
 
-diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
-index bfe2b70daf39..c26fec94d032 100644
---- a/drivers/infiniband/core/cma.c
-+++ b/drivers/infiniband/core/cma.c
-@@ -21,6 +21,7 @@
- 
- #include <net/net_namespace.h>
- #include <net/netns/generic.h>
-+#include <net/netevent.h>
- #include <net/tcp.h>
- #include <net/ipv6.h>
- #include <net/ip_fib.h>
-@@ -173,6 +174,7 @@ static struct rb_root id_table = RB_ROOT;
- /* Serialize operations of id_table tree */
- static DEFINE_SPINLOCK(id_table_lock);
- static struct workqueue_struct *cma_wq;
-+static struct workqueue_struct *cma_netevent_wq;
- static unsigned int cma_pernet_id;
- 
- struct cma_pernet {
-@@ -373,6 +375,11 @@ struct cma_work {
- 	struct rdma_cm_event	event;
- };
- 
-+struct cma_netevent_work {
-+	struct work_struct work;
-+	struct rdma_id_private *id_priv;
-+};
-+
- union cma_ip_addr {
- 	struct in6_addr ip6;
- 	struct {
-@@ -5054,10 +5061,95 @@ static int cma_netdev_callback(struct notifier_block *self, unsigned long event,
- 	return ret;
- }
- 
-+static void cma_netevent_work_handler(struct work_struct *_work)
-+{
-+	struct cma_netevent_work *network =
-+		container_of(_work, struct cma_netevent_work, work);
-+	struct rdma_cm_event event = {};
-+
-+	mutex_lock(&network->id_priv->handler_mutex);
-+
-+	if (READ_ONCE(network->id_priv->state) == RDMA_CM_DESTROYING ||
-+	    READ_ONCE(network->id_priv->state) == RDMA_CM_DEVICE_REMOVAL)
-+		goto out_unlock;
-+
-+	event.event = RDMA_CM_EVENT_UNREACHABLE;
-+	event.status = -ETIMEDOUT;
-+
-+	if (cma_cm_event_handler(network->id_priv, &event)) {
-+		__acquire(&network->id_priv->handler_mutex);
-+		network->id_priv->cm_id.ib = NULL;
-+		cma_id_put(network->id_priv);
-+		destroy_id_handler_unlock(network->id_priv);
-+		kfree(network);
-+		return;
-+	}
-+
-+out_unlock:
-+	mutex_unlock(&network->id_priv->handler_mutex);
-+	cma_id_put(network->id_priv);
-+	kfree(network);
-+}
-+
-+static int cma_netevent_callback(struct notifier_block *self,
-+				 unsigned long event, void *ctx)
-+{
-+	struct id_table_entry *ips_node = NULL;
-+	struct rdma_id_private *current_id;
-+	struct cma_netevent_work *network;
-+	struct neighbour *neigh = ctx;
-+	unsigned long flags;
-+
-+	if (event != NETEVENT_NEIGH_UPDATE)
-+		return NOTIFY_DONE;
-+
-+	spin_lock_irqsave(&id_table_lock, flags);
-+	if (neigh->tbl->family == AF_INET6) {
-+		struct sockaddr_in6 neigh_sock_6;
-+
-+		neigh_sock_6.sin6_family = AF_INET6;
-+		neigh_sock_6.sin6_addr = *(struct in6_addr *)neigh->primary_key;
-+		ips_node = node_from_ndev_ip(&id_table, neigh->dev->ifindex,
-+					     (struct sockaddr *)&neigh_sock_6);
-+	} else if (neigh->tbl->family == AF_INET) {
-+		struct sockaddr_in neigh_sock_4;
-+
-+		neigh_sock_4.sin_family = AF_INET;
-+		neigh_sock_4.sin_addr.s_addr = *(__be32 *)(neigh->primary_key);
-+		ips_node = node_from_ndev_ip(&id_table, neigh->dev->ifindex,
-+					     (struct sockaddr *)&neigh_sock_4);
-+	} else
-+		goto out;
-+
-+	if (!ips_node)
-+		goto out;
-+
-+	list_for_each_entry(current_id, &ips_node->id_list, id_list_entry) {
-+		if (!memcmp(current_id->id.route.addr.dev_addr.dst_dev_addr,
-+			   neigh->ha, ETH_ALEN))
-+			continue;
-+		network = kzalloc(sizeof(*network), GFP_ATOMIC);
-+		if (!network)
-+			goto out;
-+
-+		INIT_WORK(&network->work, cma_netevent_work_handler);
-+		network->id_priv = current_id;
-+		cma_id_get(current_id);
-+		queue_work(cma_netevent_wq, &network->work);
-+	}
-+out:
-+	spin_unlock_irqrestore(&id_table_lock, flags);
-+	return NOTIFY_DONE;
-+}
-+
- static struct notifier_block cma_nb = {
- 	.notifier_call = cma_netdev_callback
- };
- 
-+static struct notifier_block cma_netevent_cb = {
-+	.notifier_call = cma_netevent_callback
-+};
-+
- static void cma_send_device_removal_put(struct rdma_id_private *id_priv)
- {
- 	struct rdma_cm_event event = { .event = RDMA_CM_EVENT_DEVICE_REMOVAL };
-@@ -5274,12 +5366,19 @@ static int __init cma_init(void)
- 	if (!cma_wq)
- 		return -ENOMEM;
- 
-+	cma_netevent_wq = alloc_ordered_workqueue("rdma_cm_netevent", 0);
-+	if (!cma_netevent_wq) {
-+		ret = -ENOMEM;
-+		goto err_netevent_wq;
-+	}
-+
- 	ret = register_pernet_subsys(&cma_pernet_operations);
- 	if (ret)
- 		goto err_wq;
- 
- 	ib_sa_register_client(&sa_client);
- 	register_netdevice_notifier(&cma_nb);
-+	register_netevent_notifier(&cma_netevent_cb);
- 
- 	ret = ib_register_client(&cma_client);
- 	if (ret)
-@@ -5294,10 +5393,13 @@ static int __init cma_init(void)
- err_ib:
- 	ib_unregister_client(&cma_client);
- err:
-+	unregister_netevent_notifier(&cma_netevent_cb);
- 	unregister_netdevice_notifier(&cma_nb);
- 	ib_sa_unregister_client(&sa_client);
- 	unregister_pernet_subsys(&cma_pernet_operations);
- err_wq:
-+	destroy_workqueue(cma_netevent_wq);
-+err_netevent_wq:
- 	destroy_workqueue(cma_wq);
- 	return ret;
- }
-@@ -5306,9 +5408,11 @@ static void __exit cma_cleanup(void)
- {
- 	cma_configfs_exit();
- 	ib_unregister_client(&cma_client);
-+	unregister_netevent_notifier(&cma_netevent_cb);
- 	unregister_netdevice_notifier(&cma_nb);
- 	ib_sa_unregister_client(&sa_client);
- 	unregister_pernet_subsys(&cma_pernet_operations);
-+	destroy_workqueue(cma_netevent_wq);
- 	destroy_workqueue(cma_wq);
- }
- 
--- 
-2.35.1
+Yes, I was right - the test indeed has no either INT 0x20 nor INT 3 in the L2 guest code,
+and yet this should work.
+
+> +
+> +static void l1_guest_code(struct svm_test_data *svm)
+> +{
+> +	#define L2_GUEST_STACK_SIZE 64
+> +	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
+> +	struct vmcb *vmcb = svm->vmcb;
+> +
+> +	/* Prepare for L2 execution. */
+> +	generic_svm_setup(svm, l2_guest_code,
+> +			  &l2_guest_stack[L2_GUEST_STACK_SIZE]);
+> +
+> +	vmcb->control.intercept_exceptions |= BIT(PF_VECTOR) | BIT(UD_VECTOR);
+> +	vmcb->control.intercept |= BIT(INTERCEPT_HLT);
+> +
+> +	vmcb->control.event_inj = INT_NR | SVM_EVTINJ_VALID | SVM_EVTINJ_TYPE_SOFT;
+> +	/* The return address pushed on stack */
+> +	vmcb->control.next_rip = vmcb->save.rip;
+
+I'll would be putting even something more spicy here just to see that KVM preserves this field
+like say put two ud2 in the start of guest code, and here have
+
+vmcb->control.next_rip = vmcb->save.rip + 4; // skip over two ud2 instructions.
+
+That way KVM won't be able to skip over a single instruction to get correct next_rip
+
+> +
+> +	run_guest(vmcb, svm->vmcb_gpa);
+> +	GUEST_ASSERT_3(vmcb->control.exit_code == SVM_EXIT_VMMCALL,
+> +		       vmcb->control.exit_code,
+> +		       vmcb->control.exit_info_1, vmcb->control.exit_info_2);
+> +
+> +	/* Skip over VMCALL */
+> +	vmcb->save.rip += 3;
+> +
+> +	vmcb->control.event_inj = BP_VECTOR | SVM_EVTINJ_VALID | SVM_EVTINJ_TYPE_EXEPT;
+> +	/* The return address pushed on stack, skip over UD2 */
+> +	vmcb->control.next_rip = vmcb->save.rip + 2;
+> +
+> +	run_guest(vmcb, svm->vmcb_gpa);
+> +	GUEST_ASSERT_3(vmcb->control.exit_code == SVM_EXIT_HLT,
+> +		       vmcb->control.exit_code,
+> +		       vmcb->control.exit_info_1, vmcb->control.exit_info_2);
+> +
+> +	GUEST_DONE();
+> +}
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	struct kvm_cpuid_entry2 *cpuid;
+> +	struct kvm_vm *vm;
+> +	vm_vaddr_t svm_gva;
+> +	struct kvm_guest_debug debug;
+> +
+> +	nested_svm_check_supported();
+> +
+> +	cpuid = kvm_get_supported_cpuid_entry(0x8000000a);
+> +	if (!(cpuid->edx & X86_FEATURE_NRIPS)) {
+> +		print_skip("nRIP Save unavailable");
+> +		exit(KSFT_SKIP);
+> +	}
+> +
+> +	vm = vm_create_default(VCPU_ID, 0, (void *) l1_guest_code);
+> +
+> +	vm_init_descriptor_tables(vm);
+> +	vcpu_init_descriptor_tables(vm, VCPU_ID);
+> +
+> +	vm_install_exception_handler(vm, BP_VECTOR, guest_bp_handler);
+> +	vm_install_exception_handler(vm, INT_NR, guest_int_handler);
+> +
+> +	vcpu_alloc_svm(vm, &svm_gva);
+> +	vcpu_args_set(vm, VCPU_ID, 1, svm_gva);
+> +
+> +	memset(&debug, 0, sizeof(debug));
+> +	vcpu_set_guest_debug(vm, VCPU_ID, &debug);
+> +
+> +	struct kvm_run *run = vcpu_state(vm, VCPU_ID);
+> +	struct ucall uc;
+> +
+> +	vcpu_run(vm, VCPU_ID);
+> +	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
+> +		    "Got exit_reason other than KVM_EXIT_IO: %u (%s)\n",
+> +		    run->exit_reason,
+> +		    exit_reason_str(run->exit_reason));
+> +
+> +	switch (get_ucall(vm, VCPU_ID, &uc)) {
+> +	case UCALL_ABORT:
+> +		TEST_FAIL("%s at %s:%ld, vals = 0x%lx 0x%lx 0x%lx", (const char *)uc.args[0],
+> +			  __FILE__, uc.args[1], uc.args[2], uc.args[3], uc.args[4]);
+> +		break;
+> +		/* NOT REACHED */
+> +	case UCALL_DONE:
+> +		goto done;
+> +	default:
+> +		TEST_FAIL("Unknown ucall 0x%lx.", uc.cmd);
+> +	}
+> +done:
+> +	kvm_vm_free(vm);
+> +	return 0;
+> +}
+
+
+Other that nitpicks:
+
+Reviewed-by: Maxim levitsky <mlevitsk@redhat.com>
+
+Best regards,
+	Maxim Levitsky
+
 

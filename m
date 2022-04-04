@@ -2,89 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506B34F17E9
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A9E64F17EC
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378122AbiDDPHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 11:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
+        id S1378413AbiDDPId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 11:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236667AbiDDPHN (ORCPT
+        with ESMTP id S236667AbiDDPIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 11:07:13 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F2024F30;
-        Mon,  4 Apr 2022 08:05:17 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 4 Apr 2022 11:08:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A202B3AA7A;
+        Mon,  4 Apr 2022 08:06:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 167CF221D4;
-        Mon,  4 Apr 2022 17:05:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1649084714;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vFi7yXUyhEvuyEPAaB5PJBj31x6UAMrx11hHIwLpdNw=;
-        b=dc6JR3Kh1Ky3QpzM5AVH203vP79qpSRIe0/7KFPStc93uVzLA6hMlEPEl7+mjlOxUUQm5N
-        s9pNBuWORJiOmTMckn+4ooQE8mRVMNiYtpgDX5TFNKNcHP/PVUlWNuQAxyqLeNzAafgFs1
-        9HQ+CQBtpNZYNCqrUyrqASCM2kV4p6Q=
-From:   Michael Walle <michael@walle.cc>
-To:     richardcochran@gmail.com
-Cc:     andrew@lunn.ch, davem@davemloft.net, grygorii.strashko@ti.com,
-        kuba@kernel.org, kurt@linutronix.de, linux-kernel@vger.kernel.org,
-        linux@armlinux.org.uk, mlichvar@redhat.com, netdev@vger.kernel.org,
-        qiangqing.zhang@nxp.com, vladimir.oltean@nxp.com,
-        Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH RFC V1 net-next 3/4] net: Let the active time stamping layer be selectable.
-Date:   Mon,  4 Apr 2022 17:05:08 +0200
-Message-Id: <20220404150508.3945833-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220104014215.GA20062@hoboy.vegasvil.org>
-References: <20220104014215.GA20062@hoboy.vegasvil.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FB81615CD;
+        Mon,  4 Apr 2022 15:06:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCFEAC340EE;
+        Mon,  4 Apr 2022 15:06:34 +0000 (UTC)
+Date:   Mon, 4 Apr 2022 11:06:33 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Sebastian Fricke <sebastian.fricke@collabora.com>,
+        linux-trace-devel@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Amit Daniel Kachhap <amit.kachhap@arm.com>,
+        Torsten Duwe <duwe@suse.de>
+Subject: Re: Corrupted function tracer in 5.17.0-rc1
+Message-ID: <20220404110633.1b246d55@gandalf.local.home>
+In-Reply-To: <YksG6LXUCwIZhK8k@FVFF77S0Q05N>
+References: <20220404125212.tuby556kara5t56c@basti-XPS-13-9310>
+        <20220404102607.5c9cb515@gandalf.local.home>
+        <YksG6LXUCwIZhK8k@FVFF77S0Q05N>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry for digging out this older thread, but it seems to be discussed
-in [1].
+On Mon, 4 Apr 2022 15:55:36 +0100
+Mark Rutland <mark.rutland@arm.com> wrote:
 
-> IMO, the default should be PHY because up until now the PHY layer was
-> prefered.
+> From the title, this is v5.17-rc1, which is known broken due to the mcount sort
+> issue that was subsequently fixed in commit:
+
+Ah, yes. I was thinking of 5.18-rc1 (which has just been released)
+
 > 
-> Or would you say the MAC layer should take default priority?
+>   4ed308c445a1e3ab ("ftrace: Have architectures opt-in for mcount build time sorting")
 > 
-> (that may well break some existing systems)
+> Is it possible to try with the final v5.17? Or at least try with that patch
+> cherry-picked?
 
-Correct me if I'm wrong, but for systems with multiple interfaces,
-in particular switches, you'd need external circuits to synchronize
-the PHCs within in the PHYs. (And if you use a time aware scheduler
-you'd need to synchronize the MAC, too). Whereas for switches there
-is usually just one PHC in the MAC which just works.
+Right, 5.17-rc1 is known broken. Please try the latest, 5.17 and let us
+know if it is still an issue.
 
-On these systems, pushing the timestamping to the PHY would mean
-that this external circuitry must exist and have to be in use/
-supported. MAC timestamping will work in all cases without any
-external dependencies.
+Thanks,
 
-I'm working on a board with the LAN9668 switch which has one LAN8814
-PHY and two GPY215 PHYs and two internal PHYs. The LAN9668 driver
-will forward all timestamping ioctls to the PHY if it supports
-timestamping (unconditionally). As soon as the patches to add ptp
-support to the LAN8814 will be accepted, I guess it will break the
-PTP/TAS support because there is no synchronization between all the
-PHCs on that board. Thus, IMHO MAC timestamping should be the default.
-
--michael
-
-[1] https://lore.kernel.org/netdev/20220308145405.GD29063@hoboy.vegasvil.org/
+-- Steve

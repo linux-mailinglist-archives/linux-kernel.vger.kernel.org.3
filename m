@@ -2,158 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5274F1D96
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E5C4F1D8C
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383546AbiDDVdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36852 "EHLO
+        id S1382940AbiDDVcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:32:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380643AbiDDUso (ORCPT
+        with ESMTP id S1380644AbiDDUth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 16:48:44 -0400
-Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B3D713E9A;
-        Mon,  4 Apr 2022 13:46:47 -0700 (PDT)
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1nbTav-0003dN-Sm; Mon, 04 Apr 2022 22:46:37 +0200
-Message-ID: <fde9cf47-b420-23c7-f974-480eb95da221@maciej.szmigiero.name>
-Date:   Mon, 4 Apr 2022 22:46:32 +0200
+        Mon, 4 Apr 2022 16:49:37 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2040.outbound.protection.outlook.com [40.107.243.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3036205C0
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 13:47:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GLNkNBj6HBCKhD5HNgnrm4Sm/dI6RijUz/+a5Jimf/a+s41b0V31ubKYv0LElE1lVS6Hmf0bksNjPplNvD+hLlrnfsSY7kDS71CTOtq0zlnySDFNG6hvRPQg0eRG6lmbVubDuNIwDc+7mt4gvbledjx1WdGH39RRctNwXkhLfzq8f2cAZRyW2WtaYOy8q91TMkoXcL54FMPXc5BAj+7TlWfzB/kXN0npbDXQH31Mq+Fi7kV8TySaNuGdxZvD40Al/YSqLUrnZu7H2tT1cuRa2IV0n3Ahu6W1/gGumuNVueVQVR6nMXOhrJKAZcKmABQjXPaZykijbo4V1gyj3VTb/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=94JCOCW+fPlUnwlKPkgEWPmXrX+ICQvnUxZJn9I/A7g=;
+ b=ZT1wJKREbohNq2al8bz9/qs5Q/jJOrltl07E3GZuYmmbtwH59KKODqSlMZ5T79DDqtIN/csqqxEtlRFMUOT0mtPA7gwl2UjsdWAv1+mhtZnM+FUOcY8xF5f0JjeXJu1rEa+3in31m5cnbeu11LVo0cRr9TM+eZYGJmnw6NuRKoP3YO4AWcs9iCkehdW4WMJCpBSr0OKvDTxZhPtjOq6e6ijSXeLPdGEl27j+b73rCe4HFOBvUsR3rZj/KtfVt6bY/YXjCKWwKcO2WXyq9LOHxzaf1MNjjvTz7IaVohkvZNTr/oDdc7PwsNW+1CuLOmYbt3P3j+nBi22g5dCDsEpWNA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=8bytes.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=94JCOCW+fPlUnwlKPkgEWPmXrX+ICQvnUxZJn9I/A7g=;
+ b=QPOsZL1uqBYRAiG2Hcdzg6x4YGaIOsWkyC9HkZyxUVAV3bM7xjoPabYsUfuMx8FOBLqplNJkrrVR4BlMEPbn0wgYPpNtPXJabXx3gnZx0lNPHZAjdB5QoAYD8zwhEwLnAM7CPbU0Wts1nHD0uSZwlV2cnYd9wI5iv1UlDNlZ890=
+Received: from BN9PR03CA0482.namprd03.prod.outlook.com (2603:10b6:408:130::7)
+ by MW2PR12MB2379.namprd12.prod.outlook.com (2603:10b6:907:9::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.30; Mon, 4 Apr
+ 2022 20:47:36 +0000
+Received: from BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:130:cafe::7f) by BN9PR03CA0482.outlook.office365.com
+ (2603:10b6:408:130::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31 via Frontend
+ Transport; Mon, 4 Apr 2022 20:47:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT039.mail.protection.outlook.com (10.13.177.169) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5123.19 via Frontend Transport; Mon, 4 Apr 2022 20:47:35 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 4 Apr
+ 2022 15:47:33 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>
+CC:     Christoph Hellwig <hch@infradead.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        Suthikulpanit Suravee <Suravee.Suthikulpanit@amd.com>,
+        Hegde Vasant <Vasant.Hegde@amd.com>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v2 1/2] iommu/amd: Enable swiotlb in all cases
+Date:   Mon, 4 Apr 2022 15:47:22 -0500
+Message-ID: <20220404204723.9767-2-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220404204723.9767-1-mario.limonciello@amd.com>
+References: <20220404204723.9767-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 5/8] KVM: SVM: Re-inject INT3/INTO instead of retrying the
- instruction
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220402010903.727604-1-seanjc@google.com>
- <20220402010903.727604-6-seanjc@google.com>
- <a47217da0b6db4f1b6b6c69a9dc38350b13ac17c.camel@redhat.com>
- <YkshgrUaF4+MrrXf@google.com>
- <a3cf781b-0b1a-0bba-6b37-12666c7fc154@maciej.szmigiero.name>
- <YktIGHM86jHkzGdF@google.com> <YktM9bnq5HaTMKkV@google.com>
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-In-Reply-To: <YktM9bnq5HaTMKkV@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f3dc8a52-0453-4fd9-fdd4-08da167c5941
+X-MS-TrafficTypeDiagnostic: MW2PR12MB2379:EE_
+X-Microsoft-Antispam-PRVS: <MW2PR12MB237903CAEA08DC5F8345666AE2E59@MW2PR12MB2379.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Cpp2Jf31DLwsNwb3AywUGP3b7es8cHmdHzWytPgyqgm+f715CuUrO8A1LftsYs3lBOIkFZbiVbCkgpiUxdHJxadRWnJIIZGr2d9VuZUZAyDZrmJrLrws1W9G8twLh5yxFZLsgnBPy8LUkvUR4vrq+4aw5N9LJWzJ5ZI/jHhHRpvxI6Z8Ak+JCRBxAVPrKkDHBukHInPH9ixTH8DTVJDaGEjt77/EeYWnYRFecfdERPzWjbs5nf8xRAwUHeUafZAUQWJZ320KdmEHC205GdSvEuqr8j/L6Ze0u1e3IztAykjXo1h+k8gtfg+/GTAlVzB68f0g+c5H/dKQyxmhG7Gfp8nz5rGZw/mqyCEzcHrq6yR3XwSOuvgYIXgH+yoLeXYzBmmBrV7GyXzVbNTbpRFvRdS/64VeibSXPJ/9ccC+F0HPdd7Ma7B9T7HBZ00df6vJu618N1NL8yrJ1nAVl4CFblRnvvC4NbkpG1bXKaooycwoGeQmJmbQquDpJX5mWGnh5obTqeQPrPcUQ+w9PGH6Cy52Zt3fQzGsc02tvYL1uIPXoeMdwCzfRNS9HCUDpYQvQkM3CsNiy3fOfdIU8urfpvt85tqGKtDjQlHJpf6ee9qWRxM9fqqzhWps+Fz+faprzkmYFCMfC5L/Mxz2Ls3uwRE+GHHwbwTL4so5760ItcJru+n+7ZN7esJq12cOiaCCD/1I5gfnaYLl2P9rtVIPpw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(82310400004)(70206006)(70586007)(36860700001)(47076005)(110136005)(8936002)(86362001)(316002)(81166007)(54906003)(44832011)(356005)(26005)(5660300002)(1076003)(83380400001)(40460700003)(2616005)(36756003)(426003)(336012)(16526019)(186003)(7696005)(6666004)(8676002)(2906002)(508600001)(4326008)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2022 20:47:35.4818
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f3dc8a52-0453-4fd9-fdd4-08da167c5941
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR12MB2379
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4.04.2022 21:54, Sean Christopherson wrote:
-> On Mon, Apr 04, 2022, Sean Christopherson wrote:
->> On Mon, Apr 04, 2022, Maciej S. Szmigiero wrote:
->>>>>> index 47e7427d0395..a770a1c7ddd2 100644
->>>>>> --- a/arch/x86/kvm/svm/svm.h
->>>>>> +++ b/arch/x86/kvm/svm/svm.h
->>>>>> @@ -230,8 +230,8 @@ struct vcpu_svm {
->>>>>>    	bool nmi_singlestep;
->>>>>>    	u64 nmi_singlestep_guest_rflags;
->>>>>> -	unsigned int3_injected;
->>>>>> -	unsigned long int3_rip;
->>>>>> +	unsigned soft_int_injected;
->>>>>> +	unsigned long soft_int_linear_rip;
->>>>>>    	/* optional nested SVM features that are enabled for this guest  */
->>>>>>    	bool nrips_enabled                : 1;
->>>>>
->>>>>
->>>>> I mostly agree with this patch, but think that it doesn't address the
->>>>> original issue that Maciej wanted to address:
->>>>>
->>>>> Suppose that there is *no* instruction in L2 code which caused the software
->>>>> exception, but rather L1 set arbitrary next_rip, and set EVENTINJ to software
->>>>> exception with some vector, and that injection got interrupted.
->>>>>
->>>>> I don't think that this code will support this.
->>>>
->>>> Argh, you're right.  Maciej's selftest injects without an instruction, but it doesn't
->>>> configure the scenario where that injection fails due to an exception+VM-Exit that
->>>> isn't intercepted by L1 and is handled by L0.  The event_inj test gets the coverage
->>>> for the latter, but always has a backing instruction.
->>>
->>> Still reviewing the whole patch set, but want to clear this point quickly:
->>> The selftest does have an implicit intervening NPF (handled by L0) while
->>> injecting the first L1 -> L2 event.
->>
->> I'll do some debug to figure out why the test passes for me.  I'm guessing I either
->> got lucky, e.g. IDT was faulted in already, or I screwed up and the test doesn't
->> actually pass.
-> 
-> Well that was easy.  My code is indeed flawed and skips the wrong instruction,
-> the skipped instruction just so happens to be a (spurious?) adjustment of RSP.  The
-> L2 guest function never runs to completion and so the "bad" RSP is never consumed.
->   
->     KVM: incomplete injection for L2, vector 32 @ 401c70.  next_rip = 0
->     KVM: injecting for L2, vector 0 @ 401c70.  next_rip = 401c74
-> 
-> 0000000000401c70 <l2_guest_code>:
->    401c70:       48 83 ec 08             sub    $0x8,%rsp
->    401c74:       83 3d 75 a7 0e 00 01    cmpl   $0x1,0xea775(%rip)        # 4ec3f0 <int_fired>
->    401c7b:       74 1e                   je     401c9b <l2_guest_code+0x2b>
->    401c7d:       45 31 c0                xor    %r8d,%r8d
->    401c80:       b9 32 00 00 00          mov    $0x32,%ecx
->    401c85:       ba 90 40 4b 00          mov    $0x4b4090,%edx
->    401c8a:       31 c0                   xor    %eax,%eax
->    401c8c:       be 02 00 00 00          mov    $0x2,%esi
->    401c91:       bf 02 00 00 00          mov    $0x2,%edi
->    401c96:       e8 05 ae 00 00          call   40caa0 <ucall>
->    401c9b:       0f 01 d9                vmmcall
->    401c9e:       0f 0b                   ud2
->    401ca0:       83 3d 4d a7 0e 00 01    cmpl   $0x1,0xea74d(%rip)        # 4ec3f4 <bp_fired>
->    401ca7:       74 1e                   je     401cc7 <l2_guest_code+0x57>
->    401ca9:       45 31 c0                xor    %r8d,%r8d
->    401cac:       b9 36 00 00 00          mov    $0x36,%ecx
->    401cb1:       ba b8 40 4b 00          mov    $0x4b40b8,%edx
->    401cb6:       31 c0                   xor    %eax,%eax
->    401cb8:       be 02 00 00 00          mov    $0x2,%esi
->    401cbd:       bf 02 00 00 00          mov    $0x2,%edi
->    401cc2:       e8 d9 ad 00 00          call   40caa0 <ucall>
->    401cc7:       f4                      hlt
->    401cc8:       48 83 c4 08             add    $0x8,%rsp
->    401ccc:       c3                      ret
->    401ccd:       0f 1f 00                nopl   (%rax)
-> 
-> I don't see why the compiler is creating room for a single variable, but it doesn't
-> really matter, the easiest way to detect this bug is to assert that the return RIP
-> in the INT 0x20 handler points at l2_guest_code, e.g. this fails:
-> 
-> diff --git a/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c b/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c
-> index d39be5d885c1..257aa2280b5c 100644
-> --- a/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/svm_nested_soft_inject_test.c
-> @@ -40,9 +40,13 @@ static void guest_bp_handler(struct ex_regs *regs)
->   }
-> 
->   static unsigned int int_fired;
-> +static void l2_guest_code(void);
-> +
->   static void guest_int_handler(struct ex_regs *regs)
->   {
->          int_fired++;
-> +       GUEST_ASSERT_2(regs->rip == (unsigned long)l2_guest_code,
-> +                      regs->rip, (unsigned long)l2_guest_code);
->   }
-> 
->   static void l2_guest_code(void)
+Previously the AMD IOMMU would only enable SWIOTLB in certain
+circumstances:
+ * IOMMU in passthrough mode
+ * SME enabled
 
-It totally makes sense to add the above as an additional assert to the
-self test - the more checks the test have the better at catching bugs
-it is.
+This logic however doesn't work when an untrusted device is plugged in
+that doesn't do page aligned DMA transactions.  The expectation is
+that a bounce buffer is used for those transactions.
 
-Thanks,
-Maciej
+This fails like this:
+
+swiotlb buffer is full (sz: 4096 bytes), total 0 (slots), used 0 (slots)
+
+That happens because the bounce buffers have been allocated, followed by
+freed during startup but the bounce buffering code expects that all IOMMUs
+have left it enabled.
+
+Remove the criteria to set up bounce buffers on AMD systems to ensure
+they're always available for supporting untrusted devices.
+
+Fixes: 82612d66d51d ("iommu: Allow the dma-iommu api to use bounce buffers")
+Suggested-by: Christoph Hellwig <hch@infradead.org>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+v1->v2:
+ * Enable swiotlb for AMD instead of ignoring it for inactive
+
+ drivers/iommu/amd/iommu.c | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+index a1ada7bff44e..079694f894b8 100644
+--- a/drivers/iommu/amd/iommu.c
++++ b/drivers/iommu/amd/iommu.c
+@@ -1838,17 +1838,10 @@ void amd_iommu_domain_update(struct protection_domain *domain)
+ 	amd_iommu_domain_flush_complete(domain);
+ }
+ 
+-static void __init amd_iommu_init_dma_ops(void)
+-{
+-	swiotlb = (iommu_default_passthrough() || sme_me_mask) ? 1 : 0;
+-}
+-
+ int __init amd_iommu_init_api(void)
+ {
+ 	int err;
+ 
+-	amd_iommu_init_dma_ops();
+-
+ 	err = bus_set_iommu(&pci_bus_type, &amd_iommu_ops);
+ 	if (err)
+ 		return err;
+-- 
+2.34.1
+

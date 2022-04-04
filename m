@@ -2,129 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040FE4F122B
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE314F1232
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354562AbiDDJiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 05:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42934 "EHLO
+        id S1354562AbiDDJlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 05:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354650AbiDDJil (ORCPT
+        with ESMTP id S1354412AbiDDJlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 05:38:41 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B73D3BFBC;
-        Mon,  4 Apr 2022 02:36:36 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 0F7091F37E;
-        Mon,  4 Apr 2022 09:36:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1649064995; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LpYoL6AgjzJZ4tpGv3/xyzDAd+WQcpBXKtpN+zEEZ6M=;
-        b=URZHSoRiL8o7b+yMQLyfEwpcnDVBQxC25DaiTXuXyRDL0IVDsBLTG0R5+BoVe4h2RwHe+8
-        846rB9SKsGl/yDW1VzKHMBpdDywbpp7qqlqIszK75ScfGaGQ/nc4UbHX9VFyfjHiaxZssh
-        AyAChWqakgt161TVz0sPrchh0q2dSMg=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id CC8C7A3B92;
-        Mon,  4 Apr 2022 09:36:34 +0000 (UTC)
-Date:   Mon, 4 Apr 2022 11:36:33 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        cgroups mailinglist <cgroups@vger.kernel.org>,
-        Ke Wang <ke.wang@unisoc.com>
-Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
-Message-ID: <Ykq8IXstIKoW8JE2@dhcp22.suse.cz>
-References: <YkWR8t8yEe6xyzCM@dhcp22.suse.cz>
- <CAGWkznHxAD0757m1i1Csw1CVRDtQddfCL08dYf12fa47=-uYYQ@mail.gmail.com>
- <YkbjNYMY8VjHoSHR@dhcp22.suse.cz>
- <CAGWkznF7cSyPU0ceYwH6zweJzf-X1bQnS6AJ2-J+WEL0u8jzng@mail.gmail.com>
- <CAJuCfpHneDZMXO_MmQDPA+igAOdAPRUChiq+zftFXGfDzPHNhQ@mail.gmail.com>
- <CAGWkznFTQCm0cusVxA_55fu2WfT-w2coVHrT=JA1D_9_2728mQ@mail.gmail.com>
- <YkqxpEW4m6iU3zMq@dhcp22.suse.cz>
- <CAGWkznG4L3w=9bpZp8TjyWHmqFyZQk-3m4xCZ96zhHCLPawBgQ@mail.gmail.com>
- <CAGWkznGMRohE2_at4Qh8KbwSqNmNqOAG2N1EM+7uE9wKqzRm0A@mail.gmail.com>
- <Ykq7KUleuAg5QnNU@dhcp22.suse.cz>
+        Mon, 4 Apr 2022 05:41:42 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C11423143
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 02:39:45 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id yy13so18679905ejb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 02:39:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zYzeb2fJ8p/eCP3NXepXxEemb9cW6kn/EXiOBzgXQVQ=;
+        b=H8xgB+BJ5DMDOo+xvvuAoWF2Sj0v/bgo7aoZ6bmGwIzSHN60ntXjscgQF/YDIrHjKK
+         RtwS7kHeOI++OBryAEuN86dZI/oRTBI2sy88JZiOG+L8hhJBtKFDBG/gP1eg21Byy5G2
+         7S2K/o2eBj+Liva6Vt6d3s4LivDZc8Ly5MhmzLLcPy5vHlynNc3urTliJLvoB6xbQMGu
+         sPqOPOAIWIjzH8EMdnLyEYKSwcATH6yt7uJ58UOwomCF9RgQhGnoSE1Z2MVGQ5xkTJwQ
+         Oo7rVPq2clTQXJ9ZzFzf1C5kZxwa5SGGZhaPMlkdVCqgvDHAgOAb9aNbw/tGo5QL24wP
+         5Hgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zYzeb2fJ8p/eCP3NXepXxEemb9cW6kn/EXiOBzgXQVQ=;
+        b=xLiHFMdJsHeL9l9+3Xjae9Z/N4pzY8G6f0aew5dcZbnWdmF6lRT5ScmdOL8H602Sli
+         WW60lKtQQ/tcd3bZvf231DJ8FPxYh2PdwF0nI3dP7PCgo79sv89SwcIURcNHKrESuqsp
+         QJpwsLSVWcfctJfhsu2U9tKZaXTv4Et2FwLWZ98xSVPdE3Z6hLV+HG6LMYWfGn8U4KMj
+         V9PfUba/ihdxsHzvvOdmNOW2cM4Nycy36x77Gtnuv80PcphYVtPMLlXLTasLKl7sXJ9T
+         7QEVtIeByu4rtenlcFvZjM7R/CL97StwAed5z8z2wZFMaMFnWBgQF2xF7KA1Hu3joAmG
+         kI9g==
+X-Gm-Message-State: AOAM532q49i8PxHo2+hA0tF9xuUh7C7MkEFD6A3TPxuqo+8sOyxU554c
+        /D6lTTfthI3BJvUQPan1S/sF/w==
+X-Google-Smtp-Source: ABdhPJz0vxNya0f/EBPQIcDsfNm21sKQMPYumYWR9o99ZXh4kdxqUrZi3/2gLt1IjWwGNgi45LSBxQ==
+X-Received: by 2002:a17:907:3d93:b0:6e7:4d22:75c8 with SMTP id he19-20020a1709073d9300b006e74d2275c8mr6462088ejc.330.1649065183902;
+        Mon, 04 Apr 2022 02:39:43 -0700 (PDT)
+Received: from [192.168.0.173] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id sb15-20020a1709076d8f00b006dfe4cda58fsm4092580ejc.95.2022.04.04.02.39.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Apr 2022 02:39:43 -0700 (PDT)
+Message-ID: <30df2887-27d9-c207-4c69-9d5fe3b04777@linaro.org>
+Date:   Mon, 4 Apr 2022 11:39:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ykq7KUleuAg5QnNU@dhcp22.suse.cz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: qcom-pmic-gpio: Add pmx65
+ support
+Content-Language: en-US
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
+        bjorn.andersson@linaro.org, linus.walleij@linaro.org,
+        robh+dt@kernel.org, krzk+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1649048650-14059-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1649048650-14059-2-git-send-email-quic_rohiagar@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1649048650-14059-2-git-send-email-quic_rohiagar@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 04-04-22 11:32:28, Michal Hocko wrote:
-> On Mon 04-04-22 17:23:43, Zhaoyang Huang wrote:
-> > On Mon, Apr 4, 2022 at 5:07 PM Zhaoyang Huang <huangzhaoyang@gmail.com> wrote:
-> > >
-> > > On Mon, Apr 4, 2022 at 4:51 PM Michal Hocko <mhocko@suse.com> wrote:
-> > > >
-> > > > On Mon 04-04-22 10:33:58, Zhaoyang Huang wrote:
-> > > > [...]
-> > > > > > One thing that I don't understand in this approach is: why memory.low
-> > > > > > should depend on the system's memory pressure. It seems you want to
-> > > > > > allow a process to allocate more when memory pressure is high. That is
-> > > > > > very counter-intuitive to me. Could you please explain the underlying
-> > > > > > logic of why this is the right thing to do, without going into
-> > > > > > technical details?
-> > > > > What I want to achieve is make memory.low be positive correlation with
-> > > > > timing and negative to memory pressure, which means the protected
-> > > > > memcg should lower its protection(via lower memcg.low) for helping
-> > > > > system's memory pressure when it's high.
-> > > >
-> > > > I have to say this is still very confusing to me. The low limit is a
-> > > > protection against external (e.g. global) memory pressure. Decreasing
-> > > > the protection based on the external pressure sounds like it goes right
-> > > > against the purpose of the knob. I can see reasons to update protection
-> > > > based on refaults or other metrics from the userspace but I still do not
-> > > > see how this is a good auto-magic tuning done by the kernel.
-> > > >
-> > > > > The concept behind is memcg's
-> > > > > fault back of dropped memory is less important than system's latency
-> > > > > on high memory pressure.
-> > > >
-> > > > Can you give some specific examples?
-> > > For both of the above two comments, please refer to the latest test
-> > > result in Patchv2 I have sent. I prefer to name my change as focus
-> > > transfer under pressure as protected memcg is the focus when system's
-> > > memory pressure is low which will reclaim from root, this is not
-> > > against current design. However, when global memory pressure is high,
-> > > then the focus has to be changed to the whole system, because it
-> > > doesn't make sense to let the protected memcg out of everybody, it
-> > > can't
-> > > do anything when the system is trapped in the kernel with reclaiming work.
-> > Does it make more sense if I describe the change as memcg will be
-> > protect long as system pressure is under the threshold(partially
-> > coherent with current design) and will sacrifice the memcg if pressure
-> > is over the threshold(added change)
+On 04/04/2022 07:04, Rohit Agarwal wrote:
+> Add support for the PMX65 GPIO support to the Qualcomm PMIC GPIO
+> binding.
 > 
-> No, not really. For one it is still really unclear why there should be any
-> difference in the semantic between global and external memory pressure
-> in general. The low limit is always a protection from the external
-> pressure. And what should be the actual threshold? Amount of the reclaim
-> performed, effectivness of the reclaim or what?
+> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/pinctrl/qcom,pmic-gpio.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Btw. you might want to have a look at http://lkml.kernel.org/r/20220331084151.2600229-1-yosryahmed@google.com
-where a new interface to allow pro-active memory reclaim is discussed.
-I think that this might turn out to be a better fit then an automagic
-kernel manipulation with a low limit. It will require a user agent to
-drive the reclaim though.
--- 
-Michal Hocko
-SUSE Labs
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

@@ -2,89 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A984F0D70
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 03:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D094F0D75
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 03:47:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376873AbiDDBcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 21:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
+        id S1376881AbiDDBs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 21:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344091AbiDDBcK (ORCPT
+        with ESMTP id S1344091AbiDDBsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 21:32:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849742CE1E;
-        Sun,  3 Apr 2022 18:30:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E152CB801B8;
-        Mon,  4 Apr 2022 01:30:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9183DC340F0;
-        Mon,  4 Apr 2022 01:30:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649035811;
-        bh=cchmOcpQSMM6YXLo3nclOq49DjPa7jtMaWZG7HiWitM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=hXsndN2961BIOEZY4UroZBn14ghnjjrusT6FahLft5i+DumTIGSdnM0I8723qkWLC
-         ir+54vHN/iTpIFG2lo6gqBBOqxteefa1Axuos3pYh+q9aZaFJ31CCCDyMRZ8yC2BaG
-         yvRCrbacD7XlrHaWOQwET0gNOWBKEYwVuQvsENl7jonN9BFuxvf85pEtpFOXhiWiiA
-         dQntl1gIKR08XpYipg6j9Amg+RtPzW+MJkAmnfBh4Jat/eqrg5nH6jtUzLQziRR+z6
-         QOkVHgDX2BPSW8duJRG7GB7ILpfMcaW/m1HxASvE5z7JwhHLQY8AY3TsvCjCUbIQky
-         /ELdWe6sTlOFw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 75CF0E4A6CB;
-        Mon,  4 Apr 2022 01:30:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 3 Apr 2022 21:48:55 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25CF186CB;
+        Sun,  3 Apr 2022 18:46:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+        bh=iYteJcvBgc/YlU1X4Yo/ta7CrqAZSWx1rViU/Vx9fDU=; b=vx4Ug+BqP19TzwZ6WfSkT8gFXX
+        ZZ+Vb5A1VhkcyygtiMTWQr/SA18H/maiUVGiLbCBCYDQH8qGX3pidHsevpHfw80dDQSJMKpRb6bUU
+        0xM663j/8QSpV9pdjpbzJcIaCWPoeUqOXyBhqNaqsrB5In46PJi8rt8ByBdqqQqtShTpo7QKnQQag
+        Cwr6YX8LACN+fTCqhYXkosoyKb1T825KDXcWf2Yf2T4asJ6Bso9VFj/TVoJZepAT3ggCvxM1H72RS
+        y1AA3DwtPJD6qQuqwQcnDhes6kPzqBFo44/JxmkRmxvCwjjoJw05dsCRmJSfXN/xy5LaWS7d3GNJr
+        N5T+h+oA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nbBnr-00Ck2y-Uz; Mon, 04 Apr 2022 01:46:47 +0000
+Date:   Sun, 3 Apr 2022 18:46:47 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Wei Xiao <xiaowei66@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the sysctl tree
+Message-ID: <YkpOBykNOI6YjMon@bombadil.infradead.org>
+References: <20220330115617.4d694d11@canb.auug.org.au>
+ <20220404102617.572de1d8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3] libbpf: Don't return -EINVAL if hdr_len <
- offsetofend(core_relo_len)
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164903581147.16822.5070536140817711487.git-patchwork-notify@kernel.org>
-Date:   Mon, 04 Apr 2022 01:30:11 +0000
-References: <20220404005320.1723055-1-ytcoode@gmail.com>
-In-Reply-To: <20220404005320.1723055-1-ytcoode@gmail.com>
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     andrii.nakryiko@gmail.com, andrii@kernel.org, ast@kernel.org,
-        bpf@vger.kernel.org, daniel@iogearbox.net,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        songliubraving@fb.com, toke@redhat.com, yhs@fb.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220404102617.572de1d8@canb.auug.org.au>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Mon, Apr 04, 2022 at 10:26:17AM +1000, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> On Wed, 30 Mar 2022 11:56:17 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >
+> > Hi all,
+> >=20
+> > After merging the sysctl tree, today's linux-next build (powerpc
+> > ppc64_defconfig) failed like this:
+> >=20
+> > kernel/sysctl.c:1776:36: error: 'C_A_D' undeclared here (not in a funct=
+ion)
+> >  1776 |                 .data           =3D &C_A_D,
+> >       |                                    ^~~~~
+> >=20
+> > Caused by commit
+> >=20
+> >   84053cc7ef2f ("ftrace: move sysctl_ftrace_enabled to ftrace.c")
+> >=20
+> > I can't imagine how that happened (though I do note that the whole bran=
+ch
+> > has been rebased and not tested :-( ).
+> >=20
+> > I have used the sysctl tree from next-20220329 for today.
+>=20
+> I am still getting this failure.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+I have fixed these issues in a new push to sysctl-next just now.
+This all goes tested through 0-day with no issues found there.
+Sorry for the delay in fixing this.
 
-On Mon,  4 Apr 2022 08:53:20 +0800 you wrote:
-> Since core relos is an optional part of the .BTF.ext ELF section, we should
-> skip parsing it instead of returning -EINVAL if header size is less than
-> offsetofend(struct btf_ext_header, core_relo_len).
-> 
-> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-> ---
-> v1 -> v2: skip core relos if hdr_len < offsetofend(core_relo_len)
-> v2 -> v3: fix comment style
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v3] libbpf: Don't return -EINVAL if hdr_len < offsetofend(core_relo_len)
-    https://git.kernel.org/bpf/bpf-next/c/a6a86da847eb
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+  Luis

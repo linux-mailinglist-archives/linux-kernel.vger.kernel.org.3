@@ -2,39 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0758B4F118F
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B49F4F118A
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345532AbiDDJC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 05:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50798 "EHLO
+        id S1344830AbiDDJCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 05:02:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242500AbiDDJCL (ORCPT
+        with ESMTP id S1343716AbiDDJCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 05:02:11 -0400
+        Mon, 4 Apr 2022 05:02:06 -0400
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA002B1AB;
-        Mon,  4 Apr 2022 02:00:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDEAC29CB2;
+        Mon,  4 Apr 2022 02:00:10 -0700 (PDT)
 Received: from wf0416.dip.tu-dresden.de ([141.76.181.160] helo=phil.dip.tu-dresden.de)
         by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <heiko@sntech.de>)
-        id 1nbIZB-0008Ew-GN; Mon, 04 Apr 2022 11:00:05 +0200
+        id 1nbIZB-0008Ew-WA; Mon, 04 Apr 2022 11:00:06 +0200
 From:   Heiko Stuebner <heiko@sntech.de>
-To:     linux-rockchip@lists.infradead.org,
-        Frank Wunderlich <linux@fw-web.de>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Peter Geis <pgwipeout@gmail.com>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Frank Wunderlich <frank-w@public-files.de>
-Subject: Re: [PATCH v1 0/2] Change Bananapi-R2-Pro board to match V1.0
-Date:   Mon,  4 Apr 2022 10:59:59 +0200
-Message-Id: <164906273049.1398682.587469799631775473.b4-ty@sntech.de>
+To:     Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Tianling Shen <cnsztl@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, Levin Du <djw@t-chip.com.cn>,
+        Liang Chen <cl@rock-chips.com>, Alex Bee <knaerzche@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>
+Subject: Re: [PATCH v2 0/3] (partial) arm64: dts: rockchip: add basic dts for the radxa rock3 model a
+Date:   Mon,  4 Apr 2022 11:00:00 +0200
+Message-Id: <164906273050.1398682.18343164633060967077.b4-ty@sntech.de>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220402110045.104031-1-linux@fw-web.de>
-References: <20220402110045.104031-1-linux@fw-web.de>
+In-Reply-To: <20220310210352.451136-1-michael.riesch@wolfvision.net>
+References: <20220310210352.451136-1-michael.riesch@wolfvision.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -47,25 +49,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2 Apr 2022 13:00:43 +0200, Frank Wunderlich wrote:
-> Mainline Devicetree was created for v00 prototype that was not in
-> public sale and only shipped to few developers. V1.0 of the board
-> has some changes in io-domain and gmacs are swapped.
+On Thu, 10 Mar 2022 22:03:49 +0100, Michael Riesch wrote:
+> This series introduces basic support for the Radxa ROCK3 Model A
+> featuring the Rockchip RK3568 SoC. The basic support includes Ethernet,
+> USB2 and the headphone connector.
 > 
-> Change mainline DTS to match the current hardware.
-> 
-> Frank Wunderlich (2):
->   arm64: dts: rockchip: Change io-domains of bpi-r2-pro
->   arm64: dts: rockchip: Add gmac1 and change network settings
+> Patch 3 adds support for the Video Output Processor (VOP) 2 and the
+> HDMI output. It requires the VOP2/HDMI TX patches (which are discussed
+> on the list) and can be considered as RFC.
 > 
 > [...]
 
-Applied, thanks!
+(partial) Applied, thanks!
 
-[1/2] arm64: dts: rockchip: Change io-domains of bpi-r2-pro
-      commit: 34fc952867aa2a2e257bf2bcbbaac97ac91f8bd1
-[2/2] arm64: dts: rockchip: Add gmac1 and change network settings
-      commit: 5c8e82ed3a4a5c8023b2959d8f3292f7291e7227
+[1/3] dt-bindings: arm: rockchip: add radxa rock3 model a
+      commit: 65a31b5abb7f4c373ce0de52eca75348156c87d2
+[2/3] arm64: dts: rockchip: add basic dts for the radxa rock3 model a
+      commit: 056ef970c434a572f81eae199846bf3f521a8303
 
 Best regards,
 -- 

@@ -2,157 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB30E4F18D3
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4284F18CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378718AbiDDPuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 11:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
+        id S1378670AbiDDPuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 11:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378713AbiDDPuU (ORCPT
+        with ESMTP id S235747AbiDDPuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 11:50:20 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B116377
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:48:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649087303; x=1680623303;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2e6RRJXiZGJCCuHS7LAbElUrJbiygHgNUYLUeLNW8+I=;
-  b=I+Y/o01CoxZ18YC9RDELGrJ8yplQNGsPAd7itDsahZIoQcFu4+m2+1kG
-   jidydED8wGu2N/33EZx5lLie7FdDyOnqGc8p6EU6VqKpf0oZjTikN+vZk
-   vY3iNAiHlmutcbToY4AYq27dOeaj8TmhoJh6DoazGnhISVK0WMjp8wZYV
-   as8BE2YkJJJ3+wErFJZStF5cTKtPl1QPQzV2Zk5U/X97AuCfnV2hq1hOJ
-   Yjyb9HFgn9oA2tZWmvj3tP0jzh4SrkC2CG2EoaHeya7jLumpdHVgwJKgW
-   aaaxSYjwCnfVzfHu2P+b5uunh10dFTyTZvsCRTWttyecXxUsgGzOxV/RM
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="346984230"
-X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="346984230"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 08:48:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="721692059"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 04 Apr 2022 08:48:19 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbOwE-0002AP-9k;
-        Mon, 04 Apr 2022 15:48:18 +0000
-Date:   Mon, 4 Apr 2022 23:47:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Evan Quan <evan.quan@amd.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h:163:17:
- warning: field smc_pptable within 'struct smu_11_0_powerplay_table' is less
- aligned than 'PPTable_t' and is usually due to 'struct
- smu_11_0_powerplay_table' being packed, which can lea...
-Message-ID: <202204042335.TdQcPTRO-lkp@intel.com>
+        Mon, 4 Apr 2022 11:50:04 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6266FBB5;
+        Mon,  4 Apr 2022 08:48:07 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 2E1F0419BC;
+        Mon,  4 Apr 2022 15:48:01 +0000 (UTC)
+To:     Rob Herring <robh@kernel.org>, Sven Peter <sven@svenpeter.dev>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Arnd Bergmann <arnd@arndb.de>, Keith Busch <kbusch@kernel.org>,
+        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
+        "sagi@grimberg.me" <sagi@grimberg.me>,
+        Marc Zyngier <maz@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org
+References: <20220321165049.35985-1-sven@svenpeter.dev>
+ <20220321165049.35985-6-sven@svenpeter.dev>
+ <5eed58a1-ee56-8aee-e73b-76b162d59873@kernel.org>
+ <35f5fdbf-faac-457b-a225-35d7141f6b2e@www.fastmail.com>
+ <YksIhWQIUHsoWEMi@robh.at.kernel.org>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH 5/9] soc: apple: Add RTKit IPC library
+Message-ID: <5441c5a7-5535-a8c3-c6ad-71d81754b9b1@marcan.st>
+Date:   Tue, 5 Apr 2022 00:47:59 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YksIhWQIUHsoWEMi@robh.at.kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: es-ES
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Evan,
+On 05/04/2022 00.02, Rob Herring wrote:
+> On Sat, Apr 02, 2022 at 03:51:46PM +0200, Sven Peter wrote:
+>> On Wed, Mar 23, 2022, at 12:19, Krzysztof Kozlowski wrote:
+>>> On 21/03/2022 17:50, Sven Peter wrote:
+>>>> Apple SoCs such as the M1 come with multiple embedded co-processors
+>>>> running proprietary firmware. Communication with those is established
+>>>> over a simple mailbox using the RTKit IPC protocol.
+>>>>
+>>>> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+>>>> ---
+>>>>  drivers/soc/apple/Kconfig          |  13 +
+>>>>  drivers/soc/apple/Makefile         |   3 +
+>>>>  drivers/soc/apple/rtkit-crashlog.c | 147 +++++
+>>>>  drivers/soc/apple/rtkit-internal.h |  76 +++
+>>>>  drivers/soc/apple/rtkit.c          | 842 +++++++++++++++++++++++++++++
+>>>>  include/linux/soc/apple/rtkit.h    | 203 +++++++
+>>>>  6 files changed, 1284 insertions(+)
+>>>
+>>> Isn't this some implementation of a mailbox? If so, it should be in
+>>> drivers/mailbox. Please don't put all stuff in soc/apple, that's not how
+>>> Linux is organized. To drivers/soc usually we put drivers which do not
+>>> fit regular subsystems.
+>>>
+>>
+>> I put this into soc/apple because I don't think it fits within the mailbox
+>> framework very well.
+>> (It actually uses the mailbox framework for the actual communication
+>> with the hardware with a driver that's already upstream.)
+>>
+>> Essentially, the mailbox subsystem provides a common API to send and
+>> receive messages over indepedent hardware channels and devicetree bindings
+>> to describe the relationship between those channels and other drivers.
+>>
+>> One of the features that doesn't really fit is that we need to be able
+>> to start, shutdown and re-start these co-processors. The NVMe driver
+> 
+> remoteproc does that. Did you look at it? Most remoteproc drivers use 
+> some combination of mailboxes and shared memory.
 
-FYI, the error/warning still remains.
+Remoteproc seems to be mostly about providing a standard interface for
+loading firmware images and kickstarting somewhat generic remote
+processors, as well as some high-level stuff for virtio. None of that is
+useful to us as far as I can tell, because Linux doesn't load the
+firmware for these things, it is pre-loaded by the bootloader and
+therefore they might as well be fixed-function hardware as far as we're
+concerned.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3123109284176b1532874591f7c81f3837bbdc17
-commit: 837d542a09cd533055423dfca7e621a9c1d13c5b drm/amd/pm: relocate the power related headers
-date:   3 months ago
-config: arm-buildonly-randconfig-r006-20220404 (https://download.01.org/0day-ci/archive/20220404/202204042335.TdQcPTRO-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=837d542a09cd533055423dfca7e621a9c1d13c5b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 837d542a09cd533055423dfca7e621a9c1d13c5b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/ drivers/gpu/drm/
+I can certainly see some similarities between the resourceproc API and
+what we're doing, but I don't see what it would do for us other than
+cause an impedance mismatch. Does it actually *do* something we can use?
+Keep in mind these are Apple copros running Apple firmware that will
+only ever talk to drivers we write for Apple machines, and we don't
+control the firmware.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Impediance mismatches on first glance:
 
-All warnings (new ones prefixed by >>):
+- The assumption that firmware is loaded by Linux seems to be hard-coded
+into the subsystem
+- Only one boot/shutdown path, while we need different power states and
+boot modes depending on the specific instance
+- The concept of the "resource table"; we have something similar for at
+least one copro, but it's brokered via exchanged messages after it is
+booted, and not something we can just look up in the firmware (our plan
+was to just put the requested regions in the DT reg node and name them;
+the firmware then *after boot* provides a list of mappings it wants from
+that list and they can be mapped at that point). At least one other
+copro does a subset of this an entirely different way altogether. Apple
+aren't consistent and we can't do anything about that.
+- Rproc trace buffers: Apple does syslogs but a different, incompatible way.
+- ELF coredumps: even if this were useful for the blobs we get, the
+blobs loaded by the bootloader themselves are Mach-O binaries, not ELF,
+so that'd require some funny binary format conversion on one end or the
+other to be able to line them up for postmortem debugging. And Apple's
+crashdump format is a custom tag/value type thing.
 
-   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/arcturus_ppt.c:37:
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h:163:17: warning: field smc_pptable within 'struct smu_11_0_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_11_0_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-         PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
-                   ^
-   1 warning generated.
---
-   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/sienna_cichlid_ppt.c:39:
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_7_pptable.h:193:17: warning: field smc_pptable within 'struct smu_11_0_7_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_11_0_7_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-         PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
-                   ^
-   1 warning generated.
---
-   In file included from drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu13/aldebaran_ppt.c:37:
->> drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v13_0_pptable.h:161:12: warning: field smc_pptable within 'struct smu_13_0_powerplay_table' is less aligned than 'PPTable_t' and is usually due to 'struct smu_13_0_powerplay_table' being packed, which can lead to unaligned accesses [-Wunaligned-access]
-           PPTable_t smc_pptable;                        //PPTable_t in driver_if.h
-                     ^
-   1 warning generated.
+I'm certainly willing to be convinced to use a kernel subsystem if it
+actually does something useful for us, but last time we did that when it
+wasn't entirely clear we should (mailbox, for the hardware underlying
+these coprocessors) it just resulted in a bunch of headaches because
+that subsystem is poorly designed and doesn't seem to have bought us
+anything other than limitations. e.g. it is using suboptimal queueing
+right now, and we had to switch to the atomic API to make SMC work,
+which ends up even lower level, and isn't even properly documented and
+different drivers interpret differently, so now it's just pure added
+complexity and confusion for ~no gain over just reading/writing the
+mailbox registers, which would've been *much* simpler (and more
+performant than introducing additional queuing, since the hardware
+*does* queuing now which we can't use because mailbox doesn't support
+it). Remoteproc kind of seems like an even worse fit here...
 
-
-vim +163 drivers/gpu/drm/amd/amdgpu/../pm/swsmu/inc/smu_v11_0_pptable.h
-
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  137  
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  138  struct smu_11_0_powerplay_table
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  139  {
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  140        struct atom_common_table_header header;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  141        uint8_t  table_revision;
-4b2bb705a0b72f drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Kenneth Feng 2019-04-04  142        uint16_t table_size;                          //Driver portion table size. The offset to smc_pptable including header size
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  143        uint32_t golden_pp_id;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  144        uint32_t golden_revision;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  145        uint16_t format_id;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  146        uint32_t platform_caps;                       //POWERPLAYABLE::ulPlatformCaps
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  147                                                      
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  148        uint8_t  thermal_controller_type;             //one of SMU_11_0_PP_THERMALCONTROLLER
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  149  
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  150        uint16_t small_power_limit1;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  151        uint16_t small_power_limit2;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  152        uint16_t boost_power_limit;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  153        uint16_t od_turbo_power_limit;                //Power limit setting for Turbo mode in Performance UI Tuning. 
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  154        uint16_t od_power_save_power_limit;           //Power limit setting for PowerSave/Optimal mode in Performance UI Tuning. 
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  155        uint16_t software_shutdown_temp;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  156  
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  157        uint16_t reserve[6];                          //Zero filled field reserved for future use
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  158  
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  159        struct smu_11_0_power_saving_clock_table      power_saving_clock;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  160        struct smu_11_0_overdrive_table               overdrive_table;
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  161  
-73abde4d864b38 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Matt Coffin  2019-11-11  162  #ifndef SMU_11_0_PARTIAL_PPTABLE
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12 @163        PPTable_t smc_pptable;                        //PPTable_t in smu11_driver_if.h
-73abde4d864b38 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Matt Coffin  2019-11-11  164  #endif
-2dd1209e576068 drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2019-02-12  165  } __attribute__((packed));
-ae35cd6a480f9c drivers/gpu/drm/amd/powerplay/inc/smu_v11_0_pptable.h Huang Rui    2018-12-12  166  
-
-:::::: The code at line 163 was first introduced by commit
-:::::: ae35cd6a480f9c2ac356f792c9a9321a5863776a drm/amd/powerplay: add pptable header for smu11
-
-:::::: TO: Huang Rui <ray.huang@amd.com>
-:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+Oh, and these device producer/consumer relations cannot be computed
+statically as far as I can tell, so each one we introduce is another
+special case in distro initramfs image building, since they need to
+encode magic additional device-specific module dependency information
+somehow since it isn't available in depmod, but only encoded in DTs
+which are not necessarily known at initramfs build time.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

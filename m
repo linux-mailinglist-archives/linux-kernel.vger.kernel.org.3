@@ -2,150 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB224F1C16
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0A04F1BDC
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381726AbiDDVXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44114 "EHLO
+        id S1381903AbiDDVYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380413AbiDDUFb (ORCPT
+        with ESMTP id S1380472AbiDDUPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 16:05:31 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F162CC36
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 13:03:33 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id i27so15174579ejd.9
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 13:03:33 -0700 (PDT)
+        Mon, 4 Apr 2022 16:15:35 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993846140
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 13:13:35 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id w18so6221693edi.13
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 13:13:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=CrpYt5lVlKuy2k+kKWnZgQywx0bCmkEjtjH6HYRoOhQ=;
-        b=QWtilS35liU4Gd847ayqzl1+Xu3q5LYVHMfUzUizuln6K7VajF0VthS1a5ivhzNuZs
-         Vb0AbMMPTtLaqQ4fs96PTRsH5w8FZuGJQgk7wadg4Zc3h1TT5TsDl2lEcelg9XECB2ef
-         q6pR6ZpG0WiArgQVkKPp2zQvs80GH3EFdkk8IBI8n7UhuS1QqVotwHz2FlEBLP/5/tB2
-         CJ6tkq0oJXB2dZ1K3zGKK1n8+9u3/7xygKNh015o9+LY81o7hMI+cCH66leOlKSBgFnw
-         BXGjLKXGVsCcw0zfsHm7B1VvznCY4DVSqevmzZrA6DknE0HLN8njsh9vZ7s6qDiGhw+Y
-         jS3w==
+         :cc;
+        bh=k3ub90YIQCH3gVrlC+XZhiwoGcv8qRMkkwg5XV6TGpo=;
+        b=H8bLkWFNt5QHQ76VwX26EiXKepq0WEvr0SAsN5VcU6JoU2U22Jvh1dCkBgEZ+teAZk
+         +D6lIkRKH3VV/XRKQCdelK4pPgvqM2wheT6odsr7hMaTQH8zYx6knH1OY6lJjYkTNbd1
+         u7qldbMjS0MWp8b2+sb0oR+qEwuEYIrEHSHfF2fGq78+I820yKFRFdZfVJATm2lIuaGt
+         Yuqh86WPFLtTS8V8vg9qrUL6gYCuUp82urNfzo7EUsSNkRczA5DKgSshbbhdfDw7hEg7
+         u4DX6v3j6OIKy9eAtaltaRyw4jleQqcwHm1/GxWk6m+P/od6CD6c7JgOEQ7S127KKGR1
+         lpAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=CrpYt5lVlKuy2k+kKWnZgQywx0bCmkEjtjH6HYRoOhQ=;
-        b=nKLLxKs8lcsSIy+OgDxEIEmgsOuXhOCGWPkwNfyP8N7y8c41PgqBkQ54YzMEKv+SqA
-         nBYArzCsKQLV1/uvGBMNqcQs83zPJvE/Jk16YxZRAFhH0LIuTgQiSliW1a9xBZu35OLU
-         rKgJVJaCYClw3M+IOA4tENGARa+ebyP+cFeyxMaGR4x8Vv0IZV5DjXph+S6aajBYlCKv
-         mpa5mljyjobak5gkJ4MeR9tzg4BGS2/GJELTWjuoDt4E8MyNNy5CBQaBQcIUkbb7DoT9
-         Tjg7UxnZtoCJrY882PBuDeKyryqiKtbcF65iQ71c4P6VcAo3JZcpOEH3c+vtYGiLaIN1
-         iI8Q==
-X-Gm-Message-State: AOAM531nnxztb8/jXcyKt46zjCeh+Veu+qXYknJEpHcHf/j7u7QvpYZR
-        /YupNByx3Oo6QFt5okXBqlI420J7FhfABM2lQwpf
-X-Google-Smtp-Source: ABdhPJyIZr77gRBKBLN+KRty/vPEiELEMcVGmq1Bl8JpZPMVFi21TaeAcOxBzdX6c3pksfR5Ragz6OdS5QPYOCAQBHg=
-X-Received: by 2002:a17:906:4443:b0:6cf:6a7d:5f9b with SMTP id
- i3-20020a170906444300b006cf6a7d5f9bmr1776503ejp.12.1649102612452; Mon, 04 Apr
- 2022 13:03:32 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=k3ub90YIQCH3gVrlC+XZhiwoGcv8qRMkkwg5XV6TGpo=;
+        b=ZkMuNjSl4lu5pZtilM8Sig0KmllpwsE5XEMrefwP3L2MhmuEEeOnvjR4tmmD4yD9ua
+         5JdEK9rS/GTT0N+TXWVmegrVZj+fM4EsUB/hs05g6PFQtXfoGyT6/Xd7ZbA1PmS4eU+c
+         nTq6SkvZP2rFOV9h7pqyY8OoVkaCjoZf5QoXw38j2f2G5TCfHriUI/0g4sIFH/f9BuQQ
+         SRu44ET0teR9ti56ZcUJlT6x8TK2WacZfbLrg90nTHPV6bxHCHgLiNK4BOue2BSlxlL0
+         uZHzAD+SMp5MfbI4RmbGJCPfWReNuE1x8vo1jHS/NcLodXIuPGg3KoX6dR1H8o2YEQNH
+         qNIw==
+X-Gm-Message-State: AOAM531Hc+eC2ODGZe/4RD7NlGlx1U7FtXeUINceF/yTRi7zzkRXdOyW
+        YoZSQi0MxZ8PvJqFynZ/LofuZiXAri/iIRSq0rVWmA==
+X-Google-Smtp-Source: ABdhPJyjaZPLJ2IAcUnO0PWdbzDgVf1qeADw4rh2FnfnjirXie9zljRk+Niv/kP5VX3HBauIFJFTem64EluRa1ybc3o=
+X-Received: by 2002:a05:6402:1c1e:b0:416:5b93:eacf with SMTP id
+ ck30-20020a0564021c1e00b004165b93eacfmr1998410edb.302.1649103213975; Mon, 04
+ Apr 2022 13:13:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220217142133.72205-3-cgzones@googlemail.com> <20220308165527.45456-1-cgzones@googlemail.com>
-In-Reply-To: <20220308165527.45456-1-cgzones@googlemail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Mon, 4 Apr 2022 16:03:21 -0400
-Message-ID: <CAHC9VhSGggUV2po0mj0qqMBBX1n56BzR99khcYfhjv4jZprEiQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/5] selinux: declare data arrays const
-To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Cc:     selinux@vger.kernel.org,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jeremy Kerr <jk@codeconstruct.com.au>,
-        Richard Haines <richard_c_haines@btinternet.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Austin Kim <austin.kim@lge.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org
+References: <20220318021314.3225240-1-davidgow@google.com> <20220318092159.6f275782@gandalf.local.home>
+In-Reply-To: <20220318092159.6f275782@gandalf.local.home>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 4 Apr 2022 16:13:22 -0400
+Message-ID: <CAFd5g461Poh37o=3m6EXppdX7oS0D5vZxvFAEtzJMwtBD1VJEw@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/2] kunit: Support redirecting function calls
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Steve Muckle <smuckle@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 8, 2022 at 11:55 AM Christian G=C3=B6ttsche
-<cgzones@googlemail.com> wrote:
+On Fri, Mar 18, 2022 at 9:22 AM Steven Rostedt <rostedt@goodmis.org> wrote:
 >
-> The arrays for the policy capability names, the initial sid identifiers
-> and the class and permission names are not changed at runtime.  Declare
-> them const to avoid accidental modification.
+> On Fri, 18 Mar 2022 10:13:12 +0800
+> David Gow <davidgow@google.com> wrote:
 >
-> Do not override the classmap and the initial sid list in the build time
-> script genheaders, by using a static buffer in the conversion function
-> stoupperx().  In cases we need to compare or print more than one
-> identifier allocate a temporary copy.
+> > Does either (or both) of these features sound useful, and is this
+> > sort-of API the right model? (Personally, I think there's a reasonable
+> > scope for both.) Is anything obviously missing or wrong? Do the names,
+> > descriptions etc. make any sense?
 >
-> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
-> ---
-> v2:
->    Drop const exemption for genheaders script by rewriting stoupperx().
-> ---
->  scripts/selinux/genheaders/genheaders.c       | 76 ++++++++++---------
->  scripts/selinux/mdp/mdp.c                     |  4 +-
->  security/selinux/avc.c                        |  2 +-
->  security/selinux/include/avc_ss.h             |  2 +-
->  security/selinux/include/classmap.h           |  2 +-
->  .../selinux/include/initial_sid_to_string.h   |  3 +-
->  security/selinux/include/policycap.h          |  2 +-
->  security/selinux/include/policycap_names.h    |  2 +-
->  security/selinux/ss/services.c                |  4 +-
->  9 files changed, 51 insertions(+), 46 deletions(-)
->
-> diff --git a/scripts/selinux/genheaders/genheaders.c b/scripts/selinux/ge=
-nheaders/genheaders.c
-> index f355b3e0e968..a2caff3c997f 100644
-> --- a/scripts/selinux/genheaders/genheaders.c
-> +++ b/scripts/selinux/genheaders/genheaders.c
-> @@ -26,19 +26,23 @@ static void usage(void)
->         exit(1);
->  }
->
-> -static char *stoupperx(const char *s)
-> +static const char *stoupperx(const char *s)
->  {
-> -       char *s2 =3D strdup(s);
-> -       char *p;
-> +       static char buffer[256];
-> +       unsigned int i;
-> +       char *p =3D buffer;
->
-> -       if (!s2) {
-> -               fprintf(stderr, "%s:  out of memory\n", progname);
-> +       for (i =3D 0; i < (sizeof(buffer) - 1) && *s; i++)
-> +               *p++ =3D toupper(*s++);
-> +
-> +       if (*s) {
-> +               fprintf(stderr, "%s:  buffer too small\n", progname);
->                 exit(3);
->         }
->
-> -       for (p =3D s2; *p; p++)
-> -               *p =3D toupper(*p);
-> -       return s2;
-> +       *p =3D '\0';
-> +
-> +       return buffer;
->  }
+> Obviously I'm biased toward the ftrace solution ;-)
 
-Hmmm.  I recognize this is just build time code so it's not as
-critical, but I still don't like the idea of passing back a static
-buffer to the caller; it just seems like we are asking for future
-trouble.  I'm also curious as to why you made this choice in this
-revision when the existing code should have worked (passed a const,
-returned a non-const).  I'm sure I'm missing something obvious, but
-can you help me understand why this is necessary?
+Personally, I like providing both - as long as we can keep the
+interface the same.
 
---=20
-paul-moore.com
+Ftrace is less visually invasive, but it is also less flexible in
+capabilities, and requires substantial work to support on new
+architectures.

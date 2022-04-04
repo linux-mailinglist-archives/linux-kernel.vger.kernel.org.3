@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 459874F1718
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A6FB4F171A
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377769AbiDDOiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 10:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40506 "EHLO
+        id S1377969AbiDDOhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 10:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235560AbiDDOhi (ORCPT
+        with ESMTP id S242732AbiDDOhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 10:37:38 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846D33ED39
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 07:35:41 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 234DncRr012575;
-        Mon, 4 Apr 2022 14:35:32 GMT
+        Mon, 4 Apr 2022 10:37:37 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B16D54
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 07:35:42 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 234DlFSm024455;
+        Mon, 4 Apr 2022 14:35:38 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
  date : message-id : references : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=FUYZ8DE62byvbFgTgRXWM/csXXURIVYnqylKkpAqLW0=;
- b=oRoDE6PYNpUCx89k5FhvNk0v/PKzpHitEA4sx8AVm+3TmjhpyhWpsx1PmOiY64FzIwWS
- V49Jz0/QaHAEQ5u0URCO0nKKWNOBtRUWS3QmboO2kZGpe+5drWGUcnA2137MI1pjibfY
- br462RCosSXBIYD0zkmQmy1dxNRoCItTP8l3Hh+bCY8VBiW1l6E+54h6V711ll12xbGC
- IVLvCzNwjby75B2+/5XHPe18eN3iVnh5PnEPnmw5DFBNSTDnDpQ0wUJpJElPvYlEBW3x
- AvCRHJA6j3FWVb/hs61RFX1cNEaJrTkUInSbpNO2ipcg8bcXgEijucG11DnFRUXu4+Pf rQ== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3f6cwcbbmq-1
+ bh=exhaR331zBmkpqXRZjNX4HMiA44jKMKkuuNIC1g6Oac=;
+ b=IqmmC/yVg2ZLjbzb5FBwonAFxjA4jvI0XEDcXBiwDaxHZ0S348783d4WHWDfrLeTef3c
+ Iuwz1qJxz3MwCMe/lWQq6Ka1DoS/OT7cPF9LuVwZzPlqn5EDMbtAYaTWvcmZtyM9jzvz
+ ov4wIo70KY6c4h0HkAnW9Yp3H9BJvkk/LCTMnZd8HfV4S4Du0EEhF2q+++EvORVbu7Ax
+ ANQ8GMN63x66mfhDG2smPftEH/fiA8UQlzlW4metsycjq+KhMx1iC7KlPRb3hW1iMpVm
+ ltMblX+sYWKaOombqqFbHNb+oBkSgc5e+VYj8O8qMcG/lnwvw798rZXkpMLy1h8hMUve kQ== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3f6f1t3crw-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 04 Apr 2022 14:35:31 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 234EGdij027742;
-        Mon, 4 Apr 2022 14:35:31 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2105.outbound.protection.outlook.com [104.47.58.105])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3f6cx2gm6e-1
+        Mon, 04 Apr 2022 14:35:38 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 234EZaYZ034331;
+        Mon, 4 Apr 2022 14:35:37 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2047.outbound.protection.outlook.com [104.47.66.47])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3f6cx2mgyc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 04 Apr 2022 14:35:31 +0000
+        Mon, 04 Apr 2022 14:35:37 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lWk9FAeZ4Wg9UjM1zn7PFqjaNbMKwsfktsjuXkIOlONd7pMtJxdqBnFThOLivAmzmwxKdrB5/RhoKkKYz61g9br+3/ZWZ6IBD/kcnbK0Cx/KOiSNULX/YVaVUGYUGSgb56RjZ3+EoFRc4XoX0iJAuM+rm9E0PrNNA26kQRaGlokeeYvAxgZdUFRA3xyFtfICRI6MwG6GTuDtyhUEm9wTyie2UQor/mpAFGNRgyqtBJ19s+Zt8iUicUbcHMi7BzikLCcIdZrFhR26uqgPujxJj26WRsBP2OdSzZyKSRL+LlnKiiQOi8kHgbaQXYRa4wIb1L/9LF7lFPfncLXKMOh7vg==
+ b=I7ThqhmhBQYDv0zKeE9S5QQpX3FXeL4Z9IsNZjLPMZPJG0HtsHyxxjzIyV2NEFBfS7QK71DR1SOvmJ0q2sn7YZ2W5XS+1gMUsVDYAgc8jbyKzeOqxGaMu4qS4okKCLkAXUg64zej1AMf9u7xaHw5vkjUOdoQKoPAbrNpdh8If0SajPdz93IgBVdUH20PyZEWC90/rt+UWGSo0WJfOkEI1LuGH7hyRTooQI8jDGKrCR/UxUCUlu9powxVI3jMyiqsTm3dVFRbq8azn5HxrAI/EjULTbzde/9hbxax9PXJvdE+pUu3Ck6DmsO3eppj9Oj2CoBVC2JZi2yPssLW1KoupA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FUYZ8DE62byvbFgTgRXWM/csXXURIVYnqylKkpAqLW0=;
- b=TiblaA02uMLPV8r7QPY+JabegtxjcfCosNFyxrugbWEmxEltl7Sc2dSn/kcptMMAEXb44bqZqARFsylHRdu+U82fz0Xkn3DjkuQXprT6zp9D7+9Smjcz/RVZSAWhFrlYngVA4sGgHWtafU/KcKeYNG4zkhz1zmSMTX/nXxKKSdXiG1J3pu8TgQHDtBMadBLNzU1VSnGnVkbrVK3J0VZUEPrKum7cnv4UIYenUmC7KC8TTQ6ctMdgw+9fn4G1fyeTYY2Cz1R9yNuDkoWK3gZV+w5ervd97er9ELBuw7PZbhPZBYUQN/eJE8yGnjtSLUBxQxl+EU9jJXNkCGY4ixnXaA==
+ bh=exhaR331zBmkpqXRZjNX4HMiA44jKMKkuuNIC1g6Oac=;
+ b=RlpuY41Rtl8VSfYa29HGL8fksfadDQe3P6x8unMguFmkc9tTDP4aabMkMQRRfEVkCS335YkUFBObTu20R41SfotSAwx/zHtmLT/tEuexrdLh5aq2G/yZdj/b/ForcNQu+Nf/n2Qzz0HkNjGeA7tkgBOZFLzPU+oMGN4DdqHKbh9Ch45unYjuacGjnzNlTuz97oF4CNvRyJrTGp+caDIy3UWshZf2sjoQKmvZMkbwV31sokFkZNJQnXUtdrnNfrjB2AdRVi5x4hQ6ONaSlP0ExsaQu4YtyKWeaRnALTWDaD9M/MTPqelCAnmCqlTdK/LBQGrcVYB+c+cWkdGvgtE8KA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FUYZ8DE62byvbFgTgRXWM/csXXURIVYnqylKkpAqLW0=;
- b=aZBm/HJvKLigWXubk28VlotftlJjMc+M6v0M8NvZeny7RVzJsXHtI2opGKST6sUPsSP9+xCw4MeJPqSiMLElrpIcBPYa0qZbOQwsv8+o+ry420xvpc8wvVrcOqOPaB6Wk1q4ZByFiKUD6hD8KCbMGDdUncMyLVJnsb13dwMmXZI=
+ bh=exhaR331zBmkpqXRZjNX4HMiA44jKMKkuuNIC1g6Oac=;
+ b=IFMJ0NM56VDlCxz0js71Bx7Fx/iayqxWFXv98Jm0ZBnt2T11SDsn8+iQo5tO3QCFEOpwAjrRF2edOsgVJ+ZxslJcCVTsRTHYcG5tumFxVpdMg3QODxHEczrhX8V2qY5r7japAMWDFolRlmbD4JaZ9yt+BMe2R56naIzyeXEcWww=
 Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by BLAPR10MB5329.namprd10.prod.outlook.com (2603:10b6:208:307::24) with
+ by MW4PR10MB5812.namprd10.prod.outlook.com (2603:10b6:303:18e::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Mon, 4 Apr
- 2022 14:35:29 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.30; Mon, 4 Apr
+ 2022 14:35:30 +0000
 Received: from SN6PR10MB3022.namprd10.prod.outlook.com
  ([fe80::74fd:df41:4c93:24a5]) by SN6PR10MB3022.namprd10.prod.outlook.com
  ([fe80::74fd:df41:4c93:24a5%6]) with mapi id 15.20.5123.031; Mon, 4 Apr 2022
- 14:35:29 +0000
+ 14:35:30 +0000
 From:   Liam Howlett <liam.howlett@oracle.com>
 To:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
         "linux-mm@kvack.org" <linux-mm@kvack.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v7 04/70] radix tree test suite: Add support for slab bulk
- APIs
-Thread-Topic: [PATCH v7 04/70] radix tree test suite: Add support for slab
- bulk APIs
-Thread-Index: AQHYSDE7dnQDQ7y0jEC2VaE5JbopoQ==
+Subject: [PATCH v7 06/70] mips: Rename mt_init to mips_mt_init
+Thread-Topic: [PATCH v7 06/70] mips: Rename mt_init to mips_mt_init
+Thread-Index: AQHYSDE7eiYZataXOEiuDEf0e8WhSg==
 Date:   Mon, 4 Apr 2022 14:35:29 +0000
-Message-ID: <20220404143501.2016403-5-Liam.Howlett@oracle.com>
+Message-ID: <20220404143501.2016403-7-Liam.Howlett@oracle.com>
 References: <20220404143501.2016403-1-Liam.Howlett@oracle.com>
 In-Reply-To: <20220404143501.2016403-1-Liam.Howlett@oracle.com>
 Accept-Language: en-US
@@ -82,68 +80,68 @@ X-MS-Has-Attach:
 X-MS-TNEF-Correlator: 
 x-mailer: git-send-email 2.34.1
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 21a6b0e8-2474-4ff2-3507-08da16485dc5
-x-ms-traffictypediagnostic: BLAPR10MB5329:EE_
-x-microsoft-antispam-prvs: <BLAPR10MB5329EF98F1FC78713969D624FDE59@BLAPR10MB5329.namprd10.prod.outlook.com>
+x-ms-office365-filtering-correlation-id: 57df67d5-8238-4ddc-8d70-08da16485e62
+x-ms-traffictypediagnostic: MW4PR10MB5812:EE_
+x-microsoft-antispam-prvs: <MW4PR10MB581208F90619D9496F006E90FDE59@MW4PR10MB5812.namprd10.prod.outlook.com>
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: iGl4NvwVHu4WNM3/sFi+SiI9bGzduugSmr4gvedKkP/qX0af1jhiFRYMJuKHsGcI2yN7yru2rkNKwFMkb3UEoAdFHBB94JCjQu4TfBMyHiz80zpmw9pBaHBackEGYIN+b+Mo0jpkxWZSHTQ+VD8bkwge4yj4mF8sPIjD61+/SikbJ0WFch+Z7gX1N+tYI2KRzKRkgkpjSnDkNbWMZWthgd7D60yiB7AFqbe9YSEanxAMZYRgzOCcShe9Gx6rDLfBTqOhB1yE6VhReWAZiVrZMe+yEOKxaB/JVcO4RyNj9Htlzrh60oRgx5rG1SRrlOtj6v0bXu+XaLJ1cCZbTWzCDILws6qc+2TlNIlHxVuhSPvC8LrtAzskMc0mzGOilqOmJf300zFoSeV4i8KK5HhViJiv73eHToCZu0wU91af5X1H4mSC8Nxm8PROpcNfJz8Rm8x/DIpGhNZA570dC9LsFFus4Dkneu8EELv9uvxLuQWO8nr9dnavabllWUzsO/upz4s/iQD7dupB1WgAW5Kfckt52XT9etNF5Mz5ZgyJAhbvWYdqWtai7CpmhRnZ//hUTMcUqMVIFo6BahXWYQFbl6kwuFqlMqO0vpAUUh5tfxPmtVLMvJN1656eomeIOa8vTNs2e2Iu3JFfhB09AsCq9D2Phca+EhN1pgYPDJl6HUjUAGUW93TK+MvLk+kRWoiKMvpRAdNo/nIF2BWn2qA/wQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(6506007)(64756008)(76116006)(66946007)(66476007)(66446008)(91956017)(316002)(83380400001)(38100700002)(66556008)(6486002)(110136005)(38070700005)(86362001)(71200400001)(6512007)(122000001)(44832011)(26005)(2616005)(1076003)(186003)(8676002)(8936002)(36756003)(5660300002)(2906002);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: /CbiKz/ohN7alvdzOnPG4i6FIU5dTtf4Pyh9jMEDyEDMvs7qogKzdK739Tdc54L1kpU5ZLKNTnPpTqqCuw/8Bz74C92mvJ89c2F86Jc9olTRnVJe0WWqZHzq2nXc3Gp0jX7P4ayCZtswUvz50Ymgz9I7NffhA9AvzKw2EoHCJsfN1WlCWy6gJgRfZ33P8//VvFYmgxqP2lsfVTALe/CAPWVL1iUBhMN6ZClKEMbA/ebfvJZYbp4I7JuM5SeE1NeER9qYx7DsdxvkaDo/h6ElF5ZTMl5grzl4ynCi1egLUc+LFPhWj6hqaNP+4MdM2BQYWNkNbqWP64qbeiUhzkcs1oNFNsZHBvBJA7RE8IklEjLKrIMfrvo2BbErIbNryVoroF+jW4lDG7YcAWQ0QTGttAM5XHL1Y2MzvSxJaIyN08eI8TTD0g5r1HKpVNbhO6CoLrBpgDZpkn5CVaR+RQ/z0febLydBsTalb9pokT6llyBIzVv0NDNT3RGKS9wbep/oK8t80SUX4V1UI+mrUD4yfDCu7RdeRiJsXFSqI1fihm6p4WTkifAy71AOx5YCrtFBYpUYtjZyBykZpWv/7LUpKPHSfxcQ6+bXtyQEedqbnctOmKEquSKHPgAPf28+uJ3008OUdJlAriRh7EncM+SDq4oVhWWkZf+oju5c/DCN4zLYY1+VwF+ikJg9mzgR8ho+piT44zfxsSIwmTKTgkxONA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(26005)(4744005)(6486002)(8936002)(1076003)(44832011)(83380400001)(508600001)(5660300002)(6506007)(36756003)(71200400001)(2616005)(2906002)(186003)(91956017)(64756008)(66556008)(66476007)(66446008)(76116006)(66946007)(6512007)(38070700005)(86362001)(38100700002)(8676002)(316002)(122000001)(110136005);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?igAvV8lp5AnweDU+GCR+0Y6MrrJvEtnuBM8Oh8g7mWwJPTh87Z8WCe5Xnx?=
- =?iso-8859-1?Q?3uft/tS4BuXlPmUCv7NbA4GcG4XsAM04C67IJyHGitSbaj+4hGKAsG7i4M?=
- =?iso-8859-1?Q?d24BB7cdb7EnZa5c6ZikhaA0kop8ELltLlq1RlorUq9VGPpOvM40vGWTmU?=
- =?iso-8859-1?Q?XsqDc4uMHvXRhXEYr7aIvmJpTXqj1bFbbX2F9J48ZJt1oXFdVpRXJNpsRx?=
- =?iso-8859-1?Q?JPcvaTD2+K1ggf0ihv58tliCurFWkAJ39X64KRBIUmOAe7W9qQrMzq92Je?=
- =?iso-8859-1?Q?bZhHieWh6vjPMb11AMuj0PU4aZcIMYWXGGtbZ0nJ+Yy9tgBjEyKrdFQo0K?=
- =?iso-8859-1?Q?wNNprcFOiRgB0GNnmbXBa+D6rw0Y00i48rgG+oDc/0EGnRBCsBtcrsMmNb?=
- =?iso-8859-1?Q?QmlydzDkVlKJzOVtkN3SEnG+fFrzDv9pXWSCaFpXwHcNCTXT+HJPn86JJk?=
- =?iso-8859-1?Q?zT4izHL8Xkt6uVx4JgVZCwQLIIh+JK15jJHGmtAVV6/xOGrw4LUKAx3FOT?=
- =?iso-8859-1?Q?ZkNOKG7mDMwjI8S0M53RWAp6Ib9jpcqyaDoh/096tsz9CGtnfoQ34K/LFq?=
- =?iso-8859-1?Q?eO4uRQNFHERxF48B6dxJNDirUGY7YrO/nVh25m/rbVf4OOcc/msVGJYi9l?=
- =?iso-8859-1?Q?mGOnwU0gG/iNYqWm7PeFAgyq0y7bSLbYGkceGXbOwFC7EM5msLcqPKk1yI?=
- =?iso-8859-1?Q?aKjkg3kxU4czqYPFs+He8XgDHXuD3X2wwonfzvJIIxgJFZt8V1YQsneosj?=
- =?iso-8859-1?Q?AOCPGQQ8PRTaommPnV3AvTl1I1hSMH5t9zRrOCg16GRFjjjGx6JiGwIWAN?=
- =?iso-8859-1?Q?lwJoXlukzX0iv9BCTxH9Jt+mTtpXa2KvV4KYm8x98FaYRPHu1zq9c8sjBc?=
- =?iso-8859-1?Q?/ds+6mfjLbXYAMGn4V2jouRKU2oHOENVm4GZdn2jtoiQv/tD3LbROtJbok?=
- =?iso-8859-1?Q?zuiooAmtM4Z+wvyvyfYNk06sUwnO3i5UXr8H/u3X39VTLcP4XwurThTJuJ?=
- =?iso-8859-1?Q?j36qOr8YAmfhsutcK620fjNjlypnI30OjbNrLqEJ0C8B6LU+yk3JJ03Ayh?=
- =?iso-8859-1?Q?DplJ34iz0VVwfiNRElNV5SFYS3NKVyCwNRkY7cO2SDeFiiQTvYkoTKCsQy?=
- =?iso-8859-1?Q?ybLg4mPJ+ZxikSECF30HVVhvRQTDRIp00+7kzS+eInL4MhNCxzSWUQzDax?=
- =?iso-8859-1?Q?/GPs4wEuNxv+9MRtB2ZsHG2H3vNsNQt1yuC1xWcbrExpbk+gp56nJTlYDQ?=
- =?iso-8859-1?Q?+KLsPaLPLoNzPDKyhOSk3S6QNUo2rUWQvDsndB1Z37YMMqxkPCGzNp0Jjt?=
- =?iso-8859-1?Q?4oJox2soFir1wcKjVoNRHbToi3C67MhXTurfXGG18HvaQH1ZxIyDbG7nvy?=
- =?iso-8859-1?Q?CNU48R7FW7T6srtB/Vu0+vMP9TmXZMkpSjoV5snGz4Znai3bpWfEQkHM8L?=
- =?iso-8859-1?Q?9v1nyvsXCcAI0Q+cdljNAQR3TUYuj0+iZt1hmNzXNWJxLnPG0WRUmiFZrE?=
- =?iso-8859-1?Q?aEEd5Aozvq+/UvSCOMF/NuA7Ywx0jpzlauo0GOaWLS/iqO5Xt7AdT5fxmO?=
- =?iso-8859-1?Q?l+v/hip2yP7nn10lzDZG6T9W1Zshq1/4+ZxEESZdhInZtk7FBrsuHueB1A?=
- =?iso-8859-1?Q?JSM4186NDKbyvSFi6nO0pfvFRdeTGnbEZ88jH50YQA0//0nwYN4+tvmjWS?=
- =?iso-8859-1?Q?LVfrPmDkm1XshN/DiqOxeJuvJNN7sBhyV3QjKJK5eo2qFhiXjfkNw0d2d6?=
- =?iso-8859-1?Q?5QeD++qbMBQc02qlFCKakR9v5dEP4cdxZiDxM/2R46lwdaNyvVTQo3sPbg?=
- =?iso-8859-1?Q?SIN7wckGS2zj0Y0hyqiB3xxfAx81Xn0=3D?=
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?YbEMevEDSLdzASXvUe1B2BiuY3V6E2hoejlUkeK9+7LVLaKTkuGDTFnzQW?=
+ =?iso-8859-1?Q?ZIULM5rJov4+Zktpopv8wG2i3qedVfBM4Brpg5eCZDVrdA5nuL5d1sIsEV?=
+ =?iso-8859-1?Q?TFNYWBu8byh6pP6tgDoYCh/G7midznBv5twanRrWGjdMbRyfbKsEp447um?=
+ =?iso-8859-1?Q?Iv0B8g7XPbN9WaQ3BLP00tjzS9GjEy75Uo/7r0J01sX6GW1O0e5XunQuEF?=
+ =?iso-8859-1?Q?hERx8nIUeJ3OHmIp4LHIAXErih3FPI22lhpIrwSLb4OZLNp2KmB5OuCkoi?=
+ =?iso-8859-1?Q?J0GA6DdeNroteo8CcO6kX7uOCi5kN3Yd1VN/koiEM1UTZ0+kTFrUtv8vNI?=
+ =?iso-8859-1?Q?JHV/fNzIY9Tgb3NqBVlV3S6fneGt/lDL2NA9HEquD7RurIIUpG4Rabd1ok?=
+ =?iso-8859-1?Q?RCpK+eclw9IMfeCh0pJzXJoH1KZXLyU5dvcQ2OIKHPIlW/ykePcEM5Ybkz?=
+ =?iso-8859-1?Q?ifXOpje8CoNmyviIBTX/lrOX1JZOjMa5f7M+KPGWA8EKyRZgeSDA/dJDnD?=
+ =?iso-8859-1?Q?aq9/GoM9uIW6c7+ExA05GSWLwxCQthNOt6Vc0/n1hZa163aAjGXGvdrpbg?=
+ =?iso-8859-1?Q?FM51WKmMmgAYilmZmay0pYOEmhiMCNbYCZ9OLWIeoK757vs62f0y13+GP9?=
+ =?iso-8859-1?Q?KW8404ijVBVlC4lp+mCyV5iiao2CqAF6yI+XSgFVkE9/9UWcqyNUKMbCTc?=
+ =?iso-8859-1?Q?NzI93fZut38pA27qjEZ0mcxUZIQGc/laxEZ82xqxu/4Dh8luup3i4il5xI?=
+ =?iso-8859-1?Q?Nn3jSD0/XRl0Qbkf9CQ+VL79gPxiXajn5Hpap8sMZhb6qdF32KP7AuDsVu?=
+ =?iso-8859-1?Q?5x6rD6BajJwbW7TOz8nncsiXPbAOMknDuLaPFZkwi3OxUhv6NgGZmXGQqM?=
+ =?iso-8859-1?Q?QZ+q7s0UvZLDIdfa1kYWMaUMYok9Yxv37Aldvwh5GkLw+5eKGOoImxflPV?=
+ =?iso-8859-1?Q?1+FuP8BcsSUHa5eNe2pHzEg2rtQsYiglN+hyVER2sz9kULTcsaegPS7rfT?=
+ =?iso-8859-1?Q?5WIZSGbariFC8ZKd+a5DZAHvKztk//V6gJwT4ZFK8Eg3GQeJKNZfkV2Iu4?=
+ =?iso-8859-1?Q?LqyR1S69YNT0tMtBwiruTR1ilX7V+sHFBe+F52F9rPNpul3MREUvmYPqPw?=
+ =?iso-8859-1?Q?SVcAlj8B2dHHFoaMUz2V0zT6CiAQSJJi0SiqvmJExVvxgD22pY7jPpnXtc?=
+ =?iso-8859-1?Q?xxh1wK6ltB4/jxgGGD7v7mikQGKCXVtbtXORXz9Ea76dp5xG1ZpIC0Dkrf?=
+ =?iso-8859-1?Q?+7ogShZbTzeToAC7gtam8volL+OsjcXku6KA4/u/ZJO2qVnGwpswnZhga4?=
+ =?iso-8859-1?Q?3tOo2ljozPzfzZyMPzbzDRqL2Ny5UYncNn/o7XJsD3qf4Xz6VSr7RLRB37?=
+ =?iso-8859-1?Q?Knm6/rgyHnD11XdrlIsPuAb8hNHnJbluAJ1ljCu10WtaRpk9fMHCogIE8P?=
+ =?iso-8859-1?Q?Sw6353ly5teNH/2N2/19YU1+8WoCaRiH+7JXjC7/gZ3F5OSIqKvi/DOAA9?=
+ =?iso-8859-1?Q?AuDf2+CNq8VF8JOV5smH3CH7LeLm9Bt81XBr/5PClegusJTTLWLtJ2oMt5?=
+ =?iso-8859-1?Q?sad5RMgK2efbQsYUy9bsZJLmiaQB6Y2T1QZl5izg7Cex2uHCcaWiqqNiuu?=
+ =?iso-8859-1?Q?KJbE8Lb7CugsQA83w4CtehtPb//RwwkbQpNSu+/8OAadRtLc56d4U9PpFJ?=
+ =?iso-8859-1?Q?6KhKt2p3RhTtBOI3hzmmrv6/trvnfcpJQxVZaNrR4BcIDx6IeSc9Fo3xUI?=
+ =?iso-8859-1?Q?ZiXLcMe/to/sGFH3SSTUrkMRMGr8mBLM+PUJzdz4jwb2GLf2wIKRmV9peJ?=
+ =?iso-8859-1?Q?Y5p13tl91qxYdVBa8X5Z1NYSSIMXt3k=3D?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: oracle.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 21a6b0e8-2474-4ff2-3507-08da16485dc5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Apr 2022 14:35:29.0352
+X-MS-Exchange-CrossTenant-Network-Message-Id: 57df67d5-8238-4ddc-8d70-08da16485e62
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Apr 2022 14:35:29.8632
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sBxIwHbTvC4m3adtvC76b5EpPhNZRnjD9J4C24g6SWRmRISnvmS7XU+85J/M8d81zm8S1MhpoaVZ1XX5mbyigg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5329
+X-MS-Exchange-CrossTenant-userprincipalname: wkZzZ5XYjewirCpNCtNOGbGl8g4scAx29JAWMt3Y9IPVt2JaSWwmbE4iltJgteaGZs7e6yjtSoEh6OzV9wOS7A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB5812
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.850
- definitions=2022-04-04_05:2022-03-30,2022-04-04 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 adultscore=0
- bulkscore=0 mlxlogscore=999 phishscore=0 suspectscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204040082
-X-Proofpoint-ORIG-GUID: uPTn8NxugfFDxv4MYSYW48_dX5veG22v
-X-Proofpoint-GUID: uPTn8NxugfFDxv4MYSYW48_dX5veG22v
+ definitions=2022-04-04_06:2022-03-30,2022-04-04 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ mlxlogscore=999 phishscore=0 spamscore=0 adultscore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204040083
+X-Proofpoint-ORIG-GUID: 61J04PouwbmzMNtTw0tClg8typVPqJFa
+X-Proofpoint-GUID: 61J04PouwbmzMNtTw0tClg8typVPqJFa
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -154,189 +152,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+Move mt_init out of the way for the maple tree.
+Use mips_mt prefix to match the rest of the functions in the file.
 
-Add support for kmem_cache_free_bulk() and kmem_cache_alloc_bulk() to
-the radix tree test suite.
-
-Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 ---
- tools/include/linux/slab.h       |   4 ++
- tools/testing/radix-tree/linux.c | 118 ++++++++++++++++++++++++++++++-
- 2 files changed, 120 insertions(+), 2 deletions(-)
+ arch/mips/kernel/mips-mt.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/include/linux/slab.h b/tools/include/linux/slab.h
-index 0616409513eb..311759ea25e9 100644
---- a/tools/include/linux/slab.h
-+++ b/tools/include/linux/slab.h
-@@ -41,4 +41,8 @@ struct kmem_cache *kmem_cache_create(const char *name, un=
-signed int size,
- 			unsigned int align, unsigned int flags,
- 			void (*ctor)(void *));
+diff --git a/arch/mips/kernel/mips-mt.c b/arch/mips/kernel/mips-mt.c
+index d5f7362e8c24..dc023a979803 100644
+--- a/arch/mips/kernel/mips-mt.c
++++ b/arch/mips/kernel/mips-mt.c
+@@ -230,7 +230,7 @@ void mips_mt_set_cpuoptions(void)
 =20
-+void kmem_cache_free_bulk(struct kmem_cache *cachep, size_t size, void **l=
-ist);
-+int kmem_cache_alloc_bulk(struct kmem_cache *cachep, gfp_t gfp, size_t siz=
-e,
-+			  void **list);
-+
- #endif		/* _TOOLS_SLAB_H */
-diff --git a/tools/testing/radix-tree/linux.c b/tools/testing/radix-tree/li=
-nux.c
-index f20529ae4dbe..2048d12c31df 100644
---- a/tools/testing/radix-tree/linux.c
-+++ b/tools/testing/radix-tree/linux.c
-@@ -93,14 +93,13 @@ void *kmem_cache_alloc_lru(struct kmem_cache *cachep, s=
-truct list_lru *lru,
- 	return p;
- }
+ struct class *mt_class;
 =20
--void kmem_cache_free(struct kmem_cache *cachep, void *objp)
-+void kmem_cache_free_locked(struct kmem_cache *cachep, void *objp)
+-static int __init mt_init(void)
++static int __init mips_mt_init(void)
  {
- 	assert(objp);
- 	uatomic_dec(&nr_allocated);
- 	uatomic_dec(&cachep->nr_allocated);
- 	if (kmalloc_verbose)
- 		printf("Freeing %p to slab\n", objp);
--	pthread_mutex_lock(&cachep->lock);
- 	if (cachep->nr_objs > 10 || cachep->align) {
- 		memset(objp, POISON_FREE, cachep->size);
- 		free(objp);
-@@ -110,9 +109,80 @@ void kmem_cache_free(struct kmem_cache *cachep, void *=
-objp)
- 		node->parent =3D cachep->objs;
- 		cachep->objs =3D node;
- 	}
-+}
-+
-+void kmem_cache_free(struct kmem_cache *cachep, void *objp)
-+{
-+	pthread_mutex_lock(&cachep->lock);
-+	kmem_cache_free_locked(cachep, objp);
- 	pthread_mutex_unlock(&cachep->lock);
+ 	struct class *mtc;
+=20
+@@ -243,4 +243,4 @@ static int __init mt_init(void)
+ 	return 0;
  }
 =20
-+void kmem_cache_free_bulk(struct kmem_cache *cachep, size_t size, void **l=
-ist)
-+{
-+	if (kmalloc_verbose)
-+		pr_debug("Bulk free %p[0-%lu]\n", list, size - 1);
-+
-+	pthread_mutex_lock(&cachep->lock);
-+	for (int i =3D 0; i < size; i++)
-+		kmem_cache_free_locked(cachep, list[i]);
-+	pthread_mutex_unlock(&cachep->lock);
-+}
-+
-+int kmem_cache_alloc_bulk(struct kmem_cache *cachep, gfp_t gfp, size_t siz=
-e,
-+			  void **p)
-+{
-+	size_t i;
-+
-+	if (kmalloc_verbose)
-+		pr_debug("Bulk alloc %lu\n", size);
-+
-+	if (!(gfp & __GFP_DIRECT_RECLAIM)) {
-+		if (cachep->non_kernel < size)
-+			return 0;
-+
-+		cachep->non_kernel -=3D size;
-+	}
-+
-+	pthread_mutex_lock(&cachep->lock);
-+	if (cachep->nr_objs >=3D size) {
-+		struct radix_tree_node *node;
-+
-+		for (i =3D 0; i < size; i++) {
-+			node =3D cachep->objs;
-+			cachep->nr_objs--;
-+			cachep->objs =3D node->parent;
-+			p[i] =3D node;
-+			node->parent =3D NULL;
-+		}
-+		pthread_mutex_unlock(&cachep->lock);
-+	} else {
-+		pthread_mutex_unlock(&cachep->lock);
-+		for (i =3D 0; i < size; i++) {
-+			if (cachep->align) {
-+				posix_memalign(&p[i], cachep->align,
-+					       cachep->size * size);
-+			} else {
-+				p[i] =3D malloc(cachep->size * size);
-+			}
-+			if (cachep->ctor)
-+				cachep->ctor(p[i]);
-+			else if (gfp & __GFP_ZERO)
-+				memset(p[i], 0, cachep->size);
-+		}
-+	}
-+
-+	for (i =3D 0; i < size; i++) {
-+		uatomic_inc(&nr_allocated);
-+		uatomic_inc(&cachep->nr_allocated);
-+		uatomic_inc(&cachep->nr_tallocated);
-+		if (kmalloc_verbose)
-+			printf("Allocating %p from slab\n", p[i]);
-+	}
-+
-+	return size;
-+}
-+
- struct kmem_cache *
- kmem_cache_create(const char *name, unsigned int size, unsigned int align,
- 		unsigned int flags, void (*ctor)(void *))
-@@ -130,3 +200,47 @@ kmem_cache_create(const char *name, unsigned int size,=
- unsigned int align,
- 	ret->non_kernel =3D 0;
- 	return ret;
- }
-+
-+/*
-+ * Test the test infrastructure for kem_cache_alloc/free and bulk counterp=
-arts.
-+ */
-+void test_kmem_cache_bulk(void)
-+{
-+	int i;
-+	void *list[12];
-+	static struct kmem_cache *test_cache, *test_cache2;
-+
-+	/*
-+	 * Testing the bulk allocators without aligned kmem_cache to force the
-+	 * bulk alloc/free to reuse
-+	 */
-+	test_cache =3D kmem_cache_create("test_cache", 256, 0, SLAB_PANIC, NULL);
-+
-+	for (i =3D 0; i < 5; i++)
-+		list[i] =3D kmem_cache_alloc(test_cache, __GFP_DIRECT_RECLAIM);
-+
-+	for (i =3D 0; i < 5; i++)
-+		kmem_cache_free(test_cache, list[i]);
-+	assert(test_cache->nr_objs =3D=3D 5);
-+
-+	kmem_cache_alloc_bulk(test_cache, __GFP_DIRECT_RECLAIM, 5, list);
-+	kmem_cache_free_bulk(test_cache, 5, list);
-+
-+	for (i =3D 0; i < 12 ; i++)
-+		list[i] =3D kmem_cache_alloc(test_cache, __GFP_DIRECT_RECLAIM);
-+
-+	for (i =3D 0; i < 12; i++)
-+		kmem_cache_free(test_cache, list[i]);
-+
-+	/* The last free will not be kept around */
-+	assert(test_cache->nr_objs =3D=3D 11);
-+
-+	/* Aligned caches will immediately free */
-+	test_cache2 =3D kmem_cache_create("test_cache2", 128, 128, SLAB_PANIC, NU=
-LL);
-+
-+	kmem_cache_alloc_bulk(test_cache2, __GFP_DIRECT_RECLAIM, 10, list);
-+	kmem_cache_free_bulk(test_cache2, 10, list);
-+	assert(!test_cache2->nr_objs);
-+
-+
-+}
+-subsys_initcall(mt_init);
++subsys_initcall(mips_mt_init);
 --=20
 2.34.1

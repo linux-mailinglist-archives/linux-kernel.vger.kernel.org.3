@@ -2,120 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B636B4F1857
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC0E4F1861
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 17:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348121AbiDDP3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 11:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49688 "EHLO
+        id S1356192AbiDDPbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 11:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245461AbiDDP3Q (ORCPT
+        with ESMTP id S1349937AbiDDPbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 11:29:16 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE8133370
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:27:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649086040; x=1680622040;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yU/nrfZ263LR5VUhJwSEVaYnpMgbfMGsS35R5MUtslE=;
-  b=Pk3wm5SZx3ZEjLwr2ph5MtheWVddxvcuMCy87rv8PBxMCzW9/LF1fgfG
-   02zdPOD+D2N/bIzyqnBZhy6Gpbm75yu7kP/zrd76m8saNJNy8SKT0jsNr
-   NScOetvdzbzc6TkP2K7Fq4KIwQeBIUiWV7hJRSwcoeILN5u9IOEt8SySd
-   boNuMd+q08NM1Z/LnaP3TiUm78y5XbcXi30Ul/Bjsb40+37Z4PjPPdxlc
-   rvO2RwdpoMlgjMi0e7zOrA61Tbn3CLZJnrAtFjW+GOtW2Wc8HVv177TRD
-   0qdFFQpimklBUU06jvVnSmyj6QbLzgCcm1axQ5phlLpnfhDcEalCxiio0
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="346979034"
-X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="346979034"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 08:27:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="657540959"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 04 Apr 2022 08:27:18 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbObt-00029g-EE;
-        Mon, 04 Apr 2022 15:27:17 +0000
-Date:   Mon, 4 Apr 2022 23:27:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: arch/arm/mach-iop32x/cp6.c:10:6: warning: no previous prototype for
- 'iop_enable_cp6'
-Message-ID: <202204042312.fVSuandr-lkp@intel.com>
+        Mon, 4 Apr 2022 11:31:16 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFE525289
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:29:19 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id s21so954150pgs.4
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 08:29:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WwaoVUBFVj9j7YaVgwWeUQJL/8oOimF01hIs03GSwEs=;
+        b=KZsqHqLKTZjQ/n4pzslaH4ezeqg3fhSolbXjJDiLWpQ/F7MVzuHnt9f78kdKHToQch
+         G70BhWHUbPG0PFNkIq0GPgyX81ktwvl+QHt8S/DabeaSL0+Iwo61HVAvu1HIBIY8S5yp
+         tBulvFhDY/WVo/ktoFXDlHK0vM9E0BPOGCq4frsH67nAc9UFAmZQVYyLIZX1GWYJbVIo
+         Qp9I2Ss9mAvRnWQ0sfLgx6U7mHlf1V5UPYz7zTqeXdXYXYAnZrrD7z8mYc2jz+gy5AQ6
+         9bRf4e6+0bJXpY3TR7YpsYxf50s9DZmxdEuNLIbT70dw6bLeUEjGMqzhAOlx0x3+Rlg5
+         Yn8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WwaoVUBFVj9j7YaVgwWeUQJL/8oOimF01hIs03GSwEs=;
+        b=EV/V/xxCySEIHV29+vXOf/ny42uuowgm6Zu6lWbslI5g4i+DdePS8Pzn8mvc5URqLY
+         /pqHK5Yxw/SZ9SYUNaG2ZCtbblYhSHZQZv92ACLkX+0qYchFSjc6B9JUReRswwGJRS5w
+         ykp559/NXhR64o577iOauGoBGc490sGAbcl1W1u6ltWsneUtVKKseGF88Xhihvtn5/Pv
+         dzHCPhlgmS5TSr+NuUMBGr8+/mhiqYgstAd7HCoArs6/JydmJuIcBxb06QuoAURrjujz
+         KFAVg3p6ME3zzZJ32D+8b3QdpVHxeiJ5FwKaz1Uu+vxkhGyznU6tV/+XEg3c3qnRaL0T
+         iaIA==
+X-Gm-Message-State: AOAM530B1964sgAsnL2zBIQfUIXBfRW68+Dtgp0uoPgGhjrKvjrOnhLw
+        5lrOK+5eNKfJzsA4F2Jst+G0SA==
+X-Google-Smtp-Source: ABdhPJwChen+B+MRC8z3HtJ9ZPqGfIpYJlCB7ilek3qAIXp3MkMC00v5kKiyVolwyc8KYvTSZ9Tagg==
+X-Received: by 2002:a63:d456:0:b0:399:4c5a:2682 with SMTP id i22-20020a63d456000000b003994c5a2682mr308856pgj.573.1649086158737;
+        Mon, 04 Apr 2022 08:29:18 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id u11-20020a056a00158b00b004fb07effe2esm13383793pfk.130.2022.04.04.08.29.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 08:29:17 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 15:29:13 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zeng Guang <guang.zeng@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hu, Robert" <robert.hu@intel.com>,
+        "Gao, Chao" <chao.gao@intel.com>
+Subject: Re: [PATCH v7 5/8] KVM: x86: Add support for vICR APIC-write
+ VM-Exits in x2APIC mode
+Message-ID: <YksOyUQd3N/inHMo@google.com>
+References: <20220304080725.18135-1-guang.zeng@intel.com>
+ <20220304080725.18135-6-guang.zeng@intel.com>
+ <YkY0MvAIPiISfk4u@google.com>
+ <ce0261c0-a8f2-a9b8-6d99-88a33556d7cb@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ce0261c0-a8f2-a9b8-6d99-88a33556d7cb@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Sat, Apr 02, 2022, Zeng Guang wrote:
+> 
+> > > -	/* TODO: optimize to just emulate side effect w/o one more write */
+> > > -	kvm_lapic_reg_write(vcpu->arch.apic, offset, val);
+> > > +		kvm_lapic_msr_read(apic, offset, &val);
+> > > +		kvm_apic_send_ipi(apic, (u32)val, (u32)(val >> 32));
+> > This needs to clear the APIC_ICR_BUSY bit.  It'd also be nice to trace this write.
+> > The easiest thing is to use kvm_x2apic_icr_write().  Kinda silly as it'll generate
+> > an extra write, but on the plus side the TODO comment doesn't have to move :-D
+> > 
+> > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> > index c4c3155d98db..58bf296ee313 100644
+> > --- a/arch/x86/kvm/lapic.c
+> > +++ b/arch/x86/kvm/lapic.c
+> > @@ -2230,6 +2230,7 @@ void kvm_apic_write_nodecode(struct kvm_vcpu *vcpu, u32 offset)
+> >          struct kvm_lapic *apic = vcpu->arch.apic;
+> >          u64 val;
+> > 
+> > +       /* TODO: optimize to just emulate side effect w/o one more write */
+> >          if (apic_x2apic_mode(apic)) {
+> >                  /*
+> >                   * When guest APIC is in x2APIC mode and IPI virtualization
+> > @@ -2240,10 +2241,9 @@ void kvm_apic_write_nodecode(struct kvm_vcpu *vcpu, u32 offset)
+> >                          return;
+> > 
+> >                  kvm_lapic_msr_read(apic, offset, &val);
+> > -               kvm_apic_send_ipi(apic, (u32)val, (u32)(val >> 32));
+> > +               kvm_x2apic_icr_write(apic, val);
+> 
+> As SDM section 10.12.9 "ICR Operation in X2APIC mode" says "Delivery status
+> bit is removed since it is not needed in x2APIC mode" , so that's not
+> necessary to clear the APIC_ICR_BUSY bit here. Alternatively we can add trace
+> to this write by hardware.
 
-FYI, the error/warning still remains.
+That same section later says 
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3123109284176b1532874591f7c81f3837bbdc17
-commit: 6f5d248d05db9c4991366154f1a657a630faa583 ARM: iop32x: use GENERIC_IRQ_MULTI_HANDLER
-date:   4 months ago
-config: arm-randconfig-r002-20220404 (https://download.01.org/0day-ci/archive/20220404/202204042312.fVSuandr-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6f5d248d05db9c4991366154f1a657a630faa583
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 6f5d248d05db9c4991366154f1a657a630faa583
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+  With the removal of the Delivery Status bit, system software no longer has a
+  reason to read the ICR. It remains readable only to aid in debugging; however,
+  software should not assume the value returned by reading the ICR is the last
+  written value.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+which means that it's at least legal for a hypervisor to clear the busy bit.  That
+might be useful for debugging IPI issues?  Probably a bit of a stretch, e.g. I doubt
+any kernels set the busy bit.  But, I do think the tracing would be helpful, and at
+that point, the extra code should be an AND+MOV.
 
-All warnings (new ones prefixed by >>):
-
->> arch/arm/mach-iop32x/cp6.c:10:6: warning: no previous prototype for 'iop_enable_cp6' [-Wmissing-prototypes]
-      10 | void iop_enable_cp6(void)
-         |      ^~~~~~~~~~~~~~
-   arch/arm/mach-iop32x/cp6.c:43:13: warning: no previous prototype for 'iop_init_cp6_handler' [-Wmissing-prototypes]
-      43 | void __init iop_init_cp6_handler(void)
-         |             ^~~~~~~~~~~~~~~~~~~~
-
-
-vim +/iop_enable_cp6 +10 arch/arm/mach-iop32x/cp6.c
-
-     9	
-  > 10	void iop_enable_cp6(void)
-    11	{
-    12		u32 temp;
-    13	
-    14	        /* enable cp6 access */
-    15	        asm volatile (
-    16			"mrc	p15, 0, %0, c15, c1, 0\n\t"
-    17			"orr	%0, %0, #(1 << 6)\n\t"
-    18			"mcr	p15, 0, %0, c15, c1, 0\n\t"
-    19			"mrc	p15, 0, %0, c15, c1, 0\n\t"
-    20			"mov	%0, %0\n\t"
-    21			"sub	pc, pc, #4  @ cp_wait\n\t"
-    22			: "=r"(temp));
-    23	}
-    24	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I don't have a super strong opinion, and I'm being somewhat hypocritical (see commit
+b51818afdc1d ("KVM: SVM: Don't rewrite guest ICR on AVIC IPI virtualization failure"),
+though that has dedicated tracing), so either approach works for me.

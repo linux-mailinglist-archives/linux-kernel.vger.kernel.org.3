@@ -2,64 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0693B4F140D
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 13:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A8DA4F13F0
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 13:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiDDLwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 07:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58686 "EHLO
+        id S1376291AbiDDLmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 07:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiDDLwe (ORCPT
+        with ESMTP id S1347843AbiDDLmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 07:52:34 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCB83CA73;
-        Mon,  4 Apr 2022 04:50:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1649072989; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=mo9jhXQZ7dDfCf1zx7Yyf+stoyzYLHDat6/ldYvgARU4DTqk8M/fLkTKnk6kk4m8K4dDx/tbE29b02iB/+7WXLZVRt7BlxIAwga5gqJUmEcl1lwZPbYgk21o8TIOcGFeoY3s0Mn3bsubyzEqVQw9r+vjftyvK0Td6cDS0tLLy6k=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1649072989; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=wH4MR2QRn9EFb2QbwxNQgFaKaRIZbXHNTjFSYpDqoMw=; 
-        b=mvN16TYvpnQFqPff72eSPvIC0ozSHO71u54Mb9PCl6qVOfs55jVj68Nkm+weM4gCFg5kXX4T2LXE5+xbCP3qxkh9t/PeTwxTlKpBGcp4N+eK2KpPxvl0tjkMZyjmT97nrv+bq0/D604smZ9Nm/IYVVQB/EPkS7bim5lBRhRP5KI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1649072989;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
-        bh=wH4MR2QRn9EFb2QbwxNQgFaKaRIZbXHNTjFSYpDqoMw=;
-        b=IkEd+cky5pBihx3tcwh3yFXJsL52aUpLmKI7SE1Veg6+CXdfer2QOO4OVurIN1cz
-        kqH2BKaeeH708amasT03Nq1Lhc31tl7VooNJHHiuYATvSkEcCoDsm/Wsnxxl25FMKqS
-        LHIoyRojQWUtUkheDaeSrCqNTo+eHvfAZKOwAWbg=
-Received: from arinc9-PC.localdomain (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
-        with SMTPS id 1649072986682935.7989606149916; Mon, 4 Apr 2022 04:49:46 -0700 (PDT)
-From:   =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
-Subject: [PATCH] net: ethernet: mtk_eth_soc: add label support for GMACs
-Date:   Mon,  4 Apr 2022 14:40:00 +0300
-Message-Id: <20220404114000.3549-1-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 4 Apr 2022 07:42:38 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E39271C
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 04:40:42 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id f23so17009366ybj.7
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 04:40:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=b3e33i6OE0vKtQNUj2X/HMPY2qJBMa9Au4u5Sza4lwk=;
+        b=h72gvlx6PxdeNzjj/gMt24tBmab31R4r06K4rde6PfLCni70SxyMCBN8jE4advswlt
+         TXWIYi7jf+zkelEhbRYicwu4oiqy2Wyn7wF1MVlZdjVr3LKALQpQXyJjmW4lAVunb3mg
+         Ywl3nuGQaxHrAiTxL2vonb2s+0ER0zoysDAMP3iv62hyLa8hCvSrstD9yZUswxW9Gpr7
+         a9LA+GiPXUGvyk8BwL5YHv9JJ8rCX/O94mqBwcUHVUk79reEYkoGloie3I9XK/EoOS7g
+         A+8u2Wt2UMeqP61Zeb8U16yOeP1gzhMvW3sQ0TefyVwxq5zd8+Nt8ILVv1TybvHiMDM3
+         spKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=b3e33i6OE0vKtQNUj2X/HMPY2qJBMa9Au4u5Sza4lwk=;
+        b=7HWUI6n2W1hrgIt/UQQsueVckGPp5O5kvFjCTf6yRfdOOE6IxMS/EcEXg/aPHtRHEL
+         SzpB0AB6EN1Y8e0VfPEY/MGpExbmpLaePFbUIHZKvsMQVpntEnxtT4UwozG/Xel+1m1p
+         ae0Rx3x3mnHWnv3NpR+XY/tA95eLO7Z+HUKEA5rwegjlm1M8MRUjEhAsaGCL5kdwZGog
+         Yfiw+/hLg5udgWKp5MVDHAVeHf/ncy2cHUsKJ4tdsfJgb565xti1AuO54W42l8dbmbu1
+         xmHcKWBuIrt2y4iDrdhQQeqSFuR2Sr4RK5AwbLUUzQ2cTkfCihDC001/UZCt5ZWsfH4d
+         w2Og==
+X-Gm-Message-State: AOAM532pNfV9A6WLNZrGl+RrV/YHi5VDOB/ov4g8NVa1QDUcxUcHwA7j
+        F5tU9BYfpNvpBh9vWZlzrtQBpXC9M00Qr1aIqH7Tiw==
+X-Google-Smtp-Source: ABdhPJxoxR86mK9l+xNHYzZggMVQi2Hc4ai3sN8J1A6guxozXQpoyV2SN+UjxYFVurlHwbPVBUGuHO1nrYIm89rKhR0=
+X-Received: by 2002:a25:e70e:0:b0:634:1a47:4ff2 with SMTP id
+ e14-20020a25e70e000000b006341a474ff2mr18831825ybh.89.1649072441764; Mon, 04
+ Apr 2022 04:40:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+References: <20220403024928.4125-1-songmuchun@bytedance.com> <20220404091957.GA22790@willie-the-truck>
+In-Reply-To: <20220404091957.GA22790@willie-the-truck>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Mon, 4 Apr 2022 19:40:05 +0800
+Message-ID: <CAMZfGtU=4aFmbwyyh+5=M3iaqox7X7yaoPP+r=WJO9dReaNb-g@mail.gmail.com>
+Subject: Re: [PATCH] arm64: mm: fix pmd_leaf()
+To:     Will Deacon <will@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        steven.price@arm.com, lengxujun2007@126.com,
+        Arnd Bergmann <arnd@arndb.de>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Muchun Song <smuchun@gmail.com>,
+        Xiongchun duan <duanxiongchun@bytedance.com>,
+        Qian Cai <quic_qiancai@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,40 +74,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: René van Dorst <opensource@vdorst.com>
+On Mon, Apr 4, 2022 at 5:20 PM Will Deacon <will@kernel.org> wrote:
+>
+> On Sun, Apr 03, 2022 at 10:49:28AM +0800, Muchun Song wrote:
+> > The pmd_leaf() is used to test a leaf mapped PMD, however, it misses
+> > the PROT_NONE mapped PMD on arm64.  Fix it.  A real world issue [1]
+> > caused by this was reported by Qian Cai.
+> >
+> > Link: https://patchwork.kernel.org/comment/24798260/ [1]
+> > Fixes: 8aa82df3c123 ("arm64: mm: add p?d_leaf() definitions")
+> > Reported-by: Qian Cai <quic_qiancai@quicinc.com>
+> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+> > ---
+> >  arch/arm64/include/asm/pgtable.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> > index 94e147e5456c..09eaae46a19b 100644
+> > --- a/arch/arm64/include/asm/pgtable.h
+> > +++ b/arch/arm64/include/asm/pgtable.h
+> > @@ -535,7 +535,7 @@ extern pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
+> >                                PMD_TYPE_TABLE)
+> >  #define pmd_sect(pmd)                ((pmd_val(pmd) & PMD_TYPE_MASK) == \
+> >                                PMD_TYPE_SECT)
+> > -#define pmd_leaf(pmd)                pmd_sect(pmd)
+> > +#define pmd_leaf(pmd)                (pmd_present(pmd) && !(pmd_val(pmd) & PMD_TABLE_BIT))
+> >  #define pmd_bad(pmd)         (!pmd_table(pmd))
+> >
+> >  #define pmd_leaf_size(pmd)   (pmd_cont(pmd) ? CONT_PMD_SIZE : PMD_SIZE)
+>
+> A bunch of the users of pmd_leaf() already check pmd_present() -- is it
+> documented that we need to handle this check inside the macro? afaict x86
+> doesn't do this either.
+>
 
-Add label support for GMACs. The network interface of the GMAC will have
-the string of the label property defined on the devicetree as its name.
+arm64 is different from x86 here. pmd_leaf() could return true for
+the none pmd without pmd_present() check, the check of
+pmd_present() aims to exclude the pmd_none() case.  However,
+it could work properly on x86 without pmd_present() or pmd_none().
+So we don't see pmd_present() or pmd_none() check in pmd_leaf().
+For this reason, I think this check is necessary.
 
-Signed-off-by: René van Dorst <opensource@vdorst.com>
-[arinc.unal@arinc9.com: change commit log and rebase to current net-next]
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
----
- drivers/net/ethernet/mediatek/mtk_eth_soc.c | 4 ++++
- 1 file changed, 4 insertions(+)
+BTW, there are some users of pmd_leaf() (e.g. apply_to_pmd_range,
+walk_pmd_range, ptdump_pmd_entry) which do not check pmd_present()
+or pmd_none() before the call of pmd_leaf().  So it is also necessary
+to add the check.
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-index f02d07ec5ccb..af2f0693180a 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -2911,6 +2911,7 @@ static const struct net_device_ops mtk_netdev_ops = {
- 
- static int mtk_add_mac(struct mtk_eth *eth, struct device_node *np)
- {
-+	const char *name = of_get_property(np, "label", NULL);
- 	const __be32 *_id = of_get_property(np, "reg", NULL);
- 	phy_interface_t phy_mode;
- 	struct phylink *phylink;
-@@ -3033,6 +3034,9 @@ static int mtk_add_mac(struct mtk_eth *eth, struct device_node *np)
- 	else
- 		eth->netdev[id]->max_mtu = MTK_MAX_RX_LENGTH_2K - MTK_RX_ETH_HLEN;
- 
-+	if (name)
-+		strlcpy(eth->netdev[id]->name, name, IFNAMSIZ);
-+
- 	return 0;
- 
- free_netdev:
--- 
-2.25.1
-
+Thanks.

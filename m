@@ -2,111 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E19A4F11A2
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 022194F11A6
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349305AbiDDJGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 05:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60358 "EHLO
+        id S1347499AbiDDJI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 05:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236111AbiDDJGo (ORCPT
+        with ESMTP id S1350670AbiDDJIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 05:06:44 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B8DF14001
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 02:04:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A66521FB;
-        Mon,  4 Apr 2022 02:04:47 -0700 (PDT)
-Received: from [10.163.37.159] (unknown [10.163.37.159])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 02B453F718;
-        Mon,  4 Apr 2022 02:04:41 -0700 (PDT)
-Message-ID: <a4df1a4d-79b6-5a69-77a2-df9a36653c89@arm.com>
-Date:   Mon, 4 Apr 2022 14:35:08 +0530
+        Mon, 4 Apr 2022 05:08:07 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD84D3B01F;
+        Mon,  4 Apr 2022 02:06:09 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2348XLNH031939;
+        Mon, 4 Apr 2022 11:06:01 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=O+gcTxP8Y7/69E7pLornS/X2ErAQMSV70Z+BZNSQjeM=;
+ b=4C0obPbxainwH3jY/z7OwKk/dV2tPb2NRod8y3P1i/6M/wRVI6x3FwacnEUVCQvTptA0
+ SPKWy2XI9Chw1QGzkY2ZIbJcIBtP1k9tMVAC8MYLQMSXRPOUIZGCWP/XETueYZZ1pAsR
+ FzlE2+Ee8MzfKM6kl55jN9C37xU6lyPZ6sjsQouI71FKwmQ6VtbmoO0K+E7tny++0/Y5
+ FpwfYIk+jJ6cOuy9nHUxJFtUiHX2Unf3/lFgKODnxOVe57+zL1dRfhJ4pO1ssG/wNnuf
+ v9zi8whcU5Cjj3t7G/ibRWptPI6GE9RuTThBtv76qjLrD4/mMSMCDHDkbjFAtheWUB+K ZA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f7a91vusa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 04 Apr 2022 11:06:01 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B27DB10002A;
+        Mon,  4 Apr 2022 11:06:00 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 28F4C2138EE;
+        Mon,  4 Apr 2022 11:06:00 +0200 (CEST)
+Received: from localhost (10.75.127.47) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 4 Apr 2022 11:05:59
+ +0200
+From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        <linux-riscv@lists.infradead.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <arnaud.pouliquen@foss.st.com>, <linux-kernel@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        Anup Patel <anup@brainfault.org>
+Subject: [PATCH] RISC-V: configs: Configs that had RPMSG_CHAR now get RPMSG_CTRL
+Date:   Mon, 4 Apr 2022 11:05:27 +0200
+Message-ID: <20220404090527.582217-1-arnaud.pouliquen@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 1/2] mm: hugetlb_vmemmap: introduce
- ARCH_WANT_HUGETLB_PAGE_FREE_VMEMMAP
-Content-Language: en-US
-To:     Muchun Song <songmuchun@bytedance.com>, will@kernel.org,
-        akpm@linux-foundation.org, david@redhat.com, bodeddub@amazon.com,
-        osalvador@suse.de, mike.kravetz@oracle.com, rientjes@google.com,
-        mark.rutland@arm.com, catalin.marinas@arm.com, james.morse@arm.com,
-        21cnbao@gmail.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, duanxiongchun@bytedance.com,
-        fam.zheng@bytedance.com, smuchun@gmail.com
-References: <20220331065640.5777-1-songmuchun@bytedance.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20220331065640.5777-1-songmuchun@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-04_03,2022-03-31_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In the patch 617d32938d1b: "rpmsg: Move the rpmsg control device
+from rpmsg_char to rpmsg_ctrl", we split the rpmsg_char driver in two.
+By default give everyone who had the old driver enabled the rpmsg_ctrl
+driver too.
 
+Fixes: 617d32938d1b ("rpmsg: Move the rpmsg control device from rpmsg_char to rpmsg_ctrl", 2022-01-24)
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-by: Anup Patel <anup@brainfault.org>
+---
+this patch is extracted from the series [1] that has been partially
+integrated in the Linux Kernel 5.18-rc1.
 
-On 3/31/22 12:26, Muchun Song wrote:
-> The feature of minimizing overhead of struct page associated with each
-> HugeTLB page is implemented on x86_64, however, the infrastructure of
-> this feature is already there, we could easily enable it for other
-> architectures.  Introduce ARCH_WANT_HUGETLB_PAGE_FREE_VMEMMAP for other
-> architectures to be easily enabled.  Just select this config if they
-> want to enable this feature.
-> 
-> Suggested-by: Andrew Morton <akpm@linux-foundation.org>
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> ---
->  arch/x86/Kconfig |  1 +
->  fs/Kconfig       | 10 +++++++++-
->  2 files changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 9f5bd41bf660..e69d42528542 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -119,6 +119,7 @@ config X86
->  	select ARCH_WANTS_DYNAMIC_TASK_STRUCT
->  	select ARCH_WANTS_NO_INSTR
->  	select ARCH_WANT_HUGE_PMD_SHARE
-> +	select ARCH_WANT_HUGETLB_PAGE_FREE_VMEMMAP	if X86_64
->  	select ARCH_WANT_LD_ORPHAN_WARN
->  	select ARCH_WANTS_THP_SWAP		if X86_64
->  	select ARCH_HAS_PARANOID_L1D_FLUSH
-> diff --git a/fs/Kconfig b/fs/Kconfig
-> index 6c7dc1387beb..f6db2af33738 100644
-> --- a/fs/Kconfig
-> +++ b/fs/Kconfig
-> @@ -245,9 +245,17 @@ config HUGETLBFS
->  config HUGETLB_PAGE
->  	def_bool HUGETLBFS
->  
-> +#
-> +# Select this config option from the architecture Kconfig, if it is preferred
-> +# to enable the feature of minimizing overhead of struct page associated with
-> +# each HugeTLB page.
-> +#
-> +config ARCH_WANT_HUGETLB_PAGE_FREE_VMEMMAP
-> +	bool
-> +
->  config HUGETLB_PAGE_FREE_VMEMMAP
->  	def_bool HUGETLB_PAGE
-> -	depends on X86_64
-> +	depends on ARCH_WANT_HUGETLB_PAGE_FREE_VMEMMAP
->  	depends on SPARSEMEM_VMEMMAP
->  
->  config HUGETLB_PAGE_FREE_VMEMMAP_DEFAULT_ON
+[1]https://lore.kernel.org/lkml/15be2f08-ba03-2b80-6f53-2056359d5c41@gmail.com/T/
+---
+ arch/riscv/configs/defconfig      | 1 +
+ arch/riscv/configs/rv32_defconfig | 1 +
+ 2 files changed, 2 insertions(+)
 
-Better to have platforms subscribe via ARCH_HAS/WANTS_ method instead
-of direct dependency in the config itself.
+diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
+index 30e3017f22bc..0cc17db8aaba 100644
+--- a/arch/riscv/configs/defconfig
++++ b/arch/riscv/configs/defconfig
+@@ -101,6 +101,7 @@ CONFIG_VIRTIO_BALLOON=y
+ CONFIG_VIRTIO_INPUT=y
+ CONFIG_VIRTIO_MMIO=y
+ CONFIG_RPMSG_CHAR=y
++CONFIG_RPMSG_CTRL=y
+ CONFIG_RPMSG_VIRTIO=y
+ CONFIG_EXT4_FS=y
+ CONFIG_EXT4_FS_POSIX_ACL=y
+diff --git a/arch/riscv/configs/rv32_defconfig b/arch/riscv/configs/rv32_defconfig
+index 7e5efdc3829d..6cd9d84d3e13 100644
+--- a/arch/riscv/configs/rv32_defconfig
++++ b/arch/riscv/configs/rv32_defconfig
+@@ -93,6 +93,7 @@ CONFIG_VIRTIO_BALLOON=y
+ CONFIG_VIRTIO_INPUT=y
+ CONFIG_VIRTIO_MMIO=y
+ CONFIG_RPMSG_CHAR=y
++CONFIG_RPMSG_CTRL=y
+ CONFIG_RPMSG_VIRTIO=y
+ CONFIG_EXT4_FS=y
+ CONFIG_EXT4_FS_POSIX_ACL=y
+-- 
+2.25.1
 
-LGTM.
-
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>

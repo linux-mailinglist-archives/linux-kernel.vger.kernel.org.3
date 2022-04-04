@@ -2,135 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D7F04F0DD0
+	by mail.lfdr.de (Postfix) with ESMTP id D942F4F0DD1
 	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 05:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355199AbiDDDy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 23:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49906 "EHLO
+        id S1377036AbiDDDy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 23:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242399AbiDDDy2 (ORCPT
+        with ESMTP id S229674AbiDDDyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 23:54:28 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9802F30567
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 20:52:32 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id u14so3782340pjj.0
-        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 20:52:32 -0700 (PDT)
+        Sun, 3 Apr 2022 23:54:53 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A223057C;
+        Sun,  3 Apr 2022 20:52:58 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id t25so14859330lfg.7;
+        Sun, 03 Apr 2022 20:52:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=5FFxSTXwBaEGi4lfK+T2LU99v/h0J5utIcW5ijXutv0=;
-        b=aOwqDqJ9BCgS/OlFhm9cTrjEoXpHxRWPaSdFORy8vWyW8x/iTrv2q1mKVoilW1X400
-         OYFUvmhZHwmxTfQ43WxSyToXNH8dNyR/4aZoQHt6FGLCZ5EzRJYK6VHPPDNxH7K45XV4
-         hKsn1oXQLQNJDGCbJVDdtpXbVvgSAJlh4IMtxPc/cYsKQw8j6umU8GrjzjGStAuPZ/9D
-         6U6zgRbaUIcKw3Mw2HI9yunNV3XtGbQTXz5hm/NDfp6yE0ThHY3E8rTtm5YWQPuK6QF6
-         lI9AQ7+LxxLZaJtacqBiWFunVSWfaX9CfPquerctUl6jstXQPOXCg9lzO1IIDS4+GUhY
-         8A2w==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=WQ2ng76YMyireTVK7QydyIIGkOLkWB3pjbKX7aVqK3I=;
+        b=ljYChF9Ht9yebTi3EgabD0asciHHMyAAz3CTF9X8T6elFNyvl8IUvZ2AXE8l6s/VTj
+         eYQja2lx/vbVN7JqE+Yu6Ckc/vUn05VF0sF8DXEc6hFvSKT/IRvWXSZLC3AN81c3XlRF
+         LwVs0J8EbghLnmrAQPlP+iCNOLmMO+LBGQmVRiFPagfhmW5gcHz7HNtLoYM6cfzSE19O
+         bxpHrM1QU9TnFFiGngP8tOwSKuXhWMhCz1c3QkXI/GMnALb949byDrKOwbt5kl/jJRA2
+         t5DEGJ2olVupvQrzz5DUuFG6z0NxiRcQUgQ4e9FZs1oaGD3PH4rNsB0POSZ3kr8YilOm
+         X+pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=5FFxSTXwBaEGi4lfK+T2LU99v/h0J5utIcW5ijXutv0=;
-        b=BWMkgi8AIe6lOEz6mkn5DSveEz2vSoSDHryF2R3va7zbGr8il7oPmrmXbxtEbWzphY
-         UQKiPDk6wuUcSpigCIpWBmBdSHqpixmuxjx7MXJugyEfI5vsdprJkoZm8Dh14eK7ZOFV
-         4E66HnrFR7FvZo+38oWl9bZtJ2jVU8BzxCF28+cfL53UYJ46O3x/PDCGzpcF4S7wj9ge
-         HZmaU+LS4rTblNdPd7mYmwUET+Z9R2UKB/oM6imQwAtO2/Qf6YrZI0K7zcXwbhOXQ7Bk
-         pHNEooEXY7TLrO8i5xIppJVktWjX3KIcEWV8EtC7czX/f7vmmlQP0hppoI0hHbcg3Yi+
-         Phxg==
-X-Gm-Message-State: AOAM530kORYe+Cq9Pwy6dabU2hgMSA4jKhaIgbYt+bl4zQ7LrkRvD14/
-        pNsj2qtecXcQIeni6t7Hj00=
-X-Google-Smtp-Source: ABdhPJyudhD009LYaZ/Hx+oWc+f1KFk4uFo6y5eJN4i37qfjlVM9CRWpoE25/CLl7gD4dLO4V2JDtA==
-X-Received: by 2002:a17:90a:2ecc:b0:1ca:6007:406c with SMTP id h12-20020a17090a2ecc00b001ca6007406cmr9762848pjs.84.1649044352039;
-        Sun, 03 Apr 2022 20:52:32 -0700 (PDT)
-Received: from ubuntu-vm.jnpr.net ([116.197.184.15])
-        by smtp.gmail.com with ESMTPSA id hk16-20020a17090b225000b001ca00b81a95sm15405045pjb.22.2022.04.03.20.52.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Apr 2022 20:52:31 -0700 (PDT)
-From:   Sathish Kumar <skumark1902@gmail.com>
-To:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Larry.Finger@lwfinger.net,
-        florian.c.schilhabel@googlemail.com
-Cc:     Sathish Kumar <skumark1902@gmail.com>
-Subject: [PATCH v2] staging: rtl8712: Fix multiple blank lines warning from .c files
-Date:   Mon,  4 Apr 2022 09:22:13 +0530
-Message-Id: <20220404035213.2609-1-skumark1902@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=WQ2ng76YMyireTVK7QydyIIGkOLkWB3pjbKX7aVqK3I=;
+        b=TIBwZdo+R8IUKQiDfllo7/mqXCKnNhbgQNO3dvDBs/S1RVG+Z/bz6p9xNJ9neytBop
+         F2stqTv+bjPNDujiRvCe6Cfwzilov/MB7NJBgZaxhkoCYnwjVfzeNJuJ8BkQG2Md8JFJ
+         OXBGb6IoEP1B6tg90CbY096cV4LjzUC8UbLgAlrNWT8ckEPu4a132BtaMaZldz5+BHRs
+         tT7N7gg8Husst2Aymt2Y5rdiqGy+86LK7Y32MBwbaUs4a/tO1Ms4+KTh60luDO/jwRl3
+         KEviarkuT19SkGlG+O5IJJlVbcJuakvpT7An1PMHlp2LeVZffgT+jMxaMWZi/hNzR75V
+         UI4Q==
+X-Gm-Message-State: AOAM530NN8QSbt+LvRojOJSQ6az4oR+aQTPvyFrpEQm1w7f3B/B2vUi5
+        YQtVKsx/AB/GdtMOvDzQqi6N9tGxa2sMjIcIoR3izWiMe6c=
+X-Google-Smtp-Source: ABdhPJxgGjNiwSRRHklO/aLlZFadWThWYuueFrAsAY4m/AV9JU8BAsjPTpRXKONxVJDMbbWYG80rty/jE9VKUBlTR3E=
+X-Received: by 2002:ac2:5444:0:b0:44a:846e:ad2b with SMTP id
+ d4-20020ac25444000000b0044a846ead2bmr21586904lfn.545.1649044375866; Sun, 03
+ Apr 2022 20:52:55 -0700 (PDT)
+MIME-Version: 1.0
+From:   Steve French <smfrench@gmail.com>
+Date:   Sun, 3 Apr 2022 22:52:43 -0500
+Message-ID: <CAH2r5msa7ZW3j+oO1JvKA0OLgaP2thyviRDGxTiK6gz2H9r-jA@mail.gmail.com>
+Subject: UBSAN shitf-out-of-bounds regression in NFS in 5.18-rc1
+To:     linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-nfs <linux-nfs@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes the checkpatch.pl warnings like:
-CHECK: Please don't use multiple blank lines
-+
-+
-from rtl871x_ioctl_rtl.c, rtl871x_ioctl_set.c, rtl871x_recv.c,
-and rtl871x_security.c
+Noticed this shift-out-of-bounds error in NFS, and also similar
+messages logged in a few other drivers when running 5.18-rc1.  It
+seems to have regressed in the last ten days because I didn't see it
+in the same setup when running an earlier version of the rc (about 10
+days ago).  Any ideas?
 
-Signed-off-by: Sathish Kumar <skumark1902@gmail.com>
----
-Changes in v2:
-  - Updated the subject and changelog text
----
- drivers/staging/rtl8712/rtl871x_ioctl_rtl.c | 1 -
- drivers/staging/rtl8712/rtl871x_ioctl_set.c | 1 -
- drivers/staging/rtl8712/rtl871x_recv.c      | 1 -
- drivers/staging/rtl8712/rtl871x_security.c  | 1 -
- 4 files changed, 4 deletions(-)
+[Sun Apr 3 22:16:57 2022] UBSAN: shift-out-of-bounds in
+lib/percpu-refcount.c:140:63
+[Sun Apr 3 22:16:57 2022] left shift of negative value -9223372036854775807
+[Sun Apr 3 22:16:57 2022] CPU: 7 PID: 10230 Comm: aio-free-ring-w Not
+tainted 5.18.0-rc1 #1
+[Sun Apr 3 22:16:57 2022] Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
+[Sun Apr 3 22:16:57 2022] Call Trace:
+[Sun Apr 3 22:16:57 2022] <TASK>
+[Sun Apr 3 22:16:57 2022] dump_stack_lvl+0x55/0x6d
+[Sun Apr 3 22:16:57 2022] ubsan_epilogue+0x5/0x40
+[Sun Apr 3 22:16:57 2022] __ubsan_handle_shift_out_of_bounds+0xfa/0x140
+[Sun Apr 3 22:16:57 2022] ? lock_acquire+0x275/0x320
+[Sun Apr 3 22:16:57 2022] ? _raw_spin_unlock_irqrestore+0x40/0x60
+[Sun Apr 3 22:16:57 2022] ? percpu_ref_exit+0x87/0x90
+[Sun Apr 3 22:16:57 2022] percpu_ref_exit+0x87/0x90
+[Sun Apr 3 22:16:57 2022] ioctx_alloc+0x500/0x8f0
+[Sun Apr 3 22:16:57 2022] __x64_sys_io_setup+0x58/0x240
+[Sun Apr 3 22:16:57 2022] do_syscall_64+0x3a/0x80
+[Sun Apr 3 22:16:57 2022] entry_SYSCALL_64_after_hwframe+0x44/0xae
+[Sun Apr 3 22:16:57 2022] RIP: 0033:0x7f0c32c52d6d
+[Sun Apr 3 22:16:57 2022] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 90
+f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c
+8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d eb 80 0c 00 f7
+d8 64 89 01 48
+[Sun Apr 3 22:16:57 2022] RSP: 002b:00007fffff3fedc8 EFLAGS: 00000202
+ORIG_RAX: 00000000000000ce
+[Sun Apr 3 22:16:57 2022] RAX: ffffffffffffffda RBX: 0000000000002710
+RCX: 00007f0c32c52d6d
+[Sun Apr 3 22:16:57 2022] RDX: 00007f0c32c52f47 RSI: 00007fffff3fee08
+RDI: 0000000000002710
+[Sun Apr 3 22:16:57 2022] RBP: 00007f0c32b586c0 R08: 0000000000000000
+R09: 00007fffff3fef08
+[Sun Apr 3 22:16:57 2022] R10: 0000000000000000 R11: 0000000000000202
+R12: 000000000000000c
+[Sun Apr 3 22:16:57 2022] R13: 00007fffff3fee08 R14: 0000000000000000
+R15: 0000000000000000
+[Sun Apr  3 22:16:57 2022]  </TASK>
+[Sun Apr  3 22:16:57 2022]
+================================================================================
+[Sun Apr  3 22:16:57 2022]
+================================================================================
+[Sun Apr  3 22:16:57 2022] UBSAN: shift-out-of-bounds in
+./include/linux/nfs_fs.h:606:9
+[Sun Apr  3 22:16:57 2022] left shift of 1 by 63 places cannot be
+represented in type 'long long int'
+[Sun Apr  3 22:16:57 2022] CPU: 5 PID: 32260 Comm: kworker/u16:3 Not
+tainted 5.18.0-rc1 #1
+[Sun Apr  3 22:16:57 2022] Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
+[Sun Apr  3 22:16:57 2022] Workqueue: rpciod rpc_async_schedule [sunrpc]
+[Sun Apr  3 22:16:57 2022] Call Trace:
+[Sun Apr  3 22:16:57 2022]  <TASK>
+[Sun Apr  3 22:16:57 2022]  dump_stack_lvl+0x55/0x6d
+[Sun Apr  3 22:16:57 2022]  ubsan_epilogue+0x5/0x40
+[Sun Apr  3 22:16:57 2022]  __ubsan_handle_shift_out_of_bounds+0xfa/0x140
+[Sun Apr  3 22:16:57 2022]  ? lock_acquire+0x275/0x320
+[Sun Apr  3 22:16:57 2022]  ? ww_mutex_trylock+0x2f1/0x370
+[Sun Apr  3 22:16:57 2022]  ? nfs_writeback_update_inode+0x5f/0xd0 [nfs]
+[Sun Apr  3 22:16:57 2022]  nfs_writeback_update_inode+0x5f/0xd0 [nfs]
+[Sun Apr  3 22:16:57 2022]  ?
+trace_raw_output_svcsock_new_socket+0xc0/0xc0 [sunrpc]
+[Sun Apr  3 22:16:57 2022]  ?
+trace_raw_output_svcsock_new_socket+0xc0/0xc0 [sunrpc]
+[Sun Apr  3 22:16:57 2022]  nfs4_write_done_cb+0x61/0x1d0 [nfsv4]
+[Sun Apr  3 22:16:57 2022]  ?
+trace_raw_output_svcsock_new_socket+0xc0/0xc0 [sunrpc]
+[Sun Apr  3 22:16:57 2022]  ?
+trace_raw_output_svcsock_new_socket+0xc0/0xc0 [sunrpc]
+[Sun Apr  3 22:16:57 2022]  ? nfs41_sequence_done+0x2c/0x40 [nfsv4]
+[Sun Apr  3 22:16:57 2022]  nfs_writeback_done+0x37/0x210 [nfs]
+[Sun Apr  3 22:16:57 2022]  ?
+trace_raw_output_svcsock_new_socket+0xc0/0xc0 [sunrpc]
+[Sun Apr  3 22:16:57 2022]  nfs_pgio_result+0x1d/0x60 [nfs]
+[Sun Apr  3 22:16:57 2022]  rpc_exit_task+0x97/0x2b0 [sunrpc]
+[Sun Apr  3 22:16:57 2022]  __rpc_execute+0xc4/0x7d0 [sunrpc]
+[Sun Apr  3 22:16:57 2022]  ? lock_is_held_type+0xea/0x140
+[Sun Apr  3 22:16:57 2022]  rpc_async_schedule+0x29/0x40 [sunrpc]
+[Sun Apr  3 22:16:57 2022]  process_one_work+0x25b/0x5f0
+[Sun Apr  3 22:16:57 2022]  worker_thread+0x30/0x360
+[Sun Apr  3 22:16:57 2022]  ? process_one_work+0x5f0/0x5f0
+[Sun Apr  3 22:16:57 2022]  kthread+0xe8/0x110
+[Sun Apr  3 22:16:57 2022]  ? kthread_complete_and_exit+0x20/0x20
+[Sun Apr  3 22:16:57 2022]  ret_from_fork+0x22/0x30
+[Sun Apr  3 22:16:57 2022]  </TASK>
+[Sun Apr  3 22:16:57 2022]
+================================================================================
 
-diff --git a/drivers/staging/rtl8712/rtl871x_ioctl_rtl.c b/drivers/staging/rtl8712/rtl871x_ioctl_rtl.c
-index b78101afc93d..2b539335206a 100644
---- a/drivers/staging/rtl8712/rtl871x_ioctl_rtl.c
-+++ b/drivers/staging/rtl8712/rtl871x_ioctl_rtl.c
-@@ -367,7 +367,6 @@ uint oid_rt_get_scan_in_progress_hdl(struct oid_par_priv *poid_par_priv)
- 	return RNDIS_STATUS_SUCCESS;
- }
- 
--
- uint oid_rt_forced_data_rate_hdl(struct oid_par_priv *poid_par_priv)
- {
- 	return RNDIS_STATUS_SUCCESS;
-diff --git a/drivers/staging/rtl8712/rtl871x_ioctl_set.c b/drivers/staging/rtl8712/rtl871x_ioctl_set.c
-index 6cdc6f1a6bc6..603a3a48f952 100644
---- a/drivers/staging/rtl8712/rtl871x_ioctl_set.c
-+++ b/drivers/staging/rtl8712/rtl871x_ioctl_set.c
-@@ -22,7 +22,6 @@
- #include "usb_osintf.h"
- #include "usb_ops.h"
- 
--
- static u8 validate_ssid(struct ndis_802_11_ssid *ssid)
- {
- 	u8 i;
-diff --git a/drivers/staging/rtl8712/rtl871x_recv.c b/drivers/staging/rtl8712/rtl871x_recv.c
-index 66cc50f24e29..de9a568eaffa 100644
---- a/drivers/staging/rtl8712/rtl871x_recv.c
-+++ b/drivers/staging/rtl8712/rtl871x_recv.c
-@@ -455,7 +455,6 @@ static sint validate_recv_mgnt_frame(struct _adapter *adapter,
- 	return _FAIL;
- }
- 
--
- static sint validate_recv_data_frame(struct _adapter *adapter,
- 				     union recv_frame *precv_frame)
- {
-diff --git a/drivers/staging/rtl8712/rtl871x_security.c b/drivers/staging/rtl8712/rtl871x_security.c
-index e0a1c30a8fe6..e46a5dbc7b65 100644
---- a/drivers/staging/rtl8712/rtl871x_security.c
-+++ b/drivers/staging/rtl8712/rtl871x_security.c
-@@ -381,7 +381,6 @@ void seccalctkipmic(u8 *key, u8 *header, u8 *data, u32 data_len, u8 *mic_code,
- #define P1K_SIZE         10    /*  80-bit Phase1 key                */
- #define RC4_KEY_SIZE     16    /* 128-bit RC4KEY (104 bits unknown) */
- 
--
- /* 2-unsigned char by 2-unsigned char subset of the full AES S-box table */
- static const unsigned short Sbox1[2][256] = {/* Sbox for hash (can be in ROM) */
- 	{
+
 -- 
-2.17.1
+Thanks,
 
+Steve

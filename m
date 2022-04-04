@@ -2,163 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD44B4F200C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 343204F200D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242884AbiDDXOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 19:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
+        id S243159AbiDDXOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 19:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243569AbiDDXLl (ORCPT
+        with ESMTP id S243475AbiDDXLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 4 Apr 2022 19:11:41 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A19113E
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 15:48:44 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id l26so6681262ejx.1
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 15:48:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vmQtSeoAc+Nq1zeZ+fcOy7GISIYvQy3s9Qy54NdzuHU=;
-        b=o04wJ+0ZKldbQAUg1OrIlnIW+Sx2rrgZN889EJaxXOUiYl1aFr9M2h/mAs5Hq/qfKP
-         TTsqt/3k7wIv4hpJjvaqoJLYI8N+Bs3w+hQCNbH+TXLubgXpeWh9UMVwIGRxTbT+0HRe
-         OYkEmZn4RdjGxdIuFmDsnKDyQOrtx7luLwYQu2jkxEZvv0Yiu0qJGhOT3Zb7QdH6VHX4
-         lyfyTbnXIgPDJjdPXj+suT0Ge2pmL/GV7WS9mY3h2pmqDceIKSocUZYNRQa/uR3YhX2e
-         7ywzIGVVVuGNqcwOXumeP3m+tRQvyS2P01JKNHoObHinqn6TKWcZZ9J4CRbY+KGcDH/K
-         P29A==
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E412CC82;
+        Mon,  4 Apr 2022 15:48:37 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-e1dcc0a327so7943076fac.1;
+        Mon, 04 Apr 2022 15:48:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vmQtSeoAc+Nq1zeZ+fcOy7GISIYvQy3s9Qy54NdzuHU=;
-        b=u2VC2Q8FvrmK0hv6TqhaN4mlLizaMOyoqXVWT6xwGjils3642n2etu9d+DbjRMj3fN
-         edZPcC4v88wqZlo3QnKUaIO7q+K5HueqY/b2b51tSAxbxh6soYT/Oa4NDSn5xywPwXmC
-         VvOJpcFXXbgOXjgl7T0QBhNBM0EdioaxhaLMDc3hecgcFyRPSniIeasbndfrpIuP/7CQ
-         lY0kCuoWPCzKAxK4ZGzp5Fn2zNf+b+LpOKSJ5CU9uyfr4NUsqXRQj7io0A1jBsjTKI1a
-         SmxFX6SK8KbZdlSV980LZaz1wdoK/zJd+9koklvTfJFZNCPeTYrTNMHVCDh9d/9ufl4W
-         fHhg==
-X-Gm-Message-State: AOAM533NAmA642EWWS1/0uaJW1TvPpLw32MtIMlngT2x/mYI6Xwiv0A2
-        p+HVfcMrJ/hOZjmJtjcQyek7DP1W7QphOUUnBBHR9A==
-X-Google-Smtp-Source: ABdhPJzdIQ4vB761RUi6v1HI1p4UzqyOOA0GSKBjTMp6EdtjdhHQq8XELB1I6aQFcv0w/hp4QKxJhGCbQx/1j27ysbA=
-X-Received: by 2002:a17:906:37cd:b0:6e0:bdb6:f309 with SMTP id
- o13-20020a17090637cd00b006e0bdb6f309mr500240ejc.394.1649112523031; Mon, 04
- Apr 2022 15:48:43 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IDVzKKe8bBDBKudRXLtOu1I28mv+pTyfCDNX1XmjnE0=;
+        b=WU4/330iQiE+hoYU0By9iZCjhWdyrqZ/wTphg+h/sMrsJkyMm53VOKL/pIw312EueR
+         SkLsYOxnDzX+sF36gvDDcN+pbw25cL31KahzcQ7oPQSNsKFblQxBpr+x8JLKyLr+G9Br
+         8V6X5f1purt4FPKrk+DqTN8FZzzMuCSUs9E3VhmdcaO8cp9ocuxAT+wtbk1ViK3tRel9
+         eIeXXLcgQ5jtjEqyA9ej/qFd3MTTJzllXh9rK2bmFozwYk+YjKxMOyTCMoPbvp+1oZt3
+         KZyDwhgsy3GmNZIu7nv/BaAn3AlA74eg5u9RUCCNkb9rPtJRNSVHtig3Cl6Wr5fo/93V
+         Afew==
+X-Gm-Message-State: AOAM5311sbroh6+GxWeDEHB8fEY2OMDZ0+EL2ragBwLDXp1MxMY0hMHU
+        KnvsC/nEJDtF3cFaSmhRpQ==
+X-Google-Smtp-Source: ABdhPJwxFmZcTOz+cwYgRxVxHJoCqnjta6b6GE3N+PBaVi4FAstZEvaVo4pb6JsSjYBxOBeHv9hdKA==
+X-Received: by 2002:a05:6870:ec90:b0:de:33ac:8100 with SMTP id eo16-20020a056870ec9000b000de33ac8100mr270569oab.192.1649112516376;
+        Mon, 04 Apr 2022 15:48:36 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i28-20020a9d4a9c000000b005ce06a77de2sm5309018otf.48.2022.04.04.15.48.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 15:48:35 -0700 (PDT)
+Received: (nullmailer pid 2148408 invoked by uid 1000);
+        Mon, 04 Apr 2022 22:48:34 -0000
+Date:   Mon, 4 Apr 2022 17:48:34 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Jassi Brar <jassisinghbrar@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alex Elder <elder@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        devicetree@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Subject: Re: [PATCH 2/2] dt-bindings: net: qcom,ipa: finish the qcom,smp2p
+ example
+Message-ID: <Ykt1wm0sfVyEKZiK@robh.at.kernel.org>
+References: <20220402155551.16509-1-krzysztof.kozlowski@linaro.org>
+ <20220402155551.16509-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <20220311072859.2174624-1-brendanhiggins@google.com> <1e1472e8-1813-3903-f934-cb0ae7f09864@linuxfoundation.org>
-In-Reply-To: <1e1472e8-1813-3903-f934-cb0ae7f09864@linuxfoundation.org>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 4 Apr 2022 18:48:31 -0400
-Message-ID: <CAFd5g46JiiddNxHW_jK6fjdfjGMjWsXsFuvL6H9xcZc98HWQyQ@mail.gmail.com>
-Subject: Re: [PATCH v1] kunit: add support for kunit_suites that reference
- init code
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
-        martin.fernandez@eclypsium.com, daniel.gutson@eclypsium.com,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        jk@codeconstruct.com.au
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220402155551.16509-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 4, 2022 at 6:37 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> Hi Brendan,
->
-> On 3/11/22 12:28 AM, Brendan Higgins wrote:
-> > Add support for a new kind of kunit_suite registration macro called
-> > kunit_test_init_suite(); this new registration macro allows the
-> > registration of kunit_suites that reference functions marked __init and
-> > data marked __initdata.
-> >
-> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > Tested-by: Martin Fernandez <martin.fernandez@eclypsium.com>
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
-> > Reviewed-by: David Gow <davidgow@google.com>
-> > ---
-> >
->
-> I almost applied it ...
->
-> > This is a follow-up to the RFC here[1].
-> >
-> > This patch is in response to a KUnit user issue[2] in which the user was
-> > attempting to test some init functions; although this is a functional
-> > solution as long as KUnit tests only run during the init phase, we will
-> > need to do more work if we ever allow tests to run after the init phase
-> > is over; it is for this reason that this patch adds a new registration
-> > macro rather than simply modifying the existing macros.
-> >
-> > Changes since last version:
-> >   - I added more to the kunit_test_init_suites() kernel-doc comment
-> >     detailing "how" the modpost warnings are suppressed in addition to
-> >     the existing information regarding "why" it is OK for the modpost
-> >     warnings to be suppressed.
-> >
-> > [1] https://lore.kernel.org/linux-kselftest/20220310210210.2124637-1-brendanhiggins@google.com/
-> > [2] https://groups.google.com/g/kunit-dev/c/XDjieRHEneg/m/D0rFCwVABgAJ
-> >
-> > ---
-> >   include/kunit/test.h | 26 ++++++++++++++++++++++++++
-> >   1 file changed, 26 insertions(+)
-> >
-> > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> > index b26400731c02..7f303a06bc97 100644
-> > --- a/include/kunit/test.h
-> > +++ b/include/kunit/test.h
-> > @@ -379,6 +379,32 @@ static inline int kunit_run_all_tests(void)
-> >
-> >   #define kunit_test_suite(suite)     kunit_test_suites(&suite)
-> >
-> > +/**
-> > + * kunit_test_init_suites() - used to register one or more &struct kunit_suite
-> > + *                         containing init functions or init data.
-> > + *
-> > + * @__suites: a statically allocated list of &struct kunit_suite.
-> > + *
-> > + * This functions identically as &kunit_test_suites() except that it suppresses
-> > + * modpost warnings for referencing functions marked __init or data marked
-> > + * __initdata; this is OK because currently KUnit only runs tests upon boot
-> > + * during the init phase or upon loading a module during the init phase.
-> > + *
-> > + * NOTE TO KUNIT DEVS: If we ever allow KUnit tests to be run after boot, these
-> > + * tests must be excluded.
-> > + *
-> > + * The only thing this macro does that's different from kunit_test_suites is
-> > + * that it suffixes the array and suite declarations it makes with _probe;
-> > + * modpost suppresses warnings about referencing init data for symbols named in
-> > + * this manner.
-> > + */
-> > +#define kunit_test_init_suites(__suites...)                          \
-> > +     __kunit_test_suites(CONCATENATE(__UNIQUE_ID(array), _probe),    \
-> > +                         CONCATENATE(__UNIQUE_ID(suites), _probe),   \
-> > +                         ##__suites)
-> > +
-> > +#define kunit_test_init_suite(suite) kunit_test_init_suites(&suite)
-> > +
-> >   #define kunit_suite_for_each_test_case(suite, test_case)            \
-> >       for (test_case = suite->test_cases; test_case->run_case; test_case++)
-> >
-> >
->
-> The naming of the function and macro are rather confusing and can become
-> error prone. Let's find better naming scheme.
+On Sat, 02 Apr 2022 17:55:51 +0200, Krzysztof Kozlowski wrote:
+> The example using qcom,smp2p should have all necessary properties, to
+> avoid DT schema validation warnings.
+> 
+> Reported-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/net/qcom,ipa.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
 
-Yeah, I wasn't sure about the name. I didn't have any better ideas
-initially though. Any suggestions?
-
-> > base-commit: 330f4c53d3c2d8b11d86ec03a964b86dc81452f5
-> >
->
-> thanks,
-> -- Shuah
+The netdev folks probably won't pick this up, so applied, thanks!

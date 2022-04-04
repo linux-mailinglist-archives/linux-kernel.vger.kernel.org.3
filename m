@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B314F1EA6
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 913444F1ED1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382525AbiDDWJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45972 "EHLO
+        id S237659AbiDDVz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378948AbiDDQHQ (ORCPT
+        with ESMTP id S1378955AbiDDQIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 12:07:16 -0400
-Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA75E13F42;
-        Mon,  4 Apr 2022 09:05:16 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 8A62D41F28;
-        Mon,  4 Apr 2022 16:05:11 +0000 (UTC)
-Subject: Re: [PATCH 6/9] nvme-apple: Add initial Apple SoC NVMe driver
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Sven Peter <sven@svenpeter.dev>, Keith Busch <kbusch@kernel.org>,
-        Jens Axboe <axboe@fb.com>, Sagi Grimberg <sagi@grimberg.me>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Marc Zyngier <maz@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org
-References: <20220321165049.35985-1-sven@svenpeter.dev>
- <20220321165049.35985-7-sven@svenpeter.dev> <20220324061620.GA12330@lst.de>
- <18f3a7e6-16d1-2037-90e7-1c0b1b2fbb1c@marcan.st>
- <20220404155924.GA9764@lst.de>
-From:   Hector Martin <marcan@marcan.st>
-Message-ID: <216d4bde-9463-a7c7-7d0a-57ea157aa280@marcan.st>
-Date:   Tue, 5 Apr 2022 01:05:09 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Mon, 4 Apr 2022 12:08:24 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C6313F42
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 09:06:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=DEQK48DTwuMTMNUTpLWwhw+3ZXcCifB/CeMmKRj1wOY=; b=DAFAD08Dvu2jDB3R/moESGFvEY
+        Qm/1sjjfXx8+Dbu/JriCkI2v/nHfqxIR3/zQ14SmSywHcDSXwXuiktZlD/CIbcT1jyYBGUljAV77+
+        1pzvYO/rOvLU9dQDRxCnzq1P++ZpREsTjxFXOHzz+quDx4Mc6MIBYZ9dTflIdAstJXUEhkTf84IP0
+        pJ6RhSlHpWUcsMzoqBMnr+bRMJhxECh9GBRoKgxe/9JtY7xjjaVHq40lvRP4zCpUJHRehexqvCtbx
+        3peHdoR4IikvuNN7WwxM+FUwcHx3YizY9zb166RCLkGfzLZvjtHoJKWLaQ+g0dG+vW1CX9h8xFine
+        5qQ7q7Lg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nbPDh-005sCJ-7u; Mon, 04 Apr 2022 16:06:21 +0000
+Date:   Mon, 4 Apr 2022 17:06:21 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>
+Subject: Re: v5.18-rc1: migratepages triggers
+ VM_BUG_ON_FOLIO(folio_nr_pages(old) != nr_pages)
+Message-ID: <YksXfckGevTN1QD+@casper.infradead.org>
+References: <20220404132908.GA785673@u2004>
+ <F3E3F1AE-B421-4463-B032-3F58DF89A5E2@nvidia.com>
+ <YksAub9UccPZa9DI@casper.infradead.org>
+ <C4792D17-A7F6-4803-B8FC-B8682F50E044@nvidia.com>
+ <20220404151805.GA800317@u2004>
+ <857E3E12-5C2D-4990-A667-79E1FC000291@nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <20220404155924.GA9764@lst.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: es-ES
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <857E3E12-5C2D-4990-A667-79E1FC000291@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04/2022 00.59, Christoph Hellwig wrote:
-> On Tue, Apr 05, 2022 at 12:57:33AM +0900, Hector Martin wrote:
->> The kernel hard limit is 100-character lines, not 80-character lines.
->> Maintainers for existing drivers are certainly free to stick to 80 chars
->> if they like it that way, but I don't see why we should still be
->> enforcing that for new code. See bdc48fa11e46.
-> 
-> Because 100 is completely utterly unreadable if is not for individual
-> lines like strings, and that is actually how Linus stated it in CodingStyle.
-> 
-> Your code as-is is completely unreadable and will not go into
-> drivers/nvme/ in that form.
+On Mon, Apr 04, 2022 at 11:44:39AM -0400, Zi Yan wrote:
+> I am wondering if my change is the right fix or not. folios with order>0
+> are still available when CONFIG_TRANSPARENT_HUGEPAGE is not set, right?
 
-That line is 81 characters. I'm sure Sven doesn't mind fixing it, but
-"your code as-is is completely unreadable" seems uncalled for here, and
-rather unreasonable.
+That's the eventual plan, but it's not possible today.  We need to
+be able to split large folios (eg in truncation) and that functionality
+is still under CONFIG_TRANSPARENT_HUGEPAGE in mm/huge_memory.c.  So
+large folios depend on CONFIG_TRANSPARENT_HUGEPAGE instead of having a
+clean separation between functionality-to-support-PMD-mapping and
+functionality-to-support-order>0.
 
--- 
-Hector Martin (marcan@marcan.st)
-Public Key: https://mrcn.st/pub
+So I preferred your earlier patch because it's more obvious.  I mean,
+we could pull in the two or three patches from my tree that convert
+these functions and their callers to folios ... we're only at rc1.
+I can post them and see what others think.

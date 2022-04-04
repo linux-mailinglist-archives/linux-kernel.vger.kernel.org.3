@@ -2,127 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5504F1E1D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A64B74F1E5A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381224AbiDDWIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39518 "EHLO
+        id S1380015AbiDDV7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:59:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379815AbiDDSKn (ORCPT
+        with ESMTP id S1379830AbiDDSMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 14:10:43 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3B263C8;
-        Mon,  4 Apr 2022 11:08:45 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2eb46d33db9so56222287b3.12;
-        Mon, 04 Apr 2022 11:08:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EOXzNn8YJXSBSPBTfEilUNoggTZ9fchh0UKh2uaYCkg=;
-        b=kAwacWRlbua9Upr4P4y0HifVnz+enwieMp9UuW7TasoWWdBMX2U1ohTaSBrWezI3J4
-         n8Y4/cnYmT1N5OVNnylsiVtO6xKHI0MRuTuJS1fgouuJ8TeX+ppvsGKAlvAyRLmkJJBg
-         ikjG+PwSNdCzzWi8FuMpWlnjrJQqZwsLh19qWQh2Xuex9MvgE4RIICVNs/JpWawpigvy
-         HLW0LKiUj7j8CdpRNQdOmvXk1DXFGpZvgZHNB7aKQxfGq643HieiLatKxO0S0EHIgK9E
-         ApgQB6v2DcSfa0DJqSPnvW8XZE/CJP/ykJcn89IfSqAMBeb0T690o7Nx9p6lUGpZM4d5
-         z81w==
+        Mon, 4 Apr 2022 14:12:41 -0400
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3928A3EA8F;
+        Mon,  4 Apr 2022 11:10:45 -0700 (PDT)
+Received: by mail-ot1-f45.google.com with SMTP id o20-20020a9d7194000000b005cb20cf4f1bso7765381otj.7;
+        Mon, 04 Apr 2022 11:10:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EOXzNn8YJXSBSPBTfEilUNoggTZ9fchh0UKh2uaYCkg=;
-        b=G2C0nKfLgbw7gwcL+90Q/aVsOfWDic1DYBhmWxXd2aMKyd1GgnbQXpu4XGeMdVVsJd
-         u94gZl/6dK1EWxPHtqfvPBmzDS1cspsE34s935HSd+M72G9l4gTzPVcDWLH5KpKfsCUo
-         gLb2ndG4QtPcF/lmiJBoZLqe1rFBEBmlKfHPt7OFADKah2ykFHENbJ6rNlAVb6Wv8K6b
-         fYBIDOcsH6deBOmKmFPYfnG+9zDaBJ3f1uZJLEbBICYJnm33weHEr19YM1l0o7wLluDo
-         q49TWCY5VnhvvGnlkDnx2MCYy/+2VrbdWWIebKS0hdKSc//4FInzXEklrjGQIZjdNghd
-         6FIg==
-X-Gm-Message-State: AOAM53053lOXLSO8DoVoTvgGAWa7dUzgK7MXIt/es2BGOripESEsqVx0
-        3FgkoM0rQzPfojybpUIn+JMn/+tAsCef8I3SXXo=
-X-Google-Smtp-Source: ABdhPJwHTThe++LzZaFuJJpiBj0G7KqdzDNbWhNKwST/OCct//gzRJbyQFkNoyVVqsf/wWrhLf7CMN5kZJcG5A4F2gc=
-X-Received: by 2002:a0d:e212:0:b0:2eb:4f2b:6e91 with SMTP id
- l18-20020a0de212000000b002eb4f2b6e91mr1221175ywe.78.1649095724281; Mon, 04
- Apr 2022 11:08:44 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=G0RgFfB88IxA96E+rK9rj+vt/jiIu7zVdnRSF6wl4nk=;
+        b=Y5IUnBGGiIEQBWlfWICMkv7QzBJJVfJWfKPT6Od8iV+qo5ErBC5D7mvoNernoC5wxH
+         gYZ5jG+E8lmhGtIzzNoHangK79EvuB5jA0L7wNxqxX0Q8gG1GJV8OYvaWlEYNOmXoe1h
+         ZqeABAXTFYqygdA3Ul2rD5b9K71UebZ7YP1JeNVWA5wwYVHED3W2mlquG8zB4BWfh+UJ
+         2oc+E+JU1jPDzz39MHe54KFX5kAnNYHVZZXAx94ia+HcIYX7ugNBlrvPxARg6+++TN8A
+         EwcTdEhA6DspM6NnpHxDx1USufw8OW8MjTl1VxkcO1L1Hw8gIzX9RY5kzfTzwgmS4pH8
+         AivA==
+X-Gm-Message-State: AOAM531cDdyG+2iqLjpnzf1cFSlCmDiqwYsXxqCgnv6reQA3au+i5A4l
+        ty9ugGM5tNAfPcSi6HHksg==
+X-Google-Smtp-Source: ABdhPJyz+du1PDetPMb0yA4IHexN+hr9rTsyusvv+hG1hp5UpyCr1hKgkqUziVw9bZUCG92xFnwWPA==
+X-Received: by 2002:a05:6830:1e8d:b0:5cf:b0e6:82ed with SMTP id n13-20020a0568301e8d00b005cfb0e682edmr308936otr.177.1649095844556;
+        Mon, 04 Apr 2022 11:10:44 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id e7-20020a9d2a87000000b005af548abe73sm4957784otb.4.2022.04.04.11.10.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 11:10:44 -0700 (PDT)
+Received: (nullmailer pid 1646653 invoked by uid 1000);
+        Mon, 04 Apr 2022 18:10:43 -0000
+Date:   Mon, 4 Apr 2022 13:10:43 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Dongjin Kim <tobetter@gmail.com>
+Cc:     linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: rockchip: Add Hardkernel ODROID-M1 board
+Message-ID: <Yks0ox5gDKhEe6ka@robh.at.kernel.org>
+References: <20220329094446.415219-1-tobetter@gmail.com>
 MIME-Version: 1.0
-References: <20220404172322.32578-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220404172322.32578-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <OS0PR01MB5922182F6302386EFF2ED66B86E59@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-In-Reply-To: <OS0PR01MB5922182F6302386EFF2ED66B86E59@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 4 Apr 2022 19:08:18 +0100
-Message-ID: <CA+V-a8tdkw8-dUfrFG9kZizok8OQdcGHitAdb4E2tsBW3Xrh-g@mail.gmail.com>
-Subject: Re: [PATCH 1/2] mmc: renesas_sdhi: Jump to error path instead of
- returning directly
-To:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Pavel Machek <pavel@denx.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220329094446.415219-1-tobetter@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Biju,
+On Tue, 29 Mar 2022 18:44:45 +0900, Dongjin Kim wrote:
+> Add device tree binding for Hardkernel ODROID-M1 board based on RK3568
+> SoC.
+> 
+> Signed-off-by: Dongjin Kim <tobetter@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/arm/rockchip.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
 
-Thank you for the review.
-
-On Mon, Apr 4, 2022 at 7:02 PM Biju Das <biju.das.jz@bp.renesas.com> wrote:
->
-> Hi Prabhakar and Pavel,
->
-> Thanks for the patch.
->
-> > Subject: [PATCH 1/2] mmc: renesas_sdhi: Jump to error path instead of
-> > returning directly
-> >
-> > Jump to error path "edisclk" instead of returning directly in case of
-> > devm_reset_control_get_optional_exclusive() failure.
-> >
-> > Fixes: b4d86f37eacb7 ("mmc: renesas_sdhi: do hard reset if possible")
-> > Reported-by: Pavel Machek <pavel@denx.de>
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> >  drivers/mmc/host/renesas_sdhi_core.c | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/mmc/host/renesas_sdhi_core.c
-> > b/drivers/mmc/host/renesas_sdhi_core.c
-> > index 2797a9c0f17d..cddb0185f5fb 100644
-> > --- a/drivers/mmc/host/renesas_sdhi_core.c
-> > +++ b/drivers/mmc/host/renesas_sdhi_core.c
-> > @@ -1033,8 +1033,10 @@ int renesas_sdhi_probe(struct platform_device
-> > *pdev,
-> >               goto efree;
-> >
-> >       priv->rstc = devm_reset_control_get_optional_exclusive(&pdev->dev,
-> > NULL);
-> > -     if (IS_ERR(priv->rstc))
-> > -             return PTR_ERR(priv->rstc);
-> > +     if (IS_ERR(priv->rstc)) {
-> > +             ret = PTR_ERR(priv->rstc);
-> > +             goto edisclk;
-> > +     }
->
-> Why can't devm_reset_control_get_optional_exclusive to be moved up before devm_clk_get?
->
-In that case we will have to jump to the "efree" label Or if you don't
-want goto at all this can be moved to the very beginning of the probe.
-
-Wolfram, what is your preference on the above?
-
-Cheers,
-Prabhakar
+Acked-by: Rob Herring <robh@kernel.org>

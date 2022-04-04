@@ -2,96 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61CA94F1D66
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1514F1DD7
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382554AbiDDVbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35358 "EHLO
+        id S1385881AbiDDVmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379932AbiDDSX6 (ORCPT
+        with ESMTP id S1379934AbiDDSYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 14:23:58 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B8422B20
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 11:21:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=DB+oqqX2BdWPTg/dtocUXs3l7PC4
-        0npL8K8kL0ZHmzQ=; b=lohcyTOHrTWVIEDzzR9KnDU0oDhuv9u0in73/MFITsOl
-        ldUu6LI1W0gEOuriBB60kN3DPEvGF5zyQKMjv4UFC/xtG9rYDGT9NY6doa0aLisL
-        9McdJh34OVe0R6C/uuh+YbIcxwoK549IxilHRB4yLXP7JGvGRrxkPA+KiF2Jx88=
-Received: (qmail 1971161 invoked from network); 4 Apr 2022 20:21:56 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 4 Apr 2022 20:21:56 +0200
-X-UD-Smtp-Session: l3s3148p1@2roINNjbrKwgAQnoAHNmALK3JllQBOZM
-Date:   Mon, 4 Apr 2022 20:21:55 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-mmc@vger.kernel.org, Pavel Machek <pavel@denx.de>,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH 2/2] mmc: renesas_internal_dmac: Fix typo's
-Message-ID: <Yks3Q75ZrUkXSjwz@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-mmc@vger.kernel.org, Pavel Machek <pavel@denx.de>,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-References: <20220404172322.32578-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220404172322.32578-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Mon, 4 Apr 2022 14:24:15 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0801222B20;
+        Mon,  4 Apr 2022 11:22:19 -0700 (PDT)
+Date:   Mon, 04 Apr 2022 18:22:16 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649096537;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oY/Nb3gZgmyqqAZtzdiguynTW3EJR/4qr4+zwF29TqU=;
+        b=IJwXMj8IMyPDXuk3w6zz8sj0SJleQztGsO2wm92rsikhMtKPNZFhaOPbTsB4qST4XKX0/7
+        LL5aeSF8RLKatcvMJlskC02vJSJbNZ0/9/qf4Q+yzvNULSn2GyI+fdPLi+yZF3xtTr/Nal
+        2NAPRhM11w7knaE936b4PeoPvwwy9K/lcwhhsf35xbd06XQMNK4QMmeMAEn5RS4X92AT9b
+        17d6FQ/hec58lR4E4WnrprWJyZE55PT/L72iSqEmz/5qY95YLVWXo33erkz10yMYWsfLTr
+        kIMyr3o1u5Wgdjrebg1WNOoOwMUDPaPjUXpzqPHYB1+r8pG9Pt+V4JIJLhmNHw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649096537;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oY/Nb3gZgmyqqAZtzdiguynTW3EJR/4qr4+zwF29TqU=;
+        b=KA6hTj/l/1ZsaiYpZZP6rWsip1LWWJgZ0WBIO9imDBYvk61hlq6MeyyKBxVsaKUOO1qiiB
+        G56ny9h0OnDw/RAg==
+From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cpu] x86/cpu: Remove "noclflush"
+Cc:     Borislav Petkov <bp@suse.de>, Kees Cook <keescook@chromium.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220127115626.14179-7-bp@alien8.de>
+References: <20220127115626.14179-7-bp@alien8.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="z7c7psLg3iS6VUgr"
-Content-Disposition: inline
-In-Reply-To: <20220404172322.32578-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Message-ID: <164909653637.389.15323497274729912796.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the x86/cpu branch of tip:
 
---z7c7psLg3iS6VUgr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Commit-ID:     f8858b5eff30d1b2be15ef1ea6285964013b95e6
+Gitweb:        https://git.kernel.org/tip/f8858b5eff30d1b2be15ef1ea6285964013b95e6
+Author:        Borislav Petkov <bp@suse.de>
+AuthorDate:    Thu, 27 Jan 2022 12:56:26 +01:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Mon, 04 Apr 2022 10:17:05 +02:00
 
+x86/cpu: Remove "noclflush"
 
-> -	/* This DMAC cannot handle if buffer is not 128-bytes alignment */
-> +	/* This DMAC cannot handle if buffer is not 128-bytes aligned */
+Not really needed anymore and there's clearcpuid=.
 
-Well, as we are here now, I think this can be further improved.
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20220127115626.14179-7-bp@alien8.de
+---
+ Documentation/admin-guide/kernel-parameters.txt | 2 --
+ arch/x86/kernel/cpu/common.c                    | 8 --------
+ 2 files changed, 10 deletions(-)
 
-
---z7c7psLg3iS6VUgr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJLNz8ACgkQFA3kzBSg
-KbYEJxAAgE3tWV3U+f4TTD+KxfEn+jkr4asi2WSlwCxNMIJ3tQJ1VMrQzRAcU7S9
-nFzV/FPLtE+Tz2etKMfQ6S/sF+nl85sA/KL7FxC/pycOjN5CRAT1JpkLuVUaZeNx
-ZaLWoVSCd3sEyKjkRWkOlZIH3nmIbc9/t7eMf3ra8ZyWektqy5G8gLo/IL4P8+y2
-YX8ZDCD7wrA7mHnCjx6lNc20InEAdmfqB5nFHIoLxD6+HaDxuWlwkI2l2NpADwkb
-xM0O9e21nJs0LckiBppmOka5uEBqMRRtsGpRq0vloHDnyURq2xv/Qa9mFmam2CXM
-UniXvARbZ0hoZymwJ0rUA1BDSNoTtdyO72urAEt4RqhxpXpAw09h4n/Lu9dXh+NF
-RFzehHeCmmqTY/Otq0ADbnKccLrjZvfvwPqynMBHRcKY9b6MkY5Z5kE/mFkUFN8J
-fhG9TLY7xHz/nXDCXjhDtNyxPjT1Eldp924STlqJPBjjEueckjNfy5p38ET8RxDZ
-415PVK/E3rzuxLnBFSd0yUE1Zhwb93jLd4KDy6xILFSmw8R6Z58pyMBr3QsNLNjZ
-S+gWLvg/LwLvZLPMQ7JwE15RhHsLaiHFD73VT6qPIWH/TB18pXmWIg3IrZr+2+Ac
-szhLdZv35LfVSybUITCqJpvnOQWng1HlvtuRZ1xgjBjklDax64E=
-=gpu9
------END PGP SIGNATURE-----
-
---z7c7psLg3iS6VUgr--
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index a2299b2..8c18e7d 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3444,8 +3444,6 @@
+ 
+ 	nocache		[ARM]
+ 
+-	noclflush	[BUGS=X86] Don't use the CLFLUSH instruction
+-
+ 	delayacct	[KNL] Enable per-task delay accounting
+ 
+ 	nodsp		[SH] Disable hardware DSP at boot time.
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 5791f69..7dd7604 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -1870,14 +1870,6 @@ void identify_secondary_cpu(struct cpuinfo_x86 *c)
+ 	update_srbds_msr();
+ }
+ 
+-static __init int setup_noclflush(char *arg)
+-{
+-	setup_clear_cpu_cap(X86_FEATURE_CLFLUSH);
+-	setup_clear_cpu_cap(X86_FEATURE_CLFLUSHOPT);
+-	return 1;
+-}
+-__setup("noclflush", setup_noclflush);
+-
+ void print_cpu_info(struct cpuinfo_x86 *c)
+ {
+ 	const char *vendor = NULL;

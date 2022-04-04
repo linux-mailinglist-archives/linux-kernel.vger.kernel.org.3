@@ -2,85 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2DEB4F2001
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BEE14F1FF4
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 01:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239886AbiDDXLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 19:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45382 "EHLO
+        id S242773AbiDDXN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 19:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242878AbiDDXKA (ORCPT
+        with ESMTP id S241783AbiDDXKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 19:10:00 -0400
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A000F10FD4;
-        Mon,  4 Apr 2022 15:45:54 -0700 (PDT)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-d39f741ba0so12460340fac.13;
-        Mon, 04 Apr 2022 15:45:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WRM9WzB5Qz/K6aETNGyEI4dOK6iqW4l8bvHxC450j9Q=;
-        b=1E1bzpo6wmOpNppuvvD+iAYDAhdWIZoD0Rgv5PP/YZXCmcYcg/IjAb9NHZj0ZuiHTn
-         GI7tiJa+yaD1qi0bNLBeVjUiYc33e8Evu67oFqv2akB0Q99nhoJidWyqlyRAJFnRrEH7
-         /Nl1Q1uRjpaPypz6YPIHXa/XhCObH65KuLAvpDyJmdsQN43EbH9xmC+5KD1nj+z06/hE
-         l/wn33HH0unV2dWZEcUDhRDYkTsYIdKpvEumOt5zamHjMcrtXjBgPZoE8OsqX8RGGahU
-         SOSc7FvD/2drPTnUshNJ5GQvyp7lfujTUHHAR57ycMyAwhEIxTHM64DCmIexU+tCN9R+
-         IdYg==
-X-Gm-Message-State: AOAM530vmpddR7oM0S4A8BOTSN3Ve3fTUrdZODPUMY64SYQKv0Z8UVyR
-        dHssUTSwb1/0N1RFSGo3MQ==
-X-Google-Smtp-Source: ABdhPJyy1avjwHAHjLhqQGywAap8haKayzoOtloxVtYd8OqawU5I4S9geqI6mUPzZDscxTQgxtNLTg==
-X-Received: by 2002:a05:6871:822:b0:e2:10ff:b84e with SMTP id q34-20020a056871082200b000e210ffb84emr245837oap.103.1649112353731;
-        Mon, 04 Apr 2022 15:45:53 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p1-20020a05683003c100b005c927b6e645sm5115082otc.20.2022.04.04.15.45.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 15:45:53 -0700 (PDT)
-Received: (nullmailer pid 2143767 invoked by uid 1000);
-        Mon, 04 Apr 2022 22:45:52 -0000
-Date:   Mon, 4 Apr 2022 17:45:52 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        netdev@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alex Elder <elder@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Manivannan Sadhasivam <mani@kernel.org>
-Subject: Re: [PATCH 2/2] dt-bindings: net: qcom,ipa: finish the qcom,smp2p
- example
-Message-ID: <Ykt1IPcba+z1oX74@robh.at.kernel.org>
-References: <20220402155551.16509-1-krzysztof.kozlowski@linaro.org>
- <20220402155551.16509-2-krzysztof.kozlowski@linaro.org>
+        Mon, 4 Apr 2022 19:10:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4705524BD3;
+        Mon,  4 Apr 2022 15:47:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D268B616B1;
+        Mon,  4 Apr 2022 22:47:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AE20C2BBE4;
+        Mon,  4 Apr 2022 22:47:19 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="StADTOFj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1649112437;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f03Sgznwk70QYZSWwxV+lkMyUN0TDnERCd80Ff7+eOo=;
+        b=StADTOFj1BKH5L0K/Z5hEWL6S9XdFR1mQey631hUwzfWEzSdtgOcm1gqrPMYGihCL+uPc7
+        4/L2tmXryqIqx0SXAwvR0AEXTT19Wl5EO++YJyAxB0eadcN8gF3MyAoWDDo3zVj3CUFnr9
+        jZDSK8q2lGxMT4Kp6BGMZlfRLLxFFrw=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b4fa201b (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 4 Apr 2022 22:47:17 +0000 (UTC)
+Date:   Tue, 5 Apr 2022 00:47:14 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, PaX Team <pageexec@freemail.hu>
+Subject: Re: [PATCH v2] gcc-plugins: latent_entropy: use /dev/urandom
+Message-ID: <Ykt1cj0wPKEsHL2q@zx2c4.com>
+References: <CAHmME9otYi4pCzZwSGnK40dp1QMRVPxp+DBysVuLXUKkXinAxg@mail.gmail.com>
+ <20220403204036.1269562-1-Jason@zx2c4.com>
+ <202204041144.96FC64A8@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220402155551.16509-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <202204041144.96FC64A8@keescook>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 02 Apr 2022 17:55:51 +0200, Krzysztof Kozlowski wrote:
-> The example using qcom,smp2p should have all necessary properties, to
-> avoid DT schema validation warnings.
-> 
-> Reported-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/net/qcom,ipa.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
+Hi Kees,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+On Mon, Apr 4, 2022 at 8:49 PM Kees Cook <keescook@chromium.org> wrote:
+> This mixes two changes: the pRNG change and the "use urandom if
+> non-deterministic" change. I think these should be split, so the pRNG
+> change can be explicitly justified.
+
+Alright, I'll split those. Or, more probably, just drop the xorshift
+thing. There's not actually a strong reason for preferring xorshift. I
+did it because it produces more uniformity and is faster to compute and
+all that. But none of that stuff actually matters here. It was just a
+sort of "well I'm at it..." thing.
+
+> >  static struct plugin_info latent_entropy_plugin_info = {
+> > -     .version        = "201606141920vanilla",
+> > +     .version        = "202203311920vanilla",
+>
+> This doesn't really need to be versioned. We can change this to just
+> "vanilla", IMO.
+
+Okay. I suppose you want it to be in a different patch too, right? In
+which case I'll leave it out and maybe get to it later. (I suppose one
+probably needs to double check whether it's used for anything
+interesting like dwarf debug info or whatever, where maybe it's
+helpful?)
+
+> > +     if (deterministic_seed) {
+> > +             unsigned HOST_WIDE_INT w = deterministic_seed;
+> > +             w ^= w << 13;
+> > +             w ^= w >> 7;
+> > +             w ^= w << 17;
+> > +             deterministic_seed = w;
+> > +             return deterministic_seed;
+>
+> While seemingly impossible, perhaps don't reset "deterministic_seed",
+> and just continue to use "seed", so that it can never become "0" again.
+
+Not sure I follow. It's an LFSR. The "L" is important. It'll never become
+zero. It's not "seemingly". We can prove it trivially in Magma:
+
+    > w := 64;
+    > K := GF(2);
+    > I := IdentityMatrix(K, w);
+    > SHL := HorizontalJoin(RemoveColumn(I, 1), ZeroMatrix(K, w, 1));
+    > SHR := HorizontalJoin(ZeroMatrix(K, w, 1), RemoveColumn(I, w));
+    > M :=  (I + SHL^17) * (I + SHR^7) * (I + SHL^13);
+    > Order(M) eq 2^64 - 1;
+    true
+    > P<x> := MinimalPolynomial(M);
+    > IsPrimitive(P);
+    true
+    > IsInvertible(M);
+    true 
+    > Rank(M);
+    64
+
+And more obviously, splitting this into "seed" and "deterministic_seed",
+as you suggested, wouldn't actually do much in the case when seed=0,
+since 0<<N==0 and 0^0==0.
+
+Jason

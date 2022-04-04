@@ -2,68 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 823734F1772
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4D64F1775
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378204AbiDDOqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 10:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
+        id S1378208AbiDDOqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 10:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379111AbiDDOoW (ORCPT
+        with ESMTP id S1379351AbiDDOok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 10:44:22 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBD51FCED
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 07:39:27 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id z1so2522783wrg.4
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 07:39:27 -0700 (PDT)
+        Mon, 4 Apr 2022 10:44:40 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77ABB1BE8B
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 07:40:09 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id x21so11793660ybd.6
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 07:40:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Ezm7s/bPPlsKI3j5Vodd/A01CmYTO8Su6wSyqI3TlXY=;
-        b=YwX2YHH9SfzSWfpOg5TmK7w79nGo2g57qnkikIFBOAJNPurOj2AeWp2y2GJDQMNRQo
-         VPEa85uc0l8dCprSmr5BOnsWoPk8vPYjjtOlwJZaOb4XoNPz6+qmlApMVIAcNY7anQAa
-         Cr5kcgA081NzJXrGn3cjAKh3m0nR5fV74Pnz1u3tcsM+KmEMxJ/wBXxmJx5d6nkMgyOi
-         /iXbOaAy+LvPi7Nmbl+gneboS6mo1JgXvqPZX3BUP8Cq1uRk5+nrUwN7o47SeaJBpdZP
-         oNnQfUV2ztUXqwtxrmSC5j1LH31tYrOxnxNIpx2OGX7OQrXdePRPPBIg3qn3Dtb7yZ49
-         WcNA==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pz3pYCujkv281hkCmxtkOvOxylf8pz3W8bcVxSFrQPo=;
+        b=rp/qQxgcvWDdpmgA7fnhdYdZmKKGoA5Rh0NrghNK6QHGJaNrHNYoL1GD0Lo1sS0BUA
+         Nby0xgsdoq1R6HeNh2u1Wkukpnqh5Ntkf5q76zL3bFMxJlmTeFTJnNsnhZRKvy55qwnZ
+         slBewtIQuNbDNpCxmj1Fdp5nbCcMAsJsPryda6tMxoCyTky12lj33/ip4ciiZUz3koC/
+         szf7VWLN8gWAJvRw9nJCWeTApXNEDA5qLIldc38tppkwV5o9VxDq6OSye/JUfjA+DBO8
+         6/xeIsUOwgR8bNW/D7SxqiCFntXvCDnf4E8IDKNocpBYt9rOmdfd/xKobqm1+B6tbRe1
+         GBtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ezm7s/bPPlsKI3j5Vodd/A01CmYTO8Su6wSyqI3TlXY=;
-        b=N0NSbYJTjRFjRtKLVc/e5XHs4nyoRGALHcYhKhw8U+NWtr+vyzbBCMgZrU2i99i6FS
-         GDuST0ezM6JbvneDJEcxrBodtjew03CJfXF+8hhsqlPCjV4xR/rJ/LuPrOQs2tjyAOpc
-         Ly5YzLCXVNBETWUACtP4hb/JJ2Y1SkpQdRIqtqTyR27v34ndPdDQy1vH1ahfOwmg7vcl
-         HZNlgMpY9KQAdL7gcnEOxnZLAVH51TIdJptWbzO3hJWDAfs9amfU+63AWSG8mhWBtImw
-         9Vo8fZA1z+jj3sKx3Fj2f30sKOD+VIO8gr+z8vkqksqCHExxm5i5G6EaDKc3hUmurR1W
-         dcFg==
-X-Gm-Message-State: AOAM531ZTUR8saypbJkcPA2XfsfjC8iQOmw0stR8kz/p6su39RDvK2nn
-        W6fd8sJ3tu2v5wPZoQ7/jYs=
-X-Google-Smtp-Source: ABdhPJym4Ae6g+MhdncKokbHAsqQnkyzEtw7DFFFy5O0cd45KZebnaDdSU2lJZ575HmSr7bcg+2p7A==
-X-Received: by 2002:a5d:5512:0:b0:1ef:5f08:29fb with SMTP id b18-20020a5d5512000000b001ef5f0829fbmr17064670wrv.653.1649083165929;
-        Mon, 04 Apr 2022 07:39:25 -0700 (PDT)
-Received: from alaa-emad ([41.42.174.117])
-        by smtp.gmail.com with ESMTPSA id y2-20020adffa42000000b002060d53dbe0sm6142385wrr.9.2022.04.04.07.39.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 07:39:25 -0700 (PDT)
-From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-To:     outreachy@lists.linux.dev
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, eng.alaamohamedsoliman.am@gmail.com
-Subject: [PATCH 2/2] staging: r8188eu: Add line after declarations
-Date:   Mon,  4 Apr 2022 16:39:17 +0200
-Message-Id: <19d8f316e43d16c9341f7fe94e68534cf60cc05c.1649082939.git.eng.alaamohamedsoliman.am@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <860d8e222e2b695ce5cb4f48aa46a7f66e05d8e4.1649082939.git.eng.alaamohamedsoliman.am@gmail.com>
-References: <860d8e222e2b695ce5cb4f48aa46a7f66e05d8e4.1649082939.git.eng.alaamohamedsoliman.am@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pz3pYCujkv281hkCmxtkOvOxylf8pz3W8bcVxSFrQPo=;
+        b=xOZm9CyBbz/Um8Xsnu5UY/ph4rdMEGgmAI296sdx+pS5NofKdEz1+XwCFOdreWNo17
+         IdxekFY/TkK7qHXiyeSiY28wxPYEi+2Ey8vpxbv+IUhXPnPcAcDi1kG3/A9MGPzMBQgS
+         AUGX1fsHyLE/vRAd5SU1V8jH12hDcs6zXvWlNkQwN/Dfl4Gxy7JRpGAfuQ2z4MsljtlG
+         l21ts98NfHeQBwejYIqwFfc3bNsExPBZyMgSutkJluDEbTCGPpdTl9l/ME+QA4b3CpBz
+         wqHTTW+cof7GjbEp3ABNDo+oY2LUgd2oxybkpObnIjHJ1CwGnuMkcGjmio9GIXP+YsgI
+         zoqQ==
+X-Gm-Message-State: AOAM533E38eh/x4TyTcIyzmfP3+JjkVztJ1IHjOE1ee+gSHj3ZQJakTk
+        A7YqwVkf7aHWWZGHYBwZJKRApGsMMOUyqqedW1npYw==
+X-Google-Smtp-Source: ABdhPJzn3nqxMsBH+7CEIPeIkwewLgc0IoSM83IwhtPQ5GBOQVPSfRg5TvY6utuFCSGhkNhPJBRtsnAq/8hPKoD3/xA=
+X-Received: by 2002:a25:3750:0:b0:634:6b89:ca9f with SMTP id
+ e77-20020a253750000000b006346b89ca9fmr78127yba.363.1649083208503; Mon, 04 Apr
+ 2022 07:40:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220329124017.737571-1-glider@google.com> <20220329124017.737571-14-glider@google.com>
+In-Reply-To: <20220329124017.737571-14-glider@google.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Mon, 4 Apr 2022 16:39:31 +0200
+Message-ID: <CAG_fn=XvC7UPaBbcDM4-Rc_4RdWSceQK5jV9n6q7DtTeZbd0zw@mail.gmail.com>
+Subject: Re: [PATCH v2 13/48] kmsan: add KMSAN runtime core
+To:     Alexander Potapenko <glider@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,42 +96,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reported by checkpatch:
+> +depot_stack_handle_t kmsan_save_stack_with_flags(gfp_t flags,
+> +                                                unsigned int extra)
+> +{
+> +       unsigned long entries[KMSAN_STACK_DEPTH];
+> +       unsigned int nr_entries;
+> +
+> +       nr_entries = stack_trace_save(entries, KMSAN_STACK_DEPTH, 0);
+> +       nr_entries = filter_irq_stacks(entries, nr_entries);
 
-WARNING: Missing a blank line after declarations
+This is redundant, __stack_depot_save() below already calls filter_irq_stacks().
 
-Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
----
- drivers/staging/r8188eu/core/rtw_br_ext.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+> +
+> +       if (depth >= MAX_CHAIN_DEPTH) {
+> +               static atomic_long_t kmsan_skipped_origins;
+> +               long skipped = atomic_long_inc_return(&kmsan_skipped_origins);
+> +
+> +               if (skipped % NUM_SKIPPED_TO_WARN == 0) {
+> +                       pr_warn("not chained %ld origins\n", skipped);
+> +                       dump_stack();
+> +                       kmsan_print_origin(id);
+> +               }
+> +               return id;
+> +       }
+> +       depth++;
+> +       extra_bits = kmsan_extra_bits(depth, uaf);
+> +
+> +       entries[0] = KMSAN_CHAIN_MAGIC_ORIGIN;
+> +       entries[1] = kmsan_save_stack_with_flags(GFP_ATOMIC, 0);
+> +       entries[2] = id;
+> +       return __stack_depot_save(entries, ARRAY_SIZE(entries), extra_bits,
+> +                                 GFP_ATOMIC, true);
 
-diff --git a/drivers/staging/r8188eu/core/rtw_br_ext.c b/drivers/staging/r8188eu/core/rtw_br_ext.c
-index 7c664f80fa99..f7811b46db1c 100644
---- a/drivers/staging/r8188eu/core/rtw_br_ext.c
-+++ b/drivers/staging/r8188eu/core/rtw_br_ext.c
-@@ -313,6 +313,7 @@ void nat25_db_cleanup(struct adapter *priv)
- 
- 	for (i = 0; i < NAT25_HASH_SIZE; i++) {
- 		struct nat25_network_db_entry *f;
-+
- 		f = priv->nethash[i];
- 		while (f) {
- 			struct nat25_network_db_entry *g;
-@@ -339,12 +340,12 @@ void nat25_db_expire(struct adapter *priv)
- 
- 	for (i = 0; i < NAT25_HASH_SIZE; i++) {
- 		struct nat25_network_db_entry *f;
--		f = priv->nethash[i];
- 
-+		f = priv->nethash[i];
- 		while (f) {
- 			struct nat25_network_db_entry *g;
--			g = f->next_hash;
- 
-+			g = f->next_hash;
- 			if (__nat25_has_expired(f)) {
- 				if (atomic_dec_and_test(&f->use_count)) {
- 					if (priv->scdb_entry == f) {
--- 
-2.35.1
-
+@entries is initialized in non-instrumented code, so passing it to
+filter_irq_stacks() etc. will result in false positives, unless we
+explicitly unpoison it.
+(right now KMSAN does not instrument kernel/stacktrace.c, but it
+probably should)

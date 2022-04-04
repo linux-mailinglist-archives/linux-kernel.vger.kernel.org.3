@@ -2,95 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3D64F1164
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4564F1166
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:51:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242144AbiDDIw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 04:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33844 "EHLO
+        id S243407AbiDDIxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 04:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240553AbiDDIw6 (ORCPT
+        with ESMTP id S239368AbiDDIxp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 04:52:58 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8165F1E3D2
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 01:51:01 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-235-1Y4JqQ3oPCehEbsc0F2AAw-1; Mon, 04 Apr 2022 09:50:58 +0100
-X-MC-Unique: 1Y4JqQ3oPCehEbsc0F2AAw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Mon, 4 Apr 2022 09:50:56 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Mon, 4 Apr 2022 09:50:56 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Pavel Skripkin' <paskripkin@gmail.com>,
-        Michael Straube <straube.linux@gmail.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-CC:     Greg KH <gregkh@linuxfoundation.org>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Subject: RE: staging: r8188eu: how to handle nested mutex under spinlock
-Thread-Topic: staging: r8188eu: how to handle nested mutex under spinlock
-Thread-Index: AQHYR5/sp6xWhoDQCkym8rTDVxAmY6zfcjRQ
-Date:   Mon, 4 Apr 2022 08:50:56 +0000
-Message-ID: <4ef1e90716e64fd78ebbc222bbb7e597@AcuMS.aculab.com>
-References: <356c24cf-625b-eea2-2c04-ce132d881cac@gmail.com>
- <4412825.cEBGB3zze1@leap> <26ac4c2d-91cf-656d-2b7e-21a95e500e70@gmail.com>
- <2029549.KlZ2vcFHjT@leap> <7d3d23c3-1839-3e6a-27bf-85bad384e5e4@gmail.com>
- <942c0fbd-f8b2-4cae-dd21-79bc55c54902@gmail.com>
- <26a91705-f721-03d1-f4c8-7f00ce0e65a8@gmail.com>
-In-Reply-To: <26a91705-f721-03d1-f4c8-7f00ce0e65a8@gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 4 Apr 2022 04:53:45 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810131E3D2;
+        Mon,  4 Apr 2022 01:51:50 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 3A8BF1F37E;
+        Mon,  4 Apr 2022 08:51:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649062309; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8dVesPMKaUut+TR+yGDooheAhutrkDr3IKERwS5AoSk=;
+        b=llLqVXQVAuNVhRTxpopykvgOo5UDxL0+UVttQORgi7aeqOzxr0beKggQRRtiym8WzDZ4Qt
+        GbJRJ10wLx240JOdmPbpx+/0eROIKFzQSN+bI6CSp2pTBrhNp1eNW3sGqfCOjn9fiS01bc
+        30ovvrP+E6SgyIM6U5zj5D9JlKi04HM=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id B5AF2A3B87;
+        Mon,  4 Apr 2022 08:51:48 +0000 (UTC)
+Date:   Mon, 4 Apr 2022 10:51:48 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        cgroups mailinglist <cgroups@vger.kernel.org>,
+        Ke Wang <ke.wang@unisoc.com>
+Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
+Message-ID: <YkqxpEW4m6iU3zMq@dhcp22.suse.cz>
+References: <1648713656-24254-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <YkVt0m+VxnXgnulq@dhcp22.suse.cz>
+ <CAGWkznF4qb2EP3=xVamKO8qk08vaFg9JeHD7g80xvBfxm39Hkg@mail.gmail.com>
+ <YkWR8t8yEe6xyzCM@dhcp22.suse.cz>
+ <CAGWkznHxAD0757m1i1Csw1CVRDtQddfCL08dYf12fa47=-uYYQ@mail.gmail.com>
+ <YkbjNYMY8VjHoSHR@dhcp22.suse.cz>
+ <CAGWkznF7cSyPU0ceYwH6zweJzf-X1bQnS6AJ2-J+WEL0u8jzng@mail.gmail.com>
+ <CAJuCfpHneDZMXO_MmQDPA+igAOdAPRUChiq+zftFXGfDzPHNhQ@mail.gmail.com>
+ <CAGWkznFTQCm0cusVxA_55fu2WfT-w2coVHrT=JA1D_9_2728mQ@mail.gmail.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGWkznFTQCm0cusVxA_55fu2WfT-w2coVHrT=JA1D_9_2728mQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogUGF2ZWwgU2tyaXBraW4NCj4gU2VudDogMDMgQXByaWwgMjAyMiAyMjoxNQ0KPiANCj4g
-SGkgTWljaGFlbCwNCj4gDQo+IE9uIDQvMy8yMiAyMzo1MSwgTWljaGFlbCBTdHJhdWJlIHdyb3Rl
-Og0KPiA+Pg0KPiA+PiBJTU8sIHRoZSBiZXN0IGFuc3dlciBpcyBqdXN0IHJlbW92ZSB0aGlzIGxv
-b3AsIHNpbmNlIGl0IGRvZXMgbm90aGluZy4gT3INCj4gPj4gcmVkZXNpZ24gaXQgdG8gYmUgbW9y
-ZSBzYW5lDQo+ID4+DQo+ID4+IEl0IHdhaXRzIGZvciBwc19wcm9jZXNzaW5nIHRvIGJlY29tZSAw
-IGZvciAzMDAwIG1zLCBidXQgaWYgMzAwMCBtcw0KPiA+PiBleHBpcmVzLi4uIGV4ZWN1dGlvbiBn
-b2VzIGZvcndhcmQgbGlrZSBhcyBwc19wcm9jZXNzaW5nIHdhcyAwIGZyb20gdGhlDQo+ID4+IGJl
-Z2lubmluZw0KPiA+Pg0KPiA+PiBNYXliZSBpdCdzIHNvbWV0aGluZyBodyByZWxhdGVkLCBsaWtl
-IHdhaXQgZm9yIDMwMDAgbXMgYW5kIGFsbCB3aWxsIGJlDQo+ID4+IG9rLiBDYW4ndCBzYXkuLi4N
-Cj4gPj4NCj4gPg0KPiA+IEhpIFBhdmVsLA0KPiA+DQo+ID4gc2FtZSB3aXRoIHRoZSBsb29wIHRo
-YXQgZm9sbG93czoNCj4gPg0KPiA+IAkvKiBTeXN0ZW0gc3VzcGVuZCBpcyBub3QgYWxsb3dlZCB0
-byB3YWtldXAgKi8NCj4gPiAJaWYgKHB3cnByaXYtPmJJblN1c3BlbmQpIHsNCj4gDQo+IAkgICBe
-Xl5eDQo+IA0KPiBidHcsIHRoaXMgcGFydCBpcyB1c2VsZXNzIHRvDQo+IA0KPiANCj4gPiAJCXdo
-aWxlIChwd3Jwcml2LT5iSW5TdXNwZW5kICYmDQo+IA0KPiBJJ3ZlIGxvb2tlZCBpbnRvIHdoYXQg
-Z2NjMTEgcHJvZHVjZWQgZnJvbSB0aGlzIGZ1bmN0aW9uIGFuZCBsb29rcyBsaWtlDQo+IG15IGNv
-bXBpbGVyIGlzIHNtYXJ0IGVub3VnaCB0byBub3QgY2FjaGUgdGhhdCB2YWx1ZSwgYnV0IEkgYW0g
-YWZyYWlkIG5vdA0KPiBhbGwgY29tcGlsZXJzIGFyZSB0aGF0IHNtYXJ0Lg0KDQpUaGUgY29tcGls
-ZXIgY2FuJ3QgY2FjaGUgdGhlIHZhbHVlIGJlY2F1c2Ugb2YgdGhlIGZ1bmN0aW9uIGNhbGwuDQoN
-ClF1aXRlIHdoZXRoZXIgdGhlIGNvZGUgaXMgaW4gYW55IHdheSBzYW5lIGluIGFub3RoZXIgbWF0
-dGVyLg0KDQpZb3UgZGVmaW5pdGVseSBjYW5ub3Qgc2xlZXAgd2l0aCBhIHNwaW5sb2NrIGhlbGQu
-DQpJbWFnaW5lIHdoYXQgaGFwcGVucyBpZiBhbm90aGVyIHByb2Nlc3MgdHJpZXMgdG8gYWNxdWly
-ZSB0aGUNCnNwaW5sb2NrIHdoaWxlIHlvdSBhcmUgc2xlZXBpbmcuDQpJdCB3aWxsIHNwaW4gZm9y
-ZXZlci4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxl
-eSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0
-aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+On Mon 04-04-22 10:33:58, Zhaoyang Huang wrote:
+[...]
+> > One thing that I don't understand in this approach is: why memory.low
+> > should depend on the system's memory pressure. It seems you want to
+> > allow a process to allocate more when memory pressure is high. That is
+> > very counter-intuitive to me. Could you please explain the underlying
+> > logic of why this is the right thing to do, without going into
+> > technical details?
+> What I want to achieve is make memory.low be positive correlation with
+> timing and negative to memory pressure, which means the protected
+> memcg should lower its protection(via lower memcg.low) for helping
+> system's memory pressure when it's high.
 
+I have to say this is still very confusing to me. The low limit is a
+protection against external (e.g. global) memory pressure. Decreasing
+the protection based on the external pressure sounds like it goes right
+against the purpose of the knob. I can see reasons to update protection
+based on refaults or other metrics from the userspace but I still do not
+see how this is a good auto-magic tuning done by the kernel.
+
+> The concept behind is memcg's
+> fault back of dropped memory is less important than system's latency
+> on high memory pressure.
+
+Can you give some specific examples?
+
+> Please refer to my new version's test data
+> for more detail.
+
+Please note that sending new RFCs will just make the discussion spread
+over several email threads which will get increasingly hard to follow.
+So do not post another version until it is really clear what is the
+actual semantic you are proposing.
+
+-- 
+Michal Hocko
+SUSE Labs

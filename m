@@ -2,160 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D942F4F0DD1
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 05:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF6744F0DD3
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 05:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377036AbiDDDy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 3 Apr 2022 23:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50166 "EHLO
+        id S1377046AbiDDD5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 3 Apr 2022 23:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiDDDyx (ORCPT
+        with ESMTP id S1377040AbiDDD5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 3 Apr 2022 23:54:53 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A223057C;
-        Sun,  3 Apr 2022 20:52:58 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id t25so14859330lfg.7;
-        Sun, 03 Apr 2022 20:52:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=WQ2ng76YMyireTVK7QydyIIGkOLkWB3pjbKX7aVqK3I=;
-        b=ljYChF9Ht9yebTi3EgabD0asciHHMyAAz3CTF9X8T6elFNyvl8IUvZ2AXE8l6s/VTj
-         eYQja2lx/vbVN7JqE+Yu6Ckc/vUn05VF0sF8DXEc6hFvSKT/IRvWXSZLC3AN81c3XlRF
-         LwVs0J8EbghLnmrAQPlP+iCNOLmMO+LBGQmVRiFPagfhmW5gcHz7HNtLoYM6cfzSE19O
-         bxpHrM1QU9TnFFiGngP8tOwSKuXhWMhCz1c3QkXI/GMnALb949byDrKOwbt5kl/jJRA2
-         t5DEGJ2olVupvQrzz5DUuFG6z0NxiRcQUgQ4e9FZs1oaGD3PH4rNsB0POSZ3kr8YilOm
-         X+pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=WQ2ng76YMyireTVK7QydyIIGkOLkWB3pjbKX7aVqK3I=;
-        b=TIBwZdo+R8IUKQiDfllo7/mqXCKnNhbgQNO3dvDBs/S1RVG+Z/bz6p9xNJ9neytBop
-         F2stqTv+bjPNDujiRvCe6Cfwzilov/MB7NJBgZaxhkoCYnwjVfzeNJuJ8BkQG2Md8JFJ
-         OXBGb6IoEP1B6tg90CbY096cV4LjzUC8UbLgAlrNWT8ckEPu4a132BtaMaZldz5+BHRs
-         tT7N7gg8Husst2Aymt2Y5rdiqGy+86LK7Y32MBwbaUs4a/tO1Ms4+KTh60luDO/jwRl3
-         KEviarkuT19SkGlG+O5IJJlVbcJuakvpT7An1PMHlp2LeVZffgT+jMxaMWZi/hNzR75V
-         UI4Q==
-X-Gm-Message-State: AOAM530NN8QSbt+LvRojOJSQ6az4oR+aQTPvyFrpEQm1w7f3B/B2vUi5
-        YQtVKsx/AB/GdtMOvDzQqi6N9tGxa2sMjIcIoR3izWiMe6c=
-X-Google-Smtp-Source: ABdhPJxgGjNiwSRRHklO/aLlZFadWThWYuueFrAsAY4m/AV9JU8BAsjPTpRXKONxVJDMbbWYG80rty/jE9VKUBlTR3E=
-X-Received: by 2002:ac2:5444:0:b0:44a:846e:ad2b with SMTP id
- d4-20020ac25444000000b0044a846ead2bmr21586904lfn.545.1649044375866; Sun, 03
- Apr 2022 20:52:55 -0700 (PDT)
+        Sun, 3 Apr 2022 23:57:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8840236171;
+        Sun,  3 Apr 2022 20:55:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E4ECF6093C;
+        Mon,  4 Apr 2022 03:55:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D54FC2BBE4;
+        Mon,  4 Apr 2022 03:55:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649044505;
+        bh=U+4uxSeSXYJxHJfmZr8zZBPJDPda8VUWre3DX0xrbIY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=U0Wv8CIyD6+3VFPbhS8EO38J4TbeBaKA3muGBg84i8AzIMtlWQVGcPG3wHEUr/lU/
+         MHsrhOPuuOoOcIrrhhoh4lRNblW0ksNRWfz+GQRolkjcfXxqgMtu1yVUqmtlbEjuTF
+         5K/tzYGcbwk1cH6VFPlT9I4oqUj9cLqkk5tzoYzGxF1InXVUdywaOFW7cf7jQ6q/tc
+         QEiiGyQn4S3AqOGIoaHCn3vfviFOh6/0rB1M7cfEZlhshEUKu23c1y1+rXlUk/bQ+g
+         sPdHWm0t3p3BF6SR2B5hB5ivww+fOJRAj2GTni1ZAPZ8MQVFm18JRi4zP0YBvHhAam
+         aNzgI1b2R2cPw==
+Date:   Sun, 3 Apr 2022 20:55:02 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: Re: [PATCH] taprio: replace usage of found with dedicated list
+ iterator variable
+Message-ID: <20220403205502.1b34415d@kernel.org>
+In-Reply-To: <6118F17F-6E0B-4FDA-A7C4-E1C487E9DB8F@gmail.com>
+References: <20220324072607.63594-1-jakobkoschel@gmail.com>
+        <87fsmz3uc6.fsf@intel.com>
+        <A19238DC-24F8-4BD9-A6FA-C8019596F4A6@gmail.com>
+        <877d8a3sww.fsf@intel.com>
+        <6118F17F-6E0B-4FDA-A7C4-E1C487E9DB8F@gmail.com>
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Sun, 3 Apr 2022 22:52:43 -0500
-Message-ID: <CAH2r5msa7ZW3j+oO1JvKA0OLgaP2thyviRDGxTiK6gz2H9r-jA@mail.gmail.com>
-Subject: UBSAN shitf-out-of-bounds regression in NFS in 5.18-rc1
-To:     linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-nfs <linux-nfs@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Noticed this shift-out-of-bounds error in NFS, and also similar
-messages logged in a few other drivers when running 5.18-rc1.  It
-seems to have regressed in the last ten days because I didn't see it
-in the same setup when running an earlier version of the rc (about 10
-days ago).  Any ideas?
+On Sun, 3 Apr 2022 13:53:06 +0200 Jakob Koschel wrote:
+> I have all the net-next patches bundled in one series now ready to repost.
+> Just wanted to verify that's the intended format since it grew a bit larger
+> then what was posted so far.
+> 
+> It's 46 patches changing 51 files across all those files:
 
-[Sun Apr 3 22:16:57 2022] UBSAN: shift-out-of-bounds in
-lib/percpu-refcount.c:140:63
-[Sun Apr 3 22:16:57 2022] left shift of negative value -9223372036854775807
-[Sun Apr 3 22:16:57 2022] CPU: 7 PID: 10230 Comm: aio-free-ring-w Not
-tainted 5.18.0-rc1 #1
-[Sun Apr 3 22:16:57 2022] Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
-[Sun Apr 3 22:16:57 2022] Call Trace:
-[Sun Apr 3 22:16:57 2022] <TASK>
-[Sun Apr 3 22:16:57 2022] dump_stack_lvl+0x55/0x6d
-[Sun Apr 3 22:16:57 2022] ubsan_epilogue+0x5/0x40
-[Sun Apr 3 22:16:57 2022] __ubsan_handle_shift_out_of_bounds+0xfa/0x140
-[Sun Apr 3 22:16:57 2022] ? lock_acquire+0x275/0x320
-[Sun Apr 3 22:16:57 2022] ? _raw_spin_unlock_irqrestore+0x40/0x60
-[Sun Apr 3 22:16:57 2022] ? percpu_ref_exit+0x87/0x90
-[Sun Apr 3 22:16:57 2022] percpu_ref_exit+0x87/0x90
-[Sun Apr 3 22:16:57 2022] ioctx_alloc+0x500/0x8f0
-[Sun Apr 3 22:16:57 2022] __x64_sys_io_setup+0x58/0x240
-[Sun Apr 3 22:16:57 2022] do_syscall_64+0x3a/0x80
-[Sun Apr 3 22:16:57 2022] entry_SYSCALL_64_after_hwframe+0x44/0xae
-[Sun Apr 3 22:16:57 2022] RIP: 0033:0x7f0c32c52d6d
-[Sun Apr 3 22:16:57 2022] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 90
-f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c
-8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d eb 80 0c 00 f7
-d8 64 89 01 48
-[Sun Apr 3 22:16:57 2022] RSP: 002b:00007fffff3fedc8 EFLAGS: 00000202
-ORIG_RAX: 00000000000000ce
-[Sun Apr 3 22:16:57 2022] RAX: ffffffffffffffda RBX: 0000000000002710
-RCX: 00007f0c32c52d6d
-[Sun Apr 3 22:16:57 2022] RDX: 00007f0c32c52f47 RSI: 00007fffff3fee08
-RDI: 0000000000002710
-[Sun Apr 3 22:16:57 2022] RBP: 00007f0c32b586c0 R08: 0000000000000000
-R09: 00007fffff3fef08
-[Sun Apr 3 22:16:57 2022] R10: 0000000000000000 R11: 0000000000000202
-R12: 000000000000000c
-[Sun Apr 3 22:16:57 2022] R13: 00007fffff3fee08 R14: 0000000000000000
-R15: 0000000000000000
-[Sun Apr  3 22:16:57 2022]  </TASK>
-[Sun Apr  3 22:16:57 2022]
-================================================================================
-[Sun Apr  3 22:16:57 2022]
-================================================================================
-[Sun Apr  3 22:16:57 2022] UBSAN: shift-out-of-bounds in
-./include/linux/nfs_fs.h:606:9
-[Sun Apr  3 22:16:57 2022] left shift of 1 by 63 places cannot be
-represented in type 'long long int'
-[Sun Apr  3 22:16:57 2022] CPU: 5 PID: 32260 Comm: kworker/u16:3 Not
-tainted 5.18.0-rc1 #1
-[Sun Apr  3 22:16:57 2022] Hardware name: Red Hat KVM, BIOS 0.5.1 01/01/2011
-[Sun Apr  3 22:16:57 2022] Workqueue: rpciod rpc_async_schedule [sunrpc]
-[Sun Apr  3 22:16:57 2022] Call Trace:
-[Sun Apr  3 22:16:57 2022]  <TASK>
-[Sun Apr  3 22:16:57 2022]  dump_stack_lvl+0x55/0x6d
-[Sun Apr  3 22:16:57 2022]  ubsan_epilogue+0x5/0x40
-[Sun Apr  3 22:16:57 2022]  __ubsan_handle_shift_out_of_bounds+0xfa/0x140
-[Sun Apr  3 22:16:57 2022]  ? lock_acquire+0x275/0x320
-[Sun Apr  3 22:16:57 2022]  ? ww_mutex_trylock+0x2f1/0x370
-[Sun Apr  3 22:16:57 2022]  ? nfs_writeback_update_inode+0x5f/0xd0 [nfs]
-[Sun Apr  3 22:16:57 2022]  nfs_writeback_update_inode+0x5f/0xd0 [nfs]
-[Sun Apr  3 22:16:57 2022]  ?
-trace_raw_output_svcsock_new_socket+0xc0/0xc0 [sunrpc]
-[Sun Apr  3 22:16:57 2022]  ?
-trace_raw_output_svcsock_new_socket+0xc0/0xc0 [sunrpc]
-[Sun Apr  3 22:16:57 2022]  nfs4_write_done_cb+0x61/0x1d0 [nfsv4]
-[Sun Apr  3 22:16:57 2022]  ?
-trace_raw_output_svcsock_new_socket+0xc0/0xc0 [sunrpc]
-[Sun Apr  3 22:16:57 2022]  ?
-trace_raw_output_svcsock_new_socket+0xc0/0xc0 [sunrpc]
-[Sun Apr  3 22:16:57 2022]  ? nfs41_sequence_done+0x2c/0x40 [nfsv4]
-[Sun Apr  3 22:16:57 2022]  nfs_writeback_done+0x37/0x210 [nfs]
-[Sun Apr  3 22:16:57 2022]  ?
-trace_raw_output_svcsock_new_socket+0xc0/0xc0 [sunrpc]
-[Sun Apr  3 22:16:57 2022]  nfs_pgio_result+0x1d/0x60 [nfs]
-[Sun Apr  3 22:16:57 2022]  rpc_exit_task+0x97/0x2b0 [sunrpc]
-[Sun Apr  3 22:16:57 2022]  __rpc_execute+0xc4/0x7d0 [sunrpc]
-[Sun Apr  3 22:16:57 2022]  ? lock_is_held_type+0xea/0x140
-[Sun Apr  3 22:16:57 2022]  rpc_async_schedule+0x29/0x40 [sunrpc]
-[Sun Apr  3 22:16:57 2022]  process_one_work+0x25b/0x5f0
-[Sun Apr  3 22:16:57 2022]  worker_thread+0x30/0x360
-[Sun Apr  3 22:16:57 2022]  ? process_one_work+0x5f0/0x5f0
-[Sun Apr  3 22:16:57 2022]  kthread+0xe8/0x110
-[Sun Apr  3 22:16:57 2022]  ? kthread_complete_and_exit+0x20/0x20
-[Sun Apr  3 22:16:57 2022]  ret_from_fork+0x22/0x30
-[Sun Apr  3 22:16:57 2022]  </TASK>
-[Sun Apr  3 22:16:57 2022]
-================================================================================
+Thanks for asking, we have a limit of 15 patches per series to avoid
+overloading reviewers. But the patches will likely get merged rather
+quickly so it won't be a long wait before you can send another series.
 
+That said:
 
--- 
-Thanks,
+>  drivers/connector/cn_queue.c                            | 13 ++++++-------
+>  drivers/net/dsa/mv88e6xxx/chip.c                        | 21 ++++++++++-----------
+>  drivers/net/dsa/sja1105/sja1105_vl.c                    | 14 +++++++++-----
 
-Steve
+yup, that's net-next
+
+>  drivers/net/ethernet/intel/i40e/i40e_ethtool.c          |  3 ++-
+>  drivers/net/ethernet/intel/i40e/i40e_main.c             | 24 ++++++++++++++----------
+>  drivers/net/ethernet/mellanox/mlx4/alloc.c              | 29 +++++++++++++++++++----------
+>  drivers/net/ethernet/mellanox/mlx4/mcg.c                | 17 ++++++++---------
+>  drivers/net/ethernet/mellanox/mlx5/core/eq.c            | 10 +++++++---
+>  drivers/net/ethernet/mellanox/mlx5/core/fs_core.c       | 12 ++++++------
+>  drivers/net/ethernet/mellanox/mlx5/core/fs_counters.c   | 21 ++++++++++++---------
+>  drivers/net/ethernet/mellanox/mlxsw/spectrum_fid.c      |  7 +++++--
+>  drivers/net/ethernet/mellanox/mlxsw/spectrum_mr.c       | 12 +++++++++---
+
+i40e and mlx5 patches you may or may not want to post separately 
+so that Intel and Mellanox can take them via their trees.
+
+>  drivers/net/ethernet/microchip/sparx5/sparx5_mactable.c | 25 ++++++++++++-------------
+>  drivers/net/ethernet/qlogic/qed/qed_dev.c               | 11 ++++++-----
+>  drivers/net/ethernet/qlogic/qed/qed_iwarp.c             | 26 ++++++++++++--------------
+>  drivers/net/ethernet/qlogic/qed/qed_spq.c               |  6 +++---
+>  drivers/net/ethernet/qlogic/qede/qede_filter.c          | 11 +++++++----
+>  drivers/net/ethernet/qlogic/qede/qede_rdma.c            | 11 +++++------
+>  drivers/net/ethernet/sfc/rx_common.c                    |  6 ++++--
+>  drivers/net/ethernet/ti/netcp_core.c                    | 24 ++++++++++++++++--------
+>  drivers/net/ethernet/toshiba/ps3_gelic_wireless.c       | 30 +++++++++++++++---------------
+>  drivers/net/ipvlan/ipvlan_main.c                        |  7 +++++--
+>  drivers/net/rionet.c                                    | 14 +++++++-------
+>  drivers/net/team/team.c                                 | 20 +++++++++++++-------
+
+yup, that's all net-next
+
+>  drivers/net/wireless/ath/ath10k/mac.c                   | 19 ++++++++++---------
+>  drivers/net/wireless/ath/ath11k/dp_rx.c                 | 15 +++++++--------
+>  drivers/net/wireless/ath/ath11k/wmi.c                   | 11 +++++------
+>  drivers/net/wireless/ath/ath6kl/htc_mbox.c              |  2 +-
+>  drivers/net/wireless/intel/ipw2x00/libipw_rx.c          | 14 ++++++++------
+
+Wireless goes to Kalle and Johannes.
+
+>  drivers/rapidio/devices/rio_mport_cdev.c                | 42 ++++++++++++++++++++----------------------
+>  drivers/rapidio/devices/tsi721.c                        | 13 ++++++-------
+>  drivers/rapidio/rio.c                                   | 14 +++++++-------
+>  drivers/rapidio/rio_cm.c                                | 81 ++++++++++++++++++++++++++++++++++++
+
+That's not networking.
+
+>  net/9p/trans_virtio.c                                   | 15 +++++++--------
+>  net/9p/trans_xen.c                                      | 10 ++++++----
+
+Also not really networking, those go thru other people's trees.
+
+>  net/core/devlink.c                                      | 22 +++++++++++++++-------
+>  net/core/gro.c                                          | 12 ++++++++----
+>  net/dsa/dsa.c                                           | 11 +++++------
+
+yup, net-next
+
+>  net/ieee802154/core.c                                   |  7 +++++--
+
+individual posting for Stefan to take via his tree
+
+>  net/ipv4/udp_tunnel_nic.c                               | 10 ++++++----
+
+yup
+
+>  net/mac80211/offchannel.c                               | 28 ++++++++++++++--------------
+>  net/mac80211/util.c                                     |  7 +++++--
+
+This is wireless, so Johannes & Kalle.
+
+>  net/sched/sch_cbs.c                                     | 11 +++++------
+>  net/sched/sch_taprio.c                                  | 11 +++++------
+>  net/smc/smc_ism.c                                       | 14 +++++++-------
+>  net/tipc/group.c                                        | 12 ++++++++----
+>  net/tipc/monitor.c                                      | 21 ++++++++++++++-------
+>  net/tipc/name_table.c                                   | 11 +++++++----
+>  net/tipc/socket.c                                       | 11 +++++++----
+
+yup
+
+>  net/wireless/core.c                                     |  7 +++++--
+
+wireless
+
+>  net/xfrm/xfrm_ipcomp.c                                  | 11 +++++++----
+
+IPsec, so Steffen and Herbert, separate posting.
+
+>  51 files changed, 452 insertions(+), 364 deletions(-)
+
+So 21-ish patches for net-next if you group changes for a same driver
+/ project into one patch. Two series 10+ patches each?
+
+> Please let me know if I should split it up or if there are certain files that might not fit.
+> Otherwise I'll post them beginning of next week.
+

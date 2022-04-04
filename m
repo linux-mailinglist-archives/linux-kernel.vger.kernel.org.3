@@ -2,130 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDBFA4F16D3
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36FFF4F16D6
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 16:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376999AbiDDOSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 10:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57038 "EHLO
+        id S1377040AbiDDOTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 10:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237149AbiDDOSc (ORCPT
+        with ESMTP id S237149AbiDDOTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 10:18:32 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596AF3B033
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 07:16:34 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id bh17so20244760ejb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 07:16:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Yrk+LsPAZj6NgBL9bPWTDL2JqqAIRaC05jfjs6HeV6M=;
-        b=C0CQSnrkT94LDeC4aymHxJuLO2rX5kVxd1bwalPdQCHCPhlzw9BgtNCNqGvLj/5NzH
-         +kmPzX98/bS8hRL1+b36hhL1ZLFlcZSqIzfQMQXlaWyMdgFmSsh9Ldf3i2QFiU5DgQOW
-         fQnguE6E2ed4f3QSkRHe613J4wOhuVpuCgoj8YyalA5UcKmsgod7XbwQ+CLmyCvrMSrv
-         khfEP4OlSKcps0B1Vfh70wLkcguDLSLhp9Zc72rDKGCs6sSLadBxPeoUs+tt+dmLS/rn
-         0ecsQV34R94NtDo1QbGSK6Uob16u/gBZHB1OpULpjjj1SZ/aZqA6CVHTNlV9v0+PwFh+
-         l+GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Yrk+LsPAZj6NgBL9bPWTDL2JqqAIRaC05jfjs6HeV6M=;
-        b=F8pV+DCi0IJKIgc8+Zpq73YvOrhkHjWmVYP14m3gxi2dh4gNafpyDJ1QCHFNWzwiNx
-         JbBGah8OzE76MuXRv7+7MWJLXcZKUrNNUa9jFrEb2XuTVNeZ9nZuyS0Bo6uSenSGF9sj
-         kR4bO0TrjMGgPJ3vxEwpeg9DKS5aJGvYJhC+xX0Rd3bl50NrgaQyIpqWIcXLhDdacor1
-         jzvHAFVeeXrVotMvClO2yPoS+pp79T8ODsJ9LI3XanIzz360M+4kQqxUmVCTl0Jqw3rT
-         drvNxvPRw2YN5DqpPeAvw2XuqHz8dqAIA2WyQtZ7BPlKGxC1KrmNyo3C9BfN1YTIbTmP
-         S0FQ==
-X-Gm-Message-State: AOAM530DlA3rLP3xOrTXfCVI9M1u7h9WIGhWmXZ4ZzwoqZNxcc0FyQCt
-        /0wmyRqazZjpuaHNqVx2DMg=
-X-Google-Smtp-Source: ABdhPJwvxYyF0JUDpmRlQHyz90MqCDt9VyxoPybNjJQvz6+gMQG4EbL38QpAT2rrxotiAAc0RzaZoA==
-X-Received: by 2002:a17:907:7e94:b0:6e4:9d72:a784 with SMTP id qb20-20020a1709077e9400b006e49d72a784mr260209ejc.346.1649081792880;
-        Mon, 04 Apr 2022 07:16:32 -0700 (PDT)
-Received: from [192.168.0.253] (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
-        by smtp.gmail.com with ESMTPSA id ga10-20020a1709070c0a00b006dfc7c089f7sm4389965ejc.1.2022.04.04.07.16.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 07:16:32 -0700 (PDT)
-Message-ID: <66efc2d7-ec85-25af-1499-0dce2a09c3cd@gmail.com>
-Date:   Mon, 4 Apr 2022 16:16:31 +0200
+        Mon, 4 Apr 2022 10:19:08 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC973B033;
+        Mon,  4 Apr 2022 07:17:12 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id CE90D210E5;
+        Mon,  4 Apr 2022 14:17:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649081830; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Rze0Jhi/DK5kWoGoABbHFZ2g0bO59w1puNqIyew0fbQ=;
+        b=NuRhmVsuuISJsd8BJFS2w0AHxAChlUR+Zs2Tk2CD2BmcBSysouRnrwBdtqDhwT9tV/yFRj
+        20+uWtwlHvQG33Dsa4yw9cZL/CaMGO65jV2JdiPcjTxITG45cXnXxWZTOcbkamzJ/CR1L7
+        VutDnw+unMqssuQ2wjCE1x4SPcCENTo=
+Received: from suse.cz (pathway.suse.cz [10.100.12.24])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 38BECA3B82;
+        Mon,  4 Apr 2022 14:17:09 +0000 (UTC)
+Date:   Mon, 4 Apr 2022 16:17:09 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Lecopzer Chen <lecopzer.chen@mediatek.com>
+Cc:     linux-kernel@vger.kernel.org, acme@kernel.org,
+        akpm@linux-foundation.org, alexander.shishkin@linux.intel.com,
+        catalin.marinas@arm.com, davem@davemloft.net, jolsa@redhat.com,
+        jthierry@redhat.com, keescook@chromium.org, kernelfans@gmail.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
+        masahiroy@kernel.org, matthias.bgg@gmail.com, maz@kernel.org,
+        mcgrof@kernel.org, mingo@redhat.com, namhyung@kernel.org,
+        nixiaoming@huawei.com, peterz@infradead.org,
+        sparclinux@vger.kernel.org, sumit.garg@linaro.org,
+        wangqing@vivo.com, will@kernel.org, yj.chiang@mediatek.com
+Subject: Re: [PATCH v3 5/5] arm64: Enable perf events based hard lockup
+ detector
+Message-ID: <20220404141709.GA26840@pathway.suse.cz>
+References: <20220324141405.10835-1-lecopzer.chen@mediatek.com>
+ <20220324141405.10835-6-lecopzer.chen@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: staging: r8188eu: how to handle nested mutex under spinlock
-Content-Language: en-US
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <356c24cf-625b-eea2-2c04-ce132d881cac@gmail.com>
- <bf1137fa-5051-a834-0c1f-042c5a8074a3@gmail.com> <1858641.taCxCBeP46@leap>
- <2366209.jE0xQCEvom@leap> <617af7b6-eeac-372a-7bbb-828db11a2aa9@gmail.com>
- <20220404133312.GC3293@kadam>
-From:   Michael Straube <straube.linux@gmail.com>
-In-Reply-To: <20220404133312.GC3293@kadam>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220324141405.10835-6-lecopzer.chen@mediatek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/4/22 15:33, Dan Carpenter wrote:
-> On Sun, Apr 03, 2022 at 02:18:04PM +0200, Michael Straube wrote:
->> On 4/3/22 14:10, Fabio M. De Francesco wrote:
->>> For a list of all the paths to a given function you may use Smatch:
->>>
->>> ./smatch/smatch_data/db/smdb.py ips_leave
->>>
->>> or
->>>
->>> ./smatch/smatch_data/db/smdb.py call_tree ips_leave
->>>
->>> But perhaps you already know how to do it.
->>
->> Yes, but thank you anyway. :)
->>
+On Thu 2022-03-24 22:14:05, Lecopzer Chen wrote:
+> With the recent feature added to enable perf events to use pseudo NMIs
+> as interrupts on platforms which support GICv3 or later, its now been
+> possible to enable hard lockup detector (or NMI watchdog) on arm64
+> platforms. So enable corresponding support.
 > 
-> My email (gmail account) has been so weird recently.  I don't know why
-> I'm not getting Fabio's emails...  Presumably they will show up in a few
-> days.
+> One thing to note here is that normally lockup detector is initialized
+> just after the early initcalls but PMU on arm64 comes up much later as
+> device_initcall(). To cope with that, overriding watchdog_nmi_probe() to
+> let the watchdog framework know PMU not ready, and inform the framework
+> to re-initialize lockup detection once PMU has been initialized.
 > 
-> The other command to use is:
+> [1]: http://lore.kernel.org/linux-arm-kernel/1610712101-14929-1-git-send-email-sumit.garg@linaro.org
 > 
-> $ ./smatch/smatch_data/db/smdb.py preempt ips_leave
-> rtw_set_802_11_disassociate() <- disables preempt
-> -> _rtw_pwr_wakeup()
->     -> LeaveAllPowerSaveMode()
->        -> ips_leave()
-> 
-> I save that to a file, open it with with vim and run a vim function
-> `hall` (for highlight all) from my .vimrc file.
-> 
-> " Use :hall to highlight all the words in a file (for debugging sleeping bugs)
-> function HLall()
->    let a=[]
->    %s/\w\+/\=add(a, submatch(0))/gn
->    let @/ = join(a, "\\|")
-> endfunction
-> cnoreabbrev hall call HLall() <CR>:set hls<CR>
-> 
-> That highlights all the functions is the call tree, then I use cscope to
-> jump to rtw_set_802_11_disassociate and follow the highlighted functions
-> to ips_leave().
+> --- /dev/null
+> +++ b/arch/arm64/kernel/watchdog_hld.c
+> @@ -0,0 +1,37 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <linux/nmi.h>
+> +#include <linux/cpufreq.h>
+> +#include <linux/perf/arm_pmu.h>
+> +
+> +/*
+> + * Safe maximum CPU frequency in case a particular platform doesn't implement
+> + * cpufreq driver. Although, architecture doesn't put any restrictions on
+> + * maximum frequency but 5 GHz seems to be safe maximum given the available
+> + * Arm CPUs in the market which are clocked much less than 5 GHz. On the other
+> + * hand, we can't make it much higher as it would lead to a large hard-lockup
+> + * detection timeout on parts which are running slower (eg. 1GHz on
+> + * Developerbox) and doesn't possess a cpufreq driver.
+> + */
+> +#define SAFE_MAX_CPU_FREQ	5000000000UL // 5 GHz
+> +u64 hw_nmi_get_sample_period(int watchdog_thresh)
+> +{
+> +	unsigned int cpu = smp_processor_id();
+> +	unsigned long max_cpu_freq;
+> +
+> +	max_cpu_freq = cpufreq_get_hw_max_freq(cpu) * 1000UL;
+> +	if (!max_cpu_freq)
+> +		max_cpu_freq = SAFE_MAX_CPU_FREQ;
+> +
+> +	return (u64)max_cpu_freq * watchdog_thresh;
+> +}
 
-Thank you for this hint Dan. :)
+This change is not mentioned in the commit message.
+Please, put it into a separate patch.
 
-thanks,
-Michael
+> +int __init watchdog_nmi_probe(void)
+> +{
+> +	if (!allow_lockup_detector_init_retry)
+> +		return -EBUSY;
 
+How do you know that you should return -EBUSY
+when retry in not enabled?
+
+I guess that it is an optimization to make it fast
+during the first call. But the logic is far from
+obvious.
+
+> +
+> +	if (!arm_pmu_irq_is_nmi())
+> +		return -ENODEV;
+> +
+> +	return hardlockup_detector_perf_init();
+> +}
+
+Is this just an optimization or is it really needed?
+Why this was not needed in v2 patchset?
+
+If it is just an optimization then I would remove it.
+IMHO, it just adds confusion and it is not worth it.
+
+Best Regards,
+Petr

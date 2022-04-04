@@ -2,114 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B298A4F11C9
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 176424F11CB
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 11:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352127AbiDDJQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 05:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
+        id S1352715AbiDDJRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 05:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbiDDJQk (ORCPT
+        with ESMTP id S231165AbiDDJRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 05:16:40 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB043B3D6;
-        Mon,  4 Apr 2022 02:14:44 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2348jSuK022927;
-        Mon, 4 Apr 2022 09:14:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- content-transfer-encoding : mime-version; s=pp1;
- bh=GQa4dUqo2VI4GxIa+aRuhSHq4bfQQ7AzPX5fSNIQSkU=;
- b=XlJ3MGa7JW67J3qreQG26cArrYURWUjJADmmbxJq6t2kqNJySeQxAUwDIgZTNbvSIiR/
- ZPJnuvfFfAuoqbbQPcsSaAXdFklQy/z+JeuhTyZRQAvUsZ/1q1DTTsqyW/ZyI7ghKDv3
- MOoicpxeO5A5z1VEm1VR6ftgiRx/7a149yzdcoLRlTZ/FeKIjVO7RPic3hCr8jgmHYDJ
- zKxLyay9rxaT60RlS++cdCVEsBcnuGgS7VrrypAcPvUTow3VHWtAqcYObGxjT4DcAKfO
- 91bjzGtVNVY6zL6IrztBcicGoRxeBIujnJdovBuXdFM2xWvStwIDmEDeKu8UxSa3tYq1 JQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f6ywhmxyx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Apr 2022 09:14:43 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2348jKo7031946;
-        Mon, 4 Apr 2022 09:14:43 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3f6ywhmxye-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Apr 2022 09:14:43 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 234973cj013551;
-        Mon, 4 Apr 2022 09:14:41 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3f6drhk8s6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Apr 2022 09:14:41 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2349EcqT32244172
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 4 Apr 2022 09:14:38 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4E2975204F;
-        Mon,  4 Apr 2022 09:14:38 +0000 (GMT)
-Received: from osiris (unknown [9.145.2.177])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id D4C4C5204E;
-        Mon,  4 Apr 2022 09:14:37 +0000 (GMT)
-Date:   Mon, 4 Apr 2022 11:14:36 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     cgel.zte@gmail.com
-Cc:     gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com, lv.ruyi@zte.com.cn,
-        egorenar@linux.ibm.com, oberpar@linux.ibm.com,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] s390: replace zero-length array with flexible-array
- member
-Message-ID: <Ykq2/JEubkdX7GWR@osiris>
-References: <20220401075639.2407457-1-lv.ruyi@zte.com.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220401075639.2407457-1-lv.ruyi@zte.com.cn>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: gRvhvQFwpneu12mUj-Lcyhje4TrFXbcA
-X-Proofpoint-ORIG-GUID: 5Kwx4m1tPBDxh7Wi_SxQMlF2KeVhWCEw
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 4 Apr 2022 05:17:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA49D3BA62
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 02:15:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649063734;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zh+UBOLHFqYkLJABHLlIQlGO7HQCcNKtPFV3cCbp8X4=;
+        b=hTEKqddRf/BEr24/1zWZnyo16xnxayH3VGs36oFqlgmwOO5bstVzNa7fHL30RvkeDSdBjJ
+        WKPLjEy0l7PSJ3+ufRxH8e3DEA605htZyZUs3npCBSAiHU+AbCIgfDpPFZ4y1LEy5YviL/
+        UHKxMkclu/culcrM6qtUYerfL80bYFU=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-613-RnkibNnRPlejXxflErwhNw-1; Mon, 04 Apr 2022 05:15:31 -0400
+X-MC-Unique: RnkibNnRPlejXxflErwhNw-1
+Received: by mail-ed1-f70.google.com with SMTP id l14-20020aa7cace000000b003f7f8e1cbbdso5097119edt.20
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 02:15:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zh+UBOLHFqYkLJABHLlIQlGO7HQCcNKtPFV3cCbp8X4=;
+        b=RKcpASLJunJiL7tk4v7hdUtb3gNdpVcLj2EFPyNmgy+et54YwWxOOQmxSO2gO4zQS9
+         yUkCxd/uxgSkiaSOx8IscMvKujk41aA3JQM6Bk9gChg0ECqNXo09b3qrA42N+dQGf1w1
+         rNFuAym9wKkCZOCMn08sbswMtLB1WOp7aGe1djS6kiwlnDPN7PpsgpJiXqEMGVK7gxqn
+         Z8pqPt07SunTqIK+bp/UP2sYOcXWvzCEKWfjGdcPCBQ/Fdd8PZp9VgHyu/IW70Kjrf1z
+         lp3HG/XpowHGlHisXek71a+mAmuEUPzdueD6DrI+vsGQBqcctoheTX8F31wrQIW6lpjL
+         m5Gw==
+X-Gm-Message-State: AOAM5337iWwk58oeV0hu9RNen1NZcaAv4UInATl72hVrvCuvjqYc6Esd
+        SxdcM5EG+OmLouoPtpu8K2lYgpvUGuBO94rt1R79mL8ehxbEwyRUnkY9Y7oYuknWl1SQEPLwGFP
+        NNEe76ir1lh5+fhiZd6qzA5u7
+X-Received: by 2002:a17:907:6e2a:b0:6e0:b263:37a6 with SMTP id sd42-20020a1709076e2a00b006e0b26337a6mr9954147ejc.622.1649063729645;
+        Mon, 04 Apr 2022 02:15:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzmn871wVtdooXLKKs/nDhI5mJUKB2kXphxAfDG/vjQpPO3vHN0FZV1sNNiN9ue236h3k7sMg==
+X-Received: by 2002:a17:907:6e2a:b0:6e0:b263:37a6 with SMTP id sd42-20020a1709076e2a00b006e0b26337a6mr9954136ejc.622.1649063729415;
+        Mon, 04 Apr 2022 02:15:29 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id og49-20020a1709071df100b006db0dcf673esm4124588ejc.27.2022.04.04.02.15.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Apr 2022 02:15:28 -0700 (PDT)
+Message-ID: <dbd72dd0-5898-dfd7-00a0-475fb798c595@redhat.com>
+Date:   Mon, 4 Apr 2022 11:15:28 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-04_03,2022-03-31_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=1 clxscore=1011 mlxscore=1
- mlxlogscore=207 suspectscore=0 spamscore=1 adultscore=0 impostorscore=0
- bulkscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204040050
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: [PATCH] phy: ti: tusb1210: Fix an error handling path in
+ tusb1210_probe()
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-phy@lists.infradead.org
+References: <07c4926c42243cedb3b6067a241bb486fdda01b5.1648991162.git.christophe.jaillet@wanadoo.fr>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <07c4926c42243cedb3b6067a241bb486fdda01b5.1648991162.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 07:56:39AM +0000, cgel.zte@gmail.com wrote:
-> From: Lv Ruyi <lv.ruyi@zte.com.cn>
-> 
-> There is a regular need in the kernel to provide a way to declare
-> having a dynamically sized set of trailing elements in a structure.
-> Kernel code should always use “flexible array members”[1] for these
-> cases. The older style of one-element or zero-length arrays should
-> no longer be used[2].
-> 
-> [1] https://en.wikipedia.org/wiki/Flexible_array_member
-> [2] https://www.kernel.org/doc/html/v5.16/process/deprecated.html#zero-length-and-one-element-arrays
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-> ---
->  drivers/s390/char/sclp_cmd.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Hi,
 
-Please resend with a proper sign-off chain. Thanks!
+On 4/3/22 15:06, Christophe JAILLET wrote:
+> tusb1210_probe_charger_detect() must be undone by a corresponding
+> tusb1210_remove_charger_detect() in the error handling path, as already
+> done in the remove function.
+> 
+> Fixes: 48969a5623ed ("phy: ti: tusb1210: Add charger detection")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+
+Thanks, patch looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
+> ---
+>  drivers/phy/ti/phy-tusb1210.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/phy/ti/phy-tusb1210.c b/drivers/phy/ti/phy-tusb1210.c
+> index a0cdbcadf09e..008d80977fc5 100644
+> --- a/drivers/phy/ti/phy-tusb1210.c
+> +++ b/drivers/phy/ti/phy-tusb1210.c
+> @@ -537,12 +537,18 @@ static int tusb1210_probe(struct ulpi *ulpi)
+>  	tusb1210_probe_charger_detect(tusb);
+>  
+>  	tusb->phy = ulpi_phy_create(ulpi, &phy_ops);
+> -	if (IS_ERR(tusb->phy))
+> -		return PTR_ERR(tusb->phy);
+> +	if (IS_ERR(tusb->phy)) {
+> +		ret = PTR_ERR(tusb->phy);
+> +		goto err_remove_charger;
+> +	}
+>  
+>  	phy_set_drvdata(tusb->phy, tusb);
+>  	ulpi_set_drvdata(ulpi, tusb);
+>  	return 0;
+> +
+> +err_remove_charger:
+> +	tusb1210_remove_charger_detect(tusb);
+> +	return ret;
+>  }
+>  
+>  static void tusb1210_remove(struct ulpi *ulpi)
+

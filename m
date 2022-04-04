@@ -2,122 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9CB4F1E6B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E05CD4F1F10
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 00:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382721AbiDDWKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 18:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44798 "EHLO
+        id S1382606AbiDDWJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 18:09:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379142AbiDDQh0 (ORCPT
+        with ESMTP id S1379161AbiDDQhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 12:37:26 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B6C15A3C
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 09:35:30 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id z6so12020935iot.0
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 09:35:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura-hr.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=u2tjCgL5q60NGSsrT51lKaR05T0paQW81C5vQQ853wY=;
-        b=LU/LuEgYuinqEj95G4H6JtZIbQpHE6Wkox3vsqOb7m7lngKeo8ezZjUZB4v+fMzrXu
-         i7Mox9Hha2YBG2+eHgJc2l9JEC4zF8ZM6xXEbdc37VoB58K8gfNWoq8c3Odp3BA/21Wj
-         8xx8CnXdvah5jZ4gGbPfynV1of+K7wveZu6ohsinc1J4F7G1fu9EQEwU4GwH50u0dX/R
-         tIVVPOC3JjPkru7Ee/eKnl5+bJQJ3/AshfySEgepXYEt9Ba7CQGsGL2IeBF9/KuX9IrP
-         JbX5rZg2SYWlWHW9g+t4sfQ+vuvn6EP/KTcrv8ic5QexGre+YCX3K/iPVS+gp28DNVr7
-         JX+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u2tjCgL5q60NGSsrT51lKaR05T0paQW81C5vQQ853wY=;
-        b=GKDdG4O7eb2NJvt/pLjqf0v68c1tSend6atfV71/tt0GXUfXTR/P52Pa7KZSxyygUY
-         ZGYroRc+M8IBXA6ga6vD1+9g7PpAO9TpPLwvTIe1prReR679brRKowFxzxu8lEIfxBTn
-         mHv6CuV4+Gq850yVv2mowvyR+aJAAqlrqLNJj/UOfkaA4RLtm7L9x306zrpn/SNVbZ1u
-         bxlkqVgi1tgqMZqXx/AFYEAC9e+z+7cI8jvaYCT/FpvEKjXql32cwB9+Qz44I/Y8cxTw
-         M9OQ6IETqIF3HRtv3y4YYdENplw1blk6dqCmhnO7yEydenNYaCECZxZNxxpUsSMXaFis
-         HB2g==
-X-Gm-Message-State: AOAM532gu8CuIPf2pT/fLPyVuNTDkZeGmB+nb+YIw0TTVaQHb2J0TbnW
-        OjpInD5nIjnwhM8L2GU43E0Rh0eRMjKEp/WslBPzjTvDRbRFVtxOub4=
-X-Google-Smtp-Source: ABdhPJxGPGo6ZeYMtrmrzTqcFfxOkAJo2j1ZjwZE5kyqJVyLQGVWZDw37xIK3ZrpEfi7IjV6VOZwuUlNmhvG7sZ1KNI=
-X-Received: by 2002:a05:6602:15d1:b0:649:1ed6:edcf with SMTP id
- f17-20020a05660215d100b006491ed6edcfmr506912iow.74.1649090129391; Mon, 04 Apr
- 2022 09:35:29 -0700 (PDT)
+        Mon, 4 Apr 2022 12:37:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3BB71B7B5
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 09:35:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8B755D6E;
+        Mon,  4 Apr 2022 09:35:55 -0700 (PDT)
+Received: from [10.57.24.6] (unknown [10.57.24.6])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 636063F73B;
+        Mon,  4 Apr 2022 09:35:53 -0700 (PDT)
+Message-ID: <f5f8166e-1831-1fa0-123c-53d3632451a8@arm.com>
+Date:   Mon, 4 Apr 2022 17:35:45 +0100
 MIME-Version: 1.0
-References: <20220404105324.13810-1-straube.linux@gmail.com>
-In-Reply-To: <20220404105324.13810-1-straube.linux@gmail.com>
-From:   Robert Marko <robert.marko@sartura.hr>
-Date:   Mon, 4 Apr 2022 18:35:18 +0200
-Message-ID: <CA+HBbNHEK=CbyeeyPG=s=D2xofdSbk8Lxx5R9nij_cp6t7ybDA@mail.gmail.com>
-Subject: Re: [PATCH] ath11k: do not return random value
-To:     Michael Straube <straube.linux@gmail.com>
-Cc:     kvalo@kernel.org, David Miller <davem@davemloft.net>,
-        kuba@kernel.org, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 07/21] x86/resctrl: Create mba_sc configuration in the
+ rdt_domain
+Content-Language: en-US
+To:     Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Fenghua Yu <fenghua.yu@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        Jamie Iles <jamie@nuviainc.com>,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        lcherian@marvell.com, bobo.shaobowang@huawei.com,
+        tan.shaopeng@fujitsu.com
+References: <20220217182110.7176-1-james.morse@arm.com>
+ <20220217182110.7176-8-james.morse@arm.com>
+ <01651414-9d4a-409d-9db7-b4b6dde72829@intel.com>
+ <d49bdfad-df5e-77e1-4834-266dcd1b9055@arm.com>
+ <91a43681-524e-c12d-612d-259e51bde12c@intel.com>
+From:   James Morse <james.morse@arm.com>
+In-Reply-To: <91a43681-524e-c12d-612d-259e51bde12c@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 4, 2022 at 12:54 PM Michael Straube <straube.linux@gmail.com> wrote:
->
-> Function ath11k_qmi_assign_target_mem_chunk() returns a random value
-> if of_parse_phandle() fails because the return variable ret is not
-> initialized before calling of_parse_phandle(). Return -EINVAL to avoid
-> possibly returning 0, which would be wrong here.
->
-> Issue found by smatch.
->
-> Signed-off-by: Michael Straube <straube.linux@gmail.com>
-> ---
->  drivers/net/wireless/ath/ath11k/qmi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/net/wireless/ath/ath11k/qmi.c b/drivers/net/wireless/ath/ath11k/qmi.c
-> index 65d3c6ba35ae..81b2304b1fde 100644
-> --- a/drivers/net/wireless/ath/ath11k/qmi.c
-> +++ b/drivers/net/wireless/ath/ath11k/qmi.c
-> @@ -1932,7 +1932,7 @@ static int ath11k_qmi_assign_target_mem_chunk(struct ath11k_base *ab)
->                         if (!hremote_node) {
->                                 ath11k_dbg(ab, ATH11K_DBG_QMI,
->                                            "qmi fail to get hremote_node\n");
-> -                               return ret;
-> +                               return -EINVAL;
->                         }
->
->                         ret = of_address_to_resource(hremote_node, 0, &res);
-> --
-> 2.35.1
+Hi Reinette,
 
-Hi Michael,
-This is already solved in ath-next and 5.18-rc1:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/net/wireless/ath/ath11k/qmi.c?h=v5.18-rc1&id=c9b41832dc080fa59bad597de94865b3ea2d5bab
+On 4/1/22 23:54, Reinette Chatre wrote:
+> On 3/30/2022 9:43 AM, James Morse wrote:
+>> On 16/03/2022 21:50, Reinette Chatre wrote:
+>>> On 2/17/2022 10:20 AM, James Morse wrote:
+>>>> To support resctrl's MBA software controller, the architecture must provide
+>>>> a second configuration array to hold the mbps_val[] from user-space.
+>>>>
+>>>> This complicates the interface between the architecture specific code and
+>>>> the filesystem portions of resctrl that will move to /fs/, to allow
+>>>> multiple architectures to support resctrl.
+>>>>
+>>>> Make the filesystem parts of resctrl create an array for the mba_sc
+>>>> values when is_mba_sc() is set to true. The software controller
+>>>> can be changed to use this, allowing the architecture code to only
+>>>> consider the values configured in hardware.
 
-Regards,
-Robert
->
->
-> --
-> ath11k mailing list
-> ath11k@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/ath11k
+[...]
+
+>>> Considering that no domain belonging to RDT_RESOURCE_MBA will have this array this
+>>> always ends up being a null pointer de-reference.
+>>
+>> Ugh. I'm not sure how I managed to miss that. Thanks for debugging it!
+>>
+>> That loop was added to reset the array when the filesystem is mounted, as it may hold
+>> stale values from a previous mount of the filesystem. Its currently done by
+>> reset_all_ctrls(), but that function should really belong to the architecture code.
+>>
+>> Because mbm_handle_overflow() always passes a domain from the L3 to update_mba_bw(), I
+>> think the cleanest thing to do is move the reset to a helper that always operates on the
+>> L3 array. (and leave some breadcrumbs in the comments).
+
+> I think this points to more than a need to reset the correct array on mount/unmount ... or
+> perhaps I am not understanding this correctly?
+> 
+> As the analysis above shows the mbps_val array only exists for rdt_domains associated
+> with RDT_RESOURCE_L3 but yet mbps_val will contain the MB value provided by user space
+> associated with RDT_RESOURCE_MBA.
+
+I've finally got my head round what is going on here: I've muddled up whether mon_capable
+is a resource or system property. mba_sc depends on the L3 being mon_capable, but the
+configuration should be associated with MBA (wherever that is).
+(basically ignore my previous reply!)
+
+The creation of the mbps_val[] should depend on supports_mba_mbps(), which uses
+is_mbm_enabled() to check whether the L3 is mon_capable. I'll check the rid too
+to make it clear its only MBA that has this.
+The call to allocate the domain in resctrl_online_domain() should be above the mon_capable
+check. (which is still needed to avoid the work guarded by is_mbm_enabled() and friends
+running for each domain).
 
 
+Thanks,
 
--- 
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura Ltd.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
+James
+
+-----------------------%<-----------------------
+diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+index e3c90f33baf2..ad0411eb2147 100644
+--- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
++++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+@@ -3345,6 +3345,14 @@ int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d)
+  
+         lockdep_assert_held(&rdtgroup_mutex);
+  
++       if (is_mbm_enabled() && r->rid == RDT_RESOURCE_MBA) {
++               err = mba_sc_domain_allocate(r, d);
++               if (err) {
++                       domain_destroy_mon_state(d);
++                       return err;
++               }
++       }
++
+         if (!r->mon_capable)
+                 return 0;
+  
+@@ -3352,12 +3360,6 @@ int resctrl_online_domain(struct rdt_resource *r, struct rdt_domain *d)
+         if (err)
+                 return err;
+  
+-       err = mba_sc_domain_allocate(r, d);
+-       if (err) {
+-               domain_destroy_mon_state(d);
+-               return err;
+-       }
+-
+         if (is_mbm_enabled()) {
+                 INIT_DELAYED_WORK(&d->mbm_over, mbm_handle_overflow);
+                 mbm_setup_overflow_handler(d, MBM_OVERFLOW_INTERVAL);
+-----------------------%<-----------------------

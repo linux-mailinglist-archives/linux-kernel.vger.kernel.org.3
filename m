@@ -2,76 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F964F0F21
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 08:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B59A4F0F25
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 08:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377381AbiDDGDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 02:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59944 "EHLO
+        id S1377361AbiDDGKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 02:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235279AbiDDGDL (ORCPT
+        with ESMTP id S236927AbiDDGKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 02:03:11 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0AB332EEF
-        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 23:01:15 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8E8DC210DB;
-        Mon,  4 Apr 2022 06:01:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649052074; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QMUWDi2KJPo4dFK9Qvg757uowk2riW8b+q7dHl6m3IM=;
-        b=q2r1WTI4xk6lMHpLroN8mls7Ex7jBdv9NbQbePnrSUhuN7HKzzLvU6JD0Sea/dJPjXixsU
-        D0tnBYQ03JyF/gaorFG/wSpNYCeE07MhIU/NThKMPF3f9NzS9dwsxjSyUx4k8N0O6SHpoh
-        cRhZs8AbWalUSTthcYV/Ss2LBBOhWQw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649052074;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QMUWDi2KJPo4dFK9Qvg757uowk2riW8b+q7dHl6m3IM=;
-        b=eeIRe9Y/pXs66Bts5snXAVH8fru+ud+RYAhx5+aF7ogTxCtwpAtN3B2VuY0HLTZxhQYrS6
-        UPZxa/bln+VzjrCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6AB8213216;
-        Mon,  4 Apr 2022 06:01:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id iwqwGKqJSmIVTQAAMHmgww
-        (envelope-from <jslaby@suse.cz>); Mon, 04 Apr 2022 06:01:14 +0000
-Message-ID: <694a8729-7313-e63e-7415-5a749be3a828@suse.cz>
-Date:   Mon, 4 Apr 2022 08:01:14 +0200
+        Mon, 4 Apr 2022 02:10:46 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8C913CD3
+        for <linux-kernel@vger.kernel.org>; Sun,  3 Apr 2022 23:08:49 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso7029976wme.5
+        for <linux-kernel@vger.kernel.org>; Sun, 03 Apr 2022 23:08:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=fn7+Axbb3oHFzu0IUSF5oGWWmKgpBpA2rKaZa34mQMA=;
+        b=IgcR+Kf+++ogtqVkxEujQCdza7utQVaho1jIlzn05axtUFLeYUGxIIRscndLroe904
+         vQWSO+3aLR1hAxgk9P4Q2zPJKMlx8BkDvocOLlVCawAo4iCzhkGOwCZhSVOkTyR3iEHJ
+         q89+iuT/8y4Ksf22WkB4jrRWeMXcMYVP87M0JmEYFckMOTS+XHuRH5G0soLOgrNQ5m0B
+         dGn5whIMRNlJjZq+nGmnOE1CT8Lm59porbmKINiPJbzxdO1mmexDQj2hvw6ZqNZ/gi9j
+         5rfdDYDWCUilYib/g1WNkNRzMetqbbPZXhuKnPm54Rjk405RNfkW74w4Ns1MgJlQmtaS
+         JeWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fn7+Axbb3oHFzu0IUSF5oGWWmKgpBpA2rKaZa34mQMA=;
+        b=NARGH7nLNpghXDX8ZW0LesM5YnHCLNPJjXG+eDfUycSBg2vX64t+qIs06OOwJdzfPR
+         9J4G6nqt5bzmXxnPMVC5LsRYIAVKzRaX3JGjyawM7SYXSgli7XwwreAGdTSlvgE/m5PW
+         X9WnXVT0eSFECdts0vN4X+/yxD5ekGd6f6q+QHF2IMmaPFN7JCslG9KJilqXsWm7X2Qw
+         tNzHmnqWMdTLBUVWjbo3njaGcQM7/L6FelNpAZ7qUd2mcZR534MPITZHo8vux7Jub3oJ
+         YBZTRqeUqFiBQwKPwvHDr456Po6yL8hNNfp5pVkuFOXFVzuknS4fbgfHSlu6f95ON/2S
+         xbpQ==
+X-Gm-Message-State: AOAM533zkYMumPcezFevVx6xrT30O/vukjCaC68rkXdpA4P3j38lVOx+
+        cfQY+Vj/ZJHCqRIChD9s+PzdPw==
+X-Google-Smtp-Source: ABdhPJytCL+ChARui3ZMXV7R6knVdh/akY8c5Kio/IkxV6qS4h16j8/oNLsBp6+Ha5L4N17tE73F2Q==
+X-Received: by 2002:a05:600c:4241:b0:38c:ec66:7c8f with SMTP id r1-20020a05600c424100b0038cec667c8fmr17793672wmm.179.1649052528247;
+        Sun, 03 Apr 2022 23:08:48 -0700 (PDT)
+Received: from [192.168.0.172] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id b15-20020adfc74f000000b001e888b871a0sm8521783wrh.87.2022.04.03.23.08.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 03 Apr 2022 23:08:47 -0700 (PDT)
+Message-ID: <edeb1037-e28a-a2c5-5dcf-d1f1686f6d7e@linaro.org>
+Date:   Mon, 4 Apr 2022 08:08:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: Linux 5.18-rc1
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] dt-bindings: net: snps: remove duplicate name
 Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Oded Gabbay <ogabbay@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <CAHk-=wg6FWL1xjVyHx7DdjD2dHZETA5_=FqqW17Z19X-WTfWSg@mail.gmail.com>
- <20220404022239.GA1186352@roeck-us.net>
- <CAHk-=wimc7V9mi=P+6p2nnctPYtSM55OSPVERUeJor7fkD_EVg@mail.gmail.com>
-From:   Jiri Slaby <jslaby@suse.cz>
-In-Reply-To: <CAHk-=wimc7V9mi=P+6p2nnctPYtSM55OSPVERUeJor7fkD_EVg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     dj76.yang@samsung.com, "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Moon-Ki Jun <moonki.jun@samsung.com>
+References: <CGME20220404022857epcms1p6e6af1a6a86569f339e50c318abde7d3c@epcms1p6>
+ <20220404022857epcms1p6e6af1a6a86569f339e50c318abde7d3c@epcms1p6>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220404022857epcms1p6e6af1a6a86569f339e50c318abde7d3c@epcms1p6>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,33 +81,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04. 04. 22, 5:29, Linus Torvalds wrote:
->> Error log:
->> drivers/tty/serial/mpc52xx_uart.c:967:23: error: initialization of 'unsigned int (*)(struct uart_port *)' from incompatible pointer type 'int (*)(struct uart_port *)' [-Werror=incompatible-pointer-types]
->>    967 |         .raw_rx_rdy = mpc5125_psc_raw_rx_rdy,
->>
->> and many similar errors.
->>
->> Caused by commit 18662a1d8f35 ("tty: serial: mpc52xx_uart: make rx/tx
->> hooks return unsigned"). Reported at
->> https://lore.kernel.org/lkml/20220403153607.GA3644508@roeck-us.net/
+On 04/04/2022 04:28, Dongjin Yang wrote:
+> snps,dwmac has duplicated name for loongson,ls2k-dwmac and
+> loongson,ls7a-dwmac.
 > 
-> Jiri - apparently you didn't convert the cases under CONFIG_PPC_MPC512x.
-> 
-> Please, people, let's get these silly problems fixed asap, and not
-> have people unaware of them and fixes pending until much later in the
-> rc series? It was painful  last release, let's not repeat that
-> mistake.
+> Signed-off-by: Dongjin Yang <dj76.yang@samsung.com>
+> ---
+>  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 
-Sure, I wasn't aware of the issue until yesterday -- when Guenter 
-dropped me an e-mail. It passed through all the testing machinery which 
-is unfortunate. (I have a script to cross-compile most of the peculiar 
-tty drivers [1]. That indeed contains "mpc52xx_uart.o powerpc_mpc5200".) 
-The fix was posted as 20220404055122.31194-1-jslaby@suse.cz .
+This is a v2, so please version in the subject + some changelog under ---.
 
-[1] https://pastebin.com/UDTsBAaY
+You missed my comment about fixes tag, please add it, do not ignore.
 
-thanks,
--- 
-js
-suse labs
+Fixes: 68277749a013 ("dt-bindings: dwmac: Add bindings for new Loongson
+SoC and bridge chip")
+
+Best regards,
+Krzysztof

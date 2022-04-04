@@ -2,123 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4E74F1AFD
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A534F1C5A
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379343AbiDDVTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39490 "EHLO
+        id S1382237AbiDDV0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379404AbiDDRGE (ORCPT
+        with ESMTP id S1379419AbiDDRKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 13:06:04 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C0C40A22
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 10:04:07 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id p15so18487876lfk.8
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 10:04:07 -0700 (PDT)
+        Mon, 4 Apr 2022 13:10:19 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E281E40A25
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 10:08:22 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id ot30so11392306ejb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 10:08:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=J334O5uYapL/nSov6BZAzFIp7kzwsiEjIccb8+5N22c=;
-        b=f07uA2nRdSeYaV6J0y8FPL4bPtqDnXuBCANsO8bx0j7F5mJV3d8FyIxuXDZ9mY5LHa
-         GoDjtp8ZFIHxrYd+1KbhjEWgk6q38scATXBkxvTL5bimRO/FxE7oFoKFaFK5u1UPQjhh
-         yEM/yzy4sxr3ObXCNh3tJOi5lsE6MzpZKvwQ1xVizV3wq1ht6lmCPkB336REFQ2Da/8i
-         uAoPQcV5M7F2YHxdHjtPSeiYJBFRtF8s3C/Hk27Qb+29HmpBV0Cj8mXRMJnMoHGZmClv
-         rJJSSIdGGvoR7Lz/ratpwdJS1KfBOdXQfV3LiCnu9zg8jpoJMcCfwSKIEUJWD8/vEuqq
-         NP0w==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=LXXr7F0cW3RTrkA8M6uuznqZSvmvR1TGt0LOYkCfNSQ=;
+        b=wBUWd1KOHSXpqah/8BaOgmo8qLPdZf1sdgt0au6YhBPtGFBBh2rBCHyFSGtQaXNZe7
+         khGltgNxaO32X6qwHt4slyv3JWF+NX5P+dHNeemg4Dp4Rj2oEKD1T3M7L+jBkvG0cEaj
+         XWzBID2cjpeX8s/+1fc7UvWjmeXe7cRskPgFVjXw5x5VHbcBDjc3bg59jDMUgbQMp0QD
+         LFBiJ6j2JSV6MBnkz8TAYalVInVz6tEnJZIX0E2/DYb+fBpSM+arJRv+VD6RXlRi6b5Y
+         Ek8TgLsFU9b5Qf6uMfaf/Q6xTn5QkVOkUzkmJD5P8m3DccA+TDLPfosr3ptDA05BQWii
+         dHCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J334O5uYapL/nSov6BZAzFIp7kzwsiEjIccb8+5N22c=;
-        b=4GOnkExjl7j2S+UGqPtJWyFp1XWes68oSJ6cJrLuS3iz5dfBpy6JLLly7FCH4ZqSel
-         U3grYCygAiAyX2xGesIACKYFmmf+5JL1uZgQPgx70E6jMKcRADGcyt9uBy6sCepbzklu
-         bw1woH3jNL5RJstOPYwOArOgspkylgbmX1OEgmxKGLppRwUthT80rIar4lz++gzF6gBt
-         +mmpGpgP/y2XIMf/LK77MxfRp/uk3mhZ7RnYxMUslAAY9Q7dHDeQX8dlQ2qtiVCIWE+I
-         cYkz8qtIWTXXEAiyrNgORXnxsnbpTmy52e2CNBGGaetAEPcbWGwLCh4LHxYIbyvEusox
-         +6DA==
-X-Gm-Message-State: AOAM533yPBnpcssOFwBD0R/sUZIghPj4dUPbew+fcR+iw6Rv7AWKJZ1a
-        0SK11Mqp4aCc+ptAviwXjmZNdg+Hl8oT9qpoHCDk6Wmyqc88FQ==
-X-Google-Smtp-Source: ABdhPJxSX/N/OBaPWataxe8f7C/8UA4YyOws9Udkg9tB+MjsWXVgKMGfJd5zUxPlMjvU6XV3jv/PVlgrCvTkFoyV5Jc=
-X-Received: by 2002:a05:6512:3092:b0:44a:e7bb:e961 with SMTP id
- z18-20020a056512309200b0044ae7bbe961mr314645lfd.190.1649091843129; Mon, 04
- Apr 2022 10:04:03 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=LXXr7F0cW3RTrkA8M6uuznqZSvmvR1TGt0LOYkCfNSQ=;
+        b=vcKkHev3ADuEjZkbBn685rmVtfJJDBznQVepxhnsnbKUy6cJEjRFlm8DfGZglTVH5C
+         Mlbg8YlhGpKDsESk8CCwAKJX/TsnCi3/iKgC8SlxLPvC+X4ATzVy3+cjQP2QE9xQ6mKH
+         +XxtEkGot4NLRB6pEVL5a/AgkVW3MfOsOpR3wui3gounecKh8jmqq/sVPmLQwUlWqxLE
+         1kgZLnp/pggCo1eO3DJM7/iJKTrueBL8ms+m3vwolWeHgY8Pec2xirVcbxRsce0x7UR4
+         BIDAkF+jVbK3F19h/JNRiOTfPfHnjriTfYAqlH2o1naoEfXdxOlgEdeZDFro6qbDA/DB
+         1HXg==
+X-Gm-Message-State: AOAM532tjEB3bDzpsriElFJGUbMBqbFnLFKfA3+cKPQNCzuy5jzMvOvB
+        ErN9f+hp90dZ8/KMDYNeaJRCxQ==
+X-Google-Smtp-Source: ABdhPJx2qo4HGcrJqr114ZtIIY4ckwTEFuRMwUlvOaFJCAC2pEj4AzRRvX7sa3sEZVcPo8HyRUAHlA==
+X-Received: by 2002:a17:907:a41e:b0:6e7:9ea9:8350 with SMTP id sg30-20020a170907a41e00b006e79ea98350mr1021136ejc.377.1649092101002;
+        Mon, 04 Apr 2022 10:08:21 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id u25-20020a170906b11900b006e08588afedsm4565827ejy.132.2022.04.04.10.08.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 10:08:20 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-samsung-soc@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] memory: samsung: exynos5422-dmc: Avoid some over memory allocation
+Date:   Mon,  4 Apr 2022 19:08:14 +0200
+Message-Id: <164909209237.1690243.6125620782539753539.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <69d7e69346986e2fdb994d4382954c932f9f0993.1647760213.git.christophe.jaillet@wanadoo.fr>
+References: <69d7e69346986e2fdb994d4382954c932f9f0993.1647760213.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-References: <20220402130014.1417773-1-masahiroy@kernel.org> <20220402130014.1417773-2-masahiroy@kernel.org>
-In-Reply-To: <20220402130014.1417773-2-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 4 Apr 2022 10:03:51 -0700
-Message-ID: <CAKwvOd=r4JQ0p1xRix934oTaF-7zQJiaNo7Er7ExH0_R3AnmZw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] modpost: move export_from_secname() call to more
- relevant place
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michal Marek <michal.lkml@markovi.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 2, 2022 at 6:00 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> The value returned by export_from_secname() is only used by
-> sym_add_exported().
->
-> Move export_from_secname() just above sym_add_exported().
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+On Sun, 20 Mar 2022 08:10:30 +0100, Christophe JAILLET wrote:
+> 'dmc->counter' is a 'struct devfreq_event_dev **', so there is some
+> over memory allocation. 'counters_size' should be computed with
+> 'sizeof(struct devfreq_event_dev *)'.
+> 
+> Use 'sizeof(*dmc->counter)' instead to fix it.
+> 
+> While at it, use devm_kcalloc() instead of devm_kzalloc()+open coded
+> multiplication.
+> 
+> [...]
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Applied, thanks!
 
-> ---
->
->  scripts/mod/modpost.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 194ca9083c7a..f9e54247ae1d 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -684,12 +684,8 @@ static void handle_modversion(const struct module *mod,
->  static void handle_symbol(struct module *mod, struct elf_info *info,
->                           const Elf_Sym *sym, const char *symname)
->  {
-> -       enum export export;
->         const char *name;
->
-> -       if (strstarts(symname, "__ksymtab"))
-> -               export = export_from_secname(info, get_secindex(info, sym));
-> -
->         switch (sym->st_shndx) {
->         case SHN_COMMON:
->                 if (strstarts(symname, "__gnu_lto_")) {
-> @@ -724,7 +720,11 @@ static void handle_symbol(struct module *mod, struct elf_info *info,
->         default:
->                 /* All exported symbols */
->                 if (strstarts(symname, "__ksymtab_")) {
-> +                       enum export export;
-> +
->                         name = symname + strlen("__ksymtab_");
-> +                       export = export_from_secname(info,
-> +                                                    get_secindex(info, sym));
->                         sym_add_exported(name, mod, export);
->                 }
->                 if (strcmp(symname, "init_module") == 0)
-> --
-> 2.32.0
->
+[1/1] memory: samsung: exynos5422-dmc: Avoid some over memory allocation
+      commit: 56653827f0d7bc7c2d8bac0e119fd1521fa9990a
 
-
+Best regards,
 -- 
-Thanks,
-~Nick Desaulniers
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>

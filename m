@@ -2,100 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C144F106B
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0706B4F1073
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377872AbiDDIDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 04:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
+        id S1377896AbiDDIE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 04:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243172AbiDDIDv (ORCPT
+        with ESMTP id S1377882AbiDDIEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 04:03:51 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308AC3B2B3
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 01:01:56 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id l7-20020a05600c1d0700b0038c99618859so7201711wms.2
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 01:01:56 -0700 (PDT)
+        Mon, 4 Apr 2022 04:04:16 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5B23B3D6
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 01:02:20 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id g20so10011219edw.6
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 01:02:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FMlxUg9R4XMvayD2D6tTORqQnMzt34ahkr+1IIPpZrk=;
-        b=xugZeTvVg5ASBCvLguGnDYkmRLxgPUfEhleySeiR9uFXVQxx+Hr8V1YFRV2BUDwXuI
-         msyLtkIgyC7A9wWhZKlYg1anDc7Iju+x8iRBqTwy1j04UnbSuIirNEPkFu/6wO3m9p+8
-         f9FNRYu3HOXNXKLbfoHYTVT8BjqQSPtatuRKgSDo1ThJlVmi2Cf6K0R+mHxPQDeVQiO1
-         5Q9uZ5ZqJIlBr+OZp1InjMQUi4L0ZN4pffk5D9B3CuQWx8vFmdgArsfM1r28PSbPAdSQ
-         0AZ8PH4SLfYjtyoicGP5lMaqZakfDhZxLmz8PVAO4yltGyK4EexIuhCNYPgYcRtX9540
-         XzYw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1JgldMjDiu5zvK43QVM+MblMzFJyCLm6wag4GS38NI8=;
+        b=ga3t17CYfB+KE5TsU35ymU7gxz3it957Oe4YUouw/nV0JQpApURccq9lNMFMZlgmex
+         jCH1hxwg5j0DpUWw2a1DWbHQB4XgKTwrjQLTEiZi2wOOW6MxKBUVYR1hDcbLYo1rlNlA
+         VVcEn6ELp11wq8wEBmvX58dV37HR66tsvubuyNwohvs0eIJr2lMksepdj7hQ45NQXcPh
+         TkSJ1HyTe1fD15uHj35aLRr/2cKRM00z4bBP89rwISORGPjxUqwJSivRjVDrtgKQ+smB
+         khIsYorPHxcGCaV0PH/16q+MJeOcAG+AcxMlNGiKD/8fnyBLsO1VkADj1b9Z0B3XcgGU
+         +Q6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FMlxUg9R4XMvayD2D6tTORqQnMzt34ahkr+1IIPpZrk=;
-        b=pvGDLcTBtMZm9NOL298gDGStEXKkVVRfvo//pTM4RsCazdnRPOTCjxqgUlX03UGpAf
-         56jCU6LqzQMv4ZfY2cfpykqznyQ0YX76xqOpdnYyi7h8qrorl6FXrY3ITFEN9TUUtCX4
-         CQ76t/bXtRBfywjfTtiEsi4PnBdZ92e4EhEcong/iuoOh48L8D6RFudG0rWxzXPclk+O
-         JdnEZyJnN5l0KhfAWf91FznTbdgyl5IivD4VB8+6FhSgGsrAwUMPeD237AoUWJXenBO4
-         VWP5Y7Ycwpk+NVGofpiRkfE+f5Bdw4bpRRxy89hN8drBD/gZY2ZrviessJ9Z+f1/NvQN
-         GpcA==
-X-Gm-Message-State: AOAM533qvEym1ULuIAZpf+Gckkun+yzoiR2h20YDNI2v74K8qMYn1q8S
-        yZ8uQ2gYHfJ+EaJrgW4cU0nnVQ2XMKS+OseS
-X-Google-Smtp-Source: ABdhPJwnvBXWc2QrklzwJsBhpREtyKwtTZ8QEHMMLvvJRy0/5hd+0G+oXty5theGkKG3n7Y3e+KiFw==
-X-Received: by 2002:a05:600c:1d8e:b0:389:d079:cc0 with SMTP id p14-20020a05600c1d8e00b00389d0790cc0mr18377684wms.98.1649059314426;
-        Mon, 04 Apr 2022 01:01:54 -0700 (PDT)
-Received: from localhost.localdomain ([2001:861:44c0:66c0:1add:1b28:2457:eb46])
-        by smtp.gmail.com with ESMTPSA id q14-20020a1cf30e000000b0038986a18ec8sm8586159wmq.46.2022.04.04.01.01.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 01:01:53 -0700 (PDT)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Vyacheslav Bocharov <adeep@lexina.in>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Neil Armstrong <narmstrong@baylibre.com>
-Subject: Re: [PATCH v2 0/4] arm64: meson: update dts for JetHub devices
-Date:   Mon,  4 Apr 2022 10:01:52 +0200
-Message-Id: <164905930207.1797085.9678466232916244683.b4-ty@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220326075110.1462301-1-adeep@lexina.in>
-References: <20220326075110.1462301-1-adeep@lexina.in>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1JgldMjDiu5zvK43QVM+MblMzFJyCLm6wag4GS38NI8=;
+        b=fSp9NTFBnyirMbAWMbVyDfWc44RgRbjk39X84m41Y/Xt/zrxRDYSubHzZG0kIWFKKd
+         n9Vk548EFnIAHkG70VgFu/nZ7t7irWmsixODAf6asbi+rA06T90EYwmYC/GSYPoLGxDX
+         93K7gqMuRcYsXw9vhcdGsffGOeaWTjLbh7I1qDv0RooLicrNC5guYiJ7+Q1sRuk9CKNn
+         rlXSJ7aus/vX8vf7m/vVg9BWnxi0iiNpfF50RBhxzoXkhuZZPtwve9y1EftvaaJGrHQ5
+         v1c6xvKnPDYMJQl/9vHcaLY6UEobzgcavMrmfxauEz1L6H9vGQ7gMwABCM1GdMTfL0kj
+         KONg==
+X-Gm-Message-State: AOAM532Op6ie3eHBgGBCTscGFg0FEQK1PdfjE6FVsk9dS8YL3fdl7I8X
+        3td2N3LaYQ1iaG+WIGQLR7c=
+X-Google-Smtp-Source: ABdhPJy3Lne0mEdt5P7baRApHpBKwehsF8BbTaFxGRB7bweJOspyVKwdLk40Ri78C0idhxVP+MClyA==
+X-Received: by 2002:a05:6402:4247:b0:419:3990:3db6 with SMTP id g7-20020a056402424700b0041939903db6mr31362069edb.193.1649059338902;
+        Mon, 04 Apr 2022 01:02:18 -0700 (PDT)
+Received: from [192.168.0.253] (ip5f5abb55.dynamic.kabel-deutschland.de. [95.90.187.85])
+        by smtp.gmail.com with ESMTPSA id jt8-20020a170906ca0800b006df9b29eaf1sm4039632ejb.8.2022.04.04.01.02.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Apr 2022 01:02:18 -0700 (PDT)
+Message-ID: <bdd168a8-b260-0653-f835-a7814a8fd4c8@gmail.com>
+Date:   Mon, 4 Apr 2022 10:02:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH V2] Fix unsafe memory access by memcmp
+Content-Language: en-US
+To:     Charlie Sands <sandsch@northvilleschools.net>,
+        gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        paskripkin@gmail.com
+References: <YkpdVyuQguGzPSNE@sckzor-linux.localdomain>
+From:   Michael Straube <straube.linux@gmail.com>
+In-Reply-To: <YkpdVyuQguGzPSNE@sckzor-linux.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Sat, 26 Mar 2022 10:51:06 +0300, Vyacheslav Bocharov wrote:
-> Update dts for JetHub H1:
-> - add bluetooth node for RTL8822CS uart port
+On 4/4/22 04:52, Charlie Sands wrote:
+> This patch fixes sparse warnings about the memcmp function unsafely
+> accessing userspace memory without first copying it to kernel space.
 > 
-> Update dts for JetHub D1:
-> - add ZigBee serial alias (ttyAML2) for backward compatibility
-> - update voltage regulators and SDIO config to match board's reference design
-> - update max freq for WiFi SDIO
+> Signed-off-by: Charlie Sands <sandsch@northvilleschools.net>
+> ---
 > 
-> [...]
+> V2: Fixed checkpatch.pl warning and changed variable name as suggested
+> by Greg K. H. and improved error checking on the "copy_from_user" function as
+> suggested by Pavel Skripkin.
+> 
+>   drivers/staging/r8188eu/os_dep/ioctl_linux.c | 21 ++++++++++++--------
+>   1 file changed, 13 insertions(+), 8 deletions(-)
+> 
 
-Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v5.19/dt64)
+Hi Charlie,
 
-[1/4] arm64: meson: add dts bluetooth node for JetHub H1
-      https://git.kernel.org/amlogic/c/2bda08dfc501967a7a7bd6f77f04afef14dc7271
-[2/4] arm64: meson: dts: update serial alias in dts for JetHub D1
-      https://git.kernel.org/amlogic/c/cf94e26508ad411c2a618b00dfaae515affd0ca7
-[3/4] arm64: meson: update SDIO voltage in dts for JetHub D1
-      https://git.kernel.org/amlogic/c/81bbd2bd24a9ebac3871b293060df50445458c79
-[4/4] arm64: meson: update WiFi SDIO in dts for JetHub D1
-      https://git.kernel.org/amlogic/c/87a87657249316616138c103c2bdb7525c34d987
+thanks for your patch. Looks good to me, but you should include
+staging: r8188eu: in the subject line.
 
--- 
-Neil
+"staging: r8188eu: Fix unsafe memory access by memcmp"
+
+thanks,
+Michael

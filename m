@@ -2,80 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A184F0E7E
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 07:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EC5D4F0EF2
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 07:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377281AbiDDFGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 01:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44364 "EHLO
+        id S1353119AbiDDFJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 01:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232689AbiDDFGb (ORCPT
+        with ESMTP id S1377363AbiDDFJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 01:06:31 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56725329B5;
-        Sun,  3 Apr 2022 22:04:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649048676; x=1680584676;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=LtXc+BMMIF66L9dPpPSWxaiUiDGxUjHQfNaESczVJyw=;
-  b=Iez/9+yzUHGNQCwRyk1GLD/I41uYWPwOkCJf8+59kipfRlR1a+tbRv/R
-   1EI/EUUZEovDMQPigT+kmGSiFNqIBZe2ljmIPLYxQzPGzVtbIgIpOUAFk
-   oCZNo3nasZrZsi4tes02AiDIvMMvcuDzp5SnLGRr74R/qbrMrM8AhLx0a
-   g=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 03 Apr 2022 22:04:36 -0700
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 03 Apr 2022 22:04:33 -0700
-X-QCInternal: smtphost
-Received: from hu-rohiagar-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.106.138])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 04 Apr 2022 10:34:21 +0530
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3970568)
-        id 5A4703960; Mon,  4 Apr 2022 10:34:20 +0530 (+0530)
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org,
-        linus.walleij@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rohit Agarwal <quic_rohiagar@quicinc.com>
-Subject: [PATCH 2/2] pinctrl: qcom-pmic-gpio: Add support for pmx65
-Date:   Mon,  4 Apr 2022 10:34:10 +0530
-Message-Id: <1649048650-14059-3-git-send-email-quic_rohiagar@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1649048650-14059-1-git-send-email-quic_rohiagar@quicinc.com>
-References: <1649048650-14059-1-git-send-email-quic_rohiagar@quicinc.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 4 Apr 2022 01:09:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5CF3AA71;
+        Sun,  3 Apr 2022 22:07:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30C866116F;
+        Mon,  4 Apr 2022 05:07:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01954C2BBE4;
+        Mon,  4 Apr 2022 05:07:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649048848;
+        bh=rQVIxA1afwJ+h3SVM7T+uP8DlSo28TtyzvT0bkF0qPo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l27SCTbH51/9XHHwDMydw7JG/oLhbLYQ588ZhIfA75G40vgj6H/pir4pDPKTMqB58
+         2DbZNJbqPzXnRBhFjNBUWfQOBHRTe6fJnlHTxcOWyn9MH/Ejl81vmJi0Ee2SL9A85k
+         J3vEiEVWFml/0oyJjbBE0QoESQdzrFzKmEPNvnKY=
+Date:   Mon, 4 Apr 2022 07:07:23 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        stable-commits@vger.kernel.org,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: Patch "can: isotp: add local echo tx processing for consecutive
+ frames" has been added to the 5.15-stable tree
+Message-ID: <Ykp9CxBncgUv7inJ@kroah.com>
+References: <20220402160350.2129531-1-sashal@kernel.org>
+ <020deca3-6560-ab5c-8794-ec06f2a8498a@hartkopp.net>
+ <4ee9edd1-f805-b125-32d6-13b06d38bedc@hartkopp.net>
+ <YknZSon6bikrS7ij@sashalap>
+ <33688c0b-f90f-15cc-d098-c21a23b285ff@hartkopp.net>
+ <YkowdppmGGMSPjNB@sashalap>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkowdppmGGMSPjNB@sashalap>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PMX65 pmic support gpio controller so add compatible.
+On Sun, Apr 03, 2022 at 07:40:38PM -0400, Sasha Levin wrote:
+> On Sun, Apr 03, 2022 at 08:24:04PM +0200, Oliver Hartkopp wrote:
+> > Hi Sasha,
+> > 
+> > On 03.04.22 19:28, Sasha Levin wrote:
+> > > On Sun, Apr 03, 2022 at 11:26:30AM +0200, Oliver Hartkopp wrote:
+> > > > Hello Sasha/Greg,
+> > > > 
+> > > > the way how the can-isotp patches are currently applied to the
+> > > > stable trees 5.17/5.16/5.15/5.10 is FINE.
+> > > > 
+> > > > This means 5.15 now has a functional improvement (as only stable
+> > > > tree). But that should be fine too.
+> > > 
+> > > Are they all a functional improvement? or are some fixes?
+> > > 
+> > 
+> > Only upstream commit 4b7fe92c06901f4563af0e36d25223a5ab343782 ("can:
+> > isotp: add local echo tx processing for consecutive frames") is an
+> > improvement, see:
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git/tree/queue-5.15/can-isotp-add-local-echo-tx-processing-for-consecuti.patch?id=c0c51980438b5e5b0d758dc28eef5947e57c9c1e
+> > 
+> > All others are fixes.
+> > 
+> > You now added this improvement to 5.15 which then needs this original
+> > fix, which you correctly applied:
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git/tree/queue-5.15/can-isotp-sanitize-can-id-checks-in-isotp_bind.patch?id=c0c51980438b5e5b0d758dc28eef5947e57c9c1e
+> > 
+> > The other stable kernels 5.17, 5.16, 5.10 do not contain the improvement
+> > and for that reason I sent an adapted fix, which Greg applied to those
+> > kernels, e.g. in 5.17:
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git/tree/queue-5.17/can-isotp-sanitize-can-id-checks-in-isotp_bind.patch?id=c0c51980438b5e5b0d758dc28eef5947e57c9c1e
+> > 
+> > I originally sent this adapted patch to both of you on 02.04.22 11:12
+> > ("[PATCH stable v5.10-v5.17] can: isotp: sanitize CAN ID checks in
+> > isotp_bind()")
+> > 
+> > So you could either leave it as-as and only the 5.15 has the improvement
+> > OR you remove the two first referenced patches from the 5.15-queue and
+> > add only the *adapted* "sanitized CAN ID ..." patch which is applied in
+> > 5.17 and the other series. Your choice ;-)
+> 
+> Looks like we had a mismerge in 5.15. I've dropped the feature patch and
+> picked up your backport instead of the one that was in the tree.
+> 
+> > Sorry for this big pile of patches this time :-/
+> 
+> Fixes are good :)
+> 
+> > Finally another hint:
+> > 
+> > All stable trees (5.10, 5.15, 5.16, 5.17) already contain the patch
+> > "can: isotp: support MSG_TRUNC flag when reading from socket" (upstream
+> > commit 42bf50a1795a185).
+> > 
+> > E.g. see
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git/tree/queue-5.17/can-isotp-support-msg_trunc-flag-when-reading-from-s.patch?id=c0c51980438b5e5b0d758dc28eef5947e57c9c1e
+> > 
+> > This patch is needed but unfortunately introduced a regression which is
+> > fixed with this follow up patch here:
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=e382fea8ae54f5bb62869c6b69b33993d43adeca
+> > 
+> > "can: isotp: restore accidentally removed MSG_PEEK feature"
+> > 
+> > So this last patch needs to be added to 5.10, 5.15, 5.16, 5.17 too.
+> 
+> I've queued it up for the above trees.
 
-Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
----
- drivers/pinctrl/qcom/pinctrl-spmi-gpio.c | 1 +
- 1 file changed, 1 insertion(+)
+Thanks for fixing up my merge mess here, much appreciated.
 
-diff --git a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-index 4fbf8d3..a0c45b3 100644
---- a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-+++ b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-@@ -1183,6 +1183,7 @@ static const struct of_device_id pmic_gpio_of_match[] = {
- 	{ .compatible = "qcom,pms405-gpio", .data = (void *) 12 },
- 	/* pmx55 has 11 GPIOs with holes on 3, 7, 10, 11 */
- 	{ .compatible = "qcom,pmx55-gpio", .data = (void *) 11 },
-+	{ .compatible = "qcom,pmx65-gpio", .data = (void *) 16 },
- 	{ },
- };
- 
--- 
-2.7.4
-
+greg k-h

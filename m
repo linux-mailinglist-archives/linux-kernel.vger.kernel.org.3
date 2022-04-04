@@ -2,101 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 521684F1005
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 09:33:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 274584F100A
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 09:36:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377689AbiDDHfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 03:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
+        id S1377699AbiDDHhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 03:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237797AbiDDHfr (ORCPT
+        with ESMTP id S237797AbiDDHg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 03:35:47 -0400
-X-Greylist: delayed 152 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Apr 2022 00:33:51 PDT
-Received: from resdmta-a1p-077302.sys.comcast.net (resdmta-a1p-077302.sys.comcast.net [IPv6:2001:558:fd01:2bb4::c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51C4E07
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 00:33:50 -0700 (PDT)
-Received: from resomta-a1p-077245.sys.comcast.net ([96.103.145.236])
-        by resdmta-a1p-077302.sys.comcast.net with ESMTP
-        id bH8DnruG6HzlAbHBFnAef7; Mon, 04 Apr 2022 07:31:17 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=comcast.net;
-        s=20190202a; t=1649057477;
-        bh=fEm/vE2z2BEzMcXW0PFgggG5I90y9tWWUTabwLNrL2I=;
-        h=Received:Received:Message-ID:Date:MIME-Version:To:Subject:From:
-         Content-Type;
-        b=UcI0wVZze9zZT7l3g0eH5gQjzowNgBX+wm+e6yVGmwoJxhaJmRm5bgb2dxN4z1P9/
-         +xAoU29qDi7QKlpxaNjxY2sTBe5DrI29/96JPHfpqXZ+xmGH8aplQs0IYzfLKsV5ak
-         QGrWVgTbfnxgDrKeciFz/ZnHJanQJmWEeMEcf8ZPFLwYv321BwF39eypK8R2RAHpz3
-         vLJk7PMGfkWfAiHqXlSRCQuaMJk72TVkSEYVdazpGSOb1QShht0lv/d4na+W3B4Me7
-         0AlbbF/tj5wOoxlPTFQnE8xMBl0yCXtwae+5G2/F8cUp8ADl1WqxURDuSnrcXWjqe/
-         IKeY9zrxflGFw==
-Received: from [IPV6:2601:647:4700:284:7bc2:74ff:50ae:144]
- ([IPv6:2601:647:4700:284:7bc2:74ff:50ae:144])
-        by resomta-a1p-077245.sys.comcast.net with ESMTPSA
-        id bHAqnd2ZeJWAXbHArnyMpD; Mon, 04 Apr 2022 07:30:55 +0000
-X-Xfinity-VMeta: sc=0.00;st=legit
-Message-ID: <c66d704d-4cd9-31a7-b94b-ff60f176c076@comcast.net>
-Date:   Mon, 4 Apr 2022 00:30:52 -0700
+        Mon, 4 Apr 2022 03:36:59 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDD1165BF;
+        Mon,  4 Apr 2022 00:35:03 -0700 (PDT)
+Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N95mR-1o6qB70YlD-0167ZH; Mon, 04 Apr 2022 09:35:02 +0200
+Received: by mail-wr1-f50.google.com with SMTP id b19so13023870wrh.11;
+        Mon, 04 Apr 2022 00:35:02 -0700 (PDT)
+X-Gm-Message-State: AOAM533q4EAh6WnaHs6wAGzbztrwbYwEregx/0nl6DBK+3E8w67CMKQD
+        jLvqOXZGI6CdoClAP7GMEv+swa1440JeSaixtOU=
+X-Google-Smtp-Source: ABdhPJwrecYOdkY3TJ48gqbFuXT/mD0XaIIYl5yZtNKXWERJKznl01pyz/ckYokgBEG0N3no2bo8h1E8PCUCLAMKglw=
+X-Received: by 2002:a05:6000:10c7:b0:206:135e:c84e with SMTP id
+ b7-20020a05600010c700b00206135ec84emr2006910wrx.12.1649057701673; Mon, 04 Apr
+ 2022 00:35:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-To:     linux@roeck-us.net
-Cc:     Larry.Finger@lwfinger.net, gregkh@linuxfoundation.org,
-        jslaby@suse.cz, linux-kernel@vger.kernel.org, ogabbay@kernel.org,
-        torvalds@linux-foundation.org
-References: <aba387bd-9799-e0b5-40e3-1bcb552ac74c@roeck-us.net>
-Subject: Re: Linux 5.18-rc1
-Content-Language: en-US
-From:   Ron Economos <w6rz@comcast.net>
-In-Reply-To: <aba387bd-9799-e0b5-40e3-1bcb552ac74c@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220404061948.2111820-1-masahiroy@kernel.org>
+In-Reply-To: <20220404061948.2111820-1-masahiroy@kernel.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 4 Apr 2022 09:34:45 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3RWypZ2H6zRTdEWMvg608VFVAoNAQZbUM4GbW7uAWk8A@mail.gmail.com>
+Message-ID: <CAK8P3a3RWypZ2H6zRTdEWMvg608VFVAoNAQZbUM4GbW7uAWk8A@mail.gmail.com>
+Subject: Re: [PATCH 0/8] UAPI: make more exported headers self-contained, and
+ put them into test coverage
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:T15ZZ+wXFygrBFcuA38guq9hqE43alcNHM3kBQk/KHFcvqJiXow
+ j/xOxrQ3t2LjER2qhm7qW26LDYrmQrf4p6gRT3htoixnCCICfBLHi7QUyeh8S23Igvji9FF
+ YfDQtyjvAaxcwOk475JCxfCe72CVsYPlOX1wQG9DvLUs6yvtEmoylwiXhxJpZ7/AvoNKYIB
+ /fbmgnrGnzRWIxzi5yqfg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:14+AXDMp6Eg=:9+jnsX4ZoMr/PGP6kxQoqE
+ ypDPYKdwNWzMtoTQpYHBcjf5+FpDZS2Qd1Qovx9zTLqIdyWqgDKzmBjaRWQyyXlK8UvLXUtlj
+ v6Yrgn3SmGq4wVNgndATXm3ndLrtEQHKw8rZgTxuKGgsThxbF0Le2v9NU2Nl8boilLgBsgSH0
+ OhY3WejMJ1r+OK11SMRTvw8vKG7G1W/Sq0/l7OmNSPOj+1vx2RVIpXo/cmpQrHyqt7Xd2U503
+ FYfVGN7OAg7eAs0WR/OJGzCDbbKK2NC5gsUdEGuQvmkvn5Jw98+E6mS1s6kv+NhQ9FD9HVfZ0
+ ETGD87NLuOV7LNBb0qgUQtn1OlCCcWtxrqMeE17rNixtN33lLpwmnmEZwvzHDnfLh1KveJiuX
+ OKJ89ceRgKSXzoBMRkIhzk9uzyxUEOW9jI/HIKLkWrCBtQM2QUDZUJrVuyfD2Qp5A4HKQAmfA
+ 9HUP1VmzW6P40J7h5nja7b3NHB96bXd/EfM/LpPFS5I5Rp9J9HVGO4HfN4ce572gHfzpnXB3x
+ nJ8oet4f1d+NfHms7Lzc46KkKr49LQHFQ70dt/sFDlRy2VuGMxm4ZcU0zz0Ldyks1xxj692mG
+ wGEbcfQ4Wu9AOElW1ziH1dOVLTttCMY6s0ejolO/wJwOMCuocuMIqoJSOdqzPjHhZfJaCu8Gy
+ K6IMW5d4ZvYs3MIFwxtPsnFiOHN0B1dX8Nqm0lQjlg5FzyfN08IGbh6pCyfa1uHhYFQ8=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On 4/3/22 20:29, Linus Torvalds wrote:
-> > On Sun, Apr 3, 2022 at 7:22 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >>
-> >> In function '__nat25_add_pppoe_tag',
-> >>      inlined from 'nat25_db_handle' at drivers/staging/r8188eu/core/rtw_br_ext.c:479:11:
-> >> arch/alpha/include/asm/string.h:22:16: error: '__builtin_memcpy' forming offset [40, 2051] is out of the bounds [0, 40] of object 'tag_buf' with type 'unsigned char[40]'
-> >>
-> >> Exposed by commit e6148767825c ("Makefile: Enable -Warray-bounds").
-> >> Fix at https://lore.kernel.org/lkml/20220403123628.3113382-1-linux@roeck-us.net/
-> > 
-> > Funky. Apparently nobody else does that pppoe_tag thing, and this
-> > driver does it wrong on little-endian, which is the common thing to
-> > test.
-> > 
-> > Your email that you point to is a bit confused, though, in how it says
-> > "when building the driver on a big endian system such as alpha".
-> > 
-> > Alpha is little-endian, not big-endian.
-> > 
+On Mon, Apr 4, 2022 at 8:19 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> Oops. Sorry, I thought it was big endian. No idea why. I'll update
-> subject and description and resend.
 >
-> > Now, why it apparently only warns on alpha, I have absolutely no idea.
-> > It should warn on other things too afaik, since that
-> > 
-> >          tag->tag_len = htons(MAGIC_CODE_LEN+RTL_RELAY_TAG_LEN+old_tag_len);
-> > 
-> > should be visible not just on alpha.
-> > 
-> Maybe htons() and ntohs() are modeled differently on other architectures,
-> and the compiler doesn't see the context ?
+> Here are more efforts to put more headers to UAPI compile testing
+> (CONFIG_UAPI_HEADER_TEST).
 >
-> > Weird. But your patch looks correct.
-This warning also appears on RISC-V RV64 with gcc 11.2.0. The patch 
-works good.
+> I am sending this series to Arnd because he has deep knowledge for the
+> kernel APIs and manages asm-generic pull requests.
 
-Ron
+These all look good to me, I can apply them for 5.19 but would wait
+a few days for others to comment.
 
+       Arnd

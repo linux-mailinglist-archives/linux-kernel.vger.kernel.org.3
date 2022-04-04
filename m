@@ -2,82 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F33E94F0E61
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 06:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A6424F0E62
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 06:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377221AbiDDEyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 00:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41826 "EHLO
+        id S1377203AbiDDEyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 00:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377204AbiDDEx0 (ORCPT
+        with ESMTP id S1377287AbiDDEyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 00:53:26 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74C61396B7;
-        Sun,  3 Apr 2022 21:51:30 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3FCF51FB;
-        Sun,  3 Apr 2022 21:51:30 -0700 (PDT)
-Received: from a077893.arm.com (unknown [10.163.36.163])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 329FF3F5A1;
-        Sun,  3 Apr 2022 21:51:24 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        peterz@infradead.org, acme@kernel.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH V5 8/8] perf/tools: Add PERF_BR_NEW_ARCH_[N] map for BRBE on arm64 platform
-Date:   Mon,  4 Apr 2022 10:20:46 +0530
-Message-Id: <20220404045046.634522-9-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220404045046.634522-1-anshuman.khandual@arm.com>
-References: <20220404045046.634522-1-anshuman.khandual@arm.com>
+        Mon, 4 Apr 2022 00:54:20 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F153B299;
+        Sun,  3 Apr 2022 21:52:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=b5rvgKHQBrxUjxrXC1n/6ZmRlGY5pOrxtPmT3z1PEjc=; b=SlZcwtx7AAAee889K+zl49LOb9
+        oV6PrhY+KekPy01nguN00WX7mhZwuYAm38m0y6xm2BW33Wz8fASnXyAdwPNQt5wbQdvfLdIhjZmdc
+        wmMfGoqckxzjpwJVo7iY9EIHrDYxEpJug//AV/69EiHp07dx72GjnnAl5l6DRHH01+lxPTBfjLItY
+        8h5XY1wF2I4AbmO2ndxmfnQkKtWWJL/9VGeG2SgFOuBkqsUzz82z4VyeKRaYBu0nP35uRzZffOFpq
+        i/4soywdERhe1oWmrVjnNpdJ7QQB1+hsg95r5wpBH1I/sJyngnq8q2Hwwx0mHUoo80mTAR34+RKr6
+        1Ku5c33Q==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nbEh8-00D5Dg-TI; Mon, 04 Apr 2022 04:52:02 +0000
+Date:   Sun, 3 Apr 2022 21:52:02 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     "Yuezhang.Mo@sony.com" <Yuezhang.Mo@sony.com>
+Cc:     Namjae Jeon <linkinjeon@kernel.org>,
+        "sj1557.seo@samsung.com" <sj1557.seo@samsung.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "Andy.Wu@sony.com" <Andy.Wu@sony.com>,
+        "Wataru.Aoyama@sony.com" <Wataru.Aoyama@sony.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [PATCH v2 1/2] block: add sync_blockdev_range()
+Message-ID: <Ykp5cmdP3nV8XTFj@infradead.org>
+References: <HK2PR04MB38914CCBCA891B82060B659281E39@HK2PR04MB3891.apcprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <HK2PR04MB38914CCBCA891B82060B659281E39@HK2PR04MB3891.apcprd04.prod.outlook.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This updates the perf tool with arch specific branch type classification
-used for BRBE on arm64 platform as added in the kernel earlier.
+On Sat, Apr 02, 2022 at 03:28:00AM +0000, Yuezhang.Mo@sony.com wrote:
+> sync_blockdev_range() is to support syncing multiple sectors
+> with as few block device requests as possible, it is helpful
+> to make the block device to give full play to its performance.
+> 
+> Signed-off-by: Yuezhang Mo <Yuezhang.Mo@sony.com>
+> Suggested-by: Christoph Hellwig <hch@infradead.org>
+> Reviewed-by: Andy Wu <Andy.Wu@sony.com>
+> Reviewed-by: Aoyama Wataru <wataru.aoyama@sony.com>
+> cc: Jens Axboe <axboe@kernel.dk>
+> ---
+>  block/bdev.c           | 10 ++++++++++
+>  include/linux/blkdev.h |  6 ++++++
+>  2 files changed, 16 insertions(+)
+> 
+> diff --git a/block/bdev.c b/block/bdev.c
+> index 102837a37051..57043e4f3322 100644
+> --- a/block/bdev.c
+> +++ b/block/bdev.c
+> @@ -200,6 +200,16 @@ int sync_blockdev(struct block_device *bdev)
+>  }
+>  EXPORT_SYMBOL(sync_blockdev);
+>  
+> +int sync_blockdev_range(struct block_device *bdev, loff_t lstart, loff_t lend)
+> +{
+> +	if (!bdev)
+> +		return 0;
 
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
- tools/include/uapi/linux/perf_event.h | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
-index 193dba2ecdc1..4cf1c8e22cab 100644
---- a/tools/include/uapi/linux/perf_event.h
-+++ b/tools/include/uapi/linux/perf_event.h
-@@ -282,6 +282,12 @@ enum {
- 	PERF_BR_PRIV_HV		= 3,
- };
- 
-+#define PERF_BR_ARM64_FIQ		PERF_BR_NEW_ARCH_1
-+#define PERF_BR_ARM64_DEBUG_HALT	PERF_BR_NEW_ARCH_2
-+#define PERF_BR_ARM64_DEBUG_EXIT	PERF_BR_NEW_ARCH_3
-+#define PERF_BR_ARM64_DEBUG_INST	PERF_BR_NEW_ARCH_4
-+#define PERF_BR_ARM64_DEBUG_DATA	PERF_BR_NEW_ARCH_5
-+
- #define PERF_SAMPLE_BRANCH_PLM_ALL \
- 	(PERF_SAMPLE_BRANCH_USER|\
- 	 PERF_SAMPLE_BRANCH_KERNEL|\
--- 
-2.25.1
-
+This check isn't really needed, and I don't think we need a
+!CONFIG_BLOCK stub for this either.

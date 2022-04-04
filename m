@@ -2,77 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28C1B4F1B27
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:18:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 490E14F1ABD
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379461AbiDDVTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34504 "EHLO
+        id S1359211AbiDDVSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:18:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379220AbiDDQqH (ORCPT
+        with ESMTP id S1379222AbiDDQrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 12:46:07 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB7425C62;
-        Mon,  4 Apr 2022 09:44:11 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 2so2102420pjw.2;
-        Mon, 04 Apr 2022 09:44:11 -0700 (PDT)
+        Mon, 4 Apr 2022 12:47:19 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2053335DFF;
+        Mon,  4 Apr 2022 09:45:22 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id y10so9499225pfa.7;
+        Mon, 04 Apr 2022 09:45:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VidJpygdWDhsPO2PnGTUorRul6XI2t/vnWn1jdgufK8=;
-        b=YHcYrPZoBx3AIEnPLlkIjp4d+DhFHUBAZNEMptQgbnoekAnP6pN4qvNlBBwE++iiC4
-         5YZoEAxeSMPeIvZiA7urwvcAsay7jJzAMNJ5cEqxUA32iSJKDxWfJhsPU9SYx2ZXKm51
-         NDi5IkEKmmb3DmthmBj+qAVdgYaZFrqGX37FotMqcTY7Gb0em6W5eSvuWM7AC0hZYt8O
-         OkQqHYAkpGFvGZOgo2FY6dNmpHAqT4o/tBw//AQZCvg2JX79HxLkJQLVY5W1rjz7NCod
-         154PV3TU1cgwzRWqbSIYIW963s70jiuYjwV8vHyoHKFkrt0B2SJgeEfaMmZgKo8Ydo8h
-         r+bQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+vlroJ+nQTT4IB9+qowpCJrEHHMQMZEYFyVaBXOw9cA=;
+        b=K+zWzR4ruy+ZtnYKb3uQ8qPZ1rB96be4f9KbPJeqM2bII/wOKRfwJBp9khKYpdzZNw
+         p/HQY9ehgjEtNQA3UubppVVM2P3enmFvLuFNI2VYINSU8+ehqH1PUud6XiJrJ31Fx+1N
+         9Mw4kdlWm8JhkOo4TWsGUExTMTrl3ji9q4OyAg57DWOcT4X54WgiyRHSF39tOum+DFz/
+         PCtuDEaRjqI075K956dVofjVavlxFPT9gfTJwGH1zzpqTw6kmRYZ/vPvlJ9mLorG7VCX
+         xOWeFzQd44DIsWpLNCyHiCC/aZXwnF4wxYBBg6HkBljldJPYGG7drQ/eGiaJ8MNzP9Y2
+         FmlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VidJpygdWDhsPO2PnGTUorRul6XI2t/vnWn1jdgufK8=;
-        b=EJl9CCSPLiS09/Fj0DxUA7VOxwRi5uKuuidIsduqHbC8OWA3nJDekbX2JB1TtbIu/F
-         TIwaeVJaR9B/y/U4wO33CEvN6z4MPhSarsPdV2+hP2or58GQ0YGqlSUokqiT7p7T5XoZ
-         VJHCt7q0B8svQNoZSD/NSYUvDZR4JPegBPtpxrWFUODiNhSfQUTj8bXjc+EhvwoeFyvK
-         BZZVsy46Gb5U2IOmxCiySkt5OHEV50QEt6FC/Hcg99Uad0wX23rp235rE0AoiSWD+tUT
-         2gXW6XWPdpxC2uj8CKmehTRzOViJcDxAYMk8BoYXGAfOI0JMX+/hDLowkJch+GavKpVo
-         iF5A==
-X-Gm-Message-State: AOAM532BaIEpXbN42w33xRfket9R5GOcjZZD1D2uEWG4497o9ofdgSOF
-        qpb0amc/dLHqHz5hwGsYd+A=
-X-Google-Smtp-Source: ABdhPJwe7KWOFaQYr15fxkjseF+MIDSOIPq0cWUdmxxhYqC3/S001kgGbB66UaX+2wPv1A0IJWw3LA==
-X-Received: by 2002:a17:902:bd95:b0:14f:40ab:270e with SMTP id q21-20020a170902bd9500b0014f40ab270emr684770pls.101.1649090650679;
-        Mon, 04 Apr 2022 09:44:10 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id s22-20020a056a00179600b004fb28a97abdsm14300835pfg.12.2022.04.04.09.44.08
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+vlroJ+nQTT4IB9+qowpCJrEHHMQMZEYFyVaBXOw9cA=;
+        b=H5VRk/Lfvm1WmWeEu5Pj03YQ5HzxULNix3HL42gNovU5fKBi7Gfq+4c+wbHof6fnQm
+         XNFPEXGTD4+ynVRz5sjhefZVBQyCYni/zgBfZYZUlauvUF/0TlubP1Jh5HD6J0w1uzEA
+         xd+EsaBE8kaUTeJkP4xEkm1smhchDjCdWWLO9spfK5Get9tmPKA+UK2KARrZKkd5J54Z
+         3C8qSmi7WsaVpUGd7j/jOMgXw7eSee1bLrXhYiURwlQG6KXACPCPqR+9Z99RAjE5y/Ez
+         PMSn7+A7K7JP7cers2kBKctOca37cPsDIPpa0YYGxMFJcX8aVp7UepO0VS5ODfbJriG+
+         +8jg==
+X-Gm-Message-State: AOAM531Tm4Rj2wahuchYVJh2nL1TtMys4h6x3Z/TGjhGiKRNMZW8wLJb
+        yAZMKXk5NrOJadGD9Sg/reo=
+X-Google-Smtp-Source: ABdhPJykjuTWmrEFansk8XIVGuyt/Galx5GJ9a/oS+WxZ9T0MRsu62DxJHiJKdurLYFsP8Kx1hHJDA==
+X-Received: by 2002:a63:338e:0:b0:398:4302:c503 with SMTP id z136-20020a63338e000000b003984302c503mr633219pgz.217.1649090721580;
+        Mon, 04 Apr 2022 09:45:21 -0700 (PDT)
+Received: from localhost.localdomain ([223.212.58.71])
+        by smtp.gmail.com with ESMTPSA id np8-20020a17090b4c4800b001c70aeab380sm11035pjb.41.2022.04.04.09.45.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 09:44:09 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        =?iso-8859-1?q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Ray Jui <rjui@broadcom.com>, Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Scott Branden <sbranden@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Tony Lindgren <tony@atomide.com>
-Cc:     kernel@pengutronix.de, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v5 4/9] ARM: dts: bcm283x: fix ethernet node name
-Date:   Mon,  4 Apr 2022 09:44:07 -0700
-Message-Id: <20220404164407.2291341-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220216074927.3619425-5-o.rempel@pengutronix.de>
-References: <20220216074927.3619425-1-o.rempel@pengutronix.de> <20220216074927.3619425-5-o.rempel@pengutronix.de>
+        Mon, 04 Apr 2022 09:45:21 -0700 (PDT)
+From:   Yuntao Wang <ytcoode@gmail.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Yuntao Wang <ytcoode@gmail.com>
+Subject: [PATCH bpf-next] selftests/bpf: Fix issues in parse_num_list()
+Date:   Tue,  5 Apr 2022 00:45:14 +0800
+Message-Id: <20220404164514.1814897-1-ytcoode@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,17 +75,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 16 Feb 2022 08:49:22 +0100, Oleksij Rempel <o.rempel@pengutronix.de> wrote:
-> It should be "ethernet@x" instead of "usbether@x" as required by Ethernet
-> controller devicetree schema:
->  Documentation/devicetree/bindings/net/ethernet-controller.yaml
-> 
-> This patch can potentially affect boot loaders patching against full
-> node path instead of using device aliases.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
+There are some issues in parse_num_list():
 
-Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
---
-Florian
+1. The end variable is assigned twice when parsing_end is true.
+2. The function does not check that parsing_end should finally be false.
+
+Clean up parse_num_list() and fix these issues.
+
+Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+---
+ tools/testing/selftests/bpf/testing_helpers.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
+index 795b6798ccee..82f0e2d99c23 100644
+--- a/tools/testing/selftests/bpf/testing_helpers.c
++++ b/tools/testing/selftests/bpf/testing_helpers.c
+@@ -20,16 +20,16 @@ int parse_num_list(const char *s, bool **num_set, int *num_set_len)
+ 		if (errno)
+ 			return -errno;
+ 
+-		if (parsing_end)
+-			end = num;
+-		else
++		if (!parsing_end) {
+ 			start = num;
++			if (*next == '-') {
++				s = next + 1;
++				parsing_end = true;
++				continue;
++			}
++		}
+ 
+-		if (!parsing_end && *next == '-') {
+-			s = next + 1;
+-			parsing_end = true;
+-			continue;
+-		} else if (*next == ',') {
++		if (*next == ',') {
+ 			parsing_end = false;
+ 			s = next + 1;
+ 			end = num;
+@@ -60,7 +60,7 @@ int parse_num_list(const char *s, bool **num_set, int *num_set_len)
+ 			set[i] = true;
+ 	}
+ 
+-	if (!set)
++	if (!set || parsing_end)
+ 		return -EINVAL;
+ 
+ 	*num_set = set;
+-- 
+2.35.1
+

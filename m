@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92AC04F12FD
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 12:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23FD14F1302
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 12:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357073AbiDDKUP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 4 Apr 2022 06:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38068 "EHLO
+        id S1357319AbiDDKUw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 4 Apr 2022 06:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356962AbiDDKUO (ORCPT
+        with ESMTP id S1357144AbiDDKUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 06:20:14 -0400
+        Mon, 4 Apr 2022 06:20:44 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901ED3C717
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 03:18:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88460642B
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 03:18:49 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1nbJmo-0002A5-Ki; Mon, 04 Apr 2022 12:18:14 +0200
+        id 1nbJnM-0002Ek-2i; Mon, 04 Apr 2022 12:18:48 +0200
 Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1nbJmm-0010WZ-M1; Mon, 04 Apr 2022 12:18:11 +0200
+        id 1nbJnM-0010Wg-OK; Mon, 04 Apr 2022 12:18:47 +0200
 Received: from pza by lupine with local (Exim 4.94.2)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1nbJmk-0006k3-H6; Mon, 04 Apr 2022 12:18:10 +0200
-Message-ID: <b8ca583f3fbd4e0a25181d2ccdd0c05034561c74.camel@pengutronix.de>
-Subject: Re: [PATCH] reset: simple: Add AST2600 compatible
+        id 1nbJnK-0006lZ-N5; Mon, 04 Apr 2022 12:18:46 +0200
+Message-ID: <b6ba2600f4e9e8108b1865f863d489a8c49d17ec.camel@pengutronix.de>
+Subject: Re: [PATCH v2] reset: ACPI reset support
 From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Mon, 04 Apr 2022 12:18:10 +0200
-In-Reply-To: <20220221072650.129348-1-joel@jms.id.au>
-References: <20220221072650.129348-1-joel@jms.id.au>
+To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        linux-kernel@vger.kernel.org, thierry.reding@gmail.com
+Date:   Mon, 04 Apr 2022 12:18:46 +0200
+In-Reply-To: <20220307135626.16673-1-kyarlagadda@nvidia.com>
+References: <20220307135626.16673-1-kyarlagadda@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 User-Agent: Evolution 3.38.3-1 
@@ -52,32 +52,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mo, 2022-02-21 at 17:56 +1030, Joel Stanley wrote:
-> Similar to the 2400 and 2500, the LPC controller has some simple
-> reset
-> lines that are used by the UART devices.
+On Mo, 2022-03-07 at 19:26 +0530, Krishna Yarlagadda wrote:
+> Some of the IO devices like I2C or SPI require reset at runtime to
+> recover from an error condition without changing the power state of
+> the system. Added check for ACPI handle and a call to method '__RST'
+> if supported. Devices using device tree method are unaffected by
+> this.
 > 
-> This is already documented in LPC bindings document.
-> 
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
+> Signed-off-by: Krishna Yarlagadda <kyarlagadda@nvidia.com>
 > ---
->  drivers/reset/reset-simple.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/reset/reset-simple.c b/drivers/reset/reset-
-> simple.c
-> index 4dda0daf2c6f..361a68314265 100644
-> --- a/drivers/reset/reset-simple.c
-> +++ b/drivers/reset/reset-simple.c
-> @@ -144,6 +144,7 @@ static const struct of_device_id
-> reset_simple_dt_ids[] = {
->                 .data = &reset_simple_active_low },
->         { .compatible = "aspeed,ast2400-lpc-reset" },
->         { .compatible = "aspeed,ast2500-lpc-reset" },
-> +       { .compatible = "aspeed,ast2600-lpc-reset" },
->         { .compatible = "bitmain,bm1880-reset",
->                 .data = &reset_simple_active_low },
->         { .compatible = "brcm,bcm4908-misc-pcie-reset",
+> v2:
+> - add error checks.
 
 Thank you, applied to reset/next.
 

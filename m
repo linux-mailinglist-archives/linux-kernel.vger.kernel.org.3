@@ -2,153 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D57724F1B34
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B439C4F1D89
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379513AbiDDVTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37472 "EHLO
+        id S1382822AbiDDVcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380577AbiDDUbw (ORCPT
+        with ESMTP id S1380582AbiDDUhM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 16:31:52 -0400
-Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch [IPv6:2001:1600:4:17::8faa])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA51377FD;
-        Mon,  4 Apr 2022 13:29:55 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KXMp90prXzMptVt;
-        Mon,  4 Apr 2022 22:29:53 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KXMp602llzlhRVP;
-        Mon,  4 Apr 2022 22:29:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1649104193;
-        bh=0mFVDtUYoFc9pSC5qUi5cW5G1Ntu51smq5L10oK+2/A=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=TaTRgRi8PJBAchvq1Ix+2vhlaVk/a4nJDrvNu0UPE+g7kY8z4w69RVDtrYUQI4sW7
-         NyeXa0fQWVDYnVQ3YGjrnXS4Dxsj1EG0+q4+bKAuR0xQzy0D8Rj6shj3puUOuxqZU6
-         n9x7Sib0gN6Nsv1/R7bd7gTDuaRn/pnmNcgBseS8=
-Message-ID: <816667d8-2a6c-6334-94a4-6127699d4144@digikod.net>
-Date:   Mon, 4 Apr 2022 22:30:13 +0200
+        Mon, 4 Apr 2022 16:37:12 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE5626AC8
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 13:35:14 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id f3so10086560pfe.2
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 13:35:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=o6Jps2kjgfU371gs4sTPnWDwSSEcT5HsdO32Ve4rCA0=;
+        b=byVdCGvSfTN+YF9id0vNf0etolMj+qC4TWGVuif01wYvsnFC5p7Eu60+KIbGKtf23I
+         L1qp2tXp3H1qKh8ID/YgvO4Ybb1z7p3HWhN/kQORzGDYtqImGFuN05iPemY1YyLo4EzI
+         3ishUmMXZXenx+gdi8i6jAO6QIsdYFre3qQfqv3c3d4NhyYCjDwI/rNOFfiGfolSeoJP
+         JoUrVPOPl/asUmrsT3wtoKAXy+HrlTccZUOmda/dERxQSHdN9IX5cmNpAB5G7kpgZMEj
+         5AYpDcqrlhuTWK3zQUnxcB8C3vaEQWMzOovPhBnMh0pIKDJOBuMdUWGM19ni3OsuEgaN
+         T+LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=o6Jps2kjgfU371gs4sTPnWDwSSEcT5HsdO32Ve4rCA0=;
+        b=tID1hB467hE7EcMPqnPGeyDK8orotpD8SKKvO6uvQbgk6xyjQMHQeFUcw1RMGbNdo/
+         bz350ZoCP6h6Fub6h71/PCct59rhqpAcICI6bvMsMD2Rm9A9oC5VQnl84SRZ+4J2fwgg
+         yUd8jAxNb5DOg6lQD3e2ELfqQHwRjhrQbdaABFkEViCwZSoQOaefbCW2z3rDCd7iY6uC
+         35SeNhvgr3cgdL1lQI0r5HqXD89EKxQB4eZ+tAPrZjsGkFjuIur1U2J0NApjj6RDsDFV
+         sPYHFq2/BbBS3eh16BTkH9ZykffoyWc6Izqq7BzjgZa6xvFsAWBrRJ/j0loWKNO12yTQ
+         H73Q==
+X-Gm-Message-State: AOAM532IToWvJxYmraUkPFznmrGz2nNn/rfluiLXF4JYtfFJjDWQnVbu
+        xnvUSa05SGuvx7HbI90BjFnFgQ==
+X-Google-Smtp-Source: ABdhPJxf1tcimAHxmnX+3KpJwnG6PzgI/KP+QN+oSek+zwRxiAZ+7SLg4i1DQoAnErmOfKEUozNR9w==
+X-Received: by 2002:a63:3e47:0:b0:382:366:64ea with SMTP id l68-20020a633e47000000b00382036664eamr1365270pga.210.1649104513958;
+        Mon, 04 Apr 2022 13:35:13 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id s26-20020a62e71a000000b004fde8486500sm7989821pfh.126.2022.04.04.13.35.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 13:35:12 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 20:35:09 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Gonda <pgonda@google.com>
+Cc:     kvm@vger.kernel.org, John Sperbeck <jsperbeck@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: SEV: Mark nested locking of vcpu->lock
+Message-ID: <YktWfUbjz27OdbUA@google.com>
+References: <20220404194605.1569855-1-pgonda@google.com>
 MIME-Version: 1.0
-User-Agent: 
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Heimes <christian@python.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        James Morris <jmorris@namei.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Paul Moore <paul@paul-moore.com>,
-        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Steve Dower <steve.dower@python.org>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Christian Brauner <brauner@kernel.org>
-References: <20220321161557.495388-1-mic@digikod.net>
- <202204041130.F649632@keescook>
- <CAHk-=wgoC76v-4s0xVr1Xvnx-8xZ8M+LWgyq5qGLA5UBimEXtQ@mail.gmail.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-Subject: Re: [GIT PULL] Add trusted_for(2) (was O_MAYEXEC)
-In-Reply-To: <CAHk-=wgoC76v-4s0xVr1Xvnx-8xZ8M+LWgyq5qGLA5UBimEXtQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220404194605.1569855-1-pgonda@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 04/04/2022 20:47, Linus Torvalds wrote:
-> On Mon, Apr 4, 2022 at 11:40 AM Kees Cook <keescook@chromium.org> wrote:
->>
->> It looks like this didn't get pulled for -rc1 even though it was sent
->> during the merge window and has been in -next for a while. It would be
->> really nice to get this landed since userspace can't make any forward
->> progress without the kernel support.
+On Mon, Apr 04, 2022, Peter Gonda wrote:
+> svm_vm_migrate_from() uses sev_lock_vcpus_for_migration() to lock all
+> source and target vcpu->locks. Mark the nested subclasses to avoid false
+> positives from lockdep.
 > 
-> Honestly, I need a *lot* better reasoning for random new non-standard
-> system calls than this had.
+> Fixes: b56639318bb2b ("KVM: SEV: Add support for SEV intra host migration")
+> Reported-by: John Sperbeck<jsperbeck@google.com>
+> Suggested-by: David Rientjes <rientjes@google.com>
+> Signed-off-by: Peter Gonda <pgonda@google.com>
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> Cc: kvm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
 > 
-> And this kind of "completely random interface with no semantics except
-> for random 'future flags'" I will not pull even *with* good reasoning.
-
-I think the semantic is well defined:
-"This new syscall enables user space to ask the kernel: is this file
-descriptor's content trusted to be used for this purpose?"
-See the trusted_for_policy sysctl documentation: 
-https://lore.kernel.org/all/20220104155024.48023-3-mic@digikod.net/
-
-There is currently only one defined and implemented purpose: execution 
-(or script interpretation). There is room for other flags because it is 
-a good practice to do so, and other purposes were proposed.
-
-
+> Tested by running sev_migrate_tests with lockdep enabled. Before we see
+> a warning from sev_lock_vcpus_for_migration(). After we get no warnings.
 > 
-> I already told Mickaël in private that I wouldn't pull this.
+> ---
+>  arch/x86/kvm/svm/sev.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
 > 
-> Honestly, we have a *horrible* history with non-standard system calls,
-> and that's been true even for well-designed stuff that actually
-> matters, that people asked for.
-> 
-> Something  like this, which adds one very special system call and
-> where the whole thing is designed for "let's add something random
-> later because we don't even know what we want" is right out.
-> 
-> What the system call seems to actually *want* is basically a new flag
-> to access() (and faccessat()). One that is very close to what X_OK
-> already is.
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index 75fa6dd268f0..8f77421c1c4b 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -1591,15 +1591,16 @@ static void sev_unlock_two_vms(struct kvm *dst_kvm, struct kvm *src_kvm)
+>  	atomic_set_release(&src_sev->migration_in_progress, 0);
+>  }
+>  
+> -
+> -static int sev_lock_vcpus_for_migration(struct kvm *kvm)
+> +static int sev_lock_vcpus_for_migration(struct kvm *kvm, unsigned int *subclass)
+>  {
+>  	struct kvm_vcpu *vcpu;
+>  	unsigned long i, j;
+>  
+>  	kvm_for_each_vcpu(i, vcpu, kvm) {
+> -		if (mutex_lock_killable(&vcpu->mutex))
+> +		if (mutex_lock_killable_nested(&vcpu->mutex, *subclass))
+>  			goto out_unlock;
+> +
+> +		++(*subclass);
 
-I agree.
+This is rather gross, and I'm guessing it adds extra work for the non-lockdep
+case, assuming the compiler isn't so clever that it can figure out that the result
+is never used.  Not that this is a hot path...
+
+Does each lock actually need a separate subclass?  If so, why don't the other
+paths that lock all vCPUs complain?
+
+If differentiating the two VMs is sufficient, then we can pass in SINGLE_DEPTH_NESTING
+for the second round of locks.  If a per-vCPU subclass is required, we can use the
+vCPU index and assign evens to one and odds to the other, e.g. this should work and
+compiles to a nop when LOCKDEP is disabled (compile tested only).  It's still gross,
+but we could pretty it up, e.g. add defines for the 0/1 param.
+
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index 75fa6dd268f0..9be35902b809 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -1591,14 +1591,13 @@ static void sev_unlock_two_vms(struct kvm *dst_kvm, struct kvm *src_kvm)
+        atomic_set_release(&src_sev->migration_in_progress, 0);
+ }
+
+-
+-static int sev_lock_vcpus_for_migration(struct kvm *kvm)
++static int sev_lock_vcpus_for_migration(struct kvm *kvm, int mod)
+ {
+        struct kvm_vcpu *vcpu;
+        unsigned long i, j;
+
+        kvm_for_each_vcpu(i, vcpu, kvm) {
+-               if (mutex_lock_killable(&vcpu->mutex))
++               if (mutex_lock_killable_nested(&vcpu->mutex, i * 2 + mod))
+                        goto out_unlock;
+        }
+
+@@ -1745,10 +1744,10 @@ int sev_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+                charged = true;
+        }
+
+-       ret = sev_lock_vcpus_for_migration(kvm);
++       ret = sev_lock_vcpus_for_migration(kvm, 0);
+        if (ret)
+                goto out_dst_cgroup;
+-       ret = sev_lock_vcpus_for_migration(source_kvm);
++       ret = sev_lock_vcpus_for_migration(source_kvm, 1);
+        if (ret)
+                goto out_dst_vcpu;
 
 
-> 
-> But that wasn't how it was sold.
-> 
-> So no. No way will this ever get merged, and whoever came up with that
-> disgusting "trusted_for()" (for WHAT? WHO TRUSTS? WHY?) should look
-> themselves in the mirror.
-
-Well, naming is difficult, but I'm open to suggestion. :)
-
-As explained in the description, the WHAT is the file descriptor 
-content, the WHO TRUSTS is the system security policy (e.g. the mount 
-point options) and the WHY is defined by the usage flag 
-(TRUSTED_FOR_EXECUTION).
-This translates to: is this file descriptor's content trusted to be used 
-for this specified purpose/usage?
-
-
-> 
-> If you add a new X_OK variant to access(), maybe that could fly.
-
-As answered in private, that was the approach I took for one of the 
-early versions but a dedicated syscall was requested by Al Viro: 
-https://lore.kernel.org/r/2ed377c4-3500-3ddc-7181-a5bc114ddf94@digikod.net
-The main reason behind this request was that it doesn't have the exact 
-same semantic as faccessat(2). The changes for this syscall are 
-documented here: 
-https://lore.kernel.org/all/20220104155024.48023-3-mic@digikod.net/
-The whole history is linked in the cover letter: 
-https://lore.kernel.org/all/2ed377c4-3500-3ddc-7181-a5bc114ddf94@digikod.net/
-
-This initial proposal was using a new faccessat2(2) flag: 
-AT_INTERPRETED, see 
-https://lore.kernel.org/all/20200908075956.1069018-2-mic@digikod.net/
-What do you think about that? I'm happy to get back to this version if 
-everyone is OK with it.

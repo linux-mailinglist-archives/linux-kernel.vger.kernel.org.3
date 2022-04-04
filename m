@@ -2,172 +2,505 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5BA74F10AB
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0D64F10BC
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240896AbiDDISw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 04:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
+        id S242397AbiDDIVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 04:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237801AbiDDISu (ORCPT
+        with ESMTP id S239203AbiDDIVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 04:18:50 -0400
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90082.outbound.protection.outlook.com [40.107.9.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B6593B3E2;
-        Mon,  4 Apr 2022 01:16:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XKbOFYT3LmUumMw/fLaDwb+waG/WAMs2UCyuLMheeEu6+QkQ0mBOXLRcsVAH9Tv+O+zxmomi8eFIigFaX/JoQFIHrxCS9xTsCW3d4+j0JnLc4r32rBc8fZDrTituHx2/9DIRK69ZDbjswekPiGWBIs8rZm+KkIKGbEogBJqbacyJLWy5O4+waLrA+8/l9O0CBH7FVpBaOJWZeD//EUXy8dVDgx/DdheqQW8SZaWAH0M8sL4veOmWbKDdjj6Pk16otE16s7XxhSB5RXF03Xr9XlniwJ3XPGarI5BwHY/nxEQhl55lxaBxK6H4liQhwYvT+PzDrJi0TgBOylmXtE5sgA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0Q3jKhbYZvY9iV8pJcG9Woyf7YgAVsyANCpm/poU6kI=;
- b=VBqZZn1i/yg22bNqB6SDiwh3R2OT5uAybmXxtJlh0RZpUDWjmnhX2d31mOIog2Xhlw6VxGVR8pK4K66Ntb1PT6h2xYAlHtSRU9nDPwnhJ7REjwd/0khVmdizQxb6LRNws06S+tYFQndgBOKLoQq2Udu++Zo6JBSKM3lle+VWy8/VGwD0OBvdhXVX/2KCcS8H0/MuMu7Wdg+xuY3SWkf6tZ+k9/S3s1GKq+tD4LdYzEOZY7wH4o7tSWY1NJngJxNf2T6JZGKRcAnpTypf3psu2eaMURb2PRwUffVkNxZSj3Kl0Oka0gN3ve5etvPyjX7OZIJzoeNAFU1uCrQxjSqxXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR1P264MB2245.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1b1::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Mon, 4 Apr
- 2022 08:16:48 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::59c:ae33:63c1:cb1c]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::59c:ae33:63c1:cb1c%7]) with mapi id 15.20.5123.031; Mon, 4 Apr 2022
- 08:16:48 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Rob Herring <robh+dt@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: What means "sysfs: cannot create duplicate filename
- '/devices/platform/ff000100.localbus/d0000044.gpio-controller'"
-Thread-Topic: What means "sysfs: cannot create duplicate filename
- '/devices/platform/ff000100.localbus/d0000044.gpio-controller'"
-Thread-Index: AQHYR/xUyPpICbYGlkyr3dOIDaK7Jw==
-Date:   Mon, 4 Apr 2022 08:16:48 +0000
-Message-ID: <35ceac23-2841-7def-d963-484d1a489836@csgroup.eu>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 74823217-649d-40e2-6972-08da161376e7
-x-ms-traffictypediagnostic: PR1P264MB2245:EE_
-x-microsoft-antispam-prvs: <PR1P264MB2245F7343C35E90C00441318EDE59@PR1P264MB2245.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: y4onuXOnzB5It8vAvnJy3nqQhNhp9nDsLcwekficfdc0fjTS0YVjj9KVTH6tnwdDahC2ao13npfPzM27UAYLXPt5muqxIOmrT160U1odeoAWyWBlZJkHiP9hO+ojYUBmiUKvLTk+w2rhP3VIC+9A8QG7nWgFBnMb5B0y0MPDR51ePccrmQhwCVGuX5m1BXe+1ZRIAHnpKhOuu2ccpKM+gC3IpDg7iLYCl/gkt7rC4Es4/ykAg+k5JqUL2PmP/vUH8MWSMgG0/cT+uRwdue1MNs0do/1YdhiKl7nw3jKjNKr0GqRShnnYr1sNQSl0YpjxPJwM/AXqqovSe0LkWmq0VNJ17QWTQW0fHr4QA8kAt3wOLfny4GTxYww2Aam38GKgYH7mQ8vKrLBGbgj2ARMpcW5XvzwIVhmV9S9oHEDjHjGvXMP8xshIlVOfRxfI2ZJxS6PI5hIo0YMgEvhpF2x/frwZ5dPqbEywkdMxjvV53TIKSH/fpsJBnuTZo203KnFdMGMBkRThG7Jq7Ka0alU/5r9DNdslDqnw8C6r6NeZRKPwYfJXlBz5agSN9Dw3ni/83Ci/Y4QvMGEnbMvwFEriwqKL1uqzzL/4pGZbTiYVPerkJuI5cmSvvpipJXceStM6SzxF6eBtddw1FfeR7Q1aAfZt4a1XDVSTtERRBSIJP+TbZSclXBIyDDg43sJh7CbyVTwtKgwbaKBaOuX/5UGr5+Dz/BY49oeaGHfFfCfBs/JPdIC0Hf2hS8eBD7qiX7RnKpJoUwNgTLBs8GNXYpQ2Lg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(6506007)(54906003)(31696002)(44832011)(8936002)(6512007)(2906002)(38100700002)(71200400001)(508600001)(86362001)(316002)(122000001)(2616005)(38070700005)(83380400001)(186003)(31686004)(8676002)(66476007)(66556008)(66946007)(66446008)(64756008)(76116006)(36756003)(6486002)(4326008)(91956017)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?K2NxTTdsOURRdXVTWFZzVkpqdkpmQlV3QmNBSWR1NXlKbnNkSkVHNGN1NXRj?=
- =?utf-8?B?LzRhTUllYnQzTWQ0MnB4YzdiREY4TG9KZ3NTYk10U1hTbFVhOEdWMzJ4QjNU?=
- =?utf-8?B?WjJDSWRPY0tLOXlZWWx0TVAxVFhMYlVUNXV4ZTZMTVdybEVKekNSTVoxWlpk?=
- =?utf-8?B?c1g0VW8yOHJZNnh3b0NIem9TdFZGM0MyN3VMbnk4NTNac0Nxd21OWEdWMkIz?=
- =?utf-8?B?MFJoM3d1SDZ4NFBlWEJDejIwdFpXMk5XWDVOMkNBK2I3VTNVUHd1R0VxZkRi?=
- =?utf-8?B?TTZ3QzdVNUdrRWJVUUZ2dDZranFQSUMrZCs4ZXEvMUdBRHI2dzBCYTJINDVU?=
- =?utf-8?B?Rk1PMzJvdnEvbSswbzZtRnEzT2xHc1JhZFdFWStEdExvZFFhU1lYckNxQThV?=
- =?utf-8?B?Z1FJQm12Mjl2Q1F2VUZYZk5uSmxKc05nWFJZMnNreC9hcGFFRTA5dmN4MlFN?=
- =?utf-8?B?S1FtVkVOVDBxZVRPaktteU9iYkV5ZlpQRzVQZFRwc3FWZ0pUM2R6NXJGU0x3?=
- =?utf-8?B?VVJLck1Eek1yMHZzaVFxckZYS1BUOUZHMWZzRVBTbUNVaFlCUXRuc3FZNFRv?=
- =?utf-8?B?bzdYVCtTUmpLZnBwZnYwVlFhL0VKL0dJdjdmS1J5WDVVNU1yeEFyb0NhL2Vq?=
- =?utf-8?B?anNoczNwTjdkc21paUJIaG4rb0lrVCtGczFCZnBOTEwzWUxhWjE5b1pzbTBo?=
- =?utf-8?B?LytobWJocHc2RFIycWVxeitkWGtTbjh5NFk3Wi9WSE10elRvbURVQmlZTlly?=
- =?utf-8?B?OFVUemZlUTR4RnJENmtsZmxMUUEveG96ajNielVxSzNWNHVIRkUxbjhkN2dX?=
- =?utf-8?B?K0E1ejBrVnRrQisyemVTM2lXaTdtWndDVjNoKzg0b05rV2tYNVlJbzNlbi9I?=
- =?utf-8?B?N0ZJVitXN1pSRlFlcU8rZUVSL29HSHhQdHVsSlZwZW1SWnVNY1Rabzl2WURN?=
- =?utf-8?B?VXdaME5UMmVxRHNzYVpaUnJKYXFBMnI1N2dpSFhWdzJWeWwrZThWcXNjM25T?=
- =?utf-8?B?KzJpUGhWbVZQcnJOeWdTVjA1QlpqcGVXRzFLSHJwV3Z1VGJubXNlZnpNMHhn?=
- =?utf-8?B?Yzc3QmFYWUlweU5EU2g3QlpySGxXVnhDYy9zVzJqc2U4N1hOVDFyV3lkRTZh?=
- =?utf-8?B?dmU3WFZhRGN6Q3BHZDk2R28zVnhmTjdURXZyVzJjOTl6aENUQlhkQjQ2bndM?=
- =?utf-8?B?MC9FdjBRaExQNVcrUVdrdDhGbVlxN3pNbC9tb1NXZEtnbTEra2tjUWFsb1l2?=
- =?utf-8?B?TWpMbGZBcVF0NktoS3JIaXNzQlMwcjQxUGVuQk1ESjNtNDRGYmxZemZwRVZC?=
- =?utf-8?B?blVydTA2S3NDbWdRaVh2TVg3ZEpEaWRjbENTUHFWTVRwM2dsaGZQVFlFUXUz?=
- =?utf-8?B?Q1FGWEtEUTRZZ28vekxWaVQ3WjJqVG4rNmlRdTNmMHhsNTc0RlRqbUJJQkZx?=
- =?utf-8?B?K3dtMnFzdldRRWNMaDF5ZnZYSFBDTnpGU21kbTR1V2diLzF6Ui9QWGlvbzBl?=
- =?utf-8?B?UzdoQ3pWTTc0Zi8xcStDcnZSUnJFWFdQVW5CNFRydTM1Mnk2UzNvakNVM2lt?=
- =?utf-8?B?czJaWXVoY1ZEZ1pBdjFIMEJlOThBcWhMWVdWaStzLzFmMVQycmZReURweUZl?=
- =?utf-8?B?dGQxRjdtdzJVS3VET0VpQUFKN3YxOXA0bmd0L0F0cVJzRVNST09VRW9hbGJr?=
- =?utf-8?B?Mks5aWhQMkNQRHdaT1RTTWpxZ0FIclNodDg3cFNscmxjaHcyZVNkQ3N6NzQ3?=
- =?utf-8?B?NWpXcUYxR09aUEJBT2dCUlUrMFJ3Q2FncVpwZ1dudUljR1J3WjNKNDNQV0Zj?=
- =?utf-8?B?UjRsQk0vZWVJMzFWRElHOUxWNkdGSWRKalR1TnhDTVpReE53MTF4Nm1UMWRz?=
- =?utf-8?B?QkJHOEErdCsrK2tDZGdyQ3pBekMvb1FGdVJhb3hnaklJMWlKcU9wb051bjk1?=
- =?utf-8?B?UjFJZUVEWm5kelBQczlyR3RsdzZZcjlPbXpGTk1BSS9hTXFJMS9CUkMwb3Y4?=
- =?utf-8?B?Mmw4ZzFIRDZuTDhXN1F2WHdTeENaSzVWVXNTNTFvdGNRT3BqdzVObXpjQlhj?=
- =?utf-8?B?SStRQ293R0cyRjZ6TWd5T0N3Wlo4bFU3a0FvNWlYYVkvQ1J5OE8zZklVUzNj?=
- =?utf-8?B?TG1ZaVUxOC9aMEJwSE9CZkhEUGNiSlhPZ2VuK2JRdlNhWWlPUU1ReG16eTRW?=
- =?utf-8?B?SUhZbXVRZnU1YVQwdzU5Mkd4bVA5ZGdUOTEramJzV3haYUJGdG44UXlOLzdN?=
- =?utf-8?B?RGVEUzFpclFkZTM0bDVGcmZSL3BaMVR5dVA1V1dWYTJWcHJHdGlRNlJnK3pv?=
- =?utf-8?B?VCtLYi9kdnpxalByc2xnRDFSSXNlR05pRWNiVHNEOTVYM3EybFovcTM3ZWsz?=
- =?utf-8?Q?zDATbpGSQcwx97JSOz4jMT11kwrVN/RCsRPxr?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E8CB7632F2FC6640A4DB87CBA4FB5270@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Mon, 4 Apr 2022 04:21:06 -0400
+Received: from smtp2.infineon.com (smtp2.infineon.com [IPv6:2a00:18f0:1e00:4::4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17EA3B3DF;
+        Mon,  4 Apr 2022 01:19:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
+  t=1649060350; x=1680596350;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=edhpGRnqyPzUgy34dTZ0AdexDsbqmzEgNi2cFAe5lag=;
+  b=NhKydAgQY4v00+VFjdqUvHoOrhPoADkLgiE2VSyq2ozy5YYzZiOQ/Hin
+   3K6J0Cumop/eHjOZFK8gR586jewGgJAueIUyoF3Dng/erCXR85n3gK9A1
+   HxnD46GanIC2NVt94mKNk5hCSDvsjheU2QfWek3m8P7HxChPSS3AsZTRZ
+   s=;
+X-SBRS: None
+X-IronPort-AV: E=McAfee;i="6200,9189,10306"; a="172160963"
+X-IronPort-AV: E=Sophos;i="5.90,233,1643670000"; 
+   d="scan'208";a="172160963"
+Received: from unknown (HELO mucxv001.muc.infineon.com) ([172.23.11.16])
+  by smtp2.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 10:19:05 +0200
+Received: from MUCSE819.infineon.com (MUCSE819.infineon.com [172.23.29.45])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mucxv001.muc.infineon.com (Postfix) with ESMTPS;
+        Mon,  4 Apr 2022 10:19:05 +0200 (CEST)
+Received: from ISCN5CG1067W80.infineon.com (172.23.8.247) by
+ MUCSE819.infineon.com (172.23.29.45) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 4 Apr 2022 10:19:05 +0200
+From:   Johannes Holland <johannes.holland@infineon.com>
+To:     <peterhuewe@gmx.de>, <jarkko@kernel.org>, <jgg@ziepe.ca>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <amirmizi6@gmail.com>, <robh@kernel.org>,
+        Johannes Holland <johannes.holland@infineon.com>
+Subject: [PATCH 1/4] tpm: Add tpm_tis_i2c backend for tpm_tis_core
+Date:   Mon, 4 Apr 2022 10:18:32 +0200
+Message-ID: <20220404081835.495-1-johannes.holland@infineon.com>
+X-Mailer: git-send-email 2.31.1.windows.1
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 74823217-649d-40e2-6972-08da161376e7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Apr 2022 08:16:48.0788
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: I3pMJCY5bGI+pbkl8qa1wU6Tq+bHdO58vq/+tmi1HJDPfVlBazsAnWOM8H8K3XU3SjMeYL9mxcftPU/D4TNg/d9ejK7Z8YjRcix7zWMBcSA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB2245
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.23.8.247]
+X-ClientProxiedBy: MUCSE812.infineon.com (172.23.29.38) To
+ MUCSE819.infineon.com (172.23.29.45)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGksDQoNCkR1cmluZyBib290IEknbSBnZXR0aW5nICJzeXNmczogY2Fubm90IGNyZWF0ZSBkdXBs
-aWNhdGUgZmlsZW5hbWUgDQonL2RldmljZXMvcGxhdGZvcm0vZmYwMDAxMDAubG9jYWxidXMvZDAw
-MDAwNDQuZ3Bpby1jb250cm9sbGVyJyINCg0KQmVsb3cgaXMgYSBncmVwIG9mICJkMDAwMDA0NC5n
-cGlvLWNvbnRyb2xsZXIiIGluIHRoZSBsb2cuDQoNCkFueSBvZiB3aGF0IHRoZSBwcm9ibGVtIGNh
-biBiZSBhbmQgd2hhdCBJIGhhdmUgdG8gbG9vayBmb3IgYW5kIGRvIHRvIA0KYXZvaWQgaXQgPw0K
-DQoNClsgICAgMi4xNTA5NTRdIGRldmljZTogJ2QwMDAwMDQ0LmdwaW8tY29udHJvbGxlcic6IGRl
-dmljZV9hZGQNClsgICAgMi4xNTYzNThdIGJ1czogJ3BsYXRmb3JtJzogYWRkIGRldmljZSBkMDAw
-MDA0NC5ncGlvLWNvbnRyb2xsZXINClsgICAgMi4xNjI3MjVdIGJ1czogJ3BsYXRmb3JtJzogX19k
-cml2ZXJfcHJvYmVfZGV2aWNlOiBtYXRjaGVkIGRldmljZSANCmQwMDAwMDQ0LmdwaW8tY29udHJv
-bGxlciB3aXRoIGRyaXZlciB1MTYtZ3Bpbw0KWyAgICAyLjE3MjgzM10gcGxhdGZvcm0gZDAwMDAw
-NDQuZ3Bpby1jb250cm9sbGVyOiBlcnJvciAtRVBST0JFX0RFRkVSOiANCndhaXQgZm9yIHN1cHBs
-aWVyIHBpY0AyMg0KWyAgICAyLjE4MTAxOV0gcGxhdGZvcm0gZDAwMDAwNDQuZ3Bpby1jb250cm9s
-bGVyOiBBZGRlZCB0byBkZWZlcnJlZCBsaXN0DQpbICAgIDIuNDcxOTgxXSBkZXZpY2U6IA0KJ3Bs
-YXRmb3JtOmQwMDAwMDAwLnBpYy0tcGxhdGZvcm06ZDAwMDAwNDQuZ3Bpby1jb250cm9sbGVyJzog
-ZGV2aWNlX2FkZA0KWyAgICAyLjQ4MDYzOV0gZGV2aWNlc19rc2V0OiBNb3ZpbmcgZDAwMDAwNDQu
-Z3Bpby1jb250cm9sbGVyIHRvIGVuZCBvZiBsaXN0DQpbICAgIDIuNDg3MTQyXSBwbGF0Zm9ybSBk
-MDAwMDA0NC5ncGlvLWNvbnRyb2xsZXI6IExpbmtlZCBhcyBhIGNvbnN1bWVyIA0KdG8gZDAwMDAw
-MDAucGljDQpbICAgIDIuNTc1Njc3XSBkZXZpY2U6IA0KJ3BsYXRmb3JtOmQwMDAwMDQ0LmdwaW8t
-Y29udHJvbGxlci0tcGxhdGZvcm06ZmYwMDAxMDAubG9jYWxidXM6bGVkX3B3cic6IA0KZGV2aWNl
-X2FkZA0KWyAgICAyLjU5MTk2NF0gcGxhdGZvcm0gZmYwMDAxMDAubG9jYWxidXM6bGVkX3B3cjog
-TGlua2VkIGFzIGEgY29uc3VtZXIgDQp0byBkMDAwMDA0NC5ncGlvLWNvbnRyb2xsZXINClsgICAg
-Mi42NDg2NjJdIGRldmljZTogDQoncGxhdGZvcm06ZDAwMDAwNDQuZ3Bpby1jb250cm9sbGVyLS1w
-bGF0Zm9ybTpkMDAwMDA0Mi5HUElPJzogZGV2aWNlX2FkZA0KWyAgICAyLjY2Mjg3N10gcGxhdGZv
-cm0gZDAwMDAwNDIuR1BJTzogTGlua2VkIGFzIGEgY29uc3VtZXIgdG8gDQpkMDAwMDA0NC5ncGlv
-LWNvbnRyb2xsZXINClsgICAgMi43ODU5NDFdIGRldmljZTogJ2QwMDAwMDQ0LmdwaW8tY29udHJv
-bGxlcic6IGRldmljZV9hZGQNClsgICAgMi43OTE2MTRdIHN5c2ZzOiBjYW5ub3QgY3JlYXRlIGR1
-cGxpY2F0ZSBmaWxlbmFtZSANCicvZGV2aWNlcy9wbGF0Zm9ybS9mZjAwMDEwMC5sb2NhbGJ1cy9k
-MDAwMDA0NC5ncGlvLWNvbnRyb2xsZXInDQpbICAgIDIuOTAwMjI4XSBrb2JqZWN0X2FkZF9pbnRl
-cm5hbCBmYWlsZWQgZm9yIGQwMDAwMDQ0LmdwaW8tY29udHJvbGxlciANCndpdGggLUVFWElTVCwg
-ZG9uJ3QgdHJ5IHRvIHJlZ2lzdGVyIHRoaW5ncyB3aXRoIHRoZSBzYW1lIG5hbWUgaW4gdGhlIA0K
-c2FtZSBkaXJlY3RvcnkuDQpbICAgIDkuNzk3NDAyXSBwbGF0Zm9ybSBmZjAwMDEwMC5sb2NhbGJ1
-czpsZWRfcHdyOiBlcnJvciAtRVBST0JFX0RFRkVSOiANCnN1cHBsaWVyIGQwMDAwMDQ0LmdwaW8t
-Y29udHJvbGxlciBub3QgcmVhZHkNClsgICAxMS4yMjk5MjddIGRldmljZXNfa3NldDogTW92aW5n
-IGQwMDAwMDQ0LmdwaW8tY29udHJvbGxlciB0byBlbmQgb2YgbGlzdA0KWyAgIDExLjI0ODc5OV0g
-cGxhdGZvcm0gZDAwMDAwNDQuZ3Bpby1jb250cm9sbGVyOiBSZXRyeWluZyBmcm9tIGRlZmVycmVk
-IA0KbGlzdA0KWyAgIDExLjI1NTgwNl0gYnVzOiAncGxhdGZvcm0nOiBfX2RyaXZlcl9wcm9iZV9k
-ZXZpY2U6IG1hdGNoZWQgZGV2aWNlIA0KZDAwMDAwNDQuZ3Bpby1jb250cm9sbGVyIHdpdGggZHJp
-dmVyIHUxNi1ncGlvDQpbICAgMTEuMjY1ODYyXSBidXM6ICdwbGF0Zm9ybSc6IHJlYWxseV9wcm9i
-ZTogcHJvYmluZyBkcml2ZXIgdTE2LWdwaW8gDQp3aXRoIGRldmljZSBkMDAwMDA0NC5ncGlvLWNv
-bnRyb2xsZXINClsgICAxMS4zMjE0MjJdIGRyaXZlcjogJ3UxNi1ncGlvJzogZHJpdmVyX2JvdW5k
-OiBib3VuZCB0byBkZXZpY2UgDQonZDAwMDAwNDQuZ3Bpby1jb250cm9sbGVyJw0KWyAgIDExLjMz
-MTczMl0gYnVzOiAncGxhdGZvcm0nOiByZWFsbHlfcHJvYmU6IGJvdW5kIGRldmljZSANCmQwMDAw
-MDQ0LmdwaW8tY29udHJvbGxlciB0byBkcml2ZXIgdTE2LWdwaW8NCg0KVGhhbmtzDQpDaHJpc3Rv
-cGhl
+Implement the TCG I2C Interface driver, as specified in the TCG PC
+Client Platform TPM Profile (PTP) specification for TPM 2.0 v1.04
+revision 14, section 8, I2C Interface Definition.
+
+This driver supports Guard Times. That is, if required by the TPM, the
+driver has to wait by a vendor-specific time after each I2C read/write.
+The specific time is read from the TPM_I2C_INTERFACE_CAPABILITY register.
+
+Unfortunately, the TCG specified almost but not quite compatible
+register addresses. Therefore, the TIS register addresses need to be
+mapped to I2C ones. The locality is stripped because for now, only
+locality 0 is supported.
+
+Add a sanity check to I2C reads of e.g. TPM_ACCESS and TPM_STS. This is
+to detect communication errors and issues due to non-standard behaviour
+(E.g. the clock stretching quirk in the BCM2835, see 4dbfb5f4401f). In
+case the sanity check fails, attempt a retry.
+
+The CRC over the FIFO register is not implemented here since a new call
+has to be added to the API (tpm_tis_phy_ops).
+
+Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
+---
+ drivers/char/tpm/Kconfig       |  12 ++
+ drivers/char/tpm/Makefile      |   1 +
+ drivers/char/tpm/tpm_tis_i2c.c | 365 +++++++++++++++++++++++++++++++++
+ 3 files changed, 378 insertions(+)
+ create mode 100644 drivers/char/tpm/tpm_tis_i2c.c
+
+diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+index 4a5516406c22..927088b2c3d3 100644
+--- a/drivers/char/tpm/Kconfig
++++ b/drivers/char/tpm/Kconfig
+@@ -74,6 +74,18 @@ config TCG_TIS_SPI_CR50
+ 	  If you have a H1 secure module running Cr50 firmware on SPI bus,
+ 	  say Yes and it will be accessible from within Linux.
+ 
++config TCG_TIS_I2C
++	tristate "TPM Interface Specification 1.3 Interface / TPM 2.0 FIFO Interface - (I2C - generic)"
++	depends on I2C
++	select CRC_CCITT
++	select TCG_TIS_CORE
++	help
++	  If you have a TPM security chip, compliant with the TCG TPM PTP
++	  (I2C interface) specification and connected to an I2C bus master,
++	  say Yes and it will be accessible from within Linux.
++	  To compile this driver as a module, choose M here;
++	  the module will be called tpm_tis_i2c.
++
+ config TCG_TIS_SYNQUACER
+ 	tristate "TPM Interface Specification 1.2 Interface / TPM 2.0 FIFO Interface (MMIO - SynQuacer)"
+ 	depends on ARCH_SYNQUACER || COMPILE_TEST
+diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
+index 66d39ea6bd10..0222b1ddb310 100644
+--- a/drivers/char/tpm/Makefile
++++ b/drivers/char/tpm/Makefile
+@@ -29,6 +29,7 @@ tpm_tis_spi-$(CONFIG_TCG_TIS_SPI_CR50) += tpm_tis_spi_cr50.o
+ 
+ obj-$(CONFIG_TCG_TIS_I2C_CR50) += tpm_tis_i2c_cr50.o
+ 
++obj-$(CONFIG_TCG_TIS_I2C) += tpm_tis_i2c.o
+ obj-$(CONFIG_TCG_TIS_I2C_ATMEL) += tpm_i2c_atmel.o
+ obj-$(CONFIG_TCG_TIS_I2C_INFINEON) += tpm_i2c_infineon.o
+ obj-$(CONFIG_TCG_TIS_I2C_NUVOTON) += tpm_i2c_nuvoton.o
+diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
+new file mode 100644
+index 000000000000..206406c97325
+--- /dev/null
++++ b/drivers/char/tpm/tpm_tis_i2c.c
+@@ -0,0 +1,365 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2014-2021 Nuvoton Technology corporation
++ * Copyright (C) 2019-2022 Infineon Technologies AG
++ *
++ * Authors:
++ * Alexander Steffen <alexander.steffen@infineon.com>
++ * Amir Mizinski <amirmizi6@gmail.com>
++ * Johannes Holland <johannes.holland@infineon.com>
++ *
++ * This device driver implements the TPM interface as defined in the TCG PC
++ * Client Platform TPM Profile (PTP) Specification for TPM 2.0 v1.04
++ * Revision 14.
++ *
++ * It is based on the tpm_tis_spi device driver.
++ */
++
++#include <linux/init.h>
++#include <linux/module.h>
++#include <linux/moduleparam.h>
++#include <linux/slab.h>
++#include <linux/interrupt.h>
++#include <linux/wait.h>
++#include <linux/acpi.h>
++#include <linux/freezer.h>
++
++#include <linux/module.h>
++#include <linux/i2c.h>
++#include <linux/gpio.h>
++#include <linux/of_irq.h>
++#include <linux/of_gpio.h>
++#include <linux/tpm.h>
++#include "tpm_tis_core.h"
++
++/* TPM registers */
++#define TPM_I2C_LOC_SEL 0x00
++#define TPM_I2C_ACCESS 0x04
++#define TPM_I2C_INTERFACE_CAPABILITY 0x30
++#define TPM_I2C_DEVICE_ADDRESS 0x38
++#define TPM_I2C_DATA_CSUM_ENABLE 0x40
++#define TPM_I2C_DID_VID 0x48
++#define TPM_I2C_RID 0x4C
++
++/* TIS-compatible register address to avoid clash with TPM_ACCESS (0x00) */
++#define TPM_LOC_SEL 0x0FFF
++
++/* Mask to extract the I2C register from TIS register addresses */
++#define TPM_TIS_REGISTER_MASK 0x0FFF
++
++/*
++ * Guard Time:
++ * After each I2C operation, the TPM might require the master to wait.
++ * The time period is vendor-specific and must be read from the
++ * TPM_I2C_INTERFACE_CAPABILITY register.
++ *
++ * Before the Guard Time is read (or after the TPM failed to send an I2C NACK),
++ * a Guard Time of 250µs applies.
++ *
++ * Various flags in the same register indicate if a guard time is needed:
++ *  - SR: <I2C read with repeated start> <guard time> <I2C read>
++ *  - RR: <I2C read> <guard time> <I2C read>
++ *  - RW: <I2C read> <guard time> <I2C write>
++ *  - WR: <I2C write> <guard time> <I2C read>
++ *  - WW: <I2C write> <guard time> <I2C write>
++ *
++ * See TCG PC Client PTP Specification v1.04, 8.1.10 GUARD_TIME
++ */
++
++/* Default Guard Time until interface capability register is read */
++#define GUARD_TIME_DEFAULT_MIN 250
++#define GUARD_TIME_DEFAULT_MAX 300
++
++/* Guard Time after I2C slave NACK */
++#define GUARD_TIME_ERR_MIN 250
++#define GUARD_TIME_ERR_MAX 300
++
++/* Guard Time bit masks; SR is repeated start, RW is read then write, etc. */
++#define TPM_GUARD_TIME_SR_MASK 0x40000000
++#define TPM_GUARD_TIME_RR_MASK 0x00100000
++#define TPM_GUARD_TIME_RW_MASK 0x00080000
++#define TPM_GUARD_TIME_WR_MASK 0x00040000
++#define TPM_GUARD_TIME_WW_MASK 0x00020000
++#define TPM_GUARD_TIME_MIN_MASK 0x0001FE00
++#define TPM_GUARD_TIME_MIN_SHIFT 9
++
++/* Masks with bits that must be read zero */
++#define TPM_ACCESS_READ_ZERO 0x48
++#define TPM_INT_ENABLE_ZERO 0x7FFFFF6
++#define TPM_STS_READ_ZERO 0x23
++#define TPM_INTF_CAPABILITY_ZERO 0x0FFFF000
++#define TPM_I2C_INTERFACE_CAPABILITY_ZERO 0x80000000
++
++struct tpm_tis_i2c_phy {
++	struct tpm_tis_data priv;
++	struct i2c_client *i2c_client;
++	bool guard_time_read;
++	bool guard_time_write;
++	u16 guard_time_min;
++	u16 guard_time_max;
++	u8 *io_buf;
++};
++
++static inline struct tpm_tis_i2c_phy *
++to_tpm_tis_i2c_phy(struct tpm_tis_data *data)
++{
++	return container_of(data, struct tpm_tis_i2c_phy, priv);
++}
++
++static u8 address_to_register(u32 addr)
++{
++	addr &= TPM_TIS_REGISTER_MASK;
++
++	switch (addr) {
++	case TPM_ACCESS(0):
++		return TPM_I2C_ACCESS;
++	case TPM_LOC_SEL:
++		return TPM_I2C_LOC_SEL;
++	case TPM_DID_VID(0):
++		return TPM_I2C_DID_VID;
++	case TPM_RID(0):
++		return TPM_I2C_RID;
++	default:
++		return addr;
++	}
++}
++
++static int retry_i2c_transfer_until_ack(struct tpm_tis_data *data,
++					struct i2c_msg *msg)
++{
++	struct tpm_tis_i2c_phy *phy = to_tpm_tis_i2c_phy(data);
++	bool guard_time;
++	int i = 0;
++	int ret;
++
++	if (msg->flags & I2C_M_RD)
++		guard_time = phy->guard_time_read;
++	else
++		guard_time = phy->guard_time_write;
++
++	do {
++		ret = i2c_transfer(phy->i2c_client->adapter, msg, 1);
++		if (ret < 0)
++			usleep_range(GUARD_TIME_ERR_MIN, GUARD_TIME_ERR_MAX);
++		else if (guard_time)
++			usleep_range(phy->guard_time_min, phy->guard_time_max);
++		/* retry on TPM NACK */
++	} while (ret < 0 && i++ < TPM_RETRY);
++
++	return ret;
++}
++
++/* Check that bits which must be read zero are not set */
++static int sanity_check_read(u8 reg, u16 len, u8 *buf)
++{
++	u32 value;
++	u32 zero_mask;
++
++	switch (len) {
++	case sizeof(u8):
++		value = buf[0];
++		break;
++	case sizeof(u16):
++		value = le16_to_cpup((__le16 *)buf);
++		break;
++	case sizeof(u32):
++		value = le32_to_cpup((__le32 *)buf);
++		break;
++	default:
++		return 0;
++	}
++
++	switch (reg) {
++	case TPM_I2C_ACCESS:
++		zero_mask = TPM_ACCESS_READ_ZERO;
++		break;
++	case TPM_INT_ENABLE(0) & TPM_TIS_REGISTER_MASK:
++		zero_mask = TPM_INT_ENABLE_ZERO;
++		break;
++	case TPM_STS(1) & TPM_TIS_REGISTER_MASK:
++		zero_mask = TPM_STS_READ_ZERO;
++		break;
++	case TPM_INTF_CAPS(0) & TPM_TIS_REGISTER_MASK:
++		zero_mask = TPM_INTF_CAPABILITY_ZERO;
++		break;
++	case TPM_I2C_INTERFACE_CAPABILITY:
++		zero_mask = TPM_I2C_INTERFACE_CAPABILITY_ZERO;
++		break;
++	default:
++		return 0;
++	}
++
++	if (unlikely((value & zero_mask) != 0x00)) {
++		pr_debug("TPM I2C read of register 0x%02x failed sanity check: 0x%x\n", reg, value);
++		return -EIO;
++	}
++
++	return 0;
++}
++
++static int tpm_tis_i2c_read_bytes(struct tpm_tis_data *data, u32 addr, u16 len,
++				  u8 *result, enum tpm_tis_io_mode io_mode)
++{
++	struct tpm_tis_i2c_phy *phy = to_tpm_tis_i2c_phy(data);
++	struct i2c_msg msg = { .addr = phy->i2c_client->addr };
++	u8 reg = address_to_register(addr);
++	int i = 0;
++	int ret;
++
++	do {
++		/* write register */
++		msg.len = sizeof(reg);
++		msg.buf = &reg;
++		msg.flags = 0;
++		retry_i2c_transfer_until_ack(data, &msg);
++		if (ret < 0)
++			return ret;
++
++		/* read data */
++		msg.buf = result;
++		msg.len = len;
++		msg.flags = I2C_M_RD;
++		retry_i2c_transfer_until_ack(data, &msg);
++		if (ret < 0)
++			return ret;
++
++		ret = sanity_check_read(reg, len, result);
++		if (ret == 0)
++			return 0;
++
++		usleep_range(GUARD_TIME_ERR_MIN, GUARD_TIME_ERR_MAX);
++	} while (i++ < TPM_RETRY);
++
++	return ret;
++}
++
++static int tpm_tis_i2c_write_bytes(struct tpm_tis_data *data, u32 addr, u16 len,
++				   const u8 *value,
++				   enum tpm_tis_io_mode io_mode)
++{
++	struct tpm_tis_i2c_phy *phy = to_tpm_tis_i2c_phy(data);
++	struct i2c_msg msg = { .addr = phy->i2c_client->addr };
++	u8 reg = address_to_register(addr);
++	int ret = 0;
++
++	if (len > TPM_BUFSIZE - 1)
++		return -EIO;
++
++	/* write register and data in one go */
++	phy->io_buf[0] = reg;
++	memcpy(phy->io_buf + sizeof(reg), value, len);
++
++	msg.len = sizeof(reg) + len;
++	msg.buf = phy->io_buf;
++	retry_i2c_transfer_until_ack(data, &msg);
++	if (ret < 0)
++		return ret;
++
++	return 0;
++}
++
++static int init_guard_time(struct tpm_tis_i2c_phy *phy)
++{
++	u32 i2c_caps;
++	int ret;
++
++	phy->guard_time_read = true;
++	phy->guard_time_write = true;
++	phy->guard_time_min = GUARD_TIME_DEFAULT_MIN;
++	phy->guard_time_max = GUARD_TIME_DEFAULT_MAX;
++
++	ret = tpm_tis_i2c_read_bytes(&phy->priv, TPM_I2C_INTERFACE_CAPABILITY,
++				     sizeof(i2c_caps), (u8 *)&i2c_caps,
++				     TPM_TIS_PHYS_32);
++	if (ret)
++		return ret;
++
++	phy->guard_time_read = (i2c_caps & TPM_GUARD_TIME_RR_MASK) ||
++			       (i2c_caps & TPM_GUARD_TIME_RW_MASK);
++	phy->guard_time_write = (i2c_caps & TPM_GUARD_TIME_WR_MASK) ||
++				(i2c_caps & TPM_GUARD_TIME_WW_MASK);
++	phy->guard_time_min = (i2c_caps & TPM_GUARD_TIME_MIN_MASK) >>
++			      TPM_GUARD_TIME_MIN_SHIFT;
++	/* guard_time_max = guard_time_min * 1.2 */
++	phy->guard_time_max = phy->guard_time_min + phy->guard_time_min / 5;
++
++	return 0;
++}
++
++static SIMPLE_DEV_PM_OPS(tpm_tis_pm, tpm_pm_suspend, tpm_tis_resume);
++
++static const struct tpm_tis_phy_ops tpm_i2c_phy_ops = {
++	.read_bytes = tpm_tis_i2c_read_bytes,
++	.write_bytes = tpm_tis_i2c_write_bytes,
++};
++
++static int tpm_tis_i2c_probe(struct i2c_client *dev,
++			     const struct i2c_device_id *id)
++{
++	struct tpm_tis_i2c_phy *phy;
++	const u8 locality = 0;
++	int ret;
++
++	phy = devm_kzalloc(&dev->dev, sizeof(struct tpm_tis_i2c_phy),
++			   GFP_KERNEL);
++	if (!phy)
++		return -ENOMEM;
++
++	phy->io_buf = devm_kzalloc(&dev->dev, TPM_BUFSIZE, GFP_KERNEL);
++	if (!phy->io_buf)
++		return -ENOMEM;
++
++	phy->i2c_client = dev;
++
++	/* must precede all communication with the tpm */
++	ret = init_guard_time(phy);
++	if (ret)
++		return ret;
++
++	ret = tpm_tis_i2c_write_bytes(&phy->priv, TPM_LOC_SEL, sizeof(locality),
++				      &locality, TPM_TIS_PHYS_8);
++	if (ret)
++		return ret;
++
++	return tpm_tis_core_init(&dev->dev, &phy->priv, -1, &tpm_i2c_phy_ops,
++				 NULL);
++}
++
++static int tpm_tis_i2c_remove(struct i2c_client *client)
++{
++	struct tpm_chip *chip = i2c_get_clientdata(client);
++
++	tpm_chip_unregister(chip);
++	tpm_tis_remove(chip);
++	return 0;
++}
++
++static const struct i2c_device_id tpm_tis_i2c_id[] = {
++	{ "tpm_tis_i2c", 0 },
++	{}
++};
++MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_id);
++
++static const struct of_device_id of_tis_i2c_match[] = {
++	{ .compatible = "infineon,slb9673", },
++	{ .compatible = "nuvoton,npct75x", },
++	{ .compatible = "tcg,tpm-tis-i2c", },
++	{}
++};
++MODULE_DEVICE_TABLE(of, of_tis_i2c_match);
++
++static struct i2c_driver tpm_tis_i2c_driver = {
++	.driver = {
++		.owner = THIS_MODULE,
++		.name = "tpm_tis_i2c",
++		.pm = &tpm_tis_pm,
++		.of_match_table = of_match_ptr(of_tis_i2c_match),
++	},
++	.probe = tpm_tis_i2c_probe,
++	.remove = tpm_tis_i2c_remove,
++	.id_table = tpm_tis_i2c_id,
++};
++module_i2c_driver(tpm_tis_i2c_driver);
++
++MODULE_DESCRIPTION("TPM Driver for native I2C access");
++MODULE_LICENSE("GPL");
+-- 
+2.31.1.windows.1
+

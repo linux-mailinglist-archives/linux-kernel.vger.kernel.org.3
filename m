@@ -2,119 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 525D94F103C
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 09:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F234F1045
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 09:49:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377789AbiDDHr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 03:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37316 "EHLO
+        id S1356349AbiDDHtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 03:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353876AbiDDHrX (ORCPT
+        with ESMTP id S239741AbiDDHtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 03:47:23 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2223B014;
-        Mon,  4 Apr 2022 00:45:27 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id f18so4902612edc.5;
-        Mon, 04 Apr 2022 00:45:27 -0700 (PDT)
+        Mon, 4 Apr 2022 03:49:14 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD13917ABF
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 00:47:18 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id g15-20020a17090adb0f00b001caa9a230c7so833756pjv.5
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 00:47:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Tlai9C8cCZiFfKZnTMXZTtbcv2bOhWWExoRE23jJ3PQ=;
-        b=hnpZqkQvRmhcgBpVq1K7rI1j3GvBGkZU/uMd3O9XQIvlRWmpAJ2xY9AdPT9g4u3G+A
-         P7lEhSmfAdelj8ntCpmVIrCXpgVb/lguNVtMkyfAVq8btERTg+bgi7ZDBwKqJydzyvHE
-         Y2qfyNt09y62V9e5Ouh5e5pKEC/gUUZc5b8W9ti8xscMHRMXyl/olrhO5ZlNyKfQrEZq
-         Y/A0VvvlA0cR1O5pCB1k3dJUbPWEIHrUwNA/TqaAeN03DUwjmKKg+cRDsxls+RSL0bEy
-         7aYIkTUGW7LgBiFNcNAPPU38W7jJq4lJZlBg/O7ztgO0XNlbCYMFvZtEeV74dvMrlXJt
-         ynMA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0eeT6kPw0yLPrANsQAxwIxRSWeGtxpHd9u+X7Wv3pGE=;
+        b=Y+9H/px8pBLuWwNc5mNdxkF+MHWQsFi8MXFzKzIQ3IphDkradk32peIA372HJM9sRd
+         9/XBzNydfRNBjL5g9VPofLauSg2M2l4JUCRcYRwPZS2JRyjTa6a8AlAZJ5lm2xRbPnEy
+         x3iwBrrBPNLSPWiYGWPsmYyohRHk/1gYItdb0su6o/MLCgVnVv54ScrZxgrW1YzinsoT
+         lVyrD0Z+gis08MqKFLrepPq98OAR08Q0iPrJR5DRlObxKLoKQg5gVsksn/Ja32+TAGE7
+         NMCB8aWB91vGlYUr1mDCyxwcE9b6UIE2xfIGl7lHxhN1FRWNztQM83ZI4UJY9ifWwzck
+         v2VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Tlai9C8cCZiFfKZnTMXZTtbcv2bOhWWExoRE23jJ3PQ=;
-        b=DsW58/rgbf/tzW7ik879+qiq6eowzupckGfP2t03DVJMQuB8yHWeRMM++I5IG3a2C1
-         Xl98NLGEbGoB1CkM/c72rQkn5jEfGet4F/HeK43T/neOkR3b8kZiMIMeFVja3FZzyAkq
-         L04WSDVMj0CMFGVvuP7ST1OLW0kSFqzMioQ1KD2mGwP5sRai6K0pkV6kanrg6eM+dTez
-         YN4fOCRgXK/Y9Mg8NBvF4u90U1LJmaJwzuJlraPDq4COdmprNuXeWONK5GREeNWT6OSd
-         DdVePLh24k5Rtzu5U5c48NtIu1fsNs48HlrfKc6ybI2dhV4lJRtWjtJkOVMbpbwslYFG
-         VYNQ==
-X-Gm-Message-State: AOAM531Ng2kBrvzReepCWMVC1Y2FjsJUs22z3FhknmueVZ31Xu06jXjA
-        4g7BPurIQfXse1H5iDfrknEAS1n/p1AqDgzLoPc=
-X-Google-Smtp-Source: ABdhPJyWJ0a9eaELFNxUdBnwfDWskCppbdAyhqtxj0984BUGh7eK26sPOBWWPUumUd+bfO25fkAYIOEIoHyeCUw06E8=
-X-Received: by 2002:aa7:c98c:0:b0:41c:bfbd:380 with SMTP id
- c12-20020aa7c98c000000b0041cbfbd0380mr6001495edt.313.1649058325913; Mon, 04
- Apr 2022 00:45:25 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0eeT6kPw0yLPrANsQAxwIxRSWeGtxpHd9u+X7Wv3pGE=;
+        b=ladcT5X1TkMttymUE64auDuf0x9tLhNTlKFB60+Lm+fXH3cTax5FdgMPBg0WOZ2xIJ
+         KoUNiQ/ATjLd/I5EF/wIKMlVn0DS/64Aq3w7Kj71LH3Rim4pq48tEjlWK5zIc5Xl/d/U
+         gGxkLsZgxSqY4ZX8ie/GSs99yUWrjCCf/2wUgh3VYb/6dRhOYqSsAc2U0o5G51XJB4ZH
+         jAMuruEKrB3UdrIJD8zH+yepHnURgYXlA3kqDTtgwcz8RzINuIKUnvqy6N/FOj4/nQWE
+         aSIC1oHj/PXaI/StUkoBiUlvHwGhOysH+RR5Jkx7ilwFOo6EKsJ1K8SBna8+mMdCnhDj
+         whwQ==
+X-Gm-Message-State: AOAM533cqlEK0rSVpXm8JRB4EZTNMUQvEUjE+PxTndsmgAAPBZwlD7hW
+        /wu7tata77A82TEsx6C7ZNeu2A==
+X-Google-Smtp-Source: ABdhPJzRe/n6k0xdw97giJs6QEXkVJSOZ+CF0WqVP2yuW58cDTjgrcK3nXt32NvZ4ILaeG4XXrjPog==
+X-Received: by 2002:a17:902:e193:b0:156:a04a:40d0 with SMTP id y19-20020a170902e19300b00156a04a40d0mr4453833pla.125.1649058437835;
+        Mon, 04 Apr 2022 00:47:17 -0700 (PDT)
+Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.245])
+        by smtp.gmail.com with ESMTPSA id g70-20020a636b49000000b003823dd39d41sm9376579pgc.64.2022.04.04.00.47.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 00:47:17 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     mike.kravetz@oracle.com, akpm@linux-foundation.org,
+        david@redhat.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        smuchun@bytedance.com, Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH 0/3] cleanup hugetlb_vmemmap
+Date:   Mon,  4 Apr 2022 15:46:49 +0800
+Message-Id: <20220404074652.68024-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
- <20220331022727.ybj4rui4raxmsdpu@MBP-98dd607d3435.dhcp.thefacebook.com>
- <b9f5995f96da447c851f7c9db8232a9b@huawei.com> <20220401235537.mwziwuo4n53m5cxp@MBP-98dd607d3435.dhcp.thefacebook.com>
- <CACYkzJ5QgkucL3HZ4bY5Rcme4ey6U3FW4w2Gz-9rdWq0_RHvgA@mail.gmail.com>
-In-Reply-To: <CACYkzJ5QgkucL3HZ4bY5Rcme4ey6U3FW4w2Gz-9rdWq0_RHvgA@mail.gmail.com>
-From:   Djalal Harouni <tixxdz@gmail.com>
-Date:   Mon, 4 Apr 2022 09:44:59 +0200
-Message-ID: <CAEiveUcx1KHoJ421Cv+52t=0U+Uy2VF51VC_zfTSftQ4wVYOPw@mail.gmail.com>
-Subject: Re: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF programs
-To:     KP Singh <kpsingh@kernel.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
-        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 3, 2022 at 5:42 PM KP Singh <kpsingh@kernel.org> wrote:
->
-> On Sat, Apr 2, 2022 at 1:55 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-...
-> >
-> > > Pinning
-> > > them to unreachable inodes intuitively looked the
-> > > way to go for achieving the stated goal.
-> >
-> > We can consider inodes in bpffs that are not unlinkable by root
-> > in the future, but certainly not for this use case.
->
-> Can this not be already done by adding a BPF_LSM program to the
-> inode_unlink LSM hook?
->
+This series is based on next-20220404.
 
-Also, beside of the inode_unlink... and out of curiosity: making sysfs/bpffs/
-readonly after pinning, then using bpf LSM hooks sb_mount|remount|unmount...
-family combining bpf() LSM hook... isn't this enough to:
-1. Restrict who can pin to bpffs without using a full MAC
-2. Restrict who can delete or unmount bpf filesystem
+The word of "free" is not expressive enough to express the feature of optimizing
+vmemmap pages associated with each HugeTLB, rename this keywork to "optimeze" is
+more clear.  In this series, cheanup related codes to make it more clear and
+expressive.  This is suggested by David.
 
-?
+Muchun Song (3):
+  mm: hugetlb_vmemmap: cleanup hugetlb_vmemmap related functions
+  mm: hugetlb_vmemmap: cleanup hugetlb_free_vmemmap_enabled*
+  mm: hugetlb_vmemmap: cleanup CONFIG_HUGETLB_PAGE_FREE_VMEMMAP*
+
+ Documentation/admin-guide/kernel-parameters.txt |  4 +-
+ Documentation/admin-guide/mm/hugetlbpage.rst    |  2 +-
+ arch/arm64/Kconfig                              |  2 +-
+ arch/arm64/mm/flush.c                           |  4 +-
+ arch/x86/Kconfig                                |  2 +-
+ arch/x86/mm/init_64.c                           |  2 +-
+ fs/Kconfig                                      | 16 +++----
+ include/linux/hugetlb.h                         |  4 +-
+ include/linux/mm.h                              |  2 +-
+ include/linux/page-flags.h                      | 18 ++++----
+ mm/Makefile                                     |  2 +-
+ mm/hugetlb.c                                    | 10 ++---
+ mm/hugetlb_vmemmap.c                            | 56 ++++++++++++-------------
+ mm/hugetlb_vmemmap.h                            | 24 +++++------
+ mm/memory_hotplug.c                             |  2 +-
+ mm/sparse-vmemmap.c                             |  4 +-
+ 16 files changed, 76 insertions(+), 78 deletions(-)
 
 -- 
-https://djalal.opendz.org/
+2.11.0
+

@@ -2,137 +2,789 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9B94F1696
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 15:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0F04F16A5
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 15:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358707AbiDDN6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 09:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40294 "EHLO
+        id S1359179AbiDDOBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 10:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242856AbiDDN6J (ORCPT
+        with ESMTP id S234518AbiDDOBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 09:58:09 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam08on2076.outbound.protection.outlook.com [40.107.101.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B8A3E5F5;
-        Mon,  4 Apr 2022 06:56:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kAWtlnPZKLcCoXJ90YL5e2DMoWK7GeKFA4YUJiV/iD33uBXV0MEgqeBn63k8pUm3d25xYc7S9QMA5RdTHP282ttNQqPrGROAM3NaJoDQbyPtn1XZAMjJXmVITa1iiu5T7y6Ds1GKJNUdgosjVXsDvRp6o6MkHHkeryr1tKqYLk9y9cZHHQ9iouNe1BU1T6X2B7C9w5HRBiIaNvnQ8w1bNa8MzbZKTXmRwUw9neZ0e+euBIj0ncH71wxwdwMMS3bODRS8A7a7lhHlTpydbNk7W7oMiXwnZ650yDvJOcKRRfugYpypI/fwHiQxZsn+13OJFt55/TD+rIjMH0ECCyQhMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wGaaS514UlLXzJ0Lt4WfQ1NLtKEgAEllDrzrRLc/8RA=;
- b=dUnuzABJOabxdMnlvkmsomusmbXUeTQ9MRoAdCYcSE/EWplFP+o0QqmCKt3zytsyzvtyYOLPijaP2lZGLI/HdBb3mdNzBP3vRMgDNhdrDB4I6GMvSBXNJ+PQp5uyHNQ5muyfY3to9tCIJQ291jNdUz4dv9WZu/W8nlMa4fj9R6Qpz8x//tUooVOSHJXytV+cktB8YhyV9tMd9ePLWt7a5sWi0n/zKsbIK5jnA70n4nk0LQI1cpkIAnG/Hw5BNgms2nYHZCEuGJZGuC02/EQIrPPbKOjuf5kba8GpTc4kivI/u2VEoIHfRUuNkXrCGIkW7Yomut3H2eGoVGp/jQJmJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wGaaS514UlLXzJ0Lt4WfQ1NLtKEgAEllDrzrRLc/8RA=;
- b=j0NAPvD5bf0YwekqXf30bqEfO68K4j2KBMNDpKaSnNlf827SOh3M+NbMA/OEA8BlTgVUPHPRqFrndm8Vr5pux/f7jSrXelhRtJTaOcfiLSrtQZ7hqTMKSMA4KGoVL0w9Gf8OBLXKC9DlkRsX20AdajdHb7izugyh3woFhZerB6fuBAjpOgbPWbpeTOcW2zZ2lT5Lxg8UgAYcByn10xKm7Os+k2iJJbDlskKNPeX7smRwLdImoE4VSSsIzSR7c5ahvZGfxH34Sxxssz8yaDJRJ02d67fceZCmLSSAo7DWcYvsO7QT6Ro9m208Mv09cEk21fhSzTX+xR3IEwgAlQ3M9w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by MN2PR12MB4424.namprd12.prod.outlook.com (2603:10b6:208:26a::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Mon, 4 Apr
- 2022 13:56:11 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::cdfb:f88e:410b:9374]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::cdfb:f88e:410b:9374%5]) with mapi id 15.20.5123.031; Mon, 4 Apr 2022
- 13:56:11 +0000
-Date:   Mon, 4 Apr 2022 10:56:09 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Guo Zhengkui <guozhengkui@vivo.com>
-Cc:     Mustafa Ismail <mustafa.ismail@intel.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        "open list:INTEL ETHERNET PROTOCOL DRIVER FOR RDMA" 
-        <linux-rdma@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        zhengkui_guo@outlook.com
-Subject: Re: [PATCH linux-next v2] RDMA: simplify if-if to if-else
-Message-ID: <20220404135609.GA2911054@nvidia.com>
-References: <YkVu3vqjIPFRSGtM@unreal>
- <20220331130525.14750-1-guozhengkui@vivo.com>
+        Mon, 4 Apr 2022 10:01:11 -0400
+X-Greylist: delayed 211 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Apr 2022 06:59:11 PDT
+Received: from gateway20.websitewelcome.com (gateway20.websitewelcome.com [192.185.62.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26C83335E
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 06:59:10 -0700 (PDT)
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway20.websitewelcome.com (Postfix) with ESMTP id 0102F4010DAE6
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 08:59:10 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id bNCenzts722u3bNCfn77Jo; Mon, 04 Apr 2022 08:57:09 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=RerQAtl7dv4nDimyCHHS11MiVdMTFcDnZuZ3PqbaiZ0=; b=meolIeGJs6HQCXTVFf/5t42kU0
+        aU7EGzORifdpKDQaQMsDH/rR9ZGjaFYfC2e6tbbb5VuBRHMB/Rb6sQjKo21bWRzz1nH3ZrZxfVMYp
+        IaqXKqoK8Q/Fgx/dx+HLSeAQBG8r2FZ+zd6VOz6NvcTIwGcvqurvOLUnQvIUCRio2o+y0LMu6vPyX
+        q50R67Aqc2woUUbXrAfJ+smXjGceEaLyFfhqvyxaEUaaS5lf/f3VLs6Ot/L2Z4Q6oQnDKLNMeW7y2
+        8rcEodidcrdpy08qSCTd1b7K6A8/dYkDybJbuQH1VWspQsxE8SFNumAxZGP7NbkKNBLgW7JwzgoWh
+        w111PVeA==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57850 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nbNCe-000lRS-Gd; Mon, 04 Apr 2022 13:57:08 +0000
+Date:   Mon, 4 Apr 2022 06:57:07 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Aleksa Savic <savicaleksa83@gmail.com>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] hwmon: (aquacomputer_d5next) Add support for
+ Aquacomputer Octo
+Message-ID: <20220404135707.GA3283128@roeck-us.net>
+References: <20220404134212.9690-1-savicaleksa83@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220331130525.14750-1-guozhengkui@vivo.com>
-X-ClientProxiedBy: BL0PR02CA0009.namprd02.prod.outlook.com
- (2603:10b6:207:3c::22) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 61e5a5ad-d26e-411d-d214-08da1642e00d
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4424:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB442473969A398EBE82470253C2E59@MN2PR12MB4424.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 26cJf38TAPcW9Wmy39oMBnte4xud66Zk9rG2ct0ABUN0HHw1VSySX7hauu7GTIariqDop6NL19/TJ65iEDMNUFKK4AqYXAomnruOLVd6+H03kxXkxwVOXVLn37lvQ3I3oRS31Cdb1ATjeMh6k6XLuBlUBOfeHfirCXML1z4ZJ0y+MZGwTkmpILe4dQ+Y9r6vlAOpNBJuyuIhm+hpErOphxEb4cMRIIrcjx2aXIJH8Ov/Ge9U3ZGApZGMGmOXs27c7YXJpc4xcF/9mwwDq2QkjJ61WPgSUc8zauowaQkiadvS/zAJ4G/Pfx1MhTbz0AoDo3mFLai5Soif6bnkSQPhogCna7T1ghJGDEX2QuGPxchkYBKNF1ZKLPn9QtQar/ftPuxFfncs03vTzx7Fa/u6/EGKlNJOnP67KvCbSez21HydTxXC6iKrDD1reEyCwZuJEUQO8mYK/iXUl0DW1MQ387ZfNQHE5/O9I+Wa668p7bxTUolTDYYWJ8OTH7VjKeZUSp0m8Fkyoj/AfOYO37tfmTW/L8qTQhNBoHe5Dv/8vV+sqCaUtXZA615/zsFRA5NIC5GdCoXU2jkMy7fp+M72ASuqdMfSUbFgmolCczPo4pzedny9zLq4aeU88sADIHcB5DcoujCzQCdvbtIBi4eEHQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(66556008)(6486002)(66476007)(6506007)(4326008)(6916009)(316002)(86362001)(54906003)(6512007)(66946007)(8676002)(33656002)(8936002)(38100700002)(26005)(186003)(5660300002)(4744005)(2906002)(36756003)(1076003)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8JOiT4SprqigkgcQ+1oTTJmwlkuXx5VmZ8O6jvxUPtyxvQNwgzlI0ZtlRgz2?=
- =?us-ascii?Q?QEbVhA+gkvFKduEwGq7T1utaujOMqY3/ZCIcSuDH9jJrKKxGkHaa0PVB1dSg?=
- =?us-ascii?Q?sObvFjtczt+YolQuNJ8B+Z5IwfXdOPs9q7zhn09ituUdx997K9TeCuSOAKhB?=
- =?us-ascii?Q?PMpNZb3wSl9q2bMrinAGtWL6VteIFDzPFDt6nmILx138Kw0b2REdwGKL05Qi?=
- =?us-ascii?Q?SXXz0wm8+iWQ+DlFgvc+5BBAToh6KOEnQTZCk4xyullLExaJ8lOOhQV2hakh?=
- =?us-ascii?Q?zgzXanW4zZ9oJDDAgxiPcpEGlMZvz9mm+47g2DiaZ4II2Mjaqsi/ysVMWzSE?=
- =?us-ascii?Q?oyMQTKvb2qlUlMTwnj2x625xi2ZFF1IEbt4gP/9NE/rjintVxaiMThDNAuN7?=
- =?us-ascii?Q?blre6IY+1MElJQmzyQ0GH4gH0u4aroaXJ4fMipKDX/+B79AbB46DOqC2Q8f8?=
- =?us-ascii?Q?CfDcdttqagreVT9aiEfcPKh978aJEhGYGOXwsUZ14P+6NZnxEUJmt0gGHqnA?=
- =?us-ascii?Q?lAnT+npM7IJBxC2SOg6FehRRJ3fR6DkG0qKDU1OIw+4nDa6hTduvK2GRUEoh?=
- =?us-ascii?Q?mLs49gkxs5hKXFzAZiLNocmIxzjO5vj0Iq3eKbc/WW5C+pk1htabM3gepVx+?=
- =?us-ascii?Q?rOgTNMkosauY/rcPgtoogR3AV1UWhkb1JKQTik4Y9Gxz+z+2s82j9HG45MnO?=
- =?us-ascii?Q?QW0holSIo2MVgPUTuHnFgw9IyHfhxE6dlZR2c4wWHGTo8mXl5KSeODFrEmyQ?=
- =?us-ascii?Q?ZSA4jq5KW+JzNAog+Yez2CDJCeWoHfOEiUUM/2BWuKuLOLBtRxWbOMPQKu73?=
- =?us-ascii?Q?cBCWw2joqjIKw9j/1IRm9nKpb5M4f4eT/k5kV66gBH7Ed5zXrB0xmIKZQaKN?=
- =?us-ascii?Q?aDLkIhL+Uc5k7nAiKzAJwb5hQo5qXRDwLc8IiMoiq2WqiDgnpdeikmQ8Gp4F?=
- =?us-ascii?Q?o8lEa69QLQzNWiaWqN4IFvP7JbBWIc6XdmkCNBhYAggBhYRXsh/ck2p0A18W?=
- =?us-ascii?Q?abWsfAwxHc2Hvs9Mn6DtDPQWzic98Wf7//2P+F/I5PG3VRa0D6Nowl/pjKoj?=
- =?us-ascii?Q?Rt9uexRIXh5NrRWDmP+pDFZ3SegW41ESQmCBx1yC6PrmO2kI3Xc33Gt3Dc36?=
- =?us-ascii?Q?rezsvAITZEp4auLbMq1Len1YPz551mHhJa8hCM3Vzq7fQVtXhaq59cyLtY8C?=
- =?us-ascii?Q?/rjcdn+Hj58x8Uw4UdLhQ+w6UGuHYhKm0YwfP/oCTGGnjAnTYvnP0QS8qIer?=
- =?us-ascii?Q?KJurDDNcCMx/pZOXqH+xt8vMX8SMJduYIEcSeulNlvzqydD1b2A3Vj6Uy0ge?=
- =?us-ascii?Q?VC2EK4YHE2xSJ6oQRXDT35558qvq9/48MfRG7n+Wa7FSUzPBP6Jss58z58Ba?=
- =?us-ascii?Q?9fF8owHkjEYtjVcjyK9XuXG5XZ7pM5Ivmo6z66mdG+ry7DbXHM2tF40JJPVm?=
- =?us-ascii?Q?hqdGwHUW2OF5c/rMo7rmirTBEzvlg2SxSVtxyHoK7A4zsN9YCRL2WIj3+ZHq?=
- =?us-ascii?Q?hLu1rF/dZFdkLoT/YK7bRpjRJchVSqc1cQ/W3WbWjJCThv5/JNDKdAY/AqjK?=
- =?us-ascii?Q?Zdp1xfsdQJL+LNw3Ep/GZZTujXpQ7yxzQ9Itzwchj61XimkMB0PchSRqYuSr?=
- =?us-ascii?Q?84CCm5JzCbpXlaEjjFgFVNuc/dP2iBbFoT9BnRk6odzG2UsrQnnsvqploB4c?=
- =?us-ascii?Q?jD5tYUh8hfHA9cBLb/StDCNYwp27+YauI7j5QcBwBlaqUS2Hgri+mNRL+fCn?=
- =?us-ascii?Q?UQXwQ99nqA=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 61e5a5ad-d26e-411d-d214-08da1642e00d
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2022 13:56:11.2125
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rRlQCzZP70i6zJAP0NcWlb3GS5kp3yjLLpuMIoUcVkmKN0hUy+Kb6ibqPdHP6/kj
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4424
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220404134212.9690-1-savicaleksa83@gmail.com>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nbNCe-000lRS-Gd
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57850
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 23
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 09:05:25PM +0800, Guo Zhengkui wrote:
-> @@ -632,7 +632,7 @@ static int handle_join_req(struct mcast_group *group, u8 join_mask,
->  			kfree(req);
->  			ref = 1;
->  			group->state = group->prev_state;
-> -		} else
-> +		} else {
->  			group->state = MCAST_JOIN_SENT;
+On Mon, Apr 04, 2022 at 03:42:11PM +0200, Aleksa Savic wrote:
+> Extend aquacomputer_d5next driver to expose hardware temperature sensors
+> and fans of the Aquacomputer Octo fan controller, which communicates
+> through a proprietary USB HID protocol.
+> 
+> Four temperature sensors and eight PWM controllable fans are available.
+> Additionally, serial number, firmware version and power-on count are
+> exposed through debugfs.
+> 
+> This driver has been tested on x86_64.
+> 
+> Signed-off-by: Aleksa Savic <savicaleksa83@gmail.com>
+
+Applied to hwmon-next.
+
+Thanks,
+Guenter
+
+> ---
+> Changes in v4:
+> - Add comments above PWM conversion functions to note that
+>   they work in centi-percent
+> 
+> Changes in v3:
+> - Added break; statements where needed
+> - aqc_set_ctrl_val() now only sets values with a length of 2
+> - Replace goto with return in aqc_send_ctrl_data()
+> 
+> Changes in v2:
+> - Fixed formatting
+> - HID report values from device are now being converted sooner
+> - aqc_pwm_to_percent() is now range checked
+> - Put pointers to labels in aqc_data
+> - Simplified checksum calculation call
+> ---
+>  Documentation/hwmon/aquacomputer_d5next.rst |   4 +
+>  drivers/hwmon/Kconfig                       |   7 +-
+>  drivers/hwmon/aquacomputer_d5next.c         | 433 +++++++++++++++++---
+>  3 files changed, 392 insertions(+), 52 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/aquacomputer_d5next.rst b/Documentation/hwmon/aquacomputer_d5next.rst
+> index 3373e27b707d..e69f718caf5b 100644
+> --- a/Documentation/hwmon/aquacomputer_d5next.rst
+> +++ b/Documentation/hwmon/aquacomputer_d5next.rst
+> @@ -7,6 +7,7 @@ Supported devices:
+>  
+>  * Aquacomputer D5 Next watercooling pump
+>  * Aquacomputer Farbwerk 360 RGB controller
+> +* Aquacomputer Octo fan controller
+>  
+>  Author: Aleksa Savic
+>  
+> @@ -28,6 +29,9 @@ seems to require sending it a complete configuration. That includes addressable
+>  RGB LEDs, for which there is no standard sysfs interface. Thus, that task is
+>  better suited for userspace tools.
+>  
+> +The Octo exposes four temperature sensors and eight PWM controllable fans, along
+> +with their speed (in RPM), power, voltage and current.
+> +
+>  The Farbwerk 360 exposes four temperature sensors. Depending on the device,
+>  not all sysfs and debugfs entries will be available.
+>  
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index db8bc55e5f50..5beadd8a0932 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -256,11 +256,12 @@ config SENSORS_AHT10
+>  	  will be called aht10.
+>  
+>  config SENSORS_AQUACOMPUTER_D5NEXT
+> -	tristate "Aquacomputer D5 Next watercooling pump"
+> +	tristate "Aquacomputer D5 Next, Octo and Farbwerk 360"
+>  	depends on USB_HID
+>  	help
+> -	  If you say yes here you get support for the Aquacomputer D5 Next
+> -	  watercooling pump sensors.
+> +	  If you say yes here you get support for sensors and fans of
+> +	  the Aquacomputer D5 Next watercooling pump, Octo fan
+> +	  controller and Farbwerk 360 RGB controller, where available.
+>  
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called aquacomputer_d5next.
+> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
+> index 525809cf7c95..a464473bc981 100644
+> --- a/drivers/hwmon/aquacomputer_d5next.c
+> +++ b/drivers/hwmon/aquacomputer_d5next.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0+
+>  /*
+> - * hwmon driver for Aquacomputer devices (D5 Next, Farbwerk 360)
+> + * hwmon driver for Aquacomputer devices (D5 Next, Farbwerk 360, Octo)
+>   *
+>   * Aquacomputer devices send HID reports (with ID 0x01) every second to report
+>   * sensor values.
+> @@ -8,23 +8,27 @@
+>   * Copyright 2021 Aleksa Savic <savicaleksa83@gmail.com>
+>   */
+>  
+> +#include <linux/crc16.h>
+>  #include <linux/debugfs.h>
+>  #include <linux/hid.h>
+>  #include <linux/hwmon.h>
+>  #include <linux/jiffies.h>
+>  #include <linux/module.h>
+> +#include <linux/mutex.h>
+>  #include <linux/seq_file.h>
+>  #include <asm/unaligned.h>
+>  
+>  #define USB_VENDOR_ID_AQUACOMPUTER	0x0c70
+>  #define USB_PRODUCT_ID_D5NEXT		0xf00e
+>  #define USB_PRODUCT_ID_FARBWERK360	0xf010
+> +#define USB_PRODUCT_ID_OCTO		0xf011
+>  
+> -enum kinds { d5next, farbwerk360 };
+> +enum kinds { d5next, farbwerk360, octo };
+>  
+>  static const char *const aqc_device_names[] = {
+>  	[d5next] = "d5next",
+> -	[farbwerk360] = "farbwerk360"
+> +	[farbwerk360] = "farbwerk360",
+> +	[octo] = "octo"
+>  };
+>  
+>  #define DRIVER_NAME			"aquacomputer_d5next"
+> @@ -35,6 +39,18 @@ static const char *const aqc_device_names[] = {
+>  #define SERIAL_SECOND_PART		5
+>  #define FIRMWARE_VERSION		13
+>  
+> +#define CTRL_REPORT_ID			0x03
+> +
+> +/* The HID report that the official software always sends
+> + * after writing values, currently same for all devices
+> + */
+> +#define SECONDARY_CTRL_REPORT_ID	0x02
+> +#define SECONDARY_CTRL_REPORT_SIZE	0x0B
+> +
+> +static u8 secondary_ctrl_report[] = {
+> +	0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x34, 0xC6
+> +};
+> +
+>  /* Register offsets for the D5 Next pump */
+>  #define D5NEXT_POWER_CYCLES		24
+>  
+> @@ -55,12 +71,38 @@ static const char *const aqc_device_names[] = {
+>  
+>  /* Register offsets for the Farbwerk 360 RGB controller */
+>  #define FARBWERK360_NUM_SENSORS		4
+> -#define FARBWERK360_SENSOR_START		0x32
+> +#define FARBWERK360_SENSOR_START	0x32
+>  #define FARBWERK360_SENSOR_SIZE		0x02
+>  #define FARBWERK360_SENSOR_DISCONNECTED	0x7FFF
+>  
+> +/* Register offsets for the Octo fan controller */
+> +#define OCTO_POWER_CYCLES		0x18
+> +#define OCTO_NUM_FANS			8
+> +#define OCTO_FAN_PERCENT_OFFSET		0x00
+> +#define OCTO_FAN_VOLTAGE_OFFSET		0x02
+> +#define OCTO_FAN_CURRENT_OFFSET		0x04
+> +#define OCTO_FAN_POWER_OFFSET		0x06
+> +#define OCTO_FAN_SPEED_OFFSET		0x08
+> +
+> +static u8 octo_sensor_fan_offsets[] = { 0x7D, 0x8A, 0x97, 0xA4, 0xB1, 0xBE, 0xCB, 0xD8 };
+> +
+> +#define OCTO_NUM_SENSORS		4
+> +#define OCTO_SENSOR_START		0x3D
+> +#define OCTO_SENSOR_SIZE		0x02
+> +#define OCTO_SENSOR_DISCONNECTED	0x7FFF
+> +
+> +#define OCTO_CTRL_REPORT_SIZE			0x65F
+> +#define OCTO_CTRL_REPORT_CHECKSUM_OFFSET	0x65D
+> +#define OCTO_CTRL_REPORT_CHECKSUM_START		0x01
+> +#define OCTO_CTRL_REPORT_CHECKSUM_LENGTH	0x65C
+> +
+> +/* Fan speed registers in Octo control report (from 0-100%) */
+> +static u16 octo_ctrl_fan_offsets[] = { 0x5B, 0xB0, 0x105, 0x15A, 0x1AF, 0x204, 0x259, 0x2AE };
+> +
+>  /* Labels for D5 Next */
+> -#define L_D5NEXT_COOLANT_TEMP		"Coolant temp"
+> +static const char *const label_d5next_temp[] = {
+> +	"Coolant temp"
+> +};
+>  
+>  static const char *const label_d5next_speeds[] = {
+>  	"Pump speed",
+> @@ -83,7 +125,7 @@ static const char *const label_d5next_current[] = {
+>  	"Fan current"
+>  };
+>  
+> -/* Labels for Farbwerk 360 temperature sensors */
+> +/* Labels for Farbwerk 360 and Octo temperature sensors */
+>  static const char *const label_temp_sensors[] = {
+>  	"Sensor 1",
+>  	"Sensor 2",
+> @@ -91,32 +133,182 @@ static const char *const label_temp_sensors[] = {
+>  	"Sensor 4"
+>  };
+>  
+> +/* Labels for Octo */
+> +static const char *const label_fan_speed[] = {
+> +	"Fan 1 speed",
+> +	"Fan 2 speed",
+> +	"Fan 3 speed",
+> +	"Fan 4 speed",
+> +	"Fan 5 speed",
+> +	"Fan 6 speed",
+> +	"Fan 7 speed",
+> +	"Fan 8 speed"
+> +};
+> +
+> +static const char *const label_fan_power[] = {
+> +	"Fan 1 power",
+> +	"Fan 2 power",
+> +	"Fan 3 power",
+> +	"Fan 4 power",
+> +	"Fan 5 power",
+> +	"Fan 6 power",
+> +	"Fan 7 power",
+> +	"Fan 8 power"
+> +};
+> +
+> +static const char *const label_fan_voltage[] = {
+> +	"Fan 1 voltage",
+> +	"Fan 2 voltage",
+> +	"Fan 3 voltage",
+> +	"Fan 4 voltage",
+> +	"Fan 5 voltage",
+> +	"Fan 6 voltage",
+> +	"Fan 7 voltage",
+> +	"Fan 8 voltage"
+> +};
+> +
+> +static const char *const label_fan_current[] = {
+> +	"Fan 1 current",
+> +	"Fan 2 current",
+> +	"Fan 3 current",
+> +	"Fan 4 current",
+> +	"Fan 5 current",
+> +	"Fan 6 current",
+> +	"Fan 7 current",
+> +	"Fan 8 current"
+> +};
+> +
+>  struct aqc_data {
+>  	struct hid_device *hdev;
+>  	struct device *hwmon_dev;
+>  	struct dentry *debugfs;
+> +	struct mutex mutex;	/* Used for locking access when reading and writing PWM values */
+>  	enum kinds kind;
+>  	const char *name;
+>  
+> +	int buffer_size;
+> +	u8 *buffer;
+> +	int checksum_start;
+> +	int checksum_length;
+> +	int checksum_offset;
+> +
+>  	/* General info, same across all devices */
+>  	u32 serial_number[2];
+>  	u16 firmware_version;
+>  
+> -	/* D5 Next specific - how many times the device was powered on */
+> +	/* How many times the device was powered on */
+>  	u32 power_cycles;
+>  
+>  	/* Sensor values */
+>  	s32 temp_input[4];
+> -	u16 speed_input[2];
+> -	u32 power_input[2];
+> -	u16 voltage_input[3];
+> -	u16 current_input[2];
+> +	u16 speed_input[8];
+> +	u32 power_input[8];
+> +	u16 voltage_input[8];
+> +	u16 current_input[8];
+> +
+> +	/* Label values */
+> +	const char *const *temp_label;
+> +	const char *const *speed_label;
+> +	const char *const *power_label;
+> +	const char *const *voltage_label;
+> +	const char *const *current_label;
+>  
+>  	unsigned long updated;
+>  };
+>  
+> -static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u32 attr,
+> -			      int channel)
+> +/* Converts from centi-percent */
+> +static int aqc_percent_to_pwm(u16 val)
+> +{
+> +	return DIV_ROUND_CLOSEST(val * 255, 100 * 100);
+> +}
+> +
+> +/* Converts to centi-percent */
+> +static int aqc_pwm_to_percent(long val)
+> +{
+> +	if (val < 0 || val > 255)
+> +		return -EINVAL;
+> +
+> +	return DIV_ROUND_CLOSEST(val * 100 * 100, 255);
+> +}
+> +
+> +/* Expects the mutex to be locked */
+> +static int aqc_get_ctrl_data(struct aqc_data *priv)
+> +{
+> +	int ret;
+> +
+> +	memset(priv->buffer, 0x00, priv->buffer_size);
+> +	ret = hid_hw_raw_request(priv->hdev, CTRL_REPORT_ID, priv->buffer, priv->buffer_size,
+> +				 HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
+> +	if (ret < 0)
+> +		ret = -ENODATA;
+> +
+> +	return ret;
+> +}
+> +
+> +/* Expects the mutex to be locked */
+> +static int aqc_send_ctrl_data(struct aqc_data *priv)
+> +{
+> +	int ret;
+> +	u16 checksum;
+> +
+> +	/* Init and xorout value for CRC-16/USB is 0xffff */
+> +	checksum = crc16(0xffff, priv->buffer + priv->checksum_start, priv->checksum_length);
+> +	checksum ^= 0xffff;
+> +
+> +	/* Place the new checksum at the end of the report */
+> +	put_unaligned_be16(checksum, priv->buffer + priv->checksum_offset);
+> +
+> +	/* Send the patched up report back to the device */
+> +	ret = hid_hw_raw_request(priv->hdev, CTRL_REPORT_ID, priv->buffer, priv->buffer_size,
+> +				 HID_FEATURE_REPORT, HID_REQ_SET_REPORT);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* The official software sends this report after every change, so do it here as well */
+> +	ret = hid_hw_raw_request(priv->hdev, SECONDARY_CTRL_REPORT_ID, secondary_ctrl_report,
+> +				 SECONDARY_CTRL_REPORT_SIZE, HID_FEATURE_REPORT,
+> +				 HID_REQ_SET_REPORT);
+> +	return ret;
+> +}
+> +
+> +/* Refreshes the control buffer and returns value at offset */
+> +static int aqc_get_ctrl_val(struct aqc_data *priv, int offset)
+> +{
+> +	int ret;
+> +
+> +	mutex_lock(&priv->mutex);
+> +
+> +	ret = aqc_get_ctrl_data(priv);
+> +	if (ret < 0)
+> +		goto unlock_and_return;
+> +
+> +	ret = get_unaligned_be16(priv->buffer + offset);
+> +
+> +unlock_and_return:
+> +	mutex_unlock(&priv->mutex);
+> +	return ret;
+> +}
+> +
+> +static int aqc_set_ctrl_val(struct aqc_data *priv, int offset, long val)
+> +{
+> +	int ret;
+> +
+> +	mutex_lock(&priv->mutex);
+> +
+> +	ret = aqc_get_ctrl_data(priv);
+> +	if (ret < 0)
+> +		goto unlock_and_return;
+> +
+> +	put_unaligned_be16((u16)val, priv->buffer + offset);
+> +
+> +	ret = aqc_send_ctrl_data(priv);
+> +
+> +unlock_and_return:
+> +	mutex_unlock(&priv->mutex);
+> +	return ret;
+> +}
+> +
+> +static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u32 attr, int channel)
+>  {
+>  	const struct aqc_data *priv = data;
+>  
+> @@ -128,17 +320,47 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+>  				return 0444;
+>  			break;
+>  		case farbwerk360:
+> +		case octo:
+>  			return 0444;
+>  		default:
+>  			break;
+>  		}
+>  		break;
+> +	case hwmon_pwm:
+> +		switch (priv->kind) {
+> +		case octo:
+> +			switch (attr) {
+> +			case hwmon_pwm_input:
+> +				return 0644;
+> +			default:
+> +				break;
+> +			}
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +		break;
+>  	case hwmon_fan:
+>  	case hwmon_power:
+> -	case hwmon_in:
+>  	case hwmon_curr:
+>  		switch (priv->kind) {
+>  		case d5next:
+> +			if (channel < 2)
+> +				return 0444;
+> +			break;
+> +		case octo:
+> +			return 0444;
+> +		default:
+> +			break;
+> +		}
+> +		break;
+> +	case hwmon_in:
+> +		switch (priv->kind) {
+> +		case d5next:
+> +			if (channel < 3)
+> +				return 0444;
+> +			break;
+> +		case octo:
+>  			return 0444;
+>  		default:
+>  			break;
+> @@ -154,6 +376,7 @@ static umode_t aqc_is_visible(const void *data, enum hwmon_sensor_types type, u3
+>  static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>  		    int channel, long *val)
+>  {
+> +	int ret;
+>  	struct aqc_data *priv = dev_get_drvdata(dev);
+>  
+>  	if (time_after(jiffies, priv->updated + STATUS_UPDATE_INTERVAL))
+> @@ -172,6 +395,19 @@ static int aqc_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>  	case hwmon_power:
+>  		*val = priv->power_input[channel];
+>  		break;
+> +	case hwmon_pwm:
+> +		switch (priv->kind) {
+> +		case octo:
+> +			ret = aqc_get_ctrl_val(priv, octo_ctrl_fan_offsets[channel]);
+> +			if (ret < 0)
+> +				return ret;
+> +
+> +			*val = aqc_percent_to_pwm(ret);
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +		break;
+>  	case hwmon_in:
+>  		*val = priv->voltage_input[channel];
+>  		break;
+> @@ -192,48 +428,51 @@ static int aqc_read_string(struct device *dev, enum hwmon_sensor_types type, u32
+>  
+>  	switch (type) {
+>  	case hwmon_temp:
+> -		switch (priv->kind) {
+> -		case d5next:
+> -			*str = L_D5NEXT_COOLANT_TEMP;
+> -			break;
+> -		case farbwerk360:
+> -			*str = label_temp_sensors[channel];
+> -			break;
+> -		default:
+> -			break;
+> -		}
+> +		*str = priv->temp_label[channel];
+>  		break;
+>  	case hwmon_fan:
+> -		switch (priv->kind) {
+> -		case d5next:
+> -			*str = label_d5next_speeds[channel];
+> -			break;
+> -		default:
+> -			break;
+> -		}
+> +		*str = priv->speed_label[channel];
+>  		break;
+>  	case hwmon_power:
+> -		switch (priv->kind) {
+> -		case d5next:
+> -			*str = label_d5next_power[channel];
+> -			break;
+> -		default:
+> -			break;
+> -		}
+> +		*str = priv->power_label[channel];
+>  		break;
+>  	case hwmon_in:
+> -		switch (priv->kind) {
+> -		case d5next:
+> -			*str = label_d5next_voltages[channel];
+> -			break;
+> -		default:
+> -			break;
+> -		}
+> +		*str = priv->voltage_label[channel];
+>  		break;
+>  	case hwmon_curr:
+> -		switch (priv->kind) {
+> -		case d5next:
+> -			*str = label_d5next_current[channel];
+> +		*str = priv->current_label[channel];
+> +		break;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int aqc_write(struct device *dev, enum hwmon_sensor_types type, u32 attr, int channel,
+> +		     long val)
+> +{
+> +	int ret, pwm_value;
+> +	struct aqc_data *priv = dev_get_drvdata(dev);
+> +
+> +	switch (type) {
+> +	case hwmon_pwm:
+> +		switch (attr) {
+> +		case hwmon_pwm_input:
+> +			switch (priv->kind) {
+> +			case octo:
+> +				pwm_value = aqc_pwm_to_percent(val);
+> +				if (pwm_value < 0)
+> +					return pwm_value;
+> +
+> +				ret = aqc_set_ctrl_val(priv, octo_ctrl_fan_offsets[channel],
+> +						       pwm_value);
+> +				if (ret < 0)
+> +					return ret;
+> +				break;
+> +			default:
+> +				break;
+> +			}
+>  			break;
+>  		default:
+>  			break;
+> @@ -250,6 +489,7 @@ static const struct hwmon_ops aqc_hwmon_ops = {
+>  	.is_visible = aqc_is_visible,
+>  	.read = aqc_read,
+>  	.read_string = aqc_read_string,
+> +	.write = aqc_write
+>  };
+>  
+>  static const struct hwmon_channel_info *aqc_info[] = {
+> @@ -259,16 +499,48 @@ static const struct hwmon_channel_info *aqc_info[] = {
+>  			   HWMON_T_INPUT | HWMON_T_LABEL,
+>  			   HWMON_T_INPUT | HWMON_T_LABEL),
+>  	HWMON_CHANNEL_INFO(fan,
+> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+> +			   HWMON_F_INPUT | HWMON_F_LABEL,
+>  			   HWMON_F_INPUT | HWMON_F_LABEL,
+>  			   HWMON_F_INPUT | HWMON_F_LABEL),
+>  	HWMON_CHANNEL_INFO(power,
+> +			   HWMON_P_INPUT | HWMON_P_LABEL,
+> +			   HWMON_P_INPUT | HWMON_P_LABEL,
+> +			   HWMON_P_INPUT | HWMON_P_LABEL,
+> +			   HWMON_P_INPUT | HWMON_P_LABEL,
+> +			   HWMON_P_INPUT | HWMON_P_LABEL,
+> +			   HWMON_P_INPUT | HWMON_P_LABEL,
+>  			   HWMON_P_INPUT | HWMON_P_LABEL,
+>  			   HWMON_P_INPUT | HWMON_P_LABEL),
+> +	HWMON_CHANNEL_INFO(pwm,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT,
+> +			   HWMON_PWM_INPUT),
+>  	HWMON_CHANNEL_INFO(in,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+> +			   HWMON_I_INPUT | HWMON_I_LABEL,
+>  			   HWMON_I_INPUT | HWMON_I_LABEL,
+>  			   HWMON_I_INPUT | HWMON_I_LABEL,
+>  			   HWMON_I_INPUT | HWMON_I_LABEL),
+>  	HWMON_CHANNEL_INFO(curr,
+> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+> +			   HWMON_C_INPUT | HWMON_C_LABEL,
+>  			   HWMON_C_INPUT | HWMON_C_LABEL,
+>  			   HWMON_C_INPUT | HWMON_C_LABEL),
+>  	NULL
+> @@ -326,6 +598,35 @@ static int aqc_raw_event(struct hid_device *hdev, struct hid_report *report, u8
+>  				priv->temp_input[i] = sensor_value * 10;
+>  		}
+>  		break;
+> +	case octo:
+> +		priv->power_cycles = get_unaligned_be32(data + OCTO_POWER_CYCLES);
+> +
+> +		/* Fan speed and related readings */
+> +		for (i = 0; i < OCTO_NUM_FANS; i++) {
+> +			priv->speed_input[i] =
+> +			    get_unaligned_be16(data + octo_sensor_fan_offsets[i] +
+> +					       OCTO_FAN_SPEED_OFFSET);
+> +			priv->power_input[i] =
+> +			    get_unaligned_be16(data + octo_sensor_fan_offsets[i] +
+> +					       OCTO_FAN_POWER_OFFSET) * 10000;
+> +			priv->voltage_input[i] =
+> +			    get_unaligned_be16(data + octo_sensor_fan_offsets[i] +
+> +					       OCTO_FAN_VOLTAGE_OFFSET) * 10;
+> +			priv->current_input[i] =
+> +			    get_unaligned_be16(data + octo_sensor_fan_offsets[i] +
+> +					       OCTO_FAN_CURRENT_OFFSET);
+> +		}
+> +
+> +		/* Temperature sensor readings */
+> +		for (i = 0; i < OCTO_NUM_SENSORS; i++) {
+> +			sensor_value = get_unaligned_be16(data + OCTO_SENSOR_START +
+> +							  i * OCTO_SENSOR_SIZE);
+> +			if (sensor_value == OCTO_SENSOR_DISCONNECTED)
+> +				priv->temp_input[i] = -ENODATA;
+> +			else
+> +				priv->temp_input[i] = sensor_value * 10;
+> +		}
+> +		break;
+>  	default:
+>  		break;
 >  	}
-
-This doesn't compile.
-
-Jason
+> @@ -378,8 +679,14 @@ static void aqc_debugfs_init(struct aqc_data *priv)
+>  	debugfs_create_file("serial_number", 0444, priv->debugfs, priv, &serial_number_fops);
+>  	debugfs_create_file("firmware_version", 0444, priv->debugfs, priv, &firmware_version_fops);
+>  
+> -	if (priv->kind == d5next)
+> +	switch (priv->kind) {
+> +	case d5next:
+> +	case octo:
+>  		debugfs_create_file("power_cycles", 0444, priv->debugfs, priv, &power_cycles_fops);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+>  }
+>  
+>  #else
+> @@ -419,9 +726,30 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>  	switch (hdev->product) {
+>  	case USB_PRODUCT_ID_D5NEXT:
+>  		priv->kind = d5next;
+> +
+> +		priv->temp_label = label_d5next_temp;
+> +		priv->speed_label = label_d5next_speeds;
+> +		priv->power_label = label_d5next_power;
+> +		priv->voltage_label = label_d5next_voltages;
+> +		priv->current_label = label_d5next_current;
+>  		break;
+>  	case USB_PRODUCT_ID_FARBWERK360:
+>  		priv->kind = farbwerk360;
+> +
+> +		priv->temp_label = label_temp_sensors;
+> +		break;
+> +	case USB_PRODUCT_ID_OCTO:
+> +		priv->kind = octo;
+> +		priv->buffer_size = OCTO_CTRL_REPORT_SIZE;
+> +		priv->checksum_start = OCTO_CTRL_REPORT_CHECKSUM_START;
+> +		priv->checksum_length = OCTO_CTRL_REPORT_CHECKSUM_LENGTH;
+> +		priv->checksum_offset = OCTO_CTRL_REPORT_CHECKSUM_OFFSET;
+> +
+> +		priv->temp_label = label_temp_sensors;
+> +		priv->speed_label = label_fan_speed;
+> +		priv->power_label = label_fan_power;
+> +		priv->voltage_label = label_fan_voltage;
+> +		priv->current_label = label_fan_current;
+>  		break;
+>  	default:
+>  		break;
+> @@ -429,6 +757,12 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>  
+>  	priv->name = aqc_device_names[priv->kind];
+>  
+> +	priv->buffer = devm_kzalloc(&hdev->dev, priv->buffer_size, GFP_KERNEL);
+> +	if (!priv->buffer)
+> +		return -ENOMEM;
+> +
+> +	mutex_init(&priv->mutex);
+> +
+>  	priv->hwmon_dev = hwmon_device_register_with_info(&hdev->dev, priv->name, priv,
+>  							  &aqc_chip_info, NULL);
+>  
+> @@ -462,6 +796,7 @@ static void aqc_remove(struct hid_device *hdev)
+>  static const struct hid_device_id aqc_table[] = {
+>  	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_D5NEXT) },
+>  	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_FARBWERK360) },
+> +	{ HID_USB_DEVICE(USB_VENDOR_ID_AQUACOMPUTER, USB_PRODUCT_ID_OCTO) },
+>  	{ }
+>  };
+>  

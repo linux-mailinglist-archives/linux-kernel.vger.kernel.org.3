@@ -2,88 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C52D4F148B
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 14:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED84F4F1484
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 14:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241398AbiDDMQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 08:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
+        id S241074AbiDDMQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 08:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241227AbiDDMQW (ORCPT
+        with ESMTP id S239813AbiDDMQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 08:16:22 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B45AE51
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 05:14:26 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 5so16929612lfp.1
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 05:14:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sSQP6H+w0A6mK1X6YckSkQa+uY4WT+vpP1uv3lYD8xg=;
-        b=SpMe7y/b+L2vVcjET6iWPHNNjIQyT80Rc1DetSrH3U4WGxccF9IMMz05dm7oX5MxkQ
-         DDV8jpIueBPmP+bfRB5/BjNfW8nt0bXPO/Ut+6FeB3IZwotrKO9T7EQxAJ9QBihGwvbS
-         UURVOthZsrve9v9DmaxOBG6by6HT6hb6X0VMxe2LJyMiHIO6s3RBCV00te1mWCGNXKca
-         iO0SPVAjdwk0Q71wWVW/PH+RV6agX4Q32p4omO3vcw3ohfjYFBTtxPizM6uPK2nPb7cc
-         P5+ONv19uJhDSjCNHDCXSMkIFYL2ItIM6u0t58NREZMcGiQnn4RNIuOkjMWYUS4B0wxZ
-         +ssg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sSQP6H+w0A6mK1X6YckSkQa+uY4WT+vpP1uv3lYD8xg=;
-        b=NXVB+tG7pbjjMb66nGaoVMkIZVY6OkIM8Btn5WWsUaR4MlLBsnMQe0dMIuTDtdgg5x
-         EEhthpXFN+ZhSZ+MwUkT2K4BZOAq3pXNDASERBVD44dPNfLtX9SSWjUT7tnkm02RmA9S
-         oTy/eeu/kbAbUHjjQWZ2FNCQRXhas2npIJbGku495SKpFJgn84wNekPbOfwR4wiIJ5ie
-         I5yhkZPuwZqUixwF/nDHNOx5Mo904+ckLPmdGkhbcgkihRER7cwH7NDYe01EleuTtImM
-         a22IXBS5vRUcPPxtfnH3Gkj6x2Qy20PIlJe3G1U2b9eX60pl4vmwTPtbNYcCgq/1lJkk
-         3pRg==
-X-Gm-Message-State: AOAM532rk0zhZXYJmAZeb3GJbsb/lnJ5eycu7TIU/5gGCh4AFoFr+aL8
-        egcx0fdKvmyQIwVgYOxbo5e9r9ZnP30AjumK/26M+A==
-X-Google-Smtp-Source: ABdhPJx6/M59e/LceORrAaJwjmYx51VoKqH6hL5/10GGrTKh07Z9uQ8DL6vpFQ0BRbZrKnzsbYMZly7RZDbHaf8xMNM=
-X-Received: by 2002:a05:6512:c0c:b0:44a:6865:860a with SMTP id
- z12-20020a0565120c0c00b0044a6865860amr21944403lfu.71.1649074464272; Mon, 04
- Apr 2022 05:14:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220321115059.21803-1-wsa+renesas@sang-engineering.com> <20220321115059.21803-9-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20220321115059.21803-9-wsa+renesas@sang-engineering.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 4 Apr 2022 14:13:48 +0200
-Message-ID: <CAPDyKFqwgxhRPBabxfUTC+8UVegWrTg3F0nRn3PoToiO2DWtvQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 08/10] mmc: core: improve API to make clear hw_reset
- from bus_ops is for cards
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-mmc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        Mon, 4 Apr 2022 08:16:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB1982AFD
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 05:14:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649074458;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=k11A/AZt+oc87Hz3W5TrMPkcAHCJtsmjAAnrVjuNJG4=;
+        b=XwFEBGAs8dV/OzbD9nK4UQjRs+pdoHdPXIR6UJfvWBy9v2UH7RTzYBmW0fEZeDPOMgbD5B
+        jZclvpFLLm95NmEuiKBkttxZRnWsvOAN/eejgFPf4lS+rAfaNXCZWvshr9/3waI6s9PDJx
+        9tIhTu4AGRws4Cmw2rKV3efs3tI6G5o=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-674-MSaBRzuKOOCwVdKK93OiZQ-1; Mon, 04 Apr 2022 08:14:17 -0400
+X-MC-Unique: MSaBRzuKOOCwVdKK93OiZQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2C8F538035A2;
+        Mon,  4 Apr 2022 12:14:11 +0000 (UTC)
+Received: from starship (unknown [10.40.194.231])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DCA07202F2F1;
+        Mon,  4 Apr 2022 12:14:03 +0000 (UTC)
+Message-ID: <df8e53474fb161f83c8cb8b9816995b23798545b.camel@redhat.com>
+Subject: Re: [PATCH 7/8] KVM: x86: Trace re-injected exceptions
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>
+Date:   Mon, 04 Apr 2022 15:14:01 +0300
+In-Reply-To: <20220402010903.727604-8-seanjc@google.com>
+References: <20220402010903.727604-1-seanjc@google.com>
+         <20220402010903.727604-8-seanjc@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Mar 2022 at 12:51, Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
->
-> To make it unambiguous that bus_ops->hw_reset() is for cards and not for
-> controllers, we a) add 'card' to the function name and b) make the
-> function argument mmc_card instead of mmc_host. All users are converted,
-> too.
+On Sat, 2022-04-02 at 01:09 +0000, Sean Christopherson wrote:
+> Trace exceptions that are re-injected, not just those that KVM is
+> injecting for the first time.  Debugging re-injection bugs is painful
+> enough as is, not having visibility into what KVM is doing only makes
+> things worse.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/x86.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 7a066cf92692..384091600bc2 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -9382,6 +9382,10 @@ int kvm_check_nested_events(struct kvm_vcpu *vcpu)
+>  
+>  static void kvm_inject_exception(struct kvm_vcpu *vcpu)
+>  {
+> +	trace_kvm_inj_exception(vcpu->arch.exception.nr,
+> +				vcpu->arch.exception.has_error_code,
+> +				vcpu->arch.exception.error_code);
+> +
 
-Again b) is sufficient in my opinion. All bus_ops are for cards, while
-host_ops are for hosts.
+Can we use a {new tracepoint / new parameter for this tracepoint} for this to avoid confusion?
 
-Also, there may be some corner cases where b) can't be done, like the
-->remove() bus_ops for example. In that case, we either have to make
-more re-structuring of the code of simply live with that there may be
-some special cases.
+Best regards,
+	Maxim Levitsky
 
-[...]
 
-Kind regards
-Uffe
+
+>  	if (vcpu->arch.exception.error_code && !is_protmode(vcpu))
+>  		vcpu->arch.exception.error_code = false;
+>  	static_call(kvm_x86_queue_exception)(vcpu);
+> @@ -9439,10 +9443,6 @@ static int inject_pending_event(struct kvm_vcpu *vcpu, bool *req_immediate_exit)
+>  
+>  	/* try to inject new event if pending */
+>  	if (vcpu->arch.exception.pending) {
+> -		trace_kvm_inj_exception(vcpu->arch.exception.nr,
+> -					vcpu->arch.exception.has_error_code,
+> -					vcpu->arch.exception.error_code);
+> -
+>  		vcpu->arch.exception.pending = false;
+>  		vcpu->arch.exception.injected = true;
+>  
+
+

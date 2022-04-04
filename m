@@ -2,285 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA594F1C12
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43CAA4F1BAA
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381378AbiDDVW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
+        id S1380800AbiDDVWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379008AbiDDQSd (ORCPT
+        with ESMTP id S1379006AbiDDQRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 12:18:33 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDBB31922
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 09:16:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649088997; x=1680624997;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=RhaIORVqgtJXoKDihME/LCeLAa94zMaiZuSGp63+DmE=;
-  b=dBgxGgHiiZIm5pgE9yRNpn3J9WSmUK6XkUH92PHzCMbW69Phdfm/dmKp
-   v/pb0QJmMlmYf38Oc2+eorMpbHWBvShtQ4lnUYtd236OsLzz+N1pHIaAX
-   gaTpO+dlCMbwI5mk0naz1pt+3kLgjjx40OQU0hfv7RhkjNjI66r1i+flV
-   AkwenL/1u0412YZp10ZyxETjrY3qOFS8PzoyyoAppQaX8ghrrkYsCq5zc
-   vPAUbGNqjdY/jdEdzNg+EspwSffR4jSqrxgFLYr+smIm0fgIk5ydJngtq
-   0TR6VHZdzWMpNk3DWFvl+DTSxhw4T7CRmx1ZOrEdN4jDeIAztjTEFT0nV
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="321247707"
-X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="321247707"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 09:16:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="523637231"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 04 Apr 2022 09:16:20 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbPNL-0002Bt-J6;
-        Mon, 04 Apr 2022 16:16:19 +0000
-Date:   Tue, 05 Apr 2022 00:15:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- 4a5e50667c63697dbbf9099419ce4ac8d376b099
-Message-ID: <624b19b1.7YYEzQQXRtDXPsR3%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 4 Apr 2022 12:17:53 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1364381A7
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 09:15:57 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id nt14-20020a17090b248e00b001ca601046a4so5519694pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 09:15:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Ng6DcmM5tFKWfxali81J0mfMImmzHiLurj6u/+uziLk=;
+        b=HXOmZE1RtYgubAH+EbMo3I6hVyTda0n3RvWQxbxKNH9WsRFKu7ffxKRotQeemfaTy+
+         WG93q2P5TZkBtIjyvteBW1gY4EKU+e3KpS9DVwKTTVZTeml5hMnQUgt3bk5gpOBLemRS
+         ZIOtol1sPS1wc9qkY9x4s4R2dIVxjC141YGfSby1pY4lS6Ms5gekCEtxaIz1pKQ9j5Pn
+         WERkByf/F8DiINZ4MxSYYF2EIUnuJRY4SDLhGN3Ftl9xIe97pX/973mh2CqajJK+ufJa
+         9DW70uFOQ0kB5ih/FliBHjPYO9oXFC0gJGaxMmUtKDB2KuLJMmUWzCV2gqV6hEECZHQ5
+         SjUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Ng6DcmM5tFKWfxali81J0mfMImmzHiLurj6u/+uziLk=;
+        b=WtvmYHgy8p+w5/Itw2xSb55ZRr6P7XwWc18cdMFao1OxIIOV0MyVInEbl1BDxAF34h
+         VBOLITE6tJ6vwH3yu/aBc4xSSSeAS3TumzqJn4y/L49QZ4lpweLZXqX9ol5TgwCfgCLH
+         GVwzGByn5gPy/EgTBr2iTxC4JGn8X8c4V2S8UfeyEcFCXE7eJKUkS8We6Na04Vhi1m8E
+         hBUcHE6LieRXYQ0zIpWSA6bBpKOVQtwTpAMVEJFAxfxdquapdjajtQ8FMRx2CSt0sbUq
+         7bUGOuo9EecW16JaU1jR+m4TXHcWfpbkxtHpaic7ahSQkfqw0lqUbh6vy2rV3rnQGrRx
+         62Hw==
+X-Gm-Message-State: AOAM530db+1hqbNuLKH9/HyXSmhoo2XB+Q1NniWFzh9Rt2tnvKJKDWWD
+        TzjcvbiTy4unAkbemFzHg7t06w==
+X-Google-Smtp-Source: ABdhPJw0bHkRyQrMEI8u1Kx/EMowdX9JWrk1FT5MCnF8rKx/ah4P1uTx38JgRaEc8jLyOH5+qO/ukg==
+X-Received: by 2002:a17:90b:713:b0:1c6:c8f5:6138 with SMTP id s19-20020a17090b071300b001c6c8f56138mr27342669pjz.138.1649088957115;
+        Mon, 04 Apr 2022 09:15:57 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id p4-20020a637404000000b00375948e63d6sm10641282pgc.91.2022.04.04.09.15.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 09:15:56 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 10:15:54 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Mike Leach <mike.leach@linaro.org>
+Cc:     suzuki.poulose@arm.com, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        linux-perf-users@vger.kernel.org, leo.yan@linaro.org
+Subject: Re: [PATCH 00/10] coresight: Add new API to allocate trace source ID
+ values
+Message-ID: <20220404161554.GA4079910@p14s>
+References: <20220308205000.27646-1-mike.leach@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20220308205000.27646-1-mike.leach@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: 4a5e50667c63697dbbf9099419ce4ac8d376b099  tools/include/string: Implement `strdup()` and `strndup()`
+Good morning,
 
-elapsed time: 993m
+On Tue, Mar 08, 2022 at 08:49:50PM +0000, Mike Leach wrote:
+> The current method for allocating trace source ID values to sources is
+> to use a fixed algorithm for CPU based sources of (cpu_num * 2 + 0x10).
+> The STM is allocated ID 0x1.
+> 
+> This fixed algorithm is used in both the CoreSight driver code, and by
+> perf when writing the trace metadata in the AUXTRACE_INFO record.
+> 
+> The method needs replacing as currently:-
+> 1. It is inefficient in using available IDs.
+> 2. Does not scale to larger systems with many cores and the algorithm
+> has no limits so will generate invalid trace IDs for cpu number > 44.
+> 
+> Additionally requirements to allocate additional system IDs on some
+> systems have been seen.
+> 
+> This patch set  introduces an API that allows the allocation of trace IDs
+> in a dynamic manner.
+> 
+> Architecturally reserved IDs are never allocated, and the system is
+> limited to allocating only valid IDs.
+> 
+> Each of the current trace sources ETM3.x, ETM4.x and STM is updated to use
+> the new API.
+> 
+> perf handling is changed so that the ID associated with the CPU is read
+> from sysfs. The ID allocator is notified when perf events start and stop
+> so CPU based IDs are kept constant throughout any perf session.
+> 
+> For the ETMx.x devices IDs are allocated on certain events
+> a) When using sysfs, an ID will be allocated on hardware enable, and freed
+> when the sysfs reset is written.
+> b) When using perf, ID is allocated on hardware enable, and freed on
+> hardware disable.
+> 
+> For both cases the ID is allocated when sysfs is read to get the current
+> trace ID. This ensures that consistent decode metadata can be extracted
+> from the system where this read occurs before device enable.
+> 
+> Note: This patchset breaks backward compatibility for perf record.
+> Because the method for generating the AUXTRACE_INFO meta data has
+> changed, using an older perf record will result in metadata that
+> does not match the trace IDs used in the recorded trace data.
+> This mismatch will cause subsequent decode to fail. Older versions of
+> perf will still be able to decode data generated by the updated system.
+> 
 
-configs tested: 198
-configs skipped: 4
+I have started looking at this set, comments to follow shortly.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thanks,
+Mathieu
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                 randconfig-c001-20220404
-i386                          randconfig-c001
-arm                      integrator_defconfig
-m68k                            q40_defconfig
-nios2                         3c120_defconfig
-arm                         vf610m4_defconfig
-arm64                            alldefconfig
-m68k                       m5475evb_defconfig
-arm                     eseries_pxa_defconfig
-arm                        realview_defconfig
-ia64                            zx1_defconfig
-arm                          gemini_defconfig
-mips                        vocore2_defconfig
-powerpc                           allnoconfig
-sh                          rsk7269_defconfig
-sh                 kfr2r09-romimage_defconfig
-parisc64                         alldefconfig
-sh                          rsk7264_defconfig
-arm                           sama5_defconfig
-powerpc                    klondike_defconfig
-sh                        edosk7705_defconfig
-m68k                          hp300_defconfig
-sh                           se7722_defconfig
-arm                           h3600_defconfig
-h8300                               defconfig
-sh                  sh7785lcr_32bit_defconfig
-mips                            ar7_defconfig
-mips                  maltasmvp_eva_defconfig
-arm                          simpad_defconfig
-arm                           stm32_defconfig
-parisc                           alldefconfig
-alpha                               defconfig
-arm                        mvebu_v7_defconfig
-sh                            hp6xx_defconfig
-powerpc                 mpc834x_itx_defconfig
-um                             i386_defconfig
-sh                             sh03_defconfig
-powerpc                     taishan_defconfig
-ia64                        generic_defconfig
-arc                            hsdk_defconfig
-sh                     sh7710voipgw_defconfig
-arm                        oxnas_v6_defconfig
-mips                           jazz_defconfig
-sh                          polaris_defconfig
-powerpc                        cell_defconfig
-sh                          rsk7203_defconfig
-sh                        sh7763rdp_defconfig
-arc                              alldefconfig
-powerpc                      ppc6xx_defconfig
-powerpc                     ep8248e_defconfig
-arc                        nsim_700_defconfig
-powerpc                      cm5200_defconfig
-mips                            gpr_defconfig
-sh                          r7785rp_defconfig
-sh                            migor_defconfig
-xtensa                generic_kc705_defconfig
-arm                        spear6xx_defconfig
-parisc                generic-64bit_defconfig
-x86_64                              defconfig
-sh                         ecovec24_defconfig
-sh                   sh7770_generic_defconfig
-arm                         cm_x300_defconfig
-m68k                          sun3x_defconfig
-h8300                    h8300h-sim_defconfig
-arm                         nhk8815_defconfig
-mips                         rt305x_defconfig
-mips                    maltaup_xpa_defconfig
-powerpc                  iss476-smp_defconfig
-mips                         db1xxx_defconfig
-arm                           viper_defconfig
-mips                           ip32_defconfig
-powerpc                     tqm8548_defconfig
-sh                           se7206_defconfig
-m68k                         apollo_defconfig
-sh                         ap325rxa_defconfig
-m68k                          amiga_defconfig
-sh                           se7705_defconfig
-sh                   secureedge5410_defconfig
-sh                               j2_defconfig
-arm                            lart_defconfig
-mips                  decstation_64_defconfig
-sh                      rts7751r2d1_defconfig
-arm                            qcom_defconfig
-x86_64               randconfig-c001-20220404
-arm                  randconfig-c002-20220404
-arm                  randconfig-c002-20220403
-ia64                             allmodconfig
-ia64                             allyesconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-x86_64               randconfig-a015-20220404
-x86_64               randconfig-a011-20220404
-x86_64               randconfig-a014-20220404
-x86_64               randconfig-a016-20220404
-x86_64               randconfig-a012-20220404
-x86_64               randconfig-a013-20220404
-i386                 randconfig-a014-20220404
-i386                 randconfig-a013-20220404
-i386                 randconfig-a016-20220404
-i386                 randconfig-a015-20220404
-i386                 randconfig-a011-20220404
-i386                 randconfig-a012-20220404
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-arc                  randconfig-r043-20220404
-s390                 randconfig-r044-20220404
-riscv                randconfig-r042-20220404
-arc                  randconfig-r043-20220403
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
-
-clang tested configs:
-i386                 randconfig-c001-20220404
-x86_64               randconfig-c007-20220404
-powerpc              randconfig-c003-20220404
-riscv                randconfig-c006-20220404
-mips                 randconfig-c004-20220404
-arm                  randconfig-c002-20220404
-x86_64                        randconfig-c007
-i386                          randconfig-c001
-powerpc              randconfig-c003-20220403
-riscv                randconfig-c006-20220403
-mips                 randconfig-c004-20220403
-arm                  randconfig-c002-20220403
-arm                          ep93xx_defconfig
-arm                       netwinder_defconfig
-mips                      pic32mzda_defconfig
-powerpc                      katmai_defconfig
-mips                   sb1250_swarm_defconfig
-arm                         socfpga_defconfig
-arm                           sama7_defconfig
-mips                        workpad_defconfig
-arm                          pcm027_defconfig
-riscv                             allnoconfig
-mips                         tb0219_defconfig
-powerpc                   bluestone_defconfig
-arm                         bcm2835_defconfig
-powerpc                 mpc8315_rdb_defconfig
-powerpc                      ppc44x_defconfig
-x86_64               randconfig-a006-20220404
-x86_64               randconfig-a002-20220404
-x86_64               randconfig-a001-20220404
-x86_64               randconfig-a005-20220404
-x86_64               randconfig-a003-20220404
-x86_64               randconfig-a004-20220404
-i386                 randconfig-a006-20220404
-i386                 randconfig-a002-20220404
-i386                 randconfig-a001-20220404
-i386                 randconfig-a004-20220404
-i386                 randconfig-a003-20220404
-i386                 randconfig-a005-20220404
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-hexagon              randconfig-r045-20220403
-riscv                randconfig-r042-20220403
-hexagon              randconfig-r041-20220403
-hexagon              randconfig-r045-20220404
-hexagon              randconfig-r041-20220404
-s390                 randconfig-r044-20220403
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> Applies to coresight/next [b54f53bc11a5]
+> Tested on DB410c
+> 
+> Mike Leach (10):
+>   coresight: trace-id: Add API to dynamically assign trace ID values
+>   coresight: trace-id: Set up source trace ID map for system
+>   coresight: stm: Update STM driver to use Trace ID api
+>   coresight: etm4x: Use trace ID API to dynamically allocate trace ID
+>   coresight: etm3x: Use trace ID API to allocate IDs
+>   coresight: perf: traceid: Add perf notifiers for trace ID
+>   perf: cs-etm: Update event to read trace ID from sysfs
+>   coresight: Remove legacy Trace ID allocation mechanism
+>   coresight: etmX.X: stm: Remove unused legacy source trace ID ops
+>   coresight: trace-id: Add debug & test macros to trace id allocation
+> 
+>  drivers/hwtracing/coresight/Makefile          |   2 +-
+>  drivers/hwtracing/coresight/coresight-core.c  |  64 ++---
+>  .../hwtracing/coresight/coresight-etm-perf.c  |  16 +-
+>  drivers/hwtracing/coresight/coresight-etm.h   |   3 +-
+>  .../coresight/coresight-etm3x-core.c          |  93 ++++---
+>  .../coresight/coresight-etm3x-sysfs.c         |  28 +-
+>  .../coresight/coresight-etm4x-core.c          |  63 ++++-
+>  .../coresight/coresight-etm4x-sysfs.c         |  32 ++-
+>  drivers/hwtracing/coresight/coresight-etm4x.h |   3 +
+>  drivers/hwtracing/coresight/coresight-priv.h  |   1 +
+>  drivers/hwtracing/coresight/coresight-stm.c   |  49 +---
+>  .../hwtracing/coresight/coresight-trace-id.c  | 255 ++++++++++++++++++
+>  .../hwtracing/coresight/coresight-trace-id.h  |  69 +++++
+>  include/linux/coresight-pmu.h                 |  12 -
+>  include/linux/coresight.h                     |   3 -
+>  tools/perf/arch/arm/util/cs-etm.c             |  12 +-
+>  16 files changed, 530 insertions(+), 175 deletions(-)
+>  create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.c
+>  create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.h
+> 
+> -- 
+> 2.17.1
+> 

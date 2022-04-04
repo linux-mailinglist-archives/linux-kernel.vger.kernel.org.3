@@ -2,146 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A504F10DE
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 501344F1104
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 10:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236659AbiDDI25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 04:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38618 "EHLO
+        id S238608AbiDDIdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 04:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232527AbiDDI2x (ORCPT
+        with ESMTP id S238183AbiDDIci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 04:28:53 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03DA33A36;
-        Mon,  4 Apr 2022 01:26:57 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id t19so7097764qtc.4;
-        Mon, 04 Apr 2022 01:26:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9B1vDg725ZL75B9hNHdJwVzoV1gBOAZG8QnNdH+UPxA=;
-        b=TGG+Z2rYdZzDaSevItzamM42OIU80qWLeqPMTkTiFlEJxRmPVujDHJwDDXgYdExXTl
-         Th8He6JC6kEtU2QmNDWKz6+FwBRWhSPyqUENADNgb/wiE37ZcaoNjnJ3tmawIDD9jYqR
-         9Yuov0LGuC0CIzVkLbtK8fUjeiQcOA4MjIxh5vmmtxzejMYpLWpuv1jgyDWu8mpe7iOn
-         v65RX/l5fJvJtfRlm5L27pG9q8PhaEpuVYzjGrAgxOFyxBDRRHzBXxDasIfbvRNreKu8
-         4PqkbsNJdnCE2KX2PjBqSA+E/D1XA+kN+diAKPr8pHdNCYQQJwmHLFAhAE1e3GHaM528
-         Am7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9B1vDg725ZL75B9hNHdJwVzoV1gBOAZG8QnNdH+UPxA=;
-        b=bpakZlxmPlHBAyJzasGXpvtV2owfTdt/MytiAWMRyte62cG4kRNiXwQxAVGxndOJ7Z
-         0hkWMiz2KAKvIRx2hGh1DW1D3wpLYEzEXRK71ud+bkO4YMxr8Sz91lQuaL8hhY2Aj6ZX
-         9f+InPjNcfBi9pjmL3oi0Xc1YUkAzZu3eG2RO30MF1yByD/fBN5uIApiOZ48rU76nfVZ
-         Xc5F+pEVm1y3t+1SjUt1hgJQs83jDoDpRpz+mm+ZWEqeJLFl14GuGgynTzMWAS2KiXL0
-         vhOn+iqq/G8U/fdXscJVpnVgz4A9PMpxudKgmgv43rAwHJnsvSnzYBt7nF303f11yAGQ
-         oDmA==
-X-Gm-Message-State: AOAM5322kSLtxtv9bSNnu6QdyvWXBzKP6NcRJYuCbWQFL+hryCoa1gIp
-        bZoa+np2s+WwcZJT3x4jBYT5gnM2Z7bxcS35qFc=
-X-Google-Smtp-Source: ABdhPJyMyNUGjmhcgxdxcxIUEwWFso/oW3ZHbINEDa3SsiRO5EUgB3PU/yUmWSq8iuC7Ed8DE1CELm3ObEm4rETLdHo=
-X-Received: by 2002:ac8:598a:0:b0:2e1:e81a:d059 with SMTP id
- e10-20020ac8598a000000b002e1e81ad059mr16436086qte.297.1649060817152; Mon, 04
- Apr 2022 01:26:57 -0700 (PDT)
+        Mon, 4 Apr 2022 04:32:38 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D1F3584C;
+        Mon,  4 Apr 2022 01:30:40 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A5B9D2000D;
+        Mon,  4 Apr 2022 08:30:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1649061038;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=c0zr7u2ZGW8b7dHqUeFZDVs8y9pfDOaTguMgL52CwSQ=;
+        b=mNvAz6VXb3UrSawFLoHLhwcW5kR0Ctm1Y4waL3DSwT6opGruoUUiAuaqXA6kibzEb1O9Ah
+        ZYAd/WILTHfI41H4Cy4QCswuL5xBcLurwaeDRWrqp/QXKd+jcsD9e0XzI7R87MAfgV3VIR
+        y1BrI/WIhto3s06zapyK0ngt2z7U1XXyle05/VL1Sgqm34jjFxf4HL/Wsti3YvV+V6Lwgq
+        Vlqf/3D99xE6KrMFxFGcThuJFqssnri/hlMcGIR3fVp5dL4vBBZ7eiHgbtzWNS7SxSWTPo
+        phdpK/cQT7YprV1vf4oi3sXNN4Dn3detD3qkvxH9S6Ft/y/RwCUGbCxEv6NcXg==
+Date:   Mon, 4 Apr 2022 10:30:34 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Liang Yang <liang.yang@amlogic.com>
+Cc:     <linux-mtd@lists.infradead.org>, Rob Herring <robh+dt@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v4 1/2] mtd: rawnand: meson: discard the common MMC sub
+ clock framework
+Message-ID: <20220404103034.48ec16b1@xps13>
+In-Reply-To: <20220402074921.13316-2-liang.yang@amlogic.com>
+References: <20220402074921.13316-1-liang.yang@amlogic.com>
+        <20220402074921.13316-2-liang.yang@amlogic.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220401093554.360211-1-robimarko@gmail.com> <87ilrsuab4.fsf@kernel.org>
- <CAOX2RU4pCn8C-HhhuOzyikjk2Ax3VDcjMKh7N6X5HeMN4xLMEg@mail.gmail.com> <87zgl1s4xr.fsf@kernel.org>
-In-Reply-To: <87zgl1s4xr.fsf@kernel.org>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Mon, 4 Apr 2022 10:26:46 +0200
-Message-ID: <CAOX2RU4+6_64MBxZAT9q0QQvjROteDtAsPiYYYWd-Yjijik91w@mail.gmail.com>
-Subject: Re: [PATCH] ath11k: select QRTR for AHB as well
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Apr 2022 at 09:06, Kalle Valo <kvalo@kernel.org> wrote:
->
-> Robert Marko <robimarko@gmail.com> writes:
->
-> > On Fri, 1 Apr 2022 at 16:51, Kalle Valo <kvalo@kernel.org> wrote:
-> >>
-> >> Robert Marko <robimarko@gmail.com> writes:
-> >>
-> >> > Currently, ath11k only selects QRTR if ath11k PCI is selected, however
-> >> > AHB support requires QRTR, more precisely QRTR_SMD because it is using
-> >> > QMI as well which in turn uses QRTR.
-> >> >
-> >> > Without QRTR_SMD AHB does not work, so select QRTR in ATH11K and then
-> >> > select QRTR_SMD for ATH11K_AHB and QRTR_MHI for ATH11K_PCI.
-> >> >
-> >> > Tested-on: IPQ8074 hw2.0 AHB WLAN.HK.2.5.0.1-01208-QCAHKSWPL_SILICONZ-1
-> >> >
-> >> > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> >> > ---
-> >> >  drivers/net/wireless/ath/ath11k/Kconfig | 3 ++-
-> >> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >> >
-> >> > diff --git a/drivers/net/wireless/ath/ath11k/Kconfig b/drivers/net/wireless/ath/ath11k/Kconfig
-> >> > index ad5cc6cac05b..b45baad184f6 100644
-> >> > --- a/drivers/net/wireless/ath/ath11k/Kconfig
-> >> > +++ b/drivers/net/wireless/ath/ath11k/Kconfig
-> >> > @@ -5,6 +5,7 @@ config ATH11K
-> >> >       depends on CRYPTO_MICHAEL_MIC
-> >> >       select ATH_COMMON
-> >> >       select QCOM_QMI_HELPERS
-> >> > +     select QRTR
-> >> >       help
-> >> >         This module adds support for Qualcomm Technologies 802.11ax family of
-> >> >         chipsets.
-> >> > @@ -15,6 +16,7 @@ config ATH11K_AHB
-> >> >       tristate "Atheros ath11k AHB support"
-> >> >       depends on ATH11K
-> >> >       depends on REMOTEPROC
-> >> > +     select QRTR_SMD
-> >> >       help
-> >> >         This module adds support for AHB bus
-> >> >
-> >> > @@ -22,7 +24,6 @@ config ATH11K_PCI
-> >> >       tristate "Atheros ath11k PCI support"
-> >> >       depends on ATH11K && PCI
-> >> >       select MHI_BUS
-> >> > -     select QRTR
-> >> >       select QRTR_MHI
-> >> >       help
-> >> >         This module adds support for PCIE bus
-> >>
-> >> I now see a new warning:
-> >>
-> >> WARNING: unmet direct dependencies detected for QRTR_SMD
-> >>   Depends on [n]: NET [=y] && QRTR [=m] && (RPMSG [=n] || COMPILE_TEST [=n] && RPMSG [=n]=n)
-> >>   Selected by [m]:
-> >>   - ATH11K_AHB [=m] && NETDEVICES [=y] && WLAN [=y] && WLAN_VENDOR_ATH [=y] && ATH11K [=m] && REMOTEPROC [=y]
-> >
-> > Ahh yeah, since it's SMD then it requires RPMGS which in turn requires
-> > more stuff. What do you think about making it depend on QRTR_SMD
-> > instead, because without it AHB literally does not work?
->
-> To be honest I don't know qrtr well enough to comment right now :)
+Hi Liang,
 
-I dont know details about QRTR as well, but I know that its used for
-both AHB and PCI versions for QMI.
-AHB versions use it over SMD and without it, AHB support wont work, it
-will find the HW model and revision and that's it, only after the
-QRTR_SMD is inserted you can use QMI to load the caldata etc.
+liang.yang@amlogic.com wrote on Sat, 2 Apr 2022 15:49:19 +0800:
 
-Regards,
-Robert
->
-> --
-> https://patchwork.kernel.org/project/linux-wireless/list/
->
-> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+> EMMC and NAND have the same clock control register named 'SD_EMMC_CLOCK' =
+which is
+> defined in EMMC port internally. bit0~5 of 'SD_EMMC_CLOCK' is the divider=
+ and
+> bit6~7 is the mux for fix pll and xtal.A common MMC and NAND sub-clock ha=
+s been
+> implemented and can be used by the eMMC and NAND controller (which are mu=
+tually
+> exclusive anyway). Let's use this new clock.
+>=20
+> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
+> ---
+>  drivers/mtd/nand/raw/meson_nand.c | 89 +++++++++++++++----------------
+>  1 file changed, 42 insertions(+), 47 deletions(-)
+>=20
+> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/mes=
+on_nand.c
+> index ac3be92872d0..1b1a9407fb2f 100644
+> --- a/drivers/mtd/nand/raw/meson_nand.c
+> +++ b/drivers/mtd/nand/raw/meson_nand.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/dma-mapping.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/clk.h>
+> +#include <linux/clk-provider.h>
+>  #include <linux/mtd/rawnand.h>
+>  #include <linux/mtd/mtd.h>
+>  #include <linux/mfd/syscon.h>
+> @@ -19,6 +20,7 @@
+>  #include <linux/iopoll.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+> +#include <linux/of_address.h>
+>  #include <linux/sched/task_stack.h>
+> =20
+>  #define NFC_REG_CMD		0x00
+> @@ -104,6 +106,9 @@
+> =20
+>  #define PER_INFO_BYTE		8
+> =20
+> +#define CLK_DIV_SHIFT		0
+> +#define CLK_DIV_WIDTH		6
+> +
+>  struct meson_nfc_nand_chip {
+>  	struct list_head node;
+>  	struct nand_chip nand;
+> @@ -151,15 +156,15 @@ struct meson_nfc {
+>  	struct nand_controller controller;
+>  	struct clk *core_clk;
+>  	struct clk *device_clk;
+> -	struct clk *phase_tx;
+> -	struct clk *phase_rx;
+> +	struct clk *nand_clk;
+> +	struct clk_divider nand_divider;
+> =20
+>  	unsigned long clk_rate;
+>  	u32 bus_timing;
+> =20
+>  	struct device *dev;
+>  	void __iomem *reg_base;
+> -	struct regmap *reg_clk;
+> +	void __iomem *sd_emmc_clock;
+>  	struct completion completion;
+>  	struct list_head chips;
+>  	const struct meson_nfc_data *data;
+> @@ -235,7 +240,7 @@ static void meson_nfc_select_chip(struct nand_chip *n=
+and, int chip)
+>  	nfc->timing.tbers_max =3D meson_chip->tbers_max;
+> =20
+>  	if (nfc->clk_rate !=3D meson_chip->clk_rate) {
+> -		ret =3D clk_set_rate(nfc->device_clk, meson_chip->clk_rate);
+> +		ret =3D clk_set_rate(nfc->nand_clk, meson_chip->clk_rate);
+>  		if (ret) {
+>  			dev_err(nfc->dev, "failed to set clock rate\n");
+>  			return;
+> @@ -406,7 +411,6 @@ static int meson_nfc_queue_rb(struct meson_nfc *nfc, =
+int timeout_ms)
+>  	cmd =3D NFC_CMD_RB | NFC_CMD_RB_INT
+>  		| nfc->param.chip_select | nfc->timing.tbers_max;
+>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+> -
+
+Please avoid these spacing changes in the middle of a commit.
+
+>  	ret =3D wait_for_completion_timeout(&nfc->completion,
+>  					  msecs_to_jiffies(timeout_ms));
+>  	if (ret =3D=3D 0)
+> @@ -985,9 +989,11 @@ static const struct mtd_ooblayout_ops meson_ooblayou=
+t_ops =3D {
+>  	.free =3D meson_ooblayout_free,
+>  };
+> =20
+> +struct clk_parent_data nfc_divider_parent_data[1];
+>  static int meson_nfc_clk_init(struct meson_nfc *nfc)
+>  {
+>  	int ret;
+> +	struct clk_init_data init =3D {0};
+> =20
+>  	/* request core clock */
+>  	nfc->core_clk =3D devm_clk_get(nfc->dev, "core");
+> @@ -1002,21 +1008,26 @@ static int meson_nfc_clk_init(struct meson_nfc *n=
+fc)
+>  		return PTR_ERR(nfc->device_clk);
+>  	}
+> =20
+> -	nfc->phase_tx =3D devm_clk_get(nfc->dev, "tx");
+> -	if (IS_ERR(nfc->phase_tx)) {
+> -		dev_err(nfc->dev, "failed to get TX clk\n");
+> -		return PTR_ERR(nfc->phase_tx);
+> -	}
+> -
+> -	nfc->phase_rx =3D devm_clk_get(nfc->dev, "rx");
+> -	if (IS_ERR(nfc->phase_rx)) {
+> -		dev_err(nfc->dev, "failed to get RX clk\n");
+> -		return PTR_ERR(nfc->phase_rx);
+> -	}
+> +	init.name =3D devm_kstrdup(nfc->dev, "nfc#div", GFP_KERNEL);
+> +	init.ops =3D &clk_divider_ops;
+> +	nfc_divider_parent_data[0].fw_name =3D "device";
+> +	init.parent_data =3D nfc_divider_parent_data;
+> +	init.num_parents =3D 1;
+> +	nfc->nand_divider.reg =3D nfc->sd_emmc_clock;
+> +	nfc->nand_divider.shift =3D CLK_DIV_SHIFT;
+> +	nfc->nand_divider.width =3D CLK_DIV_WIDTH;
+> +	nfc->nand_divider.hw.init =3D &init;
+> +	nfc->nand_divider.flags =3D CLK_DIVIDER_ONE_BASED |
+> +				  CLK_DIVIDER_ROUND_CLOSEST |
+> +				  CLK_DIVIDER_ALLOW_ZERO;
+> +
+> +	nfc->nand_clk =3D devm_clk_register(nfc->dev, &nfc->nand_divider.hw);
+> +	if (IS_ERR(nfc->nand_clk))
+> +		return PTR_ERR(nfc->nand_clk);
+> =20
+>  	/* init SD_EMMC_CLOCK to sane defaults w/min clock rate */
+> -	regmap_update_bits(nfc->reg_clk,
+> -			   0, CLK_SELECT_NAND, CLK_SELECT_NAND);
+> +	writel(CLK_SELECT_NAND | readl(nfc->sd_emmc_clock),
+> +	       nfc->sd_emmc_clock);
+> =20
+>  	ret =3D clk_prepare_enable(nfc->core_clk);
+>  	if (ret) {
+> @@ -1030,29 +1041,21 @@ static int meson_nfc_clk_init(struct meson_nfc *n=
+fc)
+>  		goto err_device_clk;
+>  	}
+> =20
+> -	ret =3D clk_prepare_enable(nfc->phase_tx);
+> +	ret =3D clk_prepare_enable(nfc->nand_clk);
+>  	if (ret) {
+> -		dev_err(nfc->dev, "failed to enable TX clock\n");
+> -		goto err_phase_tx;
+> +		dev_err(nfc->dev, "pre enable NFC divider fail\n");
+> +		goto err_nand_clk;
+>  	}
+> =20
+> -	ret =3D clk_prepare_enable(nfc->phase_rx);
+> -	if (ret) {
+> -		dev_err(nfc->dev, "failed to enable RX clock\n");
+> -		goto err_phase_rx;
+> -	}
+> -
+> -	ret =3D clk_set_rate(nfc->device_clk, 24000000);
+> +	ret =3D clk_set_rate(nfc->nand_clk, 24000000);
+
+Is this rename really useful?
+
+>  	if (ret)
+> -		goto err_disable_rx;
+> +		goto err_disable_clk;
+> =20
+>  	return 0;
+> =20
+> -err_disable_rx:
+> -	clk_disable_unprepare(nfc->phase_rx);
+> -err_phase_rx:
+> -	clk_disable_unprepare(nfc->phase_tx);
+> -err_phase_tx:
+> +err_disable_clk:
+> +	clk_disable_unprepare(nfc->nand_clk);
+> +err_nand_clk:
+>  	clk_disable_unprepare(nfc->device_clk);
+>  err_device_clk:
+>  	clk_disable_unprepare(nfc->core_clk);
+> @@ -1061,8 +1064,7 @@ static int meson_nfc_clk_init(struct meson_nfc *nfc)
+> =20
+>  static void meson_nfc_disable_clk(struct meson_nfc *nfc)
+>  {
+> -	clk_disable_unprepare(nfc->phase_rx);
+> -	clk_disable_unprepare(nfc->phase_tx);
+> +	clk_disable_unprepare(nfc->nand_clk);
+>  	clk_disable_unprepare(nfc->device_clk);
+>  	clk_disable_unprepare(nfc->core_clk);
+>  }
+> @@ -1374,7 +1376,6 @@ static int meson_nfc_probe(struct platform_device *=
+pdev)
+>  {
+>  	struct device *dev =3D &pdev->dev;
+>  	struct meson_nfc *nfc;
+> -	struct resource *res;
+>  	int ret, irq;
+> =20
+>  	nfc =3D devm_kzalloc(dev, sizeof(*nfc), GFP_KERNEL);
+> @@ -1388,21 +1389,15 @@ static int meson_nfc_probe(struct platform_device=
+ *pdev)
+>  	nand_controller_init(&nfc->controller);
+>  	INIT_LIST_HEAD(&nfc->chips);
+>  	init_completion(&nfc->completion);
+> -
+
+Please don't modify spacing in this commit.
+
+>  	nfc->dev =3D dev;
+> =20
+> -	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	nfc->reg_base =3D devm_ioremap_resource(dev, res);
+> +	nfc->reg_base =3D devm_platform_ioremap_resource_byname(pdev, "nfc");
+
+This change seems unrelated.
+
+>  	if (IS_ERR(nfc->reg_base))
+>  		return PTR_ERR(nfc->reg_base);
+> =20
+> -	nfc->reg_clk =3D
+> -		syscon_regmap_lookup_by_phandle(dev->of_node,
+> -						"amlogic,mmc-syscon");
+> -	if (IS_ERR(nfc->reg_clk)) {
+> -		dev_err(dev, "Failed to lookup clock base\n");
+> -		return PTR_ERR(nfc->reg_clk);
+> -	}
+> +	nfc->sd_emmc_clock =3D devm_platform_ioremap_resource_byname(pdev, "emm=
+c");
+> +	if (IS_ERR(nfc->sd_emmc_clock))
+> +		return PTR_ERR(nfc->sd_emmc_clock);
+
+While I agree this is much better than the previous solution, we cannot
+break DT compatibility, so you need to try getting the emmc clock, but
+if it fails you should fallback to the regmap lookup.
+
+> =20
+>  	irq =3D platform_get_irq(pdev, 0);
+>  	if (irq < 0)
+
+
+Thanks,
+Miqu=C3=A8l

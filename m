@@ -2,60 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FEC4F1D14
-	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB864F1B55
+	for <lists+linux-kernel@lfdr.de>; Mon,  4 Apr 2022 23:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382459AbiDDVaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 17:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46474 "EHLO
+        id S1379608AbiDDVUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 17:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379267AbiDDQvv (ORCPT
+        with ESMTP id S1379284AbiDDQxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 12:51:51 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4B62DAA1;
-        Mon,  4 Apr 2022 09:49:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649090994; x=1680626994;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4ED03ebku1o8iobIzAgP7riBruf7KThgs/0tqOMzplc=;
-  b=Z+7tP+IRbi7bDrVj+FB2hdro/eKa13RRR2tVdT20HXoAM4dAyRG0Tp2A
-   QKmIu/MXUO6fjOobRj55oyFfVAwa/dZvOdnV3YXQkLyHeThxTWWi4SSMs
-   Wv0a1NT9x25+5ag2U6mySvTc23Wfc20Ms41D5Z8O2vI6MSGeIvneZ/afK
-   +v98YwhX1H9KUL/vL67I+9odNz2SmvV9FCkUJYG/qL4XuxnV81ZPvEAC8
-   Z6a9b/okvYTODxOFiz4jmJWyltT6rilgAeiKGVSwz27WOsFeEZ/zZTEDg
-   OYfb2pkucor8UCjXlHnBK7IFOAaoK4Gt4zavbkJU7mwcfhKxPEiCrwBLK
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="259390792"
-X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="259390792"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 09:49:51 -0700
-X-IronPort-AV: E=Sophos;i="5.90,234,1643702400"; 
-   d="scan'208";a="523105240"
-Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 09:49:51 -0700
-From:   Reinette Chatre <reinette.chatre@intel.com>
-To:     dave.hansen@linux.intel.com, jarkko@kernel.org, tglx@linutronix.de,
-        bp@alien8.de, luto@kernel.org, mingo@redhat.com,
-        linux-sgx@vger.kernel.org, x86@kernel.org
-Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
-        cedric.xing@intel.com, haitao.huang@intel.com,
-        mark.shanahan@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V3 30/30] selftests/sgx: Page removal stress test
-Date:   Mon,  4 Apr 2022 09:49:38 -0700
-Message-Id: <5df85109e6b88787ddf31ac42762c9d1dcc0c3e1.1648847675.git.reinette.chatre@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1648847675.git.reinette.chatre@intel.com>
-References: <cover.1648847675.git.reinette.chatre@intel.com>
+        Mon, 4 Apr 2022 12:53:12 -0400
+Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EBD3B032;
+        Mon,  4 Apr 2022 09:51:14 -0700 (PDT)
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1nbPuw-0002t4-DU; Mon, 04 Apr 2022 18:51:02 +0200
+Message-ID: <112c2108-7548-f5bd-493d-19b944701f1b@maciej.szmigiero.name>
+Date:   Mon, 4 Apr 2022 18:50:54 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220402010903.727604-1-seanjc@google.com>
+ <20220402010903.727604-2-seanjc@google.com>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Subject: Re: [PATCH 1/8] KVM: nSVM: Sync next_rip field from vmcb12 to vmcb02
+In-Reply-To: <20220402010903.727604-2-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,171 +49,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create enclave with additional heap that consumes all physical SGX
-memory and then remove it.
+On 2.04.2022 03:08, Sean Christopherson wrote:
+> From: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+> 
+> The next_rip field of a VMCB is *not* an output-only field for a VMRUN.
+> This field value (instead of the saved guest RIP) in used by the CPU for
+> the return address pushed on stack when injecting a software interrupt or
+> INT3 or INTO exception.
+> 
+> Make sure this field gets synced from vmcb12 to vmcb02 when entering L2 or
+> loading a nested state and NRIPS is exposed to L1.  If NRIPS is supported
+> in hardware but not exposed to L1 (nrips=0 or hidden by userspace), stuff
+> vmcb02's next_rip from the new L2 RIP to emulate a !NRIPS CPU (which
+> saves RIP on the stack as-is).
+> 
+> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+> Co-developed-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>   arch/x86/kvm/svm/nested.c | 22 +++++++++++++++++++---
+>   arch/x86/kvm/svm/svm.h    |  1 +
+>   2 files changed, 20 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> index 73b545278f5f..9a6dc2b38fcf 100644
+> --- a/arch/x86/kvm/svm/nested.c
+> +++ b/arch/x86/kvm/svm/nested.c
+> @@ -369,6 +369,7 @@ void __nested_copy_vmcb_control_to_cache(struct kvm_vcpu *vcpu,
+>   	to->nested_ctl          = from->nested_ctl;
+>   	to->event_inj           = from->event_inj;
+>   	to->event_inj_err       = from->event_inj_err;
+> +	to->next_rip            = from->next_rip;
+>   	to->nested_cr3          = from->nested_cr3;
+>   	to->virt_ext            = from->virt_ext;
+>   	to->pause_filter_count  = from->pause_filter_count;
+> @@ -606,7 +607,8 @@ static void nested_vmcb02_prepare_save(struct vcpu_svm *svm, struct vmcb *vmcb12
+>   	}
+>   }
+>   
+> -static void nested_vmcb02_prepare_control(struct vcpu_svm *svm)
+> +static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
+> +					  unsigned long vmcb12_rip)
+>   {
+>   	u32 int_ctl_vmcb01_bits = V_INTR_MASKING_MASK;
+>   	u32 int_ctl_vmcb12_bits = V_TPR_MASK | V_IRQ_INJECTION_BITS_MASK;
+> @@ -660,6 +662,19 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm)
+>   	vmcb02->control.event_inj           = svm->nested.ctl.event_inj;
+>   	vmcb02->control.event_inj_err       = svm->nested.ctl.event_inj_err;
+>   
+> +	/*
+> +	 * next_rip is consumed on VMRUN as the return address pushed on the
+> +	 * stack for injected soft exceptions/interrupts.  If nrips is exposed
+> +	 * to L1, take it verbatim from vmcb12.  If nrips is supported in
+> +	 * hardware but not exposed to L1, stuff the actual L2 RIP to emulate
+> +	 * what a nrips=0 CPU would do (L1 is responsible for advancing RIP
+> +	 * prior to injecting the event).
+> +	 */
+> +	if (svm->nrips_enabled)
+> +		vmcb02->control.next_rip    = svm->nested.ctl.next_rip;
+> +	else if (boot_cpu_has(X86_FEATURE_NRIPS))
+> +		vmcb02->control.next_rip    = vmcb12_rip;
+> +
+>   	vmcb02->control.virt_ext            = vmcb01->control.virt_ext &
+>   					      LBR_CTL_ENABLE_MASK;
+>   	if (svm->lbrv_enabled)
+> @@ -743,7 +758,7 @@ int enter_svm_guest_mode(struct kvm_vcpu *vcpu, u64 vmcb12_gpa,
+>   	nested_svm_copy_common_state(svm->vmcb01.ptr, svm->nested.vmcb02.ptr);
+>   
+>   	svm_switch_vmcb(svm, &svm->nested.vmcb02);
+> -	nested_vmcb02_prepare_control(svm);
+> +	nested_vmcb02_prepare_control(svm, vmcb12->save.rip);
+>   	nested_vmcb02_prepare_save(svm, vmcb12);
+>   
+>   	ret = nested_svm_load_cr3(&svm->vcpu, svm->nested.save.cr3,
+> @@ -1422,6 +1437,7 @@ static void nested_copy_vmcb_cache_to_control(struct vmcb_control_area *dst,
+>   	dst->nested_ctl           = from->nested_ctl;
+>   	dst->event_inj            = from->event_inj;
+>   	dst->event_inj_err        = from->event_inj_err;
+> +	dst->next_rip             = from->next_rip;
+>   	dst->nested_cr3           = from->nested_cr3;
+>   	dst->virt_ext              = from->virt_ext;
+>   	dst->pause_filter_count   = from->pause_filter_count;
+> @@ -1606,7 +1622,7 @@ static int svm_set_nested_state(struct kvm_vcpu *vcpu,
+>   	nested_copy_vmcb_control_to_cache(svm, ctl);
+>   
+>   	svm_switch_vmcb(svm, &svm->nested.vmcb02);
+> -	nested_vmcb02_prepare_control(svm);
+> +	nested_vmcb02_prepare_control(svm, save->rip);
+>   
 
-Depending on the available SGX memory this test could take a
-significant time to run (several minutes) as it (1) creates the
-enclave, (2) changes the type of every page to be trimmed,
-(3) enters the enclave once per page to run EACCEPT, before
-(4) the pages are finally removed.
+					   ^
+I guess this should be "svm->vmcb->save.rip", since
+KVM_{GET,SET}_NESTED_STATE "save" field contains vmcb01 data,
+not vmcb{0,1}2 (in contrast to the "control" field).
 
-Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
----
-Changes since V2:
-- Rename struct sgx_enclave_modt -> struct sgx_enclave_modify_type
 
-Changes since V1:
-- Exit test completely on first failure of EACCEPT of a removed page. Since
-  this is an oversubscribed test the number of pages on which this is
-  attempted can be significant and in case of failure the per-page
-  error logging would overwhelm the system.
-- Update test to call renamed ioctl() (SGX_IOC_PAGE_MODT ->
-  SGX_IOC_ENCLAVE_MODIFY_TYPE) and provide secinfo as parameter (Jarkko).
-- Fixup definitions to be reverse xmas tree.
-- Update test to reflect page removal ioctl() and struct name change:
-  SGX_IOC_PAGE_REMOVE->SGX_IOC_ENCLAVE_REMOVE_PAGES,
-  struct sgx_page_remove -> struct sgx_enclave_remove_pages (Jarkko).
-- Ensure test is skipped when SGX2 not supported by kernel.
-- Cleanup comments.
-
- tools/testing/selftests/sgx/main.c | 122 +++++++++++++++++++++++++++++
- 1 file changed, 122 insertions(+)
-
-diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-index 82cc2283be03..535f6cd72eb1 100644
---- a/tools/testing/selftests/sgx/main.c
-+++ b/tools/testing/selftests/sgx/main.c
-@@ -378,7 +378,129 @@ TEST_F(enclave, unclobbered_vdso_oversubscribed)
- 	EXPECT_EQ(get_op.value, MAGIC);
- 	EXPECT_EEXIT(&self->run);
- 	EXPECT_EQ(self->run.user_data, 0);
-+}
-+
-+TEST_F_TIMEOUT(enclave, unclobbered_vdso_oversubscribed_remove, 900)
-+{
-+	struct sgx_enclave_remove_pages remove_ioc;
-+	struct sgx_enclave_modify_type modt_ioc;
-+	struct encl_op_get_from_buf get_op;
-+	struct encl_op_eaccept eaccept_op;
-+	struct encl_op_put_to_buf put_op;
-+	struct sgx_secinfo secinfo;
-+	struct encl_segment *heap;
-+	unsigned long total_mem;
-+	int ret, errno_save;
-+	unsigned long addr;
-+	unsigned long i;
-+
-+	/*
-+	 * Create enclave with additional heap that is as big as all
-+	 * available physical SGX memory.
-+	 */
-+	total_mem = get_total_epc_mem();
-+	ASSERT_NE(total_mem, 0);
-+	TH_LOG("Creating an enclave with %lu bytes heap may take a while ...",
-+	       total_mem);
-+	ASSERT_TRUE(setup_test_encl(total_mem, &self->encl, _metadata));
-+
-+	/*
-+	 * Hardware (SGX2) and kernel support is needed for this test. Start
-+	 * with check that test has a chance of succeeding.
-+	 */
-+	memset(&modt_ioc, 0, sizeof(modt_ioc));
-+	ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPE, &modt_ioc);
-+
-+	if (ret == -1) {
-+		if (errno == ENOTTY)
-+			SKIP(return, "Kernel does not support SGX_IOC_ENCLAVE_MODIFY_TYPE ioctl()");
-+		else if (errno == ENODEV)
-+			SKIP(return, "System does not support SGX2");
-+	}
-+
-+	/*
-+	 * Invalid parameters were provided during sanity check,
-+	 * expect command to fail.
-+	 */
-+	EXPECT_EQ(ret, -1);
-+
-+	/* SGX2 is supported by kernel and hardware, test can proceed. */
-+	memset(&self->run, 0, sizeof(self->run));
-+	self->run.tcs = self->encl.encl_base;
-+
-+	heap = &self->encl.segment_tbl[self->encl.nr_segments - 1];
-+
-+	put_op.header.type = ENCL_OP_PUT_TO_BUFFER;
-+	put_op.value = MAGIC;
-+
-+	EXPECT_EQ(ENCL_CALL(&put_op, &self->run, false), 0);
-+
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.user_data, 0);
-+
-+	get_op.header.type = ENCL_OP_GET_FROM_BUFFER;
-+	get_op.value = 0;
-+
-+	EXPECT_EQ(ENCL_CALL(&get_op, &self->run, false), 0);
-+
-+	EXPECT_EQ(get_op.value, MAGIC);
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.user_data, 0);
-+
-+	/* Trim entire heap. */
-+	memset(&modt_ioc, 0, sizeof(modt_ioc));
-+	memset(&secinfo, 0, sizeof(secinfo));
-+
-+	secinfo.flags = SGX_PAGE_TYPE_TRIM << 8;
-+	modt_ioc.offset = heap->offset;
-+	modt_ioc.length = heap->size;
-+	modt_ioc.secinfo = (unsigned long)&secinfo;
-+
-+	TH_LOG("Changing type of %zd bytes to trimmed may take a while ...",
-+	       heap->size);
-+	ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_MODIFY_TYPE, &modt_ioc);
-+	errno_save = ret == -1 ? errno : 0;
-+
-+	EXPECT_EQ(ret, 0);
-+	EXPECT_EQ(errno_save, 0);
-+	EXPECT_EQ(modt_ioc.result, 0);
-+	EXPECT_EQ(modt_ioc.count, heap->size);
-+
-+	/* EACCEPT all removed pages. */
-+	addr = self->encl.encl_base + heap->offset;
-+
-+	eaccept_op.flags = SGX_SECINFO_TRIM | SGX_SECINFO_MODIFIED;
-+	eaccept_op.header.type = ENCL_OP_EACCEPT;
-+
-+	TH_LOG("Entering enclave to run EACCEPT for each page of %zd bytes may take a while ...",
-+	       heap->size);
-+	for (i = 0; i < heap->size; i += 4096) {
-+		eaccept_op.epc_addr = addr + i;
-+		eaccept_op.ret = 0;
- 
-+		EXPECT_EQ(ENCL_CALL(&eaccept_op, &self->run, true), 0);
-+
-+		EXPECT_EQ(self->run.exception_vector, 0);
-+		EXPECT_EQ(self->run.exception_error_code, 0);
-+		EXPECT_EQ(self->run.exception_addr, 0);
-+		ASSERT_EQ(eaccept_op.ret, 0);
-+		ASSERT_EQ(self->run.function, EEXIT);
-+	}
-+
-+	/* Complete page removal. */
-+	memset(&remove_ioc, 0, sizeof(remove_ioc));
-+
-+	remove_ioc.offset = heap->offset;
-+	remove_ioc.length = heap->size;
-+
-+	TH_LOG("Removing %zd bytes from enclave may take a while ...",
-+	       heap->size);
-+	ret = ioctl(self->encl.fd, SGX_IOC_ENCLAVE_REMOVE_PAGES, &remove_ioc);
-+	errno_save = ret == -1 ? errno : 0;
-+
-+	EXPECT_EQ(ret, 0);
-+	EXPECT_EQ(errno_save, 0);
-+	EXPECT_EQ(remove_ioc.count, heap->size);
- }
- 
- TEST_F(enclave, clobbered_vdso)
--- 
-2.25.1
-
+Thanks,
+Maciej

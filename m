@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D044F4D07
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A77D4F4CA6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1450077AbiDEXiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
+        id S1579310AbiDEX05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351428AbiDEKCY (ORCPT
+        with ESMTP id S1358060AbiDEK15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:02:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9C16E297;
-        Tue,  5 Apr 2022 02:51:45 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F59937AA1;
+        Tue,  5 Apr 2022 03:14:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA03E61368;
-        Tue,  5 Apr 2022 09:51:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA958C385A1;
-        Tue,  5 Apr 2022 09:51:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53F5CB81BC5;
+        Tue,  5 Apr 2022 10:14:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1F3EC385A1;
+        Tue,  5 Apr 2022 10:14:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152304;
-        bh=536otJG6irmPN3L/0cDJmTTtx6vrE6tpwy6troGIf0Y=;
+        s=korg; t=1649153646;
+        bh=c3I5LkA6//bl+gmvL+GzcqiMgLSDC/t1HXvj51hvlzY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G5csImZZ5sLq0R/q8s8UjWFbDyJu5W0qiRM92vL+owMcBvoTdbaVj6lt6U03eYvLd
-         LEMyXfdQXLT9TCJaXiDn7fNzCSFTLm4ig60f+W5ZbbJ/OG0gvlRHJ+Hk3sqTQuVbm/
-         h35IRFVCO2MODwfZerYvMgoZK0l1bgl4ADnmv84E=
+        b=c7kidxs348hvCYXG/Mo6jkuPMaEnHBc0QuLF6fMizhWjEh+S7z/7gR4HL48XlifF0
+         CFk9jk85+UlBc/2b/FO3U9yn0QA/R/Fyyd4CdvSJFrLKj9Aru62gssp8Yrh9pr/5Ef
+         B+RdmYT2wq1+cbYhXa7etM7TWJAM6usbPJ1sZz0E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 728/913] media: atmel: atmel-isc-base: report frame sizes as full supported range
-Date:   Tue,  5 Apr 2022 09:29:50 +0200
-Message-Id: <20220405070401.653441413@linuxfoundation.org>
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 297/599] HID: i2c-hid: fix GET/SET_REPORT for unnumbered reports
+Date:   Tue,  5 Apr 2022 09:29:51 +0200
+Message-Id: <20220405070307.672513533@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,71 +56,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eugen Hristev <eugen.hristev@microchip.com>
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-[ Upstream commit 72802a86e11c34e819fbfb38f58c5aef668f833d ]
+[ Upstream commit a5e5e03e94764148a01757b2fa4737d3445c13a6 ]
 
-The ISC supports a full broad range of frame sizes.
-Until now, the subdevice was queried for possible frame sizes and these
-were reported to the user space.
-However, the ISC should not care about which frame sizes the subdev
-supports, as long as this frame size is supported.
-Thus, report a continuous range from smallest frame size up to the max
-resolution.
+Internally kernel prepends all report buffers, for both numbered and
+unnumbered reports, with report ID, therefore to properly handle unnumbered
+reports we should prepend it ourselves.
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+For the same reason we should skip the first byte of the buffer when
+calling i2c_hid_set_or_send_report() which then will take care of properly
+formatting the transfer buffer based on its separate report ID argument
+along with report payload.
+
+[jkosina@suse.cz: finalize trimmed sentence in changelog as spotted by Benjamin]
+Fixes: 9b5a9ae88573 ("HID: i2c-hid: implement ll_driver transport-layer callbacks")
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Tested-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/atmel/atmel-isc-base.c | 22 +++++++++----------
- 1 file changed, 10 insertions(+), 12 deletions(-)
+ drivers/hid/i2c-hid/i2c-hid-core.c | 32 ++++++++++++++++++++++--------
+ 1 file changed, 24 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
-index ebf264b980f9..f768be3c4059 100644
---- a/drivers/media/platform/atmel/atmel-isc-base.c
-+++ b/drivers/media/platform/atmel/atmel-isc-base.c
-@@ -1369,14 +1369,12 @@ static int isc_enum_framesizes(struct file *file, void *fh,
- 			       struct v4l2_frmsizeenum *fsize)
- {
- 	struct isc_device *isc = video_drvdata(file);
--	struct v4l2_subdev_frame_size_enum fse = {
--		.code = isc->config.sd_format->mbus_code,
--		.index = fsize->index,
--		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
--	};
- 	int ret = -EINVAL;
- 	int i;
+diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-hid/i2c-hid-core.c
+index 998aad8a9e60..14811d42a5a9 100644
+--- a/drivers/hid/i2c-hid/i2c-hid-core.c
++++ b/drivers/hid/i2c-hid/i2c-hid-core.c
+@@ -620,6 +620,17 @@ static int i2c_hid_get_raw_report(struct hid_device *hid,
+ 	if (report_type == HID_OUTPUT_REPORT)
+ 		return -EINVAL;
  
-+	if (fsize->index)
-+		return -EINVAL;
++	/*
++	 * In case of unnumbered reports the response from the device will
++	 * not have the report ID that the upper layers expect, so we need
++	 * to stash it the buffer ourselves and adjust the data size.
++	 */
++	if (!report_number) {
++		buf[0] = 0;
++		buf++;
++		count--;
++	}
 +
- 	for (i = 0; i < isc->num_user_formats; i++)
- 		if (isc->user_formats[i]->fourcc == fsize->pixel_format)
- 			ret = 0;
-@@ -1388,14 +1386,14 @@ static int isc_enum_framesizes(struct file *file, void *fh,
- 	if (ret)
- 		return ret;
+ 	/* +2 bytes to include the size of the reply in the query buffer */
+ 	ask_count = min(count + 2, (size_t)ihid->bufsize);
  
--	ret = v4l2_subdev_call(isc->current_subdev->sd, pad, enum_frame_size,
--			       NULL, &fse);
--	if (ret)
--		return ret;
-+	fsize->type = V4L2_FRMSIZE_TYPE_CONTINUOUS;
+@@ -641,6 +652,9 @@ static int i2c_hid_get_raw_report(struct hid_device *hid,
+ 	count = min(count, ret_count - 2);
+ 	memcpy(buf, ihid->rawbuf + 2, count);
  
--	fsize->type = V4L2_FRMSIZE_TYPE_DISCRETE;
--	fsize->discrete.width = fse.max_width;
--	fsize->discrete.height = fse.max_height;
-+	fsize->stepwise.min_width = 16;
-+	fsize->stepwise.max_width = isc->max_width;
-+	fsize->stepwise.min_height = 16;
-+	fsize->stepwise.max_height = isc->max_height;
-+	fsize->stepwise.step_width = 1;
-+	fsize->stepwise.step_height = 1;
- 
- 	return 0;
++	if (!report_number)
++		count++;
++
+ 	return count;
  }
+ 
+@@ -657,17 +671,19 @@ static int i2c_hid_output_raw_report(struct hid_device *hid, __u8 *buf,
+ 
+ 	mutex_lock(&ihid->reset_lock);
+ 
+-	if (report_id) {
+-		buf++;
+-		count--;
+-	}
+-
++	/*
++	 * Note that both numbered and unnumbered reports passed here
++	 * are supposed to have report ID stored in the 1st byte of the
++	 * buffer, so we strip it off unconditionally before passing payload
++	 * to i2c_hid_set_or_send_report which takes care of encoding
++	 * everything properly.
++	 */
+ 	ret = i2c_hid_set_or_send_report(client,
+ 				report_type == HID_FEATURE_REPORT ? 0x03 : 0x02,
+-				report_id, buf, count, use_data);
++				report_id, buf + 1, count - 1, use_data);
+ 
+-	if (report_id && ret >= 0)
+-		ret++; /* add report_id to the number of transfered bytes */
++	if (ret >= 0)
++		ret++; /* add report_id to the number of transferred bytes */
+ 
+ 	mutex_unlock(&ihid->reset_lock);
+ 
 -- 
 2.34.1
 

@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69254F4D9D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8CFC4F4A38
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1450678AbiDEXqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33784 "EHLO
+        id S1454135AbiDEWhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242860AbiDEKfe (ORCPT
+        with ESMTP id S1358264AbiDEK2L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:35:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CA5DF497;
-        Tue,  5 Apr 2022 03:19:24 -0700 (PDT)
+        Tue, 5 Apr 2022 06:28:11 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E58DFAF;
+        Tue,  5 Apr 2022 03:17:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D43B8617CA;
-        Tue,  5 Apr 2022 10:19:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E165FC385A1;
-        Tue,  5 Apr 2022 10:19:22 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id CBEF6CE1C9B;
+        Tue,  5 Apr 2022 10:17:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A235C385A1;
+        Tue,  5 Apr 2022 10:17:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153963;
-        bh=4zHTUQBUJz8Jg/fy+DBNG6bHNHfHiQRfq5MW2UJ0gZ8=;
+        s=korg; t=1649153861;
+        bh=u37C4ImYVSn6aD7UEH9AOkQBki7uvbodiwatWGjKU6w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G0skozuJ4QEg8M7ReKkzw/LO0GqcCIafVTIcIwwHlZf3D1rpuNX6o9w1i0iut14aZ
-         xp6a63hJWUbLFOrW91JYQqhq70vj9cZo4AN61civTufNBPTc0TiZZtUOQGKs+g4E6J
-         62/7SVsb8ohubcLb7J5b9I+yPfPcA0rRQiX0x8vQ=
+        b=Md4AstlKQ3PGbyZmUJdjYpEpFjbYMJgxcpv3SoY9dxNiWj8Fa9c3NfzCRp7eqwiGx
+         W9uwYSngS/lpI7bVpIgB0XafntfROSTgFTq8e5gM5Q1qfw5dCB+FFimpcDyWpuoOgZ
+         sLmeJhRISEdu/RAnHCrhJXB2lrH82KpEGnm/1h3U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mick Lorain <micklorain@protonmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
+        stable@vger.kernel.org, Andre Nash <alnash@fb.com>,
+        Neil Spring <ntspring@fb.com>, Wei Wang <weiwan@google.com>,
+        Yuchung Cheng <ycheng@google.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 372/599] PCI: Avoid broken MSI on SB600 USB devices
-Date:   Tue,  5 Apr 2022 09:31:06 +0200
-Message-Id: <20220405070309.900387133@linuxfoundation.org>
+Subject: [PATCH 5.10 374/599] tcp: ensure PMTU updates are processed during fastopen
+Date:   Tue,  5 Apr 2022 09:31:08 +0200
+Message-Id: <20220405070309.959710049@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -55,59 +59,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+From: Jakub Kicinski <kuba@kernel.org>
 
-[ Upstream commit 63cd736f449445edcd7f0bcc7d84453e9beec0aa ]
+[ Upstream commit ed0c99dc0f499ff8b6e75b5ae6092ab42be1ad39 ]
 
-Some ATI SB600 USB adapters advertise MSI, but if INTx is disabled by
-setting PCI_COMMAND_INTX_DISABLE, MSI doesn't work either.  The PCI/PCIe
-specs do not require software to set PCI_COMMAND_INTX_DISABLE when enabling
-MSI, but Linux has done that for many years.
+tp->rx_opt.mss_clamp is not populated, yet, during TFO send so we
+rise it to the local MSS. tp->mss_cache is not updated, however:
 
-Mick reported that 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI
-devices") broke these devices.  Prior to 306c54d0edb6, they used INTx.
-Starting with 306c54d0edb6, they use MSI, and and the fact that Linux sets
-PCI_COMMAND_INTX_DISABLE means both INTx and MSI are disabled on these
-devices.
+tcp_v6_connect():
+  tp->rx_opt.mss_clamp = IPV6_MIN_MTU - headers;
+  tcp_connect():
+     tcp_connect_init():
+       tp->mss_cache = min(mtu, tp->rx_opt.mss_clamp)
+     tcp_send_syn_data():
+       tp->rx_opt.mss_clamp = tp->advmss
 
-Avoid this SB600 defect by disabling MSI so we use INTx as before.
+After recent fixes to ICMPv6 PTB handling we started dropping
+PMTU updates higher than tp->mss_cache. Because of the stale
+tp->mss_cache value PMTU updates during TFO are always dropped.
 
-Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI devices")
-Link: https://lore.kernel.org/r/20220321183446.1108325-1-helgaas@kernel.org
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215690
-Link: https://lore.kernel.org/all/PxIByDyBRcsbpcmVhGSNDFAoUcMmb78ctXCkw6fbpx25TGlCHvA6SJjjFkNr1FfQZMntYPTNyvEnblxzAZ8a6jP9ddLpKeCN6Chi_2FuexU=@protonmail.com/
-Link: https://lore.kernel.org/r/20220314101448.90074-1-andriy.shevchenko@linux.intel.com
-BugLink: https://lore.kernel.org/all/20200702143045.23429-1-andriy.shevchenko@linux.intel.com/
-Reported-by: Mick Lorain <micklorain@protonmail.com>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Thanks to Wei for helping zero in on the problem and the fix!
+
+Fixes: c7bb4b89033b ("ipv6: tcp: drop silly ICMPv6 packet too big messages")
+Reported-by: Andre Nash <alnash@fb.com>
+Reported-by: Neil Spring <ntspring@fb.com>
+Reviewed-by: Wei Wang <weiwan@google.com>
+Acked-by: Yuchung Cheng <ycheng@google.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Link: https://lore.kernel.org/r/20220321165957.1769954-1-kuba@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/quirks.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ net/ipv4/tcp_output.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 95fcc735c88e..1be2894ada70 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -1816,6 +1816,18 @@ static void quirk_alder_ioapic(struct pci_dev *pdev)
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL,	PCI_DEVICE_ID_INTEL_EESSC,	quirk_alder_ioapic);
- #endif
- 
-+static void quirk_no_msi(struct pci_dev *dev)
-+{
-+	pci_info(dev, "avoiding MSI to work around a hardware defect\n");
-+	dev->no_msi = 1;
-+}
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4386, quirk_no_msi);
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4387, quirk_no_msi);
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4388, quirk_no_msi);
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4389, quirk_no_msi);
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x438a, quirk_no_msi);
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x438b, quirk_no_msi);
-+
- static void quirk_pcie_mch(struct pci_dev *pdev)
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 19ef4577b70d..ce9987e6ff25 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -3733,6 +3733,7 @@ static void tcp_connect_queue_skb(struct sock *sk, struct sk_buff *skb)
+  */
+ static int tcp_send_syn_data(struct sock *sk, struct sk_buff *syn)
  {
- 	pdev->no_msi = 1;
++	struct inet_connection_sock *icsk = inet_csk(sk);
+ 	struct tcp_sock *tp = tcp_sk(sk);
+ 	struct tcp_fastopen_request *fo = tp->fastopen_req;
+ 	int space, err = 0;
+@@ -3747,8 +3748,10 @@ static int tcp_send_syn_data(struct sock *sk, struct sk_buff *syn)
+ 	 * private TCP options. The cost is reduced data space in SYN :(
+ 	 */
+ 	tp->rx_opt.mss_clamp = tcp_mss_clamp(tp, tp->rx_opt.mss_clamp);
++	/* Sync mss_cache after updating the mss_clamp */
++	tcp_sync_mss(sk, icsk->icsk_pmtu_cookie);
+ 
+-	space = __tcp_mtu_to_mss(sk, inet_csk(sk)->icsk_pmtu_cookie) -
++	space = __tcp_mtu_to_mss(sk, icsk->icsk_pmtu_cookie) -
+ 		MAX_TCP_OPTION_SPACE;
+ 
+ 	space = min_t(size_t, space, fo->size);
 -- 
 2.34.1
 

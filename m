@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C38AE4F2E57
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41544F2AB5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242888AbiDEJiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34714 "EHLO
+        id S242586AbiDEJIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239390AbiDEIUC (ORCPT
+        with ESMTP id S239411AbiDEIUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A1DC55B5;
-        Tue,  5 Apr 2022 01:12:24 -0700 (PDT)
+        Tue, 5 Apr 2022 04:20:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9CC5C36C;
+        Tue,  5 Apr 2022 01:12:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E530FB81B90;
-        Tue,  5 Apr 2022 08:12:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A401C385A0;
-        Tue,  5 Apr 2022 08:12:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0DCCB81BA7;
+        Tue,  5 Apr 2022 08:12:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C680C385A1;
+        Tue,  5 Apr 2022 08:12:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146341;
-        bh=FXIASGTXlwyPFhZKczifYvKVHhbnTeDqSdZKl1fpCmc=;
+        s=korg; t=1649146366;
+        bh=RpHeGB/4TCr70vwntNOFuyfpQZbXqLVJP5A5Q9NI2ds=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t1VboZiZB2EfZK/HQPOKeTHvAe4R2l5XMrZ2a4y2/BJVq6InWHzv8AWBbnBgW6ePE
-         zkVYpmiZWplMUgkx6TGQVXLc0suxOZpTbdXAHibFGc8IjtIyPGEPQmbWmLxhKvXIG4
-         xodwwCrZCYs0moIj0Yq2981hNRTzg7jeSnqBh4ZQ=
+        b=EFELc+diWYZnE3fkn4Ws6jlYgZe1ka+KbeTULKNae8uB6F+Uq9m8ogo+ik1L3pRf9
+         4hl04QHdae2lZH8FqSYxsIiGLHtPExcV19j4TOrWYop0a3A1ui/KlNQ037Pomcxl8V
+         MjURrrM4u0UJhUwlzk17VB5Kc+vXYvgDgccJNaJ4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0730/1126] pinctrl: renesas: checker: Fix miscalculation of number of states
-Date:   Tue,  5 Apr 2022 09:24:37 +0200
-Message-Id: <20220405070429.017455126@linuxfoundation.org>
+Subject: [PATCH 5.17 0738/1126] iio: adc: Add check for devm_request_threaded_irq
+Date:   Tue,  5 Apr 2022 09:24:45 +0200
+Message-Id: <20220405070429.249982139@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,49 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit de9b861018d46af27a5edff8b6baef35c0c0ad4f ]
+[ Upstream commit b30537a4cedcacf0ade2f33ebb7610178ed1e7d7 ]
 
-The checker failed to validate all enum IDs in the description of a
-register with fixed-width register fields, due to a miscalculation of
-the number of described states: each register field of n bits can have
-"1 << n" possible states, not "1".
+As the potential failure of the devm_request_threaded_irq(),
+it should be better to check the return value and return
+error if fails.
 
-Increase SH_PFC_MAX_ENUMS accordingly, now more enum IDs are checked
-(SH-Mobile AG5 has more than 4000 enum IDs defined).
-
-Fixes: 12d057bad683b1c6 ("pinctrl: sh-pfc: checker: Add check for enum ID conflicts")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/6d8a6a05564f38f9d20464c1c17f96e52740cf6a.1645460429.git.geert+renesas@glider.be
+Fixes: fa659a40b80b ("iio: adc: twl6030-gpadc: Use devm_* API family")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Link: https://lore.kernel.org/r/20220224062849.3280966-1-jiasheng@iscas.ac.cn
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/renesas/core.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/iio/adc/twl6030-gpadc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/pinctrl/renesas/core.c b/drivers/pinctrl/renesas/core.c
-index 0d4ea2e22a53..12d41ac017b5 100644
---- a/drivers/pinctrl/renesas/core.c
-+++ b/drivers/pinctrl/renesas/core.c
-@@ -741,7 +741,7 @@ static int sh_pfc_suspend_init(struct sh_pfc *pfc) { return 0; }
+diff --git a/drivers/iio/adc/twl6030-gpadc.c b/drivers/iio/adc/twl6030-gpadc.c
+index afdb59e0b526..d0223e39d59a 100644
+--- a/drivers/iio/adc/twl6030-gpadc.c
++++ b/drivers/iio/adc/twl6030-gpadc.c
+@@ -911,6 +911,8 @@ static int twl6030_gpadc_probe(struct platform_device *pdev)
+ 	ret = devm_request_threaded_irq(dev, irq, NULL,
+ 				twl6030_gpadc_irq_handler,
+ 				IRQF_ONESHOT, "twl6030_gpadc", indio_dev);
++	if (ret)
++		return ret;
  
- #ifdef DEBUG
- #define SH_PFC_MAX_REGS		300
--#define SH_PFC_MAX_ENUMS	3000
-+#define SH_PFC_MAX_ENUMS	5000
- 
- static unsigned int sh_pfc_errors __initdata;
- static unsigned int sh_pfc_warnings __initdata;
-@@ -865,7 +865,8 @@ static void __init sh_pfc_check_cfg_reg(const char *drvname,
- 			 GENMASK(cfg_reg->reg_width - 1, 0));
- 
- 	if (cfg_reg->field_width) {
--		n = cfg_reg->reg_width / cfg_reg->field_width;
-+		fw = cfg_reg->field_width;
-+		n = (cfg_reg->reg_width / fw) << fw;
- 		/* Skip field checks (done at build time) */
- 		goto check_enum_ids;
- 	}
+ 	ret = twl6030_gpadc_enable_irq(TWL6030_GPADC_RT_SW1_EOC_MASK);
+ 	if (ret < 0) {
 -- 
 2.34.1
 

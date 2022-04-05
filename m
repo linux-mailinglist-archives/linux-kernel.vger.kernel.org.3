@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A76BC4F4712
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3C84F461F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233152AbiDEU6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:58:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
+        id S1386245AbiDEMkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:40:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348752AbiDEJsb (ORCPT
+        with ESMTP id S236496AbiDEJDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B303E4833A;
-        Tue,  5 Apr 2022 02:34:50 -0700 (PDT)
+        Tue, 5 Apr 2022 05:03:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A34E2D1CC;
+        Tue,  5 Apr 2022 01:54:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 639FEB81C82;
-        Tue,  5 Apr 2022 09:34:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC275C385A2;
-        Tue,  5 Apr 2022 09:34:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA5AA61476;
+        Tue,  5 Apr 2022 08:54:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8DC4C385A0;
+        Tue,  5 Apr 2022 08:54:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151288;
-        bh=3WCk8sBpIkZCS0IofelWfKv101rypvwobF2dXzA2GKA=;
+        s=korg; t=1649148885;
+        bh=U2ZJYOuEEz0m9/elS5Kj92JvO3TyzPU4Kk2kEKcCqqE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zRkJjstNbmpfo5bDWwOhNP9GZ72Lv5XoNmCOtPf14SAV+YVkdN278q7pOhNAT9OX4
-         ND1m2u2TtXf80MRcv5zEo172YEAnYGFBxS92sZPEJt6cTLRHClb/TNyB1SMU49QDY6
-         8tYAAUxR9d4mIK1P03i4fhhg6mdI09kqhtJmniNo=
+        b=wXTbrKAAfku7vvgMeHu1RTal5gY8bpw9Is9Vozaes80THRtZMhD1/KnbscJ6xToRl
+         mBw4NE+SRzhPd+8dkmezDqCUaEZm8s7ihpzLvCN67gCt0scPUPGaN9V3qTXeVYBMoL
+         Uw10qxlPY/HttRsPOFP4C2LeZTGfZdwHjG9+euB8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Luca Coelho <luciano.coelho@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 360/913] ASoC: rk817: Fix missing clk_disable_unprepare() in rk817_platform_probe
+Subject: [PATCH 5.16 0509/1017] iwlwifi: mvm: dont iterate unadded vifs when handling FW SMPS req
 Date:   Tue,  5 Apr 2022 09:23:42 +0200
-Message-Id: <20220405070350.637046054@linuxfoundation.org>
+Message-Id: <20220405070409.409242075@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Luca Coelho <luciano.coelho@intel.com>
 
-[ Upstream commit a6b44a2518a08348bd0f0401e4d2b99233bbabc2 ]
+[ Upstream commit 8a265d1a619c16400406c9d598411850ee104aed ]
 
-Fix the missing clk_disable_unprepare() before return
-from rk817_platform_probe() in the error handling case.
+We may not have all the interfaces added to the driver when we get the
+THERMAL_DUAL_CHAIN_REQUEST notification from the FW, so instead of
+iterating all vifs to update SMPS, iterate only the ones that are
+already assigned.  The interfaces that were not assigned yet, will be
+updated accordingly when we start using them.
 
-Fixes: 0d6a04da9b25 ("ASoC: Add Rockchip rk817 audio CODEC support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Tested-by: Chris Morgan <macromorgan@hotmail.com>
-Link: https://lore.kernel.org/r/20220307090146.4104-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Fixes: 2a7ce54ccc23 ("iwlwifi: mvm: honour firmware SMPS requests")
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/iwlwifi.20220129105618.9416aade2ba0.I0b71142f89e3f158aa058a1dfb2517c8c1fa3726@changeid
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/rk817_codec.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/net/wireless/intel/iwlwifi/mvm/ops.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/codecs/rk817_codec.c b/sound/soc/codecs/rk817_codec.c
-index 03f24edfe4f6..8fffe378618d 100644
---- a/sound/soc/codecs/rk817_codec.c
-+++ b/sound/soc/codecs/rk817_codec.c
-@@ -508,12 +508,14 @@ static int rk817_platform_probe(struct platform_device *pdev)
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "%s() register codec error %d\n",
- 			__func__, ret);
--		goto err_;
-+		goto err_clk;
- 	}
- 
- 	return 0;
--err_:
- 
-+err_clk:
-+	clk_disable_unprepare(rk817_codec_data->mclk);
-+err_:
- 	return ret;
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/ops.c b/drivers/net/wireless/intel/iwlwifi/mvm/ops.c
+index 364f6aefae81..5b7d89e33431 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/ops.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/ops.c
+@@ -237,7 +237,8 @@ static void iwl_mvm_rx_thermal_dual_chain_req(struct iwl_mvm *mvm,
+ 	 */
+ 	mvm->fw_static_smps_request =
+ 		req->event == cpu_to_le32(THERMAL_DUAL_CHAIN_REQ_DISABLE);
+-	ieee80211_iterate_interfaces(mvm->hw, IEEE80211_IFACE_ITER_NORMAL,
++	ieee80211_iterate_interfaces(mvm->hw,
++				     IEEE80211_IFACE_SKIP_SDATA_NOT_IN_DRIVER,
+ 				     iwl_mvm_intf_dual_chain_req, NULL);
  }
  
 -- 

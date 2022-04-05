@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CCDF4F2D9C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 872EA4F2E1D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238841AbiDEJFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
+        id S1350121AbiDEJy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238264AbiDEISq (ORCPT
+        with ESMTP id S238283AbiDEISr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:18:46 -0400
+        Tue, 5 Apr 2022 04:18:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D7C107;
-        Tue,  5 Apr 2022 01:08:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD12CBF7;
+        Tue,  5 Apr 2022 01:08:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B51F608C0;
-        Tue,  5 Apr 2022 08:08:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9305CC385A0;
-        Tue,  5 Apr 2022 08:08:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 49CCC6093C;
+        Tue,  5 Apr 2022 08:08:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59063C385A0;
+        Tue,  5 Apr 2022 08:08:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146110;
-        bh=coUnbwtMgy4IhV9sRORvYZJQFoFUkg3DcYgYPIf8ovE=;
+        s=korg; t=1649146112;
+        bh=nTo5q30PPqsFi2+GkQvzuK8vFIkgLEuVQEnryNps5rM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F5wUXmffXJ9QonZE/9NEM/9INI4IE5W57GRbkiLOCYKo9fIckrBAHcX4pnQx325Lm
-         QPlJ4QAj9+i6aB1Pmke2SH168LtGtc/JfgoEKe1RuZehLvlXsYBqJN8GBvOiowQ+ys
-         i7+7K6XZbJtKG84J7mO1iiYdXp1TV1FaX1ZeweIU=
+        b=tOHzpQDE5HZDqO0IXHVRDrs0ASbqcVyt5JW5KIxle4yI6PZ38tWJO/svHt5v3y2O6
+         jAL/aUhLS6PK/s5g09CzgAJcQFrkO+8XdFdIHlGqZI55qwq/DGTL/57QycPQDCy/G0
+         4dOO6glPNORshA8Bp68L/oQ7H1goUggpm08q9jIE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0647/1126] powerpc: 8xx: fix a return value error in mpc8xx_pic_init
-Date:   Tue,  5 Apr 2022 09:23:14 +0200
-Message-Id: <20220405070426.622989226@linuxfoundation.org>
+Subject: [PATCH 5.17 0648/1126] xtensa: add missing XCHAL_HAVE_WINDOWED check
+Date:   Tue,  5 Apr 2022 09:23:15 +0200
+Message-Id: <20220405070426.651837890@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,36 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
 
-[ Upstream commit 3fd46e551f67f4303c3276a0d6cd20baf2d192c4 ]
+[ Upstream commit 8c9ab55c0fbdc76cb876140c2dad75a610bb23ef ]
 
-mpc8xx_pic_init() should return -ENOMEM instead of 0 when
-irq_domain_add_linear() return NULL. This cause mpc8xx_pics_init to continue
-executing even if mpc8xx_pic_host is NULL.
+Add missing preprocessor conditions to secondary reset vector code.
 
-Fixes: cc76404feaed ("powerpc/8xx: Fix possible device node reference leak")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220223070223.26845-1-hbh25y@gmail.com
+Fixes: 09af39f649da ("xtensa: use register window specific opcodes only when present")
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/platforms/8xx/pic.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/xtensa/kernel/mxhead.S | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/powerpc/platforms/8xx/pic.c b/arch/powerpc/platforms/8xx/pic.c
-index f2ba837249d6..04a6abf14c29 100644
---- a/arch/powerpc/platforms/8xx/pic.c
-+++ b/arch/powerpc/platforms/8xx/pic.c
-@@ -153,6 +153,7 @@ int __init mpc8xx_pic_init(void)
- 	if (mpc8xx_pic_host == NULL) {
- 		printk(KERN_ERR "MPC8xx PIC: failed to allocate irq host!\n");
- 		ret = -ENOMEM;
-+		goto out;
- 	}
+diff --git a/arch/xtensa/kernel/mxhead.S b/arch/xtensa/kernel/mxhead.S
+index 9f3843742726..b702c0908b1f 100644
+--- a/arch/xtensa/kernel/mxhead.S
++++ b/arch/xtensa/kernel/mxhead.S
+@@ -37,11 +37,13 @@ _SetupOCD:
+ 	 * xt-gdb to single step via DEBUG exceptions received directly
+ 	 * by ocd.
+ 	 */
++#if XCHAL_HAVE_WINDOWED
+ 	movi	a1, 1
+ 	movi	a0, 0
+ 	wsr	a1, windowstart
+ 	wsr	a0, windowbase
+ 	rsync
++#endif
  
- 	ret = 0;
+ 	movi	a1, LOCKLEVEL
+ 	wsr	a1, ps
 -- 
 2.34.1
 

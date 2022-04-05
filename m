@@ -2,169 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD9B4F4F29
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C52E4F4C10
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390270AbiDFAmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48860 "EHLO
+        id S1575606AbiDEXIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443755AbiDEPkP (ORCPT
+        with ESMTP id S1443699AbiDEPkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:40:15 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D7836E02
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:59:07 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id n8so3993709plh.1
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 06:59:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FlDX9fQV9YwI2F2bsF/EhT89ZCpPX/Uxw6NOPcG/zWs=;
-        b=vpfHXe2NKDpDlZOUubw/epseFWJYmzTK8I77LrHDUtVgVvNxWJLYVFm4Nw6VlN9whs
-         Kxln9wEZ2CRA8FsH9PU5mi95PNoHoP4GWEapJH4Xc4U/PGwzruUl1h93BQlSvnQcdyPe
-         y0YtQEVbBngqi2TDqoSexbidaWxDM8Tp8ht1yMXLHWsIdRZdcPv1QdnlYuo9c8FCPE89
-         Nn/SFJmJKbIQuh5k/DtqmvQKF/kJWgO7D2kdmy6w7w0ZBqO7VrPBkMBEttF6JVVKhmG7
-         QLUOVZxVU0YbWzDp6ydW7J8xT6qUkJeLpVIponOsgiyiBbqFyvaEEcoibQcBj1xbqbJ/
-         fj5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FlDX9fQV9YwI2F2bsF/EhT89ZCpPX/Uxw6NOPcG/zWs=;
-        b=3JKdqAgsR62ytSWw7Fiadhqeqt16D+cYyz9QV+C/lGxMNDuin0t3Ma6WiCHbJRUmnD
-         ZOE9ooMc9PpPTqFQMK0Ff69QybICtM8y9vuRaPl/YQX+E0dmytH64omdQRa3Hx2+bxO9
-         Yh3/Nykxv1fXxCiS2ubMu1JRx5tKIR12Ly/B0VhzuWnywMoZXv4LNdaFs5vFL9P2tEu6
-         ZcFKnVT5L3vZgHQlhX2Hj4u03UjMplTgMF1tUwTuZGq81tgZDST/BqxrxgtgUFdKgC4f
-         1FMT/5I8D/zQNKGZEwni/eKbdUR1ZOZs3DFHgxIwZGw+SlaPy4yiBtllgTF/1QBfu8s2
-         9CIw==
-X-Gm-Message-State: AOAM5330CUiJF26pw7ss0z6cMVoPGmIsIrj+LtJ7OXVf7KOlwAolfCPE
-        h/+k4TiZYA6KFD/MwTfH54wC+57xEVEu
-X-Google-Smtp-Source: ABdhPJx9jXnVCoeYIBfz9Q4nYaydHk89UYiMnWdYdSATjinvEhEEvVQ+jncDXj6i4vUE9kjQAl0gmA==
-X-Received: by 2002:a17:903:40c7:b0:156:8b56:5fa1 with SMTP id t7-20020a17090340c700b001568b565fa1mr3657852pld.108.1649167146927;
-        Tue, 05 Apr 2022 06:59:06 -0700 (PDT)
-Received: from localhost.localdomain ([59.92.98.98])
-        by smtp.gmail.com with ESMTPSA id u14-20020a056a00124e00b004fab8f3245fsm16785402pfi.149.2022.04.05.06.59.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 06:59:06 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        elder@linaro.org, mhi@lists.linux.dev, quic_hemantk@quicinc.com,
-        quic_bbhatt@quicinc.com, quic_jhugo@quicinc.com,
-        bjorn.andersson@linaro.org, dmitry.baryshkov@linaro.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 12/18] bus: mhi: ep: Add support for handling SYS_ERR condition
-Date:   Tue,  5 Apr 2022 19:27:48 +0530
-Message-Id: <20220405135754.6622-13-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220405135754.6622-1-manivannan.sadhasivam@linaro.org>
-References: <20220405135754.6622-1-manivannan.sadhasivam@linaro.org>
+        Tue, 5 Apr 2022 11:40:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5DB8184B54
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:58:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46B55B81C9B
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 13:58:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E608EC385A4;
+        Tue,  5 Apr 2022 13:58:00 +0000 (UTC)
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Mark Brown <broonie@kernel.org>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH 00/10] mm, arm64: Reduce ARCH_KMALLOC_MINALIGN below the cache line size
+Date:   Tue,  5 Apr 2022 14:57:48 +0100
+Message-Id: <20220405135758.774016-1-catalin.marinas@arm.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for handling SYS_ERR (System Error) condition in the MHI
-endpoint stack. The SYS_ERR flag will be asserted by the endpoint device
-when it detects an internal error. The host will then issue reset and
-reinitializes MHI to recover from the error state.
+Hi,
 
-Reviewed-by: Alex Elder <elder@linaro.org>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/bus/mhi/ep/internal.h |  1 +
- drivers/bus/mhi/ep/main.c     | 20 ++++++++++++++++++++
- drivers/bus/mhi/ep/sm.c       | 11 +++++++++--
- 3 files changed, 30 insertions(+), 2 deletions(-)
+On arm64 ARCH_DMA_MINALIGN (and therefore ARCH_KMALLOC_MINALIGN) is 128.
+While the majority of arm64 SoCs have a 64-byte cache line size (or
+rather CWG - cache writeback granule), we chose a less than optimal
+value in order to support all SoCs in a single kernel image.
 
-diff --git a/drivers/bus/mhi/ep/internal.h b/drivers/bus/mhi/ep/internal.h
-index 4f2e26841702..d201d755560c 100644
---- a/drivers/bus/mhi/ep/internal.h
-+++ b/drivers/bus/mhi/ep/internal.h
-@@ -211,5 +211,6 @@ int mhi_ep_set_mhi_state(struct mhi_ep_cntrl *mhi_cntrl, enum mhi_state mhi_stat
- int mhi_ep_set_m0_state(struct mhi_ep_cntrl *mhi_cntrl);
- int mhi_ep_set_m3_state(struct mhi_ep_cntrl *mhi_cntrl);
- int mhi_ep_set_ready_state(struct mhi_ep_cntrl *mhi_cntrl);
-+void mhi_ep_handle_syserr(struct mhi_ep_cntrl *mhi_cntrl);
- 
- #endif
-diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
-index d36708d43eb6..706473ea4918 100644
---- a/drivers/bus/mhi/ep/main.c
-+++ b/drivers/bus/mhi/ep/main.c
-@@ -516,6 +516,26 @@ static void mhi_ep_reset_worker(struct work_struct *work)
- 	}
- }
- 
-+/*
-+ * We don't need to do anything special other than setting the MHI SYS_ERR
-+ * state. The host will reset all contexts and issue MHI RESET so that we
-+ * could also recover from error state.
-+ */
-+void mhi_ep_handle_syserr(struct mhi_ep_cntrl *mhi_cntrl)
-+{
-+	struct device *dev = &mhi_cntrl->mhi_dev->dev;
-+	int ret;
-+
-+	ret = mhi_ep_set_mhi_state(mhi_cntrl, MHI_STATE_SYS_ERR);
-+	if (ret)
-+		return;
-+
-+	/* Signal host that the device went to SYS_ERR state */
-+	ret = mhi_ep_send_state_change_event(mhi_cntrl, MHI_STATE_SYS_ERR);
-+	if (ret)
-+		dev_err(dev, "Failed sending SYS_ERR state change event: %d\n", ret);
-+}
-+
- int mhi_ep_power_up(struct mhi_ep_cntrl *mhi_cntrl)
- {
- 	struct device *dev = &mhi_cntrl->mhi_dev->dev;
-diff --git a/drivers/bus/mhi/ep/sm.c b/drivers/bus/mhi/ep/sm.c
-index ffc02f5d0a0d..e3865b85399d 100644
---- a/drivers/bus/mhi/ep/sm.c
-+++ b/drivers/bus/mhi/ep/sm.c
-@@ -68,8 +68,10 @@ int mhi_ep_set_m0_state(struct mhi_ep_cntrl *mhi_cntrl)
- 	ret = mhi_ep_set_mhi_state(mhi_cntrl, MHI_STATE_M0);
- 	spin_unlock_bh(&mhi_cntrl->state_lock);
- 
--	if (ret)
-+	if (ret) {
-+		mhi_ep_handle_syserr(mhi_cntrl);
- 		return ret;
-+	}
- 
- 	/* Signal host that the device moved to M0 */
- 	ret = mhi_ep_send_state_change_event(mhi_cntrl, MHI_STATE_M0);
-@@ -99,8 +101,10 @@ int mhi_ep_set_m3_state(struct mhi_ep_cntrl *mhi_cntrl)
- 	ret = mhi_ep_set_mhi_state(mhi_cntrl, MHI_STATE_M3);
- 	spin_unlock_bh(&mhi_cntrl->state_lock);
- 
--	if (ret)
-+	if (ret) {
-+		mhi_ep_handle_syserr(mhi_cntrl);
- 		return ret;
-+	}
- 
- 	/* Signal host that the device moved to M3 */
- 	ret = mhi_ep_send_state_change_event(mhi_cntrl, MHI_STATE_M3);
-@@ -132,5 +136,8 @@ int mhi_ep_set_ready_state(struct mhi_ep_cntrl *mhi_cntrl)
- 	ret = mhi_ep_set_mhi_state(mhi_cntrl, MHI_STATE_READY);
- 	spin_unlock_bh(&mhi_cntrl->state_lock);
- 
-+	if (ret)
-+		mhi_ep_handle_syserr(mhi_cntrl);
-+
- 	return ret;
- }
--- 
-2.25.1
+The aim of this series is to allow smaller default ARCH_KMALLOC_MINALIGN
+with kmalloc() caches configured at boot time to be safe when an SoC has
+a larger DMA alignment requirement.
+
+The first patch decouples ARCH_KMALLOC_MINALIGN from ARCH_DMA_MINALIGN
+with the aim to only use the latter in DMA-specific compile-time
+annotations. ARCH_KMALLOC_MINALIGN becomes the minimum (static)
+guaranteed kmalloc() alignment but not necessarily safe for non-coherent
+DMA. Patches 2-7 change some drivers/ code to use ARCH_DMA_MINALIGN
+instead of ARCH_KMALLOC_MINALIGN.
+
+Patch 8 introduces the dynamic arch_kmalloc_minalign() and the slab code
+changes to set the corresponding minimum alignment on the newly created
+kmalloc() caches. Patch 10 defines arch_kmalloc_minalign() for arm64
+returning cache_line_size() together with reducing ARCH_KMALLOC_MINALIGN
+to 64. ARCH_DMA_MINALIGN remains 128 on arm64.
+
+I don't have access to it but there's the Fujitsu A64FX with a CWG of
+256 (the arm64 cache_line_size() returns 256). This series will bump the
+smallest kmalloc cache to kmalloc-256. The platform is known to be fully
+cache coherent (or so I think) and we decided long ago not to bump
+ARCH_DMA_MINALIGN to 256. If problematic, we could make the dynamic
+kmalloc() alignment on arm64 min(ARCH_DMA_MINALIGN, cache_line_size()).
+
+This series is beneficial to arm64 even if it's only reducing the
+kmalloc() minimum alignment to 64. While it would be nice to reduce this
+further to 8 (or 16) on SoCs known to be fully DMA coherent, detecting
+this is via arch_setup_dma_ops() is problematic, especially with late
+probed devices. I'd leave it for an additional RFC series on top of
+this (there are ideas like bounce buffering for non-coherent devices if
+the SoC was deemed coherent).
+
+Thanks.
+
+Catalin Marinas (10):
+  mm/slab: Decouple ARCH_KMALLOC_MINALIGN from ARCH_DMA_MINALIGN
+  drivers/base: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
+  drivers/gpu: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
+  drivers/md: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
+  drivers/spi: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
+  drivers/usb: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
+  crypto: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
+  mm/slab: Allow dynamic kmalloc() minimum alignment
+  mm/slab: Simplify create_kmalloc_cache() args and make it static
+  arm64: Enable dynamic kmalloc() minimum alignment
+
+ arch/arm64/include/asm/cache.h |  1 +
+ arch/arm64/kernel/cacheinfo.c  |  7 ++++++
+ drivers/base/devres.c          |  4 ++--
+ drivers/gpu/drm/drm_managed.c  |  4 ++--
+ drivers/md/dm-crypt.c          |  2 +-
+ drivers/spi/spidev.c           |  2 +-
+ drivers/usb/core/buffer.c      |  8 +++----
+ drivers/usb/misc/usbtest.c     |  2 +-
+ include/linux/crypto.h         |  2 +-
+ include/linux/slab.h           | 25 ++++++++++++++++-----
+ mm/slab.c                      |  6 +----
+ mm/slab.h                      |  5 ++---
+ mm/slab_common.c               | 40 ++++++++++++++++++++++------------
+ 13 files changed, 69 insertions(+), 39 deletions(-)
 

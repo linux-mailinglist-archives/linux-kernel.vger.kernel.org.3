@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A45B4F4EB3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 840E14F4A30
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1836316AbiDFAfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49790 "EHLO
+        id S1453725AbiDEWgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:36:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354047AbiDEKLL (ORCPT
+        with ESMTP id S1354079AbiDEKL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:11:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2384C43B;
-        Tue,  5 Apr 2022 02:56:57 -0700 (PDT)
+        Tue, 5 Apr 2022 06:11:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A744DF76;
+        Tue,  5 Apr 2022 02:57:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 882ED6157A;
-        Tue,  5 Apr 2022 09:56:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ADCFC385A2;
-        Tue,  5 Apr 2022 09:56:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B46256157A;
+        Tue,  5 Apr 2022 09:57:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4A0DC385A2;
+        Tue,  5 Apr 2022 09:57:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152617;
-        bh=UO2eg/kU3zQNVWeY1pHzVEaHjxnStJIMnFDNAI8p7yE=;
+        s=korg; t=1649152625;
+        bh=iTXKqvGPA52czy0DyOfskTNfOi5wLMP9Uy+AzJwxCLg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xQ7iOwh3k3EzqvxYH1MLniPG8AuFbpqTq81ZZGKAUwYsNWqWnQudD5XN1F1t22+5e
-         +ef4dqMX1GVg+ZuBai25h4mKTUnowogYDsmWTy03m5wpItFQPx7YgYYVdcM8d1e045
-         WCC8RJqMAKax0N/FR0kMaxSnNydK/F6sZYQDRCB8=
+        b=ftXrOx3l5XUrdwuaS8/2qAovzbhRkh7RKYhqeC4QnbeDfD1LmL4eeUOMcgO9RWx1x
+         l4klSUWZOqTW5updEXm4liRLM4RkTYOMNkbBC5KLkptU8JbEjzVxtaWncYKuP1Kte+
+         OfJt6jb5LIh87UfhQZTw2mb5xAYkpo7kO7E0zO5I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Xiaolong Huang <butterflyhuangxx@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH 5.15 842/913] rxrpc: fix some null-ptr-deref bugs in server_key.c
-Date:   Tue,  5 Apr 2022 09:31:44 +0200
-Message-Id: <20220405070405.068531899@linuxfoundation.org>
+        stable@vger.kernel.org, Jacky Bai <ping.bai@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>, Robin Gong <yibin.gong@nxp.com>,
+        Jassi Brar <jaswinder.singh@linaro.org>
+Subject: [PATCH 5.15 844/913] mailbox: imx: fix wakeup failure from freeze mode
+Date:   Tue,  5 Apr 2022 09:31:46 +0200
+Message-Id: <20220405070405.127669353@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -57,86 +55,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaolong Huang <butterflyhuangxx@gmail.com>
+From: Robin Gong <yibin.gong@nxp.com>
 
-commit ff8376ade4f668130385839cef586a0990f8ef87 upstream.
+commit 892cb524ae8a27bf5e42f711318371acd9a9f74a upstream.
 
-Some function calls are not implemented in rxrpc_no_security, there are
-preparse_server_key, free_preparse_server_key and destroy_server_key.
-When rxrpc security type is rxrpc_no_security, user can easily trigger a
-null-ptr-deref bug via ioctl. So judgment should be added to prevent it
+Since IRQF_NO_SUSPEND used for imx mailbox driver, that means this irq
+can't be used for wakeup source so that can't wakeup from freeze mode.
+Add pm_system_wakeup() to wakeup from freeze mode.
 
-The crash log:
-user@syzkaller:~$ ./rxrpc_preparse_s
-[   37.956878][T15626] BUG: kernel NULL pointer dereference, address: 0000000000000000
-[   37.957645][T15626] #PF: supervisor instruction fetch in kernel mode
-[   37.958229][T15626] #PF: error_code(0x0010) - not-present page
-[   37.958762][T15626] PGD 4aadf067 P4D 4aadf067 PUD 4aade067 PMD 0
-[   37.959321][T15626] Oops: 0010 [#1] PREEMPT SMP
-[   37.959739][T15626] CPU: 0 PID: 15626 Comm: rxrpc_preparse_ Not tainted 5.17.0-01442-gb47d5a4f6b8d #43
-[   37.960588][T15626] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1 04/01/2014
-[   37.961474][T15626] RIP: 0010:0x0
-[   37.961787][T15626] Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
-[   37.962480][T15626] RSP: 0018:ffffc9000d9abdc0 EFLAGS: 00010286
-[   37.963018][T15626] RAX: ffffffff84335200 RBX: ffff888012a1ce80 RCX: 0000000000000000
-[   37.963727][T15626] RDX: 0000000000000000 RSI: ffffffff84a736dc RDI: ffffc9000d9abe48
-[   37.964425][T15626] RBP: ffffc9000d9abe48 R08: 0000000000000000 R09: 0000000000000002
-[   37.965118][T15626] R10: 000000000000000a R11: f000000000000000 R12: ffff888013145680
-[   37.965836][T15626] R13: 0000000000000000 R14: ffffffffffffffec R15: ffff8880432aba80
-[   37.966441][T15626] FS:  00007f2177907700(0000) GS:ffff88803ec00000(0000) knlGS:0000000000000000
-[   37.966979][T15626] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   37.967384][T15626] CR2: ffffffffffffffd6 CR3: 000000004aaf1000 CR4: 00000000000006f0
-[   37.967864][T15626] Call Trace:
-[   37.968062][T15626]  <TASK>
-[   37.968240][T15626]  rxrpc_preparse_s+0x59/0x90
-[   37.968541][T15626]  key_create_or_update+0x174/0x510
-[   37.968863][T15626]  __x64_sys_add_key+0x139/0x1d0
-[   37.969165][T15626]  do_syscall_64+0x35/0xb0
-[   37.969451][T15626]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   37.969824][T15626] RIP: 0033:0x43a1f9
-
-Signed-off-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
-Tested-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Acked-by: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
-Link: http://lists.infradead.org/pipermail/linux-afs/2022-March/005069.html
-Fixes: 12da59fcab5a ("rxrpc: Hand server key parsing off to the security class")
-Link: https://lore.kernel.org/r/164865013439.2941502.8966285221215590921.stgit@warthog.procyon.org.uk
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fixes: b7b2796b9b31e("mailbox: imx: ONLY IPC MU needs IRQF_NO_SUSPEND flag")
+Reviewed-by: Jacky Bai <ping.bai@nxp.com>
+Reviewed-by: Peng Fan <peng.fan@nxp.com>
+Signed-off-by: Robin Gong <yibin.gong@nxp.com>
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/rxrpc/server_key.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/mailbox/imx-mailbox.c |    9 +++++++++
+ 1 file changed, 9 insertions(+)
 
---- a/net/rxrpc/server_key.c
-+++ b/net/rxrpc/server_key.c
-@@ -84,6 +84,9 @@ static int rxrpc_preparse_s(struct key_p
+--- a/drivers/mailbox/imx-mailbox.c
++++ b/drivers/mailbox/imx-mailbox.c
+@@ -13,6 +13,7 @@
+ #include <linux/module.h>
+ #include <linux/of_device.h>
+ #include <linux/pm_runtime.h>
++#include <linux/suspend.h>
+ #include <linux/slab.h>
  
- 	prep->payload.data[1] = (struct rxrpc_security *)sec;
+ #define IMX_MU_CHANS		16
+@@ -67,6 +68,7 @@ struct imx_mu_priv {
+ 	const struct imx_mu_dcfg	*dcfg;
+ 	struct clk		*clk;
+ 	int			irq;
++	bool			suspend;
  
-+	if (!sec->preparse_server_key)
-+		return -EINVAL;
+ 	u32 xcr[4];
+ 
+@@ -307,6 +309,9 @@ static irqreturn_t imx_mu_isr(int irq, v
+ 		return IRQ_NONE;
+ 	}
+ 
++	if (priv->suspend)
++		pm_system_wakeup();
 +
- 	return sec->preparse_server_key(prep);
+ 	return IRQ_HANDLED;
  }
  
-@@ -91,7 +94,7 @@ static void rxrpc_free_preparse_s(struct
- {
- 	const struct rxrpc_security *sec = prep->payload.data[1];
+@@ -652,6 +657,8 @@ static int __maybe_unused imx_mu_suspend
+ 			priv->xcr[i] = imx_mu_read(priv, priv->dcfg->xCR[i]);
+ 	}
  
--	if (sec)
-+	if (sec && sec->free_preparse_server_key)
- 		sec->free_preparse_server_key(prep);
++	priv->suspend = true;
++
+ 	return 0;
  }
  
-@@ -99,7 +102,7 @@ static void rxrpc_destroy_s(struct key *
- {
- 	const struct rxrpc_security *sec = key->payload.data[1];
+@@ -673,6 +680,8 @@ static int __maybe_unused imx_mu_resume_
+ 			imx_mu_write(priv, priv->xcr[i], priv->dcfg->xCR[i]);
+ 	}
  
--	if (sec)
-+	if (sec && sec->destroy_server_key)
- 		sec->destroy_server_key(key);
++	priv->suspend = false;
++
+ 	return 0;
  }
  
 

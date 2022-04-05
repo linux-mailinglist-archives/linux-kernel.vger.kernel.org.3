@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B684F32CA
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F6944F30EC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:36:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345047AbiDEKki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56776 "EHLO
+        id S238026AbiDEJE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:04:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237548AbiDEISG (ORCPT
+        with ESMTP id S237575AbiDEISH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:18:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4AA46A421;
-        Tue,  5 Apr 2022 01:06:46 -0700 (PDT)
+        Tue, 5 Apr 2022 04:18:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409A86B0B5;
+        Tue,  5 Apr 2022 01:07:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81012617F0;
-        Tue,  5 Apr 2022 08:06:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D7F1C385A0;
-        Tue,  5 Apr 2022 08:06:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 350D4617F3;
+        Tue,  5 Apr 2022 08:07:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48F7AC385A0;
+        Tue,  5 Apr 2022 08:06:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146005;
-        bh=xSXEUYgzxQ6dCPr/F/TUohTuCLEdahAXG9X8b46p8Eg=;
+        s=korg; t=1649146019;
+        bh=r91jElRvQN2IYdOEUX6cggvgiowglxtTlKd9Phaicio=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fGPFWY0h4jX62uMFqkuabsAV5HpkGU9bHqSPLND9331VUWbVLSEwNZwgWJSfYisSP
-         1S/3KOoVxQYU31/hG0mtXcJXA3x47pPyFs4TywVo/jtNshEXlI1Ma3hSBtzKuP+foN
-         50eMaXyAAvLdwMNrCbjWcrbidp/72lG+AGa9f+Vg=
+        b=BVGf5B6Kzdz+um4wi0oHJvQZxH+Dp1UrkwBPblc6Y+jSius7Tbez2zeqYzN7VndGB
+         WYToNIaFKfiRE4ML6jd1d92JkN73D1HYD+eIg/yfnRx7JzGWWdu77f08p4Op2bNd7+
+         XOVOgf1+b2DhRS4rJ8koDpRl4QcWHkRvKENjCx2E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yihang Li <liyihang6@hisilicon.com>,
-        Xiang Chen <chenxiang66@hisilicon.com>,
-        John Garry <john.garry@huawei.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Mustafa Ismail <mustafa.ismail@intel.com>,
+        Shiraz Saleem <shiraz.saleem@intel.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0608/1126] scsi: hisi_sas: Change permission of parameter prot_mask
-Date:   Tue,  5 Apr 2022 09:22:35 +0200
-Message-Id: <20220405070425.480902281@linuxfoundation.org>
+Subject: [PATCH 5.17 0613/1126] RDMA/irdma: Fix netdev notifications for vlans
+Date:   Tue,  5 Apr 2022 09:22:40 +0200
+Message-Id: <20220405070425.627703461@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -57,40 +57,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiang Chen <chenxiang66@hisilicon.com>
+From: Mustafa Ismail <mustafa.ismail@intel.com>
 
-[ Upstream commit c4e070457a93705e56ed06b3910d9e5fe56d3be3 ]
+[ Upstream commit 6702bc14744847842a87fed21a795b6e8bab6965 ]
 
-Currently the permission of parameter prot_mask is 0x0, which means that
-the member does not appear in sysfs. Change it as other module parameters
-to 0444 for world-readable.
+Currently, events on vlan netdevs are being ignored. Fix this by finding
+the real netdev and processing the notifications for vlan netdevs.
 
-[mkp: s/v3/v2/]
-
-Link: https://lore.kernel.org/r/1645703489-87194-2-git-send-email-john.garry@huawei.com
-Fixes: d6a9000b81be ("scsi: hisi_sas: Add support for DIF feature for v2 hw")
-Reported-by: Yihang Li <liyihang6@hisilicon.com>
-Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
-Signed-off-by: John Garry <john.garry@huawei.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: 915cc7ac0f8e ("RDMA/irdma: Add miscellaneous utility definitions")
+Link: https://lore.kernel.org/r/20220225163211.127-2-shiraz.saleem@intel.com
+Signed-off-by: Mustafa Ismail <mustafa.ismail@intel.com>
+Signed-off-by: Shiraz Saleem <shiraz.saleem@intel.com>
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/infiniband/hw/irdma/utils.c | 48 ++++++++++++++++++-----------
+ 1 file changed, 30 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index a01a3a7b706b..70173389f6eb 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -530,7 +530,7 @@ MODULE_PARM_DESC(intr_conv, "interrupt converge enable (0-1)");
+diff --git a/drivers/infiniband/hw/irdma/utils.c b/drivers/infiniband/hw/irdma/utils.c
+index 398736d8c78a..e81b74a518dd 100644
+--- a/drivers/infiniband/hw/irdma/utils.c
++++ b/drivers/infiniband/hw/irdma/utils.c
+@@ -150,31 +150,35 @@ int irdma_inetaddr_event(struct notifier_block *notifier, unsigned long event,
+ 			 void *ptr)
+ {
+ 	struct in_ifaddr *ifa = ptr;
+-	struct net_device *netdev = ifa->ifa_dev->dev;
++	struct net_device *real_dev, *netdev = ifa->ifa_dev->dev;
+ 	struct irdma_device *iwdev;
+ 	struct ib_device *ibdev;
+ 	u32 local_ipaddr;
  
- /* permit overriding the host protection capabilities mask (EEDP/T10 PI) */
- static int prot_mask;
--module_param(prot_mask, int, 0);
-+module_param(prot_mask, int, 0444);
- MODULE_PARM_DESC(prot_mask, " host protection capabilities mask, def=0x0 ");
+-	ibdev = ib_device_get_by_netdev(netdev, RDMA_DRIVER_IRDMA);
++	real_dev = rdma_vlan_dev_real_dev(netdev);
++	if (!real_dev)
++		real_dev = netdev;
++
++	ibdev = ib_device_get_by_netdev(real_dev, RDMA_DRIVER_IRDMA);
+ 	if (!ibdev)
+ 		return NOTIFY_DONE;
  
- static void debugfs_work_handler_v3_hw(struct work_struct *work);
+ 	iwdev = to_iwdev(ibdev);
+ 	local_ipaddr = ntohl(ifa->ifa_address);
+ 	ibdev_dbg(&iwdev->ibdev,
+-		  "DEV: netdev %p event %lu local_ip=%pI4 MAC=%pM\n", netdev,
+-		  event, &local_ipaddr, netdev->dev_addr);
++		  "DEV: netdev %p event %lu local_ip=%pI4 MAC=%pM\n", real_dev,
++		  event, &local_ipaddr, real_dev->dev_addr);
+ 	switch (event) {
+ 	case NETDEV_DOWN:
+-		irdma_manage_arp_cache(iwdev->rf, netdev->dev_addr,
++		irdma_manage_arp_cache(iwdev->rf, real_dev->dev_addr,
+ 				       &local_ipaddr, true, IRDMA_ARP_DELETE);
+-		irdma_if_notify(iwdev, netdev, &local_ipaddr, true, false);
++		irdma_if_notify(iwdev, real_dev, &local_ipaddr, true, false);
+ 		irdma_gid_change_event(&iwdev->ibdev);
+ 		break;
+ 	case NETDEV_UP:
+ 	case NETDEV_CHANGEADDR:
+-		irdma_add_arp(iwdev->rf, &local_ipaddr, true, netdev->dev_addr);
+-		irdma_if_notify(iwdev, netdev, &local_ipaddr, true, true);
++		irdma_add_arp(iwdev->rf, &local_ipaddr, true, real_dev->dev_addr);
++		irdma_if_notify(iwdev, real_dev, &local_ipaddr, true, true);
+ 		irdma_gid_change_event(&iwdev->ibdev);
+ 		break;
+ 	default:
+@@ -196,32 +200,36 @@ int irdma_inet6addr_event(struct notifier_block *notifier, unsigned long event,
+ 			  void *ptr)
+ {
+ 	struct inet6_ifaddr *ifa = ptr;
+-	struct net_device *netdev = ifa->idev->dev;
++	struct net_device *real_dev, *netdev = ifa->idev->dev;
+ 	struct irdma_device *iwdev;
+ 	struct ib_device *ibdev;
+ 	u32 local_ipaddr6[4];
+ 
+-	ibdev = ib_device_get_by_netdev(netdev, RDMA_DRIVER_IRDMA);
++	real_dev = rdma_vlan_dev_real_dev(netdev);
++	if (!real_dev)
++		real_dev = netdev;
++
++	ibdev = ib_device_get_by_netdev(real_dev, RDMA_DRIVER_IRDMA);
+ 	if (!ibdev)
+ 		return NOTIFY_DONE;
+ 
+ 	iwdev = to_iwdev(ibdev);
+ 	irdma_copy_ip_ntohl(local_ipaddr6, ifa->addr.in6_u.u6_addr32);
+ 	ibdev_dbg(&iwdev->ibdev,
+-		  "DEV: netdev %p event %lu local_ip=%pI6 MAC=%pM\n", netdev,
+-		  event, local_ipaddr6, netdev->dev_addr);
++		  "DEV: netdev %p event %lu local_ip=%pI6 MAC=%pM\n", real_dev,
++		  event, local_ipaddr6, real_dev->dev_addr);
+ 	switch (event) {
+ 	case NETDEV_DOWN:
+-		irdma_manage_arp_cache(iwdev->rf, netdev->dev_addr,
++		irdma_manage_arp_cache(iwdev->rf, real_dev->dev_addr,
+ 				       local_ipaddr6, false, IRDMA_ARP_DELETE);
+-		irdma_if_notify(iwdev, netdev, local_ipaddr6, false, false);
++		irdma_if_notify(iwdev, real_dev, local_ipaddr6, false, false);
+ 		irdma_gid_change_event(&iwdev->ibdev);
+ 		break;
+ 	case NETDEV_UP:
+ 	case NETDEV_CHANGEADDR:
+ 		irdma_add_arp(iwdev->rf, local_ipaddr6, false,
+-			      netdev->dev_addr);
+-		irdma_if_notify(iwdev, netdev, local_ipaddr6, false, true);
++			      real_dev->dev_addr);
++		irdma_if_notify(iwdev, real_dev, local_ipaddr6, false, true);
+ 		irdma_gid_change_event(&iwdev->ibdev);
+ 		break;
+ 	default:
+@@ -243,14 +251,18 @@ int irdma_net_event(struct notifier_block *notifier, unsigned long event,
+ 		    void *ptr)
+ {
+ 	struct neighbour *neigh = ptr;
++	struct net_device *real_dev, *netdev = (struct net_device *)neigh->dev;
+ 	struct irdma_device *iwdev;
+ 	struct ib_device *ibdev;
+ 	__be32 *p;
+ 	u32 local_ipaddr[4] = {};
+ 	bool ipv4 = true;
+ 
+-	ibdev = ib_device_get_by_netdev((struct net_device *)neigh->dev,
+-					RDMA_DRIVER_IRDMA);
++	real_dev = rdma_vlan_dev_real_dev(netdev);
++	if (!real_dev)
++		real_dev = netdev;
++
++	ibdev = ib_device_get_by_netdev(real_dev, RDMA_DRIVER_IRDMA);
+ 	if (!ibdev)
+ 		return NOTIFY_DONE;
+ 
 -- 
 2.34.1
 

@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 756D04F498A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A9C4F4AAF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442439AbiDEWTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
+        id S1442535AbiDEWuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573646AbiDET30 (ORCPT
+        with ESMTP id S1573647AbiDET31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 15:29:26 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF8BBE9FD;
-        Tue,  5 Apr 2022 12:27:27 -0700 (PDT)
-Date:   Tue, 05 Apr 2022 19:27:24 -0000
+        Tue, 5 Apr 2022 15:29:27 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46B8BF000;
+        Tue,  5 Apr 2022 12:27:28 -0700 (PDT)
+Date:   Tue, 05 Apr 2022 19:27:26 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649186846;
+        s=2020; t=1649186847;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Apj1WNSGkjJ8qBld0G1fRhqZVHswRua50ugsNNzGKZA=;
-        b=QPqFejLM6vWh5deYEFxaZoFIBFKWHoVyPGm85w6i7iuyvsSRDwtbqrivldew8s14epXpRO
-        AmIt6LPMpBS9YhYCnf12zzcRyvVubo0G1rfg52HgHjzQYeuHeLiKuop+5wETPAnq2nnnf1
-        d3YHJQSL5o71KwFZbuEuAqLABbsRE2WwHJobqN7o1dsgla+VQOaMJjJ51d39TCUBa5l2nE
-        O4SsX7eUofQEKU241+pTSWLG1bMCVdjkJu6jdzzfjTxOcmShZ8VBtMxM4U3oIXydtlG9Jq
-        E+6YhZdyANBwc2d9tbMygOvo29Qv40trnKzT+w8elvNr8lcuVzHqBccLp94nPA==
+        bh=SH++pPXt5/MXSBZwUFXzyKmchSB5rWCVJKOal0mJc68=;
+        b=qOYLmLAh6SrCv0U7WUKdx6kDqTdT45JSqFSK7l7WnGZEIQG8EH/o3+VOyTVKy36my+YN1u
+        yQNjG/UhjPr3JEsssUonnTR8ZX9hbs8QBiosXuBLn/SYadeG6fsixMIR4pXFA/UJ56zXIi
+        FBBjzEjKXmligf64RB9EuiIpzVwXQktYi7FiTO2qzpCPcJYlmYtzvezC7ycCW7P+ijPlq7
+        NtBbhhafIRMbftlDETAevYwRDDPrNf2wv+cdHw6r3+T/Mz26a875Of+LxPnQImWjXnBAf0
+        KhOMGHzsRKTZyErU2mwOMaUF907dXR22OZVnzop/0vaqjRldRdtshDjYG2sxjw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649186846;
+        s=2020e; t=1649186847;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Apj1WNSGkjJ8qBld0G1fRhqZVHswRua50ugsNNzGKZA=;
-        b=ClPuWOqOgjfUWaEacCw4zTvpCV5dZvv9YBZ3flIzRVJMPq4KC9Codtf7GaJI4RXocIs4D5
-        pNJWGQ/gyOq+IZCw==
-From:   "tip-bot2 for Muralidhara M K" <tip-bot2@linutronix.de>
+        bh=SH++pPXt5/MXSBZwUFXzyKmchSB5rWCVJKOal0mJc68=;
+        b=7QfmmMCDW0T1IbXkwHXAGX9/cOJHP30DP6rOz6x5yGbr8ZySm7EVJBlgDbXsyUUuKRRkAA
+        r4D4Yj9GACKseZAw==
+From:   "tip-bot2 for Peter Gonda" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/misc] x86/amd_nb: Unexport amd_cache_northbridges()
-Cc:     Muralidhara M K <muralimk@amd.com>,
-        Naveen Krishna Chatradhi <nchatrad@amd.com>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
+Subject: [tip: x86/sev] x86/sev-es: Replace open-coded hlt-loop with
+ sev_es_terminate()
+Cc:     Peter Gonda <pgonda@google.com>, Borislav Petkov <bp@suse.de>,
+        Joerg Roedel <jroedel@suse.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220324122729.221765-1-nchatrad@amd.com>
-References: <20220324122729.221765-1-nchatrad@amd.com>
+In-Reply-To: <20220317211913.1397427-1-pgonda@google.com>
+References: <20220317211913.1397427-1-pgonda@google.com>
 MIME-Version: 1.0
-Message-ID: <164918684484.389.10138844403913568515.tip-bot2@tip-bot2>
+Message-ID: <164918684623.389.10520041359552585691.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,126 +66,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/misc branch of tip:
+The following commit has been merged into the x86/sev branch of tip:
 
-Commit-ID:     e1907d37514b8564ba18b4a768a35beee71cb011
-Gitweb:        https://git.kernel.org/tip/e1907d37514b8564ba18b4a768a35beee71cb011
-Author:        Muralidhara M K <muralimk@amd.com>
-AuthorDate:    Thu, 24 Mar 2022 17:57:29 +05:30
+Commit-ID:     453e580abcdb53f688d5711c68bec96bea35430d
+Gitweb:        https://git.kernel.org/tip/453e580abcdb53f688d5711c68bec96bea35430d
+Author:        Peter Gonda <pgonda@google.com>
+AuthorDate:    Thu, 17 Mar 2022 14:19:13 -07:00
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Tue, 05 Apr 2022 19:22:27 +02:00
+CommitterDate: Tue, 05 Apr 2022 19:33:55 +02:00
 
-x86/amd_nb: Unexport amd_cache_northbridges()
+x86/sev-es: Replace open-coded hlt-loop with sev_es_terminate()
 
-amd_cache_northbridges() is exported by amd_nb.c and is called by
-amd64-agp.c and amd64_edac.c modules at module_init() time so that NB
-descriptors are properly cached before those drivers can use them.
+Replace the halt loop in handle_vc_boot_ghcb() with an
+sev_es_terminate(). The HLT gives the system no indication the guest is
+unhappy. The termination request will signal there was an error during
+VC handling during boot.
 
-However, the init_amd_nbs() initcall already does call
-amd_cache_northbridges() unconditionally and thus makes sure the NB
-descriptors are enumerated.
-
-That initcall is a fs_initcall type which is on the 5th group (starting
-from 0) of initcalls that gets run in increasing numerical order by the
-init code.
-
-The module_init() call is turned into an __initcall() in the MODULE=n
-case and those are device-level initcalls, i.e., group 6.
-
-Therefore, the northbridges caching is already finished by the time
-module initialization starts and thus the correct initialization order
-is retained.
-
-Unexport amd_cache_northbridges(), update dependent modules to
-call amd_nb_num() instead. While at it, simplify the checks in
-amd_cache_northbridges().
-
-  [ bp: Heavily massage and *actually* explain why the change is ok. ]
-
-Signed-off-by: Muralidhara M K <muralimk@amd.com>
-Signed-off-by: Naveen Krishna Chatradhi <nchatrad@amd.com>
+Signed-off-by: Peter Gonda <pgonda@google.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220324122729.221765-1-nchatrad@amd.com
+Reviewed-by: Joerg Roedel <jroedel@suse.de>
+Link: https://lore.kernel.org/r/20220317211913.1397427-1-pgonda@google.com
 ---
- arch/x86/include/asm/amd_nb.h | 1 -
- arch/x86/kernel/amd_nb.c      | 7 +++----
- drivers/char/agp/amd64-agp.c  | 2 +-
- drivers/edac/amd64_edac.c     | 2 +-
- 4 files changed, 5 insertions(+), 7 deletions(-)
+ arch/x86/kernel/sev.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/amd_nb.h b/arch/x86/include/asm/amd_nb.h
-index 00d1a40..ed0eaf6 100644
---- a/arch/x86/include/asm/amd_nb.h
-+++ b/arch/x86/include/asm/amd_nb.h
-@@ -16,7 +16,6 @@ extern const struct amd_nb_bus_dev_range amd_nb_bus_dev_ranges[];
+diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+index e6d316a..ae87fbf 100644
+--- a/arch/x86/kernel/sev.c
++++ b/arch/x86/kernel/sev.c
+@@ -1425,6 +1425,5 @@ bool __init handle_vc_boot_ghcb(struct pt_regs *regs)
+ fail:
+ 	show_regs(regs);
  
- extern bool early_is_amd_nb(u32 value);
- extern struct resource *amd_get_mmconfig_range(struct resource *res);
--extern int amd_cache_northbridges(void);
- extern void amd_flush_garts(void);
- extern int amd_numa_init(void);
- extern int amd_get_subcaches(int);
-diff --git a/arch/x86/kernel/amd_nb.c b/arch/x86/kernel/amd_nb.c
-index 020c906..190e0f7 100644
---- a/arch/x86/kernel/amd_nb.c
-+++ b/arch/x86/kernel/amd_nb.c
-@@ -188,7 +188,7 @@ int amd_smn_write(u16 node, u32 address, u32 value)
- EXPORT_SYMBOL_GPL(amd_smn_write);
- 
- 
--int amd_cache_northbridges(void)
-+static int amd_cache_northbridges(void)
- {
- 	const struct pci_device_id *misc_ids = amd_nb_misc_ids;
- 	const struct pci_device_id *link_ids = amd_nb_link_ids;
-@@ -210,14 +210,14 @@ int amd_cache_northbridges(void)
- 	}
- 
- 	misc = NULL;
--	while ((misc = next_northbridge(misc, misc_ids)) != NULL)
-+	while ((misc = next_northbridge(misc, misc_ids)))
- 		misc_count++;
- 
- 	if (!misc_count)
- 		return -ENODEV;
- 
- 	root = NULL;
--	while ((root = next_northbridge(root, root_ids)) != NULL)
-+	while ((root = next_northbridge(root, root_ids)))
- 		root_count++;
- 
- 	if (root_count) {
-@@ -290,7 +290,6 @@ int amd_cache_northbridges(void)
- 
- 	return 0;
+-	while (true)
+-		halt();
++	sev_es_terminate(GHCB_SEV_ES_GEN_REQ);
  }
--EXPORT_SYMBOL_GPL(amd_cache_northbridges);
- 
- /*
-  * Ignores subdevice/subvendor but as far as I can figure out
-diff --git a/drivers/char/agp/amd64-agp.c b/drivers/char/agp/amd64-agp.c
-index dc78a4f..84a4aa9 100644
---- a/drivers/char/agp/amd64-agp.c
-+++ b/drivers/char/agp/amd64-agp.c
-@@ -327,7 +327,7 @@ static int cache_nbs(struct pci_dev *pdev, u32 cap_ptr)
- {
- 	int i;
- 
--	if (amd_cache_northbridges() < 0)
-+	if (!amd_nb_num())
- 		return -ENODEV;
- 
- 	if (!amd_nb_has_feature(AMD_NB_GART))
-diff --git a/drivers/edac/amd64_edac.c b/drivers/edac/amd64_edac.c
-index 812baa4..2f854fe 100644
---- a/drivers/edac/amd64_edac.c
-+++ b/drivers/edac/amd64_edac.c
-@@ -4336,7 +4336,7 @@ static int __init amd64_edac_init(void)
- 	if (!x86_match_cpu(amd64_cpuids))
- 		return -ENODEV;
- 
--	if (amd_cache_northbridges() < 0)
-+	if (!amd_nb_num())
- 		return -ENODEV;
- 
- 	opstate_init();

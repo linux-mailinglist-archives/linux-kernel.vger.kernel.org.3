@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599884F4EE3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2CDE4F4CD1
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447567AbiDFAEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
+        id S1580073AbiDEXdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348817AbiDEJsj (ORCPT
+        with ESMTP id S1348819AbiDEJsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:48:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFC0AC938;
-        Tue,  5 Apr 2022 02:36:11 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695DAADD66;
+        Tue,  5 Apr 2022 02:36:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2D22BB81B75;
-        Tue,  5 Apr 2022 09:36:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 923A9C385A0;
-        Tue,  5 Apr 2022 09:36:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 043C061675;
+        Tue,  5 Apr 2022 09:36:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E146C385A0;
+        Tue,  5 Apr 2022 09:36:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151368;
-        bh=K6geJeEW5QaOD+aLW/HKf6IJ3et2Chj97ahJ/fcGf9U=;
+        s=korg; t=1649151374;
+        bh=cHh6Am89UvKmAAC6DhpJgKI9IPbPSd8DeXy2OH/l794=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KDuPES/2QE5aL6JRMbKTCG28nac+T6vQmZ/Z/ye4VvB/gjb2+JK16kg53k9Bu29dr
-         DphVKwG4SvBeuS68qiBlkMQ3JBU1Q8AyGRfq8kOlAEQ2Y6g+f8PKxyUup042OEYTSo
-         P5vUb+Uip+CQSq75LK7GJ5BFbIG6l8uii+2U2H88=
+        b=og2SSEgZXqrAJDWTGwOmos+tVuYTV4fOqA/Lek8t1d7jHdchr/ErrV5DNiX51UfwC
+         En3L0tqDabMuvzwyOJN5/s2Ybt+nkj/iLEQaz4eUUZvgZDYmv3yB1MLoSZlvJDqSvf
+         df4BmomxUFuLbRdhC8D4IVPAEo1oDot9ESK7/BOE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felix Maurer <fmaurer@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
+        stable@vger.kernel.org, Yiru Xu <xyru1999@gmail.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 390/913] selftests: bpf: Fix bind on used port
-Date:   Tue,  5 Apr 2022 09:24:12 +0200
-Message-Id: <20220405070351.537975626@linuxfoundation.org>
+Subject: [PATCH 5.15 392/913] Bluetooth: hci_serdev: call init_rwsem() before p->open()
+Date:   Tue,  5 Apr 2022 09:24:14 +0200
+Message-Id: <20220405070351.598011800@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,71 +56,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Felix Maurer <fmaurer@redhat.com>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-[ Upstream commit 8c0be0631d81e48f77d0ebf0534c86e32bef5f89 ]
+[ Upstream commit 9d7cbe2b9cf5f650067df4f402fdd799d4bbb4e1 ]
 
-The bind_perm BPF selftest failed when port 111/tcp was already in use
-during the test. To fix this, the test now runs in its own network name
-space.
+kvartet reported, that hci_uart_tx_wakeup() uses uninitialized rwsem.
+The problem was in wrong place for percpu_init_rwsem() call.
 
-To use unshare, it is necessary to reorder the includes. The style of
-the includes is adapted to be consistent with the other prog_tests.
+hci_uart_proto::open() may register a timer whose callback may call
+hci_uart_tx_wakeup(). There is a chance, that hci_uart_register_device()
+thread won't be fast enough to call percpu_init_rwsem().
 
-v2: Replace deprecated CHECK macro with ASSERT_OK
+Fix it my moving percpu_init_rwsem() call before p->open().
 
-Fixes: 8259fdeb30326 ("selftests/bpf: Verify that rebinding to port < 1024 from BPF works")
-Signed-off-by: Felix Maurer <fmaurer@redhat.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
-Link: https://lore.kernel.org/bpf/551ee65533bb987a43f93d88eaf2368b416ccd32.1642518457.git.fmaurer@redhat.com
+INFO: trying to register non-static key.
+The code is fine but needs lockdep annotation, or maybe
+you didn't initialize this object before use?
+turning off the locking correctness validator.
+CPU: 2 PID: 18524 Comm: syz-executor.5 Not tainted 5.16.0-rc6 #9
+...
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ assign_lock_key kernel/locking/lockdep.c:951 [inline]
+ register_lock_class+0x148d/0x1950 kernel/locking/lockdep.c:1263
+ __lock_acquire+0x106/0x57e0 kernel/locking/lockdep.c:4906
+ lock_acquire kernel/locking/lockdep.c:5637 [inline]
+ lock_acquire+0x1ab/0x520 kernel/locking/lockdep.c:5602
+ percpu_down_read_trylock include/linux/percpu-rwsem.h:92 [inline]
+ hci_uart_tx_wakeup+0x12e/0x490 drivers/bluetooth/hci_ldisc.c:124
+ h5_timed_event+0x32f/0x6a0 drivers/bluetooth/hci_h5.c:188
+ call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
+
+Fixes: d73e17281665 ("Bluetooth: hci_serdev: Init hci_uart proto_lock to avoid oops")
+Reported-by: Yiru Xu <xyru1999@gmail.com>
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../selftests/bpf/prog_tests/bind_perm.c      | 20 ++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
+ drivers/bluetooth/hci_serdev.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bind_perm.c b/tools/testing/selftests/bpf/prog_tests/bind_perm.c
-index d0f06e40c16d..eac71fbb24ce 100644
---- a/tools/testing/selftests/bpf/prog_tests/bind_perm.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bind_perm.c
-@@ -1,13 +1,24 @@
- // SPDX-License-Identifier: GPL-2.0
--#include <test_progs.h>
--#include "bind_perm.skel.h"
--
-+#define _GNU_SOURCE
-+#include <sched.h>
-+#include <stdlib.h>
- #include <sys/types.h>
- #include <sys/socket.h>
- #include <sys/capability.h>
+diff --git a/drivers/bluetooth/hci_serdev.c b/drivers/bluetooth/hci_serdev.c
+index 3b00d82d36cf..4cda890ce647 100644
+--- a/drivers/bluetooth/hci_serdev.c
++++ b/drivers/bluetooth/hci_serdev.c
+@@ -305,6 +305,8 @@ int hci_uart_register_device(struct hci_uart *hu,
+ 	if (err)
+ 		return err;
  
-+#include "test_progs.h"
-+#include "bind_perm.skel.h"
++	percpu_init_rwsem(&hu->proto_lock);
 +
- static int duration;
+ 	err = p->open(hu);
+ 	if (err)
+ 		goto err_open;
+@@ -327,7 +329,6 @@ int hci_uart_register_device(struct hci_uart *hu,
  
-+static int create_netns(void)
-+{
-+	if (!ASSERT_OK(unshare(CLONE_NEWNET), "create netns"))
-+		return -1;
-+
-+	return 0;
-+}
-+
- void try_bind(int family, int port, int expected_errno)
- {
- 	struct sockaddr_storage addr = {};
-@@ -75,6 +86,9 @@ void test_bind_perm(void)
- 	struct bind_perm *skel;
- 	int cgroup_fd;
+ 	INIT_WORK(&hu->init_ready, hci_uart_init_work);
+ 	INIT_WORK(&hu->write_work, hci_uart_write_work);
+-	percpu_init_rwsem(&hu->proto_lock);
  
-+	if (create_netns())
-+		return;
-+
- 	cgroup_fd = test__join_cgroup("/bind_perm");
- 	if (CHECK(cgroup_fd < 0, "cg-join", "errno %d", errno))
- 		return;
+ 	/* Only when vendor specific setup callback is provided, consider
+ 	 * the manufacturer information valid. This avoids filling in the
 -- 
 2.34.1
 

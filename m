@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E97544F3EFF
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:55:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 004364F4086
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391000AbiDENqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44156 "EHLO
+        id S238723AbiDEN4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347339AbiDEJ0B (ORCPT
+        with ESMTP id S1347739AbiDEJ2O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:26:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707E2DE92D;
-        Tue,  5 Apr 2022 02:15:22 -0700 (PDT)
+        Tue, 5 Apr 2022 05:28:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1650DFD7A;
+        Tue,  5 Apr 2022 02:15:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B72EB81B75;
-        Tue,  5 Apr 2022 09:15:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCCF6C385A0;
-        Tue,  5 Apr 2022 09:15:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23E2BB818F3;
+        Tue,  5 Apr 2022 09:15:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63896C385A0;
+        Tue,  5 Apr 2022 09:15:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150119;
-        bh=a6oPxCJzwFg+auaLybS3Cz5xCfoOmB6qPAWpGmmbt78=;
+        s=korg; t=1649150124;
+        bh=Xt7afQvQqXUQxnHQRQb7yFraVXo0NKAKwUkzf0P7wPQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SvMPhZaRdqwzMm7sQTiiU53rPmf6/jFTSm5IWaUHQM1601SGqxAcpNS0xcczTdauh
-         s4qRps5G30Krs9YD3Dwl7hxZzkroZ0EncoML4wm8y85AuDS66bNBcSgI0clvoL/5fG
-         ie6IAaGCOaKDihgKGIOkxH36SfUrEJXKErlbFYQo=
+        b=czSqcoa/FDH3Dsr+jCw/u0TZgLYGgdzz4KjHVr+Fo3FJY2CNP+KlpFO8zBSfMlBA+
+         anbF3O/iikW7tnHKcQ+FCRGsPGMVBzFQF2aW2i7Pk9K3hSZ4hjRz0XIwKXlQOv4T5p
+         y98ovBnSn9bzbpsK5Hq5ASy2/QC31nkZqGJqqko4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+0d2b0bf32ca5cfd09f2e@syzkaller.appspotmail.com,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: [PATCH 5.16 0922/1017] XArray: Fix xas_create_range() when multi-order entry present
-Date:   Tue,  5 Apr 2022 09:30:35 +0200
-Message-Id: <20220405070421.586364516@linuxfoundation.org>
+        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        syzbot+3bc1dce0cc0052d60fde@syzkaller.appspotmail.com
+Subject: [PATCH 5.16 0924/1017] can: mcba_usb: properly check endpoint type
+Date:   Tue,  5 Apr 2022 09:30:37 +0200
+Message-Id: <20220405070421.645176454@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,85 +56,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Wilcox (Oracle) <willy@infradead.org>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-commit 3e3c658055c002900982513e289398a1aad4a488 upstream.
+commit 136bed0bfd3bc9c95c88aafff2d22ecb3a919f23 upstream.
 
-If there is already an entry present that is of order >= XA_CHUNK_SHIFT
-when we call xas_create_range(), xas_create_range() will misinterpret
-that entry as a node and dereference xa_node->parent, generally leading
-to a crash that looks something like this:
+Syzbot reported warning in usb_submit_urb() which is caused by wrong
+endpoint type. We should check that in endpoint is actually present to
+prevent this warning.
 
-general protection fault, probably for non-canonical address 0xdffffc0000000001:
-0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-CPU: 0 PID: 32 Comm: khugepaged Not tainted 5.17.0-rc8-syzkaller-00003-g56e337f2cf13 #0
-RIP: 0010:xa_parent_locked include/linux/xarray.h:1207 [inline]
-RIP: 0010:xas_create_range+0x2d9/0x6e0 lib/xarray.c:725
+Found pipes are now saved to struct mcba_priv and code uses them
+directly instead of making pipes in place.
 
-It's deterministically reproducable once you know what the problem is,
-but producing it in a live kernel requires khugepaged to hit a race.
-While the problem has been present since xas_create_range() was
-introduced, I'm not aware of a way to hit it before the page cache was
-converted to use multi-index entries.
+Fail log:
 
-Fixes: 6b24ca4a1a8d ("mm: Use multi-index entries in the page cache")
-Reported-by: syzbot+0d2b0bf32ca5cfd09f2e@syzkaller.appspotmail.com
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+| usb 5-1: BOGUS urb xfer, pipe 3 != type 1
+| WARNING: CPU: 1 PID: 49 at drivers/usb/core/urb.c:502 usb_submit_urb+0xed2/0x18a0 drivers/usb/core/urb.c:502
+| Modules linked in:
+| CPU: 1 PID: 49 Comm: kworker/1:2 Not tainted 5.17.0-rc6-syzkaller-00184-g38f80f42147f #0
+| Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+| Workqueue: usb_hub_wq hub_event
+| RIP: 0010:usb_submit_urb+0xed2/0x18a0 drivers/usb/core/urb.c:502
+| ...
+| Call Trace:
+|  <TASK>
+|  mcba_usb_start drivers/net/can/usb/mcba_usb.c:662 [inline]
+|  mcba_usb_probe+0x8a3/0xc50 drivers/net/can/usb/mcba_usb.c:858
+|  usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
+|  call_driver_probe drivers/base/dd.c:517 [inline]
+
+Fixes: 51f3baad7de9 ("can: mcba_usb: Add support for Microchip CAN BUS Analyzer")
+Link: https://lore.kernel.org/all/20220313100903.10868-1-paskripkin@gmail.com
+Reported-and-tested-by: syzbot+3bc1dce0cc0052d60fde@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- lib/test_xarray.c |   22 ++++++++++++++++++++++
- lib/xarray.c      |    2 ++
- 2 files changed, 24 insertions(+)
+ drivers/net/can/usb/mcba_usb.c |   26 ++++++++++++++++----------
+ 1 file changed, 16 insertions(+), 10 deletions(-)
 
---- a/lib/test_xarray.c
-+++ b/lib/test_xarray.c
-@@ -1463,6 +1463,25 @@ unlock:
- 	XA_BUG_ON(xa, !xa_empty(xa));
- }
+--- a/drivers/net/can/usb/mcba_usb.c
++++ b/drivers/net/can/usb/mcba_usb.c
+@@ -33,10 +33,6 @@
+ #define MCBA_USB_RX_BUFF_SIZE 64
+ #define MCBA_USB_TX_BUFF_SIZE (sizeof(struct mcba_usb_msg))
  
-+static noinline void check_create_range_5(struct xarray *xa,
-+		unsigned long index, unsigned int order)
-+{
-+	XA_STATE_ORDER(xas, xa, index, order);
-+	unsigned int i;
+-/* MCBA endpoint numbers */
+-#define MCBA_USB_EP_IN 1
+-#define MCBA_USB_EP_OUT 1
+-
+ /* Microchip command id */
+ #define MBCA_CMD_RECEIVE_MESSAGE 0xE3
+ #define MBCA_CMD_I_AM_ALIVE_FROM_CAN 0xF5
+@@ -84,6 +80,8 @@ struct mcba_priv {
+ 	atomic_t free_ctx_cnt;
+ 	void *rxbuf[MCBA_MAX_RX_URBS];
+ 	dma_addr_t rxbuf_dma[MCBA_MAX_RX_URBS];
++	int rx_pipe;
++	int tx_pipe;
+ };
+ 
+ /* CAN frame */
+@@ -272,10 +270,8 @@ static netdev_tx_t mcba_usb_xmit(struct
+ 
+ 	memcpy(buf, usb_msg, MCBA_USB_TX_BUFF_SIZE);
+ 
+-	usb_fill_bulk_urb(urb, priv->udev,
+-			  usb_sndbulkpipe(priv->udev, MCBA_USB_EP_OUT), buf,
+-			  MCBA_USB_TX_BUFF_SIZE, mcba_usb_write_bulk_callback,
+-			  ctx);
++	usb_fill_bulk_urb(urb, priv->udev, priv->tx_pipe, buf, MCBA_USB_TX_BUFF_SIZE,
++			  mcba_usb_write_bulk_callback, ctx);
+ 
+ 	urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
+ 	usb_anchor_urb(urb, &priv->tx_submitted);
+@@ -610,7 +606,7 @@ static void mcba_usb_read_bulk_callback(
+ resubmit_urb:
+ 
+ 	usb_fill_bulk_urb(urb, priv->udev,
+-			  usb_rcvbulkpipe(priv->udev, MCBA_USB_EP_OUT),
++			  priv->rx_pipe,
+ 			  urb->transfer_buffer, MCBA_USB_RX_BUFF_SIZE,
+ 			  mcba_usb_read_bulk_callback, priv);
+ 
+@@ -655,7 +651,7 @@ static int mcba_usb_start(struct mcba_pr
+ 		urb->transfer_dma = buf_dma;
+ 
+ 		usb_fill_bulk_urb(urb, priv->udev,
+-				  usb_rcvbulkpipe(priv->udev, MCBA_USB_EP_IN),
++				  priv->rx_pipe,
+ 				  buf, MCBA_USB_RX_BUFF_SIZE,
+ 				  mcba_usb_read_bulk_callback, priv);
+ 		urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
+@@ -809,6 +805,13 @@ static int mcba_usb_probe(struct usb_int
+ 	struct mcba_priv *priv;
+ 	int err;
+ 	struct usb_device *usbdev = interface_to_usbdev(intf);
++	struct usb_endpoint_descriptor *in, *out;
 +
-+	xa_store_order(xa, index, order, xa_mk_index(index), GFP_KERNEL);
-+
-+	for (i = 0; i < order + 10; i++) {
-+		do {
-+			xas_lock(&xas);
-+			xas_create_range(&xas);
-+			xas_unlock(&xas);
-+		} while (xas_nomem(&xas, GFP_KERNEL));
++	err = usb_find_common_endpoints(intf->cur_altsetting, &in, &out, NULL, NULL);
++	if (err) {
++		dev_err(&intf->dev, "Can't find endpoints\n");
++		return err;
 +	}
-+
-+	xa_destroy(xa);
-+}
-+
- static noinline void check_create_range(struct xarray *xa)
- {
- 	unsigned int order;
-@@ -1490,6 +1509,9 @@ static noinline void check_create_range(
- 		check_create_range_4(xa, (3U << order) + 1, order);
- 		check_create_range_4(xa, (3U << order) - 1, order);
- 		check_create_range_4(xa, (1U << 24) + 1, order);
-+
-+		check_create_range_5(xa, 0, order);
-+		check_create_range_5(xa, (1U << order), order);
+ 
+ 	netdev = alloc_candev(sizeof(struct mcba_priv), MCBA_MAX_TX_URBS);
+ 	if (!netdev) {
+@@ -854,6 +857,9 @@ static int mcba_usb_probe(struct usb_int
+ 		goto cleanup_free_candev;
  	}
  
- 	check_create_range_3();
---- a/lib/xarray.c
-+++ b/lib/xarray.c
-@@ -722,6 +722,8 @@ void xas_create_range(struct xa_state *x
++	priv->rx_pipe = usb_rcvbulkpipe(priv->udev, in->bEndpointAddress);
++	priv->tx_pipe = usb_sndbulkpipe(priv->udev, out->bEndpointAddress);
++
+ 	devm_can_led_init(netdev);
  
- 		for (;;) {
- 			struct xa_node *node = xas->xa_node;
-+			if (node->shift >= shift)
-+				break;
- 			xas->xa_node = xa_parent_locked(xas->xa, node);
- 			xas->xa_offset = node->offset - 1;
- 			if (node->offset != 0)
+ 	/* Start USB dev only if we have successfully registered CAN device */
 
 

@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C0D4F4309
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ACAB4F3E63
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386822AbiDEOZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
+        id S1383168AbiDEOR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238976AbiDEJdP (ORCPT
+        with ESMTP id S239437AbiDEJdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:33:15 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DAF6464;
-        Tue,  5 Apr 2022 02:21:22 -0700 (PDT)
+        Tue, 5 Apr 2022 05:33:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEA135DE8;
+        Tue,  5 Apr 2022 02:21:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D7418CE1C6A;
-        Tue,  5 Apr 2022 09:21:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEA9CC385A2;
-        Tue,  5 Apr 2022 09:21:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CC8B61574;
+        Tue,  5 Apr 2022 09:21:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A9F6C385A4;
+        Tue,  5 Apr 2022 09:21:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150479;
-        bh=z03uRE2H7zmi68R1Q0lvr3LCmd3ruYnHuWykD/0EvBo=;
+        s=korg; t=1649150517;
+        bh=aEb6bFctWPFgGqy+PW+9mHUKyTN0aHivpB5iy1Ji954=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E5zeVMupNafqz2+c+ynklQr8xIOZJpwP1Ts7UWd5fnMwr/3m9/aoNXNv6lMqYVn68
-         OTYNmgueebrGvkkSX/99v342b7Eignk1Am9FPF+5TND4NaT4J8yr25uLiyF4ogRa95
-         C5NOfQ/Xv7UGCmeOgtx1XYLBUXI+RJNu+ezF8i00=
+        b=lQK94LR2HlGqpNbbNycPUNUUhPyMJTnERvUlfEw9+P60J6NQnKAWGp+4WTk/aAUQF
+         Gr6S7LTwHsAvNJfh7ac8VRUasGaaIPvdOk+fM04yW1pyhtGpcB4c+Lp6gUhb1VnmIn
+         QT1y1oyCkjvSAoqRlg2SEs42PTJIa7CxYsabfonA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Subject: [PATCH 5.15 043/913] coresight: Fix TRCCONFIGR.QE sysfs interface
-Date:   Tue,  5 Apr 2022 09:18:25 +0200
-Message-Id: <20220405070341.109583188@linuxfoundation.org>
+        stable@vger.kernel.org, Liam Beguin <liambeguin@gmail.com>,
+        Peter Rosin <peda@axentia.se>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.15 045/913] iio: afe: rescale: use s64 for temporary scale calculations
+Date:   Tue,  5 Apr 2022 09:18:27 +0200
+Message-Id: <20220405070341.169270034@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,56 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Clark <james.clark@arm.com>
+From: Liam Beguin <liambeguin@gmail.com>
 
-commit ea75a342aed5ed72c87f38fbe0df2f5df7eae374 upstream.
+commit 51593106b608ae4247cc8da928813347da16d025 upstream.
 
-It's impossible to program a valid value for TRCCONFIGR.QE
-when TRCIDR0.QSUPP==0b10. In that case the following is true:
+All four scaling coefficients can take signed values.
+Make tmp a signed 64-bit integer and switch to div_s64() to preserve
+signs during 64-bit divisions.
 
-  Q element support is implemented, and only supports Q elements without
-  instruction counts. TRCCONFIGR.QE can only take the values 0b00 or 0b11.
-
-Currently the low bit of QSUPP is checked to see if the low bit of QE can
-be written to, but as you can see when QSUPP==0b10 the low bit is cleared
-making it impossible to ever write the only valid value of 0b11 to QE.
-0b10 would be written instead, which is a reserved QE value even for all
-values of QSUPP.
-
-The fix is to allow writing the low bit of QE for any non zero value of
-QSUPP.
-
-This change also ensures that the low bit is always set, even when the
-user attempts to only set the high bit.
-
-Signed-off-by: James Clark <james.clark@arm.com>
-Reviewed-by: Mike Leach <mike.leach@linaro.org>
-Fixes: d8c66962084f ("coresight-etm4x: Controls pertaining to the reset, mode, pe and events")
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220120113047.2839622-2-james.clark@arm.com
-Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+Fixes: 8b74816b5a9a ("iio: afe: rescale: new driver")
+Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+Reviewed-by: Peter Rosin <peda@axentia.se>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Link: https://lore.kernel.org/r/20220108205319.2046348-5-liambeguin@gmail.com
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hwtracing/coresight/coresight-etm4x-sysfs.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/iio/afe/iio-rescale.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-+++ b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-@@ -367,8 +367,12 @@ static ssize_t mode_store(struct device
- 	mode = ETM_MODE_QELEM(config->mode);
- 	/* start by clearing QE bits */
- 	config->cfg &= ~(BIT(13) | BIT(14));
--	/* if supported, Q elements with instruction counts are enabled */
--	if ((mode & BIT(0)) && (drvdata->q_support & BIT(0)))
-+	/*
-+	 * if supported, Q elements with instruction counts are enabled.
-+	 * Always set the low bit for any requested mode. Valid combos are
-+	 * 0b00, 0b01 and 0b11.
-+	 */
-+	if (mode && drvdata->q_support)
- 		config->cfg |= BIT(13);
- 	/*
- 	 * if supported, Q elements with and without instruction
+--- a/drivers/iio/afe/iio-rescale.c
++++ b/drivers/iio/afe/iio-rescale.c
+@@ -39,7 +39,7 @@ static int rescale_read_raw(struct iio_d
+ 			    int *val, int *val2, long mask)
+ {
+ 	struct rescale *rescale = iio_priv(indio_dev);
+-	unsigned long long tmp;
++	s64 tmp;
+ 	int ret;
+ 
+ 	switch (mask) {
+@@ -77,10 +77,10 @@ static int rescale_read_raw(struct iio_d
+ 			*val2 = rescale->denominator;
+ 			return IIO_VAL_FRACTIONAL;
+ 		case IIO_VAL_FRACTIONAL_LOG2:
+-			tmp = *val * 1000000000LL;
+-			do_div(tmp, rescale->denominator);
++			tmp = (s64)*val * 1000000000LL;
++			tmp = div_s64(tmp, rescale->denominator);
+ 			tmp *= rescale->numerator;
+-			do_div(tmp, 1000000000LL);
++			tmp = div_s64(tmp, 1000000000LL);
+ 			*val = tmp;
+ 			return ret;
+ 		default:
 
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A354F491D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:19:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3134F4EBE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390591AbiDEWEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:04:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
+        id S1836489AbiDFAgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349184AbiDEJtZ (ORCPT
+        with ESMTP id S1355268AbiDEKSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:25 -0400
+        Tue, 5 Apr 2022 06:18:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C31205D8;
-        Tue,  5 Apr 2022 02:42:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4363C10FE1;
+        Tue,  5 Apr 2022 03:04:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61090615E5;
-        Tue,  5 Apr 2022 09:42:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 682FDC385A3;
-        Tue,  5 Apr 2022 09:42:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CDB5F61673;
+        Tue,  5 Apr 2022 10:04:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE4FEC385A2;
+        Tue,  5 Apr 2022 10:04:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151744;
-        bh=WrBVVqM10/J6lxBsgTkDsZRT45DDOW82ezoBdJUPxIM=;
+        s=korg; t=1649153076;
+        bh=uos+dZQFyuLbUjPtiaSV8Nc9hZwgOh9eP9pCprv8FZs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O0I/PHvAC7/4dIWHQCHsWx3Dz8KiYKuHxsQTrAK6OtZkvfkDlDZYJC9JblBlzgQLt
-         NF1ICxm6uivZ5Uub9nTgsE5QhjWn4POOyFvqD2CaoLaGdr9Mzt+0tg+Ziw8Nr1e1XY
-         3biVHR+aR1JFLdEzyTosZ3oIRJsBx1yFNmvlsXpA=
+        b=EMOpZ/6zfwaZ/KCCdwYhL17zUXNW2udDxGs2Zq+CTaC2r/tOsEG41czJSWiiSUD1s
+         DF9oOqmmW0fc9iQV7MbH28XJKuRiX9luX7mx9gKZzk5UNtUjHBXq/fVik3eSUspq2W
+         dF6xPXmOgGwIEneCrH8xpG++dT6t8oChCIGfONPI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Cheng Li <lic121@chinatelecom.cn>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 525/913] libbpf: Unmap rings when umem deleted
-Date:   Tue,  5 Apr 2022 09:26:27 +0200
-Message-Id: <20220405070355.588417863@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.10 094/599] block: limit request dispatch loop duration
+Date:   Tue,  5 Apr 2022 09:26:28 +0200
+Message-Id: <20220405070301.627744791@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,60 +55,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: lic121 <lic121@chinatelecom.cn>
+From: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
 
-[ Upstream commit 9c6e6a80ee741adf6cb3cfd8eef7d1554f91fceb ]
+commit 572299f03afd676dd4e20669cdaf5ed0fe1379d4 upstream.
 
-xsk_umem__create() does mmap for fill/comp rings, but xsk_umem__delete()
-doesn't do the unmap. This works fine for regular cases, because
-xsk_socket__delete() does unmap for the rings. But for the case that
-xsk_socket__create_shared() fails, umem rings are not unmapped.
+When IO requests are made continuously and the target block device
+handles requests faster than request arrival, the request dispatch loop
+keeps on repeating to dispatch the arriving requests very long time,
+more than a minute. Since the loop runs as a workqueue worker task, the
+very long loop duration triggers workqueue watchdog timeout and BUG [1].
 
-fill_save/comp_save are checked to determine if rings have already be
-unmapped by xsk. If fill_save and comp_save are NULL, it means that the
-rings have already been used by xsk. Then they are supposed to be
-unmapped by xsk_socket__delete(). Otherwise, xsk_umem__delete() does the
-unmap.
+To avoid the very long loop duration, break the loop periodically. When
+opportunity to dispatch requests still exists, check need_resched(). If
+need_resched() returns true, the dispatch loop already consumed its time
+slice, then reschedule the dispatch work and break the loop. With heavy
+IO load, need_resched() does not return true for 20~30 seconds. To cover
+such case, check time spent in the dispatch loop with jiffies. If more
+than 1 second is spent, reschedule the dispatch work and break the loop.
 
-Fixes: 2f6324a3937f ("libbpf: Support shared umems between queues and devices")
-Signed-off-by: Cheng Li <lic121@chinatelecom.cn>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20220301132623.GA19995@vscode.7~
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+[1]
+
+[  609.691437] BUG: workqueue lockup - pool cpus=10 node=1 flags=0x0 nice=-20 stuck for 35s!
+[  609.701820] Showing busy workqueues and worker pools:
+[  609.707915] workqueue events: flags=0x0
+[  609.712615]   pwq 0: cpus=0 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
+[  609.712626]     pending: drm_fb_helper_damage_work [drm_kms_helper]
+[  609.712687] workqueue events_freezable: flags=0x4
+[  609.732943]   pwq 0: cpus=0 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
+[  609.732952]     pending: pci_pme_list_scan
+[  609.732968] workqueue events_power_efficient: flags=0x80
+[  609.751947]   pwq 0: cpus=0 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
+[  609.751955]     pending: neigh_managed_work
+[  609.752018] workqueue kblockd: flags=0x18
+[  609.769480]   pwq 21: cpus=10 node=1 flags=0x0 nice=-20 active=3/256 refcnt=4
+[  609.769488]     in-flight: 1020:blk_mq_run_work_fn
+[  609.769498]     pending: blk_mq_timeout_work, blk_mq_run_work_fn
+[  609.769744] pool 21: cpus=10 node=1 flags=0x0 nice=-20 hung=35s workers=2 idle: 67
+[  639.899730] BUG: workqueue lockup - pool cpus=10 node=1 flags=0x0 nice=-20 stuck for 66s!
+[  639.909513] Showing busy workqueues and worker pools:
+[  639.915404] workqueue events: flags=0x0
+[  639.920197]   pwq 0: cpus=0 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
+[  639.920215]     pending: drm_fb_helper_damage_work [drm_kms_helper]
+[  639.920365] workqueue kblockd: flags=0x18
+[  639.939932]   pwq 21: cpus=10 node=1 flags=0x0 nice=-20 active=3/256 refcnt=4
+[  639.939942]     in-flight: 1020:blk_mq_run_work_fn
+[  639.939955]     pending: blk_mq_timeout_work, blk_mq_run_work_fn
+[  639.940212] pool 21: cpus=10 node=1 flags=0x0 nice=-20 hung=66s workers=2 idle: 67
+
+Fixes: 6e6fcbc27e778 ("blk-mq: support batching dispatch in case of io")
+Signed-off-by: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+Cc: stable@vger.kernel.org # v5.10+
+Link: https://lore.kernel.org/linux-block/20220310091649.zypaem5lkyfadymg@shindev/
+Link: https://lore.kernel.org/r/20220318022641.133484-1-shinichiro.kawasaki@wdc.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/lib/bpf/xsk.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ block/blk-mq-sched.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
-index e9b619aa0cdf..a27b3141463a 100644
---- a/tools/lib/bpf/xsk.c
-+++ b/tools/lib/bpf/xsk.c
-@@ -1210,12 +1210,23 @@ int xsk_socket__create(struct xsk_socket **xsk_ptr, const char *ifname,
+--- a/block/blk-mq-sched.c
++++ b/block/blk-mq-sched.c
+@@ -194,11 +194,18 @@ static int __blk_mq_do_dispatch_sched(st
  
- int xsk_umem__delete(struct xsk_umem *umem)
+ static int blk_mq_do_dispatch_sched(struct blk_mq_hw_ctx *hctx)
  {
-+	struct xdp_mmap_offsets off;
-+	int err;
-+
- 	if (!umem)
- 		return 0;
++	unsigned long end = jiffies + HZ;
+ 	int ret;
  
- 	if (umem->refcount)
- 		return -EBUSY;
+ 	do {
+ 		ret = __blk_mq_do_dispatch_sched(hctx);
+-	} while (ret == 1);
++		if (ret != 1)
++			break;
++		if (need_resched() || time_is_before_jiffies(end)) {
++			blk_mq_delay_run_hw_queue(hctx, 0);
++			break;
++		}
++	} while (1);
  
-+	err = xsk_get_mmap_offsets(umem->fd, &off);
-+	if (!err && umem->fill_save && umem->comp_save) {
-+		munmap(umem->fill_save->ring - off.fr.desc,
-+		       off.fr.desc + umem->config.fill_size * sizeof(__u64));
-+		munmap(umem->comp_save->ring - off.cr.desc,
-+		       off.cr.desc + umem->config.comp_size * sizeof(__u64));
-+	}
-+
- 	close(umem->fd);
- 	free(umem);
- 
--- 
-2.34.1
-
+ 	return ret;
+ }
 
 

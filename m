@@ -2,70 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F1734F4DB1
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C07DF4F4C9F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1582658AbiDEXtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59114 "EHLO
+        id S1579175AbiDEX0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1458006AbiDEREa (ORCPT
+        with ESMTP id S1458012AbiDERFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 13:04:30 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B95736B74
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 10:02:30 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id y6so11423666plg.2
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 10:02:30 -0700 (PDT)
+        Tue, 5 Apr 2022 13:05:00 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39CE68BE29
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 10:03:01 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id i27so20930899ejd.9
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 10:03:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yO8HbIMVJgMW92Isut2vOmUaNAYMH1DhCX86wHWJRSo=;
-        b=tHoByH669Szdsl21UDdyYcrAEwgfn57/nEFHCCWGLnAW2OsToxC+wap4hC2m2CFRAl
-         trycQUQ11z24buiTdAHPYeCPKgFs/eznc3xu2uup5hJvdlp8V5TL+7wPS6BC2um9unhf
-         hcxbB5j/9u+1OVIWDMCbW4ja+iO7sEReGDJMRvEUrrf5OxIz8J162VM/RHkwdfrY09qe
-         1PZoGUmeymn9j6UW/NDhiY91+amYrTrK9lWuaezy+Z3K/5uP2PX+aec19HC+1JaKIhaI
-         m23qxAgniw+XmquyPgw7G/AA79tqhnxEtc3x8BVu7uh314cN8NyFtUrFq5iAR0dBbb43
-         IzAQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=W9jjXhkkwggvTX4fvJBrk+j1Dfql0KOELV0oxfWMhuc=;
+        b=Da196R/xzbnxuTIH3vscQpCMovYwydT/AzCJSlQj8Eqi4CvIwtAd/mUQm9MmrSBpfo
+         C+EBgKeBCuBKVRkDsHPA8cOoIX8OcoIl86zyYotKiHUopfezjcGIoi0dE+KUYYdh8QMp
+         KVzZw8avVxGZB0tQNm3+yFeorwp26KB33gYBo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yO8HbIMVJgMW92Isut2vOmUaNAYMH1DhCX86wHWJRSo=;
-        b=rBxxO973ApV4M1n28m8JL/tHw8H/zvEvK+f7FdCM9Hrc5wnPWlRyd6ekZ/QML1sVMI
-         ahdVvU/talU0jsXf1Q8cEpTvmCuKkhDXDcD2OJN2XBCfb+s/ZIrQdiZqseUTElxtHaWo
-         SvsqxX81o0RMvZh/aKBpbAlsyhV5D/YL9IGPvBKHdzN/BRdmsa3uqOfaC5Fjf2WUg+Qk
-         QH+hZ665XZV54AIOmbX9VQAQ4jvMLByjQcJq7NUOt8TG9Sgwa4O4i5JcIBSJbYm/MoAz
-         kZllw+swEXUun3QdMBKQNmGx0ntq+CYISsFqCErPr3vN3Q9YwVMLN/SHTB1hUrj32jEB
-         jeNw==
-X-Gm-Message-State: AOAM5335oFPdLraYfiO/E6HoKEK9MzXdb+EA8J6hJiNVpIZ1BZgmLodc
-        a5w1F00QMKkPrJdpanHEYq0asg==
-X-Google-Smtp-Source: ABdhPJzKSi5DdnjoR2l0Nmc2GMfO1SmhjMFV5BVTWYvenktsc0lHTuNfpNSQWBGXgTVrADjQczjokQ==
-X-Received: by 2002:a17:902:8306:b0:14f:a386:6a44 with SMTP id bd6-20020a170902830600b0014fa3866a44mr4455290plb.140.1649178149924;
-        Tue, 05 Apr 2022 10:02:29 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id z2-20020aa79902000000b004fb05c04b53sm17240460pff.103.2022.04.05.10.02.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 10:02:27 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 11:02:23 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Mike Leach <mike.leach@linaro.org>
-Cc:     suzuki.poulose@arm.com, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        linux-perf-users@vger.kernel.org, leo.yan@linaro.org
-Subject: Re: [PATCH 01/10] coresight: trace-id: Add API to dynamically assign
- trace ID values
-Message-ID: <20220405170223.GA4151723@p14s>
-References: <20220308205000.27646-1-mike.leach@linaro.org>
- <20220308205000.27646-2-mike.leach@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=W9jjXhkkwggvTX4fvJBrk+j1Dfql0KOELV0oxfWMhuc=;
+        b=EV4HC1pVu6oX1dqFGuvlGPHT2VLftquS5PUcc+XWLCYtJ6bTHvX2fE6WK0OwOJVLK2
+         7csmlhz58C0b25yYiukzxaA3LMk8T43RH/QXzqwrS93/gdKrUyGYte4AKFziIJrtUDLp
+         zQXQAp4/lrYhQ4smMnvUVaH5tfqWyUsiYMSCESj+sCreTgh7f9xXYHFjUWaW7N21QdQ1
+         PWDrPyqXP3VDOHrR1ijl2jDoUBLM44MugIHMOnmtKPY4AWoICw0iycIFiVhx04g0pc0/
+         oN2rnMBWba91jvtKSv3xDh5pW9eZSDErPYhYZ+mjmMXDdbia2A4mrBvEUoWo2SRascu5
+         SgCA==
+X-Gm-Message-State: AOAM533gKCnq9o1TGVgQPXmu5/Y7+kBPNyjY1zhp0tQ+WtdnTRwesL0j
+        MwExbPEf/KBGX0fwTybWGM3vVctRmYzSA75g
+X-Google-Smtp-Source: ABdhPJzX3H4hDjAqc2mHTZ66cAYbl6mIWNZnniUb2HNwhQkp34v9FFq+g7kOWHyjjd99/Xmm2y34JQ==
+X-Received: by 2002:a17:906:280b:b0:6ce:f3c7:688f with SMTP id r11-20020a170906280b00b006cef3c7688fmr4575787ejc.468.1649178179171;
+        Tue, 05 Apr 2022 10:02:59 -0700 (PDT)
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com. [209.85.128.41])
+        by smtp.gmail.com with ESMTPSA id v5-20020a50c405000000b004161123bf7asm6715819edf.67.2022.04.05.10.02.56
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 10:02:57 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id bi13-20020a05600c3d8d00b0038c2c33d8f3so1986173wmb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 10:02:56 -0700 (PDT)
+X-Received: by 2002:a05:600c:4f10:b0:38c:ae36:d305 with SMTP id
+ l16-20020a05600c4f1000b0038cae36d305mr3996092wmq.34.1649178175654; Tue, 05
+ Apr 2022 10:02:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220308205000.27646-2-mike.leach@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <1648656179-10347-1-git-send-email-quic_sbillaka@quicinc.com>
+ <1648656179-10347-2-git-send-email-quic_sbillaka@quicinc.com>
+ <CAD=FV=X+QvjwoT2zGP82KW4kD0oMUY6ZgCizSikNX_Uj8dNDqA@mail.gmail.com>
+ <392b933f-760c-3c81-1040-c514045df3da@linaro.org> <CAD=FV=W4PYK-t607yjRbfjDjjEZX0KdgHDRukw_vSH8E8EDH6w@mail.gmail.com>
+ <CAA8EJppt9XONbgtKfmHmN+==QNqiVJeb8GKJFdZm=yyY-tgmHQ@mail.gmail.com>
+ <CAD=FV=U5-sTDLYdkeJWLAOG-0wgxR49VxtwUyUO7z2PuibLGsg@mail.gmail.com> <CAA8EJppgfYgQjG8A4LsR-1wmBj3Ku3eO8cKfAYhxjWXL7e3eHg@mail.gmail.com>
+In-Reply-To: <CAA8EJppgfYgQjG8A4LsR-1wmBj3Ku3eO8cKfAYhxjWXL7e3eHg@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 5 Apr 2022 10:02:42 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=V=a1CnT8fqTJR40WoS3BaDQ3xZ=HnHVHqZh=MEmVUZBA@mail.gmail.com>
+Message-ID: <CAD=FV=V=a1CnT8fqTJR40WoS3BaDQ3xZ=HnHVHqZh=MEmVUZBA@mail.gmail.com>
+Subject: Re: [PATCH v6 1/8] drm/msm/dp: Add eDP support via aux_bus
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        quic_kalyant <quic_kalyant@quicinc.com>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
+        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        quic_vproddut <quic_vproddut@quicinc.com>,
+        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,362 +93,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good morning,
+Hi,
 
-To avoid getting tunnel vision, I haven't red any of the comments already posted
-about this set.  As such some of my observations may be redundant.
+On Tue, Apr 5, 2022 at 5:54 AM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+> > 3. For DP and eDP HPD means something a little different. Essentially
+> > there are two concepts: a) is a display physically connected and b) is
+> > the display powered up and ready. For DP, the two are really tied
+> > together. From the kernel's point of view you never "power down" a DP
+> > display and you can't detect that it's physically connected until it's
+> > ready. Said another way, on you tie "is a display there" to the HPD
+> > line and the moment a display is there it's ready for you to do AUX
+> > transfers. For eDP, in the lowest power state of a display it _won't_
+> > assert its "HPD" signal. However, it's still physically present. For
+> > eDP you simply have to _assume_ it's present without any actual proof
+> > since you can't get proof until you power it up. Thus for eDP, you
+> > report that the display is there as soon as we're asked. We can't
+> > _talk_ to the display yet, though. So in get_modes() we need to be
+> > able to power the display on enough to talk over the AUX channel to
+> > it. As part of this, we wait for the signal named "HPD" which really
+> > means "panel finished powering on" in this context.
+> >
+> > NOTE: for aux transfer, we don't have the _display_ pipe and clocks
+> > running. We only have enough stuff running to do the AUX transfer.
+> > We're not clocking out pixels. We haven't fully powered on the
+> > display. The AUX transfer is designed to be something that can be done
+> > early _before_ you turn on the display.
+> >
+> >
+> > OK, so basically that was a longwinded way of saying: yes, we could
+> > avoid the AUX transfer in probe, but we can't wait all the way to
+> > enable. We have to be able to transfer in get_modes(). If you think
+> > that's helpful I think it'd be a pretty easy patch to write even if it
+> > would look a tad bit awkward IMO. Let me know if you want me to post
+> > it up.
+>
+> I think it would be a good idea. At least it will allow us to judge,
+> which is the more correct way.
 
-On Tue, Mar 08, 2022 at 08:49:51PM +0000, Mike Leach wrote:
-> The existing mechanism to assign Trace ID values to sources is limited
-> and does not scale for larger multicore / multi trace source systems.
-> 
-> The API introduces functions that reserve IDs based on availabilty
-> represented by a coresight_trace_id_map structure. This records the
-> used and free IDs in a bitmap.
-> 
-> CPU bound sources such as ETMs use the coresight_trace_id_get_cpu_id /
-> coresight_trace_id_put_cpu_id pair of functions. The API will record
-> the ID associated with the CPU. This ensures that the same ID will be
-> re-used while perf events are active on the CPU. The put_cpu_id function
-> will pend release of the ID until all perf cs_etm sessions are complete.
-> 
-> Non-cpu sources, such as the STM can use coresight_trace_id_get_system_id /
-> coresight_trace_id_put_system_id.
-> 
-> Signed-off-by: Mike Leach <mike.leach@linaro.org>
-> ---
->  drivers/hwtracing/coresight/Makefile          |   2 +-
->  .../hwtracing/coresight/coresight-trace-id.c  | 222 ++++++++++++++++++
->  .../hwtracing/coresight/coresight-trace-id.h  |  69 ++++++
->  3 files changed, 292 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.c
->  create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.h
-> 
-> diff --git a/drivers/hwtracing/coresight/Makefile b/drivers/hwtracing/coresight/Makefile
-> index b6c4a48140ec..329a0c704b87 100644
-> --- a/drivers/hwtracing/coresight/Makefile
-> +++ b/drivers/hwtracing/coresight/Makefile
-> @@ -6,7 +6,7 @@ obj-$(CONFIG_CORESIGHT) += coresight.o
->  coresight-y := coresight-core.o  coresight-etm-perf.o coresight-platform.o \
->  		coresight-sysfs.o coresight-syscfg.o coresight-config.o \
->  		coresight-cfg-preload.o coresight-cfg-afdo.o \
-> -		coresight-syscfg-configfs.o
-> +		coresight-syscfg-configfs.o coresight-trace-id.o
->  obj-$(CONFIG_CORESIGHT_LINK_AND_SINK_TMC) += coresight-tmc.o
->  coresight-tmc-y := coresight-tmc-core.o coresight-tmc-etf.o \
->  		      coresight-tmc-etr.o
-> diff --git a/drivers/hwtracing/coresight/coresight-trace-id.c b/drivers/hwtracing/coresight/coresight-trace-id.c
-> new file mode 100644
-> index 000000000000..ce6c7d7b55d6
-> --- /dev/null
-> +++ b/drivers/hwtracing/coresight/coresight-trace-id.c
-> @@ -0,0 +1,222 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2022, Linaro Limited, All rights reserved.
-> + * Author: Mike Leach <mike.leach@linaro.org>
-> + */
-> +#include <linux/kernel.h>
-> +#include <linux/types.h>
-> +#include <linux/spinlock.h>
-> +
-> +#include "coresight-trace-id.h"
-> +
-> +/* need to keep data on ids & association with cpus. */
-> +struct cpu_id_info {
-> +	int id;
-> +	bool pend_rel;
-> +};
-> +
-> +/* maintain a record of the current mapping of cpu IDs */
-> +static DEFINE_PER_CPU(struct cpu_id_info, cpu_ids);
-> +
-> +/* a list of currently used id_maps */
-> +static LIST_HEAD(id_map_list);
-> +
-> +/* perf session active flag */
-> +static int perf_cs_etm_session_active;
-> +
-> +/* lock to protect id_map list and cpu data  */
-> +static DEFINE_SPINLOCK(id_map_lock);
-> +
-> +/* ID 0 is reserved */
-> +#define CORESIGHT_TRACE_ID_RES_0 0
-> +
-> +/* ID 0x70 onwards are reserved */
-> +#define CORESIGHT_TRACE_ID_RES_RANGE_LO 0x70
-> +#define CORESIGHT_TRACE_ID_RES_RANGE_HI 0x7F
-> +
-> +#define IS_VALID_ID(id)	\
-> +	((id > CORESIGHT_TRACE_ID_RES_0) && (id < CORESIGHT_TRACE_ID_RES_RANGE_LO))
-> +
-> +static void coresight_trace_id_set_inuse(int id, struct coresight_trace_id_map *id_map)
-> +{
-> +	if (IS_VALID_ID(id))
-> +		set_bit(id, id_map->avail_ids);
-> +}
-> +
-> +static void coresight_trace_id_clear_inuse(int id, struct coresight_trace_id_map *id_map)
-> +{
-> +	if (IS_VALID_ID(id))
-> +		clear_bit(id, id_map->avail_ids);
-> +}
-> +
-> +static void coresight_trace_id_set_pend_rel(int id, struct coresight_trace_id_map *id_map)
-> +{
-> +	if (IS_VALID_ID(id))
-> +		set_bit(id, id_map->pend_rel_ids);
-> +}
-> +
-> +static void coresight_trace_id_clear_pend_rel(int id, struct coresight_trace_id_map *id_map)
-> +{
-> +	if (IS_VALID_ID(id))
-> +		clear_bit(id, id_map->pend_rel_ids);
-> +}
-> +
-> +static int coresight_trace_id_find_new_id(struct coresight_trace_id_map *id_map)
-> +{
-> +	int id;
-> +
-> +	id = find_first_zero_bit(id_map->avail_ids, CORESIGHT_TRACE_IDS_MAX);
-> +	if (id >= CORESIGHT_TRACE_IDS_MAX)
-> +		id = -EINVAL;
-> +	return id;
-> +}
-> +
-> +/* release all pending IDs for all current maps & clear CPU associations */
-> +static void coresight_trace_id_release_all_pending(void)
-> +{
-> +	struct coresight_trace_id_map *id_map;
-> +	int cpu, bit;
-> +
-> +	list_for_each_entry(id_map, &id_map_list, node) {
-> +		for_each_set_bit(bit, id_map->pend_rel_ids, CORESIGHT_TRACE_IDS_MAX) {
-> +			clear_bit(bit, id_map->avail_ids);
-> +			clear_bit(bit, id_map->pend_rel_ids);
-> +		}
-> +	}
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		if (per_cpu(cpu_ids, cpu).pend_rel) {
-> +			per_cpu(cpu_ids, cpu).pend_rel = false;
-> +			per_cpu(cpu_ids, cpu).id = 0;
-> +		}
-> +	}
-> +}
-> +
-> +int coresight_trace_id_get_cpu_id(int cpu, struct coresight_trace_id_map *id_map)
-> +{
-> +	unsigned long flags;
-> +	int id;
-> +
-> +	spin_lock_irqsave(&id_map_lock, flags);
-> +	id = per_cpu(cpu_ids, cpu).id;
-> +	if (!id) {
-> +		id = coresight_trace_id_find_new_id(id_map);
-> +		if (id < 0)
-> +			goto get_cpu_id_out;
-> +	}
-> +
-> +	per_cpu(cpu_ids, cpu).id = id;
-> +	per_cpu(cpu_ids, cpu).pend_rel = false;
-> +	coresight_trace_id_set_inuse(id, id_map);
-> +	coresight_trace_id_clear_pend_rel(id, id_map);
+I'm still happy to prototype this, but the more I think about it the
+more it feels like a workaround for the Qualcomm driver. The eDP panel
+driver is actually given a pointer to the AUX bus at probe time. It's
+really weird to say that we can't do a transfer on it yet... As you
+said, this is a little sideband bus. It should be able to be used
+without all the full blown infra of the rest of the driver.
 
-The above should have been done when the ID for this CPU has been set for the
-first time.  Therefore we should simply release the spinlock and return if an ID
-has already been set.
 
-> +
-> +get_cpu_id_out:
-> +	spin_unlock_irqrestore(&id_map_lock, flags);
-> +	return id;
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_trace_id_get_cpu_id);
-> +
-> +void coresight_trace_id_put_cpu_id(int cpu, struct coresight_trace_id_map *id_map)
-> +{
-> +	unsigned long flags;
-> +	int id;
-> +
-> +	spin_lock_irqsave(&id_map_lock, flags);
-> +	id = per_cpu(cpu_ids, cpu).id;
-> +	if (!id)
-> +		goto put_cpu_id_out;
-> +
-> +	if (perf_cs_etm_session_active) {
-> +		/* set release at pending if perf still active */
-> +		coresight_trace_id_set_pend_rel(id, id_map);
-> +		per_cpu(cpu_ids, cpu).pend_rel = true;
-> +	} else {
-> +		/* otherwise clear id */
-> +		coresight_trace_id_clear_inuse(id, id_map);
-> +		per_cpu(cpu_ids, cpu).id = 0;
-> +	}
-> +
-> + put_cpu_id_out:
-> +	spin_unlock_irqrestore(&id_map_lock, flags);
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_trace_id_put_cpu_id);
-> +
-> +int coresight_trace_id_get_system_id(struct coresight_trace_id_map *id_map)
-> +{
+> And I also think it might help the ti,sn65dsi86 driver, as it won't
+> have to ensure that gpio is available during the AUX bus probe.
 
-So far I have reviewed until patch 05 and I find passing the id_map every time
-we need an ID quite heavy, especially since it is always the same one. 
+The ti,sn65dsi86 GPIO issue has been solved for a while, though so not
+sure why we need to do something there? I'm also unclear how it would
+have helped. In this discussion, we've agreed that the panel driver
+would still acquire resources during its probe time and the only thing
+that would be delayed would be the first AUX transfer. The GPIO is a
+resource here and it's ideal to acquire it at probe time so we could
+EPROBE_DEFER if needed.
 
-> +	unsigned long flags;
-> +	int id;
-> +
-> +	spin_lock_irqsave(&id_map_lock, flags);
-> +	id = coresight_trace_id_find_new_id(id_map);
-> +	if (id > 0)
-> +		coresight_trace_id_set_inuse(id, id_map);
-> +	spin_unlock_irqrestore(&id_map_lock, flags);
-> +
-> +	return id;
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_trace_id_get_system_id);
-> +
-> +void coresight_trace_id_put_system_id(struct coresight_trace_id_map *id_map, int id)
-> +{
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&id_map_lock, flags);
-> +	coresight_trace_id_clear_inuse(id, id_map);
-> +	spin_unlock_irqrestore(&id_map_lock, flags);
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_trace_id_put_system_id);
-> +
-> +void coresight_trace_id_perf_start(void)
-> +{
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&id_map_lock, flags);
-> +	perf_cs_etm_session_active++;
-> +	spin_unlock_irqrestore(&id_map_lock, flags);
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_trace_id_perf_start);
-> +
-> +void coresight_trace_id_perf_stop(void)
-> +{
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&id_map_lock, flags);
-> +	perf_cs_etm_session_active--;
-> +	if (!perf_cs_etm_session_active)
-> +		coresight_trace_id_release_all_pending();
-> +	spin_unlock_irqrestore(&id_map_lock, flags);
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_trace_id_perf_stop);
-> +
-> +void coresight_trace_id_init_id_map(struct coresight_trace_id_map *id_map)
-> +{
-> +	unsigned long flags;
-> +	int bit;
-> +
-> +	/* set all reserved bits as in-use */
-> +	set_bit(CORESIGHT_TRACE_ID_RES_0, id_map->avail_ids);
-> +	for (bit = CORESIGHT_TRACE_ID_RES_RANGE_LO;
-> +	     bit <= CORESIGHT_TRACE_ID_RES_RANGE_HI; bit++)
-> +		set_bit(bit, id_map->avail_ids);
-> +
-> +	spin_lock_irqsave(&id_map_lock, flags);
-> +
-> +	/* add id_map to the list */
-> +	list_add(&id_map->node, &id_map_list);
-> +
-> +	spin_unlock_irqrestore(&id_map_lock, flags);
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_trace_id_init_id_map);
-> +
-> +void coresight_trace_id_release_id_map(struct coresight_trace_id_map *id_map)
-> +{
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&id_map_lock, flags);
-> +
-> +	/* remove id_map from list */
-> +	list_del(&id_map->node);
-> +
-> +	spin_unlock_irqrestore(&id_map_lock, flags);
-> +}
-> +EXPORT_SYMBOL_GPL(coresight_trace_id_release_id_map);
-> diff --git a/drivers/hwtracing/coresight/coresight-trace-id.h b/drivers/hwtracing/coresight/coresight-trace-id.h
-> new file mode 100644
-> index 000000000000..01db2441cee6
-> --- /dev/null
-> +++ b/drivers/hwtracing/coresight/coresight-trace-id.h
-> @@ -0,0 +1,69 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright(C) 2022 Linaro Limited. All rights reserved.
-> + * Author: Mike Leach <mike.leach@linaro.org>
-> + */
-> +
-> +#ifndef _CORESIGHT_TRACE_ID_H
-> +#define _CORESIGHT_TRACE_ID_H
-> +
-> +/*
-> + * Coresight trace ID allocation API
-> + *
-> + * With multi cpu systems, and more additional trace sources a scalable
-> + * trace ID reservation system is required.
-> + *
-> + * The system will allocate Ids on a demand basis, and allow them to be
-> + * released when done.
-> + *
-> + * In order to ensure that a consistent cpu / ID matching is maintained
-> + * throughout a perf cs_etm event session - a session in progress flag will
-> + * be maintained, and released IDs not cleared until the perf session is
-> + * complete. This allows the same CPU to be re-allocated its prior ID.
-> + *
-> + *
-> + * Trace ID maps will be created and initialised to prevent architecturally
-> + * reserved IDs from being allocated.
-> + *
-> + * API permits multiple maps to be maintained - for large systems where
-> + * different sets of cpus trace into different independent sinks.
-> + */
-> +
-> +#include <linux/bitops.h>
-> +#include <linux/types.h>
-> +
-> +
-> +/* architecturally we have 128 IDs some of which are reserved */
-> +#define CORESIGHT_TRACE_IDS_MAX 128
-> +
-> +/**
-> + * Trace ID map.
-> + *
-> + * @avail_ids:	Bitmap to register available (bit = 0) and in use (bit = 1) IDs.
-> + *		Initialised so that the reserved IDs are permanently marked as in use.
-> + * @pend_rel_ids: CPU IDs that have been released by the trace source but not yet marked
-> + *                as available, to allow re-allocation to the same CPU during a perf session.
-> + * @node:	List entry to add to list of managed trace id maps.
-> + */
-> +struct coresight_trace_id_map {
-> +	DECLARE_BITMAP(avail_ids, CORESIGHT_TRACE_IDS_MAX);
-> +	DECLARE_BITMAP(pend_rel_ids, CORESIGHT_TRACE_IDS_MAX);
-> +	struct list_head node;
-> +};
-> +
-> +/* Allocate and release IDs */
-> +int coresight_trace_id_get_cpu_id(int cpu, struct coresight_trace_id_map *id_map);
-> +int coresight_trace_id_get_system_id(struct coresight_trace_id_map *id_map);
-> +void coresight_trace_id_put_cpu_id(int cpu, struct coresight_trace_id_map *id_map);
-> +void coresight_trace_id_put_system_id(struct coresight_trace_id_map *id_map, int id);
-> +
-> +/* initialise ID map - block reserved IDs, add to list of ID maps */
-> +void coresight_trace_id_init_id_map(struct coresight_trace_id_map *id_map);
-> +/* remove ID maps from list of maps */
-> +void coresight_trace_id_release_id_map(struct coresight_trace_id_map *id_map);
-> +
-> +/* notifiers for perf session start and stop */
-> +void coresight_trace_id_perf_start(void);
-> +void coresight_trace_id_perf_stop(void);
-> +
-> +#endif /* _CORESIGHT_TRACE_ID_H */
-> -- 
-> 2.17.1
-> 
+
+> BTW, another random idea, before you start coding.
+>
+> We have the bridge's hpd_notify call. Currently it is called only by
+> the means of drm_bridge_connector's HPD mechanism, tied to the bridge
+> registering as DRM_BRIDGE_OP_HPD.
+> It looks to me like it might be a perfect fit for the first aux-bus
+> related reads.
+>
+> We'd need to trigger it manually once and tie it to the new
+> drm_panel_funcs callback, which in turn would probe the aux bus,
+> create backlight, etc.
+>
+> Regarding the Sankeerth's patch. I have been comparing it with the
+> hpd_event_thread()'s calls.
+> It looks to me like we should reuse dp_display_config_hpd()
+> /EV_HPD_INIT_SETUP and maybe others.
+>
+> What I'm trying to say is that if we split AUX probing and first AUX
+> transfers, it would be possible to reuse a significant part of MSM DP
+> HPD machine rather than hacking around it and replicating it manually.
+
+I'm not sure I completely understand, but I'm pretty wary here. It's
+my assertion that all of the current "HPD" infrastructure in DRM all
+relates to the physical presence of the panel. If you start
+implementing these functions for eDP I think you're going to confuse
+the heck out of everything. The kernel will think that this is a
+display that's sometimes not there. Whenever the display is powered
+off then HPD will be low and it will look like there's no display.
+Nothing will ever try to power it on because it looks like there's no
+display.
+
+I think your idea is to "trigger once" at bootup and then it all
+magically works, right? ...but what about after bootup? If you turn
+the display off for whatever reason (modeset or you simply close the
+lid of your laptop because you're using an external display) and then
+you want to use the eDP display again, how do you kickstart the
+process another time? You can't reboot, and when the display is off
+the HPD line is low.
+
+I can't say it enough times, HPD on eDP _does not mean hot plug
+detect_. The panel is always there. HPD is really a "panel ready /
+panel notify" signal for eDP. That's fully what its function is.
+
+-Doug

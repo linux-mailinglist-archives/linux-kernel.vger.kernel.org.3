@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2C24F33BD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A74FE4F32CD
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350573AbiDEJ64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56978 "EHLO
+        id S1350716AbiDEJ7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239968AbiDEIV5 (ORCPT
+        with ESMTP id S239992AbiDEIWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:21:57 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74266BC3A;
+        Tue, 5 Apr 2022 04:22:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E213A1035;
         Tue,  5 Apr 2022 01:19:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CD355CE1BF3;
-        Tue,  5 Apr 2022 08:19:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4637C385A0;
-        Tue,  5 Apr 2022 08:19:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A624609AD;
+        Tue,  5 Apr 2022 08:19:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E9C2C385A0;
+        Tue,  5 Apr 2022 08:19:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146770;
-        bh=p4qOkgGo1/eyoeVeoSnjF3H2g47JG7CGB9P5oxsXQkc=;
+        s=korg; t=1649146772;
+        bh=KL2U+DdtwFetDLdywa1BvKB0ub14yiL29O6JG2SZpkM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p+XWc1pzqMLtf75U6M/wKunLDgsOa1ngaFndAdVk2QNL9GquBwQuPOWDp3ReXXpmV
-         8lXmZJjCmefJ544lFzc8u59sG8PIbOXhKGU53PYnzHRq4cbkLnfFKKyS1J9399SqEu
-         /ASQ54wDN/34RPYE0MdVf8WpS6TnbPsIRRtS3LTs=
+        b=x/37nQwq60mxVYUfB+WklXeNKt4u1JVgaMznoT7NoYdWI61B2aw/ehjS8iK4SZHIX
+         X8ZzTscGfQNFelJPQIDD3LFgyds85TuBlNOYr758VDKHAWGBkHQVksdxmWMfBClFdS
+         EtADm2pR+K4NpgeWevmGBbYypPzAdxYkh2JmK+zU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, rftc <rftc@gmx.de>,
+        stable@vger.kernel.org, Kai Ye <yekai13@huawei.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0844/1126] crypto: xts - Add softdep on ecb
-Date:   Tue,  5 Apr 2022 09:26:31 +0200
-Message-Id: <20220405070432.325069788@linuxfoundation.org>
+Subject: [PATCH 5.17 0845/1126] crypto: hisilicon/sec - not need to enable sm4 extra mode at HW V3
+Date:   Tue,  5 Apr 2022 09:26:32 +0200
+Message-Id: <20220405070432.353566176@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,30 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Herbert Xu <herbert@gondor.apana.org.au>
+From: Kai Ye <yekai13@huawei.com>
 
-[ Upstream commit dfe085d8dcd0bb1fe20cc2327e81c8064cead441 ]
+[ Upstream commit f8a2652826444d13181061840b96a5d975d5b6c6 ]
 
-The xts module needs ecb to be present as it's meant to work
-on top of ecb.  This patch adds a softdep so ecb can be included
-automatically into the initramfs.
+It is not need to enable sm4 extra mode in at HW V3. Here is fix it.
 
-Reported-by: rftc <rftc@gmx.de>
+Signed-off-by: Kai Ye <yekai13@huawei.com>
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- crypto/xts.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/crypto/hisilicon/sec2/sec_main.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/crypto/xts.c b/crypto/xts.c
-index 6c12f30dbdd6..63c85b9e64e0 100644
---- a/crypto/xts.c
-+++ b/crypto/xts.c
-@@ -466,3 +466,4 @@ MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("XTS block cipher mode");
- MODULE_ALIAS_CRYPTO("xts");
- MODULE_IMPORT_NS(CRYPTO_INTERNAL);
-+MODULE_SOFTDEP("pre: ecb");
+diff --git a/drivers/crypto/hisilicon/sec2/sec_main.c b/drivers/crypto/hisilicon/sec2/sec_main.c
+index 26d3ab1d308b..89d4cc767d36 100644
+--- a/drivers/crypto/hisilicon/sec2/sec_main.c
++++ b/drivers/crypto/hisilicon/sec2/sec_main.c
+@@ -443,9 +443,11 @@ static int sec_engine_init(struct hisi_qm *qm)
+ 
+ 	writel(SEC_SAA_ENABLE, qm->io_base + SEC_SAA_EN_REG);
+ 
+-	/* Enable sm4 extra mode, as ctr/ecb */
+-	writel_relaxed(SEC_BD_ERR_CHK_EN0,
+-		       qm->io_base + SEC_BD_ERR_CHK_EN_REG0);
++	/* HW V2 enable sm4 extra mode, as ctr/ecb */
++	if (qm->ver < QM_HW_V3)
++		writel_relaxed(SEC_BD_ERR_CHK_EN0,
++			       qm->io_base + SEC_BD_ERR_CHK_EN_REG0);
++
+ 	/* Enable sm4 xts mode multiple iv */
+ 	writel_relaxed(SEC_BD_ERR_CHK_EN1,
+ 		       qm->io_base + SEC_BD_ERR_CHK_EN_REG1);
 -- 
 2.34.1
 

@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A874F3962
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A48454F3922
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378243AbiDELcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
+        id S1377645AbiDELaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244208AbiDEIvu (ORCPT
+        with ESMTP id S243884AbiDEIvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:51:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D97AD9F;
-        Tue,  5 Apr 2022 01:40:29 -0700 (PDT)
+        Tue, 5 Apr 2022 04:51:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BF4CFBAF;
+        Tue,  5 Apr 2022 01:40:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B58BE61504;
-        Tue,  5 Apr 2022 08:39:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2610C385A3;
-        Tue,  5 Apr 2022 08:39:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CF983B81C6F;
+        Tue,  5 Apr 2022 08:39:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4061DC385A1;
+        Tue,  5 Apr 2022 08:39:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147983;
-        bh=gXaSowdSzdHDz/SLK+lkSj4IXT9ETjfxO2NaDq+DOw8=;
+        s=korg; t=1649147988;
+        bh=oIga0He4yI5LBX1UhvwIvH0cnuahKV9lNiCEteLrRxs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ulth/KkgmWAQtgbCc/yLqjDYcM/uXNybGqOAVTfU5NTWKAcDpGr6/J8UTNnkQ8ZW5
-         xNIK8N3hqKiZFs+NJjdIqgesbbvCUz6j+lFjEwbJKzqw0GhEJ09S70UuDYhdon5BQl
-         sRtVFZDq1KIO99P3fDpc+ThsHa+mSIjfWtz1SCrE=
+        b=aGFX7Uad6j/l8ols4QdJI/Wed0CkSRLwGG/N5cqk6w4I55hMD++g8+dW51CO2MOCa
+         bXwbBFe8a9CayPXpndUVVdVkBKHBxnP54Xa1VqjxJUUnzz+ik/akimdbsCvDZKt+5d
+         a9JasQtBE1RHmBXtqdSKkZdSQSaClg2DryfxwxCw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Hector Martin <marcan@marcan.st>, Kalle Valo <kvalo@kernel.org>
-Subject: [PATCH 5.16 0193/1017] brcmfmac: pcie: Replace brcmf_pcie_copy_mem_todev with memcpy_toio
-Date:   Tue,  5 Apr 2022 09:18:26 +0200
-Message-Id: <20220405070359.972866303@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>
+Subject: [PATCH 5.16 0195/1017] drm/i915/opregion: check port number bounds for SWSCI display power state
+Date:   Tue,  5 Apr 2022 09:18:28 +0200
+Message-Id: <20220405070400.033338683@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,108 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hector Martin <marcan@marcan.st>
+From: Jani Nikula <jani.nikula@intel.com>
 
-commit 9466987f246758eb7e9071ae58005253f631271e upstream.
+commit 24a644ebbfd3b13cda702f98907f9dd123e34bf9 upstream.
 
-The alignment check was wrong (e.g. & 4 instead of & 3), and the logic
-was also inefficient if the length was not a multiple of 4, since it
-would needlessly fall back to copying the entire buffer bytewise.
+The mapping from enum port to whatever port numbering scheme is used by
+the SWSCI Display Power State Notification is odd, and the memory of it
+has faded. In any case, the parameter only has space for ports numbered
+[0..4], and UBSAN reports bit shift beyond it when the platform has port
+F or more.
 
-We already have a perfectly good memcpy_toio function, so just call that
-instead of rolling our own copy logic here. brcmf_pcie_init_ringbuffers
-was already using it anyway.
+Since the SWSCI functionality is supposed to be obsolete for new
+platforms (i.e. ones that might have port F or more), just bail out
+early if the mapped and mangled port number is beyond what the Display
+Power State Notification can support.
 
-Fixes: 9e37f045d5e7 ("brcmfmac: Adding PCIe bus layer support.")
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Hector Martin <marcan@marcan.st>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220131160713.245637-6-marcan@marcan.st
+Fixes: 9c4b0a683193 ("drm/i915: add opregion function to notify bios of encoder enable/disable")
+Cc: <stable@vger.kernel.org> # v3.13+
+Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>
+Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/4800
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/cc363f42d6b5a5932b6d218fefcc8bdfb15dbbe5.1644489329.git.jani.nikula@intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c |   48 +---------------
- 1 file changed, 4 insertions(+), 44 deletions(-)
+ drivers/gpu/drm/i915/display/intel_opregion.c |   15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-@@ -12,6 +12,7 @@
- #include <linux/interrupt.h>
- #include <linux/bcma/bcma.h>
- #include <linux/sched.h>
-+#include <linux/io.h>
- #include <asm/unaligned.h>
+--- a/drivers/gpu/drm/i915/display/intel_opregion.c
++++ b/drivers/gpu/drm/i915/display/intel_opregion.c
+@@ -375,6 +375,21 @@ int intel_opregion_notify_encoder(struct
+ 		return -EINVAL;
+ 	}
  
- #include <soc.h>
-@@ -455,47 +456,6 @@ brcmf_pcie_write_ram32(struct brcmf_pcie
++	/*
++	 * The port numbering and mapping here is bizarre. The now-obsolete
++	 * swsci spec supports ports numbered [0..4]. Port E is handled as a
++	 * special case, but port F and beyond are not. The functionality is
++	 * supposed to be obsolete for new platforms. Just bail out if the port
++	 * number is out of bounds after mapping.
++	 */
++	if (port > 4) {
++		drm_dbg_kms(&dev_priv->drm,
++			    "[ENCODER:%d:%s] port %c (index %u) out of bounds for display power state notification\n",
++			    intel_encoder->base.base.id, intel_encoder->base.name,
++			    port_name(intel_encoder->port), port);
++		return -EINVAL;
++	}
++
+ 	if (!enable)
+ 		parm |= 4 << 8;
  
- 
- static void
--brcmf_pcie_copy_mem_todev(struct brcmf_pciedev_info *devinfo, u32 mem_offset,
--			  void *srcaddr, u32 len)
--{
--	void __iomem *address = devinfo->tcm + mem_offset;
--	__le32 *src32;
--	__le16 *src16;
--	u8 *src8;
--
--	if (((ulong)address & 4) || ((ulong)srcaddr & 4) || (len & 4)) {
--		if (((ulong)address & 2) || ((ulong)srcaddr & 2) || (len & 2)) {
--			src8 = (u8 *)srcaddr;
--			while (len) {
--				iowrite8(*src8, address);
--				address++;
--				src8++;
--				len--;
--			}
--		} else {
--			len = len / 2;
--			src16 = (__le16 *)srcaddr;
--			while (len) {
--				iowrite16(le16_to_cpu(*src16), address);
--				address += 2;
--				src16++;
--				len--;
--			}
--		}
--	} else {
--		len = len / 4;
--		src32 = (__le32 *)srcaddr;
--		while (len) {
--			iowrite32(le32_to_cpu(*src32), address);
--			address += 4;
--			src32++;
--			len--;
--		}
--	}
--}
--
--
--static void
- brcmf_pcie_copy_dev_tomem(struct brcmf_pciedev_info *devinfo, u32 mem_offset,
- 			  void *dstaddr, u32 len)
- {
-@@ -1570,8 +1530,8 @@ static int brcmf_pcie_download_fw_nvram(
- 		return err;
- 
- 	brcmf_dbg(PCIE, "Download FW %s\n", devinfo->fw_name);
--	brcmf_pcie_copy_mem_todev(devinfo, devinfo->ci->rambase,
--				  (void *)fw->data, fw->size);
-+	memcpy_toio(devinfo->tcm + devinfo->ci->rambase,
-+		    (void *)fw->data, fw->size);
- 
- 	resetintr = get_unaligned_le32(fw->data);
- 	release_firmware(fw);
-@@ -1585,7 +1545,7 @@ static int brcmf_pcie_download_fw_nvram(
- 		brcmf_dbg(PCIE, "Download NVRAM %s\n", devinfo->nvram_name);
- 		address = devinfo->ci->rambase + devinfo->ci->ramsize -
- 			  nvram_len;
--		brcmf_pcie_copy_mem_todev(devinfo, address, nvram, nvram_len);
-+		memcpy_toio(devinfo->tcm + address, nvram, nvram_len);
- 		brcmf_fw_nvram_free(nvram);
- 	} else {
- 		brcmf_dbg(PCIE, "No matching NVRAM file found %s\n",
 
 

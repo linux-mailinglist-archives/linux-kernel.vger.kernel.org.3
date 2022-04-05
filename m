@@ -2,138 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF064F49F2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9ED4F4DE0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1453504AbiDEWdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53874 "EHLO
+        id S231875AbiDEXxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353614AbiDEKIe (ORCPT
+        with ESMTP id S1354203AbiDEKMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:08:34 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAB0C3358
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 02:55:31 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id bh17so25558700ejb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 02:55:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=c9bcsFTz7o1nm6T6sdAD3XwMAfi3610i3GxsLP1j6GY=;
-        b=bWkvwp9wKo7oK0PWO7l+fyV9iJKA01a9CrDr8gPEZrRYTMyPiW7uH0PnKGKYi/V2qO
-         8+wfTV2QScMQCc3WMmmmqbhUsW3o0XiKVmUddIdgEiKvHaiQw8RYSHt4WKn11X/jFTUu
-         ctH0fgMUoQ+98re9S7pbjyVRqKnlEY1uFtBFZLPfMszzjCJn8KgyCkYsa1NENh34dlPl
-         /w80buM+JoFVZQvayAM0w0MsuGRoCKDl064zYloABRjlWZ5G5nQRGMCPBuJnibxV4Ceu
-         Sj2s9pXXsj9PwGVlnRUxP2pE96TGF/O5f287B225fOlHhvR5u6BgXEJEy9c5Fn1/+Fep
-         /Kzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c9bcsFTz7o1nm6T6sdAD3XwMAfi3610i3GxsLP1j6GY=;
-        b=pJg88aOrClXaLoetQO2nLSFNSyH1jwfmn+Z7dLo0Z/IgOv66A7p3uBL/esvupYvu9/
-         IuccWqGSPf/rDBo2lRsxDxAP7IkX/CivyycobVjIBNfh/JOaPv3lHgdq4HO0MMUMOdhu
-         Vu5wXRt6DP0taL3OX8m1wLEH/JbwD40cdzcuuhekWWMlidDO5Qlilw1bjUchqnNhXjOX
-         RFP0GV4URZMpoQ3Rf9rktuWqsagWCfy+rqiD1v2Yd7HD8rW+zTQMOX0QO5Ev36QvVmp/
-         vYKYYjHaoh0t6Dta69TNTR02Qtvu0izY9rNibe+RxZCvA+Ia3/5tG+Q+tjjaglrnJD4y
-         TJag==
-X-Gm-Message-State: AOAM532OsCud0HBXXz+B/7lhMB43GSbvfEtpKbRR0UvtI+ntXLeFOkMS
-        ulicltMCN9WJFNuhGYl9o7ObFZPZ+P+7+/AaICg=
-X-Google-Smtp-Source: ABdhPJxqX58QBB/FJLa4jq5hUa9Gru6wPvY57zbPfPCDS76TiHrgDvbMWpCcLLa+fN7M0ssz08RmFGqaUq6S5QWTMNg=
-X-Received: by 2002:a17:906:7714:b0:6ba:8a6a:b464 with SMTP id
- q20-20020a170906771400b006ba8a6ab464mr2587437ejm.613.1649152529642; Tue, 05
- Apr 2022 02:55:29 -0700 (PDT)
+        Tue, 5 Apr 2022 06:12:15 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D06A53E2C;
+        Tue,  5 Apr 2022 02:58:35 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id BE1411F745;
+        Tue,  5 Apr 2022 09:58:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649152713; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9a/4aWMnWgkY65Ue+vqroxBzn1D+3uaU5AzDsaTyLNk=;
+        b=2Wea9AbDcGVfSFq0QG3rlJWkGO+m7CJ4DLAeyJSfPiKAbSa9IUttz9RwKzFsHbtpu7P086
+        PIwrqr+4xrLKni7Ee2uD8j4mfQqFgRuyq+fNoR0SCVO6Lz4tgH2+YvXgEDXeFs+7H8HbY4
+        oC4d/GeD4tyVud9VBdkNCNEYYIy7Tq4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649152713;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9a/4aWMnWgkY65Ue+vqroxBzn1D+3uaU5AzDsaTyLNk=;
+        b=KFhmiYSggNmD9D1VA7PMDbsQDcs7P8Xutg+p8/i9NhcXPmq3NfN4ykB1Ymc2mxyE0638a1
+        XEVmsUz7jSSQscDg==
+Received: from murzim.suse.de (murzim.suse.de [10.160.4.192])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id B7283A3B83;
+        Tue,  5 Apr 2022 09:58:33 +0000 (UTC)
+Date:   Tue, 5 Apr 2022 11:58:33 +0200 (CEST)
+From:   Richard Biener <rguenther@suse.de>
+To:     Borislav Petkov <bp@alien8.de>
+cc:     linux-toolchains@vger.kernel.org, Michael Matz <matz@suse.de>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: older gccs and case labels producing integer constants
+In-Reply-To: <YkwQ6+tIH8GQpuct@zn.tnic>
+Message-ID: <7o5nn52-nqn1-oo13-s6o9-59r85r91o768@fhfr.qr>
+References: <YkwQ6+tIH8GQpuct@zn.tnic>
 MIME-Version: 1.0
-References: <20211120193916.1309236-1-aford173@gmail.com> <319e976acb0a686e596b88520dbcda59c78afe9e.camel@pengutronix.de>
- <CAHCN7x+5HXJEdRKbm80trpNwxZRAMhX12+FQ0JeVvrqKpKf+BA@mail.gmail.com> <20220405064458.GA129381@dragon>
-In-Reply-To: <20220405064458.GA129381@dragon>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Tue, 5 Apr 2022 04:55:18 -0500
-Message-ID: <CAHCN7xKShNswT2JDZFZ9vSQ9_Kk1T+Ow3+=9as8sZ7mDQ6E1Vg@mail.gmail.com>
-Subject: Re: [PATCH] soc: imx: gpcv2: keep i.MX8MM VPU-H1 bus clock active
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="-1609908220-30019681-1649152713=:27745"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 1:45 AM Shawn Guo <shawnguo@kernel.org> wrote:
->
-> On Thu, Mar 31, 2022 at 06:32:13AM -0500, Adam Ford wrote:
-> > On Thu, Mar 31, 2022 at 4:28 AM Lucas Stach <l.stach@pengutronix.de> wrote:
-> > >
-> > > Hi Adam, hi Shawn,
-> > >
-> > > Am Samstag, dem 20.11.2021 um 13:39 -0600 schrieb Adam Ford:
-> > > > Enable the vpu-h1 clock when the domain is active because reading
-> > > > or writing to the VPU-H1 IP block cause the system to hang.
-> > > >
-> > > > Fixes: 656ade7aa42a ("soc: imx: gpcv2: keep i.MX8M* bus clocks enabled")
-> > > > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > > >
-> > > > diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
-> > > > index b8d52d8d29db..7b6dfa33dcb9 100644
-> > > > --- a/drivers/soc/imx/gpcv2.c
-> > > > +++ b/drivers/soc/imx/gpcv2.c
-> > > > @@ -734,6 +734,7 @@ static const struct imx_pgc_domain imx8mm_pgc_domains[] = {
-> > > >                       .map = IMX8MM_VPUH1_A53_DOMAIN,
-> > > >               },
-> > > >               .pgc   = BIT(IMX8MM_PGC_VPUH1),
-> > > > +             .keep_clocks = true,
-> > > >       },
-> > > >
-> > > I missed this patch and just stumbled across it when looking at the git
-> > > history. I don't think this patch is correct. The H1 GPC domain does
-> > > not even have clocks assigned in the DT, so there is nothing to keep
-> > > active. Also H1 is not a MIX domain, so it should not keep any bus
-> > > clocks active, that is the job of the VPUMIX domain.
-> > >
-> > > While this patch is a no-op, as far as I can see, it still seems wrong
-> > > and I think it should be reverted.
-> >
-> > At the time I sent this, I was working with some people in the media
-> > group to split the G1 and G2 up in the imx8mq and add G1 and G2
-> > support in the imx8mm.  I had inquired about the feasibility of using
-> > the H1 encoder on the imx8mm, but I needed to read some registers from
-> > the IP block to see which features were fused out.  I tried several
-> > different options to get the H1 to not hang when reading registers,
-> > and that was the only solution I found that worked.  I thought it odd
-> > as well since the G1 and G2 decoders didn't appear to need this.
-> > However, during the course of my investigation, I learned that the
-> > JPEG encoder was fused out of the imx8mm, and there wasn't a plan to
-> > add VP8 or H.264 encodering any time soon.   Since it is, as you put
-> > it, a no-op, I have no objections to reverting it.
->
-> I do not quite follow.  You claimed that the change fixes a system hang.
-> Are we getting the hang back if we revert the change?
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-It was hanging when I has trying to use the H1 VPU, and this did fix
-it, but it seemed weird to me.  Unfortunately, Hantro H1 driver that
-is currently in Linux only supports JPEG, and the H1 VPU in the imx8mm
-has JPEG fused out.  As of right now, there is no H1 VPU consumer, so
-there is nobody attempting to enable the H1 power domain, so it
-remains a no-op.  If it's reverted, we'll have to revisit the issue in
-the future to prevent the hanging, but that will also require a new
-Hantro driver.
+---1609908220-30019681-1649152713=:27745
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 
-adam
->
-> Shawn
+On Tue, 5 Apr 2022, Borislav Petkov wrote:
+
+> Hi folks,
+> 
+> I'm starting to see failures like this on allmodconfig builds:
+> 
+> sound/usb/midi.c: In function ‘snd_usbmidi_out_endpoint_create’:
+> sound/usb/midi.c:1389:2: error: case label does not reduce to an integer constant
+>   case (((0xfc08) << 16) | (0x0101)):
+>   ^~~~
+> 
+> (The case statement is a macro but it evaluates to what I have there)
+> 
+> and that thing fails with
+> 
+> $ gcc --version
+> gcc (SUSE Linux) 7.5.0
+> 
+> although it doesn't have any problems building with newer compilers.
+> 
+> I'm presuming older gccs consider those case statements signed ints and
+> the following fixes it:
+> 
+>   case ((((unsigned int)0xfc08) << 16) | (0x0101)):
+> 
+> and I guess we can whack the couple of occurrences but what I'm
+> wondering is why does this work with newer gccs?
+
+I tried
+
+void foo (int i)
+{
+  switch (i)
+    {
+      case (((0xfc08) << 16) | (0x0101)):;
+    }
+}
+
+also with 'unsigned int i' but that's accepted with GCC 7.  So
+what do you switch on?
+
+> Thx.
+> 
+> 
+
+-- 
+Richard Biener <rguenther@suse.de>
+SUSE Software Solutions Germany GmbH, Maxfeldstrasse 5, 90409 Nuernberg,
+Germany; GF: Ivo Totev; HRB 36809 (AG Nuernberg)
+---1609908220-30019681-1649152713=:27745--

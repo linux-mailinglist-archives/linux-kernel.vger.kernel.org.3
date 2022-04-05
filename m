@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FDA64F41D0
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0724F40F9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357248AbiDEMvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:51:06 -0400
+        id S1359674AbiDEMwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:52:16 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244455AbiDEJJ7 (ORCPT
+        with ESMTP id S244600AbiDEJKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:09:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00531255BA;
-        Tue,  5 Apr 2022 01:59:23 -0700 (PDT)
+        Tue, 5 Apr 2022 05:10:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0113425E85;
+        Tue,  5 Apr 2022 01:59:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AAC6614E4;
-        Tue,  5 Apr 2022 08:59:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 850DAC385B3;
-        Tue,  5 Apr 2022 08:59:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E84D8B81BAE;
+        Tue,  5 Apr 2022 08:59:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C13C385A1;
+        Tue,  5 Apr 2022 08:59:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149160;
-        bh=KkqvdNudypKbbtIijKOGeT0cNlIeNDr+yKjHsjcNilc=;
+        s=korg; t=1649149163;
+        bh=o7xH8q1QcBDjg+NQiSO+r0qpDbFOAcGSWY82F81nOho=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hc8ARRFLolOsNf2veBfQruC/r4k1z8oP9Rii9hzmBLNTEz5SyjJHwO1rrmVVvXgqb
-         6liwPf6iUHO/D4yrCuV3Vn6ZLKMJ/Pwccef9OSvyND1n7cWI3dapAfkHGf0ogQHA9V
-         ou9DOUEnrAL9ngJyOhojFsElj7Vx8sAnIZV5POow=
+        b=F8s+9XeK0DL+f+Ktuu8o6WvhyxLio8h5eHQRJNALe1hp4KK3CtWZnqOQg8MTHpMjY
+         bCYlJpt7wC6BSzrYd8PNLOdp9f7QBFnGsnk3bjmb7H2kfe5SJNeSaZhTjYECRbb30x
+         j+sIl0yjn/hG2QIoJIwBHNVTMpZQqo3r00kUTtfk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
+        stable@vger.kernel.org,
+        syzbot+b9bd12fbed3485a3e51f@syzkaller.appspotmail.com,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0616/1017] selftests/bpf: Fix error reporting from sock_fields programs
-Date:   Tue,  5 Apr 2022 09:25:29 +0200
-Message-Id: <20220405070412.567745590@linuxfoundation.org>
+Subject: [PATCH 5.16 0617/1017] Bluetooth: hci_uart: add missing NULL check in h5_enqueue
+Date:   Tue,  5 Apr 2022 09:25:30 +0200
+Message-Id: <20220405070412.597331467@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,44 +57,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Sitnicki <jakub@cloudflare.com>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-[ Upstream commit a4c9fe0ed4a13e25e43fcd44d9f89bc19ba8fbb7 ]
+[ Upstream commit 32cb08e958696908a9aad5e49a78d74f7e32fffb ]
 
-The helper macro that records an error in BPF programs that exercise sock
-fields access has been inadvertently broken by adaptation work that
-happened in commit b18c1f0aa477 ("bpf: selftest: Adapt sock_fields test to
-use skel and global variables").
+Syzbot hit general protection fault in __pm_runtime_resume(). The problem
+was in missing NULL check.
 
-BPF_NOEXIST flag cannot be used to update BPF_MAP_TYPE_ARRAY. The operation
-always fails with -EEXIST, which in turn means the error never gets
-recorded, and the checks for errors always pass.
+hu->serdev can be NULL and we should not blindly pass &serdev->dev
+somewhere, since it will cause GPF.
 
-Revert the change in update flags.
-
-Fixes: b18c1f0aa477 ("bpf: selftest: Adapt sock_fields test to use skel and global variables")
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
-Link: https://lore.kernel.org/bpf/20220317113920.1068535-2-jakub@cloudflare.com
+Reported-by: syzbot+b9bd12fbed3485a3e51f@syzkaller.appspotmail.com
+Fixes: d9dd833cf6d2 ("Bluetooth: hci_h5: Add runtime suspend")
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/test_sock_fields.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/bluetooth/hci_h5.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_sock_fields.c b/tools/testing/selftests/bpf/progs/test_sock_fields.c
-index 81b57b9aaaea..7967348b11af 100644
---- a/tools/testing/selftests/bpf/progs/test_sock_fields.c
-+++ b/tools/testing/selftests/bpf/progs/test_sock_fields.c
-@@ -113,7 +113,7 @@ static void tpcpy(struct bpf_tcp_sock *dst,
+diff --git a/drivers/bluetooth/hci_h5.c b/drivers/bluetooth/hci_h5.c
+index 34286ffe0568..7ac6908a4dfb 100644
+--- a/drivers/bluetooth/hci_h5.c
++++ b/drivers/bluetooth/hci_h5.c
+@@ -629,9 +629,11 @@ static int h5_enqueue(struct hci_uart *hu, struct sk_buff *skb)
+ 		break;
+ 	}
  
- #define RET_LOG() ({						\
- 	linum = __LINE__;					\
--	bpf_map_update_elem(&linum_map, &linum_idx, &linum, BPF_NOEXIST);	\
-+	bpf_map_update_elem(&linum_map, &linum_idx, &linum, BPF_ANY);	\
- 	return CG_OK;						\
- })
+-	pm_runtime_get_sync(&hu->serdev->dev);
+-	pm_runtime_mark_last_busy(&hu->serdev->dev);
+-	pm_runtime_put_autosuspend(&hu->serdev->dev);
++	if (hu->serdev) {
++		pm_runtime_get_sync(&hu->serdev->dev);
++		pm_runtime_mark_last_busy(&hu->serdev->dev);
++		pm_runtime_put_autosuspend(&hu->serdev->dev);
++	}
  
+ 	return 0;
+ }
 -- 
 2.34.1
 

@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E24264F345D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 903F24F335F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240997AbiDEJG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:06:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
+        id S243913AbiDEJkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239254AbiDEIT4 (ORCPT
+        with ESMTP id S239299AbiDEIT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:19:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CF37DE34;
-        Tue,  5 Apr 2022 01:10:41 -0700 (PDT)
+        Tue, 5 Apr 2022 04:19:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A3C81644;
+        Tue,  5 Apr 2022 01:10:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78A95B81B90;
-        Tue,  5 Apr 2022 08:10:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCE78C385A0;
-        Tue,  5 Apr 2022 08:10:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9F127B81B18;
+        Tue,  5 Apr 2022 08:10:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18C3EC385A0;
+        Tue,  5 Apr 2022 08:10:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146239;
-        bh=mNrzE2y4jaCJIXuG3CMdKKY1QnNmRPTne+P4BnMs2vQ=;
+        s=korg; t=1649146255;
+        bh=rYFP1BJ4Qw1ivdKhFqqmw2gOqzma9KK70jJAP0HaOdo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c8lW2pUaD/WY2bry+XgCTw6uCRQLO8BIOSLE4BCIL/Ty4XTS6RkWtc3CZzbm7xAX7
-         E25yp0+IcE/ik8FUUccrOVfRV9ZrDLcQfT6hyXaxucGeSRjxYDtuvEcWyU1Vysrduu
-         7an6LyRnaEttP9w+T2OY8M8SVVqbdjB6+razSzF8=
+        b=fbqLZaG4/FLady0jFeP4RvvokjNuaI1V8xKY78PX/J7RVApm8Cc0ortWn/GtDC52y
+         muCAVkxOL1qzEli3vB9nRKwIR/nIv86O0NFK+FoYSeQe+Zzf1yeWutFHWVfsB+2Jej
+         yED+MtFCdZFRR9peizCNtHGoJ/WtBYJpH/x0lDp0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peter Rosin <peda@axentia.se>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0692/1126] i2c: mux: demux-pinctrl: do not deactivate a master that is not active
-Date:   Tue,  5 Apr 2022 09:23:59 +0200
-Message-Id: <20220405070427.924835122@linuxfoundation.org>
+        stable@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0698/1126] bpftool: Fix print error when show bpf map
+Date:   Tue,  5 Apr 2022 09:24:05 +0200
+Message-Id: <20220405070428.096755911@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -54,50 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Rosin <peda@axentia.se>
+From: Yafang Shao <laoar.shao@gmail.com>
 
-[ Upstream commit 1a22aabf20adf89cb216f566913196128766f25b ]
+[ Upstream commit 1824d8ea75f275a5e69e5f6bc0ffe122ea9b938c ]
 
-Attempting to rollback the activation of the current master when
-the current master has not been activated is bad. priv->cur_chan
-and priv->cur_adap are both still zeroed out and the rollback
-may result in attempts to revert an of changeset that has not been
-applied and do result in calls to both del and put the zeroed out
-i2c_adapter. Maybe it crashes, or whatever, but it's bad in any
-case.
+If there is no btf_id or frozen, it will not show the pids, but the pids don't
+depend on any one of them.
 
-Fixes: e9d1a0a41d44 ("i2c: mux: demux-pinctrl: Fix an error handling path in 'i2c_demux_pinctrl_probe()'")
-Signed-off-by: Peter Rosin <peda@axentia.se>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Below is the result after this change:
+
+  $ ./bpftool map show
+  2: lpm_trie  flags 0x1
+	key 8B  value 8B  max_entries 1  memlock 4096B
+	pids systemd(1)
+  3: lpm_trie  flags 0x1
+	key 20B  value 8B  max_entries 1  memlock 4096B
+	pids systemd(1)
+
+While before this change, the 'pids systemd(1)' can't be displayed.
+
+Fixes: 9330986c0300 ("bpf: Add bloom filter map implementation")
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20220320060815.7716-1-laoar.shao@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/muxes/i2c-demux-pinctrl.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ tools/bpf/bpftool/map.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/i2c/muxes/i2c-demux-pinctrl.c b/drivers/i2c/muxes/i2c-demux-pinctrl.c
-index 5365199a31f4..f7a7405d4350 100644
---- a/drivers/i2c/muxes/i2c-demux-pinctrl.c
-+++ b/drivers/i2c/muxes/i2c-demux-pinctrl.c
-@@ -261,7 +261,7 @@ static int i2c_demux_pinctrl_probe(struct platform_device *pdev)
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index e746642de292..0bba33729c7f 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -620,17 +620,14 @@ static int show_map_close_plain(int fd, struct bpf_map_info *info)
+ 					    u32_as_hash_field(info->id))
+ 			printf("\n\tpinned %s", (char *)entry->value);
+ 	}
+-	printf("\n");
  
- 	err = device_create_file(&pdev->dev, &dev_attr_available_masters);
- 	if (err)
--		goto err_rollback;
-+		goto err_rollback_activation;
+ 	if (frozen_str) {
+ 		frozen = atoi(frozen_str);
+ 		free(frozen_str);
+ 	}
  
- 	err = device_create_file(&pdev->dev, &dev_attr_current_master);
- 	if (err)
-@@ -271,8 +271,9 @@ static int i2c_demux_pinctrl_probe(struct platform_device *pdev)
+-	if (!info->btf_id && !frozen)
+-		return 0;
+-
+-	printf("\t");
++	if (info->btf_id || frozen)
++		printf("\n\t");
  
- err_rollback_available:
- 	device_remove_file(&pdev->dev, &dev_attr_available_masters);
--err_rollback:
-+err_rollback_activation:
- 	i2c_demux_deactivate_master(priv);
-+err_rollback:
- 	for (j = 0; j < i; j++) {
- 		of_node_put(priv->chan[j].parent_np);
- 		of_changeset_destroy(&priv->chan[j].chgset);
+ 	if (info->btf_id)
+ 		printf("btf_id %d", info->btf_id);
 -- 
 2.34.1
 

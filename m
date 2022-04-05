@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6AC4F49F6
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:36:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A65D14F4E69
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1453633AbiDEWd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
+        id S232759AbiDFAT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358152AbiDEK2C (ORCPT
+        with ESMTP id S1358155AbiDEK2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 06:28:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9789A9D4F7;
-        Tue,  5 Apr 2022 03:16:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5947C9D4F8;
+        Tue,  5 Apr 2022 03:16:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B93A61777;
-        Tue,  5 Apr 2022 10:16:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36A6AC385A0;
-        Tue,  5 Apr 2022 10:15:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA8916179E;
+        Tue,  5 Apr 2022 10:16:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03618C385A0;
+        Tue,  5 Apr 2022 10:16:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153759;
-        bh=TkRjkbHf35GwvaY8YoQCXT3xu4BK4ElnagkTLzoI8O8=;
+        s=korg; t=1649153762;
+        bh=M++LqbkOcaNMdYU7FwBHBjnWXZ7kMQuwGOw1w2rIsQU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ldvo7AUv1ER97pdJt3liNMClUqE+3qdzDbvZYVEFC7eEwR80wCPztysd+/fjpyAtE
-         579mRRjGC5KRrQjd7PsUlzsLmohT4yFk+GiX/KNPqmXxAp+vLrJDJjDcLYudjZIWUn
-         AkoWq6RKme/UOG7UZUF7KFVqZeRl//ncGU4vw0kc=
+        b=L+qsJBdLg6oVvm9TpQrxhG097nhBR+GdT9ivUXU22wa9ULVfHzILdpFmsSGiX01S7
+         fFsFbANMtdozmXqNp0AcYxUc/17D9UbKQ7vIOb+TzQPJQGiQ/t1syMwwXU9lEKUgV7
+         /Zg7zTmIl6vImoTgOuV73QCZDU3ZuyptJeilsYkQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        stable@vger.kernel.org,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 338/599] power: supply: wm8350-power: Add missing free in free_charger_irq
-Date:   Tue,  5 Apr 2022 09:30:32 +0200
-Message-Id: <20220405070308.890690877@linuxfoundation.org>
+Subject: [PATCH 5.10 339/599] IB/hfi1: Allow larger MTU without AIP
+Date:   Tue,  5 Apr 2022 09:30:33 +0200
+Message-Id: <20220405070308.921133002@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -56,34 +57,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
 
-[ Upstream commit 6dee930f6f6776d1e5a7edf542c6863b47d9f078 ]
+[ Upstream commit b135e324d7a2e7fa0a7ef925076136e799b79f44 ]
 
-In free_charger_irq(), there is no free for 'WM8350_IRQ_CHG_FAST_RDY'.
-Therefore, it should be better to add it in order to avoid the memory leak.
+The AIP code signals the phys_mtu in the following query_port()
+fragment:
 
-Fixes: 14431aa0c5a4 ("power_supply: Add support for WM8350 PMU")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+	props->phys_mtu = HFI1_CAP_IS_KSET(AIP) ? hfi1_max_mtu :
+				ib_mtu_enum_to_int(props->max_mtu);
+
+Using the largest MTU possible should not depend on AIP.
+
+Fix by unconditionally using the hfi1_max_mtu value.
+
+Fixes: 6d72344cf6c4 ("IB/ipoib: Increase ipoib Datagram mode MTU's upper limit")
+Link: https://lore.kernel.org/r/1644348309-174874-1-git-send-email-mike.marciniszyn@cornelisnetworks.com
+Reviewed-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+Signed-off-by: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/wm8350_power.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/infiniband/hw/hfi1/verbs.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/power/supply/wm8350_power.c b/drivers/power/supply/wm8350_power.c
-index 9c46c48dccb1..908cfd45d262 100644
---- a/drivers/power/supply/wm8350_power.c
-+++ b/drivers/power/supply/wm8350_power.c
-@@ -524,6 +524,7 @@ static void free_charger_irq(struct wm8350 *wm8350)
- 	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_TO, wm8350);
- 	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_END, wm8350);
- 	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_START, wm8350);
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_FAST_RDY, wm8350);
- 	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P9, wm8350);
- 	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P1, wm8350);
- 	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_2P85, wm8350);
+diff --git a/drivers/infiniband/hw/hfi1/verbs.c b/drivers/infiniband/hw/hfi1/verbs.c
+index 3591923abebb..5f3edd255ca3 100644
+--- a/drivers/infiniband/hw/hfi1/verbs.c
++++ b/drivers/infiniband/hw/hfi1/verbs.c
+@@ -1439,8 +1439,7 @@ static int query_port(struct rvt_dev_info *rdi, u8 port_num,
+ 				      4096 : hfi1_max_mtu), IB_MTU_4096);
+ 	props->active_mtu = !valid_ib_mtu(ppd->ibmtu) ? props->max_mtu :
+ 		mtu_to_enum(ppd->ibmtu, IB_MTU_4096);
+-	props->phys_mtu = HFI1_CAP_IS_KSET(AIP) ? hfi1_max_mtu :
+-				ib_mtu_enum_to_int(props->max_mtu);
++	props->phys_mtu = hfi1_max_mtu;
+ 
+ 	return 0;
+ }
 -- 
 2.34.1
 

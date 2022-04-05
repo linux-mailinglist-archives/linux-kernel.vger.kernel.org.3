@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B41814F4408
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3313A4F467A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:13:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387589AbiDENPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
+        id S243724AbiDEUdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344271AbiDEJTD (ORCPT
+        with ESMTP id S1349478AbiDEJtz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:19:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4566622B14;
-        Tue,  5 Apr 2022 02:06:46 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3DB0B67;
+        Tue,  5 Apr 2022 02:47:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D74F361571;
-        Tue,  5 Apr 2022 09:06:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDDDCC385A1;
-        Tue,  5 Apr 2022 09:06:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0D8EB818F3;
+        Tue,  5 Apr 2022 09:47:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 208F1C385A2;
+        Tue,  5 Apr 2022 09:47:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149605;
-        bh=A/hAMMRh3XJNdD9x1AAtbacK618VtXEYBp3Ix1ZXMfo=;
+        s=korg; t=1649152024;
+        bh=MwpI0A3swHzrHWq8nSzg3WNEjrJHPUTBAbo9N7PY73M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AAKXUvTO3Jf/UhSqvcjtd6jXVq11fhbxo6Cb89WdKQlifS+B68zNzvZKZSdKczTXX
-         pL3n+AUzTXfuvNc/bxdpacX9kcgnjiCKD/8fcugzfXTJfPztM/azJ79HOz8Wuzc9lH
-         x5dBRzMUX8b8KqpeyO8XMhZYBnfRcQ9gIZVG2QQE=
+        b=den/OtFFWaOo+pCn56yGY/f1HMDnlcSyoUlADv2Bd0rrtiJ50NRVh/2D5V4/dkgE+
+         ndRoMduGCB6Pa45xWOt8OZUp2YiitCO0u7SmafUdqHhXvBfA81cZ2TkniN3gT7lnk1
+         J3ce5d0Gzp8kZiOXelT3Ti/Sb4naYDhT2hXeJZig=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Matt Brown <matthew.brown.dev@gmail.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Song Liu <song@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0775/1017] lib/raid6/test/Makefile: Use $(pound) instead of \# for Make 4.3
-Date:   Tue,  5 Apr 2022 09:28:08 +0200
-Message-Id: <20220405070417.263405796@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 628/913] staging: mt7621-dts: fix formatting
+Date:   Tue,  5 Apr 2022 09:28:10 +0200
+Message-Id: <20220405070358.663025839@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,80 +56,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Menzel <pmenzel@molgen.mpg.de>
+From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-[ Upstream commit 633174a7046ec3b4572bec24ef98e6ee89bce14b ]
+[ Upstream commit 7eeec44d33f6be7caca4fe9ca4e653cf315a36c1 ]
 
-Buidling raid6test on Ubuntu 21.10 (ppc64le) with GNU Make 4.3 shows the
-errors below:
+Fix formatting on mt7621.dtsi.
 
-    $ cd lib/raid6/test/
-    $ make
-    <stdin>:1:1: error: stray ‘\’ in program
-    <stdin>:1:2: error: stray ‘#’ in program
-    <stdin>:1:11: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ \
-        before ‘<’ token
-
-    [...]
-
-The errors come from the HAS_ALTIVEC test, which fails, and the POWER
-optimized versions are not built. That’s also reason nobody noticed on the
-other architectures.
-
-GNU Make 4.3 does not remove the backslash anymore. From the 4.3 release
-announcment:
-
-> * WARNING: Backward-incompatibility!
->   Number signs (#) appearing inside a macro reference or function invocation
->   no longer introduce comments and should not be escaped with backslashes:
->   thus a call such as:
->     foo := $(shell echo '#')
->   is legal.  Previously the number sign needed to be escaped, for example:
->     foo := $(shell echo '\#')
->   Now this latter will resolve to "\#".  If you want to write makefiles
->   portable to both versions, assign the number sign to a variable:
->     H := \#
->     foo := $(shell echo '$H')
->   This was claimed to be fixed in 3.81, but wasn't, for some reason.
->   To detect this change search for 'nocomment' in the .FEATURES variable.
-
-So, do the same as commit 9564a8cf422d ("Kbuild: fix # escaping in .cmd
-files for future Make") and commit 929bef467771 ("bpf: Use $(pound) instead
-of \# in Makefiles") and define and use a $(pound) variable.
-
-Reference for the change in make:
-https://git.savannah.gnu.org/cgit/make.git/commit/?id=c6966b323811c37acedff05b57
-
-Cc: Matt Brown <matthew.brown.dev@gmail.com>
-Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Signed-off-by: Song Liu <song@kernel.org>
+Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Link: https://lore.kernel.org/r/20220125153903.1469-2-arinc.unal@arinc9.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/raid6/test/Makefile | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/staging/mt7621-dts/mt7621.dtsi | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/lib/raid6/test/Makefile b/lib/raid6/test/Makefile
-index a4c7cd74cff5..4fb7700a741b 100644
---- a/lib/raid6/test/Makefile
-+++ b/lib/raid6/test/Makefile
-@@ -4,6 +4,8 @@
- # from userspace.
- #
+diff --git a/drivers/staging/mt7621-dts/mt7621.dtsi b/drivers/staging/mt7621-dts/mt7621.dtsi
+index eeabe9c0f4fb..eca384cdec39 100644
+--- a/drivers/staging/mt7621-dts/mt7621.dtsi
++++ b/drivers/staging/mt7621-dts/mt7621.dtsi
+@@ -36,9 +36,9 @@
+ 		regulator-max-microvolt = <3300000>;
+ 		enable-active-high;
+ 		regulator-always-on;
+-	  };
++	};
  
-+pound := \#
+-	  mmc_fixed_1v8_io: fixedregulator@1 {
++	mmc_fixed_1v8_io: fixedregulator@1 {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "mmc_io";
+ 		regulator-min-microvolt = <1800000>;
+@@ -391,17 +391,18 @@
+ 
+ 		mediatek,ethsys = <&sysc>;
+ 
+-
+ 		gmac0: mac@0 {
+ 			compatible = "mediatek,eth-mac";
+ 			reg = <0>;
+ 			phy-mode = "rgmii";
 +
- CC	 = gcc
- OPTFLAGS = -O2			# Adjust as desired
- CFLAGS	 = -I.. -I ../../../include -g $(OPTFLAGS)
-@@ -42,7 +44,7 @@ else ifeq ($(HAS_NEON),yes)
-         OBJS   += neon.o neon1.o neon2.o neon4.o neon8.o recov_neon.o recov_neon_inner.o
-         CFLAGS += -DCONFIG_KERNEL_MODE_NEON=1
- else
--        HAS_ALTIVEC := $(shell printf '\#include <altivec.h>\nvector int a;\n' |\
-+        HAS_ALTIVEC := $(shell printf '$(pound)include <altivec.h>\nvector int a;\n' |\
-                          gcc -c -x c - >/dev/null && rm ./-.o && echo yes)
-         ifeq ($(HAS_ALTIVEC),yes)
-                 CFLAGS += -I../../../arch/powerpc/include
+ 			fixed-link {
+ 				speed = <1000>;
+ 				full-duplex;
+ 				pause;
+ 			};
+ 		};
++
+ 		gmac1: mac@1 {
+ 			compatible = "mediatek,eth-mac";
+ 			reg = <1>;
+@@ -409,6 +410,7 @@
+ 			phy-mode = "rgmii-rxid";
+ 			phy-handle = <&phy_external>;
+ 		};
++
+ 		mdio-bus {
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+@@ -439,36 +441,43 @@
+ 					#address-cells = <1>;
+ 					#size-cells = <0>;
+ 					reg = <0>;
++
+ 					port@0 {
+ 						status = "off";
+ 						reg = <0>;
+ 						label = "lan0";
+ 					};
++
+ 					port@1 {
+ 						status = "off";
+ 						reg = <1>;
+ 						label = "lan1";
+ 					};
++
+ 					port@2 {
+ 						status = "off";
+ 						reg = <2>;
+ 						label = "lan2";
+ 					};
++
+ 					port@3 {
+ 						status = "off";
+ 						reg = <3>;
+ 						label = "lan3";
+ 					};
++
+ 					port@4 {
+ 						status = "off";
+ 						reg = <4>;
+ 						label = "lan4";
+ 					};
++
+ 					port@6 {
+ 						reg = <6>;
+ 						label = "cpu";
+ 						ethernet = <&gmac0>;
+ 						phy-mode = "trgmii";
++
+ 						fixed-link {
+ 							speed = <1000>;
+ 							full-duplex;
 -- 
 2.34.1
 

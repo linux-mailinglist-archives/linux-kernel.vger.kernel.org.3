@@ -2,87 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128AB4F48AE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF2E4F4DDA
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383934AbiDEVqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
+        id S1583545AbiDEXxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457744AbiDEQiy (ORCPT
+        with ESMTP id S1457758AbiDEQlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:38:54 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C295D4C84
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:36:56 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649176614;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IPEm072E8FKkKXf7xYeG5Rr06A0qV3ZtKJkAJTFl2us=;
-        b=3XBImYBOM467XP0kbv6mEhGJH9yCiVcCoJfXXYMexLgp+09PEf3G5eRgfXEjGizbfY32li
-        q6Aloaa5xst6kaWm5GtIRE09YN/xUipA1gYkJX2Tcv7SfSMwp7jeb/DD3QG5ufx4uJXVW4
-        dNI31rW0IipHqyvR9vNIWyCVYK7zn8BdYHwZ9cfH11WncF4vBt471/ztTReir7T14SMBkz
-        Wa2d8uX2PERiZFubN+rP7NuDNQOnaeUboGpzC59ZmLWnzUPsFmNayQC1run6FRSg0xInN+
-        ++XFDB4T3SZ7bpCgBG8bt7NQixPE6hv1PWoDEgNe/BIBXICNhjN2uKQx/pwIpg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649176614;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IPEm072E8FKkKXf7xYeG5Rr06A0qV3ZtKJkAJTFl2us=;
-        b=VA4Z9W9LDNsjaTBzCefRUHmN/VkusECn5JukLM4m3q1lGIhpV/RudqrrPe9DEdIb54jgPm
-        Zm1RDhYOsNdYt2Aw==
-To:     Alexey Dobriyan <adobriyan@gmail.com>, x86@kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, linux-kernel@vger.kernel.org, adobriyan@gmail.com
-Subject: Re: [PATCH 1/5] x86/alternative: simplify DUMP_BYTES macro
-In-Reply-To: <20220311144312.88466-1-adobriyan@gmail.com>
-References: <20220311144312.88466-1-adobriyan@gmail.com>
-Date:   Tue, 05 Apr 2022 18:36:53 +0200
-Message-ID: <87v8vn1o7u.ffs@tglx>
+        Tue, 5 Apr 2022 12:41:11 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F221E43AD6;
+        Tue,  5 Apr 2022 09:39:12 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id u14so15895pjj.0;
+        Tue, 05 Apr 2022 09:39:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h0Ezkowr2vA+TSkiAQHrFqf3CTenq1qGRwHjwra0sLA=;
+        b=N4YLCezFpaFlp26K2sW2ESPajZSoXYWOnj+h1n8qRp3nR6g6MBUfk1pfub5qP8x+lK
+         rd2p9fxCOawPf2OKJjyz1ET2rwsJmp6GkRVkU6VUmrw6DjqTTNZH4BK3IY/Xs67uAAS/
+         Gx6QlAomXXDTJFKvsk53YrF6klSeprkImsmgPaiXY0iH6tBgVgoK17p9g/2XR7hG2wdm
+         5zr5q91q4xpKpSid2G5/RCt2mKwS0C9LbpovyzkPC7omWhzHMFEyk2cgy1jBj05JPMor
+         yb8AGuP29MFNS5ZE9nTuPfRd+wzl/VXQvszFIfAN4tFXA3sIwqfgASaGq77CGR6tzV+D
+         10gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=h0Ezkowr2vA+TSkiAQHrFqf3CTenq1qGRwHjwra0sLA=;
+        b=lHb+ZHljAjuOCyKniELAiAm+cPIK8v0bVne4XzyBZQxjtSinoesnOi/tut9KtiYBXW
+         DDQINbhYMgZED2rQ5VJrY7wTiDy7l5WTbrsK6ZrODFgK9q4QqWH431qxPL0sGPJrdBP4
+         wlRZFUP3T+KLT+wihA2wETuH4NG0NnBLfsTxTb30ddFckxp1v1ZI2ev5Ty/fBpEC7iEM
+         RBSvKykhlR4nKCuRL/ZSQaEh6prPrfKN9pfi/Z8k6iQpjp7fRRixxF0vpP4GUt4iVczl
+         NqYuHWHHsII5sdHjfL1SxkGPQ9DarEj37rppqSwq10SyG42vMc6a7NxaLqmU+7NJgibq
+         lq9A==
+X-Gm-Message-State: AOAM530R37wQ54MjJxNyyb54Zu/StMOveLmSZE/dwI9rbR8Rns29vDTs
+        qaTBCGFVMlHThEHzU+CoIdc=
+X-Google-Smtp-Source: ABdhPJxnTEGJd3Tj4Dvmdh+v7GzN2T87vgpt31Bse4ScpzbbZRyF/5EVLbAhrn40PriKpj4xSVy/4g==
+X-Received: by 2002:a17:902:728f:b0:156:24d3:ae1a with SMTP id d15-20020a170902728f00b0015624d3ae1amr4336617pll.9.1649176752483;
+        Tue, 05 Apr 2022 09:39:12 -0700 (PDT)
+Received: from localhost.localdomain ([223.212.58.71])
+        by smtp.gmail.com with ESMTPSA id s3-20020a056a00194300b004f6664d26eesm17079538pfk.88.2022.04.05.09.39.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 09:39:11 -0700 (PDT)
+From:   Yuntao Wang <ytcoode@gmail.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Yuntao Wang <ytcoode@gmail.com>
+Subject: [PATCH bpf-next] selftests/bpf: Remove redundant checks in get_stack_print_output()
+Date:   Wed,  6 Apr 2022 00:37:28 +0800
+Message-Id: <20220405163728.56471-1-ytcoode@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11 2022 at 17:43, Alexey Dobriyan wrote:
-> Avoid zero length check with clever whitespace placement in the format
-> string.
->
-> Signed-off-by: Alexey Dobriyan (CloudLinux) <adobriyan@gmail.com>
-> ---
->  arch/x86/kernel/alternative.c | 21 +++++++++------------
->  1 file changed, 9 insertions(+), 12 deletions(-)
->
-> diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-> index 5007c3ffe96f..6c9758ee6810 100644
-> --- a/arch/x86/kernel/alternative.c
-> +++ b/arch/x86/kernel/alternative.c
-> @@ -66,13 +66,10 @@ do {									\
->  	if (unlikely(debug_alternative)) {				\
->  		int j;							\
->  									\
-> -		if (!(len))						\
-> -			break;						\
-> -									\
+The checks preceding CHECK macro are redundant, remove them.
 
-How does that clever whitespace placement prevent this being printed in
-the len == 0 case, which is a legit case?
+Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+---
+ tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
->  		printk(KERN_DEBUG pr_fmt(fmt), ##args);			\
+diff --git a/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c b/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
+index 16048978a1ef..5f2ab720dabd 100644
+--- a/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
++++ b/tools/testing/selftests/bpf/prog_tests/get_stack_raw_tp.c
+@@ -76,10 +76,8 @@ static void get_stack_print_output(void *ctx, int cpu, void *data, __u32 size)
+ 			good_user_stack = true;
+ 	}
+ 
+-	if (!good_kern_stack)
+-	    CHECK(!good_kern_stack, "kern_stack", "corrupted kernel stack\n");
+-	if (!good_user_stack)
+-	    CHECK(!good_user_stack, "user_stack", "corrupted user stack\n");
++	CHECK(!good_kern_stack, "kern_stack", "corrupted kernel stack\n");
++	CHECK(!good_user_stack, "user_stack", "corrupted user stack\n");
+ }
+ 
+ void test_get_stack_raw_tp(void)
+-- 
+2.35.1
 
-This is debug muck. So why does it have to be "optimized"?
-
-Thanks,
-
-        tglx

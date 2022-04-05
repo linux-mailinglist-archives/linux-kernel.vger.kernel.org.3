@@ -2,283 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2544F45F9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABF04F45A3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353447AbiDEUXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
+        id S1377946AbiDEU1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1453037AbiDEPzy (ORCPT
+        with ESMTP id S1454613AbiDEP6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:55:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D48D4137B24
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 07:59:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649170743;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=m2sfKB74gTolYuaOLfzO0CaB/byjGpQyOkAPbwbPHJY=;
-        b=MkDOyllG16SfP+JMgX/qQZIjvZEAQkhaCIYH+UNacySdrEMA0Ny/LtkmJo6m8X2dsueIpS
-        Jrsp8xdVqUNFWUTogm/OUqGuubq/gvKtY3bE7NjARsL/eiH3xiQJZdHxCDjUd9ZxGva4EN
-        RCU20tWWLlk+6gmBemGWvGLdW57Pq7M=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-453-IXsRU-a-Oe6oYKphwg06mQ-1; Tue, 05 Apr 2022 10:58:59 -0400
-X-MC-Unique: IXsRU-a-Oe6oYKphwg06mQ-1
-Received: by mail-qt1-f199.google.com with SMTP id b10-20020ac801ca000000b002e1cfb25db9so9179273qtg.1
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 07:58:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=m2sfKB74gTolYuaOLfzO0CaB/byjGpQyOkAPbwbPHJY=;
-        b=gZ56U5k0lcOdY3cVNHbpbZduml6oLQcoCm/adcvnb+ZUuubxeosFYBpFT8JLCwHUqG
-         1+yukutFUtVIsshRTMW7jFqYrhgfSNiuun0PBemq6NLN2TkMjUeQSiaDz9IG0Dbuz2nV
-         t67PQ5lT1zEmtGQtEDeDCnncTpV870iSXm7iZWiJ3uuEccF4IrU968vdX3UDAAkgHiwg
-         zJQGOyL3q57ar/Djm74A2667eJkcdH0Gx+2POOABzRUjfAwQ1pPsJ/gBOFy5+IBWqQjm
-         dwljn38bvA/ZhU05Qv8/QDwi7oRCszhOCeJWn/9xqxWZ+UyfJLq/hWz1KSketFDewyI0
-         wn7g==
-X-Gm-Message-State: AOAM532K51NQe8g4yTxHjQtMJrUIrGvGTkSYQQqnIF/we6InkqNzSiqH
-        h8+wpnihsNqwu0FXVtPH98rEsDPj9v52m3Xtspq6g9w/oIc3IR2AgeFuJT6RtDJ3LWx8g0GJuQi
-        bZFzX4QP+1S0qY8ztJj+EMcWy
-X-Received: by 2002:a05:620a:210f:b0:67b:119d:f32d with SMTP id l15-20020a05620a210f00b0067b119df32dmr2596727qkl.316.1649170739274;
-        Tue, 05 Apr 2022 07:58:59 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyxrv+hAz704UHG1GvBC1bddnp2MT4csXtUyD6rb0x6BFrLO5qGXa/QxqcDJp3NxZ4dggSgJw==
-X-Received: by 2002:a05:620a:210f:b0:67b:119d:f32d with SMTP id l15-20020a05620a210f00b0067b119df32dmr2596698qkl.316.1649170738832;
-        Tue, 05 Apr 2022 07:58:58 -0700 (PDT)
-Received: from [10.32.181.87] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
-        by smtp.googlemail.com with ESMTPSA id c27-20020a05620a165b00b0067d32238bc8sm8030769qko.125.2022.04.05.07.58.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 07:58:58 -0700 (PDT)
-Message-ID: <fbd5271c-5d6d-ded6-63dc-6ee3a7ccd305@redhat.com>
-Date:   Tue, 5 Apr 2022 16:58:56 +0200
+        Tue, 5 Apr 2022 11:58:44 -0400
+Received: from mail-4317.proton.ch (mail-4317.proton.ch [185.70.43.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8EE3FBE3
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:05:27 -0700 (PDT)
+Date:   Tue, 05 Apr 2022 15:05:17 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
+        s=protonmail2; t=1649171125;
+        bh=t+hIRZtv/5J72gOq5YhoXVrS/FiYqIfmQiB83JSrhzM=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=ru1fLrLFoyieVqTtaX1uC01gDuQjSCnK7Ljdh8R2cG0as4M3vxMFjpQAwOaqHjrW7
+         kFnCqk1G2nuLsNvZVQqJWP2RyBmiolkuND1Q4BSdDlmtCO3xFSwT60C0Xe8QeBOzwL
+         6B78G9ucKB8GMYB9ezsonO3HFyGQF2YUzl7skwJceOlQcYOGX5zuhoQmrgnKL1XFU+
+         DeVBOmCBbpFFauC34ukoOlILVXl8mt3fZ4n2PJur0FFm67z1Igl4YFGbHFzm9D4MK8
+         iIEJLG5sYsqQttjfEwpRcqquHdxyEXwnsdY34nDXP3WeLho1BxlAQP7NfIyKEXoBOh
+         kft73uhSV1RIg==
+To:     Randy Dunlap <rdunlap@infradead.org>
+From:   Simon Ser <contact@emersion.fr>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org
+Reply-To: Simon Ser <contact@emersion.fr>
+Subject: Re: [PATCH] drm/format_helper: fix a kernel-doc typo
+Message-ID: <qjTlHAInyuxpFWsTWPGXoVeByVdVe-NF-kg-FUeLWQbKy9SovMzCcK-eDsijpDt1roaSubDr-8kBGKQSt_7CXFa4-BxQ6SrGSNeoZrdiq-s=@emersion.fr>
+In-Reply-To: <c544d79e-90ec-7bbe-77ad-de96a700d711@infradead.org>
+References: <20220403232902.1753-1-rdunlap@infradead.org> <ttcrpLw9HkdhAH5SkXylXDBi9SBf7LWgOeW09ZvTF4U4_zKJAOXBQZlFxfw6NKY0Hip6dXBFape6zkX09cstuOno72c-c00wmZ_VbNDg6xs=@emersion.fr> <b20bbd22-895c-9e74-e579-d2f3561a2fe1@infradead.org> <BzpH4s8ZYn84kTlJQ3BHVMQzZlESb2Fk6v-uO5KBaaeBNMvRvC98lpuBLUNLE3a5bdoYTb5JRvo6EU__5AGJ79LUirSppO39I1t1xlwx-fI=@emersion.fr> <fda186f7-2cf4-a69a-d68e-58073d35cbea@redhat.com> <c544d79e-90ec-7bbe-77ad-de96a700d711@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v5 047/104] KVM: x86/mmu: add a private pointer to
- struct kvm_mmu_page
-Content-Language: en-US
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <499d1fd01b0d1d9a8b46a55bb863afd0c76f1111.1646422845.git.isaku.yamahata@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <499d1fd01b0d1d9a8b46a55bb863afd0c76f1111.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
-> 
-> Add a private pointer to kvm_mmu_page for private EPT.
-> 
-> To resolve KVM page fault on private GPA, it will allocate additional page
-> for Secure EPT in addition to private EPT.  Add memory allocator for it and
-> topup its memory allocator before resolving KVM page fault similar to
-> shared EPT page.  Allocation of those memory will be done for TDP MMU by
-> alloc_tdp_mmu_page().  Freeing those memory will be done for TDP MMU on
-> behalf of kvm_tdp_mmu_zap_all() called by kvm_mmu_zap_all().  Private EPT
-> page needs to carry one more page used for Secure EPT in addition to the
-> private EPT page.  Add private pointer to struct kvm_mmu_page for that
-> purpose and Add helper functions to allocate/free a page for Secure EPT.
-> Also add helper functions to check if a given kvm_mmu_page is private.
-> 
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->   arch/x86/include/asm/kvm_host.h |  1 +
->   arch/x86/kvm/mmu/mmu.c          |  9 ++++
->   arch/x86/kvm/mmu/mmu_internal.h | 84 +++++++++++++++++++++++++++++++++
->   arch/x86/kvm/mmu/tdp_mmu.c      |  3 ++
->   4 files changed, 97 insertions(+)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index fcab2337819c..0c8cc7d73371 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -689,6 +689,7 @@ struct kvm_vcpu_arch {
->   	struct kvm_mmu_memory_cache mmu_shadow_page_cache;
->   	struct kvm_mmu_memory_cache mmu_gfn_array_cache;
->   	struct kvm_mmu_memory_cache mmu_page_header_cache;
-> +	struct kvm_mmu_memory_cache mmu_private_sp_cache;
->   
->   	/*
->   	 * QEMU userspace and the guest each have their own FPU state.
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 6e9847b1124b..8def8b97978f 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -758,6 +758,13 @@ static int mmu_topup_shadow_page_cache(struct kvm_vcpu *vcpu)
->   	struct kvm_mmu_memory_cache *mc = &vcpu->arch.mmu_shadow_page_cache;
->   	int start, end, i, r;
->   
-> +	if (kvm_gfn_stolen_mask(vcpu->kvm)) {
-> +		r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_private_sp_cache,
-> +					       PT64_ROOT_MAX_LEVEL);
-> +		if (r)
-> +			return r;
-> +	}
-> +
->   	if (shadow_init_value)
->   		start = kvm_mmu_memory_cache_nr_free_objects(mc);
->   
-> @@ -799,6 +806,7 @@ static void mmu_free_memory_caches(struct kvm_vcpu *vcpu)
->   {
->   	kvm_mmu_free_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache);
->   	kvm_mmu_free_memory_cache(&vcpu->arch.mmu_shadow_page_cache);
-> +	kvm_mmu_free_memory_cache(&vcpu->arch.mmu_private_sp_cache);
->   	kvm_mmu_free_memory_cache(&vcpu->arch.mmu_gfn_array_cache);
->   	kvm_mmu_free_memory_cache(&vcpu->arch.mmu_page_header_cache);
->   }
-> @@ -1791,6 +1799,7 @@ static struct kvm_mmu_page *kvm_mmu_alloc_page(struct kvm_vcpu *vcpu, int direct
->   	if (!direct)
->   		sp->gfns = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_gfn_array_cache);
->   	set_page_private(virt_to_page(sp->spt), (unsigned long)sp);
-> +	kvm_mmu_init_private_sp(sp);
->   
->   	/*
->   	 * active_mmu_pages must be a FIFO list, as kvm_zap_obsolete_pages()
-> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> index da6166b5c377..80f7a74a71dc 100644
-> --- a/arch/x86/kvm/mmu/mmu_internal.h
-> +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> @@ -53,6 +53,10 @@ struct kvm_mmu_page {
->   	u64 *spt;
->   	/* hold the gfn of each spte inside spt */
->   	gfn_t *gfns;
-> +#ifdef CONFIG_KVM_MMU_PRIVATE
-> +	/* associated private shadow page, e.g. SEPT page */
-> +	void *private_sp;
-> +#endif
->   	/* Currently serving as active root */
->   	union {
->   		int root_count;
-> @@ -104,6 +108,86 @@ static inline int kvm_mmu_page_as_id(struct kvm_mmu_page *sp)
->   	return kvm_mmu_role_as_id(sp->role);
->   }
->   
-> +/*
-> + * TDX vcpu allocates page for root Secure EPT page and assigns to CPU secure
-> + * EPT pointer.  KVM doesn't need to allocate and link to the secure EPT.
-> + * Dummy value to make is_pivate_sp() return true.
-> + */
-> +#define KVM_MMU_PRIVATE_SP_ROOT	((void *)1)
-> +
-> +#ifdef CONFIG_KVM_MMU_PRIVATE
-> +static inline bool is_private_sp(struct kvm_mmu_page *sp)
-> +{
-> +	return !!sp->private_sp;
-> +}
-> +
-> +static inline bool is_private_spte(u64 *sptep)
-> +{
-> +	return is_private_sp(sptep_to_sp(sptep));
-> +}
-> +
-> +static inline void *kvm_mmu_private_sp(struct kvm_mmu_page *sp)
-> +{
-> +	return sp->private_sp;
-> +}
-> +
-> +static inline void kvm_mmu_init_private_sp(struct kvm_mmu_page *sp)
-> +{
-> +	sp->private_sp = NULL;
-> +}
-> +
-> +/* Valid sp->role.level is required. */
-> +static inline void kvm_mmu_alloc_private_sp(struct kvm_vcpu *vcpu,
-> +					struct kvm_mmu_page *sp)
-> +{
-> +	if (vcpu->arch.mmu->shadow_root_level == sp->role.level)
-> +		sp->private_sp = KVM_MMU_PRIVATE_SP_ROOT;
-> +	else
-> +		sp->private_sp =
-> +			kvm_mmu_memory_cache_alloc(
-> +				&vcpu->arch.mmu_private_sp_cache);
-> +	/*
-> +	 * Because mmu_private_sp_cache is topped up before staring kvm page
-> +	 * fault resolving, the allocation above shouldn't fail.
-> +	 */
-> +	WARN_ON_ONCE(!sp->private_sp);
-> +}
-> +
-> +static inline void kvm_mmu_free_private_sp(struct kvm_mmu_page *sp)
-> +{
-> +	if (sp->private_sp != KVM_MMU_PRIVATE_SP_ROOT)
-> +		free_page((unsigned long)sp->private_sp);
-> +}
-> +#else
-> +static inline bool is_private_sp(struct kvm_mmu_page *sp)
-> +{
-> +	return false;
-> +}
-> +
-> +static inline bool is_private_spte(u64 *sptep)
-> +{
-> +	return false;
-> +}
-> +
-> +static inline void *kvm_mmu_private_sp(struct kvm_mmu_page *sp)
-> +{
-> +	return NULL;
-> +}
-> +
-> +static inline void kvm_mmu_init_private_sp(struct kvm_mmu_page *sp)
-> +{
-> +}
-> +
-> +static inline void kvm_mmu_alloc_private_sp(struct kvm_vcpu *vcpu,
-> +					struct kvm_mmu_page *sp)
-> +{
-> +}
-> +
-> +static inline void kvm_mmu_free_private_sp(struct kvm_mmu_page *sp)
-> +{
-> +}
-> +#endif
-> +
->   static inline bool kvm_mmu_page_ad_need_write_protect(struct kvm_mmu_page *sp)
->   {
->   	/*
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 8db262440d5c..a68f3a22836b 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -59,6 +59,8 @@ static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
->   
->   static void tdp_mmu_free_sp(struct kvm_mmu_page *sp)
->   {
-> +	if (is_private_sp(sp))
-> +		kvm_mmu_free_private_sp(sp);
->   	free_page((unsigned long)sp->spt);
->   	kmem_cache_free(mmu_page_header_cache, sp);
->   }
-> @@ -184,6 +186,7 @@ static struct kvm_mmu_page *alloc_tdp_mmu_page(struct kvm_vcpu *vcpu, gfn_t gfn,
->   	sp->role.word = page_role_for_level(vcpu, level).word;
->   	sp->gfn = gfn;
->   	sp->tdp_mmu_page = true;
-> +	kvm_mmu_init_private_sp(sp);
->   
->   	trace_kvm_mmu_get_page(sp, true);
->   
+On Tuesday, April 5th, 2022 at 16:39, Randy Dunlap <rdunlap@infradead.org> =
+wrote:
 
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+> On 4/4/22 23:26, Javier Martinez Canillas wrote:
+>
+> > On 4/5/22 08:12, Simon Ser wrote:
+> >
+> > > On Monday, April 4th, 2022 at 23:35, Randy Dunlap rdunlap@infradead.o=
+rg wrote:
+> > >
+> > > > On 4/4/22 09:04, Simon Ser wrote:
+> > > >
+> > > > > Both doc patches pushed, thanks. I had to manually edit them beca=
+use they
+> > > > > wouldn't apply cleanly. Next time, please use git-send-email (see
+> > > > > https://git-send-email.io/ for setup instructions).
+> > > >
+> > > > That's odd. I did use 'git send-email' and I don't usually have any
+> > > > problems (AFAIK). I'll check those setup instructions.
+> > >
+> > > Hm, maybe the issue isn't git-send-email, but the way the patch was
+> > > generated? I had to manually edit these lines for the first patch to =
+work:
+> > >
+> > > --- linux-next-20211217.orig/include/drm/drm_file.h
+> > > +++ linux-next-20211217/include/drm/drm_file.h
+> > >
+> > > I changed these to:
+> > >
+> > > --- a/include/drm/drm_file.h
+> > > +++ b/include/drm/drm_file.h
+> > >
+> > > This wasn't enough for the second patch, I had to re-do the changes b=
+y hand
+> > > from scratch.
+> >
+> > Yes, I believe the suggestion should be to use git-format-patch instead=
+.
+> >
+> > To make sure that was is posted can be consumed by the git-am command.
+>
+>
+> Considering that I am not using git, I think it will be difficult
+> to use git-format-patch.
 
+Ah, okay. Would you consider using Git for you next patches?
+
+(FYI, I'll pass next time I hit a patch which doesn't apply cleanly.
+Nothing personal, it's just that I don't have time to deal with broken
+patches.)

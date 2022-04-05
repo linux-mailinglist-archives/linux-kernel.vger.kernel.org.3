@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB2A4F50AD
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1FB4F50F1
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1842859AbiDFBfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
+        id S1353976AbiDFBoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358078AbiDEK16 (ORCPT
+        with ESMTP id S1350855AbiDEKAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B701ED57;
-        Tue,  5 Apr 2022 03:14:52 -0700 (PDT)
+        Tue, 5 Apr 2022 06:00:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D486A424;
+        Tue,  5 Apr 2022 02:51:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67410B81BC5;
-        Tue,  5 Apr 2022 10:14:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5BEDC385A2;
-        Tue,  5 Apr 2022 10:14:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C45F3B81B76;
+        Tue,  5 Apr 2022 09:51:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21942C385A1;
+        Tue,  5 Apr 2022 09:51:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153690;
-        bh=UBmK10rXj2XHwAB4O1S/H943HEeDYiGEUvojg+iDfW8=;
+        s=korg; t=1649152277;
+        bh=VEzzR77h+TVNn8t6F21fg2748P4148M/vVkJolOx9t8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fTp0YRh04ImH4gMrWnj4BFBuOtuTrIKzg8mro+jpHNIOYmootJKIXjCByfRFq+yNz
-         0ZpU2PcqmD87LvzmmdkYjQTqLbBQa5oXbeD/3Nvict2Osb/w5BerrhxYH4X5AvQbpj
-         noW+9NBlVP+H9zFULo2wAy6llqGIRarvtfvSaxnY=
+        b=xID2Orn/c/yCt/skZiLipFLfo2X1+Jxoi8Ox+g4SH9cb+8NH2frCtzuLylGnolAPn
+         /Ibgtz1Ox01bG9phhF87kKPSX3zkDwOj8zm3puS7ctrrrZPVNtkeyilWpi2hxncUwk
+         4+KFgveMWBMo+CjQ+iR5lTGyFYJpibcL9fkOElms=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabiano Rosas <farosas@linux.ibm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
+        Anand Jain <anand.jain@oracle.com>,
+        David Sterba <dsterba@suse.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 285/599] KVM: PPC: Book3S HV: Check return value of kvmppc_radix_init
-Date:   Tue,  5 Apr 2022 09:29:39 +0200
-Message-Id: <20220405070307.315987169@linuxfoundation.org>
+Subject: [PATCH 5.15 719/913] btrfs: harden identification of a stale device
+Date:   Tue,  5 Apr 2022 09:29:41 +0200
+Message-Id: <20220405070401.385203742@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +56,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabiano Rosas <farosas@linux.ibm.com>
+From: Anand Jain <anand.jain@oracle.com>
 
-[ Upstream commit 69ab6ac380a00244575de02c406dcb9491bf3368 ]
+[ Upstream commit 770c79fb65506fc7c16459855c3839429f46cb32 ]
 
-The return of the function is being shadowed by the call to
-kvmppc_uvmem_init.
+Identifying and removing the stale device from the fs_uuids list is done
+by btrfs_free_stale_devices().  btrfs_free_stale_devices() in turn
+depends on device_path_matched() to check if the device appears in more
+than one btrfs_device structure.
 
-Fixes: ca9f4942670c ("KVM: PPC: Book3S HV: Support for running secure guests")
-Signed-off-by: Fabiano Rosas <farosas@linux.ibm.com>
-Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220125155735.1018683-2-farosas@linux.ibm.com
+The matching of the device happens by its path, the device path. However,
+when device mapper is in use, the dm device paths are nothing but a link
+to the actual block device, which leads to the device_path_matched()
+failing to match.
+
+Fix this by matching the dev_t as provided by lookup_bdev() instead of
+plain string compare of the device paths.
+
+Reported-by: Josef Bacik <josef@toxicpanda.com>
+Signed-off-by: Anand Jain <anand.jain@oracle.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kvm/book3s_hv.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ fs/btrfs/volumes.c | 45 ++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 38 insertions(+), 7 deletions(-)
 
-diff --git a/arch/powerpc/kvm/book3s_hv.c b/arch/powerpc/kvm/book3s_hv.c
-index 527c205d5a5f..38b7a3491aac 100644
---- a/arch/powerpc/kvm/book3s_hv.c
-+++ b/arch/powerpc/kvm/book3s_hv.c
-@@ -5752,8 +5752,11 @@ static int kvmppc_book3s_init_hv(void)
- 	if (r)
- 		return r;
+diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
+index 06a1a7c2254c..33bd94ee4690 100644
+--- a/fs/btrfs/volumes.c
++++ b/fs/btrfs/volumes.c
+@@ -530,15 +530,48 @@ btrfs_get_bdev_and_sb(const char *device_path, fmode_t flags, void *holder,
+ 	return ret;
+ }
  
--	if (kvmppc_radix_possible())
-+	if (kvmppc_radix_possible()) {
- 		r = kvmppc_radix_init();
-+		if (r)
-+			return r;
-+	}
+-static bool device_path_matched(const char *path, struct btrfs_device *device)
++/*
++ * Check if the device in the path matches the device in the given struct device.
++ *
++ * Returns:
++ *   true  If it is the same device.
++ *   false If it is not the same device or on error.
++ */
++static bool device_matched(const struct btrfs_device *device, const char *path)
+ {
+-	int found;
++	char *device_name;
++	dev_t dev_old;
++	dev_t dev_new;
++	int ret;
++
++	/*
++	 * If we are looking for a device with the matching dev_t, then skip
++	 * device without a name (a missing device).
++	 */
++	if (!device->name)
++		return false;
++
++	device_name = kzalloc(BTRFS_PATH_NAME_MAX, GFP_KERNEL);
++	if (!device_name)
++		return false;
  
- 	/*
- 	 * POWER9 chips before version 2.02 can't have some threads in
+ 	rcu_read_lock();
+-	found = strcmp(rcu_str_deref(device->name), path);
++	scnprintf(device_name, BTRFS_PATH_NAME_MAX, "%s", rcu_str_deref(device->name));
+ 	rcu_read_unlock();
+ 
+-	return found == 0;
++	ret = lookup_bdev(device_name, &dev_old);
++	kfree(device_name);
++	if (ret)
++		return false;
++
++	ret = lookup_bdev(path, &dev_new);
++	if (ret)
++		return false;
++
++	if (dev_old == dev_new)
++		return true;
++
++	return false;
+ }
+ 
+ /*
+@@ -571,9 +604,7 @@ static int btrfs_free_stale_devices(const char *path,
+ 					 &fs_devices->devices, dev_list) {
+ 			if (skip_device && skip_device == device)
+ 				continue;
+-			if (path && !device->name)
+-				continue;
+-			if (path && !device_path_matched(path, device))
++			if (path && !device_matched(device, path))
+ 				continue;
+ 			if (fs_devices->opened) {
+ 				/* for an already deleted device return 0 */
 -- 
 2.34.1
 

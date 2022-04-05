@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D1644F3B90
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 490C34F3BB2
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381258AbiDEL66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
+        id S1381789AbiDEL7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245044AbiDEIxD (ORCPT
+        with ESMTP id S245058AbiDEIxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:53:03 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92441E89;
-        Tue,  5 Apr 2022 01:50:32 -0700 (PDT)
+        Tue, 5 Apr 2022 04:53:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F0B103A;
+        Tue,  5 Apr 2022 01:50:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 012EECE1BCE;
-        Tue,  5 Apr 2022 08:50:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18279C385A1;
-        Tue,  5 Apr 2022 08:50:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4715861003;
+        Tue,  5 Apr 2022 08:50:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DF63C385A0;
+        Tue,  5 Apr 2022 08:50:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148629;
-        bh=0Dg7CYB7xn8BcJUfpIWrYJsGfvLqYxZJacs/FazW+sQ=;
+        s=korg; t=1649148656;
+        bh=UdP0IzdJecjT0BWP9LHkIR4ds8fCXT1iDcxu9yYHu28=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mWQZ0ElD2FC9z4Mr8sMWM0GmyYynq6tqFSXO00TMU6LLXS+vtXHXyn2X6Hzn2AlMS
-         ai+VDM1bZXxZQxWAWzhp/aNCWbEIHkjUNNC4KDWqggi7f+n3aucgWR2RVVzerJ0V4I
-         5dIL/41fI/1SBWHgPr2p2JZBm61jrYos0j2p4Jnk=
+        b=zROnBMiD/PUaaukR8WmWIYsA922i0oXVmCLuM80SRrXt6IEkhlApEGE+EF0gRkWCX
+         PMkWIu3g+dKtlKayL7AQRN7QtNxJ6MLtnoDBr3QB5gyZK0o0cfR93Wagb6eJ6VH7zO
+         HEBrdqPly+2f+MJos+dhUVmBKLzchxPhKd77cePI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shannon Nelson <snelson@pensando.io>,
+        stable@vger.kernel.org, Brett Creeley <brett@pensando.io>,
+        Shannon Nelson <snelson@pensando.io>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0423/1017] ionic: fix type complaint in ionic_dev_cmd_clean()
-Date:   Tue,  5 Apr 2022 09:22:16 +0200
-Message-Id: <20220405070406.846252958@linuxfoundation.org>
+Subject: [PATCH 5.16 0427/1017] ionic: Correctly print AQ errors if completions arent received
+Date:   Tue,  5 Apr 2022 09:22:20 +0200
+Message-Id: <20220405070406.967349811@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,49 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shannon Nelson <snelson@pensando.io>
+From: Brett Creeley <brett@pensando.io>
 
-[ Upstream commit bc0bf9de6f48268f4ee59e57fb42ac751be3ecda ]
+[ Upstream commit bc43ed4f35abfdb1d52311110d49b545fccce975 ]
 
-Sparse seems to have gotten a little more picky lately and
-we need to revisit this bit of code to make sparse happy.
+Recent changes went into the driver to allow flexibility when
+printing error messages. Unfortunately this had the unexpected
+consequence of printing confusing messages like the following:
 
-warning: incorrect type in initializer (different address spaces)
-   expected union ionic_dev_cmd_regs *regs
-   got union ionic_dev_cmd_regs [noderef] __iomem *dev_cmd_regs
-warning: incorrect type in argument 2 (different address spaces)
-   expected void [noderef] __iomem *
-   got unsigned int *
-warning: incorrect type in argument 1 (different address spaces)
-   expected void volatile [noderef] __iomem *
-   got union ionic_dev_cmd *
+IONIC_CMD_RX_FILTER_ADD (31) failed: IONIC_RC_SUCCESS (-6)
 
-Fixes: d701ec326a31 ("ionic: clean up sparse complaints")
+In cases like this the completion of the admin queue command never
+completes, so the completion status is 0, hence IONIC_RC_SUCCESS
+is printed even though the command clearly failed. For example,
+this could happen when the driver tries to add a filter and at
+the same time the FW goes through a reset, so the AQ command
+never completes.
+
+Fix this by forcing the FW completion status to IONIC_RC_ERROR
+in cases where we never get the completion.
+
+Fixes: 8c9d956ab6fb ("ionic: allow adminq requests to override default error message")
+Signed-off-by: Brett Creeley <brett@pensando.io>
 Signed-off-by: Shannon Nelson <snelson@pensando.io>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/pensando/ionic/ionic_main.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/pensando/ionic/ionic_main.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/net/ethernet/pensando/ionic/ionic_main.c b/drivers/net/ethernet/pensando/ionic/ionic_main.c
-index 875f4ec42efe..a89ad768e4a0 100644
+index 2e4294a4fa83..a0f9136b2d89 100644
 --- a/drivers/net/ethernet/pensando/ionic/ionic_main.c
 +++ b/drivers/net/ethernet/pensando/ionic/ionic_main.c
-@@ -370,10 +370,10 @@ int ionic_adminq_post_wait_nomsg(struct ionic_lif *lif, struct ionic_admin_ctx *
+@@ -322,6 +322,7 @@ int ionic_adminq_wait(struct ionic_lif *lif, struct ionic_admin_ctx *ctx,
+ 		if (do_msg && !test_bit(IONIC_LIF_F_FW_RESET, lif->state))
+ 			netdev_err(netdev, "Posting of %s (%d) failed: %d\n",
+ 				   name, ctx->cmd.cmd.opcode, err);
++		ctx->comp.comp.status = IONIC_RC_ERROR;
+ 		return err;
+ 	}
  
- static void ionic_dev_cmd_clean(struct ionic *ionic)
- {
--	union __iomem ionic_dev_cmd_regs *regs = ionic->idev.dev_cmd_regs;
-+	struct ionic_dev *idev = &ionic->idev;
+@@ -340,6 +341,7 @@ int ionic_adminq_wait(struct ionic_lif *lif, struct ionic_admin_ctx *ctx,
+ 			if (do_msg)
+ 				netdev_err(netdev, "%s (%d) interrupted, FW in reset\n",
+ 					   name, ctx->cmd.cmd.opcode);
++			ctx->comp.comp.status = IONIC_RC_ERROR;
+ 			return -ENXIO;
+ 		}
  
--	iowrite32(0, &regs->doorbell);
--	memset_io(&regs->cmd, 0, sizeof(regs->cmd));
-+	iowrite32(0, &idev->dev_cmd_regs->doorbell);
-+	memset_io(&idev->dev_cmd_regs->cmd, 0, sizeof(idev->dev_cmd_regs->cmd));
- }
- 
- int ionic_dev_cmd_wait(struct ionic *ionic, unsigned long max_seconds)
 -- 
 2.34.1
 

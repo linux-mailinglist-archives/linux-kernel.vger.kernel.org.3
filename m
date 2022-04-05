@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A654F336D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C3A44F33E0
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343563AbiDEI5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
+        id S1343673AbiDEI51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:57:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235027AbiDEIOp (ORCPT
+        with ESMTP id S236456AbiDEIQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:14:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F3D9D0E1;
-        Tue,  5 Apr 2022 01:03:16 -0700 (PDT)
+        Tue, 5 Apr 2022 04:16:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C483270CC2;
+        Tue,  5 Apr 2022 01:04:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B26F61684;
-        Tue,  5 Apr 2022 08:03:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5E5BC385A3;
-        Tue,  5 Apr 2022 08:03:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85892B81BBD;
+        Tue,  5 Apr 2022 08:03:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFAFCC385A3;
+        Tue,  5 Apr 2022 08:03:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145795;
-        bh=k43HI1oa+1ay+oQjwrj4y1FFW04YWbKgIhD+6XlwZdk=;
+        s=korg; t=1649145836;
+        bh=6Hsugf3hew1UI09HjRquu7J/Ln94XbVvsslObP2Jc5M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tQTFSQ/RioE/keFYc6rAfshcuiwf8WZPKLQ5ntX6GTFdicRImtJReBohnYaUToybr
-         bdomr0XOV1fv3EmbJL1BzKimvCxO3G3JE2H7rDjYYTLPyfwsy+NhszBY2Ybhz08IVt
-         BNZ/4ozoke63njsGcb3NzaoYkdlRkj5J4ZkTyiTA=
+        b=rtqnrElMmyFSVWKFw04rBSIZ6xkypElc/OtGAsxMNLptj7aaAplHxSiG8GxX9DCZW
+         K2xovKF8NpbA0HDsxPXG+hMPUhtahfnkqJ+N6ShtAB2mME+IBGZJxkbB2BB/ZANJDw
+         Ea2Jjvbte/m8+ExwKfZWXQCO/iQ5n63OGvXnaQ1I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        =?UTF-8?q?Alex=20Benn=C3=A9e?= <alex.bennee@linaro.org>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
+        stable@vger.kernel.org, Wen Gong <quic_wgong@quicinc.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0532/1126] cxl/regs: Fix size of CXL Capability Header Register
-Date:   Tue,  5 Apr 2022 09:21:19 +0200
-Message-Id: <20220405070423.246673251@linuxfoundation.org>
+Subject: [PATCH 5.17 0545/1126] ath11k: fix uninitialized rate_idx in ath11k_dp_tx_update_txcompl()
+Date:   Tue,  5 Apr 2022 09:21:32 +0200
+Message-Id: <20220405070423.630202991@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -58,69 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+From: Wen Gong <quic_wgong@quicinc.com>
 
-[ Upstream commit 74b0fe80409733055971bbfaf33c80a33fddeeb3 ]
+[ Upstream commit 8c4c567fa291e4805d5116f1333b2ed83877032b ]
 
-In CXL 2.0, 8.2.5.1 CXL Capability Header Register: this register
-is given as 32 bits.
+The rate_idx which passed to ath11k_debugfs_sta_add_tx_stats() by
+ath11k_dp_tx_update_txcompl() is not initialized, add initialization
+for it.
 
-8.2.3 which covers the CXL 2.0 Component registers, including the
-CXL Capability Header Register states that access restrictions
-specified in Section 8.2.2 apply.
+Tested-on: WCN6855 hw2.0 PCI WLAN.HSP.1.1-03003-QCAHSPSWPL_V1_V2_SILICONZ_LITE-2
 
-8.2.2 includes:
-* A 32 bit register shall be accessed as a 4 Byte quantity.
-...
-If these rules are not followed, the behavior is undefined.
-
-Discovered during review of CXL QEMU emulation. Alex Bennée pointed
-out there was a comment saying that 4 byte registers must be read
-with a 4 byte read, but 8 byte reads were being emulated.
-
-https://lore.kernel.org/qemu-devel/87bkzyd3c7.fsf@linaro.org/
-
-Fixing that, led to this code failing. Whilst a given hardware
-implementation 'might' work with an 8 byte read, it should not be relied
-upon. The QEMU emulation v5 will return 0 and log the wrong access width.
-
-The code moved, so one fixes tag for where this will directly apply and
-also a reference to the earlier introduction of the code for backports.
-
-Fixes: 0f06157e0135 ("cxl/core: Move register mapping infrastructure")
-Fixes: 08422378c4ad ("cxl/pci: Add HDM decoder capabilities")
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: Alex Bennée <alex.bennee@linaro.org>
-Reviewed-by: Ben Widawsky <ben.widawsky@intel.com>
-Link: https://lore.kernel.org/r/20220201153437.2873-1-Jonathan.Cameron@huawei.com
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+Fixes: 1b8bb94c0612 ("ath11k: report tx bitrate for iw wlan station dump")
+Signed-off-by: Wen Gong <quic_wgong@quicinc.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220209060816.423-1-quic_wgong@quicinc.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cxl/core/regs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/wireless/ath/ath11k/dp_tx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
-index cdc0b75d94f2..6a18ff8739e0 100644
---- a/drivers/cxl/core/regs.c
-+++ b/drivers/cxl/core/regs.c
-@@ -35,7 +35,7 @@ void cxl_probe_component_regs(struct device *dev, void __iomem *base,
- 			      struct cxl_component_reg_map *map)
- {
- 	int cap, cap_count;
--	u64 cap_array;
-+	u32 cap_array;
+diff --git a/drivers/net/wireless/ath/ath11k/dp_tx.c b/drivers/net/wireless/ath/ath11k/dp_tx.c
+index 91d6244b6543..8402961c6688 100644
+--- a/drivers/net/wireless/ath/ath11k/dp_tx.c
++++ b/drivers/net/wireless/ath/ath11k/dp_tx.c
+@@ -426,7 +426,7 @@ void ath11k_dp_tx_update_txcompl(struct ath11k *ar, struct hal_tx_status *ts)
+ 	struct ath11k_sta *arsta;
+ 	struct ieee80211_sta *sta;
+ 	u16 rate, ru_tones;
+-	u8 mcs, rate_idx, ofdma;
++	u8 mcs, rate_idx = 0, ofdma;
+ 	int ret;
  
- 	*map = (struct cxl_component_reg_map) { 0 };
- 
-@@ -45,7 +45,7 @@ void cxl_probe_component_regs(struct device *dev, void __iomem *base,
- 	 */
- 	base += CXL_CM_OFFSET;
- 
--	cap_array = readq(base + CXL_CM_CAP_HDR_OFFSET);
-+	cap_array = readl(base + CXL_CM_CAP_HDR_OFFSET);
- 
- 	if (FIELD_GET(CXL_CM_CAP_HDR_ID_MASK, cap_array) != CM_CAP_HDR_CAP_ID) {
- 		dev_err(dev,
+ 	spin_lock_bh(&ab->base_lock);
 -- 
 2.34.1
 

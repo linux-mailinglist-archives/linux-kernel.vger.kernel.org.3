@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 169904F44CF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6D274F4745
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384686AbiDENc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
+        id S1354367AbiDEVFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345777AbiDEJXB (ORCPT
+        with ESMTP id S1353042AbiDEKFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:23:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1551191557;
-        Tue,  5 Apr 2022 02:12:12 -0700 (PDT)
+        Tue, 5 Apr 2022 06:05:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C224BD7D9;
+        Tue,  5 Apr 2022 02:54:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A876AB81A22;
-        Tue,  5 Apr 2022 09:12:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13105C385A0;
-        Tue,  5 Apr 2022 09:12:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D4E961743;
+        Tue,  5 Apr 2022 09:54:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B4D6C385A1;
+        Tue,  5 Apr 2022 09:54:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149929;
-        bh=ZQtAJtFT3tYHabqpMHz6Tb1HyIxMzqpBLVOx+C0HNV0=;
+        s=korg; t=1649152450;
+        bh=9kDFyJtz5aRFD1HOBnwM1kO3is+NlX0c7whwfOn5IIw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nrFRnH3T9tMBswoZbbLtMLJP8WZ4Yhz2LV050HJ6U0IKIXWHIlR/NlkkbPpQT5KKh
-         tO+saFs7okKEP0PoxjVOVlXFKP+P76T6a0VhkubFnyUY9PxDi4xs5pVud41F2fZ3LJ
-         unFXldNi7e7ixK1xEKJ/2M2XxS+9upMlr/z3m/rs=
+        b=eD2XDz5cYFX0eWXcZI330shMgpH2GN1EBy0bddRUryRhZ2OE3SsMybpAjk2WT4Pf8
+         tI7Oqp17cGnJiaXRgrFEfZiRJqC+NnBI2FfVU0Hl3QVqaP4ZRYZmnu9OKoDqrb3J23
+         UzN78wlZgbw1o8gP94QV4QorTfDMFkHM6K4LVxuw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Arun Easi <aeasi@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.16 0893/1017] scsi: qla2xxx: Fix missed DMA unmap for NVMe ls requests
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 744/913] media: atomisp_gmin_platform: Add DMI quirk to not turn AXP ELDO2 regulator off on some boards
 Date:   Tue,  5 Apr 2022 09:30:06 +0200
-Message-Id: <20220405070420.735566910@linuxfoundation.org>
+Message-Id: <20220405070402.135881972@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,71 +55,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arun Easi <aeasi@marvell.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-commit c85ab7d9e27a80e48d5b7d7fb2fe2b0fdb2de523 upstream.
+[ Upstream commit 2c39a01154ea57d596470afa1d278e3be3b37f6a ]
 
-At NVMe ELS request time, request structure is DMA mapped and never
-unmapped. Fix this by calling the unmap on ELS completion.
+The TrekStor SurfTab duo W1 10.1 has a hw bug where turning eldo2 back on
+after having turned it off causes the CPLM3218 ambient-light-sensor on
+the front camera sensor's I2C bus to crash, hanging the bus.
 
-Link: https://lore.kernel.org/r/20220310092604.22950-5-njavali@marvell.com
-Fixes: e84067d74301 ("scsi: qla2xxx: Add FC-NVMe F/W initialization and transport registration")
-Cc: stable@vger.kernel.org
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Arun Easi <aeasi@marvell.com>
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Add a DMI quirk table for systems on which to leave eldo2 on.
+
+Note an alternative fix is to turn off the CPLM3218 ambient-light-sensor
+as long as the camera sensor is being used, this is what Windows seems
+to do as a workaround (based on analyzing the DSDT). But that is not
+easy to do cleanly under Linux.
+
+Link: https://lore.kernel.org/linux-media/20220116215204.307649-10-hdegoede@redhat.com
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/qla2xxx/qla_nvme.c |   17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ .../media/atomisp/pci/atomisp_gmin_platform.c  | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
---- a/drivers/scsi/qla2xxx/qla_nvme.c
-+++ b/drivers/scsi/qla2xxx/qla_nvme.c
-@@ -172,6 +172,18 @@ out:
- 	qla2xxx_rel_qpair_sp(sp->qpair, sp);
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
+index 62dc06e22476..cd0a771454da 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
+@@ -729,6 +729,21 @@ static int axp_regulator_set(struct device *dev, struct gmin_subdev *gs,
+ 	return 0;
  }
  
-+static void qla_nvme_ls_unmap(struct srb *sp, struct nvmefc_ls_req *fd)
-+{
-+	if (sp->flags & SRB_DMA_VALID) {
-+		struct srb_iocb *nvme = &sp->u.iocb_cmd;
-+		struct qla_hw_data *ha = sp->fcport->vha->hw;
++/*
++ * Some boards contain a hw-bug where turning eldo2 back on after having turned
++ * it off causes the CPLM3218 ambient-light-sensor on the image-sensor's I2C bus
++ * to crash, hanging the bus. Do not turn eldo2 off on these systems.
++ */
++static const struct dmi_system_id axp_leave_eldo2_on_ids[] = {
++	{
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "TrekStor"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "SurfTab duo W1 10.1 (VT4)"),
++		},
++	},
++	{ }
++};
 +
-+		dma_unmap_single(&ha->pdev->dev, nvme->u.nvme.cmd_dma,
-+				 fd->rqstlen, DMA_TO_DEVICE);
-+		sp->flags &= ~SRB_DMA_VALID;
-+	}
-+}
-+
- static void qla_nvme_release_ls_cmd_kref(struct kref *kref)
+ static int axp_v1p8_on(struct device *dev, struct gmin_subdev *gs)
  {
- 	struct srb *sp = container_of(kref, struct srb, cmd_kref);
-@@ -188,6 +200,8 @@ static void qla_nvme_release_ls_cmd_kref
- 	spin_unlock_irqrestore(&priv->cmd_lock, flags);
+ 	int ret;
+@@ -763,6 +778,9 @@ static int axp_v1p8_off(struct device *dev, struct gmin_subdev *gs)
+ 	if (ret)
+ 		return ret;
  
- 	fd = priv->fd;
++	if (dmi_check_system(axp_leave_eldo2_on_ids))
++		return 0;
 +
-+	qla_nvme_ls_unmap(sp, fd);
- 	fd->done(fd, priv->comp_status);
- out:
- 	qla2x00_rel_sp(sp);
-@@ -358,6 +372,8 @@ static int qla_nvme_ls_req(struct nvme_f
- 	dma_sync_single_for_device(&ha->pdev->dev, nvme->u.nvme.cmd_dma,
- 	    fd->rqstlen, DMA_TO_DEVICE);
- 
-+	sp->flags |= SRB_DMA_VALID;
-+
- 	rval = qla2x00_start_sp(sp);
- 	if (rval != QLA_SUCCESS) {
- 		ql_log(ql_log_warn, vha, 0x700e,
-@@ -365,6 +381,7 @@ static int qla_nvme_ls_req(struct nvme_f
- 		wake_up(&sp->nvme_ls_waitq);
- 		sp->priv = NULL;
- 		priv->sp = NULL;
-+		qla_nvme_ls_unmap(sp, fd);
- 		qla2x00_rel_sp(sp);
- 		return rval;
- 	}
+ 	ret = axp_regulator_set(dev, gs, gs->eldo2_sel_reg, gs->eldo2_1p8v,
+ 				ELDO_CTRL_REG, gs->eldo2_ctrl_shift, false);
+ 	return ret;
+-- 
+2.34.1
+
 
 

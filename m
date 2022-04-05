@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987E24F472D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BEE4F4628
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345480AbiDEVC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
+        id S1380655AbiDEMyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349135AbiDEJtM (ORCPT
+        with ESMTP id S244102AbiDEJOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F56CF;
-        Tue,  5 Apr 2022 02:41:14 -0700 (PDT)
+        Tue, 5 Apr 2022 05:14:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69D73DDF6;
+        Tue,  5 Apr 2022 02:00:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D534661673;
-        Tue,  5 Apr 2022 09:41:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDA60C385A4;
-        Tue,  5 Apr 2022 09:41:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52797B818F3;
+        Tue,  5 Apr 2022 09:00:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D611C385A0;
+        Tue,  5 Apr 2022 09:00:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151673;
-        bh=9n0s1PVnFShGn2pmObyGWleDrpp43npEIx1yGJvstUM=;
+        s=korg; t=1649149236;
+        bh=ROnrbzz1l46AppRuRx0ztfxHB96FsZrQXsAc4TedgXk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s3N6DI+J+nPUi7QncrOKYDrkkKNlUgLiv9K0NefbTh/ZgGdSUO4OxPtGUE/6WxVBi
-         pnWYObaRPJB4WMgtz1g0PoZipzHh/+Ea1H9M3TunF9HwCwobX5Q+edupm8TTfVVZ6E
-         8WLdknoMmWDzNU8UAfAb77DQDrECRgDLRwOTRfZU=
+        b=Hu4hLyKGP5TGp0UbFMQf5fyb6XZA4huXEUSByB/m7A+67gG/S8uw6TXscTIXPZNMn
+         8WLyiOFgCWv6Oo0ralos1Kxt6rBirc4QiwjWWk9DhDncKFFDUdayLGCZrhHtsCOcap
+         qcPNiX5H8f7jm/tE/sMaLBO9nVhd0Ktj3iM5AEk8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        stable@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 493/913] power: supply: sbs-charger: Dont cancel work that is not initialized
-Date:   Tue,  5 Apr 2022 09:25:55 +0200
-Message-Id: <20220405070354.632314836@linuxfoundation.org>
+Subject: [PATCH 5.16 0644/1017] mxser: fix xmit_buf leak in activate when LSR == 0xff
+Date:   Tue,  5 Apr 2022 09:25:57 +0200
+Message-Id: <20220405070413.399273841@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,80 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Jiri Slaby <jslaby@suse.cz>
 
-[ Upstream commit de85193cff0d94d030a53656d8fcc41794807bef ]
+[ Upstream commit cd3a4907ee334b40d7aa880c7ab310b154fd5cd4 ]
 
-This driver can use an interrupt or polling in order get the charger's
-status.
+When LSR is 0xff in ->activate() (rather unlike), we return an error.
+Provided ->shutdown() is not called when ->activate() fails, nothing
+actually frees the buffer in this case.
 
-When using polling, a delayed work is used.
+Fix this by properly freeing the buffer in a designated label. We jump
+there also from the "!info->type" if now too.
 
-However, the remove() function unconditionally call
-cancel_delayed_work_sync(), even if the delayed work is not used and is not
-initialized.
-
-In order to fix it, use devm_delayed_work_autocancel() and remove the now
-useless remove() function.
-
-Fixes: feb583e37f8a ("power: supply: add sbs-charger driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Fixes: 6769140d3047 ("tty: mxser: use the tty_port_open method")
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Link: https://lore.kernel.org/r/20220124071430.14907-6-jslaby@suse.cz
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/sbs-charger.c | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
+ drivers/tty/mxser.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/power/supply/sbs-charger.c b/drivers/power/supply/sbs-charger.c
-index 6fa65d118ec1..b08f7d0c4181 100644
---- a/drivers/power/supply/sbs-charger.c
-+++ b/drivers/power/supply/sbs-charger.c
-@@ -18,6 +18,7 @@
- #include <linux/interrupt.h>
- #include <linux/regmap.h>
- #include <linux/bitops.h>
-+#include <linux/devm-helpers.h>
+diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
+index 39458b42df7b..88d2f16fbf89 100644
+--- a/drivers/tty/mxser.c
++++ b/drivers/tty/mxser.c
+@@ -719,6 +719,7 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
+ 	struct mxser_port *info = container_of(port, struct mxser_port, port);
+ 	unsigned long page;
+ 	unsigned long flags;
++	int ret;
  
- #define SBS_CHARGER_REG_SPEC_INFO		0x11
- #define SBS_CHARGER_REG_STATUS			0x13
-@@ -209,7 +210,12 @@ static int sbs_probe(struct i2c_client *client,
- 		if (ret)
- 			return dev_err_probe(&client->dev, ret, "Failed to request irq\n");
- 	} else {
--		INIT_DELAYED_WORK(&chip->work, sbs_delayed_work);
-+		ret = devm_delayed_work_autocancel(&client->dev, &chip->work,
-+						   sbs_delayed_work);
-+		if (ret)
-+			return dev_err_probe(&client->dev, ret,
-+					     "Failed to init work for polling\n");
-+
- 		schedule_delayed_work(&chip->work,
- 				      msecs_to_jiffies(SBS_CHARGER_POLL_TIME));
+ 	page = __get_free_page(GFP_KERNEL);
+ 	if (!page)
+@@ -728,9 +729,9 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
+ 
+ 	if (!info->type) {
+ 		set_bit(TTY_IO_ERROR, &tty->flags);
+-		free_page(page);
+ 		spin_unlock_irqrestore(&info->slock, flags);
+-		return 0;
++		ret = 0;
++		goto err_free_xmit;
  	}
-@@ -220,15 +226,6 @@ static int sbs_probe(struct i2c_client *client,
+ 	info->port.xmit_buf = (unsigned char *) page;
+ 
+@@ -750,8 +751,10 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
+ 		if (capable(CAP_SYS_ADMIN)) {
+ 			set_bit(TTY_IO_ERROR, &tty->flags);
+ 			return 0;
+-		} else
+-			return -ENODEV;
++		}
++
++		ret = -ENODEV;
++		goto err_free_xmit;
+ 	}
+ 
+ 	/*
+@@ -796,6 +799,10 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
+ 	spin_unlock_irqrestore(&info->slock, flags);
+ 
  	return 0;
++err_free_xmit:
++	free_page(page);
++	info->port.xmit_buf = NULL;
++	return ret;
  }
  
--static int sbs_remove(struct i2c_client *client)
--{
--	struct sbs_info *chip = i2c_get_clientdata(client);
--
--	cancel_delayed_work_sync(&chip->work);
--
--	return 0;
--}
--
- #ifdef CONFIG_OF
- static const struct of_device_id sbs_dt_ids[] = {
- 	{ .compatible = "sbs,sbs-charger" },
-@@ -245,7 +242,6 @@ MODULE_DEVICE_TABLE(i2c, sbs_id);
- 
- static struct i2c_driver sbs_driver = {
- 	.probe		= sbs_probe,
--	.remove		= sbs_remove,
- 	.id_table	= sbs_id,
- 	.driver = {
- 		.name	= "sbs-charger",
+ /*
 -- 
 2.34.1
 

@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DFBE4F3E40
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6484F3DF9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343612AbiDEMeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
+        id S1442786AbiDEUHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:07:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235654AbiDEJCY (ORCPT
+        with ESMTP id S1348751AbiDEJsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:02:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD6C27FEA;
-        Tue,  5 Apr 2022 01:54:21 -0700 (PDT)
+        Tue, 5 Apr 2022 05:48:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E80F48321;
+        Tue,  5 Apr 2022 02:34:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93BCE61476;
-        Tue,  5 Apr 2022 08:54:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A60B5C385A0;
-        Tue,  5 Apr 2022 08:54:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B04E5B81C6F;
+        Tue,  5 Apr 2022 09:34:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFEA7C385A2;
+        Tue,  5 Apr 2022 09:34:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148860;
-        bh=S2KuJRjgEpRjx8Areu8U+GZvYUTs9/nOiG/mM/dEr5Y=;
+        s=korg; t=1649151285;
+        bh=vOzsy4dCO55H8J9nLmLlOgkfuzre8MNWIEBAqKkF684=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=enAZeVgWP8ZWnJRSKK6hS2E+bQhTlZp2+bHmno6chf/9DWmOm7erYSUpHg222P0iX
-         Sjbb5Kx842H50DbbfR4k9PE/ldq01ogY/lDSJOfe5/wPU1GYdWI9WioORH9Rk7ie/I
-         JLn7eKl6sD5ZwXjrOXf6UEs6GT/h3qURYYI07k5c=
+        b=id7mDuHaBPj3jy+kQz+6D4o4Rbp+MUzpB2JmbK1y3o58PKo9mVtaW6SvRRqs/Ph2u
+         zELT82oQJl1EH/rbPXZ1Zsitvo6oRvKVcxD58CEVdHww9V6t8ZlkuFHBDYDzxs+D0J
+         iR72GohdFAJnGh47COyWgTrvntTRgeq2XEl7lMx4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tong Zhang <ztong0001@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0506/1017] dax: make sure inodes are flushed before destroy cache
-Date:   Tue,  5 Apr 2022 09:23:39 +0200
-Message-Id: <20220405070409.319682532@linuxfoundation.org>
+Subject: [PATCH 5.15 359/913] ASoC: mediatek: mt8192-mt6359: Fix error handling in mt8192_mt6359_dev_probe
+Date:   Tue,  5 Apr 2022 09:23:41 +0200
+Message-Id: <20220405070350.606451968@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,47 +56,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tong Zhang <ztong0001@gmail.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit a7e8de822e0b1979f08767c751f6c8a9c1d4ad86 ]
+[ Upstream commit e45ac7831ff3e2934d58cce319c17c8ec763c95c ]
 
-A bug can be triggered by following command
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-$ modprobe nd_pmem && modprobe -r nd_pmem
+This function only calls of_node_put() in the regular path.
+And it will cause refcount leak in error paths.
+Fix this by calling of_node_put() in error handling too.
 
-[   10.060014] BUG dax_cache (Not tainted): Objects remaining in dax_cache on __kmem_cache_shutdown()
-[   10.060938] Slab 0x0000000085b729ac objects=9 used=1 fp=0x000000004f5ae469 flags=0x200000000010200(slab|head|node)
-[   10.062433] Call Trace:
-[   10.062673]  dump_stack_lvl+0x34/0x44
-[   10.062865]  slab_err+0x90/0xd0
-[   10.063619]  __kmem_cache_shutdown+0x13b/0x2f0
-[   10.063848]  kmem_cache_destroy+0x4a/0x110
-[   10.064058]  __x64_sys_delete_module+0x265/0x300
-
-This is caused by dax_fs_exit() not flushing inodes before destroy cache.
-To fix this issue, call rcu_barrier() before destroy cache.
-
-Signed-off-by: Tong Zhang <ztong0001@gmail.com>
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220212071111.148575-1-ztong0001@gmail.com
-Fixes: 7b6be8444e0f ("dax: refactor dax-fs into a generic provider of 'struct dax_device' instances")
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+Fixes: 4e28491a7a19 ("ASoC: mediatek: mt8192-mt6359: fix device_node leak")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Link: https://lore.kernel.org/r/20220308015224.23585-1-linmq006@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dax/super.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../mt8192/mt8192-mt6359-rt1015-rt5682.c       | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/dax/super.c b/drivers/dax/super.c
-index e20d0cef10a1..0e55dde937d2 100644
---- a/drivers/dax/super.c
-+++ b/drivers/dax/super.c
-@@ -612,6 +612,7 @@ static int dax_fs_init(void)
- static void dax_fs_exit(void)
- {
- 	kern_unmount(dax_mnt);
-+	rcu_barrier();
- 	kmem_cache_destroy(dax_cache);
+diff --git a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
+index ab449d0e4e9b..c1d225b49851 100644
+--- a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
++++ b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
+@@ -1116,8 +1116,10 @@ static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	card = (struct snd_soc_card *)of_device_get_match_data(&pdev->dev);
+-	if (!card)
+-		return -EINVAL;
++	if (!card) {
++		ret = -EINVAL;
++		goto put_platform_node;
++	}
+ 	card->dev = &pdev->dev;
+ 
+ 	hdmi_codec = of_parse_phandle(pdev->dev.of_node,
+@@ -1159,20 +1161,24 @@ static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+-	if (!priv)
+-		return -ENOMEM;
++	if (!priv) {
++		ret = -ENOMEM;
++		goto put_hdmi_codec;
++	}
+ 	snd_soc_card_set_drvdata(card, priv);
+ 
+ 	ret = mt8192_afe_gpio_init(&pdev->dev);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "init gpio error %d\n", ret);
+-		return ret;
++		goto put_hdmi_codec;
+ 	}
+ 
+ 	ret = devm_snd_soc_register_card(&pdev->dev, card);
+ 
+-	of_node_put(platform_node);
++put_hdmi_codec:
+ 	of_node_put(hdmi_codec);
++put_platform_node:
++	of_node_put(platform_node);
+ 	return ret;
  }
  
 -- 

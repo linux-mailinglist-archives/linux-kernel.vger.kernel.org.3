@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37794F3A8B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA664F3AAC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381540AbiDELqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52324 "EHLO
+        id S1381582AbiDELqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244880AbiDEIwp (ORCPT
+        with ESMTP id S244882AbiDEIwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:52:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C14223BF1;
-        Tue,  5 Apr 2022 01:45:24 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A300623BF5;
+        Tue,  5 Apr 2022 01:45:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE922609D0;
-        Tue,  5 Apr 2022 08:45:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2CD3C385A0;
-        Tue,  5 Apr 2022 08:45:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47C08B81BAE;
+        Tue,  5 Apr 2022 08:45:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8284CC385A0;
+        Tue,  5 Apr 2022 08:45:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148323;
-        bh=zU7u/yHCVJFvTPDvmJ3yVd81YrXpQ+cTytG0N2dOO4k=;
+        s=korg; t=1649148325;
+        bh=G+dpt/CHyJptW+Y2sRkZveVurfZhzw2Rf/ij93P3riA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KBAhrB6/2XtgBtqg+QTRzJsU2va2dx6peoF3u2afZli06KM3GJ4mD6AKfhmOcoykh
-         FMIMgt3X5BB5rbt+HuEENFHz4oatZmH+KL1pcygkhei4zniBbXPf81FzwLp5Ake9aQ
-         TdY0ohKKtmD/iy2+riNmxbKf4PJV2S3Qa/HyQhxw=
+        b=B6p6ClOrU+W9k0sQIFAu2N4dlmNkotAXvmnPrYJ47RRmyM9wR7jNSo41mVHzAbC4B
+         a6ytlMYQGinTadipM8MmcvU8Fl9mJUC+XQgJ630HczVme6FhaHS0QBterqwANgKp41
+         uwBxKw6wqavHGMAZVTF2CKtOI/kJcxZNypUUeYRI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Heidelberg <david@ixit.cz>,
-        Steev Klimaszewski <steev@kali.org>,
+        stable@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0316/1017] arm64: dts: qcom: sdm845: fix microphone bias properties and values
-Date:   Tue,  5 Apr 2022 09:20:29 +0200
-Message-Id: <20220405070403.657709246@linuxfoundation.org>
+Subject: [PATCH 5.16 0317/1017] arm64: dts: qcom: sm8250: fix PCIe bindings to follow schema
+Date:   Tue,  5 Apr 2022 09:20:30 +0200
+Message-Id: <20220405070403.687973357@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,56 +57,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Heidelberg <david@ixit.cz>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit 625c24460dbbc3b6c9a148c0a30f0830893fc909 ]
+[ Upstream commit d60507200485bc778bf6a5556271d784ab09d913 ]
 
-replace millivolt with correct microvolt and adjust value to
-the minimal value allowed by documentation.
+Replace (unused) enable-gpio binding with schema-defined wake-gpios. The
+GPIO line is still unused, but at least we'd follow the defined schema.
 
-Found with `make qcom/sdm845-oneplus-fajita.dtb`.
+While we are at it, change perst-gpio property to follow the preferred
+naming schema (perst-gpios).
 
-Fixes:
-arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: codec@1: 'qcom,micbias1-microvolt' is a required property
-        From schema: Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
-arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: codec@1: 'qcom,micbias2-microvolt' is a required property
-        From schema: Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
-arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: codec@1: 'qcom,micbias3-microvolt' is a required property
-        From schema: Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
-arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: codec@1: 'qcom,micbias4-microvolt' is a required property
-        From schema: Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
-arch/arm64/boot/dts/qcom/sdm845-oneplus-fajita.dt.yaml: codec@1: 'qcom,micbias1-millivolt', 'qcom,micbias2-millivolt', 'qcom,micbias3-millivolt', 'qcom,micbias4-millivolt' do not match any of the regexes: '^.*@[0-9a-f]+$', 'pinctrl-[0-9]+'
-
-Fixes: 27ca1de07dc3 ("arm64: dts: qcom: sdm845: add slimbus nodes")
-
-Signed-off-by: David Heidelberg <david@ixit.cz>
-Tested-by: Steev Klimaszewski <steev@kali.org>
+Fixes: 13e948a36db7 ("arm64: dts: qcom: sm8250: Commonize PCIe pins")
+Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20211213195105.114596-1-david@ixit.cz
+Link: https://lore.kernel.org/r/20211214231448.2044987-1-dmitry.baryshkov@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/arm64/boot/dts/qcom/sm8250.dtsi | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index 526087586ba4..0dda3a378158 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -3613,10 +3613,10 @@
- 					#clock-cells = <0>;
- 					clock-frequency = <9600000>;
- 					clock-output-names = "mclk";
--					qcom,micbias1-millivolt = <1800>;
--					qcom,micbias2-millivolt = <1800>;
--					qcom,micbias3-millivolt = <1800>;
--					qcom,micbias4-millivolt = <1800>;
-+					qcom,micbias1-microvolt = <1800000>;
-+					qcom,micbias2-microvolt = <1800000>;
-+					qcom,micbias3-microvolt = <1800000>;
-+					qcom,micbias4-microvolt = <1800000>;
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index 8a3373c110fc..7d1ec0432020 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -1426,8 +1426,8 @@
+ 			phys = <&pcie0_lane>;
+ 			phy-names = "pciephy";
  
- 					#address-cells = <1>;
- 					#size-cells = <1>;
+-			perst-gpio = <&tlmm 79 GPIO_ACTIVE_LOW>;
+-			enable-gpio = <&tlmm 81 GPIO_ACTIVE_HIGH>;
++			perst-gpios = <&tlmm 79 GPIO_ACTIVE_LOW>;
++			wake-gpios = <&tlmm 81 GPIO_ACTIVE_HIGH>;
+ 
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&pcie0_default_state>;
+@@ -1530,8 +1530,8 @@
+ 			phys = <&pcie1_lane>;
+ 			phy-names = "pciephy";
+ 
+-			perst-gpio = <&tlmm 82 GPIO_ACTIVE_LOW>;
+-			enable-gpio = <&tlmm 84 GPIO_ACTIVE_HIGH>;
++			perst-gpios = <&tlmm 82 GPIO_ACTIVE_LOW>;
++			wake-gpios = <&tlmm 84 GPIO_ACTIVE_HIGH>;
+ 
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&pcie1_default_state>;
+@@ -1636,8 +1636,8 @@
+ 			phys = <&pcie2_lane>;
+ 			phy-names = "pciephy";
+ 
+-			perst-gpio = <&tlmm 85 GPIO_ACTIVE_LOW>;
+-			enable-gpio = <&tlmm 87 GPIO_ACTIVE_HIGH>;
++			perst-gpios = <&tlmm 85 GPIO_ACTIVE_LOW>;
++			wake-gpios = <&tlmm 87 GPIO_ACTIVE_HIGH>;
+ 
+ 			pinctrl-names = "default";
+ 			pinctrl-0 = <&pcie2_default_state>;
 -- 
 2.34.1
 

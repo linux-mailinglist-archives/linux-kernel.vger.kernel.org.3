@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E3E4F3063
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F00944F2F95
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236243AbiDEI1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
+        id S235146AbiDEI0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235150AbiDEH7Z (ORCPT
+        with ESMTP id S235348AbiDEH7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:59:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F7F5748A;
-        Tue,  5 Apr 2022 00:53:54 -0700 (PDT)
+        Tue, 5 Apr 2022 03:59:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88BE57491;
+        Tue,  5 Apr 2022 00:54:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42616615C3;
-        Tue,  5 Apr 2022 07:53:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CB56C34110;
-        Tue,  5 Apr 2022 07:53:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29DA661722;
+        Tue,  5 Apr 2022 07:54:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AAD6C34111;
+        Tue,  5 Apr 2022 07:54:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145233;
-        bh=MBJNukljmwQnzR5zg24hkhfWMssQy3eMfwPIH82ryCA=;
+        s=korg; t=1649145244;
+        bh=k5R7zHG+JGBCo1Mf88SDA+mrmcIevYFylf9t74xM0Ec=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ayPieFVQK+tDGUwAv21FtmkErjt1kNA8I8BuPePfPVQS46dr0ryACSmSmErCg+GXl
-         +od+e+pQTQJutTDkJphuNGZ022rR+PsEJc0xOC8w5hrPtrSVpgwMMv5ReUugEM57+1
-         ge1rMhHUk7N6EYWyyXeXT99HjgVlICfLGaUanEW0=
+        b=nZO8xeHEaicYWYJmIBOwPYzrkx2rMoY7YUcEyskS8tpmfxiupjMp2cYuLNMGO0Rb1
+         21SFfRNDUeY21qCUk4MQcYV9sgw++UHuqxPhIPizwALqeZD8/ouCa2CjaGSsPpEATJ
+         n9RtlXuYnl8nwZxIaLMFr4k+PTqWb2cWJEo7APMs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        stable@vger.kernel.org, devicetree@vger.kernel.org,
+        Maulik Shah <quic_mkshah@quicinc.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0332/1126] arm64: dts: qcom: sm8250: fix PCIe bindings to follow schema
-Date:   Tue,  5 Apr 2022 09:17:59 +0200
-Message-Id: <20220405070417.361513582@linuxfoundation.org>
+Subject: [PATCH 5.17 0336/1126] arm64: dts: qcom: sm8350: Correct TCS configuration for apps rsc
+Date:   Tue,  5 Apr 2022 09:18:03 +0200
+Message-Id: <20220405070417.478351415@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -57,63 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From: Maulik Shah <quic_mkshah@quicinc.com>
 
-[ Upstream commit d60507200485bc778bf6a5556271d784ab09d913 ]
+[ Upstream commit a131255e4ad1ef8d4873ecba21561ba272b2547a ]
 
-Replace (unused) enable-gpio binding with schema-defined wake-gpios. The
-GPIO line is still unused, but at least we'd follow the defined schema.
+Correct the TCS config by updating the number of TCSes for each type.
 
-While we are at it, change perst-gpio property to follow the preferred
-naming schema (perst-gpios).
-
-Fixes: 13e948a36db7 ("arm64: dts: qcom: sm8250: Commonize PCIe pins")
-Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: devicetree@vger.kernel.org
+Fixes: b7e8f433a673 ("arm64: dts: qcom: Add basic devicetree support for SM8350 SoC")
+Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20211214231448.2044987-1-dmitry.baryshkov@linaro.org
+Link: https://lore.kernel.org/r/1641749107-31979-4-git-send-email-quic_mkshah@quicinc.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ arch/arm64/boot/dts/qcom/sm8350.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index e2a5dfa7b1a0..a92230bec1dd 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -1740,8 +1740,8 @@
- 			phys = <&pcie0_lane>;
- 			phy-names = "pciephy";
+diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+index 4b19744bcfb3..765d018e6306 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+@@ -1820,7 +1820,7 @@
+ 			qcom,tcs-offset = <0xd00>;
+ 			qcom,drv-id = <2>;
+ 			qcom,tcs-config = <ACTIVE_TCS  2>, <SLEEP_TCS   3>,
+-					  <WAKE_TCS    3>, <CONTROL_TCS 1>;
++					  <WAKE_TCS    3>, <CONTROL_TCS 0>;
  
--			perst-gpio = <&tlmm 79 GPIO_ACTIVE_LOW>;
--			enable-gpio = <&tlmm 81 GPIO_ACTIVE_HIGH>;
-+			perst-gpios = <&tlmm 79 GPIO_ACTIVE_LOW>;
-+			wake-gpios = <&tlmm 81 GPIO_ACTIVE_HIGH>;
- 
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&pcie0_default_state>;
-@@ -1844,8 +1844,8 @@
- 			phys = <&pcie1_lane>;
- 			phy-names = "pciephy";
- 
--			perst-gpio = <&tlmm 82 GPIO_ACTIVE_LOW>;
--			enable-gpio = <&tlmm 84 GPIO_ACTIVE_HIGH>;
-+			perst-gpios = <&tlmm 82 GPIO_ACTIVE_LOW>;
-+			wake-gpios = <&tlmm 84 GPIO_ACTIVE_HIGH>;
- 
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&pcie1_default_state>;
-@@ -1950,8 +1950,8 @@
- 			phys = <&pcie2_lane>;
- 			phy-names = "pciephy";
- 
--			perst-gpio = <&tlmm 85 GPIO_ACTIVE_LOW>;
--			enable-gpio = <&tlmm 87 GPIO_ACTIVE_HIGH>;
-+			perst-gpios = <&tlmm 85 GPIO_ACTIVE_LOW>;
-+			wake-gpios = <&tlmm 87 GPIO_ACTIVE_HIGH>;
- 
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&pcie2_default_state>;
+ 			rpmhcc: clock-controller {
+ 				compatible = "qcom,sm8350-rpmh-clk";
 -- 
 2.34.1
 

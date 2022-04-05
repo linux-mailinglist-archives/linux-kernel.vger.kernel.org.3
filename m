@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50774F4EA6
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE0224F4B6A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1836013AbiDFAeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
+        id S1574596AbiDEW4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457386AbiDEQDK (ORCPT
+        with ESMTP id S1457388AbiDEQDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 12:03:10 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC9B2704
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:40:01 -0700 (PDT)
-Date:   Tue, 05 Apr 2022 15:39:58 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB70C5FCB
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:40:02 -0700 (PDT)
+Date:   Tue, 05 Apr 2022 15:40:00 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649173199;
+        s=2020; t=1649173201;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FYLX3zMwYYS/2mN49h0AH7UMJtTws3J3pqHyjIi/IxM=;
-        b=ehbVtxmz1Q9X6qmneErmigDyIgiViqG41BF7LScvI3Rp2HAkIaHZfw5jSXCjWvJBK3lWH4
-        9VCVpjR1unlsk7W3PNHMmrP6dcqkPJ52rmvirVHUgyE2EmJPfu3/j60x5wRYgna25OwI6A
-        qotnuFZzP+BL/Zruc3+StU3W4dJ8i2/ZefJI8ia7EJO6T9n542mDLxMxl+JRVCH/CkQmSM
-        xnzLfkNR2FqOAYMmaBVHSPXRK5LuMKR39rceD7vjD0jRtsanRW0Oek3BkMxVDSclJ/i3Zz
-        ef8FZphKpAdJowv/9CaqN0wWMHsq2XSywwPbp8vSNnB5NVykEps+ZH91I3357Q==
+        bh=8bcrTbBX37+kVlaJBgWsgjcoRyEtqjFzNj/tbPx0zYU=;
+        b=LcddRTzEt2hk++e3vqlqx9ayHVfzAFNYkZougtlZIGzKvxTkJi7Q9itEdGCxkLddkdexY1
+        S+RLplC6XuDJK5SfR7kDp0oVgGQML4ZPDen3ooqIrqnl01OdnQnhRjodDhT/BPuthNRToc
+        Y84jWTSzFRKghZcXN7389LsczoNNFkOBi5otO1haniu734wU1MNxQ4P0I0400YdjdYKkI6
+        zkoqgItv5Iyzf3n3BFiOu4PAnvfME4ZhxscphiQeGMNy2ipGHr8WEagXmZLEyd4u6EFMNk
+        jJclyHLxQTi+x3gdVvw7yOdMNWM+31uInkRruxt4QyJBMAo0l4AYpmF0gYS0GA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649173199;
+        s=2020e; t=1649173201;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=FYLX3zMwYYS/2mN49h0AH7UMJtTws3J3pqHyjIi/IxM=;
-        b=M391MSaHICL7bCwBLE3YYQnbytAbiCNIZKhlpsTumXmArmzxWcTXvLpU2bNU4uG6CYh01c
-        GWCAPNgJfakdutBQ==
-From:   "irqchip-bot for Andre Przywara" <tip-bot2@linutronix.de>
+        bh=8bcrTbBX37+kVlaJBgWsgjcoRyEtqjFzNj/tbPx0zYU=;
+        b=vX+9+7BKkVw21k5REZ/ZSKU/iT0nz0rA6FTH5uwQNcnzu+n9LW71E4TH1p7BIvwLLHEwGt
+        MQub8RSMQqd89/CA==
+From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-fixes] irqchip/gic, gic-v3: Prevent GSI to SGI
- translations
-Cc:     Andre Przywara <andre.przywara@arm.com>,
+Subject: [irqchip: irq/irqchip-fixes] irqchip/gic-v4: Wait for
+ GICR_VPENDBASER.Dirty to clear before descheduling
+Cc:     Jingyi Wang <wangjingyi11@huawei.com>,
+        Nianyao Tang <tangnianyao@huawei.com>,
         Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: <20220404110842.2882446-1-andre.przywara@arm.com>
-References: <20220404110842.2882446-1-andre.przywara@arm.com>
+In-Reply-To: <4aae10ba-b39a-5f84-754b-69c2eb0a2c03@huawei.com>
+References: <4aae10ba-b39a-5f84-754b-69c2eb0a2c03@huawei.com>
 MIME-Version: 1.0
-Message-ID: <164917319858.389.17170980222692377777.tip-bot2@tip-bot2>
+Message-ID: <164917320029.389.16907436280316992087.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,65 +68,93 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
 
-Commit-ID:     544808f7e21cb9ccdb8f3aa7de594c05b1419061
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/544808f7e21cb9ccdb8f3aa7de594c05b1419061
-Author:        Andre Przywara <andre.przywara@arm.com>
-AuthorDate:    Mon, 04 Apr 2022 12:08:42 +01:00
+Commit-ID:     af27e41612ec7e5b4783f589b753a7c31a37aac8
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/af27e41612ec7e5b4783f589b753a7c31a37aac8
+Author:        Marc Zyngier <maz@kernel.org>
+AuthorDate:    Thu, 17 Mar 2022 09:49:02 
 Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Tue, 05 Apr 2022 16:33:47 +01:00
+CommitterDate: Tue, 05 Apr 2022 16:33:13 +01:00
 
-irqchip/gic, gic-v3: Prevent GSI to SGI translations
+irqchip/gic-v4: Wait for GICR_VPENDBASER.Dirty to clear before descheduling
 
-At the moment the GIC IRQ domain translation routine happily converts
-ACPI table GSI numbers below 16 to GIC SGIs (Software Generated
-Interrupts aka IPIs). On the Devicetree side we explicitly forbid this
-translation, actually the function will never return HWIRQs below 16 when
-using a DT based domain translation.
+The way KVM drives GICv4.{0,1} is as follows:
+- vcpu_load() makes the VPE resident, instructing the RD to start
+  scanning for interrupts
+- just before entering the guest, we check that the RD has finished
+  scanning and that we can start running the vcpu
+- on preemption, we deschedule the VPE by making it invalid on
+  the RD
 
-We expect SGIs to be handled in the first part of the function, and any
-further occurrence should be treated as a firmware bug, so add a check
-and print to report this explicitly and avoid lengthy debug sessions.
+However, we are preemptible between the first two steps. If it so
+happens *and* that the RD was still scanning, we nonetheless write
+to the GICR_VPENDBASER register while Dirty is set, and bad things
+happen (we're in UNPRED land).
 
-Fixes: 64b499d8df40 ("irqchip/gic-v3: Configure SGIs as standard interrupts")
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+This affects both the 4.0 and 4.1 implementations.
+
+Make sure Dirty is cleared before performing the deschedule,
+meaning that its_clear_vpend_valid() becomes a sort of full VPE
+residency barrier.
+
+Reported-by: Jingyi Wang <wangjingyi11@huawei.com>
+Tested-by: Nianyao Tang <tangnianyao@huawei.com>
 Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220404110842.2882446-1-andre.przywara@arm.com
+Fixes: 57e3cebd022f ("KVM: arm64: Delay the polling of the GICR_VPENDBASER.Dirty bit")
+Link: https://lore.kernel.org/r/4aae10ba-b39a-5f84-754b-69c2eb0a2c03@huawei.com
 ---
- drivers/irqchip/irq-gic-v3.c | 6 ++++++
- drivers/irqchip/irq-gic.c    | 6 ++++++
- 2 files changed, 12 insertions(+)
+ drivers/irqchip/irq-gic-v3-its.c | 28 +++++++++++++++++++---------
+ 1 file changed, 19 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-index 9b63165..b252d55 100644
---- a/drivers/irqchip/irq-gic-v3.c
-+++ b/drivers/irqchip/irq-gic-v3.c
-@@ -1466,6 +1466,12 @@ static int gic_irq_domain_translate(struct irq_domain *d,
- 		if(fwspec->param_count != 2)
- 			return -EINVAL;
+diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+index cd77297..a0fc764 100644
+--- a/drivers/irqchip/irq-gic-v3-its.c
++++ b/drivers/irqchip/irq-gic-v3-its.c
+@@ -3011,18 +3011,12 @@ static int __init allocate_lpi_tables(void)
+ 	return 0;
+ }
  
-+		if (fwspec->param[0] < 16) {
-+			pr_err(FW_BUG "Illegal GSI%d translation request\n",
-+			       fwspec->param[0]);
-+			return -EINVAL;
-+		}
+-static u64 its_clear_vpend_valid(void __iomem *vlpi_base, u64 clr, u64 set)
++static u64 read_vpend_dirty_clear(void __iomem *vlpi_base)
+ {
+ 	u32 count = 1000000;	/* 1s! */
+ 	bool clean;
+ 	u64 val;
+ 
+-	val = gicr_read_vpendbaser(vlpi_base + GICR_VPENDBASER);
+-	val &= ~GICR_VPENDBASER_Valid;
+-	val &= ~clr;
+-	val |= set;
+-	gicr_write_vpendbaser(val, vlpi_base + GICR_VPENDBASER);
+-
+ 	do {
+ 		val = gicr_read_vpendbaser(vlpi_base + GICR_VPENDBASER);
+ 		clean = !(val & GICR_VPENDBASER_Dirty);
+@@ -3033,10 +3027,26 @@ static u64 its_clear_vpend_valid(void __iomem *vlpi_base, u64 clr, u64 set)
+ 		}
+ 	} while (!clean && count);
+ 
+-	if (unlikely(val & GICR_VPENDBASER_Dirty)) {
++	if (unlikely(!clean))
+ 		pr_err_ratelimited("ITS virtual pending table not cleaning\n");
 +
- 		*hwirq = fwspec->param[0];
- 		*type = fwspec->param[1];
- 
-diff --git a/drivers/irqchip/irq-gic.c b/drivers/irqchip/irq-gic.c
-index 58ba835..09c710e 100644
---- a/drivers/irqchip/irq-gic.c
-+++ b/drivers/irqchip/irq-gic.c
-@@ -1123,6 +1123,12 @@ static int gic_irq_domain_translate(struct irq_domain *d,
- 		if(fwspec->param_count != 2)
- 			return -EINVAL;
- 
-+		if (fwspec->param[0] < 16) {
-+			pr_err(FW_BUG "Illegal GSI%d translation request\n",
-+			       fwspec->param[0]);
-+			return -EINVAL;
-+		}
++	return val;
++}
 +
- 		*hwirq = fwspec->param[0];
- 		*type = fwspec->param[1];
++static u64 its_clear_vpend_valid(void __iomem *vlpi_base, u64 clr, u64 set)
++{
++	u64 val;
++
++	/* Make sure we wait until the RD is done with the initial scan */
++	val = read_vpend_dirty_clear(vlpi_base);
++	val &= ~GICR_VPENDBASER_Valid;
++	val &= ~clr;
++	val |= set;
++	gicr_write_vpendbaser(val, vlpi_base + GICR_VPENDBASER);
++
++	val = read_vpend_dirty_clear(vlpi_base);
++	if (unlikely(val & GICR_VPENDBASER_Dirty))
+ 		val |= GICR_VPENDBASER_PendingLast;
+-	}
  
+ 	return val;
+ }

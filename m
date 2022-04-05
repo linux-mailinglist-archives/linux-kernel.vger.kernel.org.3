@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C514F26CD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6834F274B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235520AbiDEH7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
+        id S233512AbiDEH5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232881AbiDEHrN (ORCPT
+        with ESMTP id S232933AbiDEHrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:47:13 -0400
+        Tue, 5 Apr 2022 03:47:15 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC45C9BBAB;
-        Tue,  5 Apr 2022 00:43:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0CC9D066;
+        Tue,  5 Apr 2022 00:43:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7ED70B81B18;
-        Tue,  5 Apr 2022 07:43:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5ADBC340EE;
-        Tue,  5 Apr 2022 07:43:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F3A7DB81BB2;
+        Tue,  5 Apr 2022 07:43:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BE53C34110;
+        Tue,  5 Apr 2022 07:43:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144590;
-        bh=KrpoqmBm+9RVRU5wmQ0UoegreTFKV0nEgPTZhJMf3uw=;
+        s=korg; t=1649144595;
+        bh=iTOfois0ZYqCKY2NqBrvbMomRaXgDpO4cM8qbhCxGl4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z696SO4J8y5zA4q8hpxm/m1C5D5lHSdG5v2q+wEH7jTFcAWbanlHCPAaIWmfubIc/
-         6mPNouekrLvEjLG93CvgERn1uvJCuErE+6JP5GXbbGWOBl5zyYpZ2fCylhtng8iIHI
-         /dWFrdnVKsXnkDYnWZ0Dt8gBeVx/Y5HdUCsmaHuc=
+        b=0Y1O/F0bPaSM1ke7IKNa6LxY2+qQ3UQ2LSA9wgfu6nJ9YP9+avlS2rJAPQdeQ3yKJ
+         vH8IgeJDhYftu1PQJgXa6kcIwa0oLjsh6FG2At7Z4Ma1OHscuqH+3Q4yN7sXC3zHpN
+         5oeBgxN/gSa0p+0yRU8In1l5soSWF0277LvqAb5k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chao Yu <chao.yu@oppo.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH 5.17 0061/1126] f2fs: fix to do sanity check on .cp_pack_total_block_count
-Date:   Tue,  5 Apr 2022 09:13:28 +0200
-Message-Id: <20220405070409.361282307@linuxfoundation.org>
+        stable@vger.kernel.org, Miaohe Lin <linmiaohe@huawei.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Subject: [PATCH 5.17 0063/1126] mm/mlock: fix two bugs in user_shm_lock()
+Date:   Tue,  5 Apr 2022 09:13:30 +0200
+Message-Id: <20220405070409.420000846@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -54,76 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Yu <chao@kernel.org>
+From: Miaohe Lin <linmiaohe@huawei.com>
 
-commit 5b5b4f85b01604389f7a0f11ef180a725bf0e2d4 upstream.
+commit e97824ff663ce3509fe040431c713182c2f058b1 upstream.
 
-As bughunter reported in bugzilla:
+user_shm_lock forgets to set allowed to 0 when get_ucounts fails. So the
+later user_shm_unlock might do the extra dec_rlimit_ucounts. Also in the
+RLIM_INFINITY case, user_shm_lock will success regardless of the value of
+memlock where memblock == LONG_MAX && !capable(CAP_IPC_LOCK) should fail.
+Fix all of these by changing the code to leave lock_limit at ULONG_MAX aka
+RLIM_INFINITY, leave "allowed" initialized to 0 and remove the special case
+of RLIM_INFINITY as nothing can be greater than ULONG_MAX.
 
-https://bugzilla.kernel.org/show_bug.cgi?id=215709
+Credit goes to Eric W. Biederman for proposing simplifying the code and
+thus catching the later bug.
 
-f2fs may hang when mounting a fuzzed image, the dmesg shows as below:
-
-__filemap_get_folio+0x3a9/0x590
-pagecache_get_page+0x18/0x60
-__get_meta_page+0x95/0x460 [f2fs]
-get_checkpoint_version+0x2a/0x1e0 [f2fs]
-validate_checkpoint+0x8e/0x2a0 [f2fs]
-f2fs_get_valid_checkpoint+0xd0/0x620 [f2fs]
-f2fs_fill_super+0xc01/0x1d40 [f2fs]
-mount_bdev+0x18a/0x1c0
-f2fs_mount+0x15/0x20 [f2fs]
-legacy_get_tree+0x28/0x50
-vfs_get_tree+0x27/0xc0
-path_mount+0x480/0xaa0
-do_mount+0x7c/0xa0
-__x64_sys_mount+0x8b/0xe0
-do_syscall_64+0x38/0xc0
-entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-The root cause is cp_pack_total_block_count field in checkpoint was fuzzed
-to one, as calcuated, two cp pack block locates in the same block address,
-so then read latter cp pack block, it will block on the page lock due to
-the lock has already held when reading previous cp pack block, fix it by
-adding sanity check for cp_pack_total_block_count.
-
+Fixes: d7c9e99aee48 ("Reimplement RLIMIT_MEMLOCK on top of ucounts")
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 Cc: stable@vger.kernel.org
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+v1: https://lkml.kernel.org/r/20220310132417.41189-1-linmiaohe@huawei.com
+v2: https://lkml.kernel.org/r/20220314064039.62972-1-linmiaohe@huawei.com
+Link: https://lkml.kernel.org/r/20220322080918.59861-1-linmiaohe@huawei.com
+Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/f2fs/checkpoint.c |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ mm/mlock.c |    7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
---- a/fs/f2fs/checkpoint.c
-+++ b/fs/f2fs/checkpoint.c
-@@ -864,6 +864,7 @@ static struct page *validate_checkpoint(
- 	struct page *cp_page_1 = NULL, *cp_page_2 = NULL;
- 	struct f2fs_checkpoint *cp_block = NULL;
- 	unsigned long long cur_version = 0, pre_version = 0;
-+	unsigned int cp_blocks;
- 	int err;
+--- a/mm/mlock.c
++++ b/mm/mlock.c
+@@ -827,13 +827,12 @@ int user_shm_lock(size_t size, struct uc
  
- 	err = get_checkpoint_version(sbi, cp_addr, &cp_block,
-@@ -871,15 +872,16 @@ static struct page *validate_checkpoint(
- 	if (err)
- 		return NULL;
+ 	locked = (size + PAGE_SIZE - 1) >> PAGE_SHIFT;
+ 	lock_limit = rlimit(RLIMIT_MEMLOCK);
+-	if (lock_limit == RLIM_INFINITY)
+-		allowed = 1;
+-	lock_limit >>= PAGE_SHIFT;
++	if (lock_limit != RLIM_INFINITY)
++		lock_limit >>= PAGE_SHIFT;
+ 	spin_lock(&shmlock_user_lock);
+ 	memlock = inc_rlimit_ucounts(ucounts, UCOUNT_RLIMIT_MEMLOCK, locked);
  
--	if (le32_to_cpu(cp_block->cp_pack_total_block_count) >
--					sbi->blocks_per_seg) {
-+	cp_blocks = le32_to_cpu(cp_block->cp_pack_total_block_count);
-+
-+	if (cp_blocks > sbi->blocks_per_seg || cp_blocks <= F2FS_CP_PACKS) {
- 		f2fs_warn(sbi, "invalid cp_pack_total_block_count:%u",
- 			  le32_to_cpu(cp_block->cp_pack_total_block_count));
- 		goto invalid_cp;
+-	if (!allowed && (memlock == LONG_MAX || memlock > lock_limit) && !capable(CAP_IPC_LOCK)) {
++	if ((memlock == LONG_MAX || memlock > lock_limit) && !capable(CAP_IPC_LOCK)) {
+ 		dec_rlimit_ucounts(ucounts, UCOUNT_RLIMIT_MEMLOCK, locked);
+ 		goto out;
  	}
- 	pre_version = *version;
- 
--	cp_addr += le32_to_cpu(cp_block->cp_pack_total_block_count) - 1;
-+	cp_addr += cp_blocks - 1;
- 	err = get_checkpoint_version(sbi, cp_addr, &cp_block,
- 					&cp_page_2, version);
- 	if (err)
 
 

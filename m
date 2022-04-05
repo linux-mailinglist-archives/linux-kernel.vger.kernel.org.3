@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5774F455A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE91A4F45FD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346604AbiDENvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
+        id S1383590AbiDENbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345522AbiDEJWr (ORCPT
+        with ESMTP id S1345602AbiDEJWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:22:47 -0400
+        Tue, 5 Apr 2022 05:22:52 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EAC4C7B8;
-        Tue,  5 Apr 2022 02:11:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B3D4E39A;
+        Tue,  5 Apr 2022 02:11:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E62F8B81A12;
-        Tue,  5 Apr 2022 09:11:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C54AC385A2;
-        Tue,  5 Apr 2022 09:11:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ECDF2B81A22;
+        Tue,  5 Apr 2022 09:11:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58F3EC385A2;
+        Tue,  5 Apr 2022 09:11:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149868;
-        bh=/l/iLNcIVgBl6tLCGjPlH9RZNhMIyV8EQX/3Y4TFIDo=;
+        s=korg; t=1649149876;
+        bh=kkViTKLxtjTpFBT2dicv1m1kwZOz0euKBQaPrCLNz78=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ud390YaoTGTVy/NtgXt3n5IksjXeINsMV5l98jgv6cqILSwVyYuQYo9Y53D0ZBz8M
-         4p4OhlK2o/9alfhJLLEtTvt/rB0oBeugzq+WPxwqYfiOlWyWQAgPbVUbyri7d+LUWC
-         2eV+hpgZUBsmTP4/N/b8QUvbnm5OiWlnhCxpRnnc=
+        b=tHimlaVn766KIMMpbatMDM4yVwIFAwlmt5drOftk3pzMDbTordOCIiPMFZc6udYYP
+         VYCdf3ntt+FsOkoFCe0rtx5VK7exQiHtgzB7RClheQ2E5lo4LWCAaldUtEhHoUS5X8
+         w8GzAZuBed5slWguVsfQSV0jlFWsZ/jsBgCGTffA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Bizon <mbizon@freebox.fr>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Russell Currey <ruscur@russell.cc>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.16 0869/1017] powerpc: Add set_memory_{p/np}() and remove set_memory_attr()
-Date:   Tue,  5 Apr 2022 09:29:42 +0200
-Message-Id: <20220405070420.031451125@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: [PATCH 5.16 0872/1017] drm/i915: Treat SAGV block time 0 as SAGV disabled
+Date:   Tue,  5 Apr 2022 09:29:45 +0200
+Message-Id: <20220405070420.120133998@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,178 +57,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+From: Ville Syrjälä <ville.syrjala@linux.intel.com>
 
-commit f222ab83df92acf72691a2021e1f0d99880dcdf1 upstream.
+commit 1937f3feb0e84089ae4065e09c871b8ab4676f01 upstream.
 
-set_memory_attr() was implemented by commit 4d1755b6a762 ("powerpc/mm:
-implement set_memory_attr()") because the set_memory_xx() couldn't
-be used at that time to modify memory "on the fly" as explained it
-the commit.
+For modern platforms the spec explicitly states that a
+SAGV block time of zero means that SAGV is not supported.
+Let's extend that to all platforms. Supposedly there should
+be no systems where this isn't true, and it'll allow us to:
+- use the same code regardless of older vs. newer platform
+- wm latencies already treat 0 as disabled, so this fits well
+  with other related code
+- make it a bit more clear when SAGV is used vs. not
+- avoid overflows from adding U32_MAX with a u16 wm0 latency value
+  which could cause us to miscalculate the SAGV watermarks on tgl+
 
-But set_memory_attr() uses set_pte_at() which leads to warnings when
-CONFIG_DEBUG_VM is selected, because set_pte_at() is unexpected for
-updating existing page table entries.
-
-The check could be bypassed by using __set_pte_at() instead,
-as it was the case before commit c988cfd38e48 ("powerpc/32:
-use set_memory_attr()") but since commit 9f7853d7609d ("powerpc/mm:
-Fix set_memory_*() against concurrent accesses") it is now possible
-to use set_memory_xx() functions to update page table entries
-"on the fly" because the update is now atomic.
-
-For DEBUG_PAGEALLOC we need to clear and set back _PAGE_PRESENT.
-Add set_memory_np() and set_memory_p() for that.
-
-Replace all uses of set_memory_attr() by the relevant set_memory_xx()
-and remove set_memory_attr().
-
-Fixes: c988cfd38e48 ("powerpc/32: use set_memory_attr()")
 Cc: stable@vger.kernel.org
-Reported-by: Maxime Bizon <mbizon@freebox.fr>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Tested-by: Maxime Bizon <mbizon@freebox.fr>
-Reviewed-by: Russell Currey <ruscur@russell.cc>
-Depends-on: 9f7853d7609d ("powerpc/mm: Fix set_memory_*() against concurrent accesses")
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/cda2b44b55c96f9ac69fa92e68c01084ec9495c5.1640344012.git.christophe.leroy@csgroup.eu
+Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220309164948.10671-2-ville.syrjala@linux.intel.com
+Reviewed-by: Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>
+(cherry picked from commit d8f5855b31c0523ea3b171db8dfb998830e8735d)
+Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/include/asm/set_memory.h |   12 +++++++++-
- arch/powerpc/mm/pageattr.c            |   39 +++++-----------------------------
- arch/powerpc/mm/pgtable_32.c          |   24 +++++++++-----------
- 3 files changed, 28 insertions(+), 47 deletions(-)
+ drivers/gpu/drm/i915/intel_pm.c |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
---- a/arch/powerpc/include/asm/set_memory.h
-+++ b/arch/powerpc/include/asm/set_memory.h
-@@ -6,6 +6,8 @@
- #define SET_MEMORY_RW	1
- #define SET_MEMORY_NX	2
- #define SET_MEMORY_X	3
-+#define SET_MEMORY_NP	4	/* Set memory non present */
-+#define SET_MEMORY_P	5	/* Set memory present */
- 
- int change_memory_attr(unsigned long addr, int numpages, long action);
- 
-@@ -29,6 +31,14 @@ static inline int set_memory_x(unsigned
- 	return change_memory_attr(addr, numpages, SET_MEMORY_X);
- }
- 
--int set_memory_attr(unsigned long addr, int numpages, pgprot_t prot);
-+static inline int set_memory_np(unsigned long addr, int numpages)
-+{
-+	return change_memory_attr(addr, numpages, SET_MEMORY_NP);
-+}
-+
-+static inline int set_memory_p(unsigned long addr, int numpages)
-+{
-+	return change_memory_attr(addr, numpages, SET_MEMORY_P);
-+}
- 
- #endif
---- a/arch/powerpc/mm/pageattr.c
-+++ b/arch/powerpc/mm/pageattr.c
-@@ -48,6 +48,12 @@ static int change_page_attr(pte_t *ptep,
- 	case SET_MEMORY_X:
- 		pte = pte_mkexec(pte);
- 		break;
-+	case SET_MEMORY_NP:
-+		pte_update(&init_mm, addr, ptep, _PAGE_PRESENT, 0, 0);
-+		break;
-+	case SET_MEMORY_P:
-+		pte_update(&init_mm, addr, ptep, 0, _PAGE_PRESENT, 0);
-+		break;
- 	default:
- 		WARN_ON_ONCE(1);
- 		break;
-@@ -96,36 +102,3 @@ int change_memory_attr(unsigned long add
- 	return apply_to_existing_page_range(&init_mm, start, size,
- 					    change_page_attr, (void *)action);
- }
--
--/*
-- * Set the attributes of a page:
-- *
-- * This function is used by PPC32 at the end of init to set final kernel memory
-- * protection. It includes changing the maping of the page it is executing from
-- * and data pages it is using.
-- */
--static int set_page_attr(pte_t *ptep, unsigned long addr, void *data)
--{
--	pgprot_t prot = __pgprot((unsigned long)data);
--
--	spin_lock(&init_mm.page_table_lock);
--
--	set_pte_at(&init_mm, addr, ptep, pte_modify(*ptep, prot));
--	flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
--
--	spin_unlock(&init_mm.page_table_lock);
--
--	return 0;
--}
--
--int set_memory_attr(unsigned long addr, int numpages, pgprot_t prot)
--{
--	unsigned long start = ALIGN_DOWN(addr, PAGE_SIZE);
--	unsigned long sz = numpages * PAGE_SIZE;
--
--	if (numpages <= 0)
--		return 0;
--
--	return apply_to_existing_page_range(&init_mm, start, sz, set_page_attr,
--					    (void *)pgprot_val(prot));
--}
---- a/arch/powerpc/mm/pgtable_32.c
-+++ b/arch/powerpc/mm/pgtable_32.c
-@@ -135,10 +135,12 @@ void mark_initmem_nx(void)
- 	unsigned long numpages = PFN_UP((unsigned long)_einittext) -
- 				 PFN_DOWN((unsigned long)_sinittext);
- 
--	if (v_block_mapped((unsigned long)_sinittext))
-+	if (v_block_mapped((unsigned long)_sinittext)) {
- 		mmu_mark_initmem_nx();
--	else
--		set_memory_attr((unsigned long)_sinittext, numpages, PAGE_KERNEL);
-+	} else {
-+		set_memory_nx((unsigned long)_sinittext, numpages);
-+		set_memory_rw((unsigned long)_sinittext, numpages);
-+	}
- }
- 
- #ifdef CONFIG_STRICT_KERNEL_RWX
-@@ -152,18 +154,14 @@ void mark_rodata_ro(void)
- 		return;
+--- a/drivers/gpu/drm/i915/intel_pm.c
++++ b/drivers/gpu/drm/i915/intel_pm.c
+@@ -3712,8 +3712,7 @@ skl_setup_sagv_block_time(struct drm_i91
+ 		MISSING_CASE(DISPLAY_VER(dev_priv));
  	}
  
--	numpages = PFN_UP((unsigned long)_etext) -
--		   PFN_DOWN((unsigned long)_stext);
--
--	set_memory_attr((unsigned long)_stext, numpages, PAGE_KERNEL_ROX);
- 	/*
--	 * mark .rodata as read only. Use __init_begin rather than __end_rodata
--	 * to cover NOTES and EXCEPTION_TABLE.
-+	 * mark .text and .rodata as read only. Use __init_begin rather than
-+	 * __end_rodata to cover NOTES and EXCEPTION_TABLE.
- 	 */
- 	numpages = PFN_UP((unsigned long)__init_begin) -
--		   PFN_DOWN((unsigned long)__start_rodata);
-+		   PFN_DOWN((unsigned long)_stext);
- 
--	set_memory_attr((unsigned long)__start_rodata, numpages, PAGE_KERNEL_RO);
-+	set_memory_ro((unsigned long)_stext, numpages);
- 
- 	// mark_initmem_nx() should have already run by now
- 	ptdump_check_wx();
-@@ -179,8 +177,8 @@ void __kernel_map_pages(struct page *pag
- 		return;
- 
- 	if (enable)
--		set_memory_attr(addr, numpages, PAGE_KERNEL);
-+		set_memory_p(addr, numpages);
- 	else
--		set_memory_attr(addr, numpages, __pgprot(0));
-+		set_memory_np(addr, numpages);
+-	/* Default to an unusable block time */
+-	dev_priv->sagv_block_time_us = -1;
++	dev_priv->sagv_block_time_us = 0;
  }
- #endif /* CONFIG_DEBUG_PAGEALLOC */
+ 
+ /*
+@@ -5634,7 +5633,7 @@ static void skl_compute_plane_wm(const s
+ 	result->min_ddb_alloc = max(min_ddb_alloc, blocks) + 1;
+ 	result->enable = true;
+ 
+-	if (DISPLAY_VER(dev_priv) < 12)
++	if (DISPLAY_VER(dev_priv) < 12 && dev_priv->sagv_block_time_us)
+ 		result->can_sagv = latency >= dev_priv->sagv_block_time_us;
+ }
+ 
+@@ -5665,7 +5664,10 @@ static void tgl_compute_sagv_wm(const st
+ 	struct drm_i915_private *dev_priv = to_i915(crtc_state->uapi.crtc->dev);
+ 	struct skl_wm_level *sagv_wm = &plane_wm->sagv.wm0;
+ 	struct skl_wm_level *levels = plane_wm->wm;
+-	unsigned int latency = dev_priv->wm.skl_latency[0] + dev_priv->sagv_block_time_us;
++	unsigned int latency = 0;
++
++	if (dev_priv->sagv_block_time_us)
++		latency = dev_priv->sagv_block_time_us + dev_priv->wm.skl_latency[0];
+ 
+ 	skl_compute_plane_wm(crtc_state, 0, latency,
+ 			     wm_params, &levels[0],
 
 

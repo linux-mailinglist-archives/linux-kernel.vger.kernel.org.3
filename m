@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 036244F4C3E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3A54F4C19
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1453632AbiDEXPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
+        id S1575793AbiDEXJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:09:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243492AbiDEKhC (ORCPT
+        with ESMTP id S1354206AbiDEKMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:37:02 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E827A53E32;
-        Tue,  5 Apr 2022 03:22:01 -0700 (PDT)
+        Tue, 5 Apr 2022 06:12:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3B054BC3;
+        Tue,  5 Apr 2022 02:58:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 67BF8CE1C9D;
-        Tue,  5 Apr 2022 10:22:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A175C385A1;
-        Tue,  5 Apr 2022 10:21:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43267B817D3;
+        Tue,  5 Apr 2022 09:58:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAF06C385A2;
+        Tue,  5 Apr 2022 09:58:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154118;
-        bh=acO79mqm0yvbtjrflsojebLRmE5nRnrPuXbmZzr+qBY=;
+        s=korg; t=1649152719;
+        bh=QvVBerDKdoCVfQK/+ujmnOE/1XqAbYOn7pRFuVZg8nk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=znwe//XXlvrg6Y7qBnn9wrmHAik56T5Mlh/CT6R0r44v+WHEAfDUrFS/5H3LIvghf
-         qqH/xlFZAXtTe0+kGsGivERXTpgi8JFskNHm6xjBA8JtImLKogJAa7oSUvWEk5BfPb
-         HYXH+AfV+UNxizH4ho0z8EszLva/6Y6aaAVRHBWY=
+        b=Pf31a6kOcM3IjMNmdEGZR29P17fY229pkxC26NUipHk9JNLiNGHgPH+F4rB+6jKpI
+         VpWK55/s9eeRSICj0qNLz/+9W1z7ogB/fVIYjYVQgh9gzm6Z8oDsRvI24fOXoJvgnp
+         pU88W307X0WCSVTjtMlJrTyPA/imgNTH3w2bw8pI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 447/599] lib/test: use after free in register_test_dev_kmod()
+        stable@vger.kernel.org, Hengqi Chen <hengqi.chen@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yonghong Song <yhs@fb.com>
+Subject: [PATCH 5.15 879/913] bpf: Fix comment for helper bpf_current_task_under_cgroup()
 Date:   Tue,  5 Apr 2022 09:32:21 +0200
-Message-Id: <20220405070312.131794111@linuxfoundation.org>
+Message-Id: <20220405070406.171460911@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Hengqi Chen <hengqi.chen@gmail.com>
 
-[ Upstream commit dc0ce6cc4b133f5f2beb8b47dacae13a7d283c2c ]
+commit 58617014405ad5c9f94f464444f4972dabb71ca7 upstream.
 
-The "test_dev" pointer is freed but then returned to the caller.
+Fix the descriptions of the return values of helper bpf_current_task_under_cgroup().
 
-Fixes: d9c6a72d6fa2 ("kmod: add test driver to stress test the module loader")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: c6b5fb8690fa ("bpf: add documentation for eBPF helpers (42-50)")
+Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/bpf/20220310155335.1278783-1-hengqi.chen@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- lib/test_kmod.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/uapi/linux/bpf.h       |    4 ++--
+ tools/include/uapi/linux/bpf.h |    4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/lib/test_kmod.c b/lib/test_kmod.c
-index eab52770070d..c637f6b5053a 100644
---- a/lib/test_kmod.c
-+++ b/lib/test_kmod.c
-@@ -1155,6 +1155,7 @@ static struct kmod_test_device *register_test_dev_kmod(void)
- 	if (ret) {
- 		pr_err("could not register misc device: %d\n", ret);
- 		free_test_dev_kmod(test_dev);
-+		test_dev = NULL;
- 		goto out;
- 	}
- 
--- 
-2.34.1
-
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -2276,8 +2276,8 @@ union bpf_attr {
+  * 	Return
+  * 		The return value depends on the result of the test, and can be:
+  *
+- *		* 0, if current task belongs to the cgroup2.
+- *		* 1, if current task does not belong to the cgroup2.
++ *		* 1, if current task belongs to the cgroup2.
++ *		* 0, if current task does not belong to the cgroup2.
+  * 		* A negative error code, if an error occurred.
+  *
+  * long bpf_skb_change_tail(struct sk_buff *skb, u32 len, u64 flags)
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -2276,8 +2276,8 @@ union bpf_attr {
+  * 	Return
+  * 		The return value depends on the result of the test, and can be:
+  *
+- *		* 0, if current task belongs to the cgroup2.
+- *		* 1, if current task does not belong to the cgroup2.
++ *		* 1, if current task belongs to the cgroup2.
++ *		* 0, if current task does not belong to the cgroup2.
+  * 		* A negative error code, if an error occurred.
+  *
+  * long bpf_skb_change_tail(struct sk_buff *skb, u32 len, u64 flags)
 
 

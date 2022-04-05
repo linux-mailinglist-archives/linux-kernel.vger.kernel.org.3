@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 360584F44B1
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 954FB4F44E5
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:32:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386205AbiDEMke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51012 "EHLO
+        id S1354944AbiDEMi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236480AbiDEJDA (ORCPT
+        with ESMTP id S236407AbiDEJCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:03:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5D711C06;
-        Tue,  5 Apr 2022 01:54:45 -0700 (PDT)
+        Tue, 5 Apr 2022 05:02:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4CCFD03;
+        Tue,  5 Apr 2022 01:54:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6902B81C15;
-        Tue,  5 Apr 2022 08:54:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C1F4C385A0;
-        Tue,  5 Apr 2022 08:54:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78401614E4;
+        Tue,  5 Apr 2022 08:54:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87063C385A1;
+        Tue,  5 Apr 2022 08:54:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148882;
-        bh=mPVrZdRJ9e3MIMaNoTtfRmSysmhMmo05jO1t2TBd+Ew=;
+        s=korg; t=1649148870;
+        bh=61JOj3rc2LxFRa0F8Npl5jgFEtUFrS1lDJOqF8od3/c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HWapMY3HxprYp+Q/91gZyl/qfS9vOAEDZCXUk3KwXyWiQfFlchso8uv+a7RgZwHSo
-         eLn7NhFJmapHghcT6lezybzrH9ocw3LLFUp8v1lIdP3y2C4T0d6Zb3R9D2pCsTDI96
-         uTzoZBkEVgIlpI2x6uZQU4xABXFziY2dYIytgG/w=
+        b=QtQjK4v7hi3gb1T2FcyVtPHk/5xGpQe+NnPRhnB+Tf4U+DW1EYwWEoTT0flWIDlc6
+         JKBtdEA9KWUjOlyC7GLemJDBKCmQfXSkkvtvvRarI4+11bWdyamotPksnehGMuBeYI
+         Etb53/VK3UwFKzuM0vqsNbmaSVuwbBOYnRbs3pBs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ryder Lee <ryder.lee@mediatek.com>,
-        MeiChia Chiu <meichia.chiu@mediatek.com>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0467/1017] mt76: mt7915: fix the nss setting in bitrates
-Date:   Tue,  5 Apr 2022 09:23:00 +0200
-Message-Id: <20220405070408.160948329@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Thomas Bracht Laumann Jespersen <t@laumann.xyz>,
+        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0473/1017] scripts/dtc: Call pkg-config POSIXly correct
+Date:   Tue,  5 Apr 2022 09:23:06 +0200
+Message-Id: <20220405070408.339016025@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,41 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: MeiChia Chiu <meichia.chiu@mediatek.com>
+From: Thomas Bracht Laumann Jespersen <t@laumann.xyz>
 
-[ Upstream commit c41d2a075206fcbdc89695b874a6ac06160b4f1a ]
+[ Upstream commit a8b309ce9760943486e0585285e0125588a31650 ]
 
-without this change, the fixed MCS only supports 1 Nss.
+Running with POSIXLY_CORRECT=1 in the environment the scripts/dtc build
+fails, because pkg-config doesn't output anything when the flags come
+after the arguments.
 
-Fixes: 70fd1333cd32f ("mt76: mt7915: rework .set_bitrate_mask() to support more options")
-Reviewed-by: Ryder Lee <ryder.lee@mediatek.com>
-Signed-off-by: MeiChia Chiu <meichia.chiu@mediatek.com>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Fixes: 067c650c456e ("dtc: Use pkg-config to locate libyaml")
+Signed-off-by: Thomas Bracht Laumann Jespersen <t@laumann.xyz>
+Signed-off-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20220131112028.7907-1-t@laumann.xyz
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7915/mcu.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ scripts/dtc/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-index ef8b0d0a05ef..21fbe7a6141f 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-@@ -2124,9 +2124,12 @@ mt7915_mcu_add_rate_ctrl_fixed(struct mt7915_dev *dev,
- 			phy.sgi |= gi << (i << (_he));				\
- 			phy.he_ltf |= mask->control[band].he_ltf << (i << (_he));\
- 		}								\
--		for (i = 0; i < ARRAY_SIZE(mask->control[band]._mcs); i++) 	\
--			nrates += hweight16(mask->control[band]._mcs[i]);  	\
--		phy.mcs = ffs(mask->control[band]._mcs[0]) - 1;			\
-+		for (i = 0; i < ARRAY_SIZE(mask->control[band]._mcs); i++) {	\
-+			if (!mask->control[band]._mcs[i])			\
-+				continue;					\
-+			nrates += hweight16(mask->control[band]._mcs[i]);	\
-+			phy.mcs = ffs(mask->control[band]._mcs[i]) - 1;		\
-+		}								\
- 	} while (0)
+diff --git a/scripts/dtc/Makefile b/scripts/dtc/Makefile
+index 95aaf7431bff..1cba78e1dce6 100644
+--- a/scripts/dtc/Makefile
++++ b/scripts/dtc/Makefile
+@@ -29,7 +29,7 @@ dtc-objs	+= yamltree.o
+ # To include <yaml.h> installed in a non-default path
+ HOSTCFLAGS_yamltree.o := $(shell pkg-config --cflags yaml-0.1)
+ # To link libyaml installed in a non-default path
+-HOSTLDLIBS_dtc	:= $(shell pkg-config yaml-0.1 --libs)
++HOSTLDLIBS_dtc	:= $(shell pkg-config --libs yaml-0.1)
+ endif
  
- 	if (sta->he_cap.has_he) {
+ # Generated files need one more search path to include headers in source tree
 -- 
 2.34.1
 

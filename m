@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA4A64F3FB0
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F1E4F3E52
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234507AbiDEOf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
+        id S1350913AbiDEMIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238681AbiDEJci (ORCPT
+        with ESMTP id S244444AbiDEIwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:32:38 -0400
+        Tue, 5 Apr 2022 04:52:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C254EEBB;
-        Tue,  5 Apr 2022 02:19:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4582D5EAB;
+        Tue,  5 Apr 2022 01:41:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61B366144D;
-        Tue,  5 Apr 2022 09:19:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65AC2C385A3;
-        Tue,  5 Apr 2022 09:19:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBA6361003;
+        Tue,  5 Apr 2022 08:41:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C43CEC385A0;
+        Tue,  5 Apr 2022 08:41:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150384;
-        bh=03Ws9qQgvQwf9mtv7tPWt+LryrlarzUFcRPDufIyokE=;
+        s=korg; t=1649148061;
+        bh=XQzzdibhL0otRHSkdbIMNyKyXU70t8rbk4JAHgEy2QE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jcdD+oVd0LEWalWL4NgL8YUfmHBI/bWNc1lv3iFGWf+lvij6O/jxo6iiDhW7hw078
-         2/T9dLrQF5cRfh2jaqu/1MInCG8XtJf+3dYDJgg1dAetMK7eCeWia1B/YXRj2Boo6V
-         8LgRZlQYfpw79w9d/Ui4HpGL60VCFFZ0YadZ3RJk=
+        b=BWkArbK+yfYpQKkODEzTd86MzG3Bpl5PPFpAY95G5DokSkiHSZosArYmkL8pMvcnq
+         cLEUsdxbtcyNi51Cz1pjDpqn6e9KrxeTUgJB0iNLt+kTSPemU1HZ+aIAaEK1j9KTJc
+         BuwUoqJoYS3GnT5dduYJG3lX64GeXwnHJ+rJ17Q4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexander Usyskin <alexander.usyskin@intel.com>,
-        Tomas Winkler <tomas.winkler@intel.com>
-Subject: [PATCH 5.15 037/913] mei: me: disable driver on the ign firmware
-Date:   Tue,  5 Apr 2022 09:18:19 +0200
-Message-Id: <20220405070340.928706468@linuxfoundation.org>
+        stable@vger.kernel.org, Lyude Paul <lyude@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>
+Subject: [PATCH 5.16 0187/1017] drm/nouveau/backlight: Fix LVDS backlight detection on some laptops
+Date:   Tue,  5 Apr 2022 09:18:20 +0200
+Message-Id: <20220405070359.790951126@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,102 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Usyskin <alexander.usyskin@intel.com>
+From: Lyude Paul <lyude@redhat.com>
 
-commit ccdf6f806fbf559f7c29ed9302a7c1b4da7fd37f upstream.
+commit 6b0076540faffd47f5a899bf12f3528c4f0e726b upstream.
 
-Add a quirk to disable MEI interface on Intel PCH Ignition (IGN)
-as the IGN firmware doesn't support the protocol.
+It seems that some laptops will report having both an eDP and LVDS
+connector, even though only the LVDS connector is actually hooked up. This
+can lead to issues with backlight registration if the eDP connector ends up
+getting registered before the LVDS connector, as the backlight device will
+then be registered to the eDP connector instead of the LVDS connector.
 
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
-Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
-Link: https://lore.kernel.org/r/20220215080438.264876-1-tomas.winkler@intel.com
+So, fix this by only registering the backlight on connectors that are
+reported as being connected.
+
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Fixes: 6eca310e8924 ("drm/nouveau/kms/nv50-: Add basic DPCD backlight support for nouveau")
+Bugzilla: https://gitlab.freedesktop.org/drm/nouveau/-/issues/137
+Cc: <stable@vger.kernel.org> # v5.15+
+Reviewed-by: Karol Herbst <kherbst@redhat.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220204180504.328999-1-lyude@redhat.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/misc/mei/hw-me-regs.h |    1 +
- drivers/misc/mei/hw-me.c      |   23 ++++++++++++-----------
- 2 files changed, 13 insertions(+), 11 deletions(-)
+ drivers/gpu/drm/nouveau/nouveau_backlight.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/misc/mei/hw-me-regs.h
-+++ b/drivers/misc/mei/hw-me-regs.h
-@@ -120,6 +120,7 @@
- #define PCI_CFG_HFS_2         0x48
- #define PCI_CFG_HFS_3         0x60
- #  define PCI_CFG_HFS_3_FW_SKU_MSK   0x00000070
-+#  define PCI_CFG_HFS_3_FW_SKU_IGN   0x00000000
- #  define PCI_CFG_HFS_3_FW_SKU_SPS   0x00000060
- #define PCI_CFG_HFS_4         0x64
- #define PCI_CFG_HFS_5         0x68
---- a/drivers/misc/mei/hw-me.c
-+++ b/drivers/misc/mei/hw-me.c
-@@ -1405,16 +1405,16 @@ static bool mei_me_fw_type_sps_4(const s
- 	.quirk_probe = mei_me_fw_type_sps_4
+--- a/drivers/gpu/drm/nouveau/nouveau_backlight.c
++++ b/drivers/gpu/drm/nouveau/nouveau_backlight.c
+@@ -294,7 +294,8 @@ nv50_backlight_init(struct nouveau_backl
+ 	struct nouveau_drm *drm = nouveau_drm(nv_encoder->base.base.dev);
+ 	struct nvif_object *device = &drm->client.device.object;
  
- /**
-- * mei_me_fw_type_sps() - check for sps sku
-+ * mei_me_fw_type_sps_ign() - check for sps or ign sku
-  *
-- * Read ME FW Status register to check for SPS Firmware.
-- * The SPS FW is only signaled in pci function 0
-+ * Read ME FW Status register to check for SPS or IGN Firmware.
-+ * The SPS/IGN FW is only signaled in pci function 0
-  *
-  * @pdev: pci device
-  *
-- * Return: true in case of SPS firmware
-+ * Return: true in case of SPS/IGN firmware
-  */
--static bool mei_me_fw_type_sps(const struct pci_dev *pdev)
-+static bool mei_me_fw_type_sps_ign(const struct pci_dev *pdev)
- {
- 	u32 reg;
- 	u32 fw_type;
-@@ -1427,14 +1427,15 @@ static bool mei_me_fw_type_sps(const str
+-	if (!nvif_rd32(device, NV50_PDISP_SOR_PWM_CTL(ffs(nv_encoder->dcb->or) - 1)))
++	if (!nvif_rd32(device, NV50_PDISP_SOR_PWM_CTL(ffs(nv_encoder->dcb->or) - 1)) ||
++	    nv_conn->base.status != connector_status_connected)
+ 		return -ENODEV;
  
- 	dev_dbg(&pdev->dev, "fw type is %d\n", fw_type);
- 
--	return fw_type == PCI_CFG_HFS_3_FW_SKU_SPS;
-+	return fw_type == PCI_CFG_HFS_3_FW_SKU_IGN ||
-+	       fw_type == PCI_CFG_HFS_3_FW_SKU_SPS;
- }
- 
- #define MEI_CFG_KIND_ITOUCH                     \
- 	.kind = "itouch"
- 
--#define MEI_CFG_FW_SPS                          \
--	.quirk_probe = mei_me_fw_type_sps
-+#define MEI_CFG_FW_SPS_IGN                      \
-+	.quirk_probe = mei_me_fw_type_sps_ign
- 
- #define MEI_CFG_FW_VER_SUPP                     \
- 	.fw_ver_supported = 1
-@@ -1535,7 +1536,7 @@ static const struct mei_cfg mei_me_pch12
- 	MEI_CFG_PCH8_HFS,
- 	MEI_CFG_FW_VER_SUPP,
- 	MEI_CFG_DMA_128,
--	MEI_CFG_FW_SPS,
-+	MEI_CFG_FW_SPS_IGN,
- };
- 
- /* Cannon Lake itouch with quirk for SPS 5.0 and newer Firmware exclusion
-@@ -1545,7 +1546,7 @@ static const struct mei_cfg mei_me_pch12
- 	MEI_CFG_KIND_ITOUCH,
- 	MEI_CFG_PCH8_HFS,
- 	MEI_CFG_FW_VER_SUPP,
--	MEI_CFG_FW_SPS,
-+	MEI_CFG_FW_SPS_IGN,
- };
- 
- /* Tiger Lake and newer devices */
-@@ -1562,7 +1563,7 @@ static const struct mei_cfg mei_me_pch15
- 	MEI_CFG_FW_VER_SUPP,
- 	MEI_CFG_DMA_128,
- 	MEI_CFG_TRC,
--	MEI_CFG_FW_SPS,
-+	MEI_CFG_FW_SPS_IGN,
- };
- 
- /*
+ 	if (nv_conn->type == DCB_CONNECTOR_eDP) {
 
 

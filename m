@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F1E4F3973
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9F14F3972
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:48:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378598AbiDELeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50832 "EHLO
+        id S1378578AbiDELec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244676AbiDEIwc (ORCPT
+        with ESMTP id S244681AbiDEIwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:52:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC73D76EF;
-        Tue,  5 Apr 2022 01:41:52 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5B2D76D1;
+        Tue,  5 Apr 2022 01:41:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABF7F60FFC;
-        Tue,  5 Apr 2022 08:41:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6797C385A0;
-        Tue,  5 Apr 2022 08:41:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57B0960FFB;
+        Tue,  5 Apr 2022 08:41:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 687E9C385A3;
+        Tue,  5 Apr 2022 08:41:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148111;
-        bh=oRLN2IlqOxkWoTJkzS7xdz28eTe0nNxu9oZttJFSR0E=;
+        s=korg; t=1649148113;
+        bh=2O2qi9G29+1tq670OXCv1SbgmBO+GBQAThVfE/FwPEU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hwOBg8VXCT8b4x46l8y1rno4qistkLIWBOirQHJuz/UFQ6tcsCsoUvTcMypzV4S4J
-         C8DISbFYx5ulY+emrL0p826FCngzABKElUXThSsUZPrk+Oz/VZE0zQaX2OUkqLjhVn
-         Us5a49x2X4ieRb3D5f71uZuB0eGZ2Db6ui4iTrI4=
+        b=CtoMu2Qm8nfExsTi0ZzQ0Jo8aUq9g3g4cgTOeQdsH3My2cvEf4JkXbQijY89PPci9
+         fPOLGu29T3rx1BqkEU3EsvT2jMT2UXZmaj3o0EEqb8/GGo2wPVTSCYdZ1duSFA1Az9
+         4ncqwv51GVY9qfGwskhJejX5c7pYT9RD7owOnETA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0238/1017] crypto: amlogic - call finalize with bh disabled
-Date:   Tue,  5 Apr 2022 09:19:11 +0200
-Message-Id: <20220405070401.321973828@linuxfoundation.org>
+Subject: [PATCH 5.16 0239/1017] crypto: gemini - call finalize with bh disabled
+Date:   Tue,  5 Apr 2022 09:19:12 +0200
+Message-Id: <20220405070401.351219897@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -57,27 +57,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Corentin Labbe <clabbe@baylibre.com>
 
-[ Upstream commit dba633342994ce47d347bcf5522ba28301247b79 ]
+[ Upstream commit 7f22421103c5a7f9a1726f0ed125274c38174ddb ]
 
 Doing ipsec produces a spinlock recursion warning.
 This is due to not disabling BH during crypto completion function.
 
-Fixes: 48fe583fe541 ("crypto: amlogic - Add crypto accelerator for amlogic GXL")
+Fixes: 46c5338db7bd45b2 ("crypto: sl3516 - Add sl3516 crypto engine")
 Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/amlogic/amlogic-gxl-cipher.c | 2 ++
+ drivers/crypto/gemini/sl3516-ce-cipher.c | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/drivers/crypto/amlogic/amlogic-gxl-cipher.c b/drivers/crypto/amlogic/amlogic-gxl-cipher.c
-index c6865cbd334b..e79514fce731 100644
---- a/drivers/crypto/amlogic/amlogic-gxl-cipher.c
-+++ b/drivers/crypto/amlogic/amlogic-gxl-cipher.c
-@@ -265,7 +265,9 @@ static int meson_handle_cipher_request(struct crypto_engine *engine,
+diff --git a/drivers/crypto/gemini/sl3516-ce-cipher.c b/drivers/crypto/gemini/sl3516-ce-cipher.c
+index c1c2b1d86663..f2be0a7d7f7a 100644
+--- a/drivers/crypto/gemini/sl3516-ce-cipher.c
++++ b/drivers/crypto/gemini/sl3516-ce-cipher.c
+@@ -264,7 +264,9 @@ static int sl3516_ce_handle_cipher_request(struct crypto_engine *engine, void *a
  	struct skcipher_request *breq = container_of(areq, struct skcipher_request, base);
  
- 	err = meson_cipher(breq);
+ 	err = sl3516_ce_cipher(breq);
 +	local_bh_disable();
  	crypto_finalize_skcipher_request(engine, breq, err);
 +	local_bh_enable();

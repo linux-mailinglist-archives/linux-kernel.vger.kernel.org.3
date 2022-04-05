@@ -2,67 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446374F4A7F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:44:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445C84F4B62
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:01:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1457465AbiDEWrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
+        id S1574435AbiDEW4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383154AbiDEMY5 (ORCPT
+        with ESMTP id S1384219AbiDEM1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 08:24:57 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 63D48DA08A;
-        Tue,  5 Apr 2022 04:31:59 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 751C49200BB; Tue,  5 Apr 2022 13:31:58 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 7075E9200B4;
-        Tue,  5 Apr 2022 12:31:58 +0100 (BST)
-Date:   Tue, 5 Apr 2022 12:31:58 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-cc:     Andrew Powers-Holmes <aholmes@omnom.net>,
-        yaliang.wang@windriver.com, rppt@kernel.org, huangpei@loongson.cn,
-        Andrew Morton <akpm@linux-foundation.org>, kumba@gentoo.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        anshuman.khandual@arm.com, penberg@kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] MIPS: pgalloc: fix memory leak caused by pgd_free()
-In-Reply-To: <20220405104506.GA17085@alpha.franken.de>
-Message-ID: <alpine.DEB.2.21.2204051224560.47162@angie.orcam.me.uk>
-References: <20220310113116.2068859-1-yaliang.wang@windriver.com> <alpine.DEB.2.21.2204021446370.47162@angie.orcam.me.uk> <9cc88b1c-8a8c-95ea-2cf7-31be3b771495@omnom.net> <alpine.DEB.2.21.2204031122020.47162@angie.orcam.me.uk> <b273a9b7-82f7-5883-14d2-973dd005b005@omnom.net>
- <alpine.DEB.2.21.2204051027490.47162@angie.orcam.me.uk> <20220405104506.GA17085@alpha.franken.de>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Tue, 5 Apr 2022 08:27:16 -0400
+Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0DF7486F;
+        Tue,  5 Apr 2022 04:35:52 -0700 (PDT)
+Received: from grover.. (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-12.nifty.com with ESMTP id 235BYCGm000464;
+        Tue, 5 Apr 2022 20:34:12 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 235BYCGm000464
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1649158453;
+        bh=tlKllE+DeH+owxkSzZkT6wnBC6VcqxWAXsQhSEB8rk0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YdaL0ynmtbZVeMCw/+dhJuynpbARiMg258nxmjvJekOGt/BAROJZ5u5E6dzP9wHKk
+         z5WhiExOSraf3CMM3c6G+MBalNLwRSGDm+9bYdG5m0wFFYf8nRPWh9cmzKi924/NMO
+         AjCuGRYQZ8qtd70DvHof32c9rcC6cOiqixuQ3s7ZqYWWeS0/zYgRBTKEITtDktDB9X
+         a5r0Dly+Or5at2+zpXgdhCnEdSBqqQd6W6cWZmLP1hPR9XE/aYOGGg9WIK+12igwJn
+         wP97HdvKtkFIMPe+w69PRGXtEsrb+/Eo5STtoAHjICWMdV9YuDuv2bfDgpgRkmYk/z
+         fvA9GM3qVrezA==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexander Lobakin <alobakin@pm.me>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <n.schier@avm.de>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev
+Subject: [PATCH v2 00/10] kbuild: misc cleanups
+Date:   Tue,  5 Apr 2022 20:33:48 +0900
+Message-Id: <20220405113359.2880241-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Apr 2022, Thomas Bogendoerfer wrote:
 
-> >  NB I think it has to be backported to all the stable branches made since 
-> > the original breakage; i.e. v5.9+ (I haven't kept track of what they are).
-> 
-> the fix has a Fixes tag so it will usually ported to stable/longterm kernels.
-> I already saw it in Greg's patch bombs.
+This is a series of prerequisite cleanups of my next work.
 
- Hmm, not all fixes qualify for or indeed are worth backporting and I'd 
-expect those that have no stable annotation to remain on trunk only.  I 
-have been following this principle with my submissions anyway.
 
- Indeed I can see a backport to 5.17 has literally just been posted in 
-this humongous patch set, but in this case I suspect Greg has just picked 
-this up by hand (thanks, Greg!) having seen this discussion (though how he 
-manages to escape alive through the flood of messages has been astonishing 
-me).
+Masahiro Yamada (10):
+  kbuild: factor out genksyms command from cmd_gensymtypes_{c,S}
+  kbuild: do not remove empty *.symtypes explicitly
+  modpost: remove useless export_from_sec()
+  modpost: move export_from_secname() call to more relevant place
+  modpost: remove redundant initializes for static variables
+  modpost: remove annoying namespace_from_kstrtabns()
+  kbuild: get rid of duplication in the first line of *.mod files
+  kbuild: split the second line of *.mod into *.usyms
+  kbuild: refactor cmd_modversions_c
+  kbuild: refactor cmd_modversions_S
 
-  Maciej
+ .gitignore                  |  1 +
+ Makefile                    |  2 +-
+ scripts/Makefile.build      | 86 ++++++++++++++++---------------------
+ scripts/adjust_autoksyms.sh |  2 +-
+ scripts/gen_autoksyms.sh    | 18 +++++---
+ scripts/mod/modpost.c       | 49 ++++++---------------
+ scripts/mod/modpost.h       |  4 --
+ scripts/mod/sumversion.c    | 11 +----
+ 8 files changed, 64 insertions(+), 109 deletions(-)
+
+-- 
+2.32.0
+

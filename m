@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A7F14F4E13
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9DC4F4A7E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1587427AbiDFAJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
+        id S1457337AbiDEWrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358461AbiDEK2Z (ORCPT
+        with ESMTP id S1353921AbiDEKJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:28:25 -0400
+        Tue, 5 Apr 2022 06:09:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EB0BA325;
-        Tue,  5 Apr 2022 03:18:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD444C4E1B;
+        Tue,  5 Apr 2022 02:55:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CBB461777;
-        Tue,  5 Apr 2022 10:18:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FBF4C385A0;
-        Tue,  5 Apr 2022 10:18:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31F6161577;
+        Tue,  5 Apr 2022 09:55:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 441F1C385A1;
+        Tue,  5 Apr 2022 09:55:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153882;
-        bh=3SyFg1Ox2BVv77hwr5Q+brbLvYJwdOjO6I/B8CTdJ5k=;
+        s=korg; t=1649152547;
+        bh=fywS0SO7tp8sPRJmZFhQFeRorWt9giLj0GkaAOpgxdc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TFRb0JRtSmUneYTMtm+T523bX1K3ipI78fWC3Yth0iUMDWYK3gEFwCowNmdfehZ75
-         YfAgVlD5ijA/P2BSUoq6h2d2HCbNKjScUBbwt5Xd7kMloEp+R7JmQHlUQNKD1QdvfM
-         tyH/L3bOpUWO9Qz1pnV+/3DyJBWy/5AcsF1S2cjg=
+        b=hyhNUsCdQasC8ykSIyUipJJuhWRUucXp7Rqi7iqo4WjHJs83ZI5ZmBHvbAlCjX7fz
+         wZzgm41Atr19kjbvSm9eAWv0Tglexrt0PYzqufLN+PIvkCU+iGgy2gxYGQUnUzjBgW
+         DCFhWNFG8942pVs50C1ry3pRwzWKEXtc4wxJ4PlA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 382/599] misc: alcor_pci: Fix an error handling path
-Date:   Tue,  5 Apr 2022 09:31:16 +0200
-Message-Id: <20220405070310.198300048@linuxfoundation.org>
+        stable@vger.kernel.org, Yi Liu <liu.yi24@zte.com.cn>,
+        Yi Wang <wang.yi59@zte.com.cn>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.15 815/913] KVM: SVM: fix panic on out-of-bounds guest IRQ
+Date:   Tue,  5 Apr 2022 09:31:17 +0200
+Message-Id: <20220405070404.260348077@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,72 +55,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Yi Wang <wang.yi59@zte.com.cn>
 
-[ Upstream commit 5b3dc949f554379edcb8ef6111aa5ecb78feb798 ]
+commit a80ced6ea514000d34bf1239d47553de0d1ee89e upstream.
 
-A successful ida_simple_get() should be balanced by a corresponding
-ida_simple_remove().
+As guest_irq is coming from KVM_IRQFD API call, it may trigger
+crash in svm_update_pi_irte() due to out-of-bounds:
 
-Add the missing call in the error handling path of the probe.
+crash> bt
+PID: 22218  TASK: ffff951a6ad74980  CPU: 73  COMMAND: "vcpu8"
+ #0 [ffffb1ba6707fa40] machine_kexec at ffffffff8565b397
+ #1 [ffffb1ba6707fa90] __crash_kexec at ffffffff85788a6d
+ #2 [ffffb1ba6707fb58] crash_kexec at ffffffff8578995d
+ #3 [ffffb1ba6707fb70] oops_end at ffffffff85623c0d
+ #4 [ffffb1ba6707fb90] no_context at ffffffff856692c9
+ #5 [ffffb1ba6707fbf8] exc_page_fault at ffffffff85f95b51
+ #6 [ffffb1ba6707fc50] asm_exc_page_fault at ffffffff86000ace
+    [exception RIP: svm_update_pi_irte+227]
+    RIP: ffffffffc0761b53  RSP: ffffb1ba6707fd08  RFLAGS: 00010086
+    RAX: ffffb1ba6707fd78  RBX: ffffb1ba66d91000  RCX: 0000000000000001
+    RDX: 00003c803f63f1c0  RSI: 000000000000019a  RDI: ffffb1ba66db2ab8
+    RBP: 000000000000019a   R8: 0000000000000040   R9: ffff94ca41b82200
+    R10: ffffffffffffffcf  R11: 0000000000000001  R12: 0000000000000001
+    R13: 0000000000000001  R14: ffffffffffffffcf  R15: 000000000000005f
+    ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
+ #7 [ffffb1ba6707fdb8] kvm_irq_routing_update at ffffffffc09f19a1 [kvm]
+ #8 [ffffb1ba6707fde0] kvm_set_irq_routing at ffffffffc09f2133 [kvm]
+ #9 [ffffb1ba6707fe18] kvm_vm_ioctl at ffffffffc09ef544 [kvm]
+    RIP: 00007f143c36488b  RSP: 00007f143a4e04b8  RFLAGS: 00000246
+    RAX: ffffffffffffffda  RBX: 00007f05780041d0  RCX: 00007f143c36488b
+    RDX: 00007f05780041d0  RSI: 000000004008ae6a  RDI: 0000000000000020
+    RBP: 00000000000004e8   R8: 0000000000000008   R9: 00007f05780041e0
+    R10: 00007f0578004560  R11: 0000000000000246  R12: 00000000000004e0
+    R13: 000000000000001a  R14: 00007f1424001c60  R15: 00007f0578003bc0
+    ORIG_RAX: 0000000000000010  CS: 0033  SS: 002b
 
-While at it, switch to ida_alloc()/ida_free() instead to
-ida_simple_get()/ida_simple_remove().
-The latter is deprecated and more verbose.
+Vmx have been fix this in commit 3a8b0677fc61 (KVM: VMX: Do not BUG() on
+out-of-bounds guest IRQ), so we can just copy source from that to fix
+this.
 
-Fixes: 4f556bc04e3c ("misc: cardreader: add new Alcor Micro Cardreader PCI driver")
-Reviewed-by: Oleksij Rempel <o.rempel@pengutronix.de>
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Link: https://lore.kernel.org/r/918a9875b7f67b7f8f123c4446452603422e8c5e.1644136776.git.christophe.jaillet@wanadoo.fr
+Co-developed-by: Yi Liu <liu.yi24@zte.com.cn>
+Signed-off-by: Yi Liu <liu.yi24@zte.com.cn>
+Signed-off-by: Yi Wang <wang.yi59@zte.com.cn>
+Message-Id: <20220309113025.44469-1-wang.yi59@zte.com.cn>
+Cc: stable@vger.kernel.org
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/cardreader/alcor_pci.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ arch/x86/kvm/svm/avic.c |   10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/misc/cardreader/alcor_pci.c b/drivers/misc/cardreader/alcor_pci.c
-index de6d44a158bb..3f514d77a843 100644
---- a/drivers/misc/cardreader/alcor_pci.c
-+++ b/drivers/misc/cardreader/alcor_pci.c
-@@ -266,7 +266,7 @@ static int alcor_pci_probe(struct pci_dev *pdev,
- 	if (!priv)
- 		return -ENOMEM;
+--- a/arch/x86/kvm/svm/avic.c
++++ b/arch/x86/kvm/svm/avic.c
+@@ -799,7 +799,7 @@ int svm_update_pi_irte(struct kvm *kvm,
+ {
+ 	struct kvm_kernel_irq_routing_entry *e;
+ 	struct kvm_irq_routing_table *irq_rt;
+-	int idx, ret = -EINVAL;
++	int idx, ret = 0;
  
--	ret = ida_simple_get(&alcor_pci_idr, 0, 0, GFP_KERNEL);
-+	ret = ida_alloc(&alcor_pci_idr, GFP_KERNEL);
- 	if (ret < 0)
- 		return ret;
- 	priv->id = ret;
-@@ -280,7 +280,8 @@ static int alcor_pci_probe(struct pci_dev *pdev,
- 	ret = pci_request_regions(pdev, DRV_NAME_ALCOR_PCI);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Cannot request region\n");
--		return -ENOMEM;
-+		ret = -ENOMEM;
-+		goto error_free_ida;
- 	}
+ 	if (!kvm_arch_has_assigned_device(kvm) ||
+ 	    !irq_remapping_cap(IRQ_POSTING_CAP))
+@@ -810,7 +810,13 @@ int svm_update_pi_irte(struct kvm *kvm,
  
- 	if (!(pci_resource_flags(pdev, bar) & IORESOURCE_MEM)) {
-@@ -324,6 +325,8 @@ static int alcor_pci_probe(struct pci_dev *pdev,
+ 	idx = srcu_read_lock(&kvm->irq_srcu);
+ 	irq_rt = srcu_dereference(kvm->irq_routing, &kvm->irq_srcu);
+-	WARN_ON(guest_irq >= irq_rt->nr_rt_entries);
++
++	if (guest_irq >= irq_rt->nr_rt_entries ||
++		hlist_empty(&irq_rt->map[guest_irq])) {
++		pr_warn_once("no route for guest_irq %u/%u (broken user space?)\n",
++			     guest_irq, irq_rt->nr_rt_entries);
++		goto out;
++	}
  
- error_release_regions:
- 	pci_release_regions(pdev);
-+error_free_ida:
-+	ida_free(&alcor_pci_idr, priv->id);
- 	return ret;
- }
- 
-@@ -337,7 +340,7 @@ static void alcor_pci_remove(struct pci_dev *pdev)
- 
- 	mfd_remove_devices(&pdev->dev);
- 
--	ida_simple_remove(&alcor_pci_idr, priv->id);
-+	ida_free(&alcor_pci_idr, priv->id);
- 
- 	pci_release_regions(pdev);
- 	pci_set_drvdata(pdev, NULL);
--- 
-2.34.1
-
+ 	hlist_for_each_entry(e, &irq_rt->map[guest_irq], link) {
+ 		struct vcpu_data vcpu_info;
 
 

@@ -2,71 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373F84F4FC8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF4B74F4FDE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1839385AbiDFBBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:01:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
+        id S1839807AbiDFBFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387516AbiDENPQ (ORCPT
+        with ESMTP id S1383538AbiDENaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 09:15:16 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27BAD557A;
-        Tue,  5 Apr 2022 05:20:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=/Jzy8onOXUPJU7Y+hs/6t3GRIWLkNmZwe+i4nNa4Yxc=; b=xTGGnE8UM+/e5BXzMVCICfkA3l
-        78wgvNqyPrLXzotrawBoBiAINgodkOn60B6J1YFAtkLIva9JxM5iWZyv6FvWxA6mlbYPUjCRcu8Bv
-        PGMzaaxFPXK4JIOVFeiKVmdwsVWZv52IUFxApOygAB2B0qeU3YjnxsFJIJs0llcFmuLo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nbiAO-00EFPI-74; Tue, 05 Apr 2022 14:20:12 +0200
-Date:   Tue, 5 Apr 2022 14:20:12 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Michael Walle <michael@walle.cc>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH net-next v3 2/3] dt-bindings: net: mscc-miim: add clock
- and clock-frequency
-Message-ID: <Ykwz/GKpsaug6RpD@lunn.ch>
-References: <20220405120951.4044875-1-michael@walle.cc>
- <20220405120951.4044875-3-michael@walle.cc>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220405120951.4044875-3-michael@walle.cc>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 5 Apr 2022 09:30:52 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DE63EAA0
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 05:29:35 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 58AE5210EA;
+        Tue,  5 Apr 2022 12:29:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649161774; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LX1Y1wytzXUwD49XoymIggwDFSmAem8nS60r7OHveSY=;
+        b=LNyuR9n5V63kXQ4u02QTDo3+rxmPzzHfTsEsTny+dqeOrCbA9qYZvNqxjVSz0Fc7fOwzGb
+        PrZdpcVSlmlw6KmhOiHINFP3p8YyGzsGgVA7pfLe14Ovd23T3n5CsbagnN0TV4b0uAX+vo
+        PbjWnA3Yq4sN+lJpOk8AiXuMRUYtlIQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649161774;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LX1Y1wytzXUwD49XoymIggwDFSmAem8nS60r7OHveSY=;
+        b=oNP8ulzXNzBvshg0+gstblohTrD+/4vq7Z30nb/vxaTnUA/koNXeLfV7D+mX7UkCZtBFw2
+        isk2iVy84jtcoPDw==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 426B3A3B89;
+        Tue,  5 Apr 2022 12:29:34 +0000 (UTC)
+Date:   Tue, 05 Apr 2022 14:29:34 +0200
+Message-ID: <s5ha6cz7lxt.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     perex@perex.cz, tiwai@suse.com, iommu@lists.linux-foundation.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: emu10k1: Stop using iommu_present()
+In-Reply-To: <5ac9b54285b2189b848da2595408eb3cae8e5e9d.1649160813.git.robin.murphy@arm.com>
+References: <5ac9b54285b2189b848da2595408eb3cae8e5e9d.1649160813.git.robin.murphy@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 02:09:50PM +0200, Michael Walle wrote:
-> Add the (optional) clock input of the MDIO controller and indicate that
-> the common clock-frequency property is supported. The driver can use it
-> to set the desired MDIO bus frequency.
+On Tue, 05 Apr 2022 14:13:33 +0200,
+Robin Murphy wrote:
 > 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> iommu_get_domain_for_dev() is already perfectly happy to return NULL
+> if the given device has no IOMMU. Drop the unnecessary check.
+> 
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+This will change the code behavior.  The current code does nothing if
+no IOMMU is found, but after your removal of the check, the code
+reaches to emu->iommu_workaround = true incorrectly.
 
-    Andrew
 
+thanks,
+
+Takashi
+
+> ---
+>  sound/pci/emu10k1/emu10k1_main.c | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/sound/pci/emu10k1/emu10k1_main.c b/sound/pci/emu10k1/emu10k1_main.c
+> index 86cc1ca025e4..5ffab343b89c 100644
+> --- a/sound/pci/emu10k1/emu10k1_main.c
+> +++ b/sound/pci/emu10k1/emu10k1_main.c
+> @@ -1751,9 +1751,6 @@ static void snd_emu10k1_detect_iommu(struct snd_emu10k1 *emu)
+>  
+>  	emu->iommu_workaround = false;
+>  
+> -	if (!iommu_present(emu->card->dev->bus))
+> -		return;
+> -
+>  	domain = iommu_get_domain_for_dev(emu->card->dev);
+>  	if (domain && domain->type == IOMMU_DOMAIN_IDENTITY)
+>  		return;
+> -- 
+> 2.28.0.dirty
+> 

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB8B4F3F00
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9D34F4254
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242223AbiDEO6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
+        id S1382593AbiDEMQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344632AbiDEJmH (ORCPT
+        with ESMTP id S244905AbiDEIwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:42:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAB3BE9EA;
-        Tue,  5 Apr 2022 02:27:50 -0700 (PDT)
+        Tue, 5 Apr 2022 04:52:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C83824596;
+        Tue,  5 Apr 2022 01:46:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC5C56165C;
-        Tue,  5 Apr 2022 09:27:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03140C385A0;
-        Tue,  5 Apr 2022 09:27:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C0F7614E4;
+        Tue,  5 Apr 2022 08:45:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A406DC385A0;
+        Tue,  5 Apr 2022 08:45:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150869;
-        bh=/fa+W8otdX4/pIC4YUsTrMT7cnva2we2YaIsU6eSU8M=;
+        s=korg; t=1649148359;
+        bh=7PbildU4fVy2AP3yvxFY7nRP8gtRqmn3F61F8jyqIRQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Il4NHh0D3FfRPmmTDON3R6umP+EBGn4ok1Q8GN0Uk8R38N3qq+CE+gWFXfw0a2iCK
-         AD0XfSvxECY/JaoKE0bHkwRzlkfCrOVAajDm8keKQ1G/xIjgK2+e2H2SMP9dQAIwsv
-         VYdR8YUA/Oxu7U8Wsodbmn2D4qWuWreJ3Gmikki8=
+        b=wUGGQ4QPs1B2nRaLUaY5XTS7QhIzSbkvKS/JEg16nkVqcn5tmf46/a1/7Vv83DP5I
+         4ME7RbiSqT40Yb7hV0wVl9/qjXZIosyiwm5+x/sTU+QvET2iA2vKPWknLBLiZU82pl
+         mOQGgtVa7ncpeTDdUi6hmlhdiEDH9SCd5/Z6e00A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH 5.15 178/913] drm/fb-helper: Mark screen buffers in system memory with FBINFO_VIRTFB
-Date:   Tue,  5 Apr 2022 09:20:40 +0200
-Message-Id: <20220405070345.189489718@linuxfoundation.org>
+        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0328/1017] ARM: ftrace: ensure that ADR takes the Thumb bit into account
+Date:   Tue,  5 Apr 2022 09:20:41 +0200
+Message-Id: <20220405070404.017836188@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,67 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Zimmermann <tzimmermann@suse.de>
+From: Ard Biesheuvel <ardb@kernel.org>
 
-commit cd9f7f7ac5932129fe81b4c7559cfcb226ec7c5c upstream.
+[ Upstream commit dd88b03ff0c84f4bcbe1419b93a4bed429fed3be ]
 
-Mark screen buffers in system memory with FBINFO_VIRTFB. Otherwise, fbdev
-deferred I/O marks mmap'ed areas of system memory with VM_IO. (There's an
-inverse relationship between the two flags.)
+Using ADR to take the address of 'ftrace_stub' via a local label
+produces an address that has the Thumb bit cleared, which means the
+subsequent comparison is guaranteed to fail. Instead, use the badr
+macro, which forces the Thumb bit to be set.
 
-For shadow buffers, also set the FBINFO_READS_FAST hint.
-
-v3:
-	* change FB_ to FBINFO_ in commit description
-v2:
-	* updated commit description (Daniel)
-	* added Fixes tag
-
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Fixes: d536540f304c ("drm/fb-helper: Add generic fbdev emulation .fb_probe function")
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: dri-devel@lists.freedesktop.org
-Cc: <stable@vger.kernel.org> # v4.19+
-Link: https://patchwork.freedesktop.org/patch/msgid/20220201115305.9333-1-tzimmermann@suse.de
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: a3ba87a61499 ("ARM: 6316/1: ftrace: add Thumb-2 support")
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/drm_fb_helper.c |    9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ arch/arm/kernel/entry-ftrace.S | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/drm_fb_helper.c
-+++ b/drivers/gpu/drm/drm_fb_helper.c
-@@ -2346,6 +2346,7 @@ static int drm_fb_helper_generic_probe(s
- 	fbi->fbops = &drm_fbdev_fb_ops;
- 	fbi->screen_size = fb->height * fb->pitches[0];
- 	fbi->fix.smem_len = fbi->screen_size;
-+	fbi->flags = FBINFO_DEFAULT;
+diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
+index a74289ebc803..f4886fb6e9ba 100644
+--- a/arch/arm/kernel/entry-ftrace.S
++++ b/arch/arm/kernel/entry-ftrace.S
+@@ -40,7 +40,7 @@
+ 	mcount_enter
+ 	ldr	r0, =ftrace_trace_function
+ 	ldr	r2, [r0]
+-	adr	r0, .Lftrace_stub
++	badr	r0, .Lftrace_stub
+ 	cmp	r0, r2
+ 	bne	1f
  
- 	drm_fb_helper_fill_info(fbi, fb_helper, sizes);
- 
-@@ -2353,19 +2354,21 @@ static int drm_fb_helper_generic_probe(s
- 		fbi->screen_buffer = vzalloc(fbi->screen_size);
- 		if (!fbi->screen_buffer)
- 			return -ENOMEM;
-+		fbi->flags |= FBINFO_VIRTFB | FBINFO_READS_FAST;
- 
- 		fbi->fbdefio = &drm_fbdev_defio;
--
- 		fb_deferred_io_init(fbi);
- 	} else {
- 		/* buffer is mapped for HW framebuffer */
- 		ret = drm_client_buffer_vmap(fb_helper->buffer, &map);
- 		if (ret)
- 			return ret;
--		if (map.is_iomem)
-+		if (map.is_iomem) {
- 			fbi->screen_base = map.vaddr_iomem;
--		else
-+		} else {
- 			fbi->screen_buffer = map.vaddr;
-+			fbi->flags |= FBINFO_VIRTFB;
-+		}
- 
- 		/*
- 		 * Shamelessly leak the physical address to user-space. As
+-- 
+2.34.1
+
 
 

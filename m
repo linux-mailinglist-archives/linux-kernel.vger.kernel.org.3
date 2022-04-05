@@ -2,50 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D9C04F2265
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 07:04:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4D44F2269
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 07:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbiDEFFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 01:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55866 "EHLO
+        id S229617AbiDEFHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 01:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiDEFFy (ORCPT
+        with ESMTP id S229639AbiDEFH1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 01:05:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5610F2408C
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 22:03:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 069A4B81A1C
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 05:03:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C5BDC340EE;
-        Tue,  5 Apr 2022 05:03:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649135032;
-        bh=s4jp7m29/elz1udJzUPX9qnRlradyqvvImu+zBEXFdE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m5R2delX1lljAk2JBtzoqkfHqaYsSTbH/yqi4QazW0ubO3ZF+2M7qsapY84ha91JR
-         xn5CFXzvROv39jkI5gjk0nE4bYk0BeJw6SwtGnjoyvlHfL/XaVLOBwWM/9oymJ07WV
-         uJWyd/WlQAIOBBbrk+gRWPJEGMTS2eCyIlebXL7M=
-Date:   Tue, 5 Apr 2022 07:03:50 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     ogabbay@kernel.org, linux-riscv@lists.infradead.org,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        osharabi@habana.ai
-Subject: Re: [PATCH] habanalabs: Elide a warning on 32-bit targets
-Message-ID: <YkvNtoX0F5zMEeqg@kroah.com>
-References: <YksIkY0l8k7mmnzJ@kroah.com>
- <mhng-2927288f-0f89-4f03-b3a2-35b92fd9d51e@palmer-ri-x1c9>
+        Tue, 5 Apr 2022 01:07:27 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B71483B8;
+        Mon,  4 Apr 2022 22:05:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649135126; x=1680671126;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=LkxzEX1anG4s/wmWN5T1Ru9TpO+y0pigaqRc6/MAp74=;
+  b=hkTEbrENBz2DxmOhLmhj3UOKp9+PNnIyKTw16MyxdGO3IFoKVhfyVPP2
+   47Pt66O04n+IgBNKsYqNzpx6/fjakkM3RKQfcZZD2Pwlhvf+IQ0Q4GRFd
+   ThV9O3/9affKK34oi4Y2IhMikdT/so/XcCpMLPwwVavmpi6Q6bY1SRkGI
+   k=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 04 Apr 2022 22:05:26 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 22:05:10 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 4 Apr 2022 22:05:10 -0700
+Received: from [10.216.10.223] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 4 Apr 2022
+ 22:05:06 -0700
+Message-ID: <5d2f23a5-e8a9-6be1-cc91-0a80bad68f3a@quicinc.com>
+Date:   Tue, 5 Apr 2022 10:35:03 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <mhng-2927288f-0f89-4f03-b3a2-35b92fd9d51e@palmer-ri-x1c9>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v5 3/3] arm64: dts: qcom: sc7280: add lpass lpi pin
+ controller node
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <devicetree@vger.kernel.org>,
+        <dianders@chromium.org>, <judyhsiao@chromium.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <robh+dt@kernel.org>, <srinivas.kandagatla@linaro.org>
+CC:     Venkata Prasad Potturu <quic_potturu@quicinc.com>
+References: <1647863959-3289-1-git-send-email-quic_srivasam@quicinc.com>
+ <1647863959-3289-4-git-send-email-quic_srivasam@quicinc.com>
+ <CAE-0n50xoWpd8S82W=xjbKBjqD-bgyMM8b539PV83=fHBQC7yw@mail.gmail.com>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <CAE-0n50xoWpd8S82W=xjbKBjqD-bgyMM8b539PV83=fHBQC7yw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,98 +73,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 05:43:08PM -0700, Palmer Dabbelt wrote:
-> On Mon, 04 Apr 2022 08:02:41 PDT (-0700), Greg KH wrote:
-> > On Fri, Apr 01, 2022 at 11:36:53AM -0700, Palmer Dabbelt wrote:
-> > > On Fri, 01 Apr 2022 11:13:48 PDT (-0700), ogabbay@kernel.org wrote:
-> > > > On Fri, Apr 1, 2022 at 7:41 PM Palmer Dabbelt <palmer@rivosinc.com> wrote:
-> > > > >
-> > > > > From: Palmer Dabbelt <palmer@rivosinc.com>
-> > > > >
-> > > > > This double-cast pattern looks a bit awkward, but it already exists
-> > > > > elsewhere in the driver.  Without this patch I get
-> > > > >
-> > > > > drivers/misc/habanalabs/common/memory.c: In function ‘alloc_device_memory’:
-> > > > > drivers/misc/habanalabs/common/memory.c:153:49: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-> > > > >   153 |                                                 (u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
-> > > > >       |                                                 ^
-> > > > >
-> > > > > which ends up promoted to a build error in my test setup.
-> > > > >
-> > > > > Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> > > > >
-> > > > > ---
-> > > > >
-> > > > > I don't know anything about this driver, I'm just pattern-matching the
-> > > > > warning away.
-> > > > > ---
-> > > > >  drivers/misc/habanalabs/common/memory.c | 10 +++++-----
-> > > > >  1 file changed, 5 insertions(+), 5 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
-> > > > > index e008d82e4ba3..f1fc79c1fc10 100644
-> > > > > --- a/drivers/misc/habanalabs/common/memory.c
-> > > > > +++ b/drivers/misc/habanalabs/common/memory.c
-> > > > > @@ -150,12 +150,12 @@ static int alloc_device_memory(struct hl_ctx *ctx, struct hl_mem_in *args,
-> > > > >                 for (i = 0 ; i < num_pgs ; i++) {
-> > > > >                         if (is_power_of_2(page_size))
-> > > > >                                 phys_pg_pack->pages[i] =
-> > > > > -                                               (u64) gen_pool_dma_alloc_align(vm->dram_pg_pool,
-> > > > > -                                                                               page_size, NULL,
-> > > > > -                                                                               page_size);
-> > > > > +                                               (u64) (uintptr_t) gen_pool_dma_alloc_align(vm->dram_pg_pool,
-> > > > > +                                                                                          page_size, NULL,
-> > > > > +                                                                                          page_size);
-> > > > >                         else
-> > > > > -                               phys_pg_pack->pages[i] = (u64) gen_pool_alloc(vm->dram_pg_pool,
-> > > > > -                                                                               page_size);
-> > > > > +                               phys_pg_pack->pages[i] = (u64) (uintptr_t) gen_pool_alloc(vm->dram_pg_pool,
-> > > > > +                                                                                         page_size);
-> > > > >                         if (!phys_pg_pack->pages[i]) {
-> > > > >                                 dev_err(hdev->dev,
-> > > > >                                         "Failed to allocate device memory (out of memory)\n");
-> > > > > --
-> > > > > 2.34.1
-> > > > >
-> > > >
-> > > > This patch is:
-> > > > Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-> > > >
-> > > > Greg,
-> > > > Could you please apply this directly to your misc tree and send it to
-> > > > Linus at your next pull request ?
-> > > > I don't have any other fixes pending for 5.18.
-> > > >
-> > > > For 5.19 we will do a more elegant solution that Arnd has recommended.
-> > > 
-> > > Thanks.
-> > > 
-> > > Assuming this is too late for rc1, would it be possibe to have it in
-> > > something I can take into my fixes/for-next without too much diff?  I put
-> > > this on top of the offending commit with a
-> > > 
-> > > Fixes: e8458e20e0a3 ("habanalabs: make sure device mem alloc is page aligned")
-> > > 
-> > > at kernel.org/palmer/habana , if that helps any.  No big deal if it goes in
-> > > another way, it's just nice to keep allyesconfig building on my branches
-> > > directly.
-> > 
-> > Looks like Guenter sent in a "more complete" version of this.  I'll
-> > queue it up to my tree and get it to Linus for -rc2.
-> 
-> I'm fine with anything here, as long as it fixes my build errors ;).
-> 
-> Do you mind giving me a pointer?  That way I can use exactly what's going
-> upstream, rather that keeping around this now-dead-end diff (I poked around
-> your kernel.org trees and couldn't find anything, but I've not done that
-> before).
 
-The commit I took is here:
-	https://lore.kernel.org/all/20220404134859.3278599-1-linux@roeck-us.net/
-and you can find it in my char-misc.git tree with commit:
-	94865e2dcb46 ("habanalabs: Fix test build failures")
-and it should show up in the next linux-next tree as well.
-
-thanks,
-
-greg k-h
+On 3/22/2022 1:56 AM, Stephen Boyd wrote:
+> Quoting Srinivasa Rao Mandadapu (2022-03-21 04:59:19)
+>> Add LPASS LPI pinctrl node required for Audio functionality on sc7280
+>> based platforms.
+>>
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>> ---
+>>   arch/arm64/boot/dts/qcom/sc7280.dtsi | 147 +++++++++++++++++++++++++++++++++++
+>>   1 file changed, 147 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> index 8d8cec5..499299a 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> @@ -1987,6 +1987,153 @@
+>>                          qcom,bcm-voters = <&apps_bcm_voter>;
+>>                  };
+>>
+>> +               lpass_tlmm: pinctrl@33c0000 {
+>> +                       compatible = "qcom,sc7280-lpass-lpi-pinctrl";
+>> +                       reg = <0 0x33c0000 0x0 0x20000>,
+>> +                               <0 0x3550000 0x0 0x10000>;
+>> +                       gpio-controller;
+>> +                       #gpio-cells = <2>;
+>> +                       gpio-ranges = <&lpass_tlmm 0 0 15>;
+>> +
+>> +                       #clock-cells = <1>;
+>> +
+>> +                       dmic01_active: dmic01-active {
+>> +                               clk {
+>> +                                       pins = "gpio6";
+>> +                                       function = "dmic1_clk";
+>> +                                       drive-strength = <8>;
+>> +                                       output-high;
+> The rule of thumb is that drive strength, output/input, and bias
+> properties should be in the board file, because the board layout decides
+> the drive strength, the output level could be inverted on the board, and
+> the biasing could be done externally (or not) via pullup/pulldowns on
+> the net. The gpio driver should be able to make pins into inputs
+> automatically when the gpio is requested and used so having input or
+> output is typically wrong and should be handled by the consumer driver.
+Okay. will re arrange accordingly and remove output-high property.
+>
+>> +                               };
+>> +
+>> +                               data {
+>> +                                       pins = "gpio7";
+>> +                                       function = "dmic1_data";
+> So in the end I'd expect to only see pins and function properties in the
+> SoC dtsi file.
+Okay.
+>
+>> +                                       drive-strength = <8>;
+>> +                               };
+>> +                       };
+>> +
+>> +                       dmic01_sleep: dmic01-sleep {
+>> +                               clk {
+>> +                                       pins = "gpio6";
+>> +                                       function = "dmic1_clk";

@@ -2,230 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E75DC4F30F2
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1908A4F3232
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350131AbiDEJzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56226 "EHLO
+        id S1347624AbiDEJ1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:27:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238285AbiDEISr (ORCPT
+        with ESMTP id S239578AbiDEIUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:18:47 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210C7E6;
-        Tue,  5 Apr 2022 01:08:29 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 194A75C0199;
-        Tue,  5 Apr 2022 04:08:29 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Tue, 05 Apr 2022 04:08:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:date:date:from:from:in-reply-to
-        :message-id:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=ULP8rc
-        faCHueJJcnGSad4jhUThCttt20904WHbSKF9w=; b=LuWVE8abpnpw4YMexiymBr
-        daGPXkPYmeSvVFYEoF4SoLCAG6GDvo4nnfHh93gREsZYeWKHMzYtMYISU/0x2l2p
-        Pamif2EuIzolCGUjnFtm6aVq0Pm1FE/+HNOclGrajztaRGxYbKUZm/zZINHfLO1Q
-        bqNRg8v5BtNHnbJJ36PyNRgiKNDwoH7gIPFURIbcA0UyoFK3ecUg4EK7kJjyFQwQ
-        oo8S/iVae1zeWlVkEVVGGXeyaPvIoOYPvrBnEcqSz7lzG2zlV4c3tK394FaKHZ9Z
-        1fhkEXjaLi8yYJAlB5b9L0cKwwanSzOXYEqD7vLjEtApj2kCZuUF5w8E9onV82mw
-        ==
-X-ME-Sender: <xms:_PhLYiF4hbHPvOc62rpRIabAEl1nWd6AA5Z14OIDCHO0K7Q97RLzsg>
-    <xme:_PhLYjXoIyTH1Yi11Qhz01iW61rYBTlFuuxer5W2IUjjtDQ5xrRDSFAxIUD6Qlyk7
-    i9eevoiRrYSjpYZsoc>
-X-ME-Received: <xmr:_PhLYsLUJaRsq7wCdmI_yYYMBd8rGI3ChesC6idVGyqxsigj1X1EjT7WzLKTqd8Klmhqq6ng4iYqN5xkhLoby8Z69IdT5MJWBJw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudejfedguddvkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefvkffhufffsedttdertddttddtnecuhfhrohhmpefhihhnnhcuvfhhrghi
-    nhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrghtthgvrh
-    hnpedtleetkeelkeekvdeujeehkefgvddtheehhfetieethfetfeeghfduheevveelleen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehfthhhrg
-    hinheslhhinhhugidqmheikehkrdhorhhg
-X-ME-Proxy: <xmx:_PhLYsFO_YSMl1FVVgGXuyOz7rT_g2khe_KVwvATIdDL5JRUqil_GQ>
-    <xmx:_PhLYoWyy2jGesNZmceT15g44XX4x-dglBu7K1HqGoQLun8ZWFPz4g>
-    <xmx:_PhLYvMcoQqRPG7fgJQFRHb321h5zDHIxoEfFZ_QwRogA64I-RBy7w>
-    <xmx:_fhLYjcRzdSJJa6mEsswm3NjZpnCCZLCCI76eMCzBJETOHc93hE8lQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 5 Apr 2022 04:08:25 -0400 (EDT)
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <4948f86703d23e5048f4e24e649680259b2610f9.1649146056.git.fthain@linux-m68k.org>
-From:   Finn Thain <fthain@linux-m68k.org>
-Subject: [PATCH] scsi: sym53c500_cs: Stop using struct scsi_pointer
-Date:   Tue, 05 Apr 2022 18:07:36 +1000
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 5 Apr 2022 04:20:14 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2048.outbound.protection.outlook.com [40.107.244.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE42641C;
+        Tue,  5 Apr 2022 01:16:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KEWMmfspaT/SAPF1l3Pb1Z7HlvGgF3UA6+HM9u/lYB4KNqNPYVycaOwHJlDRzu3TG/1mSG3EKtBfSgi4gbV3cm2aA7mEMu1xFkUN5kV4m/9cT8wbucs9SfkIYtAYA0qJTS0aIKNNrqll7JQn9PsEtaGM+bVReJEFPnyZH01nfAi99dTr9Fb4dLq3pWKdyUDLxwffphCm09XwK02F4eSE53NpaPgNrZi76NRRJ+lKnfs/L4OkirKYkznxFeCp4SQb8QI0er40dwG7F0YNaBqi//UiIqPohBeYQ5WJa+UWdSuusz8CbwnPx3QffWdmD9WtFQyqOfU5VH/AC2riSRnjtw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zod3BV10YHUk/5mSinApGGyP1wTOVPTEWVtjzC4BRNE=;
+ b=NedKtFH8BNnDPQS8y2baqo2+h2ZmYOP2zRcd6e5UlpO71fCwfR/MJR4rAN61iGLnxS8d+SPL6NVOb+xVUCkhTLV252lPqCdvyqNdVWAOSopZfEg6lLa1Lf2diqSYox4kIvQ9HNLLHSA5dn2WbIxre+JqbvKF3fp3nsU+5KFqRjy09dtrufSi4g+aHjzn+6Adr9Z9xiIhVBjWKky3zIdmbit/nUl81/vOSxnxj2Fbwk0cPppQNXXCLC1TuLHXRj9uWy6d6kIHNF7F6HSpTh6Pd+H/iSHOxU/yEgF1QsqqQYU7AasB6RUL+Dxr45bwN/6EkbjBjYQd+8rLh65DhGCOfw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.238) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zod3BV10YHUk/5mSinApGGyP1wTOVPTEWVtjzC4BRNE=;
+ b=JmfNV1eb5pMhhQdghMy6SHLJW3br0GFFMDhBZqO3ZUYXiORpPY9zzJ7Nq+eCFJknEbydiF45SHYk4gf1XywGT0PcsGBwzLVAACi4J/+UgRKhT9R/e9O8qSOE3Rb/Hq83YXdGO0cayXBXZ3n5GULoCSx6m+sIHQ/2YACif6SXGWapXPPIZBoESuSeqzuL31Q7W23UhiZJp0dORgncmxzUBq10T9hQTCEIsGILfRYUyCYgFOm7BL3Dvn+LQpLm4vC0jnO0y9CusJcH9eVmq3cXUsYoR2OR3LTCNU0anDpNAX8niSMfIyWr3X/jewUgOSh9RIdE8W9D/1PcYG3f1gTFNg==
+Received: from BN6PR17CA0036.namprd17.prod.outlook.com (2603:10b6:405:75::25)
+ by BN8PR12MB3426.namprd12.prod.outlook.com (2603:10b6:408:4a::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Tue, 5 Apr
+ 2022 08:16:51 +0000
+Received: from BN8NAM11FT025.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:405:75:cafe::81) by BN6PR17CA0036.outlook.office365.com
+ (2603:10b6:405:75::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31 via Frontend
+ Transport; Tue, 5 Apr 2022 08:16:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.238) by
+ BN8NAM11FT025.mail.protection.outlook.com (10.13.177.136) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5123.19 via Frontend Transport; Tue, 5 Apr 2022 08:16:51 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL105.nvidia.com
+ (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 5 Apr
+ 2022 08:16:50 +0000
+Received: from [10.41.21.79] (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 5 Apr 2022
+ 01:16:46 -0700
+Message-ID: <9c20f916-4de9-33cf-960b-cd3bedf96ca8@nvidia.com>
+Date:   Tue, 5 Apr 2022 13:46:44 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [Patch v3 1/4] dt-bindings: Document Tegra CCPLEX Cluster
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <jonathanh@nvidia.com>,
+        <ksitaraman@nvidia.com>, <bbasu@nvidia.com>,
+        <linux-kernel@vger.kernel.org>, <treding@nvidia.com>,
+        <sanjayc@nvidia.com>, <linux-tegra@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <robh+dt@kernel.org>,
+        <viresh.kumar@linaro.org>, <rafael@kernel.org>,
+        <krzk+dt@kernel.org>, Sumit Gupta <sumitg@nvidia.com>
+References: <20220404121713.22461-1-sumitg@nvidia.com>
+ <20220404121713.22461-2-sumitg@nvidia.com>
+ <1649088538.036927.1436947.nullmailer@robh.at.kernel.org>
+From:   Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <1649088538.036927.1436947.nullmailer@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 091dd518-3a5f-4da9-8763-08da16dca366
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3426:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR12MB342646C0DF8C99A3C855588EB9E49@BN8PR12MB3426.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UsWnEccd7+S7Ws2FpisJqbrDwDbZjVExhvjK/tKo+YnMPc5akTkWEJX0yGTvmZsvWmXvEqdafPHk0JENQbubbGBL8uW6Hb5XgjtK1IeavmYpgGZ+EYWB0zzqL0jVfOZLgA+cS057xoxElFD6VtZBKXlRe0ENEyZNNlRAKW0+aEuXAp13GUymtghYx2LW6t2R9t0dOLvNu46zs1C2+owXVbhA9Bn0TwufsK4bs/EQXVagbdx+kXcxTTjlsH1Wl5cNR8x1BdKVWOL83yZ01RJnqYHWM+XSpSxC4GaxVwCvfk0idEnWTTfJFgzvUE9U37XIgUl+GTYe7VQZh9LkPoxUOAXiTUGSPFzGpLTaOrdElGoM9F11avMzu1YbYPIeONpNkiN8S8VdB27UD86vRDoRISSH3D3Xv1OFNXESYiCu4nqYoApDP1qrTJtfG3M8ZiKLXbBdJ/S93LPdGcIjNqoni3Zz1QiikOCbc87dsbWe09sGMBMNXuCWnhvcO+RYsa3q9N1/h9r4373XDtduNyHqp80iaUUs21EETwOwwIs43nFLhW6ouUbmuj+hQ8B1fIT7RtuPCPInN+/iuNoxA3Mq2iqKMc7DSWBKN6i/HHs9CwbWzNBtqwnzBelJKeCkLw9fU1PbjaEy5vIVIu63MQYHuFUg/pX8yss8WEPfTUAP6gV2oFex2YXDNMycvXibp1l/kJduboB5mFRuklR2L7hW23TmZrTb8A6CbcnHJGmFkBD6T/A8pjXvtW5W7WQq0B/k3INtLL2v4PkYuI2I17z2xfJBjS80TwhahRrhRN36Td5znPh0RvhmaSQULe5mFTiE
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(4326008)(8676002)(16576012)(70206006)(966005)(316002)(8936002)(16526019)(26005)(186003)(2906002)(426003)(336012)(31686004)(107886003)(508600001)(2616005)(83380400001)(6916009)(54906003)(36756003)(70586007)(31696002)(40460700003)(53546011)(86362001)(82310400005)(36860700001)(5660300002)(47076005)(81166007)(356005)(36900700001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2022 08:16:51.4805
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 091dd518-3a5f-4da9-8763-08da16dca366
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT025.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3426
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver doesn't use SCp.ptr to save a SCSI command data pointer which
-means "scsi pointer" is a complete misnomer here. Only a few members of
-struct scsi_pointer are needed so move those to private command data.
 
-Signed-off-by: Finn Thain <fthain@linux-m68k.org>
----
-The sym53c500_cs driver somehow missed out on complete scsi_pointer
-removal in Bart's recently queued patch series, unlike nsp32 for example.
-So this patch finishes the job. Compile-tested only.
----
- drivers/scsi/pcmcia/sym53c500_cs.c | 51 ++++++++++++++++--------------
- 1 file changed, 27 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/scsi/pcmcia/sym53c500_cs.c b/drivers/scsi/pcmcia/sym53c500_cs.c
-index c4a838635893..4980247f95bc 100644
---- a/drivers/scsi/pcmcia/sym53c500_cs.c
-+++ b/drivers/scsi/pcmcia/sym53c500_cs.c
-@@ -192,7 +192,13 @@ struct sym53c500_data {
- 	int fast_pio;
- };
- 
--static struct scsi_pointer *sym53c500_scsi_pointer(struct scsi_cmnd *cmd)
-+struct sym53c500_cmd_priv {
-+	int status;
-+	int message;
-+	int phase;
-+};
-+
-+static struct sym53c500_cmd_priv *SYM53c500_priv(struct scsi_cmnd *cmd)
- {
- 	return scsi_cmd_priv(cmd);
- }
-@@ -356,7 +362,7 @@ SYM53C500_intr(int irq, void *dev_id)
- 	struct sym53c500_data *data =
- 	    (struct sym53c500_data *)dev->hostdata;
- 	struct scsi_cmnd *curSC = data->current_SC;
--	struct scsi_pointer *scsi_pointer = sym53c500_scsi_pointer(curSC);
-+	struct sym53c500_cmd_priv *scp = SYM53c500_priv(curSC);
- 	int fast_pio = data->fast_pio;
- 
- 	spin_lock_irqsave(dev->host_lock, flags);
-@@ -403,12 +409,11 @@ SYM53C500_intr(int irq, void *dev_id)
- 
- 	if (int_reg & 0x20) {		/* Disconnect */
- 		DEB(printk("SYM53C500: disconnect intr received\n"));
--		if (scsi_pointer->phase != message_in) {	/* Unexpected disconnect */
-+		if (scp->phase != message_in) {	/* Unexpected disconnect */
- 			curSC->result = DID_NO_CONNECT << 16;
- 		} else {	/* Command complete, return status and message */
--			curSC->result = (scsi_pointer->Status & 0xff) |
--				((scsi_pointer->Message & 0xff) << 8) |
--				(DID_OK << 16);
-+			curSC->result = (scp->status & 0xff) |
-+				((scp->message & 0xff) << 8) | (DID_OK << 16);
- 		}
- 		goto idle_out;
- 	}
-@@ -419,7 +424,7 @@ SYM53C500_intr(int irq, void *dev_id)
- 			struct scatterlist *sg;
- 			int i;
- 
--			scsi_pointer->phase = data_out;
-+			scp->phase = data_out;
- 			VDEB(printk("SYM53C500: Data-Out phase\n"));
- 			outb(FLUSH_FIFO, port_base + CMD_REG);
- 			LOAD_DMA_COUNT(port_base, scsi_bufflen(curSC));	/* Max transfer size */
-@@ -438,7 +443,7 @@ SYM53C500_intr(int irq, void *dev_id)
- 			struct scatterlist *sg;
- 			int i;
- 
--			scsi_pointer->phase = data_in;
-+			scp->phase = data_in;
- 			VDEB(printk("SYM53C500: Data-In phase\n"));
- 			outb(FLUSH_FIFO, port_base + CMD_REG);
- 			LOAD_DMA_COUNT(port_base, scsi_bufflen(curSC));	/* Max transfer size */
-@@ -453,12 +458,12 @@ SYM53C500_intr(int irq, void *dev_id)
- 		break;
- 
- 	case 0x02:		/* COMMAND */
--		scsi_pointer->phase = command_ph;
-+		scp->phase = command_ph;
- 		printk("SYM53C500: Warning: Unknown interrupt occurred in command phase!\n");
- 		break;
- 
- 	case 0x03:		/* STATUS */
--		scsi_pointer->phase = status_ph;
-+		scp->phase = status_ph;
- 		VDEB(printk("SYM53C500: Status phase\n"));
- 		outb(FLUSH_FIFO, port_base + CMD_REG);
- 		outb(INIT_CMD_COMPLETE, port_base + CMD_REG);
-@@ -471,24 +476,22 @@ SYM53C500_intr(int irq, void *dev_id)
- 
- 	case 0x06:		/* MESSAGE-OUT */
- 		DEB(printk("SYM53C500: Message-Out phase\n"));
--		scsi_pointer->phase = message_out;
-+		scp->phase = message_out;
- 		outb(SET_ATN, port_base + CMD_REG);	/* Reject the message */
- 		outb(MSG_ACCEPT, port_base + CMD_REG);
- 		break;
- 
- 	case 0x07:		/* MESSAGE-IN */
- 		VDEB(printk("SYM53C500: Message-In phase\n"));
--		scsi_pointer->phase = message_in;
-+		scp->phase = message_in;
- 
--		scsi_pointer->Status = inb(port_base + SCSI_FIFO);
--		scsi_pointer->Message = inb(port_base + SCSI_FIFO);
-+		scp->status = inb(port_base + SCSI_FIFO);
-+		scp->message = inb(port_base + SCSI_FIFO);
- 
- 		VDEB(printk("SCSI FIFO size=%d\n", inb(port_base + FIFO_FLAGS) & 0x1f));
--		DEB(printk("Status = %02x  Message = %02x\n",
--			   scsi_pointer->Status, scsi_pointer->Message));
-+		DEB(printk("Status = %02x  Message = %02x\n", scp->status, scp->message));
- 
--		if (scsi_pointer->Message == SAVE_POINTERS ||
--		    scsi_pointer->Message == DISCONNECT) {
-+		if (scp->message == SAVE_POINTERS || scp->message == DISCONNECT) {
- 			outb(SET_ATN, port_base + CMD_REG);	/* Reject message */
- 			DEB(printk("Discarding SAVE_POINTERS message\n"));
- 		}
-@@ -500,7 +503,7 @@ SYM53C500_intr(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- 
- idle_out:
--	scsi_pointer->phase = idle;
-+	scp->phase = idle;
- 	scsi_done(curSC);
- 	goto out;
- }
-@@ -548,7 +551,7 @@ SYM53C500_info(struct Scsi_Host *SChost)
- 
- static int SYM53C500_queue_lck(struct scsi_cmnd *SCpnt)
- {
--	struct scsi_pointer *scsi_pointer = sym53c500_scsi_pointer(SCpnt);
-+	struct sym53c500_cmd_priv *scp = SYM53c500_priv(SCpnt);
- 	int i;
- 	int port_base = SCpnt->device->host->io_port;
- 	struct sym53c500_data *data =
-@@ -565,9 +568,9 @@ static int SYM53C500_queue_lck(struct scsi_cmnd *SCpnt)
- 	VDEB(printk("\n"));
- 
- 	data->current_SC = SCpnt;
--	scsi_pointer->phase = command_ph;
--	scsi_pointer->Status = 0;
--	scsi_pointer->Message = 0;
-+	scp->phase = command_ph;
-+	scp->status = 0;
-+	scp->message = 0;
- 
- 	/* We are locked here already by the mid layer */
- 	REG0(port_base);
-@@ -682,7 +685,7 @@ static struct scsi_host_template sym53c500_driver_template = {
-      .this_id			= 7,
-      .sg_tablesize		= 32,
-      .shost_groups		= SYM53C500_shost_groups,
--     .cmd_size			= sizeof(struct scsi_pointer),
-+     .cmd_size			= sizeof(struct sym53c500_cmd_priv),
- };
- 
- static int SYM53C500_config_check(struct pcmcia_device *p_dev, void *priv_data)
--- 
-2.32.0
+On 04/04/22 21:38, Rob Herring wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> On Mon, 04 Apr 2022 17:47:10 +0530, Sumit Gupta wrote:
+>> The Tegra CPU COMPLEX CLUSTER area contains memory-mapped
+>> registers that initiate CPU frequency/voltage transitions.
+>>
+>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+>> ---
+>>   .../tegra/nvidia,tegra-ccplex-cluster.yaml    | 52 +++++++++++++++++++
+>>   1 file changed, 52 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
+>>
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.example.dt.yaml: example-0: ccplex@e000000:reg:0: [0, 234881024, 0, 393215] is too long
+>          From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/reg.yaml
+> 
+will do the below change to fix this in v4.
 
+      ccplex@e000000 {
+        compatible = "nvidia,tegra234-ccplex-cluster";
+-      reg = <0x0 0x0e000000 0x0 0x5ffff>;
++      reg = <0x0e000000 0x5ffff>;
+
+
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/patch/
+> 
+> This check can fail if there are any dependencies. The base for a patch
+> series is generally the most recent rc1.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit.
+> 

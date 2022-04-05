@@ -2,99 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9A624F2197
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5564F21B0
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiDECPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 22:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
+        id S230203AbiDECw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 22:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiDECPY (ORCPT
+        with ESMTP id S231482AbiDECvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 22:15:24 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96B117ABB2;
-        Mon,  4 Apr 2022 18:10:16 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id o20so3852261pla.13;
-        Mon, 04 Apr 2022 18:10:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=woWc2+lO22HzkiGe6tfKJYkKrmQ1CA7aDFe+SOO4MVo=;
-        b=kfJo4Xj4tsvv/raS2h6Me0pD+/r2cSvGc3gqTYzD3/0o2MAiYvQwl6ekwsFdIjmSE/
-         8e8EX3k9sUmWEP3lmVSt90/6vPD3SGyNwpLLgWJ81KPGtgjXiXA3Y2Opzk2N3uMrJe0k
-         0645Ol9XN1/Sa+kXLJJ/qiRJtTt41BJofHvOAA/fMU+Rb+VUeItqT0mS9IxOlsK6l5HU
-         Z3Hqy8RY1hBwBDPqUX8Oz8gao9TEWxVhfVSqci1C7q7JI7Ht7UQqVK+vHPnxiOoEbF/j
-         /u0wVzWgPfrsuc6ux9NXuku6WHeu/2TX+iONMFZpROfl7DspH33C/kGU28f4h9+Ybj5A
-         WyKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=woWc2+lO22HzkiGe6tfKJYkKrmQ1CA7aDFe+SOO4MVo=;
-        b=RM7g+sLwVy6aoF9jzLGG1dWsuMT2RzLkQdzaSAi0P/Ojqx9MwbOP0dSwLOJcYa04Dx
-         H7jtmFA4WbyKcY5D6aXFg+xZvwJh4lgwoZY3yl1LrqOTblt0kkQfoN9nC49TwsRcsHwO
-         BZEnnsJg+9KZYz5+R7OVjAY0k8i9t3dydh+LKVW3jvjlXzm4Sq8QRw61OsbgTHoHmy7h
-         fkgXxIKSugkZXjoKZSQGg54Yy363E1sl0r8INSIxvpdITd9Y5cNID/sIg03NDL5Yn39l
-         /QsRmE2ch5eUFrIVKgmsbK2XNlsGkxSqgrwROgeRc4U8en8UyxKBWmYbd4j+aQSMnzzN
-         aELQ==
-X-Gm-Message-State: AOAM531lG6YImeiPvuj19Ux4dSuWeQFR9EBbcyAPmkzkJKi2W+NcvIij
-        l/mP+rvrr0ms8MEDtjGmCC1rUxKq7V6LDA==
-X-Google-Smtp-Source: ABdhPJyU90xOzeJ4z46zscOLk3F/0p1/sSaacQYJrTAKfRMomoQ2uWRBEXJPTNNlbKSA0irPj0sSuw==
-X-Received: by 2002:a17:902:a581:b0:154:8c7d:736a with SMTP id az1-20020a170902a58100b001548c7d736amr835564plb.74.1649118196127;
-        Mon, 04 Apr 2022 17:23:16 -0700 (PDT)
-Received: from localhost ([183.156.181.188])
-        by smtp.gmail.com with ESMTPSA id j6-20020a63b606000000b003808b0ea96fsm11091422pgf.66.2022.04.04.17.23.14
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 04 Apr 2022 17:23:15 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     aelior@marvell.com, manishc@marvell.com, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Subject: [PATCH] qed: remove an unneed NULL check on list iterator
-Date:   Tue,  5 Apr 2022 08:22:56 +0800
-Message-Id: <20220405002256.22772-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 4 Apr 2022 22:51:43 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE223A4F9F
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 18:59:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649123969; x=1680659969;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rFzUkn5Y5xQQ2HAB0qQSLI8m5kgEaFLoljYOb1PCiZg=;
+  b=U91uwvCRl680fupQY4wxT96uCHtJO0j9uK4Gi3dRyTSB2H2sLpbi4OcT
+   b7gGaia2zmlRGEoHU4yQOq5qSlKNZfjqwW8sjf4e9k9mZB1SrK8XlgJbH
+   wfbqFwbqUP2z7PQRKJ36i83K7Oy1T2ek/bZadpeWX1nmyFYiX7VURRtyw
+   X9mRMIkFEspgXUJufyu9xMmJmFfBGA+lVhDCRwVgq5U0oQCX5j+LdrskW
+   vas0gmf1BeKaqcANIJ1ZA1eSdEBzVwfVmfKOCs0bGbnHNLArTCn+omX7O
+   B509Rwg/67FuVHOSs9z3AjWh78Ii49DEzQiFAgh6m+0vRyz+hoJYrAbVt
+   g==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="323811701"
+X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
+   d="scan'208";a="323811701"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 17:34:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
+   d="scan'208";a="548858094"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 04 Apr 2022 17:34:39 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbX9b-0002Uh-8C;
+        Tue, 05 Apr 2022 00:34:39 +0000
+Date:   Tue, 5 Apr 2022 08:34:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [intel-tdx:host-upstream 4/22] arch/x86/virt/vmx/tdx/seamcall.o:
+ warning: objtool: __seamcall()+0x46: missing int3 after ret
+Message-ID: <202204050802.3XX06naF-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The define for_each_pci_dev(d) is:
- while ((d = pci_get_device(PCI_ANY_ID, PCI_ANY_ID, d)) != NULL)
+Hi Kai,
 
-Thus, the list iterator 'd' is always non-NULL so it doesn't need to
-be checked. So just remove the unnecessary NULL check. Also remove the
-unnecessary initializer because the list iterator is always initialized.
+First bad commit (maybe != root cause):
 
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
----
- drivers/net/ethernet/qlogic/qed/qed_nvmetcp_ip_services.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+tree:   https://github.com/intel/tdx.git host-upstream
+head:   5361812499e28ae0203df555669b6c1d79754fd1
+commit: 40b2c61b1b21e86f5b32ec6222cfc11270fe0ce1 [4/22] x86/virt/tdx: Implement the SEAMCALL base function
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220405/202204050802.3XX06naF-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel/tdx/commit/40b2c61b1b21e86f5b32ec6222cfc11270fe0ce1
+        git remote add intel-tdx https://github.com/intel/tdx.git
+        git fetch --no-tags intel-tdx host-upstream
+        git checkout 40b2c61b1b21e86f5b32ec6222cfc11270fe0ce1
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_nvmetcp_ip_services.c b/drivers/net/ethernet/qlogic/qed/qed_nvmetcp_ip_services.c
-index 96a2077fd315..37af8395f1bd 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_nvmetcp_ip_services.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_nvmetcp_ip_services.c
-@@ -161,11 +161,11 @@ EXPORT_SYMBOL(qed_vlan_get_ndev);
- 
- struct pci_dev *qed_validate_ndev(struct net_device *ndev)
- {
--	struct pci_dev *pdev = NULL;
-+	struct pci_dev *pdev;
- 	struct net_device *upper;
- 
- 	for_each_pci_dev(pdev) {
--		if (pdev && pdev->driver &&
-+		if (pdev->driver &&
- 		    !strcmp(pdev->driver->name, "qede")) {
- 			upper = pci_get_drvdata(pdev);
- 			if (upper->ifindex == ndev->ifindex)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/virt/vmx/tdx/seamcall.o: warning: objtool: __seamcall()+0x46: missing int3 after ret
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

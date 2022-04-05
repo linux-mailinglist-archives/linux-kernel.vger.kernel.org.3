@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDEDE4F3F57
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1294F42AC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383362AbiDEMZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:25:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
+        id S1387635AbiDEPTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245138AbiDEIyL (ORCPT
+        with ESMTP id S1346783AbiDEJp2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:54:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041FE10A3;
-        Tue,  5 Apr 2022 01:51:31 -0700 (PDT)
+        Tue, 5 Apr 2022 05:45:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE92DDB4BF;
+        Tue,  5 Apr 2022 02:31:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E0A661509;
-        Tue,  5 Apr 2022 08:51:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A443BC385A0;
-        Tue,  5 Apr 2022 08:51:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 97250B81CC4;
+        Tue,  5 Apr 2022 09:31:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E01AFC385A3;
+        Tue,  5 Apr 2022 09:31:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148690;
-        bh=GRVYjGN0oVU3bLQLZkS30dh2b8ueNqwEcosPDjmYZFA=;
+        s=korg; t=1649151109;
+        bh=eVZftVlJ42o4VmZTs29/3AwJXmVvKUpsGDEe+yjvsqk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JvqHxUSk9gWKjpqrl7aKyOfLLHCcp1Sqz/3OvWrdABhwJPdtPBDGg75eHPpyqITvw
-         y/mK++6Cl5UoC2k8bXI32Nbyda2UhjIFkUwmbCJwP6BCcxDgb8EhIaP33XQjjgGmkx
-         pS9zzxbsbt+9TrrzaSPYpD6U9WZ7vUiOt1fAmysA=
+        b=zUMjfG53+cIsN6+5nFJznzk/wSm2iGk//y0Jt2vXa9F9EhM1iOMllC9ah1+K89cHa
+         sbvDXJVxU/TMmdYG8qy8MaW2LYrpMFqKdLeFbuL5N/UN0B7Q4Jv9GSS1QM+vgVN1kg
+         /CPvFKAU4xgvxd0dYZ7TEA9aC+IsfypyLiUuO74w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        stable@vger.kernel.org,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0446/1017] power: reset: gemini-poweroff: Fix IRQ check in gemini_poweroff_probe
-Date:   Tue,  5 Apr 2022 09:22:39 +0200
-Message-Id: <20220405070407.536371746@linuxfoundation.org>
+Subject: [PATCH 5.15 298/913] soc: qcom: aoss: remove spurious IRQF_ONESHOT flags
+Date:   Tue,  5 Apr 2022 09:22:40 +0200
+Message-Id: <20220405070348.789077973@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Daniel Thompson <daniel.thompson@linaro.org>
 
-[ Upstream commit ba18dad0fb880cd29aa97b6b75560ef14d1061ba ]
+[ Upstream commit 8030cb9a55688c1339edd284d9d6ce5f9fc75160 ]
 
-platform_get_irq() returns negative error number instead 0 on failure.
-And the doc of platform_get_irq() provides a usage example:
+Quoting the header comments, IRQF_ONESHOT is "Used by threaded interrupts
+which need to keep the irq line disabled until the threaded handler has
+been run.". When applied to an interrupt that doesn't request a threaded
+irq then IRQF_ONESHOT has a lesser known (undocumented?) side effect,
+which it to disable the forced threading of the irq. For "normal" kernels
+(without forced threading) then, if there is no thread_fn, then
+IRQF_ONESHOT is a nop.
 
-    int irq = platform_get_irq(pdev, 0);
-    if (irq < 0)
-        return irq;
+In this case disabling forced threading is not appropriate for this driver
+because it calls wake_up_all() and this API cannot be called from
+no-thread interrupt handlers on PREEMPT_RT systems (deadlock risk, triggers
+sleeping-while-atomic warnings).
 
-Fix the check of return value to catch errors correctly.
+Fix this by removing IRQF_ONESHOT.
 
-Fixes: f7a388d6cd1c ("power: reset: Add a driver for the Gemini poweroff")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Fixes: 2209481409b7 ("soc: qcom: Add AOSS QMP driver")
+Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
+[bjorn: Added Fixes tag]
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220127173554.158111-1-daniel.thompson@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/reset/gemini-poweroff.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/soc/qcom/qcom_aoss.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/power/reset/gemini-poweroff.c b/drivers/power/reset/gemini-poweroff.c
-index 90e35c07240a..b7f7a8225f22 100644
---- a/drivers/power/reset/gemini-poweroff.c
-+++ b/drivers/power/reset/gemini-poweroff.c
-@@ -107,8 +107,8 @@ static int gemini_poweroff_probe(struct platform_device *pdev)
- 		return PTR_ERR(gpw->base);
+diff --git a/drivers/soc/qcom/qcom_aoss.c b/drivers/soc/qcom/qcom_aoss.c
+index 536c3e4114fb..a0659cf27845 100644
+--- a/drivers/soc/qcom/qcom_aoss.c
++++ b/drivers/soc/qcom/qcom_aoss.c
+@@ -548,7 +548,7 @@ static int qmp_probe(struct platform_device *pdev)
+ 	}
  
  	irq = platform_get_irq(pdev, 0);
--	if (!irq)
--		return -EINVAL;
-+	if (irq < 0)
-+		return irq;
- 
- 	gpw->dev = dev;
- 
+-	ret = devm_request_irq(&pdev->dev, irq, qmp_intr, IRQF_ONESHOT,
++	ret = devm_request_irq(&pdev->dev, irq, qmp_intr, 0,
+ 			       "aoss-qmp", qmp);
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "failed to request interrupt\n");
 -- 
 2.34.1
 

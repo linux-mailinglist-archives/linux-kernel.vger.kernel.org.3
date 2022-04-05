@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F3D4F4463
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 272304F46C0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:18:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380279AbiDEMxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
+        id S237109AbiDEUmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343739AbiDEJMm (ORCPT
+        with ESMTP id S1349097AbiDEJtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:12:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A322636693;
-        Tue,  5 Apr 2022 02:00:24 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF4EA997E;
+        Tue,  5 Apr 2022 02:40:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4EF00B818F3;
-        Tue,  5 Apr 2022 09:00:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC148C385A0;
-        Tue,  5 Apr 2022 09:00:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE3F1615E5;
+        Tue,  5 Apr 2022 09:40:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF164C385A2;
+        Tue,  5 Apr 2022 09:40:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149222;
-        bh=2xrrqqAmurLYBbNH7gEODCEGzcqKSrwq1J93E5yRers=;
+        s=korg; t=1649151648;
+        bh=rxHQsFLtgiC6ynAr/G0LJGWLVUyFleSmT1QUVei06mU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hbquNh/X0cuSG1GuBo4SB0L8bCCt4IM1i6DWZLoi/13O6YxSW3IKcc0GigcvAO6np
-         OvjGEJbHR9uMtZx0IIZA2uTnzAO2Yuy4oJcyq9NnbNvuZZjIzI81XVExWGiw6htcpU
-         ec1LacT4TuNJgLm6gXjkerOkDG3AYLyNFgaCqqUo=
+        b=LgKGn7O+sgGl9WUA54hx0LIKOPUc2Y5w7v3uxkmpGIO00GHjJPYsBniAYNJkhEKzM
+         hy+w4d5DgRrcMaT4sKiUy0NwALqmzWO94r7/vqJjIAHz0p1pEzmF0Jg6F6gJ14Pt5j
+         7NQwgD9ZtpOfICcHnNZH7HDPwYGuKzXnl3XQ8NBI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jan Sondhauss <jan.sondhauss@wago.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Aharon Landau <aharonl@nvidia.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0639/1017] drivers: ethernet: cpsw: fix panic when interrupt coaleceing is set via ethtool
+Subject: [PATCH 5.15 490/913] RDMA/mlx5: Fix the flow of a miss in the allocation of a cache ODP MR
 Date:   Tue,  5 Apr 2022 09:25:52 +0200
-Message-Id: <20220405070413.250573972@linuxfoundation.org>
+Message-Id: <20220405070354.542717445@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,52 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sondhauß, Jan <Jan.Sondhauss@wago.com>
+From: Aharon Landau <aharonl@nvidia.com>
 
-[ Upstream commit 2844e2434385819f674d1fb4130c308c50ba681e ]
+[ Upstream commit 2f0e60d5e9f96341a0c8a01be8878cdb3b29ff20 ]
 
-cpsw_ethtool_begin directly returns the result of pm_runtime_get_sync
-when successful.
-pm_runtime_get_sync returns -error code on failure and 0 on successful
-resume but also 1 when the device is already active. So the common case
-for cpsw_ethtool_begin is to return 1. That leads to inconsistent calls
-to pm_runtime_put in the call-chain so that pm_runtime_put is called
-one too many times and as result leaving the cpsw dev behind suspended.
+When an ODP MR cache entry is empty and trying to allocate it, increment
+the ent->miss counter and call to queue_adjust_cache_locked() to verify
+the entry is balanced.
 
-The suspended cpsw dev leads to an access violation later on by
-different parts of the cpsw driver.
-
-Fix this by calling the return-friendly pm_runtime_resume_and_get
-function.
-
-Fixes: d43c65b05b84 ("ethtool: runtime-resume netdev parent in ethnl_ops_begin")
-Signed-off-by: Jan Sondhauss <jan.sondhauss@wago.com>
-Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
-Link: https://lore.kernel.org/r/20220323084725.65864-1-jan.sondhauss@wago.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: aad719dcf379 ("RDMA/mlx5: Allow MRs to be created in the cache synchronously")
+Link: https://lore.kernel.org/r/09503e295276dcacc92cb1d8aef1ad0961c99dc1.1644947594.git.leonro@nvidia.com
+Signed-off-by: Aharon Landau <aharonl@nvidia.com>
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/ti/cpsw_ethtool.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/infiniband/hw/mlx5/mr.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/ethernet/ti/cpsw_ethtool.c b/drivers/net/ethernet/ti/cpsw_ethtool.c
-index 158c8d3793f4..b5bae6324970 100644
---- a/drivers/net/ethernet/ti/cpsw_ethtool.c
-+++ b/drivers/net/ethernet/ti/cpsw_ethtool.c
-@@ -364,11 +364,9 @@ int cpsw_ethtool_op_begin(struct net_device *ndev)
- 	struct cpsw_common *cpsw = priv->cpsw;
- 	int ret;
- 
--	ret = pm_runtime_get_sync(cpsw->dev);
--	if (ret < 0) {
-+	ret = pm_runtime_resume_and_get(cpsw->dev);
-+	if (ret < 0)
- 		cpsw_err(priv, drv, "ethtool begin failed %d\n", ret);
--		pm_runtime_put_noidle(cpsw->dev);
--	}
- 
- 	return ret;
- }
+diff --git a/drivers/infiniband/hw/mlx5/mr.c b/drivers/infiniband/hw/mlx5/mr.c
+index 22e2f4d79743..7bb1b9d0941c 100644
+--- a/drivers/infiniband/hw/mlx5/mr.c
++++ b/drivers/infiniband/hw/mlx5/mr.c
+@@ -580,6 +580,8 @@ struct mlx5_ib_mr *mlx5_mr_cache_alloc(struct mlx5_ib_dev *dev,
+ 	ent = &cache->ent[entry];
+ 	spin_lock_irq(&ent->lock);
+ 	if (list_empty(&ent->head)) {
++		queue_adjust_cache_locked(ent);
++		ent->miss++;
+ 		spin_unlock_irq(&ent->lock);
+ 		mr = create_cache_mr(ent);
+ 		if (IS_ERR(mr))
 -- 
 2.34.1
 

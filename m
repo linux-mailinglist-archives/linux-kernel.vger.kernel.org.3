@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 235684F4200
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EBE4F3E2F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382997AbiDEMRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51190 "EHLO
+        id S1388837AbiDEOl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244936AbiDEIws (ORCPT
+        with ESMTP id S244111AbiDEJlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19FB24977;
-        Tue,  5 Apr 2022 01:46:59 -0700 (PDT)
+        Tue, 5 Apr 2022 05:41:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183ECBAB9E;
+        Tue,  5 Apr 2022 02:25:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DBD8614FD;
-        Tue,  5 Apr 2022 08:46:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9996FC385A1;
-        Tue,  5 Apr 2022 08:46:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C38CEB81C9A;
+        Tue,  5 Apr 2022 09:25:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E54DC385A0;
+        Tue,  5 Apr 2022 09:25:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148419;
-        bh=7wnlgHT1RIJpVnS9Yrdz9dgDs8GDXeJxl614hLxTywo=;
+        s=korg; t=1649150714;
+        bh=toUIKSG7Y9lYiTObnBI3exiCjRwsy9pdblqnPZcepWY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2ledxKDBc6kRFDZhRWMaCJ4IIBvCiLSTW5Sd0aUEo2cfVOWOt2jJ7MC5//NdjH4XE
-         gyP1coV6YAGO39VvNQY4ozpkLBWxrcmYsF4Oa4mrDFb4wIQ26gaWW+niiNd2hUFtSD
-         mqbTGr5wJVQMi6Gx6NetLmRAv+syXCGyfoQF0DUg=
+        b=sXae/q0S9ASnvlKp99MPOwcohWLmg4e81qx29+TZ8Abl/3/hF7yJEOhb0AiCGv/4d
+         A1J0AzNLEFIjkclhl2AYiPnknIV7NxjuTvjL+JKm85UPHnImqxJHxjoGrpHtk2E1nP
+         +fG/QxGR5+v08Gjm/K7FmSMns1B+w9PgtqveEuP8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jammy Huang <jammy_huang@aspeedtech.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0301/1017] media: aspeed: Correct value for h-total-pixels
-Date:   Tue,  5 Apr 2022 09:20:14 +0200
-Message-Id: <20220405070403.210158572@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Jann Horn <jannh@google.com>, Kees Cook <keescook@chromium.org>
+Subject: [PATCH 5.15 153/913] pstore: Dont use semaphores in always-atomic-context code
+Date:   Tue,  5 Apr 2022 09:20:15 +0200
+Message-Id: <20220405070344.423633354@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,74 +55,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jammy Huang <jammy_huang@aspeedtech.com>
+From: Jann Horn <jannh@google.com>
 
-[ Upstream commit 4b732a0016853eaff35944f900b0db66f3914374 ]
+commit 8126b1c73108bc691f5643df19071a59a69d0bc6 upstream.
 
-Previous reg-field, 0x98[11:0], stands for the period of the detected
-hsync signal.
-Use the correct reg, 0xa0, to get h-total in pixels.
+pstore_dump() is *always* invoked in atomic context (nowadays in an RCU
+read-side critical section, before that under a spinlock).
+It doesn't make sense to try to use semaphores here.
 
-Fixes: d2b4387f3bdf ("media: platform: Add Aspeed Video Engine driver")
-Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
-Reviewed-by: Joel Stanley <joel@jms.id.au>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This is mostly a revert of commit ea84b580b955 ("pstore: Convert buf_lock
+to semaphore"), except that two parts aren't restored back exactly as they
+were:
+
+ - keep the lock initialization in pstore_register
+ - in efi_pstore_write(), always set the "block" flag to false
+ - omit "is_locked", that was unnecessary since
+   commit 959217c84c27 ("pstore: Actually give up during locking failure")
+ - fix the bailout message
+
+The actual problem that the buggy commit was trying to address may have
+been that the use of preemptible() in efi_pstore_write() was wrong - it
+only looks at preempt_count() and the state of IRQs, but __rcu_read_lock()
+doesn't touch either of those under CONFIG_PREEMPT_RCU.
+(Sidenote: CONFIG_PREEMPT_RCU means that the scheduler can preempt tasks in
+RCU read-side critical sections, but you're not allowed to actively
+block/reschedule.)
+
+Lockdep probably never caught the problem because it's very rare that you
+actually hit the contended case, so lockdep always just sees the
+down_trylock(), not the down_interruptible(), and so it can't tell that
+there's a problem.
+
+Fixes: ea84b580b955 ("pstore: Convert buf_lock to semaphore")
+Cc: stable@vger.kernel.org
+Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Signed-off-by: Jann Horn <jannh@google.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20220314185953.2068993-1-jannh@google.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/platform/aspeed-video.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/firmware/efi/efi-pstore.c |    2 +-
+ fs/pstore/platform.c              |   38 ++++++++++++++++++--------------------
+ include/linux/pstore.h            |    6 +++---
+ 3 files changed, 22 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index 7a24daf7165a..bdeecde0d997 100644
---- a/drivers/media/platform/aspeed-video.c
-+++ b/drivers/media/platform/aspeed-video.c
-@@ -153,7 +153,7 @@
- #define  VE_SRC_TB_EDGE_DET_BOT		GENMASK(28, VE_SRC_TB_EDGE_DET_BOT_SHF)
+--- a/drivers/firmware/efi/efi-pstore.c
++++ b/drivers/firmware/efi/efi-pstore.c
+@@ -266,7 +266,7 @@ static int efi_pstore_write(struct pstor
+ 		efi_name[i] = name[i];
  
- #define VE_MODE_DETECT_STATUS		0x098
--#define  VE_MODE_DETECT_H_PIXELS	GENMASK(11, 0)
-+#define  VE_MODE_DETECT_H_PERIOD	GENMASK(11, 0)
- #define  VE_MODE_DETECT_V_LINES_SHF	16
- #define  VE_MODE_DETECT_V_LINES		GENMASK(27, VE_MODE_DETECT_V_LINES_SHF)
- #define  VE_MODE_DETECT_STATUS_VSYNC	BIT(28)
-@@ -164,6 +164,8 @@
- #define  VE_SYNC_STATUS_VSYNC_SHF	16
- #define  VE_SYNC_STATUS_VSYNC		GENMASK(27, VE_SYNC_STATUS_VSYNC_SHF)
+ 	ret = efivar_entry_set_safe(efi_name, vendor, PSTORE_EFI_ATTRIBUTES,
+-			      preemptible(), record->size, record->psi->buf);
++			      false, record->size, record->psi->buf);
  
-+#define VE_H_TOTAL_PIXELS		0x0A0
-+
- #define VE_INTERRUPT_CTRL		0x304
- #define VE_INTERRUPT_STATUS		0x308
- #define  VE_INTERRUPT_MODE_DETECT_WD	BIT(0)
-@@ -802,6 +804,7 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
- 	u32 src_lr_edge;
- 	u32 src_tb_edge;
- 	u32 sync;
-+	u32 htotal;
- 	struct v4l2_bt_timings *det = &video->detected_timings;
+ 	if (record->reason == KMSG_DUMP_OOPS && try_module_get(THIS_MODULE))
+ 		if (!schedule_work(&efivar_work))
+--- a/fs/pstore/platform.c
++++ b/fs/pstore/platform.c
+@@ -143,21 +143,22 @@ static void pstore_timer_kick(void)
+ 	mod_timer(&pstore_timer, jiffies + msecs_to_jiffies(pstore_update_ms));
+ }
  
- 	det->width = MIN_WIDTH;
-@@ -847,6 +850,7 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
- 		src_tb_edge = aspeed_video_read(video, VE_SRC_TB_EDGE_DET);
- 		mds = aspeed_video_read(video, VE_MODE_DETECT_STATUS);
- 		sync = aspeed_video_read(video, VE_SYNC_STATUS);
-+		htotal = aspeed_video_read(video, VE_H_TOTAL_PIXELS);
+-/*
+- * Should pstore_dump() wait for a concurrent pstore_dump()? If
+- * not, the current pstore_dump() will report a failure to dump
+- * and return.
+- */
+-static bool pstore_cannot_wait(enum kmsg_dump_reason reason)
++static bool pstore_cannot_block_path(enum kmsg_dump_reason reason)
+ {
+-	/* In NMI path, pstore shouldn't block regardless of reason. */
++	/*
++	 * In case of NMI path, pstore shouldn't be blocked
++	 * regardless of reason.
++	 */
+ 	if (in_nmi())
+ 		return true;
  
- 		video->frame_bottom = (src_tb_edge & VE_SRC_TB_EDGE_DET_BOT) >>
- 			VE_SRC_TB_EDGE_DET_BOT_SHF;
-@@ -863,8 +867,7 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
- 			VE_SRC_LR_EDGE_DET_RT_SHF;
- 		video->frame_left = src_lr_edge & VE_SRC_LR_EDGE_DET_LEFT;
- 		det->hfrontporch = video->frame_left;
--		det->hbackporch = (mds & VE_MODE_DETECT_H_PIXELS) -
--			video->frame_right;
-+		det->hbackporch = htotal - video->frame_right;
- 		det->hsync = sync & VE_SYNC_STATUS_HSYNC;
- 		if (video->frame_left > video->frame_right)
- 			continue;
--- 
-2.34.1
-
+ 	switch (reason) {
+ 	/* In panic case, other cpus are stopped by smp_send_stop(). */
+ 	case KMSG_DUMP_PANIC:
+-	/* Emergency restart shouldn't be blocked. */
++	/*
++	 * Emergency restart shouldn't be blocked by spinning on
++	 * pstore_info::buf_lock.
++	 */
+ 	case KMSG_DUMP_EMERG:
+ 		return true;
+ 	default:
+@@ -389,21 +390,19 @@ static void pstore_dump(struct kmsg_dump
+ 	unsigned long	total = 0;
+ 	const char	*why;
+ 	unsigned int	part = 1;
++	unsigned long	flags = 0;
+ 	int		ret;
+ 
+ 	why = kmsg_dump_reason_str(reason);
+ 
+-	if (down_trylock(&psinfo->buf_lock)) {
+-		/* Failed to acquire lock: give up if we cannot wait. */
+-		if (pstore_cannot_wait(reason)) {
+-			pr_err("dump skipped in %s path: may corrupt error record\n",
+-				in_nmi() ? "NMI" : why);
+-			return;
+-		}
+-		if (down_interruptible(&psinfo->buf_lock)) {
+-			pr_err("could not grab semaphore?!\n");
++	if (pstore_cannot_block_path(reason)) {
++		if (!spin_trylock_irqsave(&psinfo->buf_lock, flags)) {
++			pr_err("dump skipped in %s path because of concurrent dump\n",
++					in_nmi() ? "NMI" : why);
+ 			return;
+ 		}
++	} else {
++		spin_lock_irqsave(&psinfo->buf_lock, flags);
+ 	}
+ 
+ 	kmsg_dump_rewind(&iter);
+@@ -467,8 +466,7 @@ static void pstore_dump(struct kmsg_dump
+ 		total += record.size;
+ 		part++;
+ 	}
+-
+-	up(&psinfo->buf_lock);
++	spin_unlock_irqrestore(&psinfo->buf_lock, flags);
+ }
+ 
+ static struct kmsg_dumper pstore_dumper = {
+@@ -594,7 +592,7 @@ int pstore_register(struct pstore_info *
+ 		psi->write_user = pstore_write_user_compat;
+ 	psinfo = psi;
+ 	mutex_init(&psinfo->read_mutex);
+-	sema_init(&psinfo->buf_lock, 1);
++	spin_lock_init(&psinfo->buf_lock);
+ 
+ 	if (psi->flags & PSTORE_FLAGS_DMESG)
+ 		allocate_buf_for_compression();
+--- a/include/linux/pstore.h
++++ b/include/linux/pstore.h
+@@ -14,7 +14,7 @@
+ #include <linux/errno.h>
+ #include <linux/kmsg_dump.h>
+ #include <linux/mutex.h>
+-#include <linux/semaphore.h>
++#include <linux/spinlock.h>
+ #include <linux/time.h>
+ #include <linux/types.h>
+ 
+@@ -87,7 +87,7 @@ struct pstore_record {
+  * @owner:	module which is responsible for this backend driver
+  * @name:	name of the backend driver
+  *
+- * @buf_lock:	semaphore to serialize access to @buf
++ * @buf_lock:	spinlock to serialize access to @buf
+  * @buf:	preallocated crash dump buffer
+  * @bufsize:	size of @buf available for crash dump bytes (must match
+  *		smallest number of bytes available for writing to a
+@@ -178,7 +178,7 @@ struct pstore_info {
+ 	struct module	*owner;
+ 	const char	*name;
+ 
+-	struct semaphore buf_lock;
++	spinlock_t	buf_lock;
+ 	char		*buf;
+ 	size_t		bufsize;
+ 
 
 

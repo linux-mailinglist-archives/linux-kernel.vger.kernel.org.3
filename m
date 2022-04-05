@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6C94F36C2
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D17F4F3742
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243651AbiDELHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:07:39 -0400
+        id S1352581AbiDELLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:11:54 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237891AbiDEInb (ORCPT
+        with ESMTP id S239020AbiDEIoa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:43:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF751D328;
-        Tue,  5 Apr 2022 01:35:54 -0700 (PDT)
+        Tue, 5 Apr 2022 04:44:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDC6201A7;
+        Tue,  5 Apr 2022 01:36:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80FB260B0A;
-        Tue,  5 Apr 2022 08:35:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91E87C385A0;
-        Tue,  5 Apr 2022 08:35:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9DE22B81A32;
+        Tue,  5 Apr 2022 08:35:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00FB6C385A2;
+        Tue,  5 Apr 2022 08:35:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147752;
-        bh=9oeaOtDRB/SGVsQXC0FYtjORDubOt8V3HM+oZFsGGz4=;
+        s=korg; t=1649147758;
+        bh=fHq6yezaEyDiwaMdcaDnIeQNeAFcl0kVKFCgE+Qc/VU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TuC24iUrVtKK6BvNYr5ew7qJgM3fYBFAeYqQMDWX7dfizpWXShjYBHOtbMuFIDxmU
-         +HbZ79DhE0HKsA2a5r+C4TEw6GtXPSNf13kqEZwQpZvXpbEGe5areoj0Dp+/N1l2V2
-         VfEIGdMUdYjnsO6SA7Qh0O5+iduXv2hrDc/zj5/o=
+        b=fy3bGpCSwjxHbX9FwFlqyqXgdEGAaARkzXAzDKPCNG+vIV7dMQk8RjhgFrmZWuPlz
+         Oyh/c1+i1+IOxojFm6uHtc8WF2HwrDmH6VVFumsr8KtJxEQ/jOTW5jIwVKE91+3U4n
+         H0tLMQeFa9GhT8i9DOmpKcb2Cc6909lzMpZ1FpQ0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 5.16 0108/1017] rtc: mc146818-lib: fix locking in mc146818_set_time
-Date:   Tue,  5 Apr 2022 09:17:01 +0200
-Message-Id: <20220405070357.402497403@linuxfoundation.org>
+        stable@vger.kernel.org, Ali Pouladi <quic_apouladi@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH 5.16 0109/1017] rtc: pl031: fix rtc features null pointer dereference
+Date:   Tue,  5 Apr 2022 09:17:02 +0200
+Message-Id: <20220405070357.432300746@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -57,43 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mateusz Jończyk <mat.jonczyk@o2.pl>
+From: Ali Pouladi <quic_apouladi@quicinc.com>
 
-commit 811f5559270f25c34c338d6eaa2ece2544c3d3bd upstream.
+commit ea6af39f3da50c86367a71eb3cc674ade3ed244c upstream.
 
-In mc146818_set_time(), CMOS_READ(RTC_CONTROL) was performed without the
-rtc_lock taken, which is required for CMOS accesses. Fix this.
+When there is no interrupt line, rtc alarm feature is disabled.
 
-Nothing in kernel modifies RTC_DM_BINARY, so a separate critical section
-is allowed here.
+The clearing of the alarm feature bit was being done prior to allocations
+of ldata->rtc device, resulting in a null pointer dereference.
 
-Fixes: dcf257e92622 ("rtc: mc146818: Reduce spinlock section in mc146818_set_time()")
-Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
+Clear RTC_FEATURE_ALARM after the rtc device is allocated.
+
+Fixes: d9b0dd54a194 ("rtc: pl031: use RTC_FEATURE_ALARM")
 Cc: stable@vger.kernel.org
+Signed-off-by: Ali Pouladi <quic_apouladi@quicinc.com>
+Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lore.kernel.org/r/20220220090403.153928-1-mat.jonczyk@o2.pl
+Link: https://lore.kernel.org/r/20220225161924.274141-1-quic_eberman@quicinc.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/rtc/rtc-mc146818-lib.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/rtc/rtc-pl031.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/rtc/rtc-mc146818-lib.c
-+++ b/drivers/rtc/rtc-mc146818-lib.c
-@@ -176,8 +176,10 @@ int mc146818_set_time(struct rtc_time *t
- 	if (yrs >= 100)
- 		yrs -= 100;
+--- a/drivers/rtc/rtc-pl031.c
++++ b/drivers/rtc/rtc-pl031.c
+@@ -350,9 +350,6 @@ static int pl031_probe(struct amba_devic
+ 		}
+ 	}
  
--	if (!(CMOS_READ(RTC_CONTROL) & RTC_DM_BINARY)
--	    || RTC_ALWAYS_BCD) {
-+	spin_lock_irqsave(&rtc_lock, flags);
-+	save_control = CMOS_READ(RTC_CONTROL);
-+	spin_unlock_irqrestore(&rtc_lock, flags);
-+	if (!(save_control & RTC_DM_BINARY) || RTC_ALWAYS_BCD) {
- 		sec = bin2bcd(sec);
- 		min = bin2bcd(min);
- 		hrs = bin2bcd(hrs);
+-	if (!adev->irq[0])
+-		clear_bit(RTC_FEATURE_ALARM, ldata->rtc->features);
+-
+ 	device_init_wakeup(&adev->dev, true);
+ 	ldata->rtc = devm_rtc_allocate_device(&adev->dev);
+ 	if (IS_ERR(ldata->rtc)) {
+@@ -360,6 +357,9 @@ static int pl031_probe(struct amba_devic
+ 		goto out;
+ 	}
+ 
++	if (!adev->irq[0])
++		clear_bit(RTC_FEATURE_ALARM, ldata->rtc->features);
++
+ 	ldata->rtc->ops = ops;
+ 	ldata->rtc->range_min = vendor->range_min;
+ 	ldata->rtc->range_max = vendor->range_max;
 
 

@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D8D4F39EB
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 757E54F39D5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378867AbiDELjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46832 "EHLO
+        id S1378785AbiDELiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244717AbiDEIwf (ORCPT
+        with ESMTP id S244721AbiDEIwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:52:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D9B1AF0D;
-        Tue,  5 Apr 2022 01:42:42 -0700 (PDT)
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA901AF24;
+        Tue,  5 Apr 2022 01:42:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 984D1B81A32;
-        Tue,  5 Apr 2022 08:42:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A5BC385A0;
-        Tue,  5 Apr 2022 08:42:39 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4CCC8CE1C2B;
+        Tue,  5 Apr 2022 08:42:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69F48C385A1;
+        Tue,  5 Apr 2022 08:42:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148160;
-        bh=3jS/1+1QYAeYKa8cy05dKsvo8e3E1btsbL4192s26p4=;
+        s=korg; t=1649148165;
+        bh=o27kHmOtOvotRFc51Tl3DglrijIVdbuDH53J86XD31o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gSA4FXOmo8JlRLEb+/omQfIEConP6H+p4DIbg0isqJT4+f+gcjUsaUlP/r3/kzrGQ
-         TTB3fJdL5XWYsa7rGnJw+ZGlzlscKFcggom/8z8ZrDPP6UGmE2vWDmd49UgAq4nYx1
-         HRiiuJ2sbR4W4nRgj5bK0QYYQPm4eem+4bF5p1WA=
+        b=Kl3f3cOzSzmvjGJFE7cHgDwVNAVfd6JsTiYdq1s1qpzdT249Ef1js/pxeLGof0es+
+         AgE+E5ZCG6ezdYam6cSu4iF8MFSunuTLwfN5K5pN9SiWbtwWoTIqQUgt6EnyM4qZnl
+         Gn08RYOa+GiwG24U5uuSy5zzOhYw+P/MO7sYT2V8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0255/1017] io_uring: dont check unrelated req->open.how in accept request
-Date:   Tue,  5 Apr 2022 09:19:28 +0200
-Message-Id: <20220405070401.832562237@linuxfoundation.org>
+        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Sasha Levin <sashal@kernel.org>,
+        syzbot+d55757faa9b80590767b@syzkaller.appspotmail.com
+Subject: [PATCH 5.16 0257/1017] watch_queue: Fix NULL dereference in error cleanup
+Date:   Tue,  5 Apr 2022 09:19:30 +0200
+Message-Id: <20220405070401.892438714@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -54,40 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: David Howells <dhowells@redhat.com>
 
-[ Upstream commit adf3a9e9f556613197583a1884f0de40a8bb6fb9 ]
+[ Upstream commit a635415a064e77bcfbf43da413fd9dfe0bbed9cb ]
 
-Looks like a victim of too much copy/paste, we should not be looking
-at req->open.how in accept. The point is to check CLOEXEC and error
-out, which we don't invalid direct descriptors on exec. Hence any
-attempt to get a direct descriptor with CLOEXEC is invalid.
+In watch_queue_set_size(), the error cleanup code doesn't take account of
+the fact that __free_page() can't handle a NULL pointer when trying to free
+up buffer pages that did get allocated.
 
-No harm is done here, as req->open.how.flags overlaps with
-req->accept.flags, but it's very confusing and might change if either of
-those command structs are modified.
+Fix this by only calling __free_page() on the pages actually allocated.
 
-Fixes: aaa4db12ef7b ("io_uring: accept directly into fixed file table")
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Without the fix, this can lead to something like the following:
+
+BUG: KASAN: null-ptr-deref in __free_pages+0x1f/0x1b0 mm/page_alloc.c:5473
+Read of size 4 at addr 0000000000000034 by task syz-executor168/3599
+...
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ __kasan_report mm/kasan/report.c:446 [inline]
+ kasan_report.cold+0x66/0xdf mm/kasan/report.c:459
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_read include/linux/instrumented.h:71 [inline]
+ atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
+ page_ref_count include/linux/page_ref.h:67 [inline]
+ put_page_testzero include/linux/mm.h:717 [inline]
+ __free_pages+0x1f/0x1b0 mm/page_alloc.c:5473
+ watch_queue_set_size+0x499/0x630 kernel/watch_queue.c:275
+ pipe_ioctl+0xac/0x2b0 fs/pipe.c:632
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:874 [inline]
+ __se_sys_ioctl fs/ioctl.c:860 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Fixes: c73be61cede5 ("pipe: Add general notification queue support")
+Reported-and-tested-by: syzbot+d55757faa9b80590767b@syzkaller.appspotmail.com
+Signed-off-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/io_uring.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ kernel/watch_queue.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 783d7380331b..974f6fb327e7 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -5178,8 +5178,7 @@ static int io_accept_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	accept->nofile = rlimit(RLIMIT_NOFILE);
+diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
+index 055bc20ecdda..12348b41d7ad 100644
+--- a/kernel/watch_queue.c
++++ b/kernel/watch_queue.c
+@@ -274,7 +274,7 @@ long watch_queue_set_size(struct pipe_inode_info *pipe, unsigned int nr_notes)
+ 	return 0;
  
- 	accept->file_slot = READ_ONCE(sqe->file_index);
--	if (accept->file_slot && ((req->open.how.flags & O_CLOEXEC) ||
--				  (accept->flags & SOCK_CLOEXEC)))
-+	if (accept->file_slot && (accept->flags & SOCK_CLOEXEC))
- 		return -EINVAL;
- 	if (accept->flags & ~(SOCK_CLOEXEC | SOCK_NONBLOCK))
- 		return -EINVAL;
+ error_p:
+-	for (i = 0; i < nr_pages; i++)
++	while (--i >= 0)
+ 		__free_page(pages[i]);
+ 	kfree(pages);
+ error:
 -- 
 2.34.1
 

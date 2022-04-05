@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94AC44F3E5F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E429B4F431B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380216AbiDEPAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
+        id S1354990AbiDEMaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344934AbiDEJmu (ORCPT
+        with ESMTP id S235356AbiDEIQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:42:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2FCBF50C;
-        Tue,  5 Apr 2022 02:28:09 -0700 (PDT)
+        Tue, 5 Apr 2022 04:16:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1C5A5EB5;
+        Tue,  5 Apr 2022 01:03:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42409616BA;
-        Tue,  5 Apr 2022 09:28:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5054EC385A8;
-        Tue,  5 Apr 2022 09:28:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0777BB81BA7;
+        Tue,  5 Apr 2022 08:03:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5960CC385A0;
+        Tue,  5 Apr 2022 08:03:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150888;
-        bh=pjie2QMLJLfdcAB5nvLmBy0n7SMLRfr+ZHGFmeQZQSg=;
+        s=korg; t=1649145797;
+        bh=1R95iKwLg6uykAlkrYJDXyi0yVHdPcfqRxwyL5W0GOQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Le7G4wDZlzpxnkCtazHUfuG6X3hWahAHbqbttmrujzS98XwsxS6w0ugjdURO3ZMsM
-         Q7o2RJllGYvSxieKYXwhZ7uihJ++rQP6OmjlVjwWgPcIBmikemy0FGzkaIiu4VgEAv
-         apXm7mWs+L8aCCJJTQ3iwvCqmP6HmeBiF2JgsZx4=
+        b=2MKtSL4wFyaeHtZVO9giCqlTxCblcGMSIptOMoHz0IBpQ1OaqZS/ne4ICLaXtHI3j
+         ZT5a/vJcwUo4yLTCEt+T2BOXqJpMJmmI1ovSMaqhAnIUjeopYZksdBLTJOkb4Qmzht
+         7s/000BNQ/xPpTC7Y5YuK0+0xdoSc4YUuBgPaajU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Eric Biggers <ebiggers@google.com>,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        stable@vger.kernel.org, Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 218/913] block: dont delete queue kobject before its children
+Subject: [PATCH 5.17 0533/1126] Netvsc: Call hv_unmap_memory() in the netvsc_device_remove()
 Date:   Tue,  5 Apr 2022 09:21:20 +0200
-Message-Id: <20220405070346.392664546@linuxfoundation.org>
+Message-Id: <20220405070423.275859303@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
+References: <20220405070407.513532867@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,69 +55,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+From: Tianyu Lan <Tianyu.Lan@microsoft.com>
 
-[ Upstream commit 0f69288253e9fc7c495047720e523b9f1aba5712 ]
+[ Upstream commit b539324f6fe798bdb186e4e91eafb37dd851db2a ]
 
-kobjects aren't supposed to be deleted before their child kobjects are
-deleted.  Apparently this is usually benign; however, a WARN will be
-triggered if one of the child kobjects has a named attribute group:
+netvsc_device_remove() calls vunmap() inside which should not be
+called in the interrupt context. Current code calls hv_unmap_memory()
+in the free_netvsc_device() which is rcu callback and maybe called
+in the interrupt context. This will trigger BUG_ON(in_interrupt())
+in the vunmap(). Fix it via moving hv_unmap_memory() to netvsc_device_
+remove().
 
-    sysfs group 'modes' not found for kobject 'crypto'
-    WARNING: CPU: 0 PID: 1 at fs/sysfs/group.c:278 sysfs_remove_group+0x72/0x80
-    ...
-    Call Trace:
-      sysfs_remove_groups+0x29/0x40 fs/sysfs/group.c:312
-      __kobject_del+0x20/0x80 lib/kobject.c:611
-      kobject_cleanup+0xa4/0x140 lib/kobject.c:696
-      kobject_release lib/kobject.c:736 [inline]
-      kref_put include/linux/kref.h:65 [inline]
-      kobject_put+0x53/0x70 lib/kobject.c:753
-      blk_crypto_sysfs_unregister+0x10/0x20 block/blk-crypto-sysfs.c:159
-      blk_unregister_queue+0xb0/0x110 block/blk-sysfs.c:962
-      del_gendisk+0x117/0x250 block/genhd.c:610
-
-Fix this by moving the kobject_del() and the corresponding
-kobject_uevent() to the correct place.
-
-Fixes: 2c2086afc2b8 ("block: Protect less code with sysfs_lock in blk_{un,}register_queue()")
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Eric Biggers <ebiggers@google.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220124215938.2769-3-ebiggers@kernel.org
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 846da38de0e8 ("net: netvsc: Add Isolation VM support for netvsc driver")
+Signed-off-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/blk-sysfs.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/net/hyperv/netvsc.c | 24 ++++++++++++++++--------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
 
-diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
-index 4737ec024ee9..00021f012370 100644
---- a/block/blk-sysfs.c
-+++ b/block/blk-sysfs.c
-@@ -954,15 +954,17 @@ void blk_unregister_queue(struct gendisk *disk)
- 	 */
- 	if (queue_is_mq(q))
- 		blk_mq_unregister_dev(disk_to_dev(disk), q);
--
--	kobject_uevent(&q->kobj, KOBJ_REMOVE);
--	kobject_del(&q->kobj);
- 	blk_trace_remove_sysfs(disk_to_dev(disk));
+diff --git a/drivers/net/hyperv/netvsc.c b/drivers/net/hyperv/netvsc.c
+index afa81a9480cc..e675d1016c3c 100644
+--- a/drivers/net/hyperv/netvsc.c
++++ b/drivers/net/hyperv/netvsc.c
+@@ -154,19 +154,15 @@ static void free_netvsc_device(struct rcu_head *head)
  
- 	mutex_lock(&q->sysfs_lock);
- 	if (q->elevator)
- 		elv_unregister_queue(q);
- 	mutex_unlock(&q->sysfs_lock);
-+
-+	/* Now that we've deleted all child objects, we can delete the queue. */
-+	kobject_uevent(&q->kobj, KOBJ_REMOVE);
-+	kobject_del(&q->kobj);
-+
- 	mutex_unlock(&q->sysfs_dir_lock);
+ 	kfree(nvdev->extension);
  
- 	kobject_put(&disk_to_dev(disk)->kobj);
+-	if (nvdev->recv_original_buf) {
+-		hv_unmap_memory(nvdev->recv_buf);
++	if (nvdev->recv_original_buf)
+ 		vfree(nvdev->recv_original_buf);
+-	} else {
++	else
+ 		vfree(nvdev->recv_buf);
+-	}
+ 
+-	if (nvdev->send_original_buf) {
+-		hv_unmap_memory(nvdev->send_buf);
++	if (nvdev->send_original_buf)
+ 		vfree(nvdev->send_original_buf);
+-	} else {
++	else
+ 		vfree(nvdev->send_buf);
+-	}
+ 
+ 	bitmap_free(nvdev->send_section_map);
+ 
+@@ -765,6 +761,12 @@ void netvsc_device_remove(struct hv_device *device)
+ 		netvsc_teardown_send_gpadl(device, net_device, ndev);
+ 	}
+ 
++	if (net_device->recv_original_buf)
++		hv_unmap_memory(net_device->recv_buf);
++
++	if (net_device->send_original_buf)
++		hv_unmap_memory(net_device->send_buf);
++
+ 	/* Release all resources */
+ 	free_netvsc_device_rcu(net_device);
+ }
+@@ -1821,6 +1823,12 @@ struct netvsc_device *netvsc_device_add(struct hv_device *device,
+ 	netif_napi_del(&net_device->chan_table[0].napi);
+ 
+ cleanup2:
++	if (net_device->recv_original_buf)
++		hv_unmap_memory(net_device->recv_buf);
++
++	if (net_device->send_original_buf)
++		hv_unmap_memory(net_device->send_buf);
++
+ 	free_netvsc_device(&net_device->rcu);
+ 
+ 	return ERR_PTR(ret);
 -- 
 2.34.1
 

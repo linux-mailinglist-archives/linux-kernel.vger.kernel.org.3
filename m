@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 976ED4F4FE8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F49F4F5053
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1839982AbiDFBGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
+        id S1347725AbiDFBU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349069AbiDEJtD (ORCPT
+        with ESMTP id S1354912AbiDEKQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10345A94F7;
-        Tue,  5 Apr 2022 02:39:48 -0700 (PDT)
+        Tue, 5 Apr 2022 06:16:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F121D1FA63;
+        Tue,  5 Apr 2022 03:03:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3A31615E5;
-        Tue,  5 Apr 2022 09:39:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B852EC385A2;
-        Tue,  5 Apr 2022 09:39:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F552B81C86;
+        Tue,  5 Apr 2022 10:03:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8A29C385A1;
+        Tue,  5 Apr 2022 10:03:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151587;
-        bh=D9X4N7CjniGGLjHiUlduDQRYx7n6Zjs8euUw2wDCyR0=;
+        s=korg; t=1649153032;
+        bh=0EpLQqBQHjcTpSODKHXy71hIZ4eq3bpxMs0J0sqKlmw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2Rm32ttEIbYYPiaEsX4YQUeoW0a8uBb9Y8YqSScfYGOedQEWc9VrCoBag+JU6gGsj
-         rKtIs03XexKrQ43z6eO2c58H+7YsEYJdsMzYDnHpk5EzjA6/DORu2xTbfBGKazj7Lz
-         f7ZdFTtaDj4ome4CYeIDrovGr49sN1n4pyutkjHo=
+        b=t5GWJeQSuuyO0vuwWaQmxXU5zfPI5RT/UDT9yQNo8yek1KtHyXMkRULKPHPORE2Kl
+         NNrZyfuNDvHlkxnNwKuuoVhBZserp1Bf5q1Xd+D9eIlkz3n/H3aOXaURcb4jKLGTJ3
+         Fh/+KibwiqYzHaXlwNr/xee373efAg7z3mbzma2Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 470/913] drm/msm/dp: stop link training after link training 2 failed
-Date:   Tue,  5 Apr 2022 09:25:32 +0200
-Message-Id: <20220405070353.943570972@linuxfoundation.org>
+        stable@vger.kernel.org, stable@kernel.org,
+        Jann Horn <jannh@google.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Subject: [PATCH 5.10 039/599] ptrace: Check PTRACE_O_SUSPEND_SECCOMP permission on PTRACE_SEIZE
+Date:   Tue,  5 Apr 2022 09:25:33 +0200
+Message-Id: <20220405070259.989212056@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,49 +55,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuogee Hsieh <quic_khsieh@quicinc.com>
+From: Jann Horn <jannh@google.com>
 
-[ Upstream commit 9051d629dbf7a998a40f7eac65a9512b01bc3bb8 ]
+commit ee1fee900537b5d9560e9f937402de5ddc8412f3 upstream.
 
-Each DP link training contains link training 1 followed by link
-training 2.  There is maximum of 5 retries of DP link training
-before declared link training failed. It is required to stop link
-training at end of link training 2 if it is failed so that next
-link training 1 can start freshly. This patch fixes link compliance
-test  case 4.3.1.13 (Source Device Link Training EQ Fallback Test).
+Setting PTRACE_O_SUSPEND_SECCOMP is supposed to be a highly privileged
+operation because it allows the tracee to completely bypass all seccomp
+filters on kernels with CONFIG_CHECKPOINT_RESTORE=y. It is only supposed to
+be settable by a process with global CAP_SYS_ADMIN, and only if that
+process is not subject to any seccomp filters at all.
 
-Changes in v10:
---  group into one series
+However, while these permission checks were done on the PTRACE_SETOPTIONS
+path, they were missing on the PTRACE_SEIZE path, which also sets
+user-specified ptrace flags.
 
-Changes in v11:
--- drop drm/msm/dp: dp_link_parse_sink_count() return immediately if aux read
+Move the permissions checks out into a helper function and let both
+ptrace_attach() and ptrace_setoptions() call it.
 
-Fixes: 2e0adc765d88 ("drm/msm/dp: do not end dp link training until video is ready")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Link: https://lore.kernel.org/r/1642531648-8448-5-git-send-email-quic_khsieh@quicinc.com
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@kernel.org
+Fixes: 13c4a90119d2 ("seccomp: add ptrace options for suspend/resume")
+Signed-off-by: Jann Horn <jannh@google.com>
+Link: https://lkml.kernel.org/r/20220319010838.1386861-1-jannh@google.com
+Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/msm/dp/dp_ctrl.c | 3 +++
- 1 file changed, 3 insertions(+)
+ kernel/ptrace.c |   47 ++++++++++++++++++++++++++++++++---------------
+ 1 file changed, 32 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-index 62e75dc8afc6..4af281d97493 100644
---- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-+++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-@@ -1744,6 +1744,9 @@ int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl)
- 				/* end with failure */
- 				break; /* lane == 1 already */
- 			}
-+
-+			/* stop link training before start re training  */
-+			dp_ctrl_clear_training_pattern(ctrl);
- 		}
- 	}
+--- a/kernel/ptrace.c
++++ b/kernel/ptrace.c
+@@ -370,6 +370,26 @@ bool ptrace_may_access(struct task_struc
+ 	return !err;
+ }
  
--- 
-2.34.1
-
++static int check_ptrace_options(unsigned long data)
++{
++	if (data & ~(unsigned long)PTRACE_O_MASK)
++		return -EINVAL;
++
++	if (unlikely(data & PTRACE_O_SUSPEND_SECCOMP)) {
++		if (!IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) ||
++		    !IS_ENABLED(CONFIG_SECCOMP))
++			return -EINVAL;
++
++		if (!capable(CAP_SYS_ADMIN))
++			return -EPERM;
++
++		if (seccomp_mode(&current->seccomp) != SECCOMP_MODE_DISABLED ||
++		    current->ptrace & PT_SUSPEND_SECCOMP)
++			return -EPERM;
++	}
++	return 0;
++}
++
+ static int ptrace_attach(struct task_struct *task, long request,
+ 			 unsigned long addr,
+ 			 unsigned long flags)
+@@ -381,8 +401,16 @@ static int ptrace_attach(struct task_str
+ 	if (seize) {
+ 		if (addr != 0)
+ 			goto out;
++		/*
++		 * This duplicates the check in check_ptrace_options() because
++		 * ptrace_attach() and ptrace_setoptions() have historically
++		 * used different error codes for unknown ptrace options.
++		 */
+ 		if (flags & ~(unsigned long)PTRACE_O_MASK)
+ 			goto out;
++		retval = check_ptrace_options(flags);
++		if (retval)
++			return retval;
+ 		flags = PT_PTRACED | PT_SEIZED | (flags << PT_OPT_FLAG_SHIFT);
+ 	} else {
+ 		flags = PT_PTRACED;
+@@ -655,22 +683,11 @@ int ptrace_writedata(struct task_struct
+ static int ptrace_setoptions(struct task_struct *child, unsigned long data)
+ {
+ 	unsigned flags;
++	int ret;
+ 
+-	if (data & ~(unsigned long)PTRACE_O_MASK)
+-		return -EINVAL;
+-
+-	if (unlikely(data & PTRACE_O_SUSPEND_SECCOMP)) {
+-		if (!IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) ||
+-		    !IS_ENABLED(CONFIG_SECCOMP))
+-			return -EINVAL;
+-
+-		if (!capable(CAP_SYS_ADMIN))
+-			return -EPERM;
+-
+-		if (seccomp_mode(&current->seccomp) != SECCOMP_MODE_DISABLED ||
+-		    current->ptrace & PT_SUSPEND_SECCOMP)
+-			return -EPERM;
+-	}
++	ret = check_ptrace_options(data);
++	if (ret)
++		return ret;
+ 
+ 	/* Avoid intermediate state when all opts are cleared */
+ 	flags = child->ptrace;
 
 

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 950FD4F3B8F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BAF74F3794
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381184AbiDEL6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
+        id S1356342AbiDELPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245028AbiDEIxC (ORCPT
+        with ESMTP id S237141AbiDEIRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:53:02 -0400
+        Tue, 5 Apr 2022 04:17:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B231DC9;
-        Tue,  5 Apr 2022 01:49:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B68FB0D08;
+        Tue,  5 Apr 2022 01:05:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 073B261504;
-        Tue,  5 Apr 2022 08:49:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AD22C385A4;
-        Tue,  5 Apr 2022 08:49:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E544C61725;
+        Tue,  5 Apr 2022 08:05:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F4214C385A1;
+        Tue,  5 Apr 2022 08:05:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148592;
-        bh=hE0+M1yHyMNF+b58TMcf0wEYVHccPRvtpndBkcpj1nU=;
+        s=korg; t=1649145925;
+        bh=JHETf6kArsf/97BPwP8PKkdh+DPkqOvTkbRkJV+dBFc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zbc8j0B1nxD0RGBtrwOpT3aBZvEi0ZwSTNfFTVndvub1ZVgFxByaLxmfq4IAxsnWv
-         RszGCXHAIosM99gMg1Bz9FNmTqtTDtMaGVll4oEjnxnBIy7aToTAOzic4xI4QTRvGk
-         XfL8w2wgpe7+5jS4aZuS7iXDUr5LqvtZerL3rwC4=
+        b=qDX9oglZ6e+1IdTn0mEIkRyYuoQeWfvydebxKqdqIGvTj3UlyIAruwM4EF3BM8DSd
+         kb4h9As0tFfTS6HQdpkhRP7ANWgWh0SdeyMEB0aQfjQsnJrj2VwU9lxC+hMeGbRB0E
+         OpJ157Sj1WP0gLN0t40PJf4B3NF3MhEFgpuIHTTE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Sasha Levin <sashal@kernel.org>,
-        syzbot+2c56b725ec547fa9cb29@syzkaller.appspotmail.com
-Subject: [PATCH 5.16 0411/1017] udmabuf: validate ubuf->pagecount
-Date:   Tue,  5 Apr 2022 09:22:04 +0200
-Message-Id: <20220405070406.487545541@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Nemanja Rakovic <nemanja.rakovic@syrmia.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0578/1126] mips: Enable KCSAN
+Date:   Tue,  5 Apr 2022 09:22:05 +0200
+Message-Id: <20220405070424.598071434@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
+References: <20220405070407.513532867@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Nemanja Rakovic <nemanja.rakovic@syrmia.com>
 
-[ Upstream commit 2b6dd600dd72573c23ea180b5b0b2f1813405882 ]
+[ Upstream commit e0a8b93efa2382d370be44bf289157de7e5dacb4 ]
 
-Syzbot has reported GPF in sg_alloc_append_table_from_pages(). The
-problem was in ubuf->pages == ZERO_PTR.
+This patch enables KCSAN for the 64-bit version. Updated rules
+for the incompatible compilation units (vdso, boot/compressed).
 
-ubuf->pagecount is calculated from arguments passed from user-space. If
-user creates udmabuf with list.size == 0 then ubuf->pagecount will be
-also equal to zero; it causes kmalloc_array() to return ZERO_PTR.
-
-Fix it by validating ubuf->pagecount before passing it to
-kmalloc_array().
-
-Fixes: fbb0de795078 ("Add udmabuf misc device")
-Reported-and-tested-by: syzbot+2c56b725ec547fa9cb29@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Link: http://patchwork.freedesktop.org/patch/msgid/20211230142649.23022-1-paskripkin@gmail.com
-Signed-off-by: Gerd Hoffmann <kraxel@redhat.com>
+Signed-off-by: Nemanja Rakovic <nemanja.rakovic@syrmia.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma-buf/udmabuf.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/mips/Kconfig                  | 1 +
+ arch/mips/boot/compressed/Makefile | 1 +
+ arch/mips/vdso/Makefile            | 3 +++
+ 3 files changed, 5 insertions(+)
 
-diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
-index c57a609db75b..e7330684d3b8 100644
---- a/drivers/dma-buf/udmabuf.c
-+++ b/drivers/dma-buf/udmabuf.c
-@@ -190,6 +190,10 @@ static long udmabuf_create(struct miscdevice *device,
- 		if (ubuf->pagecount > pglimit)
- 			goto err;
- 	}
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 058446f01487..651d4fe355da 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -101,6 +101,7 @@ config MIPS
+ 	select TRACE_IRQFLAGS_SUPPORT
+ 	select VIRT_TO_BUS
+ 	select ARCH_HAS_ELFCORE_COMPAT
++	select HAVE_ARCH_KCSAN if 64BIT
+ 
+ config MIPS_FIXUP_BIGPHYS_ADDR
+ 	bool
+diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
+index 5a15d51e8884..a35f78212ea9 100644
+--- a/arch/mips/boot/compressed/Makefile
++++ b/arch/mips/boot/compressed/Makefile
+@@ -38,6 +38,7 @@ KBUILD_AFLAGS := $(KBUILD_AFLAGS) -D__ASSEMBLY__ \
+ KCOV_INSTRUMENT		:= n
+ GCOV_PROFILE := n
+ UBSAN_SANITIZE := n
++KASAN_SANITIZE			:= n
+ 
+ # decompressor objects (linked with vmlinuz)
+ vmlinuzobjs-y := $(obj)/head.o $(obj)/decompress.o $(obj)/string.o $(obj)/bswapsi.o
+diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
+index d65f55f67e19..f72658b3a53f 100644
+--- a/arch/mips/vdso/Makefile
++++ b/arch/mips/vdso/Makefile
+@@ -1,6 +1,9 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Objects to go into the VDSO.
+ 
++# Sanitizer runtimes are unavailable and cannot be linked here.
++ KCSAN_SANITIZE			:= n
 +
-+	if (!ubuf->pagecount)
-+		goto err;
-+
- 	ubuf->pages = kmalloc_array(ubuf->pagecount, sizeof(*ubuf->pages),
- 				    GFP_KERNEL);
- 	if (!ubuf->pages) {
+ # Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+ # the inclusion of generic Makefile.
+ ARCH_REL_TYPE_ABS := R_MIPS_JUMP_SLOT|R_MIPS_GLOB_DAT
 -- 
 2.34.1
 

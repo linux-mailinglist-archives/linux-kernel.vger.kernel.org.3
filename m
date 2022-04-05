@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 377414F4D72
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DF24F4B99
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1582395AbiDEXnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59588 "EHLO
+        id S1575235AbiDEXDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356181AbiDEKXP (ORCPT
+        with ESMTP id S1349415AbiDEJtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:23:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADF3BAB80;
-        Tue,  5 Apr 2022 03:07:29 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D631C920;
+        Tue,  5 Apr 2022 02:45:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 894D4616E7;
-        Tue,  5 Apr 2022 10:07:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FA26C385A1;
-        Tue,  5 Apr 2022 10:07:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4790DB817D3;
+        Tue,  5 Apr 2022 09:45:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 942C4C385A4;
+        Tue,  5 Apr 2022 09:45:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153249;
-        bh=3eWLhoShjrpU7CFb1QIvb/+h4UKZ8gJnx4hchgePSOo=;
+        s=korg; t=1649151912;
+        bh=07VNWO8H9YlwU0pqnXEKrNMaQkGMU5st7eEL9fMQ2pM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Chg7TYQtnC0ZI+tvzlZzfhQV6j7cliR19jEECAzLKha/ujSV2vgcCgQRmFt91Aptk
-         b4+/ezDo3qFTV5+YeLoPzF5IdzgSsJOldEJLvjgfz8JLAM51lhM+r4cJehhpGPAJvM
-         nLcFc3UJaKKVjYO5ZQtj6vdGoHOKzSUS7OjMDSv8=
+        b=icC7z32n4BrQfpi11GhCW8qAl8W7maThS6N/XqW1X9JDJgt7QSkMAMXssg8MpHr+j
+         FdyhnALdUwW4sPzX0ovLXGy6I+/u/EhjtIOgv6VWZwQTKQjDLAOqA/9h/mUxv/vg/+
+         1F/XPXCyhLaxMOUTMORl5q+N8wuAWX5mUeseVuOo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 154/599] crypto: amlogic - call finalize with bh disabled
-Date:   Tue,  5 Apr 2022 09:27:28 +0200
-Message-Id: <20220405070303.425558190@linuxfoundation.org>
+        stable@vger.kernel.org, Libin Yang <libin.yang@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Rander Wang <rander.wang@intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 587/913] soundwire: intel: fix wrong register name in intel_shim_wake
+Date:   Tue,  5 Apr 2022 09:27:29 +0200
+Message-Id: <20220405070357.439541450@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +57,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Corentin Labbe <clabbe@baylibre.com>
+From: Libin Yang <libin.yang@intel.com>
 
-[ Upstream commit dba633342994ce47d347bcf5522ba28301247b79 ]
+[ Upstream commit 3957db3ae3dae6f8b8168791f154567fe49e1fd7 ]
 
-Doing ipsec produces a spinlock recursion warning.
-This is due to not disabling BH during crypto completion function.
+When clearing the sdw wakests status, we should use SDW_SHIM_WAKESTS.
 
-Fixes: 48fe583fe541 ("crypto: amlogic - Add crypto accelerator for amlogic GXL")
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Fixes: 4a17c441c7cb ("soundwire: intel: revisit SHIM programming sequences.")
+Signed-off-by: Libin Yang <libin.yang@intel.com>
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Rander Wang <rander.wang@intel.com>
+Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+Link: https://lore.kernel.org/r/20220126011451.27853-1-yung-chuan.liao@linux.intel.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/amlogic/amlogic-gxl-cipher.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/soundwire/intel.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/crypto/amlogic/amlogic-gxl-cipher.c b/drivers/crypto/amlogic/amlogic-gxl-cipher.c
-index 8b5e07316352..652e72d030bb 100644
---- a/drivers/crypto/amlogic/amlogic-gxl-cipher.c
-+++ b/drivers/crypto/amlogic/amlogic-gxl-cipher.c
-@@ -265,7 +265,9 @@ static int meson_handle_cipher_request(struct crypto_engine *engine,
- 	struct skcipher_request *breq = container_of(areq, struct skcipher_request, base);
+diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
+index 78037ffdb09b..f72d36654ac2 100644
+--- a/drivers/soundwire/intel.c
++++ b/drivers/soundwire/intel.c
+@@ -448,8 +448,8 @@ static void intel_shim_wake(struct sdw_intel *sdw, bool wake_enable)
  
- 	err = meson_cipher(breq);
-+	local_bh_disable();
- 	crypto_finalize_skcipher_request(engine, breq, err);
-+	local_bh_enable();
- 
- 	return 0;
+ 		/* Clear wake status */
+ 		wake_sts = intel_readw(shim, SDW_SHIM_WAKESTS);
+-		wake_sts |= (SDW_SHIM_WAKEEN_ENABLE << link_id);
+-		intel_writew(shim, SDW_SHIM_WAKESTS_STATUS, wake_sts);
++		wake_sts |= (SDW_SHIM_WAKESTS_STATUS << link_id);
++		intel_writew(shim, SDW_SHIM_WAKESTS, wake_sts);
+ 	}
+ 	mutex_unlock(sdw->link_res->shim_lock);
  }
 -- 
 2.34.1

@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218CB4F2AAA
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 039354F2E8A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236698AbiDEJDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:03:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55022 "EHLO
+        id S1352476AbiDEKEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237322AbiDEIRz (ORCPT
+        with ESMTP id S237344AbiDEIR4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:17:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D888B3DE4;
-        Tue,  5 Apr 2022 01:06:03 -0700 (PDT)
+        Tue, 5 Apr 2022 04:17:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9AEB53C1;
+        Tue,  5 Apr 2022 01:06:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7ED0DB81BAF;
-        Tue,  5 Apr 2022 08:06:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3AB9C385A0;
-        Tue,  5 Apr 2022 08:06:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C3E66617EF;
+        Tue,  5 Apr 2022 08:06:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4DB0C385A0;
+        Tue,  5 Apr 2022 08:06:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145961;
-        bh=Pq3+SVaoZd+Fd197Y5mdzFTMoxlvF+PCrqlvowlz+Cs=;
+        s=korg; t=1649145964;
+        bh=0e3l9pPzVkeZhdzgF8J8i/OJrfVilyJRrXcXUlIX+qI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zwXCSIm4tun+fC/EgZ8slUbx/fOQziaThUshrBfJAVyUsEEa+2Vmr8by4xfxLeQjJ
-         hj8L3GsT+gh1U1+DkxvqaTnEZP6zRcR2j4ksKl+3v5iZnm7IsXv1DNASyLqovTe+wK
-         jZOMRk+1Q2mZnxXC6JM9LX2RwbaNPycQkjRIZc+g=
+        b=hgTuIMyd0XREv43M0W93tpK/fMWNHI4SIojMKG5dx31xvV/D3HxFtae7/TI/W0Xwd
+         MOY1f05r8QAy0/tjbB69le7r30FbF5fOiMM3e680YRmLXXkA7W+Taa+tJukbTXzqcQ
+         ofmOKpbPNRsil1lWx89dgs3ixbBJmUTZJ9vPIg2Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ben Widawsky <ben.widawsky@intel.com>,
+        stable@vger.kernel.org, Tong Zhang <ztong0001@gmail.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
         Dan Williams <dan.j.williams@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0554/1126] cxl/port: Hold port reference until decoder release
-Date:   Tue,  5 Apr 2022 09:21:41 +0200
-Message-Id: <20220405070423.894407819@linuxfoundation.org>
+Subject: [PATCH 5.17 0555/1126] dax: make sure inodes are flushed before destroy cache
+Date:   Tue,  5 Apr 2022 09:21:42 +0200
+Message-Id: <20220405070423.923849328@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,71 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Williams <dan.j.williams@intel.com>
+From: Tong Zhang <ztong0001@gmail.com>
 
-[ Upstream commit 74be98774dfbc5b8b795db726bd772e735d2edd4 ]
+[ Upstream commit a7e8de822e0b1979f08767c751f6c8a9c1d4ad86 ]
 
-KASAN + DEBUG_KOBJECT_RELEASE reports a potential use-after-free in
-cxl_decoder_release() where it goes to reference its parent, a cxl_port,
-to free its id back to port->decoder_ida.
+A bug can be triggered by following command
 
- BUG: KASAN: use-after-free in to_cxl_port+0x18/0x90 [cxl_core]
- Read of size 8 at addr ffff888119270908 by task kworker/35:2/379
+$ modprobe nd_pmem && modprobe -r nd_pmem
 
- CPU: 35 PID: 379 Comm: kworker/35:2 Tainted: G           OE     5.17.0-rc2+ #198
- Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
- Workqueue: events kobject_delayed_cleanup
- Call Trace:
-  <TASK>
-  dump_stack_lvl+0x59/0x73
-  print_address_description.constprop.0+0x1f/0x150
-  ? to_cxl_port+0x18/0x90 [cxl_core]
-  kasan_report.cold+0x83/0xdf
-  ? to_cxl_port+0x18/0x90 [cxl_core]
-  to_cxl_port+0x18/0x90 [cxl_core]
-  cxl_decoder_release+0x2a/0x60 [cxl_core]
-  device_release+0x5f/0x100
-  kobject_cleanup+0x80/0x1c0
+[   10.060014] BUG dax_cache (Not tainted): Objects remaining in dax_cache on __kmem_cache_shutdown()
+[   10.060938] Slab 0x0000000085b729ac objects=9 used=1 fp=0x000000004f5ae469 flags=0x200000000010200(slab|head|node)
+[   10.062433] Call Trace:
+[   10.062673]  dump_stack_lvl+0x34/0x44
+[   10.062865]  slab_err+0x90/0xd0
+[   10.063619]  __kmem_cache_shutdown+0x13b/0x2f0
+[   10.063848]  kmem_cache_destroy+0x4a/0x110
+[   10.064058]  __x64_sys_delete_module+0x265/0x300
 
-The device core only guarantees parent lifetime until all children are
-unregistered. If a child needs a parent to complete its ->release()
-callback that child needs to hold a reference to extend the lifetime of
-the parent.
+This is caused by dax_fs_exit() not flushing inodes before destroy cache.
+To fix this issue, call rcu_barrier() before destroy cache.
 
-Fixes: 40ba17afdfab ("cxl/acpi: Introduce cxl_decoder objects")
-Reported-by: Ben Widawsky <ben.widawsky@intel.com>
-Tested-by: Ben Widawsky <ben.widawsky@intel.com>
-Reviewed-by: Ben Widawsky <ben.widawsky@intel.com>
-Link: https://lore.kernel.org/r/164505751190.4175768.13324905271463416712.stgit@dwillia2-desk3.amr.corp.intel.com
+Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220212071111.148575-1-ztong0001@gmail.com
+Fixes: 7b6be8444e0f ("dax: refactor dax-fs into a generic provider of 'struct dax_device' instances")
 Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cxl/core/port.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/dax/super.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
-index 3f9b98ecd18b..aa5239ac67c6 100644
---- a/drivers/cxl/core/port.c
-+++ b/drivers/cxl/core/port.c
-@@ -182,6 +182,7 @@ static void cxl_decoder_release(struct device *dev)
- 
- 	ida_free(&port->decoder_ida, cxld->id);
- 	kfree(cxld);
-+	put_device(&port->dev);
+diff --git a/drivers/dax/super.c b/drivers/dax/super.c
+index e3029389d809..6bd565fe2e63 100644
+--- a/drivers/dax/super.c
++++ b/drivers/dax/super.c
+@@ -476,6 +476,7 @@ static int dax_fs_init(void)
+ static void dax_fs_exit(void)
+ {
+ 	kern_unmount(dax_mnt);
++	rcu_barrier();
+ 	kmem_cache_destroy(dax_cache);
  }
  
- static const struct device_type cxl_decoder_switch_type = {
-@@ -500,7 +501,10 @@ struct cxl_decoder *cxl_decoder_alloc(struct cxl_port *port, int nr_targets)
- 	if (rc < 0)
- 		goto err;
- 
-+	/* need parent to stick around to release the id */
-+	get_device(&port->dev);
- 	cxld->id = rc;
-+
- 	cxld->nr_targets = nr_targets;
- 	dev = &cxld->dev;
- 	device_initialize(dev);
 -- 
 2.34.1
 

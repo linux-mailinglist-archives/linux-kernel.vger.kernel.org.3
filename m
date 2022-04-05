@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150C34F4527
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CF684F45B8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237226AbiDEPCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59292 "EHLO
+        id S1384513AbiDEM1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345034AbiDEJm4 (ORCPT
+        with ESMTP id S235573AbiDEIQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:42:56 -0400
+        Tue, 5 Apr 2022 04:16:15 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361B5BF964;
-        Tue,  5 Apr 2022 02:28:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3721CFEC;
+        Tue,  5 Apr 2022 01:03:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 564F96165C;
-        Tue,  5 Apr 2022 09:28:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6130DC385A2;
-        Tue,  5 Apr 2022 09:28:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA2016167A;
+        Tue,  5 Apr 2022 08:03:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1F5EC385A2;
+        Tue,  5 Apr 2022 08:03:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150902;
-        bh=RAUViBvGmuS5RTbopXWh3hkvE9oXTfd0Ghbb8YE3plM=;
+        s=korg; t=1649145814;
+        bh=oBueRlGnsA+SB0G09LAGMW5kSeGEyH/mD0Q4eBI8Owk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mSnF3M/3U0vCCF1pgMlzHpE2edy7YqurgQ55z1yPhV60b43f3MKDAqYKbTNG/HNt9
-         9Amp/10vb+e7mDuNeTTin/CxBiiTiAcMNaCPEI7HPNNoiyMHhonmDsSYEEwHVfl4Ij
-         RNuyDm0LxpAK/CdOWlzhUrn3EkNGcnKapHV6SMLY=
+        b=Tfb33VJYW5O0sHCdK3bPBdJdwadjwIT0rNhnFwXBk9Ye6rzBQZwsJPImI4IJXaULz
+         K1kdQ4fK5+WjN+dqPi/VhzRo1BYRFd2dv1+/9Xhbfy67a/v9IYDhpdEEYrYvv0q0eX
+         TOCdAVjg2aTjei/T7eQX9VQs5RhbIu6gIAmdN6pU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 223/913] crypto: sun8i-ss - call finalize with bh disabled
+Subject: [PATCH 5.17 0538/1126] power: supply: ab8500: Swap max and overvoltage
 Date:   Tue,  5 Apr 2022 09:21:25 +0200
-Message-Id: <20220405070346.542298967@linuxfoundation.org>
+Message-Id: <20220405070423.423986849@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
+References: <20220405070407.513532867@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,65 +55,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Corentin Labbe <clabbe@baylibre.com>
+From: Linus Walleij <linus.walleij@linaro.org>
 
-[ Upstream commit b169b3766242b6f3336e24a6c8ee1522978b57a7 ]
+[ Upstream commit d662a7df36e1edc65eaf166ec1c8527ce9d088ea ]
 
-Doing ipsec produces a spinlock recursion warning.
-This is due to not disabling BH during crypto completion function.
+We should terminate charging when we reach the voltage_max_design_uv
+not overvoltage_limit_uv, this is an abuse of that struct member.
 
-Fixes: f08fcced6d00 ("crypto: allwinner - Add sun8i-ss cryptographic offloader")
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+The overvoltage limit is actually not configurable on the AB8500,
+it is fixed to 4.75 V so drop a comment about that in the code.
+
+Fixes: 2a5f41830aad ("power: supply: ab8500: Standardize voltages")
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c | 3 +++
- drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c   | 3 +++
- 2 files changed, 6 insertions(+)
+ drivers/power/supply/ab8500_bmdata.c   | 8 +++-----
+ drivers/power/supply/ab8500_chargalg.c | 2 +-
+ drivers/power/supply/ab8500_fg.c       | 8 +++++++-
+ 3 files changed, 11 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-index 9ef1c85c4aaa..554e400d41ca 100644
---- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-+++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-@@ -11,6 +11,7 @@
-  * You could find a link for the datasheet in Documentation/arm/sunxi.rst
-  */
+diff --git a/drivers/power/supply/ab8500_bmdata.c b/drivers/power/supply/ab8500_bmdata.c
+index 7ae95f537580..9a8334a65de1 100644
+--- a/drivers/power/supply/ab8500_bmdata.c
++++ b/drivers/power/supply/ab8500_bmdata.c
+@@ -188,13 +188,11 @@ int ab8500_bm_of_probe(struct power_supply *psy,
+ 	 * fall back to safe defaults.
+ 	 */
+ 	if ((bi->voltage_min_design_uv < 0) ||
+-	    (bi->voltage_max_design_uv < 0) ||
+-	    (bi->overvoltage_limit_uv < 0)) {
++	    (bi->voltage_max_design_uv < 0)) {
+ 		/* Nominal voltage is 3.7V for unknown batteries */
+ 		bi->voltage_min_design_uv = 3700000;
+-		bi->voltage_max_design_uv = 3700000;
+-		/* Termination voltage (overcharge limit) 4.05V */
+-		bi->overvoltage_limit_uv = 4050000;
++		/* Termination voltage 4.05V */
++		bi->voltage_max_design_uv = 4050000;
+ 	}
  
-+#include <linux/bottom_half.h>
- #include <linux/crypto.h>
- #include <linux/dma-mapping.h>
- #include <linux/io.h>
-@@ -274,7 +275,9 @@ static int sun8i_ss_handle_cipher_request(struct crypto_engine *engine, void *ar
- 	struct skcipher_request *breq = container_of(areq, struct skcipher_request, base);
+ 	if (bi->constant_charge_current_max_ua < 0)
+diff --git a/drivers/power/supply/ab8500_chargalg.c b/drivers/power/supply/ab8500_chargalg.c
+index c4a2fe07126c..bcf85ae6828e 100644
+--- a/drivers/power/supply/ab8500_chargalg.c
++++ b/drivers/power/supply/ab8500_chargalg.c
+@@ -802,7 +802,7 @@ static void ab8500_chargalg_end_of_charge(struct ab8500_chargalg *di)
+ 	if (di->charge_status == POWER_SUPPLY_STATUS_CHARGING &&
+ 		di->charge_state == STATE_NORMAL &&
+ 		!di->maintenance_chg && (di->batt_data.volt_uv >=
+-		di->bm->bi->overvoltage_limit_uv ||
++		di->bm->bi->voltage_max_design_uv ||
+ 		di->events.usb_cv_active || di->events.ac_cv_active) &&
+ 		di->batt_data.avg_curr_ua <
+ 		di->bm->bi->charge_term_current_ua &&
+diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
+index b0919a6a6587..236fd9f9d6f1 100644
+--- a/drivers/power/supply/ab8500_fg.c
++++ b/drivers/power/supply/ab8500_fg.c
+@@ -2263,7 +2263,13 @@ static int ab8500_fg_init_hw_registers(struct ab8500_fg *di)
+ {
+ 	int ret;
  
- 	err = sun8i_ss_cipher(breq);
-+	local_bh_disable();
- 	crypto_finalize_skcipher_request(engine, breq, err);
-+	local_bh_enable();
- 
- 	return 0;
- }
-diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
-index 3c073eb3db03..1a71ed49d233 100644
---- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
-+++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
-@@ -9,6 +9,7 @@
-  *
-  * You could find the datasheet in Documentation/arm/sunxi.rst
-  */
-+#include <linux/bottom_half.h>
- #include <linux/dma-mapping.h>
- #include <linux/pm_runtime.h>
- #include <linux/scatterlist.h>
-@@ -442,6 +443,8 @@ int sun8i_ss_hash_run(struct crypto_engine *engine, void *breq)
- theend:
- 	kfree(pad);
- 	kfree(result);
-+	local_bh_disable();
- 	crypto_finalize_hash_request(engine, breq, err);
-+	local_bh_enable();
- 	return 0;
- }
+-	/* Set VBAT OVV threshold */
++	/*
++	 * Set VBAT OVV (overvoltage) threshold to 4.75V (typ) this is what
++	 * the hardware supports, nothing else can be configured in hardware.
++	 * See this as an "outer limit" where the charger will certainly
++	 * shut down. Other (lower) overvoltage levels need to be implemented
++	 * in software.
++	 */
+ 	ret = abx500_mask_and_set_register_interruptible(di->dev,
+ 		AB8500_CHARGER,
+ 		AB8500_BATT_OVV,
 -- 
 2.34.1
 

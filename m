@@ -2,123 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A064F4B34
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 324FF4F4C25
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573964AbiDEWxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55432 "EHLO
+        id S1576162AbiDEXKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573640AbiDET1r (ORCPT
+        with ESMTP id S1573643AbiDET2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 15:27:47 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C55EBD7C6
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 12:25:48 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id 14so286478ily.11
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 12:25:48 -0700 (PDT)
+        Tue, 5 Apr 2022 15:28:22 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0002BE9FD
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 12:26:22 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id e16so148383lfc.13
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 12:26:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=u+T3NU6QNFkOQKHYYcZy7EJ0pKJCkBa9x+ezT/MG77s=;
-        b=fHGI43HnzKEaZ07fIjKBZkHadZt8X8koXagtbSwmRMHFHmPgl9iQmJnTwHdQkVFRcO
-         GU46qvE9L5+uBxPExQk4gtIc5KvuEeUYhLhWLcZ36mJgUc5Fk0FlnOoPz0BKzSuT+nJl
-         64Qeom+Zf9OtQ1GOxzg8pQLZywcy1w3SwLtIE=
+         :cc:content-transfer-encoding;
+        bh=aM/g1QWf5Ry19waQIN/yIeidX6+3IktjhZXbrkM4RkA=;
+        b=VqGDk0cJy3VeD9YeUGkYiZjnNQkZlk/Mdl0vUqqTFICQid0WGPL+Av1QUqRMJhz3Ke
+         WrYERt9bbKqaRmJWLGp+DBX+ozx2WIsDDOgkFrI0daBzk4PEMGo4qVcPq8l8U0s145vZ
+         vBzjBwIR3Z43nEGj8amENjwPazeZzr5a7iNwQ9ylKV6qSev2vlvPWE2IFFchha3/nric
+         89HS0Jw07JOwWXOvkQ+C9aGiS7y3U1hNOzwVyZEpKqj/3hwe5Ja/gGOAb+DKaMELoMNS
+         IihVPlC3vtOWpd1N8AI6o+dwKHircdKjX5BtX/lT14fQCsCzaYapIIgcND7heWlJBP+U
+         +nFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u+T3NU6QNFkOQKHYYcZy7EJ0pKJCkBa9x+ezT/MG77s=;
-        b=bSU3Y4CniODsyE6YmvJujSIh/gbBrtODerkqrxEm4DWsZ68HVHW65iMQ9hDsIr4jF4
-         UfWO7F8brW9LdiSpNSNrvxvDBiQuFw883U1KghuLZGQaevRrU79/qyebAAkrs3Tz9Pv1
-         B20OMzx8IkG+Xmc3nW7ZboLNqIbw/Wrb3WncsxPDhHb6MiZd4gVme41kBslf/LNWfmsV
-         1eGh/DRUpNn3JxhtMa/97r05YiqEKzVUNqsWsGbyuPNMucQhGeZ3QRQCzGXJHld5AJOv
-         BpndhdgnFqVniRWN0hgIxoQvjxSeWFZpnMLI5d9M6aZF8yIj94m84Elhyvmg0cPLCuXo
-         PTaw==
-X-Gm-Message-State: AOAM531kUXb5KM8uYxak39q5oTVvnD2YXXqyNtsTGO+AC3VK2fANfyJ9
-        BPY00Xr0xj8cpsAGchh2n0SqYJxVjYKZMSVJ8kWu3Q==
-X-Google-Smtp-Source: ABdhPJxTgVZ2jFFHgxN7D/AtvnXeF5uqH4Yvnf+QwwOB4lFId32budFznnvimZWza/nh+PWTqsX5Q6prwTm7+Xq/tXk=
-X-Received: by 2002:a92:cac4:0:b0:2c8:1095:b352 with SMTP id
- m4-20020a92cac4000000b002c81095b352mr2384844ilq.103.1649186747658; Tue, 05
- Apr 2022 12:25:47 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=aM/g1QWf5Ry19waQIN/yIeidX6+3IktjhZXbrkM4RkA=;
+        b=cR5QggDIfnJmkgCk1MKQqbBhVA+pCCUcaMQkTqBR9Fbx+0fS43OyFjiS83Gj2uhhUX
+         L+m2f2CYAHyMpw7blNNgXQyIqsTIG5YevsWHHNI68G2Dn2Iax4vHZJ7c/hhoqSLR+JQF
+         11aR40hs5jD6BXqFsLj3TvI3uZqmF1ELzOVhYG2be1ObTqfhnlin7hVhqeli34J7LdAU
+         3yb7jurYdQWfO5PVd7OIfLsqkPxzbsUMxc7vs7zTCnXN4fYCDXvrpy2nbP8Oc/yF1ZAa
+         vfEQtVl2AEBOBbvSbyOL8jw2oEJXieQqVJZMl0fX7cT1DoDK3apRJAFB7g2aF2Oa6xP3
+         2A9Q==
+X-Gm-Message-State: AOAM532F6ljWvusW/gbeHMEAPb/Jtlhw3q+WMZQ5GZctPXnOILIYpDsC
+        +WTRu0fmjrnWS8LjSizrLfInJfeSUjMB+bj63J1lQA==
+X-Google-Smtp-Source: ABdhPJxuMetLuvdZqMK40/5W5YwyJzebZo0tDnZYg162KlZH94xPjpjAL4QaPZ0vTIDn+hejxD/o7qNaX1svStxVFmU=
+X-Received: by 2002:a05:6512:12c6:b0:44a:650f:3b86 with SMTP id
+ p6-20020a05651212c600b0044a650f3b86mr3771545lfg.79.1649186780874; Tue, 05 Apr
+ 2022 12:26:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220330160535.GN8939@worktop.programming.kicks-ass.net>
- <CAEXW_YQNi42gahbSJ1skadh_8D+Ry6ZOmMqSU5BdidfCbmOtRg@mail.gmail.com> <YkbmCr6ojXYiWzkP@hirez.programming.kicks-ass.net>
-In-Reply-To: <YkbmCr6ojXYiWzkP@hirez.programming.kicks-ass.net>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Tue, 5 Apr 2022 15:25:36 -0400
-Message-ID: <CAEXW_YSHVUgqc_Uvx6dyiC2ynYTi2YLTuX87KkrAJDpm6D0EzQ@mail.gmail.com>
-Subject: Re: [PATCH] sched/core: Fix forceidle balancing
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Guenter Roeck <groeck@chromium.org>
+References: <20220330164306.2376085-1-pgonda@google.com> <CAL715W+S-SJwXBhYO=_T-9uAPLt6cQ-Hn+_+ehefAh6+kQ_zOA@mail.gmail.com>
+ <YkYdlfYM/FWlMqMg@google.com>
+In-Reply-To: <YkYdlfYM/FWlMqMg@google.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Tue, 5 Apr 2022 13:26:09 -0600
+Message-ID: <CAMkAt6p+u8ggkipnp1x=iv4xLD75b+eYEO3cCxP7f30PYPW0YQ@mail.gmail.com>
+Subject: Re: [PATCH] KVM: SEV: Add cond_resched() to loop in sev_clflush_pages()
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Mingwei Zhang <mizhang@google.com>, kvm <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 1, 2022 at 7:46 AM Peter Zijlstra <peterz@infradead.org> wrote:
+On Thu, Mar 31, 2022 at 3:31 PM Sean Christopherson <seanjc@google.com> wro=
+te:
 >
-> On Thu, Mar 31, 2022 at 03:00:40PM -0400, Joel Fernandes wrote:
-> > Hi,
-> >
-> > By the way, might be slightly related - we still see crashes with
-> > pick_task_fair() in our kernel even with this change:
-> > https://lkml.org/lkml/2020/11/17/2137
+> On Wed, Mar 30, 2022, Mingwei Zhang wrote:
+> > On Wed, Mar 30, 2022 at 9:43 AM Peter Gonda <pgonda@google.com> wrote:
+> > >
+> > > Add resched to avoid warning from sev_clflush_pages() with large numb=
+er
+> > > of pages.
+> > >
+> > > Signed-off-by: Peter Gonda <pgonda@google.com>
+> > > Cc: Sean Christopherson <seanjc@google.com>
+> > > Cc: kvm@vger.kernel.org
+> > > Cc: linux-kernel@vger.kernel.org
+> > >
+> > > ---
+> > > Here is a warning similar to what I've seen many times running large =
+SEV
+> > > VMs:
+> > > [  357.714051] CPU 15: need_resched set for > 52000222 ns (52 ticks) =
+without schedule
+> > > [  357.721623] WARNING: CPU: 15 PID: 35848 at kernel/sched/core.c:373=
+3 scheduler_tick+0x2f9/0x3f0
+> > > [  357.730222] Modules linked in: kvm_amd uhaul vfat fat hdi2_standar=
+d_ftl hdi2_megablocks hdi2_pmc hdi2_pmc_eeprom hdi2 stg elephant_dev_num cc=
+p i2c_mux_ltc4306 i2c_mux i2c_via_ipmi i2c_piix4 google_bmc_usb google_bmc_=
+gpioi2c_mb_common google_bmc_mailbox cdc_acm xhci_pci xhci_hcd sha3_generic=
+ gq nv_p2p_glue accel_class
+> > > [  357.758261] CPU: 15 PID: 35848 Comm: switchto-defaul Not tainted 4=
+.15.0-smp-DEV #11
+> > > [  357.765912] Hardware name: Google, Inc.                           =
+                            Arcadia_IT_80/Arcadia_IT_80, BIOS 30.20.2-gce 1=
+1/05/2021
+> > > [  357.779372] RIP: 0010:scheduler_tick+0x2f9/0x3f0
+> > > [  357.783988] RSP: 0018:ffff98558d1c3dd8 EFLAGS: 00010046
+> > > [  357.789207] RAX: 741f23206aa8dc00 RBX: 0000005349236a42 RCX: 00000=
+00000000007
+> > > [  357.796339] RDX: 0000000000000006 RSI: 0000000000000002 RDI: ffff9=
+8558d1d5a98
+> > > [  357.803463] RBP: ffff98558d1c3ea0 R08: 0000000000100ceb R09: 00000=
+00000000000
+> > > [  357.810597] R10: ffff98558c958c00 R11: ffffffff94850740 R12: 00000=
+000031975de
+> > > [  357.817729] R13: 0000000000000000 R14: ffff98558d1e2640 R15: ffff9=
+8525739ea40
+> > > [  357.824862] FS:  00007f87503eb700(0000) GS:ffff98558d1c0000(0000) =
+knlGS:0000000000000000
+> > > [  357.832948] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > [  357.838695] CR2: 00005572fe74b080 CR3: 0000007bea706006 CR4: 00000=
+00000360ef0
+> > > [  357.845828] Call Trace:
+> > > [  357.848277]  <IRQ>
+> > > [  357.850294]  [<ffffffff94411420>] ? tick_setup_sched_timer+0x130/0=
+x130
+> > > [  357.856818]  [<ffffffff943ed60d>] ? rcu_sched_clock_irq+0x6ed/0x85=
+0
+> > > [  357.863084]  [<ffffffff943fdf02>] ? __run_timers+0x42/0x260
+> > > [  357.868654]  [<ffffffff94411420>] ? tick_setup_sched_timer+0x130/0=
+x130
+> > > [  357.875182]  [<ffffffff943fd35b>] update_process_times+0x7b/0x90
+> > > [  357.881188]  [<ffffffff944114a2>] tick_sched_timer+0x82/0xd0
+> > > [  357.886845]  [<ffffffff94400671>] __run_hrtimer+0x81/0x200
+> > > [  357.892331]  [<ffffffff943ff222>] hrtimer_interrupt+0x192/0x450
+> > > [  357.898252]  [<ffffffff950002fa>] ? __do_softirq+0x2fa/0x33e
+> > > [  357.903911]  [<ffffffff94e02edc>] smp_apic_timer_interrupt+0xac/0x=
+1d0
+> > > [  357.910349]  [<ffffffff94e01ef6>] apic_timer_interrupt+0x86/0x90
+> > > [  357.916347]  </IRQ>
+> > > [  357.918452] RIP: 0010:clflush_cache_range+0x3f/0x50
+> > > [  357.923324] RSP: 0018:ffff98529af89cc0 EFLAGS: 00000246 ORIG_RAX: =
+ffffffffffffff12
+> > > [  357.930889] RAX: 0000000000000040 RBX: 0000000000038135 RCX: ffff9=
+85233d36000
+> > > [  357.938013] RDX: ffff985233d36000 RSI: 0000000000001000 RDI: ffff9=
+85233d35000
+> > > [  357.945145] RBP: ffff98529af89cc0 R08: 0000000000000001 R09: ffffb=
+5753fb23000
+> > > [  357.952271] R10: 000000000003fe00 R11: 0000000000000008 R12: 00000=
+00000040000
+> > > [  357.959401] R13: ffff98525739ea40 R14: ffffb5753fb22000 R15: ffff9=
+8532a58dd80
+> > > [  357.966536]  [<ffffffffc07afd41>] svm_register_enc_region+0xd1/0x1=
+70 [kvm_amd]
+> > > [  357.973758]  [<ffffffff94246e8c>] kvm_arch_vm_ioctl+0x84c/0xb00
+> > > [  357.979677]  [<ffffffff9455980f>] ? handle_mm_fault+0x6ff/0x1370
+> > > [  357.985683]  [<ffffffff9423412b>] kvm_vm_ioctl+0x69b/0x720
+> > > [  357.991167]  [<ffffffff945dfd9d>] do_vfs_ioctl+0x47d/0x680
+> > > [  357.996654]  [<ffffffff945e0188>] SyS_ioctl+0x68/0x90
+> > > [  358.001706]  [<ffffffff942066f1>] do_syscall_64+0x71/0x110
+> > > [  358.007192]  [<ffffffff94e00081>] entry_SYSCALL_64_after_hwframe+0=
+x3d/0xa2
+> > >
+> > > Tested by running a large 256gib SEV VM several times, saw no warning=
+s.
+> > > Without the change warnings are seen.
 >
-> Please as to not use lkml.org. Please use something with a MsgID in like
-> lore.
+> Clean up the splat (remove timestamps, everything with a ?, etc... I beli=
+eve there
+> is a kernel scripts/ to do this...) and throw it in the changelog.  Docum=
+enting the
+> exact problem is very helpful, e.g. future readers may wonder "what warni=
+ng?".
 
-Yep, will do.
+Paolo has queued this I think, so I'll do this next time I am fixing a
+warning.  Thanks Sean.
 
-> > Is it possible that when doing pick_task_fair() especially on a remote
-> > CPU, both the "cfs_rq->curr" and the rbtree's "left" be NULL with core
-> > scheduling? In this case, se will be NULL and can cause crashes right?
-> > I think the code assumes this can never happen.
-> >
-> > +Guenter Roeck  kindly debugged pick_task_fair() in a crash as
-> > follows. Copying some details he mentioned in a bug report:
-> >
-> > Assembler/source:
-> >
-> >   25:   e8 4f 11 00 00          call   0x1179             ; se =
-> > pick_next_entity(cfs_rq, curr);
-> >   2a:*  48 8b 98 60 01 00 00    mov    0x160(%rax),%rbx   ; trapping
-> > instruction [cfs_rq = group_cfs_rq(se);]
-> >   31:   48 85 db                test   %rbx,%rbx
-> >   34:   75 d1                   jne    0x7
-> >   36:   48 89 c7                mov    %rax,%rdi
-> >
-> > At 2a: RAX = se == NULL after pick_next_entity(). Looking closely into
-> > pick_next_entity(), it can indeed return NULL if curr is NULL and if
-> > left in pick_next_entity() is NULL. Per line 7:, curr is in %r14 and
-> > indeed 0.
-> >
-> > Thoughts?
 >
-> It is possible for ->curr and ->leftmost to be NULL, but then we should
-> also be having ->nr_running == 0 and not call pick in the first place.
-> Because picking a task from no tasks doesn't make much sense.
-
-Indeed the code checks for nr_running so it is really bizarre. My
-guess is this is kernel memory corruption due to an unrelated bug or
-something, it is also not easy to trigger.
-
-Thanks,
-
- - Joel
+>
+> > > ---
+> > >  arch/x86/kvm/svm/sev.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> > > index 75fa6dd268f0..c2fe89ecdb2d 100644
+> > > --- a/arch/x86/kvm/svm/sev.c
+> > > +++ b/arch/x86/kvm/svm/sev.c
+> > > @@ -465,6 +465,7 @@ static void sev_clflush_pages(struct page *pages[=
+], unsigned long npages)
+> > >                 page_virtual =3D kmap_atomic(pages[i]);
+> > >                 clflush_cache_range(page_virtual, PAGE_SIZE);
+> > >                 kunmap_atomic(page_virtual);
+> > > +               cond_resched();
+> >
+> > If you add cond_resched() here, the frequency (once per 4K) might be
+> > too high. You may want to do it once per X pages, where X could be
+> > something like 1G/4K?
+>
+> No, every iteration is perfectly ok.  The "cond"itional part means that t=
+his will
+> reschedule if and only if it actually needs to be rescheduled, e.g. if th=
+e task's
+> timeslice as expired.  The check for a needed reschedule is cheap, using
+> cond_resched() in tight-ish loops is ok and intended, e.g. KVM does a rec=
+hed
+> check prior to enterring the guest.

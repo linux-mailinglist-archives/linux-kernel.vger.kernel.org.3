@@ -2,74 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D73E14F231D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0024F2323
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbiDEGbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 02:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33096 "EHLO
+        id S230228AbiDEGcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 02:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiDEGbc (ORCPT
+        with ESMTP id S230209AbiDEGbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 02:31:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849B433A3D;
-        Mon,  4 Apr 2022 23:29:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2A150B81B98;
-        Tue,  5 Apr 2022 06:29:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89032C340F3;
-        Tue,  5 Apr 2022 06:29:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649140171;
-        bh=kcD8piI7TjLNSLlS5U7+xwCT0pyjngczKZUKaVKe62g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SXWR9MZJVas509w7bdMer/rdOmzJObKxWjVaxkDzLQaMoTDQ68FT6/vU8KcTIv8Kx
-         ggyeVL29ksUI1Rz+ntwzQTX6SY6xK0379tgjk3bNjkQl2GJ+ULgGbT/sLXhGhGZC1Q
-         Nz/OdxeaU/NpOfLiIyqcJ4gSr3mGKUuBVeHmpSeV78lanr2Vk7lwquL+Ma9/hGgL45
-         slYvnN+H2hOa3jzGTdXFejHfOU/5v11pTb2mujoVvX5/WZ7sYbv1JilbUBqMmgVOYM
-         jvZu3N4mOh2/180R6AlD5v62WkTW0sW8G6Rfmohag6EkkIIPtx5JpeTaqK0YV7aWkq
-         AC3rE717h7hCg==
-Date:   Mon, 4 Apr 2022 23:29:30 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     =?UTF-8?B?SsOpcsO0bWU=?= Pouiller <jerome.pouiller@silabs.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v10 0/1] wfx: get out from the staging area
-Message-ID: <20220404232930.05dd49cf@kernel.org>
-In-Reply-To: <20220404232247.01cc6567@kernel.org>
-References: <20220226092142.10164-1-Jerome.Pouiller@silabs.com>
-        <YhojjHGp4EfsTpnG@kroah.com>
-        <87wnhhsr9m.fsf@kernel.org>
-        <5830958.DvuYhMxLoT@pc-42>
-        <878rslt975.fsf@tynnyri.adurom.net>
-        <20220404232247.01cc6567@kernel.org>
+        Tue, 5 Apr 2022 02:31:53 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C16652E40;
+        Mon,  4 Apr 2022 23:29:54 -0700 (PDT)
+Received: from mail-wm1-f50.google.com ([209.85.128.50]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MyK5K-1nwLS02Y5k-00yixP; Tue, 05 Apr 2022 08:29:52 +0200
+Received: by mail-wm1-f50.google.com with SMTP id bi13-20020a05600c3d8d00b0038c2c33d8f3so885267wmb.4;
+        Mon, 04 Apr 2022 23:29:52 -0700 (PDT)
+X-Gm-Message-State: AOAM533c1kU5UG6Dgl6fglDxiVSp1JJjXvxLcczK4SI/xToN5JmuqTQh
+        83Pa6gYmQXpqI1hFhegKEkNUrvjiH402fcfij5s=
+X-Google-Smtp-Source: ABdhPJwsEWf6Kh9ZmIXYYN/M9onvtdd1lx+p5bH1oV2EAH9/3o2ZPWJZ3zKpIpvz66ZNFBOP57JnZalCuJjU3V4Z5Fo=
+X-Received: by 2002:a05:600c:4e11:b0:38c:bd19:e72c with SMTP id
+ b17-20020a05600c4e1100b0038cbd19e72cmr1618846wmq.174.1649140192243; Mon, 04
+ Apr 2022 23:29:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220404061948.2111820-1-masahiroy@kernel.org>
+ <20220404061948.2111820-9-masahiroy@kernel.org> <Ykqh3mEy5uY8spe8@infradead.org>
+ <CAK8P3a07ZdqA0UBC_qkqzMsZWLUK=Rti3AkFe2VVEWLivuZAqA@mail.gmail.com> <YkvVOLj/Rv4yPf5K@infradead.org>
+In-Reply-To: <YkvVOLj/Rv4yPf5K@infradead.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 5 Apr 2022 08:29:36 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0FjfSyUtv9a9dM7ixsK2oY9VF7WZPvDctn2JRi7A0YyQ@mail.gmail.com>
+Message-ID: <CAK8P3a0FjfSyUtv9a9dM7ixsK2oY9VF7WZPvDctn2JRi7A0YyQ@mail.gmail.com>
+Subject: Re: [PATCH 8/8] virtio_ring.h: do not include <stdint.h> from
+ exported header
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization list <virtualization@lists.linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:97ZUr0yfSVQstYUK4F5LrqXuvIwLfKa2qugu5/vkLljAk+jZE3Z
+ h9QkhZuVeQyXBlfEi4q9m8OVXmLRYqaxQCFw5HHBlvfab6AWEGHjT0HM63Gnqz7WXk4LkJF
+ MSGz5EvcUPfbD6RtI9I6stN00PRHvGRhHsQ84odKVMpXiC10UwHc//DgYEbqYJ/AWG1yJAq
+ I+e8n0XFZzdVmRhw7BA4w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Uoldei0PfR8=:J0+2DU1VyzsYAC1pEJIh0C
+ ExQcvuPLetSen3D/9Uptd41/9OP0paBB/B48ZUfbQqnuV5cvZ9UckFInzwl0FMFxo0G6arrs4
+ jvC/9zngMkzG6zQeTirlGZx4SwqnYfm2aJAfzjUU+U76MxcH92vXhLlXTepzRO0u9D2ZdmMkO
+ ivPEv10nwwkbmlOM0BLc/27vdiQ2ild8IVz5CaNUcaIe2HH7uDbqjpJR82wlC3YziHG2n/i7n
+ UzXDiqi7xTTw6Dw4rlkNRitScDienSUDbtoQ7iZhmpKEVSfI7l41C+USDdpydU32IjPXevcyJ
+ jLZHBAEbvnmEg86aUt8u6JHyK9CLsITT2SbJc00AEAGbdxWep/Kqc/D2Bl8bwtrZU3y2YlN8z
+ ARrCs3YF8brwxZqNEX2caVzMmGPLUsoqm9Ms7CP3UYUdzOkQxjLC8AiW6hGijg1ttPER3aP6C
+ nZt055ehRAo+cZP+jZbsjY2HkkOI/UGaEkkAGAM29NuboAng/tIrzSkZKK9enagRBJjDdvTlS
+ NwbJzpvxA5OupNjhy6OX6u2wySUTnHvaAF2dZPHLyY7vyZT31qtaprBjXEzglUuLufCyqnsS1
+ q8z5EHN942LPNo9FNODjXbuM8a6QZzdyShu8TvaXTojaQONpJ8Rw92Bn+ziI5EZ0DjOUG8AgW
+ fnvgIlLUYfIzrkpaAT4bCP/D47tdFxNaJbwjHWPoeeV3F0ILP4NC7vChVqK/NpUFbAco=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 4 Apr 2022 23:22:47 -0700 Jakub Kicinski wrote:
-> On Mon, 04 Apr 2022 13:49:18 +0300 Kalle Valo wrote:
-> > Dave&Jakub, once you guys open net-next will it be based on -rc1?  
-> 
-> Not normally. We usually let net feed net-next so it'd get -rc1 this
-> Thursday. But we should be able to fast-forward, let me confirm with
-> Dave.
+On Tue, Apr 5, 2022 at 7:35 AM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Mon, Apr 04, 2022 at 10:04:02AM +0200, Arnd Bergmann wrote:
+> > The header is shared between kernel and other projects using virtio, such as
+> > qemu and any boot loaders booting from virtio devices. It's not technically a
+> > /kernel/ ABI, but it is an ABI and for practical reasons the kernel version is
+> > maintained as the master copy if I understand it correctly.
+>
+> Besides that fact that as you correctly states these are not a UAPI at
+> all, qemu and bootloades are not specific to Linux and can't require a
+> specific kernel version.  So the same thing we do for file system
+> formats or network protocols applies here:  just copy the damn header.
+> And as stated above any reasonably portable userspace needs to have a
+> copy anyway.
 
-Wait, why is -rc1 magic? If you based the branch on whatever
-the merge-base of net-next and staging-next is, would that be
-an aberration?
+I think the users all have their own copies, at least the ones I could
+find on codesearch.debian.org. However, there are 27 virtio_*.h
+files in include/uapi/linux that probably should stay together for
+the purpose of defining the virtio protocol, and some others might
+be uapi relevant.
+
+I see that at least include/uapi/linux/vhost.h has ioctl() definitions
+in it, and includes the virtio_ring.h header indirectly.
+
+Adding the virtio maintainers to Cc to see if they can provide
+more background on this.
+
+> If it is just as a "master copy" it can live in drivers/virtio/, just
+> like we do for other formats.
+
+It has to be in include/linux/ at least because it's used by a number
+of drivers outside of drivers/virtio/.
+
+        Arnd

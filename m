@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B8F4F3FDF
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 222594F3E3F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380973AbiDEMYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46120 "EHLO
+        id S1380229AbiDEPNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245032AbiDEIxC (ORCPT
+        with ESMTP id S1346354AbiDEJov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:53:02 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDDEC7B;
-        Tue,  5 Apr 2022 01:50:09 -0700 (PDT)
+        Tue, 5 Apr 2022 05:44:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BE0D9EA2;
+        Tue,  5 Apr 2022 02:30:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E1CE1CE1C6B;
-        Tue,  5 Apr 2022 08:50:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2ECCC385A1;
-        Tue,  5 Apr 2022 08:50:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D1BB861680;
+        Tue,  5 Apr 2022 09:30:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA612C385A0;
+        Tue,  5 Apr 2022 09:30:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148606;
-        bh=K6geJeEW5QaOD+aLW/HKf6IJ3et2Chj97ahJ/fcGf9U=;
+        s=korg; t=1649151026;
+        bh=IQlQgUCjG42fAEaq4U78Y6LFtmOpKk1GRDjB9tZcYGc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UOsDdubPSESNbpJST1vNH8qe1LiYVQ0344dbse6Tz/vwzWaFF0N7BSV3CK4Q1AoR/
-         CYddz58WgQAVYmdJxHpGNk5oHyolwfTxk453z+uQBiuEMh0yymYy3ihnyL1ZtIUHMj
-         BvVTnSRW28cx1wOsAo1H8iSyNiCnmtPkox0hqcuQ=
+        b=B1mFe8dX2iqIM8125ET4Wu3LcR3VnVTFMGQKfEZ2XcDm8B/2BqysueAl4rMqJiqDh
+         R0D59DVwGVjxQBQcwOIWD6odsMcHrVQrq9oFfFLLip6jrlvKiMkO3Sk7ET/A1hE2g3
+         CzGgkfR5ZcABWpAP+4QNLN38OO/V1oKSLvJL7I4o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felix Maurer <fmaurer@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
+        stable@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
+        Robert Foss <robert.foss@linaro.org>,
+        Julian Grahsl <jgrahsl@snap.com>,
+        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0415/1017] selftests: bpf: Fix bind on used port
-Date:   Tue,  5 Apr 2022 09:22:08 +0200
-Message-Id: <20220405070406.607807821@linuxfoundation.org>
+Subject: [PATCH 5.15 267/913] media: camss: csid-170: dont enable unused irqs
+Date:   Tue,  5 Apr 2022 09:22:09 +0200
+Message-Id: <20220405070347.859924298@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,71 +59,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Felix Maurer <fmaurer@redhat.com>
+From: Jonathan Marek <jonathan@marek.ca>
 
-[ Upstream commit 8c0be0631d81e48f77d0ebf0534c86e32bef5f89 ]
+[ Upstream commit a6da362491e409de0978d733441e59db6584d69f ]
 
-The bind_perm BPF selftest failed when port 111/tcp was already in use
-during the test. To fix this, the test now runs in its own network name
-space.
+csid_isr() only checks for the reset irq, so enabling any other irqs
+doesn't make sense. The "RDI irq" comment is also wrong, the register
+should be CSID_CSI2_RDIN_IRQ_MASK. Without this fix there may be an
+excessive amount of irqs.
 
-To use unshare, it is necessary to reorder the includes. The style of
-the includes is adapted to be consistent with the other prog_tests.
-
-v2: Replace deprecated CHECK macro with ASSERT_OK
-
-Fixes: 8259fdeb30326 ("selftests/bpf: Verify that rebinding to port < 1024 from BPF works")
-Signed-off-by: Felix Maurer <fmaurer@redhat.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
-Link: https://lore.kernel.org/bpf/551ee65533bb987a43f93d88eaf2368b416ccd32.1642518457.git.fmaurer@redhat.com
+Fixes: eebe6d00e9bf ("media: camss: Add support for CSID hardware version Titan 170")
+Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Tested-by: Julian Grahsl <jgrahsl@snap.com>
+Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../selftests/bpf/prog_tests/bind_perm.c      | 20 ++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
+ drivers/media/platform/qcom/camss/camss-csid-170.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bind_perm.c b/tools/testing/selftests/bpf/prog_tests/bind_perm.c
-index d0f06e40c16d..eac71fbb24ce 100644
---- a/tools/testing/selftests/bpf/prog_tests/bind_perm.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bind_perm.c
-@@ -1,13 +1,24 @@
- // SPDX-License-Identifier: GPL-2.0
--#include <test_progs.h>
--#include "bind_perm.skel.h"
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-170.c b/drivers/media/platform/qcom/camss/camss-csid-170.c
+index aa65043c3303..a006c8dbceb1 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-170.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-170.c
+@@ -444,12 +444,6 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
+ 	val |= 1 << CSI2_RX_CFG1_MISR_EN;
+ 	writel_relaxed(val, csid->base + CSID_CSI2_RX_CFG1); // csi2_vc_mode_shift_val ?
+ 
+-	/* error irqs start at BIT(11) */
+-	writel_relaxed(~0u, csid->base + CSID_CSI2_RX_IRQ_MASK);
 -
-+#define _GNU_SOURCE
-+#include <sched.h>
-+#include <stdlib.h>
- #include <sys/types.h>
- #include <sys/socket.h>
- #include <sys/capability.h>
- 
-+#include "test_progs.h"
-+#include "bind_perm.skel.h"
-+
- static int duration;
- 
-+static int create_netns(void)
-+{
-+	if (!ASSERT_OK(unshare(CLONE_NEWNET), "create netns"))
-+		return -1;
-+
-+	return 0;
-+}
-+
- void try_bind(int family, int port, int expected_errno)
- {
- 	struct sockaddr_storage addr = {};
-@@ -75,6 +86,9 @@ void test_bind_perm(void)
- 	struct bind_perm *skel;
- 	int cgroup_fd;
- 
-+	if (create_netns())
-+		return;
-+
- 	cgroup_fd = test__join_cgroup("/bind_perm");
- 	if (CHECK(cgroup_fd < 0, "cg-join", "errno %d", errno))
- 		return;
+-	/* RDI irq */
+-	writel_relaxed(~0u, csid->base + CSID_TOP_IRQ_MASK);
+-
+ 	val = 1 << RDI_CTRL_HALT_CMD;
+ 	writel_relaxed(val, csid->base + CSID_RDI_CTRL(0));
+ }
 -- 
 2.34.1
 

@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F1094F40E2
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC8C4F3F6D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380594AbiDEM5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41928 "EHLO
+        id S240292AbiDEMpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243005AbiDEJIf (ORCPT
+        with ESMTP id S243168AbiDEJIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:08:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A78D91ACF;
-        Tue,  5 Apr 2022 01:57:35 -0700 (PDT)
+        Tue, 5 Apr 2022 05:08:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1F29F38B;
+        Tue,  5 Apr 2022 01:57:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2E3361561;
-        Tue,  5 Apr 2022 08:57:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6B38C385A4;
-        Tue,  5 Apr 2022 08:57:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93C69B81C6A;
+        Tue,  5 Apr 2022 08:57:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 053FEC385A6;
+        Tue,  5 Apr 2022 08:57:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149054;
-        bh=GFaQBGiyHR7R9an96UR5qCvcpxgJaPDYRvgatno0VlQ=;
+        s=korg; t=1649149062;
+        bh=1I9ntHJiM21S0qLJy1WF+V3MuZ6FluhhpC6uOraCkoc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AowEDb0qC9V4gE2lcu3tqI2fLThgW0AGDGZwk4t3i96+g3mfhXK/Veoo9vhsigTnt
-         8ppHAkJ3SREHj/+shL3vGgAhTtRVhZfQcALKOKti92Ng7KPdvDiI628/6WuAh3CCzc
-         Fv51uFBmaqCMIpFk1oiPgPMxY5mGUWIYu4U90vbo=
+        b=ZUdsfQGKqUQ1gykIK6+zuIJUp367FXbOkT1gMPr2FLuoQi1v4svl0RfL0bHyyfd7Z
+         FMx2Fop6+MmPBaYhPGc6u6VyirdwZb3ukIiJP5/0b1ep1kksqRHbfr2XWDhGZS18ic
+         l4TWjCvRc1oj7iBkLVbbzkrHjg2QkGTtjehcEruI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        linux-mips@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0577/1017] mips: DEC: honor CONFIG_MIPS_FP_SUPPORT=n
-Date:   Tue,  5 Apr 2022 09:24:50 +0200
-Message-Id: <20220405070411.406895569@linuxfoundation.org>
+        stable@vger.kernel.org, Jakob Koschel <jakobkoschel@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0579/1017] powerpc/sysdev: fix incorrect use to determine if list is empty
+Date:   Tue,  5 Apr 2022 09:24:52 +0200
+Message-Id: <20220405070411.466855616@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -58,78 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Jakob Koschel <jakobkoschel@gmail.com>
 
-[ Upstream commit 97bf0395c226907e1a9b908511a35192bf1e09bb ]
+[ Upstream commit fa1321b11bd01752f5be2415e74a0e1a7c378262 ]
 
-Include the DECstation interrupt handler in opting out of
-FPU support.
+'gtm' will *always* be set by list_for_each_entry().
+It is incorrect to assume that the iterator value will be NULL if the
+list is empty.
 
-Fixes a linker error:
+Instead of checking the pointer it should be checked if
+the list is empty.
 
-mips-linux-ld: arch/mips/dec/int-handler.o: in function `fpu':
-(.text+0x148): undefined reference to `handle_fpe_int'
-
-Fixes: 183b40f992c8 ("MIPS: Allow FP support to be disabled")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Paul Burton <paulburton@kernel.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Maciej W. Rozycki <macro@orcam.me.uk>
-Cc: linux-mips@vger.kernel.org
-Acked-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Fixes: 83ff9dcf375c ("powerpc/sysdev: implement FSL GTM support")
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220228142434.576226-1-jakobkoschel@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/dec/int-handler.S | 6 +++---
- arch/mips/dec/setup.c       | 3 ++-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ arch/powerpc/sysdev/fsl_gtm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/dec/int-handler.S b/arch/mips/dec/int-handler.S
-index ea5b5a83f1e1..011d1d678840 100644
---- a/arch/mips/dec/int-handler.S
-+++ b/arch/mips/dec/int-handler.S
-@@ -131,7 +131,7 @@
- 		 */
- 		mfc0	t0,CP0_CAUSE		# get pending interrupts
- 		mfc0	t1,CP0_STATUS
--#ifdef CONFIG_32BIT
-+#if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
- 		lw	t2,cpu_fpu_mask
- #endif
- 		andi	t0,ST0_IM		# CAUSE.CE may be non-zero!
-@@ -139,7 +139,7 @@
+diff --git a/arch/powerpc/sysdev/fsl_gtm.c b/arch/powerpc/sysdev/fsl_gtm.c
+index 8963eaffb1b7..39186ad6b3c3 100644
+--- a/arch/powerpc/sysdev/fsl_gtm.c
++++ b/arch/powerpc/sysdev/fsl_gtm.c
+@@ -86,7 +86,7 @@ static LIST_HEAD(gtms);
+  */
+ struct gtm_timer *gtm_get_timer16(void)
+ {
+-	struct gtm *gtm = NULL;
++	struct gtm *gtm;
+ 	int i;
  
- 		beqz	t0,spurious
+ 	list_for_each_entry(gtm, &gtms, list_node) {
+@@ -103,7 +103,7 @@ struct gtm_timer *gtm_get_timer16(void)
+ 		spin_unlock_irq(&gtm->lock);
+ 	}
  
--#ifdef CONFIG_32BIT
-+#if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
- 		 and	t2,t0
- 		bnez	t2,fpu			# handle FPU immediately
- #endif
-@@ -280,7 +280,7 @@ handle_it:
- 		j	dec_irq_dispatch
- 		 nop
- 
--#ifdef CONFIG_32BIT
-+#if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
- fpu:
- 		lw	t0,fpu_kstat_irq
- 		nop
-diff --git a/arch/mips/dec/setup.c b/arch/mips/dec/setup.c
-index a8a30bb1dee8..82b00e45ce50 100644
---- a/arch/mips/dec/setup.c
-+++ b/arch/mips/dec/setup.c
-@@ -746,7 +746,8 @@ void __init arch_init_irq(void)
- 		dec_interrupt[DEC_IRQ_HALT] = -1;
- 
- 	/* Register board interrupts: FPU and cascade. */
--	if (dec_interrupt[DEC_IRQ_FPU] >= 0 && cpu_has_fpu) {
-+	if (IS_ENABLED(CONFIG_MIPS_FP_SUPPORT) &&
-+	    dec_interrupt[DEC_IRQ_FPU] >= 0 && cpu_has_fpu) {
- 		struct irq_desc *desc_fpu;
- 		int irq_fpu;
- 
+-	if (gtm)
++	if (!list_empty(&gtms))
+ 		return ERR_PTR(-EBUSY);
+ 	return ERR_PTR(-ENODEV);
+ }
 -- 
 2.34.1
 

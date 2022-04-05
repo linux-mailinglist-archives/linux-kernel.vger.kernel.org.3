@@ -2,181 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B37E4F4863
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57B9B4F4762
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382219AbiDEVim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
+        id S1352638AbiDEVKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573696AbiDETnG (ORCPT
+        with ESMTP id S1573703AbiDETpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 15:43:06 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DB5208
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 12:41:07 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id b13so468607pfv.0
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 12:41:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mSWn+bwJl0JXyj3IYwZGhRTiDd7qYXvMXLFtGw/g+rg=;
-        b=AlCCPq+JKrSyY6/MdAWK+LJuFWEhXLOG2iRM8eu949iBowZOgYJpjjEZpvcwItS8+d
-         FEsIJdYmNNMsbMLSdUVjIs4nmz5vT7bZ7g0IC7PS/W33SVLgyOhPMKVc1hrkM/ybgdzd
-         i2jtISpWLxcxVWQR/Nn5bREeHtnuDwJpw37LvO7wCQo11vKt0AwUemLOuwYj1VFxKVXR
-         hMIICCbOonqXvUjzSbqP4umdws0neDr1awH1mbCXQOE1HRfpfmMRHUA++iIBc/IcROVl
-         uvLnKsuTqIOV5nEgg1TUvo47C8T7k/JqnB0mapIqQiPSvV58KN+OHoUlSQjUoTb3h1mP
-         6oAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mSWn+bwJl0JXyj3IYwZGhRTiDd7qYXvMXLFtGw/g+rg=;
-        b=k9c29M0/t8QfwwIzqkN/4HhpiJK/Kr9fvnqIqOz/2p5Ul7AiE+u5ebVzVvr6aSwGxK
-         yU0sY+DdE4bSO+anJvtjyVw20oERSvKXShjWG9JdWMUcQecPNBCJhBMSUS1yiSXIHFSD
-         +2019J/j/aXzgENRNrVxP+byZixfQIvcZvvl94UJ46O4RZWvDrQd6nULF8WbQj6/+t2Z
-         J1iWq1jlo76BAzdMqyizKkFWt13x0OqnyDsYd1tTlEqxZm1ilcaD5GVPy+vrxbCuvggk
-         Zzk2gRnGFQiCoP+U+ZagKDGmRdmic9gUAMWY80xo3KffPLPwDdMqQZ1ld6GgRE/T9Ipv
-         kqDQ==
-X-Gm-Message-State: AOAM530HFTelENtMezat/Dgegyr2vVQSmBXIoekjwpbjIGvpsa5LlGhb
-        vbl/Irnxes7qDUG7nJ9sivwqAFR7kB/+eA==
-X-Google-Smtp-Source: ABdhPJwz4yMK7s1pjudVER/qr9fFsGeQA/N/GsijRhlaiArSrhqko6pULldJx680awQe2eXzGIRGzw==
-X-Received: by 2002:a05:6a00:1828:b0:4fd:e0e5:6115 with SMTP id y40-20020a056a00182800b004fde0e56115mr5257368pfa.52.1649187666833;
-        Tue, 05 Apr 2022 12:41:06 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id j9-20020aa78009000000b004fde2dd78b0sm11969754pfi.109.2022.04.05.12.41.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 12:41:06 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 19:41:02 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Brijesh Singh <brijesh.singh@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v12 22/46] x86/sev: Use SEV-SNP AP creation to start
- secondary CPUs
-Message-ID: <YkybTnVYBKZ1zvz6@google.com>
-References: <20220307213356.2797205-1-brijesh.singh@amd.com>
- <20220307213356.2797205-23-brijesh.singh@amd.com>
- <YkuMTdckSgSB9M6f@google.com>
- <f4369605-7c8d-1a89-bd0e-b82710d0772a@amd.com>
+        Tue, 5 Apr 2022 15:45:30 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C091A208
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 12:43:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649187810; x=1680723810;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FBU+tAHtxcA3U+08ZDABcnOpS8ebJ2z+wPcv1j7H39E=;
+  b=Gz352RBU4yL6prwohET1kqCKEGrxiNZtw5S8NxrKL5IunMXZL3eDfcfz
+   gBIQ9jNqp5lB1v8Fyp2deUoQ2QPO0AFe56XBDvHFxz7TXbf07uOO6qaFQ
+   KRQPHuQifyNeMKkgF1GdWgpFqZU+PywgTjUd7PIllozqIJVjjmHcSemGr
+   9yre+q9COYUWz1RT0VmqCxxYd3MnwLUk0Ntm1nBSugRfmtymJEnAkybKz
+   FMiV53AwzKbLsSKpMRK0DNrWp8+3wNx5MIhdW6ssdY/pDmw93VHZ1V+mD
+   C+LpZIVz5bD8JwThGr7N9b5Myoq4/wPS6CFQsRwiaRpcSCFdAA/wpgBk8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="285809835"
+X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
+   d="scan'208";a="285809835"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 12:43:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
+   d="scan'208";a="524139308"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 05 Apr 2022 12:43:28 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbp5M-0003hr-7N;
+        Tue, 05 Apr 2022 19:43:28 +0000
+Date:   Wed, 6 Apr 2022 03:43:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: WARNING: modpost: vmlinux.o(.text.unlikely+0x3120): Section mismatch
+ in reference from the function trace_define_common_fields() to the variable
+ .init.data:initcall_level_names
+Message-ID: <202204060353.d0FrU970-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f4369605-7c8d-1a89-bd0e-b82710d0772a@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022, Brijesh Singh wrote:
-> Hi Sean,
->
-> On 4/4/22 19:24, Sean Christopherson wrote:
->
-> > > +static void snp_cleanup_vmsa(struct sev_es_save_area *vmsa)
-> > > +{
-> > > + int err;
-> > > +
-> > > + err = snp_set_vmsa(vmsa, false);
-> >
-> > Uh, so what happens if a malicious guest does RMPADJUST to convert a VMSA page
-> > back to a "normal" page while the host is trying to VMRUN that VMSA?  Does VMRUN
-> > fault?
->
-> When SEV-SNP is enabled, the VMRUN instruction performs an additional
-> security checks on various memory pages. In the case of VMSA page, hardware
-> enforce that page is marked as "VMSA" in the RMP table. If not,  VMRUN will
-> fail with VMEXIT_INVALID.
->
-> After the VMRUN is successful, the VMSA page is marked IN_USE by the
-> hardware, any attempt to modify the RMP entries will result in FAIL_INUSE
-> error. The IN_USE marking is automatically cleared by the hardware after the
-> #VMEXIT.
->
-> Please see the APM vol2 section 15.36.12 for additional information.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3e732ebf7316ac83e8562db7e64cc68aec390a18
+commit: a55f224ff5f238013de8762c4287117e47b86e22 tracing: Fix pid filtering when triggers are attached
+date:   4 months ago
+config: xtensa-randconfig-r026-20220405 (https://download.01.org/0day-ci/archive/20220406/202204060353.d0FrU970-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a55f224ff5f238013de8762c4287117e47b86e22
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a55f224ff5f238013de8762c4287117e47b86e22
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash
 
-Thanks!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > Can Linux refuse to support this madness and instead require the ACPI MP wakeup
-> > protocol being proposed/implemented for TDX?  That would allow KVM to have at
->
-> My two cents
->
-> In the current architecture, the HV track VMSAs by their SPA and guest
-> controls when they are runnable. It provides flexibility to the guest, which
-> can add and remove the VMSA. This flexibility may come in handy to support
-> the kexec and reboot use cases.
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-I understand it provides the guest flexibility, but IMO it completely inverts the
-separation of concerns between host and guest.  The host should have control of
-when a vCPU is added/removed and with what state, and the guest should be able to
-verify/acknowledge any changes.  This scheme gives the guest the bulk of the control,
-and doesn't even let the host verify much at all since the VMSA is opaque.
+<< WARNING: modpost: vmlinux.o(.text.unlikely+0x2f30): Section mismatch in reference from the function init_tracefs.isra.0() to the variable .init.data:initcall_level_names
+>> WARNING: modpost: vmlinux.o(.text.unlikely+0x3120): Section mismatch in reference from the function trace_define_common_fields() to the variable .init.data:initcall_level_names
+The function trace_define_common_fields() references
+the variable __initdata initcall_level_names.
+This is often because trace_define_common_fields lacks a __initdata
+annotation or the annotation of initcall_level_names is wrong.
 
-That the guest can yank the rug out from the host at any time just adds to the pain.
-VMEXIT_INVALID isn't the end of the world, but it breaks the assumption that such
-errors are host bugs.  To guard against such behavior, the host would have to unmap
-the VMSA page in order to prevent unwanted RMPADJUST, and that gets ugly fast if a
-VMSA can be any arbitrary guest page.
-
-Another example is the 2mb alignment erratum.  Technically, the guest can't workaround
-the erratum with 100% certainty because there's no guarantee that the host uses the
-same alignment for gfns and pfns.  I don't actually expect a host to use unaligned
-mappings, just pointing out how backwards this is.
-
-I fully realize there's basically zero chance of getting any of this changed in
-hardware/firmware, but I'm hoping we can concoct a software/GHCB solution to the
-worst issues.
-
-I don't see an way easy to address the guest getting to shove state directly into
-the VMSA, but the location of the VMSA gfn/pfn is a very solvable problem.  E.g.
-the host gets full control over each vCPU's VMSA, and the host-provided VMSA is
-discoverable in the guest.  That allows the guest to change vCPU state, e.g. for AP
-bringup, kexec, etc..., but gives the host the ability to protect itself without
-having to support arbitrary VMSA pages.  E.g. the host can dynamically map/unmap the
-VMSA from the guest: map on fault, unmap on AP "creation", refuse to run the vCPU if
-its VMSA isn't in the unmap state.  The VMSA pfn is fully host controlled, so
-there's no need for the guest to be aware of the 2mb alignment erratum.
-
-Requiring such GHCB extensions in the guest would make Linux incompatible with
-hypervisors that aren't updated, but IMO that's not a ridiculous ask given that
-it would be in the best interested of any hypervisor that isn't running a fully
-trusted, paravirt VMPL0.
-
-> The current approach does not depend on
-> ACPI; it will also come in handy to support microvm (minimalist machine type
-> without PCI nor ACPI support).
-
-Eh, a microvm really shouldn't need AP bringup in the first place, just run all
-APs from time zero and route them to where they need to be.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,68 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5994F4685
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 064CC4F4510
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348836AbiDEUeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
+        id S1449061AbiDEUKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457006AbiDEQCi (ORCPT
+        with ESMTP id S1457062AbiDEQCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:02:38 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C133AE8853
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:26:00 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id w7so12366058pfu.11
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 08:26:00 -0700 (PDT)
+        Tue, 5 Apr 2022 12:02:42 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C743BF32AB
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:26:53 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id r66so2474997pgr.3
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 08:26:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=nlcDYyeczHYZLKKspnEu5slcPvr1pfijlItskO0pzK4=;
-        b=WSNHXs0W5TvbEOpBlw4zJj47ZPJYMlXRx38aBCLgqNH7+XypYFRt5yKXe0RB33UwAd
-         9GXSl3H2QZdgdjjw1DVmkeiCWy7OFsGJxQ9AIJDl9xWsI3LdmBemt/xfgkP0ylPygVwm
-         6dp/v+CS1pNAxhx9s0/pxXqeNriszfYAbVUQ5CwEq3s+78WvdQuOKuIeQZuQwSj5Y39c
-         apKLZoESUXrIz+8bjtHnRzregsiWaIWvOv2Pfh4CT1FccGCCM7kG/UwKr+4UY1KooFuR
-         Uweewlazq2UY4f4rRh3J8byLQIKBjp3zMT9N77YtIfQnlBye/0nKv4vcd73+az/yI7+X
-         xY7w==
+        bh=kdycBsuX0g++/RcAqO3Nh9RpbFLdm52QoSaW2fF8jpA=;
+        b=vWElyWYs5POabdNlTJG/H3Z8Mcd7e7W1xxw4ojO5DcfZmeJmBi4zgZ4udZCL5YkkJC
+         gcfavDDrTarEbQoPO4Sdio+h9k3N6ADyEMGUi2aHg7GXp2palwloLsHgGZNrDlCbcL2x
+         ar4hVSaUpOdRz3ORNcruxOquOe7N6t2NeatyyU3qjlHvvq9TbTKXi+s+9icEwa4BgjH9
+         5FLHspkniaM0KwAJhgpa6Du4DK5nYVmJaiJmRAazUcC+uPIvQ5xOHHuogY1cNOTeyxSw
+         vwjjpLCs1Q0xNLcF7g4oMhTJZaF7Drg3jNvA6UtPNtKESTPExorYtxrIBGkXbYKmJIcb
+         WNFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=nlcDYyeczHYZLKKspnEu5slcPvr1pfijlItskO0pzK4=;
-        b=Q3zsbFFxe+ytYWMDGl6uuKw7huqhCpqA3Aon7FBcwtrKR8E2fXLgEDg1WMIrdMQxQ0
-         K2DKBEm6qckAkvqaw6n21GaPmgkyTkNdULP3RNEHiOT5PnWZqy47plp8y8WlM55h0JFs
-         Tsq1MDdOnY6G7k6lVLKM7ts3D+PSlBe9U3nbYU25ZZ8goZIsSDDi9nGGMVhUj5nGORrT
-         a8BfBQDhQZGzUcXhgHX+L46Vn8o/Lm5vqIzhh2CTe16pS8nAW2d5lH9GyOyjGygqmhOL
-         1KFXg/RCyRNJ134zXc/cfzB4Tn0meucUmQBpTAsE3ILRp05TolOls1hWgHh7aK9lvcMn
-         UwYQ==
-X-Gm-Message-State: AOAM530H5U/c9jZaFUwNDKqR6JIeev6MdupCe8u5tUERlnWDDCZjAVT9
-        ZE9rTl1QSMLigwWaHlioIhMjCQ==
-X-Google-Smtp-Source: ABdhPJz7yF6N9ZNXE6NMcS2CsOkoYIqxjjYdWdWKVmamt8X+07AjeWC8YH9Zx5T3RQEHz4C5J9vmJA==
-X-Received: by 2002:a63:a902:0:b0:398:cdd3:f85e with SMTP id u2-20020a63a902000000b00398cdd3f85emr3358626pge.122.1649172360274;
-        Tue, 05 Apr 2022 08:26:00 -0700 (PDT)
+        bh=kdycBsuX0g++/RcAqO3Nh9RpbFLdm52QoSaW2fF8jpA=;
+        b=Jv7Ivd2/auhPsSn3ZZtq3ooK581rzGR5eNMIKG7mvV0dA4KhoqkVXsQZySMyAJ3BEm
+         q6glG8ieRMypE7dHnoqxrk4Vm8ZwQbLOtfgufZXsHS2ebwh6Ir7GPTjswH9Vs/x7ZxwR
+         Le2iyC7I15lMqIKdOuKrxAabxtSNg9VfRo31dA1kYMCT9GlnKaOEdGFGe6vMuvfO+cz5
+         55024OXMm2F6ftD9X+y0I0rIWenizXwEaqZY/+Pe9PtXa89P5fwZyt6jiiMRsXhAbEP5
+         v4pjeZ6TJxDXAnx2WZLf/1vXA5WP3G+FVFXiyywIvlijWnbpuPGYwca80VvzPT4j5Z3q
+         G9Gg==
+X-Gm-Message-State: AOAM532uLwMhp1R/EYKfPsNV+TnAykkoN1MRSyxReXdKVIZB54jcvZrh
+        XG2NMlgTouO/T0Befr+VrDMIUA==
+X-Google-Smtp-Source: ABdhPJzrbX/Sddjrknw9Kh/d2WHnv7CItd5Pk7DXrwOfNDQD+F5B4NYZiMWJySrhddyqzsAOE88YMg==
+X-Received: by 2002:a65:6813:0:b0:384:b288:8702 with SMTP id l19-20020a656813000000b00384b2888702mr3339475pgt.275.1649172413085;
+        Tue, 05 Apr 2022 08:26:53 -0700 (PDT)
 Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id i6-20020a633c46000000b003817d623f72sm13886071pgn.24.2022.04.05.08.25.56
+        by smtp.gmail.com with ESMTPSA id m21-20020a17090ab79500b001ca3c46ba2fsm2737681pjr.24.2022.04.05.08.26.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 08:25:57 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 09:25:55 -0600
+        Tue, 05 Apr 2022 08:26:52 -0700 (PDT)
+Date:   Tue, 5 Apr 2022 09:26:49 -0600
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: defconfig: Config that had RPMSG_CHAR now gets
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Anup Patel <anup@brainfault.org>
+Subject: Re: [PATCH v2] RISC-V: configs: Configs that had RPMSG_CHAR now get
  RPMSG_CTRL
-Message-ID: <20220405152555.GB4147585@p14s>
-References: <20220405115524.1020499-1-arnaud.pouliquen@foss.st.com>
+Message-ID: <20220405152649.GC4147585@p14s>
+References: <20220405115729.1020889-1-arnaud.pouliquen@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220405115524.1020499-1-arnaud.pouliquen@foss.st.com>
+In-Reply-To: <20220405115729.1020889-1-arnaud.pouliquen@foss.st.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -74,20 +75,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 01:55:24PM +0200, Arnaud Pouliquen wrote:
+On Tue, Apr 05, 2022 at 01:57:29PM +0200, Arnaud Pouliquen wrote:
 > In the commit 617d32938d1b ("rpmsg: Move the rpmsg control device
 > from rpmsg_char to rpmsg_ctrl"), we split the rpmsg_char driver in two.
 > By default give everyone who had the old driver enabled the rpmsg_ctrl
 > driver too.
 > 
 > Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-
-This patch is missing a separation marker, i.e "---", just above.  Without it
-the text below is also included in the changelog, and it shouldn't.
-
-Thanks,
-Mathieu
-
+> Reviewed-by: Anup Patel <anup@brainfault.org>
+> ---
 > 
 > This patch is extracted from the series [1] that has been partially
 > integrated in the Linux Kernel 5.18-rc1.
@@ -98,21 +94,37 @@ Mathieu
 > [1]https://lore.kernel.org/lkml/15be2f08-ba03-2b80-6f53-2056359d5c41@gmail.com/T/
 > [2]https://lore.kernel.org/linux-arm-kernel/CANLsYky1_b80qPbgOaLGVYD-GEr21V6C653iGEB7VCU=GbGvAQ@mail.gmail.com/T/
 > ---
->  arch/arm64/configs/defconfig | 1 +
->  1 file changed, 1 insertion(+)
+>  arch/riscv/configs/defconfig      | 1 +
+>  arch/riscv/configs/rv32_defconfig | 1 +
+>  2 files changed, 2 insertions(+)
 > 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index 50aa3d75ab4f..3f8906b8a2ca 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -1053,6 +1053,7 @@ CONFIG_QCOM_Q6V5_PAS=m
->  CONFIG_QCOM_SYSMON=m
->  CONFIG_QCOM_WCNSS_PIL=m
->  CONFIG_RPMSG_CHAR=m
-> +CONFIG_RPMSG_CTRL=m
->  CONFIG_RPMSG_QCOM_GLINK_RPM=y
->  CONFIG_RPMSG_QCOM_GLINK_SMEM=m
->  CONFIG_RPMSG_QCOM_SMD=y
+> diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
+> index 30e3017f22bc..0cc17db8aaba 100644
+> --- a/arch/riscv/configs/defconfig
+> +++ b/arch/riscv/configs/defconfig
+> @@ -101,6 +101,7 @@ CONFIG_VIRTIO_BALLOON=y
+>  CONFIG_VIRTIO_INPUT=y
+>  CONFIG_VIRTIO_MMIO=y
+>  CONFIG_RPMSG_CHAR=y
+> +CONFIG_RPMSG_CTRL=y
+>  CONFIG_RPMSG_VIRTIO=y
+>  CONFIG_EXT4_FS=y
+>  CONFIG_EXT4_FS_POSIX_ACL=y
+> diff --git a/arch/riscv/configs/rv32_defconfig b/arch/riscv/configs/rv32_defconfig
+> index 7e5efdc3829d..6cd9d84d3e13 100644
+> --- a/arch/riscv/configs/rv32_defconfig
+> +++ b/arch/riscv/configs/rv32_defconfig
+> @@ -93,6 +93,7 @@ CONFIG_VIRTIO_BALLOON=y
+>  CONFIG_VIRTIO_INPUT=y
+>  CONFIG_VIRTIO_MMIO=y
+>  CONFIG_RPMSG_CHAR=y
+> +CONFIG_RPMSG_CTRL=y
+>  CONFIG_RPMSG_VIRTIO=y
+>  CONFIG_EXT4_FS=y
+>  CONFIG_EXT4_FS_POSIX_ACL=y
+
+Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+
 > -- 
 > 2.25.1
 > 

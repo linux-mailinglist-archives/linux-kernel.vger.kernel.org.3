@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA854F4534
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7CCE4F4525
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383798AbiDENbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
+        id S1379890AbiDEN3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345683AbiDEJW4 (ORCPT
+        with ESMTP id S1345312AbiDEJWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:22:56 -0400
+        Tue, 5 Apr 2022 05:22:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AED53E27;
-        Tue,  5 Apr 2022 02:11:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136252AE00;
+        Tue,  5 Apr 2022 02:10:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3679561576;
-        Tue,  5 Apr 2022 09:11:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46D6BC385A0;
-        Tue,  5 Apr 2022 09:11:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6EC361527;
+        Tue,  5 Apr 2022 09:10:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0648C385A2;
+        Tue,  5 Apr 2022 09:10:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149901;
-        bh=BIereeSl8OOvQHyMUSmTZlEVrUWpAJuLOWV5juCjHcQ=;
+        s=korg; t=1649149821;
+        bh=BS9+xBaILP2NTve/YGTy5aoxWamiPKm3xneZ2z7LGuc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MCn46OUdKrSxvQG1LgcxTqkecGf5yyDi2cTLpkj5rH1/1TyNwfn1agQHeM9jzo0i7
-         YMLQ/rP5z5uLpW9f7jot3+aRyhpHhVkYTdGrJ/acm8f0el690NENYM03AkffcDi9IO
-         dm0Mnyn5ey4DPToSPMYQ4q25mw7Bz5BS4Z73GXvw=
+        b=oV6OPfcMbWKXZZvcL+wPwe0gvLdyrKJ4HqdoSukuUr6Uqo3PUGYwsEnlolbx57R6G
+         40flP+Sp5hV+kupJvCNnc+WeT/4n0+ttB8gspgWzUmOI2w+cfBB/atdlGA0nQYt8oe
+         dV8M5cSCHdbxw9LY3cmb14lNMkfivRvuDGyN1KK4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
+        =?UTF-8?q?Daniel=20Gonz=C3=A1lez=20Cabanelas?= <dgcbueu@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0834/1017] ASoC: Intel: sof_es8336: add quirk for Huawei D15 2021
-Date:   Tue,  5 Apr 2022 09:29:07 +0200
-Message-Id: <20220405070418.999508419@linuxfoundation.org>
+Subject: [PATCH 5.16 0836/1017] media: cx88-mpeg: clear interrupt status register before streaming video
+Date:   Tue,  5 Apr 2022 09:29:09 +0200
+Message-Id: <20220405070419.057876762@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -57,40 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+From: Daniel González Cabanelas <dgcbueu@gmail.com>
 
-[ Upstream commit ce6a70bfce21bb4edb7c0f29ecfb0522fa34ab71 ]
+[ Upstream commit 56cb61f70e547e1b0cdfe6ff5a1f1ce6242e6d96 ]
 
-Huawei D15 uses SSP_CODEC(0).
+Some cx88 video cards may have transport stream status interrupts set
+to 1 from cold start, causing errors like this:
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Link: https://lore.kernel.org/r/d560a1c76edb633c37acf04a9a82518b6233a719.1640351150.git.mchehab@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+  cx88xx: cx88_print_irqbits: core:irq mpeg  [0x100000] ts_err?*
+  cx8802: cx8802_mpeg_irq: mpeg:general errors: 0x00100000
+
+According to CX2388x datasheet, the interrupt status register should be
+cleared before enabling IRQs to stream video.
+
+Fix it by clearing the Transport Stream Interrupt Status register.
+
+Signed-off-by: Daniel González Cabanelas <dgcbueu@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/intel/boards/sof_es8336.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/media/pci/cx88/cx88-mpeg.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/sound/soc/intel/boards/sof_es8336.c b/sound/soc/intel/boards/sof_es8336.c
-index 20d577eaab6d..e6d599f0cd26 100644
---- a/sound/soc/intel/boards/sof_es8336.c
-+++ b/sound/soc/intel/boards/sof_es8336.c
-@@ -247,6 +247,14 @@ static const struct dmi_system_id sof_es8336_quirk_table[] = {
- 					SOF_ES8336_TGL_GPIO_QUIRK |
- 					SOF_ES8336_ENABLE_DMIC)
- 	},
-+	{
-+		.callback = sof_es8336_quirk_cb,
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "HUAWEI"),
-+			DMI_MATCH(DMI_BOARD_NAME, "BOHB-WAX9-PCB-B2"),
-+		},
-+		.driver_data = (void *)SOF_ES8336_SSP_CODEC(0)
-+	},
- 	{}
- };
+diff --git a/drivers/media/pci/cx88/cx88-mpeg.c b/drivers/media/pci/cx88/cx88-mpeg.c
+index 680e1e3fe89b..2c1d5137ac47 100644
+--- a/drivers/media/pci/cx88/cx88-mpeg.c
++++ b/drivers/media/pci/cx88/cx88-mpeg.c
+@@ -162,6 +162,9 @@ int cx8802_start_dma(struct cx8802_dev    *dev,
+ 	cx_write(MO_TS_GPCNTRL, GP_COUNT_CONTROL_RESET);
+ 	q->count = 0;
  
++	/* clear interrupt status register */
++	cx_write(MO_TS_INTSTAT,  0x1f1111);
++
+ 	/* enable irqs */
+ 	dprintk(1, "setting the interrupt mask\n");
+ 	cx_set(MO_PCI_INTMSK, core->pci_irqmask | PCI_INT_TSINT);
 -- 
 2.34.1
 

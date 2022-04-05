@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C474F3FBD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9941E4F417B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385543AbiDEMd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52356 "EHLO
+        id S1385572AbiDEMdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235459AbiDEJCF (ORCPT
+        with ESMTP id S235554AbiDEJCP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:02:05 -0400
+        Tue, 5 Apr 2022 05:02:15 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38C6E86;
-        Tue,  5 Apr 2022 01:53:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CED25F6F;
+        Tue,  5 Apr 2022 01:54:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B0CBB81BD9;
-        Tue,  5 Apr 2022 08:53:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC802C385A0;
-        Tue,  5 Apr 2022 08:53:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25E97B81BC5;
+        Tue,  5 Apr 2022 08:54:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83A9FC385A0;
+        Tue,  5 Apr 2022 08:54:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148835;
-        bh=EIQ75Iss0C+N32dhwHmXt/LiiU6YMzb9YdD0k8MwtBA=;
+        s=korg; t=1649148840;
+        bh=xFrfaAw0W6wPzfErlhGrafzRHMRpYYTkjh++zOYTdoY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iVaD0yx+N9EKK1+VRVwSFU1S7FkcnbdcQtFWO2FrjEtG1+IWjvr4DiVwNIuR/vDkR
-         ggF/Ekssg9DBYNaTo7sSza6HtTsGHfPJzXcuC5BQcqb6IBpvZuDxcaSwrEoTC1T2OZ
-         b7P71VRpF6ZMM3IbK/2T378pirLwoJP7LEX5PhII=
+        b=lzhZhN8AMzt7p2GRZ4l4RpBpfiaJI9mEQpQK36bHcnjXqb+wGn7HMZkpPleDIHtT4
+         YkI0bcfKVr2iYnP7DkKuljsan53VCptwyzqTEfK9ehsHB5lb1P1LYQ35MYg8jv2y+/
+         0QCC5fk/Fgl3Frgfi12LDgevR46xFCIo8Tm/6uko=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0497/1017] iommu/ipmmu-vmsa: Check for error num after setting mask
-Date:   Tue,  5 Apr 2022 09:23:30 +0200
-Message-Id: <20220405070409.052420079@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Hector Martin <marcan@marcan.st>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0499/1017] i2c: pasemi: Drop I2C classes from platform driver variant
+Date:   Tue,  5 Apr 2022 09:23:32 +0200
+Message-Id: <20220405070409.111104987@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,40 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Martin Povišer <povik+lin@cutebit.org>
 
-[ Upstream commit 1fdbbfd5099f797a4dac05e7ef0192ba4a9c39b4 ]
+[ Upstream commit 19e138e43a0820bb4dbf8fb5c7691f82e9221f2b ]
 
-Because of the possible failure of the dma_supported(), the
-dma_set_mask_and_coherent() may return error num.
-Therefore, it should be better to check it and return the error if
-fails.
+Drop I2C device-probing classes from platform variant of the PASemi
+controller as it is only used on platforms where I2C devices should
+be instantiated in devicetree. (The I2C_CLASS_DEPRECATED flag is not
+raised as up to this point no devices relied on the old behavior.)
 
-Fixes: 1c894225bf5b ("iommu/ipmmu-vmsa: IPMMU device is 40-bit bus master")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Reviewed-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Link: https://lore.kernel.org/r/20220106024302.2574180-1-jiasheng@iscas.ac.cn
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Fixes: d88ae2932df0 ("i2c: pasemi: Add Apple platform driver")
+Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
+Reviewed-by: Sven Peter <sven@svenpeter.dev>
+Acked-by: Hector Martin <marcan@marcan.st>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/ipmmu-vmsa.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-pasemi-core.c | 1 -
+ drivers/i2c/busses/i2c-pasemi-pci.c  | 1 +
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/ipmmu-vmsa.c b/drivers/iommu/ipmmu-vmsa.c
-index ca752bdc710f..61bd9a3004ed 100644
---- a/drivers/iommu/ipmmu-vmsa.c
-+++ b/drivers/iommu/ipmmu-vmsa.c
-@@ -1006,7 +1006,9 @@ static int ipmmu_probe(struct platform_device *pdev)
- 	bitmap_zero(mmu->ctx, IPMMU_CTX_MAX);
- 	mmu->features = of_device_get_match_data(&pdev->dev);
- 	memset(mmu->utlb_ctx, IPMMU_CTX_INVALID, mmu->features->num_utlbs);
--	dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(40));
-+	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(40));
-+	if (ret)
-+		return ret;
+diff --git a/drivers/i2c/busses/i2c-pasemi-core.c b/drivers/i2c/busses/i2c-pasemi-core.c
+index 4e161a4089d8..7728c8460dc0 100644
+--- a/drivers/i2c/busses/i2c-pasemi-core.c
++++ b/drivers/i2c/busses/i2c-pasemi-core.c
+@@ -333,7 +333,6 @@ int pasemi_i2c_common_probe(struct pasemi_smbus *smbus)
+ 	smbus->adapter.owner = THIS_MODULE;
+ 	snprintf(smbus->adapter.name, sizeof(smbus->adapter.name),
+ 		 "PA Semi SMBus adapter (%s)", dev_name(smbus->dev));
+-	smbus->adapter.class = I2C_CLASS_HWMON | I2C_CLASS_SPD;
+ 	smbus->adapter.algo = &smbus_algorithm;
+ 	smbus->adapter.algo_data = smbus;
  
- 	/* Map I/O memory and request IRQ. */
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+diff --git a/drivers/i2c/busses/i2c-pasemi-pci.c b/drivers/i2c/busses/i2c-pasemi-pci.c
+index 1ab1f28744fb..cfc89e04eb94 100644
+--- a/drivers/i2c/busses/i2c-pasemi-pci.c
++++ b/drivers/i2c/busses/i2c-pasemi-pci.c
+@@ -56,6 +56,7 @@ static int pasemi_smb_pci_probe(struct pci_dev *dev,
+ 	if (!smbus->ioaddr)
+ 		return -EBUSY;
+ 
++	smbus->adapter.class = I2C_CLASS_HWMON | I2C_CLASS_SPD;
+ 	error = pasemi_i2c_common_probe(smbus);
+ 	if (error)
+ 		return error;
 -- 
 2.34.1
 

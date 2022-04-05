@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ADC64F421B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E83434F3DB5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385162AbiDEMbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33454 "EHLO
+        id S1385229AbiDEMb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343533AbiDEI45 (ORCPT
+        with ESMTP id S238543AbiDEI5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:56:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8144C21E09;
-        Tue,  5 Apr 2022 01:53:00 -0700 (PDT)
+        Tue, 5 Apr 2022 04:57:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EE724594;
+        Tue,  5 Apr 2022 01:53:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D64066117A;
-        Tue,  5 Apr 2022 08:52:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E35E3C385A0;
-        Tue,  5 Apr 2022 08:52:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FBF46117A;
+        Tue,  5 Apr 2022 08:53:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E84EC385A0;
+        Tue,  5 Apr 2022 08:53:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148779;
-        bh=F7l6cRDIskjsaex4YVqyUiGZjsX8weyvVrGPsY41MgU=;
+        s=korg; t=1649148787;
+        bh=RU2UcSzhXOx0PlpkB8nfVRVn7CxbRPcmWHXxp5CSZok=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TWIm5NdLqJh3tUPDBi1w6vW68nrxwPA2JcREKDrUY2cJy0f2+SUYgl3wY6Md/Aw20
-         2h2jy/zE7zpwPLKPfWks3E90OOOmcuzm6jB0DIawLC1l1VcuV6scAjc2DnnOHy5LtL
-         XWEEaRJAbJ0/WG4JU1vDWYuxnVVK0j8JMkUfqR9I=
+        b=Iq88c6D4nZOz9R+vgLpru1YfPKwuuiq6c33XVtQnjaXLYO4eajstI3VpX39y4osPl
+         HuFZmAxGEOhW8x8f9T8xa7Kn7O4efEGMz4crKW+JvusleOcAonL6apnqjLSmahHWA4
+         0yJdYYzgP/2nFiDOK/3IcORwvdNIilXyaTbUxUVY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        stable@vger.kernel.org, Lennert Buytenhek <buytenh@arista.com>,
+        Corinna Vinschen <vinschen@redhat.com>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Dvora Fuxbrumer <dvorax.fuxbrumer@linux.intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0479/1017] mtd: mchp48l640: Add SPI ID table
-Date:   Tue,  5 Apr 2022 09:23:12 +0200
-Message-Id: <20220405070408.517000412@linuxfoundation.org>
+Subject: [PATCH 5.16 0482/1017] igc: avoid kernel warning when changing RX ring parameters
+Date:   Tue,  5 Apr 2022 09:23:15 +0200
+Message-Id: <20220405070408.606199117@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,54 +58,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Corinna Vinschen <vinschen@redhat.com>
 
-[ Upstream commit 69a6d06878f05d63673b0dcdc3c3ef1af2996d46 ]
+[ Upstream commit 453307b569a0d41bddd07f26bf41b784cd82a4c9 ]
 
-Currently autoloading for SPI devices does not use the DT ID table, it uses
-SPI modalises. Supporting OF modalises is going to be difficult if not
-impractical, an attempt was made but has been reverted, so ensure that
-module autoloading works for this driver by adding an id_table listing the
-SPI IDs for everything.
+Calling ethtool changing the RX ring parameters like this:
 
-Fixes: 96c8395e2166 ("spi: Revert modalias changes")
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Michael Walle <michael@walle.cc>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220202143404.16070-4-broonie@kernel.org
+  $ ethtool -G eth0 rx 1024
+
+on igc triggers kernel warnings like this:
+
+[  225.198467] ------------[ cut here ]------------
+[  225.198473] Missing unregister, handled but fix driver
+[  225.198485] WARNING: CPU: 7 PID: 959 at net/core/xdp.c:168
+xdp_rxq_info_reg+0x79/0xd0
+[...]
+[  225.198601] Call Trace:
+[  225.198604]  <TASK>
+[  225.198609]  igc_setup_rx_resources+0x3f/0xe0 [igc]
+[  225.198617]  igc_ethtool_set_ringparam+0x30e/0x450 [igc]
+[  225.198626]  ethnl_set_rings+0x18a/0x250
+[  225.198631]  genl_family_rcv_msg_doit+0xca/0x110
+[  225.198637]  genl_rcv_msg+0xce/0x1c0
+[  225.198640]  ? rings_prepare_data+0x60/0x60
+[  225.198644]  ? genl_get_cmd+0xd0/0xd0
+[  225.198647]  netlink_rcv_skb+0x4e/0xf0
+[  225.198652]  genl_rcv+0x24/0x40
+[  225.198655]  netlink_unicast+0x20e/0x330
+[  225.198659]  netlink_sendmsg+0x23f/0x480
+[  225.198663]  sock_sendmsg+0x5b/0x60
+[  225.198667]  __sys_sendto+0xf0/0x160
+[  225.198671]  ? handle_mm_fault+0xb2/0x280
+[  225.198676]  ? do_user_addr_fault+0x1eb/0x690
+[  225.198680]  __x64_sys_sendto+0x20/0x30
+[  225.198683]  do_syscall_64+0x38/0x90
+[  225.198687]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  225.198693] RIP: 0033:0x7f7ae38ac3aa
+
+igc_ethtool_set_ringparam() copies the igc_ring structure but neglects to
+reset the xdp_rxq_info member before calling igc_setup_rx_resources().
+This in turn calls xdp_rxq_info_reg() with an already registered xdp_rxq_info.
+
+Make sure to unregister the xdp_rxq_info structure first in
+igc_setup_rx_resources.
+
+Fixes: 73f1071c1d29 ("igc: Add support for XDP_TX action")
+Reported-by: Lennert Buytenhek <buytenh@arista.com>
+Signed-off-by: Corinna Vinschen <vinschen@redhat.com>
+Acked-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+Tested-by: Dvora Fuxbrumer <dvorax.fuxbrumer@linux.intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/devices/mchp48l640.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/net/ethernet/intel/igc/igc_main.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/mtd/devices/mchp48l640.c b/drivers/mtd/devices/mchp48l640.c
-index 99400d0fb8c1..fbd6b6bf908e 100644
---- a/drivers/mtd/devices/mchp48l640.c
-+++ b/drivers/mtd/devices/mchp48l640.c
-@@ -357,6 +357,15 @@ static const struct of_device_id mchp48l640_of_table[] = {
- };
- MODULE_DEVICE_TABLE(of, mchp48l640_of_table);
+diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+index a156738dc9b6..0000eae0d729 100644
+--- a/drivers/net/ethernet/intel/igc/igc_main.c
++++ b/drivers/net/ethernet/intel/igc/igc_main.c
+@@ -505,6 +505,9 @@ int igc_setup_rx_resources(struct igc_ring *rx_ring)
+ 	u8 index = rx_ring->queue_index;
+ 	int size, desc_len, res;
  
-+static const struct spi_device_id mchp48l640_spi_ids[] = {
-+	{
-+		.name = "48l640",
-+		.driver_data = (kernel_ulong_t)&mchp48l640_caps,
-+	},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(spi, mchp48l640_spi_ids);
-+
- static struct spi_driver mchp48l640_driver = {
- 	.driver = {
- 		.name	= "mchp48l640",
-@@ -364,6 +373,7 @@ static struct spi_driver mchp48l640_driver = {
- 	},
- 	.probe		= mchp48l640_probe,
- 	.remove		= mchp48l640_remove,
-+	.id_table	= mchp48l640_spi_ids,
- };
- 
- module_spi_driver(mchp48l640_driver);
++	/* XDP RX-queue info */
++	if (xdp_rxq_info_is_reg(&rx_ring->xdp_rxq))
++		xdp_rxq_info_unreg(&rx_ring->xdp_rxq);
+ 	res = xdp_rxq_info_reg(&rx_ring->xdp_rxq, ndev, index,
+ 			       rx_ring->q_vector->napi.napi_id);
+ 	if (res < 0) {
 -- 
 2.34.1
 

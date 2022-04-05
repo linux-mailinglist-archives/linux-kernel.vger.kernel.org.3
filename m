@@ -2,119 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A3A4F5267
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 612434F5268
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1850258AbiDFCsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48800 "EHLO
+        id S1850286AbiDFCsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1585626AbiDFAAG (ORCPT
+        with ESMTP id S1585759AbiDFAAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 20:00:06 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB4B5DE40;
-        Tue,  5 Apr 2022 15:22:11 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-108-7-220-252.bstnma.fios.verizon.net [108.7.220.252])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 235MLeah002791
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 5 Apr 2022 18:21:40 -0400
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id DFA5915C3EB6; Tue,  5 Apr 2022 18:21:39 -0400 (EDT)
-Date:   Tue, 5 Apr 2022 18:21:39 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Heimes <christian@python.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        James Morris <jmorris@namei.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Steve Dower <steve.dower@python.org>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-integrity <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [GIT PULL] Add trusted_for(2) (was O_MAYEXEC)
-Message-ID: <YkzA8/3sl86W5oCX@mit.edu>
-References: <20220321161557.495388-1-mic@digikod.net>
- <202204041130.F649632@keescook>
- <CAHk-=wgoC76v-4s0xVr1Xvnx-8xZ8M+LWgyq5qGLA5UBimEXtQ@mail.gmail.com>
- <816667d8-2a6c-6334-94a4-6127699d4144@digikod.net>
- <CAHk-=wjPuRi5uYs9SuQ2Xn+8+RnhoKgjPEwNm42+AGKDrjTU5g@mail.gmail.com>
- <202204041451.CC4F6BF@keescook>
- <CAHk-=whb=XuU=LGKnJWaa7LOYQz9VwHs8SLfgLbT5sf2VAbX1A@mail.gmail.com>
+        Tue, 5 Apr 2022 20:00:15 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E265A68FAC
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 15:24:21 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id n18so347537plg.5
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 15:24:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AFohrDwPLJ24B3bsNYFKKfK0pUNl+4eRfrb3Wv82z8Q=;
+        b=kMa3GPA0lkk2iNEDUuwVMJ3d9K8pD/NCUfgKm4F3iVaENyQ8BHH0E2DbpSmnaP3oKr
+         ljk46BOQgavuqHkKGrgE3jRLv7og4JiojPJ8x4BzN9wiMlUUr7LWf0mJnAGvke9ALkQR
+         QJ0pRbRqnb4oQKbLt5+eBKeGIaULeaKS/FCP2RhtfX9Nkq9P8M2z2kqyYwaq0bG/8mkb
+         E8rKUre0zGiuwA9AEoLxg/vmQfVHGQxk9D9EBsT1pWbn8cZaxj0P7DZGK/bQMNiq034u
+         lS+VstGL2uJBCxA45sIpOkJTyDcc3iVGRUDSlmReWBx/PafRzKHFrB+wbYOjenbfJAZO
+         shlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AFohrDwPLJ24B3bsNYFKKfK0pUNl+4eRfrb3Wv82z8Q=;
+        b=Dm9DJUlMLNpi24sTxd0JEuHVcfu24KnTBo/QY+i0i7YLXHcdLGWd34TS7fEpHDVOSa
+         VIblzG15iKJ72VkwYflMv9ekg4CGTW45JJvhyUPJrsWqkxwJLQbOHZcdChN6c94zGH+Y
+         PjGfzMpApib7gPOMKftrhe6qgouS8djWePiIzzFQ9muWly3sspW+ZIA6eGtwjA1UWlff
+         EEjMBeOLu463KpvRJ+lpuOrTU8sX3JGTs+/wEiZ6pwMmxOR4iLXbLblty7TFQrpjFOY/
+         MJs7VusssDt7B3uWKU5RMcQHNZYH0uvT9ryN5Iyp+e43SsqncgGrHsnbYoCLZHn4hwks
+         CtnA==
+X-Gm-Message-State: AOAM531q9di+zTf1/dpFPaiURfY1U3XNRcjaOQnUiLgTUMWu4xgWd+K4
+        23TT2f/mMwKzAMVghpUQ8sEukQ==
+X-Google-Smtp-Source: ABdhPJy6s0kDnRB3ZIolWmKvR2DBkwHjL6Yfe8nTD97Ezla3Chsf/1YlYAWsX1sb7fcsxxSvM+W3fg==
+X-Received: by 2002:a17:902:9309:b0:156:983d:2193 with SMTP id bc9-20020a170902930900b00156983d2193mr5399926plb.158.1649197457026;
+        Tue, 05 Apr 2022 15:24:17 -0700 (PDT)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id y13-20020a17090a390d00b001c995e0a481sm3446636pjb.30.2022.04.05.15.24.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 15:24:16 -0700 (PDT)
+Date:   Tue, 5 Apr 2022 22:24:12 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH v3 03/11] KVM: selftests: Test reading a single stat
+Message-ID: <YkzBjF3NyI9fyZad@google.com>
+References: <20220330174621.1567317-1-bgardon@google.com>
+ <20220330174621.1567317-4-bgardon@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=whb=XuU=LGKnJWaa7LOYQz9VwHs8SLfgLbT5sf2VAbX1A@mail.gmail.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220330174621.1567317-4-bgardon@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 04:26:44PM -0700, Linus Torvalds wrote:
-> > >     (a) "what about suid bits that user space cannot react to"
-> >
-> > What do you mean here? Do you mean setid bits on the file itself?
+On Wed, Mar 30, 2022 at 10:46:13AM -0700, Ben Gardon wrote:
+> Retrieve the value of a single stat by name in the binary stats test to
+> ensure the kvm_util library functions work.
 > 
-> Right.
+> CC: Jing Zhang <jingzhangos@google.com>
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> ---
+>  .../selftests/kvm/include/kvm_util_base.h     |  1 +
+>  .../selftests/kvm/kvm_binary_stats_test.c     |  3 ++
+>  tools/testing/selftests/kvm/lib/kvm_util.c    | 53 +++++++++++++++++++
+>  3 files changed, 57 insertions(+)
 > 
-> Maybe we don't care.
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> index 4783fd1cd4cf..78c4407f36b4 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> @@ -402,6 +402,7 @@ void assert_on_unhandled_exception(struct kvm_vm *vm, uint32_t vcpuid);
+>  int vm_get_stats_fd(struct kvm_vm *vm);
+>  int vcpu_get_stats_fd(struct kvm_vm *vm, uint32_t vcpuid);
+>  void dump_vm_stats(struct kvm_vm *vm);
+> +uint64_t vm_get_single_stat(struct kvm_vm *vm, const char *stat_name);
+>  
+>  uint32_t guest_get_vcpuid(void);
+>  
+> diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+> index afc4701ce8dd..97bde355f105 100644
+> --- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+> +++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
+> @@ -177,6 +177,9 @@ static void vm_stats_test(struct kvm_vm *vm)
+>  
+>  	/* Dump VM stats */
+>  	dump_vm_stats(vm);
+> +
+> +	/* Read a single stat. */
+> +	printf("remote_tlb_flush: %lu\n", vm_get_single_stat(vm, "remote_tlb_flush"));
+>  }
+>  
+>  static void vcpu_stats_test(struct kvm_vm *vm, int vcpu_id)
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index f87df68b150d..9c4574381daa 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -2705,3 +2705,56 @@ void dump_vm_stats(struct kvm_vm *vm)
+>  	close(stats_fd);
+>  }
+>  
+> +static int vm_get_stat_data(struct kvm_vm *vm, const char *stat_name,
+> +			    uint64_t **data)
+> +{
+> +	struct kvm_stats_desc *stats_desc;
+> +	struct kvm_stats_header *header;
+> +	struct kvm_stats_desc *desc;
+> +	size_t size_desc;
+> +	int stats_fd;
+> +	int ret = -EINVAL;
+> +	int i;
+> +
+> +	*data = NULL;
+> +
+> +	stats_fd = vm_get_stats_fd(vm);
+> +
+> +	header = read_vm_stats_header(stats_fd);
+> +
+> +	stats_desc = read_vm_stats_desc(stats_fd, header);
+> +
+> +	size_desc = stats_desc_size(header);
+> +
+> +	/* Read kvm stats data one by one */
+> +	for (i = 0; i < header->num_desc; ++i) {
+> +		desc = (void *)stats_desc + (i * size_desc);
+> +
+> +		if (strcmp(desc->name, stat_name))
+> +			continue;
+> +
+> +		ret = read_stat_data(stats_fd, header, desc, data);
+> +	}
+> +
+> +	free(stats_desc);
+> +	free(header);
+> +
+> +	close(stats_fd);
+> +
+> +	return ret;
+> +}
+> +
+> +uint64_t vm_get_single_stat(struct kvm_vm *vm, const char *stat_name)
+> +{
+> +	uint64_t *data;
+> +	uint64_t value;
+> +	int ret;
+> +
+> +	ret = vm_get_stat_data(vm, stat_name, &data);
+> +	TEST_ASSERT(ret == 1, "Stat %s expected to have 1 element, but has %d",
+> +		    stat_name, ret);
+> +	value = *data;
+> +	free(data);
+
+Allocating temporary storage for the data is unnecessary. Just read the
+stat directly into &value. You'll need to change read_stat_data() to
+accept another parameter that defines the number of elements the caller
+wants to read. Otherwise botched stats could trigger a buffer overflow.
+
+> +	return value;
+> +}
+> +
+> -- 
+> 2.35.1.1021.g381101b075-goog
 > 
-> Maybe we do.
-> 
-> Is the user-space loader going to honor them? Is it going to ignore
-> them? I don't know. And it actually interacts with things like
-> 'nosuid', which the kernel does know about, and user space has a hard
-> time figuring out.
-
-So there *used* to be suidperl which was a setuid version of perl with
-some extra security checks.  (See [1] for more details.)  The suidperl
-binary would be used by #!/usr/bin/perl so it could honor setuid bits
-on perl scripts, but it was deprecated in Perl 5.8 and removed in Perl
-5.12 in 2010[2].
-
-[1] https://mattmccutchen.net/suidperl.html
-[2] https://metacpan.org/release/SHAY/perl-5.20.2/view/pod/perl5120delta.pod#Deprecations
-
-So it's possible that the user-space loader might try to honor them,
-and if there was such an example "in the field", it might be nice if
-there was a way for the kernel to advise userspace about the nosuid.
-But I'm not aware of any other shell script interpreter that tried do
-what perl did with suidperl.
-
-> So if the point is "give me an interface so that I can do the same
-> thing a kernel execve() loader would do", then those sgid/suid bits
-> actually may be exactly the kind of thing that user space wants the
-> kernel to react to - should it ignore them, or should it do something
-> special when it sees that they are set?
-> 
-> I'm not saying that they *should* be something we care about. All I'm
-> saying is that I want that *discussion* to happen.
-
-I'm not convinced we should.  I suppose *if* the shell script was
-suid, *and* the file system was mounted nosuid, then the check could
-return false, and that would be mostly harmless even if the script
-interpreter didn't support setuid.  But it's extra complexity, and in
-theory it could break a setuid script, where the setuid bit was
-previously a no-op, and it now might cause a problem for that user.
-
-	     	    	       	     	   - Ted

@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BAC54F368C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:07:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0424F3697
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351802AbiDELFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45542 "EHLO
+        id S1352263AbiDELGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237553AbiDEImt (ORCPT
+        with ESMTP id S237567AbiDEImt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:42:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7295811172;
-        Tue,  5 Apr 2022 01:35:10 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834911276A;
+        Tue,  5 Apr 2022 01:35:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E230B81BBF;
-        Tue,  5 Apr 2022 08:35:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87B50C385A1;
-        Tue,  5 Apr 2022 08:35:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FF4060B0A;
+        Tue,  5 Apr 2022 08:35:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35E58C385A1;
+        Tue,  5 Apr 2022 08:35:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147707;
-        bh=upjup/PH9p+NOiB48oXfZdK7fKPqGxjGolVx04MBn/8=;
+        s=korg; t=1649147710;
+        bh=hzFTItGk6MhMLG5gB5eFJka/S3aQMbJUpwbjLiXXVC0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pG73wvd+N6RZ/803W6rHAouePhFZxOGW85/TsEhzS8lal4tMs9yRGzmZFfNw3kfrw
-         ZLeSAmwUq0EcHDl2QrSIWxijU+ea6Uxboma2VvdshDFLURg2w+letUViMOqWz5cY8h
-         jYGV3KSSxYmH0OQF2VAcsh8qFPNbCG1FGG65J8IQ=
+        b=AQUgH3GOgXweSkXo5n+U6IynUKmX188LDJ3LDBaD83Ya3oUjyxN6mGCmNrdyzPClT
+         aU4AXfAeBOk1Nyeei1fRJ5qqJ6LWTMeN8OmCUVxK2c9hdRT3Rrs5yXzV68Oiecol8Q
+         8wGM8miDZdJ5rR9CSzQRAEzFlC3ERbvg2f2gfIZw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shyam Sundar <ssundar@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        James Smart <jsmart2021@gmail.com>,
+        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.16 0093/1017] scsi: scsi_transport_fc: Fix FPIN Link Integrity statistics counters
-Date:   Tue,  5 Apr 2022 09:16:46 +0200
-Message-Id: <20220405070356.955557248@linuxfoundation.org>
+Subject: [PATCH 5.16 0094/1017] scsi: libsas: Fix sas_ata_qc_issue() handling of NCQ NON DATA commands
+Date:   Tue,  5 Apr 2022 09:16:47 +0200
+Message-Id: <20220405070356.986151516@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -57,128 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-commit 07e0984b96ec1ba8c6de1c092b986b00ea0c114c upstream.
+commit 8454563e4c2aafbfb81a383ab423ea8b9b430a25 upstream.
 
-In the original FPIN commit, stats were incremented by the event_count.
-Event_count is the minimum # of events that must occur before an FPIN is
-sent. Thus, its not the actual number of events, and could be significantly
-off (too low) as it doesn't reflect anything not reported.  Rather than
-attempt to count events, have the statistic count how many FPINS cross the
-threshold and were reported.
+To detect for the DMA_NONE (no data transfer) DMA direction,
+sas_ata_qc_issue() tests if the command protocol is ATA_PROT_NODATA.  This
+test does not include the ATA_CMD_NCQ_NON_DATA command as this command
+protocol is defined as ATA_PROT_NCQ_NODATA (equal to ATA_PROT_FLAG_NCQ) and
+not as ATA_PROT_NODATA.
 
-Link: https://lore.kernel.org/r/20220301175536.60250-1-jsmart2021@gmail.com
-Fixes: 3dcfe0de5a97 ("scsi: fc: Parse FPIN packets and update statistics")
-Cc: <stable@vger.kernel.org> # v5.11+
-Cc: Shyam Sundar <ssundar@marvell.com>
-Cc: Nilesh Javali <njavali@marvell.com>
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
+To include both NCQ and non-NCQ commands when testing for the DMA_NONE DMA
+direction, use "!ata_is_data()".
+
+Link: https://lore.kernel.org/r/20220220031810.738362-2-damien.lemoal@opensource.wdc.com
+Fixes: 176ddd89171d ("scsi: libsas: Reset num_scatter if libata marks qc as NODATA")
+Cc: stable@vger.kernel.org
+Reviewed-by: John Garry <john.garry@huawei.com>
+Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/scsi_transport_fc.c |   39 ++++++++++++++++-----------------------
- 1 file changed, 16 insertions(+), 23 deletions(-)
+ drivers/scsi/libsas/sas_ata.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/scsi/scsi_transport_fc.c
-+++ b/drivers/scsi/scsi_transport_fc.c
-@@ -34,7 +34,7 @@ static int fc_bsg_hostadd(struct Scsi_Ho
- static int fc_bsg_rportadd(struct Scsi_Host *, struct fc_rport *);
- static void fc_bsg_remove(struct request_queue *);
- static void fc_bsg_goose_queue(struct fc_rport *);
--static void fc_li_stats_update(struct fc_fn_li_desc *li_desc,
-+static void fc_li_stats_update(u16 event_type,
- 			       struct fc_fpin_stats *stats);
- static void fc_delivery_stats_update(u32 reason_code,
- 				     struct fc_fpin_stats *stats);
-@@ -670,42 +670,34 @@ fc_find_rport_by_wwpn(struct Scsi_Host *
- EXPORT_SYMBOL(fc_find_rport_by_wwpn);
- 
- static void
--fc_li_stats_update(struct fc_fn_li_desc *li_desc,
-+fc_li_stats_update(u16 event_type,
- 		   struct fc_fpin_stats *stats)
- {
--	stats->li += be32_to_cpu(li_desc->event_count);
--	switch (be16_to_cpu(li_desc->event_type)) {
-+	stats->li++;
-+	switch (event_type) {
- 	case FPIN_LI_UNKNOWN:
--		stats->li_failure_unknown +=
--		    be32_to_cpu(li_desc->event_count);
-+		stats->li_failure_unknown++;
- 		break;
- 	case FPIN_LI_LINK_FAILURE:
--		stats->li_link_failure_count +=
--		    be32_to_cpu(li_desc->event_count);
-+		stats->li_link_failure_count++;
- 		break;
- 	case FPIN_LI_LOSS_OF_SYNC:
--		stats->li_loss_of_sync_count +=
--		    be32_to_cpu(li_desc->event_count);
-+		stats->li_loss_of_sync_count++;
- 		break;
- 	case FPIN_LI_LOSS_OF_SIG:
--		stats->li_loss_of_signals_count +=
--		    be32_to_cpu(li_desc->event_count);
-+		stats->li_loss_of_signals_count++;
- 		break;
- 	case FPIN_LI_PRIM_SEQ_ERR:
--		stats->li_prim_seq_err_count +=
--		    be32_to_cpu(li_desc->event_count);
-+		stats->li_prim_seq_err_count++;
- 		break;
- 	case FPIN_LI_INVALID_TX_WD:
--		stats->li_invalid_tx_word_count +=
--		    be32_to_cpu(li_desc->event_count);
-+		stats->li_invalid_tx_word_count++;
- 		break;
- 	case FPIN_LI_INVALID_CRC:
--		stats->li_invalid_crc_count +=
--		    be32_to_cpu(li_desc->event_count);
-+		stats->li_invalid_crc_count++;
- 		break;
- 	case FPIN_LI_DEVICE_SPEC:
--		stats->li_device_specific +=
--		    be32_to_cpu(li_desc->event_count);
-+		stats->li_device_specific++;
- 		break;
- 	}
- }
-@@ -767,6 +759,7 @@ fc_fpin_li_stats_update(struct Scsi_Host
- 	struct fc_rport *attach_rport = NULL;
- 	struct fc_host_attrs *fc_host = shost_to_fc_host(shost);
- 	struct fc_fn_li_desc *li_desc = (struct fc_fn_li_desc *)tlv;
-+	u16 event_type = be16_to_cpu(li_desc->event_type);
- 	u64 wwpn;
- 
- 	rport = fc_find_rport_by_wwpn(shost,
-@@ -775,7 +768,7 @@ fc_fpin_li_stats_update(struct Scsi_Host
- 	    (rport->roles & FC_PORT_ROLE_FCP_TARGET ||
- 	     rport->roles & FC_PORT_ROLE_NVME_TARGET)) {
- 		attach_rport = rport;
--		fc_li_stats_update(li_desc, &attach_rport->fpin_stats);
-+		fc_li_stats_update(event_type, &attach_rport->fpin_stats);
- 	}
- 
- 	if (be32_to_cpu(li_desc->pname_count) > 0) {
-@@ -789,14 +782,14 @@ fc_fpin_li_stats_update(struct Scsi_Host
- 			    rport->roles & FC_PORT_ROLE_NVME_TARGET)) {
- 				if (rport == attach_rport)
- 					continue;
--				fc_li_stats_update(li_desc,
-+				fc_li_stats_update(event_type,
- 						   &rport->fpin_stats);
- 			}
- 		}
- 	}
- 
- 	if (fc_host->port_name == be64_to_cpu(li_desc->attached_wwpn))
--		fc_li_stats_update(li_desc, &fc_host->fpin_stats);
-+		fc_li_stats_update(event_type, &fc_host->fpin_stats);
- }
- 
- /*
+--- a/drivers/scsi/libsas/sas_ata.c
++++ b/drivers/scsi/libsas/sas_ata.c
+@@ -197,7 +197,7 @@ static unsigned int sas_ata_qc_issue(str
+ 		task->total_xfer_len = qc->nbytes;
+ 		task->num_scatter = qc->n_elem;
+ 		task->data_dir = qc->dma_dir;
+-	} else if (qc->tf.protocol == ATA_PROT_NODATA) {
++	} else if (!ata_is_data(qc->tf.protocol)) {
+ 		task->data_dir = DMA_NONE;
+ 	} else {
+ 		for_each_sg(qc->sg, sg, qc->n_elem, si)
 
 

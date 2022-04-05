@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8DE54F5069
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A956D4F5044
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1841720AbiDFBZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
+        id S1841074AbiDFBPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354756AbiDEKPd (ORCPT
+        with ESMTP id S1354776AbiDEKPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:15:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3A36C4A5;
-        Tue,  5 Apr 2022 03:02:36 -0700 (PDT)
+        Tue, 5 Apr 2022 06:15:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CB149C83;
+        Tue,  5 Apr 2022 03:02:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE4E161740;
-        Tue,  5 Apr 2022 10:02:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5E64C385A1;
-        Tue,  5 Apr 2022 10:02:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 99C05B81C8B;
+        Tue,  5 Apr 2022 10:02:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17892C385A1;
+        Tue,  5 Apr 2022 10:02:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152955;
-        bh=locgQxsyc0MpvAdZeZH1B7amSJ1o7txFD/CTHTitM/g=;
+        s=korg; t=1649152963;
+        bh=3TnHiDcoE4UN7piXzw8IEQIziQxDeP2KahwoBf8cuVg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JkaBythOPpsAqlnM1UmkT7GPGCubDuz0L2jj5NP97f1xYymLODM6pqSeHblqidvGh
-         AAoq35pmx1535L62sEVigAp0dVvWiTTcvv4mrmzX8dSD4sJahLBCz2Z8G1ukpGJHlV
-         iAXo2peRT/GWXjRsoznlcHDN23G9BuhJQmehFsNE=
+        b=SJYjXxRc8m1RbNetZo3orsE7L7WKKxzlJcvlpQA3GArXcLp0l1/eGibsZSxVbkgrG
+         59rhFq8iqsiY1HSAkivy/H5uJTeS/cDP8P2OQExwpHLSJrcSeubSoVpctWFyYPQ6x+
+         D9FRmUG7Ya3eipyyI89HcVDh4KfhHrJgos/l1I4Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chao Yu <chao.yu@oppo.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH 5.10 050/599] f2fs: fix to do sanity check on .cp_pack_total_block_count
-Date:   Tue,  5 Apr 2022 09:25:44 +0200
-Message-Id: <20220405070300.317859746@linuxfoundation.org>
+        stable@vger.kernel.org, Mason Yang <masonccyang@mxic.com.tw>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Zhengxun Li <zhengxunli@mxic.com.tw>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.10 053/599] spi: mxic: Fix the transmit path
+Date:   Tue,  5 Apr 2022 09:25:47 +0200
+Message-Id: <20220405070300.406181228@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -54,76 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Yu <chao@kernel.org>
+From: Miquel Raynal <miquel.raynal@bootlin.com>
 
-commit 5b5b4f85b01604389f7a0f11ef180a725bf0e2d4 upstream.
+commit 5fd6739e0df7e320bcac103dfb95fe75941fea17 upstream.
 
-As bughunter reported in bugzilla:
+By working with external hardware ECC engines, we figured out that
+Under certain circumstances, it is needed for the SPI controller to
+check INT_TX_EMPTY and INT_RX_NOT_EMPTY in both receive and transmit
+path (not only in the receive path). The delay penalty being
+negligible, move this code in the common path.
 
-https://bugzilla.kernel.org/show_bug.cgi?id=215709
-
-f2fs may hang when mounting a fuzzed image, the dmesg shows as below:
-
-__filemap_get_folio+0x3a9/0x590
-pagecache_get_page+0x18/0x60
-__get_meta_page+0x95/0x460 [f2fs]
-get_checkpoint_version+0x2a/0x1e0 [f2fs]
-validate_checkpoint+0x8e/0x2a0 [f2fs]
-f2fs_get_valid_checkpoint+0xd0/0x620 [f2fs]
-f2fs_fill_super+0xc01/0x1d40 [f2fs]
-mount_bdev+0x18a/0x1c0
-f2fs_mount+0x15/0x20 [f2fs]
-legacy_get_tree+0x28/0x50
-vfs_get_tree+0x27/0xc0
-path_mount+0x480/0xaa0
-do_mount+0x7c/0xa0
-__x64_sys_mount+0x8b/0xe0
-do_syscall_64+0x38/0xc0
-entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-The root cause is cp_pack_total_block_count field in checkpoint was fuzzed
-to one, as calcuated, two cp pack block locates in the same block address,
-so then read latter cp pack block, it will block on the page lock due to
-the lock has already held when reading previous cp pack block, fix it by
-adding sanity check for cp_pack_total_block_count.
-
+Fixes: b942d80b0a39 ("spi: Add MXIC controller driver")
 Cc: stable@vger.kernel.org
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Suggested-by: Mason Yang <masonccyang@mxic.com.tw>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Reviewed-by: Zhengxun Li <zhengxunli@mxic.com.tw>
+Reviewed-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/linux-mtd/20220127091808.1043392-10-miquel.raynal@bootlin.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/f2fs/checkpoint.c |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/spi/spi-mxic.c |   26 +++++++++++---------------
+ 1 file changed, 11 insertions(+), 15 deletions(-)
 
---- a/fs/f2fs/checkpoint.c
-+++ b/fs/f2fs/checkpoint.c
-@@ -851,6 +851,7 @@ static struct page *validate_checkpoint(
- 	struct page *cp_page_1 = NULL, *cp_page_2 = NULL;
- 	struct f2fs_checkpoint *cp_block = NULL;
- 	unsigned long long cur_version = 0, pre_version = 0;
-+	unsigned int cp_blocks;
- 	int err;
+--- a/drivers/spi/spi-mxic.c
++++ b/drivers/spi/spi-mxic.c
+@@ -304,25 +304,21 @@ static int mxic_spi_data_xfer(struct mxi
  
- 	err = get_checkpoint_version(sbi, cp_addr, &cp_block,
-@@ -858,15 +859,16 @@ static struct page *validate_checkpoint(
- 	if (err)
- 		return NULL;
+ 		writel(data, mxic->regs + TXD(nbytes % 4));
  
--	if (le32_to_cpu(cp_block->cp_pack_total_block_count) >
--					sbi->blocks_per_seg) {
-+	cp_blocks = le32_to_cpu(cp_block->cp_pack_total_block_count);
-+
-+	if (cp_blocks > sbi->blocks_per_seg || cp_blocks <= F2FS_CP_PACKS) {
- 		f2fs_warn(sbi, "invalid cp_pack_total_block_count:%u",
- 			  le32_to_cpu(cp_block->cp_pack_total_block_count));
- 		goto invalid_cp;
- 	}
- 	pre_version = *version;
+-		if (rxbuf) {
+-			ret = readl_poll_timeout(mxic->regs + INT_STS, sts,
+-						 sts & INT_TX_EMPTY, 0,
+-						 USEC_PER_SEC);
+-			if (ret)
+-				return ret;
++		ret = readl_poll_timeout(mxic->regs + INT_STS, sts,
++					 sts & INT_TX_EMPTY, 0, USEC_PER_SEC);
++		if (ret)
++			return ret;
  
--	cp_addr += le32_to_cpu(cp_block->cp_pack_total_block_count) - 1;
-+	cp_addr += cp_blocks - 1;
- 	err = get_checkpoint_version(sbi, cp_addr, &cp_block,
- 					&cp_page_2, version);
- 	if (err)
+-			ret = readl_poll_timeout(mxic->regs + INT_STS, sts,
+-						 sts & INT_RX_NOT_EMPTY, 0,
+-						 USEC_PER_SEC);
+-			if (ret)
+-				return ret;
++		ret = readl_poll_timeout(mxic->regs + INT_STS, sts,
++					 sts & INT_RX_NOT_EMPTY, 0,
++					 USEC_PER_SEC);
++		if (ret)
++			return ret;
+ 
+-			data = readl(mxic->regs + RXD);
++		data = readl(mxic->regs + RXD);
++		if (rxbuf) {
+ 			data >>= (8 * (4 - nbytes));
+ 			memcpy(rxbuf + pos, &data, nbytes);
+-			WARN_ON(readl(mxic->regs + INT_STS) & INT_RX_NOT_EMPTY);
+-		} else {
+-			readl(mxic->regs + RXD);
+ 		}
+ 		WARN_ON(readl(mxic->regs + INT_STS) & INT_RX_NOT_EMPTY);
+ 
 
 

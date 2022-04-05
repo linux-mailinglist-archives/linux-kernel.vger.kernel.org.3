@@ -2,108 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D815C4F4FD2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7F344F5037
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1839529AbiDFBEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59508 "EHLO
+        id S229598AbiDFBMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457671AbiDEQc6 (ORCPT
+        with ESMTP id S1457877AbiDEQzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:32:58 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261B6BF00C
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:30:57 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2eb543fe73eso82962807b3.5
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 09:30:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KMTS6ZzHfqr0cBt89fdY6xnjYm43a4DPuwzvi/5KFcU=;
-        b=GfRipIriW+4Gj99TqghbKjqPOWjqvQue0SDRC4xYdndLHj14kAu4g3o3HbRpq6OgaD
-         Sn5pT4Z+6R1oJj23BSQ3wpF7CHtOUv1KqyofptkTp7Zjl47B9Y3A3JwDNhcn3tuTwLvP
-         Ur2dd8w+slSKU4TcOWV01cvwPCEC1SpHjBtjbb5VvcqSJGQCubjtJbLpzVirhDpU+S8w
-         pQBn9XJtkFGu1pwS/xFAkRR612gGqFmLkKD5w4ZeCdC1JeNlITkXhKL/EI3/g/5k1qXR
-         JYfMlyH0cOCO2YB8okcmQzy934x3VMAmYrn20RlsTdQON1UeQZGjZbsdDhgXhNHVxOdi
-         mV6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KMTS6ZzHfqr0cBt89fdY6xnjYm43a4DPuwzvi/5KFcU=;
-        b=t34DoLdAbC8m0ngyTZrb1w1BvYOiXBGW/VlkPFCJ1oSOB8AWcbAFp0uUne8nz4Kjla
-         rff/OdCEJf+Ir46XvclE8ZKbhS8UD9YG9IHu0sEeFqYmnRVqJYgsLmE14vTQsc5zJk//
-         AEBT16KzH2HycPKHM/x4Jl6ZmCRIFOCqg+7QBaHGDJzSOI5PxH+H8ogETSrHOfgDfeqN
-         ull/jfy7YP943MBex6V+RNn4ewfDQhC+uFuoXWKFZ1OIJaQixUMdD9Dbnymd/WSuU+9r
-         FeS6kk1NaHATX5g0wAjA6Rqa3g8CNkNiyiitE1gdeRT4j23m7UANWW2KI4dheEF7459K
-         +JDA==
-X-Gm-Message-State: AOAM533TEzPV7NL24BCuETnys9vl6jl7Gz1ZjBBQrwFpYGmrVUjG4jY6
-        dJZIEYJCdzZtOX52+QF5IFvRuHXQXShza/PD0UiCig==
-X-Google-Smtp-Source: ABdhPJyIgna9axSeomjEBQ4XMEGPKbQbe9lvwwQnq3ep9YudH9QmF87Opki8o1yO4mskUXTOYwEcNk+E7wb+6fxKfmM=
-X-Received: by 2002:a0d:cc55:0:b0:2eb:994c:1b56 with SMTP id
- o82-20020a0dcc55000000b002eb994c1b56mr3445672ywd.437.1649176256367; Tue, 05
- Apr 2022 09:30:56 -0700 (PDT)
+        Tue, 5 Apr 2022 12:55:05 -0400
+Received: from 14.mo581.mail-out.ovh.net (14.mo581.mail-out.ovh.net [178.33.251.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586BC326E9
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:53:06 -0700 (PDT)
+Received: from player734.ha.ovh.net (unknown [10.110.171.5])
+        by mo581.mail-out.ovh.net (Postfix) with ESMTP id E660823BE0
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 16:35:42 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player734.ha.ovh.net (Postfix) with ESMTPSA id 85D1D28FEBF99;
+        Tue,  5 Apr 2022 16:35:36 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-102R004d61553c7-e202-4547-945e-565ecbb11848,
+                    8AF55017BACD44284FC599BC4826E0280D36FCC4) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     M R Swami Reddy <mr.swami.reddy@ti.com>,
+        Vishwas A Deshpande <vishwas.a.deshpande@ti.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
+        Stephen Kitt <steve@sk2.org>
+Subject: [PATCH] ASoC: lm49xxx: use simple i2c probe function
+Date:   Tue,  5 Apr 2022 18:35:33 +0200
+Message-Id: <20220405163533.2157401-1-steve@sk2.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20220405091750.3076973-1-arnd@kernel.org> <20220405091750.3076973-2-arnd@kernel.org>
-In-Reply-To: <20220405091750.3076973-2-arnd@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 5 Apr 2022 18:30:43 +0200
-Message-ID: <CACRpkdZHFmxB+dHyeFSJjgXeBc-KPtBNS50m-EZDUOjd2EHKZw@mail.gmail.com>
-Subject: Re: [PATCH 01/12] ARM: versatile: move integrator/realview/vexpress
- to versatile
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Hubert Feurstein <hubert.feurstein@contec.at>,
-        Lukasz Majewski <lukma@denx.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Imre Kaloz <kaloz@openwrt.org>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Liviu Dudau <Liviu.Dudau@arm.com>,
-        Sudeep Holla <Sudeep.Holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, patches@opensource.cirrus.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 8060880383069685382
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejgedgleelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeetgedugfelkeeikeetgeegteevfeeufeetuefgudeiiedthfehtdeffeekvdeffeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejfeegrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 11:18 AM Arnd Bergmann <arnd@kernel.org> wrote:
+The i2c probe functions here don't use the id information provided in
+their second argument, so the single-parameter i2c probe function
+("probe_new") can be used instead.
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> These are all fairly small platforms by now, and they are
-> closely related. Just move them all into a single directory.
->
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Liviu Dudau <liviu.dudau@arm.com>
-> Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> Tested-by: Sudeep Holla <sudeep.holla@arm.com>
-> Acked-by: Sudeep Holla <sudeep.holla@arm.com>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+This avoids scanning the identifier tables during probes.
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Stephen Kitt <steve@sk2.org>
+---
+ sound/soc/codecs/isabelle.c | 5 ++---
+ sound/soc/codecs/lm49453.c  | 5 ++---
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-I can't test much right now, but I sure trust you with this!
+diff --git a/sound/soc/codecs/isabelle.c b/sound/soc/codecs/isabelle.c
+index 1d86b6a0eb9d..39be31e1282e 100644
+--- a/sound/soc/codecs/isabelle.c
++++ b/sound/soc/codecs/isabelle.c
+@@ -1108,8 +1108,7 @@ static const struct regmap_config isabelle_regmap_config = {
+ 	.cache_type = REGCACHE_RBTREE,
+ };
+ 
+-static int isabelle_i2c_probe(struct i2c_client *i2c,
+-			      const struct i2c_device_id *id)
++static int isabelle_i2c_probe(struct i2c_client *i2c)
+ {
+ 	struct regmap *isabelle_regmap;
+ 	int ret = 0;
+@@ -1144,7 +1143,7 @@ static struct i2c_driver isabelle_i2c_driver = {
+ 	.driver = {
+ 		.name = "isabelle",
+ 	},
+-	.probe = isabelle_i2c_probe,
++	.probe_new = isabelle_i2c_probe,
+ 	.id_table = isabelle_i2c_id,
+ };
+ 
+diff --git a/sound/soc/codecs/lm49453.c b/sound/soc/codecs/lm49453.c
+index 973d781b4b6a..bd0078e4499b 100644
+--- a/sound/soc/codecs/lm49453.c
++++ b/sound/soc/codecs/lm49453.c
+@@ -1412,8 +1412,7 @@ static const struct regmap_config lm49453_regmap_config = {
+ 	.cache_type = REGCACHE_RBTREE,
+ };
+ 
+-static int lm49453_i2c_probe(struct i2c_client *i2c,
+-			     const struct i2c_device_id *id)
++static int lm49453_i2c_probe(struct i2c_client *i2c)
+ {
+ 	struct lm49453_priv *lm49453;
+ 	int ret = 0;
+@@ -1458,7 +1457,7 @@ static struct i2c_driver lm49453_i2c_driver = {
+ 	.driver = {
+ 		.name = "lm49453",
+ 	},
+-	.probe = lm49453_i2c_probe,
++	.probe_new = lm49453_i2c_probe,
+ 	.remove = lm49453_i2c_remove,
+ 	.id_table = lm49453_i2c_id,
+ };
+-- 
+2.27.0
 
-Yours,
-Linus Walleij

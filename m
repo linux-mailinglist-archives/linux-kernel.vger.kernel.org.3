@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84FC94F4912
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 833174F4930
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390104AbiDEWDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
+        id S229872AbiDEWFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243475AbiDEKgs (ORCPT
+        with ESMTP id S1354395AbiDEKOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:36:48 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E53546AB;
-        Tue,  5 Apr 2022 03:22:21 -0700 (PDT)
+        Tue, 5 Apr 2022 06:14:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27124692BA;
+        Tue,  5 Apr 2022 03:00:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 93DDCCE0B18;
-        Tue,  5 Apr 2022 10:22:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A608BC385A1;
-        Tue,  5 Apr 2022 10:22:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB6D8B81C83;
+        Tue,  5 Apr 2022 09:59:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33ABEC385A1;
+        Tue,  5 Apr 2022 09:59:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154138;
-        bh=zxWq7PkrMpndvDnwYkItpxVvHPTOTfn5VcI31JDhtUg=;
+        s=korg; t=1649152797;
+        bh=/UGrkgR647QQXM3GQRZYQjVcQ6Z9E8jtvWs6yNBcuDQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aj/D/Dq/I5C/1ATmJBHNe0KDxWMLz7/et30+tVMroqYolC9XJ+kBSzAe+Etyk1mt2
-         GLSTuW6Xd8Yigug4tnoWJumLYRuMtCQn789HdTzM2WOdW3gDjaiQnQZDBMwLhGnZ23
-         FPYGKSkJkLy/qfUx4D5KPW9tgAQaAQ54Uanlnk/U=
+        b=BX1m9XbmmB419nYHNUW4m5KTWdjex61iBKouzFiCuK7NaGBZgG6oKOSKN1denDwcs
+         Gluv6MhqYPP1NpLGOsLH1X6+SAVxuZ+Ix/395/bvYjmWK0RlmKbs5BvgJHwXxpGm/T
+         u3j3IwUb1OxV20eIMw5de9ZG5nA8toDxhTYEnneI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ritesh Harjani <riteshh@linux.ibm.com>,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 471/599] ext4: correct cluster len and clusters changed accounting in ext4_mb_mark_bb
-Date:   Tue,  5 Apr 2022 09:32:45 +0200
-Message-Id: <20220405070312.841903314@linuxfoundation.org>
+        stable@vger.kernel.org, Qiuhao Li <qiuhao@sysec.org>,
+        Gaoning Pan <pgn@zju.edu.cn>, Yongkang Jia <kangel@zju.edu.cn>,
+        syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: [PATCH 5.15 904/913] KVM: x86/mmu: do compare-and-exchange of gPTE via the user address
+Date:   Tue,  5 Apr 2022 09:32:46 +0200
+Message-Id: <20220405070406.915680217@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,81 +58,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ritesh Harjani <riteshh@linux.ibm.com>
+From: Paolo Bonzini <pbonzini@redhat.com>
 
-[ Upstream commit a5c0e2fdf7cea535ba03259894dc184e5a4c2800 ]
+commit 2a8859f373b0a86f0ece8ec8312607eacf12485d upstream.
 
-ext4_mb_mark_bb() currently wrongly calculates cluster len (clen) and
-flex_group->free_clusters. This patch fixes that.
+FNAME(cmpxchg_gpte) is an inefficient mess.  It is at least decent if it
+can go through get_user_pages_fast(), but if it cannot then it tries to
+use memremap(); that is not just terribly slow, it is also wrong because
+it assumes that the VM_PFNMAP VMA is contiguous.
 
-Identified based on code review of ext4_mb_mark_bb() function.
+The right way to do it would be to do the same thing as
+hva_to_pfn_remapped() does since commit add6a0cd1c5b ("KVM: MMU: try to
+fix up page faults before giving up", 2016-07-05), using follow_pte()
+and fixup_user_fault() to determine the correct address to use for
+memremap().  To do this, one could for example extract hva_to_pfn()
+for use outside virt/kvm/kvm_main.c.  But really there is no reason to
+do that either, because there is already a perfectly valid address to
+do the cmpxchg() on, only it is a userspace address.  That means doing
+user_access_begin()/user_access_end() and writing the code in assembly
+to handle exceptions correctly.  Worse, the guest PTE can be 8-byte
+even on i686 so there is the extra complication of using cmpxchg8b to
+account for.  But at least it is an efficient mess.
 
-Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/a0b035d536bafa88110b74456853774b64c8ac40.1644992609.git.riteshh@linux.ibm.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+(Thanks to Linus for suggesting improvement on the inline assembly).
+
+Reported-by: Qiuhao Li <qiuhao@sysec.org>
+Reported-by: Gaoning Pan <pgn@zju.edu.cn>
+Reported-by: Yongkang Jia <kangel@zju.edu.cn>
+Reported-by: syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
+Debugged-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+Tested-by: Maxim Levitsky <mlevitsk@redhat.com>
+Cc: stable@vger.kernel.org
+Fixes: bd53cb35a3e9 ("X86/KVM: Handle PFNs outside of kernel reach when touching GPTEs")
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/mballoc.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+ arch/x86/kvm/mmu/paging_tmpl.h |   77 +++++++++++++++++++----------------------
+ 1 file changed, 37 insertions(+), 40 deletions(-)
 
-diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-index 110c25824a67..41a115c53bf6 100644
---- a/fs/ext4/mballoc.c
-+++ b/fs/ext4/mballoc.c
-@@ -3320,10 +3320,11 @@ void ext4_mb_mark_bb(struct super_block *sb, ext4_fsblk_t block,
- 	struct ext4_sb_info *sbi = EXT4_SB(sb);
- 	ext4_group_t group;
- 	ext4_grpblk_t blkoff;
--	int i, clen, err;
-+	int i, err;
- 	int already;
-+	unsigned int clen, clen_changed;
+--- a/arch/x86/kvm/mmu/paging_tmpl.h
++++ b/arch/x86/kvm/mmu/paging_tmpl.h
+@@ -34,9 +34,8 @@
+ 	#define PT_HAVE_ACCESSED_DIRTY(mmu) true
+ 	#ifdef CONFIG_X86_64
+ 	#define PT_MAX_FULL_LEVELS PT64_ROOT_MAX_LEVEL
+-	#define CMPXCHG cmpxchg
++	#define CMPXCHG "cmpxchgq"
+ 	#else
+-	#define CMPXCHG cmpxchg64
+ 	#define PT_MAX_FULL_LEVELS 2
+ 	#endif
+ #elif PTTYPE == 32
+@@ -52,7 +51,7 @@
+ 	#define PT_GUEST_DIRTY_SHIFT PT_DIRTY_SHIFT
+ 	#define PT_GUEST_ACCESSED_SHIFT PT_ACCESSED_SHIFT
+ 	#define PT_HAVE_ACCESSED_DIRTY(mmu) true
+-	#define CMPXCHG cmpxchg
++	#define CMPXCHG "cmpxchgl"
+ #elif PTTYPE == PTTYPE_EPT
+ 	#define pt_element_t u64
+ 	#define guest_walker guest_walkerEPT
+@@ -65,7 +64,9 @@
+ 	#define PT_GUEST_DIRTY_SHIFT 9
+ 	#define PT_GUEST_ACCESSED_SHIFT 8
+ 	#define PT_HAVE_ACCESSED_DIRTY(mmu) ((mmu)->ept_ad)
+-	#define CMPXCHG cmpxchg64
++	#ifdef CONFIG_X86_64
++	#define CMPXCHG "cmpxchgq"
++	#endif
+ 	#define PT_MAX_FULL_LEVELS PT64_ROOT_MAX_LEVEL
+ #else
+ 	#error Invalid PTTYPE value
+@@ -147,43 +148,39 @@ static int FNAME(cmpxchg_gpte)(struct kv
+ 			       pt_element_t __user *ptep_user, unsigned index,
+ 			       pt_element_t orig_pte, pt_element_t new_pte)
+ {
+-	int npages;
+-	pt_element_t ret;
+-	pt_element_t *table;
+-	struct page *page;
+-
+-	npages = get_user_pages_fast((unsigned long)ptep_user, 1, FOLL_WRITE, &page);
+-	if (likely(npages == 1)) {
+-		table = kmap_atomic(page);
+-		ret = CMPXCHG(&table[index], orig_pte, new_pte);
+-		kunmap_atomic(table);
+-
+-		kvm_release_page_dirty(page);
+-	} else {
+-		struct vm_area_struct *vma;
+-		unsigned long vaddr = (unsigned long)ptep_user & PAGE_MASK;
+-		unsigned long pfn;
+-		unsigned long paddr;
+-
+-		mmap_read_lock(current->mm);
+-		vma = find_vma_intersection(current->mm, vaddr, vaddr + PAGE_SIZE);
+-		if (!vma || !(vma->vm_flags & VM_PFNMAP)) {
+-			mmap_read_unlock(current->mm);
+-			return -EFAULT;
+-		}
+-		pfn = ((vaddr - vma->vm_start) >> PAGE_SHIFT) + vma->vm_pgoff;
+-		paddr = pfn << PAGE_SHIFT;
+-		table = memremap(paddr, PAGE_SIZE, MEMREMAP_WB);
+-		if (!table) {
+-			mmap_read_unlock(current->mm);
+-			return -EFAULT;
+-		}
+-		ret = CMPXCHG(&table[index], orig_pte, new_pte);
+-		memunmap(table);
+-		mmap_read_unlock(current->mm);
+-	}
++	int r = -EFAULT;
++
++	if (!user_access_begin(ptep_user, sizeof(pt_element_t)))
++		return -EFAULT;
++
++#ifdef CMPXCHG
++	asm volatile("1:" LOCK_PREFIX CMPXCHG " %[new], %[ptr]\n"
++		     "mov $0, %[r]\n"
++		     "setnz %b[r]\n"
++		     "2:"
++		     _ASM_EXTABLE_UA(1b, 2b)
++		     : [ptr] "+m" (*ptep_user),
++		       [old] "+a" (orig_pte),
++		       [r] "+q" (r)
++		     : [new] "r" (new_pte)
++		     : "memory");
++#else
++	asm volatile("1:" LOCK_PREFIX "cmpxchg8b %[ptr]\n"
++		     "movl $0, %[r]\n"
++		     "jz 2f\n"
++		     "incl %[r]\n"
++		     "2:"
++		     _ASM_EXTABLE_UA(1b, 2b)
++		     : [ptr] "+m" (*ptep_user),
++		       [old] "+A" (orig_pte),
++		       [r] "+rm" (r)
++		     : [new_lo] "b" ((u32)new_pte),
++		       [new_hi] "c" ((u32)(new_pte >> 32))
++		     : "memory");
++#endif
  
--	clen = EXT4_B2C(sbi, len);
-+	clen = EXT4_NUM_B2C(sbi, len);
+-	return (ret != orig_pte);
++	user_access_end();
++	return r;
+ }
  
- 	ext4_get_group_no_and_offset(sb, block, &group, &blkoff);
- 	bitmap_bh = ext4_read_block_bitmap(sb, group);
-@@ -3344,6 +3345,7 @@ void ext4_mb_mark_bb(struct super_block *sb, ext4_fsblk_t block,
- 		if (!mb_test_bit(blkoff + i, bitmap_bh->b_data) == !state)
- 			already++;
- 
-+	clen_changed = clen - already;
- 	if (state)
- 		ext4_set_bits(bitmap_bh->b_data, blkoff, clen);
- 	else
-@@ -3356,9 +3358,9 @@ void ext4_mb_mark_bb(struct super_block *sb, ext4_fsblk_t block,
- 						group, gdp));
- 	}
- 	if (state)
--		clen = ext4_free_group_clusters(sb, gdp) - clen + already;
-+		clen = ext4_free_group_clusters(sb, gdp) - clen_changed;
- 	else
--		clen = ext4_free_group_clusters(sb, gdp) + clen - already;
-+		clen = ext4_free_group_clusters(sb, gdp) + clen_changed;
- 
- 	ext4_free_group_clusters_set(sb, gdp, clen);
- 	ext4_block_bitmap_csum_set(sb, group, gdp, bitmap_bh);
-@@ -3368,10 +3370,13 @@ void ext4_mb_mark_bb(struct super_block *sb, ext4_fsblk_t block,
- 
- 	if (sbi->s_log_groups_per_flex) {
- 		ext4_group_t flex_group = ext4_flex_group(sbi, group);
-+		struct flex_groups *fg = sbi_array_rcu_deref(sbi,
-+					   s_flex_groups, flex_group);
- 
--		atomic64_sub(len,
--			     &sbi_array_rcu_deref(sbi, s_flex_groups,
--						  flex_group)->free_clusters);
-+		if (state)
-+			atomic64_sub(clen_changed, &fg->free_clusters);
-+		else
-+			atomic64_add(clen_changed, &fg->free_clusters);
- 	}
- 
- 	err = ext4_handle_dirty_metadata(NULL, NULL, bitmap_bh);
--- 
-2.34.1
-
+ static bool FNAME(prefetch_invalid_gpte)(struct kvm_vcpu *vcpu,
 
 

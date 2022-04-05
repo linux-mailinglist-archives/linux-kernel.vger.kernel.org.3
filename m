@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C744F445F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38CA94F43F1
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391616AbiDEUGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
+        id S1359022AbiDEUYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239467AbiDEKfX (ORCPT
+        with ESMTP id S1354450AbiDEKOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:35:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5103B4D24A;
-        Tue,  5 Apr 2022 03:20:54 -0700 (PDT)
+        Tue, 5 Apr 2022 06:14:16 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32BE76A010;
+        Tue,  5 Apr 2022 03:00:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01CF7B81C8A;
-        Tue,  5 Apr 2022 10:20:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57115C385A1;
-        Tue,  5 Apr 2022 10:20:51 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 63D65CE0B18;
+        Tue,  5 Apr 2022 10:00:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B977C385A1;
+        Tue,  5 Apr 2022 10:00:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154051;
-        bh=xmpYNe7lP0sm/crrazOov450MjnZ3vDtEETdr1+zEH8=;
+        s=korg; t=1649152808;
+        bh=KbcFA6Q3yLM52ALUUVmwuNRPyePwNo0MqRUxe/NNLCA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TbwJtdubnwIUzkrPJtA1jE2jDyhdFM4J0XDY7f0axQ4kSBR9o35aA/1OlA2889eM0
-         +/k3q5/e65EkSsvSEQnZHQJVO+yIrV9otjs+oaqZBEGSaWs1FVWN+WhWvt/kJZ7YGT
-         KE5bOC48iAuTZXan7SGI48A88VvmXOFMQXm9lzCI=
+        b=My4WcbdphqvY4aecczTqtxcpeWdoOZHUhRrTxzT9gIV6TQxgnffgYueAiC2J5+ihN
+         PGIppOILZOrflMHKPKXwyyHhv3y9fEXfTP9TXNimaLQDXiRmVGaRppQg1kP80pTAvE
+         4oB7k5hnF57uWxd4PFmWMc2oKKyUt10exKp2eDNo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jian Shen <shenjian15@huawei.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 439/599] net: hns3: fix bug when PF set the duplicate MAC address for VFs
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 871/913] net: add skb_set_end_offset() helper
 Date:   Tue,  5 Apr 2022 09:32:13 +0200
-Message-Id: <20220405070311.896333933@linuxfoundation.org>
+Message-Id: <20220405070405.932435069@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +54,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jian Shen <shenjian15@huawei.com>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit ccb18f05535c96d26e2d559d402acb87700fc5a7 ]
+commit 763087dab97547230a6807c865a6a5ae53a59247 upstream.
 
-If the MAC address A is configured to vport A and then vport B. The MAC
-address of vport A in the hardware becomes invalid. If the address of
-vport A is changed to MAC address B, the driver needs to delete the MAC
-address A of vport A. Due to the MAC address A of vport A has become
-invalid in the hardware entry, so "-ENOENT" is returned. In this case, the
-"used_umv_size" value recorded in driver is not updated. As a result, the
-MAC entry status of the software is inconsistent with that of the hardware.
+We have multiple places where this helper is convenient,
+and plan using it in the following patch.
 
-Therefore, the driver updates the umv size even if the MAC entry cannot be
-found. Ensure that the software and hardware status is consistent.
-
-Fixes: ee4bcd3b7ae4 ("net: hns3: refactor the MAC address configure")
-Signed-off-by: Jian Shen <shenjian15@huawei.com>
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+Signed-off-by: Eric Dumazet <edumazet@google.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ include/linux/skbuff.h |   10 ++++++++++
+ net/core/skbuff.c      |   19 +++++--------------
+ 2 files changed, 15 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-index 7b94764b4f5d..49129e8002fc 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-@@ -7616,12 +7616,11 @@ int hclge_rm_uc_addr_common(struct hclge_vport *vport,
- 	hnae3_set_bit(req.entry_type, HCLGE_MAC_VLAN_BIT0_EN_B, 0);
- 	hclge_prepare_mac_addr(&req, addr, false);
- 	ret = hclge_remove_mac_vlan_tbl(vport, &req);
--	if (!ret) {
-+	if (!ret || ret == -ENOENT) {
- 		mutex_lock(&hdev->vport_lock);
- 		hclge_update_umv_space(vport, true);
- 		mutex_unlock(&hdev->vport_lock);
--	} else if (ret == -ENOENT) {
--		ret = 0;
-+		return 0;
- 	}
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -1436,6 +1436,11 @@ static inline unsigned int skb_end_offse
+ {
+ 	return skb->end;
+ }
++
++static inline void skb_set_end_offset(struct sk_buff *skb, unsigned int offset)
++{
++	skb->end = offset;
++}
+ #else
+ static inline unsigned char *skb_end_pointer(const struct sk_buff *skb)
+ {
+@@ -1446,6 +1451,11 @@ static inline unsigned int skb_end_offse
+ {
+ 	return skb->end - skb->head;
+ }
++
++static inline void skb_set_end_offset(struct sk_buff *skb, unsigned int offset)
++{
++	skb->end = skb->head + offset;
++}
+ #endif
  
- 	return ret;
--- 
-2.34.1
-
+ /* Internal */
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -203,7 +203,7 @@ static void __build_skb_around(struct sk
+ 	skb->head = data;
+ 	skb->data = data;
+ 	skb_reset_tail_pointer(skb);
+-	skb->end = skb->tail + size;
++	skb_set_end_offset(skb, size);
+ 	skb->mac_header = (typeof(skb->mac_header))~0U;
+ 	skb->transport_header = (typeof(skb->transport_header))~0U;
+ 
+@@ -1738,11 +1738,10 @@ int pskb_expand_head(struct sk_buff *skb
+ 	skb->head     = data;
+ 	skb->head_frag = 0;
+ 	skb->data    += off;
++
++	skb_set_end_offset(skb, size);
+ #ifdef NET_SKBUFF_DATA_USES_OFFSET
+-	skb->end      = size;
+ 	off           = nhead;
+-#else
+-	skb->end      = skb->head + size;
+ #endif
+ 	skb->tail	      += off;
+ 	skb_headers_offset_update(skb, nhead);
+@@ -6159,11 +6158,7 @@ static int pskb_carve_inside_header(stru
+ 	skb->head = data;
+ 	skb->data = data;
+ 	skb->head_frag = 0;
+-#ifdef NET_SKBUFF_DATA_USES_OFFSET
+-	skb->end = size;
+-#else
+-	skb->end = skb->head + size;
+-#endif
++	skb_set_end_offset(skb, size);
+ 	skb_set_tail_pointer(skb, skb_headlen(skb));
+ 	skb_headers_offset_update(skb, 0);
+ 	skb->cloned = 0;
+@@ -6301,11 +6296,7 @@ static int pskb_carve_inside_nonlinear(s
+ 	skb->head = data;
+ 	skb->head_frag = 0;
+ 	skb->data = data;
+-#ifdef NET_SKBUFF_DATA_USES_OFFSET
+-	skb->end = size;
+-#else
+-	skb->end = skb->head + size;
+-#endif
++	skb_set_end_offset(skb, size);
+ 	skb_reset_tail_pointer(skb);
+ 	skb_headers_offset_update(skb, 0);
+ 	skb->cloned   = 0;
 
 

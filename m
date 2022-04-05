@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93DF54F3662
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:03:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F6C34F3658
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347344AbiDELCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
+        id S1346090AbiDELBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:01:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234768AbiDEIjT (ORCPT
+        with ESMTP id S235503AbiDEIjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:39:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02D821802;
-        Tue,  5 Apr 2022 01:33:03 -0700 (PDT)
+        Tue, 5 Apr 2022 04:39:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90D21BB;
+        Tue,  5 Apr 2022 01:33:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36FADB81A32;
-        Tue,  5 Apr 2022 08:33:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F263C385A0;
-        Tue,  5 Apr 2022 08:33:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7EC34B81C14;
+        Tue,  5 Apr 2022 08:33:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D85A1C385A0;
+        Tue,  5 Apr 2022 08:33:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147580;
-        bh=aFHFFMUipHtG2lH2cH1iKH9i2DXXPKMIpLsnTSvrAjc=;
+        s=korg; t=1649147611;
+        bh=c04I7xSLn2X3v4DHKriGZ3PkJ9qQh69X1RKAjzC5s9M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ea+Em23vH2+LlNZg6SuEIUl/C4kE9sgPEk0iHIeJ60CLZNpcoYSiNHUl0eZGxDAvK
-         W67coiOw2dMiRkntxYueSpXRi6sHzCUU4RMs6VIEQ1VRwGaPOgOkf7imLHJFJM8801
-         oQS7YHln+QaDpxObdHf5Inwt0Sn8JGcV67h67f4U=
+        b=F9OuOpystmZwaXX+ei8PjXP8YsAOYMlIHzfFDtToBAllZhjRVjfC6ssJTe0jM+GoQ
+         ye4ypyGNzYYqRNq4b49y4zVNmWYWYnJSc0WExqQ+/yQESMBAV2ZJj+ZslkwnUAg6Kz
+         TnYINRJsY35CPnImZ7C+Z/hcNs/hR9k9+qvRIplY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Song Liu <songliubraving@fb.com>,
         Jens Axboe <axboe@kernel.dk>, Song Liu <song@kernel.org>
-Subject: [PATCH 5.16 0030/1017] block: ensure plug merging checks the correct queue at least once
-Date:   Tue,  5 Apr 2022 09:15:43 +0200
-Message-Id: <20220405070355.072987835@linuxfoundation.org>
+Subject: [PATCH 5.16 0031/1017] block: flush plug based on hardware and software queue order
+Date:   Tue,  5 Apr 2022 09:15:44 +0200
+Message-Id: <20220405070355.102575591@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,60 +56,105 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jens Axboe <axboe@kernel.dk>
 
-commit 5b2050718d095cd3242d1f42aaaea3a2fec8e6f0 upstream.
+commit 26fed4ac4eab09c27fbae1859696cc38f0536407 upstream.
 
-Song reports that a RAID rebuild workload runs much slower recently,
-and it is seeing a lot less merging than it did previously. The reason
-is that a previous commit reduced the amount of work we do for plug
-merging. RAID rebuild interleaves requests between disks, so a last-entry
-check in plug merging always misses a merge opportunity since we always
-find a different disk than what we are looking for.
+We used to sort the plug list if we had multiple queues before dispatching
+requests to the IO scheduler. This usually isn't needed, but for certain
+workloads that interleave requests to disks, it's a less efficient to
+process the plug list one-by-one if everything is interleaved.
 
-Modify the logic such that it's still a one-hit cache, but ensure that
-we check enough to find the right target before giving up.
+Don't sort the list, but skip through it and flush out entries that have
+the same target at the same time.
 
-Fixes: d38a9c04c0d5 ("block: only check previous entry for plug merge attempt")
+Fixes: df87eb0fce8f ("block: get rid of plug list sorting")
 Reported-and-tested-by: Song Liu <song@kernel.org>
 Reviewed-by: Song Liu <songliubraving@fb.com>
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/blk-merge.c |   23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+ block/blk-mq.c |   60 +++++++++++++++++++++++++--------------------------------
+ 1 file changed, 27 insertions(+), 33 deletions(-)
 
---- a/block/blk-merge.c
-+++ b/block/blk-merge.c
-@@ -1093,18 +1093,21 @@ bool blk_attempt_plug_merge(struct reque
- 	if (!plug || rq_list_empty(plug->mq_list))
- 		return false;
- 
--	/* check the previously added entry for a quick merge attempt */
--	rq = rq_list_peek(&plug->mq_list);
--	if (rq->q == q) {
-+	rq_list_for_each(&plug->mq_list, rq) {
-+		if (rq->q == q) {
-+			*same_queue_rq = true;
-+			if (blk_attempt_bio_merge(q, rq, bio, nr_segs, false) ==
-+			    BIO_MERGE_OK)
-+				return true;
-+			break;
-+		}
-+
- 		/*
--		 * Only blk-mq multiple hardware queues case checks the rq in
--		 * the same queue, there should be only one such rq in a queue
-+		 * Only keep iterating plug list for merges if we have multiple
-+		 * queues
- 		 */
--		*same_queue_rq = true;
--
--		if (blk_attempt_bio_merge(q, rq, bio, nr_segs, false) ==
--				BIO_MERGE_OK)
--			return true;
-+		if (!plug->multiple_queues)
-+			break;
- 	}
- 	return false;
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -2244,13 +2244,35 @@ static void blk_mq_plug_issue_direct(str
+ 		blk_mq_commit_rqs(hctx, &queued, from_schedule);
  }
+ 
+-void blk_mq_flush_plug_list(struct blk_plug *plug, bool from_schedule)
++static void blk_mq_dispatch_plug_list(struct blk_plug *plug, bool from_sched)
+ {
+-	struct blk_mq_hw_ctx *this_hctx;
+-	struct blk_mq_ctx *this_ctx;
+-	unsigned int depth;
++	struct blk_mq_hw_ctx *this_hctx = NULL;
++	struct blk_mq_ctx *this_ctx = NULL;
++	struct request *requeue_list = NULL;
++	unsigned int depth = 0;
+ 	LIST_HEAD(list);
+ 
++	do {
++		struct request *rq = rq_list_pop(&plug->mq_list);
++
++		if (!this_hctx) {
++			this_hctx = rq->mq_hctx;
++			this_ctx = rq->mq_ctx;
++		} else if (this_hctx != rq->mq_hctx || this_ctx != rq->mq_ctx) {
++			rq_list_add(&requeue_list, rq);
++			continue;
++		}
++		list_add_tail(&rq->queuelist, &list);
++		depth++;
++	} while (!rq_list_empty(plug->mq_list));
++
++	plug->mq_list = requeue_list;
++	trace_block_unplug(this_hctx->queue, depth, !from_sched);
++	blk_mq_sched_insert_requests(this_hctx, this_ctx, &list, from_sched);
++}
++
++void blk_mq_flush_plug_list(struct blk_plug *plug, bool from_schedule)
++{
+ 	if (rq_list_empty(plug->mq_list))
+ 		return;
+ 	plug->rq_count = 0;
+@@ -2261,37 +2283,9 @@ void blk_mq_flush_plug_list(struct blk_p
+ 			return;
+ 	}
+ 
+-	this_hctx = NULL;
+-	this_ctx = NULL;
+-	depth = 0;
+ 	do {
+-		struct request *rq;
+-
+-		rq = rq_list_pop(&plug->mq_list);
+-
+-		if (!this_hctx) {
+-			this_hctx = rq->mq_hctx;
+-			this_ctx = rq->mq_ctx;
+-		} else if (this_hctx != rq->mq_hctx || this_ctx != rq->mq_ctx) {
+-			trace_block_unplug(this_hctx->queue, depth,
+-						!from_schedule);
+-			blk_mq_sched_insert_requests(this_hctx, this_ctx,
+-						&list, from_schedule);
+-			depth = 0;
+-			this_hctx = rq->mq_hctx;
+-			this_ctx = rq->mq_ctx;
+-
+-		}
+-
+-		list_add(&rq->queuelist, &list);
+-		depth++;
++		blk_mq_dispatch_plug_list(plug, from_schedule);
+ 	} while (!rq_list_empty(plug->mq_list));
+-
+-	if (!list_empty(&list)) {
+-		trace_block_unplug(this_hctx->queue, depth, !from_schedule);
+-		blk_mq_sched_insert_requests(this_hctx, this_ctx, &list,
+-						from_schedule);
+-	}
+ }
+ 
+ static void blk_mq_bio_to_request(struct request *rq, struct bio *bio,
 
 

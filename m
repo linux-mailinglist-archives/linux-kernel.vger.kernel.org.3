@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C9D24F43A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EDCB4F4769
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:35:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244897AbiDEN1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59912 "EHLO
+        id S1355306AbiDEVK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345222AbiDEJWW (ORCPT
+        with ESMTP id S1357665AbiDEK0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:22:22 -0400
+        Tue, 5 Apr 2022 06:26:42 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6982C33A33;
-        Tue,  5 Apr 2022 02:09:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6E03335E;
+        Tue,  5 Apr 2022 03:10:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED386B80DA1;
-        Tue,  5 Apr 2022 09:09:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64CB9C385A2;
-        Tue,  5 Apr 2022 09:09:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA37FB81C8A;
+        Tue,  5 Apr 2022 10:10:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06801C385A1;
+        Tue,  5 Apr 2022 10:10:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149779;
-        bh=8OMFyOaAk1BzOs8bd9OEu8SQHWkFyA3dMkqxRl+sTPI=;
+        s=korg; t=1649153430;
+        bh=CSMlmGL614k1X+ldBmtvlDf0XkR5AmyOsgqIcsGuQF4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V7q50ER06Jj2HvX+J8kh1lzlOUfTdWQa6sNSMuvAfrgk0RwXoRq0AcM/kPPObm/rI
-         9Gco0wvwsKjafCaU95Bkvz3OtewVL7deBWYEugESQF7U8PuaFTLj0mryA5hn/dhGvT
-         Wo9CrmOUEtuDzIU8D1dAw1dJ3whqG5m0JD3t/pdo=
+        b=vO39spMg7GuRKvZDFNsuxRKYV6GXAOfegOcHFTbj/Bz/EKemLiUiCtHCIE8gPSW6O
+         fRLXBmzsiqbyC2zt/xuB/ev56+NGH4dmlRcan7aSxQ8VV2d764HO/iUCy/9eBOuInk
+         2f49QcBzc4+T/joeIArTfCEZHeN0hhLlJeTuACyo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chao Yu <chao.yu@oppo.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
+        stable@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0800/1017] f2fs: compress: fix to print raw data size in error path of lz4 decompression
-Date:   Tue,  5 Apr 2022 09:28:33 +0200
-Message-Id: <20220405070417.997536220@linuxfoundation.org>
+Subject: [PATCH 5.10 220/599] ASoC: codecs: wcd934x: fix return value of wcd934x_rx_hph_mode_put
+Date:   Tue,  5 Apr 2022 09:28:34 +0200
+Message-Id: <20220405070305.390482911@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Yu <chao@kernel.org>
+From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
-[ Upstream commit d284af43f703760e261b1601378a0c13a19d5f1f ]
+[ Upstream commit 4b0bec6088588a120d33db85b1f0d9f096d1df71 ]
 
-In lz4_decompress_pages(), if size of decompressed data is not equal to
-expected one, we should print the size rather than size of target buffer
-for decompressed data, fix it.
+wcd934x_rx_hph_mode_put currently returns zero eventhough it changes the value.
+Fix this, so that change notifications are sent correctly.
 
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Fixes: 1cde8b822332 ("ASoC: wcd934x: add basic controls")
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Link: https://lore.kernel.org/r/20220222183212.11580-10-srinivas.kandagatla@linaro.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/f2fs/compress.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ sound/soc/codecs/wcd934x.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
-index 190a3c4d4c91..ced0fd54658c 100644
---- a/fs/f2fs/compress.c
-+++ b/fs/f2fs/compress.c
-@@ -313,10 +313,9 @@ static int lz4_decompress_pages(struct decompress_io_ctx *dic)
- 	}
+diff --git a/sound/soc/codecs/wcd934x.c b/sound/soc/codecs/wcd934x.c
+index 01df3f4e045a..f07dea0bc27e 100644
+--- a/sound/soc/codecs/wcd934x.c
++++ b/sound/soc/codecs/wcd934x.c
+@@ -2522,13 +2522,16 @@ static int wcd934x_rx_hph_mode_put(struct snd_kcontrol *kc,
  
- 	if (ret != PAGE_SIZE << dic->log_cluster_size) {
--		printk_ratelimited("%sF2FS-fs (%s): lz4 invalid rlen:%zu, "
-+		printk_ratelimited("%sF2FS-fs (%s): lz4 invalid ret:%d, "
- 					"expected:%lu\n", KERN_ERR,
--					F2FS_I_SB(dic->inode)->sb->s_id,
--					dic->rlen,
-+					F2FS_I_SB(dic->inode)->sb->s_id, ret,
- 					PAGE_SIZE << dic->log_cluster_size);
- 		return -EIO;
+ 	mode_val = ucontrol->value.enumerated.item[0];
+ 
++	if (mode_val == wcd->hph_mode)
++		return 0;
++
+ 	if (mode_val == 0) {
+ 		dev_err(wcd->dev, "Invalid HPH Mode, default to ClSH HiFi\n");
+ 		mode_val = CLS_H_LOHIFI;
  	}
+ 	wcd->hph_mode = mode_val;
+ 
+-	return 0;
++	return 1;
+ }
+ 
+ static int slim_rx_mux_get(struct snd_kcontrol *kc,
 -- 
 2.34.1
 

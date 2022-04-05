@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F36864F49E8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5394F48CF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1452550AbiDEWcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
+        id S1386700AbiDEVuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349374AbiDEJtp (ORCPT
+        with ESMTP id S1349378AbiDEJtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:45 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A690F13FBF;
-        Tue,  5 Apr 2022 02:44:36 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9363D140A0;
+        Tue,  5 Apr 2022 02:44:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 157E0CE1C90;
-        Tue,  5 Apr 2022 09:44:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FF51C385A3;
-        Tue,  5 Apr 2022 09:44:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4D492B81B76;
+        Tue,  5 Apr 2022 09:44:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AFA3C385A1;
+        Tue,  5 Apr 2022 09:44:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151873;
-        bh=pfUa9LayJvonNRTRyNr0npSc/ylo332Q3BdAw9/BZgY=;
+        s=korg; t=1649151879;
+        bh=5rWQUbhUJiGX3djm74TDVdsNPbKR1t9CD3a31xh3vpU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QnjkRZdXKlV6cIVJ8aq52Ra+uu3a2eFN62g5bsznocGKjo6qMwjWu8lrUC5HOcQ+H
-         mUFYsP/dCcwSkXOM22N7RG5Xw5l2O866MLyIX6W6XMNTEjLIRhT3KYAeGVxcQg8BwB
-         XvCNgunEgtur2WZUqHa7oCi5PI7NwRwoVknCsfYE=
+        b=w3QbOIsWxqRJI6La09M4TWDMDtoONzKQryJMCLj5UrXPwkod1eDl7ch165arPSGkQ
+         yiRGAwGuGjiFnUFedmMAh+j3/nHQgfAIbcQZxvVMAqVTjsCbcHCtmZukZyI2r6UUh2
+         kfdq73SDNmSmWDqlhHpOrG6at5nzC86r0QkV+C24=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ying Xue <ying.xue@windriver.com>,
-        Hoang Le <hoang.h.le@dektech.com.au>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 571/913] tipc: fix the timer expires after interval 100ms
-Date:   Tue,  5 Apr 2022 09:27:13 +0200
-Message-Id: <20220405070356.959803260@linuxfoundation.org>
+Subject: [PATCH 5.15 573/913] ice: fix scheduling while atomic on aux critical err interrupt
+Date:   Tue,  5 Apr 2022 09:27:15 +0200
+Message-Id: <20220405070357.021794436@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,43 +58,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hoang Le <hoang.h.le@dektech.com.au>
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
 
-[ Upstream commit 6a7d8cff4a3301087dd139293e9bddcf63827282 ]
+[ Upstream commit 32d53c0aa3a7b727243473949bad2a830b908edc ]
 
-In the timer callback function tipc_sk_timeout(), we're trying to
-reschedule another timeout to retransmit a setup request if destination
-link is congested. But we use the incorrect timeout value
-(msecs_to_jiffies(100)) instead of (jiffies + msecs_to_jiffies(100)),
-so that the timer expires immediately, it's irrelevant for original
-description.
+There's a kernel BUG splat on processing aux critical error
+interrupts in ice_misc_intr():
 
-In this commit we correct the timeout value in sk_reset_timer()
+[ 2100.917085] BUG: scheduling while atomic: swapper/15/0/0x00010000
+...
+[ 2101.060770] Call Trace:
+[ 2101.063229]  <IRQ>
+[ 2101.065252]  dump_stack+0x41/0x60
+[ 2101.068587]  __schedule_bug.cold.100+0x4c/0x58
+[ 2101.073060]  __schedule+0x6a4/0x830
+[ 2101.076570]  schedule+0x35/0xa0
+[ 2101.079727]  schedule_preempt_disabled+0xa/0x10
+[ 2101.084284]  __mutex_lock.isra.7+0x310/0x420
+[ 2101.088580]  ? ice_misc_intr+0x201/0x2e0 [ice]
+[ 2101.093078]  ice_send_event_to_aux+0x25/0x70 [ice]
+[ 2101.097921]  ice_misc_intr+0x220/0x2e0 [ice]
+[ 2101.102232]  __handle_irq_event_percpu+0x40/0x180
+[ 2101.106965]  handle_irq_event_percpu+0x30/0x80
+[ 2101.111434]  handle_irq_event+0x36/0x53
+[ 2101.115292]  handle_edge_irq+0x82/0x190
+[ 2101.119148]  handle_irq+0x1c/0x30
+[ 2101.122480]  do_IRQ+0x49/0xd0
+[ 2101.125465]  common_interrupt+0xf/0xf
+[ 2101.129146]  </IRQ>
+...
 
-Fixes: 6787927475e5 ("tipc: buffer overflow handling in listener socket")
-Acked-by: Ying Xue <ying.xue@windriver.com>
-Signed-off-by: Hoang Le <hoang.h.le@dektech.com.au>
-Link: https://lore.kernel.org/r/20220321042229.314288-1-hoang.h.le@dektech.com.au
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+As Andrew correctly mentioned previously[0], the following call
+ladder happens:
+
+ice_misc_intr() <- hardirq
+  ice_send_event_to_aux()
+    device_lock()
+      mutex_lock()
+        might_sleep()
+          might_resched() <- oops
+
+Add a new PF state bit which indicates that an aux critical error
+occurred and serve it in ice_service_task() in process context.
+The new ice_pf::oicr_err_reg is read-write in both hardirq and
+process contexts, but only 3 bits of non-critical data probably
+aren't worth explicit synchronizing (and they're even in the same
+byte [31:24]).
+
+[0] https://lore.kernel.org/all/YeSRUVmrdmlUXHDn@lunn.ch
+
+Fixes: 348048e724a0e ("ice: Implement iidc operations")
+Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Tested-by: Michal Kubiak <michal.kubiak@intel.com>
+Acked-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/tipc/socket.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/intel/ice/ice.h      |  2 ++
+ drivers/net/ethernet/intel/ice/ice_main.c | 25 ++++++++++++++---------
+ 2 files changed, 17 insertions(+), 10 deletions(-)
 
-diff --git a/net/tipc/socket.c b/net/tipc/socket.c
-index 7545321c3440..17f8c523e33b 100644
---- a/net/tipc/socket.c
-+++ b/net/tipc/socket.c
-@@ -2852,7 +2852,8 @@ static void tipc_sk_retry_connect(struct sock *sk, struct sk_buff_head *list)
+diff --git a/drivers/net/ethernet/intel/ice/ice.h b/drivers/net/ethernet/intel/ice/ice.h
+index 16b63f727efa..7e5daede3a2e 100644
+--- a/drivers/net/ethernet/intel/ice/ice.h
++++ b/drivers/net/ethernet/intel/ice/ice.h
+@@ -241,6 +241,7 @@ enum ice_pf_state {
+ 	ICE_LINK_DEFAULT_OVERRIDE_PENDING,
+ 	ICE_PHY_INIT_COMPLETE,
+ 	ICE_FD_VF_FLUSH_CTX,		/* set at FD Rx IRQ or timeout */
++	ICE_AUX_ERR_PENDING,
+ 	ICE_STATE_NBITS		/* must be last */
+ };
  
- 	/* Try again later if dest link is congested */
- 	if (tsk->cong_link_cnt) {
--		sk_reset_timer(sk, &sk->sk_timer, msecs_to_jiffies(100));
-+		sk_reset_timer(sk, &sk->sk_timer,
-+			       jiffies + msecs_to_jiffies(100));
+@@ -464,6 +465,7 @@ struct ice_pf {
+ 	wait_queue_head_t reset_wait_queue;
+ 
+ 	u32 hw_csum_rx_error;
++	u32 oicr_err_reg;
+ 	u16 oicr_idx;		/* Other interrupt cause MSIX vector index */
+ 	u16 num_avail_sw_msix;	/* remaining MSIX SW vectors left unclaimed */
+ 	u16 max_pf_txqs;	/* Total Tx queues PF wide */
+diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+index 524e6e65dc9d..7f68132b8a1f 100644
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -2143,6 +2143,19 @@ static void ice_service_task(struct work_struct *work)
  		return;
  	}
- 	/* Prepare SYN for retransmit */
+ 
++	if (test_and_clear_bit(ICE_AUX_ERR_PENDING, pf->state)) {
++		struct iidc_event *event;
++
++		event = kzalloc(sizeof(*event), GFP_KERNEL);
++		if (event) {
++			set_bit(IIDC_EVENT_CRIT_ERR, event->type);
++			/* report the entire OICR value to AUX driver */
++			swap(event->reg, pf->oicr_err_reg);
++			ice_send_event_to_aux(pf, event);
++			kfree(event);
++		}
++	}
++
+ 	if (test_bit(ICE_FLAG_PLUG_AUX_DEV, pf->flags)) {
+ 		/* Plug aux device per request */
+ 		ice_plug_aux_dev(pf);
+@@ -2881,17 +2894,9 @@ static irqreturn_t ice_misc_intr(int __always_unused irq, void *data)
+ 
+ #define ICE_AUX_CRIT_ERR (PFINT_OICR_PE_CRITERR_M | PFINT_OICR_HMC_ERR_M | PFINT_OICR_PE_PUSH_M)
+ 	if (oicr & ICE_AUX_CRIT_ERR) {
+-		struct iidc_event *event;
+-
++		pf->oicr_err_reg |= oicr;
++		set_bit(ICE_AUX_ERR_PENDING, pf->state);
+ 		ena_mask &= ~ICE_AUX_CRIT_ERR;
+-		event = kzalloc(sizeof(*event), GFP_ATOMIC);
+-		if (event) {
+-			set_bit(IIDC_EVENT_CRIT_ERR, event->type);
+-			/* report the entire OICR value to AUX driver */
+-			event->reg = oicr;
+-			ice_send_event_to_aux(pf, event);
+-			kfree(event);
+-		}
+ 	}
+ 
+ 	/* Report any remaining unexpected interrupts */
 -- 
 2.34.1
 

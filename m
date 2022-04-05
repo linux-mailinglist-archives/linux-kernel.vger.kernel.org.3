@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C16E4F4EE9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 244024F4F3E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1583961AbiDEX5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44568 "EHLO
+        id S1456230AbiDFAnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241908AbiDEKfP (ORCPT
+        with ESMTP id S1354195AbiDEKMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:35:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9E617E3E;
-        Tue,  5 Apr 2022 03:20:30 -0700 (PDT)
+        Tue, 5 Apr 2022 06:12:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67AF452E7C;
+        Tue,  5 Apr 2022 02:58:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6043E61562;
-        Tue,  5 Apr 2022 10:20:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71B1DC385A0;
-        Tue,  5 Apr 2022 10:20:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2A097B81B18;
+        Tue,  5 Apr 2022 09:58:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92BE2C385A1;
+        Tue,  5 Apr 2022 09:58:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154029;
-        bh=eWiMQKH+8NE4RyT+NKLLKGJ0I/akTh05uaqGDyTovvo=;
+        s=korg; t=1649152701;
+        bh=n6zyPSIkFvCLdD5kBxfGwkFctlLJmjTygZHO/L9jPmc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eAkJ95WmKhT3mAj3Kscnj27KjqeJMScjw39oCXGrBSSFmMZy8yX3mYkROce4eBVxt
-         uBNPvLZ7H6U3iAW0OkpWm7LrzSMmjkGHfwW1lPgVQ/ZQX/SVn/3pacN0iJ854HRfQq
-         yaoaGD55bKnqLS866sf6KFiDlyKkGTHMKir1uVIs=
+        b=MZPPJBgI9AIlOcBs/rK/flSSH3mO4pmSTfyfUjR0r6P/UOnveedrYERVu5V2RJpPQ
+         EaSsFmNC3xv5WylzvHaF1cf+sUbT1Bb0qvtKWXUqxwP+hzyt3qUjAnZAhf+QoXesfO
+         i4rCA+YSr6d1CwSlWwyW+o6rpZcV+bvRb1rVokd0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sven Auhagen <sven.auhagen@voleatech.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 432/599] netfilter: nf_conntrack_tcp: preserve liberal flag in tcp options
-Date:   Tue,  5 Apr 2022 09:32:06 +0200
-Message-Id: <20220405070311.688975451@linuxfoundation.org>
+        stable@vger.kernel.org, Ewan Milne <emilne@redhat.com>,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Saurav Kashyap <skashyap@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.15 865/913] scsi: qla2xxx: Add qla2x00_async_done() for async routines
+Date:   Tue,  5 Apr 2022 09:32:07 +0200
+Message-Id: <20220405070405.752209504@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,71 +57,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Saurav Kashyap <skashyap@marvell.com>
 
-[ Upstream commit f2dd495a8d589371289981d5ed33e6873df94ecc ]
+commit 49b729f58e7a98a006a8a0c1dcca8a1a4f58d2a8 upstream.
 
-Do not reset IP_CT_TCP_FLAG_BE_LIBERAL flag in out-of-sync scenarios
-coming before the TCP window tracking, otherwise such connections will
-fail in the window check.
+This done routine will delete the timer and check for its return value and
+decrease the reference count accordingly. This prevents boot hangs reported
+after commit 31e6cdbe0eae ("scsi: qla2xxx: Implement ref count for SRB")
+was merged.
 
-Update tcp_options() to leave this flag in place and add a new helper
-function to reset the tcp window state.
-
-Based on patch from Sven Auhagen.
-
-Fixes: c4832c7bbc3f ("netfilter: nf_ct_tcp: improve out-of-sync situation in TCP tracking")
-Tested-by: Sven Auhagen <sven.auhagen@voleatech.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/20220208093946.4471-1-njavali@marvell.com
+Fixes: 31e6cdbe0eae ("scsi: qla2xxx: Implement ref count for SRB")
+Reported-by: Ewan Milne <emilne@redhat.com>
+Tested-by: Ewan D. Milne <emilne@redhat.com>
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
+Signed-off-by: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nf_conntrack_proto_tcp.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ drivers/scsi/qla2xxx/qla_iocb.c |   17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/net/netfilter/nf_conntrack_proto_tcp.c b/net/netfilter/nf_conntrack_proto_tcp.c
-index c8fb2187ad4b..3f785bdfa942 100644
---- a/net/netfilter/nf_conntrack_proto_tcp.c
-+++ b/net/netfilter/nf_conntrack_proto_tcp.c
-@@ -354,8 +354,8 @@ static void tcp_options(const struct sk_buff *skb,
- 				 length, buff);
- 	BUG_ON(ptr == NULL);
- 
--	state->td_scale =
--	state->flags = 0;
-+	state->td_scale = 0;
-+	state->flags &= IP_CT_TCP_FLAG_BE_LIBERAL;
- 
- 	while (length > 0) {
- 		int opcode=*ptr++;
-@@ -840,6 +840,16 @@ static bool nf_conntrack_tcp_established(const struct nf_conn *ct)
- 	       test_bit(IPS_ASSURED_BIT, &ct->status);
+--- a/drivers/scsi/qla2xxx/qla_iocb.c
++++ b/drivers/scsi/qla2xxx/qla_iocb.c
+@@ -2560,6 +2560,20 @@ qla24xx_tm_iocb(srb_t *sp, struct tsk_mg
+ 	}
  }
  
-+static void nf_ct_tcp_state_reset(struct ip_ct_tcp_state *state)
++static void
++qla2x00_async_done(struct srb *sp, int res)
 +{
-+	state->td_end		= 0;
-+	state->td_maxend	= 0;
-+	state->td_maxwin	= 0;
-+	state->td_maxack	= 0;
-+	state->td_scale		= 0;
-+	state->flags		&= IP_CT_TCP_FLAG_BE_LIBERAL;
++	if (del_timer(&sp->u.iocb_cmd.timer)) {
++		/*
++		 * Successfully cancelled the timeout handler
++		 * ref: TMR
++		 */
++		if (kref_put(&sp->cmd_kref, qla2x00_sp_release))
++			return;
++	}
++	sp->async_done(sp, res);
 +}
 +
- /* Returns verdict for packet, or -1 for invalid. */
- int nf_conntrack_tcp_packet(struct nf_conn *ct,
- 			    struct sk_buff *skb,
-@@ -946,8 +956,7 @@ int nf_conntrack_tcp_packet(struct nf_conn *ct,
- 			ct->proto.tcp.last_flags &= ~IP_CT_EXP_CHALLENGE_ACK;
- 			ct->proto.tcp.seen[ct->proto.tcp.last_dir].flags =
- 				ct->proto.tcp.last_flags;
--			memset(&ct->proto.tcp.seen[dir], 0,
--			       sizeof(struct ip_ct_tcp_state));
-+			nf_ct_tcp_state_reset(&ct->proto.tcp.seen[dir]);
- 			break;
- 		}
- 		ct->proto.tcp.last_index = index;
--- 
-2.34.1
-
+ void
+ qla2x00_sp_release(struct kref *kref)
+ {
+@@ -2573,7 +2587,8 @@ qla2x00_init_async_sp(srb_t *sp, unsigne
+ 		     void (*done)(struct srb *sp, int res))
+ {
+ 	timer_setup(&sp->u.iocb_cmd.timer, qla2x00_sp_timeout, 0);
+-	sp->done = done;
++	sp->done = qla2x00_async_done;
++	sp->async_done = done;
+ 	sp->free = qla2x00_sp_free;
+ 	sp->u.iocb_cmd.timeout = qla2x00_async_iocb_timeout;
+ 	sp->u.iocb_cmd.timer.expires = jiffies + tmo * HZ;
 
 

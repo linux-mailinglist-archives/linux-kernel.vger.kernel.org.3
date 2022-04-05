@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 989234F4C6D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F4F4F4E0B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233597AbiDEXUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58644 "EHLO
+        id S1587276AbiDFAI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348339AbiDEKqo (ORCPT
+        with ESMTP id S1345168AbiDEKkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:46:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC91E3EA8D;
-        Tue,  5 Apr 2022 03:27:07 -0700 (PDT)
+        Tue, 5 Apr 2022 06:40:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB74C22C;
+        Tue,  5 Apr 2022 03:26:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C8B7617AF;
-        Tue,  5 Apr 2022 10:27:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58DDEC385A0;
-        Tue,  5 Apr 2022 10:27:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B8D7B81B18;
+        Tue,  5 Apr 2022 10:26:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6EF5C385A0;
+        Tue,  5 Apr 2022 10:26:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154426;
-        bh=OmfsfMu7icEH0HKY0Ecjaqr8pqfFMPj/l9JUfgzSvPE=;
+        s=korg; t=1649154377;
+        bh=0Vq7vJRdob4ZU/b7s+kXri72eyuTWPYUpF6OazvvaDc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eLD85lSTj9ZYQ1mQFfBNda+3nd0jAJpKjnPN4QiKNeysG519WpYpHBZ1vMAFzu1QT
-         VuNPirwBIPt6vwJrzhOAgyU/eUFmpcR68ISMl/BCrDaYEUqXv1K83Gj3+kYENoz0ab
-         WnE772xxc8c2ZNyOhOCWY8Zk3DZiYrCDmLsa8YRM=
+        b=bipKaNWysUcLwH2wH4uGUGgmfag3VcK18FjkTJPwd4cRXBiTjv6jjoLKaGXbHAWRm
+         QsGFkrYnQqeVopAP6VpEu9/kc3WRvqLhR0HRzNYWTFpJ2shEgyRhRKnwkbv15mMb4Z
+         SpechxjMmya/epTqZfJMuVcG1sYP6Q3iQ+lHsxR8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,9 +37,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Quinn Tran <qutran@marvell.com>,
         Nilesh Javali <njavali@marvell.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.10 526/599] scsi: qla2xxx: Fix incorrect reporting of task management failure
-Date:   Tue,  5 Apr 2022 09:33:40 +0200
-Message-Id: <20220405070314.492786870@linuxfoundation.org>
+Subject: [PATCH 5.10 529/599] scsi: qla2xxx: Fix N2N inconsistent PLOGI
+Date:   Tue,  5 Apr 2022 09:33:43 +0200
+Message-Id: <20220405070314.582133434@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -59,16 +59,15 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Quinn Tran <qutran@marvell.com>
 
-commit 58ca5999e0367d131de82a75257fbfd5aed0195d upstream.
+commit c13ce47c64ea8f14e77eecb40d1e7c2ac667f898 upstream.
 
-User experienced no task management error while target device is responding
-with error. The RSP_CODE field in the status IOCB is in little endian.
-Driver assumes it's big endian and it picked up erroneous data.
+For N2N topology, ELS Passthrough is used to send PLOGI. On failure of ELS
+pass through PLOGI, driver flipped over to using LLIOCB PLOGI for N2N. This
+is not consistent. Delete the session to restart the connection where ELS
+pass through PLOGI would be used consistently.
 
-Convert the data back to big endian as is on the wire.
-
-Link: https://lore.kernel.org/r/20220310092604.22950-2-njavali@marvell.com
-Fixes: faef62d13463 ("[SCSI] qla2xxx: Fix Task Management command asynchronous handling")
+Link: https://lore.kernel.org/r/20220310092604.22950-7-njavali@marvell.com
+Fixes: c76ae845ea83 ("scsi: qla2xxx: Add error handling for PLOGI ELS passthrough")
 Cc: stable@vger.kernel.org
 Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 Signed-off-by: Quinn Tran <qutran@marvell.com>
@@ -76,18 +75,39 @@ Signed-off-by: Nilesh Javali <njavali@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_isr.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/scsi/qla2xxx/qla_iocb.c |    8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
---- a/drivers/scsi/qla2xxx/qla_isr.c
-+++ b/drivers/scsi/qla2xxx/qla_isr.c
-@@ -2248,6 +2248,7 @@ qla24xx_tm_iocb_entry(scsi_qla_host_t *v
- 		iocb->u.tmf.data = QLA_FUNCTION_FAILED;
- 	} else if ((le16_to_cpu(sts->scsi_status) &
- 	    SS_RESPONSE_INFO_LEN_VALID)) {
-+		host_to_fcp_swap(sts->data, sizeof(sts->data));
- 		if (le32_to_cpu(sts->rsp_data_len) < 4) {
- 			ql_log(ql_log_warn, fcport->vha, 0x503b,
- 			    "Async-%s error - hdl=%x not enough response(%d).\n",
+--- a/drivers/scsi/qla2xxx/qla_iocb.c
++++ b/drivers/scsi/qla2xxx/qla_iocb.c
+@@ -2910,6 +2910,7 @@ static void qla2x00_els_dcmd2_sp_done(sr
+ 					set_bit(ISP_ABORT_NEEDED,
+ 					    &vha->dpc_flags);
+ 					qla2xxx_wake_dpc(vha);
++					break;
+ 				}
+ 				fallthrough;
+ 			default:
+@@ -2919,9 +2920,7 @@ static void qla2x00_els_dcmd2_sp_done(sr
+ 				    fw_status[0], fw_status[1], fw_status[2]);
+ 
+ 				fcport->flags &= ~FCF_ASYNC_SENT;
+-				qla2x00_set_fcport_disc_state(fcport,
+-				    DSC_LOGIN_FAILED);
+-				set_bit(RELOGIN_NEEDED, &vha->dpc_flags);
++				qlt_schedule_sess_for_deletion(fcport);
+ 				break;
+ 			}
+ 			break;
+@@ -2933,8 +2932,7 @@ static void qla2x00_els_dcmd2_sp_done(sr
+ 			    fw_status[0], fw_status[1], fw_status[2]);
+ 
+ 			sp->fcport->flags &= ~FCF_ASYNC_SENT;
+-			qla2x00_set_fcport_disc_state(fcport, DSC_LOGIN_FAILED);
+-			set_bit(RELOGIN_NEEDED, &vha->dpc_flags);
++			qlt_schedule_sess_for_deletion(fcport);
+ 			break;
+ 		}
+ 
 
 

@@ -2,164 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1699D4F329F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 074804F33AA
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243034AbiDEJis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51984 "EHLO
+        id S1351117AbiDEKBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239764AbiDEIUu (ORCPT
+        with ESMTP id S234185AbiDEIYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:50 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CB8B3C
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 01:18:48 -0700 (PDT)
-Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KXgV63YyFz67ydH;
-        Tue,  5 Apr 2022 16:17:02 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 5 Apr 2022 10:18:46 +0200
-Received: from [10.47.91.157] (10.47.91.157) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 5 Apr
- 2022 09:18:45 +0100
-Message-ID: <ba5aa606-54bf-e19f-39ba-a21998781a6c@huawei.com>
-Date:   Tue, 5 Apr 2022 09:18:43 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3 1/2] drivers/perf: hisi: Associate PMUs in SICL with
- CPUs online
-To:     Qi Liu <liuqi115@huawei.com>, "will@kernel.org" <will@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>
-CC:     Zhangshaokun <zhangshaokun@hisilicon.com>,
-        Linuxarm <linuxarm@huawei.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220321070124.41338-1-liuqi115@huawei.com>
- <20220321070124.41338-2-liuqi115@huawei.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220321070124.41338-2-liuqi115@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Tue, 5 Apr 2022 04:24:43 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E0A9FE7;
+        Tue,  5 Apr 2022 01:20:20 -0700 (PDT)
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2357drRY009012;
+        Tue, 5 Apr 2022 08:20:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=jvaX86yLEGbCLrrwl/LtphbACiuYVeIpVZHlGhHhu9A=;
+ b=pC2LZtcc2Qv1H41r0/eOKPbXojqTB5fcpkzQRg8jmQBjbQx97WHG8dSnADlTsBn6Jt0t
+ pU+pDRuQs05X5Io3E18RibsrJsN00owZ/h0oj/qtH8KIEGIH4lt6tEUOuEizZZdep9dl
+ tUXvIFqm4naLP2NjSOgW2tq0fR5JSqQInBZQGeHlJq/iVrmnfybPrcFYaeqLZXdFiMrv
+ 12bhRsVs3Rg07mFhL6c8UVGl3ZIKZBZ1/PxUV9ncfra8KaDINdWYKAKFooF2nPGbt9RF
+ C0KJJO5RsyiTa8+hMU38XN9hozCxNnfVt+IkHbaBEfioDHVa+8oYnwbCuACpL4KX5XAa 6w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3f705hk73j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 05 Apr 2022 08:20:18 +0000
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 2358IRKg021885;
+        Tue, 5 Apr 2022 08:20:18 GMT
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3f705hk72k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 05 Apr 2022 08:20:17 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2358DRfg020930;
+        Tue, 5 Apr 2022 08:20:15 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma01fra.de.ibm.com with ESMTP id 3f6e48vanb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 05 Apr 2022 08:20:15 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2358KC0U33358080
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 5 Apr 2022 08:20:12 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4241C42041;
+        Tue,  5 Apr 2022 08:20:12 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CEB0D42045;
+        Tue,  5 Apr 2022 08:20:10 +0000 (GMT)
+Received: from sig-9-145-21-185.uk.ibm.com (unknown [9.145.21.185])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  5 Apr 2022 08:20:10 +0000 (GMT)
+Message-ID: <8fc611271c6156dee5c5f5b5c2f583d2d7774843.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 10/21] KVM: s390: pci: add basic kvm_zdev structure
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
+        farman@linux.ibm.com, pmorel@linux.ibm.com,
+        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
+        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Date:   Tue, 05 Apr 2022 10:20:10 +0200
+In-Reply-To: <20220404174349.58530-11-mjrosato@linux.ibm.com>
+References: <20220404174349.58530-1-mjrosato@linux.ibm.com>
+         <20220404174349.58530-11-mjrosato@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.91.157]
-X-ClientProxiedBy: lhreml747-chm.china.huawei.com (10.201.108.197) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: tLpowZUl73C-jlbAU_rgjQIxTiHb2PhV
+X-Proofpoint-ORIG-GUID: Cd9hlDx7RLCspQAJowud_tOMJozcrHjG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-04_10,2022-03-31_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ spamscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=692
+ adultscore=0 bulkscore=0 lowpriorityscore=0 phishscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204050044
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/03/2022 07:01, Qi Liu wrote:
-> If a PMU is in SICL, we associate it with all CPUs online, rather
-
-/s/in SICL/in a SICL/ [and all other places, including the code change], 
-or maybe it is better mention "IO super cluster" as well for people who 
-would not know or remember.
-
-> than CPUs in the nearest SCCL.
-
-You are not really saying why. I would mention that we do it as it is 
-not appropiate to associate with a CPU die, and you can also mention 
-problems that associating with a SICL creates.
-
-Please also mention how changing FW definition is ok at this stage.
-
+On Mon, 2022-04-04 at 13:43 -0400, Matthew Rosato wrote:
+> This structure will be used to carry kvm passthrough information related to
+> zPCI devices.
 > 
-> Signed-off-by: Qi Liu <liuqi115@huawei.com>
+> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
 > ---
->   drivers/perf/hisilicon/hisi_uncore_pa_pmu.c | 18 +++++++-----------
->   drivers/perf/hisilicon/hisi_uncore_pmu.c    |  4 ++++
->   drivers/perf/hisilicon/hisi_uncore_pmu.h    |  1 +
->   3 files changed, 12 insertions(+), 11 deletions(-)
+>  arch/s390/include/asm/pci.h |  3 +++
+>  arch/s390/kvm/Makefile      |  1 +
+>  arch/s390/kvm/pci.c         | 38 +++++++++++++++++++++++++++++++++++++
+>  arch/s390/kvm/pci.h         | 21 ++++++++++++++++++++
+>  4 files changed, 63 insertions(+)
+>  create mode 100644 arch/s390/kvm/pci.c
+>  create mode 100644 arch/s390/kvm/pci.h
 > 
-> diff --git a/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
-> index bad99d149172..54c604c0d404 100644
-> --- a/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
-> +++ b/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
-> @@ -258,13 +258,12 @@ static int hisi_pa_pmu_init_data(struct platform_device *pdev,
->   				   struct hisi_pmu *pa_pmu)
->   {
->   	/*
-> -	 * Use the SCCL_ID and the index ID to identify the PA PMU,
-> -	 * while SCCL_ID is the nearst SCCL_ID from this SICL and
-> -	 * CPU core is chosen from this SCCL to manage this PMU.
-> +	 * As PA PMU is in SICL, use the SICL_ID and the index ID
-
-"a SICL"
-
-> +	 * to identify the PA PMU.
->   	 */
->   	if (device_property_read_u32(&pdev->dev, "hisilicon,scl-id",
-> -				     &pa_pmu->sccl_id)) {
-> -		dev_err(&pdev->dev, "Cannot read sccl-id!\n");
-> +				     &pa_pmu->sicl_id)) {
-> +		dev_err(&pdev->dev, "Cannot read sicl-id!\n");
->   		return -EINVAL;
->   	}
->   
-> @@ -275,6 +274,7 @@ static int hisi_pa_pmu_init_data(struct platform_device *pdev,
->   	}
->   
->   	pa_pmu->ccl_id = -1;
-> +	pa_pmu->sccl_id = -1;
->   
->   	pa_pmu->base = devm_platform_ioremap_resource(pdev, 0);
->   	if (IS_ERR(pa_pmu->base)) {
-> @@ -399,13 +399,9 @@ static int hisi_pa_pmu_probe(struct platform_device *pdev)
->   	ret = hisi_pa_pmu_dev_probe(pdev, pa_pmu);
->   	if (ret)
->   		return ret;
-> -	/*
-> -	 * PA is attached in SICL and the CPU core is chosen to manage this
-> -	 * PMU which is the nearest SCCL, while its SCCL_ID is greater than
-> -	 * one with the SICL_ID.
-> -	 */
+> diff --git a/arch/s390/include/asm/pci.h b/arch/s390/include/asm/pci.h
+> index 4c5b8fbc2079..9eb20cebaa18 100644
+> --- a/arch/s390/include/asm/pci.h
+> +++ b/arch/s390/include/asm/pci.h
+> @@ -97,6 +97,7 @@ struct zpci_bar_struct {
+>  };
+>  
+>  struct s390_domain;
+> +struct kvm_zdev;
+>  
+>  #define ZPCI_FUNCTIONS_PER_BUS 256
+>  struct zpci_bus {
+> @@ -190,6 +191,8 @@ struct zpci_dev {
+>  	struct dentry	*debugfs_dev;
+>  
+>  	struct s390_domain *s390_domain; /* s390 IOMMU domain data */
 > +
->   	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sicl%u_pa%u",
-> -			      pa_pmu->sccl_id - 1, pa_pmu->index_id);
-> +			      pa_pmu->sicl_id, pa_pmu->index_id);
->   	if (!name)
->   		return -ENOMEM;
->   
-> diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pmu.c
-> index a738aeab5c04..31930166c34b 100644
-> --- a/drivers/perf/hisilicon/hisi_uncore_pmu.c
-> +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.c
-> @@ -458,6 +458,10 @@ static bool hisi_pmu_cpu_is_associated_pmu(struct hisi_pmu *hisi_pmu)
->   {
->   	int sccl_id, ccl_id;
->   
-> +	/* If SCCL_ID is -1, the PMU is in SICL and can be associated this PMU with any CPU */
+> +	struct kvm_zdev *kzdev; /* passthrough data */
+>  };
 
-too long, just have "The PMU is in a SICL and has no CPU affinity"
+The struct zpci_dev tries to use semantic groups in its formatting.
+It's not perfect and we probably need to clean this up to remove some
+holes in the future. For now let's put the new kzdev without a blank
+line together with s390_domain and add a "section comment" like
+"IOMMU and passthrough".
+Also I'd drop the "... data" part of the line end comment or even drop
+it entirely, the name is pretty clear already when combined with the
+section comment.
 
-> +	if (hisi_pmu->sccl_id == -1)
-> +		return true;
-> +
->   	if (hisi_pmu->ccl_id == -1) {
->   		/* If CCL_ID is -1, the PMU only shares the same SCCL */
->   		hisi_read_sccl_and_ccl_id(&sccl_id, NULL);
-> diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.h b/drivers/perf/hisilicon/hisi_uncore_pmu.h
-> index 7f5841d6f592..96eeddad55ff 100644
-> --- a/drivers/perf/hisilicon/hisi_uncore_pmu.h
-> +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.h
-> @@ -81,6 +81,7 @@ struct hisi_pmu {
->   	struct device *dev;
->   	struct hlist_node node;
->   	int sccl_id;
-> +	int sicl_id;
->   	int ccl_id;
->   	void __iomem *base;
->   	/* the ID of the PMU modules */
+With that Reviewed-by: Niklas Schnelle <schnelle@linux.ibm.com>
 

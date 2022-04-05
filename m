@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52AB54F467B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2125B4F4800
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244286AbiDEUd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
+        id S1354766AbiDEVYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349377AbiDEKun (ORCPT
+        with ESMTP id S1350031AbiDEKvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:50:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E552EA76E4;
-        Tue,  5 Apr 2022 03:27:48 -0700 (PDT)
+        Tue, 5 Apr 2022 06:51:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D72A7758;
+        Tue,  5 Apr 2022 03:27:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ABF40B81C8A;
-        Tue,  5 Apr 2022 10:27:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20EA3C385A0;
-        Tue,  5 Apr 2022 10:27:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6AC2B81B18;
+        Tue,  5 Apr 2022 10:27:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12294C385A0;
+        Tue,  5 Apr 2022 10:27:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154465;
-        bh=t5Kjxi8BKChE7cLLOSmUC5fA8BDDzn2f270Eb+wM/pU=;
+        s=korg; t=1649154468;
+        bh=wXCQH6QP5X6EUlJs4U9BH9qhWh3wALpbUoz21iTuBFA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UGKH5SdhPLpMs1wykGrE9K2mXJEZ8QTmPcfb+atStJnbvXVoqsWtHXkxppbXqay2r
-         zyXjn5YpeORfLeTWAgqe9eUZ9+8YXxdiQLMquW5xeoD9RH/3HSIeghMVUcrXak/+4H
-         kMlhq5nF3HthuSethL0tRlGWTY8ocxFUvhyQVcU0=
+        b=zKbdUiSpTouF49qPrY8nmAe9+HJ0W6rdGGJeD5VLoLqjWog4CZkeZpQNyQuErByta
+         oitywbc5YcpM3mo4p6gpDSZKPYx9v1BdNutHNja1V2LoV/4f0AxKcul1sBnhG+rxwc
+         HboaLZ08m98R6uLdhYk1iO0aew7s8zeUoJYCiUqM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 5.10 588/599] ARM: dts: spear13xx: Update SPI dma properties
-Date:   Tue,  5 Apr 2022 09:34:42 +0200
-Message-Id: <20220405070316.339291523@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: [PATCH 5.10 589/599] um: Fix uml_mconsole stop/go
+Date:   Tue,  5 Apr 2022 09:34:43 +0200
+Message-Id: <20220405070316.368502131@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -55,37 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+From: Anton Ivanov <anton.ivanov@cambridgegreys.com>
 
-commit 31d3687d6017c7ce6061695361598d9cda70807a upstream.
+commit 1a3a6a2a035bb6c3a7ef4c788d8fd69a7b2d6284 upstream.
 
-Reorder dmas and dma-names property for spi controller node to make it
-compliant with bindings.
+Moving to an EPOLL based IRQ controller broke uml_mconsole stop/go
+commands. This fixes it and restores stop/go functionality.
 
-Fixes: 6e8887f60f60 ("ARM: SPEAr13xx: Pass generic DW DMAC platform data from DT")
-Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Link: https://lore.kernel.org/r/20220326042313.97862-2-singh.kuldeep87k@gmail.com'
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: ff6a17989c08 ("Epoll based IRQ controller")
+Signed-off-by: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/spear13xx.dtsi |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/um/drivers/mconsole_kern.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/arch/arm/boot/dts/spear13xx.dtsi
-+++ b/arch/arm/boot/dts/spear13xx.dtsi
-@@ -284,9 +284,9 @@
- 				#size-cells = <0>;
- 				interrupts = <0 31 0x4>;
- 				status = "disabled";
--				dmas = <&dwdma0 4 0 0>,
--					<&dwdma0 5 0 0>;
--				dma-names = "tx", "rx";
-+				dmas = <&dwdma0 5 0 0>,
-+					<&dwdma0 4 0 0>;
-+				dma-names = "rx", "tx";
- 			};
+--- a/arch/um/drivers/mconsole_kern.c
++++ b/arch/um/drivers/mconsole_kern.c
+@@ -223,7 +223,7 @@ void mconsole_go(struct mc_request *req)
  
- 			rtc@e0580000 {
+ void mconsole_stop(struct mc_request *req)
+ {
+-	deactivate_fd(req->originating_fd, MCONSOLE_IRQ);
++	block_signals();
+ 	os_set_fd_block(req->originating_fd, 1);
+ 	mconsole_reply(req, "stopped", 0, 0);
+ 	for (;;) {
+@@ -246,6 +246,7 @@ void mconsole_stop(struct mc_request *re
+ 	}
+ 	os_set_fd_block(req->originating_fd, 0);
+ 	mconsole_reply(req, "", 0, 0);
++	unblock_signals();
+ }
+ 
+ static DEFINE_SPINLOCK(mc_devices_lock);
 
 

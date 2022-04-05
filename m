@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106AB4F41D9
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 871364F3DC4
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385276AbiDEMcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58320 "EHLO
+        id S1385262AbiDEMcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236232AbiDEI6M (ORCPT
+        with ESMTP id S236080AbiDEI7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:58:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA4C24BFC;
-        Tue,  5 Apr 2022 01:53:14 -0700 (PDT)
+        Tue, 5 Apr 2022 04:59:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61FE255A7;
+        Tue,  5 Apr 2022 01:53:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBE6B61511;
-        Tue,  5 Apr 2022 08:53:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3296C385A1;
-        Tue,  5 Apr 2022 08:53:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6EE63B81BD9;
+        Tue,  5 Apr 2022 08:53:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3150C385A1;
+        Tue,  5 Apr 2022 08:53:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148793;
-        bh=a4PdAOU8SZBWxNOgvOfdb9z+k5GvR5/1CHmDF+qaoz4=;
+        s=korg; t=1649148799;
+        bh=uZbSp/e8RnRyXsLlnieqg+hbOw+fz3mD3VWlhSBXOG4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qOku37nC49DL4Ih3OZbQpmBnRZN2GPK5azOD4+FP58pOOH0IuHhnNFyWr/w1OWQHv
-         5op8ZKD3hiaAVXhExnzqhy99Q9I3wKDb/vFQ0hiQZwvU5i4FHUqIxz3BoagoxxrxQn
-         OcISmLoWeK9sYztlR/x/z3LGl38ZU+YgeIAbu0eo=
+        b=lNNm1ne8S+MAp43Uxxn05bZp8IlYRK12KbekCQ6zM/eVm/Q9ATSFq9qxlz0DWJhLE
+         EbghY0HXbekkSKkyhube6gE4EXt9IvI2FEI38+H/zLfbbmfS9TqP2Begeiu/V6TMZQ
+         iQO0DSQpYoX6T5+Pe7mjcSoj5X4swZSdtLVSUeO8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        stable@vger.kernel.org, Xiao Yang <yangx.jy@fujitsu.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0484/1017] PCI: aardvark: Fix reading MSI interrupt number
-Date:   Tue,  5 Apr 2022 09:23:17 +0200
-Message-Id: <20220405070408.666006366@linuxfoundation.org>
+Subject: [PATCH 5.16 0486/1017] RDMA/rxe: Check the last packet by RXE_END_MASK
+Date:   Tue,  5 Apr 2022 09:23:19 +0200
+Message-Id: <20220405070408.724845173@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -57,60 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Xiao Yang <yangx.jy@fujitsu.com>
 
-[ Upstream commit 805dfc18dd3d4dd97a987d4406593b5a225b1253 ]
+[ Upstream commit b1377cc37f6bebd57ce8747b7e16163a475af295 ]
 
-In advk_pcie_handle_msi() it is expected that when bit i in the W1C
-register PCIE_MSI_STATUS_REG is cleared, the PCIE_MSI_PAYLOAD_REG is
-updated to contain the MSI number corresponding to index i.
+It's wrong to check the last packet by RXE_COMP_MASK because the flag is
+to indicate if responder needs to generate a completion.
 
-Experiments show that this is not so, and instead PCIE_MSI_PAYLOAD_REG
-always contains the number of the last received MSI, overall.
-
-Do not read PCIE_MSI_PAYLOAD_REG register for determining MSI interrupt
-number. Since Aardvark already forbids more than 32 interrupts and uses
-own allocated hwirq numbers, the msi_idx already corresponds to the
-received MSI number.
-
-Link: https://lore.kernel.org/r/20220110015018.26359-3-kabel@kernel.org
-Fixes: 8c39d710363c ("PCI: aardvark: Add Aardvark PCI host controller driver")
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Fixes: 9fcd67d1772c ("IB/rxe: increment msn only when completing a request")
+Fixes: 8700e3e7c485 ("Soft RoCE driver")
+Link: https://lore.kernel.org/r/20211229034438.1854908-1-yangx.jy@fujitsu.com
+Signed-off-by: Xiao Yang <yangx.jy@fujitsu.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pci-aardvark.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ drivers/infiniband/sw/rxe/rxe_resp.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
-index b2217e2b3efd..7aa6d6336223 100644
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -1381,7 +1381,6 @@ static void advk_pcie_remove_irq_domain(struct advk_pcie *pcie)
- static void advk_pcie_handle_msi(struct advk_pcie *pcie)
- {
- 	u32 msi_val, msi_mask, msi_status, msi_idx;
--	u16 msi_data;
- 
- 	msi_mask = advk_readl(pcie, PCIE_MSI_MASK_REG);
- 	msi_val = advk_readl(pcie, PCIE_MSI_STATUS_REG);
-@@ -1391,13 +1390,9 @@ static void advk_pcie_handle_msi(struct advk_pcie *pcie)
- 		if (!(BIT(msi_idx) & msi_status))
- 			continue;
- 
--		/*
--		 * msi_idx contains bits [4:0] of the msi_data and msi_data
--		 * contains 16bit MSI interrupt number
--		 */
- 		advk_writel(pcie, BIT(msi_idx), PCIE_MSI_STATUS_REG);
--		msi_data = advk_readl(pcie, PCIE_MSI_PAYLOAD_REG) & PCIE_MSI_DATA_MASK;
--		generic_handle_irq(msi_data);
-+		if (generic_handle_domain_irq(pcie->msi_inner_domain, msi_idx) == -EINVAL)
-+			dev_err_ratelimited(&pcie->pdev->dev, "unexpected MSI 0x%02x\n", msi_idx);
+diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
+index e8f435fa6e4d..380934e38923 100644
+--- a/drivers/infiniband/sw/rxe/rxe_resp.c
++++ b/drivers/infiniband/sw/rxe/rxe_resp.c
+@@ -814,6 +814,10 @@ static enum resp_states execute(struct rxe_qp *qp, struct rxe_pkt_info *pkt)
+ 			return RESPST_ERR_INVALIDATE_RKEY;
  	}
  
- 	advk_writel(pcie, PCIE_ISR0_MSI_INT_PENDING,
++	if (pkt->mask & RXE_END_MASK)
++		/* We successfully processed this new request. */
++		qp->resp.msn++;
++
+ 	/* next expected psn, read handles this separately */
+ 	qp->resp.psn = (pkt->psn + 1) & BTH_PSN_MASK;
+ 	qp->resp.ack_psn = qp->resp.psn;
+@@ -821,11 +825,9 @@ static enum resp_states execute(struct rxe_qp *qp, struct rxe_pkt_info *pkt)
+ 	qp->resp.opcode = pkt->opcode;
+ 	qp->resp.status = IB_WC_SUCCESS;
+ 
+-	if (pkt->mask & RXE_COMP_MASK) {
+-		/* We successfully processed this new request. */
+-		qp->resp.msn++;
++	if (pkt->mask & RXE_COMP_MASK)
+ 		return RESPST_COMPLETE;
+-	} else if (qp_type(qp) == IB_QPT_RC)
++	else if (qp_type(qp) == IB_QPT_RC)
+ 		return RESPST_ACKNOWLEDGE;
+ 	else
+ 		return RESPST_CLEANUP;
 -- 
 2.34.1
 

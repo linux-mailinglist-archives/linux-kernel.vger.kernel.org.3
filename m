@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56DF24F4B99
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A02EA4F4C58
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1575235AbiDEXDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39548 "EHLO
+        id S1578183AbiDEXSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349415AbiDEJtt (ORCPT
+        with ESMTP id S1356199AbiDEKXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D631C920;
-        Tue,  5 Apr 2022 02:45:14 -0700 (PDT)
+        Tue, 5 Apr 2022 06:23:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781BFBAB82;
+        Tue,  5 Apr 2022 03:07:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4790DB817D3;
-        Tue,  5 Apr 2022 09:45:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 942C4C385A4;
-        Tue,  5 Apr 2022 09:45:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 136936172B;
+        Tue,  5 Apr 2022 10:07:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 258E9C385A2;
+        Tue,  5 Apr 2022 10:07:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151912;
-        bh=07VNWO8H9YlwU0pqnXEKrNMaQkGMU5st7eEL9fMQ2pM=;
+        s=korg; t=1649153254;
+        bh=4j2Vmnry4afDwD/BVc1voFBpw36DgCELYEtrkoh8pZU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=icC7z32n4BrQfpi11GhCW8qAl8W7maThS6N/XqW1X9JDJgt7QSkMAMXssg8MpHr+j
-         FdyhnALdUwW4sPzX0ovLXGy6I+/u/EhjtIOgv6VWZwQTKQjDLAOqA/9h/mUxv/vg/+
-         1F/XPXCyhLaxMOUTMORl5q+N8wuAWX5mUeseVuOo=
+        b=jdL8qSUF2WZSx4DjG3opKmagScBbW5sOoSAA3DrQ2RWuGgDFgKbauhqIUmoVWUZbl
+         DvRBsIzvB9zVucBh/KNJ0BmdjriruXTDOtrrn5IJTXL+/aH6xrR5uZGNzjgDd5h5rw
+         HaA+VotkazAky8dQfCgvYnGyvzZU4lG5KOalv4jQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Libin Yang <libin.yang@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Rander Wang <rander.wang@intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 587/913] soundwire: intel: fix wrong register name in intel_shim_wake
-Date:   Tue,  5 Apr 2022 09:27:29 +0200
-Message-Id: <20220405070357.439541450@linuxfoundation.org>
+        stable@vger.kernel.org, Suman Anna <s-anna@ti.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Drew Fustini <dfustini@baylibre.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 156/599] clocksource/drivers/timer-ti-dm: Fix regression from errata i940 fix
+Date:   Tue,  5 Apr 2022 09:27:30 +0200
+Message-Id: <20220405070303.484775695@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,39 +57,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Libin Yang <libin.yang@intel.com>
+From: Drew Fustini <dfustini@baylibre.com>
 
-[ Upstream commit 3957db3ae3dae6f8b8168791f154567fe49e1fd7 ]
+[ Upstream commit bceaae3bac0ce27c549bb050336d8d08abc2ee54 ]
 
-When clearing the sdw wakests status, we should use SDW_SHIM_WAKESTS.
+The existing fix for errata i940 causes a conflict for IPU2 which is
+using timer 3 and 4. From arch/arm/boot/dts/dra7-ipu-dsp-common.dtsi:
 
-Fixes: 4a17c441c7cb ("soundwire: intel: revisit SHIM programming sequences.")
-Signed-off-by: Libin Yang <libin.yang@intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Rander Wang <rander.wang@intel.com>
-Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-Link: https://lore.kernel.org/r/20220126011451.27853-1-yung-chuan.liao@linux.intel.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+  &ipu2 {
+          mboxes = <&mailbox6 &mbox_ipu2_ipc3x>;
+          ti,timers = <&timer3>;
+          ti,watchdog-timers = <&timer4>, <&timer9>;
+  };
+
+The conflict was noticed when booting mainline on the BeagleBoard X15
+which has a TI AM5728 SoC:
+
+  remoteproc remoteproc1: 55020000.ipu is available
+  remoteproc remoteproc1: powering up 55020000.ipu
+  remoteproc remoteproc1: Booting fw image dra7-ipu2-fw.xem4
+  omap-rproc 55020000.ipu: could not get timer platform device
+  omap-rproc 55020000.ipu: omap_rproc_enable_timers failed: -19
+  remoteproc remoteproc1: can't start rproc 55020000.ipu: -19
+
+This change modifies the errata fix to instead use timer 15 and 16 which
+resolves the timer conflict.
+
+It does not appear to introduce any latency regression. Results from
+cyclictest with original errata fix using dmtimer 3 and 4:
+
+  # cyclictest --mlockall --smp --priority=80 --interval=200 --distance=0
+  policy: fifo: loadavg: 0.02 0.03 0.05
+
+  T: 0 ( 1449) P:80 I:200 C: 800368 Min:   0 Act:   32 Avg:   22 Max:  128
+  T: 1 ( 1450) P:80 I:200 C: 800301 Min:   0 Act:   12 Avg:   23 Max:   70
+
+The results after the change to dmtimer 15 and 16:
+
+  # cyclictest --mlockall --smp --priority=80 --interval=200 --distance=0
+  policy: fifo: loadavg: 0.36 0.19 0.07
+
+  T: 0 ( 1711) P:80 I:200 C: 759599 Min:   0 Act:    6 Avg:   22 Max:  108
+  T: 1 ( 1712) P:80 I:200 C: 759539 Min:   0 Act:   19 Avg:   23 Max:   79
+
+Fixes: 25de4ce5ed02 ("clocksource/drivers/timer-ti-dm: Handle dra7 timer wrap errata i940")
+Link: https://lore.kernel.org/linux-omap/YfWsG0p6to3IJuvE@x1/
+Suggested-by: Suman Anna <s-anna@ti.com>
+Reviewed-by: Tony Lindgren <tony@atomide.com>
+Signed-off-by: Drew Fustini <dfustini@baylibre.com>
+Link: https://lore.kernel.org/r/20220204053503.1409162-1-dfustini@baylibre.com
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soundwire/intel.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm/boot/dts/dra7-l4.dtsi             | 5 ++---
+ arch/arm/boot/dts/dra7.dtsi                | 8 ++++----
+ drivers/clocksource/timer-ti-dm-systimer.c | 4 ++--
+ 3 files changed, 8 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
-index 78037ffdb09b..f72d36654ac2 100644
---- a/drivers/soundwire/intel.c
-+++ b/drivers/soundwire/intel.c
-@@ -448,8 +448,8 @@ static void intel_shim_wake(struct sdw_intel *sdw, bool wake_enable)
+diff --git a/arch/arm/boot/dts/dra7-l4.dtsi b/arch/arm/boot/dts/dra7-l4.dtsi
+index 30b72f431850..f8c0eee7a62b 100644
+--- a/arch/arm/boot/dts/dra7-l4.dtsi
++++ b/arch/arm/boot/dts/dra7-l4.dtsi
+@@ -3448,8 +3448,7 @@
+ 				ti,timer-pwm;
+ 			};
+ 		};
+-
+-		target-module@2c000 {			/* 0x4882c000, ap 17 02.0 */
++		timer15_target: target-module@2c000 {	/* 0x4882c000, ap 17 02.0 */
+ 			compatible = "ti,sysc-omap4-timer", "ti,sysc";
+ 			reg = <0x2c000 0x4>,
+ 			      <0x2c010 0x4>;
+@@ -3477,7 +3476,7 @@
+ 			};
+ 		};
  
- 		/* Clear wake status */
- 		wake_sts = intel_readw(shim, SDW_SHIM_WAKESTS);
--		wake_sts |= (SDW_SHIM_WAKEEN_ENABLE << link_id);
--		intel_writew(shim, SDW_SHIM_WAKESTS_STATUS, wake_sts);
-+		wake_sts |= (SDW_SHIM_WAKESTS_STATUS << link_id);
-+		intel_writew(shim, SDW_SHIM_WAKESTS, wake_sts);
+-		target-module@2e000 {			/* 0x4882e000, ap 19 14.0 */
++		timer16_target: target-module@2e000 {	/* 0x4882e000, ap 19 14.0 */
+ 			compatible = "ti,sysc-omap4-timer", "ti,sysc";
+ 			reg = <0x2e000 0x4>,
+ 			      <0x2e010 0x4>;
+diff --git a/arch/arm/boot/dts/dra7.dtsi b/arch/arm/boot/dts/dra7.dtsi
+index 7ecf8f86ac74..998932136656 100644
+--- a/arch/arm/boot/dts/dra7.dtsi
++++ b/arch/arm/boot/dts/dra7.dtsi
+@@ -1093,20 +1093,20 @@
+ };
+ 
+ /* Local timers, see ARM architected timer wrap erratum i940 */
+-&timer3_target {
++&timer15_target {
+ 	ti,no-reset-on-init;
+ 	ti,no-idle;
+ 	timer@0 {
+-		assigned-clocks = <&l4per_clkctrl DRA7_L4PER_TIMER3_CLKCTRL 24>;
++		assigned-clocks = <&l4per3_clkctrl DRA7_L4PER3_TIMER15_CLKCTRL 24>;
+ 		assigned-clock-parents = <&timer_sys_clk_div>;
+ 	};
+ };
+ 
+-&timer4_target {
++&timer16_target {
+ 	ti,no-reset-on-init;
+ 	ti,no-idle;
+ 	timer@0 {
+-		assigned-clocks = <&l4per_clkctrl DRA7_L4PER_TIMER4_CLKCTRL 24>;
++		assigned-clocks = <&l4per3_clkctrl DRA7_L4PER3_TIMER16_CLKCTRL 24>;
+ 		assigned-clock-parents = <&timer_sys_clk_div>;
+ 	};
+ };
+diff --git a/drivers/clocksource/timer-ti-dm-systimer.c b/drivers/clocksource/timer-ti-dm-systimer.c
+index 1fccb457fcc5..2737407ff069 100644
+--- a/drivers/clocksource/timer-ti-dm-systimer.c
++++ b/drivers/clocksource/timer-ti-dm-systimer.c
+@@ -694,9 +694,9 @@ static int __init dmtimer_percpu_quirk_init(struct device_node *np, u32 pa)
+ 		return 0;
  	}
- 	mutex_unlock(sdw->link_res->shim_lock);
- }
+ 
+-	if (pa == 0x48034000)		/* dra7 dmtimer3 */
++	if (pa == 0x4882c000)           /* dra7 dmtimer15 */
+ 		return dmtimer_percpu_timer_init(np, 0);
+-	else if (pa == 0x48036000)	/* dra7 dmtimer4 */
++	else if (pa == 0x4882e000)      /* dra7 dmtimer16 */
+ 		return dmtimer_percpu_timer_init(np, 1);
+ 
+ 	return 0;
 -- 
 2.34.1
 

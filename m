@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 477AC4F464A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 138064F4695
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390410AbiDENib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
+        id S1358771AbiDEUgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344346AbiDEJTd (ORCPT
+        with ESMTP id S1349501AbiDEJt6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:19:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D11B23BF7;
-        Tue,  5 Apr 2022 02:07:32 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:58 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02B89B;
+        Tue,  5 Apr 2022 02:47:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D020FB81C15;
-        Tue,  5 Apr 2022 09:07:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 232D8C385A0;
-        Tue,  5 Apr 2022 09:07:28 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5DCCCCE1C90;
+        Tue,  5 Apr 2022 09:47:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73263C385A3;
+        Tue,  5 Apr 2022 09:47:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149649;
-        bh=fHWOggZ0S4hvTFd4G0AD1ngfqFQeOt9QOGZoZs+G7so=;
+        s=korg; t=1649152067;
+        bh=AvslXiiGZCRFOeGrGZqo2rx705V5+cRos00EJU0PUxc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L9UC9+ovCVrEFQzEwZSAZ8shiW2mUTqOkKJU0NvALIOLkCXLxCmxGQ9X69PjgWJCR
-         sNBlayIKPL6r/LthYf4NgUTbSORWeKdYcYQ3/sYaBS9Y4gGtR0FcwjsUvZW/ugYZIN
-         9QHv22gxDWwQTC0Rbc4KBTZFYyDbcoOBzRsGtP9Q=
+        b=gOWe46uAWDXGbiGsj6/89e2cbBwCk5rwnEG6PNWsoyqBWG57rnrIYBSmhre/SjaQ7
+         UQ1fO6zJxBUkBqBh6xwjFRJ88FQ/Pg6g8KZjaqkqGG0Y8bLECQFHWLVTeQA/4wbMbn
+         UptkRSJpAl8HBqnSNeJ3gol9sXVG75JWHlnXC/cg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+d59332e2db681cf18f0318a06e994ebbb529a8db@syzkaller.appspotmail.com,
-        Lee Jones <lee.jones@linaro.org>, Theodore Tso <tytso@mit.edu>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0790/1017] ext4: dont BUG if someone dirty pages without asking ext4 first
-Date:   Tue,  5 Apr 2022 09:28:23 +0200
-Message-Id: <20220405070417.703356282@linuxfoundation.org>
+        stable@vger.kernel.org, Yonghua Huang <yonghua.huang@intel.com>,
+        Fei Li <fei1.li@intel.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 643/913] virt: acrn: obtain pa from VMA with PFNMAP flag
+Date:   Tue,  5 Apr 2022 09:28:25 +0200
+Message-Id: <20220405070359.114200785@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,82 +54,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Theodore Ts'o <tytso@mit.edu>
+From: Yonghua Huang <yonghua.huang@intel.com>
 
-[ Upstream commit cc5095747edfb054ca2068d01af20be3fcc3634f ]
+[ Upstream commit 8a6e85f75a83d16a71077e41f2720c691f432002 ]
 
-[un]pin_user_pages_remote is dirtying pages without properly warning
-the file system in advance.  A related race was noted by Jan Kara in
-2018[1]; however, more recently instead of it being a very hard-to-hit
-race, it could be reliably triggered by process_vm_writev(2) which was
-discovered by Syzbot[2].
+ acrn_vm_ram_map can't pin the user pages with VM_PFNMAP flag
+ by calling get_user_pages_fast(), the PA(physical pages)
+ may be mapped by kernel driver and set PFNMAP flag.
 
-This is technically a bug in mm/gup.c, but arguably ext4 is fragile in
-that if some other kernel subsystem dirty pages without properly
-notifying the file system using page_mkwrite(), ext4 will BUG, while
-other file systems will not BUG (although data will still be lost).
+ This patch fixes logic to setup EPT mapping for PFN mapped RAM region
+ by checking the memory attribute before adding EPT mapping for them.
 
-So instead of crashing with a BUG, issue a warning (since there may be
-potential data loss) and just mark the page as clean to avoid
-unprivileged denial of service attacks until the problem can be
-properly fixed.  More discussion and background can be found in the
-thread starting at [2].
-
-[1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
-[2] https://lore.kernel.org/r/Yg0m6IjcNmfaSokM@google.com
-
-Reported-by: syzbot+d59332e2db681cf18f0318a06e994ebbb529a8db@syzkaller.appspotmail.com
-Reported-by: Lee Jones <lee.jones@linaro.org>
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Link: https://lore.kernel.org/r/YiDS9wVfq4mM2jGK@mit.edu
+Fixes: 88f537d5e8dd ("virt: acrn: Introduce EPT mapping management")
+Signed-off-by: Yonghua Huang <yonghua.huang@intel.com>
+Signed-off-by: Fei Li <fei1.li@intel.com>
+Link: https://lore.kernel.org/r/20220228022212.419406-1-yonghua.huang@intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/inode.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ drivers/virt/acrn/mm.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index 2f5686dfa30d..a61d1e4e1026 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -1992,6 +1992,15 @@ static int ext4_writepage(struct page *page,
- 	else
- 		len = PAGE_SIZE;
+diff --git a/drivers/virt/acrn/mm.c b/drivers/virt/acrn/mm.c
+index c4f2e15c8a2b..3b1b1e7a844b 100644
+--- a/drivers/virt/acrn/mm.c
++++ b/drivers/virt/acrn/mm.c
+@@ -162,10 +162,34 @@ int acrn_vm_ram_map(struct acrn_vm *vm, struct acrn_vm_memmap *memmap)
+ 	void *remap_vaddr;
+ 	int ret, pinned;
+ 	u64 user_vm_pa;
++	unsigned long pfn;
++	struct vm_area_struct *vma;
  
-+	/* Should never happen but for bugs in other kernel subsystems */
-+	if (!page_has_buffers(page)) {
-+		ext4_warning_inode(inode,
-+		   "page %lu does not have buffers attached", page->index);
-+		ClearPageDirty(page);
-+		unlock_page(page);
-+		return 0;
+ 	if (!vm || !memmap)
+ 		return -EINVAL;
+ 
++	mmap_read_lock(current->mm);
++	vma = vma_lookup(current->mm, memmap->vma_base);
++	if (vma && ((vma->vm_flags & VM_PFNMAP) != 0)) {
++		if ((memmap->vma_base + memmap->len) > vma->vm_end) {
++			mmap_read_unlock(current->mm);
++			return -EINVAL;
++		}
++
++		ret = follow_pfn(vma, memmap->vma_base, &pfn);
++		mmap_read_unlock(current->mm);
++		if (ret < 0) {
++			dev_dbg(acrn_dev.this_device,
++				"Failed to lookup PFN at VMA:%pK.\n", (void *)memmap->vma_base);
++			return ret;
++		}
++
++		return acrn_mm_region_add(vm, memmap->user_vm_pa,
++			 PFN_PHYS(pfn), memmap->len,
++			 ACRN_MEM_TYPE_WB, memmap->attr);
 +	}
++	mmap_read_unlock(current->mm);
 +
- 	page_bufs = page_buffers(page);
- 	/*
- 	 * We cannot do block allocation or other extent handling in this
-@@ -2595,6 +2604,22 @@ static int mpage_prepare_extent_to_map(struct mpage_da_data *mpd)
- 			wait_on_page_writeback(page);
- 			BUG_ON(PageWriteback(page));
- 
-+			/*
-+			 * Should never happen but for buggy code in
-+			 * other subsystems that call
-+			 * set_page_dirty() without properly warning
-+			 * the file system first.  See [1] for more
-+			 * information.
-+			 *
-+			 * [1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
-+			 */
-+			if (!page_has_buffers(page)) {
-+				ext4_warning_inode(mpd->inode, "page %lu does not have buffers attached", page->index);
-+				ClearPageDirty(page);
-+				unlock_page(page);
-+				continue;
-+			}
-+
- 			if (mpd->map.m_len == 0)
- 				mpd->first_page = page->index;
- 			mpd->next_page = page->index + 1;
+ 	/* Get the page number of the map region */
+ 	nr_pages = memmap->len >> PAGE_SHIFT;
+ 	pages = vzalloc(nr_pages * sizeof(struct page *));
 -- 
 2.34.1
 

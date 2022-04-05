@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF684F4632
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 959F94F4541
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386393AbiDEMnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
+        id S1386427AbiDEMnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242250AbiDEJHv (ORCPT
+        with ESMTP id S242444AbiDEJH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:07:51 -0400
+        Tue, 5 Apr 2022 05:07:59 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510AF6517A;
-        Tue,  5 Apr 2022 01:56:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A211769284;
+        Tue,  5 Apr 2022 01:56:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D70C8B81C6D;
-        Tue,  5 Apr 2022 08:56:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29DC6C385A1;
-        Tue,  5 Apr 2022 08:56:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A79C1B81BAE;
+        Tue,  5 Apr 2022 08:56:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED688C385A0;
+        Tue,  5 Apr 2022 08:56:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149001;
-        bh=uRP3lPFh83fo86mszzm6oL6vhfxl+Y9k7IkMaSWOLwQ=;
+        s=korg; t=1649149004;
+        bh=d4plXabZ/0GHQZP3pqI9AgA3gJA7Dn4AgKEq+HZi9B8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f/Wrs7jpKjCCU60dcQI+LiMW5wyGzO/fTa8tE9s6/r+cr3xSy9K6HfncRTBnHzfC9
-         /d81ATB/lQvedJegaErUyMsZQ1gg9xUrX0qn1I0NxUbT6QUG5qSmLnP35lwZZf+WWp
-         RHIqgSSORQKaICHZgIOmcyEEeo27BkuBbjheHd+A=
+        b=TzJB8xI0uJstUcJW8wTZNVOoBsaujc30X+pM23f8RrBk3zl5CveEmYS/mE2cPsizU
+         ebZ/QV9XrjBeNsptFJdCn0ELbfpWcmL7+0UEdFR7yOCzo56h0yoXcQWcEmqJfFzXjz
+         NCK32ls3mqFcZqz0Kbjt701kRsjIKI4LuGvtzeRE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Thierry Reding <treding@nvidia.com>,
+        stable@vger.kernel.org, Xu Kuohai <xukuohai@huawei.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Song Liu <songliubraving@fb.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0559/1017] gpu: host1x: Fix a memory leak in host1x_remove()
-Date:   Tue,  5 Apr 2022 09:24:32 +0200
-Message-Id: <20220405070410.873649820@linuxfoundation.org>
+Subject: [PATCH 5.16 0560/1017] libbpf: Skip forward declaration when counting duplicated type names
+Date:   Tue,  5 Apr 2022 09:24:33 +0200
+Message-Id: <20220405070410.903621803@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,33 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Xu Kuohai <xukuohai@huawei.com>
 
-[ Upstream commit 025c6643a81564f066d8381b9e2f4603e0f8438f ]
+[ Upstream commit 4226961b0019b2e1612029e8950a9e911affc995 ]
 
-Add a missing 'host1x_channel_list_free()' call in the remove function,
-as already done in the error handling path of the probe function.
+Currently if a declaration appears in the BTF before the definition, the
+definition is dumped as a conflicting name, e.g.:
 
-Fixes: 8474b02531c4 ("gpu: host1x: Refactor channel allocation code")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Thierry Reding <treding@nvidia.com>
+    $ bpftool btf dump file vmlinux format raw | grep "'unix_sock'"
+    [81287] FWD 'unix_sock' fwd_kind=struct
+    [89336] STRUCT 'unix_sock' size=1024 vlen=14
+
+    $ bpftool btf dump file vmlinux format c | grep "struct unix_sock"
+    struct unix_sock;
+    struct unix_sock___2 {	<--- conflict, the "___2" is unexpected
+		    struct unix_sock___2 *unix_sk;
+
+This causes a compilation error if the dump output is used as a header file.
+
+Fix it by skipping declaration when counting duplicated type names.
+
+Fixes: 351131b51c7a ("libbpf: add btf_dump API for BTF-to-C conversion")
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Song Liu <songliubraving@fb.com>
+Link: https://lore.kernel.org/bpf/20220301053250.1464204-2-xukuohai@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/host1x/dev.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/lib/bpf/btf_dump.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
-index 3872e4cd2698..fc9f54282f7d 100644
---- a/drivers/gpu/host1x/dev.c
-+++ b/drivers/gpu/host1x/dev.c
-@@ -526,6 +526,7 @@ static int host1x_remove(struct platform_device *pdev)
- 	host1x_syncpt_deinit(host);
- 	reset_control_assert(host->rst);
- 	clk_disable_unprepare(host->clk);
-+	host1x_channel_list_free(&host->channel_list);
- 	host1x_iommu_exit(host);
+diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+index f2ab392a0e34..96af8c4ecf78 100644
+--- a/tools/lib/bpf/btf_dump.c
++++ b/tools/lib/bpf/btf_dump.c
+@@ -1483,6 +1483,11 @@ static const char *btf_dump_resolve_name(struct btf_dump *d, __u32 id,
+ 	if (s->name_resolved)
+ 		return *cached_name ? *cached_name : orig_name;
  
- 	return 0;
++	if (btf_is_fwd(t) || (btf_is_enum(t) && btf_vlen(t) == 0)) {
++		s->name_resolved = 1;
++		return orig_name;
++	}
++
+ 	dup_cnt = btf_dump_name_dups(d, name_map, orig_name);
+ 	if (dup_cnt > 1) {
+ 		const size_t max_len = 256;
 -- 
 2.34.1
 

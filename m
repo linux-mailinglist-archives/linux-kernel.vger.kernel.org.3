@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438A34F2C8D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A71A4F2C6E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235738AbiDEIhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
+        id S242138AbiDEIg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235483AbiDEH7r (ORCPT
+        with ESMTP id S235509AbiDEH7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:59:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0BA5EBF7;
-        Tue,  5 Apr 2022 00:54:40 -0700 (PDT)
+        Tue, 5 Apr 2022 03:59:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B59266F9A;
+        Tue,  5 Apr 2022 00:54:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A0AA615CD;
-        Tue,  5 Apr 2022 07:54:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9659C340EE;
-        Tue,  5 Apr 2022 07:54:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AF676B81A32;
+        Tue,  5 Apr 2022 07:54:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BF8CC340EE;
+        Tue,  5 Apr 2022 07:54:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145279;
-        bh=CaPjrMepGUncNKEa4UU9hfroCy8AfZBlohBfmt7mJRc=;
+        s=korg; t=1649145295;
+        bh=FNWouC3CoH6+dXI5kygOzexAVVRXN9qg89YVmFU1Dbg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RG2+ob9Ss4wn53+iaaEpZ5t+vaivVsL6hqvUfRmETHmvK1Q+MceoNq+CA0HwlerVx
-         FvSP8T5yprh1D4WAVpuMVgFOvdGSjLDIjL0vL/jc83n8AsBmYy5mZ6HJxoQUeD0oO5
-         Vx23JoxP4GkdSptBp3pxFpMcT7XJw5W5dsBErZIs=
+        b=Nj/CB5fL/1sxCXzU1DyGvcauNdbJgpM5DJNJhQfva7/YbekeeNF1YRG4yhEl31zE0
+         WA0tJOrGHvbqVoYOKe14vkL8VvCtk/4PfVfmKOWKY09FXfvUaAS0aK8SXnpYAIhCUR
+         brmUk+ssOURpjQF1TcWaKsJX465uUgMSWCaVZH/k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        stable@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0350/1126] media: video/hdmi: handle short reads of hdmi info frame.
-Date:   Tue,  5 Apr 2022 09:18:17 +0200
-Message-Id: <20220405070417.902302808@linuxfoundation.org>
+Subject: [PATCH 5.17 0356/1126] media: cedrus: h264: Fix neighbour info buffer size
+Date:   Tue,  5 Apr 2022 09:18:23 +0200
+Message-Id: <20220405070418.078301947@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,64 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-[ Upstream commit 4a92fc6e55da5b87cecb572275deaff6ac9dd27e ]
+[ Upstream commit fecd363ae2d5042553370b0adf60c47e35c34a83 ]
 
-Calling hdmi_infoframe_unpack() with static sizeof(buffer) skips all
-the size checking done later in hdmi_infoframe_unpack().  A better
-value is the amount of data read into buffer.
+According to BSP library source, H264 neighbour info buffer size needs
+to be 32 kiB for H6. This is similar to H265 decoding, which also needs
+double buffer size in comparison to older Cedrus core generations.
 
-Fixes: 480b8b3e42c3 ("video/hdmi: Pass buffer size to infoframe unpack functions")
-Signed-off-by: Tom Rix <trix@redhat.com>
+Increase buffer size to cover H6 needs. Since increase is not that big
+in absolute numbers, it doesn't make sense to complicate logic for older
+generations.
+
+Issue was discovered using iommu and cross checked with BSP library
+source.
+
+Fixes: 6eb9b758e307 ("media: cedrus: Add H264 decoding support")
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/adv7511-v4l2.c | 2 +-
- drivers/media/i2c/adv7604.c      | 2 +-
- drivers/media/i2c/adv7842.c      | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/staging/media/sunxi/cedrus/cedrus_h264.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/adv7511-v4l2.c b/drivers/media/i2c/adv7511-v4l2.c
-index 8e13cae40ec5..db7f41a80770 100644
---- a/drivers/media/i2c/adv7511-v4l2.c
-+++ b/drivers/media/i2c/adv7511-v4l2.c
-@@ -522,7 +522,7 @@ static void log_infoframe(struct v4l2_subdev *sd, const struct adv7511_cfg_read_
- 	buffer[3] = 0;
- 	buffer[3] = hdmi_infoframe_checksum(buffer, len + 4);
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+index b4173a8926d6..d8fb93035470 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+@@ -38,7 +38,7 @@ struct cedrus_h264_sram_ref_pic {
  
--	if (hdmi_infoframe_unpack(&frame, buffer, sizeof(buffer)) < 0) {
-+	if (hdmi_infoframe_unpack(&frame, buffer, len + 4) < 0) {
- 		v4l2_err(sd, "%s: unpack of %s infoframe failed\n", __func__, cri->desc);
- 		return;
- 	}
-diff --git a/drivers/media/i2c/adv7604.c b/drivers/media/i2c/adv7604.c
-index a2fa408d2d9f..bb0c8fc6d383 100644
---- a/drivers/media/i2c/adv7604.c
-+++ b/drivers/media/i2c/adv7604.c
-@@ -2484,7 +2484,7 @@ static int adv76xx_read_infoframe(struct v4l2_subdev *sd, int index,
- 		buffer[i + 3] = infoframe_read(sd,
- 				       adv76xx_cri[index].payload_addr + i);
+ #define CEDRUS_H264_FRAME_NUM		18
  
--	if (hdmi_infoframe_unpack(frame, buffer, sizeof(buffer)) < 0) {
-+	if (hdmi_infoframe_unpack(frame, buffer, len + 3) < 0) {
- 		v4l2_err(sd, "%s: unpack of %s infoframe failed\n", __func__,
- 			 adv76xx_cri[index].desc);
- 		return -ENOENT;
-diff --git a/drivers/media/i2c/adv7842.c b/drivers/media/i2c/adv7842.c
-index 9d6eed0f8281..22caa070273b 100644
---- a/drivers/media/i2c/adv7842.c
-+++ b/drivers/media/i2c/adv7842.c
-@@ -2583,7 +2583,7 @@ static void log_infoframe(struct v4l2_subdev *sd, const struct adv7842_cfg_read_
- 	for (i = 0; i < len; i++)
- 		buffer[i + 3] = infoframe_read(sd, cri->payload_addr + i);
+-#define CEDRUS_NEIGHBOR_INFO_BUF_SIZE	(16 * SZ_1K)
++#define CEDRUS_NEIGHBOR_INFO_BUF_SIZE	(32 * SZ_1K)
+ #define CEDRUS_MIN_PIC_INFO_BUF_SIZE       (130 * SZ_1K)
  
--	if (hdmi_infoframe_unpack(&frame, buffer, sizeof(buffer)) < 0) {
-+	if (hdmi_infoframe_unpack(&frame, buffer, len + 3) < 0) {
- 		v4l2_err(sd, "%s: unpack of %s infoframe failed\n", __func__, cri->desc);
- 		return;
- 	}
+ static void cedrus_h264_write_sram(struct cedrus_dev *dev,
 -- 
 2.34.1
 

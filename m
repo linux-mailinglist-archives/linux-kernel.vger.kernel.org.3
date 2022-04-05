@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF224F378B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDFC94F378F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353908AbiDELOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:14:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53000 "EHLO
+        id S1355533AbiDELOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:14:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238070AbiDEIaL (ORCPT
+        with ESMTP id S237675AbiDEI3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:30:11 -0400
+        Tue, 5 Apr 2022 04:29:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95EC71D32C;
-        Tue,  5 Apr 2022 01:21:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98DE1AF2B;
+        Tue,  5 Apr 2022 01:21:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD8E460FF5;
-        Tue,  5 Apr 2022 08:21:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3930C385A0;
-        Tue,  5 Apr 2022 08:21:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 641BD60FF7;
+        Tue,  5 Apr 2022 08:21:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 797CCC385A0;
+        Tue,  5 Apr 2022 08:21:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146891;
-        bh=cbFoD/cSl0Wwoo5hfS907/U1A0IK3iWQWOOCuvSG7/8=;
+        s=korg; t=1649146879;
+        bh=npZND2F45RRYAssBboFeZcJHYiaFp/sJkE0rO0UbqL4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KEtPc6552QirWKUCO5E5s1m0ynunoOupI7V4/RRIkkQ2sIe19mWn8MUEjp10FA1gO
-         HJ1SBWKArOk5oYUOTPx+AOhbP3/z8TjbbSnt+GnaWCe60EHSYMR7SVQGudm09PJyAM
-         KCYyALG50nHKzLwKGDm0DPErSVH1susGcWivHQWw=
+        b=aGyvQZ6EUCSvpWMrMAvE+Faln7LbehOiIGzL1HEqO5v1Vco2xaKzIq4P+JrTZPnCj
+         7FUV50Kul2g27uMMaXxqQU5NLyaAUiJJKBdwDobBGc9ty5RLL2wzlgxsL8QgvUa+PI
+         lYxe4kTZ4O249hU7xfW6TZSE3GV2aBnbmHVU7jzQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chao Yu <chao@kernel.org>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
+        stable@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0877/1126] f2fs: fix to do sanity check on curseg->alloc_type
-Date:   Tue,  5 Apr 2022 09:27:04 +0200
-Message-Id: <20220405070433.276293569@linuxfoundation.org>
+Subject: [PATCH 5.17 0883/1126] btrfs: do not double complete bio on errors during compressed reads
+Date:   Tue,  5 Apr 2022 09:27:10 +0200
+Message-Id: <20220405070433.449856145@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,83 +55,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Yu <chao@kernel.org>
+From: Josef Bacik <josef@toxicpanda.com>
 
-[ Upstream commit f41ee8b91c00770d718be2ff4852a80017ae9ab3 ]
+[ Upstream commit f9f15de85d74e7eef021af059ca53a15f041cdd8 ]
 
-As Wenqing Liu reported in bugzilla:
+I hit some weird panics while fixing up the error handling from
+btrfs_lookup_bio_sums().  Turns out the compression path will complete
+the bio we use if we set up any of the compression bios and then return
+an error, and then btrfs_submit_data_bio() will also call bio_endio() on
+the bio.
 
-https://bugzilla.kernel.org/show_bug.cgi?id=215657
+Fix this by making btrfs_submit_compressed_read() responsible for
+calling bio_endio() on the bio if there are any errors.  Currently it
+was only doing it if we created the compression bios, otherwise it was
+depending on btrfs_submit_data_bio() to do the right thing.  This
+creates the above problem, so fix up btrfs_submit_compressed_read() to
+always call bio_endio() in case of an error, and then simply return from
+btrfs_submit_data_bio() if we had to call
+btrfs_submit_compressed_read().
 
-- Overview
-UBSAN: array-index-out-of-bounds in fs/f2fs/segment.c:3460:2 when mount and operate a corrupted image
-
-- Reproduce
-tested on kernel 5.17-rc4, 5.17-rc6
-
-1. mkdir test_crash
-2. cd test_crash
-3. unzip tmp2.zip
-4. mkdir mnt
-5. ./single_test.sh f2fs 2
-
-- Kernel dump
-[   46.434454] loop0: detected capacity change from 0 to 131072
-[   46.529839] F2FS-fs (loop0): Mounted with checkpoint version = 7548c2d9
-[   46.738319] ================================================================================
-[   46.738412] UBSAN: array-index-out-of-bounds in fs/f2fs/segment.c:3460:2
-[   46.738475] index 231 is out of range for type 'unsigned int [2]'
-[   46.738539] CPU: 2 PID: 939 Comm: umount Not tainted 5.17.0-rc6 #1
-[   46.738547] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-[   46.738551] Call Trace:
-[   46.738556]  <TASK>
-[   46.738563]  dump_stack_lvl+0x47/0x5c
-[   46.738581]  ubsan_epilogue+0x5/0x50
-[   46.738592]  __ubsan_handle_out_of_bounds+0x68/0x80
-[   46.738604]  f2fs_allocate_data_block+0xdff/0xe60 [f2fs]
-[   46.738819]  do_write_page+0xef/0x210 [f2fs]
-[   46.738934]  f2fs_do_write_node_page+0x3f/0x80 [f2fs]
-[   46.739038]  __write_node_page+0x2b7/0x920 [f2fs]
-[   46.739162]  f2fs_sync_node_pages+0x943/0xb00 [f2fs]
-[   46.739293]  f2fs_write_checkpoint+0x7bb/0x1030 [f2fs]
-[   46.739405]  kill_f2fs_super+0x125/0x150 [f2fs]
-[   46.739507]  deactivate_locked_super+0x60/0xc0
-[   46.739517]  deactivate_super+0x70/0xb0
-[   46.739524]  cleanup_mnt+0x11a/0x200
-[   46.739532]  __cleanup_mnt+0x16/0x20
-[   46.739538]  task_work_run+0x67/0xa0
-[   46.739547]  exit_to_user_mode_prepare+0x18c/0x1a0
-[   46.739559]  syscall_exit_to_user_mode+0x26/0x40
-[   46.739568]  do_syscall_64+0x46/0xb0
-[   46.739584]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-The root cause is we missed to do sanity check on curseg->alloc_type,
-result in out-of-bound accessing on sbi->block_count[] array, fix it.
-
-Signed-off-by: Chao Yu <chao@kernel.org>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/f2fs/segment.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ fs/btrfs/compression.c | 20 ++++++++++++++------
+ fs/btrfs/inode.c       |  8 +++++++-
+ 2 files changed, 21 insertions(+), 7 deletions(-)
 
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 1dabc8244083..416d802ebbea 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -4789,6 +4789,13 @@ static int sanity_check_curseg(struct f2fs_sb_info *sbi)
+diff --git a/fs/btrfs/compression.c b/fs/btrfs/compression.c
+index 71e5b2e9a1ba..6158b870a269 100644
+--- a/fs/btrfs/compression.c
++++ b/fs/btrfs/compression.c
+@@ -808,7 +808,7 @@ blk_status_t btrfs_submit_compressed_read(struct inode *inode, struct bio *bio,
+ 	u64 em_len;
+ 	u64 em_start;
+ 	struct extent_map *em;
+-	blk_status_t ret = BLK_STS_RESOURCE;
++	blk_status_t ret;
+ 	int faili = 0;
+ 	u8 *sums;
  
- 		sanity_check_seg_type(sbi, curseg->seg_type);
+@@ -821,14 +821,18 @@ blk_status_t btrfs_submit_compressed_read(struct inode *inode, struct bio *bio,
+ 	read_lock(&em_tree->lock);
+ 	em = lookup_extent_mapping(em_tree, file_offset, fs_info->sectorsize);
+ 	read_unlock(&em_tree->lock);
+-	if (!em)
+-		return BLK_STS_IOERR;
++	if (!em) {
++		ret = BLK_STS_IOERR;
++		goto out;
++	}
  
-+		if (curseg->alloc_type != LFS && curseg->alloc_type != SSR) {
-+			f2fs_err(sbi,
-+				 "Current segment has invalid alloc_type:%d",
-+				 curseg->alloc_type);
-+			return -EFSCORRUPTED;
-+		}
-+
- 		if (f2fs_test_bit(blkofs, se->cur_valid_map))
+ 	ASSERT(em->compress_type != BTRFS_COMPRESS_NONE);
+ 	compressed_len = em->block_len;
+ 	cb = kmalloc(compressed_bio_size(fs_info, compressed_len), GFP_NOFS);
+-	if (!cb)
++	if (!cb) {
++		ret = BLK_STS_RESOURCE;
+ 		goto out;
++	}
+ 
+ 	refcount_set(&cb->pending_sectors, compressed_len >> fs_info->sectorsize_bits);
+ 	cb->errors = 0;
+@@ -851,8 +855,10 @@ blk_status_t btrfs_submit_compressed_read(struct inode *inode, struct bio *bio,
+ 	nr_pages = DIV_ROUND_UP(compressed_len, PAGE_SIZE);
+ 	cb->compressed_pages = kcalloc(nr_pages, sizeof(struct page *),
+ 				       GFP_NOFS);
+-	if (!cb->compressed_pages)
++	if (!cb->compressed_pages) {
++		ret = BLK_STS_RESOURCE;
+ 		goto fail1;
++	}
+ 
+ 	for (pg_index = 0; pg_index < nr_pages; pg_index++) {
+ 		cb->compressed_pages[pg_index] = alloc_page(GFP_NOFS);
+@@ -938,7 +944,7 @@ blk_status_t btrfs_submit_compressed_read(struct inode *inode, struct bio *bio,
+ 			comp_bio = NULL;
+ 		}
+ 	}
+-	return 0;
++	return BLK_STS_OK;
+ 
+ fail2:
+ 	while (faili >= 0) {
+@@ -951,6 +957,8 @@ blk_status_t btrfs_submit_compressed_read(struct inode *inode, struct bio *bio,
+ 	kfree(cb);
+ out:
+ 	free_extent_map(em);
++	bio->bi_status = ret;
++	bio_endio(bio);
+ 	return ret;
+ finish_cb:
+ 	if (comp_bio) {
+diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
+index 5bbea5ec31fc..0f4408f9dadd 100644
+--- a/fs/btrfs/inode.c
++++ b/fs/btrfs/inode.c
+@@ -2538,10 +2538,15 @@ blk_status_t btrfs_submit_data_bio(struct inode *inode, struct bio *bio,
  			goto out;
+ 
+ 		if (bio_flags & EXTENT_BIO_COMPRESSED) {
++			/*
++			 * btrfs_submit_compressed_read will handle completing
++			 * the bio if there were any errors, so just return
++			 * here.
++			 */
+ 			ret = btrfs_submit_compressed_read(inode, bio,
+ 							   mirror_num,
+ 							   bio_flags);
+-			goto out;
++			goto out_no_endio;
+ 		} else {
+ 			/*
+ 			 * Lookup bio sums does extra checks around whether we
+@@ -2575,6 +2580,7 @@ blk_status_t btrfs_submit_data_bio(struct inode *inode, struct bio *bio,
+ 		bio->bi_status = ret;
+ 		bio_endio(bio);
+ 	}
++out_no_endio:
+ 	return ret;
+ }
  
 -- 
 2.34.1

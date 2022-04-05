@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4C84F4576
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A16854F477F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389423AbiDENdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
+        id S236939AbiDEVL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345993AbiDEJXP (ORCPT
+        with ESMTP id S1352248AbiDEKEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:23:15 -0400
+        Tue, 5 Apr 2022 06:04:09 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292E5A8ED2;
-        Tue,  5 Apr 2022 02:12:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13CAB188F;
+        Tue,  5 Apr 2022 02:53:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98831B818F3;
-        Tue,  5 Apr 2022 09:12:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1179C385A3;
-        Tue,  5 Apr 2022 09:12:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7BE9DB818F6;
+        Tue,  5 Apr 2022 09:52:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D16D9C385A2;
+        Tue,  5 Apr 2022 09:52:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149962;
-        bh=HmXyQy+1K/lealDgdQq2ot7mCjmICWhV+Bgh4pBkcn0=;
+        s=korg; t=1649152378;
+        bh=AFZ59VOapNr5cWpaRq0CIL0ekbENTTRB6orw4H6WiQU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DKFs3s7VzLXfX61/QrJfyaJsJWdIMNfijBVdnjeGAoiSSh5cztwMEKyGOVaY3d8zZ
-         g0Ddn7ANVmDEQF/Qr/QZtpx0KxsJCiP/4P7m4v8GPZ5O6GsLn3dIZm2gG9083sV4yO
-         QfifREBxznTYinmPkJazEnFrvs6OC/XgXhg+nZxw=
+        b=UjZcdWK0adSIW/imaGW6MMywcyCGUBxV70Peug/XI6ejWuw3tgMjibHjuGV+nnFkH
+         CIMjXOIFd0kD9epa4XfApIjw7A+MpUoYvnsBGu6cN8BR5g+rBy8ikh0+UdF4NRGc+w
+         zBl9A++Acs7L0bM0aLVTJ8mCI3JYJe9o0SwC7Nnw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.16 0904/1017] KVM: Prevent module exit until all VMs are freed
-Date:   Tue,  5 Apr 2022 09:30:17 +0200
-Message-Id: <20220405070421.058915912@linuxfoundation.org>
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 756/913] uaccess: fix type mismatch warnings from access_ok()
+Date:   Tue,  5 Apr 2022 09:30:18 +0200
+Message-Id: <20220405070402.494312569@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,75 +56,232 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Matlack <dmatlack@google.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-commit 5f6de5cbebee925a612856fce6f9182bb3eee0db upstream.
+[ Upstream commit 23fc539e81295b14b50c6ccc5baeb4f3d59d822d ]
 
-Tie the lifetime the KVM module to the lifetime of each VM via
-kvm.users_count. This way anything that grabs a reference to the VM via
-kvm_get_kvm() cannot accidentally outlive the KVM module.
+On some architectures, access_ok() does not do any argument type
+checking, so replacing the definition with a generic one causes
+a few warnings for harmless issues that were never caught before.
 
-Prior to this commit, the lifetime of the KVM module was tied to the
-lifetime of /dev/kvm file descriptors, VM file descriptors, and vCPU
-file descriptors by their respective file_operations "owner" field.
-This approach is insufficient because references grabbed via
-kvm_get_kvm() do not prevent closing any of the aforementioned file
-descriptors.
+Fix the ones that I found either through my own test builds or
+that were reported by the 0-day bot.
 
-This fixes a long standing theoretical bug in KVM that at least affects
-async page faults. kvm_setup_async_pf() grabs a reference via
-kvm_get_kvm(), and drops it in an asynchronous work callback. Nothing
-prevents the VM file descriptor from being closed and the KVM module
-from being unloaded before this callback runs.
-
-Fixes: af585b921e5d ("KVM: Halt vcpu if page it tries to access is swapped out")
-Fixes: 3d3aab1b973b ("KVM: set owner of cpu and vm file operations")
-Cc: stable@vger.kernel.org
-Suggested-by: Ben Gardon <bgardon@google.com>
-[ Based on a patch from Ben implemented for Google's kernel. ]
-Signed-off-by: David Matlack <dmatlack@google.com>
-Message-Id: <20220303183328.1499189-2-dmatlack@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- virt/kvm/kvm_main.c |   13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ arch/arc/kernel/process.c          |  2 +-
+ arch/arm/kernel/swp_emulate.c      |  2 +-
+ arch/arm/kernel/traps.c            |  2 +-
+ arch/csky/kernel/perf_callchain.c  |  2 +-
+ arch/csky/kernel/signal.c          |  2 +-
+ arch/nios2/kernel/signal.c         | 20 +++++++++++---------
+ arch/powerpc/lib/sstep.c           |  4 ++--
+ arch/riscv/kernel/perf_callchain.c |  4 ++--
+ arch/sparc/kernel/signal_32.c      |  2 +-
+ lib/test_lockup.c                  |  4 ++--
+ 10 files changed, 23 insertions(+), 21 deletions(-)
 
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -117,6 +117,8 @@ EXPORT_SYMBOL_GPL(kvm_debugfs_dir);
- 
- static const struct file_operations stat_fops_per_vm;
- 
-+static struct file_operations kvm_chardev_ops;
-+
- static long kvm_vcpu_ioctl(struct file *file, unsigned int ioctl,
- 			   unsigned long arg);
- #ifdef CONFIG_KVM_COMPAT
-@@ -1107,6 +1109,16 @@ static struct kvm *kvm_create_vm(unsigne
- 	preempt_notifier_inc();
- 	kvm_init_pm_notifier(kvm);
- 
-+	/*
-+	 * When the fd passed to this ioctl() is opened it pins the module,
-+	 * but try_module_get() also prevents getting a reference if the module
-+	 * is in MODULE_STATE_GOING (e.g. if someone ran "rmmod --wait").
-+	 */
-+	if (!try_module_get(kvm_chardev_ops.owner)) {
-+		r = -ENODEV;
-+		goto out_err;
-+	}
-+
- 	return kvm;
- 
- out_err:
-@@ -1196,6 +1208,7 @@ static void kvm_destroy_vm(struct kvm *k
- 	preempt_notifier_dec();
- 	hardware_disable_all();
- 	mmdrop(mm);
-+	module_put(kvm_chardev_ops.owner);
+diff --git a/arch/arc/kernel/process.c b/arch/arc/kernel/process.c
+index 8e90052f6f05..5f7f5aab361f 100644
+--- a/arch/arc/kernel/process.c
++++ b/arch/arc/kernel/process.c
+@@ -43,7 +43,7 @@ SYSCALL_DEFINE0(arc_gettls)
+ 	return task_thread_info(current)->thr_ptr;
  }
  
- void kvm_get_kvm(struct kvm *kvm)
+-SYSCALL_DEFINE3(arc_usr_cmpxchg, int *, uaddr, int, expected, int, new)
++SYSCALL_DEFINE3(arc_usr_cmpxchg, int __user *, uaddr, int, expected, int, new)
+ {
+ 	struct pt_regs *regs = current_pt_regs();
+ 	u32 uval;
+diff --git a/arch/arm/kernel/swp_emulate.c b/arch/arm/kernel/swp_emulate.c
+index 6166ba38bf99..b74bfcf94fb1 100644
+--- a/arch/arm/kernel/swp_emulate.c
++++ b/arch/arm/kernel/swp_emulate.c
+@@ -195,7 +195,7 @@ static int swp_handler(struct pt_regs *regs, unsigned int instr)
+ 		 destreg, EXTRACT_REG_NUM(instr, RT2_OFFSET), data);
+ 
+ 	/* Check access in reasonable access range for both SWP and SWPB */
+-	if (!access_ok((address & ~3), 4)) {
++	if (!access_ok((void __user *)(address & ~3), 4)) {
+ 		pr_debug("SWP{B} emulation: access to %p not allowed!\n",
+ 			 (void *)address);
+ 		res = -EFAULT;
+diff --git a/arch/arm/kernel/traps.c b/arch/arm/kernel/traps.c
+index 655c4fe0b4d0..54abd8720dde 100644
+--- a/arch/arm/kernel/traps.c
++++ b/arch/arm/kernel/traps.c
+@@ -575,7 +575,7 @@ do_cache_op(unsigned long start, unsigned long end, int flags)
+ 	if (end < start || flags)
+ 		return -EINVAL;
+ 
+-	if (!access_ok(start, end - start))
++	if (!access_ok((void __user *)start, end - start))
+ 		return -EFAULT;
+ 
+ 	return __do_cache_op(start, end);
+diff --git a/arch/csky/kernel/perf_callchain.c b/arch/csky/kernel/perf_callchain.c
+index 35318a635a5f..75e1f9df5f60 100644
+--- a/arch/csky/kernel/perf_callchain.c
++++ b/arch/csky/kernel/perf_callchain.c
+@@ -49,7 +49,7 @@ static unsigned long user_backtrace(struct perf_callchain_entry_ctx *entry,
+ {
+ 	struct stackframe buftail;
+ 	unsigned long lr = 0;
+-	unsigned long *user_frame_tail = (unsigned long *)fp;
++	unsigned long __user *user_frame_tail = (unsigned long __user *)fp;
+ 
+ 	/* Check accessibility of one struct frame_tail beyond */
+ 	if (!access_ok(user_frame_tail, sizeof(buftail)))
+diff --git a/arch/csky/kernel/signal.c b/arch/csky/kernel/signal.c
+index c7b763d2f526..8867ddf3e6c7 100644
+--- a/arch/csky/kernel/signal.c
++++ b/arch/csky/kernel/signal.c
+@@ -136,7 +136,7 @@ static inline void __user *get_sigframe(struct ksignal *ksig,
+ static int
+ setup_rt_frame(struct ksignal *ksig, sigset_t *set, struct pt_regs *regs)
+ {
+-	struct rt_sigframe *frame;
++	struct rt_sigframe __user *frame;
+ 	int err = 0;
+ 
+ 	frame = get_sigframe(ksig, regs, sizeof(*frame));
+diff --git a/arch/nios2/kernel/signal.c b/arch/nios2/kernel/signal.c
+index 2009ae2d3c3b..386e46443b60 100644
+--- a/arch/nios2/kernel/signal.c
++++ b/arch/nios2/kernel/signal.c
+@@ -36,10 +36,10 @@ struct rt_sigframe {
+ 
+ static inline int rt_restore_ucontext(struct pt_regs *regs,
+ 					struct switch_stack *sw,
+-					struct ucontext *uc, int *pr2)
++					struct ucontext __user *uc, int *pr2)
+ {
+ 	int temp;
+-	unsigned long *gregs = uc->uc_mcontext.gregs;
++	unsigned long __user *gregs = uc->uc_mcontext.gregs;
+ 	int err;
+ 
+ 	/* Always make any pending restarted system calls return -EINTR */
+@@ -102,10 +102,11 @@ asmlinkage int do_rt_sigreturn(struct switch_stack *sw)
+ {
+ 	struct pt_regs *regs = (struct pt_regs *)(sw + 1);
+ 	/* Verify, can we follow the stack back */
+-	struct rt_sigframe *frame = (struct rt_sigframe *) regs->sp;
++	struct rt_sigframe __user *frame;
+ 	sigset_t set;
+ 	int rval;
+ 
++	frame = (struct rt_sigframe __user *) regs->sp;
+ 	if (!access_ok(frame, sizeof(*frame)))
+ 		goto badframe;
+ 
+@@ -124,10 +125,10 @@ asmlinkage int do_rt_sigreturn(struct switch_stack *sw)
+ 	return 0;
+ }
+ 
+-static inline int rt_setup_ucontext(struct ucontext *uc, struct pt_regs *regs)
++static inline int rt_setup_ucontext(struct ucontext __user *uc, struct pt_regs *regs)
+ {
+ 	struct switch_stack *sw = (struct switch_stack *)regs - 1;
+-	unsigned long *gregs = uc->uc_mcontext.gregs;
++	unsigned long __user *gregs = uc->uc_mcontext.gregs;
+ 	int err = 0;
+ 
+ 	err |= __put_user(MCONTEXT_VERSION, &uc->uc_mcontext.version);
+@@ -162,8 +163,9 @@ static inline int rt_setup_ucontext(struct ucontext *uc, struct pt_regs *regs)
+ 	return err;
+ }
+ 
+-static inline void *get_sigframe(struct ksignal *ksig, struct pt_regs *regs,
+-				 size_t frame_size)
++static inline void __user *get_sigframe(struct ksignal *ksig,
++					struct pt_regs *regs,
++					size_t frame_size)
+ {
+ 	unsigned long usp;
+ 
+@@ -174,13 +176,13 @@ static inline void *get_sigframe(struct ksignal *ksig, struct pt_regs *regs,
+ 	usp = sigsp(usp, ksig);
+ 
+ 	/* Verify, is it 32 or 64 bit aligned */
+-	return (void *)((usp - frame_size) & -8UL);
++	return (void __user *)((usp - frame_size) & -8UL);
+ }
+ 
+ static int setup_rt_frame(struct ksignal *ksig, sigset_t *set,
+ 			  struct pt_regs *regs)
+ {
+-	struct rt_sigframe *frame;
++	struct rt_sigframe __user *frame;
+ 	int err = 0;
+ 
+ 	frame = get_sigframe(ksig, regs, sizeof(*frame));
+diff --git a/arch/powerpc/lib/sstep.c b/arch/powerpc/lib/sstep.c
+index d8cc49f39fe4..1a16ad18f9f2 100644
+--- a/arch/powerpc/lib/sstep.c
++++ b/arch/powerpc/lib/sstep.c
+@@ -112,9 +112,9 @@ static nokprobe_inline long address_ok(struct pt_regs *regs,
+ {
+ 	if (!user_mode(regs))
+ 		return 1;
+-	if (__access_ok(ea, nb))
++	if (access_ok((void __user *)ea, nb))
+ 		return 1;
+-	if (__access_ok(ea, 1))
++	if (access_ok((void __user *)ea, 1))
+ 		/* Access overlaps the end of the user region */
+ 		regs->dar = TASK_SIZE_MAX - 1;
+ 	else
+diff --git a/arch/riscv/kernel/perf_callchain.c b/arch/riscv/kernel/perf_callchain.c
+index d82c291c1e4c..357f985041cb 100644
+--- a/arch/riscv/kernel/perf_callchain.c
++++ b/arch/riscv/kernel/perf_callchain.c
+@@ -15,8 +15,8 @@ static unsigned long user_backtrace(struct perf_callchain_entry_ctx *entry,
+ {
+ 	struct stackframe buftail;
+ 	unsigned long ra = 0;
+-	unsigned long *user_frame_tail =
+-			(unsigned long *)(fp - sizeof(struct stackframe));
++	unsigned long __user *user_frame_tail =
++		(unsigned long __user *)(fp - sizeof(struct stackframe));
+ 
+ 	/* Check accessibility of one struct frame_tail beyond */
+ 	if (!access_ok(user_frame_tail, sizeof(buftail)))
+diff --git a/arch/sparc/kernel/signal_32.c b/arch/sparc/kernel/signal_32.c
+index ffab16369bea..74f80443b195 100644
+--- a/arch/sparc/kernel/signal_32.c
++++ b/arch/sparc/kernel/signal_32.c
+@@ -65,7 +65,7 @@ struct rt_signal_frame {
+  */
+ static inline bool invalid_frame_pointer(void __user *fp, int fplen)
+ {
+-	if ((((unsigned long) fp) & 15) || !__access_ok((unsigned long)fp, fplen))
++	if ((((unsigned long) fp) & 15) || !access_ok(fp, fplen))
+ 		return true;
+ 
+ 	return false;
+diff --git a/lib/test_lockup.c b/lib/test_lockup.c
+index 906b598740a7..6a0f329a794a 100644
+--- a/lib/test_lockup.c
++++ b/lib/test_lockup.c
+@@ -417,8 +417,8 @@ static bool test_kernel_ptr(unsigned long addr, int size)
+ 		return false;
+ 
+ 	/* should be at least readable kernel address */
+-	if (access_ok(ptr, 1) ||
+-	    access_ok(ptr + size - 1, 1) ||
++	if (access_ok((void __user *)ptr, 1) ||
++	    access_ok((void __user *)ptr + size - 1, 1) ||
+ 	    get_kernel_nofault(buf, ptr) ||
+ 	    get_kernel_nofault(buf, ptr + size - 1)) {
+ 		pr_err("invalid kernel ptr: %#lx\n", addr);
+-- 
+2.34.1
+
 
 

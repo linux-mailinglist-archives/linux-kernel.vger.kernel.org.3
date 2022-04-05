@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 490C34F3BB2
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A477B4F3B92
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381789AbiDEL7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
+        id S1381348AbiDEL7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245058AbiDEIxE (ORCPT
+        with ESMTP id S245063AbiDEIxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:53:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F0B103A;
-        Tue,  5 Apr 2022 01:50:57 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB281088;
+        Tue,  5 Apr 2022 01:51:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4715861003;
-        Tue,  5 Apr 2022 08:50:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DF63C385A0;
-        Tue,  5 Apr 2022 08:50:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B55EBB81BC0;
+        Tue,  5 Apr 2022 08:51:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F569C385A1;
+        Tue,  5 Apr 2022 08:50:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148656;
-        bh=UdP0IzdJecjT0BWP9LHkIR4ds8fCXT1iDcxu9yYHu28=;
+        s=korg; t=1649148659;
+        bh=vFkFSIOQAYRV18Jutd1lvERU8M7ilOc4MsxMU5vsFXw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zROnBMiD/PUaaukR8WmWIYsA922i0oXVmCLuM80SRrXt6IEkhlApEGE+EF0gRkWCX
-         PMkWIu3g+dKtlKayL7AQRN7QtNxJ6MLtnoDBr3QB5gyZK0o0cfR93Wagb6eJ6VH7zO
-         HEBrdqPly+2f+MJos+dhUVmBKLzchxPhKd77cePI=
+        b=NuCq3qwY9nivPX5mCuYahlDOSqk5D6n41LiF3boVbVEdCpNs8vCZhngS1Y2Z/Hk7r
+         DsDT2/ocQ7NKbT9nE1/RuUjkqeIDjfDxooaXqS7DOHXRiXr3B8Eu88nRxJCahl4iMC
+         IjJCalUuca2XQbV+LGYeZGXDbn6nWR939LdVWRsU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brett Creeley <brett@pensando.io>,
-        Shannon Nelson <snelson@pensando.io>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Fabiano Rosas <farosas@linux.ibm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0427/1017] ionic: Correctly print AQ errors if completions arent received
-Date:   Tue,  5 Apr 2022 09:22:20 +0200
-Message-Id: <20220405070406.967349811@linuxfoundation.org>
+Subject: [PATCH 5.16 0436/1017] KVM: PPC: Fix vmx/vsx mixup in mmio emulation
+Date:   Tue,  5 Apr 2022 09:22:29 +0200
+Message-Id: <20220405070407.236156318@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,55 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brett Creeley <brett@pensando.io>
+From: Fabiano Rosas <farosas@linux.ibm.com>
 
-[ Upstream commit bc43ed4f35abfdb1d52311110d49b545fccce975 ]
+[ Upstream commit b99234b918c6e36b9aa0a5b2981e86b6bd11f8e2 ]
 
-Recent changes went into the driver to allow flexibility when
-printing error messages. Unfortunately this had the unexpected
-consequence of printing confusing messages like the following:
+The MMIO emulation code for vector instructions is duplicated between
+VSX and VMX. When emulating VMX we should check the VMX copy size
+instead of the VSX one.
 
-IONIC_CMD_RX_FILTER_ADD (31) failed: IONIC_RC_SUCCESS (-6)
-
-In cases like this the completion of the admin queue command never
-completes, so the completion status is 0, hence IONIC_RC_SUCCESS
-is printed even though the command clearly failed. For example,
-this could happen when the driver tries to add a filter and at
-the same time the FW goes through a reset, so the AQ command
-never completes.
-
-Fix this by forcing the FW completion status to IONIC_RC_ERROR
-in cases where we never get the completion.
-
-Fixes: 8c9d956ab6fb ("ionic: allow adminq requests to override default error message")
-Signed-off-by: Brett Creeley <brett@pensando.io>
-Signed-off-by: Shannon Nelson <snelson@pensando.io>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: acc9eb9305fe ("KVM: PPC: Reimplement LOAD_VMX/STORE_VMX instruction ...")
+Signed-off-by: Fabiano Rosas <farosas@linux.ibm.com>
+Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220125215655.1026224-3-farosas@linux.ibm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/pensando/ionic/ionic_main.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/powerpc/kvm/powerpc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/pensando/ionic/ionic_main.c b/drivers/net/ethernet/pensando/ionic/ionic_main.c
-index 2e4294a4fa83..a0f9136b2d89 100644
---- a/drivers/net/ethernet/pensando/ionic/ionic_main.c
-+++ b/drivers/net/ethernet/pensando/ionic/ionic_main.c
-@@ -322,6 +322,7 @@ int ionic_adminq_wait(struct ionic_lif *lif, struct ionic_admin_ctx *ctx,
- 		if (do_msg && !test_bit(IONIC_LIF_F_FW_RESET, lif->state))
- 			netdev_err(netdev, "Posting of %s (%d) failed: %d\n",
- 				   name, ctx->cmd.cmd.opcode, err);
-+		ctx->comp.comp.status = IONIC_RC_ERROR;
- 		return err;
- 	}
+diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+index a72920f4f221..8d91a50a84a8 100644
+--- a/arch/powerpc/kvm/powerpc.c
++++ b/arch/powerpc/kvm/powerpc.c
+@@ -1507,7 +1507,7 @@ int kvmppc_handle_vmx_load(struct kvm_vcpu *vcpu,
+ {
+ 	enum emulation_result emulated = EMULATE_DONE;
  
-@@ -340,6 +341,7 @@ int ionic_adminq_wait(struct ionic_lif *lif, struct ionic_admin_ctx *ctx,
- 			if (do_msg)
- 				netdev_err(netdev, "%s (%d) interrupted, FW in reset\n",
- 					   name, ctx->cmd.cmd.opcode);
-+			ctx->comp.comp.status = IONIC_RC_ERROR;
- 			return -ENXIO;
- 		}
+-	if (vcpu->arch.mmio_vsx_copy_nums > 2)
++	if (vcpu->arch.mmio_vmx_copy_nums > 2)
+ 		return EMULATE_FAIL;
  
+ 	while (vcpu->arch.mmio_vmx_copy_nums) {
+@@ -1604,7 +1604,7 @@ int kvmppc_handle_vmx_store(struct kvm_vcpu *vcpu,
+ 	unsigned int index = rs & KVM_MMIO_REG_MASK;
+ 	enum emulation_result emulated = EMULATE_DONE;
+ 
+-	if (vcpu->arch.mmio_vsx_copy_nums > 2)
++	if (vcpu->arch.mmio_vmx_copy_nums > 2)
+ 		return EMULATE_FAIL;
+ 
+ 	vcpu->arch.io_gpr = rs;
 -- 
 2.34.1
 

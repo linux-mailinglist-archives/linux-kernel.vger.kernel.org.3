@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CDEE4F4485
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6573B4F4703
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:26:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357774AbiDEODb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:03:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
+        id S1384466AbiDEUz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235451AbiDEJah (ORCPT
+        with ESMTP id S1358767AbiDELR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:30:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B258E540B;
-        Tue,  5 Apr 2022 02:17:36 -0700 (PDT)
+        Tue, 5 Apr 2022 07:17:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470912FFC0;
+        Tue,  5 Apr 2022 03:20:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A830B80DA1;
-        Tue,  5 Apr 2022 09:17:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF260C385A0;
-        Tue,  5 Apr 2022 09:17:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF54BB81C6C;
+        Tue,  5 Apr 2022 10:20:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6154CC385A0;
+        Tue,  5 Apr 2022 10:20:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150254;
-        bh=hkzJKH+9ntGpKLU8MpszvUYKaLGgVtdAemBPeotoG9c=;
+        s=korg; t=1649154021;
+        bh=ryI4nmnWCITwgMxyxAhVGbPtmN7Hf4iB4cJjnuFKMfs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0N1wQOGXpA8HR8aqqgBoGIJ0oCobM0S8YOlFV1spklCz1mxr6GsqDxsYPXkAVfjnP
-         BIyT5H6azdAY0mFFdxRcpZSyfl8knmAYPMlRlF6Tod7UCpoeQtkLmY7KeEF96Z7R9K
-         kd9BsRVIyGCosPB0/rFOFN5vUdwDJZf4ruftBIdM=
+        b=R8EJIWeXCNVZw5tK3PoWprHeqCAeGj0IgbPTrJfaFzKw5uw0d50u0/SF30vVvWZP7
+         tb8B45aLnxx5ASbJl8dm4NwMg3CcpkVDGfoUU9YfPnsZZVD2M9dD6ao8wrPh/TyRlZ
+         xdQEjWNfZHy96pbxgQyvJ2CsgFzuTjse4Zjgehd4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Gabriel L. Somlo" <somlo@cmu.edu>,
-        Borislav Petkov <bp@alien8.de>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.16 1010/1017] Revert "nbd: fix possible overflow on first_minor in nbd_dev_add()"
+        stable@vger.kernel.org,
+        anton ivanov <anton.ivanov@cambridgegreys.com>,
+        Julius Werner <jwerner@chromium.org>,
+        David Gow <davidgow@google.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 429/599] firmware: google: Properly state IOMEM dependency
 Date:   Tue,  5 Apr 2022 09:32:03 +0200
-Message-Id: <20220405070424.178136408@linuxfoundation.org>
+Message-Id: <20220405070311.599379148@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,69 +57,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: David Gow <davidgow@google.com>
 
-commit 7198bfc2017644c6b92d2ecef9b8b8e0363bb5fd upstream.
+[ Upstream commit 37fd83916da2e4cae03d350015c82a67b1b334c4 ]
 
-This reverts commit 6d35d04a9e18990040e87d2bbf72689252669d54.
+The Google Coreboot implementation requires IOMEM functions
+(memmremap, memunmap, devm_memremap), but does not specify this is its
+Kconfig. This results in build errors when HAS_IOMEM is not set, such as
+on some UML configurations:
 
-Both Gabriel and Borislav report that this commit casues a regression
-with nbd:
+/usr/bin/ld: drivers/firmware/google/coreboot_table.o: in function `coreboot_table_probe':
+coreboot_table.c:(.text+0x311): undefined reference to `memremap'
+/usr/bin/ld: coreboot_table.c:(.text+0x34e): undefined reference to `memunmap'
+/usr/bin/ld: drivers/firmware/google/memconsole-coreboot.o: in function `memconsole_probe':
+memconsole-coreboot.c:(.text+0x12d): undefined reference to `memremap'
+/usr/bin/ld: memconsole-coreboot.c:(.text+0x17e): undefined reference to `devm_memremap'
+/usr/bin/ld: memconsole-coreboot.c:(.text+0x191): undefined reference to `memunmap'
+/usr/bin/ld: drivers/firmware/google/vpd.o: in function `vpd_section_destroy.isra.0':
+vpd.c:(.text+0x300): undefined reference to `memunmap'
+/usr/bin/ld: drivers/firmware/google/vpd.o: in function `vpd_section_init':
+vpd.c:(.text+0x382): undefined reference to `memremap'
+/usr/bin/ld: vpd.c:(.text+0x459): undefined reference to `memunmap'
+/usr/bin/ld: drivers/firmware/google/vpd.o: in function `vpd_probe':
+vpd.c:(.text+0x59d): undefined reference to `memremap'
+/usr/bin/ld: vpd.c:(.text+0x5d3): undefined reference to `memunmap'
+collect2: error: ld returned 1 exit status
 
-sysfs: cannot create duplicate filename '/dev/block/43:0'
-
-Revert it before 5.18-rc1 and we'll investigage this separately in
-due time.
-
-Link: https://lore.kernel.org/all/YkiJTnFOt9bTv6A2@zn.tnic/
-Reported-by: Gabriel L. Somlo <somlo@cmu.edu>
-Reported-by: Borislav Petkov <bp@alien8.de>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: a28aad66da8b ("firmware: coreboot: Collapse platform drivers into bus core")
+Acked-By: anton ivanov <anton.ivanov@cambridgegreys.com>
+Acked-By: Julius Werner <jwerner@chromium.org>
+Signed-off-by: David Gow <davidgow@google.com>
+Link: https://lore.kernel.org/r/20220225041502.1901806-1-davidgow@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/nbd.c |   24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ drivers/firmware/google/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -1800,6 +1800,17 @@ static struct nbd_device *nbd_dev_add(in
- 	refcount_set(&nbd->refs, 0);
- 	INIT_LIST_HEAD(&nbd->list);
- 	disk->major = NBD_MAJOR;
-+
-+	/* Too big first_minor can cause duplicate creation of
-+	 * sysfs files/links, since index << part_shift might overflow, or
-+	 * MKDEV() expect that the max bits of first_minor is 20.
-+	 */
-+	disk->first_minor = index << part_shift;
-+	if (disk->first_minor < index || disk->first_minor > MINORMASK) {
-+		err = -EINVAL;
-+		goto out_free_work;
-+	}
-+
- 	disk->minors = 1 << part_shift;
- 	disk->fops = &nbd_fops;
- 	disk->private_data = nbd;
-@@ -1904,19 +1915,8 @@ static int nbd_genl_connect(struct sk_bu
- 	if (!netlink_capable(skb, CAP_SYS_ADMIN))
- 		return -EPERM;
+diff --git a/drivers/firmware/google/Kconfig b/drivers/firmware/google/Kconfig
+index 931544c9f63d..983e07dc022e 100644
+--- a/drivers/firmware/google/Kconfig
++++ b/drivers/firmware/google/Kconfig
+@@ -21,7 +21,7 @@ config GOOGLE_SMI
  
--	if (info->attrs[NBD_ATTR_INDEX]) {
-+	if (info->attrs[NBD_ATTR_INDEX])
- 		index = nla_get_u32(info->attrs[NBD_ATTR_INDEX]);
--
--		/*
--		 * Too big first_minor can cause duplicate creation of
--		 * sysfs files/links, since index << part_shift might overflow, or
--		 * MKDEV() expect that the max bits of first_minor is 20.
--		 */
--		if (index < 0 || index > MINORMASK >> part_shift) {
--			printk(KERN_ERR "nbd: illegal input index %d\n", index);
--			return -EINVAL;
--		}
--	}
- 	if (!info->attrs[NBD_ATTR_SOCKETS]) {
- 		printk(KERN_ERR "nbd: must specify at least one socket\n");
- 		return -EINVAL;
+ config GOOGLE_COREBOOT_TABLE
+ 	tristate "Coreboot Table Access"
+-	depends on ACPI || OF
++	depends on HAS_IOMEM && (ACPI || OF)
+ 	help
+ 	  This option enables the coreboot_table module, which provides other
+ 	  firmware modules access to the coreboot table. The coreboot table
+-- 
+2.34.1
+
 
 

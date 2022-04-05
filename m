@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD76B4F29EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 12:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A360C4F2A14
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 12:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357845AbiDEK1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
+        id S239346AbiDEKb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241077AbiDEIcr (ORCPT
+        with ESMTP id S240957AbiDEIcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:32:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D5813F1A;
-        Tue,  5 Apr 2022 01:26:55 -0700 (PDT)
+        Tue, 5 Apr 2022 04:32:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396808FE7A;
+        Tue,  5 Apr 2022 01:25:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F201B81BAF;
-        Tue,  5 Apr 2022 08:26:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C04BC385A2;
-        Tue,  5 Apr 2022 08:26:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B80560FFC;
+        Tue,  5 Apr 2022 08:25:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD3B8C385A1;
+        Tue,  5 Apr 2022 08:25:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147212;
-        bh=nI7dbDDhx02UpWsfJfAL/zctEyT8a5ocPR6yVKs23Fo=;
+        s=korg; t=1649147127;
+        bh=bymNXs9RSnkFw+C4LkYHYp5fkQlBVZApsmk8h49t/k0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JWYuuAqqcXP0x1W5htFwQlIQO0HpKUkwMHfg3Cnw1lZ5g7ixnDWFs2jcQipq9DEuM
-         QH44xixgRrMKK1+ITQHLwDshI9llY3SfBVfkwfX2BUz4WSGsXigGjjyp4hi6d1dh2t
-         HvVBcXtajeboGiXpHKydonRjZvT75CtugE0NWo80=
+        b=IDQ7In1aEyagAmhskaibY/4gmFYYBg1U9X7jG0dcYpstG9h4j1b37ufNZR+TNb8ED
+         YYlfsY7WwlBRdhwIJDMXeOV5SFiWy/MIXidp6s1YsO+sAECbZeB2RImog8K+4Ib+Nh
+         1ipA3OwCe/Sd3Lk5lIbSYGp0C+eS8gUZAsbwyHAw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
         Richard Weinberger <richard@nod.at>
-Subject: [PATCH 5.17 1005/1126] ubifs: Fix deadlock in concurrent rename whiteout and inode writeback
-Date:   Tue,  5 Apr 2022 09:29:12 +0200
-Message-Id: <20220405070436.990536184@linuxfoundation.org>
+Subject: [PATCH 5.17 1012/1126] ubifs: Fix to add refcount once page is set private
+Date:   Tue,  5 Apr 2022 09:29:19 +0200
+Message-Id: <20220405070437.193663780@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,113 +56,182 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zhihao Cheng <chengzhihao1@huawei.com>
 
-commit afd427048047e8efdedab30e8888044e2be5aa9c upstream.
+commit 3b67db8a6ca83e6ff90b756d3da0c966f61cd37b upstream.
 
-Following hung tasks:
-[   77.028764] task:kworker/u8:4    state:D stack:    0 pid:  132
-[   77.028820] Call Trace:
-[   77.029027]  schedule+0x8c/0x1b0
-[   77.029067]  mutex_lock+0x50/0x60
-[   77.029074]  ubifs_write_inode+0x68/0x1f0 [ubifs]
-[   77.029117]  __writeback_single_inode+0x43c/0x570
-[   77.029128]  writeback_sb_inodes+0x259/0x740
-[   77.029148]  wb_writeback+0x107/0x4d0
-[   77.029163]  wb_workfn+0x162/0x7b0
+MM defined the rule [1] very clearly that once page was set with PG_private
+flag, we should increment the refcount in that page, also main flows like
+pageout(), migrate_page() will assume there is one additional page
+reference count if page_has_private() returns true. Otherwise, we may
+get a BUG in page migration:
 
-[   92.390442] task:aa              state:D stack:    0 pid: 1506
-[   92.390448] Call Trace:
-[   92.390458]  schedule+0x8c/0x1b0
-[   92.390461]  wb_wait_for_completion+0x82/0xd0
-[   92.390469]  __writeback_inodes_sb_nr+0xb2/0x110
-[   92.390472]  writeback_inodes_sb_nr+0x14/0x20
-[   92.390476]  ubifs_budget_space+0x705/0xdd0 [ubifs]
-[   92.390503]  do_rename.cold+0x7f/0x187 [ubifs]
-[   92.390549]  ubifs_rename+0x8b/0x180 [ubifs]
-[   92.390571]  vfs_rename+0xdb2/0x1170
-[   92.390580]  do_renameat2+0x554/0x770
+  page:0000000080d05b9d refcount:-1 mapcount:0 mapping:000000005f4d82a8
+  index:0xe2 pfn:0x14c12
+  aops:ubifs_file_address_operations [ubifs] ino:8f1 dentry name:"f30e"
+  flags: 0x1fffff80002405(locked|uptodate|owner_priv_1|private|node=0|
+  zone=1|lastcpupid=0x1fffff)
+  page dumped because: VM_BUG_ON_PAGE(page_count(page) != 0)
+  ------------[ cut here ]------------
+  kernel BUG at include/linux/page_ref.h:184!
+  invalid opcode: 0000 [#1] SMP
+  CPU: 3 PID: 38 Comm: kcompactd0 Not tainted 5.15.0-rc5
+  RIP: 0010:migrate_page_move_mapping+0xac3/0xe70
+  Call Trace:
+    ubifs_migrate_page+0x22/0xc0 [ubifs]
+    move_to_new_page+0xb4/0x600
+    migrate_pages+0x1523/0x1cc0
+    compact_zone+0x8c5/0x14b0
+    kcompactd+0x2bc/0x560
+    kthread+0x18c/0x1e0
+    ret_from_fork+0x1f/0x30
 
-, are caused by concurrent rename whiteout and inode writeback processes:
-	rename_whiteout(Thread 1)	        wb_workfn(Thread2)
-ubifs_rename
-  do_rename
-    lock_4_inodes (Hold ui_mutex)
-    ubifs_budget_space
-      make_free_space
-        shrink_liability
-	  __writeback_inodes_sb_nr
-	    bdi_split_work_to_wbs (Queue new wb work)
-					      wb_do_writeback(wb work)
-						__writeback_single_inode
-					          ubifs_write_inode
-					            LOCK(ui_mutex)
-							   ↑
-	      wb_wait_for_completion (Wait wb work) <-- deadlock!
+Before the time, we should make clean a concept, what does refcount means
+in page gotten from grab_cache_page_write_begin(). There are 2 situations:
+Situation 1: refcount is 3, page is created by __page_cache_alloc.
+  TYPE_A - the write process is using this page
+  TYPE_B - page is assigned to one certain mapping by calling
+	   __add_to_page_cache_locked()
+  TYPE_C - page is added into pagevec list corresponding current cpu by
+	   calling lru_cache_add()
+Situation 2: refcount is 2, page is gotten from the mapping's tree
+  TYPE_B - page has been assigned to one certain mapping
+  TYPE_A - the write process is using this page (by calling
+	   page_cache_get_speculative())
+Filesystem releases one refcount by calling put_page() in xxx_write_end(),
+the released refcount corresponds to TYPE_A (write task is using it). If
+there are any processes using a page, page migration process will skip the
+page by judging whether expected_page_refs() equals to page refcount.
 
-Reproducer (Detail program in [Link]):
-  1. SYS_renameat2("/mp/dir/file", "/mp/dir/whiteout", RENAME_WHITEOUT)
-  2. Consume out of space before kernel(mdelay) doing budget for whiteout
+The BUG is caused by following process:
+    PA(cpu 0)                           kcompactd(cpu 1)
+				compact_zone
+ubifs_write_begin
+  page_a = grab_cache_page_write_begin
+    add_to_page_cache_lru
+      lru_cache_add
+        pagevec_add // put page into cpu 0's pagevec
+  (refcnf = 3, for page creation process)
+ubifs_write_end
+  SetPagePrivate(page_a) // doesn't increase page count !
+  unlock_page(page_a)
+  put_page(page_a)  // refcnt = 2
+				[...]
 
-Fix it by doing whiteout space budget before locking ubifs inodes.
-BTW, it also fixes wrong goto tag 'out_release' in whiteout budget
-error handling path(It should at least recover dir i_size and unlock
-4 ubifs inodes).
+    PB(cpu 0)
+filemap_read
+  filemap_get_pages
+    add_to_page_cache_lru
+      lru_cache_add
+        __pagevec_lru_add // traverse all pages in cpu 0's pagevec
+	  __pagevec_lru_add_fn
+	    SetPageLRU(page_a)
+				isolate_migratepages
+                                  isolate_migratepages_block
+				    get_page_unless_zero(page_a)
+				    // refcnt = 3
+                                      list_add(page_a, from_list)
+				migrate_pages(from_list)
+				  __unmap_and_move
+				    move_to_new_page
+				      ubifs_migrate_page(page_a)
+				        migrate_page_move_mapping
+					  expected_page_refs get 3
+                                  (migration[1] + mapping[1] + private[1])
+	 release_pages
+	   put_page_testzero(page_a) // refcnt = 3
+                                          page_ref_freeze  // refcnt = 0
+	     page_ref_dec_and_test(0 - 1 = -1)
+                                          page_ref_unfreeze
+                                            VM_BUG_ON_PAGE(-1 != 0, page)
 
-Fixes: 9e0a1fff8db56ea ("ubifs: Implement RENAME_WHITEOUT")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=214733
+UBIFS doesn't increase the page refcount after setting private flag, which
+leads to page migration task believes the page is not used by any other
+processes, so the page is migrated. This causes concurrent accessing on
+page refcount between put_page() called by other process(eg. read process
+calls lru_cache_add) and page_ref_unfreeze() called by migration task.
+
+Actually zhangjun has tried to fix this problem [2] by recalculating page
+refcnt in ubifs_migrate_page(). It's better to follow MM rules [1], because
+just like Kirill suggested in [2], we need to check all users of
+page_has_private() helper. Like f2fs does in [3], fix it by adding/deleting
+refcount when setting/clearing private for a page. BTW, according to [4],
+we set 'page->private' as 1 because ubifs just simply SetPagePrivate().
+And, [5] provided a common helper to set/clear page private, ubifs can
+use this helper following the example of iomap, afs, btrfs, etc.
+
+Jump [6] to find a reproducer.
+
+[1] https://lore.kernel.org/lkml/2b19b3c4-2bc4-15fa-15cc-27a13e5c7af1@aol.com
+[2] https://www.spinics.net/lists/linux-mtd/msg04018.html
+[3] http://lkml.iu.edu/hypermail/linux/kernel/1903.0/03313.html
+[4] https://lore.kernel.org/linux-f2fs-devel/20210422154705.GO3596236@casper.infradead.org
+[5] https://lore.kernel.org/all/20200517214718.468-1-guoqing.jiang@cloud.ionos.com
+[6] https://bugzilla.kernel.org/show_bug.cgi?id=214961
+
+Fixes: 1e51764a3c2ac0 ("UBIFS: add new flash file system")
 Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
 Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ubifs/dir.c |   25 +++++++++++++++----------
- 1 file changed, 15 insertions(+), 10 deletions(-)
+ fs/ubifs/file.c |   14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
---- a/fs/ubifs/dir.c
-+++ b/fs/ubifs/dir.c
-@@ -1324,6 +1324,7 @@ static int do_rename(struct inode *old_d
- 
- 	if (flags & RENAME_WHITEOUT) {
- 		union ubifs_dev_desc *dev = NULL;
-+		struct ubifs_budget_req wht_req;
- 
- 		dev = kmalloc(sizeof(union ubifs_dev_desc), GFP_NOFS);
- 		if (!dev) {
-@@ -1345,6 +1346,20 @@ static int do_rename(struct inode *old_d
- 		whiteout_ui->data = dev;
- 		whiteout_ui->data_len = ubifs_encode_dev(dev, MKDEV(0, 0));
- 		ubifs_assert(c, !whiteout_ui->dirty);
-+
-+		memset(&wht_req, 0, sizeof(struct ubifs_budget_req));
-+		wht_req.dirtied_ino = 1;
-+		wht_req.dirtied_ino_d = ALIGN(whiteout_ui->data_len, 8);
-+		/*
-+		 * To avoid deadlock between space budget (holds ui_mutex and
-+		 * waits wb work) and writeback work(waits ui_mutex), do space
-+		 * budget before ubifs inodes locked.
-+		 */
-+		err = ubifs_budget_space(c, &wht_req);
-+		if (err) {
-+			iput(whiteout);
-+			goto out_release;
-+		}
+--- a/fs/ubifs/file.c
++++ b/fs/ubifs/file.c
+@@ -570,7 +570,7 @@ static int ubifs_write_end(struct file *
  	}
  
- 	lock_4_inodes(old_dir, new_dir, new_inode, whiteout);
-@@ -1419,16 +1434,6 @@ static int do_rename(struct inode *old_d
+ 	if (!PagePrivate(page)) {
+-		SetPagePrivate(page);
++		attach_page_private(page, (void *)1);
+ 		atomic_long_inc(&c->dirty_pg_cnt);
+ 		__set_page_dirty_nobuffers(page);
+ 	}
+@@ -947,7 +947,7 @@ static int do_writepage(struct page *pag
+ 		release_existing_page_budget(c);
+ 
+ 	atomic_long_dec(&c->dirty_pg_cnt);
+-	ClearPagePrivate(page);
++	detach_page_private(page);
+ 	ClearPageChecked(page);
+ 
+ 	kunmap(page);
+@@ -1304,7 +1304,7 @@ static void ubifs_invalidatepage(struct
+ 		release_existing_page_budget(c);
+ 
+ 	atomic_long_dec(&c->dirty_pg_cnt);
+-	ClearPagePrivate(page);
++	detach_page_private(page);
+ 	ClearPageChecked(page);
+ }
+ 
+@@ -1471,8 +1471,8 @@ static int ubifs_migrate_page(struct add
+ 		return rc;
+ 
+ 	if (PagePrivate(page)) {
+-		ClearPagePrivate(page);
+-		SetPagePrivate(newpage);
++		detach_page_private(page);
++		attach_page_private(newpage, (void *)1);
  	}
  
- 	if (whiteout) {
--		struct ubifs_budget_req wht_req = { .dirtied_ino = 1,
--				.dirtied_ino_d = \
--				ALIGN(ubifs_inode(whiteout)->data_len, 8) };
--
--		err = ubifs_budget_space(c, &wht_req);
--		if (err) {
--			iput(whiteout);
--			goto out_release;
--		}
--
- 		inc_nlink(whiteout);
- 		mark_inode_dirty(whiteout);
- 
+ 	if (mode != MIGRATE_SYNC_NO_COPY)
+@@ -1496,7 +1496,7 @@ static int ubifs_releasepage(struct page
+ 		return 0;
+ 	ubifs_assert(c, PagePrivate(page));
+ 	ubifs_assert(c, 0);
+-	ClearPagePrivate(page);
++	detach_page_private(page);
+ 	ClearPageChecked(page);
+ 	return 1;
+ }
+@@ -1567,7 +1567,7 @@ static vm_fault_t ubifs_vm_page_mkwrite(
+ 	else {
+ 		if (!PageChecked(page))
+ 			ubifs_convert_page_budget(c);
+-		SetPagePrivate(page);
++		attach_page_private(page, (void *)1);
+ 		atomic_long_inc(&c->dirty_pg_cnt);
+ 		__set_page_dirty_nobuffers(page);
+ 	}
 
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B3C4F4F91
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 741B84F505A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573347AbiDFAzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46622 "EHLO
+        id S238528AbiDFBWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356969AbiDEKZJ (ORCPT
+        with ESMTP id S1349476AbiDEJtz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:25:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F63C4E2D;
-        Tue,  5 Apr 2022 03:09:20 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD74327CF2;
+        Tue,  5 Apr 2022 02:47:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 636246179C;
-        Tue,  5 Apr 2022 10:09:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 503B9C385A0;
-        Tue,  5 Apr 2022 10:09:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 68F2BB81B14;
+        Tue,  5 Apr 2022 09:47:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BABF1C385A1;
+        Tue,  5 Apr 2022 09:46:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153358;
-        bh=Z7mrj6JD5q7BUmziq5k5KH5tmvw4CIe8WpOS8nmYG7M=;
+        s=korg; t=1649152019;
+        bh=Lq7uEknIvP4GPj5dBJRcnfmvSL9QX0ZCmPatFqEOiX0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=es0DTJBcJgF58ZkP588AYFIFMJZ3Z/TlqZbXHVe/M3le++tmlHVi5d6srrBDnnqT+
-         iyZW1XAC6rSt1Y9SLnJDLnaZJZlI5io8whTy1JW6BexV0t5ZrhXAdoR3wWcJwnnN+/
-         NpKaTeoOlXVfVEwmnApFhkN6yD0/jWDldnMv5YEw=
+        b=xTXvv0848gzPJaqWM3V0Upby3jzdbu6m2kkk6jC3O0vLOxA6pqv9Qs4DU4JT9hsOi
+         Ur453fUZmItSB+lNr/mKdMAKnM7sjGUraXKYcjEwm10TOQotj0a6H+TI3EYQd3axGA
+         fMbfjaTbhewLBM1zW0LbtZmL0gqAVU00Vu5rZM5M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 193/599] media: coda: Fix missing put_device() call in coda_get_vdoa_data
-Date:   Tue,  5 Apr 2022 09:28:07 +0200
-Message-Id: <20220405070304.584708385@linuxfoundation.org>
+Subject: [PATCH 5.15 626/913] NFS: remove unneeded check in decode_devicenotify_args()
+Date:   Tue,  5 Apr 2022 09:28:08 +0200
+Message-Id: <20220405070358.603196433@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Alexey Khoroshilov <khoroshilov@ispras.ru>
 
-[ Upstream commit ca85d271531a1e1c86f24b892f57b7d0a3ddb5a6 ]
+[ Upstream commit cb8fac6d2727f79f211e745b16c9abbf4d8be652 ]
 
-The reference taken by 'of_find_device_by_node()' must be released when
-not needed anymore.
-Add the corresponding 'put_device()' in the error handling path.
+[You don't often get email from khoroshilov@ispras.ru. Learn why this is important at http://aka.ms/LearnAboutSenderIdentification.]
 
-Fixes: e7f3c5481035 ("[media] coda: use VDOA for un-tiling custom macroblock format")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Overflow check in not needed anymore after we switch to kmalloc_array().
+
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+Fixes: a4f743a6bb20 ("NFSv4.1: Convert open-coded array allocation calls to kmalloc_array()")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/coda/coda-common.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/nfs/callback_xdr.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
-index 1eed69d29149..2333079a83c7 100644
---- a/drivers/media/platform/coda/coda-common.c
-+++ b/drivers/media/platform/coda/coda-common.c
-@@ -408,6 +408,7 @@ static struct vdoa_data *coda_get_vdoa_data(void)
- 	if (!vdoa_data)
- 		vdoa_data = ERR_PTR(-EPROBE_DEFER);
+diff --git a/fs/nfs/callback_xdr.c b/fs/nfs/callback_xdr.c
+index ce3d1d5b1291..ea17085ef884 100644
+--- a/fs/nfs/callback_xdr.c
++++ b/fs/nfs/callback_xdr.c
+@@ -271,10 +271,6 @@ __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
+ 	n = ntohl(*p++);
+ 	if (n == 0)
+ 		goto out;
+-	if (n > ULONG_MAX / sizeof(*args->devs)) {
+-		status = htonl(NFS4ERR_BADXDR);
+-		goto out;
+-	}
  
-+	put_device(&vdoa_pdev->dev);
- out:
- 	of_node_put(vdoa_node);
- 
+ 	args->devs = kmalloc_array(n, sizeof(*args->devs), GFP_KERNEL);
+ 	if (!args->devs) {
 -- 
 2.34.1
 

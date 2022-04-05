@@ -2,143 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 653B54F2397
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0ECE4F239A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:48:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbiDEGt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 02:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
+        id S230490AbiDEGuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 02:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiDEGtv (ORCPT
+        with ESMTP id S229569AbiDEGud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 02:49:51 -0400
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FF065D34;
-        Mon,  4 Apr 2022 23:47:53 -0700 (PDT)
-Received: by mail-qv1-f47.google.com with SMTP id kc20so9345834qvb.3;
-        Mon, 04 Apr 2022 23:47:53 -0700 (PDT)
+        Tue, 5 Apr 2022 02:50:33 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8D72CE0E
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 23:48:34 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id f18so8667059edc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 23:48:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=YIG+/UngSJhhTn55tz4dtQqmyPpgvUtXWMrPNZZWXxc=;
+        b=KQ7/PZv7p7HmszGimDU4P1S/pP6CcO/nKxgzYEQJ7PIWE8IENA29hqed3E4BramaaG
+         VpwzbBsLE/iWOjlBJLrc7mafpV80Mdi8HljUds0bG7Emq6C9RcfXphze5DCSwhLMHbik
+         VSPmGPlEtLAB9o2FzzXpnqewTNrKKSsojG+c2RQoFyn++d+/KZmWG2Q7WLAFM93T5rHy
+         oO0hhS3hAzrtS4bO/3kBg4kmCHwTEb04U/+EIiMzjnfPHAaQMEGOEp5EWR/tmFy+VqTI
+         +xcmasxPCMxHInt/xrpY+Cq8a1JHMQhYnWiFuYiAQWcEVY2B9pxPJK45QTM6Bduop2pj
+         SGxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u1fOL/166fikmH7uX2rZtUmlwmKDUvQ+HD9q8zNW/kM=;
-        b=LGC17qPN2DTZd9LED2aXK0ffSxgkk+mKdSxrc82NCHiHcm/S3VaChsvuP+lyod/2Ro
-         yTT4RzbGtySEokF5A14CH3fMAvH+P9wG73UTRl2n64ZUpGO5hMAU/iiClHf8dB3c+ilR
-         lBq+o9YCgRTSVS6dwrpwv66fIGHH+4lr6MNO6nmdbEEczJJ0JHUhAHQh+NxkgTpFdzlZ
-         nbOJ2vpEs1ReElgJqZhqrJhMMpUihwNc7Cd3y+Ne9Aw7+v+xAUy5MeeKt/QcnaLNQg/5
-         HgkgB4bmBGXEnOq7ZRtumejEuj4Ux45S4BsSkcN3I98HrM7lNCrAYMh3KamcFrY8/PlE
-         sDbQ==
-X-Gm-Message-State: AOAM530D6fbTGHJ9ZQo/Y84hsqEi84gQEjBVz0Hf8qyMGczFq5T7kYpr
-        8jXu7IJkXshKO6UNCtcSXblLA+s99feRSg==
-X-Google-Smtp-Source: ABdhPJxqUS6Pw7wAQQ+YkofO7XRIpAPfbdC/NQ+LtaNsNmRgWc5kc9NrNTy/nQXRCYN1xGpwNiHsnA==
-X-Received: by 2002:ad4:5dc8:0:b0:441:651c:2d25 with SMTP id m8-20020ad45dc8000000b00441651c2d25mr1511953qvh.89.1649141272590;
-        Mon, 04 Apr 2022 23:47:52 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id w1-20020ac857c1000000b002e1e899badesm9610250qta.72.2022.04.04.23.47.52
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=YIG+/UngSJhhTn55tz4dtQqmyPpgvUtXWMrPNZZWXxc=;
+        b=sABZGgXT16DMzngoRSTgqNhtesAH/rRa6IvDIUfF+NKwROlOFMZEHrar/Mpu+CipR8
+         x5BOTWIThvlm1+CNrwhUe1va35M7HUkETrysUb8flzjAUMznKDMhJKqGb3EwL87fUT5s
+         VAtnLWFAWPV33Wo/XjwXyswtOjCygOOGnaSFWv7gkFi7OxVO3F6dvvDNYtUcJLFjVifQ
+         kg3XfEUk43jzp/kYb8s852NFLtFWqiVIufRFjr/zZyjBtGbxPa31cvnJ3AVrQlIubpbn
+         CSb0Rvx5gPgRxECQy67zAMVkoiGHa0qAp1vaIb192wJKHbTwj3IpQzeKNsLGUzUgdzGe
+         pKUg==
+X-Gm-Message-State: AOAM532ZfnHj5gSmmCv7IXe/1r2ciaB3VxxsUiRAt9ABCw/A5jrhsx+r
+        s/1hSsXrlRVOtyrR5sUraYtKKA==
+X-Google-Smtp-Source: ABdhPJyUgD65+k0l3SLm8SGlDx1mgZx1RRhCF6A319xJHVUqx7IPUwwP7ZrzLZBz9MkPn31j1ilDlQ==
+X-Received: by 2002:aa7:c04e:0:b0:400:4daf:bab1 with SMTP id k14-20020aa7c04e000000b004004dafbab1mr1995189edo.101.1649141313496;
+        Mon, 04 Apr 2022 23:48:33 -0700 (PDT)
+Received: from [192.168.0.179] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id k19-20020a1709062a5300b006c75a94c587sm5214344eje.65.2022.04.04.23.48.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 23:47:52 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id j2so21799245ybu.0;
-        Mon, 04 Apr 2022 23:47:52 -0700 (PDT)
-X-Received: by 2002:a25:c049:0:b0:634:6751:e8d2 with SMTP id
- c70-20020a25c049000000b006346751e8d2mr1506294ybf.6.1649141271808; Mon, 04 Apr
- 2022 23:47:51 -0700 (PDT)
+        Mon, 04 Apr 2022 23:48:32 -0700 (PDT)
+Message-ID: <df2fc253-b16a-3d93-7682-513abdf967d5@linaro.org>
+Date:   Tue, 5 Apr 2022 08:48:32 +0200
 MIME-Version: 1.0
-References: <CAHk-=wg6FWL1xjVyHx7DdjD2dHZETA5_=FqqW17Z19X-WTfWSg@mail.gmail.com>
- <20220404074734.1092959-1-geert@linux-m68k.org> <alpine.DEB.2.22.394.2204041006230.1941618@ramsan.of.borg>
- <20220404092655.GR1544202@dread.disaster.area> <CAMuHMdWgqdR1o3wT9pjB=w8z=2xaDFv5DJX58-HPHOFRm3Tr8Q@mail.gmail.com>
- <CAK8P3a0QrihBR_2FQ7uZ5w2JmLjv7czfrrarCMmJOhvNdJ3p9g@mail.gmail.com> <20220404221605.GS1544202@dread.disaster.area>
-In-Reply-To: <20220404221605.GS1544202@dread.disaster.area>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 5 Apr 2022 08:47:40 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWak-zarKA_eCxWm5uhejWAXi0XkAuekfpAKRczLfhq3g@mail.gmail.com>
-Message-ID: <CAMuHMdWak-zarKA_eCxWm5uhejWAXi0XkAuekfpAKRczLfhq3g@mail.gmail.com>
-Subject: Re: Build regressions/improvements in v5.18-rc1
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/2] dt-bindings: mfd: syscon: Add support for regmap
+ fast-io
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     lee.jones@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        arnd@arndb.de, matthias.bgg@gmail.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+References: <20220401135048.23245-1-angelogioacchino.delregno@collabora.com>
+ <20220401135048.23245-3-angelogioacchino.delregno@collabora.com>
+ <8588a941-6d3e-9e14-cb21-d7af29b4b2bd@linaro.org>
+ <7775eb70-692f-3f1b-f226-f7e0fad47e37@collabora.com>
+ <26af9701-267d-5a23-8688-24608617d3f6@linaro.org>
+ <af2b304a-a407-3fc6-dfc6-edc85ce1caea@collabora.com>
+ <20220404222659.yn2wrda5xtbmvul7@notapiano>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220404222659.yn2wrda5xtbmvul7@notapiano>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
+On 05/04/2022 00:26, Nícolas F. R. A. Prado wrote:
+> On Mon, Apr 04, 2022 at 11:39:49AM +0200, AngeloGioacchino Del Regno wrote:
+>> Il 04/04/22 10:55, Krzysztof Kozlowski ha scritto:
+>>> On 04/04/2022 10:40, AngeloGioacchino Del Regno wrote:
+>>>> Il 02/04/22 13:38, Krzysztof Kozlowski ha scritto:
+>>>>> On 01/04/2022 15:50, AngeloGioacchino Del Regno wrote:
+>>>>>> The syscon driver now enables the .fast_io regmap configuration when
+>>>>>> the 'fast-io' property is found in a syscon node.
+>>>>>>
+>>>>>> Keeping in mind that, in regmap, fast_io is checked only if we are
+>>>>>> not using hardware spinlocks, allow the fast-io property only if
+>>>>>> there is no hwlocks reference (and vice-versa).
+>>>>>
+>>>>> I have doubts you need a property for this. "fast" is subjective in
+>>>>> terms of hardware, so this looks more like a software property, not
+>>>>> hardware.
+>>>>>
+>>>>> I think most of MMIOs inside a SoC are considered fast. Usually also the
+>>>>> syscon/regmap consumer knows which regmap it gets, so knows that it is
+>>>>> fast or not.
+>>>>>
+>>>>
+>>>> Hello Krzysztof,
+>>>>
+>>>> well yes, this property is changing how software behaves - specifically,
+>>>> as you've correctly understood, what regmap does.
+>>>>
+>>>> It's true that most of MMIOs inside a SoC are considered fast.. the word "most" is
+>>>> the exact reason why I haven't proposed simply hardcoding '.fast_io = true' in
+>>>> syscon, or in regmap-mmio...
+>>>> There are too many different SoCs around, and I didn't want to end up breaking
+>>>> anything (even if it should be unlikely, since MMIO is fast by principle).
+> 
+> Hi Angelo,
+> 
+> I think I can see what Krzysztof means by saying this looks more like a software
+> property.
+> 
+> This property isn't simply saying whether the hardware is fast or not by itself,
+> since that's relative. Rather, it means that this hardware is fast relative to
+> the time overhead of using a mutex for locking in regmap. Since this is a
+> software construct, the property as a whole is software-dependent. If for some
+> reason the locking in regmap were to be changed and was now a lot faster or
+> slower, the same hardware could now be considered "fast" or "slow". This seems
+> to me a good reason to avoid making "fastness" part of the ABI for each
+> hardware.
 
-On Tue, Apr 5, 2022 at 12:16 AM Dave Chinner <david@fromorbit.com> wrote:
-> On Mon, Apr 04, 2022 at 01:45:05PM +0200, Arnd Bergmann wrote:
-> > On Mon, Apr 4, 2022 at 12:19 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > > /kisskb/src/fs/xfs/./xfs_trace.h:432:2: note: in expansion of macro 'TP_printk'
-> > > >   TP_printk("dev %d:%d daddr 0x%llx bbcount 0x%x hold %d pincount %d "
-> > > >   ^
-> > > > /kisskb/src/fs/xfs/./xfs_trace.h:440:5: note: in expansion of macro '__print_flags'
-> > > >      __print_flags(__entry->flags, "|", XFS_BUF_FLAGS),
-> > > >      ^
-> > > > /kisskb/src/fs/xfs/xfs_buf.h:67:4: note: in expansion of macro 'XBF_UNMAPPED'
-> > > >   { XBF_UNMAPPED,  "UNMAPPED" }
-> > > >     ^
-> > > > /kisskb/src/fs/xfs/./xfs_trace.h:440:40: note: in expansion of macro 'XFS_BUF_FLAGS'
-> > > >      __print_flags(__entry->flags, "|", XFS_BUF_FLAGS),
-> > > >                                         ^
-> > > > /kisskb/src/fs/xfs/./xfs_trace.h: In function 'trace_raw_output_xfs_buf_flags_class':
-> > > > /kisskb/src/fs/xfs/xfs_buf.h:46:23: error: initializer element is not constant
-> > > >  #define XBF_UNMAPPED  (1 << 31)/* do not map the buffer */
-> > > >
-> > > > This doesn't make a whole lotta sense to me. It's blown up in a
-> > > > tracepoint macro in XFS that was not changed at all in 5.18-rc1, nor
-> > > > was any of the surrounding XFS code or contexts.  Perhaps something
-> > > > outside XFS changed to cause this on these platforms?
-> > >
-> > > Upon closer look, all builds showing this issue are using gcc-5...
-> > >
-> > > > Can you bisect this, please?
-> > >
-> > > Fortunately I still have gcc-5 installed on an older machine,
-> > > and I could reproduce the issue on amd64 with
-> > > "make allmodconfig fs/xfs/xfs_trace.o".
-> > >
-> > > Bisection points to commit e8c07082a810fbb9 ("Kbuild: move to
-> > > -std=gnu11").
-> > >
-> > > [1] gcc version 5.5.0 20171010 (Ubuntu 5.5.0-12ubuntu1
-> >
-> > Thanks for the report. I've produced it and can see that the problem
-> > is assigning
-> > the value of "(1 << 31)" to an 'unsigned long' struct member. Since this is
-> > a signed integer overflow, the result is technically undefined behavior,
-> > which gcc-5 does not accept as an integer constant.
-> >
-> > The patch below fixes it for me, but I have not checked if there are any
-> > other instances. This could also be done using the 'BIT()' macro if the
-> > XFS maintainers prefer:
->
-> So XFS only uses these flags in unsigned int fields that are
-> typed via:
->
-> typedef unsigned int xfs_buf_flags_t;
->
-> So on the surface, declaring the flag values as ULONG and then writing
-> them into a UINT field is not a nice thing to be doing.
->
-> I really don't want to change the xfs_buf_flags_t type to an
-> unsigned long, because that changes the packing of the first
-> cacheline of the struct xfs_buf and the contents of that cacheline
-> are performance critical for the lookup fastpath....
+Thanks, that very good explanation!
 
-Hence just use "1u << n" instead of "1ul << n"?
+> 
+>>>
+>>> What I am proposing, is the regmap consumer knows whether access is fast
+>>> or not, so it could call get_regmap() or
+>>> syscon_regmap_lookup_by_phandle() with appropriate argument.
+>>>
+>>> Even if we stay with a DT property, I am not sure if this is an
+>>> attribute of syscon but rather of a bus.
+>>>
+>>> Best regards,
+>>> Krzysztof
+>>
+>> I'm sorry for sending a v2 so fast - apparently, I initially didn't fully
+>> understand your comment, but now it's clear.
+>>
+>> Actually, since locking in regmap's configuration does not use DT at all
+>> in any generic case, maybe bringing this change purely in code may be a
+>> good one... and I have evaluated that before proposing this kind of change.
+>>
+>> My concerns about that kind of approach are:
+>> - First of all, there are * a lot * of drivers, in various subsystems, that
+>>   are using syscon, so changing some function parameter in syscon.c would
+>>   result in a commit that would be touching hundreds of them... and some of
+>>   them would be incorrect, as the default would be no fast-io, while they
+>>   should indeed enable that. Of course this would have to be changed later
+>>   by the respective driver maintainer(s), potentially creating a lot of
+>>   commit noise with lots of Fixes tags, which I am trying to avoid;
+>> - Not all drivers are using the same syscon exported function to get a
+>>   handle to regmap and we're looking at 6 of them; changing only one of
+>>   the six would be rather confusing, and most probably logically incorrect
+>>   as well...
+>>
+>> Of course you know, but for the sake of making this easily understandable
+>> for any casual developers reading this, functions are:
+>> - device_node_to_regmap()
+>> - syscon_node_to_regmap()
+>> - syscon_regmap_lookup_by_compatible()
+>> - syscon_regmap_lookup_by_phandle()
+>> - syscon_regmap_lookup_by_phandle_args()
+>> - syscon_regmap_lookup_by_phandle_optional().
+> 
+> What if a separate function was added with the additional regmap configuration
+> argument? That way setting the "fast_io" would be opt-in much like a DT property
+> would. The other drivers wouldn't need to be changed.
 
-Gr{oetje,eeting}s,
+Exactly, there is no need to change all callers now.
+1. You just add rename existing code and add argument:
 
-                        Geert
+  syscon_regmap_lookup_by_compatible_mmio(...., unsigned long flags);
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2. Add a wrappers (with old names):
+syscon_regmap_lookup_by_compatible() {
+  syscon_regmap_lookup_by_compatible_mmio(..., SYSCON_IO_DEFAULT);
+}
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+3. and finally slowly convert the users where it is relevant.
+
+Just one more thing. I was rather thinking out loud, instead of
+proposing a proper solution about clients defining speed. I am still not
+sure if this is correct approach, because actually the regmap provider
+knows the best whether it is slow or fast. Clients within SoC should
+know it, but what if one client asks for fast regmap, other for slow? Or
+not every client is updated to new API?
+
+Another solution would be to add such property to the bus on which the
+syscon device is sitting. Although this is also not complete. Imagine:
+
+syscon <--ahb-fast-bus--> some bus bridge <--apb-slow-bus--> syscon consumer
+
+Although your original case also would not be accurate here.
+
+Best regards,
+Krzysztof

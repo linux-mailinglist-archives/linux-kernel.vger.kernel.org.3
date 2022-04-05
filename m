@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75D484F4491
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:25:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18BA14F4524
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381694AbiDEPOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
+        id S1382408AbiDEPOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346580AbiDEJpM (ORCPT
+        with ESMTP id S1346599AbiDEJpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:45:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FD4DA6FD;
-        Tue,  5 Apr 2022 02:31:00 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F768DC9;
+        Tue,  5 Apr 2022 02:31:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A7D426165C;
-        Tue,  5 Apr 2022 09:30:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C160CC385A3;
-        Tue,  5 Apr 2022 09:30:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A733AB81C9A;
+        Tue,  5 Apr 2022 09:31:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AE22C385A3;
+        Tue,  5 Apr 2022 09:31:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151059;
-        bh=D6m+o0u+CA+SvDho6afPxHeHyW7tn/a0c/86ypjkG+8=;
+        s=korg; t=1649151064;
+        bh=4SVC2Nxylfe4tkCpqrTVQRdzAUldIPjWomgZW9cYs7s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MbyN5SdgqACx0nfL+S1OJDR2/uQ9I4fXFKBUqOCesQ2SSZxRRHB8ufU/imKDFc7Mc
-         bA45j1JjxvRBswe45BBI+czvlpSFzaJeoifwf8RcmGNdNJV9gwlUuFf7sjGVEshJFY
-         AmiPacJ3jMAryrv/k34RXpJ/VNJqTkGZIlIhLEPY=
+        b=vjwBODDDc3pVmJdbekJLWMGfkn8L3BgM8hyHiv4zRF0yWIb3Gm4slv0QibBKegcoP
+         l3ReFVSopxxkAaW1Ffy50CaHbm8xlmxS1g1lmgZ5jAvSzK0DV1ygq8XN3eZW95zr7J
+         kYv5rvXK3iuLea8Im4PqT3fKtVHjLey3tSbVwpqw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 278/913] ASoC: codecs: Check for error pointer after calling devm_regmap_init_mmio
-Date:   Tue,  5 Apr 2022 09:22:20 +0200
-Message-Id: <20220405070348.190484643@linuxfoundation.org>
+Subject: [PATCH 5.15 280/913] ASoC: simple-card-utils: Set sysclk on all components
+Date:   Tue,  5 Apr 2022 09:22:22 +0200
+Message-Id: <20220405070348.250345298@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,68 +56,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Robert Hancock <robert.hancock@calian.com>
 
-[ Upstream commit aa505ecccf2ae7546e0e262d574e18a9241f3005 ]
+[ Upstream commit ce2f7b8d4290c22e462e465d1da38a1c113ae66a ]
 
-Since the potential failure of the devm_regmap_init_mmio(), it will
-return error pointer and be assigned to the regmap.
-Then the error pointer will be dereferenced.
-For example rx->regmap will be used in rx_macro_mclk_enable().
-Therefore, it should be better to check it.
+If an mclk-fs value was provided in the device tree configuration, the
+calculated MCLK was fed into the downstream codec DAI and CPU DAI,
+however set_sysclk was not being called on the platform device. Some
+platform devices such as the Xilinx Audio Formatter need to know the MCLK
+as well.
 
-Fixes: af3d54b99764 ("ASoC: codecs: lpass-rx-macro: add support for lpass rx macro")
-Fixes: c39667ddcfc5 ("ASoC: codecs: lpass-tx-macro: add support for lpass tx macro")
-Fixes: 809bcbcecebf ("ASoC: codecs: lpass-wsa-macro: Add support to WSA Macro")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220121171031.2826198-1-jiasheng@iscas.ac.cn
+Call snd_soc_component_set_sysclk on each component in the stream to set
+the proper sysclk value in addition to the existing call of
+snd_soc_dai_set_sysclk on the codec DAI and CPU DAI. This may end up
+resulting in redundant calls if one of the snd_soc_dai_set_sysclk calls
+ends up calling snd_soc_component_set_sysclk itself, but that isn't
+expected to cause any significant harm.
+
+Fixes: f48dcbb6d47d ("ASoC: simple-card-utils: share asoc_simple_hw_param()")
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Reviewed-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Link: https://lore.kernel.org/r/20220120195832.1742271-5-robert.hancock@calian.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/lpass-rx-macro.c  | 2 ++
- sound/soc/codecs/lpass-tx-macro.c  | 2 ++
- sound/soc/codecs/lpass-wsa-macro.c | 2 ++
- 3 files changed, 6 insertions(+)
+ sound/soc/generic/simple-card-utils.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/sound/soc/codecs/lpass-rx-macro.c b/sound/soc/codecs/lpass-rx-macro.c
-index 1c0409350e86..0f932ca61c81 100644
---- a/sound/soc/codecs/lpass-rx-macro.c
-+++ b/sound/soc/codecs/lpass-rx-macro.c
-@@ -3542,6 +3542,8 @@ static int rx_macro_probe(struct platform_device *pdev)
- 		return PTR_ERR(base);
+diff --git a/sound/soc/generic/simple-card-utils.c b/sound/soc/generic/simple-card-utils.c
+index 10c63b73900c..ffda8a38de3e 100644
+--- a/sound/soc/generic/simple-card-utils.c
++++ b/sound/soc/generic/simple-card-utils.c
+@@ -275,6 +275,7 @@ int asoc_simple_hw_params(struct snd_pcm_substream *substream,
+ 		mclk_fs = props->mclk_fs;
  
- 	rx->regmap = devm_regmap_init_mmio(dev, base, &rx_regmap_config);
-+	if (IS_ERR(rx->regmap))
-+		return PTR_ERR(rx->regmap);
+ 	if (mclk_fs) {
++		struct snd_soc_component *component;
+ 		mclk = params_rate(params) * mclk_fs;
  
- 	dev_set_drvdata(dev, rx);
- 
-diff --git a/sound/soc/codecs/lpass-tx-macro.c b/sound/soc/codecs/lpass-tx-macro.c
-index 27a0d5defd27..e4bbc6bd4925 100644
---- a/sound/soc/codecs/lpass-tx-macro.c
-+++ b/sound/soc/codecs/lpass-tx-macro.c
-@@ -1803,6 +1803,8 @@ static int tx_macro_probe(struct platform_device *pdev)
- 		return PTR_ERR(base);
- 
- 	tx->regmap = devm_regmap_init_mmio(dev, base, &tx_regmap_config);
-+	if (IS_ERR(tx->regmap))
-+		return PTR_ERR(tx->regmap);
- 
- 	dev_set_drvdata(dev, tx);
- 
-diff --git a/sound/soc/codecs/lpass-wsa-macro.c b/sound/soc/codecs/lpass-wsa-macro.c
-index d3ac318fd6b6..dd1a8b7bc794 100644
---- a/sound/soc/codecs/lpass-wsa-macro.c
-+++ b/sound/soc/codecs/lpass-wsa-macro.c
-@@ -2405,6 +2405,8 @@ static int wsa_macro_probe(struct platform_device *pdev)
- 		return PTR_ERR(base);
- 
- 	wsa->regmap = devm_regmap_init_mmio(dev, base, &wsa_regmap_config);
-+	if (IS_ERR(wsa->regmap))
-+		return PTR_ERR(wsa->regmap);
- 
- 	dev_set_drvdata(dev, wsa);
- 
+ 		for_each_prop_dai_codec(props, i, pdai) {
+@@ -282,16 +283,30 @@ int asoc_simple_hw_params(struct snd_pcm_substream *substream,
+ 			if (ret < 0)
+ 				return ret;
+ 		}
++
+ 		for_each_prop_dai_cpu(props, i, pdai) {
+ 			ret = asoc_simple_set_clk_rate(pdai, mclk);
+ 			if (ret < 0)
+ 				return ret;
+ 		}
++
++		/* Ensure sysclk is set on all components in case any
++		 * (such as platform components) are missed by calls to
++		 * snd_soc_dai_set_sysclk.
++		 */
++		for_each_rtd_components(rtd, i, component) {
++			ret = snd_soc_component_set_sysclk(component, 0, 0,
++							   mclk, SND_SOC_CLOCK_IN);
++			if (ret && ret != -ENOTSUPP)
++				return ret;
++		}
++
+ 		for_each_rtd_codec_dais(rtd, i, sdai) {
+ 			ret = snd_soc_dai_set_sysclk(sdai, 0, mclk, SND_SOC_CLOCK_IN);
+ 			if (ret && ret != -ENOTSUPP)
+ 				return ret;
+ 		}
++
+ 		for_each_rtd_cpu_dais(rtd, i, sdai) {
+ 			ret = snd_soc_dai_set_sysclk(sdai, 0, mclk, SND_SOC_CLOCK_OUT);
+ 			if (ret && ret != -ENOTSUPP)
 -- 
 2.34.1
 

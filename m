@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C664F2F31
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6494F3205
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245289AbiDEJLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34704 "EHLO
+        id S1346129AbiDEJoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239547AbiDEIUN (ORCPT
+        with ESMTP id S239557AbiDEIUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9BE1132;
-        Tue,  5 Apr 2022 01:16:04 -0700 (PDT)
+        Tue, 5 Apr 2022 04:20:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B5221AD;
+        Tue,  5 Apr 2022 01:16:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EEBD7B81BAC;
-        Tue,  5 Apr 2022 08:16:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FD13C385A0;
-        Tue,  5 Apr 2022 08:16:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5EC63B81BAC;
+        Tue,  5 Apr 2022 08:16:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3748C385A1;
+        Tue,  5 Apr 2022 08:16:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146561;
-        bh=rdK5mcYAvYDBjTtpXFY1r65fy+A1YkLBs/XFQ/Eway0=;
+        s=korg; t=1649146567;
+        bh=kIr5JhcaLshk79hym1GPm/MZv8EVmOacLbwDOQPyUlw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tG2t1tZ6SK+1+Idx8Xh9toGTUAGLBoYNXucaQNKALsnA1Np/ixassOzKD10wD7c7z
-         CJCt3C+2IDFzcwFLPjD+5xT8F/1wHKh9Kec0toEqWVJBGXJ9Ts+IKg/a7wSJ1LBJfR
-         JISTa7NK7xjmKICMIQfcFqHSQIbUMa8Ij9edDnCM=
+        b=f69BunrHFl3tM9/ukbZXt6dQeCuVy4hPL8c23sTfJyokubWk+uZXv9YK52ABHcFZQ
+         NFQvHf3ZmgkAjWTXrVlJFE5drC04ash+2zvHW/WYqyf7OepSt1hTuw//zytenOGfOe
+         HP7gCtpjQ0dKPtmGUFm9szf2o4HhFojgKmiOdGTA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jian Shen <shenjian15@huawei.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
+        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0809/1126] net: hns3: add vlan list lock to protect vlan list
-Date:   Tue,  5 Apr 2022 09:25:56 +0200
-Message-Id: <20220405070431.312604781@linuxfoundation.org>
+Subject: [PATCH 5.17 0811/1126] net: phy: broadcom: Fix brcm_fet_config_init()
+Date:   Tue,  5 Apr 2022 09:25:58 +0200
+Message-Id: <20220405070431.371012514@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,180 +55,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jian Shen <shenjian15@huawei.com>
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-[ Upstream commit 1932a624ab88ff407d1a1d567fe581faa15dc725 ]
+[ Upstream commit bf8bfc4336f7a34e48b3bbd19b1542bf085bdc3d ]
 
-When adding port base VLAN, vf VLAN need to remove from HW and modify
-the vlan state in vf VLAN list as false. If the periodicity task is
-freeing the same node, it may cause "use after free" error.
-This patch adds a vlan list lock to protect the vlan list.
+A Broadcom AC201 PHY (same entry as 5241) would be flagged by the
+Broadcom UniMAC MDIO controller as not completing the turn around
+properly since the PHY expects 65 MDC clock cycles to complete a write
+cycle, and the MDIO controller was only sending 64 MDC clock cycles as
+determined by looking at a scope shot.
 
-Fixes: c6075b193462 ("net: hns3: Record VF vlan tables")
-Signed-off-by: Jian Shen <shenjian15@huawei.com>
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+This would make the subsequent read fail with the UniMAC MDIO controller
+command field having MDIO_READ_FAIL set and we would abort the
+brcm_fet_config_init() function and thus not probe the PHY at all.
+
+After issuing a software reset, wait for at least 1ms which is well
+above the 1us reset delay advertised by the datasheet and issue a dummy
+read to let the PHY turn around the line properly. This read
+specifically ignores -EIO which would be returned by MDIO controllers
+checking for the line being turned around.
+
+If we have a genuine reaad failure, the next read of the interrupt
+status register would pick it up anyway.
+
+Fixes: d7a2ed9248a3 ("broadcom: Add AC131 phy support")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220324232438.1156812-1-f.fainelli@gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../hisilicon/hns3/hns3pf/hclge_main.c        | 38 +++++++++++++++++--
- .../hisilicon/hns3/hns3pf/hclge_main.h        |  1 +
- 2 files changed, 35 insertions(+), 4 deletions(-)
+ drivers/net/phy/broadcom.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-index d4fe92b22fb9..9655a7d2c200 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-@@ -9809,19 +9809,28 @@ static void hclge_add_vport_vlan_table(struct hclge_vport *vport, u16 vlan_id,
- 				       bool writen_to_tbl)
- {
- 	struct hclge_vport_vlan_cfg *vlan, *tmp;
-+	struct hclge_dev *hdev = vport->back;
+diff --git a/drivers/net/phy/broadcom.c b/drivers/net/phy/broadcom.c
+index 3c683e0e40e9..e36809aa6d30 100644
+--- a/drivers/net/phy/broadcom.c
++++ b/drivers/net/phy/broadcom.c
+@@ -11,6 +11,7 @@
+  */
  
--	list_for_each_entry_safe(vlan, tmp, &vport->vlan_list, node)
--		if (vlan->vlan_id == vlan_id)
-+	mutex_lock(&hdev->vport_lock);
+ #include "bcm-phy-lib.h"
++#include <linux/delay.h>
+ #include <linux/module.h>
+ #include <linux/phy.h>
+ #include <linux/brcmphy.h>
+@@ -602,6 +603,26 @@ static int brcm_fet_config_init(struct phy_device *phydev)
+ 	if (err < 0)
+ 		return err;
+ 
++	/* The datasheet indicates the PHY needs up to 1us to complete a reset,
++	 * build some slack here.
++	 */
++	usleep_range(1000, 2000);
 +
-+	list_for_each_entry_safe(vlan, tmp, &vport->vlan_list, node) {
-+		if (vlan->vlan_id == vlan_id) {
-+			mutex_unlock(&hdev->vport_lock);
- 			return;
-+		}
-+	}
- 
- 	vlan = kzalloc(sizeof(*vlan), GFP_KERNEL);
--	if (!vlan)
-+	if (!vlan) {
-+		mutex_unlock(&hdev->vport_lock);
- 		return;
-+	}
- 
- 	vlan->hd_tbl_status = writen_to_tbl;
- 	vlan->vlan_id = vlan_id;
- 
- 	list_add_tail(&vlan->node, &vport->vlan_list);
-+	mutex_unlock(&hdev->vport_lock);
- }
- 
- static int hclge_add_vport_all_vlan_table(struct hclge_vport *vport)
-@@ -9830,6 +9839,8 @@ static int hclge_add_vport_all_vlan_table(struct hclge_vport *vport)
- 	struct hclge_dev *hdev = vport->back;
- 	int ret;
- 
-+	mutex_lock(&hdev->vport_lock);
++	/* The PHY requires 65 MDC clock cycles to complete a write operation
++	 * and turnaround the line properly.
++	 *
++	 * We ignore -EIO here as the MDIO controller (e.g.: mdio-bcm-unimac)
++	 * may flag the lack of turn-around as a read failure. This is
++	 * particularly true with this combination since the MDIO controller
++	 * only used 64 MDC cycles. This is not a critical failure in this
++	 * specific case and it has no functional impact otherwise, so we let
++	 * that one go through. If there is a genuine bus error, the next read
++	 * of MII_BRCM_FET_INTREG will error out.
++	 */
++	err = phy_read(phydev, MII_BMCR);
++	if (err < 0 && err != -EIO)
++		return err;
 +
- 	list_for_each_entry_safe(vlan, tmp, &vport->vlan_list, node) {
- 		if (!vlan->hd_tbl_status) {
- 			ret = hclge_set_vlan_filter_hw(hdev, htons(ETH_P_8021Q),
-@@ -9839,12 +9850,16 @@ static int hclge_add_vport_all_vlan_table(struct hclge_vport *vport)
- 				dev_err(&hdev->pdev->dev,
- 					"restore vport vlan list failed, ret=%d\n",
- 					ret);
-+
-+				mutex_unlock(&hdev->vport_lock);
- 				return ret;
- 			}
- 		}
- 		vlan->hd_tbl_status = true;
- 	}
- 
-+	mutex_unlock(&hdev->vport_lock);
-+
- 	return 0;
- }
- 
-@@ -9854,6 +9869,8 @@ static void hclge_rm_vport_vlan_table(struct hclge_vport *vport, u16 vlan_id,
- 	struct hclge_vport_vlan_cfg *vlan, *tmp;
- 	struct hclge_dev *hdev = vport->back;
- 
-+	mutex_lock(&hdev->vport_lock);
-+
- 	list_for_each_entry_safe(vlan, tmp, &vport->vlan_list, node) {
- 		if (vlan->vlan_id == vlan_id) {
- 			if (is_write_tbl && vlan->hd_tbl_status)
-@@ -9868,6 +9885,8 @@ static void hclge_rm_vport_vlan_table(struct hclge_vport *vport, u16 vlan_id,
- 			break;
- 		}
- 	}
-+
-+	mutex_unlock(&hdev->vport_lock);
- }
- 
- void hclge_rm_vport_all_vlan_table(struct hclge_vport *vport, bool is_del_list)
-@@ -9875,6 +9894,8 @@ void hclge_rm_vport_all_vlan_table(struct hclge_vport *vport, bool is_del_list)
- 	struct hclge_vport_vlan_cfg *vlan, *tmp;
- 	struct hclge_dev *hdev = vport->back;
- 
-+	mutex_lock(&hdev->vport_lock);
-+
- 	list_for_each_entry_safe(vlan, tmp, &vport->vlan_list, node) {
- 		if (vlan->hd_tbl_status)
- 			hclge_set_vlan_filter_hw(hdev,
-@@ -9890,6 +9911,7 @@ void hclge_rm_vport_all_vlan_table(struct hclge_vport *vport, bool is_del_list)
- 		}
- 	}
- 	clear_bit(vport->vport_id, hdev->vf_vlan_full);
-+	mutex_unlock(&hdev->vport_lock);
- }
- 
- void hclge_uninit_vport_vlan_table(struct hclge_dev *hdev)
-@@ -9898,6 +9920,8 @@ void hclge_uninit_vport_vlan_table(struct hclge_dev *hdev)
- 	struct hclge_vport *vport;
- 	int i;
- 
-+	mutex_lock(&hdev->vport_lock);
-+
- 	for (i = 0; i < hdev->num_alloc_vport; i++) {
- 		vport = &hdev->vport[i];
- 		list_for_each_entry_safe(vlan, tmp, &vport->vlan_list, node) {
-@@ -9905,6 +9929,8 @@ void hclge_uninit_vport_vlan_table(struct hclge_dev *hdev)
- 			kfree(vlan);
- 		}
- 	}
-+
-+	mutex_unlock(&hdev->vport_lock);
- }
- 
- void hclge_restore_vport_port_base_vlan_config(struct hclge_dev *hdev)
-@@ -9944,6 +9970,8 @@ void hclge_restore_vport_vlan_table(struct hclge_vport *vport)
- 	struct hclge_dev *hdev = vport->back;
- 	int ret;
- 
-+	mutex_lock(&hdev->vport_lock);
-+
- 	if (vport->port_base_vlan_cfg.state == HNAE3_PORT_BASE_VLAN_DISABLE) {
- 		list_for_each_entry_safe(vlan, tmp, &vport->vlan_list, node) {
- 			ret = hclge_set_vlan_filter_hw(hdev, htons(ETH_P_8021Q),
-@@ -9954,6 +9982,8 @@ void hclge_restore_vport_vlan_table(struct hclge_vport *vport)
- 			vlan->hd_tbl_status = true;
- 		}
- 	}
-+
-+	mutex_unlock(&hdev->vport_lock);
- }
- 
- /* For global reset and imp reset, hardware will clear the mac table,
-@@ -11854,8 +11884,8 @@ static void hclge_uninit_ae_dev(struct hnae3_ae_dev *ae_dev)
- 	hclge_misc_irq_uninit(hdev);
- 	hclge_devlink_uninit(hdev);
- 	hclge_pci_uninit(hdev);
--	mutex_destroy(&hdev->vport_lock);
- 	hclge_uninit_vport_vlan_table(hdev);
-+	mutex_destroy(&hdev->vport_lock);
- 	ae_dev->priv = NULL;
- }
- 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.h b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.h
-index 31fef46b93b3..63197257dd4e 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.h
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.h
-@@ -1025,6 +1025,7 @@ struct hclge_vport {
- 	spinlock_t mac_list_lock; /* protect mac address need to add/detele */
- 	struct list_head uc_mac_list;   /* Store VF unicast table */
- 	struct list_head mc_mac_list;   /* Store VF multicast table */
-+
- 	struct list_head vlan_list;     /* Store VF vlan table */
- };
- 
+ 	reg = phy_read(phydev, MII_BRCM_FET_INTREG);
+ 	if (reg < 0)
+ 		return reg;
 -- 
 2.34.1
 

@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452494F4397
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89DB14F4425
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353841AbiDEPL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33310 "EHLO
+        id S1354865AbiDEPMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346057AbiDEJoX (ORCPT
+        with ESMTP id S1346086AbiDEJo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:44:23 -0400
+        Tue, 5 Apr 2022 05:44:27 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814C1C6EF5;
-        Tue,  5 Apr 2022 02:30:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F169CC8BC0;
+        Tue,  5 Apr 2022 02:30:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EB59EB81C9A;
-        Tue,  5 Apr 2022 09:30:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35ADBC385A0;
-        Tue,  5 Apr 2022 09:30:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 990ADB81CAC;
+        Tue,  5 Apr 2022 09:30:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E29EDC385A0;
+        Tue,  5 Apr 2022 09:30:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151001;
-        bh=/Fq1gwqrLUmliP1W1v3pB/zvWHZ8E/6r9pL/5AHf0sc=;
+        s=korg; t=1649151004;
+        bh=cK/eTmMO1ar/cpLmr16wWiPao3SLZRntHcZdToKAgao=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EiNb5h63Lp61rCQ1I/HGh6ER1F8kpbXn3h84/Y5VvTTs35qVED6jaboIXoX5Y/L3F
-         j2JCLi9IDDhn3hj0JZ73/9TMBcERaZYYYZvqPNbPe0LtyhMOWwGqePRWFP8Sf2Qa9t
-         5JccoTRfBsh/t2k7D/v44TIlu8Sh0scvoMZpu0ok=
+        b=I7NXaezY2a1FQVAGvkKlDq3/iB21nkzNNIjA2GQN0tETT69nnrRZiZNHR4ZV8AAqU
+         37RVLI/kPxX6xPWSg4x4Xia4EZHy3GkaZQyo37S1JJHAiCAmzjzYW6DqToTPkJ6Obc
+         7jtouU1JHVxFewZr36UxrSbkJahwj4xf5E495HoY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
-        David Sterba <dsterba@suse.com>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Fengnan Chang <changfengnan@vivo.com>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 259/913] btrfs: fix unexpected error path when reflinking an inline extent
-Date:   Tue,  5 Apr 2022 09:22:01 +0200
-Message-Id: <20220405070347.619409658@linuxfoundation.org>
+Subject: [PATCH 5.15 260/913] f2fs: fix compressed file start atomic write may cause data corruption
+Date:   Tue,  5 Apr 2022 09:22:02 +0200
+Message-Id: <20220405070347.649783086@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,48 +57,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Filipe Manana <fdmanana@suse.com>
+From: Fengnan Chang <changfengnan@vivo.com>
 
-[ Upstream commit 1f4613cdbe7739ce291554b316bff8e551383389 ]
+[ Upstream commit 9b56adcf525522e9ffa52471260298d91fc1d395 ]
 
-When reflinking an inline extent, we assert that its file offset is 0 and
-that its uncompressed length is not greater than the sector size. We then
-return an error if one of those conditions is not satisfied. However we
-use a return statement, which results in returning from btrfs_clone()
-without freeing the path and buffer that were allocated before, as well as
-not clearing the flag BTRFS_INODE_NO_DELALLOC_FLUSH for the destination
-inode.
+When compressed file has blocks, f2fs_ioc_start_atomic_write will succeed,
+but compressed flag will be remained in inode. If write partial compreseed
+cluster and commit atomic write will cause data corruption.
 
-Fix that by jumping to the 'out' label instead, and also add a WARN_ON()
-for each condition so that in case assertions are disabled, we get to
-known which of the unexpected conditions triggered the error.
+This is the reproduction process:
+Step 1:
+create a compressed file ,write 64K data , call fsync(), then the blocks
+are write as compressed cluster.
+Step2:
+iotcl(F2FS_IOC_START_ATOMIC_WRITE)  --- this should be fail, but not.
+write page 0 and page 3.
+iotcl(F2FS_IOC_COMMIT_ATOMIC_WRITE)  -- page 0 and 3 write as normal file,
+Step3:
+drop cache.
+read page 0-4   -- Since page 0 has a valid block address, read as
+non-compressed cluster, page 1 and 2 will be filled with compressed data
+or zero.
 
-Fixes: a61e1e0df9f321 ("Btrfs: simplify inline extent handling when doing reflinks")
-Signed-off-by: Filipe Manana <fdmanana@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+The root cause is, after commit 7eab7a696827 ("f2fs: compress: remove
+unneeded read when rewrite whole cluster"), in step 2, f2fs_write_begin()
+only set target page dirty, and in f2fs_commit_inmem_pages(), we will write
+partial raw pages into compressed cluster, result in corrupting compressed
+cluster layout.
+
+Fixes: 4c8ff7095bef ("f2fs: support data compression")
+Fixes: 7eab7a696827 ("f2fs: compress: remove unneeded read when rewrite whole cluster")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Fengnan Chang <changfengnan@vivo.com>
+Reviewed-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/reflink.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ fs/f2fs/data.c | 2 +-
+ fs/f2fs/file.c | 5 ++++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/fs/btrfs/reflink.c b/fs/btrfs/reflink.c
-index c71e49782e86..fa60af00ebca 100644
---- a/fs/btrfs/reflink.c
-+++ b/fs/btrfs/reflink.c
-@@ -505,8 +505,11 @@ static int btrfs_clone(struct inode *src, struct inode *inode,
- 			 */
- 			ASSERT(key.offset == 0);
- 			ASSERT(datal <= fs_info->sectorsize);
--			if (key.offset != 0 || datal > fs_info->sectorsize)
--				return -EUCLEAN;
-+			if (WARN_ON(key.offset != 0) ||
-+			    WARN_ON(datal > fs_info->sectorsize)) {
-+				ret = -EUCLEAN;
-+				goto out;
-+			}
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index f6e9fc36b837..4cf522120cb1 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -3410,7 +3410,7 @@ static int f2fs_write_begin(struct file *file, struct address_space *mapping,
  
- 			ret = clone_copy_inline_extent(inode, path, &new_key,
- 						       drop_start, datal, size,
+ 		*fsdata = NULL;
+ 
+-		if (len == PAGE_SIZE)
++		if (len == PAGE_SIZE && !(f2fs_is_atomic_file(inode)))
+ 			goto repeat;
+ 
+ 		ret = f2fs_prepare_compress_overwrite(inode, pagep,
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 7ed44752c758..0e14dc41ed4e 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -2002,7 +2002,10 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
+ 
+ 	inode_lock(inode);
+ 
+-	f2fs_disable_compressed_file(inode);
++	if (!f2fs_disable_compressed_file(inode)) {
++		ret = -EINVAL;
++		goto out;
++	}
+ 
+ 	if (f2fs_is_atomic_file(inode)) {
+ 		if (is_inode_flag_set(inode, FI_ATOMIC_REVOKE_REQUEST))
 -- 
 2.34.1
 

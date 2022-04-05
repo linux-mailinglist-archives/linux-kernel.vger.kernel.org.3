@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1C04F388C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB3D4F3889
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377071AbiDELZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
+        id S1377029AbiDELZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242801AbiDEItd (ORCPT
+        with ESMTP id S242743AbiDEIt3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:49:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B061A75602;
-        Tue,  5 Apr 2022 01:37:45 -0700 (PDT)
+        Tue, 5 Apr 2022 04:49:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E839470F70;
+        Tue,  5 Apr 2022 01:37:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB675B81C15;
-        Tue,  5 Apr 2022 08:37:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30787C385A7;
-        Tue,  5 Apr 2022 08:37:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA5A9614E2;
+        Tue,  5 Apr 2022 08:37:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF48AC385A0;
+        Tue,  5 Apr 2022 08:37:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147847;
-        bh=4JilkGpXUFStr7DuFbAb05Cf5KlVYYVNVPbAujUtgkU=;
+        s=korg; t=1649147850;
+        bh=S9aXtfEKDGdBQZkVkd+a1yTaeGJtvtEgjUrZ0wayzj4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tKRUsMt+Ix78VulN/E/Kb9AWShbephKVVc+p5UnEjdeaB/l8FQTMteSIyKDZiSIyh
-         xXJmj/b5Tsx8U7HORG8XA0YOnna1hJlQNmpAE60RKP4x6HJkQlyCyvg9xVdqS5p02a
-         s8FZWqSal2SV87ux38BESKrBFzJyq7UJyDI/TXhY=
+        b=L+v2fXqiy9ax9kTB/1Kdi6r6Gj9Q4QumHYW2/s2d1BXvmjAY94/GPcUVxWAjl71ab
+         YMuvQvG4SvIIRJ2QB50+fcgcQMYLjJMZuV1IPAD7ehq9P8CWi5UYS/tDHEsx2B0NV3
+         aGIb51stzuuPvgrHeGmAQMcgvXi6ZsJQLf5ubIug=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        stable@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
         =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
-Subject: [PATCH 5.16 0142/1017] samples/landlock: Fix path_list memory leak
-Date:   Tue,  5 Apr 2022 09:17:35 +0200
-Message-Id: <20220405070358.418907818@linuxfoundation.org>
+Subject: [PATCH 5.16 0143/1017] landlock: Use square brackets around "landlock-ruleset"
+Date:   Tue,  5 Apr 2022 09:17:36 +0200
+Message-Id: <20220405070358.448959069@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -54,36 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Christian Brauner <christian.brauner@ubuntu.com>
 
-commit 66b513b7c64a7290c1fbb88e657f7cece992e131 upstream.
+commit aea0b9f2486da8497f35c7114b764bf55e17c7ea upstream.
 
-Clang static analysis reports this error
+Make the name of the anon inode fd "[landlock-ruleset]" instead of
+"landlock-ruleset". This is minor but most anon inode fds already
+carry square brackets around their name:
 
-sandboxer.c:134:8: warning: Potential leak of memory
-  pointed to by 'path_list'
-        ret = 0;
-              ^
-path_list is allocated in parse_path() but never freed.
+    [eventfd]
+    [eventpoll]
+    [fanotify]
+    [fscontext]
+    [io_uring]
+    [pidfd]
+    [signalfd]
+    [timerfd]
+    [userfaultfd]
 
-Signed-off-by: Tom Rix <trix@redhat.com>
-Link: https://lore.kernel.org/r/20210428213852.2874324-1-trix@redhat.com
+For the sake of consistency lets do the same for the landlock-ruleset anon
+inode fd that comes with landlock. We did the same in
+1cdc415f1083 ("uapi, fsopen: use square brackets around "fscontext" [ver #2]")
+for the new mount api.
+
+Cc: linux-security-module@vger.kernel.org
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+Link: https://lore.kernel.org/r/20211011133704.1704369-1-brauner@kernel.org
 Cc: stable@vger.kernel.org
 Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- samples/landlock/sandboxer.c |    1 +
- 1 file changed, 1 insertion(+)
+ security/landlock/syscalls.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/samples/landlock/sandboxer.c
-+++ b/samples/landlock/sandboxer.c
-@@ -134,6 +134,7 @@ static int populate_ruleset(
- 	ret = 0;
+--- a/security/landlock/syscalls.c
++++ b/security/landlock/syscalls.c
+@@ -192,7 +192,7 @@ SYSCALL_DEFINE3(landlock_create_ruleset,
+ 		return PTR_ERR(ruleset);
  
- out_free_name:
-+	free(path_list);
- 	free(env_path_name);
- 	return ret;
- }
+ 	/* Creates anonymous FD referring to the ruleset. */
+-	ruleset_fd = anon_inode_getfd("landlock-ruleset", &ruleset_fops,
++	ruleset_fd = anon_inode_getfd("[landlock-ruleset]", &ruleset_fops,
+ 			ruleset, O_RDWR | O_CLOEXEC);
+ 	if (ruleset_fd < 0)
+ 		landlock_put_ruleset(ruleset);
 
 

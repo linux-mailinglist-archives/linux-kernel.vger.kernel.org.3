@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E124F394C
+	by mail.lfdr.de (Postfix) with ESMTP id A1D754F394D
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378038AbiDELbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
+        id S1378065AbiDELb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244167AbiDEIvr (ORCPT
+        with ESMTP id S244188AbiDEIvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:51:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5894BD3ACB;
-        Tue,  5 Apr 2022 01:40:27 -0700 (PDT)
+        Tue, 5 Apr 2022 04:51:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A4AD3AD5;
+        Tue,  5 Apr 2022 01:40:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A3B1BB81C69;
-        Tue,  5 Apr 2022 08:40:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8EB8C385A1;
-        Tue,  5 Apr 2022 08:40:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A466E60FFC;
+        Tue,  5 Apr 2022 08:40:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA690C385A0;
+        Tue,  5 Apr 2022 08:40:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148005;
-        bh=bd6rYXGYbU0BS3hg2ZtondeDJ5v2EGuiw/BaeVtysrk=;
+        s=korg; t=1649148011;
+        bh=FD6A8Q2VodmlK/aTr23PGmh0+5iHx7dgmOFrv2Xh6ew=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MSGPNXrFILqifhP6JY4ZPJ+/qlFxYCgDwIzwWDQRKOTLRPgdrOUtsIwT3SFhWxh7z
-         hjALd92c2Sf/HXAHknX1fXVAzcwHnpqWZ3kUTLosSxTIUnPMqo+9JExUcz+O9Pd6g4
-         ar8bKQMXDcrV1DTGyo/70YEJDGUAbkQ9LQ8E0bo8=
+        b=Cpe8pw7QDVkL9epidr4MzQDn8oovMSNLGQbi3yKw42nkoMtpAEB2wy+Ti1UzHXcmN
+         cs0T1e96dzy3FjI4krW2YhhT5upGMAWU5ZI/kjcUPqenYYMOm80geyR0qOYimUwRgw
+         B7gLllbR4uyyCK/JaoGj6ZBwUXbOiXD6XtDN8ZCE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "GONG, Ruiqi" <gongruiqi1@huawei.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         Paul Moore <paul@paul-moore.com>,
-        Sasha Levin <sashal@kernel.org>, GONG@vger.kernel.org
-Subject: [PATCH 5.16 0201/1017] selinux: access superblock_security_struct in LSM blob way
-Date:   Tue,  5 Apr 2022 09:18:34 +0200
-Message-Id: <20220405070400.216504660@linuxfoundation.org>
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0202/1017] selinux: check return value of sel_make_avc_files
+Date:   Tue,  5 Apr 2022 09:18:35 +0200
+Message-Id: <20220405070400.245926398@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,46 +57,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: GONG, Ruiqi <gongruiqi1@huawei.com>
+From: Christian Göttsche <cgzones@googlemail.com>
 
-[ Upstream commit 0266c25e7c2821181b610595df42cbca6bc93cb8 ]
+[ Upstream commit bcb62828e3e8c813b6613db6eb7fd9657db248fc ]
 
-LSM blob has been involved for superblock's security struct. So fix the
-remaining direct access to sb->s_security by using the LSM blob
-mechanism.
+sel_make_avc_files() might fail and return a negative errno value on
+memory allocation failures. Re-add the check of the return value,
+dropped in 66f8e2f03c02 ("selinux: sidtab reverse lookup hash table").
 
-Fixes: 08abe46b2cfc ("selinux: fall back to SECURITY_FS_USE_GENFS if no xattr support")
-Fixes: 69c4a42d72eb ("lsm,selinux: add new hook to compare new mount to an existing mount")
-Signed-off-by: GONG, Ruiqi <gongruiqi1@huawei.com>
-Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+Reported by clang-analyzer:
+
+    security/selinux/selinuxfs.c:2129:2: warning: Value stored to
+      'ret' is never read [deadcode.DeadStores]
+            ret = sel_make_avc_files(dentry);
+            ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fixes: 66f8e2f03c02 ("selinux: sidtab reverse lookup hash table")
+Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+[PM: description line wrapping, added proper commit ref]
 Signed-off-by: Paul Moore <paul@paul-moore.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/selinux/hooks.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ security/selinux/selinuxfs.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 49b4f59db35e..5b4b738a3be4 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -492,7 +492,7 @@ static int selinux_is_sblabel_mnt(struct super_block *sb)
+diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
+index e4cd7cb856f3..f2f6203e0fff 100644
+--- a/security/selinux/selinuxfs.c
++++ b/security/selinux/selinuxfs.c
+@@ -2127,6 +2127,8 @@ static int sel_fill_super(struct super_block *sb, struct fs_context *fc)
+ 	}
  
- static int sb_check_xattr_support(struct super_block *sb)
- {
--	struct superblock_security_struct *sbsec = sb->s_security;
-+	struct superblock_security_struct *sbsec = selinux_superblock(sb);
- 	struct dentry *root = sb->s_root;
- 	struct inode *root_inode = d_backing_inode(root);
- 	u32 sid;
-@@ -2696,7 +2696,7 @@ static int selinux_sb_eat_lsm_opts(char *options, void **mnt_opts)
- static int selinux_sb_mnt_opts_compat(struct super_block *sb, void *mnt_opts)
- {
- 	struct selinux_mnt_opts *opts = mnt_opts;
--	struct superblock_security_struct *sbsec = sb->s_security;
-+	struct superblock_security_struct *sbsec = selinux_superblock(sb);
- 	u32 sid;
- 	int rc;
+ 	ret = sel_make_avc_files(dentry);
++	if (ret)
++		goto err;
  
+ 	dentry = sel_make_dir(sb->s_root, "ss", &fsi->last_ino);
+ 	if (IS_ERR(dentry)) {
 -- 
 2.34.1
 

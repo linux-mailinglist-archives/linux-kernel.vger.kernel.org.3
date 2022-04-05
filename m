@@ -2,72 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FDD84F2871
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAF774F2CD9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:33:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235928AbiDEIQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
+        id S1356559AbiDEKYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:24:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235536AbiDEH7u (ORCPT
+        with ESMTP id S241290AbiDEIdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:59:50 -0400
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 506E93A5D6;
-        Tue,  5 Apr 2022 00:55:07 -0700 (PDT)
-Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 05 Apr 2022 16:55:07 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 422A02058B50;
-        Tue,  5 Apr 2022 16:55:07 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 5 Apr 2022 16:55:07 +0900
-Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id B2787B6389;
-        Tue,  5 Apr 2022 16:55:06 +0900 (JST)
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH 2/2] dt-bindings: regulator: uniphier: Use unevaluatedProperties
-Date:   Tue,  5 Apr 2022 16:55:03 +0900
-Message-Id: <1649145303-30221-3-git-send-email-hayashi.kunihiko@socionext.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1649145303-30221-1-git-send-email-hayashi.kunihiko@socionext.com>
-References: <1649145303-30221-1-git-send-email-hayashi.kunihiko@socionext.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 5 Apr 2022 04:33:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31069C4;
+        Tue,  5 Apr 2022 01:31:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B318CB81C13;
+        Tue,  5 Apr 2022 08:31:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2342CC385A0;
+        Tue,  5 Apr 2022 08:31:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649147470;
+        bh=8/YNMu7+LX6RHTLGnnonVq5mzG5eSceZVaeyn/2kX5Q=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=NEKEYyENUwUNHvub+wWekDVAUWzh+hGRvecg0uOWKHuDMuAfam+p+iUnS5DLuzGxv
+         FAReWQn4rSrI4dbEyx3yDnEhMJoi4mEFkhM8QqeG/tJsVrkWDYVpiBrwCrbXyZdSju
+         P34HVUweHGcBKTSgaisB6gfPb9pnfSYJBYFcPS7k=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Daniel Palmer <daniel@0x0f.com>,
+        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0010/1017] ARM: mstar: Select HAVE_ARM_ARCH_TIMER
+Date:   Tue,  5 Apr 2022 09:15:23 +0200
+Message-Id: <20220405070354.477448879@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This refers common bindings, so this is preferred for
-unevaluatedProperties instead of additionalProperties.
+From: Daniel Palmer <daniel@0x0f.com>
 
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+[ Upstream commit ea49432d184a6a09f84461604b7711a4e9f5ec9c ]
+
+The mstar SoCs have an arch timer but HAVE_ARM_ARCH_TIMER wasn't
+selected. If MSC313E_TIMER isn't selected then the kernel gets
+stuck at boot because there are no timers available.
+
+Signed-off-by: Daniel Palmer <daniel@0x0f.com>
+Link: https://lore.kernel.org/r/20220301104349.3040422-1-daniel@0x0f.com'
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../bindings/regulator/socionext,uniphier-regulator.yaml        | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/mach-mstar/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/regulator/socionext,uniphier-regulator.yaml b/Documentation/devicetree/bindings/regulator/socionext,uniphier-regulator.yaml
-index cc40cf72a149..75087c6e001c 100644
---- a/Documentation/devicetree/bindings/regulator/socionext,uniphier-regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/socionext,uniphier-regulator.yaml
-@@ -77,7 +77,7 @@ allOf:
-         reset-names:
-           const: link
- 
--additionalProperties: false
-+unevaluatedProperties: false
- 
- required:
-   - compatible
+diff --git a/arch/arm/mach-mstar/Kconfig b/arch/arm/mach-mstar/Kconfig
+index cd300eeedc20..0bf4d312bcfd 100644
+--- a/arch/arm/mach-mstar/Kconfig
++++ b/arch/arm/mach-mstar/Kconfig
+@@ -3,6 +3,7 @@ menuconfig ARCH_MSTARV7
+ 	depends on ARCH_MULTI_V7
+ 	select ARM_GIC
+ 	select ARM_HEAVY_MB
++	select HAVE_ARM_ARCH_TIMER
+ 	select MST_IRQ
+ 	select MSTAR_MSC313_MPLL
+ 	help
 -- 
-2.25.1
+2.34.1
+
+
 

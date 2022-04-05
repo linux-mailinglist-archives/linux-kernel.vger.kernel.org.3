@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D754F263F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23D9A4F263B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232700AbiDEH4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
+        id S232640AbiDEHz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233555AbiDEHr6 (ORCPT
+        with ESMTP id S233560AbiDEHr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 03:47:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AC592D00;
-        Tue,  5 Apr 2022 00:45:28 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602C19319A;
+        Tue,  5 Apr 2022 00:45:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 10AF7616C4;
-        Tue,  5 Apr 2022 07:45:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21E7CC340EE;
-        Tue,  5 Apr 2022 07:45:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EFDA9615E7;
+        Tue,  5 Apr 2022 07:45:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06CBBC340EE;
+        Tue,  5 Apr 2022 07:45:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144727;
-        bh=h/fjImZufkoiOHYV3J89zfVTdxTBVYhSbpTa8rbcvSI=;
+        s=korg; t=1649144738;
+        bh=0IXNH02d04Pp3qo3nL8AHAf9mxn0yRHztLc0LEJHT3U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LTLd5Xu+q5SsRnreGmKSNjU8ihtRrC5R36P6GrjdMO24xMVUUpJlfFtHFYMqkQWO5
-         w9+6oq4+NWVuivkqerhtBNPPxPIUs3gp7fl19vauE+uaVaCI6btbbkSbSyr2Vuom/q
-         duvO1guzE0VohzYAyPXG1CgbOcCs62RMLWH2f0Ts=
+        b=Jp32PdTTslbynb1B0CAPazYvwGPAdU39s5rkFJmqVg8IkrQ08molVPfAydLaqtfPN
+         wcxXewli4dZR02jfJOVorRz9XR434Luy+OKgn0zBk8Z/yidSzjg0M2Q8cjTzbPP3d2
+         grBq0s+s40MBURWHkePBABUPXonp9+0L1LfR5rps=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Alexander Dahl <ada@thorsis.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>
-Subject: [PATCH 5.17 0150/1126] ARM: dts: at91: sama5d2: Fix PMERRLOC resource size
-Date:   Tue,  5 Apr 2022 09:14:57 +0200
-Message-Id: <20220405070411.987164965@linuxfoundation.org>
+        stable@vger.kernel.org, Jocelyn Falempe <jfalempe@redhat.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH 5.17 0154/1126] mgag200 fix memmapsl configuration in GCTL6 register
+Date:   Tue,  5 Apr 2022 09:15:01 +0200
+Message-Id: <20220405070412.106119668@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,36 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tudor Ambarus <tudor.ambarus@microchip.com>
+From: Jocelyn Falempe <jfalempe@redhat.com>
 
-commit 0fb578a529ac7aca326a9fa475b4a6f58a756fda upstream.
+commit 028a73e10705af1ffd51f2537460f616dc58680e upstream.
 
-PMERRLOC resource size was set to 0x100, which resulted in HSMC_ERRLOCx
-register being truncated to offset x = 21, causing error correction to
-fail if more than 22 bit errors and if 24 or 32 bit error correction
-was supported.
+On some servers with MGA G200_SE_A (rev 42), booting with Legacy BIOS,
+the hardware hangs when using kdump and kexec into the kdump kernel.
+This happens when the uncompress code tries to write "Decompressing Linux"
+to the VGA Console.
 
-Fixes: d9c41bf30cf8 ("ARM: dts: at91: Declare EBI/NAND controllers")
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc: <stable@vger.kernel.org> # 4.13.x
-Acked-by: Alexander Dahl <ada@thorsis.com>
-Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-Link: https://lore.kernel.org/r/20220111132301.906712-1-tudor.ambarus@microchip.com
+It can be reproduced by writing to the VGA console (0xB8000) after
+booting to graphic mode, it generates the following error:
+
+kernel:NMI: PCI system error (SERR) for reason a0 on CPU 0.
+kernel:Dazed and confused, but trying to continue
+
+The root cause is the configuration of the MGA GCTL6 register
+
+According to the GCTL6 register documentation:
+
+bit 0 is gcgrmode:
+    0: Enables alpha mode, and the character generator addressing system is
+     activated.
+    1: Enables graphics mode, and the character addressing system is not
+     used.
+
+bit 1 is chainodd even:
+    0: The A0 signal of the memory address bus is used during system memory
+     addressing.
+    1: Allows A0 to be replaced by either the A16 signal of the system
+     address (ifmemmapsl is ‘00’), or by the hpgoddev (MISC<5>, odd/even
+     page select) field, described on page 3-294).
+
+bit 3-2 are memmapsl:
+    Memory map select bits 1 and 0. VGA.
+    These bits select where the video memory is mapped, as shown below:
+        00 => A0000h - BFFFFh
+        01 => A0000h - AFFFFh
+        10 => B0000h - B7FFFh
+        11 => B8000h - BFFFFh
+
+bit 7-4 are reserved.
+
+Current code set it to 0x05 => memmapsl to b01 => 0xa0000 (graphic mode)
+But on x86, the VGA console is at 0xb8000 (text mode)
+In arch/x86/boot/compressed/misc.c debug strings are written to 0xb8000
+As the driver doesn't use this mapping at 0xa0000, it is safe to set it to
+0xb8000 instead, to avoid kernel hang on G200_SE_A rev42, with kexec/kdump.
+
+Thus changing the value 0x05 to 0x0d
+
+Signed-off-by: Jocelyn Falempe <jfalempe@redhat.com>
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+Acked-by: Lyude Paul <lyude@redhat.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220119102905.1194787-1-jfalempe@redhat.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/sama5d2.dtsi |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/mgag200/mgag200_mode.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/arch/arm/boot/dts/sama5d2.dtsi
-+++ b/arch/arm/boot/dts/sama5d2.dtsi
-@@ -415,7 +415,7 @@
- 				pmecc: ecc-engine@f8014070 {
- 					compatible = "atmel,sama5d2-pmecc";
- 					reg = <0xf8014070 0x490>,
--					      <0xf8014500 0x100>;
-+					      <0xf8014500 0x200>;
- 				};
- 			};
+--- a/drivers/gpu/drm/mgag200/mgag200_mode.c
++++ b/drivers/gpu/drm/mgag200/mgag200_mode.c
+@@ -529,7 +529,10 @@ static void mgag200_set_format_regs(stru
+ 	WREG_GFX(3, 0x00);
+ 	WREG_GFX(4, 0x00);
+ 	WREG_GFX(5, 0x40);
+-	WREG_GFX(6, 0x05);
++	/* GCTL6 should be 0x05, but we configure memmapsl to 0xb8000 (text mode),
++	 * so that it doesn't hang when running kexec/kdump on G200_SE rev42.
++	 */
++	WREG_GFX(6, 0x0d);
+ 	WREG_GFX(7, 0x0f);
+ 	WREG_GFX(8, 0x0f);
  
 
 

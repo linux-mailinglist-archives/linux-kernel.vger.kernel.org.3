@@ -2,45 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 900FF4F4655
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DAF4F44F7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:32:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378474AbiDENNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
+        id S1357400AbiDEUQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:16:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344205AbiDEJSi (ORCPT
+        with ESMTP id S1349433AbiDEJtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:18:38 -0400
+        Tue, 5 Apr 2022 05:49:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F232A0BCD;
-        Tue,  5 Apr 2022 02:05:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9244E24BD1;
+        Tue,  5 Apr 2022 02:45:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E6E1614E4;
-        Tue,  5 Apr 2022 09:05:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36FCAC385A1;
-        Tue,  5 Apr 2022 09:05:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D7AA61675;
+        Tue,  5 Apr 2022 09:45:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09DE1C385A2;
+        Tue,  5 Apr 2022 09:45:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149527;
-        bh=WDCh1frB76ZgY5mu6uFLH7Bvag6zbMU6kBLWN9Pw2bs=;
+        s=korg; t=1649151945;
+        bh=zPCGveBQgJIlDVIMeFHkX0aMMcRrkc0ZJmZXhkmwY1w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bxEwErh7EdBONUOR+Sb09sytCwAOMLvQh8gC8m5onD+L6MBL8wHYBFCzh3wTlcbo+
-         sdoISKpX3+IwJLq2jiJDEwmb+YUEJw2cRJvDDV9Uft6mYYDLog91tKWYxnDH2G3EV+
-         VDJMnvhcuy3Wn78Uv5eUjAtD2PNgW5SKb7tblS+A=
+        b=Fmoh3PC9MkzVVgVISbnNSsyTDV8g6RlMqccTT0cT0nBLqfa0WK9fNdMMmLuCBQ+8M
+         pQ8YHjtZGJ3YRiiuYjYwxdlBeunIeRa6inmubpMZsULPGas/+PanBM+zHcBhSHTRjj
+         aGCDiDhowCQnT1yEaNYuqZeado5DEgPOiP7tXpJU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0746/1017] NFSv4/pNFS: Fix another issue with a list iterator pointing to the head
-Date:   Tue,  5 Apr 2022 09:27:39 +0200
-Message-Id: <20220405070416.405319305@linuxfoundation.org>
+        stable@vger.kernel.org, Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
+        Liu Ying <victor.liu@nxp.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 598/913] phy: dphy: Correct lpx parameter and its derivatives(ta_{get,go,sure})
+Date:   Tue,  5 Apr 2022 09:27:40 +0200
+Message-Id: <20220405070357.767344907@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,117 +61,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Liu Ying <victor.liu@nxp.com>
 
-[ Upstream commit 7c9d845f0612e5bcd23456a2ec43be8ac43458f1 ]
+[ Upstream commit 3153fa38e38af566cf6454a03b1dbadaf6f323c0 ]
 
-In nfs4_callback_devicenotify(), if we don't find a matching entry for
-the deviceid, we're left with a pointer to 'struct nfs_server' that
-actually points to the list of super blocks associated with our struct
-nfs_client.
-Furthermore, even if we have a valid pointer, nothing pins the super
-block, and so the struct nfs_server could end up getting freed while
-we're using it.
+According to the comment of the function phy_mipi_dphy_get_default_config(),
+it uses minimum D-PHY timings based on MIPI D-PHY specification.  They are
+derived from the valid ranges specified in Section 6.9, Table 14, Page 41
+of the D-PHY specification (v1.2).  The table 14 explicitly mentions that
+the minimum T-LPX parameter is 50 nanoseconds and the minimum TA-SURE
+parameter is T-LPX nanoseconds.  Likewise, the kernel doc of the 'lpx' and
+'ta_sure' members of struct phy_configure_opts_mipi_dphy mentions that
+the minimum values are 50000 picoseconds and @lpx picoseconds respectively.
+Also, the function phy_mipi_dphy_config_validate() checks if cfg->lpx is
+less than 50000 picoseconds and if cfg->ta_sure is less than cfg->lpx,
+which hints the same minimum values.
 
-Since all we want is a pointer to the struct pnfs_layoutdriver_type,
-let's skip all the iteration over super blocks, and just use APIs to
-find the layout driver directly.
+Without this patch, the function phy_mipi_dphy_get_default_config()
+wrongly sets cfg->lpx to 60000 picoseconds and cfg->ta_sure to 2 * cfg->lpx.
+So, let's correct them to 50000 picoseconds and cfg->lpx respectively.
 
-Reported-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Fixes: 1be5683b03a7 ("pnfs: CB_NOTIFY_DEVICEID")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Note that I've only tested the patch with RM67191 DSI panel on i.MX8mq EVK.
+Help is needed to test with other i.MX8mq, Meson and Rockchip platforms,
+as I don't have the hardwares.
+
+Fixes: dddc97e82303 ("phy: dphy: Add configuration helpers")
+Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+Cc: Neil Armstrong <narmstrong@baylibre.com>
+Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Cc: Kishon Vijay Abraham I <kishon@ti.com>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: Heiko Stuebner <heiko@sntech.de>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Guido Günther <agx@sigxcpu.org>
+Signed-off-by: Liu Ying <victor.liu@nxp.com>
+Link: https://lore.kernel.org/r/20220216071257.1647703-1-victor.liu@nxp.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/callback_proc.c | 27 +++++++++------------------
- fs/nfs/pnfs.c          | 11 +++++++++++
- fs/nfs/pnfs.h          |  2 ++
- 3 files changed, 22 insertions(+), 18 deletions(-)
+ drivers/phy/phy-core-mipi-dphy.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/nfs/callback_proc.c b/fs/nfs/callback_proc.c
-index c343666d9a42..6464dde03705 100644
---- a/fs/nfs/callback_proc.c
-+++ b/fs/nfs/callback_proc.c
-@@ -358,12 +358,11 @@ __be32 nfs4_callback_devicenotify(void *argp, void *resp,
- 				  struct cb_process_state *cps)
- {
- 	struct cb_devicenotifyargs *args = argp;
-+	const struct pnfs_layoutdriver_type *ld = NULL;
- 	uint32_t i;
- 	__be32 res = 0;
--	struct nfs_client *clp = cps->clp;
--	struct nfs_server *server = NULL;
+diff --git a/drivers/phy/phy-core-mipi-dphy.c b/drivers/phy/phy-core-mipi-dphy.c
+index ccb4045685cd..929e86d6558e 100644
+--- a/drivers/phy/phy-core-mipi-dphy.c
++++ b/drivers/phy/phy-core-mipi-dphy.c
+@@ -64,10 +64,10 @@ int phy_mipi_dphy_get_default_config(unsigned long pixel_clock,
+ 	cfg->hs_trail = max(4 * 8 * ui, 60000 + 4 * 4 * ui);
  
--	if (!clp) {
-+	if (!cps->clp) {
- 		res = cpu_to_be32(NFS4ERR_OP_NOT_IN_SESSION);
- 		goto out;
- 	}
-@@ -371,23 +370,15 @@ __be32 nfs4_callback_devicenotify(void *argp, void *resp,
- 	for (i = 0; i < args->ndevs; i++) {
- 		struct cb_devicenotifyitem *dev = &args->devs[i];
+ 	cfg->init = 100;
+-	cfg->lpx = 60000;
++	cfg->lpx = 50000;
+ 	cfg->ta_get = 5 * cfg->lpx;
+ 	cfg->ta_go = 4 * cfg->lpx;
+-	cfg->ta_sure = 2 * cfg->lpx;
++	cfg->ta_sure = cfg->lpx;
+ 	cfg->wakeup = 1000;
  
--		if (!server ||
--		    server->pnfs_curr_ld->id != dev->cbd_layout_type) {
--			rcu_read_lock();
--			list_for_each_entry_rcu(server, &clp->cl_superblocks, client_link)
--				if (server->pnfs_curr_ld &&
--				    server->pnfs_curr_ld->id == dev->cbd_layout_type) {
--					rcu_read_unlock();
--					goto found;
--				}
--			rcu_read_unlock();
--			continue;
-+		if (!ld || ld->id != dev->cbd_layout_type) {
-+			pnfs_put_layoutdriver(ld);
-+			ld = pnfs_find_layoutdriver(dev->cbd_layout_type);
-+			if (!ld)
-+				continue;
- 		}
--
--	found:
--		nfs4_delete_deviceid(server->pnfs_curr_ld, clp, &dev->cbd_dev_id);
-+		nfs4_delete_deviceid(ld, cps->clp, &dev->cbd_dev_id);
- 	}
--
-+	pnfs_put_layoutdriver(ld);
- out:
- 	kfree(args->devs);
- 	return res;
-diff --git a/fs/nfs/pnfs.c b/fs/nfs/pnfs.c
-index 7c9090a28e5c..7ddd003ab8b1 100644
---- a/fs/nfs/pnfs.c
-+++ b/fs/nfs/pnfs.c
-@@ -92,6 +92,17 @@ find_pnfs_driver(u32 id)
- 	return local;
- }
- 
-+const struct pnfs_layoutdriver_type *pnfs_find_layoutdriver(u32 id)
-+{
-+	return find_pnfs_driver(id);
-+}
-+
-+void pnfs_put_layoutdriver(const struct pnfs_layoutdriver_type *ld)
-+{
-+	if (ld)
-+		module_put(ld->owner);
-+}
-+
- void
- unset_pnfs_layoutdriver(struct nfs_server *nfss)
- {
-diff --git a/fs/nfs/pnfs.h b/fs/nfs/pnfs.h
-index f4d7548d67b2..07f11489e4e9 100644
---- a/fs/nfs/pnfs.h
-+++ b/fs/nfs/pnfs.h
-@@ -234,6 +234,8 @@ struct pnfs_devicelist {
- 
- extern int pnfs_register_layoutdriver(struct pnfs_layoutdriver_type *);
- extern void pnfs_unregister_layoutdriver(struct pnfs_layoutdriver_type *);
-+extern const struct pnfs_layoutdriver_type *pnfs_find_layoutdriver(u32 id);
-+extern void pnfs_put_layoutdriver(const struct pnfs_layoutdriver_type *ld);
- 
- /* nfs4proc.c */
- extern size_t max_response_pages(struct nfs_server *server);
+ 	cfg->hs_clk_rate = hs_clk_rate;
 -- 
 2.34.1
 

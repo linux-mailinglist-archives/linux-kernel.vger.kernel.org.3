@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EB044F4201
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C66044F412B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382787AbiDEMQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46618 "EHLO
+        id S1384068AbiDEM1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244967AbiDEIww (ORCPT
+        with ESMTP id S235847AbiDEIQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:52 -0400
+        Tue, 5 Apr 2022 04:16:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447691CB2B;
-        Tue,  5 Apr 2022 01:48:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF2857B1B;
+        Tue,  5 Apr 2022 01:03:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D43BC61511;
-        Tue,  5 Apr 2022 08:48:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1589C385A1;
-        Tue,  5 Apr 2022 08:48:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 879EF616DF;
+        Tue,  5 Apr 2022 08:03:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93B56C385A1;
+        Tue,  5 Apr 2022 08:03:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148490;
-        bh=G96Dh5WtfTKppnov59BIh9FH3+pya1x2zXt3Qam/+VU=;
+        s=korg; t=1649145820;
+        bh=TIY/MaJG64dJFYhgSREZ7Io2V0kw+HnjbuZ5wtzkwkI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pmvpv8NCc4kCeNcsrxybV1hHUeK88fpxdQrUUDKgSVaJ6DrYXvJ6LEe+nM6GCwWxD
-         3cUFICWB2nkoN/P8Ush2iBIOj7xivZoil/WndQrDtCkfUCEJJ8MRnioWsmw8S+W70g
-         cu2LUb9MofxCoe00xd0+6OfeNZjTx/mvb4ipNh34=
+        b=FC2X+4BF7GNIoizLoL8VdSTYIWHJg2TYlJ+tASeeW0nBn5JxR7B/22FnFUlIpfNbi
+         PAsbDwa3d7rMpcS1D4bd8NmE/jAnCHQzfxIOjWOwbirtgZMlu57b7NO/JqGUM4TGQ5
+         CALEwA7sBgKh5Hj9Yf91a7WDyh8H26qYU5XobsyI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Zhiqian Guan <zhguan@redhat.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0373/1017] ASoC: wm8350: Handle error for wm8350_register_irq
-Date:   Tue,  5 Apr 2022 09:21:26 +0200
-Message-Id: <20220405070405.357775848@linuxfoundation.org>
+Subject: [PATCH 5.17 0540/1126] libbpf: Use dynamically allocated buffer when receiving netlink messages
+Date:   Tue,  5 Apr 2022 09:21:27 +0200
+Message-Id: <20220405070423.482079955@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
+References: <20220405070407.513532867@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,71 +57,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-[ Upstream commit db0350da8084ad549bca16cc0486c11cc70a1f9b ]
+[ Upstream commit 9c3de619e13ee6693ec5ac74f50b7aa89056a70e ]
 
-As the potential failure of the wm8350_register_irq(),
-it should be better to check it and return error if fails.
-Also, use 'free_' in order to avoid the same code.
+When receiving netlink messages, libbpf was using a statically allocated
+stack buffer of 4k bytes. This happened to work fine on systems with a 4k
+page size, but on systems with larger page sizes it can lead to truncated
+messages. The user-visible impact of this was that libbpf would insist no
+XDP program was attached to some interfaces because that bit of the netlink
+message got chopped off.
 
-Fixes: a6ba2b2dabb5 ("ASoC: Implement WM8350 headphone jack detection")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220304023821.391936-1-jiasheng@iscas.ac.cn
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fix this by switching to a dynamically allocated buffer; we borrow the
+approach from iproute2 of using recvmsg() with MSG_PEEK|MSG_TRUNC to get
+the actual size of the pending message before receiving it, adjusting the
+buffer as necessary. While we're at it, also add retries on interrupted
+system calls around the recvmsg() call.
+
+v2:
+  - Move peek logic to libbpf_netlink_recv(), don't double free on ENOMEM.
+
+Fixes: 8bbb77b7c7a2 ("libbpf: Add various netlink helpers")
+Reported-by: Zhiqian Guan <zhguan@redhat.com>
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Link: https://lore.kernel.org/bpf/20220211234819.612288-1-toke@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/wm8350.c | 28 ++++++++++++++++++++++++----
- 1 file changed, 24 insertions(+), 4 deletions(-)
+ tools/lib/bpf/netlink.c | 55 ++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 51 insertions(+), 4 deletions(-)
 
-diff --git a/sound/soc/codecs/wm8350.c b/sound/soc/codecs/wm8350.c
-index 15d42ce3b21d..41504ce2a682 100644
---- a/sound/soc/codecs/wm8350.c
-+++ b/sound/soc/codecs/wm8350.c
-@@ -1537,18 +1537,38 @@ static  int wm8350_component_probe(struct snd_soc_component *component)
- 	wm8350_clear_bits(wm8350, WM8350_JACK_DETECT,
- 			  WM8350_JDL_ENA | WM8350_JDR_ENA);
+diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
+index 39f25e09b51e..69b353d55dbf 100644
+--- a/tools/lib/bpf/netlink.c
++++ b/tools/lib/bpf/netlink.c
+@@ -87,29 +87,75 @@ enum {
+ 	NL_DONE,
+ };
  
--	wm8350_register_irq(wm8350, WM8350_IRQ_CODEC_JCK_DET_L,
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CODEC_JCK_DET_L,
- 			    wm8350_hpl_jack_handler, 0, "Left jack detect",
- 			    priv);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CODEC_JCK_DET_R,
-+	if (ret != 0)
-+		goto err;
++static int netlink_recvmsg(int sock, struct msghdr *mhdr, int flags)
++{
++	int len;
 +
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CODEC_JCK_DET_R,
- 			    wm8350_hpr_jack_handler, 0, "Right jack detect",
- 			    priv);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CODEC_MICSCD,
-+	if (ret != 0)
-+		goto free_jck_det_l;
++	do {
++		len = recvmsg(sock, mhdr, flags);
++	} while (len < 0 && (errno == EINTR || errno == EAGAIN));
 +
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CODEC_MICSCD,
- 			    wm8350_mic_handler, 0, "Microphone short", priv);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CODEC_MICD,
-+	if (ret != 0)
-+		goto free_jck_det_r;
++	if (len < 0)
++		return -errno;
++	return len;
++}
 +
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CODEC_MICD,
- 			    wm8350_mic_handler, 0, "Microphone detect", priv);
-+	if (ret != 0)
-+		goto free_micscd;
++static int alloc_iov(struct iovec *iov, int len)
++{
++	void *nbuf;
++
++	nbuf = realloc(iov->iov_base, len);
++	if (!nbuf)
++		return -ENOMEM;
++
++	iov->iov_base = nbuf;
++	iov->iov_len = len;
++	return 0;
++}
++
+ static int libbpf_netlink_recv(int sock, __u32 nl_pid, int seq,
+ 			       __dump_nlmsg_t _fn, libbpf_dump_nlmsg_t fn,
+ 			       void *cookie)
+ {
++	struct iovec iov = {};
++	struct msghdr mhdr = {
++		.msg_iov = &iov,
++		.msg_iovlen = 1,
++	};
+ 	bool multipart = true;
+ 	struct nlmsgerr *err;
+ 	struct nlmsghdr *nh;
+-	char buf[4096];
+ 	int len, ret;
  
- 	return 0;
++	ret = alloc_iov(&iov, 4096);
++	if (ret)
++		goto done;
 +
-+free_micscd:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CODEC_MICSCD, priv);
-+free_jck_det_r:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CODEC_JCK_DET_R, priv);
-+free_jck_det_l:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CODEC_JCK_DET_L, priv);
-+err:
-+	return ret;
+ 	while (multipart) {
+ start:
+ 		multipart = false;
+-		len = recv(sock, buf, sizeof(buf), 0);
++		len = netlink_recvmsg(sock, &mhdr, MSG_PEEK | MSG_TRUNC);
++		if (len < 0) {
++			ret = len;
++			goto done;
++		}
++
++		if (len > iov.iov_len) {
++			ret = alloc_iov(&iov, len);
++			if (ret)
++				goto done;
++		}
++
++		len = netlink_recvmsg(sock, &mhdr, 0);
+ 		if (len < 0) {
+-			ret = -errno;
++			ret = len;
+ 			goto done;
+ 		}
+ 
+ 		if (len == 0)
+ 			break;
+ 
+-		for (nh = (struct nlmsghdr *)buf; NLMSG_OK(nh, len);
++		for (nh = (struct nlmsghdr *)iov.iov_base; NLMSG_OK(nh, len);
+ 		     nh = NLMSG_NEXT(nh, len)) {
+ 			if (nh->nlmsg_pid != nl_pid) {
+ 				ret = -LIBBPF_ERRNO__WRNGPID;
+@@ -151,6 +197,7 @@ static int libbpf_netlink_recv(int sock, __u32 nl_pid, int seq,
+ 	}
+ 	ret = 0;
+ done:
++	free(iov.iov_base);
+ 	return ret;
  }
  
- static void wm8350_component_remove(struct snd_soc_component *component)
 -- 
 2.34.1
 

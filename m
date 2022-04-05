@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C755B4F4224
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FDA64F41D0
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353426AbiDEMto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41928 "EHLO
+        id S1357248AbiDEMvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244259AbiDEJJv (ORCPT
+        with ESMTP id S244455AbiDEJJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:09:51 -0400
+        Tue, 5 Apr 2022 05:09:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5A7205EC;
-        Tue,  5 Apr 2022 01:59:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00531255BA;
+        Tue,  5 Apr 2022 01:59:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FCF16159F;
-        Tue,  5 Apr 2022 08:59:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DC53C385A3;
-        Tue,  5 Apr 2022 08:59:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AAC6614E4;
+        Tue,  5 Apr 2022 08:59:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 850DAC385B3;
+        Tue,  5 Apr 2022 08:59:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149149;
-        bh=68tEdpLmNp8IW56JqoG0OPYoak/d+7TDd4489L5IY4I=;
+        s=korg; t=1649149160;
+        bh=KkqvdNudypKbbtIijKOGeT0cNlIeNDr+yKjHsjcNilc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dS//EjcIwWb2cdYLKF7AzuuMboCnqtQALcuCzcGQ8VrSc0EZHOV7RIu8svBrD9U2M
-         LFKBOeU2bGbX+Tx0JUI9vOpFxmlRX3lt0pKTG8WV2jXaQibJxU8FhILIiD/C6KYuT7
-         Zf+KSWA9+FBbTqke0l7B+LsivkOjWR/yfvedxWOs=
+        b=Hc8ARRFLolOsNf2veBfQruC/r4k1z8oP9Rii9hzmBLNTEz5SyjJHwO1rrmVVvXgqb
+         6liwPf6iUHO/D4yrCuV3Vn6ZLKMJ/Pwccef9OSvyND1n7cWI3dapAfkHGf0ogQHA9V
+         ou9DOUEnrAL9ngJyOhojFsElj7Vx8sAnIZV5POow=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Derek Will <derekrobertwill@gmail.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+        stable@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0612/1017] can: isotp: support MSG_TRUNC flag when reading from socket
-Date:   Tue,  5 Apr 2022 09:25:25 +0200
-Message-Id: <20220405070412.448960205@linuxfoundation.org>
+Subject: [PATCH 5.16 0616/1017] selftests/bpf: Fix error reporting from sock_fields programs
+Date:   Tue,  5 Apr 2022 09:25:29 +0200
+Message-Id: <20220405070412.567745590@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,84 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
+From: Jakub Sitnicki <jakub@cloudflare.com>
 
-[ Upstream commit 42bf50a1795a1854d48717b7361dbdbce496b16b ]
+[ Upstream commit a4c9fe0ed4a13e25e43fcd44d9f89bc19ba8fbb7 ]
 
-When providing the MSG_TRUNC flag via recvmsg() syscall the return value
-provides the real length of the packet or datagram, even when it was longer
-than the passed buffer.
+The helper macro that records an error in BPF programs that exercise sock
+fields access has been inadvertently broken by adaptation work that
+happened in commit b18c1f0aa477 ("bpf: selftest: Adapt sock_fields test to
+use skel and global variables").
 
-Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
-Link: https://github.com/linux-can/can-utils/issues/347#issuecomment-1065932671
-Link: https://lore.kernel.org/all/20220316164258.54155-3-socketcan@hartkopp.net
-Suggested-by: Derek Will <derekrobertwill@gmail.com>
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+BPF_NOEXIST flag cannot be used to update BPF_MAP_TYPE_ARRAY. The operation
+always fails with -EEXIST, which in turn means the error never gets
+recorded, and the checks for errors always pass.
+
+Revert the change in update flags.
+
+Fixes: b18c1f0aa477 ("bpf: selftest: Adapt sock_fields test to use skel and global variables")
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+Link: https://lore.kernel.org/bpf/20220317113920.1068535-2-jakub@cloudflare.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/can/isotp.c | 27 +++++++++++++++------------
- 1 file changed, 15 insertions(+), 12 deletions(-)
+ tools/testing/selftests/bpf/progs/test_sock_fields.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/can/isotp.c b/net/can/isotp.c
-index 8966f06e0660..ad61342d2e16 100644
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -1006,29 +1006,28 @@ static int isotp_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
- 	struct sock *sk = sock->sk;
- 	struct sk_buff *skb;
- 	struct isotp_sock *so = isotp_sk(sk);
--	int err = 0;
--	int noblock;
-+	int noblock = flags & MSG_DONTWAIT;
-+	int ret = 0;
+diff --git a/tools/testing/selftests/bpf/progs/test_sock_fields.c b/tools/testing/selftests/bpf/progs/test_sock_fields.c
+index 81b57b9aaaea..7967348b11af 100644
+--- a/tools/testing/selftests/bpf/progs/test_sock_fields.c
++++ b/tools/testing/selftests/bpf/progs/test_sock_fields.c
+@@ -113,7 +113,7 @@ static void tpcpy(struct bpf_tcp_sock *dst,
  
--	noblock = flags & MSG_DONTWAIT;
--	flags &= ~MSG_DONTWAIT;
-+	if (flags & ~(MSG_DONTWAIT | MSG_TRUNC))
-+		return -EINVAL;
+ #define RET_LOG() ({						\
+ 	linum = __LINE__;					\
+-	bpf_map_update_elem(&linum_map, &linum_idx, &linum, BPF_NOEXIST);	\
++	bpf_map_update_elem(&linum_map, &linum_idx, &linum, BPF_ANY);	\
+ 	return CG_OK;						\
+ })
  
- 	if (!so->bound)
- 		return -EADDRNOTAVAIL;
- 
--	skb = skb_recv_datagram(sk, flags, noblock, &err);
-+	flags &= ~MSG_DONTWAIT;
-+	skb = skb_recv_datagram(sk, flags, noblock, &ret);
- 	if (!skb)
--		return err;
-+		return ret;
- 
- 	if (size < skb->len)
- 		msg->msg_flags |= MSG_TRUNC;
- 	else
- 		size = skb->len;
- 
--	err = memcpy_to_msg(msg, skb->data, size);
--	if (err < 0) {
--		skb_free_datagram(sk, skb);
--		return err;
--	}
-+	ret = memcpy_to_msg(msg, skb->data, size);
-+	if (ret < 0)
-+		goto out_err;
- 
- 	sock_recv_timestamp(msg, sk, skb);
- 
-@@ -1038,9 +1037,13 @@ static int isotp_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
- 		memcpy(msg->msg_name, skb->cb, msg->msg_namelen);
- 	}
- 
-+	/* set length of return value */
-+	ret = (flags & MSG_TRUNC) ? skb->len : size;
-+
-+out_err:
- 	skb_free_datagram(sk, skb);
- 
--	return size;
-+	return ret;
- }
- 
- static int isotp_release(struct socket *sock)
 -- 
 2.34.1
 

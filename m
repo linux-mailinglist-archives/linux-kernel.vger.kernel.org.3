@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9323B4F3A38
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DDB14F3A31
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379395AbiDELks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50830 "EHLO
+        id S1379334AbiDELko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244777AbiDEIwi (ORCPT
+        with ESMTP id S244788AbiDEIwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE54313F4D;
-        Tue,  5 Apr 2022 01:43:49 -0700 (PDT)
+        Tue, 5 Apr 2022 04:52:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BDD1A382;
+        Tue,  5 Apr 2022 01:43:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 912CBB81BC5;
-        Tue,  5 Apr 2022 08:43:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4310C385A0;
-        Tue,  5 Apr 2022 08:43:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3B52B81A32;
+        Tue,  5 Apr 2022 08:43:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3075FC385A0;
+        Tue,  5 Apr 2022 08:43:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148227;
-        bh=IQlQgUCjG42fAEaq4U78Y6LFtmOpKk1GRDjB9tZcYGc=;
+        s=korg; t=1649148235;
+        bh=DxHVQy1Fc+e0le2fwHX1vbuTw7y/q9K+F6271ZOTKMA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OZG1DBc5ndCjFKCNQ+n53JA6xRLFV7IjwjQEE4SRzusZ2dh09J6hIAITPJkZ+Dllb
-         XjseApgKDyQcKWPaHTdVJiP+h9JOembwqTByvTf8fMA2Gjm66KIwy8AbfCJuBfKyii
-         mUYk0VZ/tXZVi0nSK+54LdYWZzHj0swF3hf/p26k=
+        b=CWJZURdc1fL9wPImEJcnXfrtzXDnamN6/e6kDru9OrY8GIYsU70CQXwcvadS/VCbY
+         5N+1FGbxAaAV1ywxXVZ+rbK4G/TuSPaeYjwWW6rp8aZ1uWXo684JrnLSd7qFzktbor
+         yoNWZRJD/sFTAHGLv8lMggZQle0dpZgzBz2VMfSI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
-        Robert Foss <robert.foss@linaro.org>,
-        Julian Grahsl <jgrahsl@snap.com>,
-        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        stable@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0280/1017] media: camss: csid-170: dont enable unused irqs
-Date:   Tue,  5 Apr 2022 09:19:53 +0200
-Message-Id: <20220405070402.579620291@linuxfoundation.org>
+Subject: [PATCH 5.16 0283/1017] media: staging: media: imx: imx7-mipi-csis: Make subdev name unique
+Date:   Tue,  5 Apr 2022 09:19:56 +0200
+Message-Id: <20220405070402.669618359@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -59,45 +59,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Marek <jonathan@marek.ca>
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-[ Upstream commit a6da362491e409de0978d733441e59db6584d69f ]
+[ Upstream commit 5be7f8c91d25089be847a71b336c13b5bb0db772 ]
 
-csid_isr() only checks for the reset irq, so enabling any other irqs
-doesn't make sense. The "RDI irq" comment is also wrong, the register
-should be CSID_CSI2_RDIN_IRQ_MASK. Without this fix there may be an
-excessive amount of irqs.
+When multiple CSIS instances are present in a single graph, they are
+currently all named "imx7-mipi-csis.0", which breaks the entity name
+uniqueness requirement. Fix it by using the device name to create the
+subdev name.
 
-Fixes: eebe6d00e9bf ("media: camss: Add support for CSID hardware version Titan 170")
-Signed-off-by: Jonathan Marek <jonathan@marek.ca>
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
-Tested-by: Julian Grahsl <jgrahsl@snap.com>
-Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Fixes: 7807063b862b ("media: staging/imx7: add MIPI CSI-2 receiver subdev for i.MX7")
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
+Tested-by: Jerome Brunet <jbrunet@baylibre.com> # On i.MX8MP
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/qcom/camss/camss-csid-170.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csid-170.c b/drivers/media/platform/qcom/camss/camss-csid-170.c
-index aa65043c3303..a006c8dbceb1 100644
---- a/drivers/media/platform/qcom/camss/camss-csid-170.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid-170.c
-@@ -444,12 +444,6 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
- 	val |= 1 << CSI2_RX_CFG1_MISR_EN;
- 	writel_relaxed(val, csid->base + CSID_CSI2_RX_CFG1); // csi2_vc_mode_shift_val ?
+diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
+index 2b73fa55c938..9ea723bb5f20 100644
+--- a/drivers/staging/media/imx/imx7-mipi-csis.c
++++ b/drivers/staging/media/imx/imx7-mipi-csis.c
+@@ -32,7 +32,6 @@
+ #include <media/v4l2-subdev.h>
  
--	/* error irqs start at BIT(11) */
--	writel_relaxed(~0u, csid->base + CSID_CSI2_RX_IRQ_MASK);
--
--	/* RDI irq */
--	writel_relaxed(~0u, csid->base + CSID_TOP_IRQ_MASK);
--
- 	val = 1 << RDI_CTRL_HALT_CMD;
- 	writel_relaxed(val, csid->base + CSID_RDI_CTRL(0));
- }
+ #define CSIS_DRIVER_NAME			"imx7-mipi-csis"
+-#define CSIS_SUBDEV_NAME			CSIS_DRIVER_NAME
+ 
+ #define CSIS_PAD_SINK				0
+ #define CSIS_PAD_SOURCE				1
+@@ -311,7 +310,6 @@ struct csi_state {
+ 	struct reset_control *mrst;
+ 	struct regulator *mipi_phy_regulator;
+ 	const struct mipi_csis_info *info;
+-	u8 index;
+ 
+ 	struct v4l2_subdev sd;
+ 	struct media_pad pads[CSIS_PADS_NUM];
+@@ -1303,8 +1301,8 @@ static int mipi_csis_subdev_init(struct csi_state *state)
+ 
+ 	v4l2_subdev_init(sd, &mipi_csis_subdev_ops);
+ 	sd->owner = THIS_MODULE;
+-	snprintf(sd->name, sizeof(sd->name), "%s.%d",
+-		 CSIS_SUBDEV_NAME, state->index);
++	snprintf(sd->name, sizeof(sd->name), "csis-%s",
++		 dev_name(state->dev));
+ 
+ 	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+ 	sd->ctrl_handler = NULL;
 -- 
 2.34.1
 

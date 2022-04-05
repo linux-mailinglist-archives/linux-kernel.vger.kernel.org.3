@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA7C4F50F5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E880C4F508A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1844109AbiDFBpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
+        id S1446565AbiDFB27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348883AbiDEJso (ORCPT
+        with ESMTP id S1349008AbiDEJsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79453B82F1;
-        Tue,  5 Apr 2022 02:36:50 -0700 (PDT)
+        Tue, 5 Apr 2022 05:48:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D3DDF5A;
+        Tue,  5 Apr 2022 02:39:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ECBAAB81C6F;
-        Tue,  5 Apr 2022 09:36:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DB99C385A0;
-        Tue,  5 Apr 2022 09:36:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DF87615E5;
+        Tue,  5 Apr 2022 09:39:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 807C4C385A1;
+        Tue,  5 Apr 2022 09:39:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151407;
-        bh=wrzKA6GCbzPNzzjub1bTM8BTkxgUSu+wwTfvBLMihEs=;
+        s=korg; t=1649151542;
+        bh=Ti/hMQRoUjDzZyl/JprxiwoA8pb7BvXKCaYpu3E0oKw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n8+T5/5aBzh4NOCCj0tAorkv9cTNqd/uM/VT3vtDUKajun3QWmw2ufI45Y1xkTShR
-         +92Uvx4Q5wjuiS3o6JejvpSSk27/YhwohuYM035bbuk5/tCYB5LZSv9Ckvv9cQHZXT
-         RU2SZHvBmKz9fNLMWaS3qadyHv2CXpFvRgCJHEic=
+        b=Og2x+pC6YH5NmOBgFzZpQMdWa3I6EH8U2KZzkZ33pBLq/nTcmZHiGoRWgyDHG1Fkd
+         xl8msuiLtRZ6DPMyM+owxRwqBp6snndBRKPjE1Z3SQJGXo+mZk/MP8kUs7HIqnqnB2
+         pgPr5sad/kzm3+DkuMw93AIDF0sWqgKp+1FBfrWA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Jesper Dangaard Brouer <brouer@redhat.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Sandeep Penigalapati <sandeep.penigalapati@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 403/913] net: phy: at803x: move page selection fix to config_init
-Date:   Tue,  5 Apr 2022 09:24:25 +0200
-Message-Id: <20220405070351.927797234@linuxfoundation.org>
+Subject: [PATCH 5.15 415/913] ixgbe: respect metadata on XSK Rx to skb
+Date:   Tue,  5 Apr 2022 09:24:37 +0200
+Message-Id: <20220405070352.287506962@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,89 +59,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
 
-[ Upstream commit 4f3a00c7f5b2cfe4e127fd3fe49b55e1b318c01f ]
+[ Upstream commit f322a620be69e95594eda89502b478aa7dbf6ec2 ]
 
-The fix to select the copper page on AR8031 was being done in the probe
-function rather than config_init, so it would not be redone after resume
-from suspend. Move this to config_init so it is always redone when
-needed.
+For now, if the XDP prog returns XDP_PASS on XSK, the metadata
+will be lost as it doesn't get copied to the skb.
 
-Fixes: c329e5afb42f ("net: phy: at803x: select correct page on config init")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Copy it along with the frame headers. Account its size on skb
+allocation, and when copying just treat it as a part of the frame
+and do a pull after to "move" it to the "reserved" zone.
+
+net_prefetch() xdp->data_meta and align the copy size to speed-up
+memcpy() a little and better match ixgbe_construct_skb().
+
+Fixes: d0bcacd0a130 ("ixgbe: add AF_XDP zero-copy Rx support")
+Suggested-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Suggested-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+Tested-by: Sandeep Penigalapati <sandeep.penigalapati@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/at803x.c | 40 ++++++++++++++++------------------------
- 1 file changed, 16 insertions(+), 24 deletions(-)
+ drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/phy/at803x.c b/drivers/net/phy/at803x.c
-index bdac087058b2..5ae39d236b30 100644
---- a/drivers/net/phy/at803x.c
-+++ b/drivers/net/phy/at803x.c
-@@ -666,25 +666,7 @@ static int at803x_probe(struct phy_device *phydev)
- 			return ret;
- 	}
- 
--	/* Some bootloaders leave the fiber page selected.
--	 * Switch to the copper page, as otherwise we read
--	 * the PHY capabilities from the fiber side.
--	 */
--	if (phydev->drv->phy_id == ATH8031_PHY_ID) {
--		phy_lock_mdio_bus(phydev);
--		ret = at803x_write_page(phydev, AT803X_PAGE_COPPER);
--		phy_unlock_mdio_bus(phydev);
--		if (ret)
--			goto err;
--	}
--
- 	return 0;
--
--err:
--	if (priv->vddio)
--		regulator_disable(priv->vddio);
--
--	return ret;
- }
- 
- static void at803x_remove(struct phy_device *phydev)
-@@ -785,6 +767,22 @@ static int at803x_config_init(struct phy_device *phydev)
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
+index 36f43dc3a55e..b399b9c14717 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
+@@ -203,19 +203,25 @@ bool ixgbe_alloc_rx_buffers_zc(struct ixgbe_ring *rx_ring, u16 count)
+ static struct sk_buff *ixgbe_construct_skb_zc(struct ixgbe_ring *rx_ring,
+ 					      const struct xdp_buff *xdp)
  {
- 	int ret;
++	unsigned int totalsize = xdp->data_end - xdp->data_meta;
+ 	unsigned int metasize = xdp->data - xdp->data_meta;
+-	unsigned int datasize = xdp->data_end - xdp->data;
+ 	struct sk_buff *skb;
  
-+	if (phydev->drv->phy_id == ATH8031_PHY_ID) {
-+		/* Some bootloaders leave the fiber page selected.
-+		 * Switch to the copper page, as otherwise we read
-+		 * the PHY capabilities from the fiber side.
-+		 */
-+		phy_lock_mdio_bus(phydev);
-+		ret = at803x_write_page(phydev, AT803X_PAGE_COPPER);
-+		phy_unlock_mdio_bus(phydev);
-+		if (ret)
-+			return ret;
++	net_prefetch(xdp->data_meta);
 +
-+		ret = at8031_pll_config(phydev);
-+		if (ret < 0)
-+			return ret;
+ 	/* allocate a skb to store the frags */
+-	skb = __napi_alloc_skb(&rx_ring->q_vector->napi, datasize,
++	skb = __napi_alloc_skb(&rx_ring->q_vector->napi, totalsize,
+ 			       GFP_ATOMIC | __GFP_NOWARN);
+ 	if (unlikely(!skb))
+ 		return NULL;
+ 
+-	memcpy(__skb_put(skb, datasize), xdp->data, datasize);
+-	if (metasize)
++	memcpy(__skb_put(skb, totalsize), xdp->data_meta,
++	       ALIGN(totalsize, sizeof(long)));
++
++	if (metasize) {
+ 		skb_metadata_set(skb, metasize);
++		__skb_pull(skb, metasize);
 +	}
-+
- 	/* The RX and TX delay default is:
- 	 *   after HW reset: RX delay enabled and TX delay disabled
- 	 *   after SW reset: RX delay enabled, while TX delay retains the
-@@ -814,12 +812,6 @@ static int at803x_config_init(struct phy_device *phydev)
- 	if (ret < 0)
- 		return ret;
  
--	if (phydev->drv->phy_id == ATH8031_PHY_ID) {
--		ret = at8031_pll_config(phydev);
--		if (ret < 0)
--			return ret;
--	}
--
- 	/* Ar803x extended next page bit is enabled by default. Cisco
- 	 * multigig switches read this bit and attempt to negotiate 10Gbps
- 	 * rates even if the next page bit is disabled. This is incorrect
+ 	return skb;
+ }
 -- 
 2.34.1
 

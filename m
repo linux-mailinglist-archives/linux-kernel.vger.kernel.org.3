@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F21B64F2733
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A134F274A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235035AbiDEH7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48370 "EHLO
+        id S233048AbiDEH4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233567AbiDEHr6 (ORCPT
+        with ESMTP id S233576AbiDEHsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:47:58 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086F51D9;
-        Tue,  5 Apr 2022 00:45:52 -0700 (PDT)
+        Tue, 5 Apr 2022 03:48:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1A026C;
+        Tue,  5 Apr 2022 00:46:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EE3C0CE1BEB;
-        Tue,  5 Apr 2022 07:45:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13D77C340EE;
-        Tue,  5 Apr 2022 07:45:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B83F8B81B9C;
+        Tue,  5 Apr 2022 07:45:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F29EC340EE;
+        Tue,  5 Apr 2022 07:45:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144749;
-        bh=rMKBD1koYZ8J49XDOyG6OKlNOGIa8Bmni21RPT14hTI=;
+        s=korg; t=1649144757;
+        bh=C/750eIEw2xnKQ7Z3W6sdUklRUAe3atwbovg2TFjKWM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r2HLIxESjk3vZR5bft4eTm9AZ88ACHu2LewaK7y/Q9SToFbOkSWGmG5z541SMsTL9
-         fghbGUWamYqYP/cqnzHi2qV8EFZXrdVG+IKQ12SBnAiFq76X8SIoomti0YF3SPtV7N
-         lq/V9f4jQbTaRGw4i0ch/BvGMxdGqc2m7TEsLe6I=
+        b=LNQpXYzuVRDemEUOQqomLbTiGsTbX6dia6nCxjbD9euckWwcredTRce5d8L8Gq1ww
+         yC+vqByKxqg13K9n3/smWQ2OhTLZW1mPhfqh+o5Huf+eEAqesBQVYoqOeu8gmE83+I
+         dBAwc3EDljW9dASPd6zOhZhNo5O88owMsvT/UZ5A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.17 0157/1126] thermal: int340x: Increase bitmap size
-Date:   Tue,  5 Apr 2022 09:15:04 +0200
-Message-Id: <20220405070412.196481744@linuxfoundation.org>
+        stable@vger.kernel.org, Eric Biggers <ebiggers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Subject: [PATCH 5.17 0160/1126] crypto: rsa-pkcs1pad - only allow with rsa
+Date:   Tue,  5 Apr 2022 09:15:07 +0200
+Message-Id: <20220405070412.287396986@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,35 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+From: Eric Biggers <ebiggers@google.com>
 
-commit 668f69a5f863b877bc3ae129efe9a80b6f055141 upstream.
+commit 9b30430ea356f237945e52f8a3a42158877bd5a9 upstream.
 
-The number of policies are 10, so can't be supported by the bitmap size
-of u8.
+The pkcs1pad template can be instantiated with an arbitrary akcipher
+algorithm, which doesn't make sense; it is specifically an RSA padding
+scheme.  Make it check that the underlying algorithm really is RSA.
 
-Even though there are no platfoms with these many policies, but
-for correctness increase to u32.
-
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Fixes: 16fc8eca1975 ("thermal/int340x_thermal: Add additional UUIDs")
-Cc: 5.1+ <stable@vger.kernel.org> # 5.1+
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fixes: 3d5b1ecdea6f ("crypto: rsa - RSA padding algorithm")
+Cc: <stable@vger.kernel.org> # v4.5+
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/thermal/intel/int340x_thermal/int3400_thermal.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ crypto/rsa-pkcs1pad.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -53,7 +53,7 @@ struct int3400_thermal_priv {
- 	struct art *arts;
- 	int trt_count;
- 	struct trt *trts;
--	u8 uuid_bitmap;
-+	u32 uuid_bitmap;
- 	int rel_misc_dev_res;
- 	int current_uuid_index;
- 	char *data_vault;
+--- a/crypto/rsa-pkcs1pad.c
++++ b/crypto/rsa-pkcs1pad.c
+@@ -621,6 +621,11 @@ static int pkcs1pad_create(struct crypto
+ 
+ 	rsa_alg = crypto_spawn_akcipher_alg(&ctx->spawn);
+ 
++	if (strcmp(rsa_alg->base.cra_name, "rsa") != 0) {
++		err = -EINVAL;
++		goto err_free_inst;
++	}
++
+ 	err = -ENAMETOOLONG;
+ 	hash_name = crypto_attr_alg_name(tb[2]);
+ 	if (IS_ERR(hash_name)) {
 
 

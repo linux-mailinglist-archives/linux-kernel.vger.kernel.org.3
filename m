@@ -2,136 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1CD4F4702
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD2E4F4677
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384415AbiDEUzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42458 "EHLO
+        id S240468AbiDEUcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383966AbiDEPOv (ORCPT
+        with ESMTP id S1391010AbiDEPdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:14:51 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCB157B08;
-        Tue,  5 Apr 2022 06:28:32 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 709324000D;
-        Tue,  5 Apr 2022 13:28:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649165311;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qnhE1fGjUafmBC+KaTBnXvOD8ef7wgKM3WFEC0Tf58Q=;
-        b=PNZNMPwtfLbDvJj2rr5VXgbxaCGxcXBVC+gZHBtIAYoLT4hU6bhMpirHr8gz34mNJXLwRO
-        6LDLtXVpQnIuL7joOzxx9Ymx88UJvXp25mqd5+1fwpkfq9LPc28eaU0N05kaOwcWtbuWmk
-        GiTNuRJji7YMiyuTKfkrzQ+z3IpmfDY/JtMPHS4AI82mAnxjTgra4Kc/vf8XNy2XPyhn4G
-        +R377fFgzWK/qsqrQV4FhwQeZHFkMf9ok4VSgKwai8hmm2ocIWz0Z7N3wOY3gDfIsP4wdc
-        1+jboRxEU1Fhwg8JYtN+22rUVhqpabxaS2J78OFowBUg/dKrZYmIvsQQdPdskw==
-Date:   Tue, 5 Apr 2022 15:27:02 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Len Brown <lenb@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v3 3/9] device property: add index argument to
- property_read_string_array() callback
-Message-ID: <20220405152702.50ba516d@fixe.home>
-In-Reply-To: <CAJZ5v0hOjaOCUxbFzKG90Db0bgfdb3q988oAvLB4kmD3-HS8sQ@mail.gmail.com>
-References: <20220325113148.588163-1-clement.leger@bootlin.com>
-        <20220325113148.588163-4-clement.leger@bootlin.com>
-        <Yj3SFYdUQ4r7GXqs@smile.fi.intel.com>
-        <20220328162812.16deac92@fixe.home>
-        <CAJZ5v0hOjaOCUxbFzKG90Db0bgfdb3q988oAvLB4kmD3-HS8sQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Tue, 5 Apr 2022 11:33:38 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55844B1F6;
+        Tue,  5 Apr 2022 06:39:58 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 0F47F1F4343B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649165997;
+        bh=gQ3Pg9KvJsy1nFjnsiFdGRFbG2pjxVLA/rIpxmBYnwQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bCaiTvvM0EjvxPHg+Cq7O5T0+4hFiZUiI5RpINvgXIufUIWOgU+JCWbOLVPG4UdzK
+         vl5GkV8ZyYkDoDat6rI53qT2r39VItbOp2S9bVyr7ze61LtNTD6ql1dbDHp1eYSytk
+         Bk98QgZiyNDZ2omvmhhIYaq1PgqlZXI/SYHQLr+G0kHbhrMu80gamnya1o9f3R8YpT
+         Im9GzEyXmk5wA7PHXkesFA9m76uC3vjsu0FW1KIAX5HqrSml/R12UNuqDrjvuk4jJk
+         pe+LYZhlL84lF3r5Ouk4u2IJlRSzVwgTA9q/KiaooZQyL7co0i1bW8x9BNoHG8rtlc
+         kCeCgITqZw9eg==
+Message-ID: <0762b013-6c13-ef57-5796-902c9899ee95@collabora.com>
+Date:   Tue, 5 Apr 2022 15:39:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] media: mediatek: vcodec: Fix v4l2 compliance decoder
+ cmd test fail
+Content-Language: en-US
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+Cc:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, srv_heupstream@mediatek.com,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220401081302.9475-1-yunfei.dong@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220401081302.9475-1-yunfei.dong@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Tue, 5 Apr 2022 15:22:51 +0200,
-"Rafael J. Wysocki" <rafael@kernel.org> a =C3=A9crit :
+Il 01/04/22 10:13, Yunfei Dong ha scritto:
+> Will return -EINVAL using standard framework api when test stateless
+> decoder with cmd VIDIOC_(TRY)DECODER_CMD.
+> 
+> Using another return value to adjust v4l2 compliance test for user
+> driver(GStreamer/Chrome) won't use decoder cmd.
+> 
+> Fixes: 8cdc3794b2e3 ("media: mtk-vcodec: vdec: support stateless API")
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
 
-> On Mon, Mar 28, 2022 at 4:29 PM Cl=C3=A9ment L=C3=A9ger <clement.leger@bo=
-otlin.com> wrote:
-> >
-> > Le Fri, 25 Mar 2022 16:30:45 +0200,
-> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> a =C3=A9crit :
-> > =20
-> > > >     pointer =3D property_entry_find(props, propname, length);
-> > > >     if (IS_ERR(pointer))
-> > > >             return PTR_ERR(pointer); =20
-> > > =20
-> > > > +   if (index >=3D array_len)
-> > > > +           return -ENODATA; =20
-> > >
-> > > I was about to ask if we can check this before the
-> > > property_entry_find() call, but realized that in such case it will
-> > > shadow possible errors due to wrong or absent property. =20
-> >
-> > I think you are actually right, the check can be done after
-> > property_entry_count_elems_of_size() since it already checks for the
-> > property to be present. I'll move that check.
-> > =20
-> > >
-> > > ...
-> > > =20
-> > > > -           of_property_read_string_array(node, propname, val,
-> > > > nval) :
-> > > > +           of_property_read_string_array_index(node,
-> > > > propname, val, nval,
-> > > > +                                               index) : =20
-> > >
-> > > Dunno about the style there, but I think it can be one line. =20
-> >
-> > Seems like the complete file is strictly applying the 80 columns rules
-> > so I thought it was better to keep it like this. However, I think the
-> > ternary oeprator is not really readable with such split. =20
->=20
-> So FWIW I would entirely change it to
->=20
-> if (!val)
->         return of_property_count_strings(node, propname);
->=20
-> return of_property_read_string_array_index(node, propname, val,
->=20
-> nval, index);
->=20
-> which IMO would be way easier to read.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Hi Rafael,
-
-Agreed, this is way more readable. I'll modify that.
-
-Thanks,
-
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com

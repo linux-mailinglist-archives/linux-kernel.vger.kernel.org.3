@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6994F45EE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:57:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E394E4F45AC
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358303AbiDENJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
+        id S1349901AbiDENGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344110AbiDEJSO (ORCPT
+        with ESMTP id S1344004AbiDEJQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:18:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B5E37A38;
-        Tue,  5 Apr 2022 02:04:10 -0700 (PDT)
+        Tue, 5 Apr 2022 05:16:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65679101FE;
+        Tue,  5 Apr 2022 02:02:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55791B81B75;
-        Tue,  5 Apr 2022 09:04:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B128FC385A0;
-        Tue,  5 Apr 2022 09:04:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01BD061564;
+        Tue,  5 Apr 2022 09:02:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17C37C385A1;
+        Tue,  5 Apr 2022 09:02:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149448;
-        bh=wCS0KzKr4oLP5q/Kgg4TSGoEWXx2RJU1a3UmIAGtzOU=;
+        s=korg; t=1649149368;
+        bh=Uei5z8hVMTTP/ef+TzfjM7pNOY5Pj1gxvZnvJmGs/1Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sLWkBkHRkM+s9P/VbqidAGoB6i1ZKF+StVZfOP5p3E3F/Yvw9aOUK6QXSfJaTSMh4
-         fjvdPIDK28ESIfzNDOx+TJn4PFuYoRyPQbtxdea68hgz+hMceS2QAFCgCsFtw8mA/C
-         jeJKIahB4Gde1PSk316XzKMkWYncSX3678wWoZn8=
+        b=sIkKJzXwVB/kaHmKzUi8HxpwsS+7ZOKh+RLIaBTshTtOJIopYs/6xbz2ufZyH3YTC
+         Dxugq6iyXnxY6ELCpJAHepKRJ6FyUwAah99ewwgLidXK3dQqWQ9Lde1ElrXV9yNH1+
+         NObaWFNIhsTUEc9wlUKvusTUE/AzODtqNOsCLDRU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Oded Gabbay <ogabbay@kernel.org>,
+        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+        Martin Kaiser <martin@kaiser.cx>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0670/1017] habanalabs: Add check for pci_enable_device
-Date:   Tue,  5 Apr 2022 09:26:23 +0200
-Message-Id: <20220405070414.169016092@linuxfoundation.org>
+Subject: [PATCH 5.16 0672/1017] staging: r8188eu: fix endless loop in recv_func
+Date:   Tue,  5 Apr 2022 09:26:25 +0200
+Message-Id: <20220405070414.227866929@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,36 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Martin Kaiser <martin@kaiser.cx>
 
-[ Upstream commit 9c27896ac1bb83ea5c461ce6f7089d02102a2b21 ]
+[ Upstream commit 1327fcf175fa63d3b7a058b8148ed7714acdc035 ]
 
-As the potential failure of the pci_enable_device(),
-it should be better to check the return value and return
-error if fails.
+Fix an endless loop in recv_func. If pending_frame is not NULL, we're
+stuck in the while loop forever. We have to call rtw_alloc_recvframe
+each time we loop.
 
-Fixes: 70b2f993ea4a ("habanalabs: create common folder")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+Fixes: 15865124feed ("staging: r8188eu: introduce new core dir for RTL8188eu driver")
+Reported-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+Link: https://lore.kernel.org/r/20220226181457.1138035-4-martin@kaiser.cx
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/habanalabs/common/debugfs.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/staging/r8188eu/core/rtw_recv.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/common/debugfs.c b/drivers/misc/habanalabs/common/debugfs.c
-index 1f2a3dc6c4e2..78a6789ef7cc 100644
---- a/drivers/misc/habanalabs/common/debugfs.c
-+++ b/drivers/misc/habanalabs/common/debugfs.c
-@@ -856,6 +856,8 @@ static ssize_t hl_set_power_state(struct file *f, const char __user *buf,
- 		pci_set_power_state(hdev->pdev, PCI_D0);
- 		pci_restore_state(hdev->pdev);
- 		rc = pci_enable_device(hdev->pdev);
-+		if (rc < 0)
-+			return rc;
- 	} else if (value == 2) {
- 		pci_save_state(hdev->pdev);
- 		pci_disable_device(hdev->pdev);
+diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+index 51a13262a226..d120d61454a3 100644
+--- a/drivers/staging/r8188eu/core/rtw_recv.c
++++ b/drivers/staging/r8188eu/core/rtw_recv.c
+@@ -1853,8 +1853,7 @@ static int recv_func(struct adapter *padapter, struct recv_frame *rframe)
+ 		struct recv_frame *pending_frame;
+ 		int cnt = 0;
+ 
+-		pending_frame = rtw_alloc_recvframe(&padapter->recvpriv.uc_swdec_pending_queue);
+-		while (pending_frame) {
++		while ((pending_frame = rtw_alloc_recvframe(&padapter->recvpriv.uc_swdec_pending_queue))) {
+ 			cnt++;
+ 			recv_func_posthandle(padapter, pending_frame);
+ 		}
 -- 
 2.34.1
 

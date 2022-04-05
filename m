@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B9E4F4261
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC9D4F419C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384118AbiDEM1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:27:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59118 "EHLO
+        id S1388702AbiDEPUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245183AbiDEIyN (ORCPT
+        with ESMTP id S1346948AbiDEJpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:54:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F9B2609;
-        Tue,  5 Apr 2022 01:51:50 -0700 (PDT)
+        Tue, 5 Apr 2022 05:45:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D35462FC;
+        Tue,  5 Apr 2022 02:32:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C63D961509;
-        Tue,  5 Apr 2022 08:51:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D33D2C385A0;
-        Tue,  5 Apr 2022 08:51:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DD8F616D9;
+        Tue,  5 Apr 2022 09:32:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6564C385A6;
+        Tue,  5 Apr 2022 09:32:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148709;
-        bh=q0syxxaTH7xp2V/r98sFo2P+r4nVpI03Joft2BVr5xI=;
+        s=korg; t=1649151129;
+        bh=iTfkyGCaJb+tZxRhyt4J9Q68OsZSnrVr7BNR7lW+X9w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eQMNk2gB2cejchGoDc8hBFcDxWG2pCWnF83gbI3CGXTCAzR2hWrqKeeGgtcPqij7j
-         n7z/k4IUSUmmFZIhb045NCbMO0/oitMyY9Wimy1tHDQYxw/bwqXtyTKNg//NwmqQnn
-         D4mw5bk36PHyXnJ2tpx1N7hTLe6Oa6MONYxuKh/U=
+        b=u6J5SgX8bpsJYNvLBUkCbxPrztvmCWoOGHyZDwiUCJiyPUiv70XiowmZLnvxzKM2O
+         NGXkprD2WNl4k2yHlJ/lzGf7co6QHJlWGnHUOvkHBNU4ro5GR01HvdN7Qnx1p0lVOJ
+         zAYI/8kz1pa2aruqTXqwHf5BSrAiLwWTzomLBdm8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0453/1017] mt76: mt7915: use proper aid value in mt7915_mcu_sta_basic_tlv
-Date:   Tue,  5 Apr 2022 09:22:46 +0200
-Message-Id: <20220405070407.745073528@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Nishanth Menon <nm@ti.com>, Dave Gerlach <d-gerlach@ti.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 305/913] soc: ti: wkup_m3_ipc: Fix IRQ check in wkup_m3_ipc_probe
+Date:   Tue,  5 Apr 2022 09:22:47 +0200
+Message-Id: <20220405070348.999212015@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit abdb8bc94be4cf68aa71c9a8ee0bad9b3e6f52d3 ]
+[ Upstream commit c3d66a164c726cc3b072232d3b6d87575d194084 ]
 
-Similar to mt7915_mcu_wtbl_generic_tlv, rely on vif->bss_conf.aid for
-aid in sta mode and not on sta->aid.
+platform_get_irq() returns negative error number instead 0 on failure.
+And the doc of platform_get_irq() provides a usage example:
 
-Fixes: e57b7901469fc ("mt76: add mac80211 driver for MT7915 PCIe-based chipsets")
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+    int irq = platform_get_irq(pdev, 0);
+    if (irq < 0)
+        return irq;
+
+Fix the check of return value to catch errors correctly.
+
+Fixes: cdd5de500b2c ("soc: ti: Add wkup_m3_ipc driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Nishanth Menon <nm@ti.com>
+Acked-by: Dave Gerlach <d-gerlach@ti.com>
+Link: https://lore.kernel.org/r/20220114062840.16620-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7915/mcu.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/soc/ti/wkup_m3_ipc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-index 8cdf689b383e..abc798536a81 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-@@ -1321,12 +1321,15 @@ mt7915_mcu_sta_basic_tlv(struct sk_buff *skb, struct ieee80211_vif *vif,
- 	case NL80211_IFTYPE_MESH_POINT:
- 	case NL80211_IFTYPE_AP:
- 		basic->conn_type = cpu_to_le32(CONNECTION_INFRA_STA);
-+		basic->aid = cpu_to_le16(sta->aid);
- 		break;
- 	case NL80211_IFTYPE_STATION:
- 		basic->conn_type = cpu_to_le32(CONNECTION_INFRA_AP);
-+		basic->aid = cpu_to_le16(vif->bss_conf.aid);
- 		break;
- 	case NL80211_IFTYPE_ADHOC:
- 		basic->conn_type = cpu_to_le32(CONNECTION_IBSS_ADHOC);
-+		basic->aid = cpu_to_le16(sta->aid);
- 		break;
- 	default:
- 		WARN_ON(1);
-@@ -1334,7 +1337,6 @@ mt7915_mcu_sta_basic_tlv(struct sk_buff *skb, struct ieee80211_vif *vif,
+diff --git a/drivers/soc/ti/wkup_m3_ipc.c b/drivers/soc/ti/wkup_m3_ipc.c
+index 09abd17065ba..8b3ff44fd901 100644
+--- a/drivers/soc/ti/wkup_m3_ipc.c
++++ b/drivers/soc/ti/wkup_m3_ipc.c
+@@ -449,9 +449,9 @@ static int wkup_m3_ipc_probe(struct platform_device *pdev)
+ 		return PTR_ERR(m3_ipc->ipc_mem_base);
+ 
+ 	irq = platform_get_irq(pdev, 0);
+-	if (!irq) {
++	if (irq < 0) {
+ 		dev_err(&pdev->dev, "no irq resource\n");
+-		return -ENXIO;
++		return irq;
  	}
  
- 	memcpy(basic->peer_addr, sta->addr, ETH_ALEN);
--	basic->aid = cpu_to_le16(sta->aid);
- 	basic->qos = sta->wme;
- }
- 
+ 	ret = devm_request_irq(dev, irq, wkup_m3_txev_handler,
 -- 
 2.34.1
 

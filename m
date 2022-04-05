@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A824F417D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F16A44F40B8
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380494AbiDEMxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41472 "EHLO
+        id S237369AbiDEMqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243237AbiDEJIv (ORCPT
+        with ESMTP id S243275AbiDEJIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:08:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853849F6C0;
-        Tue,  5 Apr 2022 01:57:49 -0700 (PDT)
+        Tue, 5 Apr 2022 05:08:52 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B9F9F6E0;
+        Tue,  5 Apr 2022 01:57:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 067AEB80DA1;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 030D8CE1C6A;
+        Tue,  5 Apr 2022 08:57:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17D58C385A0;
         Tue,  5 Apr 2022 08:57:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5453DC385AA;
-        Tue,  5 Apr 2022 08:57:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149067;
-        bh=fTO4FNgiYK0sHRgMdAu5LNK4LHTq4UV5MSEOC31Srdw=;
+        s=korg; t=1649149070;
+        bh=9+mIZFk4KMQEa6L1emFd16nfR80Y07GQTihFMe8LjcQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W9hmgdLLx0gcajiLykU/J1bpJrQWkx2Zk+f9OXFKDxjOdsT4cX0pHJJn4Szwvr98f
-         25i0kIH42+VSbLlmpQ8UWkN5XH6n+kJH3rX9e8ouhIuswQwFThF9old/Juwg0s9yST
-         X2uxZ8kxp5z7NUDeqMvxCrhclrGSvca9TR1YtFl0=
+        b=DuRPKiXj9wx+fvta9mi0vMW34T5Utbl//vYxw2TN/lgyTYBHsie5vNpSorMWSmoJI
+         YFvXN2YLvermi5+mQN6QQNypsPbLxasvbeDtrvWnSpRyspLgkEk4cnOLWQn4tcymvz
+         6DFqIGJrK8lzTuLekPc5b77UDq1C9aR5fJAFvHNs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Lee Jones <lee.jones@linaro.org>,
+        stable@vger.kernel.org, Cheng Li <lic121@chinatelecom.cn>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0581/1017] mfd: mc13xxx: Add check for mc13xxx_irq_request
-Date:   Tue,  5 Apr 2022 09:24:54 +0200
-Message-Id: <20220405070411.525227578@linuxfoundation.org>
+Subject: [PATCH 5.16 0582/1017] libbpf: Unmap rings when umem deleted
+Date:   Tue,  5 Apr 2022 09:24:55 +0200
+Message-Id: <20220405070411.555633168@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,39 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: lic121 <lic121@chinatelecom.cn>
 
-[ Upstream commit e477e51a41cb5d6034f3c5ea85a71ad4613996b9 ]
+[ Upstream commit 9c6e6a80ee741adf6cb3cfd8eef7d1554f91fceb ]
 
-As the potential failure of the devm_request_threaded_irq(),
-it should be better to check the return value of the
-mc13xxx_irq_request() and return error if fails.
+xsk_umem__create() does mmap for fill/comp rings, but xsk_umem__delete()
+doesn't do the unmap. This works fine for regular cases, because
+xsk_socket__delete() does unmap for the rings. But for the case that
+xsk_socket__create_shared() fails, umem rings are not unmapped.
 
-Fixes: 8e00593557c3 ("mfd: Add mc13892 support to mc13xxx")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Link: https://lore.kernel.org/r/20220224022331.3208275-1-jiasheng@iscas.ac.cn
+fill_save/comp_save are checked to determine if rings have already be
+unmapped by xsk. If fill_save and comp_save are NULL, it means that the
+rings have already been used by xsk. Then they are supposed to be
+unmapped by xsk_socket__delete(). Otherwise, xsk_umem__delete() does the
+unmap.
+
+Fixes: 2f6324a3937f ("libbpf: Support shared umems between queues and devices")
+Signed-off-by: Cheng Li <lic121@chinatelecom.cn>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20220301132623.GA19995@vscode.7~
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/mc13xxx-core.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/lib/bpf/xsk.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/mfd/mc13xxx-core.c b/drivers/mfd/mc13xxx-core.c
-index 8a4f1d90dcfd..1000572761a8 100644
---- a/drivers/mfd/mc13xxx-core.c
-+++ b/drivers/mfd/mc13xxx-core.c
-@@ -323,8 +323,10 @@ int mc13xxx_adc_do_conversion(struct mc13xxx *mc13xxx, unsigned int mode,
- 		adc1 |= MC13783_ADC1_ATOX;
+diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+index 81f8fbc85e70..c43b4d94346d 100644
+--- a/tools/lib/bpf/xsk.c
++++ b/tools/lib/bpf/xsk.c
+@@ -1210,12 +1210,23 @@ int xsk_socket__create(struct xsk_socket **xsk_ptr, const char *ifname,
  
- 	dev_dbg(mc13xxx->dev, "%s: request irq\n", __func__);
--	mc13xxx_irq_request(mc13xxx, MC13XXX_IRQ_ADCDONE,
-+	ret = mc13xxx_irq_request(mc13xxx, MC13XXX_IRQ_ADCDONE,
- 			mc13xxx_handler_adcdone, __func__, &adcdone_data);
-+	if (ret)
-+		goto out;
+ int xsk_umem__delete(struct xsk_umem *umem)
+ {
++	struct xdp_mmap_offsets off;
++	int err;
++
+ 	if (!umem)
+ 		return 0;
  
- 	mc13xxx_reg_write(mc13xxx, MC13XXX_ADC0, adc0);
- 	mc13xxx_reg_write(mc13xxx, MC13XXX_ADC1, adc1);
+ 	if (umem->refcount)
+ 		return -EBUSY;
+ 
++	err = xsk_get_mmap_offsets(umem->fd, &off);
++	if (!err && umem->fill_save && umem->comp_save) {
++		munmap(umem->fill_save->ring - off.fr.desc,
++		       off.fr.desc + umem->config.fill_size * sizeof(__u64));
++		munmap(umem->comp_save->ring - off.cr.desc,
++		       off.cr.desc + umem->config.comp_size * sizeof(__u64));
++	}
++
+ 	close(umem->fd);
+ 	free(umem);
+ 
 -- 
 2.34.1
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF5834F4134
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0E44F4345
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:58:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380192AbiDEU2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
+        id S1390156AbiDENhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354978AbiDEKQu (ORCPT
+        with ESMTP id S242457AbiDEJQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:16:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F2B11C0A;
-        Tue,  5 Apr 2022 03:04:22 -0700 (PDT)
+        Tue, 5 Apr 2022 05:16:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B2ED3720;
+        Tue,  5 Apr 2022 02:01:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32B07B81C99;
-        Tue,  5 Apr 2022 10:04:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D21BC385A6;
-        Tue,  5 Apr 2022 10:04:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 88A32614E4;
+        Tue,  5 Apr 2022 09:01:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 924A3C385A1;
+        Tue,  5 Apr 2022 09:01:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153059;
-        bh=r4l+owIcrNQ3efGn/1bGA3KGQMB6wEfh4CiEt6UHA3Q=;
+        s=korg; t=1649149314;
+        bh=RpHeGB/4TCr70vwntNOFuyfpQZbXqLVJP5A5Q9NI2ds=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PFneB6CrddJXe6VeQFalHJpQxA4Z4mwjlFB4Peyy/AGcytZh6c2IA1qWHrOgIvlEY
-         mW8o62cQqOzawG9Gb+RDoJBH2gMYfUXwNLaTA7jYdIT7LXm8BT6IBMX1bOzTPiPgCB
-         o8B2DLaWUrVjROuDSaxsiyzFBR2um2PrCwgGoYWI=
+        b=F0Ok6rA2FbaKbmxr87GJNURAHLK4u2z6P6nT5XXlblbciklnt8n6pCuNmE6DUqGiC
+         SBzk8uMHcElsGEi4WhdUzZluB9lHgOR/Rn7TX2ntw6Mj+AJ/6M6PagYioPzYXHR36u
+         FvMftACtCEHl4lSMA/JW8cq0hc06+uoBu87op940=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.10 088/599] ACPI: properties: Consistently return -ENOENT if there are no more references
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0669/1017] iio: adc: Add check for devm_request_threaded_irq
 Date:   Tue,  5 Apr 2022 09:26:22 +0200
-Message-Id: <20220405070301.448435301@linuxfoundation.org>
+Message-Id: <20220405070414.139507094@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-commit babc92da5928f81af951663fc436997352e02d3a upstream.
+[ Upstream commit b30537a4cedcacf0ade2f33ebb7610178ed1e7d7 ]
 
-__acpi_node_get_property_reference() is documented to return -ENOENT if
-the caller requests a property reference at an index that does not exist,
-not -EINVAL which it actually does.
+As the potential failure of the devm_request_threaded_irq(),
+it should be better to check the return value and return
+error if fails.
 
-Fix this by returning -ENOENT consistenly, independently of whether the
-property value is a plain reference or a package.
-
-Fixes: c343bc2ce2c6 ("ACPI: properties: Align return codes of __acpi_node_get_property_reference()")
-Cc: 4.14+ <stable@vger.kernel.org> # 4.14+
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: fa659a40b80b ("iio: adc: twl6030-gpadc: Use devm_* API family")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Link: https://lore.kernel.org/r/20220224062849.3280966-1-jiasheng@iscas.ac.cn
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/property.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/iio/adc/twl6030-gpadc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/acpi/property.c
-+++ b/drivers/acpi/property.c
-@@ -685,7 +685,7 @@ int __acpi_node_get_property_reference(c
- 	 */
- 	if (obj->type == ACPI_TYPE_LOCAL_REFERENCE) {
- 		if (index)
--			return -EINVAL;
-+			return -ENOENT;
+diff --git a/drivers/iio/adc/twl6030-gpadc.c b/drivers/iio/adc/twl6030-gpadc.c
+index afdb59e0b526..d0223e39d59a 100644
+--- a/drivers/iio/adc/twl6030-gpadc.c
++++ b/drivers/iio/adc/twl6030-gpadc.c
+@@ -911,6 +911,8 @@ static int twl6030_gpadc_probe(struct platform_device *pdev)
+ 	ret = devm_request_threaded_irq(dev, irq, NULL,
+ 				twl6030_gpadc_irq_handler,
+ 				IRQF_ONESHOT, "twl6030_gpadc", indio_dev);
++	if (ret)
++		return ret;
  
- 		ret = acpi_bus_get_device(obj->reference.handle, &device);
- 		if (ret)
+ 	ret = twl6030_gpadc_enable_irq(TWL6030_GPADC_RT_SW1_EOC_MASK);
+ 	if (ret < 0) {
+-- 
+2.34.1
+
 
 

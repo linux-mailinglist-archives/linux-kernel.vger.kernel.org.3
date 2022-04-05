@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2114F355C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3CB4F352D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237221AbiDEI3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
+        id S236841AbiDEI2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:28:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234681AbiDEH6p (ORCPT
+        with ESMTP id S234976AbiDEH7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:58:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEBFA94F3;
-        Tue,  5 Apr 2022 00:53:10 -0700 (PDT)
+        Tue, 5 Apr 2022 03:59:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A51554A2;
+        Tue,  5 Apr 2022 00:53:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7B17B81BB5;
-        Tue,  5 Apr 2022 07:53:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0431DC34110;
-        Tue,  5 Apr 2022 07:53:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 116C56176E;
+        Tue,  5 Apr 2022 07:53:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E93CC340EE;
+        Tue,  5 Apr 2022 07:53:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145187;
-        bh=q+HweTIoMRUDs33SD84jX+bq8GXDyO/WMF9zN2kpg1M=;
+        s=korg; t=1649145214;
+        bh=bSkoIg8YPsWNJ8PQ3THzEbNRMzcfHUi9ycc8yIeKJZw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e3ufrs0JIHFLoBdo5Jee5+BMqjJOjrflFTA3ALTcXUlri/PyGt66oiYBUz0pzhHBy
-         R5iU3ghO7lCecnhaP342e9jEJ3sdSYjwAtObi7Trhw3XDZ1WB1sYeMB5O6HlTY9ZoM
-         AR7zo+E2+iJ6KWEm3LAOBr9vIEMRyBE/DYp3ykGk=
+        b=jIEkBV+XBetRap+VnMYvaRFkYyMv1x1r/mb5KINQOTJzy58s2yvHd8t9irC0Bxkua
+         MZjTQSwW8ubxwIZh86iVwLWtu6IqMd+iMW5/l9jiCeD2fsVpNZL0fEvDPSX1Z2d+sz
+         mlvgShxjv8nI0vJPjG6iLEyLZ5j9Vqy3MNm6acug=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Z. Liu" <liuzx@knownsec.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0317/1126] video: fbdev: matroxfb: set maxvram of vbG200eW to the same as vbG200 to avoid black screen
-Date:   Tue,  5 Apr 2022 09:17:44 +0200
-Message-Id: <20220405070416.920628985@linuxfoundation.org>
+        stable@vger.kernel.org, Pavel Kubelun <be.dissent@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Christian Lamparter <chunkeey@gmail.com>
+Subject: [PATCH 5.17 0326/1126] ARM: dts: qcom: ipq4019: fix sleep clock
+Date:   Tue,  5 Apr 2022 09:17:53 +0200
+Message-Id: <20220405070417.187073749@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -54,36 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Z. Liu <liuzx@knownsec.com>
+From: Pavel Kubelun <be.dissent@gmail.com>
 
-[ Upstream commit 62d89a7d49afe46e6b9bbe9e23b004ad848dbde4 ]
+[ Upstream commit 3d7e7980993d2c1ae42d3d314040fc2de6a9c45f ]
 
-Start from commit 11be60bd66d54 "matroxfb: add Matrox MGA-G200eW board
-support", when maxvram is 0x800000, monitor become black w/ error message
-said: "The current input timing is not supported by the monitor display.
-Please change your input timing to 1920x1080@60Hz ...".
+It seems like sleep_clk was copied from ipq806x.
+Fix ipq40xx sleep_clk to the value QSDK defines.
 
-Fixes: 11be60bd66d5 ("matroxfb: add Matrox MGA-G200eW board support")
-Signed-off-by: Z. Liu <liuzx@knownsec.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Link: https://source.codeaurora.org/quic/qsdk/oss/kernel/linux-msm/commit/?id=d92ec59973484acc86dd24b67f10f8911b4b4b7d
+Link: https://patchwork.kernel.org/comment/22721613/
+Fixes: bec6ba4cdf2a ("qcom: ipq4019: Add basic board/dts support for IPQ4019 SoC")
+Suggested-by: Bjorn Andersson <bjorn.andersson@linaro.org> (clock-output-names)
+Signed-off-by: Pavel Kubelun <be.dissent@gmail.com>
+Signed-off-by: Christian Lamparter <chunkeey@gmail.com> (removed clock rename)
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20211220170352.34591-1-chunkeey@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/matrox/matroxfb_base.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/qcom-ipq4019.dtsi | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/video/fbdev/matrox/matroxfb_base.c b/drivers/video/fbdev/matrox/matroxfb_base.c
-index 5c82611e93d9..236521b19daf 100644
---- a/drivers/video/fbdev/matrox/matroxfb_base.c
-+++ b/drivers/video/fbdev/matrox/matroxfb_base.c
-@@ -1377,7 +1377,7 @@ static struct video_board vbG200 = {
- 	.lowlevel = &matrox_G100
- };
- static struct video_board vbG200eW = {
--	.maxvram = 0x800000,
-+	.maxvram = 0x100000,
- 	.maxdisplayable = 0x800000,
- 	.accelID = FB_ACCEL_MATROX_MGAG200,
- 	.lowlevel = &matrox_G100
+diff --git a/arch/arm/boot/dts/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom-ipq4019.dtsi
+index 7dec0553636e..51c365fdf3bf 100644
+--- a/arch/arm/boot/dts/qcom-ipq4019.dtsi
++++ b/arch/arm/boot/dts/qcom-ipq4019.dtsi
+@@ -142,7 +142,8 @@
+ 	clocks {
+ 		sleep_clk: sleep_clk {
+ 			compatible = "fixed-clock";
+-			clock-frequency = <32768>;
++			clock-frequency = <32000>;
++			clock-output-names = "gcc_sleep_clk_src";
+ 			#clock-cells = <0>;
+ 		};
+ 
 -- 
 2.34.1
 

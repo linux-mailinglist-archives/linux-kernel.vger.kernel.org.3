@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B25414F4E84
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B46324F4EC4
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235513AbiDFA2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:28:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49774 "EHLO
+        id S1836610AbiDFAgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358064AbiDEK15 (ORCPT
+        with ESMTP id S1351643AbiDEKDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:57 -0400
+        Tue, 5 Apr 2022 06:03:05 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B842D1C2;
-        Tue,  5 Apr 2022 03:14:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24EC3716E3;
+        Tue,  5 Apr 2022 02:52:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BB204B81C8A;
-        Tue,  5 Apr 2022 10:14:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B7D4C385A0;
-        Tue,  5 Apr 2022 10:14:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32304B81B14;
+        Tue,  5 Apr 2022 09:51:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97C49C385A2;
+        Tue,  5 Apr 2022 09:51:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153651;
-        bh=V7nv+sBTTQFZrPFOnXBbBdjlf3WP3Xfv9MFVK1hPUwM=;
+        s=korg; t=1649152318;
+        bh=vJB3hI7pFHLZ4ItKPzu559ozRQX/5iq+YVkCRMlueys=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u0Q87ekpetbXfVCrXyi1vkt/tfJPATHsmFiGj37sWz2Dj2FwB/FnEvG+TCmJqGxBY
-         PBQ2nZ4/xKcm7zsHP9FMlLOEjQcp0mL50Nyde4WcsSNEk/ETuAXCzQsrggtSmKcMd9
-         Qph8LKXS1pbtggfEIQCfQb9XXLahAHI7Ci/55jzM=
+        b=G2P9AXtzEiagN9VH1MmtNouE66a4Y8HcO1TfQyjI6merjCFb+gcfDP3tMwa0O88Yo
+         ZveGM1AQV7gLHo0G0fmD1CTLwRheeHzWOK4AixFqA5EeqiBl5efkMFFS2iyLdXGnJR
+         oh2KFxqp3T2UbDMA4mcb9if7oaen2ysrxzs8uUDc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yiqing Yao <yiqing.yao@amd.com>,
-        Monk Liu <Monk.liu@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org,
+        Mirela Rabulea <mirela.rabulea@oss.nxp.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 299/599] drm/amd/pm: enable pm sysfs write for one VF mode
-Date:   Tue,  5 Apr 2022 09:29:53 +0200
-Message-Id: <20220405070307.731614410@linuxfoundation.org>
+Subject: [PATCH 5.15 732/913] media: imx-jpeg: Prevent decoding NV12M jpegs into single-planar buffers
+Date:   Tue,  5 Apr 2022 09:29:54 +0200
+Message-Id: <20220405070401.773042917@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yiqing Yao <yiqing.yao@amd.com>
+From: Mirela Rabulea <mirela.rabulea@oss.nxp.com>
 
-[ Upstream commit e610941c45bad75aa839af015c27d236ab6749e5 ]
+[ Upstream commit 417591a766b3c040c346044541ff949c0b2bb7b2 ]
 
-[why]
-pm sysfs should be writable in one VF mode as is in passthrough
+If the application queues an NV12M jpeg as output buffer, but then
+queues a single planar capture buffer, the kernel will crash with
+"Unable to handle kernel NULL pointer dereference" in mxc_jpeg_addrs,
+prevent this by finishing the job with error.
 
-[how]
-do not remove write access on pm sysfs if device is in one VF mode
-
-Fixes: 11c9cc95f818 ("amdgpu/pm: Make sysfs pm attributes as read-only for VFs")
-Signed-off-by: Yiqing Yao <yiqing.yao@amd.com>
-Reviewed-by: Monk Liu <Monk.liu@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Mirela Rabulea <mirela.rabulea@oss.nxp.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/pm/amdgpu_pm.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/platform/imx-jpeg/mxc-jpeg.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/pm/amdgpu_pm.c b/drivers/gpu/drm/amd/pm/amdgpu_pm.c
-index 49109614510b..5abb68017f6e 100644
---- a/drivers/gpu/drm/amd/pm/amdgpu_pm.c
-+++ b/drivers/gpu/drm/amd/pm/amdgpu_pm.c
-@@ -2098,8 +2098,8 @@ static int default_attr_update(struct amdgpu_device *adev, struct amdgpu_device_
- 		}
- 	}
+diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/imx-jpeg/mxc-jpeg.c
+index fc905ea78b17..637d73f5f4a2 100644
+--- a/drivers/media/platform/imx-jpeg/mxc-jpeg.c
++++ b/drivers/media/platform/imx-jpeg/mxc-jpeg.c
+@@ -925,6 +925,12 @@ static void mxc_jpeg_device_run(void *priv)
+ 	v4l2_m2m_buf_copy_metadata(src_buf, dst_buf, true);
  
--	/* setting should not be allowed from VF */
--	if (amdgpu_sriov_vf(adev)) {
-+	/* setting should not be allowed from VF if not in one VF mode */
-+	if (amdgpu_sriov_vf(adev) && !amdgpu_sriov_is_pp_one_vf(adev)) {
- 		dev_attr->attr.mode &= ~S_IWUGO;
- 		dev_attr->store = NULL;
- 	}
+ 	jpeg_src_buf = vb2_to_mxc_buf(&src_buf->vb2_buf);
++	if (q_data_cap->fmt->colplanes != dst_buf->vb2_buf.num_planes) {
++		dev_err(dev, "Capture format %s has %d planes, but capture buffer has %d planes\n",
++			q_data_cap->fmt->name, q_data_cap->fmt->colplanes,
++			dst_buf->vb2_buf.num_planes);
++		jpeg_src_buf->jpeg_parse_error = true;
++	}
+ 	if (jpeg_src_buf->jpeg_parse_error) {
+ 		jpeg->slot_data[ctx->slot].used = false;
+ 		v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
 -- 
 2.34.1
 

@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D304F43D1
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 760D34F4421
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389742AbiDEPV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
+        id S1389418AbiDEPVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346880AbiDEJpk (ORCPT
+        with ESMTP id S1347056AbiDEJpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:45:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2040C63CA;
-        Tue,  5 Apr 2022 02:32:06 -0700 (PDT)
+        Tue, 5 Apr 2022 05:45:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12644E394;
+        Tue,  5 Apr 2022 02:32:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0FC5B81CB5;
-        Tue,  5 Apr 2022 09:32:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E33D3C385A3;
-        Tue,  5 Apr 2022 09:32:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE98561368;
+        Tue,  5 Apr 2022 09:32:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5707C385A0;
+        Tue,  5 Apr 2022 09:32:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151123;
-        bh=Ea5ndGWXz9K8ljtr3OiwEJECD2uDT/KjukYvFs0JZnY=;
+        s=korg; t=1649151137;
+        bh=7PbildU4fVy2AP3yvxFY7nRP8gtRqmn3F61F8jyqIRQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pMWI75GI8mL2GxchqzVIbZjRql9L4aZ44iueRPKZOFVKGk4spg97Rwt1B6g5zLkVa
-         rOpiacMm9ii+kl7Pl/ihCM3pPMX3No6HYeYkK52DAnV7sa9JGBk/6iYeuOUSEaLeLx
-         St3i4bXonLjvs2lew4kcywMrg6tZzjhpbEs+CeAo=
+        b=CsaJw4ldPZuWRQi4QNBoaCf3lcEbcIEuseNaNhkhEkiyfn4T35cJr/KSgULkkn7AB
+         3dNTI2bFKPTsK6vKlt8tv0S1zZhqsuWtU1UDtSRBcsd7GRs+LyLgqRKeEqr/JhW+NT
+         2LGFV4HUqFe6bP74Pc/V+aANyfaGIMX+Htm+KbUw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, devicetree@vger.kernel.org,
-        Maulik Shah <quic_mkshah@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 303/913] arm64: dts: qcom: sm8350: Correct TCS configuration for apps rsc
-Date:   Tue,  5 Apr 2022 09:22:45 +0200
-Message-Id: <20220405070348.939161671@linuxfoundation.org>
+Subject: [PATCH 5.15 307/913] ARM: ftrace: ensure that ADR takes the Thumb bit into account
+Date:   Tue,  5 Apr 2022 09:22:49 +0200
+Message-Id: <20220405070349.058006700@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,35 +57,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maulik Shah <quic_mkshah@quicinc.com>
+From: Ard Biesheuvel <ardb@kernel.org>
 
-[ Upstream commit a131255e4ad1ef8d4873ecba21561ba272b2547a ]
+[ Upstream commit dd88b03ff0c84f4bcbe1419b93a4bed429fed3be ]
 
-Correct the TCS config by updating the number of TCSes for each type.
+Using ADR to take the address of 'ftrace_stub' via a local label
+produces an address that has the Thumb bit cleared, which means the
+subsequent comparison is guaranteed to fail. Instead, use the badr
+macro, which forces the Thumb bit to be set.
 
-Cc: devicetree@vger.kernel.org
-Fixes: b7e8f433a673 ("arm64: dts: qcom: Add basic devicetree support for SM8350 SoC")
-Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/1641749107-31979-4-git-send-email-quic_mkshah@quicinc.com
+Fixes: a3ba87a61499 ("ARM: 6316/1: ftrace: add Thumb-2 support")
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/sm8350.dtsi | 2 +-
+ arch/arm/kernel/entry-ftrace.S | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index a8886adaaf37..3d32d5581816 100644
---- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -979,7 +979,7 @@
- 			qcom,tcs-offset = <0xd00>;
- 			qcom,drv-id = <2>;
- 			qcom,tcs-config = <ACTIVE_TCS  2>, <SLEEP_TCS   3>,
--					  <WAKE_TCS    3>, <CONTROL_TCS 1>;
-+					  <WAKE_TCS    3>, <CONTROL_TCS 0>;
+diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
+index a74289ebc803..f4886fb6e9ba 100644
+--- a/arch/arm/kernel/entry-ftrace.S
++++ b/arch/arm/kernel/entry-ftrace.S
+@@ -40,7 +40,7 @@
+ 	mcount_enter
+ 	ldr	r0, =ftrace_trace_function
+ 	ldr	r2, [r0]
+-	adr	r0, .Lftrace_stub
++	badr	r0, .Lftrace_stub
+ 	cmp	r0, r2
+ 	bne	1f
  
- 			rpmhcc: clock-controller {
- 				compatible = "qcom,sm8350-rpmh-clk";
 -- 
 2.34.1
 

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 583414F4E7E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5154F4E34
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444452AbiDFAYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
+        id S1588145AbiDFAOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354567AbiDEKOj (ORCPT
+        with ESMTP id S1354570AbiDEKOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 06:14:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EEA6BDC0;
-        Tue,  5 Apr 2022 03:01:10 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D366BDC3;
+        Tue,  5 Apr 2022 03:01:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D53876172B;
-        Tue,  5 Apr 2022 10:01:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2B02C385A2;
-        Tue,  5 Apr 2022 10:01:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E1A261673;
+        Tue,  5 Apr 2022 10:01:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75E88C385A1;
+        Tue,  5 Apr 2022 10:01:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152869;
-        bh=d/cY7PKqDZsO7roqJnKo+pFXp8Zl8yqMxxZoCi2Jn6o=;
+        s=korg; t=1649152874;
+        bh=FIT3wawucFWfzyjni/wMaQn1OA4tnDnV0gudXsZTwlc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IOscMeEr3J+uvHlOJw1W1YMSeaEpr83PYtJEVDicnVI12qlJOLBJ2nHqNnvVqjhw/
-         Z7SYWeHChm5GF4x81ufWS2JynMExa8TUcAWGCUaXZVfHJ0KxPKi/KccwZUU1tunfWU
-         wNVFr6cm6cx0NijgpRe64Wudc+iBUMWdL1eMecCE=
+        b=04Ru8TKdjl+iQgt2jyTgtZfYGclEd5W2LeiaP4VcRq93H5qy9rqA1KoEuzJpDaMj9
+         l4ZPE/m4fVLnGwrHfpdQtGSlt5haebWGtFHBr1MsKFoGeWZicup49eHIChM8VTktft
+         nniR//qI7nVcT3s9CZWCGN2yJQG2zfrD98/CK2OY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TCS Robot <tcs_robot@tencent.com>,
-        Haimin Zhang <tcs_kernel@tencent.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
+        stable@vger.kernel.org,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 019/599] af_key: add __GFP_ZERO flag for compose_sadb_supported in function pfkey_register
-Date:   Tue,  5 Apr 2022 09:25:13 +0200
-Message-Id: <20220405070259.388646405@linuxfoundation.org>
+Subject: [PATCH 5.10 020/599] net: dsa: microchip: add spi_device_id tables
+Date:   Tue,  5 Apr 2022 09:25:14 +0200
+Message-Id: <20220405070259.418169239@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -56,40 +56,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haimin Zhang <tcs_kernel@tencent.com>
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-[ Upstream commit 9a564bccb78a76740ea9d75a259942df8143d02c ]
+[ Upstream commit e981bc74aefc6a177b50c16cfa7023599799cf74 ]
 
-Add __GFP_ZERO flag for compose_sadb_supported in function pfkey_register
-to initialize the buffer of supp_skb to fix a kernel-info-leak issue.
-1) Function pfkey_register calls compose_sadb_supported to request
-a sk_buff. 2) compose_sadb_supported calls alloc_sbk to allocate
-a sk_buff, but it doesn't zero it. 3) If auth_len is greater 0, then
-compose_sadb_supported treats the memory as a struct sadb_supported and
-begins to initialize. But it just initializes the field sadb_supported_len
-and field sadb_supported_exttype without field sadb_supported_reserved.
+Add spi_device_id tables to avoid logs like "SPI driver ksz9477-switch
+has no spi_device_id".
 
-Reported-by: TCS Robot <tcs_robot@tencent.com>
-Signed-off-by: Haimin Zhang <tcs_kernel@tencent.com>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/key/af_key.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/dsa/microchip/ksz8795_spi.c | 11 +++++++++++
+ drivers/net/dsa/microchip/ksz9477_spi.c | 12 ++++++++++++
+ 2 files changed, 23 insertions(+)
 
-diff --git a/net/key/af_key.c b/net/key/af_key.c
-index d1364b858fdf..bd9b5c573b5a 100644
---- a/net/key/af_key.c
-+++ b/net/key/af_key.c
-@@ -1703,7 +1703,7 @@ static int pfkey_register(struct sock *sk, struct sk_buff *skb, const struct sad
+diff --git a/drivers/net/dsa/microchip/ksz8795_spi.c b/drivers/net/dsa/microchip/ksz8795_spi.c
+index 8b00f8e6c02f..5639c5c59e25 100644
+--- a/drivers/net/dsa/microchip/ksz8795_spi.c
++++ b/drivers/net/dsa/microchip/ksz8795_spi.c
+@@ -86,12 +86,23 @@ static const struct of_device_id ksz8795_dt_ids[] = {
+ };
+ MODULE_DEVICE_TABLE(of, ksz8795_dt_ids);
  
- 	xfrm_probe_algs();
++static const struct spi_device_id ksz8795_spi_ids[] = {
++	{ "ksz8765" },
++	{ "ksz8794" },
++	{ "ksz8795" },
++	{ "ksz8863" },
++	{ "ksz8873" },
++	{ },
++};
++MODULE_DEVICE_TABLE(spi, ksz8795_spi_ids);
++
+ static struct spi_driver ksz8795_spi_driver = {
+ 	.driver = {
+ 		.name	= "ksz8795-switch",
+ 		.owner	= THIS_MODULE,
+ 		.of_match_table = of_match_ptr(ksz8795_dt_ids),
+ 	},
++	.id_table = ksz8795_spi_ids,
+ 	.probe	= ksz8795_spi_probe,
+ 	.remove	= ksz8795_spi_remove,
+ 	.shutdown = ksz8795_spi_shutdown,
+diff --git a/drivers/net/dsa/microchip/ksz9477_spi.c b/drivers/net/dsa/microchip/ksz9477_spi.c
+index 1142768969c2..9bda83d063e8 100644
+--- a/drivers/net/dsa/microchip/ksz9477_spi.c
++++ b/drivers/net/dsa/microchip/ksz9477_spi.c
+@@ -88,12 +88,24 @@ static const struct of_device_id ksz9477_dt_ids[] = {
+ };
+ MODULE_DEVICE_TABLE(of, ksz9477_dt_ids);
  
--	supp_skb = compose_sadb_supported(hdr, GFP_KERNEL);
-+	supp_skb = compose_sadb_supported(hdr, GFP_KERNEL | __GFP_ZERO);
- 	if (!supp_skb) {
- 		if (hdr->sadb_msg_satype != SADB_SATYPE_UNSPEC)
- 			pfk->registered &= ~(1<<hdr->sadb_msg_satype);
++static const struct spi_device_id ksz9477_spi_ids[] = {
++	{ "ksz9477" },
++	{ "ksz9897" },
++	{ "ksz9893" },
++	{ "ksz9563" },
++	{ "ksz8563" },
++	{ "ksz9567" },
++	{ },
++};
++MODULE_DEVICE_TABLE(spi, ksz9477_spi_ids);
++
+ static struct spi_driver ksz9477_spi_driver = {
+ 	.driver = {
+ 		.name	= "ksz9477-switch",
+ 		.owner	= THIS_MODULE,
+ 		.of_match_table = of_match_ptr(ksz9477_dt_ids),
+ 	},
++	.id_table = ksz9477_spi_ids,
+ 	.probe	= ksz9477_spi_probe,
+ 	.remove	= ksz9477_spi_remove,
+ 	.shutdown = ksz9477_spi_shutdown,
 -- 
 2.34.1
 

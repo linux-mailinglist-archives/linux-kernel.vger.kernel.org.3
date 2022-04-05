@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B18D4F4FA3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA92F4F5026
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:19:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1838952AbiDFA5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35092 "EHLO
+        id S1840598AbiDFBLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352665AbiDEKEw (ORCPT
+        with ESMTP id S1352649AbiDEKEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:04:52 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5483ABB910;
-        Tue,  5 Apr 2022 02:53:37 -0700 (PDT)
+        Tue, 5 Apr 2022 06:04:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B36DBB93B;
+        Tue,  5 Apr 2022 02:53:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 266BDCE1CA2;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F18F661741;
+        Tue,  5 Apr 2022 09:53:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAF58C385A2;
         Tue,  5 Apr 2022 09:53:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CC72C385A1;
-        Tue,  5 Apr 2022 09:53:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152414;
-        bh=dOC/qeva2LJb0df2IyTGuQKNhvG4/vpycOtEmcS+tso=;
+        s=korg; t=1649152417;
+        bh=f5kwN4S2vdesuUj/xzMZWQjyIOdPLVM7/VR9lrPVkig=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K9X234PuAWJShF74rKwKyqALJ8eSez9UUIEfHOvNZ/W6yAbmUsIKg3GUqAB3q/RbB
-         YM3puXLyVlInKlbixudn3eAkJGMugNS9Rh8bkoDaqXgtz2bW1NGNoByIGcbju46Xuf
-         oyrZ0Jsnb2IspKDNCbFp8Peb7sDrPIEhJNh7c/cM=
+        b=BuSg87JuxayP3ctVQis9jOmJ7kKvOxCvjLi4d5sf8P/Lv21Y6y7e7d3xDmzIcO4jZ
+         xDJ72ADbLX0uaooCc5PqFq6Eg8+adM+ti8LqV3122x0RL/2uy8+n2ugVikmG5BJWyQ
+         N2lWlWmZLDysOG2lHOGaxLkoFL82DCIw9L4fEWns=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 768/913] media: atomisp: fix bad usage at error handling logic
-Date:   Tue,  5 Apr 2022 09:30:30 +0200
-Message-Id: <20220405070402.853528449@linuxfoundation.org>
+        stable@vger.kernel.org, Matt Kramer <mccleetus@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 769/913] ALSA: hda/realtek: Add alc256-samsung-headphone fixup
+Date:   Tue,  5 Apr 2022 09:30:31 +0200
+Message-Id: <20220405070402.883278443@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,93 +54,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab@kernel.org>
+From: Matt Kramer <mccleetus@gmail.com>
 
-[ Upstream commit fc0b582c858ed73f94c8f3375c203ea46f1f7402 ]
+[ Upstream commit ef248d9bd616b04df8be25539a4dc5db4b6c56f4 ]
 
-As warned by sparse:
-	atomisp: drivers/staging/media/atomisp/pci/atomisp_acc.c:508 atomisp_acc_load_extensions() warn: iterator used outside loop: 'acc_fw'
+This fixes the near-silence of the headphone jack on the ALC256-based
+Samsung Galaxy Book Flex Alpha (NP730QCJ). The magic verbs were found
+through trial and error, using known ALC298 hacks as inspiration. The
+fixup is auto-enabled only when the NP730QCJ is detected. It can be
+manually enabled using model=alc256-samsung-headphone.
 
-The acc_fw interactor is used outside the loop, at the error handling
-logic. On most cases, this is actually safe there, but, if
-atomisp_css_set_acc_parameters() has an error, an attempt to use it
-will pick an invalid value for acc_fw.
-
-Reported-by: Hans Verkuil <hverkuil@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Matt Kramer <mccleetus@gmail.com>
+Link: https://lore.kernel.org/r/3168355.aeNJFYEL58@linus
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../staging/media/atomisp/pci/atomisp_acc.c   | 28 +++++++++++++------
- 1 file changed, 19 insertions(+), 9 deletions(-)
+ Documentation/sound/hd-audio/models.rst |  4 ++++
+ sound/pci/hda/patch_realtek.c           | 11 +++++++++++
+ 2 files changed, 15 insertions(+)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_acc.c b/drivers/staging/media/atomisp/pci/atomisp_acc.c
-index 9a1751895ab0..28cb271663c4 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_acc.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_acc.c
-@@ -439,6 +439,18 @@ int atomisp_acc_s_mapped_arg(struct atomisp_sub_device *asd,
- 	return 0;
- }
+diff --git a/Documentation/sound/hd-audio/models.rst b/Documentation/sound/hd-audio/models.rst
+index d25335993e55..9b52f50a6854 100644
+--- a/Documentation/sound/hd-audio/models.rst
++++ b/Documentation/sound/hd-audio/models.rst
+@@ -261,6 +261,10 @@ alc-sense-combo
+ huawei-mbx-stereo
+     Enable initialization verbs for Huawei MBX stereo speakers;
+     might be risky, try this at your own risk
++alc298-samsung-headphone
++    Samsung laptops with ALC298
++alc256-samsung-headphone
++    Samsung laptops with ALC256
  
-+static void atomisp_acc_unload_some_extensions(struct atomisp_sub_device *asd,
-+					      int i,
-+					      struct atomisp_acc_fw *acc_fw)
-+{
-+	while (--i >= 0) {
-+		if (acc_fw->flags & acc_flag_to_pipe[i].flag) {
-+			atomisp_css_unload_acc_extension(asd, acc_fw->fw,
-+							 acc_flag_to_pipe[i].pipe_id);
-+		}
-+	}
-+}
-+
- /*
-  * Appends the loaded acceleration binary extensions to the
-  * current ISP mode. Must be called just before sh_css_start().
-@@ -479,16 +491,20 @@ int atomisp_acc_load_extensions(struct atomisp_sub_device *asd)
- 								     acc_fw->fw,
- 								     acc_flag_to_pipe[i].pipe_id,
- 								     acc_fw->type);
--				if (ret)
-+				if (ret) {
-+					atomisp_acc_unload_some_extensions(asd, i, acc_fw);
- 					goto error;
-+				}
- 
- 				ext_loaded = true;
- 			}
- 		}
- 
- 		ret = atomisp_css_set_acc_parameters(acc_fw);
--		if (ret < 0)
-+		if (ret < 0) {
-+			atomisp_acc_unload_some_extensions(asd, i, acc_fw);
- 			goto error;
-+		}
- 	}
- 
- 	if (!ext_loaded)
-@@ -497,6 +513,7 @@ int atomisp_acc_load_extensions(struct atomisp_sub_device *asd)
- 	ret = atomisp_css_update_stream(asd);
- 	if (ret) {
- 		dev_err(isp->dev, "%s: update stream failed.\n", __func__);
-+		atomisp_acc_unload_extensions(asd);
- 		goto error;
- 	}
- 
-@@ -504,13 +521,6 @@ int atomisp_acc_load_extensions(struct atomisp_sub_device *asd)
- 	return 0;
- 
- error:
--	while (--i >= 0) {
--		if (acc_fw->flags & acc_flag_to_pipe[i].flag) {
--			atomisp_css_unload_acc_extension(asd, acc_fw->fw,
--							 acc_flag_to_pipe[i].pipe_id);
--		}
--	}
--
- 	list_for_each_entry_continue_reverse(acc_fw, &asd->acc.fw, list) {
- 		if (acc_fw->type != ATOMISP_ACC_FW_LOAD_TYPE_OUTPUT &&
- 		    acc_fw->type != ATOMISP_ACC_FW_LOAD_TYPE_VIEWFINDER)
+ ALC66x/67x/892
+ ==============
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 888d049d5304..f6e5ed34dd09 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -6816,6 +6816,7 @@ enum {
+ 	ALC236_FIXUP_HP_MUTE_LED,
+ 	ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF,
+ 	ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET,
++	ALC256_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET,
+ 	ALC295_FIXUP_ASUS_MIC_NO_PRESENCE,
+ 	ALC269VC_FIXUP_ACER_VCOPPERBOX_PINS,
+ 	ALC269VC_FIXUP_ACER_HEADSET_MIC,
+@@ -8138,6 +8139,14 @@ static const struct hda_fixup alc269_fixups[] = {
+ 			{ }
+ 		},
+ 	},
++	[ALC256_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET] = {
++		.type = HDA_FIXUP_VERBS,
++		.v.verbs = (const struct hda_verb[]) {
++			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x08},
++			{ 0x20, AC_VERB_SET_PROC_COEF, 0x2fcf},
++			{ }
++		},
++	},
+ 	[ALC295_FIXUP_ASUS_MIC_NO_PRESENCE] = {
+ 		.type = HDA_FIXUP_PINS,
+ 		.v.pins = (const struct hda_pintbl[]) {
+@@ -8900,6 +8909,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x144d, 0xc740, "Samsung Ativ book 8 (NP870Z5G)", ALC269_FIXUP_ATIV_BOOK_8),
+ 	SND_PCI_QUIRK(0x144d, 0xc812, "Samsung Notebook Pen S (NT950SBE-X58)", ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
+ 	SND_PCI_QUIRK(0x144d, 0xc830, "Samsung Galaxy Book Ion (NT950XCJ-X716A)", ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
++	SND_PCI_QUIRK(0x144d, 0xc832, "Samsung Galaxy Book Flex Alpha (NP730QCJ)", ALC256_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET),
+ 	SND_PCI_QUIRK(0x1458, 0xfa53, "Gigabyte BXBT-2807", ALC283_FIXUP_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1462, 0xb120, "MSI Cubi MS-B120", ALC283_FIXUP_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1462, 0xb171, "Cubi N 8GL (MS-B171)", ALC283_FIXUP_HEADSET_MIC),
+@@ -9242,6 +9252,7 @@ static const struct hda_model_fixup alc269_fixup_models[] = {
+ 	{.id = ALC298_FIXUP_HUAWEI_MBX_STEREO, .name = "huawei-mbx-stereo"},
+ 	{.id = ALC256_FIXUP_MEDION_HEADSET_NO_PRESENCE, .name = "alc256-medion-headset"},
+ 	{.id = ALC298_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET, .name = "alc298-samsung-headphone"},
++	{.id = ALC256_FIXUP_SAMSUNG_HEADPHONE_VERY_QUIET, .name = "alc256-samsung-headphone"},
+ 	{.id = ALC255_FIXUP_XIAOMI_HEADSET_MIC, .name = "alc255-xiaomi-headset"},
+ 	{.id = ALC274_FIXUP_HP_MIC, .name = "alc274-hp-mic-detect"},
+ 	{.id = ALC245_FIXUP_HP_X360_AMP, .name = "alc245-hp-x360-amp"},
 -- 
 2.34.1
 

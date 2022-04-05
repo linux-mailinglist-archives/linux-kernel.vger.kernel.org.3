@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2125B4F4800
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7579E4F47F9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354766AbiDEVYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34060 "EHLO
+        id S1350901AbiDEVYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350031AbiDEKvD (ORCPT
+        with ESMTP id S232686AbiDEKwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:51:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D72A7758;
-        Tue,  5 Apr 2022 03:27:51 -0700 (PDT)
+        Tue, 5 Apr 2022 06:52:07 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94940A8885;
+        Tue,  5 Apr 2022 03:28:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6AC2B81B18;
-        Tue,  5 Apr 2022 10:27:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12294C385A0;
-        Tue,  5 Apr 2022 10:27:47 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id F11F3CE1CA2;
+        Tue,  5 Apr 2022 10:28:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1856AC385A0;
+        Tue,  5 Apr 2022 10:27:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154468;
-        bh=wXCQH6QP5X6EUlJs4U9BH9qhWh3wALpbUoz21iTuBFA=;
+        s=korg; t=1649154479;
+        bh=aB7lseUHHwrbAdSM5G9olk5YFjpyPBk6CkChr4Li2sw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zKbdUiSpTouF49qPrY8nmAe9+HJ0W6rdGGJeD5VLoLqjWog4CZkeZpQNyQuErByta
-         oitywbc5YcpM3mo4p6gpDSZKPYx9v1BdNutHNja1V2LoV/4f0AxKcul1sBnhG+rxwc
-         HboaLZ08m98R6uLdhYk1iO0aew7s8zeUoJYCiUqM=
+        b=wS3ksYLINlsjpy7GMW9VPauKRmb9QpZg4rMZ9ikY2nk3oL01yZy3PR7PDQgvtRU+a
+         HMHVFpOQihNYE1dBjpDUKhB/2hiUl8BbMrkq0BdC4g87jHsHTDUg2ZbpCyrm9GBerX
+         OjYEg9cDjApTNUJqveR9lbXJsMLEW4BlyjF0hhUg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Richard Weinberger <richard@nod.at>
-Subject: [PATCH 5.10 589/599] um: Fix uml_mconsole stop/go
-Date:   Tue,  5 Apr 2022 09:34:43 +0200
-Message-Id: <20220405070316.368502131@linuxfoundation.org>
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 5.10 593/599] can: m_can: m_can_tx_handler(): fix use after free of skb
+Date:   Tue,  5 Apr 2022 09:34:47 +0200
+Message-Id: <20220405070316.487398000@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -55,39 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+From: Marc Kleine-Budde <mkl@pengutronix.de>
 
-commit 1a3a6a2a035bb6c3a7ef4c788d8fd69a7b2d6284 upstream.
+commit 2e8e79c416aae1de224c0f1860f2e3350fa171f8 upstream.
 
-Moving to an EPOLL based IRQ controller broke uml_mconsole stop/go
-commands. This fixes it and restores stop/go functionality.
+can_put_echo_skb() will clone skb then free the skb. Move the
+can_put_echo_skb() for the m_can version 3.0.x directly before the
+start of the xmit in hardware, similar to the 3.1.x branch.
 
-Fixes: ff6a17989c08 ("Epoll based IRQ controller")
-Signed-off-by: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
+Fixes: 80646733f11c ("can: m_can: update to support CAN FD features")
+Link: https://lore.kernel.org/all/20220317081305.739554-1-mkl@pengutronix.de
+Cc: stable@vger.kernel.org
+Reported-by: Hangyu Hua <hbh25y@gmail.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/um/drivers/mconsole_kern.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/can/m_can/m_can.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/arch/um/drivers/mconsole_kern.c
-+++ b/arch/um/drivers/mconsole_kern.c
-@@ -223,7 +223,7 @@ void mconsole_go(struct mc_request *req)
+--- a/drivers/net/can/m_can/m_can.c
++++ b/drivers/net/can/m_can/m_can.c
+@@ -1491,8 +1491,6 @@ static netdev_tx_t m_can_tx_handler(stru
+ 					 M_CAN_FIFO_DATA(i / 4),
+ 					 *(u32 *)(cf->data + i));
  
- void mconsole_stop(struct mc_request *req)
- {
--	deactivate_fd(req->originating_fd, MCONSOLE_IRQ);
-+	block_signals();
- 	os_set_fd_block(req->originating_fd, 1);
- 	mconsole_reply(req, "stopped", 0, 0);
- 	for (;;) {
-@@ -246,6 +246,7 @@ void mconsole_stop(struct mc_request *re
- 	}
- 	os_set_fd_block(req->originating_fd, 0);
- 	mconsole_reply(req, "", 0, 0);
-+	unblock_signals();
- }
- 
- static DEFINE_SPINLOCK(mc_devices_lock);
+-		can_put_echo_skb(skb, dev, 0);
+-
+ 		if (cdev->can.ctrlmode & CAN_CTRLMODE_FD) {
+ 			cccr = m_can_read(cdev, M_CAN_CCCR);
+ 			cccr &= ~(CCCR_CMR_MASK << CCCR_CMR_SHIFT);
+@@ -1509,6 +1507,9 @@ static netdev_tx_t m_can_tx_handler(stru
+ 			m_can_write(cdev, M_CAN_CCCR, cccr);
+ 		}
+ 		m_can_write(cdev, M_CAN_TXBTIE, 0x1);
++
++		can_put_echo_skb(skb, dev, 0);
++
+ 		m_can_write(cdev, M_CAN_TXBAR, 0x1);
+ 		/* End of xmit function for version 3.0.x */
+ 	} else {
 
 

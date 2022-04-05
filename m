@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3FEE4F475D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:34:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA5774F455A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350034AbiDEVJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:09:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
+        id S1346604AbiDENvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358097AbiDEK16 (ORCPT
+        with ESMTP id S1345522AbiDEJWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DC72B198;
-        Tue,  5 Apr 2022 03:15:31 -0700 (PDT)
+        Tue, 5 Apr 2022 05:22:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EAC4C7B8;
+        Tue,  5 Apr 2022 02:11:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 130C9B81C88;
-        Tue,  5 Apr 2022 10:15:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F143C385A0;
-        Tue,  5 Apr 2022 10:15:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E62F8B81A12;
+        Tue,  5 Apr 2022 09:11:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C54AC385A2;
+        Tue,  5 Apr 2022 09:11:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153728;
-        bh=+fiwjdwdc0xeZY13tfgi2lJG8et6wcD0wv6mNjjcT8o=;
+        s=korg; t=1649149868;
+        bh=/l/iLNcIVgBl6tLCGjPlH9RZNhMIyV8EQX/3Y4TFIDo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V0x/vl1Tw7Qxm8gHC4Ul24kXq5iAQOe5slmmhghPBGt4l8vpJaEnpyYTNF/E26AIZ
-         gwkCDwTOpPR8Fb2zPQi4NodJvwBEm7mn7EASp2I5rGB9wikifTY67rXZIHz/JRO9x/
-         HQfgM+dYDOrXoTmdJkFdxjItVy1B5YCLNJlPnGOk=
+        b=ud390YaoTGTVy/NtgXt3n5IksjXeINsMV5l98jgv6cqILSwVyYuQYo9Y53D0ZBz8M
+         4p4OhlK2o/9alfhJLLEtTvt/rB0oBeugzq+WPxwqYfiOlWyWQAgPbVUbyri7d+LUWC
+         2eV+hpgZUBsmTP4/N/b8QUvbnm5OiWlnhCxpRnnc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 288/599] mt76: mt7915: use proper aid value in mt7915_mcu_sta_basic_tlv
+        stable@vger.kernel.org, Maxime Bizon <mbizon@freebox.fr>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Russell Currey <ruscur@russell.cc>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.16 0869/1017] powerpc: Add set_memory_{p/np}() and remove set_memory_attr()
 Date:   Tue,  5 Apr 2022 09:29:42 +0200
-Message-Id: <20220405070307.404480951@linuxfoundation.org>
+Message-Id: <20220405070420.031451125@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +56,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-[ Upstream commit abdb8bc94be4cf68aa71c9a8ee0bad9b3e6f52d3 ]
+commit f222ab83df92acf72691a2021e1f0d99880dcdf1 upstream.
 
-Similar to mt7915_mcu_wtbl_generic_tlv, rely on vif->bss_conf.aid for
-aid in sta mode and not on sta->aid.
+set_memory_attr() was implemented by commit 4d1755b6a762 ("powerpc/mm:
+implement set_memory_attr()") because the set_memory_xx() couldn't
+be used at that time to modify memory "on the fly" as explained it
+the commit.
 
-Fixes: e57b7901469fc ("mt76: add mac80211 driver for MT7915 PCIe-based chipsets")
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+But set_memory_attr() uses set_pte_at() which leads to warnings when
+CONFIG_DEBUG_VM is selected, because set_pte_at() is unexpected for
+updating existing page table entries.
+
+The check could be bypassed by using __set_pte_at() instead,
+as it was the case before commit c988cfd38e48 ("powerpc/32:
+use set_memory_attr()") but since commit 9f7853d7609d ("powerpc/mm:
+Fix set_memory_*() against concurrent accesses") it is now possible
+to use set_memory_xx() functions to update page table entries
+"on the fly" because the update is now atomic.
+
+For DEBUG_PAGEALLOC we need to clear and set back _PAGE_PRESENT.
+Add set_memory_np() and set_memory_p() for that.
+
+Replace all uses of set_memory_attr() by the relevant set_memory_xx()
+and remove set_memory_attr().
+
+Fixes: c988cfd38e48 ("powerpc/32: use set_memory_attr()")
+Cc: stable@vger.kernel.org
+Reported-by: Maxime Bizon <mbizon@freebox.fr>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Tested-by: Maxime Bizon <mbizon@freebox.fr>
+Reviewed-by: Russell Currey <ruscur@russell.cc>
+Depends-on: 9f7853d7609d ("powerpc/mm: Fix set_memory_*() against concurrent accesses")
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/cda2b44b55c96f9ac69fa92e68c01084ec9495c5.1640344012.git.christophe.leroy@csgroup.eu
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7915/mcu.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/powerpc/include/asm/set_memory.h |   12 +++++++++-
+ arch/powerpc/mm/pageattr.c            |   39 +++++-----------------------------
+ arch/powerpc/mm/pgtable_32.c          |   24 +++++++++-----------
+ 3 files changed, 28 insertions(+), 47 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-index 6e73964b8b0a..41054ee43dbf 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-@@ -1317,12 +1317,15 @@ mt7915_mcu_sta_basic_tlv(struct sk_buff *skb, struct ieee80211_vif *vif,
- 	case NL80211_IFTYPE_MESH_POINT:
- 	case NL80211_IFTYPE_AP:
- 		basic->conn_type = cpu_to_le32(CONNECTION_INFRA_STA);
-+		basic->aid = cpu_to_le16(sta->aid);
- 		break;
- 	case NL80211_IFTYPE_STATION:
- 		basic->conn_type = cpu_to_le32(CONNECTION_INFRA_AP);
-+		basic->aid = cpu_to_le16(vif->bss_conf.aid);
- 		break;
- 	case NL80211_IFTYPE_ADHOC:
- 		basic->conn_type = cpu_to_le32(CONNECTION_IBSS_ADHOC);
-+		basic->aid = cpu_to_le16(sta->aid);
- 		break;
- 	default:
- 		WARN_ON(1);
-@@ -1330,7 +1333,6 @@ mt7915_mcu_sta_basic_tlv(struct sk_buff *skb, struct ieee80211_vif *vif,
- 	}
+--- a/arch/powerpc/include/asm/set_memory.h
++++ b/arch/powerpc/include/asm/set_memory.h
+@@ -6,6 +6,8 @@
+ #define SET_MEMORY_RW	1
+ #define SET_MEMORY_NX	2
+ #define SET_MEMORY_X	3
++#define SET_MEMORY_NP	4	/* Set memory non present */
++#define SET_MEMORY_P	5	/* Set memory present */
  
- 	memcpy(basic->peer_addr, sta->addr, ETH_ALEN);
--	basic->aid = cpu_to_le16(sta->aid);
- 	basic->qos = sta->wme;
+ int change_memory_attr(unsigned long addr, int numpages, long action);
+ 
+@@ -29,6 +31,14 @@ static inline int set_memory_x(unsigned
+ 	return change_memory_attr(addr, numpages, SET_MEMORY_X);
  }
  
--- 
-2.34.1
-
+-int set_memory_attr(unsigned long addr, int numpages, pgprot_t prot);
++static inline int set_memory_np(unsigned long addr, int numpages)
++{
++	return change_memory_attr(addr, numpages, SET_MEMORY_NP);
++}
++
++static inline int set_memory_p(unsigned long addr, int numpages)
++{
++	return change_memory_attr(addr, numpages, SET_MEMORY_P);
++}
+ 
+ #endif
+--- a/arch/powerpc/mm/pageattr.c
++++ b/arch/powerpc/mm/pageattr.c
+@@ -48,6 +48,12 @@ static int change_page_attr(pte_t *ptep,
+ 	case SET_MEMORY_X:
+ 		pte = pte_mkexec(pte);
+ 		break;
++	case SET_MEMORY_NP:
++		pte_update(&init_mm, addr, ptep, _PAGE_PRESENT, 0, 0);
++		break;
++	case SET_MEMORY_P:
++		pte_update(&init_mm, addr, ptep, 0, _PAGE_PRESENT, 0);
++		break;
+ 	default:
+ 		WARN_ON_ONCE(1);
+ 		break;
+@@ -96,36 +102,3 @@ int change_memory_attr(unsigned long add
+ 	return apply_to_existing_page_range(&init_mm, start, size,
+ 					    change_page_attr, (void *)action);
+ }
+-
+-/*
+- * Set the attributes of a page:
+- *
+- * This function is used by PPC32 at the end of init to set final kernel memory
+- * protection. It includes changing the maping of the page it is executing from
+- * and data pages it is using.
+- */
+-static int set_page_attr(pte_t *ptep, unsigned long addr, void *data)
+-{
+-	pgprot_t prot = __pgprot((unsigned long)data);
+-
+-	spin_lock(&init_mm.page_table_lock);
+-
+-	set_pte_at(&init_mm, addr, ptep, pte_modify(*ptep, prot));
+-	flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+-
+-	spin_unlock(&init_mm.page_table_lock);
+-
+-	return 0;
+-}
+-
+-int set_memory_attr(unsigned long addr, int numpages, pgprot_t prot)
+-{
+-	unsigned long start = ALIGN_DOWN(addr, PAGE_SIZE);
+-	unsigned long sz = numpages * PAGE_SIZE;
+-
+-	if (numpages <= 0)
+-		return 0;
+-
+-	return apply_to_existing_page_range(&init_mm, start, sz, set_page_attr,
+-					    (void *)pgprot_val(prot));
+-}
+--- a/arch/powerpc/mm/pgtable_32.c
++++ b/arch/powerpc/mm/pgtable_32.c
+@@ -135,10 +135,12 @@ void mark_initmem_nx(void)
+ 	unsigned long numpages = PFN_UP((unsigned long)_einittext) -
+ 				 PFN_DOWN((unsigned long)_sinittext);
+ 
+-	if (v_block_mapped((unsigned long)_sinittext))
++	if (v_block_mapped((unsigned long)_sinittext)) {
+ 		mmu_mark_initmem_nx();
+-	else
+-		set_memory_attr((unsigned long)_sinittext, numpages, PAGE_KERNEL);
++	} else {
++		set_memory_nx((unsigned long)_sinittext, numpages);
++		set_memory_rw((unsigned long)_sinittext, numpages);
++	}
+ }
+ 
+ #ifdef CONFIG_STRICT_KERNEL_RWX
+@@ -152,18 +154,14 @@ void mark_rodata_ro(void)
+ 		return;
+ 	}
+ 
+-	numpages = PFN_UP((unsigned long)_etext) -
+-		   PFN_DOWN((unsigned long)_stext);
+-
+-	set_memory_attr((unsigned long)_stext, numpages, PAGE_KERNEL_ROX);
+ 	/*
+-	 * mark .rodata as read only. Use __init_begin rather than __end_rodata
+-	 * to cover NOTES and EXCEPTION_TABLE.
++	 * mark .text and .rodata as read only. Use __init_begin rather than
++	 * __end_rodata to cover NOTES and EXCEPTION_TABLE.
+ 	 */
+ 	numpages = PFN_UP((unsigned long)__init_begin) -
+-		   PFN_DOWN((unsigned long)__start_rodata);
++		   PFN_DOWN((unsigned long)_stext);
+ 
+-	set_memory_attr((unsigned long)__start_rodata, numpages, PAGE_KERNEL_RO);
++	set_memory_ro((unsigned long)_stext, numpages);
+ 
+ 	// mark_initmem_nx() should have already run by now
+ 	ptdump_check_wx();
+@@ -179,8 +177,8 @@ void __kernel_map_pages(struct page *pag
+ 		return;
+ 
+ 	if (enable)
+-		set_memory_attr(addr, numpages, PAGE_KERNEL);
++		set_memory_p(addr, numpages);
+ 	else
+-		set_memory_attr(addr, numpages, __pgprot(0));
++		set_memory_np(addr, numpages);
+ }
+ #endif /* CONFIG_DEBUG_PAGEALLOC */
 
 

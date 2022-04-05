@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 736DF4F25B3
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 018634F25B9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232500AbiDEHvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:51:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
+        id S232532AbiDEHvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232568AbiDEHqu (ORCPT
+        with ESMTP id S232632AbiDEHrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:46:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99D7939E9;
-        Tue,  5 Apr 2022 00:42:34 -0700 (PDT)
+        Tue, 5 Apr 2022 03:47:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437D195A18;
+        Tue,  5 Apr 2022 00:42:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17995B81B7F;
-        Tue,  5 Apr 2022 07:42:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 577E7C340EE;
-        Tue,  5 Apr 2022 07:42:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56EBBB81B18;
+        Tue,  5 Apr 2022 07:42:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B94E6C340EE;
+        Tue,  5 Apr 2022 07:42:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144551;
-        bh=hzFTItGk6MhMLG5gB5eFJka/S3aQMbJUpwbjLiXXVC0=;
+        s=korg; t=1649144557;
+        bh=u2nGEvtwicBX4OYSzCM0UB7N5/sxr44UItVD1FL1gQw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1F9Ou+ui2ZHL1dstKvyB6MCwpc0+N8V4AWsZ6g29mbR87hrie1O7Sxgy+uW55H9h8
-         8prRma3YiTPFAC3fru+ZzP1OsQ75y3uAAG8KtrKm2T9cFAOKmt1tQhA3d0LCpR8FVJ
-         X8ycGH9x52yD2vKhZKLCig77LS3HHhNVp6kJVC60=
+        b=DrnPZUZ/lE1hNIEFOQ/h0x1njq3VztXvRflcaX+srBm2crouUYwfqYOqblgxWkk9G
+         HAPTnJohnzd4rxKQ4Du2vXvUkTHfQN1INtlHkuQx4lA6ozowlrleVhlRg5H5duGlz9
+         qYHoK71c/8dUQOjPp/eJ6N4Zj52LXVqDBmxa0vqE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.17 0084/1126] scsi: libsas: Fix sas_ata_qc_issue() handling of NCQ NON DATA commands
-Date:   Tue,  5 Apr 2022 09:13:51 +0200
-Message-Id: <20220405070410.035257186@linuxfoundation.org>
+        stable@vger.kernel.org, Manish Chopra <manishc@marvell.com>,
+        Ariel Elior <aelior@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.17 0086/1126] qed: validate and restrict untrusted VFs vlan promisc mode
+Date:   Tue,  5 Apr 2022 09:13:53 +0200
+Message-Id: <20220405070410.093539189@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,41 +55,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Manish Chopra <manishc@marvell.com>
 
-commit 8454563e4c2aafbfb81a383ab423ea8b9b430a25 upstream.
+commit cbcc44db2cf7b836896733acc0e5ea966136ed22 upstream.
 
-To detect for the DMA_NONE (no data transfer) DMA direction,
-sas_ata_qc_issue() tests if the command protocol is ATA_PROT_NODATA.  This
-test does not include the ATA_CMD_NCQ_NON_DATA command as this command
-protocol is defined as ATA_PROT_NCQ_NODATA (equal to ATA_PROT_FLAG_NCQ) and
-not as ATA_PROT_NODATA.
+Today when VFs are put in promiscuous mode, they can request PF
+to configure device for them to receive all VLANs traffic regardless
+of what vlan is configured by the PF (via ip link) and PF allows this
+config request regardless of whether VF is trusted or not.
 
-To include both NCQ and non-NCQ commands when testing for the DMA_NONE DMA
-direction, use "!ata_is_data()".
+>From security POV, when VLAN is configured for VF through PF (via ip link),
+honour such config requests from VF only when they are configured to be
+trusted, otherwise restrict such VFs vlan promisc mode config.
 
-Link: https://lore.kernel.org/r/20220220031810.738362-2-damien.lemoal@opensource.wdc.com
-Fixes: 176ddd89171d ("scsi: libsas: Reset num_scatter if libata marks qc as NODATA")
 Cc: stable@vger.kernel.org
-Reviewed-by: John Garry <john.garry@huawei.com>
-Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: f990c82c385b ("qed*: Add support for ndo_set_vf_trust")
+Signed-off-by: Manish Chopra <manishc@marvell.com>
+Signed-off-by: Ariel Elior <aelior@marvell.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/libsas/sas_ata.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/qlogic/qed/qed_sriov.c |   28 ++++++++++++++++++++++++++--
+ drivers/net/ethernet/qlogic/qed/qed_sriov.h |    1 +
+ 2 files changed, 27 insertions(+), 2 deletions(-)
 
---- a/drivers/scsi/libsas/sas_ata.c
-+++ b/drivers/scsi/libsas/sas_ata.c
-@@ -197,7 +197,7 @@ static unsigned int sas_ata_qc_issue(str
- 		task->total_xfer_len = qc->nbytes;
- 		task->num_scatter = qc->n_elem;
- 		task->data_dir = qc->dma_dir;
--	} else if (qc->tf.protocol == ATA_PROT_NODATA) {
-+	} else if (!ata_is_data(qc->tf.protocol)) {
- 		task->data_dir = DMA_NONE;
- 	} else {
- 		for_each_sg(qc->sg, sg, qc->n_elem, si)
+--- a/drivers/net/ethernet/qlogic/qed/qed_sriov.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_sriov.c
+@@ -2984,12 +2984,16 @@ static int qed_iov_pre_update_vport(stru
+ 	u8 mask = QED_ACCEPT_UCAST_UNMATCHED | QED_ACCEPT_MCAST_UNMATCHED;
+ 	struct qed_filter_accept_flags *flags = &params->accept_flags;
+ 	struct qed_public_vf_info *vf_info;
++	u16 tlv_mask;
++
++	tlv_mask = BIT(QED_IOV_VP_UPDATE_ACCEPT_PARAM) |
++		   BIT(QED_IOV_VP_UPDATE_ACCEPT_ANY_VLAN);
+ 
+ 	/* Untrusted VFs can't even be trusted to know that fact.
+ 	 * Simply indicate everything is configured fine, and trace
+ 	 * configuration 'behind their back'.
+ 	 */
+-	if (!(*tlvs & BIT(QED_IOV_VP_UPDATE_ACCEPT_PARAM)))
++	if (!(*tlvs & tlv_mask))
+ 		return 0;
+ 
+ 	vf_info = qed_iov_get_public_vf_info(hwfn, vfid, true);
+@@ -3006,6 +3010,13 @@ static int qed_iov_pre_update_vport(stru
+ 			flags->tx_accept_filter &= ~mask;
+ 	}
+ 
++	if (params->update_accept_any_vlan_flg) {
++		vf_info->accept_any_vlan = params->accept_any_vlan;
++
++		if (vf_info->forced_vlan && !vf_info->is_trusted_configured)
++			params->accept_any_vlan = false;
++	}
++
+ 	return 0;
+ }
+ 
+@@ -5150,6 +5161,12 @@ static void qed_iov_handle_trust_change(
+ 
+ 		params.update_ctl_frame_check = 1;
+ 		params.mac_chk_en = !vf_info->is_trusted_configured;
++		params.update_accept_any_vlan_flg = 0;
++
++		if (vf_info->accept_any_vlan && vf_info->forced_vlan) {
++			params.update_accept_any_vlan_flg = 1;
++			params.accept_any_vlan = vf_info->accept_any_vlan;
++		}
+ 
+ 		if (vf_info->rx_accept_mode & mask) {
+ 			flags->update_rx_mode_config = 1;
+@@ -5165,13 +5182,20 @@ static void qed_iov_handle_trust_change(
+ 		if (!vf_info->is_trusted_configured) {
+ 			flags->rx_accept_filter &= ~mask;
+ 			flags->tx_accept_filter &= ~mask;
++			params.accept_any_vlan = false;
+ 		}
+ 
+ 		if (flags->update_rx_mode_config ||
+ 		    flags->update_tx_mode_config ||
+-		    params.update_ctl_frame_check)
++		    params.update_ctl_frame_check ||
++		    params.update_accept_any_vlan_flg) {
++			DP_VERBOSE(hwfn, QED_MSG_IOV,
++				   "vport update config for %s VF[abs 0x%x rel 0x%x]\n",
++				   vf_info->is_trusted_configured ? "trusted" : "untrusted",
++				   vf->abs_vf_id, vf->relative_vf_id);
+ 			qed_sp_vport_update(hwfn, &params,
+ 					    QED_SPQ_MODE_EBLOCK, NULL);
++		}
+ 	}
+ }
+ 
+--- a/drivers/net/ethernet/qlogic/qed/qed_sriov.h
++++ b/drivers/net/ethernet/qlogic/qed/qed_sriov.h
+@@ -62,6 +62,7 @@ struct qed_public_vf_info {
+ 	bool is_trusted_request;
+ 	u8 rx_accept_mode;
+ 	u8 tx_accept_mode;
++	bool accept_any_vlan;
+ };
+ 
+ struct qed_iov_vf_init_params {
 
 

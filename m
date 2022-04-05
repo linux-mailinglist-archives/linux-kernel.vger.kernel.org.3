@@ -2,198 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66DAB4F4E83
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:49:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 442704F4E5A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232688AbiDFA22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36088 "EHLO
+        id S1588994AbiDFASG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389094AbiDEOnP (ORCPT
+        with ESMTP id S243622AbiDEPJY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:43:15 -0400
-Received: from esa2.hc3370-68.iphmx.com (esa2.hc3370-68.iphmx.com [216.71.145.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6457217A8F;
-        Tue,  5 Apr 2022 06:20:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1649164855;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=nPT7jC9A8CnrEzqW+VbdWOaZNZqFgP7wrgukoekQr6M=;
-  b=JAyu9rw6psUdUsiAx2rWk55CAoYk1LQ9XY+donamFvXj1BxqrSOU+uZd
-   q5jyJWXU4cLRI0rGzvN9wzm9Cb/Sh2NeVQGyhWdlgbsyvHTn4jPZyICm8
-   F9b+uqdaPMpvcoSHC/rFBAXPY5qjA7WCT5ZssSVW5crO0UtizqjHY72bF
-   Q=;
-Authentication-Results: esa2.hc3370-68.iphmx.com; dkim=pass (signature verified) header.i=@citrix.onmicrosoft.com
-X-SBRS: 5.1
-X-MesageID: 68060920
-X-Ironport-Server: esa2.hc3370-68.iphmx.com
-X-Remote-IP: 162.221.156.83
-X-Policy: $RELAYED
-IronPort-Data: A9a23:jjvDC6pIpgZy9Yumua1b/EFNA2BeBmLRYhIvgKrLsJaIsI4StFCzt
- garIBmCOa7bYTT1Loojb4u+/RwOvsLQmoNhQVM6+Ss3FygX8puZCYyVIHmrMnLJJKUvbq7GA
- +byyDXkBJppJpMJjk71atANlVEliefQAOCU5NfsYkidfyc9IMsaoU8lyrZRbrJA24DjWVvR4
- Y6q+aUzBXf+s9JKGjNMg068gEsHUMTa4Fv0aXRnOJinFHeH/5UkJMp3yZOZdhMUcaENdgKOf
- M7RzanRw4/s10xF5uVJMFrMWhZirrb6ZWBig5fNMkSoqkAqSicais7XOBeAAKv+Zvrgc91Zk
- b1wWZKMpQgBIfzcld9DURRkHX9DN4hM0afiESWimJnGp6HGWyOEL/RGCUg3OcsT+/ptAHEI/
- vsdQNwPRknd3aTsmuv9E7QywJR4RCXoFNp3VnVI5DfVF/s5B7vERL3H/4Rw1zYsnMFeW/3ZY
- qL1bBIxPEyeO0wVYj/7Dro8l8y3gWLBbwFZ8lCJhas2oDPUyzR+he2F3N39JYXRGJQ9clyjj
- m3N9Ez2CRpcO9qCjz2f/RqEgu7JgDO+UZgZFJWm+fNwxl6e3GoeDFsRT1TTiea4jkqWWN9FL
- UEQvC00osAa/0W3R938WVu9qWSFuBcHc9NKFqsx7wTl4q/d+Q2QAEABRyRKYdpgr9NebT4nz
- FKMjpXtBDpzt7u9QGiYsLyTqFuaPSkTMH9HZiIeSwYBy8fsrZt1jR/VSNtnVqmvgbXdHTD23
- iDPpTI7wrYel8gG042//EvbmHStoJbTRwI47wmRWXiqhit8bZyNZIGy71Xfq/FaI+6xR0ONt
- lAHltKY4eRICouC/ASVQeMWH7Cgz/mAOTzYx1VoGvEJ8j23+Di5YJxU6TdyDE5zN4APfjqBS
- FfepQ5L9rdSOnWwZKN6ao73DN4lpYD7B93vUfTfdZxIa5dgXAad+WdlYkv493C9zmAvnLs5N
- JPddtyjZV4dEalhwD+8b+gY2L4vgCs5wAv7S9b1xhWh3L6aZVaaTL4ENB2FaeVR0U+fiFyLq
- ZAFbZLMkkgBFr2lCsXKzWINBU9bPXUAW5L7l8IJS+SmKCN+PVF8FtaElNvNZLdZt6hSk+7J+
- FS0VUlZ1EfziBX7FOmaVpxwQOixBMgi9BrXKQRpZA/1gCZ7Pe5D+Y9FL/MKka8bGPuPJBKeZ
- 90MYI2+D/tGUVwrEBxNPMCm/OSOmPlG7D9i3hZJghBiJPaMpCSTo7cImzcDEgFUU0JbUuNk/
- tWdOvvzG8ZreuibJJ++hAiT512wp2MBv+l5QlHFJNJeEG21rtQ7c3ap0qJreJ1QQfkm+td8/
- 1zLafv/jbOTy7LZDfGT3fzUx2tXO7UW8rVm85nzsu/taHiyEpuLyo5cSueYFQ0xp0uvkJhOk
- d59lqmmWNVexQ4im9MlT95DkPJvj/Oy9uQy5lk1Qx32g6GDV+oIzo+uhpIU6MWgB9Zx5GOLZ
- 6540oIDY+/UZ5q5TgV5ychMRr3r6Mz4UwL6tJwdCE77+DV27PyAV0BTNAOLkytTMP1+N4ZN/
- AvrkJd+B9CX4vbyDuu7sw==
-IronPort-HdrOrdr: A9a23:Ii12Wa70elhEQN21kwPXwM3XdLJyesId70hD6qkRc20yTiX2rb
- HLoB1273/JYU8qOU3I+urwX5VoI0m3yXcd2+B4VotKOjOW21dAR7sSiLcKrQeQeREWwdQx6U
- 6wScZD4IyZNzdHZZiT2mWFL+o=
-X-IronPort-AV: E=Sophos;i="5.90,236,1643691600"; 
-   d="scan'208";a="68060920"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Pamac/+AlWoYf7PeWGWgWsbFNqmRJnwau+2iD6DZa3r/udIZuSQ8NWuL7SEE8NqGAWV/hpObgHPtoaMan06HVmLwVFEPktWgRlQe18PGJKxpp7861FKAZfCySQqH29s1TzKrCLhPoZZgDraYpOs6AeygQYS4MwH6mtBxVYzzr+5c75hMAp/cRcFv5PIuSEdXY84dv0iCr4d80yNmjN62/Hk/W576GgbfkEGthGShSt8NX0T5K4fCoBA0xgiEU494MsvIRAiZErf5wduZzp1ccNeblXKaR/I7VogRnuvlKxx4mzbNmRvozLo0TpNCEVv+Qy9HFZpDvhZvzv9Re/xl5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nPT7jC9A8CnrEzqW+VbdWOaZNZqFgP7wrgukoekQr6M=;
- b=BqC1wTjkP4fIWHktHigC4t6Yus9ai249r9jZ7dUh8tDxwHGPbEp3Cn17umKYKtbBuft6E0+ANdbrvDt1mTRPW73ecWLCs0XCD7zB0byU41XgSHN5KFsb6nhWgN/SzM5lMKM2iEaXKAgiZocuWVwaXC/jIhRD0XBXXbEPhssLrV0pJLOJxZpiea+B9DoDuparpuU//lwgWTi0ImR7qIZL+N//DB9EI5byUb7A4z/nYZBb9sTchmy8DLxgPDnm8SxI5BaeBEjUhPqfbqs30WB31QHVyqZFWNmYhyHjS3PzZBAOen5WAmO+9rkOOOyN5I/n5Bp8dv/oUDif+1hV+3naIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
- dkim=pass header.d=citrix.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=citrix.onmicrosoft.com; s=selector2-citrix-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nPT7jC9A8CnrEzqW+VbdWOaZNZqFgP7wrgukoekQr6M=;
- b=F842tLFqgx9NNPXgUDgWGebuCIUKMTXGqpeXBSnwCxBiFHdxZOuOljreXgNEmXsnIIKxq0i28WZEJaPFyhXV44xJ2OV0ld8OBGNy4EuXVnOtJTanFv+e5IurlBolh05/coOB//wo9V/C88uSq29V1aMSTKt6nJChlVRwzhvXKwc=
-From:   Andrew Cooper <Andrew.Cooper3@citrix.com>
-To:     Mark Rutland <mark.rutland@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "gcc@gcc.gnu.org" <gcc@gcc.gnu.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "marcan@marcan.st" <marcan@marcan.st>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "opendmb@gmail.com" <opendmb@gmail.com>,
-        "Andrew Pinski" <pinskia@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Jeremy Linton <jeremy.linton@arm.com>
-Subject: Re: GCC 12 miscompilation of volatile asm (was: Re: [PATCH] arm64/io:
- Remind compiler that there is a memory side effect)
-Thread-Topic: GCC 12 miscompilation of volatile asm (was: Re: [PATCH]
- arm64/io: Remind compiler that there is a memory side effect)
-Thread-Index: AQHYSOvqbmoChfXhzEOrs+lafwM0eqzhSZmAgAAEfYA=
-Date:   Tue, 5 Apr 2022 13:20:50 +0000
-Message-ID: <7988e82a-8494-a954-0a79-7f86d34a96ad@citrix.com>
-References: <20220401164406.61583-1-jeremy.linton@arm.com>
- <Ykc0xrLv391/jdJj@FVFF77S0Q05N> <Ykw7UnlTnx63z/Ca@FVFF77S0Q05N>
- <Ykw+bVS9WY/JfoYO@FVFF77S0Q05N>
-In-Reply-To: <Ykw+bVS9WY/JfoYO@FVFF77S0Q05N>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 45d46dfc-06c3-40a8-f672-08da17071ad5
-x-ms-traffictypediagnostic: DM5PR03MB2842:EE_
-x-microsoft-antispam-prvs: <DM5PR03MB2842EEE373750B8E22E84254BAE49@DM5PR03MB2842.namprd03.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: rUytiTGyOBCBsz/lFKJNY/RKiPSZk/ee5KAkzKO3EFR1KCsqSoWdvwkp7V6O+2XPcVLg2ANvF1ENdk095QnfGZVnsOcHXuLQ0ghxAz7QkiCbpBn032un3MZQAL8vs6LATj4TFdx4cTjNVBzj88XHT5QR0eUv2jvfS8jn5Lo/cviDKs9KiXN3DKgXbfXBG2prjv7eF6sJQeKy8EO3Tjkej+Os3Wnl7VdO1vxAiKQwAMBHie4nwgiSdILcz000g3qW5gn+i5NMBeb7JfGYk3JlYrxUwBz9kEXUjEHheW4fFcuS7uk/ytWgzJLCdzvupMcQ6nFx2gTlpao8tA7Pbsz92jnxmGWE2Qka8H13mrH8ZuD7leL53AaJVtY/BU0riYuZY8qsbrV/i0mMOo792EHIfF3RrHQzKvvvOodtq1uKJvolov/d2MYKjpnw6U/Xv0Vbe9jpgWRny1edz2V9/7gjqb1WNRakWRn184e2CoY8qJ44VFaje55DQUlH4IJA35G3mJGlMD00JCII0e3ykp/eUqa+KxEl5cKjepDxcl2tmmgoZjepq4u42uuxvDGvAV8I2E44wpfzUhZNIU1Fy1jPG5fzNcTBUT+Pc2mNHdaEyBBhcLc3tzHsdiNDiERbk0PRsf/+d4lHnvtf5QLd8Lvbdfv0uNBkD3BuiA9Nbk43qhEIrgF2wycnn0XF/vmarcrxHOFI9gat1OmuBfVb2jP3LhwPknJ4/ik0XE64myLaVQQwKUSfvipe7dvUh9vuEpTv7EyolIMsTgbpD8Vchyz2SPqR6UjXI3dr7vJsJkQ1nEgN8wsgw3sNDNUQwWdVcstHTzhqxAdp5EyDhcVS5/uumxmjHD4/bpmoAEvn+fvZyms=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR03MB3623.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(38100700002)(31686004)(6486002)(2906002)(86362001)(31696002)(5660300002)(6506007)(38070700005)(54906003)(53546011)(4326008)(82960400001)(8676002)(508600001)(64756008)(36756003)(6512007)(122000001)(316002)(2616005)(4744005)(66476007)(66446008)(186003)(26005)(76116006)(66556008)(7416002)(91956017)(110136005)(66946007)(8936002)(71200400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dE1va2Vra1NTMG9WeFh0aVdJVkNMTWsxZ0U0SHEwUmdiU2ZOSXEvdFpua001?=
- =?utf-8?B?MzN6YUcrL2F4RndNbE5FVitrcVdYd2Z0SzMrTEdQV3FKcUVQcVNUaS9jSXdI?=
- =?utf-8?B?ZG03WDBuZlZWK0xCSU51ZitpQmY5d2NEcStVNkVqSTBPR3QrZm5SRUtDNEZs?=
- =?utf-8?B?Z2MyN005RFB2Uk5TQVVBbzA0Q2ExOWh0bXRVVWpZcFhCVlJhSUdTWHEyNno4?=
- =?utf-8?B?NkV2TXo4NXlqVWZ0NlNXTGM3QUlJNm9HOFRVUDRWdHhUcm9CcEZmMERsbCtB?=
- =?utf-8?B?REk5MW41Q1lLM0xkTzV5aHlzd0ZkVk82NmVERWlES2RrQUszS0k3Qm1YRGZN?=
- =?utf-8?B?UGFkNFVVUHgzc25jNkUvWUhTTWtKRVc1aGNRY0x6YVNZbmplOXBmY3ZCdTI5?=
- =?utf-8?B?MjlXSUJKeDRicWdaL2gxRkYrbmhyRUpxRGtFaEJYdkNHalNmWlhJVlhiYmFz?=
- =?utf-8?B?U25zMXF2amUyeHcvNXYvTm0xb2kyMDFEZmlaVEFzSFQxeS9vUEpyV0xpeEVo?=
- =?utf-8?B?VkZmT0hGeE81Y1hJV0lub1lIdGxIV0ZNeDVsWWJ0SUFoQ0kwTGFvUEhQUjA0?=
- =?utf-8?B?ajVVeG81OUY4bzJQZ3Uyc3ZaSThVY3JXVzV2emNZRXRyNHZCektzQUU1SkdL?=
- =?utf-8?B?bDdPempVdkR3MUpvOHdMQU1tNVkyMTJWMVY1ZDNBTk5wMHZkMFQ4aERJZmRy?=
- =?utf-8?B?azhjbjB5bjg3MENzTlhRU0lYb2E2ZnNBSVUyTVloWDdHNEtIUGJRTC9WTExD?=
- =?utf-8?B?ckc4enA1dWFoZVRMMW9BM0JEei9RM3JFSW9WK1FCWDEzNncxZ1kwazdyQ0lo?=
- =?utf-8?B?Z3ljSTJLNmJQRCtOUGdkZFl1eS9UMWVsMVNXdGV4OENJSXpKVEMzWUYweGUr?=
- =?utf-8?B?S0lqbTNtLzB5bXFCYlBYZ0RMV1JUWXZ5TkNpcklhWVNObkMwQ1dFZ3Q0RE5H?=
- =?utf-8?B?dHdxZ1dQSHBBTXNYeGpoR2RoclJBVFplbms5M3A2cGFocTNJVlVpTmRBR0xP?=
- =?utf-8?B?MjVuOW0wRmJGaDUvQUUzZXN4UjBTUVowSzA3aVVsNDFNamsrYlNHQ0tSU2xR?=
- =?utf-8?B?WEJVd1dGb0ZtT3RUOEwwN0hrSk1ZNGR3V2hzbml3cmdCWXJEYTM1ZmIzZmFv?=
- =?utf-8?B?aEQzZmxES3lld2RDdlRTMWw5Z29pREJFbmFDNVdZejhuZ0RqRmtxc1Vqb29O?=
- =?utf-8?B?TnpDYStKOEh1TkZJUjBVczNudnR4UEdXTnRzMHlDNlh5S1lJWXFsUTIyT3li?=
- =?utf-8?B?L2hYTkxFTTdXbmNGRmNod2YwS0ZuQlZwV2dkZVhBdFJ3UHlGNGhkZG15blFt?=
- =?utf-8?B?RjRWZzVNeWF1bjdVdTZpNHRMYk9tUjdCM1k1QVBBaGtzejdlUzR5VnBxZk5m?=
- =?utf-8?B?V3BaSEdMUzZlV3RVRFRHenBIUnZrM2tJQnAyYjNWRGV1cDJPOEpPOFFtMDdY?=
- =?utf-8?B?K2FvMFFwOFdRMitubVlZSGdIZUFzVEVWbGF3VlRUb01BNnlrNzJCNGtCektI?=
- =?utf-8?B?OWpXaTlTWUUrdEVTU0tBZ3BIMS9WS1FkWkVpdVZncU53ZXhCODVsYXhJRHc2?=
- =?utf-8?B?U2FHdDRqSWx5ckV3bkFTdnBsa2g5RnRUNVQ5bkZpWmxLekN6cmNKZUNTdmhq?=
- =?utf-8?B?Z0daZG9haFBrM0xVMFVudTdlSDZUcy8yOHpJVm9aOFFhUE0xVHIzUUNhdXhG?=
- =?utf-8?B?WXdkMi91aHFzLzV4MG1oMUJjZmdzUlA3UUg5aW41aVJMc2FOdjRHZnJSUEJY?=
- =?utf-8?B?Tm40d1NocEh4S0lCSDBOVW5ERmR3RXBuRVBDSFUwc0J4eXBGa1lxR3hPL2p5?=
- =?utf-8?B?MFgybHVqc0RHQVJIbC9hZGJjZTV0bjZvL0M2ZzZUNWJQc21jdmh6emxlbWNW?=
- =?utf-8?B?aGxOTis3QUhyQzVjVFhIMVFvbU52bTBQc1JQV3FMUWZBWWdrQ3kzenRDRFFP?=
- =?utf-8?B?QjMyV2wvZ2xtVDVCRHBuVFJKd1orTEpBN2RXRW1JQ3dwUUc4WXY1RDIrcWdE?=
- =?utf-8?B?UTYzdUVodVlTTFhoZHVMb0J0dVdVbkNqbDNPMWJhWXZaUDNrWnpvQ0VJNTcw?=
- =?utf-8?B?cWpsL3QvVXRxbkNQcFpuWlgvOUoxSTBjeFdsdVlKa3NGWXhrS1cwbUlUdFcw?=
- =?utf-8?B?NW5sQ0FJdC9odTBpclJmNWlESTF2c09MMHhyU1NML2IzN1hkU0hpa09ua1k3?=
- =?utf-8?B?MzI2VllWTFFucXZJUHZJWDFpTFNzWWUwMUwzWmpuZ3Z4Um9rYlVHUXByTEJF?=
- =?utf-8?B?WktHbkJMbDZtL09adHZ4Y3VLTlRaYjVvckFWMmlSL1QzdjZYeUVDWS9ETE5s?=
- =?utf-8?B?eFplZElIeGV5ZEd0aUdPUUlBeGFOYlRPck51dzVIcys2SmNMTUs1S2pmL2Zp?=
- =?utf-8?Q?eLH5Cr2HmQcAh1zw=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <8D6B5437B626AE438314D0415891CE3F@namprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Tue, 5 Apr 2022 11:09:24 -0400
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E64ABF53A;
+        Tue,  5 Apr 2022 06:24:55 -0700 (PDT)
+Received: by mail-qt1-f171.google.com with SMTP id o15so9548925qtv.8;
+        Tue, 05 Apr 2022 06:24:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hBCPhJo5YyS6XSPC6qSR2NczndtrlVmfcRjGORmxI/A=;
+        b=EURQlCOo5uMFEGKK2235tNRMwsSYU4ycAr5/uhPDmTcoSJCkr8q77DmULI8+dVOW5U
+         Fg7viLWjfIf1GxbKzHhSy8AKiAPf6VDLy1xXfw3rursUbek92oSIzViv4fPQjPHzdr7d
+         jaUtdJqPR9E2OASW/5/NJDGSfve0eZuRloVN7orFTDRo9ZqZIjpgqoBV47kRr8XBlEF5
+         DBSJvbtiC8QZHXkFkGkOa/+xzlHUsCCYAMQEfdB5PEsocbn0WFnpQAJyildu0Z9iCJf6
+         dMcHtyWUSDyfvFf8JlKs0RIL3xmyQQMGaGgw2ge9PphTnIBJyHYGS2CYbimZOlSOFR7R
+         w8Uw==
+X-Gm-Message-State: AOAM532MwIr22564AApN9joJnKtRsUPWxOKaFbNhNz+kXkMnLLdHcwGf
+        bb8LHeKzxXqDM3m0M8Xve7qgwnBIIFuSDg==
+X-Google-Smtp-Source: ABdhPJxcBvIz7X+nnZAVOil6lfBgF9PLhnvtD+5MKWMfgMIX6lMCA+qxVOSaeGGfGYm7B+vKsP9Hgg==
+X-Received: by 2002:a05:622a:120a:b0:2e1:c9ba:e99b with SMTP id y10-20020a05622a120a00b002e1c9bae99bmr2867850qtx.685.1649165092828;
+        Tue, 05 Apr 2022 06:24:52 -0700 (PDT)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id a129-20020a376687000000b0067d186d953bsm7960042qkc.121.2022.04.05.06.24.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 06:24:52 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2eb888cf7e7so47571727b3.13;
+        Tue, 05 Apr 2022 06:24:52 -0700 (PDT)
+X-Received: by 2002:a81:618b:0:b0:2db:d952:8a39 with SMTP id
+ v133-20020a81618b000000b002dbd9528a39mr2679880ywb.132.1649165091759; Tue, 05
+ Apr 2022 06:24:51 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR03MB3623.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 45d46dfc-06c3-40a8-f672-08da17071ad5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Apr 2022 13:20:50.7848
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 335836de-42ef-43a2-b145-348c2ee9ca5b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: CjMWXvMP6Ki99Q/Z5+2pF5L3+WL+EywQvlqCh93it+Hl4whj38pqEGBBj1v/YlCWrnqJDCeEDUw8E/cNW9M+mCg95V8xTqoE3YS+6dlRag8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR03MB2842
-X-OriginatorOrg: citrix.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220208210824.2238981-1-daniel.vetter@ffwll.ch>
+ <20220208210824.2238981-19-daniel.vetter@ffwll.ch> <4ae20b63-f452-fdb4-ced6-d4968a8d69f0@redhat.com>
+ <Ykv/k/WoVemoCJJA@phenom.ffwll.local> <YkwAhSt9HlbxcuZo@phenom.ffwll.local>
+ <408ffe9b-f09f-dc7e-7f5e-a93b311a06fa@redhat.com> <CAKMK7uHf6H8mhSm6eDHUruWK5Xc2cSPkJUX6v-jpeQfjS19dKw@mail.gmail.com>
+ <e124af06-4f24-277a-543a-82b383f48cea@redhat.com> <CAKMK7uH4GgDQJZguT-k0QmgEAHYHuDEbBtjYje51_Rtqzud0yw@mail.gmail.com>
+In-Reply-To: <CAKMK7uH4GgDQJZguT-k0QmgEAHYHuDEbBtjYje51_Rtqzud0yw@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 5 Apr 2022 15:24:40 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWr0L0r+MVU-=+_yeHKwK8BjF7_EJQxiJT5jMqS9FJUeQ@mail.gmail.com>
+Message-ID: <CAMuHMdWr0L0r+MVU-=+_yeHKwK8BjF7_EJQxiJT5jMqS9FJUeQ@mail.gmail.com>
+Subject: Re: [PATCH v2 18/19] Revert "fbdev: Prevent probing generic drivers
+ if a FB is already registered"
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Zack Rusin <zackr@vmware.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Ilya Trukhanov <lahvuun@gmail.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Peter Jones <pjones@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMDUvMDQvMjAyMiAxNDowNCwgTWFyayBSdXRsYW5kIHdyb3RlOg0KPiBPbiBUdWUsIEFwciAw
-NSwgMjAyMiBhdCAwMTo1MTozMFBNICswMTAwLCBNYXJrIFJ1dGxhbmQgd3JvdGU6DQo+IE15IHg4
-Nl82NCB0ZXN0IGNhc2UgaXM6DQo+DQo+IFBlciBjb21waWxlciBleHBsb3JlciAoaHR0cHM6Ly9n
-b2Rib2x0Lm9yZy96L2N2ZWZmOWhxNSkgR0NDIHRydW5rIGN1cnJlbnRseQ0KPiBjb21waWxlcyB0
-aGlzIGFzOg0KPg0KPiB8IG1zcl9ybXdfc2V0X2JpdHM6DQo+IHwgICAgICAgICBtb3YgICAgIHJj
-eCwgcmRpDQo+IHwgICAgICAgICByZG1zcg0KPiB8ICAgICAgICAgc2FsICAgICByZHgsIDMyDQo+
-IHwgICAgICAgICBtb3YgICAgIGVheCwgZWF4DQo+IHwgICAgICAgICBvciAgICAgIHJheCwgcnNp
-DQo+IHwgICAgICAgICBvciAgICAgIHJheCwgcmR4DQo+IHwgICAgICAgICBtb3YgICAgIHJkeCwg
-cmF4DQo+IHwgICAgICAgICBzaHIgICAgIHJkeCwgMzINCj4gfCAgICAgICAgIHdybXNyDQo+IHwg
-ICAgICAgICByZXQNCj4gfCBmdW5jX3dpdGhfbXNyX3NpZGVfZWZmZWN0czoNCj4gfCAgICAgICAg
-IHJldA0KPg0KDQpZZWFoLi4uIHRoYXQgY29kZSBnZW4gaXMgdmVyeSBicm9rZW4gZm9yIGZ1bmNf
-d2l0aF9tc3Jfc2lkZV9lZmZlY3RzKCkuDQoNCn5BbmRyZXcNCg==
+Hi Daniel,
+
+On Tue, Apr 5, 2022 at 1:48 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+> On Tue, 5 Apr 2022 at 11:52, Javier Martinez Canillas
+> <javierm@redhat.com> wrote:
+> > On 4/5/22 11:24, Daniel Vetter wrote:
+> > > On Tue, 5 Apr 2022 at 11:19, Javier Martinez Canillas
+> > >> This is how I think that work, please let me know if you see something
+> > >> wrong in my logic:
+> > >>
+> > >> 1) A PCI device of OF device is registered for the GPU, this attempt to
+> > >>    match a registered driver but no driver was registered that match yet.
+> > >>
+> > >> 2) The efifb driver is built-in, will be initialized according to the link
+> > >>    order of the objects under drivers/video and the fbdev driver is registered.
+> > >>
+> > >>    There is no platform device or PCI/OF device registered that matches.
+> > >>
+> > >> 3) The DRM driver is built-in, will be initialized according to the link
+> > >>    order of the objects under drivers/gpu and the DRM driver is registered.
+> > >>
+> > >>    This matches the device registered in (1) and the DRM driver probes.
+> > >>
+> > >> 4) The DRM driver .probe kicks out any conflicting DRM drivers and pdev
+> > >>    before registering the DRM device.
+> > >>
+> > >>    There are no conflicting drivers or platform device at this point.
+> > >>
+> > >> 5) Latter at some point the drivers/firmware/sysfb.c init function is
+> > >>    executed, and this registers a platform device for the generic fb.
+> > >>
+> > >>    This device matches the efifb driver registered in (2) and the fbdev
+> > >>    driver probes.
+> > >>
+> > >>    Since that happens *after* the DRM driver already matched, probed
+> > >>    and registered the DRM device, that is a bug and what the reverted
+> > >>    patch worked around.
+> > >>
+> > >> So we need to prevent (5) if (1) and (3) already happened. Having a flag
+> > >> set in the fbdev core somewhere when remove_conflicting_framebuffers()
+> > >> is called could be a solution indeed.
+> > >>
+> > >> That is, the fbdev core needs to know that a DRM driver already probed
+> > >> and make register_framebuffer() fail if info->flag & FBINFO_MISC_FIRMWARE
+> > >>
+> > >> I can attempt to write a patch for that.
+> > >
+> > > Ah yeah that could be an issue. I think the right fix is to replace
+> > > the platform dev unregister with a sysfb_unregister() function in
+> > > sysfb.c, which is synced with a common lock with the sysfb_init
+> > > function and a small boolean. I think I can type that up quickly for
+> > > v3.
+> >
+> > It's more complicated than that since sysfb is just *one* of the several
+> > places where platform devices can be registered for video devices.
+> >
+> > For instance, the vga16fb driver registers its own platform device in
+> > its module_init() function so that can also happen after the conflicting
+> > framebuffers (and associated devices) were removed by a DRM driver probe.
+> >
+> > I tried to minimize the issue for that particular driver with commit:
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0499f419b76f
+> >
+> > But the point stands, it all boils down to the fact that you have two
+> > different subsystems registering video drivers and they don't know all
+> > about each other to take a proper decision.
+> >
+> > Right now the drm_aperture_remove_conflicting_framebuffers() call signals
+> > in one direction from DRM to fbdev but there isn't a communication in the
+> > other direction, from fbdev to DRM.
+> >
+> > I believe the correct fix would be for the fbdev core to keep a list of
+> > the apertures struct that are passed to remove_conflicting_framebuffers(),
+> > that way it will know what apertures are not available anymore and prevent
+> > to register any fbdev framebuffer that conflicts with one already present.
+>
+> Hm that still feels like reinventing a driver model, badly.
+>
+> I think there's two cleaner solutions:
+> - move all the firmware driver platform_dev into sysfb.c, and then
+> just bind the special cases against that (e.g. offb, vga16fb and all
+> these). Then we'd have one sysfb_try_unregister(struct device *dev)
+> interface that fbmem.c uses.
+> - let fbmem.c call into each of these firmware device providers, which
+> means some loops most likely (like we can't call into vga16fb), so
+> probably need to move that into fbmem.c and it all gets a bit messy.
+>
+> > Let me know if you think that makes sense and I can attempt to write a fix.
+>
+> I still think unregistering the platform_dev properly makes the most
+
+That doesn't sound very driver-model-aware to me. The device is what
+the driver binds to; it does not cease to exist.
+
+> sense, and feels like the most proper linux device model solution
+> instead of hacks on top - if the firmware fb is unuseable because a
+> native driver has taken over, we should nuke that. And also the
+> firmware fb driver would then just bind to that platform_dev if it
+> exists, and only if it exists. Also I think it should be the
+> responsibility of whichever piece of code that registers these
+> platform devices to ensure that platform_dev actually still exists.
+> That's why I think pushing all that code into sysfb.c is probably the
+> cleanest solution.
+
+Can't you unbind the generic driver first, and bind the specific driver
+afterwards? Alike writing to sysfs unbind/driver_override/bind,
+but from code?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

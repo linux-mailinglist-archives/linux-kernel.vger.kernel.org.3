@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E1FD4F4C8F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8D04F49C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1578824AbiDEXZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55934 "EHLO
+        id S1350527AbiDEW0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:26:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345111AbiDEKkn (ORCPT
+        with ESMTP id S1345137AbiDEKkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:40:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037202DAAE;
-        Tue,  5 Apr 2022 03:25:51 -0700 (PDT)
+        Tue, 5 Apr 2022 06:40:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF111AC;
+        Tue,  5 Apr 2022 03:26:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9694761425;
-        Tue,  5 Apr 2022 10:25:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7CEDC385A0;
-        Tue,  5 Apr 2022 10:25:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD73DB81B18;
+        Tue,  5 Apr 2022 10:26:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FF5EC385A0;
+        Tue,  5 Apr 2022 10:26:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154350;
-        bh=a6oPxCJzwFg+auaLybS3Cz5xCfoOmB6qPAWpGmmbt78=;
+        s=korg; t=1649154368;
+        bh=gnwKpIuO0gxSR0HzxvdK3Lq1DoU5LfgR2w+c65MoDDs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XVDadoXOdGQeFf7zhCfwoxHCL8sJ9uIMRORw6byvTDbpjPod8gnYSnumalRd/xwMc
-         mpYLqnKp/iXDHd3OZumqvvShAmrcqvOY5syCdUzA20se2K+Xgs/7STyorh2SR96n4P
-         A/BElTnYuUQWlJe/khU2jDtuGhA9no5FyzhjQM34=
+        b=tC1RWV5ksQeppnYk12cZ7LHK1z8fPuHKyb4WX+uANLEdE8kL+TYIrEmH7TUlZEhQt
+         PEKOlr8+tAtv3L/y1nfHUADSHwH7uVAoBM52UgkxgSaXl8K2T5j5VvScggvZpRLYKG
+         d8JlxQmC+8a31xXbXodyA1kEKTCoS5t3Bq7JRvw0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+0d2b0bf32ca5cfd09f2e@syzkaller.appspotmail.com,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: [PATCH 5.10 548/599] XArray: Fix xas_create_range() when multi-order entry present
-Date:   Tue,  5 Apr 2022 09:34:02 +0200
-Message-Id: <20220405070315.148705763@linuxfoundation.org>
+        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH 5.10 553/599] rtc: check if __rtc_read_time was successful
+Date:   Tue,  5 Apr 2022 09:34:07 +0200
+Message-Id: <20220405070315.296153615@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -55,85 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Wilcox (Oracle) <willy@infradead.org>
+From: Tom Rix <trix@redhat.com>
 
-commit 3e3c658055c002900982513e289398a1aad4a488 upstream.
+commit 915593a7a663b2ad08b895a5f3ba8b19d89d4ebf upstream.
 
-If there is already an entry present that is of order >= XA_CHUNK_SHIFT
-when we call xas_create_range(), xas_create_range() will misinterpret
-that entry as a node and dereference xa_node->parent, generally leading
-to a crash that looks something like this:
+Clang static analysis reports this issue
+interface.c:810:8: warning: Passed-by-value struct
+  argument contains uninitialized data
+  now = rtc_tm_to_ktime(tm);
+      ^~~~~~~~~~~~~~~~~~~
 
-general protection fault, probably for non-canonical address 0xdffffc0000000001:
-0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-CPU: 0 PID: 32 Comm: khugepaged Not tainted 5.17.0-rc8-syzkaller-00003-g56e337f2cf13 #0
-RIP: 0010:xa_parent_locked include/linux/xarray.h:1207 [inline]
-RIP: 0010:xas_create_range+0x2d9/0x6e0 lib/xarray.c:725
+tm is set by a successful call to __rtc_read_time()
+but its return status is not checked.  Check if
+it was successful before setting the enabled flag.
+Move the decl of err to function scope.
 
-It's deterministically reproducable once you know what the problem is,
-but producing it in a live kernel requires khugepaged to hit a race.
-While the problem has been present since xas_create_range() was
-introduced, I'm not aware of a way to hit it before the page cache was
-converted to use multi-index entries.
-
-Fixes: 6b24ca4a1a8d ("mm: Use multi-index entries in the page cache")
-Reported-by: syzbot+0d2b0bf32ca5cfd09f2e@syzkaller.appspotmail.com
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Fixes: 2b2f5ff00f63 ("rtc: interface: ignore expired timers when enqueuing new timers")
+Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Link: https://lore.kernel.org/r/20220326194236.2916310-1-trix@redhat.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- lib/test_xarray.c |   22 ++++++++++++++++++++++
- lib/xarray.c      |    2 ++
- 2 files changed, 24 insertions(+)
+ drivers/rtc/interface.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/lib/test_xarray.c
-+++ b/lib/test_xarray.c
-@@ -1463,6 +1463,25 @@ unlock:
- 	XA_BUG_ON(xa, !xa_empty(xa));
- }
+--- a/drivers/rtc/interface.c
++++ b/drivers/rtc/interface.c
+@@ -807,9 +807,13 @@ static int rtc_timer_enqueue(struct rtc_
+ 	struct timerqueue_node *next = timerqueue_getnext(&rtc->timerqueue);
+ 	struct rtc_time tm;
+ 	ktime_t now;
++	int err;
++
++	err = __rtc_read_time(rtc, &tm);
++	if (err)
++		return err;
  
-+static noinline void check_create_range_5(struct xarray *xa,
-+		unsigned long index, unsigned int order)
-+{
-+	XA_STATE_ORDER(xas, xa, index, order);
-+	unsigned int i;
-+
-+	xa_store_order(xa, index, order, xa_mk_index(index), GFP_KERNEL);
-+
-+	for (i = 0; i < order + 10; i++) {
-+		do {
-+			xas_lock(&xas);
-+			xas_create_range(&xas);
-+			xas_unlock(&xas);
-+		} while (xas_nomem(&xas, GFP_KERNEL));
-+	}
-+
-+	xa_destroy(xa);
-+}
-+
- static noinline void check_create_range(struct xarray *xa)
- {
- 	unsigned int order;
-@@ -1490,6 +1509,9 @@ static noinline void check_create_range(
- 		check_create_range_4(xa, (3U << order) + 1, order);
- 		check_create_range_4(xa, (3U << order) - 1, order);
- 		check_create_range_4(xa, (1U << 24) + 1, order);
-+
-+		check_create_range_5(xa, 0, order);
-+		check_create_range_5(xa, (1U << order), order);
- 	}
+ 	timer->enabled = 1;
+-	__rtc_read_time(rtc, &tm);
+ 	now = rtc_tm_to_ktime(tm);
  
- 	check_create_range_3();
---- a/lib/xarray.c
-+++ b/lib/xarray.c
-@@ -722,6 +722,8 @@ void xas_create_range(struct xa_state *x
+ 	/* Skip over expired timers */
+@@ -823,7 +827,6 @@ static int rtc_timer_enqueue(struct rtc_
+ 	trace_rtc_timer_enqueue(timer);
+ 	if (!next || ktime_before(timer->node.expires, next->expires)) {
+ 		struct rtc_wkalrm alarm;
+-		int err;
  
- 		for (;;) {
- 			struct xa_node *node = xas->xa_node;
-+			if (node->shift >= shift)
-+				break;
- 			xas->xa_node = xa_parent_locked(xas->xa, node);
- 			xas->xa_offset = node->offset - 1;
- 			if (node->offset != 0)
+ 		alarm.time = rtc_ktime_to_tm(timer->node.expires);
+ 		alarm.enabled = 1;
 
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE05D4F50E5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98EBB4F513B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1843938AbiDFBmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
+        id S1845635AbiDFB4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356314AbiDEKXg (ORCPT
+        with ESMTP id S1349441AbiDEJtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:23:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5EC2BB0AE;
-        Tue,  5 Apr 2022 03:08:09 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AC926AC7;
+        Tue,  5 Apr 2022 02:46:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7198B6176C;
-        Tue,  5 Apr 2022 10:08:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86BEDC385A2;
-        Tue,  5 Apr 2022 10:08:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 80520B817D3;
+        Tue,  5 Apr 2022 09:46:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C135AC385A2;
+        Tue,  5 Apr 2022 09:45:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153287;
-        bh=R7jBaNNOIfBcdkDD1sAHN6W5EEcD4afMpqTGiA3CiWY=;
+        s=korg; t=1649151959;
+        bh=R7OELOo+Oi/SyfgfAsS9oeLiXh3ryotLhL8VqMLThOs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kDgYjHIWRB7bYX76Jlw5ninWbblEUBj1zY5Lv5FISAfA5BaO7yDOqVxa75SvHCb4Q
-         dS6//zvTpdZGYyHmpqDghPNFXA8/w5HoNso4z1UegdrDqQ8KHNqbP0j5fNW4FJn5zd
-         cez8gFXA52FyaZgChvquEnIf2eZAR/+2bAaEhX04=
+        b=wqQ0YLQQXpHO/BYFQdARcdQWrRegefTQKOioszjzZ9WuekiiQq6B5fPZXCd96KgY8
+         5JIBnQ+GfpiH2gKHaeTLa1ACdIH0r9RgYQwWw3CgQdRyhfx9wGpfDwHWpdsk1sU5Nh
+         a8w75SxwHlwC07UIiHG0XapY7SvoPsHBzHvY1xoI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Sasha Levin <sashal@kernel.org>,
-        syzbot+d55757faa9b80590767b@syzkaller.appspotmail.com
-Subject: [PATCH 5.10 170/599] watch_queue: Fix NULL dereference in error cleanup
-Date:   Tue,  5 Apr 2022 09:27:44 +0200
-Message-Id: <20220405070303.901025767@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 603/913] serial: 8250: Fix race condition in RTS-after-send handling
+Date:   Tue,  5 Apr 2022 09:27:45 +0200
+Message-Id: <20220405070357.915942151@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,66 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-[ Upstream commit a635415a064e77bcfbf43da413fd9dfe0bbed9cb ]
+[ Upstream commit dedab69fd650ea74710b2e626e63fd35584ef773 ]
 
-In watch_queue_set_size(), the error cleanup code doesn't take account of
-the fact that __free_page() can't handle a NULL pointer when trying to free
-up buffer pages that did get allocated.
+Set em485->active_timer = NULL isn't always enough to take out the stop
+timer. While there is a check that it acts in the right state (i.e.
+waiting for RTS-after-send to pass after sending some chars) but the
+following might happen:
 
-Fix this by only calling __free_page() on the pages actually allocated.
+ - CPU1: some chars send, shifter becomes empty, stop tx timer armed
+ - CPU0: more chars send before RTS-after-send expired
+ - CPU0: shifter empty irq, port lock taken
+ - CPU1: tx timer triggers, waits for port lock
+ - CPU0: em485->active_timer = &em485->stop_tx_timer, hrtimer_start(),
+   releases lock()
+ - CPU1: get lock, see em485->active_timer == &em485->stop_tx_timer,
+   tear down RTS too early
 
-Without the fix, this can lead to something like the following:
+This fix bases on research done by Steffen Trumtrar.
 
-BUG: KASAN: null-ptr-deref in __free_pages+0x1f/0x1b0 mm/page_alloc.c:5473
-Read of size 4 at addr 0000000000000034 by task syz-executor168/3599
-...
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- __kasan_report mm/kasan/report.c:446 [inline]
- kasan_report.cold+0x66/0xdf mm/kasan/report.c:459
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_read include/linux/instrumented.h:71 [inline]
- atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
- page_ref_count include/linux/page_ref.h:67 [inline]
- put_page_testzero include/linux/mm.h:717 [inline]
- __free_pages+0x1f/0x1b0 mm/page_alloc.c:5473
- watch_queue_set_size+0x499/0x630 kernel/watch_queue.c:275
- pipe_ioctl+0xac/0x2b0 fs/pipe.c:632
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Fixes: c73be61cede5 ("pipe: Add general notification queue support")
-Reported-and-tested-by: syzbot+d55757faa9b80590767b@syzkaller.appspotmail.com
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+Fixes: b86f86e8e7c5 ("serial: 8250: fix potential deadlock in rs485-mode")
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Link: https://lore.kernel.org/r/20220215160236.344236-1-u.kleine-koenig@pengutronix.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/watch_queue.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/8250/8250_port.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
-index e3f144d96026..45a8eb90e5fc 100644
---- a/kernel/watch_queue.c
-+++ b/kernel/watch_queue.c
-@@ -274,7 +274,7 @@ long watch_queue_set_size(struct pipe_inode_info *pipe, unsigned int nr_notes)
- 	return 0;
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index b470bc747b99..868ccb3e16cf 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -1623,6 +1623,18 @@ static inline void start_tx_rs485(struct uart_port *port)
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+ 	struct uart_8250_em485 *em485 = up->em485;
  
- error_p:
--	for (i = 0; i < nr_pages; i++)
-+	while (--i >= 0)
- 		__free_page(pages[i]);
- 	kfree(pages);
- error:
++	/*
++	 * While serial8250_em485_handle_stop_tx() is a noop if
++	 * em485->active_timer != &em485->stop_tx_timer, it might happen that
++	 * the timer is still armed and triggers only after the current bunch of
++	 * chars is send and em485->active_timer == &em485->stop_tx_timer again.
++	 * So cancel the timer. There is still a theoretical race condition if
++	 * the timer is already running and only comes around to check for
++	 * em485->active_timer when &em485->stop_tx_timer is armed again.
++	 */
++	if (em485->active_timer == &em485->stop_tx_timer)
++		hrtimer_try_to_cancel(&em485->stop_tx_timer);
++
+ 	em485->active_timer = NULL;
+ 
+ 	if (em485->tx_stopped) {
 -- 
 2.34.1
 

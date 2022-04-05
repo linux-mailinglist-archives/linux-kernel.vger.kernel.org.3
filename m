@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF654F3696
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93C064F3695
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352242AbiDELGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
+        id S1352221AbiDELGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237571AbiDEImt (ORCPT
+        with ESMTP id S237572AbiDEImt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:42:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8735F15718;
-        Tue,  5 Apr 2022 01:35:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC3816589;
+        Tue,  5 Apr 2022 01:35:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F133F614E4;
-        Tue,  5 Apr 2022 08:35:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BC2CC385A1;
-        Tue,  5 Apr 2022 08:35:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0592614E4;
+        Tue,  5 Apr 2022 08:35:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C29BBC385A2;
+        Tue,  5 Apr 2022 08:35:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147721;
-        bh=XB2ZAnqs10KWvSqh5mAX4FfDP5UtSANZ3tDNnXYKoYA=;
+        s=korg; t=1649147727;
+        bh=U6NPccItde/lV+Aupb+80yWZKd2ruP1llhPD9xnH5U8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dKr7jA30pfOYXFmsos9mEy2tdb85+oTBIOQV9C7AUfZqyAcj+uqSyrOz4GwejjSDb
-         vpsxHSL3Cf2bqR6iqf1bBhml2pqle4yml1lhl6aLSDHei5tK4hKm5Hle7824v/X0Zr
-         q1Q9UzK0mwYwu/1AQzXYpmYm6QkKmInuTo6FeftQ=
+        b=Iis+WPexVF9uHGrR2yP/D5lzDJiyy6i8UogRFSqF6nAMqyElmknzQY7/SHoKMHFE3
+         QjzGcttQiveCoYaOPe4qZe0Ek+Bfp/y9uZqA1GF4eVgYH9NmNxFim9pERX0Cq2IGy7
+         TATV6H14Fjm2k6Vj8uPRmMOduB7ErFnaGyaZ0HJ8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nikita Shubin <n.shubin@yadro.com>,
+        stable@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>,
+        syzbot+0600986d88e2d4d7ebb8@syzkaller.appspotmail.com,
         Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH 5.16 0098/1017] riscv: Fix fill_callchain return value
-Date:   Tue,  5 Apr 2022 09:16:51 +0200
-Message-Id: <20220405070357.105802778@linuxfoundation.org>
+Subject: [PATCH 5.16 0099/1017] riscv: Increase stack size under KASAN
+Date:   Tue,  5 Apr 2022 09:16:52 +0200
+Message-Id: <20220405070357.135672401@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -54,32 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nikita Shubin <n.shubin@yadro.com>
+From: Dmitry Vyukov <dvyukov@google.com>
 
-commit 2b2b574ac587ec5bd7716a356492a85ab8b0ce9f upstream.
+commit b81d591386c3a50b96dddcf663628ea0df0bf2b3 upstream.
 
-perf_callchain_store return 0 on success, -1 otherwise,
-fix fill_callchain to return correct bool value.
+KASAN requires more stack space because of compiler instrumentation.
+Increase stack size as other arches do.
 
-Fixes: dbeb90b0c1eb ("riscv: Add perf callchain support")
-Signed-off-by: Nikita Shubin <n.shubin@yadro.com>
+Signed-off-by: Dmitry Vyukov <dvyukov@google.com>
+Reported-by: syzbot+0600986d88e2d4d7ebb8@syzkaller.appspotmail.com
+Fixes: 8ad8b72721d0 ("riscv: Add KASAN support")
 Cc: stable@vger.kernel.org
 Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/riscv/kernel/perf_callchain.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/riscv/include/asm/thread_info.h |   10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
---- a/arch/riscv/kernel/perf_callchain.c
-+++ b/arch/riscv/kernel/perf_callchain.c
-@@ -73,7 +73,7 @@ void perf_callchain_user(struct perf_cal
+--- a/arch/riscv/include/asm/thread_info.h
++++ b/arch/riscv/include/asm/thread_info.h
+@@ -11,11 +11,17 @@
+ #include <asm/page.h>
+ #include <linux/const.h>
  
- static bool fill_callchain(void *entry, unsigned long pc)
- {
--	return perf_callchain_store(entry, pc);
-+	return perf_callchain_store(entry, pc) == 0;
- }
++#ifdef CONFIG_KASAN
++#define KASAN_STACK_ORDER 1
++#else
++#define KASAN_STACK_ORDER 0
++#endif
++
+ /* thread information allocation */
+ #ifdef CONFIG_64BIT
+-#define THREAD_SIZE_ORDER	(2)
++#define THREAD_SIZE_ORDER	(2 + KASAN_STACK_ORDER)
+ #else
+-#define THREAD_SIZE_ORDER	(1)
++#define THREAD_SIZE_ORDER	(1 + KASAN_STACK_ORDER)
+ #endif
+ #define THREAD_SIZE		(PAGE_SIZE << THREAD_SIZE_ORDER)
  
- void perf_callchain_kernel(struct perf_callchain_entry_ctx *entry,
 
 

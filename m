@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04ED84F4568
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA3DC4F46BD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1450985AbiDEUKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36848 "EHLO
+        id S1383647AbiDEUlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1455446AbiDEQAC (ORCPT
+        with ESMTP id S1455456AbiDEQAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:00:02 -0400
+        Tue, 5 Apr 2022 12:00:03 -0400
 Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2D837A0D;
-        Tue,  5 Apr 2022 08:15:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE0055BF9
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:15:38 -0700 (PDT)
 Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A17AB1EC0502;
-        Tue,  5 Apr 2022 17:15:28 +0200 (CEST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4181C1EC04AD;
+        Tue,  5 Apr 2022 17:15:33 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1649171728;
+        t=1649171733;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=eiC67LvkcRptZ4vBTwfJLFk18efdkgw7h4pbP4PEKXY=;
-        b=hEUAFCh5v61AOluFcbWJkVxBkYfuIDLTWZWTaNKwVuVmu8wc+ckaad77AK2YlaNTKYaKYr
-        PFWhwwmQ9gQeF8jRu3SmcKDmXrgnwAArO/a7S61IZhA6h2tlUYrDO9pU2nhCnoYP+GqDpb
-        1jWA7ewvTWjdwVvE2eQxHNCiexjNsnM=
+        bh=SmhdfcsfbUleu5su8WIpv3awYN3mvxwGNPN2GgtP+eM=;
+        b=lirn6QWU6l3x2HY1jEv7bpHHvQQOsPyAB0GuR/9TahNHORoVCpFoMP1z4hTe+UecGKfLr0
+        k0Skp9sPK3HhHITVFI942ZBb6HdEdhT+J0CWGY+G16AOyJxf+Rbam+HLgZD+pR06H6w0nw
+        dOLqldmTnMghaA/Etg8CW5iR4TIjgac=
 From:   Borislav Petkov <bp@alien8.de>
 To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH 01/11] scsi: aacraid: Fix undefined behavior due to shift overflowing the constant
-Date:   Tue,  5 Apr 2022 17:15:07 +0200
-Message-Id: <20220405151517.29753-2-bp@alien8.de>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org
+Subject: [PATCH 02/11] ALSA: usb-audio: Fix undefined behavior due to shift overflowing the constant
+Date:   Tue,  5 Apr 2022 17:15:08 +0200
+Message-Id: <20220405151517.29753-3-bp@alien8.de>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405151517.29753-1-bp@alien8.de>
 References: <20220405151517.29753-1-bp@alien8.de>
@@ -56,38 +54,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Borislav Petkov <bp@suse.de>
 
-Fix
+Fix:
 
-  drivers/scsi/aacraid/commsup.c: In function ‘aac_handle_sa_aif’:
-  drivers/scsi/aacraid/commsup.c:1983:2: error: case label does not reduce to an integer constant
-    case SA_AIF_BPCFG_CHANGE:
+  sound/usb/midi.c: In function ‘snd_usbmidi_out_endpoint_create’:
+  sound/usb/midi.c:1389:2: error: case label does not reduce to an integer constant
+    case USB_ID(0xfc08, 0x0101): /* Unknown vendor Cable */
     ^~~~
 
 See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
 details as to why it triggers with older gccs only.
 
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Adaptec OEM Raid Solutions <aacraid@microsemi.com>
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org
+Cc: Jaroslav Kysela <perex@perex.cz>
+Cc: Takashi Iwai <tiwai@suse.com>
+Cc: alsa-devel@alsa-project.org
 ---
- drivers/scsi/aacraid/aacraid.h | 2 +-
+ sound/usb/usbaudio.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/aacraid/aacraid.h b/drivers/scsi/aacraid/aacraid.h
-index f849e7c9d428..5e115e8b2ba4 100644
---- a/drivers/scsi/aacraid/aacraid.h
-+++ b/drivers/scsi/aacraid/aacraid.h
-@@ -121,7 +121,7 @@ enum {
- #define SA_AIF_PDEV_CHANGE		(1<<4)
- #define SA_AIF_LDEV_CHANGE		(1<<5)
- #define SA_AIF_BPSTAT_CHANGE		(1<<30)
--#define SA_AIF_BPCFG_CHANGE		(1<<31)
-+#define SA_AIF_BPCFG_CHANGE		(1U<<31)
+diff --git a/sound/usb/usbaudio.h b/sound/usb/usbaudio.h
+index 167834133b9b..2b3dd55e8ee0 100644
+--- a/sound/usb/usbaudio.h
++++ b/sound/usb/usbaudio.h
+@@ -8,7 +8,7 @@
+  */
  
- #define HBA_MAX_SG_EMBEDDED		28
- #define HBA_MAX_SG_SEPARATE		90
+ /* handling of USB vendor/product ID pairs as 32-bit numbers */
+-#define USB_ID(vendor, product) (((vendor) << 16) | (product))
++#define USB_ID(vendor, product) ((((unsigned int)vendor) << 16) | (product))
+ #define USB_ID_VENDOR(id) ((id) >> 16)
+ #define USB_ID_PRODUCT(id) ((u16)(id))
+ 
 -- 
 2.35.1
 

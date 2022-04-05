@@ -2,285 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E407A4F43AB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE3E4F4760
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:35:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355271AbiDEUQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:16:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
+        id S1351709AbiDEVKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457570AbiDEQKx (ORCPT
+        with ESMTP id S1457604AbiDEQPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:10:53 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F3AFD1B;
-        Tue,  5 Apr 2022 09:08:53 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 31CE422260;
-        Tue,  5 Apr 2022 18:08:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1649174931;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2p3sjpS/Bg3o28UgK7piCHL/zRE/gDoVsSlTwfbWAqQ=;
-        b=hMCfN8z+XOdJahCnW0raIQnxmiUTsWCzvdBExcEKDAWdGV9SsNa0GQ6pXixZKAW/h3fW5d
-        kj1MS2BRgUJGDEZW4WOmVLXQGm9txK+i09wtdOT6D4zgrw77uGgppPHxW+9rXXWKPhD8Vn
-        GUoS/bPfLvQfqyeLsvp7zUkgSBz/oNM=
-From:   Michael Walle <michael@walle.cc>
-To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Tudor.Ambarus@microchip.com, Michael Walle <michael@walle.cc>
-Subject: [PATCH v3 7/7] ARM: dts: lan966x: add basic Kontron KSwitch D10 support
-Date:   Tue,  5 Apr 2022 18:08:37 +0200
-Message-Id: <20220405160837.4093563-8-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220405160837.4093563-1-michael@walle.cc>
-References: <20220405160837.4093563-1-michael@walle.cc>
+        Tue, 5 Apr 2022 12:15:41 -0400
+Received: from smtp-8fab.mail.infomaniak.ch (smtp-8fab.mail.infomaniak.ch [83.166.143.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFBA01835D
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:13:42 -0700 (PDT)
+Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KXt4523HhzMqCNN;
+        Tue,  5 Apr 2022 18:13:41 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4KXt440gnCzljsTK;
+        Tue,  5 Apr 2022 18:13:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1649175221;
+        bh=HbIIPB+F63MI4bn+Xkm4MHoAj4TOesDIJhPoMCrZYT8=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=qzdG0k4T0pCT9Y5O0SKeHR1gCabKPNMXBr9/oJo7CpCICY/1j/xC2dh+CGhYEieKE
+         I5WUzniErLzcmVzJF5p85bToyKl7r8vfpngkouqMWfClJtdtLDQWHn6WY8FtRicLWN
+         7Iz+X5pHaKySgtyIp9gsBPVns7tV6n6l4sge18jg=
+Message-ID: <f93438e8-f568-a70d-2e03-4aa147932e00@digikod.net>
+Date:   Tue, 5 Apr 2022 18:14:05 +0200
 MIME-Version: 1.0
+User-Agent: 
+Content-Language: en-US
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Heimes <christian@python.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Morris <jmorris@namei.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Paul Moore <paul@paul-moore.com>,
+        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Steve Dower <steve.dower@python.org>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Christian Brauner <brauner@kernel.org>
+References: <20220321161557.495388-1-mic@digikod.net>
+ <202204041130.F649632@keescook>
+ <CAHk-=wgoC76v-4s0xVr1Xvnx-8xZ8M+LWgyq5qGLA5UBimEXtQ@mail.gmail.com>
+ <816667d8-2a6c-6334-94a4-6127699d4144@digikod.net> <YkxYHqLqTEKFrCeg@mit.edu>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [GIT PULL] Add trusted_for(2) (was O_MAYEXEC)
+In-Reply-To: <YkxYHqLqTEKFrCeg@mit.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add basic support for the Kontron KSwitch D10 MMT. It comes in two
-variants: "6G-2GS" which features 6 Gigabit copper ports and two SFP
-cages and "8G" which features 6 Gigbabit copper ports (where two are
-2.5G capable).
 
-For now the following is supported and working:
- - Kernel console
- - SFP cages I2C bus and mux
- - SPI
- - SGPIO
- - Watchdog
+On 05/04/2022 16:54, Theodore Ts'o wrote:
+> On Mon, Apr 04, 2022 at 10:30:13PM +0200, Mickaël Salaün wrote:
+>>> If you add a new X_OK variant to access(), maybe that could fly.
+>>
+>> As answered in private, that was the approach I took for one of the early
+>> versions but a dedicated syscall was requested by Al Viro:
+>> https://lore.kernel.org/r/2ed377c4-3500-3ddc-7181-a5bc114ddf94@digikod.net
+>> The main reason behind this request was that it doesn't have the exact same
+>> semantic as faccessat(2). The changes for this syscall are documented here:
+>> https://lore.kernel.org/all/20220104155024.48023-3-mic@digikod.net/
+>> The whole history is linked in the cover letter:
+>> https://lore.kernel.org/all/2ed377c4-3500-3ddc-7181-a5bc114ddf94@digikod.net/
+> 
+> As a suggestion, something that can be helpful for something which has
+> been as heavily bike-sheded as this concept might be to write a
+> "legislative history", or perhaps, a "bike shed history".
+> 
+> And not just with links to mailing list discussions, but a short
+> summary of why, for example, we moved from the open flag O_MAYEXEC to
+> the faccessat(2) approach.  I looked, but I couldn't find the
+> reasoning while diving into the mail archives.  And there was some
+> kind of request for some new functionality for IMA and other LSM's
+> that I couldn't follow that is why the new AT_INTERETED flag, but at
+> this point my time quantuum for mailing list archeology most
+> definitely expired.  :-)
+> 
+> It might be that when all of this is laid out, we can either revisit
+> prior design decisions as "that bike-shed request to support this
+> corner case was unreasonable", or "oh, OK, this is why we need as
+> fully general a solution as this".
+> 
+> Also, some of examples of potential future use cases such as "magic
+> links" that were linked in the cover letter, it's not clear to me
+> actually make sense in the context of a "trusted for" system call
+> (although might make more sense in the context of an open flag).  So
+> revisiting some of those other cases to see whether they actually
+> *could* be implemented as new "TRUSTED_FOR" flags might be
+> instructive.
+> 
+> Personally, I'm a bit skeptical about the prospct of additional use
+> cases, since trusted_for(2) is essentially a mother_should_I(2)
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- arch/arm/boot/dts/Makefile                    |  4 +-
- ...lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts | 77 +++++++++++++++++++
- .../lan966x-kontron-kswitch-d10-mmt-8g.dts    | 13 ++++
- .../dts/lan966x-kontron-kswitch-d10-mmt.dtsi  | 75 ++++++++++++++++++
- 4 files changed, 168 insertions(+), 1 deletion(-)
- create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
- create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts
- create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
+That would be an interesting syscall name. ;)
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7c16f8a2b738..54beef7c1810 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -742,7 +742,9 @@ dtb-$(CONFIG_SOC_IMX7ULP) += \
- 	imx7ulp-com.dtb \
- 	imx7ulp-evk.dtb
- dtb-$(CONFIG_SOC_LAN966) += \
--	lan966x-pcb8291.dtb
-+	lan966x-pcb8291.dtb \
-+	lan966x-kontron-kswitch-d10-mmt-6g-2gs.dtb \
-+	lan966x-kontron-kswitch-d10-mmt-8g.dtb
- dtb-$(CONFIG_SOC_LS1021A) += \
- 	ls1021a-moxa-uc-8410a.dtb \
- 	ls1021a-qds.dtb \
-diff --git a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
-new file mode 100644
-index 000000000000..9cf0b791a355
---- /dev/null
-+++ b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
-@@ -0,0 +1,77 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Device Tree file for the Kontron KSwitch D10 MMT 6G-2GS
-+ */
-+
-+/dts-v1/;
-+#include "lan966x-kontron-kswitch-d10-mmt.dtsi"
-+
-+/ {
-+	model = "Kontron KSwitch D10 MMT 6G-2GS";
-+	compatible = "kontron,kswitch-d10-mmt-6g-2gs", "kontron,s1921",
-+		     "microchip,lan9668", "microchip,lan966";
-+
-+	i2cmux {
-+		compatible = "i2c-mux-gpio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		mux-gpios = <&sgpio_out 3 2 GPIO_ACTIVE_HIGH>,
-+			    <&sgpio_out 3 3 GPIO_ACTIVE_HIGH>;
-+		i2c-parent = <&i2c4>;
-+
-+		i2c4_0: i2c@1 {
-+			reg = <1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+
-+		i2c4_1: i2c@2 {
-+			reg = <2>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+		};
-+	};
-+
-+	sfp0: sfp0 {
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c4_0>;
-+		los-gpios = <&sgpio_in 1 0 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in 1 1 GPIO_ACTIVE_LOW>;
-+		maximum-power-milliwatt = <2500>;
-+		tx-disable-gpios = <&sgpio_out 3 0 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in 0 2 GPIO_ACTIVE_HIGH>;
-+		rate-select0-gpios = <&sgpio_out 2 0 GPIO_ACTIVE_HIGH>;
-+		rate-select1-gpios = <&sgpio_out 2 1 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	sfp1: sfp1 {
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c4_1>;
-+		los-gpios = <&sgpio_in 1 2 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&sgpio_in 1 3 GPIO_ACTIVE_LOW>;
-+		maximum-power-milliwatt = <2500>;
-+		tx-disable-gpios = <&sgpio_out 3 1 GPIO_ACTIVE_LOW>;
-+		tx-fault-gpios = <&sgpio_in 0 3 GPIO_ACTIVE_HIGH>;
-+		rate-select0-gpios = <&sgpio_out 2 2 GPIO_ACTIVE_HIGH>;
-+		rate-select1-gpios = <&sgpio_out 2 3 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
-+&flx4 {
-+	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_TWI>;
-+	status = "okay";
-+
-+	i2c4: i2c@600 {
-+		pinctrl-0 = <&fc4_b_pins>;
-+		pinctrl-names = "default";
-+		status = "okay";
-+	};
-+};
-+
-+&gpio {
-+	fc4_b_pins: fc4-b-i2c-pins {
-+		/* SCL, SDA */
-+		pins = "GPIO_57", "GPIO_58";
-+		function = "fc4_b";
-+	};
-+};
-diff --git a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts
-new file mode 100644
-index 000000000000..4b35f6c46e7f
---- /dev/null
-+++ b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts
-@@ -0,0 +1,13 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Device Tree file for the Kontron KSwitch D10 MMT 8G
-+ */
-+
-+/dts-v1/;
-+#include "lan966x-kontron-kswitch-d10-mmt.dtsi"
-+
-+/ {
-+	model = "Kontron KSwitch D10 MMT 8G";
-+	compatible = "kontron,kswitch-d10-mmt-8g", "kontron,s1921",
-+		     "microchip,lan9668", "microchip,lan966";
-+};
-diff --git a/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
-new file mode 100644
-index 000000000000..4178fb0bd9c5
---- /dev/null
-+++ b/arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
-@@ -0,0 +1,75 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Common part of the device tree for the Kontron KSwitch D10 MMT
-+ */
-+
-+/dts-v1/;
-+#include "lan966x.dtsi"
-+
-+/ {
-+	aliases {
-+		serial0 = &usart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	gpio-restart {
-+		compatible = "gpio-restart";
-+		gpios = <&gpio 56 GPIO_ACTIVE_LOW>;
-+		priority = <200>;
-+	};
-+};
-+
-+&flx0 {
-+	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
-+	status = "okay";
-+
-+	usart0: serial@200 {
-+		pinctrl-0 = <&usart0_pins>;
-+		pinctrl-names = "default";
-+		status = "okay";
-+	};
-+};
-+
-+&gpio {
-+	usart0_pins: usart0-pins {
-+		/* RXD, TXD */
-+		pins = "GPIO_25", "GPIO_26";
-+		function = "fc0_b";
-+	};
-+
-+	sgpio_a_pins: sgpio-a-pins {
-+		/* SCK, D0, D1 */
-+		pins = "GPIO_32", "GPIO_33", "GPIO_34";
-+		function = "sgpio_a";
-+	};
-+
-+	sgpio_b_pins: sgpio-b-pins {
-+		/* LD */
-+		pins = "GPIO_64";
-+		function = "sgpio_b";
-+	};
-+};
-+
-+&sgpio {
-+	pinctrl-0 = <&sgpio_a_pins>, <&sgpio_b_pins>;
-+	pinctrl-names = "default";
-+	bus-frequency = <8000000>;
-+	/* arbitrary range because all GPIOs are in software mode */
-+	microchip,sgpio-port-ranges = <0 11>;
-+	status = "okay";
-+
-+	sgpio_in: gpio@0 {
-+		ngpios = <128>;
-+	};
-+
-+	sgpio_out: gpio@1 {
-+		ngpios = <128>;
-+	};
-+};
-+
-+&watchdog {
-+	status = "okay";
-+};
--- 
-2.30.2
 
+> request where userspace is asking the kernel whether they should go
+> ahead and do some particular policy thing.  And it's not clear to me
+> how many of these policy questions exist where (a) the kernel is in
+> the past position to answer that question, and (b) there isn't some
+> additional information that the kernel doesn't have that might be
+> needed to answer that question.
+
+Script execution is definitely the main use case and the semantic is 
+already known by the kernel.
+
+
+> 
+> For example, "Mother should I use that private key file" might require
+> information about whether the SRE is currently on pager duty or not,
+> at least for some policies, and the kernel isn't going to have that
+> information.
+> 
+> Other examples of TRUSTED_FOR flags that really make sense and would
+> be useful might help alleviate my skepticsm.  And the "bike shed
+> history" would help with my question about why some folks didn't like
+> the original O_MAYEXEC flag?
+
+Thanks, I'll do some that.
+
+> 
+> Cheers,
+> 
+> 					- Ted

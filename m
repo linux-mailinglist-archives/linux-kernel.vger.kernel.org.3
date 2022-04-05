@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C1E4F308C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F359F4F3387
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244368AbiDEJlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
+        id S1346446AbiDEJpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239082AbiDEITq (ORCPT
+        with ESMTP id S239121AbiDEITt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:19:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD199762B7;
-        Tue,  5 Apr 2022 01:10:10 -0700 (PDT)
+        Tue, 5 Apr 2022 04:19:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F377776E19;
+        Tue,  5 Apr 2022 01:10:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C19CB81A37;
-        Tue,  5 Apr 2022 08:10:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCEAFC385A0;
-        Tue,  5 Apr 2022 08:10:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 69BDF60B0A;
+        Tue,  5 Apr 2022 08:10:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70A26C385A1;
+        Tue,  5 Apr 2022 08:10:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146208;
-        bh=KkqvdNudypKbbtIijKOGeT0cNlIeNDr+yKjHsjcNilc=;
+        s=korg; t=1649146213;
+        bh=Trdjz113LxrKF3oJNGM6ih+BUfsfmZMoS0b/51xev/k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ce+fQXlk+XwcuGazr/9XkyR1+1LLy8fu3AkLgo5A/+xDxsy5vjDpTQ1tldyiH10Lw
-         SMXue1zAtGkWSKcTc5qExH9J6zsu3sF4OTC5L9xwTUe2Nos2TV3T+6C536BE/NNs6w
-         qmQELzLxy8I1pHkcOWMYvIw3rhodBU8ftxUSRoRQ=
+        b=FbuAZ8kupfHffOA+cDYTTTrROUopiXBWDx+E9WVkqEU5A6r313Goq33ATGN5q7FKs
+         yoXjJwrMQGNAib1yoRrh1Ldq07clNJPy6aMadLllcj8BUzd0c7AFwJ3oFyPlKzbXoy
+         3tkPxOYpZU9kCEb4gz2AD+1+EFwrWFgR71C6w3jM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
+        stable@vger.kernel.org, Niels Dossche <dossche.niels@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0682/1126] selftests/bpf: Fix error reporting from sock_fields programs
-Date:   Tue,  5 Apr 2022 09:23:49 +0200
-Message-Id: <20220405070427.637224947@linuxfoundation.org>
+Subject: [PATCH 5.17 0684/1126] Bluetooth: call hci_le_conn_failed with hdev lock in hci_le_conn_failed
+Date:   Tue,  5 Apr 2022 09:23:51 +0200
+Message-Id: <20220405070427.695377553@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,43 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Sitnicki <jakub@cloudflare.com>
+From: Niels Dossche <dossche.niels@gmail.com>
 
-[ Upstream commit a4c9fe0ed4a13e25e43fcd44d9f89bc19ba8fbb7 ]
+[ Upstream commit 9fa6b4cda3b414e990f008f45f9bcecbcb54d4d1 ]
 
-The helper macro that records an error in BPF programs that exercise sock
-fields access has been inadvertently broken by adaptation work that
-happened in commit b18c1f0aa477 ("bpf: selftest: Adapt sock_fields test to
-use skel and global variables").
+hci_le_conn_failed function's documentation says that the caller must
+hold hdev->lock. The only callsite that does not hold that lock is
+hci_le_conn_failed. The other 3 callsites hold the hdev->lock very
+locally. The solution is to hold the lock during the call to
+hci_le_conn_failed.
 
-BPF_NOEXIST flag cannot be used to update BPF_MAP_TYPE_ARRAY. The operation
-always fails with -EEXIST, which in turn means the error never gets
-recorded, and the checks for errors always pass.
-
-Revert the change in update flags.
-
-Fixes: b18c1f0aa477 ("bpf: selftest: Adapt sock_fields test to use skel and global variables")
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
-Link: https://lore.kernel.org/bpf/20220317113920.1068535-2-jakub@cloudflare.com
+Fixes: 3c857757ef6e ("Bluetooth: Add directed advertising support through connect()")
+Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/test_sock_fields.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/bluetooth/hci_conn.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_sock_fields.c b/tools/testing/selftests/bpf/progs/test_sock_fields.c
-index 81b57b9aaaea..7967348b11af 100644
---- a/tools/testing/selftests/bpf/progs/test_sock_fields.c
-+++ b/tools/testing/selftests/bpf/progs/test_sock_fields.c
-@@ -113,7 +113,7 @@ static void tpcpy(struct bpf_tcp_sock *dst,
- 
- #define RET_LOG() ({						\
- 	linum = __LINE__;					\
--	bpf_map_update_elem(&linum_map, &linum_idx, &linum, BPF_NOEXIST);	\
-+	bpf_map_update_elem(&linum_map, &linum_idx, &linum, BPF_ANY);	\
- 	return CG_OK;						\
- })
+diff --git a/net/bluetooth/hci_conn.c b/net/bluetooth/hci_conn.c
+index 04ebe901e86f..3bb2b3b6a1c9 100644
+--- a/net/bluetooth/hci_conn.c
++++ b/net/bluetooth/hci_conn.c
+@@ -669,7 +669,9 @@ static void le_conn_timeout(struct work_struct *work)
+ 	if (conn->role == HCI_ROLE_SLAVE) {
+ 		/* Disable LE Advertising */
+ 		le_disable_advertising(hdev);
++		hci_dev_lock(hdev);
+ 		hci_le_conn_failed(conn, HCI_ERROR_ADVERTISING_TIMEOUT);
++		hci_dev_unlock(hdev);
+ 		return;
+ 	}
  
 -- 
 2.34.1

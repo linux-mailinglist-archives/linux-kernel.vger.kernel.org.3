@@ -2,113 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4084F50FF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B774F505F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573317AbiDFBuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
+        id S1841539AbiDFBYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1456320AbiDEQBb (ORCPT
+        with ESMTP id S1456964AbiDEQCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:01:31 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9895313EFAD
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:22:30 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id 9so15563699iou.5
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 08:22:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VUTUxfwx0BMlegLzejTeqPrh28XK1GfyeFHo2+PzHSA=;
-        b=X/ggfC92FSIBBaIJoh4Lvf2OOxCHxifc1+KXsolz68JKkTf66vNMPiFv0uTbW3X+Tf
-         MCWTL/SWwwjYkxJkqYzHr5nKXuxeQ2ITjuWzPSExmX/xC8cWsOEbmvFkpDYRaUfhHyjF
-         YDuhAf4nBhRafZIn8gieNVZVSKekDKyUhpxYKncULsJxdUSIzmoZm1iJrwEa/WyoI0QE
-         KkpHVKUW8usvg+8kVn+Z2s+7MMLsuGK6iV9Wd0j31rEPo2merxQ82OdhC1wIctLAeJuO
-         VWjT3E/mBoFcavJc6nyq1omw2lBkJpB44ymHsBeFQsffZIdjl9VvqWhL581O44uA3Mwf
-         +Pjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VUTUxfwx0BMlegLzejTeqPrh28XK1GfyeFHo2+PzHSA=;
-        b=fVrScaPYYjUXs0AWCQvrKqRQ6LvyZlE6GNYg/wWtUE5hd8ELjW5Z3MHq7QG9JXJb8Q
-         3Jae/NEOTAAl0mBkX/AMM/6+CX+OUl8AnolgcnrTzpGIHQkqkha2d0nj+Vcqd38Ifg/r
-         zdV0bbC90KWbDoTwXGBoZ4HDEtiqIq69AvUCzqG6VIpB6lZkN6B/3BKZfvoykhRlVXP8
-         Dzo1g9/wH+Lmw/y0fLlALiZQRn+sAmnvz/d4RVYeZqD6KJenvVEh2GY1rs6qTAcqdHGg
-         0qLrGpKQJoaXoitvTIsfJFhgRx1t1OKbp0yD30GAnOSLAHbBnGu7dP8B5RyZJDYxfT8A
-         HjDQ==
-X-Gm-Message-State: AOAM533plD2j+AeXR0/9I8zIYkao4Hb8U5tfqjvl6ZF+YjKQ5nsCqzSV
-        Z9rTOy7H6SBzwIaXAhp/maXOMWX/1goo4I34KJw=
-X-Google-Smtp-Source: ABdhPJxDUFQSp6D1AlpXJtxXe8348cZazMDEkUmEcoM1Vu4ZcFMv1Ssr3lWia7cZ321svVePcrIfn7/ykSnzvdg5K14=
-X-Received: by 2002:a6b:116:0:b0:648:bd29:2f44 with SMTP id
- 22-20020a6b0116000000b00648bd292f44mr1993367iob.56.1649172150007; Tue, 05 Apr
- 2022 08:22:30 -0700 (PDT)
+        Tue, 5 Apr 2022 12:02:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAC8E7F75;
+        Tue,  5 Apr 2022 08:25:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 859BBB81E30;
+        Tue,  5 Apr 2022 15:25:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1782C385A0;
+        Tue,  5 Apr 2022 15:25:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649172337;
+        bh=+xFbJqvwMJbQSj9nFNnlG1Arjg38F6OzcmwY3dTsFQ4=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=uIuEDxP6ZeCDhTVHagvUEbxwEJq2viGhA/Lc3oGsoongfmoEMblsuITW0rw1MIaza
+         Xd8biZfxObEYo1U+FJpjsLVAtadGW4aMg7NTYPwedhQGeIyAQFZvKbRdxwPcpznhWl
+         DLyxV7ipXnY9exHsnUktrYNcD/ZSyekx69EIZ1DT8fayxtwkcy+0XfFf8eyLOYrOKH
+         iw+JK+P5f6vFct8RAkzV5ss9bLnhT8mGEqqHV3hkIlFTawW/z5sEIUllDIsoBjwQPz
+         ol7+B7F1SPT9HffpPgncyq5M1GqVk+3NUjsaFlNjC5wSb9OsiUIMFmBlLTyaAPx8DG
+         2Scic8xo0aZnw==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        brcm80211-dev-list.pdl@broadcom.com, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org
+Subject: Re: [PATCH 06/11] brcmfmac: sdio: Fix undefined behavior due to shift overflowing the constant
+References: <20220405151517.29753-1-bp@alien8.de>
+        <20220405151517.29753-7-bp@alien8.de>
+Date:   Tue, 05 Apr 2022 18:25:30 +0300
+In-Reply-To: <20220405151517.29753-7-bp@alien8.de> (Borislav Petkov's message
+        of "Tue, 5 Apr 2022 17:15:12 +0200")
+Message-ID: <87y20jr1qt.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-References: <cover.1648049113.git.andreyknvl@google.com> <f75c58b17bfaa419f84286cd174e3a08f971b779.1648049113.git.andreyknvl@google.com>
- <YkVzTbafttTHWETU@FVFF77S0Q05N>
-In-Reply-To: <YkVzTbafttTHWETU@FVFF77S0Q05N>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Tue, 5 Apr 2022 17:22:19 +0200
-Message-ID: <CA+fCnZekoAMEcS+0905JzP=Gu81R_F_em5Un8JL+FOF2Jj3rqg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] arm64, scs: save scs_sp values per-cpu when
- switching stacks
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Florian Mayer <fmayer@google.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 11:24 AM Mark Rutland <mark.rutland@arm.com> wrote:
++ linux-wireless
+
+Borislav Petkov <bp@alien8.de> writes:
+
+> From: Borislav Petkov <bp@suse.de>
 >
-> On Wed, Mar 23, 2022 at 04:32:53PM +0100, andrey.konovalov@linux.dev wrote:
-> > From: Andrey Konovalov <andreyknvl@google.com>
-> >
-> > Instead of trying to retrieve the SCS pointers from the stack, change
-> > interrupt handlers (for hard IRQ, Normal and Critical SDEI) to save the
-> > previous SCS pointer in a per-CPU variable.
+> Fix:
 >
-> I'm *really* not keen on *always* poking this in the entry code for the
-> uncommon case of unwind. It complicates the entry code and means we're always
-> paying a cost for potentially no benefit. At a high-level, I don't think this
-> is the right approach.
+>   drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c: In function =
+=E2=80=98brcmf_sdio_drivestrengthinit=E2=80=99:
+>   drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c:3798:2: error: =
+case label does not reduce to an integer constant
+>     case SDIOD_DRVSTR_KEY(BRCM_CC_43143_CHIP_ID, 17):
+>     ^~~~
+>   drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c:3809:2: error: =
+case label does not reduce to an integer constant
+>     case SDIOD_DRVSTR_KEY(BRCM_CC_43362_CHIP_ID, 13):
+>     ^~~~
+>
+> See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
+> details as to why it triggers with older gccs only.
+>
+> Signed-off-by: Borislav Petkov <bp@suse.de>
+> Cc: Arend van Spriel <aspriel@gmail.com>
+> Cc: Franky Lin <franky.lin@broadcom.com>
+> Cc: Hante Meuleman <hante.meuleman@broadcom.com>
+> Cc: Kalle Valo <kvalo@kernel.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: brcm80211-dev-list.pdl@broadcom.com
+> Cc: netdev@vger.kernel.org
+> ---
+>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c b/dr=
+ivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
+> index ba3c159111d3..d78ccc223709 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
+> @@ -557,7 +557,7 @@ enum brcmf_sdio_frmtype {
+>  	BRCMF_SDIO_FT_SUB,
+>  };
+>=20=20
+> -#define SDIOD_DRVSTR_KEY(chip, pmu)     (((chip) << 16) | (pmu))
+> +#define SDIOD_DRVSTR_KEY(chip, pmu)     (((unsigned int)(chip) << 16) | =
+(pmu))
 
-This also gives a 5% slowdown, which is not acceptable.
+Via which tree is this going? I assume not the wireless tree, so:
 
-What we can do instead, is to not collect frames from the higher
-exception levels at all. This would leave SCS-based stack collection
-method impaired, but this is probably fine for KASAN's use case:
-currently, stack depot filters out higher-level frames anyway, so
-KASAN never saves them. And the lower-level part of the stack trace is
-enough to identify the allocation.
+Acked-by: Kalle Valo <kvalo@kernel.org>
 
-Thanks!
+--=20
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-
-> For the regular unwinder, I want to rework things such that we can identify
-> exception boundaries and look into the regs (e.g. so that we can recover the
-> PC+LR+FP and avoid duplicating part of this in a frame record), and I'd much
-> prefer that we did the same here.
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
+hes

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7524F364C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1480F4F3446
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345310AbiDELAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:00:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45542 "EHLO
+        id S237502AbiDEIml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234501AbiDEIjT (ORCPT
+        with ESMTP id S233199AbiDEH46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:39:19 -0400
+        Tue, 5 Apr 2022 03:56:58 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6686D21E3F;
-        Tue,  5 Apr 2022 01:33:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5067C4160C;
+        Tue,  5 Apr 2022 00:50:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1BB40B81B92;
-        Tue,  5 Apr 2022 08:33:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AAA4C385A1;
-        Tue,  5 Apr 2022 08:33:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB93AB81B90;
+        Tue,  5 Apr 2022 07:50:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 057C5C3410F;
+        Tue,  5 Apr 2022 07:50:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147591;
-        bh=Hxo4l3G3ezXXxyeir2RGiMkhpL4xQTk/wS0+4Y5M1K8=;
+        s=korg; t=1649145047;
+        bh=YFr4/nojKaAOU/ZZjc5sHloKXZS8yH7kQ2huS/c3kYc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kQ34fV7LJPq/dVQMYnoTsb8UizHxgrXRPHiFNGsHl/3+VfwT5AK2RBJWkrG+ayWWD
-         BbV/+g3usMlhmugEO7vSSzoBOl95WLQeLgihtB76IWjMyOLjdgShTqyJru7OjiNq+P
-         UOMm4adpzq0lc6AEQQa9EXmb7WFEUhJ3guMSysAI=
+        b=NaM7U76lD3USeLJl+aE8SkOefRAFZSOS4dVnXSBusAVAUqefzg5cz16NBNxaxN6rj
+         tCYoVKEJQVQ/nlwivRKGbX9pt2W+fhYM0W/XOLVcIT3eeWJgoCL20fw8/vowRacC12
+         D2x/yNEpVb/stz7YbD6B3dEhNbcSXP7ghDTd6rfg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.16 0051/1017] greybus: svc: fix an error handling bug in gb_svc_hello()
-Date:   Tue,  5 Apr 2022 09:16:04 +0200
-Message-Id: <20220405070355.699128328@linuxfoundation.org>
+        stable@vger.kernel.org, Jianglei Nie <niejianglei2021@163.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0258/1126] crypto: ccree - Fix use after free in cc_cipher_exit()
+Date:   Tue,  5 Apr 2022 09:16:45 +0200
+Message-Id: <20220405070415.183638436@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
+References: <20220405070407.513532867@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Jianglei Nie <niejianglei2021@163.com>
 
-commit 5f8583a3b7552092582a92e7bbd2153319929ad7 upstream.
+[ Upstream commit 3d950c34074ed74d2713c3856ba01264523289e6 ]
 
-Cleanup if gb_svc_queue_deferred_request() fails.
+kfree_sensitive(ctx_p->user.key) will free the ctx_p->user.key. But
+ctx_p->user.key is still used in the next line, which will lead to a
+use after free.
 
-Link: https://lore.kernel.org/r/20220202072016.GA6748@kili
-Fixes: ee2f2074fdb2 ("greybus: svc: reconfig APBridgeA-Switch link to handle required load")
-Cc: stable@vger.kernel.org      # 4.9
-[johan: fix commit summary prefix and rename label ]
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Link: https://lore.kernel.org/r/20220202113347.1288-2-johan@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+We can call kfree_sensitive() after dev_dbg() to avoid the uaf.
+
+Fixes: 63ee04c8b491 ("crypto: ccree - add skcipher support")
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/greybus/svc.c |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/crypto/ccree/cc_cipher.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/greybus/svc.c
-+++ b/drivers/greybus/svc.c
-@@ -866,8 +866,14 @@ static int gb_svc_hello(struct gb_operat
+diff --git a/drivers/crypto/ccree/cc_cipher.c b/drivers/crypto/ccree/cc_cipher.c
+index 78833491f534..309da6334a0a 100644
+--- a/drivers/crypto/ccree/cc_cipher.c
++++ b/drivers/crypto/ccree/cc_cipher.c
+@@ -257,8 +257,8 @@ static void cc_cipher_exit(struct crypto_tfm *tfm)
+ 		&ctx_p->user.key_dma_addr);
  
- 	gb_svc_debugfs_init(svc);
+ 	/* Free key buffer in context */
+-	kfree_sensitive(ctx_p->user.key);
+ 	dev_dbg(dev, "Free key buffer in context. key=@%p\n", ctx_p->user.key);
++	kfree_sensitive(ctx_p->user.key);
+ }
  
--	return gb_svc_queue_deferred_request(op);
-+	ret = gb_svc_queue_deferred_request(op);
-+	if (ret)
-+		goto err_remove_debugfs;
- 
-+	return 0;
-+
-+err_remove_debugfs:
-+	gb_svc_debugfs_exit(svc);
- err_unregister_device:
- 	gb_svc_watchdog_destroy(svc);
- 	device_del(&svc->dev);
+ struct tdes_keys {
+-- 
+2.34.1
+
 
 

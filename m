@@ -2,126 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3364F522E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DF24F5209
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1849466AbiDFCiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52566 "EHLO
+        id S1849287AbiDFCeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443250AbiDEWUP (ORCPT
+        with ESMTP id S1446036AbiDEWWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 18:20:15 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CE69D0CF;
-        Tue,  5 Apr 2022 14:08:09 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id m16so219376plx.3;
-        Tue, 05 Apr 2022 14:08:09 -0700 (PDT)
+        Tue, 5 Apr 2022 18:22:04 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83BB910505B
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 14:14:30 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id 10so1189697qtz.11
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 14:14:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=AtngP8d0g0fi2Zi2weqgSY60agKP0OsKMyjizujaa74=;
-        b=LfOLR30Fdj30wr86t2iIVLaxJGwMJ0KBcQXZVtJQZJIuAQ8Dh19WNThfA4VM3e8Ytn
-         HHI932K10nMfwMEC5pKGCcpXIbQhoUUAeZ7kM/ocyYGDjfbhlE2kxs05NXewD7bjvSsR
-         D9hynn+MGRET238VbNLuq5BVeHdbUYOLyGte5DmT7aV8U+9np6LwuSt1YIFplqtQIDNX
-         i15w/TKzB5a5wKj1Di5WJubjB+JtFjMJhMhOOwEu+WTcWongNq1z3vcf0po9kZgSsfMB
-         PbABfib6Q9EU0H6CBfKw8JXF7f4veBaMVUKg5ETkjyUsmsFXWYeuNPYdBjjYco5gVtXr
-         jc3A==
+        d=linuxfoundation.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=o0wDpIkEwpRJQFvM50lGA/vb8efTxI0/dQ/fmk4QzbA=;
+        b=ThI3NTIpoBycVs2LfLGSPPFPXxE4ZirP4bQIXVK4NbCb7Gu+0u7SnfLzt3RF2+v2Ua
+         Om2EemBJj5MGUstXBIhyiQ5C9tIkivpr4u0eqJAwXUtK2uxch/zsc8jti2zcPazIB2hM
+         ZF//e5qzhrW1jE2djugTCfKFrjmvXwhJvNL9c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=AtngP8d0g0fi2Zi2weqgSY60agKP0OsKMyjizujaa74=;
-        b=sUnoq488stvnst/Exqho95ARNyfY9OsotaCO/44ivdLuC26cW+x9D4xYm1ySM/xBWc
-         C5fIOY5e4N1+3uJ/ztJ6NNhcs4MZGazk2bkHcI/ukK69PSIfoPxAUjzNjZY7zLwH4/Cp
-         tnYHtFc2BkBsdszHMlz9twZDNNHmeBtSfdDVJ8nZ1aKlJrcuOZOUPaeIovPjXzw5JwiN
-         IO22PzYwKulFG29my3jxqhO/zOQyT3gOvLjp7IAGF79tEZuQNkNbplqoHh79LzxoAuR+
-         g7bb+D4DoSGwa0v0NiaXzGzLliwXfltmJz7ysuUBQACJsTdNVXSd1xwzZnyYU2j6SdhT
-         bpMA==
-X-Gm-Message-State: AOAM531B8QY/HvXECu87ZVDJIyo/qJyPUgJu0xNhHGVvCBRi+n+29Gmw
-        PMJ9v9+iX29RZSG8iKYjkN8=
-X-Google-Smtp-Source: ABdhPJyxCwrKvkUu9M6Duz48XTcvyzgBHvz1hsRU6NdhZWIFqFIcpUkk9QddmT8Sm1NZVtSH0iPIyw==
-X-Received: by 2002:a17:90b:1bc6:b0:1c7:f32:3aa0 with SMTP id oa6-20020a17090b1bc600b001c70f323aa0mr6336718pjb.168.1649192889310;
-        Tue, 05 Apr 2022 14:08:09 -0700 (PDT)
-Received: from jaschultz-Thelio-Major.corp.microsoft.com ([2001:4898:80e8:3:511c:41a7:57f7:f826])
-        by smtp.gmail.com with ESMTPSA id k22-20020aa788d6000000b004faaf897064sm16240010pff.106.2022.04.05.14.08.08
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=o0wDpIkEwpRJQFvM50lGA/vb8efTxI0/dQ/fmk4QzbA=;
+        b=lF7rBMl/WOXAI4RxCoQTT0Hw+bf+p2zeoxj2cr8d+W1LO7Z0H2bW9GS1CnTOIJQm4E
+         p3/5DDhnYobpYCZIMl271OCGBzO+SSSd9HSF9LXnZCqqkdeJxuTO5W/LMa4HdfAxLrXG
+         i/S2u5dAE256O6xB4HAzYLnzloJkK5cm/2ZfYH88WBmUtDDqkLdJHuL+kFJb0tKj90Rg
+         rWUR/ILNdjMpgV2ctuDpFK4IUEtpa9atgGUuoeDAHKzKmlTa36v8ckdTTkIkOe1PgEo6
+         ISnSiUqEF+G9HQ2MmQrnJ5sj+KWmTAFXIrofPXVCqGgr6KSbzR2cAkthAB47vuvMV6rP
+         j8/Q==
+X-Gm-Message-State: AOAM530H7jfz56mjpM70eILbz7EMALDP5sEGFOrQkDa2nepbf8elIXIm
+        io2Kq7YinjO/THtRNaoimbzfIw==
+X-Google-Smtp-Source: ABdhPJxz81u5YQuiZoDNOUymjm0pKS8xOdGu0TNaTbvTwvmeHetQudOhEx7SLNocVGCOfNZxig1XXA==
+X-Received: by 2002:a05:620a:24c5:b0:67d:99c9:eaf9 with SMTP id m5-20020a05620a24c500b0067d99c9eaf9mr3685452qkn.379.1649193269614;
+        Tue, 05 Apr 2022 14:14:29 -0700 (PDT)
+Received: from meerkat.local (bras-base-mtrlpq5031w-grc-32-216-209-220-127.dsl.bell.ca. [216.209.220.127])
+        by smtp.gmail.com with ESMTPSA id v9-20020a05620a0a8900b0067db9cc46a9sm8216024qkg.62.2022.04.05.14.14.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 14:08:08 -0700 (PDT)
-From:   Jarrett Schultz <jaschultzms@gmail.com>
-X-Google-Original-From: Jarrett Schultz <jaschultzMS@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Jarrett Schultz <jaschultz@microsoft.com>
-Subject: [PATCH v5 4/4] arm64: dts: qcom: surface-duo: Add surface xbl
-Date:   Tue,  5 Apr 2022 14:07:50 -0700
-Message-Id: <20220405210750.619511-5-jaschultzMS@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220405210750.619511-1-jaschultzMS@gmail.com>
-References: <20220405210750.619511-1-jaschultzMS@gmail.com>
+        Tue, 05 Apr 2022 14:14:29 -0700 (PDT)
+Date:   Tue, 5 Apr 2022 17:14:27 -0400
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Oded Gabbay <ogabbay@kernel.org>, Jiri Slaby <jslaby@suse.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: Linux 5.18-rc1
+Message-ID: <20220405211427.ybl54q5smqicvad4@meerkat.local>
+References: <CAHk-=wg6FWL1xjVyHx7DdjD2dHZETA5_=FqqW17Z19X-WTfWSg@mail.gmail.com>
+ <20220404022239.GA1186352@roeck-us.net>
+ <CAHk-=wimc7V9mi=P+6p2nnctPYtSM55OSPVERUeJor7fkD_EVg@mail.gmail.com>
+ <aba387bd-9799-e0b5-40e3-1bcb552ac74c@roeck-us.net>
+ <CAHk-=witgMUS8To6wijxdbQ+QEH0gcHSYV6Y=yzOdb=Q4h9PJA@mail.gmail.com>
+ <ea840ab9-0c20-8c06-f7d4-bb9642a63500@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ea840ab9-0c20-8c06-f7d4-bb9642a63500@roeck-us.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jarrett Schultz <jaschultz@microsoft.com>
+On Mon, Apr 04, 2022 at 09:45:46AM -0700, Guenter Roeck wrote:
+> I tried to tell my provider, but to no avail. Until now I used gmail,
+> but gmail will disable that ability by end of this month, leaving me
+> in the dark. Lose-lose situation for me. Right now I don't have a
+> useful alternative that doesn't require me to change my e-mail
+> address completely (or setting up my own e-mail server which
+> is a pita).
 
-Introduce device tree source for the surface xbl driver.
+There are hosting providers that are known to work well. Many people happily
+use fastmail (e.g. Greg KH), and it is known to do All The Right Things when
+it comes to DKIM/DMARC.
 
-Signed-off-by: Jarrett Schultz <jaschultz@microsoft.com>
-
----
-
-Changes in v4:
- - N/A
-
----
-
-Changes in v3:
- - N/A
-
----
-
-Changes in v2:
- - Updated to reference an offset inside of imem
----
- .../boot/dts/qcom/sm8150-microsoft-surface-duo.dts     | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8150-microsoft-surface-duo.dts b/arch/arm64/boot/dts/qcom/sm8150-microsoft-surface-duo.dts
-index 5901c28e6696..abb7964daac4 100644
---- a/arch/arm64/boot/dts/qcom/sm8150-microsoft-surface-duo.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8150-microsoft-surface-duo.dts
-@@ -430,6 +430,16 @@ &i2c19 {
- 	/* MAX34417 @ 0x1e */
- };
- 
-+&imem {
-+	status = "okay";
-+
-+	xbl@a94 {
-+		compatible = "microsoft,sm8150-surface-duo-xbl";
-+		reg = <0xa94 0x100>;
-+		status = "okay";
-+	};
-+};
-+
- &pon {
- 	pwrkey {
- 		status = "okay";
--- 
-2.25.1
-
+-K

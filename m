@@ -2,69 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF4C4F23C6
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 037E54F23C2
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbiDEG5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 02:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42158 "EHLO
+        id S231184AbiDEG47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 02:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiDEG5P (ORCPT
+        with ESMTP id S230399AbiDEG45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 02:57:15 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2356B24F
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 23:55:17 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id i27so17523280ejd.9
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 23:55:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=V38z6KNkG0po4D2d3HPJjL+6I1e/SaURvPwZ2pkI1iw=;
-        b=tPtw9CQMpVJHh48w3R8UFCjRkqd9gPxoBFkIoBF4qaxba3O3PFDAAj7V8hcdVZ/rln
-         gk6IedKPIWb+ZCvDcS9mNNGmjWqOXGNtVo421kWWlyBxjXRMCgLdjAAQkHlZFoaIscSW
-         Tb91LtFcRGriSs8b0UBhv7XMvNSyztqRLTuvOWp/gZw0v1VdP9Ck8u+8Vs5+mwWfg1Ch
-         H30tcQZgvl4FLPFFR/jSToVc4jlELMj9OmESSV54J494BuUoNzmyG3kGPUM9WlE78lKI
-         QbMOC5gHzTfRGQYG++nEZ0feVqbP4Pjf6yudg9HlkXYKLUuhwsYpPgIpsNXj0XGE6sUH
-         Mlgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=V38z6KNkG0po4D2d3HPJjL+6I1e/SaURvPwZ2pkI1iw=;
-        b=sn77ODgr/mdr6rXdVpKpS+zIBV+mU9TMaVYVpPHhb+oxqHNwp/wIF34mP8aW9DtLbO
-         bJ/PzzgLdoynTroErh/G8r49ruVSZeJxH2VicWzWamh1kBGB8AN7LqyJjjK3FSiww+Fp
-         9F4GhFk7nRphXXtw1hHzNHcgSwRruXqUcPjyp6tE9PY78lM8KTpAHnILNEM2gTvzp9wP
-         UGh/WlltV6r0zO1VCdKVt5qIc70e7/X5m7DzIBKQdUQ9rswOEoG7JDjbQuXYAop0PcRd
-         pPykapvnhg9Ie8j70VLEVeVjT+mHEodYO+av+sLzN76vD+493OmrWgAhf3L1jZ1GBvsU
-         S16g==
-X-Gm-Message-State: AOAM533X7lIjkU1mLYjeYPkj5UwJnne8+Y2wwBXHE3YiOPRjlRQ4UJ5A
-        rE4bSzeuSkzHmBLct0tDOoVm7g==
-X-Google-Smtp-Source: ABdhPJzC1j6ts7p8CPXN/UyNDuwiyF6wmEYJBVY9WiGN2C958BD7fCvkUbny2vlzFgjCmgclLgW4nw==
-X-Received: by 2002:a17:907:94cf:b0:6e4:a60b:bae5 with SMTP id dn15-20020a17090794cf00b006e4a60bbae5mr2033338ejc.476.1649141715632;
-        Mon, 04 Apr 2022 23:55:15 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id c11-20020a056402120b00b004196059efd1sm6453247edw.75.2022.04.04.23.55.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 23:55:15 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Tue, 5 Apr 2022 02:56:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B81ED45;
+        Mon,  4 Apr 2022 23:54:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC440615B2;
+        Tue,  5 Apr 2022 06:54:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA6AFC340F3;
+        Tue,  5 Apr 2022 06:54:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649141698;
+        bh=lAGRKXFyscFGIBfBF8/g5C+egdrJLMjHYOz7COxwDTE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qb6sSCd/z2WkgKTxFL/W0crkdglAxSy/+jlEdiLzCJ2gwzJYgxa6iiejxO8rcYqGy
+         1dD3xzfy+pW8roY4c4jJUDiGh1drNpoe2/WaK/NzhMLsSWDAautHIe42nlXPzT0Eol
+         4cuSp15x8iFs86JDqA2CnoL0DN7tOw+UlhFcHQhYNve4Yk8M/SSKL0m3S2SalVZ1II
+         2YSPvg1PqI3t/XAapVd6ScjzgZFcPZgCmaq7djMtiudgORts5+HIfQp/s+yTP0yBPX
+         vezlzj9ia5GHguCnH22cVkocwZiO3+7308ugR0IQtG5nXgPEcq/dyQONoRhl6ZD6b3
+         Iaubz5skOYmKg==
+Date:   Tue, 5 Apr 2022 09:56:09 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
+        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
+        x86@kernel.org, seanjc@google.com, kai.huang@intel.com,
+        cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
         linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v2] dt-bindings: soc: qcom,smsm: convert to dtschema
-Date:   Tue,  5 Apr 2022 08:55:12 +0200
-Message-Id: <20220405065512.26521-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
+Subject: Re: [PATCH V3 05/30] x86/sgx: Support loading enclave page without
+ VMA permissions check
+Message-ID: <YkvoCQ/P1qUJgpmt@kernel.org>
+References: <cover.1648847675.git.reinette.chatre@intel.com>
+ <c9a81f8a2b3f582a906c750e2221f98ca36731e4.1648847675.git.reinette.chatre@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c9a81f8a2b3f582a906c750e2221f98ca36731e4.1648847675.git.reinette.chatre@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,278 +60,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Qualcomm Shared Memory State Machine to DT schema.
+On Mon, Apr 04, 2022 at 09:49:13AM -0700, Reinette Chatre wrote:
+> sgx_encl_load_page() is used to find and load an enclave page into
+> enclave (EPC) memory, potentially loading it from the backing storage.
+> Both usages of sgx_encl_load_page() are during an access to the
+> enclave page from a VMA and thus the permissions of the VMA are
+> considered before the enclave page is loaded.
+> 
+> SGX2 functions operating on enclave pages belonging to an initialized
+> enclave requiring the page to be in EPC. It is thus required to
+> support loading enclave pages into the EPC independent from a VMA.
+> 
+> Split the current sgx_encl_load_page() to support the two usages:
+> A new call, sgx_encl_load_page_in_vma(), behaves exactly like the
+> current sgx_encl_load_page() that takes VMA permissions into account,
+> while sgx_encl_load_page() just loads an enclave page into EPC.
+> 
+> VMA, PTE, and EPCM permissions would continue to dictate whether
+> the pages can be accessed from within an enclave.
+> 
+> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+> ---
+> Changes since V2:
+> - New patch
+> 
+>  arch/x86/kernel/cpu/sgx/encl.c | 57 ++++++++++++++++++++++------------
+>  arch/x86/kernel/cpu/sgx/encl.h |  2 ++
+>  2 files changed, 40 insertions(+), 19 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
+> index 7c63a1911fae..05ae1168391c 100644
+> --- a/arch/x86/kernel/cpu/sgx/encl.c
+> +++ b/arch/x86/kernel/cpu/sgx/encl.c
+> @@ -131,25 +131,10 @@ static struct sgx_epc_page *sgx_encl_eldu(struct sgx_encl_page *encl_page,
+>  	return epc_page;
+>  }
+>  
+> -static struct sgx_encl_page *sgx_encl_load_page(struct sgx_encl *encl,
+> -						unsigned long addr,
+> -						unsigned long vm_flags)
+> +static struct sgx_encl_page *__sgx_encl_load_page(struct sgx_encl *encl,
+> +						  struct sgx_encl_page *entry)
+>  {
+> -	unsigned long vm_prot_bits = vm_flags & (VM_READ | VM_WRITE | VM_EXEC);
+>  	struct sgx_epc_page *epc_page;
+> -	struct sgx_encl_page *entry;
+> -
+> -	entry = xa_load(&encl->page_array, PFN_DOWN(addr));
+> -	if (!entry)
+> -		return ERR_PTR(-EFAULT);
+> -
+> -	/*
+> -	 * Verify that the faulted page has equal or higher build time
+> -	 * permissions than the VMA permissions (i.e. the subset of {VM_READ,
+> -	 * VM_WRITE, VM_EXECUTE} in vma->vm_flags).
+> -	 */
+> -	if ((entry->vm_max_prot_bits & vm_prot_bits) != vm_prot_bits)
+> -		return ERR_PTR(-EFAULT);
+>  
+>  	/* Entry successfully located. */
+>  	if (entry->epc_page) {
+> @@ -175,6 +160,40 @@ static struct sgx_encl_page *sgx_encl_load_page(struct sgx_encl *encl,
+>  	return entry;
+>  }
+>  
+> +static struct sgx_encl_page *sgx_encl_load_page_in_vma(struct sgx_encl *encl,
+> +						       unsigned long addr,
+> +						       unsigned long vm_flags)
+> +{
+> +	unsigned long vm_prot_bits = vm_flags & (VM_READ | VM_WRITE | VM_EXEC);
+> +	struct sgx_encl_page *entry;
+> +
+> +	entry = xa_load(&encl->page_array, PFN_DOWN(addr));
+> +	if (!entry)
+> +		return ERR_PTR(-EFAULT);
+> +
+> +	/*
+> +	 * Verify that the page has equal or higher build time
+> +	 * permissions than the VMA permissions (i.e. the subset of {VM_READ,
+> +	 * VM_WRITE, VM_EXECUTE} in vma->vm_flags).
+> +	 */
+> +	if ((entry->vm_max_prot_bits & vm_prot_bits) != vm_prot_bits)
+> +		return ERR_PTR(-EFAULT);
+> +
+> +	return __sgx_encl_load_page(encl, entry);
+> +}
+> +
+> +struct sgx_encl_page *sgx_encl_load_page(struct sgx_encl *encl,
+> +					 unsigned long addr)
+> +{
+> +	struct sgx_encl_page *entry;
+> +
+> +	entry = xa_load(&encl->page_array, PFN_DOWN(addr));
+> +	if (!entry)
+> +		return ERR_PTR(-EFAULT);
+> +
+> +	return __sgx_encl_load_page(encl, entry);
+> +}
+> +
+>  static vm_fault_t sgx_vma_fault(struct vm_fault *vmf)
+>  {
+>  	unsigned long addr = (unsigned long)vmf->address;
+> @@ -196,7 +215,7 @@ static vm_fault_t sgx_vma_fault(struct vm_fault *vmf)
+>  
+>  	mutex_lock(&encl->lock);
+>  
+> -	entry = sgx_encl_load_page(encl, addr, vma->vm_flags);
+> +	entry = sgx_encl_load_page_in_vma(encl, addr, vma->vm_flags);
+>  	if (IS_ERR(entry)) {
+>  		mutex_unlock(&encl->lock);
+>  
+> @@ -344,7 +363,7 @@ static struct sgx_encl_page *sgx_encl_reserve_page(struct sgx_encl *encl,
+>  	for ( ; ; ) {
+>  		mutex_lock(&encl->lock);
+>  
+> -		entry = sgx_encl_load_page(encl, addr, vm_flags);
+> +		entry = sgx_encl_load_page_in_vma(encl, addr, vm_flags);
+>  		if (PTR_ERR(entry) != -EBUSY)
+>  			break;
+>  
+> diff --git a/arch/x86/kernel/cpu/sgx/encl.h b/arch/x86/kernel/cpu/sgx/encl.h
+> index fec43ca65065..6b34efba1602 100644
+> --- a/arch/x86/kernel/cpu/sgx/encl.h
+> +++ b/arch/x86/kernel/cpu/sgx/encl.h
+> @@ -116,5 +116,7 @@ unsigned int sgx_alloc_va_slot(struct sgx_va_page *va_page);
+>  void sgx_free_va_slot(struct sgx_va_page *va_page, unsigned int offset);
+>  bool sgx_va_page_full(struct sgx_va_page *va_page);
+>  void sgx_encl_free_epc_page(struct sgx_epc_page *page);
+> +struct sgx_encl_page *sgx_encl_load_page(struct sgx_encl *encl,
+> +					 unsigned long addr);
+>  
+>  #endif /* _X86_ENCL_H */
+> -- 
+> 2.25.1
+> 
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Rob Herring <robh@kernel.org>
 
----
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Changes since v1:
-1. Skip "^.*" from pattern.
-2. Fix subjectprefix.
-3. Add Rob's review.
----
- .../bindings/soc/qcom/qcom,smsm.txt           | 104 -------------
- .../bindings/soc/qcom/qcom,smsm.yaml          | 138 ++++++++++++++++++
- 2 files changed, 138 insertions(+), 104 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,smsm.txt
- create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,smsm.yaml
-
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,smsm.txt b/Documentation/devicetree/bindings/soc/qcom/qcom,smsm.txt
-deleted file mode 100644
-index 2993b5a97dd6..000000000000
---- a/Documentation/devicetree/bindings/soc/qcom/qcom,smsm.txt
-+++ /dev/null
-@@ -1,104 +0,0 @@
--Qualcomm Shared Memory State Machine
--
--The Shared Memory State Machine facilitates broadcasting of single bit state
--information between the processors in a Qualcomm SoC. Each processor is
--assigned 32 bits of state that can be modified. A processor can through a
--matrix of bitmaps signal subscription of notifications upon changes to a
--certain bit owned by a certain remote processor.
--
--- compatible:
--	Usage: required
--	Value type: <string>
--	Definition: must be one of:
--		    "qcom,smsm"
--
--- qcom,ipc-N:
--	Usage: required
--	Value type: <prop-encoded-array>
--	Definition: three entries specifying the outgoing ipc bit used for
--		    signaling the N:th remote processor
--		    - phandle to a syscon node representing the apcs registers
--		    - u32 representing offset to the register within the syscon
--		    - u32 representing the ipc bit within the register
--
--- qcom,local-host:
--	Usage: optional
--	Value type: <u32>
--	Definition: identifier of the local processor in the list of hosts, or
--		    in other words specifier of the column in the subscription
--		    matrix representing the local processor
--		    defaults to host 0
--
--- #address-cells:
--	Usage: required
--	Value type: <u32>
--	Definition: must be 1
--
--- #size-cells:
--	Usage: required
--	Value type: <u32>
--	Definition: must be 0
--
--= SUBNODES
--Each processor's state bits are described by a subnode of the smsm device node.
--Nodes can either be flagged as an interrupt-controller to denote a remote
--processor's state bits or the local processors bits.  The node names are not
--important.
--
--- reg:
--	Usage: required
--	Value type: <u32>
--	Definition: specifies the offset, in words, of the first bit for this
--		    entry
--
--- #qcom,smem-state-cells:
--	Usage: required for local entry
--	Value type: <u32>
--	Definition: must be 1 - denotes bit number
--
--- interrupt-controller:
--	Usage: required for remote entries
--	Value type: <empty>
--	Definition: marks the entry as a interrupt-controller and the state bits
--		    to belong to a remote processor
--
--- #interrupt-cells:
--	Usage: required for remote entries
--	Value type: <u32>
--	Definition: must be 2 - denotes bit number and IRQ flags
--
--- interrupts:
--	Usage: required for remote entries
--	Value type: <prop-encoded-array>
--	Definition: one entry specifying remote IRQ used by the remote processor
--		    to signal changes of its state bits
--
--
--= EXAMPLE
--The following example shows the SMEM setup for controlling properties of the
--wireless processor, defined from the 8974 apps processor's point-of-view. It
--encompasses one outbound entry and the outgoing interrupt for the wireless
--processor.
--
--smsm {
--	compatible = "qcom,smsm";
--
--	#address-cells = <1>;
--	#size-cells = <0>;
--
--	qcom,ipc-3 = <&apcs 8 19>;
--
--	apps_smsm: apps@0 {
--		reg = <0>;
--
--		#qcom,smem-state-cells = <1>;
--	};
--
--	wcnss_smsm: wcnss@7 {
--		reg = <7>;
--		interrupts = <0 144 1>;
--
--		interrupt-controller;
--		#interrupt-cells = <2>;
--	};
--};
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,smsm.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,smsm.yaml
-new file mode 100644
-index 000000000000..db67cf043256
---- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom,smsm.yaml
-@@ -0,0 +1,138 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/soc/qcom/qcom,smsm.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm Shared Memory State Machine
-+
-+maintainers:
-+  - Andy Gross <agross@kernel.org>
-+  - Bjorn Andersson <bjorn.andersson@linaro.org>
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-+
-+description:
-+  The Shared Memory State Machine facilitates broadcasting of single bit state
-+  information between the processors in a Qualcomm SoC. Each processor is
-+  assigned 32 bits of state that can be modified. A processor can through a
-+  matrix of bitmaps signal subscription of notifications upon changes to a
-+  certain bit owned by a certain remote processor.
-+
-+properties:
-+  compatible:
-+    const: qcom,smsm
-+
-+  '#address-cells':
-+    const: 1
-+
-+  qcom,local-host:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    default: 0
-+    description:
-+      Identifier of the local processor in the list of hosts, or in other words
-+      specifier of the column in the subscription matrix representing the local
-+      processor.
-+
-+  '#size-cells':
-+    const: 0
-+
-+patternProperties:
-+  "^qcom,ipc-[1-4]$":
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    items:
-+      - items:
-+          - description: phandle to a syscon node representing the APCS registers
-+          - description: u32 representing offset to the register within the syscon
-+          - description: u32 representing the ipc bit within the register
-+    description:
-+      Three entries specifying the outgoing ipc bit used for signaling the N:th
-+      remote processor.
-+
-+  "@[0-9a-f]$":
-+    type: object
-+    description:
-+      Each processor's state bits are described by a subnode of the SMSM device
-+      node.  Nodes can either be flagged as an interrupt-controller to denote a
-+      remote processor's state bits or the local processors bits.  The node
-+      names are not important.
-+
-+    properties:
-+      reg:
-+        maxItems: 1
-+
-+      interrupt-controller:
-+        description:
-+          Marks the entry as a interrupt-controller and the state bits to
-+          belong to a remote processor.
-+
-+      '#interrupt-cells':
-+        const: 2
-+
-+      interrupts:
-+        maxItems: 1
-+        description:
-+          One entry specifying remote IRQ used by the remote processor to
-+          signal changes of its state bits.
-+
-+      '#qcom,smem-state-cells':
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        const: 1
-+        description:
-+          Required for local entry. Denotes bit number.
-+
-+    required:
-+      - reg
-+
-+    oneOf:
-+      - required:
-+          - '#qcom,smem-state-cells'
-+      - required:
-+          - interrupt-controller
-+          - '#interrupt-cells'
-+          - interrupts
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - '#address-cells'
-+  - '#size-cells'
-+
-+anyOf:
-+  - required:
-+      - qcom,ipc-1
-+  - required:
-+      - qcom,ipc-2
-+  - required:
-+      - qcom,ipc-3
-+  - required:
-+      - qcom,ipc-4
-+
-+additionalProperties: false
-+
-+examples:
-+  # The following example shows the SMEM setup for controlling properties of
-+  # the wireless processor, defined from the 8974 apps processor's
-+  # point-of-view. It encompasses one outbound entry and the outgoing interrupt
-+  # for the wireless processor.
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    shared-memory {
-+        compatible = "qcom,smsm";
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        qcom,ipc-3 = <&apcs 8 19>;
-+
-+        apps_smsm: apps@0 {
-+            reg = <0>;
-+            #qcom,smem-state-cells = <1>;
-+        };
-+
-+        wcnss_smsm: wcnss@7 {
-+            reg = <7>;
-+            interrupts = <GIC_SPI 144 IRQ_TYPE_EDGE_RISING>;
-+            interrupt-controller;
-+            #interrupt-cells = <2>;
-+        };
-+    };
--- 
-2.32.0
-
+BR, Jarkko

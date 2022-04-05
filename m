@@ -2,153 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 740C24F4E3D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBD314F4937
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1588331AbiDFAPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
+        id S245141AbiDEWG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443467AbiDEPjk (ORCPT
+        with ESMTP id S1443488AbiDEPjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:39:40 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53CDD7
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:56:25 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id b188so13430507oia.13
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 06:56:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=YCAAPrKYGMpteO8HsHXIgowtM9srkXdQGvqaN8hMluo=;
-        b=OnxBihp4lODvPg4Vh6Z4IKBACJYaqjE50m/IyiPn1KpCeBWtRR7gArmE1n+NVMMzGr
-         BMyUcnQ7C4dOX1m1YLDqtnL3PjzqIl4PGNCGHdBcJ10LnpP3MDnrVKRQvTt65f7Yz574
-         eUyH5Q1vBKrs+/fKTbicqsJnwHWgpm558b5iHzWKhiAm0XfDvGwYQxViXt7CU1Ju/ZVv
-         6WPLhLk3qcfbQ6IVncp6ZAJLiJNd+IAvGGz5apzbdz1G2Q/pLAo94Su4/o7FUoyaLLBM
-         AK+GeE4uPJU6RllgVZmCtCYrpWB6QcMtx3VisGFpLaIaV6J5+hFY43oBpCgdv9NtWfLZ
-         Vwcw==
+        Tue, 5 Apr 2022 11:39:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F57814CD06
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:56:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649166984;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cfhShkJ9GGB5NMk/Kf+P1wbpLhxJJWK4mdwN+7tkv6Q=;
+        b=MhuXQfR9l26DRkaHKeIvxbMEoCJ0S16iWjCL/7+FQ5+bakMoUipP6CeI5NJDU15HvZ+c6U
+        tRV0hLuPwDme5fb1/yfiwDjHxjBeTgk477iAOG8mrm6uan88Wnl4rGrbyO2J/tvFB+mvsb
+        OhkdAq8VtS+t83J8bB9h/V7lXxWDoQ4=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-518-kuWlvZZdPZ-geokm6EsfCw-1; Tue, 05 Apr 2022 09:56:23 -0400
+X-MC-Unique: kuWlvZZdPZ-geokm6EsfCw-1
+Received: by mail-ej1-f72.google.com with SMTP id 13-20020a170906328d00b006982d0888a4so6379885ejw.9
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 06:56:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YCAAPrKYGMpteO8HsHXIgowtM9srkXdQGvqaN8hMluo=;
-        b=oW9TgFE+bfUeONzUJtM00rwjAWOwS+RIOzs/ZIA07uI5ghNBfKRH0ueHtVzh3gb6er
-         RM2WW42b8oeMH1PyT+1jE+Mpu/LHS1/zHUPJRHpSLORxt3ubdefHw3tCbIQ0C+g5RrMQ
-         ps0PAtbi0D6XYh6KjmuIfH+xpDnNXzXnoeljxAgPySyy+JMWbiYCQEG9CzJ3C+P9vU1W
-         hpcryglWRFTXnlUFwQDyBkzTVO11lKQ5md0BnyUdc6rEuhZALFXO+nTU/GHOyNk2iXKD
-         dTIZpY+35THfXGtWWar9EWTemtVepYGHextpg1stgv/GeIn3AN57lc0Rij6Td+guzO8O
-         HkBg==
-X-Gm-Message-State: AOAM531MZNNW/11+HUEkOQdGGqXrf/HRGHZhskArlwFFHygCB+q8z6BP
-        aba9lajl/cmM7/GzeKT94gx6Sx1wSN8PsVvqJ4M=
-X-Google-Smtp-Source: ABdhPJzH/9FaaYtXvjsgUHrM11qiKYU7i9SkABBcgqx9plkb/ib6+CEk7Fig2tnoMRBs/644ht1mIt+GM4U4kyh5SpU=
-X-Received: by 2002:a05:6808:df1:b0:2ec:b193:ad6c with SMTP id
- g49-20020a0568080df100b002ecb193ad6cmr1372936oic.200.1649166981991; Tue, 05
- Apr 2022 06:56:21 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=cfhShkJ9GGB5NMk/Kf+P1wbpLhxJJWK4mdwN+7tkv6Q=;
+        b=YK1YUSfzN+FmFQwAfmzPtRXQlohqSl+ao+ETXf4dwN6S56Sost4y5iZEALxKHvyaGN
+         UFij8+PrANl5mvupjKawOWouZN1FVNcb/DXmSXp6uL/uCM1ZDRAe+dCIX2/Fjpc6X+VU
+         02XJQSg5G4N9uLHYzYodlx57vffnd88jn8MPy0HAXOx/FLrkgEDG4peV+3wX8CxtvdUn
+         gQranxRn1VGpec6ezC9kMSKIlRm/RwbHA4jLFACQNGP7/f3PYpWO9jXGGRh1dx77HooQ
+         Gg43Rkse1s5aja6OchoFrli2UwUvUjxnES1xEaUY7iMuRkDF3clGg0pdIWxt2kCHzt1B
+         e2HQ==
+X-Gm-Message-State: AOAM530Jcmc1el1CbXDy64wxo3ZBZunGgLswPniQ1oatxOOPGcnK+4Av
+        w1BB+I4SsmPj+cjWcWgCLUDgY9adJlD+CafsMwmDrLEy/HEWXIpvmJv4X5SJn+pt8TwjU6u480e
+        N8qb5ZECS/6fx5Q/z7wfP+ngX
+X-Received: by 2002:a17:907:3f92:b0:6e7:2ad3:a92b with SMTP id hr18-20020a1709073f9200b006e72ad3a92bmr3830791ejc.239.1649166982509;
+        Tue, 05 Apr 2022 06:56:22 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx69MGrYFiX2diEdHGCV1GaeBoAESL3VkLvFfkO+94ucsSVEn/t7bVB93+D7yDW19qjYnxehg==
+X-Received: by 2002:a17:907:3f92:b0:6e7:2ad3:a92b with SMTP id hr18-20020a1709073f9200b006e72ad3a92bmr3830772ejc.239.1649166982285;
+        Tue, 05 Apr 2022 06:56:22 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id s4-20020a170906a18400b006db0a78bde8sm5576897ejy.87.2022.04.05.06.56.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 06:56:21 -0700 (PDT)
+Message-ID: <6b61410d-ce1e-e84c-4a4e-aa3b22f3dc89@redhat.com>
+Date:   Tue, 5 Apr 2022 15:56:21 +0200
 MIME-Version: 1.0
-References: <20220404233306.2207-1-h0tc0d3@gmail.com>
-In-Reply-To: <20220404233306.2207-1-h0tc0d3@gmail.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 5 Apr 2022 09:56:10 -0400
-Message-ID: <CADnq5_Mf3hpqnbgywSD68CmUe3dYrwjdZpFaMDrMWazDxBFWcg@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: Junk code
-To:     Grigory Vasilyev <h0tc0d3@gmail.com>
-Cc:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Melissa Wen <mwen@igalia.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>,
-        Claudio Suarez <cssk@net-c.es>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 0/2] Make headphone work on Huawei Matebook D15
+Content-Language: en-US
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jie Yang <yang.jie@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+References: <cover.1649147890.git.mchehab@kernel.org>
+ <168fe6c3-6a7d-4019-16e3-066caf394b8a@redhat.com>
+ <20220405154816.5cfdc49c@coco.lan>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220405154816.5cfdc49c@coco.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 5:07 AM Grigory Vasilyev <h0tc0d3@gmail.com> wrote:
->
-> Variable igp_lane_info always is 0. 0 & any value =3D 0 and false.
-> In this way, all =D1=81onditional statements will false.
-> Therefore, it is not clear what this code does.
+Hi,
 
-It was leftover from when the code was ported from radeon.  The igp
-lane info was available from the vbios on older APUs.  It's not
-relevant on any asics supported by amdgpu.  I've applied the patch and
-clarified the commit message.
+On 4/5/22 15:48, Mauro Carvalho Chehab wrote:
+> Em Tue, 5 Apr 2022 11:00:44 +0200
+> Hans de Goede <hdegoede@redhat.com> escreveu:
+> 
+>> Hi,
+>>
+>> On 4/5/22 10:44, Mauro Carvalho Chehab wrote:
+>>> At Huawei Matebook D15 two different GPIOs are used to control the output:
+>>> 	- gpio0 controls the speaker output;
+>>> 	- gpio1 controls the headphone output.
+>>>
+>>> Changing both at the same time cause spurious events that are mis-interpreted
+>>> as input events, causing troubles on apps. So, a delay is needed before turning
+>>> on such gpios.
+>>>
+>>> With this patch, plugging a headphone causes a jack event to trigger the speaker
+>>> supply, powering down the speaker and powering up the headphone output.
+>>> Removing the headphone also triggers the power supply, powering up the speaker
+>>> and powering down the headphone.
+>>>
+>>> Mauro Carvalho Chehab (2):
+>>>   ASoC: Intel: sof_es8336: support a separate gpio to control headphone
+>>>   ASoC: Intel: sof_es8336: Huawei Matebook D15 uses a headphone gpio  
+>>
+>> There is something weird with the patches here, at least for me in Thunderbird
+>> both patches show up as nameless attachments to emails with empty bodies.
+> 
+> Weird... I tested here on Thunderbird (Fedora 35), reading it from the ML
+> and they opened ok here.
 
-Thanks,
+Yes I checked lore.kernel.org and they look fine there, so as you
+said: weird.
 
-Alex
+> There *is* an issue on such patches though: they ended using my past
+> e-mail :-) 
+> 
+> I'll re-send those with your ack using the right SoB/From
+> mchehab@kernel.org.
 
->
-> Signed-off-by: Grigory Vasilyev <h0tc0d3@gmail.com>
-> ---
->  .../gpu/drm/amd/amdgpu/atombios_encoders.c    | 21 -------------------
->  1 file changed, 21 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c b/drivers/gpu=
-/drm/amd/amdgpu/atombios_encoders.c
-> index 2b0cc793291c..100bad2f5901 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
-> @@ -769,7 +769,6 @@ amdgpu_atombios_encoder_setup_dig_transmitter(struct =
-drm_encoder *encoder, int a
->         int dp_clock =3D 0;
->         int dp_lane_count =3D 0;
->         int connector_object_id =3D 0;
-> -       int igp_lane_info =3D 0;
->         int dig_encoder =3D dig->dig_encoder;
->         int hpd_id =3D AMDGPU_HPD_NONE;
->
-> @@ -852,26 +851,6 @@ amdgpu_atombios_encoder_setup_dig_transmitter(struct=
- drm_encoder *encoder, int a
->                         else
->                                 args.v1.ucConfig |=3D ATOM_TRANSMITTER_CO=
-NFIG_DIG1_ENCODER;
->
-> -                       if ((adev->flags & AMD_IS_APU) &&
-> -                           (amdgpu_encoder->encoder_id =3D=3D ENCODER_OB=
-JECT_ID_INTERNAL_UNIPHY)) {
-> -                               if (is_dp ||
-> -                                   !amdgpu_dig_monitor_is_duallink(encod=
-er, amdgpu_encoder->pixel_clock)) {
-> -                                       if (igp_lane_info & 0x1)
-> -                                               args.v1.ucConfig |=3D ATO=
-M_TRANSMITTER_CONFIG_LANE_0_3;
-> -                                       else if (igp_lane_info & 0x2)
-> -                                               args.v1.ucConfig |=3D ATO=
-M_TRANSMITTER_CONFIG_LANE_4_7;
-> -                                       else if (igp_lane_info & 0x4)
-> -                                               args.v1.ucConfig |=3D ATO=
-M_TRANSMITTER_CONFIG_LANE_8_11;
-> -                                       else if (igp_lane_info & 0x8)
-> -                                               args.v1.ucConfig |=3D ATO=
-M_TRANSMITTER_CONFIG_LANE_12_15;
-> -                               } else {
-> -                                       if (igp_lane_info & 0x3)
-> -                                               args.v1.ucConfig |=3D ATO=
-M_TRANSMITTER_CONFIG_LANE_0_7;
-> -                                       else if (igp_lane_info & 0xc)
-> -                                               args.v1.ucConfig |=3D ATO=
-M_TRANSMITTER_CONFIG_LANE_8_15;
-> -                               }
-> -                       }
-> -
->                         if (dig->linkb)
->                                 args.v1.ucConfig |=3D ATOM_TRANSMITTER_CO=
-NFIG_LINKB;
->                         else
-> --
-> 2.35.1
->
+And in the resend they look fine in my Thunderbird too.
+
+Regards,
+
+Hans
+

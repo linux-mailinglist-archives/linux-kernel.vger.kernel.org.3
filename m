@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50DB94F2A18
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 12:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC364F2D2A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240338AbiDEIqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
+        id S245426AbiDEIzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233332AbiDEIGO (ORCPT
+        with ESMTP id S232630AbiDEIHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:06:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064FD6972C;
-        Tue,  5 Apr 2022 01:01:41 -0700 (PDT)
+        Tue, 5 Apr 2022 04:07:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A0A6A401;
+        Tue,  5 Apr 2022 01:01:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 560F961806;
-        Tue,  5 Apr 2022 08:01:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D9D6C385B2;
-        Tue,  5 Apr 2022 08:01:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75F22617CB;
+        Tue,  5 Apr 2022 08:01:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83F38C385B6;
+        Tue,  5 Apr 2022 08:01:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145700;
-        bh=xZqW6bhmtjzrBnDxdcWjv2+8BAXwYVWbAoDYitT4kk0=;
+        s=korg; t=1649145714;
+        bh=7kMRIe5E5plW+zWdx27wKfaHpZNnvpROlbcE8cgadSo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vQAKpub3RMBjVgwiiWzqNGRimznDyhUhuT56t6kq/8CrpWIGVbpSDYu1UbK/Qj8U9
-         bYHsGzUHx5SRevlt5/86HSCnapsvnTBUadnioVIxRuWW3ydYCMPDtvOy8AF0tc3ctn
-         fwiU/iHfIQjn4PoqaOMGa8HUjyvqnmnSQnBTUJBg=
+        b=1gKkRu951TRGn8bDOB87PcXj4wGRVRIcI5dARq7fKGQDwDmUA/TqXaJ4KlnB3OrZF
+         GbLRg4CPIdSR0BlEW/fhJWxmT377OMflxKiGodurz80UNlHB0wiYoLllGuRR2Jqa9F
+         yGybahiIpJYZmtDbY7OX+Z98bmHv0yWmS37FSvWM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0497/1126] mt76: mt7921: do not always disable fw runtime-pm
-Date:   Tue,  5 Apr 2022 09:20:44 +0200
-Message-Id: <20220405070422.215177427@linuxfoundation.org>
+        stable@vger.kernel.org, Sean Wang <sean.wang@mediatek.com>,
+        Leon Yen <leon.yen@mediatek.com>, Felix Fietkau <nbd@nbd.name>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0502/1126] mt76: mt7921s: fix mt7921s_mcu_[fw|drv]_pmctrl
+Date:   Tue,  5 Apr 2022 09:20:49 +0200
+Message-Id: <20220405070422.362109384@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -54,44 +55,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+From: Leon Yen <leon.yen@mediatek.com>
 
-[ Upstream commit b44eeb8cbdf2b88f2844f11e4f263b0abed5b5b0 ]
+[ Upstream commit b12deb5e86fa36dc6f3aa3321f5da27addec4f1f ]
 
-After commit 'd430dffbe9dd ("mt76: mt7921: fix a possible race
-enabling/disabling runtime-pm")', runtime-pm is always disabled in the
-fw even if the user requests to enable it toggling debugfs node since
-mt7921_pm_interface_iter routine will use pm->enable to configure the fw.
-Fix the issue moving enable variable configuration before running
-mt7921_pm_interface_iter routine.
+According to the firmware behavior (even the oldest one in linux-firmware)
+If the firmware is downloaded, MT7921S must rely on the additional mailbox
+mechanism that resides in firmware to check if the device is the right
+state for mt7921s_mcu_[fw|drv]_pmctrl. Otherwise, we still apply the old
+way for that.
 
-Fixes: d430dffbe9dd ("mt76: mt7921: fix a possible race enabling/disabling runtime-pm")
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+That is a necessary patch before we enable runtime pm for mt7921s as
+default.
+
+Fixes: 48fab5bbef40 ("mt76: mt7921: introduce mt7921s support")
+Co-developed-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Leon Yen <leon.yen@mediatek.com>
 Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ .../wireless/mediatek/mt76/mt7921/sdio_mcu.c  | 38 +++++++++++++++++++
+ drivers/net/wireless/mediatek/mt76/sdio.h     |  2 +
+ 2 files changed, 40 insertions(+)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c b/drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c
-index 86fd7292b229..45a393070e46 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c
-@@ -291,13 +291,12 @@ mt7921_pm_set(void *data, u64 val)
- 	pm->enable = false;
- 	mt76_connac_pm_wake(&dev->mphy, pm);
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/sdio_mcu.c b/drivers/net/wireless/mediatek/mt76/mt7921/sdio_mcu.c
+index d20f2ff01be1..5d8af18c7026 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7921/sdio_mcu.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7921/sdio_mcu.c
+@@ -49,6 +49,26 @@ mt7921s_mcu_send_message(struct mt76_dev *mdev, struct sk_buff *skb,
+ 	return ret;
+ }
  
-+	pm->enable = val;
- 	ieee80211_iterate_active_interfaces(mt76_hw(dev),
- 					    IEEE80211_IFACE_ITER_RESUME_ALL,
- 					    mt7921_pm_interface_iter, dev);
++static u32 mt7921s_read_rm3r(struct mt7921_dev *dev)
++{
++	struct mt76_sdio *sdio = &dev->mt76.sdio;
++
++	return sdio_readl(sdio->func, MCR_D2HRM3R, NULL);
++}
++
++static u32 mt7921s_clear_rm3r_drv_own(struct mt7921_dev *dev)
++{
++	struct mt76_sdio *sdio = &dev->mt76.sdio;
++	u32 val;
++
++	val = sdio_readl(sdio->func, MCR_D2HRM3R, NULL);
++	if (val)
++		sdio_writel(sdio->func, H2D_SW_INT_CLEAR_MAILBOX_ACK,
++			    MCR_WSICR, NULL);
++
++	return val;
++}
++
+ int mt7921s_mcu_init(struct mt7921_dev *dev)
+ {
+ 	static const struct mt76_mcu_ops mt7921s_mcu_ops = {
+@@ -88,6 +108,12 @@ int mt7921s_mcu_drv_pmctrl(struct mt7921_dev *dev)
  
- 	mt76_connac_mcu_set_deep_sleep(&dev->mt76, pm->ds_enable);
--
--	pm->enable = val;
- 	mt76_connac_power_save_sched(&dev->mphy, pm);
- out:
- 	mutex_unlock(&dev->mt76.mutex);
+ 	err = readx_poll_timeout(mt76s_read_pcr, &dev->mt76, status,
+ 				 status & WHLPCR_IS_DRIVER_OWN, 2000, 1000000);
++
++	if (!err && test_bit(MT76_STATE_MCU_RUNNING, &dev->mphy.state))
++		err = readx_poll_timeout(mt7921s_read_rm3r, dev, status,
++					 status & D2HRM3R_IS_DRIVER_OWN,
++					 2000, 1000000);
++
+ 	sdio_release_host(func);
+ 
+ 	if (err < 0) {
+@@ -115,12 +141,24 @@ int mt7921s_mcu_fw_pmctrl(struct mt7921_dev *dev)
+ 
+ 	sdio_claim_host(func);
+ 
++	if (test_bit(MT76_STATE_MCU_RUNNING, &dev->mphy.state)) {
++		err = readx_poll_timeout(mt7921s_clear_rm3r_drv_own,
++					 dev, status,
++					 !(status & D2HRM3R_IS_DRIVER_OWN),
++					 2000, 1000000);
++		if (err < 0) {
++			dev_err(dev->mt76.dev, "mailbox ACK not cleared\n");
++			goto err;
++		}
++	}
++
+ 	sdio_writel(func, WHLPCR_FW_OWN_REQ_SET, MCR_WHLPCR, NULL);
+ 
+ 	err = readx_poll_timeout(mt76s_read_pcr, &dev->mt76, status,
+ 				 !(status & WHLPCR_IS_DRIVER_OWN), 2000, 1000000);
+ 	sdio_release_host(func);
+ 
++err:
+ 	if (err < 0) {
+ 		dev_err(dev->mt76.dev, "firmware own failed\n");
+ 		clear_bit(MT76_STATE_PM, &mphy->state);
+diff --git a/drivers/net/wireless/mediatek/mt76/sdio.h b/drivers/net/wireless/mediatek/mt76/sdio.h
+index 99db4ad93b7c..27d5d2077eba 100644
+--- a/drivers/net/wireless/mediatek/mt76/sdio.h
++++ b/drivers/net/wireless/mediatek/mt76/sdio.h
+@@ -65,6 +65,7 @@
+ #define MCR_H2DSM0R			0x0070
+ #define H2D_SW_INT_READ			BIT(16)
+ #define H2D_SW_INT_WRITE		BIT(17)
++#define H2D_SW_INT_CLEAR_MAILBOX_ACK	BIT(22)
+ 
+ #define MCR_H2DSM1R			0x0074
+ #define MCR_D2HRM0R			0x0078
+@@ -109,6 +110,7 @@
+ #define MCR_H2DSM2R			0x0160 /* supported in CONNAC2 */
+ #define MCR_H2DSM3R			0x0164 /* supported in CONNAC2 */
+ #define MCR_D2HRM3R			0x0174 /* supported in CONNAC2 */
++#define D2HRM3R_IS_DRIVER_OWN		BIT(0)
+ #define MCR_WTQCR8			0x0190 /* supported in CONNAC2 */
+ #define MCR_WTQCR9			0x0194 /* supported in CONNAC2 */
+ #define MCR_WTQCR10			0x0198 /* supported in CONNAC2 */
 -- 
 2.34.1
 

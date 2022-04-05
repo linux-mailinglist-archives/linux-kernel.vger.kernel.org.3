@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD574F3E9B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 070104F40B3
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390563AbiDENma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60096 "EHLO
+        id S1448022AbiDEUJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345305AbiDEJWZ (ORCPT
+        with ESMTP id S1351878AbiDEKD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:22:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBBF442A21;
-        Tue,  5 Apr 2022 02:10:20 -0700 (PDT)
+        Tue, 5 Apr 2022 06:03:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423AF90FE4;
+        Tue,  5 Apr 2022 02:52:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C461B81A22;
-        Tue,  5 Apr 2022 09:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E17ABC385A2;
-        Tue,  5 Apr 2022 09:10:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34412B81BAE;
+        Tue,  5 Apr 2022 09:52:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89FC2C385A1;
+        Tue,  5 Apr 2022 09:52:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149818;
-        bh=eoZ0HFT+tUf0KCHQlr264DY6FOlKPVdFmmnUbukaqx8=;
+        s=korg; t=1649152342;
+        bh=xm9x/FZCEUK/x/FQ/b38Amq5e9rRH5/BKJxWdvbog6E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZWX0orBFmsO3rtej4Uw/+s7GDolAf9tmsDYkwNWofSG206ahrCD0nH0vHJBaiFsYj
-         sviIqBmZ+8mgTAcIwpqjVsBYutpJL55kPEIf5zPVJHV830oCVmj3UPeUdfUoAKbbIQ
-         EM81wrVo3IAduQeep1npfirZNju0HWAWhaDEAQQo=
+        b=HpW8q0NakENo6VPBU4lYGa61UblongfTdWnDll/k/M4KxIsolxDFlNwSw19MACYX7
+         a9kql096w08UCcK9Db5FN/STqerwHqLTlDf3BGzOIocgwzeuGgSx8nTrq63CU/0hxj
+         eiEWkZMyVf7YYPu18o5ApnDAdE/zpqc8xhufXLjo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ritesh Harjani <riteshh@linux.ibm.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        stable@vger.kernel.org,
+        Darren Hart <darren@os.amperecomputing.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0853/1017] tracing: Have TRACE_DEFINE_ENUM affect trace event types as well
+Subject: [PATCH 5.15 704/913] ACPI/APEI: Limit printable size of BERT table data
 Date:   Tue,  5 Apr 2022 09:29:26 +0200
-Message-Id: <20220405070419.556935675@linuxfoundation.org>
+Message-Id: <20220405070400.937974988@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,81 +56,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt (Google) <rostedt@goodmis.org>
+From: Darren Hart <darren@os.amperecomputing.com>
 
-[ Upstream commit b3bc8547d3be60898818885f5bf22d0a62e2eb48 ]
+[ Upstream commit 3f8dec116210ca649163574ed5f8df1e3b837d07 ]
 
-The macro TRACE_DEFINE_ENUM is used to convert enums in the kernel to
-their actual value when they are exported to user space via the trace
-event format file.
+Platforms with large BERT table data can trigger soft lockup errors
+while attempting to print the entire BERT table data to the console at
+boot:
 
-Currently only the enums in the "print fmt" (TP_printk in the TRACE_EVENT
-macro) have the enums converted. But the enums can be used to denote array
-size:
+  watchdog: BUG: soft lockup - CPU#160 stuck for 23s! [swapper/0:1]
 
-        field:unsigned int fc_ineligible_rc[EXT4_FC_REASON_MAX]; offset:12;      size:36;        signed:0;
+Observed on Ampere Altra systems with a single BERT record of ~250KB.
 
-The EXT4_FC_REASON_MAX has no meaning to userspace but it needs to know
-that information to know how to parse the array.
+The original bert driver appears to have assumed relatively small table
+data. Since it is impractical to reassemble large table data from
+interwoven console messages, and the table data is available in
 
-Have the array indexes also be parsed as well.
+  /sys/firmware/acpi/tables/data/BERT
 
-Link: https://lore.kernel.org/all/cover.1646922487.git.riteshh@linux.ibm.com/
+limit the size for tables printed to the console to 1024 (for no reason
+other than it seemed like a good place to kick off the discussion, would
+appreciate feedback from existing users in terms of what size would
+maintain their current usage model).
 
-Reported-by: Ritesh Harjani <riteshh@linux.ibm.com>
-Tested-by: Ritesh Harjani <riteshh@linux.ibm.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Alternatively, we could make printing a CONFIG option, use the
+bert_disable boot arg (or something similar), or use a debug log level.
+However, all those solutions require extra steps or change the existing
+behavior for small table data. Limiting the size preserves existing
+behavior on existing platforms with small table data, and eliminates the
+soft lockups for platforms with large table data, while still making it
+available.
+
+Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/trace/trace_events.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ drivers/acpi/apei/bert.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index c097d89ca946..f809d795a9a8 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -2637,6 +2637,33 @@ static void update_event_printk(struct trace_event_call *call,
- 	}
- }
+diff --git a/drivers/acpi/apei/bert.c b/drivers/acpi/apei/bert.c
+index 86211422f4ee..598fd19b65fa 100644
+--- a/drivers/acpi/apei/bert.c
++++ b/drivers/acpi/apei/bert.c
+@@ -29,6 +29,7 @@
  
-+static void update_event_fields(struct trace_event_call *call,
-+				struct trace_eval_map *map)
-+{
-+	struct ftrace_event_field *field;
-+	struct list_head *head;
-+	char *ptr;
-+	int len = strlen(map->eval_string);
-+
-+	head = trace_get_fields(call);
-+	list_for_each_entry(field, head, link) {
-+		ptr = strchr(field->type, '[');
-+		if (!ptr)
-+			continue;
-+		ptr++;
-+
-+		if (!isalpha(*ptr) && *ptr != '_')
-+			continue;
-+
-+		if (strncmp(map->eval_string, ptr, len) != 0)
-+			continue;
-+
-+		ptr = eval_replace(ptr, map, len);
-+		/* enum/sizeof string smaller than value */
-+		WARN_ON_ONCE(!ptr);
-+	}
-+}
-+
- void trace_event_eval_update(struct trace_eval_map **map, int len)
- {
- 	struct trace_event_call *call, *p;
-@@ -2672,6 +2699,7 @@ void trace_event_eval_update(struct trace_eval_map **map, int len)
- 					first = false;
- 				}
- 				update_event_printk(call, map[i]);
-+				update_event_fields(call, map[i]);
- 			}
+ #undef pr_fmt
+ #define pr_fmt(fmt) "BERT: " fmt
++#define ACPI_BERT_PRINT_MAX_LEN 1024
+ 
+ static int bert_disable;
+ 
+@@ -58,8 +59,11 @@ static void __init bert_print_all(struct acpi_bert_region *region,
  		}
- 	}
+ 
+ 		pr_info_once("Error records from previous boot:\n");
+-
+-		cper_estatus_print(KERN_INFO HW_ERR, estatus);
++		if (region_len < ACPI_BERT_PRINT_MAX_LEN)
++			cper_estatus_print(KERN_INFO HW_ERR, estatus);
++		else
++			pr_info_once("Max print length exceeded, table data is available at:\n"
++				     "/sys/firmware/acpi/tables/data/BERT");
+ 
+ 		/*
+ 		 * Because the boot error source is "one-time polled" type,
 -- 
 2.34.1
 

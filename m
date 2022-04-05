@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB154F4501
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F78F4F4650
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382612AbiDEMQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:16:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53834 "EHLO
+        id S244762AbiDEO6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244901AbiDEIwq (ORCPT
+        with ESMTP id S1344638AbiDEJmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E6C24594;
-        Tue,  5 Apr 2022 01:45:57 -0700 (PDT)
+        Tue, 5 Apr 2022 05:42:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41835BE9F7;
+        Tue,  5 Apr 2022 02:27:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B826B614EB;
-        Tue,  5 Apr 2022 08:45:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3079C385A1;
-        Tue,  5 Apr 2022 08:45:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D27916144D;
+        Tue,  5 Apr 2022 09:27:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAA8BC385A0;
+        Tue,  5 Apr 2022 09:27:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148356;
-        bh=J0WD4djqociSdD8QofJp0UbOEnwx+j5yOsva2RrHM3Q=;
+        s=korg; t=1649150872;
+        bh=o65J34RLJto+GKz4V0046wtNQI+MbpXjeDjAO3L02e8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xhyFssvBKuuKQKaLw3mTvxDxeJIvjtHrpM1BACKrf8rHzN0+oPmRTGg/shvhx0DTQ
-         /9XOMzORfJWNkprP8/uqJ0i+iIB9Q/I0Ro0QDCbfnrfob/RLUFWGf+9EX7zmShV3E1
-         9hRmT88Co3o08uBTNMj1e4MIrSjDsFO5niWGAEG8=
+        b=VTpo/l9xdcvwjoByhnn7+Fukf7jDPO4PhVh5V1AZXffhwao4NJbhUbrdRJGmiVCZY
+         KQkLQTdB8cHgqHIwscJCiA/MhZW7/EyAbK0TW1BkuzE27HyeofA60ZArMCx6i/67U+
+         zA8PAvzzax1QHnHoN4HePTgGvR3H2zhadWxnAtlM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Olivier Moysan <olivier.moysan@foss.st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0327/1017] ARM: dts: stm32: fix AV96 board SAI2 pin muxing on stm32mp15
-Date:   Tue,  5 Apr 2022 09:20:40 +0200
-Message-Id: <20220405070403.987625567@linuxfoundation.org>
+        Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Hector Martin <marcan@marcan.st>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>
+Subject: [PATCH 5.15 179/913] brcmfmac: firmware: Allocate space for default boardrev in nvram
+Date:   Tue,  5 Apr 2022 09:20:41 +0200
+Message-Id: <20220405070345.220598639@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,37 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Olivier Moysan <olivier.moysan@foss.st.com>
+From: Hector Martin <marcan@marcan.st>
 
-[ Upstream commit ee2aacb6f3a901a95b1dd68964b69c92cdbbf213 ]
+commit d19d8e3ba256f81ea4a27209dbbd1f0a00ef1903 upstream.
 
-Replace sai2a-2 node name by sai2a-sleep-2, to avoid name
-duplication.
+If boardrev is missing from the NVRAM we add a default one, but this
+might need more space in the output buffer than was allocated. Ensure
+we have enough padding for this in the buffer.
 
-Fixes: 1a9a9d226f0f ("ARM: dts: stm32: fix AV96 board SAI2 pin muxing on stm32mp15")
-
-Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
-Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 46f2b38a91b0 ("brcmfmac: insert default boardrev in nvram data if missing")
+Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Hector Martin <marcan@marcan.st>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20220131160713.245637-3-marcan@marcan.st
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/stm32mp15-pinctrl.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
-index 2ebafe27a865..d3553e0f0187 100644
---- a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
-+++ b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
-@@ -1190,7 +1190,7 @@
- 		};
- 	};
- 
--	sai2a_sleep_pins_c: sai2a-2 {
-+	sai2a_sleep_pins_c: sai2a-sleep-2 {
- 		pins {
- 			pinmux = <STM32_PINMUX('D', 13, ANALOG)>, /* SAI2_SCK_A */
- 				 <STM32_PINMUX('D', 11, ANALOG)>, /* SAI2_SD_A */
--- 
-2.34.1
-
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c
+@@ -207,6 +207,8 @@ static int brcmf_init_nvram_parser(struc
+ 		size = BRCMF_FW_MAX_NVRAM_SIZE;
+ 	else
+ 		size = data_len;
++	/* Add space for properties we may add */
++	size += strlen(BRCMF_FW_DEFAULT_BOARDREV) + 1;
+ 	/* Alloc for extra 0 byte + roundup by 4 + length field */
+ 	size += 1 + 3 + sizeof(u32);
+ 	nvp->nvram = kzalloc(size, GFP_KERNEL);
 
 

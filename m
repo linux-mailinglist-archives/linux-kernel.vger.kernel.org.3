@@ -2,42 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5D54F25CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 787434F25D5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229979AbiDEHw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47250 "EHLO
+        id S229918AbiDEHwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:52:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233254AbiDEHrl (ORCPT
+        with ESMTP id S233285AbiDEHrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 03:47:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786736355;
-        Tue,  5 Apr 2022 00:43:46 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186CCE01E;
+        Tue,  5 Apr 2022 00:43:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB925B81B92;
-        Tue,  5 Apr 2022 07:43:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19FA9C340EE;
-        Tue,  5 Apr 2022 07:43:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36F52B81B7F;
+        Tue,  5 Apr 2022 07:43:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A09D8C340EE;
+        Tue,  5 Apr 2022 07:43:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144623;
-        bh=E+kINYDa4vjmR2/Ac/d85f684pQx7sVqJoLby8JcQdo=;
+        s=korg; t=1649144629;
+        bh=ZxgY+DG0V/m8ix9O/dK77iX00sKsYy35vR68jBeaAoE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LKdx5n6hjvgFGPecud8wFgjoYVbourRREl0yT6Scfm0G20nBXUZ9/tVlhNKMDyN7e
-         SpYe+/3JK9lgTrYaeOKEdt8Pj7yAZ0lCpuzWMsjW0jV8jfcXatcl49Aei5VbHW9Kp6
-         fEcKkWGh0i9ibJW2vt5E9VK6VtnHPQpnhfIEYfMU=
+        b=bSU3bm9a8/o5kN/FK9G/wKiJGIfft8CluobWG2JXNU9y+S/j824m6ULKIoIe3UZhv
+         OESRd9PsPI6boFfaW0CFtF4fYpihaayj9t/dRknoOSOk8poX2uHrCR33bjmxYXHoed
+         yXhehS++jSA6lg/HsRhntnKKmwxzcbC9IjW6o2C0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kirill Tkhai <ktkhai@virtuozzo.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Mike Snitzer <snitzer@redhat.com>
-Subject: [PATCH 5.17 0112/1126] dm: fix use-after-free in dm_cleanup_zoned_dev()
-Date:   Tue,  5 Apr 2022 09:14:19 +0200
-Message-Id: <20220405070410.858214332@linuxfoundation.org>
+        stable@vger.kernel.org, Mike Snitzer <snitzer@redhat.com>
+Subject: [PATCH 5.17 0114/1126] dm: fix double accounting of flush with data
+Date:   Tue,  5 Apr 2022 09:14:21 +0200
+Message-Id: <20220405070410.916850191@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,76 +53,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kirill Tkhai <ktkhai@virtuozzo.com>
+From: Mike Snitzer <snitzer@redhat.com>
 
-commit 588b7f5df0cb64f281290c7672470c006abe7160 upstream.
+commit 8d394bc4adf588ca4a0650745167cb83f86c18c9 upstream.
 
-dm_cleanup_zoned_dev() uses queue, so it must be called
-before blk_cleanup_disk() starts its killing:
+DM handles a flush with data by first issuing an empty flush and then
+once it completes the REQ_PREFLUSH flag is removed and the payload is
+issued.  The problem fixed by this commit is that both the empty flush
+bio and the data payload will account the full extent of the data
+payload.
 
-blk_cleanup_disk->blk_cleanup_queue()->kobject_put()->blk_release_queue()->
-->...RCU...->blk_free_queue_rcu()->kmem_cache_free()
+Fix this by factoring out dm_io_acct() and having it wrap all IO
+accounting to set the size of  bio with REQ_PREFLUSH to 0, account the
+IO, and then restore the original size.
 
-Otherwise, RCU callback may be executed first and
-dm_cleanup_zoned_dev() will touch free'd memory:
-
- BUG: KASAN: use-after-free in dm_cleanup_zoned_dev+0x33/0xd0
- Read of size 8 at addr ffff88805ac6e430 by task dmsetup/681
-
- CPU: 4 PID: 681 Comm: dmsetup Not tainted 5.17.0-rc2+ #6
- Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
- Call Trace:
-  <TASK>
-  dump_stack_lvl+0x57/0x7d
-  print_address_description.constprop.0+0x1f/0x150
-  ? dm_cleanup_zoned_dev+0x33/0xd0
-  kasan_report.cold+0x7f/0x11b
-  ? dm_cleanup_zoned_dev+0x33/0xd0
-  dm_cleanup_zoned_dev+0x33/0xd0
-  __dm_destroy+0x26a/0x400
-  ? dm_blk_ioctl+0x230/0x230
-  ? up_write+0xd8/0x270
-  dev_remove+0x156/0x1d0
-  ctl_ioctl+0x269/0x530
-  ? table_clear+0x140/0x140
-  ? lock_release+0xb2/0x750
-  ? remove_all+0x40/0x40
-  ? rcu_read_lock_sched_held+0x12/0x70
-  ? lock_downgrade+0x3c0/0x3c0
-  ? rcu_read_lock_sched_held+0x12/0x70
-  dm_ctl_ioctl+0xa/0x10
-  __x64_sys_ioctl+0xb9/0xf0
-  do_syscall_64+0x3b/0x90
-  entry_SYSCALL_64_after_hwframe+0x44/0xae
- RIP: 0033:0x7fb6dfa95c27
-
-Fixes: bb37d77239af ("dm: introduce zone append emulation")
 Cc: stable@vger.kernel.org
-Signed-off-by: Kirill Tkhai <ktkhai@virtuozzo.com>
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Mike Snitzer <snitzer@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/dm.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/md/dm-stats.c |    6 ++++--
+ drivers/md/dm-stats.h |    2 +-
+ drivers/md/dm.c       |   47 +++++++++++++++++++++++++++++++++--------------
+ 3 files changed, 38 insertions(+), 17 deletions(-)
 
+--- a/drivers/md/dm-stats.c
++++ b/drivers/md/dm-stats.c
+@@ -644,13 +644,14 @@ static void __dm_stat_bio(struct dm_stat
+ 
+ void dm_stats_account_io(struct dm_stats *stats, unsigned long bi_rw,
+ 			 sector_t bi_sector, unsigned bi_sectors, bool end,
+-			 unsigned long duration_jiffies,
++			 unsigned long start_time,
+ 			 struct dm_stats_aux *stats_aux)
+ {
+ 	struct dm_stat *s;
+ 	sector_t end_sector;
+ 	struct dm_stats_last_position *last;
+ 	bool got_precise_time;
++	unsigned long duration_jiffies = 0;
+ 
+ 	if (unlikely(!bi_sectors))
+ 		return;
+@@ -670,7 +671,8 @@ void dm_stats_account_io(struct dm_stats
+ 				       ));
+ 		WRITE_ONCE(last->last_sector, end_sector);
+ 		WRITE_ONCE(last->last_rw, bi_rw);
+-	}
++	} else
++		duration_jiffies = jiffies - start_time;
+ 
+ 	rcu_read_lock();
+ 
+--- a/drivers/md/dm-stats.h
++++ b/drivers/md/dm-stats.h
+@@ -31,7 +31,7 @@ int dm_stats_message(struct mapped_devic
+ 
+ void dm_stats_account_io(struct dm_stats *stats, unsigned long bi_rw,
+ 			 sector_t bi_sector, unsigned bi_sectors, bool end,
+-			 unsigned long duration_jiffies,
++			 unsigned long start_time,
+ 			 struct dm_stats_aux *aux);
+ 
+ static inline bool dm_stats_used(struct dm_stats *st)
 --- a/drivers/md/dm.c
 +++ b/drivers/md/dm.c
-@@ -1609,6 +1609,7 @@ static void cleanup_mapped_device(struct
- 		md->dax_dev = NULL;
- 	}
+@@ -484,29 +484,48 @@ u64 dm_start_time_ns_from_clone(struct b
+ }
+ EXPORT_SYMBOL_GPL(dm_start_time_ns_from_clone);
  
-+	dm_cleanup_zoned_dev(md);
- 	if (md->disk) {
- 		spin_lock(&_minor_lock);
- 		md->disk->private_data = NULL;
-@@ -1629,7 +1630,6 @@ static void cleanup_mapped_device(struct
- 	mutex_destroy(&md->swap_bios_lock);
+-static void start_io_acct(struct dm_io *io)
++static bool bio_is_flush_with_data(struct bio *bio)
+ {
+-	struct mapped_device *md = io->md;
+-	struct bio *bio = io->orig_bio;
++	return ((bio->bi_opf & REQ_PREFLUSH) && bio->bi_iter.bi_size);
++}
++
++static void dm_io_acct(bool end, struct mapped_device *md, struct bio *bio,
++		       unsigned long start_time, struct dm_stats_aux *stats_aux)
++{
++	bool is_flush_with_data;
++	unsigned int bi_size;
++
++	/* If REQ_PREFLUSH set save any payload but do not account it */
++	is_flush_with_data = bio_is_flush_with_data(bio);
++	if (is_flush_with_data) {
++		bi_size = bio->bi_iter.bi_size;
++		bio->bi_iter.bi_size = 0;
++	}
++
++	if (!end)
++		bio_start_io_acct_time(bio, start_time);
++	else
++		bio_end_io_acct(bio, start_time);
  
- 	dm_mq_cleanup_mapped_device(md);
--	dm_cleanup_zoned_dev(md);
+-	bio_start_io_acct_time(bio, io->start_time);
+ 	if (unlikely(dm_stats_used(&md->stats)))
+ 		dm_stats_account_io(&md->stats, bio_data_dir(bio),
+ 				    bio->bi_iter.bi_sector, bio_sectors(bio),
+-				    false, 0, &io->stats_aux);
++				    end, start_time, stats_aux);
++
++	/* Restore bio's payload so it does get accounted upon requeue */
++	if (is_flush_with_data)
++		bio->bi_iter.bi_size = bi_size;
++}
++
++static void start_io_acct(struct dm_io *io)
++{
++	dm_io_acct(false, io->md, io->orig_bio, io->start_time, &io->stats_aux);
  }
  
- /*
+ static void end_io_acct(struct mapped_device *md, struct bio *bio,
+ 			unsigned long start_time, struct dm_stats_aux *stats_aux)
+ {
+-	unsigned long duration = jiffies - start_time;
+-
+-	bio_end_io_acct(bio, start_time);
+-
+-	if (unlikely(dm_stats_used(&md->stats)))
+-		dm_stats_account_io(&md->stats, bio_data_dir(bio),
+-				    bio->bi_iter.bi_sector, bio_sectors(bio),
+-				    true, duration, stats_aux);
++	dm_io_acct(true, md, bio, start_time, stats_aux);
+ }
+ 
+ static struct dm_io *alloc_io(struct mapped_device *md, struct bio *bio)
+@@ -835,7 +854,7 @@ void dm_io_dec_pending(struct dm_io *io,
+ 		if (io_error == BLK_STS_DM_REQUEUE)
+ 			return;
+ 
+-		if ((bio->bi_opf & REQ_PREFLUSH) && bio->bi_iter.bi_size) {
++		if (bio_is_flush_with_data(bio)) {
+ 			/*
+ 			 * Preflush done for flush with data, reissue
+ 			 * without REQ_PREFLUSH.
 
 

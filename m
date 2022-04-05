@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7860D4F3A82
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 966EE4F3A18
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381483AbiDELqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
+        id S1379116AbiDELkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244865AbiDEIwo (ORCPT
+        with ESMTP id S244748AbiDEIwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECF7237EF;
-        Tue,  5 Apr 2022 01:45:03 -0700 (PDT)
+        Tue, 5 Apr 2022 04:52:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81331CB00;
+        Tue,  5 Apr 2022 01:43:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8F0C8B81BC5;
-        Tue,  5 Apr 2022 08:45:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8FB4C385A1;
-        Tue,  5 Apr 2022 08:45:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73DBB60FFC;
+        Tue,  5 Apr 2022 08:43:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86F95C385A0;
+        Tue,  5 Apr 2022 08:43:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148301;
-        bh=f7lk/uatWZehCCEatvm6qnumEhlCGUuUHdGZqbrb3Fw=;
+        s=korg; t=1649148196;
+        bh=3jM5yqIOb3WL2Na1v0+VlkoKC6eouOTM4+v6Y/kg5DA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vgrS8Vp4HRlWT7ZdRtE3HtqgUW+0JzTrgs4O+zOjaJnTDzSYCD8woN6W9wG0ocbU/
-         wREti6KD0araK0Ewmq+e4WClou+Mm7WwmyHulR6PL1VnqB2z0KOiL/BQCcN6IAr/sJ
-         Jjqw1K2/MGqj/I0/TG5g+E//Sk21KS83KnkvWJDg=
+        b=jc2UUl+Q46Ve6cDFX+sC2EQ0YczdR32CLvokZHfddlbuzmw0bYtW2atZ6M84ypUmx
+         AKLLFDcFxcFJbd+lkCDziLHE7QHcpaVO91E430Y/24uR6EmkebQ7I05/UXIQpyrGhz
+         8bsJ2aazC37xOzzi1l7+J9ezw9u0NWwqb+DO7NwU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Minye Zhu <zhuminye@bytedance.com>,
-        Chengming Zhou <zhouchengming@bytedance.com>,
+        stable@vger.kernel.org, John Keeping <john@metanate.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Tejun Heo <tj@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0269/1017] sched/cpuacct: Fix charge percpu cpuusage
-Date:   Tue,  5 Apr 2022 09:19:42 +0200
-Message-Id: <20220405070402.249536522@linuxfoundation.org>
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0270/1017] sched/rt: Plug rt_mutex_setprio() vs push_rt_task() race
+Date:   Tue,  5 Apr 2022 09:19:43 +0200
+Message-Id: <20220405070402.279932841@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,47 +57,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chengming Zhou <zhouchengming@bytedance.com>
+From: Valentin Schneider <valentin.schneider@arm.com>
 
-[ Upstream commit 248cc9993d1cc12b8e9ed716cc3fc09f6c3517dd ]
+[ Upstream commit 49bef33e4b87b743495627a529029156c6e09530 ]
 
-The cpuacct_account_field() is always called by the current task
-itself, so it's ok to use __this_cpu_add() to charge the tick time.
+John reported that push_rt_task() can end up invoking
+find_lowest_rq(rq->curr) when curr is not an RT task (in this case a CFS
+one), which causes mayhem down convert_prio().
 
-But cpuacct_charge() maybe called by update_curr() in load_balance()
-on a random CPU, different from the CPU on which the task is running.
-So __this_cpu_add() will charge that cputime to a random incorrect CPU.
+This can happen when current gets demoted to e.g. CFS when releasing an
+rt_mutex, and the local CPU gets hit with an rto_push_work irqwork before
+getting the chance to reschedule. Exactly who triggers this work isn't
+entirely clear to me - switched_from_rt() only invokes rt_queue_pull_task()
+if there are no RT tasks on the local RQ, which means the local CPU can't
+be in the rto_mask.
 
-Fixes: 73e6aafd9ea8 ("sched/cpuacct: Simplify the cpuacct code")
-Reported-by: Minye Zhu <zhuminye@bytedance.com>
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+My current suspected sequence is something along the lines of the below,
+with the demoted task being current.
+
+  mark_wakeup_next_waiter()
+    rt_mutex_adjust_prio()
+      rt_mutex_setprio() // deboost originally-CFS task
+	check_class_changed()
+	  switched_from_rt() // Only rt_queue_pull_task() if !rq->rt.rt_nr_running
+	  switched_to_fair() // Sets need_resched
+      __balance_callbacks() // if pull_rt_task(), tell_cpu_to_push() can't select local CPU per the above
+      raw_spin_rq_unlock(rq)
+
+       // need_resched is set, so task_woken_rt() can't
+       // invoke push_rt_tasks(). Best I can come up with is
+       // local CPU has rt_nr_migratory >= 2 after the demotion, so stays
+       // in the rto_mask, and then:
+
+       <some other CPU running rto_push_irq_work_func() queues rto_push_work on this CPU>
+	 push_rt_task()
+	   // breakage follows here as rq->curr is CFS
+
+Move an existing check to check rq->curr vs the next pushable task's
+priority before getting anywhere near find_lowest_rq(). While at it, add an
+explicit sched_class of rq->curr check prior to invoking
+find_lowest_rq(rq->curr). Align the DL logic to also reschedule regardless
+of next_task's migratability.
+
+Fixes: a7c81556ec4d ("sched: Fix migrate_disable() vs rt/dl balancing")
+Reported-by: John Keeping <john@metanate.com>
+Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Tejun Heo <tj@kernel.org>
-Link: https://lore.kernel.org/r/20220220051426.5274-1-zhouchengming@bytedance.com
+Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Tested-by: John Keeping <john@metanate.com>
+Link: https://lore.kernel.org/r/20220127154059.974729-1-valentin.schneider@arm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/sched/cpuacct.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ kernel/sched/deadline.c | 12 ++++++------
+ kernel/sched/rt.c       | 32 ++++++++++++++++++++++----------
+ 2 files changed, 28 insertions(+), 16 deletions(-)
 
-diff --git a/kernel/sched/cpuacct.c b/kernel/sched/cpuacct.c
-index ab67d97a8442..cacc2076ad21 100644
---- a/kernel/sched/cpuacct.c
-+++ b/kernel/sched/cpuacct.c
-@@ -328,12 +328,13 @@ static struct cftype files[] = {
-  */
- void cpuacct_charge(struct task_struct *tsk, u64 cputime)
- {
-+	unsigned int cpu = task_cpu(tsk);
- 	struct cpuacct *ca;
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index d2c072b0ef01..62f0cf842277 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -2240,12 +2240,6 @@ static int push_dl_task(struct rq *rq)
+ 		return 0;
  
- 	rcu_read_lock();
+ retry:
+-	if (is_migration_disabled(next_task))
+-		return 0;
+-
+-	if (WARN_ON(next_task == rq->curr))
+-		return 0;
+-
+ 	/*
+ 	 * If next_task preempts rq->curr, and rq->curr
+ 	 * can move away, it makes sense to just reschedule
+@@ -2258,6 +2252,12 @@ static int push_dl_task(struct rq *rq)
+ 		return 0;
+ 	}
  
- 	for (ca = task_ca(tsk); ca; ca = parent_ca(ca))
--		__this_cpu_add(*ca->cpuusage, cputime);
-+		*per_cpu_ptr(ca->cpuusage, cpu) += cputime;
++	if (is_migration_disabled(next_task))
++		return 0;
++
++	if (WARN_ON(next_task == rq->curr))
++		return 0;
++
+ 	/* We might release rq lock */
+ 	get_task_struct(next_task);
  
- 	rcu_read_unlock();
- }
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index 7b4f4fbbb404..14f273c29518 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -2026,6 +2026,16 @@ static int push_rt_task(struct rq *rq, bool pull)
+ 		return 0;
+ 
+ retry:
++	/*
++	 * It's possible that the next_task slipped in of
++	 * higher priority than current. If that's the case
++	 * just reschedule current.
++	 */
++	if (unlikely(next_task->prio < rq->curr->prio)) {
++		resched_curr(rq);
++		return 0;
++	}
++
+ 	if (is_migration_disabled(next_task)) {
+ 		struct task_struct *push_task = NULL;
+ 		int cpu;
+@@ -2033,6 +2043,18 @@ static int push_rt_task(struct rq *rq, bool pull)
+ 		if (!pull || rq->push_busy)
+ 			return 0;
+ 
++		/*
++		 * Invoking find_lowest_rq() on anything but an RT task doesn't
++		 * make sense. Per the above priority check, curr has to
++		 * be of higher priority than next_task, so no need to
++		 * reschedule when bailing out.
++		 *
++		 * Note that the stoppers are masqueraded as SCHED_FIFO
++		 * (cf. sched_set_stop_task()), so we can't rely on rt_task().
++		 */
++		if (rq->curr->sched_class != &rt_sched_class)
++			return 0;
++
+ 		cpu = find_lowest_rq(rq->curr);
+ 		if (cpu == -1 || cpu == rq->cpu)
+ 			return 0;
+@@ -2057,16 +2079,6 @@ static int push_rt_task(struct rq *rq, bool pull)
+ 	if (WARN_ON(next_task == rq->curr))
+ 		return 0;
+ 
+-	/*
+-	 * It's possible that the next_task slipped in of
+-	 * higher priority than current. If that's the case
+-	 * just reschedule current.
+-	 */
+-	if (unlikely(next_task->prio < rq->curr->prio)) {
+-		resched_curr(rq);
+-		return 0;
+-	}
+-
+ 	/* We might release rq lock */
+ 	get_task_struct(next_task);
+ 
 -- 
 2.34.1
 

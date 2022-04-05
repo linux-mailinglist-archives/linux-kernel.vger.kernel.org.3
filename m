@@ -2,114 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C26834F46E9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3FF4F4852
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378465AbiDEUx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
+        id S1380151AbiDEVg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350261AbiDEOOW (ORCPT
+        with ESMTP id S1381985AbiDEORL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:14:22 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0576EA349
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 05:59:18 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id t4so10972984pgc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 05:59:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YnItvGxT8i10DQes1NCRhX/bTChJJvk7adiGCya/CXU=;
-        b=kYd6uPNbAu0E4FGtIi3vUxffLxSDAXLS6yCvqDKpgqCxQOwD87YmeokiiY3ycbDKZg
-         pjEN4vbUeMxf6Ij1eqFLn10jBOB9MQxBojm4/l5U+aABqVLNFH9o5ySL4o+soz2I1k4H
-         6vB/9oxt9imbUJH/j8Vt5ZvDAciujpAr6VNZDqIRojeSK9fijq9WyjDVVM1VeIAb+hfW
-         Yad7IA/e9fM8vkB/rftX2ijFzDYlTZ7EtEaH+3dHonGSZkuxceEenQXjVUfDib758w3f
-         eOIu4oeU4SqFYPljUghYYLBI70epYKwCcO9lc7sIJrN2DOg6UAVjmV7iXBhHGZPQ9d/+
-         dKEA==
+        Tue, 5 Apr 2022 10:17:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC3521606B0
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:01:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649163681;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=c1Lv+i1PBgFa+gfs5DRpbJ6m0eCPENa4LFWCMUe7Pgk=;
+        b=fxvIN8WwOn87c6DahdYexpN8Ka3Hj0FlsXDrSfK/c34qYlYxSLBwFAeJrzZkQ5ZOaQIWWx
+        efZDThHgyY571qHgLXf9qGU6ouN14q+NUsaojS3s8/ul/M2xM9JkDKsHGqGjtgwc3PvvYp
+        qiD5ytBSPM2f6Bj5gXIKyefuwxdcfKs=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-556--VAqhSEkMXCvVMot_Lv7lQ-1; Tue, 05 Apr 2022 09:01:17 -0400
+X-MC-Unique: -VAqhSEkMXCvVMot_Lv7lQ-1
+Received: by mail-wm1-f70.google.com with SMTP id m3-20020a05600c3b0300b0038e74402cb6so1217631wms.8
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 06:01:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=YnItvGxT8i10DQes1NCRhX/bTChJJvk7adiGCya/CXU=;
-        b=Nwjo8ttOY7YpdquwBmPqTxK4v07UclkR32xoB5HhQpjl8TRtockynpI+YP5XgjJTWE
-         lvSU9D//+v6/V/xZIJTroS+E58MBl+xIrf7lZybDVKEf3TBnrlC6v9UcXKdy0Oljq0JY
-         JD1szjO+ypMfm6brqtKztfRmWmFSzreCY+Oq4WHHb1U8luZUwsuSFCWxCuvJpc6VzcZJ
-         5GFzPzGAY5dFA8WSXYFE8VMXaaa3L8WpyM/QDWaE/TioKGAThc8W3nJCShFGKW6EY2pQ
-         MK/4TZBe+275p8dWPikJ3FPmW9sawHzeLqJ4mimgXrwDGmEVq+SfkhEStmWiLK8/gr/E
-         tTKg==
-X-Gm-Message-State: AOAM533ddKigFAJNieobNJQ+paZtwNvNBtUnrovoaCkdSkGo3XpEFItK
-        LwFRXuQNIPyX4vm+pHdNGA8x
-X-Google-Smtp-Source: ABdhPJwbPWA5TgQQhTcEfxswEhUbXEP0D+yJWQtU0Mfoo7/ZuGdjdohoTgBof9AHBKzvU5/03Sz/6Q==
-X-Received: by 2002:a65:434b:0:b0:382:4fa9:3be6 with SMTP id k11-20020a65434b000000b003824fa93be6mr2739082pgq.459.1649163558282;
-        Tue, 05 Apr 2022 05:59:18 -0700 (PDT)
-Received: from localhost.localdomain ([59.92.98.98])
-        by smtp.gmail.com with ESMTPSA id j8-20020a17090a060800b001c7936791d1sm2384377pjj.7.2022.04.05.05.59.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 05:59:17 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     mhi@lists.linux.dev
-Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loic.poulain@linaro.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        stable@vger.kernel.org
-Subject: [PATCH v2] bus: mhi: host: pci_generic: Add missing poweroff() PM callback
-Date:   Tue,  5 Apr 2022 18:29:07 +0530
-Message-Id: <20220405125907.5644-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        bh=c1Lv+i1PBgFa+gfs5DRpbJ6m0eCPENa4LFWCMUe7Pgk=;
+        b=V/fkrxMsh6dY8jrYWTQ4+TXSB2ZyzNAQIXjF6fA+U98gVYidO6oWtkGBb/wib5JrOj
+         NWgwt9o5zeWymbVvmbIRSvlhgRxDVmgrWSMEBYadoDssnkzEfQaB1AkQAYvVW5pg5TuJ
+         o9HRvU8dS9ctOmKKZ3YOg2mUGTTDUyY3wuw6NQs1CJqwMqY+7lNXJpNm9zDp4P0NKASN
+         ew71FO3Crqvnyq/pgcSZ3L/vjV743l61wjPi0BzQFa5OAAolfWESBoSCg9cWvQxuaVOq
+         jKls/Trmc2IhuFVJPomTG9Zbj+YJtL/qkJJPvRnxv5flD3oEP0AQXhBkXQ5GS/uJ6XBe
+         2lUA==
+X-Gm-Message-State: AOAM530zgmjsHxxgjsKlmZjgkNfr9fqweKxG5sP9WQDPGTrkneTYsDVa
+        Y/AJvroGZbBUk25PXKN+t+5bosy4KHo6Q+kzD952tjweRmzftlJ+FSSrTmk1iiZEyyLND45xMo0
+        t21YUDDhmerwIfEovcLHVzz3O
+X-Received: by 2002:adf:ba8f:0:b0:1e9:4afb:179b with SMTP id p15-20020adfba8f000000b001e94afb179bmr2726493wrg.57.1649163671583;
+        Tue, 05 Apr 2022 06:01:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxNzI5PD1sS5Vh0+bMeeZnomXZHkWuWTcu1XLTQ/uRuaUVRxMlYuIfdB8IaN0F1ErzpxtndZQ==
+X-Received: by 2002:adf:ba8f:0:b0:1e9:4afb:179b with SMTP id p15-20020adfba8f000000b001e94afb179bmr2726472wrg.57.1649163671377;
+        Tue, 05 Apr 2022 06:01:11 -0700 (PDT)
+Received: from [10.32.181.87] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
+        by smtp.googlemail.com with ESMTPSA id n2-20020adfb742000000b00205eda3b3c1sm12716780wre.34.2022.04.05.06.01.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 06:01:10 -0700 (PDT)
+Message-ID: <6e370d39-fcb6-c158-e5fb-690cd3802150@redhat.com>
+Date:   Tue, 5 Apr 2022 15:01:09 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v5 027/104] KVM: TDX: initialize VM with TDX specific
+ parameters
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, isaku.yamahata@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
+        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <c3b37cf5c83f92be0e153075d81a80729bf1031e.1646422845.git.isaku.yamahata@intel.com>
+ <509fb6fb5c581e6bf14149dff17d7426a6b061f2.camel@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <509fb6fb5c581e6bf14149dff17d7426a6b061f2.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During hibernation process, once thaw() stage completes, the MHI endpoint
-devices will be in M0 state post recovery. After that, the devices will be
-powered down so that the system can enter the target sleep state. During
-this stage, the PCI core will put the devices in D3hot. But this transition
-is allowed by the MHI spec. The devices can only enter D3hot when it is in
-M3 state.
+On 3/31/22 06:55, Kai Huang wrote:
+>>   
+>> +struct kvm_tdx_init_vm {
+>> +	__u32 max_vcpus;
+>> +	__u32 tsc_khz;
+>> +	__u64 attributes;
+>> +	__u64 cpuid;
+> Is it better to append all CPUIDs directly into this structure, perhaps at end
+> of this structure, to make it more consistent with TD_PARAMS?
+> 
+> Also, I think somewhere in commit message or comments we should explain why
+> CPUIDs are passed here (why existing KVM_SET_CUPID2 is not sufficient).
+> 
 
-So for fixing this issue, let's add the poweroff() callback that will get
-executed before putting the system in target sleep state during
-hibernation. This callback will power down the device properly so that it
-could be restored during restore() or thaw() stage.
+Indeed, it would be easier to use the existing cpuid data in struct 
+kvm_vcpu, because right now there is no way to ensure that they are 
+consistent.
 
-Cc: stable@vger.kernel.org
-Fixes: 5f0c2ee1fe8d ("bus: mhi: pci-generic: Fix hibernation")
-Reported-by: Hemant Kumar <quic_hemantk@quicinc.com>
-Suggested-by: Hemant Kumar <quic_hemantk@quicinc.com>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
+Why is KVM_SET_CPUID2 not enough?  Are there any modifications done by 
+KVM that affect the measurement?
 
-Changes in v2:
+Thanks,
 
-* Hemant suggested to use restore function for poweroff() callback as we can
-make sure that the device gets powered down properly.
-
- drivers/bus/mhi/host/pci_generic.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
-index 9527b7d63840..ef85dbfb3216 100644
---- a/drivers/bus/mhi/host/pci_generic.c
-+++ b/drivers/bus/mhi/host/pci_generic.c
-@@ -1085,6 +1085,7 @@ static const struct dev_pm_ops mhi_pci_pm_ops = {
- 	.resume = mhi_pci_resume,
- 	.freeze = mhi_pci_freeze,
- 	.thaw = mhi_pci_restore,
-+	.poweroff = mhi_pci_freeze,
- 	.restore = mhi_pci_restore,
- #endif
- };
--- 
-2.25.1
+Paolo
 

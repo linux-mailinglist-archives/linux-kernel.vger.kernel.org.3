@@ -2,93 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDBC44F4958
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141DD4F48C9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392232AbiDEWJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
+        id S1386107AbiDEVu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358198AbiDEK2F (ORCPT
+        with ESMTP id S1353985AbiDEKKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:28:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E762C5FE1;
-        Tue,  5 Apr 2022 03:16:53 -0700 (PDT)
+        Tue, 5 Apr 2022 06:10:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D74BC55A1;
+        Tue,  5 Apr 2022 02:56:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 84B9C617A4;
-        Tue,  5 Apr 2022 10:16:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 937BBC385A0;
-        Tue,  5 Apr 2022 10:16:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F09061676;
+        Tue,  5 Apr 2022 09:56:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B19A6C385A3;
+        Tue,  5 Apr 2022 09:56:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153813;
-        bh=ZpJa06M24vlUXxlUQAshkic/5mp5lbLahynR0Rd5WWA=;
+        s=korg; t=1649152578;
+        bh=dpAuHk9AMMi+c0jBE3LaVdSqLounWNH5VIaXCMAcTEs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GD/Rz0ApSKcLI5ELjEuavGQDVZPyxbm7OKoOdXR2QvARtfa/5Eiy4JrsmnGkG/bi1
-         tfzP64wMlxLkibAVPNstVBtkczThc7cAGDEX9df6cKwD6uW1ChFvtHI4OEHwd403id
-         01ZO61vfp9jG1ABkZJapImr1HGCdEbFBKnVEhF3w=
+        b=swi93AZyUWgw7BCoWQzdPvBzraHTY+y8GKiiU6yAhgpO2MsdDvujeaPBH6GKJx5Kb
+         IVBOUEOU1ZfUBlP+OmsaXu8XpgBNkf7B3XdvuwT7vmEUC7Rmq7ZUiRGEj07IS7ptbL
+         TFR2UPsyKyDNQv/98NaAd7S5gQipbXErlKjcfc28=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yongzhi Liu <lyz_cs@pku.edu.cn>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 355/599] RDMA/mlx5: Fix memory leak in error flow for subscribe event routine
-Date:   Tue,  5 Apr 2022 09:30:49 +0200
-Message-Id: <20220405070309.396885113@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Quinn Tran <qutran@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.15 789/913] scsi: qla2xxx: Fix stuck session in gpdb
+Date:   Tue,  5 Apr 2022 09:30:51 +0200
+Message-Id: <20220405070403.485019282@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yongzhi Liu <lyz_cs@pku.edu.cn>
+From: Quinn Tran <qutran@marvell.com>
 
-[ Upstream commit 087f9c3f2309ed183f7e4b85ae57121d8663224d ]
+commit 725d3a0d31a51c0debf970011e05f585e805165b upstream.
 
-In case the second xa_insert() fails, the obj_event is not released.  Fix
-the error unwind flow to free that memory to avoid a memory leak.
+Fix stuck sessions in get port database. When a thread is in the process of
+re-establishing a session, a flag is set to prevent multiple threads /
+triggers from doing the same task. This flag was left on, where any attempt
+to relogin was locked out. Clear this flag, if the attempt has failed.
 
-Fixes: 759738537142 ("IB/mlx5: Enable subscription for device events over DEVX")
-Link: https://lore.kernel.org/r/1647018361-18266-1-git-send-email-lyz_cs@pku.edu.cn
-Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/20220110050218.3958-4-njavali@marvell.com
+Cc: stable@vger.kernel.org
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Signed-off-by: Quinn Tran <qutran@marvell.com>
+Signed-off-by: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/hw/mlx5/devx.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/scsi/qla2xxx/qla_init.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/infiniband/hw/mlx5/devx.c b/drivers/infiniband/hw/mlx5/devx.c
-index 343e6709d9fc..2f053f48f1be 100644
---- a/drivers/infiniband/hw/mlx5/devx.c
-+++ b/drivers/infiniband/hw/mlx5/devx.c
-@@ -1792,8 +1792,10 @@ subscribe_event_xa_alloc(struct mlx5_devx_event_table *devx_event_table,
- 				key_level2,
- 				obj_event,
- 				GFP_KERNEL);
--		if (err)
-+		if (err) {
-+			kfree(obj_event);
- 			return err;
-+		}
- 		INIT_LIST_HEAD(&obj_event->obj_sub_list);
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -1333,9 +1333,9 @@ int qla24xx_async_gpdb(struct scsi_qla_h
+ 	if (!vha->flags.online || (fcport->flags & FCF_ASYNC_SENT) ||
+ 	    fcport->loop_id == FC_NO_LOOP_ID) {
+ 		ql_log(ql_log_warn, vha, 0xffff,
+-		    "%s: %8phC - not sending command.\n",
+-		    __func__, fcport->port_name);
+-		return rval;
++		    "%s: %8phC online %d flags %x - not sending command.\n",
++		    __func__, fcport->port_name, vha->flags.online, fcport->flags);
++		goto done;
  	}
  
--- 
-2.34.1
-
+ 	sp = qla2x00_get_sp(vha, fcport, GFP_KERNEL);
 
 

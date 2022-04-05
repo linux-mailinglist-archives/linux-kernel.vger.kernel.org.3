@@ -2,63 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2F34F4D4E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 623344F4EF8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581876AbiDEXlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40560 "EHLO
+        id S1581943AbiDEXl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377046AbiDENMq (ORCPT
+        with ESMTP id S1354551AbiDENH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 09:12:46 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65A2120DA3;
-        Tue,  5 Apr 2022 05:12:51 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 81BE01F7AE;
-        Tue,  5 Apr 2022 12:12:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649160770;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
+        Tue, 5 Apr 2022 09:07:28 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B858022B20;
+        Tue,  5 Apr 2022 05:09:58 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id E0ED922248;
+        Tue,  5 Apr 2022 14:09:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1649160596;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/iIK4IU6j3+Uo5l6+7LzbpsQLqXq+AMjHPYQVXiK+s0=;
-        b=nyDFnzsydFaAJRoydrXbuGhbN1CuPAs6b94/8t/8QhRfZOBjATR/JtQEr0PKFcwYWnCVVP
-        vVHRRuPcTKMWtOjKUkYxStbCyI7lJAidHB7/BKugFEOBxmY8G7GSVqzmlrrxdy7pQC9IOy
-        sOR0SQyVSaNtgdZBZlCjtjgGpwoGu68=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649160770;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/iIK4IU6j3+Uo5l6+7LzbpsQLqXq+AMjHPYQVXiK+s0=;
-        b=PRDmohv2bqg2SiWHds2qJ7AS5EgCW6hoUEYX9gRBElZsIqcxpo8xCIJKDnhYBPyDVBx7Lu
-        mnmQbDvljuT36RCQ==
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 7921BA3B92;
-        Tue,  5 Apr 2022 12:12:50 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 4ECCDDA80E; Tue,  5 Apr 2022 14:08:49 +0200 (CEST)
-Date:   Tue, 5 Apr 2022 14:08:48 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [GIT PULL] Folio fixes for 5.18
-Message-ID: <20220405120848.GV15609@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Matthew Wilcox <willy@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org
-References: <YkdKgzil38iyc7rX@casper.infradead.org>
+        bh=fCggV6bqzjUPTh2UWexsbRy4IO96rl40cUnwkAVnT5I=;
+        b=o9rAEG5dNTu/qS3ZOBvruaB/fIHLjhKxrVXoek8KJ1TykK8P3RzBI/WsitXw4LUyQ9LLKm
+        D7g1rsSD0/r5bZvfsajnZKBHMqBqTsSP2/LDVzqpwLnnPaiymXtkDn49hzSwbFOfjQFH5T
+        xKp26b33xygscWr1W+LI+oxzn5Ko+54=
+From:   Michael Walle <michael@walle.cc>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH net-next v3 1/3] dt-bindings: net: convert mscc-miim to YAML format
+Date:   Tue,  5 Apr 2022 14:09:49 +0200
+Message-Id: <20220405120951.4044875-2-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220405120951.4044875-1-michael@walle.cc>
+References: <20220405120951.4044875-1-michael@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkdKgzil38iyc7rX@casper.infradead.org>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -69,26 +62,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 07:54:59PM +0100, Matthew Wilcox wrote:
-> A mixture of odd changes that didn't quite make it into the original
-> pull and fixes for things that did.  Also the readpages changes had to
-> wait for the NFS tree to be pulled first.
-> 
-> The following changes since commit d888c83fcec75194a8a48ccd283953bdba7b2550:
-> 
->   fs: fix fd table size alignment properly (2022-03-29 23:29:18 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.infradead.org/users/willy/pagecache.git tags/folio-5.18d
-> 
-> for you to fetch changes up to 5a60542c61f3cce6e5dff2a38c8fb08a852a517b:
-> 
->   btrfs: Remove a use of PAGE_SIZE in btrfs_invalidate_folio() (2022-04-01 14:40:44 -0400)
+Convert the mscc-miim device tree binding to the new YAML format.
 
-Matthew, can you please always CC linux-btrfs@vger.kernel.org for any
-patches that touch code under fs/btrfs? I've only noticed your folio
-updates in this pull request. Some of the changes are plain API switch,
-that's fine but I want to know about that, some changes seem to slightly
-modify logic that I'd really like to review and there are several missed
-opportunities to fix coding style. Thanks.
+The original binding don't mention if the interrupt property is optional
+or not. But on the SparX-5 SoC, for example, the interrupt property isn't
+used, thus in the new binding that property is optional. FWIW the driver
+doesn't use interrupts at all.
+
+Signed-off-by: Michael Walle <michael@walle.cc>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../devicetree/bindings/net/mscc,miim.yaml    | 56 +++++++++++++++++++
+ .../devicetree/bindings/net/mscc-miim.txt     | 26 ---------
+ 2 files changed, 56 insertions(+), 26 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/mscc,miim.yaml
+ delete mode 100644 Documentation/devicetree/bindings/net/mscc-miim.txt
+
+diff --git a/Documentation/devicetree/bindings/net/mscc,miim.yaml b/Documentation/devicetree/bindings/net/mscc,miim.yaml
+new file mode 100644
+index 000000000000..cdc39aa20683
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/mscc,miim.yaml
+@@ -0,0 +1,56 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/mscc,miim.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Microsemi MII Management Controller (MIIM)
++
++maintainers:
++  - Alexandre Belloni <alexandre.belloni@bootlin.com>
++
++allOf:
++  - $ref: "mdio.yaml#"
++
++properties:
++  compatible:
++    enum:
++      - mscc,ocelot-miim
++      - microchip,lan966x-miim
++
++  "#address-cells":
++    const: 1
++
++  "#size-cells":
++    const: 0
++
++  reg:
++    items:
++      - description: base address
++      - description: associated reset register for internal PHYs
++    minItems: 1
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - "#address-cells"
++  - "#size-cells"
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    mdio@107009c {
++      compatible = "mscc,ocelot-miim";
++      reg = <0x107009c 0x36>, <0x10700f0 0x8>;
++      interrupts = <14>;
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      phy0: ethernet-phy@0 {
++        reg = <0>;
++      };
++    };
+diff --git a/Documentation/devicetree/bindings/net/mscc-miim.txt b/Documentation/devicetree/bindings/net/mscc-miim.txt
+deleted file mode 100644
+index 70e0cb1ee485..000000000000
+--- a/Documentation/devicetree/bindings/net/mscc-miim.txt
++++ /dev/null
+@@ -1,26 +0,0 @@
+-Microsemi MII Management Controller (MIIM) / MDIO
+-=================================================
+-
+-Properties:
+-- compatible: must be "mscc,ocelot-miim" or "microchip,lan966x-miim"
+-- reg: The base address of the MDIO bus controller register bank. Optionally, a
+-  second register bank can be defined if there is an associated reset register
+-  for internal PHYs
+-- #address-cells: Must be <1>.
+-- #size-cells: Must be <0>.  MDIO addresses have no size component.
+-- interrupts: interrupt specifier (refer to the interrupt binding)
+-
+-Typically an MDIO bus might have several children.
+-
+-Example:
+-	mdio@107009c {
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		compatible = "mscc,ocelot-miim";
+-		reg = <0x107009c 0x36>, <0x10700f0 0x8>;
+-		interrupts = <14>;
+-
+-		phy0: ethernet-phy@0 {
+-			reg = <0>;
+-		};
+-	};
+-- 
+2.30.2
+

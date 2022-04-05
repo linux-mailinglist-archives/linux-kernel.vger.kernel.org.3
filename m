@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14B44F4B51
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A0A4F4943
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574130AbiDEWyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:54:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59382 "EHLO
+        id S1392187AbiDEWJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356144AbiDEKW7 (ORCPT
+        with ESMTP id S1349473AbiDEJtz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:22:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5D1BA304;
-        Tue,  5 Apr 2022 03:06:58 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A27215809;
+        Tue,  5 Apr 2022 02:46:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03434B81C86;
-        Tue,  5 Apr 2022 10:06:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42538C385A2;
-        Tue,  5 Apr 2022 10:06:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED104B81B14;
+        Tue,  5 Apr 2022 09:46:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38E75C385A2;
+        Tue,  5 Apr 2022 09:46:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153215;
-        bh=pgtTMJ3lOChN0sZhtkEWGnw/cn/E2bkd2HKG/XVMGcY=;
+        s=korg; t=1649152013;
+        bh=2xrrqqAmurLYBbNH7gEODCEGzcqKSrwq1J93E5yRers=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Io+E+qvbUfo87R0h9hCWQpD8RT7LopNftIzdErXeEBf6PZ1xO8BO+FzQGXR/R+Ugt
-         j340dKuqz7pJ2Q138V8+OOSzQVwoLgUMA0vp6TsTIEr9UiHCgSdyS/aeZXPHSRKIkp
-         PZkS44pRav44bZ9jmBp1LH8KAuVIaYEtKgUglm9o=
+        b=irblOKDdx5TPwfPPV8xanHFkqVhVvUDSoBtAhA66ge1vohFU8eeaXZ23tT/xIInhT
+         lC+uZKdaE9YVUa++4pRlm96xeNLok4kKQElrjmKvD+4YZN3/ia3etyGZ9Uad6md6tK
+         fdAATaTql/vRemPArdg34fp3EJdMlgVPYZuelntA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wang Qing <wangqing@vivo.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Jan Sondhauss <jan.sondhauss@wago.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 143/599] spi: pxa2xx-pci: Balance reference count for PCI DMA device
+Subject: [PATCH 5.15 575/913] drivers: ethernet: cpsw: fix panic when interrupt coaleceing is set via ethtool
 Date:   Tue,  5 Apr 2022 09:27:17 +0200
-Message-Id: <20220405070303.098160106@linuxfoundation.org>
+Message-Id: <20220405070357.082424924@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,75 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Sondhauß, Jan <Jan.Sondhauss@wago.com>
 
-[ Upstream commit 609d7ffdc42199a0ec949db057e3b4be6745d6c5 ]
+[ Upstream commit 2844e2434385819f674d1fb4130c308c50ba681e ]
 
-The pci_get_slot() increases its reference count, the caller
-must decrement the reference count by calling pci_dev_put().
+cpsw_ethtool_begin directly returns the result of pm_runtime_get_sync
+when successful.
+pm_runtime_get_sync returns -error code on failure and 0 on successful
+resume but also 1 when the device is already active. So the common case
+for cpsw_ethtool_begin is to return 1. That leads to inconsistent calls
+to pm_runtime_put in the call-chain so that pm_runtime_put is called
+one too many times and as result leaving the cpsw dev behind suspended.
 
-Fixes: 743485ea3bee ("spi: pxa2xx-pci: Do a specific setup in a separate function")
-Fixes: 25014521603f ("spi: pxa2xx-pci: Enable DMA for Intel Merrifield")
-Reported-by: Wang Qing <wangqing@vivo.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Link: https://lore.kernel.org/r/20220223191637.31147-1-andriy.shevchenko@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+The suspended cpsw dev leads to an access violation later on by
+different parts of the cpsw driver.
+
+Fix this by calling the return-friendly pm_runtime_resume_and_get
+function.
+
+Fixes: d43c65b05b84 ("ethtool: runtime-resume netdev parent in ethnl_ops_begin")
+Signed-off-by: Jan Sondhauss <jan.sondhauss@wago.com>
+Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
+Link: https://lore.kernel.org/r/20220323084725.65864-1-jan.sondhauss@wago.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-pxa2xx-pci.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/ti/cpsw_ethtool.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/spi/spi-pxa2xx-pci.c b/drivers/spi/spi-pxa2xx-pci.c
-index aafac128bb5f..4eb979a096c7 100644
---- a/drivers/spi/spi-pxa2xx-pci.c
-+++ b/drivers/spi/spi-pxa2xx-pci.c
-@@ -74,14 +74,23 @@ static bool lpss_dma_filter(struct dma_chan *chan, void *param)
- 	return true;
+diff --git a/drivers/net/ethernet/ti/cpsw_ethtool.c b/drivers/net/ethernet/ti/cpsw_ethtool.c
+index 158c8d3793f4..b5bae6324970 100644
+--- a/drivers/net/ethernet/ti/cpsw_ethtool.c
++++ b/drivers/net/ethernet/ti/cpsw_ethtool.c
+@@ -364,11 +364,9 @@ int cpsw_ethtool_op_begin(struct net_device *ndev)
+ 	struct cpsw_common *cpsw = priv->cpsw;
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(cpsw->dev);
+-	if (ret < 0) {
++	ret = pm_runtime_resume_and_get(cpsw->dev);
++	if (ret < 0)
+ 		cpsw_err(priv, drv, "ethtool begin failed %d\n", ret);
+-		pm_runtime_put_noidle(cpsw->dev);
+-	}
+ 
+ 	return ret;
  }
- 
-+static void lpss_dma_put_device(void *dma_dev)
-+{
-+	pci_dev_put(dma_dev);
-+}
-+
- static int lpss_spi_setup(struct pci_dev *dev, struct pxa_spi_info *c)
- {
- 	struct pci_dev *dma_dev;
-+	int ret;
- 
- 	c->num_chipselect = 1;
- 	c->max_clk_rate = 50000000;
- 
- 	dma_dev = pci_get_slot(dev->bus, PCI_DEVFN(PCI_SLOT(dev->devfn), 0));
-+	ret = devm_add_action_or_reset(&dev->dev, lpss_dma_put_device, dma_dev);
-+	if (ret)
-+		return ret;
- 
- 	if (c->tx_param) {
- 		struct dw_dma_slave *slave = c->tx_param;
-@@ -105,8 +114,9 @@ static int lpss_spi_setup(struct pci_dev *dev, struct pxa_spi_info *c)
- 
- static int mrfld_spi_setup(struct pci_dev *dev, struct pxa_spi_info *c)
- {
--	struct pci_dev *dma_dev = pci_get_slot(dev->bus, PCI_DEVFN(21, 0));
- 	struct dw_dma_slave *tx, *rx;
-+	struct pci_dev *dma_dev;
-+	int ret;
- 
- 	switch (PCI_FUNC(dev->devfn)) {
- 	case 0:
-@@ -131,6 +141,11 @@ static int mrfld_spi_setup(struct pci_dev *dev, struct pxa_spi_info *c)
- 		return -ENODEV;
- 	}
- 
-+	dma_dev = pci_get_slot(dev->bus, PCI_DEVFN(21, 0));
-+	ret = devm_add_action_or_reset(&dev->dev, lpss_dma_put_device, dma_dev);
-+	if (ret)
-+		return ret;
-+
- 	tx = c->tx_param;
- 	tx->dma_dev = &dma_dev->dev;
- 
 -- 
 2.34.1
 

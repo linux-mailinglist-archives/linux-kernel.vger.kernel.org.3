@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A1C4F486C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 790054F49C8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:29:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383042AbiDEVjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39370 "EHLO
+        id S1450394AbiDEW1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349477AbiDEJtz (ORCPT
+        with ESMTP id S1357084AbiDEKZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99EC10B6;
-        Tue,  5 Apr 2022 02:47:09 -0700 (PDT)
+        Tue, 5 Apr 2022 06:25:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24AAAC6818;
+        Tue,  5 Apr 2022 03:09:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8A961B81B14;
-        Tue,  5 Apr 2022 09:47:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D91D9C385A1;
-        Tue,  5 Apr 2022 09:47:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 919B261500;
+        Tue,  5 Apr 2022 10:09:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AAC6C385A1;
+        Tue,  5 Apr 2022 10:09:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152027;
-        bh=oYKkbZrm7pxnfDKheAyX3y1/Hm+QiAx86q2QPbVeBdo=;
+        s=korg; t=1649153370;
+        bh=YHj8iQCd/OzW6n3qVyhCaXbJn2snqvg9rtDApIgkDJ4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QV5g18gKkeW3IxWjsFhy2eLXmP+fzKJYgjLpYzPnBvVpevPQVxnVoZgEGXIo6jwPw
-         uyd3l61nZSmHjMi46Q2x2y5E/0OZPdorq8W+yaEwnsLgV1sxt5ctc3E7NgG2pCNqIj
-         eyfTqYtTAapWARbAgAeowKauH7haz/drs/Dz0AuY=
+        b=j97EIoCRX29QQYFj35eX3LJ/aRX8tqasjRQiLZ4p7TdfLN7ebL6aqat6dhu6XEwU/
+         elVswZpSDU0KFMIvtJdsFyrwm165Faq4kcsOcM+tgsNcbrYFb92XPggfQNidEwCcKW
+         SGCjJ8QsToDO2myWSWAnNFF6MpOyOM/H+SsEMceI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 629/913] staging: mt7621-dts: fix pinctrl properties for ethernet
+        stable@vger.kernel.org, "Z. Liu" <liuzx@knownsec.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 197/599] video: fbdev: matroxfb: set maxvram of vbG200eW to the same as vbG200 to avoid black screen
 Date:   Tue,  5 Apr 2022 09:28:11 +0200
-Message-Id: <20220405070358.692961623@linuxfoundation.org>
+Message-Id: <20220405070304.703511882@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,91 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arınç ÜNAL <arinc.unal@arinc9.com>
+From: Z. Liu <liuzx@knownsec.com>
 
-[ Upstream commit 0a93c0d75809582893e82039143591b9265b520e ]
+[ Upstream commit 62d89a7d49afe46e6b9bbe9e23b004ad848dbde4 ]
 
-Add pinctrl properties with rgmii1 & mdio pins under ethernet node which
-was wrongfully put under an external phy node.
-GMAC1 will start working with this fix.
+Start from commit 11be60bd66d54 "matroxfb: add Matrox MGA-G200eW board
+support", when maxvram is 0x800000, monitor become black w/ error message
+said: "The current input timing is not supported by the monitor display.
+Please change your input timing to 1920x1080@60Hz ...".
 
-Link: https://lore.kernel.org/netdev/02ecce91-7aad-4392-c9d7-f45ca1b31e0b@arinc9.com/T/
-
-Move GB-PC2 specific phy_external node to its own device tree.
-
-Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-Link: https://lore.kernel.org/r/20220125153903.1469-5-arinc.unal@arinc9.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 11be60bd66d5 ("matroxfb: add Matrox MGA-G200eW board support")
+Signed-off-by: Z. Liu <liuzx@knownsec.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/mt7621-dts/gbpc2.dts   | 16 +++++++++++-----
- drivers/staging/mt7621-dts/mt7621.dtsi | 13 +++----------
- 2 files changed, 14 insertions(+), 15 deletions(-)
+ drivers/video/fbdev/matrox/matroxfb_base.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/mt7621-dts/gbpc2.dts b/drivers/staging/mt7621-dts/gbpc2.dts
-index 52760e7351f6..f9b69091bfc0 100644
---- a/drivers/staging/mt7621-dts/gbpc2.dts
-+++ b/drivers/staging/mt7621-dts/gbpc2.dts
-@@ -12,10 +12,16 @@
- 	function = "gpio";
+diff --git a/drivers/video/fbdev/matrox/matroxfb_base.c b/drivers/video/fbdev/matrox/matroxfb_base.c
+index 570439b32655..daaa99818d3b 100644
+--- a/drivers/video/fbdev/matrox/matroxfb_base.c
++++ b/drivers/video/fbdev/matrox/matroxfb_base.c
+@@ -1377,7 +1377,7 @@ static struct video_board vbG200 = {
+ 	.lowlevel = &matrox_G100
  };
- 
--&gmac1 {
--	status = "ok";
--};
-+&ethernet {
-+	gmac1: mac@1 {
-+		status = "ok";
-+		phy-handle = <&phy_external>;
-+	};
- 
--&phy_external {
--	status = "ok";
-+	mdio-bus {
-+		phy_external: ethernet-phy@5 {
-+			reg = <5>;
-+			phy-mode = "rgmii-rxid";
-+		};
-+	};
- };
-diff --git a/drivers/staging/mt7621-dts/mt7621.dtsi b/drivers/staging/mt7621-dts/mt7621.dtsi
-index eca384cdec39..99b0eef1f3e2 100644
---- a/drivers/staging/mt7621-dts/mt7621.dtsi
-+++ b/drivers/staging/mt7621-dts/mt7621.dtsi
-@@ -391,6 +391,9 @@
- 
- 		mediatek,ethsys = <&sysc>;
- 
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&rgmii1_pins &rgmii2_pins &mdio_pins>;
-+
- 		gmac0: mac@0 {
- 			compatible = "mediatek,eth-mac";
- 			reg = <0>;
-@@ -408,22 +411,12 @@
- 			reg = <1>;
- 			status = "off";
- 			phy-mode = "rgmii-rxid";
--			phy-handle = <&phy_external>;
- 		};
- 
- 		mdio-bus {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 
--			phy_external: ethernet-phy@5 {
--				status = "off";
--				reg = <5>;
--				phy-mode = "rgmii-rxid";
--
--				pinctrl-names = "default";
--				pinctrl-0 = <&rgmii2_pins>;
--			};
--
- 			switch0: switch0@0 {
- 				compatible = "mediatek,mt7621";
- 				#address-cells = <1>;
+ static struct video_board vbG200eW = {
+-	.maxvram = 0x800000,
++	.maxvram = 0x100000,
+ 	.maxdisplayable = 0x800000,
+ 	.accelID = FB_ACCEL_MATROX_MGAG200,
+ 	.lowlevel = &matrox_G100
 -- 
 2.34.1
 

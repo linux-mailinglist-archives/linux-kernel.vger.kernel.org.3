@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C804F3516
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FDCB4F2F27
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358081AbiDEK16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:27:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
+        id S1358292AbiDEK2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241063AbiDEIcq (ORCPT
+        with ESMTP id S241062AbiDEIcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:32:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F55AB9192;
-        Tue,  5 Apr 2022 01:26:30 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6090BB91A6;
+        Tue,  5 Apr 2022 01:26:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0F34DB81BCE;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E8AB86117D;
+        Tue,  5 Apr 2022 08:26:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0567AC385A1;
         Tue,  5 Apr 2022 08:26:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59E94C385A4;
-        Tue,  5 Apr 2022 08:26:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147187;
-        bh=q9reCg0Q/4GU8MiDT8PeLNp2EtR568uj8DjkLKywS8Q=;
+        s=korg; t=1649147190;
+        bh=YbwfK3n1g59Ka5Cp7SEaBOTGe7h8cOzjzd41fU7Ajow=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W3FuWfcQ55FeuFiH0rUNTX3fALz27VQwbBK99UTcWkklirXp6z6Bv8t6lB9c3xdK7
-         uhJAXsX3+FQh91WHS8bTcaTOxP4sybHbCISGlwsQkPEiMEoHhZ+IcmMGx430fKZbpb
-         OOgzVTccKbJcBDLzvq832CIUeDBNjRekObpAWnTg=
+        b=dwM6B0Q3ctQkrGuNWZphQ1mp4Nu/wBuibuGjpLJK3oA9rGrL4NS8kG3jiiWvTzUZw
+         B0EHwzb5508oXp4xVQ07AR6UOVI9cDOI1j3UObb3uaJf3ZNJSqLhZM+f46asrwexW4
+         qPB9vb2LQa/f9zyL0+tv0bnHhUZ4BQeTCAuy9OaE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yufeng Mo <moyufeng@huawei.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
+        stable@vger.kernel.org, Guangbin Huang <huangguangbin2@huawei.com>,
         Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH 5.17 1032/1126] net: hns3: fix the concurrency between functions reading debugfs
-Date:   Tue,  5 Apr 2022 09:29:39 +0200
-Message-Id: <20220405070437.768858431@linuxfoundation.org>
+Subject: [PATCH 5.17 1033/1126] net: hns3: fix software vlan talbe of vlan 0 inconsistent with hardware
+Date:   Tue,  5 Apr 2022 09:29:40 +0200
+Message-Id: <20220405070437.798067423@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,85 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yufeng Mo <moyufeng@huawei.com>
+From: Guangbin Huang <huangguangbin2@huawei.com>
 
-commit 9c9a04212fa380d2e7d1412bb281309955c0a781 upstream.
+commit 7ed258f12ec5ce855f15cdfb5710361dc82fe899 upstream.
 
-Currently, the debugfs mechanism is that all functions share a
-global variable to save the pointer for obtaining data. When
-different functions concurrently access the same file node,
-repeated release exceptions occur. Therefore, the granularity
-of the pointer for storing the obtained data is adjusted to be
-private for each function.
+When user delete vlan 0, as driver will not delete vlan 0 for hardware in
+function hclge_set_vlan_filter_hw(), so vlan 0 in software vlan talbe should
+not be deleted.
 
-Fixes: 5e69ea7ee2a6 ("net: hns3: refactor the debugfs process")
-Signed-off-by: Yufeng Mo <moyufeng@huawei.com>
+Fixes: fe4144d47eef ("net: hns3: sync VLAN filter entries when kill VLAN ID failed")
 Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
 Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/hisilicon/hns3/hnae3.h        |    1 +
- drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c |   15 +++++++++++----
- drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.h |    1 -
- 3 files changed, 12 insertions(+), 5 deletions(-)
+ drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/net/ethernet/hisilicon/hns3/hnae3.h
-+++ b/drivers/net/ethernet/hisilicon/hns3/hnae3.h
-@@ -844,6 +844,7 @@ struct hnae3_handle {
- 	struct dentry *hnae3_dbgfs;
- 	/* protects concurrent contention between debugfs commands */
- 	struct mutex dbgfs_lock;
-+	char **dbgfs_buf;
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
+@@ -10314,11 +10314,11 @@ int hclge_set_vlan_filter(struct hnae3_h
+ 	}
  
- 	/* Network interface message level enabled bits */
- 	u32 msg_enable;
---- a/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c
-@@ -1227,7 +1227,7 @@ static ssize_t hns3_dbg_read(struct file
- 		return ret;
- 
- 	mutex_lock(&handle->dbgfs_lock);
--	save_buf = &hns3_dbg_cmd[index].buf;
-+	save_buf = &handle->dbgfs_buf[index];
- 
- 	if (!test_bit(HNS3_NIC_STATE_INITED, &priv->state) ||
- 	    test_bit(HNS3_NIC_STATE_RESETTING, &priv->state)) {
-@@ -1332,6 +1332,13 @@ int hns3_dbg_init(struct hnae3_handle *h
- 	int ret;
- 	u32 i;
- 
-+	handle->dbgfs_buf = devm_kcalloc(&handle->pdev->dev,
-+					 ARRAY_SIZE(hns3_dbg_cmd),
-+					 sizeof(*handle->dbgfs_buf),
-+					 GFP_KERNEL);
-+	if (!handle->dbgfs_buf)
-+		return -ENOMEM;
-+
- 	hns3_dbg_dentry[HNS3_DBG_DENTRY_COMMON].dentry =
- 				debugfs_create_dir(name, hns3_dbgfs_root);
- 	handle->hnae3_dbgfs = hns3_dbg_dentry[HNS3_DBG_DENTRY_COMMON].dentry;
-@@ -1380,9 +1387,9 @@ void hns3_dbg_uninit(struct hnae3_handle
- 	u32 i;
- 
- 	for (i = 0; i < ARRAY_SIZE(hns3_dbg_cmd); i++)
--		if (hns3_dbg_cmd[i].buf) {
--			kvfree(hns3_dbg_cmd[i].buf);
--			hns3_dbg_cmd[i].buf = NULL;
-+		if (handle->dbgfs_buf[i]) {
-+			kvfree(handle->dbgfs_buf[i]);
-+			handle->dbgfs_buf[i] = NULL;
- 		}
- 
- 	mutex_destroy(&handle->dbgfs_lock);
---- a/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.h
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.h
-@@ -49,7 +49,6 @@ struct hns3_dbg_cmd_info {
- 	enum hnae3_dbg_cmd cmd;
- 	enum hns3_dbg_dentry_type dentry;
- 	u32 buf_len;
--	char *buf;
- 	int (*init)(struct hnae3_handle *handle, unsigned int cmd);
- };
- 
+ 	if (!ret) {
+-		if (is_kill)
+-			hclge_rm_vport_vlan_table(vport, vlan_id, false);
+-		else
++		if (!is_kill)
+ 			hclge_add_vport_vlan_table(vport, vlan_id,
+ 						   writen_to_tbl);
++		else if (is_kill && vlan_id != 0)
++			hclge_rm_vport_vlan_table(vport, vlan_id, false);
+ 	} else if (is_kill) {
+ 		/* when remove hw vlan filter failed, record the vlan id,
+ 		 * and try to remove it from hw later, to be consistence
 
 

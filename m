@@ -2,49 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9704F436A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4B04F3DAA
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380108AbiDEMxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
+        id S239058AbiDEUML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343764AbiDEJMr (ORCPT
+        with ESMTP id S1354826AbiDEKQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:12:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911B8275EF;
-        Tue,  5 Apr 2022 02:00:27 -0700 (PDT)
+        Tue, 5 Apr 2022 06:16:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF596C95A;
+        Tue,  5 Apr 2022 03:03:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E3C2B818F3;
-        Tue,  5 Apr 2022 09:00:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93916C385A0;
-        Tue,  5 Apr 2022 09:00:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77177B81BC0;
+        Tue,  5 Apr 2022 10:03:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9184C385A2;
+        Tue,  5 Apr 2022 10:03:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149225;
-        bh=E0sTsnsfYNAoV+LlZ2QFM+Pw4k3Bo2wovI1KqqBQ/KE=;
+        s=korg; t=1649152985;
+        bh=7T3V9Ql41ZXUXe2eHr5kADkK5LhNNXoQgf53a89Czf8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kJQ5oAw3H+Y9Ygm+wKVtWDC/nEbnMoVNj0X6+l8NN68KCPF+W3hOhw83/J/5eIuM5
-         r8Jfn+9HThNzLY5QC8c4nNsceu9qdaeJ2PQwgILjBTacAV9WyJg8vru+JTABFR2eF0
-         3hNPxvzVlxsYJHcsCFxqX0pSbqIVdc6naoixT10Y=
+        b=XoKYqACQi5ksIOTFMur+8DnXtj5FM7/y6D5345l+RubAeqz/+rNP70fgslsOakE2x
+         PmqMXDTaRBRFvloGrW+kvNEm2ndh/5njpPzktJRIvGO9V/DhR9yYlAMwvqycvXqLiB
+         RfCjUovO3aUB8/aVxLGYBNL4N5umklNdd2uOlv8Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Alistair Popple <apopple@nvidia.com>,
+        stable@vger.kernel.org, Rik van Riel <riel@surriel.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0640/1017] kernel/resource: fix kfree() of bootmem memory again
-Date:   Tue,  5 Apr 2022 09:25:53 +0200
-Message-Id: <20220405070413.279967331@linuxfoundation.org>
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.10 060/599] mm: invalidate hwpoison page cache page in fault path
+Date:   Tue,  5 Apr 2022 09:25:54 +0200
+Message-Id: <20220405070300.613828921@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,96 +62,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaohe Lin <linmiaohe@huawei.com>
+From: Rik van Riel <riel@surriel.com>
 
-[ Upstream commit 0cbcc92917c5de80f15c24d033566539ad696892 ]
+commit e53ac7374e64dede04d745ff0e70ff5048378d1f upstream.
 
-Since commit ebff7d8f270d ("mem hotunplug: fix kfree() of bootmem
-memory"), we could get a resource allocated during boot via
-alloc_resource().  And it's required to release the resource using
-free_resource().  Howerver, many people use kfree directly which will
-result in kernel BUG.  In order to fix this without fixing every call
-site, just leak a couple of bytes in such corner case.
+Sometimes the page offlining code can leave behind a hwpoisoned clean
+page cache page.  This can lead to programs being killed over and over
+and over again as they fault in the hwpoisoned page, get killed, and
+then get re-spawned by whatever wanted to run them.
 
-Link: https://lkml.kernel.org/r/20220217083619.19305-1-linmiaohe@huawei.com
-Fixes: ebff7d8f270d ("mem hotunplug: fix kfree() of bootmem memory")
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-Suggested-by: David Hildenbrand <david@redhat.com>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Alistair Popple <apopple@nvidia.com>
+This is particularly embarrassing when the page was offlined due to
+having too many corrected memory errors.  Now we are killing tasks due
+to them trying to access memory that probably isn't even corrupted.
+
+This problem can be avoided by invalidating the page from the page fault
+handler, which already has a branch for dealing with these kinds of
+pages.  With this patch we simply pretend the page fault was successful
+if the page was invalidated, return to userspace, incur another page
+fault, read in the file from disk (to a new memory page), and then
+everything works again.
+
+Link: https://lkml.kernel.org/r/20220212213740.423efcea@imladris.surriel.com
+Signed-off-by: Rik van Riel <riel@surriel.com>
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+Reviewed-by: Oscar Salvador <osalvador@suse.de>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Cc: Mel Gorman <mgorman@suse.de>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: <stable@vger.kernel.org>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/resource.c | 41 ++++++++---------------------------------
- 1 file changed, 8 insertions(+), 33 deletions(-)
+ mm/memory.c |    9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/resource.c b/kernel/resource.c
-index 5ad3eba619ba..092a6154371b 100644
---- a/kernel/resource.c
-+++ b/kernel/resource.c
-@@ -56,14 +56,6 @@ struct resource_constraint {
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -3676,11 +3676,16 @@ static vm_fault_t __do_fault(struct vm_f
+ 		return ret;
  
- static DEFINE_RWLOCK(resource_lock);
+ 	if (unlikely(PageHWPoison(vmf->page))) {
+-		if (ret & VM_FAULT_LOCKED)
++		vm_fault_t poisonret = VM_FAULT_HWPOISON;
++		if (ret & VM_FAULT_LOCKED) {
++			/* Retry if a clean page was removed from the cache. */
++			if (invalidate_inode_page(vmf->page))
++				poisonret = 0;
+ 			unlock_page(vmf->page);
++		}
+ 		put_page(vmf->page);
+ 		vmf->page = NULL;
+-		return VM_FAULT_HWPOISON;
++		return poisonret;
+ 	}
  
--/*
-- * For memory hotplug, there is no way to free resource entries allocated
-- * by boot mem after the system is up. So for reusing the resource entry
-- * we need to remember the resource.
-- */
--static struct resource *bootmem_resource_free;
--static DEFINE_SPINLOCK(bootmem_resource_lock);
--
- static struct resource *next_resource(struct resource *p)
- {
- 	if (p->child)
-@@ -160,36 +152,19 @@ __initcall(ioresources_init);
- 
- static void free_resource(struct resource *res)
- {
--	if (!res)
--		return;
--
--	if (!PageSlab(virt_to_head_page(res))) {
--		spin_lock(&bootmem_resource_lock);
--		res->sibling = bootmem_resource_free;
--		bootmem_resource_free = res;
--		spin_unlock(&bootmem_resource_lock);
--	} else {
-+	/**
-+	 * If the resource was allocated using memblock early during boot
-+	 * we'll leak it here: we can only return full pages back to the
-+	 * buddy and trying to be smart and reusing them eventually in
-+	 * alloc_resource() overcomplicates resource handling.
-+	 */
-+	if (res && PageSlab(virt_to_head_page(res)))
- 		kfree(res);
--	}
- }
- 
- static struct resource *alloc_resource(gfp_t flags)
- {
--	struct resource *res = NULL;
--
--	spin_lock(&bootmem_resource_lock);
--	if (bootmem_resource_free) {
--		res = bootmem_resource_free;
--		bootmem_resource_free = res->sibling;
--	}
--	spin_unlock(&bootmem_resource_lock);
--
--	if (res)
--		memset(res, 0, sizeof(struct resource));
--	else
--		res = kzalloc(sizeof(struct resource), flags);
--
--	return res;
-+	return kzalloc(sizeof(struct resource), flags);
- }
- 
- /* Return the conflict entry if you can't request it */
--- 
-2.34.1
-
+ 	if (unlikely(!(ret & VM_FAULT_LOCKED)))
 
 

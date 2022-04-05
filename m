@@ -2,73 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2641A4F5208
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2794F520C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1849268AbiDFCeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
+        id S1849352AbiDFCee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1449532AbiDEWYn (ORCPT
+        with ESMTP id S1349583AbiDEW0v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 18:24:43 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F68917584C
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 14:22:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Vfnds4uZwOUw8zPinp55S3drsKWUUrjkD5pxZmDfQ3o=; b=UE9salMD8CEHOMHRKgSqk1ysa4
-        +Zb8ubeM4QI2ErLIm70Y4BRN2nXRdyL+r/3EWfgaNkAjGzYvbec7vhKYE2uod+I9xbucnfeb4m0HU
-        lRTNfmvRPN5IzMdnPags8ZPe7zz/KKEQ+N6TLon1FgZEO2tYuIWqSDIC5BYVl90nu3zUQpvI+dMFS
-        HGCtYR/g0Y1c+8XmM8EkbAinT1rcrVVrPO2x2jy7n07PnzjcJ/cinP7k0C8R9w6f7Nczk1v9TsVcL
-        KEy3AsIypYKS8H0evy+GXwixPEX+lSfwm/hlmJlrY4fj6qjfgGeiqSVjg3zxtDgtvKZwsaSFrTk6l
-        +V2RFV7A==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nbqcb-0074AY-PZ; Tue, 05 Apr 2022 21:21:53 +0000
-Date:   Tue, 5 Apr 2022 22:21:53 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Dave Chinner <david@fromorbit.com>,
-        Hillf Danton <hdanton@sina.com>, MM <linux-mm@kvack.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        Yu Zhao <yuzhao@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC] mm/vmscan: add periodic slab shrinker
-Message-ID: <Ykyy8RfJgWDOGylv@casper.infradead.org>
-References: <20220402072103.5140-1-hdanton@sina.com>
- <20220403005618.5263-1-hdanton@sina.com>
- <20220404010948.GV1609613@dread.disaster.area>
- <YktCKVbChtC+YjOk@carbon.dhcp.thefacebook.com>
- <20220405051710.GW1609613@dread.disaster.area>
- <Ykxv1j9dxlz1BS5N@carbon.dhcp.thefacebook.com>
- <CAHbLzko=bjLhhJXjcs0Uh-g3x9vV1gQZjEU2JqxVehqSb1UGkQ@mail.gmail.com>
+        Tue, 5 Apr 2022 18:26:51 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E68E17A2F6;
+        Tue,  5 Apr 2022 14:24:47 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649193852;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NJUFDru3qyRPcfEWEwWxICWATudSEIElFknJUgTQ0rI=;
+        b=cCDrq+y4GV3ckhkx0flFd1XPyBIxnBgkMD4TFRB8m3nQ+HlLtjIpzgwvCremvc1EzQLtqu
+        +qhehmh6PeprC5PqL3qAAvNxiyR6qkzBGhSLt+XyHvBZRr2mqTVsFgdEIsI+VXx8CkREUN
+        Us+Vxoci2U4gstiAPEVAwUub7+pMdMUp80sA/LewDbfaVc6MMeqloUiNNONCciWCQKnoWj
+        i1XvU0GDjhnAssqIAYLJHu9QBixaB1lMNWeQKl4SlIppYJUPWRi18M0u8SL1phBxGAUCao
+        9cI2+xyzwHKD3uMCL/OrPB6gG+HnQv0M181JhYU1EOgOQ9RTUztrNwD2BnQcIQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649193852;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NJUFDru3qyRPcfEWEwWxICWATudSEIElFknJUgTQ0rI=;
+        b=Gf60UpzSNAwZhbH/FbvMcoEFj+IASDOG+6UsBJsVK9yir1a5I2JZsB9eUzG8bzlbDdMrVV
+        RJms7BQQG5P33ECw==
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marco Elver <elver@google.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Alexander Potapenko <glider@google.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Kees Cook <keescook@chromium.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Wei Liu <wei.liu@kernel.org>,
+        Xiaoming Ni <nixiaoming@huawei.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Helge Deller <deller@gmx.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Phil Auld <pauld@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Wang Qing <wangqing@vivo.com>, rcu@vger.kernel.org
+Subject: Re: [PATCH printk v2 00/12] implement threaded console printing
+In-Reply-To: <YkxaTy08ClcNj0P3@smile.fi.intel.com>
+References: <20220405132535.649171-1-john.ogness@linutronix.de>
+ <YkxaTy08ClcNj0P3@smile.fi.intel.com>
+Date:   Tue, 05 Apr 2022 23:30:10 +0206
+Message-ID: <87sfqrrzph.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHbLzko=bjLhhJXjcs0Uh-g3x9vV1gQZjEU2JqxVehqSb1UGkQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 01:58:59PM -0700, Yang Shi wrote:
-> Yeah, I agree it actually doesn't make too much sense to return the
-> number of reclaimed objects. Other part of vmscan returns the number
-> of base pages, the sizes of slab objects are varied, it may be much
-> smaller than a page, for example, dentry may be 192 bytes.
+On 2022-04-05, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> From the list of patches and the only one I am Cc'ed to I can't find
+> the answer to my question,
 
-From the point of view of vmscan, it only cares about the number of pages
-freed because it's trying to free pages.  But from the point of view of
-trying to keep the number of non-useful objects in check, the number of
-objects freed is more important, and it doesn't matter whether we ended
-up freeing any pages because we made memory available for this slab cache.
+It seems lore is having trouble picking up the series. Until then, I've
+pushed the series to github.com so you can see the code.
+
+> i.e. does it take care about console_unregister() cases at run time?
+> (We have some drivers to call ->exit() for console in that case,
+> perhaps it should do something before calling it.)
+
+Yes. In console_unregister(), the printing thread is shutdown before the
+actual console unregistration takes place. The thread is shutdown here:
+
+https://github.com/Linutronix/linux/blob/b27eb6c3d168d608b3a9d04578e030a3d79d889a/kernel/printk/printk.c#L3393
+
+The console's exit() callback is below that:
+
+https://github.com/Linutronix/linux/blob/b27eb6c3d168d608b3a9d04578e030a3d79d889a/kernel/printk/printk.c#L3429
+
+> Would be nice to see some pointers where I can find the answer and
+> maybe even describing in the cover-letter/commit
+> message/documentation.
+
+I suppose for the console thread patch [0] I could add a paragraph to
+the commit message mentioning kernel thread shutdown for console
+unregistration.
+
+[0] https://github.com/Linutronix/linux/commit/e26ae677da2e339dd268c1f871b81e61e782393f
+
+John

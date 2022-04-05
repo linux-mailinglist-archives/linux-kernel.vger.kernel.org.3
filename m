@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727724F415C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 645964F4279
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383727AbiDEPOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59384 "EHLO
+        id S1385066AbiDEMbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346555AbiDEJpL (ORCPT
+        with ESMTP id S1343495AbiDEI44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:45:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDC8DA6FB;
-        Tue,  5 Apr 2022 02:30:56 -0700 (PDT)
+        Tue, 5 Apr 2022 04:56:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDCE1CB06;
+        Tue,  5 Apr 2022 01:52:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B432B81CB5;
-        Tue,  5 Apr 2022 09:30:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 745CCC385A2;
-        Tue,  5 Apr 2022 09:30:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3122609D0;
+        Tue,  5 Apr 2022 08:52:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE77BC385A0;
+        Tue,  5 Apr 2022 08:52:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151053;
-        bh=qKXsJ7vAUl9nUSKCHBeqDKEnxEuqtPHwSAaDwyNgnFY=;
+        s=korg; t=1649148768;
+        bh=RMDCIpgqoRMmnnuBwu/bpCkTKuBa8Q1wElxe8DXBVS0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ythMEheLA5Fi2VluAakvv+uOQOvqEHsfcIl21SGPx+0bVr/LKd+/M2mpw0kpClGcO
-         0zGiKp61DzxTFp6NDCzir7zo+WHKJs1Y2qDS7VLbhVFX21QoT2hn2yfRwQ4evj0Hg/
-         Fscw9pl/0S/QtKu1V9Pcv7z+DTHf9LnL/B6sUnoA=
+        b=VDnhiI6fJBAdyITiKu6d/ovopCceed+TY3v+MO2Q9G8Fx0Rhzukcu3QbcYsAuwkjt
+         qzkF+Ow/YYUNhd9X2R1+StHWPvYtt5zLbEVIOS8mElfFHMWNy3/ssb/5rnUzBfK0GE
+         gtXMZo3IRtDTFCQbOznFXRpbfnrQ04xy0joQ5XCM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Shannon Nelson <snelson@pensando.io>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 276/913] media: atmel: atmel-sama7g5-isc: fix ispck leftover
-Date:   Tue,  5 Apr 2022 09:22:18 +0200
-Message-Id: <20220405070348.130965095@linuxfoundation.org>
+Subject: [PATCH 5.16 0426/1017] ionic: fix up printing of timeout error
+Date:   Tue,  5 Apr 2022 09:22:19 +0200
+Message-Id: <20220405070406.937720244@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,54 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eugen Hristev <eugen.hristev@microchip.com>
+From: Shannon Nelson <snelson@pensando.io>
 
-[ Upstream commit 1b52ce99e9f2dcda868a1a7026bfb58d04bd6bc8 ]
+[ Upstream commit 4cc787bd88be6974f3362fa49fd8c5609bd039b8 ]
 
-The ispck is not used for sama7g5 variant of the ISC.
-Calls to ispck have to be removed also from module insert/removal.
+Make sure we print the TIMEOUT string if we had a timeout
+error, rather than printing the wrong status.
 
-Fixes: d7f26849ed7c ("media: atmel: fix the ispck initialization")
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 8c9d956ab6fb ("ionic: allow adminq requests to override default error message")
+Signed-off-by: Shannon Nelson <snelson@pensando.io>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/atmel/atmel-sama7g5-isc.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/net/ethernet/pensando/ionic/ionic_main.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/atmel/atmel-sama7g5-isc.c b/drivers/media/platform/atmel/atmel-sama7g5-isc.c
-index 9c05acafd072..6a5d3f7ce75e 100644
---- a/drivers/media/platform/atmel/atmel-sama7g5-isc.c
-+++ b/drivers/media/platform/atmel/atmel-sama7g5-isc.c
-@@ -555,7 +555,6 @@ static int microchip_xisc_remove(struct platform_device *pdev)
- 
- 	v4l2_device_unregister(&isc->v4l2_dev);
- 
--	clk_disable_unprepare(isc->ispck);
- 	clk_disable_unprepare(isc->hclock);
- 
- 	isc_clk_cleanup(isc);
-@@ -567,7 +566,6 @@ static int __maybe_unused xisc_runtime_suspend(struct device *dev)
+diff --git a/drivers/net/ethernet/pensando/ionic/ionic_main.c b/drivers/net/ethernet/pensando/ionic/ionic_main.c
+index a548f2a01806..2e4294a4fa83 100644
+--- a/drivers/net/ethernet/pensando/ionic/ionic_main.c
++++ b/drivers/net/ethernet/pensando/ionic/ionic_main.c
+@@ -215,9 +215,13 @@ static void ionic_adminq_flush(struct ionic_lif *lif)
+ void ionic_adminq_netdev_err_print(struct ionic_lif *lif, u8 opcode,
+ 				   u8 status, int err)
  {
- 	struct isc_device *isc = dev_get_drvdata(dev);
- 
--	clk_disable_unprepare(isc->ispck);
- 	clk_disable_unprepare(isc->hclock);
- 
- 	return 0;
-@@ -582,10 +580,6 @@ static int __maybe_unused xisc_runtime_resume(struct device *dev)
- 	if (ret)
- 		return ret;
- 
--	ret = clk_prepare_enable(isc->ispck);
--	if (ret)
--		clk_disable_unprepare(isc->hclock);
--
- 	return ret;
++	const char *stat_str;
++
++	stat_str = (err == -ETIMEDOUT) ? "TIMEOUT" :
++					 ionic_error_to_str(status);
++
+ 	netdev_err(lif->netdev, "%s (%d) failed: %s (%d)\n",
+-		   ionic_opcode_to_str(opcode), opcode,
+-		   ionic_error_to_str(status), err);
++		   ionic_opcode_to_str(opcode), opcode, stat_str, err);
  }
  
+ static int ionic_adminq_check_err(struct ionic_lif *lif,
 -- 
 2.34.1
 

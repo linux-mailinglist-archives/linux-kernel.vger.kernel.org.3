@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB8D04F49C7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CF54F4C49
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350527AbiDEW0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
+        id S1577890AbiDEXRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345137AbiDEKkp (ORCPT
+        with ESMTP id S1345139AbiDEKkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 06:40:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF111AC;
-        Tue,  5 Apr 2022 03:26:11 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0444DDCE;
+        Tue,  5 Apr 2022 03:26:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DD73DB81B18;
-        Tue,  5 Apr 2022 10:26:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FF5EC385A0;
-        Tue,  5 Apr 2022 10:26:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9F0DEB81B18;
+        Tue,  5 Apr 2022 10:26:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 151F4C385A1;
+        Tue,  5 Apr 2022 10:26:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154368;
-        bh=gnwKpIuO0gxSR0HzxvdK3Lq1DoU5LfgR2w+c65MoDDs=;
+        s=korg; t=1649154371;
+        bh=feGq1vv6b5m7Q0C96kxI5Jx7e8brMe/R0kBNnTceQgg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tC1RWV5ksQeppnYk12cZ7LHK1z8fPuHKyb4WX+uANLEdE8kL+TYIrEmH7TUlZEhQt
-         PEKOlr8+tAtv3L/y1nfHUADSHwH7uVAoBM52UgkxgSaXl8K2T5j5VvScggvZpRLYKG
-         d8JlxQmC+8a31xXbXodyA1kEKTCoS5t3Bq7JRvw0=
+        b=ZyJOqBjCKf0jrCAmB52mqGzmKB5yc2NpqQRiTlw8MIKDwUW/s4oFiqDyg04sGYgvt
+         hyJBBWko1dDHHjkGoAxmExGoF4Mc+kn8rn/edPJIj9aRjYSwaCQ2WmOaGZQoi392LG
+         V5SGme3oFrcx6rp2XTWwdKuF8yZ9IZiLnlOzyzBY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 5.10 553/599] rtc: check if __rtc_read_time was successful
-Date:   Tue,  5 Apr 2022 09:34:07 +0200
-Message-Id: <20220405070315.296153615@linuxfoundation.org>
+        stable@vger.kernel.org, Andrew Price <anprice@redhat.com>,
+        Andreas Gruenbacher <agruenba@redhat.com>
+Subject: [PATCH 5.10 554/599] gfs2: Make sure FITRIM minlen is rounded up to fs block size
+Date:   Tue,  5 Apr 2022 09:34:08 +0200
+Message-Id: <20220405070315.327162695@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -54,54 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Andrew Price <anprice@redhat.com>
 
-commit 915593a7a663b2ad08b895a5f3ba8b19d89d4ebf upstream.
+commit 27ca8273fda398638ca994a207323a85b6d81190 upstream.
 
-Clang static analysis reports this issue
-interface.c:810:8: warning: Passed-by-value struct
-  argument contains uninitialized data
-  now = rtc_tm_to_ktime(tm);
-      ^~~~~~~~~~~~~~~~~~~
+Per fstrim(8) we must round up the minlen argument to the fs block size.
+The current calculation doesn't take into account devices that have a
+discard granularity and requested minlen less than 1 fs block, so the
+value can get shifted away to zero in the translation to fs blocks.
 
-tm is set by a successful call to __rtc_read_time()
-but its return status is not checked.  Check if
-it was successful before setting the enabled flag.
-Move the decl of err to function scope.
+The zero minlen passed to gfs2_rgrp_send_discards() then allows
+sb_issue_discard() to be called with nr_sects == 0 which returns -EINVAL
+and results in gfs2_rgrp_send_discards() returning -EIO.
 
-Fixes: 2b2f5ff00f63 ("rtc: interface: ignore expired timers when enqueuing new timers")
-Signed-off-by: Tom Rix <trix@redhat.com>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lore.kernel.org/r/20220326194236.2916310-1-trix@redhat.com
+Make sure minlen is never < 1 fs block by taking the max of the
+requested minlen and the fs block size before comparing to the device's
+discard granularity and shifting to fs blocks.
+
+Fixes: 076f0faa764ab ("GFS2: Fix FITRIM argument handling")
+Signed-off-by: Andrew Price <anprice@redhat.com>
+Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/rtc/interface.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ fs/gfs2/rgrp.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/rtc/interface.c
-+++ b/drivers/rtc/interface.c
-@@ -807,9 +807,13 @@ static int rtc_timer_enqueue(struct rtc_
- 	struct timerqueue_node *next = timerqueue_getnext(&rtc->timerqueue);
- 	struct rtc_time tm;
- 	ktime_t now;
-+	int err;
-+
-+	err = __rtc_read_time(rtc, &tm);
-+	if (err)
-+		return err;
+--- a/fs/gfs2/rgrp.c
++++ b/fs/gfs2/rgrp.c
+@@ -1389,7 +1389,8 @@ int gfs2_fitrim(struct file *filp, void
  
- 	timer->enabled = 1;
--	__rtc_read_time(rtc, &tm);
- 	now = rtc_tm_to_ktime(tm);
+ 	start = r.start >> bs_shift;
+ 	end = start + (r.len >> bs_shift);
+-	minlen = max_t(u64, r.minlen,
++	minlen = max_t(u64, r.minlen, sdp->sd_sb.sb_bsize);
++	minlen = max_t(u64, minlen,
+ 		       q->limits.discard_granularity) >> bs_shift;
  
- 	/* Skip over expired timers */
-@@ -823,7 +827,6 @@ static int rtc_timer_enqueue(struct rtc_
- 	trace_rtc_timer_enqueue(timer);
- 	if (!next || ktime_before(timer->node.expires, next->expires)) {
- 		struct rtc_wkalrm alarm;
--		int err;
- 
- 		alarm.time = rtc_ktime_to_tm(timer->node.expires);
- 		alarm.enabled = 1;
+ 	if (end <= start || minlen > sdp->sd_max_rg_data)
 
 

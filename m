@@ -2,72 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09ADC4F4301
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECDF54F4377
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447223AbiDEUJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:09:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48954 "EHLO
+        id S1383204AbiDEUFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457533AbiDEQG3 (ORCPT
+        with ESMTP id S1457546AbiDEQJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:06:29 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00533DDA;
-        Tue,  5 Apr 2022 09:04:29 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 235ANpX7013964;
-        Tue, 5 Apr 2022 18:04:09 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=siZuhc+89Jo9JDA/pbHU2hXuJ1K7MHFkUHJM38FJfmw=;
- b=wjcnvV0EE/7FrSLN1x2A8CbH1mUtD2blQDYwa/L32Abma3dUt+KypinbB/YCNajWtFRR
- QadwC+5pppvKXtF3T6KAambfwcr1uH0TliGG7d6+ouJmyV3NWFJuyV+uZr5518Kqdl1K
- a13t6OlHsHmNUdYADAkZMHSN+M/cwhN831PcTFBt8sK6vXkjYAt6rzpPUR9WHhoKqq+p
- QVcZ7bLp90qHjeOSFj3rZBdGRWPcymFcg+kHOsbAchmw/bHXthgRkClkD4q4CSyW+Mla
- 7qV2fe7yPDnofLmlafzNRa+H81c99c1eodrCAB5twZ3IUZbrPwLa+4znao1AkP0xyOD+ +Q== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f6du0r4em-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 Apr 2022 18:04:09 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C2A4810002A;
-        Tue,  5 Apr 2022 18:04:08 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9B6DB245534;
-        Tue,  5 Apr 2022 18:04:08 +0200 (CEST)
-Received: from [10.201.20.246] (10.75.127.48) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 5 Apr
- 2022 18:04:07 +0200
-Message-ID: <9f10659b-a778-1c9b-09ba-bd4dbc3f7c66@foss.st.com>
-Date:   Tue, 5 Apr 2022 18:04:06 +0200
+        Tue, 5 Apr 2022 12:09:46 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A85A25CD;
+        Tue,  5 Apr 2022 09:07:46 -0700 (PDT)
+Received: from [IPV6:2a01:e0a:120:3210:cf29:3f0:be4d:7211] (unknown [IPv6:2a01:e0a:120:3210:cf29:3f0:be4d:7211])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 511F61F43BDC;
+        Tue,  5 Apr 2022 17:07:44 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649174864;
+        bh=Y7AMfmbF+pTW6heGBBOtMSPe72VwTuirLOp6bmUM2l8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YdiGwf54xZ2SQaL3Kg7d0z6H9yFy3jkfu5wqfmvXDG3Yoo43FV4nvSf8M7bozm3vQ
+         VVZW2A3dSj2jG45xLSvt3K2OZwoa/XmIf31XNDejfWFZ4JEAtRNyxWjl7M38ydvyLK
+         B/ELY4LHhInWRfNGtOqjHaytIuFg5ccxSSMzxTDcelnc1USAD0Ay5gysapFchtZ19D
+         tGy4YnI0AxLEchVvhSDflRaVbn8ISxd+soOSaX/Bu+cTN4ObX5nvsybHapgxlzoCdJ
+         vr+c8fj31gKs28+vpiZDH/FzwrxgFzYoJ41xyTDKpuPMLsqRupBjcVQjMZTf6IQroH
+         vvGU7AI/NHllA==
+Message-ID: <b6987a9a-56af-f63f-b60a-37df141d6e89@collabora.com>
+Date:   Tue, 5 Apr 2022 18:07:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v2] arm64: defconfig: Config that had RPMSG_CHAR now gets
- RPMSG_CTRL
+Subject: Re: [RFC PATCH 0/8] media: hantro: Add 10-bit support
 Content-Language: en-US
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
-References: <20220405115524.1020499-1-arnaud.pouliquen@foss.st.com>
- <20220405152555.GB4147585@p14s>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-In-Reply-To: <20220405152555.GB4147585@p14s>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-05_04,2022-04-05_01,2022-02-23_01
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+To:     Jernej Skrabec <jernej.skrabec@gmail.com>,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de
+Cc:     mchehab@kernel.org, nicolas@ndufresne.ca, hverkuil-cisco@xs4all.nl,
+        gregkh@linuxfoundation.org, wens@csie.org, samuel@sholland.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+References: <20220227144926.3006585-1-jernej.skrabec@gmail.com>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <20220227144926.3006585-1-jernej.skrabec@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,53 +61,60 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+Le 27/02/2022 à 15:49, Jernej Skrabec a écrit :
+> First two patches add 10-bit formats to UAPI, third extends filtering
+> mechanism, fourth fixes incorrect assumption, fifth moves register
+> configuration code to proper place, sixth and seventh enable 10-bit
+> VP9 decoding on Allwinner H6 and last increases core frequency on
+> Allwinner H6.
+>
+> I'm sending this as RFC to get some comments:
+> 1. format definitions - are fourcc's ok? are comments/descriptions ok?
+> 2. is extended filtering mechanism ok?
+>
+> I would also like if these patches are tested on some more HW.
+> Additionally, can someone test tiled P010?
+>
+> Please take a look.
 
-On 4/5/22 17:25, Mathieu Poirier wrote:
-> On Tue, Apr 05, 2022 at 01:55:24PM +0200, Arnaud Pouliquen wrote:
->> In the commit 617d32938d1b ("rpmsg: Move the rpmsg control device
->> from rpmsg_char to rpmsg_ctrl"), we split the rpmsg_char driver in two.
->> By default give everyone who had the old driver enabled the rpmsg_ctrl
->> driver too.
->>
->> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> 
-> This patch is missing a separation marker, i.e "---", just above.  Without it
-> the text below is also included in the changelog, and it shouldn't.
+Hi Jernej,
 
-A badly controlled cleaning... I send a V3
+I have create a branch to test this series with VP9 and HEVC:
+https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/tree/10bit_imx8m
+Feel free to pick what I may need in it.
 
-My apologizes,
-Arnaud 
+That doesn't improve fluster scores, I think more dev are still needed in GST
+before getting something fully functional.
+Anyway I able to select P010 pixel format if the input is a 10bit bitstream.
 
-> 
-> Thanks,
-> Mathieu
-> 
->>
->> This patch is extracted from the series [1] that has been partially
->> integrated in the Linux Kernel 5.18-rc1.
->>
->> Update vs previous version:
->> - remove "Fixes:" tag in commit, requested by Mathieu Poirier in [2]
->>
->> [1]https://lore.kernel.org/lkml/15be2f08-ba03-2b80-6f53-2056359d5c41@gmail.com/T/
->> [2]https://lore.kernel.org/linux-arm-kernel/CANLsYky1_b80qPbgOaLGVYD-GEr21V6C653iGEB7VCU=GbGvAQ@mail.gmail.com/T/
->> ---
->>  arch/arm64/configs/defconfig | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
->> index 50aa3d75ab4f..3f8906b8a2ca 100644
->> --- a/arch/arm64/configs/defconfig
->> +++ b/arch/arm64/configs/defconfig
->> @@ -1053,6 +1053,7 @@ CONFIG_QCOM_Q6V5_PAS=m
->>  CONFIG_QCOM_SYSMON=m
->>  CONFIG_QCOM_WCNSS_PIL=m
->>  CONFIG_RPMSG_CHAR=m
->> +CONFIG_RPMSG_CTRL=m
->>  CONFIG_RPMSG_QCOM_GLINK_RPM=y
->>  CONFIG_RPMSG_QCOM_GLINK_SMEM=m
->>  CONFIG_RPMSG_QCOM_SMD=y
->> -- 
->> 2.25.1
->>
+Regards,
+Benjamin
+
+>
+> Best regards,
+> Jernej
+>
+> Ezequiel Garcia (1):
+>    media: Add P010 tiled format
+>
+> Jernej Skrabec (7):
+>    media: Add P010 format
+>    media: hantro: Support format filtering by depth
+>    media: hantro: postproc: Fix buffer size calculation
+>    media: hantro: postproc: Fix legacy regs configuration
+>    media: hantro: Store VP9 bit depth in context
+>    media: hantro: sunxi: Enable 10-bit decoding
+>    media: hantro: sunxi: Increase frequency
+>
+>   drivers/media/v4l2-core/v4l2-common.c         |  3 ++
+>   drivers/media/v4l2-core/v4l2-ioctl.c          |  2 +
+>   drivers/staging/media/hantro/hantro.h         |  4 ++
+>   drivers/staging/media/hantro/hantro_drv.c     | 23 +++++++++
+>   .../staging/media/hantro/hantro_g2_vp9_dec.c  |  8 ---
+>   .../staging/media/hantro/hantro_postproc.c    | 34 ++++++++++---
+>   drivers/staging/media/hantro/hantro_v4l2.c    | 50 +++++++++++++++++--
+>   drivers/staging/media/hantro/hantro_v4l2.h    |  3 ++
+>   drivers/staging/media/hantro/sunxi_vpu_hw.c   | 13 ++++-
+>   include/uapi/linux/videodev2.h                |  2 +
+>   10 files changed, 122 insertions(+), 20 deletions(-)
+>

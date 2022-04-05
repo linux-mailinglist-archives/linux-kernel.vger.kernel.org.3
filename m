@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A8D4F415F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F944F3FA5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356865AbiDEODI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55108 "EHLO
+        id S1359119AbiDEUEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234872AbiDEJah (ORCPT
+        with ESMTP id S1354175AbiDEKMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:30:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80150E41F8;
-        Tue,  5 Apr 2022 02:17:32 -0700 (PDT)
+        Tue, 5 Apr 2022 06:12:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D67D50E33;
+        Tue,  5 Apr 2022 02:57:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3E6D615E4;
-        Tue,  5 Apr 2022 09:17:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E60BEC385A0;
-        Tue,  5 Apr 2022 09:17:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC2E3B81B18;
+        Tue,  5 Apr 2022 09:57:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E114C385A1;
+        Tue,  5 Apr 2022 09:57:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150251;
-        bh=lAtKoaS9HUgr0Lm7QE70qsSO+vReFYiIsn0xRlig5Ig=;
+        s=korg; t=1649152674;
+        bh=fiVzT95+a5QkHnGpoPHbZ5qYYyO35JuD9pBA12LY8Tg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZUQK+g6nxsc1PlUZIKu5d64SXG7zgCdH62akODO6q+LULZsvOXtP1GbLsG4UsmNgd
-         IwmFymvBBcsi0BNGSFQ+lmXzZI/Yt5OmFe0MYiLkVgyAwVP78IJHEpNtYN16zRBbVo
-         eEcdyZZRPBkfQEtSnesSN4LYNQhizOz+MUhdlH70=
+        b=1ja+btqe8+szqE05D2GTRsAPPAK5AxIlHm9WXmJQIOHcuO0XlqQDIZOUNXidReh1E
+         UlGcJ6aa9NfniU8/SHFjVor/qXKeKKTqQMeeJNN9oHfjmzmuHySlVFCWmIHRo6xMUo
+         BX1iy10PA4OXphR+G54UG0asd1/7x4hAlhotUVV0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, k2ci <kernel-bot@kylinos.cn>,
-        Jackie Liu <liuyun01@kylinos.cn>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.16 1009/1017] n64cart: convert bi_disk to bi_bdev->bd_disk fix build
-Date:   Tue,  5 Apr 2022 09:32:02 +0200
-Message-Id: <20220405070424.149130175@linuxfoundation.org>
+        stable@vger.kernel.org, Alyssa Ross <hi@alyssa.is>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>
+Subject: [PATCH 5.15 861/913] platform/chrome: cros_ec_typec: Check for EC device
+Date:   Tue,  5 Apr 2022 09:32:03 +0200
+Message-Id: <20220405070405.634759278@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,44 +57,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jackie Liu <liuyun01@kylinos.cn>
+From: Prashant Malani <pmalani@chromium.org>
 
-commit b2479de38d8fc7ef13d5c78ff5ded6e5a1a4eac0 upstream.
+commit ffebd90532728086007038986900426544e3df4e upstream.
 
-My kernel robot report below:
+The Type C ACPI device on older Chromebooks is not generated correctly
+(since their EC firmware doesn't support the new commands required). In
+such cases, the crafted ACPI device doesn't have an EC parent, and it is
+therefore not useful (it shouldn't be generated in the first place since
+the EC firmware doesn't support any of the Type C commands).
 
-  drivers/block/n64cart.c: In function ‘n64cart_submit_bio’:
-  drivers/block/n64cart.c:91:26: error: ‘struct bio’ has no member named ‘bi_disk’
-     91 |  struct device *dev = bio->bi_disk->private_data;
-        |                          ^~
-    CC      drivers/slimbus/qcom-ctrl.o
-    CC      drivers/auxdisplay/hd44780.o
-    CC      drivers/watchdog/watchdog_core.o
-    CC      drivers/nvme/host/fault_inject.o
-    AR      drivers/accessibility/braille/built-in.a
-  make[2]: *** [scripts/Makefile.build:288: drivers/block/n64cart.o] Error 1
+To handle devices which use these older firmware revisions, check for
+the parent EC device handle, and fail the probe if it's not found.
 
-Fixes: 309dca309fc3 ("block: store a block_device pointer in struct bio");
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: Jackie Liu <liuyun01@kylinos.cn>
-Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
-Link: https://lore.kernel.org/r/20220321071216.1549596-1-liu.yun@linux.dev
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: fdc6b21e2444 ("platform/chrome: Add Type C connector class driver")
+Reported-by: Alyssa Ross <hi@alyssa.is>
+Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
+Signed-off-by: Prashant Malani <pmalani@chromium.org>
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Reviewed-by: Alyssa Ross <hi@alyssa.is>
+Tested-by: Alyssa Ross <hi@alyssa.is>
+Link: https://lore.kernel.org/r/20220126190219.3095419-1-pmalani@chromium.org
+Signed-off-by: Benson Leung <bleung@chromium.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/block/n64cart.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/platform/chrome/cros_ec_typec.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/drivers/block/n64cart.c
-+++ b/drivers/block/n64cart.c
-@@ -88,7 +88,7 @@ static void n64cart_submit_bio(struct bi
- {
- 	struct bio_vec bvec;
- 	struct bvec_iter iter;
--	struct device *dev = bio->bi_disk->private_data;
-+	struct device *dev = bio->bi_bdev->bd_disk->private_data;
- 	u32 pos = bio->bi_iter.bi_sector << SECTOR_SHIFT;
+--- a/drivers/platform/chrome/cros_ec_typec.c
++++ b/drivers/platform/chrome/cros_ec_typec.c
+@@ -1106,7 +1106,13 @@ static int cros_typec_probe(struct platf
+ 		return -ENOMEM;
  
- 	bio_for_each_segment(bvec, bio, iter) {
+ 	typec->dev = dev;
++
+ 	typec->ec = dev_get_drvdata(pdev->dev.parent);
++	if (!typec->ec) {
++		dev_err(dev, "couldn't find parent EC device\n");
++		return -ENODEV;
++	}
++
+ 	platform_set_drvdata(pdev, typec);
+ 
+ 	ret = cros_typec_get_cmd_version(typec);
 
 

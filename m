@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D16E24F4C81
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D524F4DF7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1578570AbiDEXYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:24:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
+        id S1350483AbiDFAEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348903AbiDEJsp (ORCPT
+        with ESMTP id S1348911AbiDEJsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:48:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C96A2056;
-        Tue,  5 Apr 2022 02:37:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB18ED9E5;
+        Tue,  5 Apr 2022 02:37:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40408615E5;
-        Tue,  5 Apr 2022 09:37:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FFF2C385A3;
-        Tue,  5 Apr 2022 09:37:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E66961368;
+        Tue,  5 Apr 2022 09:37:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9AC1C385A0;
+        Tue,  5 Apr 2022 09:37:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151430;
-        bh=nfzYUEHmVjBI8/t16EA5oHKdr/xnKdTbSxXCL6KLiZk=;
+        s=korg; t=1649151436;
+        bh=XDVEjUMqTpwWEOMlL/Q2oJIgCZcnl9tgaB3ynEV6gtw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y2iBKoys3mD+DywKm/l7/QM6wv5Ea60nbTqmFNkSs36+06nt5XoJAzyNfIxkTmTkz
-         7txXhRBYt3sRKnQVKkA/dbn3rC4SIH2tml7TyuTo3HwsEzwxBdMwCO3z6MI0LyBTdW
-         f2V22Mo/lccz7ZR2sxhbKo8pfvxQWlfV4Wu7lVoI=
+        b=tjGKHMQEULu8CLvx0ygdz4vZlN9DnpdXCPT3WYihqmbkgjmgCFL9TOZb8kbsIbBD4
+         xdFEm4ponhDsJ05zSOJySQoSO4D9TGENv4M5MYRKJkGcLiKTZyfCiA/kssdJ9NpgwI
+         Y02QlirCneiSAvqpUrpYxlvJ/gWEECPCbPIZthbM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andre Przywara <andre.przywara@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 373/913] ARM: configs: multi_v5_defconfig: re-enable DRM_PANEL and FB_xxx
-Date:   Tue,  5 Apr 2022 09:23:55 +0200
-Message-Id: <20220405070351.027713984@linuxfoundation.org>
+        stable@vger.kernel.org, Cai Huoqing <caihuoqing@baidu.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 375/913] drm/meson: Make use of the helper function devm_platform_ioremap_resourcexxx()
+Date:   Tue,  5 Apr 2022 09:23:57 +0200
+Message-Id: <20220405070351.088604519@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -54,46 +55,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andre Przywara <andre.przywara@arm.com>
+From: Cai Huoqing <caihuoqing@baidu.com>
 
-[ Upstream commit 9c44d0805f949c56121b4ae6949fb064537bf198 ]
+[ Upstream commit d4cb82aa2e4bc0e46582a625cb41b64c83fdde49 ]
 
-Commit 91185d55b32e ("drm: Remove DRM_KMS_FB_HELPER Kconfig option")
-led to de-selection of CONFIG_FB, which was a prerequisite for
-BACKLIGHT_CLASS_DEVICE, which CONFIG_DRM_PANEL_SIMPLE depended on.
-Explicitly set CONFIG_FB, to bring DRM_PANEL_SIMPLE, DRM_PANEL_EDP,
-FB_IMX and FB_ATMEL back into the generated .config.
-This also adds some new FB related features like fonts and the
-framebuffer console.
+Use the devm_platform_ioremap_resource_byname() helper instead of
+calling platform_get_resource_byname() and devm_ioremap_resource()
+separately
 
-See also commit 8c1768967e27 ("ARM: config: mutli v7: Reenable FB
-dependency"), which solved the same problem for multi_v7_defconfig.
+Use the devm_platform_ioremap_resource() helper instead of
+calling platform_get_resource() and devm_ioremap_resource()
+separately
 
-This relies on [1], to fix a broken Kconfig dependency.
-
-[1] https://lore.kernel.org/dri-devel/20220315084559.23510-1-tzimmermann@suse.de/raw
-
-Fixes: 91185d55b32e ("drm: Remove DRM_KMS_FB_HELPER Kconfig option")
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Link: https://lore.kernel.org/r/20220317183043.948432-4-andre.przywara@arm.com'
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20210831135644.4576-1-caihuoqing@baidu.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/configs/multi_v5_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/meson/meson_drv.c     | 3 +--
+ drivers/gpu/drm/meson/meson_dw_hdmi.c | 4 +---
+ 2 files changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm/configs/multi_v5_defconfig b/arch/arm/configs/multi_v5_defconfig
-index 6f789e8483c9..e883cb6dc645 100644
---- a/arch/arm/configs/multi_v5_defconfig
-+++ b/arch/arm/configs/multi_v5_defconfig
-@@ -196,6 +196,7 @@ CONFIG_DRM=y
- CONFIG_DRM_ATMEL_HLCDC=m
- CONFIG_DRM_PANEL_SIMPLE=y
- CONFIG_DRM_ASPEED_GFX=m
-+CONFIG_FB=y
- CONFIG_FB_IMX=y
- CONFIG_FB_ATMEL=y
- CONFIG_BACKLIGHT_ATMEL_LCDC=y
+diff --git a/drivers/gpu/drm/meson/meson_drv.c b/drivers/gpu/drm/meson/meson_drv.c
+index 62846af2f5e5..923377f856de 100644
+--- a/drivers/gpu/drm/meson/meson_drv.c
++++ b/drivers/gpu/drm/meson/meson_drv.c
+@@ -206,8 +206,7 @@ static int meson_drv_bind_master(struct device *dev, bool has_components)
+ 	priv->compat = match->compat;
+ 	priv->afbcd.ops = match->afbcd_ops;
+ 
+-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "vpu");
+-	regs = devm_ioremap_resource(dev, res);
++	regs = devm_platform_ioremap_resource_byname(pdev, "vpu");
+ 	if (IS_ERR(regs)) {
+ 		ret = PTR_ERR(regs);
+ 		goto free_drm;
+diff --git a/drivers/gpu/drm/meson/meson_dw_hdmi.c b/drivers/gpu/drm/meson/meson_dw_hdmi.c
+index 2ed87cfdd735..0afbd1e70bfc 100644
+--- a/drivers/gpu/drm/meson/meson_dw_hdmi.c
++++ b/drivers/gpu/drm/meson/meson_dw_hdmi.c
+@@ -978,7 +978,6 @@ static int meson_dw_hdmi_bind(struct device *dev, struct device *master,
+ 	struct dw_hdmi_plat_data *dw_plat_data;
+ 	struct drm_bridge *next_bridge;
+ 	struct drm_encoder *encoder;
+-	struct resource *res;
+ 	int irq;
+ 	int ret;
+ 
+@@ -1042,8 +1041,7 @@ static int meson_dw_hdmi_bind(struct device *dev, struct device *master,
+ 		return PTR_ERR(meson_dw_hdmi->hdmitx_phy);
+ 	}
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	meson_dw_hdmi->hdmitx = devm_ioremap_resource(dev, res);
++	meson_dw_hdmi->hdmitx = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(meson_dw_hdmi->hdmitx))
+ 		return PTR_ERR(meson_dw_hdmi->hdmitx);
+ 
 -- 
 2.34.1
 

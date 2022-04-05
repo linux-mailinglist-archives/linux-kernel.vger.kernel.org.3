@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B584F2CF4
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 604424F2DC8
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353418AbiDEKGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
+        id S1347692AbiDEKpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:45:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240783AbiDEIcb (ORCPT
+        with ESMTP id S240939AbiDEIck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:32:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FE4890AC;
-        Tue,  5 Apr 2022 01:24:58 -0700 (PDT)
+        Tue, 5 Apr 2022 04:32:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC798FE7F;
+        Tue,  5 Apr 2022 01:25:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B91FCB81B92;
-        Tue,  5 Apr 2022 08:24:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05AF2C385A0;
-        Tue,  5 Apr 2022 08:24:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EE00CB81B13;
+        Tue,  5 Apr 2022 08:25:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3846AC385A1;
+        Tue,  5 Apr 2022 08:25:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147096;
-        bh=kU0VvC1uF97kxu9T98KRgufd1L4EUMUVwKbCz6JuJJ8=;
+        s=korg; t=1649147121;
+        bh=+AI/eYFdOzQ5BPe3mwk7+kXqJzy15v38hVCemoGFvLE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xphhm4/xbh1HUGod+STxOXeFw21wY0s10S0oyuquuAa0USD1XFaKslLvFzx5KR1ms
-         Aeh23EuJkBi+S3J5bnQc9LXYeIF+6BsMl8LdeyuwIgAMeI3dJhSQHK/3zsWdt2m/Cw
-         rMyn6wAmXEM/2FWSD+A2X3vZqf6VOdgot2BcJamQ=
+        b=xDQNDFW5765kaSVX3479bcgW+YI5OEqGOsSD9sDIMY1FRChMr8u5ECPTH8A5KwhXF
+         t7EOqOkBJ8qarLmsRrPHEZcQ2H8IZckOa7Ax2jE6Imr7mvGZaiIOmZUeQm5eef7xo8
+         1eNOzVoheI0tbGC6fGfojhAJu13PwIDx1T0PFrEk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qiuhao Li <qiuhao@sysec.org>,
-        Gaoning Pan <pgn@zju.edu.cn>, Yongkang Jia <kangel@zju.edu.cn>,
-        syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tadeusz Struk <tadeusz.struk@linaro.org>
-Subject: [PATCH 5.17 0999/1126] KVM: x86/mmu: do compare-and-exchange of gPTE via the user address
-Date:   Tue,  5 Apr 2022 09:29:06 +0200
-Message-Id: <20220405070436.814643129@linuxfoundation.org>
+        stable@vger.kernel.org, Yi Liu <liu.yi24@zte.com.cn>,
+        Yi Wang <wang.yi59@zte.com.cn>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.17 1002/1126] KVM: SVM: fix panic on out-of-bounds guest IRQ
+Date:   Tue,  5 Apr 2022 09:29:09 +0200
+Message-Id: <20220405070436.901957788@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -58,149 +55,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Bonzini <pbonzini@redhat.com>
+From: Yi Wang <wang.yi59@zte.com.cn>
 
-commit 2a8859f373b0a86f0ece8ec8312607eacf12485d upstream.
+commit a80ced6ea514000d34bf1239d47553de0d1ee89e upstream.
 
-FNAME(cmpxchg_gpte) is an inefficient mess.  It is at least decent if it
-can go through get_user_pages_fast(), but if it cannot then it tries to
-use memremap(); that is not just terribly slow, it is also wrong because
-it assumes that the VM_PFNMAP VMA is contiguous.
+As guest_irq is coming from KVM_IRQFD API call, it may trigger
+crash in svm_update_pi_irte() due to out-of-bounds:
 
-The right way to do it would be to do the same thing as
-hva_to_pfn_remapped() does since commit add6a0cd1c5b ("KVM: MMU: try to
-fix up page faults before giving up", 2016-07-05), using follow_pte()
-and fixup_user_fault() to determine the correct address to use for
-memremap().  To do this, one could for example extract hva_to_pfn()
-for use outside virt/kvm/kvm_main.c.  But really there is no reason to
-do that either, because there is already a perfectly valid address to
-do the cmpxchg() on, only it is a userspace address.  That means doing
-user_access_begin()/user_access_end() and writing the code in assembly
-to handle exceptions correctly.  Worse, the guest PTE can be 8-byte
-even on i686 so there is the extra complication of using cmpxchg8b to
-account for.  But at least it is an efficient mess.
+crash> bt
+PID: 22218  TASK: ffff951a6ad74980  CPU: 73  COMMAND: "vcpu8"
+ #0 [ffffb1ba6707fa40] machine_kexec at ffffffff8565b397
+ #1 [ffffb1ba6707fa90] __crash_kexec at ffffffff85788a6d
+ #2 [ffffb1ba6707fb58] crash_kexec at ffffffff8578995d
+ #3 [ffffb1ba6707fb70] oops_end at ffffffff85623c0d
+ #4 [ffffb1ba6707fb90] no_context at ffffffff856692c9
+ #5 [ffffb1ba6707fbf8] exc_page_fault at ffffffff85f95b51
+ #6 [ffffb1ba6707fc50] asm_exc_page_fault at ffffffff86000ace
+    [exception RIP: svm_update_pi_irte+227]
+    RIP: ffffffffc0761b53  RSP: ffffb1ba6707fd08  RFLAGS: 00010086
+    RAX: ffffb1ba6707fd78  RBX: ffffb1ba66d91000  RCX: 0000000000000001
+    RDX: 00003c803f63f1c0  RSI: 000000000000019a  RDI: ffffb1ba66db2ab8
+    RBP: 000000000000019a   R8: 0000000000000040   R9: ffff94ca41b82200
+    R10: ffffffffffffffcf  R11: 0000000000000001  R12: 0000000000000001
+    R13: 0000000000000001  R14: ffffffffffffffcf  R15: 000000000000005f
+    ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
+ #7 [ffffb1ba6707fdb8] kvm_irq_routing_update at ffffffffc09f19a1 [kvm]
+ #8 [ffffb1ba6707fde0] kvm_set_irq_routing at ffffffffc09f2133 [kvm]
+ #9 [ffffb1ba6707fe18] kvm_vm_ioctl at ffffffffc09ef544 [kvm]
+    RIP: 00007f143c36488b  RSP: 00007f143a4e04b8  RFLAGS: 00000246
+    RAX: ffffffffffffffda  RBX: 00007f05780041d0  RCX: 00007f143c36488b
+    RDX: 00007f05780041d0  RSI: 000000004008ae6a  RDI: 0000000000000020
+    RBP: 00000000000004e8   R8: 0000000000000008   R9: 00007f05780041e0
+    R10: 00007f0578004560  R11: 0000000000000246  R12: 00000000000004e0
+    R13: 000000000000001a  R14: 00007f1424001c60  R15: 00007f0578003bc0
+    ORIG_RAX: 0000000000000010  CS: 0033  SS: 002b
 
-(Thanks to Linus for suggesting improvement on the inline assembly).
+Vmx have been fix this in commit 3a8b0677fc61 (KVM: VMX: Do not BUG() on
+out-of-bounds guest IRQ), so we can just copy source from that to fix
+this.
 
-Reported-by: Qiuhao Li <qiuhao@sysec.org>
-Reported-by: Gaoning Pan <pgn@zju.edu.cn>
-Reported-by: Yongkang Jia <kangel@zju.edu.cn>
-Reported-by: syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
-Debugged-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-Tested-by: Maxim Levitsky <mlevitsk@redhat.com>
+Co-developed-by: Yi Liu <liu.yi24@zte.com.cn>
+Signed-off-by: Yi Liu <liu.yi24@zte.com.cn>
+Signed-off-by: Yi Wang <wang.yi59@zte.com.cn>
+Message-Id: <20220309113025.44469-1-wang.yi59@zte.com.cn>
 Cc: stable@vger.kernel.org
-Fixes: bd53cb35a3e9 ("X86/KVM: Handle PFNs outside of kernel reach when touching GPTEs")
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/mmu/paging_tmpl.h |   74 ++++++++++++++++++-----------------------
- 1 file changed, 34 insertions(+), 40 deletions(-)
+ arch/x86/kvm/svm/avic.c |   10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
---- a/arch/x86/kvm/mmu/paging_tmpl.h
-+++ b/arch/x86/kvm/mmu/paging_tmpl.h
-@@ -34,9 +34,8 @@
- 	#define PT_HAVE_ACCESSED_DIRTY(mmu) true
- 	#ifdef CONFIG_X86_64
- 	#define PT_MAX_FULL_LEVELS PT64_ROOT_MAX_LEVEL
--	#define CMPXCHG cmpxchg
-+	#define CMPXCHG "cmpxchgq"
- 	#else
--	#define CMPXCHG cmpxchg64
- 	#define PT_MAX_FULL_LEVELS 2
- 	#endif
- #elif PTTYPE == 32
-@@ -52,7 +51,7 @@
- 	#define PT_GUEST_DIRTY_SHIFT PT_DIRTY_SHIFT
- 	#define PT_GUEST_ACCESSED_SHIFT PT_ACCESSED_SHIFT
- 	#define PT_HAVE_ACCESSED_DIRTY(mmu) true
--	#define CMPXCHG cmpxchg
-+	#define CMPXCHG "cmpxchgl"
- #elif PTTYPE == PTTYPE_EPT
- 	#define pt_element_t u64
- 	#define guest_walker guest_walkerEPT
-@@ -65,7 +64,9 @@
- 	#define PT_GUEST_DIRTY_SHIFT 9
- 	#define PT_GUEST_ACCESSED_SHIFT 8
- 	#define PT_HAVE_ACCESSED_DIRTY(mmu) ((mmu)->ept_ad)
--	#define CMPXCHG cmpxchg64
-+	#ifdef CONFIG_X86_64
-+	#define CMPXCHG "cmpxchgq"
-+	#endif
- 	#define PT_MAX_FULL_LEVELS PT64_ROOT_MAX_LEVEL
- #else
- 	#error Invalid PTTYPE value
-@@ -147,43 +148,36 @@ static int FNAME(cmpxchg_gpte)(struct kv
- 			       pt_element_t __user *ptep_user, unsigned index,
- 			       pt_element_t orig_pte, pt_element_t new_pte)
+--- a/arch/x86/kvm/svm/avic.c
++++ b/arch/x86/kvm/svm/avic.c
+@@ -783,7 +783,7 @@ int svm_update_pi_irte(struct kvm *kvm,
  {
--	int npages;
--	pt_element_t ret;
--	pt_element_t *table;
--	struct page *page;
--
--	npages = get_user_pages_fast((unsigned long)ptep_user, 1, FOLL_WRITE, &page);
--	if (likely(npages == 1)) {
--		table = kmap_atomic(page);
--		ret = CMPXCHG(&table[index], orig_pte, new_pte);
--		kunmap_atomic(table);
--
--		kvm_release_page_dirty(page);
--	} else {
--		struct vm_area_struct *vma;
--		unsigned long vaddr = (unsigned long)ptep_user & PAGE_MASK;
--		unsigned long pfn;
--		unsigned long paddr;
--
--		mmap_read_lock(current->mm);
--		vma = find_vma_intersection(current->mm, vaddr, vaddr + PAGE_SIZE);
--		if (!vma || !(vma->vm_flags & VM_PFNMAP)) {
--			mmap_read_unlock(current->mm);
--			return -EFAULT;
--		}
--		pfn = ((vaddr - vma->vm_start) >> PAGE_SHIFT) + vma->vm_pgoff;
--		paddr = pfn << PAGE_SHIFT;
--		table = memremap(paddr, PAGE_SIZE, MEMREMAP_WB);
--		if (!table) {
--			mmap_read_unlock(current->mm);
--			return -EFAULT;
--		}
--		ret = CMPXCHG(&table[index], orig_pte, new_pte);
--		memunmap(table);
--		mmap_read_unlock(current->mm);
--	}
-+	signed char r;
-+
-+	if (!user_access_begin(ptep_user, sizeof(pt_element_t)))
-+		return -EFAULT;
-+
-+#ifdef CMPXCHG
-+	asm volatile("1:" LOCK_PREFIX CMPXCHG " %[new], %[ptr]\n"
-+		     "setnz %b[r]\n"
-+		     "2:"
-+		     _ASM_EXTABLE_TYPE_REG(1b, 2b, EX_TYPE_EFAULT_REG, %k[r])
-+		     : [ptr] "+m" (*ptep_user),
-+		       [old] "+a" (orig_pte),
-+		       [r] "=q" (r)
-+		     : [new] "r" (new_pte)
-+		     : "memory");
-+#else
-+	asm volatile("1:" LOCK_PREFIX "cmpxchg8b %[ptr]\n"
-+		     "setnz %b[r]\n"
-+		     "2:"
-+		     _ASM_EXTABLE_TYPE_REG(1b, 2b, EX_TYPE_EFAULT_REG, %k[r])
-+		     : [ptr] "+m" (*ptep_user),
-+		       [old] "+A" (orig_pte),
-+		       [r] "=q" (r)
-+		     : [new_lo] "b" ((u32)new_pte),
-+		       [new_hi] "c" ((u32)(new_pte >> 32))
-+		     : "memory");
-+#endif
+ 	struct kvm_kernel_irq_routing_entry *e;
+ 	struct kvm_irq_routing_table *irq_rt;
+-	int idx, ret = -EINVAL;
++	int idx, ret = 0;
  
--	return (ret != orig_pte);
-+	user_access_end();
-+	return r;
- }
+ 	if (!kvm_arch_has_assigned_device(kvm) ||
+ 	    !irq_remapping_cap(IRQ_POSTING_CAP))
+@@ -794,7 +794,13 @@ int svm_update_pi_irte(struct kvm *kvm,
  
- static bool FNAME(prefetch_invalid_gpte)(struct kvm_vcpu *vcpu,
+ 	idx = srcu_read_lock(&kvm->irq_srcu);
+ 	irq_rt = srcu_dereference(kvm->irq_routing, &kvm->irq_srcu);
+-	WARN_ON(guest_irq >= irq_rt->nr_rt_entries);
++
++	if (guest_irq >= irq_rt->nr_rt_entries ||
++		hlist_empty(&irq_rt->map[guest_irq])) {
++		pr_warn_once("no route for guest_irq %u/%u (broken user space?)\n",
++			     guest_irq, irq_rt->nr_rt_entries);
++		goto out;
++	}
+ 
+ 	hlist_for_each_entry(e, &irq_rt->map[guest_irq], link) {
+ 		struct vcpu_data vcpu_info;
 
 

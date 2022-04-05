@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0DF04F50F6
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C7874F4FD0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1844127AbiDFBpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
+        id S1839494AbiDFBEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358291AbiDEK2N (ORCPT
+        with ESMTP id S241150AbiDEK2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:28:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F2513FB8;
-        Tue,  5 Apr 2022 03:17:50 -0700 (PDT)
+        Tue, 5 Apr 2022 06:28:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAE7DCA82;
+        Tue,  5 Apr 2022 03:18:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0796261777;
-        Tue,  5 Apr 2022 10:17:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18708C385A0;
-        Tue,  5 Apr 2022 10:17:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB5C9B81C98;
+        Tue,  5 Apr 2022 10:18:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21C10C385A0;
+        Tue,  5 Apr 2022 10:18:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153869;
-        bh=STE1V4eBIELbzwjKqO/RVxava5O5udGBwQKcKktC430=;
+        s=korg; t=1649153885;
+        bh=wqbPfyi7RvYZHdPCYAxM7ej+NA3443hfkZmvaukFEtU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N8kEsqRP7gQyhBcFT4VHqM0DPzllUTklF7s04fzrp9YApyldWzTILveCGfHmyGfG1
-         7r2dCMbi6GOkKMC9YpIT80HnQJRZLT2itIxVc0FnFCqEW2Bwg5faCDEN/GO3ri5chf
-         sLMueyqevBAkymZDtFppmtA9/MeTRFBNwIjamWlk=
+        b=INMEHX22umhbA4IiDs9tl7U+bkmRNRibZrGtizajnbarPxWqx7gmx6QsKp7AleWXj
+         RPXcATnRpU8KP/TPPbHH65+mqZS7LdrNr58da3XnQNx0ZkuIf0LHkHNNVluV9TxzkO
+         tvmJwHAUB/+SvpK8T0I4ViJLRSapLMa4GvvD1a20=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
+        stable@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 377/599] mfd: asic3: Add missing iounmap() on error asic3_mfd_probe
-Date:   Tue,  5 Apr 2022 09:31:11 +0200
-Message-Id: <20220405070310.048907715@linuxfoundation.org>
+Subject: [PATCH 5.10 383/599] cpufreq: qcom-cpufreq-nvmem: fix reading of PVS Valid fuse
+Date:   Tue,  5 Apr 2022 09:31:17 +0200
+Message-Id: <20220405070310.227908021@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -55,57 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Luca Weiss <luca@z3ntu.xyz>
 
-[ Upstream commit e84ee1a75f944a0fe3c277aaa10c426603d2b0bc ]
+[ Upstream commit 4a8a77abf0e2b6468ba0281e33384cbec5fb476a ]
 
-Add the missing iounmap() before return from asic3_mfd_probe
-in the error handling case.
+The fuse consists of 64 bits, with this statement we're supposed to get
+the upper 32 bits but it actually read out of bounds and got 0 instead
+of the desired value which lead to the "PVS bin not set." codepath being
+run resetting our pvs value.
 
-Fixes: 64e8867ba809 ("mfd: tmio_mmc hardware abstraction for CNF area")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Link: https://lore.kernel.org/r/20220307072947.5369-1-linmq006@gmail.com
+Fixes: a8811ec764f9 ("cpufreq: qcom: Add support for krait based socs")
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/asic3.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/cpufreq/qcom-cpufreq-nvmem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/mfd/asic3.c b/drivers/mfd/asic3.c
-index a6bd2134cea2..14e4bbe6a9da 100644
---- a/drivers/mfd/asic3.c
-+++ b/drivers/mfd/asic3.c
-@@ -914,14 +914,14 @@ static int __init asic3_mfd_probe(struct platform_device *pdev,
- 		ret = mfd_add_devices(&pdev->dev, pdev->id,
- 			&asic3_cell_ds1wm, 1, mem, asic->irq_base, NULL);
- 		if (ret < 0)
--			goto out;
-+			goto out_unmap;
+diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+index fba9937a406b..7fdd30e92e42 100644
+--- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
++++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+@@ -130,7 +130,7 @@ static void get_krait_bin_format_b(struct device *cpu_dev,
  	}
  
- 	if (mem_sdio && (irq >= 0)) {
- 		ret = mfd_add_devices(&pdev->dev, pdev->id,
- 			&asic3_cell_mmc, 1, mem_sdio, irq, NULL);
- 		if (ret < 0)
--			goto out;
-+			goto out_unmap;
- 	}
- 
- 	ret = 0;
-@@ -935,8 +935,12 @@ static int __init asic3_mfd_probe(struct platform_device *pdev,
- 		ret = mfd_add_devices(&pdev->dev, 0,
- 			asic3_cell_leds, ASIC3_NUM_LEDS, NULL, 0, NULL);
- 	}
-+	return ret;
- 
-- out:
-+out_unmap:
-+	if (asic->tmio_cnf)
-+		iounmap(asic->tmio_cnf);
-+out:
- 	return ret;
- }
- 
+ 	/* Check PVS_BLOW_STATUS */
+-	pte_efuse = *(((u32 *)buf) + 4);
++	pte_efuse = *(((u32 *)buf) + 1);
+ 	pte_efuse &= BIT(21);
+ 	if (pte_efuse) {
+ 		dev_dbg(cpu_dev, "PVS bin: %d\n", *pvs);
 -- 
 2.34.1
 

@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E6B94F4845
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:01:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3C274F47F6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:44:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379114AbiDEVcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
+        id S1349168AbiDEVXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356269AbiDEKXd (ORCPT
+        with ESMTP id S1356372AbiDEKXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:23:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEC9BAB9E;
-        Tue,  5 Apr 2022 03:08:06 -0700 (PDT)
+        Tue, 5 Apr 2022 06:23:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C262BB93A;
+        Tue,  5 Apr 2022 03:08:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3DDC617AA;
-        Tue,  5 Apr 2022 10:08:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE080C385A8;
-        Tue,  5 Apr 2022 10:08:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 017626179D;
+        Tue,  5 Apr 2022 10:08:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F885C385A7;
+        Tue,  5 Apr 2022 10:08:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153285;
-        bh=WAcl/CMtJJoJE24n0Tw8tG1yq386lGcEloJ1rQ265JU=;
+        s=korg; t=1649153293;
+        bh=ya1hx1/fE2HUdn3yYRyBbOZsn1H1ZTI+2o0qI65TxsE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AUqjI8gl5e3O0KQDs4eb5itPpb0V1JDtvrhtEJ4jm5RQ6B83X7LxfCeOtrqVS/vjT
-         O4lRmMEEWvUsc49YQeY8q9hvXoAVBkJehL1YUuSvXLrs3Jf+ADg0guw6aVzVvR1Zz1
-         tq/tHF52VHCnWLdom+AydWhd4afjJhAbDMpwffkc=
+        b=xwGA8LUsf+m9um8N0BzHv9qnrrJKDZXGIj1m0cLrhbDv9lioZNb9CNqCdBYxQsz9l
+         6ioBKLq4SvlVBcwodFGYDwroUSsfEs8z2X0AExHBteKgWxiVITy2iSQ5Gcx8lbYCw3
+         DXxKYdKp2080impWxWgrmLVpErqOPy8P/R7PwR9w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joel Jaeschke <joel.jaeschke@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 169/599] io_uring: terminate manual loop iterator loop correctly for non-vecs
-Date:   Tue,  5 Apr 2022 09:27:43 +0200
-Message-Id: <20220405070303.871680061@linuxfoundation.org>
+        stable@vger.kernel.org, Zhipeng Tan <tanzhipeng@hust.edu.cn>,
+        Jicheng Shao <shaojicheng@hust.edu.cn>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 172/599] f2fs: fix to enable ATGC correctly via gc_idle sysfs interface
+Date:   Tue,  5 Apr 2022 09:27:46 +0200
+Message-Id: <20220405070303.960392461@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -54,46 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Chao Yu <chao@kernel.org>
 
-[ Upstream commit 5e929367468c8f97cd1ffb0417316cecfebef94b ]
+[ Upstream commit 7d19e3dab0002e527052b0aaf986e8c32e5537bf ]
 
-The fix for not advancing the iterator if we're using fixed buffers is
-broken in that it can hit a condition where we don't terminate the loop.
-This results in io-wq looping forever, asking to read (or write) 0 bytes
-for every subsequent loop.
+It needs to assign sbi->gc_mode with GC_IDLE_AT rather than GC_AT when
+user tries to enable ATGC via gc_idle sysfs interface, fix it.
 
-Reported-by: Joel Jaeschke <joel.jaeschke@gmail.com>
-Link: https://github.com/axboe/liburing/issues/549
-Fixes: 16c8d2df7ec0 ("io_uring: ensure symmetry in handling iter types in loop_rw_iter()")
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 093749e296e2 ("f2fs: support age threshold based garbage collection")
+Cc: Zhipeng Tan <tanzhipeng@hust.edu.cn>
+Signed-off-by: Jicheng Shao <shaojicheng@hust.edu.cn>
+Signed-off-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/io_uring.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ fs/f2fs/sysfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index fd188b972151..82f1311dab8e 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -3220,13 +3220,15 @@ static ssize_t loop_rw_iter(int rw, struct io_kiocb *req, struct iov_iter *iter)
- 				ret = nr;
- 			break;
- 		}
-+		ret += nr;
- 		if (!iov_iter_is_bvec(iter)) {
- 			iov_iter_advance(iter, nr);
+diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
+index 7ffd4bb398b0..a7e7d68256e0 100644
+--- a/fs/f2fs/sysfs.c
++++ b/fs/f2fs/sysfs.c
+@@ -386,7 +386,7 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
+ 		} else if (t == GC_IDLE_AT) {
+ 			if (!sbi->am.atgc_enabled)
+ 				return -EINVAL;
+-			sbi->gc_mode = GC_AT;
++			sbi->gc_mode = GC_IDLE_AT;
  		} else {
--			req->rw.len -= nr;
- 			req->rw.addr += nr;
-+			req->rw.len -= nr;
-+			if (!req->rw.len)
-+				break;
+ 			sbi->gc_mode = GC_NORMAL;
  		}
--		ret += nr;
- 		if (nr != iovec.iov_len)
- 			break;
- 	}
 -- 
 2.34.1
 

@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1147D4F4F4F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 164A94F4EF7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1837287AbiDFApZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39896 "EHLO
+        id S1582307AbiDEXmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347690AbiDEJqj (ORCPT
+        with ESMTP id S1348042AbiDEJqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:46:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294DEDFD49;
-        Tue,  5 Apr 2022 02:32:59 -0700 (PDT)
+        Tue, 5 Apr 2022 05:46:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94013E09A6;
+        Tue,  5 Apr 2022 02:33:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7CEFFB81C8B;
-        Tue,  5 Apr 2022 09:32:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5B44C385A2;
-        Tue,  5 Apr 2022 09:32:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F56D615E5;
+        Tue,  5 Apr 2022 09:33:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5107C385A0;
+        Tue,  5 Apr 2022 09:33:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151176;
-        bh=UtAF4TJdgd6LI56pIhGRnVTmygJzn7Y55xHYTWv0Fco=;
+        s=korg; t=1649151190;
+        bh=ffree4QTNFS/AnCZEfxj8SDurCR5FE0zgUbDPN8iszM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hzau5B5b0J8vv6tG5YKIQlzlekWPylQ2Mfz7MaECCnF0qES2D5CrI0HEBt60RWof0
-         eFEoU3am/Y5uQOnjrhuW0IBVWIA/fibtlDkx5VMH3L4OSP7kxKtGjCa952EiE8cjOZ
-         jgMsARjsoZ/1SSSh7cYukoRdIIf3MhxMPV1KROR8=
+        b=scSXy6FlT7dq+XKRssNwJ8fKTvT0D/LdJokUoaXDfiWQn3Xmwvkqh/9DsOkrGE7vB
+         xpaqh3kgr4xWyZLc0kyEOapy6Zzxu9iLEGntLnbiAoDzwHcVWzUwCMYfgcUhB11Dc8
+         IcuA5AYxCv+PQqpdCTm2iAXUYNxW1RalR619VBiQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Hugues Fruchet <hugues.fruchet@st.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 320/913] ASoC: codecs: wc938x: fix accessing array out of bounds for enum type
-Date:   Tue,  5 Apr 2022 09:23:02 +0200
-Message-Id: <20220405070349.442730334@linuxfoundation.org>
+Subject: [PATCH 5.15 325/913] media: ov5640: Fix set format, v4l2_mbus_pixelcode not updated
+Date:   Tue,  5 Apr 2022 09:23:07 +0200
+Message-Id: <20220405070349.592562675@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,47 +57,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+From: Mirela Rabulea <mirela.rabulea@nxp.com>
 
-[ Upstream commit cc587b7c8fbbe128f6bd0dad025a0caea5e6d164 ]
+[ Upstream commit e738f5dd67eb8098d75345908a5e73782d0569a5 ]
 
-Accessing enums using integer would result in array out of bounds access
-on platforms like aarch64 where sizeof(long) is 8 compared to enum size
-which is 4 bytes.
+In ov5640_set_fmt, pending_fmt_change will always be false, because the
+sensor format is saved before comparing it with the previous format:
+	fmt = &sensor->fmt;...
+	*fmt = *mbus_fmt;...
+	if (mbus_fmt->code != sensor->fmt.code)
+		sensor->pending_fmt_change = true;
+This causes the sensor to capture with the previous pixelcode.
 
-Fix this by using enumerated items instead of integers.
+Also, changes might happen even for V4L2_SUBDEV_FORMAT_TRY, so fix that.
 
-Fixes: e8ba1e05bdc0 ("ASoC: codecs: wcd938x: add basic controls")
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Link: https://lore.kernel.org/r/20220222183212.11580-7-srinivas.kandagatla@linaro.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Basically, revert back to the state before
+commit 071154499193 ("media: ov5640: Fix set format regression")
+as it was more clear, and then update format even when pixelcode does
+not change, as resolution might change.
+
+Fixes: 071154499193 ("media: ov5640: Fix set format regression")
+Fixes: 6949d864776e ("media: ov5640: do not change mode if format or frame interval is unchanged")
+Fixes: fb98e29ff1ea5 ("media: ov5640: fix mode change regression")
+
+Signed-off-by: Mirela Rabulea <mirela.rabulea@nxp.com>
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Acked-by: Hugues Fruchet <hugues.fruchet@st.com>
+Tested-by: Hugues Fruchet <hugues.fruchet@st.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/wcd938x.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ov5640.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
-index bbc261ab2025..54671bbf7471 100644
---- a/sound/soc/codecs/wcd938x.c
-+++ b/sound/soc/codecs/wcd938x.c
-@@ -2504,7 +2504,7 @@ static int wcd938x_tx_mode_get(struct snd_kcontrol *kcontrol,
- 	struct soc_enum *e = (struct soc_enum *)kcontrol->private_value;
- 	int path = e->shift_l;
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index ddbd71394db3..db5a19babe67 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -2293,7 +2293,6 @@ static int ov5640_set_fmt(struct v4l2_subdev *sd,
+ 	struct ov5640_dev *sensor = to_ov5640_dev(sd);
+ 	const struct ov5640_mode_info *new_mode;
+ 	struct v4l2_mbus_framefmt *mbus_fmt = &format->format;
+-	struct v4l2_mbus_framefmt *fmt;
+ 	int ret;
  
--	ucontrol->value.integer.value[0] = wcd938x->tx_mode[path];
-+	ucontrol->value.enumerated.item[0] = wcd938x->tx_mode[path];
+ 	if (format->pad != 0)
+@@ -2311,12 +2310,10 @@ static int ov5640_set_fmt(struct v4l2_subdev *sd,
+ 	if (ret)
+ 		goto out;
  
- 	return 0;
- }
-@@ -2528,7 +2528,7 @@ static int wcd938x_rx_hph_mode_get(struct snd_kcontrol *kcontrol,
- 	struct snd_soc_component *component = snd_soc_kcontrol_component(kcontrol);
- 	struct wcd938x_priv *wcd938x = snd_soc_component_get_drvdata(component);
+-	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
+-		fmt = v4l2_subdev_get_try_format(sd, sd_state, 0);
+-	else
+-		fmt = &sensor->fmt;
+-
+-	*fmt = *mbus_fmt;
++	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
++		*v4l2_subdev_get_try_format(sd, sd_state, 0) = *mbus_fmt;
++		goto out;
++	}
  
--	ucontrol->value.integer.value[0] = wcd938x->hph_mode;
-+	ucontrol->value.enumerated.item[0] = wcd938x->hph_mode;
+ 	if (new_mode != sensor->current_mode) {
+ 		sensor->current_mode = new_mode;
+@@ -2325,6 +2322,9 @@ static int ov5640_set_fmt(struct v4l2_subdev *sd,
+ 	if (mbus_fmt->code != sensor->fmt.code)
+ 		sensor->pending_fmt_change = true;
  
- 	return 0;
- }
++	/* update format even if code is unchanged, resolution might change */
++	sensor->fmt = *mbus_fmt;
++
+ 	__v4l2_ctrl_s_ctrl_int64(sensor->ctrls.pixel_rate,
+ 				 ov5640_calc_pixel_rate(sensor));
+ out:
 -- 
 2.34.1
 

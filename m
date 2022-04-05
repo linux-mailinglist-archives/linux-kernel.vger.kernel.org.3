@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26CFB4F391F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:44:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8894F3957
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377622AbiDEL3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
+        id S1377776AbiDELag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243858AbiDEIvM (ORCPT
+        with ESMTP id S243821AbiDEIvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:51:12 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79EDCA0FA;
-        Tue,  5 Apr 2022 01:39:48 -0700 (PDT)
+        Tue, 5 Apr 2022 04:51:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A325CC8BFA;
+        Tue,  5 Apr 2022 01:39:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BBD5CCE1BCE;
-        Tue,  5 Apr 2022 08:38:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A95FFC385A3;
-        Tue,  5 Apr 2022 08:38:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 12204B81C15;
+        Tue,  5 Apr 2022 08:39:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F33DC385A1;
+        Tue,  5 Apr 2022 08:38:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147936;
-        bh=e1bQVDK7ZCYqbZ5aVCcAEwCJB5LlrMPnBXSml3bLJm0=;
+        s=korg; t=1649147938;
+        bh=G6i5haVbj2OduWENChWdZ9mhaLevM6O81fzdyfMMJVU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qBR/QQPNDugl4/Rt0tY0cBRKTshRbWERZPjPQcyT73sWw71sKCY/t4E71Baa8dPhS
-         tUA6P42aqh7j/T/p14c17wvlGM0d+ZFPOznovCtZBjvfi4zTxenVEehIQhbc64koaX
-         EDvBM1ESwoYQtA5eiFt5qA8yfrrEhGTc2cghzo8E=
+        b=S7I+qgbtsojzs2lBkQj/UikNzMlc0VMK1xaJvqvFgXQOrma8+Ww98fGGx6VLSmV6D
+         baZ0lcWdml2+a6VYSk7jFGom8uWC/XYkHuQ1SZCRM880RS1umYstD7CqA/yymHzcLc
+         gTWEl6xPaUuJA5LTFM4WzPvpSpr+XNInRRD+BpAY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 5.16 0175/1017] media: venus: hfi_cmds: List HDR10 property as unsupported for v1 and v3
-Date:   Tue,  5 Apr 2022 09:18:08 +0200
-Message-Id: <20220405070359.425255248@linuxfoundation.org>
+Subject: [PATCH 5.16 0176/1017] media: venus: venc: Fix h264 8x8 transform control
+Date:   Tue,  5 Apr 2022 09:18:09 +0200
+Message-Id: <20220405070359.455799626@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -57,30 +57,64 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 
-commit 22beb839f48d841ec75974872863dc253d37c21c upstream.
+commit 61b3317dd424a3488b6754d7ff8301944d9d17d7 upstream.
 
-The HFI_PROPERTY_PARAM_VENC_HDR10_PQ_SEI HFI property is not supported
-on Venus v1 and v3.
+During encoder driver open controls are initialized via a call
+to v4l2_ctrl_handler_setup which returns EINVAL error for
+V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM v4l2 control. The control
+default value is disabled and because of firmware limitations
+8x8 transform cannot be disabled for the supported HIGH and
+CONSTRAINED_HIGH profiles.
 
-cc: stable@vger.kernel.org # 5.13+
-Fixes: 9172652d72f8 ("media: venus: venc: Add support for CLL and Mastering display controls")
+To fix the issue change the control default value to enabled
+(this is fine because the firmware enables 8x8 transform for
+high and constrained_high profiles by default). Also, correct
+the checking of profile ids in s_ctrl from hfi to v4l2 ids.
+
+cc: stable@vger.kernel.org # 5.15+
+Fixes: bfee75f73c37 ("media: venus: venc: add support for V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM control")
 Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/platform/qcom/venus/hfi_cmds.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/platform/qcom/venus/venc.c       |    4 ++--
+ drivers/media/platform/qcom/venus/venc_ctrls.c |    6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
---- a/drivers/media/platform/qcom/venus/hfi_cmds.c
-+++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
-@@ -1054,6 +1054,8 @@ static int pkt_session_set_property_1x(s
- 		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*info);
- 		break;
- 	}
-+	case HFI_PROPERTY_PARAM_VENC_HDR10_PQ_SEI:
-+		return -ENOTSUPP;
+--- a/drivers/media/platform/qcom/venus/venc.c
++++ b/drivers/media/platform/qcom/venus/venc.c
+@@ -662,8 +662,8 @@ static int venc_set_properties(struct ve
  
- 	/* FOLLOWING PROPERTIES ARE NOT IMPLEMENTED IN CORE YET */
- 	case HFI_PROPERTY_CONFIG_BUFFER_REQUIREMENTS:
+ 		ptype = HFI_PROPERTY_PARAM_VENC_H264_TRANSFORM_8X8;
+ 		h264_transform.enable_type = 0;
+-		if (ctr->profile.h264 == HFI_H264_PROFILE_HIGH ||
+-		    ctr->profile.h264 == HFI_H264_PROFILE_CONSTRAINED_HIGH)
++		if (ctr->profile.h264 == V4L2_MPEG_VIDEO_H264_PROFILE_HIGH ||
++		    ctr->profile.h264 == V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_HIGH)
+ 			h264_transform.enable_type = ctr->h264_8x8_transform;
+ 
+ 		ret = hfi_session_set_property(inst, ptype, &h264_transform);
+--- a/drivers/media/platform/qcom/venus/venc_ctrls.c
++++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
+@@ -320,8 +320,8 @@ static int venc_op_s_ctrl(struct v4l2_ct
+ 		ctr->intra_refresh_period = ctrl->val;
+ 		break;
+ 	case V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM:
+-		if (ctr->profile.h264 != HFI_H264_PROFILE_HIGH &&
+-		    ctr->profile.h264 != HFI_H264_PROFILE_CONSTRAINED_HIGH)
++		if (ctr->profile.h264 != V4L2_MPEG_VIDEO_H264_PROFILE_HIGH &&
++		    ctr->profile.h264 != V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_HIGH)
+ 			return -EINVAL;
+ 
+ 		/*
+@@ -457,7 +457,7 @@ int venc_ctrl_init(struct venus_inst *in
+ 			  V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MIN_QP, 1, 51, 1, 1);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM, 0, 1, 1, 0);
++			  V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM, 0, 1, 1, 1);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+ 			  V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MIN_QP, 1, 51, 1, 1);
 
 

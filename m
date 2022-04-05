@@ -2,124 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE914F4945
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9973B4F4F19
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392291AbiDEWJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
+        id S1837026AbiDFAlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573112AbiDESAs (ORCPT
+        with ESMTP id S1573153AbiDESDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 14:00:48 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABA2246
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 10:58:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=IvBWmBbI9A2nfHfEQ5fw5taUfPeU2oNqR0njw9KESho=; b=gqxsxjVUFVtxRNlYtPkGeAokgL
-        nBe9SjwVtkav8yJ/gOpBxNDP/tgC4zPGII+UUa/7IYiLuqyWp2Q680vzBGZZGq+UBPv3r2vg9rX0o
-        TE+/Ew+4sRwH/p0pIYC453JYbWT64Q+P0px/53GQzQXLEEgwsBcp81+SEc6EP15K4Szl1gbZTb9EH
-        xrPRb4q6u0KsLSvRSDnD5CPqvnN+6GvkJmMuk1e6KK0wwMDnqaQrYB4+dKA9bjsHY4Pg45R1HtRpA
-        uBa6XgKeYJ8oid7QGnjylvarWXkEKnV05Fnt/bpeFuCYmcDGR5jmxReZgu8SEciJZkzhxKoAZLPJJ
-        GupTbMFQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nbnRv-006w06-Nn; Tue, 05 Apr 2022 17:58:40 +0000
-Message-ID: <c336dd9d-dae2-f654-4849-669c9b9b568f@infradead.org>
-Date:   Tue, 5 Apr 2022 10:58:34 -0700
+        Tue, 5 Apr 2022 14:03:45 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A356EBBBA
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 11:01:46 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id q14so2878ljc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 11:01:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UtPjO+bxq+tkrbVKUaDcJXid+W/QeCc20ZhEe/m6WHk=;
+        b=Xq6IZspRICfswBPKfRG9/rkA8zzqUrYc8AEaIS7BqLjxD8XxrJt/TSd6TeV+PoOh+x
+         TWLTo87XR/66DLc3P6r3wOUKYiKC5VWuBkx+6ER1S5fqR8uVVLbE/Mnt/gH1EKOF0zMl
+         EMq7iQ4CLUD2xX1/ZT+FGVsskv4zGNk9k0kI+FnwBzf1dA/sQfweLGYAVlAZk6QClzZ1
+         nobRJrADpU/Tz+gYnl+iHQu9q539LiyMt0IlZ6xFi6lJArxzxWE3TK8eslO84swXM4xa
+         I4CGW7Vw9/WAuQl2A2SW1HyL4qebDsG468bz3mFPIUYcQxmjKImFm9B12ojvWxmqxxY5
+         SfIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UtPjO+bxq+tkrbVKUaDcJXid+W/QeCc20ZhEe/m6WHk=;
+        b=2mK21XWDSaW6i01Qo4aUujjVel5g/f27+jOPhZKUFVPBFs+68EgEAJMX2H5Rk969sS
+         MQo3Y+dmdrePhnUiQ3v6XdBVj36U4frdxu/uxoadcZ1EP2K9AQaxREaRdVhHuhCVVXDz
+         8Sz9MFIzAAxqSzDqAR3FPXT/HbDjSOnR2yZOMlOYEGiuVECjcH4LcWEAKAnqE8ed0csF
+         J2/WLT4VtXBnUbSuIecgZZl46dU2v07QnQwnvxDuz8ZcX4NsN1L0I9Edoeb6fHaj1kMB
+         ylQ5NrILMPtP9raMC3fQZNOLom/hZB1oFLEWkNbWwmegnOdL8/5BeX19MQpeAa8p3ecs
+         /nOg==
+X-Gm-Message-State: AOAM531XzV3t2QeCdAn03GGnYCAUbuYs58Q09obEFyCdwQhewMtbe2R3
+        CVtfuGLsAgxBvVXgq2RMvf473QybBq56gFQPdE14qw==
+X-Google-Smtp-Source: ABdhPJxmwIX/bZD6HHeBC8Mgm7SLI3AbupPtrtLQAue+dvE6QpFk1/V9rIQtTW8xUGyHm5vacR8kUrbKGxc6La1y6Es=
+X-Received: by 2002:a2e:b70d:0:b0:24b:11d8:8e63 with SMTP id
+ j13-20020a2eb70d000000b0024b11d88e63mr2819981ljo.472.1649181704075; Tue, 05
+ Apr 2022 11:01:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] drm/format_helper: fix a kernel-doc typo
-Content-Language: en-US
-To:     Simon Ser <contact@emersion.fr>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org
-References: <20220403232902.1753-1-rdunlap@infradead.org>
- <ttcrpLw9HkdhAH5SkXylXDBi9SBf7LWgOeW09ZvTF4U4_zKJAOXBQZlFxfw6NKY0Hip6dXBFape6zkX09cstuOno72c-c00wmZ_VbNDg6xs=@emersion.fr>
- <b20bbd22-895c-9e74-e579-d2f3561a2fe1@infradead.org>
- <BzpH4s8ZYn84kTlJQ3BHVMQzZlESb2Fk6v-uO5KBaaeBNMvRvC98lpuBLUNLE3a5bdoYTb5JRvo6EU__5AGJ79LUirSppO39I1t1xlwx-fI=@emersion.fr>
- <fda186f7-2cf4-a69a-d68e-58073d35cbea@redhat.com>
- <c544d79e-90ec-7bbe-77ad-de96a700d711@infradead.org>
- <qjTlHAInyuxpFWsTWPGXoVeByVdVe-NF-kg-FUeLWQbKy9SovMzCcK-eDsijpDt1roaSubDr-8kBGKQSt_7CXFa4-BxQ6SrGSNeoZrdiq-s=@emersion.fr>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <qjTlHAInyuxpFWsTWPGXoVeByVdVe-NF-kg-FUeLWQbKy9SovMzCcK-eDsijpDt1roaSubDr-8kBGKQSt_7CXFa4-BxQ6SrGSNeoZrdiq-s=@emersion.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220401233802.1710547-1-trix@redhat.com>
+In-Reply-To: <20220401233802.1710547-1-trix@redhat.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 5 Apr 2022 11:01:32 -0700
+Message-ID: <CAKwvOdkkfdjuNLzWimi+Q_PSD9T4ZxumBb+28g1vDbUX0VQVcg@mail.gmail.com>
+Subject: Re: [PATCH] iwlwifi: fw: move memset before early return
+To:     Tom Rix <trix@redhat.com>
+Cc:     luciano.coelho@intel.com, kvalo@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
+        johannes.berg@intel.com, mukesh.sisodiya@intel.com,
+        mordechay.goodstein@intel.com, matti.gottlieb@intel.com,
+        rotem.saado@intel.com, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Simon,
+On Fri, Apr 1, 2022 at 4:38 PM Tom Rix <trix@redhat.com> wrote:
+>
+> Clang static analysis reports this representative issue
+> dbg.c:1455:6: warning: Branch condition evaluates to
+> a garbage value
+>   if (!rxf_data.size)
+>        ^~~~~~~~~~~~~~
+>
+> This check depends on iwl_ini_get_rxf_data() to clear
+> rxf_data but the function can return early without
+> doing the clear.  So move the memset before the early
+> return.
+>
+> Fixes: cc9b6012d34b ("iwlwifi: yoyo: use hweight_long instead of bit manipulating")
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-On 4/5/22 08:05, Simon Ser wrote:
-> On Tuesday, April 5th, 2022 at 16:39, Randy Dunlap <rdunlap@infradead.org> wrote:
-> 
->> On 4/4/22 23:26, Javier Martinez Canillas wrote:
->>
->>> On 4/5/22 08:12, Simon Ser wrote:
->>>
->>>> On Monday, April 4th, 2022 at 23:35, Randy Dunlap rdunlap@infradead.org wrote:
->>>>
->>>>> On 4/4/22 09:04, Simon Ser wrote:
->>>>>
->>>>>> Both doc patches pushed, thanks. I had to manually edit them because they
->>>>>> wouldn't apply cleanly. Next time, please use git-send-email (see
->>>>>> https://git-send-email.io/ for setup instructions).
->>>>>
->>>>> That's odd. I did use 'git send-email' and I don't usually have any
->>>>> problems (AFAIK). I'll check those setup instructions.
->>>>
->>>> Hm, maybe the issue isn't git-send-email, but the way the patch was
->>>> generated? I had to manually edit these lines for the first patch to work:
->>>>
->>>> --- linux-next-20211217.orig/include/drm/drm_file.h
->>>> +++ linux-next-20211217/include/drm/drm_file.h
->>>>
->>>> I changed these to:
->>>>
->>>> --- a/include/drm/drm_file.h
->>>> +++ b/include/drm/drm_file.h
+Conditional initialization in a helper is a pretty dangerous pattern.
+How about we move the memset to the two callers of
+iwl_ini_get_rxf_data?
 
-quilt (which I am using) can generate a/ b/ patches instead of linux.orig/ and
-linux/ patches.
+> ---
+>  drivers/net/wireless/intel/iwlwifi/fw/dbg.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/net/wireless/intel/iwlwifi/fw/dbg.c b/drivers/net/wireless/intel/iwlwifi/fw/dbg.c
+> index abf49022edbe..666de922af61 100644
+> --- a/drivers/net/wireless/intel/iwlwifi/fw/dbg.c
+> +++ b/drivers/net/wireless/intel/iwlwifi/fw/dbg.c
+> @@ -1388,13 +1388,13 @@ static void iwl_ini_get_rxf_data(struct iwl_fw_runtime *fwrt,
+>         if (!data)
+>                 return;
+>
+> +       memset(data, 0, sizeof(*data));
+> +
+>         /* make sure only one bit is set in only one fid */
+>         if (WARN_ONCE(hweight_long(fid1) + hweight_long(fid2) != 1,
+>                       "fid1=%x, fid2=%x\n", fid1, fid2))
+>                 return;
+>
+> -       memset(data, 0, sizeof(*data));
+> -
+>         if (fid1) {
+>                 fifo_idx = ffs(fid1) - 1;
+>                 if (WARN_ONCE(fifo_idx >= MAX_NUM_LMAC, "fifo_idx=%d\n",
+> --
+> 2.27.0
+>
 
->>>> This wasn't enough for the second patch, I had to re-do the changes by hand
->>>> from scratch.
 
-I would like more information about this one if it's not too much trouble
-for you.
-
->>> Yes, I believe the suggestion should be to use git-format-patch instead.
->>>
->>> To make sure that was is posted can be consumed by the git-am command.
->>
->>
->> Considering that I am not using git, I think it will be difficult
->> to use git-format-patch.
-> 
-> Ah, okay. Would you consider using Git for you next patches?
-
-Don't know. It's quite a big hurdle to jump over IMO.
-
-> (FYI, I'll pass next time I hit a patch which doesn't apply cleanly.
-> Nothing personal, it's just that I don't have time to deal with broken
-> patches.)
-
-Yeah, I get it.
-
-thanks.
 -- 
-~Randy
+Thanks,
+~Nick Desaulniers

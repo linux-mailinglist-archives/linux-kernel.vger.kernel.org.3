@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 699F04F46B0
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 574434F4636
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380008AbiDEUkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43928 "EHLO
+        id S242978AbiDEMeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348703AbiDEJs0 (ORCPT
+        with ESMTP id S235638AbiDEJCY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C735A39141;
-        Tue,  5 Apr 2022 02:34:28 -0700 (PDT)
+        Tue, 5 Apr 2022 05:02:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE203DF82;
+        Tue,  5 Apr 2022 01:54:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D76DFB81C6F;
-        Tue,  5 Apr 2022 09:34:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 352F6C385A3;
-        Tue,  5 Apr 2022 09:34:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A4AE609D0;
+        Tue,  5 Apr 2022 08:54:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EAF9C385A0;
+        Tue,  5 Apr 2022 08:54:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151265;
-        bh=kTf509aGxUC2L+Qqne7LOHBXyNCvMcSwY5mKQwAKabs=;
+        s=korg; t=1649148851;
+        bh=hivumiYj3Vdez4XqYK2ou4xLfloLyBkHYVMfL/efwgk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LuSR2FeT1dCKZohKSNiS98pagNhZA6vxaK0/mf61OduRGhR4jrH5800Lf0B8iGoHX
-         bzb3SKKQzZ46lXOPJtRuqf6FdPqn1l+jFZPf3dzSmDr7RvoXCtGSUcV8u60MnDXcig
-         NYwjDTILyiJ+/LArSsHQ6UY91MXfyreilol+waaU=
+        b=DhXMlL/fuCFK6BSVImSn393nejQP8Xk92Fp62Q+quAIamvTQzZRv3NwFP4zwBeoMj
+         L1iscyz2v0EhVkRD9fIu9wf+maXhMKoGhhUvKeTjZBzEz6RF0GPO72YCE1II48fcli
+         U5vnal3MZSEgaJqWITrLuvmHSBqCNgVJODt6CPaY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakob Koschel <jakobkoschel@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        stable@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 353/913] media: saa7134: fix incorrect use to determine if list is empty
-Date:   Tue,  5 Apr 2022 09:23:35 +0200
-Message-Id: <20220405070350.427357768@linuxfoundation.org>
+Subject: [PATCH 5.16 0503/1017] libbpf: Fix memleak in libbpf_netlink_recv()
+Date:   Tue,  5 Apr 2022 09:23:36 +0200
+Message-Id: <20220405070409.229958390@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakob Koschel <jakobkoschel@gmail.com>
+From: Andrii Nakryiko <andrii@kernel.org>
 
-[ Upstream commit 9f1f4b642451d35667a4dc6a9c0a89d954b530a3 ]
+[ Upstream commit 1b8c924a05934d2e758ec7da7bd217ef8ebd80ce ]
 
-'dev' will *always* be set by list_for_each_entry().
-It is incorrect to assume that the iterator value will be NULL if the
-list is empty.
+Ensure that libbpf_netlink_recv() frees dynamically allocated buffer in
+all code paths.
 
-Instead of checking the pointer it should be checked if
-the list is empty.
-
-Fixes: 79dd0c69f05f ("V4L: 925: saa7134 alsa is now a standalone module")
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Fixes: 9c3de619e13e ("libbpf: Use dynamically allocated buffer when receiving netlink messages")
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
+Link: https://lore.kernel.org/bpf/20220217073958.276959-1-andrii@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/saa7134/saa7134-alsa.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/lib/bpf/netlink.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/pci/saa7134/saa7134-alsa.c b/drivers/media/pci/saa7134/saa7134-alsa.c
-index fb24d2ed3621..d3cde05a6eba 100644
---- a/drivers/media/pci/saa7134/saa7134-alsa.c
-+++ b/drivers/media/pci/saa7134/saa7134-alsa.c
-@@ -1214,7 +1214,7 @@ static int alsa_device_exit(struct saa7134_dev *dev)
- 
- static int saa7134_alsa_init(void)
- {
--	struct saa7134_dev *dev = NULL;
-+	struct saa7134_dev *dev;
- 
- 	saa7134_dmasound_init = alsa_device_init;
- 	saa7134_dmasound_exit = alsa_device_exit;
-@@ -1229,7 +1229,7 @@ static int saa7134_alsa_init(void)
- 			alsa_device_init(dev);
- 	}
- 
--	if (dev == NULL)
-+	if (list_empty(&saa7134_devlist))
- 		pr_info("saa7134 ALSA: no saa7134 cards found\n");
- 
- 	return 0;
+diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
+index 69b353d55dbf..fadde7d80a51 100644
+--- a/tools/lib/bpf/netlink.c
++++ b/tools/lib/bpf/netlink.c
+@@ -176,7 +176,8 @@ static int libbpf_netlink_recv(int sock, __u32 nl_pid, int seq,
+ 				libbpf_nla_dump_errormsg(nh);
+ 				goto done;
+ 			case NLMSG_DONE:
+-				return 0;
++				ret = 0;
++				goto done;
+ 			default:
+ 				break;
+ 			}
+@@ -188,9 +189,10 @@ static int libbpf_netlink_recv(int sock, __u32 nl_pid, int seq,
+ 				case NL_NEXT:
+ 					goto start;
+ 				case NL_DONE:
+-					return 0;
++					ret = 0;
++					goto done;
+ 				default:
+-					return ret;
++					goto done;
+ 				}
+ 			}
+ 		}
 -- 
 2.34.1
 

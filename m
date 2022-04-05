@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F174F2C78
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B6D4F2BDC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346023AbiDEKmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
+        id S1354611AbiDEKOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241197AbiDEIcy (ORCPT
+        with ESMTP id S241213AbiDEIcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:32:54 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358C917A86;
-        Tue,  5 Apr 2022 01:29:24 -0700 (PDT)
-Date:   Tue, 05 Apr 2022 08:29:21 -0000
+        Tue, 5 Apr 2022 04:32:55 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6495217AA1;
+        Tue,  5 Apr 2022 01:29:40 -0700 (PDT)
+Date:   Tue, 05 Apr 2022 08:29:37 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649147362;
+        s=2020; t=1649147379;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=weL/Y/0bLbSr89Udbwco2BymGNu3H+Z73Jcjq6NeTuI=;
-        b=PPDV1NnBtSFLvt+bcYKiG4rGphZi2oyC3AxUFgeFR9azd2m3bY5YILSwXRH9zUEYevKbSf
-        6TgHUz7gPyC36Cul2Lh5ecKuM5r5ro/ZQdDhljRgq9DFCZzp4G9O0ZtvACwMc3D68gyiz8
-        h7XSSH5vUz69vCQP90l9SjYJu2ZntIk/exYEPgyxhE0EFT3tGlfcGtBWovfZ68oqhoC9sN
-        JZmu52rUUAzhG/CzCo6u7t9Am9nNhfynUJHeG1wCDLmzQZUhig/dncBKOaGJmS2ExxdcY3
-        Oxa6g5ZnL0jwIHJmCgXwttzUvo8aSzXjrGEd8ZeRxFI7S+Bs+TgntsMNBwzpJA==
+        bh=Xf02MVHN4JR7VuJJrUFdSIQZRkwuZ0C8MK8iLKWLcQk=;
+        b=IIn3vSJNaAs7G+1rR35chBNTwK5Uw3lmT3weRbX9ql7RW3fJpF5x/Mu41mvNaywrFod2fi
+        g/huQLKZ0oKi+IX5ETZ/tZjTzgFD5Ugw0GCyaufaEYvuR2K0WqafWUegg3p3LlNw4EQv3t
+        vf49Zqm7o98czxEGexiR/nxsmGLYs+nMs8nJsgOWtwLCCvRsaivbYGTtkepClDbEhTLT1W
+        +HyPOYSRQLz3E7ej2dbjvoMtvT0d4VUDtgnzH2lt77vlldTSsGbN+r12IYStBX9027jJHF
+        gx+kqQ4hIh9w13mcgemb5pRUYSsXE+5gE1f7S0s5qn/POpOY/rtUe62CBupjCQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649147362;
+        s=2020e; t=1649147379;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=weL/Y/0bLbSr89Udbwco2BymGNu3H+Z73Jcjq6NeTuI=;
-        b=f3PzWIp1F/sCFHuDCAPpTCS7V1P+VizleOlgVky2nSdFgu4dQLNEi8ZWjVFAk0V9bgVqmO
-        ElUnO1IoQ+aBq1AQ==
-From:   "tip-bot2 for Valentin Schneider" <tip-bot2@linutronix.de>
+        bh=Xf02MVHN4JR7VuJJrUFdSIQZRkwuZ0C8MK8iLKWLcQk=;
+        b=vQlsxWAg09eKYJSZLGOM+Z+mAKAtN6pDD+sf1WKGWzRS0mSznZQxyrT/pq0T36eUNLyfe7
+        l1LxaayzHjTqEQCw==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] preempt/dynamic: Introduce preemption model accessors
-Cc:     Marco Elver <elver@google.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>, x86@kernel.org,
+Subject: [tip: x86/urgent] objtool: Fix IBT tail-call detection
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20211112185203.280040-3-valentin.schneider@arm.com>
-References: <20211112185203.280040-3-valentin.schneider@arm.com>
+In-Reply-To: <20220322115125.811582125@infradead.org>
+References: <20220322115125.811582125@infradead.org>
 MIME-Version: 1.0
-Message-ID: <164914736184.389.17168803226310097171.tip-bot2@tip-bot2>
+Message-ID: <164914737798.389.68339904332129316.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,111 +65,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/core branch of tip:
+The following commit has been merged into the x86/urgent branch of tip:
 
-Commit-ID:     cfe43f478b79ba45573ca22d52d0d8823be068fa
-Gitweb:        https://git.kernel.org/tip/cfe43f478b79ba45573ca22d52d0d8823be068fa
-Author:        Valentin Schneider <valentin.schneider@arm.com>
-AuthorDate:    Fri, 12 Nov 2021 18:52:01 
+Commit-ID:     d139bca4b824ffb9731763c31b271a24b595948a
+Gitweb:        https://git.kernel.org/tip/d139bca4b824ffb9731763c31b271a24b595948a
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Tue, 22 Mar 2022 12:33:31 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 05 Apr 2022 10:24:42 +02:00
+CommitterDate: Tue, 05 Apr 2022 10:24:40 +02:00
 
-preempt/dynamic: Introduce preemption model accessors
+objtool: Fix IBT tail-call detection
 
-CONFIG_PREEMPT{_NONE, _VOLUNTARY} designate either:
-o The build-time preemption model when !PREEMPT_DYNAMIC
-o The default boot-time preemption model when PREEMPT_DYNAMIC
+Objtool reports:
 
-IOW, using those on PREEMPT_DYNAMIC kernels is meaningless - the actual
-model could have been set to something else by the "preempt=foo" cmdline
-parameter. Same problem applies to CONFIG_PREEMPTION.
+  arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_blocks_avx() falls through to next function poly1305_blocks_x86_64()
+  arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_emit_avx() falls through to next function poly1305_emit_x86_64()
+  arch/x86/crypto/poly1305-x86_64.o: warning: objtool: poly1305_blocks_avx2() falls through to next function poly1305_blocks_x86_64()
 
-Introduce a set of helpers to determine the actual preemption model used by
-the live kernel.
+Which reads like:
 
-Suggested-by: Marco Elver <elver@google.com>
-Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+0000000000000040 <poly1305_blocks_x86_64>:
+	 40:       f3 0f 1e fa             endbr64
+	...
+
+0000000000000400 <poly1305_blocks_avx>:
+	400:       f3 0f 1e fa             endbr64
+	404:       44 8b 47 14             mov    0x14(%rdi),%r8d
+	408:       48 81 fa 80 00 00 00    cmp    $0x80,%rdx
+	40f:       73 09                   jae    41a <poly1305_blocks_avx+0x1a>
+	411:       45 85 c0                test   %r8d,%r8d
+	414:       0f 84 2a fc ff ff       je     44 <poly1305_blocks_x86_64+0x4>
+	...
+
+These are simple conditional tail-calls and *should* be recognised as
+such by objtool, however due to a mistake in commit 08f87a93c8ec
+("objtool: Validate IBT assumptions") this is failing.
+
+Specifically, the jump_dest is +4, this means the instruction pointed
+at will not be ENDBR and as such it will fail the second clause of
+is_first_func_insn() that was supposed to capture this exact case.
+
+Instead, have is_first_func_insn() look at the previous instruction.
+
+Fixes: 08f87a93c8ec ("objtool: Validate IBT assumptions")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Marco Elver <elver@google.com>
-Acked-by: Frederic Weisbecker <frederic@kernel.org>
-Link: https://lore.kernel.org/r/20211112185203.280040-3-valentin.schneider@arm.com
+Link: https://lkml.kernel.org/r/20220322115125.811582125@infradead.org
 ---
- include/linux/sched.h | 41 +++++++++++++++++++++++++++++++++++++++++
- kernel/sched/core.c   | 12 ++++++++++++
- 2 files changed, 53 insertions(+)
+ tools/objtool/check.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index d5e3c00..67f06f7 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -2117,6 +2117,47 @@ static inline void cond_resched_rcu(void)
- #endif
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 6de5085..b848e1d 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -1239,11 +1239,20 @@ static bool same_function(struct instruction *insn1, struct instruction *insn2)
+ 	return insn1->func->pfunc == insn2->func->pfunc;
  }
  
-+#ifdef CONFIG_PREEMPT_DYNAMIC
+-static bool is_first_func_insn(struct instruction *insn)
++static bool is_first_func_insn(struct objtool_file *file, struct instruction *insn)
+ {
+-	return insn->offset == insn->func->offset ||
+-	       (insn->type == INSN_ENDBR &&
+-		insn->offset == insn->func->offset + insn->len);
++	if (insn->offset == insn->func->offset)
++		return true;
 +
-+extern bool preempt_model_none(void);
-+extern bool preempt_model_voluntary(void);
-+extern bool preempt_model_full(void);
++	if (ibt) {
++		struct instruction *prev = prev_insn_same_sym(file, insn);
 +
-+#else
++		if (prev && prev->type == INSN_ENDBR &&
++		    insn->offset == insn->func->offset + prev->len)
++			return true;
++	}
 +
-+static inline bool preempt_model_none(void)
-+{
-+	return IS_ENABLED(CONFIG_PREEMPT_NONE);
-+}
-+static inline bool preempt_model_voluntary(void)
-+{
-+	return IS_ENABLED(CONFIG_PREEMPT_VOLUNTARY);
-+}
-+static inline bool preempt_model_full(void)
-+{
-+	return IS_ENABLED(CONFIG_PREEMPT);
-+}
-+
-+#endif
-+
-+static inline bool preempt_model_rt(void)
-+{
-+	return IS_ENABLED(CONFIG_PREEMPT_RT);
-+}
-+
-+/*
-+ * Does the preemption model allow non-cooperative preemption?
-+ *
-+ * For !CONFIG_PREEMPT_DYNAMIC kernels this is an exact match with
-+ * CONFIG_PREEMPTION; for CONFIG_PREEMPT_DYNAMIC this doesn't work as the
-+ * kernel is *built* with CONFIG_PREEMPTION=y but may run with e.g. the
-+ * PREEMPT_NONE model.
-+ */
-+static inline bool preempt_model_preemptible(void)
-+{
-+	return preempt_model_full() || preempt_model_rt();
-+}
-+
++	return false;
+ }
+ 
  /*
-  * Does a critical section need to be broken due to another
-  * task waiting?: (technically does not depend on CONFIG_PREEMPTION,
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index d575b49..068c088 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -8409,6 +8409,18 @@ static void __init preempt_dynamic_init(void)
- 	}
- }
+@@ -1327,7 +1336,7 @@ static int add_jump_destinations(struct objtool_file *file)
+ 				insn->jump_dest->func->pfunc = insn->func;
  
-+#define PREEMPT_MODEL_ACCESSOR(mode) \
-+	bool preempt_model_##mode(void)						 \
-+	{									 \
-+		WARN_ON_ONCE(preempt_dynamic_mode == preempt_dynamic_undefined); \
-+		return preempt_dynamic_mode == preempt_dynamic_##mode;		 \
-+	}									 \
-+	EXPORT_SYMBOL_GPL(preempt_model_##mode)
-+
-+PREEMPT_MODEL_ACCESSOR(none);
-+PREEMPT_MODEL_ACCESSOR(voluntary);
-+PREEMPT_MODEL_ACCESSOR(full);
-+
- #else /* !CONFIG_PREEMPT_DYNAMIC */
- 
- static inline void preempt_dynamic_init(void) { }
+ 			} else if (!same_function(insn, insn->jump_dest) &&
+-				   is_first_func_insn(insn->jump_dest)) {
++				   is_first_func_insn(file, insn->jump_dest)) {
+ 				/* internal sibling call (without reloc) */
+ 				add_call_dest(file, insn, insn->jump_dest->func, true);
+ 			}

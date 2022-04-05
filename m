@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 919A74F2C60
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC324F2C18
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345390AbiDEKlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53140 "EHLO
+        id S244170AbiDEKiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240354AbiDEIby (ORCPT
+        with ESMTP id S240727AbiDEIc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:31:54 -0400
+        Tue, 5 Apr 2022 04:32:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8976FA21;
-        Tue,  5 Apr 2022 01:24:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000757DA98;
+        Tue,  5 Apr 2022 01:24:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B9FC60FFB;
-        Tue,  5 Apr 2022 08:24:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61EF0C385A0;
-        Tue,  5 Apr 2022 08:24:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47EC760FF7;
+        Tue,  5 Apr 2022 08:24:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 570A5C385A0;
+        Tue,  5 Apr 2022 08:24:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147045;
-        bh=gKjV3QLPv6TeU0BZhoxIGrkmjtEcGY8pEsjKlh+Y7xY=;
+        s=korg; t=1649147090;
+        bh=LTilDw4wQFbAgRvgcQ9qqIkL948aoZ4wDVrlgzRerzc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fMmmA1kbMLWccjQJkW4E2Ci/gZHkrt96z7JRKv77cbYrlQjIMY6muNThVnFj+Bofp
-         mc4hiROlnChCbe8BcjeMhd7aDIQAVyw4FXjk1MW6RjnT5T73MO9vjXk9n2comORmMc
-         Wnzv6I4Ny7sX7x7OFghtdzsJLyLBiRpwHPAk54EQ=
+        b=qPc05iZdW0X7aw9LdFlajnPwIhCWnP6J6rikTO6p0g4Xu7XO5NzEFLk0eY56hGFm8
+         RMza5wAvXZCCFp5cJ78mXqZjGzEiL6sLbrcEMn/Qphb8QOu7j7pjXdqgKHcHI1AQKc
+         0O7wovevmI8LJdC9uPSSZSN1Y7PUOupwUCviU7eM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joe Carnuccio <joe.carnuccio@cavium.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.17 0982/1126] scsi: qla2xxx: Check for firmware dump already collected
-Date:   Tue,  5 Apr 2022 09:28:49 +0200
-Message-Id: <20220405070436.323124241@linuxfoundation.org>
+        stable@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.17 0997/1126] KVM: x86: Avoid theoretical NULL pointer dereference in kvm_irq_delivery_to_apic_fast()
+Date:   Tue,  5 Apr 2022 09:29:04 +0200
+Message-Id: <20220405070436.757394444@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,39 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joe Carnuccio <joe.carnuccio@cavium.com>
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-commit cfbafad7c6032d449a5a07f2d273acd2437bbc6a upstream.
+commit 00b5f37189d24ac3ed46cb7f11742094778c46ce upstream.
 
-While allocating firmware dump, check if dump is already collected and do
-not re-allocate the buffer.
+When kvm_irq_delivery_to_apic_fast() is called with APIC_DEST_SELF
+shorthand, 'src' must not be NULL. Crash the VM with KVM_BUG_ON()
+instead of crashing the host.
 
-Link: https://lore.kernel.org/r/20220110050218.3958-17-njavali@marvell.com
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Message-Id: <20220325132140.25650-3-vkuznets@redhat.com>
 Cc: stable@vger.kernel.org
-Signed-off-by: Joe Carnuccio <joe.carnuccio@cavium.com>
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_init.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/x86/kvm/lapic.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -3482,6 +3482,14 @@ qla2x00_alloc_fw_dump(scsi_qla_host_t *v
- 	struct rsp_que *rsp = ha->rsp_q_map[0];
- 	struct qla2xxx_fw_dump *fw_dump;
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -992,6 +992,10 @@ bool kvm_irq_delivery_to_apic_fast(struc
+ 	*r = -1;
  
-+	if (ha->fw_dump) {
-+		ql_dbg(ql_dbg_init, vha, 0x00bd,
-+		    "Firmware dump already allocated.\n");
-+		return;
-+	}
-+
-+	ha->fw_dumped = 0;
-+	ha->fw_dump_cap_flags = 0;
- 	dump_size = fixed_size = mem_size = eft_size = fce_size = mq_size = 0;
- 	req_q_size = rsp_q_size = 0;
- 
+ 	if (irq->shorthand == APIC_DEST_SELF) {
++		if (KVM_BUG_ON(!src, kvm)) {
++			*r = 0;
++			return true;
++		}
+ 		*r = kvm_apic_set_irq(src->vcpu, irq, dest_map);
+ 		return true;
+ 	}
 
 

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDDB04F4EDA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0473C4F4C9D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1584457AbiDEX6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38010 "EHLO
+        id S1579133AbiDEX0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351687AbiDEKDL (ORCPT
+        with ESMTP id S1358072AbiDEK15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:03:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3136973060;
-        Tue,  5 Apr 2022 02:52:12 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 626B55A166;
+        Tue,  5 Apr 2022 03:14:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81237616D7;
-        Tue,  5 Apr 2022 09:52:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BFB5C385A2;
-        Tue,  5 Apr 2022 09:52:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3C4961777;
+        Tue,  5 Apr 2022 10:14:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DDA3C385A1;
+        Tue,  5 Apr 2022 10:14:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152331;
-        bh=qW1x31HnZxqlWv9yLK7leVGiHSRFHxjgpFRqN+3ePM4=;
+        s=korg; t=1649153673;
+        bh=+Z+iOIZiTwTn+gyRQKPoDa7Gxs2LV6jj2/L1a8FvIns=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qWz10RDKOyKNugTych2AqL1vRausJfYBSRUYZ7Bq5NDgsi8yNgQbA5wTyOj04hM/U
-         ymkdTxPnTD5fQHsoXt81rge6I7uNnlSgfKnq8kN7wkgILsUcuWU4OTSx4yohwcdkul
-         QnVLfc7pt1jbz6K0v2r907ZMYsHbfKm2K1SJBp+8=
+        b=YRnaYt7WFUkwHCpNtpvxVGWFygMsgW3THJsom1K83HOeDY3VHHjHj6JUHBSkyxB3J
+         EX299TccWxeBlys2HcDnern/Wt9J9pO1MOhr5QFsP5nPJT5zL5CuEgRc8z8GCbe+Kc
+         DSc3ldF81+oWTyUY9nPCzyBkCyvXg6rcUtxKLoG8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Antonino Daplas <adaplas@gmail.com>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Tim Gardner <tim.gardner@canonical.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 737/913] video: fbdev: nvidiafb: Use strscpy() to prevent buffer overflow
-Date:   Tue,  5 Apr 2022 09:29:59 +0200
-Message-Id: <20220405070401.926691966@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 306/599] drm/msm/dpu: add DSPP blocks teardown
+Date:   Tue,  5 Apr 2022 09:30:00 +0200
+Message-Id: <20220405070307.941271688@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,49 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tim Gardner <tim.gardner@canonical.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit 37a1a2e6eeeb101285cd34e12e48a881524701aa ]
+[ Upstream commit d5c5e78f217172e87d8fb2c3418dd8b58b4adfcb ]
 
-Coverity complains of a possible buffer overflow. However,
-given the 'static' scope of nvidia_setup_i2c_bus() it looks
-like that can't happen after examiniing the call sites.
+Add missing calls to dpu_hw_dspp_destroy() to free resources allocated
+for DSPP hardware blocks.
 
-CID 19036 (#1 of 1): Copy into fixed size buffer (STRING_OVERFLOW)
-1. fixed_size_dest: You might overrun the 48-character fixed-size string
-  chan->adapter.name by copying name without checking the length.
-2. parameter_as_source: Note: This defect has an elevated risk because the
-  source argument is a parameter of the current function.
- 89        strcpy(chan->adapter.name, name);
-
-Fix this warning by using strscpy() which will silence the warning and
-prevent any future buffer overflows should the names used to identify the
-channel become much longer.
-
-Cc: Antonino Daplas <adaplas@gmail.com>
-Cc: linux-fbdev@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Tim Gardner <tim.gardner@canonical.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Fixes: e47616df008b ("drm/msm/dpu: add support for color processing blocks in dpu driver")
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Link: https://lore.kernel.org/r/20220121210618.3482550-3-dmitry.baryshkov@linaro.org
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/nvidia/nv_i2c.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/video/fbdev/nvidia/nv_i2c.c b/drivers/video/fbdev/nvidia/nv_i2c.c
-index d7994a173245..0b48965a6420 100644
---- a/drivers/video/fbdev/nvidia/nv_i2c.c
-+++ b/drivers/video/fbdev/nvidia/nv_i2c.c
-@@ -86,7 +86,7 @@ static int nvidia_setup_i2c_bus(struct nvidia_i2c_chan *chan, const char *name,
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
+index 9b2b5044e8e0..74a13ccad34c 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
+@@ -34,6 +34,14 @@ int dpu_rm_destroy(struct dpu_rm *rm)
  {
- 	int rc;
+ 	int i;
  
--	strcpy(chan->adapter.name, name);
-+	strscpy(chan->adapter.name, name, sizeof(chan->adapter.name));
- 	chan->adapter.owner = THIS_MODULE;
- 	chan->adapter.class = i2c_class;
- 	chan->adapter.algo_data = &chan->algo;
++	for (i = 0; i < ARRAY_SIZE(rm->dspp_blks); i++) {
++		struct dpu_hw_dspp *hw;
++
++		if (rm->dspp_blks[i]) {
++			hw = to_dpu_hw_dspp(rm->dspp_blks[i]);
++			dpu_hw_dspp_destroy(hw);
++		}
++	}
+ 	for (i = 0; i < ARRAY_SIZE(rm->pingpong_blks); i++) {
+ 		struct dpu_hw_pingpong *hw;
+ 
 -- 
 2.34.1
 

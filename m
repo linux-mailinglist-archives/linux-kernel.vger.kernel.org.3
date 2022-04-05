@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE074F2CAE
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4C74F2C23
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245511AbiDEI4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57716 "EHLO
+        id S245631AbiDEI4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233883AbiDEIKf (ORCPT
+        with ESMTP id S234190AbiDEIMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:10:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323836D4DD;
-        Tue,  5 Apr 2022 01:02:48 -0700 (PDT)
+        Tue, 5 Apr 2022 04:12:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434546E358;
+        Tue,  5 Apr 2022 01:03:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC4BF617B4;
-        Tue,  5 Apr 2022 08:02:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3132C385A0;
-        Tue,  5 Apr 2022 08:02:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98959B81B16;
+        Tue,  5 Apr 2022 08:02:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E50FAC385A2;
+        Tue,  5 Apr 2022 08:02:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145767;
-        bh=y8xx7mcIFCMP4NH0mfaRbybxjb4RywbvD6xPkY8QbH8=;
+        s=korg; t=1649145778;
+        bh=mcXObXzAbkIV2NnSPRY4FHVSKdiRd91ADCJdY18KVDw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mJT3h0JMuY3VWeT2QEhpZ6fgJe3qG4pKsC45nL9ERKuOXPxw2gC0jWw8JQxiSjvnw
-         w7oIJcRAIC5+T3kbdGu+YAz7UfKZIfVstpZ4sXpOZqtdW/y9DqDrxoY3O67C7Wmoiw
-         6Q58yBdokqyXzX0FwPfFRZ3+R65srhKWjX7duEz4=
+        b=rE5rs8sw4bEy0x0BNEMCB4v6FTvOqgk/xDSnij2QOWP8m1MPMjByiWu4qInq+XR7j
+         tPvjBGafDkedHX6C6wzkElUa656uNFcGhIYASMIz+QcHKTVHaR2wW6Ge9eltkJ68Qh
+         LjHhftyDRly3FtuiC5hF8XXrn3elXzWQYmfeBJWQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Corinna Vinschen <vinschen@redhat.com>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Sandeep Penigalapati <sandeep.penigalapati@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0523/1126] igb: refactor XDP registration
-Date:   Tue,  5 Apr 2022 09:21:10 +0200
-Message-Id: <20220405070422.980609310@linuxfoundation.org>
+Subject: [PATCH 5.17 0526/1126] PCI: aardvark: Fix reading PCI_EXP_RTSTA_PME bit on emulated bridge
+Date:   Tue,  5 Apr 2022 09:21:13 +0200
+Message-Id: <20220405070423.069486912@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -57,83 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Corinna Vinschen <vinschen@redhat.com>
+From: Pali Rohár <pali@kernel.org>
 
-[ Upstream commit e62ad74aa534404b3ee7e250b114a3536ac56987 ]
+[ Upstream commit 735f5ae49e1b44742cc63ca9b5c1ffde3e94ba91 ]
 
-On changing the RX ring parameters igb uses a hack to avoid a warning
-when calling xdp_rxq_info_reg via igb_setup_rx_resources.  It just
-clears the struct xdp_rxq_info content.
+The emulated bridge returns incorrect value for PCI_EXP_RTSTA register
+during readout in advk_pci_bridge_emul_pcie_conf_read() function: the
+correct bit is BIT(16), but we are setting BIT(23), because the code
+does
+  *value = (isr0 & PCIE_MSG_PM_PME_MASK) << 16
+where
+  PCIE_MSG_PM_PME_MASK
+is
+  BIT(7).
 
-Instead, change this to unregister if we're already registered.  Align
-code to the igc code.
+The code should probably have been something like
+  *value = (!!(isr0 & PCIE_MSG_PM_PME_MASK)) << 16,
+but we are better of using an if() and using the proper macro for this
+bit.
 
-Fixes: 9cbc948b5a20c ("igb: add XDP support")
-Signed-off-by: Corinna Vinschen <vinschen@redhat.com>
-Acked-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
-Tested-by: Sandeep Penigalapati <sandeep.penigalapati@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Link: https://lore.kernel.org/r/20220110015018.26359-15-kabel@kernel.org
+Fixes: 8a3ebd8de328 ("PCI: aardvark: Implement emulated root PCI bridge config space")
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/igb/igb_ethtool.c |  4 ----
- drivers/net/ethernet/intel/igb/igb_main.c    | 19 +++++++++++++------
- 2 files changed, 13 insertions(+), 10 deletions(-)
+ drivers/pci/controller/pci-aardvark.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/igb/igb_ethtool.c b/drivers/net/ethernet/intel/igb/igb_ethtool.c
-index 51a2dcaf553d..2a5782063f4c 100644
---- a/drivers/net/ethernet/intel/igb/igb_ethtool.c
-+++ b/drivers/net/ethernet/intel/igb/igb_ethtool.c
-@@ -965,10 +965,6 @@ static int igb_set_ringparam(struct net_device *netdev,
- 			memcpy(&temp_ring[i], adapter->rx_ring[i],
- 			       sizeof(struct igb_ring));
+diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
+index 10e936363461..82e2c618d532 100644
+--- a/drivers/pci/controller/pci-aardvark.c
++++ b/drivers/pci/controller/pci-aardvark.c
+@@ -846,7 +846,9 @@ advk_pci_bridge_emul_pcie_conf_read(struct pci_bridge_emul *bridge,
+ 	case PCI_EXP_RTSTA: {
+ 		u32 isr0 = advk_readl(pcie, PCIE_ISR0_REG);
+ 		u32 msglog = advk_readl(pcie, PCIE_MSG_LOG_REG);
+-		*value = (isr0 & PCIE_MSG_PM_PME_MASK) << 16 | (msglog >> 16);
++		*value = msglog >> 16;
++		if (isr0 & PCIE_MSG_PM_PME_MASK)
++			*value |= PCI_EXP_RTSTA_PME;
+ 		return PCI_BRIDGE_EMUL_HANDLED;
+ 	}
  
--			/* Clear copied XDP RX-queue info */
--			memset(&temp_ring[i].xdp_rxq, 0,
--			       sizeof(temp_ring[i].xdp_rxq));
--
- 			temp_ring[i].count = new_rx_count;
- 			err = igb_setup_rx_resources(&temp_ring[i]);
- 			if (err) {
-diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-index 38ba92022cd4..c1e4ad65b02d 100644
---- a/drivers/net/ethernet/intel/igb/igb_main.c
-+++ b/drivers/net/ethernet/intel/igb/igb_main.c
-@@ -4352,7 +4352,18 @@ int igb_setup_rx_resources(struct igb_ring *rx_ring)
- {
- 	struct igb_adapter *adapter = netdev_priv(rx_ring->netdev);
- 	struct device *dev = rx_ring->dev;
--	int size;
-+	int size, res;
-+
-+	/* XDP RX-queue info */
-+	if (xdp_rxq_info_is_reg(&rx_ring->xdp_rxq))
-+		xdp_rxq_info_unreg(&rx_ring->xdp_rxq);
-+	res = xdp_rxq_info_reg(&rx_ring->xdp_rxq, rx_ring->netdev,
-+			       rx_ring->queue_index, 0);
-+	if (res < 0) {
-+		dev_err(dev, "Failed to register xdp_rxq index %u\n",
-+			rx_ring->queue_index);
-+		return res;
-+	}
- 
- 	size = sizeof(struct igb_rx_buffer) * rx_ring->count;
- 
-@@ -4375,14 +4386,10 @@ int igb_setup_rx_resources(struct igb_ring *rx_ring)
- 
- 	rx_ring->xdp_prog = adapter->xdp_prog;
- 
--	/* XDP RX-queue info */
--	if (xdp_rxq_info_reg(&rx_ring->xdp_rxq, rx_ring->netdev,
--			     rx_ring->queue_index, 0) < 0)
--		goto err;
--
- 	return 0;
- 
- err:
-+	xdp_rxq_info_unreg(&rx_ring->xdp_rxq);
- 	vfree(rx_ring->rx_buffer_info);
- 	rx_ring->rx_buffer_info = NULL;
- 	dev_err(dev, "Unable to allocate memory for the Rx descriptor ring\n");
 -- 
 2.34.1
 

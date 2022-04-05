@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4DCF4F38B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D26134F38BC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377107AbiDEL10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39666 "EHLO
+        id S1377140AbiDEL1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242794AbiDEItd (ORCPT
+        with ESMTP id S242793AbiDEItd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:49:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B4674DEE;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B551F75611;
         Tue,  5 Apr 2022 01:37:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 317A1B81C19;
-        Tue,  5 Apr 2022 08:37:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96157C385A0;
-        Tue,  5 Apr 2022 08:37:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36B6F614E9;
+        Tue,  5 Apr 2022 08:37:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46E11C385A0;
+        Tue,  5 Apr 2022 08:37:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147853;
-        bh=7Rkrs3sSrSyd8jDFyNshJ53iysc72CbfSpCQdoARRUk=;
+        s=korg; t=1649147855;
+        bh=zmHctF1XS8pTSyItRcY2jAqHaGIbjUzahCepRrZqcSQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b9e87uoSquDRaT56EJKvhdH8/aUes8C/o+qQKiDgywRkVw69w5r8gWeOIghDH5Van
-         vqzVa8b1WfhYY/F63E+M8QMtkWOLOt5tf71NQ3Zgm1d7n2/K+WLEVnbBhbKl2nIaAs
-         1WZKoeqe8iytUEFyx+86N3gQ4hcIEWCNMOntvruw=
+        b=PhfroRnmsZNxUZTj4mIkAPHHRSWeX8/VXp6uHjwEkdZHm7L6Uagfot74akyiPQN0G
+         sjXb9sd47jqeF/JFccQzGlNUQNbDCRtDIXlnOroNcGzxS7uuq7fvIvvkKmuMMmOJ06
+         4M959k4+CaR6ub0Hbh90AUZXF+udgjXkJ/a4lMik=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pekka Pessi <ppessi@nvidia.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Jassi Brar <jaswinder.singh@linaro.org>
-Subject: [PATCH 5.16 0144/1017] mailbox: tegra-hsp: Flush whole channel
-Date:   Tue,  5 Apr 2022 09:17:37 +0200
-Message-Id: <20220405070358.478359288@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Nikolay Borisov <nborisov@suse.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.16 0145/1017] btrfs: zoned: put block group after final usage
+Date:   Tue,  5 Apr 2022 09:17:38 +0200
+Message-Id: <20220405070358.507991164@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,41 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pekka Pessi <ppessi@nvidia.com>
+From: Nikolay Borisov <nborisov@suse.com>
 
-commit 60de2d2dc284e0dd1c2c897d08625bde24ef3454 upstream.
+commit d3e29967079c522ce1c5cab0e9fab2c280b977eb upstream.
 
-The txdone can re-fill the mailbox. Keep polling the mailbox during the
-flush until all the messages have been delivered.
+It's counter-intuitive (and wrong) to put the block group _before_ the
+final usage in submit_eb_page. Fix it by re-ordering the call to
+btrfs_put_block_group after its final reference. Also fix a minor typo
+in 'implies'
 
-This fixes an issue with the Tegra Combined UART (TCU) where output can
-get truncated under high traffic load.
-
-Signed-off-by: Pekka Pessi <ppessi@nvidia.com>
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
-Fixes: 91b1b1c3da8a ("mailbox: tegra-hsp: Add support for shared mailboxes")
-Cc: stable@vger.kernel.org
-Signed-off-by: Thierry Reding <treding@nvidia.com>
-Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
-Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
+Fixes: be1a1d7a5d24 ("btrfs: zoned: finish fully written block group")
+CC: stable@vger.kernel.org # 5.16+
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Signed-off-by: Nikolay Borisov <nborisov@suse.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mailbox/tegra-hsp.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ fs/btrfs/extent_io.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
---- a/drivers/mailbox/tegra-hsp.c
-+++ b/drivers/mailbox/tegra-hsp.c
-@@ -412,6 +412,11 @@ static int tegra_hsp_mailbox_flush(struc
- 		value = tegra_hsp_channel_readl(ch, HSP_SM_SHRD_MBOX);
- 		if ((value & HSP_SM_SHRD_MBOX_FULL) == 0) {
- 			mbox_chan_txdone(chan, 0);
-+
-+			/* Wait until channel is empty */
-+			if (chan->active_req != NULL)
-+				continue;
-+
- 			return 0;
- 		}
- 
+--- a/fs/btrfs/extent_io.c
++++ b/fs/btrfs/extent_io.c
+@@ -4800,11 +4800,12 @@ static int submit_eb_page(struct page *p
+ 		return ret;
+ 	}
+ 	if (cache) {
+-		/* Impiles write in zoned mode */
+-		btrfs_put_block_group(cache);
+-		/* Mark the last eb in a block group */
++		/*
++		 * Implies write in zoned mode. Mark the last eb in a block group.
++		 */
+ 		if (cache->seq_zone && eb->start + eb->len == cache->zone_capacity)
+ 			set_bit(EXTENT_BUFFER_ZONE_FINISH, &eb->bflags);
++		btrfs_put_block_group(cache);
+ 	}
+ 	ret = write_one_eb(eb, wbc, epd);
+ 	free_extent_buffer(eb);
 
 

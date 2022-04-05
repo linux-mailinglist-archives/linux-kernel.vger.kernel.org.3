@@ -2,308 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A8F54F52C7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 05:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 021B84F52C3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 05:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234162AbiDFDHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 23:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37706 "EHLO
+        id S231190AbiDFDGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 23:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1846885AbiDFCKm (ORCPT
+        with ESMTP id S1846075AbiDFCCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 22:10:42 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8446411177D
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 16:34:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649201680; x=1680737680;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=gAh4bFJzyQGpzFApMU7+xjdlxgtqHF4SHKQrijCAFwc=;
-  b=gkNFCSpdw/ZKUyoQA6IFnW2HV6uj3IGR1+pZWVrJCp8hWg8ohnCGiK5X
-   V4SiMEIhrgyCqk05UxDykTht+Ou6Udcm5yS1SrB7Ctdz2oLoE5k3/U5Aa
-   f33Gwj59lhIQlbHhlUMbqBfoy8qtMMT3+jVu60fTaGJ61J7mWR5LYI2cT
-   xSndr74xj3uzRAmcz9p7JKcJ59z8a7Xp2oA3yO50ypQG0J3v9dZWze+7r
-   nnZNoBTMLlE95lvEsEHz5onfIOaplm474L5lcEOgY5LPYzzKnPpFfWcCP
-   ho6kQWQBplkx6q5zO13YSbpU5qV9qseaMyqXtT/NQeTG/KNhFz3Dy+Byv
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="243031265"
-X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="243031265"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 16:34:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="851032854"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 05 Apr 2022 16:34:33 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 74B80132; Wed,  6 Apr 2022 02:29:45 +0300 (EEST)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@intel.com, luto@kernel.org, peterz@infradead.org
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv8 00/30] TDX Guest: TDX core support
-Date:   Wed,  6 Apr 2022 02:29:09 +0300
-Message-Id: <20220405232939.73860-1-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 5 Apr 2022 22:02:41 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE30EB82CD
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 16:31:25 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id y10so883207pfa.7
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 16:31:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6JOmtv6Rm4jDh0GV7OKzMV/6Ac5cnRIZHSOY48wGL+U=;
+        b=IR7NpSrOcaWXxtSNibofCxKTyR+Y1ehaqpsHYBWsLG588QCVk7fyXTNrhtWv6FZeN2
+         4HDgQFkk5m4kzQLr6UWhK0RjQoq+ntg9xHh9c17ebLkzzEG6C1PW/dgwNs+PxqotwjNj
+         sTBMKqfrkpgzOefDX4j9aEhyESmeM0tv64aQXFVSLdQd04zlAbQ/OnewgnvGt5izAhek
+         xwpsUnP7pRDkR2YZJuD5/oG7B9GuG9RD5K+bM7Ra/2kc/2hFSgL0d6EYVroT8YhB0RbO
+         RNKIUB9VO74CVWys7kx8e5eu77BmMlRwoOaesF9yaVKJyhGwgagVzn3SjGmPi8cgQk2c
+         Im8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6JOmtv6Rm4jDh0GV7OKzMV/6Ac5cnRIZHSOY48wGL+U=;
+        b=S1AvJgAdYk4fQUqsQVA7dCMQgumKsxH9n9299uhL6ILnTh+PJY8srq5bxNzIlpTPUa
+         pp0P1NVd2/R4H3N9pbfDd/dDd8ZXldUwgg03Ax3MHkcNJyMh2c4VUrO5DDW5S5+cB8VZ
+         awhn/EPRZe4sAZr/gtUP7RabVdVWBiXZx+bs920SbIHorP1HUbzLpug8xLaD93xyxVkp
+         vHyhNZT3cez59CYYJsJPU8P/16BTLIvbOkCkGh+p5HRO8wEGxKgT7cT6IWlajwFFo7As
+         XbM1OsyxnnGebByH9WT5blnzNNf3bH8vPyjsd+LatsZZRDeZYTVLj5Vi1bu1Me6yf7L9
+         1KYA==
+X-Gm-Message-State: AOAM530LS5ebtAlZzi2fe8Zw9Kf8w0uhyEN9UkefddVsJKDYGATYmQep
+        Fc0WJbSbWqNF0ffu/ppWcY/IVQ==
+X-Google-Smtp-Source: ABdhPJxsLjjK4uqFcbL1535kTJ41gTxis92axMmsCdKtnF2Ol53TKxBl5mCocSqV/2Ap1aWie/DWRg==
+X-Received: by 2002:a63:6645:0:b0:382:65eb:1215 with SMTP id a66-20020a636645000000b0038265eb1215mr4767387pgc.337.1649201484673;
+        Tue, 05 Apr 2022 16:31:24 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id v22-20020a056a00149600b004fb34a7b500sm17228303pfu.203.2022.04.05.16.31.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 16:31:23 -0700 (PDT)
+Date:   Tue, 5 Apr 2022 23:31:20 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chenyi Qiang <chenyi.qiang@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/3] KVM: X86: Save&restore the triple fault request
+Message-ID: <YkzRSHHDMaVBQrxd@google.com>
+References: <20220318074955.22428-1-chenyi.qiang@intel.com>
+ <20220318074955.22428-2-chenyi.qiang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220318074955.22428-2-chenyi.qiang@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+On Fri, Mar 18, 2022, Chenyi Qiang wrote:
+> For the triple fault sythesized by KVM, e.g. the RSM path or
+> nested_vmx_abort(), if KVM exits to userspace before the request is
+> serviced, userspace could migrate the VM and lose the triple fault.
+> Fix this issue by adding a new event KVM_VCPUEVENT_TRIPLE_FAULT in
+> get/set_vcpu_events() to track the triple fault request.
+> 
+> Signed-off-by: Chenyi Qiang <chenyi.qiang@intel.com>
+> ---
+>  Documentation/virt/kvm/api.rst  | 6 ++++++
+>  arch/x86/include/uapi/asm/kvm.h | 1 +
+>  arch/x86/kvm/x86.c              | 9 ++++++++-
+>  3 files changed, 15 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 691ff84444bd..9682b0a438bd 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -1146,6 +1146,9 @@ The following bits are defined in the flags field:
+>    fields contain a valid state. This bit will be set whenever
+>    KVM_CAP_EXCEPTION_PAYLOAD is enabled.
+>  
+> +- KVM_VCPUEVENT_TRIPLE_FAULT may be set to signal that there's a
+> +  triple fault request waiting to be serviced.
 
-Intel's Trust Domain Extensions (TDX) protects confidential guest VMs
-from the host and physical attacks by isolating the guest register
-state and by encrypting the guest memory. In TDX, a special TDX module
-sits between the host and the guest, and runs in a special mode and
-manages the guest/host separation.
+Please avoid "request" in the docs, as before, that's a KVM implemenation detail.
+For this one, maybe "there's a pending triple fault event"?
 
-	Please review and consider applying.
+> +
+>  ARM/ARM64:
+>  ^^^^^^^^^^
+>  
+> @@ -1241,6 +1244,9 @@ can be set in the flags field to signal that the
+>  exception_has_payload, exception_payload, and exception.pending fields
+>  contain a valid state and shall be written into the VCPU.
+>  
+> +KVM_VCPUEVENT_TRIPLE_FAULT can be set in flags field to signal that a
+> +triple fault request should be made.
 
-More details of TDX guests can be found in Documentation/x86/tdx.rst.
 
-Dependencies:
--------------
+And here, "to signal that KVM should synthesize a triple fault for the guest"?
 
-The patchset depends on changes in swiotlb-init-cleanup branch of the
-Christoph's misc tree[1]. It makes SWIOTLB forced for platforms with
-CC_ATTR_GUEST_MEM_ENCRYPT. These changes are not required to apply the
-patchset, but the kernel will not be bootable on TDX platform.
+> +
+>  ARM/ARM64:
+>  ^^^^^^^^^^
+>  
+> diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
+> index bf6e96011dfe..d8ef0d993e86 100644
+> --- a/arch/x86/include/uapi/asm/kvm.h
+> +++ b/arch/x86/include/uapi/asm/kvm.h
+> @@ -325,6 +325,7 @@ struct kvm_reinject_control {
+>  #define KVM_VCPUEVENT_VALID_SHADOW	0x00000004
+>  #define KVM_VCPUEVENT_VALID_SMM		0x00000008
+>  #define KVM_VCPUEVENT_VALID_PAYLOAD	0x00000010
+> +#define KVM_VCPUEVENT_TRIPLE_FAULT	0x00000020
+>  
+>  /* Interrupt shadow states */
+>  #define KVM_X86_SHADOW_INT_MOV_SS	0x01
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 4fa4d8269e5b..fee402a700df 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -4891,6 +4891,9 @@ static void kvm_vcpu_ioctl_x86_get_vcpu_events(struct kvm_vcpu *vcpu,
+>  	if (vcpu->kvm->arch.exception_payload_enabled)
+>  		events->flags |= KVM_VCPUEVENT_VALID_PAYLOAD;
+>  
+> +	if (kvm_check_request(KVM_REQ_TRIPLE_FAULT, vcpu))
+> +		events->flags |= KVM_VCPUEVENT_TRIPLE_FAULT;
+> +
+>  	memset(&events->reserved, 0, sizeof(events->reserved));
+>  }
+>  
+> @@ -4903,7 +4906,8 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
+>  			      | KVM_VCPUEVENT_VALID_SIPI_VECTOR
+>  			      | KVM_VCPUEVENT_VALID_SHADOW
+>  			      | KVM_VCPUEVENT_VALID_SMM
+> -			      | KVM_VCPUEVENT_VALID_PAYLOAD))
+> +			      | KVM_VCPUEVENT_VALID_PAYLOAD
+> +			      | KVM_VCPUEVENT_TRIPLE_FAULT))
+>  		return -EINVAL;
+>  
+>  	if (events->flags & KVM_VCPUEVENT_VALID_PAYLOAD) {
+> @@ -4976,6 +4980,9 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
+>  		}
+>  	}
+>  
+> +	if (events->flags & KVM_VCPUEVENT_TRIPLE_FAULT)
+> +		kvm_make_request(KVM_REQ_TRIPLE_FAULT, vcpu);
+> +
+>  	kvm_make_request(KVM_REQ_EVENT, vcpu);
 
-[1] git://git.infradead.org/users/hch/misc swiotlb-init-cleanup
+Looks correct, but this really needs a selftest, at least for the SET path since
+the intent is to use that for the NOTIFY handling.  Doesn't need to be super fancy,
+e.g. do port I/O from L2, inject a triple fault, and verify L1 sees the appropriate
+exit.
 
-SEV/TDX comparison:
--------------------
-
-TDX has a lot of similarities to SEV. It enhances confidentiality
-of guest memory and state (like registers) and includes a new exception
-(#VE) for the same basic reasons as SEV-ES. Like SEV-SNP (not merged
-yet), TDX limits the host's ability to make changes in the guest
-physical address space.
-
-TDX/VM comparison:
-------------------
-
-Some of the key differences between TD and regular VM is,
-
-1. Multi CPU bring-up is done using the ACPI MADT wake-up table.
-2. A new #VE exception handler is added. The TDX module injects #VE exception
-   to the guest TD in cases of instructions that need to be emulated, disallowed
-   MSR accesses, etc.
-3. By default memory is marked as private, and TD will selectively share it with
-   VMM based on need.
-
-You can find TDX related documents in the following link.
-
-https://software.intel.com/content/www/br/pt/develop/articles/intel-trust-domain-extensions.html
-
-Git tree:
-
-https://github.com/intel/tdx.git guest-upstream
-
-Previous version:
-
-https://lore.kernel.org/r/20220318153048.51177-1-kirill.shutemov@linux.intel.com
-
-Changes from v7:
-  - Rebased to v5.18-rc1
-  - Actually address Thomas' feedback on patch 02/30
-  - Rework try_accept_one() to fix build issue with older GCC;
-  - Remove timeout on a secondary vCPU wake up;
-  - Drop protection from re-wakeup as it is handled by core;
-  - Fix TDX_SEAMCALL_VMFAILINVALID definition;
-  - Updates to commit messages;
-  - Add Reviewed-bys;
-Changes from v6:
-  - Drop unused early_is_tdx_guest() and tdx_guest_detected;
-  - Drop unused port I/O callback in pio_ops;
-  - Restructure code around TDX_GET_INFO, cc_mask and physical_mask;
-  - Drop unneeded mailbox_lock in ACPI wake up code;
-  - Use memory barrier for serialzation around acpi_mp_wake_mailbox;
-  - Update comments and commit messages;
-  - Add Reviewed-bys and Suggested-by;
-  - Fix few nits from checkpatch;
-Changes from v5:
-  - Drop paranoid check against TDX_IDENT;
-  - Move files around;
-  - Clarify why TDX_SEAMCALL_VMFAILINVALID has the value it has;
-  - Better diagnostics for TDVMCALL failure;
-  - WARN() instead of BUG() for confused instruction decoder for MMIO;
-  - Rework port I/O in decompression code to avoid "pio_ops." at all call sites
-    of I/O helpers;
-  - Refactor code around tdx_enc_status_changed()
-  - Utilize updated swiotlb code to initialize it for TDX (swiotlb-init-cleanup branch)
-  - io_apic_set_fixmap_nocache() -> io_apic_set_fixmap();
-  - Updates to comments and commit messages;
-Changes from v4:
-  - Update comments for TDX_MODULE_CALL()
-  - Clarify how TDX_SEAMCALL_VMFAILINVALID is defined
-  - Updated comments in __tdx_hypercall()
-  - Get rid of td_info
-  - Move exc_general_protection() refactoring into a separate patch
-  - Updates comments around #VE handling
-  - Add hcall_func() to differenciate exit reason from hypercalls
-  - Only allow hypervisor CPUID leaves to be handled with #VE
-  - Update MMIO handling comments and commit message
-  - Update commit messages from port I/O related pateches
-  - Rename init_io_ops() to init_default_io_ops()
-  - Refactor handle_io()
-  - Fold warning fix from a stand along patch to patch that make the warning
-    triggerable
-  - Do not flush cache on entering sleep state for any virtual machine, not only TDX
-  - Documentation is updated
-Changes from v3:
-  - Rebased on top of merged x86/coco patches
-  - Sanity build-time check for TDX detection (Cyrill Gorcunov)
-  - Correction in the documentation regarding #VE for CPUID
-Changes from v2:
-  - Move TDX-Guest-specific code under arch/x86/coco/
-  - Code shared between host and guest is under arch/x86/virt/
-  - Fix handling CR4.MCE for !CONFIG_X86_MCE
-  - A separate patch to clarify CR0.NE situation
-  - Use u8/u16/u32 for port I/O handler
-  - Rework TDCALL helpers:
-    + consolidation between guest and host
-    + clearer interface
-    + A new tdx_module_call() panic() if TDCALL fails
-  - Rework MMIO handling to imporove readability
-  - New generic API to deal encryption masks
-  - Move tdx_early_init() before copy_bootdata() (again)
-  - Rework #VE handing to share more code with #GP handler
-  - Rework __set_memory_enc_pgtable() to provide proper abstruction for both
-    SME/SEV and TDX cases.
-  - Fix warning on build with X86_MEM_ENCRYPT=y
-  - ... and more
-Changes from v1:
-  - Rebased to tip/master (94985da003a4).
-  - Address feedback from Borislav and Josh.
-  - Wire up KVM hypercalls. Needed to send IPI.
-
-Andi Kleen (1):
-  x86/tdx: Port I/O: add early boot support
-
-Isaku Yamahata (1):
-  x86/tdx: ioapic: Add shared bit for IOAPIC base address
-
-Kirill A. Shutemov (18):
-  x86/tdx: Provide common base for SEAMCALL and TDCALL C wrappers
-  x86/tdx: Extend the confidential computing API to support TDX guests
-  x86/tdx: Exclude shared bit from __PHYSICAL_MASK
-  x86/traps: Refactor exc_general_protection()
-  x86/traps: Add #VE support for TDX guest
-  x86/tdx: Add HLT support for TDX guests
-  x86/tdx: Add MSR support for TDX guests
-  x86/tdx: Handle CPUID via #VE
-  x86/tdx: Handle in-kernel MMIO
-  x86: Adjust types used in port I/O helpers
-  x86: Consolidate port I/O helpers
-  x86/boot: Port I/O: allow to hook up alternative helpers
-  x86/boot: Port I/O: add decompression-time support for TDX
-  x86/boot: Set CR0.NE early and keep it set during the boot
-  x86/tdx: Make pages shared in ioremap()
-  x86/mm/cpa: Add support for TDX shared memory
-  x86/mm: Make DMA memory shared for TD guest
-  ACPICA: Avoid cache flush inside virtual machines
-
-Kuppuswamy Sathyanarayanan (8):
-  x86/tdx: Detect running as a TDX guest in early boot
-  x86/tdx: Add __tdx_module_call() and __tdx_hypercall() helper
-    functions
-  x86/tdx: Detect TDX at early kernel decompression time
-  x86/tdx: Port I/O: add runtime hypercalls
-  x86/tdx: Wire up KVM hypercalls
-  x86/acpi, x86/boot: Add multiprocessor wake-up support
-  x86/topology: Disable CPU online/offline control for TDX guests
-  Documentation/x86: Document TDX kernel architecture
-
-Sean Christopherson (2):
-  x86/boot: Add a trampoline for booting APs via firmware handoff
-  x86/boot: Avoid #VE during boot for TDX platforms
-
- Documentation/x86/index.rst              |   1 +
- Documentation/x86/tdx.rst                | 214 +++++++
- arch/x86/Kconfig                         |  15 +
- arch/x86/boot/boot.h                     |  37 +-
- arch/x86/boot/compressed/Makefile        |   1 +
- arch/x86/boot/compressed/head_64.S       |  27 +-
- arch/x86/boot/compressed/misc.c          |  12 +
- arch/x86/boot/compressed/misc.h          |   4 +-
- arch/x86/boot/compressed/pgtable.h       |   2 +-
- arch/x86/boot/compressed/tdcall.S        |   3 +
- arch/x86/boot/compressed/tdx.c           |  77 +++
- arch/x86/boot/compressed/tdx.h           |  13 +
- arch/x86/boot/cpuflags.c                 |   3 +-
- arch/x86/boot/cpuflags.h                 |   1 +
- arch/x86/boot/io.h                       |  41 ++
- arch/x86/boot/main.c                     |   4 +
- arch/x86/coco/Makefile                   |   2 +
- arch/x86/coco/core.c                     |  22 +-
- arch/x86/coco/tdx/Makefile               |   3 +
- arch/x86/coco/tdx/tdcall.S               | 204 +++++++
- arch/x86/coco/tdx/tdx.c                  | 692 +++++++++++++++++++++++
- arch/x86/include/asm/acenv.h             |  14 +-
- arch/x86/include/asm/apic.h              |   7 +
- arch/x86/include/asm/cpufeatures.h       |   1 +
- arch/x86/include/asm/disabled-features.h |   8 +-
- arch/x86/include/asm/idtentry.h          |   4 +
- arch/x86/include/asm/io.h                |  42 +-
- arch/x86/include/asm/kvm_para.h          |  22 +
- arch/x86/include/asm/mem_encrypt.h       |   6 +-
- arch/x86/include/asm/realmode.h          |   1 +
- arch/x86/include/asm/shared/io.h         |  34 ++
- arch/x86/include/asm/shared/tdx.h        |  40 ++
- arch/x86/include/asm/tdx.h               |  91 +++
- arch/x86/kernel/acpi/boot.c              |  93 ++-
- arch/x86/kernel/apic/apic.c              |  10 +
- arch/x86/kernel/apic/io_apic.c           |  18 +-
- arch/x86/kernel/asm-offsets.c            |  17 +
- arch/x86/kernel/head64.c                 |   7 +
- arch/x86/kernel/head_64.S                |  28 +-
- arch/x86/kernel/idt.c                    |   3 +
- arch/x86/kernel/process.c                |   4 +
- arch/x86/kernel/smpboot.c                |  12 +-
- arch/x86/kernel/traps.c                  | 143 ++++-
- arch/x86/mm/ioremap.c                    |   5 +
- arch/x86/mm/mem_encrypt.c                |   9 +-
- arch/x86/realmode/rm/header.S            |   1 +
- arch/x86/realmode/rm/trampoline_64.S     |  57 +-
- arch/x86/realmode/rm/trampoline_common.S |  12 +-
- arch/x86/realmode/rm/wakemain.c          |   4 +
- arch/x86/virt/vmx/tdx/tdxcall.S          |  96 ++++
- include/linux/cc_platform.h              |  10 +
- kernel/cpu.c                             |   7 +
- 52 files changed, 2065 insertions(+), 119 deletions(-)
- create mode 100644 Documentation/x86/tdx.rst
- create mode 100644 arch/x86/boot/compressed/tdcall.S
- create mode 100644 arch/x86/boot/compressed/tdx.c
- create mode 100644 arch/x86/boot/compressed/tdx.h
- create mode 100644 arch/x86/boot/io.h
- create mode 100644 arch/x86/coco/tdx/Makefile
- create mode 100644 arch/x86/coco/tdx/tdcall.S
- create mode 100644 arch/x86/coco/tdx/tdx.c
- create mode 100644 arch/x86/include/asm/shared/io.h
- create mode 100644 arch/x86/include/asm/shared/tdx.h
- create mode 100644 arch/x86/include/asm/tdx.h
- create mode 100644 arch/x86/virt/vmx/tdx/tdxcall.S
-
--- 
-2.35.1
-
+Aha!  And for the GET path, abuse KVM_X86_SET_MCE with CR4.MCE=0 to coerce KVM into
+making a KVM_REQ_TRIPLE_FAULT, that way there's no need to try and hit a timing
+window to intercept the request.

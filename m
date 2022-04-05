@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F0F14F4F10
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8531A4F4ED7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1836798AbiDFAkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:40:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
+        id S1583243AbiDEXvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358773AbiDELRa (ORCPT
+        with ESMTP id S1354111AbiDEKLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 07:17:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F83DDFD52;
-        Tue,  5 Apr 2022 03:19:43 -0700 (PDT)
+        Tue, 5 Apr 2022 06:11:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C504506DE;
+        Tue,  5 Apr 2022 02:57:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A61961562;
-        Tue,  5 Apr 2022 10:19:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1692AC385A0;
-        Tue,  5 Apr 2022 10:19:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F0F2B81B13;
+        Tue,  5 Apr 2022 09:57:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9947AC385A1;
+        Tue,  5 Apr 2022 09:57:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153982;
-        bh=ZfobBtkv0dNRmNXjqAgvo8TFqgxLcLeOrAxHVbstjGI=;
+        s=korg; t=1649152636;
+        bh=M22wOKUpekKpognQbIgFpkF7FL2nVQ5DecRYMgd2GuI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZIa4BU0/YVBgYATTyjtpGF/FWcodlJTH+LVSpRoJ/QrM4wbGuvkvsKoB2ucnbWf4u
-         Nrd0VIRStkK6C1fyj/80y0GVPtS+Rq/aro/kVzt2Sm4OT/ykyZ1HYd3QvIXNYMPiAR
-         I0uoxq1/0uWHk6af6CASmqkISICRWGTFB5P55Ms0=
+        b=Lw+ck9sZa/GaKHUCH0u/WWNn0OITLc8JPCHWofrBCyBd5hHjmBJI1KgTNR9Gqawvf
+         aovUm+LT4+nPMOzjrWdHjJFAYCWfPWcLZt+b3tXUwJPq8E7/HlocZBiHXLWj7pj46I
+         3GN5wjLHbehx0S82eJxUc27k9oMIVyChT1cVQJfo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 416/599] staging: mt7621-dts: fix pinctrl properties for ethernet
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>
+Subject: [PATCH 5.15 848/913] watchdog: rti-wdt: Add missing pm_runtime_disable() in probe function
 Date:   Tue,  5 Apr 2022 09:31:50 +0200
-Message-Id: <20220405070311.211992749@linuxfoundation.org>
+Message-Id: <20220405070405.247995032@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,93 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arınç ÜNAL <arinc.unal@arinc9.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 0a93c0d75809582893e82039143591b9265b520e ]
+commit d055ef3a2c6919cff504ae3b710c96318d545fd2 upstream.
 
-Add pinctrl properties with rgmii1 & mdio pins under ethernet node which
-was wrongfully put under an external phy node.
-GMAC1 will start working with this fix.
+If the probe fails, we should use pm_runtime_disable() to balance
+pm_runtime_enable().
 
-Link: https://lore.kernel.org/netdev/02ecce91-7aad-4392-c9d7-f45ca1b31e0b@arinc9.com/T/
-
-Move GB-PC2 specific phy_external node to its own device tree.
-
-Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-Link: https://lore.kernel.org/r/20220125153903.1469-5-arinc.unal@arinc9.com
+Fixes: 2d63908bdbfb ("watchdog: Add K3 RTI watchdog support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/r/20220105092114.23932-1-linmq006@gmail.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/mt7621-dts/gbpc2.dts   | 16 +++++++++++-----
- drivers/staging/mt7621-dts/mt7621.dtsi | 13 +++----------
- 2 files changed, 14 insertions(+), 15 deletions(-)
+ drivers/watchdog/rti_wdt.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/staging/mt7621-dts/gbpc2.dts b/drivers/staging/mt7621-dts/gbpc2.dts
-index 52760e7351f6..f9b69091bfc0 100644
---- a/drivers/staging/mt7621-dts/gbpc2.dts
-+++ b/drivers/staging/mt7621-dts/gbpc2.dts
-@@ -12,10 +12,16 @@
- 	function = "gpio";
- };
+--- a/drivers/watchdog/rti_wdt.c
++++ b/drivers/watchdog/rti_wdt.c
+@@ -229,6 +229,7 @@ static int rti_wdt_probe(struct platform
+ 	ret = pm_runtime_get_sync(dev);
+ 	if (ret) {
+ 		pm_runtime_put_noidle(dev);
++		pm_runtime_disable(&pdev->dev);
+ 		return dev_err_probe(dev, ret, "runtime pm failed\n");
+ 	}
  
--&gmac1 {
--	status = "ok";
--};
-+&ethernet {
-+	gmac1: mac@1 {
-+		status = "ok";
-+		phy-handle = <&phy_external>;
-+	};
- 
--&phy_external {
--	status = "ok";
-+	mdio-bus {
-+		phy_external: ethernet-phy@5 {
-+			reg = <5>;
-+			phy-mode = "rgmii-rxid";
-+		};
-+	};
- };
-diff --git a/drivers/staging/mt7621-dts/mt7621.dtsi b/drivers/staging/mt7621-dts/mt7621.dtsi
-index 50f6d89f4673..51c0061daa37 100644
---- a/drivers/staging/mt7621-dts/mt7621.dtsi
-+++ b/drivers/staging/mt7621-dts/mt7621.dtsi
-@@ -412,6 +412,9 @@
- 
- 		mediatek,ethsys = <&ethsys>;
- 
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&rgmii1_pins &rgmii2_pins &mdio_pins>;
-+
- 		gmac0: mac@0 {
- 			compatible = "mediatek,eth-mac";
- 			reg = <0>;
-@@ -429,22 +432,12 @@
- 			reg = <1>;
- 			status = "off";
- 			phy-mode = "rgmii-rxid";
--			phy-handle = <&phy_external>;
- 		};
- 
- 		mdio-bus {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 
--			phy_external: ethernet-phy@5 {
--				status = "off";
--				reg = <5>;
--				phy-mode = "rgmii-rxid";
--
--				pinctrl-names = "default";
--				pinctrl-0 = <&rgmii2_pins>;
--			};
--
- 			switch0: switch0@0 {
- 				compatible = "mediatek,mt7621";
- 				#address-cells = <1>;
--- 
-2.34.1
-
 
 

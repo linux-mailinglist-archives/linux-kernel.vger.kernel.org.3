@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BAF74F3794
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:21:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2936A4F3793
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356342AbiDELPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
+        id S1356124AbiDELPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237141AbiDEIRo (ORCPT
+        with ESMTP id S237158AbiDEIRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:17:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B68FB0D08;
-        Tue,  5 Apr 2022 01:05:26 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E335694B7;
+        Tue,  5 Apr 2022 01:05:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E544C61725;
-        Tue,  5 Apr 2022 08:05:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F4214C385A1;
-        Tue,  5 Apr 2022 08:05:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B7DAB81B7F;
+        Tue,  5 Apr 2022 08:05:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF44BC385A2;
+        Tue,  5 Apr 2022 08:05:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145925;
-        bh=JHETf6kArsf/97BPwP8PKkdh+DPkqOvTkbRkJV+dBFc=;
+        s=korg; t=1649145928;
+        bh=6+9kOnTAntUOhvfGm7xQGXJ5NZ8bUKFJ/hdZcBWcIkQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qDX9oglZ6e+1IdTn0mEIkRyYuoQeWfvydebxKqdqIGvTj3UlyIAruwM4EF3BM8DSd
-         kb4h9As0tFfTS6HQdpkhRP7ANWgWh0SdeyMEB0aQfjQsnJrj2VwU9lxC+hMeGbRB0E
-         OpJ157Sj1WP0gLN0t40PJf4B3NF3MhEFgpuIHTTE=
+        b=MLM6pyrxOmosHCQd7OzHK38rfZjSWcqZN1V9z/1JipGG8R7UOhErDzfxLmg0MRaa0
+         qRpw8i0yOYLUiyE2kxRh++DnD81JopUbT0afYxbW7TXJrN77tie6PTrSnqGcmLj7Rj
+         jEagGAm1eAX2cXwFlC+Wuf4QnVXB2RZJZLJ/UjoE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nemanja Rakovic <nemanja.rakovic@syrmia.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, Aashish Sharma <shraash@google.com>,
+        Mike Snitzer <snitzer@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0578/1126] mips: Enable KCSAN
-Date:   Tue,  5 Apr 2022 09:22:05 +0200
-Message-Id: <20220405070424.598071434@linuxfoundation.org>
+Subject: [PATCH 5.17 0579/1126] dm crypt: fix get_key_size compiler warning if !CONFIG_KEYS
+Date:   Tue,  5 Apr 2022 09:22:06 +0200
+Message-Id: <20220405070424.627167206@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,60 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nemanja Rakovic <nemanja.rakovic@syrmia.com>
+From: Aashish Sharma <shraash@google.com>
 
-[ Upstream commit e0a8b93efa2382d370be44bf289157de7e5dacb4 ]
+[ Upstream commit 6fc51504388c1a1a53db8faafe9fff78fccc7c87 ]
 
-This patch enables KCSAN for the 64-bit version. Updated rules
-for the incompatible compilation units (vdso, boot/compressed).
+Explicitly convert unsigned int in the right of the conditional
+expression to int to match the left side operand and the return type,
+fixing the following compiler warning:
 
-Signed-off-by: Nemanja Rakovic <nemanja.rakovic@syrmia.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+drivers/md/dm-crypt.c:2593:43: warning: signed and unsigned
+type in conditional expression [-Wsign-compare]
+
+Fixes: c538f6ec9f56 ("dm crypt: add ability to use keys from the kernel key retention service")
+Signed-off-by: Aashish Sharma <shraash@google.com>
+Signed-off-by: Mike Snitzer <snitzer@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/Kconfig                  | 1 +
- arch/mips/boot/compressed/Makefile | 1 +
- arch/mips/vdso/Makefile            | 3 +++
- 3 files changed, 5 insertions(+)
+ drivers/md/dm-crypt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index 058446f01487..651d4fe355da 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -101,6 +101,7 @@ config MIPS
- 	select TRACE_IRQFLAGS_SUPPORT
- 	select VIRT_TO_BUS
- 	select ARCH_HAS_ELFCORE_COMPAT
-+	select HAVE_ARCH_KCSAN if 64BIT
+diff --git a/drivers/md/dm-crypt.c b/drivers/md/dm-crypt.c
+index d4ae31558826..f51aea71cb03 100644
+--- a/drivers/md/dm-crypt.c
++++ b/drivers/md/dm-crypt.c
+@@ -2590,7 +2590,7 @@ static int crypt_set_keyring_key(struct crypt_config *cc, const char *key_string
  
- config MIPS_FIXUP_BIGPHYS_ADDR
- 	bool
-diff --git a/arch/mips/boot/compressed/Makefile b/arch/mips/boot/compressed/Makefile
-index 5a15d51e8884..a35f78212ea9 100644
---- a/arch/mips/boot/compressed/Makefile
-+++ b/arch/mips/boot/compressed/Makefile
-@@ -38,6 +38,7 @@ KBUILD_AFLAGS := $(KBUILD_AFLAGS) -D__ASSEMBLY__ \
- KCOV_INSTRUMENT		:= n
- GCOV_PROFILE := n
- UBSAN_SANITIZE := n
-+KASAN_SANITIZE			:= n
+ static int get_key_size(char **key_string)
+ {
+-	return (*key_string[0] == ':') ? -EINVAL : strlen(*key_string) >> 1;
++	return (*key_string[0] == ':') ? -EINVAL : (int)(strlen(*key_string) >> 1);
+ }
  
- # decompressor objects (linked with vmlinuz)
- vmlinuzobjs-y := $(obj)/head.o $(obj)/decompress.o $(obj)/string.o $(obj)/bswapsi.o
-diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-index d65f55f67e19..f72658b3a53f 100644
---- a/arch/mips/vdso/Makefile
-+++ b/arch/mips/vdso/Makefile
-@@ -1,6 +1,9 @@
- # SPDX-License-Identifier: GPL-2.0
- # Objects to go into the VDSO.
- 
-+# Sanitizer runtimes are unavailable and cannot be linked here.
-+ KCSAN_SANITIZE			:= n
-+
- # Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
- # the inclusion of generic Makefile.
- ARCH_REL_TYPE_ABS := R_MIPS_JUMP_SLOT|R_MIPS_GLOB_DAT
+ #endif /* CONFIG_KEYS */
 -- 
 2.34.1
 

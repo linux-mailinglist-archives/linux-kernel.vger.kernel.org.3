@@ -2,49 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2214F3DDF
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 506034F3EE8
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388260AbiDEOd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39134 "EHLO
+        id S1380214AbiDEOQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238760AbiDEJcp (ORCPT
+        with ESMTP id S238790AbiDEJcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:32:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43982AFF;
-        Tue,  5 Apr 2022 02:20:03 -0700 (PDT)
+        Tue, 5 Apr 2022 05:32:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3255F66;
+        Tue,  5 Apr 2022 02:20:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 710F5B81B75;
-        Tue,  5 Apr 2022 09:20:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0D6DC385A4;
-        Tue,  5 Apr 2022 09:20:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9ABAA6144D;
+        Tue,  5 Apr 2022 09:20:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4193C385A0;
+        Tue,  5 Apr 2022 09:20:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150401;
-        bh=MVgAlWvP92ctLAd+b4nIN9lxSN72tSLbU4rwT1rGihY=;
+        s=korg; t=1649150407;
+        bh=xGJ+ArF/bMzVzpHzzWR2mQad4zARlA/iBKKkcu48jJc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s9bjq6+gVmKFpO1/5uBwpOvVlyIJBYSlWdvbCv6Ssm1UZryo0VaCZMs2b4Pow96tL
-         yoHIQM+dMDkDlX2K3QpeT/O03pcOUGjarRGomrBSS4X5yZDjkLJyQTv6h5BNOYwACF
-         lsocq5sDdSsbKfi75yi0fxJz97+itSoKcL+vsxDk=
+        b=iN6d3vvZln0p3sb7nCg4zIerqhgmHG+g7IB1JUc1IE1qVJRfVC1738iSeV0Keency
+         dEk0FmsE8iC5FjIZiJndw23bIvOhZGqdH5mr9YMV3ooO+RGssLeFNxdGH0zDdiHfNH
+         EwAOIa13SKolOd+hA+CbTTMmpnRP4+aoz3CetPgY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        linux-hyperv@vger.kernel.org,
-        Michael Kelley <mikelley@microsoft.com>,
-        =?UTF-8?q?Petr=20=C5=A0tetiar?= <ynezz@true.cz>
-Subject: [PATCH 5.15 007/913] hv: utils: add PTP_1588_CLOCK to Kconfig to fix build
-Date:   Tue,  5 Apr 2022 09:17:49 +0200
-Message-Id: <20220405070340.032267794@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Michael=20H=C3=BCbner?= <michaelh.95@t-online.de>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 009/913] HID: Add support for open wheel and no attachment to T300
+Date:   Tue,  5 Apr 2022 09:17:51 +0200
+Message-Id: <20220405070340.092325466@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -62,50 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Michael Hübner <michaelh.95@t-online.de>
 
-commit 1dc2f2b81a6a9895da59f3915760f6c0c3074492 upstream.
+[ Upstream commit 0a5a587501b54e8c6d86960b047d4491fd40dcf2 ]
 
-The hyperv utilities use PTP clock interfaces and should depend a
-a kconfig symbol such that they will be built as a loadable module or
-builtin so that linker errors do not happen.
+Different add ons to the wheel base report different models. Having
+no wheel mounted to the base and using the open wheel attachment is
+added here.
 
-Prevents these build errors:
-
-ld: drivers/hv/hv_util.o: in function `hv_timesync_deinit':
-hv_util.c:(.text+0x37d): undefined reference to `ptp_clock_unregister'
-ld: drivers/hv/hv_util.o: in function `hv_timesync_init':
-hv_util.c:(.text+0x738): undefined reference to `ptp_clock_register'
-
-Fixes: 3716a49a81ba ("hv_utils: implement Hyper-V PTP source")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: "K. Y. Srinivasan" <kys@microsoft.com>
-Cc: Haiyang Zhang <haiyangz@microsoft.com>
-Cc: Stephen Hemminger <sthemmin@microsoft.com>
-Cc: Wei Liu <wei.liu@kernel.org>
-Cc: Dexuan Cui <decui@microsoft.com>
-Cc: linux-hyperv@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Link: https://lore.kernel.org/r/20211126023316.25184-1-rdunlap@infradead.org
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
-Cc: Petr Štetiar <ynezz@true.cz>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Michael Hübner <michaelh.95@t-online.de>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hv/Kconfig |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/hid/hid-thrustmaster.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/hv/Kconfig
-+++ b/drivers/hv/Kconfig
-@@ -18,6 +18,7 @@ config HYPERV_TIMER
- config HYPERV_UTILS
- 	tristate "Microsoft Hyper-V Utilities driver"
- 	depends on HYPERV && CONNECTOR && NLS
-+	depends on PTP_1588_CLOCK_OPTIONAL
- 	help
- 	  Select this option to enable the Hyper-V Utilities.
- 
+diff --git a/drivers/hid/hid-thrustmaster.c b/drivers/hid/hid-thrustmaster.c
+index afdd778a10f0..a28c3e575650 100644
+--- a/drivers/hid/hid-thrustmaster.c
++++ b/drivers/hid/hid-thrustmaster.c
+@@ -64,7 +64,9 @@ struct tm_wheel_info {
+  */
+ static const struct tm_wheel_info tm_wheels_infos[] = {
+ 	{0x0306, 0x0006, "Thrustmaster T150RS"},
++	{0x0200, 0x0005, "Thrustmaster T300RS (Missing Attachment)"},
+ 	{0x0206, 0x0005, "Thrustmaster T300RS"},
++	{0x0209, 0x0005, "Thrustmaster T300RS (Open Wheel Attachment)"},
+ 	{0x0204, 0x0005, "Thrustmaster T300 Ferrari Alcantara Edition"},
+ 	{0x0002, 0x0002, "Thrustmaster T500RS"}
+ 	//{0x0407, 0x0001, "Thrustmaster TMX"}
+-- 
+2.34.1
+
 
 

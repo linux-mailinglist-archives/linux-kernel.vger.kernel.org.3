@@ -2,117 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 324F24F2394
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 653B54F2397
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbiDEGs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 02:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
+        id S230230AbiDEGt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 02:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbiDEGsT (ORCPT
+        with ESMTP id S229569AbiDEGtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 02:48:19 -0400
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D9A57175;
-        Mon,  4 Apr 2022 23:46:20 -0700 (PDT)
-Received: by mail-qt1-f181.google.com with SMTP id v2so9708009qtc.5;
-        Mon, 04 Apr 2022 23:46:20 -0700 (PDT)
+        Tue, 5 Apr 2022 02:49:51 -0400
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FF065D34;
+        Mon,  4 Apr 2022 23:47:53 -0700 (PDT)
+Received: by mail-qv1-f47.google.com with SMTP id kc20so9345834qvb.3;
+        Mon, 04 Apr 2022 23:47:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=UuWjfy1DmKGBwxecHn9QW28Mp8RGeP8Fe6idp3HhRGs=;
-        b=XM48JdQlRjpvDo6pAnEfInZQ02JydMyJSRb+hGGXieNxNU8mZ3kXD/gEu0mZV++O2k
-         BqS6NEIoz2gsS8qU754qXmlGGdecWLhxBKTy8nQHlXUP7/An4b0tCe6BQQkN8HUGP3mg
-         CZ/Aro8sSU0utf0rAYn2baDlmL3oNG88I8GpFzbPK/CacovKR6jKzxmPjLaSSRenV6Ph
-         BvXPV8XItBJUMXSpzEcjVzhTBf3m5fL8OHSPHARPfMlGu7keGZVa8qfRRKOu3BXJNv2O
-         2xdRgdMmflZWYsTNNuF3/AlnRJKOjBKcZ+veIgQodE67F/b2u0SX2U4pATdnsUqAv6g5
-         WrqA==
-X-Gm-Message-State: AOAM532nBU/gi9XQjDN33cMYjxk2EBLOmHtK3YNCKQilvc6FC+iT8SSA
-        ZP4ihtDGGD79/PMkzdXb+luSSoATM5GxDA==
-X-Google-Smtp-Source: ABdhPJwkZT+cT8EcW9YAwiSyF8z2cWBBKHK+j5v06cUcI/z3ZQE/vjvuRTuaahHCBiEU5I/o9Rlyjg==
-X-Received: by 2002:ac8:5c84:0:b0:2e1:eede:8b1b with SMTP id r4-20020ac85c84000000b002e1eede8b1bmr1709809qta.228.1649141179007;
-        Mon, 04 Apr 2022 23:46:19 -0700 (PDT)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id q8-20020a05622a04c800b002e06d7c1eabsm10360081qtx.16.2022.04.04.23.46.18
+        bh=u1fOL/166fikmH7uX2rZtUmlwmKDUvQ+HD9q8zNW/kM=;
+        b=LGC17qPN2DTZd9LED2aXK0ffSxgkk+mKdSxrc82NCHiHcm/S3VaChsvuP+lyod/2Ro
+         yTT4RzbGtySEokF5A14CH3fMAvH+P9wG73UTRl2n64ZUpGO5hMAU/iiClHf8dB3c+ilR
+         lBq+o9YCgRTSVS6dwrpwv66fIGHH+4lr6MNO6nmdbEEczJJ0JHUhAHQh+NxkgTpFdzlZ
+         nbOJ2vpEs1ReElgJqZhqrJhMMpUihwNc7Cd3y+Ne9Aw7+v+xAUy5MeeKt/QcnaLNQg/5
+         HgkgB4bmBGXEnOq7ZRtumejEuj4Ux45S4BsSkcN3I98HrM7lNCrAYMh3KamcFrY8/PlE
+         sDbQ==
+X-Gm-Message-State: AOAM530D6fbTGHJ9ZQo/Y84hsqEi84gQEjBVz0Hf8qyMGczFq5T7kYpr
+        8jXu7IJkXshKO6UNCtcSXblLA+s99feRSg==
+X-Google-Smtp-Source: ABdhPJxqUS6Pw7wAQQ+YkofO7XRIpAPfbdC/NQ+LtaNsNmRgWc5kc9NrNTy/nQXRCYN1xGpwNiHsnA==
+X-Received: by 2002:ad4:5dc8:0:b0:441:651c:2d25 with SMTP id m8-20020ad45dc8000000b00441651c2d25mr1511953qvh.89.1649141272590;
+        Mon, 04 Apr 2022 23:47:52 -0700 (PDT)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id w1-20020ac857c1000000b002e1e899badesm9610250qta.72.2022.04.04.23.47.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 23:46:18 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id g9so21718806ybf.1;
-        Mon, 04 Apr 2022 23:46:18 -0700 (PDT)
-X-Received: by 2002:a25:45:0:b0:633:96e2:2179 with SMTP id 66-20020a250045000000b0063396e22179mr1490905yba.393.1649141178137;
- Mon, 04 Apr 2022 23:46:18 -0700 (PDT)
+        Mon, 04 Apr 2022 23:47:52 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id j2so21799245ybu.0;
+        Mon, 04 Apr 2022 23:47:52 -0700 (PDT)
+X-Received: by 2002:a25:c049:0:b0:634:6751:e8d2 with SMTP id
+ c70-20020a25c049000000b006346751e8d2mr1506294ybf.6.1649141271808; Mon, 04 Apr
+ 2022 23:47:51 -0700 (PDT)
 MIME-Version: 1.0
 References: <CAHk-=wg6FWL1xjVyHx7DdjD2dHZETA5_=FqqW17Z19X-WTfWSg@mail.gmail.com>
  <20220404074734.1092959-1-geert@linux-m68k.org> <alpine.DEB.2.22.394.2204041006230.1941618@ramsan.of.borg>
- <874k38u20c.fsf@tynnyri.adurom.net>
-In-Reply-To: <874k38u20c.fsf@tynnyri.adurom.net>
+ <20220404092655.GR1544202@dread.disaster.area> <CAMuHMdWgqdR1o3wT9pjB=w8z=2xaDFv5DJX58-HPHOFRm3Tr8Q@mail.gmail.com>
+ <CAK8P3a0QrihBR_2FQ7uZ5w2JmLjv7czfrrarCMmJOhvNdJ3p9g@mail.gmail.com> <20220404221605.GS1544202@dread.disaster.area>
+In-Reply-To: <20220404221605.GS1544202@dread.disaster.area>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 5 Apr 2022 08:46:06 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV_-3TOHYehUsHeqwHjQtzN1Ot886K7vwPr4P-4u8eehw@mail.gmail.com>
-Message-ID: <CAMuHMdV_-3TOHYehUsHeqwHjQtzN1Ot886K7vwPr4P-4u8eehw@mail.gmail.com>
+Date:   Tue, 5 Apr 2022 08:47:40 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWak-zarKA_eCxWm5uhejWAXi0XkAuekfpAKRczLfhq3g@mail.gmail.com>
+Message-ID: <CAMuHMdWak-zarKA_eCxWm5uhejWAXi0XkAuekfpAKRczLfhq3g@mail.gmail.com>
 Subject: Re: Build regressions/improvements in v5.18-rc1
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        scsi <linux-scsi@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        linux-xfs@vger.kernel.org,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        linux-s390 <linux-s390@vger.kernel.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kalle,
+Hi Dave,
 
-On Mon, Apr 4, 2022 at 8:39 PM Kalle Valo <kvalo@kernel.org> wrote:
-> Geert Uytterhoeven <geert@linux-m68k.org> writes:
-> >> /kisskb/src/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c:
-> >> error: case label does not reduce to an integer constant: => 3798:2,
-> >> 3809:2
+On Tue, Apr 5, 2022 at 12:16 AM Dave Chinner <david@fromorbit.com> wrote:
+> On Mon, Apr 04, 2022 at 01:45:05PM +0200, Arnd Bergmann wrote:
+> > On Mon, Apr 4, 2022 at 12:19 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > > /kisskb/src/fs/xfs/./xfs_trace.h:432:2: note: in expansion of macro 'TP_printk'
+> > > >   TP_printk("dev %d:%d daddr 0x%llx bbcount 0x%x hold %d pincount %d "
+> > > >   ^
+> > > > /kisskb/src/fs/xfs/./xfs_trace.h:440:5: note: in expansion of macro '__print_flags'
+> > > >      __print_flags(__entry->flags, "|", XFS_BUF_FLAGS),
+> > > >      ^
+> > > > /kisskb/src/fs/xfs/xfs_buf.h:67:4: note: in expansion of macro 'XBF_UNMAPPED'
+> > > >   { XBF_UNMAPPED,  "UNMAPPED" }
+> > > >     ^
+> > > > /kisskb/src/fs/xfs/./xfs_trace.h:440:40: note: in expansion of macro 'XFS_BUF_FLAGS'
+> > > >      __print_flags(__entry->flags, "|", XFS_BUF_FLAGS),
+> > > >                                         ^
+> > > > /kisskb/src/fs/xfs/./xfs_trace.h: In function 'trace_raw_output_xfs_buf_flags_class':
+> > > > /kisskb/src/fs/xfs/xfs_buf.h:46:23: error: initializer element is not constant
+> > > >  #define XBF_UNMAPPED  (1 << 31)/* do not map the buffer */
+> > > >
+> > > > This doesn't make a whole lotta sense to me. It's blown up in a
+> > > > tracepoint macro in XFS that was not changed at all in 5.18-rc1, nor
+> > > > was any of the surrounding XFS code or contexts.  Perhaps something
+> > > > outside XFS changed to cause this on these platforms?
+> > >
+> > > Upon closer look, all builds showing this issue are using gcc-5...
+> > >
+> > > > Can you bisect this, please?
+> > >
+> > > Fortunately I still have gcc-5 installed on an older machine,
+> > > and I could reproduce the issue on amd64 with
+> > > "make allmodconfig fs/xfs/xfs_trace.o".
+> > >
+> > > Bisection points to commit e8c07082a810fbb9 ("Kbuild: move to
+> > > -std=gnu11").
+> > >
+> > > [1] gcc version 5.5.0 20171010 (Ubuntu 5.5.0-12ubuntu1
 > >
-> > arm64-gcc5.4/arm64-allmodconfig
-> > powerpc-gcc5/powerpc-allmodconfig
-> > powerpc-gcc5/ppc64_book3e_allmodconfig
+> > Thanks for the report. I've produced it and can see that the problem
+> > is assigning
+> > the value of "(1 << 31)" to an 'unsigned long' struct member. Since this is
+> > a signed integer overflow, the result is technically undefined behavior,
+> > which gcc-5 does not accept as an integer constant.
+> >
+> > The patch below fixes it for me, but I have not checked if there are any
+> > other instances. This could also be done using the 'BIT()' macro if the
+> > XFS maintainers prefer:
 >
-> After v5.17 there were two commits to brcmfmac/sdio.c:
+> So XFS only uses these flags in unsigned int fields that are
+> typed via:
 >
-> $ git log --oneline v5.17.. drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
-> ed26edf7bfd9 brcmfmac: Add BCM43454/6 support
-> 6d766d8cb505 brcmfmac: pcie: Declare missing firmware files in pcie.c
+> typedef unsigned int xfs_buf_flags_t;
 >
-> I can't see how either of them could cause this warning. Could something
-> else cause this or am I missing something?
+> So on the surface, declaring the flag values as ULONG and then writing
+> them into a UINT field is not a nice thing to be doing.
+>
+> I really don't want to change the xfs_buf_flags_t type to an
+> unsigned long, because that changes the packing of the first
+> cacheline of the struct xfs_buf and the contents of that cacheline
+> are performance critical for the lookup fastpath....
 
-Doh, I should not have reduced the CC list in the xfs subthread...
-
-The builds above are all gcc-5 builds, so they are affected by the same
-issue as XFS: unsigned constants that don't fit in int are lacking a
-"U" suffix.
-
-I assume Arnd's patch for
-drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c
-fixes this?
-https://lore.kernel.org/all/CAK8P3a0wRiS03imdXk2WbGONkSSczEGdE-ue5ubF6UyyDE9dQg@mail.gmail.com
+Hence just use "1u << n" instead of "1ul << n"?
 
 Gr{oetje,eeting}s,
 

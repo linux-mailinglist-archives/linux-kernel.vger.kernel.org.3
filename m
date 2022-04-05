@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BDF94F4536
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7774F43DE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344015AbiDEPKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
+        id S1383173AbiDEMZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345640AbiDEJnm (ORCPT
+        with ESMTP id S245051AbiDEIxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:43:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E978C1CBE;
-        Tue,  5 Apr 2022 02:29:26 -0700 (PDT)
+        Tue, 5 Apr 2022 04:53:04 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4092DDE7;
+        Tue,  5 Apr 2022 01:50:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64201B81CAC;
-        Tue,  5 Apr 2022 09:29:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA834C385A0;
-        Tue,  5 Apr 2022 09:29:16 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A4672CE1BCE;
+        Tue,  5 Apr 2022 08:50:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDC37C385A1;
+        Tue,  5 Apr 2022 08:50:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150957;
-        bh=xMuBtpSMi0tR4uqVjAuMkRQrPn1kVymN+i1l75YiSig=;
+        s=korg; t=1649148643;
+        bh=9xEAKMpxGzf2culwYA+lPprUuDTBQpTKmsGMIu0d/v0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nBWUqc2oeU7PLo/X8jlJefJvXVBRqfFRJfCcmQRvUiRwLTVXNa2P1ksF/B2BK9ksO
-         OROciOf4OIHXZc5AUvJPtwh19QUMW8xIIOlSVXQTGM1NnCIhNlb6bEgZ9YfjgXgjHI
-         Vl+mQMycoJSPGUgc/VerCYNSRGPGxtDWsom4IqSA=
+        b=f3bAarNP9VbODL++HYYabkwqGBSnj9JAOfKw9aUkbUR7/HliX5f1G6UcvXzUgcy3r
+         fq6MftnRLTgecWgqK989AOOm9s9QgBap+LNkfAk/sjrGrJ4qrlDyB9PeeLT8YvjsG8
+         3xEyRiYa/ITMPw29mEeFIiMqB3Grc2dCVztnm6NI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 241/913] clocksource: acpi_pm: fix return value of __setup handler
+Subject: [PATCH 5.16 0390/1017] mmc: davinci_mmc: Handle error for clk_enable
 Date:   Tue,  5 Apr 2022 09:21:43 +0200
-Message-Id: <20220405070347.080719624@linuxfoundation.org>
+Message-Id: <20220405070405.862160748@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 6a861abceecb68497dd82a324fee45a5332dcece ]
+[ Upstream commit 09e7af76db02c74f2a339b3cb2d95460fa2ddbe4 ]
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) environment strings.
+As the potential failure of the clk_enable(),
+it should be better to check it and return error
+if fails.
 
-The __setup() handler interface isn't meant to handle negative return
-values -- they are non-zero, so they mean "handled" (like a return
-value of 1 does), but that's just a quirk. So return 1 from
-parse_pmtmr(). Also print a warning message if kstrtouint() returns
-an error.
-
-Fixes: 6b148507d3d0 ("pmtmr: allow command line override of ioport")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fixes: bbce5802afc5 ("davinci: mmc: updates to suspend/resume implementation")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Link: https://lore.kernel.org/r/20220308071415.1093393-1-jiasheng@iscas.ac.cn
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clocksource/acpi_pm.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/mmc/host/davinci_mmc.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clocksource/acpi_pm.c b/drivers/clocksource/acpi_pm.c
-index eb596ff9e7bb..279ddff81ab4 100644
---- a/drivers/clocksource/acpi_pm.c
-+++ b/drivers/clocksource/acpi_pm.c
-@@ -229,8 +229,10 @@ static int __init parse_pmtmr(char *arg)
- 	int ret;
+diff --git a/drivers/mmc/host/davinci_mmc.c b/drivers/mmc/host/davinci_mmc.c
+index 2a757c88f9d2..80de660027d8 100644
+--- a/drivers/mmc/host/davinci_mmc.c
++++ b/drivers/mmc/host/davinci_mmc.c
+@@ -1375,8 +1375,12 @@ static int davinci_mmcsd_suspend(struct device *dev)
+ static int davinci_mmcsd_resume(struct device *dev)
+ {
+ 	struct mmc_davinci_host *host = dev_get_drvdata(dev);
++	int ret;
++
++	ret = clk_enable(host->clk);
++	if (ret)
++		return ret;
  
- 	ret = kstrtouint(arg, 16, &base);
--	if (ret)
--		return ret;
-+	if (ret) {
-+		pr_warn("PMTMR: invalid 'pmtmr=' value: '%s'\n", arg);
-+		return 1;
-+	}
+-	clk_enable(host->clk);
+ 	mmc_davinci_reset_ctrl(host, 0);
  
- 	pr_info("PMTMR IOPort override: 0x%04x -> 0x%04x\n", pmtmr_ioport,
- 		base);
+ 	return 0;
 -- 
 2.34.1
 

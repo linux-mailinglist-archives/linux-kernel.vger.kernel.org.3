@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927EE4F4A6A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 583414F4E7E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1456078AbiDEWpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46880 "EHLO
+        id S1444452AbiDFAYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:24:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354562AbiDEKOj (ORCPT
+        with ESMTP id S1354567AbiDEKOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 06:14:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27176B51E;
-        Tue,  5 Apr 2022 03:01:04 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EEA6BDC0;
+        Tue,  5 Apr 2022 03:01:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FFCD6172B;
-        Tue,  5 Apr 2022 10:01:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50B48C385A1;
-        Tue,  5 Apr 2022 10:01:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D53876172B;
+        Tue,  5 Apr 2022 10:01:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2B02C385A2;
+        Tue,  5 Apr 2022 10:01:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152863;
-        bh=4RJxg9sFpf0XnO3T0Y7aRhplR65wf1OiryRNWgxLIpg=;
+        s=korg; t=1649152869;
+        bh=d/cY7PKqDZsO7roqJnKo+pFXp8Zl8yqMxxZoCi2Jn6o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B7gEK5UKBcfXoYhJULITgftjJOHct5/sg1a67uC3FwgIzgzVhc0ha93JnkM+cunqQ
-         YujLMOYVTvJ8BtV2ul9g+kP37ublEk6iFcGjZWMMaC4jW2XuN6l48/EO/2nhnL/j92
-         MKUo2IUz3DxcM66SpVuWz5xMnW6HRD3nRahM9Qo8=
+        b=IOscMeEr3J+uvHlOJw1W1YMSeaEpr83PYtJEVDicnVI12qlJOLBJ2nHqNnvVqjhw/
+         Z7SYWeHChm5GF4x81ufWS2JynMExa8TUcAWGCUaXZVfHJ0KxPKi/KccwZUU1tunfWU
+         wNVFr6cm6cx0NijgpRe64Wudc+iBUMWdL1eMecCE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, TCS Robot <tcs_robot@tencent.com>,
+        Haimin Zhang <tcs_kernel@tencent.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 017/599] spi: Fix erroneous sgs value with min_t()
-Date:   Tue,  5 Apr 2022 09:25:11 +0200
-Message-Id: <20220405070259.329330392@linuxfoundation.org>
+Subject: [PATCH 5.10 019/599] af_key: add __GFP_ZERO flag for compose_sadb_supported in function pfkey_register
+Date:   Tue,  5 Apr 2022 09:25:13 +0200
+Message-Id: <20220405070259.388646405@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -59,57 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Biju Das <biju.das.jz@bp.renesas.com>
+From: Haimin Zhang <tcs_kernel@tencent.com>
 
-[ Upstream commit ebc4cb43ea5ada3db46c80156fca58a54b9bbca8 ]
+[ Upstream commit 9a564bccb78a76740ea9d75a259942df8143d02c ]
 
-While computing sgs in spi_map_buf(), the data type
-used in min_t() for max_seg_size is 'unsigned int' where
-as that of ctlr->max_dma_len is 'size_t'.
+Add __GFP_ZERO flag for compose_sadb_supported in function pfkey_register
+to initialize the buffer of supp_skb to fix a kernel-info-leak issue.
+1) Function pfkey_register calls compose_sadb_supported to request
+a sk_buff. 2) compose_sadb_supported calls alloc_sbk to allocate
+a sk_buff, but it doesn't zero it. 3) If auth_len is greater 0, then
+compose_sadb_supported treats the memory as a struct sadb_supported and
+begins to initialize. But it just initializes the field sadb_supported_len
+and field sadb_supported_exttype without field sadb_supported_reserved.
 
-min_t(unsigned int,x,y) gives wrong results if one of x/y is
-'size_t'
-
-Consider the below examples on a 64-bit machine (ie size_t is
-64-bits, and unsigned int is 32-bit).
-    case 1) min_t(unsigned int, 5, 0x100000001);
-    case 2) min_t(size_t, 5, 0x100000001);
-
-Case 1 returns '1', where as case 2 returns '5'. As you can see
-the result from case 1 is wrong.
-
-This patch fixes the above issue by using the data type of the
-parameters that are used in min_t with maximum data length.
-
-Fixes: commit 1a4e53d2fc4f68aa ("spi: Fix invalid sgs value")
-Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-Suggested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Link: https://lore.kernel.org/r/20220316175317.465-1-biju.das.jz@bp.renesas.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Reported-by: TCS Robot <tcs_robot@tencent.com>
+Signed-off-by: Haimin Zhang <tcs_kernel@tencent.com>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/key/af_key.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 2396565fc91b..6ea7b286c80c 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -881,10 +881,10 @@ int spi_map_buf(struct spi_controller *ctlr, struct device *dev,
- 	int i, ret;
+diff --git a/net/key/af_key.c b/net/key/af_key.c
+index d1364b858fdf..bd9b5c573b5a 100644
+--- a/net/key/af_key.c
++++ b/net/key/af_key.c
+@@ -1703,7 +1703,7 @@ static int pfkey_register(struct sock *sk, struct sk_buff *skb, const struct sad
  
- 	if (vmalloced_buf || kmap_buf) {
--		desc_len = min_t(unsigned int, max_seg_size, PAGE_SIZE);
-+		desc_len = min_t(unsigned long, max_seg_size, PAGE_SIZE);
- 		sgs = DIV_ROUND_UP(len + offset_in_page(buf), desc_len);
- 	} else if (virt_addr_valid(buf)) {
--		desc_len = min_t(unsigned int, max_seg_size, ctlr->max_dma_len);
-+		desc_len = min_t(size_t, max_seg_size, ctlr->max_dma_len);
- 		sgs = DIV_ROUND_UP(len, desc_len);
- 	} else {
- 		return -EINVAL;
+ 	xfrm_probe_algs();
+ 
+-	supp_skb = compose_sadb_supported(hdr, GFP_KERNEL);
++	supp_skb = compose_sadb_supported(hdr, GFP_KERNEL | __GFP_ZERO);
+ 	if (!supp_skb) {
+ 		if (hdr->sadb_msg_satype != SADB_SATYPE_UNSPEC)
+ 			pfk->registered &= ~(1<<hdr->sadb_msg_satype);
 -- 
 2.34.1
 

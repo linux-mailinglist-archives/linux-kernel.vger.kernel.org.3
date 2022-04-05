@@ -2,213 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4514F4EFC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:57:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D96CA4F4929
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581516AbiDEXjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44732 "EHLO
+        id S1391235AbiDEWFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457916AbiDEQ7s (ORCPT
+        with ESMTP id S1457950AbiDERBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:59:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BDA5D1A3
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:57:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 929BD615AF
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 16:57:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4B99C385A1;
-        Tue,  5 Apr 2022 16:57:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649177866;
-        bh=TKj/Gdf3upOujc9HOwY9/yVgEBOdEJpY7NOsYt4MUt0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sLjhPxKBSrpwXS5A8EWIIkEak001fUnpZol7Yuk6pHxjC+lRXq/aT1HSu+2Di5ICa
-         OQ+7e+yMEXVdVtBMaHZfWOxrefF1fJ/Q+4DWRfT10DZdwQeb0lGxfvH8U9BuHT0b0K
-         R92RQ//OsY4L5MM1nv4aeIxBerZ0OKBGmbk69yHjbfZAVFDxWR+BKIIPWFPnmUPCG6
-         kDqNmZhTdlsAbqwQ9y2CQVTBbCfYA/JGuI+/083okepz6UcZCkySf36XBlxlOedyzy
-         tatiOSITnJV4Q/h1mBT8oJmONJgctog+CC1z4a9m5uuK6YTBG6yc4owenwoh91Mu0P
-         8GrQzujSWGXsg==
-Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1nbmUx-002uYS-EY; Tue, 05 Apr 2022 18:57:43 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     alsa-devel@alsa-project.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        "Hans de Goede" <hdegoede@redhat.com>,
-        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jie Yang <yang.jie@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/3] ASoC: Intel: sof_es8336: support a separate gpio to control headphone
-Date:   Tue,  5 Apr 2022 18:57:33 +0200
-Message-Id: <535454c0c598a8454487fe29b164527370e2db81.1649177516.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <cover.1649177516.git.mchehab@kernel.org>
-References: <cover.1649177516.git.mchehab@kernel.org>
+        Tue, 5 Apr 2022 13:01:22 -0400
+Received: from 6.mo560.mail-out.ovh.net (6.mo560.mail-out.ovh.net [87.98.165.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6493A51E46
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:59:23 -0700 (PDT)
+Received: from player771.ha.ovh.net (unknown [10.109.156.133])
+        by mo560.mail-out.ovh.net (Postfix) with ESMTP id 58ADD23B90
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 16:59:21 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player771.ha.ovh.net (Postfix) with ESMTPSA id F24EE293E366C;
+        Tue,  5 Apr 2022 16:59:15 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-106R0069cd6cc63-6d12-4d77-a5d0-44e51e431b9e,
+                    8AF55017BACD44284FC599BC4826E0280D36FCC4) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
+        Stephen Kitt <steve@sk2.org>
+Subject: [PATCH 01/14] ASoC: ak4*: use simple i2c probe function
+Date:   Tue,  5 Apr 2022 18:58:23 +0200
+Message-Id: <20220405165836.2165310-2-steve@sk2.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220405165836.2165310-1-steve@sk2.org>
+References: <20220405165836.2165310-1-steve@sk2.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Ovh-Tracer-Id: 8460293375399265926
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejgedguddtgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecuggftrfgrthhtvghrnhepjeelledvfeeiiedutdefveekgeeuheekkedvffegvdehudegkefgjeejkefgueegnecukfhppedtrddtrddtrddtpdekvddrieehrddvhedrvddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeejuddrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some devices may use both gpio0 and gpio1 to independently switch
-the speaker and the headphone.
+The i2c probe functions here don't use the id information provided in
+their second argument, so the single-parameter i2c probe function
+("probe_new") can be used instead.
 
-Add support for that.
+This avoids scanning the identifier tables during probes.
 
-Acked-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Stephen Kitt <steve@sk2.org>
 ---
+ sound/soc/codecs/ak4118.c | 5 ++---
+ sound/soc/codecs/ak4535.c | 5 ++---
+ sound/soc/codecs/ak4641.c | 5 ++---
+ sound/soc/codecs/ak4671.c | 5 ++---
+ 4 files changed, 8 insertions(+), 12 deletions(-)
 
-See [PATCH v3 0/3] at: https://lore.kernel.org/all/cover.1649177516.git.mchehab@kernel.org/
-
- sound/soc/intel/boards/sof_es8336.c | 59 ++++++++++++++++++++++++-----
- 1 file changed, 49 insertions(+), 10 deletions(-)
-
-diff --git a/sound/soc/intel/boards/sof_es8336.c b/sound/soc/intel/boards/sof_es8336.c
-index e4829a376b79..d15a58666cc6 100644
---- a/sound/soc/intel/boards/sof_es8336.c
-+++ b/sound/soc/intel/boards/sof_es8336.c
-@@ -30,6 +30,7 @@
- #define SOF_ES8336_SPEAKERS_EN_GPIO1_QUIRK	BIT(4)
- #define SOF_ES8336_ENABLE_DMIC			BIT(5)
- #define SOF_ES8336_JD_INVERTED			BIT(6)
-+#define SOF_ES8336_HEADPHONE_GPIO		BIT(7)
- 
- static unsigned long quirk;
- 
-@@ -39,7 +40,7 @@ MODULE_PARM_DESC(quirk, "Board-specific quirk override");
- 
- struct sof_es8336_private {
- 	struct device *codec_dev;
--	struct gpio_desc *gpio_speakers;
-+	struct gpio_desc *gpio_speakers, *gpio_headphone;
- 	struct snd_soc_jack jack;
- 	struct list_head hdmi_pcm_list;
- 	bool speaker_en;
-@@ -51,15 +52,27 @@ struct sof_hdmi_pcm {
- 	int device;
+diff --git a/sound/soc/codecs/ak4118.c b/sound/soc/codecs/ak4118.c
+index 2e6bafd2a821..5c4a78c16733 100644
+--- a/sound/soc/codecs/ak4118.c
++++ b/sound/soc/codecs/ak4118.c
+@@ -356,8 +356,7 @@ static const struct regmap_config ak4118_regmap = {
+ 	.max_register = AK4118_REG_MAX - 1,
  };
  
--static const struct acpi_gpio_params speakers_enable_gpio0 = { 0, 0, true };
-+static const struct acpi_gpio_params enable_gpio0 = { 0, 0, true };
-+static const struct acpi_gpio_params enable_gpio1 = { 1, 0, true };
-+
- static const struct acpi_gpio_mapping acpi_speakers_enable_gpio0[] = {
--	{ "speakers-enable-gpios", &speakers_enable_gpio0, 1 },
-+	{ "speakers-enable-gpios", &enable_gpio0, 1 },
- 	{ }
- };
- 
--static const struct acpi_gpio_params speakers_enable_gpio1 = { 1, 0, true };
- static const struct acpi_gpio_mapping acpi_speakers_enable_gpio1[] = {
--	{ "speakers-enable-gpios", &speakers_enable_gpio1, 1 },
-+	{ "speakers-enable-gpios", &enable_gpio1, 1 },
-+};
-+
-+static const struct acpi_gpio_mapping acpi_enable_both_gpios[] = {
-+	{ "speakers-enable-gpios", &enable_gpio0, 1 },
-+	{ "headphone-enable-gpios", &enable_gpio1, 1 },
-+	{ }
-+};
-+
-+static const struct acpi_gpio_mapping acpi_enable_both_gpios_rev_order[] = {
-+	{ "speakers-enable-gpios", &enable_gpio1, 1 },
-+	{ "headphone-enable-gpios", &enable_gpio0, 1 },
- 	{ }
- };
- 
-@@ -73,6 +86,8 @@ static void log_quirks(struct device *dev)
- 		dev_info(dev, "quirk DMIC enabled\n");
- 	if (quirk & SOF_ES8336_SPEAKERS_EN_GPIO1_QUIRK)
- 		dev_info(dev, "Speakers GPIO1 quirk enabled\n");
-+	if (quirk & SOF_ES8336_HEADPHONE_GPIO)
-+		dev_info(dev, "quirk headphone GPIO enabled\n");
- 	if (quirk & SOF_ES8336_JD_INVERTED)
- 		dev_info(dev, "quirk JD inverted enabled\n");
- }
-@@ -83,13 +98,24 @@ static int sof_es8316_speaker_power_event(struct snd_soc_dapm_widget *w,
- 	struct snd_soc_card *card = w->dapm->card;
- 	struct sof_es8336_private *priv = snd_soc_card_get_drvdata(card);
- 
-+	if (priv->speaker_en == !SND_SOC_DAPM_EVENT_ON(event))
-+		return 0;
-+
-+	priv->speaker_en = !SND_SOC_DAPM_EVENT_ON(event);
-+
- 	if (SND_SOC_DAPM_EVENT_ON(event))
--		priv->speaker_en = false;
--	else
--		priv->speaker_en = true;
-+		msleep(70);
- 
- 	gpiod_set_value_cansleep(priv->gpio_speakers, priv->speaker_en);
- 
-+	if (!(quirk & SOF_ES8336_HEADPHONE_GPIO))
-+		return 0;
-+
-+	if (SND_SOC_DAPM_EVENT_ON(event))
-+		msleep(70);
-+
-+	gpiod_set_value_cansleep(priv->gpio_headphone, priv->speaker_en);
-+
- 	return 0;
- }
- 
-@@ -114,7 +140,7 @@ static const struct snd_soc_dapm_route sof_es8316_audio_map[] = {
- 
- 	/*
- 	 * There is no separate speaker output instead the speakers are muxed to
--	 * the HP outputs. The mux is controlled by the "Speaker Power" supply.
-+	 * the HP outputs. The mux is controlled Speaker and/or headphone switch.
- 	 */
- 	{"Speaker", NULL, "HPOL"},
- 	{"Speaker", NULL, "HPOR"},
-@@ -233,8 +259,14 @@ static int sof_es8336_quirk_cb(const struct dmi_system_id *id)
+-static int ak4118_i2c_probe(struct i2c_client *i2c,
+-			    const struct i2c_device_id *id)
++static int ak4118_i2c_probe(struct i2c_client *i2c)
  {
- 	quirk = (unsigned long)id->driver_data;
+ 	struct ak4118_priv *ak4118;
+ 	int ret;
+@@ -416,7 +415,7 @@ static struct i2c_driver ak4118_i2c_driver = {
+ 		.of_match_table = of_match_ptr(ak4118_of_match),
+ 	},
+ 	.id_table = ak4118_id_table,
+-	.probe  = ak4118_i2c_probe,
++	.probe_new = ak4118_i2c_probe,
+ };
  
--	if (quirk & SOF_ES8336_SPEAKERS_EN_GPIO1_QUIRK)
-+	if (quirk & SOF_ES8336_HEADPHONE_GPIO) {
-+		if (quirk & SOF_ES8336_SPEAKERS_EN_GPIO1_QUIRK)
-+			gpio_mapping = acpi_enable_both_gpios;
-+		else
-+			gpio_mapping = acpi_enable_both_gpios_rev_order;
-+	} else if (quirk & SOF_ES8336_SPEAKERS_EN_GPIO1_QUIRK) {
- 		gpio_mapping = acpi_speakers_enable_gpio1;
-+	}
+ module_i2c_driver(ak4118_i2c_driver);
+diff --git a/sound/soc/codecs/ak4535.c b/sound/soc/codecs/ak4535.c
+index 91e7a57c43da..cc803e730c6e 100644
+--- a/sound/soc/codecs/ak4535.c
++++ b/sound/soc/codecs/ak4535.c
+@@ -405,8 +405,7 @@ static const struct snd_soc_component_driver soc_component_dev_ak4535 = {
+ 	.non_legacy_dai_naming	= 1,
+ };
  
- 	return 1;
- }
-@@ -592,6 +624,13 @@ static int sof_es8336_probe(struct platform_device *pdev)
- 		goto err_put_codec;
- 	}
+-static int ak4535_i2c_probe(struct i2c_client *i2c,
+-			    const struct i2c_device_id *id)
++static int ak4535_i2c_probe(struct i2c_client *i2c)
+ {
+ 	struct ak4535_priv *ak4535;
+ 	int ret;
+@@ -441,7 +440,7 @@ static struct i2c_driver ak4535_i2c_driver = {
+ 	.driver = {
+ 		.name = "ak4535",
+ 	},
+-	.probe =    ak4535_i2c_probe,
++	.probe_new = ak4535_i2c_probe,
+ 	.id_table = ak4535_i2c_id,
+ };
  
-+	priv->gpio_headphone = gpiod_get_optional(codec_dev, "headphone-enable", GPIOD_OUT_LOW);
-+	if (IS_ERR(priv->gpio_headphone)) {
-+		ret = dev_err_probe(dev, PTR_ERR(priv->gpio_headphone),
-+				    "could not get headphone-enable GPIO\n");
-+		goto err_put_codec;
-+	}
-+
- 	INIT_LIST_HEAD(&priv->hdmi_pcm_list);
+diff --git a/sound/soc/codecs/ak4641.c b/sound/soc/codecs/ak4641.c
+index 04aef0e72aa5..d8d9cc712d67 100644
+--- a/sound/soc/codecs/ak4641.c
++++ b/sound/soc/codecs/ak4641.c
+@@ -548,8 +548,7 @@ static const struct regmap_config ak4641_regmap = {
+ 	.cache_type = REGCACHE_RBTREE,
+ };
  
- 	snd_soc_card_set_drvdata(card, priv);
+-static int ak4641_i2c_probe(struct i2c_client *i2c,
+-			    const struct i2c_device_id *id)
++static int ak4641_i2c_probe(struct i2c_client *i2c)
+ {
+ 	struct ak4641_platform_data *pdata = i2c->dev.platform_data;
+ 	struct ak4641_priv *ak4641;
+@@ -632,7 +631,7 @@ static struct i2c_driver ak4641_i2c_driver = {
+ 	.driver = {
+ 		.name = "ak4641",
+ 	},
+-	.probe =    ak4641_i2c_probe,
++	.probe_new = ak4641_i2c_probe,
+ 	.remove =   ak4641_i2c_remove,
+ 	.id_table = ak4641_i2c_id,
+ };
+diff --git a/sound/soc/codecs/ak4671.c b/sound/soc/codecs/ak4671.c
+index e9d1251c4265..60edcbe56014 100644
+--- a/sound/soc/codecs/ak4671.c
++++ b/sound/soc/codecs/ak4671.c
+@@ -629,8 +629,7 @@ static const struct regmap_config ak4671_regmap = {
+ 	.cache_type = REGCACHE_RBTREE,
+ };
+ 
+-static int ak4671_i2c_probe(struct i2c_client *client,
+-			    const struct i2c_device_id *id)
++static int ak4671_i2c_probe(struct i2c_client *client)
+ {
+ 	struct regmap *regmap;
+ 	int ret;
+@@ -657,7 +656,7 @@ static struct i2c_driver ak4671_i2c_driver = {
+ 	.driver = {
+ 		.name = "ak4671-codec",
+ 	},
+-	.probe = ak4671_i2c_probe,
++	.probe_new = ak4671_i2c_probe,
+ 	.id_table = ak4671_i2c_id,
+ };
+ 
 -- 
-2.35.1
+2.27.0
 

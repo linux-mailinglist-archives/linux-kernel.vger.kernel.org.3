@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E35134F44FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E18664F45A6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349749AbiDEMTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46798 "EHLO
+        id S1378703AbiDEMYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244990AbiDEIxA (ORCPT
+        with ESMTP id S245046AbiDEIxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:53:00 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D15E132;
-        Tue,  5 Apr 2022 01:48:44 -0700 (PDT)
+        Tue, 5 Apr 2022 04:53:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2BDEA;
+        Tue,  5 Apr 2022 01:50:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7FC3DCE1B55;
-        Tue,  5 Apr 2022 08:48:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EDCDC385A0;
-        Tue,  5 Apr 2022 08:48:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A191FB81BBF;
+        Tue,  5 Apr 2022 08:50:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD54CC385A1;
+        Tue,  5 Apr 2022 08:50:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148521;
-        bh=3WCk8sBpIkZCS0IofelWfKv101rypvwobF2dXzA2GKA=;
+        s=korg; t=1649148632;
+        bh=w1w5STSoU+1OvcgmNGv4Uzg0F4cQg98rLnw4UUo6UjQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r1nPA8E5pvIZOVPYOn75JNMosINPYpxyyeSb32/MX1HD4qR+8mTZUfk/Fyqhgdyz2
-         EwGQ1SiG74vJ5IodUhaJKbwLsk81f96ZW7MdqTV11jCo1EH+aAOq9eNLDTX26LL7WQ
-         HZ7vmBxfU9TKv5TgmFWpG1WkZZ4EQc9k9lVTKHCE=
+        b=AoQccAlLptqIpI6dpmb5ALB6QT7Z7ikY5QBbaK+gtQh+saDNifZylxAmJ+3LLHHw5
+         N2hccXu8P1WjorCkg4agsz9oUBqh4hNPzo+Cyyn8ta4Nbb7llaUn6wNtrzv2Mhcw2m
+         QO/VDQ905FzGlKOYs5ux8yApfY3NmGzb0SvTDEb4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
+        stable@vger.kernel.org,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0383/1017] ASoC: rk817: Fix missing clk_disable_unprepare() in rk817_platform_probe
-Date:   Tue,  5 Apr 2022 09:21:36 +0200
-Message-Id: <20220405070405.655068781@linuxfoundation.org>
+Subject: [PATCH 5.16 0388/1017] ASoC: SOF: Intel: enable DMI L1 for playback streams
+Date:   Tue,  5 Apr 2022 09:21:41 +0200
+Message-Id: <20220405070405.802480370@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,43 +59,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Kai Vehmanen <kai.vehmanen@linux.intel.com>
 
-[ Upstream commit a6b44a2518a08348bd0f0401e4d2b99233bbabc2 ]
+[ Upstream commit a174e72e2355b9025205b4b6727bf43047eac6c6 ]
 
-Fix the missing clk_disable_unprepare() before return
-from rk817_platform_probe() in the error handling case.
+Add back logic to mark all playback streams as L1 compatible.
 
-Fixes: 0d6a04da9b25 ("ASoC: Add Rockchip rk817 audio CODEC support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Tested-by: Chris Morgan <macromorgan@hotmail.com>
-Link: https://lore.kernel.org/r/20220307090146.4104-1-linmq006@gmail.com
+Fixes: 246dd4287dfb ("ASoC: SOF: Intel: make DMI L1 selection more robust")
+Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Signed-off-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Link: https://lore.kernel.org/r/20220310171651.249385-2-pierre-louis.bossart@linux.intel.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/rk817_codec.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ sound/soc/sof/intel/hda-pcm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/codecs/rk817_codec.c b/sound/soc/codecs/rk817_codec.c
-index 03f24edfe4f6..8fffe378618d 100644
---- a/sound/soc/codecs/rk817_codec.c
-+++ b/sound/soc/codecs/rk817_codec.c
-@@ -508,12 +508,14 @@ static int rk817_platform_probe(struct platform_device *pdev)
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "%s() register codec error %d\n",
- 			__func__, ret);
--		goto err_;
-+		goto err_clk;
- 	}
+diff --git a/sound/soc/sof/intel/hda-pcm.c b/sound/soc/sof/intel/hda-pcm.c
+index 41cb60955f5c..68834325d8fb 100644
+--- a/sound/soc/sof/intel/hda-pcm.c
++++ b/sound/soc/sof/intel/hda-pcm.c
+@@ -278,6 +278,7 @@ int hda_dsp_pcm_open(struct snd_sof_dev *sdev,
+ 		runtime->hw.info &= ~SNDRV_PCM_INFO_PAUSE;
  
- 	return 0;
--err_:
- 
-+err_clk:
-+	clk_disable_unprepare(rk817_codec_data->mclk);
-+err_:
- 	return ret;
- }
+ 	if (hda_always_enable_dmi_l1 ||
++	    direction == SNDRV_PCM_STREAM_PLAYBACK ||
+ 	    spcm->stream[substream->stream].d0i3_compatible)
+ 		flags |= SOF_HDA_STREAM_DMI_L1_COMPATIBLE;
  
 -- 
 2.34.1

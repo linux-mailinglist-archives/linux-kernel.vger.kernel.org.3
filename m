@@ -2,48 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27EE94F24FC
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3D64F2407
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbiDEHne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
+        id S231445AbiDEHQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231892AbiDEHlz (ORCPT
+        with ESMTP id S231423AbiDEHPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:41:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDCE4B871;
-        Tue,  5 Apr 2022 00:39:55 -0700 (PDT)
+        Tue, 5 Apr 2022 03:15:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267A9101B;
+        Tue,  5 Apr 2022 00:13:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0BC9B81B16;
-        Tue,  5 Apr 2022 07:39:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D91CC340EE;
-        Tue,  5 Apr 2022 07:39:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144392;
-        bh=iy6lksg609i4AYODstSzuabS3QmBmkPLkoK1AMgigFc=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B2A27615F2;
+        Tue,  5 Apr 2022 07:13:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15E41C34110;
+        Tue,  5 Apr 2022 07:13:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649142825;
+        bh=G+0AfE7fg3YZ31nVbGgXwDbWLMbNh9zLjXb0j5/M9J0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c0q9fV78zfyNSQxwHJalw7rqqbuEMMINjhal8AFhzwSeNvP/7j+yaBKw5plRYcgo9
-         iUEWVhquspmJKXTQ8a+AsXdOfY15rwpF+vrCQzI2jqXm78Lqh7SzjpDm/cOqAwVbtd
-         YFlcVPqBOqJx9pKpxemuCDbTpd5X1AgWAUf1GVt8=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        Michal Simek <michal.simek@xilinx.com>, Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.17 0029/1126] iio: adc: xilinx-ams: Fix single channel switching sequence
-Date:   Tue,  5 Apr 2022 09:12:56 +0200
-Message-Id: <20220405070408.407392004@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
-References: <20220405070407.513532867@linuxfoundation.org>
-User-Agent: quilt/0.66
+        b=hg9A0ZUMbegvkVZuThrs1ia8iZPEYRY0lQMvLLIqtpCetW7qSu4KdeNggSwvdPzRZ
+         vdXV0CR4AxHItnb3A8brWNCwTS3aRr8wAsDO0ICbwP+iaYd7vN/IOA3CvggnKlm49H
+         tyoXFObs2nuKA/cv+aFmJXCG+/Ix6l6G5KRSvR5OFlXfBZqQ4gAYr4eGQxQBv8HdGe
+         IQ0ASPr55NXWYDy9AMrrLSXyVK2FXcTpIwVcudFAo1+hV4ln7T6cuzynwgfBu+wQuF
+         59MFs1C64vkbD8FLlqPmqm/d5XTHFMyvdgeydHuy1jYGUJfsRCqBJdkQ/vpEHqUxgw
+         ChElq6EWgsxqw==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, hch@lst.de, nathan@kernel.org,
+        naresh.kamboju@linaro.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        heiko@sntech.de
+Subject: [PATCH V12 02/20] uapi: always define F_GETLK64/F_SETLK64/F_SETLKW64 in fcntl.h
+Date:   Tue,  5 Apr 2022 15:12:56 +0800
+Message-Id: <20220405071314.3225832-3-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220405071314.3225832-1-guoren@kernel.org>
+References: <20220405071314.3225832-1-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -55,66 +60,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Christoph Hellwig <hch@lst.de>
 
-commit 0bf126163c3e7e6d722622073046aed567a5551e upstream.
+The F_GETLK64/F_SETLK64/F_SETLKW64 fcntl opcodes are only implemented
+for the 32-bit syscall APIs, but are also needed for compat handling
+on 64-bit kernels.
 
-Some of the AMS channels need to be read by switching into single-channel
-mode from the normal polling sequence. There was a logic issue in this
-switching code that could cause the first read of these channels to read
-back as zero.
+Consolidate them in unistd.h instead of definining the internal compat
+definitions in compat.h, which is rather error prone (e.g. parisc
+gets the values wrong currently).
 
-It appears that the sequencer should be set back to default mode before
-changing the channel selection, and the channel should be set before
-switching the sequencer back into single-channel mode.
+Note that before this change they were never visible to userspace due
+to the fact that CONFIG_64BIT is only set for kernel builds.
 
-Also, write 1 to the EOC bit in the status register to clear it before
-waiting for it to become set, so that we actually wait for a new
-conversion to complete, and don't proceed based on a previous conversion
-completing.
-
-Fixes: d5c70627a794 ("iio: adc: Add Xilinx AMS driver")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Acked-by: Michal Simek <michal.simek@xilinx.com>
-Link: https://lore.kernel.org/r/20220127173450.3684318-5-robert.hancock@calian.com
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Tested-by: Heiko Stuebner <heiko@sntech.de>
 ---
- drivers/iio/adc/xilinx-ams.c |   10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ arch/arm64/include/asm/compat.h        | 4 ----
+ arch/mips/include/asm/compat.h         | 4 ----
+ arch/mips/include/uapi/asm/fcntl.h     | 4 ++--
+ arch/powerpc/include/asm/compat.h      | 4 ----
+ arch/s390/include/asm/compat.h         | 4 ----
+ arch/sparc/include/asm/compat.h        | 4 ----
+ arch/x86/include/asm/compat.h          | 4 ----
+ include/uapi/asm-generic/fcntl.h       | 4 ++--
+ tools/include/uapi/asm-generic/fcntl.h | 2 --
+ 9 files changed, 4 insertions(+), 30 deletions(-)
 
---- a/drivers/iio/adc/xilinx-ams.c
-+++ b/drivers/iio/adc/xilinx-ams.c
-@@ -530,14 +530,18 @@ static int ams_enable_single_channel(str
- 		return -EINVAL;
- 	}
+diff --git a/arch/arm64/include/asm/compat.h b/arch/arm64/include/asm/compat.h
+index eaa6ca062d89..276328765408 100644
+--- a/arch/arm64/include/asm/compat.h
++++ b/arch/arm64/include/asm/compat.h
+@@ -73,10 +73,6 @@ struct compat_flock {
+ 	compat_pid_t	l_pid;
+ };
  
--	/* set single channel, sequencer off mode */
-+	/* put sysmon in a soft reset to change the sequence */
- 	ams_ps_update_reg(ams, AMS_REG_CONFIG1, AMS_CONF1_SEQ_MASK,
--			  AMS_CONF1_SEQ_SINGLE_CHANNEL);
-+			  AMS_CONF1_SEQ_DEFAULT);
+-#define F_GETLK64	12	/*  using 'struct flock64' */
+-#define F_SETLK64	13
+-#define F_SETLKW64	14
+-
+ struct compat_flock64 {
+ 	short		l_type;
+ 	short		l_whence;
+diff --git a/arch/mips/include/asm/compat.h b/arch/mips/include/asm/compat.h
+index bbb3bc5a42fd..6a350c1f70d7 100644
+--- a/arch/mips/include/asm/compat.h
++++ b/arch/mips/include/asm/compat.h
+@@ -65,10 +65,6 @@ struct compat_flock {
+ 	s32		pad[4];
+ };
  
- 	/* write the channel number */
- 	ams_ps_update_reg(ams, AMS_REG_CONFIG0, AMS_CONF0_CHANNEL_NUM_MASK,
- 			  channel_num);
+-#define F_GETLK64	33
+-#define F_SETLK64	34
+-#define F_SETLKW64	35
+-
+ struct compat_flock64 {
+ 	short		l_type;
+ 	short		l_whence;
+diff --git a/arch/mips/include/uapi/asm/fcntl.h b/arch/mips/include/uapi/asm/fcntl.h
+index 9e44ac810db9..0369a38e3d4f 100644
+--- a/arch/mips/include/uapi/asm/fcntl.h
++++ b/arch/mips/include/uapi/asm/fcntl.h
+@@ -44,11 +44,11 @@
+ #define F_SETOWN	24	/*  for sockets. */
+ #define F_GETOWN	23	/*  for sockets. */
  
-+	/* set single channel, sequencer off mode */
-+	ams_ps_update_reg(ams, AMS_REG_CONFIG1, AMS_CONF1_SEQ_MASK,
-+			  AMS_CONF1_SEQ_SINGLE_CHANNEL);
-+
- 	return 0;
- }
+-#ifndef __mips64
++#if __BITS_PER_LONG == 32 || defined(__KERNEL__)
+ #define F_GETLK64	33	/*  using 'struct flock64' */
+ #define F_SETLK64	34
+ #define F_SETLKW64	35
+-#endif
++#endif /* __BITS_PER_LONG == 32 || defined(__KERNEL__) */
  
-@@ -551,6 +555,8 @@ static int ams_read_vcc_reg(struct ams *
- 	if (ret)
- 		return ret;
+ #if _MIPS_SIM != _MIPS_SIM_ABI64
+ #define __ARCH_FLOCK_EXTRA_SYSID	long l_sysid;
+diff --git a/arch/powerpc/include/asm/compat.h b/arch/powerpc/include/asm/compat.h
+index 7afc96fb6524..83d8f70779cb 100644
+--- a/arch/powerpc/include/asm/compat.h
++++ b/arch/powerpc/include/asm/compat.h
+@@ -52,10 +52,6 @@ struct compat_flock {
+ 	compat_pid_t	l_pid;
+ };
  
-+	/* clear end-of-conversion flag, wait for next conversion to complete */
-+	writel(expect, ams->base + AMS_ISR_1);
- 	ret = readl_poll_timeout(ams->base + AMS_ISR_1, reg, (reg & expect),
- 				 AMS_INIT_POLL_TIME_US, AMS_INIT_TIMEOUT_US);
- 	if (ret)
-
+-#define F_GETLK64	12	/*  using 'struct flock64' */
+-#define F_SETLK64	13
+-#define F_SETLKW64	14
+-
+ struct compat_flock64 {
+ 	short		l_type;
+ 	short		l_whence;
+diff --git a/arch/s390/include/asm/compat.h b/arch/s390/include/asm/compat.h
+index cdc7ae72529d..0f14b3188b1b 100644
+--- a/arch/s390/include/asm/compat.h
++++ b/arch/s390/include/asm/compat.h
+@@ -110,10 +110,6 @@ struct compat_flock {
+ 	compat_pid_t	l_pid;
+ };
+ 
+-#define F_GETLK64       12
+-#define F_SETLK64       13
+-#define F_SETLKW64      14    
+-
+ struct compat_flock64 {
+ 	short		l_type;
+ 	short		l_whence;
+diff --git a/arch/sparc/include/asm/compat.h b/arch/sparc/include/asm/compat.h
+index bd949fcf9d63..108078751bb5 100644
+--- a/arch/sparc/include/asm/compat.h
++++ b/arch/sparc/include/asm/compat.h
+@@ -84,10 +84,6 @@ struct compat_flock {
+ 	short		__unused;
+ };
+ 
+-#define F_GETLK64	12
+-#define F_SETLK64	13
+-#define F_SETLKW64	14
+-
+ struct compat_flock64 {
+ 	short		l_type;
+ 	short		l_whence;
+diff --git a/arch/x86/include/asm/compat.h b/arch/x86/include/asm/compat.h
+index 7516e4199b3c..8d19a212f4f2 100644
+--- a/arch/x86/include/asm/compat.h
++++ b/arch/x86/include/asm/compat.h
+@@ -58,10 +58,6 @@ struct compat_flock {
+ 	compat_pid_t	l_pid;
+ };
+ 
+-#define F_GETLK64	12	/*  using 'struct flock64' */
+-#define F_SETLK64	13
+-#define F_SETLKW64	14
+-
+ /*
+  * IA32 uses 4 byte alignment for 64 bit quantities,
+  * so we need to pack this structure.
+diff --git a/include/uapi/asm-generic/fcntl.h b/include/uapi/asm-generic/fcntl.h
+index 77aa9f2ff98d..f13d37b60775 100644
+--- a/include/uapi/asm-generic/fcntl.h
++++ b/include/uapi/asm-generic/fcntl.h
+@@ -116,13 +116,13 @@
+ #define F_GETSIG	11	/* for sockets. */
+ #endif
+ 
+-#ifndef CONFIG_64BIT
++#if __BITS_PER_LONG == 32 || defined(__KERNEL__)
+ #ifndef F_GETLK64
+ #define F_GETLK64	12	/*  using 'struct flock64' */
+ #define F_SETLK64	13
+ #define F_SETLKW64	14
+ #endif
+-#endif
++#endif /* __BITS_PER_LONG == 32 || defined(__KERNEL__) */
+ 
+ #ifndef F_SETOWN_EX
+ #define F_SETOWN_EX	15
+diff --git a/tools/include/uapi/asm-generic/fcntl.h b/tools/include/uapi/asm-generic/fcntl.h
+index 99bc9b15ce2b..0197042b7dfb 100644
+--- a/tools/include/uapi/asm-generic/fcntl.h
++++ b/tools/include/uapi/asm-generic/fcntl.h
+@@ -115,13 +115,11 @@
+ #define F_GETSIG	11	/* for sockets. */
+ #endif
+ 
+-#ifndef CONFIG_64BIT
+ #ifndef F_GETLK64
+ #define F_GETLK64	12	/*  using 'struct flock64' */
+ #define F_SETLK64	13
+ #define F_SETLKW64	14
+ #endif
+-#endif
+ 
+ #ifndef F_SETOWN_EX
+ #define F_SETOWN_EX	15
+-- 
+2.25.1
 

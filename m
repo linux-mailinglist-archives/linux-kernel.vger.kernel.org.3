@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A06E4F4759
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F0C4F4557
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346938AbiDEVJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50650 "EHLO
+        id S1359160AbiDENKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357252AbiDEKZ5 (ORCPT
+        with ESMTP id S1344187AbiDEJSg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:25:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB41424A0;
-        Tue,  5 Apr 2022 03:09:52 -0700 (PDT)
+        Tue, 5 Apr 2022 05:18:36 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23D76663E;
+        Tue,  5 Apr 2022 02:05:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CF5D6179E;
-        Tue,  5 Apr 2022 10:09:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DAAEC385A0;
-        Tue,  5 Apr 2022 10:09:51 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4355DCE1C6C;
+        Tue,  5 Apr 2022 09:05:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 629E8C385A0;
+        Tue,  5 Apr 2022 09:05:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153391;
-        bh=ueapUc85Of3/Cvqvv//FCEs2fr5rsCIo9e2Rfc8HXr0=;
+        s=korg; t=1649149505;
+        bh=eI/tG81nC1saJgPatTgG7icD/lGlD5gWAo+K+jBtukE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=REATpm8l7AAHH298ix2BFtTP285mU16lkDWGl3kLpupGO0/mjpyCmquh75PAcMJZH
-         B54KCWhuk0ZhHil8CaphqyhvZnFR437b2ZESJ2zR6zotnqADwdygUZHQ2mitlFffNw
-         1w2WQh7nlilRje9hHu2oWACm0jSXxe9IvscfhfQM=
+        b=NYwbQ+n135CdF7gGZ8YINtciQmS7JB3mTvNmNDWUKDeqGJve+iXxmhRUUfc1wIbU7
+         sot8GE0QWAlogecUyJy4aSPHFxIMUuyvVduVloORvPgbCzq7nine2ewmEyBbdmHuNz
+         UbynodvtsQGYgkWTMSki57YyJq7qemc3dVrhNUcw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 158/599] clocksource/drivers/exynos_mct: Handle DTS with higher number of interrupts
+Subject: [PATCH 5.16 0739/1017] qlcnic: dcb: default to returning -EOPNOTSUPP
 Date:   Tue,  5 Apr 2022 09:27:32 +0200
-Message-Id: <20220405070303.544064840@linuxfoundation.org>
+Message-Id: <20220405070416.200180255@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,62 +55,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+From: Tom Rix <trix@redhat.com>
 
-[ Upstream commit ab8da93dc06d82f464c47ab30e6c75190702f369 ]
+[ Upstream commit 1521db37f0d42334a88e8ff28198a27d1ed5cd7b ]
 
-The driver statically defines maximum number of interrupts it can
-handle, however it does not respect that limit when configuring them.
-When provided with a DTS with more interrupts than assumed, the driver
-will overwrite static array mct_irqs leading to silent memory
-corruption.
+Clang static analysis reports this issue
+qlcnic_dcb.c:382:10: warning: Assigned value is
+  garbage or undefined
+  mbx_out = *val;
+          ^ ~~~~
 
-Validate the interrupts coming from DTS to avoid this.  This does not
-change the fact that such DTS might not boot at all, because it is
-simply incompatible, however at least some warning will be printed.
+val is set in the qlcnic_dcb_query_hw_capability() wrapper.
+If there is no query_hw_capability op in dcp, success is
+returned without setting the val.
 
-Fixes: 36ba5d527e95 ("ARM: EXYNOS: add device tree support for MCT controller driver")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-Link: https://lore.kernel.org/r/20220220103815.135380-1-krzysztof.kozlowski@canonical.com
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+For this and similar wrappers, return -EOPNOTSUPP.
+
+Fixes: 14d385b99059 ("qlcnic: dcb: Query adapter DCB capabilities.")
+Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clocksource/exynos_mct.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/clocksource/exynos_mct.c b/drivers/clocksource/exynos_mct.c
-index 5533c9afc088..df194b05e944 100644
---- a/drivers/clocksource/exynos_mct.c
-+++ b/drivers/clocksource/exynos_mct.c
-@@ -531,6 +531,11 @@ static int __init exynos4_timer_interrupts(struct device_node *np,
- 	 * irqs are specified.
- 	 */
- 	nr_irqs = of_irq_count(np);
-+	if (nr_irqs > ARRAY_SIZE(mct_irqs)) {
-+		pr_err("exynos-mct: too many (%d) interrupts configured in DT\n",
-+			nr_irqs);
-+		nr_irqs = ARRAY_SIZE(mct_irqs);
-+	}
- 	for (i = MCT_L0_IRQ; i < nr_irqs; i++)
- 		mct_irqs[i] = irq_of_parse_and_map(np, i);
+diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
+index 5d79ee4370bc..7519773eaca6 100644
+--- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
++++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
+@@ -51,7 +51,7 @@ static inline int qlcnic_dcb_get_hw_capability(struct qlcnic_dcb *dcb)
+ 	if (dcb && dcb->ops->get_hw_capability)
+ 		return dcb->ops->get_hw_capability(dcb);
  
-@@ -543,11 +548,14 @@ static int __init exynos4_timer_interrupts(struct device_node *np,
- 		     mct_irqs[MCT_L0_IRQ], err);
- 	} else {
- 		for_each_possible_cpu(cpu) {
--			int mct_irq = mct_irqs[MCT_L0_IRQ + cpu];
-+			int mct_irq;
- 			struct mct_clock_event_device *pcpu_mevt =
- 				per_cpu_ptr(&percpu_mct_tick, cpu);
+-	return 0;
++	return -EOPNOTSUPP;
+ }
  
- 			pcpu_mevt->evt.irq = -1;
-+			if (MCT_L0_IRQ + cpu >= ARRAY_SIZE(mct_irqs))
-+				break;
-+			mct_irq = mct_irqs[MCT_L0_IRQ + cpu];
+ static inline void qlcnic_dcb_free(struct qlcnic_dcb *dcb)
+@@ -65,7 +65,7 @@ static inline int qlcnic_dcb_attach(struct qlcnic_dcb *dcb)
+ 	if (dcb && dcb->ops->attach)
+ 		return dcb->ops->attach(dcb);
  
- 			irq_set_status_flags(mct_irq, IRQ_NOAUTOEN);
- 			if (request_irq(mct_irq,
+-	return 0;
++	return -EOPNOTSUPP;
+ }
+ 
+ static inline int
+@@ -74,7 +74,7 @@ qlcnic_dcb_query_hw_capability(struct qlcnic_dcb *dcb, char *buf)
+ 	if (dcb && dcb->ops->query_hw_capability)
+ 		return dcb->ops->query_hw_capability(dcb, buf);
+ 
+-	return 0;
++	return -EOPNOTSUPP;
+ }
+ 
+ static inline void qlcnic_dcb_get_info(struct qlcnic_dcb *dcb)
+@@ -89,7 +89,7 @@ qlcnic_dcb_query_cee_param(struct qlcnic_dcb *dcb, char *buf, u8 type)
+ 	if (dcb && dcb->ops->query_cee_param)
+ 		return dcb->ops->query_cee_param(dcb, buf, type);
+ 
+-	return 0;
++	return -EOPNOTSUPP;
+ }
+ 
+ static inline int qlcnic_dcb_get_cee_cfg(struct qlcnic_dcb *dcb)
+@@ -97,7 +97,7 @@ static inline int qlcnic_dcb_get_cee_cfg(struct qlcnic_dcb *dcb)
+ 	if (dcb && dcb->ops->get_cee_cfg)
+ 		return dcb->ops->get_cee_cfg(dcb);
+ 
+-	return 0;
++	return -EOPNOTSUPP;
+ }
+ 
+ static inline void qlcnic_dcb_aen_handler(struct qlcnic_dcb *dcb, void *msg)
 -- 
 2.34.1
 

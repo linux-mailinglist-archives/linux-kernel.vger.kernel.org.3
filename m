@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D03DD4F285D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC6A14F2860
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234856AbiDEIOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:14:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48172 "EHLO
+        id S234936AbiDEIOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234928AbiDEH7D (ORCPT
+        with ESMTP id S235110AbiDEH7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:59:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E91155203;
-        Tue,  5 Apr 2022 00:53:32 -0700 (PDT)
+        Tue, 5 Apr 2022 03:59:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF115675D;
+        Tue,  5 Apr 2022 00:53:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AB85615C3;
-        Tue,  5 Apr 2022 07:53:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BF8FC340EE;
-        Tue,  5 Apr 2022 07:53:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E212B81B9C;
+        Tue,  5 Apr 2022 07:53:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBF35C340EE;
+        Tue,  5 Apr 2022 07:53:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145211;
-        bh=+B1K6yVJZhmk/O3MTEvRv6W2ZTCovqloX1k7D8NE4iU=;
+        s=korg; t=1649145225;
+        bh=phuxJo7oRmldSO2cwujmdOqMdhQCoMAdhkZWFNfJytE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m5C8WR0DiH5zAwcFewNdf6jUyZitHY2Lcgm5QGG5Xpbscrxp2m7pGu7Ub4LPRmdb1
-         CRJuPPkLyj3wXr3P1N7Vt4Pu2LEp3HTIvxWk7cYR3/CP5MclwqW6eeK63eUoxRnYhH
-         CHVxzuAxjyhf8cfNjKpLFX6HNdlLSXVXJ6zpudMs=
+        b=dJaHsze0YeKMAuHOjWBrvKUlHWs6b1pkDthI8+hLwEHlILC3/iGubhPE1uNLQTKAb
+         RdD4ZwEBRp4GOyRYd3L8YW8Z9JcGK11K95UHzo8DwHhWli0Z/0ZPVVHGM4TjkV4OrV
+         wxGi6PbtUWQjqxtAX7S9cqYPyO3KElglVHwhwxPc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Alex Elder <elder@linaro.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0325/1126] firmware: qcom: scm: Remove reassignment to desc following initializer
-Date:   Tue,  5 Apr 2022 09:17:52 +0200
-Message-Id: <20220405070417.157737790@linuxfoundation.org>
+Subject: [PATCH 5.17 0329/1126] soc: qcom: aoss: Fix missing put_device call in qmp_get
+Date:   Tue,  5 Apr 2022 09:17:56 +0200
+Message-Id: <20220405070417.275513555@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -59,44 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marijn Suijten <marijn.suijten@somainline.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 7823e5aa5d1dd9ed5849923c165eb8f29ad23c54 ]
+[ Upstream commit 4b41a9d0fe3db5f91078a380f62f0572c3ecf2dd ]
 
-Member assignments to qcom_scm_desc were moved into struct initializers
-in 57d3b816718c ("firmware: qcom_scm: Remove thin wrappers") including
-the case in qcom_scm_iommu_secure_ptbl_init, except that the - now
-duplicate - assignment to desc was left in place. While not harmful,
-remove this unnecessary extra reassignment.
+The reference taken by 'of_find_device_by_node()' must be released when
+not needed anymore.
+Add the corresponding 'put_device()' in the error handling paths.
 
-Fixes: 57d3b816718c ("firmware: qcom_scm: Remove thin wrappers")
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-Reviewed-by: Alex Elder <elder@linaro.org>
+Fixes: 8c75d585b931 ("soc: qcom: aoss: Expose send for generic usecase")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20211208083423.22037-2-marijn.suijten@somainline.org
+Link: https://lore.kernel.org/r/20220108095931.21527-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/qcom_scm.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/soc/qcom/qcom_aoss.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index 7db8066b19fd..3f67bf774821 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -749,12 +749,6 @@ int qcom_scm_iommu_secure_ptbl_init(u64 addr, u32 size, u32 spare)
- 	};
- 	int ret;
+diff --git a/drivers/soc/qcom/qcom_aoss.c b/drivers/soc/qcom/qcom_aoss.c
+index cbe5e39fdaeb..563ae0a501dc 100644
+--- a/drivers/soc/qcom/qcom_aoss.c
++++ b/drivers/soc/qcom/qcom_aoss.c
+@@ -451,7 +451,11 @@ struct qmp *qmp_get(struct device *dev)
  
--	desc.args[0] = addr;
--	desc.args[1] = size;
--	desc.args[2] = spare;
--	desc.arginfo = QCOM_SCM_ARGS(3, QCOM_SCM_RW, QCOM_SCM_VAL,
--				     QCOM_SCM_VAL);
--
- 	ret = qcom_scm_call(__scm->dev, &desc, NULL);
+ 	qmp = platform_get_drvdata(pdev);
  
- 	/* the pg table has been initialized already, ignore the error */
+-	return qmp ? qmp : ERR_PTR(-EPROBE_DEFER);
++	if (!qmp) {
++		put_device(&pdev->dev);
++		return ERR_PTR(-EPROBE_DEFER);
++	}
++	return qmp;
+ }
+ EXPORT_SYMBOL(qmp_get);
+ 
 -- 
 2.34.1
 

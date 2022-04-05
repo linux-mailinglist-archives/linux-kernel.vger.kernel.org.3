@@ -2,51 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA9D4F4567
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8042D4F477C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444353AbiDEUIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60768 "EHLO
+        id S1356226AbiDEVLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356221AbiDEKXa (ORCPT
+        with ESMTP id S1349312AbiDEJti (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:23:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935E54AE19;
-        Tue,  5 Apr 2022 03:07:53 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87FD1FF2;
+        Tue,  5 Apr 2022 02:43:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4B504B81B7A;
-        Tue,  5 Apr 2022 10:07:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C612C385A2;
-        Tue,  5 Apr 2022 10:07:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22C4561368;
+        Tue,  5 Apr 2022 09:43:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 317A2C385A2;
+        Tue,  5 Apr 2022 09:43:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153271;
-        bh=ES3X17Y01QRt0jn6W30I/2/ntU0WYkz9qFCvGLKNurI=;
+        s=korg; t=1649151834;
+        bh=QVXp6p/sKAkxfFAtgWgBEw3F9NYPX2bkUkaiLouRxGQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ByjWzPeRt33PcSqfOiefYDAu/94DutCw+3ksofD56A0g2Ckk+ltq5a7MvFiLUc3CN
-         Er4Ppzr9fyBCxJKGn+KCExylr0BdchSl102SkYZIaeZGFmHH35aRi8yf+NaRMlpZoP
-         9LDyvmN1BCL1J63KO6nxrMGXZbb+TPLVuOHBeUow=
+        b=gI2jkqCnihsDELpyHlW9k3eWfMap+ktbetyOIaKf3+Lp41t18dOfCS9ptmIvxhptj
+         eeZxRTUSwvUkLJ+xn618zAG6OrE9X3t8J9keCnIm65TjMQ9J0Ej4o1oN03/H219zkz
+         baK8fYWmPynpZZygcnKcEcMYciEJxQ0x4ffSTots=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mastan Katragadda <mastanx.katragadda@intel.com>,
-        Adam Zabrocki <adamza@microsoft.com>,
-        Jackson Cody <cody.jackson@intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Jon Bloomfield <jon.bloomfield@intel.com>,
-        Sudeep Dutt <sudeep.dutt@intel.com>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Subject: [PATCH 5.10 125/599] drm/i915/gem: add missing boundary check in vm_access
-Date:   Tue,  5 Apr 2022 09:26:59 +0200
-Message-Id: <20220405070302.558663250@linuxfoundation.org>
+        stable@vger.kernel.org, Mark Chen <markyawenchen@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Yake Yang <yake.yang@mediatek.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 558/913] Bluetooth: btmtksdio: Fix kernel oops in btmtksdio_interrupt
+Date:   Tue,  5 Apr 2022 09:27:00 +0200
+Message-Id: <20220405070356.572606693@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,82 +57,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mastan Katragadda <mastanx.katragadda@intel.com>
+From: Yake Yang <yake.yang@mediatek.com>
 
-commit 3886a86e7e6cc6ce2ce93c440fecd8f42aed0ce7 upstream.
+[ Upstream commit b062a0b9c1dc1ff63094337dccfe1568d5b62023 ]
 
-A missing bounds check in vm_access() can lead to an out-of-bounds read
-or write in the adjacent memory area, since the len attribute is not
-validated before the memcpy later in the function, potentially hitting:
+Fix the following kernel oops in btmtksdio_interrrupt
 
-[  183.637831] BUG: unable to handle page fault for address: ffffc90000c86000
-[  183.637934] #PF: supervisor read access in kernel mode
-[  183.637997] #PF: error_code(0x0000) - not-present page
-[  183.638059] PGD 100000067 P4D 100000067 PUD 100258067 PMD 106341067 PTE 0
-[  183.638144] Oops: 0000 [#2] PREEMPT SMP NOPTI
-[  183.638201] CPU: 3 PID: 1790 Comm: poc Tainted: G      D           5.17.0-rc6-ci-drm-11296+ #1
-[  183.638298] Hardware name: Intel Corporation CoffeeLake Client Platform/CoffeeLake H DDR4 RVP, BIOS CNLSFWR1.R00.X208.B00.1905301319 05/30/2019
-[  183.638430] RIP: 0010:memcpy_erms+0x6/0x10
-[  183.640213] RSP: 0018:ffffc90001763d48 EFLAGS: 00010246
-[  183.641117] RAX: ffff888109c14000 RBX: ffff888111bece40 RCX: 0000000000000ffc
-[  183.642029] RDX: 0000000000001000 RSI: ffffc90000c86000 RDI: ffff888109c14004
-[  183.642946] RBP: 0000000000000ffc R08: 800000000000016b R09: 0000000000000000
-[  183.643848] R10: ffffc90000c85000 R11: 0000000000000048 R12: 0000000000001000
-[  183.644742] R13: ffff888111bed190 R14: ffff888109c14000 R15: 0000000000001000
-[  183.645653] FS:  00007fe5ef807540(0000) GS:ffff88845b380000(0000) knlGS:0000000000000000
-[  183.646570] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  183.647481] CR2: ffffc90000c86000 CR3: 000000010ff02006 CR4: 00000000003706e0
-[  183.648384] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[  183.649271] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[  183.650142] Call Trace:
-[  183.650988]  <TASK>
-[  183.651793]  vm_access+0x1f0/0x2a0 [i915]
-[  183.652726]  __access_remote_vm+0x224/0x380
-[  183.653561]  mem_rw.isra.0+0xf9/0x190
-[  183.654402]  vfs_read+0x9d/0x1b0
-[  183.655238]  ksys_read+0x63/0xe0
-[  183.656065]  do_syscall_64+0x38/0xc0
-[  183.656882]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[  183.657663] RIP: 0033:0x7fe5ef725142
-[  183.659351] RSP: 002b:00007ffe1e81c7e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-[  183.660227] RAX: ffffffffffffffda RBX: 0000557055dfb780 RCX: 00007fe5ef725142
-[  183.661104] RDX: 0000000000001000 RSI: 00007ffe1e81d880 RDI: 0000000000000005
-[  183.661972] RBP: 00007ffe1e81e890 R08: 0000000000000030 R09: 0000000000000046
-[  183.662832] R10: 0000557055dfc2e0 R11: 0000000000000246 R12: 0000557055dfb1c0
-[  183.663691] R13: 00007ffe1e81e980 R14: 0000000000000000 R15: 0000000000000000
+[   14.339134]  btmtksdio_interrupt+0x28/0x54
+[   14.339139]  process_sdio_pending_irqs+0x68/0x1a0
+[   14.339144]  sdio_irq_work+0x40/0x70
+[   14.339154]  process_one_work+0x184/0x39c
+[   14.339160]  worker_thread+0x228/0x3e8
+[   14.339168]  kthread+0x148/0x3ac
+[   14.339176]  ret_from_fork+0x10/0x30
 
-Changes since v1:
-     - Updated if condition with range_overflows_t [Chris Wilson]
+That happened because hdev->power_on is already called before
+sdio_set_drvdata which btmtksdio_interrupt handler relies on is not
+properly set up.
 
-Fixes: 9f909e215fea ("drm/i915: Implement vm_ops->access for gdb access into mmaps")
-Signed-off-by: Mastan Katragadda <mastanx.katragadda@intel.com>
-Suggested-by: Adam Zabrocki <adamza@microsoft.com>
-Reported-by: Jackson Cody <cody.jackson@intel.com>
-Cc: Chris Wilson <chris@chris-wilson.co.uk>
-Cc: Jon Bloomfield <jon.bloomfield@intel.com>
-Cc: Sudeep Dutt <sudeep.dutt@intel.com>
-Cc: <stable@vger.kernel.org> # v5.8+
-Reviewed-by: Matthew Auld <matthew.auld@intel.com>
-[mauld: tidy up the commit message and add Cc: stable]
-Signed-off-by: Matthew Auld <matthew.auld@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220303060428.1668844-1-mastanx.katragadda@intel.com
-(cherry picked from commit 661412e301e2ca86799aa4f400d1cf0bd38c57c6)
-Signed-off-by: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The details are shown as the below: hci_register_dev would run
+queue_work(hdev->req_workqueue, &hdev->power_on) as WQ_HIGHPRI
+workqueue_struct to complete the power-on sequeunce and thus hci_power_on
+may run before sdio_set_drvdata is done in btmtksdio_probe.
+
+The hci_dev_do_open in hci_power_on would initialize the device and enable
+the interrupt and thus it is possible that btmtksdio_interrupt is being
+called right before sdio_set_drvdata is filled out.
+
+When btmtksdio_interrupt is being called and sdio_set_drvdata is not filled
+, the kernel oops is going to happen because btmtksdio_interrupt access an
+uninitialized pointer.
+
+Fixes: 9aebfd4a2200 ("Bluetooth: mediatek: add support for MediaTek MT7663S and MT7668S SDIO devices")
+Reviewed-by: Mark Chen <markyawenchen@gmail.com>
+Co-developed-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Yake Yang <yake.yang@mediatek.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/i915/gem/i915_gem_mman.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/bluetooth/btmtksdio.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/gpu/drm/i915/gem/i915_gem_mman.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_mman.c
-@@ -423,7 +423,7 @@ vm_access(struct vm_area_struct *area, u
- 		return -EACCES;
+diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
+index 1cbdeca1fdc4..ff1f5dfbb6db 100644
+--- a/drivers/bluetooth/btmtksdio.c
++++ b/drivers/bluetooth/btmtksdio.c
+@@ -981,6 +981,8 @@ static int btmtksdio_probe(struct sdio_func *func,
+ 	hdev->manufacturer = 70;
+ 	set_bit(HCI_QUIRK_NON_PERSISTENT_SETUP, &hdev->quirks);
  
- 	addr -= area->vm_start;
--	if (addr >= obj->base.size)
-+	if (range_overflows_t(u64, addr, len, obj->base.size))
- 		return -EINVAL;
++	sdio_set_drvdata(func, bdev);
++
+ 	err = hci_register_dev(hdev);
+ 	if (err < 0) {
+ 		dev_err(&func->dev, "Can't register HCI device\n");
+@@ -988,8 +990,6 @@ static int btmtksdio_probe(struct sdio_func *func,
+ 		return err;
+ 	}
  
- 	/* As this is primarily for debugging, let's focus on simplicity */
+-	sdio_set_drvdata(func, bdev);
+-
+ 	/* pm_runtime_enable would be done after the firmware is being
+ 	 * downloaded because the core layer probably already enables
+ 	 * runtime PM for this func such as the case host->caps &
+-- 
+2.34.1
+
 
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 231D64F517B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF9E4F4FD7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1846498AbiDFCE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52170 "EHLO
+        id S1839676AbiDFBFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351738AbiDEKKO (ORCPT
+        with ESMTP id S240392AbiDEKcj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:10:14 -0400
+        Tue, 5 Apr 2022 06:32:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684B7C4E33;
-        Tue,  5 Apr 2022 02:55:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7A9DE906;
+        Tue,  5 Apr 2022 03:18:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1F24616D7;
-        Tue,  5 Apr 2022 09:55:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF99FC385A2;
-        Tue,  5 Apr 2022 09:55:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59CDE61777;
+        Tue,  5 Apr 2022 10:18:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4228CC385A1;
+        Tue,  5 Apr 2022 10:18:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152553;
-        bh=nI7dbDDhx02UpWsfJfAL/zctEyT8a5ocPR6yVKs23Fo=;
+        s=korg; t=1649153915;
+        bh=9PEFQguw30U1gpsVR7cU8RY0vR6P0NTVaLm1k7N31mQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kGYk5uz2k4kLMSdPoAAzGvVYXmfv7B1ft2s1ks1iFr5xWy3GZPb2eohpbQak6x6MZ
-         UIYZZTQrOQu9lXWxtozQvY2xQjV3UrIuFqCQGyUX8iJGkskGAwkn+17VRBIQaX5UTh
-         7igNCg7WHmuCRWc6Y1kzoZWOG5zK53sYa6IARYDY=
+        b=SEPSUYsy+gRZzA7LJ/UWk6NdGeOPsfpe5HAViPJDRgMT47p5vJJeXGtsGnBr7070v
+         aVZXYPGWjC6r0rIhOpb3lhEk59BGAzo4s5S2UTy7sdayFrDss5YvYoq9Ah3HneGZuT
+         6UPNd0N+1C5aTYc70h/Io5hkdBKpUR8Fn8e+JEoM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
-        Richard Weinberger <richard@nod.at>
-Subject: [PATCH 5.15 817/913] ubifs: Fix deadlock in concurrent rename whiteout and inode writeback
-Date:   Tue,  5 Apr 2022 09:31:19 +0200
-Message-Id: <20220405070404.320584400@linuxfoundation.org>
+        stable@vger.kernel.org, Qing Wang <wangqing@vivo.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 393/599] serial: 8250_lpss: Balance reference count for PCI DMA device
+Date:   Tue,  5 Apr 2022 09:31:27 +0200
+Message-Id: <20220405070310.526505829@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,115 +55,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhihao Cheng <chengzhihao1@huawei.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-commit afd427048047e8efdedab30e8888044e2be5aa9c upstream.
+[ Upstream commit 5318f70da7e82649d794fc27d8a127c22aa3566e ]
 
-Following hung tasks:
-[   77.028764] task:kworker/u8:4    state:D stack:    0 pid:  132
-[   77.028820] Call Trace:
-[   77.029027]  schedule+0x8c/0x1b0
-[   77.029067]  mutex_lock+0x50/0x60
-[   77.029074]  ubifs_write_inode+0x68/0x1f0 [ubifs]
-[   77.029117]  __writeback_single_inode+0x43c/0x570
-[   77.029128]  writeback_sb_inodes+0x259/0x740
-[   77.029148]  wb_writeback+0x107/0x4d0
-[   77.029163]  wb_workfn+0x162/0x7b0
+The pci_get_slot() increases its reference count, the caller
+must decrement the reference count by calling pci_dev_put().
 
-[   92.390442] task:aa              state:D stack:    0 pid: 1506
-[   92.390448] Call Trace:
-[   92.390458]  schedule+0x8c/0x1b0
-[   92.390461]  wb_wait_for_completion+0x82/0xd0
-[   92.390469]  __writeback_inodes_sb_nr+0xb2/0x110
-[   92.390472]  writeback_inodes_sb_nr+0x14/0x20
-[   92.390476]  ubifs_budget_space+0x705/0xdd0 [ubifs]
-[   92.390503]  do_rename.cold+0x7f/0x187 [ubifs]
-[   92.390549]  ubifs_rename+0x8b/0x180 [ubifs]
-[   92.390571]  vfs_rename+0xdb2/0x1170
-[   92.390580]  do_renameat2+0x554/0x770
-
-, are caused by concurrent rename whiteout and inode writeback processes:
-	rename_whiteout(Thread 1)	        wb_workfn(Thread2)
-ubifs_rename
-  do_rename
-    lock_4_inodes (Hold ui_mutex)
-    ubifs_budget_space
-      make_free_space
-        shrink_liability
-	  __writeback_inodes_sb_nr
-	    bdi_split_work_to_wbs (Queue new wb work)
-					      wb_do_writeback(wb work)
-						__writeback_single_inode
-					          ubifs_write_inode
-					            LOCK(ui_mutex)
-							   ↑
-	      wb_wait_for_completion (Wait wb work) <-- deadlock!
-
-Reproducer (Detail program in [Link]):
-  1. SYS_renameat2("/mp/dir/file", "/mp/dir/whiteout", RENAME_WHITEOUT)
-  2. Consume out of space before kernel(mdelay) doing budget for whiteout
-
-Fix it by doing whiteout space budget before locking ubifs inodes.
-BTW, it also fixes wrong goto tag 'out_release' in whiteout budget
-error handling path(It should at least recover dir i_size and unlock
-4 ubifs inodes).
-
-Fixes: 9e0a1fff8db56ea ("ubifs: Implement RENAME_WHITEOUT")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=214733
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
+Fixes: 9a1870ce812e ("serial: 8250: don't use slave_id of dma_slave_config")
+Depends-on: a13e19cf3dc1 ("serial: 8250_lpss: split LPSS driver to separate module")
+Reported-by: Qing Wang <wangqing@vivo.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Link: https://lore.kernel.org/r/20220223151240.70248-1-andriy.shevchenko@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ubifs/dir.c |   25 +++++++++++++++----------
- 1 file changed, 15 insertions(+), 10 deletions(-)
+ drivers/tty/serial/8250/8250_lpss.c | 28 ++++++++++++++++++++++------
+ 1 file changed, 22 insertions(+), 6 deletions(-)
 
---- a/fs/ubifs/dir.c
-+++ b/fs/ubifs/dir.c
-@@ -1324,6 +1324,7 @@ static int do_rename(struct inode *old_d
+diff --git a/drivers/tty/serial/8250/8250_lpss.c b/drivers/tty/serial/8250/8250_lpss.c
+index 4dee8a9e0c95..dfb730b7ea2a 100644
+--- a/drivers/tty/serial/8250/8250_lpss.c
++++ b/drivers/tty/serial/8250/8250_lpss.c
+@@ -121,8 +121,7 @@ static int byt_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
+ {
+ 	struct dw_dma_slave *param = &lpss->dma_param;
+ 	struct pci_dev *pdev = to_pci_dev(port->dev);
+-	unsigned int dma_devfn = PCI_DEVFN(PCI_SLOT(pdev->devfn), 0);
+-	struct pci_dev *dma_dev = pci_get_slot(pdev->bus, dma_devfn);
++	struct pci_dev *dma_dev;
  
- 	if (flags & RENAME_WHITEOUT) {
- 		union ubifs_dev_desc *dev = NULL;
-+		struct ubifs_budget_req wht_req;
+ 	switch (pdev->device) {
+ 	case PCI_DEVICE_ID_INTEL_BYT_UART1:
+@@ -141,6 +140,8 @@ static int byt_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
+ 		return -EINVAL;
+ 	}
  
- 		dev = kmalloc(sizeof(union ubifs_dev_desc), GFP_NOFS);
- 		if (!dev) {
-@@ -1345,6 +1346,20 @@ static int do_rename(struct inode *old_d
- 		whiteout_ui->data = dev;
- 		whiteout_ui->data_len = ubifs_encode_dev(dev, MKDEV(0, 0));
- 		ubifs_assert(c, !whiteout_ui->dirty);
++	dma_dev = pci_get_slot(pdev->bus, PCI_DEVFN(PCI_SLOT(pdev->devfn), 0));
 +
-+		memset(&wht_req, 0, sizeof(struct ubifs_budget_req));
-+		wht_req.dirtied_ino = 1;
-+		wht_req.dirtied_ino_d = ALIGN(whiteout_ui->data_len, 8);
-+		/*
-+		 * To avoid deadlock between space budget (holds ui_mutex and
-+		 * waits wb work) and writeback work(waits ui_mutex), do space
-+		 * budget before ubifs inodes locked.
-+		 */
-+		err = ubifs_budget_space(c, &wht_req);
-+		if (err) {
-+			iput(whiteout);
-+			goto out_release;
-+		}
- 	}
+ 	param->dma_dev = &dma_dev->dev;
+ 	param->m_master = 0;
+ 	param->p_master = 1;
+@@ -156,11 +157,26 @@ static int byt_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
+ 	return 0;
+ }
  
- 	lock_4_inodes(old_dir, new_dir, new_inode, whiteout);
-@@ -1419,16 +1434,6 @@ static int do_rename(struct inode *old_d
- 	}
++static void byt_serial_exit(struct lpss8250 *lpss)
++{
++	struct dw_dma_slave *param = &lpss->dma_param;
++
++	/* Paired with pci_get_slot() in the byt_serial_setup() above */
++	put_device(param->dma_dev);
++}
++
+ static int ehl_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
+ {
+ 	return 0;
+ }
  
- 	if (whiteout) {
--		struct ubifs_budget_req wht_req = { .dirtied_ino = 1,
--				.dirtied_ino_d = \
--				ALIGN(ubifs_inode(whiteout)->data_len, 8) };
--
--		err = ubifs_budget_space(c, &wht_req);
--		if (err) {
--			iput(whiteout);
--			goto out_release;
--		}
--
- 		inc_nlink(whiteout);
- 		mark_inode_dirty(whiteout);
++static void ehl_serial_exit(struct lpss8250 *lpss)
++{
++	struct uart_8250_port *up = serial8250_get_port(lpss->data.line);
++
++	up->dma = NULL;
++}
++
+ #ifdef CONFIG_SERIAL_8250_DMA
+ static const struct dw_dma_platform_data qrk_serial_dma_pdata = {
+ 	.nr_channels = 2,
+@@ -335,8 +351,7 @@ static int lpss8250_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	return 0;
  
+ err_exit:
+-	if (lpss->board->exit)
+-		lpss->board->exit(lpss);
++	lpss->board->exit(lpss);
+ 	pci_free_irq_vectors(pdev);
+ 	return ret;
+ }
+@@ -347,8 +362,7 @@ static void lpss8250_remove(struct pci_dev *pdev)
+ 
+ 	serial8250_unregister_port(lpss->data.line);
+ 
+-	if (lpss->board->exit)
+-		lpss->board->exit(lpss);
++	lpss->board->exit(lpss);
+ 	pci_free_irq_vectors(pdev);
+ }
+ 
+@@ -356,12 +370,14 @@ static const struct lpss8250_board byt_board = {
+ 	.freq = 100000000,
+ 	.base_baud = 2764800,
+ 	.setup = byt_serial_setup,
++	.exit = byt_serial_exit,
+ };
+ 
+ static const struct lpss8250_board ehl_board = {
+ 	.freq = 200000000,
+ 	.base_baud = 12500000,
+ 	.setup = ehl_serial_setup,
++	.exit = ehl_serial_exit,
+ };
+ 
+ static const struct lpss8250_board qrk_board = {
+-- 
+2.34.1
+
 
 

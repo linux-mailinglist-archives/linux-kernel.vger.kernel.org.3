@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C104F5127
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE834F4FAA
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1845037AbiDFBxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
+        id S1839060AbiDFA6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348994AbiDEJsw (ORCPT
+        with ESMTP id S1349006AbiDEJsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83784BE34;
-        Tue,  5 Apr 2022 02:38:47 -0700 (PDT)
+        Tue, 5 Apr 2022 05:48:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66459DF41;
+        Tue,  5 Apr 2022 02:39:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A3F3615E5;
-        Tue,  5 Apr 2022 09:38:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22029C385A2;
-        Tue,  5 Apr 2022 09:38:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 80DC3B81B7F;
+        Tue,  5 Apr 2022 09:39:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0254C385A2;
+        Tue,  5 Apr 2022 09:38:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151526;
-        bh=4GVNTj2YOOxt86du6z4LnhR8s7JceT8i+SaFiQdlXpA=;
+        s=korg; t=1649151540;
+        bh=TIY/MaJG64dJFYhgSREZ7Io2V0kw+HnjbuZ5wtzkwkI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R3QNB2cvd8TPd4MLu1iY2GvbOOv3rsBykY41gKfsRNdJ8s9S2fnqAZaplMrTQNuGR
-         DdMrVRGsQwqUQqKzAnY2HAh+EbEpfUKAJV0gdzayxTkd9Hg20FMIEarhjwUpEfxoQO
-         FEA1aGYZNI1v+38qCDmK/+3hn1xIWwO0BrEgUpao=
+        b=pmTpJlyYHfuOmgFW0VwPlHzwrVNL3zz7ir75eGGDTkrivWiWpdRpzt3K3Ias36kCQ
+         7aF3RwA2v2bu/LcW20kChCaWORhQe7F1gJodXo6pzc8IER51hNTFKgl5/go10kMDos
+         5ec0RiaLNlMSR2mGUgtI5DKAd935lepAJ6Jg1QoM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        =?UTF-8?q?Alex=20Benn=C3=A9e?= <alex.bennee@linaro.org>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
+        stable@vger.kernel.org, Zhiqian Guan <zhguan@redhat.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 446/913] cxl/regs: Fix size of CXL Capability Header Register
-Date:   Tue,  5 Apr 2022 09:25:08 +0200
-Message-Id: <20220405070353.216070330@linuxfoundation.org>
+Subject: [PATCH 5.15 450/913] libbpf: Use dynamically allocated buffer when receiving netlink messages
+Date:   Tue,  5 Apr 2022 09:25:12 +0200
+Message-Id: <20220405070353.337403206@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -58,69 +57,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-[ Upstream commit 74b0fe80409733055971bbfaf33c80a33fddeeb3 ]
+[ Upstream commit 9c3de619e13ee6693ec5ac74f50b7aa89056a70e ]
 
-In CXL 2.0, 8.2.5.1 CXL Capability Header Register: this register
-is given as 32 bits.
+When receiving netlink messages, libbpf was using a statically allocated
+stack buffer of 4k bytes. This happened to work fine on systems with a 4k
+page size, but on systems with larger page sizes it can lead to truncated
+messages. The user-visible impact of this was that libbpf would insist no
+XDP program was attached to some interfaces because that bit of the netlink
+message got chopped off.
 
-8.2.3 which covers the CXL 2.0 Component registers, including the
-CXL Capability Header Register states that access restrictions
-specified in Section 8.2.2 apply.
+Fix this by switching to a dynamically allocated buffer; we borrow the
+approach from iproute2 of using recvmsg() with MSG_PEEK|MSG_TRUNC to get
+the actual size of the pending message before receiving it, adjusting the
+buffer as necessary. While we're at it, also add retries on interrupted
+system calls around the recvmsg() call.
 
-8.2.2 includes:
-* A 32 bit register shall be accessed as a 4 Byte quantity.
-...
-If these rules are not followed, the behavior is undefined.
+v2:
+  - Move peek logic to libbpf_netlink_recv(), don't double free on ENOMEM.
 
-Discovered during review of CXL QEMU emulation. Alex Bennée pointed
-out there was a comment saying that 4 byte registers must be read
-with a 4 byte read, but 8 byte reads were being emulated.
-
-https://lore.kernel.org/qemu-devel/87bkzyd3c7.fsf@linaro.org/
-
-Fixing that, led to this code failing. Whilst a given hardware
-implementation 'might' work with an 8 byte read, it should not be relied
-upon. The QEMU emulation v5 will return 0 and log the wrong access width.
-
-The code moved, so one fixes tag for where this will directly apply and
-also a reference to the earlier introduction of the code for backports.
-
-Fixes: 0f06157e0135 ("cxl/core: Move register mapping infrastructure")
-Fixes: 08422378c4ad ("cxl/pci: Add HDM decoder capabilities")
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: Alex Bennée <alex.bennee@linaro.org>
-Reviewed-by: Ben Widawsky <ben.widawsky@intel.com>
-Link: https://lore.kernel.org/r/20220201153437.2873-1-Jonathan.Cameron@huawei.com
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+Fixes: 8bbb77b7c7a2 ("libbpf: Add various netlink helpers")
+Reported-by: Zhiqian Guan <zhguan@redhat.com>
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Link: https://lore.kernel.org/bpf/20220211234819.612288-1-toke@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cxl/core/regs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/lib/bpf/netlink.c | 55 ++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 51 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
-index b8aa583a7642..2e7027a3fef3 100644
---- a/drivers/cxl/core/regs.c
-+++ b/drivers/cxl/core/regs.c
-@@ -35,7 +35,7 @@ void cxl_probe_component_regs(struct device *dev, void __iomem *base,
- 			      struct cxl_component_reg_map *map)
+diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
+index 39f25e09b51e..69b353d55dbf 100644
+--- a/tools/lib/bpf/netlink.c
++++ b/tools/lib/bpf/netlink.c
+@@ -87,29 +87,75 @@ enum {
+ 	NL_DONE,
+ };
+ 
++static int netlink_recvmsg(int sock, struct msghdr *mhdr, int flags)
++{
++	int len;
++
++	do {
++		len = recvmsg(sock, mhdr, flags);
++	} while (len < 0 && (errno == EINTR || errno == EAGAIN));
++
++	if (len < 0)
++		return -errno;
++	return len;
++}
++
++static int alloc_iov(struct iovec *iov, int len)
++{
++	void *nbuf;
++
++	nbuf = realloc(iov->iov_base, len);
++	if (!nbuf)
++		return -ENOMEM;
++
++	iov->iov_base = nbuf;
++	iov->iov_len = len;
++	return 0;
++}
++
+ static int libbpf_netlink_recv(int sock, __u32 nl_pid, int seq,
+ 			       __dump_nlmsg_t _fn, libbpf_dump_nlmsg_t fn,
+ 			       void *cookie)
  {
- 	int cap, cap_count;
--	u64 cap_array;
-+	u32 cap_array;
++	struct iovec iov = {};
++	struct msghdr mhdr = {
++		.msg_iov = &iov,
++		.msg_iovlen = 1,
++	};
+ 	bool multipart = true;
+ 	struct nlmsgerr *err;
+ 	struct nlmsghdr *nh;
+-	char buf[4096];
+ 	int len, ret;
  
- 	*map = (struct cxl_component_reg_map) { 0 };
++	ret = alloc_iov(&iov, 4096);
++	if (ret)
++		goto done;
++
+ 	while (multipart) {
+ start:
+ 		multipart = false;
+-		len = recv(sock, buf, sizeof(buf), 0);
++		len = netlink_recvmsg(sock, &mhdr, MSG_PEEK | MSG_TRUNC);
++		if (len < 0) {
++			ret = len;
++			goto done;
++		}
++
++		if (len > iov.iov_len) {
++			ret = alloc_iov(&iov, len);
++			if (ret)
++				goto done;
++		}
++
++		len = netlink_recvmsg(sock, &mhdr, 0);
+ 		if (len < 0) {
+-			ret = -errno;
++			ret = len;
+ 			goto done;
+ 		}
  
-@@ -45,7 +45,7 @@ void cxl_probe_component_regs(struct device *dev, void __iomem *base,
- 	 */
- 	base += CXL_CM_OFFSET;
+ 		if (len == 0)
+ 			break;
  
--	cap_array = readq(base + CXL_CM_CAP_HDR_OFFSET);
-+	cap_array = readl(base + CXL_CM_CAP_HDR_OFFSET);
+-		for (nh = (struct nlmsghdr *)buf; NLMSG_OK(nh, len);
++		for (nh = (struct nlmsghdr *)iov.iov_base; NLMSG_OK(nh, len);
+ 		     nh = NLMSG_NEXT(nh, len)) {
+ 			if (nh->nlmsg_pid != nl_pid) {
+ 				ret = -LIBBPF_ERRNO__WRNGPID;
+@@ -151,6 +197,7 @@ static int libbpf_netlink_recv(int sock, __u32 nl_pid, int seq,
+ 	}
+ 	ret = 0;
+ done:
++	free(iov.iov_base);
+ 	return ret;
+ }
  
- 	if (FIELD_GET(CXL_CM_CAP_HDR_ID_MASK, cap_array) != CM_CAP_HDR_CAP_ID) {
- 		dev_err(dev,
 -- 
 2.34.1
 

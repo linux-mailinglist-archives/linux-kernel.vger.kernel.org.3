@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23AA44F4F5B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAAD24F4F58
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1837271AbiDFApW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59196 "EHLO
+        id S1837595AbiDFAp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355439AbiDEKTn (ORCPT
+        with ESMTP id S1355712AbiDEKVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:19:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F91270856;
-        Tue,  5 Apr 2022 03:04:56 -0700 (PDT)
+        Tue, 5 Apr 2022 06:21:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3FC7C15B;
+        Tue,  5 Apr 2022 03:05:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE99E616E7;
-        Tue,  5 Apr 2022 10:04:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AE4CC385A2;
-        Tue,  5 Apr 2022 10:04:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46863B81B7A;
+        Tue,  5 Apr 2022 10:05:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9458EC385A2;
+        Tue,  5 Apr 2022 10:05:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153095;
-        bh=rxSC1Q8UZg6s7D6ZuFhMZ73XWIIqRVLONcnqQ9q8kC4=;
+        s=korg; t=1649153101;
+        bh=kHivgI89ExcwhIzHs0s0eahszGcG5QZveN98bO2rNkA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MdLBi5hTK8fVCbu0DONnN+jz2iq9KblTE2m4qtStmrBMir+bTNhlNwzrqHpuWZbjd
-         ooJ/rBzRlH8yvmla4G7rJAJ+VEYmlDQ80aQb41QtHWhNKtqxxiiGT7VZaCDM+ZGugP
-         AqKlFtGw0UmpaegKKWFZZZatpjA9DKIy3N6dk00A=
+        b=ZakrJ9BKjDOHGl480Db8DJ7JsIukLr0vRbcvXY8U5HpfhqPkSKtFDl8Hl0VeGujc7
+         z9HS+d1GrEImsq6DTPDkEF+BLT6TYJcWtb2iM2VgLKL5Rgs3tIWIkfiVCslzwPuRxV
+         TIITbasITW2kAMiDkyjoWgId5BQteAwydT4tWP4M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
         Alim Akhtar <alim.akhtar@samsung.com>
-Subject: [PATCH 5.10 100/599] ARM: dts: exynos: fix UART3 pins configuration in Exynos5250
-Date:   Tue,  5 Apr 2022 09:26:34 +0200
-Message-Id: <20220405070301.808905613@linuxfoundation.org>
+Subject: [PATCH 5.10 102/599] ARM: dts: exynos: add missing HDMI supplies on SMDK5420
+Date:   Tue,  5 Apr 2022 09:26:36 +0200
+Message-Id: <20220405070301.868219337@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -58,32 +57,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-commit 372d7027fed43c8570018e124cf78b89523a1f8e upstream.
+commit 453a24ded415f7fce0499c6b0a2c7b28f84911f2 upstream.
 
-The gpa1-4 pin was put twice in UART3 pin configuration of Exynos5250,
-instead of proper pin gpa1-5.
+Add required VDD supplies to HDMI block on SMDK5420.  Without them, the
+HDMI driver won't probe.  Because of lack of schematics, use same
+supplies as on Arndale Octa and Odroid XU3 boards (voltage matches).
 
-Fixes: f8bfe2b050f3 ("ARM: dts: add pin state information in client nodes for Exynos5 platforms")
-Cc: <stable@vger.kernel.org>
+Cc: <stable@vger.kernel.org> # v3.15+
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-Link: https://lore.kernel.org/r/20211230195325.328220-1-krzysztof.kozlowski@canonical.com
+Link: https://lore.kernel.org/r/20220208171823.226211-3-krzysztof.kozlowski@canonical.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/exynos5250-pinctrl.dtsi |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/exynos5420-smdk5420.dts |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/arch/arm/boot/dts/exynos5250-pinctrl.dtsi
-+++ b/arch/arm/boot/dts/exynos5250-pinctrl.dtsi
-@@ -260,7 +260,7 @@
- 	};
+--- a/arch/arm/boot/dts/exynos5420-smdk5420.dts
++++ b/arch/arm/boot/dts/exynos5420-smdk5420.dts
+@@ -124,6 +124,9 @@
+ 	hpd-gpios = <&gpx3 7 GPIO_ACTIVE_HIGH>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&hdmi_hpd_irq>;
++	vdd-supply = <&ldo6_reg>;
++	vdd_osc-supply = <&ldo7_reg>;
++	vdd_pll-supply = <&ldo6_reg>;
+ };
  
- 	uart3_data: uart3-data {
--		samsung,pins = "gpa1-4", "gpa1-4";
-+		samsung,pins = "gpa1-4", "gpa1-5";
- 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
- 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
- 		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
+ &hsi2c_4 {
 
 

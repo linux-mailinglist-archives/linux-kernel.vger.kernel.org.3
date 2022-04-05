@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE054F2B10
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C38AE4F2E57
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:00:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242951AbiDEJij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33820 "EHLO
+        id S242888AbiDEJiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239389AbiDEIUC (ORCPT
+        with ESMTP id S239390AbiDEIUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:20:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E890FC558D;
-        Tue,  5 Apr 2022 01:12:19 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A1DC55B5;
+        Tue,  5 Apr 2022 01:12:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 868CB60AFB;
-        Tue,  5 Apr 2022 08:12:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91FDAC385A0;
-        Tue,  5 Apr 2022 08:12:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E530FB81B90;
+        Tue,  5 Apr 2022 08:12:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A401C385A0;
+        Tue,  5 Apr 2022 08:12:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146339;
-        bh=B4ZcG0QXqpeghTBVKDIRTsP/36gZD9K13i5RowxWSZc=;
+        s=korg; t=1649146341;
+        bh=FXIASGTXlwyPFhZKczifYvKVHhbnTeDqSdZKl1fpCmc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oDc+nN2S1BwVCUlUzbgfGPDAN7SDXtM+qtSQN3EtzcOTlFheKFM7J0jKcWyNES0sK
-         gDx49rCaYoqwlki6wv8jq3CDFNgKirz9kHu21l73IYxSS5e24vu1rov+YIB6wCwVlK
-         1Ju8/Kig3H9rgP8oLBGjOIwqzzXzpaRRHaD+eG3s=
+        b=t1VboZiZB2EfZK/HQPOKeTHvAe4R2l5XMrZ2a4y2/BJVq6InWHzv8AWBbnBgW6ePE
+         zkVYpmiZWplMUgkx6TGQVXLc0suxOZpTbdXAHibFGc8IjtIyPGEPQmbWmLxhKvXIG4
+         xodwwCrZCYs0moIj0Yq2981hNRTzg7jeSnqBh4ZQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0729/1126] pinctrl: renesas: r8a77470: Reduce size for narrow VIN1 channel
-Date:   Tue,  5 Apr 2022 09:24:36 +0200
-Message-Id: <20220405070428.988558813@linuxfoundation.org>
+Subject: [PATCH 5.17 0730/1126] pinctrl: renesas: checker: Fix miscalculation of number of states
+Date:   Tue,  5 Apr 2022 09:24:37 +0200
+Message-Id: <20220405070429.017455126@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -57,46 +57,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 
-[ Upstream commit 9e04a0eda84fccab0ac22a33825ad53f47c968c7 ]
+[ Upstream commit de9b861018d46af27a5edff8b6baef35c0c0ad4f ]
 
-The second video-in channel on RZ/G1C has only 12 data lanes, but the
-pin control driver uses the vin_data union, which is meant for 24 data
-lanes, thus wasting space.
+The checker failed to validate all enum IDs in the description of a
+register with fixed-width register fields, due to a miscalculation of
+the number of described states: each register field of n bits can have
+"1 << n" possible states, not "1".
 
-Fix this by using the vin_data12 union instead.
+Increase SH_PFC_MAX_ENUMS accordingly, now more enum IDs are checked
+(SH-Mobile AG5 has more than 4000 enum IDs defined).
 
-This reduces kernel size by 96 bytes.
-
-Fixes: 50f3f2d73e3426ba ("pinctrl: sh-pfc: Reduce kernel size for narrow VIN channels")
+Fixes: 12d057bad683b1c6 ("pinctrl: sh-pfc: checker: Add check for enum ID conflicts")
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/52716fa89139f6f92592633edb52804d4c5e18f0.1640269757.git.geert+renesas@glider.be
+Link: https://lore.kernel.org/r/6d8a6a05564f38f9d20464c1c17f96e52740cf6a.1645460429.git.geert+renesas@glider.be
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/renesas/pfc-r8a77470.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/pinctrl/renesas/core.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pinctrl/renesas/pfc-r8a77470.c b/drivers/pinctrl/renesas/pfc-r8a77470.c
-index e6e5487691c1..cf7153d06a95 100644
---- a/drivers/pinctrl/renesas/pfc-r8a77470.c
-+++ b/drivers/pinctrl/renesas/pfc-r8a77470.c
-@@ -2140,7 +2140,7 @@ static const unsigned int vin0_clk_mux[] = {
- 	VI0_CLK_MARK,
- };
- /* - VIN1 ------------------------------------------------------------------- */
--static const union vin_data vin1_data_pins = {
-+static const union vin_data12 vin1_data_pins = {
- 	.data12 = {
- 		RCAR_GP_PIN(3,  1), RCAR_GP_PIN(3, 2),
- 		RCAR_GP_PIN(3,  3), RCAR_GP_PIN(3, 4),
-@@ -2150,7 +2150,7 @@ static const union vin_data vin1_data_pins = {
- 		RCAR_GP_PIN(3, 15), RCAR_GP_PIN(3, 16),
- 	},
- };
--static const union vin_data vin1_data_mux = {
-+static const union vin_data12 vin1_data_mux = {
- 	.data12 = {
- 		VI1_DATA0_MARK, VI1_DATA1_MARK,
- 		VI1_DATA2_MARK, VI1_DATA3_MARK,
+diff --git a/drivers/pinctrl/renesas/core.c b/drivers/pinctrl/renesas/core.c
+index 0d4ea2e22a53..12d41ac017b5 100644
+--- a/drivers/pinctrl/renesas/core.c
++++ b/drivers/pinctrl/renesas/core.c
+@@ -741,7 +741,7 @@ static int sh_pfc_suspend_init(struct sh_pfc *pfc) { return 0; }
+ 
+ #ifdef DEBUG
+ #define SH_PFC_MAX_REGS		300
+-#define SH_PFC_MAX_ENUMS	3000
++#define SH_PFC_MAX_ENUMS	5000
+ 
+ static unsigned int sh_pfc_errors __initdata;
+ static unsigned int sh_pfc_warnings __initdata;
+@@ -865,7 +865,8 @@ static void __init sh_pfc_check_cfg_reg(const char *drvname,
+ 			 GENMASK(cfg_reg->reg_width - 1, 0));
+ 
+ 	if (cfg_reg->field_width) {
+-		n = cfg_reg->reg_width / cfg_reg->field_width;
++		fw = cfg_reg->field_width;
++		n = (cfg_reg->reg_width / fw) << fw;
+ 		/* Skip field checks (done at build time) */
+ 		goto check_enum_ids;
+ 	}
 -- 
 2.34.1
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A42E4F46F0
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E47B4F446D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380156AbiDEUy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55110 "EHLO
+        id S244836AbiDEOAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354075AbiDEKL0 (ORCPT
+        with ESMTP id S238452AbiDEJ3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:11:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6771B4D9FE;
-        Tue,  5 Apr 2022 02:57:03 -0700 (PDT)
+        Tue, 5 Apr 2022 05:29:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A09A13E10;
+        Tue,  5 Apr 2022 02:16:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 07F04616D7;
-        Tue,  5 Apr 2022 09:57:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13436C385A2;
-        Tue,  5 Apr 2022 09:57:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4F5BB818F3;
+        Tue,  5 Apr 2022 09:16:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A606C385A2;
+        Tue,  5 Apr 2022 09:16:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152622;
-        bh=YMuvDVCXN0t5GEpEso/ItGrfwaHKye26v8Bn/LLLC+k=;
+        s=korg; t=1649150215;
+        bh=JVi6iNnNgKNf/3WG5A4crMAJ/xLn832x/mT8K/pZK30=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PMGQHm4Koz5HHvsFx1OCwM4a4mHOJdYW/2HCk7qlhjAJbQqv1ZHlxahfufshwzAMj
-         1+Lw9vudA3PGbK1w8VEPpC6oymDXvpr2W9QMgo9Sf6XbRJhFp2xg66KrMgLU8TJHN/
-         1xU4plwFCYtfjWcrMxpNHDyJua8YeTDz87sjIBZk=
+        b=I0A2X0Wthm4P73W+IjsmhvdR0G1QZP4zABfhm2kI1xyUrbjG7aIdwqxUWXbuUq61M
+         rYEEvhIs+UwquqkT7MDxGxgORrEjJRo1aaJoVx3JMqnN+zwt1pUeg/J0yt5AZ9LRUW
+         EdBXZZVhA+oZ8VkhFYc8D5syIWcFyJVd7eJrn8H4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc Dionne <marc.dionne@auristor.com>,
-        David Howells <dhowells@redhat.com>,
-        linux-afs@lists.infradead.org, Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH 5.15 843/913] rxrpc: Fix call timer start racing with call destruction
-Date:   Tue,  5 Apr 2022 09:31:45 +0200
-Message-Id: <20220405070405.098095347@linuxfoundation.org>
+        stable@vger.kernel.org, Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 5.16 0994/1017] media: ov6650: Add try support to selection API operations
+Date:   Tue,  5 Apr 2022 09:31:47 +0200
+Message-Id: <20220405070423.709048356@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,200 +55,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Janusz Krzysztofik <jmkrzyszt@gmail.com>
 
-commit 4a7f62f91933c8ae5308f9127fd8ea48188b6bc3 upstream.
+commit c74052646496ffe0bc606152e6b9653137020cbf upstream.
 
-The rxrpc_call struct has a timer used to handle various timed events
-relating to a call.  This timer can get started from the packet input
-routines that are run in softirq mode with just the RCU read lock held.
-Unfortunately, because only the RCU read lock is held - and neither ref or
-other lock is taken - the call can start getting destroyed at the same time
-a packet comes in addressed to that call.  This causes the timer - which
-was already stopped - to get restarted.  Later, the timer dispatch code may
-then oops if the timer got deallocated first.
+Try requests are now only supported by format processing pad operations
+implemented by the driver.  The driver selection API operations
+currently respond to them with -EINVAL.  While that is correct, it
+constraints video device drivers to not use subdevice cropping at all
+while processing user requested active frame size, otherwise their set
+try format results might differ from active.  As a consequence, we
+can't fix set format pad operation as not to touch crop rectangle since
+that would affect users not being able to set arbitrary frame sizes.
+Moreover, without a working set try selection support we are not able
+to use pad config crop rectangle as a reference while processing set
+try format requests.
 
-Fix this by trying to take a ref on the rxrpc_call struct and, if
-successful, passing that ref along to the timer.  If the timer was already
-running, the ref is discarded.
+Implement missing try selection support.  Moreover, as it will be now
+possible to maintain the pad config crop rectangle via selection API,
+start using it instead of the active one as a reference while
+processing set try format requests.
 
-The timer completion routine can then pass the ref along to the call's work
-item when it queues it.  If the timer or work item where already
-queued/running, the extra ref is discarded.
+is_unscaled_ok() helper, now also called from set selection operation,
+has been just moved up in the source file to avoid a prototype, with no
+functional changes.
 
-Fixes: a158bdd3247b ("rxrpc: Fix call timeouts")
-Reported-by: Marc Dionne <marc.dionne@auristor.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Marc Dionne <marc.dionne@auristor.com>
-Tested-by: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
-Link: http://lists.infradead.org/pipermail/linux-afs/2022-March/005073.html
-Link: https://lore.kernel.org/r/164865115696.2943015.11097991776647323586.stgit@warthog.procyon.org.uk
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+[Sakari Ailus: Rebase on subdev state patches]
+
+Fixes: 717fd5b4907a ("[media] v4l2: replace try_mbus_fmt by set_fmt")
+Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/trace/events/rxrpc.h |    8 +++++++-
- net/rxrpc/ar-internal.h      |   15 +++++++--------
- net/rxrpc/call_event.c       |    2 +-
- net/rxrpc/call_object.c      |   40 +++++++++++++++++++++++++++++++++++-----
- 4 files changed, 50 insertions(+), 15 deletions(-)
+ drivers/media/i2c/ov6650.c |   54 +++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 43 insertions(+), 11 deletions(-)
 
---- a/include/trace/events/rxrpc.h
-+++ b/include/trace/events/rxrpc.h
-@@ -83,12 +83,15 @@ enum rxrpc_call_trace {
- 	rxrpc_call_error,
- 	rxrpc_call_got,
- 	rxrpc_call_got_kernel,
-+	rxrpc_call_got_timer,
- 	rxrpc_call_got_userid,
- 	rxrpc_call_new_client,
- 	rxrpc_call_new_service,
- 	rxrpc_call_put,
- 	rxrpc_call_put_kernel,
- 	rxrpc_call_put_noqueue,
-+	rxrpc_call_put_notimer,
-+	rxrpc_call_put_timer,
- 	rxrpc_call_put_userid,
- 	rxrpc_call_queued,
- 	rxrpc_call_queued_ref,
-@@ -278,12 +281,15 @@ enum rxrpc_tx_point {
- 	EM(rxrpc_call_error,			"*E*") \
- 	EM(rxrpc_call_got,			"GOT") \
- 	EM(rxrpc_call_got_kernel,		"Gke") \
-+	EM(rxrpc_call_got_timer,		"GTM") \
- 	EM(rxrpc_call_got_userid,		"Gus") \
- 	EM(rxrpc_call_new_client,		"NWc") \
- 	EM(rxrpc_call_new_service,		"NWs") \
- 	EM(rxrpc_call_put,			"PUT") \
- 	EM(rxrpc_call_put_kernel,		"Pke") \
--	EM(rxrpc_call_put_noqueue,		"PNQ") \
-+	EM(rxrpc_call_put_noqueue,		"PnQ") \
-+	EM(rxrpc_call_put_notimer,		"PnT") \
-+	EM(rxrpc_call_put_timer,		"PTM") \
- 	EM(rxrpc_call_put_userid,		"Pus") \
- 	EM(rxrpc_call_queued,			"QUE") \
- 	EM(rxrpc_call_queued_ref,		"QUR") \
---- a/net/rxrpc/ar-internal.h
-+++ b/net/rxrpc/ar-internal.h
-@@ -777,14 +777,12 @@ void rxrpc_propose_ACK(struct rxrpc_call
- 		       enum rxrpc_propose_ack_trace);
- void rxrpc_process_call(struct work_struct *);
+--- a/drivers/media/i2c/ov6650.c
++++ b/drivers/media/i2c/ov6650.c
+@@ -472,9 +472,16 @@ static int ov6650_get_selection(struct v
+ {
+ 	struct i2c_client *client = v4l2_get_subdevdata(sd);
+ 	struct ov6650 *priv = to_ov6650(client);
++	struct v4l2_rect *rect;
  
--static inline void rxrpc_reduce_call_timer(struct rxrpc_call *call,
--					   unsigned long expire_at,
--					   unsigned long now,
--					   enum rxrpc_timer_trace why)
--{
--	trace_rxrpc_timer(call, why, now);
--	timer_reduce(&call->timer, expire_at);
--}
-+void rxrpc_reduce_call_timer(struct rxrpc_call *call,
-+			     unsigned long expire_at,
-+			     unsigned long now,
-+			     enum rxrpc_timer_trace why);
+-	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE)
+-		return -EINVAL;
++	if (sel->which == V4L2_SUBDEV_FORMAT_TRY) {
++		/* pre-select try crop rectangle */
++		rect = &sd_state->pads->try_crop;
 +
-+void rxrpc_delete_call_timer(struct rxrpc_call *call);
- 
- /*
-  * call_object.c
-@@ -808,6 +806,7 @@ void rxrpc_release_calls_on_socket(struc
- bool __rxrpc_queue_call(struct rxrpc_call *);
- bool rxrpc_queue_call(struct rxrpc_call *);
- void rxrpc_see_call(struct rxrpc_call *);
-+bool rxrpc_try_get_call(struct rxrpc_call *call, enum rxrpc_call_trace op);
- void rxrpc_get_call(struct rxrpc_call *, enum rxrpc_call_trace);
- void rxrpc_put_call(struct rxrpc_call *, enum rxrpc_call_trace);
- void rxrpc_cleanup_call(struct rxrpc_call *);
---- a/net/rxrpc/call_event.c
-+++ b/net/rxrpc/call_event.c
-@@ -310,7 +310,7 @@ recheck_state:
- 	}
- 
- 	if (call->state == RXRPC_CALL_COMPLETE) {
--		del_timer_sync(&call->timer);
-+		rxrpc_delete_call_timer(call);
- 		goto out_put;
- 	}
- 
---- a/net/rxrpc/call_object.c
-+++ b/net/rxrpc/call_object.c
-@@ -53,10 +53,30 @@ static void rxrpc_call_timer_expired(str
- 
- 	if (call->state < RXRPC_CALL_COMPLETE) {
- 		trace_rxrpc_timer(call, rxrpc_timer_expired, jiffies);
--		rxrpc_queue_call(call);
-+		__rxrpc_queue_call(call);
 +	} else {
-+		rxrpc_put_call(call, rxrpc_call_put);
++		/* pre-select active crop rectangle */
++		rect = &priv->rect;
 +	}
-+}
+ 
+ 	switch (sel->target) {
+ 	case V4L2_SEL_TGT_CROP_BOUNDS:
+@@ -483,14 +490,22 @@ static int ov6650_get_selection(struct v
+ 		sel->r.width = W_CIF;
+ 		sel->r.height = H_CIF;
+ 		return 0;
 +
-+void rxrpc_reduce_call_timer(struct rxrpc_call *call,
-+			     unsigned long expire_at,
-+			     unsigned long now,
-+			     enum rxrpc_timer_trace why)
-+{
-+	if (rxrpc_try_get_call(call, rxrpc_call_got_timer)) {
-+		trace_rxrpc_timer(call, why, now);
-+		if (timer_reduce(&call->timer, expire_at))
-+			rxrpc_put_call(call, rxrpc_call_put_notimer);
+ 	case V4L2_SEL_TGT_CROP:
+-		sel->r = priv->rect;
++		/* use selected crop rectangle */
++		sel->r = *rect;
+ 		return 0;
++
+ 	default:
+ 		return -EINVAL;
  	}
  }
  
-+void rxrpc_delete_call_timer(struct rxrpc_call *call)
++static bool is_unscaled_ok(int width, int height, struct v4l2_rect *rect)
 +{
-+	if (del_timer_sync(&call->timer))
-+		rxrpc_put_call(call, rxrpc_call_put_timer);
++	return width > rect->width >> 1 || height > rect->height >> 1;
 +}
 +
- static struct lock_class_key rxrpc_call_user_mutex_lock_class_key;
+ static void ov6650_bind_align_crop_rectangle(struct v4l2_rect *rect)
+ {
+ 	v4l_bound_align_image(&rect->width, 2, W_CIF, 1,
+@@ -510,12 +525,30 @@ static int ov6650_set_selection(struct v
+ 	struct ov6650 *priv = to_ov6650(client);
+ 	int ret;
  
- /*
-@@ -463,6 +483,17 @@ void rxrpc_see_call(struct rxrpc_call *c
- 	}
+-	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE ||
+-	    sel->target != V4L2_SEL_TGT_CROP)
++	if (sel->target != V4L2_SEL_TGT_CROP)
+ 		return -EINVAL;
+ 
+ 	ov6650_bind_align_crop_rectangle(&sel->r);
+ 
++	if (sel->which == V4L2_SUBDEV_FORMAT_TRY) {
++		struct v4l2_rect *crop = &sd_state->pads->try_crop;
++		struct v4l2_mbus_framefmt *mf = &sd_state->pads->try_fmt;
++		/* detect current pad config scaling factor */
++		bool half_scale = !is_unscaled_ok(mf->width, mf->height, crop);
++
++		/* store new crop rectangle */
++		*crop = sel->r;
++
++		/* adjust frame size */
++		mf->width = crop->width >> half_scale;
++		mf->height = crop->height >> half_scale;
++
++		return 0;
++	}
++
++	/* V4L2_SUBDEV_FORMAT_ACTIVE */
++
++	/* apply new crop rectangle */
+ 	ret = ov6650_reg_write(client, REG_HSTRT, sel->r.left >> 1);
+ 	if (!ret) {
+ 		priv->rect.width += priv->rect.left - sel->r.left;
+@@ -567,11 +600,6 @@ static int ov6650_get_fmt(struct v4l2_su
+ 	return 0;
  }
  
-+bool rxrpc_try_get_call(struct rxrpc_call *call, enum rxrpc_call_trace op)
-+{
-+	const void *here = __builtin_return_address(0);
-+	int n = atomic_fetch_add_unless(&call->usage, 1, 0);
-+
-+	if (n == 0)
-+		return false;
-+	trace_rxrpc_call(call->debug_id, op, n, here, NULL);
-+	return true;
-+}
-+
- /*
-  * Note the addition of a ref on a call.
-  */
-@@ -510,8 +541,7 @@ void rxrpc_release_call(struct rxrpc_soc
- 	spin_unlock_bh(&call->lock);
- 
- 	rxrpc_put_call_slot(call);
+-static bool is_unscaled_ok(int width, int height, struct v4l2_rect *rect)
+-{
+-	return width > rect->width >> 1 || height > rect->height >> 1;
+-}
 -
--	del_timer_sync(&call->timer);
-+	rxrpc_delete_call_timer(call);
+ #define to_clkrc(div)	((div) - 1)
  
- 	/* Make sure we don't get any more notifications */
- 	write_lock_bh(&rx->recvmsg_lock);
-@@ -618,6 +648,8 @@ static void rxrpc_destroy_call(struct wo
- 	struct rxrpc_call *call = container_of(work, struct rxrpc_call, processor);
- 	struct rxrpc_net *rxnet = call->rxnet;
+ /* set the format we will capture in */
+@@ -692,7 +720,11 @@ static int ov6650_set_fmt(struct v4l2_su
+ 		break;
+ 	}
  
-+	rxrpc_delete_call_timer(call);
+-	*crop = priv->rect;
++	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
++		*crop = sd_state->pads->try_crop;
++	else
++		*crop = priv->rect;
 +
- 	rxrpc_put_connection(call->conn);
- 	rxrpc_put_peer(call->peer);
- 	kfree(call->rxtx_buffer);
-@@ -652,8 +684,6 @@ void rxrpc_cleanup_call(struct rxrpc_cal
+ 	half_scale = !is_unscaled_ok(mf->width, mf->height, crop);
  
- 	memset(&call->sock_node, 0xcd, sizeof(call->sock_node));
- 
--	del_timer_sync(&call->timer);
--
- 	ASSERTCMP(call->state, ==, RXRPC_CALL_COMPLETE);
- 	ASSERT(test_bit(RXRPC_CALL_RELEASED, &call->flags));
- 
+ 	/* adjust new crop rectangle position against its current center */
 
 

@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65DE14F4950
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F2C94F4CC6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442177AbiDEWKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
+        id S1579599AbiDEXcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358053AbiDEK15 (ORCPT
+        with ESMTP id S1351410AbiDEKCY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:57 -0400
+        Tue, 5 Apr 2022 06:02:24 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE5840E4D;
-        Tue,  5 Apr 2022 03:14:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E2A6D4E1;
+        Tue,  5 Apr 2022 02:51:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0FA0EB81BC5;
-        Tue,  5 Apr 2022 10:13:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79EDBC385A1;
-        Tue,  5 Apr 2022 10:13:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F29D3B818F3;
+        Tue,  5 Apr 2022 09:51:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4440BC385A1;
+        Tue,  5 Apr 2022 09:51:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153637;
-        bh=SweP1HTw8tC+AtVVhlyi/ss/sL+iGct34bnHaSMvRHQ=;
+        s=korg; t=1649152298;
+        bh=1mzmburc3X+szuNAEo1tXUhYMeph1aGhucbEOTahC2s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iT+jUPl4EVNtAL0ANY4apqvL6qm8Et/vCc+kabD+psK/8sPdHH6JmF+iCvbstUDVX
-         PLNwkvYaTvu0BcvaOq2TZB3gIMBw+SnHC9MEna/cM+cdccxNGI7DRicQBYqs49Cd5h
-         GNj8ggIHV103mxg4WadmfvSEMtEymSHMWiWtBodI=
+        b=HJpMjeyalV/lhbM3/NYaLVeH8qDojrV/j94qB62wTAFbAgYM89PEC2Ft7XYoxV/fw
+         jv+tLm0+9MC3JTgi+npS8+qfperGqZ5wOgzCvg0dha7MISMzhCIWvZKjMQj98tAwfX
+         xg3bYRCkut1tjrlRsNdARjpJjaUL0xMAUln3aXBo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 294/599] PCI: aardvark: Fix reading PCI_EXP_RTSTA_PME bit on emulated bridge
+Subject: [PATCH 5.15 726/913] media: staging: media: zoran: calculate the right buffer number for zoran_reap_stat_com
 Date:   Tue,  5 Apr 2022 09:29:48 +0200
-Message-Id: <20220405070307.582647954@linuxfoundation.org>
+Message-Id: <20220405070401.593671596@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,50 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Corentin Labbe <clabbe@baylibre.com>
 
-[ Upstream commit 735f5ae49e1b44742cc63ca9b5c1ffde3e94ba91 ]
+[ Upstream commit e3b86f4e558cea9eed71d894df2f19b10d60a207 ]
 
-The emulated bridge returns incorrect value for PCI_EXP_RTSTA register
-during readout in advk_pci_bridge_emul_pcie_conf_read() function: the
-correct bit is BIT(16), but we are setting BIT(23), because the code
-does
-  *value = (isr0 & PCIE_MSG_PM_PME_MASK) << 16
-where
-  PCIE_MSG_PM_PME_MASK
-is
-  BIT(7).
+On the case tmp_dcim=1, the index of buffer is miscalculated.
+This generate a NULL pointer dereference later.
 
-The code should probably have been something like
-  *value = (!!(isr0 & PCIE_MSG_PM_PME_MASK)) << 16,
-but we are better of using an if() and using the proper macro for this
-bit.
+So let's fix the calcul and add a check to prevent this to reappear.
 
-Link: https://lore.kernel.org/r/20220110015018.26359-15-kabel@kernel.org
-Fixes: 8a3ebd8de328 ("PCI: aardvark: Implement emulated root PCI bridge config space")
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pci-aardvark.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/staging/media/zoran/zoran_device.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
-index f30144c8c0bd..49ff8bf10c74 100644
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -851,7 +851,9 @@ advk_pci_bridge_emul_pcie_conf_read(struct pci_bridge_emul *bridge,
- 	case PCI_EXP_RTSTA: {
- 		u32 isr0 = advk_readl(pcie, PCIE_ISR0_REG);
- 		u32 msglog = advk_readl(pcie, PCIE_MSG_LOG_REG);
--		*value = (isr0 & PCIE_MSG_PM_PME_MASK) << 16 | (msglog >> 16);
-+		*value = msglog >> 16;
-+		if (isr0 & PCIE_MSG_PM_PME_MASK)
-+			*value |= PCI_EXP_RTSTA_PME;
- 		return PCI_BRIDGE_EMUL_HANDLED;
- 	}
+diff --git a/drivers/staging/media/zoran/zoran_device.c b/drivers/staging/media/zoran/zoran_device.c
+index 5b12a730a229..fb1f0465ca87 100644
+--- a/drivers/staging/media/zoran/zoran_device.c
++++ b/drivers/staging/media/zoran/zoran_device.c
+@@ -814,7 +814,7 @@ static void zoran_reap_stat_com(struct zoran *zr)
+ 		if (zr->jpg_settings.tmp_dcm == 1)
+ 			i = (zr->jpg_dma_tail - zr->jpg_err_shift) & BUZ_MASK_STAT_COM;
+ 		else
+-			i = ((zr->jpg_dma_tail - zr->jpg_err_shift) & 1) * 2 + 1;
++			i = ((zr->jpg_dma_tail - zr->jpg_err_shift) & 1) * 2;
  
+ 		stat_com = le32_to_cpu(zr->stat_com[i]);
+ 		if ((stat_com & 1) == 0) {
+@@ -826,6 +826,11 @@ static void zoran_reap_stat_com(struct zoran *zr)
+ 		size = (stat_com & GENMASK(22, 1)) >> 1;
+ 
+ 		buf = zr->inuse[i];
++		if (!buf) {
++			spin_unlock_irqrestore(&zr->queued_bufs_lock, flags);
++			pci_err(zr->pci_dev, "No buffer at slot %d\n", i);
++			return;
++		}
+ 		buf->vbuf.vb2_buf.timestamp = ktime_get_ns();
+ 
+ 		if (zr->codec_mode == BUZ_MODE_MOTION_COMPRESS) {
 -- 
 2.34.1
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770954F400B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAAF14F3FF8
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:09:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344246AbiDEPKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
+        id S238440AbiDEMSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345760AbiDEJoD (ORCPT
+        with ESMTP id S245003AbiDEIxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:44:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2840C55A0;
-        Tue,  5 Apr 2022 02:29:38 -0700 (PDT)
+        Tue, 5 Apr 2022 04:53:00 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF18D1DA;
+        Tue,  5 Apr 2022 01:49:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 02C38616D6;
-        Tue,  5 Apr 2022 09:29:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12EDFC385A0;
-        Tue,  5 Apr 2022 09:29:27 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1EE50CE1B55;
+        Tue,  5 Apr 2022 08:49:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 390F3C385A0;
+        Tue,  5 Apr 2022 08:49:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150968;
-        bh=M67CU+T4xOG6XH0wlo3yuSohmbR82pONZTeDDfPjaTs=;
+        s=korg; t=1649148545;
+        bh=SzrysxvBq5ZNLxqpDPYaIE3D44TsoqwU/9BTGFVVG8w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PtbYBiv0paTZSK5d7BW/JrsxpZ5N3ulBDeNOTSW8g1XjR6rQgcHY0RsU6GCo8cmPJ
-         qbdrXHKboKrzmTpjBhmTcLKjQzSdt76ggSOf0XNIiKu8TU8W7y2+ty2OPb4jooGb99
-         YVbOmsqVsdqEzsQdp4WlVgnGBVDNLnIlUAy47E+E=
+        b=pdGn64RzqPlqAunX4dhXOJaXmMMdAVu5aCXV4W8XuncTlP7e5sBam7zy8YzgZQu+E
+         WONk8RFu/zBF35W578V2TlKh2s/xwcBu85slQHG6ZN/o/OvWqArbNwpspSs2Wdoiua
+         JVFcrKq4SdzvCzxDmHt/bYziVjRwOr3zou4iiZgE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        Sasha Levin <sashal@kernel.org>,
-        syzbot+6e2de48f06cdb2884bfc@syzkaller.appspotmail.com
-Subject: [PATCH 5.15 245/913] watch_queue: Actually free the watch
-Date:   Tue,  5 Apr 2022 09:21:47 +0200
-Message-Id: <20220405070347.201194687@linuxfoundation.org>
+        stable@vger.kernel.org, Meng Tang <tangmeng@uniontech.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0395/1017] ASoC: amd: Fix reference to PCM buffer address
+Date:   Tue,  5 Apr 2022 09:21:48 +0200
+Message-Id: <20220405070406.011267860@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Meng Tang <tangmeng@uniontech.com>
 
-[ Upstream commit 3d8dcf278b1ee1eff1e90be848fa2237db4c07a7 ]
+[ Upstream commit 54e1bf9f6177a3ffbd920474f4481a25361163aa ]
 
-free_watch() does everything barring actually freeing the watch object.  Fix
-this by adding the missing kfree.
+PCM buffers might be allocated dynamically when the buffer
+preallocation failed or a larger buffer is requested, and it's not
+guaranteed that substream->dma_buffer points to the actually used
+buffer.  The driver needs to refer to substream->runtime->dma_addr
+instead for the buffer address.
 
-kmemleak produces a report something like the following.  Note that as an
-address can be seen in the first word, the watch would appear to have gone
-through call_rcu().
-
-BUG: memory leak
-unreferenced object 0xffff88810ce4a200 (size 96):
-  comm "syz-executor352", pid 3605, jiffies 4294947473 (age 13.720s)
-  hex dump (first 32 bytes):
-    e0 82 48 0d 81 88 ff ff 00 00 00 00 00 00 00 00  ..H.............
-    80 a2 e4 0c 81 88 ff ff 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8214e6cc>] kmalloc include/linux/slab.h:581 [inline]
-    [<ffffffff8214e6cc>] kzalloc include/linux/slab.h:714 [inline]
-    [<ffffffff8214e6cc>] keyctl_watch_key+0xec/0x2e0 security/keys/keyctl.c:1800
-    [<ffffffff8214ec84>] __do_sys_keyctl+0x3c4/0x490 security/keys/keyctl.c:2016
-    [<ffffffff84493a25>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84493a25>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Fixes: c73be61cede5 ("pipe: Add general notification queue support")
-Reported-and-tested-by: syzbot+6e2de48f06cdb2884bfc@syzkaller.appspotmail.com
-Signed-off-by: David Howells <dhowells@redhat.com>
+Fixes: cab396d8b22c1 ("ASoC: amd: add ACP5x pcm dma driver ops")
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+Link: https://lore.kernel.org/r/20220316091303.9745-1-tangmeng@uniontech.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/watch_queue.c | 1 +
- 1 file changed, 1 insertion(+)
+ sound/soc/amd/vangogh/acp5x-pcm-dma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
-index 12348b41d7ad..38a135d68c05 100644
---- a/kernel/watch_queue.c
-+++ b/kernel/watch_queue.c
-@@ -398,6 +398,7 @@ static void free_watch(struct rcu_head *rcu)
- 	put_watch_queue(rcu_access_pointer(watch->queue));
- 	atomic_dec(&watch->cred->user->nr_watches);
- 	put_cred(watch->cred);
-+	kfree(watch);
- }
- 
- static void __put_watch(struct kref *kref)
+diff --git a/sound/soc/amd/vangogh/acp5x-pcm-dma.c b/sound/soc/amd/vangogh/acp5x-pcm-dma.c
+index f10de38976cb..6abcc2133a2c 100644
+--- a/sound/soc/amd/vangogh/acp5x-pcm-dma.c
++++ b/sound/soc/amd/vangogh/acp5x-pcm-dma.c
+@@ -281,7 +281,7 @@ static int acp5x_dma_hw_params(struct snd_soc_component *component,
+ 		return -EINVAL;
+ 	}
+ 	size = params_buffer_bytes(params);
+-	rtd->dma_addr = substream->dma_buffer.addr;
++	rtd->dma_addr = substream->runtime->dma_addr;
+ 	rtd->num_pages = (PAGE_ALIGN(size) >> PAGE_SHIFT);
+ 	config_acp5x_dma(rtd, substream->stream);
+ 	return 0;
 -- 
 2.34.1
 

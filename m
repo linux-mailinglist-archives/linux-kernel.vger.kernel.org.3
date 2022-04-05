@@ -2,215 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373484F536C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 06:32:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B8D44F53DB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 06:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2360015AbiDFDXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 23:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
+        id S2360048AbiDFDYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 23:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1847969AbiDFCUa (ORCPT
+        with ESMTP id S1848385AbiDFCVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 22:20:30 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E2C1D1916
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 16:41:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=Bqjzo3dRF9g7zUJGDSV93bexe38finF36uQEXO1Q6Eo=; b=fRCXkrEwv9VlqF3i5n9xEpcHOQ
-        dD8CsjQZQI67uzl8Uwku21HAQ42AP38UPrbcrebkHkjbMYeaCCYtw+mbtyliiMBCcly08eIZQMtub
-        vHHKUQOUdY5DQIIU80MGvObCOJ3Ib17YBDuiTuOuq+Vbd2Y23xdMQfWjaVnihN3onI6Zz9HtuEG9q
-        y7udsfo4rC+7RTknUG98ZKECcgOR8AJXqS3OYBuKIUjHzrjt4WtxMmIesbIP58wUXhQX5JmC1W4aN
-        NaRIOkkN5ZeQ1+LufEbHO1p5DMxt5OvHIQSZ6JY8lpmhHcOfqIidOTdW+GNKKU87fWCa04IQ304lC
-        f6We2LSg==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nbsnY-0031Cn-28; Tue, 05 Apr 2022 23:41:20 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        kernel test robot <lkp@intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
-Subject: [PATCH v3] sound/oss/dmasound: fix build when drivers are mixed =y/=m
-Date:   Tue,  5 Apr 2022 16:41:18 -0700
-Message-Id: <20220405234118.24830-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 5 Apr 2022 22:21:04 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7BB27CE0A
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 16:42:38 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id c15so1034576ljr.9
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 16:42:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Jvd8yLkL4H4JMSJ4KoB1/KxgXXtRYZgPmAmGLOJdDus=;
+        b=PoMu5ik5/yViCVccnBhUOXg7CMfjb6jA2lxAUxUKu8U3QiFo1bAN9ndX++nD+VUOTb
+         QtSseUsk1zCurh9CnfZ5ckLgHMynwYkjIv2BG1B3IEm/yGM9XhzYh/16PnP1Cg9UOzaU
+         QHxIdsDrT2bZfVKudVvwiG2WpY20CKgWgM4QIkjMvnBDLTGAEmIMfFQZxC9wawfgC2jB
+         Lh7xLdtWuPbjy0xJCQmp9QUOZNWvjjWKJ3gxJqj+iFqJ/JkvhW3ddUcVOIrORY077fiM
+         tglCVL+oz2Mf6emzuxtNHMezz1CpJKpaySbVIMvQ9TzN5JRc7wjvzSLoMCMNDMCGvGvj
+         U6/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Jvd8yLkL4H4JMSJ4KoB1/KxgXXtRYZgPmAmGLOJdDus=;
+        b=sykyDFeiy/7QkwzFCOCjqSSec9wXc9W9mviAghQ2FtIkfUQzvswHWzf2EGmD7DP0hH
+         vQZR9DSEifrXmoMtU54ETB7lI2qqC5B1Ge4QCtKfLqa3t/F1atzclnJAzTzlQ8HuUK1F
+         rtxZUqEVsjOT2k5tZOS+6X1mxzcQVLyKN41UrZBXHwNrNkUGOANvxHweZ+B5u8B4ba/R
+         6UFekMuu26cxahsKG+CMmiWPMSHAnJ0F5VPmMm0vrAzP8kG7GS2U4cEsV6CGmlGFMvEh
+         cfnEvP+lTJ7nEnb2qdTMSprPSLp+zcMEKr502e2VZEGtHITJ7cth+l0EYWNPlIhjTjY6
+         XmSg==
+X-Gm-Message-State: AOAM531SE9x2PuP+5G/b/BLiSeowcbzd8zYBm7HVpE3mp84neOJ7WEh+
+        F7dfW68YKorsCp7xVanut607J7z58F174Q==
+X-Google-Smtp-Source: ABdhPJwJurYqLtF/SAzZ6/+lSfeZmeFaSLKmwD+ujlty37GIYbc4JDTjheD3AefDplUEwXQV6ADzjg==
+X-Received: by 2002:a2e:7316:0:b0:24a:f59a:3c06 with SMTP id o22-20020a2e7316000000b0024af59a3c06mr3738312ljc.294.1649202155353;
+        Tue, 05 Apr 2022 16:42:35 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id w13-20020a2e998d000000b002496199495csm1465715lji.55.2022.04.05.16.42.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 16:42:34 -0700 (PDT)
+Message-ID: <f5fc9704-5c22-8c95-b6d6-e2c20145672c@linaro.org>
+Date:   Wed, 6 Apr 2022 02:42:34 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v6 14/14] drm/msm/dsi: Add support for DSC configuration
+Content-Language: en-GB
+To:     Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org
+References: <20220404163436.956875-1-vkoul@kernel.org>
+ <20220404163436.956875-15-vkoul@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220404163436.956875-15-vkoul@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CONFIG_DMASOUND_ATARI=m and CONFIG_DMASOUND_Q40=y (or vice versa),
-dmasound_core.o can be built without dmasound_deinit() being defined,
-causing a build error:
+On 04/04/2022 19:34, Vinod Koul wrote:
+> When DSC is enabled, we need to configure DSI registers accordingly and
+> configure the respective stream compression registers.
+> 
+> Add support to calculate the register setting based on DSC params and
+> timing information and configure these registers.
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> ---
+>   drivers/gpu/drm/msm/dsi/dsi_host.c | 98 +++++++++++++++++++++++++++++-
+>   1 file changed, 97 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> index eb0be34add45..f3ed6c40b9e1 100644
+> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> @@ -912,6 +912,65 @@ static void dsi_ctrl_config(struct msm_dsi_host *msm_host, bool enable,
+>   		dsi_write(msm_host, REG_DSI_CPHY_MODE_CTRL, BIT(0));
+>   }
+>   
+> +static void dsi_update_dsc_timing(struct msm_dsi_host *msm_host, bool is_cmd_mode, u32 hdisplay)
+> +{
+> +	struct msm_display_dsc_config *dsc = msm_host->dsc;
+> +	u32 reg, intf_width, reg_ctrl, reg_ctrl2;
+> +	u32 slice_per_intf, total_bytes_per_intf;
+> +	u32 pkt_per_line;
+> +	u32 bytes_in_slice;
+> +	u32 eol_byte_num;
+> +
+> +	/* first calculate dsc parameters and then program
+> +	 * compress mode registers
+> +	 */
+> +	intf_width = hdisplay;
+> +	slice_per_intf = DIV_ROUND_UP(intf_width, dsc->drm->slice_width);
+> +
+> +	/* If slice_per_pkt is greater than slice_per_intf
+> +	 * then default to 1. This can happen during partial
+> +	 * update.
+> +	 */
+> +	if (slice_per_intf > dsc->drm->slice_count)
+> +		dsc->drm->slice_count = 1;
+> +
+> +	slice_per_intf = DIV_ROUND_UP(hdisplay, dsc->drm->slice_width);
+> +	bytes_in_slice = DIV_ROUND_UP(dsc->drm->slice_width * dsc->drm->bits_per_pixel, 8);
+> +
+> +	dsc->drm->slice_chunk_size = bytes_in_slice;
+> +
+> +	total_bytes_per_intf = bytes_in_slice * slice_per_intf;
+> +
+> +	eol_byte_num = total_bytes_per_intf % 3;
+> +	pkt_per_line = slice_per_intf / dsc->drm->slice_count;
+> +
+> +	if (is_cmd_mode) /* packet data type */
+> +		reg = DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_DATATYPE(MIPI_DSI_DCS_LONG_WRITE);
+> +	else
+> +		reg = DSI_VIDEO_COMPRESSION_MODE_CTRL_DATATYPE(MIPI_DSI_COMPRESSED_PIXEL_STREAM);
+> +
+> +	/* DSI_VIDEO_COMPRESSION_MODE & DSI_COMMAND_COMPRESSION_MODE
+> +	 * registers have similar offsets, so for below common code use
+> +	 * DSI_VIDEO_COMPRESSION_MODE_XXXX for setting bits
+> +	 */
+> +	reg |= DSI_VIDEO_COMPRESSION_MODE_CTRL_PKT_PER_LINE(pkt_per_line >> 1);
+> +	reg |= DSI_VIDEO_COMPRESSION_MODE_CTRL_EOL_BYTE_NUM(eol_byte_num);
+> +	reg |= DSI_VIDEO_COMPRESSION_MODE_CTRL_EN;
+> +
+> +	if (is_cmd_mode) {
+> +		reg_ctrl = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL);
+> +		reg_ctrl2 = dsi_read(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2);
+> +
+> +		reg_ctrl |= reg;
+> +		reg_ctrl2 |= DSI_COMMAND_COMPRESSION_MODE_CTRL2_STREAM0_SLICE_WIDTH(bytes_in_slice);
+> +
+> +		dsi_write(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL, reg);
 
-ERROR: modpost: "dmasound_deinit" [sound/oss/dmasound/dmasound_atari.ko] undefined!
+reg_ctrl, as reported by testing robot
 
-Modify dmasound_core.c and dmasound.h so that dmasound_deinit() is
-always available.
+> +		dsi_write(msm_host, REG_DSI_COMMAND_COMPRESSION_MODE_CTRL2, reg_ctrl2);
+> +	} else {
+> +		dsi_write(msm_host, REG_DSI_VIDEO_COMPRESSION_MODE_CTRL, reg);
+> +	}
+> +}
+> +
+>   static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+>   {
+>   	struct drm_display_mode *mode = msm_host->mode;
+> @@ -944,7 +1003,38 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+>   		hdisplay /= 2;
+>   	}
+>   
+> +	if (msm_host->dsc) {
+> +		struct msm_display_dsc_config *dsc = msm_host->dsc;
+> +
+> +		/* update dsc params with timing params */
+> +		if (!dsc || !mode->hdisplay || !mode->vdisplay) {
+> +			pr_err("DSI: invalid input: pic_width: %d pic_height: %d\n",
+> +			       mode->hdisplay, mode->vdisplay);
+> +			return;
+> +		}
+> +
+> +		dsc->drm->pic_width = mode->hdisplay;
+> +		dsc->drm->pic_height = mode->vdisplay;
+> +		DBG("Mode %dx%d\n", dsc->drm->pic_width, dsc->drm->pic_height);
+> +
+> +		/* we do the calculations for dsc parameters here so that
+> +		 * panel can use these parameters
+> +		 */
+> +		dsi_populate_dsc_params(dsc);
+> +
+> +		/* Divide the display by 3 but keep back/font porch and
+> +		 * pulse width same
+> +		 */
+> +		h_total -= hdisplay;
+> +		hdisplay /= 3;
+> +		h_total += hdisplay;
+> +		ha_end = ha_start + hdisplay;
+> +	}
+> +
+>   	if (msm_host->mode_flags & MIPI_DSI_MODE_VIDEO) {
+> +		if (msm_host->dsc)
+> +			dsi_update_dsc_timing(msm_host, false, mode->hdisplay);
+> +
+>   		dsi_write(msm_host, REG_DSI_ACTIVE_H,
+>   			DSI_ACTIVE_H_START(ha_start) |
+>   			DSI_ACTIVE_H_END(ha_end));
+> @@ -963,8 +1053,14 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+>   			DSI_ACTIVE_VSYNC_VPOS_START(vs_start) |
+>   			DSI_ACTIVE_VSYNC_VPOS_END(vs_end));
+>   	} else {		/* command mode */
+> +		if (msm_host->dsc)
+> +			dsi_update_dsc_timing(msm_host, true, mode->hdisplay);
+> +
+>   		/* image data and 1 byte write_memory_start cmd */
+> -		wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 + 1;
+> +		if (!msm_host->dsc)
+> +			wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 + 1;
+> +		else
+> +			wc = mode->hdisplay / 2 + 1;
+>   
+>   		dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_CTRL,
+>   			DSI_CMD_MDP_STREAM0_CTRL_WORD_COUNT(wc) |
 
-The mixed modes (=y/=m) also mean that several variables and structs
-have to be declared in all cases.
 
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Link: lore.kernel.org/r/202204032138.EFT9qGEd-lkp@intel.com
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Takashi Iwai <tiwai@suse.com>
-Cc: alsa-devel@alsa-project.org
----
-v3: Remove use of #ifdef MODULE/#endif since the conditional data & code
-    need to be there for some of the cases. (Geert)
-v2: make dmasound_deinit() defined and available in all configs (Arnd)
-
-@Geert: any way to test this?
-
-#Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-
- sound/oss/dmasound/dmasound.h      |    6 ------
- sound/oss/dmasound/dmasound_core.c |   24 +-----------------------
- 2 files changed, 1 insertion(+), 29 deletions(-)
-
---- a/sound/oss/dmasound/dmasound_core.c
-+++ b/sound/oss/dmasound/dmasound_core.c
-@@ -206,12 +206,10 @@ module_param(writeBufSize, int, 0);
- 
- MODULE_LICENSE("GPL");
- 
--#ifdef MODULE
- static int sq_unit = -1;
- static int mixer_unit = -1;
- static int state_unit = -1;
- static int irq_installed;
--#endif /* MODULE */
- 
- /* control over who can modify resources shared between play/record */
- static fmode_t shared_resource_owner;
-@@ -391,9 +389,6 @@ static const struct file_operations mixe
- 
- static void mixer_init(void)
- {
--#ifndef MODULE
--	int mixer_unit;
--#endif
- 	mixer_unit = register_sound_mixer(&mixer_fops, -1);
- 	if (mixer_unit < 0)
- 		return;
-@@ -1171,9 +1166,6 @@ static const struct file_operations sq_f
- static int sq_init(void)
- {
- 	const struct file_operations *fops = &sq_fops;
--#ifndef MODULE
--	int sq_unit;
--#endif
- 
- 	sq_unit = register_sound_dsp(fops, -1);
- 	if (sq_unit < 0) {
-@@ -1366,9 +1358,6 @@ static const struct file_operations stat
- 
- static int state_init(void)
- {
--#ifndef MODULE
--	int state_unit;
--#endif
- 	state_unit = register_sound_special(&state_fops, SND_DEV_STATUS);
- 	if (state_unit < 0)
- 		return state_unit ;
-@@ -1386,10 +1375,9 @@ static int state_init(void)
- int dmasound_init(void)
- {
- 	int res ;
--#ifdef MODULE
-+
- 	if (irq_installed)
- 		return -EBUSY;
--#endif
- 
- 	/* Set up sound queue, /dev/audio and /dev/dsp. */
- 
-@@ -1408,9 +1396,7 @@ int dmasound_init(void)
- 		printk(KERN_ERR "DMA sound driver: Interrupt initialization failed\n");
- 		return -ENODEV;
- 	}
--#ifdef MODULE
- 	irq_installed = 1;
--#endif
- 
- 	printk(KERN_INFO "%s DMA sound driver rev %03d installed\n",
- 		dmasound.mach.name, (DMASOUND_CORE_REVISION<<4) +
-@@ -1424,8 +1410,6 @@ int dmasound_init(void)
- 	return 0;
- }
- 
--#ifdef MODULE
--
- void dmasound_deinit(void)
- {
- 	if (irq_installed) {
-@@ -1444,8 +1428,6 @@ void dmasound_deinit(void)
- 		unregister_sound_dsp(sq_unit);
- }
- 
--#else /* !MODULE */
--
- static int dmasound_setup(char *str)
- {
- 	int ints[6], size;
-@@ -1489,8 +1471,6 @@ static int dmasound_setup(char *str)
- 
- __setup("dmasound=", dmasound_setup);
- 
--#endif /* !MODULE */
--
-     /*
-      *  Conversion tables
-      */
-@@ -1577,9 +1557,7 @@ char dmasound_alaw2dma8[] = {
- 
- EXPORT_SYMBOL(dmasound);
- EXPORT_SYMBOL(dmasound_init);
--#ifdef MODULE
- EXPORT_SYMBOL(dmasound_deinit);
--#endif
- EXPORT_SYMBOL(dmasound_write_sq);
- EXPORT_SYMBOL(dmasound_catchRadius);
- #ifdef HAS_8BIT_TABLES
---- a/sound/oss/dmasound/dmasound.h
-+++ b/sound/oss/dmasound/dmasound.h
-@@ -88,11 +88,7 @@ static inline int ioctl_return(int __use
-      */
- 
- extern int dmasound_init(void);
--#ifdef MODULE
- extern void dmasound_deinit(void);
--#else
--#define dmasound_deinit()	do { } while (0)
--#endif
- 
- /* description of the set-up applies to either hard or soft settings */
- 
-@@ -114,9 +110,7 @@ typedef struct {
-     void *(*dma_alloc)(unsigned int, gfp_t);
-     void (*dma_free)(void *, unsigned int);
-     int (*irqinit)(void);
--#ifdef MODULE
-     void (*irqcleanup)(void);
--#endif
-     void (*init)(void);
-     void (*silence)(void);
-     int (*setFormat)(int);
+-- 
+With best wishes
+Dmitry

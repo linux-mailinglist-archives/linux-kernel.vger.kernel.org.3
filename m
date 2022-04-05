@@ -2,232 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 881FB4F525C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C38CF4F5260
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1849948AbiDFCpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
+        id S1850039AbiDFCrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1580276AbiDEXeH (ORCPT
+        with ESMTP id S1580823AbiDEXew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 19:34:07 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8661162BC
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 14:54:36 -0700 (PDT)
+        Tue, 5 Apr 2022 19:34:52 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076115F4E2
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 14:57:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649195680; x=1680731680;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=InyNG7brVOrB+pbl6SuP7WIX8fZMnSQ9ZXXp7iCGQ/w=;
-  b=ep8pXFq49omlqkqd/F1crhUsL67sviamgTLIhV5leoRnLqj0gpNUkutB
-   8lHelMRUcldAiZ2I7JxD9nVC6v3eM0ljsNi3n5odR1fAR+M4MsMvIcF3Y
-   BL8GBNHI+yHCRAcFnde4uU/8Ja81ME4emaOgf9dp5RwJ6bv1E/9SZKC9c
-   co0aPCtP0l0liMolfC5vAE5+K/eOIhDA84cvLnLz9QwVTu7pwW98s7gq0
-   j0sbUsnYVFqalrYDicezr56gPG10suZaYwkYgl3BYcvqbgdx9uEYFEX7H
-   wwpkgdehwn57PKPTaXLZZGQbENp8lm8Q6csq4acamsPS0IHVRdN7i5xxu
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="347314238"
+  t=1649195860; x=1680731860;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0w8O0Vd1TQMF4m2IKNfcg2j0Z1CYEGhYwuFP/DSTEKM=;
+  b=h7My4x3sl6U5lj9+ftiwl/XOWgeESGnZtJfZqfwkAYqcXKSGxGQ71Tw2
+   D+HC+4Vy4Ndr2ge7cBwWebbnk/OsoUYWy1Bh5Yv4c2BNS0pVmVUwZqeOb
+   bBLeRBjNsr/o5BfMOO81tu59QPq7NlFYadKM/aXEn0xOLvzJ+KcXVvGIJ
+   NxNOaYuX+2aNxfMDuZ1Pc/gFWPgELY50ItSBfRUgWWDZymx7MVbrCzWYf
+   1viTOU056jENslYLKVrG9DsQr2PPYc7YfqVktVIvYC2tshrOx/l76cSfs
+   fqRdheCN38zAR062uqk9IJDceNhc7uc5zoa403GBH7+7wgKnFe3sSsaC8
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="243012945"
 X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="347314238"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 14:54:36 -0700
+   d="scan'208";a="243012945"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 14:57:38 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="556689594"
+   d="scan'208";a="608621905"
 Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 05 Apr 2022 14:54:35 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 05 Apr 2022 14:57:36 -0700
 Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nbr8F-0003nd-0R;
-        Tue, 05 Apr 2022 21:54:35 +0000
-Date:   Wed, 06 Apr 2022 05:53:35 +0800
+        id 1nbrBA-0003np-2h;
+        Tue, 05 Apr 2022 21:57:36 +0000
+Date:   Wed, 6 Apr 2022 05:56:34 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:perf/urgent] BUILD SUCCESS
- e19cd0b6fa5938c51d7b928010d584f0de93913a
-Message-ID: <624cba5f.4fH6PK3nQClk0OsR%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+To:     David Howells <dhowells@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/rxrpc-ringless 4/9]
+ net/rxrpc/local_object.c:172:24: warning: format specifies type 'unsigned
+ short' but the argument has type 'int'
+Message-ID: <202204060503.2pTsIRTu-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/urgent
-branch HEAD: e19cd0b6fa5938c51d7b928010d584f0de93913a  perf/core: Always set cpuctx cgrp when enable cgroup event
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/rxrpc-ringless
+head:   a4b855ffcf1d116e65df68fa6f5df04878bc0083
+commit: 569092d7590362c7148ac768a923783886248c3b [4/9] rxrpc: Don't use a ring buffer for call Tx queue
+config: riscv-randconfig-r042-20220405 (https://download.01.org/0day-ci/archive/20220406/202204060503.2pTsIRTu-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/569092d7590362c7148ac768a923783886248c3b
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/rxrpc-ringless
+        git checkout 569092d7590362c7148ac768a923783886248c3b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/rxrpc/
 
-elapsed time: 728m
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-configs tested: 148
-configs skipped: 4
+All warnings (new ones prefixed by >>):
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+   In file included from net/rxrpc/local_object.c:12:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from net/rxrpc/local_object.c:12:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from net/rxrpc/local_object.c:12:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> net/rxrpc/local_object.c:172:24: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+                                     "krxrpctxd/%hu", ntohs(udp_conf.local_udp_port));
+                                                ~~~   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                %d
+   include/linux/kthread.h:54:48: note: expanded from macro 'kthread_run'
+                   = kthread_create(threadfn, data, namefmt, ## __VA_ARGS__); \
+                                                    ~~~~~~~     ^~~~~~~~~~~
+   include/linux/kthread.h:28:66: note: expanded from macro 'kthread_create'
+           kthread_create_on_node(threadfn, data, NUMA_NO_NODE, namefmt, ##arg)
+                                                                ~~~~~~~    ^~~
+   include/linux/byteorder/generic.h:142:18: note: expanded from macro 'ntohs'
+   #define ntohs(x) ___ntohs(x)
+                    ^~~~~~~~~~~
+   include/linux/byteorder/generic.h:137:21: note: expanded from macro '___ntohs'
+   #define ___ntohs(x) __be16_to_cpu(x)
+                       ^~~~~~~~~~~~~~~~
+   include/uapi/linux/byteorder/little_endian.h:43:26: note: expanded from macro '__be16_to_cpu'
+   #define __be16_to_cpu(x) __swab16((__force __u16)(__be16)(x))
+                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/swab.h:105:2: note: expanded from macro '__swab16'
+           (__builtin_constant_p((__u16)(x)) ?     \
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/rxrpc/local_object.c:246:23: warning: unused variable 'c' [-Wunused-variable]
+                   struct rxrpc_local *c = hlist_entry(cursor, struct rxrpc_local, link);
+                                       ^
+   9 warnings generated.
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-arm                         s3c6400_defconfig
-mips                         db1xxx_defconfig
-openrisc                 simple_smp_defconfig
-arm                         at91_dt_defconfig
-m68k                        m5407c3_defconfig
-powerpc                     pq2fads_defconfig
-sparc64                          alldefconfig
-sparc                       sparc32_defconfig
-powerpc                  storcenter_defconfig
-arc                            hsdk_defconfig
-riscv                    nommu_k210_defconfig
-arm                      jornada720_defconfig
-arm                       imx_v6_v7_defconfig
-sh                     magicpanelr2_defconfig
-openrisc                  or1klitex_defconfig
-mips                        vocore2_defconfig
-mips                         cobalt_defconfig
-arc                      axs103_smp_defconfig
-ia64                            zx1_defconfig
-arm                         lpc18xx_defconfig
-sh                           se7343_defconfig
-sh                         ap325rxa_defconfig
-sh                           se7722_defconfig
-powerpc                      tqm8xx_defconfig
-powerpc                     tqm8548_defconfig
-sh                             sh03_defconfig
-powerpc                         wii_defconfig
-arm                             ezx_defconfig
-mips                  maltasmvp_eva_defconfig
-m68k                       m5249evb_defconfig
-ia64                        generic_defconfig
-arm                           viper_defconfig
-arm                           stm32_defconfig
-powerpc                 mpc837x_mds_defconfig
-powerpc                     tqm8541_defconfig
-xtensa                    smp_lx200_defconfig
-arm                          exynos_defconfig
-openrisc                            defconfig
-h8300                            allyesconfig
-powerpc                     stx_gp3_defconfig
-nios2                         10m50_defconfig
-arm                            hisi_defconfig
-arm                        keystone_defconfig
-powerpc                         ps3_defconfig
-arm                        realview_defconfig
-m68k                          multi_defconfig
-xtensa                       common_defconfig
-sh                        edosk7760_defconfig
-sparc                       sparc64_defconfig
-arm                          iop32x_defconfig
-riscv             nommu_k210_sdcard_defconfig
-s390                                defconfig
-ia64                          tiger_defconfig
-arm                       multi_v4t_defconfig
-powerpc                        warp_defconfig
-xtensa                          iss_defconfig
-arm                            qcom_defconfig
-m68k                        mvme147_defconfig
-ia64                             allyesconfig
-arm                             pxa_defconfig
-mips                  decstation_64_defconfig
-h8300                       h8s-sim_defconfig
-arm                           sama5_defconfig
-mips                           xway_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220405
-ia64                             allmodconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
+   Depends on HAS_IOMEM && DRM && MMU
+   Selected by
+   - DRM_SSD130X && HAS_IOMEM && DRM
 
-clang tested configs:
-x86_64                        randconfig-c007
-i386                          randconfig-c001
-powerpc              randconfig-c003-20220405
-riscv                randconfig-c006-20220405
-mips                 randconfig-c004-20220405
-arm                  randconfig-c002-20220405
-arm                          moxart_defconfig
-powerpc                        icon_defconfig
-powerpc                   bluestone_defconfig
-arm                      tct_hammer_defconfig
-powerpc                  mpc885_ads_defconfig
-arm                     am200epdkit_defconfig
-arm                       aspeed_g4_defconfig
-arm                            mmp2_defconfig
-arm                              alldefconfig
-riscv                    nommu_virt_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-hexagon              randconfig-r045-20220405
-riscv                randconfig-r042-20220405
-hexagon              randconfig-r041-20220405
+
+vim +172 net/rxrpc/local_object.c
+
+   105	
+   106	/*
+   107	 * create the local socket
+   108	 * - must be called with rxrpc_local_mutex locked
+   109	 */
+   110	static int rxrpc_open_socket(struct rxrpc_local *local, struct net *net)
+   111	{
+   112		struct udp_tunnel_sock_cfg tuncfg = {NULL};
+   113		struct sockaddr_rxrpc *srx = &local->srx;
+   114		struct udp_port_cfg udp_conf = {0};
+   115		struct task_struct *transmitter;
+   116		struct sock *usk;
+   117		int ret;
+   118	
+   119		_enter("%p{%d,%d}",
+   120		       local, srx->transport_type, srx->transport.family);
+   121	
+   122		udp_conf.family = srx->transport.family;
+   123		if (udp_conf.family == AF_INET) {
+   124			udp_conf.local_ip = srx->transport.sin.sin_addr;
+   125			udp_conf.local_udp_port = srx->transport.sin.sin_port;
+   126	#if IS_ENABLED(CONFIG_AF_RXRPC_IPV6)
+   127		} else {
+   128			udp_conf.local_ip6 = srx->transport.sin6.sin6_addr;
+   129			udp_conf.local_udp_port = srx->transport.sin6.sin6_port;
+   130	#endif
+   131		}
+   132		ret = udp_sock_create(net, &udp_conf, &local->socket);
+   133		if (ret < 0) {
+   134			_leave(" = %d [socket]", ret);
+   135			return ret;
+   136		}
+   137	
+   138		tuncfg.encap_type = UDP_ENCAP_RXRPC;
+   139		tuncfg.encap_rcv = rxrpc_input_packet;
+   140		tuncfg.sk_user_data = local;
+   141		setup_udp_tunnel_sock(net, local->socket, &tuncfg);
+   142	
+   143		/* set the socket up */
+   144		usk = local->socket->sk;
+   145		usk->sk_error_report = rxrpc_error_report;
+   146	
+   147		switch (srx->transport.family) {
+   148		case AF_INET6:
+   149			/* we want to receive ICMPv6 errors */
+   150			ip6_sock_set_recverr(usk);
+   151	
+   152			/* Fall through and set IPv4 options too otherwise we don't get
+   153			 * errors from IPv4 packets sent through the IPv6 socket.
+   154			 */
+   155			fallthrough;
+   156		case AF_INET:
+   157			/* we want to receive ICMP errors */
+   158			ip_sock_set_recverr(usk);
+   159	
+   160			/* we want to set the don't fragment bit */
+   161			ip_sock_set_mtu_discover(usk, IP_PMTUDISC_DO);
+   162	
+   163			/* We want receive timestamps. */
+   164			sock_enable_timestamps(usk);
+   165			break;
+   166	
+   167		default:
+   168			BUG();
+   169		}
+   170	
+   171		transmitter = kthread_run(rxrpc_transmitter, local,
+ > 172					  "krxrpctxd/%hu", ntohs(udp_conf.local_udp_port));
+   173		if (IS_ERR(transmitter)) {
+   174			ret = PTR_ERR(transmitter);
+   175			goto error_sock;
+   176		}
+   177	
+   178		local->transmitter = transmitter;
+   179		_leave(" = 0");
+   180		return 0;
+   181	
+   182	error_sock:
+   183		kernel_sock_shutdown(local->socket, SHUT_RDWR);
+   184		local->socket->sk->sk_user_data = NULL;
+   185		sock_release(local->socket);
+   186		local->socket = NULL;
+   187		return ret;
+   188	}
+   189	
 
 -- 
 0-DAY CI Kernel Test Service

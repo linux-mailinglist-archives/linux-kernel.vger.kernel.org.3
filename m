@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D164F4167
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA5C4F3E0D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380936AbiDEUEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50650 "EHLO
+        id S1344238AbiDENRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357001AbiDEKZY (ORCPT
+        with ESMTP id S1344274AbiDEJTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:25:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6AA1F603;
-        Tue,  5 Apr 2022 03:09:22 -0700 (PDT)
+        Tue, 5 Apr 2022 05:19:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A395022B17;
+        Tue,  5 Apr 2022 02:06:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E02E61500;
-        Tue,  5 Apr 2022 10:09:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38E85C385A1;
-        Tue,  5 Apr 2022 10:09:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52A3EB81BBF;
+        Tue,  5 Apr 2022 09:06:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EF2AC385A0;
+        Tue,  5 Apr 2022 09:06:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153361;
-        bh=LUTYwhcnmybB6Lou8IoelB42nJG5tdqzX84/Z0p+xeY=;
+        s=korg; t=1649149608;
+        bh=HmgySWAgI7lbWNhdt5YYN+F4pSLogygYEPz8K+p7vu8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PxTvuVB4Y4tNgonqZ/R/oQA9sG6zlCz7IGLTkEL1J4n522bagqh1Fi0rqx4gUoRJJ
-         N9RLELdoU0CwTnmvNSAnpOsQYbKtG5Jin70k6v+MbxV1Oas/61J1H0RtcREn9Q5YH3
-         3OQaCtgQiew2c3hSQniCmDLLb3w+ystVLr2RRSw8=
+        b=NUPrTL4GujOB/eKeVlOrNM/rpklQVH3AdMA4CCBvNO4nNaGw3SXNw0462MSqmMLad
+         KCrtuEKHzkumfQTXc7bkfnahw2IbniGlb1e1Zr7jmscqrLtD/TTvliq76gRq/GPtqZ
+         a69t9HZGTQ6eMS/gMpEjzAgpUvVrKhzUv2W6Y/JU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 194/599] media: meson: vdec: potential dereference of null pointer
-Date:   Tue,  5 Apr 2022 09:28:08 +0200
-Message-Id: <20220405070304.615044171@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Holger=20Hoffst=C3=A4tte?= 
+        <holger@applied-asynchrony.com>,
+        Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0776/1017] Revert "Revert "block, bfq: honor already-setup queue merges""
+Date:   Tue,  5 Apr 2022 09:28:09 +0200
+Message-Id: <20220405070417.293216641@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,94 +57,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Paolo Valente <paolo.valente@linaro.org>
 
-[ Upstream commit c8c80c996182239ff9b05eda4db50184cf3b2e99 ]
+[ Upstream commit 15729ff8143f8135b03988a100a19e66d7cb7ecd ]
 
-As the possible failure of the kzalloc(), the 'new_ts' could be NULL
-pointer.
-Therefore, it should be better to check it in order to avoid the
-dereference of the NULL pointer.
-Also, the caller esparser_queue() needs to deal with the return value of
-the amvdec_add_ts().
+A crash [1] happened to be triggered in conjunction with commit
+2d52c58b9c9b ("block, bfq: honor already-setup queue merges"). The
+latter was then reverted by commit ebc69e897e17 ("Revert "block, bfq:
+honor already-setup queue merges""). Yet, the reverted commit was not
+the one introducing the bug. In fact, it actually triggered a UAF
+introduced by a different commit, and now fixed by commit d29bd41428cf
+("block, bfq: reset last_bfqq_created on group change").
 
-Fixes: 876f123b8956 ("media: meson: vdec: bring up to compliance")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Suggested-by: Neil Armstrong <narmstrong@baylibre.com>
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+So, there is no point in keeping commit 2d52c58b9c9b ("block, bfq:
+honor already-setup queue merges") out. This commit restores it.
+
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=214503
+
+Reported-by: Holger Hoffstätte <holger@applied-asynchrony.com>
+Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
+Link: https://lore.kernel.org/r/20211125181510.15004-1-paolo.valente@linaro.org
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/meson/vdec/esparser.c     | 7 ++++++-
- drivers/staging/media/meson/vdec/vdec_helpers.c | 8 ++++++--
- drivers/staging/media/meson/vdec/vdec_helpers.h | 4 ++--
- 3 files changed, 14 insertions(+), 5 deletions(-)
+ block/bfq-iosched.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/media/meson/vdec/esparser.c b/drivers/staging/media/meson/vdec/esparser.c
-index db7022707ff8..86ccc8937afc 100644
---- a/drivers/staging/media/meson/vdec/esparser.c
-+++ b/drivers/staging/media/meson/vdec/esparser.c
-@@ -328,7 +328,12 @@ esparser_queue(struct amvdec_session *sess, struct vb2_v4l2_buffer *vbuf)
- 
- 	offset = esparser_get_offset(sess);
- 
--	amvdec_add_ts(sess, vb->timestamp, vbuf->timecode, offset, vbuf->flags);
-+	ret = amvdec_add_ts(sess, vb->timestamp, vbuf->timecode, offset, vbuf->flags);
-+	if (ret) {
-+		v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_ERROR);
-+		return ret;
-+	}
-+
- 	dev_dbg(core->dev, "esparser: ts = %llu pld_size = %u offset = %08X flags = %08X\n",
- 		vb->timestamp, payload_size, offset, vbuf->flags);
- 
-diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.c b/drivers/staging/media/meson/vdec/vdec_helpers.c
-index 7f07a9175815..db4a854e59a3 100644
---- a/drivers/staging/media/meson/vdec/vdec_helpers.c
-+++ b/drivers/staging/media/meson/vdec/vdec_helpers.c
-@@ -227,13 +227,16 @@ int amvdec_set_canvases(struct amvdec_session *sess,
+diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+index 7eecd3200d83..342e927f213b 100644
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -2662,6 +2662,15 @@ bfq_setup_merge(struct bfq_queue *bfqq, struct bfq_queue *new_bfqq)
+ 	 * are likely to increase the throughput.
+ 	 */
+ 	bfqq->new_bfqq = new_bfqq;
++	/*
++	 * The above assignment schedules the following redirections:
++	 * each time some I/O for bfqq arrives, the process that
++	 * generated that I/O is disassociated from bfqq and
++	 * associated with new_bfqq. Here we increases new_bfqq->ref
++	 * in advance, adding the number of processes that are
++	 * expected to be associated with new_bfqq as they happen to
++	 * issue I/O.
++	 */
+ 	new_bfqq->ref += process_refs;
+ 	return new_bfqq;
  }
- EXPORT_SYMBOL_GPL(amvdec_set_canvases);
- 
--void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
--		   struct v4l2_timecode tc, u32 offset, u32 vbuf_flags)
-+int amvdec_add_ts(struct amvdec_session *sess, u64 ts,
-+		  struct v4l2_timecode tc, u32 offset, u32 vbuf_flags)
+@@ -2724,6 +2733,10 @@ bfq_setup_cooperator(struct bfq_data *bfqd, struct bfq_queue *bfqq,
  {
- 	struct amvdec_timestamp *new_ts;
- 	unsigned long flags;
+ 	struct bfq_queue *in_service_bfqq, *new_bfqq;
  
- 	new_ts = kzalloc(sizeof(*new_ts), GFP_KERNEL);
-+	if (!new_ts)
-+		return -ENOMEM;
++	/* if a merge has already been setup, then proceed with that first */
++	if (bfqq->new_bfqq)
++		return bfqq->new_bfqq;
 +
- 	new_ts->ts = ts;
- 	new_ts->tc = tc;
- 	new_ts->offset = offset;
-@@ -242,6 +245,7 @@ void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
- 	spin_lock_irqsave(&sess->ts_spinlock, flags);
- 	list_add_tail(&new_ts->list, &sess->timestamps);
- 	spin_unlock_irqrestore(&sess->ts_spinlock, flags);
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(amvdec_add_ts);
+ 	/*
+ 	 * Check delayed stable merge for rotational or non-queueing
+ 	 * devs. For this branch to be executed, bfqq must not be
+@@ -2825,9 +2838,6 @@ bfq_setup_cooperator(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+ 	if (bfq_too_late_for_merging(bfqq))
+ 		return NULL;
  
-diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.h b/drivers/staging/media/meson/vdec/vdec_helpers.h
-index cfaed52ab526..798e5a8a9b3f 100644
---- a/drivers/staging/media/meson/vdec/vdec_helpers.h
-+++ b/drivers/staging/media/meson/vdec/vdec_helpers.h
-@@ -55,8 +55,8 @@ void amvdec_dst_buf_done_offset(struct amvdec_session *sess,
-  * @offset: offset in the VIFIFO where the associated packet was written
-  * @flags the vb2_v4l2_buffer flags
-  */
--void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
--		   struct v4l2_timecode tc, u32 offset, u32 flags);
-+int amvdec_add_ts(struct amvdec_session *sess, u64 ts,
-+		  struct v4l2_timecode tc, u32 offset, u32 flags);
- void amvdec_remove_ts(struct amvdec_session *sess, u64 ts);
+-	if (bfqq->new_bfqq)
+-		return bfqq->new_bfqq;
+-
+ 	if (!io_struct || unlikely(bfqq == &bfqd->oom_bfqq))
+ 		return NULL;
  
- /**
 -- 
 2.34.1
 

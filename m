@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 081E54F2A0A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 12:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7172D4F2DF6
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243130AbiDEJIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43750 "EHLO
+        id S243049AbiDEJIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239413AbiDEIUD (ORCPT
+        with ESMTP id S239416AbiDEIUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2495A6E376;
-        Tue,  5 Apr 2022 01:12:50 -0700 (PDT)
+        Tue, 5 Apr 2022 04:20:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28868E1AC;
+        Tue,  5 Apr 2022 01:12:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3DCE609D0;
-        Tue,  5 Apr 2022 08:12:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6A5CC385A1;
-        Tue,  5 Apr 2022 08:12:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E187B81BAC;
+        Tue,  5 Apr 2022 08:12:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5501C385A1;
+        Tue,  5 Apr 2022 08:12:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146369;
-        bh=LJJehfXe2pxzDjwyzAOhqxPzhzKLcJEjYz+g1v9YVeQ=;
+        s=korg; t=1649146372;
+        bh=nFAlM8SC4bGfTFPK+QEVwKUwAblEGofTTZTQdXpBBfo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IFin/vo9uwu+WTKIxeav1bEbfXJjS+GFiHjB0AXItubJSt/KX2ooaZenYGYfO+UPE
-         CnW8dLRK+9+/LHMttzOHH4KnzfHdZ9NLZGGjOPkdBc0BENGdM3jVjpEJOAW1xEwjFd
-         V887ybRtkS26mjM5ojloLON2bBYgxUbCQdGdrb0A=
+        b=DJ3gEQxS3dOOcKQCo5kKpnK6l9B9U4YmbQr0X9hSN83GYKfaGDtI4IHX+OOJYfwUP
+         cge/0Agdefm6TwYM/CMQYKjzdTikLEjwj5Xtpyu4y1sWFKiXBnRpmqVdX/dmQwNeGp
+         vfmHnbKe8invq60a2grEoGFHFBfhe78WM0z1YdRE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Oded Gabbay <ogabbay@kernel.org>,
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0739/1126] habanalabs: Add check for pci_enable_device
-Date:   Tue,  5 Apr 2022 09:24:46 +0200
-Message-Id: <20220405070429.278835914@linuxfoundation.org>
+Subject: [PATCH 5.17 0740/1126] NFS: Return valid errors from nfs2/3_decode_dirent()
+Date:   Tue,  5 Apr 2022 09:24:47 +0200
+Message-Id: <20220405070429.307647249@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,36 +55,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit 9c27896ac1bb83ea5c461ce6f7089d02102a2b21 ]
+[ Upstream commit 64cfca85bacde54caa64e0ab855c48734894fa37 ]
 
-As the potential failure of the pci_enable_device(),
-it should be better to check the return value and return
-error if fails.
+Valid return values for decode_dirent() callback functions are:
+ 0: Success
+ -EBADCOOKIE: End of directory
+ -EAGAIN: End of xdr_stream
 
-Fixes: 70b2f993ea4a ("habanalabs: create common folder")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+All errors need to map into one of those three values.
+
+Fixes: 573c4e1ef53a ("NFS: Simplify ->decode_dirent() calling sequence")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/habanalabs/common/debugfs.c | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/nfs/nfs2xdr.c |  2 +-
+ fs/nfs/nfs3xdr.c | 21 ++++++---------------
+ 2 files changed, 7 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/common/debugfs.c b/drivers/misc/habanalabs/common/debugfs.c
-index fc084ee5106e..09001fd9db85 100644
---- a/drivers/misc/habanalabs/common/debugfs.c
-+++ b/drivers/misc/habanalabs/common/debugfs.c
-@@ -890,6 +890,8 @@ static ssize_t hl_set_power_state(struct file *f, const char __user *buf,
- 		pci_set_power_state(hdev->pdev, PCI_D0);
- 		pci_restore_state(hdev->pdev);
- 		rc = pci_enable_device(hdev->pdev);
-+		if (rc < 0)
-+			return rc;
- 	} else if (value == 2) {
- 		pci_save_state(hdev->pdev);
- 		pci_disable_device(hdev->pdev);
+diff --git a/fs/nfs/nfs2xdr.c b/fs/nfs/nfs2xdr.c
+index 7fba7711e6b3..3d5ba43f44bb 100644
+--- a/fs/nfs/nfs2xdr.c
++++ b/fs/nfs/nfs2xdr.c
+@@ -949,7 +949,7 @@ int nfs2_decode_dirent(struct xdr_stream *xdr, struct nfs_entry *entry,
+ 
+ 	error = decode_filename_inline(xdr, &entry->name, &entry->len);
+ 	if (unlikely(error))
+-		return error;
++		return -EAGAIN;
+ 
+ 	/*
+ 	 * The type (size and byte order) of nfscookie isn't defined in
+diff --git a/fs/nfs/nfs3xdr.c b/fs/nfs/nfs3xdr.c
+index 54a1d21cbcc6..7ab60ad98776 100644
+--- a/fs/nfs/nfs3xdr.c
++++ b/fs/nfs/nfs3xdr.c
+@@ -1967,7 +1967,6 @@ int nfs3_decode_dirent(struct xdr_stream *xdr, struct nfs_entry *entry,
+ 		       bool plus)
+ {
+ 	struct user_namespace *userns = rpc_userns(entry->server->client);
+-	struct nfs_entry old = *entry;
+ 	__be32 *p;
+ 	int error;
+ 	u64 new_cookie;
+@@ -1987,15 +1986,15 @@ int nfs3_decode_dirent(struct xdr_stream *xdr, struct nfs_entry *entry,
+ 
+ 	error = decode_fileid3(xdr, &entry->ino);
+ 	if (unlikely(error))
+-		return error;
++		return -EAGAIN;
+ 
+ 	error = decode_inline_filename3(xdr, &entry->name, &entry->len);
+ 	if (unlikely(error))
+-		return error;
++		return -EAGAIN;
+ 
+ 	error = decode_cookie3(xdr, &new_cookie);
+ 	if (unlikely(error))
+-		return error;
++		return -EAGAIN;
+ 
+ 	entry->d_type = DT_UNKNOWN;
+ 
+@@ -2003,7 +2002,7 @@ int nfs3_decode_dirent(struct xdr_stream *xdr, struct nfs_entry *entry,
+ 		entry->fattr->valid = 0;
+ 		error = decode_post_op_attr(xdr, entry->fattr, userns);
+ 		if (unlikely(error))
+-			return error;
++			return -EAGAIN;
+ 		if (entry->fattr->valid & NFS_ATTR_FATTR_V3)
+ 			entry->d_type = nfs_umode_to_dtype(entry->fattr->mode);
+ 
+@@ -2018,11 +2017,8 @@ int nfs3_decode_dirent(struct xdr_stream *xdr, struct nfs_entry *entry,
+ 			return -EAGAIN;
+ 		if (*p != xdr_zero) {
+ 			error = decode_nfs_fh3(xdr, entry->fh);
+-			if (unlikely(error)) {
+-				if (error == -E2BIG)
+-					goto out_truncated;
+-				return error;
+-			}
++			if (unlikely(error))
++				return -EAGAIN;
+ 		} else
+ 			zero_nfs_fh3(entry->fh);
+ 	}
+@@ -2031,11 +2027,6 @@ int nfs3_decode_dirent(struct xdr_stream *xdr, struct nfs_entry *entry,
+ 	entry->cookie = new_cookie;
+ 
+ 	return 0;
+-
+-out_truncated:
+-	dprintk("NFS: directory entry contains invalid file handle\n");
+-	*entry = old;
+-	return -EAGAIN;
+ }
+ 
+ /*
 -- 
 2.34.1
 

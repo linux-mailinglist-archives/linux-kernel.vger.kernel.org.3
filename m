@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2E04F4FE1
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:10:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB554F508C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1839872AbiDFBGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56276 "EHLO
+        id S1451342AbiDFB3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:29:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443715AbiDEPkL (ORCPT
+        with ESMTP id S1443721AbiDEPkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:40:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14568184B6E
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:58:24 -0700 (PDT)
+        Tue, 5 Apr 2022 11:40:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D99018500E
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:58:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A032EB81C9B
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 13:58:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 312D1C385A8;
-        Tue,  5 Apr 2022 13:58:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5C4661926
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 13:58:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A697C385A7;
+        Tue,  5 Apr 2022 13:58:24 +0000 (UTC)
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -29,12 +29,10 @@ To:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
-Date:   Tue,  5 Apr 2022 14:57:55 +0100
-Message-Id: <20220405135758.774016-8-catalin.marinas@arm.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 09/10] mm/slab: Simplify create_kmalloc_cache() args and make it static
+Date:   Tue,  5 Apr 2022 14:57:57 +0100
+Message-Id: <20220405135758.774016-10-catalin.marinas@arm.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220405135758.774016-1-catalin.marinas@arm.com>
 References: <20220405135758.774016-1-catalin.marinas@arm.com>
@@ -49,27 +47,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ARCH_DMA_MINALIGN represents the minimum (static) alignment for safe DMA
-operations while ARCH_KMALLOC_MINALIGN is the minimum kmalloc() objects
-alignment.
+create_kmalloc_cache() is now only called from new_kmalloc_cache() in
+the same file, so make it static. In addition, the useroffset argument
+is always 0 while usersize is the same as size. Remove them.
 
 Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Andrew Morton <akpm@linux-foundation.org>
 ---
- include/linux/crypto.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/slab.h        | 3 ---
+ mm/slab_common.c | 9 ++++-----
+ 2 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/include/linux/crypto.h b/include/linux/crypto.h
-index 2324ab6f1846..654b9c355575 100644
---- a/include/linux/crypto.h
-+++ b/include/linux/crypto.h
-@@ -167,7 +167,7 @@
-  * maintenance for non-coherent DMA (cache invalidation in particular) does not
-  * affect data that may be accessed by the CPU concurrently.
-  */
--#define CRYPTO_MINALIGN ARCH_KMALLOC_MINALIGN
-+#define CRYPTO_MINALIGN ARCH_DMA_MINALIGN
+diff --git a/mm/slab.h b/mm/slab.h
+index e9238406602a..d334b5e6d7aa 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -280,9 +280,6 @@ gfp_t kmalloc_fix_flags(gfp_t flags);
+ /* Functions provided by the slab allocators */
+ int __kmem_cache_create(struct kmem_cache *, slab_flags_t flags);
  
- #define CRYPTO_MINALIGN_ATTR __attribute__ ((__aligned__(CRYPTO_MINALIGN)))
+-struct kmem_cache *create_kmalloc_cache(const char *name, unsigned int size,
+-			slab_flags_t flags, unsigned int useroffset,
+-			unsigned int usersize);
+ void __init new_kmalloc_cache(int idx, enum kmalloc_cache_type type,
+ 			      slab_flags_t flags);
+ extern void create_boot_cache(struct kmem_cache *, const char *name,
+diff --git a/mm/slab_common.c b/mm/slab_common.c
+index 594d8a8a68d0..3a9f7a1e6490 100644
+--- a/mm/slab_common.c
++++ b/mm/slab_common.c
+@@ -655,16 +655,15 @@ void __init create_boot_cache(struct kmem_cache *s, const char *name,
+ 	s->refcount = -1;	/* Exempt from merging for now */
+ }
+ 
+-struct kmem_cache *__init create_kmalloc_cache(const char *name,
+-		unsigned int size, slab_flags_t flags,
+-		unsigned int useroffset, unsigned int usersize)
++static struct kmem_cache *__init create_kmalloc_cache(const char *name,
++		unsigned int size, slab_flags_t flags)
+ {
+ 	struct kmem_cache *s = kmem_cache_zalloc(kmem_cache, GFP_NOWAIT);
+ 
+ 	if (!s)
+ 		panic("Out of memory when creating slab %s\n", name);
+ 
+-	create_boot_cache(s, name, size, flags, useroffset, usersize);
++	create_boot_cache(s, name, size, flags, 0, size);
+ 	kasan_cache_create_kmalloc(s);
+ 	list_add(&s->list, &slab_caches);
+ 	s->refcount = 1;
+@@ -868,7 +867,7 @@ new_kmalloc_cache(int idx, enum kmalloc_cache_type type, slab_flags_t flags)
+ 	if (!kmalloc_caches[type][aligned_idx])
+ 		kmalloc_caches[type][aligned_idx] = create_kmalloc_cache(
+ 					kmalloc_info[aligned_idx].name[type],
+-					aligned_size, flags, 0, aligned_size);
++					aligned_size, flags);
+ 	if (idx != aligned_idx)
+ 		kmalloc_caches[type][idx] = kmalloc_caches[type][aligned_idx];
  

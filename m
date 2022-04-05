@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085644F50D0
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 521324F5070
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1843357AbiDFBkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
+        id S1841863AbiDFB0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353373AbiDEKGD (ORCPT
+        with ESMTP id S1353395AbiDEKGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:06:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05B5BF531;
-        Tue,  5 Apr 2022 02:54:51 -0700 (PDT)
+        Tue, 5 Apr 2022 06:06:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBBDBF94A;
+        Tue,  5 Apr 2022 02:54:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96A3361500;
-        Tue,  5 Apr 2022 09:54:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5176C385A2;
-        Tue,  5 Apr 2022 09:54:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1943161676;
+        Tue,  5 Apr 2022 09:54:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 281A5C385A1;
+        Tue,  5 Apr 2022 09:54:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152490;
-        bh=Wn3JxQQnYj5scrd2H9Ydr3wFpxUS1p1tfgW+6PBkh4A=;
+        s=korg; t=1649152495;
+        bh=v9T8eW4CxRqcZcIN2O8Jva+X3Q6MDQY+h98m2KVgeYQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PPzAKTbxDu4p6mPJAUe1ImdV1TGPXycKI9VRU86+waE6XXxWpUp7ocTysQzIl2Snf
-         JSRnQl4swZiakSg3yJ95XgLLHpiLsfCmrS4D3Pw/qvnvbfxdUD1O4915OGWXieRwDg
-         8rRxiwNmZwOC8vAAKcqcg3aQeIyKDMgRJDiYjrVA=
+        b=QSrXwpfsJd9NsFdD6eSpx5DmtAtUImO2EiNZbW55ER05AyI9ukuyvLkDTk6BFRskM
+         l4kxrcApARUmM2FEnUpMjo8JzhSKOZvpiS+3ALd8y/o9qEHBFrg4mOiWb+Alap4tPk
+         4JMqQfEiGVbW74J7ozCxSJg57bchRPZcy0Hke47g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Quinn Tran <qutran@marvell.com>,
+        stable@vger.kernel.org, Joe Carnuccio <joe.carnuccio@cavium.com>,
         Nilesh Javali <njavali@marvell.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.15 796/913] scsi: qla2xxx: edif: Fix clang warning
-Date:   Tue,  5 Apr 2022 09:30:58 +0200
-Message-Id: <20220405070403.692757202@linuxfoundation.org>
+Subject: [PATCH 5.15 798/913] scsi: qla2xxx: Add devids and conditionals for 28xx
+Date:   Tue,  5 Apr 2022 09:31:00 +0200
+Message-Id: <20220405070403.752421111@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -57,94 +55,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
+From: Joe Carnuccio <joe.carnuccio@cavium.com>
 
-commit 73825fd7a37c1a685e9e9e27c9dc91ef1f3e2971 upstream.
+commit 0d6a536cb1fcabb6c3e9c94871c8d0b29bb5813b upstream.
 
-Silence compile warning due to unaligned memory access.
+This is an update to the original 28xx adapter enablement. Add a bunch of
+conditionals that are applicable for 28xx.
 
-qla_edif.c:713:45: warning: taking address of packed member 'u' of class or
-   structure 'auth_complete_cmd' may result in an unaligned pointer value
-   [-Waddress-of-packed-member]
-    fcport = qla2x00_find_fcport_by_pid(vha, &appplogiok.u.d_id);
-
-Link: https://lore.kernel.org/r/20220110050218.3958-13-njavali@marvell.com
+Link: https://lore.kernel.org/r/20220110050218.3958-16-njavali@marvell.com
+Fixes: ecc89f25e225 ("scsi: qla2xxx: Add Device ID for ISP28XX")
 Cc: stable@vger.kernel.org
-Reported-by: kernel test robot <lkp@intel.com>
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Quinn Tran <qutran@marvell.com>
+Signed-off-by: Joe Carnuccio <joe.carnuccio@cavium.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_edif.c |   22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
+ drivers/scsi/qla2xxx/qla_attr.c   |    7 ++-----
+ drivers/scsi/qla2xxx/qla_init.c   |    8 +++-----
+ drivers/scsi/qla2xxx/qla_mbx.c    |   14 +++++++++++---
+ drivers/scsi/qla2xxx/qla_os.c     |    3 +--
+ drivers/scsi/qla2xxx/qla_sup.c    |    4 ++--
+ drivers/scsi/qla2xxx/qla_target.c |    3 +--
+ 6 files changed, 20 insertions(+), 19 deletions(-)
 
---- a/drivers/scsi/qla2xxx/qla_edif.c
-+++ b/drivers/scsi/qla2xxx/qla_edif.c
-@@ -668,6 +668,11 @@ qla_edif_app_authok(scsi_qla_host_t *vha
- 	    bsg_job->request_payload.sg_cnt, &appplogiok,
- 	    sizeof(struct auth_complete_cmd));
+--- a/drivers/scsi/qla2xxx/qla_attr.c
++++ b/drivers/scsi/qla2xxx/qla_attr.c
+@@ -555,7 +555,7 @@ qla2x00_sysfs_read_vpd(struct file *filp
+ 	if (!capable(CAP_SYS_ADMIN))
+ 		return -EINVAL;
  
-+	/* silent unaligned access warning */
-+	portid.b.domain = appplogiok.u.d_id.b.domain;
-+	portid.b.area   = appplogiok.u.d_id.b.area;
-+	portid.b.al_pa  = appplogiok.u.d_id.b.al_pa;
+-	if (IS_NOCACHE_VPD_TYPE(ha))
++	if (!IS_NOCACHE_VPD_TYPE(ha))
+ 		goto skip;
+ 
+ 	faddr = ha->flt_region_vpd << 2;
+@@ -745,7 +745,7 @@ qla2x00_sysfs_write_reset(struct file *f
+ 		ql_log(ql_log_info, vha, 0x706f,
+ 		    "Issuing MPI reset.\n");
+ 
+-		if (IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha)) {
++		if (IS_QLA83XX(ha)) {
+ 			uint32_t idc_control;
+ 
+ 			qla83xx_idc_lock(vha, 0);
+@@ -1056,9 +1056,6 @@ qla2x00_free_sysfs_attr(scsi_qla_host_t
+ 			continue;
+ 		if (iter->type == 3 && !(IS_CNA_CAPABLE(ha)))
+ 			continue;
+-		if (iter->type == 0x27 &&
+-		    (!IS_QLA27XX(ha) || !IS_QLA28XX(ha)))
+-			continue;
+ 
+ 		sysfs_remove_bin_file(&host->shost_gendev.kobj,
+ 		    iter->attr);
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -3473,7 +3473,7 @@ qla2x00_alloc_fw_dump(scsi_qla_host_t *v
+ 		mem_size = (ha->fw_memory_size - 0x11000 + 1) *
+ 		    sizeof(uint16_t);
+ 	} else if (IS_FWI2_CAPABLE(ha)) {
+-		if (IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha))
++		if (IS_QLA83XX(ha))
+ 			fixed_size = offsetof(struct qla83xx_fw_dump, ext_mem);
+ 		else if (IS_QLA81XX(ha))
+ 			fixed_size = offsetof(struct qla81xx_fw_dump, ext_mem);
+@@ -3485,8 +3485,7 @@ qla2x00_alloc_fw_dump(scsi_qla_host_t *v
+ 		mem_size = (ha->fw_memory_size - 0x100000 + 1) *
+ 		    sizeof(uint32_t);
+ 		if (ha->mqenable) {
+-			if (!IS_QLA83XX(ha) && !IS_QLA27XX(ha) &&
+-			    !IS_QLA28XX(ha))
++			if (!IS_QLA83XX(ha))
+ 				mq_size = sizeof(struct qla2xxx_mq_chain);
+ 			/*
+ 			 * Allocate maximum buffer size for all queues - Q0.
+@@ -4047,8 +4046,7 @@ enable_82xx_npiv:
+ 			    ha->fw_major_version, ha->fw_minor_version,
+ 			    ha->fw_subminor_version);
+ 
+-			if (IS_QLA83XX(ha) || IS_QLA27XX(ha) ||
+-			    IS_QLA28XX(ha)) {
++			if (IS_QLA83XX(ha)) {
+ 				ha->flags.fac_supported = 0;
+ 				rval = QLA_SUCCESS;
+ 			}
+--- a/drivers/scsi/qla2xxx/qla_mbx.c
++++ b/drivers/scsi/qla2xxx/qla_mbx.c
+@@ -9,6 +9,12 @@
+ #include <linux/delay.h>
+ #include <linux/gfp.h>
+ 
++#ifdef CONFIG_PPC
++#define IS_PPCARCH      true
++#else
++#define IS_PPCARCH      false
++#endif
 +
- 	switch (appplogiok.type) {
- 	case PL_TYPE_WWPN:
- 		fcport = qla2x00_find_fcport_by_wwpn(vha,
-@@ -678,7 +683,7 @@ qla_edif_app_authok(scsi_qla_host_t *vha
- 			    __func__, appplogiok.u.wwpn);
- 		break;
- 	case PL_TYPE_DID:
--		fcport = qla2x00_find_fcport_by_pid(vha, &appplogiok.u.d_id);
-+		fcport = qla2x00_find_fcport_by_pid(vha, &portid);
- 		if (!fcport)
- 			ql_dbg(ql_dbg_edif, vha, 0x911d,
- 			    "%s d_id lookup failed: %x\n", __func__,
-@@ -777,6 +782,11 @@ qla_edif_app_authfail(scsi_qla_host_t *v
- 	    bsg_job->request_payload.sg_cnt, &appplogifail,
- 	    sizeof(struct auth_complete_cmd));
- 
-+	/* silent unaligned access warning */
-+	portid.b.domain = appplogifail.u.d_id.b.domain;
-+	portid.b.area   = appplogifail.u.d_id.b.area;
-+	portid.b.al_pa  = appplogifail.u.d_id.b.al_pa;
+ static struct mb_cmd_name {
+ 	uint16_t cmd;
+ 	const char *str;
+@@ -728,6 +734,9 @@ again:
+ 				vha->min_supported_speed =
+ 				    nv->min_supported_speed;
+ 			}
 +
- 	/*
- 	 * TODO: edif: app has failed this plogi. Inform driver to
- 	 * take any action (if any).
-@@ -788,7 +798,7 @@ qla_edif_app_authfail(scsi_qla_host_t *v
- 		SET_DID_STATUS(bsg_reply->result, DID_OK);
- 		break;
- 	case PL_TYPE_DID:
--		fcport = qla2x00_find_fcport_by_pid(vha, &appplogifail.u.d_id);
-+		fcport = qla2x00_find_fcport_by_pid(vha, &portid);
- 		if (!fcport)
- 			ql_dbg(ql_dbg_edif, vha, 0x911d,
- 			    "%s d_id lookup failed: %x\n", __func__,
-@@ -1253,6 +1263,7 @@ qla24xx_sadb_update(struct bsg_job *bsg_
- 	int result = 0;
- 	struct qla_sa_update_frame sa_frame;
- 	struct srb_iocb *iocb_cmd;
-+	port_id_t portid;
++			if (IS_PPCARCH)
++				mcp->mb[11] |= BIT_4;
+ 		}
  
- 	ql_dbg(ql_dbg_edif + ql_dbg_verbose, vha, 0x911d,
- 	    "%s entered, vha: 0x%p\n", __func__, vha);
-@@ -1276,7 +1287,12 @@ qla24xx_sadb_update(struct bsg_job *bsg_
- 		goto done;
+ 		if (ha->flags.exlogins_enabled)
+@@ -3029,8 +3038,7 @@ qla2x00_get_resource_cnts(scsi_qla_host_
+ 		ha->orig_fw_iocb_count = mcp->mb[10];
+ 		if (ha->flags.npiv_supported)
+ 			ha->max_npiv_vports = mcp->mb[11];
+-		if (IS_QLA81XX(ha) || IS_QLA83XX(ha) || IS_QLA27XX(ha) ||
+-		    IS_QLA28XX(ha))
++		if (IS_QLA81XX(ha) || IS_QLA83XX(ha))
+ 			ha->fw_max_fcf_count = mcp->mb[12];
  	}
  
--	fcport = qla2x00_find_fcport_by_pid(vha, &sa_frame.port_id);
-+	/* silent unaligned access warning */
-+	portid.b.domain = sa_frame.port_id.b.domain;
-+	portid.b.area   = sa_frame.port_id.b.area;
-+	portid.b.al_pa  = sa_frame.port_id.b.al_pa;
-+
-+	fcport = qla2x00_find_fcport_by_pid(vha, &portid);
- 	if (fcport) {
- 		found = 1;
- 		if (sa_frame.flags == QLA_SA_UPDATE_FLAGS_TX_KEY)
+@@ -5621,7 +5629,7 @@ qla2x00_get_data_rate(scsi_qla_host_t *v
+ 	mcp->out_mb = MBX_1|MBX_0;
+ 	mcp->in_mb = MBX_2|MBX_1|MBX_0;
+ 	if (IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha))
+-		mcp->in_mb |= MBX_3;
++		mcp->in_mb |= MBX_4|MBX_3;
+ 	mcp->tov = MBX_TOV_SECONDS;
+ 	mcp->flags = 0;
+ 	rval = qla2x00_mailbox_command(vha, mcp);
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -3739,8 +3739,7 @@ qla2x00_unmap_iobases(struct qla_hw_data
+ 		if (ha->mqiobase)
+ 			iounmap(ha->mqiobase);
+ 
+-		if ((IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha)) &&
+-		    ha->msixbase)
++		if (ha->msixbase)
+ 			iounmap(ha->msixbase);
+ 	}
+ }
+--- a/drivers/scsi/qla2xxx/qla_sup.c
++++ b/drivers/scsi/qla2xxx/qla_sup.c
+@@ -844,7 +844,7 @@ qla2xxx_get_flt_info(scsi_qla_host_t *vh
+ 				ha->flt_region_nvram = start;
+ 			break;
+ 		case FLT_REG_IMG_PRI_27XX:
+-			if (IS_QLA27XX(ha) && !IS_QLA28XX(ha))
++			if (IS_QLA27XX(ha) || IS_QLA28XX(ha))
+ 				ha->flt_region_img_status_pri = start;
+ 			break;
+ 		case FLT_REG_IMG_SEC_27XX:
+@@ -1356,7 +1356,7 @@ next:
+ 		    flash_data_addr(ha, faddr), le32_to_cpu(*dwptr));
+ 		if (ret) {
+ 			ql_dbg(ql_dbg_user, vha, 0x7006,
+-			    "Failed slopw write %x (%x)\n", faddr, *dwptr);
++			    "Failed slow write %x (%x)\n", faddr, *dwptr);
+ 			break;
+ 		}
+ 	}
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -7220,8 +7220,7 @@ qlt_probe_one_stage1(struct scsi_qla_hos
+ 	if (!QLA_TGT_MODE_ENABLED())
+ 		return;
+ 
+-	if  ((ql2xenablemsix == 0) || IS_QLA83XX(ha) || IS_QLA27XX(ha) ||
+-	    IS_QLA28XX(ha)) {
++	if  (ha->mqenable || IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha)) {
+ 		ISP_ATIO_Q_IN(base_vha) = &ha->mqiobase->isp25mq.atio_q_in;
+ 		ISP_ATIO_Q_OUT(base_vha) = &ha->mqiobase->isp25mq.atio_q_out;
+ 	} else {
 
 

@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1B84F43DF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6D54F44F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389189AbiDEOnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47490 "EHLO
+        id S1389412AbiDEOox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244222AbiDEJlK (ORCPT
+        with ESMTP id S244306AbiDEJlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:41:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43005BB08B;
-        Tue,  5 Apr 2022 02:25:45 -0700 (PDT)
+        Tue, 5 Apr 2022 05:41:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754EFBB0B2;
+        Tue,  5 Apr 2022 02:26:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D24CD6165C;
-        Tue,  5 Apr 2022 09:25:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E43CCC385A2;
-        Tue,  5 Apr 2022 09:25:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 047E66164E;
+        Tue,  5 Apr 2022 09:26:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19280C385A2;
+        Tue,  5 Apr 2022 09:26:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150744;
-        bh=CRkojIeG8hfsFSBTHg4oYYawOOdZgescy1u4wNygcPs=;
+        s=korg; t=1649150766;
+        bh=nwj9I4hz2LjdI9ekt63/VjDkSUZQm1L///5e87gCFWg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZFYRkzt3EKn2b5kC4UZmdNi8fHMtPNTTF9o9vfvwlpnMzKQyzpTUczV4F3q3OFnD8
-         P3DSx8VK5npKnu8nE4CiU8zM7urQHJ3tfNS3enP7RfXfa8tfJxKtKv3tE9sstAYDp5
-         6pp8iDkIpGOvxxh4oOSNzcMFS8s5OReBsX/GFXu4=
+        b=HqdJhCdgf8oROgseBk7QGjgMaxGfblohV8kckRfMxiMhT/HpdP9N8ZcHK9U6EzZno
+         B0HDtQ/jExfAkVVbdNKNZ6+2pN0GF36PygrhNC7kJVnatUciEQPJWP6G759e3GgPxr
+         hsvZPnIjz3BiqPN0pyJOdYwkEilesYa5LPudWmts=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jan-Benedict Glaw <jbglaw@lug-owl.de>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: [PATCH 5.15 163/913] DEC: Limit PMAX memory probing to R3k systems
-Date:   Tue,  5 Apr 2022 09:20:25 +0200
-Message-Id: <20220405070344.731019792@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 5.15 166/913] media: venus: venc: Fix h264 8x8 transform control
+Date:   Tue,  5 Apr 2022 09:20:28 +0200
+Message-Id: <20220405070344.823339864@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,70 +55,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej W. Rozycki <macro@orcam.me.uk>
+From: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 
-commit 244eae91a94c6dab82b3232967d10eeb9dfa21c6 upstream.
+commit 61b3317dd424a3488b6754d7ff8301944d9d17d7 upstream.
 
-Recent tightening of the opcode table in binutils so as to consistently
-disallow the assembly or disassembly of CP0 instructions not supported
-by the processor architecture chosen has caused a regression like below:
+During encoder driver open controls are initialized via a call
+to v4l2_ctrl_handler_setup which returns EINVAL error for
+V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM v4l2 control. The control
+default value is disabled and because of firmware limitations
+8x8 transform cannot be disabled for the supported HIGH and
+CONSTRAINED_HIGH profiles.
 
-arch/mips/dec/prom/locore.S: Assembler messages:
-arch/mips/dec/prom/locore.S:29: Error: opcode not supported on this processor: r4600 (mips3) `rfe'
+To fix the issue change the control default value to enabled
+(this is fine because the firmware enables 8x8 transform for
+high and constrained_high profiles by default). Also, correct
+the checking of profile ids in s_ctrl from hfi to v4l2 ids.
 
-in a piece of code used to probe for memory with PMAX DECstation models,
-which have non-REX firmware.  Those computers always have an R2000 CPU
-and consequently the exception handler used in memory probing uses the
-RFE instruction, which those processors use.
-
-While adding 64-bit support this code was correctly excluded for 64-bit
-configurations, however it should have also been excluded for irrelevant
-32-bit configurations.  Do this now then, and only enable PMAX memory
-probing for R3k systems.
-
-Reported-by: Jan-Benedict Glaw <jbglaw@lug-owl.de>
-Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Cc: stable@vger.kernel.org # v2.6.12+
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc: stable@vger.kernel.org # 5.15+
+Fixes: bfee75f73c37 ("media: venus: venc: add support for V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM control")
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/mips/dec/prom/Makefile      |    2 +-
- arch/mips/include/asm/dec/prom.h |   15 +++++----------
- 2 files changed, 6 insertions(+), 11 deletions(-)
+ drivers/media/platform/qcom/venus/venc.c       |    4 ++--
+ drivers/media/platform/qcom/venus/venc_ctrls.c |    6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
---- a/arch/mips/dec/prom/Makefile
-+++ b/arch/mips/dec/prom/Makefile
-@@ -6,4 +6,4 @@
+--- a/drivers/media/platform/qcom/venus/venc.c
++++ b/drivers/media/platform/qcom/venus/venc.c
+@@ -604,8 +604,8 @@ static int venc_set_properties(struct ve
  
- lib-y			+= init.o memory.o cmdline.o identify.o console.o
+ 		ptype = HFI_PROPERTY_PARAM_VENC_H264_TRANSFORM_8X8;
+ 		h264_transform.enable_type = 0;
+-		if (ctr->profile.h264 == HFI_H264_PROFILE_HIGH ||
+-		    ctr->profile.h264 == HFI_H264_PROFILE_CONSTRAINED_HIGH)
++		if (ctr->profile.h264 == V4L2_MPEG_VIDEO_H264_PROFILE_HIGH ||
++		    ctr->profile.h264 == V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_HIGH)
+ 			h264_transform.enable_type = ctr->h264_8x8_transform;
  
--lib-$(CONFIG_32BIT)	+= locore.o
-+lib-$(CONFIG_CPU_R3000)	+= locore.o
---- a/arch/mips/include/asm/dec/prom.h
-+++ b/arch/mips/include/asm/dec/prom.h
-@@ -43,16 +43,11 @@
-  */
- #define REX_PROM_MAGIC		0x30464354
+ 		ret = hfi_session_set_property(inst, ptype, &h264_transform);
+--- a/drivers/media/platform/qcom/venus/venc_ctrls.c
++++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
+@@ -320,8 +320,8 @@ static int venc_op_s_ctrl(struct v4l2_ct
+ 		ctr->intra_refresh_period = ctrl->val;
+ 		break;
+ 	case V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM:
+-		if (ctr->profile.h264 != HFI_H264_PROFILE_HIGH &&
+-		    ctr->profile.h264 != HFI_H264_PROFILE_CONSTRAINED_HIGH)
++		if (ctr->profile.h264 != V4L2_MPEG_VIDEO_H264_PROFILE_HIGH &&
++		    ctr->profile.h264 != V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_HIGH)
+ 			return -EINVAL;
  
--#ifdef CONFIG_64BIT
--
--#define prom_is_rex(magic)	1	/* KN04 and KN05 are REX PROMs.  */
--
--#else /* !CONFIG_64BIT */
--
--#define prom_is_rex(magic)	((magic) == REX_PROM_MAGIC)
--
--#endif /* !CONFIG_64BIT */
--
-+/* KN04 and KN05 are REX PROMs, so only do the check for R3k systems.  */
-+static inline bool prom_is_rex(u32 magic)
-+{
-+	return !IS_ENABLED(CONFIG_CPU_R3000) || magic == REX_PROM_MAGIC;
-+}
+ 		/*
+@@ -457,7 +457,7 @@ int venc_ctrl_init(struct venus_inst *in
+ 			  V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MIN_QP, 1, 51, 1, 1);
  
- /*
-  * 3MIN/MAXINE PROM entry points for DS5000/1xx's, DS5000/xx's and
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+-			  V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM, 0, 1, 1, 0);
++			  V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM, 0, 1, 1, 1);
+ 
+ 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
+ 			  V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MIN_QP, 1, 51, 1, 1);
 
 

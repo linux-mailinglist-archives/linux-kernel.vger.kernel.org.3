@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30A64F2599
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 736DF4F25B3
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:50:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbiDEHun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
+        id S232500AbiDEHvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:51:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232483AbiDEHqg (ORCPT
+        with ESMTP id S232568AbiDEHqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:46:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7B793993;
-        Tue,  5 Apr 2022 00:42:24 -0700 (PDT)
+        Tue, 5 Apr 2022 03:46:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99D7939E9;
+        Tue,  5 Apr 2022 00:42:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93CFD61607;
-        Tue,  5 Apr 2022 07:42:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DE3BC3410F;
-        Tue,  5 Apr 2022 07:42:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17995B81B7F;
+        Tue,  5 Apr 2022 07:42:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 577E7C340EE;
+        Tue,  5 Apr 2022 07:42:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144543;
-        bh=qHi3AlOuCH/EuE0DuSv/3Xe8gCCOBIG48WeW3IQvH2w=;
+        s=korg; t=1649144551;
+        bh=hzFTItGk6MhMLG5gB5eFJka/S3aQMbJUpwbjLiXXVC0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yQ/iYDhodqGVYZ3jL4SI6Qi36/bn2obAbqv9vSDZkdc8BxYAfWsWA7EtnXoVuSP5I
-         OIuq8RKentZknlcrZAuIFKEvBg45wWmmdOOwoZj+rSuZyfGsLbTUtwpZXVw7IuKKGx
-         /ot/hTxrz5z/2wKyVkmLuXLP+DRvr8Mp7XeCSTXM=
+        b=1F9Ou+ui2ZHL1dstKvyB6MCwpc0+N8V4AWsZ6g29mbR87hrie1O7Sxgy+uW55H9h8
+         8prRma3YiTPFAC3fru+ZzP1OsQ75y3uAAG8KtrKm2T9cFAOKmt1tQhA3d0LCpR8FVJ
+         X8ycGH9x52yD2vKhZKLCig77LS3HHhNVp6kJVC60=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
+        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.17 0082/1126] scsi: ufs: Fix runtime PM messages never-ending cycle
-Date:   Tue,  5 Apr 2022 09:13:49 +0200
-Message-Id: <20220405070409.976672828@linuxfoundation.org>
+Subject: [PATCH 5.17 0084/1126] scsi: libsas: Fix sas_ata_qc_issue() handling of NCQ NON DATA commands
+Date:   Tue,  5 Apr 2022 09:13:51 +0200
+Message-Id: <20220405070410.035257186@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -54,95 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adrian Hunter <adrian.hunter@intel.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-commit 71bb9ab6e3511b7bb98678a19eb8cf1ccbf3ca2f upstream.
+commit 8454563e4c2aafbfb81a383ab423ea8b9b430a25 upstream.
 
-Kernel messages produced during runtime PM can cause a never-ending cycle
-because user space utilities (e.g. journald or rsyslog) write the messages
-back to storage, causing runtime resume, more messages, and so on.
+To detect for the DMA_NONE (no data transfer) DMA direction,
+sas_ata_qc_issue() tests if the command protocol is ATA_PROT_NODATA.  This
+test does not include the ATA_CMD_NCQ_NON_DATA command as this command
+protocol is defined as ATA_PROT_NCQ_NODATA (equal to ATA_PROT_FLAG_NCQ) and
+not as ATA_PROT_NODATA.
 
-Messages that tell of things that are expected to happen, are arguably
-unnecessary, so suppress them.
+To include both NCQ and non-NCQ commands when testing for the DMA_NONE DMA
+direction, use "!ata_is_data()".
 
-UFS driver messages are changes to from dev_err() to dev_dbg() which means
-they will not display unless activated by dynamic debug of building with
--DDEBUG.
-
-sdev->silence_suspend is set to skip messages from sd_suspend_common()
-"Synchronizing SCSI cache", "Stopping disk" and scsi_report_sense()
-"Power-on or device reset occurred" message (Note, that message appears
-when the LUN is accessed after runtime PM, not during runtime PM)
-
- Example messages from Ubuntu 21.10:
-
- $ dmesg | tail
- [ 1620.380071] ufshcd 0000:00:12.5: ufshcd_print_pwr_info:[RX, TX]: gear=[1, 1], lane[1, 1], pwr[SLOWAUTO_MODE, SLOWAUTO_MODE], rate = 0
- [ 1620.408825] ufshcd 0000:00:12.5: ufshcd_print_pwr_info:[RX, TX]: gear=[4, 4], lane[2, 2], pwr[FAST MODE, FAST MODE], rate = 2
- [ 1620.409020] ufshcd 0000:00:12.5: ufshcd_find_max_sup_active_icc_level: Regulator capability was not set, actvIccLevel=0
- [ 1620.409524] sd 0:0:0:0: Power-on or device reset occurred
- [ 1622.938794] sd 0:0:0:0: [sda] Synchronizing SCSI cache
- [ 1622.939184] ufs_device_wlun 0:0:0:49488: Power-on or device reset occurred
- [ 1625.183175] ufshcd 0000:00:12.5: ufshcd_print_pwr_info:[RX, TX]: gear=[1, 1], lane[1, 1], pwr[SLOWAUTO_MODE, SLOWAUTO_MODE], rate = 0
- [ 1625.208041] ufshcd 0000:00:12.5: ufshcd_print_pwr_info:[RX, TX]: gear=[4, 4], lane[2, 2], pwr[FAST MODE, FAST MODE], rate = 2
- [ 1625.208311] ufshcd 0000:00:12.5: ufshcd_find_max_sup_active_icc_level: Regulator capability was not set, actvIccLevel=0
- [ 1625.209035] sd 0:0:0:0: Power-on or device reset occurred
-
-Note for stable: depends on patch "scsi: core: sd: Add silence_suspend flag
-to suppress some PM messages".
-
-Link: https://lore.kernel.org/r/20220228113652.970857-3-adrian.hunter@intel.com
+Link: https://lore.kernel.org/r/20220220031810.738362-2-damien.lemoal@opensource.wdc.com
+Fixes: 176ddd89171d ("scsi: libsas: Reset num_scatter if libata marks qc as NODATA")
 Cc: stable@vger.kernel.org
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Reviewed-by: John Garry <john.garry@huawei.com>
+Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/ufs/ufshcd.c |   21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+ drivers/scsi/libsas/sas_ata.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -585,7 +585,12 @@ static void ufshcd_print_pwr_info(struct
- 		"INVALID MODE",
- 	};
- 
--	dev_err(hba->dev, "%s:[RX, TX]: gear=[%d, %d], lane[%d, %d], pwr[%s, %s], rate = %d\n",
-+	/*
-+	 * Using dev_dbg to avoid messages during runtime PM to avoid
-+	 * never-ending cycles of messages written back to storage by user space
-+	 * causing runtime resume, causing more messages and so on.
-+	 */
-+	dev_dbg(hba->dev, "%s:[RX, TX]: gear=[%d, %d], lane[%d, %d], pwr[%s, %s], rate = %d\n",
- 		 __func__,
- 		 hba->pwr_info.gear_rx, hba->pwr_info.gear_tx,
- 		 hba->pwr_info.lane_rx, hba->pwr_info.lane_tx,
-@@ -5024,6 +5029,12 @@ static int ufshcd_slave_configure(struct
- 		pm_runtime_get_noresume(&sdev->sdev_gendev);
- 	else if (ufshcd_is_rpm_autosuspend_allowed(hba))
- 		sdev->rpm_autosuspend = 1;
-+	/*
-+	 * Do not print messages during runtime PM to avoid never-ending cycles
-+	 * of messages written back to storage by user space causing runtime
-+	 * resume, causing more messages and so on.
-+	 */
-+	sdev->silence_suspend = 1;
- 
- 	ufshcd_crypto_register(hba, q);
- 
-@@ -7339,7 +7350,13 @@ static u32 ufshcd_find_max_sup_active_ic
- 
- 	if (!hba->vreg_info.vcc || !hba->vreg_info.vccq ||
- 						!hba->vreg_info.vccq2) {
--		dev_err(hba->dev,
-+		/*
-+		 * Using dev_dbg to avoid messages during runtime PM to avoid
-+		 * never-ending cycles of messages written back to storage by
-+		 * user space causing runtime resume, causing more messages and
-+		 * so on.
-+		 */
-+		dev_dbg(hba->dev,
- 			"%s: Regulator capability was not set, actvIccLevel=%d",
- 							__func__, icc_level);
- 		goto out;
+--- a/drivers/scsi/libsas/sas_ata.c
++++ b/drivers/scsi/libsas/sas_ata.c
+@@ -197,7 +197,7 @@ static unsigned int sas_ata_qc_issue(str
+ 		task->total_xfer_len = qc->nbytes;
+ 		task->num_scatter = qc->n_elem;
+ 		task->data_dir = qc->dma_dir;
+-	} else if (qc->tf.protocol == ATA_PROT_NODATA) {
++	} else if (!ata_is_data(qc->tf.protocol)) {
+ 		task->data_dir = DMA_NONE;
+ 	} else {
+ 		for_each_sg(qc->sg, sg, qc->n_elem, si)
 
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 722434F2D9E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04EAE4F2D2F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234764AbiDEJAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55022 "EHLO
+        id S235367AbiDEJBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236952AbiDEIRK (ORCPT
+        with ESMTP id S237110AbiDEIRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:17:10 -0400
+        Tue, 5 Apr 2022 04:17:42 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B5EAFAD6;
-        Tue,  5 Apr 2022 01:04:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE20B0D00;
+        Tue,  5 Apr 2022 01:05:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03D1FB81BBF;
-        Tue,  5 Apr 2022 08:04:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A0EC385A0;
-        Tue,  5 Apr 2022 08:04:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC4A4B81B90;
+        Tue,  5 Apr 2022 08:05:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C9F0C385A0;
+        Tue,  5 Apr 2022 08:05:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145891;
-        bh=VuVqk7vpmyOSK/0S07GFXdyZfzputg41fFIzTsR7aR4=;
+        s=korg; t=1649145916;
+        bh=SFOiuOZBANB4tfnXxc03p8RaNQqv6v/wYZfju1VjuiY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lihjjzTvGu15zz95eP+KN+T4jtTcwtGVs/TAw+I5VAEIXFRmFkbPwdENGfrh6KRU9
-         rzbEK133aNlYDZGKenWOO0+lsB7+CRdNJiHD5934kxZgNXiqPIQiVygr3B6vkfUVY6
-         FopnPdfax09Yn+bz2icJNed+YKoYAczEu+wdtaNo=
+        b=FjNcb5145YgDYdljyFqb0P9r3e19ep6iGQ6plT1yZI0XKPY9WLxi/BwEaNxNFbvhn
+         O1zJzqI2G125KQ8Je8+cHdhIuzly/hZaiQregIAj5Q6bp1wFESfngh1E9bdAKpswda
+         tOoBNTG0wjdx/GUe+5GyGlTH6LFuykOCf0x24w8g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>
-Subject: [PATCH 5.17 0567/1126] drm/msm/dp: populate connector of struct dp_panel
-Date:   Tue,  5 Apr 2022 09:21:54 +0200
-Message-Id: <20220405070424.276269185@linuxfoundation.org>
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        George Kuruvinakunnel <george.kuruvinakunnel@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0576/1126] i40e: remove dead stores on XSK hotpath
+Date:   Tue,  5 Apr 2022 09:22:03 +0200
+Message-Id: <20220405070424.538592971@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -58,80 +59,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuogee Hsieh <quic_khsieh@quicinc.com>
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
 
-[ Upstream commit 5e602f5156910c7b19661699896cb6e3fb94fab9 ]
+[ Upstream commit 7e1b54d07751edcbf23c7211508abf5667b490ee ]
 
-DP CTS test case 4.2.2.6 has valid edid with bad checksum on purpose
-and expect DP source return correct checksum. During drm edid read,
-correct edid checksum is calculated and stored at
-connector::real_edid_checksum.
+The 'if (ntu == rx_ring->count)' block in i40e_alloc_rx_buffers_zc()
+was previously residing in the loop, but after introducing the
+batched interface it is used only to wrap-around the NTU descriptor,
+thus no more need to assign 'xdp'.
 
-The problem is struct dp_panel::connector never be assigned, instead the
-connector is stored in struct msm_dp::connector. When we run compliance
-testing test case 4.2.2.6 dp_panel_handle_sink_request() won't have a valid
-edid set in struct dp_panel::edid so we'll try to use the connectors
-real_edid_checksum and hit a NULL pointer dereference error because the
-connector pointer is never assigned.
+'cleaned_count' in i40e_clean_rx_irq_zc() was previously being
+incremented in the loop, but after commit f12738b6ec06
+("i40e: remove unnecessary cleaned_count updates") it gets
+assigned only once after it, so the initialization can be dropped.
 
-Changes in V2:
--- populate panel connector at msm_dp_modeset_init() instead of at dp_panel_read_sink_caps()
-
-Changes in V3:
--- remove unhelpful kernel crash trace commit text
--- remove renaming dp_display parameter to dp
-
-Changes in V4:
--- add more details to commit text
-
-Changes in v10:
---  group into one series
-
-Changes in v11:
--- drop drm/msm/dp: dp_link_parse_sink_count() return immediately if aux read
-
-Fixes: 7948fe12d47 ("drm/msm/dp: return correct edid checksum after corrupted edid checksum read")
-Signee-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Link: https://lore.kernel.org/r/1642531648-8448-3-git-send-email-quic_khsieh@quicinc.com
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Fixes: 6aab0bb0c5cd ("i40e: Use the xsk batched rx allocation interface")
+Fixes: f12738b6ec06 ("i40e: remove unnecessary cleaned_count updates")
+Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Tested-by: George Kuruvinakunnel <george.kuruvinakunnel@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/dp/dp_display.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index 30590232d263..1d7f82e6eafe 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -1463,6 +1463,7 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
- 			struct drm_encoder *encoder)
- {
- 	struct msm_drm_private *priv;
-+	struct dp_display_private *dp_priv;
- 	int ret;
- 
- 	if (WARN_ON(!encoder) || WARN_ON(!dp_display) || WARN_ON(!dev))
-@@ -1471,6 +1472,8 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
- 	priv = dev->dev_private;
- 	dp_display->drm_dev = dev;
- 
-+	dp_priv = container_of(dp_display, struct dp_display_private, dp_display);
-+
- 	ret = dp_display_request_irq(dp_display);
- 	if (ret) {
- 		DRM_ERROR("request_irq failed, ret=%d\n", ret);
-@@ -1488,6 +1491,8 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
- 		return ret;
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+index 67e9844e2076..e5e72b5bb619 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+@@ -218,7 +218,6 @@ bool i40e_alloc_rx_buffers_zc(struct i40e_ring *rx_ring, u16 count)
+ 	ntu += nb_buffs;
+ 	if (ntu == rx_ring->count) {
+ 		rx_desc = I40E_RX_DESC(rx_ring, 0);
+-		xdp = i40e_rx_bi(rx_ring, 0);
+ 		ntu = 0;
  	}
  
-+	dp_priv->panel->connector = dp_display->connector;
-+
- 	priv->connectors[priv->num_connectors++] = dp_display->connector;
+@@ -328,11 +327,11 @@ static void i40e_handle_xdp_result_zc(struct i40e_ring *rx_ring,
+ int i40e_clean_rx_irq_zc(struct i40e_ring *rx_ring, int budget)
+ {
+ 	unsigned int total_rx_bytes = 0, total_rx_packets = 0;
+-	u16 cleaned_count = I40E_DESC_UNUSED(rx_ring);
+ 	u16 next_to_clean = rx_ring->next_to_clean;
+ 	u16 count_mask = rx_ring->count - 1;
+ 	unsigned int xdp_res, xdp_xmit = 0;
+ 	bool failure = false;
++	u16 cleaned_count;
  
- 	dp_display->bridge = msm_dp_bridge_init(dp_display, dev, encoder);
+ 	while (likely(total_rx_packets < (unsigned int)budget)) {
+ 		union i40e_rx_desc *rx_desc;
 -- 
 2.34.1
 

@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9B64F3254
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85CDF4F3319
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351936AbiDEKKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
+        id S1357283AbiDEK0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241128AbiDEIcv (ORCPT
+        with ESMTP id S241125AbiDEIcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:32:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB8D15FC9;
-        Tue,  5 Apr 2022 01:28:06 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD4715FE9;
+        Tue,  5 Apr 2022 01:28:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52E936062B;
-        Tue,  5 Apr 2022 08:28:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62D9BC385A2;
-        Tue,  5 Apr 2022 08:28:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7BFCB81B18;
+        Tue,  5 Apr 2022 08:28:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2264DC385A1;
+        Tue,  5 Apr 2022 08:28:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147285;
-        bh=234vjUTZtijWVtkoomSPxYcD2YhmlklL6TqSehEq8A4=;
+        s=korg; t=1649147288;
+        bh=Rd5nw3jDuLAv2KMmI7ewgk5evQITYPwffFCbrPD6p1k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n37IzcvSuEnTgsOaxdjCX7JIM8FZBxP69VolXqABE20JenUo6wuSyrsHAthl7wDae
-         oqd3cfRmFFkBg/fHSnT4ZMf/yVRQUiodW81fGtdervqSHVET1oiUPkFhwadVZEhAg4
-         Cie7UVUfqmmW4jYiizwtYF0AwBIcTjhOvPeiY5KY=
+        b=gcYS7a8Ia2lpBMUrKyzWL1c6DxFftKODL2HqxSxpqUGgYmcS4oTtGA4WdVoV+brYe
+         9Z7vj5dOFJOO5q5XHX6LMX2j4/2GvhQDs3tA6JiLiUCsYAWcRJr5Oi6VOerujbr/v4
+         Yr7Ai+bJD/B2lywrn3Cj1IWvQgLRvvdm30C15cEk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sander Vanheule <sander@svanheule.net>,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
-Subject: [PATCH 5.17 1069/1126] staging: mt7621-dts: fix pinctrl-0 items to be size-1 items on ethernet
-Date:   Tue,  5 Apr 2022 09:30:16 +0200
-Message-Id: <20220405070438.833372822@linuxfoundation.org>
+        stable@vger.kernel.org, Wan Jiabing <wanjiabing@vivo.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        Paul Moore <paul@paul-moore.com>
+Subject: [PATCH 5.17 1070/1126] docs: fix make htmldocs warning in SCTP.rst
+Date:   Tue,  5 Apr 2022 09:30:17 +0200
+Message-Id: <20220405070438.863033340@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -54,33 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arınç ÜNAL <arinc.unal@arinc9.com>
+From: Wan Jiabing <wanjiabing@vivo.com>
 
-commit 25e4f5220efead592c83200241e098e757d37e1f upstream.
+commit 70868c6b8fd80db585da57a264c50a69af8fd3c3 upstream.
 
-Fix pinctrl-0 items under the ethernet node to be size-1 items.
-Current notation would be used on specifications with non-zero cells.
+Fix following 'make htmldocs' warnings:
+./Documentation/security/SCTP.rst:123: WARNING: Title underline too short.
+security_sctp_assoc_established()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./Documentation/security/SCTP.rst:123: WARNING: Title underline too short.
+security_sctp_assoc_established()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./Documentation/security/SCTP.rst:273: WARNING: Title underline too short.
+security_sctp_assoc_established()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./Documentation/security/SCTP.rst:273: WARNING: Title underline too short.
+security_sctp_assoc_established()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Fixes: 0a93c0d75809 ("staging: mt7621-dts: fix pinctrl properties for ethernet")
-Reported-by: Sander Vanheule <sander@svanheule.net>
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-Link: https://lore.kernel.org/r/20220215081725.3463-1-arinc.unal@arinc9.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 5e50f5d4ff31 ("security: add sctp_assoc_established hook")
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+Reviewed-by: Xin Long <lucien.xin@gmail.com>
+Signed-off-by: Paul Moore <paul@paul-moore.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/staging/mt7621-dts/mt7621.dtsi |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/security/SCTP.rst |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/staging/mt7621-dts/mt7621.dtsi
-+++ b/drivers/staging/mt7621-dts/mt7621.dtsi
-@@ -326,7 +326,7 @@
- 		mediatek,ethsys = <&sysc>;
+--- a/Documentation/security/SCTP.rst
++++ b/Documentation/security/SCTP.rst
+@@ -120,7 +120,7 @@ calls **sctp_peeloff**\(3).
  
- 		pinctrl-names = "default";
--		pinctrl-0 = <&rgmii1_pins &rgmii2_pins &mdio_pins>;
-+		pinctrl-0 = <&mdio_pins>, <&rgmii1_pins>, <&rgmii2_pins>;
  
- 		gmac0: mac@0 {
- 			compatible = "mediatek,eth-mac";
+ security_sctp_assoc_established()
+-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Called when a COOKIE ACK is received, and the peer secid will be
+ saved into ``@asoc->peer_secid`` for client::
+ 
+@@ -270,7 +270,7 @@ sockets sid and peer sid to that contain
+ 
+ 
+ security_sctp_assoc_established()
+-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Called when a COOKIE ACK is received where it sets the connection's peer sid
+ to that in ``@skb``::
+ 
 
 

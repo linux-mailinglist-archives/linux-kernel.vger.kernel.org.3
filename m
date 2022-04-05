@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E35F84F3E3A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 972054F4115
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377800AbiDEPNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59296 "EHLO
+        id S234754AbiDEMUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346203AbiDEJoh (ORCPT
+        with ESMTP id S245030AbiDEIxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:44:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3164CB021;
-        Tue,  5 Apr 2022 02:30:16 -0700 (PDT)
+        Tue, 5 Apr 2022 04:53:02 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAEFC01;
+        Tue,  5 Apr 2022 01:50:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7CBB616AE;
-        Tue,  5 Apr 2022 09:30:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3CE4C385A2;
-        Tue,  5 Apr 2022 09:30:14 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B10E0CE1C6A;
+        Tue,  5 Apr 2022 08:49:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF75FC385A0;
+        Tue,  5 Apr 2022 08:49:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151015;
-        bh=127clEKAApcmCizF8OrmgjOLybkk/5Iv2HLlHH6Ka8c=;
+        s=korg; t=1649148598;
+        bh=mMs8cEwxxXca6Fv/Ju+e15x+v/0X/GOCyC5VUwCK5YA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pK6g9RCz4idqkLfk7DgNAEgF3OD2WzTV/b4C8dZOPtxzRkxL3mXWfg2XUAV3vaKUd
-         a2QfR2JO1L8LjivoIK7Wr9PpIq7fwpdAnUg13XPFeBDOBo/Vcrb0yEcglZqyH1KGJS
-         jaMKZp/2veI4lfAGGYBDA9nP+2zmrxSlr1WMtvpw=
+        b=a+CXb2YjRhFbX/FoaDJpXt+y/xxodGPL6weqDAMIcUB8iVUUG1WRQtm04piSLahSK
+         /62G9WKviGD4C54eGj/Lbwki8zAUuOCXfZA0j3WQKISW3/J1Djw5VpL5GMHUKOZyD6
+         Q1H+lfz3byRoXmwD07y+wIiFar1lyd2fQLUVZehg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sam Protsenko <semen.protsenko@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 264/913] pinctrl: samsung: Remove EINT handler for Exynos850 ALIVE and CMGP gpios
+Subject: [PATCH 5.16 0413/1017] drm/selftests/test-drm_dp_mst_helper: Fix memory leak in sideband_msg_req_encode_decode
 Date:   Tue,  5 Apr 2022 09:22:06 +0200
-Message-Id: <20220405070347.770082571@linuxfoundation.org>
+Message-Id: <20220405070406.547611167@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sam Protsenko <semen.protsenko@linaro.org>
+From: José Expósito <jose.exposito89@gmail.com>
 
-[ Upstream commit 96f79935015cf3d7ca6fabf63cd13b8af45a7713 ]
+[ Upstream commit ba3a5ddcf1e5df31f2291006d5297ca62035584f ]
 
-GPIO_ALIVE and GPIO_CMGP blocks in Exynos850 SoC don't have EINT
-capabilities (like EINT_SVC register), and there are no corresponding
-interrupts wired to GIC. Instead those blocks have wake-up interrupts
-for each pin. The ".eint_gpio_init" callbacks were specified by mistake
-for these blocks, when porting pinctrl code from downstream kernel. That
-leads to error messages like this:
+Avoid leaking the "out" variable if it is not possible to allocate
+the "txmsg" variable.
 
-    samsung-pinctrl 11850000.pinctrl: irq number not available
-
-Remove ".eint_gpio_init" for pinctrl_alive and pinctrl_gpmc to fix this
-error. This change doesn't affect proper interrupt handling for related
-pins, as all those pins are handled in ".eint_wkup_init".
-
-Fixes: cdd3d945dcec ("pinctrl: samsung: Add Exynos850 SoC specific data")
-Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-Link: https://lore.kernel.org/r/20220114203757.4860-1-semen.protsenko@linaro.org
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Fixes: 09234b88ef55 ("drm/selftests/test-drm_dp_mst_helper: Move 'sideband_msg_req_encode_decode' onto the heap")
+Addresses-Coverity-ID: 1475685 ("Resource leak")
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220108165812.46797-1-jose.exposito89@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/samsung/pinctrl-exynos-arm64.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
-index fe5f6046fbd5..cc66f852ef7b 100644
---- a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
-+++ b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
-@@ -504,13 +504,11 @@ static const struct samsung_pin_ctrl exynos850_pin_ctrl[] __initconst = {
- 		/* pin-controller instance 0 ALIVE data */
- 		.pin_banks	= exynos850_pin_banks0,
- 		.nr_banks	= ARRAY_SIZE(exynos850_pin_banks0),
--		.eint_gpio_init = exynos_eint_gpio_init,
- 		.eint_wkup_init = exynos_eint_wkup_init,
- 	}, {
- 		/* pin-controller instance 1 CMGP data */
- 		.pin_banks	= exynos850_pin_banks1,
- 		.nr_banks	= ARRAY_SIZE(exynos850_pin_banks1),
--		.eint_gpio_init = exynos_eint_gpio_init,
- 		.eint_wkup_init = exynos_eint_wkup_init,
- 	}, {
- 		/* pin-controller instance 2 AUD data */
+diff --git a/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c b/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
+index 6b4759ed6bfd..c491429f1a02 100644
+--- a/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
++++ b/drivers/gpu/drm/selftests/test-drm_dp_mst_helper.c
+@@ -131,8 +131,10 @@ sideband_msg_req_encode_decode(struct drm_dp_sideband_msg_req_body *in)
+ 		return false;
+ 
+ 	txmsg = kzalloc(sizeof(*txmsg), GFP_KERNEL);
+-	if (!txmsg)
++	if (!txmsg) {
++		kfree(out);
+ 		return false;
++	}
+ 
+ 	drm_dp_encode_sideband_req(in, txmsg);
+ 	ret = drm_dp_decode_sideband_req(txmsg, out);
 -- 
 2.34.1
 

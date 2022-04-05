@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18BA14F4524
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A03B4F43EF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382408AbiDEPOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:14:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
+        id S1384886AbiDEM2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346599AbiDEJpM (ORCPT
+        with ESMTP id S245661AbiDEI4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:45:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F768DC9;
-        Tue,  5 Apr 2022 02:31:07 -0700 (PDT)
+        Tue, 5 Apr 2022 04:56:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C378113D1C;
+        Tue,  5 Apr 2022 01:52:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A733AB81C9A;
-        Tue,  5 Apr 2022 09:31:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AE22C385A3;
-        Tue,  5 Apr 2022 09:31:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C2D761511;
+        Tue,  5 Apr 2022 08:52:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D80FC385A0;
+        Tue,  5 Apr 2022 08:52:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151064;
-        bh=4SVC2Nxylfe4tkCpqrTVQRdzAUldIPjWomgZW9cYs7s=;
+        s=korg; t=1649148748;
+        bh=hK8FHhsYT2+byT0t0KwNPnJY44RdRl84eOg4/ueCyuc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vjwBODDDc3pVmJdbekJLWMGfkn8L3BgM8hyHiv4zRF0yWIb3Gm4slv0QibBKegcoP
-         l3ReFVSopxxkAaW1Ffy50CaHbm8xlmxS1g1lmgZ5jAvSzK0DV1ygq8XN3eZW95zr7J
-         kYv5rvXK3iuLea8Im4PqT3fKtVHjLey3tSbVwpqw=
+        b=Wzd38Atm775WFOZgkrlwxbpqtP6Hh35V5BAid8x8oBrvBLLnraqJQnACj/FQ+waEB
+         Bvj4+q2ZBL7uxRSKSl2OoxJ9eRTL3V1UjfKCaPJSVIbmVmqK8twWyQC7JaU07kBJzc
+         +ZF2pTlW/V3QV16qzzqUl2uQcf/fvug4tZR8NM+c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 280/913] ASoC: simple-card-utils: Set sysclk on all components
-Date:   Tue,  5 Apr 2022 09:22:22 +0200
-Message-Id: <20220405070348.250345298@linuxfoundation.org>
+Subject: [PATCH 5.16 0430/1017] drm/amd/pm: return -ENOTSUPP if there is no get_dpm_ultimate_freq function
+Date:   Tue,  5 Apr 2022 09:22:23 +0200
+Message-Id: <20220405070407.058356730@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,76 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Tom Rix <trix@redhat.com>
 
-[ Upstream commit ce2f7b8d4290c22e462e465d1da38a1c113ae66a ]
+[ Upstream commit 430e6a0212b2a0eb1de5e9d47a016fa79edf3978 ]
 
-If an mclk-fs value was provided in the device tree configuration, the
-calculated MCLK was fed into the downstream codec DAI and CPU DAI,
-however set_sysclk was not being called on the platform device. Some
-platform devices such as the Xilinx Audio Formatter need to know the MCLK
-as well.
+clang static analysis reports this represenative problem
+amdgpu_smu.c:144:18: warning: The left operand of '*' is a garbage value
+        return clk_freq * 100;
+               ~~~~~~~~ ^
 
-Call snd_soc_component_set_sysclk on each component in the stream to set
-the proper sysclk value in addition to the existing call of
-snd_soc_dai_set_sysclk on the codec DAI and CPU DAI. This may end up
-resulting in redundant calls if one of the snd_soc_dai_set_sysclk calls
-ends up calling snd_soc_component_set_sysclk itself, but that isn't
-expected to cause any significant harm.
+If there is no get_dpm_ultimate_freq function,
+smu_get_dpm_freq_range returns success without setting the
+output min,max parameters.  So return an -ENOTSUPP error.
 
-Fixes: f48dcbb6d47d ("ASoC: simple-card-utils: share asoc_simple_hw_param()")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Reviewed-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Link: https://lore.kernel.org/r/20220120195832.1742271-5-robert.hancock@calian.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: e5ef784b1e17 ("drm/amd/powerplay: revise calling chain on retrieving frequency range")
+Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/generic/simple-card-utils.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/generic/simple-card-utils.c b/sound/soc/generic/simple-card-utils.c
-index 10c63b73900c..ffda8a38de3e 100644
---- a/sound/soc/generic/simple-card-utils.c
-+++ b/sound/soc/generic/simple-card-utils.c
-@@ -275,6 +275,7 @@ int asoc_simple_hw_params(struct snd_pcm_substream *substream,
- 		mclk_fs = props->mclk_fs;
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
+index 9d7d64fdf410..9b54c1b89ea4 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c
+@@ -138,7 +138,7 @@ int smu_get_dpm_freq_range(struct smu_context *smu,
+ 			   uint32_t *min,
+ 			   uint32_t *max)
+ {
+-	int ret = 0;
++	int ret = -ENOTSUPP;
  
- 	if (mclk_fs) {
-+		struct snd_soc_component *component;
- 		mclk = params_rate(params) * mclk_fs;
- 
- 		for_each_prop_dai_codec(props, i, pdai) {
-@@ -282,16 +283,30 @@ int asoc_simple_hw_params(struct snd_pcm_substream *substream,
- 			if (ret < 0)
- 				return ret;
- 		}
-+
- 		for_each_prop_dai_cpu(props, i, pdai) {
- 			ret = asoc_simple_set_clk_rate(pdai, mclk);
- 			if (ret < 0)
- 				return ret;
- 		}
-+
-+		/* Ensure sysclk is set on all components in case any
-+		 * (such as platform components) are missed by calls to
-+		 * snd_soc_dai_set_sysclk.
-+		 */
-+		for_each_rtd_components(rtd, i, component) {
-+			ret = snd_soc_component_set_sysclk(component, 0, 0,
-+							   mclk, SND_SOC_CLOCK_IN);
-+			if (ret && ret != -ENOTSUPP)
-+				return ret;
-+		}
-+
- 		for_each_rtd_codec_dais(rtd, i, sdai) {
- 			ret = snd_soc_dai_set_sysclk(sdai, 0, mclk, SND_SOC_CLOCK_IN);
- 			if (ret && ret != -ENOTSUPP)
- 				return ret;
- 		}
-+
- 		for_each_rtd_cpu_dais(rtd, i, sdai) {
- 			ret = snd_soc_dai_set_sysclk(sdai, 0, mclk, SND_SOC_CLOCK_OUT);
- 			if (ret && ret != -ENOTSUPP)
+ 	if (!min && !max)
+ 		return -EINVAL;
 -- 
 2.34.1
 

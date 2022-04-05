@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1492E4F4371
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F1E4F4259
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359662AbiDENMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34878 "EHLO
+        id S1380415AbiDENOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344218AbiDEJSs (ORCPT
+        with ESMTP id S1344225AbiDEJSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:18:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E55548E65;
-        Tue,  5 Apr 2022 02:05:45 -0700 (PDT)
+        Tue, 5 Apr 2022 05:18:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89AD46B30;
+        Tue,  5 Apr 2022 02:05:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFA6861571;
-        Tue,  5 Apr 2022 09:05:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAB53C385A0;
-        Tue,  5 Apr 2022 09:05:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 565A6614E4;
+        Tue,  5 Apr 2022 09:05:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A1F0C385A0;
+        Tue,  5 Apr 2022 09:05:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149544;
-        bh=t/QupVy0dbCFdJvA+PQ1ww6kp1XlV5Q+WcimY+Qw8n8=;
+        s=korg; t=1649149546;
+        bh=rdP+btfujumuIu3/jnl32qr0EKP44WX3lE/wBICng7E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EZmkQ5dvZl5mV7qo+6WlTe41a/jxLrtl3K93we83Pq7FTbP+pLzOIEmnCR/EXTgIh
-         nUoDVQrtEd7YBEQB0jh5U+r/4XYgATpOdWwisgiOQla4k/mipwrwHdUTM21/ZsuHYT
-         Bt08yjxHTZRAuIE+QcvfVQdxU9LRs74yRN4aD9bQ=
+        b=rSI3e27B/sQFq7bEMvXp/UQskpTasovtlTZgZ5mUF2TrC7CAMNhVEK+khiTC5xpCb
+         AOBACJY8kF7ONB78UqH+76RrrEfjZ7nXVtRZASdDschNn40HO5alJZt/AnKZiv1yaZ
+         i/M3Pb7qZsfp4aU6tWGps/Rmq6GbEFE6K+mhNKik=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Phil Sutter <phil@nwl.cc>,
-        Florian Westphal <fw@strlen.de>,
+        stable@vger.kernel.org, Sven Auhagen <sven.auhagen@voleatech.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0716/1017] netfilter: egress: Report interface as outgoing
-Date:   Tue,  5 Apr 2022 09:27:09 +0200
-Message-Id: <20220405070415.522953768@linuxfoundation.org>
+Subject: [PATCH 5.16 0717/1017] netfilter: nf_conntrack_tcp: preserve liberal flag in tcp options
+Date:   Tue,  5 Apr 2022 09:27:10 +0200
+Message-Id: <20220405070415.552134740@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,34 +55,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Phil Sutter <phil@nwl.cc>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit d645552e9bd96671079b27015294ec7f9748fa2b ]
+[ Upstream commit f2dd495a8d589371289981d5ed33e6873df94ecc ]
 
-Otherwise packets in egress chains seem like they are being received by
-the interface, not sent out via it.
+Do not reset IP_CT_TCP_FLAG_BE_LIBERAL flag in out-of-sync scenarios
+coming before the TCP window tracking, otherwise such connections will
+fail in the window check.
 
-Fixes: 42df6e1d221dd ("netfilter: Introduce egress hook")
-Signed-off-by: Phil Sutter <phil@nwl.cc>
-Signed-off-by: Florian Westphal <fw@strlen.de>
+Update tcp_options() to leave this flag in place and add a new helper
+function to reset the tcp window state.
+
+Based on patch from Sven Auhagen.
+
+Fixes: c4832c7bbc3f ("netfilter: nf_ct_tcp: improve out-of-sync situation in TCP tracking")
+Tested-by: Sven Auhagen <sven.auhagen@voleatech.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/netfilter_netdev.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/netfilter/nf_conntrack_proto_tcp.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/netfilter_netdev.h b/include/linux/netfilter_netdev.h
-index e6487a691136..8676316547cc 100644
---- a/include/linux/netfilter_netdev.h
-+++ b/include/linux/netfilter_netdev.h
-@@ -99,7 +99,7 @@ static inline struct sk_buff *nf_hook_egress(struct sk_buff *skb, int *rc,
- 		return skb;
+diff --git a/net/netfilter/nf_conntrack_proto_tcp.c b/net/netfilter/nf_conntrack_proto_tcp.c
+index af5115e127cf..3cee5d8ee702 100644
+--- a/net/netfilter/nf_conntrack_proto_tcp.c
++++ b/net/netfilter/nf_conntrack_proto_tcp.c
+@@ -341,8 +341,8 @@ static void tcp_options(const struct sk_buff *skb,
+ 	if (!ptr)
+ 		return;
  
- 	nf_hook_state_init(&state, NF_NETDEV_EGRESS,
--			   NFPROTO_NETDEV, dev, NULL, NULL,
-+			   NFPROTO_NETDEV, NULL, dev, NULL,
- 			   dev_net(dev), NULL);
+-	state->td_scale =
+-	state->flags = 0;
++	state->td_scale = 0;
++	state->flags &= IP_CT_TCP_FLAG_BE_LIBERAL;
  
- 	/* nf assumes rcu_read_lock, not just read_lock_bh */
+ 	while (length > 0) {
+ 		int opcode=*ptr++;
+@@ -839,6 +839,16 @@ static bool tcp_can_early_drop(const struct nf_conn *ct)
+ 	return false;
+ }
+ 
++static void nf_ct_tcp_state_reset(struct ip_ct_tcp_state *state)
++{
++	state->td_end		= 0;
++	state->td_maxend	= 0;
++	state->td_maxwin	= 0;
++	state->td_maxack	= 0;
++	state->td_scale		= 0;
++	state->flags		&= IP_CT_TCP_FLAG_BE_LIBERAL;
++}
++
+ /* Returns verdict for packet, or -1 for invalid. */
+ int nf_conntrack_tcp_packet(struct nf_conn *ct,
+ 			    struct sk_buff *skb,
+@@ -945,8 +955,7 @@ int nf_conntrack_tcp_packet(struct nf_conn *ct,
+ 			ct->proto.tcp.last_flags &= ~IP_CT_EXP_CHALLENGE_ACK;
+ 			ct->proto.tcp.seen[ct->proto.tcp.last_dir].flags =
+ 				ct->proto.tcp.last_flags;
+-			memset(&ct->proto.tcp.seen[dir], 0,
+-			       sizeof(struct ip_ct_tcp_state));
++			nf_ct_tcp_state_reset(&ct->proto.tcp.seen[dir]);
+ 			break;
+ 		}
+ 		ct->proto.tcp.last_index = index;
 -- 
 2.34.1
 

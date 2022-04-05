@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B49A24F4E5B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B47DA4F48E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1589011AbiDFASJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
+        id S1388407AbiDEVyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348367AbiDEJrf (ORCPT
+        with ESMTP id S1348479AbiDEJrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:47:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496BC6D4C8;
-        Tue,  5 Apr 2022 02:33:49 -0700 (PDT)
+        Tue, 5 Apr 2022 05:47:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2426C6F483;
+        Tue,  5 Apr 2022 02:34:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D325FB81C86;
-        Tue,  5 Apr 2022 09:33:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C955C385A2;
-        Tue,  5 Apr 2022 09:33:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41F6EB81CB3;
+        Tue,  5 Apr 2022 09:33:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EAABC385A0;
+        Tue,  5 Apr 2022 09:33:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151226;
-        bh=xSZkEnScJV/S1z08cBaoKDakLEQls9BjWgqvGeiGTa4=;
+        s=korg; t=1649151237;
+        bh=2oZ6o3YYR84xrbyRZvsWvVcONdqA2nZyWHB3WsSIGY8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BDW838biTkGCvfcVJBzqkgWnm8H+bq/3nmaz4PIgZ5nRK2A1MYFTIHjvzwoQWD7FZ
-         PUpQtgZ+bAHpR4kTOEHNvDJBu4Izwr7qzrri56Kapc26gH8X7LTjhQXwEmWOZhXKPW
-         lstp50QF3djC2cn2QELvSZ8CA/BoChLzhpOflEFA=
+        b=JOlLrgLUCcOMbLPlfEiIV4F5g7I/EioraRBU4In69KOCXjulAmU0HvuikJg0Xj576
+         up7NrUPVTsFwrSTX7mu6nl0GaA5a5IQ0ai+UlcbNbuqPlhHTgVoBQ+zPc3LM8uV8ft
+         O/q66w99fTHIZ75eVRt4TugDBJ4FxN2brizGxZj4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 340/913] ASoC: dwc-i2s: Handle errors for clk_enable
-Date:   Tue,  5 Apr 2022 09:23:22 +0200
-Message-Id: <20220405070350.039637651@linuxfoundation.org>
+        stable@vger.kernel.org, Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 344/913] ALSA: firewire-lib: fix uninitialized flag for AV/C deferred transaction
+Date:   Tue,  5 Apr 2022 09:23:26 +0200
+Message-Id: <20220405070350.158000824@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,59 +54,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Takashi Sakamoto <o-takashi@sakamocchi.jp>
 
-[ Upstream commit 45ea97d74313bae681328b0c36fa348036777644 ]
+[ Upstream commit bf0cd60b7e33cf221fbe1114e4acb2c828b0af0d ]
 
-As the potential failure of the clk_enable(),
-it should be better to check it, as same as clk_prepare_enable().
+AV/C deferred transaction was supported at a commit 00a7bb81c20f ("ALSA:
+firewire-lib: Add support for deferred transaction") while 'deferrable'
+flag can be uninitialized for non-control/notify AV/C transactions.
+UBSAN reports it:
 
-Fixes: c9afc1834e81 ("ASoC: dwc: Disallow building designware_pcm as a module")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220301084742.3751939-1-jiasheng@iscas.ac.cn
-Signed-off-by: Mark Brown <broonie@kernel.org>
+kernel: ================================================================================
+kernel: UBSAN: invalid-load in /build/linux-aa0B4d/linux-5.15.0/sound/firewire/fcp.c:363:9
+kernel: load of value 158 is not a valid value for type '_Bool'
+kernel: CPU: 3 PID: 182227 Comm: irq/35-firewire Tainted: P           OE     5.15.0-18-generic #18-Ubuntu
+kernel: Hardware name: Gigabyte Technology Co., Ltd. AX370-Gaming 5/AX370-Gaming 5, BIOS F42b 08/01/2019
+kernel: Call Trace:
+kernel:  <IRQ>
+kernel:  show_stack+0x52/0x58
+kernel:  dump_stack_lvl+0x4a/0x5f
+kernel:  dump_stack+0x10/0x12
+kernel:  ubsan_epilogue+0x9/0x45
+kernel:  __ubsan_handle_load_invalid_value.cold+0x44/0x49
+kernel:  fcp_response.part.0.cold+0x1a/0x2b [snd_firewire_lib]
+kernel:  fcp_response+0x28/0x30 [snd_firewire_lib]
+kernel:  fw_core_handle_request+0x230/0x3d0 [firewire_core]
+kernel:  handle_ar_packet+0x1d9/0x200 [firewire_ohci]
+kernel:  ? handle_ar_packet+0x1d9/0x200 [firewire_ohci]
+kernel:  ? transmit_complete_callback+0x9f/0x120 [firewire_core]
+kernel:  ar_context_tasklet+0xa8/0x2e0 [firewire_ohci]
+kernel:  tasklet_action_common.constprop.0+0xea/0xf0
+kernel:  tasklet_action+0x22/0x30
+kernel:  __do_softirq+0xd9/0x2e3
+kernel:  ? irq_finalize_oneshot.part.0+0xf0/0xf0
+kernel:  do_softirq+0x75/0xa0
+kernel:  </IRQ>
+kernel:  <TASK>
+kernel:  __local_bh_enable_ip+0x50/0x60
+kernel:  irq_forced_thread_fn+0x7e/0x90
+kernel:  irq_thread+0xba/0x190
+kernel:  ? irq_thread_fn+0x60/0x60
+kernel:  kthread+0x11e/0x140
+kernel:  ? irq_thread_check_affinity+0xf0/0xf0
+kernel:  ? set_kthread_struct+0x50/0x50
+kernel:  ret_from_fork+0x22/0x30
+kernel:  </TASK>
+kernel: ================================================================================
+
+This commit fixes the bug. The bug has no disadvantage for the non-
+control/notify AV/C transactions since the flag has an effect for AV/C
+response with INTERIM (0x0f) status which is not used for the transactions
+in AV/C general specification.
+
+Fixes: 00a7bb81c20f ("ALSA: firewire-lib: Add support for deferred transaction")
+Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Link: https://lore.kernel.org/r/20220304125647.78430-1-o-takashi@sakamocchi.jp
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/dwc/dwc-i2s.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ sound/firewire/fcp.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/sound/soc/dwc/dwc-i2s.c b/sound/soc/dwc/dwc-i2s.c
-index 33ce257ae198..315ca5c4b057 100644
---- a/sound/soc/dwc/dwc-i2s.c
-+++ b/sound/soc/dwc/dwc-i2s.c
-@@ -403,9 +403,13 @@ static int dw_i2s_runtime_suspend(struct device *dev)
- static int dw_i2s_runtime_resume(struct device *dev)
- {
- 	struct dw_i2s_dev *dw_dev = dev_get_drvdata(dev);
-+	int ret;
+diff --git a/sound/firewire/fcp.c b/sound/firewire/fcp.c
+index bbfbebf4affb..df44dd5dc4b2 100644
+--- a/sound/firewire/fcp.c
++++ b/sound/firewire/fcp.c
+@@ -240,9 +240,7 @@ int fcp_avc_transaction(struct fw_unit *unit,
+ 	t.response_match_bytes = response_match_bytes;
+ 	t.state = STATE_PENDING;
+ 	init_waitqueue_head(&t.wait);
+-
+-	if (*(const u8 *)command == 0x00 || *(const u8 *)command == 0x03)
+-		t.deferrable = true;
++	t.deferrable = (*(const u8 *)command == 0x00 || *(const u8 *)command == 0x03);
  
--	if (dw_dev->capability & DW_I2S_MASTER)
--		clk_enable(dw_dev->clk);
-+	if (dw_dev->capability & DW_I2S_MASTER) {
-+		ret = clk_enable(dw_dev->clk);
-+		if (ret)
-+			return ret;
-+	}
- 	return 0;
- }
- 
-@@ -422,10 +426,13 @@ static int dw_i2s_resume(struct snd_soc_component *component)
- {
- 	struct dw_i2s_dev *dev = snd_soc_component_get_drvdata(component);
- 	struct snd_soc_dai *dai;
--	int stream;
-+	int stream, ret;
- 
--	if (dev->capability & DW_I2S_MASTER)
--		clk_enable(dev->clk);
-+	if (dev->capability & DW_I2S_MASTER) {
-+		ret = clk_enable(dev->clk);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	for_each_component_dais(component, dai) {
- 		for_each_pcm_streams(stream)
+ 	spin_lock_irq(&transactions_lock);
+ 	list_add_tail(&t.list, &transactions);
 -- 
 2.34.1
 

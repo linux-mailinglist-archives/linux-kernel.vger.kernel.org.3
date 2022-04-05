@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C38F4F512D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BFE54F5124
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1845189AbiDFByD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
+        id S1844992AbiDFBxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349742AbiDEJvM (ORCPT
+        with ESMTP id S1349776AbiDEJvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:51:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9CED13E89;
-        Tue,  5 Apr 2022 02:49:13 -0700 (PDT)
+        Tue, 5 Apr 2022 05:51:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11A91BEB9;
+        Tue,  5 Apr 2022 02:49:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 859FA61577;
-        Tue,  5 Apr 2022 09:49:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D049C385A2;
-        Tue,  5 Apr 2022 09:49:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79D68B818F3;
+        Tue,  5 Apr 2022 09:49:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA68AC385A2;
+        Tue,  5 Apr 2022 09:49:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152153;
-        bh=nRRBq/Jik1ej734zd5EJafMlkLa2+n+e12Jve3Y5fDU=;
+        s=korg; t=1649152164;
+        bh=gSKk94JlnT76nQt2YzGKXOMGeTex5ODG6i1MtGdF5n0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rjOigTjRsSQB0FDQVnb/gIZPouLrf+qsCspKWvAZBiWN4Ib1YSb+5IHy9LyCwA0kx
-         rnJ9IMlhcndNrlRf5etTcz4acmM4VtubYEXCJ2WZRzBuDmEBpV/CRTNuAZCCRbzWqh
-         fnTw/6cwKWWHWtxnXslHXuYq4HVcbe8jJhm8dR9Q=
+        b=uH5vD717zGRgVIIDz6GnicteYUGQvBmQ2u73reNiD2FKhfeIJPMwIf6Y53n5rbnLt
+         4WqILGjUcClLVXfp6zyla1EaQSJFemgXlxDiOxdErdUBnHWd5ui4yHMwxx6ponSEMM
+         zfO48S5+nic/vqRAaJ9yl6Kg/I7eyebB48R14BCY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Blakey <paulb@mellanox.com>,
-        dev@openvswitch.org, Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 675/913] net: prefer nf_ct_put instead of nf_conntrack_put
-Date:   Tue,  5 Apr 2022 09:28:57 +0200
-Message-Id: <20220405070400.069133533@linuxfoundation.org>
+Subject: [PATCH 5.15 678/913] net: dsa: bcm_sf2_cfp: fix an incorrect NULL check on list iterator
+Date:   Tue,  5 Apr 2022 09:29:00 +0200
+Message-Id: <20220405070400.159309578@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,124 +57,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-[ Upstream commit 408bdcfce8dfd6902f75fbcd3b99d8b24b506597 ]
+[ Upstream commit 6da69b1da130e7d96766042750cd9f902e890eba ]
 
-Its the same as nf_conntrack_put(), but without the
-need for an indirect call.  The downside is a module dependency on
-nf_conntrack, but all of these already depend on conntrack anyway.
+The bug is here:
+	return rule;
 
-Cc: Paul Blakey <paulb@mellanox.com>
-Cc: dev@openvswitch.org
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+The list iterator value 'rule' will *always* be set and non-NULL
+by list_for_each_entry(), so it is incorrect to assume that the
+iterator value will be NULL if the list is empty or no element
+is found.
+
+To fix the bug, return 'rule' when found, otherwise return NULL.
+
+Fixes: ae7a5aff783c7 ("net: dsa: bcm_sf2: Keep copy of inserted rules")
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Link: https://lore.kernel.org/r/20220328032431.22538-1-xiam0nd.tong@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_conntrack_core.c |  4 ++--
- net/openvswitch/conntrack.c       | 14 ++++++++++----
- net/sched/act_ct.c                |  6 +++---
- 3 files changed, 15 insertions(+), 9 deletions(-)
+ drivers/net/dsa/bcm_sf2_cfp.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/net/netfilter/nf_conntrack_core.c b/net/netfilter/nf_conntrack_core.c
-index 7f7997460764..917e708a4561 100644
---- a/net/netfilter/nf_conntrack_core.c
-+++ b/net/netfilter/nf_conntrack_core.c
-@@ -989,7 +989,7 @@ static int __nf_ct_resolve_clash(struct sk_buff *skb,
- 
- 		nf_ct_acct_merge(ct, ctinfo, loser_ct);
- 		nf_ct_add_to_dying_list(loser_ct);
--		nf_conntrack_put(&loser_ct->ct_general);
-+		nf_ct_put(loser_ct);
- 		nf_ct_set(skb, ct, ctinfo);
- 
- 		NF_CT_STAT_INC(net, clash_resolve);
-@@ -1920,7 +1920,7 @@ nf_conntrack_in(struct sk_buff *skb, const struct nf_hook_state *state)
- 		/* Invalid: inverse of the return code tells
- 		 * the netfilter core what to do */
- 		pr_debug("nf_conntrack_in: Can't track with proto module\n");
--		nf_conntrack_put(&ct->ct_general);
-+		nf_ct_put(ct);
- 		skb->_nfct = 0;
- 		/* Special case: TCP tracker reports an attempt to reopen a
- 		 * closed/aborted connection. We have to go back and create a
-diff --git a/net/openvswitch/conntrack.c b/net/openvswitch/conntrack.c
-index 8f47f4e78d32..f2b64cab9af7 100644
---- a/net/openvswitch/conntrack.c
-+++ b/net/openvswitch/conntrack.c
-@@ -574,7 +574,7 @@ ovs_ct_expect_find(struct net *net, const struct nf_conntrack_zone *zone,
- 			struct nf_conn *ct = nf_ct_tuplehash_to_ctrack(h);
- 
- 			nf_ct_delete(ct, 0, 0);
--			nf_conntrack_put(&ct->ct_general);
-+			nf_ct_put(ct);
- 		}
- 	}
- 
-@@ -723,7 +723,7 @@ static bool skb_nfct_cached(struct net *net,
- 		if (nf_ct_is_confirmed(ct))
- 			nf_ct_delete(ct, 0, 0);
- 
--		nf_conntrack_put(&ct->ct_general);
-+		nf_ct_put(ct);
- 		nf_ct_set(skb, NULL, 0);
- 		return false;
- 	}
-@@ -967,7 +967,8 @@ static int __ovs_ct_lookup(struct net *net, struct sw_flow_key *key,
- 
- 		/* Associate skb with specified zone. */
- 		if (tmpl) {
--			nf_conntrack_put(skb_nfct(skb));
-+			ct = nf_ct_get(skb, &ctinfo);
-+			nf_ct_put(ct);
- 			nf_conntrack_get(&tmpl->ct_general);
- 			nf_ct_set(skb, tmpl, IP_CT_NEW);
- 		}
-@@ -1328,7 +1329,12 @@ int ovs_ct_execute(struct net *net, struct sk_buff *skb,
- 
- int ovs_ct_clear(struct sk_buff *skb, struct sw_flow_key *key)
+diff --git a/drivers/net/dsa/bcm_sf2_cfp.c b/drivers/net/dsa/bcm_sf2_cfp.c
+index a7e2fcf2df2c..edbe5e7f1cb6 100644
+--- a/drivers/net/dsa/bcm_sf2_cfp.c
++++ b/drivers/net/dsa/bcm_sf2_cfp.c
+@@ -567,14 +567,14 @@ static void bcm_sf2_cfp_slice_ipv6(struct bcm_sf2_priv *priv,
+ static struct cfp_rule *bcm_sf2_cfp_rule_find(struct bcm_sf2_priv *priv,
+ 					      int port, u32 location)
  {
--	nf_conntrack_put(skb_nfct(skb));
-+	enum ip_conntrack_info ctinfo;
-+	struct nf_conn *ct;
-+
-+	ct = nf_ct_get(skb, &ctinfo);
-+
-+	nf_ct_put(ct);
- 	nf_ct_set(skb, NULL, IP_CT_UNTRACKED);
- 	ovs_ct_fill_key(skb, key, false);
+-	struct cfp_rule *rule = NULL;
++	struct cfp_rule *rule;
  
-diff --git a/net/sched/act_ct.c b/net/sched/act_ct.c
-index 4ffea1290ce1..240b3c5d2eb1 100644
---- a/net/sched/act_ct.c
-+++ b/net/sched/act_ct.c
-@@ -592,7 +592,7 @@ static bool tcf_ct_skb_nfct_cached(struct net *net, struct sk_buff *skb,
- 		if (nf_ct_is_confirmed(ct))
- 			nf_ct_kill(ct);
+ 	list_for_each_entry(rule, &priv->cfp.rules_list, next) {
+ 		if (rule->port == port && rule->fs.location == location)
+-			break;
++			return rule;
+ 	}
  
--		nf_conntrack_put(&ct->ct_general);
-+		nf_ct_put(ct);
- 		nf_ct_set(skb, NULL, IP_CT_UNTRACKED);
- 
- 		return false;
-@@ -757,7 +757,7 @@ static void tcf_ct_params_free(struct rcu_head *head)
- 	tcf_ct_flow_table_put(params);
- 
- 	if (params->tmpl)
--		nf_conntrack_put(&params->tmpl->ct_general);
-+		nf_ct_put(params->tmpl);
- 	kfree(params);
+-	return rule;
++	return NULL;
  }
  
-@@ -967,7 +967,7 @@ static int tcf_ct_act(struct sk_buff *skb, const struct tc_action *a,
- 		tc_skb_cb(skb)->post_ct = false;
- 		ct = nf_ct_get(skb, &ctinfo);
- 		if (ct) {
--			nf_conntrack_put(&ct->ct_general);
-+			nf_ct_put(ct);
- 			nf_ct_set(skb, NULL, IP_CT_UNTRACKED);
- 		}
- 
+ static int bcm_sf2_cfp_rule_cmp(struct bcm_sf2_priv *priv, int port,
 -- 
 2.34.1
 

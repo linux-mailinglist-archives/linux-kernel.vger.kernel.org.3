@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9D44F3C09
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:24:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C3834F3C4C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382275AbiDEMED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:04:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
+        id S1345463AbiDEMHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243992AbiDEIvY (ORCPT
+        with ESMTP id S244264AbiDEIvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:51:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D02D0AB0;
-        Tue,  5 Apr 2022 01:40:10 -0700 (PDT)
+        Tue, 5 Apr 2022 04:51:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924EAD373A;
+        Tue,  5 Apr 2022 01:40:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61907B81BC5;
-        Tue,  5 Apr 2022 08:40:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5987C385A1;
-        Tue,  5 Apr 2022 08:40:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 365A6B81A32;
+        Tue,  5 Apr 2022 08:40:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B006C385A0;
+        Tue,  5 Apr 2022 08:40:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148008;
-        bh=vCNxLByh22qWpvDtzrk7nKcRMnmgzftlBFDb7fx5dWY=;
+        s=korg; t=1649148039;
+        bh=7wCX3eOKIpkxHj64CzX6+7Q6t9WICOqWbk2IYw7KeWo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lYb6K33RswvVn53LeUwYhFtzD//6sKBbO6aIcd18xNj05qjssnm73x8zZcXEpV9O0
-         1uNqukii7QFqzs1UV18EC2iOV8H2KuKK0DzSHxEyklOf9Lzgoajy/LRfSdY5Xz2Tik
-         66UsiiwpPj0D4aTNrfoY3F2INt9C8VX/izAvwKtU=
+        b=B5Aj4slC65qcrfukHgnXoQy3Q2xO/OxP8ExQRugTZucQt3kpuGZKCzRk3pG26xXKF
+         CujEeadlMgqfCTV+6HLxtAUTUwcw++MRLgDwTKyFPw0Opb9pTzHUGwSgFfz2UVUKU7
+         u0rIZgZlumYdVC4oqBzIu95Xnhw7ChBUbkIMhTuM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH 5.16 0184/1017] xtensa: fix stop_machine_cpuslocked call in patch_text
-Date:   Tue,  5 Apr 2022 09:18:17 +0200
-Message-Id: <20220405070359.702346386@linuxfoundation.org>
+Subject: [PATCH 5.16 0185/1017] xtensa: fix xtensa_wsr always writing 0
+Date:   Tue,  5 Apr 2022 09:18:18 +0200
+Message-Id: <20220405070359.731782203@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,32 +55,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Max Filippov <jcmvbkbc@gmail.com>
 
-commit f406f2d03e07afc199dd8cf501f361dde6be8a69 upstream.
+commit a3d0245c58f962ee99d4440ea0eaf45fb7f5a5cc upstream.
 
-patch_text must invoke patch_text_stop_machine on all online CPUs, but
-it calls stop_machine_cpuslocked with NULL cpumask. As a result only one
-CPU runs patch_text_stop_machine potentially leaving stale icache
-entries on other CPUs. Fix that by calling stop_machine_cpuslocked with
-cpu_online_mask as the last argument.
+The commit cad6fade6e78 ("xtensa: clean up WSR*/RSR*/get_sr/set_sr")
+replaced 'WSR' macro in the function xtensa_wsr with 'xtensa_set_sr',
+but variable 'v' in the xtensa_set_sr body shadowed the argument 'v'
+passed to it, resulting in wrong value written to debug registers.
+
+Fix that by removing intermediate variable from the xtensa_set_sr
+macro body.
 
 Cc: stable@vger.kernel.org
-Fixes: 64711f9a47d4 ("xtensa: implement jump_label support")
+Fixes: cad6fade6e78 ("xtensa: clean up WSR*/RSR*/get_sr/set_sr")
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/xtensa/kernel/jump_label.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/xtensa/include/asm/processor.h |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/xtensa/kernel/jump_label.c
-+++ b/arch/xtensa/kernel/jump_label.c
-@@ -61,7 +61,7 @@ static void patch_text(unsigned long add
- 			.data = data,
- 		};
- 		stop_machine_cpuslocked(patch_text_stop_machine,
--					&patch, NULL);
-+					&patch, cpu_online_mask);
- 	} else {
- 		unsigned long flags;
+--- a/arch/xtensa/include/asm/processor.h
++++ b/arch/xtensa/include/asm/processor.h
+@@ -246,8 +246,8 @@ extern unsigned long __get_wchan(struct
  
+ #define xtensa_set_sr(x, sr) \
+ 	({ \
+-	 unsigned int v = (unsigned int)(x); \
+-	 __asm__ __volatile__ ("wsr %0, "__stringify(sr) :: "a"(v)); \
++	 __asm__ __volatile__ ("wsr %0, "__stringify(sr) :: \
++			       "a"((unsigned int)(x))); \
+ 	 })
+ 
+ #define xtensa_get_sr(sr) \
 
 

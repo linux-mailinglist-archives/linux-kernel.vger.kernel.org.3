@@ -2,546 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D9E4F20FC
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 184234F210D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:08:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbiDECq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 22:46:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44778 "EHLO
+        id S231279AbiDEDJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 23:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230507AbiDECq0 (ORCPT
+        with ESMTP id S231425AbiDEDJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 22:46:26 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364431229A8;
-        Mon,  4 Apr 2022 19:32:50 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id y6so9741222plg.2;
-        Mon, 04 Apr 2022 19:32:50 -0700 (PDT)
+        Mon, 4 Apr 2022 23:09:26 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A639119EC43
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 19:53:06 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id g15-20020a17090adb0f00b001caa9a230c7so1168934pjv.5
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 19:53:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=vI1wpZOrZu49cdz2T/VmUys+7JrgZzqJM6m+nCLErpc=;
-        b=TZ2d0oG3XBk/UUfNXBjOZ7y1qMsM4Fa2EH1bIxiEXTqQgLd9YkmkSB6UJ7hwzhbATE
-         8uCzM9pum+4+GVwB+8f/iPmKApa6ke3q2bxSJJftCszHik5fx5rKL4qFKwoEeD4kFXEz
-         BFkHqzp7ajaLaO3DIcm15zXYAh+LKAzvfQZ/hql/VQA05/XkHflr6qUn+/W3mtJHXdcy
-         4mvrdEDpmqVzA+5pvbL+9kHBryZR3pzgAHfiMZhRcNYMpCIjWGV1N0A0GKZctcyHqnGi
-         kPr0fVmb0sQnd2UxxdBkonKiIZ0penexkFDiYwwEn9WqlykNGout6x3aq885umUd5nCN
-         wyAg==
+        bh=RzCNHATVinMYtEKVMMIDubor35Dt80OzooLQrltUApM=;
+        b=N9TdufpWDVKbp38k8iCOC/2EFCcd30wxtzwCUb1TTzlkaZsDEt8KaHMZszH4iOb2jD
+         OR2cD1+XafBXpJ5pq6VC+wNGWQKqqHRjkN+XPqOXB/RLxr+DW7Yv/M06mMn8R/O7wVO3
+         kFjNq2hpO9C8vosv9I9ffSM+ZDtvuR+bVaKYs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=vI1wpZOrZu49cdz2T/VmUys+7JrgZzqJM6m+nCLErpc=;
-        b=z+jZdEz+hjkYC4Q+JQzjIv5SSvyQGiDSdtEQLMeiSvxLQ4DC54o6G53eutQHNSwGrx
-         7MIYs43YsjHq9RdHZyvD9l9NYEKscMTqeCWMz2LkZWsEufUdOc+DEI5JM/6g3B19URLu
-         WbK8TqNMgDB4ZYKZZEmodOGTh+9KPV5o3tAOeOmhu6zwAcpgGh0JiqX51egp24LDL3Di
-         SbcmBRbSJOHgOsJ/T0DtzMZdI6KUAcYObu1mNoSMmOc8+3APHWelG7zRFrJjZnAiSRfl
-         WwxzrDSVHhRMPFEC7N7eQzbG4H9ZbLv8l/LeCptoAvuCC5yfupH1k+4HFwxyEFbFmEzD
-         EWSg==
-X-Gm-Message-State: AOAM53087PGr8bnW7agjEOl+TYEh+XxAXqI7BtsdfdFanW7o/G04oX6D
-        NxmGv9DMMoHdLgQ1A7OpWyNlKW8MNarsOA==
-X-Google-Smtp-Source: ABdhPJyCrPyiv/vX6oOk3TRa9n9KuP7AV7pOcmSRR1GDw53d+NiKNrrmL84SfE4wAKs9+kqQY+yV+g==
-X-Received: by 2002:a17:90a:1941:b0:1ca:a28b:6744 with SMTP id 1-20020a17090a194100b001caa28b6744mr1544320pjh.50.1649125969004;
-        Mon, 04 Apr 2022 19:32:49 -0700 (PDT)
-Received: from anyang ([106.250.177.234])
-        by smtp.gmail.com with ESMTPSA id k10-20020a056a00168a00b004f7e2a550ccsm13782641pfc.78.2022.04.04.19.32.46
+        bh=RzCNHATVinMYtEKVMMIDubor35Dt80OzooLQrltUApM=;
+        b=2FmqDsjvIqUWms8m0hiB2PcY6dQWTxHEHe9jw6lnkVEqT2+KoMFcrjhbZ62mOg3R13
+         79NmxaffGQZyq/KBAGTjckJ9WpnhRLvCei5gfofIE3kGKXbYvcHnbNplsJz6wjuNSUUW
+         /57pLlrFmGAuzz1gvfHL3Ppvq0sTbCFv8eLEZNYH/HrtQxoF7U0XkoZra348YigmuvUf
+         aa4XElz3t8C33Y8RNteXIgGx/h5Hcw/C8dBdqoQZ50MNwLzznksTvCE+BhKvGbtnEZch
+         zHKAO6ZhTBlq0YYTR8GNLk+rDb2FklrZOx7Cnb5BFio2tx8s0K3SrA5ERktdGGm+KaAL
+         OZpQ==
+X-Gm-Message-State: AOAM533mW5L9nKhXAzIC0XVdDpqvuRPzAvPmZKunHUCiWkvy2/5d2huL
+        PCKw3arq8FGYIaut5vzUaCiv+A==
+X-Google-Smtp-Source: ABdhPJzgJ3PcpqePx7yJkUjQ9w+yt6GA1CifHPfNbfQ5uDiUQz3+GZgm4m/QE146hFtdAY3/em/zoA==
+X-Received: by 2002:a17:902:c401:b0:154:3b8a:5e6e with SMTP id k1-20020a170902c40100b001543b8a5e6emr1238570plk.18.1649127186112;
+        Mon, 04 Apr 2022 19:53:06 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w129-20020a628287000000b004fdc453b49asm13683585pfd.39.2022.04.04.19.53.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 19:32:48 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 11:32:44 +0900
-From:   Dongjin Kim <tobetter@gmail.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] arm64: dts: rockchip: Add Hardkernel ODROID-M1 board
-Message-ID: <YkuqTBAi8d48NAOR@anyang>
-References: <20220329094446.415219-1-tobetter@gmail.com>
- <20220329094446.415219-2-tobetter@gmail.com>
- <2a5f002f-8a61-e5b0-a574-ee99591c4c12@kernel.org>
+        Mon, 04 Apr 2022 19:53:05 -0700 (PDT)
+Date:   Mon, 4 Apr 2022 19:53:05 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Sami Tolvanen <samitolvanen@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH 1/3] kbuild: Change CFI_CLANG to depend on
+ __builtin_function_start
+Message-ID: <202204041950.B13AD5CB@keescook>
+References: <20220401201916.1487500-1-samitolvanen@google.com>
+ <20220401201916.1487500-2-samitolvanen@google.com>
+ <CAK7LNAQoJWUscyxXVnOQ9924MYZwaZGgfBYSzmjJxKH_UC0Pkw@mail.gmail.com>
+ <CABCJKudaQJ0_e290gD+rG8SwEembd33ua1MG-w2OKRq3es8Kjw@mail.gmail.com>
+ <Ykt2mz3gBTAyu9pL@dev-arch.thelio-3990X>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2a5f002f-8a61-e5b0-a574-ee99591c4c12@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Ykt2mz3gBTAyu9pL@dev-arch.thelio-3990X>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 07:12:16PM +0200, Krzysztof Kozlowski wrote:
-> On 29/03/2022 11:44, Dongjin Kim wrote:
-> > This patch is to add a device tree for new board Hardkernel ODROID-M1
-> > based on Rockchip RK3568, includes basic peripherals -
-> > uart/eMMC/uSD/i2c and on-board ethernet.
-> 
-> I think the email got corrupted (incorrect To addresses).
-> 
-Thank you for reviewing and sorry for late reply.
+On Mon, Apr 04, 2022 at 03:52:11PM -0700, Nathan Chancellor wrote:
+> On Mon, Apr 04, 2022 at 12:40:46PM -0700, Sami Tolvanen wrote:
+> > On Sat, Apr 2, 2022 at 6:32 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > >
+> > > On Sat, Apr 2, 2022 at 5:19 AM Sami Tolvanen <samitolvanen@google.com> wrote:
+> > > >
+> > > > Clang 14 added support for the __builtin_function_start()
+> > > > built-in function, which allows us to implement function_nocfi()
+> > > > without architecture-specific inline assembly. This patch changes
+> > > > CONFIG_CFI_CLANG to depend on the built-in and effectively upgrades
+> > > > the minimum supported compiler version for CFI to Clang 14.
+> > >
+> > > From this description, I think the straight-forward change would be:
+> > >
+> > >     depends on CLANG_VERSION >= 120000
+> > > -->
+> > >     depends on CLANG_VERSION >= 140000
+> > >
+> > > Any reason to avoid this?
 > > 
-> > Signed-off-by: Dongjin Kim <tobetter@gmail.com>
-> > ---
-> >  arch/arm64/boot/dts/rockchip/Makefile         |   1 +
-> >  .../boot/dts/rockchip/rk3568-odroid-m1.dts    | 406 ++++++++++++++++++
-> >  2 files changed, 407 insertions(+)
-> >  create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-odroid-m1.dts
-> > 
-> > diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
-> > index 4ae9f35434b8..81d160221227 100644
-> > --- a/arch/arm64/boot/dts/rockchip/Makefile
-> > +++ b/arch/arm64/boot/dts/rockchip/Makefile
-> > @@ -61,3 +61,4 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-pinenote-v1.2.dtb
-> >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3566-quartz64-a.dtb
-> >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-evb1-v10.dtb
-> >  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-bpi-r2-pro.dtb
-> > +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3568-odroid-m1.dtb
-> > diff --git a/arch/arm64/boot/dts/rockchip/rk3568-odroid-m1.dts b/arch/arm64/boot/dts/rockchip/rk3568-odroid-m1.dts
-> > new file mode 100644
-> > index 000000000000..d1a5d43127e9
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/rockchip/rk3568-odroid-m1.dts
-> > @@ -0,0 +1,406 @@
-> > +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> > +/*
-> > + * Copyright (c) 2022 Hardkernel Co., Ltd.
-> > + *
-> > + */
-> > +
-> > +/dts-v1/;
-> > +#include <dt-bindings/gpio/gpio.h>
-> > +#include <dt-bindings/leds/common.h>
-> > +#include <dt-bindings/pinctrl/rockchip.h>
-> > +#include "rk3568.dtsi"
-> > +
-> > +/ {
-> > +	model = "Hardkernel ODROID-M1";
-> > +	compatible = "rockchip,rk3568-odroid-m1", "rockchip,rk3568";
-> > +
-> > +	aliases {
-> > +		ethernet0 = &gmac0;
-> > +		i2c0 = &i2c3;
-> > +		i2c3 = &i2c0;
-> > +		mmc0 = &sdhci;
-> > +		mmc1 = &sdmmc0;
-> > +		serial0 = &uart1;
-> > +		serial1 = &uart0;
-> > +	};
-> > +
-> > +	chosen: chosen {
+> > I thought testing for the compiler feature was preferred, but I can
+> > certainly just increase the minimum version number here too.
 > 
-> No need for label.
+> I think we have been somewhat inconsistent with feature versus version
+> checking. It might be nice to hash out when a feature check should be
+> done instead of a version one.
 > 
-Ok. Will fix it.
-> > +		stdout-path = "serial2:1500000n8";
-> > +	};
-> > +
-> > +	dc_12v: dc-12v {
+> Generally, I think we tend to prefer version checks, as they are
+> "cheaper" since we do not have to call the compiler again because we
+> already cached the version code. When adding version checks, our policy
+> has always been use the upstream version of LLVM that the feature in
+> question shipped in, even if it is a top of tree version, as people who
+> are using prereleased versions of LLVM should be frequently updating
+> them.
 > 
-> Generic node name, so "regulator" or "regulator-0"
+> Unfortunately, that does not always match reality. For example,
+> Android's LLVM tracks the main branch but they are almost always behind
+> by a few months. For example, the latest release is 14.0.4, based on a
+> version of LLVM from January 28th:
 > 
-I've followed the node names as already merged device tree files
-for other boards and thought this would be acceptable. Same for other
-node names 'vcc3v3-sys' and node names with underscore below.
-> > +		compatible = "regulator-fixed";
-> > +		regulator-name = "dc_12v";
-> > +		regulator-always-on;
-> > +		regulator-boot-on;
-> > +		regulator-min-microvolt = <12000000>;
-> > +		regulator-max-microvolt = <12000000>;
-> > +	};
-> > +
-> > +	leds: leds {
+> https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+/ab73cd180863dbd17fdb8f20e39b33ab38030cf9/clang-r450784b/clang_source_info.md
+> https://github.com/llvm/llvm-project/commits/282c83c32384cb2f37030c28650fef4150a8b67c
 > 
-> Label seems unused.
+> Normally, I would say "who cares?" but Android's LLVM is used by the
+> Android kernel team both downstream and upstream, so I would argue it is
+> important to take that into account when deciding to do a feature check
+> versus a version check. In other words, by moving to a version check,
+> will we knowingly break a version of clang that is relatively widely
+> used?
 > 
-Ok, will fix it.
-> > +		compatible = "gpio-leds";
-> > +
-> > +		led_power: led-0 {
-> > +			gpios = <&gpio0 RK_PC6 GPIO_ACTIVE_LOW>;
-> > +			function = LED_FUNCTION_POWER;
-> > +			color = <LED_COLOR_ID_RED>;
-> > +			linux,default-trigger = "default-on";
-> > +			pinctrl-names = "default";
-> > +			pinctrl-0 = <&led_power_en>;
-> > +		};
-> > +		led_work: led-1 {
-> > +			gpios = <&gpio0 RK_PB7 GPIO_ACTIVE_HIGH>;
-> > +			function = LED_FUNCTION_HEARTBEAT;
-> > +			color = <LED_COLOR_ID_BLUE>;
-> > +			linux,default-trigger = "heartbeat";
-> > +			pinctrl-names = "default";
-> > +			pinctrl-0 = <&led_work_en>;
-> > +		};
-> > +	};
-> > +
-> > +	vcc3v3_sys: vcc3v3-sys {
-> 
-> Generic node name.
-> 
-> > +		compatible = "regulator-fixed";
-> > +		regulator-name = "vcc3v3_sys";
-> > +		regulator-always-on;
-> > +		regulator-boot-on;
-> > +		regulator-min-microvolt = <3300000>;
-> > +		regulator-max-microvolt = <3300000>;
-> > +		vin-supply = <&dc_12v>;
-> > +	};
-> > +};
-> > +
-> > +&cpu0 {
-> > +	cpu-supply = <&vdd_cpu>;
-> > +};
-> > +
-> > +&cpu1 {
-> > +	cpu-supply = <&vdd_cpu>;
-> > +};
-> > +
-> > +&cpu2 {
-> > +	cpu-supply = <&vdd_cpu>;
-> > +};
-> > +
-> > +&cpu3 {
-> > +	cpu-supply = <&vdd_cpu>;
-> > +};
-> > +
-> > +&gmac0 {
-> > +	assigned-clocks = <&cru SCLK_GMAC0_RX_TX>, <&cru SCLK_GMAC0>;
-> > +	assigned-clock-parents = <&cru SCLK_GMAC0_RGMII_SPEED>;
-> > +	assigned-clock-rates = <0>, <125000000>;
-> > +	clock_in_out = "output";
-> > +	phy-handle = <&rgmii_phy0>;
-> > +	phy-mode = "rgmii";
-> > +	pinctrl-names = "default";
-> > +	pinctrl-0 = <&gmac0_miim
-> > +		     &gmac0_tx_bus2
-> > +		     &gmac0_rx_bus2
-> > +		     &gmac0_rgmii_clk
-> > +		     &gmac0_rgmii_bus>;
-> > +	status = "okay";
-> > +
-> > +	tx_delay = <0x4f>;
-> > +	rx_delay = <0x2d>;
-> > +};
-> > +
-> > +&i2c0 {
-> > +	status = "okay";
-> > +
-> > +	vdd_cpu: regulator@1c {
-> > +		compatible = "tcs,z`";
-> > +		reg = <0x1c>;
-> > +		 fcs,suspend-voltage-selector = <1>;
-> 
-> Mixed up indentation.
-> 
-Sorry, my bad. Will fix it.
-> > +		 regulator-name = "vdd_cpu";
-> > +		 regulator-always-on;
-> > +		 regulator-boot-on;
-> > +		 regulator-min-microvolt = <800000>;
-> > +		 regulator-max-microvolt = <1150000>;
-> > +		 regulator-ramp-delay = <2300>;
-> > +		 vin-supply = <&vcc3v3_sys>;
-> > +
-> > +		 regulator-state-mem {
-> > +			 regulator-off-in-suspend;
-> > +		};
-> > +	};
-> > +
-> > +	rk809: pmic@20 {
-> > +		compatible = "rockchip,rk809";
-> > +		reg = <0x20>;
-> > +		interrupt-parent = <&gpio0>;
-> > +		interrupts = <RK_PA3 IRQ_TYPE_LEVEL_LOW>;
-> > +		#clock-cells = <1>;
-> > +		pinctrl-names = "default";
-> > +		pinctrl-0 = <&pmic_int>;
-> > +		rockchip,system-power-controller;
-> > +		vcc1-supply = <&vcc3v3_sys>;
-> > +		vcc2-supply = <&vcc3v3_sys>;
-> > +		vcc3-supply = <&vcc3v3_sys>;
-> > +		vcc4-supply = <&vcc3v3_sys>;
-> > +		vcc5-supply = <&vcc3v3_sys>;
-> > +		vcc6-supply = <&vcc3v3_sys>;
-> > +		vcc7-supply = <&vcc3v3_sys>;
-> > +		vcc8-supply = <&vcc3v3_sys>;
-> > +		vcc9-supply = <&vcc3v3_sys>;
-> > +		wakeup-source;
-> > +
-> > +		regulators {
-> > +			vdd_logic: DCDC_REG1 {
-> 
-> No underscores in node names, unless anything requires it.
-> 
-> > +				regulator-name = "vdd_logic";
-> > +				regulator-always-on;
-> > +				regulator-boot-on;
-> > +				regulator-init-microvolt = <900000>;
-> > +				regulator-initial-mode = <0x2>;
-> > +				regulator-min-microvolt = <500000>;
-> > +				regulator-max-microvolt = <1350000>;
-> > +				regulator-ramp-delay = <6001>;
-> > +
-> > +				regulator-state-mem {
-> > +					regulator-off-in-suspend;
-> > +				};
-> > +			};
-> > +
-> > +			vdd_gpu: DCDC_REG2 {
-> > +				regulator-name = "vdd_gpu";
-> > +				regulator-init-microvolt = <900000>;
-> > +				regulator-initial-mode = <0x2>;
-> > +				regulator-min-microvolt = <500000>;
-> > +				regulator-max-microvolt = <1350000>;
-> > +				regulator-ramp-delay = <6001>;
-> > +
-> > +				regulator-state-mem {
-> > +					regulator-off-in-suspend;
-> > +				};
-> > +			};
-> > +
-> > +			vcc_ddr: DCDC_REG3 {
-> > +				regulator-name = "vcc_ddr";
-> > +				regulator-always-on;
-> > +				regulator-boot-on;
-> > +				regulator-initial-mode = <0x2>;
-> > +
-> > +				regulator-state-mem {
-> > +					regulator-on-in-suspend;
-> > +				};
-> > +			};
-> > +
-> > +			vdd_npu: DCDC_REG4 {
-> > +				regulator-name = "vdd_npu";
-> > +				regulator-init-microvolt = <900000>;
-> > +				regulator-initial-mode = <0x2>;
-> > +				regulator-min-microvolt = <500000>;
-> > +				regulator-max-microvolt = <1350000>;
-> > +				regulator-ramp-delay = <6001>;
-> > +
-> > +				regulator-state-mem {
-> > +					regulator-off-in-suspend;
-> > +				};
-> > +			};
-> > +
-> > +			vcc_1v8: DCDC_REG5 {
-> > +				regulator-name = "vcc_1v8";
-> > +				regulator-always-on;
-> > +				regulator-boot-on;
-> > +				regulator-min-microvolt = <1800000>;
-> > +				regulator-max-microvolt = <1800000>;
-> > +
-> > +				regulator-state-mem {
-> > +					regulator-off-in-suspend;
-> > +				};
-> > +			};
-> > +
-> > +			vdda0v9_image: LDO_REG1 {
-> > +				regulator-name = "vdda0v9_image";
-> > +				regulator-min-microvolt = <900000>;
-> > +				regulator-max-microvolt = <900000>;
-> > +
-> > +				regulator-state-mem {
-> > +					regulator-off-in-suspend;
-> > +				};
-> > +			};
-> > +
-> > +			vdda_0v9: LDO_REG2 {
-> > +				regulator-name = "vdda_0v9";
-> > +				regulator-always-on;
-> > +				regulator-boot-on;
-> > +				regulator-min-microvolt = <900000>;
-> > +				regulator-max-microvolt = <900000>;
-> > +
-> > +				regulator-state-mem {
-> > +					regulator-off-in-suspend;
-> > +				};
-> > +			};
-> > +
-> > +			vdda0v9_pmu: LDO_REG3 {
-> > +				regulator-name = "vdda0v9_pmu";
-> > +				regulator-always-on;
-> > +				regulator-boot-on;
-> > +				regulator-min-microvolt = <900000>;
-> > +				regulator-max-microvolt = <900000>;
-> > +
-> > +				regulator-state-mem {
-> > +					regulator-on-in-suspend;
-> > +					regulator-suspend-microvolt = <900000>;
-> > +				};
-> > +			};
-> > +
-> > +			vccio_acodec: LDO_REG4 {
-> > +				regulator-name = "vccio_acodec";
-> > +				regulator-min-microvolt = <3300000>;
-> > +				regulator-max-microvolt = <3300000>;
-> > +
-> > +				regulator-state-mem {
-> > +					regulator-off-in-suspend;
-> > +				};
-> > +			};
-> > +
-> > +			vccio_sd: LDO_REG5 {
-> > +				regulator-name = "vccio_sd";
-> > +				regulator-min-microvolt = <1800000>;
-> > +				regulator-max-microvolt = <3300000>;
-> > +
-> > +				regulator-state-mem {
-> > +					regulator-off-in-suspend;
-> > +				};
-> > +			};
-> > +
-> > +			vcc3v3_pmu: LDO_REG6 {
-> > +				regulator-name = "vcc3v3_pmu";
-> > +				regulator-always-on;
-> > +				regulator-boot-on;
-> > +				regulator-min-microvolt = <3300000>;
-> > +				regulator-max-microvolt = <3300000>;
-> > +
-> > +				regulator-state-mem {
-> > +					regulator-on-in-suspend;
-> > +					regulator-suspend-microvolt = <3300000>;
-> > +				};
-> > +			};
-> > +
-> > +			vcca_1v8: LDO_REG7 {
-> > +				regulator-name = "vcca_1v8";
-> > +				regulator-always-on;
-> > +				regulator-boot-on;
-> > +				regulator-min-microvolt = <1800000>;
-> > +				regulator-max-microvolt = <1800000>;
-> > +
-> > +				regulator-state-mem {
-> > +					regulator-off-in-suspend;
-> > +				};
-> > +			};
-> > +
-> > +			vcca1v8_pmu: LDO_REG8 {
-> > +				regulator-name = "vcca1v8_pmu";
-> > +				regulator-always-on;
-> > +				regulator-boot-on;
-> > +				regulator-min-microvolt = <1800000>;
-> > +				regulator-max-microvolt = <1800000>;
-> > +
-> > +				regulator-state-mem {
-> > +					regulator-on-in-suspend;
-> > +					regulator-suspend-microvolt = <1800000>;
-> > +				};
-> > +			};
-> > +
-> > +			vcca1v8_image: LDO_REG9 {
-> > +				regulator-name = "vcca1v8_image";
-> > +				regulator-min-microvolt = <1800000>;
-> > +				regulator-max-microvolt = <1800000>;
-> > +
-> > +				regulator-state-mem {
-> > +					regulator-off-in-suspend;
-> > +				};
-> > +			};
-> > +
-> > +			vcc_3v3: SWITCH_REG1 {
-> > +				regulator-name = "vcc_3v3";
-> > +				regulator-always-on;
-> > +				regulator-boot-on;
-> > +
-> > +				regulator-state-mem {
-> > +					regulator-off-in-suspend;
-> > +				};
-> > +			};
-> > +
-> > +			vcc3v3_sd: SWITCH_REG2 {
-> > +				regulator-name = "vcc3v3_sd";
-> > +
-> > +				regulator-state-mem {
-> > +					regulator-off-in-suspend;
-> > +				};
-> > +			};
-> > +		};
-> > +	};
-> > +};
-> > +
-> > +&mdio0 {
-> > +	rgmii_phy0: ethernet-phy@0 {
-> > +		compatible = "ethernet-phy-ieee802.3-c22";
-> > +		reg = <0x0>;
-> > +		reset-assert-us = <20000>;
-> > +		reset-deassert-us = <100000>;
-> > +		reset-gpios = <&gpio3 RK_PB7 GPIO_ACTIVE_LOW>;
-> > +	};
-> > +};
-> > +
-> > +&pinctrl {
-> > +	leds {
-> > +		led_power_en: led_power_en {
-> 
-> No underscores in node names. Do bindings require specific naming? I
-> would expect "-grp" or "-pins" suffixes, if possible.
-> 
-> > +			rockchip,pins = <0 RK_PC6 RK_FUNC_GPIO &pcfg_pull_none>;
-> > +		};
-> > +		led_work_en: led_work_en {
-> > +			rockchip,pins = <0 RK_PB7 RK_FUNC_GPIO &pcfg_pull_none>;
-> > +		};
-> > +	};
-> > +
-> > +	pmic {
-> > +		pmic_int: pmic_int {
-> > +			rockchip,pins =
-> > +				<0 RK_PA3 RK_FUNC_GPIO &pcfg_pull_up>;
-> > +		};
-> > +	};
-> > +};
-> > +
-> > +&pmu_io_domains {
-> > +	pmuio1-supply = <&vcc3v3_pmu>;
-> > +	pmuio2-supply = <&vcc3v3_pmu>;
-> > +	vccio1-supply = <&vccio_acodec>;
-> > +	vccio2-supply = <&vcc_1v8>;
-> > +	vccio3-supply = <&vccio_sd>;
-> > +	vccio4-supply = <&vcc_1v8>;
-> > +	vccio5-supply = <&vcc_3v3>;
-> > +	vccio6-supply = <&vcc_3v3>;
-> > +	vccio7-supply = <&vcc_3v3>;
-> > +	status = "okay";
-> > +};
-> > +
-> > +&saradc {
-> > +	vref-supply = <&vcca_1v8>;
-> > +	status = "okay";
-> > +};
-> > +
-> > +&sdhci {
-> > +	bus-width = <8>;
-> > +	max-frequency = <200000000>;
-> > +	non-removable;
-> > +	pinctrl-names = "default";
-> > +	pinctrl-0 = <&emmc_bus8 &emmc_clk &emmc_cmd &emmc_datastrobe &emmc_rstnout>;
-> > +	status = "okay";
-> > +};
-> > +
-> > +&sdmmc0 {
-> > +	bus-width = <4>;
-> > +	cap-sd-highspeed;
-> > +	cd-gpios = <&gpio0 RK_PA4 GPIO_ACTIVE_LOW>;
-> > +	disable-wp;
-> > +	pinctrl-names = "default";
-> > +	pinctrl-0 = <&sdmmc0_bus4 &sdmmc0_clk &sdmmc0_cmd &sdmmc0_det>;
-> > +	sd-uhs-sdr104;
-> > +	vmmc-supply = <&vcc3v3_sd>;
-> > +	vqmmc-supply = <&vccio_sd>;
-> > +	status = "okay";
-> > +};
-> > +
-> > +&uart2 {
-> > +	status = "okay";
-> > +};
-> 
-> 
-> Best regards,
-> Krzysztof
-Thank you,
-Dongjin.
+> In this case, 14.0.4 has __builtin_function_start(), so I think it is
+> okay to use a version check instead of a feature one.
+
+Thanks for checking the details on that. Yeah, I think it's fine to go
+with a version check here.
+
+Sami, can you send a v2, and I can take it via the hardening for
+-next? (Unless the ARM folks _really_ want it for -rc2 -- this is kind
+of a fix, but it's also kind of not.)
+
+-- 
+Kees Cook

@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 372B04F4F59
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 865704F4FA2
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1837682AbiDFAqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
+        id S1838921AbiDFA53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348258AbiDEJrT (ORCPT
+        with ESMTP id S1348139AbiDEJrD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:47:19 -0400
+        Tue, 5 Apr 2022 05:47:03 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0509413D2D;
-        Tue,  5 Apr 2022 02:33:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85367E29E5;
+        Tue,  5 Apr 2022 02:33:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 522E7B81C82;
-        Tue,  5 Apr 2022 09:33:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B29A4C385A2;
-        Tue,  5 Apr 2022 09:33:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3CDBCB81C85;
+        Tue,  5 Apr 2022 09:33:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C426C385A0;
+        Tue,  5 Apr 2022 09:33:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151213;
-        bh=hGfpX2/660mo2vFk//XI/hXob0LrOy9/SJhBumtFWJs=;
+        s=korg; t=1649151199;
+        bh=zEeKefMZYRslSx40JLS5O+6+t08QoeqPa7ZuL/Iyqg4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WuDYAUIbCjncfIgr593vac5yeA5wtTQN3qcqBVuWk4kgNf85dvq3ntS05shBz1kDE
-         4cFCTQMY5/q8L/ndvCXnYIYTeuCyp1ZbdIYYRfT+zSdvAgjRh1wYg73q5pQ7S8NB9A
-         RPzO0oH75bebzwnbrmmG+1ggAkZcuwAqSjhaD9GU=
+        b=n6a25wLKAtHtYGi7WSugnSk3t9IlgWbm1ly6YNp4IEUro489uC/ZXnxKuF69eI3JL
+         FgQeHEm+fI5FH46yEfn1mGonWtCGHkab4DfsZvtK/BkO2fP1zjmr85gaE+ljjAn0RK
+         8mV1n8rxqSohbicf961AT1M0gCemXU0O9ZVTzmqE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jammy Huang <jammy_huang@aspeedtech.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 287/913] media: aspeed: Correct value for h-total-pixels
-Date:   Tue,  5 Apr 2022 09:22:29 +0200
-Message-Id: <20220405070348.461014255@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 292/913] video: fbdev: fbcvt.c: fix printing in fb_cvt_print_name()
+Date:   Tue,  5 Apr 2022 09:22:34 +0200
+Message-Id: <20220405070348.609404279@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -57,72 +54,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jammy Huang <jammy_huang@aspeedtech.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 4b732a0016853eaff35944f900b0db66f3914374 ]
+[ Upstream commit 78482af095abd9f4f29f1aa3fe575d25c6ae3028 ]
 
-Previous reg-field, 0x98[11:0], stands for the period of the detected
-hsync signal.
-Use the correct reg, 0xa0, to get h-total in pixels.
+This code has two bugs:
+1) "cnt" is 255 but the size of the buffer is 256 so the last byte is
+   not used.
+2) If we try to print more than 255 characters then "cnt" will be
+   negative and that will trigger a WARN() in snprintf(). The fix for
+   this is to use scnprintf() instead of snprintf().
 
-Fixes: d2b4387f3bdf ("media: platform: Add Aspeed Video Engine driver")
-Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
-Reviewed-by: Joel Stanley <joel@jms.id.au>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+We can re-write this code to be cleaner:
+1) Rename "offset" to "off" because that's shorter.
+2) Get rid of the "cnt" variable and just use "size - off" directly.
+3) Get rid of the "read" variable and just increment "off" directly.
+
+Fixes: 96fe6a2109db ("fbdev: Add VESA Coordinated Video Timings (CVT) support")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/aspeed-video.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/video/fbdev/core/fbcvt.c | 53 +++++++++++++-------------------
+ 1 file changed, 21 insertions(+), 32 deletions(-)
 
-diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index debc7509c173..757a58829a51 100644
---- a/drivers/media/platform/aspeed-video.c
-+++ b/drivers/media/platform/aspeed-video.c
-@@ -151,7 +151,7 @@
- #define  VE_SRC_TB_EDGE_DET_BOT		GENMASK(28, VE_SRC_TB_EDGE_DET_BOT_SHF)
+diff --git a/drivers/video/fbdev/core/fbcvt.c b/drivers/video/fbdev/core/fbcvt.c
+index 55d2bd0ce5c0..64843464c661 100644
+--- a/drivers/video/fbdev/core/fbcvt.c
++++ b/drivers/video/fbdev/core/fbcvt.c
+@@ -214,9 +214,11 @@ static u32 fb_cvt_aspect_ratio(struct fb_cvt_data *cvt)
+ static void fb_cvt_print_name(struct fb_cvt_data *cvt)
+ {
+ 	u32 pixcount, pixcount_mod;
+-	int cnt = 255, offset = 0, read = 0;
+-	u8 *buf = kzalloc(256, GFP_KERNEL);
++	int size = 256;
++	int off = 0;
++	u8 *buf;
  
- #define VE_MODE_DETECT_STATUS		0x098
--#define  VE_MODE_DETECT_H_PIXELS	GENMASK(11, 0)
-+#define  VE_MODE_DETECT_H_PERIOD	GENMASK(11, 0)
- #define  VE_MODE_DETECT_V_LINES_SHF	16
- #define  VE_MODE_DETECT_V_LINES		GENMASK(27, VE_MODE_DETECT_V_LINES_SHF)
- #define  VE_MODE_DETECT_STATUS_VSYNC	BIT(28)
-@@ -162,6 +162,8 @@
- #define  VE_SYNC_STATUS_VSYNC_SHF	16
- #define  VE_SYNC_STATUS_VSYNC		GENMASK(27, VE_SYNC_STATUS_VSYNC_SHF)
++	buf = kzalloc(size, GFP_KERNEL);
+ 	if (!buf)
+ 		return;
  
-+#define VE_H_TOTAL_PIXELS		0x0A0
+@@ -224,43 +226,30 @@ static void fb_cvt_print_name(struct fb_cvt_data *cvt)
+ 	pixcount_mod = (cvt->xres * (cvt->yres/cvt->interlace)) % 1000000;
+ 	pixcount_mod /= 1000;
+ 
+-	read = snprintf(buf+offset, cnt, "fbcvt: %dx%d@%d: CVT Name - ",
+-			cvt->xres, cvt->yres, cvt->refresh);
+-	offset += read;
+-	cnt -= read;
++	off += scnprintf(buf + off, size - off, "fbcvt: %dx%d@%d: CVT Name - ",
++			    cvt->xres, cvt->yres, cvt->refresh);
+ 
+-	if (cvt->status)
+-		snprintf(buf+offset, cnt, "Not a CVT standard - %d.%03d Mega "
+-			 "Pixel Image\n", pixcount, pixcount_mod);
+-	else {
+-		if (pixcount) {
+-			read = snprintf(buf+offset, cnt, "%d", pixcount);
+-			cnt -= read;
+-			offset += read;
+-		}
++	if (cvt->status) {
++		off += scnprintf(buf + off, size - off,
++				 "Not a CVT standard - %d.%03d Mega Pixel Image\n",
++				 pixcount, pixcount_mod);
++	} else {
++		if (pixcount)
++			off += scnprintf(buf + off, size - off, "%d", pixcount);
+ 
+-		read = snprintf(buf+offset, cnt, ".%03dM", pixcount_mod);
+-		cnt -= read;
+-		offset += read;
++		off += scnprintf(buf + off, size - off, ".%03dM", pixcount_mod);
+ 
+ 		if (cvt->aspect_ratio == 0)
+-			read = snprintf(buf+offset, cnt, "3");
++			off += scnprintf(buf + off, size - off, "3");
+ 		else if (cvt->aspect_ratio == 3)
+-			read = snprintf(buf+offset, cnt, "4");
++			off += scnprintf(buf + off, size - off, "4");
+ 		else if (cvt->aspect_ratio == 1 || cvt->aspect_ratio == 4)
+-			read = snprintf(buf+offset, cnt, "9");
++			off += scnprintf(buf + off, size - off, "9");
+ 		else if (cvt->aspect_ratio == 2)
+-			read = snprintf(buf+offset, cnt, "A");
+-		else
+-			read = 0;
+-		cnt -= read;
+-		offset += read;
+-
+-		if (cvt->flags & FB_CVT_FLAG_REDUCED_BLANK) {
+-			read = snprintf(buf+offset, cnt, "-R");
+-			cnt -= read;
+-			offset += read;
+-		}
++			off += scnprintf(buf + off, size - off, "A");
 +
- #define VE_INTERRUPT_CTRL		0x304
- #define VE_INTERRUPT_STATUS		0x308
- #define  VE_INTERRUPT_MODE_DETECT_WD	BIT(0)
-@@ -765,6 +767,7 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
- 	u32 src_lr_edge;
- 	u32 src_tb_edge;
- 	u32 sync;
-+	u32 htotal;
- 	struct v4l2_bt_timings *det = &video->detected_timings;
++		if (cvt->flags & FB_CVT_FLAG_REDUCED_BLANK)
++			off += scnprintf(buf + off, size - off, "-R");
+ 	}
  
- 	det->width = MIN_WIDTH;
-@@ -809,6 +812,7 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
- 		src_tb_edge = aspeed_video_read(video, VE_SRC_TB_EDGE_DET);
- 		mds = aspeed_video_read(video, VE_MODE_DETECT_STATUS);
- 		sync = aspeed_video_read(video, VE_SYNC_STATUS);
-+		htotal = aspeed_video_read(video, VE_H_TOTAL_PIXELS);
- 
- 		video->frame_bottom = (src_tb_edge & VE_SRC_TB_EDGE_DET_BOT) >>
- 			VE_SRC_TB_EDGE_DET_BOT_SHF;
-@@ -825,8 +829,7 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
- 			VE_SRC_LR_EDGE_DET_RT_SHF;
- 		video->frame_left = src_lr_edge & VE_SRC_LR_EDGE_DET_LEFT;
- 		det->hfrontporch = video->frame_left;
--		det->hbackporch = (mds & VE_MODE_DETECT_H_PIXELS) -
--			video->frame_right;
-+		det->hbackporch = htotal - video->frame_right;
- 		det->hsync = sync & VE_SYNC_STATUS_HSYNC;
- 		if (video->frame_left > video->frame_right)
- 			continue;
+ 	printk(KERN_INFO "%s\n", buf);
 -- 
 2.34.1
 

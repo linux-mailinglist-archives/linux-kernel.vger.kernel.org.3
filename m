@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9254F4DEC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D6A4F49C9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1584132AbiDEX5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
+        id S1450437AbiDEW1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:27:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442202AbiDEPhI (ORCPT
+        with ESMTP id S1442422AbiDEPhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:37:08 -0400
+        Tue, 5 Apr 2022 11:37:40 -0400
 Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D5BF1EA7;
-        Tue,  5 Apr 2022 06:51:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EB2111DD8;
+        Tue,  5 Apr 2022 06:51:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649166684; x=1680702684;
+  t=1649166713; x=1680702713;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=hMIn10jdMOZ3d+zm3mh/P4foFQUZ8FiHKOHW1rBiQyk=;
-  b=KjFLfrB70J1Uc7rMVAQpTc0ojUYjsennUg7P6N9rjiPtJleyoig263ug
-   w8w4Y8x5uuz1NoosSqb2az12PsGe23OYYmP20MVv3fdgdXp2lXgmL2isu
-   YkBN69zLICYLEW4qkx1JT1gErd6PSpq37O0ATFLUEgJwUDA2AzE43I0m1
+  bh=5+nWAPFQHv6Q16Bxq/GwQj6VzCNcFVPIYMa5uQiSOBU=;
+  b=ZNQLPuExRktDuO3QUPcaEEaJhceRk2h+SvKRHCwuU0S2g+0Yty7WBYBW
+   f78U9xlsFPUap+/29LTjspm8aSHEHFVlaRHUYlBh+Xhdt3PCFlgKDdMOO
+   9g6QYtkcVaXYQztJWcj8c3jGPRB5U4KCk8u0We7HLxvuiDpCporPcgpUi
    Y=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 05 Apr 2022 06:51:24 -0700
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 05 Apr 2022 06:51:52 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 06:51:23 -0700
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 06:51:37 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Apr 2022 06:51:23 -0700
+ 15.2.986.22; Tue, 5 Apr 2022 06:51:36 -0700
 Received: from c-skakit-linux.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Apr 2022 06:51:19 -0700
+ 15.2.986.22; Tue, 5 Apr 2022 06:51:32 -0700
 From:   Satya Priya <quic_c_skakit@quicinc.com>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>
@@ -49,9 +49,9 @@ CC:     Lee Jones <lee.jones@linaro.org>,
         <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>,
         <quic_jprakash@quicinc.com>,
         Satya Priya <quic_c_skakit@quicinc.com>
-Subject: [PATCH V9 3/6] mfd: pm8008: Add mfd cell struct to register LDOs
-Date:   Tue, 5 Apr 2022 19:20:30 +0530
-Message-ID: <1649166633-25872-4-git-send-email-quic_c_skakit@quicinc.com>
+Subject: [PATCH V9 6/6] arm64: dts: qcom: sc7280: Add pm8008 support for sc7280-idp
+Date:   Tue, 5 Apr 2022 19:20:33 +0530
+Message-ID: <1649166633-25872-7-git-send-email-quic_c_skakit@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1649166633-25872-1-git-send-email-quic_c_skakit@quicinc.com>
 References: <1649166633-25872-1-git-send-email-quic_c_skakit@quicinc.com>
@@ -70,164 +70,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add mfd cell struct to match with the "qcom,pm8008-regulator"
-driver and a separate probe to add pm8008_regulator_devs.
-This separate probe is required to ensure the regulators are
-registered only with the mfd device which contains regulators.
-
-Add the reset-gpio toggling in the pm8008_probe() to bring
-pm8008 chip out of reset instead of doing it in DT node using
-"output-high" property.
+Add pm8008 infra and regulators support for sc7280 idp.
 
 Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
 ---
 Changes in V6:
- - Changed the mfd_cell struct to have only name of the regulator driver.
- - Using device_get_match_data() instead of of_match_node() to match data.
- - Fixed few nits.
+ - No changes.
 
 Changes in V7:
- - Fixed minor errors.
+ - No Changes.
 
 Changes in V8:
- - Split the probe for infra and regulator devices
- - Add the reset-gpio toggling in the infra driver probe
+ - Add an extra phandle "pm8008_bus" and then include pm8008 dtsi files inside it.
+ - Remove output-high from pm8008_active node.
 
 Changes in V9:
- - Fixed nits.
+ - Added interrupts properties.
 
- drivers/mfd/qcom-pm8008.c | 80 +++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 78 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 68 ++++++++++++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
-diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
-index c472d7f..c7781ab 100644
---- a/drivers/mfd/qcom-pm8008.c
-+++ b/drivers/mfd/qcom-pm8008.c
-@@ -4,10 +4,12 @@
-  */
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+index ecbf2b8..6f39c05 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+@@ -263,6 +263,65 @@
+ 	};
+ };
  
- #include <linux/bitops.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
- #include <linux/irq.h>
- #include <linux/irqdomain.h>
-+#include <linux/mfd/core.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
- #include <linux/of_platform.h>
-@@ -27,6 +29,10 @@
- #define INT_EN_CLR_OFFSET		0x16
- #define INT_LATCHED_STS_OFFSET		0x18
- 
-+static const struct mfd_cell pm8008_regulator_devs[] = {
-+	MFD_CELL_NAME("qcom,pm8008-regulators"),
++pm8008_bus: &i2c1 {
++	status = "okay";
 +};
 +
- enum {
- 	PM8008_MISC,
- 	PM8008_TEMP_ALARM,
-@@ -57,6 +63,7 @@ enum {
- struct pm8008_data {
- 	struct device *dev;
- 	struct regmap *regmap;
-+	struct gpio_desc *reset_gpio;
- 	int irq;
- 	struct regmap_irq_chip_data *irq_data;
- };
-@@ -239,13 +246,44 @@ static int pm8008_probe(struct i2c_client *client)
- 			dev_err(chip->dev, "Failed to probe irq periphs: %d\n", rc);
- 	}
- 
-+	chip->reset_gpio = devm_gpiod_get(chip->dev, "reset", GPIOD_OUT_HIGH);
-+	if (IS_ERR(chip->reset_gpio)) {
-+		dev_err(chip->dev, "failed to acquire reset gpio\n");
-+		return PTR_ERR(chip->reset_gpio);
-+	}
-+	gpiod_set_value(chip->reset_gpio, 1);
++#include "pm8008.dtsi"
 +
- 	return devm_of_platform_populate(chip->dev);
- }
- 
-+static int pm8008_probe_regulators(struct i2c_client *client)
-+{
++&pm8008 {
++	interrupt-parent = <&tlmm>;
++	interrupts = <24 IRQ_TYPE_EDGE_RISING>;
 +
-+	int rc;
-+	struct pm8008_data *chip;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pm8008_active>;
 +
-+	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
-+	if (!chip)
-+		return -ENOMEM;
-+
-+	chip->dev = &client->dev;
-+	chip->regmap = devm_regmap_init_i2c(client, &qcom_mfd_regmap_cfg);
-+	if (!chip->regmap)
-+		return -ENODEV;
-+
-+	rc = devm_mfd_add_devices(chip->dev, 0, pm8008_regulator_devs,
-+			ARRAY_SIZE(pm8008_regulator_devs), NULL, 0, NULL);
-+	if (rc)
-+		dev_err(chip->dev, "Failed to add children: %d\n", rc);
-+
-+	return rc;
-+}
-+
- static const struct of_device_id pm8008_match[] = {
- 	{ .compatible = "qcom,pm8008", },
--	{ },
-+	{ }
- };
-+MODULE_DEVICE_TABLE(of, pm8008_match);
- 
- static struct i2c_driver pm8008_mfd_driver = {
- 	.driver = {
-@@ -254,7 +292,45 @@ static struct i2c_driver pm8008_mfd_driver = {
- 	},
- 	.probe_new = pm8008_probe,
- };
--module_i2c_driver(pm8008_mfd_driver);
-+
-+static const struct of_device_id pm8008_regulators_match[] = {
-+	{ .compatible = "qcom,pm8008-regulators", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, pm8008_regulators_match);
-+
-+static struct i2c_driver pm8008_regulators_driver = {
-+	.driver = {
-+		.name = "pm8008-regulators",
-+		.of_match_table = pm8008_regulators_match,
-+	},
-+	.probe_new = pm8008_probe_regulators,
++	reset-gpios = <&pm8350c_gpios 4 GPIO_ACTIVE_HIGH>;
 +};
 +
-+static int __init pm8008_i2c_init(void)
-+{
-+	int ret;
++&pm8008_regulators {
++	vdd_l1_l2-supply = <&vreg_s8b_1p2>;
++	vdd_l3_l4-supply = <&vreg_s1b_1p8>;
++	vdd_l5-supply = <&vreg_bob>;
++	vdd_l6-supply = <&vreg_bob>;
++	vdd_l7-supply = <&vreg_bob>;
++};
 +
-+	ret = i2c_add_driver(&pm8008_mfd_driver);
-+	if (ret) {
-+		pr_err("Failed to register driver for pm8008_infra: %d\n", ret);
-+		return ret;
-+	}
++&pm8008_l1 {
++	regulator-min-microvolt = <950000>;
++	regulator-max-microvolt = <1300000>;
++};
 +
-+	ret = i2c_add_driver(&pm8008_regulators_driver);
-+	if (ret)
-+		pr_err("Failed to register driver for pm8008_regulators: %d\n", ret);
++&pm8008_l2 {
++	regulator-min-microvolt = <950000>;
++	regulator-max-microvolt = <1250000>;
++};
 +
-+	return ret;
-+}
-+module_init(pm8008_i2c_init);
++&pm8008_l3 {
++	regulator-min-microvolt = <1650000>;
++	regulator-max-microvolt = <3000000>;
++};
 +
-+static void __exit pm8008_i2c_exit(void)
-+{
-+	i2c_del_driver(&pm8008_mfd_driver);
-+	i2c_del_driver(&pm8008_regulators_driver);
-+}
-+module_exit(pm8008_i2c_exit);
++&pm8008_l4 {
++	regulator-min-microvolt = <1504000>;
++	regulator-max-microvolt = <1600000>;
++};
++
++&pm8008_l5 {
++	regulator-min-microvolt = <2600000>;
++	regulator-max-microvolt = <3000000>;
++};
++
++&pm8008_l6 {
++	regulator-min-microvolt = <2600000>;
++	regulator-max-microvolt = <3000000>;
++};
++
++&pm8008_l7 {
++	regulator-min-microvolt = <3000000>;
++	regulator-max-microvolt = <3544000>;
++};
++
+ &qfprom {
+ 	vcc-supply = <&vreg_l1c_1p8>;
+ };
+@@ -375,6 +434,15 @@
+ 	drive-strength = <2>;
+ };
  
- MODULE_LICENSE("GPL v2");
- MODULE_ALIAS("i2c:qcom-pm8008");
++&pm8350c_gpios {
++	pm8008_active: pm8008-active {
++		pins = "gpio4";
++		function = "normal";
++		bias-disable;
++		power-source = <0>;
++	};
++};
++
+ &qspi_cs0 {
+ 	bias-disable;
+ };
 -- 
 2.7.4
 

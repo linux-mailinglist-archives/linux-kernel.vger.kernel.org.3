@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 817924F4E23
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1484F4A41
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1587908AbiDFAKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35486 "EHLO
+        id S1454523AbiDEWit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573552AbiDETWj (ORCPT
+        with ESMTP id S1573555AbiDETWl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 15:22:39 -0400
+        Tue, 5 Apr 2022 15:22:41 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AC73CFDB;
-        Tue,  5 Apr 2022 12:20:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477353CFCD;
+        Tue,  5 Apr 2022 12:20:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0A6DDB81FA4;
-        Tue,  5 Apr 2022 19:20:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BD42C385A0;
-        Tue,  5 Apr 2022 19:20:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D4AA7B81FA5;
+        Tue,  5 Apr 2022 19:20:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5A20C385A1;
+        Tue,  5 Apr 2022 19:20:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649186436;
-        bh=y1CHM8STK8OTbioMqhyja91DwJu2qLFOOxUQqODp/bA=;
+        s=k20201202; t=1649186440;
+        bh=u6cpxI3/hvGaiyZFCeu55d6yaSo4kUHVnzeT4mNgI6I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KKgdKxatD/6nBp3Zy2wQE3CVP9KcHcBNn3W7yivtMJdaCRwY4ooZp1XV0xJHqWBfz
-         qbz8sDTdhukY/sGPLUBHvA/x4w7zwvzJD87Vgs0KTidTFbLURAnWNVSjYY/psun+Ur
-         mnYvFyN7EC8TfEIkpHNRNatHCvQ8rC2pgfPj4AvDpxYKy4ErUqq7/rf66/P5S7mSWT
-         v/Gh/s2vgrIccinHt98aPCL1EJrR6T2kOZlgJ6xa3xQpMa5bQlX9HtfmPkWlZ8gMdQ
-         On3g+1VHlFRp7+t1nTzcug2oxPr5KbQbmcFVMqtTnOF1lwDgjE8a+9MC23FOk+A7yV
-         UxMGTrGm9J3og==
+        b=nxmTSsYbQna7Zx3YoDwuUWRwNf5AdGwzzK96nh63/QltKFEnpr2PwhwuQyaEUKrfI
+         VmN1uf1EXU+xTBMcM0xQIkGQnrfebS6qxczBYaXfBy7+dgrogjZbb+oJsQZ8G99/zt
+         m1UAohAn5Z6Lt9yEoSz50mbQaNjV+zuK6QWz+GhsADdTJyysdJ5gR2cH+b4og7vRV1
+         SdLTIIHrHWnG9boNnJWQSHXaeMf+A5N7IhyWG8cQShe7U6MSY4t2bUF3whg6EmHHvW
+         6G0JUFKiVb0hUoWhBOiPiVVyu7yXfDEKf196oeE7VlGUSoDz1KKw9riH3VkX/NJ/HF
+         mVoj8euy/4W5Q==
 From:   Jeff Layton <jlayton@kernel.org>
 To:     idryomov@gmail.com, xiubli@redhat.com
 Cc:     ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lhenriques@suse.de
-Subject: [PATCH v13 05/59] libceph: support sparse reads on msgr2 secure codepath
-Date:   Tue,  5 Apr 2022 15:19:36 -0400
-Message-Id: <20220405192030.178326-6-jlayton@kernel.org>
+        lhenriques@suse.de, Eric Biggers <ebiggers@google.com>
+Subject: [PATCH v13 09/59] fscrypt: export fscrypt_base64url_encode and fscrypt_base64url_decode
+Date:   Tue,  5 Apr 2022 15:19:40 -0400
+Message-Id: <20220405192030.178326-10-jlayton@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405192030.178326-1-jlayton@kernel.org>
 References: <20220405192030.178326-1-jlayton@kernel.org>
@@ -55,206 +55,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new init_sgs_pages helper that populates the scatterlist from
-an arbitrary point in an array of pages.
+Ceph is going to add fscrypt support, but we still want encrypted
+filenames to be composed of printable characters, so we can maintain
+compatibility with clients that don't support fscrypt.
 
-Change setup_message_sgs to take an optional pointer to an array of
-pages. If that's set, then the scatterlist will be set using that
-array instead of the cursor.
+We could just adopt fscrypt's current nokey name format, but that is
+subject to change in the future, and it also contains dirhash fields
+that we don't need for cephfs. Because of this, we're going to concoct
+our own scheme for encoding encrypted filenames. It's very similar to
+fscrypt's current scheme, but doesn't bother with the dirhash fields.
 
-When given a sparse read on a secure connection, decrypt the data
-in-place rather than into the final destination, by passing it the
-in_enc_pages array.
+The ceph encoding scheme will use base64 encoding as well, and we also
+want it to avoid characters that are illegal in filenames. Export the
+fscrypt base64 encoding/decoding routines so we can use them in ceph's
+fscrypt implementation.
 
-After decrypting, run the sparse_read state machine in a loop, copying
-data from the decrypted pages until it's complete.
-
+Acked-by: Eric Biggers <ebiggers@google.com>
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- net/ceph/messenger_v2.c | 119 ++++++++++++++++++++++++++++++++++++----
- 1 file changed, 109 insertions(+), 10 deletions(-)
+ fs/crypto/fname.c       | 8 ++++----
+ include/linux/fscrypt.h | 5 +++++
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/net/ceph/messenger_v2.c b/net/ceph/messenger_v2.c
-index d527777af584..3dcaee6f8903 100644
---- a/net/ceph/messenger_v2.c
-+++ b/net/ceph/messenger_v2.c
-@@ -963,12 +963,48 @@ static void init_sgs_cursor(struct scatterlist **sg,
- 	}
- }
+diff --git a/fs/crypto/fname.c b/fs/crypto/fname.c
+index a9be4bc74a94..1e4233c95005 100644
+--- a/fs/crypto/fname.c
++++ b/fs/crypto/fname.c
+@@ -182,8 +182,6 @@ static int fname_decrypt(const struct inode *inode,
+ static const char base64url_table[65] =
+ 	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
  
-+/**
-+ * init_sgs_pages: set up scatterlist on an array of page pointers
-+ * @sg: 	scatterlist to populate
-+ * @pages: 	pointer to page array
-+ * @dpos:	position in the array to start (bytes)
-+ * @dlen:	len to add to sg (bytes)
-+ * @pad:	pointer to pad destination (if any)
-+ *
-+ * Populate the scatterlist from the page array, starting at an arbitrary
-+ * byte in the array and running for a specified length.
-+ */
-+static void init_sgs_pages(struct scatterlist **sg, struct page **pages,
-+			     int dpos, int dlen, u8 *pad)
-+{
-+	int idx = dpos >> PAGE_SHIFT;
-+	int off = offset_in_page(dpos);
-+	int resid = dlen;
-+
-+	do {
-+		int len = min(resid, (int)PAGE_SIZE - off);
-+
-+		sg_set_page(*sg, pages[idx], len, off);
-+		*sg = sg_next(*sg);
-+		off = 0;
-+		++idx;
-+		resid -= len;
-+	} while (resid);
-+
-+	if (need_padding(dlen)) {
-+		sg_set_buf(*sg, pad, padding_len(dlen));
-+		*sg = sg_next(*sg);
-+	}
-+}
-+
- static int setup_message_sgs(struct sg_table *sgt, struct ceph_msg *msg,
- 			     u8 *front_pad, u8 *middle_pad, u8 *data_pad,
--			     void *epilogue, bool add_tag)
-+			     void *epilogue, struct page **pages, int dpos,
-+			     bool add_tag)
+-#define FSCRYPT_BASE64URL_CHARS(nbytes)	DIV_ROUND_UP((nbytes) * 4, 3)
+-
+ /**
+  * fscrypt_base64url_encode() - base64url-encode some binary data
+  * @src: the binary data to encode
+@@ -198,7 +196,7 @@ static const char base64url_table[65] =
+  * Return: the length of the resulting base64url-encoded string in bytes.
+  *	   This will be equal to FSCRYPT_BASE64URL_CHARS(srclen).
+  */
+-static int fscrypt_base64url_encode(const u8 *src, int srclen, char *dst)
++int fscrypt_base64url_encode(const u8 *src, int srclen, char *dst)
  {
- 	struct ceph_msg_data_cursor cursor;
- 	struct scatterlist *cur_sg;
-+	int dlen = data_len(msg);
- 	int sg_cnt;
- 	int ret;
- 
-@@ -982,9 +1018,15 @@ static int setup_message_sgs(struct sg_table *sgt, struct ceph_msg *msg,
- 	if (middle_len(msg))
- 		sg_cnt += calc_sg_cnt(msg->middle->vec.iov_base,
- 				      middle_len(msg));
--	if (data_len(msg)) {
--		ceph_msg_data_cursor_init(&cursor, msg, data_len(msg));
--		sg_cnt += calc_sg_cnt_cursor(&cursor);
-+	if (dlen) {
-+		if (pages) {
-+			sg_cnt += calc_pages_for(dpos, dlen);
-+			if (need_padding(dlen))
-+				sg_cnt++;
-+		} else {
-+			ceph_msg_data_cursor_init(&cursor, msg, dlen);
-+			sg_cnt += calc_sg_cnt_cursor(&cursor);
-+		}
- 	}
- 
- 	ret = sg_alloc_table(sgt, sg_cnt, GFP_NOIO);
-@@ -998,9 +1040,13 @@ static int setup_message_sgs(struct sg_table *sgt, struct ceph_msg *msg,
- 	if (middle_len(msg))
- 		init_sgs(&cur_sg, msg->middle->vec.iov_base, middle_len(msg),
- 			 middle_pad);
--	if (data_len(msg)) {
--		ceph_msg_data_cursor_init(&cursor, msg, data_len(msg));
--		init_sgs_cursor(&cur_sg, &cursor, data_pad);
-+	if (dlen) {
-+		if (pages) {
-+			init_sgs_pages(&cur_sg, pages, dpos, dlen, data_pad);
-+		} else {
-+			ceph_msg_data_cursor_init(&cursor, msg, dlen);
-+			init_sgs_cursor(&cur_sg, &cursor, data_pad);
-+		}
- 	}
- 
- 	WARN_ON(!sg_is_last(cur_sg));
-@@ -1035,10 +1081,52 @@ static int decrypt_control_remainder(struct ceph_connection *con)
- 			 padded_len(rem_len) + CEPH_GCM_TAG_LEN);
+ 	u32 ac = 0;
+ 	int bits = 0;
+@@ -217,6 +215,7 @@ static int fscrypt_base64url_encode(const u8 *src, int srclen, char *dst)
+ 		*cp++ = base64url_table[(ac << (6 - bits)) & 0x3f];
+ 	return cp - dst;
  }
++EXPORT_SYMBOL_GPL(fscrypt_base64url_encode);
  
-+/* Process sparse read data that lives in a buffer */
-+static int process_v2_sparse_read(struct ceph_connection *con, struct page **pages, int spos)
-+{
-+	struct ceph_msg_data_cursor *cursor = &con->v2.in_cursor;
-+	int ret;
-+
-+	for (;;) {
-+		char *buf = NULL;
-+
-+		ret = con->ops->sparse_read(con, cursor, &buf);
-+		if (ret <= 0)
-+			return ret;
-+
-+		dout("%s: sparse_read return %x buf %p\n", __func__, ret, buf);
-+
-+		do {
-+			int idx = spos >> PAGE_SHIFT;
-+			int soff = offset_in_page(spos);
-+			struct page *spage = con->v2.in_enc_pages[idx];
-+			int len = min_t(int, ret, PAGE_SIZE - soff);
-+
-+			if (buf) {
-+				memcpy_from_page(buf, spage, soff, len);
-+				buf += len;
-+			} else {
-+				struct bio_vec bv;
-+
-+				get_bvec_at(cursor, &bv);
-+				len = min_t(int, len, bv.bv_len);
-+				memcpy_page(bv.bv_page, bv.bv_offset,
-+					    spage, soff, len);
-+				ceph_msg_data_advance(cursor, len);
-+			}
-+			spos += len;
-+			ret -= len;
-+		} while (ret);
-+	}
-+}
-+
- static int decrypt_tail(struct ceph_connection *con)
+ /**
+  * fscrypt_base64url_decode() - base64url-decode a string
+@@ -233,7 +232,7 @@ static int fscrypt_base64url_encode(const u8 *src, int srclen, char *dst)
+  * Return: the length of the resulting decoded binary data in bytes,
+  *	   or -1 if the string isn't a valid base64url string.
+  */
+-static int fscrypt_base64url_decode(const char *src, int srclen, u8 *dst)
++int fscrypt_base64url_decode(const char *src, int srclen, u8 *dst)
  {
- 	struct sg_table enc_sgt = {};
- 	struct sg_table sgt = {};
-+	struct page **pages = NULL;
-+	bool sparse = con->in_msg->sparse_read;
-+	int dpos = 0;
- 	int tail_len;
- 	int ret;
+ 	u32 ac = 0;
+ 	int bits = 0;
+@@ -256,6 +255,7 @@ static int fscrypt_base64url_decode(const char *src, int srclen, u8 *dst)
+ 		return -1;
+ 	return bp - dst;
+ }
++EXPORT_SYMBOL_GPL(fscrypt_base64url_decode);
  
-@@ -1049,9 +1137,14 @@ static int decrypt_tail(struct ceph_connection *con)
- 	if (ret)
- 		goto out;
+ bool fscrypt_fname_encrypted_size(const union fscrypt_policy *policy,
+ 				  u32 orig_len, u32 max_len,
+diff --git a/include/linux/fscrypt.h b/include/linux/fscrypt.h
+index 50d92d805bd8..629ccd09e095 100644
+--- a/include/linux/fscrypt.h
++++ b/include/linux/fscrypt.h
+@@ -46,6 +46,9 @@ struct fscrypt_name {
+ /* Maximum value for the third parameter of fscrypt_operations.set_context(). */
+ #define FSCRYPT_SET_CONTEXT_MAX_SIZE	40
  
-+	if (sparse) {
-+		dpos = padded_len(front_len(con->in_msg) + padded_len(middle_len(con->in_msg)));
-+		pages = con->v2.in_enc_pages;
-+	}
++/* len of resulting string (sans NUL terminator) after base64 encoding nbytes */
++#define FSCRYPT_BASE64URL_CHARS(nbytes)		DIV_ROUND_UP((nbytes) * 4, 3)
 +
- 	ret = setup_message_sgs(&sgt, con->in_msg, FRONT_PAD(con->v2.in_buf),
--			MIDDLE_PAD(con->v2.in_buf), DATA_PAD(con->v2.in_buf),
--			con->v2.in_buf, true);
-+				MIDDLE_PAD(con->v2.in_buf), DATA_PAD(con->v2.in_buf),
-+				con->v2.in_buf, pages, dpos, true);
- 	if (ret)
- 		goto out;
+ #ifdef CONFIG_FS_ENCRYPTION
  
-@@ -1061,6 +1154,12 @@ static int decrypt_tail(struct ceph_connection *con)
- 	if (ret)
- 		goto out;
+ /*
+@@ -305,6 +308,8 @@ void fscrypt_free_inode(struct inode *inode);
+ int fscrypt_drop_inode(struct inode *inode);
  
-+	if (sparse && data_len(con->in_msg)) {
-+		ret = process_v2_sparse_read(con, con->v2.in_enc_pages, dpos);
-+		if (ret)
-+			goto out;
-+	}
-+
- 	WARN_ON(!con->v2.in_enc_page_cnt);
- 	ceph_release_page_vector(con->v2.in_enc_pages,
- 				 con->v2.in_enc_page_cnt);
-@@ -1584,7 +1683,7 @@ static int prepare_message_secure(struct ceph_connection *con)
- 
- 	encode_epilogue_secure(con, false);
- 	ret = setup_message_sgs(&sgt, con->out_msg, zerop, zerop, zerop,
--				&con->v2.out_epil, false);
-+				&con->v2.out_epil, NULL, 0, false);
- 	if (ret)
- 		goto out;
+ /* fname.c */
++int fscrypt_base64url_encode(const u8 *src, int len, char *dst);
++int fscrypt_base64url_decode(const char *src, int len, u8 *dst);
+ int fscrypt_setup_filename(struct inode *inode, const struct qstr *iname,
+ 			   int lookup, struct fscrypt_name *fname);
  
 -- 
 2.35.1

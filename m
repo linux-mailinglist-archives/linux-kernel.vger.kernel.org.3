@@ -2,51 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A7B34F4DC9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B6F4F4C29
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1583214AbiDEXvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:51:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
+        id S1576459AbiDEXKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354201AbiDEKMP (ORCPT
+        with ESMTP id S243864AbiDEKhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:12:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35B653709;
-        Tue,  5 Apr 2022 02:58:28 -0700 (PDT)
+        Tue, 5 Apr 2022 06:37:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0736E7BD;
+        Tue,  5 Apr 2022 03:23:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E93D616D7;
-        Tue,  5 Apr 2022 09:58:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C58EC385A2;
-        Tue,  5 Apr 2022 09:58:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A13B1616D7;
+        Tue,  5 Apr 2022 10:23:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2F31C385A1;
+        Tue,  5 Apr 2022 10:23:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152708;
-        bh=H3I7y/rRseTzNvxZw4IcBbimlRO08GhSoaw43F0QV1c=;
+        s=korg; t=1649154198;
+        bh=/GE3itW8H5N1d3k8ul41yxIrIxzjmHcnGvC2im5uJmY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cB6fIKhXmWwYROhXrLjdBAbxfX3X3GtH98l61k9+O3MBzs79KdoSf7e4JjWrG7+08
-         ZeG0y9Mv+CVYogZp0za70gc8hY1ZH4dJenp7oJYQd7h+jjssriveHG+g6Vlr3L5LQV
-         75+R0OuJybz5S0IfKLyHX1N2DAkL9aaAB38LEA8Q=
+        b=HysIdRe8YRr0UntGqx9CnHowacZ0zBqf686fI7fUqQohcUcDOPnVrcsU68HblCprz
+         yaOevwpI5YT5dphRRVTTj1lUruynEJc0SoexiEo1HbxDDsPT/+OcQYv0Lh/QPupnXx
+         mOtDARo6LZguLHKckjyLGkWZZd/0Y1WdPIOGou2I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.15 875/913] mm/memcontrol: return 1 from cgroup.memory __setup() handler
-Date:   Tue,  5 Apr 2022 09:32:17 +0200
-Message-Id: <20220405070406.051120082@linuxfoundation.org>
+        stable@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 445/599] net: dsa: bcm_sf2_cfp: fix an incorrect NULL check on list iterator
+Date:   Tue,  5 Apr 2022 09:32:19 +0200
+Message-Id: <20220405070312.073422957@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,55 +57,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit 460a79e18842caca6fa0c415de4a3ac1e671ac50 upstream.
+[ Upstream commit 6da69b1da130e7d96766042750cd9f902e890eba ]
 
-__setup() handlers should return 1 if the command line option is handled
-and 0 if not (or maybe never return 0; it just pollutes init's
-environment).
+The bug is here:
+	return rule;
 
-The only reason that this particular __setup handler does not pollute
-init's environment is that the setup string contains a '.', as in
-"cgroup.memory".  This causes init/main.c::unknown_boottoption() to
-consider it to be an "Unused module parameter" and ignore it.  (This is
-for parsing of loadable module parameters any time after kernel init.)
-Otherwise the string "cgroup.memory=whatever" would be added to init's
-environment strings.
+The list iterator value 'rule' will *always* be set and non-NULL
+by list_for_each_entry(), so it is incorrect to assume that the
+iterator value will be NULL if the list is empty or no element
+is found.
 
-Instead of relying on this '.' quirk, just return 1 to indicate that the
-boot option has been handled.
+To fix the bug, return 'rule' when found, otherwise return NULL.
 
-Note that there is no warning message if someone enters:
-	cgroup.memory=anything_invalid
-
-Link: https://lkml.kernel.org/r/20220222005811.10672-1-rdunlap@infradead.org
-Fixes: f7e1cb6ec51b0 ("mm: memcontrol: account socket memory in unified hierarchy memory controller")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Reviewed-by: Michal Koutný <mkoutny@suse.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Michal Hocko <mhocko@kernel.org>
-Cc: Vladimir Davydov <vdavydov.dev@gmail.com>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: ae7a5aff783c7 ("net: dsa: bcm_sf2: Keep copy of inserted rules")
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Link: https://lore.kernel.org/r/20220328032431.22538-1-xiam0nd.tong@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- mm/memcontrol.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/dsa/bcm_sf2_cfp.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -7105,7 +7105,7 @@ static int __init cgroup_memory(char *s)
- 		if (!strcmp(token, "nokmem"))
- 			cgroup_memory_nokmem = true;
- 	}
--	return 0;
-+	return 1;
- }
- __setup("cgroup.memory=", cgroup_memory);
+diff --git a/drivers/net/dsa/bcm_sf2_cfp.c b/drivers/net/dsa/bcm_sf2_cfp.c
+index d82cee5d9202..cbf44fc7d03a 100644
+--- a/drivers/net/dsa/bcm_sf2_cfp.c
++++ b/drivers/net/dsa/bcm_sf2_cfp.c
+@@ -567,14 +567,14 @@ static void bcm_sf2_cfp_slice_ipv6(struct bcm_sf2_priv *priv,
+ static struct cfp_rule *bcm_sf2_cfp_rule_find(struct bcm_sf2_priv *priv,
+ 					      int port, u32 location)
+ {
+-	struct cfp_rule *rule = NULL;
++	struct cfp_rule *rule;
  
+ 	list_for_each_entry(rule, &priv->cfp.rules_list, next) {
+ 		if (rule->port == port && rule->fs.location == location)
+-			break;
++			return rule;
+ 	}
+ 
+-	return rule;
++	return NULL;
+ }
+ 
+ static int bcm_sf2_cfp_rule_cmp(struct bcm_sf2_priv *priv, int port,
+-- 
+2.34.1
+
 
 

@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321A84F4675
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB744F4616
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:02:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237010AbiDEUbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33932 "EHLO
+        id S1381577AbiDEUEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351969AbiDEKDf (ORCPT
+        with ESMTP id S1352696AbiDEKE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:03:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FFBA94C1;
-        Tue,  5 Apr 2022 02:52:42 -0700 (PDT)
+        Tue, 5 Apr 2022 06:04:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7A7BBE0B;
+        Tue,  5 Apr 2022 02:53:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C89B661743;
-        Tue,  5 Apr 2022 09:52:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D96F6C385A1;
-        Tue,  5 Apr 2022 09:52:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB575616D7;
+        Tue,  5 Apr 2022 09:53:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B421BC385A2;
+        Tue,  5 Apr 2022 09:53:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152359;
-        bh=4YhYlmlgU5yF/qSl658v/68xrg7u+cOGYTE7Fjs+AWc=;
+        s=korg; t=1649152420;
+        bh=I6aGqWjrqvnZkEehH1G0+jL/Sh2jVVvHMXxT5JjDfXE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qWHdpTgxfGGtJlmGpsofnwZB5KwgmxPuNeQCkdYNDRgu4UpxfXy+Ll9xsIUlZeSpM
-         t9KeBMTZ4UpmHsSId/U63iXTBautSLF6Rfk95JVoqMt+/pUJFLNJ0wHKJnYUuHK9ba
-         DZ7kH3XjQVf9kcviG8sG5uVs6ihtUGEwp6mRmRjE=
+        b=vfnJAl7o6+SYFrsHB+o21lWOdgXWSJsOCMOwtkD8CmtFU5jIqXO5GcGZvwUYuy/MC
+         H3uyVuXFQa1ayMhY4jDIP6OTks2yEIyCQJaIWvuyD61PpZTP+SnjB1IttvcRJvKzHD
+         8YMf0gsLnNKxDNfhNyQDk6Wj78uv3Vim0Ui9f7GA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Heidelberg <david@ixit.cz>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>,
-        LogicalErzor <logicalerzor@gmail.com>
-Subject: [PATCH 5.15 741/913] ARM: dts: qcom: fix gic_irq_domain_translate warnings for msm8960
-Date:   Tue,  5 Apr 2022 09:30:03 +0200
-Message-Id: <20220405070402.046129133@linuxfoundation.org>
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 743/913] ASoC: madera: Add dependencies on MFD
+Date:   Tue,  5 Apr 2022 09:30:05 +0200
+Message-Id: <20220405070402.106626163@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,58 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Heidelberg <david@ixit.cz>
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-[ Upstream commit 6f7e221e7a5cfc3299616543fce42b36e631497b ]
+[ Upstream commit ec29170c724ca30305fc3a19ba2ee73ecac65509 ]
 
-IRQ types blindly copied from very similar APQ8064.
+The Madera CODECs use regmap_irq functions but nothing ensures that
+regmap_irq is built into the kernel. Add dependencies on the ASoC
+symbols for the relevant MFD component. There is no point in building
+the ASoC driver if the MFD doesn't support it and the MFD part contains
+the necessary dependencies to ensure everything is built into the
+kernel.
 
-Fixes warnings as:
-WARNING: CPU: 0 PID: 1 at drivers/irqchip/irq-gic.c:1080 gic_irq_domain_translate+0x118/0x120
-...
-
-Tested-by: LogicalErzor <logicalerzor@gmail.com> # boot-tested on Samsung S3
-Signed-off-by: David Heidelberg <david@ixit.cz>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220108174229.60384-1-david@ixit.cz
+Reported-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Link: https://lore.kernel.org/r/20220203115025.16464-1-ckeepax@opensource.cirrus.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/qcom-msm8960.dtsi | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ sound/soc/codecs/Kconfig | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm/boot/dts/qcom-msm8960.dtsi b/arch/arm/boot/dts/qcom-msm8960.dtsi
-index 172ea3c70eac..c197927e7435 100644
---- a/arch/arm/boot/dts/qcom-msm8960.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8960.dtsi
-@@ -146,7 +146,9 @@
- 			reg		= <0x108000 0x1000>;
- 			qcom,ipc	= <&l2cc 0x8 2>;
+diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
+index f12c9b942678..47e675e8bd00 100644
+--- a/sound/soc/codecs/Kconfig
++++ b/sound/soc/codecs/Kconfig
+@@ -690,6 +690,7 @@ config SND_SOC_CS4349
  
--			interrupts	= <0 19 0>, <0 21 0>, <0 22 0>;
-+			interrupts	= <GIC_SPI 19 IRQ_TYPE_EDGE_RISING>,
-+					  <GIC_SPI 21 IRQ_TYPE_EDGE_RISING>,
-+					  <GIC_SPI 22 IRQ_TYPE_EDGE_RISING>;
- 			interrupt-names	= "ack", "err", "wakeup";
+ config SND_SOC_CS47L15
+ 	tristate
++	depends on MFD_CS47L15
  
- 			regulators {
-@@ -192,7 +194,7 @@
- 				compatible = "qcom,msm-uartdm-v1.3", "qcom,msm-uartdm";
- 				reg = <0x16440000 0x1000>,
- 				      <0x16400000 0x1000>;
--				interrupts = <0 154 0x0>;
-+				interrupts = <GIC_SPI 154 IRQ_TYPE_LEVEL_HIGH>;
- 				clocks = <&gcc GSBI5_UART_CLK>, <&gcc GSBI5_H_CLK>;
- 				clock-names = "core", "iface";
- 				status = "disabled";
-@@ -318,7 +320,7 @@
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				reg = <0x16080000 0x1000>;
--				interrupts = <0 147 0>;
-+				interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_HIGH>;
- 				spi-max-frequency = <24000000>;
- 				cs-gpios = <&msmgpio 8 0>;
+ config SND_SOC_CS47L24
+ 	tristate
+@@ -697,15 +698,19 @@ config SND_SOC_CS47L24
  
+ config SND_SOC_CS47L35
+ 	tristate
++	depends on MFD_CS47L35
+ 
+ config SND_SOC_CS47L85
+ 	tristate
++	depends on MFD_CS47L85
+ 
+ config SND_SOC_CS47L90
+ 	tristate
++	depends on MFD_CS47L90
+ 
+ config SND_SOC_CS47L92
+ 	tristate
++	depends on MFD_CS47L92
+ 
+ # Cirrus Logic Quad-Channel ADC
+ config SND_SOC_CS53L30
 -- 
 2.34.1
 

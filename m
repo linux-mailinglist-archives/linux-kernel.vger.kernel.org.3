@@ -2,176 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D6034F513D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B7B4F5061
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446925AbiDFB5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56118 "EHLO
+        id S1841590AbiDFBY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1454778AbiDEP7H (ORCPT
+        with ESMTP id S1455105AbiDEP7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:59:07 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2046.outbound.protection.outlook.com [40.107.21.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A0C7B91B8;
-        Tue,  5 Apr 2022 08:06:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zfd6oaVa6DNJV9keE8A0qSGh/BVdiSvA5k0Pn9hi/k9Dsc23xVPIJf4NH3O5qVZN5paHRQXxfhTg++IX7Gxn0L1mv7Z4UOQgaSsIN+qL6hgy7djFQxHhqN/0bzqax905JeCKZYcHAzz2ABIPmhhZVWqDVYqUwdMMH5O4A0DFOaSCDSAlvlNBUOlONV+jx3ehSZpubxOPDS0xUgcNdOnnjypkX/SVr8+DCt+3smUR1IAh6CKtTUaH2IHEu3HCzAi0PJtEJYqqxjjvixo1CybSm7VNfq/ykj/VirrFQ2JrFPH2yM/n5VvrkO1Mlj8x9Jzn8aSq6eWbYSpgn0movLOehQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1FKoL/tsDBkDE/EhIco2+obGB7G4lV2QgSaPT/LsEyg=;
- b=CN8SdPiNRpRA4BICabdJGwXB0ieAnwLu0T5+B1sEAYcohSYalGcYSEW2HR73t6jKaKs/3xWdtTaqpkth3y62FHxlBCGSDVU+wGBwlc+czJbGFgFr1bw2oUWUwCnqbfRBVU4nV1oN2jjX00kreAUuYhLpY9FGbIu36J2rQOa0GiKvmc3fQfaZlybOlJzWxYjW4bRdwp0DIGKhToG1suCO+O36d+zYyhuRZcFb+TvkkJqwVTXdBvmqacWOKIWLHYg39t0L3VPmnT7kYfW2ohFQeCQI1pwRqFydglLGBB9uzEsVIEr3cMLvPTc5DgjQ8dMBEozdS9zeUxJ3ilgY6ClR3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1FKoL/tsDBkDE/EhIco2+obGB7G4lV2QgSaPT/LsEyg=;
- b=AUreYJn0mf07hm234vmDm0uDxnlpIAbrLTcJVvixTWYvZY2mqVAX99eYuEtB8mjuI9UutAWVhwvkk4Yq26fAt5mU54oXw9W1FPTBKAy/n/hVgCI+Mz7QTQFgJup8JE4vJYas1sUk46ZEOBLTg30+3SvBEQtfFMhbEFTaXcvCIvNVPOoihpaC54ETMSQBigdzIsfKg7DciSuskAavtdXD8DHjrTB2Vf488G3S2nFMhmrdemgIqvnQtogE8KcAYg0vvJlw3uOFXCgqvSu8Lt4rTE/5kV/BsEutWYF7laMtyquvssTrPeNoKAyi+cLB0ruiaCbyUPKpn+xcPk8wUzETtA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from VI1PR03MB4973.eurprd03.prod.outlook.com (2603:10a6:803:c5::12)
- by AS8PR03MB7096.eurprd03.prod.outlook.com (2603:10a6:20b:290::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Tue, 5 Apr
- 2022 15:06:14 +0000
-Received: from VI1PR03MB4973.eurprd03.prod.outlook.com
- ([fe80::2ca2:213d:e44b:cf71]) by VI1PR03MB4973.eurprd03.prod.outlook.com
- ([fe80::2ca2:213d:e44b:cf71%7]) with mapi id 15.20.5123.030; Tue, 5 Apr 2022
- 15:06:14 +0000
-Subject: Re: [PATCH 0/4] usb: phy: generic: Support enabling/disabling VBUS
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Robert Jarzmik <robert.jarzmik@free.fr>,
-        Felipe Balbi <balbi@kernel.org>, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-References: <20220114170941.800068-1-sean.anderson@seco.com>
- <ffee044a-d34f-6be5-1fa9-c14cf3bb30de@seco.com> <YkxaIK/y+7H8HgwZ@kroah.com>
-From:   Sean Anderson <sean.anderson@seco.com>
-Message-ID: <4737966b-a72f-8f4b-e9bc-a38a3f96b6da@seco.com>
-Date:   Tue, 5 Apr 2022 11:06:10 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <YkxaIK/y+7H8HgwZ@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR08CA0016.namprd08.prod.outlook.com
- (2603:10b6:208:239::21) To VI1PR03MB4973.eurprd03.prod.outlook.com
- (2603:10a6:803:c5::12)
+        Tue, 5 Apr 2022 11:59:37 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CF51ED05F
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:10:05 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id r2so15462451iod.9
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 08:10:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=odjTcYZDlQIoWSkHe17VwGaSSDqsAiUMG/3xJUCUusY=;
+        b=BIrJnLaJlobJRELofbUGfFGoIys4VbYWUyOHKM6yPYsEcaU68cPexoPGB+FF75wT0l
+         nTLBpmNWQH9/4qlaY0IAqmQ99mQpeHL5s+1WZFh0J7WoAX7+equKRVWQIefnQJGxuh/d
+         12Uk/NDYJwyFUL3HMR+IHHm9e1DqLhSp1oAk5dW6A9KBz/M3GH2qfDskfkemdyJNjOfZ
+         zklDlMXUPCraZit01xyTMy4mXPhfA6rQp9D9ILWlKYTlfAySHdHSrPXE36e/9K358+yp
+         2FY/pAh3O3L/Cdc9+eHFv8jK5bnXsezX/to0L2uZ8nOAf+9AnR8YjKHodr+zV3g6F846
+         Wspw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=odjTcYZDlQIoWSkHe17VwGaSSDqsAiUMG/3xJUCUusY=;
+        b=AcWoWsVKzma/ACKsNdaYHVZ/VcsqlUeCsOCHccPU9Te7MI4L9koX5fwOcr5gUQxdv4
+         YIq2/F3p8pOVaB7BsYtIwDNlqEO5RDVGjWlu9PKk2IQnBYwJ3aXS3jEST2g0NEEnho8d
+         TGgFbLSUXHhIY5HnIMHWm0m7v74lfJCAkxaVIL9aKR61Dt3YohrHSNn3n5Y5mc92mEsi
+         sQjGnOPar20LlnTpeWSh43xLxNik6YFBKK1F4K64jpXZhst6u4tbIUTQwT0pVCvDvWOF
+         bIhVj2n30cittgqEWUP2aq0aeGGHPdO2v99oIjoW8c/et6csb+XJe5YVRI0Dcb/rpaUR
+         MsKg==
+X-Gm-Message-State: AOAM5311z+ZQBsu30jc39xNU7NYxmlR4r1hmx79Z77qz5/TONAMhAhSD
+        WInWVrOvMkNI9VoBuSlczXH4AtC2M8pvFQN+FzA=
+X-Google-Smtp-Source: ABdhPJxAaHeUeJtc2U3f+/5L8fy3AA56uR4U1tXUh2cgSLnkKbaFje6hcmqnAosZq0GKK0ddS4eVRltN814HgJgzkfI=
+X-Received: by 2002:a02:c89a:0:b0:321:25b2:4b52 with SMTP id
+ m26-20020a02c89a000000b0032125b24b52mr2152926jao.218.1649171404854; Tue, 05
+ Apr 2022 08:10:04 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 06f27745-e772-4a2c-85e9-08da1715d411
-X-MS-TrafficTypeDiagnostic: AS8PR03MB7096:EE_
-X-Microsoft-Antispam-PRVS: <AS8PR03MB709652924F840EED9C1E968F96E49@AS8PR03MB7096.eurprd03.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /Nl7IYQN6kbeKT39FcdbIhIDL5bI7DmC1+pPGHESoETgMk9lVSvj/wckWQGsCLKpRRqt+C0h0nQ14AKz2ZnrshOGtSaYwxIbd/6iHWxiQrkKkJhug54dcEFTkGqQSCWQL5zaAJaiO7PFjejBOYXzjOqtX52szJnHaOPyWQekmMsd3UycRLD/YZp6pSmsT4aBegPDn/hDcy2pgPgDGJpzhJwjkV62b4OBb1NwW+gIZzD832xPLUuHsO2rgFJr5xhzSbhYF+PBsI5m/CBBzDT/Jq677lMilMzbmHWabqpjbWddCs99n51rnRtk/TJuib+G8m/PwvlDpu+Fe/tmITK5jYB1REWbqEzYS+5Bdx3gnd8Kj0UDPU2KFTFqnPUaWPJuHbq2L/e6CE2ryUI9Sa8EIXKLad9qerZDZWQ8XOcHXcOooxGqeFynWEh8bTw9aiRdHPBgw9PgKPpsoX1ezJS9FNZvfrpOrd/cjC6i+HxA2O+uEisOG7JUniVd9kEruMjp/K9UxPbDHHXxH5eV48pk8EvxGs6EyUDa09jDzbj/BU0af7jsIaLithn81ENYTvR8CkVTR/1LYzUDjSyQmomRRLvY7NTZAGoXY9ANMwAQ6cF2LJEBWid5xZoiOkdxlE7bwVfwy00Yj3/XuWL6ijDG46FPoj26uXF7hijCEMQ6hpdKsfzA/C8LK7KJNyqIqw4Xw98yDEjZwvjSqOgaTpWJ6klLlSMKX55AwQb+tzrQmsx0Jh6v+uaxhl29Co/KImtHT6w7Z5hYv0RKiLkOnkPR1TPvamLg7q1P49mIlVuCoCIQOS9KZbqDtbewCsBxTuukH6kGTAdZXt/qBX1lxKlSSQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR03MB4973.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(26005)(66556008)(66476007)(186003)(4326008)(36756003)(8676002)(54906003)(66946007)(31686004)(6916009)(83380400001)(316002)(86362001)(508600001)(31696002)(8936002)(5660300002)(6506007)(2616005)(6486002)(6512007)(38350700002)(38100700002)(2906002)(53546011)(52116002)(44832011)(6666004)(41533002)(41080700001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SEt0Tno0aDZzOHVEVEs5MzBXbVZjTXBrclg2S21EWlFCTkVYMXBzYXBaVXZL?=
- =?utf-8?B?UFV5TFYwZWhhMjgycU9uNUZ1TlZ4L0gzTWhyK0tRZHNqNDRYREcvM1JNeGhR?=
- =?utf-8?B?aURpRWFhUENEVVBUZXhMWi9FM0hzdnd5bGlpUVhHbGlKZno1ZFJwMTZnZk95?=
- =?utf-8?B?U3M3bzdUQ3pqMWM1NS82aGZZSGFiK29OV01JYXVWczZhblRxTlRIYXZWRG5W?=
- =?utf-8?B?M2ZLbi9DY3VIa2ZQMWZJeU03L2ZGUHhoK0d4RGVucjZ3QUxNVjdxZ1lmVjc2?=
- =?utf-8?B?bGRMc0Yrc0hJL3NsUEhvaG9RTTZTRmM3Um01b1QvTllodkMxRUdoS3JmcFI4?=
- =?utf-8?B?d1Q4aHkzV1pCQTBJd0txaGNabVFBdGRtbE5ERVgzWTFtWklyRmx6Qm1xTHNt?=
- =?utf-8?B?SytUa2VzbEF2MFQ3eG9ocFlBQ1NwR3o0SFpFUjR4cGlYZTNodkpsSnhRbG81?=
- =?utf-8?B?TEJkaFl6L1piRVFKaUw3by9tdndRTlZNekVjSENwTGdiWVpTQ2NwN3BuTjhY?=
- =?utf-8?B?MExsby9Fb216cTRXQzdINzlLWTFWMlhOc0srMGFxQWRrL2tYczUxQU1BT0JP?=
- =?utf-8?B?NVovZmF0eGN4SjVyNzVIbkpvNWlNRkZkT3RwSmNwL3JHTmU4SXI4Q1p4eTA1?=
- =?utf-8?B?TUxrT3hBMGlVQkorTUc2WGFuU3JxTXdicnoyUzlLK29kTUhCL1h6YU9uWFcv?=
- =?utf-8?B?Mmx2d2k4SlRTcWljU3YvS215YU1XMy9aUXk1NTcwTTN4TVJTczdnTkhMVHVy?=
- =?utf-8?B?a3dJajlyZFNqYjN2c2FuRWIvQVlSdmsyM2FnZ0xjelBRSDdUT0NxOWRVTjFs?=
- =?utf-8?B?VXlSQjFUSlY1KzR1SE01Zmg2Q2MwVXRsRFlxT1p2SHViYU1jQkpRU2VCZE9q?=
- =?utf-8?B?WDJNSVozdzd3aDlOTjBqLzlhNUxsS2liWFJ6cXFtaTJIT0tQdi9NN1hSdVpE?=
- =?utf-8?B?RUpZTlFWc0ZhNnRqb3prQStnQWE2aUppMUo1RUNjbjVJOUVBb1lBbEpodjBZ?=
- =?utf-8?B?QlRtdUcrWS9NOW04QjJIRGRuaS8rNGNvVjdsVTVmdCtmRG8zMlJLR0pQSloy?=
- =?utf-8?B?OUl5Szg3Rk9ndFZETFNKTVNvZGJEZ3hGNGR1dTMxc24zNDlNVjlDTFNOeUhh?=
- =?utf-8?B?TjBYSUFXRWkwREhvOXFWOVVucFdjUUhlSkNlUisyUkQ1c01mYUhPcTVHOXJp?=
- =?utf-8?B?aVNzRFI3ZVpiMncxSUZKU0VYNS9paFpsM3NQWTU4U3p5TTNQT1hOWVRmMnFY?=
- =?utf-8?B?T0xBYUJuTXdiWkNZS3lKRmM4RlJpNkNsb1I4N09VTFNTSXlWYzJPM2taem9i?=
- =?utf-8?B?eGNpUkozbzkza3F3bWR6TWUxQ21ZL2V3ZHgzYVRIR2JnenU0d2o4WjFkMUYw?=
- =?utf-8?B?VitzaDZjT2FiQUVBQXBFOWEwUWwxUFBtZUx3SkI0Y1lzOU5tV3E2eUJhdXRF?=
- =?utf-8?B?RUNoS0k0em5FQjlVb0VPWVdUSmg1VHBqQjU1K3ViZHExSTNpMUQ5aTQ5VW9H?=
- =?utf-8?B?Yk9aMnFXYWFSUVB5Tlo3YWJHajJjYStHZEFkMGdqN1NXMFRVM1BUalB1ajhz?=
- =?utf-8?B?bUhBci9nVlQ2ZzJVUi9MUkk1SGdHbkxKS3FCWGFoSmdlcVpKeXRSK0w0dzFp?=
- =?utf-8?B?ZDEyMGhSMkRFQTE2SUZocWVEVHFzRXlFY0lMRVc4NjdHS0tLcXdIREJUaXVv?=
- =?utf-8?B?R2F1ZVdFMU9odEJ1WTI2c0FjZ2psOHB2OWY5Yk93ZFRmTkdDUExWSzBMTldF?=
- =?utf-8?B?aDZOYkNzOVJGS3p5dTdBSjF1MS9HMDRtSUJ1NlZvMkEwV2ZuOHFsS0Q5QnVh?=
- =?utf-8?B?NnFrVG8vN2JBZkN3NGdaNkQyUTBOemRHZGU4ZnlkS2pTOTd0aGozNmdVOHgw?=
- =?utf-8?B?S3dCbHh0MWxHZGxyeUsxYkYxVUtYcFFnS1FXZ1dmdis3cU15OE9TZ0t3V3Rl?=
- =?utf-8?B?N1hmbkxySS9HU3dLWjMzbzNFZUxGQUIzTkE1cllTdmdvTlVzemN5dFljSS9q?=
- =?utf-8?B?b1NSY2w5ZXVsV2E5NnJJd3lzYnFnK3RlUHNtSWEzemkreGQ2SHpyUm1JcVRz?=
- =?utf-8?B?MjdSV1QxWGhhanJ6ZEVueTN1TVNrbldxT3IyUE9rYlV3U1g2RmUzQ09ObklR?=
- =?utf-8?B?VVptdFpHSTcxb01OYmZubFpsMVM5RkxYK1A0OTlidzkvdGtWdDMzVTBYZWIx?=
- =?utf-8?B?YnJxM04ybEd0dDdXV0pnbHVwbzFtSWtKbVVwZDhDQWpCUHBZMmYxb3duNndS?=
- =?utf-8?B?QWF4ckRKNmRIQmdFcmdIWnN5T0ZQb0xlTkdRSTVscENDOTUzU294T2VMTlhK?=
- =?utf-8?B?TFBTZ0R3dUFpTFNYdkRFSzNOWVJISWRBVWh0cndXTkltbmNyQTN4NUppWFlv?=
- =?utf-8?Q?nBcLANJdBD5b2wVY=3D?=
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06f27745-e772-4a2c-85e9-08da1715d411
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR03MB4973.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2022 15:06:14.7110
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vbF6xRdxBOzoLoFLsVgkLk1nrNUEel2/cH635rEEYP603b0mp9yndpOinHPzSZ6/VUVSeQBAggwN2AdiMebWFA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB7096
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1648049113.git.andreyknvl@google.com> <YkV6QG+VtO7b0H7g@FVFF77S0Q05N>
+In-Reply-To: <YkV6QG+VtO7b0H7g@FVFF77S0Q05N>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Tue, 5 Apr 2022 17:09:54 +0200
+Message-ID: <CA+fCnZfU+Jj3Of+d0d6b3=fJC0F+SfcUHV1p0Gs95exoNsqvmA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] kasan, arm64, scs, stacktrace: collect stack
+ traces from Shadow Call Stack
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     andrey.konovalov@linux.dev, Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Florian Mayer <fmayer@google.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 31, 2022 at 11:54 AM Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> That is an impressive number. TBH, I'm shocked that this has *that* much of an
+> improvement, and I suspect this means we're doing something unnecssarily
+> expensive in the regular unwinder.
+>
+> I've given some specific comments on patches, but a a high-level, I don't want
+> to add yet another unwind mechanism. For maintenance and correctness reasons,
+> we've spent the last few years consolidating various unwinders, which this
+> unfortunately goes against.
+>
+> I see that there are number of cases this unwinder will fall afoul of (e.g.
+> kretprobes and ftrace graph trampolines), and making those work correctly will
+> require changes elsewhere (e.g. as we rely upon a snapshot of the FP to
+> disambiguate cases today).
 
+Do I understand correctly that kretprobes and ftrace modify frames
+saved on SCS? So, if either is enabled, SCS frames might contain their
+addresses instead of actual PCs?
 
-On 4/5/22 11:02 AM, Greg Kroah-Hartman wrote:
-> On Tue, Apr 05, 2022 at 10:51:34AM -0400, Sean Anderson wrote:
->> 
->> 
->> On 1/14/22 12:09 PM, Sean Anderson wrote:
->> > The generic USB phy has had VBUS-related code for a long time, but it
->> > has always been broken, since the regulator was never gotten from the
->> > device tree. However, the support itself seems not very useful, since
->> > e.g.  usb_phy_vbus_on/off has no users and usb_phy_set_power is only
->> > used by gadgets to make sure they don't draw too much current. Instead,
->> > use the VBUS regulator to implement otg_set_vbus, which is called from
->> > several drivers. This results in a change in semantics of VBUS, but
->> > since support was always broken I don't think this will have any affect.
->> > 
->> > 
->> > Sean Anderson (4):
->> >   dt-bindings: usb: usb-nop-xceiv: Repurpose vbus-regulator
->> >   usb: phy: generic: Get the vbus supply
->> >   usb: phy: generic: Implement otg->set_vbus
->> >   usb: phy: generic: Disable vbus on removal
->> > 
->> >  .../bindings/usb/usb-nop-xceiv.yaml           |  8 +--
->> >  drivers/usb/phy/phy-generic.c                 | 55 +++++++++----------
->> >  2 files changed, 31 insertions(+), 32 deletions(-)
->> > 
->> 
->> ping?
->> 
->> When this was submitted I got an email saying that the merge window was
->> closed... but I think it has opened and closed again during the
->> intervening time.
-> 
-> It opened yesterday.  Please give us a chance to catch up.
+If so, this is good enough for our use case. Having kretprobes or
+ftrace enabled is an unusual setting and there's no requirement to
+support it.
 
-Ah, sorry. I thought this series had just gotten lost.
+The goal is to have stack trace collection working in most cases
+during a normal usage of an Android device. Being not feature-complete
+and not covering all possible peculiar cases is fine.
 
-> While that happens, please take the time to review other changes on the
-> mailing lists, we can always use the help.
+> I'm also very much not keen on having to stash things in the entry assembly for
+> this distinct unwinder.
 
-Noted.
+I'll drop these changes, I'll respond on that patch.
 
---Sean
+> Going forward, I'm also planning on making changes to the way we unwind across
+> exception boundaries (e.g. to report the LR and FP), and as that depends on
+> finding the pt_regs based on the FP, that's not going to work with SCS.
+>
+> So at a high level, I don't want to add an SCS based unwinder.
+>
+> However, I'm very much open to how we could improve the standard unwinder to be
+> faster, which would be more generally beneficial. I can see that there are some
+> things we could reasonably do with simple refactoring.
+
+The intention of adding an SCS-based unwinder it to use in production
+together with MTE-based KASAN. Thus, it needs to be as fast as
+possible. I doubt even a very optimized FP-based unwinder will compare
+with a simple loop over SCS frames.
+
+It seems a pity to let the kernel maintain the current call trace via
+SCS and then not to use it to collect stack traces.
+
+Would it be acceptable if we keep the SCS unwinder code in mm/kasan
+and not integrate with the common stacktrace machanisms?
+
+Thanks!

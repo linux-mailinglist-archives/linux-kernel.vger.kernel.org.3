@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4A54F3419
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F7D14F2EFC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237540AbiDEKdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45836 "EHLO
+        id S238930AbiDEKfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240911AbiDEIci (ORCPT
+        with ESMTP id S240916AbiDEIci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:32:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C408CCD7;
-        Tue,  5 Apr 2022 01:25:11 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CEB8CD8F;
+        Tue,  5 Apr 2022 01:25:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 134C360FF5;
-        Tue,  5 Apr 2022 08:25:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 216CBC385A1;
-        Tue,  5 Apr 2022 08:25:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77D8FB81BBF;
+        Tue,  5 Apr 2022 08:25:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA2A9C385A5;
+        Tue,  5 Apr 2022 08:25:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147110;
-        bh=eho7sW1CDBPvxwr8elr2Qn2DJF/zM/g7Jg72tpIQ0mo=;
+        s=korg; t=1649147113;
+        bh=VW8l/UtEnR6m5WabQpjetu0YZ6sC6cMLC6TVrw8WDW0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D5ZHn6nYsf8GjM2XHx6rAeZEr3Xi0WwOTNYVI7nvST8yFKXIW5AJ6MlD28KFN/RGO
-         eStyDrKivXTOVLmk5ues3/jufUkH6oNw565rNDWdxhtGcJioCRVuZoV2phWkzecH/I
-         Y2KaK3/OMfB5y7IrRYI4xbdbFlPOGQ0tfe8AJT5Y=
+        b=rnQpbOEgxkABy6G3Qxt6l0gKnY6VKp4Wa3HC/ewU/q660lA8bvVhTs8UiGqPvQt51
+         2t0b3HMX4yWZHFUdjFDLi4VvnBGEStpkDRpuESgcAxGzDxo3hoi4U/2gl7037fqAMP
+         99/9u2Md6sLeEm9q4BI1Gy360N0K7c8aEpp04A+s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
         =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
         <ville.syrjala@linux.intel.com>,
-        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
         Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: [PATCH 5.17 0967/1126] drm/i915: Treat SAGV block time 0 as SAGV disabled
-Date:   Tue,  5 Apr 2022 09:28:34 +0200
-Message-Id: <20220405070435.889239064@linuxfoundation.org>
+Subject: [PATCH 5.17 0968/1126] drm/i915: Fix PSF GV point mask when SAGV is not possible
+Date:   Tue,  5 Apr 2022 09:28:35 +0200
+Message-Id: <20220405070435.917503095@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -59,62 +59,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ville Syrjälä <ville.syrjala@linux.intel.com>
 
-commit 1937f3feb0e84089ae4065e09c871b8ab4676f01 upstream.
+commit 3ef8b5e19ead5a79600ea55f9549658281415893 upstream.
 
-For modern platforms the spec explicitly states that a
-SAGV block time of zero means that SAGV is not supported.
-Let's extend that to all platforms. Supposedly there should
-be no systems where this isn't true, and it'll allow us to:
-- use the same code regardless of older vs. newer platform
-- wm latencies already treat 0 as disabled, so this fits well
-  with other related code
-- make it a bit more clear when SAGV is used vs. not
-- avoid overflows from adding U32_MAX with a u16 wm0 latency value
-  which could cause us to miscalculate the SAGV watermarks on tgl+
+Don't just mask off all the PSF GV points when SAGV gets disabled.
+This should in fact cause the Pcode to reject the request since
+at least one PSF point must remain enabled at all times.
 
 Cc: stable@vger.kernel.org
+Cc: Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>
+Fixes: 192fbfb76744 ("drm/i915: Implement PSF GV point support")
 Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220309164948.10671-2-ville.syrjala@linux.intel.com
+Link: https://patchwork.freedesktop.org/patch/msgid/20220309164948.10671-7-ville.syrjala@linux.intel.com
 Reviewed-by: Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>
-(cherry picked from commit d8f5855b31c0523ea3b171db8dfb998830e8735d)
+(cherry picked from commit 0fed4ddd18f064d2359b430c6e83ee60dd1f49b1)
 Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/i915/intel_pm.c |   10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/i915/display/intel_bw.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/i915/intel_pm.c
-+++ b/drivers/gpu/drm/i915/intel_pm.c
-@@ -3722,8 +3722,7 @@ skl_setup_sagv_block_time(struct drm_i91
- 		MISSING_CASE(DISPLAY_VER(dev_priv));
+--- a/drivers/gpu/drm/i915/display/intel_bw.c
++++ b/drivers/gpu/drm/i915/display/intel_bw.c
+@@ -966,7 +966,8 @@ int intel_bw_atomic_check(struct intel_a
+ 	 * cause.
+ 	 */
+ 	if (!intel_can_enable_sagv(dev_priv, new_bw_state)) {
+-		allowed_points = BIT(max_bw_point);
++		allowed_points &= ADLS_PSF_PT_MASK;
++		allowed_points |= BIT(max_bw_point);
+ 		drm_dbg_kms(&dev_priv->drm, "No SAGV, using single QGV point %d\n",
+ 			    max_bw_point);
  	}
- 
--	/* Default to an unusable block time */
--	dev_priv->sagv_block_time_us = -1;
-+	dev_priv->sagv_block_time_us = 0;
- }
- 
- /*
-@@ -5652,7 +5651,7 @@ static void skl_compute_plane_wm(const s
- 	result->min_ddb_alloc = max(min_ddb_alloc, blocks) + 1;
- 	result->enable = true;
- 
--	if (DISPLAY_VER(dev_priv) < 12)
-+	if (DISPLAY_VER(dev_priv) < 12 && dev_priv->sagv_block_time_us)
- 		result->can_sagv = latency >= dev_priv->sagv_block_time_us;
- }
- 
-@@ -5683,7 +5682,10 @@ static void tgl_compute_sagv_wm(const st
- 	struct drm_i915_private *dev_priv = to_i915(crtc_state->uapi.crtc->dev);
- 	struct skl_wm_level *sagv_wm = &plane_wm->sagv.wm0;
- 	struct skl_wm_level *levels = plane_wm->wm;
--	unsigned int latency = dev_priv->wm.skl_latency[0] + dev_priv->sagv_block_time_us;
-+	unsigned int latency = 0;
-+
-+	if (dev_priv->sagv_block_time_us)
-+		latency = dev_priv->sagv_block_time_us + dev_priv->wm.skl_latency[0];
- 
- 	skl_compute_plane_wm(crtc_state, 0, latency,
- 			     wm_params, &levels[0],
 
 

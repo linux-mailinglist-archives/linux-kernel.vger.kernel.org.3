@@ -2,40 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64F194F2FB3
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09B484F3348
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353755AbiDEKJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33758 "EHLO
+        id S1357589AbiDEK0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241099AbiDEIct (ORCPT
+        with ESMTP id S241101AbiDEIct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:32:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8AD15718;
-        Tue,  5 Apr 2022 01:27:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22D6140FF;
+        Tue,  5 Apr 2022 01:27:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA31260AFB;
-        Tue,  5 Apr 2022 08:27:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA78CC385A1;
-        Tue,  5 Apr 2022 08:27:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F3F260AFB;
+        Tue,  5 Apr 2022 08:27:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53143C385A1;
+        Tue,  5 Apr 2022 08:27:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147245;
-        bh=qXqfx40qQ5JvHY/HCPqeC+CgsiXSNii4hw22CsqeTk0=;
+        s=korg; t=1649147250;
+        bh=4djunoAxJHOaDgEd2iZ0RMBXmqeYYQMugjYVYuIJyBs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BDIerafSYu2+nr1RrjfQ05Kbp0tgpHYu1EVYp6gugehL5cLpQJx9Yh8hI1dOSH1hu
-         pp2GSSYP80b/kQUiPDgzC279VVWrt2UOkASx8zWdP7rUOGkf3UUYLYEz8kcsZvcYZO
-         XpzYP/RUyAAzpu6QQ9q5s/ZCsphFblCC+roovMww=
+        b=KPruNiIRmoarrl99l1ry/OYZpVdOzE4OyInA/trRXd+1hvntmF5U4jxRPK1G+9399
+         ppfDjy/CaoBfV7Uhf0xdp8kA4dzTaYauFuZ7cjOrOyZEGsBM0WmLkVkKUCQYkk/yLr
+         /pY/40z86ZCvsKp/cQEzIO2LBXQe2iQ+2ePQ8LZI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.17 1055/1126] io_uring: bump poll refs to full 31-bits
-Date:   Tue,  5 Apr 2022 09:30:02 +0200
-Message-Id: <20220405070438.432743258@linuxfoundation.org>
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Fangrui Song <maskray@google.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH 5.17 1057/1126] riscv module: remove (NOLOAD)
+Date:   Tue,  5 Apr 2022 09:30:04 +0200
+Message-Id: <20220405070438.489563417@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -53,39 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Fangrui Song <maskray@google.com>
 
-commit e2c0cb7c0cc72939b61a7efee376206725796625 upstream.
+commit 60210a3d86dc57ce4a76a366e7841dda746a33f7 upstream.
 
-The previous commit:
+On ELF, (NOLOAD) sets the section type to SHT_NOBITS[1]. It is conceptually
+inappropriate for .plt, .got, and .got.plt sections which are always
+SHT_PROGBITS.
 
-1bc84c40088 ("io_uring: remove poll entry from list when canceling all")
+In GNU ld, if PLT entries are needed, .plt will be SHT_PROGBITS anyway
+and (NOLOAD) will be essentially ignored. In ld.lld, since
+https://reviews.llvm.org/D118840 ("[ELF] Support (TYPE=<value>) to
+customize the output section type"), ld.lld will report a `section type
+mismatch` error (later changed to a warning). Just remove (NOLOAD) to
+fix the warning.
 
-removed a potential overflow condition for the poll references. They
-are currently limited to 20-bits, even if we have 31-bits available. The
-upper bit is used to mark for cancelation.
+[1] https://lld.llvm.org/ELF/linker_script.html As of today, "The
+section should be marked as not loadable" on
+https://sourceware.org/binutils/docs/ld/Output-Section-Type.html is
+outdated for ELF.
 
-Bump the poll ref space to 31-bits, making that kind of situation much
-harder to trigger in general. We'll separately add overflow checking
-and handling.
-
-Fixes: aa43477b0402 ("io_uring: poll rework")
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1597
+Fixes: ab1ef68e5401 ("RISC-V: Add sections of PLT and GOT for kernel module")
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Fangrui Song <maskray@google.com>
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/io_uring.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/riscv/include/asm/module.lds.h |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -5414,7 +5414,7 @@ struct io_poll_table {
- };
- 
- #define IO_POLL_CANCEL_FLAG	BIT(31)
--#define IO_POLL_REF_MASK	((1u << 20)-1)
-+#define IO_POLL_REF_MASK	GENMASK(30, 0)
- 
- /*
-  * If refs part of ->poll_refs (see IO_POLL_REF_MASK) is 0, it's free. We can
+--- a/arch/riscv/include/asm/module.lds.h
++++ b/arch/riscv/include/asm/module.lds.h
+@@ -2,8 +2,8 @@
+ /* Copyright (C) 2017 Andes Technology Corporation */
+ #ifdef CONFIG_MODULE_SECTIONS
+ SECTIONS {
+-	.plt (NOLOAD) : { BYTE(0) }
+-	.got (NOLOAD) : { BYTE(0) }
+-	.got.plt (NOLOAD) : { BYTE(0) }
++	.plt : { BYTE(0) }
++	.got : { BYTE(0) }
++	.got.plt : { BYTE(0) }
+ }
+ #endif
 
 

@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 442704F4E5A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6114F4C12
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1588994AbiDFASG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
+        id S1575641AbiDEXIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243622AbiDEPJY (ORCPT
+        with ESMTP id S1350084AbiDEPLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:09:24 -0400
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E64ABF53A;
-        Tue,  5 Apr 2022 06:24:55 -0700 (PDT)
-Received: by mail-qt1-f171.google.com with SMTP id o15so9548925qtv.8;
-        Tue, 05 Apr 2022 06:24:55 -0700 (PDT)
+        Tue, 5 Apr 2022 11:11:46 -0400
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E17B107A93;
+        Tue,  5 Apr 2022 06:25:30 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id w134so15468852ybe.10;
+        Tue, 05 Apr 2022 06:25:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=hBCPhJo5YyS6XSPC6qSR2NczndtrlVmfcRjGORmxI/A=;
-        b=EURQlCOo5uMFEGKK2235tNRMwsSYU4ycAr5/uhPDmTcoSJCkr8q77DmULI8+dVOW5U
-         Fg7viLWjfIf1GxbKzHhSy8AKiAPf6VDLy1xXfw3rursUbek92oSIzViv4fPQjPHzdr7d
-         jaUtdJqPR9E2OASW/5/NJDGSfve0eZuRloVN7orFTDRo9ZqZIjpgqoBV47kRr8XBlEF5
-         DBSJvbtiC8QZHXkFkGkOa/+xzlHUsCCYAMQEfdB5PEsocbn0WFnpQAJyildu0Z9iCJf6
-         dMcHtyWUSDyfvFf8JlKs0RIL3xmyQQMGaGgw2ge9PphTnIBJyHYGS2CYbimZOlSOFR7R
-         w8Uw==
-X-Gm-Message-State: AOAM532MwIr22564AApN9joJnKtRsUPWxOKaFbNhNz+kXkMnLLdHcwGf
-        bb8LHeKzxXqDM3m0M8Xve7qgwnBIIFuSDg==
-X-Google-Smtp-Source: ABdhPJxcBvIz7X+nnZAVOil6lfBgF9PLhnvtD+5MKWMfgMIX6lMCA+qxVOSaeGGfGYm7B+vKsP9Hgg==
-X-Received: by 2002:a05:622a:120a:b0:2e1:c9ba:e99b with SMTP id y10-20020a05622a120a00b002e1c9bae99bmr2867850qtx.685.1649165092828;
-        Tue, 05 Apr 2022 06:24:52 -0700 (PDT)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id a129-20020a376687000000b0067d186d953bsm7960042qkc.121.2022.04.05.06.24.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 06:24:52 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2eb888cf7e7so47571727b3.13;
-        Tue, 05 Apr 2022 06:24:52 -0700 (PDT)
-X-Received: by 2002:a81:618b:0:b0:2db:d952:8a39 with SMTP id
- v133-20020a81618b000000b002dbd9528a39mr2679880ywb.132.1649165091759; Tue, 05
- Apr 2022 06:24:51 -0700 (PDT)
+        bh=E5Al4J7VCG/P8LTv1wy0Uzk4KB0CIZvLVMNw+72bmlY=;
+        b=pi+F9TIqKCEsUNjCb9dXoXQQNWKsRRxNdv5tIwo+338XztSKFJIYmHZkceBh6r31HM
+         zOTEafVXA117xUkDIWXQSCqSwY7HnBzPCE7H7i85C/kKEg+7wdLDKD+j9xsWQF98VQrl
+         5Kjz/7MYovpuUNj8n9fKK9hYnLmdWvAoDaDhCquMQvMxs13dSczKF+xMgB739HndQrSS
+         Rp/JRdwBjIGx6li46fitUbQLTiDJJbqjnIXi4rtPfui9XBxI2FZBy2MpNhHlQkWzydG4
+         qBUwmqE/gZejHwC62QLm5ZSfAa8sCHXWIfpuGriNwHcsb6EFjqr9zJy5unCcyAqHpyjW
+         vTog==
+X-Gm-Message-State: AOAM5334oGiOzG8pbMFgDpKN4hv9B9HGkKRbYFupf1gXc4FXR09Cc7DL
+        VxPINjrv6k3JFzyzhFHueIjR5jZUD+v7hpIxDsk=
+X-Google-Smtp-Source: ABdhPJzvtUL+VkrikhhCBPKyLKqDEV2E5D8I7wR0e3nEvz40gGldfHk2pv2u3E/1r3WC/KqC7zaSc0uRoPXPW/UhUpc=
+X-Received: by 2002:a05:6902:1544:b0:63d:d3a7:8cc4 with SMTP id
+ r4-20020a056902154400b0063dd3a78cc4mr2582151ybu.622.1649165129602; Tue, 05
+ Apr 2022 06:25:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220208210824.2238981-1-daniel.vetter@ffwll.ch>
- <20220208210824.2238981-19-daniel.vetter@ffwll.ch> <4ae20b63-f452-fdb4-ced6-d4968a8d69f0@redhat.com>
- <Ykv/k/WoVemoCJJA@phenom.ffwll.local> <YkwAhSt9HlbxcuZo@phenom.ffwll.local>
- <408ffe9b-f09f-dc7e-7f5e-a93b311a06fa@redhat.com> <CAKMK7uHf6H8mhSm6eDHUruWK5Xc2cSPkJUX6v-jpeQfjS19dKw@mail.gmail.com>
- <e124af06-4f24-277a-543a-82b383f48cea@redhat.com> <CAKMK7uH4GgDQJZguT-k0QmgEAHYHuDEbBtjYje51_Rtqzud0yw@mail.gmail.com>
-In-Reply-To: <CAKMK7uH4GgDQJZguT-k0QmgEAHYHuDEbBtjYje51_Rtqzud0yw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 5 Apr 2022 15:24:40 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWr0L0r+MVU-=+_yeHKwK8BjF7_EJQxiJT5jMqS9FJUeQ@mail.gmail.com>
-Message-ID: <CAMuHMdWr0L0r+MVU-=+_yeHKwK8BjF7_EJQxiJT5jMqS9FJUeQ@mail.gmail.com>
-Subject: Re: [PATCH v2 18/19] Revert "fbdev: Prevent probing generic drivers
- if a FB is already registered"
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Zack Rusin <zackr@vmware.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Ilya Trukhanov <lahvuun@gmail.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Peter Jones <pjones@redhat.com>
+References: <20220325184609.4059963-1-rajatja@google.com>
+In-Reply-To: <20220325184609.4059963-1-rajatja@google.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 5 Apr 2022 15:25:17 +0200
+Message-ID: <CAJZ5v0jQW3NcbtBWxUW8RQ-eCB3M6wdqztDmPr4q5+=FYmfJHw@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] PCI: ACPI: Support Microsoft's "DmaProperty"
+To:     Rajat Jain <rajatja@google.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatxjain@gmail.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Pavel Machek <pavel@denx.de>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        "open list:AMD IOMMU (AMD-VI)" <iommu@lists.linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -79,122 +72,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
-
-On Tue, Apr 5, 2022 at 1:48 PM Daniel Vetter <daniel@ffwll.ch> wrote:
-> On Tue, 5 Apr 2022 at 11:52, Javier Martinez Canillas
-> <javierm@redhat.com> wrote:
-> > On 4/5/22 11:24, Daniel Vetter wrote:
-> > > On Tue, 5 Apr 2022 at 11:19, Javier Martinez Canillas
-> > >> This is how I think that work, please let me know if you see something
-> > >> wrong in my logic:
-> > >>
-> > >> 1) A PCI device of OF device is registered for the GPU, this attempt to
-> > >>    match a registered driver but no driver was registered that match yet.
-> > >>
-> > >> 2) The efifb driver is built-in, will be initialized according to the link
-> > >>    order of the objects under drivers/video and the fbdev driver is registered.
-> > >>
-> > >>    There is no platform device or PCI/OF device registered that matches.
-> > >>
-> > >> 3) The DRM driver is built-in, will be initialized according to the link
-> > >>    order of the objects under drivers/gpu and the DRM driver is registered.
-> > >>
-> > >>    This matches the device registered in (1) and the DRM driver probes.
-> > >>
-> > >> 4) The DRM driver .probe kicks out any conflicting DRM drivers and pdev
-> > >>    before registering the DRM device.
-> > >>
-> > >>    There are no conflicting drivers or platform device at this point.
-> > >>
-> > >> 5) Latter at some point the drivers/firmware/sysfb.c init function is
-> > >>    executed, and this registers a platform device for the generic fb.
-> > >>
-> > >>    This device matches the efifb driver registered in (2) and the fbdev
-> > >>    driver probes.
-> > >>
-> > >>    Since that happens *after* the DRM driver already matched, probed
-> > >>    and registered the DRM device, that is a bug and what the reverted
-> > >>    patch worked around.
-> > >>
-> > >> So we need to prevent (5) if (1) and (3) already happened. Having a flag
-> > >> set in the fbdev core somewhere when remove_conflicting_framebuffers()
-> > >> is called could be a solution indeed.
-> > >>
-> > >> That is, the fbdev core needs to know that a DRM driver already probed
-> > >> and make register_framebuffer() fail if info->flag & FBINFO_MISC_FIRMWARE
-> > >>
-> > >> I can attempt to write a patch for that.
-> > >
-> > > Ah yeah that could be an issue. I think the right fix is to replace
-> > > the platform dev unregister with a sysfb_unregister() function in
-> > > sysfb.c, which is synced with a common lock with the sysfb_init
-> > > function and a small boolean. I think I can type that up quickly for
-> > > v3.
-> >
-> > It's more complicated than that since sysfb is just *one* of the several
-> > places where platform devices can be registered for video devices.
-> >
-> > For instance, the vga16fb driver registers its own platform device in
-> > its module_init() function so that can also happen after the conflicting
-> > framebuffers (and associated devices) were removed by a DRM driver probe.
-> >
-> > I tried to minimize the issue for that particular driver with commit:
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0499f419b76f
-> >
-> > But the point stands, it all boils down to the fact that you have two
-> > different subsystems registering video drivers and they don't know all
-> > about each other to take a proper decision.
-> >
-> > Right now the drm_aperture_remove_conflicting_framebuffers() call signals
-> > in one direction from DRM to fbdev but there isn't a communication in the
-> > other direction, from fbdev to DRM.
-> >
-> > I believe the correct fix would be for the fbdev core to keep a list of
-> > the apertures struct that are passed to remove_conflicting_framebuffers(),
-> > that way it will know what apertures are not available anymore and prevent
-> > to register any fbdev framebuffer that conflicts with one already present.
+On Fri, Mar 25, 2022 at 7:46 PM Rajat Jain <rajatja@google.com> wrote:
 >
-> Hm that still feels like reinventing a driver model, badly.
+> The "DmaProperty" is supported and documented by Microsoft here:
+> https://docs.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports
+> They use this property for DMA protection:
+> https://docs.microsoft.com/en-us/windows/security/information-protection/kernel-dma-protection-for-thunderbolt
 >
-> I think there's two cleaner solutions:
-> - move all the firmware driver platform_dev into sysfb.c, and then
-> just bind the special cases against that (e.g. offb, vga16fb and all
-> these). Then we'd have one sysfb_try_unregister(struct device *dev)
-> interface that fbmem.c uses.
-> - let fbmem.c call into each of these firmware device providers, which
-> means some loops most likely (like we can't call into vga16fb), so
-> probably need to move that into fbmem.c and it all gets a bit messy.
+> Support the "DmaProperty" with the same semantics. This is useful for
+> internal PCI devices that do not hang off a PCIe rootport, but offer
+> an attack surface for DMA attacks (e.g. internal network devices).
 >
-> > Let me know if you think that makes sense and I can attempt to write a fix.
+> Signed-off-by: Rajat Jain <rajatja@google.com>
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+> ---
+> v5: * Reorder the patches in the series
+> v4: * Add the GUID.
+>     * Update the comment and commitlog.
+> v3: * Use Microsoft's documented property "DmaProperty"
+>     * Resctrict to ACPI only
 >
-> I still think unregistering the platform_dev properly makes the most
-
-That doesn't sound very driver-model-aware to me. The device is what
-the driver binds to; it does not cease to exist.
-
-> sense, and feels like the most proper linux device model solution
-> instead of hacks on top - if the firmware fb is unuseable because a
-> native driver has taken over, we should nuke that. And also the
-> firmware fb driver would then just bind to that platform_dev if it
-> exists, and only if it exists. Also I think it should be the
-> responsibility of whichever piece of code that registers these
-> platform devices to ensure that platform_dev actually still exists.
-> That's why I think pushing all that code into sysfb.c is probably the
-> cleanest solution.
-
-Can't you unbind the generic driver first, and bind the specific driver
-afterwards? Alike writing to sysfs unbind/driver_override/bind,
-but from code?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>  drivers/acpi/property.c |  3 +++
+>  drivers/pci/pci-acpi.c  | 16 ++++++++++++++++
+>  2 files changed, 19 insertions(+)
+>
+> diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
+> index d0986bda2964..20603cacc28d 100644
+> --- a/drivers/acpi/property.c
+> +++ b/drivers/acpi/property.c
+> @@ -48,6 +48,9 @@ static const guid_t prp_guids[] = {
+>         /* Storage device needs D3 GUID: 5025030f-842f-4ab4-a561-99a5189762d0 */
+>         GUID_INIT(0x5025030f, 0x842f, 0x4ab4,
+>                   0xa5, 0x61, 0x99, 0xa5, 0x18, 0x97, 0x62, 0xd0),
+> +       /* DmaProperty for PCI devices GUID: 70d24161-6dd5-4c9e-8070-705531292865 */
+> +       GUID_INIT(0x70d24161, 0x6dd5, 0x4c9e,
+> +                 0x80, 0x70, 0x70, 0x55, 0x31, 0x29, 0x28, 0x65),
+>  };
+>
+>  /* ACPI _DSD data subnodes GUID: dbb8e3e6-5886-4ba6-8795-1319f52a966b */
+> diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+> index 1f15ab7eabf8..378e05096c52 100644
+> --- a/drivers/pci/pci-acpi.c
+> +++ b/drivers/pci/pci-acpi.c
+> @@ -1350,12 +1350,28 @@ static void pci_acpi_set_external_facing(struct pci_dev *dev)
+>                 dev->external_facing = 1;
+>  }
+>
+> +static void pci_acpi_check_for_dma_protection(struct pci_dev *dev)
+> +{
+> +       u8 val;
+> +
+> +       /*
+> +        * Property also used by Microsoft Windows for same purpose,
+> +        * (to implement DMA protection from a device, using the IOMMU).
+> +        */
+> +       if (device_property_read_u8(&dev->dev, "DmaProperty", &val))
+> +               return;
+> +
+> +       if (val)
+> +               dev->untrusted = 1;
+> +}
+> +
+>  void pci_acpi_setup(struct device *dev, struct acpi_device *adev)
+>  {
+>         struct pci_dev *pci_dev = to_pci_dev(dev);
+>
+>         pci_acpi_optimize_delay(pci_dev, adev->handle);
+>         pci_acpi_set_external_facing(pci_dev);
+> +       pci_acpi_check_for_dma_protection(pci_dev);
+>         pci_acpi_add_edr_notifier(pci_dev);
+>
+>         pci_acpi_add_pm_notifier(adev, pci_dev);
+> --
+> 2.35.1.1021.g381101b075-goog
+>

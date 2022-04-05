@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 893484F4683
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1804F4436
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348298AbiDEUeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
+        id S1344323AbiDEMth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354646AbiDEKO5 (ORCPT
+        with ESMTP id S244195AbiDEJJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:14:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73FF6C1D8;
-        Tue,  5 Apr 2022 03:02:10 -0700 (PDT)
+        Tue, 5 Apr 2022 05:09:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9016DBC30;
+        Tue,  5 Apr 2022 01:58:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7300561740;
-        Tue,  5 Apr 2022 10:02:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83CF3C385A1;
-        Tue,  5 Apr 2022 10:02:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 681166157A;
+        Tue,  5 Apr 2022 08:58:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79331C385A1;
+        Tue,  5 Apr 2022 08:58:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152929;
-        bh=Q78uqsoC1xavvfYSlRpEWeKITURSQGMxioyCMC1inPU=;
+        s=korg; t=1649149138;
+        bh=OtMJiNTcTHUQcPH4dSGJwZZlh+3lpDszUo2IbFnk9JM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XwVkghYotP1do9MpI6bGZE0ry/7BPjI959j3x24z4rkzOLjmKR8V+sKn1o3I68CQV
-         vpNvmMGAMEMjZmD8V7boM1kuGbPLDI/VnEldeUM36MW/Kw+mxkEUSeB5mpMNlPlSzK
-         6u28lSwLgtiPhvokXG0G9OIR2a+t9OhY1CobC4nk=
+        b=YxRKd2PS2xWWv7grxLBhK80POBaMUP4x7fowwxDB1TVu3eG1XlQ8sL/gObrIwGNr+
+         e6/bIbT2Lk3uwJUHVVVeIh3XsRAxVxoPkrjrLsTp5OF8p/UovsmkwA6vFlPnVdhsue
+         5SNFClV59HPl5nnkmjXIgh4VauD5lkIY7RTTvWcc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 009/599] virtio_console: break out of buf poll on remove
-Date:   Tue,  5 Apr 2022 09:25:03 +0200
-Message-Id: <20220405070259.091408163@linuxfoundation.org>
+Subject: [PATCH 5.16 0591/1017] mips: cdmm: Fix refcount leak in mips_cdmm_phys_base
+Date:   Tue,  5 Apr 2022 09:25:04 +0200
+Message-Id: <20220405070411.821863650@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,53 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael S. Tsirkin <mst@redhat.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 0e7174b9d5877130fec41fb4a16e0c2ee4958d44 ]
+[ Upstream commit 4528668ca331f7ce5999b7746657b46db5b3b785 ]
 
-A common pattern for device reset is currently:
-vdev->config->reset(vdev);
-.. cleanup ..
+The of_find_compatible_node() function returns a node pointer with
+refcount incremented, We should use of_node_put() on it when done
+Add the missing of_node_put() to release the refcount.
 
-reset prevents new interrupts from arriving and waits for interrupt
-handlers to finish.
-
-However if - as is common - the handler queues a work request which is
-flushed during the cleanup stage, we have code adding buffers / trying
-to get buffers while device is reset. Not good.
-
-This was reproduced by running
-	modprobe virtio_console
-	modprobe -r virtio_console
-in a loop.
-
-Fix this up by calling virtio_break_device + flush before reset.
-
-Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=1786239
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Fixes: 2121aa3e2312 ("mips: cdmm: Add mti,mips-cdmm dtb node support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Acked-by: Serge Semin <fancer.lancer@gmail.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/char/virtio_console.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/bus/mips_cdmm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/char/virtio_console.c b/drivers/char/virtio_console.c
-index 673522874cec..3dd4deb60adb 100644
---- a/drivers/char/virtio_console.c
-+++ b/drivers/char/virtio_console.c
-@@ -1959,6 +1959,13 @@ static void virtcons_remove(struct virtio_device *vdev)
- 	list_del(&portdev->list);
- 	spin_unlock_irq(&pdrvdata_lock);
- 
-+	/* Device is going away, exit any polling for buffers */
-+	virtio_break_device(vdev);
-+	if (use_multiport(portdev))
-+		flush_work(&portdev->control_work);
-+	else
-+		flush_work(&portdev->config_work);
-+
- 	/* Disable interrupts for vqs */
- 	vdev->config->reset(vdev);
- 	/* Finish up work that's lined up */
+diff --git a/drivers/bus/mips_cdmm.c b/drivers/bus/mips_cdmm.c
+index 626dedd110cb..fca0d0669aa9 100644
+--- a/drivers/bus/mips_cdmm.c
++++ b/drivers/bus/mips_cdmm.c
+@@ -351,6 +351,7 @@ phys_addr_t __weak mips_cdmm_phys_base(void)
+ 	np = of_find_compatible_node(NULL, NULL, "mti,mips-cdmm");
+ 	if (np) {
+ 		err = of_address_to_resource(np, 0, &res);
++		of_node_put(np);
+ 		if (!err)
+ 			return res.start;
+ 	}
 -- 
 2.34.1
 

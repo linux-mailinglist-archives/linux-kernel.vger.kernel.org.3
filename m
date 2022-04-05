@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 998334F3E69
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C8D4F423A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353035AbiDEMtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:49:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41926 "EHLO
+        id S1348239AbiDEUWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244191AbiDEJJs (ORCPT
+        with ESMTP id S1349125AbiDEJtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:09:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBCB33E;
-        Tue,  5 Apr 2022 01:58:57 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F91EABF63;
+        Tue,  5 Apr 2022 02:41:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4D5061003;
-        Tue,  5 Apr 2022 08:58:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE8FCC385A1;
-        Tue,  5 Apr 2022 08:58:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F0719B818F3;
+        Tue,  5 Apr 2022 09:41:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B2E0C385A3;
+        Tue,  5 Apr 2022 09:41:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149136;
-        bh=DGLMwc0aKxz+FQqD2YEpG77UF0UGtPZkVPr4ju27lBU=;
+        s=korg; t=1649151667;
+        bh=gLkXz8KQ4nS4VC4V52HBqJya/9x7GRrOlH92dFwRMKI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KykZsF+XePv5y6f7PS6tSylgzGK6pofc2clvbG4oxGLtMMlm0redtFrJWRiDw7Qdo
-         GRoL7SkQ1qzXdCp1Tcn0tbdCDMXrwJS/Z/FckRVUM1dxMsFGopyrwZQDmCgDZy67hC
-         waL/XEkdiq2ttVmzD2dwmYiy56DksPopJL+0URYU=
+        b=BxUVAXIWoEsX5sz06dP/0JWvsOONIgiHwt8Vi/S+Al4q0YlsQCWd3jzaGOhQwLS2i
+         JDTmYSaM1hFzobvhdBprqd4Pd3Xx7bkWMXgfwmdAss0q6TuP9SrJZDEPALhyEejBnO
+         LR6FQ9Fpd/T2dHPhO3DVhl667K4yWPxs8NQgRCZ4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Khaled Almahallawy <khaled.almahallawy@intel.com>,
-        Charlton Lin <charlton.lin@intel.com>,
-        =?UTF-8?q?Jouni=20H=C3=B6gander?= <jouni.hogander@intel.com>,
-        =?UTF-8?q?Jos=C3=A9=20Roberto=20de=20Souza?= <jose.souza@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        stable@vger.kernel.org, Tong Zhang <ztong0001@gmail.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Dan Williams <dan.j.williams@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0608/1017] drm/i915/display: Do not re-enable PSR after it was marked as not reliable
-Date:   Tue,  5 Apr 2022 09:25:21 +0200
-Message-Id: <20220405070412.327169580@linuxfoundation.org>
+Subject: [PATCH 5.15 460/913] dax: make sure inodes are flushed before destroy cache
+Date:   Tue,  5 Apr 2022 09:25:22 +0200
+Message-Id: <20220405070353.637920523@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,57 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: José Roberto de Souza <jose.souza@intel.com>
+From: Tong Zhang <ztong0001@gmail.com>
 
-[ Upstream commit 278da06c03655c2bb9bc36ebdf45b90a079b3bfd ]
+[ Upstream commit a7e8de822e0b1979f08767c751f6c8a9c1d4ad86 ]
 
-If a error happens and sink_not_reliable is set, PSR should be disabled
-for good but that is not happening.
-It would be disabled by the function handling the PSR error but then
-on the next fastset it would be enabled again in
-_intel_psr_post_plane_update().
-It would only be disabled for good in the next modeset where has_psr
-will be set false.
+A bug can be triggered by following command
 
-v2:
-- release psr lock before continue
+$ modprobe nd_pmem && modprobe -r nd_pmem
 
-Fixes: 9ce5884e5139 ("drm/i915/display: Only keep PSR enabled if there is active planes")
-Reported-by: Khaled Almahallawy <khaled.almahallawy@intel.com>
-Reported-by: Charlton Lin <charlton.lin@intel.com>
-Cc: Jouni Högander <jouni.hogander@intel.com>
-Signed-off-by: José Roberto de Souza <jose.souza@intel.com>
-Reviewed-by: Jouni Högander <jouni.hogander@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220311185149.110527-2-jose.souza@intel.com
-(cherry picked from commit 15f26bdc81f7f03561aaea5a10d87bd6638e1459)
-Signed-off-by: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+[   10.060014] BUG dax_cache (Not tainted): Objects remaining in dax_cache on __kmem_cache_shutdown()
+[   10.060938] Slab 0x0000000085b729ac objects=9 used=1 fp=0x000000004f5ae469 flags=0x200000000010200(slab|head|node)
+[   10.062433] Call Trace:
+[   10.062673]  dump_stack_lvl+0x34/0x44
+[   10.062865]  slab_err+0x90/0xd0
+[   10.063619]  __kmem_cache_shutdown+0x13b/0x2f0
+[   10.063848]  kmem_cache_destroy+0x4a/0x110
+[   10.064058]  __x64_sys_delete_module+0x265/0x300
+
+This is caused by dax_fs_exit() not flushing inodes before destroy cache.
+To fix this issue, call rcu_barrier() before destroy cache.
+
+Signed-off-by: Tong Zhang <ztong0001@gmail.com>
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220212071111.148575-1-ztong0001@gmail.com
+Fixes: 7b6be8444e0f ("dax: refactor dax-fs into a generic provider of 'struct dax_device' instances")
+Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/i915/display/intel_psr.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/dax/super.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/i915/display/intel_psr.c b/drivers/gpu/drm/i915/display/intel_psr.c
-index 3ba8b717e176..f7ade9c06386 100644
---- a/drivers/gpu/drm/i915/display/intel_psr.c
-+++ b/drivers/gpu/drm/i915/display/intel_psr.c
-@@ -1793,6 +1793,9 @@ static void _intel_psr_post_plane_update(const struct intel_atomic_state *state,
- 
- 		mutex_lock(&psr->lock);
- 
-+		if (psr->sink_not_reliable)
-+			goto exit;
-+
- 		drm_WARN_ON(&dev_priv->drm, psr->enabled && !crtc_state->active_planes);
- 
- 		/* Only enable if there is active planes */
-@@ -1803,6 +1806,7 @@ static void _intel_psr_post_plane_update(const struct intel_atomic_state *state,
- 		if (crtc_state->crc_enabled && psr->enabled)
- 			psr_force_hw_tracking_exit(intel_dp);
- 
-+exit:
- 		mutex_unlock(&psr->lock);
- 	}
+diff --git a/drivers/dax/super.c b/drivers/dax/super.c
+index fc89e91beea7..7610e4a9ac4e 100644
+--- a/drivers/dax/super.c
++++ b/drivers/dax/super.c
+@@ -678,6 +678,7 @@ static int dax_fs_init(void)
+ static void dax_fs_exit(void)
+ {
+ 	kern_unmount(dax_mnt);
++	rcu_barrier();
+ 	kmem_cache_destroy(dax_cache);
  }
+ 
 -- 
 2.34.1
 

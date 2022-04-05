@@ -2,53 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C12E4F246F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3EA4F2511
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231682AbiDEHSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59024 "EHLO
+        id S231904AbiDEHoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231436AbiDEHQ6 (ORCPT
+        with ESMTP id S231829AbiDEHoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:16:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCD91140;
-        Tue,  5 Apr 2022 00:14:59 -0700 (PDT)
+        Tue, 5 Apr 2022 03:44:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54455939D2;
+        Tue,  5 Apr 2022 00:40:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66684B81B75;
-        Tue,  5 Apr 2022 07:14:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B5F3C34113;
-        Tue,  5 Apr 2022 07:14:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649142897;
-        bh=ggDDZ4KrMuZa/FnH1iFuGJ/npHtqKAOwj6Ie6vczNw4=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D999E6167B;
+        Tue,  5 Apr 2022 07:40:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB3B9C340EE;
+        Tue,  5 Apr 2022 07:40:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649144434;
+        bh=n293qt+mrQy6zxOTmDT6x5dcOxeBBh/NnsqIl81K/6U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fBi4/1UQ8TYPu3HtKyxz7E7vs+XesHh9mqlNAGCCPu7pAqmdCSklUU49E5HTtRTRK
-         J6T69wDNoEPicEALGu2Xw/qiuktVFvAY0ZuDycQ1/Pmcr6H/4HMyWZa409DCqiLvZb
-         s6J3VkTwDyyGyZ3eu9EkAwlc+143LU2cGd1vc1zdgpQ0ZAU2oF3Ih9V8Ec2YmTCED5
-         SsKGhQ0J5paJUebgWmUFlD4DHHntwyFz4i38LX5Bco9HkbrZtkMpCsZkKeChunvTSM
-         C4x4Gaqwnjgyyps53h1iVUo+JBRfl2xwK/1cH62Pfpt2fUSfFGWk7oOPxYlhjfBb25
-         g9Itk8RHqE/1A==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, hch@lst.de, nathan@kernel.org,
-        naresh.kamboju@linaro.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        heiko@sntech.de, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V12 15/20] riscv: compat: Add hw capability check for elf
-Date:   Tue,  5 Apr 2022 15:13:09 +0800
-Message-Id: <20220405071314.3225832-16-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220405071314.3225832-1-guoren@kernel.org>
-References: <20220405071314.3225832-1-guoren@kernel.org>
+        b=h1XEiTqeQnSBoC92pQ/U4rbb6WSxE7hXGDSwddCt27nfL8/Tvgz1gcpLXyE5mQ7Rl
+         r9ncjGWe1IHq9QSgRCPw5thC0UuAWA4FNCW8/ub7wVbVbyUIPR51uXgrYowSmhS/YR
+         SlFUpX35aQUe1IfjNnMVLNzzxx7CXqdzDmQDl/wU=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, stable@kernel.org,
+        Jann Horn <jannh@google.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Subject: [PATCH 5.17 0042/1126] ptrace: Check PTRACE_O_SUSPEND_SECCOMP permission on PTRACE_SEIZE
+Date:   Tue,  5 Apr 2022 09:13:09 +0200
+Message-Id: <20220405070408.793958394@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
+References: <20220405070407.513532867@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -60,82 +55,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+From: Jann Horn <jannh@google.com>
 
-Detect hardware COMPAT (32bit U-mode) capability in rv64. If not
-support COMPAT mode in hw, compat_elf_check_arch would return
-false by compat_binfmt_elf.c
+commit ee1fee900537b5d9560e9f937402de5ddc8412f3 upstream.
 
-Add CLASS to enhance (compat_)elf_check_arch to distinguish
-32BIT/64BIT elf.
+Setting PTRACE_O_SUSPEND_SECCOMP is supposed to be a highly privileged
+operation because it allows the tracee to completely bypass all seccomp
+filters on kernels with CONFIG_CHECKPOINT_RESTORE=y. It is only supposed to
+be settable by a process with global CAP_SYS_ADMIN, and only if that
+process is not subject to any seccomp filters at all.
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Christoph Hellwig <hch@lst.de>
+However, while these permission checks were done on the PTRACE_SETOPTIONS
+path, they were missing on the PTRACE_SEIZE path, which also sets
+user-specified ptrace flags.
+
+Move the permissions checks out into a helper function and let both
+ptrace_attach() and ptrace_setoptions() call it.
+
+Cc: stable@kernel.org
+Fixes: 13c4a90119d2 ("seccomp: add ptrace options for suspend/resume")
+Signed-off-by: Jann Horn <jannh@google.com>
+Link: https://lkml.kernel.org/r/20220319010838.1386861-1-jannh@google.com
+Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/riscv/include/asm/elf.h |  6 ++++--
- arch/riscv/kernel/process.c  | 28 ++++++++++++++++++++++++++++
- 2 files changed, 32 insertions(+), 2 deletions(-)
+ kernel/ptrace.c |   47 ++++++++++++++++++++++++++++++++---------------
+ 1 file changed, 32 insertions(+), 15 deletions(-)
 
-diff --git a/arch/riscv/include/asm/elf.h b/arch/riscv/include/asm/elf.h
-index a234656cfb5d..754fdb8cee96 100644
---- a/arch/riscv/include/asm/elf.h
-+++ b/arch/riscv/include/asm/elf.h
-@@ -33,9 +33,11 @@
- /*
-  * This is used to ensure we don't load something for the wrong architecture.
-  */
--#define elf_check_arch(x) ((x)->e_machine == EM_RISCV)
-+#define elf_check_arch(x) (((x)->e_machine == EM_RISCV) && \
-+			   ((x)->e_ident[EI_CLASS] == ELF_CLASS))
- 
--#define compat_elf_check_arch(x) ((x)->e_machine == EM_RISCV)
-+extern bool compat_elf_check_arch(Elf32_Ehdr *hdr);
-+#define compat_elf_check_arch	compat_elf_check_arch
- 
- #define CORE_DUMP_USE_REGSET
- #define ELF_EXEC_PAGESIZE	(PAGE_SIZE)
-diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-index b4421c16198c..1c7be865ab31 100644
---- a/arch/riscv/kernel/process.c
-+++ b/arch/riscv/kernel/process.c
-@@ -84,6 +84,34 @@ void show_regs(struct pt_regs *regs)
- 		dump_backtrace(regs, NULL, KERN_DEFAULT);
+--- a/kernel/ptrace.c
++++ b/kernel/ptrace.c
+@@ -371,6 +371,26 @@ bool ptrace_may_access(struct task_struc
+ 	return !err;
  }
  
-+#ifdef CONFIG_COMPAT
-+static bool compat_mode_supported __read_mostly;
-+
-+bool compat_elf_check_arch(Elf32_Ehdr *hdr)
++static int check_ptrace_options(unsigned long data)
 +{
-+	return compat_mode_supported &&
-+	       hdr->e_machine == EM_RISCV &&
-+	       hdr->e_ident[EI_CLASS] == ELFCLASS32;
-+}
++	if (data & ~(unsigned long)PTRACE_O_MASK)
++		return -EINVAL;
 +
-+static int __init compat_mode_detect(void)
-+{
-+	unsigned long tmp = csr_read(CSR_STATUS);
++	if (unlikely(data & PTRACE_O_SUSPEND_SECCOMP)) {
++		if (!IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) ||
++		    !IS_ENABLED(CONFIG_SECCOMP))
++			return -EINVAL;
 +
-+	csr_write(CSR_STATUS, (tmp & ~SR_UXL) | SR_UXL_32);
-+	compat_mode_supported =
-+			(csr_read(CSR_STATUS) & SR_UXL) == SR_UXL_32;
++		if (!capable(CAP_SYS_ADMIN))
++			return -EPERM;
 +
-+	csr_write(CSR_STATUS, tmp);
-+
-+	pr_info("riscv: ELF compat mode %s",
-+			compat_mode_supported ? "supported" : "failed");
-+
++		if (seccomp_mode(&current->seccomp) != SECCOMP_MODE_DISABLED ||
++		    current->ptrace & PT_SUSPEND_SECCOMP)
++			return -EPERM;
++	}
 +	return 0;
 +}
-+early_initcall(compat_mode_detect);
-+#endif
 +
- void start_thread(struct pt_regs *regs, unsigned long pc,
- 	unsigned long sp)
+ static int ptrace_attach(struct task_struct *task, long request,
+ 			 unsigned long addr,
+ 			 unsigned long flags)
+@@ -382,8 +402,16 @@ static int ptrace_attach(struct task_str
+ 	if (seize) {
+ 		if (addr != 0)
+ 			goto out;
++		/*
++		 * This duplicates the check in check_ptrace_options() because
++		 * ptrace_attach() and ptrace_setoptions() have historically
++		 * used different error codes for unknown ptrace options.
++		 */
+ 		if (flags & ~(unsigned long)PTRACE_O_MASK)
+ 			goto out;
++		retval = check_ptrace_options(flags);
++		if (retval)
++			return retval;
+ 		flags = PT_PTRACED | PT_SEIZED | (flags << PT_OPT_FLAG_SHIFT);
+ 	} else {
+ 		flags = PT_PTRACED;
+@@ -654,22 +682,11 @@ int ptrace_writedata(struct task_struct
+ static int ptrace_setoptions(struct task_struct *child, unsigned long data)
  {
--- 
-2.25.1
+ 	unsigned flags;
++	int ret;
+ 
+-	if (data & ~(unsigned long)PTRACE_O_MASK)
+-		return -EINVAL;
+-
+-	if (unlikely(data & PTRACE_O_SUSPEND_SECCOMP)) {
+-		if (!IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) ||
+-		    !IS_ENABLED(CONFIG_SECCOMP))
+-			return -EINVAL;
+-
+-		if (!capable(CAP_SYS_ADMIN))
+-			return -EPERM;
+-
+-		if (seccomp_mode(&current->seccomp) != SECCOMP_MODE_DISABLED ||
+-		    current->ptrace & PT_SUSPEND_SECCOMP)
+-			return -EPERM;
+-	}
++	ret = check_ptrace_options(data);
++	if (ret)
++		return ret;
+ 
+ 	/* Avoid intermediate state when all opts are cleared */
+ 	flags = child->ptrace;
+
 

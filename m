@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABAFB4F2B70
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 858D64F29E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 12:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347357AbiDEJ0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
+        id S1346895AbiDEJpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239653AbiDEIUY (ORCPT
+        with ESMTP id S235568AbiDEIVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F414322A;
-        Tue,  5 Apr 2022 01:18:17 -0700 (PDT)
+        Tue, 5 Apr 2022 04:21:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2FE2196;
+        Tue,  5 Apr 2022 01:19:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5F28B81B18;
-        Tue,  5 Apr 2022 08:18:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF366C385A0;
-        Tue,  5 Apr 2022 08:18:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CB4360B12;
+        Tue,  5 Apr 2022 08:19:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37F55C385A0;
+        Tue,  5 Apr 2022 08:19:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146695;
-        bh=2ncRTTPX3hIETBFICl5p5zP4ZHOlcCFDMCrPZS07OeY=;
+        s=korg; t=1649146756;
+        bh=fUO8fVrX1Jo52Tl8cdXg4tG8zouKK4Q2Jo6qUwezPwQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y40r5zj5Y3LMdN7jjbHGXCg4z/IMaNX8roFjHBIW++cFal5sp/h1TyacMbP8s05Ns
-         KfUoYE6RiUP8VnGznvfIuzsqKyjLyIncRIB838o+4E6CSG7OxOqQNwFn/lz6Y4YJfP
-         5VNKtZ+EodICqABy+sEFcJuUp24zp48rJ8dVtMo0=
+        b=f0G9tQllYSKIWjzEA5PgcYmqBdMdRs+VYP1uBp8qXa7DW521PLreQgWe5OH6nxFfV
+         hyFiddRPlBwTFjkPdKKHh34paHpXcZKjSg4Gxspcl9kyfBov7k8ByOLN8n7/pzGhVV
+         b2zSsDX+z/2Hwb4eMnhzO75orSdkNP5oNqgp+mb4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Woodhouse <dwmw@amazon.co.uk>,
+        stable@vger.kernel.org, Zhouyi Zhou <zhouzhouyi@gmail.com>,
         "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0838/1126] rcu: Kill rnp->ofl_seq and use only rcu_state.ofl_lock for exclusion
-Date:   Tue,  5 Apr 2022 09:26:25 +0200
-Message-Id: <20220405070432.153271316@linuxfoundation.org>
+Subject: [PATCH 5.17 0840/1126] rcu: Mark writes to the rcu_segcblist structures ->flags field
+Date:   Tue,  5 Apr 2022 09:26:27 +0200
+Message-Id: <20220405070432.210797778@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,219 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+From: Paul E. McKenney <paulmck@kernel.org>
 
-[ Upstream commit 82980b1622d97017053c6792382469d7dc26a486 ]
+[ Upstream commit c09929031018913b5783872a8b8cdddef4a543c7 ]
 
-If we allow architectures to bring APs online in parallel, then we end
-up requiring rcu_cpu_starting() to be reentrant. But currently, the
-manipulation of rnp->ofl_seq is not thread-safe.
+KCSAN reports data races between the rcu_segcblist_clear_flags() and
+rcu_segcblist_set_flags() functions, though misreporting the latter
+as a call to rcu_segcblist_is_enabled() from call_rcu().  This commit
+converts the updates of this field to WRITE_ONCE(), relying on the
+resulting unmarked reads to continue to detect buggy concurrent writes
+to this field.
 
-However, rnp->ofl_seq is also fairly much pointless anyway since both
-rcu_cpu_starting() and rcu_report_dead() hold rcu_state.ofl_lock for
-fairly much the whole time that rnp->ofl_seq is set to an odd number
-to indicate that an operation is in progress.
-
-So drop rnp->ofl_seq completely, and use only rcu_state.ofl_lock.
-
-This has a couple of minor complexities: lockdep will complain when we
-take rcu_state.ofl_lock, and currently accepts the 'excuse' of having
-an odd value in rnp->ofl_seq. So switch it to an arch_spinlock_t to
-avoid that false positive complaint. Since we're killing rnp->ofl_seq
-of course that 'excuse' has to be changed too, so make it check for
-arch_spin_is_locked(rcu_state.ofl_lock).
-
-There's no arch_spin_lock_irqsave() so we have to manually save and
-restore local interrupts around the locking.
-
-At Paul's request based on Neeraj's analysis, make rcu_gp_init not just
-wait but *exclude* any CPU online/offline activity, which was fairly
-much true already by virtue of it holding rcu_state.ofl_lock.
-
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+Reported-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Cc: Frederic Weisbecker <frederic@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/rcu/tree.c | 71 ++++++++++++++++++++++++-----------------------
- kernel/rcu/tree.h |  4 +--
- 2 files changed, 37 insertions(+), 38 deletions(-)
+ kernel/rcu/rcu_segcblist.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index a4c25a6283b0..73a4c9d07b86 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -91,7 +91,7 @@ static struct rcu_state rcu_state = {
- 	.abbr = RCU_ABBR,
- 	.exp_mutex = __MUTEX_INITIALIZER(rcu_state.exp_mutex),
- 	.exp_wake_mutex = __MUTEX_INITIALIZER(rcu_state.exp_wake_mutex),
--	.ofl_lock = __RAW_SPIN_LOCK_UNLOCKED(rcu_state.ofl_lock),
-+	.ofl_lock = __ARCH_SPIN_LOCK_UNLOCKED,
- };
- 
- /* Dump rcu_node combining tree at boot to verify correct setup. */
-@@ -1175,7 +1175,15 @@ bool rcu_lockdep_current_cpu_online(void)
- 	preempt_disable_notrace();
- 	rdp = this_cpu_ptr(&rcu_data);
- 	rnp = rdp->mynode;
--	if (rdp->grpmask & rcu_rnp_online_cpus(rnp) || READ_ONCE(rnp->ofl_seq) & 0x1)
-+	/*
-+	 * Strictly, we care here about the case where the current CPU is
-+	 * in rcu_cpu_starting() and thus has an excuse for rdp->grpmask
-+	 * not being up to date. So arch_spin_is_locked() might have a
-+	 * false positive if it's held by some *other* CPU, but that's
-+	 * OK because that just means a false *negative* on the warning.
-+	 */
-+	if (rdp->grpmask & rcu_rnp_online_cpus(rnp) ||
-+	    arch_spin_is_locked(&rcu_state.ofl_lock))
- 		ret = true;
- 	preempt_enable_notrace();
- 	return ret;
-@@ -1739,7 +1747,6 @@ static void rcu_strict_gp_boundary(void *unused)
-  */
- static noinline_for_stack bool rcu_gp_init(void)
+diff --git a/kernel/rcu/rcu_segcblist.h b/kernel/rcu/rcu_segcblist.h
+index e373fbe44da5..431cee212467 100644
+--- a/kernel/rcu/rcu_segcblist.h
++++ b/kernel/rcu/rcu_segcblist.h
+@@ -56,13 +56,13 @@ static inline long rcu_segcblist_n_cbs(struct rcu_segcblist *rsclp)
+ static inline void rcu_segcblist_set_flags(struct rcu_segcblist *rsclp,
+ 					   int flags)
  {
--	unsigned long firstseq;
- 	unsigned long flags;
- 	unsigned long oldmask;
- 	unsigned long mask;
-@@ -1782,22 +1789,17 @@ static noinline_for_stack bool rcu_gp_init(void)
- 	 * of RCU's Requirements documentation.
- 	 */
- 	WRITE_ONCE(rcu_state.gp_state, RCU_GP_ONOFF);
-+	/* Exclude CPU hotplug operations. */
- 	rcu_for_each_leaf_node(rnp) {
--		// Wait for CPU-hotplug operations that might have
--		// started before this grace period did.
--		smp_mb(); // Pair with barriers used when updating ->ofl_seq to odd values.
--		firstseq = READ_ONCE(rnp->ofl_seq);
--		if (firstseq & 0x1)
--			while (firstseq == READ_ONCE(rnp->ofl_seq))
--				schedule_timeout_idle(1);  // Can't wake unless RCU is watching.
--		smp_mb(); // Pair with barriers used when updating ->ofl_seq to even values.
--		raw_spin_lock(&rcu_state.ofl_lock);
--		raw_spin_lock_irq_rcu_node(rnp);
-+		local_irq_save(flags);
-+		arch_spin_lock(&rcu_state.ofl_lock);
-+		raw_spin_lock_rcu_node(rnp);
- 		if (rnp->qsmaskinit == rnp->qsmaskinitnext &&
- 		    !rnp->wait_blkd_tasks) {
- 			/* Nothing to do on this leaf rcu_node structure. */
--			raw_spin_unlock_irq_rcu_node(rnp);
--			raw_spin_unlock(&rcu_state.ofl_lock);
-+			raw_spin_unlock_rcu_node(rnp);
-+			arch_spin_unlock(&rcu_state.ofl_lock);
-+			local_irq_restore(flags);
- 			continue;
- 		}
- 
-@@ -1832,8 +1834,9 @@ static noinline_for_stack bool rcu_gp_init(void)
- 				rcu_cleanup_dead_rnp(rnp);
- 		}
- 
--		raw_spin_unlock_irq_rcu_node(rnp);
--		raw_spin_unlock(&rcu_state.ofl_lock);
-+		raw_spin_unlock_rcu_node(rnp);
-+		arch_spin_unlock(&rcu_state.ofl_lock);
-+		local_irq_restore(flags);
- 	}
- 	rcu_gp_slow(gp_preinit_delay); /* Races with CPU hotplug. */
- 
-@@ -4287,11 +4290,10 @@ void rcu_cpu_starting(unsigned int cpu)
- 
- 	rnp = rdp->mynode;
- 	mask = rdp->grpmask;
--	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
--	WARN_ON_ONCE(!(rnp->ofl_seq & 0x1));
-+	local_irq_save(flags);
-+	arch_spin_lock(&rcu_state.ofl_lock);
- 	rcu_dynticks_eqs_online();
--	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
--	raw_spin_lock_irqsave_rcu_node(rnp, flags);
-+	raw_spin_lock_rcu_node(rnp);
- 	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext | mask);
- 	newcpu = !(rnp->expmaskinitnext & mask);
- 	rnp->expmaskinitnext |= mask;
-@@ -4304,15 +4306,18 @@ void rcu_cpu_starting(unsigned int cpu)
- 
- 	/* An incoming CPU should never be blocking a grace period. */
- 	if (WARN_ON_ONCE(rnp->qsmask & mask)) { /* RCU waiting on incoming CPU? */
-+		/* rcu_report_qs_rnp() *really* wants some flags to restore */
-+		unsigned long flags2;
-+
-+		local_irq_save(flags2);
- 		rcu_disable_urgency_upon_qs(rdp);
- 		/* Report QS -after- changing ->qsmaskinitnext! */
--		rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags);
-+		rcu_report_qs_rnp(mask, rnp, rnp->gp_seq, flags2);
- 	} else {
--		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
-+		raw_spin_unlock_rcu_node(rnp);
- 	}
--	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
--	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
--	WARN_ON_ONCE(rnp->ofl_seq & 0x1);
-+	arch_spin_unlock(&rcu_state.ofl_lock);
-+	local_irq_restore(flags);
- 	smp_mb(); /* Ensure RCU read-side usage follows above initialization. */
+-	rsclp->flags |= flags;
++	WRITE_ONCE(rsclp->flags, rsclp->flags | flags);
  }
  
-@@ -4326,7 +4331,7 @@ void rcu_cpu_starting(unsigned int cpu)
-  */
- void rcu_report_dead(unsigned int cpu)
+ static inline void rcu_segcblist_clear_flags(struct rcu_segcblist *rsclp,
+ 					     int flags)
  {
--	unsigned long flags;
-+	unsigned long flags, seq_flags;
- 	unsigned long mask;
- 	struct rcu_data *rdp = per_cpu_ptr(&rcu_data, cpu);
- 	struct rcu_node *rnp = rdp->mynode;  /* Outgoing CPU's rdp & rnp. */
-@@ -4340,10 +4345,8 @@ void rcu_report_dead(unsigned int cpu)
- 
- 	/* Remove outgoing CPU from mask in the leaf rcu_node structure. */
- 	mask = rdp->grpmask;
--	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
--	WARN_ON_ONCE(!(rnp->ofl_seq & 0x1));
--	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
--	raw_spin_lock(&rcu_state.ofl_lock);
-+	local_irq_save(seq_flags);
-+	arch_spin_lock(&rcu_state.ofl_lock);
- 	raw_spin_lock_irqsave_rcu_node(rnp, flags); /* Enforce GP memory-order guarantee. */
- 	rdp->rcu_ofl_gp_seq = READ_ONCE(rcu_state.gp_seq);
- 	rdp->rcu_ofl_gp_flags = READ_ONCE(rcu_state.gp_flags);
-@@ -4354,10 +4357,8 @@ void rcu_report_dead(unsigned int cpu)
- 	}
- 	WRITE_ONCE(rnp->qsmaskinitnext, rnp->qsmaskinitnext & ~mask);
- 	raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
--	raw_spin_unlock(&rcu_state.ofl_lock);
--	smp_mb(); // Pair with rcu_gp_cleanup()'s ->ofl_seq barrier().
--	WRITE_ONCE(rnp->ofl_seq, rnp->ofl_seq + 1);
--	WARN_ON_ONCE(rnp->ofl_seq & 0x1);
-+	arch_spin_unlock(&rcu_state.ofl_lock);
-+	local_irq_restore(seq_flags);
- 
- 	rdp->cpu_started = false;
+-	rsclp->flags &= ~flags;
++	WRITE_ONCE(rsclp->flags, rsclp->flags & ~flags);
  }
-diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-index 486fc901bd08..4b4bcef8a974 100644
---- a/kernel/rcu/tree.h
-+++ b/kernel/rcu/tree.h
-@@ -56,8 +56,6 @@ struct rcu_node {
- 				/*  Initialized from ->qsmaskinitnext at the */
- 				/*  beginning of each grace period. */
- 	unsigned long qsmaskinitnext;
--	unsigned long ofl_seq;	/* CPU-hotplug operation sequence count. */
--				/* Online CPUs for next grace period. */
- 	unsigned long expmask;	/* CPUs or groups that need to check in */
- 				/*  to allow the current expedited GP */
- 				/*  to complete. */
-@@ -355,7 +353,7 @@ struct rcu_state {
- 	const char *name;			/* Name of structure. */
- 	char abbr;				/* Abbreviated name. */
  
--	raw_spinlock_t ofl_lock ____cacheline_internodealigned_in_smp;
-+	arch_spinlock_t ofl_lock ____cacheline_internodealigned_in_smp;
- 						/* Synchronize offline with */
- 						/*  GP pre-initialization. */
- };
+ static inline bool rcu_segcblist_test_flags(struct rcu_segcblist *rsclp,
 -- 
 2.34.1
 

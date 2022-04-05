@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C8B4F410E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E06CB4F3F31
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357747AbiDEU10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
+        id S1390642AbiDENms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358102AbiDEK16 (ORCPT
+        with ESMTP id S1345585AbiDEJWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B2F6C964;
-        Tue,  5 Apr 2022 03:15:39 -0700 (PDT)
+        Tue, 5 Apr 2022 05:22:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448AA4EA24;
+        Tue,  5 Apr 2022 02:11:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 603F1B81B7A;
-        Tue,  5 Apr 2022 10:15:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C177FC385A0;
-        Tue,  5 Apr 2022 10:15:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB0D7B80DA1;
+        Tue,  5 Apr 2022 09:11:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D16BC385A0;
+        Tue,  5 Apr 2022 09:11:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153737;
-        bh=jwHVmQzvD3veJPHy4KQUrd9zVR34Jq8Fpe1SDmhZEEs=;
+        s=korg; t=1649149879;
+        bh=v0e+GbbN1cfqPskZ/ICNmADN7c4vz8YjGJCkhl99+Wk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KCnsV6UGaYWIZaaI9LueRvQ5d+qw3MrGSirKM2xMCftps1I13BDtkRuq1Sxr4Mq/y
-         DGLBMREzdWltd5SV+GzK9dfyunsexl1LiBcX3hwYsIo3q6nQLi+3IAWvrO9x1fbvKx
-         DNJ1xwqxxnnCAqEwkqzRWh2nniU2iV4NMPiHnBXo=
+        b=TTngsG5fufdald9LSJSmJroP4Wc+utoZ8MsCgl5/UDDAeuMMAMGDle7pHILGcVkFU
+         yRVtwKObzlYQU4oVLtQ69twfIfwORlfMGEonYX6lQiF5/RDSVEBL5aKwZfRBDW0Wkz
+         xVUbcKKKmFk7UpZMMiZGVPFq4e9ES779SrIVqJa4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tobias Waldekranz <tobias@waldekranz.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 291/599] net: dsa: mv88e6xxx: Enable port policy support on 6097
-Date:   Tue,  5 Apr 2022 09:29:45 +0200
-Message-Id: <20220405070307.493608537@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: [PATCH 5.16 0873/1017] drm/i915: Fix PSF GV point mask when SAGV is not possible
+Date:   Tue,  5 Apr 2022 09:29:46 +0200
+Message-Id: <20220405070420.149613416@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +57,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tobias Waldekranz <tobias@waldekranz.com>
+From: Ville Syrjälä <ville.syrjala@linux.intel.com>
 
-[ Upstream commit 585d42bb57bb358d48906660a8de273b078810b1 ]
+commit 3ef8b5e19ead5a79600ea55f9549658281415893 upstream.
 
-This chip has support for the same per-port policy actions found in
-later versions of LinkStreet devices.
+Don't just mask off all the PSF GV points when SAGV gets disabled.
+This should in fact cause the Pcode to reject the request since
+at least one PSF point must remain enabled at all times.
 
-Fixes: f3a2cd326e44 ("net: dsa: mv88e6xxx: introduce .port_set_policy")
-Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Cc: Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>
+Fixes: 192fbfb76744 ("drm/i915: Implement PSF GV point support")
+Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220309164948.10671-7-ville.syrjala@linux.intel.com
+Reviewed-by: Stanislav Lisovskiy <stanislav.lisovskiy@intel.com>
+(cherry picked from commit 0fed4ddd18f064d2359b430c6e83ee60dd1f49b1)
+Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/dsa/mv88e6xxx/chip.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/i915/display/intel_bw.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 1992be77522a..e79a808375fc 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -3297,6 +3297,7 @@ static const struct mv88e6xxx_ops mv88e6097_ops = {
- 	.port_set_link = mv88e6xxx_port_set_link,
- 	.port_set_speed_duplex = mv88e6185_port_set_speed_duplex,
- 	.port_tag_remap = mv88e6095_port_tag_remap,
-+	.port_set_policy = mv88e6352_port_set_policy,
- 	.port_set_frame_mode = mv88e6351_port_set_frame_mode,
- 	.port_set_egress_floods = mv88e6352_port_set_egress_floods,
- 	.port_set_ether_type = mv88e6351_port_set_ether_type,
--- 
-2.34.1
-
+--- a/drivers/gpu/drm/i915/display/intel_bw.c
++++ b/drivers/gpu/drm/i915/display/intel_bw.c
+@@ -819,7 +819,8 @@ int intel_bw_atomic_check(struct intel_a
+ 	 * cause.
+ 	 */
+ 	if (!intel_can_enable_sagv(dev_priv, new_bw_state)) {
+-		allowed_points = BIT(max_bw_point);
++		allowed_points &= ADLS_PSF_PT_MASK;
++		allowed_points |= BIT(max_bw_point);
+ 		drm_dbg_kms(&dev_priv->drm, "No SAGV, using single QGV point %d\n",
+ 			    max_bw_point);
+ 	}
 
 

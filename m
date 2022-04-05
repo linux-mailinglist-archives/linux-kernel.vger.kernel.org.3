@@ -2,163 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1908A4F3232
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1699D4F329F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347624AbiDEJ1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:27:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
+        id S243034AbiDEJis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:38:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239578AbiDEIUO (ORCPT
+        with ESMTP id S239764AbiDEIUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:14 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2048.outbound.protection.outlook.com [40.107.244.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE42641C;
-        Tue,  5 Apr 2022 01:16:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KEWMmfspaT/SAPF1l3Pb1Z7HlvGgF3UA6+HM9u/lYB4KNqNPYVycaOwHJlDRzu3TG/1mSG3EKtBfSgi4gbV3cm2aA7mEMu1xFkUN5kV4m/9cT8wbucs9SfkIYtAYA0qJTS0aIKNNrqll7JQn9PsEtaGM+bVReJEFPnyZH01nfAi99dTr9Fb4dLq3pWKdyUDLxwffphCm09XwK02F4eSE53NpaPgNrZi76NRRJ+lKnfs/L4OkirKYkznxFeCp4SQb8QI0er40dwG7F0YNaBqi//UiIqPohBeYQ5WJa+UWdSuusz8CbwnPx3QffWdmD9WtFQyqOfU5VH/AC2riSRnjtw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zod3BV10YHUk/5mSinApGGyP1wTOVPTEWVtjzC4BRNE=;
- b=NedKtFH8BNnDPQS8y2baqo2+h2ZmYOP2zRcd6e5UlpO71fCwfR/MJR4rAN61iGLnxS8d+SPL6NVOb+xVUCkhTLV252lPqCdvyqNdVWAOSopZfEg6lLa1Lf2diqSYox4kIvQ9HNLLHSA5dn2WbIxre+JqbvKF3fp3nsU+5KFqRjy09dtrufSi4g+aHjzn+6Adr9Z9xiIhVBjWKky3zIdmbit/nUl81/vOSxnxj2Fbwk0cPppQNXXCLC1TuLHXRj9uWy6d6kIHNF7F6HSpTh6Pd+H/iSHOxU/yEgF1QsqqQYU7AasB6RUL+Dxr45bwN/6EkbjBjYQd+8rLh65DhGCOfw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.238) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zod3BV10YHUk/5mSinApGGyP1wTOVPTEWVtjzC4BRNE=;
- b=JmfNV1eb5pMhhQdghMy6SHLJW3br0GFFMDhBZqO3ZUYXiORpPY9zzJ7Nq+eCFJknEbydiF45SHYk4gf1XywGT0PcsGBwzLVAACi4J/+UgRKhT9R/e9O8qSOE3Rb/Hq83YXdGO0cayXBXZ3n5GULoCSx6m+sIHQ/2YACif6SXGWapXPPIZBoESuSeqzuL31Q7W23UhiZJp0dORgncmxzUBq10T9hQTCEIsGILfRYUyCYgFOm7BL3Dvn+LQpLm4vC0jnO0y9CusJcH9eVmq3cXUsYoR2OR3LTCNU0anDpNAX8niSMfIyWr3X/jewUgOSh9RIdE8W9D/1PcYG3f1gTFNg==
-Received: from BN6PR17CA0036.namprd17.prod.outlook.com (2603:10b6:405:75::25)
- by BN8PR12MB3426.namprd12.prod.outlook.com (2603:10b6:408:4a::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Tue, 5 Apr
- 2022 08:16:51 +0000
-Received: from BN8NAM11FT025.eop-nam11.prod.protection.outlook.com
- (2603:10b6:405:75:cafe::81) by BN6PR17CA0036.outlook.office365.com
- (2603:10b6:405:75::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31 via Frontend
- Transport; Tue, 5 Apr 2022 08:16:51 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.238; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.238) by
- BN8NAM11FT025.mail.protection.outlook.com (10.13.177.136) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5123.19 via Frontend Transport; Tue, 5 Apr 2022 08:16:51 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL105.nvidia.com
- (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 5 Apr
- 2022 08:16:50 +0000
-Received: from [10.41.21.79] (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 5 Apr 2022
- 01:16:46 -0700
-Message-ID: <9c20f916-4de9-33cf-960b-cd3bedf96ca8@nvidia.com>
-Date:   Tue, 5 Apr 2022 13:46:44 +0530
+        Tue, 5 Apr 2022 04:20:50 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CB8B3C
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 01:18:48 -0700 (PDT)
+Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KXgV63YyFz67ydH;
+        Tue,  5 Apr 2022 16:17:02 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 5 Apr 2022 10:18:46 +0200
+Received: from [10.47.91.157] (10.47.91.157) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 5 Apr
+ 2022 09:18:45 +0100
+Message-ID: <ba5aa606-54bf-e19f-39ba-a21998781a6c@huawei.com>
+Date:   Tue, 5 Apr 2022 09:18:43 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [Patch v3 1/4] dt-bindings: Document Tegra CCPLEX Cluster
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <jonathanh@nvidia.com>,
-        <ksitaraman@nvidia.com>, <bbasu@nvidia.com>,
-        <linux-kernel@vger.kernel.org>, <treding@nvidia.com>,
-        <sanjayc@nvidia.com>, <linux-tegra@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <robh+dt@kernel.org>,
-        <viresh.kumar@linaro.org>, <rafael@kernel.org>,
-        <krzk+dt@kernel.org>, Sumit Gupta <sumitg@nvidia.com>
-References: <20220404121713.22461-1-sumitg@nvidia.com>
- <20220404121713.22461-2-sumitg@nvidia.com>
- <1649088538.036927.1436947.nullmailer@robh.at.kernel.org>
-From:   Sumit Gupta <sumitg@nvidia.com>
-In-Reply-To: <1649088538.036927.1436947.nullmailer@robh.at.kernel.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v3 1/2] drivers/perf: hisi: Associate PMUs in SICL with
+ CPUs online
+To:     Qi Liu <liuqi115@huawei.com>, "will@kernel.org" <will@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>
+CC:     Zhangshaokun <zhangshaokun@hisilicon.com>,
+        Linuxarm <linuxarm@huawei.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220321070124.41338-1-liuqi115@huawei.com>
+ <20220321070124.41338-2-liuqi115@huawei.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220321070124.41338-2-liuqi115@huawei.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 091dd518-3a5f-4da9-8763-08da16dca366
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3426:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB342646C0DF8C99A3C855588EB9E49@BN8PR12MB3426.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UsWnEccd7+S7Ws2FpisJqbrDwDbZjVExhvjK/tKo+YnMPc5akTkWEJX0yGTvmZsvWmXvEqdafPHk0JENQbubbGBL8uW6Hb5XgjtK1IeavmYpgGZ+EYWB0zzqL0jVfOZLgA+cS057xoxElFD6VtZBKXlRe0ENEyZNNlRAKW0+aEuXAp13GUymtghYx2LW6t2R9t0dOLvNu46zs1C2+owXVbhA9Bn0TwufsK4bs/EQXVagbdx+kXcxTTjlsH1Wl5cNR8x1BdKVWOL83yZ01RJnqYHWM+XSpSxC4GaxVwCvfk0idEnWTTfJFgzvUE9U37XIgUl+GTYe7VQZh9LkPoxUOAXiTUGSPFzGpLTaOrdElGoM9F11avMzu1YbYPIeONpNkiN8S8VdB27UD86vRDoRISSH3D3Xv1OFNXESYiCu4nqYoApDP1qrTJtfG3M8ZiKLXbBdJ/S93LPdGcIjNqoni3Zz1QiikOCbc87dsbWe09sGMBMNXuCWnhvcO+RYsa3q9N1/h9r4373XDtduNyHqp80iaUUs21EETwOwwIs43nFLhW6ouUbmuj+hQ8B1fIT7RtuPCPInN+/iuNoxA3Mq2iqKMc7DSWBKN6i/HHs9CwbWzNBtqwnzBelJKeCkLw9fU1PbjaEy5vIVIu63MQYHuFUg/pX8yss8WEPfTUAP6gV2oFex2YXDNMycvXibp1l/kJduboB5mFRuklR2L7hW23TmZrTb8A6CbcnHJGmFkBD6T/A8pjXvtW5W7WQq0B/k3INtLL2v4PkYuI2I17z2xfJBjS80TwhahRrhRN36Td5znPh0RvhmaSQULe5mFTiE
-X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(4326008)(8676002)(16576012)(70206006)(966005)(316002)(8936002)(16526019)(26005)(186003)(2906002)(426003)(336012)(31686004)(107886003)(508600001)(2616005)(83380400001)(6916009)(54906003)(36756003)(70586007)(31696002)(40460700003)(53546011)(86362001)(82310400005)(36860700001)(5660300002)(47076005)(81166007)(356005)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2022 08:16:51.4805
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 091dd518-3a5f-4da9-8763-08da16dca366
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT025.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3426
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.47.91.157]
+X-ClientProxiedBy: lhreml747-chm.china.huawei.com (10.201.108.197) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 21/03/2022 07:01, Qi Liu wrote:
+> If a PMU is in SICL, we associate it with all CPUs online, rather
 
+/s/in SICL/in a SICL/ [and all other places, including the code change], 
+or maybe it is better mention "IO super cluster" as well for people who 
+would not know or remember.
 
-On 04/04/22 21:38, Rob Herring wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> On Mon, 04 Apr 2022 17:47:10 +0530, Sumit Gupta wrote:
->> The Tegra CPU COMPLEX CLUSTER area contains memory-mapped
->> registers that initiate CPU frequency/voltage transitions.
->>
->> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
->> ---
->>   .../tegra/nvidia,tegra-ccplex-cluster.yaml    | 52 +++++++++++++++++++
->>   1 file changed, 52 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
->>
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.example.dt.yaml: example-0: ccplex@e000000:reg:0: [0, 234881024, 0, 393215] is too long
->          From schema: /usr/local/lib/python3.8/dist-packages/dtschema/schemas/reg.yaml
-> 
-will do the below change to fix this in v4.
+> than CPUs in the nearest SCCL.
 
-      ccplex@e000000 {
-        compatible = "nvidia,tegra234-ccplex-cluster";
--      reg = <0x0 0x0e000000 0x0 0x5ffff>;
-+      reg = <0x0e000000 0x5ffff>;
+You are not really saying why. I would mention that we do it as it is 
+not appropiate to associate with a CPU die, and you can also mention 
+problems that associating with a SICL creates.
 
+Please also mention how changing FW definition is ok at this stage.
 
-> doc reference errors (make refcheckdocs):
 > 
-> See https://patchwork.ozlabs.org/patch/
+> Signed-off-by: Qi Liu <liuqi115@huawei.com>
+> ---
+>   drivers/perf/hisilicon/hisi_uncore_pa_pmu.c | 18 +++++++-----------
+>   drivers/perf/hisilicon/hisi_uncore_pmu.c    |  4 ++++
+>   drivers/perf/hisilicon/hisi_uncore_pmu.h    |  1 +
+>   3 files changed, 12 insertions(+), 11 deletions(-)
 > 
-> This check can fail if there are any dependencies. The base for a patch
-> series is generally the most recent rc1.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit.
-> 
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
+> index bad99d149172..54c604c0d404 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
+> +++ b/drivers/perf/hisilicon/hisi_uncore_pa_pmu.c
+> @@ -258,13 +258,12 @@ static int hisi_pa_pmu_init_data(struct platform_device *pdev,
+>   				   struct hisi_pmu *pa_pmu)
+>   {
+>   	/*
+> -	 * Use the SCCL_ID and the index ID to identify the PA PMU,
+> -	 * while SCCL_ID is the nearst SCCL_ID from this SICL and
+> -	 * CPU core is chosen from this SCCL to manage this PMU.
+> +	 * As PA PMU is in SICL, use the SICL_ID and the index ID
+
+"a SICL"
+
+> +	 * to identify the PA PMU.
+>   	 */
+>   	if (device_property_read_u32(&pdev->dev, "hisilicon,scl-id",
+> -				     &pa_pmu->sccl_id)) {
+> -		dev_err(&pdev->dev, "Cannot read sccl-id!\n");
+> +				     &pa_pmu->sicl_id)) {
+> +		dev_err(&pdev->dev, "Cannot read sicl-id!\n");
+>   		return -EINVAL;
+>   	}
+>   
+> @@ -275,6 +274,7 @@ static int hisi_pa_pmu_init_data(struct platform_device *pdev,
+>   	}
+>   
+>   	pa_pmu->ccl_id = -1;
+> +	pa_pmu->sccl_id = -1;
+>   
+>   	pa_pmu->base = devm_platform_ioremap_resource(pdev, 0);
+>   	if (IS_ERR(pa_pmu->base)) {
+> @@ -399,13 +399,9 @@ static int hisi_pa_pmu_probe(struct platform_device *pdev)
+>   	ret = hisi_pa_pmu_dev_probe(pdev, pa_pmu);
+>   	if (ret)
+>   		return ret;
+> -	/*
+> -	 * PA is attached in SICL and the CPU core is chosen to manage this
+> -	 * PMU which is the nearest SCCL, while its SCCL_ID is greater than
+> -	 * one with the SICL_ID.
+> -	 */
+> +
+>   	name = devm_kasprintf(&pdev->dev, GFP_KERNEL, "hisi_sicl%u_pa%u",
+> -			      pa_pmu->sccl_id - 1, pa_pmu->index_id);
+> +			      pa_pmu->sicl_id, pa_pmu->index_id);
+>   	if (!name)
+>   		return -ENOMEM;
+>   
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.c b/drivers/perf/hisilicon/hisi_uncore_pmu.c
+> index a738aeab5c04..31930166c34b 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_pmu.c
+> +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.c
+> @@ -458,6 +458,10 @@ static bool hisi_pmu_cpu_is_associated_pmu(struct hisi_pmu *hisi_pmu)
+>   {
+>   	int sccl_id, ccl_id;
+>   
+> +	/* If SCCL_ID is -1, the PMU is in SICL and can be associated this PMU with any CPU */
+
+too long, just have "The PMU is in a SICL and has no CPU affinity"
+
+> +	if (hisi_pmu->sccl_id == -1)
+> +		return true;
+> +
+>   	if (hisi_pmu->ccl_id == -1) {
+>   		/* If CCL_ID is -1, the PMU only shares the same SCCL */
+>   		hisi_read_sccl_and_ccl_id(&sccl_id, NULL);
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.h b/drivers/perf/hisilicon/hisi_uncore_pmu.h
+> index 7f5841d6f592..96eeddad55ff 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_pmu.h
+> +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.h
+> @@ -81,6 +81,7 @@ struct hisi_pmu {
+>   	struct device *dev;
+>   	struct hlist_node node;
+>   	int sccl_id;
+> +	int sicl_id;
+>   	int ccl_id;
+>   	void __iomem *base;
+>   	/* the ID of the PMU modules */
+

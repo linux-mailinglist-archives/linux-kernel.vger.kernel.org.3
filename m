@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178D24F2A7B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE3F4F2CA7
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242705AbiDEJh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
+        id S242536AbiDEJha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239424AbiDEIUE (ORCPT
+        with ESMTP id S239455AbiDEIUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781808F99A;
-        Tue,  5 Apr 2022 01:12:58 -0700 (PDT)
+        Tue, 5 Apr 2022 04:20:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969B76C1D5;
+        Tue,  5 Apr 2022 01:13:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16F8060AFB;
-        Tue,  5 Apr 2022 08:12:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20512C385A4;
-        Tue,  5 Apr 2022 08:12:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B967B81BAF;
+        Tue,  5 Apr 2022 08:13:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84F88C385A1;
+        Tue,  5 Apr 2022 08:13:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146377;
-        bh=eGTpxXH09wxPDurXHU6C89R4dTMpZZ0TsDKQfzO4kZw=;
+        s=korg; t=1649146418;
+        bh=3SyFg1Ox2BVv77hwr5Q+brbLvYJwdOjO6I/B8CTdJ5k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QRGHsLhg6ioZrikoqghenTDI3fSRDwZc51AosiJMzJs/T6l0W9RlwXD6dusEIp97e
-         i6C4xAUMJeU5DfYXlq9XHH0yJCnCZLhEutoFcCcObk14jf59zBoOQ5QPAhzZYwXbVp
-         WBNUNTNOOzfFgQ8e14YFy3dZZnUPqsAjxj1jmVIM=
+        b=f877gaBDJ/tcX5L+0EeGaMrI56dTlIMwwHnmEs3105hPRVT7p+F2JGtaK95WTmoEs
+         JZ1XwneC4KDv7n9KHDHV/N1HWr+VypmmSxRo81Gsef6xYYuciNTxrBsKdYdHUDdQFd
+         +DE/cJCP2pLhdE9c5hiYDB6+v79sl5RIzhugWtHs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
-        Eddie James <eajames@linux.ibm.com>,
+        stable@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0715/1126] fsi: scom: Remove retries in indirect scoms
-Date:   Tue,  5 Apr 2022 09:24:22 +0200
-Message-Id: <20220405070428.583773894@linuxfoundation.org>
+Subject: [PATCH 5.17 0719/1126] misc: alcor_pci: Fix an error handling path
+Date:   Tue,  5 Apr 2022 09:24:26 +0200
+Message-Id: <20220405070428.697937935@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,112 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joel Stanley <joel@jms.id.au>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit ab1b79159ad5a6dc4e4994b49737f7feb13b7155 ]
+[ Upstream commit 5b3dc949f554379edcb8ef6111aa5ecb78feb798 ]
 
-In commit f72ddbe1d7b7 ("fsi: scom: Remove retries") the retries were
-removed from get and put scoms. That patch missed the retires in get and
-put indirect scom.
+A successful ida_simple_get() should be balanced by a corresponding
+ida_simple_remove().
 
-For the same reason, remove them from the scom driver to allow the
-caller to decide to retry.
+Add the missing call in the error handling path of the probe.
 
-This removes the following special case which would have caused the
-retry code to return early:
+While at it, switch to ida_alloc()/ida_free() instead to
+ida_simple_get()/ida_simple_remove().
+The latter is deprecated and more verbose.
 
- -       if ((ind_data & XSCOM_DATA_IND_COMPLETE) || (err != SCOM_PIB_BLOCKED))
- -               return 0;
-
-I believe this case is handled.
-
-Fixes: f72ddbe1d7b7 ("fsi: scom: Remove retries")
-Signed-off-by: Joel Stanley <joel@jms.id.au>
-Reviewed-by: Eddie James <eajames@linux.ibm.com>
-Link: https://lore.kernel.org/r/20211207033811.518981-3-joel@jms.id.au
-Signed-off-by: Joel Stanley <joel@jms.id.au>
+Fixes: 4f556bc04e3c ("misc: cardreader: add new Alcor Micro Cardreader PCI driver")
+Reviewed-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Link: https://lore.kernel.org/r/918a9875b7f67b7f8f123c4446452603422e8c5e.1644136776.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/fsi/fsi-scom.c | 41 +++++++++++++++--------------------------
- 1 file changed, 15 insertions(+), 26 deletions(-)
+ drivers/misc/cardreader/alcor_pci.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/fsi/fsi-scom.c b/drivers/fsi/fsi-scom.c
-index 3b427f7e9027..bcb756dc9866 100644
---- a/drivers/fsi/fsi-scom.c
-+++ b/drivers/fsi/fsi-scom.c
-@@ -145,7 +145,7 @@ static int put_indirect_scom_form0(struct scom_device *scom, uint64_t value,
- 				   uint64_t addr, uint32_t *status)
- {
- 	uint64_t ind_data, ind_addr;
--	int rc, retries, err = 0;
-+	int rc, err;
+diff --git a/drivers/misc/cardreader/alcor_pci.c b/drivers/misc/cardreader/alcor_pci.c
+index de6d44a158bb..3f514d77a843 100644
+--- a/drivers/misc/cardreader/alcor_pci.c
++++ b/drivers/misc/cardreader/alcor_pci.c
+@@ -266,7 +266,7 @@ static int alcor_pci_probe(struct pci_dev *pdev,
+ 	if (!priv)
+ 		return -ENOMEM;
  
- 	if (value & ~XSCOM_DATA_IND_DATA)
- 		return -EINVAL;
-@@ -156,19 +156,14 @@ static int put_indirect_scom_form0(struct scom_device *scom, uint64_t value,
- 	if (rc || (*status & SCOM_STATUS_ANY_ERR))
- 		return rc;
+-	ret = ida_simple_get(&alcor_pci_idr, 0, 0, GFP_KERNEL);
++	ret = ida_alloc(&alcor_pci_idr, GFP_KERNEL);
+ 	if (ret < 0)
+ 		return ret;
+ 	priv->id = ret;
+@@ -280,7 +280,8 @@ static int alcor_pci_probe(struct pci_dev *pdev,
+ 	ret = pci_request_regions(pdev, DRV_NAME_ALCOR_PCI);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Cannot request region\n");
+-		return -ENOMEM;
++		ret = -ENOMEM;
++		goto error_free_ida;
+ 	}
  
--	for (retries = 0; retries < SCOM_MAX_IND_RETRIES; retries++) {
--		rc = __get_scom(scom, &ind_data, addr, status);
--		if (rc || (*status & SCOM_STATUS_ANY_ERR))
--			return rc;
-+	rc = __get_scom(scom, &ind_data, addr, status);
-+	if (rc || (*status & SCOM_STATUS_ANY_ERR))
-+		return rc;
+ 	if (!(pci_resource_flags(pdev, bar) & IORESOURCE_MEM)) {
+@@ -324,6 +325,8 @@ static int alcor_pci_probe(struct pci_dev *pdev,
  
--		err = (ind_data & XSCOM_DATA_IND_ERR_MASK) >> XSCOM_DATA_IND_ERR_SHIFT;
--		*status = err << SCOM_STATUS_PIB_RESP_SHIFT;
--		if ((ind_data & XSCOM_DATA_IND_COMPLETE) || (err != SCOM_PIB_BLOCKED))
--			return 0;
-+	err = (ind_data & XSCOM_DATA_IND_ERR_MASK) >> XSCOM_DATA_IND_ERR_SHIFT;
-+	*status = err << SCOM_STATUS_PIB_RESP_SHIFT;
- 
--		msleep(1);
--	}
--	return rc;
-+	return 0;
+ error_release_regions:
+ 	pci_release_regions(pdev);
++error_free_ida:
++	ida_free(&alcor_pci_idr, priv->id);
+ 	return ret;
  }
  
- static int put_indirect_scom_form1(struct scom_device *scom, uint64_t value,
-@@ -188,7 +183,7 @@ static int get_indirect_scom_form0(struct scom_device *scom, uint64_t *value,
- 				   uint64_t addr, uint32_t *status)
- {
- 	uint64_t ind_data, ind_addr;
--	int rc, retries, err = 0;
-+	int rc, err;
+@@ -337,7 +340,7 @@ static void alcor_pci_remove(struct pci_dev *pdev)
  
- 	ind_addr = addr & XSCOM_ADDR_DIRECT_PART;
- 	ind_data = (addr & XSCOM_ADDR_INDIRECT_PART) | XSCOM_DATA_IND_READ;
-@@ -196,21 +191,15 @@ static int get_indirect_scom_form0(struct scom_device *scom, uint64_t *value,
- 	if (rc || (*status & SCOM_STATUS_ANY_ERR))
- 		return rc;
+ 	mfd_remove_devices(&pdev->dev);
  
--	for (retries = 0; retries < SCOM_MAX_IND_RETRIES; retries++) {
--		rc = __get_scom(scom, &ind_data, addr, status);
--		if (rc || (*status & SCOM_STATUS_ANY_ERR))
--			return rc;
--
--		err = (ind_data & XSCOM_DATA_IND_ERR_MASK) >> XSCOM_DATA_IND_ERR_SHIFT;
--		*status = err << SCOM_STATUS_PIB_RESP_SHIFT;
--		*value = ind_data & XSCOM_DATA_IND_DATA;
-+	rc = __get_scom(scom, &ind_data, addr, status);
-+	if (rc || (*status & SCOM_STATUS_ANY_ERR))
-+		return rc;
+-	ida_simple_remove(&alcor_pci_idr, priv->id);
++	ida_free(&alcor_pci_idr, priv->id);
  
--		if ((ind_data & XSCOM_DATA_IND_COMPLETE) || (err != SCOM_PIB_BLOCKED))
--			return 0;
-+	err = (ind_data & XSCOM_DATA_IND_ERR_MASK) >> XSCOM_DATA_IND_ERR_SHIFT;
-+	*status = err << SCOM_STATUS_PIB_RESP_SHIFT;
-+	*value = ind_data & XSCOM_DATA_IND_DATA;
- 
--		msleep(1);
--	}
--	return rc;
-+	return 0;
- }
- 
- static int raw_put_scom(struct scom_device *scom, uint64_t value,
+ 	pci_release_regions(pdev);
+ 	pci_set_drvdata(pdev, NULL);
 -- 
 2.34.1
 

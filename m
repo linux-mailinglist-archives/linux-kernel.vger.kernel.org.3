@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D19BF4F47CD
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B744F4543
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240377AbiDEVVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39324 "EHLO
+        id S1385777AbiDEMiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348798AbiDEJsh (ORCPT
+        with ESMTP id S237078AbiDEJDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6778B6DE;
-        Tue,  5 Apr 2022 02:35:42 -0700 (PDT)
+        Tue, 5 Apr 2022 05:03:55 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EB522A;
+        Tue,  5 Apr 2022 01:55:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AAB1615E5;
-        Tue,  5 Apr 2022 09:35:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D79AC385A0;
-        Tue,  5 Apr 2022 09:35:40 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9CCD1CE1C6A;
+        Tue,  5 Apr 2022 08:55:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1ED3C385A0;
+        Tue,  5 Apr 2022 08:55:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151341;
-        bh=FM40Sum4E3GKALIV4MiLpgEC9bKb3cKTTuUrE3SrG1U=;
+        s=korg; t=1649148933;
+        bh=OIRsUTsrsfPhRhYjXs2ZRfXKUs8pKswdjLexdG7L1Rc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WWRessIS3RDfxmYtnXMu9StB6qu2hVLiI6DdHpqnmhbAhjwCwloPPR6deOmlTwjj/
-         0FFOBA9ht2H4XWVphl0fcZodVSvEpkHSqMUQL+PEQj5FveqgNAQLgo3MuMffosLbXJ
-         oso6iLWx/6OEA7gupmEqG1ASBdEtQxy1fMVWpBfI=
+        b=Ouks4ls3Q+uu2jz6J2Iz3hLDTjVSqWO6EjF75jUBcycMVhFSmLZ+hv+tbx90prX0X
+         jLICuwUfM5x4YDJ/NEmpaTlcgN7S2lXa940ITAffx0Q3xuwK7THyb3LrDlI7leI6CB
+         FIueNuQ7fwXBkrqChThpe3glmn4qel8bWZnCPDqA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jagan Teki <jagan@amarulasolutions.com>,
-        Robert Foss <robert.foss@linaro.org>,
+        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 381/913] drm: bridge: adv7511: Fix ADV7535 HPD enablement
-Date:   Tue,  5 Apr 2022 09:24:03 +0200
-Message-Id: <20220405070351.267715821@linuxfoundation.org>
+Subject: [PATCH 5.16 0533/1017] scsi: pm8001: Fix le32 values handling in pm80xx_set_sas_protocol_timer_config()
+Date:   Tue,  5 Apr 2022 09:24:06 +0200
+Message-Id: <20220405070410.114564534@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,98 +56,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jagan Teki <jagan@amarulasolutions.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit 3dbc84a595d17f64f14fcea00120d31e33e98880 ]
+[ Upstream commit ca374f5d92b8ae778f6a37dd3e7ed809bbf7a953 ]
 
-Existing HPD enablement logic is not compatible with ADV7535
-bridge, thus any runtime plug-in of HDMI cable is not working
-on these bridge designs.
+All fields of the SASProtocolTimerConfig structure have the __le32 type.
+As such, use cpu_to_le32() to initialize them. This change suppresses many
+sparse warnings:
 
-Unlike other ADV7511 family of bridges, the ADV7535 require
-HPD_OVERRIDE bit to set and reset for proper handling of HPD
-functionality.
+warning: incorrect type in assignment (different base types)
+   expected restricted __le32 [addressable] [usertype] pageCode
+   got int
 
-Fix it.
+Note that the check to limit the value of the STP_IDLE_TMO field is removed
+as this field is initialized using the fixed (and small) value defined by
+the STP_IDLE_TIME macro.
 
-Fixes: 8501fe4b14a3 ("drm: bridge: adv7511: Add support for ADV7535")
-Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220109172949.168167-1-jagan@amarulasolutions.com
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+The pm8001_dbg() calls printing the values of the SASProtocolTimerConfig
+structure fileds are changed to use le32_to_cpu() to present the values in
+human readable form.
+
+Link: https://lore.kernel.org/r/20220220031810.738362-9-damien.lemoal@opensource.wdc.com
+Fixes: a6cb3d012b98 ("[SCSI] pm80xx: thermal, sas controller config and error handling update")
+Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/bridge/adv7511/adv7511.h     |  1 +
- drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 29 +++++++++++++++-----
- 2 files changed, 23 insertions(+), 7 deletions(-)
+ drivers/scsi/pm8001/pm80xx_hwi.c | 52 +++++++++++++++-----------------
+ 1 file changed, 25 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511.h b/drivers/gpu/drm/bridge/adv7511/adv7511.h
-index 05e3abb5a0c9..1b00dfda6e0d 100644
---- a/drivers/gpu/drm/bridge/adv7511/adv7511.h
-+++ b/drivers/gpu/drm/bridge/adv7511/adv7511.h
-@@ -169,6 +169,7 @@
- #define ADV7511_PACKET_ENABLE_SPARE2		BIT(1)
- #define ADV7511_PACKET_ENABLE_SPARE1		BIT(0)
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index 052bd97aa22b..cda82cc1e3de 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -1246,43 +1246,41 @@ pm80xx_set_sas_protocol_timer_config(struct pm8001_hba_info *pm8001_ha)
+ 	circularQ = &pm8001_ha->inbnd_q_tbl[0];
+ 	payload.tag = cpu_to_le32(tag);
  
-+#define ADV7535_REG_POWER2_HPD_OVERRIDE		BIT(6)
- #define ADV7511_REG_POWER2_HPD_SRC_MASK		0xc0
- #define ADV7511_REG_POWER2_HPD_SRC_BOTH		0x00
- #define ADV7511_REG_POWER2_HPD_SRC_HPD		0x40
-diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-index 76555ae64e9c..c02f3ec60b04 100644
---- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-+++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-@@ -351,11 +351,17 @@ static void __adv7511_power_on(struct adv7511 *adv7511)
- 	 * from standby or are enabled. When the HPD goes low the adv7511 is
- 	 * reset and the outputs are disabled which might cause the monitor to
- 	 * go to standby again. To avoid this we ignore the HPD pin for the
--	 * first few seconds after enabling the output.
-+	 * first few seconds after enabling the output. On the other hand
-+	 * adv7535 require to enable HPD Override bit for proper HPD.
- 	 */
--	regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
--			   ADV7511_REG_POWER2_HPD_SRC_MASK,
--			   ADV7511_REG_POWER2_HPD_SRC_NONE);
-+	if (adv7511->type == ADV7535)
-+		regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
-+				   ADV7535_REG_POWER2_HPD_OVERRIDE,
-+				   ADV7535_REG_POWER2_HPD_OVERRIDE);
-+	else
-+		regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
-+				   ADV7511_REG_POWER2_HPD_SRC_MASK,
-+				   ADV7511_REG_POWER2_HPD_SRC_NONE);
- }
- 
- static void adv7511_power_on(struct adv7511 *adv7511)
-@@ -375,6 +381,10 @@ static void adv7511_power_on(struct adv7511 *adv7511)
- static void __adv7511_power_off(struct adv7511 *adv7511)
- {
- 	/* TODO: setup additional power down modes */
-+	if (adv7511->type == ADV7535)
-+		regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
-+				   ADV7535_REG_POWER2_HPD_OVERRIDE, 0);
+-	SASConfigPage.pageCode        =  SAS_PROTOCOL_TIMER_CONFIG_PAGE;
+-	SASConfigPage.MST_MSI         =  3 << 15;
+-	SASConfigPage.STP_SSP_MCT_TMO =  (STP_MCT_TMO << 16) | SSP_MCT_TMO;
+-	SASConfigPage.STP_FRM_TMO     = (SAS_MAX_OPEN_TIME << 24) |
+-				(SMP_MAX_CONN_TIMER << 16) | STP_FRM_TIMER;
+-	SASConfigPage.STP_IDLE_TMO    =  STP_IDLE_TIME;
+-
+-	if (SASConfigPage.STP_IDLE_TMO > 0x3FFFFFF)
+-		SASConfigPage.STP_IDLE_TMO = 0x3FFFFFF;
+-
+-
+-	SASConfigPage.OPNRJT_RTRY_INTVL =         (SAS_MFD << 16) |
+-						SAS_OPNRJT_RTRY_INTVL;
+-	SASConfigPage.Data_Cmd_OPNRJT_RTRY_TMO =  (SAS_DOPNRJT_RTRY_TMO << 16)
+-						| SAS_COPNRJT_RTRY_TMO;
+-	SASConfigPage.Data_Cmd_OPNRJT_RTRY_THR =  (SAS_DOPNRJT_RTRY_THR << 16)
+-						| SAS_COPNRJT_RTRY_THR;
+-	SASConfigPage.MAX_AIP =  SAS_MAX_AIP;
++	SASConfigPage.pageCode = cpu_to_le32(SAS_PROTOCOL_TIMER_CONFIG_PAGE);
++	SASConfigPage.MST_MSI = cpu_to_le32(3 << 15);
++	SASConfigPage.STP_SSP_MCT_TMO =
++		cpu_to_le32((STP_MCT_TMO << 16) | SSP_MCT_TMO);
++	SASConfigPage.STP_FRM_TMO =
++		cpu_to_le32((SAS_MAX_OPEN_TIME << 24) |
++			    (SMP_MAX_CONN_TIMER << 16) | STP_FRM_TIMER);
++	SASConfigPage.STP_IDLE_TMO = cpu_to_le32(STP_IDLE_TIME);
 +
- 	regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER,
- 			   ADV7511_POWER_POWER_DOWN,
- 			   ADV7511_POWER_POWER_DOWN);
-@@ -672,9 +682,14 @@ adv7511_detect(struct adv7511 *adv7511, struct drm_connector *connector)
- 			status = connector_status_disconnected;
- 	} else {
- 		/* Renable HPD sensing */
--		regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
--				   ADV7511_REG_POWER2_HPD_SRC_MASK,
--				   ADV7511_REG_POWER2_HPD_SRC_BOTH);
-+		if (adv7511->type == ADV7535)
-+			regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
-+					   ADV7535_REG_POWER2_HPD_OVERRIDE,
-+					   ADV7535_REG_POWER2_HPD_OVERRIDE);
-+		else
-+			regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
-+					   ADV7511_REG_POWER2_HPD_SRC_MASK,
-+					   ADV7511_REG_POWER2_HPD_SRC_BOTH);
- 	}
++	SASConfigPage.OPNRJT_RTRY_INTVL =
++		cpu_to_le32((SAS_MFD << 16) | SAS_OPNRJT_RTRY_INTVL);
++	SASConfigPage.Data_Cmd_OPNRJT_RTRY_TMO =
++		cpu_to_le32((SAS_DOPNRJT_RTRY_TMO << 16) | SAS_COPNRJT_RTRY_TMO);
++	SASConfigPage.Data_Cmd_OPNRJT_RTRY_THR =
++		cpu_to_le32((SAS_DOPNRJT_RTRY_THR << 16) | SAS_COPNRJT_RTRY_THR);
++	SASConfigPage.MAX_AIP = cpu_to_le32(SAS_MAX_AIP);
  
- 	adv7511->status = status;
+ 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.pageCode 0x%08x\n",
+-		   SASConfigPage.pageCode);
++		   le32_to_cpu(SASConfigPage.pageCode));
+ 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.MST_MSI  0x%08x\n",
+-		   SASConfigPage.MST_MSI);
++		   le32_to_cpu(SASConfigPage.MST_MSI));
+ 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.STP_SSP_MCT_TMO  0x%08x\n",
+-		   SASConfigPage.STP_SSP_MCT_TMO);
++		   le32_to_cpu(SASConfigPage.STP_SSP_MCT_TMO));
+ 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.STP_FRM_TMO  0x%08x\n",
+-		   SASConfigPage.STP_FRM_TMO);
++		   le32_to_cpu(SASConfigPage.STP_FRM_TMO));
+ 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.STP_IDLE_TMO  0x%08x\n",
+-		   SASConfigPage.STP_IDLE_TMO);
++		   le32_to_cpu(SASConfigPage.STP_IDLE_TMO));
+ 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.OPNRJT_RTRY_INTVL  0x%08x\n",
+-		   SASConfigPage.OPNRJT_RTRY_INTVL);
++		   le32_to_cpu(SASConfigPage.OPNRJT_RTRY_INTVL));
+ 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.Data_Cmd_OPNRJT_RTRY_TMO  0x%08x\n",
+-		   SASConfigPage.Data_Cmd_OPNRJT_RTRY_TMO);
++		   le32_to_cpu(SASConfigPage.Data_Cmd_OPNRJT_RTRY_TMO));
+ 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.Data_Cmd_OPNRJT_RTRY_THR  0x%08x\n",
+-		   SASConfigPage.Data_Cmd_OPNRJT_RTRY_THR);
++		   le32_to_cpu(SASConfigPage.Data_Cmd_OPNRJT_RTRY_THR));
+ 	pm8001_dbg(pm8001_ha, INIT, "SASConfigPage.MAX_AIP  0x%08x\n",
+-		   SASConfigPage.MAX_AIP);
++		   le32_to_cpu(SASConfigPage.MAX_AIP));
+ 
+ 	memcpy(&payload.cfg_pg, &SASConfigPage,
+ 			 sizeof(SASProtocolTimerConfig_t));
 -- 
 2.34.1
 

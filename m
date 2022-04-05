@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F7F44F408D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F14E4F3E8D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382926AbiDEMRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
+        id S1343895AbiDEOyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244952AbiDEIwu (ORCPT
+        with ESMTP id S244628AbiDEJlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304B71BEAD;
-        Tue,  5 Apr 2022 01:47:33 -0700 (PDT)
+        Tue, 5 Apr 2022 05:41:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28291BBE2B;
+        Tue,  5 Apr 2022 02:27:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C2A90614F9;
-        Tue,  5 Apr 2022 08:47:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF3B8C385A1;
-        Tue,  5 Apr 2022 08:47:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D21C3B81CAC;
+        Tue,  5 Apr 2022 09:27:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 194DFC385A0;
+        Tue,  5 Apr 2022 09:27:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148452;
-        bh=1LZ8fotZSm4eQU/oN7SWa3oKTSpE6lIwBc6KvTf1Ti4=;
+        s=korg; t=1649150830;
+        bh=EIqZGIC3MEY6zK++/3lavNvUv7djR+iZn/Z4aFTomR0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pgdC5Fr8VkoB8YX/G/ZaCMMOyn8E4a3vHgTbQ027urqBpRIYXF1g7sVvipCj1l1P9
-         WAE9lQiCuKB1A+T8JXDhml9U3IxAjo8UJrH+AdAU7d0E7SwZT0L/cbKVeNyXNpWLH0
-         yEwGulnxSasYt6yED0D9sibMZH/9I5/mDCWUhrgc=
+        b=ZwOkzsDkdP6o6i6Ko/f+N3bhi/Ta9V6ujzLWXCKm4n0g/L/8EvaoMH07HptPCQ5Nl
+         vEInw+VepJ+mDaVOAMdnPjrFOKZVP3PuLYaNc3IZ9rirBqPyV4mP/4Du+j5DYybEeZ
+         K4+VhCK5wcBGSgOdw09XWGpPDIxG4FaIlmBn+6Ec=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        stable@vger.kernel.org, Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0345/1017] media: v4l2-core: Initialize h264 scaling matrix
+Subject: [PATCH 5.15 196/913] crypto: authenc - Fix sleep in atomic context in decrypt_tail
 Date:   Tue,  5 Apr 2022 09:20:58 +0200
-Message-Id: <20220405070404.523528515@linuxfoundation.org>
+Message-Id: <20220405070345.733437531@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,62 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+From: Herbert Xu <herbert@gondor.apana.org.au>
 
-[ Upstream commit 0f6146d476fc99862899e70f2554ee77b444b7b9 ]
+[ Upstream commit 66eae850333d639fc278d6f915c6fc01499ea893 ]
 
-In the final H264 API, it is not required to set scaling matrix if
-they are not present in the bitstream. A flag was added in order to let
-the driver know. The downside is that it leaves the default control
-value to 0, which isn't valid. As per the spec (see formulas 7-8/7-9),
-when the scaling matrix are absent from the bitstream, flat values
-of 16 should be used. This improves this control semantic in a way
-that the control value are always valid. Drivers can then use
-the scaling_matrix control values without having to check its presence.
-Same method was employed for MPEG2_QUANTISATION.
+The function crypto_authenc_decrypt_tail discards its flags
+argument and always relies on the flags from the original request
+when starting its sub-request.
 
-This fixes issues with MTK VCODEC H264 decoder when using GStreamer.
-GStreamer does not set this control if its not present in the bitstream.
-As MTK VDCODEC was using the initialized to 0 values, the frames ended
-up completely gray.
+This is clearly wrong as it may cause the SLEEPABLE flag to be
+set when it shouldn't.
 
-Fixes: 54889c51b833d236 ("media: uapi: h264: Rename and clarify PPS_FLAG_SCALING_MATRIX_PRESENT")
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Fixes: 92d95ba91772 ("crypto: authenc - Convert to new AEAD interface")
+Reported-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/v4l2-core/v4l2-ctrls-core.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ crypto/authenc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-index 70adfc1b9c81..fb9b99e9e12b 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-@@ -113,6 +113,7 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 	struct v4l2_ctrl_mpeg2_quantisation *p_mpeg2_quant;
- 	struct v4l2_ctrl_vp8_frame *p_vp8_frame;
- 	struct v4l2_ctrl_fwht_params *p_fwht_params;
-+	struct v4l2_ctrl_h264_scaling_matrix *p_h264_scaling_matrix;
- 	void *p = ptr.p + idx * ctrl->elem_size;
+diff --git a/crypto/authenc.c b/crypto/authenc.c
+index 670bf1a01d00..17f674a7cdff 100644
+--- a/crypto/authenc.c
++++ b/crypto/authenc.c
+@@ -253,7 +253,7 @@ static int crypto_authenc_decrypt_tail(struct aead_request *req,
+ 		dst = scatterwalk_ffwd(areq_ctx->dst, req->dst, req->assoclen);
  
- 	if (ctrl->p_def.p_const)
-@@ -160,6 +161,15 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 		p_fwht_params->flags = V4L2_FWHT_FL_PIXENC_YUV |
- 			(2 << V4L2_FWHT_FL_COMPONENTS_NUM_OFFSET);
- 		break;
-+	case V4L2_CTRL_TYPE_H264_SCALING_MATRIX:
-+		p_h264_scaling_matrix = p;
-+		/*
-+		 * The default (flat) H.264 scaling matrix when none are
-+		 * specified in the bitstream, this is according to formulas
-+		 *  (7-8) and (7-9) of the specification.
-+		 */
-+		memset(p_h264_scaling_matrix, 16, sizeof(*p_h264_scaling_matrix));
-+		break;
- 	}
- }
- 
+ 	skcipher_request_set_tfm(skreq, ctx->enc);
+-	skcipher_request_set_callback(skreq, aead_request_flags(req),
++	skcipher_request_set_callback(skreq, flags,
+ 				      req->base.complete, req->base.data);
+ 	skcipher_request_set_crypt(skreq, src, dst,
+ 				   req->cryptlen - authsize, req->iv);
 -- 
 2.34.1
 

@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E00644F51A9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB964F4FD1
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1846777AbiDFCIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
+        id S1839512AbiDFBEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349503AbiDEJt6 (ORCPT
+        with ESMTP id S1349515AbiDEJuC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7DD196;
-        Tue,  5 Apr 2022 02:47:54 -0700 (PDT)
+        Tue, 5 Apr 2022 05:50:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBF51E4;
+        Tue,  5 Apr 2022 02:48:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0B5161576;
-        Tue,  5 Apr 2022 09:47:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFB1BC385A2;
-        Tue,  5 Apr 2022 09:47:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A3B6B817D3;
+        Tue,  5 Apr 2022 09:48:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71748C385A1;
+        Tue,  5 Apr 2022 09:48:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152073;
-        bh=pLIQlGkUzPkW36H+QN7RfbIl6w439D/LXITrrVw3+x8=;
+        s=korg; t=1649152081;
+        bh=fc6qrim3UwwCoexjObybUivRCYC7le7SVED3R4kDhpI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ielukMC3bJP7GOPhRKt7LYaxhOjeANxHC0rumQqKecjWwqckC2hS6p0mzx29H9v82
-         YxW7nr2ZsB+vknV2Cx83x60U3VTucyKM41LJe4Z90c5+ZfKF+2vhWxZ4b7KrgDQJTl
-         +cOesVJO5PvD+zlyqYN4YFD4gOKfdpWQJKAVhncI=
+        b=Z4uzVuDnNbP9Bh98NTca+00dAM+XkdJgkpJ0VPkCoMYrupFqYFAKFi1kNkrdMzcxM
+         dLSrlAr4h47qv7iIUxnFaPoz22MBjFLdb6rKl1BR5TtwX8du2lyTiw51Za0Y/ddyPC
+         ldIoSkXHDG61BXbfwTzgFOSxCvLtT/rnqkAWmcPg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
+        stable@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Igor Zhbanov <i.zhbanov@omprussia.ru>,
         Randy Dunlap <rdunlap@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 645/913] kgdbts: fix return value of __setup handler
-Date:   Tue,  5 Apr 2022 09:28:27 +0200
-Message-Id: <20220405070359.173490547@linuxfoundation.org>
+Subject: [PATCH 5.15 647/913] driver core: dd: fix return value of __setup handler
+Date:   Tue,  5 Apr 2022 09:28:29 +0200
+Message-Id: <20220405070359.233405152@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -62,15 +59,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 96c9e802c64014a7716865332d732cc9c7f24593 ]
+[ Upstream commit f2aad54703dbe630f9d8b235eb58e8c8cc78f37d ]
 
-__setup() handlers should return 1 to indicate that the boot option
-has been handled. A return of 0 causes the boot option/value to be
-listed as an Unknown kernel parameter and added to init's (limited)
-environment strings. So return 1 from kgdbts_option_setup().
+When "driver_async_probe=nulltty" is used on the kernel boot command line,
+it causes an Unknown parameter message and the string is added to init's
+environment strings, polluting them.
 
-Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc7
-  kgdboc=kbd kgdbts=", will be passed to user space.
+  Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc6
+  driver_async_probe=nulltty", will be passed to user space.
 
  Run /sbin/init as init process
    with arguments:
@@ -78,45 +74,40 @@ Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc7
    with environment:
      HOME=/
      TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc7
-     kgdboc=kbd
-     kgdbts=
+     BOOT_IMAGE=/boot/bzImage-517rc6
+     driver_async_probe=nulltty
+
+Change the return value of the __setup function to 1 to indicate
+that the __setup option has been handled.
 
 Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Fixes: e8d31c204e36 ("kgdb: add kgdb internal test suite")
-Cc: kgdb-bugreport@lists.sourceforge.net
-Cc: Jason Wessel <jason.wessel@windriver.com>
-Cc: Daniel Thompson <daniel.thompson@linaro.org>
-Cc: Douglas Anderson <dianders@chromium.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
+Fixes: 1ea61b68d0f8 ("async: Add cmdline option to specify drivers to be async probed")
+Cc: Feng Tang <feng.tang@intel.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
 Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Reviewed-by: Feng Tang <feng.tang@intel.com>
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/20220308033255.22118-1-rdunlap@infradead.org
+Link: https://lore.kernel.org/r/20220301041829.15137-1-rdunlap@infradead.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/kgdbts.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/base/dd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/misc/kgdbts.c b/drivers/misc/kgdbts.c
-index 67c5b452dd35..88b91ad8e541 100644
---- a/drivers/misc/kgdbts.c
-+++ b/drivers/misc/kgdbts.c
-@@ -1070,10 +1070,10 @@ static int kgdbts_option_setup(char *opt)
- {
- 	if (strlen(opt) >= MAX_CONFIG_LEN) {
- 		printk(KERN_ERR "kgdbts: config string too long\n");
--		return -ENOSPC;
-+		return 1;
- 	}
- 	strcpy(config, opt);
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index 6b6630693201..64ce42b6c6b6 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -809,7 +809,7 @@ static int __init save_async_options(char *buf)
+ 		pr_warn("Too long list of driver names for 'driver_async_probe'!\n");
+ 
+ 	strlcpy(async_probe_drv_names, buf, ASYNC_DRV_NAMES_MAX_LEN);
 -	return 0;
 +	return 1;
  }
+ __setup("driver_async_probe=", save_async_options);
  
- __setup("kgdbts=", kgdbts_option_setup);
 -- 
 2.34.1
 

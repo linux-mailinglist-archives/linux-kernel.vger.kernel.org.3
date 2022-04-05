@@ -2,104 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467D84F41E1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0224F3FF9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388717AbiDEOkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50100 "EHLO
+        id S1388784AbiDEOlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243882AbiDEJkf (ORCPT
+        with ESMTP id S233133AbiDEJka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:40:35 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82219B91BF;
-        Tue,  5 Apr 2022 02:25:04 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 5 Apr 2022 05:40:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7A3B91A6
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 02:25:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 59A0022247;
-        Tue,  5 Apr 2022 11:25:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1649150702;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LFGJ3O9qYA9938AO+AQNVvGHGDybEslbIOzd5ve6rOc=;
-        b=Q47t6wRO/Ontk9oWcJ4vW9oK8/E+y+rWODF0rkBnL9v+/QXeae/qrwlUfdccHnDmhLRVX6
-        4ZJYbomJ2z88PT80DLdLq9xDxngYJFp7nL83yRLw7NFbNN+nI/gjV3Tq583WBCexaCW0hv
-        31+C6oUMXrl2LMJ4rdbUhUXiJsSfdV0=
-From:   Michael Walle <michael@walle.cc>
-To:     Xu Yilun <yilun.xu@intel.com>, Tom Rix <trix@redhat.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, David Laight <David.Laight@ACULAB.COM>,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH v4 2/2] hwmon: intel-m10-bmc-hwmon: use devm_hwmon_sanitize_name()
-Date:   Tue,  5 Apr 2022 11:24:52 +0200
-Message-Id: <20220405092452.4033674-3-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220405092452.4033674-1-michael@walle.cc>
-References: <20220405092452.4033674-1-michael@walle.cc>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 37BD76164E
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:25:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CDBAC385A4;
+        Tue,  5 Apr 2022 09:25:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649150702;
+        bh=kogP6nO7wU0ilpGa8JtIr5fN9KE3TnBqzaKz14TEHYA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ijeYoLORnSLf/AoiqG4azMEprQrMRfuFMpyxCeV8qw1UTVmW8dOxNKVseYbED+vAe
+         231KKUQL50gbav6+5GJbGHqonejP5dzlB6OZkwJV2KTcH9z9OQUX8HkylsCFhrb6pP
+         nn4c81PFSrWCxQpyGOu4i3SolWFCSmu3aL9SF7rVQInCux5C3pvUgmyS4upGC3vc60
+         EEWxKVFp3wo+T3WYgIHw+Mrpoz8EF209VEKQaowwNeLawEXOJ/wDHI52uUkASeHP4N
+         vPrXct/qNzUUqv5GpDnlZIdqn7o8IGOr6y5NcRR5CPn/5fBMFZwDp2DQt35NPLaMeb
+         AEL2hHqkxmE+g==
+Date:   Tue, 5 Apr 2022 10:24:57 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v7 11/70] arch/arm64: Remove the merge workaround for
+ VMA_ITERATOR
+Message-ID: <20220405092456.GA24387@willie-the-truck>
+References: <20220404143501.2016403-1-Liam.Howlett@oracle.com>
+ <20220404143501.2016403-12-Liam.Howlett@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220404143501.2016403-12-Liam.Howlett@oracle.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of open-coding the bad characters replacement in the hwmon name,
-use the new devm_hwmon_sanitize_name().
+Hi Liam,
 
-Signed-off-by: Michael Walle <michael@walle.cc>
-Acked-by: Xu Yilun <yilun.xu@intel.com>
----
- drivers/hwmon/intel-m10-bmc-hwmon.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+On Mon, Apr 04, 2022 at 02:35:36PM +0000, Liam Howlett wrote:
+> Now that the vma iterator is in the kernel, remove the workaround.
+> 
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+> ---
+>  arch/arm64/kernel/elfcore.c | 7 -------
+>  1 file changed, 7 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/elfcore.c b/arch/arm64/kernel/elfcore.c
+> index 3ed39c61a510..930a0bc4cac4 100644
+> --- a/arch/arm64/kernel/elfcore.c
+> +++ b/arch/arm64/kernel/elfcore.c
+> @@ -8,13 +8,6 @@
+>  #include <asm/cpufeature.h>
+>  #include <asm/mte.h>
+>  
+> -#ifndef VMA_ITERATOR
+> -#define VMA_ITERATOR(name, mm, addr)	\
+> -	struct mm_struct *name = mm
+> -#define for_each_vma(vmi, vma)		\
+> -	for (vma = vmi->mmap; vma; vma = vma->vm_next)
+> -#endif
 
-diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
-index 7a08e4c44a4b..6e82f7200d1c 100644
---- a/drivers/hwmon/intel-m10-bmc-hwmon.c
-+++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
-@@ -515,7 +515,6 @@ static int m10bmc_hwmon_probe(struct platform_device *pdev)
- 	struct intel_m10bmc *m10bmc = dev_get_drvdata(pdev->dev.parent);
- 	struct device *hwmon_dev, *dev = &pdev->dev;
- 	struct m10bmc_hwmon *hw;
--	int i;
- 
- 	hw = devm_kzalloc(dev, sizeof(*hw), GFP_KERNEL);
- 	if (!hw)
-@@ -528,13 +527,9 @@ static int m10bmc_hwmon_probe(struct platform_device *pdev)
- 	hw->chip.info = hw->bdata->hinfo;
- 	hw->chip.ops = &m10bmc_hwmon_ops;
- 
--	hw->hw_name = devm_kstrdup(dev, id->name, GFP_KERNEL);
--	if (!hw->hw_name)
--		return -ENOMEM;
--
--	for (i = 0; hw->hw_name[i]; i++)
--		if (hwmon_is_bad_char(hw->hw_name[i]))
--			hw->hw_name[i] = '_';
-+	hw->hw_name = devm_hwmon_sanitize_name(dev, id->name);
-+	if (IS_ERR(hw->hw_name))
-+		return PTR_ERR(hw->hw_name);
- 
- 	hwmon_dev = devm_hwmon_device_register_with_info(dev, hw->hw_name,
- 							 hw, &hw->chip, NULL);
--- 
-2.30.2
+I already have this revert queued up as an arm64 fix:
 
+https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git/commit/?h=for-next/fixes&id=a0ab7e5bc9651d65637f50ee9c09e083919677ed
+
+Should land for -rc2.
+
+Will

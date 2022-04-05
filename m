@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9814F4915
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 016134F4E93
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390208AbiDEWDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:03:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46620 "EHLO
+        id S1835664AbiDFAcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:32:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357975AbiDEK1h (ORCPT
+        with ESMTP id S1357976AbiDEK1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 06:27:37 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50778CD335;
-        Tue,  5 Apr 2022 03:12:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED799517E9;
+        Tue,  5 Apr 2022 03:12:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0A65CB81B7A;
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7C22B81C88;
+        Tue,  5 Apr 2022 10:12:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E01BC385A1;
         Tue,  5 Apr 2022 10:11:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6222DC385A1;
-        Tue,  5 Apr 2022 10:11:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153517;
-        bh=TqgaRzDre7yag1CqyqM9emE+nY8wsrYrMnO0ieJPUpY=;
+        s=korg; t=1649153520;
+        bh=JFyZZRADxfo9q+pfWdPtQ2PaP46k1OOMtNnAGLXwdyw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xd/TCE+AXbBaVrBZkCLj+JTxF4OEMrvY9TTx3anAoeuDdSNOscAWroWrnYvRDGtp9
-         BpNATDdo7t2aazWv50z3CrX1F+Iido19TxAt0q475uhv5MQvF2/OHFBblXj8pgDS4E
-         4W+bZLqHjqaN8plo6ZZbt9D7PBxrIEpcbNLQ0Tdg=
+        b=ILiGCVJglfVwzitPKdszEfUPAlG+ne30GHUmQqnabYjvcTUWGpcq2Bxn4GV9JPhwU
+         M41oBNts5dn4LB9uqeq7bsOgpf4FsJuv7O+pftwFPTUM76DLHks6WFscGrVhOHikpS
+         2JztMlaqU37vHE95T8VYPO4DCqJX8hFiTe/pmf0c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
+        stable@vger.kernel.org, Wang Wensheng <wangwensheng4@huawei.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 251/599] ASoC: fsl_spdif: Disable TX clock when stop
-Date:   Tue,  5 Apr 2022 09:29:05 +0200
-Message-Id: <20220405070306.309197882@linuxfoundation.org>
+Subject: [PATCH 5.10 252/599] ASoC: imx-es8328: Fix error return code in imx_es8328_probe()
+Date:   Tue,  5 Apr 2022 09:29:06 +0200
+Message-Id: <20220405070306.338606436@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -56,39 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shengjiu Wang <shengjiu.wang@nxp.com>
+From: Wang Wensheng <wangwensheng4@huawei.com>
 
-[ Upstream commit 6ddf611219ba8f7c8fa0d26b39710a641e7d37a5 ]
+[ Upstream commit 3b891513f95cba3944e72c1139ea706d04f3781b ]
 
-The TX clock source may be changed in next case, need to
-disable it when stop, otherwise the TX may not work after
-changing the clock source, error log is:
+Fix to return a negative error code from the error handling case instead
+of 0, as done elsewhere in this function.
 
-aplay: pcm_write:2058: write error: Input/output error
-
-Fixes: a2388a498ad2 ("ASoC: fsl: Add S/PDIF CPU DAI driver")
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
-Link: https://lore.kernel.org/r/1646879863-27711-1-git-send-email-shengjiu.wang@nxp.com
+Fixes: 7e7292dba215 ("ASoC: fsl: add imx-es8328 machine driver")
+Signed-off-by: Wang Wensheng <wangwensheng4@huawei.com>
+Link: https://lore.kernel.org/r/20220310091902.129299-1-wangwensheng4@huawei.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/fsl/fsl_spdif.c | 2 ++
- 1 file changed, 2 insertions(+)
+ sound/soc/fsl/imx-es8328.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/fsl/fsl_spdif.c b/sound/soc/fsl/fsl_spdif.c
-index 15bcb0f38ec9..d01e8d516df1 100644
---- a/sound/soc/fsl/fsl_spdif.c
-+++ b/sound/soc/fsl/fsl_spdif.c
-@@ -544,6 +544,8 @@ static void fsl_spdif_shutdown(struct snd_pcm_substream *substream,
- 		mask = SCR_TXFIFO_AUTOSYNC_MASK | SCR_TXFIFO_CTRL_MASK |
- 			SCR_TXSEL_MASK | SCR_USRC_SEL_MASK |
- 			SCR_TXFIFO_FSEL_MASK;
-+		/* Disable TX clock */
-+		regmap_update_bits(regmap, REG_SPDIF_STC, STC_TXCLK_ALL_EN_MASK, 0);
- 	} else {
- 		scr = SCR_RXFIFO_OFF | SCR_RXFIFO_CTL_ZERO;
- 		mask = SCR_RXFIFO_FSEL_MASK | SCR_RXFIFO_AUTOSYNC_MASK|
+diff --git a/sound/soc/fsl/imx-es8328.c b/sound/soc/fsl/imx-es8328.c
+index fad1eb6253d5..9e602c345619 100644
+--- a/sound/soc/fsl/imx-es8328.c
++++ b/sound/soc/fsl/imx-es8328.c
+@@ -87,6 +87,7 @@ static int imx_es8328_probe(struct platform_device *pdev)
+ 	if (int_port > MUX_PORT_MAX || int_port == 0) {
+ 		dev_err(dev, "mux-int-port: hardware only has %d mux ports\n",
+ 			MUX_PORT_MAX);
++		ret = -EINVAL;
+ 		goto fail;
+ 	}
+ 
 -- 
 2.34.1
 

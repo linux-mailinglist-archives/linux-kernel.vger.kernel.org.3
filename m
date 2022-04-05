@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 409484F452E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A0A84F4679
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:13:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356283AbiDEN3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
+        id S242618AbiDEUcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345262AbiDEJWX (ORCPT
+        with ESMTP id S1358005AbiDEK1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:22:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CB03F8B7;
-        Tue,  5 Apr 2022 02:10:01 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AC7D8F61;
+        Tue,  5 Apr 2022 03:12:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E77FB81A22;
-        Tue,  5 Apr 2022 09:10:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8038EC385A2;
-        Tue,  5 Apr 2022 09:09:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8FA68B81C8A;
+        Tue,  5 Apr 2022 10:12:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08681C385A1;
+        Tue,  5 Apr 2022 10:12:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149798;
-        bh=Cah0xlxi9vX/JXqn6RvksIYmQRGk5+CJsMN43zZ9Jn4=;
+        s=korg; t=1649153562;
+        bh=5XhvLEgUeP8Y6kdjc6mEd3wkiV9dCKWc/U9ieZiKdTo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Jgn4sJdczJ9fV/yjdFXrbYAiDJurA5XtG+nsbNjwk6+bGhjAK7mD/XJNe0GdwDyAK
-         YCVCfhhoB3Hsrj3yp6HVvioEQsUjAQpQ17h0JMcfxhOrJOvhHHpG73GjshMTSjLlGU
-         y3VYlD8J5o5GKW3p9TzEJs/teih9h2c/lUB/+M5o=
+        b=0B+DMbGsPCxloxfppp92pD17vsqfNIUQlusK03GZWgDdQjYJB6WjLtCrERPjorkO9
+         QcARHLYx6AuuYXqv/igN7f/aQF9yXk1tR5DMOD7gG2TOlRg7gasSwa2AkxTvbPj+Z+
+         FutCA6/bo9KpHYy9VWpB0HBaliYfjIBX85HDjjWw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Maximilian=20B=C3=B6hm?= <maximilian.boehm@elbmurf.de>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Steven Price <steven.price@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0846/1017] media: Revert "media: em28xx: add missing em28xx_close_extension"
-Date:   Tue,  5 Apr 2022 09:29:19 +0200
-Message-Id: <20220405070419.352052052@linuxfoundation.org>
+Subject: [PATCH 5.10 266/599] drm/panfrost: Check for error num after setting mask
+Date:   Tue,  5 Apr 2022 09:29:20 +0200
+Message-Id: <20220405070306.753361724@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,45 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit fde18c3bac3f964d8333ae53b304d8fee430502b ]
+[ Upstream commit 44ab30b056149bd59dd7989a593dd25ead6007fd ]
 
-This reverts commit 2c98b8a3458df03abdc6945bbef67ef91d181938.
+Because of the possible failure of the dma_supported(), the
+dma_set_mask_and_coherent() may return error num.
+Therefore, it should be better to check it and return the error if
+fails.
 
-Reverted patch causes problems with Hauppauge WinTV dualHD as Maximilian
-reported [1]. Since quick solution didn't come up let's just revert it
-to make this device work with upstream kernels.
-
-Link: https://lore.kernel.org/all/6a72a37b-e972-187d-0322-16336e12bdc5@elbmurf.de/ [1]
-
-Reported-by: Maximilian Böhm <maximilian.boehm@elbmurf.de>
-Tested-by: Maximilian Böhm <maximilian.boehm@elbmurf.de>
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: f3ba91228e8e ("drm/panfrost: Add initial panfrost driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+[Steve: fix Fixes: line]
+Reviewed-by: Steven Price <steven.price@arm.com>
+Signed-off-by: Steven Price <steven.price@arm.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220106030326.2620942-1-jiasheng@iscas.ac.cn
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/em28xx/em28xx-cards.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/gpu/drm/panfrost/panfrost_gpu.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/usb/em28xx/em28xx-cards.c
-index f3b56c065ee1..ae25d2cbfdfe 100644
---- a/drivers/media/usb/em28xx/em28xx-cards.c
-+++ b/drivers/media/usb/em28xx/em28xx-cards.c
-@@ -4150,11 +4150,8 @@ static void em28xx_usb_disconnect(struct usb_interface *intf)
+diff --git a/drivers/gpu/drm/panfrost/panfrost_gpu.c b/drivers/gpu/drm/panfrost/panfrost_gpu.c
+index 2aae636f1cf5..107ad2d764ec 100644
+--- a/drivers/gpu/drm/panfrost/panfrost_gpu.c
++++ b/drivers/gpu/drm/panfrost/panfrost_gpu.c
+@@ -359,8 +359,11 @@ int panfrost_gpu_init(struct panfrost_device *pfdev)
  
- 	em28xx_close_extension(dev);
+ 	panfrost_gpu_init_features(pfdev);
  
--	if (dev->dev_next) {
--		em28xx_close_extension(dev->dev_next);
-+	if (dev->dev_next)
- 		em28xx_release_resources(dev->dev_next);
--	}
--
- 	em28xx_release_resources(dev);
+-	dma_set_mask_and_coherent(pfdev->dev,
++	err = dma_set_mask_and_coherent(pfdev->dev,
+ 		DMA_BIT_MASK(FIELD_GET(0xff00, pfdev->features.mmu_features)));
++	if (err)
++		return err;
++
+ 	dma_set_max_seg_size(pfdev->dev, UINT_MAX);
  
- 	if (dev->dev_next) {
+ 	irq = platform_get_irq_byname(to_platform_device(pfdev->dev), "gpu");
 -- 
 2.34.1
 

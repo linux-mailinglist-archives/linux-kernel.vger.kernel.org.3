@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 012F14F310D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 799E04F339B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242360AbiDEIhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44080 "EHLO
+        id S235916AbiDEI1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235656AbiDEH77 (ORCPT
+        with ESMTP id S235822AbiDEIA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:59:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A978A1CB0C;
-        Tue,  5 Apr 2022 00:57:04 -0700 (PDT)
+        Tue, 5 Apr 2022 04:00:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D91434B4;
+        Tue,  5 Apr 2022 00:58:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58120B81B14;
-        Tue,  5 Apr 2022 07:57:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A031C340EE;
-        Tue,  5 Apr 2022 07:57:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A61CC61748;
+        Tue,  5 Apr 2022 07:58:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0F88C340EE;
+        Tue,  5 Apr 2022 07:58:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145422;
-        bh=Ps1nATeswKaRTByy9Vpj0FarmADqO69/M4NEGtVD1Cc=;
+        s=korg; t=1649145507;
+        bh=2XbkA8Sju1QrQSE2FBej6HGGJ0n/IaEb/D2VDqu6PO0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vBoC1ewtbZZLDJS19fX52dKXgejzHg1yfKXkxlrkcNnY0BU1CVOjTnOsKJVw9G4oy
-         yU0yYLgg3RDjcanHFirAptUnMGQReK9JAmRKbykdf/zcawWdamu9WsI3Q8UN2tqSxb
-         9Q/+H2IE2d9adtkyGm5KIHG9XtyFBwaW5aPutmgQ=
+        b=J0ofGtF8NNzizFqjqcOpeJrc17DfNp9rdHA8WOrnAmz8U8qmx/Uce26FrYsiYzMyD
+         tB4cAZgXRIGyNbyRjd851dW1Y4GHgVdVWTNw3q4x+7x0/L/Qxq7idXnF+98AT3f7DV
+         d3qpY3Cb/jI5ke25imjGhttVz2LJH2Rz5NiHVUjM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Martin Dauskardt <martin.dauskardt@gmx.de>,
+        stable@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0400/1126] ivtv: fix incorrect device_caps for ivtvfb
-Date:   Tue,  5 Apr 2022 09:19:07 +0200
-Message-Id: <20220405070419.368281582@linuxfoundation.org>
+Subject: [PATCH 5.17 0423/1126] drm/meson: osd_afbcd: Add an exit callback to struct meson_afbcd_ops
+Date:   Tue,  5 Apr 2022 09:19:30 +0200
+Message-Id: <20220405070420.041722210@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,121 +56,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-[ Upstream commit 25e94139218c0293b4375233c14f2256d7dcfaa8 ]
+[ Upstream commit 04b8a5d9cfd171f65df75f444b5617a372649edd ]
 
-The VIDIOC_G_FBUF and related overlay ioctls no longer worked (-ENOTTY was
-returned).
+Use this to simplify the driver shutdown. It will also come handy when
+fixing the error handling in meson_drv_bind_master().
 
-The root cause was the introduction of the caps field in ivtv-driver.h.
-While loading the ivtvfb module would update the video_device device_caps
-field with V4L2_CAP_VIDEO_OUTPUT_OVERLAY it would not update that caps
-field, and that's what the overlay ioctls would look at.
-
-It's a bad idea to keep information in two places, so drop the caps field
-and only use vdev.device_caps.
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Reported-by: Martin Dauskardt <martin.dauskardt@gmx.de>
-Fixes: 2161536516ed (media: media/pci: set device_caps in struct video_device)
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Fixes: d1b5e41e13a7e9 ("drm/meson: Add AFBCD module driver")
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211230235515.1627522-2-martin.blumenstingl@googlemail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/ivtv/ivtv-driver.h  |  1 -
- drivers/media/pci/ivtv/ivtv-ioctl.c   | 10 +++++-----
- drivers/media/pci/ivtv/ivtv-streams.c | 11 ++++-------
- 3 files changed, 9 insertions(+), 13 deletions(-)
+ drivers/gpu/drm/meson/meson_drv.c       |  6 ++--
+ drivers/gpu/drm/meson/meson_osd_afbcd.c | 41 ++++++++++++++++---------
+ drivers/gpu/drm/meson/meson_osd_afbcd.h |  1 +
+ 3 files changed, 30 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/media/pci/ivtv/ivtv-driver.h b/drivers/media/pci/ivtv/ivtv-driver.h
-index 4cf92dee6527..ce3a7ca51736 100644
---- a/drivers/media/pci/ivtv/ivtv-driver.h
-+++ b/drivers/media/pci/ivtv/ivtv-driver.h
-@@ -330,7 +330,6 @@ struct ivtv_stream {
- 	struct ivtv *itv;		/* for ease of use */
- 	const char *name;		/* name of the stream */
- 	int type;			/* stream type */
--	u32 caps;			/* V4L2 capabilities */
+diff --git a/drivers/gpu/drm/meson/meson_drv.c b/drivers/gpu/drm/meson/meson_drv.c
+index 80f1d439841a..b919271a6e50 100644
+--- a/drivers/gpu/drm/meson/meson_drv.c
++++ b/drivers/gpu/drm/meson/meson_drv.c
+@@ -385,10 +385,8 @@ static void meson_drv_unbind(struct device *dev)
+ 	free_irq(priv->vsync_irq, drm);
+ 	drm_dev_put(drm);
  
- 	struct v4l2_fh *fh;		/* pointer to the streaming filehandle */
- 	spinlock_t qlock;		/* locks access to the queues */
-diff --git a/drivers/media/pci/ivtv/ivtv-ioctl.c b/drivers/media/pci/ivtv/ivtv-ioctl.c
-index 0cdf6b3210c2..fee460e2ca86 100644
---- a/drivers/media/pci/ivtv/ivtv-ioctl.c
-+++ b/drivers/media/pci/ivtv/ivtv-ioctl.c
-@@ -438,7 +438,7 @@ static int ivtv_g_fmt_vid_out_overlay(struct file *file, void *fh, struct v4l2_f
- 	struct ivtv_stream *s = &itv->streams[fh2id(fh)->type];
- 	struct v4l2_window *winfmt = &fmt->fmt.win;
+-	if (priv->afbcd.ops) {
+-		priv->afbcd.ops->reset(priv);
+-		meson_rdma_free(priv);
+-	}
++	if (priv->afbcd.ops)
++		priv->afbcd.ops->exit(priv);
+ }
  
--	if (!(s->caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
-+	if (!(s->vdev.device_caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
- 		return -EINVAL;
- 	if (!itv->osd_video_pbase)
- 		return -EINVAL;
-@@ -549,7 +549,7 @@ static int ivtv_try_fmt_vid_out_overlay(struct file *file, void *fh, struct v4l2
- 	u32 chromakey = fmt->fmt.win.chromakey;
- 	u8 global_alpha = fmt->fmt.win.global_alpha;
+ static const struct component_master_ops meson_drv_master_ops = {
+diff --git a/drivers/gpu/drm/meson/meson_osd_afbcd.c b/drivers/gpu/drm/meson/meson_osd_afbcd.c
+index ffc6b584dbf8..0cdbe899402f 100644
+--- a/drivers/gpu/drm/meson/meson_osd_afbcd.c
++++ b/drivers/gpu/drm/meson/meson_osd_afbcd.c
+@@ -79,11 +79,6 @@ static bool meson_gxm_afbcd_supported_fmt(u64 modifier, uint32_t format)
+ 	return meson_gxm_afbcd_pixel_fmt(modifier, format) >= 0;
+ }
  
--	if (!(s->caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
-+	if (!(s->vdev.device_caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
- 		return -EINVAL;
- 	if (!itv->osd_video_pbase)
- 		return -EINVAL;
-@@ -1383,7 +1383,7 @@ static int ivtv_g_fbuf(struct file *file, void *fh, struct v4l2_framebuffer *fb)
- 		0,
- 	};
+-static int meson_gxm_afbcd_init(struct meson_drm *priv)
+-{
+-	return 0;
+-}
+-
+ static int meson_gxm_afbcd_reset(struct meson_drm *priv)
+ {
+ 	writel_relaxed(VIU_SW_RESET_OSD1_AFBCD,
+@@ -93,6 +88,16 @@ static int meson_gxm_afbcd_reset(struct meson_drm *priv)
+ 	return 0;
+ }
  
--	if (!(s->caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
-+	if (!(s->vdev.device_caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
- 		return -ENOTTY;
- 	if (!itv->osd_video_pbase)
- 		return -ENOTTY;
-@@ -1450,7 +1450,7 @@ static int ivtv_s_fbuf(struct file *file, void *fh, const struct v4l2_framebuffe
- 	struct ivtv_stream *s = &itv->streams[fh2id(fh)->type];
- 	struct yuv_playback_info *yi = &itv->yuv_info;
++static int meson_gxm_afbcd_init(struct meson_drm *priv)
++{
++	return 0;
++}
++
++static void meson_gxm_afbcd_exit(struct meson_drm *priv)
++{
++	meson_gxm_afbcd_reset(priv);
++}
++
+ static int meson_gxm_afbcd_enable(struct meson_drm *priv)
+ {
+ 	writel_relaxed(FIELD_PREP(OSD1_AFBCD_ID_FIFO_THRD, 0x40) |
+@@ -172,6 +177,7 @@ static int meson_gxm_afbcd_setup(struct meson_drm *priv)
  
--	if (!(s->caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
-+	if (!(s->vdev.device_caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
- 		return -ENOTTY;
- 	if (!itv->osd_video_pbase)
- 		return -ENOTTY;
-@@ -1470,7 +1470,7 @@ static int ivtv_overlay(struct file *file, void *fh, unsigned int on)
- 	struct ivtv *itv = id->itv;
- 	struct ivtv_stream *s = &itv->streams[fh2id(fh)->type];
+ struct meson_afbcd_ops meson_afbcd_gxm_ops = {
+ 	.init = meson_gxm_afbcd_init,
++	.exit = meson_gxm_afbcd_exit,
+ 	.reset = meson_gxm_afbcd_reset,
+ 	.enable = meson_gxm_afbcd_enable,
+ 	.disable = meson_gxm_afbcd_disable,
+@@ -269,6 +275,18 @@ static bool meson_g12a_afbcd_supported_fmt(u64 modifier, uint32_t format)
+ 	return meson_g12a_afbcd_pixel_fmt(modifier, format) >= 0;
+ }
  
--	if (!(s->caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
-+	if (!(s->vdev.device_caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
- 		return -ENOTTY;
- 	if (!itv->osd_video_pbase)
- 		return -ENOTTY;
-diff --git a/drivers/media/pci/ivtv/ivtv-streams.c b/drivers/media/pci/ivtv/ivtv-streams.c
-index 6e455948cc77..13d7d55e6594 100644
---- a/drivers/media/pci/ivtv/ivtv-streams.c
-+++ b/drivers/media/pci/ivtv/ivtv-streams.c
-@@ -176,7 +176,7 @@ static void ivtv_stream_init(struct ivtv *itv, int type)
- 	s->itv = itv;
- 	s->type = type;
- 	s->name = ivtv_stream_info[type].name;
--	s->caps = ivtv_stream_info[type].v4l2_caps;
-+	s->vdev.device_caps = ivtv_stream_info[type].v4l2_caps;
++static int meson_g12a_afbcd_reset(struct meson_drm *priv)
++{
++	meson_rdma_reset(priv);
++
++	meson_rdma_writel_sync(priv, VIU_SW_RESET_G12A_AFBC_ARB |
++			       VIU_SW_RESET_G12A_OSD1_AFBCD,
++			       VIU_SW_RESET);
++	meson_rdma_writel_sync(priv, 0, VIU_SW_RESET);
++
++	return 0;
++}
++
+ static int meson_g12a_afbcd_init(struct meson_drm *priv)
+ {
+ 	int ret;
+@@ -286,16 +304,10 @@ static int meson_g12a_afbcd_init(struct meson_drm *priv)
+ 	return 0;
+ }
  
- 	if (ivtv_stream_info[type].pio)
- 		s->dma = DMA_NONE;
-@@ -299,12 +299,9 @@ static int ivtv_reg_dev(struct ivtv *itv, int type)
- 		if (s_mpg->vdev.v4l2_dev)
- 			num = s_mpg->vdev.num + ivtv_stream_info[type].num_offset;
- 	}
--	s->vdev.device_caps = s->caps;
--	if (itv->osd_video_pbase) {
--		itv->streams[IVTV_DEC_STREAM_TYPE_YUV].vdev.device_caps |=
--			V4L2_CAP_VIDEO_OUTPUT_OVERLAY;
--		itv->streams[IVTV_DEC_STREAM_TYPE_MPG].vdev.device_caps |=
--			V4L2_CAP_VIDEO_OUTPUT_OVERLAY;
-+	if (itv->osd_video_pbase && (type == IVTV_DEC_STREAM_TYPE_YUV ||
-+				     type == IVTV_DEC_STREAM_TYPE_MPG)) {
-+		s->vdev.device_caps |= V4L2_CAP_VIDEO_OUTPUT_OVERLAY;
- 		itv->v4l2_cap |= V4L2_CAP_VIDEO_OUTPUT_OVERLAY;
- 	}
- 	video_set_drvdata(&s->vdev, s);
+-static int meson_g12a_afbcd_reset(struct meson_drm *priv)
++static void meson_g12a_afbcd_exit(struct meson_drm *priv)
+ {
+-	meson_rdma_reset(priv);
+-
+-	meson_rdma_writel_sync(priv, VIU_SW_RESET_G12A_AFBC_ARB |
+-			       VIU_SW_RESET_G12A_OSD1_AFBCD,
+-			       VIU_SW_RESET);
+-	meson_rdma_writel_sync(priv, 0, VIU_SW_RESET);
+-
+-	return 0;
++	meson_g12a_afbcd_reset(priv);
++	meson_rdma_free(priv);
+ }
+ 
+ static int meson_g12a_afbcd_enable(struct meson_drm *priv)
+@@ -380,6 +392,7 @@ static int meson_g12a_afbcd_setup(struct meson_drm *priv)
+ 
+ struct meson_afbcd_ops meson_afbcd_g12a_ops = {
+ 	.init = meson_g12a_afbcd_init,
++	.exit = meson_g12a_afbcd_exit,
+ 	.reset = meson_g12a_afbcd_reset,
+ 	.enable = meson_g12a_afbcd_enable,
+ 	.disable = meson_g12a_afbcd_disable,
+diff --git a/drivers/gpu/drm/meson/meson_osd_afbcd.h b/drivers/gpu/drm/meson/meson_osd_afbcd.h
+index 5e5523304f42..e77ddeb6416f 100644
+--- a/drivers/gpu/drm/meson/meson_osd_afbcd.h
++++ b/drivers/gpu/drm/meson/meson_osd_afbcd.h
+@@ -14,6 +14,7 @@
+ 
+ struct meson_afbcd_ops {
+ 	int (*init)(struct meson_drm *priv);
++	void (*exit)(struct meson_drm *priv);
+ 	int (*reset)(struct meson_drm *priv);
+ 	int (*enable)(struct meson_drm *priv);
+ 	int (*disable)(struct meson_drm *priv);
 -- 
 2.34.1
 

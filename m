@@ -2,91 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C4E4F22F7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E044F22F9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbiDEGTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 02:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38062 "EHLO
+        id S230127AbiDEGUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 02:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiDEGTO (ORCPT
+        with ESMTP id S229454AbiDEGT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 02:19:14 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A51F4BFD8
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 23:17:09 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id qh7so14435087ejb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 23:17:09 -0700 (PDT)
+        Tue, 5 Apr 2022 02:19:57 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E094BBB0
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 23:17:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wnC1f8YDtYHNPe58mCUlMB+PyON8jqf3+fp0IpUSZD0=;
-        b=xzuLOwLyCXrLv1dokk2FWFBOO44zcV6ewLuCmTFE0G8HBvd24YyNf0DfoyKeGTx+BY
-         wMHoYl3dp5qPoPCTerQ6xb33Nbi4lRWXsG///0gtflmW2a8JIH7eRn8+c72TRRLrvFpB
-         MyVesHv6Je1j1aWqmHGYhmswa5qf2vtl8WQnVB6L7wMPbmv3DpxUuaDmJgJy+a9guSgr
-         zcNwP9QbwHxnB53bU02ep6SHfSuLobsm8vWpOZCWJEyAUwDBP/HMrFCGCaHJvfmp/idi
-         lsakOuxwGr1742neG8kByio2RhJAndFRV4cEb67WOcl0AeK4nkEGERkvFxMI/lJwhF++
-         mjBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wnC1f8YDtYHNPe58mCUlMB+PyON8jqf3+fp0IpUSZD0=;
-        b=iREPlulALxcx8WeGg0b6VWIwrjVY9vDaoPRcwaonrxJ7FuVU/hNgUEdHgHVv5p6xq5
-         Uz9RJplGUQp6x7CZEfentHFSY68kj9Mr7iToTjIH7xMjCz3vMoWmtl39EBqq7V1DJYXT
-         LKtAdc80sikqAsQsCI7X4qP/MB6leyGpv5qoCd9hoIJTF7JCy/5nSsVYWrnaDv7Op2Pa
-         ljOby5BouoCUpFz3ULiFtPW4arV5gITVqILOXEXlDb+Vx3yXo6wI1wxgPhsROdK7YZNR
-         mBCrf8DP//dTp0JoYgl0AO7I2A6/MCSbU1wuhCOp8O5/669Rg/mpFNeSmAhh1bPoWRbt
-         OcMg==
-X-Gm-Message-State: AOAM531Iov1ApJHBLPf8jg2x2ahic7SyNMtghbmhMzSKmzaGxfltM2cu
-        uxX/1aUE3VyAZyQPFnRdLsz3/Q==
-X-Google-Smtp-Source: ABdhPJzfMa9yu8jBzyIt+Qz59BV1ER2+WNzKmSdRxOGpZ5b6wWzlMIOIPHO/6wVUU9cjrjk4Uy8+TQ==
-X-Received: by 2002:a17:907:2d90:b0:6db:729e:7f25 with SMTP id gt16-20020a1709072d9000b006db729e7f25mr1948257ejc.203.1649139428004;
-        Mon, 04 Apr 2022 23:17:08 -0700 (PDT)
-Received: from [192.168.0.179] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id q17-20020a1709064cd100b006e78206fe2bsm2995333ejt.111.2022.04.04.23.17.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 23:17:07 -0700 (PDT)
-Message-ID: <9eb91adf-9c2a-5535-b236-6517672ef9ce@linaro.org>
-Date:   Tue, 5 Apr 2022 08:17:06 +0200
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=hys+baV0s/BB2X6ZjEsxUpZuW1LBvcMEwkegMMpJQ3M=;
+  b=cqrtI2hEUJKTeUbxl1WD+MaczjMypTi0waEARWdg0vsuXS1Rekv2scya
+   l9S0ZqR7h3qnI7eq/FG+x/wbhX5TbXf53zE4sAXfUWbo3uVyArnkDAsro
+   tbyvlQb21VAhQ6TZ8RNg8y9vh7zDd2bSs7IyWMJB9Vudt67JMRIk7ydTH
+   w=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,235,1643670000"; 
+   d="scan'208";a="30042054"
+Received: from lputeaux-656-1-153-249.w217-128.abo.wanadoo.fr (HELO hadrien) ([217.128.47.249])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 08:17:57 +0200
+Date:   Tue, 5 Apr 2022 08:17:56 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: julia@hadrien
+To:     Nishanth Menon <nm@ti.com>
+cc:     Nicolas Palix <nicolas.palix@imag.fr>,
+        linux-kernel@vger.kernel.org, cocci@inria.fr,
+        Kirill Smelkov <kirr@nexedi.com>
+Subject: Re: [PATCH] coccinelle: api/stream_open: Introduce metavariables
+ for checks
+In-Reply-To: <20220404215926.14811-1-nm@ti.com>
+Message-ID: <alpine.DEB.2.22.394.2204050816560.2185@hadrien>
+References: <20220404215926.14811-1-nm@ti.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] dt-bindings: clock: qcom,smsm: convert to dtschema
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220401215949.222965-1-krzysztof.kozlowski@linaro.org>
- <YktygNS7OwWDJCNK@robh.at.kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YktygNS7OwWDJCNK@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/04/2022 00:34, Rob Herring wrote:
-> On Fri, Apr 01, 2022 at 11:59:49PM +0200, Krzysztof Kozlowski wrote:
->> Convert the Qualcomm Shared Memory State Machine to DT schema.
-> 
-> Umm, the subject says 'clock', but this isn't a clock binding.
-> 
-
-Uh, copy paste. I'll fix it and change the pattern as well.
 
 
-Best regards,
-Krzysztof
+On Mon, 4 Apr 2022, Nishanth Menon wrote:
+
+> Coccinelle spatch version 1.1.1 reports the following:
+> warning: line 134: should no_llseek be a metavariable?
+> warning: line 141: should noop_llseek be a metavariable?
+> warning: line 223: should nonseekable_open be a metavariable?
+> warning: line 290: should nonseekable_open be a metavariable?
+> warning: line 338: should nonseekable_open be a metavariable?
+>
+> So, introduce the metavariable similar to other check instances.
+
+This changes the semantic from matching the specific thing to anything.
+So are you sure that it is what is wanted?  If it should always be the
+specific thing, then you can get rid of the warning using eg symbol
+no_llseek.
+
+julia
+
+>
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+> ---
+>
+> NOTE: This is currently reported in next-20220404, though I have'nt
+> bisected for exact fixes tags to be used.
+>
+>  scripts/coccinelle/api/stream_open.cocci | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/scripts/coccinelle/api/stream_open.cocci b/scripts/coccinelle/api/stream_open.cocci
+> index df00d6619b06..d33732f35710 100644
+> --- a/scripts/coccinelle/api/stream_open.cocci
+> +++ b/scripts/coccinelle/api/stream_open.cocci
+> @@ -129,6 +129,7 @@ identifier llseek_f;
+>
+>  @ has_no_llseek @
+>  identifier fops0.fops;
+> +identifier no_llseek;
+>  @@
+>    struct file_operations fops = {
+>      .llseek = no_llseek,
+> @@ -136,6 +137,7 @@ identifier fops0.fops;
+>
+>  @ has_noop_llseek @
+>  identifier fops0.fops;
+> +identifier noop_llseek;
+>  @@
+>    struct file_operations fops = {
+>      .llseek = noop_llseek,
+> @@ -216,6 +218,7 @@ identifier stream_writer.writestream;
+>
+>  @ report_rw depends on report @
+>  identifier fops_rw.openfunc;
+> +identifier nonseekable_open;
+>  position p1;
+>  @@
+>    openfunc(...) {
+> @@ -283,6 +286,7 @@ identifier stream_reader.readstream;
+>
+>  @ report_r depends on report @
+>  identifier fops_r.openfunc;
+> +identifier nonseekable_open;
+>  position p1;
+>  @@
+>    openfunc(...) {
+> @@ -331,6 +335,7 @@ identifier stream_writer.writestream;
+>
+>  @ report_w depends on report @
+>  identifier fops_w.openfunc;
+> +identifier nonseekable_open;
+>  position p1;
+>  @@
+>    openfunc(...) {
+> --
+> 2.31.1
+>
+>

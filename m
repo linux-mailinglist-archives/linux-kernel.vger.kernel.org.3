@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985594F4DFC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1FDB4F490C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1586890AbiDFAGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54284 "EHLO
+        id S1389607AbiDEWCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349570AbiDEJuX (ORCPT
+        with ESMTP id S1357754AbiDEK1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:50:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76589B;
-        Tue,  5 Apr 2022 02:48:24 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB2B3669C;
+        Tue,  5 Apr 2022 03:10:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 745F961576;
-        Tue,  5 Apr 2022 09:48:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C3E8C385A2;
-        Tue,  5 Apr 2022 09:48:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFD356179E;
+        Tue,  5 Apr 2022 10:10:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA459C385A0;
+        Tue,  5 Apr 2022 10:10:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152103;
-        bh=Z2fRyKtO0unBo5yv4F+hHOmM6Dx9c+nDJFB8oxsdOnA=;
+        s=korg; t=1649153441;
+        bh=YDTpRcSaCATao+L5CmLPyxK92OlmEXkjxf7243VK0CQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N0spG58nshJfnsrudYxBalgtAtQwAoVgs2fJbMP6ausnuZC1UlTnI2WVX8emW9MZ0
-         /Jb4lwAbsf9fPo8RcLMnzu8WeD3TGhUAuqAHUVowZigCv0cU95MzZoqK8IfMxMngkX
-         UC1zw3+aWzn0s8ijZKg7A/Uw9mJY9od3r7aL3hWk=
+        b=rfq6AmorgqP9bUpXce9Se+0Sg8ypmapPU1u2qHlAvNGpNjkBkhz3MQbfqWUqrSX4M
+         npmy8UTjMH4YJGChDsvwjSC1Q+qhJNxpzSyxI2kOVNeSL+Hg2lwKc0HArj2qpz2pds
+         Ff4c+ZUNJTPQOCBI4usfkuyaWv1NRy6Yb/0o/uwY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 655/913] vsock/virtio: initialize vdev->priv before using VQs
-Date:   Tue,  5 Apr 2022 09:28:37 +0200
-Message-Id: <20220405070359.472381602@linuxfoundation.org>
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 224/599] ALSA: spi: Add check for clk_enable()
+Date:   Tue,  5 Apr 2022 09:28:38 +0200
+Message-Id: <20220405070305.508137239@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,46 +54,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefano Garzarella <sgarzare@redhat.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 4b5f1ad5566ada230aaa2ce861b28d1895f1ea68 ]
+[ Upstream commit ca1697eb09208f0168d94b88b72f57505339cbe5 ]
 
-When we fill VQs with empty buffers and kick the host, it may send
-an interrupt. `vdev->priv` must be initialized before this since it
-is used in the virtqueue callbacks.
+As the potential failure of the clk_enable(),
+it should be better to check it and return error
+if fails.
 
-Fixes: 0deab087b16a ("vsock/virtio: use RCU to avoid use-after-free on the_virtio_vsock")
-Suggested-by: Michael S. Tsirkin <mst@redhat.com>
-Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
-Reviewed-by: Stefan Hajnoczi <stefanha@redhat.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 3568459a5113 ("ALSA: at73c213: manage SSC clock")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Link: https://lore.kernel.org/r/20220228022839.3547266-1-jiasheng@iscas.ac.cn
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/vmw_vsock/virtio_transport.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ sound/spi/at73c213.c | 27 +++++++++++++++++++++------
+ 1 file changed, 21 insertions(+), 6 deletions(-)
 
-diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
-index dad9ca65f4f9..fb1b8f99f679 100644
---- a/net/vmw_vsock/virtio_transport.c
-+++ b/net/vmw_vsock/virtio_transport.c
-@@ -622,6 +622,8 @@ static int virtio_vsock_probe(struct virtio_device *vdev)
- 	INIT_WORK(&vsock->event_work, virtio_transport_event_work);
- 	INIT_WORK(&vsock->send_pkt_work, virtio_transport_send_pkt_work);
+diff --git a/sound/spi/at73c213.c b/sound/spi/at73c213.c
+index 76c0e37a838c..8a2da6b1012e 100644
+--- a/sound/spi/at73c213.c
++++ b/sound/spi/at73c213.c
+@@ -218,7 +218,9 @@ static int snd_at73c213_pcm_open(struct snd_pcm_substream *substream)
+ 	runtime->hw = snd_at73c213_playback_hw;
+ 	chip->substream = substream;
  
-+	vdev->priv = vsock;
-+
- 	mutex_lock(&vsock->tx_lock);
- 	vsock->tx_run = true;
- 	mutex_unlock(&vsock->tx_lock);
-@@ -639,7 +641,6 @@ static int virtio_vsock_probe(struct virtio_device *vdev)
- 	if (virtio_has_feature(vdev, VIRTIO_VSOCK_F_SEQPACKET))
- 		vsock->seqpacket_allow = true;
+-	clk_enable(chip->ssc->clk);
++	err = clk_enable(chip->ssc->clk);
++	if (err)
++		return err;
  
--	vdev->priv = vsock;
- 	rcu_assign_pointer(the_virtio_vsock, vsock);
+ 	return 0;
+ }
+@@ -776,7 +778,9 @@ static int snd_at73c213_chip_init(struct snd_at73c213 *chip)
+ 		goto out;
  
- 	mutex_unlock(&the_virtio_vsock_mutex);
+ 	/* Enable DAC master clock. */
+-	clk_enable(chip->board->dac_clk);
++	retval = clk_enable(chip->board->dac_clk);
++	if (retval)
++		goto out;
+ 
+ 	/* Initialize at73c213 on SPI bus. */
+ 	retval = snd_at73c213_write_reg(chip, DAC_RST, 0x04);
+@@ -889,7 +893,9 @@ static int snd_at73c213_dev_init(struct snd_card *card,
+ 	chip->card = card;
+ 	chip->irq = -1;
+ 
+-	clk_enable(chip->ssc->clk);
++	retval = clk_enable(chip->ssc->clk);
++	if (retval)
++		return retval;
+ 
+ 	retval = request_irq(irq, snd_at73c213_interrupt, 0, "at73c213", chip);
+ 	if (retval) {
+@@ -1008,7 +1014,9 @@ static int snd_at73c213_remove(struct spi_device *spi)
+ 	int retval;
+ 
+ 	/* Stop playback. */
+-	clk_enable(chip->ssc->clk);
++	retval = clk_enable(chip->ssc->clk);
++	if (retval)
++		goto out;
+ 	ssc_writel(chip->ssc->regs, CR, SSC_BIT(CR_TXDIS));
+ 	clk_disable(chip->ssc->clk);
+ 
+@@ -1088,9 +1096,16 @@ static int snd_at73c213_resume(struct device *dev)
+ {
+ 	struct snd_card *card = dev_get_drvdata(dev);
+ 	struct snd_at73c213 *chip = card->private_data;
++	int retval;
+ 
+-	clk_enable(chip->board->dac_clk);
+-	clk_enable(chip->ssc->clk);
++	retval = clk_enable(chip->board->dac_clk);
++	if (retval)
++		return retval;
++	retval = clk_enable(chip->ssc->clk);
++	if (retval) {
++		clk_disable(chip->board->dac_clk);
++		return retval;
++	}
+ 	ssc_writel(chip->ssc->regs, CR, SSC_BIT(CR_TXEN));
+ 
+ 	return 0;
 -- 
 2.34.1
 

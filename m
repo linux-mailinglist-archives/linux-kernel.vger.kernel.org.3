@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D75994F2F99
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF634F333D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238320AbiDEJ3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
+        id S243857AbiDEJJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239539AbiDEIUN (ORCPT
+        with ESMTP id S239493AbiDEIUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23713108D;
-        Tue,  5 Apr 2022 01:15:43 -0700 (PDT)
+        Tue, 5 Apr 2022 04:20:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4146B0A;
+        Tue,  5 Apr 2022 01:14:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4F1C609AD;
-        Tue,  5 Apr 2022 08:15:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C11D3C385A0;
-        Tue,  5 Apr 2022 08:15:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6112EB81B90;
+        Tue,  5 Apr 2022 08:14:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1D81C385A1;
+        Tue,  5 Apr 2022 08:14:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146542;
-        bh=vW3aZppNUsxHLSbPNy/WFu/pdlhv+bbciT+wAcuOJ0I=;
+        s=korg; t=1649146461;
+        bh=oAyDcBuvjmsJalWEXosrvxoNCoCAuiWwe1NdEN4k2bk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iZOVnNI27NEqB0rv+ZgIGje6qhDNm2dGcOxj3M6ABx7cnPA50Ta5DZ/NicoJU3Syn
-         0PN8mFLSD+YPfzuZ8c7gDcNeUQ1CVmeZoQ3CHzj+ajR/f4KL0/Rfg1MDtfrPoJedsd
-         x/vbGVtoQiPB/yYQNMFOdF5g5Hgng5ZF8bEn1ndE=
+        b=z3CpbNMUMBkDAFdvLJtzphX8K19S/uRyxUTvqh4dgEbLOEa0rvrjiYMTsumubqu1l
+         gfDvlg92q4j8kIHsRYBs1C/bglTpJN7OmMd9MZDvq7EpGlGUKslCMb4zS98fu7zpkp
+         pQEUbu4MkunAUG2L/zwXSvKTGmMSkDgtYhcSWJlg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0753/1126] remoteproc: qcom_q6v5_mss: Fix some leaks in q6v5_alloc_memory_region
-Date:   Tue,  5 Apr 2022 09:25:00 +0200
-Message-Id: <20220405070429.687880174@linuxfoundation.org>
+Subject: [PATCH 5.17 0755/1126] clk: actions: Terminate clk_div_table with sentinel element
+Date:   Tue,  5 Apr 2022 09:25:02 +0200
+Message-Id: <20220405070429.745909340@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,72 +57,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
 
-[ Upstream commit 07a5dcc4bed9d7cae54adf5aa10ff9f037a3204b ]
+[ Upstream commit d8a441e53e2434b1401e52dfd66b05263e442edc ]
 
-The device_node pointer is returned by of_parse_phandle() or
-of_get_child_by_name() with refcount incremented.
-We should use of_node_put() on it when done.
+In order that the end of a clk_div_table can be detected, it must be
+terminated with a sentinel element (.div = 0).
 
-This function only call of_node_put(node) when of_address_to_resource
-succeeds, missing error cases.
+In owl-s900.s, the { 0, 8 } element was probably meant to be just that,
+so this patch changes { 0, 8 } to { 0, 0 }.
 
-Fixes: 278d744c46fd ("remoteproc: qcom: Fix potential device node leaks")
-Fixes: 051fb70fd4ea ("remoteproc: qcom: Driver for the self-authenticating Hexagon v5")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220308064522.13804-1-linmq006@gmail.com
+Fixes: d47317ca4ade1 ("clk: actions: Add S700 SoC clock support")
+Fixes: d85d20053e195 ("clk: actions: Add S900 SoC clock support")
+Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+Link: https://lore.kernel.org/r/20220218000922.134857-2-j.neuschaefer@gmx.net
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/remoteproc/qcom_q6v5_mss.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/clk/actions/owl-s700.c | 1 +
+ drivers/clk/actions/owl-s900.c | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-index 43ea8455546c..b9ab91540b00 100644
---- a/drivers/remoteproc/qcom_q6v5_mss.c
-+++ b/drivers/remoteproc/qcom_q6v5_mss.c
-@@ -1806,18 +1806,20 @@ static int q6v5_alloc_memory_region(struct q6v5 *qproc)
- 	 * reserved memory regions from device's memory-region property.
- 	 */
- 	child = of_get_child_by_name(qproc->dev->of_node, "mba");
--	if (!child)
-+	if (!child) {
- 		node = of_parse_phandle(qproc->dev->of_node,
- 					"memory-region", 0);
--	else
-+	} else {
- 		node = of_parse_phandle(child, "memory-region", 0);
-+		of_node_put(child);
-+	}
+diff --git a/drivers/clk/actions/owl-s700.c b/drivers/clk/actions/owl-s700.c
+index a2f34d13fb54..6ea7da1d6d75 100644
+--- a/drivers/clk/actions/owl-s700.c
++++ b/drivers/clk/actions/owl-s700.c
+@@ -162,6 +162,7 @@ static struct clk_div_table hdmia_div_table[] = {
  
- 	ret = of_address_to_resource(node, 0, &r);
-+	of_node_put(node);
- 	if (ret) {
- 		dev_err(qproc->dev, "unable to resolve mba region\n");
- 		return ret;
- 	}
--	of_node_put(node);
+ static struct clk_div_table rmii_div_table[] = {
+ 	{0, 4},   {1, 10},
++	{0, 0}
+ };
  
- 	qproc->mba_phys = r.start;
- 	qproc->mba_size = resource_size(&r);
-@@ -1828,14 +1830,15 @@ static int q6v5_alloc_memory_region(struct q6v5 *qproc)
- 	} else {
- 		child = of_get_child_by_name(qproc->dev->of_node, "mpss");
- 		node = of_parse_phandle(child, "memory-region", 0);
-+		of_node_put(child);
- 	}
+ /* divider clocks */
+diff --git a/drivers/clk/actions/owl-s900.c b/drivers/clk/actions/owl-s900.c
+index 790890978424..5144ada2c7e1 100644
+--- a/drivers/clk/actions/owl-s900.c
++++ b/drivers/clk/actions/owl-s900.c
+@@ -140,7 +140,7 @@ static struct clk_div_table rmii_ref_div_table[] = {
  
- 	ret = of_address_to_resource(node, 0, &r);
-+	of_node_put(node);
- 	if (ret) {
- 		dev_err(qproc->dev, "unable to resolve mpss region\n");
- 		return ret;
- 	}
--	of_node_put(node);
+ static struct clk_div_table usb3_mac_div_table[] = {
+ 	{ 1, 2 }, { 2, 3 }, { 3, 4 },
+-	{ 0, 8 },
++	{ 0, 0 }
+ };
  
- 	qproc->mpss_phys = qproc->mpss_reloc = r.start;
- 	qproc->mpss_size = resource_size(&r);
+ static struct clk_div_table i2s_div_table[] = {
 -- 
 2.34.1
 

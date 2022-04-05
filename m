@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4CA04F3FE1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB7E84F408F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355432AbiDEMuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41900 "EHLO
+        id S1386322AbiDEMlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238809AbiDEJFa (ORCPT
+        with ESMTP id S239085AbiDEJFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:05:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CD43818F;
-        Tue,  5 Apr 2022 01:56:09 -0700 (PDT)
+        Tue, 5 Apr 2022 05:05:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8D41BEB5;
+        Tue,  5 Apr 2022 01:56:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3624614E4;
-        Tue,  5 Apr 2022 08:56:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE26DC385A1;
-        Tue,  5 Apr 2022 08:56:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B50BB81C19;
+        Tue,  5 Apr 2022 08:56:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7D56C385A1;
+        Tue,  5 Apr 2022 08:56:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148968;
-        bh=7Vx2WvST/3UetrRUM4JsvOUg6Uksvk+kePktchHbQIc=;
+        s=korg; t=1649148971;
+        bh=9n0s1PVnFShGn2pmObyGWleDrpp43npEIx1yGJvstUM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rJWs6uZdTxd0LEiXyYq3W4eaZ6olw98GsXL/V+KUovdENpaTB8OsAaf3GHqT68MYe
-         ONeab5eQmhAOfVQtWGNiGIs0AKjMAhqWh1Lj5rHF3KIto4ShSImV/MeWU60+b6tY+U
-         DXU7X7fWGJGlFIjrTttX97d6dnUtKRwrJJigalJ8=
+        b=2nSx4OWDHHdMhsVPBFVLV842grTzq7pGAhGCKsXp7Uu1EaZym20RF3/Hinyqi0tDK
+         OkYuz5A4KjCYkCmx7pb9VD0x/35xJ6EbhEuaF3q0PRDiSHinQfCnawWJ/IxLLEh2N/
+         HdRs2QTJg28JxZgr9xENk00E7BVUq//MC9FfrTrU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        James Morris <jmorris@namei.org>,
-        Kentaro Takeda <takedakn@nttdata.co.jp>,
-        tomoyo-dev-en@lists.osdn.me, "Serge E. Hallyn" <serge@hallyn.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0545/1017] TOMOYO: fix __setup handlers return values
-Date:   Tue,  5 Apr 2022 09:24:18 +0200
-Message-Id: <20220405070410.464004240@linuxfoundation.org>
+Subject: [PATCH 5.16 0546/1017] power: supply: sbs-charger: Dont cancel work that is not initialized
+Date:   Tue,  5 Apr 2022 09:24:19 +0200
+Message-Id: <20220405070410.493617207@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -59,70 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 39844b7e3084baecef52d1498b5fa81afa2cefa9 ]
+[ Upstream commit de85193cff0d94d030a53656d8fcc41794807bef ]
 
-__setup() handlers should return 1 if the parameter is handled.
-Returning 0 causes the entire string to be added to init's
-environment strings (limited to 32 strings), unnecessarily polluting it.
+This driver can use an interrupt or polling in order get the charger's
+status.
 
-Using the documented strings "TOMOYO_loader=string1" and
-"TOMOYO_trigger=string2" causes an Unknown parameter message:
-  Unknown kernel command line parameters
-    "BOOT_IMAGE=/boot/bzImage-517rc5 TOMOYO_loader=string1 \
-     TOMOYO_trigger=string2", will be passed to user space.
+When using polling, a delayed work is used.
 
-and these strings are added to init's environment string space:
-  Run /sbin/init as init process
-    with arguments:
-     /sbin/init
-    with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc5
-     TOMOYO_loader=string1
-     TOMOYO_trigger=string2
+However, the remove() function unconditionally call
+cancel_delayed_work_sync(), even if the delayed work is not used and is not
+initialized.
 
-With this change, these __setup handlers act as expected,
-and init's environment is not polluted with these strings.
+In order to fix it, use devm_delayed_work_autocancel() and remove the now
+useless remove() function.
 
-Fixes: 0e4ae0e0dec63 ("TOMOYO: Make several options configurable.")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: https://lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Cc: James Morris <jmorris@namei.org>
-Cc: Kentaro Takeda <takedakn@nttdata.co.jp>
-Cc: tomoyo-dev-en@lists.osdn.me
-Cc: "Serge E. Hallyn" <serge@hallyn.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Fixes: feb583e37f8a ("power: supply: add sbs-charger driver")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/tomoyo/load_policy.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/power/supply/sbs-charger.c | 18 +++++++-----------
+ 1 file changed, 7 insertions(+), 11 deletions(-)
 
-diff --git a/security/tomoyo/load_policy.c b/security/tomoyo/load_policy.c
-index 3445ae6fd479..363b65be87ab 100644
---- a/security/tomoyo/load_policy.c
-+++ b/security/tomoyo/load_policy.c
-@@ -24,7 +24,7 @@ static const char *tomoyo_loader;
- static int __init tomoyo_loader_setup(char *str)
- {
- 	tomoyo_loader = str;
--	return 0;
-+	return 1;
+diff --git a/drivers/power/supply/sbs-charger.c b/drivers/power/supply/sbs-charger.c
+index 6fa65d118ec1..b08f7d0c4181 100644
+--- a/drivers/power/supply/sbs-charger.c
++++ b/drivers/power/supply/sbs-charger.c
+@@ -18,6 +18,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/regmap.h>
+ #include <linux/bitops.h>
++#include <linux/devm-helpers.h>
+ 
+ #define SBS_CHARGER_REG_SPEC_INFO		0x11
+ #define SBS_CHARGER_REG_STATUS			0x13
+@@ -209,7 +210,12 @@ static int sbs_probe(struct i2c_client *client,
+ 		if (ret)
+ 			return dev_err_probe(&client->dev, ret, "Failed to request irq\n");
+ 	} else {
+-		INIT_DELAYED_WORK(&chip->work, sbs_delayed_work);
++		ret = devm_delayed_work_autocancel(&client->dev, &chip->work,
++						   sbs_delayed_work);
++		if (ret)
++			return dev_err_probe(&client->dev, ret,
++					     "Failed to init work for polling\n");
++
+ 		schedule_delayed_work(&chip->work,
+ 				      msecs_to_jiffies(SBS_CHARGER_POLL_TIME));
+ 	}
+@@ -220,15 +226,6 @@ static int sbs_probe(struct i2c_client *client,
+ 	return 0;
  }
  
- __setup("TOMOYO_loader=", tomoyo_loader_setup);
-@@ -64,7 +64,7 @@ static const char *tomoyo_trigger;
- static int __init tomoyo_trigger_setup(char *str)
- {
- 	tomoyo_trigger = str;
+-static int sbs_remove(struct i2c_client *client)
+-{
+-	struct sbs_info *chip = i2c_get_clientdata(client);
+-
+-	cancel_delayed_work_sync(&chip->work);
+-
 -	return 0;
-+	return 1;
- }
+-}
+-
+ #ifdef CONFIG_OF
+ static const struct of_device_id sbs_dt_ids[] = {
+ 	{ .compatible = "sbs,sbs-charger" },
+@@ -245,7 +242,6 @@ MODULE_DEVICE_TABLE(i2c, sbs_id);
  
- __setup("TOMOYO_trigger=", tomoyo_trigger_setup);
+ static struct i2c_driver sbs_driver = {
+ 	.probe		= sbs_probe,
+-	.remove		= sbs_remove,
+ 	.id_table	= sbs_id,
+ 	.driver = {
+ 		.name	= "sbs-charger",
 -- 
 2.34.1
 

@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DA6D4F5039
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A7E14F5092
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1840818AbiDFBM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39808 "EHLO
+        id S1842351AbiDFBbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349132AbiDEJtM (ORCPT
+        with ESMTP id S1354574AbiDEKOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714C4AC044;
-        Tue,  5 Apr 2022 02:41:11 -0700 (PDT)
+        Tue, 5 Apr 2022 06:14:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500E848E55;
+        Tue,  5 Apr 2022 03:01:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F31161675;
-        Tue,  5 Apr 2022 09:41:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AD2BC385A3;
-        Tue,  5 Apr 2022 09:41:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14036B81B96;
+        Tue,  5 Apr 2022 10:01:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74372C385A1;
+        Tue,  5 Apr 2022 10:01:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151670;
-        bh=s0Xl/tDZ/nn9ljOEmMoDjIHW5BTj9WeUhGDK0Dd9ojI=;
+        s=korg; t=1649152877;
+        bh=zTkIlxHMHoKKV9SZz13H6R9GwmKrGgfVELCZXZEtKxU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fpROFFrMfgDvr6ZNya6F5LqqYvdPTDSH1nOQHwjvl9D0pBw6TmgwUEVFcVRNXL51c
-         naPp+XOtTq/VdYhBwkPpVTOrGHc7xhS4IEQ5/v+PDDpfOB+HQazKK5mpFbtmNVfVqv
-         4AAO5TGg4XfrFSHicsaGYJemn+WJy0DwTWI8UhyE=
+        b=ajdHqvhKzRh0kbYzIvjKDtoXl7XwunMyB6IEjbLnIm3tiVexgcLb2i/9y9Wgqm0oX
+         0eqehz8h1/oZscDSEqcoI1XsbfKiX7ufGcNHk9hcjUt0A3aoPBFwrgEykimxM9DUHB
+         KbpzdenUyIGiSfloRUmY2s3XAXtzzH6sdNyfJvvA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 451/913] power: supply: ab8500: Fix memory leak in ab8500_fg_sysfs_init
-Date:   Tue,  5 Apr 2022 09:25:13 +0200
-Message-Id: <20220405070353.367451209@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Waiman Long <longman@redhat.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Cheng-Jui Wang <cheng-jui.wang@mediatek.com>
+Subject: [PATCH 5.10 021/599] locking/lockdep: Avoid potential access of invalid memory in lock_class
+Date:   Tue,  5 Apr 2022 09:25:15 +0200
+Message-Id: <20220405070259.447667012@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +58,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Waiman Long <longman@redhat.com>
 
-[ Upstream commit 6a4760463dbc6b603690938c468839985189ce0a ]
+commit 61cc4534b6550997c97a03759ab46b29d44c0017 upstream.
 
-kobject_init_and_add() takes reference even when it fails.
-According to the doc of kobject_init_and_add()：
+It was found that reading /proc/lockdep after a lockdep splat may
+potentially cause an access to freed memory if lockdep_unregister_key()
+is called after the splat but before access to /proc/lockdep [1]. This
+is due to the fact that graph_lock() call in lockdep_unregister_key()
+fails after the clearing of debug_locks by the splat process.
 
-   If this function returns an error, kobject_put() must be called to
-   properly clean up the memory associated with the object.
+After lockdep_unregister_key() is called, the lock_name may be freed
+but the corresponding lock_class structure still have a reference to
+it. That invalid memory pointer will then be accessed when /proc/lockdep
+is read by a user and a use-after-free (UAF) error will be reported if
+KASAN is enabled.
 
-Fix memory leak by calling kobject_put().
+To fix this problem, lockdep_unregister_key() is now modified to always
+search for a matching key irrespective of the debug_locks state and
+zap the corresponding lock class if a matching one is found.
 
-Fixes: 8c0984e5a753 ("power: move power supply drivers to power/supply")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+[1] https://lore.kernel.org/lkml/77f05c15-81b6-bddd-9650-80d5f23fe330@i-love.sakura.ne.jp/
+
+Fixes: 8b39adbee805 ("locking/lockdep: Make lockdep_unregister_key() honor 'debug_locks' again")
+Reported-by: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Signed-off-by: Waiman Long <longman@redhat.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Cc: Cheng-Jui Wang <cheng-jui.wang@mediatek.com>
+Link: https://lkml.kernel.org/r/20220103023558.1377055-1-longman@redhat.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/power/supply/ab8500_fg.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ kernel/locking/lockdep.c |   24 +++++++++++++++---------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
-index 05fe9724ba50..57799a8079d4 100644
---- a/drivers/power/supply/ab8500_fg.c
-+++ b/drivers/power/supply/ab8500_fg.c
-@@ -2545,8 +2545,10 @@ static int ab8500_fg_sysfs_init(struct ab8500_fg *di)
- 	ret = kobject_init_and_add(&di->fg_kobject,
- 		&ab8500_fg_ktype,
- 		NULL, "battery");
--	if (ret < 0)
-+	if (ret < 0) {
-+		kobject_put(&di->fg_kobject);
- 		dev_err(di->dev, "failed to create sysfs entry\n");
-+	}
- 
- 	return ret;
+--- a/kernel/locking/lockdep.c
++++ b/kernel/locking/lockdep.c
+@@ -6209,7 +6209,13 @@ void lockdep_reset_lock(struct lockdep_m
+ 		lockdep_reset_lock_reg(lock);
  }
--- 
-2.34.1
-
+ 
+-/* Unregister a dynamically allocated key. */
++/*
++ * Unregister a dynamically allocated key.
++ *
++ * Unlike lockdep_register_key(), a search is always done to find a matching
++ * key irrespective of debug_locks to avoid potential invalid access to freed
++ * memory in lock_class entry.
++ */
+ void lockdep_unregister_key(struct lock_class_key *key)
+ {
+ 	struct hlist_head *hash_head = keyhashentry(key);
+@@ -6224,10 +6230,8 @@ void lockdep_unregister_key(struct lock_
+ 		return;
+ 
+ 	raw_local_irq_save(flags);
+-	if (!graph_lock())
+-		goto out_irq;
++	lockdep_lock();
+ 
+-	pf = get_pending_free();
+ 	hlist_for_each_entry_rcu(k, hash_head, hash_entry) {
+ 		if (k == key) {
+ 			hlist_del_rcu(&k->hash_entry);
+@@ -6235,11 +6239,13 @@ void lockdep_unregister_key(struct lock_
+ 			break;
+ 		}
+ 	}
+-	WARN_ON_ONCE(!found);
+-	__lockdep_free_key_range(pf, key, 1);
+-	call_rcu_zapped(pf);
+-	graph_unlock();
+-out_irq:
++	WARN_ON_ONCE(!found && debug_locks);
++	if (found) {
++		pf = get_pending_free();
++		__lockdep_free_key_range(pf, key, 1);
++		call_rcu_zapped(pf);
++	}
++	lockdep_unlock();
+ 	raw_local_irq_restore(flags);
+ 
+ 	/* Wait until is_dynamic_key() has finished accessing k->hash_entry. */
 
 

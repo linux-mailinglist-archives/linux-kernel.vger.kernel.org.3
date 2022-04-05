@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF7E4F326B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA93C4F333E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357476AbiDEK03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33838 "EHLO
+        id S1357686AbiDEK0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241117AbiDEIcv (ORCPT
+        with ESMTP id S241122AbiDEIcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:32:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EA61582B;
-        Tue,  5 Apr 2022 01:27:57 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A898115FC2;
+        Tue,  5 Apr 2022 01:28:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D58FAB81B13;
-        Tue,  5 Apr 2022 08:27:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AE09C385A2;
-        Tue,  5 Apr 2022 08:27:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B913B81BB1;
+        Tue,  5 Apr 2022 08:28:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5706C385A2;
+        Tue,  5 Apr 2022 08:27:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147274;
-        bh=5kDp6e7Af4lDs7gh7RHYJ0kx3NY8l0227+nMc47kasA=;
+        s=korg; t=1649147280;
+        bh=k5faAOJ40OTa0COWongLuNACNXMXAEZdrOZeJQ1+P5o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mk/Zc0hSGJDkmcJ871VaP2Q2gyiAH3JqyxbSnYdh+qtJs32DUa6hVp2Yh8Y0BWIF3
-         pg7kgkM9nAhVW25oVNQoR7Jpd53f0Q0DSsytSP96TLODf1QLsD3SzVffSRf0h+X3XS
-         /zXWRTfuchVvktUNDdKaQWXxiHSfcuJDlkxNZkzU=
+        b=aUhlxnDO1kIaVt4G2YVsKsCV3YITfLhnkX3MtncRP8OEH34+kqKmxcseRAntLSwYS
+         NieMckk7RUqEA5uvP/5nLILdo9XRuhtVOtvJwG3DNFbAcAonJXBJOJGG2JhwlSCYzt
+         GYrvuRYZKxP8Lw+frlqdb4+EpnP+4ArdLcoIMjzs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Zhong <yang.zhong@intel.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paolo Bonzini <bonzini@gnu.org>
-Subject: [PATCH 5.17 1065/1126] x86/fpu/xstate: Fix the ARCH_REQ_XCOMP_PERM implementation
-Date:   Tue,  5 Apr 2022 09:30:12 +0200
-Message-Id: <20220405070438.719098440@linuxfoundation.org>
+        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Simon Ser <contact@emersion.fr>
+Subject: [PATCH 5.17 1067/1126] drm/connector: Fix typo in documentation
+Date:   Tue,  5 Apr 2022 09:30:14 +0200
+Message-Id: <20220405070438.775851380@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,38 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Zhong <yang.zhong@intel.com>
+From: Maxime Ripard <maxime@cerno.tech>
 
-commit 063452fd94d153d4eb38ad58f210f3d37a09cca4 upstream.
+commit dca384a3bf5af1c781cfa6aec63904bdb5018c36 upstream.
 
-ARCH_REQ_XCOMP_PERM is supposed to add the requested feature to the
-permission bitmap of thread_group_leader()->fpu. But the code overwrites
-the bitmap with the requested feature bit only rather than adding it.
+Commit 4adc33f36d80 ("drm/edid: Split deep color modes between RGB and
+YUV444") introduced two new variables in struct drm_display_info and
+their documentation, but the documentation part had a typo resulting in
+a doc build warning.
 
-Fix the code to add the requested feature bit to the master bitmask.
-
-Fixes: db8268df0983 ("x86/arch_prctl: Add controls for dynamic XSTATE components")
-Signed-off-by: Yang Zhong <yang.zhong@intel.com>
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Paolo Bonzini <bonzini@gnu.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220129173647.27981-2-chang.seok.bae@intel.com
+Fixes: 4adc33f36d80 ("drm/edid: Split deep color modes between RGB and YUV444")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Reviewed-by: Simon Ser <contact@emersion.fr>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220202094340.875190-1-maxime@cerno.tech
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/fpu/xstate.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/drm/drm_connector.h |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -1639,7 +1639,7 @@ static int __xstate_request_perm(u64 per
+--- a/include/drm/drm_connector.h
++++ b/include/drm/drm_connector.h
+@@ -592,13 +592,13 @@ struct drm_display_info {
+ 	bool rgb_quant_range_selectable;
  
- 	perm = guest ? &fpu->guest_perm : &fpu->perm;
- 	/* Pairs with the READ_ONCE() in xstate_get_group_perm() */
--	WRITE_ONCE(perm->__state_perm, requested);
-+	WRITE_ONCE(perm->__state_perm, mask);
- 	/* Protected by sighand lock */
- 	perm->__state_size = ksize;
- 	perm->__user_state_size = usize;
+ 	/**
+-	 * @edid_hdmi_dc_rgb444_modes: Mask of supported hdmi deep color modes
++	 * @edid_hdmi_rgb444_dc_modes: Mask of supported hdmi deep color modes
+ 	 * in RGB 4:4:4. Even more stuff redundant with @bus_formats.
+ 	 */
+ 	u8 edid_hdmi_rgb444_dc_modes;
+ 
+ 	/**
+-	 * @edid_hdmi_dc_ycbcr444_modes: Mask of supported hdmi deep color
++	 * @edid_hdmi_ycbcr444_dc_modes: Mask of supported hdmi deep color
+ 	 * modes in YCbCr 4:4:4. Even more stuff redundant with @bus_formats.
+ 	 */
+ 	u8 edid_hdmi_ycbcr444_dc_modes;
 
 

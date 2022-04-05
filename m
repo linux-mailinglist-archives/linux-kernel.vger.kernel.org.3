@@ -2,67 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369054F52A4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA094F529E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444313AbiDFC5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:57:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42314 "EHLO
+        id S1850706AbiDFCz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446578AbiDFBQR (ORCPT
+        with ESMTP id S1841064AbiDFBPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 21:16:17 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7756C245B3;
-        Tue,  5 Apr 2022 16:08:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649200127; x=1680736127;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Xp43dfjNB+BJfz5gN1k7pk22qVpg2ISIf8p6jr207ZY=;
-  b=oDwzrA2tihl3CX3LTZQ3gFuiE0t6kn8EKP4Viai4HBQQL+qKwH2+PF1M
-   Z00Fyg0pplXwpa+lhAY4pRUHx0sWw7uWZBVNBGlFChtgYh4cyfItjDtXG
-   MSajakf4nao2uatLYlB4J9MBm9WzHXNO2TTwJi4UYdnC6iq4/k5DcDbUG
-   F3JiuCjKIgDLqKnl3mMbD5UTB3t6nKH+/DJZ4JneIwMqrDQlXqJ5rRPKc
-   5IBWj5j7Wst38oGZIbT+TaKZUAcuWy57eUIdW4UsCxMjuHUljaQ8HRMGo
-   DA/qvyEhftjQ1146rfrbGmU+83Sywjv5FAYqIK+PRGNXNMekqrRWp+ogT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="261060064"
-X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="261060064"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 16:08:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="658149390"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 05 Apr 2022 16:08:38 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbsHu-0003qj-3i;
-        Tue, 05 Apr 2022 23:08:38 +0000
-Date:   Wed, 6 Apr 2022 07:07:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Wells Lu <wellslutw@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, robh+dt@kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        p.zabel@pengutronix.de, pabeni@redhat.com, krzk+dt@kernel.org,
-        roopa@nvidia.com, andrew@lunn.ch, edumazet@google.com
-Cc:     kbuild-all@lists.01.org, wells.lu@sunplus.com,
-        Wells Lu <wellslutw@gmail.com>
-Subject: Re: [PATCH net-next v6 2/2] net: ethernet: Add driver for Sunplus
- SP7021
-Message-ID: <202204060616.kl1yKwP5-lkp@intel.com>
-References: <1649016459-23989-3-git-send-email-wellslutw@gmail.com>
+        Tue, 5 Apr 2022 21:15:03 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD32F29
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 16:08:19 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id a9-20020a5d89c9000000b0064cb68a9ba6so489823iot.11
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 16:08:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=A+mWdme+YYmhASEFhasCrli2+Kgbv+ASyCSwll2CXxM=;
+        b=41tHi5LfRNmTPh+4odBPyKgR5J2lVBWFH1PVA+qyW00ppmASgLv5Wi6bxKtdf7IQad
+         EBJl1LXKfccYz+drGAGDCAIyhLagSny3Sb8ZvcjEMc/TV2s97H1ylA1o4+7O4dwoKVFD
+         7NqPxC4P14GMQYCgirlITmfJRZvumVx4KTA+5AG7chmLddlmY1P5Th6/wuk1rSCJzuTz
+         PwuM/11HPglL6hOCEGkQ46ARc8zVteeh9+17PoTTRHVTAZ6/uLe44ZPDZiwqyQ8txOqI
+         mX5JsRA20rRGVLmwJSbKRJoo4H3UM0aJ344BarrPgSjDn/0fHo/jngiHC9nRx+JhwPTL
+         5Dnw==
+X-Gm-Message-State: AOAM531wpFGpS/5YRzQPdogBhAegwV8IT53hi+9T96YpXznXDNYp1ZYU
+        bhc+B735d+aedEY8L5NmYAHX34VGWbG1lse06r5/ZkHbqnQ7
+X-Google-Smtp-Source: ABdhPJyQfcW7dv/4UxyJRY3K9j+CZkqD2d1U1thU2nJ0YZIB6bnq1bpvwBGkxCCxpwBqHumD71RRS4jq3qiIYbhEOzNtRCyLlzof
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1649016459-23989-3-git-send-email-wellslutw@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6602:29ca:b0:649:558a:f003 with SMTP id
+ z10-20020a05660229ca00b00649558af003mr2863525ioq.160.1649200098763; Tue, 05
+ Apr 2022 16:08:18 -0700 (PDT)
+Date:   Tue, 05 Apr 2022 16:08:18 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000cede205dbf052bc@google.com>
+Subject: [syzbot] general protection fault in simple_recursive_removal (2)
+From:   syzbot <syzbot+17404da5afdf21e8d612@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,304 +53,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wells,
+Hello,
 
-I love your patch! Yet something to improve:
+syzbot found the following issue on:
 
-[auto build test ERROR on net/master]
-[also build test ERROR on robh/for-next linus/master v5.18-rc1 next-20220405]
-[cannot apply to net-next/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+HEAD commit:    ce4c854ee868 Merge tag 'for-5.18-rc1-tag' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15339f9b700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=595bcd2109a73f9c
+dashboard link: https://syzkaller.appspot.com/bug?extid=17404da5afdf21e8d612
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16e820b0f00000
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wells-Lu/This-is-a-patch-series-for-Ethernet-driver-of-Sunplus-SP7021-SoC/20220404-040949
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net.git 692930cc435099580a4b9e32fa781b0688c18439
-config: alpha-randconfig-c004-20220405 (https://download.01.org/0day-ci/archive/20220406/202204060616.kl1yKwP5-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/d8d2085594ea52869669a553bb6d60e0b3a1f412
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Wells-Lu/This-is-a-patch-series-for-Ethernet-driver-of-Sunplus-SP7021-SoC/20220404-040949
-        git checkout d8d2085594ea52869669a553bb6d60e0b3a1f412
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+17404da5afdf21e8d612@syzkaller.appspotmail.com
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+sd 1:0:0:1: [sdb] Test Unit Ready failed: Result: hostbyte=DID_NO_CONNECT driverbyte=DRIVER_OK
+general protection fault, probably for non-canonical address 0xdffffc000000002a: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000150-0x0000000000000157]
+CPU: 1 PID: 3660 Comm: udevd Not tainted 5.18.0-rc1-syzkaller-00009-gce4c854ee868 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:__lock_acquire+0xd85/0x56c0 kernel/locking/lockdep.c:4899
+Code: 1a 0e 41 be 01 00 00 00 0f 86 c8 00 00 00 89 05 21 8d 1a 0e e9 bd 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 da 48 c1 ea 03 <80> 3c 02 00 0f 85 15 31 00 00 48 81 3b 20 d4 22 8f 0f 84 4f f3 ff
+RSP: 0018:ffffc90003e7f9f0 EFLAGS: 00010012
+RAX: dffffc0000000000 RBX: 0000000000000150 RCX: 0000000000000000
+RDX: 000000000000002a RSI: 0000000000000000 RDI: 0000000000000150
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+R13: ffff88801b90d700 R14: 0000000000000000 R15: 0000000000000000
+FS:  00007f9eb648e840(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffdb4657128 CR3: 0000000075f97000 CR4: 0000000000350ee0
+Call Trace:
+ <TASK>
+ lock_acquire kernel/locking/lockdep.c:5641 [inline]
+ lock_acquire+0x1ab/0x510 kernel/locking/lockdep.c:5606
+ down_write+0x90/0x150 kernel/locking/rwsem.c:1514
+ inode_lock include/linux/fs.h:748 [inline]
+ simple_recursive_removal+0x171/0x830 fs/libfs.c:276
+ debugfs_remove fs/debugfs/inode.c:742 [inline]
+ debugfs_remove+0x59/0x80 fs/debugfs/inode.c:736
+ blk_mq_debugfs_unregister_queue_rqos+0x34/0x70 block/blk-mq-debugfs.c:840
+ rq_qos_exit+0x1e/0xf0 block/blk-rq-qos.c:297
+ disk_release_mq block/genhd.c:1142 [inline]
+ disk_release+0x191/0x420 block/genhd.c:1168
+ device_release+0x9f/0x240 drivers/base/core.c:2229
+ kobject_cleanup lib/kobject.c:705 [inline]
+ kobject_release lib/kobject.c:736 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x1c8/0x540 lib/kobject.c:753
+ put_device+0x1b/0x30 drivers/base/core.c:3512
+ blkdev_close+0x64/0x80 block/fops.c:512
+ __fput+0x277/0x9d0 fs/file_table.c:317
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
+ exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:294
+ do_syscall_64+0x42/0x80 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f9eb65a9fc3
+Code: 48 ff ff ff b8 ff ff ff ff e9 3e ff ff ff 66 0f 1f 84 00 00 00 00 00 64 8b 04 25 18 00 00 00 85 c0 75 14 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24 0c e8
+RSP: 002b:00007ffdb465f5d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 00007f9eb648e6a8 RCX: 00007f9eb65a9fc3
+RDX: 000000000000001c RSI: 00007ffdb465edd8 RDI: 0000000000000008
+RBP: 000055bf88f240c0 R08: 0000000000000007 R09: 000055bf88f36110
+R10: 00007f9eb6638fc0 R11: 0000000000000246 R12: 0000000000000002
+R13: 000055bf88f34760 R14: 0000000000000008 R15: 000055bf88efe910
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__lock_acquire+0xd85/0x56c0 kernel/locking/lockdep.c:4899
+Code: 1a 0e 41 be 01 00 00 00 0f 86 c8 00 00 00 89 05 21 8d 1a 0e e9 bd 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 da 48 c1 ea 03 <80> 3c 02 00 0f 85 15 31 00 00 48 81 3b 20 d4 22 8f 0f 84 4f f3 ff
+RSP: 0018:ffffc90003e7f9f0 EFLAGS: 00010012
+RAX: dffffc0000000000 RBX: 0000000000000150 RCX: 0000000000000000
+RDX: 000000000000002a RSI: 0000000000000000 RDI: 0000000000000150
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000001
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+R13: ffff88801b90d700 R14: 0000000000000000 R15: 0000000000000000
+FS:  00007f9eb648e840(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffdb4657128 CR3: 0000000075f97000 CR4: 0000000000350ee0
+----------------
+Code disassembly (best guess):
+   0:	1a 0e                	sbb    (%rsi),%cl
+   2:	41 be 01 00 00 00    	mov    $0x1,%r14d
+   8:	0f 86 c8 00 00 00    	jbe    0xd6
+   e:	89 05 21 8d 1a 0e    	mov    %eax,0xe1a8d21(%rip)        # 0xe1a8d35
+  14:	e9 bd 00 00 00       	jmpq   0xd6
+  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  20:	fc ff df
+  23:	48 89 da             	mov    %rbx,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2e:	0f 85 15 31 00 00    	jne    0x3149
+  34:	48 81 3b 20 d4 22 8f 	cmpq   $0xffffffff8f22d420,(%rbx)
+  3b:	0f                   	.byte 0xf
+  3c:	84 4f f3             	test   %cl,-0xd(%rdi)
+  3f:	ff                   	.byte 0xff
 
-All errors (new ones prefixed by >>):
 
-   drivers/pinctrl/sunplus/sppctl.c: In function 'sppctl_gpio_new':
->> drivers/pinctrl/sunplus/sppctl.c:559:14: error: 'struct gpio_chip' has no member named 'of_gpio_n_cells'
-     559 |         gchip->of_gpio_n_cells  = 2;
-         |              ^~
---
-   drivers/net/ethernet/sunplus/spl2sw_driver.c: In function 'spl2sw_get_eth_child_node':
->> drivers/net/ethernet/sunplus/spl2sw_driver.c:328:9: error: implicit declaration of function 'for_each_child_of_node'; did you mean 'for_each_online_node'? [-Werror=implicit-function-declaration]
-     328 |         for_each_child_of_node(ether_np, port_np) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~
-         |         for_each_online_node
->> drivers/net/ethernet/sunplus/spl2sw_driver.c:328:50: error: expected ';' before '{' token
-     328 |         for_each_child_of_node(ether_np, port_np) {
-         |                                                  ^~
-         |                                                  ;
-   drivers/net/ethernet/sunplus/spl2sw_driver.c:326:13: warning: unused variable 'port_id' [-Wunused-variable]
-     326 |         int port_id;
-         |             ^~~~~~~
-   drivers/net/ethernet/sunplus/spl2sw_driver.c:342:1: error: no return statement in function returning non-void [-Werror=return-type]
-     342 | }
-         | ^
-   drivers/net/ethernet/sunplus/spl2sw_driver.c: In function 'spl2sw_probe':
->> drivers/net/ethernet/sunplus/spl2sw_driver.c:407:24: error: implicit declaration of function 'of_get_child_by_name' [-Werror=implicit-function-declaration]
-     407 |         eth_ports_np = of_get_child_by_name(pdev->dev.of_node, "ethernet-ports");
-         |                        ^~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sunplus/spl2sw_driver.c:407:22: warning: assignment to 'struct device_node *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     407 |         eth_ports_np = of_get_child_by_name(pdev->dev.of_node, "ethernet-ports");
-         |                      ^
->> drivers/net/ethernet/sunplus/spl2sw_driver.c:428:26: error: implicit declaration of function 'of_parse_phandle' [-Werror=implicit-function-declaration]
-     428 |                 phy_np = of_parse_phandle(port_np, "phy-handle", 0);
-         |                          ^~~~~~~~~~~~~~~~
-   drivers/net/ethernet/sunplus/spl2sw_driver.c:428:24: warning: assignment to 'struct device_node *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     428 |                 phy_np = of_parse_phandle(port_np, "phy-handle", 0);
-         |                        ^
-   cc1: some warnings being treated as errors
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for PINCTRL_SPPCTL
-   Depends on PINCTRL && SOC_SP7021 && OF && HAS_IOMEM
-   Selected by
-   - SP7021_EMAC && NETDEVICES && ETHERNET && NET_VENDOR_SUNPLUS && (SOC_SP7021 || COMPILE_TEST
-
-
-vim +328 drivers/net/ethernet/sunplus/spl2sw_driver.c
-
-   322	
-   323	static struct device_node *spl2sw_get_eth_child_node(struct device_node *ether_np, int id)
-   324	{
-   325		struct device_node *port_np;
-   326		int port_id;
-   327	
- > 328		for_each_child_of_node(ether_np, port_np) {
-   329			/* It is not a 'port' node, continue. */
-   330			if (strcmp(port_np->name, "port"))
-   331				continue;
-   332	
-   333			if (of_property_read_u32(port_np, "reg", &port_id) < 0)
-   334				continue;
-   335	
-   336			if (port_id == id)
-   337				return port_np;
-   338		}
-   339	
-   340		/* Not found! */
-   341		return NULL;
-   342	}
-   343	
-   344	static int spl2sw_probe(struct platform_device *pdev)
-   345	{
-   346		struct device_node *eth_ports_np;
-   347		struct device_node *port_np;
-   348		struct spl2sw_common *comm;
-   349		struct device_node *phy_np;
-   350		phy_interface_t phy_mode;
-   351		struct net_device *ndev;
-   352		u8 mac_addr[ETH_ALEN];
-   353		struct spl2sw_mac *mac;
-   354		int irq, i;
-   355		int ret;
-   356	
-   357		if (platform_get_drvdata(pdev))
-   358			return -ENODEV;
-   359	
-   360		/* Allocate memory for 'spl2sw_common' area. */
-   361		comm = devm_kzalloc(&pdev->dev, sizeof(*comm), GFP_KERNEL);
-   362		if (!comm)
-   363			return -ENOMEM;
-   364		comm->pdev = pdev;
-   365	
-   366		spin_lock_init(&comm->rx_lock);
-   367		spin_lock_init(&comm->tx_lock);
-   368		spin_lock_init(&comm->mdio_lock);
-   369	
-   370		/* Get memory resource 0 from dts. */
-   371		comm->l2sw_reg_base = devm_platform_ioremap_resource(pdev, 0);
-   372		if (IS_ERR(comm->l2sw_reg_base))
-   373			return PTR_ERR(comm->l2sw_reg_base);
-   374	
-   375		/* Get irq resource from dts. */
-   376		ret = platform_get_irq(pdev, 0);
-   377		if (ret < 0)
-   378			return ret;
-   379		irq = ret;
-   380	
-   381		/* Get clock controller. */
-   382		comm->clk = devm_clk_get(&pdev->dev, NULL);
-   383		if (IS_ERR(comm->clk)) {
-   384			dev_err_probe(&pdev->dev, PTR_ERR(comm->clk),
-   385				      "Failed to retrieve clock controller!\n");
-   386			return PTR_ERR(comm->clk);
-   387		}
-   388	
-   389		/* Get reset controller. */
-   390		comm->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
-   391		if (IS_ERR(comm->rstc)) {
-   392			dev_err_probe(&pdev->dev, PTR_ERR(comm->rstc),
-   393				      "Failed to retrieve reset controller!\n");
-   394			return PTR_ERR(comm->rstc);
-   395		}
-   396	
-   397		/* Enable clock. */
-   398		clk_prepare_enable(comm->clk);
-   399		udelay(1);
-   400	
-   401		reset_control_assert(comm->rstc);
-   402		udelay(1);
-   403		reset_control_deassert(comm->rstc);
-   404		udelay(1);
-   405	
-   406		/* Get child node ethernet-ports. */
- > 407		eth_ports_np = of_get_child_by_name(pdev->dev.of_node, "ethernet-ports");
-   408		if (!eth_ports_np) {
-   409			dev_err(&pdev->dev, "No ethernet-ports child node found!\n");
-   410			ret = -ENODEV;
-   411			goto out_clk_disable;
-   412		}
-   413	
-   414		for (i = 0; i < MAX_NETDEV_NUM; i++) {
-   415			/* Get port@i of node ethernet-ports. */
-   416			port_np = spl2sw_get_eth_child_node(eth_ports_np, i);
-   417			if (!port_np)
-   418				continue;
-   419	
-   420			/* Get phy-mode. */
-   421			if (of_get_phy_mode(port_np, &phy_mode)) {
-   422				dev_err(&pdev->dev, "Failed to get phy-mode property of port@%d!\n",
-   423					i);
-   424				continue;
-   425			}
-   426	
-   427			/* Get phy-handle. */
- > 428			phy_np = of_parse_phandle(port_np, "phy-handle", 0);
-   429			if (!phy_np) {
-   430				dev_err(&pdev->dev, "Failed to get phy-handle property of port@%d!\n",
-   431					i);
-   432				continue;
-   433			}
-   434	
-   435			/* Get mac-address from nvmem. */
-   436			ret = spl2sw_nvmem_get_mac_address(&pdev->dev, port_np, mac_addr);
-   437			if (ret) {
-   438				dev_info(&pdev->dev, "Generate a random mac address!\n");
-   439	
-   440				/* Generate a mac address using OUI of Sunplus Technology
-   441				 * and random controller number.
-   442				 */
-   443				mac_addr[0] = 0xfc; /* OUI of Sunplus: fc:4b:bc */
-   444				mac_addr[1] = 0x4b;
-   445				mac_addr[2] = 0xbc;
-   446				mac_addr[3] = get_random_int() % 256;
-   447				mac_addr[4] = get_random_int() % 256;
-   448				mac_addr[5] = get_random_int() % 256;
-   449			}
-   450	
-   451			/* Initialize the net device. */
-   452			ret = spl2sw_init_netdev(pdev, mac_addr, &ndev);
-   453			if (ret)
-   454				goto out_unregister_dev;
-   455	
-   456			ndev->irq = irq;
-   457			comm->ndev[i] = ndev;
-   458			mac = netdev_priv(ndev);
-   459			mac->phy_node = phy_np;
-   460			mac->phy_mode = phy_mode;
-   461			mac->comm = comm;
-   462	
-   463			mac->lan_port = 0x1 << i;	/* forward to port i */
-   464			mac->to_vlan = 0x1 << i;	/* vlan group: i     */
-   465			mac->vlan_id = i;		/* vlan group: i     */
-   466	
-   467			/* Set MAC address */
-   468			ret = spl2sw_mac_addr_add(mac);
-   469			if (ret)
-   470				goto out_unregister_dev;
-   471	
-   472			spl2sw_mac_rx_mode_set(mac);
-   473		}
-   474	
-   475		/* Find first valid net device. */
-   476		for (i = 0; i < MAX_NETDEV_NUM; i++) {
-   477			if (comm->ndev[i])
-   478				break;
-   479		}
-   480		if (i >= MAX_NETDEV_NUM) {
-   481			dev_err(&pdev->dev, "No valid ethernet port!\n");
-   482			ret = -ENODEV;
-   483			goto out_clk_disable;
-   484		}
-   485	
-   486		/* Save first valid net device */
-   487		ndev = comm->ndev[i];
-   488		platform_set_drvdata(pdev, ndev);
-   489	
-   490		/* Request irq. */
-   491		ret = devm_request_irq(&pdev->dev, irq, spl2sw_ethernet_interrupt,
-   492				       0, ndev->name, ndev);
-   493		if (ret) {
-   494			netdev_err(ndev, "Failed to request irq #%d for \"%s\"!\n",
-   495				   irq, ndev->name);
-   496			goto out_unregister_dev;
-   497		}
-   498	
-   499		/* Initialize mdio bus */
-   500		ret = spl2sw_mdio_init(comm);
-   501		if (ret) {
-   502			netdev_err(ndev, "Failed to initialize mdio bus!\n");
-   503			goto out_unregister_dev;
-   504		}
-   505	
-   506		ret = spl2sw_mac_addr_del_all(comm);
-   507		if (ret)
-   508			goto out_free_mdio;
-   509	
-   510		ret = spl2sw_descs_init(comm);
-   511		if (ret) {
-   512			dev_err(&comm->pdev->dev, "Fail to initialize mac descriptors!\n");
-   513			spl2sw_descs_free(comm);
-   514			goto out_free_mdio;
-   515		}
-   516	
-   517		spl2sw_mac_init(comm);
-   518	
-   519		ret = spl2sw_phy_connect(comm);
-   520		if (ret) {
-   521			netdev_err(ndev, "Failed to connect phy!\n");
-   522			goto out_free_mdio;
-   523		}
-   524	
-   525		netif_napi_add(ndev, &comm->rx_napi, spl2sw_rx_poll, SPL2SW_RX_NAPI_WEIGHT);
-   526		napi_enable(&comm->rx_napi);
-   527		netif_napi_add(ndev, &comm->tx_napi, spl2sw_tx_poll, SPL2SW_TX_NAPI_WEIGHT);
-   528		napi_enable(&comm->tx_napi);
-   529		return 0;
-   530	
-   531	out_free_mdio:
-   532		spl2sw_mdio_remove(comm);
-   533	
-   534	out_unregister_dev:
-   535		for (i = 0; i < MAX_NETDEV_NUM; i++)
-   536			if (comm->ndev[i])
-   537				unregister_netdev(comm->ndev[i]);
-   538	
-   539	out_clk_disable:
-   540		clk_disable_unprepare(comm->clk);
-   541		return ret;
-   542	}
-   543	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

@@ -2,113 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B3FF4F4852
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF034F4825
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380151AbiDEVg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
+        id S1377133AbiDEV1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:27:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381985AbiDEORL (ORCPT
+        with ESMTP id S1382116AbiDEORO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:17:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC3521606B0
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:01:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649163681;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c1Lv+i1PBgFa+gfs5DRpbJ6m0eCPENa4LFWCMUe7Pgk=;
-        b=fxvIN8WwOn87c6DahdYexpN8Ka3Hj0FlsXDrSfK/c34qYlYxSLBwFAeJrzZkQ5ZOaQIWWx
-        efZDThHgyY571qHgLXf9qGU6ouN14q+NUsaojS3s8/ul/M2xM9JkDKsHGqGjtgwc3PvvYp
-        qiD5ytBSPM2f6Bj5gXIKyefuwxdcfKs=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-556--VAqhSEkMXCvVMot_Lv7lQ-1; Tue, 05 Apr 2022 09:01:17 -0400
-X-MC-Unique: -VAqhSEkMXCvVMot_Lv7lQ-1
-Received: by mail-wm1-f70.google.com with SMTP id m3-20020a05600c3b0300b0038e74402cb6so1217631wms.8
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 06:01:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=c1Lv+i1PBgFa+gfs5DRpbJ6m0eCPENa4LFWCMUe7Pgk=;
-        b=V/fkrxMsh6dY8jrYWTQ4+TXSB2ZyzNAQIXjF6fA+U98gVYidO6oWtkGBb/wib5JrOj
-         NWgwt9o5zeWymbVvmbIRSvlhgRxDVmgrWSMEBYadoDssnkzEfQaB1AkQAYvVW5pg5TuJ
-         o9HRvU8dS9ctOmKKZ3YOg2mUGTTDUyY3wuw6NQs1CJqwMqY+7lNXJpNm9zDp4P0NKASN
-         ew71FO3Crqvnyq/pgcSZ3L/vjV743l61wjPi0BzQFa5OAAolfWESBoSCg9cWvQxuaVOq
-         jKls/Trmc2IhuFVJPomTG9Zbj+YJtL/qkJJPvRnxv5flD3oEP0AQXhBkXQ5GS/uJ6XBe
-         2lUA==
-X-Gm-Message-State: AOAM530zgmjsHxxgjsKlmZjgkNfr9fqweKxG5sP9WQDPGTrkneTYsDVa
-        Y/AJvroGZbBUk25PXKN+t+5bosy4KHo6Q+kzD952tjweRmzftlJ+FSSrTmk1iiZEyyLND45xMo0
-        t21YUDDhmerwIfEovcLHVzz3O
-X-Received: by 2002:adf:ba8f:0:b0:1e9:4afb:179b with SMTP id p15-20020adfba8f000000b001e94afb179bmr2726493wrg.57.1649163671583;
-        Tue, 05 Apr 2022 06:01:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxNzI5PD1sS5Vh0+bMeeZnomXZHkWuWTcu1XLTQ/uRuaUVRxMlYuIfdB8IaN0F1ErzpxtndZQ==
-X-Received: by 2002:adf:ba8f:0:b0:1e9:4afb:179b with SMTP id p15-20020adfba8f000000b001e94afb179bmr2726472wrg.57.1649163671377;
-        Tue, 05 Apr 2022 06:01:11 -0700 (PDT)
-Received: from [10.32.181.87] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
-        by smtp.googlemail.com with ESMTPSA id n2-20020adfb742000000b00205eda3b3c1sm12716780wre.34.2022.04.05.06.01.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 06:01:10 -0700 (PDT)
-Message-ID: <6e370d39-fcb6-c158-e5fb-690cd3802150@redhat.com>
-Date:   Tue, 5 Apr 2022 15:01:09 +0200
+        Tue, 5 Apr 2022 10:17:14 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2042.outbound.protection.outlook.com [40.107.223.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830A5160C17;
+        Tue,  5 Apr 2022 06:01:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=i28ISAFOCCx0/+cUsremgSY/kxc8nCtOXYFm6X8bCJefiOpXVEuSPlVqvtFZQEamViFkyah67sfYhhLFiVeyx186T7fKrxn8yZ4c5y22vBNhkNpDmIJYWjFEaowUuDAQSJKbRYj856C3zl6OT89i2j7Sv6Q8udkIMXBAFf2oG79QoKQLuxkTQyfmvl6bH9jW1vAYOS0kfYQNQKJqpdNBzUvt6SxvYOkClL28Dypp+9kt6vS9esLPSVJrPFDielOnIlIESbtkSNU3y9vF8TVgqyAc+K8DRN2lNe8iB2UsE7QnPqqbrYwfBydcd7Wcwy21vB9sTKOdUHvqjs7PYri8EA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=h8i85DJwZtncqEQZ7TEeTjmCCy1RYwOdgyHXoXJi82s=;
+ b=VG9oXDRQCBqK3LE9IC1xiFkuW9rXSQbj8iFd9jJmEzK8qVtaLe695PwLfA8z73VIJfQhKrALEZZRhmwSIVPCBew/Uvhu9XdT2V3XTfbRMSvuzTm6/gk9kOAapCT4YYP4j2TxG4t1PrBWgese4At9WUcYBKbrOVYJ31Ay9kvXdp2+CGM2pULd5yWz+xLjv/c/QVAIu7/sToRsofTQtno+ccmGqWFsOjHgLCMYxfPOkFOHSpA1886DtPhV2iMaOwQR84QiimWNBJq5DladsjmQzuIDB8DwjENqoQfZwNqmIF4yGus4duHMHe0YQZCnY2cU0utbkcpliIvy5aS0Bj2JTg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=h8i85DJwZtncqEQZ7TEeTjmCCy1RYwOdgyHXoXJi82s=;
+ b=RE+g2f83Tb2ESmhK+Rs7D4bbXOpX2h2XtBh5rUtKYkmLaD8HCvtZoZ2NE9XJkJq9n8AC1CH3lK+sDsDMOiqDpU7BuILz4uZVyM6BaIth+++ZMxC/BEqATLJLT+rKrNjTR5QBd/iGK/r4SuEV94oFGxyy02Btp6b+Di5UC8aFP6elWnWMtcqqbIf1P5gZxXAd4BSMAPWodIwdOIKFNhSTLIVjv/9vq1Mqj73tGc/On/Ab3HA+c/smZ/X4+b8Cf24/nst07Lhe/YlcDdXvQHpK+E4HTsRGpwpduqlJ8PFD6PJoeNdSQA3PBK7weErhsMeHAqjLjsNguruasbPHo+NtWA==
+Received: from BN0PR04CA0081.namprd04.prod.outlook.com (2603:10b6:408:ea::26)
+ by DM6PR12MB4975.namprd12.prod.outlook.com (2603:10b6:5:1bd::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Tue, 5 Apr
+ 2022 13:01:34 +0000
+Received: from BN8NAM11FT065.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ea:cafe::46) by BN0PR04CA0081.outlook.office365.com
+ (2603:10b6:408:ea::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31 via Frontend
+ Transport; Tue, 5 Apr 2022 13:01:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ BN8NAM11FT065.mail.protection.outlook.com (10.13.177.63) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5123.19 via Frontend Transport; Tue, 5 Apr 2022 13:01:33 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by DRHQMAIL109.nvidia.com
+ (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 5 Apr
+ 2022 13:01:32 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 5 Apr 2022
+ 06:01:32 -0700
+Received: from sumitg-l4t.nvidia.com (10.127.8.10) by mail.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server id 15.2.986.22 via Frontend
+ Transport; Tue, 5 Apr 2022 06:01:28 -0700
+From:   Sumit Gupta <sumitg@nvidia.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>, <treding@nvidia.com>,
+        <jonathanh@nvidia.com>, <linux-pm@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <ksitaraman@nvidia.com>, <sanjayc@nvidia.com>, <bbasu@nvidia.com>,
+        <sumitg@nvidia.com>
+Subject: [Patch v4 1/4] dt-bindings: Document Tegra CCPLEX Cluster
+Date:   Tue, 5 Apr 2022 18:31:16 +0530
+Message-ID: <20220405130119.4697-2-sumitg@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220405130119.4697-1-sumitg@nvidia.com>
+References: <20220405130119.4697-1-sumitg@nvidia.com>
+X-NVConfidentiality: public
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v5 027/104] KVM: TDX: initialize VM with TDX specific
- parameters
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, isaku.yamahata@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <c3b37cf5c83f92be0e153075d81a80729bf1031e.1646422845.git.isaku.yamahata@intel.com>
- <509fb6fb5c581e6bf14149dff17d7426a6b061f2.camel@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <509fb6fb5c581e6bf14149dff17d7426a6b061f2.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1b993c35-5d0e-4316-149b-08da17046932
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4975:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB4975BEE00401C0AD6347F8A6B9E49@DM6PR12MB4975.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zarHcOz+f+dF4Jx70JmICFPCYnnvo2AmENjgPszZoBD0f5ne09e4WXfRfOU+C1cfFJWbERrGFTA6djkkxOXr1n6VEmkaaBhALNwdO71w7hqz/ZnR0NHSWVFaljvG8Xz2nc4ZrJQYLApTwRTVIyoDWqBa8pWGBRhdQ4YCSG7dRfyn/n67VY6gBMu+W/rRJ2uGM1HPDidvR1FuBH+EoJ9J+DEYbi716kKu+eK71hOXSdbljNY7fxY/pyoKzRz2dQayfbmvOfZy9mzazNbhTCCeYmFUkR0tfoVgzJ7OMPI+QhErN2nrZCRF0rUNymxftKWppD1dDNhhsQaaR1o9ntBrL2ebyFPYd3FMIeiCBzc4DQ1v9yMVvGyh0NqAxXGGyySMGweluK1gXzJ+oW3+3W7RCsPBv6Q1HgPyKRMlB+VMwgkC7e+y2/STZnPXS41oJqb9aGmxdkToMBVDQjUTRlcy9v6i1E8dJ3jrXKn0RlNgoVbzYtO/0P3yUKRlHGFiTvj5zRrt3mdZt3AgqutUurX52x8NjPx396dQ7MLntaQF2dphVRz5hemdWmtL4c/dujsyGnjfQrx+N6+TwaMKRIuAjvn1u7zQ3Nk4/nRXEr0wBZDmzwisoyJOLX3OUx3txMBMILR7+rMmw8tcBB2waK7tdn570GsKy/pH/i3G84JGzP79rebVigDyootXpYwYHddQiaH654v6UX7GaxH7xZFUu2tlq4V0i9YFiYds5Rb/lc5awCkU4v0x2HKwnA5MG3droXv8VdOK/th7LFVf8VPjjOTUHgRgXHULB4jye5BzChudPcceR/V2jguzm6e61Uv+e4nRctpGO13uSl8KZ2bV9mi9jBAFm2m8vkKUKNnMLqc=
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(4326008)(110136005)(70206006)(70586007)(40460700003)(81166007)(426003)(336012)(82310400005)(8676002)(107886003)(2616005)(356005)(8936002)(86362001)(921005)(2906002)(54906003)(508600001)(36860700001)(316002)(7696005)(5660300002)(1076003)(36756003)(6666004)(47076005)(186003)(26005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Apr 2022 13:01:33.6981
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b993c35-5d0e-4316-149b-08da17046932
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT065.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4975
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/31/22 06:55, Kai Huang wrote:
->>   
->> +struct kvm_tdx_init_vm {
->> +	__u32 max_vcpus;
->> +	__u32 tsc_khz;
->> +	__u64 attributes;
->> +	__u64 cpuid;
-> Is it better to append all CPUIDs directly into this structure, perhaps at end
-> of this structure, to make it more consistent with TD_PARAMS?
-> 
-> Also, I think somewhere in commit message or comments we should explain why
-> CPUIDs are passed here (why existing KVM_SET_CUPID2 is not sufficient).
-> 
+The Tegra CPU COMPLEX CLUSTER area contains memory-mapped
+registers that initiate CPU frequency/voltage transitions.
 
-Indeed, it would be easier to use the existing cpuid data in struct 
-kvm_vcpu, because right now there is no way to ensure that they are 
-consistent.
+Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+---
+ .../tegra/nvidia,tegra-ccplex-cluster.yaml    | 52 +++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
 
-Why is KVM_SET_CPUID2 not enough?  Are there any modifications done by 
-KVM that affect the measurement?
-
-Thanks,
-
-Paolo
+diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
+new file mode 100644
+index 000000000000..8c6543b5c0dc
+--- /dev/null
++++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra-ccplex-cluster.yaml
+@@ -0,0 +1,52 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/arm/tegra/nvidia,tegra-ccplex-cluster.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: NVIDIA Tegra CPU COMPLEX CLUSTER area device tree bindings
++
++maintainers:
++  - Sumit Gupta <sumitg@nvidia.com>
++  - Mikko Perttunen <mperttunen@nvidia.com>
++  - Jon Hunter <jonathanh@nvidia.com>
++  - Thierry Reding <thierry.reding@gmail.com>
++
++description: |+
++  The Tegra CPU COMPLEX CLUSTER area contains memory-mapped
++  registers that initiate CPU frequency/voltage transitions.
++
++properties:
++  $nodename:
++    pattern: "ccplex@([0-9a-f]+)$"
++
++  compatible:
++    enum:
++      - nvidia,tegra186-ccplex-cluster
++      - nvidia,tegra234-ccplex-cluster
++
++  reg:
++    maxItems: 1
++
++  nvidia,bpmp:
++    $ref: '/schemas/types.yaml#/definitions/phandle'
++    description: |
++      Specifies the BPMP node that needs to be queried to get
++      operating point data for all CPUs.
++
++additionalProperties: false
++
++required:
++  - compatible
++  - reg
++  - nvidia,bpmp
++  - status
++
++examples:
++  - |
++    ccplex@e000000 {
++      compatible = "nvidia,tegra234-ccplex-cluster";
++      reg = <0x0e000000 0x5ffff>;
++      nvidia,bpmp = <&bpmp>;
++      status = "okay";
++    };
+-- 
+2.17.1
 

@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B356D4F3242
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2114F355C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237590AbiDEI3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48346 "EHLO
+        id S237221AbiDEI3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:29:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234625AbiDEH6m (ORCPT
+        with ESMTP id S234681AbiDEH6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:58:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7062CE13;
-        Tue,  5 Apr 2022 00:53:02 -0700 (PDT)
+        Tue, 5 Apr 2022 03:58:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEBFA94F3;
+        Tue,  5 Apr 2022 00:53:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 73A0A615C3;
-        Tue,  5 Apr 2022 07:53:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88AEBC34110;
-        Tue,  5 Apr 2022 07:53:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7B17B81BB5;
+        Tue,  5 Apr 2022 07:53:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0431DC34110;
+        Tue,  5 Apr 2022 07:53:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145181;
-        bh=8bnR6WJOLbID1I2AS7TV/Ck1iZ8G7QSKCKOQ8lAzl/s=;
+        s=korg; t=1649145187;
+        bh=q+HweTIoMRUDs33SD84jX+bq8GXDyO/WMF9zN2kpg1M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P9Pb8ud7QlYN3WInT3Cc16TdlZIl0cTowEDSyS9PIY/uQM5VQhWo/fzGpOMPfKLCO
-         5bxvnYTKk4JLpDGdTOHo1V8E0AcZ1j8PSQQWQRTwMzldq1aNyItdXe7Fhjkt5puxrG
-         lB0Po27q3WYExASnTnIOHBHFHD0S8tn4LRQhV30Y=
+        b=e3ufrs0JIHFLoBdo5Jee5+BMqjJOjrflFTA3ALTcXUlri/PyGt66oiYBUz0pzhHBy
+         R5iU3ghO7lCecnhaP342e9jEJ3sdSYjwAtObi7Trhw3XDZ1WB1sYeMB5O6HlTY9ZoM
+         AR7zo+E2+iJ6KWEm3LAOBr9vIEMRyBE/DYp3ykGk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bingbu Cao <bingbu.cao@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0315/1126] media: ov2740: identify module after subdev initialisation
-Date:   Tue,  5 Apr 2022 09:17:42 +0200
-Message-Id: <20220405070416.862121724@linuxfoundation.org>
+        stable@vger.kernel.org, "Z. Liu" <liuzx@knownsec.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0317/1126] video: fbdev: matroxfb: set maxvram of vbG200eW to the same as vbG200 to avoid black screen
+Date:   Tue,  5 Apr 2022 09:17:44 +0200
+Message-Id: <20220405070416.920628985@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,52 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bingbu Cao <bingbu.cao@intel.com>
+From: Z. Liu <liuzx@knownsec.com>
 
-[ Upstream commit 54ade663d4bb606e23dbc4e0d49e2e9837dbb33f ]
+[ Upstream commit 62d89a7d49afe46e6b9bbe9e23b004ad848dbde4 ]
 
-The module identifying will try to get the sub device data which
-will be ready after sub device initialisation, so if try to use the
-subdev data to deference the client will cause NULL pointer
-dereference, this patch move the module identification after
-v4l2_i2c_subdev_init() to fix this issue, it also fixes duplicate
-module idendification.
+Start from commit 11be60bd66d54 "matroxfb: add Matrox MGA-G200eW board
+support", when maxvram is 0x800000, monitor become black w/ error message
+said: "The current input timing is not supported by the monitor display.
+Please change your input timing to 1920x1080@60Hz ...".
 
-Fixes: ada2c4f54d0a ("media: ov2740: support device probe in non-zero ACPI D state")
-Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 11be60bd66d5 ("matroxfb: add Matrox MGA-G200eW board support")
+Signed-off-by: Z. Liu <liuzx@knownsec.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/ov2740.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ drivers/video/fbdev/matrox/matroxfb_base.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/ov2740.c b/drivers/media/i2c/ov2740.c
-index bab720c7c1de..d5f0eabf20c6 100644
---- a/drivers/media/i2c/ov2740.c
-+++ b/drivers/media/i2c/ov2740.c
-@@ -1162,6 +1162,7 @@ static int ov2740_probe(struct i2c_client *client)
- 	if (!ov2740)
- 		return -ENOMEM;
- 
-+	v4l2_i2c_subdev_init(&ov2740->sd, client, &ov2740_subdev_ops);
- 	full_power = acpi_dev_state_d0(&client->dev);
- 	if (full_power) {
- 		ret = ov2740_identify_module(ov2740);
-@@ -1171,13 +1172,6 @@ static int ov2740_probe(struct i2c_client *client)
- 		}
- 	}
- 
--	v4l2_i2c_subdev_init(&ov2740->sd, client, &ov2740_subdev_ops);
--	ret = ov2740_identify_module(ov2740);
--	if (ret) {
--		dev_err(&client->dev, "failed to find sensor: %d", ret);
--		return ret;
--	}
--
- 	mutex_init(&ov2740->mutex);
- 	ov2740->cur_mode = &supported_modes[0];
- 	ret = ov2740_init_controls(ov2740);
+diff --git a/drivers/video/fbdev/matrox/matroxfb_base.c b/drivers/video/fbdev/matrox/matroxfb_base.c
+index 5c82611e93d9..236521b19daf 100644
+--- a/drivers/video/fbdev/matrox/matroxfb_base.c
++++ b/drivers/video/fbdev/matrox/matroxfb_base.c
+@@ -1377,7 +1377,7 @@ static struct video_board vbG200 = {
+ 	.lowlevel = &matrox_G100
+ };
+ static struct video_board vbG200eW = {
+-	.maxvram = 0x800000,
++	.maxvram = 0x100000,
+ 	.maxdisplayable = 0x800000,
+ 	.accelID = FB_ACCEL_MATROX_MGAG200,
+ 	.lowlevel = &matrox_G100
 -- 
 2.34.1
 

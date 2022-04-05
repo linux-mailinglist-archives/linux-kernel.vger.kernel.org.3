@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A708C4F2C63
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A13D4F2AC2
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245662AbiDEI4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
+        id S1343623AbiDEI5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234444AbiDEINN (ORCPT
+        with ESMTP id S235555AbiDEIQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:13:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90316E558;
-        Tue,  5 Apr 2022 01:03:04 -0700 (PDT)
+        Tue, 5 Apr 2022 04:16:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1F4B0A;
+        Tue,  5 Apr 2022 01:03:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A13F9B81B92;
-        Tue,  5 Apr 2022 08:03:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD07BC385A2;
-        Tue,  5 Apr 2022 08:03:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0678EB81B18;
+        Tue,  5 Apr 2022 08:03:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CBF7C385A4;
+        Tue,  5 Apr 2022 08:03:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145781;
-        bh=uZbSp/e8RnRyXsLlnieqg+hbOw+fz3mD3VWlhSBXOG4=;
+        s=korg; t=1649145805;
+        bh=0tnG8i1GQZyMXsloxwbwqj8+PZOJC5u1shC/sV5xwUI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KG5yS93sA86uc2j9q5jcr1R9Cg+oXEWO1CpsBsTsxrieyRyAXOflvxnbHW6BqiBRr
-         294E+8OT35stfeZeYgPEKB7B37PHnJ1B9q7FbhlFFrYkfMZdobqZdJ6T7OSIP11df7
-         EhxYjqK2lXROY79+tOMT0C1PgBFhNSnLGrx1FI9E=
+        b=P28+5NtjyB9voUKMtNgmPLEYCmN4heGynhANqT+F1T38ETlUHiFy94OdyjqGPJKJc
+         rd1T7Gn02UfYto2ajKX27HzGulTKGjNToEZVA4AuBIpWf50/7wosecBCVxcvq7I9il
+         mqSxeKSfpf/X5XUnDJrl5bT2pL0MeQg/q6eGaMlE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiao Yang <yangx.jy@fujitsu.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        stable@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0527/1126] RDMA/rxe: Check the last packet by RXE_END_MASK
-Date:   Tue,  5 Apr 2022 09:21:14 +0200
-Message-Id: <20220405070423.099131899@linuxfoundation.org>
+Subject: [PATCH 5.17 0535/1126] libbpf: Fix compilation warning due to mismatched printf format
+Date:   Tue,  5 Apr 2022 09:21:22 +0200
+Message-Id: <20220405070423.334924018@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,52 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiao Yang <yangx.jy@fujitsu.com>
+From: Andrii Nakryiko <andrii@kernel.org>
 
-[ Upstream commit b1377cc37f6bebd57ce8747b7e16163a475af295 ]
+[ Upstream commit dc37dc617fabfb1c3a16d49f5d8cc20e9e3608ca ]
 
-It's wrong to check the last packet by RXE_COMP_MASK because the flag is
-to indicate if responder needs to generate a completion.
+On ppc64le architecture __s64 is long int and requires %ld. Cast to
+ssize_t and use %zd to avoid architecture-specific specifiers.
 
-Fixes: 9fcd67d1772c ("IB/rxe: increment msn only when completing a request")
-Fixes: 8700e3e7c485 ("Soft RoCE driver")
-Link: https://lore.kernel.org/r/20211229034438.1854908-1-yangx.jy@fujitsu.com
-Signed-off-by: Xiao Yang <yangx.jy@fujitsu.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Fixes: 4172843ed4a3 ("libbpf: Fix signedness bug in btf_dump_array_data()")
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20220209063909.1268319-1-andrii@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/sw/rxe/rxe_resp.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ tools/lib/bpf/btf_dump.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
-index e8f435fa6e4d..380934e38923 100644
---- a/drivers/infiniband/sw/rxe/rxe_resp.c
-+++ b/drivers/infiniband/sw/rxe/rxe_resp.c
-@@ -814,6 +814,10 @@ static enum resp_states execute(struct rxe_qp *qp, struct rxe_pkt_info *pkt)
- 			return RESPST_ERR_INVALIDATE_RKEY;
+diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+index 55aed9e398c3..07ebe70d3a30 100644
+--- a/tools/lib/bpf/btf_dump.c
++++ b/tools/lib/bpf/btf_dump.c
+@@ -1869,7 +1869,8 @@ static int btf_dump_array_data(struct btf_dump *d,
+ 	elem_type = skip_mods_and_typedefs(d->btf, elem_type_id, NULL);
+ 	elem_size = btf__resolve_size(d->btf, elem_type_id);
+ 	if (elem_size <= 0) {
+-		pr_warn("unexpected elem size %lld for array type [%u]\n", elem_size, id);
++		pr_warn("unexpected elem size %zd for array type [%u]\n",
++			(ssize_t)elem_size, id);
+ 		return -EINVAL;
  	}
  
-+	if (pkt->mask & RXE_END_MASK)
-+		/* We successfully processed this new request. */
-+		qp->resp.msn++;
-+
- 	/* next expected psn, read handles this separately */
- 	qp->resp.psn = (pkt->psn + 1) & BTH_PSN_MASK;
- 	qp->resp.ack_psn = qp->resp.psn;
-@@ -821,11 +825,9 @@ static enum resp_states execute(struct rxe_qp *qp, struct rxe_pkt_info *pkt)
- 	qp->resp.opcode = pkt->opcode;
- 	qp->resp.status = IB_WC_SUCCESS;
- 
--	if (pkt->mask & RXE_COMP_MASK) {
--		/* We successfully processed this new request. */
--		qp->resp.msn++;
-+	if (pkt->mask & RXE_COMP_MASK)
- 		return RESPST_COMPLETE;
--	} else if (qp_type(qp) == IB_QPT_RC)
-+	else if (qp_type(qp) == IB_QPT_RC)
- 		return RESPST_ACKNOWLEDGE;
- 	else
- 		return RESPST_CLEANUP;
 -- 
 2.34.1
 

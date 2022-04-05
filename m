@@ -2,87 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 249624F5263
+	by mail.lfdr.de (Postfix) with ESMTP id 9667A4F5264
 	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1850132AbiDFCrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43612 "EHLO
+        id S1850144AbiDFCrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1584007AbiDEX5s (ORCPT
+        with ESMTP id S1584021AbiDEX5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 19:57:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B067E15AAFF;
-        Tue,  5 Apr 2022 15:10:54 -0700 (PDT)
+        Tue, 5 Apr 2022 19:57:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A4C1FB525;
+        Tue,  5 Apr 2022 15:10:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F891B81FF1;
-        Tue,  5 Apr 2022 22:10:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2A36FC385A5;
-        Tue,  5 Apr 2022 22:10:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649196613;
-        bh=413WPoWJxK5FtCbvBY6deUOHmDqE/X/cMye095WXlJY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=pzEjk5eE/E87tq1YG8HsafcBcz62Q1wvTmKmIUP+FNmKKuLYixYDn8qiS2XzHLbW/
-         vTltkqQxNSSeAFM7ZfXvjGbtMsAA67hIGf5DsgRRXQ4qL/msicIPLsgEl/57MUzkRT
-         AT/q0aqgiLXv89xPAbBUB6/r7OFpfXA8w8+2dOKX3RTNeYg78NmSPZw3r5xXIFtsuU
-         fxaT46sJ5L0aNYcGVh+NPdKkojXC7a8wCuILGAfK/NkBSuRwIkYl36Y2+c0uBttL3c
-         qOHZMj2H+Ontnsz6Gd5dt+vDMuqtQ+yYgaGuqqAodYdKJSTuBFYSS2GjGkA1C7l7lY
-         XOX4Hxf0/aS8g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0B9A5E85BCB;
-        Tue,  5 Apr 2022 22:10:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E59A61793;
+        Tue,  5 Apr 2022 22:10:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4774BC385A1;
+        Tue,  5 Apr 2022 22:10:47 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ZxKwp451"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1649196645;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OOYm7XyUiyywa+ltOBORW4i/OyBtu6Tfp2IZLFrWre8=;
+        b=ZxKwp451Ilh9HPCZJwq1SZiFBMZPAX92jMGZWyiZCln9HYHPJn6pRK4eNttF7GEewHR6oI
+        FhbABoOpf8AMmYFXr2iUSDRZ3+dmLGAYtfDlaixUgAWiVEjS7KdCDCx4zLnMmM/os7wAXc
+        svbUYkBFzkX3xkuzIBQe8SV3C5TutGE=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 00dc344c (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 5 Apr 2022 22:10:44 +0000 (UTC)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2eb888cf7e7so6683567b3.13;
+        Tue, 05 Apr 2022 15:10:44 -0700 (PDT)
+X-Gm-Message-State: AOAM532U3NuDM1zKiVSdHaAHdFQZUjDSA4pbzLXss9agVq3ueX8LANZh
+        GAt5t7egxbIsQw56E264djBfKPbfaNlb3/ffWMw=
+X-Google-Smtp-Source: ABdhPJwtFgaVts9HYTqyh7F5Fet5c+tDOHQtT9Rzu8KkvMz9vWKjzbefeOz+ZMEqjZ6GCgLyk0wLNd7L7BmWdbWY3mc=
+X-Received: by 2002:a0d:e8c6:0:b0:2eb:1a8e:19c4 with SMTP id
+ r189-20020a0de8c6000000b002eb1a8e19c4mr5145140ywe.404.1649196643486; Tue, 05
+ Apr 2022 15:10:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] bpf, arm64: Sign return address for jited code
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164919661303.14188.16221204846341071276.git-patchwork-notify@kernel.org>
-Date:   Tue, 05 Apr 2022 22:10:13 +0000
-References: <20220402073942.3782529-1-xukuohai@huawei.com>
-In-Reply-To: <20220402073942.3782529-1-xukuohai@huawei.com>
-To:     Xu Kuohai <xukuohai@huawei.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        daniel@iogearbox.net, ast@kernel.org, zlim.lnx@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220328111828.1554086-1-sashal@kernel.org> <20220328111828.1554086-16-sashal@kernel.org>
+ <YkH5mhYokPB87FtE@google.com> <CAHmME9oTiJ5ZTtsecisOp7cLurm+r0gOtPSozgPvr+phDjiACQ@mail.gmail.com>
+In-Reply-To: <CAHmME9oTiJ5ZTtsecisOp7cLurm+r0gOtPSozgPvr+phDjiACQ@mail.gmail.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 6 Apr 2022 00:10:32 +0200
+X-Gmail-Original-Message-ID: <CAHmME9rhwgUyhKG_JvcqAds4oZoYPwPGESo4PRq_oa=biO9RpQ@mail.gmail.com>
+Message-ID: <CAHmME9rhwgUyhKG_JvcqAds4oZoYPwPGESo4PRq_oa=biO9RpQ@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 5.17 16/43] random: use computational hash for
+ entropy extraction
+To:     Sasha Levin <sashal@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>, "Theodore Ts'o" <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Eric Biggers <ebiggers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Greg, Sasha,
 
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+On Tue, Mar 29, 2022 at 7:31 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> I'm inclined to agree with Eric here that you might be a bit careful
+> about autosel'ing 5.18, given how extensive the changes were. In
+> theory they should all be properly sequenced so that nothing breaks,
+> but I'd still be cautious. However, if you want, maybe we can work out
+> some plan for backporting.
 
-On Sat, 2 Apr 2022 03:39:42 -0400 you wrote:
-> Sign return address for jited code when the kernel is built with pointer
-> authentication enabled.
-> 
-> 1. Sign LR with paciasp instruction before LR is pushed to stack. Since
->    paciasp acts like landing pads for function entry, no need to insert
->    bti instruction before paciasp.
-> 
-> [...]
+It's still way too early to backport these, but I'll maintain these
+two branches for a little while:
 
-Here is the summary with links:
-  - [bpf-next,v2] bpf, arm64: Sign return address for jited code
-    https://git.kernel.org/bpf/bpf-next/c/042152c27c3b
+https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/log/?h=stable/linux-5.15.y
+https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/log/?h=stable/linux-5.17.y
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+So that when or if it does ever make sense to do that, it's been
+maintained incrementally while the knowledge is fresh. I'm omitting
+from those branches new feature development, such as vmgenid.
 
-
+Jason

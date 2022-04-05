@@ -2,73 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C53284F4897
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3664F4909
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236699AbiDEVnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
+        id S1389460AbiDEWBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:01:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383908AbiDEPOu (ORCPT
+        with ESMTP id S1384246AbiDEPOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:14:50 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3EB9B176D23
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:27:59 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E8D57D6E;
-        Tue,  5 Apr 2022 06:27:58 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 24DE73F5A1;
-        Tue,  5 Apr 2022 06:27:58 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     perex@perex.cz, tiwai@suse.com
-Cc:     iommu@lists.linux-foundation.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] ALSA: emu10k1: Stop using iommu_present()
-Date:   Tue,  5 Apr 2022 14:27:54 +0100
-Message-Id: <9b506b4a4fe8a7f40aa8bad1aafc82426cf3dd92.1649165210.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.28.0.dirty
+        Tue, 5 Apr 2022 11:14:54 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A0E1AF3E;
+        Tue,  5 Apr 2022 06:29:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=mGMxaI04fi2rfMsZ7XkzQpBo/JY88ZvlXCI1clOCHlY=; b=E36doV9qxOO/pwTzU5pEA7irOI
+        tJ1JtQF9Y1F8a0dDxglHRE1OaiEO3lOuLAwxewZ2ROjyYTOo9rU5PVK2qvEGK/6IXC6IRPr9C9aVx
+        cWQ2mdwVvAomiwtAudK3UtKhhDLprdYHhdeSs4DZN3P/sBGXD745znUGFtm0LfOr5qc8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1nbjF3-00EFiK-8s; Tue, 05 Apr 2022 15:29:05 +0200
+Date:   Tue, 5 Apr 2022 15:29:05 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Grygorii Strashko <grygorii.strashko@ti.com>
+Cc:     Kurt Kanzenbach <kurt@linutronix.de>,
+        Michael Walle <michael@walle.cc>, richardcochran@gmail.com,
+        davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux@armlinux.org.uk, mlichvar@redhat.com, netdev@vger.kernel.org,
+        qiangqing.zhang@nxp.com, vladimir.oltean@nxp.com
+Subject: Re: [PATCH RFC V1 net-next 3/4] net: Let the active time stamping
+ layer be selectable.
+Message-ID: <YkxEIZfA0H8yvrzn@lunn.ch>
+References: <20220104014215.GA20062@hoboy.vegasvil.org>
+ <20220404150508.3945833-1-michael@walle.cc>
+ <YksMvHgXZxA+YZci@lunn.ch>
+ <e5a6f6193b86388ed7a081939b8745be@walle.cc>
+ <877d83rjjc.fsf@kurt>
+ <ad4a8d3efbeaacf241a19bfbca5976f9@walle.cc>
+ <87wng3pyjl.fsf@kurt>
+ <defe77d9-1a41-7112-0ef6-a12aa2b725ab@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <defe77d9-1a41-7112-0ef6-a12aa2b725ab@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-iommu_get_domain_for_dev() is already perfectly happy to return NULL
-if the given device has no IOMMU. Drop the unnecessary check in favour
-of just handling that condition appropriately.
+> > Yes, the limitations described above are exactly one of the reasons to
+> > make the timestamping layer configurable at run time as done by these
+> > patches.
+> 
+> Seems like PHY TS support belongs to HW description category, so could it be device tree material,
+> like generic property defining which layer should do timestamping?
 
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
+Maybe. Device tree is supposed to describe the hardware, not how you
+configure the hardware. Which PTP you using is a configuration choice,
+so i expect some people will argue it should not be in DT.
 
-v2: Get "!domain" condition right
-
- sound/pci/emu10k1/emu10k1_main.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/sound/pci/emu10k1/emu10k1_main.c b/sound/pci/emu10k1/emu10k1_main.c
-index 86cc1ca025e4..3880f359e688 100644
---- a/sound/pci/emu10k1/emu10k1_main.c
-+++ b/sound/pci/emu10k1/emu10k1_main.c
-@@ -1751,11 +1751,8 @@ static void snd_emu10k1_detect_iommu(struct snd_emu10k1 *emu)
- 
- 	emu->iommu_workaround = false;
- 
--	if (!iommu_present(emu->card->dev->bus))
--		return;
--
- 	domain = iommu_get_domain_for_dev(emu->card->dev);
--	if (domain && domain->type == IOMMU_DOMAIN_IDENTITY)
-+	if (!domain || domain->type == IOMMU_DOMAIN_IDENTITY)
- 		return;
- 
- 	dev_notice(emu->card->dev,
--- 
-2.28.0.dirty
-
+   Andrew

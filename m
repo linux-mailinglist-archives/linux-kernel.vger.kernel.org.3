@@ -2,48 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B3A4F3E6A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5904F41E5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383129AbiDEMY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
+        id S1356414AbiDEPMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245024AbiDEIxC (ORCPT
+        with ESMTP id S1346121AbiDEJo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:53:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2838FDBD;
-        Tue,  5 Apr 2022 01:49:45 -0700 (PDT)
+        Tue, 5 Apr 2022 05:44:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D090C6271;
+        Tue,  5 Apr 2022 02:30:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA92460FFB;
-        Tue,  5 Apr 2022 08:49:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C95F6C385A1;
-        Tue,  5 Apr 2022 08:49:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 28FE0B81C9A;
+        Tue,  5 Apr 2022 09:30:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 661F3C385A2;
+        Tue,  5 Apr 2022 09:30:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148584;
-        bh=R4dI9hTV80OQykwVVQtO313Vn6qxHNVLb43uj8YjSb8=;
+        s=korg; t=1649151006;
+        bh=iOJnjeUVU/EsFOXQqOOf9bdL0qJ8z0IlD/iETWPdlfE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i6W9JTQv8eYFLJdy2wgfNLa3/uoIc7FTn1mg/ff81SYqw4QJeBb7XAdgzXwjvcdvE
-         AIkYNOVFPTch/3La3hgQxoCXEoemB6dhHil2IQ29slqafRNp88M1zyR+xGsydHHRaR
-         ETK05zVX4JNsD2G4mgWFrRlL8rpj9HiFw0rKmNC4=
+        b=R4dyMSNpxPP/oygwXsvHikD50yPJvdPf2KfDnWcBWnBVPSSjoUAY7xQUahCtE6Rld
+         FVUEBIA4LcJqBDDpLPqhuQwLn61ClNErrU4CDvIUFPW8dX8kNOilQCW5kTln152E+V
+         uO7rXkmP4rN1x7IAT/vZAb/2xF2H7KS5i8NFDNx0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Mauricio=20V=C3=A1squez?= <mauricio@kinvolk.io>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Song Liu <songliubraving@fb.com>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        "kernelci.org bot" <bot@kernelci.org>,
+        Guenter Roeck <groeck@google.com>,
+        Shuah Khan <shuah@kernel.org>, Borislav Petkov <bp@suse.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0408/1017] bpftool: Fix error check when calling hashmap__new()
-Date:   Tue,  5 Apr 2022 09:22:01 +0200
-Message-Id: <20220405070406.399155518@linuxfoundation.org>
+Subject: [PATCH 5.15 261/913] selftests, x86: fix how check_cc.sh is being invoked
+Date:   Tue,  5 Apr 2022 09:22:03 +0200
+Message-Id: <20220405070347.679866937@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,116 +61,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mauricio Vásquez <mauricio@kinvolk.io>
+From: Guillaume Tucker <guillaume.tucker@collabora.com>
 
-[ Upstream commit 622a5b582cc27d3deedc38fcef68da2972e8e58d ]
+[ Upstream commit ef696f93ed9778d570bd5ac58414421cdd4f1aab ]
 
-hashmap__new() encodes errors with ERR_PTR(), hence it's not valid to
-check the returned pointer against NULL and IS_ERR() has to be used
-instead.
+The $(CC) variable used in Makefiles could contain several arguments
+such as "ccache gcc".  These need to be passed as a single string to
+check_cc.sh, otherwise only the first argument will be used as the
+compiler command.  Without quotes, the $(CC) variable is passed as
+distinct arguments which causes the script to fail to build trivial
+programs.
 
-libbpf_get_error() can't be used in this case as hashmap__new() is not
-part of the public libbpf API and it'll continue using ERR_PTR() after
-libbpf 1.0.
+Fix this by adding quotes around $(CC) when calling check_cc.sh to pass
+the whole string as a single argument to the script even if it has
+several words such as "ccache gcc".
 
-Fixes: 8f184732b60b ("bpftool: Switch to libbpf's hashmap for pinned paths of BPF objects")
-Fixes: 2828d0d75b73 ("bpftool: Switch to libbpf's hashmap for programs/maps in BTF listing")
-Fixes: d6699f8e0f83 ("bpftool: Switch to libbpf's hashmap for PIDs/names references")
-Signed-off-by: Mauricio Vásquez <mauricio@kinvolk.io>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Reviewed-by: Quentin Monnet <quentin@isovalent.com>
-Acked-by: Song Liu <songliubraving@fb.com>
-Link: https://lore.kernel.org/bpf/20220107152620.192327-2-mauricio@kinvolk.io
+Link: https://lkml.kernel.org/r/d0d460d7be0107a69e3c52477761a6fe694c1840.1646991629.git.guillaume.tucker@collabora.com
+Fixes: e9886ace222e ("selftests, x86: Rework x86 target architecture detection")
+Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+Tested-by: "kernelci.org bot" <bot@kernelci.org>
+Reviewed-by: Guenter Roeck <groeck@google.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Borislav Petkov <bp@suse.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/bpf/bpftool/btf.c  | 2 +-
- tools/bpf/bpftool/link.c | 3 ++-
- tools/bpf/bpftool/map.c  | 2 +-
- tools/bpf/bpftool/pids.c | 3 ++-
- tools/bpf/bpftool/prog.c | 2 +-
- 5 files changed, 7 insertions(+), 5 deletions(-)
+ tools/testing/selftests/vm/Makefile  | 6 +++---
+ tools/testing/selftests/x86/Makefile | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index 015d2758f826..4a561ec848c0 100644
---- a/tools/bpf/bpftool/btf.c
-+++ b/tools/bpf/bpftool/btf.c
-@@ -899,7 +899,7 @@ static int do_show(int argc, char **argv)
- 				      equal_fn_for_key_as_id, NULL);
- 	btf_map_table = hashmap__new(hash_fn_for_key_as_id,
- 				     equal_fn_for_key_as_id, NULL);
--	if (!btf_prog_table || !btf_map_table) {
-+	if (IS_ERR(btf_prog_table) || IS_ERR(btf_map_table)) {
- 		hashmap__free(btf_prog_table);
- 		hashmap__free(btf_map_table);
- 		if (fd >= 0)
-diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-index 2c258db0d352..97dec81950e5 100644
---- a/tools/bpf/bpftool/link.c
-+++ b/tools/bpf/bpftool/link.c
-@@ -2,6 +2,7 @@
- /* Copyright (C) 2020 Facebook */
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index acf5eaeef9ff..a7fde142e814 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -50,9 +50,9 @@ TEST_GEN_FILES += split_huge_page_test
+ TEST_GEN_FILES += ksm_tests
  
- #include <errno.h>
-+#include <linux/err.h>
- #include <net/if.h>
- #include <stdio.h>
- #include <unistd.h>
-@@ -306,7 +307,7 @@ static int do_show(int argc, char **argv)
- 	if (show_pinned) {
- 		link_table = hashmap__new(hash_fn_for_key_as_id,
- 					  equal_fn_for_key_as_id, NULL);
--		if (!link_table) {
-+		if (IS_ERR(link_table)) {
- 			p_err("failed to create hashmap for pinned paths");
- 			return -1;
- 		}
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index cae1f1119296..af83ae37d247 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -698,7 +698,7 @@ static int do_show(int argc, char **argv)
- 	if (show_pinned) {
- 		map_table = hashmap__new(hash_fn_for_key_as_id,
- 					 equal_fn_for_key_as_id, NULL);
--		if (!map_table) {
-+		if (IS_ERR(map_table)) {
- 			p_err("failed to create hashmap for pinned paths");
- 			return -1;
- 		}
-diff --git a/tools/bpf/bpftool/pids.c b/tools/bpf/bpftool/pids.c
-index 56b598eee043..7c384d10e95f 100644
---- a/tools/bpf/bpftool/pids.c
-+++ b/tools/bpf/bpftool/pids.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- /* Copyright (C) 2020 Facebook */
- #include <errno.h>
-+#include <linux/err.h>
- #include <stdbool.h>
- #include <stdio.h>
- #include <stdlib.h>
-@@ -101,7 +102,7 @@ int build_obj_refs_table(struct hashmap **map, enum bpf_obj_type type)
- 	libbpf_print_fn_t default_print;
+ ifeq ($(MACHINE),x86_64)
+-CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_32bit_program.c -m32)
+-CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_64bit_program.c)
+-CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_program.c -no-pie)
++CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_program.c -m32)
++CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_64bit_program.c)
++CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_program.c -no-pie)
  
- 	*map = hashmap__new(hash_fn_for_key_as_id, equal_fn_for_key_as_id, NULL);
--	if (!*map) {
-+	if (IS_ERR(*map)) {
- 		p_err("failed to create hashmap for PID references");
- 		return -1;
- 	}
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 6ccd17b8eb56..41ed566e8c73 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -571,7 +571,7 @@ static int do_show(int argc, char **argv)
- 	if (show_pinned) {
- 		prog_table = hashmap__new(hash_fn_for_key_as_id,
- 					  equal_fn_for_key_as_id, NULL);
--		if (!prog_table) {
-+		if (IS_ERR(prog_table)) {
- 			p_err("failed to create hashmap for pinned paths");
- 			return -1;
- 		}
+ TARGETS := protection_keys
+ BINARIES_32 := $(TARGETS:%=%_32)
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index b4142cd1c5c2..02a77056bca3 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -6,9 +6,9 @@ include ../lib.mk
+ .PHONY: all all_32 all_64 warn_32bit_failure clean
+ 
+ UNAME_M := $(shell uname -m)
+-CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
+-CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
+-CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
++CAN_BUILD_I386 := $(shell ./check_cc.sh "$(CC)" trivial_32bit_program.c -m32)
++CAN_BUILD_X86_64 := $(shell ./check_cc.sh "$(CC)" trivial_64bit_program.c)
++CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
+ 
+ TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
+ 			check_initial_reg_state sigreturn iopl ioperm \
 -- 
 2.34.1
 

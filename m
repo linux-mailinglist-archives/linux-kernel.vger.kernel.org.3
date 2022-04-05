@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4872F4F2B53
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 999904F2A57
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 12:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237832AbiDEInY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
+        id S238215AbiDEIn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233032AbiDEIC5 (ORCPT
+        with ESMTP id S233344AbiDEIC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:02:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE83580E3;
-        Tue,  5 Apr 2022 01:00:45 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473EB580FB;
+        Tue,  5 Apr 2022 01:00:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B7C3B81B90;
-        Tue,  5 Apr 2022 08:00:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73FDCC340EE;
-        Tue,  5 Apr 2022 08:00:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B5FEF61668;
+        Tue,  5 Apr 2022 08:00:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAAC5C340EE;
+        Tue,  5 Apr 2022 08:00:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145642;
-        bh=gEk4RkBXFrR/2z0F7FTlWAGPlXH/JhpdoxTHvJntnts=;
+        s=korg; t=1649145648;
+        bh=598LsUvDO51y55921wS+9Yo1s9nm7pmwI2v420neoHM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vTy9t6kJ40JSyerDn/N630ym3xi/pJDjSrXEYgHju5u2SQREJKH2yk9jEDlVU0qRI
-         RY3ZwZy1Leyhm5viUataDPn7fqZ9jYVFo98YhIqfbGbOpoPm9RjZcebzU3dPU56HSz
-         sTfTB+kqQfUL0qh3HZGOUkEew62MlpB3GddNmZso=
+        b=uo+XE9peIGbKw7ZRGgr+ixLapBez0DDFjgMyHxmXdZHk9cBC1t/GIE/rF2mSzZTzG
+         hnoOYxXzXZjB4qj9WLIMHXO8m/ImLn0gD6+KMIFR8pLdEJTF9J8AnH8uwDH+C/aOqJ
+         v1+BlJWFOAwMQOzJwibk0S5vKL+efiFyUqPBAlLo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Robert Foss <robert.foss@linaro.org>,
+        stable@vger.kernel.org, Jesper Dangaard Brouer <brouer@redhat.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Kiran Bhandare <kiranx.bhandare@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0478/1126] drm/bridge: lt9611: Fix an error handling path in lt9611_probe()
-Date:   Tue,  5 Apr 2022 09:20:25 +0200
-Message-Id: <20220405070421.657785788@linuxfoundation.org>
+Subject: [PATCH 5.17 0480/1126] i40e: respect metadata on XSK Rx to skb
+Date:   Tue,  5 Apr 2022 09:20:27 +0200
+Message-Id: <20220405070421.716501077@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,42 +59,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
 
-[ Upstream commit 9987151a90567785beebcbd5c8ac58d05f254137 ]
+[ Upstream commit 6dba29537c0f639b482bd8f8bbd50ab4ae74b48d ]
 
-If lt9611_audio_init() fails, some resources still need to be released
-before returning an error code.
+For now, if the XDP prog returns XDP_PASS on XSK, the metadata will
+be lost as it doesn't get copied to the skb.
 
-Add the missing goto the error handling path.
+Copy it along with the frame headers. Account its size on skb
+allocation, and when copying just treat it as a part of the frame
+and do a pull after to "move" it to the "reserved" zone.
 
-Fixes: 23278bf54afe ("drm/bridge: Introduce LT9611 DSI to HDMI bridge")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/9c20eb74d42f6d4128e58e3e46aa320482472b77.1643468761.git.christophe.jaillet@wanadoo.fr
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+net_prefetch() xdp->data_meta and align the copy size to speed-up
+memcpy() a little and better match i40e_construct_skb().
+
+Fixes: 0a714186d3c0 ("i40e: add AF_XDP zero-copy Rx support")
+Suggested-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Suggested-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+Tested-by: Kiran Bhandare <kiranx.bhandare@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/bridge/lontium-lt9611.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/lontium-lt9611.c b/drivers/gpu/drm/bridge/lontium-lt9611.c
-index dafb1b47c15f..00597eb54661 100644
---- a/drivers/gpu/drm/bridge/lontium-lt9611.c
-+++ b/drivers/gpu/drm/bridge/lontium-lt9611.c
-@@ -1164,7 +1164,11 @@ static int lt9611_probe(struct i2c_client *client,
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+index a449c84fe357..67e9844e2076 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+@@ -241,19 +241,25 @@ bool i40e_alloc_rx_buffers_zc(struct i40e_ring *rx_ring, u16 count)
+ static struct sk_buff *i40e_construct_skb_zc(struct i40e_ring *rx_ring,
+ 					     struct xdp_buff *xdp)
+ {
++	unsigned int totalsize = xdp->data_end - xdp->data_meta;
+ 	unsigned int metasize = xdp->data - xdp->data_meta;
+-	unsigned int datasize = xdp->data_end - xdp->data;
+ 	struct sk_buff *skb;
  
- 	lt9611_enable_hpd_interrupts(lt9611);
- 
--	return lt9611_audio_init(dev, lt9611);
-+	ret = lt9611_audio_init(dev, lt9611);
-+	if (ret)
-+		goto err_remove_bridge;
++	net_prefetch(xdp->data_meta);
 +
-+	return 0;
+ 	/* allocate a skb to store the frags */
+-	skb = __napi_alloc_skb(&rx_ring->q_vector->napi, datasize,
++	skb = __napi_alloc_skb(&rx_ring->q_vector->napi, totalsize,
+ 			       GFP_ATOMIC | __GFP_NOWARN);
+ 	if (unlikely(!skb))
+ 		goto out;
  
- err_remove_bridge:
- 	drm_bridge_remove(&lt9611->bridge);
+-	memcpy(__skb_put(skb, datasize), xdp->data, datasize);
+-	if (metasize)
++	memcpy(__skb_put(skb, totalsize), xdp->data_meta,
++	       ALIGN(totalsize, sizeof(long)));
++
++	if (metasize) {
+ 		skb_metadata_set(skb, metasize);
++		__skb_pull(skb, metasize);
++	}
+ 
+ out:
+ 	xsk_buff_free(xdp);
 -- 
 2.34.1
 

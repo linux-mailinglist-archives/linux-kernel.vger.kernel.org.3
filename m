@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F6484F3DF9
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4336E4F3EA3
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442786AbiDEUHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39768 "EHLO
+        id S1385880AbiDEMjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348751AbiDEJsb (ORCPT
+        with ESMTP id S236742AbiDEJDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:31 -0400
+        Tue, 5 Apr 2022 05:03:34 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E80F48321;
-        Tue,  5 Apr 2022 02:34:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C12D1088;
+        Tue,  5 Apr 2022 01:55:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B04E5B81C6F;
-        Tue,  5 Apr 2022 09:34:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFEA7C385A2;
-        Tue,  5 Apr 2022 09:34:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB163B81BAE;
+        Tue,  5 Apr 2022 08:55:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40090C385A1;
+        Tue,  5 Apr 2022 08:55:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151285;
-        bh=vOzsy4dCO55H8J9nLmLlOgkfuzre8MNWIEBAqKkF684=;
+        s=korg; t=1649148915;
+        bh=H3ecDX8pEltqiGL2hkKufhyYiHFUlZgmKssDWrOOcHw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=id7mDuHaBPj3jy+kQz+6D4o4Rbp+MUzpB2JmbK1y3o58PKo9mVtaW6SvRRqs/Ph2u
-         zELT82oQJl1EH/rbPXZ1Zsitvo6oRvKVcxD58CEVdHww9V6t8ZlkuFHBDYDzxs+D0J
-         iR72GohdFAJnGh47COyWgTrvntTRgeq2XEl7lMx4=
+        b=kTps8JSKf0zlICE5+PXhKUzI9VPAFDycNZ1j3ZIAqORTpWVr6V2rJ+lADolggfV7m
+         /gAs4+Iljr6ULT1MSdbKq662sfSd837ERYrP8PDWQECiU7tACa4Sxo641J2OkxFlf/
+         BytBPRg1xWIigXZX48XF6Lqd/n9RWat8SNtR0EQI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 359/913] ASoC: mediatek: mt8192-mt6359: Fix error handling in mt8192_mt6359_dev_probe
-Date:   Tue,  5 Apr 2022 09:23:41 +0200
-Message-Id: <20220405070350.606451968@linuxfoundation.org>
+Subject: [PATCH 5.16 0510/1017] iwlwifi: mvm: align locking in D3 test debugfs
+Date:   Tue,  5 Apr 2022 09:23:43 +0200
+Message-Id: <20220405070409.438251687@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,73 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Johannes Berg <johannes.berg@intel.com>
 
-[ Upstream commit e45ac7831ff3e2934d58cce319c17c8ec763c95c ]
+[ Upstream commit 59e1221f470c2e5d2f2d4c95153edd577a7071c5 ]
 
-The device_node pointer is returned by of_parse_phandle()  with refcount
-incremented. We should use of_node_put() on it when done.
+Since commit a05829a7222e ("cfg80211: avoid holding the RTNL when
+calling the driver") we're not only holding the RTNL when going
+in and out of suspend, but also the wiphy->mtx. Add that to the
+D3 test debugfs in iwlwifi since it's required for various calls
+to mac80211.
 
-This function only calls of_node_put() in the regular path.
-And it will cause refcount leak in error paths.
-Fix this by calling of_node_put() in error handling too.
-
-Fixes: 4e28491a7a19 ("ASoC: mediatek: mt8192-mt6359: fix device_node leak")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
-Link: https://lore.kernel.org/r/20220308015224.23585-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: a05829a7222e ("cfg80211: avoid holding the RTNL when calling the driver")
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Fixes: a05829a7222e ("cfg80211: avoid holding the RTNL when calling the driver")
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/iwlwifi.20220129105618.fcec0204e162.Ib73bf787ab4d83581de20eb89b1f8dbfcaaad0e3@changeid
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../mt8192/mt8192-mt6359-rt1015-rt5682.c       | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ drivers/net/wireless/intel/iwlwifi/mvm/d3.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-index ab449d0e4e9b..c1d225b49851 100644
---- a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-+++ b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-@@ -1116,8 +1116,10 @@ static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
- 	}
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/d3.c b/drivers/net/wireless/intel/iwlwifi/mvm/d3.c
+index a19f646a324f..75e9776001b8 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/d3.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/d3.c
+@@ -2566,7 +2566,9 @@ static int iwl_mvm_d3_test_open(struct inode *inode, struct file *file)
  
- 	card = (struct snd_soc_card *)of_device_get_match_data(&pdev->dev);
--	if (!card)
--		return -EINVAL;
-+	if (!card) {
-+		ret = -EINVAL;
-+		goto put_platform_node;
-+	}
- 	card->dev = &pdev->dev;
+ 	/* start pseudo D3 */
+ 	rtnl_lock();
++	wiphy_lock(mvm->hw->wiphy);
+ 	err = __iwl_mvm_suspend(mvm->hw, mvm->hw->wiphy->wowlan_config, true);
++	wiphy_unlock(mvm->hw->wiphy);
+ 	rtnl_unlock();
+ 	if (err > 0)
+ 		err = -EINVAL;
+@@ -2622,7 +2624,9 @@ static int iwl_mvm_d3_test_release(struct inode *inode, struct file *file)
+ 	iwl_fw_dbg_read_d3_debug_data(&mvm->fwrt);
  
- 	hdmi_codec = of_parse_phandle(pdev->dev.of_node,
-@@ -1159,20 +1161,24 @@ static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
- 	}
+ 	rtnl_lock();
++	wiphy_lock(mvm->hw->wiphy);
+ 	__iwl_mvm_resume(mvm, true);
++	wiphy_unlock(mvm->hw->wiphy);
+ 	rtnl_unlock();
  
- 	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
--	if (!priv)
--		return -ENOMEM;
-+	if (!priv) {
-+		ret = -ENOMEM;
-+		goto put_hdmi_codec;
-+	}
- 	snd_soc_card_set_drvdata(card, priv);
- 
- 	ret = mt8192_afe_gpio_init(&pdev->dev);
- 	if (ret) {
- 		dev_err(&pdev->dev, "init gpio error %d\n", ret);
--		return ret;
-+		goto put_hdmi_codec;
- 	}
- 
- 	ret = devm_snd_soc_register_card(&pdev->dev, card);
- 
--	of_node_put(platform_node);
-+put_hdmi_codec:
- 	of_node_put(hdmi_codec);
-+put_platform_node:
-+	of_node_put(platform_node);
- 	return ret;
- }
- 
+ 	iwl_mvm_resume_tcm(mvm);
 -- 
 2.34.1
 

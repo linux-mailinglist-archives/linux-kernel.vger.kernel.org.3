@@ -2,43 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9AD4F2AF5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 379BE4F2C62
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242174AbiDEIhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42762 "EHLO
+        id S242309AbiDEIhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235546AbiDEH7u (ORCPT
+        with ESMTP id S235619AbiDEH7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:59:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374E93F8B4;
-        Tue,  5 Apr 2022 00:55:21 -0700 (PDT)
+        Tue, 5 Apr 2022 03:59:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1256462DA;
+        Tue,  5 Apr 2022 00:56:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6B6E615CD;
-        Tue,  5 Apr 2022 07:55:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1A8FC340EE;
-        Tue,  5 Apr 2022 07:55:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B98DCB81B14;
+        Tue,  5 Apr 2022 07:56:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04477C340EE;
+        Tue,  5 Apr 2022 07:56:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145320;
-        bh=/9Zl6SwhKKLl2eqmGV3+M5EBkUz2ZL2+HLu0YTX6/TU=;
+        s=korg; t=1649145374;
+        bh=/OTlw4vlMMjYBWwtu6qbfV515MzJzOYD+TMSCN15hJQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M5yZeWU7ZvhASS2kbkZbGmEiRO1gwxkxxHeQ3l0DRz49+ImVciFBbx51g3Bbkhb53
-         DWK07bEutVSpatQlbK/j7dKLFBt3z9T+2KQGiGhxCr15GbuILf/HV1YVjR7NeGjA4w
-         zihiw46U8dCNOat4kngsIa0lsZxKT0dpLkC9/u7Y=
+        b=NEmASP39m3SFQqe6O+rch6uBy+KB71pZGV+Yc+LLS/USDutp9HAHuuBKAI5dR7uk2
+         p02+qQLEyuegcK2XsX6iFO44pkFUU0I+DL7yKt4DmV9ZUx5GXN7vr88XzNnIoleTRc
+         WRHB6ip6O+fBvajLLdtT/CJZpa42n+W1UpEXgZHw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Borislav Petkov <bp@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0362/1126] ASoC: codecs: wcd938x: fix kcontrol max values
-Date:   Tue,  5 Apr 2022 09:18:29 +0200
-Message-Id: <20220405070418.253807700@linuxfoundation.org>
+Subject: [PATCH 5.17 0380/1126] printk: fix return value of printk.devkmsg __setup handler
+Date:   Tue,  5 Apr 2022 09:18:47 +0200
+Message-Id: <20220405070418.779673685@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,46 +61,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit b0217519236924f77a8382b4004e43ef8fd0dcbb ]
+[ Upstream commit b665eae7a788c5e2bc10f9ac3c0137aa0ad1fc97 ]
 
-set "HPH Type" Kcontrol max value of WCD_MBHC_HPH_STEREO instead of UINT_MAX.
-set "HPHL/R Impedance" Kcontrols max value to INT_MAX instead of UINT_MAX as
-max field is integer type.
+If an invalid option value is used with "printk.devkmsg=<value>",
+it is silently ignored.
+If a valid option value is used, it is honored but the wrong return
+value (0) is used, indicating that the command line option had an
+error and was not handled. This string is not added to init's
+environment strings due to init/main.c::unknown_bootoption()
+checking for a '.' in the boot option string and then considering
+that string to be an "Unused module parameter".
 
-Without this patch amixer for these controls will show -1 as max value to userspace.
+Print a warning message if a bad option string is used.
+Always return 1 from the __setup handler to indicate that the command
+line option has been handled.
 
-Fixes: bcee7ed09b8e ("ASoC: codecs: wcd938x: add Multi Button Headset Control support")
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Link: https://lore.kernel.org/r/20220222183212.11580-8-srinivas.kandagatla@linaro.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 750afe7babd1 ("printk: add kernel parameter to control writes to /dev/kmsg")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Cc: Borislav Petkov <bp@suse.de>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: John Ogness <john.ogness@linutronix.de>
+Reviewed-by: John Ogness <john.ogness@linutronix.de>
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Petr Mladek <pmladek@suse.com>
+Link: https://lore.kernel.org/r/20220228220556.23484-1-rdunlap@infradead.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/wcd938x.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ kernel/printk/printk.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
-index 33d5403d4e62..9ae65cbabb1a 100644
---- a/sound/soc/codecs/wcd938x.c
-+++ b/sound/soc/codecs/wcd938x.c
-@@ -3575,14 +3575,14 @@ static int wcd938x_hph_impedance_get(struct snd_kcontrol *kcontrol,
+diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+index 82abfaf3c2aa..833e407545b8 100644
+--- a/kernel/printk/printk.c
++++ b/kernel/printk/printk.c
+@@ -146,8 +146,10 @@ static int __control_devkmsg(char *str)
+ 
+ static int __init control_devkmsg(char *str)
+ {
+-	if (__control_devkmsg(str) < 0)
++	if (__control_devkmsg(str) < 0) {
++		pr_warn("printk.devkmsg: bad option string '%s'\n", str);
+ 		return 1;
++	}
+ 
+ 	/*
+ 	 * Set sysctl string accordingly:
+@@ -166,7 +168,7 @@ static int __init control_devkmsg(char *str)
+ 	 */
+ 	devkmsg_log |= DEVKMSG_LOG_MASK_LOCK;
+ 
+-	return 0;
++	return 1;
  }
- 
- static const struct snd_kcontrol_new hph_type_detect_controls[] = {
--	SOC_SINGLE_EXT("HPH Type", 0, 0, UINT_MAX, 0,
-+	SOC_SINGLE_EXT("HPH Type", 0, 0, WCD_MBHC_HPH_STEREO, 0,
- 		       wcd938x_get_hph_type, NULL),
- };
- 
- static const struct snd_kcontrol_new impedance_detect_controls[] = {
--	SOC_SINGLE_EXT("HPHL Impedance", 0, 0, UINT_MAX, 0,
-+	SOC_SINGLE_EXT("HPHL Impedance", 0, 0, INT_MAX, 0,
- 		       wcd938x_hph_impedance_get, NULL),
--	SOC_SINGLE_EXT("HPHR Impedance", 0, 1, UINT_MAX, 0,
-+	SOC_SINGLE_EXT("HPHR Impedance", 0, 1, INT_MAX, 0,
- 		       wcd938x_hph_impedance_get, NULL),
- };
+ __setup("printk.devkmsg=", control_devkmsg);
  
 -- 
 2.34.1

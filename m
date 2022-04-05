@@ -2,228 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4EE4F23B9
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C01C4F23B6
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbiDEGz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 02:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33628 "EHLO
+        id S229614AbiDEGy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 02:54:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231184AbiDEGzB (ORCPT
+        with ESMTP id S231180AbiDEGyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 02:55:01 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5440F8FE60;
-        Mon,  4 Apr 2022 23:52:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649141572; x=1680677572;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=R6S4jkz8rJH+vQOPg4Dg3MbNO5ps2IIpCkrCjpQeDxI=;
-  b=Au3+AZkEmxAAk0QdzQz9jMvJCDHORG959UCWhKJKRdSIj3sYI07KCubM
-   +EuiXt2pABGQzk7t+Ltm3+WAweb0Vsx+oFCohuRuvpaqHeKRK6vyIhj2d
-   O2XRIyOuZfgYfZqmnpztftrDBk9rf99UBlhgiB0VeYPVX3Lay+3jc/SHa
-   8YrGrivaoKVJt9S8TW3hbUSx+AqYZ7sf07Yiah+dcTx9Od4wkVpH+9MZ3
-   RqyAa0p0Lb8K+qHowQABhfzsAE+hHPopkQwoETdi4pRDuX4T3l8Tss5kK
-   zR5gCSqN76Ioqm1jVDAMDT7BaYgi/dTVlSDv1gsMh7bVv1FxU8j2OCUZI
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="241264862"
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="241264862"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 23:52:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="657822773"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 04 Apr 2022 23:52:48 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbd3X-0002kg-Gq;
-        Tue, 05 Apr 2022 06:52:47 +0000
-Date:   Tue, 5 Apr 2022 14:52:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     guoren@kernel.org, arnd@arndb.de
-Cc:     kbuild-all@lists.01.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-        Matteo Croce <mcroce@microsoft.com>,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH] csky: Add C based string functions
-Message-ID: <202204051450.UN2k1raL-lkp@intel.com>
-References: <20220404142354.2792428-1-guoren@kernel.org>
+        Tue, 5 Apr 2022 02:54:44 -0400
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85FE8EB4A;
+        Mon,  4 Apr 2022 23:52:46 -0700 (PDT)
+Received: by mail-qt1-f169.google.com with SMTP id c4so9733926qtx.1;
+        Mon, 04 Apr 2022 23:52:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xS9sh+p2XRsClxVSPRroc3YnRbOn46SzHPHvIsqLwCM=;
+        b=2KMJt+uLfxx28f7xoSxHe52Np4I4DM95EoIPkeYev4LUgYR/ecfIqR7WDnGVxEsXDY
+         tr5dNWlgif8+9mq03g5LW7f65LVkrQlLraM/YV3AUof5tPsNoWe6ZejwqaJH806fkTE1
+         fcci/qKc4q0jXPz+mZvjWbcPxuTrtHroWj9sV5FMHjQd/X/QN1sCodf2xxn8HUBmCkt1
+         V/81PbPk8Q1f5z002j34SNnptz1zSNlmv9zJ45iEW9E+UvwlAYV1Mydl25j52tcnbUoT
+         MIgVAt6eNjwIIiNYodp31s7gKLFfKiYMfamHDnObXol3580GPbVPSzPYRLSBoTGnEamG
+         lH7w==
+X-Gm-Message-State: AOAM533J4U4Gsb1sak6CDTR6MBDo7ymFQLBE6618AYQntZEQqsKWXhyC
+        7l7Dzl87bccje37g0SG9rGjpACPgJKRA9Q==
+X-Google-Smtp-Source: ABdhPJzVZGDwj9D3KVfVsQcRSyefQUUMXYe8wYI+bv2lEQWARdBnlOyY+XfqrkX240qATZLtI6SyuA==
+X-Received: by 2002:a05:622a:12:b0:2eb:871f:cdc2 with SMTP id x18-20020a05622a001200b002eb871fcdc2mr1739505qtw.352.1649141565107;
+        Mon, 04 Apr 2022 23:52:45 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id k1-20020ac85fc1000000b002e1c6420790sm11019959qta.40.2022.04.04.23.52.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Apr 2022 23:52:44 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id f23so21677678ybj.7;
+        Mon, 04 Apr 2022 23:52:44 -0700 (PDT)
+X-Received: by 2002:a25:9e89:0:b0:63c:ad37:a5de with SMTP id
+ p9-20020a259e89000000b0063cad37a5demr1478959ybq.342.1649141564401; Mon, 04
+ Apr 2022 23:52:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220404142354.2792428-1-guoren@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAMhUBjmFhqTLBscHHVZ1VTSqrJBT1VEevA+KkjY+y9_ZtdRkMg@mail.gmail.com>
+ <631f03bd-0fdf-9cc8-bf37-89235fb84162@gmx.de> <CAMuHMdUiEo8q9x0C0x5zOM=ax1=S06=s0JjcJvZYD4aMGLmEaQ@mail.gmail.com>
+ <a564f6af-31fa-79a2-72c3-578f2c095b23@gmx.de>
+In-Reply-To: <a564f6af-31fa-79a2-72c3-578f2c095b23@gmx.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 5 Apr 2022 08:52:33 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU=r+TEJmgdnuM+0Mxa0jQ4HjtKT1jzkw_2R+1v9K_9RQ@mail.gmail.com>
+Message-ID: <CAMuHMdU=r+TEJmgdnuM+0Mxa0jQ4HjtKT1jzkw_2R+1v9K_9RQ@mail.gmail.com>
+Subject: =?UTF-8?B?UmU6IFtCVUddIGZiZGV2OiBpNzQwZmI6IERpdmlkZSBlcnJvciB3aGVuIOKAmHZhci0+cA==?=
+        =?UTF-8?B?aXhjbG9ja+KAmSBpcyB6ZXJv?=
+To:     Helge Deller <deller@gmx.de>
+Cc:     Zheyu Ma <zheyuma97@gmail.com>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Helge,
 
-Thank you for the patch! Perhaps something to improve:
+On Tue, Apr 5, 2022 at 8:34 AM Helge Deller <deller@gmx.de> wrote:
+> On 4/4/22 13:46, Geert Uytterhoeven wrote:
+> > On Sun, Apr 3, 2022 at 5:41 PM Helge Deller <deller@gmx.de> wrote:
+> >> On 4/3/22 13:26, Zheyu Ma wrote:
+> >>> I found a bug in the function i740fb_set_par().
+> >>
+> >> Nice catch!
+> >>
+> >>> When the user calls the ioctl system call without setting the value to
+> >>> 'var->pixclock', the driver will throw a divide error.
+> >>>
+> >>> This bug occurs because the driver uses the value of 'var->pixclock'
+> >>> without checking it, as the following code snippet show:
+> >>>
+> >>> if ((1000000 / var->pixclock) > DACSPEED8) {
+> >>>      dev_err(info->device, "requested pixclock %i MHz out of range
+> >>> (max. %i MHz at 8bpp)\n",
+> >>>          1000000 / var->pixclock, DACSPEED8);
+> >>>     return -EINVAL;x
+> >>> }
+> >>>
+> >>> We can fix this by checking the value of 'var->pixclock' in the
+> >>> function i740fb_check_var() similar to commit
+> >>> b36b242d4b8ea178f7fd038965e3cac7f30c3f09, or we should set the lowest
+> >>> supported value when this field is zero.
+> >>> I have no idea about which solution is better.
+> >>
+> >> Me neither.
+> >> I think a solution like commit b36b242d4b8ea178f7fd038965e3cac7f30c3f09
+> >> is sufficient.
+> >>
+> >> Note that i740fb_set_par() is called in i740fb_resume() as well.
+> >> Since this doesn't comes form userspace I think adding a check for
+> >> the return value there isn't necessary.
+> >>
+> >> Would you mind sending a patch like b36b242d4b8ea178f7fd038965e3cac7f30c3f09 ?
+> >
+> > When passed an invalid value, .check_var() is supposed to
+> > round up the invalid to a valid value, if possible.
+>
+> I don't disagree.
+> The main problem probably is: what is the next valid value?
+> This needs to be analyzed on a per-driver base and ideally tested.
+> Right now a division-by-zero is tiggered which is probably more worse.
+>
+> That said, currently I'd prefer to apply the zero-checks patches over
+> any untested patches. It's easy to revert such checks if a better solution
+> becomes available.
+>
+> Thoughts?
 
-[auto build test WARNING on soc/for-next]
-[also build test WARNING on linus/master linux/master v5.18-rc1 next-20220404]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Fair enough. And you're the maintainer ;-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/guoren-kernel-org/csky-Add-C-based-string-functions/20220404-222518
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-config: csky-defconfig (https://download.01.org/0day-ci/archive/20220405/202204051450.UN2k1raL-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/e8231df5e8121c094f8668e0c850381873aa4249
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review guoren-kernel-org/csky-Add-C-based-string-functions/20220404-222518
-        git checkout e8231df5e8121c094f8668e0c850381873aa4249
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=csky SHELL=/bin/bash
+Gr{oetje,eeting}s,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+                        Geert
 
-All warnings (new ones prefixed by >>):
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
->> arch/csky/lib/string.c:30:7: warning: no previous prototype for '__memcpy' [-Wmissing-prototypes]
-      30 | void *__memcpy(void *dest, const void *src, size_t count)
-         |       ^~~~~~~~
->> arch/csky/lib/string.c:94:7: warning: no previous prototype for '__memmove' [-Wmissing-prototypes]
-      94 | void *__memmove(void *dest, const void *src, size_t count)
-         |       ^~~~~~~~~
->> arch/csky/lib/string.c:113:7: warning: no previous prototype for '__memset' [-Wmissing-prototypes]
-     113 | void *__memset(void *s, int c, size_t count)
-         |       ^~~~~~~~
-
-
-vim +/__memcpy +30 arch/csky/lib/string.c
-
-    29	
-  > 30	void *__memcpy(void *dest, const void *src, size_t count)
-    31	{
-    32		union const_types s = { .as_u8 = src };
-    33		union types d = { .as_u8 = dest };
-    34		int distance = 0;
-    35	
-    36		if (count < MIN_THRESHOLD)
-    37			goto copy_remainder;
-    38	
-    39		/* Copy a byte at time until destination is aligned. */
-    40		for (; d.as_uptr & WORD_MASK; count--)
-    41			*d.as_u8++ = *s.as_u8++;
-    42	
-    43		distance = s.as_uptr & WORD_MASK;
-    44	
-    45		if (distance) {
-    46			unsigned long last, next;
-    47	
-    48			/*
-    49			 * s is distance bytes ahead of d, and d just reached
-    50			 * the alignment boundary. Move s backward to word align it
-    51			 * and shift data to compensate for distance, in order to do
-    52			 * word-by-word copy.
-    53			 */
-    54			s.as_u8 -= distance;
-    55	
-    56			next = s.as_ulong[0];
-    57			for (; count >= BYTES_LONG; count -= BYTES_LONG) {
-    58				last = next;
-    59				next = s.as_ulong[1];
-    60	
-    61				d.as_ulong[0] = last >> (distance * 8) |
-    62					next << ((BYTES_LONG - distance) * 8);
-    63	
-    64				d.as_ulong++;
-    65				s.as_ulong++;
-    66			}
-    67	
-    68			/* Restore s with the original offset. */
-    69			s.as_u8 += distance;
-    70		} else {
-    71			/*
-    72			 * If the source and dest lower bits are the same, do a simple
-    73			 * 32/64 bit wide copy.
-    74			 */
-    75			for (; count >= BYTES_LONG; count -= BYTES_LONG)
-    76				*d.as_ulong++ = *s.as_ulong++;
-    77		}
-    78	
-    79	copy_remainder:
-    80		while (count--)
-    81			*d.as_u8++ = *s.as_u8++;
-    82	
-    83		return dest;
-    84	}
-    85	EXPORT_SYMBOL(__memcpy);
-    86	
-    87	void *memcpy(void *dest, const void *src, size_t count) __weak __alias(__memcpy);
-    88	EXPORT_SYMBOL(memcpy);
-    89	
-    90	/*
-    91	 * Simply check if the buffer overlaps an call memcpy() in case,
-    92	 * otherwise do a simple one byte at time backward copy.
-    93	 */
-  > 94	void *__memmove(void *dest, const void *src, size_t count)
-    95	{
-    96		if (dest < src || src + count <= dest)
-    97			return memcpy(dest, src, count);
-    98	
-    99		if (dest > src) {
-   100			const char *s = src + count;
-   101			char *tmp = dest + count;
-   102	
-   103			while (count--)
-   104				*--tmp = *--s;
-   105		}
-   106		return dest;
-   107	}
-   108	EXPORT_SYMBOL(__memmove);
-   109	
-   110	void *memmove(void *dest, const void *src, size_t count) __weak __alias(__memmove);
-   111	EXPORT_SYMBOL(memmove);
-   112	
- > 113	void *__memset(void *s, int c, size_t count)
-   114	{
-   115		union types dest = { .as_u8 = s };
-   116	
-   117		if (count >= MIN_THRESHOLD) {
-   118			unsigned long cu = (unsigned long)c;
-   119	
-   120			/* Compose an ulong with 'c' repeated 4/8 times */
-   121			cu |= cu << 8;
-   122			cu |= cu << 16;
-   123			/* Suppress warning on 32 bit machines */
-   124			cu |= (cu << 16) << 16;
-   125	
-   126			for (; count && dest.as_uptr & WORD_MASK; count--)
-   127				*dest.as_u8++ = c;
-   128	
-   129			/* Copy using the largest size allowed */
-   130			for (; count >= BYTES_LONG; count -= BYTES_LONG)
-   131				*dest.as_ulong++ = cu;
-   132		}
-   133	
-   134		/* copy the remainder */
-   135		while (count--)
-   136			*dest.as_u8++ = c;
-   137	
-   138		return s;
-   139	}
-   140	EXPORT_SYMBOL(__memset);
-   141	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003D84F2EE4
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F544F315A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346950AbiDEJpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:45:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
+        id S240737AbiDEJGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238750AbiDEITV (ORCPT
+        with ESMTP id S238765AbiDEITW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:19:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1296072479;
-        Tue,  5 Apr 2022 01:09:26 -0700 (PDT)
+        Tue, 5 Apr 2022 04:19:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436D672E13;
+        Tue,  5 Apr 2022 01:09:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AEB4FB81A37;
-        Tue,  5 Apr 2022 08:09:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 198EFC385A1;
-        Tue,  5 Apr 2022 08:09:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C759460A67;
+        Tue,  5 Apr 2022 08:09:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D70E8C385A0;
+        Tue,  5 Apr 2022 08:09:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146163;
-        bh=VKULRthVlARqIBKJxJT2Bjr2YzjzP/RKQZuE96zqOAA=;
+        s=korg; t=1649146166;
+        bh=CSM//Rz3PDHvzk+BYq71+X+1Jm1t0/cBCElyGnnl1/g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N3ixLPA76aNDldICDPNfkPBxrET5DdzIBHzNvDflW0qb06jbjJRAHckArjg/ssq1o
-         u0FNluG7NeGn3C8+pcn/e8N3NdGKIY8xoU56a1O1u5vyOlMrEyyAzFw6Pidqx3Ww79
-         AnrvUoMp3B/Fa5n7gbV9qzb9kq1Xu9m5XssWfIbs=
+        b=eGmMHYf9v1NM6z2AiHQV+PSdWuLp0A9BYmNQDKpto5pChmsZK2iRSv7pPeGffGy1T
+         WgFoKEBt+8BVsiy4V4o8uxd0P/nW6SMQ+/BkJEUlNkPEFSJJUyTU7qXElVgUo1LqTl
+         5pDis95WgJrvO8TV0tnWeCFLLx/Fj9W1SemjNEDI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@corigine.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0664/1126] samples/bpf, xdpsock: Fix race when running for fix duration of time
-Date:   Tue,  5 Apr 2022 09:23:31 +0200
-Message-Id: <20220405070427.118455998@linuxfoundation.org>
+Subject: [PATCH 5.17 0665/1126] USB: storage: ums-realtek: fix error code in rts51x_read_mem()
+Date:   Tue,  5 Apr 2022 09:23:32 +0200
+Message-Id: <20220405070427.147673909@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -57,68 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niklas Söderlund <niklas.soderlund@corigine.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 8fa42d78f6354bb96ad3a079dcbef528ca9fa9e0 ]
+[ Upstream commit b07cabb8361dc692522538205552b1b9dab134be ]
 
-When running xdpsock for a fix duration of time before terminating
-using --duration=<n>, there is a race condition that may cause xdpsock
-to terminate immediately.
+The rts51x_read_mem() function should return negative error codes.
+Currently if the kmalloc() fails it returns USB_STOR_TRANSPORT_ERROR (3)
+which is treated as success by the callers.
 
-When running for a fixed duration of time the check to determine when to
-terminate execution is in is_benchmark_done() and is being executed in
-the context of the poller thread,
-
-    if (opt_duration > 0) {
-            unsigned long dt = (get_nsecs() - start_time);
-
-            if (dt >= opt_duration)
-                    benchmark_done = true;
-    }
-
-However start_time is only set after the poller thread have been
-created. This leaves a small window when the poller thread is starting
-and calls is_benchmark_done() for the first time that start_time is not
-yet set. In that case start_time have its initial value of 0 and the
-duration check fails as it do not correlate correctly for the
-applications start time and immediately sets benchmark_done which in
-turn terminates the xdpsock application.
-
-Fix this by setting start_time before creating the poller thread.
-
-Fixes: d3f11b018f6c ("samples/bpf: xdpsock: Add duration option to specify how long to run")
-Signed-off-by: Niklas Söderlund <niklas.soderlund@corigine.com>
-Signed-off-by: Simon Horman <simon.horman@corigine.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20220315102948.466436-1-niklas.soderlund@corigine.com
+Fixes: 065e60964e29 ("ums_realtek: do not use stack memory for DMA")
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/20220304073504.GA26464@kili
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- samples/bpf/xdpsock_user.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/usb/storage/realtek_cr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
-index aa50864e4415..9f3446af50ce 100644
---- a/samples/bpf/xdpsock_user.c
-+++ b/samples/bpf/xdpsock_user.c
-@@ -1984,15 +1984,15 @@ int main(int argc, char **argv)
+diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
+index 3789698d9d3c..0c423916d7bf 100644
+--- a/drivers/usb/storage/realtek_cr.c
++++ b/drivers/usb/storage/realtek_cr.c
+@@ -365,7 +365,7 @@ static int rts51x_read_mem(struct us_data *us, u16 addr, u8 *data, u16 len)
  
- 	setlocale(LC_ALL, "");
+ 	buf = kmalloc(len, GFP_NOIO);
+ 	if (buf == NULL)
+-		return USB_STOR_TRANSPORT_ERROR;
++		return -ENOMEM;
  
-+	prev_time = get_nsecs();
-+	start_time = prev_time;
-+
- 	if (!opt_quiet) {
- 		ret = pthread_create(&pt, NULL, poller, NULL);
- 		if (ret)
- 			exit_with_error(ret);
- 	}
+ 	usb_stor_dbg(us, "addr = 0x%x, len = %d\n", addr, len);
  
--	prev_time = get_nsecs();
--	start_time = prev_time;
--
- 	/* Configure sched priority for better wake-up accuracy */
- 	memset(&schparam, 0, sizeof(schparam));
- 	schparam.sched_priority = opt_schprio;
 -- 
 2.34.1
 

@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 826FE4F49BA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 628264F4E4C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444614AbiDEWVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
+        id S1588666AbiDFAQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354038AbiDEKLD (ORCPT
+        with ESMTP id S242983AbiDEKfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:11:03 -0400
+        Tue, 5 Apr 2022 06:35:23 -0400
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DE14EA0E;
-        Tue,  5 Apr 2022 02:56:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552015159C;
+        Tue,  5 Apr 2022 03:21:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BDC49CE1C6C;
-        Tue,  5 Apr 2022 09:56:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7306C385A1;
-        Tue,  5 Apr 2022 09:56:53 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C1D0DCE1C9D;
+        Tue,  5 Apr 2022 10:21:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE301C385A1;
+        Tue,  5 Apr 2022 10:21:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152614;
-        bh=MqcuQlCLSDPmfpd9nc6ZNmdw5gMlElT4C8r6bpkHERc=;
+        s=korg; t=1649154071;
+        bh=GJWTx2va9kVPJ+UsHarwUFYycQHMaT1jG3zkI1xGkhM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hDGnKxYf4Yl/f4aVFRlDg/g5VLs+K3Sk0r5qqISgbfB2rC2S1TR6oDATyOi1vs/iO
-         2TqZ8yBnVdMFqZzA6wq1V7CzaMiRFMWJQRkpUCXKhv/K6QLD0Wd/JIMCWYO5e5qu1N
-         n4kLHAl2SrHwy8oD1S1XRVRawk3SKLA5SUfHzWbU=
+        b=q55aI/fAz+Fx406NumGvvgsXOg9L4mTrGSdLnUHK5xs9/8pFzFR6HH8g8b7+PEb5z
+         Sgle4GO3KJBTknA3/FOCg2WO1RWgZuQGbbmR2sl5DbZswBhQfW7b5bK13ZAWUaGEN0
+         PBz0DJobBFjeAFgFX0/e7kE8ymE3FDfEufo5Br6w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guangbin Huang <huangguangbin2@huawei.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH 5.15 841/913] net: hns3: fix software vlan talbe of vlan 0 inconsistent with hardware
-Date:   Tue,  5 Apr 2022 09:31:43 +0200
-Message-Id: <20220405070405.038514426@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 410/599] clk: loongson1: Terminate clk_div_table with sentinel element
+Date:   Tue,  5 Apr 2022 09:31:44 +0200
+Message-Id: <20220405070311.033626747@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +57,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guangbin Huang <huangguangbin2@huawei.com>
+From: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
 
-commit 7ed258f12ec5ce855f15cdfb5710361dc82fe899 upstream.
+[ Upstream commit 3eb00f89162e80083dfcaa842468b510462cfeaa ]
 
-When user delete vlan 0, as driver will not delete vlan 0 for hardware in
-function hclge_set_vlan_filter_hw(), so vlan 0 in software vlan talbe should
-not be deleted.
+In order that the end of a clk_div_table can be detected, it must be
+terminated with a sentinel element (.div = 0).
 
-Fixes: fe4144d47eef ("net: hns3: sync VLAN filter entries when kill VLAN ID failed")
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
+Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
+Link: https://lore.kernel.org/r/20220218000922.134857-3-j.neuschaefer@gmx.net
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/clk/loongson1/clk-loongson1c.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-@@ -10595,11 +10595,11 @@ int hclge_set_vlan_filter(struct hnae3_h
- 	}
+diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loongson1/clk-loongson1c.c
+index 703f87622cf5..1ebf740380ef 100644
+--- a/drivers/clk/loongson1/clk-loongson1c.c
++++ b/drivers/clk/loongson1/clk-loongson1c.c
+@@ -37,6 +37,7 @@ static const struct clk_div_table ahb_div_table[] = {
+ 	[1] = { .val = 1, .div = 4 },
+ 	[2] = { .val = 2, .div = 3 },
+ 	[3] = { .val = 3, .div = 3 },
++	[4] = { /* sentinel */ }
+ };
  
- 	if (!ret) {
--		if (is_kill)
--			hclge_rm_vport_vlan_table(vport, vlan_id, false);
--		else
-+		if (!is_kill)
- 			hclge_add_vport_vlan_table(vport, vlan_id,
- 						   writen_to_tbl);
-+		else if (is_kill && vlan_id != 0)
-+			hclge_rm_vport_vlan_table(vport, vlan_id, false);
- 	} else if (is_kill) {
- 		/* when remove hw vlan filter failed, record the vlan id,
- 		 * and try to remove it from hw later, to be consistence
+ void __init ls1x_clk_init(void)
+-- 
+2.34.1
+
 
 

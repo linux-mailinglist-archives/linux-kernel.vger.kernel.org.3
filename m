@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563B24F4F94
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F4FF4F50DF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1838614AbiDFAz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
+        id S1843744AbiDFBly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244650AbiDEKjF (ORCPT
+        with ESMTP id S1343769AbiDEKjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:39:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6024CA205E;
-        Tue,  5 Apr 2022 03:24:14 -0700 (PDT)
+        Tue, 5 Apr 2022 06:39:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B22C78;
+        Tue,  5 Apr 2022 03:24:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B09DE617CF;
-        Tue,  5 Apr 2022 10:24:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE60AC385A0;
-        Tue,  5 Apr 2022 10:24:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6D138B81C8A;
+        Tue,  5 Apr 2022 10:24:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC436C385A0;
+        Tue,  5 Apr 2022 10:24:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154253;
-        bh=Ytr58gnACPtIgX8wj6A+Rgu50Y/LfhHdm8jAbP6A5yc=;
+        s=korg; t=1649154270;
+        bh=c21vQ3R+8GL+5QHmo2cBGWmdKu6Rc/xJc0zSQJrrqF0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U/LJATG/xKwGVkj2uZroUhu9977m7Y+ijMbfjaz5X0BsXmIFNEQ97nmkUjgP4p5MF
-         Tn4GDopBdmPx6iJMpVRw4QbbW6AQzQx+/S7mVITmXAC0Q1i8/xo9VP82O8RfZv7pka
-         iOcW+XpY/6B7HU4o1dTyEJ0KeIe4+kKd6Hy1ZQi0=
+        b=PCDoW+YtmyStHEjAZJDVhzjcnD/hn+UswDik8B2YNRYZbQ41RJKApFKvJdpWDAH9v
+         p2ZTTdjRi5v4fIJVlu66rkjgM5lEiKmmusAC67j6VMDlSXyPn7dZBEyaj4NPEGHXje
+         8bSxaRjjna5FCMSH6jDkE+gwPwXoQesMRcrMlRDg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chen Jingwen <chenjingwen6@huawei.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.10 513/599] powerpc/kasan: Fix early region not updated correctly
-Date:   Tue,  5 Apr 2022 09:33:27 +0200
-Message-Id: <20220405070314.102871212@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Quinn Tran <qutran@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.10 518/599] scsi: qla2xxx: Fix scheduling while atomic
+Date:   Tue,  5 Apr 2022 09:33:32 +0200
+Message-Id: <20220405070314.253954520@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -55,86 +57,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen Jingwen <chenjingwen6@huawei.com>
+From: Quinn Tran <qutran@marvell.com>
 
-commit dd75080aa8409ce10d50fb58981c6b59bf8707d3 upstream.
+commit afd438ff874ca40b74321b3fa19bd61adfd7ca0c upstream.
 
-The shadow's page table is not updated when PTE_RPN_SHIFT is 24
-and PAGE_SHIFT is 12. It not only causes false positives but
-also false negative as shown the following text.
+The driver makes a call into midlayer (fc_remote_port_delete) which can put
+the thread to sleep. The thread that originates the call is in interrupt
+context. The combination of the two trigger a crash. Schedule the call in
+non-interrupt context where it is more safe.
 
-Fix it by bringing the logic of kasan_early_shadow_page_entry here.
+kernel: BUG: scheduling while atomic: swapper/7/0/0x00010000
+kernel: Call Trace:
+kernel:  <IRQ>
+kernel:  dump_stack+0x66/0x81
+kernel:  __schedule_bug.cold.90+0x5/0x1d
+kernel:  __schedule+0x7af/0x960
+kernel:  schedule+0x28/0x80
+kernel:  schedule_timeout+0x26d/0x3b0
+kernel:  wait_for_completion+0xb4/0x140
+kernel:  ? wake_up_q+0x70/0x70
+kernel:  __wait_rcu_gp+0x12c/0x160
+kernel:  ? sdev_evt_alloc+0xc0/0x180 [scsi_mod]
+kernel:  synchronize_sched+0x6c/0x80
+kernel:  ? call_rcu_bh+0x20/0x20
+kernel:  ? __bpf_trace_rcu_invoke_callback+0x10/0x10
+kernel:  sdev_evt_alloc+0xfd/0x180 [scsi_mod]
+kernel:  starget_for_each_device+0x85/0xb0 [scsi_mod]
+kernel:  ? scsi_init_io+0x360/0x3d0 [scsi_mod]
+kernel:  scsi_init_io+0x388/0x3d0 [scsi_mod]
+kernel:  device_for_each_child+0x54/0x90
+kernel:  fc_remote_port_delete+0x70/0xe0 [scsi_transport_fc]
+kernel:  qla2x00_schedule_rport_del+0x62/0xf0 [qla2xxx]
+kernel:  qla2x00_mark_device_lost+0x9c/0xd0 [qla2xxx]
+kernel:  qla24xx_handle_plogi_done_event+0x55f/0x570 [qla2xxx]
+kernel:  qla2x00_async_login_sp_done+0xd2/0x100 [qla2xxx]
+kernel:  qla24xx_logio_entry+0x13a/0x3c0 [qla2xxx]
+kernel:  qla24xx_process_response_queue+0x306/0x400 [qla2xxx]
+kernel:  qla24xx_msix_rsp_q+0x3f/0xb0 [qla2xxx]
+kernel:  __handle_irq_event_percpu+0x40/0x180
+kernel:  handle_irq_event_percpu+0x30/0x80
+kernel:  handle_irq_event+0x36/0x60
 
-1. False Positive:
-==================================================================
-BUG: KASAN: vmalloc-out-of-bounds in pcpu_alloc+0x508/0xa50
-Write of size 16 at addr f57f3be0 by task swapper/0/1
-
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.15.0-12267-gdebe436e77c7 #1
-Call Trace:
-[c80d1c20] [c07fe7b8] dump_stack_lvl+0x4c/0x6c (unreliable)
-[c80d1c40] [c02ff668] print_address_description.constprop.0+0x88/0x300
-[c80d1c70] [c02ff45c] kasan_report+0x1ec/0x200
-[c80d1cb0] [c0300b20] kasan_check_range+0x160/0x2f0
-[c80d1cc0] [c03018a4] memset+0x34/0x90
-[c80d1ce0] [c0280108] pcpu_alloc+0x508/0xa50
-[c80d1d40] [c02fd7bc] __kmem_cache_create+0xfc/0x570
-[c80d1d70] [c0283d64] kmem_cache_create_usercopy+0x274/0x3e0
-[c80d1db0] [c2036580] init_sd+0xc4/0x1d0
-[c80d1de0] [c00044a0] do_one_initcall+0xc0/0x33c
-[c80d1eb0] [c2001624] kernel_init_freeable+0x2c8/0x384
-[c80d1ef0] [c0004b14] kernel_init+0x24/0x170
-[c80d1f10] [c001b26c] ret_from_kernel_thread+0x5c/0x64
-
-Memory state around the buggy address:
- f57f3a80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- f57f3b00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->f57f3b80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-                                               ^
- f57f3c00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- f57f3c80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-==================================================================
-
-2. False Negative (with KASAN tests):
-==================================================================
-Before fix:
-    ok 45 - kmalloc_double_kzfree
-    # vmalloc_oob: EXPECTATION FAILED at lib/test_kasan.c:1039
-    KASAN failure expected in "((volatile char *)area)[3100]", but none occurred
-    not ok 46 - vmalloc_oob
-    not ok 1 - kasan
-
-==================================================================
-After fix:
-    ok 1 - kasan
-
-Fixes: cbd18991e24fe ("powerpc/mm: Fix an Oops in kasan_mmu_init()")
-Cc: stable@vger.kernel.org # 5.4.x
-Signed-off-by: Chen Jingwen <chenjingwen6@huawei.com>
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20211229035226.59159-1-chenjingwen6@huawei.com
+Link: https://lore.kernel.org/r/20220110050218.3958-7-njavali@marvell.com
+Cc: stable@vger.kernel.org
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Signed-off-by: Quinn Tran <qutran@marvell.com>
+Signed-off-by: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/mm/kasan/kasan_init_32.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/scsi/qla2xxx/qla_init.c |    7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
---- a/arch/powerpc/mm/kasan/kasan_init_32.c
-+++ b/arch/powerpc/mm/kasan/kasan_init_32.c
-@@ -83,13 +83,12 @@ void __init
- kasan_update_early_region(unsigned long k_start, unsigned long k_end, pte_t pte)
- {
- 	unsigned long k_cur;
--	phys_addr_t pa = __pa(kasan_early_shadow_page);
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -2114,12 +2114,7 @@ qla24xx_handle_plogi_done_event(struct s
+ 		ql_dbg(ql_dbg_disc, vha, 0x20eb, "%s %d %8phC cmd error %x\n",
+ 		    __func__, __LINE__, ea->fcport->port_name, ea->data[1]);
  
- 	for (k_cur = k_start; k_cur != k_end; k_cur += PAGE_SIZE) {
- 		pmd_t *pmd = pmd_off_k(k_cur);
- 		pte_t *ptep = pte_offset_kernel(pmd, k_cur);
- 
--		if ((pte_val(*ptep) & PTE_RPN_MASK) != pa)
-+		if (pte_page(*ptep) != virt_to_page(lm_alias(kasan_early_shadow_page)))
- 			continue;
- 
- 		__set_pte_at(&init_mm, k_cur, ptep, pte, 0);
+-		ea->fcport->flags &= ~FCF_ASYNC_SENT;
+-		qla2x00_set_fcport_disc_state(ea->fcport, DSC_LOGIN_FAILED);
+-		if (ea->data[1] & QLA_LOGIO_LOGIN_RETRIED)
+-			set_bit(RELOGIN_NEEDED, &vha->dpc_flags);
+-		else
+-			qla2x00_mark_device_lost(vha, ea->fcport, 1);
++		qlt_schedule_sess_for_deletion(ea->fcport);
+ 		break;
+ 	case MBS_LOOP_ID_USED:
+ 		/* data[1] = IO PARAM 1 = nport ID  */
 
 

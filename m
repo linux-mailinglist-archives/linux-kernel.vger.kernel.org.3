@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 340A74F5262
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C3A4F525A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1850118AbiDFCrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46908 "EHLO
+        id S1573070AbiDFCoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1580004AbiDEXdb (ORCPT
+        with ESMTP id S1579935AbiDEXd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 19:33:31 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802C31107EC
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 14:54:21 -0700 (PDT)
+        Tue, 5 Apr 2022 19:33:27 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07BD9BB99
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 14:53:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649195661; x=1680731661;
+  t=1649195617; x=1680731617;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=NGvTMnGPeUwzl4kl14u9lqcQdPSOq/O+lm8BndXEPHo=;
-  b=jL2JpdBm2j/4Zk0M6iT1tw1eHeZXLodKt1JBJNDpNIT2G9zARy8D+FPT
-   vOqADFEnLChzMpmm9htsp6603ksbn/0GFD06Q4Oj+3gg9uZ06ebzU3vyj
-   l7PSweUjkPeGc+rW/0/fV61kB9GQzWhszqPHmP5ZnIi7pQeQVZN+wkmt3
-   wvT5hGmMGuHa9tU6WzXZQ7/2kmH/oTnLfIEbMKBm0ig0SYBPsRryf+ajO
-   hrfrp1Sl9tsJuYiHGb/NXiIHbtrFdvNMjgwtkdpmKiMk+ig7A7CUJKWSO
-   1uwazPr1burQMFrGUta+hB2ZddgtndaCk6eJ+8cZ/Qg0PvGb5yTUHyWhj
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="260568083"
+  bh=Oa9GI9H4eFbsYCh9+hKgLC/hdmybikWHayQ+lt0i4rE=;
+  b=fTsdlgT2wpTbjFB1ZNReUsj5kYQRZ1I4p0ke9mQQ3B9STC7RpFtzzru9
+   d2tkNtTfYoWA4Wn7a1op0Dw90qCJA4NXYR7Wh3e62BxL3OPGB0VfPGd3Y
+   WJJRCxtfZUAW9DkwukiOAN/3vV8670xMgZoR4qRJsJts3uXZQnSxNdvB8
+   GVYQBc8RqKiZJpRuCF71bXgJQu1InNWtk1lysBpqTvFryEkuKrkkMVuCF
+   WrsLA63wVGNXEFMDee1osU77qFMqzGrf6I1nsS8yYi1ZsvMT+qV0rzPYQ
+   0KxZBG8PArkvg08OR/zCRDV5hwCvwz+lO9u53pDsGKjOpx9lqK6L9s3Pb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="241457812"
 X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="260568083"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 14:53:37 -0700
+   d="scan'208";a="241457812"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 14:53:37 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="523643363"
+   d="scan'208";a="588104292"
 Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 05 Apr 2022 14:53:35 -0700
+  by orsmga001.jf.intel.com with ESMTP; 05 Apr 2022 14:53:35 -0700
 Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nbr7G-0003nT-WA;
+        id 1nbr7G-0003nJ-Te;
         Tue, 05 Apr 2022 21:53:34 +0000
-Date:   Wed, 06 Apr 2022 05:53:28 +0800
+Date:   Wed, 06 Apr 2022 05:53:33 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "x86-ml" <x86@kernel.org>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:perf/core] BUILD SUCCESS
- 7bebfe9dd802b80abff5a43e00ab68d98893a22c
-Message-ID: <624cba58.p3jGLmaBjrqd9HPc%lkp@intel.com>
+Subject: [tip:sched/urgent] BUILD SUCCESS
+ 0a70045ed8516dfcff4b5728557e1ef3fd017c53
+Message-ID: <624cba5d.+mJLF9IXw71FXY9i%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/core
-branch HEAD: 7bebfe9dd802b80abff5a43e00ab68d98893a22c  perf/x86: Unify format of events sysfs show
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/urgent
+branch HEAD: 0a70045ed8516dfcff4b5728557e1ef3fd017c53  entry: Fix compile error in dynamic_irqentry_exit_cond_resched()
 
-elapsed time: 728m
+elapsed time: 727m
 
 configs tested: 148
 configs skipped: 4

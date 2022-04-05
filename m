@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 849F84F43B9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:05:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB574F473A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356685AbiDEOC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
+        id S1349317AbiDEVEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235400AbiDEJah (ORCPT
+        with ESMTP id S1354467AbiDEKOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:30:37 -0400
+        Tue, 5 Apr 2022 06:14:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32D8E5412;
-        Tue,  5 Apr 2022 02:17:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C63C6A41D;
+        Tue,  5 Apr 2022 03:00:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F80B615E4;
-        Tue,  5 Apr 2022 09:17:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9626DC385A2;
-        Tue,  5 Apr 2022 09:17:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC67E61673;
+        Tue,  5 Apr 2022 10:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBC47C385A4;
+        Tue,  5 Apr 2022 10:00:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150257;
-        bh=WzivcXSmnyAyLc6VtEfU3zcYJ5LcHw/WrmshFZPnr7s=;
+        s=korg; t=1649152817;
+        bh=e/XM4T8kGA8YmUSl+7zxZN4nqVNClbVOAqagp52YUXA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xt9zdx9tYGyWBLvhR8QaAYiJxKvbG4OQ0IFOAJ3XhR7+Ln5VAPKj04/Ke25Cnb09w
-         6/ZHrBj8d2M6mpV3wSriuGF11Vf7Pl35fkR+MfNrLo7uJP71szkCCCnGYeJK6cJsUf
-         9a5KGvD9pVA0v0LBf5iy+wUNg3Ir1z69RwEr/ngg=
+        b=Z0mHGU3/3lq+DAgz1/eWWkB3Bz2cqhFQXvzzlIzywvijRfQp6eos40bss/0j8sJ2t
+         FzBCfD3GxoZJLO4TBR9oFJViI/tvDYotX7jMn81tIDx0ioSLEVMcTaiiwBfIkAS4Mz
+         /zhvOkr9GhWXMHI4sU5yor/hsxvtRPYnMF7/awu0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: [PATCH 5.16 1011/1017] mmc: rtsx: Let MMC core handle runtime PM
-Date:   Tue,  5 Apr 2022 09:32:04 +0200
-Message-Id: <20220405070424.207454669@linuxfoundation.org>
+        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Simon Ser <contact@emersion.fr>
+Subject: [PATCH 5.15 864/913] drm/connector: Fix typo in documentation
+Date:   Tue,  5 Apr 2022 09:32:06 +0200
+Message-Id: <20220405070405.722836555@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,128 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+From: Maxime Ripard <maxime@cerno.tech>
 
-commit 7570fb41e450ba37bf9335fe3751fa9f502c30fa upstream.
+commit dca384a3bf5af1c781cfa6aec63904bdb5018c36 upstream.
 
-Since MMC core handles runtime PM reference counting, we can avoid doing
-redundant runtime PM work in the driver. That means the only thing
-commit 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM") misses is
-to always enable runtime PM, to let its parent driver enable ASPM in the
-runtime idle routine.
+Commit 4adc33f36d80 ("drm/edid: Split deep color modes between RGB and
+YUV444") introduced two new variables in struct drm_display_info and
+their documentation, but the documentation part had a typo resulting in
+a doc build warning.
 
-Fixes: 7499b529d97f ("mmc: rtsx: Use pm_runtime_{get,put}() to handle runtime PM")
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Link: https://lore.kernel.org/r/20220216055435.2335297-1-kai.heng.feng@canonical.com
+Fixes: 4adc33f36d80 ("drm/edid: Split deep color modes between RGB and YUV444")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Reviewed-by: Simon Ser <contact@emersion.fr>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220202094340.875190-1-maxime@cerno.tech
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mmc/host/rtsx_pci_sdmmc.c |   18 ------------------
- 1 file changed, 18 deletions(-)
+ include/drm/drm_connector.h |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/mmc/host/rtsx_pci_sdmmc.c
-+++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
-@@ -823,7 +823,6 @@ static void sd_request(struct work_struc
- 	}
+--- a/include/drm/drm_connector.h
++++ b/include/drm/drm_connector.h
+@@ -566,13 +566,13 @@ struct drm_display_info {
+ 	bool rgb_quant_range_selectable;
  
- 	mutex_lock(&pcr->pcr_mutex);
--	pm_runtime_get_sync(dev);
+ 	/**
+-	 * @edid_hdmi_dc_rgb444_modes: Mask of supported hdmi deep color modes
++	 * @edid_hdmi_rgb444_dc_modes: Mask of supported hdmi deep color modes
+ 	 * in RGB 4:4:4. Even more stuff redundant with @bus_formats.
+ 	 */
+ 	u8 edid_hdmi_rgb444_dc_modes;
  
- 	rtsx_pci_start_run(pcr);
- 
-@@ -860,8 +859,6 @@ static void sd_request(struct work_struc
- 			data->bytes_xfered = data->blocks * data->blksz;
- 	}
- 
--	pm_runtime_mark_last_busy(dev);
--	pm_runtime_put_autosuspend(dev);
- 	mutex_unlock(&pcr->pcr_mutex);
- 
- finish:
-@@ -1093,7 +1090,6 @@ static void sdmmc_set_ios(struct mmc_hos
- 		return;
- 
- 	mutex_lock(&pcr->pcr_mutex);
--	pm_runtime_get_sync(dev);
- 
- 	rtsx_pci_start_run(pcr);
- 
-@@ -1127,8 +1123,6 @@ static void sdmmc_set_ios(struct mmc_hos
- 	rtsx_pci_switch_clock(pcr, ios->clock, host->ssc_depth,
- 			host->initial_mode, host->double_clk, host->vpclk);
- 
--	pm_runtime_mark_last_busy(dev);
--	pm_runtime_put_autosuspend(dev);
- 	mutex_unlock(&pcr->pcr_mutex);
- }
- 
-@@ -1144,7 +1138,6 @@ static int sdmmc_get_ro(struct mmc_host
- 		return -ENOMEDIUM;
- 
- 	mutex_lock(&pcr->pcr_mutex);
--	pm_runtime_get_sync(dev);
- 
- 	rtsx_pci_start_run(pcr);
- 
-@@ -1154,8 +1147,6 @@ static int sdmmc_get_ro(struct mmc_host
- 	if (val & SD_WRITE_PROTECT)
- 		ro = 1;
- 
--	pm_runtime_mark_last_busy(dev);
--	pm_runtime_put_autosuspend(dev);
- 	mutex_unlock(&pcr->pcr_mutex);
- 
- 	return ro;
-@@ -1173,7 +1164,6 @@ static int sdmmc_get_cd(struct mmc_host
- 		return cd;
- 
- 	mutex_lock(&pcr->pcr_mutex);
--	pm_runtime_get_sync(dev);
- 
- 	rtsx_pci_start_run(pcr);
- 
-@@ -1183,8 +1173,6 @@ static int sdmmc_get_cd(struct mmc_host
- 	if (val & SD_EXIST)
- 		cd = 1;
- 
--	pm_runtime_mark_last_busy(dev);
--	pm_runtime_put_autosuspend(dev);
- 	mutex_unlock(&pcr->pcr_mutex);
- 
- 	return cd;
-@@ -1282,7 +1270,6 @@ static int sdmmc_switch_voltage(struct m
- 		return err;
- 
- 	mutex_lock(&pcr->pcr_mutex);
--	pm_runtime_get_sync(dev);
- 
- 	rtsx_pci_start_run(pcr);
- 
-@@ -1312,8 +1299,6 @@ out:
- 	err = rtsx_pci_write_register(pcr, SD_BUS_STAT,
- 			SD_CLK_TOGGLE_EN | SD_CLK_FORCE_STOP, 0);
- 
--	pm_runtime_mark_last_busy(dev);
--	pm_runtime_put_autosuspend(dev);
- 	mutex_unlock(&pcr->pcr_mutex);
- 
- 	return err;
-@@ -1334,7 +1319,6 @@ static int sdmmc_execute_tuning(struct m
- 		return err;
- 
- 	mutex_lock(&pcr->pcr_mutex);
--	pm_runtime_get_sync(dev);
- 
- 	rtsx_pci_start_run(pcr);
- 
-@@ -1367,8 +1351,6 @@ static int sdmmc_execute_tuning(struct m
- 		err = sd_change_phase(host, DDR50_RX_PHASE(pcr), true);
- 
- out:
--	pm_runtime_mark_last_busy(dev);
--	pm_runtime_put_autosuspend(dev);
- 	mutex_unlock(&pcr->pcr_mutex);
- 
- 	return err;
+ 	/**
+-	 * @edid_hdmi_dc_ycbcr444_modes: Mask of supported hdmi deep color
++	 * @edid_hdmi_ycbcr444_dc_modes: Mask of supported hdmi deep color
+ 	 * modes in YCbCr 4:4:4. Even more stuff redundant with @bus_formats.
+ 	 */
+ 	u8 edid_hdmi_ycbcr444_dc_modes;
 
 

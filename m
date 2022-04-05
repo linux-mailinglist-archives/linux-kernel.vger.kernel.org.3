@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 230984F3427
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 012F14F310D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242335AbiDEIhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
+        id S242360AbiDEIhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235659AbiDEH77 (ORCPT
+        with ESMTP id S235656AbiDEH77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 03:59:59 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42F21C13D;
-        Tue,  5 Apr 2022 00:56:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A978A1CB0C;
+        Tue,  5 Apr 2022 00:57:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60174B81B14;
-        Tue,  5 Apr 2022 07:56:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1838C340EE;
-        Tue,  5 Apr 2022 07:56:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58120B81B14;
+        Tue,  5 Apr 2022 07:57:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A031C340EE;
+        Tue,  5 Apr 2022 07:57:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145416;
-        bh=KK+VudrWUz/uioNtrgiRdIcswanyWA9dVTY+SNt1vgc=;
+        s=korg; t=1649145422;
+        bh=Ps1nATeswKaRTByy9Vpj0FarmADqO69/M4NEGtVD1Cc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UgWqn/yb4OcmpYPn0atDGriX7jH9Ld+p69KqHOC5T0mzvKRhTjyGBwmSOMc+pUuXV
-         1qunzY5Z7Ad6z7qWLSJ2q+iIBlh/BtndlSCCncenauv4FJVCshorOfRxcJQcK+Jhoi
-         iX/15QWc0WrKMplF3vzslCLZXaB/GjsxiFqq4XZA=
+        b=vBoC1ewtbZZLDJS19fX52dKXgejzHg1yfKXkxlrkcNnY0BU1CVOjTnOsKJVw9G4oy
+         yU0yYLgg3RDjcanHFirAptUnMGQReK9JAmRKbykdf/zcawWdamu9WsI3Q8UN2tqSxb
+         9Q/+H2IE2d9adtkyGm5KIHG9XtyFBwaW5aPutmgQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0398/1126] video: fbdev: omapfb: Add missing of_node_put() in dvic_probe_of
-Date:   Tue,  5 Apr 2022 09:19:05 +0200
-Message-Id: <20220405070419.309826211@linuxfoundation.org>
+        stable@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Martin Dauskardt <martin.dauskardt@gmx.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0400/1126] ivtv: fix incorrect device_caps for ivtvfb
+Date:   Tue,  5 Apr 2022 09:19:07 +0200
+Message-Id: <20220405070419.368281582@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -54,33 +55,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit a58c22cfbbf62fefca090334bbd35fd132e92a23 ]
+[ Upstream commit 25e94139218c0293b4375233c14f2256d7dcfaa8 ]
 
-The device_node pointer is returned by of_parse_phandle()  with refcount
-incremented. We should use of_node_put() on it when done.
+The VIDIOC_G_FBUF and related overlay ioctls no longer worked (-ENOTTY was
+returned).
 
-Fixes: f76ee892a99e ("omapfb: copy omapdss & displays for omapfb")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+The root cause was the introduction of the caps field in ivtv-driver.h.
+While loading the ivtvfb module would update the video_device device_caps
+field with V4L2_CAP_VIDEO_OUTPUT_OVERLAY it would not update that caps
+field, and that's what the overlay ioctls would look at.
+
+It's a bad idea to keep information in two places, so drop the caps field
+and only use vdev.device_caps.
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: Martin Dauskardt <martin.dauskardt@gmx.de>
+Fixes: 2161536516ed (media: media/pci: set device_caps in struct video_device)
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/pci/ivtv/ivtv-driver.h  |  1 -
+ drivers/media/pci/ivtv/ivtv-ioctl.c   | 10 +++++-----
+ drivers/media/pci/ivtv/ivtv-streams.c | 11 ++++-------
+ 3 files changed, 9 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c b/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c
-index 2fa436475b40..c8ad3ef42bd3 100644
---- a/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c
-+++ b/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c
-@@ -246,6 +246,7 @@ static int dvic_probe_of(struct platform_device *pdev)
- 	adapter_node = of_parse_phandle(node, "ddc-i2c-bus", 0);
- 	if (adapter_node) {
- 		adapter = of_get_i2c_adapter_by_node(adapter_node);
-+		of_node_put(adapter_node);
- 		if (adapter == NULL) {
- 			dev_err(&pdev->dev, "failed to parse ddc-i2c-bus\n");
- 			omap_dss_put_device(ddata->in);
+diff --git a/drivers/media/pci/ivtv/ivtv-driver.h b/drivers/media/pci/ivtv/ivtv-driver.h
+index 4cf92dee6527..ce3a7ca51736 100644
+--- a/drivers/media/pci/ivtv/ivtv-driver.h
++++ b/drivers/media/pci/ivtv/ivtv-driver.h
+@@ -330,7 +330,6 @@ struct ivtv_stream {
+ 	struct ivtv *itv;		/* for ease of use */
+ 	const char *name;		/* name of the stream */
+ 	int type;			/* stream type */
+-	u32 caps;			/* V4L2 capabilities */
+ 
+ 	struct v4l2_fh *fh;		/* pointer to the streaming filehandle */
+ 	spinlock_t qlock;		/* locks access to the queues */
+diff --git a/drivers/media/pci/ivtv/ivtv-ioctl.c b/drivers/media/pci/ivtv/ivtv-ioctl.c
+index 0cdf6b3210c2..fee460e2ca86 100644
+--- a/drivers/media/pci/ivtv/ivtv-ioctl.c
++++ b/drivers/media/pci/ivtv/ivtv-ioctl.c
+@@ -438,7 +438,7 @@ static int ivtv_g_fmt_vid_out_overlay(struct file *file, void *fh, struct v4l2_f
+ 	struct ivtv_stream *s = &itv->streams[fh2id(fh)->type];
+ 	struct v4l2_window *winfmt = &fmt->fmt.win;
+ 
+-	if (!(s->caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
++	if (!(s->vdev.device_caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
+ 		return -EINVAL;
+ 	if (!itv->osd_video_pbase)
+ 		return -EINVAL;
+@@ -549,7 +549,7 @@ static int ivtv_try_fmt_vid_out_overlay(struct file *file, void *fh, struct v4l2
+ 	u32 chromakey = fmt->fmt.win.chromakey;
+ 	u8 global_alpha = fmt->fmt.win.global_alpha;
+ 
+-	if (!(s->caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
++	if (!(s->vdev.device_caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
+ 		return -EINVAL;
+ 	if (!itv->osd_video_pbase)
+ 		return -EINVAL;
+@@ -1383,7 +1383,7 @@ static int ivtv_g_fbuf(struct file *file, void *fh, struct v4l2_framebuffer *fb)
+ 		0,
+ 	};
+ 
+-	if (!(s->caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
++	if (!(s->vdev.device_caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
+ 		return -ENOTTY;
+ 	if (!itv->osd_video_pbase)
+ 		return -ENOTTY;
+@@ -1450,7 +1450,7 @@ static int ivtv_s_fbuf(struct file *file, void *fh, const struct v4l2_framebuffe
+ 	struct ivtv_stream *s = &itv->streams[fh2id(fh)->type];
+ 	struct yuv_playback_info *yi = &itv->yuv_info;
+ 
+-	if (!(s->caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
++	if (!(s->vdev.device_caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
+ 		return -ENOTTY;
+ 	if (!itv->osd_video_pbase)
+ 		return -ENOTTY;
+@@ -1470,7 +1470,7 @@ static int ivtv_overlay(struct file *file, void *fh, unsigned int on)
+ 	struct ivtv *itv = id->itv;
+ 	struct ivtv_stream *s = &itv->streams[fh2id(fh)->type];
+ 
+-	if (!(s->caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
++	if (!(s->vdev.device_caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
+ 		return -ENOTTY;
+ 	if (!itv->osd_video_pbase)
+ 		return -ENOTTY;
+diff --git a/drivers/media/pci/ivtv/ivtv-streams.c b/drivers/media/pci/ivtv/ivtv-streams.c
+index 6e455948cc77..13d7d55e6594 100644
+--- a/drivers/media/pci/ivtv/ivtv-streams.c
++++ b/drivers/media/pci/ivtv/ivtv-streams.c
+@@ -176,7 +176,7 @@ static void ivtv_stream_init(struct ivtv *itv, int type)
+ 	s->itv = itv;
+ 	s->type = type;
+ 	s->name = ivtv_stream_info[type].name;
+-	s->caps = ivtv_stream_info[type].v4l2_caps;
++	s->vdev.device_caps = ivtv_stream_info[type].v4l2_caps;
+ 
+ 	if (ivtv_stream_info[type].pio)
+ 		s->dma = DMA_NONE;
+@@ -299,12 +299,9 @@ static int ivtv_reg_dev(struct ivtv *itv, int type)
+ 		if (s_mpg->vdev.v4l2_dev)
+ 			num = s_mpg->vdev.num + ivtv_stream_info[type].num_offset;
+ 	}
+-	s->vdev.device_caps = s->caps;
+-	if (itv->osd_video_pbase) {
+-		itv->streams[IVTV_DEC_STREAM_TYPE_YUV].vdev.device_caps |=
+-			V4L2_CAP_VIDEO_OUTPUT_OVERLAY;
+-		itv->streams[IVTV_DEC_STREAM_TYPE_MPG].vdev.device_caps |=
+-			V4L2_CAP_VIDEO_OUTPUT_OVERLAY;
++	if (itv->osd_video_pbase && (type == IVTV_DEC_STREAM_TYPE_YUV ||
++				     type == IVTV_DEC_STREAM_TYPE_MPG)) {
++		s->vdev.device_caps |= V4L2_CAP_VIDEO_OUTPUT_OVERLAY;
+ 		itv->v4l2_cap |= V4L2_CAP_VIDEO_OUTPUT_OVERLAY;
+ 	}
+ 	video_set_drvdata(&s->vdev, s);
 -- 
 2.34.1
 

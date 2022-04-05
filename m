@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF044F47DF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:44:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 201434F469E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346447AbiDEVWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43814 "EHLO
+        id S238137AbiDEUhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442176AbiDEPhF (ORCPT
+        with ESMTP id S1442389AbiDEPhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:37:05 -0400
+        Tue, 5 Apr 2022 11:37:37 -0400
 Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E510FED9EE;
-        Tue,  5 Apr 2022 06:51:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734BE11176C;
+        Tue,  5 Apr 2022 06:51:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649166679; x=1680702679;
+  t=1649166709; x=1680702709;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=pgj7ZOhRJ/NrgOQpzcRmQAbblsKAlRLHGZGqyonC/0Y=;
-  b=I/j8bbueLFse1K0gOKhPBU60uytgih4dbMJOg8jyrv4zwkhm4t7yFEvw
-   0mzsJUm0ivYcuXmQtRO+i20zXkEnHDtAHCd0Le7CaQsi+53c9wOpH6NfT
-   0NVjhxbbLYpaCTuZsDJ5cy63i7s49NPNh31GbI9HBV0IwdRwmybN1OpU5
-   8=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 05 Apr 2022 06:51:19 -0700
+  bh=3CrOD25U3ySH2uSvK1Gaz4RsMlsq+CbHlHbLLw9go20=;
+  b=JljUFUuXV3jwSeCr5L3ws9/DyLSa+YFTffiph6whYqcM7I4RCAhY7SBp
+   YGyRRrnKBlq3P7vnEPwESzxPim8R5WTwFjlY+0Ux9UZW92cefpz0dfdnj
+   8UVn0cQBaeziusCF13lG9LX4DF5q2aIkFHUVZfjLGCM/9U1O7LiZApUOD
+   g=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 05 Apr 2022 06:51:49 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 06:51:19 -0700
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 06:51:32 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Apr 2022 06:51:19 -0700
+ 15.2.986.22; Tue, 5 Apr 2022 06:51:32 -0700
 Received: from c-skakit-linux.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Apr 2022 06:51:14 -0700
+ 15.2.986.22; Tue, 5 Apr 2022 06:51:28 -0700
 From:   Satya Priya <quic_c_skakit@quicinc.com>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>
@@ -49,9 +49,9 @@ CC:     Lee Jones <lee.jones@linaro.org>,
         <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>,
         <quic_jprakash@quicinc.com>,
         Satya Priya <quic_c_skakit@quicinc.com>
-Subject: [PATCH V9 2/6] dt-bindings: mfd: pm8008: Add pm8008 regulator bindings
-Date:   Tue, 5 Apr 2022 19:20:29 +0530
-Message-ID: <1649166633-25872-3-git-send-email-quic_c_skakit@quicinc.com>
+Subject: [PATCH V9 5/6] arm64: dts: qcom: pm8008: Add base dts file
+Date:   Tue, 5 Apr 2022 19:20:32 +0530
+Message-ID: <1649166633-25872-6-git-send-email-quic_c_skakit@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1649166633-25872-1-git-send-email-quic_c_skakit@quicinc.com>
 References: <1649166633-25872-1-git-send-email-quic_c_skakit@quicinc.com>
@@ -70,110 +70,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings for pm8008 regulators device.
+Add base DTS file for pm8008 with infra and regulator nodes.
 
 Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
 ---
-Changes in V8:
- - This is split from pm8008.yaml binding.
-
 Changes in V9:
- - Remove description for reg and drop unused phandle from example.
+ - Add single dt file for pm8008 instead of adding files like in V8.
 
- .../bindings/mfd/qcom,pm8008-regulators.yaml       | 84 ++++++++++++++++++++++
- 1 file changed, 84 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mfd/qcom,pm8008-regulators.yaml
+ arch/arm64/boot/dts/qcom/pm8008.dtsi | 47 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/pm8008.dtsi
 
-diff --git a/Documentation/devicetree/bindings/mfd/qcom,pm8008-regulators.yaml b/Documentation/devicetree/bindings/mfd/qcom,pm8008-regulators.yaml
+diff --git a/arch/arm64/boot/dts/qcom/pm8008.dtsi b/arch/arm64/boot/dts/qcom/pm8008.dtsi
 new file mode 100644
-index 0000000..9a82a8b
+index 0000000..24bd832
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/qcom,pm8008-regulators.yaml
-@@ -0,0 +1,84 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/qcom,pm8008-regulators.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/arch/arm64/boot/dts/qcom/pm8008.dtsi
+@@ -0,0 +1,47 @@
++// SPDX-License-Identifier: BSD-3-Clause
++// Copyright (c) 2022, The Linux Foundation. All rights reserved.
 +
-+title: Qualcomm Technologies, Inc. PM8008 Regulator bindings
++&pm8008_bus {
++	pm8008: pm8008@8 {
++		compatible = "qcom,pm8008";
++		reg = <0x8>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++		#interrupt-cells = <2>;
++	};
 +
-+maintainers:
-+  - Satya Priya <quic_c_skakit@quicinc.com>
++	pm8008_regulators: pm8008@9 {
++		compatible = "qcom,pm8008-regulators";
++		reg = <0x9>;
++		#address-cells = <0>;
++		#size-cells = <0>;
 +
-+description: |
-+  Qualcomm Technologies, Inc. PM8008 is an I2C controlled PMIC
-+  containing 7 LDO regulators. This binding specifies the PM8008
-+  regulator peripherals of PM8008 device.
++		pm8008_l1: ldo1 {
++			regulator-name = "pm8008_l1";
++		};
 +
-+properties:
-+  compatible:
-+    const: qcom,pm8008-regulators
++		pm8008_l2: ldo2 {
++			regulator-name = "pm8008_l2";
++		};
 +
-+  reg:
-+    maxItems: 1
++		pm8008_l3: ldo3 {
++			regulator-name = "pm8008_l3";
++		};
 +
-+  "#address-cells":
-+    const: 0
++		pm8008_l4: ldo4 {
++			regulator-name = "pm8008_l4";
++		};
 +
-+  "#size-cells":
-+    const: 0
++		pm8008_l5: ldo5 {
++			regulator-name = "pm8008_l5";
++		};
 +
-+  vdd_l1_l2-supply:
-+    description: Input supply phandle of ldo1 and ldo2 regulators.
++		pm8008_l6: ldo6 {
++			regulator-name = "pm8008_l6";
++		};
 +
-+  vdd_l3_l4-supply:
-+    description: Input supply phandle of ldo3 and ldo4 regulators.
-+
-+  vdd_l5-supply:
-+    description: Input supply phandle of ldo5 regulator.
-+
-+  vdd_l6-supply:
-+    description: Input supply phandle of ldo6 regulator.
-+
-+  vdd_l7-supply:
-+    description: Input supply phandle of ldo7 regulator.
-+
-+patternProperties:
-+  "^ldo[1-7]$":
-+    type: object
-+    $ref: "../regulator/regulator.yaml#"
-+    description: PM8008 regulator peripherals of PM8008 regulator device
-+
-+required:
-+  - compatible
-+  - "#address-cells"
-+  - "#size-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/mfd/qcom-pm8008.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      pmic@9 {
-+        compatible = "qcom,pm8008-regulators";
-+        reg = <0x9>;
-+        #address-cells = <0>;
-+        #size-cells = <0>;
-+
-+        vdd_l1_l2-supply = <&vreg_s8b_1p2>;
-+        vdd_l3_l4-supply = <&vreg_s1b_1p8>;
-+        vdd_l5-supply = <&vreg_bob>;
-+        vdd_l6-supply = <&vreg_bob>;
-+        vdd_l7-supply = <&vreg_bob>;
-+
-+        pm8008_l1: ldo1 {
-+          regulator-name = "pm8008_l1";
-+          regulator-min-microvolt = <950000>;
-+          regulator-max-microvolt = <1300000>;
-+        };
-+      };
-+    };
-+...
++		pm8008_l7: ldo7 {
++			regulator-name = "pm8008_l7";
++		};
++	};
++};
 -- 
 2.7.4
 

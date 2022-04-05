@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 577A64F40DC
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:24:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F784F4389
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:59:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383293AbiDEMZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
+        id S1383313AbiDEMZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245152AbiDEIyM (ORCPT
+        with ESMTP id S245151AbiDEIyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:54:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9905910F6;
-        Tue,  5 Apr 2022 01:51:36 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C27DC7;
+        Tue,  5 Apr 2022 01:51:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1871161509;
-        Tue,  5 Apr 2022 08:51:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A9E8C385A1;
-        Tue,  5 Apr 2022 08:51:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 86617B81BC5;
+        Tue,  5 Apr 2022 08:51:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBA32C385A0;
+        Tue,  5 Apr 2022 08:51:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148695;
-        bh=D9I+rGgfR4xsdgyZ9tEUcIy10T7OjvR2xyL8W/yW+GE=;
+        s=korg; t=1649148698;
+        bh=I3uEnA03OADDN1LfFcs2Xj8Bm+YZGExuC8qCYOwy7vY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NDwJeK4gv3WlYA3uqrwioFBiMGy5vF39UGhaskuILMAR7/y2hxnjC1XWacSMm3Hll
-         YSxpW1SYRFmrrBFRSFzCWv828vuaMt7zphpm0vqq8nkdGB43EGuSlL0Acdl+rI6NFK
-         axpQgo6MdlSY1E1UGrlToLtcM5/QloRh3SlFieZU=
+        b=E+ambTHNp+2zziX1jcm43J+5VLTU5kLl1oeKa2c7F2KPAMJt2XxY0chYmr9FsyuT6
+         iMdVfICFLO556WcA46ZP1UOorozZx3xIe4Eo5AxXLBwQ4vlbnnk2tZYQUXL5yVAiJS
+         zpykGYOX/DQHu51yWcF2Tdi7NssYZtMf7Ha/cHA4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Kiselev <bigunclemax@gmail.com>,
-        Maxim Kochetkov <fido_max@inbox.ru>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        stable@vger.kernel.org, Fabiano Rosas <farosas@linux.ibm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0448/1017] powerpc: dts: t1040rdb: fix ports names for Seville Ethernet switch
-Date:   Tue,  5 Apr 2022 09:22:41 +0200
-Message-Id: <20220405070407.596314773@linuxfoundation.org>
+Subject: [PATCH 5.16 0449/1017] KVM: PPC: Book3S HV: Check return value of kvmppc_radix_init
+Date:   Tue,  5 Apr 2022 09:22:42 +0200
+Message-Id: <20220405070407.626414774@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -57,109 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Kiselev <bigunclemax@gmail.com>
+From: Fabiano Rosas <farosas@linux.ibm.com>
 
-[ Upstream commit 5ebb74749202a25da4b3cc2eb15470225a05527c ]
+[ Upstream commit 69ab6ac380a00244575de02c406dcb9491bf3368 ]
 
-On board rev A, the network interface labels for the switch ports
-written on the front panel are different than on rev B and later.
+The return of the function is being shadowed by the call to
+kvmppc_uvmem_init.
 
-This patch fixes network interface names for the switch ports according
-to labels that are written on the front panel of the board rev B.
-They start from ETH3 and end at ETH10.
-
-This patch also introduces a separate device tree for rev A.
-The main device tree is supposed to cover rev B and later.
-
-Fixes: e69eb0824d8c ("powerpc: dts: t1040rdb: add ports for Seville Ethernet switch")
-Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
-Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
-Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Fixes: ca9f4942670c ("KVM: PPC: Book3S HV: Support for running secure guests")
+Signed-off-by: Fabiano Rosas <farosas@linux.ibm.com>
+Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220121091447.3412907-1-bigunclemax@gmail.com
+Link: https://lore.kernel.org/r/20220125155735.1018683-2-farosas@linux.ibm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts | 30 ++++++++++++++++++++
- arch/powerpc/boot/dts/fsl/t1040rdb.dts       |  8 +++---
- 2 files changed, 34 insertions(+), 4 deletions(-)
- create mode 100644 arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
+ arch/powerpc/kvm/book3s_hv.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts b/arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
-new file mode 100644
-index 000000000000..73f8c998c64d
---- /dev/null
-+++ b/arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * T1040RDB-REV-A Device Tree Source
-+ *
-+ * Copyright 2014 - 2015 Freescale Semiconductor Inc.
-+ *
-+ */
-+
-+#include "t1040rdb.dts"
-+
-+/ {
-+	model = "fsl,T1040RDB-REV-A";
-+	compatible = "fsl,T1040RDB-REV-A";
-+};
-+
-+&seville_port0 {
-+	label = "ETH5";
-+};
-+
-+&seville_port2 {
-+	label = "ETH7";
-+};
-+
-+&seville_port4 {
-+	label = "ETH9";
-+};
-+
-+&seville_port6 {
-+	label = "ETH11";
-+};
-diff --git a/arch/powerpc/boot/dts/fsl/t1040rdb.dts b/arch/powerpc/boot/dts/fsl/t1040rdb.dts
-index af0c8a6f5613..b6733e7e6580 100644
---- a/arch/powerpc/boot/dts/fsl/t1040rdb.dts
-+++ b/arch/powerpc/boot/dts/fsl/t1040rdb.dts
-@@ -119,7 +119,7 @@
- 	managed = "in-band-status";
- 	phy-handle = <&phy_qsgmii_0>;
- 	phy-mode = "qsgmii";
--	label = "ETH5";
-+	label = "ETH3";
- 	status = "okay";
- };
+diff --git a/arch/powerpc/kvm/book3s_hv.c b/arch/powerpc/kvm/book3s_hv.c
+index a2fd1db29f7e..7fa685711669 100644
+--- a/arch/powerpc/kvm/book3s_hv.c
++++ b/arch/powerpc/kvm/book3s_hv.c
+@@ -6101,8 +6101,11 @@ static int kvmppc_book3s_init_hv(void)
+ 	if (r)
+ 		return r;
  
-@@ -135,7 +135,7 @@
- 	managed = "in-band-status";
- 	phy-handle = <&phy_qsgmii_2>;
- 	phy-mode = "qsgmii";
--	label = "ETH7";
-+	label = "ETH5";
- 	status = "okay";
- };
+-	if (kvmppc_radix_possible())
++	if (kvmppc_radix_possible()) {
+ 		r = kvmppc_radix_init();
++		if (r)
++			return r;
++	}
  
-@@ -151,7 +151,7 @@
- 	managed = "in-band-status";
- 	phy-handle = <&phy_qsgmii_4>;
- 	phy-mode = "qsgmii";
--	label = "ETH9";
-+	label = "ETH7";
- 	status = "okay";
- };
- 
-@@ -167,7 +167,7 @@
- 	managed = "in-band-status";
- 	phy-handle = <&phy_qsgmii_6>;
- 	phy-mode = "qsgmii";
--	label = "ETH11";
-+	label = "ETH9";
- 	status = "okay";
- };
- 
+ 	r = kvmppc_uvmem_init();
+ 	if (r < 0)
 -- 
 2.34.1
 

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5D64F4E1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E954F4E18
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1587715AbiDFAKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
+        id S1587687AbiDFAKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349465AbiDEJtz (ORCPT
+        with ESMTP id S1356159AbiDEKXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F96659A;
-        Tue,  5 Apr 2022 02:46:42 -0700 (PDT)
+        Tue, 5 Apr 2022 06:23:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A487BA333;
+        Tue,  5 Apr 2022 03:07:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3074FB81B14;
-        Tue,  5 Apr 2022 09:46:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8398BC385A2;
-        Tue,  5 Apr 2022 09:46:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA4196172B;
+        Tue,  5 Apr 2022 10:07:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4108C385A1;
+        Tue,  5 Apr 2022 10:07:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151999;
-        bh=5dFCK/bwE+X+xrItH9sMlwXXPJaUtIAhj7mXcM9iEas=;
+        s=korg; t=1649153235;
+        bh=b8Qd5YjBw56ZuJkM45Vc+wnfV5Hs4Cwi5z4/YAVLJ+M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YQROW5FSMhGfRWopfHZGXP1eSW6M+IUo18qRZt8LJrUpH+kJJbudsiP+JDHNskGwJ
-         0qiEZruM5kYU7v9JsKhoBf7qmp77hQ4+qLYcVBsmXdMxbQ8qYnCMfIQA6dFLO2l63o
-         wrzS91DqcQT6ZOXoZMKRUGiGIFRaLgFty0TJKMLU=
+        b=j9XIr9/+RPVq6lHIbK3Cbp4fSe+cky0tk0lFUH3QLXjXq0Zj3uourPwrys3nArRX6
+         xj8CoERnZZR6DRhlC3hO856ZqhFcR50No5TFnwIK/r6OEqbfpQrbRkmNcrQttx5NYT
+         Xc+v6YVqFpuFNXUBgBUmu7aGbPZh5LB5ozCW7//4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Eddie James <eajames@linux.ibm.com>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 580/913] fsi: scom: Fix error handling
-Date:   Tue,  5 Apr 2022 09:27:22 +0200
-Message-Id: <20220405070357.230944920@linuxfoundation.org>
+Subject: [PATCH 5.10 149/599] PM: suspend: fix return value of __setup handler
+Date:   Tue,  5 Apr 2022 09:27:23 +0200
+Message-Id: <20220405070303.276849651@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,68 +56,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joel Stanley <joel@jms.id.au>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit d46fddd52d11eb6a3a7ed836f9f273e9cf8cd01c ]
+[ Upstream commit 7a64ca17e4dd50d5f910769167f3553902777844 ]
 
-SCOM error handling is made complex by trying to pass around two bits of
-information: the function return code, and a status parameter that
-represents the CFAM error status register.
+If an invalid option is given for "test_suspend=<option>", the entire
+string is added to init's environment, so return 1 instead of 0 from
+the __setup handler.
 
-The commit f72ddbe1d7b7 ("fsi: scom: Remove retries") removed the
-"hidden" retries in the SCOM driver, in preference of allowing the
-calling code (userspace or driver) to decide how to handle a failed
-SCOM. However it introduced a bug by attempting to be smart about the
-return codes that were "errors" and which were ok to fall through to the
-status register parsing.
+  Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc5
+    test_suspend=invalid"
 
-We get the following errors:
+and
 
- - EINVAL or ENXIO, for indirect scoms where the value is invalid
- - EINVAL, where the size or address is incorrect
- - EIO or ETIMEOUT, where FSI write failed (aspeed master)
- - EAGAIN, where the master detected a crc error (GPIO master only)
- - EBUSY, where the bus is disabled (GPIO master in external mode)
+ Run /sbin/init as init process
+   with arguments:
+     /sbin/init
+   with environment:
+     HOME=/
+     TERM=linux
+     BOOT_IMAGE=/boot/bzImage-517rc5
+     test_suspend=invalid
 
-In all of these cases we should fail the SCOM read/write and return the
-error.
-
-Thanks to Dan Carpenter for the detailed bug report.
-
-Fixes: f72ddbe1d7b7 ("fsi: scom: Remove retries")
-Link: https://lists.ozlabs.org/pipermail/linux-fsi/2021-November/000235.html
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Joel Stanley <joel@jms.id.au>
-Reviewed-by: Eddie James <eajames@linux.ibm.com>
-Link: https://lore.kernel.org/r/20211207033811.518981-2-joel@jms.id.au
-Signed-off-by: Joel Stanley <joel@jms.id.au>
+Fixes: 2ce986892faf ("PM / sleep: Enhance test_suspend option with repeat capability")
+Fixes: 27ddcc6596e5 ("PM / sleep: Add state field to pm_states[] entries")
+Fixes: a9d7052363a6 ("PM: Separate suspend to RAM functionality from core")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/fsi/fsi-scom.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/power/suspend_test.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/fsi/fsi-scom.c b/drivers/fsi/fsi-scom.c
-index da1486bb6a14..3b427f7e9027 100644
---- a/drivers/fsi/fsi-scom.c
-+++ b/drivers/fsi/fsi-scom.c
-@@ -289,7 +289,7 @@ static int put_scom(struct scom_device *scom, uint64_t value,
- 	int rc;
+diff --git a/kernel/power/suspend_test.c b/kernel/power/suspend_test.c
+index e1ed58adb69e..be480ae5cb2a 100644
+--- a/kernel/power/suspend_test.c
++++ b/kernel/power/suspend_test.c
+@@ -157,22 +157,22 @@ static int __init setup_test_suspend(char *value)
+ 	value++;
+ 	suspend_type = strsep(&value, ",");
+ 	if (!suspend_type)
+-		return 0;
++		return 1;
  
- 	rc = raw_put_scom(scom, value, addr, &status);
--	if (rc == -ENODEV)
-+	if (rc)
- 		return rc;
+ 	repeat = strsep(&value, ",");
+ 	if (repeat) {
+ 		if (kstrtou32(repeat, 0, &test_repeat_count_max))
+-			return 0;
++			return 1;
+ 	}
  
- 	rc = handle_fsi2pib_status(scom, status);
-@@ -308,7 +308,7 @@ static int get_scom(struct scom_device *scom, uint64_t *value,
- 	int rc;
+ 	for (i = PM_SUSPEND_MIN; i < PM_SUSPEND_MAX; i++)
+ 		if (!strcmp(pm_labels[i], suspend_type)) {
+ 			test_state_label = pm_labels[i];
+-			return 0;
++			return 1;
+ 		}
  
- 	rc = raw_get_scom(scom, value, addr, &status);
--	if (rc == -ENODEV)
-+	if (rc)
- 		return rc;
+ 	printk(warn_bad_state, suspend_type);
+-	return 0;
++	return 1;
+ }
+ __setup("test_suspend", setup_test_suspend);
  
- 	rc = handle_fsi2pib_status(scom, status);
 -- 
 2.34.1
 

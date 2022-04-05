@@ -2,97 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8B94F4CD2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3734F4E07
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1580088AbiDEXdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
+        id S1587203AbiDFAII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:08:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573253AbiDESem (ORCPT
+        with ESMTP id S1573261AbiDEShI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 14:34:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383DA13F6F;
-        Tue,  5 Apr 2022 11:32:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8C68618CE;
-        Tue,  5 Apr 2022 18:32:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6932EC385A4;
-        Tue,  5 Apr 2022 18:32:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649183563;
-        bh=FL6Vjlysi/fOyZpJE2rSS+FIJYJRHCiZpiMOwwjfWKo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bS2Cf+uzFDViHR8cb3krNj3czacXlc7byzZjPKhNO5NUVAKnRvgyuk5+wApweFmIj
-         pHy5IVyT7lwNS5T3/VDkOQbRuhnkLZXJKkMRwlCInPB5cIUpwRfWYdpLbN8/5ASr52
-         +INauoBeJ79nfZrnfNaK40X81MG0NSkSETMesvwdTZBSsRyKq+BFlbZ2RMLOS5b888
-         T8a6J0cwq1pfzCcdDS4RYDxESzTzFTBOxcbNhsdnOkxnvo/3NucFHI/jiRnCVW6kEq
-         61BN8YYGxDLO7iVr0nuSdY+5+eqS01t9I9QhHjk5VA0mNdNqn1iWZJFGliGwcK8alJ
-         YHQX3NGhVT4og==
-Date:   Tue, 5 Apr 2022 21:32:39 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Saeed Mahameed <saeed@kernel.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>
-Subject: Re: [PATCH mlx5-next 4/5] net/mlx5: Remove tls vs. ktls separation
- as it is the same
-Message-ID: <YkyLR+VBb81npXnC@unreal>
-References: <cover.1649073691.git.leonro@nvidia.com>
- <67e596599edcffb0de43f26551208dfd34ac777e.1649073691.git.leonro@nvidia.com>
- <20220405003322.afko7uo527w5j3zu@sx1>
- <YkvW9SNJeb5VPmeg@unreal>
- <20220405172049.slomqla4pmnyczbj@sx1>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220405172049.slomqla4pmnyczbj@sx1>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 5 Apr 2022 14:37:08 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE8B167E3
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 11:35:09 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id p9-20020a63f449000000b0035ec8c16f0bso58519pgk.11
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 11:35:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=K74uTYo0p50+68Eav5hPTlnLwyyYs0SvA0+aQKwvrcM=;
+        b=KQEqtHlUIrCMPDEZNKiPS9MvgfELfDBKde+wsTIq1ryHFf4ypzTaT5ALjkqm0JVA/K
+         97yK54GjAMf/hbNvHEfcLoErQsv6rPoLKHy2OA9GpDLManJ08OL6cBliH1pE8PSbtm7x
+         Egplaa+kzgODwKtSCsT31nZ0UmtGrh8hUA9msDIyH4k5N+aHpal+4rr8KrD7SYUpXE3m
+         nBRZDzeYOKQosGLkqviomA/pOiSPf+ru1BtqjlgFBULpSQyd2phEdgIk9HV/Y5NxCLe8
+         iqooldC/WoJSZZ1Savcf5GCUvvf+FBFSipfwHPk+DR5bRvXG/cGwBk20mzlgOlgGncf3
+         D7Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=K74uTYo0p50+68Eav5hPTlnLwyyYs0SvA0+aQKwvrcM=;
+        b=eyHsI5p2G9koB164nx4oA1WN2qVz1gCJY3L6vPRx8n70/1SLrIjzxa+8a3HpjrgUzq
+         03p9sG9n1TWgo2qkwJhxlue3vezNzlA1pNBR6KGScV9DhFEn7AFg8ccI9YXl+vKIrZXL
+         r6XzcPddhtMBnA3sZvxaALIb6HEQj0mOjv53gLeUdov325kbQTHElENV+tgbA/3XTEXm
+         v0mevYBkJyrC+iyQWqoqJXLmVuh7+iojRZC/1mzwoACV3eRuQv9q0yrm1z/KUDYNoDdl
+         mIaM++WSHZnsmVSwkVSU2A/Rv6WcyPl848J07iNF9/pDjE1ILfz1JHkR4O9SfNqE5fV9
+         /llQ==
+X-Gm-Message-State: AOAM530xuYj0Kvs9MkEAyhCBlDvrs1k1vfQVNM+TPNEcO4h3X7TYdEyo
+        Grmj3KuhlLdmzecxB8ioBg5jlEsX7oQ=
+X-Google-Smtp-Source: ABdhPJwWLVGLr/vHL4lq1ATs4OZuBgElqxvfAYIpOrbOfXGyZoR0O+W+IABkWZEAFyqxM0aqFqnkdt8jf2k=
+X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:9f5c:353e:771c:7686])
+ (user=pgonda job=sendgmr) by 2002:a17:902:e545:b0:154:4d5b:2006 with SMTP id
+ n5-20020a170902e54500b001544d5b2006mr4889343plf.94.1649183709169; Tue, 05 Apr
+ 2022 11:35:09 -0700 (PDT)
+Date:   Tue,  5 Apr 2022 11:35:06 -0700
+Message-Id: <20220405183506.2138403-1-pgonda@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1094.g7c7d902a7c-goog
+Subject: [PATCH V4] KVM, SEV: Add KVM_EXIT_SYSTEM_EVENT metadata for SEV-ES
+From:   Peter Gonda <pgonda@google.com>
+To:     kvm@vger.kernel.org
+Cc:     Peter Gonda <pgonda@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Joerg Roedel <jroedel@suse.de>, Marc Orr <marcorr@google.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 10:20:49AM -0700, Saeed Mahameed wrote:
-> On 05 Apr 08:43, Leon Romanovsky wrote:
-> > On Mon, Apr 04, 2022 at 05:33:22PM -0700, Saeed Mahameed wrote:
-> > > On 04 Apr 15:08, Leon Romanovsky wrote:
-> > > > From: Leon Romanovsky <leonro@nvidia.com>
-> > > >
-> > > > After removal FPGA TLS, we can remove tls->ktls indirection too,
-> > > > as it is the same thing.
-> 
-> [...]
-> 
-> > > rename drivers/net/ethernet/mellanox/mlx5/core/en_accel/{tls_stats.c => ktls_stats.c} (76%)
-> > > 
-> > > Why not ktls_*.c => tls_*.c ?
-> > 
-> > Mostly because other drivers use _ktls_ name for this type of functionality.
-> > Plus internally, Tariq suggested to squash everything into ktls.
-> > 
-> > > 
-> > > Since we now have one TLS implementation, it would've been easier to maybe
-> > > repurpose TLS to be KTLS only and avoid renaming every TLS to KTLS in all
-> > > functions and files.
-> > > 
-> > > So just keep tls.c and all mlx5_tls_xyz functions and implement ktls
-> > > directly in them, the renaming will be done only on the ktls implementation
-> > > part of the code rather than in every caller.
-> > 
-> > Should I do it or keep this patch as is?
-> > 
-> 
-> Keep it, i don't have any strong feeling about this,
-> I just wanted to reduce the patch size.
+SEV-ES guests can request termination using the GHCB's MSR protocol. See
+AMD's GHCB spec section '4.1.13 Termination Request'. Currently when a
+guest does this the userspace VMM sees an KVM_EXIT_UNKNOWN (-EVINAL)
+return code from KVM_RUN. By adding a KVM_EXIT_SYSTEM_EVENT to kvm_run
+struct the userspace VMM can clearly see the guest has requested a SEV-ES
+termination including the termination reason code set and reason code.
 
-Thanks for the review.
+Signed-off-by: Peter Gonda <pgonda@google.com>
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: Brijesh Singh <brijesh.singh@amd.com>
+Cc: Joerg Roedel <jroedel@suse.de>
+Cc: Marc Orr <marcorr@google.com>
+Cc: kvm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+---
+
+V4
+ * Switch to using KVM_SYSTEM_EVENT exit reason.
+
+V3
+ * Add Documentation/ update.
+ * Updated other KVM_EXIT_SHUTDOWN exits to clear ndata and set reason
+   to KVM_SHUTDOWN_REQ.
+
+V2
+ * Add KVM_CAP_EXIT_SHUTDOWN_REASON check for KVM_CHECK_EXTENSION.
+
+Tested by making an SEV-ES guest call sev_es_terminate() with hardcoded
+reason code set and reason code and then observing the codes from the
+userspace VMM in the kvm_run.system_event fields.
+
+---
+ arch/x86/kvm/svm/sev.c   | 7 +++++--
+ include/uapi/linux/kvm.h | 1 +
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index 75fa6dd268f0..039b241a9fb5 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -2735,8 +2735,11 @@ static int sev_handle_vmgexit_msr_protocol(struct vcpu_svm *svm)
+ 		pr_info("SEV-ES guest requested termination: %#llx:%#llx\n",
+ 			reason_set, reason_code);
+ 
+-		ret = -EINVAL;
+-		break;
++		vcpu->run->exit_reason = KVM_EXIT_SHUTDOWN;
++		vcpu->run->system_event.type = KVM_SYSTEM_EVENT_SEV_TERM;
++		vcpu->run->system_event.flags = control->ghcb_gpa;
++
++		return 0;
+ 	}
+ 	default:
+ 		/* Error, keep GHCB MSR value as-is */
+diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+index 8616af85dc5d..d9d24db12930 100644
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@ -444,6 +444,7 @@ struct kvm_run {
+ #define KVM_SYSTEM_EVENT_SHUTDOWN       1
+ #define KVM_SYSTEM_EVENT_RESET          2
+ #define KVM_SYSTEM_EVENT_CRASH          3
++#define KVM_SYSTEM_EVENT_SEV_TERM       4
+ 			__u32 type;
+ 			__u64 flags;
+ 		} system_event;
+-- 
+2.35.1.1094.g7c7d902a7c-goog
+

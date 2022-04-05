@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B7504F365D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15A744F3A1E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346742AbiDELBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45574 "EHLO
+        id S1379146AbiDELk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235113AbiDEIjT (ORCPT
+        with ESMTP id S244773AbiDEIwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:39:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CCD205D8;
-        Tue,  5 Apr 2022 01:33:04 -0700 (PDT)
+        Tue, 5 Apr 2022 04:52:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E873762C9;
+        Tue,  5 Apr 2022 01:33:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D20A60B0E;
-        Tue,  5 Apr 2022 08:33:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49CFBC385A1;
-        Tue,  5 Apr 2022 08:33:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A48C0B81B92;
+        Tue,  5 Apr 2022 08:33:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09AC5C385A0;
+        Tue,  5 Apr 2022 08:33:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147583;
-        bh=mB0Uw+Ta0RUr462A5YasP0HwGJ6z9Pkl/WLXCJgaSdg=;
+        s=korg; t=1649147586;
+        bh=mhiSGor9ixVK1nQxRH8akaxf9Gzwa492ylxvfFErLK4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xzxh3DfAM0+N38VxSUjas+HNTRTMTgCS6LKoxJa8sTPzlf5GdFslqEyX42Ioc3YS1
-         r/k0wX/cbJbXMK3da6IGS2AecWHafwp2ZEifiwKbZXmW8+yNDEAuNLlEjIiEqZEhli
-         zscNhJb4eGkrwbKJpZXl0OhEGX1sGWEtdT+ZLXvI=
+        b=owynYmSBhKM3vncc4GX+96S0oyTwZuIcuXWQsDd1vnHlG8rysGdti8bxvHebRTcTX
+         EM/va403IV96rEuWSeGGK+7afbX6kGrS+ds+7MQC4+3VQ8n3//3q4LsJr8cREmvQBQ
+         1ztKAe1CD0pHz5Bk3+EbMwVfhKjCrCNJJt6xkFhY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,9 +37,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         Stable@vger.kernel.org,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.16 0048/1017] iio: inkern: apply consumer scale on IIO_VAL_INT cases
-Date:   Tue,  5 Apr 2022 09:16:01 +0200
-Message-Id: <20220405070355.609609887@linuxfoundation.org>
+Subject: [PATCH 5.16 0049/1017] iio: inkern: apply consumer scale when no channel scale is available
+Date:   Tue,  5 Apr 2022 09:16:02 +0200
+Message-Id: <20220405070355.639445951@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -59,11 +59,11 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Liam Beguin <liambeguin@gmail.com>
 
-commit 1bca97ff95c732a516ebb68da72814194980e0a5 upstream.
+commit 14b457fdde38de594a4bc4bd9075019319d978da upstream.
 
-When a consumer calls iio_read_channel_processed() and the channel has
-an integer scale, the scale channel scale is applied and the processed
-value is returned as expected.
+When a consumer calls iio_read_channel_processed() and no channel scale
+is available, it's assumed that the scale is one and the raw value is
+returned as expected.
 
 On the other hand, if the consumer calls iio_convert_raw_to_processed()
 the scaling factor requested by the consumer is not applied.
@@ -71,28 +71,33 @@ the scaling factor requested by the consumer is not applied.
 This for example causes the consumer to process mV when expecting uV.
 Make sure to always apply the scaling factor requested by the consumer.
 
-Fixes: 48e44ce0f881 ("iio:inkern: Add function to read the processed value")
+Fixes: adc8ec5ff183 ("iio: inkern: pass through raw values if no scaling")
 Signed-off-by: Liam Beguin <liambeguin@gmail.com>
 Reviewed-by: Peter Rosin <peda@axentia.se>
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Link: https://lore.kernel.org/r/20220108205319.2046348-2-liambeguin@gmail.com
+Link: https://lore.kernel.org/r/20220108205319.2046348-3-liambeguin@gmail.com
 Cc: <Stable@vger.kernel.org>
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/inkern.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/iio/inkern.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 --- a/drivers/iio/inkern.c
 +++ b/drivers/iio/inkern.c
-@@ -616,7 +616,7 @@ static int iio_convert_raw_to_processed_
+@@ -607,10 +607,10 @@ static int iio_convert_raw_to_processed_
+ 					IIO_CHAN_INFO_SCALE);
+ 	if (scale_type < 0) {
+ 		/*
+-		 * Just pass raw values as processed if no scaling is
+-		 * available.
++		 * If no channel scaling is available apply consumer scale to
++		 * raw value and return.
+ 		 */
+-		*processed = raw;
++		*processed = raw * scale;
+ 		return 0;
+ 	}
  
- 	switch (scale_type) {
- 	case IIO_VAL_INT:
--		*processed = raw64 * scale_val;
-+		*processed = raw64 * scale_val * scale;
- 		break;
- 	case IIO_VAL_INT_PLUS_MICRO:
- 		if (scale_val2 < 0)
 
 

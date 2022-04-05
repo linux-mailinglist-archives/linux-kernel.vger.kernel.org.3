@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7974F4516
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A034F45B5
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387721AbiDEPTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
+        id S1389006AbiDEPU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346735AbiDEJpY (ORCPT
+        with ESMTP id S1346982AbiDEJps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:45:24 -0400
+        Tue, 5 Apr 2022 05:45:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4A8DB499;
-        Tue,  5 Apr 2022 02:31:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E947ADCA84;
+        Tue,  5 Apr 2022 02:32:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48A37616C1;
-        Tue,  5 Apr 2022 09:31:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4C23C385A7;
-        Tue,  5 Apr 2022 09:31:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E39A616D9;
+        Tue,  5 Apr 2022 09:32:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71231C385A6;
+        Tue,  5 Apr 2022 09:32:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649151097;
-        bh=PTjivoyGXs/CkRZCvvCX+908n0DKoSEzUrbI2LgEOkc=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=QLoRWQ7gd5z5sVQg4LVS16yj6W4zJt94Y1TN9AEsL3E9/j73G4vHGYcYX/FH1v/F7
-         lFL3Oc/XpMBV1ulsVuHownh37cniGuzMtbPfXZqdeEiNh1EsCuxbew0E+lEpQCsRKO
-         ywZ3zPExKGLFm2JDJshIRcjUNv9gtEv/2UCwFOf7gf/5XUajfZYKJaXg4vZfxWKS3r
-         vbX7wf/taWf+UF9H/TVSuQarThNOpxLNVtM4zfYsYQEUfd3rfT/BytvnEu3fOx8gok
-         V6AyV19s71iP64BMt01EzT4sOkMcv8g+yTWIBY4xcAnrSdTtPZ8KJg87RVEu5IQAgz
-         Zffd90+4cW5Yw==
+        s=k20201202; t=1649151131;
+        bh=Go6Z5f/W2tjhRUO6APCSVvZp9thB6QaQP0llR9z2jKo=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=hdsFI/q/QvQQgJTabRoqDsscN7FDlRBQbb5rEDsIwQT389IMRr5Vcrq7MnX0zCSXo
+         e4TwiVVhB/Qg/SmKJrpCxDg6oVJxnW16Zn2dCtAJQkl3/wpo2FafjYygnY+r4IYZZp
+         w7G7/274oFfHviHe4Kfv9/xUkx6MRAmwf6ouhLkiLloFXnWd2IvR3+CuIeowXI4E3X
+         cW3A4G/W23mqabqTYz/vKQNE1zuwUyyLlMlODDC/gXwdRheg1XHP9P08pwFT8bTFEM
+         xTeAP11kXG8PMs4ArP84n8ak/5vx/AG+opRv7nV/ra+MVD5Z5PzfOslAtnyFoC4xes
+         5yX+LBhnFaKFQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     spujar@nvidia.com, lgirdwood@gmail.com, robh+dt@kernel.org,
-        tiwai@suse.com, thierry.reding@gmail.com, krzk+dt@kernel.org,
-        perex@perex.cz
-Cc:     linux-tegra@vger.kernel.org, jonathanh@nvidia.com, will@kernel.org,
-        catalin.marinas@arm.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org
-In-Reply-To: <1648735412-32220-1-git-send-email-spujar@nvidia.com>
-References: <1648735412-32220-1-git-send-email-spujar@nvidia.com>
-Subject: Re: (subset) [PATCH v2 0/6] ASRC support on Tegra186 and later
-Message-Id: <164915109452.276574.5258971838741299202.b4-ty@kernel.org>
-Date:   Tue, 05 Apr 2022 10:31:34 +0100
+To:     Rob Herring <robh+dt@kernel.org>, lgirdwood@gmail.com,
+        krzysztof.kozlowski@linaro.org, cy_huang@richtek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        krzk+dt@kernel.org
+In-Reply-To: <20220401153711.1057853-1-krzysztof.kozlowski@linaro.org>
+References: <20220401153711.1057853-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2] regulator: dt-bindings: richtek,rt4801: minor comments adjustments
+Message-Id: <164915113019.276837.6765844554684988945.b4-ty@kernel.org>
+Date:   Tue, 05 Apr 2022 10:32:10 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,31 +55,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 31 Mar 2022 19:33:26 +0530, Sameer Pujar wrote:
-> This series adds support for Asynchronous Sample Rate Converter (ASRC)
-> module on Tegra186 and later generations of SoCs. ASRC is a client of
-> AHUB. The driver and DT support is added to make it work with Tegra
-> audio graph card. The module can be plugged into audio path using ALSA
-> mixer controls.
+On Fri, 1 Apr 2022 17:37:11 +0200, Krzysztof Kozlowski wrote:
+> Correct grammar in 'enable-gpios' description and remove useless comment
+> about regulator nodes, because these are obvious from patternProperties.
 > 
-> ASRC supports two modes of operation, where it gets the ratio info
-> from SW and ratio detector module. Presently the support is added for
-> SW mode.
 > 
-> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
 Thanks!
 
-[1/6] ASoC: tegra: Add binding doc for ASRC module
-      commit: c54ce1a17232215c4a518149292b41835992eee8
-[2/6] ASoC: tegra: Add Tegra186 based ASRC driver
-      commit: a2df8c2d5b36fc66b9a6e674f3e0c87c0b9d0a48
-[3/6] ASoC: tegra: AHUB routes for ASRC module
-      commit: 76821c139d7e0429845e7c0798747e7eec16ec83
+[1/1] regulator: dt-bindings: richtek,rt4801: minor comments adjustments
+      commit: 41812783057c01e4e5f1eec649607e4773124dba
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0B04F3345
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:15:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E234F2FB0
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237988AbiDEI37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50032 "EHLO
+        id S233223AbiDEIdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235981AbiDEIA4 (ORCPT
+        with ESMTP id S236330AbiDEICD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:00:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E88E4838D;
-        Tue,  5 Apr 2022 00:58:58 -0700 (PDT)
+        Tue, 5 Apr 2022 04:02:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8DE49FB3;
+        Tue,  5 Apr 2022 01:00:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2309361753;
-        Tue,  5 Apr 2022 07:58:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27A4CC340EE;
-        Tue,  5 Apr 2022 07:58:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76066B81B16;
+        Tue,  5 Apr 2022 08:00:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6284C340EE;
+        Tue,  5 Apr 2022 08:00:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145537;
-        bh=ANC3d76uFEq4scIBr35/CufhWVFI+0H8MJ+uI+np9Ks=;
+        s=korg; t=1649145603;
+        bh=zNbstIO7fTReljmVQ05A1unZPeHQpqkHrt0QzvkAAfA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r6b5HGEAF4da9Hw068d3WY5fXx+quYvYsv1yD8p7ox5lmloJ/QbeMxV+mNKeagPtE
-         L3Ig2l4vFBBR6MLbEfurF9fo9rmfS+vqu4OeCyqhE1aC0eqnsLYEXS20E6jHooveNW
-         e88eSA3HgkX5vvAp0wrDDo2QvjNT924DYe/7xApU=
+        b=12WtbljeNdb4uRS9U1cFjunzmCpAXBKc6gyAsQ8HPPUAnTYdyYmc548dbpAzCV1zW
+         mJFS+jlg/Q8ZsrHwOmx0ecj/+htiGU+iZjS2rmNHmL5u0b3+8oXFO0bLT0bY2Rvpxs
+         KdGRAWPTpNylaU9JetuHlme0vGT/dRg7IwiC4kFc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Robert Foss <robert.foss@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0424/1126] drm/meson: Fix error handling when afbcd.ops->init fails
-Date:   Tue,  5 Apr 2022 09:19:31 +0200
-Message-Id: <20220405070420.071169738@linuxfoundation.org>
+Subject: [PATCH 5.17 0426/1126] drm/bridge: Add missing pm_runtime_disable() in __dw_mipi_dsi_probe
+Date:   Tue,  5 Apr 2022 09:19:33 +0200
+Message-Id: <20220405070420.129574971@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,89 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit fa747d75f65d1b1cbc3f4691fa67b695e8a399c8 ]
+[ Upstream commit 96211b7c56b109a52768e6cc5e23a1f79316eca0 ]
 
-When afbcd.ops->init fails we need to free the struct drm_device. Also
-all errors which come after afbcd.ops->init was successful need to exit
-the AFBCD, just like meson_drv_unbind() does.
+If the probe fails, we should use pm_runtime_disable() to balance
+pm_runtime_enable().
+Add missing pm_runtime_disable() for __dw_mipi_dsi_probe.
 
-Fixes: d1b5e41e13a7e9 ("drm/meson: Add AFBCD module driver")
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20211230235515.1627522-3-martin.blumenstingl@googlemail.com
+Fixes: 46fc51546d44 ("drm/bridge/synopsys: Add MIPI DSI host controller bridge")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220105104113.31415-1-linmq006@gmail.com
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/meson/meson_drv.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/meson/meson_drv.c b/drivers/gpu/drm/meson/meson_drv.c
-index b919271a6e50..26aeaf0ab86e 100644
---- a/drivers/gpu/drm/meson/meson_drv.c
-+++ b/drivers/gpu/drm/meson/meson_drv.c
-@@ -302,42 +302,42 @@ static int meson_drv_bind_master(struct device *dev, bool has_components)
- 	if (priv->afbcd.ops) {
- 		ret = priv->afbcd.ops->init(priv);
- 		if (ret)
--			return ret;
-+			goto free_drm;
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
+index e44e18a0112a..56c3fd08c6a0 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
+@@ -1199,6 +1199,7 @@ __dw_mipi_dsi_probe(struct platform_device *pdev,
+ 	ret = mipi_dsi_host_register(&dsi->dsi_host);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to register MIPI host: %d\n", ret);
++		pm_runtime_disable(dev);
+ 		dw_mipi_dsi_debugfs_remove(dsi);
+ 		return ERR_PTR(ret);
  	}
- 
- 	/* Encoder Initialization */
- 
- 	ret = meson_encoder_cvbs_init(priv);
- 	if (ret)
--		goto free_drm;
-+		goto exit_afbcd;
- 
- 	if (has_components) {
- 		ret = component_bind_all(drm->dev, drm);
- 		if (ret) {
- 			dev_err(drm->dev, "Couldn't bind all components\n");
--			goto free_drm;
-+			goto exit_afbcd;
- 		}
- 	}
- 
- 	ret = meson_encoder_hdmi_init(priv);
- 	if (ret)
--		goto free_drm;
-+		goto exit_afbcd;
- 
- 	ret = meson_plane_create(priv);
- 	if (ret)
--		goto free_drm;
-+		goto exit_afbcd;
- 
- 	ret = meson_overlay_create(priv);
- 	if (ret)
--		goto free_drm;
-+		goto exit_afbcd;
- 
- 	ret = meson_crtc_create(priv);
- 	if (ret)
--		goto free_drm;
-+		goto exit_afbcd;
- 
- 	ret = request_irq(priv->vsync_irq, meson_irq, 0, drm->driver->name, drm);
- 	if (ret)
--		goto free_drm;
-+		goto exit_afbcd;
- 
- 	drm_mode_config_reset(drm);
- 
-@@ -355,6 +355,9 @@ static int meson_drv_bind_master(struct device *dev, bool has_components)
- 
- uninstall_irq:
- 	free_irq(priv->vsync_irq, drm);
-+exit_afbcd:
-+	if (priv->afbcd.ops)
-+		priv->afbcd.ops->exit(priv);
- free_drm:
- 	drm_dev_put(drm);
- 
 -- 
 2.34.1
 

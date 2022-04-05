@@ -2,108 +2,334 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ABF64F23F1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29AD44F23EA
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbiDEHKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
+        id S231373AbiDEHJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbiDEHKb (ORCPT
+        with ESMTP id S229761AbiDEHJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:10:31 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3B8AE68;
-        Tue,  5 Apr 2022 00:08:31 -0700 (PDT)
-Received: from mail-wm1-f52.google.com ([209.85.128.52]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1N2mS2-1o0gYU13vQ-0138sv; Tue, 05 Apr 2022 09:08:30 +0200
-Received: by mail-wm1-f52.google.com with SMTP id h16so7369089wmd.0;
-        Tue, 05 Apr 2022 00:08:30 -0700 (PDT)
-X-Gm-Message-State: AOAM533uF+b4xAa6Ic2bQpbYjoG/RGOkmn+3taMPbMxBhp2EX5An+Xmo
-        rYi6zYE+2gSbnT9p+vHCWNu2AhFJO18VuGt1jJs=
-X-Google-Smtp-Source: ABdhPJxPvBD3liGjE4wcwAU/5uhv3UpZs9CP1VYRV8xEB/qANbka4xub+huj1JgZoNT228F8duYYmCMymQ3lWUBTDoI=
-X-Received: by 2002:a05:600c:4ecc:b0:38e:354d:909 with SMTP id
- g12-20020a05600c4ecc00b0038e354d0909mr1768472wmq.33.1649142509779; Tue, 05
- Apr 2022 00:08:29 -0700 (PDT)
+        Tue, 5 Apr 2022 03:09:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2E4D9C;
+        Tue,  5 Apr 2022 00:07:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42483B81BA9;
+        Tue,  5 Apr 2022 07:07:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B934C340F3;
+        Tue,  5 Apr 2022 07:07:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649142441;
+        bh=0cm3jeEzLe7N3EP4NGVKWIlZwxIWB2O3sux63BexVRU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ufKGipfKs0Ydlg7WDqtwJeyxrmzd4O0c83H8X4YI+lwm88zVQQC/c3MFVUGPmxz4l
+         SOykwmFobC6jb09nZn5BryixX8NMjG9/jX23q84xRdDnxxJmk5bnc+vPWr9BSocvXU
+         YUdkHVYOKagBt9TUN2CWRgr56EQy2krv3+oM20hoGzY+CrJ/JorbyT53iEXt5gLklj
+         pWMwizLSoCorN+ZmjvHWmDOfPOwQw+Z1COS1Q+s/1EIQcja8XrQheIkB3fG7cQC5y7
+         AZBxc49DdOEfmE8xh3W74/4Tj253iYZ0m0VnHAuidTdiodo7Meb/5Yrg1xgLYya2US
+         +BufrP403Fryg==
+Date:   Tue, 5 Apr 2022 10:08:32 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
+        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
+        x86@kernel.org, seanjc@google.com, kai.huang@intel.com,
+        cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V3 18/30] x86/sgx: Support complete page removal
+Message-ID: <Ykvq8Byj7SbXLA0z@kernel.org>
+References: <cover.1648847675.git.reinette.chatre@intel.com>
+ <82f8bb1ac50470696e6221c82cdb2807c4e0841c.1648847675.git.reinette.chatre@intel.com>
 MIME-Version: 1.0
-References: <CAHk-=wg6FWL1xjVyHx7DdjD2dHZETA5_=FqqW17Z19X-WTfWSg@mail.gmail.com>
- <20220404074734.1092959-1-geert@linux-m68k.org> <alpine.DEB.2.22.394.2204041006230.1941618@ramsan.of.borg>
- <20220404092655.GR1544202@dread.disaster.area> <CAMuHMdWgqdR1o3wT9pjB=w8z=2xaDFv5DJX58-HPHOFRm3Tr8Q@mail.gmail.com>
- <CAK8P3a0QrihBR_2FQ7uZ5w2JmLjv7czfrrarCMmJOhvNdJ3p9g@mail.gmail.com>
- <20220404221605.GS1544202@dread.disaster.area> <CAMuHMdWak-zarKA_eCxWm5uhejWAXi0XkAuekfpAKRczLfhq3g@mail.gmail.com>
-In-Reply-To: <CAMuHMdWak-zarKA_eCxWm5uhejWAXi0XkAuekfpAKRczLfhq3g@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 5 Apr 2022 09:08:13 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1JArChbzRDFU0YPCy-7QZgqSoHe8JTH4g0yOz_Mi_MEA@mail.gmail.com>
-Message-ID: <CAK8P3a1JArChbzRDFU0YPCy-7QZgqSoHe8JTH4g0yOz_Mi_MEA@mail.gmail.com>
-Subject: Re: Build regressions/improvements in v5.18-rc1
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Dave Chinner <david@fromorbit.com>, Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:v9JTIi8qJtPG3PIp92ZT1BP7xmoboLcO+2N58Y0rG8EUhOm7Txw
- FajvsKKlzhdlcaQTsyIaUM9+ML0BjbRuHavN4q8FSwUzJTTJZoGPOucY4nJLuNxRD3agKmV
- ZgLJvxMlCM3sXqoOLPU6f3WLfLUdVomfUMidgtlZAXRZq+SYumE+t+Z3zkFyEcjlKtj1j2O
- zjLCHmOP1uoXs2JAYWOmQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:F6FWl9H0mQY=:mOtSjqg6Xn4k4DEScVdk+i
- eP6YitvK+wB5dVoo6IPKnGVQ0bfZqOg0Px1eh4RgNlvtK57Z2UXVwF8ilqEfS2yoIX54o/4tR
- nl5w5y5QluOsKaS9DlSLRgArTckW5TxPeOJYhBFo6zE5TaIes9hbwoRRpY9yWTBUjCxjzIzlP
- w+l5k8hAPcjeiHaM+GsU/zmSEYGVPKQ/6dypB+nlFwqoUFDUhap9Kv9h/HVCYza0efskXOKjq
- OChO11lkYvU0K8woTHHS8QfK9jXxYpNCc+Y3T3dzGHe22+zb86C6dd3hWdoGnNxxz3Xkrcef9
- eeY87vUWZ+CfmX5fY9VRyxg064V4BEodsPkssn0FTnBzWXZdYUIAas5/gilcDo4o4/22Jfyfd
- s0Pav7lxpHwLoAGKSFOMAr039TjniDo8goTEiI8LqsA4/duZIRgaXddEre4H6hSKTB9SvyT2W
- IIgSP6egsS/uhMHRwi6kIDETHGC3Q8z7j3pkHZY5fuXVpj3t+yOekpRYuSNu8i3pBLKQG2r4F
- jAmFyvnolPZaI7pcrhgQNY8ShbsEOCoeUf41S3LjjyBV9AsyvuBL/ohESvIDzzxz1XO1ZHY2p
- +1DbeOI4WXHwTtuBlR5+XOS1v6h6D6HjHig1YdEL1IvAL7Hb4onVpfk1AgaRD+WhclR2ZF0mH
- sZPFstixJXm5WwVOgSTfEVy4fQoZvVIQTVAstJbtFFg7nNZYkU4ZxEiVqCLtDRt2wOEdEJOVF
- peC5Vt2EtABLN6SkGnWJmmIo26QN7iOuVFUtvpqbBoOot0HqUWCfqTg6D2dSLWjlAxusCiH5J
- Q0E4ToUVgfOX8ictrwEugfM7VBvSXW6u/6TRa97HcDNxbfEj/E=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <82f8bb1ac50470696e6221c82cdb2807c4e0841c.1648847675.git.reinette.chatre@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-?On Tue, Apr 5, 2022 at 8:47 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Tue, Apr 5, 2022 at 12:16 AM Dave Chinner <david@fromorbit.com> wrote:
-> > So XFS only uses these flags in unsigned int fields that are
-> > typed via:
-> >
-> > typedef unsigned int xfs_buf_flags_t;
-> >
-> > So on the surface, declaring the flag values as ULONG and then writing
-> > them into a UINT field is not a nice thing to be doing.
-> >
-> > I really don't want to change the xfs_buf_flags_t type to an
-> > unsigned long, because that changes the packing of the first
-> > cacheline of the struct xfs_buf and the contents of that cacheline
-> > are performance critical for the lookup fastpath....
->
-> Hence just use "1u << n" instead of "1ul << n"?
+On Mon, Apr 04, 2022 at 09:49:26AM -0700, Reinette Chatre wrote:
+> The SGX2 page removal flow was introduced in previous patch and is
+> as follows:
+> 1) Change the type of the pages to be removed to SGX_PAGE_TYPE_TRIM
+>    using the ioctl() SGX_IOC_ENCLAVE_MODIFY_TYPE introduced in
+>    previous patch.
+> 2) Approve the page removal by running ENCLU[EACCEPT] from within
+>    the enclave.
+> 3) Initiate actual page removal using the ioctl()
+>    SGX_IOC_ENCLAVE_REMOVE_PAGES introduced here.
+> 
+> Support the final step of the SGX2 page removal flow with ioctl()
+> SGX_IOC_ENCLAVE_REMOVE_PAGES. With this ioctl() the user specifies
+> a page range that should be removed. All pages in the provided
+> range should have the SGX_PAGE_TYPE_TRIM page type and the request
+> will fail with EPERM (Operation not permitted) if a page that does
+> not have the correct type is encountered. Page removal can fail
+> on any page within the provided range. Support partial success by
+> returning the number of pages that were successfully removed.
+> 
+> Since actual page removal will succeed even if ENCLU[EACCEPT] was not
+> run from within the enclave the ENCLU[EMODPR] instruction with RWX
+> permissions is used as a no-op mechanism to ensure ENCLU[EACCEPT] was
+> successfully run from within the enclave before the enclave page is
+> removed.
+> 
+> If the user omits running SGX_IOC_ENCLAVE_REMOVE_PAGES the pages will
+> still be removed when the enclave is unloaded.
+> 
+> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+> ---
+> Changes since V2:
+> - Adjust ioctl number since removal of
+>   SGX_IOC_ENCLAVE_RELAX_PERMISSIONS.
+> 
+> Changes since V1:
+> - Update comments to refer to new ioctl() names SGX_IOC_PAGE_MODT ->
+>   SGX_IOC_ENCLAVE_MODIFY_TYPE.
+> - Fix kernel-doc to have () as part of function name.
+> - Change name of ioctl():
+>   SGX_IOC_PAGE_REMOVE -> SGX_IOC_ENCLAVE_REMOVE_PAGES (Jarkko).
+> - With the above name change the page removal ioctl() has its name
+>   aligned with existing SGX_IOC_ENCLAVE_ADD_PAGES ioctl(). Also align
+>   naming of struct and functions:
+>   struct sgx_page_remove -> struct sgx_enclave_remove_pages
+>   sgx_page_remove() -> sgx_encl_remove_pages()
+>   sgx_ioc_page_remove() -> sgx_ioc_enclave_remove_pages()
+> - Use new SGX2 checking helper.
+> - When loading enclave page, make error code consistent with other
+>   instances to help user distinguish between permanent and temporary
+>   failures.
+> - Move kernel-doc to function that provides documentation for
+>   Documentation/x86/sgx.rst.
+> - Remove redundant comment.
+> - Use offset/length validation utility.
+> - Make explicit which member of struct sgx_enclave_remove_pages is for
+>   output (Dave).
+> 
+>  arch/x86/include/uapi/asm/sgx.h |  21 +++++
+>  arch/x86/kernel/cpu/sgx/ioctl.c | 145 ++++++++++++++++++++++++++++++++
+>  2 files changed, 166 insertions(+)
+> 
+> diff --git a/arch/x86/include/uapi/asm/sgx.h b/arch/x86/include/uapi/asm/sgx.h
+> index 529f4ab28410..feda7f85b2ce 100644
+> --- a/arch/x86/include/uapi/asm/sgx.h
+> +++ b/arch/x86/include/uapi/asm/sgx.h
+> @@ -33,6 +33,8 @@ enum sgx_page_flags {
+>  	_IOWR(SGX_MAGIC, 0x05, struct sgx_enclave_restrict_permissions)
+>  #define SGX_IOC_ENCLAVE_MODIFY_TYPE \
+>  	_IOWR(SGX_MAGIC, 0x06, struct sgx_enclave_modify_type)
+> +#define SGX_IOC_ENCLAVE_REMOVE_PAGES \
+> +	_IOWR(SGX_MAGIC, 0x07, struct sgx_enclave_remove_pages)
+>  
+>  /**
+>   * struct sgx_enclave_create - parameter structure for the
+> @@ -117,6 +119,25 @@ struct sgx_enclave_modify_type {
+>  	__u64 count;
+>  };
+>  
+> +/**
+> + * struct sgx_enclave_remove_pages - %SGX_IOC_ENCLAVE_REMOVE_PAGES parameters
+> + * @offset:	starting page offset (page aligned relative to enclave base
+> + *		address defined in SECS)
+> + * @length:	length of memory (multiple of the page size)
+> + * @count:	(output) bytes successfully changed (multiple of page size)
+> + *
+> + * Regular (PT_REG) or TCS (PT_TCS) can be removed from an initialized
+> + * enclave if the system supports SGX2. First, the %SGX_IOC_ENCLAVE_MODIFY_TYPE
+> + * ioctl() should be used to change the page type to PT_TRIM. After that
+> + * succeeds ENCLU[EACCEPT] should be run from within the enclave and then
+> + * %SGX_IOC_ENCLAVE_REMOVE_PAGES can be used to complete the page removal.
+> + */
+> +struct sgx_enclave_remove_pages {
+> +	__u64 offset;
+> +	__u64 length;
+> +	__u64 count;
+> +};
+> +
+>  struct sgx_enclave_run;
+>  
+>  /**
+> diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
+> index 6f769e67ec2d..515e1961cc02 100644
+> --- a/arch/x86/kernel/cpu/sgx/ioctl.c
+> +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
+> @@ -1104,6 +1104,148 @@ static long sgx_ioc_enclave_modify_type(struct sgx_encl *encl, void __user *arg)
+>  	return ret;
+>  }
+>  
+> +/**
+> + * sgx_encl_remove_pages() - Remove trimmed pages from SGX enclave
+> + * @encl:	Enclave to which the pages belong
+> + * @params:	Checked parameters from user on which pages need to be removed
+> + *
+> + * Return:
+> + * - 0:		Success.
+> + * - -errno:	Otherwise.
+> + */
+> +static long sgx_encl_remove_pages(struct sgx_encl *encl,
+> +				  struct sgx_enclave_remove_pages *params)
+> +{
+> +	struct sgx_encl_page *entry;
+> +	struct sgx_secinfo secinfo;
+> +	unsigned long addr;
+> +	unsigned long c;
+> +	void *epc_virt;
+> +	int ret;
+> +
+> +	memset(&secinfo, 0, sizeof(secinfo));
+> +	secinfo.flags = SGX_SECINFO_R | SGX_SECINFO_W | SGX_SECINFO_X;
+> +
+> +	for (c = 0 ; c < params->length; c += PAGE_SIZE) {
+> +		addr = encl->base + params->offset + c;
+> +
+> +		mutex_lock(&encl->lock);
+> +
+> +		entry = sgx_encl_load_page(encl, addr);
+> +		if (IS_ERR(entry)) {
+> +			ret = PTR_ERR(entry) == -EBUSY ? -EAGAIN : -EFAULT;
+> +			goto out_unlock;
+> +		}
+> +
+> +		if (entry->type != SGX_PAGE_TYPE_TRIM) {
+> +			ret = -EPERM;
+> +			goto out_unlock;
+> +		}
+> +
+> +		/*
+> +		 * ENCLS[EMODPR] is a no-op instruction used to inform if
+> +		 * ENCLU[EACCEPT] was run from within the enclave. If
+> +		 * ENCLS[EMODPR] is run with RWX on a trimmed page that is
+> +		 * not yet accepted then it will return
+> +		 * %SGX_PAGE_NOT_MODIFIABLE, after the trimmed page is
+> +		 * accepted the instruction will encounter a page fault.
+> +		 */
+> +		epc_virt = sgx_get_epc_virt_addr(entry->epc_page);
+> +		ret = __emodpr(&secinfo, epc_virt);
+> +		if (!encls_faulted(ret) || ENCLS_TRAPNR(ret) != X86_TRAP_PF) {
+> +			ret = -EPERM;
+> +			goto out_unlock;
+> +		}
+> +
+> +		if (sgx_unmark_page_reclaimable(entry->epc_page)) {
+> +			ret = -EBUSY;
+> +			goto out_unlock;
+> +		}
+> +
+> +		/*
+> +		 * Do not keep encl->lock because of dependency on
+> +		 * mmap_lock acquired in sgx_zap_enclave_ptes().
+> +		 */
+> +		mutex_unlock(&encl->lock);
+> +
+> +		sgx_zap_enclave_ptes(encl, addr);
+> +
+> +		mutex_lock(&encl->lock);
+> +
+> +		sgx_encl_free_epc_page(entry->epc_page);
+> +		encl->secs_child_cnt--;
+> +		entry->epc_page = NULL;
+> +		xa_erase(&encl->page_array, PFN_DOWN(entry->desc));
+> +		sgx_encl_shrink(encl, NULL);
+> +		kfree(entry);
+> +
+> +		mutex_unlock(&encl->lock);
+> +	}
+> +
+> +	ret = 0;
+> +	goto out;
+> +
+> +out_unlock:
+> +	mutex_unlock(&encl->lock);
+> +out:
+> +	params->count = c;
+> +
+> +	return ret;
+> +}
+> +
+> +/**
+> + * sgx_ioc_enclave_remove_pages() - handler for %SGX_IOC_ENCLAVE_REMOVE_PAGES
+> + * @encl:	an enclave pointer
+> + * @arg:	userspace pointer to &struct sgx_enclave_remove_pages instance
+> + *
+> + * Final step of the flow removing pages from an initialized enclave. The
+> + * complete flow is:
+> + *
+> + * 1) User changes the type of the pages to be removed to %SGX_PAGE_TYPE_TRIM
+> + *    using the %SGX_IOC_ENCLAVE_MODIFY_TYPE ioctl().
+> + * 2) User approves the page removal by running ENCLU[EACCEPT] from within
+> + *    the enclave.
+> + * 3) User initiates actual page removal using the
+> + *    %SGX_IOC_ENCLAVE_REMOVE_PAGES ioctl() that is handled here.
+> + *
+> + * First remove any page table entries pointing to the page and then proceed
+> + * with the actual removal of the enclave page and data in support of it.
+> + *
+> + * VA pages are not affected by this removal. It is thus possible that the
+> + * enclave may end up with more VA pages than needed to support all its
+> + * pages.
+> + *
+> + * Return:
+> + * - 0:		Success
+> + * - -errno:	Otherwise
+> + */
+> +static long sgx_ioc_enclave_remove_pages(struct sgx_encl *encl,
+> +					 void __user *arg)
+> +{
+> +	struct sgx_enclave_remove_pages params;
+> +	long ret;
+> +
+> +	ret = sgx_ioc_sgx2_ready(encl);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (copy_from_user(&params, arg, sizeof(params)))
+> +		return -EFAULT;
+> +
+> +	if (sgx_validate_offset_length(encl, params.offset, params.length))
+> +		return -EINVAL;
+> +
+> +	if (params.count)
+> +		return -EINVAL;
+> +
+> +	ret = sgx_encl_remove_pages(encl, &params);
+> +
+> +	if (copy_to_user(arg, &params, sizeof(params)))
+> +		return -EFAULT;
+> +
+> +	return ret;
+> +}
+> +
+>  long sgx_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
+>  {
+>  	struct sgx_encl *encl = filep->private_data;
+> @@ -1132,6 +1274,9 @@ long sgx_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
+>  	case SGX_IOC_ENCLAVE_MODIFY_TYPE:
+>  		ret = sgx_ioc_enclave_modify_type(encl, (void __user *)arg);
+>  		break;
+> +	case SGX_IOC_ENCLAVE_REMOVE_PAGES:
+> +		ret = sgx_ioc_enclave_remove_pages(encl, (void __user *)arg);
+> +		break;
+>  	default:
+>  		ret = -ENOIOCTLCMD;
+>  		break;
+> -- 
+> 2.25.1
+> 
 
-Right, that avoids the error as well. I picked '1ul' to match the type of
-the variable it's assigned to, but as Dave said the intended type is
-'u32', so '1u' is better here.
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-> > Looking at __print_flags, the internal array type declaration is:
-> >
-> > struct trace_print_flags {
-> >         unsigned long           mask;
-> >         const char              *name;
-> > };
-> >
-> > and that's the source of the problem.  I notice __print_flags_u64()
-> > exists, but __print_flags_u32() does not. Should it?
+It's easy to give these quickly as I've spent at least a month looking at
+this code while working on support for enarx run-time...
 
-It's not the source of the error, as there is no signed integer
-overflow when assigning an unsigned int to an unsigned long.
-
-It may be helpful to add a __print_flags_u32(), but it's unrelated
-to the problem at hand.
-
-       Arnd
+BR, Jarkko

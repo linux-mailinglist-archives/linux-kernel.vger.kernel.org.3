@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB964F4FD1
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C694F50D7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:27:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1839512AbiDFBEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47412 "EHLO
+        id S1843560AbiDFBlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349515AbiDEJuC (ORCPT
+        with ESMTP id S1357502AbiDEK0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:50:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBF51E4;
-        Tue,  5 Apr 2022 02:48:04 -0700 (PDT)
+        Tue, 5 Apr 2022 06:26:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C452DD4D;
+        Tue,  5 Apr 2022 03:10:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0A3B6B817D3;
-        Tue,  5 Apr 2022 09:48:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71748C385A1;
-        Tue,  5 Apr 2022 09:48:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DAC61617AE;
+        Tue,  5 Apr 2022 10:10:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBA95C385A1;
+        Tue,  5 Apr 2022 10:10:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152081;
-        bh=fc6qrim3UwwCoexjObybUivRCYC7le7SVED3R4kDhpI=;
+        s=korg; t=1649153419;
+        bh=gqjWp8ZRyqz+aMmbrLmE97qAwqZMiw801VH806/InDE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z4uzVuDnNbP9Bh98NTca+00dAM+XkdJgkpJ0VPkCoMYrupFqYFAKFi1kNkrdMzcxM
-         dLSrlAr4h47qv7iIUxnFaPoz22MBjFLdb6rKl1BR5TtwX8du2lyTiw51Za0Y/ddyPC
-         ldIoSkXHDG61BXbfwTzgFOSxCvLtT/rnqkAWmcPg=
+        b=Bmh4rpN9ThXkqpiLooZe4PQgmlYGOUbKmxHfjMvIX0j8JduQDFsvUh/QRytjVONOP
+         QLnkWHCmHhdIBlZoVYAqqPDPfMZUo7s3d46Mx03Fhmo0zihkqBpJQl7BTlS+fNlDIn
+         VLblGVzf1anQW18vEpZJYj1cL7E6FmvzL8xHmjTY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Randy Dunlap <rdunlap@infradead.org>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 647/913] driver core: dd: fix return value of __setup handler
-Date:   Tue,  5 Apr 2022 09:28:29 +0200
-Message-Id: <20220405070359.233405152@linuxfoundation.org>
+Subject: [PATCH 5.10 217/599] media: usb: go7007: s2250-board: fix leak in probe()
+Date:   Tue,  5 Apr 2022 09:28:31 +0200
+Message-Id: <20220405070305.299963997@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,57 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit f2aad54703dbe630f9d8b235eb58e8c8cc78f37d ]
+[ Upstream commit 67e4550ecd6164bfbdff54c169e5bbf9ccfaf14d ]
 
-When "driver_async_probe=nulltty" is used on the kernel boot command line,
-it causes an Unknown parameter message and the string is added to init's
-environment strings, polluting them.
+Call i2c_unregister_device(audio) on this error path.
 
-  Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc6
-  driver_async_probe=nulltty", will be passed to user space.
-
- Run /sbin/init as init process
-   with arguments:
-     /sbin/init
-   with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc6
-     driver_async_probe=nulltty
-
-Change the return value of the __setup function to 1 to indicate
-that the __setup option has been handled.
-
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Fixes: 1ea61b68d0f8 ("async: Add cmdline option to specify drivers to be async probed")
-Cc: Feng Tang <feng.tang@intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Reviewed-by: Feng Tang <feng.tang@intel.com>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/20220301041829.15137-1-rdunlap@infradead.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d3b2ccd9e307 ("[media] s2250: convert to the control framework")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/base/dd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/usb/go7007/s2250-board.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index 6b6630693201..64ce42b6c6b6 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -809,7 +809,7 @@ static int __init save_async_options(char *buf)
- 		pr_warn("Too long list of driver names for 'driver_async_probe'!\n");
+diff --git a/drivers/media/usb/go7007/s2250-board.c b/drivers/media/usb/go7007/s2250-board.c
+index b9e45124673b..2e5913bccb38 100644
+--- a/drivers/media/usb/go7007/s2250-board.c
++++ b/drivers/media/usb/go7007/s2250-board.c
+@@ -504,6 +504,7 @@ static int s2250_probe(struct i2c_client *client,
+ 	u8 *data;
+ 	struct go7007 *go = i2c_get_adapdata(adapter);
+ 	struct go7007_usb *usb = go->hpi_context;
++	int err = -EIO;
  
- 	strlcpy(async_probe_drv_names, buf, ASYNC_DRV_NAMES_MAX_LEN);
--	return 0;
-+	return 1;
+ 	audio = i2c_new_dummy_device(adapter, TLV320_ADDRESS >> 1);
+ 	if (IS_ERR(audio))
+@@ -532,11 +533,8 @@ static int s2250_probe(struct i2c_client *client,
+ 		V4L2_CID_HUE, -512, 511, 1, 0);
+ 	sd->ctrl_handler = &state->hdl;
+ 	if (state->hdl.error) {
+-		int err = state->hdl.error;
+-
+-		v4l2_ctrl_handler_free(&state->hdl);
+-		kfree(state);
+-		return err;
++		err = state->hdl.error;
++		goto fail;
+ 	}
+ 
+ 	state->std = V4L2_STD_NTSC;
+@@ -600,7 +598,7 @@ static int s2250_probe(struct i2c_client *client,
+ 	i2c_unregister_device(audio);
+ 	v4l2_ctrl_handler_free(&state->hdl);
+ 	kfree(state);
+-	return -EIO;
++	return err;
  }
- __setup("driver_async_probe=", save_async_options);
  
+ static int s2250_remove(struct i2c_client *client)
 -- 
 2.34.1
 

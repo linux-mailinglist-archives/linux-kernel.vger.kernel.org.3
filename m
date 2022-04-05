@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E6B4F4326
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 934A34F40A5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351980AbiDENKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34656 "EHLO
+        id S1359309AbiDENL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344194AbiDEJSh (ORCPT
+        with ESMTP id S1344202AbiDEJSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:18:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301AB9BADE;
-        Tue,  5 Apr 2022 02:05:19 -0700 (PDT)
+        Tue, 5 Apr 2022 05:18:38 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387A548E55;
+        Tue,  5 Apr 2022 02:05:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3838B818F3;
-        Tue,  5 Apr 2022 09:05:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E542C385A3;
-        Tue,  5 Apr 2022 09:05:16 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 99E16CE1BF8;
+        Tue,  5 Apr 2022 09:05:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B00AFC385A1;
+        Tue,  5 Apr 2022 09:05:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149516;
-        bh=H+wrthQDzaXAAOeIRN9O2lru9UGFfZdwB03CMg1HSOs=;
+        s=korg; t=1649149522;
+        bh=nRRBq/Jik1ej734zd5EJafMlkLa2+n+e12Jve3Y5fDU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hMWuAaqAWt9rQN92LpAvNUQ+4t7U33QAMWv2sZAc7SpXW0wsXVcdPFz41UPqqXmrC
-         r+3KQKBU7WUC2iSE7P+abOka1raME5QNGShOb51EX08UcWzfPRyWFdds+jk2x7VWGK
-         26cPmReklCRylZPq1h4NQb1bGAADKXsOdj/op8So=
+        b=FfH0tEjNkU6gt8cn5rkxjGs8jvPuVTuS7wYQLUM2iNuY30ngftsCe1s0Gu6E7iXnx
+         Vo9Ub8bG6VX0vQlO7iJ6LrPEowuh6Z4vMSZRdvg9OfY/J6+7FhmV/psL4zQoIqYoEy
+         dqRTPGE3bTkGHp+8fHjaAJAuouQoUwstrDS1Y8fE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Paul Blakey <paulb@mellanox.com>,
+        dev@openvswitch.org, Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0742/1017] octeontx2-af: initialize action variable
-Date:   Tue,  5 Apr 2022 09:27:35 +0200
-Message-Id: <20220405070416.288510791@linuxfoundation.org>
+Subject: [PATCH 5.16 0744/1017] net: prefer nf_ct_put instead of nf_conntrack_put
+Date:   Tue,  5 Apr 2022 09:27:37 +0200
+Message-Id: <20220405070416.347264359@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,107 +56,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Florian Westphal <fw@strlen.de>
 
-[ Upstream commit 33b5bc9e703383e396f275d51fc4bafa48dbae5a ]
+[ Upstream commit 408bdcfce8dfd6902f75fbcd3b99d8b24b506597 ]
 
-Clang static analysis reports this representative issue
-rvu_npc.c:898:15: warning: Assigned value is garbage
-  or undefined
-  req.match_id = action.match_id;
-               ^ ~~~~~~~~~~~~~~~
+Its the same as nf_conntrack_put(), but without the
+need for an indirect call.  The downside is a module dependency on
+nf_conntrack, but all of these already depend on conntrack anyway.
 
-The initial setting of action is conditional on
- if (is_mcam_entry_enabled(...))
-The later check of action.op will sometimes be garbage.
-So initialize action.
-
-Reduce setting of
-  *(u64 *)&action = 0x00;
-to
-  *(u64 *)&action = 0;
-
-Fixes: 967db3529eca ("octeontx2-af: add support for multicast/promisc packet replication feature")
-Signed-off-by: Tom Rix <trix@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Cc: Paul Blakey <paulb@mellanox.com>
+Cc: dev@openvswitch.org
+Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/ethernet/marvell/octeontx2/af/rvu_npc.c   | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ net/netfilter/nf_conntrack_core.c |  4 ++--
+ net/openvswitch/conntrack.c       | 14 ++++++++++----
+ net/sched/act_ct.c                |  6 +++---
+ 3 files changed, 15 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c
-index 91f86d77cd41..3a31fb8cc155 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c
-@@ -605,7 +605,7 @@ void rvu_npc_install_ucast_entry(struct rvu *rvu, u16 pcifunc,
- 	struct npc_install_flow_req req = { 0 };
- 	struct npc_install_flow_rsp rsp = { 0 };
- 	struct npc_mcam *mcam = &rvu->hw->mcam;
--	struct nix_rx_action action;
-+	struct nix_rx_action action = { 0 };
- 	int blkaddr, index;
+diff --git a/net/netfilter/nf_conntrack_core.c b/net/netfilter/nf_conntrack_core.c
+index 7f7997460764..917e708a4561 100644
+--- a/net/netfilter/nf_conntrack_core.c
++++ b/net/netfilter/nf_conntrack_core.c
+@@ -989,7 +989,7 @@ static int __nf_ct_resolve_clash(struct sk_buff *skb,
  
- 	/* AF's and SDP VFs work in promiscuous mode */
-@@ -626,7 +626,6 @@ void rvu_npc_install_ucast_entry(struct rvu *rvu, u16 pcifunc,
- 		*(u64 *)&action = npc_get_mcam_action(rvu, mcam,
- 						      blkaddr, index);
- 	} else {
--		*(u64 *)&action = 0x00;
- 		action.op = NIX_RX_ACTIONOP_UCAST;
- 		action.pf_func = pcifunc;
- 	}
-@@ -657,7 +656,7 @@ void rvu_npc_install_promisc_entry(struct rvu *rvu, u16 pcifunc,
- 	struct npc_mcam *mcam = &rvu->hw->mcam;
- 	struct rvu_hwinfo *hw = rvu->hw;
- 	int blkaddr, ucast_idx, index;
--	struct nix_rx_action action;
-+	struct nix_rx_action action = { 0 };
- 	u64 relaxed_mask;
+ 		nf_ct_acct_merge(ct, ctinfo, loser_ct);
+ 		nf_ct_add_to_dying_list(loser_ct);
+-		nf_conntrack_put(&loser_ct->ct_general);
++		nf_ct_put(loser_ct);
+ 		nf_ct_set(skb, ct, ctinfo);
  
- 	if (!hw->cap.nix_rx_multicast && is_cgx_vf(rvu, pcifunc))
-@@ -685,14 +684,14 @@ void rvu_npc_install_promisc_entry(struct rvu *rvu, u16 pcifunc,
- 						      blkaddr, ucast_idx);
+ 		NF_CT_STAT_INC(net, clash_resolve);
+@@ -1920,7 +1920,7 @@ nf_conntrack_in(struct sk_buff *skb, const struct nf_hook_state *state)
+ 		/* Invalid: inverse of the return code tells
+ 		 * the netfilter core what to do */
+ 		pr_debug("nf_conntrack_in: Can't track with proto module\n");
+-		nf_conntrack_put(&ct->ct_general);
++		nf_ct_put(ct);
+ 		skb->_nfct = 0;
+ 		/* Special case: TCP tracker reports an attempt to reopen a
+ 		 * closed/aborted connection. We have to go back and create a
+diff --git a/net/openvswitch/conntrack.c b/net/openvswitch/conntrack.c
+index 8f47f4e78d32..f2b64cab9af7 100644
+--- a/net/openvswitch/conntrack.c
++++ b/net/openvswitch/conntrack.c
+@@ -574,7 +574,7 @@ ovs_ct_expect_find(struct net *net, const struct nf_conntrack_zone *zone,
+ 			struct nf_conn *ct = nf_ct_tuplehash_to_ctrack(h);
  
- 	if (action.op != NIX_RX_ACTIONOP_RSS) {
--		*(u64 *)&action = 0x00;
-+		*(u64 *)&action = 0;
- 		action.op = NIX_RX_ACTIONOP_UCAST;
+ 			nf_ct_delete(ct, 0, 0);
+-			nf_conntrack_put(&ct->ct_general);
++			nf_ct_put(ct);
+ 		}
  	}
  
- 	/* RX_ACTION set to MCAST for CGX PF's */
- 	if (hw->cap.nix_rx_multicast && pfvf->use_mce_list &&
- 	    is_pf_cgxmapped(rvu, rvu_get_pf(pcifunc))) {
--		*(u64 *)&action = 0x00;
-+		*(u64 *)&action = 0;
- 		action.op = NIX_RX_ACTIONOP_MCAST;
- 		pfvf = rvu_get_pfvf(rvu, pcifunc & ~RVU_PFVF_FUNC_MASK);
- 		action.index = pfvf->promisc_mce_idx;
-@@ -832,7 +831,7 @@ void rvu_npc_install_allmulti_entry(struct rvu *rvu, u16 pcifunc, int nixlf,
- 	struct rvu_hwinfo *hw = rvu->hw;
- 	int blkaddr, ucast_idx, index;
- 	u8 mac_addr[ETH_ALEN] = { 0 };
--	struct nix_rx_action action;
-+	struct nix_rx_action action = { 0 };
- 	struct rvu_pfvf *pfvf;
- 	u16 vf_func;
+@@ -723,7 +723,7 @@ static bool skb_nfct_cached(struct net *net,
+ 		if (nf_ct_is_confirmed(ct))
+ 			nf_ct_delete(ct, 0, 0);
  
-@@ -861,14 +860,14 @@ void rvu_npc_install_allmulti_entry(struct rvu *rvu, u16 pcifunc, int nixlf,
- 							blkaddr, ucast_idx);
- 
- 	if (action.op != NIX_RX_ACTIONOP_RSS) {
--		*(u64 *)&action = 0x00;
-+		*(u64 *)&action = 0;
- 		action.op = NIX_RX_ACTIONOP_UCAST;
- 		action.pf_func = pcifunc;
+-		nf_conntrack_put(&ct->ct_general);
++		nf_ct_put(ct);
+ 		nf_ct_set(skb, NULL, 0);
+ 		return false;
  	}
+@@ -967,7 +967,8 @@ static int __ovs_ct_lookup(struct net *net, struct sw_flow_key *key,
  
- 	/* RX_ACTION set to MCAST for CGX PF's */
- 	if (hw->cap.nix_rx_multicast && pfvf->use_mce_list) {
--		*(u64 *)&action = 0x00;
-+		*(u64 *)&action = 0;
- 		action.op = NIX_RX_ACTIONOP_MCAST;
- 		action.index = pfvf->mcast_mce_idx;
- 	}
+ 		/* Associate skb with specified zone. */
+ 		if (tmpl) {
+-			nf_conntrack_put(skb_nfct(skb));
++			ct = nf_ct_get(skb, &ctinfo);
++			nf_ct_put(ct);
+ 			nf_conntrack_get(&tmpl->ct_general);
+ 			nf_ct_set(skb, tmpl, IP_CT_NEW);
+ 		}
+@@ -1328,7 +1329,12 @@ int ovs_ct_execute(struct net *net, struct sk_buff *skb,
+ 
+ int ovs_ct_clear(struct sk_buff *skb, struct sw_flow_key *key)
+ {
+-	nf_conntrack_put(skb_nfct(skb));
++	enum ip_conntrack_info ctinfo;
++	struct nf_conn *ct;
++
++	ct = nf_ct_get(skb, &ctinfo);
++
++	nf_ct_put(ct);
+ 	nf_ct_set(skb, NULL, IP_CT_UNTRACKED);
+ 	ovs_ct_fill_key(skb, key, false);
+ 
+diff --git a/net/sched/act_ct.c b/net/sched/act_ct.c
+index 4ffea1290ce1..240b3c5d2eb1 100644
+--- a/net/sched/act_ct.c
++++ b/net/sched/act_ct.c
+@@ -592,7 +592,7 @@ static bool tcf_ct_skb_nfct_cached(struct net *net, struct sk_buff *skb,
+ 		if (nf_ct_is_confirmed(ct))
+ 			nf_ct_kill(ct);
+ 
+-		nf_conntrack_put(&ct->ct_general);
++		nf_ct_put(ct);
+ 		nf_ct_set(skb, NULL, IP_CT_UNTRACKED);
+ 
+ 		return false;
+@@ -757,7 +757,7 @@ static void tcf_ct_params_free(struct rcu_head *head)
+ 	tcf_ct_flow_table_put(params);
+ 
+ 	if (params->tmpl)
+-		nf_conntrack_put(&params->tmpl->ct_general);
++		nf_ct_put(params->tmpl);
+ 	kfree(params);
+ }
+ 
+@@ -967,7 +967,7 @@ static int tcf_ct_act(struct sk_buff *skb, const struct tc_action *a,
+ 		tc_skb_cb(skb)->post_ct = false;
+ 		ct = nf_ct_get(skb, &ctinfo);
+ 		if (ct) {
+-			nf_conntrack_put(&ct->ct_general);
++			nf_ct_put(ct);
+ 			nf_ct_set(skb, NULL, IP_CT_UNTRACKED);
+ 		}
+ 
 -- 
 2.34.1
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF9E4F4FD7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59FE14F5089
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1839676AbiDFBFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
+        id S1348324AbiDFB2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240392AbiDEKcj (ORCPT
+        with ESMTP id S1354182AbiDEKMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:32:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7A9DE906;
-        Tue,  5 Apr 2022 03:18:36 -0700 (PDT)
+        Tue, 5 Apr 2022 06:12:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD3B52B17;
+        Tue,  5 Apr 2022 02:58:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59CDE61777;
-        Tue,  5 Apr 2022 10:18:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4228CC385A1;
-        Tue,  5 Apr 2022 10:18:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE2556172B;
+        Tue,  5 Apr 2022 09:58:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 098CFC385A2;
+        Tue,  5 Apr 2022 09:58:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153915;
-        bh=9PEFQguw30U1gpsVR7cU8RY0vR6P0NTVaLm1k7N31mQ=;
+        s=korg; t=1649152688;
+        bh=5zlb1hptJ2v/BAudDlnKXkagzh8LBcBz6czfaqR09DE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SEPSUYsy+gRZzA7LJ/UWk6NdGeOPsfpe5HAViPJDRgMT47p5vJJeXGtsGnBr7070v
-         aVZXYPGWjC6r0rIhOpb3lhEk59BGAzo4s5S2UTy7sdayFrDss5YvYoq9Ah3HneGZuT
-         6UPNd0N+1C5aTYc70h/Io5hkdBKpUR8Fn8e+JEoM=
+        b=JJeUIFf50R1R2Zivvgp2dhiJay9QM1p/kmuLFcewmOr7KEx8kw0EYaADo812GPPGW
+         EesrgBac/OwIrPm+KEgLSRFyEZwFsLWz15kI5SUrsJF7P9xH2D5QdVJBLgs2Mtmo1t
+         P4Ej1fDKEBb5qRXB+RpGyA+iJ/n5JQjVoFI28M3s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qing Wang <wangqing@vivo.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 393/599] serial: 8250_lpss: Balance reference count for PCI DMA device
-Date:   Tue,  5 Apr 2022 09:31:27 +0200
-Message-Id: <20220405070310.526505829@linuxfoundation.org>
+        stable@vger.kernel.org, Wang Hai <wanghai38@huawei.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 829/913] wireguard: socket: free skb in send6 when ipv6 is disabled
+Date:   Tue,  5 Apr 2022 09:31:31 +0200
+Message-Id: <20220405070404.679959400@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,111 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Wang Hai <wanghai38@huawei.com>
 
-[ Upstream commit 5318f70da7e82649d794fc27d8a127c22aa3566e ]
+commit bbbf962d9460194993ee1943a793a0a0af4a7fbf upstream.
 
-The pci_get_slot() increases its reference count, the caller
-must decrement the reference count by calling pci_dev_put().
+I got a memory leak report:
 
-Fixes: 9a1870ce812e ("serial: 8250: don't use slave_id of dma_slave_config")
-Depends-on: a13e19cf3dc1 ("serial: 8250_lpss: split LPSS driver to separate module")
-Reported-by: Qing Wang <wangqing@vivo.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Link: https://lore.kernel.org/r/20220223151240.70248-1-andriy.shevchenko@linux.intel.com
+unreferenced object 0xffff8881191fc040 (size 232):
+  comm "kworker/u17:0", pid 23193, jiffies 4295238848 (age 3464.870s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff814c3ef4>] slab_post_alloc_hook+0x84/0x3b0
+    [<ffffffff814c8977>] kmem_cache_alloc_node+0x167/0x340
+    [<ffffffff832974fb>] __alloc_skb+0x1db/0x200
+    [<ffffffff82612b5d>] wg_socket_send_buffer_to_peer+0x3d/0xc0
+    [<ffffffff8260e94a>] wg_packet_send_handshake_initiation+0xfa/0x110
+    [<ffffffff8260ec81>] wg_packet_handshake_send_worker+0x21/0x30
+    [<ffffffff8119c558>] process_one_work+0x2e8/0x770
+    [<ffffffff8119ca2a>] worker_thread+0x4a/0x4b0
+    [<ffffffff811a88e0>] kthread+0x120/0x160
+    [<ffffffff8100242f>] ret_from_fork+0x1f/0x30
+
+In function wg_socket_send_buffer_as_reply_to_skb() or wg_socket_send_
+buffer_to_peer(), the semantics of send6() is required to free skb. But
+when CONFIG_IPV6 is disable, kfree_skb() is missing. This patch adds it
+to fix this bug.
+
+Signed-off-by: Wang Hai <wanghai38@huawei.com>
+Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/8250/8250_lpss.c | 28 ++++++++++++++++++++++------
- 1 file changed, 22 insertions(+), 6 deletions(-)
+ drivers/net/wireguard/socket.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/tty/serial/8250/8250_lpss.c b/drivers/tty/serial/8250/8250_lpss.c
-index 4dee8a9e0c95..dfb730b7ea2a 100644
---- a/drivers/tty/serial/8250/8250_lpss.c
-+++ b/drivers/tty/serial/8250/8250_lpss.c
-@@ -121,8 +121,7 @@ static int byt_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
- {
- 	struct dw_dma_slave *param = &lpss->dma_param;
- 	struct pci_dev *pdev = to_pci_dev(port->dev);
--	unsigned int dma_devfn = PCI_DEVFN(PCI_SLOT(pdev->devfn), 0);
--	struct pci_dev *dma_dev = pci_get_slot(pdev->bus, dma_devfn);
-+	struct pci_dev *dma_dev;
- 
- 	switch (pdev->device) {
- 	case PCI_DEVICE_ID_INTEL_BYT_UART1:
-@@ -141,6 +140,8 @@ static int byt_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
- 		return -EINVAL;
- 	}
- 
-+	dma_dev = pci_get_slot(pdev->bus, PCI_DEVFN(PCI_SLOT(pdev->devfn), 0));
-+
- 	param->dma_dev = &dma_dev->dev;
- 	param->m_master = 0;
- 	param->p_master = 1;
-@@ -156,11 +157,26 @@ static int byt_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
- 	return 0;
- }
- 
-+static void byt_serial_exit(struct lpss8250 *lpss)
-+{
-+	struct dw_dma_slave *param = &lpss->dma_param;
-+
-+	/* Paired with pci_get_slot() in the byt_serial_setup() above */
-+	put_device(param->dma_dev);
-+}
-+
- static int ehl_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
- {
- 	return 0;
- }
- 
-+static void ehl_serial_exit(struct lpss8250 *lpss)
-+{
-+	struct uart_8250_port *up = serial8250_get_port(lpss->data.line);
-+
-+	up->dma = NULL;
-+}
-+
- #ifdef CONFIG_SERIAL_8250_DMA
- static const struct dw_dma_platform_data qrk_serial_dma_pdata = {
- 	.nr_channels = 2,
-@@ -335,8 +351,7 @@ static int lpss8250_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	return 0;
- 
- err_exit:
--	if (lpss->board->exit)
--		lpss->board->exit(lpss);
-+	lpss->board->exit(lpss);
- 	pci_free_irq_vectors(pdev);
+--- a/drivers/net/wireguard/socket.c
++++ b/drivers/net/wireguard/socket.c
+@@ -160,6 +160,7 @@ out:
+ 	rcu_read_unlock_bh();
  	return ret;
+ #else
++	kfree_skb(skb);
+ 	return -EAFNOSUPPORT;
+ #endif
  }
-@@ -347,8 +362,7 @@ static void lpss8250_remove(struct pci_dev *pdev)
- 
- 	serial8250_unregister_port(lpss->data.line);
- 
--	if (lpss->board->exit)
--		lpss->board->exit(lpss);
-+	lpss->board->exit(lpss);
- 	pci_free_irq_vectors(pdev);
- }
- 
-@@ -356,12 +370,14 @@ static const struct lpss8250_board byt_board = {
- 	.freq = 100000000,
- 	.base_baud = 2764800,
- 	.setup = byt_serial_setup,
-+	.exit = byt_serial_exit,
- };
- 
- static const struct lpss8250_board ehl_board = {
- 	.freq = 200000000,
- 	.base_baud = 12500000,
- 	.setup = ehl_serial_setup,
-+	.exit = ehl_serial_exit,
- };
- 
- static const struct lpss8250_board qrk_board = {
--- 
-2.34.1
-
 
 

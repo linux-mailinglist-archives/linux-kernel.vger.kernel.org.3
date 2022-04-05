@@ -2,61 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D56F64F4E2D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 627844F4910
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349465AbiDFAMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53478 "EHLO
+        id S1389993AbiDEWC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573460AbiDETLS (ORCPT
+        with ESMTP id S1573490AbiDETL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 15:11:18 -0400
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1BB1EADB;
-        Tue,  5 Apr 2022 12:09:18 -0700 (PDT)
-Received: by mail-pj1-f44.google.com with SMTP id i10-20020a17090a2aca00b001ca56c9ab16so2443035pjg.1;
-        Tue, 05 Apr 2022 12:09:18 -0700 (PDT)
+        Tue, 5 Apr 2022 15:11:58 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4005E885A
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 12:09:59 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-e2442907a1so40467fac.8
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 12:09:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=sPMX429tI6hHm9JGLP4wtiS6WntCuwJ+oSIEAlhqQq4=;
+        b=HCOU4BHcfRd3p8bxiwuoftAjfLn3RfhjTUIBIg9b7YM/jJMdwkTSrJ84CkHkpB0v1s
+         uE0tKJ2IxoARUznnTrCPNS6G4Iie2aoFAv6s45x+yIC3tD6iE2p1vtqlk2PPQiZVzAJi
+         ANFvSL+vd5g/wFrh40eK3FIuUvVdZ5e0iNHLM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KqPdTTAkIPZEGxZKNABzyGtE0ndiZgNTYdvHB+Ojtik=;
-        b=CnLRwKfCCJtDdt0ElG2ODjhOu/eeHu0LM0XUyT8v4/gzgp1ZOcZ0WIqYOoqRZPxzhg
-         Wh2ZtmQeKZNmO49Fbu6Nu8h9YMycW7cnDKWhafqBSQ5drp+aotorHUas+IKmMxnNhphQ
-         ORDH4BqAnqFwUP3iRKc/wXCQRYLGcN9hhVlKPtxJi2ZNDhM+dIvY4C/VRSPi4wz0VQZq
-         6BWpc9h2UVomMgtU5jz1mvAiRSNgJjznOKnY6l3SrgThu/JeoByGuy7uBaYubP55vl9A
-         DcM6FyABqLtugmeXEeABNf3p/f7eWMl27uxw/87TtYi6Qth08BVuCe7As/Ga0EhoU/TW
-         sjZg==
-X-Gm-Message-State: AOAM531PjZK6EJs6R76AunwChAp22Iv2eo8JsL5Sj4aCiNUwF44JYwlw
-        GCAIhFObWsgbQyqxay0kdLs=
-X-Google-Smtp-Source: ABdhPJwhSNjuHo4h/4MK/MjyZC/rq8mAiS9T7IwWyWtBqMnrLhJ5JJt3LmMSYSZC3cqhWhcBP6faOw==
-X-Received: by 2002:a17:903:244b:b0:154:4104:4668 with SMTP id l11-20020a170903244b00b0015441044668mr4958750pls.30.1649185757702;
-        Tue, 05 Apr 2022 12:09:17 -0700 (PDT)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id q6-20020a056a00150600b004fb2d266f97sm17149906pfu.115.2022.04.05.12.09.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 12:09:16 -0700 (PDT)
-Message-ID: <ad7eb0c9-23b7-ac11-3de9-10393b9e526e@acm.org>
-Date:   Tue, 5 Apr 2022 12:09:15 -0700
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=sPMX429tI6hHm9JGLP4wtiS6WntCuwJ+oSIEAlhqQq4=;
+        b=4NdTDUvDNlBGkynrOe5Qq+PYXG9MFSMEc8oaiBXb8Xm0o/0iguYIfOm8GdZhnKfeB6
+         T0Vc+S9rVUtEfafZ9iFTxZziVVErS927sA8UoH6vV63FI77T07V5iyPYjftXeya1fcOm
+         tJ55iRQggJvuvkwzfLGgAcKWo6BJCnviq0GbwUYCVSCpEgK04wY8JRcB1DpNc+LwjX93
+         hamju0y+F3PNyUFSyM59VEBa+adR4+GORCqIwivE49i+fJ+ngv1PXkZcEuMT0AqvCJQG
+         uACnkKGhmwoWwZORq1iw61qMxp4yHkqRX/yCoJLW1HyWpbWjZ6sEowxTW//hdT4htAOt
+         Ve8Q==
+X-Gm-Message-State: AOAM5315psYQtjfb75CUaZOhScOCHoxQYEFGLI+SyyFqh7VxLftciVX/
+        BxSuLChJgFGrdPG89jnSwlVlRdQhOILYBhC0LLPHng==
+X-Google-Smtp-Source: ABdhPJxWEM7cBY41biQ2dGgAM1IQu7FyI39398w6FDLRT0cr5Eg7iPiQ04BRqK9rPG53e/kqf3JThjvF++uVHzzoPcI=
+X-Received: by 2002:a05:6870:558e:b0:e1:db7c:26aa with SMTP id
+ n14-20020a056870558e00b000e1db7c26aamr2272235oao.63.1649185799403; Tue, 05
+ Apr 2022 12:09:59 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 5 Apr 2022 14:09:59 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] scsi: sym53c500_cs: Stop using struct scsi_pointer
-Content-Language: en-US
-To:     Finn Thain <fthain@linux-m68k.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <4948f86703d23e5048f4e24e649680259b2610f9.1649146056.git.fthain@linux-m68k.org>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <4948f86703d23e5048f4e24e649680259b2610f9.1649146056.git.fthain@linux-m68k.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+In-Reply-To: <1649166633-25872-5-git-send-email-quic_c_skakit@quicinc.com>
+References: <1649166633-25872-1-git-send-email-quic_c_skakit@quicinc.com> <1649166633-25872-5-git-send-email-quic_c_skakit@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Tue, 5 Apr 2022 14:09:59 -0500
+Message-ID: <CAE-0n53tXnOw_hRD-O9juAbJ1FDcEOx1rHqGijZs8fuanqMNfg@mail.gmail.com>
+Subject: Re: [PATCH V9 4/6] regulator: Add a regulator driver for the PM8008 PMIC
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Satya Priya <quic_c_skakit@quicinc.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_collinsd@quicinc.com, quic_subbaram@quicinc.com,
+        quic_jprakash@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,9 +72,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/22 01:07, Finn Thain wrote:
-> This driver doesn't use SCp.ptr to save a SCSI command data pointer which
-> means "scsi pointer" is a complete misnomer here. Only a few members of
-> struct scsi_pointer are needed so move those to private command data.
+Quoting Satya Priya (2022-04-05 06:50:31)
+> +
+> +static struct platform_driver pm8008_regulator_driver = {
+> +       .driver = {
+> +               .name           = "qcom,pm8008-regulators",
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Also, the name should be something like pm8008_regulators

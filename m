@@ -2,51 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34FD04F4765
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4062C4F4720
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354734AbiDEVKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
+        id S241120AbiDEVAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240264AbiDEKbi (ORCPT
+        with ESMTP id S1354176AbiDEKMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:31:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146C23BE;
-        Tue,  5 Apr 2022 03:18:31 -0700 (PDT)
+        Tue, 5 Apr 2022 06:12:15 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FDA527D6;
+        Tue,  5 Apr 2022 02:58:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3F5861777;
-        Tue,  5 Apr 2022 10:18:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B50EC385A2;
-        Tue,  5 Apr 2022 10:18:29 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B488DCE1BE5;
+        Tue,  5 Apr 2022 09:58:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B874CC385A2;
+        Tue,  5 Apr 2022 09:57:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153910;
-        bh=jdRZxhGVBh24b1pO4PjXneg0iSK34WICAWHCxcRCZRY=;
+        s=korg; t=1649152680;
+        bh=W2iDmijh5Mz5L+NfOi0odH3UV0cPQ8+YrV8yXMfky18=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ls9qXCY8u3E6s1z6AbJhKOcYTxGGyA8Lm5V4JflnJVGxcD4sUa5Ce13eOk/SawvmX
-         DJn6ZYcYR/J1XVNeR65zVDEsFmfBnIRgecL0vl42/o2LHVD11JN0KfNjnuIjImQxQx
-         F2Sbbb8D4ELKgt+0IRSCtWONR6tU1G8MW/TxcZCA=
+        b=NZ6CDkfOOe6GAljHyusI+B9lqs9LwrCeK67bouU5cI7MhbgZHi+CaUbbQlKm93C6M
+         NyiavzW4VEnIQqyuiNYOA01CJhO0ZaTzInajWPJgFC0N7uUxRdqIEnoJugWZrKNsLo
+         XGveydt/o9B/Em8ePxtF0G4WxBJD3DrGysZNT2oY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
-        Liu Ying <victor.liu@nxp.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 391/599] phy: dphy: Correct lpx parameter and its derivatives(ta_{get,go,sure})
-Date:   Tue,  5 Apr 2022 09:31:25 +0200
-Message-Id: <20220405070310.466368441@linuxfoundation.org>
+        stable@vger.kernel.org, Pankaj Raghav <p.raghav@samsung.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH 5.15 827/913] nvme: fix the read-only state for zoned namespaces with unsupposed features
+Date:   Tue,  5 Apr 2022 09:31:29 +0200
+Message-Id: <20220405070404.619743307@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,66 +54,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liu Ying <victor.liu@nxp.com>
+From: Pankaj Raghav <p.raghav@samsung.com>
 
-[ Upstream commit 3153fa38e38af566cf6454a03b1dbadaf6f323c0 ]
+commit 726be2c72efc0a64c206e854b8996ad3ab9c7507 upstream.
 
-According to the comment of the function phy_mipi_dphy_get_default_config(),
-it uses minimum D-PHY timings based on MIPI D-PHY specification.  They are
-derived from the valid ranges specified in Section 6.9, Table 14, Page 41
-of the D-PHY specification (v1.2).  The table 14 explicitly mentions that
-the minimum T-LPX parameter is 50 nanoseconds and the minimum TA-SURE
-parameter is T-LPX nanoseconds.  Likewise, the kernel doc of the 'lpx' and
-'ta_sure' members of struct phy_configure_opts_mipi_dphy mentions that
-the minimum values are 50000 picoseconds and @lpx picoseconds respectively.
-Also, the function phy_mipi_dphy_config_validate() checks if cfg->lpx is
-less than 50000 picoseconds and if cfg->ta_sure is less than cfg->lpx,
-which hints the same minimum values.
+commit 2f4c9ba23b88 ("nvme: export zoned namespaces without Zone Append
+support read-only") marks zoned namespaces without append support
+read-only.  It does iso by setting NVME_NS_FORCE_RO in ns->flags in
+nvme_update_zone_info and checking for that flag later in
+nvme_update_disk_info to mark the disk as read-only.
 
-Without this patch, the function phy_mipi_dphy_get_default_config()
-wrongly sets cfg->lpx to 60000 picoseconds and cfg->ta_sure to 2 * cfg->lpx.
-So, let's correct them to 50000 picoseconds and cfg->lpx respectively.
+But commit 73d90386b559 ("nvme: cleanup zone information initialization")
+rearranged nvme_update_disk_info to be called before
+nvme_update_zone_info and thus not marking the disk as read-only.
+The call order cannot be just reverted because nvme_update_zone_info sets
+certain queue parameters such as zone_write_granularity that depend on the
+prior call to nvme_update_disk_info.
 
-Note that I've only tested the patch with RM67191 DSI panel on i.MX8mq EVK.
-Help is needed to test with other i.MX8mq, Meson and Rockchip platforms,
-as I don't have the hardwares.
+Remove the call to set_disk_ro in nvme_update_disk_info. and call
+set_disk_ro after nvme_update_zone_info and nvme_update_disk_info to set
+the permission for ZNS drives correctly. The same applies to the
+multipath disk path.
 
-Fixes: dddc97e82303 ("phy: dphy: Add configuration helpers")
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-Cc: Neil Armstrong <narmstrong@baylibre.com>
-Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Cc: Kishon Vijay Abraham I <kishon@ti.com>
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: Heiko Stuebner <heiko@sntech.de>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: Guido Günther <agx@sigxcpu.org>
-Signed-off-by: Liu Ying <victor.liu@nxp.com>
-Link: https://lore.kernel.org/r/20220216071257.1647703-1-victor.liu@nxp.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 73d90386b559 ("nvme: cleanup zone information initialization")
+Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/phy/phy-core-mipi-dphy.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/nvme/host/core.c |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/phy/phy-core-mipi-dphy.c b/drivers/phy/phy-core-mipi-dphy.c
-index 14e0551cd319..0aa740b73d0d 100644
---- a/drivers/phy/phy-core-mipi-dphy.c
-+++ b/drivers/phy/phy-core-mipi-dphy.c
-@@ -66,10 +66,10 @@ int phy_mipi_dphy_get_default_config(unsigned long pixel_clock,
- 	cfg->hs_trail = max(4 * 8 * ui, 60000 + 4 * 4 * ui);
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -1838,9 +1838,6 @@ static void nvme_update_disk_info(struct
+ 	nvme_config_discard(disk, ns);
+ 	blk_queue_max_write_zeroes_sectors(disk->queue,
+ 					   ns->ctrl->max_zeroes_sectors);
+-
+-	set_disk_ro(disk, (id->nsattr & NVME_NS_ATTR_RO) ||
+-		test_bit(NVME_NS_FORCE_RO, &ns->flags));
+ }
  
- 	cfg->init = 100;
--	cfg->lpx = 60000;
-+	cfg->lpx = 50000;
- 	cfg->ta_get = 5 * cfg->lpx;
- 	cfg->ta_go = 4 * cfg->lpx;
--	cfg->ta_sure = 2 * cfg->lpx;
-+	cfg->ta_sure = cfg->lpx;
- 	cfg->wakeup = 1000;
+ static inline bool nvme_first_scan(struct gendisk *disk)
+@@ -1901,6 +1898,8 @@ static int nvme_update_ns_info(struct nv
+ 			goto out_unfreeze;
+ 	}
  
- 	cfg->hs_clk_rate = hs_clk_rate;
--- 
-2.34.1
-
++	set_disk_ro(ns->disk, (id->nsattr & NVME_NS_ATTR_RO) ||
++		test_bit(NVME_NS_FORCE_RO, &ns->flags));
+ 	set_bit(NVME_NS_READY, &ns->flags);
+ 	blk_mq_unfreeze_queue(ns->disk->queue);
+ 
+@@ -1913,6 +1912,9 @@ static int nvme_update_ns_info(struct nv
+ 	if (nvme_ns_head_multipath(ns->head)) {
+ 		blk_mq_freeze_queue(ns->head->disk->queue);
+ 		nvme_update_disk_info(ns->head->disk, ns, id);
++		set_disk_ro(ns->head->disk,
++			    (id->nsattr & NVME_NS_ATTR_RO) ||
++				    test_bit(NVME_NS_FORCE_RO, &ns->flags));
+ 		nvme_mpath_revalidate_paths(ns);
+ 		blk_stack_limits(&ns->head->disk->queue->limits,
+ 				 &ns->queue->limits, 0);
 
 

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E63284F4045
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:15:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE704F3E0B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390021AbiDENgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
+        id S1383221AbiDENfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346605AbiDEJYa (ORCPT
+        with ESMTP id S1346623AbiDEJYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:24:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D1F9B28;
+        Tue, 5 Apr 2022 05:24:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4218A2D1C6;
         Tue,  5 Apr 2022 02:13:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 448EFB81C77;
-        Tue,  5 Apr 2022 09:13:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACC27C385A6;
-        Tue,  5 Apr 2022 09:13:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D81661673;
+        Tue,  5 Apr 2022 09:13:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 607ABC385A4;
+        Tue,  5 Apr 2022 09:13:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150025;
-        bh=1P7dqhC2TaTndTPDyXwVbqmJovUDvfg+vmyr+QM2+nU=;
+        s=korg; t=1649150027;
+        bh=rh/sHor9Aw97ytCJh5RJpfrzwpfhvEGt5A32jaHkQXY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PyE5dJAxszd9e6Fk7uDWyJqe3op38l8lFh3icx2Caw6sa405NQxtbEpdKZwGEwiCt
-         3TwIarIsSd/rNxx83t0hoc8oq/M1dQSjaoynyJhroFaJ+TX6a1kDO/gRf4Govi5KIq
-         rfkaFr2/Al0WMZg1QKZ+1Zv7H5I4T1gZcBUzdWqI=
+        b=jBgWMTD2L9g8aAMWj1OWv3IRM/BoLxPxeSYUp2UkzOVD5ciVSboLKlNNk44x/a/0b
+         krkZOUl6WFdMnigW/xeMxD6lnvluown0CDF0j7BKSRQw4dk8cu2bfvWPwUz7aBpaxQ
+         1uPlimwbpva6LF7kVNuLQpXih9v3wT23jh4kW8sM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 5.16 0928/1017] rtc: check if __rtc_read_time was successful
-Date:   Tue,  5 Apr 2022 09:30:41 +0200
-Message-Id: <20220405070421.761859139@linuxfoundation.org>
+        stable@vger.kernel.org, Carlos Llamas <cmllamas@google.com>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.16 0929/1017] loop: fix ioctl calls using compat_loop_info
+Date:   Tue,  5 Apr 2022 09:30:42 +0200
+Message-Id: <20220405070421.791439048@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -54,54 +54,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Carlos Llamas <cmllamas@google.com>
 
-commit 915593a7a663b2ad08b895a5f3ba8b19d89d4ebf upstream.
+commit f941c51eeac7ebe0f8ec30943bf78e7f60aad039 upstream.
 
-Clang static analysis reports this issue
-interface.c:810:8: warning: Passed-by-value struct
-  argument contains uninitialized data
-  now = rtc_tm_to_ktime(tm);
-      ^~~~~~~~~~~~~~~~~~~
+Support for cryptoloop was deleted in commit 47e9624616c8 ("block:
+remove support for cryptoloop and the xor transfer"), making the usage
+of loop_info->lo_encrypt_type obsolete. However, this member was also
+removed from the compat_loop_info definition and this breaks userspace
+ioctl calls for 32-bit binaries and CONFIG_COMPAT=y.
 
-tm is set by a successful call to __rtc_read_time()
-but its return status is not checked.  Check if
-it was successful before setting the enabled flag.
-Move the decl of err to function scope.
+This patch restores the compat_loop_info->lo_encrypt_type member and
+marks it obsolete as well as in the uapi header definitions.
 
-Fixes: 2b2f5ff00f63 ("rtc: interface: ignore expired timers when enqueuing new timers")
-Signed-off-by: Tom Rix <trix@redhat.com>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lore.kernel.org/r/20220326194236.2916310-1-trix@redhat.com
+Fixes: 47e9624616c8 ("block: remove support for cryptoloop and the xor transfer")
+Signed-off-by: Carlos Llamas <cmllamas@google.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220329201815.1347500-1-cmllamas@google.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/rtc/interface.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/block/loop.c      |    1 +
+ include/uapi/linux/loop.h |    4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/rtc/interface.c
-+++ b/drivers/rtc/interface.c
-@@ -804,9 +804,13 @@ static int rtc_timer_enqueue(struct rtc_
- 	struct timerqueue_node *next = timerqueue_getnext(&rtc->timerqueue);
- 	struct rtc_time tm;
- 	ktime_t now;
-+	int err;
-+
-+	err = __rtc_read_time(rtc, &tm);
-+	if (err)
-+		return err;
- 
- 	timer->enabled = 1;
--	__rtc_read_time(rtc, &tm);
- 	now = rtc_tm_to_ktime(tm);
- 
- 	/* Skip over expired timers */
-@@ -820,7 +824,6 @@ static int rtc_timer_enqueue(struct rtc_
- 	trace_rtc_timer_enqueue(timer);
- 	if (!next || ktime_before(timer->node.expires, next->expires)) {
- 		struct rtc_wkalrm alarm;
--		int err;
- 
- 		alarm.time = rtc_ktime_to_tm(timer->node.expires);
- 		alarm.enabled = 1;
+--- a/drivers/block/loop.c
++++ b/drivers/block/loop.c
+@@ -1603,6 +1603,7 @@ struct compat_loop_info {
+ 	compat_ulong_t	lo_inode;       /* ioctl r/o */
+ 	compat_dev_t	lo_rdevice;     /* ioctl r/o */
+ 	compat_int_t	lo_offset;
++	compat_int_t	lo_encrypt_type;        /* obsolete, ignored */
+ 	compat_int_t	lo_encrypt_key_size;    /* ioctl w/o */
+ 	compat_int_t	lo_flags;       /* ioctl r/o */
+ 	char		lo_name[LO_NAME_SIZE];
+--- a/include/uapi/linux/loop.h
++++ b/include/uapi/linux/loop.h
+@@ -45,7 +45,7 @@ struct loop_info {
+ 	unsigned long	   lo_inode; 		/* ioctl r/o */
+ 	__kernel_old_dev_t lo_rdevice; 		/* ioctl r/o */
+ 	int		   lo_offset;
+-	int		   lo_encrypt_type;
++	int		   lo_encrypt_type;		/* obsolete, ignored */
+ 	int		   lo_encrypt_key_size; 	/* ioctl w/o */
+ 	int		   lo_flags;
+ 	char		   lo_name[LO_NAME_SIZE];
+@@ -61,7 +61,7 @@ struct loop_info64 {
+ 	__u64		   lo_offset;
+ 	__u64		   lo_sizelimit;/* bytes, 0 == max available */
+ 	__u32		   lo_number;			/* ioctl r/o */
+-	__u32		   lo_encrypt_type;
++	__u32		   lo_encrypt_type;		/* obsolete, ignored */
+ 	__u32		   lo_encrypt_key_size;		/* ioctl w/o */
+ 	__u32		   lo_flags;
+ 	__u8		   lo_file_name[LO_NAME_SIZE];
 
 

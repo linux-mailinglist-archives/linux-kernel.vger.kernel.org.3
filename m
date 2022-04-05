@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 595094F4DAC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACBB04F4F0E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1582540AbiDEXs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
+        id S1836763AbiDFAji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:39:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354189AbiDEKMP (ORCPT
+        with ESMTP id S237628AbiDEKdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:12:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755BA52E16;
-        Tue,  5 Apr 2022 02:58:16 -0700 (PDT)
+        Tue, 5 Apr 2022 06:33:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FB1DEB97;
+        Tue,  5 Apr 2022 03:19:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BB82B817D3;
-        Tue,  5 Apr 2022 09:58:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FFF6C385A2;
-        Tue,  5 Apr 2022 09:58:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CDADEB81C8A;
+        Tue,  5 Apr 2022 10:18:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DC3BC385A1;
+        Tue,  5 Apr 2022 10:18:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152693;
-        bh=a6oPxCJzwFg+auaLybS3Cz5xCfoOmB6qPAWpGmmbt78=;
+        s=korg; t=1649153937;
+        bh=nHOg9kX+MbvlIgN8jRKrk4EKwtzKb7SaZy1WfCamDGo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XaAAapZRjmfbQp8rxZaWtWDO+Gnl0wy1/N5RLHClfHy0lohavaEZ7LF5ztv2y9ccY
-         nci6URG20qUkD9x6A+KcAx39YE+J6wfEMIIUGOpqv/YZ8xuABqpBI9AWvLWrtS3eC3
-         Fg0x8Wbg4pW9cguP17glVUHZf662tWf+r9AE0EZk=
+        b=vbUe8Mgn4Pwnb2UIzepeDf4/pyG/jDFjG9QtzovAOliiWDw2gYUqR1hGOLNyvdPPy
+         ELA3UYITxRBJgfLakHM1BZuYfuITZXpZwvnKShdNEDSRgKwdQT5jFdgqveJNHtOsd3
+         7CbCNNlGa1s9dG7wUGfGzBGewM5fmmkNtarncLt4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+0d2b0bf32ca5cfd09f2e@syzkaller.appspotmail.com,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: [PATCH 5.15 831/913] XArray: Fix xas_create_range() when multi-order entry present
-Date:   Tue,  5 Apr 2022 09:31:33 +0200
-Message-Id: <20220405070404.741036756@linuxfoundation.org>
+        stable@vger.kernel.org, David Wolfe <david.wolfe@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 400/599] clk: imx7d: Remove audio_mclk_root_clk
+Date:   Tue,  5 Apr 2022 09:31:34 +0200
+Message-Id: <20220405070310.733879929@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,85 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Wilcox (Oracle) <willy@infradead.org>
+From: Abel Vesa <abel.vesa@nxp.com>
 
-commit 3e3c658055c002900982513e289398a1aad4a488 upstream.
+[ Upstream commit eccac77ede3946c90143447cdc785dc16aec4b24 ]
 
-If there is already an entry present that is of order >= XA_CHUNK_SHIFT
-when we call xas_create_range(), xas_create_range() will misinterpret
-that entry as a node and dereference xa_node->parent, generally leading
-to a crash that looks something like this:
+The audio_mclk_root_clk was added as a gate with the CCGR121 (0x4790),
+but according to the reference manual, there is no such gate. The
+CCGR121 belongs to ECSPI2 and it is not shared.
 
-general protection fault, probably for non-canonical address 0xdffffc0000000001:
-0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
-CPU: 0 PID: 32 Comm: khugepaged Not tainted 5.17.0-rc8-syzkaller-00003-g56e337f2cf13 #0
-RIP: 0010:xa_parent_locked include/linux/xarray.h:1207 [inline]
-RIP: 0010:xas_create_range+0x2d9/0x6e0 lib/xarray.c:725
-
-It's deterministically reproducable once you know what the problem is,
-but producing it in a live kernel requires khugepaged to hit a race.
-While the problem has been present since xas_create_range() was
-introduced, I'm not aware of a way to hit it before the page cache was
-converted to use multi-index entries.
-
-Fixes: 6b24ca4a1a8d ("mm: Use multi-index entries in the page cache")
-Reported-by: syzbot+0d2b0bf32ca5cfd09f2e@syzkaller.appspotmail.com
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 8f6d8094b215b57 ("ARM: imx: add imx7d clk tree support")
+Reported-by: David Wolfe <david.wolfe@nxp.com>
+Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+Reviewed-by: Peng Fan <peng.fan@nxp.com>
+Link: https://lore.kernel.org/r/20220127141052.1900174-2-abel.vesa@nxp.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/test_xarray.c |   22 ++++++++++++++++++++++
- lib/xarray.c      |    2 ++
- 2 files changed, 24 insertions(+)
+ drivers/clk/imx/clk-imx7d.c | 1 -
+ 1 file changed, 1 deletion(-)
 
---- a/lib/test_xarray.c
-+++ b/lib/test_xarray.c
-@@ -1463,6 +1463,25 @@ unlock:
- 	XA_BUG_ON(xa, !xa_empty(xa));
- }
- 
-+static noinline void check_create_range_5(struct xarray *xa,
-+		unsigned long index, unsigned int order)
-+{
-+	XA_STATE_ORDER(xas, xa, index, order);
-+	unsigned int i;
-+
-+	xa_store_order(xa, index, order, xa_mk_index(index), GFP_KERNEL);
-+
-+	for (i = 0; i < order + 10; i++) {
-+		do {
-+			xas_lock(&xas);
-+			xas_create_range(&xas);
-+			xas_unlock(&xas);
-+		} while (xas_nomem(&xas, GFP_KERNEL));
-+	}
-+
-+	xa_destroy(xa);
-+}
-+
- static noinline void check_create_range(struct xarray *xa)
- {
- 	unsigned int order;
-@@ -1490,6 +1509,9 @@ static noinline void check_create_range(
- 		check_create_range_4(xa, (3U << order) + 1, order);
- 		check_create_range_4(xa, (3U << order) - 1, order);
- 		check_create_range_4(xa, (1U << 24) + 1, order);
-+
-+		check_create_range_5(xa, 0, order);
-+		check_create_range_5(xa, (1U << order), order);
- 	}
- 
- 	check_create_range_3();
---- a/lib/xarray.c
-+++ b/lib/xarray.c
-@@ -722,6 +722,8 @@ void xas_create_range(struct xa_state *x
- 
- 		for (;;) {
- 			struct xa_node *node = xas->xa_node;
-+			if (node->shift >= shift)
-+				break;
- 			xas->xa_node = xa_parent_locked(xas->xa, node);
- 			xas->xa_offset = node->offset - 1;
- 			if (node->offset != 0)
+diff --git a/drivers/clk/imx/clk-imx7d.c b/drivers/clk/imx/clk-imx7d.c
+index c4e0f1c07192..3f6fd7ef2a68 100644
+--- a/drivers/clk/imx/clk-imx7d.c
++++ b/drivers/clk/imx/clk-imx7d.c
+@@ -849,7 +849,6 @@ static void __init imx7d_clocks_init(struct device_node *ccm_node)
+ 	hws[IMX7D_WDOG4_ROOT_CLK] = imx_clk_hw_gate4("wdog4_root_clk", "wdog_post_div", base + 0x49f0, 0);
+ 	hws[IMX7D_KPP_ROOT_CLK] = imx_clk_hw_gate4("kpp_root_clk", "ipg_root_clk", base + 0x4aa0, 0);
+ 	hws[IMX7D_CSI_MCLK_ROOT_CLK] = imx_clk_hw_gate4("csi_mclk_root_clk", "csi_mclk_post_div", base + 0x4490, 0);
+-	hws[IMX7D_AUDIO_MCLK_ROOT_CLK] = imx_clk_hw_gate4("audio_mclk_root_clk", "audio_mclk_post_div", base + 0x4790, 0);
+ 	hws[IMX7D_WRCLK_ROOT_CLK] = imx_clk_hw_gate4("wrclk_root_clk", "wrclk_post_div", base + 0x47a0, 0);
+ 	hws[IMX7D_USB_CTRL_CLK] = imx_clk_hw_gate4("usb_ctrl_clk", "ahb_root_clk", base + 0x4680, 0);
+ 	hws[IMX7D_USB_PHY1_CLK] = imx_clk_hw_gate4("usb_phy1_clk", "pll_usb1_main_clk", base + 0x46a0, 0);
+-- 
+2.34.1
+
 
 

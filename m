@@ -2,46 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC634F5174
+	by mail.lfdr.de (Postfix) with ESMTP id 9856A4F5175
 	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:39:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1846371AbiDFCEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47430 "EHLO
+        id S1846387AbiDFCEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349138AbiDEJtM (ORCPT
+        with ESMTP id S1354936AbiDEKQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28EFD12C;
-        Tue,  5 Apr 2022 02:41:24 -0700 (PDT)
+        Tue, 5 Apr 2022 06:16:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3848622C;
+        Tue,  5 Apr 2022 03:04:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C848CB81B14;
-        Tue,  5 Apr 2022 09:41:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3471BC385A3;
-        Tue,  5 Apr 2022 09:41:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4087B81C86;
+        Tue,  5 Apr 2022 10:04:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BD30C385A1;
+        Tue,  5 Apr 2022 10:04:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151681;
-        bh=P9cAgoMeroWf2nVM2LaYjb9TMKAdQKYO1vUZvOl9bT4=;
+        s=korg; t=1649153048;
+        bh=3z3jzRHy3464weK3HR2VtlPoQjepKQ2VowKCdolR2nc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0kNxkY9Qgzu8gltdfTD9gefy7QHYnNw0FcYP6P1epUCkQ68UIDdmTuWf+aEjRxqrI
-         HOORAlvclLYNLgmv0UYU+xCheoTM2RlthZkMBSwAgXClMNqDLqMwWzg3+YbU9mhQqv
-         YE6iArVZVgkj6mx0ROuQ/gv3zBRVolvbRJv2lnoE=
+        b=N1Bn+W02k0eBNlR9xJNshEzU3y4tFwqi3R9IF9hpWsxtXbXRv6eYXzloebkLUAxOh
+         Y6cECJzjcklrkCTv+zD28xd5mHRgBzWNUKHuBsOOL0ZflGt/9I7tK19JTurw0dFXC7
+         OomQ+FRLUjD/vduDBeDS6LgKkm1dcH1fovbHm1O0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mustafa Ismail <mustafa.ismail@intel.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 504/913] RDMA/irdma: Remove incorrect masking of PD
-Date:   Tue,  5 Apr 2022 09:26:06 +0200
-Message-Id: <20220405070354.964596858@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Charan Teja Kalla <quic_charante@quicinc.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.10 076/599] Revert "mm: madvise: skip unmapped vma holes passed to process_madvise"
+Date:   Tue,  5 Apr 2022 09:26:10 +0200
+Message-Id: <20220405070301.087589272@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +61,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mustafa Ismail <mustafa.ismail@intel.com>
+From: Charan Teja Kalla <quic_charante@quicinc.com>
 
-[ Upstream commit 17850f2b0b4b806e47cc44df94186bfc2cdd490b ]
+commit e6b0a7b357659c332231621e4315658d062c23ee upstream.
 
-The PD id is masked with 0x7fff, while PD can be 18 bits for GEN2 HW.
-Remove the masking as it should not be needed and can cause incorrect PD
-id to be used.
+This reverts commit 08095d6310a7 ("mm: madvise: skip unmapped vma holes
+passed to process_madvise") as process_madvise() fails to return the
+exact processed bytes in other cases too.
 
-Fixes: b48c24c2d710 ("RDMA/irdma: Implement device supported verb APIs")
-Link: https://lore.kernel.org/r/20220225163211.127-4-shiraz.saleem@intel.com
-Signed-off-by: Mustafa Ismail <mustafa.ismail@intel.com>
-Signed-off-by: Shiraz Saleem <shiraz.saleem@intel.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+As an example: if process_madvise() hits mlocked pages after processing
+some initial bytes passed in [start, end), it just returns EINVAL
+although some bytes are processed.  Thus making an exception only for
+ENOMEM is partially fixing the problem of returning the proper advised
+bytes.
+
+Thus revert this patch and return proper bytes advised.
+
+Link: https://lkml.kernel.org/r/e73da1304a88b6a8a11907045117cccf4c2b8374.1648046642.git.quic_charante@quicinc.com
+Fixes: 08095d6310a7ce ("mm: madvise: skip unmapped vma holes passed to process_madvise")
+Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
+Acked-by: Michal Hocko <mhocko@suse.com>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: David Rientjes <rientjes@google.com>
+Cc: Nadav Amit <nadav.amit@gmail.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/hw/irdma/verbs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ mm/madvise.c |    9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/drivers/infiniband/hw/irdma/verbs.c b/drivers/infiniband/hw/irdma/verbs.c
-index 8bbc4620a97a..4a6fdd5c09e3 100644
---- a/drivers/infiniband/hw/irdma/verbs.c
-+++ b/drivers/infiniband/hw/irdma/verbs.c
-@@ -2506,7 +2506,7 @@ static int irdma_dealloc_mw(struct ib_mw *ibmw)
- 	cqp_info = &cqp_request->info;
- 	info = &cqp_info->in.u.dealloc_stag.info;
- 	memset(info, 0, sizeof(*info));
--	info->pd_id = iwpd->sc_pd.pd_id & 0x00007fff;
-+	info->pd_id = iwpd->sc_pd.pd_id;
- 	info->stag_idx = ibmw->rkey >> IRDMA_CQPSQ_STAG_IDX_S;
- 	info->mr = false;
- 	cqp_info->cqp_cmd = IRDMA_OP_DEALLOC_STAG;
-@@ -3018,7 +3018,7 @@ static int irdma_dereg_mr(struct ib_mr *ib_mr, struct ib_udata *udata)
- 	cqp_info = &cqp_request->info;
- 	info = &cqp_info->in.u.dealloc_stag.info;
- 	memset(info, 0, sizeof(*info));
--	info->pd_id = iwpd->sc_pd.pd_id & 0x00007fff;
-+	info->pd_id = iwpd->sc_pd.pd_id;
- 	info->stag_idx = ib_mr->rkey >> IRDMA_CQPSQ_STAG_IDX_S;
- 	info->mr = true;
- 	if (iwpbl->pbl_allocated)
--- 
-2.34.1
-
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -1222,16 +1222,9 @@ SYSCALL_DEFINE5(process_madvise, int, pi
+ 
+ 	while (iov_iter_count(&iter)) {
+ 		iovec = iov_iter_iovec(&iter);
+-		/*
+-		 * do_madvise returns ENOMEM if unmapped holes are present
+-		 * in the passed VMA. process_madvise() is expected to skip
+-		 * unmapped holes passed to it in the 'struct iovec' list
+-		 * and not fail because of them. Thus treat -ENOMEM return
+-		 * from do_madvise as valid and continue processing.
+-		 */
+ 		ret = do_madvise(mm, (unsigned long)iovec.iov_base,
+ 					iovec.iov_len, behavior);
+-		if (ret < 0 && ret != -ENOMEM)
++		if (ret < 0)
+ 			break;
+ 		iov_iter_advance(&iter, iovec.iov_len);
+ 	}
 
 

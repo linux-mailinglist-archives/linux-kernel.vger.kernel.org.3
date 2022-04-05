@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02CA14F407D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B834F4155
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377601AbiDEUEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
+        id S1382882AbiDENaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358038AbiDEK14 (ORCPT
+        with ESMTP id S1345350AbiDEJW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F1A694B3;
-        Tue,  5 Apr 2022 03:13:23 -0700 (PDT)
+        Tue, 5 Apr 2022 05:22:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6A72BB3D;
+        Tue,  5 Apr 2022 02:10:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45159B81BC5;
-        Tue,  5 Apr 2022 10:13:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A90F3C385A1;
-        Tue,  5 Apr 2022 10:13:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CEEFC61527;
+        Tue,  5 Apr 2022 09:10:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3553C385A4;
+        Tue,  5 Apr 2022 09:10:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153601;
-        bh=FcVAWg6Iu/UB8Zve+Ak/qOk+BWPewdVuO26u+6lF8xo=;
+        s=korg; t=1649149843;
+        bh=SoTsVxUNgArb3KGJBW6jLzurc7grDCBVMz9x6nnfNFA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VKSerCzGio99KKE6fCFO34bnPNrz0eFRmSnW4NRNmO1pxUGlGA/pmST1yh9z70kJk
-         6ZAMH/0E3/PalpOVFTuAEvUp+5VJrMYoV+cCGvpo2Y0cb8TqwI9AfIrQCOddjXKxk3
-         VffWSY3d8fsKvJ/+kdYIkE05+ngaUmt87VfNoAAU=
+        b=zN1ke6gwoyNM8LLVnMuMgWkmV3eVeBRfh+o/hYmDv7fIw7KctqKKk9LAuzEklUL91
+         oRMZu8UmN0Fuob9O4rF3kxn8AVN4FhLGX9CF2Gytk/SpGQAwzxjQerFZ5bzBrm5bS2
+         216varebq9VdWQn8XOnPIpjysp/UMfCBKK/1fSzU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabiano Rosas <farosas@linux.ibm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 279/599] KVM: PPC: Fix vmx/vsx mixup in mmio emulation
-Date:   Tue,  5 Apr 2022 09:29:33 +0200
-Message-Id: <20220405070307.138361351@linuxfoundation.org>
+        stable@vger.kernel.org, Ben Gardon <bgardon@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.16 0861/1017] KVM: x86/mmu: Check for present SPTE when clearing dirty bit in TDP MMU
+Date:   Tue,  5 Apr 2022 09:29:34 +0200
+Message-Id: <20220405070419.791276787@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabiano Rosas <farosas@linux.ibm.com>
+From: Sean Christopherson <seanjc@google.com>
 
-[ Upstream commit b99234b918c6e36b9aa0a5b2981e86b6bd11f8e2 ]
+commit 3354ef5a592d219364cf442c2f784ce7ad7629fd upstream.
 
-The MMIO emulation code for vector instructions is duplicated between
-VSX and VMX. When emulating VMX we should check the VMX copy size
-instead of the VSX one.
+Explicitly check for present SPTEs when clearing dirty bits in the TDP
+MMU.  This isn't strictly required for correctness, as setting the dirty
+bit in a defunct SPTE will not change the SPTE from !PRESENT to PRESENT.
+However, the guarded MMU_WARN_ON() in spte_ad_need_write_protect() would
+complain if anyone actually turned on KVM's MMU debugging.
 
-Fixes: acc9eb9305fe ("KVM: PPC: Reimplement LOAD_VMX/STORE_VMX instruction ...")
-Signed-off-by: Fabiano Rosas <farosas@linux.ibm.com>
-Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220125215655.1026224-3-farosas@linux.ibm.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: a6a0b05da9f3 ("kvm: x86/mmu: Support dirty logging for the TDP MMU")
+Cc: Ben Gardon <bgardon@google.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Reviewed-by: Ben Gardon <bgardon@google.com>
+Message-Id: <20220226001546.360188-3-seanjc@google.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/kvm/powerpc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/x86/kvm/mmu/tdp_mmu.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-index 543db9157f3b..ef8077a739b8 100644
---- a/arch/powerpc/kvm/powerpc.c
-+++ b/arch/powerpc/kvm/powerpc.c
-@@ -1500,7 +1500,7 @@ int kvmppc_handle_vmx_load(struct kvm_vcpu *vcpu,
- {
- 	enum emulation_result emulated = EMULATE_DONE;
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -1261,6 +1261,9 @@ retry:
+ 		if (tdp_mmu_iter_cond_resched(kvm, &iter, false, true))
+ 			continue;
  
--	if (vcpu->arch.mmio_vsx_copy_nums > 2)
-+	if (vcpu->arch.mmio_vmx_copy_nums > 2)
- 		return EMULATE_FAIL;
- 
- 	while (vcpu->arch.mmio_vmx_copy_nums) {
-@@ -1597,7 +1597,7 @@ int kvmppc_handle_vmx_store(struct kvm_vcpu *vcpu,
- 	unsigned int index = rs & KVM_MMIO_REG_MASK;
- 	enum emulation_result emulated = EMULATE_DONE;
- 
--	if (vcpu->arch.mmio_vsx_copy_nums > 2)
-+	if (vcpu->arch.mmio_vmx_copy_nums > 2)
- 		return EMULATE_FAIL;
- 
- 	vcpu->arch.io_gpr = rs;
--- 
-2.34.1
-
++		if (!is_shadow_present_pte(iter.old_spte))
++			continue;
++
+ 		if (spte_ad_need_write_protect(iter.old_spte)) {
+ 			if (is_writable_pte(iter.old_spte))
+ 				new_spte = iter.old_spte & ~PT_WRITABLE_MASK;
 
 

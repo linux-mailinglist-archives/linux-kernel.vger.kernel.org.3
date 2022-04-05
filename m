@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC9D4F419C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3785F4F3E61
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388702AbiDEPUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
+        id S1384446AbiDEM1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346948AbiDEJpp (ORCPT
+        with ESMTP id S245187AbiDEIyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:45:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D35462FC;
-        Tue,  5 Apr 2022 02:32:10 -0700 (PDT)
+        Tue, 5 Apr 2022 04:54:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A057E219E;
+        Tue,  5 Apr 2022 01:51:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DD8F616D9;
-        Tue,  5 Apr 2022 09:32:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6564C385A6;
-        Tue,  5 Apr 2022 09:32:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47CD5B81B92;
+        Tue,  5 Apr 2022 08:51:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95CE6C385A1;
+        Tue,  5 Apr 2022 08:51:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151129;
-        bh=iTfkyGCaJb+tZxRhyt4J9Q68OsZSnrVr7BNR7lW+X9w=;
+        s=korg; t=1649148712;
+        bh=78RxZR77BSioRzFqKK8i55TTw5bKAdRw/UP/KCM/hrI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u6J5SgX8bpsJYNvLBUkCbxPrztvmCWoOGHyZDwiUCJiyPUiv70XiowmZLnvxzKM2O
-         NGXkprD2WNl4k2yHlJ/lzGf7co6QHJlWGnHUOvkHBNU4ro5GR01HvdN7Qnx1p0lVOJ
-         zAYI/8kz1pa2aruqTXqwHf5BSrAiLwWTzomLBdm8=
+        b=Dfetiqjvxc4c+Lzs4mapGTR7OYx/gFRTyJlsPRqk/fPZ3dzOia0mFyj3zQcs/VL6/
+         lpIrDThafCo9siQR/yOmulDUsaKk2NCyxMY9c2GxWnDZAqzPRtk2veN2jDah8oABgM
+         Ot83z2avJ81xmppBBn38PBMhsaOifQrYcVSDhAtM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Nishanth Menon <nm@ti.com>, Dave Gerlach <d-gerlach@ti.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 305/913] soc: ti: wkup_m3_ipc: Fix IRQ check in wkup_m3_ipc_probe
+        stable@vger.kernel.org, Sean Wang <sean.wang@mediatek.com>,
+        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0454/1017] mt76: mt76_connac: fix MCU_CE_CMD_SET_ROC definition error
 Date:   Tue,  5 Apr 2022 09:22:47 +0200
-Message-Id: <20220405070348.999212015@linuxfoundation.org>
+Message-Id: <20220405070407.775336709@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Sean Wang <sean.wang@mediatek.com>
 
-[ Upstream commit c3d66a164c726cc3b072232d3b6d87575d194084 ]
+[ Upstream commit bf9727a27442a50c75b7d99a5088330c578b2a42 ]
 
-platform_get_irq() returns negative error number instead 0 on failure.
-And the doc of platform_get_irq() provides a usage example:
+Fixed an MCU_CE_CMD_SET_ROC definition error that occurred from a previous
+refactor work.
 
-    int irq = platform_get_irq(pdev, 0);
-    if (irq < 0)
-        return irq;
-
-Fix the check of return value to catch errors correctly.
-
-Fixes: cdd5de500b2c ("soc: ti: Add wkup_m3_ipc driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Nishanth Menon <nm@ti.com>
-Acked-by: Dave Gerlach <d-gerlach@ti.com>
-Link: https://lore.kernel.org/r/20220114062840.16620-1-linmq006@gmail.com
+Fixes: d0e274af2f2e4 ("mt76: mt76_connac: create mcu library")
+Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/ti/wkup_m3_ipc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/soc/ti/wkup_m3_ipc.c b/drivers/soc/ti/wkup_m3_ipc.c
-index 09abd17065ba..8b3ff44fd901 100644
---- a/drivers/soc/ti/wkup_m3_ipc.c
-+++ b/drivers/soc/ti/wkup_m3_ipc.c
-@@ -449,9 +449,9 @@ static int wkup_m3_ipc_probe(struct platform_device *pdev)
- 		return PTR_ERR(m3_ipc->ipc_mem_base);
- 
- 	irq = platform_get_irq(pdev, 0);
--	if (!irq) {
-+	if (irq < 0) {
- 		dev_err(&pdev->dev, "no irq resource\n");
--		return -ENXIO;
-+		return irq;
- 	}
- 
- 	ret = devm_request_irq(dev, irq, wkup_m3_txev_handler,
+diff --git a/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h b/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h
+index acb9a286d354..63fc331e98bd 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h
++++ b/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h
+@@ -598,7 +598,7 @@ enum {
+ 	MCU_CE_CMD_SET_BSS_CONNECTED = 0x16,
+ 	MCU_CE_CMD_SET_BSS_ABORT = 0x17,
+ 	MCU_CE_CMD_CANCEL_HW_SCAN = 0x1b,
+-	MCU_CE_CMD_SET_ROC = 0x1d,
++	MCU_CE_CMD_SET_ROC = 0x1c,
+ 	MCU_CE_CMD_SET_P2P_OPPPS = 0x33,
+ 	MCU_CE_CMD_SET_RATE_TX_POWER = 0x5d,
+ 	MCU_CE_CMD_SCHED_SCAN_ENABLE = 0x61,
 -- 
 2.34.1
 

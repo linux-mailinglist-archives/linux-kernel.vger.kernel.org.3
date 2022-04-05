@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 289934F3B81
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EED24F3BA5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378882AbiDEL5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52324 "EHLO
+        id S1382087AbiDEMAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244977AbiDEIww (ORCPT
+        with ESMTP id S236378AbiDEIQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDD21D0E6;
-        Tue,  5 Apr 2022 01:48:25 -0700 (PDT)
+        Tue, 5 Apr 2022 04:16:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849166FA02;
+        Tue,  5 Apr 2022 01:04:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09CA561504;
-        Tue,  5 Apr 2022 08:48:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B688C385A1;
-        Tue,  5 Apr 2022 08:48:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3AAD7B81BBC;
+        Tue,  5 Apr 2022 08:03:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82335C385A4;
+        Tue,  5 Apr 2022 08:03:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148504;
-        bh=k+kA+XOU2S9QaW5auCvkHqxpqLDNO4b9XtnucmR8ilA=;
+        s=korg; t=1649145830;
+        bh=+dtZf56pDcVGj1Y2yGsngkE8Pr8vjsaRXriBUUn+Sa4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wWmoDH4VvhWNMEbPPLbEPHTIh4S5DkBg3J8v/R2mb2VuyW6ylRQTMy8jtXbojP0KD
-         +juFni223uey48+5YsSsL56TDvIgPQhlfV/plm8ZB03DYYrdcLoD64cOtY2ZwEX9Qv
-         3i5DkQQ4Lgs+yawzOm39X+OADT2r7HLVl2R9Y+5g=
+        b=XIfGGpCvyIJgGXR2Jwu/4cS+3RAQHWFaiLZj2mGrr8eWoQDFUNjbb20RnW0/A2Qby
+         irIo1Swi9CoruaIV83NPsY/5xlhA+x+pB1t1yudRIpJVoYw0c64ZNPSTOm+Eq53kgn
+         dwnV3hcojviaJYRSXtOItVg2wZ7UI+jBs4dx9qG8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Pin-Yen Lin <treapking@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Robert Foss <robert.foss@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0378/1017] ASoC: atmel: Fix error handling in snd_proto_probe
+Subject: [PATCH 5.17 0544/1126] drm/bridge: anx7625: Fix overflow issue on reading EDID
 Date:   Tue,  5 Apr 2022 09:21:31 +0200
-Message-Id: <20220405070405.506970709@linuxfoundation.org>
+Message-Id: <20220405070423.600520464@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
+References: <20220405070407.513532867@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,78 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Pin-Yen Lin <treapking@chromium.org>
 
-[ Upstream commit b0bfaf0544d08d093d6211d7ef8816fb0b5b6c75 ]
+[ Upstream commit d5c6f647aec9ed524aedd04a3aec5ebc21d39007 ]
 
-The device_node pointer is returned by of_parse_phandle()  with refcount
-incremented. We should use of_node_put() on it when done.
+The length of EDID block can be longer than 256 bytes, so we should use
+`int` instead of `u8` for the `edid_pos` variable.
 
-This function only calls of_node_put() in the regular path.
-And it will cause refcount leak in error paths.
-Fix this by calling of_node_put() in error handling too.
-
-Fixes: a45f8853a5f9 ("ASoC: Add driver for PROTO Audio CODEC (with a WM8731)")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Link: https://lore.kernel.org/r/20220308013949.20323-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 8bdfc5dae4e3 ("drm/bridge: anx7625: Add anx7625 MIPI DSI/DPI to DP")
+Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220210103827.402436-1-treapking@chromium.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/atmel/mikroe-proto.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+ drivers/gpu/drm/bridge/analogix/anx7625.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/atmel/mikroe-proto.c b/sound/soc/atmel/mikroe-proto.c
-index f9331f7e80fe..5b513ff7fe2d 100644
---- a/sound/soc/atmel/mikroe-proto.c
-+++ b/sound/soc/atmel/mikroe-proto.c
-@@ -115,7 +115,8 @@ static int snd_proto_probe(struct platform_device *pdev)
- 	cpu_np = of_parse_phandle(np, "i2s-controller", 0);
- 	if (!cpu_np) {
- 		dev_err(&pdev->dev, "i2s-controller missing\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_codec_node;
- 	}
- 	dai->cpus->of_node = cpu_np;
- 	dai->platforms->of_node = cpu_np;
-@@ -125,7 +126,8 @@ static int snd_proto_probe(struct platform_device *pdev)
- 						       &bitclkmaster, &framemaster);
- 	if (bitclkmaster != framemaster) {
- 		dev_err(&pdev->dev, "Must be the same bitclock and frame master\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_cpu_node;
- 	}
- 	if (bitclkmaster) {
- 		if (codec_np == bitclkmaster)
-@@ -136,18 +138,20 @@ static int snd_proto_probe(struct platform_device *pdev)
- 		dai_fmt |= snd_soc_daifmt_parse_clock_provider_as_flag(np, NULL);
- 	}
- 
--	of_node_put(bitclkmaster);
--	of_node_put(framemaster);
--	dai->dai_fmt = dai_fmt;
--
--	of_node_put(codec_np);
--	of_node_put(cpu_np);
- 
-+	dai->dai_fmt = dai_fmt;
- 	ret = snd_soc_register_card(&snd_proto);
- 	if (ret && ret != -EPROBE_DEFER)
- 		dev_err(&pdev->dev,
- 			"snd_soc_register_card() failed: %d\n", ret);
- 
-+
-+put_cpu_node:
-+	of_node_put(bitclkmaster);
-+	of_node_put(framemaster);
-+	of_node_put(cpu_np);
-+put_codec_node:
-+	of_node_put(codec_np);
- 	return ret;
- }
- 
+diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+index 2346dbcc505f..e596cacce9e3 100644
+--- a/drivers/gpu/drm/bridge/analogix/anx7625.c
++++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+@@ -846,7 +846,8 @@ static int segments_edid_read(struct anx7625_data *ctx,
+ static int sp_tx_edid_read(struct anx7625_data *ctx,
+ 			   u8 *pedid_blocks_buf)
+ {
+-	u8 offset, edid_pos;
++	u8 offset;
++	int edid_pos;
+ 	int count, blocks_num;
+ 	u8 pblock_buf[MAX_DPCD_BUFFER_SIZE];
+ 	u8 i, j;
 -- 
 2.34.1
 

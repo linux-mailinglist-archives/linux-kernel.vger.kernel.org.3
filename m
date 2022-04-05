@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3D324F2F90
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E1F4F34B0
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346845AbiDEJpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54492 "EHLO
+        id S1347093AbiDEJqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235552AbiDEIVa (ORCPT
+        with ESMTP id S235676AbiDEIVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:21:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D9321AD;
-        Tue,  5 Apr 2022 01:19:16 -0700 (PDT)
+        Tue, 5 Apr 2022 04:21:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933476152;
+        Tue,  5 Apr 2022 01:19:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 21DACB81BAC;
-        Tue,  5 Apr 2022 08:19:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B586C385A0;
-        Tue,  5 Apr 2022 08:19:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AFA88B81BBC;
+        Tue,  5 Apr 2022 08:19:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 012D0C340EE;
+        Tue,  5 Apr 2022 08:19:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146753;
-        bh=bk9cWPr/wjcvI1DpKgD6lGJ0CQY4X1di6UU/QY0bodk=;
+        s=korg; t=1649146759;
+        bh=sNuO6dQJvF6Vk5Tn8/d8XLokuoseHYyzEeHKBYNpZho=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ns6nLuv4FC89rNcFAZ5gO9qGBwX5AmS9/jMNA0ZX0ncDiOcjCoiGIuylBIPk7UiTf
-         oypR3M4/hivbw/vRO3LaDU4HATKJ54r5lJ9MSQEjdVoVV41ook+HnidrCM2cgsqtlG
-         dlEiQLMOY+cMYCP2mBWyKOfxPZ8hhEZtxtdcSTFs=
+        b=k6uZ5n8aJF647GWMHzidiIEuyzwq+sPzGquD9u83C14Ktpk5pJqHGG1KpJFVIKT6Y
+         xhHlHmrtcYiltLKcTUlrk8nFyU5/nOfmATMexaJNWlvxDer9W4LO5lll+V/LaM0Tz7
+         Kc3YUSaal3Q82uW8FyXcSAYIn+36cVWnLTFEzjtk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        syzbot+d59332e2db681cf18f0318a06e994ebbb529a8db@syzkaller.appspotmail.com,
+        Lee Jones <lee.jones@linaro.org>, Theodore Tso <tytso@mit.edu>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0875/1126] sched/tracing: Report TASK_RTLOCK_WAIT tasks as TASK_UNINTERRUPTIBLE
-Date:   Tue,  5 Apr 2022 09:27:02 +0200
-Message-Id: <20220405070433.219535150@linuxfoundation.org>
+Subject: [PATCH 5.17 0876/1126] ext4: dont BUG if someone dirty pages without asking ext4 first
+Date:   Tue,  5 Apr 2022 09:27:03 +0200
+Message-Id: <20220405070433.248084159@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -59,53 +56,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Valentin Schneider <valentin.schneider@arm.com>
+From: Theodore Ts'o <tytso@mit.edu>
 
-[ Upstream commit 25795ef6299f07ce3838f3253a9cb34f64efcfae ]
+[ Upstream commit cc5095747edfb054ca2068d01af20be3fcc3634f ]
 
-TASK_RTLOCK_WAIT currently isn't part of TASK_REPORT, thus a task blocking
-on an rtlock will appear as having a task state == 0, IOW TASK_RUNNING.
+[un]pin_user_pages_remote is dirtying pages without properly warning
+the file system in advance.  A related race was noted by Jan Kara in
+2018[1]; however, more recently instead of it being a very hard-to-hit
+race, it could be reliably triggered by process_vm_writev(2) which was
+discovered by Syzbot[2].
 
-The actual state is saved in p->saved_state, but reading it after reading
-p->__state has a few issues:
-o that could still be TASK_RUNNING in the case of e.g. rt_spin_lock
-o ttwu_state_match() might have changed that to TASK_RUNNING
+This is technically a bug in mm/gup.c, but arguably ext4 is fragile in
+that if some other kernel subsystem dirty pages without properly
+notifying the file system using page_mkwrite(), ext4 will BUG, while
+other file systems will not BUG (although data will still be lost).
 
-As pointed out by Eric, adding TASK_RTLOCK_WAIT to TASK_REPORT implies
-exposing a new state to userspace tools which way not know what to do with
-them. The only information that needs to be conveyed here is that a task is
-waiting on an rt_mutex, which matches TASK_UNINTERRUPTIBLE - there's no
-need for a new state.
+So instead of crashing with a BUG, issue a warning (since there may be
+potential data loss) and just mark the page as clean to avoid
+unprivileged denial of service attacks until the problem can be
+properly fixed.  More discussion and background can be found in the
+thread starting at [2].
 
-Reported-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Link: https://lore.kernel.org/r/20220120162520.570782-3-valentin.schneider@arm.com
+[1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
+[2] https://lore.kernel.org/r/Yg0m6IjcNmfaSokM@google.com
+
+Reported-by: syzbot+d59332e2db681cf18f0318a06e994ebbb529a8db@syzkaller.appspotmail.com
+Reported-by: Lee Jones <lee.jones@linaro.org>
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Link: https://lore.kernel.org/r/YiDS9wVfq4mM2jGK@mit.edu
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/sched.h | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ fs/ext4/inode.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index a76a178f8eb6..36e38434391c 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1630,6 +1630,14 @@ static inline unsigned int __task_state_index(unsigned int tsk_state,
- 	if (tsk_state == TASK_IDLE)
- 		state = TASK_REPORT_IDLE;
+diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+index 01c9e4f743ba..531a94f48637 100644
+--- a/fs/ext4/inode.c
++++ b/fs/ext4/inode.c
+@@ -1993,6 +1993,15 @@ static int ext4_writepage(struct page *page,
+ 	else
+ 		len = PAGE_SIZE;
  
-+	/*
-+	 * We're lying here, but rather than expose a completely new task state
-+	 * to userspace, we can make this appear as if the task has gone through
-+	 * a regular rt_mutex_lock() call.
-+	 */
-+	if (tsk_state == TASK_RTLOCK_WAIT)
-+		state = TASK_UNINTERRUPTIBLE;
++	/* Should never happen but for bugs in other kernel subsystems */
++	if (!page_has_buffers(page)) {
++		ext4_warning_inode(inode,
++		   "page %lu does not have buffers attached", page->index);
++		ClearPageDirty(page);
++		unlock_page(page);
++		return 0;
++	}
 +
- 	return fls(state);
- }
+ 	page_bufs = page_buffers(page);
+ 	/*
+ 	 * We cannot do block allocation or other extent handling in this
+@@ -2594,6 +2603,22 @@ static int mpage_prepare_extent_to_map(struct mpage_da_data *mpd)
+ 			wait_on_page_writeback(page);
+ 			BUG_ON(PageWriteback(page));
  
++			/*
++			 * Should never happen but for buggy code in
++			 * other subsystems that call
++			 * set_page_dirty() without properly warning
++			 * the file system first.  See [1] for more
++			 * information.
++			 *
++			 * [1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
++			 */
++			if (!page_has_buffers(page)) {
++				ext4_warning_inode(mpd->inode, "page %lu does not have buffers attached", page->index);
++				ClearPageDirty(page);
++				unlock_page(page);
++				continue;
++			}
++
+ 			if (mpd->map.m_len == 0)
+ 				mpd->first_page = page->index;
+ 			mpd->next_page = page->index + 1;
 -- 
 2.34.1
 

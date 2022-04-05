@@ -2,107 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2014F40EC
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:25:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCDC24F40F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354639AbiDEU1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
+        id S1441841AbiDEUHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343564AbiDENEx (ORCPT
+        with ESMTP id S1354632AbiDENH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 09:04:53 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA6511F793
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 05:06:27 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id d3so8154340wrb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 05:06:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=z46lGhLfI6ugeu1P3zjJF0oXFB21fasaHhYIlRjoeMU=;
-        b=c/SA4frMQAMHJXuDb0VyOfv2BeFzsflHSheqcsZper5NrOSCQcDkjHGkxYhD4uNF1C
-         I+Xyo11kF6QE1iNzQI+lBBNtJBJlEw/7qjhL9zW8sCmr6cjvigCUy4IPjhJCB5vSpU94
-         9dfv3K/TYdm865KWJVTxotArxbpGIJW+TdPaCTIMUmJW1PQAD6LS4ywWbwzBHQ7eeKu+
-         +jmxW9ZK/GZp36hKFxCgGgwc1Qsp6IIjZTNUulESiraVoRjdGe8BJ2ZPyEN0UqrFAEND
-         G/xGtqqj7CdZj9tqiScMA7VXvzoLTSrcZ3FGc/BH8vD8+90EyfHcd31cemhdem4NlzJt
-         Grug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=z46lGhLfI6ugeu1P3zjJF0oXFB21fasaHhYIlRjoeMU=;
-        b=IuuAqhyNpfBlFQS/NsaDdEWJEx3wtxpfAyNMnlJ0CpP4kt333aWBKO4tVZppsie2nb
-         /NVF8T9sBRvDKNg5EQ4Aj5ciVQWsQLN6Bd12VCJSyrL4FWR/rHxLpQUxW08rJ9Cba39I
-         tC+zRzZejSyssW/1Q1oDx1I/MJCh2mtVWaNsm8tqR5ymJ8BcrwepcjfT9+JXX8KPXMdE
-         RnputksrxAuDAyLdNa+t4plB7PnMV9dn33SZA6kXBKTPueh8LLO/jWi68DYpTxgE6m51
-         X7l4chCbqauIHONJGp0siZc2iO0Ech4ESjYlcwF836dfDsFtcIKfZ+9IAolyJQve9XIh
-         +rZg==
-X-Gm-Message-State: AOAM533TBrT9S9vSZtZAyfX3uZYmSdgUdQZ00m6l7fSYebXsPN95EpFu
-        kQmqLo2gPTiIs9rjSbYTHz4S1w==
-X-Google-Smtp-Source: ABdhPJyqTOFEOFeAFt/2YcX1+9+RtfO1i6wtivOXlQ7O002sz/pWInKXqVkJNxQ9hZqMYs1r9BBdQQ==
-X-Received: by 2002:adf:8066:0:b0:206:1563:8b2b with SMTP id 93-20020adf8066000000b0020615638b2bmr2518784wrk.582.1649160385937;
-        Tue, 05 Apr 2022 05:06:25 -0700 (PDT)
-Received: from fedora.lab.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id r16-20020a7bc090000000b0038e73023334sm1994323wmh.2.2022.04.05.05.06.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 05:06:25 -0700 (PDT)
-From:   Patrick Rudolph <patrick.rudolph@9elements.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-i2c@vger.kernel.org
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [v7 0/3] Add support for Maxim MAX735x/MAX736x variants
-Date:   Tue,  5 Apr 2022 14:05:48 +0200
-Message-Id: <20220405120552.433415-1-patrick.rudolph@9elements.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 5 Apr 2022 09:07:28 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4A4222B2;
+        Tue,  5 Apr 2022 05:09:57 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 8DC8022247;
+        Tue,  5 Apr 2022 14:09:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1649160595;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=N3QegVmrV1duTmro584pVd3S+Weu0aeOJNo5pVDKL/g=;
+        b=b6AzGRPwXUkUocumc/PNKiR8cbZZ5gdSpF5XNLOzJ6dkBWvgO3nBiip2cWD9JVhff1tyah
+        IvofnNScb4uzbrOmQE+9ZJfHSmkyEdgTKMrT4GmcpyqfbN8REAWC5qR4g/cdXc/++hn1Wq
+        34bMgfY+8B7cuY0DoEk0GBnuP6bkIAg=
+From:   Michael Walle <michael@walle.cc>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>
+Subject: [PATCH net-next v3 0/3] net: phy: mscc-miim: add MDIO bus frequency support
+Date:   Tue,  5 Apr 2022 14:09:48 +0200
+Message-Id: <20220405120951.4044875-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v7:
-- Reworked the commit message, comments and renamed a struct
-  field. No functional change.
+Introduce MDIO bus frequency support. This way the board can have a
+faster (or maybe slower) bus frequency than the hardware default.
 
-v6:
-- Fix typo in dt-bindings
+changes since v2:
+ - resend, no RFC anymore, because net-next is open again
 
-v5:
-- Remove optional and make vdd-supply mandatory
+changes since v1:
+ - fail probe if clock-frequency is set, but not clock is given
+ - rename clk_freq to bus_freq
+ - add maxItems to interrupts property
+ - put compatible and reg first in the example
 
-v4:
-- Add missing maxitems dt-bindings property
+Michael Walle (3):
+  dt-bindings: net: convert mscc-miim to YAML format
+  dt-bindings: net: mscc-miim: add clock and clock-frequency
+  net: phy: mscc-miim: add support to set MDIO bus frequency
 
-v3:
-- Merge dt-bindings into i2c-mux-pca954x.yaml
-
-v2:
-- Move dt-bindings to separate file
-- Added support for MAX736x as they are very similar
-- Fixed an issue found by kernel test robot
-- Dropped max735x property and custom IRQ check
-- Added MAX7357 config register defines instead of magic values
-- Renamed vcc-supply to vdd-supply
-
-Patrick Rudolph (3):
-  dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
-  i2c: muxes: pca954x: Add MAX735x/MAX736x support
-  i2c: muxes: pca954x: Add regulator support
-
- .../bindings/i2c/i2c-mux-pca954x.yaml         |  44 ++++--
- drivers/i2c/muxes/Kconfig                     |   4 +-
- drivers/i2c/muxes/i2c-mux-pca954x.c           | 126 ++++++++++++++++--
- 3 files changed, 153 insertions(+), 21 deletions(-)
+ .../devicetree/bindings/net/mscc,miim.yaml    | 61 +++++++++++++++++++
+ .../devicetree/bindings/net/mscc-miim.txt     | 26 --------
+ drivers/net/mdio/mdio-mscc-miim.c             | 58 +++++++++++++++++-
+ 3 files changed, 117 insertions(+), 28 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/mscc,miim.yaml
+ delete mode 100644 Documentation/devicetree/bindings/net/mscc-miim.txt
 
 -- 
-2.34.1
+2.30.2
 

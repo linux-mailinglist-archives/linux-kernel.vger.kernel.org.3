@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A71A4F2C6E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9AD4F2AF5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242138AbiDEIg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43990 "EHLO
+        id S242174AbiDEIhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235509AbiDEH7s (ORCPT
+        with ESMTP id S235546AbiDEH7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:59:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B59266F9A;
-        Tue,  5 Apr 2022 00:54:58 -0700 (PDT)
+        Tue, 5 Apr 2022 03:59:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374E93F8B4;
+        Tue,  5 Apr 2022 00:55:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF676B81A32;
-        Tue,  5 Apr 2022 07:54:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BF8CC340EE;
-        Tue,  5 Apr 2022 07:54:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6B6E615CD;
+        Tue,  5 Apr 2022 07:55:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1A8FC340EE;
+        Tue,  5 Apr 2022 07:55:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145295;
-        bh=FNWouC3CoH6+dXI5kygOzexAVVRXN9qg89YVmFU1Dbg=;
+        s=korg; t=1649145320;
+        bh=/9Zl6SwhKKLl2eqmGV3+M5EBkUz2ZL2+HLu0YTX6/TU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Nj/CB5fL/1sxCXzU1DyGvcauNdbJgpM5DJNJhQfva7/YbekeeNF1YRG4yhEl31zE0
-         WA0tJOrGHvbqVoYOKe14vkL8VvCtk/4PfVfmKOWKY09FXfvUaAS0aK8SXnpYAIhCUR
-         brmUk+ssOURpjQF1TcWaKsJX465uUgMSWCaVZH/k=
+        b=M5yZeWU7ZvhASS2kbkZbGmEiRO1gwxkxxHeQ3l0DRz49+ImVciFBbx51g3Bbkhb53
+         DWK07bEutVSpatQlbK/j7dKLFBt3z9T+2KQGiGhxCr15GbuILf/HV1YVjR7NeGjA4w
+         zihiw46U8dCNOat4kngsIa0lsZxKT0dpLkC9/u7Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        stable@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0356/1126] media: cedrus: h264: Fix neighbour info buffer size
-Date:   Tue,  5 Apr 2022 09:18:23 +0200
-Message-Id: <20220405070418.078301947@linuxfoundation.org>
+Subject: [PATCH 5.17 0362/1126] ASoC: codecs: wcd938x: fix kcontrol max values
+Date:   Tue,  5 Apr 2022 09:18:29 +0200
+Message-Id: <20220405070418.253807700@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,42 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jernej Skrabec <jernej.skrabec@gmail.com>
+From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
-[ Upstream commit fecd363ae2d5042553370b0adf60c47e35c34a83 ]
+[ Upstream commit b0217519236924f77a8382b4004e43ef8fd0dcbb ]
 
-According to BSP library source, H264 neighbour info buffer size needs
-to be 32 kiB for H6. This is similar to H265 decoding, which also needs
-double buffer size in comparison to older Cedrus core generations.
+set "HPH Type" Kcontrol max value of WCD_MBHC_HPH_STEREO instead of UINT_MAX.
+set "HPHL/R Impedance" Kcontrols max value to INT_MAX instead of UINT_MAX as
+max field is integer type.
 
-Increase buffer size to cover H6 needs. Since increase is not that big
-in absolute numbers, it doesn't make sense to complicate logic for older
-generations.
+Without this patch amixer for these controls will show -1 as max value to userspace.
 
-Issue was discovered using iommu and cross checked with BSP library
-source.
-
-Fixes: 6eb9b758e307 ("media: cedrus: Add H264 decoding support")
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Fixes: bcee7ed09b8e ("ASoC: codecs: wcd938x: add Multi Button Headset Control support")
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Link: https://lore.kernel.org/r/20220222183212.11580-8-srinivas.kandagatla@linaro.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/sunxi/cedrus/cedrus_h264.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/codecs/wcd938x.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-index b4173a8926d6..d8fb93035470 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-@@ -38,7 +38,7 @@ struct cedrus_h264_sram_ref_pic {
+diff --git a/sound/soc/codecs/wcd938x.c b/sound/soc/codecs/wcd938x.c
+index 33d5403d4e62..9ae65cbabb1a 100644
+--- a/sound/soc/codecs/wcd938x.c
++++ b/sound/soc/codecs/wcd938x.c
+@@ -3575,14 +3575,14 @@ static int wcd938x_hph_impedance_get(struct snd_kcontrol *kcontrol,
+ }
  
- #define CEDRUS_H264_FRAME_NUM		18
+ static const struct snd_kcontrol_new hph_type_detect_controls[] = {
+-	SOC_SINGLE_EXT("HPH Type", 0, 0, UINT_MAX, 0,
++	SOC_SINGLE_EXT("HPH Type", 0, 0, WCD_MBHC_HPH_STEREO, 0,
+ 		       wcd938x_get_hph_type, NULL),
+ };
  
--#define CEDRUS_NEIGHBOR_INFO_BUF_SIZE	(16 * SZ_1K)
-+#define CEDRUS_NEIGHBOR_INFO_BUF_SIZE	(32 * SZ_1K)
- #define CEDRUS_MIN_PIC_INFO_BUF_SIZE       (130 * SZ_1K)
+ static const struct snd_kcontrol_new impedance_detect_controls[] = {
+-	SOC_SINGLE_EXT("HPHL Impedance", 0, 0, UINT_MAX, 0,
++	SOC_SINGLE_EXT("HPHL Impedance", 0, 0, INT_MAX, 0,
+ 		       wcd938x_hph_impedance_get, NULL),
+-	SOC_SINGLE_EXT("HPHR Impedance", 0, 1, UINT_MAX, 0,
++	SOC_SINGLE_EXT("HPHR Impedance", 0, 1, INT_MAX, 0,
+ 		       wcd938x_hph_impedance_get, NULL),
+ };
  
- static void cedrus_h264_write_sram(struct cedrus_dev *dev,
 -- 
 2.34.1
 

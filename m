@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5394F48CF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E14B44F4B51
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386700AbiDEVuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
+        id S1574130AbiDEWyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349378AbiDEJtq (ORCPT
+        with ESMTP id S1356144AbiDEKW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:46 -0400
+        Tue, 5 Apr 2022 06:22:59 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9363D140A0;
-        Tue,  5 Apr 2022 02:44:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5D1BA304;
+        Tue,  5 Apr 2022 03:06:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D492B81B76;
-        Tue,  5 Apr 2022 09:44:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AFA3C385A1;
-        Tue,  5 Apr 2022 09:44:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 03434B81C86;
+        Tue,  5 Apr 2022 10:06:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42538C385A2;
+        Tue,  5 Apr 2022 10:06:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151879;
-        bh=5rWQUbhUJiGX3djm74TDVdsNPbKR1t9CD3a31xh3vpU=;
+        s=korg; t=1649153215;
+        bh=pgtTMJ3lOChN0sZhtkEWGnw/cn/E2bkd2HKG/XVMGcY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w3QbOIsWxqRJI6La09M4TWDMDtoONzKQryJMCLj5UrXPwkod1eDl7ch165arPSGkQ
-         yiRGAwGuGjiFnUFedmMAh+j3/nHQgfAIbcQZxvVMAqVTjsCbcHCtmZukZyI2r6UUh2
-         kfdq73SDNmSmWDqlhHpOrG6at5nzC86r0QkV+C24=
+        b=Io+E+qvbUfo87R0h9hCWQpD8RT7LopNftIzdErXeEBf6PZ1xO8BO+FzQGXR/R+Ugt
+         j340dKuqz7pJ2Q138V8+OOSzQVwoLgUMA0vp6TsTIEr9UiHCgSdyS/aeZXPHSRKIkp
+         PZkS44pRav44bZ9jmBp1LH8KAuVIaYEtKgUglm9o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Wang Qing <wangqing@vivo.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 573/913] ice: fix scheduling while atomic on aux critical err interrupt
-Date:   Tue,  5 Apr 2022 09:27:15 +0200
-Message-Id: <20220405070357.021794436@linuxfoundation.org>
+Subject: [PATCH 5.10 143/599] spi: pxa2xx-pci: Balance reference count for PCI DMA device
+Date:   Tue,  5 Apr 2022 09:27:17 +0200
+Message-Id: <20220405070303.098160106@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,130 +56,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-[ Upstream commit 32d53c0aa3a7b727243473949bad2a830b908edc ]
+[ Upstream commit 609d7ffdc42199a0ec949db057e3b4be6745d6c5 ]
 
-There's a kernel BUG splat on processing aux critical error
-interrupts in ice_misc_intr():
+The pci_get_slot() increases its reference count, the caller
+must decrement the reference count by calling pci_dev_put().
 
-[ 2100.917085] BUG: scheduling while atomic: swapper/15/0/0x00010000
-...
-[ 2101.060770] Call Trace:
-[ 2101.063229]  <IRQ>
-[ 2101.065252]  dump_stack+0x41/0x60
-[ 2101.068587]  __schedule_bug.cold.100+0x4c/0x58
-[ 2101.073060]  __schedule+0x6a4/0x830
-[ 2101.076570]  schedule+0x35/0xa0
-[ 2101.079727]  schedule_preempt_disabled+0xa/0x10
-[ 2101.084284]  __mutex_lock.isra.7+0x310/0x420
-[ 2101.088580]  ? ice_misc_intr+0x201/0x2e0 [ice]
-[ 2101.093078]  ice_send_event_to_aux+0x25/0x70 [ice]
-[ 2101.097921]  ice_misc_intr+0x220/0x2e0 [ice]
-[ 2101.102232]  __handle_irq_event_percpu+0x40/0x180
-[ 2101.106965]  handle_irq_event_percpu+0x30/0x80
-[ 2101.111434]  handle_irq_event+0x36/0x53
-[ 2101.115292]  handle_edge_irq+0x82/0x190
-[ 2101.119148]  handle_irq+0x1c/0x30
-[ 2101.122480]  do_IRQ+0x49/0xd0
-[ 2101.125465]  common_interrupt+0xf/0xf
-[ 2101.129146]  </IRQ>
-...
-
-As Andrew correctly mentioned previously[0], the following call
-ladder happens:
-
-ice_misc_intr() <- hardirq
-  ice_send_event_to_aux()
-    device_lock()
-      mutex_lock()
-        might_sleep()
-          might_resched() <- oops
-
-Add a new PF state bit which indicates that an aux critical error
-occurred and serve it in ice_service_task() in process context.
-The new ice_pf::oicr_err_reg is read-write in both hardirq and
-process contexts, but only 3 bits of non-critical data probably
-aren't worth explicit synchronizing (and they're even in the same
-byte [31:24]).
-
-[0] https://lore.kernel.org/all/YeSRUVmrdmlUXHDn@lunn.ch
-
-Fixes: 348048e724a0e ("ice: Implement iidc operations")
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Tested-by: Michal Kubiak <michal.kubiak@intel.com>
-Acked-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 743485ea3bee ("spi: pxa2xx-pci: Do a specific setup in a separate function")
+Fixes: 25014521603f ("spi: pxa2xx-pci: Enable DMA for Intel Merrifield")
+Reported-by: Wang Qing <wangqing@vivo.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Link: https://lore.kernel.org/r/20220223191637.31147-1-andriy.shevchenko@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ice/ice.h      |  2 ++
- drivers/net/ethernet/intel/ice/ice_main.c | 25 ++++++++++++++---------
- 2 files changed, 17 insertions(+), 10 deletions(-)
+ drivers/spi/spi-pxa2xx-pci.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice.h b/drivers/net/ethernet/intel/ice/ice.h
-index 16b63f727efa..7e5daede3a2e 100644
---- a/drivers/net/ethernet/intel/ice/ice.h
-+++ b/drivers/net/ethernet/intel/ice/ice.h
-@@ -241,6 +241,7 @@ enum ice_pf_state {
- 	ICE_LINK_DEFAULT_OVERRIDE_PENDING,
- 	ICE_PHY_INIT_COMPLETE,
- 	ICE_FD_VF_FLUSH_CTX,		/* set at FD Rx IRQ or timeout */
-+	ICE_AUX_ERR_PENDING,
- 	ICE_STATE_NBITS		/* must be last */
- };
+diff --git a/drivers/spi/spi-pxa2xx-pci.c b/drivers/spi/spi-pxa2xx-pci.c
+index aafac128bb5f..4eb979a096c7 100644
+--- a/drivers/spi/spi-pxa2xx-pci.c
++++ b/drivers/spi/spi-pxa2xx-pci.c
+@@ -74,14 +74,23 @@ static bool lpss_dma_filter(struct dma_chan *chan, void *param)
+ 	return true;
+ }
  
-@@ -464,6 +465,7 @@ struct ice_pf {
- 	wait_queue_head_t reset_wait_queue;
++static void lpss_dma_put_device(void *dma_dev)
++{
++	pci_dev_put(dma_dev);
++}
++
+ static int lpss_spi_setup(struct pci_dev *dev, struct pxa_spi_info *c)
+ {
+ 	struct pci_dev *dma_dev;
++	int ret;
  
- 	u32 hw_csum_rx_error;
-+	u32 oicr_err_reg;
- 	u16 oicr_idx;		/* Other interrupt cause MSIX vector index */
- 	u16 num_avail_sw_msix;	/* remaining MSIX SW vectors left unclaimed */
- 	u16 max_pf_txqs;	/* Total Tx queues PF wide */
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index 524e6e65dc9d..7f68132b8a1f 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -2143,6 +2143,19 @@ static void ice_service_task(struct work_struct *work)
- 		return;
+ 	c->num_chipselect = 1;
+ 	c->max_clk_rate = 50000000;
+ 
+ 	dma_dev = pci_get_slot(dev->bus, PCI_DEVFN(PCI_SLOT(dev->devfn), 0));
++	ret = devm_add_action_or_reset(&dev->dev, lpss_dma_put_device, dma_dev);
++	if (ret)
++		return ret;
+ 
+ 	if (c->tx_param) {
+ 		struct dw_dma_slave *slave = c->tx_param;
+@@ -105,8 +114,9 @@ static int lpss_spi_setup(struct pci_dev *dev, struct pxa_spi_info *c)
+ 
+ static int mrfld_spi_setup(struct pci_dev *dev, struct pxa_spi_info *c)
+ {
+-	struct pci_dev *dma_dev = pci_get_slot(dev->bus, PCI_DEVFN(21, 0));
+ 	struct dw_dma_slave *tx, *rx;
++	struct pci_dev *dma_dev;
++	int ret;
+ 
+ 	switch (PCI_FUNC(dev->devfn)) {
+ 	case 0:
+@@ -131,6 +141,11 @@ static int mrfld_spi_setup(struct pci_dev *dev, struct pxa_spi_info *c)
+ 		return -ENODEV;
  	}
  
-+	if (test_and_clear_bit(ICE_AUX_ERR_PENDING, pf->state)) {
-+		struct iidc_event *event;
++	dma_dev = pci_get_slot(dev->bus, PCI_DEVFN(21, 0));
++	ret = devm_add_action_or_reset(&dev->dev, lpss_dma_put_device, dma_dev);
++	if (ret)
++		return ret;
 +
-+		event = kzalloc(sizeof(*event), GFP_KERNEL);
-+		if (event) {
-+			set_bit(IIDC_EVENT_CRIT_ERR, event->type);
-+			/* report the entire OICR value to AUX driver */
-+			swap(event->reg, pf->oicr_err_reg);
-+			ice_send_event_to_aux(pf, event);
-+			kfree(event);
-+		}
-+	}
-+
- 	if (test_bit(ICE_FLAG_PLUG_AUX_DEV, pf->flags)) {
- 		/* Plug aux device per request */
- 		ice_plug_aux_dev(pf);
-@@ -2881,17 +2894,9 @@ static irqreturn_t ice_misc_intr(int __always_unused irq, void *data)
+ 	tx = c->tx_param;
+ 	tx->dma_dev = &dma_dev->dev;
  
- #define ICE_AUX_CRIT_ERR (PFINT_OICR_PE_CRITERR_M | PFINT_OICR_HMC_ERR_M | PFINT_OICR_PE_PUSH_M)
- 	if (oicr & ICE_AUX_CRIT_ERR) {
--		struct iidc_event *event;
--
-+		pf->oicr_err_reg |= oicr;
-+		set_bit(ICE_AUX_ERR_PENDING, pf->state);
- 		ena_mask &= ~ICE_AUX_CRIT_ERR;
--		event = kzalloc(sizeof(*event), GFP_ATOMIC);
--		if (event) {
--			set_bit(IIDC_EVENT_CRIT_ERR, event->type);
--			/* report the entire OICR value to AUX driver */
--			event->reg = oicr;
--			ice_send_event_to_aux(pf, event);
--			kfree(event);
--		}
- 	}
- 
- 	/* Report any remaining unexpected interrupts */
 -- 
 2.34.1
 

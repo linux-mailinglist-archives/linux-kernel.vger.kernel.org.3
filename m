@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C8F4F4595
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D484F4491
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377224AbiDEMXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
+        id S1381694AbiDEPOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:14:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245047AbiDEIxE (ORCPT
+        with ESMTP id S1346580AbiDEJpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:53:04 -0400
+        Tue, 5 Apr 2022 05:45:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C351FE70;
-        Tue,  5 Apr 2022 01:50:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FD4DA6FD;
+        Tue,  5 Apr 2022 02:31:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 614E360FFB;
-        Tue,  5 Apr 2022 08:50:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74124C385A0;
-        Tue,  5 Apr 2022 08:50:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7D426165C;
+        Tue,  5 Apr 2022 09:30:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C160CC385A3;
+        Tue,  5 Apr 2022 09:30:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148637;
-        bh=bSHnxBfTeFa9LiNJveLBByEKIzdv4qri4DryIuhPjVw=;
+        s=korg; t=1649151059;
+        bh=D6m+o0u+CA+SvDho6afPxHeHyW7tn/a0c/86ypjkG+8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IeZo6hpPHcSB/WXpCy061gMeylVIEif4D3CaAenPDPRU7BFG33V5L2cf06sze5kVl
-         AScADy1OFIuFNshVHsEUFb4NGAGYRklMYr5+B5p0RREZZ98/fSuvY6g3OZBxbX/WOh
-         nPxjmzB/rROOKXsdnBcwOeCw2zFjbY44wnkOBsnI=
+        b=MbyN5SdgqACx0nfL+S1OJDR2/uQ9I4fXFKBUqOCesQ2SSZxRRHB8ufU/imKDFc7Mc
+         bA45j1JjxvRBswe45BBI+czvlpSFzaJeoifwf8RcmGNdNJV9gwlUuFf7sjGVEshJFY
+         AmiPacJ3jMAryrv/k34RXpJ/VNJqTkGZIlIhLEPY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brett Creeley <brett@pensando.io>,
-        Shannon Nelson <snelson@pensando.io>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0425/1017] ionic: Dont send reset commands if FW isnt running
-Date:   Tue,  5 Apr 2022 09:22:18 +0200
-Message-Id: <20220405070406.905976087@linuxfoundation.org>
+Subject: [PATCH 5.15 278/913] ASoC: codecs: Check for error pointer after calling devm_regmap_init_mmio
+Date:   Tue,  5 Apr 2022 09:22:20 +0200
+Message-Id: <20220405070348.190484643@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,128 +55,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brett Creeley <brett@pensando.io>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit b8fd0271dad00b953caaabe73474788d3d19e252 ]
+[ Upstream commit aa505ecccf2ae7546e0e262d574e18a9241f3005 ]
 
-It's possible the FW is already shutting down while the driver is being
-removed and/or when the driver is going through reset. This can cause
-unexpected/unnecessary errors to be printed:
+Since the potential failure of the devm_regmap_init_mmio(), it will
+return error pointer and be assigned to the regmap.
+Then the error pointer will be dereferenced.
+For example rx->regmap will be used in rx_macro_mclk_enable().
+Therefore, it should be better to check it.
 
-eth0: DEV_CMD IONIC_CMD_PORT_RESET (12) error, IONIC_RC_ERROR (29) failed
-eth1: DEV_CMD IONIC_CMD_RESET (3) error, IONIC_RC_ERROR (29) failed
-
-Fix this by checking the FW status register before issuing the reset
-commands.
-
-Also, since err may not be assigned in ionic_port_reset(), assign it a
-default value of 0, and remove an unnecessary log message.
-
-Fixes: fbfb8031533c ("ionic: Add hardware init and device commands")
-Signed-off-by: Brett Creeley <brett@pensando.io>
-Signed-off-by: Shannon Nelson <snelson@pensando.io>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: af3d54b99764 ("ASoC: codecs: lpass-rx-macro: add support for lpass rx macro")
+Fixes: c39667ddcfc5 ("ASoC: codecs: lpass-tx-macro: add support for lpass tx macro")
+Fixes: 809bcbcecebf ("ASoC: codecs: lpass-wsa-macro: Add support to WSA Macro")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Link: https://lore.kernel.org/r/20220121171031.2826198-1-jiasheng@iscas.ac.cn
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/ethernet/pensando/ionic/ionic_dev.c    | 17 ++++++++++++-----
- .../net/ethernet/pensando/ionic/ionic_dev.h    |  1 +
- .../net/ethernet/pensando/ionic/ionic_main.c   | 18 ++++++++++--------
- 3 files changed, 23 insertions(+), 13 deletions(-)
+ sound/soc/codecs/lpass-rx-macro.c  | 2 ++
+ sound/soc/codecs/lpass-tx-macro.c  | 2 ++
+ sound/soc/codecs/lpass-wsa-macro.c | 2 ++
+ 3 files changed, 6 insertions(+)
 
-diff --git a/drivers/net/ethernet/pensando/ionic/ionic_dev.c b/drivers/net/ethernet/pensando/ionic/ionic_dev.c
-index 4044c630f8b4..2c7ce820a1fa 100644
---- a/drivers/net/ethernet/pensando/ionic/ionic_dev.c
-+++ b/drivers/net/ethernet/pensando/ionic/ionic_dev.c
-@@ -129,6 +129,16 @@ int ionic_dev_setup(struct ionic *ionic)
- }
+diff --git a/sound/soc/codecs/lpass-rx-macro.c b/sound/soc/codecs/lpass-rx-macro.c
+index 1c0409350e86..0f932ca61c81 100644
+--- a/sound/soc/codecs/lpass-rx-macro.c
++++ b/sound/soc/codecs/lpass-rx-macro.c
+@@ -3542,6 +3542,8 @@ static int rx_macro_probe(struct platform_device *pdev)
+ 		return PTR_ERR(base);
  
- /* Devcmd Interface */
-+bool ionic_is_fw_running(struct ionic_dev *idev)
-+{
-+	u8 fw_status = ioread8(&idev->dev_info_regs->fw_status);
-+
-+	/* firmware is useful only if the running bit is set and
-+	 * fw_status != 0xff (bad PCI read)
-+	 */
-+	return (fw_status != 0xff) && (fw_status & IONIC_FW_STS_F_RUNNING);
-+}
-+
- int ionic_heartbeat_check(struct ionic *ionic)
- {
- 	struct ionic_dev *idev = &ionic->idev;
-@@ -152,13 +162,10 @@ int ionic_heartbeat_check(struct ionic *ionic)
- 		goto do_check_time;
- 	}
+ 	rx->regmap = devm_regmap_init_mmio(dev, base, &rx_regmap_config);
++	if (IS_ERR(rx->regmap))
++		return PTR_ERR(rx->regmap);
  
--	/* firmware is useful only if the running bit is set and
--	 * fw_status != 0xff (bad PCI read)
--	 * If fw_status is not ready don't bother with the generation.
--	 */
- 	fw_status = ioread8(&idev->dev_info_regs->fw_status);
+ 	dev_set_drvdata(dev, rx);
  
--	if (fw_status == 0xff || !(fw_status & IONIC_FW_STS_F_RUNNING)) {
-+	/* If fw_status is not ready don't bother with the generation */
-+	if (!ionic_is_fw_running(idev)) {
- 		fw_status_ready = false;
- 	} else {
- 		fw_generation = fw_status & IONIC_FW_STS_F_GENERATION;
-diff --git a/drivers/net/ethernet/pensando/ionic/ionic_dev.h b/drivers/net/ethernet/pensando/ionic/ionic_dev.h
-index e5acf3bd62b2..73b950ac1272 100644
---- a/drivers/net/ethernet/pensando/ionic/ionic_dev.h
-+++ b/drivers/net/ethernet/pensando/ionic/ionic_dev.h
-@@ -353,5 +353,6 @@ void ionic_q_rewind(struct ionic_queue *q, struct ionic_desc_info *start);
- void ionic_q_service(struct ionic_queue *q, struct ionic_cq_info *cq_info,
- 		     unsigned int stop_index);
- int ionic_heartbeat_check(struct ionic *ionic);
-+bool ionic_is_fw_running(struct ionic_dev *idev);
+diff --git a/sound/soc/codecs/lpass-tx-macro.c b/sound/soc/codecs/lpass-tx-macro.c
+index 27a0d5defd27..e4bbc6bd4925 100644
+--- a/sound/soc/codecs/lpass-tx-macro.c
++++ b/sound/soc/codecs/lpass-tx-macro.c
+@@ -1803,6 +1803,8 @@ static int tx_macro_probe(struct platform_device *pdev)
+ 		return PTR_ERR(base);
  
- #endif /* _IONIC_DEV_H_ */
-diff --git a/drivers/net/ethernet/pensando/ionic/ionic_main.c b/drivers/net/ethernet/pensando/ionic/ionic_main.c
-index a89ad768e4a0..a548f2a01806 100644
---- a/drivers/net/ethernet/pensando/ionic/ionic_main.c
-+++ b/drivers/net/ethernet/pensando/ionic/ionic_main.c
-@@ -540,6 +540,9 @@ int ionic_reset(struct ionic *ionic)
- 	struct ionic_dev *idev = &ionic->idev;
- 	int err;
+ 	tx->regmap = devm_regmap_init_mmio(dev, base, &tx_regmap_config);
++	if (IS_ERR(tx->regmap))
++		return PTR_ERR(tx->regmap);
  
-+	if (!ionic_is_fw_running(idev))
-+		return 0;
-+
- 	mutex_lock(&ionic->dev_cmd_lock);
- 	ionic_dev_cmd_reset(idev);
- 	err = ionic_dev_cmd_wait(ionic, DEVCMD_TIMEOUT);
-@@ -612,15 +615,17 @@ int ionic_port_init(struct ionic *ionic)
- int ionic_port_reset(struct ionic *ionic)
- {
- 	struct ionic_dev *idev = &ionic->idev;
--	int err;
-+	int err = 0;
+ 	dev_set_drvdata(dev, tx);
  
- 	if (!idev->port_info)
- 		return 0;
+diff --git a/sound/soc/codecs/lpass-wsa-macro.c b/sound/soc/codecs/lpass-wsa-macro.c
+index d3ac318fd6b6..dd1a8b7bc794 100644
+--- a/sound/soc/codecs/lpass-wsa-macro.c
++++ b/sound/soc/codecs/lpass-wsa-macro.c
+@@ -2405,6 +2405,8 @@ static int wsa_macro_probe(struct platform_device *pdev)
+ 		return PTR_ERR(base);
  
--	mutex_lock(&ionic->dev_cmd_lock);
--	ionic_dev_cmd_port_reset(idev);
--	err = ionic_dev_cmd_wait(ionic, DEVCMD_TIMEOUT);
--	mutex_unlock(&ionic->dev_cmd_lock);
-+	if (ionic_is_fw_running(idev)) {
-+		mutex_lock(&ionic->dev_cmd_lock);
-+		ionic_dev_cmd_port_reset(idev);
-+		err = ionic_dev_cmd_wait(ionic, DEVCMD_TIMEOUT);
-+		mutex_unlock(&ionic->dev_cmd_lock);
-+	}
+ 	wsa->regmap = devm_regmap_init_mmio(dev, base, &wsa_regmap_config);
++	if (IS_ERR(wsa->regmap))
++		return PTR_ERR(wsa->regmap);
  
- 	dma_free_coherent(ionic->dev, idev->port_info_sz,
- 			  idev->port_info, idev->port_info_pa);
-@@ -628,9 +633,6 @@ int ionic_port_reset(struct ionic *ionic)
- 	idev->port_info = NULL;
- 	idev->port_info_pa = 0;
- 
--	if (err)
--		dev_err(ionic->dev, "Failed to reset port\n");
--
- 	return err;
- }
+ 	dev_set_drvdata(dev, wsa);
  
 -- 
 2.34.1

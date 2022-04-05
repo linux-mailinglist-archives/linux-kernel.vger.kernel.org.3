@@ -2,49 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C80424F4F0B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 332DF4F4F0F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:57:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1836688AbiDFAiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49574 "EHLO
+        id S1836782AbiDFAjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:39:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350266AbiDEJ4z (ORCPT
+        with ESMTP id S1358052AbiDEK15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:56:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590504FC62;
-        Tue,  5 Apr 2022 02:51:02 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DF8403D8;
+        Tue,  5 Apr 2022 03:13:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D3EFC616D1;
-        Tue,  5 Apr 2022 09:51:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E03ACC385BB;
-        Tue,  5 Apr 2022 09:51:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B2A06B81BC5;
+        Tue,  5 Apr 2022 10:13:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A1DCC385A0;
+        Tue,  5 Apr 2022 10:13:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152261;
-        bh=EEzSTtJhiB4vfmd+xlsYP6HL/LckkspU9kimszDf3zY=;
+        s=korg; t=1649153629;
+        bh=enzqPginarj/QnU6H8pla220r9cEFqVA6qz1/mBHTDc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M29knTvPq33BvaPksmPv9gNO7nQOJekSCStI8AEZcWr5L0cF+0/Qj/AKssM7Gj+LK
-         8yKYHk7LiQqli6x9eQ19qv1RaC9JEM0x8Cf7SNGNbXFwJ3tH5rDQxYjR56teTggh4F
-         dZRdOUP2vo2M0FN6CFoVCIBQ8yQ6wCXGWWwo0Jgk=
+        b=0L0q+YKJuZf6sfF8ktogHZxBJcNzTAy6VygyOwjNPWaeyBcHxJW/pwoVZ6bbOJ77m
+         diEvUibtbi0FsYBCLbI3/SF+ev2r12vgWexoK1zSIXKlRwk1ayrCmv7l5++2Xw+jEO
+         NWSZvJKjNYl+WYhokZjxBdF64rFjg+Yn86wqd7Ew=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 714/913] sched/tracing: Report TASK_RTLOCK_WAIT tasks as TASK_UNINTERRUPTIBLE
-Date:   Tue,  5 Apr 2022 09:29:36 +0200
-Message-Id: <20220405070401.236850024@linuxfoundation.org>
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 283/599] ray_cs: Check ioremap return value
+Date:   Tue,  5 Apr 2022 09:29:37 +0200
+Message-Id: <20220405070307.257230649@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,53 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Valentin Schneider <valentin.schneider@arm.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 25795ef6299f07ce3838f3253a9cb34f64efcfae ]
+[ Upstream commit 7e4760713391ee46dc913194b33ae234389a174e ]
 
-TASK_RTLOCK_WAIT currently isn't part of TASK_REPORT, thus a task blocking
-on an rtlock will appear as having a task state == 0, IOW TASK_RUNNING.
+As the possible failure of the ioremap(), the 'local->sram' and other
+two could be NULL.
+Therefore it should be better to check it in order to avoid the later
+dev_dbg.
 
-The actual state is saved in p->saved_state, but reading it after reading
-p->__state has a few issues:
-o that could still be TASK_RUNNING in the case of e.g. rt_spin_lock
-o ttwu_state_match() might have changed that to TASK_RUNNING
-
-As pointed out by Eric, adding TASK_RTLOCK_WAIT to TASK_REPORT implies
-exposing a new state to userspace tools which way not know what to do with
-them. The only information that needs to be conveyed here is that a task is
-waiting on an rt_mutex, which matches TASK_UNINTERRUPTIBLE - there's no
-need for a new state.
-
-Reported-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Link: https://lore.kernel.org/r/20220120162520.570782-3-valentin.schneider@arm.com
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20211230022926.1846757-1-jiasheng@iscas.ac.cn
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/sched.h | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/net/wireless/ray_cs.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 8fcf76fed984..031588cd2ccb 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1626,6 +1626,14 @@ static inline unsigned int __task_state_index(unsigned int tsk_state,
- 	if (tsk_state == TASK_IDLE)
- 		state = TASK_REPORT_IDLE;
+diff --git a/drivers/net/wireless/ray_cs.c b/drivers/net/wireless/ray_cs.c
+index bf3fbd14eda3..091eea0d958d 100644
+--- a/drivers/net/wireless/ray_cs.c
++++ b/drivers/net/wireless/ray_cs.c
+@@ -382,6 +382,8 @@ static int ray_config(struct pcmcia_device *link)
+ 		goto failed;
+ 	local->sram = ioremap(link->resource[2]->start,
+ 			resource_size(link->resource[2]));
++	if (!local->sram)
++		goto failed;
  
-+	/*
-+	 * We're lying here, but rather than expose a completely new task state
-+	 * to userspace, we can make this appear as if the task has gone through
-+	 * a regular rt_mutex_lock() call.
-+	 */
-+	if (tsk_state == TASK_RTLOCK_WAIT)
-+		state = TASK_UNINTERRUPTIBLE;
-+
- 	return fls(state);
- }
+ /*** Set up 16k window for shared memory (receive buffer) ***************/
+ 	link->resource[3]->flags |=
+@@ -396,6 +398,8 @@ static int ray_config(struct pcmcia_device *link)
+ 		goto failed;
+ 	local->rmem = ioremap(link->resource[3]->start,
+ 			resource_size(link->resource[3]));
++	if (!local->rmem)
++		goto failed;
  
+ /*** Set up window for attribute memory ***********************************/
+ 	link->resource[4]->flags |=
+@@ -410,6 +414,8 @@ static int ray_config(struct pcmcia_device *link)
+ 		goto failed;
+ 	local->amem = ioremap(link->resource[4]->start,
+ 			resource_size(link->resource[4]));
++	if (!local->amem)
++		goto failed;
+ 
+ 	dev_dbg(&link->dev, "ray_config sram=%p\n", local->sram);
+ 	dev_dbg(&link->dev, "ray_config rmem=%p\n", local->rmem);
 -- 
 2.34.1
 

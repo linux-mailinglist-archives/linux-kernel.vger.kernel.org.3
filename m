@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 173E84F2C24
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E19E4F2E7F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239488AbiDEKHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45702 "EHLO
+        id S229641AbiDEKar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240969AbiDEIcl (ORCPT
+        with ESMTP id S240974AbiDEIcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:32:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950BD9398C;
-        Tue,  5 Apr 2022 01:25:32 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940899E9E0;
+        Tue,  5 Apr 2022 01:25:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1BBF3B81BAF;
-        Tue,  5 Apr 2022 08:25:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 727A1C385A2;
-        Tue,  5 Apr 2022 08:25:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F419C60FFC;
+        Tue,  5 Apr 2022 08:25:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A2E8C385A1;
+        Tue,  5 Apr 2022 08:25:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147129;
-        bh=jl6Snp2v0QTf7bMzCJgP0Dv9BzB/beZVOt0Nxq39c78=;
+        s=korg; t=1649147135;
+        bh=tRO1PGn12jKvQfnysJtLy8P3zLYsaGSIXrfzfDWlxbQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kQs5mbcNLQ/ejN12DlwQUq4HvYymnLwz8ofM9ugq7xaZcJwHDMaNyPbCCx5l2Hzmp
-         CEFelsStbz76IDNnyf8OrzTvFX+Y8rjgDv/15FsD9Ha3LYgmhQcKXO6iXUcVDrjW7R
-         32CkYXHhEbrlFfswvUKVzUuqO1tLO8y1oUmWK4GQ=
+        b=y42tajtVDqNnaK1E2mDiELwH972laRUbytG50nDeZuQzi6N4drrr0FeGATGgmedPE
+         xqhtlZ77+PuPNCLrkXGfLRL0ZpJza2KlzfbddTNR0wfPrXE0oaANl3amOV2WHURmue
+         7vlo5mewUdLCpmvFhoPBNdguJUbxl0Zd7dVKnKlA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>,
-        Richard Weinberger <richard@nod.at>
-Subject: [PATCH 5.17 1013/1126] ubifs: rename_whiteout: correct old_dir size computing
-Date:   Tue,  5 Apr 2022 09:29:20 +0200
-Message-Id: <20220405070437.222069130@linuxfoundation.org>
+        stable@vger.kernel.org, Pankaj Raghav <p.raghav@samsung.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH 5.17 1015/1126] nvme: fix the read-only state for zoned namespaces with unsupposed features
+Date:   Tue,  5 Apr 2022 09:29:22 +0200
+Message-Id: <20220405070437.280317264@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,35 +54,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baokun Li <libaokun1@huawei.com>
+From: Pankaj Raghav <p.raghav@samsung.com>
 
-commit 705757274599e2e064dd3054aabc74e8af31a095 upstream.
+commit 726be2c72efc0a64c206e854b8996ad3ab9c7507 upstream.
 
-When renaming the whiteout file, the old whiteout file is not deleted.
-Therefore, we add the old dentry size to the old dir like XFS.
-Otherwise, an error may be reported due to `fscki->calc_sz != fscki->size`
-in check_indes.
+commit 2f4c9ba23b88 ("nvme: export zoned namespaces without Zone Append
+support read-only") marks zoned namespaces without append support
+read-only.  It does iso by setting NVME_NS_FORCE_RO in ns->flags in
+nvme_update_zone_info and checking for that flag later in
+nvme_update_disk_info to mark the disk as read-only.
 
-Fixes: 9e0a1fff8db56ea ("ubifs: Implement RENAME_WHITEOUT")
-Reported-by: Zhihao Cheng <chengzhihao1@huawei.com>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
+But commit 73d90386b559 ("nvme: cleanup zone information initialization")
+rearranged nvme_update_disk_info to be called before
+nvme_update_zone_info and thus not marking the disk as read-only.
+The call order cannot be just reverted because nvme_update_zone_info sets
+certain queue parameters such as zone_write_granularity that depend on the
+prior call to nvme_update_disk_info.
+
+Remove the call to set_disk_ro in nvme_update_disk_info. and call
+set_disk_ro after nvme_update_zone_info and nvme_update_disk_info to set
+the permission for ZNS drives correctly. The same applies to the
+multipath disk path.
+
+Fixes: 73d90386b559 ("nvme: cleanup zone information initialization")
+Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ubifs/dir.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/nvme/host/core.c |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
---- a/fs/ubifs/dir.c
-+++ b/fs/ubifs/dir.c
-@@ -1402,6 +1402,9 @@ static int do_rename(struct inode *old_d
- 			iput(whiteout);
- 			goto out_release;
- 		}
-+
-+		/* Add the old_dentry size to the old_dir size. */
-+		old_sz -= CALC_DENT_SIZE(fname_len(&old_nm));
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -1857,9 +1857,6 @@ static void nvme_update_disk_info(struct
+ 	nvme_config_discard(disk, ns);
+ 	blk_queue_max_write_zeroes_sectors(disk->queue,
+ 					   ns->ctrl->max_zeroes_sectors);
+-
+-	set_disk_ro(disk, (id->nsattr & NVME_NS_ATTR_RO) ||
+-		test_bit(NVME_NS_FORCE_RO, &ns->flags));
+ }
+ 
+ static inline bool nvme_first_scan(struct gendisk *disk)
+@@ -1918,6 +1915,8 @@ static int nvme_update_ns_info(struct nv
+ 			goto out_unfreeze;
  	}
  
- 	lock_4_inodes(old_dir, new_dir, new_inode, whiteout);
++	set_disk_ro(ns->disk, (id->nsattr & NVME_NS_ATTR_RO) ||
++		test_bit(NVME_NS_FORCE_RO, &ns->flags));
+ 	set_bit(NVME_NS_READY, &ns->flags);
+ 	blk_mq_unfreeze_queue(ns->disk->queue);
+ 
+@@ -1930,6 +1929,9 @@ static int nvme_update_ns_info(struct nv
+ 	if (nvme_ns_head_multipath(ns->head)) {
+ 		blk_mq_freeze_queue(ns->head->disk->queue);
+ 		nvme_update_disk_info(ns->head->disk, ns, id);
++		set_disk_ro(ns->head->disk,
++			    (id->nsattr & NVME_NS_ATTR_RO) ||
++				    test_bit(NVME_NS_FORCE_RO, &ns->flags));
+ 		nvme_mpath_revalidate_paths(ns);
+ 		blk_stack_limits(&ns->head->disk->queue->limits,
+ 				 &ns->queue->limits, 0);
 
 

@@ -2,83 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 613A64F4F81
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4BA74F5011
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1838467AbiDFAvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
+        id S1452746AbiDFBJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457272AbiDEQDC (ORCPT
+        with ESMTP id S1457390AbiDEQDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:03:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 38FCF20BEF
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:36:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649173017;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Tue, 5 Apr 2022 12:03:10 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653585FD2
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:40:04 -0700 (PDT)
+Date:   Tue, 05 Apr 2022 15:40:02 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649173203;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=w5pFr+rSLwvAAi2cZv8XUzE7S/JhtL0csx8uaJExo6E=;
-        b=K5R6xQezlx1pJGBySI3Xs1whNba30+/p9ZOO9lx0XEkC2WRCeN0rytrr3sfxhesm/qCbeX
-        qSM3uaR+A/VrJdoFYjRkWU8k3cZ8f4zK0i6PDcy2QLB1qULnxcCNQR1vha7I6yZJgNP0B3
-        2BW6q1YqSaQa4gZ244Lf5LEXxBDSGec=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-263-H6cTnmRzPWy8M7cRT4dMsg-1; Tue, 05 Apr 2022 11:36:56 -0400
-X-MC-Unique: H6cTnmRzPWy8M7cRT4dMsg-1
-Received: by mail-wm1-f69.google.com with SMTP id r19-20020a7bc093000000b0038e706da7c0so1405988wmh.1
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 08:36:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=w5pFr+rSLwvAAi2cZv8XUzE7S/JhtL0csx8uaJExo6E=;
-        b=1dMeagrGthyZMD9CPjhDLEzibvY73BmqedNMadxs9ont3nOEDzthyiI0pHlCrVSRyP
-         uZFM/kgLhCMnZ/pcIJpEN9yG10BsW3c2h+cVB3pfoOIj26Scp57FFmmezgI93X3Lk6kC
-         ZGrsoOT0RdcKYL5CovLqFHWlokshW8r6HW8DZ5iL1BX3kArE42n/U7qcxRipJgEshXOZ
-         E1UzBMjRJpqn2CnVYnrfxjKPcGAU2Y+d3/1BbPOaQfwAHJeYbeHUBHliSw1Ipt76mKjP
-         /7KGjqvB9aIeY1o15aEWoyJCPsaKnWMDiiShBfGpdsg9YvJmUiC5HEcsa8ONvFh8UaGz
-         c4ig==
-X-Gm-Message-State: AOAM533czhg4TEDPKCWBf27oKl/uwbxyotydEeRaFJrc4k9AY5BZw3wi
-        tOqut/6DB/l/9AW+WrJqNdqB/MZxg+/7GTkig7GOE05swPQ7TDpPJ9qsafz3ZgQAiFpS6iJ7ZZa
-        1vbLgomvxzAfEKj+SXE0lxeVC
-X-Received: by 2002:a05:600c:2213:b0:38e:7138:de13 with SMTP id z19-20020a05600c221300b0038e7138de13mr3610880wml.26.1649173014506;
-        Tue, 05 Apr 2022 08:36:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyD2fMFuh8JuuHOsHRwnbywieUmyYbfuQQjPfttsinL3vtfw+ztig4KQrX2KML8XIXv9oeJ5Q==
-X-Received: by 2002:a05:600c:2213:b0:38e:7138:de13 with SMTP id z19-20020a05600c221300b0038e7138de13mr3610856wml.26.1649173014255;
-        Tue, 05 Apr 2022 08:36:54 -0700 (PDT)
-Received: from [10.32.181.87] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
-        by smtp.googlemail.com with ESMTPSA id c7-20020a5d4f07000000b00203db8f13c6sm12570791wru.75.2022.04.05.08.36.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 08:36:53 -0700 (PDT)
-Message-ID: <b3d7a72d-39f8-d9dc-8811-25df504d481d@redhat.com>
-Date:   Tue, 5 Apr 2022 17:36:52 +0200
+        bh=/bDtmQYgBvJGgUnqDZdoylzTygcxGVQDC5VhemXrey8=;
+        b=lHdM+kZ9Ue0f9rsKoPhHy/toqky3/GBj7xPzCcUTrSSp+Dgsn9Q73ZoZPZmkJKNZAO906G
+        BmsDFd+Y7uCWZ8rync15CwDna7MWPzYjLF3h3Nc/uu5+tPaDfcXeyyTsFrACs89jXUZflW
+        hXft24QR5bXF/CwU/jtFpDix2QLPtn7zB4+jKAdIPvsLp7z/RdRen969a+a6LniafxBL54
+        TsEyEsN7/JdVwGJfBAiABGCHLf/ju/C4mh8TtvYvTLYSCwxS47vB0VNteitRd9QzgAZyUi
+        jGdiktJAEdT0JVgPCvFZwD7bAEU0STUFBzvvc4XvOpmdnJXzBqD64D2GG9FW9Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649173203;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/bDtmQYgBvJGgUnqDZdoylzTygcxGVQDC5VhemXrey8=;
+        b=f5o6m9L1HSYlncLfXFk1Eo8ER7GlgBObZEWKl06LJKtwcfFiV/L364wIXDzwzj1mHY6kT8
+        dg9VH6e7wockenBA==
+From:   "irqchip-bot for YueHaibing" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-fixes] irq/qcom-mpm: Fix build error without MAILBOX
+Cc:     YueHaibing <yuehaibing@huawei.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
+In-Reply-To: <20220317131956.30004-1-yuehaibing@huawei.com>
+References: <20220317131956.30004-1-yuehaibing@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v5 077/104] KVM: TDX: Use vcpu_to_pi_desc() uniformly
- in posted_intr.c
-Content-Language: en-US
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <ee7be7832bc424546fd4f05015a844a0205b5ba2.1646422845.git.isaku.yamahata@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <ee7be7832bc424546fd4f05015a844a0205b5ba2.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-ID: <164917320203.389.10470324625310778188.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,57 +65,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
-> From: Yuan Yao <yuan.yao@intel.com>
-> 
-> The helper function, vcpu_to_pi_desc(), is defined to get the posted
-> interrupt descriptor from vcpu.  There is one place that doesn't use it,
-> but direct reference to vmx_vcpu->pi_desc.  It's inconsistent.
-> 
-> For TDX, TDX vcpu structure will be defined and the helper function,
-> vcpu_to_pi_desc(), will return tdx_vcpu->pi_desc for TDX case instead of
-> vmx_vcpu->pi_desc.  The direct reference to vmx_vcpu->pi_desc doesn't work
-> for TDX.
-> 
-> Replace vmx_vcpu->pi_desc with the helper function, vcpu_pi_desc() for
-> consistency and TDX.
-> 
-> Signed-off-by: Yuan Yao <yuan.yao@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->   arch/x86/kvm/vmx/posted_intr.c | 2 +-
->   arch/x86/kvm/vmx/x86_ops.h     | 3 +++
->   2 files changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
-> index aa1fe9085d77..c8a81c916eed 100644
-> --- a/arch/x86/kvm/vmx/posted_intr.c
-> +++ b/arch/x86/kvm/vmx/posted_intr.c
-> @@ -311,7 +311,7 @@ int pi_update_irte(struct kvm *kvm, unsigned int host_irq, uint32_t guest_irq,
->   			continue;
->   		}
->   
-> -		vcpu_info.pi_desc_addr = __pa(&to_vmx(vcpu)->pi_desc);
-> +		vcpu_info.pi_desc_addr = __pa(vcpu_to_pi_desc(vcpu));
->   		vcpu_info.vector = irq.vector;
->   
->   		trace_kvm_pi_irte_update(host_irq, vcpu->vcpu_id, e->gsi,
-> diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
-> index aae0f4449ec5..0f1a28f67e60 100644
-> --- a/arch/x86/kvm/vmx/x86_ops.h
-> +++ b/arch/x86/kvm/vmx/x86_ops.h
-> @@ -147,6 +147,9 @@ void tdx_prepare_switch_to_guest(struct kvm_vcpu *vcpu);
->   void tdx_vcpu_put(struct kvm_vcpu *vcpu);
->   void tdx_vcpu_load(struct kvm_vcpu *vcpu, int cpu);
->   
-> +void tdx_apicv_post_state_restore(struct kvm_vcpu *vcpu);
-> +int tdx_deliver_posted_interrupt(struct kvm_vcpu *vcpu, int vector);
-> +
->   int tdx_vm_ioctl(struct kvm *kvm, void __user *argp);
->   int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp);
->   
+The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
 
-Applied the first hunk, the second should be squashed somewhere else.
+Commit-ID:     fa4dcc880390fbedf4118e9f88a6b13363e0a7a1
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/fa4dcc880390fbedf4118e9f88a6b13363e0a7a1
+Author:        YueHaibing <yuehaibing@huawei.com>
+AuthorDate:    Thu, 17 Mar 2022 21:19:56 +08:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Tue, 05 Apr 2022 16:33:13 +01:00
 
-Paolo
+irq/qcom-mpm: Fix build error without MAILBOX
 
+If MAILBOX is n, building fails:
+
+drivers/irqchip/irq-qcom-mpm.o: In function `mpm_pd_power_off':
+irq-qcom-mpm.c:(.text+0x174): undefined reference to `mbox_send_message'
+irq-qcom-mpm.c:(.text+0x174): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `mbox_send_message'
+
+Make QCOM_MPM depends on MAILBOX to fix this.
+
+Fixes: a6199bb514d8 ("irqchip: Add Qualcomm MPM controller driver")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Acked-by: Shawn Guo <shawn.guo@linaro.org>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220317131956.30004-1-yuehaibing@huawei.com
+---
+ drivers/irqchip/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+index 680d2fc..15edb9a 100644
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+@@ -433,6 +433,7 @@ config QCOM_PDC
+ config QCOM_MPM
+ 	tristate "QCOM MPM"
+ 	depends on ARCH_QCOM
++	depends on MAILBOX
+ 	select IRQ_DOMAIN_HIERARCHY
+ 	help
+ 	  MSM Power Manager driver to manage and configure wakeup

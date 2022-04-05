@@ -2,46 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 831BA4F2E39
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F34D4F2E5F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354072AbiDEKLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
+        id S1356972AbiDEKZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241145AbiDEIcw (ORCPT
+        with ESMTP id S241152AbiDEIcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:32:52 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E98F19;
-        Tue,  5 Apr 2022 01:28:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC2FDE91;
+        Tue,  5 Apr 2022 01:28:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1C70B81B18;
-        Tue,  5 Apr 2022 08:28:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F11EEC385A4;
-        Tue,  5 Apr 2022 08:28:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B6745B81BB1;
+        Tue,  5 Apr 2022 08:28:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24759C385A1;
+        Tue,  5 Apr 2022 08:28:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147318;
-        bh=pXlaA9OMGP8WJ/kSu8kwlLxWk28p/wkhn0VdUYvIH2M=;
+        s=korg; t=1649147329;
+        bh=mCx+kBN+WhlxVBxM6gPhbryuaNJocdq5+DBhTaHt0Z4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l2nYcSEz7aPrpWgUfyGzIYdWsVGBZ69HoKUG26M2Zh48PfFh0HwJbF84VM4kmtXbS
-         5iaYvFfJbizoFztZkJjY8uCe55clYyqmEPbb4MxI0HdcTRhxT/BoKHYX1uC/9boR6P
-         C2X8ZGRTXLLF2acYUBXcxFMAvSl6ZAiJ3MZPCAGw=
+        b=U8knLFhV32UYPYS7sRo4Bi4C69h8X5Ph6T37WBS7mCW9lri5vBkt46UlhYWvlX2tV
+         oOZbJptSwRjdyAQCc37LDD419K2rcXlZFQYYwaB+rWx8FTqj3qQopZAYKMsa3Vt8FQ
+         +3wbZpjdSOAZQshhsBkR52haPY2jDc7eeul9DG3M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Ben Dooks <ben-linux@fluff.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, patches@armlinux.org.uk,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: [PATCH 5.17 1080/1126] ARM: 9187/1: JIVE: fix return value of __setup handler
-Date:   Tue,  5 Apr 2022 09:30:27 +0200
-Message-Id: <20220405070439.154726853@linuxfoundation.org>
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.17 1083/1126] af_unix: Support POLLPRI for OOB.
+Date:   Tue,  5 Apr 2022 09:30:30 +0200
+Message-Id: <20220405070439.241619607@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -59,56 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
 
-commit 8b2360c7157b462c4870d447d1e65d30ef31f9aa upstream.
+commit d9a232d435dcc966738b0f414a86f7edf4f4c8c4 upstream.
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) argument or environment
-strings. Also, error return codes don't mean anything to
-obsolete_checksetup() -- only non-zero (usually 1) or zero.
-So return 1 from jive_mtdset().
+The commit 314001f0bf92 ("af_unix: Add OOB support") introduced OOB for
+AF_UNIX, but it lacks some changes for POLLPRI.  Let's add the missing
+piece.
 
-Fixes: 9db829f485c5 ("[ARM] JIVE: Initial machine support for Logitech Jive")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Ben Dooks <ben-linux@fluff.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-samsung-soc@vger.kernel.org
-Cc: patches@armlinux.org.uk
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+In the selftest, normal datagrams are sent followed by OOB data, so this
+commit replaces `POLLIN | POLLPRI` with just `POLLPRI` in the first test
+case.
+
+Fixes: 314001f0bf92 ("af_unix: Add OOB support")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/mach-s3c/mach-jive.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ net/unix/af_unix.c                                  |    4 ++++
+ tools/testing/selftests/net/af_unix/test_unix_oob.c |    6 +++---
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
---- a/arch/arm/mach-s3c/mach-jive.c
-+++ b/arch/arm/mach-s3c/mach-jive.c
-@@ -236,11 +236,11 @@ static int __init jive_mtdset(char *opti
- 	unsigned long set;
+--- a/net/unix/af_unix.c
++++ b/net/unix/af_unix.c
+@@ -3137,6 +3137,10 @@ static __poll_t unix_poll(struct file *f
+ 		mask |= EPOLLIN | EPOLLRDNORM;
+ 	if (sk_is_readable(sk))
+ 		mask |= EPOLLIN | EPOLLRDNORM;
++#if IS_ENABLED(CONFIG_AF_UNIX_OOB)
++	if (READ_ONCE(unix_sk(sk)->oob_skb))
++		mask |= EPOLLPRI;
++#endif
  
- 	if (options == NULL || options[0] == '\0')
--		return 0;
-+		return 1;
+ 	/* Connection-based need to check for termination and startup */
+ 	if ((sk->sk_type == SOCK_STREAM || sk->sk_type == SOCK_SEQPACKET) &&
+--- a/tools/testing/selftests/net/af_unix/test_unix_oob.c
++++ b/tools/testing/selftests/net/af_unix/test_unix_oob.c
+@@ -218,10 +218,10 @@ main(int argc, char **argv)
  
- 	if (kstrtoul(options, 10, &set)) {
- 		printk(KERN_ERR "failed to parse mtdset=%s\n", options);
--		return 0;
-+		return 1;
- 	}
- 
- 	switch (set) {
-@@ -256,7 +256,7 @@ static int __init jive_mtdset(char *opti
- 		       "using default.", set);
- 	}
- 
--	return 0;
-+	return 1;
- }
- 
- /* parse the mtdset= option given to the kernel command line */
+ 	/* Test 1:
+ 	 * veriyf that SIGURG is
+-	 * delivered and 63 bytes are
+-	 * read and oob is '@'
++	 * delivered, 63 bytes are
++	 * read, oob is '@', and POLLPRI works.
+ 	 */
+-	wait_for_data(pfd, POLLIN | POLLPRI);
++	wait_for_data(pfd, POLLPRI);
+ 	read_oob(pfd, &oob);
+ 	len = read_data(pfd, buf, 1024);
+ 	if (!signal_recvd || len != 63 || oob != '@') {
 
 

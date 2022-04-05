@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1F54F3FC8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E712E4F403F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351458AbiDENGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
+        id S1356384AbiDEUDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343991AbiDEJQo (ORCPT
+        with ESMTP id S1356220AbiDEKXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:16:44 -0400
+        Tue, 5 Apr 2022 06:23:30 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9EAEB7;
-        Tue,  5 Apr 2022 02:03:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60BE8BAB88;
+        Tue,  5 Apr 2022 03:07:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CFB261564;
-        Tue,  5 Apr 2022 09:03:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADC07C385A1;
-        Tue,  5 Apr 2022 09:03:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F09B46167E;
+        Tue,  5 Apr 2022 10:07:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 105EFC385A1;
+        Tue,  5 Apr 2022 10:07:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149393;
-        bh=iyz1Yk21oN71kPToOHP+9tfSQ5oWptc3Iu7o1QaJYJc=;
+        s=korg; t=1649153276;
+        bh=sUjtqpLKMHu18jX7PBFfofAGO5LsbRcb2dWLAoSItpw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J1l3EbbpN8sjwY17VUejGCf21LkyA6ikG29081q5xVHJmLY06G0lxT9Lu9HGUyAqH
-         j38Mnj1UO70jTrOyESMLBBRcxvWJPPADAoYlNlgFyJOslDxqbWN4LxT+5vK9XGlcI/
-         1CSRmwdEG7J4alVya29jjLJsVfHKrZ0pkH5lIpeI=
+        b=VWHCwsj4NkcRgOdQMPRrc/YVAgHKnowNtgLY/c96OdWLAEXfQeclrxU8+zPzY+iXs
+         oKN7lwrLbL3tDhWwEPhD+8/KM0e5nl+jY8mIN0obkhPlwMVAU7faaBi5hYEIa8LJPJ
+         Gs7hydBweaMw4CDI60DAYsEV6mKR2j1mMJ2bFeCg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0698/1017] pinctrl: mediatek: paris: Fix "argument" argument type for mtk_pinconf_get()
+        stable@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
+        Johan Hovold <johan@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 5.10 117/599] media: davinci: vpif: fix unbalanced runtime PM enable
 Date:   Tue,  5 Apr 2022 09:26:51 +0200
-Message-Id: <20220405070414.991737425@linuxfoundation.org>
+Message-Id: <20220405070302.322672550@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,44 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen-Yu Tsai <wenst@chromium.org>
+From: Johan Hovold <johan@kernel.org>
 
-[ Upstream commit 19bce7ce0a593c7024030a0cda9e23facea3c93d ]
+commit d42b3ad105b5d3481f6a56bc789aa2b27aa09325 upstream.
 
-For mtk_pinconf_get(), the "argument" argument is typically returned by
-pinconf_to_config_argument(), which holds the value for a given pinconf
-parameter. It certainly should not have the type of "enum pin_config_param",
-which describes the type of the pinconf parameter itself.
+Make sure to disable runtime PM before returning on probe errors.
 
-Change the type to u32, which matches the return type of
-pinconf_to_config_argument().
-
-Fixes: 805250982bb5 ("pinctrl: mediatek: add pinctrl-paris that implements the vendor dt-bindings")
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Link: https://lore.kernel.org/r/20220308100956.2750295-4-wenst@chromium.org
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 479f7a118105 ("[media] davinci: vpif: adaptions for DT support")
+Cc: stable@vger.kernel.org
+Cc: Kevin Hilman <khilman@baylibre.com>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/mediatek/pinctrl-paris.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/media/platform/davinci/vpif.c |   11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c b/drivers/pinctrl/mediatek/pinctrl-paris.c
-index f7644530cee1..cbaad89fbe17 100644
---- a/drivers/pinctrl/mediatek/pinctrl-paris.c
-+++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
-@@ -184,8 +184,7 @@ static int mtk_pinconf_get(struct pinctrl_dev *pctldev,
+--- a/drivers/media/platform/davinci/vpif.c
++++ b/drivers/media/platform/davinci/vpif.c
+@@ -428,6 +428,7 @@ static int vpif_probe(struct platform_de
+ 	static struct resource	*res, *res_irq;
+ 	struct platform_device *pdev_capture, *pdev_display;
+ 	struct device_node *endpoint = NULL;
++	int ret;
+ 
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	vpif_base = devm_ioremap_resource(&pdev->dev, res);
+@@ -458,8 +459,8 @@ static int vpif_probe(struct platform_de
+ 	res_irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+ 	if (!res_irq) {
+ 		dev_warn(&pdev->dev, "Missing IRQ resource.\n");
+-		pm_runtime_put(&pdev->dev);
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto err_put_rpm;
+ 	}
+ 
+ 	pdev_capture = devm_kzalloc(&pdev->dev, sizeof(*pdev_capture),
+@@ -493,6 +494,12 @@ static int vpif_probe(struct platform_de
+ 	}
+ 
+ 	return 0;
++
++err_put_rpm:
++	pm_runtime_put(&pdev->dev);
++	pm_runtime_disable(&pdev->dev);
++
++	return ret;
  }
  
- static int mtk_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
--			   enum pin_config_param param,
--			   enum pin_config_param arg)
-+			   enum pin_config_param param, u32 arg)
- {
- 	struct mtk_pinctrl *hw = pinctrl_dev_get_drvdata(pctldev);
- 	const struct mtk_pin_desc *desc;
--- 
-2.34.1
-
+ static int vpif_remove(struct platform_device *pdev)
 
 

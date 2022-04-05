@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B104F4D6F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D00AD4F4955
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1582325AbiDEXmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59114 "EHLO
+        id S1442485AbiDEWLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384483AbiDEOSH (ORCPT
+        with ESMTP id S1384447AbiDEOSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:18:07 -0400
+        Tue, 5 Apr 2022 10:18:06 -0400
 Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F2199EDD;
-        Tue,  5 Apr 2022 06:04:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512982F384;
+        Tue,  5 Apr 2022 06:03:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=axis.com; q=dns/txt; s=axis-central1; t=1649163848;
   x=1680699848;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=SRDguBSs1Y1J0kKrsj8H5WlSWoje+dTygZTrpaj2/6I=;
-  b=M04nl71coNVbG2fv/0z56zzyyJfVDcMraxWfrECBCe+tu+a+0QEHfgWf
-   c3B/1qZZMSrHnk3j0YYnQJbkiwt1SuCpAjIPfuVYHLz3qydKMbCPO16zR
-   r9ih6s8weXPOlAzQo/7rKjiyXXnWBODpbyzaydKrx9nJqSkGtC8vQYXRf
-   LhXCjnAA1s1i3aDowW+PN/yYkgjvrXHDlihfg7RP5yTJoMdjQWaca0swD
-   biGFcbimL+lVV8sLTpd+rflwCIyrbS098Rn999X+KpGAqL7mFOCCWOS5a
-   JWbwqCs5yKBmkPqIBLx5cSu/86XUsEMipguMhPHK7iOA0dZnDRlk3w+Vj
-   Q==;
+  bh=S1wiQhSXl03OwHvB8odQNz0Ply4j8QcaKLui++yLhe4=;
+  b=Cq874ZtK30JWxAIC75IihxHdfA8r0hwGN9M7iHQiKnx1HTfUdcaLx3gM
+   zBm8+Ijs9SRRR0AlWPCdmCpZriM+2KViLd0VjfLsbob48wBoPGySVunwK
+   /LzWWXxr9bQ8FqZeiXv9LeceOCGslmnQfCvf3/DNXg5QdzaN4b6O0CFip
+   RXff2odRNbUZYfnfexSCyiLHvmU9VrlmFY9KRtJ6O8wptR8B8LTHjkwPU
+   hndibKpY+siszjkzeeBXvNeYiO0Zd0s4Lq86f1r4SQVM4jZp2YmXhwJQD
+   wjcMcHaa915t1bsfejyk8zK4UlB1dC6fEtl94/J3QOf7gLQOHDSDdlJGy
+   g==;
 From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
 To:     <vigneshr@ti.com>, <richard@nod.at>, <miquel.raynal@bootlin.com>,
         <joern@lazybastard.org>
@@ -36,9 +36,9 @@ CC:     <kernel@axis.com>,
         <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
         <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
         <frowand.list@gmail.com>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 3/4] mtd: phram: Allow probing via reserved-memory
-Date:   Tue, 5 Apr 2022 15:03:49 +0200
-Message-ID: <20220405130350.1640985-4-vincent.whitchurch@axis.com>
+Subject: [PATCH v2 4/4] mtd: phram: Allow cached mappings
+Date:   Tue, 5 Apr 2022 15:03:50 +0200
+Message-ID: <20220405130350.1640985-5-vincent.whitchurch@axis.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220405130350.1640985-1-vincent.whitchurch@axis.com>
 References: <20220405130350.1640985-1-vincent.whitchurch@axis.com>
@@ -55,157 +55,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow phram to be probed from the devicetree.  It expects to be in a
-reserved-memory node as documented by the bindings.  This allows things
-like partitioning to be specified via the devicetree.
+Currently phram always uses ioremap(), but this is unnecessary when
+normal memory is used.  If the reserved-memory node does not specify the
+no-map property, indicating it should be mapped as system RAM and
+ioremap() cannot be used on it, use a cached mapping using
+memremap(MEMREMAP_WB) instead.
+
+On one of my systems this improves read performance by ~70%.
 
 Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 ---
- drivers/mtd/devices/phram.c | 67 ++++++++++++++++++++++++++++++++++---
- drivers/of/platform.c       |  1 +
- 2 files changed, 64 insertions(+), 4 deletions(-)
+ drivers/mtd/devices/phram.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/mtd/devices/phram.c b/drivers/mtd/devices/phram.c
-index d503821a3e60..6dfe9401a3c5 100644
+index 6dfe9401a3c5..ac2679f9031a 100644
 --- a/drivers/mtd/devices/phram.c
 +++ b/drivers/mtd/devices/phram.c
-@@ -27,6 +27,9 @@
- #include <linux/slab.h>
- #include <linux/mtd/mtd.h>
- #include <asm/div64.h>
-+#include <linux/platform_device.h>
-+#include <linux/of_address.h>
-+#include <linux/of.h>
- 
+@@ -34,6 +34,7 @@
  struct phram_mtd_list {
  	struct mtd_info mtd;
-@@ -89,8 +92,10 @@ static void unregister_devices(void)
- 	}
- }
+ 	struct list_head list;
++	bool cached;
+ };
  
--static int register_device(char *name, phys_addr_t start, size_t len, uint32_t erasesize)
-+static int register_device(struct platform_device *pdev, const char *name,
-+			   phys_addr_t start, size_t len, uint32_t erasesize)
+ static LIST_HEAD(phram_list);
+@@ -96,6 +97,7 @@ static int register_device(struct platform_device *pdev, const char *name,
+ 			   phys_addr_t start, size_t len, uint32_t erasesize)
  {
-+	struct device_node *np = pdev ? pdev->dev.of_node : NULL;
+ 	struct device_node *np = pdev ? pdev->dev.of_node : NULL;
++	bool cached = np ? !of_property_read_bool(np, "no-map") : false;
  	struct phram_mtd_list *new;
  	int ret = -ENOMEM;
  
-@@ -119,13 +124,19 @@ static int register_device(char *name, phys_addr_t start, size_t len, uint32_t e
- 	new->mtd.erasesize = erasesize;
- 	new->mtd.writesize = 1;
+@@ -103,8 +105,13 @@ static int register_device(struct platform_device *pdev, const char *name,
+ 	if (!new)
+ 		goto out0;
  
-+	mtd_set_of_node(&new->mtd, np);
++	new->cached = cached;
 +
- 	ret = -EAGAIN;
- 	if (mtd_device_register(&new->mtd, NULL, 0)) {
- 		pr_err("Failed to register new device\n");
- 		goto out2;
- 	}
- 
--	list_add_tail(&new->list, &phram_list);
-+	if (pdev)
-+		platform_set_drvdata(pdev, new);
+ 	ret = -EIO;
+-	new->mtd.priv = ioremap(start, len);
++	if (cached)
++		new->mtd.priv = memremap(start, len, MEMREMAP_WB);
 +	else
-+		list_add_tail(&new->list, &phram_list);
-+
++		new->mtd.priv = ioremap(start, len);
+ 	if (!new->mtd.priv) {
+ 		pr_err("ioremap failed\n");
+ 		goto out1;
+@@ -140,7 +147,7 @@ static int register_device(struct platform_device *pdev, const char *name,
  	return 0;
  
  out2:
-@@ -278,7 +289,7 @@ static int phram_setup(const char *val)
- 		goto error;
- 	}
+-	iounmap(new->mtd.priv);
++	cached ? memunmap(new->mtd.priv) : iounmap(new->mtd.priv);
+ out1:
+ 	kfree(new);
+ out0:
+@@ -362,7 +369,7 @@ static int phram_remove(struct platform_device *pdev)
+ 	struct phram_mtd_list *phram = platform_get_drvdata(pdev);
  
--	ret = register_device(name, start, len, (uint32_t)erasesize);
-+	ret = register_device(NULL, name, start, len, (uint32_t)erasesize);
- 	if (ret)
- 		goto error;
+ 	mtd_device_unregister(&phram->mtd);
+-	iounmap(phram->mtd.priv);
++	phram->cached ? memunmap(phram->mtd.priv) : iounmap(phram->mtd.priv);
+ 	kfree(phram);
  
-@@ -325,10 +336,54 @@ static int phram_param_call(const char *val, const struct kernel_param *kp)
- module_param_call(phram, phram_param_call, NULL, NULL, 0200);
- MODULE_PARM_DESC(phram, "Memory region to map. \"phram=<name>,<start>,<length>[,<erasesize>]\"");
- 
-+#ifdef CONFIG_OF
-+static const struct of_device_id phram_of_match[] = {
-+	{ .compatible = "phram" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, phram_of_match)
-+#endif
-+
-+static int phram_probe(struct platform_device *pdev)
-+{
-+	struct resource *res;
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!res)
-+		return -ENOMEM;
-+
-+	/* mtd_set_of_node() reads name from "label" */
-+	return register_device(pdev, NULL, res->start, resource_size(res),
-+			       PAGE_SIZE);
-+}
-+
-+static int phram_remove(struct platform_device *pdev)
-+{
-+	struct phram_mtd_list *phram = platform_get_drvdata(pdev);
-+
-+	mtd_device_unregister(&phram->mtd);
-+	iounmap(phram->mtd.priv);
-+	kfree(phram);
-+
-+	return 0;
-+}
-+
-+static struct platform_driver phram_driver = {
-+	.probe		= phram_probe,
-+	.remove		= phram_remove,
-+	.driver		= {
-+		.name		= "phram",
-+		.of_match_table	= of_match_ptr(phram_of_match),
-+	},
-+};
- 
- static int __init init_phram(void)
- {
--	int ret = 0;
-+	int ret;
-+
-+	ret = platform_driver_register(&phram_driver);
-+	if (ret)
-+		return ret;
- 
- #ifndef MODULE
- 	if (phram_paramline[0])
-@@ -336,12 +391,16 @@ static int __init init_phram(void)
- 	phram_init_called = 1;
- #endif
- 
-+	if (ret)
-+		platform_driver_unregister(&phram_driver);
-+
- 	return ret;
- }
- 
- static void __exit cleanup_phram(void)
- {
- 	unregister_devices();
-+	platform_driver_unregister(&phram_driver);
- }
- 
- module_init(init_phram);
-diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-index a16b74f32aa9..55d62b82c650 100644
---- a/drivers/of/platform.c
-+++ b/drivers/of/platform.c
-@@ -509,6 +509,7 @@ EXPORT_SYMBOL_GPL(of_platform_default_populate);
- 
- #ifndef CONFIG_PPC
- static const struct of_device_id reserved_mem_matches[] = {
-+	{ .compatible = "phram" },
- 	{ .compatible = "qcom,rmtfs-mem" },
- 	{ .compatible = "qcom,cmd-db" },
- 	{ .compatible = "qcom,smem" },
+ 	return 0;
 -- 
 2.34.1
 

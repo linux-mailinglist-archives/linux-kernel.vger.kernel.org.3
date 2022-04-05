@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 571904F46DA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D9F4F47AC
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242816AbiDEUqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34838 "EHLO
+        id S1358980AbiDEVPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244475AbiDEKiw (ORCPT
+        with ESMTP id S1343763AbiDEKjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:38:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554A646172;
-        Tue,  5 Apr 2022 03:23:49 -0700 (PDT)
+        Tue, 5 Apr 2022 06:39:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F26C5FC5;
+        Tue,  5 Apr 2022 03:24:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7166617CC;
-        Tue,  5 Apr 2022 10:23:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A583C385A1;
-        Tue,  5 Apr 2022 10:23:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 02075B81B18;
+        Tue,  5 Apr 2022 10:24:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C123C385A1;
+        Tue,  5 Apr 2022 10:24:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154228;
-        bh=yD6j1fnTv8REaI/DYQ4/I9JyKfmStY72PLy1+LTQ6pg=;
+        s=korg; t=1649154272;
+        bh=Ew4sFXFJL9/Fob+RXWFLC70dMuNHv4n2jRil1FCn0DY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KaggEEvg78s3Xzls1aSH708LwYimuklkDDxySFOCfT5kei8h3QTfIoz2xWQlT+VqI
-         1NR22186z8GnIbwdrdVFZRAsdWtzs4ww9psBjcfMLLpq66I9tUddkljWJoLOJkIrf0
-         ZBlUMlO2gdW+KvARgPZfrYaJFZ/LDrWpqFn3M7Ow=
+        b=lFDKT16G0/Y7VMl9VYM7py5hphKz5Ur/drh/gqk3PBortRwo5ey8XiB5eIJwNamJl
+         o8qZA131Av402/bnC/C7tDVn3yOVTpbLbJWiXyFTDrtxOEYGkvsnXWlw5T6Nb2PbcO
+         HSuqzXaLV1EobQddGg4hjoWzhwJrisWxQ26c08eY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 505/599] video: fbdev: sm712fb: Fix crash in smtcfb_write()
-Date:   Tue,  5 Apr 2022 09:33:19 +0200
-Message-Id: <20220405070313.856556943@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Bikash Hazarika <bhazarika@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.10 519/599] scsi: qla2xxx: Fix wrong FDMI data for 64G adapter
+Date:   Tue,  5 Apr 2022 09:33:33 +0200
+Message-Id: <20220405070314.283919431@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -54,70 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheyu Ma <zheyuma97@gmail.com>
+From: Bikash Hazarika <bhazarika@marvell.com>
 
-[ Upstream commit 4f01d09b2bbfbcb47b3eb305560a7f4857a32260 ]
+commit 1cfbbacbee2d6ea3816386a483e3c7a96e5bd657 upstream.
 
-When the sm712fb driver writes three bytes to the framebuffer, the
-driver will crash:
+Corrected transmission speed mask values for FC.
 
-    BUG: unable to handle page fault for address: ffffc90001ffffff
-    RIP: 0010:smtcfb_write+0x454/0x5b0
-    Call Trace:
-     vfs_write+0x291/0xd60
-     ? do_sys_openat2+0x27d/0x350
-     ? __fget_light+0x54/0x340
-     ksys_write+0xce/0x190
-     do_syscall_64+0x43/0x90
-     entry_SYSCALL_64_after_hwframe+0x44/0xae
+Supported Speed: 16 32 20 Gb/s ===> Should be 64 instead of 20
+Supported Speed: 16G 32G 48G   ===> Should be 64G instead of 48G
 
-Fix it by removing the open-coded endianness fixup-code.
-
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/20220110050218.3958-9-njavali@marvell.com
+Cc: stable@vger.kernel.org
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Signed-off-by: Bikash Hazarika <bhazarika@marvell.com>
+Signed-off-by: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/video/fbdev/sm712fb.c |   21 ++++-----------------
- 1 file changed, 4 insertions(+), 17 deletions(-)
+ drivers/scsi/qla2xxx/qla_def.h |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/drivers/video/fbdev/sm712fb.c
-+++ b/drivers/video/fbdev/sm712fb.c
-@@ -1119,7 +1119,7 @@ static ssize_t smtcfb_write(struct fb_in
- 		count = total_size - p;
- 	}
+--- a/drivers/scsi/qla2xxx/qla_def.h
++++ b/drivers/scsi/qla2xxx/qla_def.h
+@@ -2796,7 +2796,11 @@ struct ct_fdmi2_hba_attributes {
+ #define FDMI_PORT_SPEED_8GB		0x10
+ #define FDMI_PORT_SPEED_16GB		0x20
+ #define FDMI_PORT_SPEED_32GB		0x40
+-#define FDMI_PORT_SPEED_64GB		0x80
++#define FDMI_PORT_SPEED_20GB		0x80
++#define FDMI_PORT_SPEED_40GB		0x100
++#define FDMI_PORT_SPEED_128GB		0x200
++#define FDMI_PORT_SPEED_64GB		0x400
++#define FDMI_PORT_SPEED_256GB		0x800
+ #define FDMI_PORT_SPEED_UNKNOWN		0x8000
  
--	buffer = kmalloc((count > PAGE_SIZE) ? PAGE_SIZE : count, GFP_KERNEL);
-+	buffer = kmalloc(PAGE_SIZE, GFP_KERNEL);
- 	if (!buffer)
- 		return -ENOMEM;
- 
-@@ -1137,24 +1137,11 @@ static ssize_t smtcfb_write(struct fb_in
- 			break;
- 		}
- 
--		for (i = c >> 2; i--;) {
--			fb_writel(big_swap(*src), dst++);
-+		for (i = (c + 3) >> 2; i--;) {
-+			fb_writel(big_swap(*src), dst);
-+			dst++;
- 			src++;
- 		}
--		if (c & 3) {
--			u8 *src8 = (u8 *)src;
--			u8 __iomem *dst8 = (u8 __iomem *)dst;
--
--			for (i = c & 3; i--;) {
--				if (i & 1) {
--					fb_writeb(*src8++, ++dst8);
--				} else {
--					fb_writeb(*src8++, --dst8);
--					dst8 += 2;
--				}
--			}
--			dst = (u32 __iomem *)dst8;
--		}
- 
- 		*ppos += c;
- 		buf += c;
+ #define FC_CLASS_2	0x04
 
 

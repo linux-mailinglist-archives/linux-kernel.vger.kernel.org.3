@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4EA84F4C02
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 041B74F4946
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1575509AbiDEXIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57682 "EHLO
+        id S1392442AbiDEWJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356125AbiDEKW7 (ORCPT
+        with ESMTP id S1349347AbiDEJtl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:22:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42314B7169;
-        Tue,  5 Apr 2022 03:06:28 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47FACDBC;
+        Tue,  5 Apr 2022 02:44:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EEBAAB81C8B;
-        Tue,  5 Apr 2022 10:06:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39579C385A1;
-        Tue,  5 Apr 2022 10:06:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 08CA5B817D3;
+        Tue,  5 Apr 2022 09:44:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DBD5C385A2;
+        Tue,  5 Apr 2022 09:44:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153185;
-        bh=EIqZGIC3MEY6zK++/3lavNvUv7djR+iZn/Z4aFTomR0=;
+        s=korg; t=1649151856;
+        bh=98aCFofgFx1i2qmaGNmZ2Ir40iIRhlyna9C5ZXP/Y2o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MlqGPqZrka7B7VyvIQ5jLmqWkaqX/E+H5xVYym/dRzmiAXcf4mD2m8QmZWowXXIVQ
-         XnV8UTdtzEgvf0TBmXSECnaGo031A9lhyEmlhaY1cmqiDdZTcvP+xqonWXWM/Qe2NY
-         UMCfaQFr8z/+2eCFGZm87R+gIq/qMtiz/Uv7pkVs=
+        b=1zxKVXEiH0Nj3a108bCEZ6cymdOupquHXyny9iUU3ZuBgK1Md4ZSyu398PNtRZ5ho
+         5Ao3mC2GoEAvs5NRazgQNhTULPr4pZqCqKmQCQHCeI3j8ENFyPcDOL1MR9RuX1pZe9
+         HSOdDBb+9/TL9KXh/l7jAuCIjbruQEnzz0NQRKoQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 133/599] crypto: authenc - Fix sleep in atomic context in decrypt_tail
+Subject: [PATCH 5.15 565/913] selftests/bpf/test_lirc_mode2.sh: Exit with proper code
 Date:   Tue,  5 Apr 2022 09:27:07 +0200
-Message-Id: <20220405070302.799140357@linuxfoundation.org>
+Message-Id: <20220405070356.780493269@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Herbert Xu <herbert@gondor.apana.org.au>
+From: Hangbin Liu <liuhangbin@gmail.com>
 
-[ Upstream commit 66eae850333d639fc278d6f915c6fc01499ea893 ]
+[ Upstream commit ec80906b0fbd7be11e3e960813b977b1ffe5f8fe ]
 
-The function crypto_authenc_decrypt_tail discards its flags
-argument and always relies on the flags from the original request
-when starting its sub-request.
+When test_lirc_mode2_user exec failed, the test report failed but still
+exit with 0. Fix it by exiting with an error code.
 
-This is clearly wrong as it may cause the SLEEPABLE flag to be
-set when it shouldn't.
+Another issue is for the LIRCDEV checking. With bash -n, we need to quote
+the variable, or it will always be true. So if test_lirc_mode2_user was
+not run, just exit with skip code.
 
-Fixes: 92d95ba91772 ("crypto: authenc - Convert to new AEAD interface")
-Reported-by: Corentin Labbe <clabbe.montjoie@gmail.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Fixes: 6bdd533cee9a ("bpf: add selftest for lirc_mode2 type program")
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20220321024149.157861-1-liuhangbin@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- crypto/authenc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_lirc_mode2.sh | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/crypto/authenc.c b/crypto/authenc.c
-index 670bf1a01d00..17f674a7cdff 100644
---- a/crypto/authenc.c
-+++ b/crypto/authenc.c
-@@ -253,7 +253,7 @@ static int crypto_authenc_decrypt_tail(struct aead_request *req,
- 		dst = scatterwalk_ffwd(areq_ctx->dst, req->dst, req->assoclen);
+diff --git a/tools/testing/selftests/bpf/test_lirc_mode2.sh b/tools/testing/selftests/bpf/test_lirc_mode2.sh
+index ec4e15948e40..5252b91f48a1 100755
+--- a/tools/testing/selftests/bpf/test_lirc_mode2.sh
++++ b/tools/testing/selftests/bpf/test_lirc_mode2.sh
+@@ -3,6 +3,7 @@
  
- 	skcipher_request_set_tfm(skreq, ctx->enc);
--	skcipher_request_set_callback(skreq, aead_request_flags(req),
-+	skcipher_request_set_callback(skreq, flags,
- 				      req->base.complete, req->base.data);
- 	skcipher_request_set_crypt(skreq, src, dst,
- 				   req->cryptlen - authsize, req->iv);
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
++ret=$ksft_skip
+ 
+ msg="skip all tests:"
+ if [ $UID != 0 ]; then
+@@ -25,7 +26,7 @@ do
+ 	fi
+ done
+ 
+-if [ -n $LIRCDEV ];
++if [ -n "$LIRCDEV" ];
+ then
+ 	TYPE=lirc_mode2
+ 	./test_lirc_mode2_user $LIRCDEV $INPUTDEV
+@@ -36,3 +37,5 @@ then
+ 		echo -e ${GREEN}"PASS: $TYPE"${NC}
+ 	fi
+ fi
++
++exit $ret
 -- 
 2.34.1
 

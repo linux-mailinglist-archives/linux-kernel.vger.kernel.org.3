@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3528E4F3DB3
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5146D4F4191
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385740AbiDEPPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53872 "EHLO
+        id S1385012AbiDEMax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346680AbiDEJpV (ORCPT
+        with ESMTP id S245756AbiDEI4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:45:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC4C6472;
-        Tue,  5 Apr 2022 02:31:21 -0700 (PDT)
+        Tue, 5 Apr 2022 04:56:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E6619C2B;
+        Tue,  5 Apr 2022 01:52:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A396DB81B14;
-        Tue,  5 Apr 2022 09:31:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1353FC385A3;
-        Tue,  5 Apr 2022 09:31:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D4409609D0;
+        Tue,  5 Apr 2022 08:52:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5472C385A0;
+        Tue,  5 Apr 2022 08:52:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151078;
-        bh=h2e4qYecj9Bm+D+7lf7mH8L5duW4UVKYn8UQDRd28xU=;
+        s=korg; t=1649148765;
+        bh=G+tlzkSO4tf9ZQVjfwUjPYMxK5+NilPHHkn+It7OI2I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ElZ3l/c6my+ceK3uU3skBryGZ+a9x0V4+yoMxUIy72os/Xxhu2om5twg3TfEZwtMs
-         pmBK0Uw1xZuQnKccP/wFUibeLFZ8nmdKvsjX8JwkM73WmxHKpfT4Xizs47uduj5tlK
-         UbV20dpwwwVbtkvaSzRycA2pWJii7eBXqwLwu2pw=
+        b=ZQWL6/s5R3TdT1Oya95zqBKDaCaASNTkv/C4v2TpcAO5XuIlPXlceiYg2PTkR0S/E
+         ru2Yjqf6Gki8jEDk05fNL2ClcUqsC+CKETfr+84rZor9HTCWdKsIAB1nvTZVbMaxJl
+         RAFQAouh3mFmIll/9eCRlVg3NEg+p3lxAurhG/aQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Maor Gottlieb <maorg@nvidia.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 285/913] media: v4l: Avoid unaligned access warnings when printing 4cc modifiers
-Date:   Tue,  5 Apr 2022 09:22:27 +0200
-Message-Id: <20220405070348.400902612@linuxfoundation.org>
+Subject: [PATCH 5.16 0435/1017] RDMA/core: Set MR type in ib_reg_user_mr
+Date:   Tue,  5 Apr 2022 09:22:28 +0200
+Message-Id: <20220405070407.206922578@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,71 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
+From: Maor Gottlieb <maorg@nvidia.com>
 
-[ Upstream commit 24bb30c8c894ec7213ad810b46e2a6a4c12136c1 ]
+[ Upstream commit 32a88d16615c2be295571c29273c4ac94cb75309 ]
 
-Pointers V4L2 pixelformat and dataformat fields in a few packed structs
-are directly passed to printk family of functions. This could result in an
-unaligned access albeit no such possibility appears to exist at the
-moment i.e. this clang warning appears to be a false positive.
+Add missing assignment of MR type to IB_MR_TYPE_USER.
 
-Address the warning by copying the pixelformat or dataformat value to a
-local variable first.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: e927e1e0f0dd ("v4l: ioctl: Use %p4cc printk modifier to print FourCC codes")
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 33006bd4f37f ("IB/core: Introduce ib_reg_user_mr")
+Link: https://lore.kernel.org/r/be2e91bcd6e52dc36be289ae92f30d3a5cc6dcb1.1642491047.git.leonro@nvidia.com
+Signed-off-by: Maor Gottlieb <maorg@nvidia.com>
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/v4l2-core/v4l2-ioctl.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/infiniband/core/verbs.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index c7308a2a80a0..7c596a85f34f 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -279,8 +279,8 @@ static void v4l_print_format(const void *arg, bool write_only)
- 	const struct v4l2_vbi_format *vbi;
- 	const struct v4l2_sliced_vbi_format *sliced;
- 	const struct v4l2_window *win;
--	const struct v4l2_sdr_format *sdr;
- 	const struct v4l2_meta_format *meta;
-+	u32 pixelformat;
- 	u32 planes;
- 	unsigned i;
+diff --git a/drivers/infiniband/core/verbs.c b/drivers/infiniband/core/verbs.c
+index c18634bec212..e821dc94a43e 100644
+--- a/drivers/infiniband/core/verbs.c
++++ b/drivers/infiniband/core/verbs.c
+@@ -2153,6 +2153,7 @@ struct ib_mr *ib_reg_user_mr(struct ib_pd *pd, u64 start, u64 length,
+ 		return mr;
  
-@@ -299,8 +299,9 @@ static void v4l_print_format(const void *arg, bool write_only)
- 	case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
- 	case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
- 		mp = &p->fmt.pix_mp;
-+		pixelformat = mp->pixelformat;
- 		pr_cont(", width=%u, height=%u, format=%p4cc, field=%s, colorspace=%d, num_planes=%u, flags=0x%x, ycbcr_enc=%u, quantization=%u, xfer_func=%u\n",
--			mp->width, mp->height, &mp->pixelformat,
-+			mp->width, mp->height, &pixelformat,
- 			prt_names(mp->field, v4l2_field_names),
- 			mp->colorspace, mp->num_planes, mp->flags,
- 			mp->ycbcr_enc, mp->quantization, mp->xfer_func);
-@@ -343,14 +344,15 @@ static void v4l_print_format(const void *arg, bool write_only)
- 		break;
- 	case V4L2_BUF_TYPE_SDR_CAPTURE:
- 	case V4L2_BUF_TYPE_SDR_OUTPUT:
--		sdr = &p->fmt.sdr;
--		pr_cont(", pixelformat=%p4cc\n", &sdr->pixelformat);
-+		pixelformat = p->fmt.sdr.pixelformat;
-+		pr_cont(", pixelformat=%p4cc\n", &pixelformat);
- 		break;
- 	case V4L2_BUF_TYPE_META_CAPTURE:
- 	case V4L2_BUF_TYPE_META_OUTPUT:
- 		meta = &p->fmt.meta;
-+		pixelformat = meta->dataformat;
- 		pr_cont(", dataformat=%p4cc, buffersize=%u\n",
--			&meta->dataformat, meta->buffersize);
-+			&pixelformat, meta->buffersize);
- 		break;
- 	}
- }
+ 	mr->device = pd->device;
++	mr->type = IB_MR_TYPE_USER;
+ 	mr->pd = pd;
+ 	mr->dm = NULL;
+ 	atomic_inc(&pd->usecnt);
 -- 
 2.34.1
 

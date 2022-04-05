@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1C54F4591
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 441784F453D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387280AbiDEOb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
+        id S1387384AbiDEOb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240440AbiDEJe1 (ORCPT
+        with ESMTP id S240502AbiDEJe1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:34:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5168684EF6;
-        Tue,  5 Apr 2022 02:23:57 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09FA85BD3;
+        Tue,  5 Apr 2022 02:24:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5049AB81C69;
-        Tue,  5 Apr 2022 09:23:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90346C385A4;
-        Tue,  5 Apr 2022 09:23:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EE1F61574;
+        Tue,  5 Apr 2022 09:24:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 918E4C385A2;
+        Tue,  5 Apr 2022 09:24:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150634;
-        bh=q6y2/6h1VVSs/fCO23TCYlJkU4HL9siqv9Gt+YyZhSE=;
+        s=korg; t=1649150642;
+        bh=hzFTItGk6MhMLG5gB5eFJka/S3aQMbJUpwbjLiXXVC0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T0RhU76ExIkJ9unNrgVngw07Eg35RfOibXdeXTvt8OHrgX/5CEzgc87ixq322AP4c
-         pBkDbyX6P/0xrmUMCTlRkHTxydO2SGCcSOozBLptnqlFx5R8LKe2yW/aE485RpTZO2
-         XrVIaaNHY4NLw7LBhljpZk3lvKph0IFEAqKtdWL0=
+        b=YG9gp4nmXE0t73DZZuXcZ1GVVyeek6TwFcOclTL/n1fqI679eKQDcAfbuZXHoN7zq
+         WCUYVr+quHTWQW+5OAKVoh4XuZhgYO9b9gdXd2Eb1A+I2sXZSlt6db0WS7U3nqyfH2
+         ezEET91yGv/+E3JV8eaqXNsOiOSZ4WCzLo8ydcpQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
+        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.15 087/913] scsi: core: sd: Add silence_suspend flag to suppress some PM messages
-Date:   Tue,  5 Apr 2022 09:19:09 +0200
-Message-Id: <20220405070342.430963969@linuxfoundation.org>
+Subject: [PATCH 5.15 090/913] scsi: libsas: Fix sas_ata_qc_issue() handling of NCQ NON DATA commands
+Date:   Tue,  5 Apr 2022 09:19:12 +0200
+Message-Id: <20220405070342.521365590@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -54,78 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adrian Hunter <adrian.hunter@intel.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-commit af4edb1d50c6d1044cb34bc43621411b7ba2cffe upstream.
+commit 8454563e4c2aafbfb81a383ab423ea8b9b430a25 upstream.
 
-Kernel messages produced during runtime PM can cause a never-ending cycle
-because user space utilities (e.g. journald or rsyslog) write the messages
-back to storage, causing runtime resume, more messages, and so on.
+To detect for the DMA_NONE (no data transfer) DMA direction,
+sas_ata_qc_issue() tests if the command protocol is ATA_PROT_NODATA.  This
+test does not include the ATA_CMD_NCQ_NON_DATA command as this command
+protocol is defined as ATA_PROT_NCQ_NODATA (equal to ATA_PROT_FLAG_NCQ) and
+not as ATA_PROT_NODATA.
 
-Messages that tell of things that are expected to happen are arguably
-unnecessary, so add a flag to suppress them. This flag is used by the UFS
-driver.
+To include both NCQ and non-NCQ commands when testing for the DMA_NONE DMA
+direction, use "!ata_is_data()".
 
-Link: https://lore.kernel.org/r/20220228113652.970857-2-adrian.hunter@intel.com
+Link: https://lore.kernel.org/r/20220220031810.738362-2-damien.lemoal@opensource.wdc.com
+Fixes: 176ddd89171d ("scsi: libsas: Reset num_scatter if libata marks qc as NODATA")
 Cc: stable@vger.kernel.org
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Reviewed-by: John Garry <john.garry@huawei.com>
+Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/scsi_error.c  |    9 +++++++--
- drivers/scsi/sd.c          |    6 ++++--
- include/scsi/scsi_device.h |    1 +
- 3 files changed, 12 insertions(+), 4 deletions(-)
+ drivers/scsi/libsas/sas_ata.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/scsi/scsi_error.c
-+++ b/drivers/scsi/scsi_error.c
-@@ -485,8 +485,13 @@ static void scsi_report_sense(struct scs
- 
- 		if (sshdr->asc == 0x29) {
- 			evt_type = SDEV_EVT_POWER_ON_RESET_OCCURRED;
--			sdev_printk(KERN_WARNING, sdev,
--				    "Power-on or device reset occurred\n");
-+			/*
-+			 * Do not print message if it is an expected side-effect
-+			 * of runtime PM.
-+			 */
-+			if (!sdev->silence_suspend)
-+				sdev_printk(KERN_WARNING, sdev,
-+					    "Power-on or device reset occurred\n");
- 		}
- 
- 		if (sshdr->asc == 0x2a && sshdr->ascq == 0x01) {
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -3628,7 +3628,8 @@ static int sd_suspend_common(struct devi
- 		return 0;
- 
- 	if (sdkp->WCE && sdkp->media_present) {
--		sd_printk(KERN_NOTICE, sdkp, "Synchronizing SCSI cache\n");
-+		if (!sdkp->device->silence_suspend)
-+			sd_printk(KERN_NOTICE, sdkp, "Synchronizing SCSI cache\n");
- 		ret = sd_sync_cache(sdkp, &sshdr);
- 
- 		if (ret) {
-@@ -3650,7 +3651,8 @@ static int sd_suspend_common(struct devi
- 	}
- 
- 	if (sdkp->device->manage_start_stop) {
--		sd_printk(KERN_NOTICE, sdkp, "Stopping disk\n");
-+		if (!sdkp->device->silence_suspend)
-+			sd_printk(KERN_NOTICE, sdkp, "Stopping disk\n");
- 		/* an error is not worth aborting a system sleep */
- 		ret = sd_start_stop_device(sdkp, 0);
- 		if (ignore_stop_errors)
---- a/include/scsi/scsi_device.h
-+++ b/include/scsi/scsi_device.h
-@@ -206,6 +206,7 @@ struct scsi_device {
- 	unsigned rpm_autosuspend:1;	/* Enable runtime autosuspend at device
- 					 * creation time */
- 	unsigned ignore_media_change:1; /* Ignore MEDIA CHANGE on resume */
-+	unsigned silence_suspend:1;	/* Do not print runtime PM related messages */
- 
- 	bool offline_already;		/* Device offline message logged */
- 
+--- a/drivers/scsi/libsas/sas_ata.c
++++ b/drivers/scsi/libsas/sas_ata.c
+@@ -197,7 +197,7 @@ static unsigned int sas_ata_qc_issue(str
+ 		task->total_xfer_len = qc->nbytes;
+ 		task->num_scatter = qc->n_elem;
+ 		task->data_dir = qc->dma_dir;
+-	} else if (qc->tf.protocol == ATA_PROT_NODATA) {
++	} else if (!ata_is_data(qc->tf.protocol)) {
+ 		task->data_dir = DMA_NONE;
+ 	} else {
+ 		for_each_sg(qc->sg, sg, qc->n_elem, si)
 
 

@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 466184F4B95
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 709054F4B8A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1575169AbiDEXDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
+        id S1574964AbiDEXCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357882AbiDEK1W (ORCPT
+        with ESMTP id S1357900AbiDEK1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:22 -0400
+        Tue, 5 Apr 2022 06:27:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875164A918;
-        Tue,  5 Apr 2022 03:11:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9532515BC;
+        Tue,  5 Apr 2022 03:11:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 235536172B;
-        Tue,  5 Apr 2022 10:11:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C80EC385A1;
-        Tue,  5 Apr 2022 10:10:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BDD46172B;
+        Tue,  5 Apr 2022 10:11:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22983C385A1;
+        Tue,  5 Apr 2022 10:11:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153460;
-        bh=/WtJySjaHTwCqUhYX6wURi4WDdrk0AMB8cEEqWIkQZI=;
+        s=korg; t=1649153468;
+        bh=AhpTxZ7Xbf8FRRKK2R0+ENp23MVF1F4aTDQkIWZarUc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EgRAvjShBLUgb4cM8nZ8VywLGA93i0/+jm/0NmFn+NtyJda973XF1ZGqgq+j3JgBd
-         Y7aCJjgTdMtK5mebnvSOUp2emuctDHPqKn+x9jSOjmy6NJT38GtMILbOAMjsQkO0eA
-         aCcOowpBOd9ohfIzP38gepITo8L40zYyjLaAc34o=
+        b=unv9jZNdUsHRrPN9klg2gmCMAPT4cMwtZi28wUsryuA9QtUSpiHQxWG5PWkC4Tjoe
+         QleZsLsGZ0OvcqSJASXuQ1kSfR3FtesyxVXO0CRVybt/6eb6GuG7ba6N8EJjD3CPu8
+         kK4p9Va55lBKt2bbaLrYHpfan5qOhwaiFGw0y3VY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 230/599] ASoC: dwc-i2s: Handle errors for clk_enable
-Date:   Tue,  5 Apr 2022 09:28:44 +0200
-Message-Id: <20220405070305.685303431@linuxfoundation.org>
+Subject: [PATCH 5.10 231/599] ASoC: soc-compress: prevent the potentially use of null pointer
+Date:   Tue,  5 Apr 2022 09:28:45 +0200
+Message-Id: <20220405070305.715516367@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -57,57 +59,61 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 45ea97d74313bae681328b0c36fa348036777644 ]
+[ Upstream commit de2c6f98817fa5decb9b7d3b3a8a3ab864c10588 ]
 
-As the potential failure of the clk_enable(),
-it should be better to check it, as same as clk_prepare_enable().
+There is one call trace that snd_soc_register_card()
+->snd_soc_bind_card()->soc_init_pcm_runtime()
+->snd_soc_dai_compress_new()->snd_soc_new_compress().
+In the trace the 'codec_dai' transfers from card->dai_link,
+and we can see from the snd_soc_add_pcm_runtime() in
+snd_soc_bind_card() that, if value of card->dai_link->num_codecs
+is 0, then 'codec_dai' could be null pointer caused
+by index out of bound in 'asoc_rtd_to_codec(rtd, 0)'.
+And snd_soc_register_card() is called by various platforms.
+Therefore, it is better to add the check in the case of misusing.
+And because 'cpu_dai' has already checked in soc_init_pcm_runtime(),
+there is no need to check again.
+Adding the check as follow, then if 'codec_dai' is null,
+snd_soc_new_compress() will not pass through the check
+'if (playback + capture != 1)', avoiding the leftover use of
+'codec_dai'.
 
-Fixes: c9afc1834e81 ("ASoC: dwc: Disallow building designware_pcm as a module")
+Fixes: 467fece ("ASoC: soc-dai: move snd_soc_dai_stream_valid() to soc-dai.c")
 Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220301084742.3751939-1-jiasheng@iscas.ac.cn
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/1634285633-529368-1-git-send-email-jiasheng@iscas.ac.cn
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/dwc/dwc-i2s.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ sound/soc/soc-compress.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/sound/soc/dwc/dwc-i2s.c b/sound/soc/dwc/dwc-i2s.c
-index fd4160289fac..36da0f01571a 100644
---- a/sound/soc/dwc/dwc-i2s.c
-+++ b/sound/soc/dwc/dwc-i2s.c
-@@ -403,9 +403,13 @@ static int dw_i2s_runtime_suspend(struct device *dev)
- static int dw_i2s_runtime_resume(struct device *dev)
- {
- 	struct dw_i2s_dev *dw_dev = dev_get_drvdata(dev);
-+	int ret;
+diff --git a/sound/soc/soc-compress.c b/sound/soc/soc-compress.c
+index 3a6a60215e81..5a1702d926ae 100644
+--- a/sound/soc/soc-compress.c
++++ b/sound/soc/soc-compress.c
+@@ -767,12 +767,14 @@ int snd_soc_new_compress(struct snd_soc_pcm_runtime *rtd, int num)
+ 	}
  
--	if (dw_dev->capability & DW_I2S_MASTER)
--		clk_enable(dw_dev->clk);
-+	if (dw_dev->capability & DW_I2S_MASTER) {
-+		ret = clk_enable(dw_dev->clk);
-+		if (ret)
-+			return ret;
-+	}
- 	return 0;
- }
- 
-@@ -422,10 +426,13 @@ static int dw_i2s_resume(struct snd_soc_component *component)
- {
- 	struct dw_i2s_dev *dev = snd_soc_component_get_drvdata(component);
- 	struct snd_soc_dai *dai;
--	int stream;
-+	int stream, ret;
- 
--	if (dev->capability & DW_I2S_MASTER)
--		clk_enable(dev->clk);
-+	if (dev->capability & DW_I2S_MASTER) {
-+		ret = clk_enable(dev->clk);
-+		if (ret)
-+			return ret;
+ 	/* check client and interface hw capabilities */
+-	if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_PLAYBACK) &&
+-	    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_PLAYBACK))
+-		playback = 1;
+-	if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_CAPTURE) &&
+-	    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_CAPTURE))
+-		capture = 1;
++	if (codec_dai) {
++		if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_PLAYBACK) &&
++		    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_PLAYBACK))
++			playback = 1;
++		if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_CAPTURE) &&
++		    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_CAPTURE))
++			capture = 1;
 +	}
  
- 	for_each_component_dais(component, dai) {
- 		for_each_pcm_streams(stream)
+ 	/*
+ 	 * Compress devices are unidirectional so only one of the directions
 -- 
 2.34.1
 

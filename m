@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A794F462C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D0B4F4766
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384968AbiDENcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
+        id S1354965AbiDEVKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345957AbiDEJXN (ORCPT
+        with ESMTP id S1358263AbiDEK2L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:23:13 -0400
+        Tue, 5 Apr 2022 06:28:11 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C73A8EC1;
-        Tue,  5 Apr 2022 02:12:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21706DF9E;
+        Tue,  5 Apr 2022 03:17:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 23A78B81A12;
-        Tue,  5 Apr 2022 09:12:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C968C385A2;
-        Tue,  5 Apr 2022 09:12:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C45CAB81C9B;
+        Tue,  5 Apr 2022 10:17:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 401D2C385A0;
+        Tue,  5 Apr 2022 10:17:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149956;
-        bh=KYthF1V1rwYdHB0aarjtYpgHgzauarKh6ljbQ558ZEI=;
+        s=korg; t=1649153855;
+        bh=Z9o8gaYS56UaYl5hI66rYbD2VLJumMbKcvklW95+7cY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HuEGp4V6VPhCz4duGkd4NuNJa00LiEH3E9nMm/WyICF2phHkeg678fM7TsCs+ltyx
-         23UMHbf0kaH9Ulzw0qV+eEl43NkUZrP3kMgTHLVk+qqxGl203ppLXwrQ+WpvpsEsOM
-         D/OcgpB+yRzAtkWhzAB4Oherz/WIEyJCZnX100qU=
+        b=StAuJ+NkB5okfZpj8BGWThy+H3C6RsYDB2rQPg5b6h9/Ggy9AKvmlruLMXAW2C5qc
+         8VOpxxn9weodceRhVzH0Mq1AWB7hMhX5XgUkkgyp7Nb5fWKnOoHSSqv69ihY5qB7Dz
+         KkIO1iTyzKXGDi3RsjtFtHKlDNurOMpBlflK8ngI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.16 0902/1017] KVM: x86: Avoid theoretical NULL pointer dereference in kvm_irq_delivery_to_apic_fast()
-Date:   Tue,  5 Apr 2022 09:30:15 +0200
-Message-Id: <20220405070421.000501880@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 323/599] drm/tegra: Fix reference leak in tegra_dsi_ganged_probe
+Date:   Tue,  5 Apr 2022 09:30:17 +0200
+Message-Id: <20220405070308.444870827@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 00b5f37189d24ac3ed46cb7f11742094778c46ce upstream.
+[ Upstream commit 221e3638feb8bc42143833c9a704fa89b6c366bb ]
 
-When kvm_irq_delivery_to_apic_fast() is called with APIC_DEST_SELF
-shorthand, 'src' must not be NULL. Crash the VM with KVM_BUG_ON()
-instead of crashing the host.
+The reference taken by 'of_find_device_by_node()' must be released when
+not needed anymore. Add put_device() call to fix this.
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Message-Id: <20220325132140.25650-3-vkuznets@redhat.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: e94236cde4d5 ("drm/tegra: dsi: Add ganged mode support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/lapic.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/gpu/drm/tegra/dsi.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -987,6 +987,10 @@ bool kvm_irq_delivery_to_apic_fast(struc
- 	*r = -1;
+diff --git a/drivers/gpu/drm/tegra/dsi.c b/drivers/gpu/drm/tegra/dsi.c
+index f46d377f0c30..de1333dc0d86 100644
+--- a/drivers/gpu/drm/tegra/dsi.c
++++ b/drivers/gpu/drm/tegra/dsi.c
+@@ -1538,8 +1538,10 @@ static int tegra_dsi_ganged_probe(struct tegra_dsi *dsi)
+ 		dsi->slave = platform_get_drvdata(gangster);
+ 		of_node_put(np);
  
- 	if (irq->shorthand == APIC_DEST_SELF) {
-+		if (KVM_BUG_ON(!src, kvm)) {
-+			*r = 0;
-+			return true;
+-		if (!dsi->slave)
++		if (!dsi->slave) {
++			put_device(&gangster->dev);
+ 			return -EPROBE_DEFER;
 +		}
- 		*r = kvm_apic_set_irq(src->vcpu, irq, dest_map);
- 		return true;
+ 
+ 		dsi->slave->master = dsi;
  	}
+-- 
+2.34.1
+
 
 

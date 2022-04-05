@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1D14F4166
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8214F3EBE
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:49:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238139AbiDEPXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55206 "EHLO
+        id S1356930AbiDEPYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347190AbiDEJqI (ORCPT
+        with ESMTP id S1347210AbiDEJqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:46:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39ECDD95A;
-        Tue,  5 Apr 2022 02:32:34 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA8CDD97B;
+        Tue,  5 Apr 2022 02:32:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BDFA616C1;
-        Tue,  5 Apr 2022 09:32:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67B84C385A0;
-        Tue,  5 Apr 2022 09:32:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27313615E5;
+        Tue,  5 Apr 2022 09:32:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39962C385A2;
+        Tue,  5 Apr 2022 09:32:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151153;
-        bh=+sX6eT4etelquzx7SDWaJwJw7R7+rWeSw+xS7cKPHDI=;
+        s=korg; t=1649151156;
+        bh=TdNHD+ThQdFDNYzUnyywSIQFu/8Rmrh1akcMl4pdADg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kj8sRnDRvMrIbie7VNBhBviXQM74RGLgPqAzsHPLF9E99cKdSRShoy9tIwCwwkHn/
-         d+ggeRXX8iFh98Ov4//SFFwr5leUN4GXog0mYJqdJaTNd1JioriL5Jenef6tFeq4AV
-         FWkzlXZ4RSOis402KEwwKg/ykzBQq6XgqoWHZngY=
+        b=mTqCmeGdGNXyAGp+MeGmYdeQuVVJUFjroorq57uFz8FF00U5mqasa+pzXq/YUlhRK
+         4tCJr+h989D6vfEOHP9BFXKb77T5S4v3SPjF+q0yi9LJzzJ7JbZZhi4ZHe17/cxAGV
+         5sxXMgghaZRZ4PFB+eVZVICX1MueVr1q74WukJ+w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 313/913] media: em28xx: initialize refcount before kref_get
-Date:   Tue,  5 Apr 2022 09:22:55 +0200
-Message-Id: <20220405070349.235758782@linuxfoundation.org>
+Subject: [PATCH 5.15 314/913] media: usb: go7007: s2250-board: fix leak in probe()
+Date:   Tue,  5 Apr 2022 09:22:56 +0200
+Message-Id: <20220405070349.265093600@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,64 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit c08eadca1bdfa099e20a32f8fa4b52b2f672236d ]
+[ Upstream commit 67e4550ecd6164bfbdff54c169e5bbf9ccfaf14d ]
 
-The commit 47677e51e2a4("[media] em28xx: Only deallocate struct
-em28xx after finishing all extensions") adds kref_get to many init
-functions (e.g., em28xx_audio_init). However, kref_init is called too
-late in em28xx_usb_probe, since em28xx_init_dev before will invoke
-those init functions and call kref_get function. Then refcount bug
-occurs in my local syzkaller instance.
+Call i2c_unregister_device(audio) on this error path.
 
-Fix it by moving kref_init before em28xx_init_dev. This issue occurs
-not only in dev but also dev->dev_next.
-
-Fixes: 47677e51e2a4 ("[media] em28xx: Only deallocate struct em28xx after finishing all extensions")
-Reported-by: syzkaller <syzkaller@googlegroups.com>
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Fixes: d3b2ccd9e307 ("[media] s2250: convert to the control framework")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/em28xx/em28xx-cards.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/media/usb/go7007/s2250-board.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/usb/em28xx/em28xx-cards.c
-index ebc430b05f21..c415b1d195c4 100644
---- a/drivers/media/usb/em28xx/em28xx-cards.c
-+++ b/drivers/media/usb/em28xx/em28xx-cards.c
-@@ -3931,6 +3931,8 @@ static int em28xx_usb_probe(struct usb_interface *intf,
- 		goto err_free;
- 	}
+diff --git a/drivers/media/usb/go7007/s2250-board.c b/drivers/media/usb/go7007/s2250-board.c
+index c742cc88fac5..1fa6f10ee157 100644
+--- a/drivers/media/usb/go7007/s2250-board.c
++++ b/drivers/media/usb/go7007/s2250-board.c
+@@ -504,6 +504,7 @@ static int s2250_probe(struct i2c_client *client,
+ 	u8 *data;
+ 	struct go7007 *go = i2c_get_adapdata(adapter);
+ 	struct go7007_usb *usb = go->hpi_context;
++	int err = -EIO;
  
-+	kref_init(&dev->ref);
-+
- 	dev->devno = nr;
- 	dev->model = id->driver_info;
- 	dev->alt   = -1;
-@@ -4031,6 +4033,8 @@ static int em28xx_usb_probe(struct usb_interface *intf,
- 	}
- 
- 	if (dev->board.has_dual_ts && em28xx_duplicate_dev(dev) == 0) {
-+		kref_init(&dev->dev_next->ref);
-+
- 		dev->dev_next->ts = SECONDARY_TS;
- 		dev->dev_next->alt   = -1;
- 		dev->dev_next->is_audio_only = has_vendor_audio &&
-@@ -4085,12 +4089,8 @@ static int em28xx_usb_probe(struct usb_interface *intf,
- 			em28xx_write_reg(dev, 0x0b, 0x82);
- 			mdelay(100);
- 		}
+ 	audio = i2c_new_dummy_device(adapter, TLV320_ADDRESS >> 1);
+ 	if (IS_ERR(audio))
+@@ -532,11 +533,8 @@ static int s2250_probe(struct i2c_client *client,
+ 		V4L2_CID_HUE, -512, 511, 1, 0);
+ 	sd->ctrl_handler = &state->hdl;
+ 	if (state->hdl.error) {
+-		int err = state->hdl.error;
 -
--		kref_init(&dev->dev_next->ref);
+-		v4l2_ctrl_handler_free(&state->hdl);
+-		kfree(state);
+-		return err;
++		err = state->hdl.error;
++		goto fail;
  	}
  
--	kref_init(&dev->ref);
--
- 	request_modules(dev);
+ 	state->std = V4L2_STD_NTSC;
+@@ -600,7 +598,7 @@ static int s2250_probe(struct i2c_client *client,
+ 	i2c_unregister_device(audio);
+ 	v4l2_ctrl_handler_free(&state->hdl);
+ 	kfree(state);
+-	return -EIO;
++	return err;
+ }
  
- 	/*
+ static int s2250_remove(struct i2c_client *client)
 -- 
 2.34.1
 

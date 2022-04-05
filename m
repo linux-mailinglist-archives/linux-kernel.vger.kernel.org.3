@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A24984F3671
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E98644F3660
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348818AbiDELDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
+        id S1347146AbiDELBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237121AbiDEIli (ORCPT
+        with ESMTP id S234119AbiDEIjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:41:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075E51152;
-        Tue,  5 Apr 2022 01:34:19 -0700 (PDT)
+        Tue, 5 Apr 2022 04:39:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558101EAFF;
+        Tue,  5 Apr 2022 01:32:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8668961470;
-        Tue,  5 Apr 2022 08:34:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91DDEC385A0;
-        Tue,  5 Apr 2022 08:34:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4E9BB81A32;
+        Tue,  5 Apr 2022 08:32:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C9C7C385A1;
+        Tue,  5 Apr 2022 08:32:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147658;
-        bh=cJgNiIRKs43WwxcFvB9IigSsDaV6t6vyU5S0AYz5shw=;
+        s=korg; t=1649147572;
+        bh=g4fyN2qoHyGpxXNxZZ707m4eEwBL7Q2b400w2aH4EFg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=erN6RTJDDAqtqP3DvTX9rE4GFbXLzXJGElfg8tTdUMfNokyROHsIU/FCFdNcgKFkf
-         svJf3nA6NQJd/blQKz4f3y/lG019+4QEQRuqxjVXr2PiK/QzxdntweWJZ3bVxJMCi7
-         EYUkok2fMo//IVfqa03S/mRlokuNVk4xNHpc7yPA=
+        b=kAV2iUaYkedzOrwRNN5/fD0F6BkCMJTIPWMnMheQSmhenUoA7jz8oG3ndlHUMgBAH
+         9JDd/xzYpCzzC1rHlBcdjiIRqkORLuU4NPPSf1TIXLaQtoJdKVVeLOWrFKFiXbUilI
+         fz5HlzN1RYF83I6mcbX91In2XMkr6qSKvXgsFQus=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Anssi Hannula <anssi.hannula@bitwise.fi>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 5.16 0037/1017] xhci: fix uninitialized string returned by xhci_decode_ctrl_ctx()
-Date:   Tue,  5 Apr 2022 09:15:50 +0200
-Message-Id: <20220405070355.280917400@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Subject: [PATCH 5.16 0045/1017] coresight: syscfg: Fix memleak on registration failure in cscfg_create_device
+Date:   Tue,  5 Apr 2022 09:15:58 +0200
+Message-Id: <20220405070355.520237785@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -54,43 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anssi Hannula <anssi.hannula@bitwise.fi>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 05519b8589a679edb8fa781259893d20bece04ad upstream.
+commit cfa5dbcdd7aece76f3415284569f2f384aff0253 upstream.
 
-xhci_decode_ctrl_ctx() returns the untouched buffer as-is if both "drop"
-and "add" parameters are zero.
+device_register() calls device_initialize(),
+according to doc of device_initialize:
 
-Fix the function to return an empty string in that case.
+    Use put_device() to give up your reference instead of freeing
+    * @dev directly once you have called this function.
 
-It was not immediately clear from the possible call chains whether this
-issue is currently actually triggerable or not.
+To prevent potential memleak, use put_device() for error handling.
 
-Note that before commit 4843b4b5ec64 ("xhci: fix even more unsafe memory
-usage in xhci tracing") the result effect in the failure case was different
-as a static buffer was used here, but the code still worked incorrectly.
-
-Fixes: 90d6d5731da7 ("xhci: Add tracing for input control context")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Fixes: 85e2414c518a ("coresight: syscfg: Initial coresight system configuration")
 Cc: stable@vger.kernel.org
-Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-commit 4843b4b5ec64 ("xhci: fix even more unsafe memory usage in xhci tracing")
-Link: https://lore.kernel.org/r/20220303110903.1662404-4-mathias.nyman@linux.intel.com
+Link: https://lore.kernel.org/r/20220124124121.8888-1-linmq006@gmail.com
+Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/host/xhci.h |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/hwtracing/coresight/coresight-syscfg.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -2470,6 +2470,8 @@ static inline const char *xhci_decode_ct
- 	unsigned int	bit;
- 	int		ret = 0;
+--- a/drivers/hwtracing/coresight/coresight-syscfg.c
++++ b/drivers/hwtracing/coresight/coresight-syscfg.c
+@@ -791,7 +791,7 @@ static int cscfg_create_device(void)
  
-+	str[0] = '\0';
-+
- 	if (drop) {
- 		ret = sprintf(str, "Drop:");
- 		for_each_set_bit(bit, &drop, 32)
+ 	err = device_register(dev);
+ 	if (err)
+-		cscfg_dev_release(dev);
++		put_device(dev);
+ 
+ create_dev_exit_unlock:
+ 	mutex_unlock(&cscfg_mutex);
 
 

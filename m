@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8138D4F3EFB
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0284F4215
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390376AbiDENiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:38:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
+        id S1387133AbiDEUFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344353AbiDEJTe (ORCPT
+        with ESMTP id S1356536AbiDEKX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:19:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E0419C;
-        Tue,  5 Apr 2022 02:07:47 -0700 (PDT)
+        Tue, 5 Apr 2022 06:23:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0390DA;
+        Tue,  5 Apr 2022 03:08:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A467161571;
-        Tue,  5 Apr 2022 09:07:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B27F1C385A1;
-        Tue,  5 Apr 2022 09:07:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A86C5B81C8A;
+        Tue,  5 Apr 2022 10:08:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAB82C385A2;
+        Tue,  5 Apr 2022 10:08:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149666;
-        bh=6gpvLMzBnjn0DjTfgIKa+rsrDplZXOu7OHD95azo03s=;
+        s=korg; t=1649153307;
+        bh=phw36U8LfLAByfH2Wv8qk/Z/g2xProxmP4xZfrB1lHc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=faEPtxQiN5i2y8M5KOB19e5wOHiEEPCcgsZOsAKFYTAkj0bS42BjZZt7fgsWD/LX7
-         wzlad35UShsyyEnrnVwOq+d+MwZwR5cQORfq7u0TfdjIirl+tIpKNReZ5mXN9nZ8xh
-         FLZp+QSWg+DWSw4dC44YvMG61w6TlPq3mC+89oCk=
+        b=I8e6HFOeQf1kG2+BZtvFDRMap7anaNGxYPr3Yv9IMEzDiAmrCyjqtxR5foIs8aDSw
+         IKKIGHaMDp6Roh2MsHLW/A0VVdLCXhsg7iRCsCORNf7lIHTsoFxJXbzgqOaZV9/xYn
+         yHDgSEWDB79sU7+LX+rtb9Ss5XuNmBSwi2FzFYtQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ning Li <lining2020x@163.com>,
-        Tejun Heo <tj@kernel.org>, Chunguang Xu <brookxu@tencent.com>,
-        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0758/1017] block: throttle split bio in case of iops limit
+Subject: [PATCH 5.10 177/599] perf/core: Fix address filter parser for multiple filters
 Date:   Tue,  5 Apr 2022 09:27:51 +0200
-Message-Id: <20220405070416.758774397@linuxfoundation.org>
+Message-Id: <20220405070304.109432125@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,103 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ming Lei <ming.lei@redhat.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
 
-[ Upstream commit 9f5ede3c01f9951b0ae7d68b28762ad51d9bacc8 ]
+[ Upstream commit d680ff24e9e14444c63945b43a37ede7cd6958f9 ]
 
-Commit 111be8839817 ("block-throttle: avoid double charge") marks bio as
-BIO_THROTTLED unconditionally if __blk_throtl_bio() is called on this bio,
-then this bio won't be called into __blk_throtl_bio() any more. This way
-is to avoid double charge in case of bio splitting. It is reasonable for
-read/write throughput limit, but not reasonable for IOPS limit because
-block layer provides io accounting against split bio.
+Reset appropriate variables in the parser loop between parsing separate
+filters, so that they do not interfere with parsing the next filter.
 
-Chunguang Xu has already observed this issue and fixed it in commit
-4f1e9630afe6 ("blk-throtl: optimize IOPS throttle for large IO scenarios").
-However, that patch only covers bio splitting in __blk_queue_split(), and
-we have other kind of bio splitting, such as bio_split() &
-submit_bio_noacct() and other ways.
-
-This patch tries to fix the issue in one generic way by always charging
-the bio for iops limit in blk_throtl_bio(). This way is reasonable:
-re-submission & fast-cloned bio is charged if it is submitted to same
-disk/queue, and BIO_THROTTLED will be cleared if bio->bi_bdev is changed.
-
-This new approach can get much more smooth/stable iops limit compared with
-commit 4f1e9630afe6 ("blk-throtl: optimize IOPS throttle for large IO
-scenarios") since that commit can't throttle current split bios actually.
-
-Also this way won't cause new double bio iops charge in
-blk_throtl_dispatch_work_fn() in which blk_throtl_bio() won't be called
-any more.
-
-Reported-by: Ning Li <lining2020x@163.com>
-Acked-by: Tejun Heo <tj@kernel.org>
-Cc: Chunguang Xu <brookxu@tencent.com>
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
-Link: https://lore.kernel.org/r/20220216044514.2903784-7-ming.lei@redhat.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 375637bc524952 ("perf/core: Introduce address range filtering")
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lore.kernel.org/r/20220131072453.2839535-4-adrian.hunter@intel.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/blk-merge.c    |  2 --
- block/blk-throttle.c | 10 +++++++---
- block/blk-throttle.h |  2 --
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ kernel/events/core.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/block/blk-merge.c b/block/blk-merge.c
-index a5b73bad9462..09bf679dc132 100644
---- a/block/blk-merge.c
-+++ b/block/blk-merge.c
-@@ -367,8 +367,6 @@ void __blk_queue_split(struct request_queue *q, struct bio **bio,
- 		trace_block_split(split, (*bio)->bi_iter.bi_sector);
- 		submit_bio_noacct(*bio);
- 		*bio = split;
--
--		blk_throtl_charge_bio_split(*bio);
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index c8b3f94f0dbb..79d8b27cf2fc 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -10265,8 +10265,11 @@ perf_event_parse_addr_filter(struct perf_event *event, char *fstr,
+ 			}
+ 
+ 			/* ready to consume more filters */
++			kfree(filename);
++			filename = NULL;
+ 			state = IF_STATE_ACTION;
+ 			filter = NULL;
++			kernel = 0;
+ 		}
  	}
- }
- 
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index 39bb6e68a9a2..96573fa4edf2 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -807,7 +807,8 @@ static bool tg_with_in_bps_limit(struct throtl_grp *tg, struct bio *bio,
- 	unsigned long jiffy_elapsed, jiffy_wait, jiffy_elapsed_rnd;
- 	unsigned int bio_size = throtl_bio_data_size(bio);
- 
--	if (bps_limit == U64_MAX) {
-+	/* no need to throttle if this bio's bytes have been accounted */
-+	if (bps_limit == U64_MAX || bio_flagged(bio, BIO_THROTTLED)) {
- 		if (wait)
- 			*wait = 0;
- 		return true;
-@@ -919,9 +920,12 @@ static void throtl_charge_bio(struct throtl_grp *tg, struct bio *bio)
- 	unsigned int bio_size = throtl_bio_data_size(bio);
- 
- 	/* Charge the bio to the group */
--	tg->bytes_disp[rw] += bio_size;
-+	if (!bio_flagged(bio, BIO_THROTTLED)) {
-+		tg->bytes_disp[rw] += bio_size;
-+		tg->last_bytes_disp[rw] += bio_size;
-+	}
-+
- 	tg->io_disp[rw]++;
--	tg->last_bytes_disp[rw] += bio_size;
- 	tg->last_io_disp[rw]++;
- 
- 	/*
-diff --git a/block/blk-throttle.h b/block/blk-throttle.h
-index 175f03abd9e4..cb43f4417d6e 100644
---- a/block/blk-throttle.h
-+++ b/block/blk-throttle.h
-@@ -170,8 +170,6 @@ static inline bool blk_throtl_bio(struct bio *bio)
- {
- 	struct throtl_grp *tg = blkg_to_tg(bio->bi_blkg);
- 
--	if (bio_flagged(bio, BIO_THROTTLED))
--		return false;
- 	if (!tg->has_rules[bio_data_dir(bio)])
- 		return false;
  
 -- 
 2.34.1

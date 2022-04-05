@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD83A4F4E51
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A68344F4B56
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1588773AbiDFARR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
+        id S1574238AbiDEWzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349731AbiDEJvJ (ORCPT
+        with ESMTP id S1357992AbiDEK1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:51:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B6B13CF7;
-        Tue,  5 Apr 2022 02:49:11 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C3CD4CB5;
+        Tue,  5 Apr 2022 03:12:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8AE861577;
-        Tue,  5 Apr 2022 09:49:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E585FC385A1;
-        Tue,  5 Apr 2022 09:49:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C897B81C88;
+        Tue,  5 Apr 2022 10:12:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EA68C385A1;
+        Tue,  5 Apr 2022 10:12:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152150;
-        bh=PbNZRs7V0fNEXSyWkR/PcpcLLp5OESncjXOJnqkXlCQ=;
+        s=korg; t=1649153545;
+        bh=hZx8lNDD4pMclzbGy8TuPGTNGQCoy+kcAgApRpooPG8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Db3CnS2b641nVOMKm2zIcR5kicHZbRPelnr+w/p0aku0e5oVuWzKWepJ8QSbk+Di7
-         TnUglt120QAB+E2Qs2n3QHWXk6VPlswbIijoW8UFO6RYy+tM2sQesLNPE3t/mmoGt9
-         pajLjhefDitpODy4MbOYyxFe8SRdMVRGza68ELIk=
+        b=S9ufgXm5O1bBcJpgJTGjqFoiy4cBZefBtzfCFzOzwRIVPmd8+YkC5PUHd1Wvn/3eo
+         Gwnwo330exoFjZDk6jOIRYUIwAIyAwybdjfjI9B8HMsbs6R/QvapjWTiaPQfmp3KYA
+         RtE9RWGdFV8bvTBdRibBn4EzjLjJrMiWdx9GtCLg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 674/913] octeontx2-af: initialize action variable
-Date:   Tue,  5 Apr 2022 09:28:56 +0200
-Message-Id: <20220405070400.039736574@linuxfoundation.org>
+Subject: [PATCH 5.10 243/599] media: saa7134: convert list_for_each to entry variant
+Date:   Tue,  5 Apr 2022 09:28:57 +0200
+Message-Id: <20220405070306.072598205@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,107 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 33b5bc9e703383e396f275d51fc4bafa48dbae5a ]
+[ Upstream commit 3f3475a5c77e9eabab43537f713b90f1d19258b7 ]
 
-Clang static analysis reports this representative issue
-rvu_npc.c:898:15: warning: Assigned value is garbage
-  or undefined
-  req.match_id = action.match_id;
-               ^ ~~~~~~~~~~~~~~~
+Convert list_for_each() to list_for_each_entry() where
+applicable.
 
-The initial setting of action is conditional on
- if (is_mcam_entry_enabled(...))
-The later check of action.op will sometimes be garbage.
-So initialize action.
-
-Reduce setting of
-  *(u64 *)&action = 0x00;
-to
-  *(u64 *)&action = 0;
-
-Fixes: 967db3529eca ("octeontx2-af: add support for multicast/promisc packet replication feature")
-Signed-off-by: Tom Rix <trix@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/ethernet/marvell/octeontx2/af/rvu_npc.c   | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ drivers/media/pci/saa7134/saa7134-alsa.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c
-index fbb573c40c1a..c4a46b295d40 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc.c
-@@ -605,7 +605,7 @@ void rvu_npc_install_ucast_entry(struct rvu *rvu, u16 pcifunc,
- 	struct npc_install_flow_req req = { 0 };
- 	struct npc_install_flow_rsp rsp = { 0 };
- 	struct npc_mcam *mcam = &rvu->hw->mcam;
--	struct nix_rx_action action;
-+	struct nix_rx_action action = { 0 };
- 	int blkaddr, index;
+diff --git a/drivers/media/pci/saa7134/saa7134-alsa.c b/drivers/media/pci/saa7134/saa7134-alsa.c
+index 7a1fb067b0e0..fb24d2ed3621 100644
+--- a/drivers/media/pci/saa7134/saa7134-alsa.c
++++ b/drivers/media/pci/saa7134/saa7134-alsa.c
+@@ -1215,15 +1215,13 @@ static int alsa_device_exit(struct saa7134_dev *dev)
+ static int saa7134_alsa_init(void)
+ {
+ 	struct saa7134_dev *dev = NULL;
+-	struct list_head *list;
  
- 	/* AF's and SDP VFs work in promiscuous mode */
-@@ -626,7 +626,6 @@ void rvu_npc_install_ucast_entry(struct rvu *rvu, u16 pcifunc,
- 		*(u64 *)&action = npc_get_mcam_action(rvu, mcam,
- 						      blkaddr, index);
- 	} else {
--		*(u64 *)&action = 0x00;
- 		action.op = NIX_RX_ACTIONOP_UCAST;
- 		action.pf_func = pcifunc;
- 	}
-@@ -657,7 +656,7 @@ void rvu_npc_install_promisc_entry(struct rvu *rvu, u16 pcifunc,
- 	struct npc_mcam *mcam = &rvu->hw->mcam;
- 	struct rvu_hwinfo *hw = rvu->hw;
- 	int blkaddr, ucast_idx, index;
--	struct nix_rx_action action;
-+	struct nix_rx_action action = { 0 };
- 	u64 relaxed_mask;
+ 	saa7134_dmasound_init = alsa_device_init;
+ 	saa7134_dmasound_exit = alsa_device_exit;
  
- 	if (!hw->cap.nix_rx_multicast && is_cgx_vf(rvu, pcifunc))
-@@ -685,14 +684,14 @@ void rvu_npc_install_promisc_entry(struct rvu *rvu, u16 pcifunc,
- 						      blkaddr, ucast_idx);
+ 	pr_info("saa7134 ALSA driver for DMA sound loaded\n");
  
- 	if (action.op != NIX_RX_ACTIONOP_RSS) {
--		*(u64 *)&action = 0x00;
-+		*(u64 *)&action = 0;
- 		action.op = NIX_RX_ACTIONOP_UCAST;
- 	}
- 
- 	/* RX_ACTION set to MCAST for CGX PF's */
- 	if (hw->cap.nix_rx_multicast && pfvf->use_mce_list &&
- 	    is_pf_cgxmapped(rvu, rvu_get_pf(pcifunc))) {
--		*(u64 *)&action = 0x00;
-+		*(u64 *)&action = 0;
- 		action.op = NIX_RX_ACTIONOP_MCAST;
- 		pfvf = rvu_get_pfvf(rvu, pcifunc & ~RVU_PFVF_FUNC_MASK);
- 		action.index = pfvf->promisc_mce_idx;
-@@ -832,7 +831,7 @@ void rvu_npc_install_allmulti_entry(struct rvu *rvu, u16 pcifunc, int nixlf,
- 	struct rvu_hwinfo *hw = rvu->hw;
- 	int blkaddr, ucast_idx, index;
- 	u8 mac_addr[ETH_ALEN] = { 0 };
--	struct nix_rx_action action;
-+	struct nix_rx_action action = { 0 };
- 	struct rvu_pfvf *pfvf;
- 	u16 vf_func;
- 
-@@ -861,14 +860,14 @@ void rvu_npc_install_allmulti_entry(struct rvu *rvu, u16 pcifunc, int nixlf,
- 							blkaddr, ucast_idx);
- 
- 	if (action.op != NIX_RX_ACTIONOP_RSS) {
--		*(u64 *)&action = 0x00;
-+		*(u64 *)&action = 0;
- 		action.op = NIX_RX_ACTIONOP_UCAST;
- 		action.pf_func = pcifunc;
- 	}
- 
- 	/* RX_ACTION set to MCAST for CGX PF's */
- 	if (hw->cap.nix_rx_multicast && pfvf->use_mce_list) {
--		*(u64 *)&action = 0x00;
-+		*(u64 *)&action = 0;
- 		action.op = NIX_RX_ACTIONOP_MCAST;
- 		action.index = pfvf->mcast_mce_idx;
- 	}
+-	list_for_each(list,&saa7134_devlist) {
+-		dev = list_entry(list, struct saa7134_dev, devlist);
++	list_for_each_entry(dev, &saa7134_devlist, devlist) {
+ 		if (dev->pci->device == PCI_DEVICE_ID_PHILIPS_SAA7130)
+ 			pr_info("%s/alsa: %s doesn't support digital audio\n",
+ 				dev->name, saa7134_boards[dev->board].name);
 -- 
 2.34.1
 

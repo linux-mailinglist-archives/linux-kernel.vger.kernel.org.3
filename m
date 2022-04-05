@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 851A64F3DD9
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:36:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9304F414C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345672AbiDENek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
+        id S1391074AbiDENrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346967AbiDEJYv (ORCPT
+        with ESMTP id S244019AbiDEJ0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:24:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E41A205D;
-        Tue,  5 Apr 2022 02:14:32 -0700 (PDT)
+        Tue, 5 Apr 2022 05:26:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F47DE906;
+        Tue,  5 Apr 2022 02:15:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6713E61693;
-        Tue,  5 Apr 2022 09:14:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7386DC385A2;
-        Tue,  5 Apr 2022 09:14:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C2E82B81B62;
+        Tue,  5 Apr 2022 09:15:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20C98C385A2;
+        Tue,  5 Apr 2022 09:15:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150046;
-        bh=xEF+OP1ljNay77jIZcx5islH8QqbrHyXClz2GbkB7RM=;
+        s=korg; t=1649150116;
+        bh=g0TljGLO1IzFHta7Q9gIR9X96djpoWB7T6QSJAJD6jc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lmVwKZ3qH8dF+d+qKJP+wMIaDcdIVHoUUwFHAXR61I8PNCsz355X/tr6gfNhiJqN0
-         7v8C5T1qgvZ8+Ev2ClZNJ/fF86IhNrfKrEzuOkg0e75ReKldUQ314RzLgZVXLBLpu8
-         tU14IKiB/hdgeDpVTK7WSTNANoW5F22WOIw5KmnA=
+        b=isIcuypI4bToG7GfP5O1j3ZzFpsemGE5QInCdKKFSBMNKNGSRD+O7diQRzP28cThf
+         QCnp+It/fdZXOO3LT7mA2T/2oDmGOpajbEoTPyGdWtYO7Fj2rUFynf2f/QwcJRzklE
+         Ml8G2tXL6HaOMUa+MVbQT/N0pgNFM2RtKZtdEGY4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pankaj Raghav <p.raghav@samsung.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH 5.16 0918/1017] nvme: fix the read-only state for zoned namespaces with unsupposed features
-Date:   Tue,  5 Apr 2022 09:30:31 +0200
-Message-Id: <20220405070421.469209455@linuxfoundation.org>
+        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.16 0921/1017] wireguard: socket: ignore v6 endpoints when ipv6 is disabled
+Date:   Tue,  5 Apr 2022 09:30:34 +0200
+Message-Id: <20220405070421.557203254@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -54,66 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pankaj Raghav <p.raghav@samsung.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit 726be2c72efc0a64c206e854b8996ad3ab9c7507 upstream.
+commit 77fc73ac89be96ec8f39e8efa53885caa7cb3645 upstream.
 
-commit 2f4c9ba23b88 ("nvme: export zoned namespaces without Zone Append
-support read-only") marks zoned namespaces without append support
-read-only.  It does iso by setting NVME_NS_FORCE_RO in ns->flags in
-nvme_update_zone_info and checking for that flag later in
-nvme_update_disk_info to mark the disk as read-only.
+The previous commit fixed a memory leak on the send path in the event
+that IPv6 is disabled at compile time, but how did a packet even arrive
+there to begin with? It turns out we have previously allowed IPv6
+endpoints even when IPv6 support is disabled at compile time. This is
+awkward and inconsistent. Instead, let's just ignore all things IPv6,
+the same way we do other malformed endpoints, in the case where IPv6 is
+disabled.
 
-But commit 73d90386b559 ("nvme: cleanup zone information initialization")
-rearranged nvme_update_disk_info to be called before
-nvme_update_zone_info and thus not marking the disk as read-only.
-The call order cannot be just reverted because nvme_update_zone_info sets
-certain queue parameters such as zone_write_granularity that depend on the
-prior call to nvme_update_disk_info.
-
-Remove the call to set_disk_ro in nvme_update_disk_info. and call
-set_disk_ro after nvme_update_zone_info and nvme_update_disk_info to set
-the permission for ZNS drives correctly. The same applies to the
-multipath disk path.
-
-Fixes: 73d90386b559 ("nvme: cleanup zone information initialization")
-Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/nvme/host/core.c |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/net/wireguard/socket.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -1860,9 +1860,6 @@ static void nvme_update_disk_info(struct
- 	nvme_config_discard(disk, ns);
- 	blk_queue_max_write_zeroes_sectors(disk->queue,
- 					   ns->ctrl->max_zeroes_sectors);
--
--	set_disk_ro(disk, (id->nsattr & NVME_NS_ATTR_RO) ||
--		test_bit(NVME_NS_FORCE_RO, &ns->flags));
- }
- 
- static inline bool nvme_first_scan(struct gendisk *disk)
-@@ -1923,6 +1920,8 @@ static int nvme_update_ns_info(struct nv
- 			goto out_unfreeze;
- 	}
- 
-+	set_disk_ro(ns->disk, (id->nsattr & NVME_NS_ATTR_RO) ||
-+		test_bit(NVME_NS_FORCE_RO, &ns->flags));
- 	set_bit(NVME_NS_READY, &ns->flags);
- 	blk_mq_unfreeze_queue(ns->disk->queue);
- 
-@@ -1935,6 +1934,9 @@ static int nvme_update_ns_info(struct nv
- 	if (nvme_ns_head_multipath(ns->head)) {
- 		blk_mq_freeze_queue(ns->head->disk->queue);
- 		nvme_update_disk_info(ns->head->disk, ns, id);
-+		set_disk_ro(ns->head->disk,
-+			    (id->nsattr & NVME_NS_ATTR_RO) ||
-+				    test_bit(NVME_NS_FORCE_RO, &ns->flags));
- 		nvme_mpath_revalidate_paths(ns);
- 		blk_stack_limits(&ns->head->disk->queue->limits,
- 				 &ns->queue->limits, 0);
+--- a/drivers/net/wireguard/socket.c
++++ b/drivers/net/wireguard/socket.c
+@@ -242,7 +242,7 @@ int wg_socket_endpoint_from_skb(struct e
+ 		endpoint->addr4.sin_addr.s_addr = ip_hdr(skb)->saddr;
+ 		endpoint->src4.s_addr = ip_hdr(skb)->daddr;
+ 		endpoint->src_if4 = skb->skb_iif;
+-	} else if (skb->protocol == htons(ETH_P_IPV6)) {
++	} else if (IS_ENABLED(CONFIG_IPV6) && skb->protocol == htons(ETH_P_IPV6)) {
+ 		endpoint->addr6.sin6_family = AF_INET6;
+ 		endpoint->addr6.sin6_port = udp_hdr(skb)->source;
+ 		endpoint->addr6.sin6_addr = ipv6_hdr(skb)->saddr;
+@@ -285,7 +285,7 @@ void wg_socket_set_peer_endpoint(struct
+ 		peer->endpoint.addr4 = endpoint->addr4;
+ 		peer->endpoint.src4 = endpoint->src4;
+ 		peer->endpoint.src_if4 = endpoint->src_if4;
+-	} else if (endpoint->addr.sa_family == AF_INET6) {
++	} else if (IS_ENABLED(CONFIG_IPV6) && endpoint->addr.sa_family == AF_INET6) {
+ 		peer->endpoint.addr6 = endpoint->addr6;
+ 		peer->endpoint.src6 = endpoint->src6;
+ 	} else {
 
 

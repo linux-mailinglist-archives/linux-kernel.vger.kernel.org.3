@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8124F4653
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B44324F4704
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:26:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353714AbiDEMtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:49:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
+        id S1384540AbiDEU4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244530AbiDEJKD (ORCPT
+        with ESMTP id S1354668AbiDEKPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:10:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7923125EBB;
-        Tue,  5 Apr 2022 01:59:47 -0700 (PDT)
+        Tue, 5 Apr 2022 06:15:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF5C6C1FC;
+        Tue,  5 Apr 2022 03:02:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B26E3B81A22;
-        Tue,  5 Apr 2022 08:59:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28815C385A0;
-        Tue,  5 Apr 2022 08:59:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7CE2B81C83;
+        Tue,  5 Apr 2022 10:02:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34A57C385A1;
+        Tue,  5 Apr 2022 10:02:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149182;
-        bh=da01Yu1VRcc/0ZM/zmhrzof8NG1WHBs1WVz1sV/nRo4=;
+        s=korg; t=1649152938;
+        bh=FYy2NuQYAT8A88IIsa/Kesb6XY03e4b5Gwo9kUxcGzI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=meRpfhKkskr0noF+WQ6ltGty2TRg/ZvmUkvPs5urNMIA8jOxu26RRrGy84l2Tnuj0
-         Gk1w0D+57pgfgVBNk4cSBo9yCC87zeh4WaN/eQXimrD+tx7472vK8YQ5MuRY1KEaKe
-         PxSPiV5SXuYerCriJU3n9Ww3idJ8EZFmSGWLd63o=
+        b=W4QSI0eo5TkekaQyKimMuXFkAh8+siqnB3BLq2CGd7vMUkDEN8+xly8ljrzPIgugs
+         06Rcc6yZQKznH50cPU4Brwouyl+IJUc1ocHgz2Wsm8XRrXHLs/DnyeboQZIyRmj1ho
+         i9bZUm1HSn01tzBz84dkHxEuN4Lna4biwTi+7z+o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0623/1017] af_netlink: Fix shift out of bounds in group mask calculation
-Date:   Tue,  5 Apr 2022 09:25:36 +0200
-Message-Id: <20220405070412.775282745@linuxfoundation.org>
+        stable@vger.kernel.org, Gwendal Grignou <gwendal@chromium.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Jiri Kosina <jkosina@suse.cz>
+Subject: [PATCH 5.10 044/599] HID: intel-ish-hid: Use dma_alloc_coherent for firmware update
+Date:   Tue,  5 Apr 2022 09:25:38 +0200
+Message-Id: <20220405070300.139280160@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,62 +55,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Petr Machata <petrm@nvidia.com>
+From: Gwendal Grignou <gwendal@chromium.org>
 
-[ Upstream commit 0caf6d9922192dd1afa8dc2131abfb4df1443b9f ]
+commit f97ec5d75e9261a5da78dc28a8955b7cc0c4468b upstream.
 
-When a netlink message is received, netlink_recvmsg() fills in the address
-of the sender. One of the fields is the 32-bit bitfield nl_groups, which
-carries the multicast group on which the message was received. The least
-significant bit corresponds to group 1, and therefore the highest group
-that the field can represent is 32. Above that, the UB sanitizer flags the
-out-of-bounds shift attempts.
+Allocating memory with kmalloc and GPF_DMA32 is not allowed, the
+allocator will ignore the attribute.
 
-Which bits end up being set in such case is implementation defined, but
-it's either going to be a wrong non-zero value, or zero, which is at least
-not misleading. Make the latter choice deterministic by always setting to 0
-for higher-numbered multicast groups.
+Instead, use dma_alloc_coherent() API as we allocate a small amount of
+memory to transfer firmware fragment to the ISH.
 
-To get information about membership in groups >= 32, userspace is expected
-to use nl_pktinfo control messages[0], which are enabled by NETLINK_PKTINFO
-socket option.
-[0] https://lwn.net/Articles/147608/
+On Arcada chromebook, after the patch the warning:
+"Unexpected gfp: 0x4 (GFP_DMA32). Fixing up to gfp: 0xcc0 (GFP_KERNEL).  Fix your code!"
+is gone. The ISH firmware is loaded properly and we can interact with
+the ISH:
+> ectool  --name cros_ish version
+...
+Build info:    arcada_ish_v2.0.3661+3c1a1c1ae0 2022-02-08 05:37:47 @localhost
+Tool version:  v2.0.12300-900b03ec7f 2022-02-08 10:01:48 @localhost
 
-The way to trigger this issue is e.g. through monitoring the BRVLAN group:
-
-	# bridge monitor vlan &
-	# ip link add name br type bridge
-
-Which produces the following citation:
-
-	UBSAN: shift-out-of-bounds in net/netlink/af_netlink.c:162:19
-	shift exponent 32 is too large for 32-bit type 'int'
-
-Fixes: f7fa9b10edbb ("[NETLINK]: Support dynamic number of multicast groups per netlink family")
-Signed-off-by: Petr Machata <petrm@nvidia.com>
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
-Link: https://lore.kernel.org/r/2bef6aabf201d1fc16cca139a744700cff9dcb04.1647527635.git.petrm@nvidia.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: commit 91b228107da3 ("HID: intel-ish-hid: ISH firmware loader client driver")
+Signed-off-by: Gwendal Grignou <gwendal@chromium.org>
+Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netlink/af_netlink.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/hid/intel-ish-hid/ishtp-fw-loader.c |   29 ++--------------------------
+ 1 file changed, 3 insertions(+), 26 deletions(-)
 
-diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-index 9eba2e648385..6fbc3ea735e5 100644
---- a/net/netlink/af_netlink.c
-+++ b/net/netlink/af_netlink.c
-@@ -157,6 +157,8 @@ EXPORT_SYMBOL(do_trace_netlink_extack);
+--- a/drivers/hid/intel-ish-hid/ishtp-fw-loader.c
++++ b/drivers/hid/intel-ish-hid/ishtp-fw-loader.c
+@@ -656,21 +656,12 @@ static int ish_fw_xfer_direct_dma(struct
+ 	 */
+ 	payload_max_size &= ~(L1_CACHE_BYTES - 1);
  
- static inline u32 netlink_group_mask(u32 group)
- {
-+	if (group > 32)
-+		return 0;
- 	return group ? 1 << (group - 1) : 0;
+-	dma_buf = kmalloc(payload_max_size, GFP_KERNEL | GFP_DMA32);
++	dma_buf = dma_alloc_coherent(devc, payload_max_size, &dma_buf_phy, GFP_KERNEL);
+ 	if (!dma_buf) {
+ 		client_data->flag_retry = true;
+ 		return -ENOMEM;
+ 	}
+ 
+-	dma_buf_phy = dma_map_single(devc, dma_buf, payload_max_size,
+-				     DMA_TO_DEVICE);
+-	if (dma_mapping_error(devc, dma_buf_phy)) {
+-		dev_err(cl_data_to_dev(client_data), "DMA map failed\n");
+-		client_data->flag_retry = true;
+-		rv = -ENOMEM;
+-		goto end_err_dma_buf_release;
+-	}
+-
+ 	ldr_xfer_dma_frag.fragment.hdr.command = LOADER_CMD_XFER_FRAGMENT;
+ 	ldr_xfer_dma_frag.fragment.xfer_mode = LOADER_XFER_MODE_DIRECT_DMA;
+ 	ldr_xfer_dma_frag.ddr_phys_addr = (u64)dma_buf_phy;
+@@ -690,14 +681,7 @@ static int ish_fw_xfer_direct_dma(struct
+ 		ldr_xfer_dma_frag.fragment.size = fragment_size;
+ 		memcpy(dma_buf, &fw->data[fragment_offset], fragment_size);
+ 
+-		dma_sync_single_for_device(devc, dma_buf_phy,
+-					   payload_max_size,
+-					   DMA_TO_DEVICE);
+-
+-		/*
+-		 * Flush cache here because the dma_sync_single_for_device()
+-		 * does not do for x86.
+-		 */
++		/* Flush cache to be sure the data is in main memory. */
+ 		clflush_cache_range(dma_buf, payload_max_size);
+ 
+ 		dev_dbg(cl_data_to_dev(client_data),
+@@ -720,15 +704,8 @@ static int ish_fw_xfer_direct_dma(struct
+ 		fragment_offset += fragment_size;
+ 	}
+ 
+-	dma_unmap_single(devc, dma_buf_phy, payload_max_size, DMA_TO_DEVICE);
+-	kfree(dma_buf);
+-	return 0;
+-
+ end_err_resp_buf_release:
+-	/* Free ISH buffer if not done already, in error case */
+-	dma_unmap_single(devc, dma_buf_phy, payload_max_size, DMA_TO_DEVICE);
+-end_err_dma_buf_release:
+-	kfree(dma_buf);
++	dma_free_coherent(devc, payload_max_size, dma_buf, dma_buf_phy);
+ 	return rv;
  }
  
--- 
-2.34.1
-
 
 

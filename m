@@ -2,98 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C42334F51CA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C054F51CC
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1847250AbiDFCQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:16:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
+        id S1847303AbiDFCRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:17:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344408AbiDEUV3 (ORCPT
+        with ESMTP id S1344894AbiDEUVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 16:21:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64A56C975
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 13:00:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 972ACB81D6E
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 20:00:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A431CC385A0;
-        Tue,  5 Apr 2022 20:00:48 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="oK7/f0ji"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1649188847;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dtTvKsnbPiz/iEPRO7T9fc0dbhR7Qpouw7hAuHZcwWA=;
-        b=oK7/f0jibQ+nQO++4aLYVnNDKBEGWa/7cfSL8349HqQ75s9Lb0fNVeWui1udeUit4C4PbC
-        D+1sD99Lc4S0twNy++TKh9i2IaN3In/mV/nHIm1GioaAQBAk8ikA4pTdIvfRsxDUoWz6jm
-        vSuPxMXuQuW4ive1duqSisC4LPADm8Q=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 76c4e30d (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 5 Apr 2022 20:00:46 +0000 (UTC)
-Date:   Tue, 5 Apr 2022 22:00:37 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Yi Zhang <yi.zhang@redhat.com>, alan.adamson@oracle.com
-Cc:     "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
-        Sagi Grimberg <sagi@grimberg.me>, alan.adamson@oracle.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [bug report]nvme0: Admin Cmd(0x6), I/O Error (sct 0x0 / sc 0x2)
- MORE DNR observed during blktests
-Message-ID: <Ykyf5Zuz1W8yHhNY@zx2c4.com>
-References: <CAHj4cs_iC+FE8ZAXXZPeia1V3ZX7zRbeASdOP_8c7DLiFozNfA@mail.gmail.com>
+        Tue, 5 Apr 2022 16:21:50 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8730B6D1BB;
+        Tue,  5 Apr 2022 13:01:22 -0700 (PDT)
+Received: from leknes.fjasle.eu ([46.142.97.95]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MLAAs-1nKqR22ZFa-00IBZv; Tue, 05 Apr 2022 22:00:46 +0200
+Received: by leknes.fjasle.eu (Postfix, from userid 1000)
+        id AB29A3C088; Tue,  5 Apr 2022 22:00:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+        t=1649188842; bh=Jp5v0unMM8TX1zb3fmwvi3+6Bc6OHGfiq1HG+GUHVyw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HCnghiuB+Wzr1v0Xj7rtxiS0alkX0ofzpVxIAQD6kCNeeJKrRBdzWsEoYLV4WdhGW
+         cK8WpcDjJixQEKeB9CidDTnKmCqBqfYq9K7JWqmuDdZOl3byBsD6cAH/2nOkdkLUED
+         CfyTrc2leT65LiIFaSS13YAg+nRUACsIHfjO8BR8=
+Date:   Tue, 5 Apr 2022 22:00:39 +0200
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH v2 01/10] kbuild: factor out genksyms command from
+ cmd_gensymtypes_{c,S}
+Message-ID: <Ykyf51yQ78g71veR@fjasle.eu>
+References: <20220405113359.2880241-1-masahiroy@kernel.org>
+ <20220405113359.2880241-2-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAHj4cs_iC+FE8ZAXXZPeia1V3ZX7zRbeASdOP_8c7DLiFozNfA@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220405113359.2880241-2-masahiroy@kernel.org>
+X-Provags-ID: V03:K1:oSARpcPyymoleg6RyJVu0DeVUrsJvspIYHiB+agK3g3YJzi5n23
+ 863JDClt1QRA49iVriE0QcZMU2v6b2K7KfzkkuLmqLyAIpGbVwpjHjseVGhwynDWQrbQYC4
+ I2OVQYgcg/LNYPEPv+xs66YzmYkcsrmOiR+7fJxqGB0+W81LWCfk8CGxLJHYumkD35jqqA8
+ aeaGGVTrYnv7TOF/G7Fvw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:N/nJZWxHmG4=:MQI6zQKrjr6jugH0+jpOEF
+ wzao4WqD3FuYGxHoo/ydg8lwOgcOEQ6JkPuJyfgyweswbZnCO9LIRW0L4pPTYjI19WEcRrpsD
+ ivMrK1eDaO5zabhjp8FvzcZrJ59SmEvp730GNA5kfCKbBBwK6UV0lqW29w7Cf+BfeS7rvC3ek
+ 8oj9iMH/Vk32LfhsDOxY5NG4jR8sUv6YJF7Rd964q9pm1YPYEEdhgLfN4z1KXflWtl4h0jhQ8
+ uS0ThIRnvDkkyqUWpare0mu446VGCw5SGpxXnQv0AC+diuKT55QQMSER4sVTbjLe/vMx3XISZ
+ QKppKbLZeCyN22CoZRhmoa9PUXCI392eEfn4yMj754Cd2o/tlklwvVCEbK2UtdSvIlV/0nthb
+ Zi66yxUV4TvymjT+kBVhRDn58REIHUAuvv9EPH8ro7GJ29dkRMHfNjasqGaMCQGO7k41zaAuT
+ l3UOMnoJ8zTqBERxEYDgjH+e3xqyQXX9wNLrMB+LL1HvtNCXLUkJ68UF7dX6s5lnC62OPi0d0
+ 5JqKTNZqfPp7yreDWBx8j7o7IqP6O1Uu9m7r9r7xJYkj6DNcqpHW2EfGbVqCL5MZV8ia5WneA
+ TbidzkC/Eg2rK6qiVBYz8hl5H687jYGCdL0QOGMBhDp3JATWZ5hP9s4LxYiMc20Pq8JGl1JnQ
+ 6UoThxkOHeOo8y3i3cJe6sGGWH1QLn6GL0O9mvoIHYBlatqByOkRRkC5AIRUUnw1NZe0=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alan,
+On Tue, Apr 05, 2022 at 08:33:49PM +0900 Masahiro Yamada wrote:
+> The genksyms command part in cmd_gensymtypes_{c,S} is duplicated.
+> Factor it out into the 'genksyms' macro.
+> 
+> For the readability, I slightly refactor the arguments to genksyms.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
 
-I too am seeing this. Tracking it down to the same commit, I decided to
-enable NVME_VERBOSE_ERRORS to get some more information. Now on boot and
-everytime I wake up from sleep, I see:
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 
-[   89.098578] nvme nvme0: Shutdown timeout set to 8 seconds
-[   89.098683] nvme0: Identify(0x6), Invalid Field in Command (sct 0x0 / sc 0x2) MORE
-[   89.119363] nvme nvme0: 16/0/0 default/read/poll queues
+> 
+> Changes in v2:
+>   - Fix the location of the closing parenthesis
+> 
+>  scripts/Makefile.build | 19 ++++++++-----------
+>  1 file changed, 8 insertions(+), 11 deletions(-)
+> 
+> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> index 9717e6f6fb31..31e0e33dfe5d 100644
+> --- a/scripts/Makefile.build
+> +++ b/scripts/Makefile.build
+> @@ -125,13 +125,14 @@ cmd_cpp_i_c       = $(CPP) $(c_flags) -o $@ $<
+>  $(obj)/%.i: $(src)/%.c FORCE
+>  	$(call if_changed_dep,cpp_i_c)
+>  
+> +genksyms = scripts/genksyms/genksyms		\
+> +	$(if $(1), -T $(2))			\
+> +	$(if $(CONFIG_MODULE_REL_CRCS), -R)	\
+> +	$(if $(KBUILD_PRESERVE), -p)		\
+> +	-r $(or $(wildcard $(2:.symtypes=.symref)), /dev/null)
+> +
+>  # These mirror gensymtypes_S and co below, keep them in synch.
+> -cmd_gensymtypes_c =                                                         \
+> -    $(CPP) -D__GENKSYMS__ $(c_flags) $< |                                   \
+> -    scripts/genksyms/genksyms $(if $(1), -T $(2))                           \
+> -     $(patsubst y,-R,$(CONFIG_MODULE_REL_CRCS))                             \
+> -     $(if $(KBUILD_PRESERVE),-p)                                            \
+> -     -r $(firstword $(wildcard $(2:.symtypes=.symref) /dev/null))
+> +cmd_gensymtypes_c = $(CPP) -D__GENKSYMS__ $(c_flags) $< | $(genksyms)
+>  
+>  quiet_cmd_cc_symtypes_c = SYM $(quiet_modtag) $@
+>  cmd_cc_symtypes_c =                                                         \
+> @@ -344,11 +345,7 @@ cmd_gensymtypes_S =                                                         \
+>      $(CPP) $(a_flags) $< |                                                  \
+>       grep "\<___EXPORT_SYMBOL\>" |                                          \
+>       sed 's/.*___EXPORT_SYMBOL[[:space:]]*\([a-zA-Z0-9_]*\)[[:space:]]*,.*/EXPORT_SYMBOL(\1);/' ; } | \
+> -    $(CPP) -D__GENKSYMS__ $(c_flags) -xc - |                                \
+> -    scripts/genksyms/genksyms $(if $(1), -T $(2))                           \
+> -     $(patsubst y,-R,$(CONFIG_MODULE_REL_CRCS))                             \
+> -     $(if $(KBUILD_PRESERVE),-p)                                            \
+> -     -r $(firstword $(wildcard $(2:.symtypes=.symref) /dev/null))
+> +    $(CPP) -D__GENKSYMS__ $(c_flags) -xc - | $(genksyms)
+>  
+>  quiet_cmd_cc_symtypes_S = SYM $(quiet_modtag) $@
+>  cmd_cc_symtypes_S =                                                         \
+> -- 
+> 2.32.0
+> 
+> 
 
-With that middle line in red.
-
-Question is: is this actually an error? If not, maybe it shouldn't be
-printed as a KERN_ERR. And if it's printed as a KERN_INFO, maybe it
-should only do so when CONFIG_NVME_VERBOSE_ERRORS=y? Or do you think
-there is actually some other diagnostic value in having this print
-always?
-
-Using a Samsung SSD 970 EVO Plus 2TB, firmware version 2B2QEXM7, in case
-that's useful info.
-
-I also noticed a ~2 second boot delay on 5.18-rc1:
-
-[    0.917631] pstore: Using crash dump compression: deflate
-[    0.917807] Key type encrypted registered
-[    0.951840] ACPI: battery: Slot [BAT0] (battery present)
-[    3.146765] nvme nvme0: Shutdown timeout set to 8 seconds
-[    3.146918] nvme0: Identify(0x6), Invalid Field in Command (sct 0x0 / sc 0x2) MORE
-[    3.188852] nvme nvme0: 16/0/0 default/read/poll queues
-[    3.198163]  nvme0n1: p1 p2
-[    3.199554] Freeing unused kernel image (initmem) memory: 12952K
-
-I haven't looked into it much, but I assume it's also NVMe related? Or
-maybe the vconsole is just initializing faster so I see text where
-before I didn't. Not sure.
-
-Regards,
-Jason
+-- 
+epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+     -- frykten for herren er opphav til kunnskap --

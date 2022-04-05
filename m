@@ -2,48 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FE24F2AB4
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF704F2DFD
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244184AbiDEJJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34734 "EHLO
+        id S244243AbiDEJJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:09:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239518AbiDEIUM (ORCPT
+        with ESMTP id S239523AbiDEIUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:20:12 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87530E8E;
-        Tue,  5 Apr 2022 01:15:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68152EB9;
+        Tue,  5 Apr 2022 01:15:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40F4EB81B90;
-        Tue,  5 Apr 2022 08:15:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FC83C385A1;
-        Tue,  5 Apr 2022 08:15:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 278DDB81B92;
+        Tue,  5 Apr 2022 08:15:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67C3BC385A0;
+        Tue,  5 Apr 2022 08:15:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146505;
-        bh=PIt3LItMcm9I/B27+MH1ot3tWgjOcbN9tmyl/YHXUp0=;
+        s=korg; t=1649146507;
+        bh=+ZIW8t4x0ThwpjfSahCA2lfR+DiLR6YdOj+9nIWr+Hs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z3OY9A+Sr8Macqm8tsJ3ndrcv2ytaYQ7ad2g6D86T0dIjagIvFjYMu3T97COsYUjb
-         r3NT7lV5g/y3dQD7OuV0RvNqKvDoDtkXC+A2Hf8q+brHJTlXcnI9DJysKGDtHRUy/Y
-         pKA4PuFwGZ7fFyL9+OabV/pcuoxtIq7xEiTHOXgg=
+        b=01IrfS9HBh6obgO7d3C+95ltjPVtF/RZ36g2I8PMLAxCuCAn1n7mNecZHfokygMBE
+         HELzv9LWjEDnaE7NuwpG0ejNhwkVNq+Aaxp7/eTKs6obxPAGPQ6yVARHW+gwFg87eG
+         n6ujp7vEf3aRpiW0HHyICHdMNh1iSgfu3BSW2Wlc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0787/1126] perf test arm64: Test unwinding using fame-pointer (fp) mode
-Date:   Tue,  5 Apr 2022 09:25:34 +0200
-Message-Id: <20220405070430.674767402@linuxfoundation.org>
+        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>,
+        Sasha Levin <sashal@kernel.org>,
+        syzbot+46f5c25af73eb8330eb6@syzkaller.appspotmail.com
+Subject: [PATCH 5.17 0788/1126] jfs: fix divide error in dbNextAG
+Date:   Tue,  5 Apr 2022 09:25:35 +0200
+Message-Id: <20220405070430.703717287@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -61,130 +56,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: German Gomez <german.gomez@arm.com>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-[ Upstream commit cd6382d82752737e43ef3617bb9e72913d2b1d47 ]
+[ Upstream commit 2cc7cc01c15f57d056318c33705647f87dcd4aab ]
 
-Add a shell script to check that the call-graphs generated using frame
-pointers (--call-graph fp) are complete and not missing leaf functions:
+Syzbot reported divide error in dbNextAG(). The problem was in missing
+validation check for malicious image.
 
-  | $ perf test 88 -v
-  |  88: Check Arm64 callgraphs are complete in fp mode                  :
-  | --- start ---
-  | test child forked, pid 8734
-  |  + Compiling test program (/tmp/test_program.Cz3yL)...
-  |  + Recording (PID=8749)...
-  |  + Stopping perf-record...
-  | test_program.Cz
-  |                  728 leaf
-  |                  753 parent
-  |                  76c main
-  | test child finished with 0
-  | ---- end ----
-  | Check Arm SPE callgraphs are complete in fp mode: Ok
+Syzbot crafted an image with bmp->db_numag equal to 0. There wasn't any
+validation checks, but dbNextAG() blindly use bmp->db_numag in divide
+expression
 
-It's supposed to work with both unwinders:
+Fix it by validating bmp->db_numag in dbMount() and return an error if
+image is malicious
 
-  | $ make                # for libunwind (default)
-  | $ make NO_LIBUNWIND=1 # for libdw
-
-Tester notes:
-
-Ran it on N1SDP and it passes, and it fails if b9f6fbb3b2c29736 ("perf
-arm64: Inject missing frames when using 'perf record --call-graph=fp'")
-isn't applied.
-
-Fixes: b9f6fbb3b2c29736 ("perf arm64: Inject missing frames when using 'perf record --call-graph=fp'")
-Suggested-by: Jiri Olsa <jolsa@kernel.org>
-Reviewed-by: James Clark <james.clark@arm.com>
-Tested-by: James Clark <james.clark@arm.com>
-Signed-off-by: German Gomez <german.gomez@arm.com>
-Cc: Alexandre Truong <alexandre.truong@arm.com>
-Cc: Leo Yan <leo.yan@linaro.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Link: https://lore.kernel.org/r/20220316172015.98000-1-german.gomez@arm.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Reported-and-tested-by: syzbot+46f5c25af73eb8330eb6@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Dave Kleikamp <dave.kleikamp@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../perf/tests/shell/test_arm_callgraph_fp.sh | 68 +++++++++++++++++++
- 1 file changed, 68 insertions(+)
- create mode 100755 tools/perf/tests/shell/test_arm_callgraph_fp.sh
+ fs/jfs/jfs_dmap.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/tools/perf/tests/shell/test_arm_callgraph_fp.sh b/tools/perf/tests/shell/test_arm_callgraph_fp.sh
-new file mode 100755
-index 000000000000..6ffbb27afaba
---- /dev/null
-+++ b/tools/perf/tests/shell/test_arm_callgraph_fp.sh
-@@ -0,0 +1,68 @@
-+#!/bin/sh
-+# Check Arm64 callgraphs are complete in fp mode
-+# SPDX-License-Identifier: GPL-2.0
+diff --git a/fs/jfs/jfs_dmap.c b/fs/jfs/jfs_dmap.c
+index 91f4ec93dab1..d8502f4989d9 100644
+--- a/fs/jfs/jfs_dmap.c
++++ b/fs/jfs/jfs_dmap.c
+@@ -148,6 +148,7 @@ static const s8 budtab[256] = {
+  *	0	- success
+  *	-ENOMEM	- insufficient memory
+  *	-EIO	- i/o error
++ *	-EINVAL - wrong bmap data
+  */
+ int dbMount(struct inode *ipbmap)
+ {
+@@ -179,6 +180,12 @@ int dbMount(struct inode *ipbmap)
+ 	bmp->db_nfree = le64_to_cpu(dbmp_le->dn_nfree);
+ 	bmp->db_l2nbperpage = le32_to_cpu(dbmp_le->dn_l2nbperpage);
+ 	bmp->db_numag = le32_to_cpu(dbmp_le->dn_numag);
++	if (!bmp->db_numag) {
++		release_metapage(mp);
++		kfree(bmp);
++		return -EINVAL;
++	}
 +
-+lscpu | grep -q "aarch64" || exit 2
-+
-+if ! [ -x "$(command -v cc)" ]; then
-+	echo "failed: no compiler, install gcc"
-+	exit 2
-+fi
-+
-+PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
-+TEST_PROGRAM_SOURCE=$(mktemp /tmp/test_program.XXXXX.c)
-+TEST_PROGRAM=$(mktemp /tmp/test_program.XXXXX)
-+
-+cleanup_files()
-+{
-+	rm -f $PERF_DATA
-+	rm -f $TEST_PROGRAM_SOURCE
-+	rm -f $TEST_PROGRAM
-+}
-+
-+trap cleanup_files exit term int
-+
-+cat << EOF > $TEST_PROGRAM_SOURCE
-+int a = 0;
-+void leaf(void) {
-+  for (;;)
-+    a += a;
-+}
-+void parent(void) {
-+  leaf();
-+}
-+int main(void) {
-+  parent();
-+  return 0;
-+}
-+EOF
-+
-+echo " + Compiling test program ($TEST_PROGRAM)..."
-+
-+CFLAGS="-g -O0 -fno-inline -fno-omit-frame-pointer"
-+cc $CFLAGS $TEST_PROGRAM_SOURCE -o $TEST_PROGRAM || exit 1
-+
-+# Add a 1 second delay to skip samples that are not in the leaf() function
-+perf record -o $PERF_DATA --call-graph fp -e cycles//u -D 1000 -- $TEST_PROGRAM 2> /dev/null &
-+PID=$!
-+
-+echo " + Recording (PID=$PID)..."
-+sleep 2
-+echo " + Stopping perf-record..."
-+
-+kill $PID
-+wait $PID
-+
-+# expected perf-script output:
-+#
-+# program
-+# 	728 leaf
-+# 	753 parent
-+# 	76c main
-+# ...
-+
-+perf script -i $PERF_DATA -F comm,ip,sym | head -n4
-+perf script -i $PERF_DATA -F comm,ip,sym | head -n4 | \
-+	awk '{ if ($2 != "") sym[i++] = $2 } END { if (sym[0] != "leaf" ||
-+						       sym[1] != "parent" ||
-+						       sym[2] != "main") exit 1 }'
+ 	bmp->db_maxlevel = le32_to_cpu(dbmp_le->dn_maxlevel);
+ 	bmp->db_maxag = le32_to_cpu(dbmp_le->dn_maxag);
+ 	bmp->db_agpref = le32_to_cpu(dbmp_le->dn_agpref);
 -- 
 2.34.1
 

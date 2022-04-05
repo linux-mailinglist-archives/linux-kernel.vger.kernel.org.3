@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFAEC4F433E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:57:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E2A44F3F7D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352210AbiDEOBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55266 "EHLO
+        id S1354432AbiDEUDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347989AbiDEJ3A (ORCPT
+        with ESMTP id S242193AbiDEKcm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:29:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4E6DFFB1;
-        Tue,  5 Apr 2022 02:16:01 -0700 (PDT)
+        Tue, 5 Apr 2022 06:32:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EF8DE919;
+        Tue,  5 Apr 2022 03:18:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3BA73B81B14;
-        Tue,  5 Apr 2022 09:16:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84A48C385A2;
-        Tue,  5 Apr 2022 09:15:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E2D96176C;
+        Tue,  5 Apr 2022 10:18:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88835C385A1;
+        Tue,  5 Apr 2022 10:18:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150158;
-        bh=YyaqKt4emR4QrHkLMVt4S1mW679qGg2lM39pkxvrAYY=;
+        s=korg; t=1649153923;
+        bh=SHgMIsg7sWxKjDxzCiPkM4eU2XEZLf2akJirYWO4Tm4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n0CMHKrPpyjVeD2FLMXVjvr89shnEb5OMWXfohD+xpCTnlw6au8qSDZIIW/13WsHC
-         XGG2w5ggrApZIh9NQv8gs5QwolJ0CfUsUosx5F0P/XU7OtnpvO92k5nTbF01kYzpMh
-         2XomJjLnx4+EKQRcEkzm4Xj1w/bM4NfqRWhUY67Q=
+        b=Gy7Tuc8vJl7RXwkXtiuc5Lo6csfFW1SHYXcy/4OybqOJyTNDnajoKPfevFwArtrKK
+         iyRr5Pe39X9icOLGMIyVAoUEaUOjeDjEyeNKyHKH/vq722JkE9MGyR+sfSRCqLBLUS
+         5SQqzQy56RYIO1p4XoGj8onT/jBgaPtseyNkSfRI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 5.16 0976/1017] libbpf: Define BTF_KIND_* constants in btf.h to avoid compilation errors
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 395/599] serial: 8250: Fix race condition in RTS-after-send handling
 Date:   Tue,  5 Apr 2022 09:31:29 +0200
-Message-Id: <20220405070423.175749554@linuxfoundation.org>
+Message-Id: <20220405070310.585238979@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,69 +55,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Toke Høiland-Jørgensen <toke@redhat.com>
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-commit eaa266d83a3730a15de2ceebcc89e8f6290e8cf6 upstream.
+[ Upstream commit dedab69fd650ea74710b2e626e63fd35584ef773 ]
 
-The btf.h header included with libbpf contains inline helper functions to
-check for various BTF kinds. These helpers directly reference the
-BTF_KIND_* constants defined in the kernel header, and because the header
-file is included in user applications, this happens in the user application
-compile units.
+Set em485->active_timer = NULL isn't always enough to take out the stop
+timer. While there is a check that it acts in the right state (i.e.
+waiting for RTS-after-send to pass after sending some chars) but the
+following might happen:
 
-This presents a problem if a user application is compiled on a system with
-older kernel headers because the constants are not available. To avoid
-this, add #defines of the constants directly in btf.h before using them.
+ - CPU1: some chars send, shifter becomes empty, stop tx timer armed
+ - CPU0: more chars send before RTS-after-send expired
+ - CPU0: shifter empty irq, port lock taken
+ - CPU1: tx timer triggers, waits for port lock
+ - CPU0: em485->active_timer = &em485->stop_tx_timer, hrtimer_start(),
+   releases lock()
+ - CPU1: get lock, see em485->active_timer == &em485->stop_tx_timer,
+   tear down RTS too early
 
-Since the kernel header moved to an enum for BTF_KIND_*, the #defines can
-shadow the enum values without any errors, so we only need #ifndef guards
-for the constants that predates the conversion to enum. We group these so
-there's only one guard for groups of values that were added together.
+This fix bases on research done by Steffen Trumtrar.
 
-  [0] Closes: https://github.com/libbpf/libbpf/issues/436
-
-Fixes: 223f903e9c83 ("bpf: Rename BTF_KIND_TAG to BTF_KIND_DECL_TAG")
-Fixes: 5b84bd10363e ("libbpf: Add support for BTF_KIND_TAG")
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Acked-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Link: https://lore.kernel.org/bpf/20220118141327.34231-1-toke@redhat.com
+Fixes: b86f86e8e7c5 ("serial: 8250: fix potential deadlock in rs485-mode")
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Link: https://lore.kernel.org/r/20220215160236.344236-1-u.kleine-koenig@pengutronix.de
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/btf.h |   22 +++++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
+ drivers/tty/serial/8250/8250_port.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -313,8 +313,28 @@ btf_dump__dump_type_data(struct btf_dump
- 			 const struct btf_dump_type_data_opts *opts);
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index 7c07ebb37b1b..1733f03a7da7 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -1620,6 +1620,18 @@ static inline void start_tx_rs485(struct uart_port *port)
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+ 	struct uart_8250_em485 *em485 = up->em485;
  
- /*
-- * A set of helpers for easier BTF types handling
-+ * A set of helpers for easier BTF types handling.
-+ *
-+ * The inline functions below rely on constants from the kernel headers which
-+ * may not be available for applications including this header file. To avoid
-+ * compilation errors, we define all the constants here that were added after
-+ * the initial introduction of the BTF_KIND* constants.
-  */
-+#ifndef BTF_KIND_FUNC
-+#define BTF_KIND_FUNC		12	/* Function	*/
-+#define BTF_KIND_FUNC_PROTO	13	/* Function Proto	*/
-+#endif
-+#ifndef BTF_KIND_VAR
-+#define BTF_KIND_VAR		14	/* Variable	*/
-+#define BTF_KIND_DATASEC	15	/* Section	*/
-+#endif
-+#ifndef BTF_KIND_FLOAT
-+#define BTF_KIND_FLOAT		16	/* Floating point	*/
-+#endif
-+/* The kernel header switched to enums, so these two were never #defined */
-+#define BTF_KIND_DECL_TAG	17	/* Decl Tag */
-+#define BTF_KIND_TYPE_TAG	18	/* Type Tag */
++	/*
++	 * While serial8250_em485_handle_stop_tx() is a noop if
++	 * em485->active_timer != &em485->stop_tx_timer, it might happen that
++	 * the timer is still armed and triggers only after the current bunch of
++	 * chars is send and em485->active_timer == &em485->stop_tx_timer again.
++	 * So cancel the timer. There is still a theoretical race condition if
++	 * the timer is already running and only comes around to check for
++	 * em485->active_timer when &em485->stop_tx_timer is armed again.
++	 */
++	if (em485->active_timer == &em485->stop_tx_timer)
++		hrtimer_try_to_cancel(&em485->stop_tx_timer);
 +
- static inline __u16 btf_kind(const struct btf_type *t)
- {
- 	return BTF_INFO_KIND(t->info);
+ 	em485->active_timer = NULL;
+ 
+ 	if (em485->tx_stopped) {
+-- 
+2.34.1
+
 
 

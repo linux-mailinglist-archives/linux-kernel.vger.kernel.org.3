@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3206A4F25F6
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC39F4F25FB
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232454AbiDEHxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
+        id S230013AbiDEHxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233385AbiDEHrp (ORCPT
+        with ESMTP id S233469AbiDEHrw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:47:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4620692D03;
-        Tue,  5 Apr 2022 00:44:04 -0700 (PDT)
+        Tue, 5 Apr 2022 03:47:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AEBCA144F;
+        Tue,  5 Apr 2022 00:44:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A1506616BF;
-        Tue,  5 Apr 2022 07:44:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABD60C340EE;
-        Tue,  5 Apr 2022 07:44:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 11A91B81B7F;
+        Tue,  5 Apr 2022 07:44:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CFEDC340EE;
+        Tue,  5 Apr 2022 07:44:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144643;
-        bh=SFZhGojlTJsFtEcOoR6TsDZqCuHRKYKgaXsoBWxvPMc=;
+        s=korg; t=1649144648;
+        bh=YhiSsJ3TnEyST2jyx9qSBcFa+5qpcWGpbNlsUtKc+X0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vhrdB62zTARGu1HtMObJHJTKA2hs1/jS5yMjP2o1oYqTawGPL9sWSv/u6wgQAewNz
-         9oA41j3vFoAfVqbGej+gXNeVUBdbEZ4XIwLR/Q5htdjI3DClpAl5KRcCxGDBfTtWo0
-         n8B7poUQmGrj9T1VyeHW6aPeJlr7NMsYUAhwW7uI=
+        b=LDMxa+iIF8+R3g88MEzbxyf+HbnK4J/UwiNEAUhAW3zr32lRmYIBfHHUjz1t+8AHW
+         xY+MIcMYilrAQiK0GD7tAHhVgsI9wHJqzLREXB8Em8nhrQUAZFyJzeEjMEcgk2TqA/
+         hRrYsD+bA1g/JIFvS9ZmJ/0/2duXawejawqpkc2o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.17 0118/1126] can: isotp: sanitize CAN ID checks in isotp_bind()
-Date:   Tue,  5 Apr 2022 09:14:25 +0200
-Message-Id: <20220405070411.037293289@linuxfoundation.org>
+        stable@vger.kernel.org, David Engraf <david.engraf@sysgo.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.17 0120/1126] arm64: signal: nofpsimd: Do not allocate fp/simd context when not available
+Date:   Tue,  5 Apr 2022 09:14:27 +0200
+Message-Id: <20220405070411.095879999@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,104 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
+From: David Engraf <david.engraf@sysgo.com>
 
-commit 3ea566422cbde9610c2734980d1286ab681bb40e upstream.
+commit 0a32c88ddb9af30e8a16d41d7b9b824c27d29459 upstream.
 
-Syzbot created an environment that lead to a state machine status that
-can not be reached with a compliant CAN ID address configuration.
-The provided address information consisted of CAN ID 0x6000001 and 0xC28001
-which both boil down to 11 bit CAN IDs 0x001 in sending and receiving.
+Commit 6d502b6ba1b2 ("arm64: signal: nofpsimd: Handle fp/simd context for
+signal frames") introduced saving the fp/simd context for signal handling
+only when support is available. But setup_sigframe_layout() always
+reserves memory for fp/simd context. The additional memory is not touched
+because preserve_fpsimd_context() is not called and thus the magic is
+invalid.
 
-Sanitize the SFF/EFF CAN ID values before performing the address checks.
+This may lead to an error when parse_user_sigframe() checks the fp/simd
+area and does not find a valid magic number.
 
-Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
-Link: https://lore.kernel.org/all/20220316164258.54155-1-socketcan@hartkopp.net
-Reported-by: syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: David Engraf <david.engraf@sysgo.com>
+Reviwed-by: Mark Brown <broonie@kernel.org>
+Fixes: 6d502b6ba1b267b3 ("arm64: signal: nofpsimd: Handle fp/simd context for signal frames")
+Cc: <stable@vger.kernel.org> # 5.6.x
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Link: https://lore.kernel.org/r/20220225104008.820289-1-david.engraf@sysgo.com
+Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/can/isotp.c |   38 ++++++++++++++++++++------------------
- 1 file changed, 20 insertions(+), 18 deletions(-)
+ arch/arm64/kernel/signal.c |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -1104,6 +1104,7 @@ static int isotp_bind(struct socket *soc
- 	struct net *net = sock_net(sk);
- 	int ifindex;
- 	struct net_device *dev;
-+	canid_t tx_id, rx_id;
- 	int err = 0;
- 	int notify_enetdown = 0;
- 	int do_rx_reg = 1;
-@@ -1111,8 +1112,18 @@ static int isotp_bind(struct socket *soc
- 	if (len < ISOTP_MIN_NAMELEN)
- 		return -EINVAL;
+--- a/arch/arm64/kernel/signal.c
++++ b/arch/arm64/kernel/signal.c
+@@ -577,10 +577,12 @@ static int setup_sigframe_layout(struct
+ {
+ 	int err;
  
--	if (addr->can_addr.tp.tx_id & (CAN_ERR_FLAG | CAN_RTR_FLAG))
--		return -EADDRNOTAVAIL;
-+	/* sanitize tx/rx CAN identifiers */
-+	tx_id = addr->can_addr.tp.tx_id;
-+	if (tx_id & CAN_EFF_FLAG)
-+		tx_id &= (CAN_EFF_FLAG | CAN_EFF_MASK);
-+	else
-+		tx_id &= CAN_SFF_MASK;
-+
-+	rx_id = addr->can_addr.tp.rx_id;
-+	if (rx_id & CAN_EFF_FLAG)
-+		rx_id &= (CAN_EFF_FLAG | CAN_EFF_MASK);
-+	else
-+		rx_id &= CAN_SFF_MASK;
+-	err = sigframe_alloc(user, &user->fpsimd_offset,
+-			     sizeof(struct fpsimd_context));
+-	if (err)
+-		return err;
++	if (system_supports_fpsimd()) {
++		err = sigframe_alloc(user, &user->fpsimd_offset,
++				     sizeof(struct fpsimd_context));
++		if (err)
++			return err;
++	}
  
- 	if (!addr->can_ifindex)
- 		return -ENODEV;
-@@ -1124,21 +1135,13 @@ static int isotp_bind(struct socket *soc
- 		do_rx_reg = 0;
- 
- 	/* do not validate rx address for functional addressing */
--	if (do_rx_reg) {
--		if (addr->can_addr.tp.rx_id == addr->can_addr.tp.tx_id) {
--			err = -EADDRNOTAVAIL;
--			goto out;
--		}
--
--		if (addr->can_addr.tp.rx_id & (CAN_ERR_FLAG | CAN_RTR_FLAG)) {
--			err = -EADDRNOTAVAIL;
--			goto out;
--		}
-+	if (do_rx_reg && rx_id == tx_id) {
-+		err = -EADDRNOTAVAIL;
-+		goto out;
- 	}
- 
- 	if (so->bound && addr->can_ifindex == so->ifindex &&
--	    addr->can_addr.tp.rx_id == so->rxid &&
--	    addr->can_addr.tp.tx_id == so->txid)
-+	    rx_id == so->rxid && tx_id == so->txid)
- 		goto out;
- 
- 	dev = dev_get_by_index(net, addr->can_ifindex);
-@@ -1162,8 +1165,7 @@ static int isotp_bind(struct socket *soc
- 	ifindex = dev->ifindex;
- 
- 	if (do_rx_reg)
--		can_rx_register(net, dev, addr->can_addr.tp.rx_id,
--				SINGLE_MASK(addr->can_addr.tp.rx_id),
-+		can_rx_register(net, dev, rx_id, SINGLE_MASK(rx_id),
- 				isotp_rcv, sk, "isotp", sk);
- 
- 	dev_put(dev);
-@@ -1183,8 +1185,8 @@ static int isotp_bind(struct socket *soc
- 
- 	/* switch to new settings */
- 	so->ifindex = ifindex;
--	so->rxid = addr->can_addr.tp.rx_id;
--	so->txid = addr->can_addr.tp.tx_id;
-+	so->rxid = rx_id;
-+	so->txid = tx_id;
- 	so->bound = 1;
- 
- out:
+ 	/* fault information, if valid */
+ 	if (add_all || current->thread.fault_code) {
 
 

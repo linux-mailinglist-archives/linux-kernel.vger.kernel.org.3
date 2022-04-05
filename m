@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5694F4F4C56
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:14:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 788674F49E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1578144AbiDEXSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:18:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
+        id S1452059AbiDEWbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349195AbiDEJt0 (ORCPT
+        with ESMTP id S1355323AbiDEKTV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C008D22298;
-        Tue,  5 Apr 2022 02:42:32 -0700 (PDT)
+        Tue, 5 Apr 2022 06:19:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B26167C8;
+        Tue,  5 Apr 2022 03:04:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B5D6B81C19;
-        Tue,  5 Apr 2022 09:42:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C63F7C385A2;
-        Tue,  5 Apr 2022 09:42:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE41261673;
+        Tue,  5 Apr 2022 10:04:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1A38C385A2;
+        Tue,  5 Apr 2022 10:04:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151750;
-        bh=qQkG5DprhOohE/vv7FqAicjZ5OSnoUow72LwglFkNNY=;
+        s=korg; t=1649153084;
+        bh=rc1NwCWd8u+M5IBIMATcIr0JQ05JfKrMq+26TiR0vLM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0Dc4Ft3UeDWFQS6/Xrj5FpgY37SKUhDEE7y6c42DLkBNvNurmoyLzgG9UTRy0RDO9
-         0i/8SMbt6brF/1msNO1+W4o0mzoozLiwZT4rGeYCY6fyR++n2Uaz987yQBXGz21OYK
-         OECSiL8O/17DwOFwgxrlNYh7o1XZLtqBGGjnTRJY=
+        b=sL2QfIIU0gUIN7edkwzKK2cjaiiUMQPHPqL4ptzMCLY0y1guCaaghE674MI1A2d0q
+         z0tGb8ImYBVxEeY8MXMKDPta/g2Io4aL5LT9c6MxTjuocalR9ZV0zH1lWaYJFZa2U1
+         lCwVKJ0BgKEaRyebdSPklmtl0r++RZ+0HSlvhrXY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 527/913] platform/x86: huawei-wmi: check the return value of device_create_file()
-Date:   Tue,  5 Apr 2022 09:26:29 +0200
-Message-Id: <20220405070355.648455368@linuxfoundation.org>
+        stable@vger.kernel.org, Jani Nikula <jani.nikula@intel.com>,
+        Shawn C Lee <shawn.c.lee@intel.com>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        Cooper Chiou <cooper.chiou@intel.com>
+Subject: [PATCH 5.10 096/599] drm/edid: check basic audio support on CEA extension block
+Date:   Tue,  5 Apr 2022 09:26:30 +0200
+Message-Id: <20220405070301.688093566@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jia-Ju Bai <baijiaju1990@gmail.com>
+From: Cooper Chiou <cooper.chiou@intel.com>
 
-[ Upstream commit c91a5b1c221a58d008485cf7d02ccce73108b119 ]
+commit 5662abf6e21338be6d085d6375d3732ac6147fd2 upstream.
 
-The function device_create_file() in huawei_wmi_battery_add() can fail,
-so its return value should be checked.
+Tag code stored in bit7:5 for CTA block byte[3] is not the same as
+CEA extension block definition. Only check CEA block has
+basic audio support.
 
-Fixes: 355a070b09ab ("platform/x86: huawei-wmi: Add battery charging thresholds")
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
-Link: https://lore.kernel.org/r/20220303022421.313-1-baijiaju1990@gmail.com
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+v3: update commit message.
+
+Cc: stable@vger.kernel.org
+Cc: Jani Nikula <jani.nikula@intel.com>
+Cc: Shawn C Lee <shawn.c.lee@intel.com>
+Cc: intel-gfx <intel-gfx@lists.freedesktop.org>
+Signed-off-by: Cooper Chiou <cooper.chiou@intel.com>
+Signed-off-by: Lee Shawn C <shawn.c.lee@intel.com>
+Fixes: e28ad544f462 ("drm/edid: parse CEA blocks embedded in DisplayID")
+Reviewed-by: Jani Nikula <jani.nikula@intel.com>
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220324061218.32739-1-shawn.c.lee@intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/platform/x86/huawei-wmi.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/drm_edid.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/platform/x86/huawei-wmi.c b/drivers/platform/x86/huawei-wmi.c
-index a2d846c4a7ee..eac3e6b4ea11 100644
---- a/drivers/platform/x86/huawei-wmi.c
-+++ b/drivers/platform/x86/huawei-wmi.c
-@@ -470,10 +470,17 @@ static DEVICE_ATTR_RW(charge_control_thresholds);
+--- a/drivers/gpu/drm/drm_edid.c
++++ b/drivers/gpu/drm/drm_edid.c
+@@ -4806,7 +4806,8 @@ bool drm_detect_monitor_audio(struct edi
+ 	if (!edid_ext)
+ 		goto end;
  
- static int huawei_wmi_battery_add(struct power_supply *battery)
- {
--	device_create_file(&battery->dev, &dev_attr_charge_control_start_threshold);
--	device_create_file(&battery->dev, &dev_attr_charge_control_end_threshold);
-+	int err = 0;
+-	has_audio = ((edid_ext[3] & EDID_BASIC_AUDIO) != 0);
++	has_audio = (edid_ext[0] == CEA_EXT &&
++		    (edid_ext[3] & EDID_BASIC_AUDIO) != 0);
  
--	return 0;
-+	err = device_create_file(&battery->dev, &dev_attr_charge_control_start_threshold);
-+	if (err)
-+		return err;
-+
-+	err = device_create_file(&battery->dev, &dev_attr_charge_control_end_threshold);
-+	if (err)
-+		device_remove_file(&battery->dev, &dev_attr_charge_control_start_threshold);
-+
-+	return err;
- }
- 
- static int huawei_wmi_battery_remove(struct power_supply *battery)
--- 
-2.34.1
-
+ 	if (has_audio) {
+ 		DRM_DEBUG_KMS("Monitor has basic audio support\n");
 
 

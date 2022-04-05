@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12874F2FA9
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F3D4F346E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352957AbiDEKFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
+        id S239760AbiDEKe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239125AbiDEIbL (ORCPT
+        with ESMTP id S240915AbiDEIci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:31:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19740496B3;
-        Tue,  5 Apr 2022 01:23:10 -0700 (PDT)
+        Tue, 5 Apr 2022 04:32:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D00D8D688;
+        Tue,  5 Apr 2022 01:25:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5828CB81BD6;
-        Tue,  5 Apr 2022 08:23:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C48E5C385B4;
-        Tue,  5 Apr 2022 08:23:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A8CD60FFC;
+        Tue,  5 Apr 2022 08:25:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68B84C385A1;
+        Tue,  5 Apr 2022 08:25:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146988;
-        bh=Iq2ZvXe9ADabMGnOc1m2KwnYvzAf0dQnMn6C1TUJ2QA=;
+        s=korg; t=1649147118;
+        bh=Ytr58gnACPtIgX8wj6A+Rgu50Y/LfhHdm8jAbP6A5yc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jEY5HTEuUy52xcqnIf3YhC79PsF4NV9Ez311b1I8w7cw54TDTQpx4V2LMLcM7NTSW
-         djcUOZXEdhPSFzlrPnS5xcuq/JL5SNG7DDm/tb8Hlr4+W5/eeUAqb7LDXqp0aKIGcs
-         TVpkDAB+9/iAfYW15JKFCoAjZvL3p+MXHc/58NbM=
+        b=bHBnmKL/AySjloMP3Y4tECs50M9+efQFOXPGXndCiYCGmjr3AC9MjDIhGcHLXsFJU
+         XdT9CJ6O1HK0F2fMPQ42pw0LvJpZnrRP81uqMgWXir+tyBlPJyd0QBN+1+fLFmijDV
+         7x9T96BPSh24QOcUrHIl1OAwLOf1y95VkvEQi5ZI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.17 0959/1126] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast hypercall
-Date:   Tue,  5 Apr 2022 09:28:26 +0200
-Message-Id: <20220405070435.653745066@linuxfoundation.org>
+        stable@vger.kernel.org, Chen Jingwen <chenjingwen6@huawei.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.17 0960/1126] powerpc/kasan: Fix early region not updated correctly
+Date:   Tue,  5 Apr 2022 09:28:27 +0200
+Message-Id: <20220405070435.684837161@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -54,127 +55,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: Chen Jingwen <chenjingwen6@huawei.com>
 
-commit 47d3e5cdfe607ec6883eb0faa7acf05b8cb3f92a upstream.
+commit dd75080aa8409ce10d50fb58981c6b59bf8707d3 upstream.
 
-It has been proven on practice that at least Windows Server 2019 tries
-using HVCALL_SEND_IPI_EX in 'XMM fast' mode when it has more than 64 vCPUs
-and it needs to send an IPI to a vCPU > 63. Similarly to other XMM Fast
-hypercalls (HVCALL_FLUSH_VIRTUAL_ADDRESS_{LIST,SPACE}{,_EX}), this
-information is missing in TLFS as of 6.0b. Currently, KVM returns an error
-(HV_STATUS_INVALID_HYPERCALL_INPUT) and Windows crashes.
+The shadow's page table is not updated when PTE_RPN_SHIFT is 24
+and PAGE_SHIFT is 12. It not only causes false positives but
+also false negative as shown the following text.
 
-Note, HVCALL_SEND_IPI is a 'standard' fast hypercall (not 'XMM fast') as
-all its parameters fit into RDX:R8 and this is handled by KVM correctly.
+Fix it by bringing the logic of kasan_early_shadow_page_entry here.
 
-Cc: stable@vger.kernel.org # 5.14.x: 3244867af8c0: KVM: x86: Ignore sparse banks size for an "all CPUs", non-sparse IPI req
-Cc: stable@vger.kernel.org # 5.14.x
-Fixes: d8f5537a8816 ("KVM: hyper-v: Advertise support for fast XMM hypercalls")
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Message-Id: <20220222154642.684285-5-vkuznets@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+1. False Positive:
+==================================================================
+BUG: KASAN: vmalloc-out-of-bounds in pcpu_alloc+0x508/0xa50
+Write of size 16 at addr f57f3be0 by task swapper/0/1
+
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.15.0-12267-gdebe436e77c7 #1
+Call Trace:
+[c80d1c20] [c07fe7b8] dump_stack_lvl+0x4c/0x6c (unreliable)
+[c80d1c40] [c02ff668] print_address_description.constprop.0+0x88/0x300
+[c80d1c70] [c02ff45c] kasan_report+0x1ec/0x200
+[c80d1cb0] [c0300b20] kasan_check_range+0x160/0x2f0
+[c80d1cc0] [c03018a4] memset+0x34/0x90
+[c80d1ce0] [c0280108] pcpu_alloc+0x508/0xa50
+[c80d1d40] [c02fd7bc] __kmem_cache_create+0xfc/0x570
+[c80d1d70] [c0283d64] kmem_cache_create_usercopy+0x274/0x3e0
+[c80d1db0] [c2036580] init_sd+0xc4/0x1d0
+[c80d1de0] [c00044a0] do_one_initcall+0xc0/0x33c
+[c80d1eb0] [c2001624] kernel_init_freeable+0x2c8/0x384
+[c80d1ef0] [c0004b14] kernel_init+0x24/0x170
+[c80d1f10] [c001b26c] ret_from_kernel_thread+0x5c/0x64
+
+Memory state around the buggy address:
+ f57f3a80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ f57f3b00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>f57f3b80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+                                               ^
+ f57f3c00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ f57f3c80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+==================================================================
+
+2. False Negative (with KASAN tests):
+==================================================================
+Before fix:
+    ok 45 - kmalloc_double_kzfree
+    # vmalloc_oob: EXPECTATION FAILED at lib/test_kasan.c:1039
+    KASAN failure expected in "((volatile char *)area)[3100]", but none occurred
+    not ok 46 - vmalloc_oob
+    not ok 1 - kasan
+
+==================================================================
+After fix:
+    ok 1 - kasan
+
+Fixes: cbd18991e24fe ("powerpc/mm: Fix an Oops in kasan_mmu_init()")
+Cc: stable@vger.kernel.org # 5.4.x
+Signed-off-by: Chen Jingwen <chenjingwen6@huawei.com>
+Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20211229035226.59159-1-chenjingwen6@huawei.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/hyperv.c |   52 ++++++++++++++++++++++++++++++++------------------
- 1 file changed, 34 insertions(+), 18 deletions(-)
+ arch/powerpc/mm/kasan/kasan_init_32.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -1890,6 +1890,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vc
- 	int sparse_banks_len;
- 	u32 vector;
- 	bool all_cpus;
-+	int i;
+--- a/arch/powerpc/mm/kasan/kasan_init_32.c
++++ b/arch/powerpc/mm/kasan/kasan_init_32.c
+@@ -83,13 +83,12 @@ void __init
+ kasan_update_early_region(unsigned long k_start, unsigned long k_end, pte_t pte)
+ {
+ 	unsigned long k_cur;
+-	phys_addr_t pa = __pa(kasan_early_shadow_page);
  
- 	if (hc->code == HVCALL_SEND_IPI) {
- 		if (!hc->fast) {
-@@ -1910,9 +1911,15 @@ static u64 kvm_hv_send_ipi(struct kvm_vc
+ 	for (k_cur = k_start; k_cur != k_end; k_cur += PAGE_SIZE) {
+ 		pmd_t *pmd = pmd_off_k(k_cur);
+ 		pte_t *ptep = pte_offset_kernel(pmd, k_cur);
  
- 		trace_kvm_hv_send_ipi(vector, sparse_banks[0]);
- 	} else {
--		if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
--					    sizeof(send_ipi_ex))))
--			return HV_STATUS_INVALID_HYPERCALL_INPUT;
-+		if (!hc->fast) {
-+			if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi_ex,
-+						    sizeof(send_ipi_ex))))
-+				return HV_STATUS_INVALID_HYPERCALL_INPUT;
-+		} else {
-+			send_ipi_ex.vector = (u32)hc->ingpa;
-+			send_ipi_ex.vp_set.format = hc->outgpa;
-+			send_ipi_ex.vp_set.valid_bank_mask = sse128_lo(hc->xmm[0]);
-+		}
+-		if ((pte_val(*ptep) & PTE_RPN_MASK) != pa)
++		if (pte_page(*ptep) != virt_to_page(lm_alias(kasan_early_shadow_page)))
+ 			continue;
  
- 		trace_kvm_hv_send_ipi_ex(send_ipi_ex.vector,
- 					 send_ipi_ex.vp_set.format,
-@@ -1920,8 +1927,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vc
- 
- 		vector = send_ipi_ex.vector;
- 		valid_bank_mask = send_ipi_ex.vp_set.valid_bank_mask;
--		sparse_banks_len = bitmap_weight(&valid_bank_mask, 64) *
--			sizeof(sparse_banks[0]);
-+		sparse_banks_len = bitmap_weight(&valid_bank_mask, 64);
- 
- 		all_cpus = send_ipi_ex.vp_set.format == HV_GENERIC_SET_ALL;
- 
-@@ -1931,12 +1937,27 @@ static u64 kvm_hv_send_ipi(struct kvm_vc
- 		if (!sparse_banks_len)
- 			goto ret_success;
- 
--		if (kvm_read_guest(kvm,
--				   hc->ingpa + offsetof(struct hv_send_ipi_ex,
--							vp_set.bank_contents),
--				   sparse_banks,
--				   sparse_banks_len))
--			return HV_STATUS_INVALID_HYPERCALL_INPUT;
-+		if (!hc->fast) {
-+			if (kvm_read_guest(kvm,
-+					   hc->ingpa + offsetof(struct hv_send_ipi_ex,
-+								vp_set.bank_contents),
-+					   sparse_banks,
-+					   sparse_banks_len * sizeof(sparse_banks[0])))
-+				return HV_STATUS_INVALID_HYPERCALL_INPUT;
-+		} else {
-+			/*
-+			 * The lower half of XMM0 is already consumed, each XMM holds
-+			 * two sparse banks.
-+			 */
-+			if (sparse_banks_len > (2 * HV_HYPERCALL_MAX_XMM_REGISTERS - 1))
-+				return HV_STATUS_INVALID_HYPERCALL_INPUT;
-+			for (i = 0; i < sparse_banks_len; i++) {
-+				if (i % 2)
-+					sparse_banks[i] = sse128_lo(hc->xmm[(i + 1) / 2]);
-+				else
-+					sparse_banks[i] = sse128_hi(hc->xmm[i / 2]);
-+			}
-+		}
- 	}
- 
- check_and_send_ipi:
-@@ -2098,6 +2119,7 @@ static bool is_xmm_fast_hypercall(struct
- 	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE:
- 	case HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST_EX:
- 	case HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX:
-+	case HVCALL_SEND_IPI_EX:
- 		return true;
- 	}
- 
-@@ -2265,14 +2287,8 @@ int kvm_hv_hypercall(struct kvm_vcpu *vc
- 		ret = kvm_hv_flush_tlb(vcpu, &hc);
- 		break;
- 	case HVCALL_SEND_IPI:
--		if (unlikely(hc.rep)) {
--			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
--			break;
--		}
--		ret = kvm_hv_send_ipi(vcpu, &hc);
--		break;
- 	case HVCALL_SEND_IPI_EX:
--		if (unlikely(hc.fast || hc.rep)) {
-+		if (unlikely(hc.rep)) {
- 			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
- 			break;
- 		}
+ 		__set_pte_at(&init_mm, k_cur, ptep, pte, 0);
 
 

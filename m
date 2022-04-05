@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A174F4398
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E4E4F449E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbiDEPWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39768 "EHLO
+        id S1383333AbiDEMZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346780AbiDEJp2 (ORCPT
+        with ESMTP id S245145AbiDEIyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:45:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A258BCF2;
-        Tue,  5 Apr 2022 02:31:49 -0700 (PDT)
+        Tue, 5 Apr 2022 04:54:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B309810B1;
+        Tue,  5 Apr 2022 01:51:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8161B81CC1;
-        Tue,  5 Apr 2022 09:31:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DECBC385A3;
-        Tue,  5 Apr 2022 09:31:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 51AC161509;
+        Tue,  5 Apr 2022 08:51:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64F19C385A1;
+        Tue,  5 Apr 2022 08:51:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151106;
-        bh=+tmigAPgxOUXyG8vpQNW9jGjOLFsVPcicykoJQBLNEE=;
+        s=korg; t=1649148692;
+        bh=MVxePCla/yh9VomTi1kSVADbmcpNtjfV/ElXGmjyMVY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mZfS9IMco6+3jEsTvD6y9XJbWfRE728c7gRJulZ7NN4nzTf5UukqR2roVBzQRaF01
-         hbJ9w5+X7OmK+zT1lDnKoTpL9JMhL/uuMWMkG1AyE3muTVRjdkOoIRsLnuNUrRCEjo
-         76DPmsRY6XWNKnP+A7uG5rULN2Xyv6z9pVT92oiQ=
+        b=Gbw4hS5ih9KvGLpSA/rLqe6YEbKNusneiDlIL6nVqs3R6VtpJdGe/EzrBP0YLbKO5
+         uxouibBa6+lwcZ8dId5CSxat61bukb/pr5CJ+oJ6b0ZA5qAnDl+xc3SSiMrDRQsrq3
+         kV5q1/E1y5enFCTMoRfZqa6hALxbuVxPML3N067E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 297/913] soc: qcom: ocmem: Fix missing put_device() call in of_get_ocmem
-Date:   Tue,  5 Apr 2022 09:22:39 +0200
-Message-Id: <20220405070348.759773335@linuxfoundation.org>
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0447/1017] ray_cs: Check ioremap return value
+Date:   Tue,  5 Apr 2022 09:22:40 +0200
+Message-Id: <20220405070407.566396878@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 0ff027027e05a866491bbb53494f0e2a61354c85 ]
+[ Upstream commit 7e4760713391ee46dc913194b33ae234389a174e ]
 
-The reference taken by 'of_find_device_by_node()' must be released when
-not needed anymore.
-Add the corresponding 'put_device()' in the error handling path.
+As the possible failure of the ioremap(), the 'local->sram' and other
+two could be NULL.
+Therefore it should be better to check it in order to avoid the later
+dev_dbg.
 
-Fixes: 01f937ffc468 ("soc: qcom: ocmem: don't return NULL in of_get_ocmem")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220107073126.2335-1-linmq006@gmail.com
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20211230022926.1846757-1-jiasheng@iscas.ac.cn
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/qcom/ocmem.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/wireless/ray_cs.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/soc/qcom/ocmem.c b/drivers/soc/qcom/ocmem.c
-index f1875dc31ae2..85f82e195ef8 100644
---- a/drivers/soc/qcom/ocmem.c
-+++ b/drivers/soc/qcom/ocmem.c
-@@ -206,6 +206,7 @@ struct ocmem *of_get_ocmem(struct device *dev)
- 	ocmem = platform_get_drvdata(pdev);
- 	if (!ocmem) {
- 		dev_err(dev, "Cannot get ocmem\n");
-+		put_device(&pdev->dev);
- 		return ERR_PTR(-ENODEV);
- 	}
- 	return ocmem;
+diff --git a/drivers/net/wireless/ray_cs.c b/drivers/net/wireless/ray_cs.c
+index e3a3dc3e45b4..03f0953440b5 100644
+--- a/drivers/net/wireless/ray_cs.c
++++ b/drivers/net/wireless/ray_cs.c
+@@ -382,6 +382,8 @@ static int ray_config(struct pcmcia_device *link)
+ 		goto failed;
+ 	local->sram = ioremap(link->resource[2]->start,
+ 			resource_size(link->resource[2]));
++	if (!local->sram)
++		goto failed;
+ 
+ /*** Set up 16k window for shared memory (receive buffer) ***************/
+ 	link->resource[3]->flags |=
+@@ -396,6 +398,8 @@ static int ray_config(struct pcmcia_device *link)
+ 		goto failed;
+ 	local->rmem = ioremap(link->resource[3]->start,
+ 			resource_size(link->resource[3]));
++	if (!local->rmem)
++		goto failed;
+ 
+ /*** Set up window for attribute memory ***********************************/
+ 	link->resource[4]->flags |=
+@@ -410,6 +414,8 @@ static int ray_config(struct pcmcia_device *link)
+ 		goto failed;
+ 	local->amem = ioremap(link->resource[4]->start,
+ 			resource_size(link->resource[4]));
++	if (!local->amem)
++		goto failed;
+ 
+ 	dev_dbg(&link->dev, "ray_config sram=%p\n", local->sram);
+ 	dev_dbg(&link->dev, "ray_config rmem=%p\n", local->rmem);
 -- 
 2.34.1
 

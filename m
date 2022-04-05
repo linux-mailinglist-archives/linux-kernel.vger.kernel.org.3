@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 613A14F4B64
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC124F4DB4
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574465AbiDEW4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57388 "EHLO
+        id S1582742AbiDEXt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:49:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356106AbiDEKW5 (ORCPT
+        with ESMTP id S1356111AbiDEKW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 06:22:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80B9B53DE;
-        Tue,  5 Apr 2022 03:06:12 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A81B6D0C;
+        Tue,  5 Apr 2022 03:06:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 748B1616E7;
-        Tue,  5 Apr 2022 10:06:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83049C385A2;
-        Tue,  5 Apr 2022 10:06:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DDBD4B81C83;
+        Tue,  5 Apr 2022 10:06:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49B46C385A2;
+        Tue,  5 Apr 2022 10:06:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153171;
-        bh=p0x3iE9iHU+TnN1lV2HCUqC+rnmu1M2H6SPMk7b2q7o=;
+        s=korg; t=1649153174;
+        bh=viDQ5oPXUO4Bg2RdHflKhjqajjnXbG/LyDSk6gx4X20=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O88VJVvnzrD9M17JdnfPlAxoQ11yqBfwgZ3qlaRjjh2HlH/Ay3vJuwJXgASBT+hFv
-         UkgnPCVH1oB/svjDpmTfIdmhTqa/7prgF6jJXvtplCrrRnADCHPgdqFm3Bq6DS6kBb
-         SbZNaFLnKZ7H9UOJl5rHRGGxIbz/rn9k3YDiNYAo=
+        b=DTeR510pL7pqgmVHNC2PJahYoYIPUOEE6r8rxd7CZmfdQANJGDJIMI+UOHUsCiZ1Z
+         trIy+GW/LqkZlCtAclyIEaOD8OYVOcwBgktgYRJWfGOnabnMzUrCUKVw7qoz7H9ovQ
+         Z+a000mIOnMI0QTvht2WjqVf0z+gg28n6tED4j3s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        kernel test robot <lkp@intel.com>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Mark Brown <broonie@kernel.org>,
+        =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Paul Moore <paul@paul-moore.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 128/599] regulator: qcom_smd: fix for_each_child.cocci warnings
-Date:   Tue,  5 Apr 2022 09:27:02 +0200
-Message-Id: <20220405070302.650785657@linuxfoundation.org>
+Subject: [PATCH 5.10 129/599] selinux: check return value of sel_make_avc_files
+Date:   Tue,  5 Apr 2022 09:27:03 +0200
+Message-Id: <20220405070302.680256821@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -58,46 +57,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: kernel test robot <lkp@intel.com>
+From: Christian Göttsche <cgzones@googlemail.com>
 
-[ Upstream commit 6390d42c21efff0b4c10956a38e341f4e84ecd3d ]
+[ Upstream commit bcb62828e3e8c813b6613db6eb7fd9657db248fc ]
 
-drivers/regulator/qcom_smd-regulator.c:1318:1-33: WARNING: Function "for_each_available_child_of_node" should have of_node_put() before return around line 1321.
+sel_make_avc_files() might fail and return a negative errno value on
+memory allocation failures. Re-add the check of the return value,
+dropped in 66f8e2f03c02 ("selinux: sidtab reverse lookup hash table").
 
-Semantic patch information:
- False positives can be due to function calls within the for_each
- loop that may encapsulate an of_node_put.
+Reported by clang-analyzer:
 
-Generated by: scripts/coccinelle/iterators/for_each_child.cocci
+    security/selinux/selinuxfs.c:2129:2: warning: Value stored to
+      'ret' is never read [deadcode.DeadStores]
+            ret = sel_make_avc_files(dentry);
+            ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Fixes: 14e2976fbabd ("regulator: qcom_smd: Align probe function with rpmh-regulator")
-CC: Konrad Dybcio <konrad.dybcio@somainline.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
-Link: https://lore.kernel.org/r/alpine.DEB.2.22.394.2201151210170.3051@hadrien
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 66f8e2f03c02 ("selinux: sidtab reverse lookup hash table")
+Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+[PM: description line wrapping, added proper commit ref]
+Signed-off-by: Paul Moore <paul@paul-moore.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/regulator/qcom_smd-regulator.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ security/selinux/selinuxfs.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/regulator/qcom_smd-regulator.c b/drivers/regulator/qcom_smd-regulator.c
-index 03e146e98abd..8d784a2a09d8 100644
---- a/drivers/regulator/qcom_smd-regulator.c
-+++ b/drivers/regulator/qcom_smd-regulator.c
-@@ -1185,8 +1185,10 @@ static int rpm_reg_probe(struct platform_device *pdev)
+diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
+index 2b745ae8cb98..d893c2280f59 100644
+--- a/security/selinux/selinuxfs.c
++++ b/security/selinux/selinuxfs.c
+@@ -2124,6 +2124,8 @@ static int sel_fill_super(struct super_block *sb, struct fs_context *fc)
+ 	}
  
- 	for_each_available_child_of_node(dev->of_node, node) {
- 		vreg = devm_kzalloc(&pdev->dev, sizeof(*vreg), GFP_KERNEL);
--		if (!vreg)
-+		if (!vreg) {
-+			of_node_put(node);
- 			return -ENOMEM;
-+		}
+ 	ret = sel_make_avc_files(dentry);
++	if (ret)
++		goto err;
  
- 		ret = rpm_regulator_init_vreg(vreg, dev, node, rpm, vreg_data);
- 
+ 	dentry = sel_make_dir(sb->s_root, "ss", &fsi->last_ino);
+ 	if (IS_ERR(dentry)) {
 -- 
 2.34.1
 

@@ -2,119 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1F24F509F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E3E4F51AD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1842599AbiDFBdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:33:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37452 "EHLO
+        id S1846860AbiDFCIz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 5 Apr 2022 22:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242829AbiDEOwv (ORCPT
+        with ESMTP id S1357841AbiDEO5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:52:51 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587BDBF97B;
-        Tue,  5 Apr 2022 06:22:08 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id n63-20020a1c2742000000b0038d0c31db6eso1643841wmn.1;
-        Tue, 05 Apr 2022 06:22:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=42pOK9ccsa2jjY6xkX2nlkLQuEWFF7Bk+1tRnHi96GI=;
-        b=elxm4jPIzGaUvukiv9OCU5WC3tOGLd7yKl16vtPMjYLE2D5vFxSu4UENBZY1jkWQd2
-         gOF0EXNlk1Fxq7wWKfP64LZ9Lg/+oqitp28xGmjju2Vkx+Knrdqcy4Vp8fVJHIwrWSUL
-         oou5HkSB9BYIJciPQ6RAN/m4mrcZ2Ef8Cd4iXB6ZbhUp2bCYp7NLp5TiPyJpX248EeJe
-         mGJbHmtfNDMd8HzPL6KNQX2D4U//E4h5ToOjWrCOYb9Ztt3fBVe0WLC6Vn2muqOlHZvQ
-         eXyrZ3aXEr1cM2rg9qsqcyT/cxSuFyF5tX4HiEM9gZC6YRsgcmCuVTyZFh+mPH4cQ9h2
-         rQWQ==
+        Tue, 5 Apr 2022 10:57:03 -0400
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC343169B0C;
+        Tue,  5 Apr 2022 06:23:02 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2eafabbc80aso135119877b3.11;
+        Tue, 05 Apr 2022 06:23:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=42pOK9ccsa2jjY6xkX2nlkLQuEWFF7Bk+1tRnHi96GI=;
-        b=za3KDLgHTvQ3fyG+npZJwlssjg/RPBLX6XsdepXB/fSXCBS8TRfRdawDstyomjnuav
-         NHIvEP2DT6H6cFqed9clyAKHrum+dNyHwS9qrsU+lnxugJwlv0eLN8/MHK3UiGUExy9K
-         9X54pe8ZYDpWGPitWQIKS+C/ziyIUH5wJ04hMiips8ReUMZFTEYAN3/OwqvJI3239aG+
-         56iWU2V2Fzd8EXxED0gyE6X8nJj5DZd3Y9tvBtZJ8ylM3Y0zlmaWqeUmOqFBv87Al6+d
-         o7quqwtwaU3ebvFGD4jANuSbC/r1pJ99KxLOFCXzZAuGByRvJhp/oKxc2y9prLRlGfrQ
-         mKlw==
-X-Gm-Message-State: AOAM533lRcqD7hJoHLLWLDxcXs7HP1JD0COEwoMhA3QGYlpLGPu3vWCM
-        kWj4ZH+bsd3IGKRQZ6v2vWdWZnZIVt0=
-X-Google-Smtp-Source: ABdhPJyTin3MLm6VWeXoWs2sztSrpiJP4TM84DHkMzMprxV9AoMxcZavqxVYsbM9sc2yNIC9cEX+RA==
-X-Received: by 2002:a05:600c:6026:b0:38e:746b:9414 with SMTP id az38-20020a05600c602600b0038e746b9414mr3202828wmb.141.1649164926604;
-        Tue, 05 Apr 2022 06:22:06 -0700 (PDT)
-Received: from [10.32.181.87] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
-        by smtp.googlemail.com with ESMTPSA id t4-20020adfe104000000b00205b50f04f0sm11951822wrz.86.2022.04.05.06.22.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 06:22:06 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <aad44bd9-7f5b-58e6-523a-ce9df57bee30@redhat.com>
-Date:   Tue, 5 Apr 2022 15:22:05 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=7A4P9kn8lX4sQ7Htb6dVWHUymvJRsd1UwLVgcXfrzcY=;
+        b=1JeLcq/jxTDd964pW6ogdHlJxVr8MMS8irQgftGCWQtbPADDPFzk1Z/QbLuVHlihbk
+         ov066ahR8eT3FdyBQkof0Y53tBUrVRp/p7tYyrxW7uYz+YaTJ9hlPzrHdKYf6R2rF8V+
+         bS+2QrKOKwwu9ND7KOu5jxVMk+UvdRoKrnNG6JceRWXPTPGST+PyquTZPKBz6i5r4iIV
+         BieZpy7L97IPcd9fi+s8ba/M2iARklmDVYgSg6zlZsGyUbrkVUCqoCID2J/4pxec+clr
+         lCPF8CRghx21zTKzzrK94warG0/3MEFep0Tp07sRq2/Fv+ssX9q/ugFdSkakDqSixCTP
+         9zEA==
+X-Gm-Message-State: AOAM531TtsjghQFB6YL53glCVsv7OgjrTJcKMcPscZb1VFkKyQ0/bBsF
+        nWKHxxRy7bJO6a/EATko2KqghU9yoRg3CHOMdV0=
+X-Google-Smtp-Source: ABdhPJycfqaQNd811FMhkXgQfDqevZ83CiXYssxwULKvsQGRHFOOAMwuLYDGOU9KcjHSXp7vTAqGzq/4etcE7UXaUuo=
+X-Received: by 2002:a81:36cf:0:b0:2e5:2597:a026 with SMTP id
+ d198-20020a8136cf000000b002e52597a026mr2616210ywa.301.1649164981760; Tue, 05
+ Apr 2022 06:23:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v5 039/104] KVM: x86/mmu: Disallow fast page fault on
- private GPA
-Content-Language: en-US
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <56693f2e1e5bb1933288272255c662d6d04b94df.1646422845.git.isaku.yamahata@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <56693f2e1e5bb1933288272255c662d6d04b94df.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220325113148.588163-1-clement.leger@bootlin.com>
+ <20220325113148.588163-4-clement.leger@bootlin.com> <Yj3SFYdUQ4r7GXqs@smile.fi.intel.com>
+ <20220328162812.16deac92@fixe.home>
+In-Reply-To: <20220328162812.16deac92@fixe.home>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 5 Apr 2022 15:22:51 +0200
+Message-ID: <CAJZ5v0hOjaOCUxbFzKG90Db0bgfdb3q988oAvLB4kmD3-HS8sQ@mail.gmail.com>
+Subject: Re: [PATCH v3 3/9] device property: add index argument to
+ property_read_string_array() callback
+To:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/22 20:48, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
-> 
-> TDX requires TDX SEAMCALL to operate Secure EPT instead of direct memory
-> access and TDX SEAMCALL is heavy operation.  Fast page fault on private GPA
-> doesn't make sense.  Disallow fast page fault on private GPA.
-> 
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->   arch/x86/kvm/mmu/mmu.c | 7 +++++++
->   1 file changed, 7 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index e9212394a530..d8c1505155b0 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -3185,6 +3185,13 @@ static int fast_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->   	u64 *sptep = NULL;
->   	uint retry_count = 0;
->   
-> +	/*
-> +	 * TDX private mapping doesn't support fast page fault because the EPT
-> +	 * entry needs TDX SEAMCALL. not direct memory access.
+On Mon, Mar 28, 2022 at 4:29 PM Clément Léger <clement.leger@bootlin.com> wrote:
+>
+> Le Fri, 25 Mar 2022 16:30:45 +0200,
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> a écrit :
+>
+> > >     pointer = property_entry_find(props, propname, length);
+> > >     if (IS_ERR(pointer))
+> > >             return PTR_ERR(pointer);
+> >
+> > > +   if (index >= array_len)
+> > > +           return -ENODATA;
+> >
+> > I was about to ask if we can check this before the
+> > property_entry_find() call, but realized that in such case it will
+> > shadow possible errors due to wrong or absent property.
+>
+> I think you are actually right, the check can be done after
+> property_entry_count_elems_of_size() since it already checks for the
+> property to be present. I'll move that check.
+>
+> >
+> > ...
+> >
+> > > -           of_property_read_string_array(node, propname, val,
+> > > nval) :
+> > > +           of_property_read_string_array_index(node,
+> > > propname, val, nval,
+> > > +                                               index) :
+> >
+> > Dunno about the style there, but I think it can be one line.
+>
+> Seems like the complete file is strictly applying the 80 columns rules
+> so I thought it was better to keep it like this. However, I think the
+> ternary oeprator is not really readable with such split.
 
-"the EPT entry is read/written with TDX SEAMCALLs instead of direct 
-memory access".
+So FWIW I would entirely change it to
 
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+if (!val)
+        return of_property_count_strings(node, propname);
 
-> +	 */
-> +	if (kvm_is_private_gpa(vcpu->kvm, fault->addr))
-> +		return ret;
-> +
->   	if (!page_fault_can_be_fast(fault))
->   		return ret;
->   
+return of_property_read_string_array_index(node, propname, val,
 
+nval, index);
+
+which IMO would be way easier to read.

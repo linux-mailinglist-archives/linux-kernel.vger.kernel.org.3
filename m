@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020554F4638
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD704F453B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388916AbiDEOli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50104 "EHLO
+        id S1389029AbiDEOmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244037AbiDEJlE (ORCPT
+        with ESMTP id S244200AbiDEJlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:41:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1162CBAB85;
-        Tue,  5 Apr 2022 02:25:09 -0700 (PDT)
+        Tue, 5 Apr 2022 05:41:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4F4BB082;
+        Tue,  5 Apr 2022 02:25:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2218B81CA1;
-        Tue,  5 Apr 2022 09:25:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BA28C385A4;
-        Tue,  5 Apr 2022 09:25:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E62761654;
+        Tue,  5 Apr 2022 09:25:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49E71C385A0;
+        Tue,  5 Apr 2022 09:25:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150706;
-        bh=0IXNH02d04Pp3qo3nL8AHAf9mxn0yRHztLc0LEJHT3U=;
+        s=korg; t=1649150730;
+        bh=wxo5Qgm4ML6MQghSIyIPjrQXgvNxgJgLaqb67pNgPhk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bsbO9boT9rs1b+MFc9Ldp5XmeWDtHQri5ClAQUjMMy7vULC66XDZL3zAALq11DPIO
-         eQYBwqeZRnIfjYBOpcU2YPlBsMHVw/VpeYM2Ensrdx2RSaExvMz8ZBUEhy6kgVkNy9
-         RdGCTELOAoZ3dod0rzAJ/KZffKq/TmEnYOfACvEo=
+        b=yzKXE/qQL5RODg5dmumMYGrPcaxCKO3QM6oW0kLbBhBRfsdVqI5YGBvWyU0f26utI
+         4hxpMMINatI8WRr5x8B+Su4HZnAnUX1z9MMVK4pU0VBw0H8FxX9rQuKMbp0Pr9iOi+
+         FyKhG6WVFAEHsNs1OKLp1Ebc8E7DyiAZ9RKXuSi4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jocelyn Falempe <jfalempe@redhat.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH 5.15 151/913] mgag200 fix memmapsl configuration in GCTL6 register
-Date:   Tue,  5 Apr 2022 09:20:13 +0200
-Message-Id: <20220405070344.363816649@linuxfoundation.org>
+        stable@vger.kernel.org, Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Vitaly Chikunov <vt@altlinux.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Subject: [PATCH 5.15 159/913] crypto: rsa-pkcs1pad - restore signature length check
+Date:   Tue,  5 Apr 2022 09:20:21 +0200
+Message-Id: <20220405070344.607892594@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,80 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jocelyn Falempe <jfalempe@redhat.com>
+From: Eric Biggers <ebiggers@google.com>
 
-commit 028a73e10705af1ffd51f2537460f616dc58680e upstream.
+commit d3481accd974541e6a5d6a1fb588924a3519c36e upstream.
 
-On some servers with MGA G200_SE_A (rev 42), booting with Legacy BIOS,
-the hardware hangs when using kdump and kexec into the kdump kernel.
-This happens when the uncompress code tries to write "Decompressing Linux"
-to the VGA Console.
+RSA PKCS#1 v1.5 signatures are required to be the same length as the RSA
+key size.  RFC8017 specifically requires the verifier to check this
+(https://datatracker.ietf.org/doc/html/rfc8017#section-8.2.2).
 
-It can be reproduced by writing to the VGA console (0xB8000) after
-booting to graphic mode, it generates the following error:
+Commit a49de377e051 ("crypto: Add hash param to pkcs1pad") changed the
+kernel to allow longer signatures, but didn't explain this part of the
+change; it seems to be unrelated to the rest of the commit.
 
-kernel:NMI: PCI system error (SERR) for reason a0 on CPU 0.
-kernel:Dazed and confused, but trying to continue
+Revert this change, since it doesn't appear to be correct.
 
-The root cause is the configuration of the MGA GCTL6 register
+We can be pretty sure that no one is relying on overly-long signatures
+(which would have to be front-padded with zeroes) being supported, given
+that they would have been broken since commit c7381b012872
+("crypto: akcipher - new verify API for public key algorithms").
 
-According to the GCTL6 register documentation:
-
-bit 0 is gcgrmode:
-    0: Enables alpha mode, and the character generator addressing system is
-     activated.
-    1: Enables graphics mode, and the character addressing system is not
-     used.
-
-bit 1 is chainodd even:
-    0: The A0 signal of the memory address bus is used during system memory
-     addressing.
-    1: Allows A0 to be replaced by either the A16 signal of the system
-     address (ifmemmapsl is ‘00’), or by the hpgoddev (MISC<5>, odd/even
-     page select) field, described on page 3-294).
-
-bit 3-2 are memmapsl:
-    Memory map select bits 1 and 0. VGA.
-    These bits select where the video memory is mapped, as shown below:
-        00 => A0000h - BFFFFh
-        01 => A0000h - AFFFFh
-        10 => B0000h - B7FFFh
-        11 => B8000h - BFFFFh
-
-bit 7-4 are reserved.
-
-Current code set it to 0x05 => memmapsl to b01 => 0xa0000 (graphic mode)
-But on x86, the VGA console is at 0xb8000 (text mode)
-In arch/x86/boot/compressed/misc.c debug strings are written to 0xb8000
-As the driver doesn't use this mapping at 0xa0000, it is safe to set it to
-0xb8000 instead, to avoid kernel hang on G200_SE_A rev42, with kexec/kdump.
-
-Thus changing the value 0x05 to 0x0d
-
-Signed-off-by: Jocelyn Falempe <jfalempe@redhat.com>
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-Acked-by: Lyude Paul <lyude@redhat.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220119102905.1194787-1-jfalempe@redhat.com
+Fixes: a49de377e051 ("crypto: Add hash param to pkcs1pad")
+Cc: <stable@vger.kernel.org> # v4.6+
+Cc: Tadeusz Struk <tadeusz.struk@linaro.org>
+Suggested-by: Vitaly Chikunov <vt@altlinux.org>
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/mgag200/mgag200_mode.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ crypto/rsa-pkcs1pad.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/mgag200/mgag200_mode.c
-+++ b/drivers/gpu/drm/mgag200/mgag200_mode.c
-@@ -529,7 +529,10 @@ static void mgag200_set_format_regs(stru
- 	WREG_GFX(3, 0x00);
- 	WREG_GFX(4, 0x00);
- 	WREG_GFX(5, 0x40);
--	WREG_GFX(6, 0x05);
-+	/* GCTL6 should be 0x05, but we configure memmapsl to 0xb8000 (text mode),
-+	 * so that it doesn't hang when running kexec/kdump on G200_SE rev42.
-+	 */
-+	WREG_GFX(6, 0x0d);
- 	WREG_GFX(7, 0x0f);
- 	WREG_GFX(8, 0x0f);
+--- a/crypto/rsa-pkcs1pad.c
++++ b/crypto/rsa-pkcs1pad.c
+@@ -538,7 +538,7 @@ static int pkcs1pad_verify(struct akciph
  
+ 	if (WARN_ON(req->dst) ||
+ 	    WARN_ON(!req->dst_len) ||
+-	    !ctx->key_size || req->src_len < ctx->key_size)
++	    !ctx->key_size || req->src_len != ctx->key_size)
+ 		return -EINVAL;
+ 
+ 	req_ctx->out_buf = kmalloc(ctx->key_size + req->dst_len, GFP_KERNEL);
 
 

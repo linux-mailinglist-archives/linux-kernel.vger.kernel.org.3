@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC12B4F3DD1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A4F84F4258
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244984AbiDEMVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46826 "EHLO
+        id S1346677AbiDEPSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245014AbiDEIxB (ORCPT
+        with ESMTP id S1346746AbiDEJpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:53:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0507ECDD;
-        Tue,  5 Apr 2022 01:49:29 -0700 (PDT)
+        Tue, 5 Apr 2022 05:45:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D66DB4B0;
+        Tue,  5 Apr 2022 02:31:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9767360FFB;
-        Tue,  5 Apr 2022 08:49:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6B02C385A0;
-        Tue,  5 Apr 2022 08:49:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4BF8B81CBC;
+        Tue,  5 Apr 2022 09:31:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7311FC385A2;
+        Tue,  5 Apr 2022 09:31:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148568;
-        bh=XoLi14Jvj17Qay94bQj6Gt2sk1ZC6Zgsi2JS+PwQfOI=;
+        s=korg; t=1649151098;
+        bh=73W+wrV+pltzRuWYHC+jUw+ORe5Zrq6RlCWY8xI8l3M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=orwezfakQtyGZw2sgPi68j8gXDoZp6jJVyFGy4CA/ilzWn3b29hc+1XSy5CQovqPh
-         rny3I5VhZW2SqUOxDf70IChreMZ2AR4h+dv05C+EJ8zNFUOOY46hNGBGgG3oxgWN42
-         qSodbzr1iWnLD6B/6SmzluEiVoFB+Qy6PrjpS57s=
+        b=pk8kbJLg0EyT57EQ7AcGFFJcW0YES3iIQfzUznukgR0q/0wbBMrhxscZjuv+e4cwe
+         goQ6G3YX6fq+ewaCeis6Z9juR2ClhZoWnFJwhjSl7J73Oah6+ZbH0pdGnHQcY80hgn
+         Ma16a32O1yrYY49Id9qOmKGoJQcjciG5Ht6KDxvg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Robert Foss <robert.foss@linaro.org>,
+        stable@vger.kernel.org, Jeff Layton <jlayton@kernel.org>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0403/1017] drm/bridge: nwl-dsi: Fix PM disable depth imbalance in nwl_dsi_probe
-Date:   Tue,  5 Apr 2022 09:21:56 +0200
-Message-Id: <20220405070406.249577530@linuxfoundation.org>
+Subject: [PATCH 5.15 255/913] nfsd: more robust allocation failure handling in nfsd_file_cache_init
+Date:   Tue,  5 Apr 2022 09:21:57 +0200
+Message-Id: <20220405070347.499400402@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +56,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Amir Goldstein <amir73il@gmail.com>
 
-[ Upstream commit b146e343a9e05605b491b1bf4a2b62a39d5638d8 ]
+[ Upstream commit 4d2eeafecd6c83b4444db3dc0ada201c89b1aa44 ]
 
-The pm_runtime_enable will increase power disable depth.
-Thus a pairing decrement is needed on the error handling
-path to keep it balanced according to context.
+The nfsd file cache table can be pretty large and its allocation
+may require as many as 80 contigious pages.
 
-Fixes: 44cfc6233447 ("drm/bridge: Add NWL MIPI DSI host controller support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220105104826.1418-1-linmq006@gmail.com
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Employ the same fix that was employed for similar issue that was
+reported for the reply cache hash table allocation several years ago
+by commit 8f97514b423a ("nfsd: more robust allocation failure handling
+in nfsd_reply_cache_init").
+
+Fixes: 65294c1f2c5e ("nfsd: add a new struct file caching facility to nfsd")
+Link: https://lore.kernel.org/linux-nfs/e3cdaeec85a6cfec980e87fc294327c0381c1778.camel@kernel.org/
+Suggested-by: Jeff Layton <jlayton@kernel.org>
+Signed-off-by: Amir Goldstein <amir73il@gmail.com>
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+Tested-by: Amir Goldstein <amir73il@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/bridge/nwl-dsi.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/nfsd/filecache.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/nwl-dsi.c b/drivers/gpu/drm/bridge/nwl-dsi.c
-index af07eeb47ca0..6e484d836cfe 100644
---- a/drivers/gpu/drm/bridge/nwl-dsi.c
-+++ b/drivers/gpu/drm/bridge/nwl-dsi.c
-@@ -1204,6 +1204,7 @@ static int nwl_dsi_probe(struct platform_device *pdev)
+diff --git a/fs/nfsd/filecache.c b/fs/nfsd/filecache.c
+index be3c1aad50ea..7e23c588f484 100644
+--- a/fs/nfsd/filecache.c
++++ b/fs/nfsd/filecache.c
+@@ -641,7 +641,7 @@ nfsd_file_cache_init(void)
+ 	if (!nfsd_filecache_wq)
+ 		goto out;
  
- 	ret = nwl_dsi_select_input(dsi);
- 	if (ret < 0) {
-+		pm_runtime_disable(dev);
- 		mipi_dsi_host_unregister(&dsi->dsi_host);
- 		return ret;
- 	}
+-	nfsd_file_hashtbl = kcalloc(NFSD_FILE_HASH_SIZE,
++	nfsd_file_hashtbl = kvcalloc(NFSD_FILE_HASH_SIZE,
+ 				sizeof(*nfsd_file_hashtbl), GFP_KERNEL);
+ 	if (!nfsd_file_hashtbl) {
+ 		pr_err("nfsd: unable to allocate nfsd_file_hashtbl\n");
+@@ -709,7 +709,7 @@ nfsd_file_cache_init(void)
+ 	nfsd_file_slab = NULL;
+ 	kmem_cache_destroy(nfsd_file_mark_slab);
+ 	nfsd_file_mark_slab = NULL;
+-	kfree(nfsd_file_hashtbl);
++	kvfree(nfsd_file_hashtbl);
+ 	nfsd_file_hashtbl = NULL;
+ 	destroy_workqueue(nfsd_filecache_wq);
+ 	nfsd_filecache_wq = NULL;
+@@ -855,7 +855,7 @@ nfsd_file_cache_shutdown(void)
+ 	fsnotify_wait_marks_destroyed();
+ 	kmem_cache_destroy(nfsd_file_mark_slab);
+ 	nfsd_file_mark_slab = NULL;
+-	kfree(nfsd_file_hashtbl);
++	kvfree(nfsd_file_hashtbl);
+ 	nfsd_file_hashtbl = NULL;
+ 	destroy_workqueue(nfsd_filecache_wq);
+ 	nfsd_filecache_wq = NULL;
 -- 
 2.34.1
 

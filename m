@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE1A94F28A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 672364F289C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239791AbiDEIU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
+        id S239700AbiDEIUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235613AbiDEH7x (ORCPT
+        with ESMTP id S235634AbiDEH74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:59:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3484A64D5;
-        Tue,  5 Apr 2022 00:56:10 -0700 (PDT)
+        Tue, 5 Apr 2022 03:59:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A235C1AF3A;
+        Tue,  5 Apr 2022 00:56:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C447661722;
-        Tue,  5 Apr 2022 07:56:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1060C34110;
-        Tue,  5 Apr 2022 07:56:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4EF32B81B18;
+        Tue,  5 Apr 2022 07:56:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A454FC340EE;
+        Tue,  5 Apr 2022 07:56:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145369;
-        bh=w7dKSlwXBA/ixEwcf1zFa8OnnuZoUm3ObPb+9ezhVoU=;
+        s=korg; t=1649145394;
+        bh=DuYmSyEzedX7U/nY9Gg5hYz0dMAKEediBXzyg56hMdA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0befS2QlFaFoKekRvCYEw8lLOwG5yo6q6DUHMBal+056vjS0ZvSXJVitifh+/375T
-         2+z2TI6i1jWrvWcLl7Fcgx/m4HoSmQHUmPwNVTWjnka0a7Lfo3umYvGnZUcLlGyqeU
-         qOBGIvk/kouIaqTIEa0OAXhb+355lt8SAxmQhaJo=
+        b=qav+hcWE46twwS5cupmpMzvQ03YCwF2/LUhMBY8J5nT6a8PwnWOWSRqVDe8WgHBt/
+         taXYdMtS42+jxhD2usR7LdI/LdpRkxkK2KUMTOCpCCgKVvg64MdKLFlN/hxwSsritH
+         LdzL8mrAZNZ2OKs6vkgrDBpP5AYSo9uCvHoyL00Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Frank Wunderlich <frank-w@public-files.de>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0379/1126] arm64: dts: broadcom: Fix sata nodename
-Date:   Tue,  5 Apr 2022 09:18:46 +0200
-Message-Id: <20220405070418.750323385@linuxfoundation.org>
+Subject: [PATCH 5.17 0382/1126] ASoC: atmel_ssc_dai: Handle errors for clk_enable
+Date:   Tue,  5 Apr 2022 09:18:49 +0200
+Message-Id: <20220405070418.838826040@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,39 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 55927cb44db43a57699fa652e2437a91620385dc ]
+[ Upstream commit f9e2ca0640e59d19af0ff285ee5591ed39069b09 ]
 
-After converting ahci-platform txt binding to yaml nodename is reported
-as not matching the standard:
+As the potential failure of the clk_enable(),
+it should be better to check it and return error if fals.
 
-arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dt.yaml:
-ahci@663f2000: $nodename:0: 'ahci@663f2000' does not match '^sata(@.*)?$'
-
-Fix it to match binding.
-
-Fixes: ac9aae00f0fc ("arm64: dts: Add SATA3 AHCI and SATA3 PHY DT nodes for NS2")
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Fixes: cbaadf0f90d6 ("ASoC: atmel_ssc_dai: refactor the startup and shutdown")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Link: https://lore.kernel.org/r/20220301090637.3776558-1-jiasheng@iscas.ac.cn
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/soc/atmel/atmel_ssc_dai.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi b/arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi
-index 2cfeaf3b0a87..8c218689fef7 100644
---- a/arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi
-+++ b/arch/arm64/boot/dts/broadcom/northstar2/ns2.dtsi
-@@ -687,7 +687,7 @@
- 			};
- 		};
+diff --git a/sound/soc/atmel/atmel_ssc_dai.c b/sound/soc/atmel/atmel_ssc_dai.c
+index 26e2bc690d86..c1dea8d62416 100644
+--- a/sound/soc/atmel/atmel_ssc_dai.c
++++ b/sound/soc/atmel/atmel_ssc_dai.c
+@@ -280,7 +280,10 @@ static int atmel_ssc_startup(struct snd_pcm_substream *substream,
  
--		sata: ahci@663f2000 {
-+		sata: sata@663f2000 {
- 			compatible = "brcm,iproc-ahci", "generic-ahci";
- 			reg = <0x663f2000 0x1000>;
- 			dma-coherent;
+ 	/* Enable PMC peripheral clock for this SSC */
+ 	pr_debug("atmel_ssc_dai: Starting clock\n");
+-	clk_enable(ssc_p->ssc->clk);
++	ret = clk_enable(ssc_p->ssc->clk);
++	if (ret)
++		return ret;
++
+ 	ssc_p->mck_rate = clk_get_rate(ssc_p->ssc->clk);
+ 
+ 	/* Reset the SSC unless initialized to keep it in a clean state */
 -- 
 2.34.1
 

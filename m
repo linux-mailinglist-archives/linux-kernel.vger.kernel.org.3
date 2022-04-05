@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 722FD4F3EB0
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF9B4F3FBF
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235839AbiDEPBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50402 "EHLO
+        id S1382870AbiDEMRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345015AbiDEJmy (ORCPT
+        with ESMTP id S244965AbiDEIwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:42:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A59BF955;
-        Tue,  5 Apr 2022 02:28:20 -0700 (PDT)
+        Tue, 5 Apr 2022 04:52:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194831C91E;
+        Tue,  5 Apr 2022 01:48:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 834916165C;
-        Tue,  5 Apr 2022 09:28:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91C06C385A0;
-        Tue,  5 Apr 2022 09:28:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD6C7614F9;
+        Tue,  5 Apr 2022 08:48:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE854C385A1;
+        Tue,  5 Apr 2022 08:48:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150899;
-        bh=aR1A0SezXpkQGZdReRE0MJZ9Tozm4kPC8Waf9Ta+wng=;
+        s=korg; t=1649148482;
+        bh=9ayTQoypg7Ma7Hon0Ma1b8RWYUYomggH8SeZpQc0dmk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CF1eeraYthcXV0kKjaKBKQ5FfVpx3Z/c6EcFEmvCRl8u4FyJSrq/n90nAxiOun93g
-         E0LOKJtf/YEnlzSa7yn23vVjSD14oA+Dxa4ksXCas+FekVcB30QWXaI/x6y1QNpQbr
-         E/2umvXhqmDR2ujDleZXZiKQcL3u1k7NxkCaJ6dU=
+        b=BAWoLJwN2M02LCfqt5WW5EtqlGpHVZsDKzD1Slg3VglF9rNrYZX4NspVi7Zq0VoT6
+         NBknvL7XPn5DKPvoEbyNU69QkMSmbh7KUV26oDXABidPfYdBvP/flSH3tp/GHoPgPY
+         VpooC6MsAJzypM1u0bFiEd2u2k3mUadxhzUQnYtI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 222/913] hwrng: atmel - disable trng on failure path
+Subject: [PATCH 5.16 0371/1017] ASoC: cs35l41: Fix max number of TX channels
 Date:   Tue,  5 Apr 2022 09:21:24 +0200
-Message-Id: <20220405070346.512201057@linuxfoundation.org>
+Message-Id: <20220405070405.298448305@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,32 +57,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
+From: Lucas Tanure <tanureal@opensource.cirrus.com>
 
-[ Upstream commit a223ea9f89ab960eb254ba78429efd42eaf845eb ]
+[ Upstream commit 16639d39bdf577168d3fe34315917a94365c8d19 ]
 
-Call atmel_trng_disable() on failure path of probe.
+This device only has 4 TX channels.
 
-Fixes: a1fa98d8116f ("hwrng: atmel - disable TRNG during suspend")
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Fixes: fe1024d50477b ("ASoC: cs35l41: Combine adjacent register writes")
+Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Link: https://lore.kernel.org/r/20220303173059.269657-3-tanureal@opensource.cirrus.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/char/hw_random/atmel-rng.c | 1 +
- 1 file changed, 1 insertion(+)
+ sound/soc/codecs/cs35l41.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/char/hw_random/atmel-rng.c b/drivers/char/hw_random/atmel-rng.c
-index ecb71c4317a5..8cf0ef501341 100644
---- a/drivers/char/hw_random/atmel-rng.c
-+++ b/drivers/char/hw_random/atmel-rng.c
-@@ -114,6 +114,7 @@ static int atmel_trng_probe(struct platform_device *pdev)
- 
- err_register:
- 	clk_disable_unprepare(trng->clk);
-+	atmel_trng_disable(trng);
- 	return ret;
- }
- 
+diff --git a/sound/soc/codecs/cs35l41.c b/sound/soc/codecs/cs35l41.c
+index 3188a8ba3507..8a2d0f9dd9a6 100644
+--- a/sound/soc/codecs/cs35l41.c
++++ b/sound/soc/codecs/cs35l41.c
+@@ -1113,7 +1113,7 @@ static struct snd_soc_dai_driver cs35l41_dai[] = {
+ 		.capture = {
+ 			.stream_name = "AMP Capture",
+ 			.channels_min = 1,
+-			.channels_max = 8,
++			.channels_max = 4,
+ 			.rates = SNDRV_PCM_RATE_KNOT,
+ 			.formats = CS35L41_TX_FORMATS,
+ 		},
 -- 
 2.34.1
 

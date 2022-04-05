@@ -2,92 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6D44F42F4
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A38314F417F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233230AbiDEUaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44848 "EHLO
+        id S1378674AbiDEUEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357362AbiDELQV (ORCPT
+        with ESMTP id S1384128AbiDEM1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 07:16:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31ACF2D1E7;
-        Tue,  5 Apr 2022 03:41:14 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F1976D6E;
-        Tue,  5 Apr 2022 03:41:13 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8A8D83F5A1;
-        Tue,  5 Apr 2022 03:41:12 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     joro@8bytes.org, baolu.lu@linux.intel.com,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
-Cc:     iommu@lists.linux-foundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mario.limonciello@amd.com, hch@lst.de
-Subject: [PATCH v3 2/4] iommu: Add capability for pre-boot DMA protection
-Date:   Tue,  5 Apr 2022 11:41:02 +0100
-Message-Id: <2b5dc62a6325075cb5bd1ceec31ebad1833acf83.1649089693.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.28.0.dirty
-In-Reply-To: <cover.1649089693.git.robin.murphy@arm.com>
-References: <cover.1649089693.git.robin.murphy@arm.com>
+        Tue, 5 Apr 2022 08:27:12 -0400
+Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C342957B02;
+        Tue,  5 Apr 2022 04:35:18 -0700 (PDT)
+Received: from grover.. (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-12.nifty.com with ESMTP id 235BYCGp000464;
+        Tue, 5 Apr 2022 20:34:14 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 235BYCGp000464
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1649158454;
+        bh=EKCTJzUdUAuHIhmyqzQO5DkjoUd5sMZA3XV4MtVgo6g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DWk37DbYUH+hKAxMwDTIpp4kMMEj+RJPnrCiqJ07xppk6Up0RBLZ+4DTHM7fLj0iK
+         /xbtGtmyRMylOKuKjhH42edScU0bLJ+jsJAcCnsj6Y62upLX/ZUkr6bv/NIXgOnmmo
+         M8snVpltT/XM37UiUKKsR89rVjlcALGWVo9zrOU6HUQ/r1tHhODKq9frJbEVaXVw8i
+         kgwhyvkl8jjozVQ1BjZXdg0wOpmOke2A4huZax8zw1M3iDJdjYWXNVM3VIlUlT51tl
+         YktT6Ccqx7R/NLsCYUo2YZf0CDDnRtuouzREtLeUmsDqpDSAoaetk9Xos+SSjb7OCM
+         tDrin0mmTl/IA==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Michal Marek <michal.lkml@markovi.net>
+Subject: [PATCH v2 03/10] modpost: remove useless export_from_sec()
+Date:   Tue,  5 Apr 2022 20:33:51 +0900
+Message-Id: <20220405113359.2880241-4-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220405113359.2880241-1-masahiroy@kernel.org>
+References: <20220405113359.2880241-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VT-d's dmar_platform_optin() actually represents a combination of
-properties fairly well standardised by Microsoft as "Pre-boot DMA
-Protection" and "Kernel DMA Protection"[1]. As such, we can provide
-interested consumers with an abstracted capability rather than
-driver-specific interfaces that won't scale. We name it for the former
-aspect since that's what external callers are most likely to be
-interested in; the latter is for the IOMMU layer to handle itself.
+With commit 1743694eb235 ("modpost: stop symbol preloading for
+modversion CRC") applied, now export_from_sec() is useless.
 
-[1] https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/oem-kernel-dma-protection
+handle_symbol() is called for every symbol in the ELF.
 
-Suggested-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+When 'symname' does not start with "__ksymtab", export_from_sec() is
+called, and the returned value is stored in 'export'.
+
+It is used in the last part of handle_symbol():
+
+    if (strstarts(symname, "__ksymtab_")) {
+            name = symname + strlen("__ksymtab_");
+            sym_add_exported(name, mod, export);
+    }
+
+'export' is used only when 'symname' starts with "__ksymtab_".
+
+So, the value returned by export_from_sec() is never used.
+
+Remove useless export_from_sec(). This makes further cleanups possible.
+
+I put the temporary code:
+
+    export = export_unknown;
+
+Otherwise, I would get the compiler warning:
+
+    warning: 'export' may be used uninitialized in this function [-Wmaybe-uninitialized]
+
+This is apparently false positive because
+
+    if (strstarts(symname, "__ksymtab_")
+
+... is a stronger condition than:
+
+    if (strstarts(symname, "__ksymtab")
+
+Anyway, this part will be cleaned up by the next commit.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
- drivers/iommu/intel/iommu.c | 2 ++
- include/linux/iommu.h       | 2 ++
- 2 files changed, 4 insertions(+)
 
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 255304eb3b1f..49d552a96098 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -4550,6 +4550,8 @@ static bool intel_iommu_capable(struct device *dev, enum iommu_cap cap)
- 		return domain_update_iommu_snooping(NULL);
- 	if (cap == IOMMU_CAP_INTR_REMAP)
- 		return irq_remapping_enabled == 1;
-+	if (cap == IOMMU_CAP_PRE_BOOT_PROTECTION)
-+		return dmar_platform_optin();
- 
- 	return false;
+Changes in v2:
+  - Fix compiler warning
+
+ scripts/mod/modpost.c | 17 ++---------------
+ scripts/mod/modpost.h |  4 ----
+ 2 files changed, 2 insertions(+), 19 deletions(-)
+
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index ed9d056d2108..eebb32689816 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -369,16 +369,6 @@ static enum export export_from_secname(struct elf_info *elf, unsigned int sec)
+ 		return export_unknown;
  }
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index 1fa927e6f1c6..64c02f472f7b 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -107,6 +107,8 @@ enum iommu_cap {
- 					   transactions */
- 	IOMMU_CAP_INTR_REMAP,		/* IOMMU supports interrupt isolation */
- 	IOMMU_CAP_NOEXEC,		/* IOMMU_NOEXEC flag */
-+	IOMMU_CAP_PRE_BOOT_PROTECTION,	/* Firmware says it used the IOMMU for
-+					   DMA protection and we should too */
- };
  
- /* These are the possible reserved region types */
+-static enum export export_from_sec(struct elf_info *elf, unsigned int sec)
+-{
+-	if (sec == elf->export_sec)
+-		return export_plain;
+-	else if (sec == elf->export_gpl_sec)
+-		return export_gpl;
+-	else
+-		return export_unknown;
+-}
+-
+ static const char *namespace_from_kstrtabns(const struct elf_info *info,
+ 					    const Elf_Sym *sym)
+ {
+@@ -576,10 +566,7 @@ static int parse_elf(struct elf_info *info, const char *filename)
+ 				fatal("%s has NOBITS .modinfo\n", filename);
+ 			info->modinfo = (void *)hdr + sechdrs[i].sh_offset;
+ 			info->modinfo_len = sechdrs[i].sh_size;
+-		} else if (strcmp(secname, "__ksymtab") == 0)
+-			info->export_sec = i;
+-		else if (strcmp(secname, "__ksymtab_gpl") == 0)
+-			info->export_gpl_sec = i;
++		}
+ 
+ 		if (sechdrs[i].sh_type == SHT_SYMTAB) {
+ 			unsigned int sh_link_idx;
+@@ -703,7 +690,7 @@ static void handle_symbol(struct module *mod, struct elf_info *info,
+ 	if (strstarts(symname, "__ksymtab"))
+ 		export = export_from_secname(info, get_secindex(info, sym));
+ 	else
+-		export = export_from_sec(info, get_secindex(info, sym));
++		export = export_unknown;
+ 
+ 	switch (sym->st_shndx) {
+ 	case SHN_COMMON:
+diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
+index 0c47ff95c0e2..a85dcec3669a 100644
+--- a/scripts/mod/modpost.h
++++ b/scripts/mod/modpost.h
+@@ -25,7 +25,6 @@
+ #define Elf_Sym     Elf32_Sym
+ #define Elf_Addr    Elf32_Addr
+ #define Elf_Sword   Elf64_Sword
+-#define Elf_Section Elf32_Half
+ #define ELF_ST_BIND ELF32_ST_BIND
+ #define ELF_ST_TYPE ELF32_ST_TYPE
+ 
+@@ -40,7 +39,6 @@
+ #define Elf_Sym     Elf64_Sym
+ #define Elf_Addr    Elf64_Addr
+ #define Elf_Sword   Elf64_Sxword
+-#define Elf_Section Elf64_Half
+ #define ELF_ST_BIND ELF64_ST_BIND
+ #define ELF_ST_TYPE ELF64_ST_TYPE
+ 
+@@ -138,8 +136,6 @@ struct elf_info {
+ 	Elf_Shdr     *sechdrs;
+ 	Elf_Sym      *symtab_start;
+ 	Elf_Sym      *symtab_stop;
+-	Elf_Section  export_sec;
+-	Elf_Section  export_gpl_sec;
+ 	char         *strtab;
+ 	char	     *modinfo;
+ 	unsigned int modinfo_len;
 -- 
-2.28.0.dirty
+2.32.0
 

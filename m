@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 941014F4E3B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B08D4F4959
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1588298AbiDFAPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
+        id S1392531AbiDEWKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:10:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354147AbiDEKMG (ORCPT
+        with ESMTP id S241169AbiDEKfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:12:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C48515B0;
-        Tue,  5 Apr 2022 02:57:41 -0700 (PDT)
+        Tue, 5 Apr 2022 06:35:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF052A715;
+        Tue,  5 Apr 2022 03:20:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F15506167E;
-        Tue,  5 Apr 2022 09:57:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E36AC385A1;
-        Tue,  5 Apr 2022 09:57:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB6CA616D7;
+        Tue,  5 Apr 2022 10:20:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAE80C385A1;
+        Tue,  5 Apr 2022 10:20:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152660;
-        bh=deA0NlTTkvXJXQU/XLDMnmMvOVgcFRhTb4ldcInvRok=;
+        s=korg; t=1649154005;
+        bh=5FrGcilHNiUz4isouMtLYPMowkNlL7KbZe/hG/nvb8c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vq3gI2XEmJVjfdHJpZOBIvkmlUoAJai3YE31/igwT2bqTaW7cPCmwDu1K1RUk1Doe
-         w+SpNOdLxAMmpaQnPZXuzs6f+lmAgQ+kD+SF7HcGclrFwNmbo2YcU0isk9tDcOBhqx
-         hoRDiyfQQfbjBPBsOTxnqe7PnwMf4k/ckUDycfpA=
+        b=CYTwXAB1yUDinYNFu1HQGoktjjVR4E+D0M+ihAAAVR9vUK2EbmxttE/U1ekxN+d8m
+         V+KMNNUOF7XHGrGChBLZkgsLBmtleZduWj/BMKs5yGopAgOtc03CFxAG0O8l1gqj1d
+         oHV3giWrTJCCbao7mLbTVWeTUqXtjuC2aFl6u3zU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.15 856/913] io_uring: fix memory leak of uid in files registration
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 424/599] pinctrl/rockchip: Add missing of_node_put() in rockchip_pinctrl_probe
 Date:   Tue,  5 Apr 2022 09:31:58 +0200
-Message-Id: <20220405070405.487304291@linuxfoundation.org>
+Message-Id: <20220405070311.450555929@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,31 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Begunkov <asml.silence@gmail.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit c86d18f4aa93e0e66cda0e55827cd03eea6bc5f8 upstream.
+[ Upstream commit 89388f8730699c259f8090ec435fb43569efe4ac ]
 
-When there are no files for __io_sqe_files_scm() to process in the
-range, it'll free everything and return. However, it forgets to put uid.
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-Fixes: 08a451739a9b5 ("io_uring: allow sparse fixed file sets")
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-Link: https://lore.kernel.org/r/accee442376f33ce8aaebb099d04967533efde92.1648226048.git.asml.silence@gmail.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 1e747e59cc4d ("pinctrl: rockchip: base regmap supplied by a syscon")
+Fixes: 14dee8677e19 ("pinctrl: rockchip: let pmu registers be supplied by a syscon")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220307120234.28657-1-linmq006@gmail.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/io_uring.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/pinctrl/pinctrl-rockchip.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -8130,6 +8130,7 @@ static int __io_sqe_files_scm(struct io_
- 			fput(fpl->fp[i]);
+diff --git a/drivers/pinctrl/pinctrl-rockchip.c b/drivers/pinctrl/pinctrl-rockchip.c
+index 53a0badc6b03..9df48e0cf4cb 100644
+--- a/drivers/pinctrl/pinctrl-rockchip.c
++++ b/drivers/pinctrl/pinctrl-rockchip.c
+@@ -3774,6 +3774,7 @@ static int rockchip_pinctrl_probe(struct platform_device *pdev)
+ 	node = of_parse_phandle(np, "rockchip,grf", 0);
+ 	if (node) {
+ 		info->regmap_base = syscon_node_to_regmap(node);
++		of_node_put(node);
+ 		if (IS_ERR(info->regmap_base))
+ 			return PTR_ERR(info->regmap_base);
  	} else {
- 		kfree_skb(skb);
-+		free_uid(fpl->user);
- 		kfree(fpl);
+@@ -3810,6 +3811,7 @@ static int rockchip_pinctrl_probe(struct platform_device *pdev)
+ 	node = of_parse_phandle(np, "rockchip,pmu", 0);
+ 	if (node) {
+ 		info->regmap_pmu = syscon_node_to_regmap(node);
++		of_node_put(node);
+ 		if (IS_ERR(info->regmap_pmu))
+ 			return PTR_ERR(info->regmap_pmu);
  	}
- 
+-- 
+2.34.1
+
 
 

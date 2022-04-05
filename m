@@ -2,335 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A9A14F46FC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:26:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2544F45F9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383787AbiDEUzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:55:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44260 "EHLO
+        id S1353447AbiDEUXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1452429AbiDEPyy (ORCPT
+        with ESMTP id S1453037AbiDEPzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:54:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A453701C;
-        Tue,  5 Apr 2022 07:55:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD520616D0;
-        Tue,  5 Apr 2022 14:55:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EC47C385A0;
-        Tue,  5 Apr 2022 14:55:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649170553;
-        bh=+wsa2KupAHEAkaJ6uGblvMqbej2o+NeI2jwDd8b2QR8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=d6d9V8yW4T+WsjbhuU0OTx8kSn0SLRe3XsjGeKmKK46+wPxSrj3/QRhEEV6ZDWfLz
-         7wPYjp8irrCdZLmD/iIXH5LHr+7ctzP8IvPnW32MYfGBuQus3t+cIlRhF+JFFQeFTn
-         Mmf6MKd49IAGmTNg5lf8Ojd98dtZDUEzb3H4JVLDlwnbcSYwVKQ/8Z0TZhL/UtjR5Q
-         tiJMr9+5Wu4n0HQ3EsgMoYIA6dVndFdfsXn2oX0/MEtbELNDgDtvg6Dv8DucmFtLIQ
-         M7VwJEQn5z3mDqGpTcK1YC+spTHrnmexvHpd8lbgVABLJE1dJLk1YvEib8KNZIa3ke
-         xIs/sLUtztryg==
-Date:   Tue, 5 Apr 2022 23:55:48 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Subject: Re: [PATCH v7 3/4] bootconfig: Support embedding a bootconfig file
- in kernel
-Message-Id: <20220405235548.38344aba5a7fcb059924c367@kernel.org>
-In-Reply-To: <164871509158.178991.12705786877340857725.stgit@devnote2>
-References: <164871505771.178991.7870442736805590948.stgit@devnote2>
-        <164871509158.178991.12705786877340857725.stgit@devnote2>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Tue, 5 Apr 2022 11:55:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D48D4137B24
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 07:59:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649170743;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=m2sfKB74gTolYuaOLfzO0CaB/byjGpQyOkAPbwbPHJY=;
+        b=MkDOyllG16SfP+JMgX/qQZIjvZEAQkhaCIYH+UNacySdrEMA0Ny/LtkmJo6m8X2dsueIpS
+        Jrsp8xdVqUNFWUTogm/OUqGuubq/gvKtY3bE7NjARsL/eiH3xiQJZdHxCDjUd9ZxGva4EN
+        RCU20tWWLlk+6gmBemGWvGLdW57Pq7M=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-453-IXsRU-a-Oe6oYKphwg06mQ-1; Tue, 05 Apr 2022 10:58:59 -0400
+X-MC-Unique: IXsRU-a-Oe6oYKphwg06mQ-1
+Received: by mail-qt1-f199.google.com with SMTP id b10-20020ac801ca000000b002e1cfb25db9so9179273qtg.1
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 07:58:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=m2sfKB74gTolYuaOLfzO0CaB/byjGpQyOkAPbwbPHJY=;
+        b=gZ56U5k0lcOdY3cVNHbpbZduml6oLQcoCm/adcvnb+ZUuubxeosFYBpFT8JLCwHUqG
+         1+yukutFUtVIsshRTMW7jFqYrhgfSNiuun0PBemq6NLN2TkMjUeQSiaDz9IG0Dbuz2nV
+         t67PQ5lT1zEmtGQtEDeDCnncTpV870iSXm7iZWiJ3uuEccF4IrU968vdX3UDAAkgHiwg
+         zJQGOyL3q57ar/Djm74A2667eJkcdH0Gx+2POOABzRUjfAwQ1pPsJ/gBOFy5+IBWqQjm
+         dwljn38bvA/ZhU05Qv8/QDwi7oRCszhOCeJWn/9xqxWZ+UyfJLq/hWz1KSketFDewyI0
+         wn7g==
+X-Gm-Message-State: AOAM532K51NQe8g4yTxHjQtMJrUIrGvGTkSYQQqnIF/we6InkqNzSiqH
+        h8+wpnihsNqwu0FXVtPH98rEsDPj9v52m3Xtspq6g9w/oIc3IR2AgeFuJT6RtDJ3LWx8g0GJuQi
+        bZFzX4QP+1S0qY8ztJj+EMcWy
+X-Received: by 2002:a05:620a:210f:b0:67b:119d:f32d with SMTP id l15-20020a05620a210f00b0067b119df32dmr2596727qkl.316.1649170739274;
+        Tue, 05 Apr 2022 07:58:59 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyxrv+hAz704UHG1GvBC1bddnp2MT4csXtUyD6rb0x6BFrLO5qGXa/QxqcDJp3NxZ4dggSgJw==
+X-Received: by 2002:a05:620a:210f:b0:67b:119d:f32d with SMTP id l15-20020a05620a210f00b0067b119df32dmr2596698qkl.316.1649170738832;
+        Tue, 05 Apr 2022 07:58:58 -0700 (PDT)
+Received: from [10.32.181.87] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
+        by smtp.googlemail.com with ESMTPSA id c27-20020a05620a165b00b0067d32238bc8sm8030769qko.125.2022.04.05.07.58.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 07:58:58 -0700 (PDT)
+Message-ID: <fbd5271c-5d6d-ded6-63dc-6ee3a7ccd305@redhat.com>
+Date:   Tue, 5 Apr 2022 16:58:56 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v5 047/104] KVM: x86/mmu: add a private pointer to
+ struct kvm_mmu_page
+Content-Language: en-US
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
+        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <499d1fd01b0d1d9a8b46a55bb863afd0c76f1111.1646422845.git.isaku.yamahata@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <499d1fd01b0d1d9a8b46a55bb863afd0c76f1111.1646422845.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steve,
-
-Have you already picked this series?
-
-Actually, kernel test robot reported an issue in this patch today.
-Here is the patch. Should I send v8 including this?
-
-Thank you,
-
-diff --git a/init/main.c b/init/main.c
-index 62dddc4206b4..f7fe7cbb1df8 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -313,7 +313,7 @@ static void * __init get_boot_config_from_initrd(size_t *_size)
- 	return data;
- }
- #else
--static void * __init get_boot_config_from_initrd(u32 *_size)
-+static void * __init get_boot_config_from_initrd(size_t *_size)
- {
- 	return NULL;
- }
-
-On Thu, 31 Mar 2022 17:24:51 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
-
-> This allows kernel developer to embed a default bootconfig file in
-> the kernel instead of embedding it in the initrd. This will be good
-> for who are using the kernel without initrd, or who needs a default
-> bootconfigs.
-> This needs to set two kconfigs: CONFIG_BOOT_CONFIG_EMBED=y and set
-> the file path to CONFIG_BOOT_CONFIG_EMBED_FILE.
+On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
 > 
-> Note that you still need 'bootconfig' command line option to load the
-> embedded bootconfig. Also if you boot using an initrd with a different
-> bootconfig, the kernel will use the bootconfig in the initrd, instead
-> of the default bootconfig.
+> Add a private pointer to kvm_mmu_page for private EPT.
 > 
-> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> To resolve KVM page fault on private GPA, it will allocate additional page
+> for Secure EPT in addition to private EPT.  Add memory allocator for it and
+> topup its memory allocator before resolving KVM page fault similar to
+> shared EPT page.  Allocation of those memory will be done for TDP MMU by
+> alloc_tdp_mmu_page().  Freeing those memory will be done for TDP MMU on
+> behalf of kvm_tdp_mmu_zap_all() called by kvm_mmu_zap_all().  Private EPT
+> page needs to carry one more page used for Secure EPT in addition to the
+> private EPT page.  Add private pointer to struct kvm_mmu_page for that
+> purpose and Add helper functions to allocate/free a page for Secure EPT.
+> Also add helper functions to check if a given kvm_mmu_page is private.
+> 
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
 > ---
->  Changes in v7:
->   - Change kconfig option name to share the common prefix so that
->     we can search it easier.
->   - Make embedded_bootconfig_data readonly.
->   - Select CONFIG_BLK_DEV_INITRD only if CONFIG_BOOT_CONFIG_EMBED=n
->   - Remove redundant default settings for new Kconfig options.
->  Changes in v6:
->   - Split out the .incbin asm part as bootconfig-data.S according to
->     Masahiro's comment.
->  Changes in v5:
->   - Fix .gitignore to be sorted alphabetically.
->   - Make default.bconf is cleaned up correctly.
->   - Allow user to specify relative path to CONFIG_EMBED_BOOT_CONFIG_FILE.
->     (Thanks Masahiro!)
->  Changes in v4:
->   - Avoid updating the default.bconf if the file is not changed.
-> ---
->  MAINTAINERS                |    1 +
->  include/linux/bootconfig.h |   10 ++++++++++
->  init/Kconfig               |   21 ++++++++++++++++++++-
->  init/main.c                |   20 +++++++++++---------
->  lib/.gitignore             |    1 +
->  lib/Makefile               |    8 ++++++++
->  lib/bootconfig-data.S      |   10 ++++++++++
->  lib/bootconfig.c           |   13 +++++++++++++
->  8 files changed, 74 insertions(+), 10 deletions(-)
->  create mode 100644 lib/bootconfig-data.S
+>   arch/x86/include/asm/kvm_host.h |  1 +
+>   arch/x86/kvm/mmu/mmu.c          |  9 ++++
+>   arch/x86/kvm/mmu/mmu_internal.h | 84 +++++++++++++++++++++++++++++++++
+>   arch/x86/kvm/mmu/tdp_mmu.c      |  3 ++
+>   4 files changed, 97 insertions(+)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index b555a5e8704f..9b4910685412 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -7350,6 +7350,7 @@ S:	Maintained
->  F:	Documentation/admin-guide/bootconfig.rst
->  F:	fs/proc/bootconfig.c
->  F:	include/linux/bootconfig.h
-> +F:	lib/bootconfig-data.S
->  F:	lib/bootconfig.c
->  F:	tools/bootconfig/*
->  F:	tools/bootconfig/scripts/*
-> diff --git a/include/linux/bootconfig.h b/include/linux/bootconfig.h
-> index a4665c7ab07c..1611f9db878e 100644
-> --- a/include/linux/bootconfig.h
-> +++ b/include/linux/bootconfig.h
-> @@ -289,4 +289,14 @@ int __init xbc_get_info(int *node_size, size_t *data_size);
->  /* XBC cleanup data structures */
->  void __init xbc_exit(void);
->  
-> +/* XBC embedded bootconfig data in kernel */
-> +#ifdef CONFIG_BOOT_CONFIG_EMBED
-> +const char * __init xbc_get_embedded_bootconfig(size_t *size);
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index fcab2337819c..0c8cc7d73371 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -689,6 +689,7 @@ struct kvm_vcpu_arch {
+>   	struct kvm_mmu_memory_cache mmu_shadow_page_cache;
+>   	struct kvm_mmu_memory_cache mmu_gfn_array_cache;
+>   	struct kvm_mmu_memory_cache mmu_page_header_cache;
+> +	struct kvm_mmu_memory_cache mmu_private_sp_cache;
+>   
+>   	/*
+>   	 * QEMU userspace and the guest each have their own FPU state.
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 6e9847b1124b..8def8b97978f 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -758,6 +758,13 @@ static int mmu_topup_shadow_page_cache(struct kvm_vcpu *vcpu)
+>   	struct kvm_mmu_memory_cache *mc = &vcpu->arch.mmu_shadow_page_cache;
+>   	int start, end, i, r;
+>   
+> +	if (kvm_gfn_stolen_mask(vcpu->kvm)) {
+> +		r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_private_sp_cache,
+> +					       PT64_ROOT_MAX_LEVEL);
+> +		if (r)
+> +			return r;
+> +	}
+> +
+>   	if (shadow_init_value)
+>   		start = kvm_mmu_memory_cache_nr_free_objects(mc);
+>   
+> @@ -799,6 +806,7 @@ static void mmu_free_memory_caches(struct kvm_vcpu *vcpu)
+>   {
+>   	kvm_mmu_free_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache);
+>   	kvm_mmu_free_memory_cache(&vcpu->arch.mmu_shadow_page_cache);
+> +	kvm_mmu_free_memory_cache(&vcpu->arch.mmu_private_sp_cache);
+>   	kvm_mmu_free_memory_cache(&vcpu->arch.mmu_gfn_array_cache);
+>   	kvm_mmu_free_memory_cache(&vcpu->arch.mmu_page_header_cache);
+>   }
+> @@ -1791,6 +1799,7 @@ static struct kvm_mmu_page *kvm_mmu_alloc_page(struct kvm_vcpu *vcpu, int direct
+>   	if (!direct)
+>   		sp->gfns = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_gfn_array_cache);
+>   	set_page_private(virt_to_page(sp->spt), (unsigned long)sp);
+> +	kvm_mmu_init_private_sp(sp);
+>   
+>   	/*
+>   	 * active_mmu_pages must be a FIFO list, as kvm_zap_obsolete_pages()
+> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+> index da6166b5c377..80f7a74a71dc 100644
+> --- a/arch/x86/kvm/mmu/mmu_internal.h
+> +++ b/arch/x86/kvm/mmu/mmu_internal.h
+> @@ -53,6 +53,10 @@ struct kvm_mmu_page {
+>   	u64 *spt;
+>   	/* hold the gfn of each spte inside spt */
+>   	gfn_t *gfns;
+> +#ifdef CONFIG_KVM_MMU_PRIVATE
+> +	/* associated private shadow page, e.g. SEPT page */
+> +	void *private_sp;
+> +#endif
+>   	/* Currently serving as active root */
+>   	union {
+>   		int root_count;
+> @@ -104,6 +108,86 @@ static inline int kvm_mmu_page_as_id(struct kvm_mmu_page *sp)
+>   	return kvm_mmu_role_as_id(sp->role);
+>   }
+>   
+> +/*
+> + * TDX vcpu allocates page for root Secure EPT page and assigns to CPU secure
+> + * EPT pointer.  KVM doesn't need to allocate and link to the secure EPT.
+> + * Dummy value to make is_pivate_sp() return true.
+> + */
+> +#define KVM_MMU_PRIVATE_SP_ROOT	((void *)1)
+> +
+> +#ifdef CONFIG_KVM_MMU_PRIVATE
+> +static inline bool is_private_sp(struct kvm_mmu_page *sp)
+> +{
+> +	return !!sp->private_sp;
+> +}
+> +
+> +static inline bool is_private_spte(u64 *sptep)
+> +{
+> +	return is_private_sp(sptep_to_sp(sptep));
+> +}
+> +
+> +static inline void *kvm_mmu_private_sp(struct kvm_mmu_page *sp)
+> +{
+> +	return sp->private_sp;
+> +}
+> +
+> +static inline void kvm_mmu_init_private_sp(struct kvm_mmu_page *sp)
+> +{
+> +	sp->private_sp = NULL;
+> +}
+> +
+> +/* Valid sp->role.level is required. */
+> +static inline void kvm_mmu_alloc_private_sp(struct kvm_vcpu *vcpu,
+> +					struct kvm_mmu_page *sp)
+> +{
+> +	if (vcpu->arch.mmu->shadow_root_level == sp->role.level)
+> +		sp->private_sp = KVM_MMU_PRIVATE_SP_ROOT;
+> +	else
+> +		sp->private_sp =
+> +			kvm_mmu_memory_cache_alloc(
+> +				&vcpu->arch.mmu_private_sp_cache);
+> +	/*
+> +	 * Because mmu_private_sp_cache is topped up before staring kvm page
+> +	 * fault resolving, the allocation above shouldn't fail.
+> +	 */
+> +	WARN_ON_ONCE(!sp->private_sp);
+> +}
+> +
+> +static inline void kvm_mmu_free_private_sp(struct kvm_mmu_page *sp)
+> +{
+> +	if (sp->private_sp != KVM_MMU_PRIVATE_SP_ROOT)
+> +		free_page((unsigned long)sp->private_sp);
+> +}
 > +#else
-> +static inline const char *xbc_get_embedded_bootconfig(size_t *size)
+> +static inline bool is_private_sp(struct kvm_mmu_page *sp)
+> +{
+> +	return false;
+> +}
+> +
+> +static inline bool is_private_spte(u64 *sptep)
+> +{
+> +	return false;
+> +}
+> +
+> +static inline void *kvm_mmu_private_sp(struct kvm_mmu_page *sp)
 > +{
 > +	return NULL;
 > +}
-> +#endif
 > +
->  #endif
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 97463a33baa7..756872d17fe1 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -1351,7 +1351,7 @@ endif
->  
->  config BOOT_CONFIG
->  	bool "Boot config support"
-> -	select BLK_DEV_INITRD
-> +	select BLK_DEV_INITRD if !BOOT_CONFIG_EMBED
->  	help
->  	  Extra boot config allows system admin to pass a config file as
->  	  complemental extension of kernel cmdline when booting.
-> @@ -1361,6 +1361,25 @@ config BOOT_CONFIG
->  
->  	  If unsure, say Y.
->  
-> +config BOOT_CONFIG_EMBED
-> +	bool "Embed bootconfig file in the kernel"
-> +	depends on BOOT_CONFIG
-> +	help
-> +	  Embed a bootconfig file given by BOOT_CONFIG_EMBED_FILE in the
-> +	  kernel. Usually, the bootconfig file is loaded with the initrd
-> +	  image. But if the system doesn't support initrd, this option will
-> +	  help you by embedding a bootconfig file while building the kernel.
-> +
-> +	  If unsure, say N.
-> +
-> +config BOOT_CONFIG_EMBED_FILE
-> +	string "Embedded bootconfig file path"
-> +	depends on BOOT_CONFIG_EMBED
-> +	help
-> +	  Specify a bootconfig file which will be embedded to the kernel.
-> +	  This bootconfig will be used if there is no initrd or no other
-> +	  bootconfig in the initrd.
-> +
->  choice
->  	prompt "Compiler optimization level"
->  	default CC_OPTIMIZE_FOR_PERFORMANCE
-> diff --git a/init/main.c b/init/main.c
-> index 266d61bc67b0..62dddc4206b4 100644
-> --- a/init/main.c
-> +++ b/init/main.c
-> @@ -266,7 +266,7 @@ static int __init loglevel(char *str)
->  early_param("loglevel", loglevel);
->  
->  #ifdef CONFIG_BLK_DEV_INITRD
-> -static void * __init get_boot_config_from_initrd(u32 *_size)
-> +static void * __init get_boot_config_from_initrd(size_t *_size)
->  {
->  	u32 size, csum;
->  	char *data;
-> @@ -410,14 +410,16 @@ static int __init warn_bootconfig(char *str)
->  static void __init setup_boot_config(void)
->  {
->  	static char tmp_cmdline[COMMAND_LINE_SIZE] __initdata;
-> -	const char *msg;
-> -	int pos;
-> -	u32 size;
-> -	char *data, *err;
-> -	int ret;
-> +	const char *msg, *data;
-> +	int pos, ret;
-> +	size_t size;
-> +	char *err;
->  
->  	/* Cut out the bootconfig data even if we have no bootconfig option */
->  	data = get_boot_config_from_initrd(&size);
-> +	/* If there is no bootconfig in initrd, try embedded one. */
-> +	if (!data)
-> +		data = xbc_get_embedded_bootconfig(&size);
->  
->  	strlcpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
->  	err = parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0, NULL,
-> @@ -436,8 +438,8 @@ static void __init setup_boot_config(void)
->  	}
->  
->  	if (size >= XBC_DATA_MAX) {
-> -		pr_err("bootconfig size %d greater than max size %d\n",
-> -			size, XBC_DATA_MAX);
-> +		pr_err("bootconfig size %ld greater than max size %d\n",
-> +			(long)size, XBC_DATA_MAX);
->  		return;
->  	}
->  
-> @@ -450,7 +452,7 @@ static void __init setup_boot_config(void)
->  				msg, pos);
->  	} else {
->  		xbc_get_info(&ret, NULL);
-> -		pr_info("Load bootconfig: %d bytes %d nodes\n", size, ret);
-> +		pr_info("Load bootconfig: %ld bytes %d nodes\n", (long)size, ret);
->  		/* keys starting with "kernel." are passed via cmdline */
->  		extra_command_line = xbc_make_cmdline("kernel");
->  		/* Also, "init." keys are init arguments */
-> diff --git a/lib/.gitignore b/lib/.gitignore
-> index e5e217b8307b..54596b634ecb 100644
-> --- a/lib/.gitignore
-> +++ b/lib/.gitignore
-> @@ -1,6 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  /crc32table.h
->  /crc64table.h
-> +/default.bconf
->  /gen_crc32table
->  /gen_crc64table
->  /oid_registry_data.c
-> diff --git a/lib/Makefile b/lib/Makefile
-> index 08053df16c7c..95268d6c75b7 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -280,6 +280,14 @@ $(foreach file, $(libfdt_files), \
->  lib-$(CONFIG_LIBFDT) += $(libfdt_files)
->  
->  obj-$(CONFIG_BOOT_CONFIG) += bootconfig.o
-> +obj-$(CONFIG_BOOT_CONFIG_EMBED) += bootconfig-data.o
-> +
-> +$(obj)/bootconfig-data.o: $(obj)/default.bconf
-> +
-> +targets += default.bconf
-> +filechk_defbconf = cat $(or $(real-prereqs), /dev/null)
-> +$(obj)/default.bconf: $(CONFIG_BOOT_CONFIG_EMBED_FILE) FORCE
-> +	$(call filechk,defbconf)
->  
->  obj-$(CONFIG_RBTREE_TEST) += rbtree_test.o
->  obj-$(CONFIG_INTERVAL_TREE_TEST) += interval_tree_test.o
-> diff --git a/lib/bootconfig-data.S b/lib/bootconfig-data.S
-> new file mode 100644
-> index 000000000000..ef85ba1a82f4
-> --- /dev/null
-> +++ b/lib/bootconfig-data.S
-> @@ -0,0 +1,10 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Embed default bootconfig in the kernel.
-> + */
-> +	.section .init.rodata, "aw"
-> +	.global embedded_bootconfig_data
-> +embedded_bootconfig_data:
-> +	.incbin "lib/default.bconf"
-> +	.global embedded_bootconfig_data_end
-> +embedded_bootconfig_data_end:
-> diff --git a/lib/bootconfig.c b/lib/bootconfig.c
-> index 74f3201ab8e5..c59d26068a64 100644
-> --- a/lib/bootconfig.c
-> +++ b/lib/bootconfig.c
-> @@ -12,6 +12,19 @@
->  #include <linux/kernel.h>
->  #include <linux/memblock.h>
->  #include <linux/string.h>
-> +
-> +#ifdef CONFIG_BOOT_CONFIG_EMBED
-> +/* embedded_bootconfig_data is defined in bootconfig-data.S */
-> +extern __visible const char embedded_bootconfig_data[];
-> +extern __visible const char embedded_bootconfig_data_end[];
-> +
-> +const char * __init xbc_get_embedded_bootconfig(size_t *size)
+> +static inline void kvm_mmu_init_private_sp(struct kvm_mmu_page *sp)
 > +{
-> +	*size = embedded_bootconfig_data_end - embedded_bootconfig_data;
-> +	return (*size) ? embedded_bootconfig_data : NULL;
+> +}
+> +
+> +static inline void kvm_mmu_alloc_private_sp(struct kvm_vcpu *vcpu,
+> +					struct kvm_mmu_page *sp)
+> +{
+> +}
+> +
+> +static inline void kvm_mmu_free_private_sp(struct kvm_mmu_page *sp)
+> +{
 > +}
 > +#endif
 > +
->  #else /* !__KERNEL__ */
->  /*
->   * NOTE: This is only for tools/bootconfig, because tools/bootconfig will
-> 
+>   static inline bool kvm_mmu_page_ad_need_write_protect(struct kvm_mmu_page *sp)
+>   {
+>   	/*
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 8db262440d5c..a68f3a22836b 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -59,6 +59,8 @@ static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
+>   
+>   static void tdp_mmu_free_sp(struct kvm_mmu_page *sp)
+>   {
+> +	if (is_private_sp(sp))
+> +		kvm_mmu_free_private_sp(sp);
+>   	free_page((unsigned long)sp->spt);
+>   	kmem_cache_free(mmu_page_header_cache, sp);
+>   }
+> @@ -184,6 +186,7 @@ static struct kvm_mmu_page *alloc_tdp_mmu_page(struct kvm_vcpu *vcpu, gfn_t gfn,
+>   	sp->role.word = page_role_for_level(vcpu, level).word;
+>   	sp->gfn = gfn;
+>   	sp->tdp_mmu_page = true;
+> +	kvm_mmu_init_private_sp(sp);
+>   
+>   	trace_kvm_mmu_get_page(sp, true);
+>   
 
+Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>

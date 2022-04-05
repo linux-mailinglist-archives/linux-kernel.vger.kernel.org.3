@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 487CB4F42C9
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4634F3E47
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388305AbiDENVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60616 "EHLO
+        id S234200AbiDENxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:53:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344696AbiDEJVG (ORCPT
+        with ESMTP id S1345005AbiDEJWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:21:06 -0400
+        Tue, 5 Apr 2022 05:22:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361AE237FF;
-        Tue,  5 Apr 2022 02:08:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59F8266B;
+        Tue,  5 Apr 2022 02:08:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0595E61564;
-        Tue,  5 Apr 2022 09:08:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15436C385A0;
-        Tue,  5 Apr 2022 09:08:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C719361577;
+        Tue,  5 Apr 2022 09:08:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D759CC385A2;
+        Tue,  5 Apr 2022 09:08:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149707;
-        bh=VlcoB2NN9O2FYLHqTNDYV/Vv3oVh0iUwfatCynBEVBc=;
+        s=korg; t=1649149738;
+        bh=PSAWW/Nw9gcKd2tq0UOU4St9E3PTIIk5kU+nkR20mk8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2DTllwcm/mbT6THd2gdgdlvHDDs7t12EspTP7Z1s6Hz0aMkWQ45EXkZYzHLER17Gv
-         2cFMmWJfX705lh/wE20hud0f9aHx8vIwT84elETAmQqGIDjab5mp7WzCZqyNo/wPJ8
-         xJRhWV76EgBacvvBE30CDx0I1jP/QhBFavsUxKjs=
+        b=cwB1UwFdO2uXKMgun+88xp+r+A0gJy3B2GRI3nQYuRBz4xPt829sSgNdGRE9jDjVO
+         5InL9xjUj6/EdpxvDHCJ0Jae5xSj9glju7rGe9GY6mdIiiSoDiioGXS/RyHwZUULzb
+         lIJvSI5Ui5o1YRQ1Nkt+R6VjZHQm8NLLcih3H0yU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Boris Burkov <boris@bur.io>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        Josef Bacik <josef@toxicpanda.com>,
+        stable@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
         David Sterba <dsterba@suse.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0795/1017] btrfs: make search_csum_tree return 0 if we get -EFBIG
-Date:   Tue,  5 Apr 2022 09:28:28 +0200
-Message-Id: <20220405070417.849784472@linuxfoundation.org>
+Subject: [PATCH 5.16 0796/1017] btrfs: handle csum lookup errors properly on reads
+Date:   Tue,  5 Apr 2022 09:28:29 +0200
+Message-Id: <20220405070417.878940354@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -59,47 +57,110 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Josef Bacik <josef@toxicpanda.com>
 
-[ Upstream commit 03ddb19d2ea745228879b9334f3b550c88acb10a ]
+[ Upstream commit 1784b7d502a94b561eae58249adde5f72c26eb3c ]
 
-We can either fail to find a csum entry at all and return -ENOENT, or we
-can find a range that is close, but return -EFBIG.  In essence these
-both mean the same thing when we are doing a lookup for a csum in an
-existing range, we didn't find a csum.  We want to treat both of these
-errors the same way, complain loudly that there wasn't a csum.  This
-currently happens anyway because we do
+Currently any error we get while trying to lookup csums during reads
+shows up as a missing csum, and then on the read completion side we
+print an error saying there was a csum mismatch and we increase the
+device corruption count.
 
-	count = search_csum_tree();
-	if (count <= 0) {
-		// reloc and error handling
-	}
+However we could have gotten an EIO from the lookup.  We could also be
+inside of a memory constrained container and gotten a ENOMEM while
+trying to do the read.  In either case we don't want to make this look
+like a file system corruption problem, we want to make it look like the
+actual error it is.  Capture any negative value, convert it to the
+appropriate blk_status_t, free the csum array if we have one and bail.
 
-However it forces us to incorrectly treat EIO or ENOMEM errors as on
-disk corruption.  Fix this by returning 0 if we get either -ENOENT or
--EFBIG from btrfs_lookup_csum() so we can do proper error handling.
+Note: a possible improvement would be to make the relocation code look
+up the owning inode and see if it's marked as NODATASUM and set
+EXTENT_NODATASUM there, that way if there's corruption and there isn't a
+checksum when we want it we can fail here rather than later.
 
-Reviewed-by: Boris Burkov <boris@bur.io>
-Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
 Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/file-item.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/btrfs/file-item.c | 36 ++++++++++++++++++++++--------------
+ 1 file changed, 22 insertions(+), 14 deletions(-)
 
 diff --git a/fs/btrfs/file-item.c b/fs/btrfs/file-item.c
-index d1cbb64a78f3..91ae1caa1bdb 100644
+index 91ae1caa1bdb..a68d9cab12ea 100644
 --- a/fs/btrfs/file-item.c
 +++ b/fs/btrfs/file-item.c
-@@ -303,7 +303,7 @@ static int search_csum_tree(struct btrfs_fs_info *fs_info,
- 	read_extent_buffer(path->nodes[0], dst, (unsigned long)item,
- 			ret * csum_size);
- out:
--	if (ret == -ENOENT)
-+	if (ret == -ENOENT || ret == -EFBIG)
- 		ret = 0;
- 	return ret;
+@@ -366,6 +366,7 @@ blk_status_t btrfs_lookup_bio_sums(struct inode *inode, struct bio *bio, u8 *dst
+ {
+ 	struct btrfs_fs_info *fs_info = btrfs_sb(inode->i_sb);
+ 	struct extent_io_tree *io_tree = &BTRFS_I(inode)->io_tree;
++	struct btrfs_bio *bbio = NULL;
+ 	struct btrfs_path *path;
+ 	const u32 sectorsize = fs_info->sectorsize;
+ 	const u32 csum_size = fs_info->csum_size;
+@@ -375,6 +376,7 @@ blk_status_t btrfs_lookup_bio_sums(struct inode *inode, struct bio *bio, u8 *dst
+ 	u8 *csum;
+ 	const unsigned int nblocks = orig_len >> fs_info->sectorsize_bits;
+ 	int count = 0;
++	blk_status_t ret = BLK_STS_OK;
+ 
+ 	if (!fs_info->csum_root || (BTRFS_I(inode)->flags & BTRFS_INODE_NODATASUM))
+ 		return BLK_STS_OK;
+@@ -397,7 +399,7 @@ blk_status_t btrfs_lookup_bio_sums(struct inode *inode, struct bio *bio, u8 *dst
+ 		return BLK_STS_RESOURCE;
+ 
+ 	if (!dst) {
+-		struct btrfs_bio *bbio = btrfs_bio(bio);
++		bbio = btrfs_bio(bio);
+ 
+ 		if (nblocks * csum_size > BTRFS_BIO_INLINE_CSUM_SIZE) {
+ 			bbio->csum = kmalloc_array(nblocks, csum_size, GFP_NOFS);
+@@ -453,21 +455,27 @@ blk_status_t btrfs_lookup_bio_sums(struct inode *inode, struct bio *bio, u8 *dst
+ 
+ 		count = search_csum_tree(fs_info, path, cur_disk_bytenr,
+ 					 search_len, csum_dst);
+-		if (count <= 0) {
+-			/*
+-			 * Either we hit a critical error or we didn't find
+-			 * the csum.
+-			 * Either way, we put zero into the csums dst, and skip
+-			 * to the next sector.
+-			 */
++		if (count < 0) {
++			ret = errno_to_blk_status(count);
++			if (bbio)
++				btrfs_bio_free_csum(bbio);
++			break;
++		}
++
++		/*
++		 * We didn't find a csum for this range.  We need to make sure
++		 * we complain loudly about this, because we are not NODATASUM.
++		 *
++		 * However for the DATA_RELOC inode we could potentially be
++		 * relocating data extents for a NODATASUM inode, so the inode
++		 * itself won't be marked with NODATASUM, but the extent we're
++		 * copying is in fact NODATASUM.  If we don't find a csum we
++		 * assume this is the case.
++		 */
++		if (count == 0) {
+ 			memset(csum_dst, 0, csum_size);
+ 			count = 1;
+ 
+-			/*
+-			 * For data reloc inode, we need to mark the range
+-			 * NODATASUM so that balance won't report false csum
+-			 * error.
+-			 */
+ 			if (BTRFS_I(inode)->root->root_key.objectid ==
+ 			    BTRFS_DATA_RELOC_TREE_OBJECTID) {
+ 				u64 file_offset;
+@@ -488,7 +496,7 @@ blk_status_t btrfs_lookup_bio_sums(struct inode *inode, struct bio *bio, u8 *dst
+ 	}
+ 
+ 	btrfs_free_path(path);
+-	return BLK_STS_OK;
++	return ret;
  }
+ 
+ int btrfs_lookup_csums_range(struct btrfs_root *root, u64 start, u64 end,
 -- 
 2.34.1
 

@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D9C14F21CD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 727614F21B4
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbiDECon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 22:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58890 "EHLO
+        id S230098AbiDECox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 22:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbiDECnl (ORCPT
+        with ESMTP id S229992AbiDECnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 22:43:41 -0400
+        Mon, 4 Apr 2022 22:43:42 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 946163A37B8
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 18:49:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D8793A52FF
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 18:49:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649123362;
+        s=mimecast20190719; t=1649123365;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Zpk9Li6fgqH75i55vcn3N+1Xng1FM6T4OSs35V/WwSY=;
-        b=AuyFPVawAUTMJ7DgjsnuWVKTP92a4zATGCq9czhbUkniyPNlNBx8F7G2mJl+u9W8WICXeS
-        PnreGcHGxhEvIyhXlRc6vGzjJu8bqKvesjgoUDFNjcl0DD6f7il9R7XTtbx+uijcYy9L01
-        rN5PbCOzv85ng9HbNSZpMlsIM5wiEMQ=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=bWfhkJFq1BCdKqisyymaNspfijHKW5rO8LQgLYY4Yk0=;
+        b=W2dP0PEOeXHbAG72TsAXZKmEm1YsqSNstkbmfUYGZ7Eskh8zuKKJWkiRue5+Ghk4VKNl+x
+        ZqGmACvE/4vpKIrn8LusZatDMb7daItKWPumTolgX8xkk2z/KmSfClk3LSalAC9r6V6/Es
+        mKLpJOn2F2Z2PzuXhoxy61DqIZlxE+c=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-629-xScWbi0WPTSzR6cwXTV8kw-1; Mon, 04 Apr 2022 21:49:21 -0400
-X-MC-Unique: xScWbi0WPTSzR6cwXTV8kw-1
-Received: by mail-io1-f70.google.com with SMTP id x16-20020a6bfe10000000b006409f03e39eso7462851ioh.7
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 18:49:21 -0700 (PDT)
+ us-mta-505--UYCS4FZPnale-CgzcWn_A-1; Mon, 04 Apr 2022 21:49:24 -0400
+X-MC-Unique: -UYCS4FZPnale-CgzcWn_A-1
+Received: by mail-il1-f200.google.com with SMTP id l8-20020a056e020dc800b002ca4c433357so1956705ilj.23
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 18:49:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Zpk9Li6fgqH75i55vcn3N+1Xng1FM6T4OSs35V/WwSY=;
-        b=VKpz4gxTpIoimHG+r1BGZLVN49XDMGXj/hlGnwqg+ANI7JGX+Nsb/3TyXXi4dAQlvi
-         iVcbShGir11ibLLbFb+Zypr1s7K/MMuQYPwUJvRDwyCrCZ6Bm8kv+c9LYlqMKpvz+41n
-         S0SNThP9FS2Edv2zslwtc43X5vD35VHousWgQe2IfrZFkaJxqn2jb3rJ50SO6vwb+T2O
-         yv/1EwfstFcZN6nwh6ebGKAtlyXV2eFOW/oxaV3atqTpToBCpjnnQHDuAswX7QZZToo7
-         cR37LSBn/3fFXRTtgvUzrHVjovlcN0VyTD2pI8a6xLCcrUr/np36PG9PeQNJryhPSWpM
-         OvEw==
-X-Gm-Message-State: AOAM531xjWnj6liRYlgIo26L75Jcu2/wQzR8D9DN2getyA9Ac7HRiZvl
-        pSJmMhptdB6JEY706jqmyqZhPev/uWaEEU20PawPGWZjN4oIdVT1qbFkJHNBAFP5DRx9y2kpS+P
-        UJ9GCw58MAfFuVDH+L1EyrBQWkWHxtvDALzzInIWTgTxbOCZqEaTQ3UpM8bY7EIda3Q8oTduWfw
+        bh=bWfhkJFq1BCdKqisyymaNspfijHKW5rO8LQgLYY4Yk0=;
+        b=63J5yNcoIpDPaiB39F3XcHIydutVnAnp8wybnfZQFWomz0xuqqQwS2/APGvuSHG9wh
+         57VM1Wud3Gf492R/8CaY322otS5wVtBjOZnvYDZf+Ls0bIqedYN2QrB1/O1/gESGWXUw
+         FGIRpfBMbAGP13RsGQWdb+YRjKKOlIKjrZVS65AuTeQMyD/fCkSU2FzWosvudGQwHJsh
+         f9LJjamo9unvT+hRPXvJ0Nz+xSejXyIAcxRInRbYxaSeMCCqPLnBYGiX8qDGrPr1Nfpf
+         UwiGsUl/WhGlZNP9+PEQdOTbCioqrJbBnRoi2o53kPxdDn8jcUS9u+koqMs/9g3Hj2LV
+         x0bQ==
+X-Gm-Message-State: AOAM53220A+WUsCUY7mmW6Un4v3UPrVo83IDgz7PRgiJiE1JeCk6UjqQ
+        u1RHi3e41xC91gLp8OQxoSAovHtzK/G61/z0l1QxPIeW6rVg3TJqOecGw60E99QznMABIYaPmhd
+        808UBUp2I0ArvjRgZcc228UiUUg/BN6YmSoko3OzzBpHh9Xu2GNpQ4BXMGu/K4bWqP/akHN06oA
         ==
-X-Received: by 2002:a05:6638:164b:b0:323:ac42:8d4b with SMTP id a11-20020a056638164b00b00323ac428d4bmr693516jat.75.1649123361107;
-        Mon, 04 Apr 2022 18:49:21 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzDhrnP+UnjED6dnxAUMKpLm5xwk/WcwG2E8d8U2B2Tf/WxM+ICv/y59UNBKP9S5t8sm4pR1A==
-X-Received: by 2002:a05:6638:164b:b0:323:ac42:8d4b with SMTP id a11-20020a056638164b00b00323ac428d4bmr693489jat.75.1649123360806;
-        Mon, 04 Apr 2022 18:49:20 -0700 (PDT)
+X-Received: by 2002:a02:cd12:0:b0:321:29bd:b5ae with SMTP id g18-20020a02cd12000000b0032129bdb5aemr659611jaq.83.1649123363651;
+        Mon, 04 Apr 2022 18:49:23 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwFo84QPKUst3NxwRFnpoGwYsq1cNnk6B7cOmPSPQoeut9h5XdJGOgIWmVZYMgQ4peNHpQKkw==
+X-Received: by 2002:a02:cd12:0:b0:321:29bd:b5ae with SMTP id g18-20020a02cd12000000b0032129bdb5aemr659588jaq.83.1649123363425;
+        Mon, 04 Apr 2022 18:49:23 -0700 (PDT)
 Received: from localhost.localdomain (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id t1-20020a056e02060100b002ca41adce5dsm2355369ils.8.2022.04.04.18.49.19
+        by smtp.gmail.com with ESMTPSA id z12-20020a92d18c000000b002ca3ac378e2sm2852863ilz.76.2022.04.04.18.49.22
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 04 Apr 2022 18:49:20 -0700 (PDT)
+        Mon, 04 Apr 2022 18:49:23 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
@@ -70,9 +70,9 @@ Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Axel Rasmussen <axelrasmussen@google.com>,
         Alistair Popple <apopple@nvidia.com>, peterx@redhat.com
-Subject: [PATCH v8 18/23] mm/hugetlb: Handle uffd-wp during fork()
-Date:   Mon,  4 Apr 2022 21:49:18 -0400
-Message-Id: <20220405014918.14932-1-peterx@redhat.com>
+Subject: [PATCH v8 19/23] mm/khugepaged: Don't recycle vma pgtable if uffd-wp registered
+Date:   Mon,  4 Apr 2022 21:49:21 -0400
+Message-Id: <20220405014921.14994-1-peterx@redhat.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220405014646.13522-1-peterx@redhat.com>
 References: <20220405014646.13522-1-peterx@redhat.com>
@@ -88,179 +88,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Firstly, we'll need to pass in dst_vma into copy_hugetlb_page_range() because
-for uffd-wp it's the dst vma that matters on deciding how we should treat
-uffd-wp protected ptes.
+When we're trying to collapse a 2M huge shmem page, don't retract pgtable pmd
+page if it's registered with uffd-wp, because that pgtable could have pte
+markers installed.  Recycling of that pgtable means we'll lose the pte markers.
+That could cause data loss for an uffd-wp enabled application on shmem.
 
-We should recognize pte markers during fork and do the pte copy if needed.
+Instead of disabling khugepaged on these files, simply skip retracting these
+special VMAs, then the page cache can still be merged into a huge thp, and
+other mm/vma can still map the range of file with a huge thp when proper.
+
+Note that checking VM_UFFD_WP needs to be done with mmap_sem held for write,
+that avoids race like:
+
+         khugepaged                             user thread
+         ==========                             ===========
+     check VM_UFFD_WP, not set
+                                       UFFDIO_REGISTER with uffd-wp on shmem
+                                       wr-protect some pages (install markers)
+     take mmap_sem write lock
+     erase pmd and free pmd page
+      --> pte markers are dropped unnoticed!
 
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- include/linux/hugetlb.h |  7 +++++--
- mm/hugetlb.c            | 42 +++++++++++++++++++++++++++--------------
- mm/memory.c             |  2 +-
- 3 files changed, 34 insertions(+), 17 deletions(-)
+ mm/khugepaged.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index ab48b3bbb0e6..6df51d23b7ee 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -137,7 +137,8 @@ int move_hugetlb_page_tables(struct vm_area_struct *vma,
- 			     struct vm_area_struct *new_vma,
- 			     unsigned long old_addr, unsigned long new_addr,
- 			     unsigned long len);
--int copy_hugetlb_page_range(struct mm_struct *, struct mm_struct *, struct vm_area_struct *);
-+int copy_hugetlb_page_range(struct mm_struct *, struct mm_struct *,
-+			    struct vm_area_struct *, struct vm_area_struct *);
- long follow_hugetlb_page(struct mm_struct *, struct vm_area_struct *,
- 			 struct page **, struct vm_area_struct **,
- 			 unsigned long *, unsigned long *, long, unsigned int,
-@@ -268,7 +269,9 @@ static inline struct page *follow_huge_addr(struct mm_struct *mm,
- }
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 04a972259136..d7c5bb9fd1fb 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -1464,6 +1464,10 @@ void collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr)
+ 	if (!hugepage_vma_check(vma, vma->vm_flags | VM_HUGEPAGE))
+ 		return;
  
- static inline int copy_hugetlb_page_range(struct mm_struct *dst,
--			struct mm_struct *src, struct vm_area_struct *vma)
-+					  struct mm_struct *src,
-+					  struct vm_area_struct *dst_vma,
-+					  struct vm_area_struct *src_vma)
- {
- 	BUG();
- 	return 0;
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index e4af8b357b90..e1571179698a 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -4706,23 +4706,24 @@ hugetlb_install_page(struct vm_area_struct *vma, pte_t *ptep, unsigned long addr
- }
- 
- int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
--			    struct vm_area_struct *vma)
-+			    struct vm_area_struct *dst_vma,
-+			    struct vm_area_struct *src_vma)
- {
- 	pte_t *src_pte, *dst_pte, entry, dst_entry;
- 	struct page *ptepage;
- 	unsigned long addr;
--	bool cow = is_cow_mapping(vma->vm_flags);
--	struct hstate *h = hstate_vma(vma);
-+	bool cow = is_cow_mapping(src_vma->vm_flags);
-+	struct hstate *h = hstate_vma(src_vma);
- 	unsigned long sz = huge_page_size(h);
- 	unsigned long npages = pages_per_huge_page(h);
--	struct address_space *mapping = vma->vm_file->f_mapping;
-+	struct address_space *mapping = src_vma->vm_file->f_mapping;
- 	struct mmu_notifier_range range;
- 	int ret = 0;
- 
- 	if (cow) {
--		mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, src,
--					vma->vm_start,
--					vma->vm_end);
-+		mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, src_vma, src,
-+					src_vma->vm_start,
-+					src_vma->vm_end);
- 		mmu_notifier_invalidate_range_start(&range);
- 		mmap_assert_write_locked(src);
- 		raw_write_seqcount_begin(&src->write_protect_seq);
-@@ -4736,12 +4737,12 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 		i_mmap_lock_read(mapping);
- 	}
- 
--	for (addr = vma->vm_start; addr < vma->vm_end; addr += sz) {
-+	for (addr = src_vma->vm_start; addr < src_vma->vm_end; addr += sz) {
- 		spinlock_t *src_ptl, *dst_ptl;
- 		src_pte = huge_pte_offset(src, addr, sz);
- 		if (!src_pte)
- 			continue;
--		dst_pte = huge_pte_alloc(dst, vma, addr, sz);
-+		dst_pte = huge_pte_alloc(dst, dst_vma, addr, sz);
- 		if (!dst_pte) {
- 			ret = -ENOMEM;
- 			break;
-@@ -4776,6 +4777,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 		} else if (unlikely(is_hugetlb_entry_migration(entry) ||
- 				    is_hugetlb_entry_hwpoisoned(entry))) {
- 			swp_entry_t swp_entry = pte_to_swp_entry(entry);
-+			bool uffd_wp = huge_pte_uffd_wp(entry);
- 
- 			if (!is_readable_migration_entry(swp_entry) && cow) {
- 				/*
-@@ -4785,10 +4787,21 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 				swp_entry = make_readable_migration_entry(
- 							swp_offset(swp_entry));
- 				entry = swp_entry_to_pte(swp_entry);
-+				if (userfaultfd_wp(src_vma) && uffd_wp)
-+					entry = huge_pte_mkuffd_wp(entry);
- 				set_huge_swap_pte_at(src, addr, src_pte,
- 						     entry, sz);
- 			}
-+			if (!userfaultfd_wp(dst_vma) && uffd_wp)
-+				entry = huge_pte_clear_uffd_wp(entry);
- 			set_huge_swap_pte_at(dst, addr, dst_pte, entry, sz);
-+		} else if (unlikely(is_pte_marker(entry))) {
++	/* Keep pmd pgtable for uffd-wp; see comment in retract_page_tables() */
++	if (userfaultfd_wp(vma))
++		return;
++
+ 	hpage = find_lock_page(vma->vm_file->f_mapping,
+ 			       linear_page_index(vma, haddr));
+ 	if (!hpage)
+@@ -1599,7 +1603,15 @@ static void retract_page_tables(struct address_space *mapping, pgoff_t pgoff)
+ 		 * reverse order. Trylock is a way to avoid deadlock.
+ 		 */
+ 		if (mmap_write_trylock(mm)) {
+-			if (!khugepaged_test_exit(mm))
 +			/*
-+			 * We copy the pte marker only if the dst vma has
-+			 * uffd-wp enabled.
++			 * When a vma is registered with uffd-wp, we can't
++			 * recycle the pmd pgtable because there can be pte
++			 * markers installed.  Skip it only, so the rest mm/vma
++			 * can still have the same file mapped hugely, however
++			 * it'll always mapped in small page size for uffd-wp
++			 * registered ranges.
 +			 */
-+			if (userfaultfd_wp(dst_vma))
-+				set_huge_pte_at(dst, addr, dst_pte, entry);
++			if (!khugepaged_test_exit(mm) && !userfaultfd_wp(vma))
+ 				collapse_and_free_pmd(mm, vma, addr, pmd);
+ 			mmap_write_unlock(mm);
  		} else {
- 			entry = huge_ptep_get(src_pte);
- 			ptepage = pte_page(entry);
-@@ -4806,20 +4819,21 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 			 */
- 			if (!PageAnon(ptepage)) {
- 				page_dup_file_rmap(ptepage, true);
--			} else if (page_try_dup_anon_rmap(ptepage, true, vma)) {
-+			} else if (page_try_dup_anon_rmap(ptepage, true,
-+							  src_vma)) {
- 				pte_t src_pte_old = entry;
- 				struct page *new;
- 
- 				spin_unlock(src_ptl);
- 				spin_unlock(dst_ptl);
- 				/* Do not use reserve as it's private owned */
--				new = alloc_huge_page(vma, addr, 1);
-+				new = alloc_huge_page(dst_vma, addr, 1);
- 				if (IS_ERR(new)) {
- 					put_page(ptepage);
- 					ret = PTR_ERR(new);
- 					break;
- 				}
--				copy_user_huge_page(new, ptepage, addr, vma,
-+				copy_user_huge_page(new, ptepage, addr, dst_vma,
- 						    npages);
- 				put_page(ptepage);
- 
-@@ -4829,13 +4843,13 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
- 				spin_lock_nested(src_ptl, SINGLE_DEPTH_NESTING);
- 				entry = huge_ptep_get(src_pte);
- 				if (!pte_same(src_pte_old, entry)) {
--					restore_reserve_on_error(h, vma, addr,
-+					restore_reserve_on_error(h, dst_vma, addr,
- 								new);
- 					put_page(new);
- 					/* dst_entry won't change as in child */
- 					goto again;
- 				}
--				hugetlb_install_page(vma, dst_pte, addr, new);
-+				hugetlb_install_page(dst_vma, dst_pte, addr, new);
- 				spin_unlock(src_ptl);
- 				spin_unlock(dst_ptl);
- 				continue;
-diff --git a/mm/memory.c b/mm/memory.c
-index 9808edfe18d4..d1e9c2517dfb 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -1278,7 +1278,7 @@ copy_page_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
- 		return 0;
- 
- 	if (is_vm_hugetlb_page(src_vma))
--		return copy_hugetlb_page_range(dst_mm, src_mm, src_vma);
-+		return copy_hugetlb_page_range(dst_mm, src_mm, dst_vma, src_vma);
- 
- 	if (unlikely(src_vma->vm_flags & VM_PFNMAP)) {
- 		/*
 -- 
 2.32.0
 

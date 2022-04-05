@@ -2,421 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B03284F523A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C0C4F523B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1849732AbiDFCkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
+        id S1849746AbiDFCkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573664AbiDEWwl (ORCPT
+        with ESMTP id S1574552AbiDEW4c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 18:52:41 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8B42183B
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 14:35:34 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id y6so273629plg.2
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 14:35:34 -0700 (PDT)
+        Tue, 5 Apr 2022 18:56:32 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75CA0197AC7
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 14:38:23 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id d5so724747lfj.9
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 14:38:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3T1DLNs454DRQUzm0Ou8rT4NITlZJwcCtRIhth0zBLg=;
-        b=dZmHadTOGH2sWttG/8o6yry7YYYDnFAlF3s85cSg04QUfWBiZwEu+ZFKK7bHAq2Nzw
-         0h401ttv6zohsw5jB+Tc2UGfvz6jvfT3KGOZAD5FEm4TMsV6B4icl5lM+1ruDwJY5mqK
-         rJIa8Bc8z5PKxidv6RtFMbTaAU6b5gKanaV/4=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bxKqK2XNY4gRVlPJC2xJqtnMP47aAtqK7bCRdORZQrc=;
+        b=pPMhHD+MAeCOHNTEHA/NpfXCwZpLhzs4orOzrp/sfSfjhe/NVw9jqmSdaz70eZjqcR
+         5o+2PV5F7QxxcmHTa8f6dNstumF3Bgv/gf8pWeNhL92TVdFP5PDHzDOoRJk5nLuBT0nS
+         Jd1XoFDylIGl8besXC0b/wp9t8DBqdw1LRLz1HySjABgaPBfJls6Zszkyb83sFtIXLBl
+         x7DLWhNpP05EDwn4zDvh3/5kTeSgrs/vR5QgrL0lKRUw9/WB6jSazvA40N5k1wEL+bJi
+         2+PfQeE4zNpnRiCg30HJ7RKvxj6OZihDtemYYzyAROjixwHBVKJbKZ0wixHYaNKh9va7
+         t1gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3T1DLNs454DRQUzm0Ou8rT4NITlZJwcCtRIhth0zBLg=;
-        b=dQBLsT75jzFg+3EHXsH8UuSfvD4Mv7wNpFHRARHTwzFCnJXn7+G7KuzUdW7ccVjP8a
-         RD+s97tVRp6zWihR4ntTQREAFJFTTs+ZKVtDg26tRng9z8Jg4GMTGNWOP2TOp6rEaCWo
-         LGDBUoXAZPYhg/tWkrENJhgmtQYVyEYnn6ph2KeSg5hcyS/aioQH6J+/0BDg1rWjEM3K
-         pJf9NQZGlSlNk9v4Ti8Ms8KHEeNtMldRpSk2FH5rYY1g3oHvYV8wH7hIPqQnhMq5uCO1
-         URBHbwBcLrjp7MaCEN78IXBRfqq33/NP/NcuVvFflZnn5QxTvPMmHAzgtv0pD5aYcYj8
-         YgSQ==
-X-Gm-Message-State: AOAM530iq/pQmnicXUPU1n5EusKzIYZD4o2q01p8SiXbLdHKt6xBVqAX
-        R/bpiDxjStWWIZ/FxgYjdIThow==
-X-Google-Smtp-Source: ABdhPJwvvmi6H06TfLDbKyMUjMOm74H9NrRlFsP8UZHH4zfLrtGFK8t0xDeYGGV6tyKLic3OjN+08w==
-X-Received: by 2002:a17:90b:4c44:b0:1c7:109c:b419 with SMTP id np4-20020a17090b4c4400b001c7109cb419mr6324577pjb.113.1649194534059;
-        Tue, 05 Apr 2022 14:35:34 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:6b63:d403:e31b:da39])
-        by smtp.gmail.com with UTF8SMTPSA id g12-20020a056a001a0c00b004e1307b249csm16964755pfv.69.2022.04.05.14.35.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 14:35:33 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 14:35:31 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_rohitkr@quicinc.com,
-        srinivas.kandagatla@linaro.org, dianders@chromium.org,
-        swboyd@chromium.org, judyhsiao@chromium.org,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Subject: Re: [PATCH v6 1/3] arm64: dts: qcom: sc7280: Add nodes for va tx and
- rx macros and external codecs
-Message-ID: <Yky2Iwt+tvxvu4/S@google.com>
-References: <1649157220-29304-1-git-send-email-quic_srivasam@quicinc.com>
- <1649157220-29304-2-git-send-email-quic_srivasam@quicinc.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bxKqK2XNY4gRVlPJC2xJqtnMP47aAtqK7bCRdORZQrc=;
+        b=U9lYH06mwrFiAZGcsYaee154v5EbWZoXRGtyx+q+YVyWAfgkTqQAMSvRSVYyL2972+
+         av1fhLhPxh2Oa8rBat634EmLoGeI6EralTgRUJwjuWwCNoneSJYgcaCjLapQZFKljveP
+         38IBr1pWBApWSNuUtazE6EhETBEDlfSNnHxjhoQM8hc4euTTaw+28UOEsh2UbFnZHISO
+         hsslbAHk4d4SXw2CQfUbx5CuIZm7Dj85VMtSIgOL+sULrxM3xTZ1fnRBx6ZWxPmu1izD
+         krd2WO0fk9t2Vrii6vq8ajFb0yLU+diJ4vQPzkKtWeEajqtmViB76RKQGlUPY7afcNlS
+         zGZA==
+X-Gm-Message-State: AOAM5309FKTpCN09j2hqngSlQssM8HYpDzaHnGu0e1sYfrtKWGQZZEUB
+        Ng0RgPelwpwI+oSwTnL/GJqaXLY8xCiOIw==
+X-Google-Smtp-Source: ABdhPJzRzL5AGzm3x9i2e6gg3GsjIDzn3cmvURvQmjY6sxRLiGWhAVY1LXX59+ePvChm1x9/n+eryg==
+X-Received: by 2002:a05:6512:3d8e:b0:44a:3ad1:8bae with SMTP id k14-20020a0565123d8e00b0044a3ad18baemr3806975lfv.231.1649194682658;
+        Tue, 05 Apr 2022 14:38:02 -0700 (PDT)
+Received: from noname.. ([2a02:2698:8c2a:226e:6d9:f5ff:fecb:a8ab])
+        by smtp.googlemail.com with ESMTPSA id v17-20020a2e7a11000000b0024b127cfc2bsm1033175ljc.127.2022.04.05.14.38.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 14:38:02 -0700 (PDT)
+From:   Grigory Vasilyev <h0tc0d3@gmail.com>
+To:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Melissa Wen <mwen@igalia.com>
+Cc:     Grigory Vasilyev <h0tc0d3@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Guchun Chen <guchun.chen@amd.com>,
+        Joseph Greathouse <Joseph.Greathouse@amd.com>,
+        Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Evan Quan <evan.quan@amd.com>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/amdgpu: Unnecessary code in gfx_v7_0.c
+Date:   Wed,  6 Apr 2022 00:37:59 +0300
+Message-Id: <20220405213800.90205-1-h0tc0d3@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1649157220-29304-2-git-send-email-quic_srivasam@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 04:43:38PM +0530, Srinivasa Rao Mandadapu wrote:
-> SC7280 has VA, TX and RX macros with SoundWire Controllers to attach with
-> codecs like WCD938x, max98360a using soundwire masters and i2s bus.
-> Add these nodes for sc7280 based platforms audio use case.
-> Add tlmm gpio property in wcd938x node for switching CTIA/OMTP Headset.
-> 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> ---
+The code is useless and doesn't change the value.
 
-A change log would be helpful for reviewers
+(0 << GB_ADDR_CONFIG__ROW_SIZE__SHIFT) = 0
+gb_addr_config | 0 = gb_addr_config
 
->  arch/arm64/boot/dts/qcom/sc7280-crd.dts        |   6 ++
->  arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi |   8 ++
->  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi       |  88 ++++++++++++++++++
->  arch/arm64/boot/dts/qcom/sc7280.dtsi           | 121 +++++++++++++++++++++++++
->  4 files changed, 223 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-> index e2efbdd..224a82d 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+Perhaps there could be 1 instead of 0, but this does not correspond with
+the logic of the switch.
 
-You might want to consider splitting this patch into one that
-adds the SoC specific bits and one for each board. It's cleaner
-and might allow to land the SoC specific bits even when the board
-specific part is still under discussion. It also might make the
-life easier for folks who want to pick the SoC specific parts,
-but aren't interested in the board bits (e.g. because they want
-to support a different board). Just a thought, the split is not
-strictly necessary.
+Signed-off-by: Grigory Vasilyev <h0tc0d3@gmail.com>
+---
+ drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-> @@ -84,6 +84,12 @@ ap_ts_pen_1v8: &i2c13 {
->  	pins = "gpio51";
->  };
->  
-> +&wcd938x {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&us_euro_select>;
-> +	us-euro-gpios = <&tlmm 81 GPIO_ACTIVE_HIGH>;
-> +};
-> +
->  &tlmm {
->  	tp_int_odl: tp-int-odl {
->  		pins = "gpio7";
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> index de646d9..c6a04c3 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> @@ -20,6 +20,14 @@
->  #include "sc7280-chrome-common.dtsi"
->  
->  / {
-> +	max98360a: audio-codec-0 {
-> +		compatible = "maxim,max98360a";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&amp_en>;
-> +		sdmode-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
-> +		#sound-dai-cells = <0>;
-> +	};
-> +
+diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c b/drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c
+index 1cb5db17d2b9..5ed84a6467ee 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c
+@@ -4409,16 +4409,14 @@ static void gfx_v7_0_gpu_early_init(struct amdgpu_device *adev)
+ 	/* fix up row size */
+ 	gb_addr_config &= ~GB_ADDR_CONFIG__ROW_SIZE_MASK;
+ 	switch (adev->gfx.config.mem_row_size_in_kb) {
+-	case 1:
+-	default:
+-		gb_addr_config |= (0 << GB_ADDR_CONFIG__ROW_SIZE__SHIFT);
+-		break;
+ 	case 2:
+ 		gb_addr_config |= (1 << GB_ADDR_CONFIG__ROW_SIZE__SHIFT);
+ 		break;
+ 	case 4:
+ 		gb_addr_config |= (2 << GB_ADDR_CONFIG__ROW_SIZE__SHIFT);
+ 		break;
++	default:
++		break;
+ 	}
+ 	adev->gfx.config.gb_addr_config = gb_addr_config;
+ }
+-- 
+2.35.1
 
-This node shouldn't be at top but with the other device nodes, in
-alphabetical order, i.e. before 'pwmleds'.
-
->  	chosen {
->  		stdout-path = "serial0:115200n8";
->  	};
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> index f912a89..83c76b2 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> @@ -20,6 +20,41 @@
->  		serial1 = &uart7;
->  	};
->  
-> +	max98360a: audio-codec-0 {
-> +		compatible = "maxim,max98360a";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&amp_en>;
-> +		sdmode-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
-> +		#sound-dai-cells = <0>;
-> +	};
-> +
-> +	wcd938x: audio-codec-1 {
-> +		compatible = "qcom,wcd9380-codec";
-> +		#sound-dai-cells = <1>;
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&wcd938x_reset_active>, <&wcd938x_reset_sleep>;
-> +		reset-gpios = <&tlmm 83 GPIO_ACTIVE_HIGH>;
-> +
-> +		qcom,rx-device = <&wcd_rx>;
-> +		qcom,tx-device = <&wcd_tx>;
-> +
-> +		vdd-rxtx-supply = <&vreg_l18b_1p8>;
-> +		vdd-io-supply = <&vreg_l18b_1p8>;
-> +		vdd-buck-supply = <&vreg_l17b_1p8>;
-> +		vdd-mic-bias-supply = <&vreg_bob>;
-> +
-> +		qcom,micbias1-microvolt = <1800000>;
-> +		qcom,micbias2-microvolt = <1800000>;
-> +		qcom,micbias3-microvolt = <1800000>;
-> +		qcom,micbias4-microvolt = <1800000>;
-> +
-> +		qcom,mbhc-buttons-vthreshold-microvolt = <75000 150000 237000 500000 500000
-> +							  500000 500000 500000>;
-> +		qcom,mbhc-headset-vthreshold-microvolt = <1700000>;
-> +		qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
-> +	};
-> +
->  	gpio-keys {
->  		compatible = "gpio-keys";
->  		label = "gpio-keys";
-> @@ -373,6 +408,19 @@
->  	status = "okay";
->  };
->  
-> +&rxmacro {
-> +	status = "okay";
-> +};
-> +
-> +&txmacro {
-> +	status = "okay";
-> +};
-> +
-> +&vamacro {
-> +	status = "okay";
-> +	vdd-micb-supply = <&vreg_bob>;
-> +};
-> +
->  &sdhc_1 {
->  	status = "okay";
->  
-> @@ -574,6 +622,24 @@
->  	drive-strength = <6>;
->  };
->  
-> +&swr0 {
-> +	wcd_rx: codec@0,4 {
-> +		compatible = "sdw20217010d00";
-> +		reg = <0 4>;
-> +		#sound-dai-cells = <1>;
-> +		qcom,rx-port-mapping = <1 2 3 4 5>;
-> +	};
-> +};
-> +
-> +&swr1 {
-> +	wcd_tx: codec@0,3 {
-> +		compatible = "sdw20217010d00";
-> +		reg = <0 3>;
-> +		#sound-dai-cells = <1>;
-> +		qcom,tx-port-mapping = <1 2 3 4>;
-> +	};
-> +};
-> +
->  &tlmm {
->  	amp_en: amp-en {
->  		pins = "gpio63";
-> @@ -663,5 +729,27 @@
->  		function = "gpio";
->  		bias-pull-down;
->  	};
-> +
-> +	us_euro_select: us-euro-select {
-
-nit: in the schematic this is called 'us_euro_hs_sel'. IMO it's preferable
-to use the name from the schematic rather than inventing a new one, unless
-there's a good reason for it.
-
-> +		pins = "gpio81";
-> +		function = "gpio";
-> +		bias-pull-down;
-> +		drive-strength = <2>;
-> +	};
-> +
-> +	wcd938x_reset_active: wcd938x-reset-active {
-
-same as above: the schematic calls this pin 'wcd_reset_n'
-
-drop the -active suffix
-
-> +		pins = "gpio83";
-> +		function = "gpio";
-> +		drive-strength = <16>;
-
-A value of 16 seems pretty high. Is it really needed?
-
-> +		output-high;
-> +	};
-> +
-> +	wcd938x_reset_sleep: wcd938x-reset-sleep {
-> +		pins = "gpio83";
-> +		function = "gpio";
-> +		drive-strength = <16>;
-
-see above
-
-> +		bias-disable;
-> +		output-low;
-> +	};
->  };
->  
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index db74fc3..78ec84c 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -822,6 +822,127 @@
->  			#power-domain-cells = <1>;
->  		};
->  
-> +		rxmacro: codec@3200000 {
-
-These node are not at the correct position. They should be sorted by
-address and hence be inserted between 'lpasscc@3000000' and
-'interconnect@3c40000'.
-
-> +			compatible = "qcom,sc7280-lpass-rx-macro";
-> +			reg = <0 0x03200000 0 0x1000>;
-> +
-> +			status = "disabled";
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&rx_swr_active>;
-> +
-> +			clocks = <&lpass_aon LPASS_AON_CC_TX_MCLK_CLK>,
-> +				 <&lpass_aon LPASS_AON_CC_TX_MCLK_2X_CLK>,
-> +				 <&vamacro>;
-> +			clock-names = "mclk", "npl", "fsgen";
-> +
-> +			power-domains = <&lpass_hm LPASS_CORE_CC_LPASS_CORE_HM_GDSC>,
-> +					<&lpass_aon LPASS_AON_CC_LPASS_AUDIO_HM_GDSC>;
-> +			power-domain-names ="macro", "dcodec";
-> +
-> +			#clock-cells = <0>;
-> +			#sound-dai-cells = <1>;
-> +		};
-> +
-> +		txmacro: codec@3220000 {
-> +			compatible = "qcom,sc7280-lpass-tx-macro";
-> +			reg = <0 0x03220000 0 0x1000>;
-> +
-> +			status = "disabled";
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&tx_swr_active>;
-> +
-> +			clocks = <&lpass_aon LPASS_AON_CC_TX_MCLK_CLK>,
-> +				 <&lpass_aon LPASS_AON_CC_TX_MCLK_2X_CLK>,
-> +				 <&vamacro>;
-> +			clock-names = "mclk", "npl", "fsgen";
-> +
-> +			power-domains = <&lpass_hm LPASS_CORE_CC_LPASS_CORE_HM_GDSC>,
-> +					<&lpass_aon LPASS_AON_CC_LPASS_AUDIO_HM_GDSC>;
-> +			power-domain-names ="macro", "dcodec";
-> +
-> +			#clock-cells = <0>;
-> +			#sound-dai-cells = <1>;
-> +		};
-> +
-> +		vamacro: codec@3370000 {
-> +			compatible = "qcom,sc7280-lpass-va-macro";
-> +			reg = <0 0x03370000 0 0x1000>;
-> +
-> +			status = "disabled";
-> +			pinctrl-0 = <&dmic01_active>;
-> +			pinctrl-names = "default";
-> +
-> +			clocks = <&lpass_aon LPASS_AON_CC_TX_MCLK_CLK>;
-> +			clock-names = "mclk";
-> +
-> +			power-domains = <&lpass_hm LPASS_CORE_CC_LPASS_CORE_HM_GDSC>,
-> +					<&lpass_aon LPASS_AON_CC_LPASS_AUDIO_HM_GDSC>;
-> +			power-domain-names ="macro", "dcodec";
-> +
-> +			#clock-cells = <0>;
-> +			#sound-dai-cells = <1>;
-> +		};
-> +
-> +		swr0: soundwire@3210000 {
-> +			compatible = "qcom,soundwire-v1.6.0";
-> +			reg = <0 0x03210000 0 0x2000>;
-> +
-> +			interrupts = <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&rxmacro>;
-> +			clock-names = "iface";
-> +
-> +			qcom,din-ports = <0>;
-> +			qcom,dout-ports = <5>;
-> +
-> +			resets = <&lpass_audiocc LPASS_AUDIO_SWR_RX_CGCR>;
-> +			reset-names = "swr_audio_cgcr";
-> +
-> +			qcom,ports-word-length =	/bits/ 8 <0x01 0x07 0x04 0xff 0xff>;
-> +			qcom,ports-sinterval-low =	/bits/ 8 <0x03 0x3f 0x1f 0x03 0x03>;
-> +			qcom,ports-offset1 =		/bits/ 8 <0x00 0x00 0x0b 0x01 0x01>;
-> +			qcom,ports-offset2 =		/bits/ 8 <0x00 0x00 0x0b 0x00 0x00>;
-> +			qcom,ports-lane-control =	/bits/ 8 <0x01 0x00 0x00 0x00 0x00>;
-> +			qcom,ports-block-pack-mode =	/bits/ 8 <0xff 0x00 0x01 0xff 0xff>;
-> +			qcom,ports-hstart =		/bits/ 8 <0xff 0x03 0xff 0xff 0xff>;
-> +			qcom,ports-hstop =		/bits/ 8 <0xff 0x06 0xff 0xff 0xff>;
-> +			qcom,ports-block-group-count =	/bits/ 8 <0xff 0xff 0xff 0xff 0x00>;
-> +
-> +			#sound-dai-cells = <1>;
-> +			#address-cells = <2>;
-> +			#size-cells = <0>;
-> +		};
-> +
-> +		swr1: soundwire@3230000 {
-> +			compatible = "qcom,soundwire-v1.6.0";
-> +			reg = <0 0x03230000 0 0x2000>;
-> +
-> +			interrupts-extended = <&intc GIC_SPI 496 IRQ_TYPE_LEVEL_HIGH>,
-> +					      <&pdc 130 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "swr_master_irq", "swr_wake_irq";
-> +			clocks = <&txmacro>;
-> +			clock-names = "iface";
-> +
-> +			qcom,din-ports = <3>;
-> +			qcom,dout-ports = <0>;
-> +
-> +			resets = <&lpass_audiocc LPASS_AUDIO_SWR_TX_CGCR>;
-> +			reset-names = "swr_audio_cgcr";
-> +
-> +			qcom,ports-sinterval-low =	/bits/ 8 <0x01 0x03 0x03>;
-> +			qcom,ports-offset1 =		/bits/ 8 <0x01 0x00 0x02>;
-> +			qcom,ports-offset2 =		/bits/ 8 <0x00 0x00 0x00>;
-> +			qcom,ports-hstart =		/bits/ 8 <0xff 0xff 0xff>;
-> +			qcom,ports-hstop =		/bits/ 8 <0xff 0xff 0xff>;
-> +			qcom,ports-word-length =	/bits/ 8 <0xff 0x0 0xff>;
-
-s/0x0/0x00/
-
-> +			qcom,ports-block-pack-mode =	/bits/ 8 <0xff 0xff 0xff>;
-> +			qcom,ports-block-group-count =	/bits/ 8 <0xff 0xff 0xff>;
-> +			qcom,ports-lane-control =	/bits/ 8 <0x00 0x01 0x00>;
-> +			qcom,port-offset = <1>;
-> +
-> +			#sound-dai-cells = <1>;
-> +			#address-cells = <2>;
-> +			#size-cells = <0>;
-> +		};
-
-add empty line
-
->  		ipcc: mailbox@408000 {
->  			compatible = "qcom,sc7280-ipcc", "qcom,ipcc";
->  			reg = <0 0x00408000 0 0x1000>;

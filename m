@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC164F5095
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8254F5155
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1842397AbiDFBbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:31:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
+        id S1845843AbiDFCB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356174AbiDEKXK (ORCPT
+        with ESMTP id S1349417AbiDEJtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:23:10 -0400
+        Tue, 5 Apr 2022 05:49:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76112BA33C;
-        Tue,  5 Apr 2022 03:07:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C271AD83;
+        Tue,  5 Apr 2022 02:45:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 11DD06172B;
-        Tue,  5 Apr 2022 10:07:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 229C1C385A2;
-        Tue,  5 Apr 2022 10:07:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7D1561368;
+        Tue,  5 Apr 2022 09:45:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5F89C385A3;
+        Tue,  5 Apr 2022 09:45:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153243;
-        bh=+ivZ1ndswnkWgvkuRzTjxp7/FEov5jP/8o+n0d4FE4M=;
+        s=korg; t=1649151909;
+        bh=suba1xzXWvaIbJzsfonGz0DLngK0q0zBAS7BYPJhF/A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zISKmR+4QQwQhiwwUYFX+4xM70TyeJjQP9/4m1PmNq9tJgJzA6C2tQZCTHAuigWpW
-         j6pO0m26QziD3RX0hwwyqh3k5gHnEGMLXvyAOsvtrMmx2bWeaGVP0UYquEVWnjD055
-         tzYeB8MVw3l5b8XoXyV0GoPeGYtluEcoJ0dw0S6A=
+        b=Xs7KCJ6Z4PbkUoDaFyXQSq8NP08tv7eyxJq3HFgQRI9QgNIa0IVvYSpmpTBB5JZAW
+         UjT9byWL4MbIAE0L7B3AOhYWnd3hjWxfb8V/eeVb4byyA3GuYx9RvagT8oFl+YeVlI
+         h4B5NakJrnVaCHRQomAb6hgPbVX97hYyqqAFKuTw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 152/599] crypto: sun8i-ss - call finalize with bh disabled
-Date:   Tue,  5 Apr 2022 09:27:26 +0200
-Message-Id: <20220405070303.365798218@linuxfoundation.org>
+Subject: [PATCH 5.15 586/913] cpufreq: qcom-cpufreq-nvmem: fix reading of PVS Valid fuse
+Date:   Tue,  5 Apr 2022 09:27:28 +0200
+Message-Id: <20220405070357.409452929@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,65 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Corentin Labbe <clabbe@baylibre.com>
+From: Luca Weiss <luca@z3ntu.xyz>
 
-[ Upstream commit b169b3766242b6f3336e24a6c8ee1522978b57a7 ]
+[ Upstream commit 4a8a77abf0e2b6468ba0281e33384cbec5fb476a ]
 
-Doing ipsec produces a spinlock recursion warning.
-This is due to not disabling BH during crypto completion function.
+The fuse consists of 64 bits, with this statement we're supposed to get
+the upper 32 bits but it actually read out of bounds and got 0 instead
+of the desired value which lead to the "PVS bin not set." codepath being
+run resetting our pvs value.
 
-Fixes: f08fcced6d00 ("crypto: allwinner - Add sun8i-ss cryptographic offloader")
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Fixes: a8811ec764f9 ("cpufreq: qcom: Add support for krait based socs")
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c | 3 +++
- drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c   | 3 +++
- 2 files changed, 6 insertions(+)
+ drivers/cpufreq/qcom-cpufreq-nvmem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-index 7c355bc2fb06..f783748462f9 100644
---- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-+++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-@@ -11,6 +11,7 @@
-  * You could find a link for the datasheet in Documentation/arm/sunxi.rst
-  */
+diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+index d1744b5d9619..6dfa86971a75 100644
+--- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
++++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+@@ -130,7 +130,7 @@ static void get_krait_bin_format_b(struct device *cpu_dev,
+ 	}
  
-+#include <linux/bottom_half.h>
- #include <linux/crypto.h>
- #include <linux/dma-mapping.h>
- #include <linux/io.h>
-@@ -271,7 +272,9 @@ static int sun8i_ss_handle_cipher_request(struct crypto_engine *engine, void *ar
- 	struct skcipher_request *breq = container_of(areq, struct skcipher_request, base);
- 
- 	err = sun8i_ss_cipher(breq);
-+	local_bh_disable();
- 	crypto_finalize_skcipher_request(engine, breq, err);
-+	local_bh_enable();
- 
- 	return 0;
- }
-diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
-index 756d5a783548..c9edecd43ef9 100644
---- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
-+++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-hash.c
-@@ -9,6 +9,7 @@
-  *
-  * You could find the datasheet in Documentation/arm/sunxi.rst
-  */
-+#include <linux/bottom_half.h>
- #include <linux/dma-mapping.h>
- #include <linux/pm_runtime.h>
- #include <linux/scatterlist.h>
-@@ -440,6 +441,8 @@ int sun8i_ss_hash_run(struct crypto_engine *engine, void *breq)
- theend:
- 	kfree(pad);
- 	kfree(result);
-+	local_bh_disable();
- 	crypto_finalize_hash_request(engine, breq, err);
-+	local_bh_enable();
- 	return 0;
- }
+ 	/* Check PVS_BLOW_STATUS */
+-	pte_efuse = *(((u32 *)buf) + 4);
++	pte_efuse = *(((u32 *)buf) + 1);
+ 	pte_efuse &= BIT(21);
+ 	if (pte_efuse) {
+ 		dev_dbg(cpu_dev, "PVS bin: %d\n", *pvs);
 -- 
 2.34.1
 

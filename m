@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A724F301D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1BA4F33CE
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346476AbiDEJpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:45:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37238 "EHLO
+        id S243527AbiDEJj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239038AbiDEITo (ORCPT
+        with ESMTP id S239341AbiDEIT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:19:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5601A75E6D;
-        Tue,  5 Apr 2022 01:10:04 -0700 (PDT)
+        Tue, 5 Apr 2022 04:19:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F97BB92B;
+        Tue,  5 Apr 2022 01:11:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46588B81A32;
-        Tue,  5 Apr 2022 08:10:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82191C385A1;
-        Tue,  5 Apr 2022 08:10:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ACB96B81B90;
+        Tue,  5 Apr 2022 08:11:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EADF6C385A0;
+        Tue,  5 Apr 2022 08:11:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146201;
-        bh=40R9kc5aBeoKOIfKNAfHBDLpStxymn0Zg5mTScWioOs=;
+        s=korg; t=1649146294;
+        bh=sFS7G5rZj3C0ZMjUhhbET/vBcgSalnDjkfieF0x48Fg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zcUWbMk5AX0W6L7wXYL8IKTQjcUJq05un+KZO0G+dNtXXlyoBFY3S6qA62tWYBinI
-         6kTLCkw2qGXOKayynDmQuiIldf9vhice1jlQWkaFhBjo72hcAkYsaitsB/KoYBK9nw
-         x9WeQaVuY5B7bETAKWfrZz2IWFunGssJ0H4WKhK4=
+        b=SXqSNi2bBLUqXoPyhOv96dj9BIZ8zXpl6dL4fnCCinvS8jbeFPTHCla9DZWx1Sllq
+         Clx+kocod2wC7f/FtHS8KOv+/YIHLjBqxcjud3RZuP0vA8uh/QoyOplwDe/esBsnOI
+         NNH380Busddueuv4U7qhQfSA5GyIRK8yuXZAYfKI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Khaled Almahallawy <khaled.almahallawy@intel.com>,
-        Charlton Lin <charlton.lin@intel.com>,
-        =?UTF-8?q?Jouni=20H=C3=B6gander?= <jouni.hogander@intel.com>,
-        =?UTF-8?q?Jos=C3=A9=20Roberto=20de=20Souza?= <jose.souza@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        stable@vger.kernel.org, Derek Will <derekrobertwill@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0672/1126] drm/i915/display: Do not re-enable PSR after it was marked as not reliable
-Date:   Tue,  5 Apr 2022 09:23:39 +0200
-Message-Id: <20220405070427.351205777@linuxfoundation.org>
+Subject: [PATCH 5.17 0675/1126] can: isotp: return -EADDRNOTAVAIL when reading from unbound socket
+Date:   Tue,  5 Apr 2022 09:23:42 +0200
+Message-Id: <20220405070427.437482044@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -59,57 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: José Roberto de Souza <jose.souza@intel.com>
+From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-[ Upstream commit 278da06c03655c2bb9bc36ebdf45b90a079b3bfd ]
+[ Upstream commit 30ffd5332e06316bd69a654c06aa033872979b7c ]
 
-If a error happens and sink_not_reliable is set, PSR should be disabled
-for good but that is not happening.
-It would be disabled by the function handling the PSR error but then
-on the next fastset it would be enabled again in
-_intel_psr_post_plane_update().
-It would only be disabled for good in the next modeset where has_psr
-will be set false.
+When reading from an unbound can-isotp socket the syscall blocked
+indefinitely. As unbound sockets (without given CAN address information)
+do not make sense anyway we directly return -EADDRNOTAVAIL on read()
+analogue to the known behavior from sendmsg().
 
-v2:
-- release psr lock before continue
-
-Fixes: 9ce5884e5139 ("drm/i915/display: Only keep PSR enabled if there is active planes")
-Reported-by: Khaled Almahallawy <khaled.almahallawy@intel.com>
-Reported-by: Charlton Lin <charlton.lin@intel.com>
-Cc: Jouni Högander <jouni.hogander@intel.com>
-Signed-off-by: José Roberto de Souza <jose.souza@intel.com>
-Reviewed-by: Jouni Högander <jouni.hogander@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220311185149.110527-2-jose.souza@intel.com
-(cherry picked from commit 15f26bdc81f7f03561aaea5a10d87bd6638e1459)
-Signed-off-by: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
+Link: https://github.com/linux-can/can-utils/issues/349
+Link: https://lore.kernel.org/all/20220316164258.54155-2-socketcan@hartkopp.net
+Suggested-by: Derek Will <derekrobertwill@gmail.com>
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/i915/display/intel_psr.c | 4 ++++
+ net/can/isotp.c | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/drivers/gpu/drm/i915/display/intel_psr.c b/drivers/gpu/drm/i915/display/intel_psr.c
-index 00279e8c2775..b00de57cc957 100644
---- a/drivers/gpu/drm/i915/display/intel_psr.c
-+++ b/drivers/gpu/drm/i915/display/intel_psr.c
-@@ -1816,6 +1816,9 @@ static void _intel_psr_post_plane_update(const struct intel_atomic_state *state,
+diff --git a/net/can/isotp.c b/net/can/isotp.c
+index f8e3aeb79e3f..8966f06e0660 100644
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -1005,12 +1005,16 @@ static int isotp_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
+ {
+ 	struct sock *sk = sock->sk;
+ 	struct sk_buff *skb;
++	struct isotp_sock *so = isotp_sk(sk);
+ 	int err = 0;
+ 	int noblock;
  
- 		mutex_lock(&psr->lock);
+ 	noblock = flags & MSG_DONTWAIT;
+ 	flags &= ~MSG_DONTWAIT;
  
-+		if (psr->sink_not_reliable)
-+			goto exit;
++	if (!so->bound)
++		return -EADDRNOTAVAIL;
 +
- 		drm_WARN_ON(&dev_priv->drm, psr->enabled && !crtc_state->active_planes);
- 
- 		/* Only enable if there is active planes */
-@@ -1826,6 +1829,7 @@ static void _intel_psr_post_plane_update(const struct intel_atomic_state *state,
- 		if (crtc_state->crc_enabled && psr->enabled)
- 			psr_force_hw_tracking_exit(intel_dp);
- 
-+exit:
- 		mutex_unlock(&psr->lock);
- 	}
- }
+ 	skb = skb_recv_datagram(sk, flags, noblock, &err);
+ 	if (!skb)
+ 		return err;
 -- 
 2.34.1
 

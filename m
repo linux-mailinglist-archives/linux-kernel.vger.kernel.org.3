@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9F04F2CE8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDC1B4F2C3D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244862AbiDEJLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45384 "EHLO
+        id S1347863AbiDEJ2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239564AbiDEIUO (ORCPT
+        with ESMTP id S239568AbiDEIUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:20:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD4E630A;
-        Tue,  5 Apr 2022 01:16:28 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F230637C;
+        Tue,  5 Apr 2022 01:16:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 457A2B81A37;
-        Tue,  5 Apr 2022 08:16:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5BD9C385A0;
-        Tue,  5 Apr 2022 08:16:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E040060AFB;
+        Tue,  5 Apr 2022 08:16:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC09FC385A0;
+        Tue,  5 Apr 2022 08:16:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146586;
-        bh=+lPkEmTh0UrKktg1kbRpn6s/1134Ya/hkpaW+uEH4nA=;
+        s=korg; t=1649146594;
+        bh=3vrI8pCC5hsfYQTqMh0KYOwxXZBB+PboDIZ3er8Rfk0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JUBbrCjrQIINjcd2uhV36Z0Dr8gMx67xQhJcLcsDZBYFNbu60JzXxjo6B8jMAgYwB
-         LdmGIoiyJY1dBE3LGTnijAcr4VFR0hPrIFVMR2hzrPBphVItX6faEQvbSyjn5mNkBj
-         4QoFPcwdbB0xyHPP7jb+u2sAD7R5oSow99O28r0c=
+        b=CYXTDSIhEP4p0DXG3B2VhoOqhDPfCbaDXFFC40bgOlNdrpca9pBliMUCdSK8WTNvA
+         f3iF8wGwNBfth+LXNNP1FkSmfcjG8EdPf1zjqgVWf2ge09uptnyhmXKGxMJLKZDjGL
+         djgzqdtH4g2/Ztcyj4C6wME2O56Wh+eRo/SKI6GU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peng Li <lipeng321@huawei.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
+        stable@vger.kernel.org, Guangbin Huang <huangguangbin2@huawei.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0817/1126] net: hns3: clean residual vf config after disable sriov
-Date:   Tue,  5 Apr 2022 09:26:04 +0200
-Message-Id: <20220405070431.545481730@linuxfoundation.org>
+Subject: [PATCH 5.17 0820/1126] net: hns3: fix phy can not link up when autoneg off and reset
+Date:   Tue,  5 Apr 2022 09:26:07 +0200
+Message-Id: <20220405070431.631781398@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,151 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Li <lipeng321@huawei.com>
+From: Guangbin Huang <huangguangbin2@huawei.com>
 
-[ Upstream commit 671cb8cbb9c9e24b681d21b1bfae991e2386ac73 ]
+[ Upstream commit ad0ecaef6a2c07e67ef9fe163c007f7b3dad8643 ]
 
-After disable sriov, VF still has some config and info need to be
-cleaned, which configured by PF. This patch clean the HW config
-and SW struct vport->vf_info.
+Currently, function hclge_mdio_read() will return 0 if during reset(the
+cmd state will be set to disable).
 
-Fixes: fa8d82e853e8 ("net: hns3: Add support of .sriov_configure in HNS3 driver")
-Signed-off-by: Peng Li<lipeng321@huawei.com>
+If use general phy driver, the phy_state_machine() will update phy speed
+every second in function genphy_read_status_fixed() when PHY is set to
+autoneg off, no matter of link down or link up.
+
+If phy driver happens to read BMCR register during reset, phy speed will
+be updated to 10Mpbs as BMCR register value is 0. So it may call phy can
+not link up if previous speed is not 10Mpbs.
+
+To fix this problem, function hclge_mdio_read() should return -EBUSY if
+the cmd state is disable. So does function hclge_mdio_write().
+
+Fixes: 1c1249380992 ("net: hns3: bugfix for hclge_mdio_write and hclge_mdio_read")
 Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/hisilicon/hns3/hnae3.h   |  3 ++
- .../net/ethernet/hisilicon/hns3/hns3_enet.c   | 18 +++++++
- .../hisilicon/hns3/hns3pf/hclge_main.c        | 50 +++++++++++++++++++
- 3 files changed, 71 insertions(+)
+ drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mdio.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hnae3.h b/drivers/net/ethernet/hisilicon/hns3/hnae3.h
-index 9298fbecb31a..adea528d79ad 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hnae3.h
-+++ b/drivers/net/ethernet/hisilicon/hns3/hnae3.h
-@@ -536,6 +536,8 @@ struct hnae3_ae_dev {
-  *   Get 1588 rx hwstamp
-  * get_ts_info
-  *   Get phc info
-+ * clean_vf_config
-+ *   Clean residual vf info after disable sriov
-  */
- struct hnae3_ae_ops {
- 	int (*init_ae_dev)(struct hnae3_ae_dev *ae_dev);
-@@ -729,6 +731,7 @@ struct hnae3_ae_ops {
- 			   struct ethtool_ts_info *info);
- 	int (*get_link_diagnosis_info)(struct hnae3_handle *handle,
- 				       u32 *status_code);
-+	void (*clean_vf_config)(struct hnae3_ae_dev *ae_dev, int num_vfs);
- };
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mdio.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mdio.c
+index 63d2be4349e3..03d63b6a9b2b 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mdio.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mdio.c
+@@ -48,7 +48,7 @@ static int hclge_mdio_write(struct mii_bus *bus, int phyid, int regnum,
+ 	int ret;
  
- struct hnae3_dcb_ops {
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-index 214d88cd8dbb..f6082be7481c 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-@@ -2992,6 +2992,21 @@ static int hns3_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	return ret;
- }
+ 	if (test_bit(HCLGE_COMM_STATE_CMD_DISABLE, &hdev->hw.hw.comm_state))
+-		return 0;
++		return -EBUSY;
  
-+/**
-+ * hns3_clean_vf_config
-+ * @pdev: pointer to a pci_dev structure
-+ * @num_vfs: number of VFs allocated
-+ *
-+ * Clean residual vf config after disable sriov
-+ **/
-+static void hns3_clean_vf_config(struct pci_dev *pdev, int num_vfs)
-+{
-+	struct hnae3_ae_dev *ae_dev = pci_get_drvdata(pdev);
-+
-+	if (ae_dev->ops->clean_vf_config)
-+		ae_dev->ops->clean_vf_config(ae_dev, num_vfs);
-+}
-+
- /* hns3_remove - Device removal routine
-  * @pdev: PCI device information struct
-  */
-@@ -3030,7 +3045,10 @@ static int hns3_pci_sriov_configure(struct pci_dev *pdev, int num_vfs)
- 		else
- 			return num_vfs;
- 	} else if (!pci_vfs_assigned(pdev)) {
-+		int num_vfs_pre = pci_num_vf(pdev);
-+
- 		pci_disable_sriov(pdev);
-+		hns3_clean_vf_config(pdev, num_vfs_pre);
- 	} else {
- 		dev_warn(&pdev->dev,
- 			 "Unable to free VFs because some are assigned to VMs.\n");
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-index 1fa13ae8c651..7bc18483a8c3 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-@@ -12717,6 +12717,55 @@ static int hclge_get_link_diagnosis_info(struct hnae3_handle *handle,
- 	return 0;
- }
+ 	hclge_cmd_setup_basic_desc(&desc, HCLGE_OPC_MDIO_CONFIG, false);
  
-+/* After disable sriov, VF still has some config and info need clean,
-+ * which configed by PF.
-+ */
-+static void hclge_clear_vport_vf_info(struct hclge_vport *vport, int vfid)
-+{
-+	struct hclge_dev *hdev = vport->back;
-+	struct hclge_vlan_info vlan_info;
-+	int ret;
-+
-+	/* after disable sriov, clean VF rate configured by PF */
-+	ret = hclge_tm_qs_shaper_cfg(vport, 0);
-+	if (ret)
-+		dev_err(&hdev->pdev->dev,
-+			"failed to clean vf%d rate config, ret = %d\n",
-+			vfid, ret);
-+
-+	vlan_info.vlan_tag = 0;
-+	vlan_info.qos = 0;
-+	vlan_info.vlan_proto = ETH_P_8021Q;
-+	ret = hclge_update_port_base_vlan_cfg(vport,
-+					      HNAE3_PORT_BASE_VLAN_DISABLE,
-+					      &vlan_info);
-+	if (ret)
-+		dev_err(&hdev->pdev->dev,
-+			"failed to clean vf%d port base vlan, ret = %d\n",
-+			vfid, ret);
-+
-+	ret = hclge_set_vf_spoofchk_hw(hdev, vport->vport_id, false);
-+	if (ret)
-+		dev_err(&hdev->pdev->dev,
-+			"failed to clean vf%d spoof config, ret = %d\n",
-+			vfid, ret);
-+
-+	memset(&vport->vf_info, 0, sizeof(vport->vf_info));
-+}
-+
-+static void hclge_clean_vport_config(struct hnae3_ae_dev *ae_dev, int num_vfs)
-+{
-+	struct hclge_dev *hdev = ae_dev->priv;
-+	struct hclge_vport *vport;
-+	int i;
-+
-+	for (i = 0; i < num_vfs; i++) {
-+		vport = &hdev->vport[i + HCLGE_VF_VPORT_START_NUM];
-+
-+		hclge_clear_vport_vf_info(vport, i);
-+	}
-+}
-+
- static const struct hnae3_ae_ops hclge_ops = {
- 	.init_ae_dev = hclge_init_ae_dev,
- 	.uninit_ae_dev = hclge_uninit_ae_dev,
-@@ -12818,6 +12867,7 @@ static const struct hnae3_ae_ops hclge_ops = {
- 	.get_rx_hwts = hclge_ptp_get_rx_hwts,
- 	.get_ts_info = hclge_ptp_get_ts_info,
- 	.get_link_diagnosis_info = hclge_get_link_diagnosis_info,
-+	.clean_vf_config = hclge_clean_vport_config,
- };
+@@ -86,7 +86,7 @@ static int hclge_mdio_read(struct mii_bus *bus, int phyid, int regnum)
+ 	int ret;
  
- static struct hnae3_ae_algo ae_algo = {
+ 	if (test_bit(HCLGE_COMM_STATE_CMD_DISABLE, &hdev->hw.hw.comm_state))
+-		return 0;
++		return -EBUSY;
+ 
+ 	hclge_cmd_setup_basic_desc(&desc, HCLGE_OPC_MDIO_CONFIG, true);
+ 
 -- 
 2.34.1
 

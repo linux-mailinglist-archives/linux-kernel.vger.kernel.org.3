@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714AD4F4334
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9BC4F3EAD
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378659AbiDEMwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:52:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58062 "EHLO
+        id S1390232AbiDENhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244732AbiDEJKw (ORCPT
+        with ESMTP id S1343970AbiDEJQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:10:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BFF2BB09;
-        Tue,  5 Apr 2022 01:59:57 -0700 (PDT)
+        Tue, 5 Apr 2022 05:16:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E36D64C3;
+        Tue,  5 Apr 2022 02:02:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F98461500;
-        Tue,  5 Apr 2022 08:59:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22571C385A0;
-        Tue,  5 Apr 2022 08:59:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9850B81C19;
+        Tue,  5 Apr 2022 09:02:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A94DC385A1;
+        Tue,  5 Apr 2022 09:02:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149196;
-        bh=98aCFofgFx1i2qmaGNmZ2Ir40iIRhlyna9C5ZXP/Y2o=;
+        s=korg; t=1649149330;
+        bh=VqwssBKFB7BIuRryYFttzTjepDcNzvs/enI6/vnlK6g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0dEhBcsSrM/BKKNZc0wGDpSMwb8RV0HSEptCVhC3zP6bXoNVuUU2HD5UO526nlG6o
-         Sl0rfDZ0U3nVshVZLMu4bjemiJrLBdczFeep9U5yXvgt25J0z3RfU1VM+BrhQa2QrY
-         c1+TNYto0urLnxb7ejBH7Y5q9fpOlxjFsciWBHaQ=
+        b=lx8+R5IEkj1fDM7FV7E9VeSO8zE1B0pm1hxzIE15oqblUjpTw5JGuzo1nt1aGOL+K
+         oDW6eHVroQYJJ1jBX5/j3U9YngPutOy2C/KIhU+FPZBtZipNEYafAnkGRiDu6OXRmB
+         rdfUnhYBgIxLj8u/JAw72lndP7j3OKI0TmzIz4ro=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>,
+        stable@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0628/1017] selftests/bpf/test_lirc_mode2.sh: Exit with proper code
-Date:   Tue,  5 Apr 2022 09:25:41 +0200
-Message-Id: <20220405070412.924432360@linuxfoundation.org>
+Subject: [PATCH 5.16 0629/1017] bpftool: Fix print error when show bpf map
+Date:   Tue,  5 Apr 2022 09:25:42 +0200
+Message-Id: <20220405070412.954688301@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,53 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangbin Liu <liuhangbin@gmail.com>
+From: Yafang Shao <laoar.shao@gmail.com>
 
-[ Upstream commit ec80906b0fbd7be11e3e960813b977b1ffe5f8fe ]
+[ Upstream commit 1824d8ea75f275a5e69e5f6bc0ffe122ea9b938c ]
 
-When test_lirc_mode2_user exec failed, the test report failed but still
-exit with 0. Fix it by exiting with an error code.
+If there is no btf_id or frozen, it will not show the pids, but the pids don't
+depend on any one of them.
 
-Another issue is for the LIRCDEV checking. With bash -n, we need to quote
-the variable, or it will always be true. So if test_lirc_mode2_user was
-not run, just exit with skip code.
+Below is the result after this change:
 
-Fixes: 6bdd533cee9a ("bpf: add selftest for lirc_mode2 type program")
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+  $ ./bpftool map show
+  2: lpm_trie  flags 0x1
+	key 8B  value 8B  max_entries 1  memlock 4096B
+	pids systemd(1)
+  3: lpm_trie  flags 0x1
+	key 20B  value 8B  max_entries 1  memlock 4096B
+	pids systemd(1)
+
+While before this change, the 'pids systemd(1)' can't be displayed.
+
+Fixes: 9330986c0300 ("bpf: Add bloom filter map implementation")
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20220321024149.157861-1-liuhangbin@gmail.com
+Link: https://lore.kernel.org/bpf/20220320060815.7716-1-laoar.shao@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/test_lirc_mode2.sh | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ tools/bpf/bpftool/map.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_lirc_mode2.sh b/tools/testing/selftests/bpf/test_lirc_mode2.sh
-index ec4e15948e40..5252b91f48a1 100755
---- a/tools/testing/selftests/bpf/test_lirc_mode2.sh
-+++ b/tools/testing/selftests/bpf/test_lirc_mode2.sh
-@@ -3,6 +3,7 @@
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index 285fb2cbaef6..59d8e72851da 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -619,17 +619,14 @@ static int show_map_close_plain(int fd, struct bpf_map_info *info)
+ 					    u32_as_hash_field(info->id))
+ 			printf("\n\tpinned %s", (char *)entry->value);
+ 	}
+-	printf("\n");
  
- # Kselftest framework requirement - SKIP code is 4.
- ksft_skip=4
-+ret=$ksft_skip
+ 	if (frozen_str) {
+ 		frozen = atoi(frozen_str);
+ 		free(frozen_str);
+ 	}
  
- msg="skip all tests:"
- if [ $UID != 0 ]; then
-@@ -25,7 +26,7 @@ do
- 	fi
- done
+-	if (!info->btf_id && !frozen)
+-		return 0;
+-
+-	printf("\t");
++	if (info->btf_id || frozen)
++		printf("\n\t");
  
--if [ -n $LIRCDEV ];
-+if [ -n "$LIRCDEV" ];
- then
- 	TYPE=lirc_mode2
- 	./test_lirc_mode2_user $LIRCDEV $INPUTDEV
-@@ -36,3 +37,5 @@ then
- 		echo -e ${GREEN}"PASS: $TYPE"${NC}
- 	fi
- fi
-+
-+exit $ret
+ 	if (info->btf_id)
+ 		printf("btf_id %d", info->btf_id);
 -- 
 2.34.1
 

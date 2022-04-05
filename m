@@ -2,129 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F7FA4F4C8C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A16C64F4E27
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1578759AbiDEXYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:24:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
+        id S229662AbiDFALV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:11:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457096AbiDEQCo (ORCPT
+        with ESMTP id S1457131AbiDEQCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:02:44 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5A1F1AC9
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:28:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649172497; x=1680708497;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TpDgxiyjCBQHjpm+3j7YA+Szlh4kAXMuzZRE+lz2Y/k=;
-  b=gSLsK0e8woyJWJ7Tnmeojzs1kA1y6S4VkKFPjzvQOXl4ahvh0VEL90eW
-   4ITq3UcfsDr3UVbuQjoIP5+N7x6KeCSrzSxUVxDwoCTifcckFIalXIHMC
-   CcrWStZ7swNsmTSW2gqaH7PO4KASCv1rZLqY/DFDqyO+6JfxqUCd1+tBG
-   xQM6xGX8949ctmRPHMrF8a+ofcoZ6QeaKfSZvnWOJJzJo/kUziMpfZPml
-   wkQ/alKqqBd21m0TNF53SbnhEVfFFwf0qhAqPE9JrZe0ZuG1OsKkrWPFT
-   NanEFBv1EJR0BiNv5qbqijGlh/39IP+EaEMPOSu44aMmtcfiXVTKPA8zZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="258362208"
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="258362208"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 08:28:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="549098652"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 05 Apr 2022 08:28:15 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbl6M-0003Tr-CB;
-        Tue, 05 Apr 2022 15:28:14 +0000
-Date:   Tue, 5 Apr 2022 23:28:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 24/40]
- include/linux/fscache.h:540: undefined reference to
- `__fscache_begin_write_operation'
-Message-ID: <202204052321.Q7Js0HBV-lkp@intel.com>
+        Tue, 5 Apr 2022 12:02:46 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C60C1965CE;
+        Tue,  5 Apr 2022 08:29:40 -0700 (PDT)
+Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KXs1t6CNPz681Vp;
+        Tue,  5 Apr 2022 23:26:42 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 5 Apr 2022 17:29:37 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Tue, 5 Apr 2022 17:29:37 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        Djalal Harouni <tixxdz@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+CC:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF
+ programs
+Thread-Topic: [PATCH 00/18] bpf: Secure and authenticated preloading of eBPF
+ programs
+Thread-Index: AQHYQsxoL5kXhl8+JE6PJPNWV+NOTqzYppqAgABrSsCAAo7zgIAAEt0AgAOU8YCAALoz0IABTtSAgAAmCSA=
+Date:   Tue, 5 Apr 2022 15:29:37 +0000
+Message-ID: <0497bb46586c4f37b9bd01950ba9e6a5@huawei.com>
+References: <20220328175033.2437312-1-roberto.sassu@huawei.com>
+        <20220331022727.ybj4rui4raxmsdpu@MBP-98dd607d3435.dhcp.thefacebook.com>
+        <b9f5995f96da447c851f7c9db8232a9b@huawei.com>
+        <20220401235537.mwziwuo4n53m5cxp@MBP-98dd607d3435.dhcp.thefacebook.com>
+        <CACYkzJ5QgkucL3HZ4bY5Rcme4ey6U3FW4w2Gz-9rdWq0_RHvgA@mail.gmail.com>
+        <CAEiveUcx1KHoJ421Cv+52t=0U+Uy2VF51VC_zfTSftQ4wVYOPw@mail.gmail.com>
+        <c2e57f10b62940eba3cfcae996e20e3c@huawei.com>
+ <385e4cf4-4cd1-8f41-5352-ea87a1f419ad@schaufler-ca.com>
+In-Reply-To: <385e4cf4-4cd1-8f41-5352-ea87a1f419ad@schaufler-ca.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.81.221.206]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   674eea41fc70a740ff83ec590f9833f805852464
-commit: d77af6a0e73b5e3c4bae01c64df536f2662e2dab [24/40] netfs: Dispatch write requests to process a writeback slice
-config: x86_64-rhel-8.3-func (https://download.01.org/0day-ci/archive/20220405/202204052321.Q7Js0HBV-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/ammarfaizi2/linux-block/commit/d77af6a0e73b5e3c4bae01c64df536f2662e2dab
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout d77af6a0e73b5e3c4bae01c64df536f2662e2dab
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   ld: fs/netfs/output.o: in function `fscache_begin_write_operation':
->> include/linux/fscache.h:540: undefined reference to `__fscache_begin_write_operation'
-
-
-vim +540 include/linux/fscache.h
-
-9af1c6c3089b29 David Howells 2021-10-20  516  
-16f2f4e679cfda David Howells 2021-08-27  517  /**
-16f2f4e679cfda David Howells 2021-08-27  518   * fscache_begin_write_operation - Begin a write operation for the netfs lib
-16f2f4e679cfda David Howells 2021-08-27  519   * @cres: The cache resources for the write being performed
-16f2f4e679cfda David Howells 2021-08-27  520   * @cookie: The cookie representing the cache object
-16f2f4e679cfda David Howells 2021-08-27  521   *
-16f2f4e679cfda David Howells 2021-08-27  522   * Begin a write operation on behalf of the netfs helper library.  @cres
-16f2f4e679cfda David Howells 2021-08-27  523   * indicates the cache resources to which the operation state should be
-16f2f4e679cfda David Howells 2021-08-27  524   * attached; @cookie indicates the cache object that will be accessed.
-16f2f4e679cfda David Howells 2021-08-27  525   *
-16f2f4e679cfda David Howells 2021-08-27  526   * @cres->inval_counter is set from @cookie->inval_counter for comparison at
-16f2f4e679cfda David Howells 2021-08-27  527   * the end of the operation.  This allows invalidation during the operation to
-16f2f4e679cfda David Howells 2021-08-27  528   * be detected by the caller.
-16f2f4e679cfda David Howells 2021-08-27  529   *
-16f2f4e679cfda David Howells 2021-08-27  530   * Returns:
-16f2f4e679cfda David Howells 2021-08-27  531   * * 0		- Success
-16f2f4e679cfda David Howells 2021-08-27  532   * * -ENOBUFS	- No caching available
-16f2f4e679cfda David Howells 2021-08-27  533   * * Other error code from the cache, such as -ENOMEM.
-16f2f4e679cfda David Howells 2021-08-27  534   */
-16f2f4e679cfda David Howells 2021-08-27  535  static inline
-16f2f4e679cfda David Howells 2021-08-27  536  int fscache_begin_write_operation(struct netfs_cache_resources *cres,
-16f2f4e679cfda David Howells 2021-08-27  537  				  struct fscache_cookie *cookie)
-16f2f4e679cfda David Howells 2021-08-27  538  {
-16f2f4e679cfda David Howells 2021-08-27  539  	if (fscache_cookie_enabled(cookie))
-16f2f4e679cfda David Howells 2021-08-27 @540  		return __fscache_begin_write_operation(cres, cookie);
-16f2f4e679cfda David Howells 2021-08-27  541  	return -ENOBUFS;
-16f2f4e679cfda David Howells 2021-08-27  542  }
-16f2f4e679cfda David Howells 2021-08-27  543  
-
-:::::: The code at line 540 was first introduced by commit
-:::::: 16f2f4e679cfdaa9552574484f104014908a76c6 nfs: Implement cache I/O by accessing the cache directly
-
-:::::: TO: David Howells <dhowells@redhat.com>
-:::::: CC: David Howells <dhowells@redhat.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+PiBGcm9tOiBDYXNleSBTY2hhdWZsZXIgW21haWx0bzpjYXNleUBzY2hhdWZsZXItY2EuY29tXQ0K
+PiBTZW50OiBUdWVzZGF5LCBBcHJpbCA1LCAyMDIyIDQ6NTAgUE0NCj4gT24gNC80LzIwMjIgMTA6
+MjAgQU0sIFJvYmVydG8gU2Fzc3Ugd3JvdGU6DQo+ID4+IEZyb206IERqYWxhbCBIYXJvdW5pIFtt
+YWlsdG86dGl4eGR6QGdtYWlsLmNvbV0NCj4gPj4gU2VudDogTW9uZGF5LCBBcHJpbCA0LCAyMDIy
+IDk6NDUgQU0NCj4gPj4gT24gU3VuLCBBcHIgMywgMjAyMiBhdCA1OjQyIFBNIEtQIFNpbmdoIDxr
+cHNpbmdoQGtlcm5lbC5vcmc+IHdyb3RlOg0KPiA+Pj4gT24gU2F0LCBBcHIgMiwgMjAyMiBhdCAx
+OjU1IEFNIEFsZXhlaSBTdGFyb3ZvaXRvdg0KPiA+Pj4gPGFsZXhlaS5zdGFyb3ZvaXRvdkBnbWFp
+bC5jb20+IHdyb3RlOg0KPiA+PiAuLi4NCj4gPj4+Pj4gUGlubmluZw0KPiA+Pj4+PiB0aGVtIHRv
+IHVucmVhY2hhYmxlIGlub2RlcyBpbnR1aXRpdmVseSBsb29rZWQgdGhlDQo+ID4+Pj4+IHdheSB0
+byBnbyBmb3IgYWNoaWV2aW5nIHRoZSBzdGF0ZWQgZ29hbC4NCj4gPj4+PiBXZSBjYW4gY29uc2lk
+ZXIgaW5vZGVzIGluIGJwZmZzIHRoYXQgYXJlIG5vdCB1bmxpbmthYmxlIGJ5IHJvb3QNCj4gPj4+
+PiBpbiB0aGUgZnV0dXJlLCBidXQgY2VydGFpbmx5IG5vdCBmb3IgdGhpcyB1c2UgY2FzZS4NCj4g
+Pj4+IENhbiB0aGlzIG5vdCBiZSBhbHJlYWR5IGRvbmUgYnkgYWRkaW5nIGEgQlBGX0xTTSBwcm9n
+cmFtIHRvIHRoZQ0KPiA+Pj4gaW5vZGVfdW5saW5rIExTTSBob29rPw0KPiA+Pj4NCj4gPj4gQWxz
+bywgYmVzaWRlIG9mIHRoZSBpbm9kZV91bmxpbmsuLi4gYW5kIG91dCBvZiBjdXJpb3NpdHk6IG1h
+a2luZw0KPiBzeXNmcy9icGZmcy8NCj4gPj4gcmVhZG9ubHkgYWZ0ZXIgcGlubmluZywgdGhlbiB1
+c2luZyBicGYgTFNNIGhvb2tzDQo+ID4+IHNiX21vdW50fHJlbW91bnR8dW5tb3VudC4uLg0KPiA+
+PiBmYW1pbHkgY29tYmluaW5nIGJwZigpIExTTSBob29rLi4uIGlzbid0IHRoaXMgZW5vdWdoIHRv
+Og0KPiA+PiAxLiBSZXN0cmljdCB3aG8gY2FuIHBpbiB0byBicGZmcyB3aXRob3V0IHVzaW5nIGEg
+ZnVsbCBNQUMNCj4gPj4gMi4gUmVzdHJpY3Qgd2hvIGNhbiBkZWxldGUgb3IgdW5tb3VudCBicGYg
+ZmlsZXN5c3RlbQ0KPiA+Pg0KPiA+PiA/DQo+ID4gSSdtIHRoaW5raW5nIHRvIGltcGxlbWVudCBz
+b21ldGhpbmcgbGlrZSB0aGlzLg0KPiA+DQo+ID4gRmlyc3QsIEkgYWRkIGEgbmV3IHByb2dyYW0g
+ZmxhZyBjYWxsZWQNCj4gPiBCUEZfRl9TVE9QX09OQ09ORklSTSwgd2hpY2ggY2F1c2VzIHRoZSBy
+ZWYgY291bnQNCj4gPiBvZiB0aGUgbGluayB0byBpbmNyZWFzZSB0d2ljZSBhdCBjcmVhdGlvbiB0
+aW1lLiBJbiB0aGlzIHdheSwNCj4gPiB1c2VyIHNwYWNlIGNhbm5vdCBtYWtlIHRoZSBsaW5rIGRp
+c2FwcGVhciwgdW5sZXNzIGENCj4gPiBjb25maXJtYXRpb24gaXMgZXhwbGljaXRseSBzZW50IHZp
+YSB0aGUgYnBmKCkgc3lzdGVtIGNhbGwuDQo+ID4NCj4gPiBBbm90aGVyIGFkdmFudGFnZSBpcyB0
+aGF0IG90aGVyIExTTXMgY2FuIGRlY2lkZQ0KPiA+IHdoZXRoZXIgb3Igbm90IHRoZXkgYWxsb3cg
+YSBwcm9ncmFtIHdpdGggdGhpcyBmbGFnDQo+ID4gKGluIHRoZSBicGYgc2VjdXJpdHkgaG9vayku
+DQo+ID4NCj4gPiBUaGlzIHdvdWxkIHdvcmsgcmVnYXJkbGVzcyBvZiB0aGUgbWV0aG9kIHVzZWQg
+dG8NCj4gPiBsb2FkIHRoZSBlQlBGIHByb2dyYW0gKHVzZXIgc3BhY2Ugb3Iga2VybmVsIHNwYWNl
+KS4NCj4gPg0KPiA+IFNlY29uZCwgSSBleHRlbmQgdGhlIGJwZigpIHN5c3RlbSBjYWxsIHdpdGgg
+YSBuZXcNCj4gPiBzdWJjb21tYW5kLCBCUEZfTElOS19DT05GSVJNX1NUT1AsIHdoaWNoDQo+ID4g
+ZGVjcmVhc3JlcyB0aGUgcmVmIGNvdW50IGZvciB0aGUgbGluayBvZiB0aGUgcHJvZ3JhbXMNCj4g
+PiB3aXRoIHRoZSBCUEZfRl9TVE9QX09OQ09ORklSTSBmbGFnLiBJIHdpbGwgYWxzbw0KPiA+IGlu
+dHJvZHVjZSBhIG5ldyBzZWN1cml0eSBob29rIChzb21ldGhpbmcgbGlrZQ0KPiA+IHNlY3VyaXR5
+X2xpbmtfY29uZmlybV9zdG9wKSwgc28gdGhhdCBhbiBMU00gaGFzIHRoZQ0KPiA+IG9wcG9ydHVu
+aXR5IHRvIGRlbnkgdGhlIHN0b3AgKHRoZSBicGYgc2VjdXJpdHkgaG9vaw0KPiA+IHdvdWxkIG5v
+dCBiZSBzdWZmaWNpZW50IHRvIGRldGVybWluZSBleGFjdGx5IGZvcg0KPiA+IHdoaWNoIGxpbmsg
+dGhlIGNvbmZpcm1hdGlvbiBpcyBnaXZlbiwgYW4gTFNNIHNob3VsZA0KPiA+IGJlIGFibGUgdG8g
+ZGVueSB0aGUgc3RvcCBmb3IgaXRzIG93biBwcm9ncmFtcykuDQo+IA0KPiBXb3VsZCB5b3UgcGxl
+YXNlIHN0b3AgcmVmZXJyaW5nIHRvIGEgc2V0IG9mIGVCUEYgcHJvZ3JhbXMNCj4gbG9hZGVkIGlu
+dG8gdGhlIEJQRiBMU00gYXMgYW4gTFNNPyBDYWxsIGl0IGEgQlBGIHNlY3VyaXR5DQo+IG1vZHVs
+ZSAoQlNNKSBpZiB5b3UgbXVzdCB1c2UgYW4gYWJicmV2aWF0aW9uLiBBbiBMU00gaXMgYQ0KPiBw
+cm92aWRlciBvZiBzZWN1cml0eV8gaG9va3MuIEluIHlvdXIgY2FzZSB0aGF0IGlzIEJQRi4gV2hl
+bg0KPiB5b3UgY2FsbCB0aGUgc2V0IG9mIGVCUEYgcHJvZ3JhbXMgYW4gTFNNIGl0IGlzIGxpa2Ug
+Y2FsbGluZw0KPiBhbiBTRUxpbnV4IHBvbGljeSBhbiBMU00uDQoNCkFuIGVCUEYgcHJvZ3JhbSBj
+b3VsZCBiZSBhIHByb3ZpZGVyIG9mIHNlY3VyaXR5XyBob29rcw0KdG9vLiBUaGUgYnBmIExTTSBp
+cyBhbiBhZ2dyZWdhdG9yLCBzaW1pbGFybHkgdG8geW91cg0KaW5mcmFzdHJ1Y3R1cmUgdG8gbWFu
+YWdlIGJ1aWx0LWluIExTTXMuIE1heWJlLCBjYWxsaW5nDQppdCBzZWNvbmQtbGV2ZWwgTFNNIG9y
+IHNlY29uZGFyeSBMU00gd291bGQgYmV0dGVyDQpyZXByZXNlbnQgdGhpcyBuZXcgY2xhc3MuDQoN
+ClRoZSBvbmx5IGRpZmZlcmVuY2VzIGFyZSB0aGUgcmVnaXN0cmF0aW9uIG1ldGhvZCwgKFNFQw0K
+ZGlyZWN0aXZlIGluc3RlYWQgb2YgREVGSU5FX0xTTSksIGFuZCB3aGF0IHRoZSBob29rDQppbXBs
+ZW1lbnRhdGlvbiBjYW4gYWNjZXNzLg0KDQpUaGUgaW1wbGVtZW50YXRpb24gb2YgYSBzZWN1cml0
+eV8gaG9vayB2aWEgZUJQRiBjYW4NCmZvbGxvdyB0aGUgc2FtZSBzdHJ1Y3R1cmUgb2YgYnVpbHQt
+aW4gTFNNcywgaS5lLiBpdCBjYW4gYmUNCnVuaXF1ZWx5IHJlc3BvbnNpYmxlIGZvciBlbmZvcmNp
+bmcgYW5kIGJlIHBvbGljeS1hZ25vc3RpYywNCmFuZCBjYW4gcmV0cmlldmUgdGhlIGRlY2lzaW9u
+cyBiYXNlZCBvbiBhIHBvbGljeSBmcm9tIGENCmNvbXBvbmVudCBpbXBsZW1lbnRlZCBzb21ld2hl
+cmUgZWxzZS4NCg0KSG9wZWZ1bGx5LCBJIHVuZGVyc3Rvb2QgdGhlIGJhc2ljIHByaW5jaXBsZXMg
+Y29ycmVjdGx5Lg0KSSBsZXQgdGhlIGVCUEYgbWFpbnRhaW5lcnMgY29tbWVudCBvbiB0aGlzLg0K
+DQpUaGFua3MNCg0KUm9iZXJ0bw0KDQpIVUFXRUkgVEVDSE5PTE9HSUVTIER1ZXNzZWxkb3JmIEdt
+YkgsIEhSQiA1NjA2Mw0KTWFuYWdpbmcgRGlyZWN0b3I6IExpIFBlbmcsIFpob25nIFJvbmdodWEN
+Cg0KPiA+IFdoYXQgZG8geW91IHRoaW5rPw0KPiA+DQo+ID4gVGhhbmtzDQo+ID4NCj4gPiBSb2Jl
+cnRvDQo+ID4NCj4gPiBIVUFXRUkgVEVDSE5PTE9HSUVTIER1ZXNzZWxkb3JmIEdtYkgsIEhSQiA1
+NjA2Mw0KPiA+IE1hbmFnaW5nIERpcmVjdG9yOiBMaSBQZW5nLCBaaG9uZyBSb25naHVhDQoNCg==

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 711544F5177
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F244F503C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1846435AbiDFCEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:04:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39826 "EHLO
+        id S1840898AbiDFBNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349075AbiDEJtE (ORCPT
+        with ESMTP id S1349077AbiDEJtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:49:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414BCA94FF;
-        Tue,  5 Apr 2022 02:40:02 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A575AA9940;
+        Tue,  5 Apr 2022 02:40:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D12006164D;
-        Tue,  5 Apr 2022 09:40:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEDC0C385A2;
-        Tue,  5 Apr 2022 09:40:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 535C6B818F3;
+        Tue,  5 Apr 2022 09:40:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BBC3C385A1;
+        Tue,  5 Apr 2022 09:40:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151601;
-        bh=bpHXttM/e3cLQHkW0j8q0tlu0YafmBGpQxC5mr2uDeU=;
+        s=korg; t=1649151604;
+        bh=jf/0EApObABORwS/DhG/9UsbVEQxtDbTazbrKwfT8wI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d6gv/HOmPK+xo3CK4lElpZG+QSGtrTSRzZdwFmPL+07AsCj1M07rjtBULvpEcBob1
-         rYhQBibbmzwl0+k79Im4Y/Bo9IR9gnEm8KObOGta6XLbaOyY4g9YZ6+zK+eKEzWDXj
-         LyFAjBao1J7zt5eKiU4JKbtJxxIKdVU+JuF52iMs=
+        b=Z7djd2FVzQ6M0GVtSFpu0P1KVwIDQdQ92SZIFFzWd2KDbGlyPZ/XkYQVqXRHlEtyf
+         v/UGbxtUgz98nmBfsDsyWpSdE00cfRM+HqgODEQ2SDngbDCS4RukBOQgN/LHkPZF7i
+         B3x3DNKIVTBPgOkD0Sh3nYrDzEmTlMALGW38Z0Ls=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        stable@vger.kernel.org, Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Stephen Boyd <swboyd@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 474/913] drm/msm/dpu: add DSPP blocks teardown
-Date:   Tue,  5 Apr 2022 09:25:36 +0200
-Message-Id: <20220405070354.063763780@linuxfoundation.org>
+Subject: [PATCH 5.15 475/913] drm/msm/dpu: fix dp audio condition
+Date:   Tue,  5 Apr 2022 09:25:37 +0200
+Message-Id: <20220405070354.093780241@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -59,41 +59,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit d5c5e78f217172e87d8fb2c3418dd8b58b4adfcb ]
+[ Upstream commit 1e0505a5a7a2fea243f8e6d7e13fcde65f9e41bc ]
 
-Add missing calls to dpu_hw_dspp_destroy() to free resources allocated
-for DSPP hardware blocks.
+DP audio enablement code which is comparing intf_type,
+DRM_MODE_ENCODER_TMDS (= 2) with DRM_MODE_CONNECTOR_DisplayPort (= 10).
+Which would never succeed. Fix it to check for DRM_MODE_ENCODER_TMDS.
 
-Fixes: e47616df008b ("drm/msm/dpu: add support for color processing blocks in dpu driver")
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Fixes: d13e36d7d222 ("drm/msm/dp: add audio support for Display Port on MSM")
 Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Link: https://lore.kernel.org/r/20220121210618.3482550-3-dmitry.baryshkov@linaro.org
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://lore.kernel.org/r/20220217035358.465904-2-dmitry.baryshkov@linaro.org
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-index f9c83d6e427a..24fbaf562d41 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
-@@ -35,6 +35,14 @@ int dpu_rm_destroy(struct dpu_rm *rm)
- {
- 	int i;
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+index 0e9d3fa1544b..6bde3e234ec8 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+@@ -1107,7 +1107,7 @@ static void _dpu_encoder_virt_enable_helper(struct drm_encoder *drm_enc)
+ 	}
  
-+	for (i = 0; i < ARRAY_SIZE(rm->dspp_blks); i++) {
-+		struct dpu_hw_dspp *hw;
-+
-+		if (rm->dspp_blks[i]) {
-+			hw = to_dpu_hw_dspp(rm->dspp_blks[i]);
-+			dpu_hw_dspp_destroy(hw);
-+		}
-+	}
- 	for (i = 0; i < ARRAY_SIZE(rm->pingpong_blks); i++) {
- 		struct dpu_hw_pingpong *hw;
  
+-	if (dpu_enc->disp_info.intf_type == DRM_MODE_CONNECTOR_DisplayPort &&
++	if (dpu_enc->disp_info.intf_type == DRM_MODE_ENCODER_TMDS &&
+ 		dpu_enc->cur_master->hw_mdptop &&
+ 		dpu_enc->cur_master->hw_mdptop->ops.intf_audio_select)
+ 		dpu_enc->cur_master->hw_mdptop->ops.intf_audio_select(
 -- 
 2.34.1
 

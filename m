@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1001E4F39F2
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6060F4F3981
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378895AbiDELjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
+        id S238079AbiDELe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244718AbiDEIwf (ORCPT
+        with ESMTP id S244711AbiDEIwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:52:35 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11F515718;
-        Tue,  5 Apr 2022 01:42:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BBE1ADAC;
+        Tue,  5 Apr 2022 01:42:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF41EB81C14;
-        Tue,  5 Apr 2022 08:42:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9FE3C385A1;
-        Tue,  5 Apr 2022 08:42:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 68538B81BC5;
+        Tue,  5 Apr 2022 08:42:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA7A4C385A1;
+        Tue,  5 Apr 2022 08:42:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148149;
-        bh=YFr4/nojKaAOU/ZZjc5sHloKXZS8yH7kQ2huS/c3kYc=;
+        s=korg; t=1649148152;
+        bh=sVR33FUtTlVIApPJsjKgr9pJZo5UOvcNrviZQ+t5OWs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dpGk3jeWY+cewBcUP4BRF3NZRPQlbE9XssvjxwanlUA04N/OS45P+B/MqNF7or1re
-         RjnD6iaLTSI5LzBktp9ekXcz+Kf3pTYwNZEbqa6Bja/d/EVl7mM2d/kUr/5ApoVfc1
-         nKKxGTnimpdNyZvaIsAgOOvRHWXAUckNF1qL3ano=
+        b=b1BrtOwQMBIprgW7QQiMELM6oyLN23UmztKNTmcW7BhtNtvVe2Y2Wp4uYggzdWd1N
+         KOtgpslQlL7uIKrtQps0dXV7X/snjFZTYsto54taDfP0md0LFifqe3GwvGv8SrE3ZK
+         f45HdpWOboK6dPDoI9O0u3yTN5xDimQfum/1DTIw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jianglei Nie <niejianglei2021@163.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0251/1017] crypto: ccree - Fix use after free in cc_cipher_exit()
-Date:   Tue,  5 Apr 2022 09:19:24 +0200
-Message-Id: <20220405070401.712674946@linuxfoundation.org>
+Subject: [PATCH 5.16 0252/1017] hwrng: nomadik - Change clk_disable to clk_disable_unprepare
+Date:   Tue,  5 Apr 2022 09:19:25 +0200
+Message-Id: <20220405070401.742875596@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,38 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jianglei Nie <niejianglei2021@163.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 3d950c34074ed74d2713c3856ba01264523289e6 ]
+[ Upstream commit 7f0f1f3ef62ed7a40e30aff28115bd94c4211d1d ]
 
-kfree_sensitive(ctx_p->user.key) will free the ctx_p->user.key. But
-ctx_p->user.key is still used in the next line, which will lead to a
-use after free.
+The corresponding API for clk_prepare_enable is clk_disable_unprepare,
+other than clk_disable_unprepare.
 
-We can call kfree_sensitive() after dev_dbg() to avoid the uaf.
+Fix this by changing clk_disable to clk_disable_unprepare.
 
-Fixes: 63ee04c8b491 ("crypto: ccree - add skcipher support")
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+Fixes: beca35d05cc2 ("hwrng: nomadik - use clk_prepare_enable()")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/ccree/cc_cipher.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/char/hw_random/nomadik-rng.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/crypto/ccree/cc_cipher.c b/drivers/crypto/ccree/cc_cipher.c
-index 78833491f534..309da6334a0a 100644
---- a/drivers/crypto/ccree/cc_cipher.c
-+++ b/drivers/crypto/ccree/cc_cipher.c
-@@ -257,8 +257,8 @@ static void cc_cipher_exit(struct crypto_tfm *tfm)
- 		&ctx_p->user.key_dma_addr);
- 
- 	/* Free key buffer in context */
--	kfree_sensitive(ctx_p->user.key);
- 	dev_dbg(dev, "Free key buffer in context. key=@%p\n", ctx_p->user.key);
-+	kfree_sensitive(ctx_p->user.key);
+diff --git a/drivers/char/hw_random/nomadik-rng.c b/drivers/char/hw_random/nomadik-rng.c
+index 67947a19aa22..e8f9621e7954 100644
+--- a/drivers/char/hw_random/nomadik-rng.c
++++ b/drivers/char/hw_random/nomadik-rng.c
+@@ -65,14 +65,14 @@ static int nmk_rng_probe(struct amba_device *dev, const struct amba_id *id)
+ out_release:
+ 	amba_release_regions(dev);
+ out_clk:
+-	clk_disable(rng_clk);
++	clk_disable_unprepare(rng_clk);
+ 	return ret;
  }
  
- struct tdes_keys {
+ static void nmk_rng_remove(struct amba_device *dev)
+ {
+ 	amba_release_regions(dev);
+-	clk_disable(rng_clk);
++	clk_disable_unprepare(rng_clk);
+ }
+ 
+ static const struct amba_id nmk_rng_ids[] = {
 -- 
 2.34.1
 

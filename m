@@ -2,104 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26FC64F21AC
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB964F2191
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbiDEDZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 23:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
+        id S230274AbiDEDfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 23:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbiDEDZs (ORCPT
+        with ESMTP id S229510AbiDEDff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 23:25:48 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B347E4706A
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 20:23:50 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id t7so9449370qta.10
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 20:23:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qApr9GrihVbOuWIYXrsrRfMhvE7Z9/nCtDMkcpQr1HA=;
-        b=OUL2erKbptx3OSEXn+FNiSDEclLx26+4Q9s4Yc0HFFg2NowwbEnAZPwFjtfFoQXFSD
-         HGr3WZcWj0bwCYYGq+VQH3lNm19kHiCLCcgHpy3MWFLUkJdqXzzsA6T3FCzHLz4UT2GP
-         u+NVUKCBFvqmXaoDydp6uOSzgkS3i+tqmaGAQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qApr9GrihVbOuWIYXrsrRfMhvE7Z9/nCtDMkcpQr1HA=;
-        b=UzbAE867Yqn93Lw/6jlBo0b/qgcsOD6i2aclRSXIP7z5J2Bsfke1bYSpyKlEQgGB76
-         e9YmMakDU9hvKW/TDq3wtM8/ptB+sAyR0OoUlWMFRcnxwbUNHSmVLY8Zm1BE36pHU5ED
-         Q/98dSVvdX1e1AKOMeJWWM87meWgApc85qIYattOIT0lbbLL4S/xUzZh7qdNU2le54Uz
-         dwQzrtxtHQGGqpZ6lglUIJqy1RBUxhOylslkv//2xWV4+6sFEx8Apx4aAF7PnTHwPuRs
-         HuMXUfsS5h9+G+J6ZOwC5eLOn99U3XZ7c8b87lsIIjvpLEtriENKQAgp5KPF2vLGp3nA
-         U9uQ==
-X-Gm-Message-State: AOAM530YUUXyUFS3/3wdWhAJIoUXk7o2bdbSt/hRxX7oY4UfIoZErQc1
-        pcbFx2rPJSYiScDk/7qAwk3HJDYT92nD5cMkAN0jNw==
-X-Google-Smtp-Source: ABdhPJwynqhZqs8C04npxIC6XvYVeW6E//MMWg7Ai+dGctLoCRwKSkiHu3j/uCEqqA2vWJ4U1/uhkuomufhsrlhjYio=
-X-Received: by 2002:a05:622a:110c:b0:2e1:fe6b:2f26 with SMTP id
- e12-20020a05622a110c00b002e1fe6b2f26mr1251546qty.201.1649129029903; Mon, 04
- Apr 2022 20:23:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <Yib9F5SqKda/nH9c@infradead.org> <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
- <YkmWh2tss8nXKqc5@infradead.org> <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
- <6a38e8b8-7ccc-afba-6826-cb6e4f92af83@linux-m68k.org>
-In-Reply-To: <6a38e8b8-7ccc-afba-6826-cb6e4f92af83@linux-m68k.org>
-From:   Daniel Palmer <daniel@0x0f.com>
-Date:   Tue, 5 Apr 2022 12:23:39 +0900
-Message-ID: <CAFr9PXkk=8HOxPwVvFRzqHZteRREWxSOOcdjrcOPe0d=9AW2yQ@mail.gmail.com>
-Subject: Re: [RFC PULL] remove arch/h8300
-To:     Greg Ungerer <gerg@linux-m68k.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "moderated list:H8/300 ARCHITECTURE" 
-        <uclinux-h8-devel@lists.sourceforge.jp>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, Max Filippov <jcmvbkbc@gmail.com>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 4 Apr 2022 23:35:35 -0400
+X-Greylist: delayed 447 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Apr 2022 20:33:35 PDT
+Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 69BC0281;
+        Mon,  4 Apr 2022 20:33:32 -0700 (PDT)
+HMM_SOURCE_IP: 172.18.0.188:46720.1605257624
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-202.80.192.39 (unknown [172.18.0.188])
+        by chinatelecom.cn (HERMES) with SMTP id 5FA6A2800D7;
+        Tue,  5 Apr 2022 11:25:51 +0800 (CST)
+X-189-SAVE-TO-SEND: +liuxp11@chinatelecom.cn
+Received: from  ([172.18.0.188])
+        by app0023 with ESMTP id 1f7cdf5bef094fc198f9b56acf9e3014 for keescook@chromium.org;
+        Tue, 05 Apr 2022 11:26:00 CST
+X-Transaction-ID: 1f7cdf5bef094fc198f9b56acf9e3014
+X-Real-From: liuxp11@chinatelecom.cn
+X-Receive-IP: 172.18.0.188
+X-MEDUSA-Status: 0
+Sender: liuxp11@chinatelecom.cn
+From:   Liu Xinpeng <liuxp11@chinatelecom.cn>
+To:     keescook@chromium.org, anton@enomsg.org, ccross@android.com,
+        tony.luck@intel.com, enb@kernel.org, ames.morse@arm.com,
+        bp@alien8.de, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Cc:     Liu Xinpeng <liuxp11@chinatelecom.cn>
+Subject: [PATCH] ACPI: APEI: fix missing erst record id
+Date:   Tue,  5 Apr 2022 11:25:33 +0800
+Message-Id: <1649129133-24777-1-git-send-email-liuxp11@chinatelecom.cn>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+record_id is in the erst_record_id_cache but not in storage,so erst_read will
+return -ENOENT, and then goto retry_next, erst_get_record_id_next skip a
+record_id. This can result in printing the records just in the cache.
 
-On Mon, 4 Apr 2022 at 22:42, Greg Ungerer <gerg@linux-m68k.org> wrote:
-> But we could consider the Dragonball support for removal. I keep it compiling,
-> but I don't use it and can't test that it actually works. Not sure that it
-> has been used for a very long time now. And I didn't even realize but its
-> serial driver (68328serial.c) was removed in 2015. No one seems too have
-> noticed and complained.
+A reproducer of the problem(retry many times):
 
-I noticed this and I am working on fixing it up for a new Dragonball
-homebrew machine.
-I'm trying to add a 68000 machine to QEMU to make the development
-easier because I'm currently waiting an hour or more for a kernel to
-load over serial.
-It might be a few months.
+[root@localhost erst-inject]# ./erst-inject -c 0xaaaaa00011
+[root@localhost erst-inject]# ./erst-inject -p
+rc: 273
+rcd sig: CPER
+rcd id: 0xaaaaa00012
+rc: 273
+rcd sig: CPER
+rcd id: 0xaaaaa00013
+rc: 273
+rcd sig: CPER
+rcd id: 0xaaaaa00014
+[root@localhost erst-inject]# ./erst-inject -i 0xaaaaa000006
+[root@localhost erst-inject]# ./erst-inject -i 0xaaaaa000007
+[root@localhost erst-inject]# ./erst-inject -i 0xaaaaa000008
+[root@localhost erst-inject]# ./erst-inject -p
+rc: 273
+rcd sig: CPER
+rcd id: 0xaaaaa00012
+rc: 273
+rcd sig: CPER
+rcd id: 0xaaaaa00013
+rc: 273
+rcd sig: CPER
+rcd id: 0xaaaaa00014
+[root@localhost erst-inject]# ./erst-inject -n
+total error record count: 6
 
-It looked like 68328serial.c was removed because someone tried to
-clean it up and it was decided that no one was using it and it was
-best to delete it.
-My plan was to at some point send a series to fix up the issues with
-the Dragonball support, revert removing the serial driver and adding
-the patch that cleaned it up.
+Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
+---
+ drivers/acpi/apei/erst-dbg.c |  4 +++-
+ drivers/acpi/apei/erst.c     | 34 +++++++++++++++++++++++++++++++---
+ include/acpi/apei.h          |  1 +
+ 3 files changed, 35 insertions(+), 4 deletions(-)
 
-Cheers,
+diff --git a/drivers/acpi/apei/erst-dbg.c b/drivers/acpi/apei/erst-dbg.c
+index c740f0faad39..1b94d5e2eaf3 100644
+--- a/drivers/acpi/apei/erst-dbg.c
++++ b/drivers/acpi/apei/erst-dbg.c
+@@ -113,8 +113,10 @@ static ssize_t erst_dbg_read(struct file *filp, char __user *ubuf,
+ retry:
+ 	rc = len = erst_read(id, erst_dbg_buf, erst_dbg_buf_len);
+ 	/* The record may be cleared by others, try read next record */
+-	if (rc == -ENOENT)
++	if (rc == -ENOENT){
++		erst_clear_cache(id);
+ 		goto retry_next;
++	}
+ 	if (rc < 0)
+ 		goto out;
+ 	if (len > ERST_DBG_RECORD_LEN_MAX) {
+diff --git a/drivers/acpi/apei/erst.c b/drivers/acpi/apei/erst.c
+index 698d67cee052..dcf08e24bab3 100644
+--- a/drivers/acpi/apei/erst.c
++++ b/drivers/acpi/apei/erst.c
+@@ -856,6 +856,31 @@ ssize_t erst_read(u64 record_id, struct cper_record_header *record,
+ }
+ EXPORT_SYMBOL_GPL(erst_read);
+ 
++int erst_clear_cache(u64 record_id)
++{
++	int rc, i;
++	u64 *entries;
++
++	if (erst_disable)
++		return -ENODEV;
++
++	rc = mutex_lock_interruptible(&erst_record_id_cache.lock);
++	if (rc)
++		return rc;
++
++	entries = erst_record_id_cache.entries;
++	for (i = 0; i < erst_record_id_cache.len; i++) {
++		if (entries[i] == record_id)
++			entries[i] = APEI_ERST_INVALID_RECORD_ID;
++	}
++	__erst_record_id_cache_compact();
++
++	mutex_unlock(&erst_record_id_cache.lock);
++
++	return rc;
++}
++EXPORT_SYMBOL_GPL(erst_clear_cache);
++
+ int erst_clear(u64 record_id)
+ {
+ 	int rc, i;
+@@ -998,14 +1023,17 @@ static ssize_t erst_reader(struct pstore_record *record)
+ 
+ 	len = erst_read(record_id, &rcd->hdr, rcd_len);
+ 	/* The record may be cleared by others, try read next record */
+-	if (len == -ENOENT)
++	if (len == -ENOENT){
++		erst_clear_cache(record_id);
+ 		goto skip;
+-	else if (len < 0 || len < sizeof(*rcd)) {
++	} else if (len < 0 || len < sizeof(*rcd)) {
+ 		rc = -EIO;
+ 		goto out;
+ 	}
+-	if (!guid_equal(&rcd->hdr.creator_id, &CPER_CREATOR_PSTORE))
++	if (!guid_equal(&rcd->hdr.creator_id, &CPER_CREATOR_PSTORE)){
++		erst_clear_cache(record_id);
+ 		goto skip;
++	}
+ 
+ 	record->buf = kmalloc(len, GFP_KERNEL);
+ 	if (record->buf == NULL) {
+diff --git a/include/acpi/apei.h b/include/acpi/apei.h
+index afaca3a075e8..f8c11ff4115a 100644
+--- a/include/acpi/apei.h
++++ b/include/acpi/apei.h
+@@ -47,6 +47,7 @@ void erst_get_record_id_end(void);
+ ssize_t erst_read(u64 record_id, struct cper_record_header *record,
+ 		  size_t buflen);
+ int erst_clear(u64 record_id);
++int erst_clear_cache(u64 record_id);
+ 
+ int arch_apei_enable_cmcff(struct acpi_hest_header *hest_hdr, void *data);
+ void arch_apei_report_mem_error(int sev, struct cper_sec_mem_err *mem_err);
+-- 
+2.23.0
 
-Daniel

@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274264F285E
+	by mail.lfdr.de (Postfix) with ESMTP id 728104F285F
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234889AbiDEIO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
+        id S234911AbiDEIO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234926AbiDEH7D (ORCPT
+        with ESMTP id S234954AbiDEH7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:59:03 -0400
+        Tue, 5 Apr 2022 03:59:04 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0280C37BD3;
-        Tue,  5 Apr 2022 00:53:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D15954FA2;
+        Tue,  5 Apr 2022 00:53:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2A474B81B14;
-        Tue,  5 Apr 2022 07:53:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D7D7C340EE;
-        Tue,  5 Apr 2022 07:53:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61FC1B81B9C;
+        Tue,  5 Apr 2022 07:53:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9257C340EE;
+        Tue,  5 Apr 2022 07:53:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145203;
-        bh=p3fs+r28lnStow8fQ64ZRjbA9lfbA6oqU9NjoM6wbho=;
+        s=korg; t=1649145209;
+        bh=U807mwT5uLeYFhAzrjf6WOAwsLXfnFIitsstvV5q7cs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iJ6JOve10bmhHaNGrx5EeMl7W5y151KtsgxUcvnoW0Xm4Yb/zCYSIUO7x/psk3gJj
-         1BudwjuqmoBulr2g6a6ioCZd9tFI1H4JJ4baANoFlfOCCq52O44JVLXp8Oc6IH59FE
-         JOEuvJmnG1P+HIqiUtpLcaJ0BHCWbi+1JKrqm+GI=
+        b=Jzy/BqY9RwCaC8Xc48eTuAg60y6NcoBQ0C5CP+B9nbQOgBRhz2azuT9xw423CEgjq
+         Qq72Qqzkh1l6ouODxnVlukSG8+jPW+gJAU9YJm+0RygSPiZg1tI+3XwTbfuN7XoVDC
+         gz0++7B6q+e242Ow2KbmDGzeCJa2ZLYAWH+7Qfoc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zev Weiss <zev@bewilderbeest.net>,
-        Lei YU <yulei.sh@bytedance.com>, Joel Stanley <joel@jms.id.au>,
+        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0322/1126] ARM: dts: Fix OpenBMC flash layout label addresses
-Date:   Tue,  5 Apr 2022 09:17:49 +0200
-Message-Id: <20220405070417.067287493@linuxfoundation.org>
+Subject: [PATCH 5.17 0324/1126] arm64: dts: qcom: sc7280: Fix gmu unit address
+Date:   Tue,  5 Apr 2022 09:17:51 +0200
+Message-Id: <20220405070417.128317271@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,52 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zev Weiss <zev@bewilderbeest.net>
+From: Douglas Anderson <dianders@chromium.org>
 
-[ Upstream commit e011df3579ac980d840db8e8c3b9431f88ebddab ]
+[ Upstream commit 142a4d995c6adb6bf5b22166f51b525e83c96661 ]
 
-We've ended up with some inconsistencies between the addresses in the
-DT node labels and the actual offsets of the partitions; this brings
-them back in sync.
+When processing sc7280 device trees, I can see:
 
-Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-Fixes: 529022738c8e ("ARM: dts: Add OpenBMC flash layout")
-Fixes: 8dec60e7b8d0 ("ARM: dts: aspeed: Grow u-boot partition 64MiB OpenBMC flash layout")
-Reviewed-by: Lei YU <yulei.sh@bytedance.com>
-Link: https://lore.kernel.org/r/20220105003718.19888-1-zev@bewilderbeest.net
-Signed-off-by: Joel Stanley <joel@jms.id.au>
+  Warning (simple_bus_reg): /soc@0/gmu@3d69000:
+    simple-bus unit address format error, expected "3d6a000"
+
+There's a clear typo in the node name. Fix it.
+
+Fixes: 96c471970b7b ("arm64: dts: qcom: sc7280: Add gpu support")
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220125144316.v2.1.I19f60014e9be4b9dda4d66b5d56ef3d9600b6e10@changeid
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/openbmc-flash-layout-64.dtsi | 2 +-
- arch/arm/boot/dts/openbmc-flash-layout.dtsi    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/openbmc-flash-layout-64.dtsi b/arch/arm/boot/dts/openbmc-flash-layout-64.dtsi
-index 31f59de5190b..7af41361c480 100644
---- a/arch/arm/boot/dts/openbmc-flash-layout-64.dtsi
-+++ b/arch/arm/boot/dts/openbmc-flash-layout-64.dtsi
-@@ -28,7 +28,7 @@ partitions {
- 		label = "rofs";
- 	};
+diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+index 937c2e0e93eb..eab7a8505053 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+@@ -1790,7 +1790,7 @@
+ 			};
+ 		};
  
--	rwfs@6000000 {
-+	rwfs@2a00000 {
- 		reg = <0x2a00000 0x1600000>; // 22MB
- 		label = "rwfs";
- 	};
-diff --git a/arch/arm/boot/dts/openbmc-flash-layout.dtsi b/arch/arm/boot/dts/openbmc-flash-layout.dtsi
-index 6c26524e93e1..b47e14063c38 100644
---- a/arch/arm/boot/dts/openbmc-flash-layout.dtsi
-+++ b/arch/arm/boot/dts/openbmc-flash-layout.dtsi
-@@ -20,7 +20,7 @@ partitions {
- 		label = "kernel";
- 	};
- 
--	rofs@c0000 {
-+	rofs@4c0000 {
- 		reg = <0x4c0000 0x1740000>;
- 		label = "rofs";
- 	};
+-		gmu: gmu@3d69000 {
++		gmu: gmu@3d6a000 {
+ 			compatible="qcom,adreno-gmu-635.0", "qcom,adreno-gmu";
+ 			reg = <0 0x03d6a000 0 0x34000>,
+ 				<0 0x3de0000 0 0x10000>,
 -- 
 2.34.1
 

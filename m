@@ -2,61 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0687E4F475F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E7D4F4734
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351291AbiDEVKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44552 "EHLO
+        id S1347688AbiDEVDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:03:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573316AbiDESxn (ORCPT
+        with ESMTP id S1573371AbiDES7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 14:53:43 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A3AB1AA2
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 11:51:44 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-df22f50e0cso374710fac.3
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 11:51:44 -0700 (PDT)
+        Tue, 5 Apr 2022 14:59:20 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A07CD338
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 11:57:19 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id e4so76708oif.2
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 11:57:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=5LQhptvFdbZ0C3sjhDpLAbcs/GIdoE2HKrU0D1husVM=;
-        b=SBAWX77d+jdUm+o+vqnl+olI+0dd442QoBAJ8p4Yy5WxGYltH0vPA+D7F3oUMH6z9C
-         LcrfY5mR+FU0amxawwfOHcaz5MhQNV1SFInR7+ewsuX5B1R03RZwUJdM1DN42Qt+Qb3j
-         1hh8IYk1Ng97+7Kgee10OuNEK5If0o+wlozzM=
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc:content-transfer-encoding;
+        bh=Eg+uJvzARiyK+y5kdwfhnsez9dPo6iD29SbfPJ5zFbo=;
+        b=SOQSZKy52LDl9ojVoe9ifg4gZDbfedX3HkeMtnOMdhgKQ+qR+r52Y+dGcz4uJd5Bob
+         kv/cVP780ma8L1IWC4Xds1yYirTqiu52lXC03y3odfB52De0YP3povQqDRNnsie5Tbh+
+         8gR0b7LCVS0p02zuIW9kppHpg2JdutvLf5iDg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=5LQhptvFdbZ0C3sjhDpLAbcs/GIdoE2HKrU0D1husVM=;
-        b=A5CI/dm1fSr9SSN1hXgBEvGaqKNz/v0thi4sSsjfWRoIbrXaMGITAT2eL1UxowtRtS
-         NkwkhwY/eAQYchhg5WER91VBlF6BEC420e2H+DTpokuUrfpiWDumE/o0icyigru2ZZQo
-         EzlH6JpgWdvO+u8kcVzAzllLU8kppKX8umhNmjI4g7P8uHO9JTW3S24QCFTCnJYsjvz5
-         d9zofvy/05qnfk+SB9FDZti3sOQ7I1RMkyb4KJQRXrnsRKjOPZwa8daORJ2JXTY59tmS
-         3mTUoxh9YDVsf8XnkWx3MPocKDEfaRlOZ2ufSQP4Lu5JjJSZ6r3PERlatAWymY0F9j1m
-         JKzA==
-X-Gm-Message-State: AOAM532akydxP5EvU615RnTHpm+yCFeiimGqzOglQJ5+0y4J5SpCTbwU
-        /85UiZit4zAh5uutwHxmrNhadeiMJNMJLA==
-X-Google-Smtp-Source: ABdhPJwi+u7HNJhVQTGZDxxKz5cHq6mQW2Zkj43J2nGB1hYNnpqiKg0YO6qpo1B7p+loLoDAaaM4RQ==
-X-Received: by 2002:a05:6870:c20b:b0:dd:9f25:b736 with SMTP id z11-20020a056870c20b00b000dd9f25b736mr2236137oae.201.1649184703898;
-        Tue, 05 Apr 2022 11:51:43 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id 190-20020a4a0dc7000000b003244ae0bbd5sm5264152oob.7.2022.04.05.11.51.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 11:51:43 -0700 (PDT)
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     tech-board-discuss@lists.linuxfoundation.org, conduct@kernel.org
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: Linux Kernel Code of Conduct Committee: March 31 2022
-Message-ID: <4401af50-083d-0239-6b7f-3454c8d69fec@linuxfoundation.org>
-Date:   Tue, 5 Apr 2022 12:51:42 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=Eg+uJvzARiyK+y5kdwfhnsez9dPo6iD29SbfPJ5zFbo=;
+        b=SNqH1eT/8ilfUG7mGvW7LEQMM+Hi6S1CBDtampzyLqb5CeD9nTxTRDxa6Jev+Kzl6l
+         fAm2yv+5vRBE4SxdnZAQ3ckmUgJjkZ51Cpo1d2n3s4Fiscp+iefCXX7F0QqffHXuVfeK
+         D3BVfxAIAuJOJE8RPVqaSAXTD8CCKmINz1k9Bc1PBWiSCMK4MOn/pl3bKJqsRXWI6+p9
+         Gi9jQC7PK0lWpzLL36pkpxPlIJIjActCdJWdF4W3XnR5AM2IoOqolugCFyniqfp9FKY8
+         Gf/0vcj8EOhabK2gSjipnElrqAYQOV9PmqyOhZB1L7YG4tDDM4hHZAD5JfMIOsqANmN0
+         6Q8w==
+X-Gm-Message-State: AOAM5326FDlxnS89NEHL1U/PwBFiLHscbMR0Th5kOqj6VFk/UMnrYAPX
+        JaXxd+ENveKiGcvCMWwYRIwCLhWhF7ClVJqb8frBsA==
+X-Google-Smtp-Source: ABdhPJxqFrAK9XKNfLSTAKp/DpPKoy3w3eYu+cvQpWHQQxYLJz3gqwv6wMtk9iToYxT4AHG9aUy+iRPRwFP3QOpCpz8=
+X-Received: by 2002:aca:bd41:0:b0:2ec:ff42:814f with SMTP id
+ n62-20020acabd41000000b002ecff42814fmr2062655oif.63.1649185039185; Tue, 05
+ Apr 2022 11:57:19 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 5 Apr 2022 13:57:18 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <CO1PR02MB853729533D004EB671B273BAE9E49@CO1PR02MB8537.namprd02.prod.outlook.com>
+References: <1646679549-12494-1-git-send-email-quic_pmaliset@quicinc.com>
+ <CAE-0n51HZKXCtrzf3_5wnoCZfhRoq8AqmUwsdk31iaiteVRDYg@mail.gmail.com> <CO1PR02MB853729533D004EB671B273BAE9E49@CO1PR02MB8537.namprd02.prod.outlook.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Tue, 5 Apr 2022 13:57:18 -0500
+Message-ID: <CAE-0n51oA99uOu4S3Sywx7FpK1SJKACgX27UN9z2kKP8UfwGOw@mail.gmail.com>
+Subject: RE: [PATCH v2] [RFC PATCH] PCI: Update LTR threshold based on LTRME bit
+To:     Prasad Malisetty <quic_pmaliset@quicinc.com>,
+        Prasad Malisetty <pmaliset@qti.qualcomm.com>,
+        agross@kernel.org, bhelgaas@google.com, bjorn.andersson@linaro.org,
+        kw@linux.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        lorenzo.pieralisi@arm.com, rajatja@google.com,
+        refactormyself@gmail.com, robh@kernel.org
+Cc:     Veerabhadrarao Badiganti <quic_vbadigan@quicinc.com>,
+        Rama Krishna <quic_ramkri@quicinc.com>,
+        "manivannan.sadhasivam@linaro.org" <manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,28 +75,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linux Kernel Code of Conduct Committee: March 31, 2022
+Quoting Prasad Malisetty (Temp) (2022-04-04 23:24:39)
+> > From: Stephen Boyd <swboyd@chromium.org>
+> > Quoting Prasad Malisetty (2022-03-07 10:59:09)
+> > > Update LTR threshold scale and value based on LTRME (Latency
+> > > Tolenrance Reporting Mechanism) from device capabilities.
+> > >
+> > > In ASPM driver, LTR threshold scale and value is updating based on
+> > > tcommon_mode and t_poweron values. In kioxia NVMe,
+> > > L1.2 is failing due to LTR threshold scale and value is greater value=
+s
+> > > than max snoop/non snoop value.
+> > >
+> > > In general, updated LTR threshold scale and value should be less than
+> > > max snoop/non snoop value to enter the device into L1.2 state.
+> > >
+> > > Signed-off-by: Prasad Malisetty <quic_pmaliset@quicinc.com>
+> > >
+> >
+> > Any Fixes tag?
+> No, we don=E2=80=99t have any fixes tag as this is new issue identified i=
+n kioxia NVMe only as of now.
 
-In the period of October 1, 2021 through March 31, 2022, the Code of
-Conduct Committee received the following reports:
-
-Unacceptable behavior or comments in email: 2
-
-The result of the investigation:
-   - Education and coaching clarifying the Code of Conduct conduct
-     related to normal review process: 2
-
-We would like to thank the Linux kernel community members who have
-supported the adoption of the Code of Conduct and who continue to
-uphold the professional standards of our community. If you have
-questions about this report, please write to <conduct@kernel.org>.
-
-------------------------------------------------------------------
-
-This report and the past Code Of Conduct Committee reports
-can be found on the Code of Conduct website at
-
-https://www.kernel.org/code-of-conduct.html
-
-thanks,
--- Shuah (On behalf of the Code of Conduct Committee)
+Just because you found it now doesn't mean it hasn't been broken for
+some time. Can you look through the history and figure out when it
+didn't work and use that commit for the fixes tag?

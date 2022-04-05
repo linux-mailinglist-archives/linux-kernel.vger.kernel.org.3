@@ -2,51 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A1094F421A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76AFC4F402E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:15:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380565AbiDEMNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
+        id S1388856AbiDEOla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244755AbiDEIwh (ORCPT
+        with ESMTP id S244104AbiDEJlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44511DA47;
-        Tue,  5 Apr 2022 01:43:28 -0700 (PDT)
+        Tue, 5 Apr 2022 05:41:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855EFBAB99;
+        Tue,  5 Apr 2022 02:25:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E6C2614E4;
-        Tue,  5 Apr 2022 08:43:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5729EC385A1;
-        Tue,  5 Apr 2022 08:43:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1E0CAB81C9A;
+        Tue,  5 Apr 2022 09:25:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84980C385A2;
+        Tue,  5 Apr 2022 09:25:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148207;
-        bh=PLJgfYpKDlA2T43Zuce5R0J0Mw2MAn5KvOTzShVlfyU=;
+        s=korg; t=1649150711;
+        bh=Tw2W437NG6DkhChOsRyAuLKEaGoelaEnNQG85SEkRVY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Eeb+Mq9ty1/YXbeXAZmxtHFHuQvfwMOlXCpJL3BIm+zr6YUQAnKM4RdgdnqfJeymW
-         TQj/4/EjWFGPAnxUM1YX7PQzXrDpPxSSo7OvmzehRGkXH0+f2UxWjjnnAgdsNZ4s44
-         viJ5oYCUTQ2arxWeqA/68I4E6+f6jgvN/14/nC5I=
+        b=O9CEFsXNplKRpqHYjdz+jTdSqsqP3acmpp8tCnyiqMH53KiZzjdr12Jn9qgD4nd7+
+         0ppK2AheYLzQHBJvMj6mhRnacB+xDnJKmZz+tfmnEKKP6dcLvHw52MIcQH+/oWj8Jk
+         yvJAT/XBUKyEXggPM6evMh9oaDRR+RqmPUXTll0A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        "kernelci.org bot" <bot@kernelci.org>,
-        Guenter Roeck <groeck@google.com>,
-        Shuah Khan <shuah@kernel.org>, Borislav Petkov <bp@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0274/1017] selftests, x86: fix how check_cc.sh is being invoked
-Date:   Tue,  5 Apr 2022 09:19:47 +0200
-Message-Id: <20220405070402.399769843@linuxfoundation.org>
+        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+Subject: [PATCH 5.15 126/913] arm64: dts: ti: k3-j7200: Fix gic-v3 compatible regs
+Date:   Tue,  5 Apr 2022 09:19:48 +0200
+Message-Id: <20220405070343.606947173@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,73 +54,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guillaume Tucker <guillaume.tucker@collabora.com>
+From: Nishanth Menon <nm@ti.com>
 
-[ Upstream commit ef696f93ed9778d570bd5ac58414421cdd4f1aab ]
+commit 1a307cc299430dd7139d351a3b8941f493dfa885 upstream.
 
-The $(CC) variable used in Makefiles could contain several arguments
-such as "ccache gcc".  These need to be passed as a single string to
-check_cc.sh, otherwise only the first argument will be used as the
-compiler command.  Without quotes, the $(CC) variable is passed as
-distinct arguments which causes the script to fail to build trivial
-programs.
+Though GIC ARE option is disabled for no GIC-v2 compatibility,
+Cortex-A72 is free to implement the CPU interface as long as it
+communicates with the GIC using the stream protocol. This requires
+that the SoC integration mark out the PERIPHBASE[1] as reserved area
+within the SoC. See longer discussion in [2] for further information.
 
-Fix this by adding quotes around $(CC) when calling check_cc.sh to pass
-the whole string as a single argument to the script even if it has
-several words such as "ccache gcc".
+Update the GIC register map to indicate offsets from PERIPHBASE based
+on [3]. Without doing this, systems like kvm will not function with
+gic-v2 emulation.
 
-Link: https://lkml.kernel.org/r/d0d460d7be0107a69e3c52477761a6fe694c1840.1646991629.git.guillaume.tucker@collabora.com
-Fixes: e9886ace222e ("selftests, x86: Rework x86 target architecture detection")
-Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
-Tested-by: "kernelci.org bot" <bot@kernelci.org>
-Reviewed-by: Guenter Roeck <groeck@google.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Borislav Petkov <bp@suse.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+[1] https://developer.arm.com/documentation/100095/0002/system-control/aarch64-register-descriptions/configuration-base-address-register--el1
+[2] https://lore.kernel.org/all/87k0e0tirw.wl-maz@kernel.org/
+[3] https://developer.arm.com/documentation/100095/0002/way1382452674438
+
+Cc: stable@vger.kernel.org
+Fixes: d361ed88455f ("arm64: dts: ti: Add support for J7200 SoC")
+Reported-by: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Nishanth Menon <nm@ti.com>
+Acked-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220215201008.15235-4-nm@ti.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/vm/Makefile  | 6 +++---
- tools/testing/selftests/x86/Makefile | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ arch/arm64/boot/dts/ti/k3-j7200-main.dtsi |    5 ++++-
+ arch/arm64/boot/dts/ti/k3-j7200.dtsi      |    1 +
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index a14b5b800897..1530c3e0242e 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -51,9 +51,9 @@ TEST_GEN_FILES += split_huge_page_test
- TEST_GEN_FILES += ksm_tests
+--- a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
+@@ -54,7 +54,10 @@
+ 		#interrupt-cells = <3>;
+ 		interrupt-controller;
+ 		reg = <0x00 0x01800000 0x00 0x10000>,	/* GICD */
+-		      <0x00 0x01900000 0x00 0x100000>;	/* GICR */
++		      <0x00 0x01900000 0x00 0x100000>,	/* GICR */
++		      <0x00 0x6f000000 0x00 0x2000>,	/* GICC */
++		      <0x00 0x6f010000 0x00 0x1000>,	/* GICH */
++		      <0x00 0x6f020000 0x00 0x2000>;	/* GICV */
  
- ifeq ($(MACHINE),x86_64)
--CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_32bit_program.c -m32)
--CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_64bit_program.c)
--CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_program.c -no-pie)
-+CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_program.c -m32)
-+CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_64bit_program.c)
-+CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_program.c -no-pie)
- 
- TARGETS := protection_keys
- BINARIES_32 := $(TARGETS:%=%_32)
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index 8a1f62ab3c8e..53df7d3893d3 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -6,9 +6,9 @@ include ../lib.mk
- .PHONY: all all_32 all_64 warn_32bit_failure clean
- 
- UNAME_M := $(shell uname -m)
--CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
--CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
--CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
-+CAN_BUILD_I386 := $(shell ./check_cc.sh "$(CC)" trivial_32bit_program.c -m32)
-+CAN_BUILD_X86_64 := $(shell ./check_cc.sh "$(CC)" trivial_64bit_program.c)
-+CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
- 
- TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
- 			check_initial_reg_state sigreturn iopl ioperm \
--- 
-2.34.1
-
+ 		/* vcpumntirq: virtual CPU interface maintenance interrupt */
+ 		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+--- a/arch/arm64/boot/dts/ti/k3-j7200.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
+@@ -127,6 +127,7 @@
+ 			 <0x00 0x00a40000 0x00 0x00a40000 0x00 0x00000800>, /* timesync router */
+ 			 <0x00 0x01000000 0x00 0x01000000 0x00 0x0d000000>, /* Most peripherals */
+ 			 <0x00 0x30000000 0x00 0x30000000 0x00 0x0c400000>, /* MAIN NAVSS */
++			 <0x00 0x6f000000 0x00 0x6f000000 0x00 0x00310000>, /* A72 PERIPHBASE */
+ 			 <0x00 0x70000000 0x00 0x70000000 0x00 0x00800000>, /* MSMC RAM */
+ 			 <0x00 0x18000000 0x00 0x18000000 0x00 0x08000000>, /* PCIe1 DAT0 */
+ 			 <0x41 0x00000000 0x41 0x00000000 0x01 0x00000000>, /* PCIe1 DAT1 */
 
 

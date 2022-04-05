@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D614F2D0B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E0B4F2BD2
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238579AbiDEJFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
+        id S1350734AbiDEJ7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237912AbiDEISb (ORCPT
+        with ESMTP id S237956AbiDEISe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:18:31 -0400
+        Tue, 5 Apr 2022 04:18:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C672B7C67;
-        Tue,  5 Apr 2022 01:07:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB6CB821D;
+        Tue,  5 Apr 2022 01:07:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33D90617E9;
-        Tue,  5 Apr 2022 08:07:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40F73C385A0;
-        Tue,  5 Apr 2022 08:07:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 83336617EE;
+        Tue,  5 Apr 2022 08:07:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90FE6C385A1;
+        Tue,  5 Apr 2022 08:07:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146063;
-        bh=3qdf/YGOydzROeLMZ/l/QehLiZgVpZTS8qAOFdD208M=;
+        s=korg; t=1649146068;
+        bh=y+dar7JCW4XERL+1xxtW86hKLcwtyN/Rw9l7lfqSf5s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1xo/Yu+s5xi3WzDeFYXd87FlEDCkFuWo910VcyKunSQ3V3krWjRt9YE6jaOKXIP1X
-         ZQ3Agoud4bK4Ao1JK+vOF2gwMBPkNLRzanpkMgcrSLYl/KzP8iXLzdjZK4kF+TNu4a
-         fE6qKS9xbmcHk7wj5EhKPQjxA6hi2c85vo+CuVMY=
+        b=uYJV8jRNvYG1pbJjafeRnCl1e6xIZIKyw9a1yaLSnFRMrJMz4yUvs2wFrM/0AyiUi
+         DB54fuTEWE1IMsgTAZvNIGE9PPfB6I+2xdWXh3nT5DmNQj4lyNnzAM8yqrXJnMpcTL
+         XQihK4gWVimd6U1C8U2UoPCDUqVRhqvKbBwD7gP0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0592/1126] scsi: pm8001: Fix abort all task initialization
-Date:   Tue,  5 Apr 2022 09:22:19 +0200
-Message-Id: <20220405070425.011139474@linuxfoundation.org>
+        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0593/1126] mt76: do not always copy ethhdr in reverse_frag0_hdr_trans
+Date:   Tue,  5 Apr 2022 09:22:20 +0200
+Message-Id: <20220405070425.040301065@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,95 +54,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Lorenzo Bianconi <lorenzo@kernel.org>
 
-[ Upstream commit 7f12845c8389855dbcc67baa068b6832dc4a396e ]
+[ Upstream commit eea7437e80216ac29a87b417896ce75656816b56 ]
 
-In pm80xx_send_abort_all(), the n_elem field of the ccb used is not
-initialized to 0. This missing initialization sometimes lead to the task
-completion path seeing the ccb with a non-zero n_elem resulting in the
-execution of invalid dma_unmap_sg() calls in pm8001_ccb_task_free(),
-causing a crash such as:
+Do not always copy ethernet header in mt{7615,7915,7921}_reverse_frag0_hdr_trans
+and use a pointer instead.
 
-[  197.676341] RIP: 0010:iommu_dma_unmap_sg+0x6d/0x280
-[  197.700204] RSP: 0018:ffff889bbcf89c88 EFLAGS: 00010012
-[  197.705485] RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffffff83d0bda0
-[  197.712687] RDX: 0000000000000002 RSI: 0000000000000000 RDI: ffff88810dffc0d0
-[  197.719887] RBP: 0000000000000000 R08: 0000000000000000 R09: ffff8881c790098b
-[  197.727089] R10: ffffed1038f20131 R11: 0000000000000001 R12: 0000000000000000
-[  197.734296] R13: ffff88810dffc0d0 R14: 0000000000000010 R15: 0000000000000000
-[  197.741493] FS:  0000000000000000(0000) GS:ffff889bbcf80000(0000) knlGS:0000000000000000
-[  197.749659] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  197.755459] CR2: 00007f16c1b42734 CR3: 0000000004814000 CR4: 0000000000350ee0
-[  197.762656] Call Trace:
-[  197.765127]  <IRQ>
-[  197.767162]  pm8001_ccb_task_free+0x5f1/0x820 [pm80xx]
-[  197.772364]  ? do_raw_spin_unlock+0x54/0x220
-[  197.776680]  pm8001_mpi_task_abort_resp+0x2ce/0x4f0 [pm80xx]
-[  197.782406]  process_oq+0xe85/0x7890 [pm80xx]
-[  197.786817]  ? lock_acquire+0x194/0x490
-[  197.790697]  ? handle_irq_event+0x10e/0x1b0
-[  197.794920]  ? mpi_sata_completion+0x2d70/0x2d70 [pm80xx]
-[  197.800378]  ? __wake_up_bit+0x100/0x100
-[  197.804340]  ? lock_is_held_type+0x98/0x110
-[  197.808565]  pm80xx_chip_isr+0x94/0x130 [pm80xx]
-[  197.813243]  tasklet_action_common.constprop.0+0x24b/0x2f0
-[  197.818785]  __do_softirq+0x1b5/0x82d
-[  197.822485]  ? do_raw_spin_unlock+0x54/0x220
-[  197.826799]  __irq_exit_rcu+0x17e/0x1e0
-[  197.830678]  irq_exit_rcu+0xa/0x20
-[  197.834114]  common_interrupt+0x78/0x90
-[  197.840051]  </IRQ>
-[  197.844236]  <TASK>
-[  197.848397]  asm_common_interrupt+0x1e/0x40
-
-Avoid this issue by always initializing the ccb n_elem field to 0 in
-pm8001_send_abort_all(), pm8001_send_read_log() and
-pm80xx_send_abort_all().
-
-Link: https://lore.kernel.org/r/20220220031810.738362-17-damien.lemoal@opensource.wdc.com
-Fixes: c6b9ef5779c3 ("[SCSI] pm80xx: NCQ error handling changes")
-Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/pm8001/pm8001_hwi.c | 2 ++
- drivers/scsi/pm8001/pm80xx_hwi.c | 1 +
- 2 files changed, 3 insertions(+)
+ .../net/wireless/mediatek/mt76/mt7615/mac.c   | 19 +++++++++----------
+ .../net/wireless/mediatek/mt76/mt7915/mac.c   | 19 +++++++++----------
+ .../net/wireless/mediatek/mt76/mt7921/mac.c   | 19 +++++++++----------
+ 3 files changed, 27 insertions(+), 30 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-index 8095eb0b04f7..d853e8d0195a 100644
---- a/drivers/scsi/pm8001/pm8001_hwi.c
-+++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -1788,6 +1788,7 @@ static void pm8001_send_abort_all(struct pm8001_hba_info *pm8001_ha,
- 	ccb->device = pm8001_ha_dev;
- 	ccb->ccb_tag = ccb_tag;
- 	ccb->task = task;
-+	ccb->n_elem = 0;
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7615/mac.c b/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
+index 6d0ff5af8fec..21941e7873d8 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
+@@ -253,12 +253,12 @@ static void mt7615_mac_fill_tm_rx(struct mt7615_phy *phy, __le32 *rxv)
+ static int mt7615_reverse_frag0_hdr_trans(struct sk_buff *skb, u16 hdr_gap)
+ {
+ 	struct mt76_rx_status *status = (struct mt76_rx_status *)skb->cb;
++	struct ethhdr *eth_hdr = (struct ethhdr *)(skb->data + hdr_gap);
+ 	struct mt7615_sta *msta = (struct mt7615_sta *)status->wcid;
++	__le32 *rxd = (__le32 *)skb->data;
+ 	struct ieee80211_sta *sta;
+ 	struct ieee80211_vif *vif;
+ 	struct ieee80211_hdr hdr;
+-	struct ethhdr eth_hdr;
+-	__le32 *rxd = (__le32 *)skb->data;
+ 	__le32 qos_ctrl, ht_ctrl;
  
- 	circularQ = &pm8001_ha->inbnd_q_tbl[0];
+ 	if (FIELD_GET(MT_RXD1_NORMAL_ADDR_TYPE, le32_to_cpu(rxd[1])) !=
+@@ -275,7 +275,6 @@ static int mt7615_reverse_frag0_hdr_trans(struct sk_buff *skb, u16 hdr_gap)
+ 	vif = container_of((void *)msta->vif, struct ieee80211_vif, drv_priv);
  
-@@ -1849,6 +1850,7 @@ static void pm8001_send_read_log(struct pm8001_hba_info *pm8001_ha,
- 	ccb->device = pm8001_ha_dev;
- 	ccb->ccb_tag = ccb_tag;
- 	ccb->task = task;
-+	ccb->n_elem = 0;
- 	pm8001_ha_dev->id |= NCQ_READ_LOG_FLAG;
- 	pm8001_ha_dev->id |= NCQ_2ND_RLE_FLAG;
+ 	/* store the info from RXD and ethhdr to avoid being overridden */
+-	memcpy(&eth_hdr, skb->data + hdr_gap, sizeof(eth_hdr));
+ 	hdr.frame_control = FIELD_GET(MT_RXD4_FRAME_CONTROL, rxd[4]);
+ 	hdr.seq_ctrl = FIELD_GET(MT_RXD6_SEQ_CTRL, rxd[6]);
+ 	qos_ctrl = FIELD_GET(MT_RXD6_QOS_CTL, rxd[6]);
+@@ -290,24 +289,24 @@ static int mt7615_reverse_frag0_hdr_trans(struct sk_buff *skb, u16 hdr_gap)
+ 		ether_addr_copy(hdr.addr3, vif->bss_conf.bssid);
+ 		break;
+ 	case IEEE80211_FCTL_FROMDS:
+-		ether_addr_copy(hdr.addr3, eth_hdr.h_source);
++		ether_addr_copy(hdr.addr3, eth_hdr->h_source);
+ 		break;
+ 	case IEEE80211_FCTL_TODS:
+-		ether_addr_copy(hdr.addr3, eth_hdr.h_dest);
++		ether_addr_copy(hdr.addr3, eth_hdr->h_dest);
+ 		break;
+ 	case IEEE80211_FCTL_TODS | IEEE80211_FCTL_FROMDS:
+-		ether_addr_copy(hdr.addr3, eth_hdr.h_dest);
+-		ether_addr_copy(hdr.addr4, eth_hdr.h_source);
++		ether_addr_copy(hdr.addr3, eth_hdr->h_dest);
++		ether_addr_copy(hdr.addr4, eth_hdr->h_source);
+ 		break;
+ 	default:
+ 		break;
+ 	}
  
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index a5a1db6ed463..908dbac20b48 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -1802,6 +1802,7 @@ static void pm80xx_send_abort_all(struct pm8001_hba_info *pm8001_ha,
- 	ccb->device = pm8001_ha_dev;
- 	ccb->ccb_tag = ccb_tag;
- 	ccb->task = task;
-+	ccb->n_elem = 0;
+ 	skb_pull(skb, hdr_gap + sizeof(struct ethhdr) - 2);
+-	if (eth_hdr.h_proto == htons(ETH_P_AARP) ||
+-	    eth_hdr.h_proto == htons(ETH_P_IPX))
++	if (eth_hdr->h_proto == cpu_to_be16(ETH_P_AARP) ||
++	    eth_hdr->h_proto == cpu_to_be16(ETH_P_IPX))
+ 		ether_addr_copy(skb_push(skb, ETH_ALEN), bridge_tunnel_header);
+-	else if (eth_hdr.h_proto >= htons(ETH_P_802_3_MIN))
++	else if (eth_hdr->h_proto >= cpu_to_be16(ETH_P_802_3_MIN))
+ 		ether_addr_copy(skb_push(skb, ETH_ALEN), rfc1042_header);
+ 	else
+ 		skb_pull(skb, 2);
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/mac.c b/drivers/net/wireless/mediatek/mt76/mt7915/mac.c
+index d18a2e93cff5..bca340cf8dcc 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7915/mac.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7915/mac.c
+@@ -391,12 +391,12 @@ mt7915_mac_decode_he_radiotap(struct sk_buff *skb, __le32 *rxv, u32 mode)
+ static int mt7915_reverse_frag0_hdr_trans(struct sk_buff *skb, u16 hdr_gap)
+ {
+ 	struct mt76_rx_status *status = (struct mt76_rx_status *)skb->cb;
++	struct ethhdr *eth_hdr = (struct ethhdr *)(skb->data + hdr_gap);
+ 	struct mt7915_sta *msta = (struct mt7915_sta *)status->wcid;
++	__le32 *rxd = (__le32 *)skb->data;
+ 	struct ieee80211_sta *sta;
+ 	struct ieee80211_vif *vif;
+ 	struct ieee80211_hdr hdr;
+-	struct ethhdr eth_hdr;
+-	__le32 *rxd = (__le32 *)skb->data;
+ 	__le32 qos_ctrl, ht_ctrl;
  
- 	circularQ = &pm8001_ha->inbnd_q_tbl[0];
+ 	if (FIELD_GET(MT_RXD3_NORMAL_ADDR_TYPE, le32_to_cpu(rxd[3])) !=
+@@ -413,7 +413,6 @@ static int mt7915_reverse_frag0_hdr_trans(struct sk_buff *skb, u16 hdr_gap)
+ 	vif = container_of((void *)msta->vif, struct ieee80211_vif, drv_priv);
  
+ 	/* store the info from RXD and ethhdr to avoid being overridden */
+-	memcpy(&eth_hdr, skb->data + hdr_gap, sizeof(eth_hdr));
+ 	hdr.frame_control = FIELD_GET(MT_RXD6_FRAME_CONTROL, rxd[6]);
+ 	hdr.seq_ctrl = FIELD_GET(MT_RXD8_SEQ_CTRL, rxd[8]);
+ 	qos_ctrl = FIELD_GET(MT_RXD8_QOS_CTL, rxd[8]);
+@@ -428,24 +427,24 @@ static int mt7915_reverse_frag0_hdr_trans(struct sk_buff *skb, u16 hdr_gap)
+ 		ether_addr_copy(hdr.addr3, vif->bss_conf.bssid);
+ 		break;
+ 	case IEEE80211_FCTL_FROMDS:
+-		ether_addr_copy(hdr.addr3, eth_hdr.h_source);
++		ether_addr_copy(hdr.addr3, eth_hdr->h_source);
+ 		break;
+ 	case IEEE80211_FCTL_TODS:
+-		ether_addr_copy(hdr.addr3, eth_hdr.h_dest);
++		ether_addr_copy(hdr.addr3, eth_hdr->h_dest);
+ 		break;
+ 	case IEEE80211_FCTL_TODS | IEEE80211_FCTL_FROMDS:
+-		ether_addr_copy(hdr.addr3, eth_hdr.h_dest);
+-		ether_addr_copy(hdr.addr4, eth_hdr.h_source);
++		ether_addr_copy(hdr.addr3, eth_hdr->h_dest);
++		ether_addr_copy(hdr.addr4, eth_hdr->h_source);
+ 		break;
+ 	default:
+ 		break;
+ 	}
+ 
+ 	skb_pull(skb, hdr_gap + sizeof(struct ethhdr) - 2);
+-	if (eth_hdr.h_proto == htons(ETH_P_AARP) ||
+-	    eth_hdr.h_proto == htons(ETH_P_IPX))
++	if (eth_hdr->h_proto == cpu_to_be16(ETH_P_AARP) ||
++	    eth_hdr->h_proto == cpu_to_be16(ETH_P_IPX))
+ 		ether_addr_copy(skb_push(skb, ETH_ALEN), bridge_tunnel_header);
+-	else if (eth_hdr.h_proto >= htons(ETH_P_802_3_MIN))
++	else if (eth_hdr->h_proto >= cpu_to_be16(ETH_P_802_3_MIN))
+ 		ether_addr_copy(skb_push(skb, ETH_ALEN), rfc1042_header);
+ 	else
+ 		skb_pull(skb, 2);
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/mac.c b/drivers/net/wireless/mediatek/mt76/mt7921/mac.c
+index c6a849ee817c..2b6bbe0682c0 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7921/mac.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7921/mac.c
+@@ -402,12 +402,12 @@ mt7921_mac_assoc_rssi(struct mt7921_dev *dev, struct sk_buff *skb)
+ static int mt7921_reverse_frag0_hdr_trans(struct sk_buff *skb, u16 hdr_gap)
+ {
+ 	struct mt76_rx_status *status = (struct mt76_rx_status *)skb->cb;
++	struct ethhdr *eth_hdr = (struct ethhdr *)(skb->data + hdr_gap);
+ 	struct mt7921_sta *msta = (struct mt7921_sta *)status->wcid;
++	__le32 *rxd = (__le32 *)skb->data;
+ 	struct ieee80211_sta *sta;
+ 	struct ieee80211_vif *vif;
+ 	struct ieee80211_hdr hdr;
+-	struct ethhdr eth_hdr;
+-	__le32 *rxd = (__le32 *)skb->data;
+ 	__le32 qos_ctrl, ht_ctrl;
+ 
+ 	if (FIELD_GET(MT_RXD3_NORMAL_ADDR_TYPE, le32_to_cpu(rxd[3])) !=
+@@ -424,7 +424,6 @@ static int mt7921_reverse_frag0_hdr_trans(struct sk_buff *skb, u16 hdr_gap)
+ 	vif = container_of((void *)msta->vif, struct ieee80211_vif, drv_priv);
+ 
+ 	/* store the info from RXD and ethhdr to avoid being overridden */
+-	memcpy(&eth_hdr, skb->data + hdr_gap, sizeof(eth_hdr));
+ 	hdr.frame_control = FIELD_GET(MT_RXD6_FRAME_CONTROL, rxd[6]);
+ 	hdr.seq_ctrl = FIELD_GET(MT_RXD8_SEQ_CTRL, rxd[8]);
+ 	qos_ctrl = FIELD_GET(MT_RXD8_QOS_CTL, rxd[8]);
+@@ -439,24 +438,24 @@ static int mt7921_reverse_frag0_hdr_trans(struct sk_buff *skb, u16 hdr_gap)
+ 		ether_addr_copy(hdr.addr3, vif->bss_conf.bssid);
+ 		break;
+ 	case IEEE80211_FCTL_FROMDS:
+-		ether_addr_copy(hdr.addr3, eth_hdr.h_source);
++		ether_addr_copy(hdr.addr3, eth_hdr->h_source);
+ 		break;
+ 	case IEEE80211_FCTL_TODS:
+-		ether_addr_copy(hdr.addr3, eth_hdr.h_dest);
++		ether_addr_copy(hdr.addr3, eth_hdr->h_dest);
+ 		break;
+ 	case IEEE80211_FCTL_TODS | IEEE80211_FCTL_FROMDS:
+-		ether_addr_copy(hdr.addr3, eth_hdr.h_dest);
+-		ether_addr_copy(hdr.addr4, eth_hdr.h_source);
++		ether_addr_copy(hdr.addr3, eth_hdr->h_dest);
++		ether_addr_copy(hdr.addr4, eth_hdr->h_source);
+ 		break;
+ 	default:
+ 		break;
+ 	}
+ 
+ 	skb_pull(skb, hdr_gap + sizeof(struct ethhdr) - 2);
+-	if (eth_hdr.h_proto == htons(ETH_P_AARP) ||
+-	    eth_hdr.h_proto == htons(ETH_P_IPX))
++	if (eth_hdr->h_proto == cpu_to_be16(ETH_P_AARP) ||
++	    eth_hdr->h_proto == cpu_to_be16(ETH_P_IPX))
+ 		ether_addr_copy(skb_push(skb, ETH_ALEN), bridge_tunnel_header);
+-	else if (eth_hdr.h_proto >= htons(ETH_P_802_3_MIN))
++	else if (eth_hdr->h_proto >= cpu_to_be16(ETH_P_802_3_MIN))
+ 		ether_addr_copy(skb_push(skb, ETH_ALEN), rfc1042_header);
+ 	else
+ 		skb_pull(skb, 2);
 -- 
 2.34.1
 

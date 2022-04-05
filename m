@@ -2,89 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED04E4F501D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 408A24F5102
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1840584AbiDFBLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
+        id S1389266AbiDFBsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:48:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1572917AbiDERUM (ORCPT
+        with ESMTP id S1457970AbiDERCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 13:20:12 -0400
-Received: from 1.mo575.mail-out.ovh.net (1.mo575.mail-out.ovh.net [46.105.41.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCDA25DA
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 10:18:13 -0700 (PDT)
-Received: from player771.ha.ovh.net (unknown [10.111.208.235])
-        by mo575.mail-out.ovh.net (Postfix) with ESMTP id DACBB23379
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 17:00:14 +0000 (UTC)
-Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
-        (Authenticated sender: steve@sk2.org)
-        by player771.ha.ovh.net (Postfix) with ESMTPSA id 8B928293E38A0;
-        Tue,  5 Apr 2022 17:00:09 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-106R0064c8ef375-8c61-4341-80ca-324eb6ce81b0,
-                    8AF55017BACD44284FC599BC4826E0280D36FCC4) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 82.65.25.201
-From:   Stephen Kitt <steve@sk2.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        Stephen Kitt <steve@sk2.org>
-Subject: [PATCH 11/14] ASoC: tda7419: use simple i2c probe function
-Date:   Tue,  5 Apr 2022 18:58:33 +0200
-Message-Id: <20220405165836.2165310-12-steve@sk2.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220405165836.2165310-1-steve@sk2.org>
-References: <20220405165836.2165310-1-steve@sk2.org>
+        Tue, 5 Apr 2022 13:02:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334F788B0E;
+        Tue,  5 Apr 2022 10:00:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C272C615AF;
+        Tue,  5 Apr 2022 17:00:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4FBBC385A5;
+        Tue,  5 Apr 2022 17:00:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649178022;
+        bh=zb1JFQP4vJ/gYj1rlsoqkkSJjt4zifG3LrmGqsQ055U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LKBetFmeA75o9XU4QGhMx54eDMYGRe6Polah3FawFP3ub9F9PvXz8KyjNQwvnu8hG
+         20c1vv60qUF70wyTBjWbRC3ZyrFXVxWxbD6Jp1sWltN7+VJhhrdGESUJLulGn4yoCg
+         UtkoFG8fjZROl67hOi1TfLJt66UAX2gCLwW7nCOg=
+Date:   Tue, 5 Apr 2022 19:00:19 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     dann frazier <dann.frazier@canonical.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Toan Le <toan@os.amperecomputing.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?iso-8859-1?Q?St=E9phane?= Graber <stgraber@ubuntu.com>
+Subject: Re: [PATCH 5.16 0199/1017] PCI: xgene: Revert "PCI: xgene: Fix IB
+ window setup"
+Message-ID: <Ykx1o2PbNzGlp1ds@kroah.com>
+References: <20220405070354.155796697@linuxfoundation.org>
+ <20220405070400.156176848@linuxfoundation.org>
+ <YkxjbVp3W2LeVIeL@xps13.dannf>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 8475211549089105542
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejgedguddtgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecuggftrfgrthhtvghrnhepjeelledvfeeiiedutdefveekgeeuheekkedvffegvdehudegkefgjeejkefgueegnecukfhppedtrddtrddtrddtpdekvddrieehrddvhedrvddtudenucevlhhushhtvghrufhiiigvpeegnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeejuddrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YkxjbVp3W2LeVIeL@xps13.dannf>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The i2c probe functions here don't use the id information provided in
-their second argument, so the single-parameter i2c probe function
-("probe_new") can be used instead.
+On Tue, Apr 05, 2022 at 09:42:37AM -0600, dann frazier wrote:
+> On Tue, Apr 05, 2022 at 09:18:32AM +0200, Greg Kroah-Hartman wrote:
+> > From: Marc Zyngier <maz@kernel.org>
+> > 
+> > commit 825da4e9cec68713fbb02dc6f71fe1bf65fe8050 upstream.
+> > 
+> > Commit c7a75d07827a ("PCI: xgene: Fix IB window setup") tried to
+> > fix the damages that 6dce5aa59e0b ("PCI: xgene: Use inbound resources
+> > for setup") caused, but actually didn't improve anything for some
+> > plarforms (at least Mustang and m400 are still broken).
+> > 
+> > Given that 6dce5aa59e0b has been reverted, revert this patch as well,
+> > restoring the PCIe support on XGene to its pre-5.5, working state.
+> > 
+> > Link: https://lore.kernel.org/r/YjN8pT5e6/8cRohQ@xps13.dannf
+> > Link: https://lore.kernel.org/r/20220321104843.949645-3-maz@kernel.org
+> > Fixes: c7a75d07827a ("PCI: xgene: Fix IB window setup")
+> > Signed-off-by: Marc Zyngier <maz@kernel.org>
+> > Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> > Cc: stable@vger.kernel.org
+> > Cc: Rob Herring <robh@kernel.org>
+> > Cc: Toan Le <toan@os.amperecomputing.com>
+> > Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> > Cc: Krzysztof Wilczyński <kw@linux.com>
+> > Cc: Bjorn Helgaas <bhelgaas@google.com>
+> > Cc: Stéphane Graber <stgraber@ubuntu.com>
+> > Cc: dann frazier <dann.frazier@canonical.com>
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> >  drivers/pci/controller/pci-xgene.c |    2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> Hi Greg,
+> 
+>   I don't think it makes sense to apply this to 5.10.y, 5.15.y &
+> 5.16.y w/o also applying a backport of 1874b6d7ab1, because without
+> that we will regress support for Stéphane's X-Gene2-based systems. The
+> backport of 1874b6d7ab1 was rejected for these trees because it doesn't
+> apply cleanly, but I've just submitted new versions that do.
 
-This avoids scanning the identifier tables during probes.
+Where were those patches sent to?  I don't seem to see them on the
+stable list, did I miss them?
 
-Signed-off-by: Stephen Kitt <steve@sk2.org>
----
- sound/soc/codecs/tda7419.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+thanks,
 
-diff --git a/sound/soc/codecs/tda7419.c b/sound/soc/codecs/tda7419.c
-index 83d220054c96..d964e5207569 100644
---- a/sound/soc/codecs/tda7419.c
-+++ b/sound/soc/codecs/tda7419.c
-@@ -571,8 +571,7 @@ static const struct snd_soc_component_driver tda7419_component_driver = {
- 	.num_dapm_routes	= ARRAY_SIZE(tda7419_dapm_routes),
- };
- 
--static int tda7419_probe(struct i2c_client *i2c,
--			 const struct i2c_device_id *id)
-+static int tda7419_probe(struct i2c_client *i2c)
- {
- 	struct tda7419_data *tda7419;
- 	int i, ret;
-@@ -630,7 +629,7 @@ static struct i2c_driver tda7419_driver = {
- 		.name   = "tda7419",
- 		.of_match_table = tda7419_of_match,
- 	},
--	.probe          = tda7419_probe,
-+	.probe_new      = tda7419_probe,
- 	.id_table       = tda7419_i2c_id,
- };
- 
--- 
-2.27.0
-
+greg k-h

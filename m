@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0BBE4F2DD3
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BAFD4F2E1C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241539AbiDEJHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45236 "EHLO
+        id S243989AbiDEJlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239281AbiDEIT5 (ORCPT
+        with ESMTP id S239280AbiDEIT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:19:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB7B7F20A;
-        Tue,  5 Apr 2022 01:10:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2C18020A;
+        Tue,  5 Apr 2022 01:10:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 148A560B0E;
-        Tue,  5 Apr 2022 08:10:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F14DC385A0;
-        Tue,  5 Apr 2022 08:10:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B5B3F60B0E;
+        Tue,  5 Apr 2022 08:10:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB9C6C385A0;
+        Tue,  5 Apr 2022 08:10:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146247;
-        bh=qxY1lfcanY2a/9xkVGsplBQwC66EMIjJbh4Dyyf2hMM=;
+        s=korg; t=1649146250;
+        bh=FLjnvxz8s9HCbZ88y2UuuXe1fMhCc9/YAMzyiL3dHXY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X3IVHQKFA1IZmL8fSJSSVXBY+EgJVZCnvGHqhM0pwc2MBP9v4awM2o1EpdNVl83M3
-         V8+8C1L8bDMhpI/MWXGgmHs6nQw1zQDHLGkvPgPseCM1IHUnlysz+rqtoS02gNR/y/
-         jlufwJYMJg+LiCIW9hvOTlXlJd7Cx2d+RiUEaB6E=
+        b=SWpcHLX2tA/nFvJ705goaEVtqpq2ZfZtQHVDhVLJX0JenGAz+hErSYMpRqgY/1Rr/
+         jYkVBxUELYDq9Zw3Kndu965M16ocit3B96wDHKTBdJ0ZYRc+9VoM/pEjS6pQL4jCCt
+         JLddk6ghnMkEyviWZbzoOpy3Alt3uHrFeTNX3JSw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Roberto=20de=20Souza?= <jose.souza@intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0695/1126] ax25: Fix NULL pointer dereferences in ax25 timers
-Date:   Tue,  5 Apr 2022 09:24:02 +0200
-Message-Id: <20220405070428.010308206@linuxfoundation.org>
+Subject: [PATCH 5.17 0696/1126] drm/i915: Fix renamed struct field
+Date:   Tue,  5 Apr 2022 09:24:03 +0200
+Message-Id: <20220405070428.039590417@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,124 +58,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Lucas De Marchi <lucas.demarchi@intel.com>
 
-[ Upstream commit fc6d01ff9ef03b66d4a3a23b46fc3c3d8cf92009 ]
+[ Upstream commit 00f4150d27d2c01eaeffe1091fc311a7c0872c69 ]
 
-The previous commit 7ec02f5ac8a5 ("ax25: fix NPD bug in ax25_disconnect")
-move ax25_disconnect into lock_sock() in order to prevent NPD bugs. But
-there are race conditions that may lead to null pointer dereferences in
-ax25_heartbeat_expiry(), ax25_t1timer_expiry(), ax25_t2timer_expiry(),
-ax25_t3timer_expiry() and ax25_idletimer_expiry(), when we use
-ax25_kill_by_device() to detach the ax25 device.
+Earlier versions of commit a5b7ef27da60 ("drm/i915: Add struct to hold
+IP version") named "ver" as "arch" and then when it was renamed it
+missed the rename on MEDIA_VER_FULL() since it it's currently not used.
 
-One of the race conditions that cause null pointer dereferences can be
-shown as below:
-
-      (Thread 1)                    |      (Thread 2)
-ax25_connect()                      |
- ax25_std_establish_data_link()     |
-  ax25_start_t1timer()              |
-   mod_timer(&ax25->t1timer,..)     |
-                                    | ax25_kill_by_device()
-   (wait a time)                    |  ...
-                                    |  s->ax25_dev = NULL; //(1)
-   ax25_t1timer_expiry()            |
-    ax25->ax25_dev->values[..] //(2)|  ...
-     ...                            |
-
-We set null to ax25_cb->ax25_dev in position (1) and dereference
-the null pointer in position (2).
-
-The corresponding fail log is shown below:
-===============================================================
-BUG: kernel NULL pointer dereference, address: 0000000000000050
-CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.17.0-rc6-00794-g45690b7d0
-RIP: 0010:ax25_t1timer_expiry+0x12/0x40
-...
-Call Trace:
- call_timer_fn+0x21/0x120
- __run_timers.part.0+0x1ca/0x250
- run_timer_softirq+0x2c/0x60
- __do_softirq+0xef/0x2f3
- irq_exit_rcu+0xb6/0x100
- sysvec_apic_timer_interrupt+0xa2/0xd0
-...
-
-This patch moves ax25_disconnect() before s->ax25_dev = NULL
-and uses del_timer_sync() to delete timers in ax25_disconnect().
-If ax25_disconnect() is called by ax25_kill_by_device() or
-ax25->ax25_dev is NULL, the reason in ax25_disconnect() will be
-equal to ENETUNREACH, it will wait all timers to stop before we
-set null to s->ax25_dev in ax25_kill_by_device().
-
-Fixes: 7ec02f5ac8a5 ("ax25: fix NPD bug in ax25_disconnect")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: a5b7ef27da60 ("drm/i915: Add struct to hold IP version")
+Cc: José Roberto de Souza <jose.souza@intel.com>
+Cc: Matt Roper <matthew.d.roper@intel.com>
+Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
+Reviewed-by: José Roberto de Souza <jose.souza@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220316234538.434357-1-lucas.demarchi@intel.com
+(cherry picked from commit b4ac33b973233dc08a56c8ef9d3c2edeab7a4370)
+Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ax25/af_ax25.c   |  4 ++--
- net/ax25/ax25_subr.c | 20 ++++++++++++++------
- 2 files changed, 16 insertions(+), 8 deletions(-)
+ drivers/gpu/drm/i915/i915_drv.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ax25/af_ax25.c b/net/ax25/af_ax25.c
-index cf8847cfc664..992b6e5d85d7 100644
---- a/net/ax25/af_ax25.c
-+++ b/net/ax25/af_ax25.c
-@@ -89,20 +89,20 @@ static void ax25_kill_by_device(struct net_device *dev)
- 			sk = s->sk;
- 			if (!sk) {
- 				spin_unlock_bh(&ax25_list_lock);
--				s->ax25_dev = NULL;
- 				ax25_disconnect(s, ENETUNREACH);
-+				s->ax25_dev = NULL;
- 				spin_lock_bh(&ax25_list_lock);
- 				goto again;
- 			}
- 			sock_hold(sk);
- 			spin_unlock_bh(&ax25_list_lock);
- 			lock_sock(sk);
-+			ax25_disconnect(s, ENETUNREACH);
- 			s->ax25_dev = NULL;
- 			if (sk->sk_socket) {
- 				dev_put_track(ax25_dev->dev, &ax25_dev->dev_tracker);
- 				ax25_dev_put(ax25_dev);
- 			}
--			ax25_disconnect(s, ENETUNREACH);
- 			release_sock(sk);
- 			spin_lock_bh(&ax25_list_lock);
- 			sock_put(sk);
-diff --git a/net/ax25/ax25_subr.c b/net/ax25/ax25_subr.c
-index 15ab812c4fe4..3a476e4f6cd0 100644
---- a/net/ax25/ax25_subr.c
-+++ b/net/ax25/ax25_subr.c
-@@ -261,12 +261,20 @@ void ax25_disconnect(ax25_cb *ax25, int reason)
- {
- 	ax25_clear_queues(ax25);
+diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
+index 0c70ab08fc0c..73efed2f30ca 100644
+--- a/drivers/gpu/drm/i915/i915_drv.h
++++ b/drivers/gpu/drm/i915/i915_drv.h
+@@ -1146,7 +1146,7 @@ static inline struct intel_gt *to_gt(struct drm_i915_private *i915)
+ 	(GRAPHICS_VER(i915) >= (from) && GRAPHICS_VER(i915) <= (until))
  
--	if (!ax25->sk || !sock_flag(ax25->sk, SOCK_DESTROY))
--		ax25_stop_heartbeat(ax25);
--	ax25_stop_t1timer(ax25);
--	ax25_stop_t2timer(ax25);
--	ax25_stop_t3timer(ax25);
--	ax25_stop_idletimer(ax25);
-+	if (reason == ENETUNREACH) {
-+		del_timer_sync(&ax25->timer);
-+		del_timer_sync(&ax25->t1timer);
-+		del_timer_sync(&ax25->t2timer);
-+		del_timer_sync(&ax25->t3timer);
-+		del_timer_sync(&ax25->idletimer);
-+	} else {
-+		if (!ax25->sk || !sock_flag(ax25->sk, SOCK_DESTROY))
-+			ax25_stop_heartbeat(ax25);
-+		ax25_stop_t1timer(ax25);
-+		ax25_stop_t2timer(ax25);
-+		ax25_stop_t3timer(ax25);
-+		ax25_stop_idletimer(ax25);
-+	}
- 
- 	ax25->state = AX25_STATE_0;
- 
+ #define MEDIA_VER(i915)			(INTEL_INFO(i915)->media.ver)
+-#define MEDIA_VER_FULL(i915)		IP_VER(INTEL_INFO(i915)->media.arch, \
++#define MEDIA_VER_FULL(i915)		IP_VER(INTEL_INFO(i915)->media.ver, \
+ 					       INTEL_INFO(i915)->media.rel)
+ #define IS_MEDIA_VER(i915, from, until) \
+ 	(MEDIA_VER(i915) >= (from) && MEDIA_VER(i915) <= (until))
 -- 
 2.34.1
 

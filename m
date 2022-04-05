@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C39A64F4213
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF5834F4134
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244452AbiDENES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
+        id S1380192AbiDEU2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238747AbiDEJQR (ORCPT
+        with ESMTP id S1354978AbiDEKQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:16:17 -0400
+        Tue, 5 Apr 2022 06:16:50 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC392D1CED;
-        Tue,  5 Apr 2022 02:01:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F2B11C0A;
+        Tue,  5 Apr 2022 03:04:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9D454B81A22;
-        Tue,  5 Apr 2022 09:01:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8F1EC385A0;
-        Tue,  5 Apr 2022 09:01:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32B07B81C99;
+        Tue,  5 Apr 2022 10:04:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D21BC385A6;
+        Tue,  5 Apr 2022 10:04:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149308;
-        bh=nHD0pg0JPdDBQlubw4lET+r6B3XXrvHryuZbDJCYbcE=;
+        s=korg; t=1649153059;
+        bh=r4l+owIcrNQ3efGn/1bGA3KGQMB6wEfh4CiEt6UHA3Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FRu8R2S5m9o8Lap9wGsgH0GjpbT83S8H0v4SgFeclbSf7cLx5+4eGdEe9e7f9C92G
-         oX8JruHOsX+tWzuUGflaWMwukwtd06l0j+RZ7jAmGTqp6OBaa5xvJ6gnHYWRSM9JzP
-         Ie5blp7kR+WcwN4dDyOGo5k9PWx/3smAYE7sUfBE=
+        b=PFneB6CrddJXe6VeQFalHJpQxA4Z4mwjlFB4Peyy/AGcytZh6c2IA1qWHrOgIvlEY
+         mW8o62cQqOzawG9Gb+RDoJBH2gMYfUXwNLaTA7jYdIT7LXm8BT6IBMX1bOzTPiPgCB
+         o8B2DLaWUrVjROuDSaxsiyzFBR2um2PrCwgGoYWI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0668/1017] serial: 8250: Fix race condition in RTS-after-send handling
-Date:   Tue,  5 Apr 2022 09:26:21 +0200
-Message-Id: <20220405070414.110149314@linuxfoundation.org>
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 5.10 088/599] ACPI: properties: Consistently return -ENOENT if there are no more references
+Date:   Tue,  5 Apr 2022 09:26:22 +0200
+Message-Id: <20220405070301.448435301@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,60 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-[ Upstream commit dedab69fd650ea74710b2e626e63fd35584ef773 ]
+commit babc92da5928f81af951663fc436997352e02d3a upstream.
 
-Set em485->active_timer = NULL isn't always enough to take out the stop
-timer. While there is a check that it acts in the right state (i.e.
-waiting for RTS-after-send to pass after sending some chars) but the
-following might happen:
+__acpi_node_get_property_reference() is documented to return -ENOENT if
+the caller requests a property reference at an index that does not exist,
+not -EINVAL which it actually does.
 
- - CPU1: some chars send, shifter becomes empty, stop tx timer armed
- - CPU0: more chars send before RTS-after-send expired
- - CPU0: shifter empty irq, port lock taken
- - CPU1: tx timer triggers, waits for port lock
- - CPU0: em485->active_timer = &em485->stop_tx_timer, hrtimer_start(),
-   releases lock()
- - CPU1: get lock, see em485->active_timer == &em485->stop_tx_timer,
-   tear down RTS too early
+Fix this by returning -ENOENT consistenly, independently of whether the
+property value is a plain reference or a package.
 
-This fix bases on research done by Steffen Trumtrar.
-
-Fixes: b86f86e8e7c5 ("serial: 8250: fix potential deadlock in rs485-mode")
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Link: https://lore.kernel.org/r/20220215160236.344236-1-u.kleine-koenig@pengutronix.de
+Fixes: c343bc2ce2c6 ("ACPI: properties: Align return codes of __acpi_node_get_property_reference()")
+Cc: 4.14+ <stable@vger.kernel.org> # 4.14+
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/8250/8250_port.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/acpi/property.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index b34e84695c8c..344fbe7426f6 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -1623,6 +1623,18 @@ static inline void start_tx_rs485(struct uart_port *port)
- 	struct uart_8250_port *up = up_to_u8250p(port);
- 	struct uart_8250_em485 *em485 = up->em485;
+--- a/drivers/acpi/property.c
++++ b/drivers/acpi/property.c
+@@ -685,7 +685,7 @@ int __acpi_node_get_property_reference(c
+ 	 */
+ 	if (obj->type == ACPI_TYPE_LOCAL_REFERENCE) {
+ 		if (index)
+-			return -EINVAL;
++			return -ENOENT;
  
-+	/*
-+	 * While serial8250_em485_handle_stop_tx() is a noop if
-+	 * em485->active_timer != &em485->stop_tx_timer, it might happen that
-+	 * the timer is still armed and triggers only after the current bunch of
-+	 * chars is send and em485->active_timer == &em485->stop_tx_timer again.
-+	 * So cancel the timer. There is still a theoretical race condition if
-+	 * the timer is already running and only comes around to check for
-+	 * em485->active_timer when &em485->stop_tx_timer is armed again.
-+	 */
-+	if (em485->active_timer == &em485->stop_tx_timer)
-+		hrtimer_try_to_cancel(&em485->stop_tx_timer);
-+
- 	em485->active_timer = NULL;
- 
- 	if (em485->tx_stopped) {
--- 
-2.34.1
-
+ 		ret = acpi_bus_get_device(obj->reference.handle, &device);
+ 		if (ret)
 
 

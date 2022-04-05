@@ -2,52 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B98664F3BAD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15C4D4F384E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236899AbiDEMA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37484 "EHLO
+        id S1376681AbiDELWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242148AbiDEIsj (ORCPT
+        with ESMTP id S242259AbiDEIsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:48:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1DD34B92;
-        Tue,  5 Apr 2022 01:37:04 -0700 (PDT)
+        Tue, 5 Apr 2022 04:48:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC1838D91;
+        Tue,  5 Apr 2022 01:37:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D34DDB81C14;
-        Tue,  5 Apr 2022 08:37:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 090BFC385A0;
-        Tue,  5 Apr 2022 08:37:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C73B4614EF;
+        Tue,  5 Apr 2022 08:37:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCFECC385A1;
+        Tue,  5 Apr 2022 08:37:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147822;
-        bh=oLz+MdJD0jtSs4e83QcUaDfl6IArG7XSm65pZxaB7rc=;
+        s=korg; t=1649147825;
+        bh=B2Gvg2dMSeDybRBkutfI6uE2QcVJM3mGlmrR9iRhpZw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xfTwN9pVFdXGjKxCENnVja/0XmsxRoxqYS51s0Zs5AR1B9v7RSqZT47zNL1uzw3ZY
-         pX0o00IF2KOGSZomSYRzp7VS5NheqQYqI/1jEUdDVwOAJ0jnSfCNgqGKTaiAjaFFZA
-         /RQi+zXtzFqirqMoyZ5xoAIMMFSq5firFyEIb+PI=
+        b=WEEvWxWRq6KO5rZUEHRs64OfRq3xQ3HFqG3WKfigTdvS21viYvZ7muwrsTDQxjk+2
+         vaIPeDSsPBcW5fyOtIjyGxTVPaopJ1YG9Vh1lBvv6nrHHJLEAkWbKfUjcc+qphFlih
+         VvYXjdMg+u/CZQyi9XKHKLyW2kBsUzK+RbfbAVhI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Baluta <daniel.baluta@nxp.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Keyon Jie <yang.jie@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rander Wang <rander.wang@intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: [PATCH 5.16 0134/1017] ASoC: SOF: Intel: Fix NULL ptr dereference when ENOMEM
-Date:   Tue,  5 Apr 2022 09:17:27 +0200
-Message-Id: <20220405070358.179697571@linuxfoundation.org>
+        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 5.16 0135/1017] mmc: core: use sysfs_emit() instead of sprintf()
+Date:   Tue,  5 Apr 2022 09:17:28 +0200
+Message-Id: <20220405070358.210521626@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -65,106 +54,221 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-commit b7fb0ae09009d076964afe4c1a2bde1ee2bd88a9 upstream.
+commit f5d8a5fe77ce933f53eb8f2e22bb7a1a2019ea11 upstream.
 
-Do not call snd_dma_free_pages() when snd_dma_alloc_pages() returns
--ENOMEM because it leads to a NULL pointer dereference bug.
+sprintf() (still used in the MMC core for the sysfs output) is vulnerable
+to the buffer overflow.  Use the new-fangled sysfs_emit() instead.
 
-The dmesg says:
+Found by Linux Verification Center (linuxtesting.org) with the SVACE static
+analysis tool.
 
-  [ T1387] sof-audio-pci-intel-tgl 0000:00:1f.3: error: memory alloc failed: -12
-  [ T1387] BUG: kernel NULL pointer dereference, address: 0000000000000000
-  [ T1387] #PF: supervisor read access in kernel mode
-  [ T1387] #PF: error_code(0x0000) - not-present page
-  [ T1387] PGD 0 P4D 0
-  [ T1387] Oops: 0000 [#1] PREEMPT SMP NOPTI
-  [ T1387] CPU: 6 PID: 1387 Comm: alsa-sink-HDA A Tainted: G        W         5.17.0-rc4-superb-owl-00055-g80d47f5de5e3
-  [ T1387] Hardware name: HP HP Laptop 14s-dq2xxx/87FD, BIOS F.15 09/15/2021
-  [ T1387] RIP: 0010:dma_free_noncontiguous+0x37/0x80
-  [ T1387] Code: [... snip ...]
-  [ T1387] RSP: 0000:ffffc90002b87770 EFLAGS: 00010246
-  [ T1387] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-  [ T1387] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff888101db30d0
-  [ T1387] RBP: 00000000fffffff4 R08: 0000000000000000 R09: 0000000000000000
-  [ T1387] R10: 0000000000000000 R11: ffffc90002b874d0 R12: 0000000000000001
-  [ T1387] R13: 0000000000058000 R14: ffff888105260c68 R15: ffff888105260828
-  [ T1387] FS:  00007f42e2ffd640(0000) GS:ffff888466b80000(0000) knlGS:0000000000000000
-  [ T1387] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  [ T1387] CR2: 0000000000000000 CR3: 000000014acf0003 CR4: 0000000000770ee0
-  [ T1387] PKRU: 55555554
-  [ T1387] Call Trace:
-  [ T1387]  <TASK>
-  [ T1387]  cl_stream_prepare+0x10a/0x120 [snd_sof_intel_hda_common 146addf995b9279ae7f509621078cccbe4f875e1]
-  [... snip ...]
-  [ T1387]  </TASK>
-
-Cc: Daniel Baluta <daniel.baluta@nxp.com>
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Cc: Keyon Jie <yang.jie@linux.intel.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Rander Wang <rander.wang@intel.com>
-Cc: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Cc: Takashi Iwai <tiwai@suse.com>
-Cc: sound-open-firmware@alsa-project.org
-Cc: alsa-devel@alsa-project.org
-Cc: linux-kernel@vger.kernel.org
-Cc: stable@vger.kernel.org # v5.2+
-Fixes: d16046ffa6de040bf580a64d5f4d0aa18258a854 ("ASoC: SOF: Intel: Add Intel specific HDA firmware loader")
-Link: https://lore.kernel.org/lkml/20220224145124.15985-1-ammarfaizi2@gnuweeb.org/ # v1
-Link: https://lore.kernel.org/lkml/20220224180850.34592-1-ammarfaizi2@gnuweeb.org/ # v2
-Link: https://lore.kernel.org/lkml/20220224182818.40301-1-ammarfaizi2@gnuweeb.org/ # v3
-Reviewed-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Link: https://lore.kernel.org/r/20220224185836.44907-1-ammarfaizi2@gnuweeb.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/717729b2-d65b-c72e-9fac-471d28d00b5a@omp.ru
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/sof/intel/hda-loader.c |   11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ drivers/mmc/core/bus.c      |    9 +++++----
+ drivers/mmc/core/bus.h      |    3 ++-
+ drivers/mmc/core/mmc.c      |   16 ++++++++--------
+ drivers/mmc/core/sd.c       |   27 +++++++++++++--------------
+ drivers/mmc/core/sdio.c     |    5 +++--
+ drivers/mmc/core/sdio_bus.c |    7 ++++---
+ 6 files changed, 35 insertions(+), 32 deletions(-)
 
---- a/sound/soc/sof/intel/hda-loader.c
-+++ b/sound/soc/sof/intel/hda-loader.c
-@@ -48,7 +48,7 @@ static struct hdac_ext_stream *cl_stream
- 	ret = snd_dma_alloc_pages(SNDRV_DMA_TYPE_DEV_SG, &pci->dev, size, dmab);
- 	if (ret < 0) {
- 		dev_err(sdev->dev, "error: memory alloc failed: %d\n", ret);
--		goto error;
-+		goto out_put;
+--- a/drivers/mmc/core/bus.c
++++ b/drivers/mmc/core/bus.c
+@@ -15,6 +15,7 @@
+ #include <linux/stat.h>
+ #include <linux/of.h>
+ #include <linux/pm_runtime.h>
++#include <linux/sysfs.h>
+ 
+ #include <linux/mmc/card.h>
+ #include <linux/mmc/host.h>
+@@ -34,13 +35,13 @@ static ssize_t type_show(struct device *
+ 
+ 	switch (card->type) {
+ 	case MMC_TYPE_MMC:
+-		return sprintf(buf, "MMC\n");
++		return sysfs_emit(buf, "MMC\n");
+ 	case MMC_TYPE_SD:
+-		return sprintf(buf, "SD\n");
++		return sysfs_emit(buf, "SD\n");
+ 	case MMC_TYPE_SDIO:
+-		return sprintf(buf, "SDIO\n");
++		return sysfs_emit(buf, "SDIO\n");
+ 	case MMC_TYPE_SD_COMBO:
+-		return sprintf(buf, "SDcombo\n");
++		return sysfs_emit(buf, "SDcombo\n");
+ 	default:
+ 		return -EFAULT;
  	}
+--- a/drivers/mmc/core/bus.h
++++ b/drivers/mmc/core/bus.h
+@@ -9,6 +9,7 @@
+ #define _MMC_CORE_BUS_H
  
- 	hstream->period_bytes = 0;/* initialize period_bytes */
-@@ -59,22 +59,23 @@ static struct hdac_ext_stream *cl_stream
- 		ret = hda_dsp_iccmax_stream_hw_params(sdev, dsp_stream, dmab, NULL);
- 		if (ret < 0) {
- 			dev_err(sdev->dev, "error: iccmax stream prepare failed: %d\n", ret);
--			goto error;
-+			goto out_free;
- 		}
- 	} else {
- 		ret = hda_dsp_stream_hw_params(sdev, dsp_stream, dmab, NULL);
- 		if (ret < 0) {
- 			dev_err(sdev->dev, "error: hdac prepare failed: %d\n", ret);
--			goto error;
-+			goto out_free;
- 		}
- 		hda_dsp_stream_spib_config(sdev, dsp_stream, HDA_DSP_SPIB_ENABLE, size);
- 	}
+ #include <linux/device.h>
++#include <linux/sysfs.h>
  
- 	return dsp_stream;
+ struct mmc_host;
+ struct mmc_card;
+@@ -17,7 +18,7 @@ struct mmc_card;
+ static ssize_t mmc_##name##_show (struct device *dev, struct device_attribute *attr, char *buf)	\
+ {										\
+ 	struct mmc_card *card = mmc_dev_to_card(dev);				\
+-	return sprintf(buf, fmt, args);						\
++	return sysfs_emit(buf, fmt, args);					\
+ }										\
+ static DEVICE_ATTR(name, S_IRUGO, mmc_##name##_show, NULL)
  
--error:
--	hda_dsp_stream_put(sdev, direction, hstream->stream_tag);
-+out_free:
- 	snd_dma_free_pages(dmab);
-+out_put:
-+	hda_dsp_stream_put(sdev, direction, hstream->stream_tag);
- 	return ERR_PTR(ret);
+--- a/drivers/mmc/core/mmc.c
++++ b/drivers/mmc/core/mmc.c
+@@ -12,6 +12,7 @@
+ #include <linux/slab.h>
+ #include <linux/stat.h>
+ #include <linux/pm_runtime.h>
++#include <linux/sysfs.h>
+ 
+ #include <linux/mmc/host.h>
+ #include <linux/mmc/card.h>
+@@ -812,12 +813,11 @@ static ssize_t mmc_fwrev_show(struct dev
+ {
+ 	struct mmc_card *card = mmc_dev_to_card(dev);
+ 
+-	if (card->ext_csd.rev < 7) {
+-		return sprintf(buf, "0x%x\n", card->cid.fwrev);
+-	} else {
+-		return sprintf(buf, "0x%*phN\n", MMC_FIRMWARE_LEN,
+-			       card->ext_csd.fwrev);
+-	}
++	if (card->ext_csd.rev < 7)
++		return sysfs_emit(buf, "0x%x\n", card->cid.fwrev);
++	else
++		return sysfs_emit(buf, "0x%*phN\n", MMC_FIRMWARE_LEN,
++				  card->ext_csd.fwrev);
  }
+ 
+ static DEVICE_ATTR(fwrev, S_IRUGO, mmc_fwrev_show, NULL);
+@@ -830,10 +830,10 @@ static ssize_t mmc_dsr_show(struct devic
+ 	struct mmc_host *host = card->host;
+ 
+ 	if (card->csd.dsr_imp && host->dsr_req)
+-		return sprintf(buf, "0x%x\n", host->dsr);
++		return sysfs_emit(buf, "0x%x\n", host->dsr);
+ 	else
+ 		/* return default DSR value */
+-		return sprintf(buf, "0x%x\n", 0x404);
++		return sysfs_emit(buf, "0x%x\n", 0x404);
+ }
+ 
+ static DEVICE_ATTR(dsr, S_IRUGO, mmc_dsr_show, NULL);
+--- a/drivers/mmc/core/sd.c
++++ b/drivers/mmc/core/sd.c
+@@ -13,6 +13,7 @@
+ #include <linux/stat.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/scatterlist.h>
++#include <linux/sysfs.h>
+ 
+ #include <linux/mmc/host.h>
+ #include <linux/mmc/card.h>
+@@ -708,18 +709,16 @@ MMC_DEV_ATTR(ocr, "0x%08x\n", card->ocr)
+ MMC_DEV_ATTR(rca, "0x%04x\n", card->rca);
+ 
+ 
+-static ssize_t mmc_dsr_show(struct device *dev,
+-                           struct device_attribute *attr,
+-                           char *buf)
+-{
+-       struct mmc_card *card = mmc_dev_to_card(dev);
+-       struct mmc_host *host = card->host;
+-
+-       if (card->csd.dsr_imp && host->dsr_req)
+-               return sprintf(buf, "0x%x\n", host->dsr);
+-       else
+-               /* return default DSR value */
+-               return sprintf(buf, "0x%x\n", 0x404);
++static ssize_t mmc_dsr_show(struct device *dev, struct device_attribute *attr,
++			    char *buf)
++{
++	struct mmc_card *card = mmc_dev_to_card(dev);
++	struct mmc_host *host = card->host;
++
++	if (card->csd.dsr_imp && host->dsr_req)
++		return sysfs_emit(buf, "0x%x\n", host->dsr);
++	/* return default DSR value */
++	return sysfs_emit(buf, "0x%x\n", 0x404);
+ }
+ 
+ static DEVICE_ATTR(dsr, S_IRUGO, mmc_dsr_show, NULL);
+@@ -735,9 +734,9 @@ static ssize_t info##num##_show(struct d
+ 												\
+ 	if (num > card->num_info)								\
+ 		return -ENODATA;								\
+-	if (!card->info[num-1][0])								\
++	if (!card->info[num - 1][0])								\
+ 		return 0;									\
+-	return sprintf(buf, "%s\n", card->info[num-1]);						\
++	return sysfs_emit(buf, "%s\n", card->info[num - 1]);					\
+ }												\
+ static DEVICE_ATTR_RO(info##num)
+ 
+--- a/drivers/mmc/core/sdio.c
++++ b/drivers/mmc/core/sdio.c
+@@ -7,6 +7,7 @@
+ 
+ #include <linux/err.h>
+ #include <linux/pm_runtime.h>
++#include <linux/sysfs.h>
+ 
+ #include <linux/mmc/host.h>
+ #include <linux/mmc/card.h>
+@@ -40,9 +41,9 @@ static ssize_t info##num##_show(struct d
+ 												\
+ 	if (num > card->num_info)								\
+ 		return -ENODATA;								\
+-	if (!card->info[num-1][0])								\
++	if (!card->info[num - 1][0])								\
+ 		return 0;									\
+-	return sprintf(buf, "%s\n", card->info[num-1]);						\
++	return sysfs_emit(buf, "%s\n", card->info[num - 1]);					\
+ }												\
+ static DEVICE_ATTR_RO(info##num)
+ 
+--- a/drivers/mmc/core/sdio_bus.c
++++ b/drivers/mmc/core/sdio_bus.c
+@@ -14,6 +14,7 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/pm_domain.h>
+ #include <linux/acpi.h>
++#include <linux/sysfs.h>
+ 
+ #include <linux/mmc/card.h>
+ #include <linux/mmc/host.h>
+@@ -35,7 +36,7 @@ field##_show(struct device *dev, struct
+ 	struct sdio_func *func;						\
+ 									\
+ 	func = dev_to_sdio_func (dev);					\
+-	return sprintf(buf, format_string, args);			\
++	return sysfs_emit(buf, format_string, args);			\
+ }									\
+ static DEVICE_ATTR_RO(field)
+ 
+@@ -52,9 +53,9 @@ static ssize_t info##num##_show(struct d
+ 												\
+ 	if (num > func->num_info)								\
+ 		return -ENODATA;								\
+-	if (!func->info[num-1][0])								\
++	if (!func->info[num - 1][0])								\
+ 		return 0;									\
+-	return sprintf(buf, "%s\n", func->info[num-1]);						\
++	return sysfs_emit(buf, "%s\n", func->info[num - 1]);					\
+ }												\
+ static DEVICE_ATTR_RO(info##num)
  
 
 

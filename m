@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CE8E4F2B2B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A49F4F2D78
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343691AbiDEJlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
+        id S1343830AbiDEJlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238966AbiDEITd (ORCPT
+        with ESMTP id S238967AbiDEITd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:19:33 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71ADC75C12;
-        Tue,  5 Apr 2022 01:09:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F2275C38;
+        Tue,  5 Apr 2022 01:09:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 08B2EB81A32;
-        Tue,  5 Apr 2022 08:09:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77B3FC385A0;
-        Tue,  5 Apr 2022 08:09:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D887DB81B90;
+        Tue,  5 Apr 2022 08:09:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37CC5C385A0;
+        Tue,  5 Apr 2022 08:09:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146190;
-        bh=/AS13XfuaTsFOWDXBRJbBDUfvHmVSfY8gACGMKNwWq8=;
+        s=korg; t=1649146193;
+        bh=+EkYPM/9VSMLeOdGLvUk8BbpTJ3vtgGT8IT5amiLLb0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2whj19hc9S6O0hcm+vajMToJGrOO1r9ygrbM075XNZb4crLMU6oWmOmSFaxkktN1U
-         +mkFezlR56kP9s55+ChsJYcbdHWetRPXGG7TreABV8BR7UpZev+V656z7HUuVUaNCt
-         36EbNE4vmeTuYLkfmft2AVZ4O+YlNUQcrytR+rVM=
+        b=dtySrJGr6y5zD7e104cetnnJTzLWuJ7lx1rVolHLJvALwVi5oW69iAjEk0edvHXk/
+         BVpc8srD8f2AWoC0T6TWdl2VWb+r5M67E9YjbIVO2KJZ6sn1uYHtrF9eNYRH91pSU4
+         UDjJxM+2450f/6dt2TP9tOQYllKGijIRtv/MjVTs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0636/1126] net: axienet: fix RX ring refill allocation failure handling
-Date:   Tue,  5 Apr 2022 09:23:03 +0200
-Message-Id: <20220405070426.305243557@linuxfoundation.org>
+Subject: [PATCH 5.17 0637/1126] drm/msm/a6xx: Fix missing ARRAY_SIZE() check
+Date:   Tue,  5 Apr 2022 09:23:04 +0200
+Message-Id: <20220405070426.333993833@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,139 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Rob Clark <robdclark@chromium.org>
 
-[ Upstream commit 7a7d340ba4d9351e4c8847b898a2b996727a922a ]
+[ Upstream commit cca96584b35765bf9eb5f38ca55a144ea2ba0de4 ]
 
-If a memory allocation error occurred during an attempt to refill a slot
-in the RX ring after the packet was received, the hardware tail pointer
-would still have been updated to point to or past the slot which remained
-marked as previously completed. This would likely result in the DMA engine
-raising an error when it eventually tried to use that slot again.
-
-If a slot cannot be refilled, then just stop processing and do not move
-the tail pointer past it. On the next attempt, we should skip receiving
-the packet from the empty slot and just try to refill it again.
-
-This failure mode has not actually been observed, but was found as part
-of other driver updates.
-
-Fixes: 8a3b7a252dca ("drivers/net/ethernet/xilinx: added Xilinx AXI Ethernet driver")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: f6d62d091cfd ("drm/msm/a6xx: add support for Adreno 660 GPU")
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://lore.kernel.org/r/20220305173405.914989-1-robdclark@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/ethernet/xilinx/xilinx_axienet_main.c | 72 +++++++++++--------
- 1 file changed, 42 insertions(+), 30 deletions(-)
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-index 377c94ec2486..90d96eb79984 100644
---- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-+++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-@@ -857,46 +857,53 @@ static void axienet_recv(struct net_device *ndev)
- 	while ((cur_p->status & XAXIDMA_BD_STS_COMPLETE_MASK)) {
- 		dma_addr_t phys;
- 
--		tail_p = lp->rx_bd_p + sizeof(*lp->rx_bd_v) * lp->rx_bd_ci;
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+index 17cfad6424db..616be7265da4 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+@@ -655,19 +655,23 @@ static void a6xx_set_cp_protect(struct msm_gpu *gpu)
+ {
+ 	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+ 	const u32 *regs = a6xx_protect;
+-	unsigned i, count = ARRAY_SIZE(a6xx_protect), count_max = 32;
 -
- 		/* Ensure we see complete descriptor update */
- 		dma_rmb();
--		phys = desc_get_phys_addr(lp, cur_p);
--		dma_unmap_single(ndev->dev.parent, phys, lp->max_frm_size,
--				 DMA_FROM_DEVICE);
+-	BUILD_BUG_ON(ARRAY_SIZE(a6xx_protect) > 32);
+-	BUILD_BUG_ON(ARRAY_SIZE(a650_protect) > 48);
++	unsigned i, count, count_max;
  
- 		skb = cur_p->skb;
- 		cur_p->skb = NULL;
--		length = cur_p->app4 & 0x0000FFFF;
--
--		skb_put(skb, length);
--		skb->protocol = eth_type_trans(skb, ndev);
--		/*skb_checksum_none_assert(skb);*/
--		skb->ip_summed = CHECKSUM_NONE;
--
--		/* if we're doing Rx csum offload, set it up */
--		if (lp->features & XAE_FEATURE_FULL_RX_CSUM) {
--			csumstatus = (cur_p->app2 &
--				      XAE_FULL_CSUM_STATUS_MASK) >> 3;
--			if ((csumstatus == XAE_IP_TCP_CSUM_VALIDATED) ||
--			    (csumstatus == XAE_IP_UDP_CSUM_VALIDATED)) {
--				skb->ip_summed = CHECKSUM_UNNECESSARY;
-+
-+		/* skb could be NULL if a previous pass already received the
-+		 * packet for this slot in the ring, but failed to refill it
-+		 * with a newly allocated buffer. In this case, don't try to
-+		 * receive it again.
-+		 */
-+		if (likely(skb)) {
-+			length = cur_p->app4 & 0x0000FFFF;
-+
-+			phys = desc_get_phys_addr(lp, cur_p);
-+			dma_unmap_single(ndev->dev.parent, phys, lp->max_frm_size,
-+					 DMA_FROM_DEVICE);
-+
-+			skb_put(skb, length);
-+			skb->protocol = eth_type_trans(skb, ndev);
-+			/*skb_checksum_none_assert(skb);*/
-+			skb->ip_summed = CHECKSUM_NONE;
-+
-+			/* if we're doing Rx csum offload, set it up */
-+			if (lp->features & XAE_FEATURE_FULL_RX_CSUM) {
-+				csumstatus = (cur_p->app2 &
-+					      XAE_FULL_CSUM_STATUS_MASK) >> 3;
-+				if (csumstatus == XAE_IP_TCP_CSUM_VALIDATED ||
-+				    csumstatus == XAE_IP_UDP_CSUM_VALIDATED) {
-+					skb->ip_summed = CHECKSUM_UNNECESSARY;
-+				}
-+			} else if ((lp->features & XAE_FEATURE_PARTIAL_RX_CSUM) != 0 &&
-+				   skb->protocol == htons(ETH_P_IP) &&
-+				   skb->len > 64) {
-+				skb->csum = be32_to_cpu(cur_p->app3 & 0xFFFF);
-+				skb->ip_summed = CHECKSUM_COMPLETE;
- 			}
--		} else if ((lp->features & XAE_FEATURE_PARTIAL_RX_CSUM) != 0 &&
--			   skb->protocol == htons(ETH_P_IP) &&
--			   skb->len > 64) {
--			skb->csum = be32_to_cpu(cur_p->app3 & 0xFFFF);
--			skb->ip_summed = CHECKSUM_COMPLETE;
--		}
+ 	if (adreno_is_a650(adreno_gpu)) {
+ 		regs = a650_protect;
+ 		count = ARRAY_SIZE(a650_protect);
+ 		count_max = 48;
++		BUILD_BUG_ON(ARRAY_SIZE(a650_protect) > 48);
+ 	} else if (adreno_is_a660_family(adreno_gpu)) {
+ 		regs = a660_protect;
+ 		count = ARRAY_SIZE(a660_protect);
+ 		count_max = 48;
++		BUILD_BUG_ON(ARRAY_SIZE(a660_protect) > 48);
++	} else {
++		regs = a6xx_protect;
++		count = ARRAY_SIZE(a6xx_protect);
++		count_max = 32;
++		BUILD_BUG_ON(ARRAY_SIZE(a6xx_protect) > 32);
+ 	}
  
--		netif_rx(skb);
-+			netif_rx(skb);
- 
--		size += length;
--		packets++;
-+			size += length;
-+			packets++;
-+		}
- 
- 		new_skb = netdev_alloc_skb_ip_align(ndev, lp->max_frm_size);
- 		if (!new_skb)
--			return;
-+			break;
- 
- 		phys = dma_map_single(ndev->dev.parent, new_skb->data,
- 				      lp->max_frm_size,
-@@ -905,7 +912,7 @@ static void axienet_recv(struct net_device *ndev)
- 			if (net_ratelimit())
- 				netdev_err(ndev, "RX DMA mapping error\n");
- 			dev_kfree_skb(new_skb);
--			return;
-+			break;
- 		}
- 		desc_set_phys_addr(lp, phys, cur_p);
- 
-@@ -913,6 +920,11 @@ static void axienet_recv(struct net_device *ndev)
- 		cur_p->status = 0;
- 		cur_p->skb = new_skb;
- 
-+		/* Only update tail_p to mark this slot as usable after it has
-+		 * been successfully refilled.
-+		 */
-+		tail_p = lp->rx_bd_p + sizeof(*lp->rx_bd_v) * lp->rx_bd_ci;
-+
- 		if (++lp->rx_bd_ci >= lp->rx_bd_num)
- 			lp->rx_bd_ci = 0;
- 		cur_p = &lp->rx_bd_v[lp->rx_bd_ci];
+ 	/*
 -- 
 2.34.1
 

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B00E4F3112
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AF7E4F326B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357744AbiDEK1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45442 "EHLO
+        id S1357476AbiDEK03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241115AbiDEIcu (ORCPT
+        with ESMTP id S241117AbiDEIcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:32:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE3015A0C;
-        Tue,  5 Apr 2022 01:27:50 -0700 (PDT)
+        Tue, 5 Apr 2022 04:32:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EA61582B;
+        Tue,  5 Apr 2022 01:27:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D221560B0E;
-        Tue,  5 Apr 2022 08:27:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E07BBC385A2;
-        Tue,  5 Apr 2022 08:27:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D58FAB81B13;
+        Tue,  5 Apr 2022 08:27:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AE09C385A2;
+        Tue,  5 Apr 2022 08:27:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147269;
-        bh=8amx3lYhPdvxlPyXrtkPsQvIG3FbeBS5jWOreTSZbyk=;
+        s=korg; t=1649147274;
+        bh=5kDp6e7Af4lDs7gh7RHYJ0kx3NY8l0227+nMc47kasA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZhB9D8QzRl4uEQctqbS7KMhbyRLkxdS3ZKQ1T9NelBbTofYNhr+WFXhKt3JTKTHL0
-         U4A0DMJ2tIzNtnbSa6XnhYBvMcdKVf79mz0uk9l3nDmAx2x7H/hB7BkdecYZDQ0j+b
-         EB59KbTEVIRwTfAIAOEc/eefug+4vWthQUWXQjTI=
+        b=Mk/Zc0hSGJDkmcJ871VaP2Q2gyiAH3JqyxbSnYdh+qtJs32DUa6hVp2Yh8Y0BWIF3
+         pg7kgkM9nAhVW25oVNQoR7Jpd53f0Q0DSsytSP96TLODf1QLsD3SzVffSRf0h+X3XS
+         /zXWRTfuchVvktUNDdKaQWXxiHSfcuJDlkxNZkzU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Derek Will <derekrobertwill@gmail.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 1063/1126] can: isotp: restore accidentally removed MSG_PEEK feature
-Date:   Tue,  5 Apr 2022 09:30:10 +0200
-Message-Id: <20220405070438.661468390@linuxfoundation.org>
+        stable@vger.kernel.org, Yang Zhong <yang.zhong@intel.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Paolo Bonzini <bonzini@gnu.org>
+Subject: [PATCH 5.17 1065/1126] x86/fpu/xstate: Fix the ARCH_REQ_XCOMP_PERM implementation
+Date:   Tue,  5 Apr 2022 09:30:12 +0200
+Message-Id: <20220405070438.719098440@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,48 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Hartkopp <socketcan@hartkopp.net>
+From: Yang Zhong <yang.zhong@intel.com>
 
-[ Upstream commit e382fea8ae54f5bb62869c6b69b33993d43adeca ]
+commit 063452fd94d153d4eb38ad58f210f3d37a09cca4 upstream.
 
-In commit 42bf50a1795a ("can: isotp: support MSG_TRUNC flag when
-reading from socket") a new check for recvmsg flags has been
-introduced that only checked for the flags that are handled in
-isotp_recvmsg() itself.
+ARCH_REQ_XCOMP_PERM is supposed to add the requested feature to the
+permission bitmap of thread_group_leader()->fpu. But the code overwrites
+the bitmap with the requested feature bit only rather than adding it.
 
-This accidentally removed the MSG_PEEK feature flag which is processed
-later in the call chain in __skb_try_recv_from_queue().
+Fix the code to add the requested feature bit to the master bitmask.
 
-Add MSG_PEEK to the set of valid flags to restore the feature.
-
-Fixes: 42bf50a1795a ("can: isotp: support MSG_TRUNC flag when reading from socket")
-Link: https://github.com/linux-can/can-utils/issues/347#issuecomment-1079554254
-Link: https://lore.kernel.org/all/20220328113611.3691-1-socketcan@hartkopp.net
-Reported-by: Derek Will <derekrobertwill@gmail.com>
-Suggested-by: Derek Will <derekrobertwill@gmail.com>
-Tested-by: Derek Will <derekrobertwill@gmail.com>
-Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: db8268df0983 ("x86/arch_prctl: Add controls for dynamic XSTATE components")
+Signed-off-by: Yang Zhong <yang.zhong@intel.com>
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: Paolo Bonzini <bonzini@gnu.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220129173647.27981-2-chang.seok.bae@intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/can/isotp.c | 2 +-
+ arch/x86/kernel/fpu/xstate.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/can/isotp.c b/net/can/isotp.c
-index ad61342d2e16..a95d171b3a64 100644
---- a/net/can/isotp.c
-+++ b/net/can/isotp.c
-@@ -1009,7 +1009,7 @@ static int isotp_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
- 	int noblock = flags & MSG_DONTWAIT;
- 	int ret = 0;
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -1639,7 +1639,7 @@ static int __xstate_request_perm(u64 per
  
--	if (flags & ~(MSG_DONTWAIT | MSG_TRUNC))
-+	if (flags & ~(MSG_DONTWAIT | MSG_TRUNC | MSG_PEEK))
- 		return -EINVAL;
- 
- 	if (!so->bound)
--- 
-2.34.1
-
+ 	perm = guest ? &fpu->guest_perm : &fpu->perm;
+ 	/* Pairs with the READ_ONCE() in xstate_get_group_perm() */
+-	WRITE_ONCE(perm->__state_perm, requested);
++	WRITE_ONCE(perm->__state_perm, mask);
+ 	/* Protected by sighand lock */
+ 	perm->__state_size = ksize;
+ 	perm->__user_state_size = usize;
 
 

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A124F522F
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3364F522E
 	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1849493AbiDFCie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
+        id S1849466AbiDFCiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443223AbiDEWUP (ORCPT
+        with ESMTP id S1443250AbiDEWUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 18:20:15 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40AD9D07E;
-        Tue,  5 Apr 2022 14:08:07 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id j8so188061pll.11;
-        Tue, 05 Apr 2022 14:08:07 -0700 (PDT)
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CE69D0CF;
+        Tue,  5 Apr 2022 14:08:09 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id m16so219376plx.3;
+        Tue, 05 Apr 2022 14:08:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=xQC5STMzw4TlY0FvT781KJXZa9jGBgzdgcysSv7pHIg=;
-        b=hN5MBQWe16GY2+eRacLZyP2J2G0/eXm5i+hVYboOw4O/CEnwwh2Zrl0ANobFYmh9/A
-         ylomaVTByFYvxkOwqktbrgMXfKNwYX9ClMbdnFJrv535F6dK24mR5xRaBv6cdIy+TKWh
-         bsNgBOuGGBU71IKS+vKdWczk7a8eBukXDor7eFDBS0SfxicbTr7q0MeUZGKnCM5W5Rs2
-         yR7lvR2F/+jFXYzMC7oOOLbCJFQ0cHXcLnUqC1guZ5YnEcYc+r8DzGAB4DN+Zs3Jhpfg
-         E90b0QFByO64SiIBTAk4OFUpL3l048rh4MV7OYFt7M5BMKOGWVRPRR7DvntMynd52uoP
-         Mjwg==
+        bh=AtngP8d0g0fi2Zi2weqgSY60agKP0OsKMyjizujaa74=;
+        b=LfOLR30Fdj30wr86t2iIVLaxJGwMJ0KBcQXZVtJQZJIuAQ8Dh19WNThfA4VM3e8Ytn
+         HHI932K10nMfwMEC5pKGCcpXIbQhoUUAeZ7kM/ocyYGDjfbhlE2kxs05NXewD7bjvSsR
+         D9hynn+MGRET238VbNLuq5BVeHdbUYOLyGte5DmT7aV8U+9np6LwuSt1YIFplqtQIDNX
+         i15w/TKzB5a5wKj1Di5WJubjB+JtFjMJhMhOOwEu+WTcWongNq1z3vcf0po9kZgSsfMB
+         PbABfib6Q9EU0H6CBfKw8JXF7f4veBaMVUKg5ETkjyUsmsFXWYeuNPYdBjjYco5gVtXr
+         jc3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xQC5STMzw4TlY0FvT781KJXZa9jGBgzdgcysSv7pHIg=;
-        b=xm8wzok6Q3eFh2l9pBP5PpU4Gxnf42ThhTTffRSgbbnPEhjNbqkO4LYLbrKS+nHodM
-         CWgbVE2uwO43xP0ZSju+Ci4VNIaJ/UZMZNC1asWCP00DJY14fU10rBU9nnsumQVhfXn2
-         OKJEIEv5SkTLBOp6NH/r5DfHlYBgr0XKrWs38gmu1WFD9w6piNbpTiOGViXqRX1oFv4B
-         Z7FPItXjOKAZMg9NXZZTPKtTDnEPVAFawuVPe9ttW1BpbuN8DTyPnyS59FihVv6YPrLl
-         qKjauZS7FF5MDzZdiriXYYLl71e+ruJggc7LF1dsgDKLsdM2ras8h8bugawnf8POuBEx
-         kxtA==
-X-Gm-Message-State: AOAM533oM9aWRjozIZZfT1slvX0pimGwWPRJfl34RK3cUOw4DVjgNuic
-        OAiY66zpLsC1Xms53nPw+WU=
-X-Google-Smtp-Source: ABdhPJy+2z/KOYY0vUQdalMA0BMC2rvgh2I4/uuGeF3/G929X6STDhElWLJEl6HJgPRI8UNAIdn10w==
-X-Received: by 2002:a17:902:f0cb:b0:156:9c51:ca4 with SMTP id v11-20020a170902f0cb00b001569c510ca4mr5294481pla.93.1649192887386;
-        Tue, 05 Apr 2022 14:08:07 -0700 (PDT)
+        bh=AtngP8d0g0fi2Zi2weqgSY60agKP0OsKMyjizujaa74=;
+        b=sUnoq488stvnst/Exqho95ARNyfY9OsotaCO/44ivdLuC26cW+x9D4xYm1ySM/xBWc
+         C5fIOY5e4N1+3uJ/ztJ6NNhcs4MZGazk2bkHcI/ukK69PSIfoPxAUjzNjZY7zLwH4/Cp
+         tnYHtFc2BkBsdszHMlz9twZDNNHmeBtSfdDVJ8nZ1aKlJrcuOZOUPaeIovPjXzw5JwiN
+         IO22PzYwKulFG29my3jxqhO/zOQyT3gOvLjp7IAGF79tEZuQNkNbplqoHh79LzxoAuR+
+         g7bb+D4DoSGwa0v0NiaXzGzLliwXfltmJz7ysuUBQACJsTdNVXSd1xwzZnyYU2j6SdhT
+         bpMA==
+X-Gm-Message-State: AOAM531B8QY/HvXECu87ZVDJIyo/qJyPUgJu0xNhHGVvCBRi+n+29Gmw
+        PMJ9v9+iX29RZSG8iKYjkN8=
+X-Google-Smtp-Source: ABdhPJyxCwrKvkUu9M6Duz48XTcvyzgBHvz1hsRU6NdhZWIFqFIcpUkk9QddmT8Sm1NZVtSH0iPIyw==
+X-Received: by 2002:a17:90b:1bc6:b0:1c7:f32:3aa0 with SMTP id oa6-20020a17090b1bc600b001c70f323aa0mr6336718pjb.168.1649192889310;
+        Tue, 05 Apr 2022 14:08:09 -0700 (PDT)
 Received: from jaschultz-Thelio-Major.corp.microsoft.com ([2001:4898:80e8:3:511c:41a7:57f7:f826])
-        by smtp.gmail.com with ESMTPSA id k22-20020aa788d6000000b004faaf897064sm16240010pff.106.2022.04.05.14.08.06
+        by smtp.gmail.com with ESMTPSA id k22-20020aa788d6000000b004faaf897064sm16240010pff.106.2022.04.05.14.08.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 14:08:06 -0700 (PDT)
+        Tue, 05 Apr 2022 14:08:08 -0700 (PDT)
 From:   Jarrett Schultz <jaschultzms@gmail.com>
 X-Google-Original-From: Jarrett Schultz <jaschultzMS@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
@@ -59,9 +59,9 @@ Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
         Felipe Balbi <balbi@kernel.org>,
         Jarrett Schultz <jaschultz@microsoft.com>
-Subject: [PATCH v5 3/4] arm64: dts: qcom: sm8150: Add imem section
-Date:   Tue,  5 Apr 2022 14:07:49 -0700
-Message-Id: <20220405210750.619511-4-jaschultzMS@gmail.com>
+Subject: [PATCH v5 4/4] arm64: dts: qcom: surface-duo: Add surface xbl
+Date:   Tue,  5 Apr 2022 14:07:50 -0700
+Message-Id: <20220405210750.619511-5-jaschultzMS@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220405210750.619511-1-jaschultzMS@gmail.com>
 References: <20220405210750.619511-1-jaschultzMS@gmail.com>
@@ -79,10 +79,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jarrett Schultz <jaschultz@microsoft.com>
 
-Introduce the imem section in preparation for the surface xbl driver.
+Introduce device tree source for the surface xbl driver.
 
 Signed-off-by: Jarrett Schultz <jaschultz@microsoft.com>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
 ---
 
@@ -97,30 +96,32 @@ Changes in v3:
 ---
 
 Changes in v2:
- - Created to properly reference the xbl section inside of imem
+ - Updated to reference an offset inside of imem
 ---
- arch/arm64/boot/dts/qcom/sm8150.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ .../boot/dts/qcom/sm8150-microsoft-surface-duo.dts     | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-index 81b4ff2cc4cd..bcfcb7306cdc 100644
---- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-@@ -1175,6 +1175,14 @@ gpi_dma1: dma-controller@a00000 {
- 			status = "disabled";
- 		};
+diff --git a/arch/arm64/boot/dts/qcom/sm8150-microsoft-surface-duo.dts b/arch/arm64/boot/dts/qcom/sm8150-microsoft-surface-duo.dts
+index 5901c28e6696..abb7964daac4 100644
+--- a/arch/arm64/boot/dts/qcom/sm8150-microsoft-surface-duo.dts
++++ b/arch/arm64/boot/dts/qcom/sm8150-microsoft-surface-duo.dts
+@@ -430,6 +430,16 @@ &i2c19 {
+ 	/* MAX34417 @ 0x1e */
+ };
  
-+		imem: imem@146bf000 {
-+			compatible = "simple-mfd";
-+			reg = <0x0 0x146bf000 0x0 0x1000>;
-+			ranges = <0x0 0x0 0x146bf000 0x1000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+		};
++&imem {
++	status = "okay";
 +
- 		qupv3_id_1: geniqup@ac0000 {
- 			compatible = "qcom,geni-se-qup";
- 			reg = <0x0 0x00ac0000 0x0 0x6000>;
++	xbl@a94 {
++		compatible = "microsoft,sm8150-surface-duo-xbl";
++		reg = <0xa94 0x100>;
++		status = "okay";
++	};
++};
++
+ &pon {
+ 	pwrkey {
+ 		status = "okay";
 -- 
 2.25.1
 

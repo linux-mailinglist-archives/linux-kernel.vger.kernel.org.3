@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 900B24F43A9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA094F43D3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345819AbiDEMs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
+        id S243561AbiDEMrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243688AbiDEJJM (ORCPT
+        with ESMTP id S243461AbiDEJI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:09:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C8A25281;
-        Tue,  5 Apr 2022 01:58:27 -0700 (PDT)
+        Tue, 5 Apr 2022 05:08:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679BEB53C7;
+        Tue,  5 Apr 2022 01:58:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A78A2614E4;
-        Tue,  5 Apr 2022 08:58:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADBD4C385A5;
-        Tue,  5 Apr 2022 08:58:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05250B80DA1;
+        Tue,  5 Apr 2022 08:58:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46C6AC385B3;
+        Tue,  5 Apr 2022 08:58:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149106;
-        bh=6EwFOGsPJ+YtAsXr+TGu5nCqNtOeBU5wO0bhRpAxWnE=;
+        s=korg; t=1649149086;
+        bh=j2lAbKArbsewxVfKvrfs2YygZwshOKUGRDy1GFvJgt8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pBYO//nsPvpCnoFguSDSgO1Bo1l1ZCGrY3KgxhrnK9cPHX6qHM372OA1a5LvFCWfU
-         vXlVbfggLqTXErOTxZslkU2/uT219l63fHN79IGmfSqJvb9KogwIXV53ccRtlmAcRN
-         hZa+5hEG+mqK0f+Df4+2ZepvW/8ofFZePXymN7Wk=
+        b=IbSDg0LhPp1fKDcNDyerBmGB8xWSCrfRYaS4fwCcQJHEcoeic8LLcdhC9RLxx0nS1
+         9N2Xwo6MoCZb50Ds964cAh9OmRy3kzm9CPUblTkgt7PdAEt8P3WL9lFJCjKkNUxigd
+         92dBuuapeTGp9ozxM49MN+ZoImRMzAx1IKsBvt7I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhang Yi <yi.zhang@huawei.com>,
-        Jan Kara <jack@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0548/1017] ext2: correct max file size computing
-Date:   Tue,  5 Apr 2022 09:24:21 +0200
-Message-Id: <20220405070410.552308176@linuxfoundation.org>
+        stable@vger.kernel.org, Nishanth Menon <nm@ti.com>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0552/1017] drm/bridge: cdns-dsi: Make sure to to create proper aliases for dt
+Date:   Tue,  5 Apr 2022 09:24:25 +0200
+Message-Id: <20220405070410.669620523@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -54,56 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Yi <yi.zhang@huawei.com>
+From: Nishanth Menon <nm@ti.com>
 
-[ Upstream commit 50b3a818991074177a56c87124c7a7bdf5fa4f67 ]
+[ Upstream commit ffb5c099aaa13ab7f73c29ea6ae26bce8d7575ae ]
 
-We need to calculate the max file size accurately if the total blocks
-that can address by block tree exceed the upper_limit. But this check is
-not correct now, it only compute the total data blocks but missing
-metadata blocks are needed. So in the case of "data blocks < upper_limit
-&& total blocks > upper_limit", we will get wrong result. Fortunately,
-this case could not happen in reality, but it's confused and better to
-correct the computing.
+Add MODULE_DEVICE_TABLE to the device tree table to create required
+aliases needed for module to be loaded with device tree based platform.
 
-  bits   data blocks   metadatablocks   upper_limit
-  10        16843020            66051    2147483647
-  11       134480396           263171    1073741823
-  12      1074791436          1050627     536870911 (*)
-  13      8594130956          4198403     268435455 (*)
-  14     68736258060         16785411     134217727 (*)
-  15    549822930956         67125251      67108863 (*)
-  16   4398314962956        268468227      33554431 (*)
-
-  [*] Need to calculate in depth.
-
-Fixes: 1c2d14212b15 ("ext2: Fix underflow in ext2_max_size()")
-Link: https://lore.kernel.org/r/20220212050532.179055-1-yi.zhang@huawei.com
-Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
-Signed-off-by: Jan Kara <jack@suse.cz>
+Fixes: e19233955d9e ("drm/bridge: Add Cadence DSI driver")
+Signed-off-by: Nishanth Menon <nm@ti.com>
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20210921174059.17946-1-nm@ti.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext2/super.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/bridge/cdns-dsi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/ext2/super.c b/fs/ext2/super.c
-index d8d580b609ba..3d21279fe2cb 100644
---- a/fs/ext2/super.c
-+++ b/fs/ext2/super.c
-@@ -753,8 +753,12 @@ static loff_t ext2_max_size(int bits)
- 	res += 1LL << (bits-2);
- 	res += 1LL << (2*(bits-2));
- 	res += 1LL << (3*(bits-2));
-+	/* Compute how many metadata blocks are needed */
-+	meta_blocks = 1;
-+	meta_blocks += 1 + ppb;
-+	meta_blocks += 1 + ppb + ppb * ppb;
- 	/* Does block tree limit file size? */
--	if (res < upper_limit)
-+	if (res + meta_blocks <= upper_limit)
- 		goto check_lfs;
+diff --git a/drivers/gpu/drm/bridge/cdns-dsi.c b/drivers/gpu/drm/bridge/cdns-dsi.c
+index d8a15c459b42..829e1a144656 100644
+--- a/drivers/gpu/drm/bridge/cdns-dsi.c
++++ b/drivers/gpu/drm/bridge/cdns-dsi.c
+@@ -1284,6 +1284,7 @@ static const struct of_device_id cdns_dsi_of_match[] = {
+ 	{ .compatible = "cdns,dsi" },
+ 	{ },
+ };
++MODULE_DEVICE_TABLE(of, cdns_dsi_of_match);
  
- 	res = upper_limit;
+ static struct platform_driver cdns_dsi_platform_driver = {
+ 	.probe  = cdns_dsi_drm_probe,
 -- 
 2.34.1
 

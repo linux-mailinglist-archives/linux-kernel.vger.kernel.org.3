@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9EB34F388B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 046A44F389B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377090AbiDELZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
+        id S241308AbiDEL0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242936AbiDEItm (ORCPT
+        with ESMTP id S242941AbiDEItn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:49:42 -0400
+        Tue, 5 Apr 2022 04:49:43 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B238BE34;
-        Tue,  5 Apr 2022 01:37:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531D7793A4;
+        Tue,  5 Apr 2022 01:38:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5EF18B81C69;
-        Tue,  5 Apr 2022 08:37:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0509C385A0;
-        Tue,  5 Apr 2022 08:37:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20F55B81C82;
+        Tue,  5 Apr 2022 08:37:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BC8FC385A1;
+        Tue,  5 Apr 2022 08:37:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147861;
-        bh=1SEV+0+k6YRHwzV5O41lcxbDLNWYL1ygIQhLSS3pFZs=;
+        s=korg; t=1649147863;
+        bh=B/RiR4B/SIpEqAuuuwCZ/BSWIAePiwRb5+A2vsL9lPo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=09wyhEl0iSf0FCU/javc3ZryaEjQPcALPoHbo6ewIj6Us78RcfrO1ksoIZVFfXpt1
-         5iRSr2xtk9xdd1IZz92dbe3yGfOd3/zzEUb9v9FGZy5ktIWA1FD1qrOpkAJXUkZBs+
-         89P2NslL+E8saS+rfDC0Ioklp9KE1lqSpkX9OoJU=
+        b=bpw1R1VvlL70HHMLPpbaEk4ZvwizQy6iAp1Y6HDP5lh3JMO2AVVUOulW65T5RKBZN
+         NpM/Qe7/xWb/13TdKdxsjLIUy52fM+g86jcla8kb5CsU3+1BouPm4pA3U3r4Elemhr
+         UJs/l3tIa0ihNl+Q/41RTnoyw/hwFfcIMToeZMag=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.16 0147/1017] block: limit request dispatch loop duration
-Date:   Tue,  5 Apr 2022 09:17:40 +0200
-Message-Id: <20220405070358.569266137@linuxfoundation.org>
+        stable@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        Josef Bacik <jbacik@fb.com>, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.16 0148/1017] block: dont merge across cgroup boundaries if blkcg is enabled
+Date:   Tue,  5 Apr 2022 09:17:41 +0200
+Message-Id: <20220405070358.599717605@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,85 +54,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+From: Tejun Heo <tj@kernel.org>
 
-commit 572299f03afd676dd4e20669cdaf5ed0fe1379d4 upstream.
+commit 6b2b04590b51aa4cf395fcd185ce439cab5961dc upstream.
 
-When IO requests are made continuously and the target block device
-handles requests faster than request arrival, the request dispatch loop
-keeps on repeating to dispatch the arriving requests very long time,
-more than a minute. Since the loop runs as a workqueue worker task, the
-very long loop duration triggers workqueue watchdog timeout and BUG [1].
+blk-iocost and iolatency are cgroup aware rq-qos policies but they didn't
+disable merges across different cgroups. This obviously can lead to
+accounting and control errors but more importantly to priority inversions -
+e.g. an IO which belongs to a higher priority cgroup or IO class may end up
+getting throttled incorrectly because it gets merged to an IO issued from a
+low priority cgroup.
 
-To avoid the very long loop duration, break the loop periodically. When
-opportunity to dispatch requests still exists, check need_resched(). If
-need_resched() returns true, the dispatch loop already consumed its time
-slice, then reschedule the dispatch work and break the loop. With heavy
-IO load, need_resched() does not return true for 20~30 seconds. To cover
-such case, check time spent in the dispatch loop with jiffies. If more
-than 1 second is spent, reschedule the dispatch work and break the loop.
+Fix it by adding blk_cgroup_mergeable() which is called from merge paths and
+rejects cross-cgroup and cross-issue_as_root merges.
 
-[1]
-
-[  609.691437] BUG: workqueue lockup - pool cpus=10 node=1 flags=0x0 nice=-20 stuck for 35s!
-[  609.701820] Showing busy workqueues and worker pools:
-[  609.707915] workqueue events: flags=0x0
-[  609.712615]   pwq 0: cpus=0 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-[  609.712626]     pending: drm_fb_helper_damage_work [drm_kms_helper]
-[  609.712687] workqueue events_freezable: flags=0x4
-[  609.732943]   pwq 0: cpus=0 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-[  609.732952]     pending: pci_pme_list_scan
-[  609.732968] workqueue events_power_efficient: flags=0x80
-[  609.751947]   pwq 0: cpus=0 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-[  609.751955]     pending: neigh_managed_work
-[  609.752018] workqueue kblockd: flags=0x18
-[  609.769480]   pwq 21: cpus=10 node=1 flags=0x0 nice=-20 active=3/256 refcnt=4
-[  609.769488]     in-flight: 1020:blk_mq_run_work_fn
-[  609.769498]     pending: blk_mq_timeout_work, blk_mq_run_work_fn
-[  609.769744] pool 21: cpus=10 node=1 flags=0x0 nice=-20 hung=35s workers=2 idle: 67
-[  639.899730] BUG: workqueue lockup - pool cpus=10 node=1 flags=0x0 nice=-20 stuck for 66s!
-[  639.909513] Showing busy workqueues and worker pools:
-[  639.915404] workqueue events: flags=0x0
-[  639.920197]   pwq 0: cpus=0 node=0 flags=0x0 nice=0 active=1/256 refcnt=2
-[  639.920215]     pending: drm_fb_helper_damage_work [drm_kms_helper]
-[  639.920365] workqueue kblockd: flags=0x18
-[  639.939932]   pwq 21: cpus=10 node=1 flags=0x0 nice=-20 active=3/256 refcnt=4
-[  639.939942]     in-flight: 1020:blk_mq_run_work_fn
-[  639.939955]     pending: blk_mq_timeout_work, blk_mq_run_work_fn
-[  639.940212] pool 21: cpus=10 node=1 flags=0x0 nice=-20 hung=66s workers=2 idle: 67
-
-Fixes: 6e6fcbc27e778 ("blk-mq: support batching dispatch in case of io")
-Signed-off-by: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Cc: stable@vger.kernel.org # v5.10+
-Link: https://lore.kernel.org/linux-block/20220310091649.zypaem5lkyfadymg@shindev/
-Link: https://lore.kernel.org/r/20220318022641.133484-1-shinichiro.kawasaki@wdc.com
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Fixes: d70675121546 ("block: introduce blk-iolatency io controller")
+Cc: stable@vger.kernel.org # v4.19+
+Cc: Josef Bacik <jbacik@fb.com>
+Link: https://lore.kernel.org/r/Yi/eE/6zFNyWJ+qd@slm.duckdns.org
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/blk-mq-sched.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ block/blk-merge.c          |   11 +++++++++++
+ include/linux/blk-cgroup.h |   17 +++++++++++++++++
+ 2 files changed, 28 insertions(+)
 
---- a/block/blk-mq-sched.c
-+++ b/block/blk-mq-sched.c
-@@ -206,11 +206,18 @@ static int __blk_mq_do_dispatch_sched(st
+--- a/block/blk-merge.c
++++ b/block/blk-merge.c
+@@ -8,6 +8,7 @@
+ #include <linux/blkdev.h>
+ #include <linux/blk-integrity.h>
+ #include <linux/scatterlist.h>
++#include <linux/blk-cgroup.h>
  
- static int blk_mq_do_dispatch_sched(struct blk_mq_hw_ctx *hctx)
+ #include <trace/events/block.h>
+ 
+@@ -598,6 +599,9 @@ static inline unsigned int blk_rq_get_ma
+ static inline int ll_new_hw_segment(struct request *req, struct bio *bio,
+ 		unsigned int nr_phys_segs)
  {
-+	unsigned long end = jiffies + HZ;
- 	int ret;
++	if (!blk_cgroup_mergeable(req, bio))
++		goto no_merge;
++
+ 	if (blk_integrity_merge_bio(req->q, req, bio) == false)
+ 		goto no_merge;
  
- 	do {
- 		ret = __blk_mq_do_dispatch_sched(hctx);
--	} while (ret == 1);
-+		if (ret != 1)
-+			break;
-+		if (need_resched() || time_is_before_jiffies(end)) {
-+			blk_mq_delay_run_hw_queue(hctx, 0);
-+			break;
-+		}
-+	} while (1);
+@@ -694,6 +698,9 @@ static int ll_merge_requests_fn(struct r
+ 	if (total_phys_segments > blk_rq_get_max_segments(req))
+ 		return 0;
  
- 	return ret;
++	if (!blk_cgroup_mergeable(req, next->bio))
++		return 0;
++
+ 	if (blk_integrity_merge_rq(q, req, next) == false)
+ 		return 0;
+ 
+@@ -907,6 +914,10 @@ bool blk_rq_merge_ok(struct request *rq,
+ 	if (rq->rq_disk != bio->bi_bdev->bd_disk)
+ 		return false;
+ 
++	/* don't merge across cgroup boundaries */
++	if (!blk_cgroup_mergeable(rq, bio))
++		return false;
++
+ 	/* only merge integrity protected bio into ditto rq */
+ 	if (blk_integrity_merge_bio(rq->q, rq, bio) == false)
+ 		return false;
+--- a/include/linux/blk-cgroup.h
++++ b/include/linux/blk-cgroup.h
+@@ -24,6 +24,7 @@
+ #include <linux/atomic.h>
+ #include <linux/kthread.h>
+ #include <linux/fs.h>
++#include <linux/blk-mq.h>
+ 
+ /* percpu_counter batch for blkg_[rw]stats, per-cpu drift doesn't matter */
+ #define BLKG_STAT_CPU_BATCH	(INT_MAX / 2)
+@@ -604,6 +605,21 @@ static inline void blkcg_clear_delay(str
+ 		atomic_dec(&blkg->blkcg->css.cgroup->congestion_count);
  }
+ 
++/**
++ * blk_cgroup_mergeable - Determine whether to allow or disallow merges
++ * @rq: request to merge into
++ * @bio: bio to merge
++ *
++ * @bio and @rq should belong to the same cgroup and their issue_as_root should
++ * match. The latter is necessary as we don't want to throttle e.g. a metadata
++ * update because it happens to be next to a regular IO.
++ */
++static inline bool blk_cgroup_mergeable(struct request *rq, struct bio *bio)
++{
++	return rq->bio->bi_blkg == bio->bi_blkg &&
++		bio_issue_as_root_blkg(rq->bio) == bio_issue_as_root_blkg(bio);
++}
++
+ void blk_cgroup_bio_start(struct bio *bio);
+ void blkcg_add_delay(struct blkcg_gq *blkg, u64 now, u64 delta);
+ void blkcg_schedule_throttle(struct request_queue *q, bool use_memdelay);
+@@ -659,6 +675,7 @@ static inline void blkg_put(struct blkcg
+ static inline bool blkcg_punt_bio_submit(struct bio *bio) { return false; }
+ static inline void blkcg_bio_issue_init(struct bio *bio) { }
+ static inline void blk_cgroup_bio_start(struct bio *bio) { }
++static inline bool blk_cgroup_mergeable(struct request *rq, struct bio *bio) { return true; }
+ 
+ #define blk_queue_for_each_rl(rl, q)	\
+ 	for ((rl) = &(q)->root_rl; (rl); (rl) = NULL)
 
 

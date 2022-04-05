@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8AE04F2EE3
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC7F4F3378
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344698AbiDEJm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:42:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45580 "EHLO
+        id S1346413AbiDEJpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239180AbiDEITx (ORCPT
+        with ESMTP id S239203AbiDEITy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:19:53 -0400
+        Tue, 5 Apr 2022 04:19:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC4D793A4;
-        Tue,  5 Apr 2022 01:10:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419EA7B54E;
+        Tue,  5 Apr 2022 01:10:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D5DA609D0;
-        Tue,  5 Apr 2022 08:10:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F25CC385A2;
-        Tue,  5 Apr 2022 08:10:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57C1060B0B;
+        Tue,  5 Apr 2022 08:10:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D832C385A2;
+        Tue,  5 Apr 2022 08:10:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146224;
-        bh=vICWyt0gjqXcm0BpZVvzgSpeTKjQqJiq/T/zwqNvZcM=;
+        s=korg; t=1649146227;
+        bh=FG+J2l5vSMEjoMnkw7iQgBBSFO5qaxDzo5Wh5g7Ah6A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kyGwdK06YzR4mAFAPQ9DecB63hRuRcnSyayZouZkoX1kGJGEuJBUc3S+fw06SGraP
-         3DJN6Box+7l5ndEzxVL/rIdj+l0Kj6Ic/jWxwL9n6xrTpJvRaJ7R6KuvfXHGb6rJV5
-         jsSEqmVhn+00okzlOLSHpU0ECoWBmCMFCeLkR56Y=
+        b=AJ3bKHuUzigIPDhNOK93cN5eoFkck/N1es4qJ4VNZYstfYyYc5uYNLn05vy6oYbhb
+         R+ILLtdlYvvma253KoCOkXBY4lfBsSxEe6ruq3TqqC8I25QETI/kKKyIp2D637Hurh
+         xDLiOWS+8LgTYBHBUL2cPeFVO5pfJ6XCroQhbiZ8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Yonglong Li <liyonglong@chinatelecom.cn>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        stable@vger.kernel.org, Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0688/1126] mptcp: Fix crash due to tcp_tsorted_anchor was initialized before release skb
-Date:   Tue,  5 Apr 2022 09:23:55 +0200
-Message-Id: <20220405070427.809797140@linuxfoundation.org>
+Subject: [PATCH 5.17 0689/1126] af_netlink: Fix shift out of bounds in group mask calculation
+Date:   Tue,  5 Apr 2022 09:23:56 +0200
+Message-Id: <20220405070427.838880213@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -57,65 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yonglong Li <liyonglong@chinatelecom.cn>
+From: Petr Machata <petrm@nvidia.com>
 
-[ Upstream commit 3ef3905aa3b5b3e222ee6eb0210bfd999417a8cc ]
+[ Upstream commit 0caf6d9922192dd1afa8dc2131abfb4df1443b9f ]
 
-Got crash when doing pressure test of mptcp:
+When a netlink message is received, netlink_recvmsg() fills in the address
+of the sender. One of the fields is the 32-bit bitfield nl_groups, which
+carries the multicast group on which the message was received. The least
+significant bit corresponds to group 1, and therefore the highest group
+that the field can represent is 32. Above that, the UB sanitizer flags the
+out-of-bounds shift attempts.
 
-===========================================================================
-dst_release: dst:ffffa06ce6e5c058 refcnt:-1
-kernel tried to execute NX-protected page - exploit attempt? (uid: 0)
-BUG: unable to handle kernel paging request at ffffa06ce6e5c058
-PGD 190a01067 P4D 190a01067 PUD 43fffb067 PMD 22e403063 PTE 8000000226e5c063
-Oops: 0011 [#1] SMP PTI
-CPU: 7 PID: 7823 Comm: kworker/7:0 Kdump: loaded Tainted: G            E
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.2.1 04/01/2014
-Call Trace:
- ? skb_release_head_state+0x68/0x100
- ? skb_release_all+0xe/0x30
- ? kfree_skb+0x32/0xa0
- ? mptcp_sendmsg_frag+0x57e/0x750
- ? __mptcp_retrans+0x21b/0x3c0
- ? __switch_to_asm+0x35/0x70
- ? mptcp_worker+0x25e/0x320
- ? process_one_work+0x1a7/0x360
- ? worker_thread+0x30/0x390
- ? create_worker+0x1a0/0x1a0
- ? kthread+0x112/0x130
- ? kthread_flush_work_fn+0x10/0x10
- ? ret_from_fork+0x35/0x40
-===========================================================================
+Which bits end up being set in such case is implementation defined, but
+it's either going to be a wrong non-zero value, or zero, which is at least
+not misleading. Make the latter choice deterministic by always setting to 0
+for higher-numbered multicast groups.
 
-In __mptcp_alloc_tx_skb skb was allocated and skb->tcp_tsorted_anchor will
-be initialized, in under memory pressure situation sk_wmem_schedule will
-return false and then kfree_skb. In this case skb->_skb_refdst is not null
-because_skb_refdst and tcp_tsorted_anchor are stored in the same mem, and
-kfree_skb will try to release dst and cause crash.
+To get information about membership in groups >= 32, userspace is expected
+to use nl_pktinfo control messages[0], which are enabled by NETLINK_PKTINFO
+socket option.
+[0] https://lwn.net/Articles/147608/
 
-Fixes: f70cad1085d1 ("mptcp: stop relying on tcp_tx_skb_cache")
-Reviewed-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Yonglong Li <liyonglong@chinatelecom.cn>
-Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
-Link: https://lore.kernel.org/r/20220317220953.426024-1-mathew.j.martineau@linux.intel.com
+The way to trigger this issue is e.g. through monitoring the BRVLAN group:
+
+	# bridge monitor vlan &
+	# ip link add name br type bridge
+
+Which produces the following citation:
+
+	UBSAN: shift-out-of-bounds in net/netlink/af_netlink.c:162:19
+	shift exponent 32 is too large for 32-bit type 'int'
+
+Fixes: f7fa9b10edbb ("[NETLINK]: Support dynamic number of multicast groups per netlink family")
+Signed-off-by: Petr Machata <petrm@nvidia.com>
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Link: https://lore.kernel.org/r/2bef6aabf201d1fc16cca139a744700cff9dcb04.1647527635.git.petrm@nvidia.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mptcp/protocol.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/netlink/af_netlink.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-index 1c72f25f083e..014c9d88f947 100644
---- a/net/mptcp/protocol.c
-+++ b/net/mptcp/protocol.c
-@@ -1196,6 +1196,7 @@ static struct sk_buff *__mptcp_alloc_tx_skb(struct sock *sk, struct sock *ssk, g
- 		tcp_skb_entail(ssk, skb);
- 		return skb;
- 	}
-+	tcp_skb_tsorted_anchor_cleanup(skb);
- 	kfree_skb(skb);
- 	return NULL;
+diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+index 7b344035bfe3..47a876ccd288 100644
+--- a/net/netlink/af_netlink.c
++++ b/net/netlink/af_netlink.c
+@@ -159,6 +159,8 @@ EXPORT_SYMBOL(do_trace_netlink_extack);
+ 
+ static inline u32 netlink_group_mask(u32 group)
+ {
++	if (group > 32)
++		return 0;
+ 	return group ? 1 << (group - 1) : 0;
  }
+ 
 -- 
 2.34.1
 

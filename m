@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E341E4F2DA4
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 682F44F2B05
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354329AbiDEKNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
+        id S1354306AbiDEKNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241167AbiDEIcw (ORCPT
+        with ESMTP id S241168AbiDEIcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:32:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE37E167C3;
-        Tue,  5 Apr 2022 01:28:58 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D2A5DF9C;
+        Tue,  5 Apr 2022 01:29:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 49CE1609D0;
-        Tue,  5 Apr 2022 08:28:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B53BC385A1;
-        Tue,  5 Apr 2022 08:28:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD241B81BC5;
+        Tue,  5 Apr 2022 08:29:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EBCEC385A6;
+        Tue,  5 Apr 2022 08:28:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147337;
-        bh=pKN6mTEyEarvcHrqx7JWF0SAABVKkggu6a7q9LHV3hA=;
+        s=korg; t=1649147340;
+        bh=yMDw+3Dl6/Eb0dGKBwer0nh7Fx6ro0c+hSAlN+Glybo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vKzAIduaMNyqRbWbKps6rxlT3OL6/XdKp//AOiutFxYH9yhw8+9oVVAESn21OKVPQ
-         KKFx+BGdNy+MfCjBwDezctBdp7gy9unThttrDlOhDjMkzZ6EWiPRTlOkpY5Bz0Z98G
-         5DKZE3f1ViVWSUz44cqf0qjGNLEga5mRQe7hXRgs=
+        b=jewYagGsL9SPkrwWQ4a3tqopzGbiJ7ctHRylp+aXsKsls7vRDEKZQcBZBz7wHW3Xu
+         CTMvN+HlIJC0M0dQCBEaaOnX8EqekyFd+Zz4m/gs+QQokMwnwsUslR43dSaUNfUJo2
+         9mn5ICsFc579Jx9qyXmQtUlyZGAT55oiuVz08lh4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Jan Kara <jack@suse.cz>, Jens Axboe <axboe@kernel.dk>,
-        Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 5.17 1050/1126] block: restore the old set_task_ioprio() behaviour wrt PF_EXITING
-Date:   Tue,  5 Apr 2022 09:29:57 +0200
-Message-Id: <20220405070438.290129747@linuxfoundation.org>
+        stable@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Subject: [PATCH 5.17 1051/1126] Revert "virtio-pci: harden INTX interrupts"
+Date:   Tue,  5 Apr 2022 09:29:58 +0200
+Message-Id: <20220405070438.318149200@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,66 +54,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiri Slaby <jslaby@suse.cz>
+From: Jason Wang <jasowang@redhat.com>
 
-commit 15583a563cd5a7358e975599b7de7caacd9e9ce9 upstream.
+commit 7b79edfb862d6b1ecc66479419ae67a7db2d02e3 upstream.
 
-PF_EXITING tasks were silently ignored before the below commits.
-Continue doing so. Otherwise python-psutil tests fail:
-  ERROR: psutil.tests.test_process.TestProcess.test_zombie_process
-  ----------------------------------------------------------------------
-  Traceback (most recent call last):
-    File "/home/abuild/rpmbuild/BUILD/psutil-5.9.0/build/lib.linux-x86_64-3.9/psutil/_pslinux.py", line 1661, in wrapper
-      return fun(self, *args, **kwargs)
-    File "/home/abuild/rpmbuild/BUILD/psutil-5.9.0/build/lib.linux-x86_64-3.9/psutil/_pslinux.py", line 2133, in ionice_set
-      return cext.proc_ioprio_set(self.pid, ioclass, value)
-  ProcessLookupError: [Errno 3] No such process
+This reverts commit 080cd7c3ac8701081d143a15ba17dd9475313188. Since
+the MSI-X interrupts hardening will be reverted in the next patch. We
+will rework the interrupt hardening in the future.
 
-  During handling of the above exception, another exception occurred:
-
-  Traceback (most recent call last):
-    File "/home/abuild/rpmbuild/BUILD/psutil-5.9.0/psutil/tests/test_process.py", line 1313, in test_zombie_process
-      succeed_or_zombie_p_exc(fun)
-    File "/home/abuild/rpmbuild/BUILD/psutil-5.9.0/psutil/tests/test_process.py", line 1288, in succeed_or_zombie_p_exc
-      return fun()
-    File "/home/abuild/rpmbuild/BUILD/psutil-5.9.0/build/lib.linux-x86_64-3.9/psutil/__init__.py", line 792, in ionice
-      return self._proc.ionice_set(ioclass, value)
-    File "/home/abuild/rpmbuild/BUILD/psutil-5.9.0/build/lib.linux-x86_64-3.9/psutil/_pslinux.py", line 1665, in wrapper
-      raise NoSuchProcess(self.pid, self._name)
-  psutil.NoSuchProcess: process no longer exists (pid=2057)
-
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Jan Kara <jack@suse.cz>
-Cc: Jens Axboe <axboe@kernel.dk>
-Fixes: 5fc11eebb4 (block: open code create_task_io_context in set_task_ioprio)
-Fixes: a957b61254 (block: fix error in handling dead task for ioprio setting)
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220328085928.7899-1-jslaby@suse.cz
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 080cd7c3ac87 ("virtio-pci: harden INTX interrupts")
+Signed-off-by: Jason Wang <jasowang@redhat.com>
+Link: https://lore.kernel.org/r/20220323031524.6555-1-jasowang@redhat.com
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/blk-ioc.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/virtio/virtio_pci_common.c |   23 ++---------------------
+ drivers/virtio/virtio_pci_common.h |    1 -
+ 2 files changed, 2 insertions(+), 22 deletions(-)
 
---- a/block/blk-ioc.c
-+++ b/block/blk-ioc.c
-@@ -280,7 +280,6 @@ int set_task_ioprio(struct task_struct *
+--- a/drivers/virtio/virtio_pci_common.c
++++ b/drivers/virtio/virtio_pci_common.c
+@@ -30,16 +30,8 @@ void vp_disable_cbs(struct virtio_device
+ 	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
+ 	int i;
  
- 		task_lock(task);
- 		if (task->flags & PF_EXITING) {
--			err = -ESRCH;
- 			kmem_cache_free(iocontext_cachep, ioc);
- 			goto out;
- 		}
-@@ -292,7 +291,7 @@ int set_task_ioprio(struct task_struct *
- 	task->io_context->ioprio = ioprio;
- out:
- 	task_unlock(task);
--	return err;
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(set_task_ioprio);
+-	if (vp_dev->intx_enabled) {
+-		/*
+-		 * The below synchronize() guarantees that any
+-		 * interrupt for this line arriving after
+-		 * synchronize_irq() has completed is guaranteed to see
+-		 * intx_soft_enabled == false.
+-		 */
+-		WRITE_ONCE(vp_dev->intx_soft_enabled, false);
++	if (vp_dev->intx_enabled)
+ 		synchronize_irq(vp_dev->pci_dev->irq);
+-	}
  
+ 	for (i = 0; i < vp_dev->msix_vectors; ++i)
+ 		disable_irq(pci_irq_vector(vp_dev->pci_dev, i));
+@@ -51,16 +43,8 @@ void vp_enable_cbs(struct virtio_device
+ 	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
+ 	int i;
+ 
+-	if (vp_dev->intx_enabled) {
+-		disable_irq(vp_dev->pci_dev->irq);
+-		/*
+-		 * The above disable_irq() provides TSO ordering and
+-		 * as such promotes the below store to store-release.
+-		 */
+-		WRITE_ONCE(vp_dev->intx_soft_enabled, true);
+-		enable_irq(vp_dev->pci_dev->irq);
++	if (vp_dev->intx_enabled)
+ 		return;
+-	}
+ 
+ 	for (i = 0; i < vp_dev->msix_vectors; ++i)
+ 		enable_irq(pci_irq_vector(vp_dev->pci_dev, i));
+@@ -113,9 +97,6 @@ static irqreturn_t vp_interrupt(int irq,
+ 	struct virtio_pci_device *vp_dev = opaque;
+ 	u8 isr;
+ 
+-	if (!READ_ONCE(vp_dev->intx_soft_enabled))
+-		return IRQ_NONE;
+-
+ 	/* reading the ISR has the effect of also clearing it so it's very
+ 	 * important to save off the value. */
+ 	isr = ioread8(vp_dev->isr);
+--- a/drivers/virtio/virtio_pci_common.h
++++ b/drivers/virtio/virtio_pci_common.h
+@@ -63,7 +63,6 @@ struct virtio_pci_device {
+ 	/* MSI-X support */
+ 	int msix_enabled;
+ 	int intx_enabled;
+-	bool intx_soft_enabled;
+ 	cpumask_var_t *msix_affinity_masks;
+ 	/* Name strings for interrupts. This size should be enough,
+ 	 * and I'm too lazy to allocate each name separately. */
 
 

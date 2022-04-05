@@ -2,57 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A55034F4EE4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 493A64F4C2B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241862AbiDFAC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54660 "EHLO
+        id S1576556AbiDEXKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457566AbiDEQKu (ORCPT
+        with ESMTP id S1457556AbiDEQKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:10:50 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A081FDFA0;
-        Tue,  5 Apr 2022 09:08:51 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 85B5422255;
-        Tue,  5 Apr 2022 18:08:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1649174929;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yOxddNobkG29CG4y5YoXQEAGgvfg9n1rTfCuIDFre0A=;
-        b=cZzpRljaNUvDJAkqSLGiEmVvdluyyTyNu0gChI6jqsE3XcgxAXjbhf1opHhFNeisVVYRu7
-        RIOdf5WvHvJb2UQ+qnPVNgi98dmJnu2teE+HeBvrl3pKZ06KQZRswxe9dhGyTOVoan6JUU
-        Lj5evrmR0hUhB2gk/7w6YTIj/y0KcJ0=
-From:   Michael Walle <michael@walle.cc>
-To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Tudor.Ambarus@microchip.com, Michael Walle <michael@walle.cc>
-Subject: [PATCH v3 4/7] ARM: dts: lan966x: add all flexcom usart nodes
-Date:   Tue,  5 Apr 2022 18:08:34 +0200
-Message-Id: <20220405160837.4093563-5-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220405160837.4093563-1-michael@walle.cc>
-References: <20220405160837.4093563-1-michael@walle.cc>
+        Tue, 5 Apr 2022 12:10:44 -0400
+Received: from smtp-8fab.mail.infomaniak.ch (smtp-8fab.mail.infomaniak.ch [83.166.143.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F45627C
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:08:40 -0700 (PDT)
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4KXsyH363KzMqGSh;
+        Tue,  5 Apr 2022 18:08:39 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4KXsyG1HnxzlhFgC;
+        Tue,  5 Apr 2022 18:08:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1649174919;
+        bh=i3oU7NU7ziCxqF8LgADjo6sEcbpRcshVXFm2U/900+U=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=05hjwZCfXtRlbuAPVKAqLxEozCUGiyJuKeR9DDy+LAIfvTjHN5Dda4CqaT6LR6AGj
+         0Y+D5L0C62XfZfPHEbOwNOtocUwvCHWgZiSizL41MxkNWkUODtKbPJGli0dLp5ZI0X
+         b0XiDi/o56PGQRzjdvJnsbHhsEcUIwMKSbhe4U14=
+Message-ID: <7e8d9f8a-f119-6d1a-7861-0493dc513aa7@digikod.net>
+Date:   Tue, 5 Apr 2022 18:09:03 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: 
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Heimes <christian@python.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Morris <jmorris@namei.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Paul Moore <paul@paul-moore.com>,
+        =?UTF-8?Q?Philippe_Tr=c3=a9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Steve Dower <steve.dower@python.org>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-integrity <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>
+References: <20220321161557.495388-1-mic@digikod.net>
+ <202204041130.F649632@keescook>
+ <CAHk-=wgoC76v-4s0xVr1Xvnx-8xZ8M+LWgyq5qGLA5UBimEXtQ@mail.gmail.com>
+ <816667d8-2a6c-6334-94a4-6127699d4144@digikod.net>
+ <CAHk-=wjPuRi5uYs9SuQ2Xn+8+RnhoKgjPEwNm42+AGKDrjTU5g@mail.gmail.com>
+ <202204041451.CC4F6BF@keescook>
+ <CAHk-=whb=XuU=LGKnJWaa7LOYQz9VwHs8SLfgLbT5sf2VAbX1A@mail.gmail.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+Subject: Re: [GIT PULL] Add trusted_for(2) (was O_MAYEXEC)
+In-Reply-To: <CAHk-=whb=XuU=LGKnJWaa7LOYQz9VwHs8SLfgLbT5sf2VAbX1A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,102 +79,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add all the remaining usart nodes for the flexcom block. Although the
-DMA channels are specified, DMA is not enabled by default because break
-detection doesn't work with DMA.
 
-Keep the nodes disabled by default.
+On 05/04/2022 01:26, Linus Torvalds wrote:
+> On Mon, Apr 4, 2022 at 3:25 PM Kees Cook <keescook@chromium.org> wrote:
 
-Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- arch/arm/boot/dts/lan966x.dtsi | 52 ++++++++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+[...]
 
-diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
-index e9d6c16d04cf..ae3ac08cfc3b 100644
---- a/arch/arm/boot/dts/lan966x.dtsi
-+++ b/arch/arm/boot/dts/lan966x.dtsi
-@@ -92,6 +92,19 @@ flx0: flexcom@e0040000 {
- 			#size-cells = <1>;
- 			ranges = <0x0 0xe0040000 0x800>;
- 			status = "disabled";
-+
-+			usart0: serial@200 {
-+				compatible = "atmel,at91sam9260-usart";
-+				reg = <0x200 0x200>;
-+				interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(3)>,
-+				       <&dma0 AT91_XDMAC_DT_PERID(2)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				clock-names = "usart";
-+				atmel,fifo-size = <32>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		flx1: flexcom@e0044000 {
-@@ -102,6 +115,19 @@ flx1: flexcom@e0044000 {
- 			#size-cells = <1>;
- 			ranges = <0x0 0xe0044000 0x800>;
- 			status = "disabled";
-+
-+			usart1: serial@200 {
-+				compatible = "atmel,at91sam9260-usart";
-+				reg = <0x200 0x200>;
-+				interrupts = <GIC_SPI 49 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(5)>,
-+				       <&dma0 AT91_XDMAC_DT_PERID(4)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				clock-names = "usart";
-+				atmel,fifo-size = <32>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		trng: rng@e0048000 {
-@@ -129,6 +155,19 @@ flx2: flexcom@e0060000 {
- 			#size-cells = <1>;
- 			ranges = <0x0 0xe0060000 0x800>;
- 			status = "disabled";
-+
-+			usart2: serial@200 {
-+				compatible = "atmel,at91sam9260-usart";
-+				reg = <0x200 0x200>;
-+				interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(7)>,
-+				       <&dma0 AT91_XDMAC_DT_PERID(6)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				clock-names = "usart";
-+				atmel,fifo-size = <32>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		flx3: flexcom@e0064000 {
-@@ -181,6 +220,19 @@ flx4: flexcom@e0070000 {
- 			#size-cells = <1>;
- 			ranges = <0x0 0xe0070000 0x800>;
- 			status = "disabled";
-+
-+			usart4: serial@200 {
-+				compatible = "atmel,at91sam9260-usart";
-+				reg = <0x200 0x200>;
-+				interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
-+				dmas = <&dma0 AT91_XDMAC_DT_PERID(11)>,
-+				       <&dma0 AT91_XDMAC_DT_PERID(10)>;
-+				dma-names = "tx", "rx";
-+				clocks = <&nic_clk>;
-+				clock-names = "usart";
-+				atmel,fifo-size = <32>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		timer0: timer@e008c000 {
--- 
-2.30.2
+> 
+>> I think this already exists as AT_EACCESS? It was added with
+>> faccessat2() itself, if I'm reading the history correctly.
+> 
+> Yeah, I noticed myself, I just hadn't looked (and I don't do enough
+> user-space programming to be aware of if that way).
 
+I think AT_EACCESS should be usable with the new EXECVE_OK too.
+
+
+> 
+>>>      (a) "what about suid bits that user space cannot react to"
+>>
+>> What do you mean here? Do you mean setid bits on the file itself?
+> 
+> Right.
+> 
+> Maybe we don't care.
+
+I think we don't. I think the only corner case that could be different 
+is for files that are executable, SUID and non-readable. In this case it 
+wouldn't matter because userspace could not read the file, which is 
+required for interpretation/execution. Anyway, S[GU]ID bits in scripts 
+are just ignored by execve and we want to follow the same semantic.
+
+
+> 
+> Maybe we do.
+> 
+> Is the user-space loader going to honor them? Is it going to ignore
+> them? I don't know. And it actually interacts with things like
+> 'nosuid', which the kernel does know about, and user space has a hard
+> time figuring out.
+> 
+> So if the point is "give me an interface so that I can do the same
+> thing a kernel execve() loader would do", then those sgid/suid bits
+> actually may be exactly the kind of thing that user space wants the
+> kernel to react to - should it ignore them, or should it do something
+> special when it sees that they are set?
+> 
+> I'm not saying that they *should* be something we care about. All I'm
+> saying is that I want that *discussion* to happen.
+> 
+>                 Linus

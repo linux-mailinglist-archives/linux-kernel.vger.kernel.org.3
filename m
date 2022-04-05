@@ -2,43 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 704B34F2E3E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E6E4F2A44
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 12:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346013AbiDEJoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
+        id S236618AbiDEJOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:14:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239573AbiDEIUO (ORCPT
+        with ESMTP id S239604AbiDEIUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CB963EC;
-        Tue,  5 Apr 2022 01:16:46 -0700 (PDT)
+        Tue, 5 Apr 2022 04:20:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A72EE;
+        Tue,  5 Apr 2022 01:17:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C64CA609D0;
-        Tue,  5 Apr 2022 08:16:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB15BC385A0;
-        Tue,  5 Apr 2022 08:16:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BADB260B0A;
+        Tue,  5 Apr 2022 08:17:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99CE5C385A2;
+        Tue,  5 Apr 2022 08:17:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146605;
-        bh=xc5tT771KBxay9UwO9nhcapUuxOWzNj8GgPN+OHumyg=;
+        s=korg; t=1649146635;
+        bh=jtVxs2/hq/y5QxVuTF5k0i9kpJhhrLCB8KzwTJnND0Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WDM6NEXSVoHOrSBdJXOVp/WgZRvK38HxXDiDVZomqszqJpHnrysBQqmR3D5rY3fIi
-         l2ge+TKL6kmCpQmMhKRc82KprC3QguNWR8i/cppMVkHGojlwO5+C33G+iH2xVY55Y9
-         jVfielsX1eWyaucPeH3lK3ImqfDCnFd13B2mxcPQ=
+        b=dL+2vHMU+sfc2jClK98oQhTHehfLFC9ad9kuNzdBX4zNvMy3xEzu0T5UW1IBowMV9
+         64oS71VBVPTa+Bu2t2yisAi/bNBmFyLQ9/9sNP9SdnfzjbP6atlrJOWmbOZFCakf1H
+         MtCMO64NK2A0cM7zBNB5Ki9XFLtvhK9j8FuzLUIY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
+        stable@vger.kernel.org, Thomas Richter <tmricht@linux.ibm.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0797/1126] kdb: Fix the putarea helper function
-Date:   Tue,  5 Apr 2022 09:25:44 +0200
-Message-Id: <20220405070430.965951446@linuxfoundation.org>
+Subject: [PATCH 5.17 0798/1126] perf stat: Fix forked applications enablement of counters
+Date:   Tue,  5 Apr 2022 09:25:45 +0200
+Message-Id: <20220405070430.995275597@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,45 +61,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Thompson <daniel.thompson@linaro.org>
+From: Thomas Richter <tmricht@linux.ibm.com>
 
-[ Upstream commit c1cb81429df462eca1b6ba615cddd21dd3103c46 ]
+[ Upstream commit d0a0a511493d269514fcbd852481cdca32c95350 ]
 
-Currently kdb_putarea_size() uses copy_from_kernel_nofault() to write *to*
-arbitrary kernel memory. This is obviously wrong and means the memory
-modify ('mm') command is a serious risk to debugger stability: if we poke
-to a bad address we'll double-fault and lose our debug session.
+I have run into the following issue:
 
-Fix this the (very) obvious way.
+ # perf stat -a -e new_pmu/INSTRUCTION_7/ --  mytest -c1 7
 
-Note that there are two Fixes: tags because the API was renamed and this
-patch will only trivially backport as far as the rename (and this is
-probably enough). Nevertheless Christoph's rename did not introduce this
-problem so I wanted to record that!
+ Performance counter stats for 'system wide':
 
-Fixes: fe557319aa06 ("maccess: rename probe_kernel_{read,write} to copy_{from,to}_kernel_nofault")
-Fixes: 5d5314d6795f ("kdb: core for kgdb back end (1 of 2)")
-Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Link: https://lore.kernel.org/r/20220128144055.207267-1-daniel.thompson@linaro.org
+                 0      new_pmu/INSTRUCTION_7/
+
+       0.000366428 seconds time elapsed
+ #
+
+The new PMU for s390 counts the execution of certain CPU instructions.
+The root cause is the extremely small run time of the mytest program. It
+just executes some assembly instructions and then exits.
+
+In above invocation the instruction is executed exactly one time (-c1
+option). The PMU is expected to report this one time execution by a
+counter value of one, but fails to do so in some cases, not all.
+
+Debugging reveals the invocation of the child process is done
+*before* the counter events are installed and enabled.
+
+Tracing reveals that sometimes the child process starts and exits before
+the event is installed on all CPUs. The more CPUs the machine has, the
+more often this miscount happens.
+
+Fix this by reversing the start of the work load after the events have
+been installed on the specified CPUs. Now the comment also matches the
+code.
+
+Output after:
+
+ # perf stat -a -e new_pmu/INSTRUCTION_7/ --  mytest -c1 7
+
+ Performance counter stats for 'system wide':
+
+                 1      new_pmu/INSTRUCTION_7/
+
+       0.000366428 seconds time elapsed
+ #
+
+Now the correct result is reported rock solid all the time regardless
+how many CPUs are online.
+
+Reviewers notes:
+
+Jiri:
+
+Right, without -a the event has enable_on_exec so the race does not
+matter, but it's a problem for system wide with fork.
+
+Namhyung:
+
+Agreed. Also we may move the enable_counters() and the clock code out of
+the if block to be shared with the else block.
+
+Fixes: acf2892270dcc428 ("perf stat: Use perf_evlist__prepare/start_workload()")
+Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+Acked-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Sven Schnelle <svens@linux.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220317155346.577384-1-tmricht@linux.ibm.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/debug/kdb/kdb_support.c | 2 +-
+ tools/perf/builtin-stat.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/debug/kdb/kdb_support.c b/kernel/debug/kdb/kdb_support.c
-index df2bface866e..85cb51c4a17e 100644
---- a/kernel/debug/kdb/kdb_support.c
-+++ b/kernel/debug/kdb/kdb_support.c
-@@ -291,7 +291,7 @@ int kdb_getarea_size(void *res, unsigned long addr, size_t size)
-  */
- int kdb_putarea_size(unsigned long addr, void *res, size_t size)
- {
--	int ret = copy_from_kernel_nofault((char *)addr, (char *)res, size);
-+	int ret = copy_to_kernel_nofault((char *)addr, (char *)res, size);
- 	if (ret) {
- 		if (!KDB_STATE(SUPPRESS)) {
- 			kdb_func_printf("Bad address 0x%lx\n", addr);
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index 3f98689dd687..60baa3dadc4b 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -955,10 +955,10 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
+ 	 * Enable counters and exec the command:
+ 	 */
+ 	if (forks) {
+-		evlist__start_workload(evsel_list);
+ 		err = enable_counters();
+ 		if (err)
+ 			return -1;
++		evlist__start_workload(evsel_list);
+ 
+ 		t0 = rdclock();
+ 		clock_gettime(CLOCK_MONOTONIC, &ref_time);
 -- 
 2.34.1
 

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5318B4F3B88
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:20:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 344624F379B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380182AbiDEL6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51012 "EHLO
+        id S1356519AbiDELPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245022AbiDEIxC (ORCPT
+        with ESMTP id S237095AbiDEIRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:53:02 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4658DAE;
-        Tue,  5 Apr 2022 01:49:41 -0700 (PDT)
+        Tue, 5 Apr 2022 04:17:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47D7B0A72;
+        Tue,  5 Apr 2022 01:05:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 34B95CE1B55;
-        Tue,  5 Apr 2022 08:49:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F8EBC385A1;
-        Tue,  5 Apr 2022 08:49:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9891EB81A32;
+        Tue,  5 Apr 2022 08:05:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D810C385A2;
+        Tue,  5 Apr 2022 08:05:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148578;
-        bh=ILWExaWFs9IY44mWLEJ+w6njJpf64YYLdcomOi8/aGM=;
+        s=korg; t=1649145908;
+        bh=DtgPalVCccaATQj0jaFNcsMve7obrls4FSjEP7bN7aM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fZoXTa3xhYPZQsxG0oACWf8Zv4oCt0CqWnR86uaQX0XlnbRX56KNILGFHa1FuWpYm
-         5Ue1suqM5FPuoKTK7TnW2ORvl9wr4lThB6Dw+fRQ1tbfPNU0vhNA0rWtI7glNuyTvB
-         rwU1FysBTLWDz+XEsU6d55KRpSDodq+RiYmTgQk8=
+        b=GNj8EJHpiFEkpB/DiqxzEJAtN835LJA6lZ9qNCb1JKco1v4hDDRpFv/kqN/mJMoHP
+         AO3szRo2Tk0ShYXAajVgKwoid41z09/i0nlKgZ1oA/p4hZJyit4VNb8KgyshWPQF/K
+         dBYwHm/ciuKmp62YfXcFhl/vSuCZeHGg8CoRxQZE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Melissa Wen <mwen@igalia.com>,
-        Melissa Wen <melissa.srw@gmail.com>,
+        stable@vger.kernel.org, Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0406/1017] drm/v3d/v3d_drv: Check for error num after setting mask
-Date:   Tue,  5 Apr 2022 09:21:59 +0200
-Message-Id: <20220405070406.340107174@linuxfoundation.org>
+Subject: [PATCH 5.17 0573/1126] drm/msm/dpu: fix dp audio condition
+Date:   Tue,  5 Apr 2022 09:22:00 +0200
+Message-Id: <20220405070424.452243006@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
+References: <20220405070407.513532867@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,53 +57,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit 4a39156166b90465da0f9a33b3442d63b5651bec ]
+[ Upstream commit 1e0505a5a7a2fea243f8e6d7e13fcde65f9e41bc ]
 
-Because of the possible failure of the dma_supported(), the
-dma_set_mask_and_coherent() may return error num.
-Therefore, it should be better to check it and return the error if
-fails.
-Also, we can create a variable for the mask to solve the
-alignment issue.
+DP audio enablement code which is comparing intf_type,
+DRM_MODE_ENCODER_TMDS (= 2) with DRM_MODE_CONNECTOR_DisplayPort (= 10).
+Which would never succeed. Fix it to check for DRM_MODE_ENCODER_TMDS.
 
-Fixes: 334dd38a3878 ("drm/v3d: Set dma_mask as well as coherent_dma_mask")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Reviewed-by: Melissa Wen <mwen@igalia.com>
-Signed-off-by: Melissa Wen <melissa.srw@gmail.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220110013807.4105270-1-jiasheng@iscas.ac.cn
+Fixes: d13e36d7d222 ("drm/msm/dp: add audio support for Display Port on MSM")
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://lore.kernel.org/r/20220217035358.465904-2-dmitry.baryshkov@linaro.org
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/v3d/v3d_drv.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/v3d/v3d_drv.c b/drivers/gpu/drm/v3d/v3d_drv.c
-index bd46396a1ae0..1afcd54fbbd5 100644
---- a/drivers/gpu/drm/v3d/v3d_drv.c
-+++ b/drivers/gpu/drm/v3d/v3d_drv.c
-@@ -219,6 +219,7 @@ static int v3d_platform_drm_probe(struct platform_device *pdev)
- 	int ret;
- 	u32 mmu_debug;
- 	u32 ident1;
-+	u64 mask;
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+index 1e648db439f9..02d0fae1c6dc 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+@@ -1099,7 +1099,7 @@ static void _dpu_encoder_virt_enable_helper(struct drm_encoder *drm_enc)
+ 	}
  
- 	v3d = devm_drm_dev_alloc(dev, &v3d_drm_driver, struct v3d_dev, drm);
- 	if (IS_ERR(v3d))
-@@ -237,8 +238,11 @@ static int v3d_platform_drm_probe(struct platform_device *pdev)
- 		return ret;
  
- 	mmu_debug = V3D_READ(V3D_MMU_DEBUG_INFO);
--	dma_set_mask_and_coherent(dev,
--		DMA_BIT_MASK(30 + V3D_GET_FIELD(mmu_debug, V3D_MMU_PA_WIDTH)));
-+	mask = DMA_BIT_MASK(30 + V3D_GET_FIELD(mmu_debug, V3D_MMU_PA_WIDTH));
-+	ret = dma_set_mask_and_coherent(dev, mask);
-+	if (ret)
-+		return ret;
-+
- 	v3d->va_width = 30 + V3D_GET_FIELD(mmu_debug, V3D_MMU_VA_WIDTH);
- 
- 	ident1 = V3D_READ(V3D_HUB_IDENT1);
+-	if (dpu_enc->disp_info.intf_type == DRM_MODE_CONNECTOR_DisplayPort &&
++	if (dpu_enc->disp_info.intf_type == DRM_MODE_ENCODER_TMDS &&
+ 		dpu_enc->cur_master->hw_mdptop &&
+ 		dpu_enc->cur_master->hw_mdptop->ops.intf_audio_select)
+ 		dpu_enc->cur_master->hw_mdptop->ops.intf_audio_select(
 -- 
 2.34.1
 

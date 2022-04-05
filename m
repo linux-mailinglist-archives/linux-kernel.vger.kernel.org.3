@@ -2,117 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2ECF4F4EB2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 511D24F4E50
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1836302AbiDFAfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47754 "EHLO
+        id S1588757AbiDFARO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383182AbiDEMZF (ORCPT
+        with ESMTP id S1382821AbiDEMRA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 08:25:05 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEDB9FC9;
-        Tue,  5 Apr 2022 04:32:30 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 1DDB81F390;
-        Tue,  5 Apr 2022 11:32:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1649158349; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type;
-        bh=B1KHdOwVSkxc4cwioVl/fqGmb4ILJaNXLeIecIndREU=;
-        b=qXT6Q82QAwXEkqmD+YG8GK/DX6LittdLbmMiR0cLdzmaGDoXz2vs56KXY3UgDLM7nnGdzs
-        8azj5l80G5gL32IcbIBHAaccnjnLeu/slYcTyrPAcRTcEmSpJgTaHNcWHaH33+nqwT9exX
-        60vdU01v3DoeL7Nr1m2hr44/kl1TwtY=
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 13F1EA3B8A;
-        Tue,  5 Apr 2022 11:32:29 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id F4233DA80E; Tue,  5 Apr 2022 13:28:27 +0200 (CEST)
-Date:   Tue, 5 Apr 2022 13:28:27 +0200
-From:   David Sterba <dsterba@suse.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Btrfs fixes for 5.18-rc2
-Message-ID: <cover.1649109877.git.dsterba@suse.com>
-Mail-Followup-To: David Sterba <dsterba@suse.com>,
-        torvalds@linux-foundation.org, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        Tue, 5 Apr 2022 08:17:00 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F4CA995D
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 04:29:35 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id g24so16670185lja.7
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 04:29:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=b7Dz2SM4siYuIwun2XwY0DhLNucqTdTNXSHP2yr5LeM=;
+        b=LOZVvXl9gGJ+RVI+ER6bknQlWcr4u1GnvrXJnh2Co/+eTsN7luh1C3Ee0mUUk7al2r
+         t2m4jmv1poxLlbvcPQalpmOl6QF6PZToWLJzEGtxHUHUOow0QixXBBqXN+q6MnnViKK1
+         XsrjEDIsj6GfB6OliOuv4Rt2ysL2QpB9/AcGir/3uX5+WhOM24y3lF/ICwjrems7FBS9
+         NfbOV0Uhv2sP0RxDI3KP2NwHlJNaSJpB8NVxC8piuaUGbuue6AyRmiEXGFL8bVaufne+
+         amNRUjuaCjpTKyTg5WYFGebmAsAk7hpgWJ1iGlXqR6cS7m5MTvQ5/xyYtM497wTWJat3
+         RujQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=b7Dz2SM4siYuIwun2XwY0DhLNucqTdTNXSHP2yr5LeM=;
+        b=7/K0bJmchZyJiL1sJukh+9qGqHNf1r7Kph3Nkj6t/z9IwoOQPwI83QbQnuJlV9HBrx
+         rpfmtGPoMofWYKyLW8nulin0Y7mikQyP7xW9FdxM15XVeAq75NgJqBv6Ngl+a9Rsqiwj
+         13I7ofM12ZK8rVUWRDqK4UaGTkLCKyAyMw4MqLVvBPZXyIhGmauPsFc1I15keGoxq5SU
+         ZCzJwnTs6YEEWmv6CLjmDBpqj9XxJAhVwewLXELeBF/3QCduUI0uZ7vnIOiSvToBJhW9
+         VGBgMuKvu08Bdt/XQ5yZ1MVN4aqK5yt4NHVEDD8hoJwOxsbV9/pFZw5Z5+jzWCiWkV6+
+         flaw==
+X-Gm-Message-State: AOAM532lb13YH7I7sxE8DAGqDvSidkT4c4vlbkdredv4ZW7CwHIrO5E5
+        9p6oMnh/pZyER4MThPM60GfWcI8PoUI=
+X-Google-Smtp-Source: ABdhPJwglmhlytZL6pt8DIvGFjc+vbkjL17UA6JUrkyOQV1Hp23dghj+SmtXzqlQgSqw6XJ9RjxJJw==
+X-Received: by 2002:a2e:150d:0:b0:24b:30d:dae with SMTP id s13-20020a2e150d000000b0024b030d0daemr1822212ljd.23.1649158174017;
+        Tue, 05 Apr 2022 04:29:34 -0700 (PDT)
+Received: from uncleman.upcloud.com (dyjc2gkmpr6qcv38v66ry-4.rev.dnainternet.fi. [2001:14bb:1c5:62a1:4c76:9a28:df91:d69c])
+        by smtp.gmail.com with ESMTPSA id v6-20020a2ea446000000b0024b0abb3984sm1093423ljn.134.2022.04.05.04.29.32
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 04:29:33 -0700 (PDT)
+Sender: =?UTF-8?Q?Ville_Skytt=C3=A4?= <vskytta@gmail.com>
+From:   "=?UTF-8?q?Ville=20Skytt=C3=A4?=" <ville.skytta@iki.fi>
+X-Google-Original-From: =?UTF-8?q?Ville=20Skytt=C3=A4?= <ville.skytta@upcloud.com>
+To:     linux-kernel@vger.kernel.org
+Subject: [PATCH] docs/kernel-parameters: Note nopku AMD applicability
+Date:   Tue,  5 Apr 2022 14:29:32 +0300
+Message-Id: <20220405112932.416098-1-ville.skytta@upcloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+pku is no longer Intel specific.
 
-please pull the following fixes for btrfs, thanks.
+Signed-off-by: Ville Skyttä <ville.skytta@upcloud.com>
+---
+ Documentation/admin-guide/kernel-parameters.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-- prevent deleting subvolume with active swapfile
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 3f1cc5e317ed..d227539c52fe 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -1120,7 +1120,7 @@
+ 			for details.
+ 
+ 	nopku		[X86] Disable Memory Protection Keys CPU feature found
+-			in some Intel CPUs.
++			in some Intel and AMD CPUs.
+ 
+ 	<module>.async_probe [KNL]
+ 			Enable asynchronous probe on this module.
+-- 
+2.25.1
 
-- fix qgroup reserve limit calculation overflow
-
-- remove device count in superblock and its item in one transaction so
-  they cant't get out of sync
-
-- skip defragmenting an isolated sector, this could cause some extra IO
-
-- unify handling of mtime/permissions in hole punch with fallocate
-
-- zoned mode fixes:
-  - remove assert checking for only single mode, we have the DUP mode
-    implemented
-
-  - fix potential lockdep warning while traversing devices when checking
-    for zone activation
-
-----------------------------------------------------------------
-The following changes since commit d3e29967079c522ce1c5cab0e9fab2c280b977eb:
-
-  btrfs: zoned: put block group after final usage (2022-03-14 13:13:54 +0100)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-5.18-rc1-tag
-
-for you to fetch changes up to 60021bd754c6ca0addc6817994f20290a321d8d6:
-
-  btrfs: prevent subvol with swapfile from being deleted (2022-03-24 17:50:57 +0100)
-
-----------------------------------------------------------------
-Darrick J. Wong (1):
-      btrfs: fix fallocate to use file_modified to update permissions consistently
-
-Ethan Lien (1):
-      btrfs: fix qgroup reserve overflow the qgroup limit
-
-Johannes Thumshirn (2):
-      btrfs: zoned: traverse devices under chunk_mutex in btrfs_can_activate_zone
-      btrfs: zoned: remove left over ASSERT checking for single profile
-
-Josef Bacik (1):
-      btrfs: do not warn for free space inode in cow_file_range
-
-Kaiwen Hu (1):
-      btrfs: prevent subvol with swapfile from being deleted
-
-Qu Wenruo (2):
-      btrfs: remove device item and update super block in the same transaction
-      btrfs: avoid defragging extents whose next extents are not targets
-
- fs/btrfs/extent_io.h |  2 +-
- fs/btrfs/file.c      | 13 +++++++++--
- fs/btrfs/inode.c     | 23 ++++++++++++++++++-
- fs/btrfs/ioctl.c     | 20 +++++++++++-----
- fs/btrfs/volumes.c   | 65 ++++++++++++++++++++++------------------------------
- fs/btrfs/zoned.c     | 13 ++++-------
- 6 files changed, 81 insertions(+), 55 deletions(-)

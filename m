@@ -2,103 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D864F426D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9886C4F3DEA
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:36:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378107AbiDEU1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60008 "EHLO
+        id S1446273AbiDEUIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573499AbiDETNH (ORCPT
+        with ESMTP id S1573505AbiDETNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 15:13:07 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E3EE885A;
-        Tue,  5 Apr 2022 12:11:08 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id u14so432180pjj.0;
-        Tue, 05 Apr 2022 12:11:08 -0700 (PDT)
+        Tue, 5 Apr 2022 15:13:19 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8D3E8860
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 12:11:20 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id r8so99957oib.5
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 12:11:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=nm9jptV3WzpDy4GnIltCgi8NKxkU/H5D+wxVFeqH508=;
-        b=W1DTLDIV2ru+DUhUkWNcBevZsjAmQlciF2Ojz9VRCB1J8LZJBSqXvJCEgi+lQXStoT
-         2e+BTYZi6ECv6oyu6x4fWHCCp3GVhbSzY8M0365tvfg2WWBSSIU/wYi/SEuLbS4fXewq
-         heKLhNJ7d4xXLA52PGaFLKrnyTZIonnsDST+fGNIUxrIfML4B3Ya2gFtU+YQcBt5VNBB
-         L3UDmMYyIZ7+RXy3eJ+2iXMPdKZ0w8X4VabdIOGCVNIv9zEyeN040vzh8piTt1JhON4D
-         dXOkrPzvndu21x4UhE2MK0ju96OE3cGlAxrNuhvkKvP4rljA7LQZ258UgHTGcPE0YAtF
-         KoCg==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=+sCFFwWhVh6IX8olIQEwfE/A9caFnSQEQiTDby/DQD0=;
+        b=htZpWkYwxplvXURN6IyOQGpIM7h5Xaj/QSzBur6jP2dUuzrHLspI/2pUZmT5jJA26H
+         p/MLtsHVJX059A4he5GjdU7AnIBH/Pd0MiOXNMrXW2bsC3jr4X325qgSdNfJIFuKm3ww
+         oFU8c/+S2YeMLeJkGp8/tNdI4mm3Jyzt9cj4E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=nm9jptV3WzpDy4GnIltCgi8NKxkU/H5D+wxVFeqH508=;
-        b=F4wabNnxseVAaRTuEbtA3YLheKLwnslVnioyxmL0lrwMX5nB9kYDEKT9W6OyJo8Vod
-         pBEGwmdADaurHPQsV4OcLHAzQTxAxMpscC1Na86Dvhx1GnT6FwYvxOicwxSR5KIAiR4k
-         40aj78Eh1dKBtRv7KSQTM7ndDVpqnAw8dBWaqPwTePdAtgwKQ94QFuC01D5B+3G31sGZ
-         IHGQM6XTRIzBCjlhXh4WAAMO7/KbllE49xLxEZaewMlr8PhCFOZE09o7lpy2cadmPmL8
-         w65awfsxXqzB0vLQyI0U44GrdX5oNo4RLJGg7t7yD2lmkKbUlAKH7NDGUwbj3mfb3tOk
-         S2AQ==
-X-Gm-Message-State: AOAM5319/FAD56D5OJsBdj1fWfs3EZ/sWVtls/rmLNOr7hEzwtNlslCf
-        h3nUFwV8xMbemVj4Z+FLExI=
-X-Google-Smtp-Source: ABdhPJzpwCZtruVdAqWgIZpc+SFgn5A5HZe0HSZhnpA3P6/0Nk5mvpUf5WMxNPuZIi5ENOo5CUziDQ==
-X-Received: by 2002:a17:90b:4b89:b0:1c8:105a:2262 with SMTP id lr9-20020a17090b4b8900b001c8105a2262mr5740653pjb.225.1649185868049;
-        Tue, 05 Apr 2022 12:11:08 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id q28-20020a656a9c000000b00372f7ecfcecsm14616686pgu.37.2022.04.05.12.11.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 12:11:07 -0700 (PDT)
-Message-ID: <b44fd7cb-018d-3258-7367-f92f7a46427a@gmail.com>
-Date:   Tue, 5 Apr 2022 12:11:00 -0700
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=+sCFFwWhVh6IX8olIQEwfE/A9caFnSQEQiTDby/DQD0=;
+        b=gAC31GsWO34yIXzaovG/eTd2usxjWF+ILylLDVFYFdBWQM3tRrADjPr8iJ3YtfklPI
+         7mySKAB59HfWny0NcpJbp7vL+LZf0iErkAKfDBdKuNC8vy6bCMuA9lZQz9Slr5FjN0BP
+         nspDzRgSeW+Uw1H+Ow4sbhiQCPbIs1XcwXZHPwmYPN2IBpNcJkPDFTi7ZV4ytgTMV3jU
+         eoacMAoD7Vgqf2l1KngDMLJKEDZsSbOWmhADDG1HRMZJcEFh2332uIe2P5bGXjVNuC4V
+         FTSS1ozoG+JojdnABq42jygpcMnfFjlPKvR2SYxrnijVjxSJ66iyu9QojtmyMNoIhoQW
+         mgVA==
+X-Gm-Message-State: AOAM530GyK1+hqPtfQAut/wkxF6cBs8HUMqyef9lAVn0gCqI0TWMf8Mk
+        kTXcNYWdDrfWetkJXN+853o2oIcNQeD17QG8+lPMCg==
+X-Google-Smtp-Source: ABdhPJxaJqt3rZ7rG2CvTp/vFfikXLJk33kvQpji7R5HlYgG9oSpRARWmCg3M9/Tlt7qRxM2Iw5QQ2YqXcp5w3lOf1A=
+X-Received: by 2002:aca:a9c8:0:b0:2da:45b6:b796 with SMTP id
+ s191-20020acaa9c8000000b002da45b6b796mr1996111oie.193.1649185879962; Tue, 05
+ Apr 2022 12:11:19 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 5 Apr 2022 14:11:19 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5.16 0000/1017] 5.16.19-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220405070354.155796697@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1649166633-25872-6-git-send-email-quic_c_skakit@quicinc.com>
+References: <1649166633-25872-1-git-send-email-quic_c_skakit@quicinc.com> <1649166633-25872-6-git-send-email-quic_c_skakit@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Tue, 5 Apr 2022 14:11:19 -0500
+Message-ID: <CAE-0n51rLRcWE+h3zaWNy-nJYK4tQoivjdbfgYrwTJbjYYxWFw@mail.gmail.com>
+Subject: Re: [PATCH V9 5/6] arm64: dts: qcom: pm8008: Add base dts file
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Satya Priya <quic_c_skakit@quicinc.com>
+Cc:     Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_collinsd@quicinc.com, quic_subbaram@quicinc.com,
+        quic_jprakash@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/22 00:15, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.16.19 release.
-> There are 1017 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 07 Apr 2022 07:01:33 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.19-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Quoting Satya Priya (2022-04-05 06:50:32)
+> diff --git a/arch/arm64/boot/dts/qcom/pm8008.dtsi b/arch/arm64/boot/dts/qcom/pm8008.dtsi
+> new file mode 100644
+> index 0000000..24bd832
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/pm8008.dtsi
+> @@ -0,0 +1,47 @@
+> +// SPDX-License-Identifier: BSD-3-Clause
+> +// Copyright (c) 2022, The Linux Foundation. All rights reserved.
+> +
+> +&pm8008_bus {
+> +       pm8008: pm8008@8 {
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+pmic@8
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+> +               compatible = "qcom,pm8008";
+> +               reg = <0x8>;
+> +               #address-cells = <1>;
+> +               #size-cells = <0>;
+> +               #interrupt-cells = <2>;
+> +       };
+> +
+> +       pm8008_regulators: pm8008@9 {
+
+pmic@9
+
+> +               compatible = "qcom,pm8008-regulators";
+> +               reg = <0x9>;
+> +               #address-cells = <0>;
+> +               #size-cells = <0>;
+> +

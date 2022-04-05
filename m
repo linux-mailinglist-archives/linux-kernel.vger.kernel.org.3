@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C354F2DF7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 337DA4F2E1F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237940AbiDEJcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
+        id S239434AbiDEJdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239489AbiDEIUI (ORCPT
+        with ESMTP id S239490AbiDEIUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:20:08 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26838BFC;
-        Tue,  5 Apr 2022 01:14:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDED3B3C;
+        Tue,  5 Apr 2022 01:14:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D7753B81B92;
-        Tue,  5 Apr 2022 08:14:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23BD3C385A0;
-        Tue,  5 Apr 2022 08:14:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95886B81BA7;
+        Tue,  5 Apr 2022 08:14:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3CD7C385A1;
+        Tue,  5 Apr 2022 08:14:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146452;
-        bh=Wp/zeVAJhVdSUcSBZOhk7aFWy4PO9rrhNrBvaBiDV8I=;
+        s=korg; t=1649146458;
+        bh=cWcCNbB+zyH5SVcQxLF5Oid3an5qQ0YrX540UlV8RGA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AniO9Sa6sOhQJNmJ0cogAI/swZnIYqwvfoTgN+ZigGp+3e3ZZDerJRPGRTBXnhzay
-         Oq/DKLVKwIJ/g99VbB7agp6SDg5BH72pvX0QA+CF81DhfpsqhouXQKRegfR7IS6Ubf
-         Qf5ehRpQoavPOpxfz+yT8IDmIfUB2MSY1CXNIPc4=
+        b=IPs4DqnYvJtCSH1OhulAkDwsuwO5n/J4Qo9gKhvO3c+VhnnyJIdEkJ4YPpuSVmYqX
+         VxB8Fu05RUx9UJYQh+nUwXg+pNHsQr4tYSC5Q9d1Ji9j2xAJwJEehVelRpnCSFBTfc
+         NM9q37SwvhE2BB2L4K+OqEVGWop65iP28N/s30ds=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,9 +37,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         <angelogioacchino.delregno@collabora.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0770/1126] pinctrl: mediatek: paris: Fix PIN_CONFIG_BIAS_* readback
-Date:   Tue,  5 Apr 2022 09:25:17 +0200
-Message-Id: <20220405070430.182360058@linuxfoundation.org>
+Subject: [PATCH 5.17 0772/1126] pinctrl: mediatek: paris: Fix pingroup pin config state readback
+Date:   Tue,  5 Apr 2022 09:25:19 +0200
+Message-Id: <20220405070430.240824721@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -59,56 +59,57 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Chen-Yu Tsai <wenst@chromium.org>
 
-[ Upstream commit 3e8c6bc608480010f360c4a59578d7841726137d ]
+[ Upstream commit 54fe55fb384ade630ef20b9a8b8f3b2a89ad97f2 ]
 
-When reading back pin bias settings, if the pin is not in the
-corresponding bias state, the function should return -EINVAL.
+mtk_pconf_group_get(), used to read back pingroup pin config state,
+simply returns a set of configs saved from a previous invocation of
+mtk_pconf_group_set(). This is an unfiltered, unvalidated set passed
+in from the pinconf core, which does not match the current hardware
+state.
 
-Fix this in the mediatek-paris pinctrl library so that the read back
-state is not littered with bogus a "input bias disabled" combined with
-"pull up" or "pull down" states.
+Since the driver library is designed to have one pin per group, pass
+through mtk_pconf_group_get() to mtk_pinconf_get(), to read back the
+current pin config state of the only pin in the group.
+
+Also drop the assignment of pin config state to the group.
 
 Fixes: 805250982bb5 ("pinctrl: mediatek: add pinctrl-paris that implements the vendor dt-bindings")
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Link: https://lore.kernel.org/r/20220308100956.2750295-3-wenst@chromium.org
+Link: https://lore.kernel.org/r/20220308100956.2750295-5-wenst@chromium.org
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/mediatek/pinctrl-paris.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ drivers/pinctrl/mediatek/pinctrl-paris.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c b/drivers/pinctrl/mediatek/pinctrl-paris.c
-index f9f9110f2107..7037560ecda9 100644
+index c668191933a0..3bda1aac650b 100644
 --- a/drivers/pinctrl/mediatek/pinctrl-paris.c
 +++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
-@@ -96,20 +96,16 @@ static int mtk_pinconf_get(struct pinctrl_dev *pctldev,
- 			err = hw->soc->bias_get_combo(hw, desc, &pullup, &ret);
- 			if (err)
- 				goto out;
-+			if (ret == MTK_PUPD_SET_R1R0_00)
-+				ret = MTK_DISABLE;
- 			if (param == PIN_CONFIG_BIAS_DISABLE) {
--				if (ret == MTK_PUPD_SET_R1R0_00)
--					ret = MTK_DISABLE;
-+				if (ret != MTK_DISABLE)
-+					err = -EINVAL;
- 			} else if (param == PIN_CONFIG_BIAS_PULL_UP) {
--				/* When desire to get pull-up value, return
--				 *  error if current setting is pull-down
--				 */
--				if (!pullup)
-+				if (!pullup || ret == MTK_DISABLE)
- 					err = -EINVAL;
- 			} else if (param == PIN_CONFIG_BIAS_PULL_DOWN) {
--				/* When desire to get pull-down value, return
--				 *  error if current setting is pull-up
--				 */
--				if (pullup)
-+				if (pullup || ret == MTK_DISABLE)
- 					err = -EINVAL;
- 			}
- 		} else {
+@@ -732,10 +732,10 @@ static int mtk_pconf_group_get(struct pinctrl_dev *pctldev, unsigned group,
+ 			       unsigned long *config)
+ {
+ 	struct mtk_pinctrl *hw = pinctrl_dev_get_drvdata(pctldev);
++	struct mtk_pinctrl_group *grp = &hw->groups[group];
+ 
+-	*config = hw->groups[group].config;
+-
+-	return 0;
++	 /* One pin per group only */
++	return mtk_pinconf_get(pctldev, grp->pin, config);
+ }
+ 
+ static int mtk_pconf_group_set(struct pinctrl_dev *pctldev, unsigned group,
+@@ -751,8 +751,6 @@ static int mtk_pconf_group_set(struct pinctrl_dev *pctldev, unsigned group,
+ 				      pinconf_to_config_argument(configs[i]));
+ 		if (ret < 0)
+ 			return ret;
+-
+-		grp->config = configs[i];
+ 	}
+ 
+ 	return 0;
 -- 
 2.34.1
 

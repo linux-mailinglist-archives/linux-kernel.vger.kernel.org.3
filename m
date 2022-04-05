@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 372504F2679
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C44274F26BF
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233338AbiDEH5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
+        id S233185AbiDEH46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233168AbiDEHrb (ORCPT
+        with ESMTP id S233271AbiDEHrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:47:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB184BB0;
-        Tue,  5 Apr 2022 00:43:43 -0700 (PDT)
+        Tue, 5 Apr 2022 03:47:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E698BB7C4;
+        Tue,  5 Apr 2022 00:43:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05211B81B14;
-        Tue,  5 Apr 2022 07:43:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B665C340EE;
-        Tue,  5 Apr 2022 07:43:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D1735616BF;
+        Tue,  5 Apr 2022 07:43:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9725C340EE;
+        Tue,  5 Apr 2022 07:43:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144620;
-        bh=F2sXadztW3MARwarwpZlIp38N5A1LAVO17ur1+LgINs=;
+        s=korg; t=1649144626;
+        bh=PwoYvdv/B8jGc1fJpLaxWKJ5aWs33AsXDs0Dcffi23s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uMyi0ODQEm/CQPZhNoq6sBJJI/v4rS6nxfbLNuG5uN0lPXCOXVEmvm90aDhHLmshD
-         yOJh4xDgDE+9/l4Ed2PPYy+Ck+95cBZTTcHLE+MDL+tZEqTbPSxaXQNdQHxVT+rTOx
-         GKUXKNYItLdg1ow4XTCGb1paGSzMC13xkj4hI1WM=
+        b=Qk5YAqJpDu78BULHfc7PtXUqhZITz+cU1uKCwrTsJzswhio/nPrj6Lzfh9GvwjxjO
+         4ygTaKIGRXPn3uthXDaQcQG9n+hEW8LKL0kpdO5R2NO9AJKe6mQ3i/LQDsuhKqRxku
+         rC9xTSuXfQSQ9UUI+90FDZPHO6UT569usRCcIn78=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
         Mike Snitzer <snitzer@redhat.com>
-Subject: [PATCH 5.17 0111/1126] dm stats: fix too short end duration_ns when using precise_timestamps
-Date:   Tue,  5 Apr 2022 09:14:18 +0200
-Message-Id: <20220405070410.829580346@linuxfoundation.org>
+Subject: [PATCH 5.17 0113/1126] dm: interlock pending dm_io and dm_wait_for_bios_completion
+Date:   Tue,  5 Apr 2022 09:14:20 +0200
+Message-Id: <20220405070410.887516282@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,131 +56,136 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Mike Snitzer <snitzer@redhat.com>
 
-commit 0cdb90f0f306384ecbc60dfd6dc48cdbc1f2d0d8 upstream.
+commit 9f6dc633761006f974701d4c88da71ab68670749 upstream.
 
-dm_stats_account_io()'s STAT_PRECISE_TIMESTAMPS support doesn't handle
-the fact that with commit b879f915bc48 ("dm: properly fix redundant
-bio-based IO accounting") io->start_time _may_ be in the past (meaning
-the start_io_acct() was deferred until later).
+Commit d208b89401e0 ("dm: fix mempool NULL pointer race when
+completing IO") didn't go far enough.
 
-Add a new dm_stats_recalc_precise_timestamps() helper that will
-set/clear a new 'precise_timestamps' flag in the dm_stats struct based
-on whether any configured stats enable STAT_PRECISE_TIMESTAMPS.
-And update DM core's alloc_io() to use dm_stats_record_start() to set
-stats_aux.duration_ns if stats->precise_timestamps is true.
+When bio_end_io_acct ends the count of in-flight I/Os may reach zero
+and the DM device may be suspended. There is a possibility that the
+suspend races with dm_stats_account_io.
 
-Also, remove unused 'last_sector' and 'last_rw' members from the
-dm_stats struct.
+Fix this by adding percpu "pending_io" counters to track outstanding
+dm_io. Move kicking of suspend queue to dm_io_dec_pending(). Also,
+rename md_in_flight_bios() to dm_in_flight_bios() and update it to
+iterate all pending_io counters.
 
-Fixes: b879f915bc48 ("dm: properly fix redundant bio-based IO accounting")
+Fixes: d208b89401e0 ("dm: fix mempool NULL pointer race when completing IO")
 Cc: stable@vger.kernel.org
 Co-developed-by: Mikulas Patocka <mpatocka@redhat.com>
 Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
 Signed-off-by: Mike Snitzer <snitzer@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/dm-stats.c |   28 +++++++++++++++++++++++++---
- drivers/md/dm-stats.h |    9 +++++++--
- drivers/md/dm.c       |    2 ++
- 3 files changed, 34 insertions(+), 5 deletions(-)
+ drivers/md/dm-core.h |    2 ++
+ drivers/md/dm.c      |   35 +++++++++++++++++++++++------------
+ 2 files changed, 25 insertions(+), 12 deletions(-)
 
---- a/drivers/md/dm-stats.c
-+++ b/drivers/md/dm-stats.c
-@@ -195,6 +195,7 @@ void dm_stats_init(struct dm_stats *stat
+--- a/drivers/md/dm-core.h
++++ b/drivers/md/dm-core.h
+@@ -65,6 +65,8 @@ struct mapped_device {
+ 	struct gendisk *disk;
+ 	struct dax_device *dax_dev;
  
- 	mutex_init(&stats->mutex);
- 	INIT_LIST_HEAD(&stats->list);
-+	stats->precise_timestamps = false;
- 	stats->last = alloc_percpu(struct dm_stats_last_position);
- 	for_each_possible_cpu(cpu) {
- 		last = per_cpu_ptr(stats->last, cpu);
-@@ -231,6 +232,22 @@ void dm_stats_cleanup(struct dm_stats *s
- 	mutex_destroy(&stats->mutex);
- }
- 
-+static void dm_stats_recalc_precise_timestamps(struct dm_stats *stats)
-+{
-+	struct list_head *l;
-+	struct dm_stat *tmp_s;
-+	bool precise_timestamps = false;
++	unsigned long __percpu *pending_io;
 +
-+	list_for_each(l, &stats->list) {
-+		tmp_s = container_of(l, struct dm_stat, list_entry);
-+		if (tmp_s->stat_flags & STAT_PRECISE_TIMESTAMPS) {
-+			precise_timestamps = true;
-+			break;
-+		}
-+	}
-+	stats->precise_timestamps = precise_timestamps;
-+}
-+
- static int dm_stats_create(struct dm_stats *stats, sector_t start, sector_t end,
- 			   sector_t step, unsigned stat_flags,
- 			   unsigned n_histogram_entries,
-@@ -376,6 +393,9 @@ static int dm_stats_create(struct dm_sta
- 	}
- 	ret_id = s->id;
- 	list_add_tail_rcu(&s->list_entry, l);
-+
-+	dm_stats_recalc_precise_timestamps(stats);
-+
- 	mutex_unlock(&stats->mutex);
- 
- 	resume_callback(md);
-@@ -418,6 +438,9 @@ static int dm_stats_delete(struct dm_sta
- 	}
- 
- 	list_del_rcu(&s->list_entry);
-+
-+	dm_stats_recalc_precise_timestamps(stats);
-+
- 	mutex_unlock(&stats->mutex);
- 
  	/*
-@@ -654,9 +677,8 @@ void dm_stats_account_io(struct dm_stats
- 	got_precise_time = false;
- 	list_for_each_entry_rcu(s, &stats->list, list_entry) {
- 		if (s->stat_flags & STAT_PRECISE_TIMESTAMPS && !got_precise_time) {
--			if (!end)
--				stats_aux->duration_ns = ktime_to_ns(ktime_get());
--			else
-+			/* start (!end) duration_ns is set by DM core's alloc_io() */
-+			if (end)
- 				stats_aux->duration_ns = ktime_to_ns(ktime_get()) - stats_aux->duration_ns;
- 			got_precise_time = true;
- 		}
---- a/drivers/md/dm-stats.h
-+++ b/drivers/md/dm-stats.h
-@@ -13,8 +13,7 @@ struct dm_stats {
- 	struct mutex mutex;
- 	struct list_head list;	/* list of struct dm_stat */
- 	struct dm_stats_last_position __percpu *last;
--	sector_t last_sector;
--	unsigned last_rw;
-+	bool precise_timestamps;
- };
- 
- struct dm_stats_aux {
-@@ -40,4 +39,10 @@ static inline bool dm_stats_used(struct
- 	return !list_empty(&st->list);
- }
- 
-+static inline void dm_stats_record_start(struct dm_stats *stats, struct dm_stats_aux *aux)
-+{
-+	if (unlikely(stats->precise_timestamps))
-+		aux->duration_ns = ktime_to_ns(ktime_get());
-+}
-+
- #endif
+ 	 * A list of ios that arrived while we were suspended.
+ 	 */
 --- a/drivers/md/dm.c
 +++ b/drivers/md/dm.c
-@@ -537,6 +537,8 @@ static struct dm_io *alloc_io(struct map
+@@ -507,10 +507,6 @@ static void end_io_acct(struct mapped_de
+ 		dm_stats_account_io(&md->stats, bio_data_dir(bio),
+ 				    bio->bi_iter.bi_sector, bio_sectors(bio),
+ 				    true, duration, stats_aux);
+-
+-	/* nudge anyone waiting on suspend queue */
+-	if (unlikely(wq_has_sleeper(&md->wait)))
+-		wake_up(&md->wait);
+ }
  
- 	io->start_time = jiffies;
- 
-+	dm_stats_record_start(&md->stats, &io->stats_aux);
+ static struct dm_io *alloc_io(struct mapped_device *md, struct bio *bio)
+@@ -531,6 +527,7 @@ static struct dm_io *alloc_io(struct map
+ 	io->magic = DM_IO_MAGIC;
+ 	io->status = 0;
+ 	atomic_set(&io->io_count, 1);
++	this_cpu_inc(*md->pending_io);
+ 	io->orig_bio = bio;
+ 	io->md = md;
+ 	spin_lock_init(&io->endio_lock);
+@@ -828,6 +825,12 @@ void dm_io_dec_pending(struct dm_io *io,
+ 		stats_aux = io->stats_aux;
+ 		free_io(md, io);
+ 		end_io_acct(md, bio, start_time, &stats_aux);
++		smp_wmb();
++		this_cpu_dec(*md->pending_io);
 +
- 	return io;
++		/* nudge anyone waiting on suspend queue */
++		if (unlikely(wq_has_sleeper(&md->wait)))
++			wake_up(&md->wait);
+ 
+ 		if (io_error == BLK_STS_DM_REQUEUE)
+ 			return;
+@@ -1622,6 +1625,11 @@ static void cleanup_mapped_device(struct
+ 		blk_cleanup_disk(md->disk);
+ 	}
+ 
++	if (md->pending_io) {
++		free_percpu(md->pending_io);
++		md->pending_io = NULL;
++	}
++
+ 	cleanup_srcu_struct(&md->io_barrier);
+ 
+ 	mutex_destroy(&md->suspend_lock);
+@@ -1723,6 +1731,10 @@ static struct mapped_device *alloc_dev(i
+ 	if (!md->wq)
+ 		goto bad;
+ 
++	md->pending_io = alloc_percpu(unsigned long);
++	if (!md->pending_io)
++		goto bad;
++
+ 	dm_stats_init(&md->stats);
+ 
+ 	/* Populate the mapping, nobody knows we exist yet */
+@@ -2130,16 +2142,13 @@ void dm_put(struct mapped_device *md)
+ }
+ EXPORT_SYMBOL_GPL(dm_put);
+ 
+-static bool md_in_flight_bios(struct mapped_device *md)
++static bool dm_in_flight_bios(struct mapped_device *md)
+ {
+ 	int cpu;
+-	struct block_device *part = dm_disk(md)->part0;
+-	long sum = 0;
++	unsigned long sum = 0;
+ 
+-	for_each_possible_cpu(cpu) {
+-		sum += part_stat_local_read_cpu(part, in_flight[0], cpu);
+-		sum += part_stat_local_read_cpu(part, in_flight[1], cpu);
+-	}
++	for_each_possible_cpu(cpu)
++		sum += *per_cpu_ptr(md->pending_io, cpu);
+ 
+ 	return sum != 0;
+ }
+@@ -2152,7 +2161,7 @@ static int dm_wait_for_bios_completion(s
+ 	while (true) {
+ 		prepare_to_wait(&md->wait, &wait, task_state);
+ 
+-		if (!md_in_flight_bios(md))
++		if (!dm_in_flight_bios(md))
+ 			break;
+ 
+ 		if (signal_pending_state(task_state, current)) {
+@@ -2164,6 +2173,8 @@ static int dm_wait_for_bios_completion(s
+ 	}
+ 	finish_wait(&md->wait, &wait);
+ 
++	smp_rmb();
++
+ 	return r;
  }
  
 

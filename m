@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3AFD4F2F04
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEAB34F326E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354101AbiDEKLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46004 "EHLO
+        id S1355760AbiDEKVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241153AbiDEIcw (ORCPT
+        with ESMTP id S241267AbiDEIdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:32:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03499DEF7;
-        Tue,  5 Apr 2022 01:28:45 -0700 (PDT)
+        Tue, 5 Apr 2022 04:33:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7064B8E;
+        Tue,  5 Apr 2022 01:31:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 967C060B0A;
-        Tue,  5 Apr 2022 08:28:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1F48C385A1;
-        Tue,  5 Apr 2022 08:28:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77B71B81BC0;
+        Tue,  5 Apr 2022 08:31:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA58CC385A1;
+        Tue,  5 Apr 2022 08:31:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147324;
-        bh=0trAmnDkOsQ3apYdbGGWIuE2yKbsncGmHrFFIsbYD/0=;
+        s=korg; t=1649147462;
+        bh=xP6Tr2F4niH5CmG/43FEijRnvWU8Se3NAUyhudXwZWU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dYcdyrv+pJHBRk2mY35dIXgACjuoIG45EGTQGgymycIClb8wrs+OTkdDt2wStXPHB
-         oPuA3OYXlUMMq2ZhmEvJ+dNWCeKiiSoka4BwK89ywPF/Lf+OQ+jlTQQfQck0eb5s19
-         loW0ZQdPZfrQbwYyQ3beRUPDx/noLhArNyoCVxAA=
+        b=M/c19MiUL0jaah/o582wXff29jDzWOBG+sVaBABUai/zgB6+PSk0bA7nuHs0J0Ie+
+         KvsIQ1K7eVDUiuEpTHx/2gW+sUq2pjaFY1y+MNX/tTa3zqVeZtTfnKXKAQtFIz6thD
+         lNXiLpQxMuriUlis2YIpk6y2Z24HxGJ50tP7tlNM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Chris von Recklinghausen <crecklin@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.17 1082/1126] mm/usercopy: return 1 from hardened_usercopy __setup() handler
-Date:   Tue,  5 Apr 2022 09:30:29 +0200
-Message-Id: <20220405070439.212444184@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: [PATCH 5.17 1084/1126] libbpf: Define BTF_KIND_* constants in btf.h to avoid compilation errors
+Date:   Tue,  5 Apr 2022 09:30:31 +0200
+Message-Id: <20220405070439.269923427@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -58,63 +56,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-commit 05fe3c103f7e6b8b4fca8a7001dfc9ed4628085b upstream.
+commit eaa266d83a3730a15de2ceebcc89e8f6290e8cf6 upstream.
 
-__setup() handlers should return 1 if the command line option is handled
-and 0 if not (or maybe never return 0; it just pollutes init's
-environment).  This prevents:
+The btf.h header included with libbpf contains inline helper functions to
+check for various BTF kinds. These helpers directly reference the
+BTF_KIND_* constants defined in the kernel header, and because the header
+file is included in user applications, this happens in the user application
+compile units.
 
-  Unknown kernel command line parameters \
-  "BOOT_IMAGE=/boot/bzImage-517rc5 hardened_usercopy=off", will be \
-  passed to user space.
+This presents a problem if a user application is compiled on a system with
+older kernel headers because the constants are not available. To avoid
+this, add #defines of the constants directly in btf.h before using them.
 
-  Run /sbin/init as init process
-   with arguments:
-     /sbin/init
-   with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc5
-     hardened_usercopy=off
-or
-     hardened_usercopy=on
-but when "hardened_usercopy=foo" is used, there is no Unknown kernel
-command line parameter.
+Since the kernel header moved to an enum for BTF_KIND_*, the #defines can
+shadow the enum values without any errors, so we only need #ifndef guards
+for the constants that predates the conversion to enum. We group these so
+there's only one guard for groups of values that were added together.
 
-Return 1 to indicate that the boot option has been handled.
-Print a warning if strtobool() returns an error on the option string,
-but do not mark this as in unknown command line option and do not cause
-init's environment to be polluted with this string.
+  [0] Closes: https://github.com/libbpf/libbpf/issues/436
 
-Link: https://lkml.kernel.org/r/20220222034249.14795-1-rdunlap@infradead.org
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Fixes: b5cb15d9372ab ("usercopy: Allow boot cmdline disabling of hardening")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Acked-by: Chris von Recklinghausen <crecklin@redhat.com>
-Cc: Kees Cook <keescook@chromium.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: 223f903e9c83 ("bpf: Rename BTF_KIND_TAG to BTF_KIND_DECL_TAG")
+Fixes: 5b84bd10363e ("libbpf: Add support for BTF_KIND_TAG")
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Acked-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Link: https://lore.kernel.org/bpf/20220118141327.34231-1-toke@redhat.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/usercopy.c |    5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ tools/lib/bpf/btf.h |   22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
---- a/mm/usercopy.c
-+++ b/mm/usercopy.c
-@@ -295,7 +295,10 @@ static bool enable_checks __initdata = t
+--- a/tools/lib/bpf/btf.h
++++ b/tools/lib/bpf/btf.h
+@@ -375,8 +375,28 @@ btf_dump__dump_type_data(struct btf_dump
+ 			 const struct btf_dump_type_data_opts *opts);
  
- static int __init parse_hardened_usercopy(char *str)
+ /*
+- * A set of helpers for easier BTF types handling
++ * A set of helpers for easier BTF types handling.
++ *
++ * The inline functions below rely on constants from the kernel headers which
++ * may not be available for applications including this header file. To avoid
++ * compilation errors, we define all the constants here that were added after
++ * the initial introduction of the BTF_KIND* constants.
+  */
++#ifndef BTF_KIND_FUNC
++#define BTF_KIND_FUNC		12	/* Function	*/
++#define BTF_KIND_FUNC_PROTO	13	/* Function Proto	*/
++#endif
++#ifndef BTF_KIND_VAR
++#define BTF_KIND_VAR		14	/* Variable	*/
++#define BTF_KIND_DATASEC	15	/* Section	*/
++#endif
++#ifndef BTF_KIND_FLOAT
++#define BTF_KIND_FLOAT		16	/* Floating point	*/
++#endif
++/* The kernel header switched to enums, so these two were never #defined */
++#define BTF_KIND_DECL_TAG	17	/* Decl Tag */
++#define BTF_KIND_TYPE_TAG	18	/* Type Tag */
++
+ static inline __u16 btf_kind(const struct btf_type *t)
  {
--	return strtobool(str, &enable_checks);
-+	if (strtobool(str, &enable_checks))
-+		pr_warn("Invalid option string for hardened_usercopy: '%s'\n",
-+			str);
-+	return 1;
- }
- 
- __setup("hardened_usercopy=", parse_hardened_usercopy);
+ 	return BTF_INFO_KIND(t->info);
 
 

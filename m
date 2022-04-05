@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8014F2CDD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 065584F2E7C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235514AbiDEJaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
+        id S236581AbiDEJbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239503AbiDEIUI (ORCPT
+        with ESMTP id S239514AbiDEIUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:08 -0400
+        Tue, 5 Apr 2022 04:20:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281E6CF2;
-        Tue,  5 Apr 2022 01:14:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3CDE99;
+        Tue,  5 Apr 2022 01:14:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B87D4609D0;
-        Tue,  5 Apr 2022 08:14:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C036C385A0;
-        Tue,  5 Apr 2022 08:14:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AA7260AFB;
+        Tue,  5 Apr 2022 08:14:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B56BC385A0;
+        Tue,  5 Apr 2022 08:14:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146483;
-        bh=JCLM8YKiiHyma2HgpUKFb0VzrXsL8iLb6rFhuU6ooFw=;
+        s=korg; t=1649146496;
+        bh=pLIQlGkUzPkW36H+QN7RfbIl6w439D/LXITrrVw3+x8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bIyOMeCM3OR5PYfHyUoqmtjjLthbWkued8Kdc1wDYRiNPwRxMmuAbxaWc4ydpqz6Y
-         uY5frKN5He5HIKlsHo+DwAJxNlbH/lGNcDR+YFOSWNih1sr2THFEWscWNXuihJGiHL
-         HGRSNXm+f/VGU4YDKpYPDvBVs0tWR1pEzZ3ctsHg=
+        b=AaRuFHjGSATiSB8XvSJjQR88ChSzrRBQAX3/JGQAQMPr5+DcHzGPxWbm7Ctb6pvkr
+         6Ag7KLokAm+PyiM92rGuP3gdcnKihnmdDgSHFOW2OJWABbVrO80wTDSOx4pqw7dgug
+         qfF3n6n+cMAo9YhTM1wnW5P/E80QRZwKDrPZKikg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, He Zhe <zhe.he@windriver.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net,
+        stable@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
         Jason Wessel <jason.wessel@windriver.com>,
         Daniel Thompson <daniel.thompson@linaro.org>,
         Douglas Anderson <dianders@chromium.org>,
-        linux-serial@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
         Igor Zhbanov <i.zhbanov@omprussia.ru>,
         Randy Dunlap <rdunlap@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0780/1126] kgdboc: fix return value of __setup handler
-Date:   Tue,  5 Apr 2022 09:25:27 +0200
-Message-Id: <20220405070430.471480461@linuxfoundation.org>
+Subject: [PATCH 5.17 0784/1126] kgdbts: fix return value of __setup handler
+Date:   Tue,  5 Apr 2022 09:25:31 +0200
+Message-Id: <20220405070430.588165488@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -64,13 +62,12 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit ab818c7aa7544bf8d2dd4bdf68878b17a02eb332 ]
+[ Upstream commit 96c9e802c64014a7716865332d732cc9c7f24593 ]
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) environment strings.
-So return 1 from kgdboc_option_setup().
+__setup() handlers should return 1 to indicate that the boot option
+has been handled. A return of 0 causes the boot option/value to be
+listed as an Unknown kernel parameter and added to init's (limited)
+environment strings. So return 1 from kgdbts_option_setup().
 
 Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc7
   kgdboc=kbd kgdbts=", will be passed to user space.
@@ -86,50 +83,40 @@ Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc7
      kgdbts=
 
 Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Fixes: 1bd54d851f50 ("kgdboc: Passing ekgdboc to command line causes panic")
-Fixes: f2d937f3bf00 ("consoles: polling support, kgdboc")
-Cc: He Zhe <zhe.he@windriver.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>
+Fixes: e8d31c204e36 ("kgdb: add kgdb internal test suite")
 Cc: kgdb-bugreport@lists.sourceforge.net
 Cc: Jason Wessel <jason.wessel@windriver.com>
 Cc: Daniel Thompson <daniel.thompson@linaro.org>
 Cc: Douglas Anderson <dianders@chromium.org>
-Cc: linux-serial@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
 Reviewed-by: Douglas Anderson <dianders@chromium.org>
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/20220309033018.17936-1-rdunlap@infradead.org
+Link: https://lore.kernel.org/r/20220308033255.22118-1-rdunlap@infradead.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/kgdboc.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/misc/kgdbts.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
-index 49d0c7f2b29b..79b7db8580e0 100644
---- a/drivers/tty/serial/kgdboc.c
-+++ b/drivers/tty/serial/kgdboc.c
-@@ -403,16 +403,16 @@ static int kgdboc_option_setup(char *opt)
+diff --git a/drivers/misc/kgdbts.c b/drivers/misc/kgdbts.c
+index 67c5b452dd35..88b91ad8e541 100644
+--- a/drivers/misc/kgdbts.c
++++ b/drivers/misc/kgdbts.c
+@@ -1070,10 +1070,10 @@ static int kgdbts_option_setup(char *opt)
  {
- 	if (!opt) {
- 		pr_err("config string not provided\n");
--		return -EINVAL;
-+		return 1;
- 	}
- 
  	if (strlen(opt) >= MAX_CONFIG_LEN) {
- 		pr_err("config string too long\n");
+ 		printk(KERN_ERR "kgdbts: config string too long\n");
 -		return -ENOSPC;
 +		return 1;
  	}
  	strcpy(config, opt);
- 
 -	return 0;
 +	return 1;
  }
  
- __setup("kgdboc=", kgdboc_option_setup);
+ __setup("kgdbts=", kgdbts_option_setup);
 -- 
 2.34.1
 

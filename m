@@ -2,60 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEC7D4F5274
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30FF54F526D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1454335AbiDFCu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43388 "EHLO
+        id S1850320AbiDFCtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1586235AbiDFABM (ORCPT
+        with ESMTP id S1586354AbiDFABY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 20:01:12 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9FE9BAF0
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 15:26:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649197599; x=1680733599;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=pW27kf6wGZKRVMIeWfA0Y9QPC3INAacHxabCny2Kt0o=;
-  b=eJwqEy6qWfmLCdkMS6go7DH6+xDH59/YEYAh9mTd03oeLxF12VG6jS3T
-   PWYZnglzbGedJ7XpXrZQd4/OcRlTci7405mwzE/7pHhm9x4BLGIVY0QW4
-   TbgDA3x2bAGB1ALX1u0jA8d6RFLWRNLl78uL+xUPClD7mZLQZWU1v13NP
-   YY8d9cShg9H78gRAss7sqP4sCXhmYePiv5jVb9XHndiFMv+xviAD8qnJN
-   tICpM3nAlrFaecY+KblfKOArtuH0mZPRkIo9lf71JSaJerGUBvgXWD7tO
-   X4vPgCoO+pDhtbp/FwB2eGyLHlumkzLVOvVvm3h7MK0IDxVcTjGKthEz3
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="240812303"
-X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="240812303"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 15:26:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="570123375"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 05 Apr 2022 15:26:37 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbrdE-0003p3-QW;
-        Tue, 05 Apr 2022 22:26:36 +0000
-Date:   Wed, 06 Apr 2022 06:25:40 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:sched/core] BUILD SUCCESS
- 089c02ae2771a14af2928c59c56abfb9b885a8d7
-Message-ID: <624cc1e4.e2KxaWTIymi80O2A%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 5 Apr 2022 20:01:24 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78610AD119
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 15:27:40 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id h19so783235pfv.1
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 15:27:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/F9FcwctkCW+3E2y6H+mYNn9o98TaWKZ4egRhw2n8U4=;
+        b=CJBcRD2/eIRg2nJUKgCWXkp/3dt4Jks9/MQLAjuBfjmshUl+09vz9rWZTtwOURZaTY
+         TD8tFA4l6SCkHkvYEiWTZMaC3YUS68yWhWMjKvJdgmrjq7mkDrSxmeMePZUQAtb+bQ2l
+         cst0pG/3Mx9DEERt9Ia+Ey5cRCjFUZQeNMTU3aVOvHkKJcCODwPuQEqHliscG7BJDJsT
+         OXkJunvXAzqhk5OMmOU2IDLahBZgQt82hMiwgMjegFBB2LNtfG05qEr+egbGYMZS6VR1
+         +meQgCSGnIWCTCzqpLqbUTuAyD8J/DNCQV+/JRcnNh/wMSzdN6cB+JAs/XEHH8pB1fxr
+         LZ5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/F9FcwctkCW+3E2y6H+mYNn9o98TaWKZ4egRhw2n8U4=;
+        b=EMaSUbkxz0+a9RLa9C4ypHZt9c7RYAeGuKt1lDwO4Zkz+YZD72cAyn/aJvTloFmjes
+         i6X08pHkb3t61mXOlZ04Hwz1UWCnfGQ1DRilGTCkfRv9gxfXyoU6WA/SCpA4E6NfDT0b
+         k/vlNwitc52apPS8fh/jtcUXhUyuuAzISto+WnXPkxpWlefza+yqVPdKW4GEnksWNYn3
+         EFkR3g44a4sUVtSFYkswFRBOa5+OG1QOoGSkGWZweehVY2CUmZkuN3rDznUaBT4HK1KP
+         d4mg8exHTfY0ElDXipMkXl7rH6Wd2XZRQA7v/orwGa5N/3p1Z2TX3yhFRG6t0X7rkNsr
+         nOeg==
+X-Gm-Message-State: AOAM533Qmve+1jdfKfUg35dMXdxQF6MutSMzZQJkuG246ZHHZYa5qiuj
+        eo3lEt0dDTdi1t9wAFW1joXAuQ==
+X-Google-Smtp-Source: ABdhPJxs9PH/uSAK+InP3KJdR6deavJYk0JCPXue0V3tWnYHg1tWuqMoOVV8w1miTG2AF29WKVFerg==
+X-Received: by 2002:a05:6a02:204:b0:399:1c4:3f45 with SMTP id bh4-20020a056a02020400b0039901c43f45mr4525831pgb.246.1649197659736;
+        Tue, 05 Apr 2022 15:27:39 -0700 (PDT)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id f16-20020a056a00229000b004fabe756ba6sm18332940pfe.54.2022.04.05.15.27.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 15:27:38 -0700 (PDT)
+Date:   Tue, 5 Apr 2022 22:27:35 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH v3 04/11] KVM: selftests: Add memslot parameter to
+ elf_load
+Message-ID: <YkzCV00n9KyZf5gs@google.com>
+References: <20220330174621.1567317-1-bgardon@google.com>
+ <20220330174621.1567317-5-bgardon@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Disposition: inline
+In-Reply-To: <20220330174621.1567317-5-bgardon@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,113 +79,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
-branch HEAD: 089c02ae2771a14af2928c59c56abfb9b885a8d7  ftrace: Use preemption model accessors for trace header printout
+On Wed, Mar 30, 2022 at 10:46:14AM -0700, Ben Gardon wrote:
+> Currently elf_load loads code into memslot 0. Add a parameter to allow
+> loading code into any memslot. This will be useful for backing code
+> pages with huge pages in future commits.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> ---
+>  .../testing/selftests/kvm/include/kvm_util_base.h  |  5 +++++
+>  tools/testing/selftests/kvm/lib/elf.c              | 13 +++++++++++--
+>  tools/testing/selftests/kvm/lib/kvm_util.c         | 14 ++++++++++----
+>  3 files changed, 26 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> index 78c4407f36b4..72163ba2f878 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> @@ -122,7 +122,10 @@ uint32_t kvm_vm_reset_dirty_ring(struct kvm_vm *vm);
+>  int kvm_memcmp_hva_gva(void *hva, struct kvm_vm *vm, const vm_vaddr_t gva,
+>  		       size_t len);
+>  
+> +void kvm_vm_elf_load_memslot(struct kvm_vm *vm, const char *filename,
+> +			     uint32_t memslot);
+>  void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename);
+> +
+>  int kvm_memfd_alloc(size_t size, bool hugepages);
+>  
+>  void vm_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent);
+> @@ -169,6 +172,8 @@ void vm_mem_region_set_flags(struct kvm_vm *vm, uint32_t slot, uint32_t flags);
+>  void vm_mem_region_move(struct kvm_vm *vm, uint32_t slot, uint64_t new_gpa);
+>  void vm_mem_region_delete(struct kvm_vm *vm, uint32_t slot);
+>  void vm_vcpu_add(struct kvm_vm *vm, uint32_t vcpuid);
+> +vm_vaddr_t vm_vaddr_alloc_memslot(struct kvm_vm *vm, size_t sz,
+> +				  vm_vaddr_t vaddr_min, uint32_t memslot);
+>  vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min);
+>  vm_vaddr_t vm_vaddr_alloc_pages(struct kvm_vm *vm, int nr_pages);
+>  vm_vaddr_t vm_vaddr_alloc_page(struct kvm_vm *vm);
+> diff --git a/tools/testing/selftests/kvm/lib/elf.c b/tools/testing/selftests/kvm/lib/elf.c
+> index 13e8e3dcf984..899418e65f60 100644
+> --- a/tools/testing/selftests/kvm/lib/elf.c
+> +++ b/tools/testing/selftests/kvm/lib/elf.c
+> @@ -97,6 +97,7 @@ static void elfhdr_get(const char *filename, Elf64_Ehdr *hdrp)
+>   *
+>   * Input Args:
+>   *   filename - Path to ELF file
+> + *   memslot - the memslot into which the elf should be loaded
+>   *
+>   * Output Args: None
+>   *
+> @@ -111,7 +112,8 @@ static void elfhdr_get(const char *filename, Elf64_Ehdr *hdrp)
+>   * by the image and it needs to have sufficient available physical pages, to
+>   * back the virtual pages used to load the image.
+>   */
+> -void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename)
+> +void kvm_vm_elf_load_memslot(struct kvm_vm *vm, const char *filename,
+> +			     uint32_t memslot)
 
-elapsed time: 760m
+Feedback I've gotten in the past for kernel code and selftests is to
+just use double-underscores (i.e. __kvm_vm_elf_load()) for situations
+like this, rather than trying to encode the extra parameters in the
+function name.
 
-configs tested: 90
-configs skipped: 3
+>  {
+>  	off_t offset, offset_rv;
+>  	Elf64_Ehdr hdr;
+> @@ -162,7 +164,9 @@ void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename)
+>  		seg_vend |= vm->page_size - 1;
+>  		size_t seg_size = seg_vend - seg_vstart + 1;
+>  
+> -		vm_vaddr_t vaddr = vm_vaddr_alloc(vm, seg_size, seg_vstart);
+> +		vm_vaddr_t vaddr = vm_vaddr_alloc_memslot(vm, seg_size,
+> +							  seg_vstart,
+> +							  memslot);
+>  		TEST_ASSERT(vaddr == seg_vstart, "Unable to allocate "
+>  			"virtual memory for segment at requested min addr,\n"
+>  			"  segment idx: %u\n"
+> @@ -191,3 +195,8 @@ void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename)
+>  		}
+>  	}
+>  }
+> +
+> +void kvm_vm_elf_load(struct kvm_vm *vm, const char *filename)
+> +{
+> +	kvm_vm_elf_load_memslot(vm, filename, 0);
+> +}
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 9c4574381daa..09742a787546 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -1336,8 +1336,7 @@ static vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz,
+>   *   vm - Virtual Machine
+>   *   sz - Size in bytes
+>   *   vaddr_min - Minimum starting virtual address
+> - *   data_memslot - Memory region slot for data pages
+> - *   pgd_memslot - Memory region slot for new virtual translation tables
+> + *   memslot - Memory region slot for data pages
+>   *
+>   * Output Args: None
+>   *
+> @@ -1350,13 +1349,15 @@ static vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz,
+>   * a unique set of pages, with the minimum real allocation being at least
+>   * a page.
+>   */
+> -vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min)
+> +vm_vaddr_t vm_vaddr_alloc_memslot(struct kvm_vm *vm, size_t sz,
+> +				  vm_vaddr_t vaddr_min, uint32_t memslot)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Same feedback here; use __vm_vaddr_alloc().
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-arm                         lpc18xx_defconfig
-mips                         db1xxx_defconfig
-sh                           se7343_defconfig
-sh                         ap325rxa_defconfig
-arm                        shmobile_defconfig
-m68k                        mvme16x_defconfig
-riscv                            allmodconfig
-mips                  maltasmvp_eva_defconfig
-sh                             sh03_defconfig
-powerpc                         wii_defconfig
-arm                             ezx_defconfig
-sh                        edosk7760_defconfig
-powerpc                     stx_gp3_defconfig
-m68k                        mvme147_defconfig
-ia64                             allyesconfig
-mips                         cobalt_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220405
-ia64                             allmodconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
-
-clang tested configs:
-x86_64                        randconfig-c007
-i386                          randconfig-c001
-powerpc              randconfig-c003-20220405
-riscv                randconfig-c006-20220405
-mips                 randconfig-c004-20220405
-arm                  randconfig-c002-20220405
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-hexagon              randconfig-r045-20220405
-riscv                randconfig-r042-20220405
-hexagon              randconfig-r041-20220405
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>  {
+>  	uint64_t pages = (sz >> vm->page_shift) + ((sz % vm->page_size) != 0);
+>  
+>  	virt_pgd_alloc(vm);
+>  	vm_paddr_t paddr = vm_phy_pages_alloc(vm, pages,
+> -					      KVM_UTIL_MIN_PFN * vm->page_size, 0);
+> +					      KVM_UTIL_MIN_PFN * vm->page_size,
+> +					      memslot);
+>  
+>  	/*
+>  	 * Find an unused range of virtual page addresses of at least
+> @@ -1377,6 +1378,11 @@ vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min)
+>  	return vaddr_start;
+>  }
+>  
+> +vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vaddr_min)
+> +{
+> +	return vm_vaddr_alloc_memslot(vm, sz, vaddr_min, 0);
+> +}
+> +
+>  /*
+>   * VM Virtual Address Allocate Pages
+>   *
+> -- 
+> 2.35.1.1021.g381101b075-goog
+> 

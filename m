@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F00944F2F95
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CAC04F34B2
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235146AbiDEI0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:26:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43840 "EHLO
+        id S234473AbiDEIZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235348AbiDEH7j (ORCPT
+        with ESMTP id S235357AbiDEH7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:59:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88BE57491;
-        Tue,  5 Apr 2022 00:54:05 -0700 (PDT)
+        Tue, 5 Apr 2022 03:59:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D5F57B3B;
+        Tue,  5 Apr 2022 00:54:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29DA661722;
-        Tue,  5 Apr 2022 07:54:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AAD6C34111;
-        Tue,  5 Apr 2022 07:54:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0876FB81B9C;
+        Tue,  5 Apr 2022 07:54:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A7CAC340EE;
+        Tue,  5 Apr 2022 07:54:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145244;
-        bh=k5R7zHG+JGBCo1Mf88SDA+mrmcIevYFylf9t74xM0Ec=;
+        s=korg; t=1649145252;
+        bh=YS6YXJtkkJlRPJMsD2DAR/8ig+TUFhHwPdrDujFulyU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nZO8xeHEaicYWYJmIBOwPYzrkx2rMoY7YUcEyskS8tpmfxiupjMp2cYuLNMGO0Rb1
-         21SFfRNDUeY21qCUk4MQcYV9sgw++UHuqxPhIPizwALqeZD8/ouCa2CjaGSsPpEATJ
-         n9RtlXuYnl8nwZxIaLMFr4k+PTqWb2cWJEo7APMs=
+        b=ALrm2gLlo5JtXr9PjasXgO2FIpBCgndVgiHXqC/RkmcrKxY2Vu6b5Ly/xpMx+zjXM
+         26qdmhD73mKchmabwRHm0bDQrQG48svEv88umNoAr3P+WdD6IGfUJUQEckQXghjpEy
+         SVPI9u9y7/k8HF2iXBSZFzuZ3jWSFtT/bgNBVC1k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, devicetree@vger.kernel.org,
-        Maulik Shah <quic_mkshah@quicinc.com>,
+        stable@vger.kernel.org, Petr Vorel <petr.vorel@gmail.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0336/1126] arm64: dts: qcom: sm8350: Correct TCS configuration for apps rsc
-Date:   Tue,  5 Apr 2022 09:18:03 +0200
-Message-Id: <20220405070417.478351415@linuxfoundation.org>
+Subject: [PATCH 5.17 0338/1126] arm64: dts: qcom: msm8994: Provide missing "xo_board" and "sleep_clk" to GCC
+Date:   Tue,  5 Apr 2022 09:18:05 +0200
+Message-Id: <20220405070417.536640808@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,35 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maulik Shah <quic_mkshah@quicinc.com>
+From: Petr Vorel <petr.vorel@gmail.com>
 
-[ Upstream commit a131255e4ad1ef8d4873ecba21561ba272b2547a ]
+[ Upstream commit 4dd1ad6192748523878463a285346db408b34a02 ]
 
-Correct the TCS config by updating the number of TCSes for each type.
+This is needed due changes in commit 0519d1d0bf33 ("clk: qcom:
+gcc-msm8994: Modernize the driver"), which removed struct
+clk_fixed_factor. Preparation for next commit for enabling SD/eMMC.
+Inspired by 2c2f64ae36d9.
 
-Cc: devicetree@vger.kernel.org
-Fixes: b7e8f433a673 ("arm64: dts: qcom: Add basic devicetree support for SM8350 SoC")
-Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
+This is required for both msm8994-huawei-angler (sdhc1 will be enabled
+in next commit) and msm8992-lg-bullhead (where actually fixes sdhc1
+- tested on bullhead rev 1.01).
+
+Fixes: 0519d1d0bf33 ("clk: qcom: gcc-msm8994: Modernize the driver")
+
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/1641749107-31979-4-git-send-email-quic_mkshah@quicinc.com
+Link: https://lore.kernel.org/r/20220113233358.17972-4-petr.vorel@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/sm8350.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/msm8994.dtsi | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index 4b19744bcfb3..765d018e6306 100644
---- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -1820,7 +1820,7 @@
- 			qcom,tcs-offset = <0xd00>;
- 			qcom,drv-id = <2>;
- 			qcom,tcs-config = <ACTIVE_TCS  2>, <SLEEP_TCS   3>,
--					  <WAKE_TCS    3>, <CONTROL_TCS 1>;
-+					  <WAKE_TCS    3>, <CONTROL_TCS 0>;
+diff --git a/arch/arm64/boot/dts/qcom/msm8994.dtsi b/arch/arm64/boot/dts/qcom/msm8994.dtsi
+index 5a9a5ed0565f..215f56daa26c 100644
+--- a/arch/arm64/boot/dts/qcom/msm8994.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8994.dtsi
+@@ -713,6 +713,9 @@
+ 			#reset-cells = <1>;
+ 			#power-domain-cells = <1>;
+ 			reg = <0xfc400000 0x2000>;
++
++			clock-names = "xo", "sleep_clk";
++			clocks = <&xo_board>, <&sleep_clk>;
+ 		};
  
- 			rpmhcc: clock-controller {
- 				compatible = "qcom,sm8350-rpmh-clk";
+ 		rpm_msg_ram: sram@fc428000 {
 -- 
 2.34.1
 

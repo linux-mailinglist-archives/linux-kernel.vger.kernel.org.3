@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECA74F4C84
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFFD54F4CCB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1578637AbiDEXYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47430 "EHLO
+        id S1579885AbiDEXdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349505AbiDEJt6 (ORCPT
+        with ESMTP id S1356844AbiDEKY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F201C9;
-        Tue,  5 Apr 2022 02:47:58 -0700 (PDT)
+        Tue, 5 Apr 2022 06:24:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B910C12DE;
+        Tue,  5 Apr 2022 03:09:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9FFABB81B76;
-        Tue,  5 Apr 2022 09:47:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE3A6C385A2;
-        Tue,  5 Apr 2022 09:47:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 028EF6167E;
+        Tue,  5 Apr 2022 10:09:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E40BC385A6;
+        Tue,  5 Apr 2022 10:09:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152076;
-        bh=oAyDcBuvjmsJalWEXosrvxoNCoCAuiWwe1NdEN4k2bk=;
+        s=korg; t=1649153347;
+        bh=GOCjvPSffRKuugb0uITMfSMEobaooJl1sG41hMr87RY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bkVZdfOvdnBR3Vm4YqGwMNzdpudBFSUioPXPWheIWZs1R8UHosysHsqBtvquZJKHF
-         XIE/HO0C+cL5OrhoDxxiwKt4rHSYlUaTmXJsXECW589/XhNgPV4hxS/ya5wq2fKfCC
-         ABZQ10OPAXSW5lhDqNJNO265SAzNNCzWP/qBYr24=
+        b=ExUDls5Xs2tZlpxU3m8yzNhDhDU5WmFPz3/jJSR7BPz5QQ2HaObEHBiu2wnaW+X/E
+         Gsd5ULEv+D4DpUc9WbHZiP3b1JEAzVqLc/07nLHM1PGr0LlCrw/0D8j19fZpvBwAPI
+         AzE5OAiNOl6HRUcAGezOsJN01GvgAuNkvw0TEK4w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 619/913] clk: actions: Terminate clk_div_table with sentinel element
-Date:   Tue,  5 Apr 2022 09:28:01 +0200
-Message-Id: <20220405070358.395006809@linuxfoundation.org>
+Subject: [PATCH 5.10 189/599] media: mtk-vcodec: potential dereference of null pointer
+Date:   Tue,  5 Apr 2022 09:28:03 +0200
+Message-Id: <20220405070304.466413862@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,53 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit d8a441e53e2434b1401e52dfd66b05263e442edc ]
+[ Upstream commit e25a89f743b18c029bfbe5e1663ae0c7190912b0 ]
 
-In order that the end of a clk_div_table can be detected, it must be
-terminated with a sentinel element (.div = 0).
+The return value of devm_kzalloc() needs to be checked.
+To avoid use of null pointer in case of thefailure of alloc.
 
-In owl-s900.s, the { 0, 8 } element was probably meant to be just that,
-so this patch changes { 0, 8 } to { 0, 0 }.
-
-Fixes: d47317ca4ade1 ("clk: actions: Add S700 SoC clock support")
-Fixes: d85d20053e195 ("clk: actions: Add S900 SoC clock support")
-Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-Link: https://lore.kernel.org/r/20220218000922.134857-2-j.neuschaefer@gmx.net
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Fixes: 46233e91fa24 ("media: mtk-vcodec: move firmware implementations into their own files")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/actions/owl-s700.c | 1 +
- drivers/clk/actions/owl-s900.c | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/clk/actions/owl-s700.c b/drivers/clk/actions/owl-s700.c
-index a2f34d13fb54..6ea7da1d6d75 100644
---- a/drivers/clk/actions/owl-s700.c
-+++ b/drivers/clk/actions/owl-s700.c
-@@ -162,6 +162,7 @@ static struct clk_div_table hdmia_div_table[] = {
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
+index cd27f637dbe7..cfc7ebed8fb7 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_fw_vpu.c
+@@ -102,6 +102,8 @@ struct mtk_vcodec_fw *mtk_vcodec_fw_vpu_init(struct mtk_vcodec_dev *dev,
+ 	vpu_wdt_reg_handler(fw_pdev, mtk_vcodec_vpu_reset_handler, dev, rst_id);
  
- static struct clk_div_table rmii_div_table[] = {
- 	{0, 4},   {1, 10},
-+	{0, 0}
- };
- 
- /* divider clocks */
-diff --git a/drivers/clk/actions/owl-s900.c b/drivers/clk/actions/owl-s900.c
-index 790890978424..5144ada2c7e1 100644
---- a/drivers/clk/actions/owl-s900.c
-+++ b/drivers/clk/actions/owl-s900.c
-@@ -140,7 +140,7 @@ static struct clk_div_table rmii_ref_div_table[] = {
- 
- static struct clk_div_table usb3_mac_div_table[] = {
- 	{ 1, 2 }, { 2, 3 }, { 3, 4 },
--	{ 0, 8 },
-+	{ 0, 0 }
- };
- 
- static struct clk_div_table i2s_div_table[] = {
+ 	fw = devm_kzalloc(&dev->plat_dev->dev, sizeof(*fw), GFP_KERNEL);
++	if (!fw)
++		return ERR_PTR(-ENOMEM);
+ 	fw->type = VPU;
+ 	fw->ops = &mtk_vcodec_vpu_msg;
+ 	fw->pdev = fw_pdev;
 -- 
 2.34.1
 

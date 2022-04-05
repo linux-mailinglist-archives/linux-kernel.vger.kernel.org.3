@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3450D4F46B9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4144F4678
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382519AbiDEUl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43208 "EHLO
+        id S241899AbiDEUcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:32:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349480AbiDEJtz (ORCPT
+        with ESMTP id S1349485AbiDEJtz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:49:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5CF10DD;
-        Tue,  5 Apr 2022 02:47:15 -0700 (PDT)
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8A421BF;
+        Tue,  5 Apr 2022 02:47:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EFDD1B817D3;
-        Tue,  5 Apr 2022 09:47:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56BFCC385A3;
-        Tue,  5 Apr 2022 09:47:12 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8EE24CE1BE5;
+        Tue,  5 Apr 2022 09:47:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A91DBC385A2;
+        Tue,  5 Apr 2022 09:47:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152032;
-        bh=HF9ZRoT/tkCsXNkCLwa2Fgwjnyr+EaDHb18MxA69YD0=;
+        s=korg; t=1649152038;
+        bh=LtbL+NctI2lPnOdJskINY7IUF608Dvnr7ibw88k9yPA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fNcD36po7XV59sL4ouWXcuYqAB/kF880aeuQN/qwvmN+hq6jHqPJ/g/xHxU2OQ75m
-         wrIPL0LhfWlwrwD1QeyKKs8MaCavCBok1vCqFwP7FYilfG6TrPZlfHvWlsaHe7NWgQ
-         /qvciperm8B2X3Y5RMC5oJd4+Ag4NH74GHI4F+mk=
+        b=1v6LPeZdOQn0Dzoam0+G6Nk0t3slNnP3tRybiWyHwFEFOzs2t+q40Ug8wi8mR40xM
+         UgS+BCpMcT/x67hsbFnI7/5a9qldaLLlykxjLnpePorUnjLcF/l/BcO/fVcefxLHLh
+         luOHDXzas2YKYWnhi1E83ispN8NhDJBz/7wd/I6I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        stable@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 631/913] pinctrl: mediatek: Fix missing of_node_put() in mtk_pctrl_init
-Date:   Tue,  5 Apr 2022 09:28:13 +0200
-Message-Id: <20220405070358.753498053@linuxfoundation.org>
+Subject: [PATCH 5.15 633/913] pinctrl: mediatek: paris: Fix "argument" argument type for mtk_pinconf_get()
+Date:   Tue,  5 Apr 2022 09:28:15 +0200
+Message-Id: <20220405070358.814319010@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -57,43 +57,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Chen-Yu Tsai <wenst@chromium.org>
 
-[ Upstream commit dab4df9ca919f59e5b9dd84385eaf34d4f20dbb0 ]
+[ Upstream commit 19bce7ce0a593c7024030a0cda9e23facea3c93d ]
 
-The device_node pointer is returned by of_parse_phandle()  with refcount
-incremented. We should use of_node_put() on it when done.
+For mtk_pinconf_get(), the "argument" argument is typically returned by
+pinconf_to_config_argument(), which holds the value for a given pinconf
+parameter. It certainly should not have the type of "enum pin_config_param",
+which describes the type of the pinconf parameter itself.
 
-Fixes: a6df410d420a ("pinctrl: mediatek: Add Pinctrl/GPIO driver for mt8135.")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Change the type to u32, which matches the return type of
+pinconf_to_config_argument().
+
+Fixes: 805250982bb5 ("pinctrl: mediatek: add pinctrl-paris that implements the vendor dt-bindings")
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Link: https://lore.kernel.org/r/20220308071155.21114-1-linmq006@gmail.com
+Link: https://lore.kernel.org/r/20220308100956.2750295-4-wenst@chromium.org
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/mediatek/pinctrl-mtk-common.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/pinctrl/mediatek/pinctrl-paris.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-index 5f7c421ab6e7..334cb85855a9 100644
---- a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-+++ b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-@@ -1038,6 +1038,7 @@ int mtk_pctrl_init(struct platform_device *pdev,
- 	node = of_parse_phandle(np, "mediatek,pctl-regmap", 0);
- 	if (node) {
- 		pctl->regmap1 = syscon_node_to_regmap(node);
-+		of_node_put(node);
- 		if (IS_ERR(pctl->regmap1))
- 			return PTR_ERR(pctl->regmap1);
- 	} else if (regmap) {
-@@ -1051,6 +1052,7 @@ int mtk_pctrl_init(struct platform_device *pdev,
- 	node = of_parse_phandle(np, "mediatek,pctl-regmap", 1);
- 	if (node) {
- 		pctl->regmap2 = syscon_node_to_regmap(node);
-+		of_node_put(node);
- 		if (IS_ERR(pctl->regmap2))
- 			return PTR_ERR(pctl->regmap2);
- 	}
+diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c b/drivers/pinctrl/mediatek/pinctrl-paris.c
+index 5bdf8b7acd23..bcf359256ed4 100644
+--- a/drivers/pinctrl/mediatek/pinctrl-paris.c
++++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
+@@ -184,8 +184,7 @@ static int mtk_pinconf_get(struct pinctrl_dev *pctldev,
+ }
+ 
+ static int mtk_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
+-			   enum pin_config_param param,
+-			   enum pin_config_param arg)
++			   enum pin_config_param param, u32 arg)
+ {
+ 	struct mtk_pinctrl *hw = pinctrl_dev_get_drvdata(pctldev);
+ 	const struct mtk_pin_desc *desc;
 -- 
 2.34.1
 

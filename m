@@ -2,172 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A94D84F5286
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A1AA4F528F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234165AbiDFCyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40630 "EHLO
+        id S1573713AbiDFCzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1839754AbiDFBFh (ORCPT
+        with ESMTP id S1839974AbiDFBGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 21:05:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18EF122C8D9
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 16:03:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649199756;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tJmB3NyGHJPctZ5Tp6VQA6j7TxUED1zTYueXlEtvASc=;
-        b=Pr+WOuJpeivT/mrGIod9jIPKj950xIQds6vH7Q7Kgd0EXV834PoE4nJHKJ0Bbi3F9zWgMW
-        2Hr9elWZ4yIJr/s7aTsGE6DZ9R4sM3oPz8uWQ+OLHuhqMAu+xq8ZuIcXyXhdcJ3NM1OBOe
-        ZEdVgcVqkVRJArdf6ucTfiaNgs2E5pE=
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
- [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-613-9s39xV1AP6GmXI42-iS1pw-1; Tue, 05 Apr 2022 19:02:35 -0400
-X-MC-Unique: 9s39xV1AP6GmXI42-iS1pw-1
-Received: by mail-il1-f198.google.com with SMTP id y19-20020a056e02119300b002c2d3ef05bfso557162ili.18
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 16:02:35 -0700 (PDT)
+        Tue, 5 Apr 2022 21:06:38 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7516B22BD77
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 16:03:28 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id z7so1039213iom.1
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 16:03:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=N0y9mPPrZg6yPHcKPUn9Zg8uBX7ANAqy/SfmEM9BLO8=;
+        b=ZS8LSatlk0Ep53N5/oKPpeXUMUkZOptah6fkZ3QeP5kc83dLgfWUw7ISjE4UjuV/sa
+         lov+jlt+y42x47tmHSGjdccwZFT6M+D2uI48DK4JblhLBk8/wKA2FEQhrc+rg2rR4jy9
+         sZ5O8TiTOdeyx0D1ObhsU2sZhfS6W6LvLhZAs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tJmB3NyGHJPctZ5Tp6VQA6j7TxUED1zTYueXlEtvASc=;
-        b=0vfAqBw0czs+SRIZW7WINjBNDn8VemTeaZHyF+uM3ImC6L4uaEGJ7y3z/6AT6h8oWg
-         9do/o6lSAIXG1+5B+8ajiqFS0d+FuZHB7WO7noHYRhv7BMmNyyLPKqhBdPgmJlEJKGOS
-         iSseX80oYFESmlAnJLlYWrZ4rb2jihJOQOaN+YlqQvL8h1URjULO07F7cBhb6JIUqvEe
-         QUxDrZX+eBQP8slr/W45c1Hk8r/c99/DiKiF7vftO3W96oH27tNSTmM7EFahCxNAVUHH
-         pz441Gdr7tGjSazfVDAZZlmXIlAFD412wSsGmvzGGbiX7tETi/XMueaKe5NTe0k6AgKS
-         BO9g==
-X-Gm-Message-State: AOAM531+ZuEUaC1HCRCoEeTzULRR8gW5ODKhoQ0xNuoipzpN6nQYWeck
-        +8JiMtcqOoMjI5Ur998+ExXoVjV8X3wGx6cQTF4BadAFTDYEMHU2myV9y8VD6xL30/Z9/prT+le
-        5zMLyzTV4MuG9BsMlGMnjVVnD
-X-Received: by 2002:a02:cb4a:0:b0:323:5e9a:255c with SMTP id k10-20020a02cb4a000000b003235e9a255cmr3038732jap.12.1649199754967;
-        Tue, 05 Apr 2022 16:02:34 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy+9hSCp/2bZlP91Ebv6INEUuSFgp3H+pRfrTy0zNtLnQiDSpakgEIaIy1Up1k16a9mCzdMNw==
-X-Received: by 2002:a02:cb4a:0:b0:323:5e9a:255c with SMTP id k10-20020a02cb4a000000b003235e9a255cmr3038706jap.12.1649199754675;
-        Tue, 05 Apr 2022 16:02:34 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id r9-20020a6b6009000000b006412abddbbbsm9285044iog.24.2022.04.05.16.02.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 16:02:34 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 19:02:32 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Hugh Dickins <hughd@google.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>
-Subject: Re: [PATCH v8 00/23] userfaultfd-wp: Support shmem and hugetlbfs
-Message-ID: <YkzKiM8tI4+qOfXF@xz-m1.local>
-References: <20220405014646.13522-1-peterx@redhat.com>
- <20220405151616.bf25fa4aad55536cd031e1ab@linux-foundation.org>
- <YkzF4/e86qwcuXiA@xz-m1.local>
- <20220405154912.4cda03c2cc5d801d25d5c2dd@linux-foundation.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=N0y9mPPrZg6yPHcKPUn9Zg8uBX7ANAqy/SfmEM9BLO8=;
+        b=1NpiMfatB18vBNm93VTBBnjAq18ffKr8q2ju5066VzUmuT4KlIGMQpVem6Eq30VWqK
+         20vPp3Qns4qK6DcGiryhrerBjRzDjHRmOdtIgflpRFMdhJkFqjn6K+mqY9+AAnWqFNHN
+         9Fu91RGBkXqQTX8ilOR7tW/bafPbbjieVP0UUseyKO4exrvWeWtUE7GoYxZn38y+mNAx
+         XH0U48HJCncWDK4R+SvOaq3SnkXjWo6PRpDzL5prGvqm/T00pMp5UPINx90ZY16np8M9
+         Xxvza+OirbkRsD3rdp/u1OSx9/3pL4EMci+B0XIYxq0KnXy2ID6B1To8YT9A4Ad3d92/
+         xM3w==
+X-Gm-Message-State: AOAM531EnlpJPhurg0K8tnL0OL5umwMfAouhwEApD7RafWC5iNPaUVTi
+        nAb4OO2hnVz+Cn/vAhasqdINDNTm2o4Xcg==
+X-Google-Smtp-Source: ABdhPJxe4MvqQAfJPT5x3ciMDW8nLtoufRWxOssNG42EjM+bAA6b1OAj52zwhWlrGR1nibIbj2L8mA==
+X-Received: by 2002:a05:6602:2e10:b0:649:e2d4:3334 with SMTP id o16-20020a0566022e1000b00649e2d43334mr2729846iow.210.1649199806459;
+        Tue, 05 Apr 2022 16:03:26 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id d14-20020a056602328e00b006494aa126c2sm9085976ioz.11.2022.04.05.16.03.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 16:03:26 -0700 (PDT)
+Subject: Re: [PATCH 5.16 0000/1017] 5.16.19-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <9882445d-ef29-689a-33de-ce66dfc79d31@linuxfoundation.org>
+Date:   Tue, 5 Apr 2022 17:03:24 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="3ob9n8+f6vq4lAWQ"
-Content-Disposition: inline
-In-Reply-To: <20220405154912.4cda03c2cc5d801d25d5c2dd@linux-foundation.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---3ob9n8+f6vq4lAWQ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-
-On Tue, Apr 05, 2022 at 03:49:12PM -0700, Andrew Morton wrote:
-> On Tue, 5 Apr 2022 18:42:43 -0400 Peter Xu <peterx@redhat.com> wrote:
+On 4/5/22 1:15 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.16.19 release.
+> There are 1017 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> > On Tue, Apr 05, 2022 at 03:16:16PM -0700, Andrew Morton wrote:
-> > > On Mon,  4 Apr 2022 21:46:23 -0400 Peter Xu <peterx@redhat.com> wrote:
-> > > 
-> > > > This is v8 of the series to add shmem+hugetlbfs support for userfaultfd
-> > > > write protection. 
-> > > 
-> > > Various compilation catastrophes with x86_64 allnoconfig.  I poked at
-> > > the include ordering for a while but other things quickly became more
-> > > attractive ;)
-> > 
-> > Sorry about that.  I still don't know what's the problem, but I'll give it
-> > a shot soon.
-> > 
-> > I think I only tried out with the new configs but not all the rest configs.
-> > I thought there're some bot looking after that one, from which I used to
-> > receive build reports. And IIRC I fixed some build issues in early versions
-> > from those reports.  Maybe I was wrong..
-> > 
-> > Any more hints on the latter?
+> Responses should be made by Thu, 07 Apr 2022 07:01:33 +0000.
+> Anything received after that time might be too late.
 > 
-> `make allnoconfig'?
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.16.19-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.16.y
+> and the diffstat can be found below.
 > 
+> thanks,
+> 
+> greg k-h
+> 
+  
+Build failed on my system. The following is the problem commit. There
+are no changes to the config between 5.16.18 and this build.
 
-Ah!  I thought when you mentioned "other things" you meant there're other
-more severe issues... :)
+Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+     ASoC: SOF: Intel: hda: Remove link assignment limitation
 
-For the allnoconfig, could you try with the attached quick fixup (upon
-patch "mm/uffd: PTE_MARKER_UFFD_WP")?
+   CC [M]  sound/soc/sof/intel/hda-dai.o
+sound/soc/sof/intel/hda-dai.c: In function ‘hda_link_stream_assign’:
+sound/soc/sof/intel/hda-dai.c:86:24: error: implicit declaration of function ‘get_chip_info’; did you mean ‘get_group_info’? [-Werror=implicit-function-declaration]
+    86 |                 chip = get_chip_info(sdev->pdata);
+       |                        ^~~~~~~~~~~~~
+       |                        get_group_info
+sound/soc/sof/intel/hda-dai.c:86:22: error: assignment to ‘const struct sof_intel_dsp_desc *’ from ‘int’ makes pointer from integer without a cast [-Werror=int-conversion]
+    86 |                 chip = get_chip_info(sdev->pdata);
+       |                      ^
+sound/soc/sof/intel/hda-dai.c:94:35: error: ‘const struct sof_intel_dsp_desc’ has no member named ‘quirks’
+    94 |                         if (!(chip->quirks & SOF_INTEL_PROCEN_FMT_QUIRK)) {
+       |                                   ^~
+sound/soc/sof/intel/hda-dai.c:94:46: error: ‘SOF_INTEL_PROCEN_FMT_QUIRK’ undeclared (first use in this function)
+    94 |                         if (!(chip->quirks & SOF_INTEL_PROCEN_FMT_QUIRK)) {
+       |                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~
+sound/soc/sof/intel/hda-dai.c:94:46: note: each undeclared identifier is reported only once for each function it appears in
+cc1: all warnings being treated as errors
+make[4]: *** [scripts/Makefile.build:287: sound/soc/sof/intel/hda-dai.o] Error 1
+make[3]: *** [scripts/Makefile.build:549: sound/soc/sof/intel] Error 2
+make[2]: *** [scripts/Makefile.build:549: sound/soc/sof] Error 2
+make[1]: *** [scripts/Makefile.build:549: sound/soc] Error 2
+make: *** [Makefile:1846: sound] Error 2
 
-That works for me on x86/arm, but I'm still trying out some other configs.
-
-Thanks,
-
--- 
-Peter Xu
-
---3ob9n8+f6vq4lAWQ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: attachment;
-	filename="0001-fixup-mm-uffd-PTE_MARKER_UFFD_WP.patch"
-
-From 83dbc502eeaba12071413691374474c09e9f24bb Mon Sep 17 00:00:00 2001
-From: Peter Xu <peterx@redhat.com>
-Date: Tue, 5 Apr 2022 19:00:37 -0400
-Subject: [PATCH] fixup! mm/uffd: PTE_MARKER_UFFD_WP
-
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- include/linux/userfaultfd_k.h | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-index ea11bed9bb7e..732b522bacb7 100644
---- a/include/linux/userfaultfd_k.h
-+++ b/include/linux/userfaultfd_k.h
-@@ -277,8 +277,12 @@ static inline bool uffd_disable_fault_around(struct vm_area_struct *vma)
- 
- static inline bool pte_marker_entry_uffd_wp(swp_entry_t entry)
- {
-+#ifdef CONFIG_PTE_MARKER_UFFD_WP
- 	return is_pte_marker_entry(entry) &&
- 	    (pte_marker_get(entry) & PTE_MARKER_UFFD_WP);
-+#else
-+	return false;
-+#endif
- }
- 
- static inline bool pte_marker_uffd_wp(pte_t pte)
--- 
-2.32.0
-
-
---3ob9n8+f6vq4lAWQ--
-
+thanks,
+-- Shuah

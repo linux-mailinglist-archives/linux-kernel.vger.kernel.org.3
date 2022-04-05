@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CEF4F4D76
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6354F4B5F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1582482AbiDEXn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
+        id S1574392AbiDEWz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240228AbiDEKcj (ORCPT
+        with ESMTP id S1354049AbiDEKLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:32:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F07DE0A5;
-        Tue,  5 Apr 2022 03:18:35 -0700 (PDT)
+        Tue, 5 Apr 2022 06:11:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03BD4DF4C;
+        Tue,  5 Apr 2022 02:57:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45933B81C9A;
-        Tue,  5 Apr 2022 10:18:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F634C385A1;
-        Tue,  5 Apr 2022 10:18:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F0536157A;
+        Tue,  5 Apr 2022 09:57:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 544F8C385A1;
+        Tue,  5 Apr 2022 09:56:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153913;
-        bh=KoGQ+0vWP49KzgTOCU/ifdDn7F7KOjvEzSHR2vQTS+U=;
+        s=korg; t=1649152619;
+        bh=jl6Snp2v0QTf7bMzCJgP0Dv9BzB/beZVOt0Nxq39c78=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JCKwaOrl+MVaxfZ4AnuHdJLwKVqtcvlLG42vd+B++FOXcbAXuAVy+qzljC1P8KUzC
-         +oTwm1dlmWX8mDcOeMJhT58lh0hGk4av9egMI3m1/AkYgQ4O+6HhWfgwtasqcElM0/
-         knsNKsdJ6EzIb0r4pwjDbawqN1F+CqzQB5txcrjQ=
+        b=ZyuxQCKh6PGIoAENeuoQnVzyAJGMiEJGg6HMQjOZNF3qQPIJ+zVKQSdc6i1IaT/K2
+         R74hqzNVRTnqZ1b53V7MgM6eimeXYLajQh2sCX+Kt3sHH0DoWWziXH0NIohiI6DIBY
+         jfCaFvgCFm29rsn9DJHl/FfoSR4Mhr1EVMqiXEwE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qing Wang <wangqing@vivo.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 392/599] serial: 8250_mid: Balance reference count for PCI DMA device
-Date:   Tue,  5 Apr 2022 09:31:26 +0200
-Message-Id: <20220405070310.496745566@linuxfoundation.org>
+        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: [PATCH 5.15 825/913] ubifs: rename_whiteout: correct old_dir size computing
+Date:   Tue,  5 Apr 2022 09:31:27 +0200
+Message-Id: <20220405070404.559560592@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,93 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Baokun Li <libaokun1@huawei.com>
 
-[ Upstream commit 67ec6dd0b257bd81b4e9fcac89b29da72f6265e5 ]
+commit 705757274599e2e064dd3054aabc74e8af31a095 upstream.
 
-The pci_get_slot() increases its reference count, the caller
-must decrement the reference count by calling pci_dev_put().
+When renaming the whiteout file, the old whiteout file is not deleted.
+Therefore, we add the old dentry size to the old dir like XFS.
+Otherwise, an error may be reported due to `fscki->calc_sz != fscki->size`
+in check_indes.
 
-Fixes: 90b9aacf912a ("serial: 8250_pci: add Intel Tangier support")
-Fixes: f549e94effa1 ("serial: 8250_pci: add Intel Penwell ports")
-Reported-by: Qing Wang <wangqing@vivo.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Depends-on: d9eda9bab237 ("serial: 8250_pci: Intel MID UART support to its own driver")
-Link: https://lore.kernel.org/r/20220215100920.41984-1-andriy.shevchenko@linux.intel.com
+Fixes: 9e0a1fff8db56ea ("ubifs: Implement RENAME_WHITEOUT")
+Reported-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/8250/8250_mid.c | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
+ fs/ubifs/dir.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/tty/serial/8250/8250_mid.c b/drivers/tty/serial/8250/8250_mid.c
-index efa0515139f8..e6c1791609dd 100644
---- a/drivers/tty/serial/8250/8250_mid.c
-+++ b/drivers/tty/serial/8250/8250_mid.c
-@@ -73,6 +73,11 @@ static int pnw_setup(struct mid8250 *mid, struct uart_port *p)
- 	return 0;
- }
- 
-+static void pnw_exit(struct mid8250 *mid)
-+{
-+	pci_dev_put(mid->dma_dev);
-+}
+--- a/fs/ubifs/dir.c
++++ b/fs/ubifs/dir.c
+@@ -1402,6 +1402,9 @@ static int do_rename(struct inode *old_d
+ 			iput(whiteout);
+ 			goto out_release;
+ 		}
 +
- static int tng_handle_irq(struct uart_port *p)
- {
- 	struct mid8250 *mid = p->private_data;
-@@ -124,6 +129,11 @@ static int tng_setup(struct mid8250 *mid, struct uart_port *p)
- 	return 0;
- }
++		/* Add the old_dentry size to the old_dir size. */
++		old_sz -= CALC_DENT_SIZE(fname_len(&old_nm));
+ 	}
  
-+static void tng_exit(struct mid8250 *mid)
-+{
-+	pci_dev_put(mid->dma_dev);
-+}
-+
- static int dnv_handle_irq(struct uart_port *p)
- {
- 	struct mid8250 *mid = p->private_data;
-@@ -330,9 +340,9 @@ static int mid8250_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 
- 	pci_set_drvdata(pdev, mid);
- 	return 0;
-+
- err:
--	if (mid->board->exit)
--		mid->board->exit(mid);
-+	mid->board->exit(mid);
- 	return ret;
- }
- 
-@@ -342,8 +352,7 @@ static void mid8250_remove(struct pci_dev *pdev)
- 
- 	serial8250_unregister_port(mid->line);
- 
--	if (mid->board->exit)
--		mid->board->exit(mid);
-+	mid->board->exit(mid);
- }
- 
- static const struct mid8250_board pnw_board = {
-@@ -351,6 +360,7 @@ static const struct mid8250_board pnw_board = {
- 	.freq = 50000000,
- 	.base_baud = 115200,
- 	.setup = pnw_setup,
-+	.exit = pnw_exit,
- };
- 
- static const struct mid8250_board tng_board = {
-@@ -358,6 +368,7 @@ static const struct mid8250_board tng_board = {
- 	.freq = 38400000,
- 	.base_baud = 1843200,
- 	.setup = tng_setup,
-+	.exit = tng_exit,
- };
- 
- static const struct mid8250_board dnv_board = {
--- 
-2.34.1
-
+ 	lock_4_inodes(old_dir, new_dir, new_inode, whiteout);
 
 

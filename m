@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C3A4F525A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 881FB4F525C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573070AbiDFCoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
+        id S1849948AbiDFCpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1579935AbiDEXd1 (ORCPT
+        with ESMTP id S1580276AbiDEXeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 19:33:27 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07BD9BB99
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 14:53:37 -0700 (PDT)
+        Tue, 5 Apr 2022 19:34:07 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8661162BC
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 14:54:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649195617; x=1680731617;
+  t=1649195680; x=1680731680;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=Oa9GI9H4eFbsYCh9+hKgLC/hdmybikWHayQ+lt0i4rE=;
-  b=fTsdlgT2wpTbjFB1ZNReUsj5kYQRZ1I4p0ke9mQQ3B9STC7RpFtzzru9
-   d2tkNtTfYoWA4Wn7a1op0Dw90qCJA4NXYR7Wh3e62BxL3OPGB0VfPGd3Y
-   WJJRCxtfZUAW9DkwukiOAN/3vV8670xMgZoR4qRJsJts3uXZQnSxNdvB8
-   GVYQBc8RqKiZJpRuCF71bXgJQu1InNWtk1lysBpqTvFryEkuKrkkMVuCF
-   WrsLA63wVGNXEFMDee1osU77qFMqzGrf6I1nsS8yYi1ZsvMT+qV0rzPYQ
-   0KxZBG8PArkvg08OR/zCRDV5hwCvwz+lO9u53pDsGKjOpx9lqK6L9s3Pb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="241457812"
+  bh=InyNG7brVOrB+pbl6SuP7WIX8fZMnSQ9ZXXp7iCGQ/w=;
+  b=ep8pXFq49omlqkqd/F1crhUsL67sviamgTLIhV5leoRnLqj0gpNUkutB
+   8lHelMRUcldAiZ2I7JxD9nVC6v3eM0ljsNi3n5odR1fAR+M4MsMvIcF3Y
+   BL8GBNHI+yHCRAcFnde4uU/8Ja81ME4emaOgf9dp5RwJ6bv1E/9SZKC9c
+   co0aPCtP0l0liMolfC5vAE5+K/eOIhDA84cvLnLz9QwVTu7pwW98s7gq0
+   j0sbUsnYVFqalrYDicezr56gPG10suZaYwkYgl3BYcvqbgdx9uEYFEX7H
+   wwpkgdehwn57PKPTaXLZZGQbENp8lm8Q6csq4acamsPS0IHVRdN7i5xxu
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="347314238"
 X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="241457812"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 14:53:37 -0700
+   d="scan'208";a="347314238"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 14:54:36 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="588104292"
+   d="scan'208";a="556689594"
 Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 05 Apr 2022 14:53:35 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 05 Apr 2022 14:54:35 -0700
 Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nbr7G-0003nJ-Te;
-        Tue, 05 Apr 2022 21:53:34 +0000
-Date:   Wed, 06 Apr 2022 05:53:33 +0800
+        id 1nbr8F-0003nd-0R;
+        Tue, 05 Apr 2022 21:54:35 +0000
+Date:   Wed, 06 Apr 2022 05:53:35 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "x86-ml" <x86@kernel.org>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:sched/urgent] BUILD SUCCESS
- 0a70045ed8516dfcff4b5728557e1ef3fd017c53
-Message-ID: <624cba5d.+mJLF9IXw71FXY9i%lkp@intel.com>
+Subject: [tip:perf/urgent] BUILD SUCCESS
+ e19cd0b6fa5938c51d7b928010d584f0de93913a
+Message-ID: <624cba5f.4fH6PK3nQClk0OsR%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -63,10 +63,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/urgent
-branch HEAD: 0a70045ed8516dfcff4b5728557e1ef3fd017c53  entry: Fix compile error in dynamic_irqentry_exit_cond_resched()
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git perf/urgent
+branch HEAD: e19cd0b6fa5938c51d7b928010d584f0de93913a  perf/core: Always set cpuctx cgrp when enable cgroup event
 
-elapsed time: 727m
+elapsed time: 728m
 
 configs tested: 148
 configs skipped: 4

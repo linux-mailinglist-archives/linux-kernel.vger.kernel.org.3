@@ -2,206 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4B04F4807
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1CB4F45BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358523AbiDEVZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46616 "EHLO
+        id S1449547AbiDEUK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573154AbiDESF0 (ORCPT
+        with ESMTP id S1573173AbiDESHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 14:05:26 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E09CEEA6C
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 11:03:27 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id s14-20020a17090a880e00b001caaf6d3dd1so3344727pjn.3
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 11:03:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=U3PyY0pRKQhXeOMKJejZ2jWEMHgtC5U/1t6Griz2ZtE=;
-        b=KGXUBKKkDKDhZlvZKiQELbSWKwFyjZ9pqbjywy++hvUawyC+vx+Kiwb6Gb6jEV0Wuc
-         giwl5qnSM5u8wdE1F5+llR4K2Ticwza1m/ioW1C0ItJqonPtmvm5nhpHrTL3N6QT1Rl3
-         Wtn49OopVnhw8g8P+PKXrUXFRKcYdC8fjuouVVIXctNCy1B+qGpT4pX2jNYpbQ1t2mP6
-         xMe4g7fYtlOfWMZCvSnpCUHEZXd84dkEWXSH6ZD1YzTcBCMO32gius56GNlGsSmncOvV
-         KQlOe+jigYhK1S2TKkrRmuV21s9fTFFu+nLTpzm/DTIX7AvACXAolik1vLnEB78gFwNe
-         bYpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=U3PyY0pRKQhXeOMKJejZ2jWEMHgtC5U/1t6Griz2ZtE=;
-        b=KFzxQZjksTwvOnZgh5f57HF90MZ4sCy9N5nv4XyArMyRwFg7+XSiTYsbCUub3bcwTa
-         MjMAOEZPKj7CFuaCHUWSY9TyrTNIKYUbJ0gRKH/jfE54YukiUMr7nC7XoWNx/HBud+bD
-         EEKlXA8V0e35mh6XEuSp30tbdxI4aA2D+/RvI2Px2XIiSIlr5yafZQ1GnfYbNf4YU6vg
-         NW4EBRc731BXNCBMKwY5nsNExg45AyZNMToAQBKu6NOLBYNMoiDmyfPgIbCXmMfzcwMd
-         V7t80psBJ9OltlJMJtirJ/vW8hJD3auEevoI63FIatXUC2vZwlvI+hHDFXQ484ZOoK/u
-         z4SA==
-X-Gm-Message-State: AOAM533VFZnLNQ3i0p2TCQITyZfGmAKOxu/R1If7z/shd+LPliDLcxv6
-        7PoLhtwjRZUfGnu3usSLgxbueA==
-X-Google-Smtp-Source: ABdhPJyStH5/Nz6FqwbLd9JjuWL5wIJ/TCBBrc+CUyEhlKkOsXFCG0zdV80i6DTnhSTJUvObFVL14A==
-X-Received: by 2002:a17:903:288:b0:156:a6b5:80d4 with SMTP id j8-20020a170903028800b00156a6b580d4mr4934454plr.98.1649181806567;
-        Tue, 05 Apr 2022 11:03:26 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id d21-20020a056a0024d500b004fb0e7c7c3bsm17524046pfv.161.2022.04.05.11.03.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 11:03:25 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 18:03:21 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Quentin Perret <qperret@google.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v5 00/13] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <YkyEaYiL0BrDYcZv@google.com>
-References: <88620519-029e-342b-0a85-ce2a20eaf41b@arm.com>
- <YkQzfjgTQaDd2E2T@google.com>
- <YkSaUQX89ZEojsQb@google.com>
- <80aad2f9-9612-4e87-a27a-755d3fa97c92@www.fastmail.com>
- <YkcTTY4YjQs5BRhE@google.com>
- <83fd55f8-cd42-4588-9bf6-199cbce70f33@www.fastmail.com>
- <YksIQYdG41v3KWkr@google.com>
- <Ykslo2eo2eRXrpFR@google.com>
- <eefc3c74-acca-419c-8947-726ce2458446@www.fastmail.com>
- <Ykwbqv90C7+8K+Ao@google.com>
+        Tue, 5 Apr 2022 14:07:00 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA441F623;
+        Tue,  5 Apr 2022 11:05:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=eK1W6c3cykjE0LliXQwdPpUl4xUEcuaJtmGpAa5ka20=; b=DroHWKqca4Vq4W7PTsU+k7+YsQ
+        +ZiV7XCDx/UOgPCSCA/Ay36KKPaIMOYZZ8GAlXpb8MzCWbQJADXlw26mZaUMWjK16b+PGHCu6OaLr
+        eKp+zBAZikv9jQCkqK4pZeHIPZTe+JjQDxH1SlB/Wxy4nBz+4ihiONMQulZmxiP3SyLRj6QbLBBHw
+        AEdn36e/hEY5DtsEzGeDqE4HAvDSxRI648dXsVbOfih/gyQnaesDl4t9ttLkT53HDVWHDAs7yD0Jv
+        Dl9TvfKQRib/BrEqja3eRnL6whXR/NN5sSHrnpXf3++dEWxEJ73jYMypwMazlVSe4lL/zm0rcubkM
+        OJy6QZwQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nbnXz-006wEx-Ex; Tue, 05 Apr 2022 18:04:55 +0000
+Message-ID: <ac023638-5ce4-1c0b-29e5-e30fc3038e72@infradead.org>
+Date:   Tue, 5 Apr 2022 11:04:51 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Ykwbqv90C7+8K+Ao@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH net] net: micrel: Fix KS8851 Kconfig
+Content-Language: en-US
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        Divya.Koppera@microchip.com, kernel test robot <lkp@intel.com>
+References: <20220405065936.4105272-1-horatiu.vultur@microchip.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220405065936.4105272-1-horatiu.vultur@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022, Quentin Perret wrote:
-> On Monday 04 Apr 2022 at 15:04:17 (-0700), Andy Lutomirski wrote:
-> > >>  - it can be very useful for protected VMs to do shared=>private
-> > >>    conversions. Think of a VM receiving some data from the host in a
-> > >>    shared buffer, and then it wants to operate on that buffer without
-> > >>    risking to leak confidential informations in a transient state. In
-> > >>    that case the most logical thing to do is to convert the buffer back
-> > >>    to private, do whatever needs to be done on that buffer (decrypting a
-> > >>    frame, ...), and then share it back with the host to consume it;
-> > >
-> > > If performance is a motivation, why would the guest want to do two
-> > > conversions instead of just doing internal memcpy() to/from a private
-> > > page?  I would be quite surprised if multiple exits and TLB shootdowns is
-> > > actually faster, especially at any kind of scale where zapping stage-2
-> > > PTEs will cause lock contention and IPIs.
-> > 
-> > I don't know the numbers or all the details, but this is arm64, which is a
-> > rather better architecture than x86 in this regard.  So maybe it's not so
-> > bad, at least in very simple cases, ignoring all implementation details.
-> > (But see below.)  Also the systems in question tend to have fewer CPUs than
-> > some of the massive x86 systems out there.
+
+
+On 4/4/22 23:59, Horatiu Vultur wrote:
+> KS8851 selects MICREL_PHY, which depends on PTP_1588_CLOCK_OPTIONAL, so
+> make KS8851 also depend on PTP_1588_CLOCK_OPTIONAL.
 > 
-> Yep. I can try and do some measurements if that's really necessary, but
-> I'm really convinced the cost of the TLBI for the shared->private
-> conversion is going to be significantly smaller than the cost of memcpy
-> the buffer twice in the guest for us.
-
-It's not just the TLB shootdown, the VM-Exits aren't free.   And barring non-trivial
-improvements to KVM's MMU, e.g. sharding of mmu_lock, modifying the page tables will
-block all other updates and MMU operations.  Taking mmu_lock for read, should arm64
-ever convert to a rwlock, is not an option because KVM needs to block other
-conversions to avoid races.
-
-Hmm, though batching multiple pages into a single request would mitigate most of
-the overhead.
-
-> There are variations of that idea: e.g. allow userspace to mmap the
-> entire private fd but w/o taking a reference on pages mapped with
-> PROT_NONE. And then the VMM can use mprotect() in response to
-> share/unshare requests. I think Marc liked that idea as it keeps the
-> userspace API closer to normal KVM -- there actually is a
-> straightforward gpa->hva relation. Not sure how much that would impact
-> the implementation at this point.
+> Fixes kconfig warning and build errors:
 > 
-> For the shared=>private conversion, this would be something like so:
+> WARNING: unmet direct dependencies detected for MICREL_PHY
+>   Depends on [m]: NETDEVICES [=y] && PHYLIB [=y] && PTP_1588_CLOCK_OPTIONAL [=m]
+>     Selected by [y]:
+>       - KS8851 [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_MICREL [=y] && SPI [=y]
 > 
->  - the guest issues a hypercall to unshare a page;
+> ld.lld: error: undefined symbol: ptp_clock_register referenced by micrel.c
+> net/phy/micrel.o:(lan8814_probe) in archive drivers/built-in.a
+> ld.lld: error: undefined symbol: ptp_clock_index referenced by micrel.c
+> net/phy/micrel.o:(lan8814_ts_info) in archive drivers/built-in.a
 > 
->  - the hypervisor forwards the request to the host;
+> Reported-by: kernel test robot <lkp@intel.com>
+> Fixes: ece19502834d ("net: phy: micrel: 1588 support for LAN8814 phy")
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+
+> ---
+>  drivers/net/ethernet/micrel/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
 > 
->  - the host kernel forwards the request to userspace;
-> 
->  - userspace then munmap()s the shared page;
-> 
->  - KVM then tries to take a reference to the page. If it succeeds, it
->    re-enters the guest with a flag of some sort saying that the share
->    succeeded, and the hypervisor will adjust pgtables accordingly. If
->    KVM failed to take a reference, it flags this and the hypervisor will
->    be responsible for communicating that back to the guest. This means
->    the guest must handle failures (possibly fatal).
-> 
-> (There are probably many ways in which we can optimize this, e.g. by
-> having the host proactively munmap() pages it no longer needs so that
-> the unshare hypercall from the guest doesn't need to exit all the way
-> back to host userspace.)
+> diff --git a/drivers/net/ethernet/micrel/Kconfig b/drivers/net/ethernet/micrel/Kconfig
+> index 1b632cdd7630..830363bafcce 100644
+> --- a/drivers/net/ethernet/micrel/Kconfig
+> +++ b/drivers/net/ethernet/micrel/Kconfig
+> @@ -28,6 +28,7 @@ config KS8842
+>  config KS8851
+>  	tristate "Micrel KS8851 SPI"
+>  	depends on SPI
+> +	depends on PTP_1588_CLOCK_OPTIONAL
+>  	select MII
+>  	select CRC32
+>  	select EEPROM_93CX6
 
-...
-
-> > Maybe there could be a special mode for the private memory fds in which
-> > specific pages are marked as "managed by this fd but actually shared".
-> > pread() and pwrite() would work on those pages, but not mmap().  (Or maybe
-> > mmap() but the resulting mappings would not permit GUP.)
-
-Unless I misunderstand what you intend by pread()/pwrite(), I think we'd need to
-allow mmap(), otherwise e.g. uaccess from the kernel wouldn't work.
-
-> > And transitioning them would be a special operation on the fd that is
-> > specific to pKVM and wouldn't work on TDX or SEV.
-
-To keep things feature agnostic (IMO, baking TDX vs SEV vs pKVM info into private-fd
-is a really bad idea), this could be handled by adding a flag and/or callback into
-the notifier/client stating whether or not it supports mapping a private-fd, and then
-mapping would be allowed if and only if all consumers support/allow mapping.
-
-> > Hmm.  Sean and Chao, are we making a bit of a mistake by making these fds
-> > technology-agnostic?  That is, would we want to distinguish between a TDX
-> > backing fd, a SEV backing fd, a software-based backing fd, etc?  API-wise
-> > this could work by requiring the fd to be bound to a KVM VM instance and
-> > possibly even configured a bit before any other operations would be
-> > allowed.
-
-I really don't want to distinguish between between each exact feature, but I've
-no objection to adding flags/callbacks to track specific properties of the
-downstream consumers, e.g. "can this memory be accessed by userspace" is a fine
-abstraction.  It also scales to multiple consumers (see above).
+-- 
+~Randy

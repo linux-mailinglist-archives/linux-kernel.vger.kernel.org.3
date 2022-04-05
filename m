@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 430C54F4F7B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 523A14F5094
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:23:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1838337AbiDFAvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58698 "EHLO
+        id S1842375AbiDFBbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358067AbiDEK15 (ORCPT
+        with ESMTP id S1351851AbiDEKDZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704BD583BD;
-        Tue,  5 Apr 2022 03:14:30 -0700 (PDT)
+        Tue, 5 Apr 2022 06:03:25 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4808975C18;
+        Tue,  5 Apr 2022 02:52:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32364B81BC5;
-        Tue,  5 Apr 2022 10:14:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E822C385A1;
-        Tue,  5 Apr 2022 10:14:27 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3525BCE1C9E;
+        Tue,  5 Apr 2022 09:52:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B4D7C385A1;
+        Tue,  5 Apr 2022 09:52:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153668;
-        bh=K3MNOoTQsy6x8DnN1TuwVMbArMhx3yyqyz7JNKrPkE4=;
+        s=korg; t=1649152334;
+        bh=/hJvC2gf0i2zGMllIvwBp0yhdrPxL94SQLzsN5wb/G8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uXSLXmDNsO5Err6CFCbLNKQMca6zKThqJx1nuXEq4b8k4pdgnungQlg9LFoM9Zfl0
-         Hzd+Dzv/buzelKqNwZFGqldiX7hS0mlPOub1bgbeK4xvARyxk2KdvuHnDIa2zpwez/
-         OZ8mU0dos5bHlOlegmQf11sva/CTRjzLzIBzYZo4=
+        b=Tq+LJKJZ9+Pxw9HHy3F3oZTxdMHRK2OTecyuB9f2Csxh4YL+83vVnLyva+iQCwtmI
+         cb0l84qdOVPFBNuKvqEW8iTq/0cVxsOahuOAlMJ2kZjQ/oEGcVl2cDMiiXcnJ29/mW
+         YTajjNRuNRkQ2TtIhbpcF1zlKuQM6XqzYtQvrBUQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 304/599] iwlwifi: mvm: Fix an error code in iwl_mvm_up()
-Date:   Tue,  5 Apr 2022 09:29:58 +0200
-Message-Id: <20220405070307.880463597@linuxfoundation.org>
+        stable@vger.kernel.org, Evgeny Novikov <novikov@ispras.ru>,
+        Kirill Shilimanov <kirill.shilimanov@huawei.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 738/913] video: fbdev: w100fb: Reset global state
+Date:   Tue,  5 Apr 2022 09:30:00 +0200
+Message-Id: <20220405070401.956283853@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +55,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Evgeny Novikov <novikov@ispras.ru>
 
-[ Upstream commit 583d18336abdfb1b355270289ff8f6a2608ba905 ]
+[ Upstream commit 8738ddcac644964ae128ccd3d80d48773c8d528e ]
 
-Return -ENODEV instead of success on this error path.
+w100fb_probe() did not reset the global state to its initial state. This
+can result in invocation of iounmap() even when there was not the
+appropriate successful call of ioremap(). For instance, this may be the
+case if first probe fails after two successful ioremap() while second
+probe fails when first ioremap() fails. The similar issue is with
+w100fb_remove(). The patch fixes both bugs.
 
-Fixes: dd36a507c806 ("iwlwifi: mvm: look for the first supported channel when add/remove phy ctxt")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/20210816183930.GA2068@kili
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Found by Linux Driver Verification project (linuxtesting.org).
+
+Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
+Co-developed-by: Kirill Shilimanov <kirill.shilimanov@huawei.com>
+Signed-off-by: Kirill Shilimanov <kirill.shilimanov@huawei.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/mvm/fw.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/video/fbdev/w100fb.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/fw.c b/drivers/net/wireless/intel/iwlwifi/mvm/fw.c
-index 6348dfa61724..54b28f0932e2 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/fw.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/fw.c
-@@ -1495,8 +1495,10 @@ int iwl_mvm_up(struct iwl_mvm *mvm)
- 	while (!sband && i < NUM_NL80211_BANDS)
- 		sband = mvm->hw->wiphy->bands[i++];
- 
--	if (WARN_ON_ONCE(!sband))
-+	if (WARN_ON_ONCE(!sband)) {
-+		ret = -ENODEV;
- 		goto error;
+diff --git a/drivers/video/fbdev/w100fb.c b/drivers/video/fbdev/w100fb.c
+index d96ab28f8ce4..4e641a780726 100644
+--- a/drivers/video/fbdev/w100fb.c
++++ b/drivers/video/fbdev/w100fb.c
+@@ -770,12 +770,18 @@ static int w100fb_probe(struct platform_device *pdev)
+ 		fb_dealloc_cmap(&info->cmap);
+ 		kfree(info->pseudo_palette);
+ 	}
+-	if (remapped_fbuf != NULL)
++	if (remapped_fbuf != NULL) {
+ 		iounmap(remapped_fbuf);
+-	if (remapped_regs != NULL)
++		remapped_fbuf = NULL;
 +	}
++	if (remapped_regs != NULL) {
+ 		iounmap(remapped_regs);
+-	if (remapped_base != NULL)
++		remapped_regs = NULL;
++	}
++	if (remapped_base != NULL) {
+ 		iounmap(remapped_base);
++		remapped_base = NULL;
++	}
+ 	if (info)
+ 		framebuffer_release(info);
+ 	return err;
+@@ -795,8 +801,11 @@ static int w100fb_remove(struct platform_device *pdev)
+ 	fb_dealloc_cmap(&info->cmap);
  
- 	chan = &sband->channels[0];
+ 	iounmap(remapped_base);
++	remapped_base = NULL;
+ 	iounmap(remapped_regs);
++	remapped_regs = NULL;
+ 	iounmap(remapped_fbuf);
++	remapped_fbuf = NULL;
+ 
+ 	framebuffer_release(info);
  
 -- 
 2.34.1

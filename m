@@ -2,57 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CD0C4F23C9
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3084F23D3
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:58:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbiDEG6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 02:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45248 "EHLO
+        id S231278AbiDEHAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbiDEG56 (ORCPT
+        with ESMTP id S231234AbiDEG77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 02:57:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7531004;
-        Mon,  4 Apr 2022 23:55:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 840ADB81B9C;
-        Tue,  5 Apr 2022 06:55:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0100CC3410F;
-        Tue,  5 Apr 2022 06:55:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649141755;
-        bh=l8dvUlb3U48S/MWZxo9VRCxlg4l3/8kSPeGWEIhVYNQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rPX15kAdYpktxUsJlFKHWTZ0Na9i/R4938XmSH4yARwnto9kzAjKsnLu2dLuN99vA
-         kgmw23OI22neTl/WRymI7gOwKCkgWpIQrP/r1/8TXYz4z3cYMoiFBCF7fyFZ9b6vPu
-         mGeYZ7fPY97pCibs0mUPqyldJqrQvpHP80tBInNDuwtmY3d1P6cw4KX+08jyADemPP
-         /ZfLX9MU3zzEFEEIhR8lzZsv+12n4HG7ly4dC6Jw/5pyuPYTtaFot0D4V7NXtuAjiV
-         idWIWpe7m6e0peiWRa639Ld+wjAwasZVdaMPzXbZ9uJIbu/CjTz5bj/YN/fDvQwuWS
-         Yfk+2OT2jxa6w==
-Date:   Tue, 5 Apr 2022 09:57:06 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org, seanjc@google.com, kai.huang@intel.com,
-        cathy.zhang@intel.com, cedric.xing@intel.com,
-        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        Tue, 5 Apr 2022 02:59:59 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E7F7E5BB
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 23:58:01 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id ot30so14693455ejb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 23:58:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ytEtJqw0uy6W+7gp4IX9zLd4Z1yoYI8Fve6cd2B1msM=;
+        b=pufHZkF7epqtGQHhi/rp3fJ68j947extNxkzIrIoEbyprH2k2/Wj7bS40po2iD6wox
+         ViOi7FMVrhjSqFQqYUXYOUEGINBqG6DSd9wWefE87XfBezcikEnJfrQV2iUpAisDrZTs
+         HTpCL4RMxAwH93CqkZf6lW+9nORiLJT//DV4FTKgbXWz5fWfaurHANDnSrGLqaswA1LA
+         SZitEGad8cC2HCoCC2iEA5laadDyH/emRXgJdjDr2g92T/jX0Xoa4mumfxw6DLaBvo4u
+         t1KaLm6ZtVk4uuFXGQFTngbGwGfYxy+5Fem3rkSDqqmYR9anWnme6Lau8NrYyHNtxxAK
+         /0dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ytEtJqw0uy6W+7gp4IX9zLd4Z1yoYI8Fve6cd2B1msM=;
+        b=y+5oto8XWeIUAjZxslsOk8uW8oqCWUXj4itdffuoM2YUqlBDzXPG8vn6/GW2pAGdj1
+         3MrzASZvQ4VsHtFm6GnZytuE1qgAwIsrJq0HjlswDt1OkRrGzVYN0kOGbVmSwaz3o9I6
+         A96nX7pTKL8uTrsMArlgHlaYznW7chZDpQoSb09l8cs679rArOe2loqzdEElSLiTwnup
+         WiiLeWznsnjK8KVNHIq5O08dumeZQrKyRFt+iSDyB64+ilz8iGSfiMIYCxln6g4CGci3
+         620r+fwzbZmTZQwwAjiGpTy1F8t4rpcBDVURSEWjq6S0r25FMZm9eCwewqmRaf8WvlyV
+         MD0g==
+X-Gm-Message-State: AOAM530Y98FoNiY+MHBzoOLsEZv/WVWtiiuTSRI7Aehx6iLavL5EL6Ap
+        b0FpuRrNg8pXNIG10m2KtTb8Og==
+X-Google-Smtp-Source: ABdhPJxahQTxuKqd0DovpGzcDiLImq2qWALuFI8VzoQ7ZIHCQgJZ1fH3yS+9s/M72qSE8TSSG5Vomw==
+X-Received: by 2002:a17:907:6d19:b0:6db:89c8:52e3 with SMTP id sa25-20020a1709076d1900b006db89c852e3mr2101712ejc.754.1649141880043;
+        Mon, 04 Apr 2022 23:58:00 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id f17-20020a056402355100b0041925e80963sm6367419edd.41.2022.04.04.23.57.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 23:57:59 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3 07/30] x86/sgx: Rename sgx_encl_ewb_cpumask() as
- sgx_encl_cpumask()
-Message-ID: <YkvoQgvOiNe5n5g2@kernel.org>
-References: <cover.1648847675.git.reinette.chatre@intel.com>
- <c42cb6298d69cacd48872f97d11df694074803d8.1648847675.git.reinette.chatre@intel.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/3] ARM: dts: qcom: rename WCNSS child name to bluetooth
+Date:   Tue,  5 Apr 2022 08:57:50 +0200
+Message-Id: <20220405065752.27389-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c42cb6298d69cacd48872f97d11df694074803d8.1648847675.git.reinette.chatre@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,96 +72,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 09:49:15AM -0700, Reinette Chatre wrote:
-> sgx_encl_ewb_cpumask() is no longer unique to the reclaimer where it
-> is used during the EWB ENCLS leaf function when EPC pages are written
-> out to main memory and sgx_encl_ewb_cpumask() is used to learn which
-> CPUs might have executed the enclave to ensure that TLBs are cleared.
-> 
-> Upcoming SGX2 enabling will use sgx_encl_ewb_cpumask() during the
-> EMODPR and EMODT ENCLS leaf functions that make changes to enclave
-> pages. The function is needed for the same reason it is used now: to
-> learn which CPUs might have executed the enclave to ensure that TLBs
-> no longer point to the changed pages.
-> 
-> Rename sgx_encl_ewb_cpumask() to sgx_encl_cpumask() to reflect the
-> broader usage.
-> 
-> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-> ---
-> No changes since V2
-> 
-> Changes since V1:
-> - New patch split from original "x86/sgx: Use more generic name for
->   enclave cpumask function" (Jarkko).
-> 
->  arch/x86/kernel/cpu/sgx/encl.c | 6 +++---
->  arch/x86/kernel/cpu/sgx/encl.h | 2 +-
->  arch/x86/kernel/cpu/sgx/main.c | 2 +-
->  3 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-> index c6525eba74e8..8de9bebc4d81 100644
-> --- a/arch/x86/kernel/cpu/sgx/encl.c
-> +++ b/arch/x86/kernel/cpu/sgx/encl.c
-> @@ -614,7 +614,7 @@ int sgx_encl_mm_add(struct sgx_encl *encl, struct mm_struct *mm)
->  }
->  
->  /**
-> - * sgx_encl_ewb_cpumask() - Query which CPUs might be accessing the enclave
-> + * sgx_encl_cpumask() - Query which CPUs might be accessing the enclave
->   * @encl: the enclave
->   *
->   * Some SGX functions require that no cached linear-to-physical address
-> @@ -639,7 +639,7 @@ int sgx_encl_mm_add(struct sgx_encl *encl, struct mm_struct *mm)
->   * The following flow is used to support SGX functions that require that
->   * no cached linear-to-physical address mappings are present:
->   * 1) Execute ENCLS[ETRACK] to initiate hardware tracking.
-> - * 2) Use this function (sgx_encl_ewb_cpumask()) to query which CPUs might be
-> + * 2) Use this function (sgx_encl_cpumask()) to query which CPUs might be
->   *    accessing the enclave.
->   * 3) Send IPI to identified CPUs, kicking them out of the enclave and
->   *    thus flushing all locally cached linear-to-physical address mappings.
-> @@ -656,7 +656,7 @@ int sgx_encl_mm_add(struct sgx_encl *encl, struct mm_struct *mm)
->   *
->   * Return: cpumask of CPUs that might be accessing @encl
->   */
-> -const cpumask_t *sgx_encl_ewb_cpumask(struct sgx_encl *encl)
-> +const cpumask_t *sgx_encl_cpumask(struct sgx_encl *encl)
->  {
->  	cpumask_t *cpumask = &encl->cpumask;
->  	struct sgx_encl_mm *encl_mm;
-> diff --git a/arch/x86/kernel/cpu/sgx/encl.h b/arch/x86/kernel/cpu/sgx/encl.h
-> index d2acb4debde5..e59c2cbf71e2 100644
-> --- a/arch/x86/kernel/cpu/sgx/encl.h
-> +++ b/arch/x86/kernel/cpu/sgx/encl.h
-> @@ -105,7 +105,7 @@ int sgx_encl_may_map(struct sgx_encl *encl, unsigned long start,
->  
->  void sgx_encl_release(struct kref *ref);
->  int sgx_encl_mm_add(struct sgx_encl *encl, struct mm_struct *mm);
-> -const cpumask_t *sgx_encl_ewb_cpumask(struct sgx_encl *encl);
-> +const cpumask_t *sgx_encl_cpumask(struct sgx_encl *encl);
->  int sgx_encl_get_backing(struct sgx_encl *encl, unsigned long page_index,
->  			 struct sgx_backing *backing);
->  void sgx_encl_put_backing(struct sgx_backing *backing, bool do_write);
-> diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
-> index 2de85f459492..fa33922879bf 100644
-> --- a/arch/x86/kernel/cpu/sgx/main.c
-> +++ b/arch/x86/kernel/cpu/sgx/main.c
-> @@ -249,7 +249,7 @@ static void sgx_encl_ewb(struct sgx_epc_page *epc_page,
->  			 * miss cpus that entered the enclave between
->  			 * generating the mask and incrementing epoch.
->  			 */
-> -			on_each_cpu_mask(sgx_encl_ewb_cpumask(encl),
-> +			on_each_cpu_mask(sgx_encl_cpumask(encl),
->  					 sgx_ipi_cb, NULL, 1);
->  			ret = __sgx_encl_ewb(epc_page, va_slot, backing);
->  		}
-> -- 
-> 2.25.1
-> 
+The "bluetooth" is more popular and more descriptive than "bt", for a
+Bluetooth device.  The WCNSS DT schema will expect such naming.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-BR, Jarkko
+---
+
+Changes since v1:
+1. None.
+---
+ arch/arm/boot/dts/qcom-apq8064.dtsi | 2 +-
+ arch/arm/boot/dts/qcom-msm8974.dtsi | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boot/dts/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom-apq8064.dtsi
+index 33a4d3441959..6eaa996272e5 100644
+--- a/arch/arm/boot/dts/qcom-apq8064.dtsi
++++ b/arch/arm/boot/dts/qcom-apq8064.dtsi
+@@ -1548,7 +1548,7 @@ wcnss {
+ 
+ 					qcom,mmio = <&riva>;
+ 
+-					bt {
++					bluetooth {
+ 						compatible = "qcom,wcnss-bt";
+ 					};
+ 
+diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
+index 2035be2fb8c4..0799dd4bfa2d 100644
+--- a/arch/arm/boot/dts/qcom-msm8974.dtsi
++++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
+@@ -930,7 +930,7 @@ wcnss {
+ 
+ 					qcom,mmio = <&pronto>;
+ 
+-					bt {
++					bluetooth {
+ 						compatible = "qcom,wcnss-bt";
+ 					};
+ 
+-- 
+2.32.0
 

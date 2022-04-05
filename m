@@ -2,123 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C21D4F5001
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8794F5029
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383538AbiDFBIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53084 "EHLO
+        id S1840674AbiDFBLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457536AbiDEQHg (ORCPT
+        with ESMTP id S1457563AbiDEQKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:07:36 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D541D21B5
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:05:35 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 5so24120309lfp.1
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 09:05:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nxSv5eyrtE6/qWHKkufe6DV14I2zyM0F7tIcd5vnzO8=;
-        b=LeSkYYoDEJNjK8zq0EOP89Hkk3DbuFfJjbUe5+KLYHcUT4m19pDvjujdRTwJ+6G4vB
-         8p1DyoVoOyCzKK3e/fxJLLSuxoeIJ8iil2Mcxo3v7StseqwcNFxnHznLz2EhZ1OEYZk9
-         /bao3mzDfMSstuCORSfk6Ns0RNTJK0oI9xZbHSil0JJNNqKPU5oidmvsCRPfhXYRRWNj
-         ++/rV4cmjyMXE9sqTGedA+0gd2DWodeIB/5zBK/deEpCSPnil+9uYYZi0kVhrhEC3lTn
-         eeA/dRf2fw8q6xdthG821zr9lo/+J4Mh/ioMv5Wz6HlDvhXTCgLhQJpWTPo5Aqs4xtts
-         k/aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nxSv5eyrtE6/qWHKkufe6DV14I2zyM0F7tIcd5vnzO8=;
-        b=ngWxlhl+REhN1ypsFGL6y4WPlRvRzRAfR+lUkPccfnsXzLZdU9rwOmW5lykSr5somB
-         or3QMaOT876qa7zbpARevkqJdbTYznjEx45GhA5a6Xjj85XJvyZTREzPQEUrXuxO3dIA
-         k7t1sUUTg7Nrr6uxTsxFZZgyZiQ99qG1DMkopx2vsmYc+IBd1qY3Axrb+bFgYRpsfo0o
-         1G+3JFGPWE00c99fvuWXkTd7vAu1XIFXJpMG8UWfs7T5+433to9Lb0SQkYa+3Kn6RbjM
-         5GaWzePSap331IagfxA1B72IBUFUxjGNWFWI7VqM3KI1uuSP67LK1w7tI5QXndMJpPWT
-         fZdQ==
-X-Gm-Message-State: AOAM533KvoEKIPCER6DXl6IYAVBFzSbgyVu7Qa/Lnbpr/MbNoiNRYTde
-        avEkfqtJh5WUWa4lbokt88CmvrtGxAPKwdksWh/ZdC64ECc=
-X-Google-Smtp-Source: ABdhPJzz/ro4Lc6Ay7slYv/xbuptHLjWeC6GRfWxUOV/UMs/OUe1EaXf8ASQ22RGz1VdFmZ7e0Do10pbasFb0tTipmQ=
-X-Received: by 2002:a05:6512:3fa0:b0:44a:f66c:8365 with SMTP id
- x32-20020a0565123fa000b0044af66c8365mr3181106lfa.152.1649174734013; Tue, 05
- Apr 2022 09:05:34 -0700 (PDT)
+        Tue, 5 Apr 2022 12:10:48 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC7C764F;
+        Tue,  5 Apr 2022 09:08:45 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 7687B22247;
+        Tue,  5 Apr 2022 18:08:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1649174924;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=h6X3/D3utwq+kJMZuybBLFCBUbNYycHilQpxUt5aIVA=;
+        b=sb4RLOw06F2OUikWNR7VIXmVEnMHuJWPtX2SRlNJukEY65dgHr+D1emUjY3vKtAHv2GS+9
+        Fj4MmL/WHm5eROQx1OqqoK+XXptio9gUyK3rZzfxlTtLJKsn8u2jd2ussYbLL6sSciesS9
+        3jNOznvAHXDr16PAnTAIF88lO/HUwwg=
+From:   Michael Walle <michael@walle.cc>
+To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tudor.Ambarus@microchip.com, Michael Walle <michael@walle.cc>
+Subject: [PATCH v3 0/7] ARM: dts: lan966x: dtsi improvements and KSwitch D10 support
+Date:   Tue,  5 Apr 2022 18:08:30 +0200
+Message-Id: <20220405160837.4093563-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20220405150912.GA625670@euclid> <YkxdasBGZ3m2Yu66@kroah.com>
- <CAMWRUK7c-hqiz+KEFkqBuvu1syCwSnF4UZzbkPFw-VWABm9qOw@mail.gmail.com>
- <CAMWRUK7Jgs3evt3bC0pnRkbRw3CS1XCULPi8NzjgGh7aLTFKCQ@mail.gmail.com> <YkxnJvJyo75c/3yk@kroah.com>
-In-Reply-To: <YkxnJvJyo75c/3yk@kroah.com>
-From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-Date:   Tue, 5 Apr 2022 12:05:22 -0400
-Message-ID: <CAMWRUK6Hamw9bg8-O+xqP0DKy=zcbXHaG4RQtqXo3keFj=KJyA@mail.gmail.com>
-Subject: Re: [PATCH v2] staging: rtl8723bs: fix indentation
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy linux kernel <outreachy@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 11:58 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Apr 05, 2022 at 11:45:29AM -0400, Sevinj Aghayeva wrote:
-> > On Tue, Apr 5, 2022 at 11:19 AM Sevinj Aghayeva
-> > <sevinj.aghayeva@gmail.com> wrote:
-> > >
-> > > On Tue, Apr 5, 2022 at 11:17 AM Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > On Tue, Apr 05, 2022 at 11:09:12AM -0400, Sevinj Aghayeva wrote:
-> > > > > Adhere to Linux kernel coding style.
-> > > > >
-> > > > > Reported by checkpatch:
-> > > > >
-> > > > > WARNING: suspect code indent for conditional statements
-> > > >
-> > > > You are also removing unneeded comments, right?  Please explain that as
-> > > > the documentation link the bot pointed you to showed.
-> > >
-> > > I specified that under the --- line:
-> > >
-> > > v1 -> v2: Remove the comments that became irrelevant with proper indentation.
-> >
-> > I think I misunderstood the bot's response. It looks like you
-> > triggered it because you wanted me to write a more complete
-> > description of what the commit is doing. I thought I received it
-> > because it was the second version of the patch from a previous
-> > patchset (the last bullet point in the bot response) that didn't
-> > include v2 in the subject and a v1 -> v2 after the --- line.
->
-> That is one reason, yes, but you also need to update the changelog text
-> to say everything you are doing in the commit.
+Add missing nodes for the flexcom blocks and a node for the SGPIO
+block. Then add basic support for the Kontron KSwitch D10.
 
-Got it.
+Microchip, please take a closer look at the compatible strings of
+the newly added nodes.
 
->
-> > I can do a fresh patch with a complete description and no v2 stuff;
-> > please let me know.
->
-> It will be a v3 patch, right?
+changes since v2:
+ - add second kontron board variant and moved common stuff into a
+   new dtsi
+ - moved the uart/i2c nodes inside of the flexcom node
+ - moved sgpio child nodes inside of the sgpio node
 
-Right.
+changes since v1:
+ - fixed indendation
+ - keep compatible, reg first, move #address-cells and #size-cells
+   towards the end
 
->
-> thanks,
->
-> greg k-h
+Michael Walle (7):
+  ARM: dts: lan966x: swap dma channels for crypto node
+  ARM: dts: lan966x: add sgpio node
+  ARM: dts: lan966x: add missing uart DMA channel
+  ARM: dts: lan966x: add all flexcom usart nodes
+  ARM: dts: lan966x: add flexcom SPI nodes
+  ARM: dts: lan966x: add flexcom I2C nodes
+  ARM: dts: lan966x: add basic Kontron KSwitch D10 support
 
-
+ arch/arm/boot/dts/Makefile                    |   4 +-
+ ...lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts |  77 ++++++
+ .../lan966x-kontron-kswitch-d10-mmt-8g.dts    |  13 +
+ .../dts/lan966x-kontron-kswitch-d10-mmt.dtsi  |  75 ++++++
+ arch/arm/boot/dts/lan966x.dtsi                | 227 +++++++++++++++++-
+ 5 files changed, 392 insertions(+), 4 deletions(-)
+ create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
+ create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts
+ create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
 
 -- 
+2.30.2
 
-Sevinj.Aghayeva

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21044F3969
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 158154F3A40
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378386AbiDELdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50832 "EHLO
+        id S1379434AbiDELlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244567AbiDEIw0 (ORCPT
+        with ESMTP id S244580AbiDEIw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:52:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE2ED7615;
-        Tue,  5 Apr 2022 01:41:21 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA59D5E9E;
+        Tue,  5 Apr 2022 01:41:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F37F614FD;
-        Tue,  5 Apr 2022 08:41:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 201DEC385A0;
-        Tue,  5 Apr 2022 08:41:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEFC860FFB;
+        Tue,  5 Apr 2022 08:41:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE4D2C385A0;
+        Tue,  5 Apr 2022 08:41:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148080;
-        bh=SjknEhECGb1fUja6ZVAmAJQKcOM/RZ1nOx6+Lr4wAFE=;
+        s=korg; t=1649148083;
+        bh=oG4PqPTQ8UDnzae81MrqynYRWxChHW4UKwC57HaQxvY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TnCtzD69knu5NS1w0sI1+YQo0zpRSi8gjYjUDgmVen0SW+10+grQ6tg4CKBxPonik
-         PxyNsH+sa37+slSO5z/9QfITZsNNOKJhNMcyR/NqNAf7Hl6vbl1HLBbiResekk7Eub
-         FwI3yJg5vKnZITup894UxQzReu5+kgAh/3RIwzTA=
+        b=VEuiB8fBlS0I3e7MKRGPdmgpau48ofZ0lTFMUxlM8XzSOkDRyxroAJKjfa6Y7jIDw
+         SN8kYeFZLe3frmM/Ctm28zE1sdWATLeeFNqHFqvdbQLsPZiBbs2hPEFhoMEp/Lq7G8
+         TjWbob0Rc6Q7HqpF+WVK1oB95+6t+f2uI4ImOiQs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Armin Wolf <W_Armin@gmx.de>,
-        Hans de Goede <hdegoede@redhat.com>,
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Keith Busch <kbusch@kernel.org>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0228/1017] hwmon: (sch56xx-common) Replace WDOG_ACTIVE with WDOG_HW_RUNNING
-Date:   Tue,  5 Apr 2022 09:19:01 +0200
-Message-Id: <20220405070401.022835973@linuxfoundation.org>
+Subject: [PATCH 5.16 0229/1017] nvme: cleanup __nvme_check_ids
+Date:   Tue,  5 Apr 2022 09:19:02 +0200
+Message-Id: <20220405070401.052384140@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,43 +56,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Armin Wolf <W_Armin@gmx.de>
+From: Christoph Hellwig <hch@lst.de>
 
-[ Upstream commit 647d6f09bea7dacf4cdb6d4ea7e3051883955297 ]
+[ Upstream commit fd8099e7918cd2df39ef306dd1d1af7178a15b81 ]
 
-If the watchdog was already enabled by the BIOS after booting, the
-watchdog infrastructure needs to regularly send keepalives to
-prevent a unexpected reset.
-WDOG_ACTIVE only serves as an status indicator for userspace,
-we want to use WDOG_HW_RUNNING instead.
+Pass the actual nvme_ns_ids used for the comparison instead of the
+ns_head that isn't needed and use a more descriptive function name.
 
-Since my Fujitsu Esprimo P720 does not support the watchdog,
-this change is compile-tested only.
-
-Suggested-by: Guenter Roeck <linux@roeck-us.net>
-Fixes: fb551405c0f8 (watchdog: sch56xx: Use watchdog core)
-Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-Link: https://lore.kernel.org/r/20220131211935.3656-5-W_Armin@gmx.de
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Keith Busch <kbusch@kernel.org>
+Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/sch56xx-common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/nvme/host/core.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common.c
-index 40cdadad35e5..f85eede6d766 100644
---- a/drivers/hwmon/sch56xx-common.c
-+++ b/drivers/hwmon/sch56xx-common.c
-@@ -422,7 +422,7 @@ void sch56xx_watchdog_register(struct device *parent, u16 addr, u32 revision,
- 	data->wddev.max_timeout = 255 * 60;
- 	watchdog_set_nowayout(&data->wddev, nowayout);
- 	if (output_enable & SCH56XX_WDOG_OUTPUT_ENABLE)
--		set_bit(WDOG_ACTIVE, &data->wddev.status);
-+		set_bit(WDOG_HW_RUNNING, &data->wddev.status);
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index 5785f6abf194..078ad43b94a1 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -3605,16 +3605,15 @@ static struct nvme_ns_head *nvme_find_ns_head(struct nvme_subsystem *subsys,
+ 	return NULL;
+ }
  
- 	/* Since the watchdog uses a downcounter there is no register to read
- 	   the BIOS set timeout from (if any was set at all) ->
+-static int __nvme_check_ids(struct nvme_subsystem *subsys,
+-		struct nvme_ns_head *new)
++static int nvme_subsys_check_duplicate_ids(struct nvme_subsystem *subsys,
++		struct nvme_ns_ids *ids)
+ {
+ 	struct nvme_ns_head *h;
+ 
+ 	lockdep_assert_held(&subsys->lock);
+ 
+ 	list_for_each_entry(h, &subsys->nsheads, entry) {
+-		if (nvme_ns_ids_valid(&new->ids) &&
+-		    nvme_ns_ids_equal(&new->ids, &h->ids))
++		if (nvme_ns_ids_valid(ids) && nvme_ns_ids_equal(ids, &h->ids))
+ 			return -EINVAL;
+ 	}
+ 
+@@ -3713,7 +3712,7 @@ static struct nvme_ns_head *nvme_alloc_ns_head(struct nvme_ctrl *ctrl,
+ 	head->ids = *ids;
+ 	kref_init(&head->ref);
+ 
+-	ret = __nvme_check_ids(ctrl->subsys, head);
++	ret = nvme_subsys_check_duplicate_ids(ctrl->subsys, &head->ids);
+ 	if (ret) {
+ 		dev_err(ctrl->device,
+ 			"duplicate IDs for nsid %d\n", nsid);
 -- 
 2.34.1
 

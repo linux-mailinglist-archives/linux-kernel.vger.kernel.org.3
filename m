@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 136E54F4208
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 727724F415C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381372AbiDEPOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59292 "EHLO
+        id S1383727AbiDEPOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:14:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346496AbiDEJpI (ORCPT
+        with ESMTP id S1346555AbiDEJpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:45:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB913DA6EA;
-        Tue,  5 Apr 2022 02:30:50 -0700 (PDT)
+        Tue, 5 Apr 2022 05:45:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDC8DA6FB;
+        Tue,  5 Apr 2022 02:30:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 742C6B81CB3;
-        Tue,  5 Apr 2022 09:30:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6695C385A0;
-        Tue,  5 Apr 2022 09:30:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2B432B81CB5;
+        Tue,  5 Apr 2022 09:30:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 745CCC385A2;
+        Tue,  5 Apr 2022 09:30:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151048;
-        bh=ILHz7ulA5x04gj7iYCp96oECxga7eMHwl9e/gQq2a24=;
+        s=korg; t=1649151053;
+        bh=qKXsJ7vAUl9nUSKCHBeqDKEnxEuqtPHwSAaDwyNgnFY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=saLO13AtUVyYeMBtU9tQMWTG35YsOhXaSIDPB6zF8DK44pZ8C4FFUIpnTEQeXHJDa
-         xl7vi+jLfbcznc9+vLDbUGwQ4Xd14PSiE4m7CEr3C4J/rMNnOCA0TvD9luCqRhQWGr
-         F92R7ENtiqxeh74BgGUGItJnk9FtLxxNQma/TayI=
+        b=ythMEheLA5Fi2VluAakvv+uOQOvqEHsfcIl21SGPx+0bVr/LKd+/M2mpw0kpClGcO
+         0zGiKp61DzxTFp6NDCzir7zo+WHKJs1Y2qDS7VLbhVFX21QoT2hn2yfRwQ4evj0Hg/
+         Fscw9pl/0S/QtKu1V9Pcv7z+DTHf9LnL/B6sUnoA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ondrej Zary <linux@zary.sk>,
+        stable@vger.kernel.org,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 275/913] media: bttv: fix WARNING regression on tunerless devices
-Date:   Tue,  5 Apr 2022 09:22:17 +0200
-Message-Id: <20220405070348.100992793@linuxfoundation.org>
+Subject: [PATCH 5.15 276/913] media: atmel: atmel-sama7g5-isc: fix ispck leftover
+Date:   Tue,  5 Apr 2022 09:22:18 +0200
+Message-Id: <20220405070348.130965095@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,47 +58,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ondrej Zary <linux@zary.sk>
+From: Eugen Hristev <eugen.hristev@microchip.com>
 
-[ Upstream commit ef058cc8b7193d15a771272359c7454839ae74ee ]
+[ Upstream commit 1b52ce99e9f2dcda868a1a7026bfb58d04bd6bc8 ]
 
-Commit 2161536516ed ("media: media/pci: set device_caps in struct video_device")
-introduced a regression: V4L2_CAP_TUNER is always present in device_caps,
-even when the device has no tuner.
+The ispck is not used for sama7g5 variant of the ISC.
+Calls to ispck have to be removed also from module insert/removal.
 
-This causes a warning:
-WARNING: CPU: 0 PID: 249 at drivers/media/v4l2-core/v4l2-ioctl.c:1102 v4l_querycap+0xa0/0xb0 [videodev]
-
-Fixes: 2161536516ed ("media: media/pci: set device_caps in struct video_device")
-Signed-off-by: Ondrej Zary <linux@zary.sk>
+Fixes: d7f26849ed7c ("media: atmel: fix the ispck initialization")
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/bt8xx/bttv-driver.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/platform/atmel/atmel-sama7g5-isc.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
-index 0e9df8b35ac6..661ebfa7bf3f 100644
---- a/drivers/media/pci/bt8xx/bttv-driver.c
-+++ b/drivers/media/pci/bt8xx/bttv-driver.c
-@@ -3890,7 +3890,7 @@ static int bttv_register_video(struct bttv *btv)
+diff --git a/drivers/media/platform/atmel/atmel-sama7g5-isc.c b/drivers/media/platform/atmel/atmel-sama7g5-isc.c
+index 9c05acafd072..6a5d3f7ce75e 100644
+--- a/drivers/media/platform/atmel/atmel-sama7g5-isc.c
++++ b/drivers/media/platform/atmel/atmel-sama7g5-isc.c
+@@ -555,7 +555,6 @@ static int microchip_xisc_remove(struct platform_device *pdev)
  
- 	/* video */
- 	vdev_init(btv, &btv->video_dev, &bttv_video_template, "video");
--	btv->video_dev.device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_TUNER |
-+	btv->video_dev.device_caps = V4L2_CAP_VIDEO_CAPTURE |
- 				     V4L2_CAP_READWRITE | V4L2_CAP_STREAMING;
- 	if (btv->tuner_type != TUNER_ABSENT)
- 		btv->video_dev.device_caps |= V4L2_CAP_TUNER;
-@@ -3911,7 +3911,7 @@ static int bttv_register_video(struct bttv *btv)
- 	/* vbi */
- 	vdev_init(btv, &btv->vbi_dev, &bttv_video_template, "vbi");
- 	btv->vbi_dev.device_caps = V4L2_CAP_VBI_CAPTURE | V4L2_CAP_READWRITE |
--				   V4L2_CAP_STREAMING | V4L2_CAP_TUNER;
-+				   V4L2_CAP_STREAMING;
- 	if (btv->tuner_type != TUNER_ABSENT)
- 		btv->vbi_dev.device_caps |= V4L2_CAP_TUNER;
+ 	v4l2_device_unregister(&isc->v4l2_dev);
+ 
+-	clk_disable_unprepare(isc->ispck);
+ 	clk_disable_unprepare(isc->hclock);
+ 
+ 	isc_clk_cleanup(isc);
+@@ -567,7 +566,6 @@ static int __maybe_unused xisc_runtime_suspend(struct device *dev)
+ {
+ 	struct isc_device *isc = dev_get_drvdata(dev);
+ 
+-	clk_disable_unprepare(isc->ispck);
+ 	clk_disable_unprepare(isc->hclock);
+ 
+ 	return 0;
+@@ -582,10 +580,6 @@ static int __maybe_unused xisc_runtime_resume(struct device *dev)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = clk_prepare_enable(isc->ispck);
+-	if (ret)
+-		clk_disable_unprepare(isc->hclock);
+-
+ 	return ret;
+ }
  
 -- 
 2.34.1

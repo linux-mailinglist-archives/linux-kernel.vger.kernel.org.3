@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 144224F43F2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0884F44DC
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389672AbiDENww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44522 "EHLO
+        id S1383139AbiDENe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347516AbiDEJ1K (ORCPT
+        with ESMTP id S1347010AbiDEJYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:27:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272B2DF49A;
-        Tue,  5 Apr 2022 02:15:32 -0700 (PDT)
+        Tue, 5 Apr 2022 05:24:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EAAA99683;
+        Tue,  5 Apr 2022 02:14:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2034B81B62;
-        Tue,  5 Apr 2022 09:15:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EADF6C385A0;
-        Tue,  5 Apr 2022 09:15:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 12FEBB81B14;
+        Tue,  5 Apr 2022 09:14:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DC51C385A3;
+        Tue,  5 Apr 2022 09:14:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150130;
-        bh=jl6Snp2v0QTf7bMzCJgP0Dv9BzB/beZVOt0Nxq39c78=;
+        s=korg; t=1649150077;
+        bh=f19IgujV/yw7D/q+fpx39ycuktKtJQPW23eKnN0ZCdQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sQbpsBnZ8BhjwAkaFseItpMRg1DuoLfArKtt4YhEkoyQl7QGU0NTyzSkipvGyPezq
-         KT0Cn1NLjRjQ8OptCr4RlaszAlywdMEKVwkMp9cSuyl3LcUsFEEeK4K/gY65nwMsJw
-         7J7HHIwx2CSeBl/g0oX+NKlGyK2/SxSoDsoLGw44=
+        b=sfOfxY7FzTsAcgY8RFGsY91nmeOqI88viV74ne/fQ2bBBdszr34+6LG2RLnv0CzIk
+         sz/HVaROG0AaHoaRcNAoZzWB0yT1m/bxYl1bQThqK3Y24FuwHovuIBBAJz7XarZqKQ
+         pRU1aOpNu82SYjoHSQzTNTYxb+4ZZKSV98Gmd5Ew=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>,
-        Richard Weinberger <richard@nod.at>
-Subject: [PATCH 5.16 0916/1017] ubifs: rename_whiteout: correct old_dir size computing
-Date:   Tue,  5 Apr 2022 09:30:29 +0200
-Message-Id: <20220405070421.410357296@linuxfoundation.org>
+        stable@vger.kernel.org, PaX Team <pageexec@freemail.hu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.16 0919/1017] wireguard: queueing: use CFI-safe ptr_ring cleanup function
+Date:   Tue,  5 Apr 2022 09:30:32 +0200
+Message-Id: <20220405070421.498365446@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,35 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baokun Li <libaokun1@huawei.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit 705757274599e2e064dd3054aabc74e8af31a095 upstream.
+commit ec59f128a9bd4255798abb1e06ac3b442f46ef68 upstream.
 
-When renaming the whiteout file, the old whiteout file is not deleted.
-Therefore, we add the old dentry size to the old dir like XFS.
-Otherwise, an error may be reported due to `fscki->calc_sz != fscki->size`
-in check_indes.
+We make too nuanced use of ptr_ring to entirely move to the skb_array
+wrappers, but we at least should avoid the naughty function pointer cast
+when cleaning up skbs. Otherwise RAP/CFI will honk at us. This patch
+uses the __skb_array_destroy_skb wrapper for the cleanup, rather than
+directly providing kfree_skb, which is what other drivers in the same
+situation do too.
 
-Fixes: 9e0a1fff8db56ea ("ubifs: Implement RENAME_WHITEOUT")
-Reported-by: Zhihao Cheng <chengzhihao1@huawei.com>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
+Reported-by: PaX Team <pageexec@freemail.hu>
+Fixes: 886fcee939ad ("wireguard: receive: use ring buffer for incoming handshakes")
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ubifs/dir.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/wireguard/queueing.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/fs/ubifs/dir.c
-+++ b/fs/ubifs/dir.c
-@@ -1402,6 +1402,9 @@ static int do_rename(struct inode *old_d
- 			iput(whiteout);
- 			goto out_release;
- 		}
-+
-+		/* Add the old_dentry size to the old_dir size. */
-+		old_sz -= CALC_DENT_SIZE(fname_len(&old_nm));
- 	}
+--- a/drivers/net/wireguard/queueing.c
++++ b/drivers/net/wireguard/queueing.c
+@@ -4,6 +4,7 @@
+  */
  
- 	lock_4_inodes(old_dir, new_dir, new_inode, whiteout);
+ #include "queueing.h"
++#include <linux/skb_array.h>
+ 
+ struct multicore_worker __percpu *
+ wg_packet_percpu_multicore_worker_alloc(work_func_t function, void *ptr)
+@@ -42,7 +43,7 @@ void wg_packet_queue_free(struct crypt_q
+ {
+ 	free_percpu(queue->worker);
+ 	WARN_ON(!purge && !__ptr_ring_empty(&queue->ring));
+-	ptr_ring_cleanup(&queue->ring, purge ? (void(*)(void*))kfree_skb : NULL);
++	ptr_ring_cleanup(&queue->ring, purge ? __skb_array_destroy_skb : NULL);
+ }
+ 
+ #define NEXT(skb) ((skb)->prev)
 
 

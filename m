@@ -2,76 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5D54F2300
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 280584F2306
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbiDEGXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 02:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
+        id S230162AbiDEGZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 02:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiDEGXN (ORCPT
+        with ESMTP id S229687AbiDEGY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 02:23:13 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7FF3121D
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 23:21:15 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id r13so24480048ejd.5
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 23:21:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=dFScsEWOIQMzMNWYs3fFmAJMFFVGjdTXWlfZ6OzACcM=;
-        b=ThW/SFaboNZtHF1joXB0EOfD3+A0oYJ68xb8vJwAGJJiAGdr5v9cOdv2Dn66J/LFyu
-         tDNav6AsyulSZuGIEw7SaLofwLqlZpeX62mUTRZP80YMIBFpCdQj2Z9FyiN3CqOSYQm2
-         LalCB5F1uP33hNg9iwBf7oB6uMrnWQNDoPsglXr10xJOBqkYwAjCgqnqd3jj45MnEqDa
-         Lg30iUzsG5H5ep1/kiOcndp8nAfuZgbCulVghu/RP2S+rGF53vYqBWYVeYqdV6ixfuza
-         RiDXrjpU+PItsGYrqSpREsv+U6svzjtGW0w42psnSUBOu1BB8eBwq0W9Bp7xR8totzeV
-         8KAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=dFScsEWOIQMzMNWYs3fFmAJMFFVGjdTXWlfZ6OzACcM=;
-        b=iatB2ZtFwjuQFvVZuWz3I4V9HhhMTxOj+jni5ndmsD4uywtuojFwrjECcoMrxPNyiH
-         Cq9iR9eBSAt9QPU5MwsxLOLTLzfDoJgW3Kpkuu1vNxZanoRZDK6WB5+4Ft8rpgMdFrz7
-         iVsI/PbOGdljef33U/nF7ZmwdnGFOy1QTLr+YrxUBGAHa1wKjJlojOr1n854QZoXzZnD
-         ST6FECnQaazsuCcKceG45AL8/K8G9FPD2GcFL6Qv+xQ9/k5gbFliQgAlFc1+U5H0IA9m
-         h6oqQXPQdZDZONxWKSq21hamE9v5BwjQIYizfPgC6Dx3jly2a3cDODDh7poxAMvRPt2l
-         gBrg==
-X-Gm-Message-State: AOAM5317pQDWCzc/mJHb8hL0dngIRH22cVLVZ5i82AwAiXuLbrja5uz9
-        EDH6Jqp46/crdy/SVfHPMl14BQ==
-X-Google-Smtp-Source: ABdhPJyYwzqhusFM2acIFejF6DscmAD/F8UQ9YmVdk9ycgo6D64esQZRZXphTaTK1r5QecxoV/dc7Q==
-X-Received: by 2002:a17:906:c145:b0:6da:aaaf:770c with SMTP id dp5-20020a170906c14500b006daaaaf770cmr1919863ejc.504.1649139674388;
-        Mon, 04 Apr 2022 23:21:14 -0700 (PDT)
-Received: from [192.168.0.179] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id f13-20020a50bf0d000000b0041cdd9c9147sm1051481edk.40.2022.04.04.23.21.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Apr 2022 23:21:13 -0700 (PDT)
-Message-ID: <12b2cd08-f296-1c48-4ea4-0d119597854e@linaro.org>
-Date:   Tue, 5 Apr 2022 08:21:13 +0200
+        Tue, 5 Apr 2022 02:24:59 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C9033E92;
+        Mon,  4 Apr 2022 23:23:01 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2356MevN095436;
+        Tue, 5 Apr 2022 01:22:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649139760;
+        bh=rMuuntgnJKW2JVzxOaOZag9nVSmVcnb08P7QfoDrzhE=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=m1ej1kteIm1Oa1/jZW3IqmUEdfEL1Z7oyLj6zQXQmC9vizLxbrYQE6jM9HxypKzT9
+         0f47HhLVlwg5SlItxfHijjmmeCbhZuatAKE+Zai0+yRBOk0R/CtHceqn9jUFeve245
+         3jtBsEgmGlquRJY3qPrEIEtzYLszaoLxHPy4Yon0=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2356MeW6067756
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 5 Apr 2022 01:22:40 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 5
+ Apr 2022 01:22:39 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 5 Apr 2022 01:22:39 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2356McPw019970;
+        Tue, 5 Apr 2022 01:22:39 -0500
+Date:   Tue, 5 Apr 2022 11:52:38 +0530
+From:   Rahul T R <r-ravikumar@ti.com>
+To:     Vignesh Raghavendra <vigneshr@ti.com>
+CC:     <nm@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski@canonical.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <tomi.valkeinen@ideasonboard.com>,
+        <laurent.pinchart@ideasonboard.com>, <kishon@ti.com>
+Subject: Re: [PATCH v2 2/2] arm64: dts: ti: k3-j721e-common-proc-board: add
+ DP to j7 evm
+Message-ID: <20220405062237.swilick4ssnrni2l@uda0490373>
+References: <20220331143035.16210-1-r-ravikumar@ti.com>
+ <20220331143035.16210-3-r-ravikumar@ti.com>
+ <3ae1a0b5-236c-20b0-ac2a-a93f0b4ced97@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] dt-bindings: white-space cleanups
-Content-Language: en-US
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        Corentin Labbe <clabbe@baylibre.com>
-References: <20220402192819.154691-1-krzysztof.kozlowski@linaro.org>
- <CAL_JsqKuFAY4QENRb3dKETKcaJm-fcguoCFOgUnzf0Pwmf1Ezg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAL_JsqKuFAY4QENRb3dKETKcaJm-fcguoCFOgUnzf0Pwmf1Ezg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <3ae1a0b5-236c-20b0-ac2a-a93f0b4ced97@ti.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,19 +71,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/04/2022 23:18, Rob Herring wrote:
-> On Sat, Apr 2, 2022 at 2:28 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> Remove trailing white-spaces and trailing blank lines (yamllint when run
->> manually does not like them).
+On 10:33-20220401, Vignesh Raghavendra wrote:
+> Hi Rahul,
 > 
-> I assume you mean run without our configuration file. I probably
-> disabled the check because I didn't want to go fix everywhere. If we
-> are going to fix, then we should enable the check to not get more.
+> On 31/03/22 8:00 pm, Rahul T R wrote:
+> > From: Tomi Valkeinen <tomi.valkeinen@ti.com>
+> > 
+> > Add the endpoint nodes to describe connection from
+> > DSS => MHDP => DisplayPort connector.
+> > Also add the phy link node and required pinmux nodes
+> > for hotplug.
+> > 
+> > Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
+> > Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+> > ---
+> >  .../dts/ti/k3-j721e-common-proc-board.dts     | 78 ++++++++++++++++++-
+> >  1 file changed, 74 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+> > index f5ca8e26ed99..8ddc0d3bd058 100644
+> > --- a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+> > +++ b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+> > @@ -148,6 +148,28 @@
+> >  		pinctrl-0 = <&main_mcan2_gpio_pins_default>;
+> >  		standby-gpios = <&main_gpio0 127 GPIO_ACTIVE_HIGH>;
+> >  	};
+> > +
+> > +	dp_pwr_3v3: fixedregulator-dp-prw {
+> 
+> Please use standard node name: regulator-X as per DT spec [1]
+> 
+> 
+> [1]
+> https://github.com/devicetree-org/devicetree-specification/releases/tag/v0.3
+> 
+> > +		compatible = "regulator-fixed";
+> > +		regulator-name = "dp-pwr";
+> > +		regulator-min-microvolt = <3300000>;
+> > +		regulator-max-microvolt = <3300000>;
+> > +		gpio = <&exp4 0 0>;	/* P0 - DP0_PWR_SW_EN */
+> 
+> Please use GPIO_ACTIVE_* macros as appropriate.
 
-Yes, just "yamllint *yaml".
+Thanks Vignesh,
 
+Will address the review comments in the respin
 
-Best regards,
-Krzysztof
+Regards
+Rahul T R
+
+> 
+> > +		enable-active-high;
+> > +	};
+> > +
+> [...]

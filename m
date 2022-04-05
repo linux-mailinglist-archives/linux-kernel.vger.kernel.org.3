@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 482E14F3DC1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:36:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A064F4176
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350593AbiDEUC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
+        id S1356316AbiDEMu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348907AbiDEJsp (ORCPT
+        with ESMTP id S242416AbiDEJHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92255ECC6B;
-        Tue,  5 Apr 2022 02:37:09 -0700 (PDT)
+        Tue, 5 Apr 2022 05:07:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E90A68FBF;
+        Tue,  5 Apr 2022 01:56:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36CF6B81B14;
-        Tue,  5 Apr 2022 09:37:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 975C7C385A0;
-        Tue,  5 Apr 2022 09:37:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B77A61562;
+        Tue,  5 Apr 2022 08:56:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69E14C385A0;
+        Tue,  5 Apr 2022 08:56:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151427;
-        bh=5ViWBbsLPxdn3zqyYlQXpfb56RiI3TzY2TRM9WAalvU=;
+        s=korg; t=1649148998;
+        bh=1+Mngr6KGkheShOg7khTz8KoT3VtqXQ7du3xbknMR0E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gcJab2+6MJauQH9NG3L9xvgEO5wS5VbhAd2hAEiRJaq+thy88okY6DKySYb1i4OrI
-         I2iRGYAldj9QnNN8X603jwSibs6TwXNKR4wk1bqA0Hls0Pk0RPN6NOaZMAxoMldmev
-         BTTcavTAbawP8pp3PC/0u4hykLul9+0sOtdTfBfQ=
+        b=ihTi9/7BWMSJh3WJ4qym9odvvx+hjYqnGCiLi55h3uCt1X8CIhtbVyGEZfi2pjJlG
+         0o9DBPY7hgq0kDIccDzUVHlz6lbYq21IUqPQQscPZz26QGnYmT+58OXlB6LdB07c2h
+         PCkP6NksZzSsT+TGKgOYEVLWUvJzLgoTqVGJDNec=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Gerhard Engleder <gerhard@engleder-embedded.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Mustafa Ismail <mustafa.ismail@intel.com>,
+        Shiraz Saleem <shiraz.saleem@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 409/913] selftests/net: timestamping: Fix bind_phc check
+Subject: [PATCH 5.16 0558/1017] RDMA/irdma: Remove incorrect masking of PD
 Date:   Tue,  5 Apr 2022 09:24:31 +0200
-Message-Id: <20220405070352.105680077@linuxfoundation.org>
+Message-Id: <20220405070410.844796945@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gerhard Engleder <gerhard@engleder-embedded.com>
+From: Mustafa Ismail <mustafa.ismail@intel.com>
 
-[ Upstream commit 678dfd5280341d877ca646499bfdc82a3d8b4356 ]
+[ Upstream commit 17850f2b0b4b806e47cc44df94186bfc2cdd490b ]
 
-timestamping checks socket options during initialisation. For the field
-bind_phc of the socket option SO_TIMESTAMPING it expects the value -1 if
-PHC is not bound. Actually the value of bind_phc is 0 if PHC is not
-bound. This results in the following output:
+The PD id is masked with 0x7fff, while PD can be 18 bits for GEN2 HW.
+Remove the masking as it should not be needed and can cause incorrect PD
+id to be used.
 
-SIOCSHWTSTAMP: tx_type 0 requested, got 0; rx_filter 0 requested, got 0
-SO_TIMESTAMP 0
-SO_TIMESTAMPNS 0
-SO_TIMESTAMPING flags 0, bind phc 0
-   not expected, flags 0, bind phc -1
-
-This is fixed by setting default value and expected value of bind_phc to
-0.
-
-Fixes: 2214d7032479 ("selftests/net: timestamping: support binding PHC")
-Signed-off-by: Gerhard Engleder <gerhard@engleder-embedded.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: b48c24c2d710 ("RDMA/irdma: Implement device supported verb APIs")
+Link: https://lore.kernel.org/r/20220225163211.127-4-shiraz.saleem@intel.com
+Signed-off-by: Mustafa Ismail <mustafa.ismail@intel.com>
+Signed-off-by: Shiraz Saleem <shiraz.saleem@intel.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/net/timestamping.c | 4 ++--
+ drivers/infiniband/hw/irdma/verbs.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/net/timestamping.c b/tools/testing/selftests/net/timestamping.c
-index aee631c5284e..044bc0e9ed81 100644
---- a/tools/testing/selftests/net/timestamping.c
-+++ b/tools/testing/selftests/net/timestamping.c
-@@ -325,8 +325,8 @@ int main(int argc, char **argv)
- 	struct ifreq device;
- 	struct ifreq hwtstamp;
- 	struct hwtstamp_config hwconfig, hwconfig_requested;
--	struct so_timestamping so_timestamping_get = { 0, -1 };
--	struct so_timestamping so_timestamping = { 0, -1 };
-+	struct so_timestamping so_timestamping_get = { 0, 0 };
-+	struct so_timestamping so_timestamping = { 0, 0 };
- 	struct sockaddr_in addr;
- 	struct ip_mreq imr;
- 	struct in_addr iaddr;
+diff --git a/drivers/infiniband/hw/irdma/verbs.c b/drivers/infiniband/hw/irdma/verbs.c
+index 8cd5f9261692..03d4da16604d 100644
+--- a/drivers/infiniband/hw/irdma/verbs.c
++++ b/drivers/infiniband/hw/irdma/verbs.c
+@@ -2504,7 +2504,7 @@ static int irdma_dealloc_mw(struct ib_mw *ibmw)
+ 	cqp_info = &cqp_request->info;
+ 	info = &cqp_info->in.u.dealloc_stag.info;
+ 	memset(info, 0, sizeof(*info));
+-	info->pd_id = iwpd->sc_pd.pd_id & 0x00007fff;
++	info->pd_id = iwpd->sc_pd.pd_id;
+ 	info->stag_idx = ibmw->rkey >> IRDMA_CQPSQ_STAG_IDX_S;
+ 	info->mr = false;
+ 	cqp_info->cqp_cmd = IRDMA_OP_DEALLOC_STAG;
+@@ -3016,7 +3016,7 @@ static int irdma_dereg_mr(struct ib_mr *ib_mr, struct ib_udata *udata)
+ 	cqp_info = &cqp_request->info;
+ 	info = &cqp_info->in.u.dealloc_stag.info;
+ 	memset(info, 0, sizeof(*info));
+-	info->pd_id = iwpd->sc_pd.pd_id & 0x00007fff;
++	info->pd_id = iwpd->sc_pd.pd_id;
+ 	info->stag_idx = ib_mr->rkey >> IRDMA_CQPSQ_STAG_IDX_S;
+ 	info->mr = true;
+ 	if (iwpbl->pbl_allocated)
 -- 
 2.34.1
 

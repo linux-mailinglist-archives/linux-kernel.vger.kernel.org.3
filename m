@@ -2,81 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFBC4F3B95
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E85674F3F1E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381736AbiDEL71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
+        id S1383818AbiDEM0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245068AbiDEIxF (ORCPT
+        with ESMTP id S240936AbiDEIsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:53:05 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B75103E;
-        Tue,  5 Apr 2022 01:51:01 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
+        Tue, 5 Apr 2022 04:48:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9930327B1E;
+        Tue,  5 Apr 2022 01:36:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A27331EC03D2;
-        Tue,  5 Apr 2022 10:50:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1649148655;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=0ktS2SIjmKrtK22LLClo6EqQScwdtGgTFjzqLBa5r/k=;
-        b=lmleDHRM0KvhUep7AsjnLgP+qh35HqZQnDNl1VigAi/Fmg+AJ7FGFoXdm30SWJE0b59YjQ
-        slYIKd0SpjaYbnip4EKof+r/bjKVht4u7aLKkDriIVAc7a6tcLCfN55oanq5KiHaFWW/HX
-        70nm8ixMWRIn7qbJuViWP4LM64za0O4=
-Date:   Tue, 5 Apr 2022 10:50:53 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Mike Travis <mike.travis@hpe.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steve Wahl <steve.wahl@hpe.com>, x86@kernel.org,
-        Andy Shevchenko <andy@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Russ Anderson <russ.anderson@hpe.com>,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v3 0/3] x86/platform/uv: UV Kernel support for UV5
-Message-ID: <YkwC7TCRMM0ejFvh@zn.tnic>
-References: <20220318224304.174967-1-mike.travis@hpe.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACB9E61540;
+        Tue,  5 Apr 2022 08:36:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE35BC385A4;
+        Tue,  5 Apr 2022 08:36:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649147778;
+        bh=YZdqkHxdou06xEwB5O8wkX6sBT8EGjd1hPU579OKop8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=09AgoInte2gpBfjbn/ljy08/M8XtAjzBK3+tdc6I/8Le16Htm6RpCU3QNhJox2KRb
+         Xsk4fSKIDEWR4350fVnEkmsontbsro18fd9Tc0hLrdso0BjyjwFKHku2Y/EWIBO6GV
+         YYeBA6twWYWcawLlSY4m6rm4iQVcWlF9fa3lnwj4=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Chuck Lever <chuck.lever@oracle.com>
+Subject: [PATCH 5.16 0069/1017] NFSD: prevent integer overflow on 32 bit systems
+Date:   Tue,  5 Apr 2022 09:16:22 +0200
+Message-Id: <20220405070356.238304577@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220318224304.174967-1-mike.travis@hpe.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 05:43:01PM -0500, Mike Travis wrote:
-> Mike Travis (3):
->   x86/platform/uv: Update NMI Handler for UV5
->   x86/platform/uv: Update TSC sync state for UV5
->   x86/platform/uv: Log gap hole end size
-> 
->  arch/x86/kernel/apic/x2apic_uv_x.c | 20 +++++++++++++++-----
->  arch/x86/platform/uv/uv_nmi.c      | 21 +++++++++++----------
->  2 files changed, 26 insertions(+), 15 deletions(-)
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-All three zapped from tip until
+commit 23a9dbbe0faf124fc4c139615633b9d12a3a89ef upstream.
 
-  https://lore.kernel.org/r/87zgl02w6v.ffs@tglx
+On a 32 bit system, the "len * sizeof(*p)" operation can have an
+integer overflow.
 
-is resolved.
+Cc: stable@vger.kernel.org
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ include/linux/sunrpc/xdr.h |    2 ++
+ 1 file changed, 2 insertions(+)
 
-Thx.
+--- a/include/linux/sunrpc/xdr.h
++++ b/include/linux/sunrpc/xdr.h
+@@ -731,6 +731,8 @@ xdr_stream_decode_uint32_array(struct xd
+ 
+ 	if (unlikely(xdr_stream_decode_u32(xdr, &len) < 0))
+ 		return -EBADMSG;
++	if (len > SIZE_MAX / sizeof(*p))
++		return -EBADMSG;
+ 	p = xdr_inline_decode(xdr, len * sizeof(*p));
+ 	if (unlikely(!p))
+ 		return -EBADMSG;
 
--- 
-Regards/Gruss,
-    Boris.
 
-https://people.kernel.org/tglx/notes-about-netiquette

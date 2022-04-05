@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 928DE4F4C7F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F2C4F4A2E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1578520AbiDEXXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
+        id S1451746AbiDEWgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:36:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357914AbiDEK10 (ORCPT
+        with ESMTP id S1350052AbiDEJwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9426522DE;
-        Tue,  5 Apr 2022 03:11:16 -0700 (PDT)
+        Tue, 5 Apr 2022 05:52:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC4D40903;
+        Tue,  5 Apr 2022 02:50:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 34BC1B81C88;
-        Tue,  5 Apr 2022 10:11:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A498BC385A1;
-        Tue,  5 Apr 2022 10:11:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9195FB81B14;
+        Tue,  5 Apr 2022 09:50:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05CF1C385A2;
+        Tue,  5 Apr 2022 09:50:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153474;
-        bh=+vNkrn4fO5sUcF7UdHE0tr717ptuDd7aFb+5A8RKrkE=;
+        s=korg; t=1649152233;
+        bh=H6yXsyLC+XmnjgO7uGN+UwUrHdlEQxZyvfw1gQLR/us=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1pfB0kNJy8qm2XTNKjSSq50DSaCo6cGBeXtvj2LhZ2zz6IbRmBF1+cTwR8lc/bh/B
-         +vF4TpGXGx7vIG8xUPJhzrOVtkh4olU91UQX2Cr37gaH5Ufz6YTYtCpfMP4ahZ4UUa
-         2HDjR0AkIn6eOZoSE3o07Giru4kh7jpswC7n9/l0=
+        b=cG8Z+hvJJ+VrHeCh/JtFotz9bnLZEQWzSR6/iPWsidiFfNis1cG1yUzTS5M8Ow9M5
+         0ao1hQUtExQvLj4d1KCtMwagZfZPDDhD/8pzVCKfukZcXU/ftqmPXcMuLZxklGzNuN
+         NR7NnVUTSCiJngTSi7MHunHdHlp2jo0Vz3Hg+N5I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jia-Ju Bai <baijiaju1990@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        stable@vger.kernel.org, Jian Shen <shenjian15@huawei.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 233/599] memory: emif: check the pointer temp in get_device_details()
+Subject: [PATCH 5.15 665/913] net: hns3: refine the process when PF set VF VLAN
 Date:   Tue,  5 Apr 2022 09:28:47 +0200
-Message-Id: <20220405070305.774722704@linuxfoundation.org>
+Message-Id: <20220405070359.769657732@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +56,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jia-Ju Bai <baijiaju1990@gmail.com>
+From: Jian Shen <shenjian15@huawei.com>
 
-[ Upstream commit 5b5ab1bfa1898c6d52936a57c25c5ceba2cb2f87 ]
+[ Upstream commit 190cd8a72b0181c543ecada6243be3a50636941b ]
 
-The pointer temp is allocated by devm_kzalloc(), so it should be
-checked for error handling.
+Currently, when PF set VF VLAN, it sends notify mailbox to VF
+if VF alive. VF stop its traffic, and send request mailbox
+to PF, then PF updates VF VLAN. It's a bit complex. If VF is
+killed before sending request, PF will not set VF VLAN without
+any log.
 
-Fixes: 7ec944538dde ("memory: emif: add basic infrastructure for EMIF driver")
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
-Link: https://lore.kernel.org/r/20220225132552.27894-1-baijiaju1990@gmail.com
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+This patch refines the process, PF can set VF VLAN direclty,
+and then notify the VF. If VF is resetting at that time, the
+notify may be dropped, so VF should query it after reset finished.
+
+Fixes: 92f11ea177cd ("net: hns3: fix set port based VLAN issue for VF")
+Signed-off-by: Jian Shen <shenjian15@huawei.com>
+Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/memory/emif.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../hisilicon/hns3/hns3pf/hclge_main.c         | 18 +++++++++++++-----
+ .../hisilicon/hns3/hns3vf/hclgevf_main.c       |  5 +++++
+ 2 files changed, 18 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/memory/emif.c b/drivers/memory/emif.c
-index 55d4c842fcd9..5a059be3516c 100644
---- a/drivers/memory/emif.c
-+++ b/drivers/memory/emif.c
-@@ -1403,7 +1403,7 @@ static struct emif_data *__init_or_module get_device_details(
- 	temp	= devm_kzalloc(dev, sizeof(*pd), GFP_KERNEL);
- 	dev_info = devm_kzalloc(dev, sizeof(*dev_info), GFP_KERNEL);
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
+index 0b0b79eec1a6..d3a259ad8ce1 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
+@@ -9290,11 +9290,16 @@ static int hclge_set_vf_mac(struct hnae3_handle *handle, int vf,
  
--	if (!emif || !pd || !dev_info) {
-+	if (!emif || !temp || !dev_info) {
- 		dev_err(dev, "%s:%d: allocation error\n", __func__, __LINE__);
- 		goto error;
+ 	ether_addr_copy(vport->vf_info.mac, mac_addr);
+ 
++	/* there is a timewindow for PF to know VF unalive, it may
++	 * cause send mailbox fail, but it doesn't matter, VF will
++	 * query it when reinit.
++	 */
+ 	if (test_bit(HCLGE_VPORT_STATE_ALIVE, &vport->state)) {
+ 		dev_info(&hdev->pdev->dev,
+ 			 "MAC of VF %d has been set to %s, and it will be reinitialized!\n",
+ 			 vf, format_mac_addr);
+-		return hclge_inform_reset_assert_to_vf(vport);
++		(void)hclge_inform_reset_assert_to_vf(vport);
++		return 0;
  	}
+ 
+ 	dev_info(&hdev->pdev->dev, "MAC of VF %d has been set to %s\n",
+@@ -10522,14 +10527,17 @@ static int hclge_set_vf_vlan_filter(struct hnae3_handle *handle, int vfid,
+ 		return ret;
+ 	}
+ 
+-	/* for DEVICE_VERSION_V3, vf doesn't need to know about the port based
++	/* there is a timewindow for PF to know VF unalive, it may
++	 * cause send mailbox fail, but it doesn't matter, VF will
++	 * query it when reinit.
++	 * for DEVICE_VERSION_V3, vf doesn't need to know about the port based
+ 	 * VLAN state.
+ 	 */
+ 	if (ae_dev->dev_version < HNAE3_DEVICE_VERSION_V3 &&
+ 	    test_bit(HCLGE_VPORT_STATE_ALIVE, &vport->state))
+-		hclge_push_vf_port_base_vlan_info(&hdev->vport[0],
+-						  vport->vport_id, state,
+-						  &vlan_info);
++		(void)hclge_push_vf_port_base_vlan_info(&hdev->vport[0],
++							vport->vport_id,
++							state, &vlan_info);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c
+index 98c847fe4c5b..21678c12afa2 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c
+@@ -3344,6 +3344,11 @@ static int hclgevf_reset_hdev(struct hclgevf_dev *hdev)
+ 		return ret;
+ 	}
+ 
++	/* get current port based vlan state from PF */
++	ret = hclgevf_get_port_base_vlan_filter_state(hdev);
++	if (ret)
++		return ret;
++
+ 	set_bit(HCLGEVF_STATE_PROMISC_CHANGED, &hdev->state);
+ 
+ 	hclgevf_init_rxd_adv_layout(hdev);
 -- 
 2.34.1
 

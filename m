@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD244F4DBB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84FC94F4912
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1582913AbiDEXuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39932 "EHLO
+        id S1390104AbiDEWDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:03:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243499AbiDEKhC (ORCPT
+        with ESMTP id S243475AbiDEKgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:37:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44844541B9;
-        Tue,  5 Apr 2022 03:22:08 -0700 (PDT)
+        Tue, 5 Apr 2022 06:36:48 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E53546AB;
+        Tue,  5 Apr 2022 03:22:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9C0D616D7;
-        Tue,  5 Apr 2022 10:22:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD9F9C385A1;
-        Tue,  5 Apr 2022 10:22:06 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 93DDCCE0B18;
+        Tue,  5 Apr 2022 10:22:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A608BC385A1;
+        Tue,  5 Apr 2022 10:22:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154127;
-        bh=bPX/khrWPtuH6lxw45TCKs76d2OxZC/P91UXYox1D2c=;
+        s=korg; t=1649154138;
+        bh=zxWq7PkrMpndvDnwYkItpxVvHPTOTfn5VcI31JDhtUg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rdu+d9tpB1p0fC4NE3qvvl34HyGIY72VvLUBE6QB1t4SKVGSFXdnDAPWgUC6M2XBm
-         +z6I3yfM1J79Hhq/QjFdrTr91bRTqLBTUSrRZgOyYdBmgGEbcwTfFycYQDvvNxlf3w
-         Xi3yDa2aqo4ccro15xgzwnyy/tgGNwye4mpvFNX8=
+        b=aj/D/Dq/I5C/1ATmJBHNe0KDxWMLz7/et30+tVMroqYolC9XJ+kBSzAe+Etyk1mt2
+         GLSTuW6Xd8Yigug4tnoWJumLYRuMtCQn789HdTzM2WOdW3gDjaiQnQZDBMwLhGnZ23
+         FPYGKSkJkLy/qfUx4D5KPW9tgAQaAQ54Uanlnk/U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John David Anglin <dave.anglin@bell.net>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 467/599] parisc: Fix handling off probe non-access faults
-Date:   Tue,  5 Apr 2022 09:32:41 +0200
-Message-Id: <20220405070312.724163665@linuxfoundation.org>
+        stable@vger.kernel.org, Ritesh Harjani <riteshh@linux.ibm.com>,
+        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 471/599] ext4: correct cluster len and clusters changed accounting in ext4_mb_mark_bb
+Date:   Tue,  5 Apr 2022 09:32:45 +0200
+Message-Id: <20220405070312.841903314@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -54,166 +55,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John David Anglin <dave.anglin@bell.net>
+From: Ritesh Harjani <riteshh@linux.ibm.com>
 
-[ Upstream commit e00b0a2ab8ec019c344e53bfc76e31c18bb587b7 ]
+[ Upstream commit a5c0e2fdf7cea535ba03259894dc184e5a4c2800 ]
 
-Currently, the parisc kernel does not fully support non-access TLB
-fault handling for probe instructions. In the fast path, we set the
-target register to zero if it is not a shadowed register. The slow
-path is not implemented, so we call do_page_fault. The architecture
-indicates that non-access faults should not cause a page fault from
-disk.
+ext4_mb_mark_bb() currently wrongly calculates cluster len (clen) and
+flex_group->free_clusters. This patch fixes that.
 
-This change adds to code to provide non-access fault support for
-probe instructions. It also modifies the handling of faults on
-userspace so that if the address lies in a valid VMA and the access
-type matches that for the VMA, the probe target register is set to
-one. Otherwise, the target register is set to zero.
+Identified based on code review of ext4_mb_mark_bb() function.
 
-This was done to make probe instructions more useful for userspace.
-Probe instructions are not very useful if they set the target register
-to zero whenever a page is not present in memory. Nominally, the
-purpose of the probe instruction is determine whether read or write
-access to a given address is allowed.
-
-This fixes a problem in function pointer comparison noticed in the
-glibc testsuite (stdio-common/tst-vfprintf-user-type). The same
-problem is likely in glibc (_dl_lookup_address).
-
-V2 adds flush and lpa instruction support to handle_nadtlb_fault.
-
-Signed-off-by: John David Anglin <dave.anglin@bell.net>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/a0b035d536bafa88110b74456853774b64c8ac40.1644992609.git.riteshh@linux.ibm.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/parisc/include/asm/traps.h |  1 +
- arch/parisc/kernel/traps.c      |  2 +
- arch/parisc/mm/fault.c          | 89 +++++++++++++++++++++++++++++++++
- 3 files changed, 92 insertions(+)
+ fs/ext4/mballoc.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/arch/parisc/include/asm/traps.h b/arch/parisc/include/asm/traps.h
-index 8ecc1f0c0483..d0e090a2c000 100644
---- a/arch/parisc/include/asm/traps.h
-+++ b/arch/parisc/include/asm/traps.h
-@@ -17,6 +17,7 @@ void die_if_kernel(char *str, struct pt_regs *regs, long err);
- const char *trap_name(unsigned long code);
- void do_page_fault(struct pt_regs *regs, unsigned long code,
- 		unsigned long address);
-+int handle_nadtlb_fault(struct pt_regs *regs);
- #endif
+diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+index 110c25824a67..41a115c53bf6 100644
+--- a/fs/ext4/mballoc.c
++++ b/fs/ext4/mballoc.c
+@@ -3320,10 +3320,11 @@ void ext4_mb_mark_bb(struct super_block *sb, ext4_fsblk_t block,
+ 	struct ext4_sb_info *sbi = EXT4_SB(sb);
+ 	ext4_group_t group;
+ 	ext4_grpblk_t blkoff;
+-	int i, clen, err;
++	int i, err;
+ 	int already;
++	unsigned int clen, clen_changed;
  
- #endif
-diff --git a/arch/parisc/kernel/traps.c b/arch/parisc/kernel/traps.c
-index 269b737d2629..bce47e0fb692 100644
---- a/arch/parisc/kernel/traps.c
-+++ b/arch/parisc/kernel/traps.c
-@@ -661,6 +661,8 @@ void notrace handle_interruption(int code, struct pt_regs *regs)
- 			 by hand. Technically we need to emulate:
- 			 fdc,fdce,pdc,"fic,4f",prober,probeir,probew, probeiw
- 		*/
-+		if (code == 17 && handle_nadtlb_fault(regs))
-+			return;
- 		fault_address = regs->ior;
- 		fault_space = regs->isr;
- 		break;
-diff --git a/arch/parisc/mm/fault.c b/arch/parisc/mm/fault.c
-index 716960f5d92e..5faa3cff4738 100644
---- a/arch/parisc/mm/fault.c
-+++ b/arch/parisc/mm/fault.c
-@@ -424,3 +424,92 @@ void do_page_fault(struct pt_regs *regs, unsigned long code,
- 		goto no_context;
- 	pagefault_out_of_memory();
- }
-+
-+/* Handle non-access data TLB miss faults.
-+ *
-+ * For probe instructions, accesses to userspace are considered allowed
-+ * if they lie in a valid VMA and the access type matches. We are not
-+ * allowed to handle MM faults here so there may be situations where an
-+ * actual access would fail even though a probe was successful.
-+ */
-+int
-+handle_nadtlb_fault(struct pt_regs *regs)
-+{
-+	unsigned long insn = regs->iir;
-+	int breg, treg, xreg, val = 0;
-+	struct vm_area_struct *vma, *prev_vma;
-+	struct task_struct *tsk;
-+	struct mm_struct *mm;
-+	unsigned long address;
-+	unsigned long acc_type;
-+
-+	switch (insn & 0x380) {
-+	case 0x280:
-+		/* FDC instruction */
-+		fallthrough;
-+	case 0x380:
-+		/* PDC and FIC instructions */
-+		if (printk_ratelimit()) {
-+			pr_warn("BUG: nullifying cache flush/purge instruction\n");
-+			show_regs(regs);
-+		}
-+		if (insn & 0x20) {
-+			/* Base modification */
-+			breg = (insn >> 21) & 0x1f;
-+			xreg = (insn >> 16) & 0x1f;
-+			if (breg && xreg)
-+				regs->gr[breg] += regs->gr[xreg];
-+		}
-+		regs->gr[0] |= PSW_N;
-+		return 1;
-+
-+	case 0x180:
-+		/* PROBE instruction */
-+		treg = insn & 0x1f;
-+		if (regs->isr) {
-+			tsk = current;
-+			mm = tsk->mm;
-+			if (mm) {
-+				/* Search for VMA */
-+				address = regs->ior;
-+				mmap_read_lock(mm);
-+				vma = find_vma_prev(mm, address, &prev_vma);
-+				mmap_read_unlock(mm);
-+
-+				/*
-+				 * Check if access to the VMA is okay.
-+				 * We don't allow for stack expansion.
-+				 */
-+				acc_type = (insn & 0x40) ? VM_WRITE : VM_READ;
-+				if (vma
-+				    && address >= vma->vm_start
-+				    && (vma->vm_flags & acc_type) == acc_type)
-+					val = 1;
-+			}
-+		}
-+		if (treg)
-+			regs->gr[treg] = val;
-+		regs->gr[0] |= PSW_N;
-+		return 1;
-+
-+	case 0x300:
-+		/* LPA instruction */
-+		if (insn & 0x20) {
-+			/* Base modification */
-+			breg = (insn >> 21) & 0x1f;
-+			xreg = (insn >> 16) & 0x1f;
-+			if (breg && xreg)
-+				regs->gr[breg] += regs->gr[xreg];
-+		}
-+		treg = insn & 0x1f;
-+		if (treg)
-+			regs->gr[treg] = 0;
-+		regs->gr[0] |= PSW_N;
-+		return 1;
-+
-+	default:
-+		break;
-+	}
-+
-+	return 0;
-+}
+-	clen = EXT4_B2C(sbi, len);
++	clen = EXT4_NUM_B2C(sbi, len);
+ 
+ 	ext4_get_group_no_and_offset(sb, block, &group, &blkoff);
+ 	bitmap_bh = ext4_read_block_bitmap(sb, group);
+@@ -3344,6 +3345,7 @@ void ext4_mb_mark_bb(struct super_block *sb, ext4_fsblk_t block,
+ 		if (!mb_test_bit(blkoff + i, bitmap_bh->b_data) == !state)
+ 			already++;
+ 
++	clen_changed = clen - already;
+ 	if (state)
+ 		ext4_set_bits(bitmap_bh->b_data, blkoff, clen);
+ 	else
+@@ -3356,9 +3358,9 @@ void ext4_mb_mark_bb(struct super_block *sb, ext4_fsblk_t block,
+ 						group, gdp));
+ 	}
+ 	if (state)
+-		clen = ext4_free_group_clusters(sb, gdp) - clen + already;
++		clen = ext4_free_group_clusters(sb, gdp) - clen_changed;
+ 	else
+-		clen = ext4_free_group_clusters(sb, gdp) + clen - already;
++		clen = ext4_free_group_clusters(sb, gdp) + clen_changed;
+ 
+ 	ext4_free_group_clusters_set(sb, gdp, clen);
+ 	ext4_block_bitmap_csum_set(sb, group, gdp, bitmap_bh);
+@@ -3368,10 +3370,13 @@ void ext4_mb_mark_bb(struct super_block *sb, ext4_fsblk_t block,
+ 
+ 	if (sbi->s_log_groups_per_flex) {
+ 		ext4_group_t flex_group = ext4_flex_group(sbi, group);
++		struct flex_groups *fg = sbi_array_rcu_deref(sbi,
++					   s_flex_groups, flex_group);
+ 
+-		atomic64_sub(len,
+-			     &sbi_array_rcu_deref(sbi, s_flex_groups,
+-						  flex_group)->free_clusters);
++		if (state)
++			atomic64_sub(clen_changed, &fg->free_clusters);
++		else
++			atomic64_add(clen_changed, &fg->free_clusters);
+ 	}
+ 
+ 	err = ext4_handle_dirty_metadata(NULL, NULL, bitmap_bh);
 -- 
 2.34.1
 

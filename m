@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 816AF4F423B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76B384F4143
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348499AbiDEOBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44934 "EHLO
+        id S245017AbiDEOAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238331AbiDEJ3O (ORCPT
+        with ESMTP id S237348AbiDEJ3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:29:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D1E22A;
-        Tue,  5 Apr 2022 02:16:40 -0700 (PDT)
+        Tue, 5 Apr 2022 05:29:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4731DC29;
+        Tue,  5 Apr 2022 02:16:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8E8EAB818F3;
-        Tue,  5 Apr 2022 09:16:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9EB2C385A0;
-        Tue,  5 Apr 2022 09:16:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C547E61576;
+        Tue,  5 Apr 2022 09:16:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1F7CC385A2;
+        Tue,  5 Apr 2022 09:16:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150198;
-        bh=anzIg/BZjHKQ8DYTcO61nN8CXBqlOwewmajuONW2WQ4=;
+        s=korg; t=1649150201;
+        bh=Fm93SfOtVMca980+6uyVenif6pThe6aO6Z2kp7al95w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CsE3siHh9tQiauic0O8RcDL7oPAOT2+tHJtUtaj3ouy+8XKwZUAYOfiBckRiNB10J
-         qBtOno52RIzflSBWoiPAhOUIqogV1yc60X9o8amUHMmA+zhOUpO61v0ZiKH7TX/2os
-         +Lmjt7ncDPwhvAYyTIDpwQ/YqiLfcqi9yu9uNKZw=
+        b=QtDolMDuOi5ZC2qlPz/hZ/f5FiDFRC0pLyqgwMMZTTR4F7YdmFh/ZLtODWE1ZWv0w
+         5gWYdcm2NCLD4KmQ48X4xIPvFcBxUHGaQiip+J+JC0ohw/fIZrPrjvWMkD78fAFTQR
+         rIVltZvjUZnprdKYpSjLHYXvD/SgJ/ThbRpVXj6c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yong Wu <yong.wu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Subject: [PATCH 5.16 0988/1017] dt-bindings: memory: mtk-smi: Correct minItems to 2 for the gals clocks
-Date:   Tue,  5 Apr 2022 09:31:41 +0200
-Message-Id: <20220405070423.529968394@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 5.16 0989/1017] dt-bindings: pinctrl: pinctrl-microchip-sgpio: Fix example
+Date:   Tue,  5 Apr 2022 09:31:42 +0200
+Message-Id: <20220405070423.558959987@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,52 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yong Wu <yong.wu@mediatek.com>
+From: Horatiu Vultur <horatiu.vultur@microchip.com>
 
-commit 996ebc0e332bfb3091395f9bd286d8349a57be62 upstream.
+commit a6ff90f3fbd4d902aad8777f0329cef3a2768bde upstream.
 
-Mute the warning from "make dtbs_check":
+The blamed commit adds support for irq, but the reqisters for irq are
+outside of the memory size. They are at address 0x108. Therefore update
+the memory size to cover all the registers used by the device.
 
-larb@14017000: clock-names: ['apb', 'smi'] is too short
-	arch/arm64/boot/dts/mediatek/mt8183-evb.dt.yaml
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dt.yaml
-	...
-
-larb@16010000: clock-names: ['apb', 'smi'] is too short
-	arch/arm64/boot/dts/mediatek/mt8183-evb.dt.yaml
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dt.yaml
-
-larb@17010000: clock-names: ['apb', 'smi'] is too short
-	arch/arm64/boot/dts/mediatek/mt8183-evb.dt.yaml
-	arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-burnet.dt.yaml
-
-If a platform's larb supports gals, there will be some larbs have one
-more "gals" clock while the others still only need "apb"/"smi" clocks,
-then the minItems for clocks and clock-names are 2.
-
-Fixes: 27bb0e42855a ("dt-bindings: memory: mediatek: Convert SMI to DT schema")
-Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Link: https://lore.kernel.org/r/20220113111057.29918-4-yong.wu@mediatek.com
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Fixes: 01a9350bdd49fb ("dt-bindings: pinctrl: pinctrl-microchip-sgpio: Add irq support")
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+Link: https://lore.kernel.org/r/20220204153535.465827-2-horatiu.vultur@microchip.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/pinctrl/microchip,sparx5-sgpio.yaml |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
-+++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
-@@ -80,9 +80,10 @@ allOf:
-     then:
-       properties:
-         clocks:
--          minItems: 3
-+          minItems: 2
-           maxItems: 3
-         clock-names:
-+          minItems: 2
-           items:
-             - const: apb
-             - const: smi
+--- a/Documentation/devicetree/bindings/pinctrl/microchip,sparx5-sgpio.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/microchip,sparx5-sgpio.yaml
+@@ -145,7 +145,7 @@ examples:
+       clocks = <&sys_clk>;
+       pinctrl-0 = <&sgpio2_pins>;
+       pinctrl-names = "default";
+-      reg = <0x1101059c 0x100>;
++      reg = <0x1101059c 0x118>;
+       microchip,sgpio-port-ranges = <0 0>, <16 18>, <28 31>;
+       bus-frequency = <25000000>;
+       sgpio_in2: gpio@0 {
 
 

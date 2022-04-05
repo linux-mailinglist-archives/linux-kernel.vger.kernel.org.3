@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 461624F31C8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B681B4F3560
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:50:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241557AbiDEIeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54136 "EHLO
+        id S240516AbiDEIqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236387AbiDEICK (ORCPT
+        with ESMTP id S233593AbiDEIIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:02:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B7F4B852;
-        Tue,  5 Apr 2022 01:00:11 -0700 (PDT)
+        Tue, 5 Apr 2022 04:08:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175E06C1ED;
+        Tue,  5 Apr 2022 01:02:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 313D4B81B14;
-        Tue,  5 Apr 2022 08:00:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B57AC340EE;
-        Tue,  5 Apr 2022 08:00:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8515617BB;
+        Tue,  5 Apr 2022 08:02:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB14DC385A0;
+        Tue,  5 Apr 2022 08:02:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145608;
-        bh=O0U3WEChpLfH8FzqsUX1BA3WYald5yMIMISKQkOwYFw=;
+        s=korg; t=1649145737;
+        bh=7sDJ2RHrC/huW9RezcPNtggKrMYJEdFEyQl7gB+nlfs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wYOjsazcvL3Yq7kp6MbsJIoy27Z18CZsctY/4ufN4kZB5NqgaKs1HDdwxKIZhg5Pl
-         o7ylnJpmsW3cjBwOxqPXn6sH1EjafSCzTFzoYlUd1zaZRr2Dym1WrXPMk/JrvhaoM/
-         YUH/2CeM9c/M56pIMmCmbqTbFtvoYPKqxYHQDTOM=
+        b=ZOUQGhclR34zJlvCwovv6xmLOvkXg4b18ZBGijcs9d890PW58tkLBgfpk5lpWCz6y
+         C6lC6DHDD4t3N//9ywJxAwhfxOBRoMPDByMLT3gMjvA0IoBQ/P4L6OmyUcZAHwROGk
+         ZddkAq0pEecsav44hLhi3B7TuIdNFHwG8FPRzqaI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
+        stable@vger.kernel.org, Fabiano Rosas <farosas@linux.ibm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0463/1126] Bluetooth: hci_event: Fix HCI_EV_VENDOR max_len
-Date:   Tue,  5 Apr 2022 09:20:10 +0200
-Message-Id: <20220405070421.216240743@linuxfoundation.org>
+Subject: [PATCH 5.17 0473/1126] KVM: PPC: Fix vmx/vsx mixup in mmio emulation
+Date:   Tue,  5 Apr 2022 09:20:20 +0200
+Message-Id: <20220405070421.510701872@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,49 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Fabiano Rosas <farosas@linux.ibm.com>
 
-[ Upstream commit 314d8cd2787418c5ac6b02035c344644f47b292b ]
+[ Upstream commit b99234b918c6e36b9aa0a5b2981e86b6bd11f8e2 ]
 
-HCI_EV_VENDOR is in fact variable length since it acts as metaevent
-where a vendor can implement their own event sets.
+The MMIO emulation code for vector instructions is duplicated between
+VSX and VMX. When emulating VMX we should check the VMX copy size
+instead of the VSX one.
 
-In addition to it this makes use of bt_dev_warn_ratelimited to supress
-the amount of logging in case the event has more data than expected.
-
-Fixes: 3e54c5890c87 ("Bluetooth: hci_event: Use of a function table to handle HCI event")
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Fixes: acc9eb9305fe ("KVM: PPC: Reimplement LOAD_VMX/STORE_VMX instruction ...")
+Signed-off-by: Fabiano Rosas <farosas@linux.ibm.com>
+Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220125215655.1026224-3-farosas@linux.ibm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/hci_event.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ arch/powerpc/kvm/powerpc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
-index 05997dff5666..a105b7317560 100644
---- a/net/bluetooth/hci_event.c
-+++ b/net/bluetooth/hci_event.c
-@@ -6798,7 +6798,7 @@ static const struct hci_ev {
- 	HCI_EV(HCI_EV_NUM_COMP_BLOCKS, hci_num_comp_blocks_evt,
- 	       sizeof(struct hci_ev_num_comp_blocks)),
- 	/* [0xff = HCI_EV_VENDOR] */
--	HCI_EV(HCI_EV_VENDOR, msft_vendor_evt, 0),
-+	HCI_EV_VL(HCI_EV_VENDOR, msft_vendor_evt, 0, HCI_MAX_EVENT_SIZE),
- };
+diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+index 2ad0ccd202d5..f0c4545dc3ab 100644
+--- a/arch/powerpc/kvm/powerpc.c
++++ b/arch/powerpc/kvm/powerpc.c
+@@ -1499,7 +1499,7 @@ int kvmppc_handle_vmx_load(struct kvm_vcpu *vcpu,
+ {
+ 	enum emulation_result emulated = EMULATE_DONE;
  
- static void hci_event_func(struct hci_dev *hdev, u8 event, struct sk_buff *skb,
-@@ -6823,8 +6823,9 @@ static void hci_event_func(struct hci_dev *hdev, u8 event, struct sk_buff *skb,
- 	 * decide if that is acceptable.
- 	 */
- 	if (skb->len > ev->max_len)
--		bt_dev_warn(hdev, "unexpected event 0x%2.2x length: %u > %u",
--			    event, skb->len, ev->max_len);
-+		bt_dev_warn_ratelimited(hdev,
-+					"unexpected event 0x%2.2x length: %u > %u",
-+					event, skb->len, ev->max_len);
+-	if (vcpu->arch.mmio_vsx_copy_nums > 2)
++	if (vcpu->arch.mmio_vmx_copy_nums > 2)
+ 		return EMULATE_FAIL;
  
- 	data = hci_ev_skb_pull(hdev, skb, event, ev->min_len);
- 	if (!data)
+ 	while (vcpu->arch.mmio_vmx_copy_nums) {
+@@ -1596,7 +1596,7 @@ int kvmppc_handle_vmx_store(struct kvm_vcpu *vcpu,
+ 	unsigned int index = rs & KVM_MMIO_REG_MASK;
+ 	enum emulation_result emulated = EMULATE_DONE;
+ 
+-	if (vcpu->arch.mmio_vsx_copy_nums > 2)
++	if (vcpu->arch.mmio_vmx_copy_nums > 2)
+ 		return EMULATE_FAIL;
+ 
+ 	vcpu->arch.io_gpr = rs;
 -- 
 2.34.1
 

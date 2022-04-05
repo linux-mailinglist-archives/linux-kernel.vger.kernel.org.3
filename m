@@ -2,83 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC184F4830
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F2D4F4861
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378069AbiDEV3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48356 "EHLO
+        id S1381995AbiDEVi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1448523AbiDEPsX (ORCPT
+        with ESMTP id S1450796AbiDEPwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:48:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205681C908;
-        Tue,  5 Apr 2022 07:29:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CEBB2B81E4D;
-        Tue,  5 Apr 2022 14:29:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B1BBC385A0;
-        Tue,  5 Apr 2022 14:29:35 +0000 (UTC)
-Date:   Tue, 5 Apr 2022 15:29:32 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Grant Likely <grant.likely@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH] Documentation/process: Update ARM contact for embargoed
- hardware issues
-Message-ID: <YkxSTBBb5Hj1EQPF@arm.com>
-References: <20220324151605.266645-1-catalin.marinas@arm.com>
- <YjyilfhMgbqTo3eL@kroah.com>
+        Tue, 5 Apr 2022 11:52:10 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE456262;
+        Tue,  5 Apr 2022 07:43:46 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id p26-20020a05600c1d9a00b0038ccbff1951so1399892wms.1;
+        Tue, 05 Apr 2022 07:43:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1mH+YSU50fajcvK1QNZ8qQyJ60qjkNCXhuT3a6pQSAs=;
+        b=dltkjXVB9Tl6/EfD0+STBcgxcVKiIwbPMdp6xBZ1L7eR30tp6KCooqhhNUqCzubXXL
+         jOn35Yz8NwUy5wRAjj3u174P0gayVAu/KowJOr1sVrtp2RH67Lj8sU/aqWsQ67PzTqV5
+         OzK6ODu2jV/DY97GmbBnnTBYEIx7xbyEbvUKt5YDYmBqnjuh4DY6y65j7roSZGZCD5tT
+         nRK4JJfAqAIeFGfeMAnibNrbaZY2A4ecnXZ4RyjlChCXHfRZM2vT3Ax2fZZ+w9KsztA+
+         pyr81udTeSjugi9UqC6jyGVq3XyULYSsxu8q7i4UcDhOjILBCk/4+gVgR2fEIncR402O
+         yypA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1mH+YSU50fajcvK1QNZ8qQyJ60qjkNCXhuT3a6pQSAs=;
+        b=vRhGnJQqLihIfiJY3r2Sl06D7uNXqTXT88KKsNBmXZRs21Q8Y14y7Yv/XwalW8QHAH
+         EjLZK/c0UZKSwe9dqSNXQeiT4r9v7aZmNX1bdshwpy/LEHRPayvltad/IZQ6CSRXQy3n
+         LChIJdjGMrWuEc1TGbMGu4AwtNPStj+d3QRY0T+hHO8kSGVtXUihr7EYvptDkvTVeq5B
+         eV5SmhYHfARbQiu2TV1FQGqXV8oAKnu6iRV8kMpC4HUaw1JUUTsy6I7+7vXzOhNcuX34
+         OGw8uC5iJAe6wzrGCw7HiFddqmMz6kg35pZn4NlLqgdo3Zajk64c0GK3B/sTkaRITmPs
+         mqjQ==
+X-Gm-Message-State: AOAM532FinHgaNW6AfhOKQsPstSowkvX84wJmISOX/VBpv9BsJznaTzq
+        CVluwyrGZDQsgXxp9Qer+qw=
+X-Google-Smtp-Source: ABdhPJz5SRm0qxdvpeISG/S9S14QGfwdgdB9fmKtitopVWQqz5GnXYublw/ecA1THWklDgvL1x48ag==
+X-Received: by 2002:a7b:ce0a:0:b0:38e:761a:1c76 with SMTP id m10-20020a7bce0a000000b0038e761a1c76mr3472870wmc.198.1649169824612;
+        Tue, 05 Apr 2022 07:43:44 -0700 (PDT)
+Received: from [10.32.181.87] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
+        by smtp.googlemail.com with ESMTPSA id 3-20020a05600c248300b0038e7e94bbc2sm2399857wms.3.2022.04.05.07.43.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 07:43:44 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <71005293-95cd-ec52-83f4-d93947d16af0@redhat.com>
+Date:   Tue, 5 Apr 2022 16:43:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YjyilfhMgbqTo3eL@kroah.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v5 040/104] KVM: VMX: Split out guts of EPT violation
+ to common/exposed function
+Content-Language: en-US
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
+        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <d7ea79b7fbebf723540672bd027d48158fcde0ff.1646422845.git.isaku.yamahata@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <d7ea79b7fbebf723540672bd027d48158fcde0ff.1646422845.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 05:55:49PM +0100, Greg Kroah-Hartman wrote:
-> On Thu, Mar 24, 2022 at 03:16:05PM +0000, Catalin Marinas wrote:
-> > With Grant taking a prominent role in Linaro, I will take over as the
-> > process ambassador for ARM w.r.t. embargoed hardware issues.
-> > 
-> > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Grant Likely <grant.likely@arm.com>
-> > Cc: Jonathan Corbet <corbet@lwn.net>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> >  Documentation/process/embargoed-hardware-issues.rst | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/process/embargoed-hardware-issues.rst b/Documentation/process/embargoed-hardware-issues.rst
-> > index 6f8f36e10e8b..41a2afaaea75 100644
-> > --- a/Documentation/process/embargoed-hardware-issues.rst
-> > +++ b/Documentation/process/embargoed-hardware-issues.rst
-> > @@ -244,7 +244,7 @@ disclosure of a particular issue, unless requested by a response team or by
-> >  an involved disclosed party. The current ambassadors list:
-> >  
-> >    ============= ========================================================
-> > -  ARM           Grant Likely <grant.likely@arm.com>
-> > +  ARM		Catalin Marinas <catalin.marinas@arm.com>
+On 3/4/22 20:48, isaku.yamahata@intel.com wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
 > 
-> Nit, no tab is needed.  I missed this on the next line:
+> The difference of TDX EPT violation is how to retrieve information, GPA,
+> and exit qualification.  To share the code to handle EPT violation, split
+> out the guts of EPT violation handler so that VMX/TDX exit handler can call
+> it after retrieving GPA and exit qualification.
 > 
-> >    AMD		Tom Lendacky <tom.lendacky@amd.com>
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>   arch/x86/kvm/vmx/common.h | 35 +++++++++++++++++++++++++++++++++++
+>   arch/x86/kvm/vmx/vmx.c    | 34 ++++++----------------------------
+>   2 files changed, 41 insertions(+), 28 deletions(-)
+>   create mode 100644 arch/x86/kvm/vmx/common.h
 > 
-> But no need to follow bad decisions :)
+> diff --git a/arch/x86/kvm/vmx/common.h b/arch/x86/kvm/vmx/common.h
+> new file mode 100644
+> index 000000000000..1052b3c93eb8
+> --- /dev/null
+> +++ b/arch/x86/kvm/vmx/common.h
+> @@ -0,0 +1,35 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +#ifndef __KVM_X86_VMX_COMMON_H
+> +#define __KVM_X86_VMX_COMMON_H
+> +
+> +#include <linux/kvm_host.h>
+> +
+> +#include "mmu.h"
+> +
+> +static inline int __vmx_handle_ept_violation(struct kvm_vcpu *vcpu, gpa_t gpa,
+> +					     unsigned long exit_qualification)
+> +{
+> +	u64 error_code;
+> +
+> +	/* Is it a read fault? */
+> +	error_code = (exit_qualification & EPT_VIOLATION_ACC_READ)
+> +		     ? PFERR_USER_MASK : 0;
+> +	/* Is it a write fault? */
+> +	error_code |= (exit_qualification & EPT_VIOLATION_ACC_WRITE)
+> +		      ? PFERR_WRITE_MASK : 0;
+> +	/* Is it a fetch fault? */
+> +	error_code |= (exit_qualification & EPT_VIOLATION_ACC_INSTR)
+> +		      ? PFERR_FETCH_MASK : 0;
+> +	/* ept page table entry is present? */
+> +	error_code |= (exit_qualification &
+> +		       (EPT_VIOLATION_READABLE | EPT_VIOLATION_WRITABLE |
+> +			EPT_VIOLATION_EXECUTABLE))
+> +		      ? PFERR_PRESENT_MASK : 0;
+> +
+> +	error_code |= (exit_qualification & EPT_VIOLATION_GVA_TRANSLATED) != 0 ?
+> +	       PFERR_GUEST_FINAL_MASK : PFERR_GUEST_PAGE_MASK;
+> +
+> +	return kvm_mmu_page_fault(vcpu, gpa, error_code, NULL, 0);
+> +}
+> +
+> +#endif /* __KVM_X86_VMX_COMMON_H */
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 7838cd177f0e..0edeeed0b4c8 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -50,6 +50,7 @@
+>   #include <asm/vmx.h>
+>   
+>   #include "capabilities.h"
+> +#include "common.h"
+>   #include "cpuid.h"
+>   #include "evmcs.h"
+>   #include "hyperv.h"
+> @@ -5381,11 +5382,10 @@ static int handle_task_switch(struct kvm_vcpu *vcpu)
+>   
+>   static int handle_ept_violation(struct kvm_vcpu *vcpu)
+>   {
+> -	unsigned long exit_qualification;
+> -	gpa_t gpa;
+> -	u64 error_code;
+> +	unsigned long exit_qualification = vmx_get_exit_qual(vcpu);
+> +	gpa_t gpa = vmcs_read64(GUEST_PHYSICAL_ADDRESS);
+>   
+> -	exit_qualification = vmx_get_exit_qual(vcpu);
+> +	trace_kvm_page_fault(gpa, exit_qualification);
+>   
+>   	/*
+>   	 * EPT violation happened while executing iret from NMI,
+> @@ -5394,31 +5394,9 @@ static int handle_ept_violation(struct kvm_vcpu *vcpu)
+>   	 * AAK134, BY25.
+>   	 */
+>   	if (!(to_vmx(vcpu)->idt_vectoring_info & VECTORING_INFO_VALID_MASK) &&
+> -			enable_vnmi &&
+> -			(exit_qualification & INTR_INFO_UNBLOCK_NMI))
+> +	    enable_vnmi && (exit_qualification & INTR_INFO_UNBLOCK_NMI))
+>   		vmcs_set_bits(GUEST_INTERRUPTIBILITY_INFO, GUEST_INTR_STATE_NMI);
+>   
+> -	gpa = vmcs_read64(GUEST_PHYSICAL_ADDRESS);
+> -	trace_kvm_page_fault(gpa, exit_qualification);
+> -
+> -	/* Is it a read fault? */
+> -	error_code = (exit_qualification & EPT_VIOLATION_ACC_READ)
+> -		     ? PFERR_USER_MASK : 0;
+> -	/* Is it a write fault? */
+> -	error_code |= (exit_qualification & EPT_VIOLATION_ACC_WRITE)
+> -		      ? PFERR_WRITE_MASK : 0;
+> -	/* Is it a fetch fault? */
+> -	error_code |= (exit_qualification & EPT_VIOLATION_ACC_INSTR)
+> -		      ? PFERR_FETCH_MASK : 0;
+> -	/* ept page table entry is present? */
+> -	error_code |= (exit_qualification &
+> -		       (EPT_VIOLATION_READABLE | EPT_VIOLATION_WRITABLE |
+> -			EPT_VIOLATION_EXECUTABLE))
+> -		      ? PFERR_PRESENT_MASK : 0;
+> -
+> -	error_code |= (exit_qualification & EPT_VIOLATION_GVA_TRANSLATED) != 0 ?
+> -	       PFERR_GUEST_FINAL_MASK : PFERR_GUEST_PAGE_MASK;
+> -
+>   	vcpu->arch.exit_qualification = exit_qualification;
+>   
+>   	/*
+> @@ -5432,7 +5410,7 @@ static int handle_ept_violation(struct kvm_vcpu *vcpu)
+>   	if (unlikely(allow_smaller_maxphyaddr && kvm_vcpu_is_illegal_gpa(vcpu, gpa)))
+>   		return kvm_emulate_instruction(vcpu, 0);
+>   
+> -	return kvm_mmu_page_fault(vcpu, gpa, error_code, NULL, 0);
+> +	return __vmx_handle_ept_violation(vcpu, gpa, exit_qualification);
+>   }
+>   
+>   static int handle_ept_misconfig(struct kvm_vcpu *vcpu)
 
-I was wondering. There are currently three entries with spaces and the
-rest with tabs, so I went with the majority. I'll repost with spaces and
-get Grant to ack again without the legal disclaimer.
-
--- 
-Catalin
+Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>

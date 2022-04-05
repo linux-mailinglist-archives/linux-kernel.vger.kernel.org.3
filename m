@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 497694F423D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 617E34F42BD
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389646AbiDEPVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36324 "EHLO
+        id S242628AbiDEPWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347114AbiDEJqB (ORCPT
+        with ESMTP id S1347136AbiDEJqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:46:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA42276678;
-        Tue,  5 Apr 2022 02:32:27 -0700 (PDT)
+        Tue, 5 Apr 2022 05:46:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B483DCE26;
+        Tue,  5 Apr 2022 02:32:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55F5261368;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF9C361368;
+        Tue,  5 Apr 2022 09:32:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42851C385A2;
         Tue,  5 Apr 2022 09:32:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E035C385A4;
-        Tue,  5 Apr 2022 09:32:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649151146;
-        bh=Pj7W+vm9/Lp1bs2VNWguTcW8ZdW7M9VQ5AaH3adc3cU=;
+        s=k20201202; t=1649151149;
+        bh=LMWjnRihmAkYJ4VE026+EhIuf0h/R47oaYeDgl0V7PM=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=MotvbsnzwbhrK0F96wxCU4WtMKr5Li9cva2QeU7vbqBzNNCZ74ZEqfcnHRnklX1Ks
-         1RjW7+s842jpmtTRWjJW7bbm0ZXczhjVSm/DV2GkO1JORw8SAk+pfMQEgqbybE7sMp
-         VFmS4vjQPxZctOd88jnYFpJ963+3sSdGp8zz7wYfjLFiLXqFwhOg0Tw+Wodx68CMJU
-         9JfurBnTcvQjSznoeN/pFk/cumt3gWH8e9B//XHfMtDQbWlg7Ulg5zQUTjDvlA/MZ1
-         IWKfY366iShazYN8iw506M9lADcVXGe9JAY9SYciqAfM4YG3llW9m0zWxoKogUUZ5a
-         AytJp4LOMbHLg==
+        b=YFSU+3oYLQYgTZ0hlJ0IlSF1Ou+RUMIgREyudOvmFbgFptcZI6uUNOyQpx7QOtVXM
+         VId6j+7j0Knrvvi+/1P5/FnhR5m69iy1fwCmFHBxwkVnj2x5oH7yV3EREKgdXcAJlx
+         ZXGrZ8g3OBO+7sH1hvV0T3Tv2Xn6IfCMpnU/PrPVRBzUtrJwtjH9S+tQ21D6QSaSRb
+         lY7GwdZgYaDBRg7b5IiACltkwJCdgeJQIPwc6k5PaNBfEzj4ZvgNa4Jn01N6SX6cU0
+         QMf8Wzw/lB3A6TOyc4mmWGxMYelT7/T9DQ5ShXW7Nwsjhk9+FveJFdXdFxJiDeKxiz
+         blXpxRCQ0yBkw==
 From:   Mark Brown <broonie@kernel.org>
-To:     jakobkoschel@gmail.com
-Cc:     linux-kernel@vger.kernel.org, bjohannesmeyer@gmail.com,
-        rppt@kernel.org, c.giuffrida@vu.nl, h.j.bos@vu.nl,
-        linux-spi@vger.kernel.org
-In-Reply-To: <20220324072534.63420-1-jakobkoschel@gmail.com>
-References: <20220324072534.63420-1-jakobkoschel@gmail.com>
-Subject: Re: [PATCH] spi: spidev: replace usage of found with dedicated list iterator variable
-Message-Id: <164915114510.276894.6837144397974645999.b4-ty@kernel.org>
-Date:   Tue, 05 Apr 2022 10:32:25 +0100
+To:     agross@kernel.org, krzk+dt@kernel.org, bjorn.andersson@linaro.org,
+        robh+dt@kernel.org, singh.kuldeep87k@gmail.com, krzk@kernel.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        robh@kernel.org, linux-spi@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+In-Reply-To: <20220328192006.18523-1-singh.kuldeep87k@gmail.com>
+References: <20220328192006.18523-1-singh.kuldeep87k@gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: spi: qcom-qspi: Add minItems to interconnect-names
+Message-Id: <164915114699.276894.10846659082729207410.b4-ty@kernel.org>
+Date:   Tue, 05 Apr 2022 10:32:26 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,14 +56,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 24 Mar 2022 08:25:34 +0100, Jakob Koschel wrote:
-> To move the list iterator variable into the list_for_each_entry_*()
-> macro in the future it should be avoided to use the list iterator
-> variable after the loop body.
+On Tue, 29 Mar 2022 00:50:06 +0530, Kuldeep Singh wrote:
+> Add minItems constraint to interconnect-names as well. The schema
+> currently tries to match 2 names and fail for DTs with single entry.
 > 
-> To *never* use the list iterator variable after the loop it was
-> concluded to use a separate iterator variable instead of a
-> found boolean [1].
+> With the change applied, below interconnect-names values are possible:
+> ['qspi-config'], ['qspi-config', 'qspi-memory']
+> 
 > 
 > [...]
 
@@ -72,8 +72,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spidev: replace usage of found with dedicated list iterator variable
-      commit: d50d7e91c6e5ccd71f21ba1aec3fef7ee4229fd6
+[1/1] dt-bindings: spi: qcom-qspi: Add minItems to interconnect-names
+      commit: e23d86c49a9c78e8dbe3abff20b30812b26ab427
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

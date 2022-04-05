@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD4D4F4433
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB3F14F4673
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244755AbiDEMSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50802 "EHLO
+        id S241838AbiDEMSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244995AbiDEIxA (ORCPT
+        with ESMTP id S244996AbiDEIxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:53:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC566146;
-        Tue,  5 Apr 2022 01:48:47 -0700 (PDT)
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E35DFA5;
+        Tue,  5 Apr 2022 01:48:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28D1961504;
-        Tue,  5 Apr 2022 08:48:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34481C385A1;
-        Tue,  5 Apr 2022 08:48:46 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9954FCE1C6B;
+        Tue,  5 Apr 2022 08:48:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AACB1C385A1;
+        Tue,  5 Apr 2022 08:48:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148526;
-        bh=guVlBzD+z8QYs49QmnLxHxL7TQNESW7NlPWrZw/7gKc=;
+        s=korg; t=1649148532;
+        bh=BhygN3uj+mbd1jYYLWBIeNcIvrKJUr9Ky4rdk79bHNg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b9iYr5P8sal8J/3C/1AtJ3UU13sgHj3G7tVMM8SDddgKiUldgwkkkXxO/TV+Rk2cR
-         HDyMaXo5G43jrZGm+OmnuTXOSLlVgGA21fgAd6hjqQH1L5i0Ei9b8xJOa//V2Oz+Jl
-         Pq82boMR4PqTUbzv3QRV6uqKr81ELlNV4CsGgYdc=
+        b=zZ2cVmCLgArI3dFoulTVwmX5qGeZ9ioPglyowsFB3tgs1yrd76+sbtKool3aMKfH+
+         kNkoQ1favbZ75a8uKOPkfRl3m/VJDLHIFvsG7fVPWZ1A6dKPyfzWd04KDuJF696vJL
+         AaE8jnZvTcJtZIBkb6fonCbW2FO1SGRrHf/AJypY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0349/1017] uaccess: fix nios2 and microblaze get_user_8()
-Date:   Tue,  5 Apr 2022 09:21:02 +0200
-Message-Id: <20220405070404.642334717@linuxfoundation.org>
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0351/1017] ASoC: acp: check the return value of devm_kzalloc() in acp_legacy_dai_links_create()
+Date:   Tue,  5 Apr 2022 09:21:04 +0200
+Message-Id: <20220405070404.701631180@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,142 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Jia-Ju Bai <baijiaju1990@gmail.com>
 
-[ Upstream commit a97b693c3712f040c5802f32b2d685352e08cefa ]
+[ Upstream commit 431f9a77a4a62694ce90742d1f4c5abe1b8b6612 ]
 
-These two architectures implement 8-byte get_user() through
-a memcpy() into a four-byte variable, which won't fit.
+The function devm_kzalloc() in acp_legacy_dai_links_create() can fail,
+so its return value should be checked.
 
-Use a temporary 64-bit variable instead here, and use a double
-cast the way that risc-v and openrisc do to avoid compile-time
-warnings.
-
-Fixes: 6a090e97972d ("arch/microblaze: support get_user() of size 8 bytes")
-Fixes: 5ccc6af5e88e ("nios2: Memory management")
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Acked-by: Dinh Nguyen <dinguyen@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: d4c750f2c7d4 ("ASoC: amd: acp: Add generic machine driver support for ACP cards")
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+Link: https://lore.kernel.org/r/20220225131645.27556-1-baijiaju1990@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/microblaze/include/asm/uaccess.h | 18 +++++++++---------
- arch/nios2/include/asm/uaccess.h      | 26 ++++++++++++++++----------
- 2 files changed, 25 insertions(+), 19 deletions(-)
+ sound/soc/amd/acp/acp-mach-common.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/microblaze/include/asm/uaccess.h b/arch/microblaze/include/asm/uaccess.h
-index 5b6e0e7788f4..3fe96979d2c6 100644
---- a/arch/microblaze/include/asm/uaccess.h
-+++ b/arch/microblaze/include/asm/uaccess.h
-@@ -130,27 +130,27 @@ extern long __user_bad(void);
+diff --git a/sound/soc/amd/acp/acp-mach-common.c b/sound/soc/amd/acp/acp-mach-common.c
+index 7785f12aa006..55ad3c70f0ef 100644
+--- a/sound/soc/amd/acp/acp-mach-common.c
++++ b/sound/soc/amd/acp/acp-mach-common.c
+@@ -531,6 +531,8 @@ int acp_legacy_dai_links_create(struct snd_soc_card *card)
+ 		num_links++;
  
- #define __get_user(x, ptr)						\
- ({									\
--	unsigned long __gu_val = 0;					\
- 	long __gu_err;							\
- 	switch (sizeof(*(ptr))) {					\
- 	case 1:								\
--		__get_user_asm("lbu", (ptr), __gu_val, __gu_err);	\
-+		__get_user_asm("lbu", (ptr), x, __gu_err);		\
- 		break;							\
- 	case 2:								\
--		__get_user_asm("lhu", (ptr), __gu_val, __gu_err);	\
-+		__get_user_asm("lhu", (ptr), x, __gu_err);		\
- 		break;							\
- 	case 4:								\
--		__get_user_asm("lw", (ptr), __gu_val, __gu_err);	\
-+		__get_user_asm("lw", (ptr), x, __gu_err);		\
- 		break;							\
--	case 8:								\
--		__gu_err = __copy_from_user(&__gu_val, ptr, 8);		\
--		if (__gu_err)						\
--			__gu_err = -EFAULT;				\
-+	case 8: {							\
-+		__u64 __x = 0;						\
-+		__gu_err = raw_copy_from_user(&__x, ptr, 8) ?		\
-+							-EFAULT : 0;	\
-+		(x) = (typeof(x))(typeof((x) - (x)))__x;		\
- 		break;							\
-+	}								\
- 	default:							\
- 		/* __gu_val = 0; __gu_err = -EINVAL;*/ __gu_err = __user_bad();\
- 	}								\
--	x = (__force __typeof__(*(ptr))) __gu_val;			\
- 	__gu_err;							\
- })
+ 	links = devm_kzalloc(dev, sizeof(struct snd_soc_dai_link) * num_links, GFP_KERNEL);
++	if (!links)
++		return -ENOMEM;
  
-diff --git a/arch/nios2/include/asm/uaccess.h b/arch/nios2/include/asm/uaccess.h
-index ba9340e96fd4..ca9285a915ef 100644
---- a/arch/nios2/include/asm/uaccess.h
-+++ b/arch/nios2/include/asm/uaccess.h
-@@ -88,6 +88,7 @@ extern __must_check long strnlen_user(const char __user *s, long n);
- /* Optimized macros */
- #define __get_user_asm(val, insn, addr, err)				\
- {									\
-+	unsigned long __gu_val;						\
- 	__asm__ __volatile__(						\
- 	"       movi    %0, %3\n"					\
- 	"1:   " insn " %1, 0(%2)\n"					\
-@@ -96,14 +97,20 @@ extern __must_check long strnlen_user(const char __user *s, long n);
- 	"       .section __ex_table,\"a\"\n"				\
- 	"       .word 1b, 2b\n"						\
- 	"       .previous"						\
--	: "=&r" (err), "=r" (val)					\
-+	: "=&r" (err), "=r" (__gu_val)					\
- 	: "r" (addr), "i" (-EFAULT));					\
-+	val = (__force __typeof__(*(addr)))__gu_val;			\
- }
- 
--#define __get_user_unknown(val, size, ptr, err) do {			\
-+extern void __get_user_unknown(void);
-+
-+#define __get_user_8(val, ptr, err) do {				\
-+	u64 __val = 0;							\
- 	err = 0;							\
--	if (__copy_from_user(&(val), ptr, size)) {			\
-+	if (raw_copy_from_user(&(__val), ptr, sizeof(val))) {		\
- 		err = -EFAULT;						\
-+	} else {							\
-+		val = (typeof(val))(typeof((val) - (val)))__val;	\
- 	}								\
- 	} while (0)
- 
-@@ -119,8 +126,11 @@ do {									\
- 	case 4:								\
- 		__get_user_asm(val, "ldw", ptr, err);			\
- 		break;							\
-+	case 8:								\
-+		__get_user_8(val, ptr, err);				\
-+		break;							\
- 	default:							\
--		__get_user_unknown(val, size, ptr, err);		\
-+		__get_user_unknown();					\
- 		break;							\
- 	}								\
- } while (0)
-@@ -129,9 +139,7 @@ do {									\
- 	({								\
- 	long __gu_err = -EFAULT;					\
- 	const __typeof__(*(ptr)) __user *__gu_ptr = (ptr);		\
--	unsigned long __gu_val = 0;					\
--	__get_user_common(__gu_val, sizeof(*(ptr)), __gu_ptr, __gu_err);\
--	(x) = (__force __typeof__(x))__gu_val;				\
-+	__get_user_common(x, sizeof(*(ptr)), __gu_ptr, __gu_err);	\
- 	__gu_err;							\
- 	})
- 
-@@ -139,11 +147,9 @@ do {									\
- ({									\
- 	long __gu_err = -EFAULT;					\
- 	const __typeof__(*(ptr)) __user *__gu_ptr = (ptr);		\
--	unsigned long __gu_val = 0;					\
- 	if (access_ok( __gu_ptr, sizeof(*__gu_ptr)))	\
--		__get_user_common(__gu_val, sizeof(*__gu_ptr),		\
-+		__get_user_common(x, sizeof(*__gu_ptr),			\
- 			__gu_ptr, __gu_err);				\
--	(x) = (__force __typeof__(x))__gu_val;				\
- 	__gu_err;							\
- })
- 
+ 	if (drv_data->hs_cpu_id == I2S_SP) {
+ 		links[i].name = "acp-headset-codec";
 -- 
 2.34.1
 

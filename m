@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13DA04F420F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 278FB4F3FDB
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381060AbiDEMOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:14:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
+        id S1353518AbiDEOhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244786AbiDEIwj (ORCPT
+        with ESMTP id S241524AbiDEJgD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:39 -0400
+        Tue, 5 Apr 2022 05:36:03 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6741619C26;
-        Tue,  5 Apr 2022 01:43:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A5392850;
+        Tue,  5 Apr 2022 02:24:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 094FBB81BC5;
-        Tue,  5 Apr 2022 08:43:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68B53C385A1;
-        Tue,  5 Apr 2022 08:43:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 609B9B81C85;
+        Tue,  5 Apr 2022 09:24:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6157C385C1;
+        Tue,  5 Apr 2022 09:24:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148232;
-        bh=zQ6/cvteXtzMrMf4i1FbC9Lt4WLK1F3GHD9ApU9xZdM=;
+        s=korg; t=1649150657;
+        bh=lzO+z6AoVIcvFgn8IXdAdIOaIsz6Yqp+xI/H9kDkdZA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iX8Fxiloz32+8hyibUMFb2+hw63q6XAGPg5rChzrUEgqktFQ4Vg/L2vpfe/rTIKvZ
-         NS0/Vn920h4GcnQtBhg4oft1jFnBq+pl8MxtAlHKf2NQQDaAy8Z0MhpxAPwekSp8OB
-         VVUu/R3gQJU8UxqMLGrp7q+orycSUA7fEyVUAcHQ=
+        b=iUGpGwxXCADKA1vPHlfXm6X2qeG6J0GhgTmPYqfBB9KaFW1X+0KiiViTNyqalmgZX
+         PLEWTcG8WBFfYhAKnTAeDyfqQgJcqMKmkXJ17jaW5wdCOwMrrq2PXX3VR1v06ruEwS
+         +yz+09dPLiW2XlX+3xo2rZfqTvLJlAD9ROWcrPb4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
-        Robert Foss <robert.foss@linaro.org>,
-        Julian Grahsl <jgrahsl@snap.com>,
-        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0282/1017] media: camss: vfe-170: fix "VFE halt timeout" error
-Date:   Tue,  5 Apr 2022 09:19:55 +0200
-Message-Id: <20220405070402.639652636@linuxfoundation.org>
+        stable@vger.kernel.org, stable@kernel.org,
+        Geetika Moolchandani <Geetika.Moolchandani1@ibm.com>,
+        Nageswara R Sastry <rnsastry@linux.ibm.com>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        Ojaswin Mujoo <ojaswin@linux.ibm.com>,
+        Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 5.15 134/913] ext4: make mb_optimize_scan performance mount option work with extents
+Date:   Tue,  5 Apr 2022 09:19:56 +0200
+Message-Id: <20220405070343.847448731@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,52 +58,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Marek <jonathan@marek.ca>
+From: Ojaswin Mujoo <ojaswin@linux.ibm.com>
 
-[ Upstream commit 1ce8c48b06f249a9739e36c5d56883f6f49ce047 ]
+commit 077d0c2c78df6f7260cdd015a991327efa44d8ad upstream.
 
-This function waits for halt_complete but doesn't do anything to cause
-it to complete, and always hits the "VFE halt timeout" error. Just delete
-this code for now.
+Currently mb_optimize_scan scan feature which improves filesystem
+performance heavily (when FS is fragmented), seems to be not working
+with files with extents (ext4 by default has files with extents).
 
-Fixes: 7319cdf189bb ("media: camss: Add support for VFE hardware version Titan 170")
-Signed-off-by: Jonathan Marek <jonathan@marek.ca>
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
-Tested-by: Julian Grahsl <jgrahsl@snap.com>
-Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This patch fixes that and makes mb_optimize_scan feature work
+for files with extents.
+
+Below are some performance numbers obtained when allocating a 10M and 100M
+file with and w/o this patch on a filesytem with no 1M contiguous block.
+
+<perf numbers>
+===============
+Workload: dd if=/dev/urandom of=test conv=fsync bs=1M count=10/100
+
+Time taken
+=====================================================
+no.     Size   without-patch     with-patch    Diff(%)
+1       10M      0m8.401s         0m5.623s     33.06%
+2       100M     1m40.465s        1m14.737s    25.6%
+
+<debug stats>
+=============
+w/o patch:
+  mballoc:
+    reqs: 17056
+    success: 11407
+    groups_scanned: 13643
+    cr0_stats:
+            hits: 37
+            groups_considered: 9472
+            useless_loops: 36
+            bad_suggestions: 0
+    cr1_stats:
+            hits: 11418
+            groups_considered: 908560
+            useless_loops: 1894
+            bad_suggestions: 0
+    cr2_stats:
+            hits: 1873
+            groups_considered: 6913
+            useless_loops: 21
+    cr3_stats:
+            hits: 21
+            groups_considered: 5040
+            useless_loops: 21
+    extents_scanned: 417364
+            goal_hits: 3707
+            2^n_hits: 37
+            breaks: 1873
+            lost: 0
+    buddies_generated: 239/240
+    buddies_time_used: 651080
+    preallocated: 705
+    discarded: 478
+
+with patch:
+  mballoc:
+    reqs: 12768
+    success: 11305
+    groups_scanned: 12768
+    cr0_stats:
+            hits: 1
+            groups_considered: 18
+            useless_loops: 0
+            bad_suggestions: 0
+    cr1_stats:
+            hits: 5829
+            groups_considered: 50626
+            useless_loops: 0
+            bad_suggestions: 0
+    cr2_stats:
+            hits: 6938
+            groups_considered: 580363
+            useless_loops: 0
+    cr3_stats:
+            hits: 0
+            groups_considered: 0
+            useless_loops: 0
+    extents_scanned: 309059
+            goal_hits: 0
+            2^n_hits: 1
+            breaks: 1463
+            lost: 0
+    buddies_generated: 239/240
+    buddies_time_used: 791392
+    preallocated: 673
+    discarded: 446
+
+Fixes: 196e402 (ext4: improve cr 0 / cr 1 group scanning)
+Cc: stable@kernel.org
+Reported-by: Geetika Moolchandani <Geetika.Moolchandani1@ibm.com>
+Reported-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
+Suggested-by: Ritesh Harjani <riteshh@linux.ibm.com>
+Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Link: https://lore.kernel.org/r/fc9a48f7f8dcfc83891a8b21f6dd8cdf056ed810.1646732698.git.ojaswin@linux.ibm.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/platform/qcom/camss/camss-vfe-170.c | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+ fs/ext4/mballoc.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-vfe-170.c b/drivers/media/platform/qcom/camss/camss-vfe-170.c
-index 5c083d70d495..af71dc659bb9 100644
---- a/drivers/media/platform/qcom/camss/camss-vfe-170.c
-+++ b/drivers/media/platform/qcom/camss/camss-vfe-170.c
-@@ -402,17 +402,7 @@ static irqreturn_t vfe_isr(int irq, void *dev)
-  */
- static int vfe_halt(struct vfe_device *vfe)
- {
--	unsigned long time;
--
--	reinit_completion(&vfe->halt_complete);
--
--	time = wait_for_completion_timeout(&vfe->halt_complete,
--					   msecs_to_jiffies(VFE_HALT_TIMEOUT_MS));
--	if (!time) {
--		dev_err(vfe->camss->dev, "VFE halt timeout\n");
--		return -EIO;
--	}
--
-+	/* rely on vfe_disable_output() to stop the VFE */
- 	return 0;
+--- a/fs/ext4/mballoc.c
++++ b/fs/ext4/mballoc.c
+@@ -1000,7 +1000,7 @@ static inline int should_optimize_scan(s
+ 		return 0;
+ 	if (ac->ac_criteria >= 2)
+ 		return 0;
+-	if (ext4_test_inode_flag(ac->ac_inode, EXT4_INODE_EXTENTS))
++	if (!ext4_test_inode_flag(ac->ac_inode, EXT4_INODE_EXTENTS))
+ 		return 0;
+ 	return 1;
  }
- 
--- 
-2.34.1
-
 
 

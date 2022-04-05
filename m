@@ -2,116 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84BEB4F5172
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A8B44F50D9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1846328AbiDFCDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
+        id S1843588AbiDFBlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573086AbiDERza (ORCPT
+        with ESMTP id S1573097AbiDER7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 13:55:30 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AB3DE09D
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 10:53:30 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id q14so18072342ljc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 10:53:30 -0700 (PDT)
+        Tue, 5 Apr 2022 13:59:03 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B48E7F47
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 10:57:04 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id r13so28323755ejd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 10:57:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=MYJtsikWi9hIB8NHNY8S76MVB/wVdm4tXnry+6+yiEo=;
-        b=ijwBLjjh6lk3Bb+x9kE21mGPVSMbJnI+Yi/zPHj8mem2U9fEgN+edh+EmjEqa+XZcD
-         n/lfaXf0Tweh9j3vMEvYaRq5AnA39APG5yQv6NKxIshzQR69mp6t6YhwSPfx9qs+WETe
-         qzbk+Vb7I8DycQ3I99Ja5mziLFXJ/cQUDqh9BmEFPMUrEBXvhlToOea+VAhw6cZbQC74
-         NLoIe5lNwslTIQJXZenzM6298KtFhaCaJ7H2Dofx9iOBYLBqokApBi/5kHOVzBOSha+8
-         N0ViNXCPr1zN2Xi1NpaNTckkmR0R5uQew58xTxPUq6A6fCfWeEH1Zr8aSDV8F7XJ0RBt
-         zqUw==
+        bh=fWlXCTkYGyXzOu6P6awXX/6nfl84WYIZI9g+WSGOyw0=;
+        b=jwx0XQUGCaRHrpcErZBCsWMj23/VXGgzoKqDbPSw2f+7F8N/d9igo6HIZ+sSRTWP9a
+         hqVlvkcMJHhbv8xYnDkM7bGSTq93zYJVCDN/0Uym3PloU+pHINLS9cTw6XdP9ouh17le
+         it2++ow9VO0gUkSzqvwdCeMBzqbqoP5MRFjfawj+UxJefktYATV0WZknO8TYNGxTGfMQ
+         A4SEg3p8c2YD/MFhBiOnIcKNUo84CMezQUHC+Em+oj9ZjR24dmD358+boudl6sT0Vpem
+         JS1XGjGYbGqUCc76nIevCdXkQ4b19TaL0abiCBotNqqN7PtVcy3R/zqZT3DhISco56Xk
+         7VWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=MYJtsikWi9hIB8NHNY8S76MVB/wVdm4tXnry+6+yiEo=;
-        b=U8dgLX2doJtGdh7Ko7qCbk3v2ADUZsYAwW37/VqBPk9FV38DDikGInK0mtFgFJZkt8
-         3dJ0ToTELZqtVTDO3G0rccETyI4NhuvC1j6K2V8KQiMp014nwSlUZgfRa8oMianS8y6Z
-         +fmQ05mvn47tM1hoLjnU9KpqIDCJI7asrS2QoS9xYcvJTUpAm2YRfUkZwzEeHPy57bj3
-         7vfUCWc+5ttL8IoG2BUx2pyENUNm+jC+/dEIrjalareRIMsXhJFzJoMSz50HB0kF2E09
-         derec2OBmaWGDap9bQEIMluwnXutrEH/k47eIRpRtGxc3Fp0Jy8EvLc2F8Cv2olr4/WP
-         ubcw==
-X-Gm-Message-State: AOAM533Td9OhvyDibARyylNxuHrNVvjylCMMy9GnJeKMRRhllKOSiXcx
-        h94d5tZ8xfvVltP8fIijEeYrltdR/p6xjY0pd7a0Vw==
-X-Google-Smtp-Source: ABdhPJxkfZhW0np+6HFZguzcslyOvUzoSGSv9BMWk5pjhEH5IyVC6Lb8xm3p/2a9i36EyTCg1IFq70K2lSb/IBVbZTs=
-X-Received: by 2002:a2e:9ec4:0:b0:24b:115c:aedb with SMTP id
- h4-20020a2e9ec4000000b0024b115caedbmr2807694ljk.235.1649181208750; Tue, 05
- Apr 2022 10:53:28 -0700 (PDT)
+        bh=fWlXCTkYGyXzOu6P6awXX/6nfl84WYIZI9g+WSGOyw0=;
+        b=G9iMyqI/e/iqin9Jtu8sd14qGrmjdaUeLWFUgDRUzh1typilbXJJ4MX4qQcS2ruVGL
+         AMN8kuVGCDjulpnrSHEkGMRfp1sIX0vHETg8GZAcNcIrGfpwbDaV7DMJUxYe2Q1RRrcO
+         YD4KF1IGxxRWg1b97Xpl3e98sdhhvlmDYd3ZqaIVpZ8qONq4lDl6f8zX7BWdAR7LAhPk
+         BenR0QJKk6M8kKEwIM8CimBSwgt1NPDc1fBdiPfUDao+U3/3ZOvl/ZGngsZJjT9Npbqx
+         zSWGpggrEKYjgYtv5SJisVf3snjErJyIPAoZEZkZxMoNDt4rIaBqwsk6g3ygUa3u3UFE
+         vTOw==
+X-Gm-Message-State: AOAM531Ke9Bbn7/OQmgP4Yi5m7MKbNdiTPzlVU+wxOn4W2RB2sPhFsZj
+        GCZ8c1DpiWLNFCaoAXtFhQnqj+OHBbilCnLboUI=
+X-Google-Smtp-Source: ABdhPJzNwJLndNEvf8of6myr8gcbYVYJMmeilk2VVKShekHBfh+c8nN7LVIdcrL0bjowhSiwuKS+l8gYahoKhGqXbFU=
+X-Received: by 2002:a17:906:d10c:b0:6cd:4aa2:cd62 with SMTP id
+ b12-20020a170906d10c00b006cd4aa2cd62mr4684858ejz.229.1649181422577; Tue, 05
+ Apr 2022 10:57:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220319143456.2159540-1-trix@redhat.com>
-In-Reply-To: <20220319143456.2159540-1-trix@redhat.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 5 Apr 2022 10:53:17 -0700
-Message-ID: <CAKwvOdkEnDBFUtio2+UVeV1J3QUwAJOc-YgcubDEUXHWMF5gbw@mail.gmail.com>
-Subject: Re: [PATCH] media: platform: return early if the iface is not handled
-To:     trix@redhat.com
-Cc:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
-        nathan@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20220405173918.1000846-1-robdclark@gmail.com>
+In-Reply-To: <20220405173918.1000846-1-robdclark@gmail.com>
+From:   Chia-I Wu <olvaffe@gmail.com>
+Date:   Tue, 5 Apr 2022 10:56:51 -0700
+Message-ID: <CAPaKu7Tur-_Kf3Lb9U=98Yr_08onxPHNKTPh2anHU6zLPhr5ZQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/virtio: Add execbuf flag to request no fence-event
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     ML dri-devel <dri-devel@lists.freedesktop.org>,
+        Rob Clark <robdclark@chromium.org>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 19, 2022 at 7:35 AM <trix@redhat.com> wrote:
+On Tue, Apr 5, 2022 at 10:38 AM Rob Clark <robdclark@gmail.com> wrote:
 >
-> From: Tom Rix <trix@redhat.com>
+> From: Rob Clark <robdclark@chromium.org>
 >
-> Clang static analysis reports this issue
-> ispcsiphy.c:63:14: warning: The left operand of '<<'
->   is a garbage value
->         reg |= mode << shift;
->                ~~~~ ^
-> The iface switch-statement default case falls through
-> to ISP_INTERFACE_CCP2B_PHY1.  Which is later checked
-> to set the mode.  Since the default case is left out
-> of this check mode is never set.  Instead of falling
-> through and assuming a ISP_INTERFACE_CCP2B_PHY1
-> iface, return.
+> It would have been cleaner to have a flag to *request* the fence event.
+> But that ship has sailed.  So add a flag so that userspace which doesn't
+> care about the events can opt-out.
 >
-> Signed-off-by: Tom Rix <trix@redhat.com>
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+Reviewed-by: Chia-I Wu <olvaffe@gmail.com>
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Might want to wait for Gurchetan to chime in as he added the mechanism.
 
 > ---
->  drivers/media/platform/ti/omap3isp/ispcsiphy.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  drivers/gpu/drm/virtio/virtgpu_ioctl.c | 8 +++++---
+>  include/uapi/drm/virtgpu_drm.h         | 2 ++
+>  2 files changed, 7 insertions(+), 3 deletions(-)
 >
-> diff --git a/drivers/media/platform/ti/omap3isp/ispcsiphy.c b/drivers/media/platform/ti/omap3isp/ispcsiphy.c
-> index 6dc7359c5131d..1bde76c0adbee 100644
-> --- a/drivers/media/platform/ti/omap3isp/ispcsiphy.c
-> +++ b/drivers/media/platform/ti/omap3isp/ispcsiphy.c
-> @@ -31,7 +31,8 @@ static void csiphy_routing_cfg_3630(struct isp_csiphy *phy,
+> diff --git a/drivers/gpu/drm/virtio/virtgpu_ioctl.c b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+> index 3a8078f2ee27..09f1aa263f91 100644
+> --- a/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+> +++ b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
+> @@ -225,9 +225,11 @@ static int virtio_gpu_execbuffer_ioctl(struct drm_device *dev, void *data,
+>                 goto out_unresv;
+>         }
 >
->         switch (iface) {
->         default:
-> -       /* Should not happen in practice, but let's keep the compiler happy. */
-> +               /* Should not happen in practice, but let's keep the compiler happy. */
-> +               return;
->         case ISP_INTERFACE_CCP2B_PHY1:
->                 reg &= ~OMAP3630_CONTROL_CAMERA_PHY_CTRL_CSI1_RX_SEL_PHY2;
->                 shift = OMAP3630_CONTROL_CAMERA_PHY_CTRL_CAMMODE_PHY1_SHIFT;
+> -       ret = virtio_gpu_fence_event_create(dev, file, out_fence, ring_idx);
+> -       if (ret)
+> -               goto out_unresv;
+> +       if (!(exbuf->flags & VIRTGPU_EXECBUF_NO_EVENT)) {
+> +               ret = virtio_gpu_fence_event_create(dev, file, out_fence, ring_idx);
+> +               if (ret)
+> +                       goto out_unresv;
+> +       }
+>
+>         if (out_fence_fd >= 0) {
+>                 sync_file = sync_file_create(&out_fence->f);
+> diff --git a/include/uapi/drm/virtgpu_drm.h b/include/uapi/drm/virtgpu_drm.h
+> index 0512fde5e697..d06cac3407cc 100644
+> --- a/include/uapi/drm/virtgpu_drm.h
+> +++ b/include/uapi/drm/virtgpu_drm.h
+> @@ -52,10 +52,12 @@ extern "C" {
+>  #define VIRTGPU_EXECBUF_FENCE_FD_IN    0x01
+>  #define VIRTGPU_EXECBUF_FENCE_FD_OUT   0x02
+>  #define VIRTGPU_EXECBUF_RING_IDX       0x04
+> +#define VIRTGPU_EXECBUF_NO_EVENT       0x08
+>  #define VIRTGPU_EXECBUF_FLAGS  (\
+>                 VIRTGPU_EXECBUF_FENCE_FD_IN |\
+>                 VIRTGPU_EXECBUF_FENCE_FD_OUT |\
+>                 VIRTGPU_EXECBUF_RING_IDX |\
+> +               VIRTGPU_EXECBUF_NO_EVENT |\
+>                 0)
+>
+>  struct drm_virtgpu_map {
 > --
-> 2.26.3
+> 2.35.1
 >
-
-
--- 
-Thanks,
-~Nick Desaulniers

@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 019394F2B36
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DEB44F2B5C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343723AbiDEI5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34812 "EHLO
+        id S245276AbiDEIyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236701AbiDEIQ5 (ORCPT
+        with ESMTP id S233769AbiDEIJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:16:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8408CAD10D;
-        Tue,  5 Apr 2022 01:04:31 -0700 (PDT)
+        Tue, 5 Apr 2022 04:09:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B936CA4C;
+        Tue,  5 Apr 2022 01:02:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 13D1DB81B7F;
-        Tue,  5 Apr 2022 08:04:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59EE7C385A0;
-        Tue,  5 Apr 2022 08:04:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 628BDB81B14;
+        Tue,  5 Apr 2022 08:02:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C40A2C385A0;
+        Tue,  5 Apr 2022 08:02:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145844;
-        bh=5mWXVxBakK/LoioY5fPBHLKqJnS9I7Zc5ph1tC3a8V4=;
+        s=korg; t=1649145756;
+        bh=PCOovBywQjdfs89+FJpIp3nsalzk5qELoJAhclxvLXw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jbZYr1ZKyCkbzjKYGij4pRJUjWKqBXiNXtMxpJufb5JsV8/u48EsXiRiqzmhdMGm8
-         8R0G8vF8uVLbhw18v2HabKGR0qJ8l3qEam2iyT92+pmBIGzoMIe9BBNvKn/QZkjgZM
-         liLBh4IY5HBvB1DDRMLMbJMBkhWglM8bM6IEyIV4=
+        b=JtTz+MvjoBwJ722tyK8kyJINkzq61/+J47MNfP3yBjtgVnFyEBkU+JwKZkzABa3vm
+         Z3shctA66laNdJv7wwXA5hM8wJiLWBYyvFax4z03ZP0BFNTeSBFHPixe97hnSJ3ap5
+         vGoKLasd8lZLbbOSV8zWUiDiYn5YgYmYCsKO9vME=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tobias Waldekranz <tobias@waldekranz.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0511/1126] net: dsa: mv88e6xxx: Enable port policy support on 6097
-Date:   Tue,  5 Apr 2022 09:20:58 +0200
-Message-Id: <20220405070422.627272143@linuxfoundation.org>
+Subject: [PATCH 5.17 0519/1126] mtd: mchp48l640: Add SPI ID table
+Date:   Tue,  5 Apr 2022 09:21:06 +0200
+Message-Id: <20220405070422.863091512@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,33 +56,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tobias Waldekranz <tobias@waldekranz.com>
+From: Mark Brown <broonie@kernel.org>
 
-[ Upstream commit 585d42bb57bb358d48906660a8de273b078810b1 ]
+[ Upstream commit 69a6d06878f05d63673b0dcdc3c3ef1af2996d46 ]
 
-This chip has support for the same per-port policy actions found in
-later versions of LinkStreet devices.
+Currently autoloading for SPI devices does not use the DT ID table, it uses
+SPI modalises. Supporting OF modalises is going to be difficult if not
+impractical, an attempt was made but has been reverted, so ensure that
+module autoloading works for this driver by adding an id_table listing the
+SPI IDs for everything.
 
-Fixes: f3a2cd326e44 ("net: dsa: mv88e6xxx: introduce .port_set_policy")
-Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 96c8395e2166 ("spi: Revert modalias changes")
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220202143404.16070-4-broonie@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/mv88e6xxx/chip.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/mtd/devices/mchp48l640.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index ab1676553714..cf7754dddad7 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -3639,6 +3639,7 @@ static const struct mv88e6xxx_ops mv88e6097_ops = {
- 	.port_sync_link = mv88e6185_port_sync_link,
- 	.port_set_speed_duplex = mv88e6185_port_set_speed_duplex,
- 	.port_tag_remap = mv88e6095_port_tag_remap,
-+	.port_set_policy = mv88e6352_port_set_policy,
- 	.port_set_frame_mode = mv88e6351_port_set_frame_mode,
- 	.port_set_ucast_flood = mv88e6352_port_set_ucast_flood,
- 	.port_set_mcast_flood = mv88e6352_port_set_mcast_flood,
+diff --git a/drivers/mtd/devices/mchp48l640.c b/drivers/mtd/devices/mchp48l640.c
+index 231a10790196..b9cf2b4415a5 100644
+--- a/drivers/mtd/devices/mchp48l640.c
++++ b/drivers/mtd/devices/mchp48l640.c
+@@ -359,6 +359,15 @@ static const struct of_device_id mchp48l640_of_table[] = {
+ };
+ MODULE_DEVICE_TABLE(of, mchp48l640_of_table);
+ 
++static const struct spi_device_id mchp48l640_spi_ids[] = {
++	{
++		.name = "48l640",
++		.driver_data = (kernel_ulong_t)&mchp48l640_caps,
++	},
++	{}
++};
++MODULE_DEVICE_TABLE(spi, mchp48l640_spi_ids);
++
+ static struct spi_driver mchp48l640_driver = {
+ 	.driver = {
+ 		.name	= "mchp48l640",
+@@ -366,6 +375,7 @@ static struct spi_driver mchp48l640_driver = {
+ 	},
+ 	.probe		= mchp48l640_probe,
+ 	.remove		= mchp48l640_remove,
++	.id_table	= mchp48l640_spi_ids,
+ };
+ 
+ module_spi_driver(mchp48l640_driver);
 -- 
 2.34.1
 

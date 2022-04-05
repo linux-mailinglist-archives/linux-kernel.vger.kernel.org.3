@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 627934F4C76
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 427B24F4DCA
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:35:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348031AbiDEXV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
+        id S1583228AbiDEXvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354472AbiDEKOU (ORCPT
+        with ESMTP id S243677AbiDEKh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:14:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7A76A424;
-        Tue,  5 Apr 2022 03:00:33 -0700 (PDT)
+        Tue, 5 Apr 2022 06:37:28 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E120554A2;
+        Tue,  5 Apr 2022 03:22:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BA2AB818F6;
-        Tue,  5 Apr 2022 10:00:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79F98C385A1;
-        Tue,  5 Apr 2022 10:00:30 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B111DCE1CA2;
+        Tue,  5 Apr 2022 10:22:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAD38C385A2;
+        Tue,  5 Apr 2022 10:22:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152830;
-        bh=57Bn+WXxIZqFBjJU2aM3gx6DzG/2oNf6AgrznRSIjW4=;
+        s=korg; t=1649154165;
+        bh=yYJRqvEcw9EcoaSG48LiLiHcl2d33GJG0wOTuWcSzBc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MujUOygyI9DRrC1kdu3uuqhOxW4n788DYrjJjEOzuwTmgispIoHBhQXivbwKqg6QV
-         NUtLJiQ+vrGcnsDs23+kcK4QYvl2HIWub2CaHMg0K2HLMgovBZti6P1rdHLx0o6TNX
-         0GunaTadQqaWYgWj375Tush3k1LeiIphYwz2r7O4=
+        b=IlHgFTHmXWs63iGaNq3e3+QrJ90PtmtUlGEcVkayYZl+zovPhnCLR3F9a68U8q+RO
+         oyvR1mqhtZhmBBXSy8qnDad4pLXcAg/DsHyHHtDt6ApCJVRG4DmZIbELMCj+oAGI25
+         ng8FDLZLdAgTTduGXDX6mTi7cb77bB/5F+hy7bA4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: [PATCH 5.15 911/913] coredump: Remove the WARN_ON in dump_vma_snapshot
-Date:   Tue,  5 Apr 2022 09:32:53 +0200
-Message-Id: <20220405070407.126814127@linuxfoundation.org>
+        stable@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Corentin Labbe <clabbe@baylibre.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 480/599] media: staging: media: zoran: fix various V4L2 compliance errors
+Date:   Tue,  5 Apr 2022 09:32:54 +0200
+Message-Id: <20220405070313.110351676@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +56,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric W. Biederman <ebiederm@xmission.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-commit 49c1866348f364478a0c4d3dd13fd08bb82d3a5b upstream.
+[ Upstream commit 914941827aad5ecddf9bf3a6dee67fbec1af1fff ]
 
-The condition is impossible and to the best of my knowledge has never
-triggered.
+This fixes several issues found with 'v4l2-compliance -s':
 
-We are in deep trouble if that conditions happens and we walk past
-the end of our allocated array.
+1) read()/write() is supported, but not reported in the capabilities
+2) S_STD(G_STD()) failed: setting the same standard should just return 0.
+3) G_PARM failed to set readbuffers.
+4) different field values in the format vs. what v4l2_buffer reported.
+5) zero the sequence number when starting streaming.
+6) drop VB_USERPTR: makes no sense with dma_contig streaming.
 
-So delete the WARN_ON and the code that makes it look like the kernel
-can handle the case of walking past the end of it's vma_meta array.
-
-Reviewed-by: Jann Horn <jannh@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/coredump.c |    6 ------
- 1 file changed, 6 deletions(-)
+ drivers/staging/media/zoran/zoran_card.c   |  2 +-
+ drivers/staging/media/zoran/zoran_driver.c | 13 ++++++++++---
+ 2 files changed, 11 insertions(+), 4 deletions(-)
 
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -1151,12 +1151,6 @@ static bool dump_vma_snapshot(struct cor
+diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
+index 782bb4443fc1..fe0cca12119c 100644
+--- a/drivers/staging/media/zoran/zoran_card.c
++++ b/drivers/staging/media/zoran/zoran_card.c
+@@ -810,7 +810,7 @@ static int zoran_init_video_device(struct zoran *zr, struct video_device *video_
+ 	*video_dev = zoran_template;
+ 	video_dev->v4l2_dev = &zr->v4l2_dev;
+ 	video_dev->lock = &zr->lock;
+-	video_dev->device_caps = V4L2_CAP_STREAMING | dir;
++	video_dev->device_caps = V4L2_CAP_STREAMING | V4L2_CAP_READWRITE | dir;
  
- 	mmap_write_unlock(mm);
+ 	strscpy(video_dev->name, ZR_DEVNAME(zr), sizeof(video_dev->name));
+ 	/*
+diff --git a/drivers/staging/media/zoran/zoran_driver.c b/drivers/staging/media/zoran/zoran_driver.c
+index 7f22596cc630..ea04f6c732b2 100644
+--- a/drivers/staging/media/zoran/zoran_driver.c
++++ b/drivers/staging/media/zoran/zoran_driver.c
+@@ -255,8 +255,6 @@ static int zoran_querycap(struct file *file, void *__fh, struct v4l2_capability
+ 	strscpy(cap->card, ZR_DEVNAME(zr), sizeof(cap->card));
+ 	strscpy(cap->driver, "zoran", sizeof(cap->driver));
+ 	snprintf(cap->bus_info, sizeof(cap->bus_info), "PCI:%s", pci_name(zr->pci_dev));
+-	cap->device_caps = zr->video_dev->device_caps;
+-	cap->capabilities = cap->device_caps | V4L2_CAP_DEVICE_CAPS;
+ 	return 0;
+ }
  
--	if (WARN_ON(i != cprm->vma_count)) {
--		kvfree(cprm->vma_meta);
--		return false;
--	}
--
--
- 	for (i = 0; i < cprm->vma_count; i++) {
- 		struct core_vma_metadata *m = cprm->vma_meta + i;
+@@ -582,6 +580,9 @@ static int zoran_s_std(struct file *file, void *__fh, v4l2_std_id std)
+ 	struct zoran *zr = video_drvdata(file);
+ 	int res = 0;
  
++	if (zr->norm == std)
++		return 0;
++
+ 	if (zr->running != ZORAN_MAP_MODE_NONE)
+ 		return -EBUSY;
+ 
+@@ -737,6 +738,7 @@ static int zoran_g_parm(struct file *file, void *priv, struct v4l2_streamparm *p
+ 	if (parm->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
+ 		return -EINVAL;
+ 
++	parm->parm.capture.readbuffers = 9;
+ 	return 0;
+ }
+ 
+@@ -867,6 +869,10 @@ int zr_set_buf(struct zoran *zr)
+ 		vbuf = &buf->vbuf;
+ 
+ 		buf->vbuf.field = V4L2_FIELD_INTERLACED;
++		if (BUZ_MAX_HEIGHT < (zr->v4l_settings.height * 2))
++			buf->vbuf.field = V4L2_FIELD_INTERLACED;
++		else
++			buf->vbuf.field = V4L2_FIELD_TOP;
+ 		vb2_set_plane_payload(&buf->vbuf.vb2_buf, 0, zr->buffer_size);
+ 		vb2_buffer_done(&buf->vbuf.vb2_buf, VB2_BUF_STATE_DONE);
+ 		zr->inuse[0] = NULL;
+@@ -926,6 +932,7 @@ static int zr_vb2_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 		zr->stat_com[j] = cpu_to_le32(1);
+ 		zr->inuse[j] = NULL;
+ 	}
++	zr->vbseq = 0;
+ 
+ 	if (zr->map_mode != ZORAN_MAP_MODE_RAW) {
+ 		pci_info(zr->pci_dev, "START JPG\n");
+@@ -1016,7 +1023,7 @@ int zoran_queue_init(struct zoran *zr, struct vb2_queue *vq, int dir)
+ 	vq->dev = &zr->pci_dev->dev;
+ 	vq->type = dir;
+ 
+-	vq->io_modes = VB2_USERPTR | VB2_DMABUF | VB2_MMAP | VB2_READ | VB2_WRITE;
++	vq->io_modes = VB2_DMABUF | VB2_MMAP | VB2_READ | VB2_WRITE;
+ 	vq->drv_priv = zr;
+ 	vq->buf_struct_size = sizeof(struct zr_buffer);
+ 	vq->ops = &zr_video_qops;
+-- 
+2.34.1
+
 
 

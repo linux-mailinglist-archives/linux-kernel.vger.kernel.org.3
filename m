@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350024F495B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A1C4F4A73
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbiDEWLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34788 "EHLO
+        id S1456546AbiDEWqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343966AbiDEKjp (ORCPT
+        with ESMTP id S1344418AbiDEKjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:39:45 -0400
+        Tue, 5 Apr 2022 06:39:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A43222B7;
-        Tue,  5 Apr 2022 03:24:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C64926AFB;
+        Tue,  5 Apr 2022 03:25:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D011D6141D;
-        Tue,  5 Apr 2022 10:24:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC6DDC385A0;
-        Tue,  5 Apr 2022 10:24:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AAD156141D;
+        Tue,  5 Apr 2022 10:25:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7D15C385A0;
+        Tue,  5 Apr 2022 10:25:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154292;
-        bh=dJPumnA6KTq5umrU0fNyR0/UzVzoQ2sShZxOvbIk0d0=;
+        s=korg; t=1649154306;
+        bh=+wq173W039LLwt49okhsC1cU/Yg0EMixvemiQqA7vmw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iUv8wg/VOKJwGsiVjLa/7EXfCqC8NrXvlTbb3usaNPyyXJLKptw9JzkJc/MazWw7R
-         G0nskrvalVspmV2vr4Q4CxEsEHzaoS6i7y2DZWboum6KW2nhHRpwrQ7GZXKoGFXoSW
-         DvqSe+tWrlYrkE4N8teCcDneqWcnLjFko6ytV+CA=
+        b=bWtP/X5h8zjMQagFoUKseIiNvCaEuX6rUADjTZn8i2VJcE99e26JB3mMAOKDm+XaG
+         LS0DzGQAk/TDXhO1ABDtVubx99QtP388J8DoDul8G0S6IagQdPGm9RS7gFWiaU2aL0
+         YFHGF+Takub6w0LIeSNrR+i6652tXuOAsU+yLwkw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Jing Yao <yao.jing2@zte.com.cn>, Helge Deller <deller@gmx.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 490/599] media: atomisp_gmin_platform: Add DMI quirk to not turn AXP ELDO2 regulator off on some boards
-Date:   Tue,  5 Apr 2022 09:33:04 +0200
-Message-Id: <20220405070313.410127845@linuxfoundation.org>
+Subject: [PATCH 5.10 495/599] video: fbdev: omapfb: panel-dsi-cm: Use sysfs_emit() instead of snprintf()
+Date:   Tue,  5 Apr 2022 09:33:09 +0200
+Message-Id: <20220405070313.559022323@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -55,65 +55,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Jing Yao <yao.jing2@zte.com.cn>
 
-[ Upstream commit 2c39a01154ea57d596470afa1d278e3be3b37f6a ]
+[ Upstream commit f63658a59c3d439c8ad7b290f8ec270980e0f384 ]
 
-The TrekStor SurfTab duo W1 10.1 has a hw bug where turning eldo2 back on
-after having turned it off causes the CPLM3218 ambient-light-sensor on
-the front camera sensor's I2C bus to crash, hanging the bus.
+Use sysfs_emit instead of scnprintf, snprintf or sprintf.
 
-Add a DMI quirk table for systems on which to leave eldo2 on.
-
-Note an alternative fix is to turn off the CPLM3218 ambient-light-sensor
-as long as the camera sensor is being used, this is what Windows seems
-to do as a workaround (based on analyzing the DSDT). But that is not
-easy to do cleanly under Linux.
-
-Link: https://lore.kernel.org/linux-media/20220116215204.307649-10-hdegoede@redhat.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Jing Yao <yao.jing2@zte.com.cn>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../media/atomisp/pci/atomisp_gmin_platform.c  | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-index 34480ca16474..c9ee85037644 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
-@@ -729,6 +729,21 @@ static int axp_regulator_set(struct device *dev, struct gmin_subdev *gs,
- 	return 0;
+diff --git a/drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c b/drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c
+index 4b0793abdd84..a2c7c5cb1523 100644
+--- a/drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c
++++ b/drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c
+@@ -409,7 +409,7 @@ static ssize_t dsicm_num_errors_show(struct device *dev,
+ 	if (r)
+ 		return r;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n", errors);
++	return sysfs_emit(buf, "%d\n", errors);
  }
  
-+/*
-+ * Some boards contain a hw-bug where turning eldo2 back on after having turned
-+ * it off causes the CPLM3218 ambient-light-sensor on the image-sensor's I2C bus
-+ * to crash, hanging the bus. Do not turn eldo2 off on these systems.
-+ */
-+static const struct dmi_system_id axp_leave_eldo2_on_ids[] = {
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "TrekStor"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "SurfTab duo W1 10.1 (VT4)"),
-+		},
-+	},
-+	{ }
-+};
-+
- static int axp_v1p8_on(struct device *dev, struct gmin_subdev *gs)
- {
- 	int ret;
-@@ -763,6 +778,9 @@ static int axp_v1p8_off(struct device *dev, struct gmin_subdev *gs)
- 	if (ret)
- 		return ret;
+ static ssize_t dsicm_hw_revision_show(struct device *dev,
+@@ -439,7 +439,7 @@ static ssize_t dsicm_hw_revision_show(struct device *dev,
+ 	if (r)
+ 		return r;
  
-+	if (dmi_check_system(axp_leave_eldo2_on_ids))
-+		return 0;
-+
- 	ret = axp_regulator_set(dev, gs, gs->eldo2_sel_reg, gs->eldo2_1p8v,
- 				ELDO_CTRL_REG, gs->eldo2_ctrl_shift, false);
- 	return ret;
+-	return snprintf(buf, PAGE_SIZE, "%02x.%02x.%02x\n", id1, id2, id3);
++	return sysfs_emit(buf, "%02x.%02x.%02x\n", id1, id2, id3);
+ }
+ 
+ static ssize_t dsicm_store_ulps(struct device *dev,
+@@ -487,7 +487,7 @@ static ssize_t dsicm_show_ulps(struct device *dev,
+ 	t = ddata->ulps_enabled;
+ 	mutex_unlock(&ddata->lock);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%u\n", t);
++	return sysfs_emit(buf, "%u\n", t);
+ }
+ 
+ static ssize_t dsicm_store_ulps_timeout(struct device *dev,
+@@ -532,7 +532,7 @@ static ssize_t dsicm_show_ulps_timeout(struct device *dev,
+ 	t = ddata->ulps_timeout;
+ 	mutex_unlock(&ddata->lock);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%u\n", t);
++	return sysfs_emit(buf, "%u\n", t);
+ }
+ 
+ static DEVICE_ATTR(num_dsi_errors, S_IRUGO, dsicm_num_errors_show, NULL);
 -- 
 2.34.1
 

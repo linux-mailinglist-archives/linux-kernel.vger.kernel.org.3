@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4DB94F3441
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:26:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 705864F3043
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232641AbiDEI5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
+        id S235177AbiDEJBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236867AbiDEIRG (ORCPT
+        with ESMTP id S237098AbiDEIRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:17:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204CAAF1E4;
-        Tue,  5 Apr 2022 01:04:46 -0700 (PDT)
+        Tue, 5 Apr 2022 04:17:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEF7B0A78;
+        Tue,  5 Apr 2022 01:05:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A1ABB81A32;
-        Tue,  5 Apr 2022 08:04:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1444C385A1;
-        Tue,  5 Apr 2022 08:04:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F606B81B7F;
+        Tue,  5 Apr 2022 08:05:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7432DC385A0;
+        Tue,  5 Apr 2022 08:05:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145883;
-        bh=pUXd/odrjqglX+qTSbsO6wGpyhmHpt2EgqG6TEgFfPs=;
+        s=korg; t=1649145913;
+        bh=ljUjy9uEyUDi5nyMnpEevzcnbDv8DuDLWbtgaNltjds=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cOFhOI+U4FPUNYmN0twqMPeWTE8vkt0m7G4pARkKT4qV+OPR8uEDEYVf7xCbVI6dn
-         MEks7T8m9rUrPuBfTWWTrmzeJ/Y3Z3sRj5N20zisfgLQT+YOUTWvQ1czSLN+VFg3Pc
-         p19cWtt7x7MqGs3KvU9oJlyqG3psdXX+p4x3HRKI=
+        b=djXNG+eGf37DvkWcSTB/M6hGOApa8EJmZIULGJkV/GuGdjI1tJ3m1syjuwkP1uDdF
+         SzZNgKG/McUqGzvzhqbpZ+ES++vcLfrh6py3Ud8bQUQ+87Giz8NZEvcOjwuVhdaF+d
+         hOclGo5OAWA6IODmoOJjHdDEL4cmZlb+PEnqS6bY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        stable@vger.kernel.org, Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0565/1126] mtd: rawnand: pl353: Set the nand chip node as the flash node
-Date:   Tue,  5 Apr 2022 09:21:52 +0200
-Message-Id: <20220405070424.217402117@linuxfoundation.org>
+Subject: [PATCH 5.17 0575/1126] drm/msm/dp: fix panel bridge attachment
+Date:   Tue,  5 Apr 2022 09:22:02 +0200
+Message-Id: <20220405070424.509757897@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,36 +56,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit a1fe2ace2c39dcdc7c053705459a73b7598b1e4f ]
+[ Upstream commit 4d793a02c4967ab14d4ae5e86a51ee02ed78921a ]
 
-In devicetree the flash information is embedded within nand chip node,
-so during nand chip initialization the nand chip node should be passed
-to nand_set_flash_node() api, instead of nand controller node.
+In commit 8a3b4c17f863 ("drm/msm/dp: employ bridge mechanism for display
+enable and disable") the DP driver received a drm_bridge instance, which
+is always attached to the encoder as a root bridge. However it conflicts
+with the panel_bridge support for eDP panels. The panel bridge attaches
+to the encoder before the "dp" bridge (DP driver's drm_bridge instance
+created in msm_dp_bridge_init()) has a chance to do so. Change
+panel bridge attachment to come after the "dp" bridge attachment (and to
+use it as a previous bridge).
 
-Fixes: 08d8c62164a3 ("mtd: rawnand: pl353: Add support for the ARM PL353 SMC NAND controller")
-Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220209053427.27676-1-amit.kumar-mahapatra@xilinx.com
+Fixes: 8a3b4c17f863 ("drm/msm/dp: employ bridge mechanism for display enable and disable")
+Cc: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Tested-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Link: https://lore.kernel.org/r/20220211224006.1797846-2-dmitry.baryshkov@linaro.org
+[db: fixed commit message according to Stephen's suggestions]
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/nand/raw/pl35x-nand-controller.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/msm/dp/dp_drm.c | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/mtd/nand/raw/pl35x-nand-controller.c b/drivers/mtd/nand/raw/pl35x-nand-controller.c
-index 8a91e069ee2e..3c6f6aff649f 100644
---- a/drivers/mtd/nand/raw/pl35x-nand-controller.c
-+++ b/drivers/mtd/nand/raw/pl35x-nand-controller.c
-@@ -1062,7 +1062,7 @@ static int pl35x_nand_chip_init(struct pl35x_nandc *nfc,
- 	chip->controller = &nfc->controller;
- 	mtd = nand_to_mtd(chip);
- 	mtd->dev.parent = nfc->dev;
--	nand_set_flash_node(chip, nfc->dev->of_node);
-+	nand_set_flash_node(chip, np);
- 	if (!mtd->name) {
- 		mtd->name = devm_kasprintf(nfc->dev, GFP_KERNEL,
- 					   "%s", PL35X_NANDC_DRIVER_NAME);
+diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
+index d4d360d19eba..26ef41a4c1b6 100644
+--- a/drivers/gpu/drm/msm/dp/dp_drm.c
++++ b/drivers/gpu/drm/msm/dp/dp_drm.c
+@@ -169,16 +169,6 @@ struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
+ 
+ 	drm_connector_attach_encoder(connector, dp_display->encoder);
+ 
+-	if (dp_display->panel_bridge) {
+-		ret = drm_bridge_attach(dp_display->encoder,
+-					dp_display->panel_bridge, NULL,
+-					DRM_BRIDGE_ATTACH_NO_CONNECTOR);
+-		if (ret < 0) {
+-			DRM_ERROR("failed to attach panel bridge: %d\n", ret);
+-			return ERR_PTR(ret);
+-		}
+-	}
+-
+ 	return connector;
+ }
+ 
+@@ -246,5 +236,16 @@ struct drm_bridge *msm_dp_bridge_init(struct msm_dp *dp_display, struct drm_devi
+ 		return ERR_PTR(rc);
+ 	}
+ 
++	if (dp_display->panel_bridge) {
++		rc = drm_bridge_attach(dp_display->encoder,
++					dp_display->panel_bridge, bridge,
++					DRM_BRIDGE_ATTACH_NO_CONNECTOR);
++		if (rc < 0) {
++			DRM_ERROR("failed to attach panel bridge: %d\n", rc);
++			drm_bridge_remove(bridge);
++			return ERR_PTR(rc);
++		}
++	}
++
+ 	return bridge;
+ }
 -- 
 2.34.1
 

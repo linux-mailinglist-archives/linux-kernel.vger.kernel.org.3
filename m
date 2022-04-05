@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7974F474C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E144F4548
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238032AbiDEVGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
+        id S1353748AbiDEOCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358436AbiDEK2Y (ORCPT
+        with ESMTP id S235377AbiDEJaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:28:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDB2B247C;
-        Tue,  5 Apr 2022 03:18:01 -0700 (PDT)
+        Tue, 5 Apr 2022 05:30:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147E737BD5;
+        Tue,  5 Apr 2022 02:17:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5D60617AA;
-        Tue,  5 Apr 2022 10:18:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C49D2C385A0;
-        Tue,  5 Apr 2022 10:17:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9ECB5615E3;
+        Tue,  5 Apr 2022 09:17:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5A81C385A2;
+        Tue,  5 Apr 2022 09:17:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153880;
-        bh=9HMECe3u2F6DkVfQDRSfxWSlqpn77kHqRP3q+B9jlqY=;
+        s=korg; t=1649150232;
+        bh=K1WOf/srQBJwEG4akzZo1hh0kYmfZ0TLnH6c80+1iE8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YpuYuQriD/wu2AiBQR6ClOtHpG5mTa+7usHtfxyndkCSn80yQvn3H7tLlbTHywgGC
-         9WlaRpiYi7xn6uUoruxudm5BWUglniRWyaAzki/TDkxe20yyhlKmGreZZxc9YepzsR
-         CdHzsornobh0yFCQSxnXi6yw4/aJEVvipCqBMHB8=
+        b=k4vkF8/htImPtYmmXY1QL+2AGoUBweFwl2HM5xISBwYoQiTjk3YMSUrCs63jYxgSo
+         PChxl8dZj1D5/SLXrASQhrUVj0g5ExGfYg92yGH2ojkPRi1wkFq1SpAGHGEMVyxlF+
+         bfFqyjY6pAPTpSvFZQ6KPys3+skaEKWUmjzvk4Yw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 381/599] fsi: Aspeed: Fix a potential double free
-Date:   Tue,  5 Apr 2022 09:31:15 +0200
-Message-Id: <20220405070310.169388127@linuxfoundation.org>
+        stable@vger.kernel.org, Sander Vanheule <sander@svanheule.net>,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+Subject: [PATCH 5.16 0963/1017] staging: mt7621-dts: fix pinctrl-0 items to be size-1 items on ethernet
+Date:   Tue,  5 Apr 2022 09:31:16 +0200
+Message-Id: <20220405070422.792588791@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,95 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-[ Upstream commit 83ba7e895debc529803a7a258653f2fe9bf3bf40 ]
+commit 25e4f5220efead592c83200241e098e757d37e1f upstream.
 
-A struct device can never be devm_alloc()'ed.
-Here, it is embedded in "struct fsi_master", and "struct fsi_master" is
-embedded in "struct fsi_master_aspeed".
+Fix pinctrl-0 items under the ethernet node to be size-1 items.
+Current notation would be used on specifications with non-zero cells.
 
-Since "struct device" is embedded, the data structure embedding it must be
-released with the release function, as is already done here.
-
-So use kzalloc() instead of devm_kzalloc() when allocating "aspeed" and
-update all error handling branches accordingly.
-
-This prevent a potential double free().
-
-This also fix another issue if opb_readl() fails. Instead of a direct
-return, it now jumps in the error handling path.
-
-Fixes: 606397d67f41 ("fsi: Add ast2600 master driver")
-Suggested-by: Greg KH <gregkh@linuxfoundation.org>
-Suggested-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Link: https://lore.kernel.org/r/2c123f8b0a40dc1a061fae982169fe030b4f47e6.1641765339.git.christophe.jaillet@wanadoo.fr
+Fixes: 0a93c0d75809 ("staging: mt7621-dts: fix pinctrl properties for ethernet")
+Reported-by: Sander Vanheule <sander@svanheule.net>
+Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Link: https://lore.kernel.org/r/20220215081725.3463-1-arinc.unal@arinc9.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/fsi/fsi-master-aspeed.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ drivers/staging/mt7621-dts/mt7621.dtsi |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/fsi/fsi-master-aspeed.c b/drivers/fsi/fsi-master-aspeed.c
-index 5d2469d44607..87edc77260d2 100644
---- a/drivers/fsi/fsi-master-aspeed.c
-+++ b/drivers/fsi/fsi-master-aspeed.c
-@@ -534,25 +534,28 @@ static int fsi_master_aspeed_probe(struct platform_device *pdev)
- 		return rc;
- 	}
+--- a/drivers/staging/mt7621-dts/mt7621.dtsi
++++ b/drivers/staging/mt7621-dts/mt7621.dtsi
+@@ -364,7 +364,7 @@
+ 		mediatek,ethsys = <&sysc>;
  
--	aspeed = devm_kzalloc(&pdev->dev, sizeof(*aspeed), GFP_KERNEL);
-+	aspeed = kzalloc(sizeof(*aspeed), GFP_KERNEL);
- 	if (!aspeed)
- 		return -ENOMEM;
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&rgmii1_pins &rgmii2_pins &mdio_pins>;
++		pinctrl-0 = <&mdio_pins>, <&rgmii1_pins>, <&rgmii2_pins>;
  
- 	aspeed->dev = &pdev->dev;
- 
- 	aspeed->base = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(aspeed->base))
--		return PTR_ERR(aspeed->base);
-+	if (IS_ERR(aspeed->base)) {
-+		rc = PTR_ERR(aspeed->base);
-+		goto err_free_aspeed;
-+	}
- 
- 	aspeed->clk = devm_clk_get(aspeed->dev, NULL);
- 	if (IS_ERR(aspeed->clk)) {
- 		dev_err(aspeed->dev, "couldn't get clock\n");
--		return PTR_ERR(aspeed->clk);
-+		rc = PTR_ERR(aspeed->clk);
-+		goto err_free_aspeed;
- 	}
- 	rc = clk_prepare_enable(aspeed->clk);
- 	if (rc) {
- 		dev_err(aspeed->dev, "couldn't enable clock\n");
--		return rc;
-+		goto err_free_aspeed;
- 	}
- 
- 	rc = setup_cfam_reset(aspeed);
-@@ -587,7 +590,7 @@ static int fsi_master_aspeed_probe(struct platform_device *pdev)
- 	rc = opb_readl(aspeed, ctrl_base + FSI_MVER, &raw);
- 	if (rc) {
- 		dev_err(&pdev->dev, "failed to read hub version\n");
--		return rc;
-+		goto err_release;
- 	}
- 
- 	reg = be32_to_cpu(raw);
-@@ -626,6 +629,8 @@ static int fsi_master_aspeed_probe(struct platform_device *pdev)
- 
- err_release:
- 	clk_disable_unprepare(aspeed->clk);
-+err_free_aspeed:
-+	kfree(aspeed);
- 	return rc;
- }
- 
--- 
-2.34.1
-
+ 		gmac0: mac@0 {
+ 			compatible = "mediatek,eth-mac";
 
 

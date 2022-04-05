@@ -2,62 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6291F4F2273
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 07:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 553414F2279
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 07:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiDEFLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 01:11:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44544 "EHLO
+        id S229683AbiDEFOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 01:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbiDEFLq (ORCPT
+        with ESMTP id S229515AbiDEFOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 01:11:46 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F28C4BFFA
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 22:09:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649135389; x=1680671389;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uml1BPu3EYtTMbgd2WGuq3w4iq6M/GD0ogJulQUKtjY=;
-  b=ZP0qHd79JRN91YvDv3Wfjyexi9psZUHHZoy+BVJw790DhkuFEL/4tN78
-   PMljlbyOhYX8j11rlRLSdglB4KwoWmz7AYr0iLUG8x4H+dg9ICM5iOwUM
-   x8QDe4GPAdEfSeC8fJwdwgH/Aa8LSTO9la8ZzLcZRPwhuR/lyZzjnWxRR
-   idWvL+kdCTJVwRB7jeWyrkyz4fImEAyGbI4nwccP9sXmqQa1UeKasqYqR
-   677rv+lzVZ3I5xXP7wcjthWawBmzO63WwJ9jY1fcj1uHvdE4DnUfBMGHT
-   T2Ct/tJmSFuyk3AM09tRW7ZVrXfOoAeKjFKLIPztgAX8O+w7bQoNlVmeH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="240602591"
-X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
-   d="scan'208";a="240602591"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 22:09:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
-   d="scan'208";a="721909358"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 04 Apr 2022 22:09:45 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbbRo-0002eh-L6;
-        Tue, 05 Apr 2022 05:09:44 +0000
-Date:   Tue, 5 Apr 2022 13:09:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 8/40]
- fs/netfs/misc.c:18:46: warning: format specifies type 'unsigned long' but
- the argument has type 'size_t' (aka 'unsigned int')
-Message-ID: <202204051354.4g0Q01jJ-lkp@intel.com>
+        Tue, 5 Apr 2022 01:14:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AD3311;
+        Mon,  4 Apr 2022 22:12:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3321E614A9;
+        Tue,  5 Apr 2022 05:12:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 432C9C340F0;
+        Tue,  5 Apr 2022 05:12:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649135521;
+        bh=iIo+zn0pj52zOFFjMSyQhxTcFA5tdRReaLN/oRTDT28=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tDXJAzwrF2zWBJHgbCM1pgN6QUq3umuEMADLIz52ETyZwPEDosIUBjvC2b0qm8JEg
+         0gYuX3lcku22/nCUOpy+TimECUFN5V6lWt7UO4RvvsECsVraPrFQvLm0XTvEtMYNfe
+         Lj3RFsPntssa1rsMaXDai74CekKdklQPTT0KjyYs=
+Date:   Tue, 5 Apr 2022 07:11:59 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        stable@vger.kernel.org, Qiuhao Li <qiuhao@sysec.org>,
+        Gaoning Pan <pgn@zju.edu.cn>, Yongkang Jia <kangel@zju.edu.cn>,
+        syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com,
+        Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Subject: Re: [PATCH 5.4 v2] KVM: x86/mmu: do compare-and-exchange of gPTE via
+ the user address
+Message-ID: <YkvPn6uWte2YEEbF@kroah.com>
+References: <20220404154913.482520-1-pbonzini@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220404154913.482520-1-pbonzini@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,79 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   674eea41fc70a740ff83ec590f9833f805852464
-commit: cae8dd85733f703374474ed433b8263263d4fa7f [8/40] netfs: Provide invalidatepage and releasepage calls
-config: i386-randconfig-a015 (https://download.01.org/0day-ci/archive/20220405/202204051354.4g0Q01jJ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/cae8dd85733f703374474ed433b8263263d4fa7f
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout cae8dd85733f703374474ed433b8263263d4fa7f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/netfs/
+On Mon, Apr 04, 2022 at 11:49:13AM -0400, Paolo Bonzini wrote:
+> commit 2a8859f373b0a86f0ece8ec8312607eacf12485d upstream.
+> 
+> FNAME(cmpxchg_gpte) is an inefficient mess.  It is at least decent if it
+> can go through get_user_pages_fast(), but if it cannot then it tries to
+> use memremap(); that is not just terribly slow, it is also wrong because
+> it assumes that the VM_PFNMAP VMA is contiguous.
+> 
+> The right way to do it would be to do the same thing as
+> hva_to_pfn_remapped() does since commit add6a0cd1c5b ("KVM: MMU: try to
+> fix up page faults before giving up", 2016-07-05), using follow_pte()
+> and fixup_user_fault() to determine the correct address to use for
+> memremap().  To do this, one could for example extract hva_to_pfn()
+> for use outside virt/kvm/kvm_main.c.  But really there is no reason to
+> do that either, because there is already a perfectly valid address to
+> do the cmpxchg() on, only it is a userspace address.  That means doing
+> user_access_begin()/user_access_end() and writing the code in assembly
+> to handle any exception correctly.  Worse, the guest PTE can be 8-byte
+> even on i686 so there is the extra complication of using cmpxchg8b to
+> account for.  But at least it is an efficient mess.
+> 
+> Reported-by: Qiuhao Li <qiuhao@sysec.org>
+> Reported-by: Gaoning Pan <pgn@zju.edu.cn>
+> Reported-by: Yongkang Jia <kangel@zju.edu.cn>
+> Reported-by: syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
+> Debugged-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+> Tested-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Cc: stable@vger.kernel.org
+> Fixes: bd53cb35a3e9 ("X86/KVM: Handle PFNs outside of kernel reach when touching GPTEs")
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/paging_tmpl.h | 77 ++++++++++++++++++--------------------
+>  1 file changed, 37 insertions(+), 40 deletions(-)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for the fix, now queued up.
 
-All warnings (new ones prefixed by >>):
-
->> fs/netfs/misc.c:18:46: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-           _enter("{%lx},%lx,%lx", folio_index(folio), offset, length);
-                         ~~~                           ^~~~~~
-                         %zx
-   fs/netfs/internal.h:164:65: note: expanded from macro '_enter'
-   #define _enter(FMT, ...) no_printk("==> %s("FMT")", __func__, ##__VA_ARGS__)
-                                               ~~~                 ^~~~~~~~~~~
-   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   fs/netfs/misc.c:18:54: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-           _enter("{%lx},%lx,%lx", folio_index(folio), offset, length);
-                             ~~~                               ^~~~~~
-                             %zx
-   fs/netfs/internal.h:164:65: note: expanded from macro '_enter'
-   #define _enter(FMT, ...) no_printk("==> %s("FMT")", __func__, ##__VA_ARGS__)
-                                               ~~~                 ^~~~~~~~~~~
-   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   2 warnings generated.
-
-
-vim +18 fs/netfs/misc.c
-
-    10	
-    11	/*
-    12	 * Invalidate part or all of a folio
-    13	 * - release a folio and clean up its private data if offset is 0 (indicating
-    14	 *   the entire folio)
-    15	 */
-    16	void netfs_invalidate_folio(struct folio *folio, size_t offset, size_t length)
-    17	{
-  > 18		_enter("{%lx},%lx,%lx", folio_index(folio), offset, length);
-    19	
-    20		folio_wait_fscache(folio);
-    21	}
-    22	EXPORT_SYMBOL(netfs_invalidate_folio);
-    23	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+greg k-h

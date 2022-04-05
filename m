@@ -2,205 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 973B64F2377
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E424F237C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbiDEGkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 02:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33450 "EHLO
+        id S230385AbiDEGmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 02:42:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbiDEGkN (ORCPT
+        with ESMTP id S229498AbiDEGmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 02:40:13 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C162A262;
-        Mon,  4 Apr 2022 23:38:15 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id qh7so14520616ejb.11;
-        Mon, 04 Apr 2022 23:38:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CTVwwGfd5gW6dvOyGN6tILqjhocBpp2BuslCi0M2GwY=;
-        b=atgAr+NvO47dcsXz5odpuvNPIxhtUuBhGr9Dk/HgOQqiT4HkVoeDyghKPEiamYbNKf
-         VPQmEvbRNFflwRDbi0jROxf7ZyxWDG61lVbZvP4o++SlVCmTkCkU3X2NavRE2tCwCgcn
-         QKNLUgrEa3t7Zb0GNEYxuhmA6LnkY98tycchLYO/gvc8PbPuB5djiVj0XBruf1m/IbH4
-         +EEDZ+7K2s95IsJBVQFizE6kvgoX2vtvZOKUR6MjF/t1r1P3XNmTe6rN68IAjXwpo99Z
-         5V79OkiHxvxXX+Z8eSi9pCBv/XK2kgxg2HJ23w9t51anj4uV3cXcmS1wSBzQ9Rs79/ul
-         6Skg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CTVwwGfd5gW6dvOyGN6tILqjhocBpp2BuslCi0M2GwY=;
-        b=5sj1fruTF1wdV32Lz8IdqlUETgjVMwe2n0H0BKC6F7Z2d42K/qVizpW/ZRfwXNWRVV
-         Ifw+dEyvDaKfA0MBmAipkGyM5JP45GTHuIrzJzbQA/A6IvqNq95kZd/AShr8aFLvdWW5
-         ffFDL4aZE8YteRaQIC6QFPaNdv0onDFlC8f5s6jzgjT4eOTCKZNDbgFB63S3JlMb9D8c
-         5ToEmUnsPoEQ4vHSMaHXwIDpvcfQMdzmrC1dGdD3Y0BODNlDnzvUhZS428fG9GkhURk9
-         S8PS/5EYQk4EoNP0sB/bzgqCaYUYTzJNYYc1Tn6RL5mqPyxFZLffXZz3eR3W1BdtYtgz
-         GoPA==
-X-Gm-Message-State: AOAM530hZ7AnWC7+MPMZHOQO0G0RBslkOT3mpFM7bQ+EuDgWUyLWlR+D
-        WYpVCMW7miobnXDp4yJdO2sNhRNeTO6SPKcGC+g=
-X-Google-Smtp-Source: ABdhPJxpfSTRKzu7NS9yqYMy9Jji8iIlFpHGclzXqSyGn24O8Uzag1gcBDdJZQ7Y9tBynMIPkRA6BPpAWEhrkZJVz1Y=
-X-Received: by 2002:a17:906:2991:b0:6cd:ac19:ce34 with SMTP id
- x17-20020a170906299100b006cdac19ce34mr1986937eje.746.1649140693847; Mon, 04
- Apr 2022 23:38:13 -0700 (PDT)
+        Tue, 5 Apr 2022 02:42:46 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23CE506F4
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 23:40:47 -0700 (PDT)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220405064044epoutp019e00d5fe5a88a87f53fed4ffc998b58e~i7Nw6tl3T2873528735epoutp01y
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:40:44 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220405064044epoutp019e00d5fe5a88a87f53fed4ffc998b58e~i7Nw6tl3T2873528735epoutp01y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1649140844;
+        bh=AGDcIVWKuM0iLeBsDgZsrsbO80+RisT3bm2qxbskRg4=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=U8FVdoDK62AgxEIzedG18DxgWFjlKSSeDgIk+o+jQLUjPKlsAMOzx3oJWQ1AfXV0T
+         Jm1TbWnPOM2SNEZmB8nlsL+UJEAwd5afsqUpaYFtYumsq+3Y14z3O2NAPY1agfCj10
+         u1fMrAQVTiPYQAQP57FhOYQiq5fh+lXfraBspT8Y=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20220405064043epcas2p3b05a6ed1c73bae131f95e1d35e7ed272~i7Nwc5TS-2285922859epcas2p3B;
+        Tue,  5 Apr 2022 06:40:43 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.98]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4KXdLx42GHz4x9Q1; Tue,  5 Apr
+        2022 06:40:41 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        49.69.10444.864EB426; Tue,  5 Apr 2022 15:40:40 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220405064040epcas2p3e5d3687bf67384c85d61c5d4ee24acaf~i7NtGidre2065120651epcas2p3H;
+        Tue,  5 Apr 2022 06:40:40 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220405064040epsmtrp2c4f2f37859554611fe724b4eebdf65cb~i7NtF0oag0813708137epsmtrp2u;
+        Tue,  5 Apr 2022 06:40:40 +0000 (GMT)
+X-AuditID: b6c32a45-4fdff700000228cc-9c-624be46868c1
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        E8.82.24342.764EB426; Tue,  5 Apr 2022 15:40:40 +0900 (KST)
+Received: from KORCO006858 (unknown [10.229.18.72]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220405064039epsmtip2e6314ae5982b52b513a44d516fcd5061~i7Ns8-M3k3244732447epsmtip2b;
+        Tue,  5 Apr 2022 06:40:39 +0000 (GMT)
+From:   "Jaewon Kim" <jaewon02.kim@samsung.com>
+To:     "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>
+Cc:     "'Krzysztof Kozlowski'" <krzk@kernel.org>,
+        "'Alim Akhtar'" <alim.akhtar@samsung.com>,
+        "'Jiri Slaby'" <jirislaby@kernel.org>,
+        <linux-samsung-soc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "'Chanho Park'" <chanho61.park@samsung.com>
+In-Reply-To: <YkvNQJ5hBhQKCwcU@kroah.com>
+Subject: RE: [PATCH 1/1] tty: serial: samsung: add spin_lock for interrupt
+ and console_write
+Date:   Tue, 5 Apr 2022 15:40:39 +0900
+Message-ID: <001601d848b8$10c97490$325c5db0$@samsung.com>
 MIME-Version: 1.0
-References: <3d58dc946a4fa1cc696d05baad1cf05ae686a86d.1649115057.git.darren@os.amperecomputing.com>
- <YkupgBs1ybDmofrY@fedora>
-In-Reply-To: <YkupgBs1ybDmofrY@fedora>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Tue, 5 Apr 2022 18:38:01 +1200
-Message-ID: <CAGsJ_4yUJXvLsGAmZ6fpHmccMLanFVVSiod_Agr+Uqzcu83h1g@mail.gmail.com>
-Subject: Re: [PATCH v4] topology: make core_mask include at least cluster_siblings
-To:     Darren Hart <darren@os.amperecomputing.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Arm <linux-arm-kernel@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        "D . Scott Phillips" <scott@os.amperecomputing.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Carl Worth <carl@os.amperecomputing.com>,
-        stable@vger.kernel.org, Dietmar Eggemann <dietmar.eggemann@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: ko
+Thread-Index: AQIGb4zGqJBuoSbl8bInG1JCGdzaKQGgf2fpAhFXrQICNgTaqaxVSdrA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHJsWRmVeSWpSXmKPExsWy7bCmuW7GE+8kg42PlC0ezNvGZnF5v7ZF
+        8+L1bBbv5spYnD+/gd1i0+NrrBaXd81hs5hxfh+TxZnFvewOnB6bVnWyeeyfu4bdY/OSeo++
+        LasYPT5vkgtgjcq2yUhNTEktUkjNS85PycxLt1XyDo53jjc1MzDUNbS0MFdSyEvMTbVVcvEJ
+        0HXLzAG6RkmhLDGnFCgUkFhcrKRvZ1OUX1qSqpCRX1xiq5RakJJTYF6gV5yYW1yal66Xl1pi
+        ZWhgYGQKVJiQndGz+wJbwT2BihVLzrM0MM7i7WLk5JAQMJG4/fc7WxcjF4eQwA5GiQMzFrJA
+        OJ8YJb596GSHcL4xSuxseAFUxgHWcu6OBUR8L6PE3t3/oYpeMEqcm72HDWQum4CuxM6Nr9hB
+        bBEBc4m5D4+D2cwCB5kkTvXygNicApoSxxa3gNULC8RJzNi1HcxmEVCR2PH+J5jNK2ApcXPa
+        TWYIW1Di5MwnLBBz5CW2v53DDPGDgsTPp8tYIeIiErM725gh9rpJnGycwARynITASg6J/4/e
+        sUA0uEjsmtjCCmELS7w6voUdwpaS+PxuLxuEXSxxvOc7VHMDo8TZOwegGowlZj1rZwQFBTPQ
+        B+t36UNCRVniyC2o2/gkOg7/ZYcI80p0tAlBNKpJ3J96Dmq6jMSkIyuZJjAqzULy2Swkn81C
+        8s0shF0LGFlWMYqlFhTnpqcWGxUYwiM7OT93EyM4oWq57mCc/PaD3iFGJg7GQ4wSHMxKIrw5
+        QZ5JQrwpiZVVqUX58UWlOanFhxhNgWE9kVlKNDkfmNLzSuINTSwNTMzMDM2NTA3MlcR5vVI2
+        JAoJpCeWpGanphakFsH0MXFwSjUwrZ5+2OfqArVWoTjXTIfl1b5ea0MV17bu5+duNJgWI/g+
+        O+9Q7VOLu0VLmjc7J+2yffXuxY3zafkiF6/sOZ9zwm1FXciM8JATrv3xAszbfk8yuOonGaH9
+        omySdPTbV93Pthj3GwsZ6YtLTN28dIawwKoay423+ZoFNGx5vz0rOpT1SqG7MvUiX1Du1htS
+        273DLsUmXbpwj3fHTqEpJ3Z+Y1Hmm5JuseXl0mUb5jLf2Hf8D7Pz7JzCuLdz1W22aT7c8Znf
+        h8VLep5XauF3A8NFbr5PzK1vMkfy7DG58GzXoqjLFVIvftUW2C4/XrnpeP4l6R8xu/f/DBDi
+        fnU/xseQY/aKxX6yqkm3XLZ7MUuYK7EUZyQaajEXFScCAJD1fnMxBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupgkeLIzCtJLcpLzFFi42LZdlhJXjfjiXeSQe92JosH87axWVzer23R
+        vHg9m8W7uTIW589vYLfY9Pgaq8XlXXPYLGac38dkcWZxL7sDp8emVZ1sHvvnrmH32Lyk3qNv
+        yypGj8+b5AJYo7hsUlJzMstSi/TtErgyenZfYCu4J1CxYsl5lgbGWbxdjBwcEgImEufuWHQx
+        cnIICexmlLg3PRXElhCQkVj+rI8NwhaWuN9yhLWLkQuo5hmjxK73f1hBEmwCuhI7N75iB7FF
+        BMwl5j48zg5SxCxwnEli2ZsWdoiOB4wSex6uYgGp4hTQlDi2uAVsrLBAjMTtiafB4iwCKhI7
+        3v8Ei/MKWErcnHaTGcIWlDg58wkLyKXMAnoSbRsZQcLMAvIS29/OYYa4TkHi59NlrBBxEYnZ
+        nW3MEAe5SZxsnMA0gVF4FpJJsxAmzUIyaRaS7gWMLKsYJVMLinPTc4sNCwzzUsv1ihNzi0vz
+        0vWS83M3MYIjS0tzB+P2VR/0DjEycTAeYpTgYFYS4c0J8kwS4k1JrKxKLcqPLyrNSS0+xCjN
+        waIkznuh62S8kEB6YklqdmpqQWoRTJaJg1OqgemELve6BwafFlZO1O2c/XPNNPmrEVzirGcW
+        sVryZbhOs/j6sVfzh/+qt6HeUy8+5TAKSO14ulFvbaRphtantufvYk75zi+YkvVoneBNaYm8
+        S7nfL15tWCSXW39yVlrNbOaJcTy9trtLHmU+Sq7+xxMTJcm87fjqZbaRn/xFSt8sM1Q07Jzm
+        1royROcBz3SvgjPK68zv3QjhjOf+/DO8enOEgea9tq4diXJ13AcCTt9QefbKe/FdBfnDzdEn
+        rsaf2vzZb23kadlHAWtCDq/eZpLpuqklUmv6zKtLXfiSk5438tcw1ObeOZxzR9jKijWc81sz
+        k8rxlcfe89doiOtMmXrA5v2kUJ+apzdv8r+M7VFiKc5INNRiLipOBACXg3/7GwMAAA==
+X-CMS-MailID: 20220405064040epcas2p3e5d3687bf67384c85d61c5d4ee24acaf
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220405033448epcas2p397080e15c54369d24eaf94c2a27bd06c
+References: <20220405033854.110374-1-jaewon02.kim@samsung.com>
+        <CGME20220405033448epcas2p397080e15c54369d24eaf94c2a27bd06c@epcas2p3.samsung.com>
+        <20220405033854.110374-2-jaewon02.kim@samsung.com>
+        <YkvNQJ5hBhQKCwcU@kroah.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 3:46 PM Darren Hart
-<darren@os.amperecomputing.com> wrote:
->
-> On Mon, Apr 04, 2022 at 04:40:37PM -0700, Darren Hart wrote:
-> > Ampere Altra defines CPU clusters in the ACPI PPTT. They share a Snoop
-> > Control Unit, but have no shared CPU-side last level cache.
+Hello
+
+On 22. 4. 5. 14:01, Greg Kroah-Hartman wrote:
+> On Tue, Apr 05, 2022 at 12:38:54PM +0900, Jaewon Kim wrote:
+> > The console_write and IRQ handler can run concurrently.
+> > Problems may occurs console_write is continuously executed while the
+> > IRQ handler is running.
 > >
-> > cpu_coregroup_mask() will return a cpumask with weight 1, while
-> > cpu_clustergroup_mask() will return a cpumask with weight 2.
-> >
-> > As a result, build_sched_domain() will BUG() once per CPU with:
-> >
-> > BUG: arch topology borken
-> > the CLS domain not a subset of the MC domain
-> >
-> > The MC level cpumask is then extended to that of the CLS child, and is
-> > later removed entirely as redundant. This sched domain topology is an
-> > improvement over previous topologies, or those built without
-> > SCHED_CLUSTER, particularly for certain latency sensitive workloads.
-> > With the current scheduler model and heuristics, this is a desirable
-> > default topology for Ampere Altra and Altra Max system.
-> >
-> > Rather than create a custom sched domains topology structure and
-> > introduce new logic in arch/arm64 to detect these systems, update the
-> > core_mask so coregroup is never a subset of clustergroup, extending it
-> > to cluster_siblings if necessary. Only do this if CONFIG_SCHED_CLUSTER
-> > is enabled to avoid also changing the topology (MC) when
-> > CONFIG_SCHED_CLUSTER is disabled.
-> >
-> > This has the added benefit over a custom topology of working for both
-> > symmetric and asymmetric topologies. It does not address systems where
-> > the CLUSTER topology is above a populated MC topology, but these are not
-> > considered today and can be addressed separately if and when they
-> > appear.
-> >
-> > The final sched domain topology for a 2 socket Ampere Altra system is
-> > unchanged with or without CONFIG_SCHED_CLUSTER, and the BUG is avoided:
-> >
-> > For CPU0:
-> >
-> > CONFIG_SCHED_CLUSTER=y
-> > CLS  [0-1]
-> > DIE  [0-79]
-> > NUMA [0-159]
-> >
-> > CONFIG_SCHED_CLUSTER is not set
-> > DIE  [0-79]
-> > NUMA [0-159]
-> >
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: Sudeep Holla <sudeep.holla@arm.com>
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Will Deacon <will@kernel.org>
-> > Cc: Peter Zijlstra <peterz@infradead.org>
-> > Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> > Cc: Barry Song <song.bao.hua@hisilicon.com>
-> > Cc: Valentin Schneider <valentin.schneider@arm.com>
-> > Cc: D. Scott Phillips <scott@os.amperecomputing.com>
-> > Cc: Ilkka Koskinen <ilkka@os.amperecomputing.com>
-> > Cc: Carl Worth <carl@os.amperecomputing.com>
-> > Cc: <stable@vger.kernel.org> # 5.16.x
-> > Suggested-by: Barry Song <song.bao.hua@hisilicon.com>
-> > Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
+> > Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
 > > ---
-> > v1: Drop MC level if coregroup weight == 1
-> > v2: New sd topo in arch/arm64/kernel/smp.c
-> > v3: No new topo, extend core_mask to cluster_siblings
-> > v4: Rebase on 5.18-rc1 for GregKH to pull. Add IS_ENABLED(CONFIG_SCHED_CLUSTER).
->
-> A bit more context on the state of review:
->
-> Several folks reviewed, but I didn't add their Reviewed-by since I added the
-> IS_ENABLED(CONFIG_SCHED_CLUSTER) test since they reviewed it last. This change
-> preserves the stated intent of the change when CONFIG_SCHED_CLUSTER is disabled.
+> >  drivers/tty/serial/samsung_tty.c | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> 
+> What commit does this fix?
 
-Everything still works even without IS_ENABLED(CONFIG_SCHED_CLUSTER), right?
-Anyway, putting IS_ENABLED(CONFIG_SCHED_CLUSTER) seems to be right as
-well.
-But it seems it is still a good choice to put all these reviewed-by
-and acked-by you got in
-v3? I don't  think the added IS_ENABLED will change their decisions.
+This is not an issue caused by anohter commits.
+There was potential issue from the beginning.
 
->
-> Barry Song - Suggested this approach
-> Vincent Guittot - informal review with reservations
-> Sudeep Holla - Acked-by
-> Dietmar Eggemann - informal review (added to Cc, apologies for the omission Dietmar)
->
-> All but Barry's recommendation captured in the v3 thread:
-> https://lore.kernel.org/linux-arm-kernel/f1deaeabfd31fdf512ff6502f38186ef842c2b1f.1646413117.git.darren@os.amperecomputing.com/
->
-> Thanks,
->
+Other drivers were fixed, but samsung_tty was not.
+PL011 patch : https://lkml.org/lkml/2012/2/1/495
+
+
+> 
 > >
-> >  drivers/base/arch_topology.c | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
+> > diff --git a/drivers/tty/serial/samsung_tty.c
+> > b/drivers/tty/serial/samsung_tty.c
+> > index e1585fbae909..d362e8e114f1 100644
+> > --- a/drivers/tty/serial/samsung_tty.c
+> > +++ b/drivers/tty/serial/samsung_tty.c
+> > @@ -2480,12 +2480,26 @@ s3c24xx_serial_console_write(struct console *co, const char *s,
+> >  			     unsigned int count)
+> >  {
+> >  	unsigned int ucon = rd_regl(cons_uart, S3C2410_UCON);
+> > +	unsigned long flags;
+> > +	int locked = 1;
+> 
+> bool?
+
+It is return value of spin_trylock()
+I used int because mose drivers used int.
+If you guide to change int to bool, I will change it.
+
+> 
 > >
-> > diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> > index 1d6636ebaac5..5497c5ab7318 100644
-> > --- a/drivers/base/arch_topology.c
-> > +++ b/drivers/base/arch_topology.c
-> > @@ -667,6 +667,15 @@ const struct cpumask *cpu_coregroup_mask(int cpu)
-> >                       core_mask = &cpu_topology[cpu].llc_sibling;
-> >       }
+> >  	/* not possible to xmit on unconfigured port */
+> >  	if (!s3c24xx_port_configured(ucon))
+> >  		return;
 > >
-> > +     /*
-> > +      * For systems with no shared cpu-side LLC but with clusters defined,
-> > +      * extend core_mask to cluster_siblings. The sched domain builder will
-> > +      * then remove MC as redundant with CLS if SCHED_CLUSTER is enabled.
-> > +      */
-> > +     if (IS_ENABLED(CONFIG_SCHED_CLUSTER) &&
-> > +         cpumask_subset(core_mask, &cpu_topology[cpu].cluster_sibling))
-> > +             core_mask = &cpu_topology[cpu].cluster_sibling;
+> > +	local_irq_save(flags);
+> > +	if (cons_uart->sysrq)
+> > +		locked = 0;
+> > +	else if (oops_in_progress)
+> > +		locked = spin_trylock(&cons_uart->lock);
+> > +	else
+> > +		spin_lock(&cons_uart->lock);
 > > +
-> >       return core_mask;
-> >  }
-> >
-> --
-> Darren Hart
-> Ampere Computing / OS and Kernel
+> >  	uart_console_write(cons_uart, s, count,
+> > s3c24xx_serial_console_putchar);
+> > +
+> > +	if (locked)
+> > +		spin_unlock(&cons_uart->lock);
+> > +	local_irq_restore(flags);
+> 
+> Why is irq_save required as well as a spinlock?
+
+No special reason.
+I will change spin_trylock() -? spin_trylock_irqsave().
+spin_lock -> spin_lock_irqsave().
+And, remove local_irq_save/restore.
+It looks more clean.
+
+
+> 
+> thanks,
+> 
+> greg k-h
 
 Thanks
-Barry
+Jaewon Kim
+

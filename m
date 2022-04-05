@@ -2,93 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 547CC4F5276
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 371D24F5277
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1580276AbiDFCvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40440 "EHLO
+        id S1850351AbiDFCwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1587465AbiDFAJ3 (ORCPT
+        with ESMTP id S1587547AbiDFAJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 20:09:29 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC253121E;
-        Tue,  5 Apr 2022 15:32:56 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KY2Tf46chz4xhP;
-        Wed,  6 Apr 2022 08:32:54 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649197974;
-        bh=lCK8IR664UwWgJLRqZzAwqE4aw6ncHJDcyX5r4gb9cI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WxBtglEjeTPk5k69ytH0DcleNVIqy5hDh6iHk7U5EnRSiVW87WQe9SL4u4ucICvX8
-         I0sD3emtqo7QL7UsoEgJp5hHn+Qc1XRyb77Uhhl28O6DbpxjDiKUxRPuQeOrJb+hCd
-         dzhJZl5cx4zYfd7VFaV5dt/TV8TPilpIt2+4v2rAyyAWZEHcHirrAXMjkjkHjZw7K/
-         lrGxLE9Ma+b3NX9m57K+oEkTkkrmYTQfeB7QB9djQywYv4eUa/+BtXsLudKKu4SbCd
-         Gb2xD701xU5FXzek64RphcH7HsOyhMKO+kTCMePE+H+sb0vZ256lpgNepQgisE7A0o
-         +acTf1GAQCmpA==
-Date:   Wed, 6 Apr 2022 08:32:53 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the v4l-dvb
- tree
-Message-ID: <20220406083253.70adb56f@canb.auug.org.au>
-In-Reply-To: <20220406083201.15e8e589@canb.auug.org.au>
-References: <20220406083201.15e8e589@canb.auug.org.au>
+        Tue, 5 Apr 2022 20:09:38 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B549DE08E;
+        Tue,  5 Apr 2022 15:33:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=s5Rv2jt7aGLImfLJIiM/5w3K8YUbSOEx+pvCk6I5VMo=; b=rqdoUew930ZZ6zrAnlfvmOF/zf
+        +YntEDiQq+lDqmtSifeD/BGDKf4g7GkHYLxudkmzdyK5cgH/wZucpnSc1cOEeqX5tzdZylyEm9uz5
+        KjdjRJUUJa9gUj9572C6PlpVQLKxTlLKuASQa0lhQMLBp52OQqySbhM/BMq/qghF0J67yro+frIqg
+        XoDZgXOLgGwC3tfbvt999mOTUy6LqjcaDRWq7nkQZS2B3zJXHLy8ItBQFTzk4vxBpz7SFXJ3cmjCe
+        SB/I/ptIkVnavZf3lWoOGDw3MGZDfUUipM9KeUyy8WAfhHKBIIH3x+GfmL+nyBA2iw4nUlGS8cNsW
+        Tu+LgHDw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nbrjU-0077Ix-P6; Tue, 05 Apr 2022 22:33:04 +0000
+Date:   Tue, 5 Apr 2022 23:33:04 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Cc:     shuah@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftest/vm clarify error statement in gup_test
+Message-ID: <YkzDoBUAhydtvnR0@casper.infradead.org>
+References: <20220405214809.3351223-1-sidhartha.kumar@oracle.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0j=1G1=66GReWpqm_CDhrT2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220405214809.3351223-1-sidhartha.kumar@oracle.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/0j=1G1=66GReWpqm_CDhrT2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Apr 05, 2022 at 09:48:09PM +0000, Sidhartha Kumar wrote:
+> -		perror("open");
+> -		exit(1);
+> +		switch (errno) {
+> +		case EACCES:
+> +			if (getuid())
+> +				printf("Please run this test as root\n");
 
-Hi all,
+Shouldn't all these be fprintf(stderr, ...); ?
 
-On Wed, 6 Apr 2022 08:32:01 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Commit
->=20
->   535f49a9e1f9 ("media: platform: imx-mipi-csis: Add dependency on VIDEO_=
-DEV")
->=20
-> is missing a Signed-off-by from its committer.
-
-Sorry that is in the v4l-dvb-next tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/0j=1G1=66GReWpqm_CDhrT2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJMw5UACgkQAVBC80lX
-0GxO3Af/Qp+WkzgKG0dWyY685LDQYUktC23wtvCEKzZHBs1oxu5DoQuvxFXOyogd
-JaRmYV+8pcoGVIW0Ndxza8eAtYpsdVZa63SPE3td0WOEuazcBdCoI45a7tjD3gIi
-T3B6Wk+vlTCVgHt6cI3LJd4g0lf3RJTL2GivwgLuxjEv/LWkkxImauwBhaZegRnQ
-MbtrqS8sZgR5rg/0G4ZiCCiEj+R6iI5t5SnlEnQQ/EUlRRDLi+Sx7eUSGGsMgGUI
-GLz5/lYsfxevxTbVLYMsVX+0s8ufOOuDs7udZg46nITYwyTpwhCmvL0LWOXGJlKd
-Z2bYrMVTxzc5Vu7E8JsHfmaIQg4Vbg==
-=WRT3
------END PGP SIGNATURE-----
-
---Sig_/0j=1G1=66GReWpqm_CDhrT2--

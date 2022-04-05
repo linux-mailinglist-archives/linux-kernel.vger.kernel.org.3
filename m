@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 234B34F51A7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE05D4F50E5
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1846749AbiDFCId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59182 "EHLO
+        id S1843938AbiDFBmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356255AbiDEKXc (ORCPT
+        with ESMTP id S1356314AbiDEKXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:23:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B32BABBF;
-        Tue,  5 Apr 2022 03:08:04 -0700 (PDT)
+        Tue, 5 Apr 2022 06:23:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5EC2BB0AE;
+        Tue,  5 Apr 2022 03:08:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8CAD8B81B7A;
-        Tue,  5 Apr 2022 10:08:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFEE7C385A1;
-        Tue,  5 Apr 2022 10:08:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7198B6176C;
+        Tue,  5 Apr 2022 10:08:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86BEDC385A2;
+        Tue,  5 Apr 2022 10:08:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153282;
-        bh=xMuBtpSMi0tR4uqVjAuMkRQrPn1kVymN+i1l75YiSig=;
+        s=korg; t=1649153287;
+        bh=R7jBaNNOIfBcdkDD1sAHN6W5EEcD4afMpqTGiA3CiWY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0qIRl9cLfbPXOCUdA2UgUzcK9y3DNd4cokvmPuApIPvvrA4G+3pTjODJihlc4nTzD
-         UVP6EgLS6BYuiQF3RbujKKl0k/01AmJxAEeojrvnMbd/e9R5YnsxLkuFNLv6J5L10F
-         ItchsbGdB/OC5re4zgjM1jjqdF/xEQNZo+Ro34ds=
+        b=kDgYjHIWRB7bYX76Jlw5ninWbblEUBj1zY5Lv5FISAfA5BaO7yDOqVxa75SvHCb4Q
+         dS6//zvTpdZGYyHmpqDghPNFXA8/w5HoNso4z1UegdrDqQ8KHNqbP0j5fNW4FJn5zd
+         cez8gFXA52FyaZgChvquEnIf2eZAR/+2bAaEhX04=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 168/599] clocksource: acpi_pm: fix return value of __setup handler
-Date:   Tue,  5 Apr 2022 09:27:42 +0200
-Message-Id: <20220405070303.841916069@linuxfoundation.org>
+        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Sasha Levin <sashal@kernel.org>,
+        syzbot+d55757faa9b80590767b@syzkaller.appspotmail.com
+Subject: [PATCH 5.10 170/599] watch_queue: Fix NULL dereference in error cleanup
+Date:   Tue,  5 Apr 2022 09:27:44 +0200
+Message-Id: <20220405070303.901025767@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -56,48 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: David Howells <dhowells@redhat.com>
 
-[ Upstream commit 6a861abceecb68497dd82a324fee45a5332dcece ]
+[ Upstream commit a635415a064e77bcfbf43da413fd9dfe0bbed9cb ]
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) environment strings.
+In watch_queue_set_size(), the error cleanup code doesn't take account of
+the fact that __free_page() can't handle a NULL pointer when trying to free
+up buffer pages that did get allocated.
 
-The __setup() handler interface isn't meant to handle negative return
-values -- they are non-zero, so they mean "handled" (like a return
-value of 1 does), but that's just a quirk. So return 1 from
-parse_pmtmr(). Also print a warning message if kstrtouint() returns
-an error.
+Fix this by only calling __free_page() on the pages actually allocated.
 
-Fixes: 6b148507d3d0 ("pmtmr: allow command line override of ioport")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Without the fix, this can lead to something like the following:
+
+BUG: KASAN: null-ptr-deref in __free_pages+0x1f/0x1b0 mm/page_alloc.c:5473
+Read of size 4 at addr 0000000000000034 by task syz-executor168/3599
+...
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ __kasan_report mm/kasan/report.c:446 [inline]
+ kasan_report.cold+0x66/0xdf mm/kasan/report.c:459
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+ instrument_atomic_read include/linux/instrumented.h:71 [inline]
+ atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
+ page_ref_count include/linux/page_ref.h:67 [inline]
+ put_page_testzero include/linux/mm.h:717 [inline]
+ __free_pages+0x1f/0x1b0 mm/page_alloc.c:5473
+ watch_queue_set_size+0x499/0x630 kernel/watch_queue.c:275
+ pipe_ioctl+0xac/0x2b0 fs/pipe.c:632
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:874 [inline]
+ __se_sys_ioctl fs/ioctl.c:860 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Fixes: c73be61cede5 ("pipe: Add general notification queue support")
+Reported-and-tested-by: syzbot+d55757faa9b80590767b@syzkaller.appspotmail.com
+Signed-off-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clocksource/acpi_pm.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ kernel/watch_queue.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clocksource/acpi_pm.c b/drivers/clocksource/acpi_pm.c
-index eb596ff9e7bb..279ddff81ab4 100644
---- a/drivers/clocksource/acpi_pm.c
-+++ b/drivers/clocksource/acpi_pm.c
-@@ -229,8 +229,10 @@ static int __init parse_pmtmr(char *arg)
- 	int ret;
+diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
+index e3f144d96026..45a8eb90e5fc 100644
+--- a/kernel/watch_queue.c
++++ b/kernel/watch_queue.c
+@@ -274,7 +274,7 @@ long watch_queue_set_size(struct pipe_inode_info *pipe, unsigned int nr_notes)
+ 	return 0;
  
- 	ret = kstrtouint(arg, 16, &base);
--	if (ret)
--		return ret;
-+	if (ret) {
-+		pr_warn("PMTMR: invalid 'pmtmr=' value: '%s'\n", arg);
-+		return 1;
-+	}
- 
- 	pr_info("PMTMR IOPort override: 0x%04x -> 0x%04x\n", pmtmr_ioport,
- 		base);
+ error_p:
+-	for (i = 0; i < nr_pages; i++)
++	while (--i >= 0)
+ 		__free_page(pages[i]);
+ 	kfree(pages);
+ error:
 -- 
 2.34.1
 

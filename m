@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51CA14F45C9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA1B4F46B5
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385090AbiDEMbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:31:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58320 "EHLO
+        id S1381394AbiDEUlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343517AbiDEI45 (ORCPT
+        with ESMTP id S1348746AbiDEJsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:56:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7DB1D302;
-        Tue,  5 Apr 2022 01:52:54 -0700 (PDT)
+        Tue, 5 Apr 2022 05:48:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CF0443E3;
+        Tue,  5 Apr 2022 02:34:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DB0E61511;
-        Tue,  5 Apr 2022 08:52:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4714EC385A3;
-        Tue,  5 Apr 2022 08:52:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C82F5B81B75;
+        Tue,  5 Apr 2022 09:34:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2405FC385A0;
+        Tue,  5 Apr 2022 09:34:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148773;
-        bh=QwLQUT2Jw7vwffeh6OOnj7GZe0N18ZdeXGnosRVYSSY=;
+        s=korg; t=1649151276;
+        bh=1H+HbGkoLOkTW0gUFqba98LuOxAX3kAuQ/zUrUQtR5Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ts2VnatClelLnyRPyS4W97wz8nrU98SbmwRRBg1HWLMBnFWwiWwEPyNxtjOdAklL2
-         foPZpQ1spRAeXRpM2j+QMSnNbg0V/ttnkwl1+MioJovdcVvZlu+sskG4dtRldCdC9M
-         31v/Vu1FxFQsmKgesprUeb32I1TFvV4MrKhDP1Jo=
+        b=jl4Qo7DFIbzXcx1NxuwpJkv1dH/21Gp/Ly98T9AI4roHSayyWEYu8V02ocjhLkaS5
+         tEJhuGNYLaG4FZka1PEq99/KgzQ2FCJC4EOUme66NHMlOlpHFzz2g3opRbZAqiwROh
+         pFkZyLnGlg2oBcMUCNOBFuJ/MAsKmybIUOB1JR/g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0477/1017] i2c: bcm2835: Fix the error handling in bcm2835_i2c_probe()
-Date:   Tue,  5 Apr 2022 09:23:10 +0200
-Message-Id: <20220405070408.457752129@linuxfoundation.org>
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 330/913] ASoC: rt5663: check the return value of devm_kzalloc() in rt5663_parse_dp()
+Date:   Tue,  5 Apr 2022 09:23:12 +0200
+Message-Id: <20220405070349.741440475@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,75 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Jia-Ju Bai <baijiaju1990@gmail.com>
 
-[ Upstream commit b205f5850263632b6897d8f0bfaeeea4955f8663 ]
+[ Upstream commit 4d06f92f38b799295ae22c98be7a20cac3e2a1a7 ]
 
-Some resource should be released if an error occurs in
-'bcm2835_i2c_probe()'.
-Add an error handling path and the needed 'clk_disable_unprepare()' and
-'clk_rate_exclusive_put()' calls.
+The function devm_kzalloc() in rt5663_parse_dp() can fail, so its return
+value should be checked.
 
-While at it, rework the bottom of the function to use this newly added
-error handling path and have an explicit and more standard "return 0;" at
-the end of the normal path.
-
-Fixes: bebff81fb8b9 ("i2c: bcm2835: Model Divider in CCF")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-[wsa: rebased]
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Fixes: 457c25efc592 ("ASoC: rt5663: Add the function of impedance sensing")
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+Link: https://lore.kernel.org/r/20220225131030.27248-1-baijiaju1990@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-bcm2835.c | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
+ sound/soc/codecs/rt5663.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-bcm2835.c b/drivers/i2c/busses/i2c-bcm2835.c
-index 5149454eef4a..f72c6576d8a3 100644
---- a/drivers/i2c/busses/i2c-bcm2835.c
-+++ b/drivers/i2c/busses/i2c-bcm2835.c
-@@ -454,18 +454,20 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
- 	ret = clk_prepare_enable(i2c_dev->bus_clk);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Couldn't prepare clock");
--		return ret;
-+		goto err_put_exclusive_rate;
- 	}
- 
- 	i2c_dev->irq = platform_get_irq(pdev, 0);
--	if (i2c_dev->irq < 0)
--		return i2c_dev->irq;
-+	if (i2c_dev->irq < 0) {
-+		ret = i2c_dev->irq;
-+		goto err_disable_unprepare_clk;
-+	}
- 
- 	ret = request_irq(i2c_dev->irq, bcm2835_i2c_isr, IRQF_SHARED,
- 			  dev_name(&pdev->dev), i2c_dev);
- 	if (ret) {
- 		dev_err(&pdev->dev, "Could not request IRQ\n");
--		return -ENODEV;
-+		goto err_disable_unprepare_clk;
- 	}
- 
- 	adap = &i2c_dev->adapter;
-@@ -489,7 +491,16 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
- 
- 	ret = i2c_add_adapter(adap);
- 	if (ret)
--		free_irq(i2c_dev->irq, i2c_dev);
-+		goto err_free_irq;
-+
-+	return 0;
-+
-+err_free_irq:
-+	free_irq(i2c_dev->irq, i2c_dev);
-+err_disable_unprepare_clk:
-+	clk_disable_unprepare(i2c_dev->bus_clk);
-+err_put_exclusive_rate:
-+	clk_rate_exclusive_put(i2c_dev->bus_clk);
- 
- 	return ret;
- }
+diff --git a/sound/soc/codecs/rt5663.c b/sound/soc/codecs/rt5663.c
+index ee09ccd448dc..4aba6e106ee4 100644
+--- a/sound/soc/codecs/rt5663.c
++++ b/sound/soc/codecs/rt5663.c
+@@ -3478,6 +3478,8 @@ static int rt5663_parse_dp(struct rt5663_priv *rt5663, struct device *dev)
+ 		table_size = sizeof(struct impedance_mapping_table) *
+ 			rt5663->pdata.impedance_sensing_num;
+ 		rt5663->imp_table = devm_kzalloc(dev, table_size, GFP_KERNEL);
++		if (!rt5663->imp_table)
++			return -ENOMEM;
+ 		ret = device_property_read_u32_array(dev,
+ 			"realtek,impedance_sensing_table",
+ 			(u32 *)rt5663->imp_table, table_size);
 -- 
 2.34.1
 

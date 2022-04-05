@@ -2,428 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AAFE4F4864
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:02:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F2FE4F4484
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382351AbiDEVir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:38:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56182 "EHLO
+        id S1345560AbiDEUBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354062AbiDEPL6 (ORCPT
+        with ESMTP id S1382107AbiDEPO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:11:58 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8296109A4F;
-        Tue,  5 Apr 2022 06:25:43 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649165141;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TZOPBfeuilAZ8Xu/MR72GQq/MIyradbJhRuauO+T6Uo=;
-        b=267EUGEryvP3VLlpF8ML/M6EmwsWS9+a5uuw+c4ljg7GyT+cglymNX4ksNhPUvE2ymF3F8
-        D6T/hbpXQqPnXqQnDngv8CTWEXXuyScGup97jqcUe+VSOa8iXevqad22ZrmHCTmVSUuIb5
-        VxYrXBgcA/Zdv/1dUHDffwB2Ktulb26qj9zhWFOqT514a9w/CW0yD5wV2BoN6rDqIgE9jQ
-        gPUk/v3IspxobpGBcEp5G+35sQ7byKI950DaO6CCBy/HBjt0xUNwAV2J1jhJhrUp0Rur/9
-        zjeydRktoPUEhdVII+R0zUnvZdsb2uAXgCgLutpmmaPIs5/qfetbtKf20ptmWg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649165141;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TZOPBfeuilAZ8Xu/MR72GQq/MIyradbJhRuauO+T6Uo=;
-        b=HdHKKDoJ1oPkzPXXy6/c5bAP/oUiRrs0iQ5QKRlPrm7w1qynY+jIibItCzwfGZyH8UNKGY
-        3QZROXpVuHG9ZBAg==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Wei Liu <wei.liu@kernel.org>,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Helge Deller <deller@gmx.de>, Marco Elver <elver@google.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Phil Auld <pauld@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Wang Qing <wangqing@vivo.com>, rcu@vger.kernel.org
-Subject: [PATCH printk v2 09/12] printk: add functions to prefer direct printing
-Date:   Tue,  5 Apr 2022 15:31:32 +0206
-Message-Id: <20220405132535.649171-10-john.ogness@linutronix.de>
-In-Reply-To: <20220405132535.649171-1-john.ogness@linutronix.de>
-References: <20220405132535.649171-1-john.ogness@linutronix.de>
+        Tue, 5 Apr 2022 11:14:28 -0400
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B081700BE;
+        Tue,  5 Apr 2022 06:26:15 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-2e5e9025c20so135503637b3.7;
+        Tue, 05 Apr 2022 06:26:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5bma3Hv9/Du0X4/97+r/i96qcpXIT9vsWsP+NmZQEhc=;
+        b=Vl4ngRqcIeckA/jKuKB4ELhRPTohkhg1Wqw0NA5NEXPIN81N78SpyBvYEtGcDGO/yj
+         fHwy8V4//fTFc1pnlG+xf2tsbQQya205qkpRU3j2uzJ5oxizPaVI+8mkcS5C/RQ3h8xE
+         sRhWmiHrMiHPG0PiMypbe4mrarR24sjBwetednlAJ9au+MQyRawPrbulFdXDd7Fw9TL+
+         UvZw0tsi2g0b+sef2fagOeD1ivYsAWj4RO5WBgTapngrnL88e+UMLGEFWPl3jWTo2q+N
+         8AcVXOyPgDBJsWTRaDgOdj4rvGWiAXVvu42r2AOyzggO0WBsK87unrPD1uAa0zFHVxUz
+         ozDQ==
+X-Gm-Message-State: AOAM530pzAdLWJ7ZQT4ykfJBCEAhhMe/HMePa2yhBoy0sEm7Ksvcy3XF
+        7lbsbDJ4Sxlx9Pswf+SZd7yWkcM+D+JGhfWzPhA=
+X-Google-Smtp-Source: ABdhPJwSoRVMoL8d5NZt/uFMN/p5bnGsKoxUE2f3GX9NbHU0ViSKhN6b3N2cxmhRKLuKcvzdrUX4TUIagp1Us0uHFq8=
+X-Received: by 2002:a81:1549:0:b0:2eb:3dc7:bd16 with SMTP id
+ 70-20020a811549000000b002eb3dc7bd16mr2689122ywv.7.1649165174251; Tue, 05 Apr
+ 2022 06:26:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220325184609.4059963-1-rajatja@google.com> <20220325184609.4059963-2-rajatja@google.com>
+In-Reply-To: <20220325184609.4059963-2-rajatja@google.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 5 Apr 2022 15:26:03 +0200
+Message-ID: <CAJZ5v0hH-Xujak9jGLOvxnLVHXCms8SU-2qJnzPXpAGK4FBxqA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] PCI: Rename pci_dev->untrusted to pci_dev->untrusted_dma
+To:     Rajat Jain <rajatja@google.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatxjain@gmail.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Pavel Machek <pavel@denx.de>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        "open list:AMD IOMMU (AMD-VI)" <iommu@lists.linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Once kthread printing is available, console printing will no longer
-occur in the context of the printk caller. However, there are some
-special contexts where it is desirable for the printk caller to
-directly print out kernel messages. Using pr_flush() to wait for
-threaded printers is only possible if the caller is in a sleepable
-context and the kthreads are active. That is not always the case.
+On Fri, Mar 25, 2022 at 7:46 PM Rajat Jain <rajatja@google.com> wrote:
+>
+> Rename the field to make it more clear, that the device can execute DMA
+> attacks on the system, and thus the system may need protection from
+> such attacks from this device.
+>
+> No functional change intended.
+>
+> Signed-off-by: Rajat Jain <rajatja@google.com>
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Introduce printk_prefer_direct_enter() and printk_prefer_direct_exit()
-functions to explicitly (and globally) activate/deactivate preferred
-direct console printing. The term "direct console printing" refers to
-printing to all enabled consoles from the context of the printk
-caller. The term "prefer" is used because this type of printing is
-only best effort. If the console is currently locked or other
-printers are already actively printing, the printk caller will need
-to rely on the other contexts to handle the printing.
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-This preferred direct printing is how all printing is currently
-handled (unless explicitly deferred).
-
-When kthread printing is introduced, there may be some unanticipated
-problems due to kthreads being unable to flush important messages.
-In order to minimize such risks, preferred direct printing is
-activated for the primary important messages when the system
-experiences general types of major errors. These are:
-
- - emergency reboot/shutdown
- - cpu and rcu stalls
- - hard and soft lockups
- - hung tasks
- - warn
- - sysrq
-
-Note that since kthread printing does not yet exist, no behavior
-changes result from this commit. This is only implementing the
-counter and marking the various places where preferred direct
-printing is active.
-
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
----
- drivers/tty/sysrq.c     |  2 ++
- include/linux/printk.h  | 11 +++++++++++
- kernel/hung_task.c      | 11 ++++++++++-
- kernel/panic.c          |  4 ++++
- kernel/printk/printk.c  | 28 ++++++++++++++++++++++++++++
- kernel/rcu/tree_stall.h |  2 ++
- kernel/reboot.c         | 14 +++++++++++++-
- kernel/watchdog.c       |  4 ++++
- kernel/watchdog_hld.c   |  4 ++++
- 9 files changed, 78 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
-index bbfd004449b5..2884cd638d64 100644
---- a/drivers/tty/sysrq.c
-+++ b/drivers/tty/sysrq.c
-@@ -578,6 +578,7 @@ void __handle_sysrq(int key, bool check_mask)
- 
- 	rcu_sysrq_start();
- 	rcu_read_lock();
-+	printk_prefer_direct_enter();
- 	/*
- 	 * Raise the apparent loglevel to maximum so that the sysrq header
- 	 * is shown to provide the user with positive feedback.  We do not
-@@ -619,6 +620,7 @@ void __handle_sysrq(int key, bool check_mask)
- 		pr_cont("\n");
- 		console_loglevel = orig_log_level;
- 	}
-+	printk_prefer_direct_exit();
- 	rcu_read_unlock();
- 	rcu_sysrq_end();
- 
-diff --git a/include/linux/printk.h b/include/linux/printk.h
-index 091fba7283e1..cd26aab0ab2a 100644
---- a/include/linux/printk.h
-+++ b/include/linux/printk.h
-@@ -170,6 +170,9 @@ extern void __printk_safe_exit(void);
- #define printk_deferred_enter __printk_safe_enter
- #define printk_deferred_exit __printk_safe_exit
- 
-+extern void printk_prefer_direct_enter(void);
-+extern void printk_prefer_direct_exit(void);
-+
- extern bool pr_flush(int timeout_ms, bool reset_on_progress);
- 
- /*
-@@ -222,6 +225,14 @@ static inline void printk_deferred_exit(void)
- {
- }
- 
-+static inline void printk_prefer_direct_enter(void)
-+{
-+}
-+
-+static inline void printk_prefer_direct_exit(void)
-+{
-+}
-+
- static inline bool pr_flush(int timeout_ms, bool reset_on_progress)
- {
- 	return true;
-diff --git a/kernel/hung_task.c b/kernel/hung_task.c
-index 52501e5f7655..02a65d554340 100644
---- a/kernel/hung_task.c
-+++ b/kernel/hung_task.c
-@@ -127,6 +127,8 @@ static void check_hung_task(struct task_struct *t, unsigned long timeout)
- 	 * complain:
- 	 */
- 	if (sysctl_hung_task_warnings) {
-+		printk_prefer_direct_enter();
-+
- 		if (sysctl_hung_task_warnings > 0)
- 			sysctl_hung_task_warnings--;
- 		pr_err("INFO: task %s:%d blocked for more than %ld seconds.\n",
-@@ -142,6 +144,8 @@ static void check_hung_task(struct task_struct *t, unsigned long timeout)
- 
- 		if (sysctl_hung_task_all_cpu_backtrace)
- 			hung_task_show_all_bt = true;
-+
-+		printk_prefer_direct_exit();
- 	}
- 
- 	touch_nmi_watchdog();
-@@ -204,12 +208,17 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
- 	}
-  unlock:
- 	rcu_read_unlock();
--	if (hung_task_show_lock)
-+	if (hung_task_show_lock) {
-+		printk_prefer_direct_enter();
- 		debug_show_all_locks();
-+		printk_prefer_direct_exit();
-+	}
- 
- 	if (hung_task_show_all_bt) {
- 		hung_task_show_all_bt = false;
-+		printk_prefer_direct_enter();
- 		trigger_all_cpu_backtrace();
-+		printk_prefer_direct_exit();
- 	}
- 
- 	if (hung_task_call_panic)
-diff --git a/kernel/panic.c b/kernel/panic.c
-index 55b50e052ec3..7d422597403f 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -560,6 +560,8 @@ void __warn(const char *file, int line, void *caller, unsigned taint,
- {
- 	disable_trace_on_warning();
- 
-+	printk_prefer_direct_enter();
-+
- 	if (file)
- 		pr_warn("WARNING: CPU: %d PID: %d at %s:%d %pS\n",
- 			raw_smp_processor_id(), current->pid, file, line,
-@@ -597,6 +599,8 @@ void __warn(const char *file, int line, void *caller, unsigned taint,
- 
- 	/* Just a warning, don't kill lockdep. */
- 	add_taint(taint, LOCKDEP_STILL_OK);
-+
-+	printk_prefer_direct_exit();
- }
- 
- #ifndef __WARN_FLAGS
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index d0369afaf365..258d02cff140 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -362,6 +362,34 @@ static int console_msg_format = MSG_FORMAT_DEFAULT;
- static DEFINE_MUTEX(syslog_lock);
- 
- #ifdef CONFIG_PRINTK
-+static atomic_t printk_prefer_direct = ATOMIC_INIT(0);
-+
-+/**
-+ * printk_prefer_direct_enter - cause printk() calls to attempt direct
-+ *                              printing to all enabled consoles
-+ *
-+ * Since it is not possible to call into the console printing code from any
-+ * context, there is no guarantee that direct printing will occur.
-+ *
-+ * This globally effects all printk() callers.
-+ *
-+ * Context: Any context.
-+ */
-+void printk_prefer_direct_enter(void)
-+{
-+	atomic_inc(&printk_prefer_direct);
-+}
-+
-+/**
-+ * printk_prefer_direct_exit - restore printk() behavior
-+ *
-+ * Context: Any context.
-+ */
-+void printk_prefer_direct_exit(void)
-+{
-+	WARN_ON(atomic_dec_if_positive(&printk_prefer_direct) < 0);
-+}
-+
- DECLARE_WAIT_QUEUE_HEAD(log_wait);
- /* All 3 protected by @syslog_lock. */
- /* the next printk record to read by syslog(READ) or /proc/kmsg */
-diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
-index 0c5d8516516a..d612707c2ed0 100644
---- a/kernel/rcu/tree_stall.h
-+++ b/kernel/rcu/tree_stall.h
-@@ -619,6 +619,7 @@ static void print_cpu_stall(unsigned long gps)
- 	 * See Documentation/RCU/stallwarn.rst for info on how to debug
- 	 * RCU CPU stall warnings.
- 	 */
-+	printk_prefer_direct_enter();
- 	trace_rcu_stall_warning(rcu_state.name, TPS("SelfDetected"));
- 	pr_err("INFO: %s self-detected stall on CPU\n", rcu_state.name);
- 	raw_spin_lock_irqsave_rcu_node(rdp->mynode, flags);
-@@ -656,6 +657,7 @@ static void print_cpu_stall(unsigned long gps)
- 	 */
- 	set_tsk_need_resched(current);
- 	set_preempt_need_resched();
-+	printk_prefer_direct_exit();
- }
- 
- static void check_cpu_stall(struct rcu_data *rdp)
-diff --git a/kernel/reboot.c b/kernel/reboot.c
-index 6bcc5d6a6572..4177645e74d6 100644
---- a/kernel/reboot.c
-+++ b/kernel/reboot.c
-@@ -447,9 +447,11 @@ static int __orderly_reboot(void)
- 	ret = run_cmd(reboot_cmd);
- 
- 	if (ret) {
-+		printk_prefer_direct_enter();
- 		pr_warn("Failed to start orderly reboot: forcing the issue\n");
- 		emergency_sync();
- 		kernel_restart(NULL);
-+		printk_prefer_direct_exit();
- 	}
- 
- 	return ret;
-@@ -462,6 +464,7 @@ static int __orderly_poweroff(bool force)
- 	ret = run_cmd(poweroff_cmd);
- 
- 	if (ret && force) {
-+		printk_prefer_direct_enter();
- 		pr_warn("Failed to start orderly shutdown: forcing the issue\n");
- 
- 		/*
-@@ -471,6 +474,7 @@ static int __orderly_poweroff(bool force)
- 		 */
- 		emergency_sync();
- 		kernel_power_off();
-+		printk_prefer_direct_exit();
- 	}
- 
- 	return ret;
-@@ -528,6 +532,8 @@ EXPORT_SYMBOL_GPL(orderly_reboot);
-  */
- static void hw_failure_emergency_poweroff_func(struct work_struct *work)
- {
-+	printk_prefer_direct_enter();
-+
- 	/*
- 	 * We have reached here after the emergency shutdown waiting period has
- 	 * expired. This means orderly_poweroff has not been able to shut off
-@@ -544,6 +550,8 @@ static void hw_failure_emergency_poweroff_func(struct work_struct *work)
- 	 */
- 	pr_emerg("Hardware protection shutdown failed. Trying emergency restart\n");
- 	emergency_restart();
-+
-+	printk_prefer_direct_exit();
- }
- 
- static DECLARE_DELAYED_WORK(hw_failure_emergency_poweroff_work,
-@@ -582,11 +590,13 @@ void hw_protection_shutdown(const char *reason, int ms_until_forced)
- {
- 	static atomic_t allow_proceed = ATOMIC_INIT(1);
- 
-+	printk_prefer_direct_enter();
-+
- 	pr_emerg("HARDWARE PROTECTION shutdown (%s)\n", reason);
- 
- 	/* Shutdown should be initiated only once. */
- 	if (!atomic_dec_and_test(&allow_proceed))
--		return;
-+		goto out;
- 
- 	/*
- 	 * Queue a backup emergency shutdown in the event of
-@@ -594,6 +604,8 @@ void hw_protection_shutdown(const char *reason, int ms_until_forced)
- 	 */
- 	hw_failure_emergency_poweroff(ms_until_forced);
- 	orderly_poweroff(true);
-+out:
-+	printk_prefer_direct_exit();
- }
- EXPORT_SYMBOL_GPL(hw_protection_shutdown);
- 
-diff --git a/kernel/watchdog.c b/kernel/watchdog.c
-index 9166220457bc..40024e03d422 100644
---- a/kernel/watchdog.c
-+++ b/kernel/watchdog.c
-@@ -424,6 +424,8 @@ static enum hrtimer_restart watchdog_timer_fn(struct hrtimer *hrtimer)
- 		/* Start period for the next softlockup warning. */
- 		update_report_ts();
- 
-+		printk_prefer_direct_enter();
-+
- 		pr_emerg("BUG: soft lockup - CPU#%d stuck for %us! [%s:%d]\n",
- 			smp_processor_id(), duration,
- 			current->comm, task_pid_nr(current));
-@@ -442,6 +444,8 @@ static enum hrtimer_restart watchdog_timer_fn(struct hrtimer *hrtimer)
- 		add_taint(TAINT_SOFTLOCKUP, LOCKDEP_STILL_OK);
- 		if (softlockup_panic)
- 			panic("softlockup: hung tasks");
-+
-+		printk_prefer_direct_exit();
- 	}
- 
- 	return HRTIMER_RESTART;
-diff --git a/kernel/watchdog_hld.c b/kernel/watchdog_hld.c
-index 247bf0b1582c..701f35f0e2d4 100644
---- a/kernel/watchdog_hld.c
-+++ b/kernel/watchdog_hld.c
-@@ -135,6 +135,8 @@ static void watchdog_overflow_callback(struct perf_event *event,
- 		if (__this_cpu_read(hard_watchdog_warn) == true)
- 			return;
- 
-+		printk_prefer_direct_enter();
-+
- 		pr_emerg("Watchdog detected hard LOCKUP on cpu %d\n",
- 			 this_cpu);
- 		print_modules();
-@@ -155,6 +157,8 @@ static void watchdog_overflow_callback(struct perf_event *event,
- 		if (hardlockup_panic)
- 			nmi_panic(regs, "Hard LOCKUP");
- 
-+		printk_prefer_direct_exit();
-+
- 		__this_cpu_write(hard_watchdog_warn, true);
- 		return;
- 	}
--- 
-2.30.2
-
+> ---
+> v5: Use "untrusted_dma" as property name, based on feedback.
+>     Reorder the patches in the series.
+> v4: Initial version, created based on comments on other patch
+>
+>  drivers/iommu/dma-iommu.c   | 6 +++---
+>  drivers/iommu/intel/iommu.c | 2 +-
+>  drivers/iommu/iommu.c       | 2 +-
+>  drivers/pci/ats.c           | 2 +-
+>  drivers/pci/pci-acpi.c      | 2 +-
+>  drivers/pci/pci.c           | 2 +-
+>  drivers/pci/probe.c         | 8 ++++----
+>  drivers/pci/quirks.c        | 2 +-
+>  include/linux/pci.h         | 5 +++--
+>  9 files changed, 16 insertions(+), 15 deletions(-)
+>
+> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+> index d85d54f2b549..7cbe300fe907 100644
+> --- a/drivers/iommu/dma-iommu.c
+> +++ b/drivers/iommu/dma-iommu.c
+> @@ -497,14 +497,14 @@ static int iova_reserve_iommu_regions(struct device *dev,
+>         return ret;
+>  }
+>
+> -static bool dev_is_untrusted(struct device *dev)
+> +static bool dev_has_untrusted_dma(struct device *dev)
+>  {
+> -       return dev_is_pci(dev) && to_pci_dev(dev)->untrusted;
+> +       return dev_is_pci(dev) && to_pci_dev(dev)->untrusted_dma;
+>  }
+>
+>  static bool dev_use_swiotlb(struct device *dev)
+>  {
+> -       return IS_ENABLED(CONFIG_SWIOTLB) && dev_is_untrusted(dev);
+> +       return IS_ENABLED(CONFIG_SWIOTLB) && dev_has_untrusted_dma(dev);
+>  }
+>
+>  /**
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index 92fea3fbbb11..9246b7c9ab46 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -5570,7 +5570,7 @@ intel_iommu_enable_nesting(struct iommu_domain *domain)
+>   */
+>  static bool risky_device(struct pci_dev *pdev)
+>  {
+> -       if (pdev->untrusted) {
+> +       if (pdev->untrusted_dma) {
+>                 pci_info(pdev,
+>                          "Skipping IOMMU quirk for dev [%04X:%04X] on untrusted PCI link\n",
+>                          pdev->vendor, pdev->device);
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 8b86406b7162..79fb66af2e68 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -1522,7 +1522,7 @@ static int iommu_get_def_domain_type(struct device *dev)
+>  {
+>         const struct iommu_ops *ops = dev->bus->iommu_ops;
+>
+> -       if (dev_is_pci(dev) && to_pci_dev(dev)->untrusted)
+> +       if (dev_is_pci(dev) && to_pci_dev(dev)->untrusted_dma)
+>                 return IOMMU_DOMAIN_DMA;
+>
+>         if (ops->def_domain_type)
+> diff --git a/drivers/pci/ats.c b/drivers/pci/ats.c
+> index c967ad6e2626..477c16ba9341 100644
+> --- a/drivers/pci/ats.c
+> +++ b/drivers/pci/ats.c
+> @@ -42,7 +42,7 @@ bool pci_ats_supported(struct pci_dev *dev)
+>         if (!dev->ats_cap)
+>                 return false;
+>
+> -       return (dev->untrusted == 0);
+> +       return (dev->untrusted_dma == 0);
+>  }
+>  EXPORT_SYMBOL_GPL(pci_ats_supported);
+>
+> diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+> index 378e05096c52..1d5a284c3661 100644
+> --- a/drivers/pci/pci-acpi.c
+> +++ b/drivers/pci/pci-acpi.c
+> @@ -1362,7 +1362,7 @@ static void pci_acpi_check_for_dma_protection(struct pci_dev *dev)
+>                 return;
+>
+>         if (val)
+> -               dev->untrusted = 1;
+> +               dev->untrusted_dma = 1;
+>  }
+>
+>  void pci_acpi_setup(struct device *dev, struct acpi_device *adev)
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 9ecce435fb3f..1fb0eb8646c8 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -958,7 +958,7 @@ static void pci_std_enable_acs(struct pci_dev *dev)
+>         ctrl |= (cap & PCI_ACS_UF);
+>
+>         /* Enable Translation Blocking for external devices and noats */
+> -       if (pci_ats_disabled() || dev->external_facing || dev->untrusted)
+> +       if (pci_ats_disabled() || dev->external_facing || dev->untrusted_dma)
+>                 ctrl |= (cap & PCI_ACS_TB);
+>
+>         pci_write_config_word(dev, pos + PCI_ACS_CTRL, ctrl);
+> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> index 17a969942d37..d2a9b26fcede 100644
+> --- a/drivers/pci/probe.c
+> +++ b/drivers/pci/probe.c
+> @@ -1587,7 +1587,7 @@ static void set_pcie_thunderbolt(struct pci_dev *dev)
+>                 dev->is_thunderbolt = 1;
+>  }
+>
+> -static void set_pcie_untrusted(struct pci_dev *dev)
+> +static void pci_set_untrusted_dma(struct pci_dev *dev)
+>  {
+>         struct pci_dev *parent;
+>
+> @@ -1596,8 +1596,8 @@ static void set_pcie_untrusted(struct pci_dev *dev)
+>          * untrusted as well.
+>          */
+>         parent = pci_upstream_bridge(dev);
+> -       if (parent && (parent->untrusted || parent->external_facing))
+> -               dev->untrusted = true;
+> +       if (parent && (parent->untrusted_dma || parent->external_facing))
+> +               dev->untrusted_dma = true;
+>  }
+>
+>  static void pci_set_removable(struct pci_dev *dev)
+> @@ -1862,7 +1862,7 @@ int pci_setup_device(struct pci_dev *dev)
+>         /* Need to have dev->cfg_size ready */
+>         set_pcie_thunderbolt(dev);
+>
+> -       set_pcie_untrusted(dev);
+> +       pci_set_untrusted_dma(dev);
+>
+>         /* "Unknown power state" */
+>         dev->current_state = PCI_UNKNOWN;
+> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> index 5f46fed01e6c..7ca3c2cdfb20 100644
+> --- a/drivers/pci/quirks.c
+> +++ b/drivers/pci/quirks.c
+> @@ -5134,7 +5134,7 @@ static int pci_quirk_enable_intel_spt_pch_acs(struct pci_dev *dev)
+>         ctrl |= (cap & PCI_ACS_CR);
+>         ctrl |= (cap & PCI_ACS_UF);
+>
+> -       if (pci_ats_disabled() || dev->external_facing || dev->untrusted)
+> +       if (pci_ats_disabled() || dev->external_facing || dev->untrusted_dma)
+>                 ctrl |= (cap & PCI_ACS_TB);
+>
+>         pci_write_config_dword(dev, pos + INTEL_SPT_ACS_CTRL, ctrl);
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 678fecdf6b81..b7c5fede0b93 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -444,13 +444,14 @@ struct pci_dev {
+>         unsigned int    shpc_managed:1;         /* SHPC owned by shpchp */
+>         unsigned int    is_thunderbolt:1;       /* Thunderbolt controller */
+>         /*
+> -        * Devices marked being untrusted are the ones that can potentially
+> +        * Devices marked with untrusted_dma are the ones that can potentially
+>          * execute DMA attacks and similar. They are typically connected
+>          * through external ports such as Thunderbolt but not limited to
+>          * that. When an IOMMU is enabled they should be getting full
+>          * mappings to make sure they cannot access arbitrary memory.
+>          */
+> -       unsigned int    untrusted:1;
+> +       unsigned int    untrusted_dma:1;
+> +
+>         /*
+>          * Info from the platform, e.g., ACPI or device tree, may mark a
+>          * device as "external-facing".  An external-facing device is
+> --
+> 2.35.1.1021.g381101b075-goog
+>

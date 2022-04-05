@@ -2,46 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB594F4CB7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B2C4F4C7B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1579450AbiDEXbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
+        id S1451016AbiDEXXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349147AbiDEJtO (ORCPT
+        with ESMTP id S1356093AbiDEKW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A6ECF5;
-        Tue,  5 Apr 2022 02:41:30 -0700 (PDT)
+        Tue, 5 Apr 2022 06:22:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95F6B2474;
+        Tue,  5 Apr 2022 03:06:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90A856164D;
-        Tue,  5 Apr 2022 09:41:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AE95C385A2;
-        Tue,  5 Apr 2022 09:41:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 434A4B81C83;
+        Tue,  5 Apr 2022 10:06:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 801EFC385A2;
+        Tue,  5 Apr 2022 10:06:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151690;
-        bh=/P8TunVzWGpmmpgr6qat+AphEiaH/CrUmR30w+542Fs=;
+        s=korg; t=1649153163;
+        bh=AXf40jmtpW45Xp9Oodq8bYKgJRTHlXh5sFHwX9zHIQY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XciM5jLbygJN/CLzfbx3MvNtCxy9nz8PebMhc1bYpFM+gYxLx69nWkfcOof4olqM6
-         RcOCY6jSQOfNfTA3J97b9I5KWZoiLQIihW/qq9D61L2HZ1fS5f2EI/uVsYp0Y/cbiK
-         mOaB8omZRAOgKcgssrbH7mXCyMR/w8N004IMtatA=
+        b=ZYMfOARH3FgULwHAcHbvUPtgmznSK8mNYvKgPYIaHqAs1pZJ6ZgVwhvJFvU59Korq
+         q1oy69j/QQ2Um2pA+VZ9NgPba3buJa02k/RXmOk0wts/1DxpD0CqPdwYRdr/oeBHWD
+         IGeCodM0oJ3eOUHYaVh7o6ciMNSXS4RtAtsObhic=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ping Fang <pifang@redhat.com>,
-        Daniel Henrique Barboza <danielhb413@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 507/913] powerpc/mm/numa: skip NUMA_NO_NODE onlining in parse_numa_properties()
+        stable@vger.kernel.org,
+        Charan Teja Kalla <quic_charante@quicinc.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Minchan Kim <minchan@kernel.org>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.10 075/599] mm: madvise: return correct bytes advised with process_madvise
 Date:   Tue,  5 Apr 2022 09:26:09 +0200
-Message-Id: <20220405070355.054023170@linuxfoundation.org>
+Message-Id: <20220405070301.057867860@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,52 +63,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Henrique Barboza <danielhb413@gmail.com>
+From: Charan Teja Kalla <quic_charante@quicinc.com>
 
-[ Upstream commit 749ed4a20657bcea66a6e082ca3dc0d228cbec80 ]
+commit 5bd009c7c9a9e888077c07535dc0c70aeab242c3 upstream.
 
-Executing node_set_online() when nid = NUMA_NO_NODE results in an
-undefined behavior. node_set_online() will call node_set_state(), into
-__node_set(), into set_bit(), and since NUMA_NO_NODE is -1 we'll end up
-doing a negative shift operation inside
-arch/powerpc/include/asm/bitops.h. This potential UB was detected
-running a kernel with CONFIG_UBSAN.
+Patch series "mm: madvise: return correct bytes processed with
+process_madvise", v2.  With the process_madvise(), always choose to return
+non zero processed bytes over an error.  This can help the user to know on
+which VMA, passed in the 'struct iovec' vector list, is failed to advise
+thus can take the decission of retrying/skipping on that VMA.
 
-The behavior was introduced by commit 10f78fd0dabb ("powerpc/numa: Fix a
-regression on memoryless node 0"), where the check for nid > 0 was
-removed to fix a problem that was happening with nid = 0, but the result
-is that now we're trying to online NUMA_NO_NODE nids as well.
+This patch (of 2):
 
-Checking for nid >= 0 will allow node 0 to be onlined while avoiding
-this UB with NUMA_NO_NODE.
+The process_madvise() system call returns error even after processing some
+VMA's passed in the 'struct iovec' vector list which leaves the user
+confused to know where to restart the advise next.  It is also against
+this syscall man page[1] documentation where it mentions that "return
+value may be less than the total number of requested bytes, if an error
+occurred after some iovec elements were already processed.".
 
-Fixes: 10f78fd0dabb ("powerpc/numa: Fix a regression on memoryless node 0")
-Reported-by: Ping Fang <pifang@redhat.com>
-Signed-off-by: Daniel Henrique Barboza <danielhb413@gmail.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220224182312.1012527-1-danielhb413@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Consider a user passed 10 VMA's in the 'struct iovec' vector list of which
+9 are processed but one.  Then it just returns the error caused on that
+failed VMA despite the first 9 VMA's processed, leaving the user confused
+about on which VMA it is failed.  Returning the number of bytes processed
+here can help the user to know which VMA it is failed on and thus can
+retry/skip the advise on that VMA.
+
+[1]https://man7.org/linux/man-pages/man2/process_madvise.2.html.
+
+Link: https://lkml.kernel.org/r/cover.1647008754.git.quic_charante@quicinc.com
+Link: https://lkml.kernel.org/r/125b61a0edcee5c2db8658aed9d06a43a19ccafc.1647008754.git.quic_charante@quicinc.com
+Fixes: ecb8ac8b1f14("mm/madvise: introduce process_madvise() syscall: an external memory hinting API")
+Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: David Rientjes <rientjes@google.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Minchan Kim <minchan@kernel.org>
+Cc: Nadav Amit <nadav.amit@gmail.com>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/mm/numa.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ mm/madvise.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/powerpc/mm/numa.c b/arch/powerpc/mm/numa.c
-index 59d3cfcd7887..5fb829256b59 100644
---- a/arch/powerpc/mm/numa.c
-+++ b/arch/powerpc/mm/numa.c
-@@ -956,7 +956,9 @@ static int __init parse_numa_properties(void)
- 			of_node_put(cpu);
- 		}
- 
--		node_set_online(nid);
-+		/* node_set_online() is an UB if 'nid' is negative */
-+		if (likely(nid >= 0))
-+			node_set_online(nid);
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -1236,8 +1236,7 @@ SYSCALL_DEFINE5(process_madvise, int, pi
+ 		iov_iter_advance(&iter, iovec.iov_len);
  	}
  
- 	get_n_mem_cells(&n_mem_addr_cells, &n_mem_size_cells);
--- 
-2.34.1
-
+-	if (ret == 0)
+-		ret = total_len - iov_iter_count(&iter);
++	ret = (total_len - iov_iter_count(&iter)) ? : ret;
+ 
+ release_mm:
+ 	mmput(mm);
 
 

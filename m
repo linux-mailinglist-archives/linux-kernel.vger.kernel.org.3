@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA93C4F333E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9B64F3254
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357686AbiDEK0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
+        id S1351936AbiDEKKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241122AbiDEIcv (ORCPT
+        with ESMTP id S241128AbiDEIcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:32:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A898115FC2;
-        Tue,  5 Apr 2022 01:28:02 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB8D15FC9;
+        Tue,  5 Apr 2022 01:28:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5B913B81BB1;
-        Tue,  5 Apr 2022 08:28:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5706C385A2;
-        Tue,  5 Apr 2022 08:27:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52E936062B;
+        Tue,  5 Apr 2022 08:28:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62D9BC385A2;
+        Tue,  5 Apr 2022 08:28:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147280;
-        bh=k5faAOJ40OTa0COWongLuNACNXMXAEZdrOZeJQ1+P5o=;
+        s=korg; t=1649147285;
+        bh=234vjUTZtijWVtkoomSPxYcD2YhmlklL6TqSehEq8A4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aUhlxnDO1kIaVt4G2YVsKsCV3YITfLhnkX3MtncRP8OEH34+kqKmxcseRAntLSwYS
-         NieMckk7RUqEA5uvP/5nLILdo9XRuhtVOtvJwG3DNFbAcAonJXBJOJGG2JhwlSCYzt
-         GYrvuRYZKxP8Lw+frlqdb4+EpnP+4ArdLcoIMjzs=
+        b=n37IzcvSuEnTgsOaxdjCX7JIM8FZBxP69VolXqABE20JenUo6wuSyrsHAthl7wDae
+         oqd3cfRmFFkBg/fHSnT4ZMf/yVRQUiodW81fGtdervqSHVET1oiUPkFhwadVZEhAg4
+         Cie7UVUfqmmW4jYiizwtYF0AwBIcTjhOvPeiY5KY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Simon Ser <contact@emersion.fr>
-Subject: [PATCH 5.17 1067/1126] drm/connector: Fix typo in documentation
-Date:   Tue,  5 Apr 2022 09:30:14 +0200
-Message-Id: <20220405070438.775851380@linuxfoundation.org>
+        stable@vger.kernel.org, Sander Vanheule <sander@svanheule.net>,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+Subject: [PATCH 5.17 1069/1126] staging: mt7621-dts: fix pinctrl-0 items to be size-1 items on ethernet
+Date:   Tue,  5 Apr 2022 09:30:16 +0200
+Message-Id: <20220405070438.833372822@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,42 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-commit dca384a3bf5af1c781cfa6aec63904bdb5018c36 upstream.
+commit 25e4f5220efead592c83200241e098e757d37e1f upstream.
 
-Commit 4adc33f36d80 ("drm/edid: Split deep color modes between RGB and
-YUV444") introduced two new variables in struct drm_display_info and
-their documentation, but the documentation part had a typo resulting in
-a doc build warning.
+Fix pinctrl-0 items under the ethernet node to be size-1 items.
+Current notation would be used on specifications with non-zero cells.
 
-Fixes: 4adc33f36d80 ("drm/edid: Split deep color modes between RGB and YUV444")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Reviewed-by: Simon Ser <contact@emersion.fr>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220202094340.875190-1-maxime@cerno.tech
+Fixes: 0a93c0d75809 ("staging: mt7621-dts: fix pinctrl properties for ethernet")
+Reported-by: Sander Vanheule <sander@svanheule.net>
+Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Link: https://lore.kernel.org/r/20220215081725.3463-1-arinc.unal@arinc9.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/drm/drm_connector.h |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/staging/mt7621-dts/mt7621.dtsi |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/include/drm/drm_connector.h
-+++ b/include/drm/drm_connector.h
-@@ -592,13 +592,13 @@ struct drm_display_info {
- 	bool rgb_quant_range_selectable;
+--- a/drivers/staging/mt7621-dts/mt7621.dtsi
++++ b/drivers/staging/mt7621-dts/mt7621.dtsi
+@@ -326,7 +326,7 @@
+ 		mediatek,ethsys = <&sysc>;
  
- 	/**
--	 * @edid_hdmi_dc_rgb444_modes: Mask of supported hdmi deep color modes
-+	 * @edid_hdmi_rgb444_dc_modes: Mask of supported hdmi deep color modes
- 	 * in RGB 4:4:4. Even more stuff redundant with @bus_formats.
- 	 */
- 	u8 edid_hdmi_rgb444_dc_modes;
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&rgmii1_pins &rgmii2_pins &mdio_pins>;
++		pinctrl-0 = <&mdio_pins>, <&rgmii1_pins>, <&rgmii2_pins>;
  
- 	/**
--	 * @edid_hdmi_dc_ycbcr444_modes: Mask of supported hdmi deep color
-+	 * @edid_hdmi_ycbcr444_dc_modes: Mask of supported hdmi deep color
- 	 * modes in YCbCr 4:4:4. Even more stuff redundant with @bus_formats.
- 	 */
- 	u8 edid_hdmi_ycbcr444_dc_modes;
+ 		gmac0: mac@0 {
+ 			compatible = "mediatek,eth-mac";
 
 

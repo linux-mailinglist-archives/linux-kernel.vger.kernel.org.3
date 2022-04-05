@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293454F2858
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E25C4F285A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234687AbiDEINx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
+        id S234753AbiDEIOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234543AbiDEH6i (ORCPT
+        with ESMTP id S234759AbiDEH6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:58:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3074A76D6;
-        Tue,  5 Apr 2022 00:52:45 -0700 (PDT)
+        Tue, 5 Apr 2022 03:58:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB45AA004;
+        Tue,  5 Apr 2022 00:53:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52E2EB81B90;
-        Tue,  5 Apr 2022 07:52:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A02BEC34110;
-        Tue,  5 Apr 2022 07:52:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38B8EB81BB4;
+        Tue,  5 Apr 2022 07:53:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85070C340EE;
+        Tue,  5 Apr 2022 07:53:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145163;
-        bh=iWedxj7YTagci/gi3EDpl5fIirs9sNJC96Xu5blLHW8=;
+        s=korg; t=1649145192;
+        bh=Znaktkp0TlhhTmv22siN8VXYQMsR80xwUmAM0j+apdc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nlMQGiIvJl95DezofkwY5Hn+hPNuduPhzsySkjwNeuoDsjGvMhP0olSMYImpMrCF5
-         RIr3snBAlk+RF+rXv5VHTofNQZuWMak8FDXj0q+rcxg1te4axtOx/n3ORb2DkYhsSi
-         82Zq8VvpkNIzby4p/IuMVZ60HbERscGizrcvdmYE=
+        b=JvLCZoej2PTPwfCIAt7Wt3XDXNWINqoyppgXKWQ29yVHlUKwlN6VfyrENpWHYDIKg
+         Pz6JNqGAWeYiZp/1JAnATjAVH5djquMvBpWpoSpe8GMuh2aJGggENojuqi5mQzt9gR
+         e0t0tTjj2xoOmStfxJijE/mQSOlN1ZfVyrtarcf4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0308/1126] memory: tegra20-emc: Correct memory device mask
-Date:   Tue,  5 Apr 2022 09:17:35 +0200
-Message-Id: <20220405070416.654889034@linuxfoundation.org>
+        stable@vger.kernel.org, YueHaibing <yuehaibing@huawei.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0318/1126] video: fbdev: controlfb: Fix COMPILE_TEST build
+Date:   Tue,  5 Apr 2022 09:17:45 +0200
+Message-Id: <20220405070416.950540649@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,36 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Osipenko <digetx@gmail.com>
+From: YueHaibing <yuehaibing@huawei.com>
 
-[ Upstream commit 9ff684342ee7d3ea2755c6e9b60bc43085baa3ad ]
+[ Upstream commit 567e44fb51b4f909ae58038a7301352eecea8426 ]
 
-Memory chip select is swapped when we read mode register, correct it.
-We didn't have devices that use a single LPDDR chip and both chips are
-always identical, hence this change is just a minor improvement.
+If PPC_BOOK3S, PPC_PMAC and PPC32 is n, COMPILE_TEST build fails:
 
-Fixes: 131dd9a436d8 ("memory: tegra20-emc: Support matching timings by LPDDR2 configuration")
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-Link: https://lore.kernel.org/r/20211222043215.28237-2-digetx@gmail.com
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+drivers/video/fbdev/controlfb.c:70:0: error: "pgprot_cached_wthru" redefined [-Werror]
+ #define pgprot_cached_wthru(prot) (prot)
+
+In file included from ./arch/powerpc/include/asm/pgtable.h:20:0,
+                 from ./include/linux/pgtable.h:6,
+                 from ./include/linux/mm.h:33,
+                 from drivers/video/fbdev/controlfb.c:37:
+./arch/powerpc/include/asm/nohash/pgtable.h:243:0: note: this is the location of the previous definition
+ #define pgprot_cached_wthru(prot) (__pgprot((pgprot_val(prot) & ~_PAGE_CACHE_CTL) | \
+
+Fixes: a07a63b0e24d ("video: fbdev: controlfb: add COMPILE_TEST support")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/memory/tegra/tegra20-emc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/video/fbdev/controlfb.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/memory/tegra/tegra20-emc.c b/drivers/memory/tegra/tegra20-emc.c
-index 497b6edbf3ca..25ba3c5e4ad6 100644
---- a/drivers/memory/tegra/tegra20-emc.c
-+++ b/drivers/memory/tegra/tegra20-emc.c
-@@ -540,7 +540,7 @@ static int emc_read_lpddr_mode_register(struct tegra_emc *emc,
- 					unsigned int register_addr,
- 					unsigned int *register_data)
+diff --git a/drivers/video/fbdev/controlfb.c b/drivers/video/fbdev/controlfb.c
+index 509311471d51..bd59e7b11ed5 100644
+--- a/drivers/video/fbdev/controlfb.c
++++ b/drivers/video/fbdev/controlfb.c
+@@ -67,7 +67,9 @@
+ #define out_8(addr, val)	(void)(val)
+ #define in_le32(addr)		0
+ #define out_le32(addr, val)	(void)(val)
++#ifndef pgprot_cached_wthru
+ #define pgprot_cached_wthru(prot) (prot)
++#endif
+ #else
+ static void invalid_vram_cache(void __force *addr)
  {
--	u32 memory_dev = emem_dev + 1;
-+	u32 memory_dev = emem_dev ? 1 : 2;
- 	u32 val, mr_mask = 0xff;
- 	int err;
- 
 -- 
 2.34.1
 

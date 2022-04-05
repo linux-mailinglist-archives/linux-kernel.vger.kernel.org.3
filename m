@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C774F3F4C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F074B4F431D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243729AbiDEND2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:03:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42102 "EHLO
+        id S243960AbiDENDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242685AbiDEJIS (ORCPT
+        with ESMTP id S242665AbiDEJIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:08:18 -0400
+        Tue, 5 Apr 2022 05:08:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D4D6F4B7;
-        Tue,  5 Apr 2022 01:57:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B6A7463A;
+        Tue,  5 Apr 2022 01:57:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A0BC6117A;
-        Tue,  5 Apr 2022 08:57:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77F75C385A0;
-        Tue,  5 Apr 2022 08:57:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B987661562;
+        Tue,  5 Apr 2022 08:57:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD010C385A0;
+        Tue,  5 Apr 2022 08:57:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149023;
-        bh=+JEE0Ko2epQOw9p8Y1HZu2AvWRrrxNXwTXSbRl53Sw0=;
+        s=korg; t=1649149029;
+        bh=x8e3y/VMMWTKGFja9YZi+iTh0PRvryetCxFkEUBsjgI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tMa6NvIhwZEhb9+MRURppIqj+4EqBT0aZr0WxTZUMEyX27rMEmD9Of1lXyWVXlkaA
-         f0KRi3LWwZuUpgDDmf8/ag1trPWuf00ThOYhUI4ymEwQvQ/eEuUIOazNo7BsCsvWqs
-         t144bNbgwVUMHC0D/YXduq0jWIsBemAzX5G6yGyU=
+        b=DcFaZAPCKpVEHoHaMKm/HQ1k2mbcvKSQzC2CICnTjjLwqE0+UAbLqByNqMhil1D0h
+         DkvntJ0VZzb2czOGE8BCWqk4V6cihf179n5FOFUjon9MNOepHjp3KmcMgj9CqqshRR
+         cnAsm0ewoQCMBCq8rrBDJfguARYfn1hf9w15F8Tw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0567/1017] KVM: arm64: Enable Cortex-A510 erratum 2077057 by default
-Date:   Tue,  5 Apr 2022 09:24:40 +0200
-Message-Id: <20220405070411.110755242@linuxfoundation.org>
+        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0568/1017] i2c: xiic: Make bus names unique
+Date:   Tue,  5 Apr 2022 09:24:41 +0200
+Message-Id: <20220405070411.139968942@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,37 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Robert Hancock <robert.hancock@calian.com>
 
-[ Upstream commit 4c11113c1a3d10f5b617e5d2b9acd8d1d715450f ]
+[ Upstream commit 1d366c2f9df8279df2adbb60471f86fc40a1c39e ]
 
-The recently added configuration option for Cortex A510 erratum 2077057 does
-not have a "default y" unlike other errata fixes. This appears to simply be
-an oversight since the help text suggests enabling the option if unsure and
-there's nothing in the commit log to suggest it is intentional.
+This driver is for an FPGA logic core, so there can be arbitrarily many
+instances of the bus on a given system. Previously all of the I2C bus
+names were "xiic-i2c" which caused issues with lm_sensors when trying to
+map human-readable names to sensor inputs because it could not properly
+distinguish the busses, for example. Append the platform device name to
+the I2C bus name so it is unique between different instances.
 
-Fixes: 1dd498e5e26ad ("KVM: arm64: Workaround Cortex-A510's single-step and PAC trap errata")
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220225184658.172527-1-broonie@kernel.org
+Fixes: e1d5b6598cdc ("i2c: Add support for Xilinx XPS IIC Bus Interface")
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Tested-by: Michal Simek <michal.simek@xilinx.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/i2c/busses/i2c-xiic.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index d05d94d2b28b..0a83e1728f7e 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -683,6 +683,7 @@ config ARM64_ERRATUM_2051678
+diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
+index eb789cfb9973..ffefe3c482e9 100644
+--- a/drivers/i2c/busses/i2c-xiic.c
++++ b/drivers/i2c/busses/i2c-xiic.c
+@@ -734,7 +734,6 @@ static const struct i2c_adapter_quirks xiic_quirks = {
  
- config ARM64_ERRATUM_2077057
- 	bool "Cortex-A510: 2077057: workaround software-step corrupting SPSR_EL2"
-+	default y
- 	help
- 	  This option adds the workaround for ARM Cortex-A510 erratum 2077057.
- 	  Affected Cortex-A510 may corrupt SPSR_EL2 when the a step exception is
+ static const struct i2c_adapter xiic_adapter = {
+ 	.owner = THIS_MODULE,
+-	.name = DRIVER_NAME,
+ 	.class = I2C_CLASS_DEPRECATED,
+ 	.algo = &xiic_algorithm,
+ 	.quirks = &xiic_quirks,
+@@ -771,6 +770,8 @@ static int xiic_i2c_probe(struct platform_device *pdev)
+ 	i2c_set_adapdata(&i2c->adap, i2c);
+ 	i2c->adap.dev.parent = &pdev->dev;
+ 	i2c->adap.dev.of_node = pdev->dev.of_node;
++	snprintf(i2c->adap.name, sizeof(i2c->adap.name),
++		 DRIVER_NAME " %s", pdev->name);
+ 
+ 	mutex_init(&i2c->lock);
+ 
 -- 
 2.34.1
 

@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F554F4FFA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF5124F4FAD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1840283AbiDFBHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50642 "EHLO
+        id S1839127AbiDFA6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358032AbiDEK14 (ORCPT
+        with ESMTP id S1358037AbiDEK14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 06:27:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBC36949D;
-        Tue,  5 Apr 2022 03:13:12 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB46694B2;
+        Tue,  5 Apr 2022 03:13:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51742B81C6C;
-        Tue,  5 Apr 2022 10:13:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5E3EC385A1;
-        Tue,  5 Apr 2022 10:13:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF81C6179E;
+        Tue,  5 Apr 2022 10:13:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF92BC385A2;
+        Tue,  5 Apr 2022 10:13:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153590;
-        bh=kFIlUHMIxufTpo1vGa4kaOdlhqgRSAbv8rvJ7WzP51M=;
+        s=korg; t=1649153598;
+        bh=mufnHjU+LVM9806wOFty/HMgBsTpq4Q9kF7GSPh16ak=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XP2hMFS8lPICAQ25VjBM/rOPG3HAqBi1oSfoiLuZg5Sy+gdoMSMOJrd2G8fQmWjsO
-         cHLjdbLC0JUg45ig07h7LnK/pDnHIse+B4NGO3Puqwde+pFrwIcFLXH0a/u6JPhhf4
-         QA8cFZWDbbkvM79ebhHDUDOTFtH+ZkKGwn3nr7a4=
+        b=04Zo9z9pYBvUGkziZVNtmDEEjGHwvkLENXxsgpnOk3NRCxp4mn2u8Gau08W2R9Htj
+         6pfm6Rjz+BLm1IH8GEImZPGtHykzyTF5k2+zzbWiFkutUJuwtNbNlP2GJerbTbPvcY
+         onLlsTdm/FnxZozL+uMfZDTpm/D78AMUuR6D2bNw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org, Maor Gottlieb <maorg@nvidia.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 275/599] drm/amd/display: Fix a NULL pointer dereference in amdgpu_dm_connector_add_common_modes()
-Date:   Tue,  5 Apr 2022 09:29:29 +0200
-Message-Id: <20220405070307.020979750@linuxfoundation.org>
+Subject: [PATCH 5.10 278/599] RDMA/core: Set MR type in ib_reg_user_mr
+Date:   Tue,  5 Apr 2022 09:29:32 +0200
+Message-Id: <20220405070307.108951717@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -55,46 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: Maor Gottlieb <maorg@nvidia.com>
 
-[ Upstream commit 588a70177df3b1777484267584ef38ab2ca899a2 ]
+[ Upstream commit 32a88d16615c2be295571c29273c4ac94cb75309 ]
 
-In amdgpu_dm_connector_add_common_modes(), amdgpu_dm_create_common_mode()
-is assigned to mode and is passed to drm_mode_probed_add() directly after
-that. drm_mode_probed_add() passes &mode->head to list_add_tail(), and
-there is a dereference of it in list_add_tail() without recoveries, which
-could lead to NULL pointer dereference on failure of
-amdgpu_dm_create_common_mode().
+Add missing assignment of MR type to IB_MR_TYPE_USER.
 
-Fix this by adding a NULL check of mode.
-
-This bug was found by a static analyzer.
-
-Builds with 'make allyesconfig' show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: e7b07ceef2a6 ("drm/amd/display: Merge amdgpu_dm_types and amdgpu_dm")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Fixes: 33006bd4f37f ("IB/core: Introduce ib_reg_user_mr")
+Link: https://lore.kernel.org/r/be2e91bcd6e52dc36be289ae92f30d3a5cc6dcb1.1642491047.git.leonro@nvidia.com
+Signed-off-by: Maor Gottlieb <maorg@nvidia.com>
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/infiniband/core/verbs.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index 6c8f141103da..b65364695219 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -6396,6 +6396,9 @@ static void amdgpu_dm_connector_add_common_modes(struct drm_encoder *encoder,
- 		mode = amdgpu_dm_create_common_mode(encoder,
- 				common_modes[i].name, common_modes[i].w,
- 				common_modes[i].h);
-+		if (!mode)
-+			continue;
-+
- 		drm_mode_probed_add(connector, mode);
- 		amdgpu_dm_connector->num_modes++;
- 	}
+diff --git a/drivers/infiniband/core/verbs.c b/drivers/infiniband/core/verbs.c
+index 3d895cc41c3a..597e889ba831 100644
+--- a/drivers/infiniband/core/verbs.c
++++ b/drivers/infiniband/core/verbs.c
+@@ -2078,6 +2078,7 @@ struct ib_mr *ib_reg_user_mr(struct ib_pd *pd, u64 start, u64 length,
+ 		return mr;
+ 
+ 	mr->device = pd->device;
++	mr->type = IB_MR_TYPE_USER;
+ 	mr->pd = pd;
+ 	mr->dm = NULL;
+ 	atomic_inc(&pd->usecnt);
 -- 
 2.34.1
 

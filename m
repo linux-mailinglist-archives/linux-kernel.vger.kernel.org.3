@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2936A4F3793
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8E64F3BA1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356124AbiDELPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34812 "EHLO
+        id S1382006AbiDEMAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237158AbiDEIRo (ORCPT
+        with ESMTP id S237194AbiDEIRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:17:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E335694B7;
-        Tue,  5 Apr 2022 01:05:30 -0700 (PDT)
+        Tue, 5 Apr 2022 04:17:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9ACB18A6;
+        Tue,  5 Apr 2022 01:05:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4B7DAB81B7F;
-        Tue,  5 Apr 2022 08:05:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF44BC385A2;
-        Tue,  5 Apr 2022 08:05:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B4BE617E9;
+        Tue,  5 Apr 2022 08:05:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27F5EC385A0;
+        Tue,  5 Apr 2022 08:05:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145928;
-        bh=6+9kOnTAntUOhvfGm7xQGXJ5NZ8bUKFJ/hdZcBWcIkQ=;
+        s=korg; t=1649145936;
+        bh=L6eP2xInAx8Yc/Dtn99mdaT/6HwILm+CN2lMGkmDi9o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MLM6pyrxOmosHCQd7OzHK38rfZjSWcqZN1V9z/1JipGG8R7UOhErDzfxLmg0MRaa0
-         qRpw8i0yOYLUiyE2kxRh++DnD81JopUbT0afYxbW7TXJrN77tie6PTrSnqGcmLj7Rj
-         jEagGAm1eAX2cXwFlC+Wuf4QnVXB2RZJZLJ/UjoE=
+        b=k1A9hB/MQb8BUW7GXHhsmogFUQLao9eSf2TukvrbCUtMRk4MBGA5/ZBJyrR+32IKa
+         nB6puQri4DtDahG+BLGbV9epIurMiuo/r4J5p/tN9UbFPsU/3ckILHTbibLuncvsbn
+         7IahrBI57dE+3CbbJqftjaSEPlodhTg4euQW4Mvk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aashish Sharma <shraash@google.com>,
-        Mike Snitzer <snitzer@redhat.com>,
+        stable@vger.kernel.org, Hiral Patel <hiralpat@cisco.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0579/1126] dm crypt: fix get_key_size compiler warning if !CONFIG_KEYS
-Date:   Tue,  5 Apr 2022 09:22:06 +0200
-Message-Id: <20220405070424.627167206@linuxfoundation.org>
+Subject: [PATCH 5.17 0582/1126] scsi: fnic: Fix a tracing statement
+Date:   Tue,  5 Apr 2022 09:22:09 +0200
+Message-Id: <20220405070424.715918800@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,38 +58,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aashish Sharma <shraash@google.com>
+From: Bart Van Assche <bvanassche@acm.org>
 
-[ Upstream commit 6fc51504388c1a1a53db8faafe9fff78fccc7c87 ]
+[ Upstream commit 3032ed77a28913203a4fe0ab8f05752331af79b3 ]
 
-Explicitly convert unsigned int in the right of the conditional
-expression to int to match the left side operand and the return type,
-fixing the following compiler warning:
+Report both the command flags and command state instead of only the
+command state.
 
-drivers/md/dm-crypt.c:2593:43: warning: signed and unsigned
-type in conditional expression [-Wsign-compare]
-
-Fixes: c538f6ec9f56 ("dm crypt: add ability to use keys from the kernel key retention service")
-Signed-off-by: Aashish Sharma <shraash@google.com>
-Signed-off-by: Mike Snitzer <snitzer@redhat.com>
+Link: https://lore.kernel.org/r/20220218195117.25689-22-bvanassche@acm.org
+Fixes: 4d7007b49d52 ("[SCSI] fnic: Fnic Trace Utility")
+Cc: Hiral Patel <hiralpat@cisco.com>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/dm-crypt.c | 2 +-
+ drivers/scsi/fnic/fnic_scsi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/md/dm-crypt.c b/drivers/md/dm-crypt.c
-index d4ae31558826..f51aea71cb03 100644
---- a/drivers/md/dm-crypt.c
-+++ b/drivers/md/dm-crypt.c
-@@ -2590,7 +2590,7 @@ static int crypt_set_keyring_key(struct crypt_config *cc, const char *key_string
+diff --git a/drivers/scsi/fnic/fnic_scsi.c b/drivers/scsi/fnic/fnic_scsi.c
+index 40a52feb315d..65047806a541 100644
+--- a/drivers/scsi/fnic/fnic_scsi.c
++++ b/drivers/scsi/fnic/fnic_scsi.c
+@@ -604,7 +604,7 @@ static int fnic_queuecommand_lck(struct scsi_cmnd *sc)
  
- static int get_key_size(char **key_string)
- {
--	return (*key_string[0] == ':') ? -EINVAL : strlen(*key_string) >> 1;
-+	return (*key_string[0] == ':') ? -EINVAL : (int)(strlen(*key_string) >> 1);
- }
+ 	FNIC_TRACE(fnic_queuecommand, sc->device->host->host_no,
+ 		  tag, sc, io_req, sg_count, cmd_trace,
+-		  (((u64)CMD_FLAGS(sc) >> 32) | CMD_STATE(sc)));
++		  (((u64)CMD_FLAGS(sc) << 32) | CMD_STATE(sc)));
  
- #endif /* CONFIG_KEYS */
+ 	/* if only we issued IO, will we have the io lock */
+ 	if (io_lock_acquired)
 -- 
 2.34.1
 

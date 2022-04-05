@@ -2,54 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86DD4F4681
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED09E4F4727
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:27:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345797AbiDEUeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35790 "EHLO
+        id S244267AbiDEVBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240675AbiDEMln (ORCPT
+        with ESMTP id S1345448AbiDENFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 08:41:43 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0CF1070B0
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 04:48:11 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nbhfB-0004q9-7F; Tue, 05 Apr 2022 13:47:57 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nbhfB-001DEo-FU; Tue, 05 Apr 2022 13:47:56 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nbhf9-00054N-7F; Tue, 05 Apr 2022 13:47:55 +0200
-Message-ID: <0ff9a7cd2e6261a0de32db3bf16901e3737efef8.camel@pengutronix.de>
-Subject: Re: [PATCH 6/8] power: reset: at91-reset: add reset_controller_dev
- support
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>, robh+dt@kernel.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        sre@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Date:   Tue, 05 Apr 2022 13:47:55 +0200
-In-Reply-To: <20220405112724.2760905-7-claudiu.beznea@microchip.com>
-References: <20220405112724.2760905-1-claudiu.beznea@microchip.com>
-         <20220405112724.2760905-7-claudiu.beznea@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.38.3-1 
+        Tue, 5 Apr 2022 09:05:21 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9C970CE6
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 05:06:31 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id u3so19014198wrg.3
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 05:06:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Uuy/oSrqPfKVMfFVdZlb83GjMVmrKFP4k9YDPQWDMGE=;
+        b=KlmKzPs++IYx5FTaDoGXSl1qs3hrr/00SCAaOP/FJu6mlkJaYvksrnCElB52Rloy6n
+         zREeVaGKzvRBPgtlUd6+6t9vJiwIVUBwSHaijo2i/0mm9Kn6LVOzPLEp64RbyKaa6dHv
+         dJWrvIzHcTjjEhwKj4PZVMGErl5caRKftsBQSj70/3Ifv+4PnjAahlkS/qhZU/yrbZam
+         ItR7BKa65xH+yrgWSkbAeLHFYa8vuXGmESX66vo+7pp8uJc5Cte8U/KR+i7AFa9GvbxZ
+         PXtl0McwO9Yy7MzaaDa7yinO2NxTk8JMRK4IrwcBV/U1Dtatzjly1HqyhddOV/XoGCt5
+         YnaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Uuy/oSrqPfKVMfFVdZlb83GjMVmrKFP4k9YDPQWDMGE=;
+        b=1IPUwDXo2ZkmnikNVf64lXmGeEwk4kOc/8rdqotubElxx5DUKWbxEJ4EDGwY0DiNL3
+         aZ6HBiAWMYvgsKkLNxvEhpHJgCbyoO1IbG0JSCWuJNZscg41GzkAnlnLJG+SLIKCW68G
+         Hv7uudSPUnUWXzvDIILkp9OyhzNgqm4tEvB8Z+YGRz83Hwp5fqAzj8UVmydaiKQR7Lb9
+         LFMXPA5rjC5i+2aPtpEQIxMGA8kYuA7N7fuEx91HvWx/2KHf6Y54TWCoXsvETWBsvgAF
+         lmaduMoT+ReaSqnplXF30tw/dwSVCR4/YOd5Kp6FxSxptzmoeUBSNWtlM2e6V0J4/9Fj
+         rzNw==
+X-Gm-Message-State: AOAM5308GCslW+QBMN/wBKFMdQWI/DmG5VEh+GIyKEulgKERI0E0qhDX
+        rkC4gyIYZTuUHng2F3FmZjgLKA==
+X-Google-Smtp-Source: ABdhPJz97+aMaGG8He5+J24ubzUoWrE9dXq/VRTjoheWERDGZngEHr4Gy/Taci3KYvzSADEOUfE0YQ==
+X-Received: by 2002:adf:dc41:0:b0:205:8df5:464c with SMTP id m1-20020adfdc41000000b002058df5464cmr2401463wrj.445.1649160390155;
+        Tue, 05 Apr 2022 05:06:30 -0700 (PDT)
+Received: from fedora.lab.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id r16-20020a7bc090000000b0038e73023334sm1994323wmh.2.2022.04.05.05.06.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 05:06:28 -0700 (PDT)
+From:   Patrick Rudolph <patrick.rudolph@9elements.com>
+To:     Peter Rosin <peda@axentia.se>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [v7 1/3] dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
+Date:   Tue,  5 Apr 2022 14:05:49 +0200
+Message-Id: <20220405120552.433415-2-patrick.rudolph@9elements.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220405120552.433415-1-patrick.rudolph@9elements.com>
+References: <20220405120552.433415-1-patrick.rudolph@9elements.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,114 +72,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgQ2xhdWRpdSwKCk9uIERpLCAyMDIyLTA0LTA1IGF0IDE0OjI3ICswMzAwLCBDbGF1ZGl1IEJl
-em5lYSB3cm90ZToKPiBTQU1BN0c1IHJlc2V0IGNvbnRyb2xsZXIgaGFzIDUgZXh0cmEgbGluZXMg
-dGhhdCBnb2VzIHRvIGRpZmZlcmVudAo+IGRldmljZXMKPiAoMyBsaW5lcyB0byBVU0IgUEhZcywg
-MSBsaW5lIHRvIEREUiBjb250cm9sbGVyLCBvbmUgbGluZSBERFIgUEhZCj4gY29udHJvbGxlciku
-IFRoZXNlIHJlc2V0IGxpbmVzIGNvdWxkIGJlIHJlcXVlc3RlZCBieSBkaWZmZXJlbnQKPiBjb250
-cm9sbGVyCj4gZHJpdmVycyAoZS5nLiBVU0IgUEhZIGRyaXZlcikgYW5kIHRoZXNlIGNvbnRyb2xs
-ZXJzJyBkcml2ZXJzIGNvdWxkCj4gYXNzZXJ0L2RlYXNzZXJ0IHRoZXNlIGxpbmVzIHdoZW4gbmVj
-ZXNzYXJ5LiBUaHVzIGFkZCBzdXBwb3J0IGZvcgo+IHJlc2V0X2NvbnRyb2xsZXJfZGV2IHdoaWNo
-IGJyaW5ncyB0aGlzIGZ1bmN0aW9uYWxpdHkuCj4gCj4gU2lnbmVkLW9mZi1ieTogQ2xhdWRpdSBC
-ZXpuZWEgPGNsYXVkaXUuYmV6bmVhQG1pY3JvY2hpcC5jb20+Cj4gLS0tCj4gwqBkcml2ZXJzL3Bv
-d2VyL3Jlc2V0L2F0OTEtcmVzZXQuYyB8IDkyCj4gKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrLS0KPiDCoDEgZmlsZSBjaGFuZ2VkLCA4OCBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygt
-KQo+IAo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3Bvd2VyL3Jlc2V0L2F0OTEtcmVzZXQuYwo+IGIv
-ZHJpdmVycy9wb3dlci9yZXNldC9hdDkxLXJlc2V0LmMKPiBpbmRleCAwZDcyMWUyN2Y1NDUuLmIw
-NGRmNTRjMTVkMiAxMDA2NDQKPiAtLS0gYS9kcml2ZXJzL3Bvd2VyL3Jlc2V0L2F0OTEtcmVzZXQu
-Ywo+ICsrKyBiL2RyaXZlcnMvcG93ZXIvcmVzZXQvYXQ5MS1yZXNldC5jCj4gQEAgLTE3LDYgKzE3
-LDcgQEAKPiDCoCNpbmNsdWRlIDxsaW51eC9vZl9hZGRyZXNzLmg+Cj4gwqAjaW5jbHVkZSA8bGlu
-dXgvcGxhdGZvcm1fZGV2aWNlLmg+Cj4gwqAjaW5jbHVkZSA8bGludXgvcmVib290Lmg+Cj4gKyNp
-bmNsdWRlIDxsaW51eC9yZXNldC1jb250cm9sbGVyLmg+Cj4gwqAKPiDCoCNpbmNsdWRlIDxzb2Mv
-YXQ5MS9hdDkxc2FtOV9kZHJzZHIuaD4KPiDCoCNpbmNsdWRlIDxzb2MvYXQ5MS9hdDkxc2FtOV9z
-ZHJhbWMuaD4KPiBAQCAtNTMsMTIgKzU0LDE2IEBAIGVudW0gcmVzZXRfdHlwZSB7Cj4gwqBzdHJ1
-Y3QgYXQ5MV9yZXNldCB7Cj4gwqDCoMKgwqDCoMKgwqDCoHZvaWQgX19pb21lbSAqcnN0Y19iYXNl
-Owo+IMKgwqDCoMKgwqDCoMKgwqB2b2lkIF9faW9tZW0gKnJhbWNfYmFzZVsyXTsKPiArwqDCoMKg
-wqDCoMKgwqB2b2lkIF9faW9tZW0gKmRldl9iYXNlOwo+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCBy
-ZXNldF9jb250cm9sbGVyX2RldiByY2RldjsKPiDCoMKgwqDCoMKgwqDCoMKgc3RydWN0IGNsayAq
-c2NsazsKPiDCoMKgwqDCoMKgwqDCoMKgc3RydWN0IG5vdGlmaWVyX2Jsb2NrIG5iOwo+IMKgwqDC
-oMKgwqDCoMKgwqB1MzIgYXJnczsKPiDCoMKgwqDCoMKgwqDCoMKgdTMyIHJhbWNfbHByOwo+IMKg
-fTsKPiDCoAo+ICsjZGVmaW5lIHRvX2F0OTFfcmVzZXQocinCoMKgwqDCoMKgwqDCoGNvbnRhaW5l
-cl9vZihyLCBzdHJ1Y3QgYXQ5MV9yZXNldCwgcmNkZXYpCj4gKwo+IMKgc3RydWN0IGF0OTFfcmVz
-ZXRfZGF0YSB7Cj4gwqDCoMKgwqDCoMKgwqDCoHUzMiByZXNldF9hcmdzOwo+IMKgwqDCoMKgwqDC
-oMKgwqB1MzIgbl9kZXZpY2VfcmVzZXQ7Cj4gQEAgLTE5MSw2ICsxOTYsNzkgQEAgc3RhdGljIGNv
-bnN0IHN0cnVjdCBvZl9kZXZpY2VfaWQKPiBhdDkxX3Jlc2V0X29mX21hdGNoW10gPSB7Cj4gwqB9
-Owo+IMKgTU9EVUxFX0RFVklDRV9UQUJMRShvZiwgYXQ5MV9yZXNldF9vZl9tYXRjaCk7Cj4gwqAK
-PiArc3RhdGljIGludCBhdDkxX3Jlc2V0X3VwZGF0ZShzdHJ1Y3QgcmVzZXRfY29udHJvbGxlcl9k
-ZXYgKnJjZGV2LAo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgdW5zaWduZWQgbG9uZyBpZCwgYm9vbCBhc3NlcnQpCj4gK3sKPiArwqDCoMKg
-wqDCoMKgwqBzdHJ1Y3QgYXQ5MV9yZXNldCAqcmVzZXQgPSB0b19hdDkxX3Jlc2V0KHJjZGV2KTsK
-PiArwqDCoMKgwqDCoMKgwqB1MzIgdmFsOwo+ICsKPiArwqDCoMKgwqDCoMKgwqB2YWwgPSByZWFk
-bF9yZWxheGVkKHJlc2V0LT5kZXZfYmFzZSk7Cj4gK8KgwqDCoMKgwqDCoMKgaWYgKGFzc2VydCkK
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdmFsIHw9IEJJVChpZCk7Cj4gK8KgwqDC
-oMKgwqDCoMKgZWxzZQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB2YWwgJj0gfkJJ
-VChpZCk7Cj4gK8KgwqDCoMKgwqDCoMKgd3JpdGVsX3JlbGF4ZWQodmFsLCByZXNldC0+ZGV2X2Jh
-c2UpOwoKVGhpcyByZWFkLW1vZGlmeS11cGRhdGUgc2hvdWxkIGJlIHByb3RlY3RlZCBieSBhIHNw
-aW5sb2NrLgoKPiArCj4gK8KgwqDCoMKgwqDCoMKgcmV0dXJuIDA7Cj4gK30KPiArCj4gK3N0YXRp
-YyBpbnQgYXQ5MV9yZXNldF9hc3NlcnQoc3RydWN0IHJlc2V0X2NvbnRyb2xsZXJfZGV2ICpyY2Rl
-diwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIHVuc2lnbmVkIGxvbmcgaWQpCj4gK3sKPiArwqDCoMKgwqDCoMKgwqByZXR1cm4gYXQ5MV9y
-ZXNldF91cGRhdGUocmNkZXYsIGlkLCB0cnVlKTsKPiArfQo+ICsKPiArc3RhdGljIGludCBhdDkx
-X3Jlc2V0X2RlYXNzZXJ0KHN0cnVjdCByZXNldF9jb250cm9sbGVyX2RldiAqcmNkZXYsCj4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-dW5zaWduZWQgbG9uZyBpZCkKPiArewo+ICvCoMKgwqDCoMKgwqDCoHJldHVybiBhdDkxX3Jlc2V0
-X3VwZGF0ZShyY2RldiwgaWQsIGZhbHNlKTsKPiArfQo+ICsKPiArc3RhdGljIGludCBhdDkxX3Jl
-c2V0X2Rldl9zdGF0dXMoc3RydWN0IHJlc2V0X2NvbnRyb2xsZXJfZGV2ICpyY2RldiwKPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgdW5zaWduZWQgbG9uZyBpZCkKPiArewo+ICvCoMKgwqDCoMKgwqDCoHN0cnVjdCBhdDkxX3Jl
-c2V0ICpyZXNldCA9IHRvX2F0OTFfcmVzZXQocmNkZXYpOwo+ICvCoMKgwqDCoMKgwqDCoHUzMiB2
-YWw7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoHZhbCA9IHJlYWRsX3JlbGF4ZWQocmVzZXQtPmRldl9i
-YXNlKTsKPiArCj4gK8KgwqDCoMKgwqDCoMKgcmV0dXJuICEhKHZhbCAmIEJJVChpZCkpOwo+ICt9
-Cj4gKwo+ICtzdGF0aWMgY29uc3Qgc3RydWN0IHJlc2V0X2NvbnRyb2xfb3BzIGF0OTFfcmVzZXRf
-b3BzID0gewo+ICvCoMKgwqDCoMKgwqDCoC5hc3NlcnQgPSBhdDkxX3Jlc2V0X2Fzc2VydCwKPiAr
-wqDCoMKgwqDCoMKgwqAuZGVhc3NlcnQgPSBhdDkxX3Jlc2V0X2RlYXNzZXJ0LAo+ICvCoMKgwqDC
-oMKgwqDCoC5zdGF0dXMgPSBhdDkxX3Jlc2V0X2Rldl9zdGF0dXMsCj4gK307Cj4gKwo+ICtzdGF0
-aWMgaW50IGF0OTFfcmVzZXRfb2ZfeGxhdGUoc3RydWN0IHJlc2V0X2NvbnRyb2xsZXJfZGV2ICpy
-Y2RldiwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoCBjb25zdCBzdHJ1Y3Qgb2ZfcGhhbmRsZV9hcmdzICpyZXNldF9zcGVjKQo+ICt7
-Cj4gK8KgwqDCoMKgwqDCoMKgcmV0dXJuIHJlc2V0X3NwZWMtPmFyZ3NbMF07Cj4gK30KCkZvciAx
-OjEgbWFwcGluZ3MgdGhlcmUgaXMgbm8gbmVlZCBmb3IgYSBjdXN0b20gb2ZfeGxhdGUgaGFuZGxl
-ci4gSnVzdApsZWF2ZSBvZl94bGF0ZSBhbmQgb2ZfcmVzZXRfbl9jZWxscyBlbXB0eS4KCj4gKwo+
-ICtzdGF0aWMgaW50IGF0OTFfcmNkZXZfaW5pdChzdHJ1Y3QgYXQ5MV9yZXNldCAqcmVzZXQsCj4g
-K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNvbnN0
-IHN0cnVjdCBhdDkxX3Jlc2V0X2RhdGEgKmRhdGEsCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYp
-Cj4gK3sKPiArwqDCoMKgwqDCoMKgwqBpZiAoIWRhdGEtPm5fZGV2aWNlX3Jlc2V0KQo+ICvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gMDsKPiArCj4gK8KgwqDCoMKgwqDCoMKg
-cmVzZXQtPmRldl9iYXNlID0gZGV2bV9vZl9pb21hcCgmcGRldi0+ZGV2LCBwZGV2LT5kZXYub2Zf
-bm9kZSwgMSwKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgTlVMTCk7Cj4gK8KgwqDCoMKgwqDCoMKg
-aWYgKElTX0VSUihyZXNldC0+cnN0Y19iYXNlKSkKClNob3VsZCBjaGVjayByZXNldC0+ZGV2X2Jh
-c2UgaGVyZS4KCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiAtRU5PREVW
-Owo+ICsKPiArwqDCoMKgwqDCoMKgwqByZXNldC0+cmNkZXYub3BzID0gJmF0OTFfcmVzZXRfb3Bz
-Owo+ICvCoMKgwqDCoMKgwqDCoHJlc2V0LT5yY2Rldi5vd25lciA9IFRISVNfTU9EVUxFOwo+ICvC
-oMKgwqDCoMKgwqDCoHJlc2V0LT5yY2Rldi5vZl9ub2RlID0gcGRldi0+ZGV2Lm9mX25vZGU7Cj4g
-K8KgwqDCoMKgwqDCoMKgcmVzZXQtPnJjZGV2Lm5yX3Jlc2V0cyA9IGRhdGEtPm5fZGV2aWNlX3Jl
-c2V0Owo+ICvCoMKgwqDCoMKgwqDCoHJlc2V0LT5yY2Rldi5vZl9yZXNldF9uX2NlbGxzID0gMTsK
-PiArwqDCoMKgwqDCoMKgwqByZXNldC0+cmNkZXYub2ZfeGxhdGUgPSBhdDkxX3Jlc2V0X29mX3hs
-YXRlOwo+ICsKPiArwqDCoMKgwqDCoMKgwqByZXR1cm4gZGV2bV9yZXNldF9jb250cm9sbGVyX3Jl
-Z2lzdGVyKCZwZGV2LT5kZXYsICZyZXNldC0+cmNkZXYpOwo+ICt9Cj4gKwo+IMKgc3RhdGljIGlu
-dCBfX2luaXQgYXQ5MV9yZXNldF9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQo+
-IMKgewo+IMKgwqDCoMKgwqDCoMKgwqBjb25zdCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkICptYXRjaDsK
-PiBAQCAtMjQ0LDYgKzMyMiwxMCBAQCBzdGF0aWMgaW50IF9faW5pdCBhdDkxX3Jlc2V0X3Byb2Jl
-KHN0cnVjdAo+IHBsYXRmb3JtX2RldmljZSAqcGRldikKPiDCoAo+IMKgwqDCoMKgwqDCoMKgwqBw
-bGF0Zm9ybV9zZXRfZHJ2ZGF0YShwZGV2LCByZXNldCk7Cj4gwqAKPiArwqDCoMKgwqDCoMKgwqBy
-ZXQgPSBhdDkxX3JjZGV2X2luaXQocmVzZXQsIGRhdGEsIHBkZXYpOwo+ICvCoMKgwqDCoMKgwqDC
-oGlmIChyZXQpCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGdvdG8gZGlzYWJsZV9j
-bGs7Cj4gKwo+IMKgwqDCoMKgwqDCoMKgwqBpZiAob2ZfZGV2aWNlX2lzX2NvbXBhdGlibGUocGRl
-di0+ZGV2Lm9mX25vZGUsCj4gIm1pY3JvY2hpcCxzYW05eDYwLXJzdGMiKSkgewo+IMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdTMyIHZhbCA9IHJlYWRsKHJlc2V0LT5yc3RjX2Jhc2Ug
-KyBBVDkxX1JTVENfTVIpOwo+IMKgCj4gQEAgLTI1MiwxNCArMzM0LDE2IEBAIHN0YXRpYyBpbnQg
-X19pbml0IGF0OTFfcmVzZXRfcHJvYmUoc3RydWN0Cj4gcGxhdGZvcm1fZGV2aWNlICpwZGV2KQo+
-IMKgwqDCoMKgwqDCoMKgwqB9Cj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgcmV0ID0gcmVnaXN0ZXJf
-cmVzdGFydF9oYW5kbGVyKCZyZXNldC0+bmIpOwo+IC3CoMKgwqDCoMKgwqDCoGlmIChyZXQpIHsK
-PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY2xrX2Rpc2FibGVfdW5wcmVwYXJlKHJl
-c2V0LT5zY2xrKTsKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIHJldDsK
-PiAtwqDCoMKgwqDCoMKgwqB9Cj4gK8KgwqDCoMKgwqDCoMKgaWYgKHJldCkKPiArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgZ290byBkaXNhYmxlX2NsazsKPiDCoAo+IMKgwqDCoMKgwqDC
-oMKgwqBhdDkxX3Jlc2V0X3N0YXR1cyhwZGV2LCByZXNldC0+cnN0Y19iYXNlKTsKPiDCoAo+IMKg
-wqDCoMKgwqDCoMKgwqByZXR1cm4gMDsKPiArCj4gK2Rpc2FibGVfY2xrOgo+ICvCoMKgwqDCoMKg
-wqDCoGNsa19kaXNhYmxlX3VucHJlcGFyZShyZXNldC0+c2Nsayk7Cj4gK8KgwqDCoMKgwqDCoMKg
-cmV0dXJuIHJldDsKPiDCoH0KPiDCoAo+IMKgc3RhdGljIGludCBfX2V4aXQgYXQ5MV9yZXNldF9y
-ZW1vdmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikKCnJlZ2FyZHMKUGhpbGlwcAo=
+Update the pca954x bindings to add support for the Maxim MAX735x/MAX736x
+chips. The functionality will be provided by the exisintg pca954x driver.
+
+While on it make the interrupts support conditionally as not all of the
+existing chips have interrupts.
+
+For chips that are powered off by default add an optional regulator
+called vdd-supply.
+
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+---
+ .../bindings/i2c/i2c-mux-pca954x.yaml         | 44 ++++++++++++++-----
+ 1 file changed, 34 insertions(+), 10 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+index 9f1726d0356b..132c3e54e7ab 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
++++ b/Documentation/devicetree/bindings/i2c/i2c-mux-pca954x.yaml
+@@ -4,21 +4,48 @@
+ $id: http://devicetree.org/schemas/i2c/i2c-mux-pca954x.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: NXP PCA954x I2C bus switch
++title: NXP PCA954x I2C and compatible bus switches
+ 
+ maintainers:
+   - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+ 
+ description:
+-  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices.
++  The binding supports NXP PCA954x and PCA984x I2C mux/switch devices,
++  and the Maxim MAX735x and MAX736x I2C mux/switch devices.
+ 
+ allOf:
+   - $ref: /schemas/i2c/i2c-mux.yaml#
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - maxim,max7367
++              - maxim,max7369
++              - nxp,pca9542
++              - nxp,pca9543
++              - nxp,pca9544
++              - nxp,pca9545
++    then:
++      properties:
++        interrupts:
++          maxItems: 1
++
++        "#interrupt-cells":
++          const: 2
++
++        interrupt-controller: true
+ 
+ properties:
+   compatible:
+     oneOf:
+       - enum:
++          - maxim,max7356
++          - maxim,max7357
++          - maxim,max7358
++          - maxim,max7367
++          - maxim,max7368
++          - maxim,max7369
+           - nxp,pca9540
+           - nxp,pca9542
+           - nxp,pca9543
+@@ -38,14 +65,6 @@ properties:
+   reg:
+     maxItems: 1
+ 
+-  interrupts:
+-    maxItems: 1
+-
+-  "#interrupt-cells":
+-    const: 2
+-
+-  interrupt-controller: true
+-
+   reset-gpios:
+     maxItems: 1
+ 
+@@ -59,6 +78,9 @@ properties:
+     description: if present, overrides i2c-mux-idle-disconnect
+     $ref: /schemas/mux/mux-controller.yaml#/properties/idle-state
+ 
++  vdd-supply:
++    description: A voltage regulator supplying power to the chip.
++
+ required:
+   - compatible
+   - reg
+@@ -79,6 +101,8 @@ examples:
+             #size-cells = <0>;
+             reg = <0x74>;
+ 
++            vdd-supply = <&p3v3>;
++
+             interrupt-parent = <&ipic>;
+             interrupts = <17 IRQ_TYPE_LEVEL_LOW>;
+             interrupt-controller;
+-- 
+2.35.1
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C473E4F3B85
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01CFB4F3796
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379561AbiDEL6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46814 "EHLO
+        id S1356629AbiDELPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245020AbiDEIxC (ORCPT
+        with ESMTP id S237091AbiDEIRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:53:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B7DD98;
-        Tue,  5 Apr 2022 01:49:36 -0700 (PDT)
+        Tue, 5 Apr 2022 04:17:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2987B0A4F;
+        Tue,  5 Apr 2022 01:05:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B980EB818F7;
-        Tue,  5 Apr 2022 08:49:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02382C385A1;
-        Tue,  5 Apr 2022 08:49:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1FD43B81BB0;
+        Tue,  5 Apr 2022 08:05:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51DBAC385A1;
+        Tue,  5 Apr 2022 08:05:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148573;
-        bh=FM40Sum4E3GKALIV4MiLpgEC9bKb3cKTTuUrE3SrG1U=;
+        s=korg; t=1649145902;
+        bh=7kR5Em9KAFPcdr/UzJk7L2Vdy1QzIZOvLSTG4t3zRps=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LuetxT8vT2rHoUCNccfkxdZOxP8Vn3/NHexme4MWTtgsf8V7DGuhg8H0NTamSc8kl
-         +Q9jemLgat5qDhqrsoDtPghfsDh54+z5EMI39P13cy3QOy6lpGznSiiMLLxpDJNcEq
-         bWT5HN3TkkSheyMo/JQwbWPYlyQ7Q4XFMFcfVLBw=
+        b=sy4oiWvy7873qRMDO+moYKD+SU1RjK2eyjNvs3Yu/kt+wBi5DnacRLqnaJkPXL/bM
+         UfIcFPiFlW6GP4zxOAf0tu+tb3kMBmm2hchkEHV0EekCS5jsQ4qsRsk/xHW/Il/d2G
+         6ysqHHu7j4hw1oaLTwYygCFFuPx8yX+P7Amj2oUA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jagan Teki <jagan@amarulasolutions.com>,
-        Robert Foss <robert.foss@linaro.org>,
+        stable@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0404/1017] drm: bridge: adv7511: Fix ADV7535 HPD enablement
-Date:   Tue,  5 Apr 2022 09:21:57 +0200
-Message-Id: <20220405070406.279693911@linuxfoundation.org>
+Subject: [PATCH 5.17 0571/1126] drm/msm/dsi/phy: fix 7nm v4.0 settings for C-PHY mode
+Date:   Tue,  5 Apr 2022 09:21:58 +0200
+Message-Id: <20220405070424.394652316@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
+References: <20220405070407.513532867@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,98 +56,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jagan Teki <jagan@amarulasolutions.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit 3dbc84a595d17f64f14fcea00120d31e33e98880 ]
+[ Upstream commit bb07af2ed2a47dc6c4d0681f275bb27d4f845465 ]
 
-Existing HPD enablement logic is not compatible with ADV7535
-bridge, thus any runtime plug-in of HDMI cable is not working
-on these bridge designs.
+The dsi_7nm_phy_enable() disagrees with downstream for
+glbl_str_swi_cal_sel_ctrl and glbl_hstx_str_ctrl_0 values. Update
+programmed settings to match downstream driver. To remove the
+possibility for such errors in future drop less_than_1500_mhz
+assignment and specify settings explicitly.
 
-Unlike other ADV7511 family of bridges, the ADV7535 require
-HPD_OVERRIDE bit to set and reset for proper handling of HPD
-functionality.
-
-Fix it.
-
-Fixes: 8501fe4b14a3 ("drm: bridge: adv7511: Add support for ADV7535")
-Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220109172949.168167-1-jagan@amarulasolutions.com
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Fixes: 5ac178381d26 ("drm/msm/dsi: support CPHY mode for 7nm pll/phy")
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Link: https://lore.kernel.org/r/20220217000837.435340-1-dmitry.baryshkov@linaro.org
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/bridge/adv7511/adv7511.h     |  1 +
- drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 29 +++++++++++++++-----
- 2 files changed, 23 insertions(+), 7 deletions(-)
+ drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c | 22 ++++++++++++++--------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511.h b/drivers/gpu/drm/bridge/adv7511/adv7511.h
-index 05e3abb5a0c9..1b00dfda6e0d 100644
---- a/drivers/gpu/drm/bridge/adv7511/adv7511.h
-+++ b/drivers/gpu/drm/bridge/adv7511/adv7511.h
-@@ -169,6 +169,7 @@
- #define ADV7511_PACKET_ENABLE_SPARE2		BIT(1)
- #define ADV7511_PACKET_ENABLE_SPARE1		BIT(0)
+diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
+index 36eb6109cb88..6e506feb111f 100644
+--- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
++++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
+@@ -864,20 +864,26 @@ static int dsi_7nm_phy_enable(struct msm_dsi_phy *phy,
+ 	/* Alter PHY configurations if data rate less than 1.5GHZ*/
+ 	less_than_1500_mhz = (clk_req->bitclk_rate <= 1500000000);
  
-+#define ADV7535_REG_POWER2_HPD_OVERRIDE		BIT(6)
- #define ADV7511_REG_POWER2_HPD_SRC_MASK		0xc0
- #define ADV7511_REG_POWER2_HPD_SRC_BOTH		0x00
- #define ADV7511_REG_POWER2_HPD_SRC_HPD		0x40
-diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-index 76555ae64e9c..c02f3ec60b04 100644
---- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-+++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-@@ -351,11 +351,17 @@ static void __adv7511_power_on(struct adv7511 *adv7511)
- 	 * from standby or are enabled. When the HPD goes low the adv7511 is
- 	 * reset and the outputs are disabled which might cause the monitor to
- 	 * go to standby again. To avoid this we ignore the HPD pin for the
--	 * first few seconds after enabling the output.
-+	 * first few seconds after enabling the output. On the other hand
-+	 * adv7535 require to enable HPD Override bit for proper HPD.
- 	 */
--	regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
--			   ADV7511_REG_POWER2_HPD_SRC_MASK,
--			   ADV7511_REG_POWER2_HPD_SRC_NONE);
-+	if (adv7511->type == ADV7535)
-+		regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
-+				   ADV7535_REG_POWER2_HPD_OVERRIDE,
-+				   ADV7535_REG_POWER2_HPD_OVERRIDE);
-+	else
-+		regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
-+				   ADV7511_REG_POWER2_HPD_SRC_MASK,
-+				   ADV7511_REG_POWER2_HPD_SRC_NONE);
- }
- 
- static void adv7511_power_on(struct adv7511 *adv7511)
-@@ -375,6 +381,10 @@ static void adv7511_power_on(struct adv7511 *adv7511)
- static void __adv7511_power_off(struct adv7511 *adv7511)
- {
- 	/* TODO: setup additional power down modes */
-+	if (adv7511->type == ADV7535)
-+		regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
-+				   ADV7535_REG_POWER2_HPD_OVERRIDE, 0);
-+
- 	regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER,
- 			   ADV7511_POWER_POWER_DOWN,
- 			   ADV7511_POWER_POWER_DOWN);
-@@ -672,9 +682,14 @@ adv7511_detect(struct adv7511 *adv7511, struct drm_connector *connector)
- 			status = connector_status_disconnected;
+-	/* For C-PHY, no low power settings for lower clk rate */
+-	if (phy->cphy_mode)
+-		less_than_1500_mhz = false;
+-
+ 	if (phy->cfg->quirks & DSI_PHY_7NM_QUIRK_V4_1) {
+ 		vreg_ctrl_0 = less_than_1500_mhz ? 0x53 : 0x52;
+-		glbl_rescode_top_ctrl = less_than_1500_mhz ? 0x3d :  0x00;
+-		glbl_rescode_bot_ctrl = less_than_1500_mhz ? 0x39 :  0x3c;
++		if (phy->cphy_mode) {
++			glbl_rescode_top_ctrl = 0x00;
++			glbl_rescode_bot_ctrl = 0x3c;
++		} else {
++			glbl_rescode_top_ctrl = less_than_1500_mhz ? 0x3d :  0x00;
++			glbl_rescode_bot_ctrl = less_than_1500_mhz ? 0x39 :  0x3c;
++		}
+ 		glbl_str_swi_cal_sel_ctrl = 0x00;
+ 		glbl_hstx_str_ctrl_0 = 0x88;
  	} else {
- 		/* Renable HPD sensing */
--		regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
--				   ADV7511_REG_POWER2_HPD_SRC_MASK,
--				   ADV7511_REG_POWER2_HPD_SRC_BOTH);
-+		if (adv7511->type == ADV7535)
-+			regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
-+					   ADV7535_REG_POWER2_HPD_OVERRIDE,
-+					   ADV7535_REG_POWER2_HPD_OVERRIDE);
-+		else
-+			regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
-+					   ADV7511_REG_POWER2_HPD_SRC_MASK,
-+					   ADV7511_REG_POWER2_HPD_SRC_BOTH);
+ 		vreg_ctrl_0 = less_than_1500_mhz ? 0x5B : 0x59;
+-		glbl_str_swi_cal_sel_ctrl = less_than_1500_mhz ? 0x03 : 0x00;
+-		glbl_hstx_str_ctrl_0 = less_than_1500_mhz ? 0x66 : 0x88;
++		if (phy->cphy_mode) {
++			glbl_str_swi_cal_sel_ctrl = 0x03;
++			glbl_hstx_str_ctrl_0 = 0x66;
++		} else {
++			glbl_str_swi_cal_sel_ctrl = less_than_1500_mhz ? 0x03 : 0x00;
++			glbl_hstx_str_ctrl_0 = less_than_1500_mhz ? 0x66 : 0x88;
++		}
+ 		glbl_rescode_top_ctrl = 0x03;
+ 		glbl_rescode_bot_ctrl = 0x3c;
  	}
- 
- 	adv7511->status = status;
 -- 
 2.34.1
 

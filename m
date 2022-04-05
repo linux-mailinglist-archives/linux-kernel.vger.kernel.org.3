@@ -2,89 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9CF34F4A42
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E56E4F4902
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1454563AbiDEWiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40810 "EHLO
+        id S1389366AbiDEV71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457347AbiDEQDH (ORCPT
+        with ESMTP id S1457372AbiDEQDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:03:07 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C5825E9E;
-        Tue,  5 Apr 2022 08:37:27 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 4F6E23201464;
-        Tue,  5 Apr 2022 11:37:25 -0400 (EDT)
-Received: from imap47 ([10.202.2.97])
-  by compute2.internal (MEProxy); Tue, 05 Apr 2022 11:37:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; bh=f7SyYZI4nz+qs5qaMDg1riUJfz1XkX
-        CuG6WXTU/lNCQ=; b=abLQr7Ocox7EC2QOocUVper/aOyFWncLbJ1SWNpn1FgdoE
-        oFjH6XS6gAddBS5s3IaBrxIUWW+yGYgKFJiYiEb0PK8Fd8bZ62aLn+EoMPkvkHFG
-        ZFNXxQWyE4j94LuxavQmpSANyzqQoQw+c/ZRF094grUvUCzHhDgJEmGW5N/C54Nr
-        ZZX9/J+C8pc8b22K9aCU44ziKFWg8Aw1DoRnXI86Mxa+lSmPuorMtDjvJv5CCuR7
-        VWlU1dP0LXpSdrWH/EgO/Q6Yt/n2GSdGRGiK63mExuRceE8IF901tSfv/R5k8VJR
-        +7S5uBKQJHhihPJ+FK9pLvK6dQsZSM5M4iIfNwmw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=f7SyYZI4nz+qs5qaM
-        Dg1riUJfz1XkXCuG6WXTU/lNCQ=; b=UeVodiwW8PmkEP9EPOHfnWy0CCe0guLPF
-        DliOMGO4FfQEz5RrQA9EawpvoUPmY2N4p1Y7hJAhXalO7KNhhjB9hrJzTKQryP13
-        BRhjKbc0Uhhae7wmBkB/+Fo7rz7Ekz5+cWeXOJ2KBQmidkgdtNAzXIEa6cnKj6gi
-        1EN0qK4VrO/0tTJM7IeFT5mRwIXqQwwJkuHJmIas+yyVgxcHUzTSCTmXCcaRx7xy
-        knHKVCSSxf1IVkwBMTOVVhwIstsUlpUzQYMKKD+SXnSMXkbA1MutFKYiEFW1SG3r
-        df+ISBqWong8Pjrx9tT1G5Yr/ia7zrmk+U01T4XEeMRJI4FDcDf9Q==
-X-ME-Sender: <xms:NGJMYuWXQtktSsSAuTYUMvwDdFEcA4yhQ5MCW9aLDi_bY1KklAMTYw>
-    <xme:NGJMYqmG5DoOWovS2HoBGsG8au43ep38U8M7cgPQyXj_NmRISXaRrhDPFjZDxNxP6
-    K3qcSG8OEmA2TXnJjU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudejgedgkeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
-    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
-    htthgvrhhnpefgieegieffuefhtedtjefgteejteefleefgfefgfdvvddtgffhffduhedv
-    feekffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:NGJMYiaEdQ36azdMNu80CJVWjwDac80cJld0O7o-VJOtCoxYhEXbmg>
-    <xmx:NGJMYlXUrltHCyl4_r8omNuAFmQQCjGgnOEUbp-oRMi_Dtg2ztDlvQ>
-    <xmx:NGJMYomK1MwE0auNSM1PEA2y1xulMXcEXFvzKgQvi9xnwS18Q8u7NQ>
-    <xmx:NGJMYhfRhmFqCvgyg5ojCGq54Zi4dy_aoLsD-vlMZVtN_tKRMHVfEg>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1381327407F6; Tue,  5 Apr 2022 11:37:24 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-385-g3a17909f9e-fm-20220404.001-g3a17909f
-Mime-Version: 1.0
-Message-Id: <c5c0db06-2d82-4e5a-b9e4-89e0b7c9230c@www.fastmail.com>
-In-Reply-To: <YksHoQvDqXOK70EX@robh.at.kernel.org>
-References: <20220321165049.35985-1-sven@svenpeter.dev>
- <20220321165049.35985-5-sven@svenpeter.dev>
- <CAK8P3a19F8K0MvZV_R6HrmmR+WBsDge+u6U3iEVEjZ74i6+nEg@mail.gmail.com>
- <f06576c8-76c6-41ae-874d-81ea0b5b5603@www.fastmail.com>
- <CAK8P3a3xioqJDb7hQ3dvxQyHPg2hgJbeJywEP+N4cDzpo=8VhQ@mail.gmail.com>
- <YksHoQvDqXOK70EX@robh.at.kernel.org>
-Date:   Tue, 05 Apr 2022 17:37:03 +0200
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Rob Herring" <robh@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>
-Cc:     "Hector Martin" <marcan@marcan.st>,
-        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
-        "Keith Busch" <kbusch@kernel.org>, "axboe@fb.com" <axboe@fb.com>,
-        "hch@lst.de" <hch@lst.de>, "sagi@grimberg.me" <sagi@grimberg.me>,
-        "Marc Zyngier" <maz@kernel.org>, DTML <devicetree@vger.kernel.org>,
-        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-nvme@lists.infradead.org
-Subject: Re: [PATCH 4/9] soc: apple: Add SART driver
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Tue, 5 Apr 2022 12:03:09 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D207830B
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:39:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649173162; x=1680709162;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=uqbvEjpy37SgrPedx6qx+fegeygTqQ92MlL6Re99mYM=;
+  b=g0E5F7UhrFc9R3Vi8Z1q08mGCtaJ8vwlwOHUskIBG/FMHW744Cg4Fsb5
+   G6gZuXHMIjhaFsg0cVnlLlYZscT5mYtG0JMeF0wc7QbQgy3zP1lv3g9dS
+   zbE6RrQvlqsSQUM6erT/ZMkb5eQs++TT60IsHCBnT+sSydEG33Jrkn8D9
+   +xIIkjQAWHCqAEwKZE622a+6t2n+ypyKi72dlwOlCBfQo5PJL52rG+pbH
+   II5ybE7C2lkh4Tk4OUsyszG5vPkV+XrlgWtcxIB+pMUP2x/vu67JSfx9w
+   qbDSY4ni5r1BE5cwc4DarCQx+kqZyoRnuUtUNs7kR0yjusufUIBeddKDl
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="242923051"
+X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
+   d="scan'208";a="242923051"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 08:39:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
+   d="scan'208";a="549102787"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 05 Apr 2022 08:39:15 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nblH0-0003UB-MM;
+        Tue, 05 Apr 2022 15:39:14 +0000
+Date:   Tue, 5 Apr 2022 23:38:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 38/40] ERROR:
+ modpost: "netfs_page_mkwrite" [fs/afs/kafs.ko] undefined!
+Message-ID: <202204052331.l5wJgtp5-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,94 +64,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 4, 2022, at 16:58, Rob Herring wrote:
-> On Sat, Apr 02, 2022 at 09:07:17PM +0200, Arnd Bergmann wrote:
->> On Sat, Apr 2, 2022 at 2:38 PM Sven Peter <sven@svenpeter.dev> wrote:
->> > On Mon, Mar 21, 2022, at 18:07, Arnd Bergmann wrote:
->> > > On Mon, Mar 21, 2022 at 5:50 PM Sven Peter <sven@svenpeter.dev> wrote:
->> > >> The NVMe co-processor on the Apple M1 uses a DMA address filter called
->> > >> SART for some DMA transactions. This adds a simple driver used to
->> > >> configure the memory regions from which DMA transactions are allowed.
->> > >>
->> > >> Co-developed-by: Hector Martin <marcan@marcan.st>
->> > >> Signed-off-by: Hector Martin <marcan@marcan.st>
->> > >> Signed-off-by: Sven Peter <sven@svenpeter.dev>
->> > >
->> > > Can you add some explanation about why this uses a custom interface
->> > > instead of hooking into the dma_map_ops?
->> >
->> > Sure.
->> > In a perfect world this would just be an IOMMU implementation but since
->> > SART can't create any real IOVA space using pagetables it doesn't fit
->> > inside that subsytem.
->> >
->> > In a slightly less perfect world I could just implement dma_map_ops here
->> > but that won't work either because not all DMA buffers of the NVMe
->> > device have to go through SART and those allocations happen
->> > inside the same device and would use the same dma_map_ops.
->> >
->> > The NVMe controller has two separate DMA filters:
->> >
->> >    - NVMMU, which must be set up for any command that uses PRPs and
->> >      ensures that the DMA transactions only touch the pages listed
->> >      inside the PRP structure. NVMMU itself is tightly coupled
->> >      to the NVMe controller: The list of allowed pages is configured
->> >      based on command's tag id and even commands that require no DMA
->> >      transactions must be listed inside NVMMU before they are started.
->> >    - SART, which must be set up for some shared memory buffers (e.g.
->> >      log messages from the NVMe firmware) and for some NVMe debug
->> >      commands that don't use PRPs.
->> >      SART is only loosely coupled to the NVMe controller and could
->> >      also be used together with other devices. It's also the only
->> >      thing that changed between M1 and M1 Pro/Max/Ultra and that's
->> >      why I decided to separate it from the NVMe driver.
->> >
->> > I'll add this explanation to the commit message.
->> 
->> Ok, thanks.
->> 
->> > >> +static void sart2_get_entry(struct apple_sart *sart, int index, u8 *flags,
->> > >> +                           phys_addr_t *paddr, size_t *size)
->> > >> +{
->> > >> +       u32 cfg = readl_relaxed(sart->regs + APPLE_SART2_CONFIG(index));
->> > >> +       u32 paddr_ = readl_relaxed(sart->regs + APPLE_SART2_PADDR(index));
->> > >
->> > > Why do you use the _relaxed() accessors here and elsewhere in the driver?
->> >
->> > This device itself doesn't do any DMA transactions so it needs no memory
->> > synchronization barriers. Only the consumer (i.e. rtkit and nvme) read/write
->> > from/to these buffers (multiple times) and they have the required barriers
->> > in place whenever they are used.
->> >
->> > These buffers so far are only allocated at probe time though so even using
->> > the normal writel/readl here won't hurt performance at all. I can just use
->> > those if you prefer or alternatively add a comment why _relaxed is fine here.
->> >
->> > This is a bit similar to the discussion for the pinctrl series last year [1].
->> 
->> I think it's better to only use the _relaxed version where it actually helps,
->> with a comment about it, and use the normal version elsewhere, in
->> particular in functions that you have copied from the normal nvme driver.
->> I had tried to compare some of your code with the other version and
->> was rather confused by that.
->
-> Oh good, I tell folks the opposite (and others do too). We don't accept 
-> random explicit barriers without explanation, but implicit ones are 
-> okay? The resulting code on arm32 is also pretty horrible with the L2x0 
-> and OMAP sync hooks not that that matters here.
->
-> I don't really care too much which way we go, but we should document one 
-> rule and follow that.
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
+head:   674eea41fc70a740ff83ec590f9833f805852464
+commit: 2726127983997dfb5bb1bc83d69cec5baeea5694 [38/40] afs: Use the netfs write helpers
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20220405/202204052331.l5wJgtp5-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/2726127983997dfb5bb1bc83d69cec5baeea5694
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
+        git checkout 2726127983997dfb5bb1bc83d69cec5baeea5694
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash
 
-I don't have a strong opinion either. Arnd's approach is currently documented
-in Documentation/driver-api/device-io.rst fwiw:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-  On architectures that require an expensive barrier for serializing against
-  DMA, these "relaxed" versions of the MMIO accessors only serialize against
-  each other, but contain a less expensive barrier operation. A device driver
-  might use these in a particularly performance sensitive fast path, with a
-  comment that explains why the usage in a specific location is safe without
-  the extra barriers.
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
+ERROR: modpost: "netfs_put_subrequest" [fs/afs/kafs.ko] undefined!
+>> ERROR: modpost: "netfs_page_mkwrite" [fs/afs/kafs.ko] undefined!
+ERROR: modpost: "mas_walk" [fs/netfs/netfs.ko] undefined!
+ERROR: modpost: "mas_destroy" [fs/netfs/netfs.ko] undefined!
+ERROR: modpost: "mas_expected_entries" [fs/netfs/netfs.ko] undefined!
+ERROR: modpost: "mas_store" [fs/netfs/netfs.ko] undefined!
 
-Sven
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

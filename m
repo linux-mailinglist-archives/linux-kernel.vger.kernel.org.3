@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2614F5040
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DFE04F5135
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1840992AbiDFBOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60410 "EHLO
+        id S1845442AbiDFByt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443704AbiDEPkK (ORCPT
+        with ESMTP id S1443707AbiDEPkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:40:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45ED4184B66
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:58:12 -0700 (PDT)
+        Tue, 5 Apr 2022 11:40:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CED184B6D
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:58:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D886B6187A
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 13:58:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BB97C385A9;
-        Tue,  5 Apr 2022 13:58:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41E31B81D2F
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 13:58:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1F95C385A7;
+        Tue,  5 Apr 2022 13:58:11 +0000 (UTC)
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -29,10 +29,11 @@ To:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>
-Subject: [PATCH 03/10] drivers/gpu: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
-Date:   Tue,  5 Apr 2022 14:57:51 +0100
-Message-Id: <20220405135758.774016-4-catalin.marinas@arm.com>
+        linux-kernel@vger.kernel.org, Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>
+Subject: [PATCH 04/10] drivers/md: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
+Date:   Tue,  5 Apr 2022 14:57:52 +0100
+Message-Id: <20220405135758.774016-5-catalin.marinas@arm.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220405135758.774016-1-catalin.marinas@arm.com>
 References: <20220405135758.774016-1-catalin.marinas@arm.com>
@@ -52,25 +53,22 @@ operations while ARCH_KMALLOC_MINALIGN is the minimum kmalloc() objects
 alignment.
 
 Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Alasdair Kergon <agk@redhat.com>
+Cc: Mike Snitzer <snitzer@kernel.org>
 ---
- drivers/gpu/drm/drm_managed.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/md/dm-crypt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/drm_managed.c b/drivers/gpu/drm/drm_managed.c
-index 37d7db6223be..2d4c51f9d74e 100644
---- a/drivers/gpu/drm/drm_managed.c
-+++ b/drivers/gpu/drm/drm_managed.c
-@@ -48,10 +48,10 @@ struct drmres {
- 	 * Some archs want to perform DMA into kmalloc caches
- 	 * and need a guaranteed alignment larger than
- 	 * the alignment of a 64-bit integer.
--	 * Thus we use ARCH_KMALLOC_MINALIGN here and get exactly the same
-+	 * Thus we use ARCH_DMA_MINALIGN here and get at least the same
- 	 * buffer alignment as if it was allocated by plain kmalloc().
- 	 */
--	u8 __aligned(ARCH_KMALLOC_MINALIGN) data[];
-+	u8 __aligned(ARCH_DMA_MINALIGN) data[];
- };
+diff --git a/drivers/md/dm-crypt.c b/drivers/md/dm-crypt.c
+index fb80539865d7..b6929dd1d283 100644
+--- a/drivers/md/dm-crypt.c
++++ b/drivers/md/dm-crypt.c
+@@ -3250,7 +3250,7 @@ static int crypt_ctr(struct dm_target *ti, unsigned int argc, char **argv)
  
- static void free_dr(struct drmres *dr)
+ 	cc->per_bio_data_size = ti->per_io_data_size =
+ 		ALIGN(sizeof(struct dm_crypt_io) + cc->dmreq_start + additional_req_size,
+-		      ARCH_KMALLOC_MINALIGN);
++		      ARCH_DMA_MINALIGN);
+ 
+ 	ret = mempool_init(&cc->page_pool, BIO_MAX_VECS, crypt_page_alloc, crypt_page_free, cc);
+ 	if (ret) {

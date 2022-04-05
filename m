@@ -2,104 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64DCF4F45E2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 189444F4537
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359346AbiDEUQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34304 "EHLO
+        id S1444654AbiDEUIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1455519AbiDEQAH (ORCPT
+        with ESMTP id S1455485AbiDEQAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:00:07 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF45654BB
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:16:11 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 58DD71EC053B;
-        Tue,  5 Apr 2022 17:16:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1649171766;
+        Tue, 5 Apr 2022 12:00:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E04A17A95
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:15:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649171753;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4tr84NTQHEVuCywsiBPVN/ZgxSPZfV76FAoYjErddKo=;
-        b=ZeEwKEPkD2xV8vTQ2kgR1hJj+cKHQBPxdfHQa/fxk7Lk57dnBWf16LBnynNZCM1upb5N/E
-        vA90w0EzlwDNEQHP2d1H/zfk3tJ6TJrcj42DFwnjEbOfcHJnTwCcZFP2y/ifMTwrmEgtdm
-        OKhleqSUJLwtl1eHRnZJa3xABrZxXpo=
-From:   Borislav Petkov <bp@alien8.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Frank Li <Frank.li@nxp.com>, Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 09/11] perf/imx_ddr: Fix undefined behavior due to shift overflowing the constant
-Date:   Tue,  5 Apr 2022 17:15:15 +0200
-Message-Id: <20220405151517.29753-10-bp@alien8.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405151517.29753-1-bp@alien8.de>
-References: <20220405151517.29753-1-bp@alien8.de>
+        bh=/hMlkmmyLf263hSrvPKkNm/6nEPBpJbD0iMYZMZaxjM=;
+        b=BqWvGSn+zJiWWIdscI3uWkmR7JRh+846rrdE9aEo9pHOQlb83kVxD+Yl6HdRPUoNzBNxUN
+        2guYSdSHfat9SF5fXuUDH82BLgH2FZRW7RyHfSzp0GhZQrF9G5Uu4T8S1s1GV0RDXig5Q/
+        T9xuxua/NqzHK1ZdNJWYBLfWGMWlkyA=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-16-dUE92-XMM-6RCBmkD3tuxQ-1; Tue, 05 Apr 2022 11:15:52 -0400
+X-MC-Unique: dUE92-XMM-6RCBmkD3tuxQ-1
+Received: by mail-qv1-f69.google.com with SMTP id kd20-20020a056214401400b00443c252b315so8493013qvb.23
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 08:15:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/hMlkmmyLf263hSrvPKkNm/6nEPBpJbD0iMYZMZaxjM=;
+        b=L3H5OCFXZloG+ckRGfl82mGUXPsHTwiWli10K3z4NF3azTVPGqBs1gjb92yGAduAk5
+         NkQFhzqKhxFoZkeVkuEdHCjciJac3YnWYV0dULQcuXb+VI5ef7RO0M58vHuc7Dukn/j5
+         F5efPqAL0XW5e+kOIk06s6kWh/LvqSpPDNJi/gdC32md5LSd4hWyBfCJ6kx9b2PiIO78
+         sl72KQcaJhZIv3xzIkTVBkAN9kIMz/JPdEbMRIWbGBq5B0YxlT8eITT3GdYv/EqG1hXP
+         0X9NmWwtgV44OIJ7fqhY0tGeUUaDkTcs54saj9LfD0a4SVrvKhEoKmaJa8UxyS47oxoW
+         7VQw==
+X-Gm-Message-State: AOAM531uho/UKwmkJN7J410SvrZ+dS6yLWyru7kLFNzYXExVYduLn1VS
+        aWVWLAD9sCvI35E0T5ZIgzsamZ0mr59v3qux28hxQw12AvYxDKrixesSb0RSG3tDs+asw88VdDV
+        oeGRdXBmdlMtLBlYRMZNvj3SR
+X-Received: by 2002:a05:620a:6c4:b0:67d:3912:ea39 with SMTP id 4-20020a05620a06c400b0067d3912ea39mr2503388qky.447.1649171751370;
+        Tue, 05 Apr 2022 08:15:51 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzPvg8C6cJl/yQX7Y31aen22UhOZ8nlbFI01UkX6EhB0OVBYX9QEwo9Okg42OdAyKyminMXcA==
+X-Received: by 2002:a05:620a:6c4:b0:67d:3912:ea39 with SMTP id 4-20020a05620a06c400b0067d3912ea39mr2503351qky.447.1649171751020;
+        Tue, 05 Apr 2022 08:15:51 -0700 (PDT)
+Received: from [10.32.181.87] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
+        by smtp.googlemail.com with ESMTPSA id k1-20020ac85fc1000000b002e1c6420790sm11862147qta.40.2022.04.05.08.15.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 08:15:50 -0700 (PDT)
+Message-ID: <564d7c99-0490-897e-6660-54203c0aa31e@redhat.com>
+Date:   Tue, 5 Apr 2022 17:15:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v5 049/104] KVM: x86/tdp_mmu: Ignore unsupported mmu
+ operation on private GFNs
+Content-Language: en-US
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
+        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <8907eadab058300fa6ba7943036ad638b41ee0ef.1646422845.git.isaku.yamahata@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <8907eadab058300fa6ba7943036ad638b41ee0ef.1646422845.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
+>   static void handle_changed_spte_dirty_log(struct kvm *kvm, int as_id, gfn_t gfn,
+> +					  bool private_spte,
+>   					  u64 old_spte, u64 new_spte, int level)
+>   {
+>   	bool pfn_changed;
+>   	struct kvm_memory_slot *slot;
+>   
+> +	/*
+> +	 * TDX doesn't support live migration.  Never mark private page as
+> +	 * dirty in log-dirty bitmap, since it's not possible for userspace
+> +	 * hypervisor to live migrate private page anyway.
+> +	 */
+> +	if (private_spte)
+> +		return;
 
-Fix:
+This should not be needed, patch 35 will block it anyway because 
+kvm_slot_dirty_track_enabled() will return false.
 
-  In file included from <command-line>:0:0:
-  In function ‘ddr_perf_counter_enable’,
-      inlined from ‘ddr_perf_irq_handler’ at drivers/perf/fsl_imx8_ddr_perf.c:651:2:
-  ././include/linux/compiler_types.h:352:38: error: call to ‘__compiletime_assert_729’ \
-	declared with attribute error: FIELD_PREP: mask is not constant
-    _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-...
+> @@ -1215,7 +1227,23 @@ static __always_inline bool kvm_tdp_mmu_handle_gfn(struct kvm *kvm,
+>   	 * into this helper allow blocking; it'd be dead, wasteful code.
+>   	 */
+>   	for_each_tdp_mmu_root(kvm, root, range->slot->as_id) {
+> -		tdp_root_for_each_leaf_pte(iter, root, range->start, range->end)
+> +		/*
+> +		 * For TDX shared mapping, set GFN shared bit to the range,
+> +		 * so the handler() doesn't need to set it, to avoid duplicated
+> +		 * code in multiple handler()s.
+> +		 */
+> +		gfn_t start;
+> +		gfn_t end;
+> +
+> +		if (is_private_sp(root)) {
+> +			start = kvm_gfn_private(kvm, range->start);
+> +			end = kvm_gfn_private(kvm, range->end);
+> +		} else {
+> +			start = kvm_gfn_shared(kvm, range->start);
+> +			end = kvm_gfn_shared(kvm, range->end);
+> +		}
 
-See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
-details as to why it triggers with older gccs only.
+I think this could be a separate function kvm_gfn_for_root(kvm, root, ...).
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Frank Li <Frank.li@nxp.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: linux-arm-kernel@lists.infradead.org
----
- drivers/perf/fsl_imx8_ddr_perf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> @@ -1237,6 +1265,15 @@ static bool age_gfn_range(struct kvm *kvm, struct tdp_iter *iter,
+>   	if (!is_accessed_spte(iter->old_spte))
+>   		return false;
+>   
+> +	/*
+> +	 * First TDX generation doesn't support clearing A bit for private
+> +	 * mapping, since there's no secure EPT API to support it.  However
+> +	 * it's a legitimate request for TDX guest, so just return w/o a
+> +	 * WARN().
+> +	 */
+> +	if (is_private_spte(iter->sptep))
+> +		return false;
 
-diff --git a/drivers/perf/fsl_imx8_ddr_perf.c b/drivers/perf/fsl_imx8_ddr_perf.c
-index 94ebc1ecace7..b1b2a55de77f 100644
---- a/drivers/perf/fsl_imx8_ddr_perf.c
-+++ b/drivers/perf/fsl_imx8_ddr_perf.c
-@@ -29,7 +29,7 @@
- #define CNTL_OVER_MASK		0xFFFFFFFE
- 
- #define CNTL_CSV_SHIFT		24
--#define CNTL_CSV_MASK		(0xFF << CNTL_CSV_SHIFT)
-+#define CNTL_CSV_MASK		(0xFFU << CNTL_CSV_SHIFT)
- 
- #define EVENT_CYCLES_ID		0
- #define EVENT_CYCLES_COUNTER	0
--- 
-2.35.1
+Please add instead a "bool only_shared" argument to 
+kvm_tdp_mmu_handle_gfn, since you can check "only_shared && 
+is_private_sp(root)" just once (instead of checking it once per PTE).
+
+>   	new_spte = iter->old_spte;
+>   
+>   	if (spte_ad_enabled(new_spte)) {
+> @@ -1281,6 +1318,13 @@ static bool set_spte_gfn(struct kvm *kvm, struct tdp_iter *iter,
+>   	/* Huge pages aren't expected to be modified without first being zapped. */
+>   	WARN_ON(pte_huge(range->pte) || range->start + 1 != range->end);
+>   
+> +	/*
+> +	 * .change_pte() callback should not happen for private page, because
+> +	 * for now TDX private pages are pinned during VM's life time.
+> +	 */
+> +	if (WARN_ON(is_private_spte(iter->sptep)))
+> +		return false;
+> +
+>   	if (iter->level != PG_LEVEL_4K ||
+>   	    !is_shadow_present_pte(iter->old_spte))
+>   		return false;
+> @@ -1332,6 +1376,16 @@ static bool wrprot_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
+>   	u64 new_spte;
+>   	bool spte_set = false;
+>   
+> +	/*
+> +	 * First TDX generation doesn't support write protecting private
+> +	 * mappings, since there's no secure EPT API to support it.  It
+> +	 * is a bug to reach here for TDX guest.
+> +	 */
+> +	if (WARN_ON(is_private_sp(root)))
+> +		return spte_set;
+
+Isn't this function unreachable even for the shared address range?  If 
+so, this WARN should be in kvm_tdp_mmu_wrprot_slot, and also it should 
+check if !kvm_arch_dirty_log_supported(kvm).
+
+> +	start = kvm_gfn_shared(kvm, start);
+> +	end = kvm_gfn_shared(kvm, end);
+
+... and then these two lines are unnecessary.
+
+>   	rcu_read_lock();
+>   
+>   	BUG_ON(min_level > KVM_MAX_HUGEPAGE_LEVEL);
+> @@ -1398,6 +1452,16 @@ static bool clear_dirty_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
+>   	u64 new_spte;
+>   	bool spte_set = false;
+>   
+> +	/*
+> +	 * First TDX generation doesn't support clearing dirty bit,
+> +	 * since there's no secure EPT API to support it.  It is a
+> +	 * bug to reach here for TDX guest.
+> +	 */
+> +	if (WARN_ON(is_private_sp(root)))
+> +		return spte_set;
+
+Same here, can you check it in kvm_tdp_mmu_clear_dirty_slot?
+
+> +	start = kvm_gfn_shared(kvm, start);
+> +	end = kvm_gfn_shared(kvm, end);
+
+Same here.
+
+>   	rcu_read_lock();
+>   
+>   	tdp_root_for_each_leaf_pte(iter, root, start, end) {
+> @@ -1467,6 +1531,15 @@ static void clear_dirty_pt_masked(struct kvm *kvm, struct kvm_mmu_page *root,
+>   	struct tdp_iter iter;
+>   	u64 new_spte;
+>   
+> +	/*
+> +	 * First TDX generation doesn't support clearing dirty bit,
+> +	 * since there's no secure EPT API to support it.  It is a
+> +	 * bug to reach here for TDX guest.
+> +	 */
+> +	if (WARN_ON(is_private_sp(root)))
+> +		return;
+
+IIRC this is reachable from userspace, so WARN_ON is not possible.  But, 
+again please check
+
+	if (!kvm_arch_dirty_log_supported(kvm))
+		return;
+
+in kvm_tdp_mmu_clear_dirty_pt_masked.
+
+> +	gfn = kvm_gfn_shared(kvm, gfn);
+
+Also unnecessary, I think.
+
+>   	rcu_read_lock();
+>   
+>   	tdp_root_for_each_leaf_pte(iter, root, gfn + __ffs(mask),
+> @@ -1530,6 +1603,16 @@ static void zap_collapsible_spte_range(struct kvm *kvm,
+>   	struct tdp_iter iter;
+>   	kvm_pfn_t pfn;
+>   
+> +	/*
+> +	 * This should only be reachable in case of log-dirty, which TD
+> +	 * private mapping doesn't support so far.  Give a WARN() if it
+> +	 * hits private mapping.
+> +	 */
+> +	if (WARN_ON(is_private_sp(root)))
+> +		return;
+> +	start = kvm_gfn_shared(kvm, start);
+> +	end = kvm_gfn_shared(kvm, end);
+
+I think this is not a big deal and you can leave it as is. 
+Alternatively, please move the WARN to 
+kvm_tdp_mmu_zap_collapsible_sptes().  It is also only reachable if you 
+can set KVM_MEM_LOG_DIRTY_PAGES in the first place.
+
+Paolo
+
+>   	rcu_read_lock();
+>   
+>   	tdp_root_for_each_pte(iter, root, start, end) {
+> @@ -1543,8 +1626,9 @@ static void zap_collapsible_spte_range(struct kvm *kvm,
+>   
+>   		pfn = spte_to_pfn(iter.old_spte);
+>   		if (kvm_is_reserved_pfn(pfn) ||
+> -		    iter.level >= kvm_mmu_max_mapping_level(kvm, slot, iter.gfn,
+> -							    pfn, PG_LEVEL_NUM))
+> +		    iter.level >= kvm_mmu_max_mapping_level(kvm, slot,
+> +			    tdp_iter_gfn_unalias(kvm, &iter), pfn,
+> +			    PG_LEVEL_NUM))
+>   			continue;
+>   
+>   		/* Note, a successful atomic zap also does a remote TLB flush. */
+> @@ -1590,6 +1674,14 @@ static bool write_protect_gfn(struct kvm *kvm, struct kvm_mmu_page *root,
+>   
+>   	BUG_ON(min_level > KVM_MAX_HUGEPAGE_LEVEL);
+>   
+> +	/*
+> +	 * First TDX generation doesn't support write protecting private
+> +	 * mappings, since there's no secure EPT API to support it.  It
+> +	 * is a bug to reach here for TDX guest.
+> +	 */
+> +	if (WARN_ON(is_private_sp(root)))
+> +		return spte_set;
+> +
+>   	rcu_read_lock();
+>   
+>   	for_each_tdp_pte_min_level(iter, root->spt, root->role.level,
 

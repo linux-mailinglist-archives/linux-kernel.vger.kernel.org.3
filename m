@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C434F4B8D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B904F4EA8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:50:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1575011AbiDEXCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35156 "EHLO
+        id S1836081AbiDFAeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352180AbiDEKEA (ORCPT
+        with ESMTP id S1358099AbiDEK16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:04:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9C6B0A7B;
-        Tue,  5 Apr 2022 02:52:55 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E2F67D3A;
+        Tue,  5 Apr 2022 03:15:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 125A5B818F6;
-        Tue,  5 Apr 2022 09:52:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F73AC385A1;
-        Tue,  5 Apr 2022 09:52:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F747B81B7A;
+        Tue,  5 Apr 2022 10:15:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE91EC385A0;
+        Tue,  5 Apr 2022 10:15:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152372;
-        bh=CphQbbV0n6/aEe+zcIVsjiSJeqm4aIXll6oPKqDuX9c=;
+        s=korg; t=1649153723;
+        bh=BJJzhM1WUsQ5X5A8y6pjqzsmFvbXaim78/7bCn5DpzQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MJk6nW7CV9x6sNay5TpLCC8wmcgEdJUuU5lfPBci9skJ5JNMPuf2Vdm6KPitef5KP
-         fvL6ZtFjYA7D9tKYvC/thDzVHOyuKkrMWpgRa5lIg0iRiMO6mIi/m5kXqGgFzn1aS6
-         Lz2n23c3m8IAotVZXtsK2vMugrENNSok3Va0Msl8=
+        b=zJI8IBSEpJji6V5F+11ZiNv7pEBNoPgV3tJO2jO8B3SRW1IQstW7GAzJ4dreODSTP
+         PvHh67rfdIxpOm3hyrOphoNIls4ZBSjQEeUtmy2hd5ahQ/Nasn5ACXPsuxdfld/FAL
+         kPjTwDnTc3CM2eP9NrT3V5yJCJ2cRaENyH+ckLSM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ming Qian <ming.qian@nxp.com>,
-        Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 754/913] media: imx-jpeg: fix a bug of accessing array out of bounds
+        stable@vger.kernel.org, Zhang Yi <yi.zhang@huawei.com>,
+        Jan Kara <jack@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 322/599] ext2: correct max file size computing
 Date:   Tue,  5 Apr 2022 09:30:16 +0200
-Message-Id: <20220405070402.434108696@linuxfoundation.org>
+Message-Id: <20220405070308.415265574@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ming Qian <ming.qian@nxp.com>
+From: Zhang Yi <yi.zhang@huawei.com>
 
-[ Upstream commit 97558d170a1236280407e8d29a7d095d2c2ed554 ]
+[ Upstream commit 50b3a818991074177a56c87124c7a7bdf5fa4f67 ]
 
-When error occurs in parsing jpeg, the slot isn't acquired yet, it may
-be the default value MXC_MAX_SLOTS.
-If the driver access the slot using the incorrect slot number, it will
-access array out of bounds.
-The result is the driver will change num_domains, which follows
-slot_data in struct mxc_jpeg_dev.
-Then the driver won't detach the pm domain at rmmod, which will lead to
-kernel panic when trying to insmod again.
+We need to calculate the max file size accurately if the total blocks
+that can address by block tree exceed the upper_limit. But this check is
+not correct now, it only compute the total data blocks but missing
+metadata blocks are needed. So in the case of "data blocks < upper_limit
+&& total blocks > upper_limit", we will get wrong result. Fortunately,
+this case could not happen in reality, but it's confused and better to
+correct the computing.
 
-Signed-off-by: Ming Qian <ming.qian@nxp.com>
-Reviewed-by: Mirela Rabulea <mirela.rabulea@nxp.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+  bits   data blocks   metadatablocks   upper_limit
+  10        16843020            66051    2147483647
+  11       134480396           263171    1073741823
+  12      1074791436          1050627     536870911 (*)
+  13      8594130956          4198403     268435455 (*)
+  14     68736258060         16785411     134217727 (*)
+  15    549822930956         67125251      67108863 (*)
+  16   4398314962956        268468227      33554431 (*)
+
+  [*] Need to calculate in depth.
+
+Fixes: 1c2d14212b15 ("ext2: Fix underflow in ext2_max_size()")
+Link: https://lore.kernel.org/r/20220212050532.179055-1-yi.zhang@huawei.com
+Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
+Signed-off-by: Jan Kara <jack@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/imx-jpeg/mxc-jpeg.c | 1 -
- 1 file changed, 1 deletion(-)
+ fs/ext2/super.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/imx-jpeg/mxc-jpeg.c
-index 637d73f5f4a2..37905547466b 100644
---- a/drivers/media/platform/imx-jpeg/mxc-jpeg.c
-+++ b/drivers/media/platform/imx-jpeg/mxc-jpeg.c
-@@ -932,7 +932,6 @@ static void mxc_jpeg_device_run(void *priv)
- 		jpeg_src_buf->jpeg_parse_error = true;
- 	}
- 	if (jpeg_src_buf->jpeg_parse_error) {
--		jpeg->slot_data[ctx->slot].used = false;
- 		v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
- 		v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
- 		v4l2_m2m_buf_done(src_buf, VB2_BUF_STATE_ERROR);
+diff --git a/fs/ext2/super.c b/fs/ext2/super.c
+index 09f1fe676972..b6314d3c6a87 100644
+--- a/fs/ext2/super.c
++++ b/fs/ext2/super.c
+@@ -756,8 +756,12 @@ static loff_t ext2_max_size(int bits)
+ 	res += 1LL << (bits-2);
+ 	res += 1LL << (2*(bits-2));
+ 	res += 1LL << (3*(bits-2));
++	/* Compute how many metadata blocks are needed */
++	meta_blocks = 1;
++	meta_blocks += 1 + ppb;
++	meta_blocks += 1 + ppb + ppb * ppb;
+ 	/* Does block tree limit file size? */
+-	if (res < upper_limit)
++	if (res + meta_blocks <= upper_limit)
+ 		goto check_lfs;
+ 
+ 	res = upper_limit;
 -- 
 2.34.1
 

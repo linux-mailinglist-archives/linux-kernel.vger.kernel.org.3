@@ -2,89 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6924F4FD4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E5D4F4FE6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1839572AbiDFBFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:05:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43252 "EHLO
+        id S1839943AbiDFBG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1572894AbiDERQE (ORCPT
+        with ESMTP id S1457875AbiDEQyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 13:16:04 -0400
-X-Greylist: delayed 12359 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Apr 2022 10:14:04 PDT
-Received: from 10.mo550.mail-out.ovh.net (10.mo550.mail-out.ovh.net [178.32.96.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E243921AD
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 10:14:04 -0700 (PDT)
-Received: from player728.ha.ovh.net (unknown [10.108.1.13])
-        by mo550.mail-out.ovh.net (Postfix) with ESMTP id 7266224066
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 16:37:58 +0000 (UTC)
-Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
-        (Authenticated sender: steve@sk2.org)
-        by player728.ha.ovh.net (Postfix) with ESMTPSA id 12A9D2918D61E;
-        Tue,  5 Apr 2022 16:37:53 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-102R004cd3fc30c-2cb9-44a9-b250-9c495a8aa197,
-                    8AF55017BACD44284FC599BC4826E0280D36FCC4) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 82.65.25.201
-From:   Stephen Kitt <steve@sk2.org>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        Stephen Kitt <steve@sk2.org>
-Subject: [PATCH] ASoC: mt6660: use simple i2c probe function
-Date:   Tue,  5 Apr 2022 18:37:50 +0200
-Message-Id: <20220405163750.2158916-1-steve@sk2.org>
-X-Mailer: git-send-email 2.27.0
+        Tue, 5 Apr 2022 12:54:13 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7D6326E9;
+        Tue,  5 Apr 2022 09:52:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EC474CE1BE1;
+        Tue,  5 Apr 2022 16:52:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B165C385A0;
+        Tue,  5 Apr 2022 16:52:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649177532;
+        bh=poRB8B2FuBtCIIZNBvi5x128WVA6VtVUiXU61lbpEBY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TG6JZgYEg7jQWabdXKKhw9T+Mlw6+RPQ0sgOsFVe9vRQmqpIcDWKq8onF0ySaaHNX
+         r/lYiXkiFnuXcfMLS00lQpn/insSguaeHkwCOw0ycjwkbmK0IZL6zV8+CcEBxPVKMw
+         j0c6N9/JuW76fcgMpF9wHudOxTRqkc8AoWHzPyP0=
+Date:   Tue, 5 Apr 2022 18:52:09 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 5.15 746/913] ARM: ftrace: avoid redundant loads or
+ clobbering IP
+Message-ID: <YkxzuSjVpIyjzdsZ@kroah.com>
+References: <20220405070339.801210740@linuxfoundation.org>
+ <20220405070402.195698649@linuxfoundation.org>
+ <CAMj1kXFL4abn9xg1ZrNpFg54Pmw1Kw8OPbDpMevSjQDNg0r5Pg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 8099160983115957894
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejgedgleelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeetgedugfelkeeikeetgeegteevfeeufeetuefgudeiiedthfehtdeffeekvdeffeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgepfeenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejvdekrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXFL4abn9xg1ZrNpFg54Pmw1Kw8OPbDpMevSjQDNg0r5Pg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The i2c probe functions here don't use the id information provided in
-their second argument, so the single-parameter i2c probe function
-("probe_new") can be used instead.
+On Tue, Apr 05, 2022 at 12:01:19PM +0200, Ard Biesheuvel wrote:
+> On Tue, 5 Apr 2022 at 11:54, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > From: Ard Biesheuvel <ardb@kernel.org>
+> >
+> > [ Upstream commit d11967870815b5ab89843980e35aab616c97c463 ]
+> >
+> > Tweak the ftrace return paths to avoid redundant loads of SP, as well as
+> > unnecessary clobbering of IP.
+> >
+> > This also fixes the inconsistency of using MOV to perform a function
+> > return, which is sub-optimal on recent micro-architectures but more
+> > importantly, does not perform an interworking return, unlike compiler
+> > generated function returns in Thumb2 builds.
+> >
+> > Let's fix this by popping PC from the stack like most ordinary code
+> > does.
+> >
+> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> > Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> > Signed-off-by: Sasha Levin <sashal@kernel.org>
+> 
+> Please drop all the 32-bit ARM patches authored by me from the stable
+> queues except the ones that have fixes tags. These are highly likely
+> to cause an explosion of regressions, and they should have never been
+> selected, as I don't remember anyone proposing these for stable.
 
-This avoids scanning the identifier tables during probes.
+From what I can tell, that is only this commit.  I'll go drop it from
+all trees, thanks.
 
-Signed-off-by: Stephen Kitt <steve@sk2.org>
----
- sound/soc/codecs/mt6660.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/sound/soc/codecs/mt6660.c b/sound/soc/codecs/mt6660.c
-index 3a881523c30f..c84a0b850f89 100644
---- a/sound/soc/codecs/mt6660.c
-+++ b/sound/soc/codecs/mt6660.c
-@@ -456,8 +456,7 @@ static int _mt6660_read_chip_revision(struct mt6660_chip *chip)
- 	return 0;
- }
- 
--static int mt6660_i2c_probe(struct i2c_client *client,
--			    const struct i2c_device_id *id)
-+static int mt6660_i2c_probe(struct i2c_client *client)
- {
- 	struct mt6660_chip *chip = NULL;
- 	int ret;
-@@ -567,7 +566,7 @@ static struct i2c_driver mt6660_i2c_driver = {
- 		.of_match_table = of_match_ptr(mt6660_of_id),
- 		.pm = &mt6660_dev_pm_ops,
- 	},
--	.probe = mt6660_i2c_probe,
-+	.probe_new = mt6660_i2c_probe,
- 	.remove = mt6660_i2c_remove,
- 	.id_table = mt6660_i2c_id,
- };
--- 
-2.27.0
-
+greg k-h

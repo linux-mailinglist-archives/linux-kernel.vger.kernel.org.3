@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB904F3B84
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAD0F4F3795
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379402AbiDEL57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:57:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
+        id S1356407AbiDELPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245021AbiDEIxC (ORCPT
+        with ESMTP id S237106AbiDEIRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:53:02 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A63DB8;
-        Tue,  5 Apr 2022 01:49:44 -0700 (PDT)
+        Tue, 5 Apr 2022 04:17:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BA2AFB0C;
+        Tue,  5 Apr 2022 01:05:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EBB77CE1C16;
-        Tue,  5 Apr 2022 08:49:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C271C385A1;
-        Tue,  5 Apr 2022 08:49:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B76EB81BBF;
+        Tue,  5 Apr 2022 08:05:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA778C385A7;
+        Tue,  5 Apr 2022 08:05:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148581;
-        bh=+vB/c5TYSJXJNmD9pjNpxLmLtUsmHAcZ/hjWBUHuL58=;
+        s=korg; t=1649145911;
+        bh=bb88SYtp3zyNlkq/15otdBnpkl/912WXpaRl/MiFuJA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BPOgxaO91HjIjqdUkjaaWnvctIQxlhz668FDP78dQXTg2BO61x/DdsO+zN7ndpmPC
-         1EUFRQIiYJaS0vvZBQF3AdDLVDVh9s21n7cpFU3K0wJwjFt1VfWgEWJzplcQqEJwke
-         dE74BuW52X0At4NTNDupt2kTo/nphaBCWVTa7o7k=
+        b=hGdvHT46JLLUxztU26V0IrQ2MZ6Y/LY8MB5IMZexXzNrVUzkDn6og2P9SvVyIaMmV
+         /yRUrtEZukVFogxq53mS1xREkk0QK8lxjKxyC6NK080u+YIMkitOg3gbnIXJ4wCqZN
+         nuziostoou2DjGSXMZy0isCiqJ46GtkDQHHRVZh4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Steven Price <steven.price@arm.com>,
+        stable@vger.kernel.org, Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0407/1017] drm/panfrost: Check for error num after setting mask
-Date:   Tue,  5 Apr 2022 09:22:00 +0200
-Message-Id: <20220405070406.369395892@linuxfoundation.org>
+Subject: [PATCH 5.17 0574/1126] drm/msm/dpu: remove msm_dp cached in dpu_encoder_virt
+Date:   Tue,  5 Apr 2022 09:22:01 +0200
+Message-Id: <20220405070424.481080231@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
+References: <20220405070407.513532867@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +57,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit 44ab30b056149bd59dd7989a593dd25ead6007fd ]
+[ Upstream commit b78f30a5c8a396ca31a905982c8cd955cd35807e ]
 
-Because of the possible failure of the dma_supported(), the
-dma_set_mask_and_coherent() may return error num.
-Therefore, it should be better to check it and return the error if
-fails.
+Stop caching msm_dp instance in dpu_encoder_virt since it's not used
+now.
 
-Fixes: f3ba91228e8e ("drm/panfrost: Add initial panfrost driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-[Steve: fix Fixes: line]
-Reviewed-by: Steven Price <steven.price@arm.com>
-Signed-off-by: Steven Price <steven.price@arm.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220106030326.2620942-1-jiasheng@iscas.ac.cn
+Fixes: 8a3b4c17f863 ("drm/msm/dp: employ bridge mechanism for display enable and disable")
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://lore.kernel.org/r/20220217035358.465904-4-dmitry.baryshkov@linaro.org
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/panfrost/panfrost_gpu.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/panfrost/panfrost_gpu.c b/drivers/gpu/drm/panfrost/panfrost_gpu.c
-index bbe628b306ee..f8355de6e335 100644
---- a/drivers/gpu/drm/panfrost/panfrost_gpu.c
-+++ b/drivers/gpu/drm/panfrost/panfrost_gpu.c
-@@ -360,8 +360,11 @@ int panfrost_gpu_init(struct panfrost_device *pfdev)
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+index 02d0fae1c6dc..16ae0cccbbb1 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+@@ -168,7 +168,6 @@ enum dpu_enc_rc_states {
+  * @vsync_event_work:		worker to handle vsync event for autorefresh
+  * @topology:                   topology of the display
+  * @idle_timeout:		idle timeout duration in milliseconds
+- * @dp:				msm_dp pointer, for DP encoders
+  */
+ struct dpu_encoder_virt {
+ 	struct drm_encoder base;
+@@ -207,8 +206,6 @@ struct dpu_encoder_virt {
+ 	struct msm_display_topology topology;
  
- 	panfrost_gpu_init_features(pfdev);
+ 	u32 idle_timeout;
+-
+-	struct msm_dp *dp;
+ };
  
--	dma_set_mask_and_coherent(pfdev->dev,
-+	err = dma_set_mask_and_coherent(pfdev->dev,
- 		DMA_BIT_MASK(FIELD_GET(0xff00, pfdev->features.mmu_features)));
-+	if (err)
-+		return err;
-+
- 	dma_set_max_seg_size(pfdev->dev, UINT_MAX);
+ #define to_dpu_encoder_virt(x) container_of(x, struct dpu_encoder_virt, base)
+@@ -2128,8 +2125,6 @@ int dpu_encoder_setup(struct drm_device *dev, struct drm_encoder *enc,
+ 		timer_setup(&dpu_enc->vsync_event_timer,
+ 				dpu_encoder_vsync_event_handler,
+ 				0);
+-	else if (disp_info->intf_type == DRM_MODE_ENCODER_TMDS)
+-		dpu_enc->dp = priv->dp[disp_info->h_tile_instance[0]];
  
- 	irq = platform_get_irq_byname(to_platform_device(pfdev->dev), "gpu");
+ 	INIT_DELAYED_WORK(&dpu_enc->delayed_off_work,
+ 			dpu_encoder_off_work);
 -- 
 2.34.1
 

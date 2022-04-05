@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6573B4F4703
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 849F84F43B9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384466AbiDEUz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44064 "EHLO
+        id S1356685AbiDEOC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358767AbiDELR1 (ORCPT
+        with ESMTP id S235400AbiDEJah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 07:17:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470912FFC0;
-        Tue,  5 Apr 2022 03:20:24 -0700 (PDT)
+        Tue, 5 Apr 2022 05:30:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32D8E5412;
+        Tue,  5 Apr 2022 02:17:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EF54BB81C6C;
-        Tue,  5 Apr 2022 10:20:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6154CC385A0;
-        Tue,  5 Apr 2022 10:20:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F80B615E4;
+        Tue,  5 Apr 2022 09:17:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9626DC385A2;
+        Tue,  5 Apr 2022 09:17:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154021;
-        bh=ryI4nmnWCITwgMxyxAhVGbPtmN7Hf4iB4cJjnuFKMfs=;
+        s=korg; t=1649150257;
+        bh=WzivcXSmnyAyLc6VtEfU3zcYJ5LcHw/WrmshFZPnr7s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R8EJIWeXCNVZw5tK3PoWprHeqCAeGj0IgbPTrJfaFzKw5uw0d50u0/SF30vVvWZP7
-         tb8B45aLnxx5ASbJl8dm4NwMg3CcpkVDGfoUU9YfPnsZZVD2M9dD6ao8wrPh/TyRlZ
-         xdQEjWNfZHy96pbxgQyvJ2CsgFzuTjse4Zjgehd4=
+        b=Xt9zdx9tYGyWBLvhR8QaAYiJxKvbG4OQ0IFOAJ3XhR7+Ln5VAPKj04/Ke25Cnb09w
+         6/ZHrBj8d2M6mpV3wSriuGF11Vf7Pl35fkR+MfNrLo7uJP71szkCCCnGYeJK6cJsUf
+         9a5KGvD9pVA0v0LBf5iy+wUNg3Ir1z69RwEr/ngg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        anton ivanov <anton.ivanov@cambridgegreys.com>,
-        Julius Werner <jwerner@chromium.org>,
-        David Gow <davidgow@google.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 429/599] firmware: google: Properly state IOMEM dependency
-Date:   Tue,  5 Apr 2022 09:32:03 +0200
-Message-Id: <20220405070311.599379148@linuxfoundation.org>
+        stable@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: [PATCH 5.16 1011/1017] mmc: rtsx: Let MMC core handle runtime PM
+Date:   Tue,  5 Apr 2022 09:32:04 +0200
+Message-Id: <20220405070424.207454669@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,58 +54,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Gow <davidgow@google.com>
+From: Kai-Heng Feng <kai.heng.feng@canonical.com>
 
-[ Upstream commit 37fd83916da2e4cae03d350015c82a67b1b334c4 ]
+commit 7570fb41e450ba37bf9335fe3751fa9f502c30fa upstream.
 
-The Google Coreboot implementation requires IOMEM functions
-(memmremap, memunmap, devm_memremap), but does not specify this is its
-Kconfig. This results in build errors when HAS_IOMEM is not set, such as
-on some UML configurations:
+Since MMC core handles runtime PM reference counting, we can avoid doing
+redundant runtime PM work in the driver. That means the only thing
+commit 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM") misses is
+to always enable runtime PM, to let its parent driver enable ASPM in the
+runtime idle routine.
 
-/usr/bin/ld: drivers/firmware/google/coreboot_table.o: in function `coreboot_table_probe':
-coreboot_table.c:(.text+0x311): undefined reference to `memremap'
-/usr/bin/ld: coreboot_table.c:(.text+0x34e): undefined reference to `memunmap'
-/usr/bin/ld: drivers/firmware/google/memconsole-coreboot.o: in function `memconsole_probe':
-memconsole-coreboot.c:(.text+0x12d): undefined reference to `memremap'
-/usr/bin/ld: memconsole-coreboot.c:(.text+0x17e): undefined reference to `devm_memremap'
-/usr/bin/ld: memconsole-coreboot.c:(.text+0x191): undefined reference to `memunmap'
-/usr/bin/ld: drivers/firmware/google/vpd.o: in function `vpd_section_destroy.isra.0':
-vpd.c:(.text+0x300): undefined reference to `memunmap'
-/usr/bin/ld: drivers/firmware/google/vpd.o: in function `vpd_section_init':
-vpd.c:(.text+0x382): undefined reference to `memremap'
-/usr/bin/ld: vpd.c:(.text+0x459): undefined reference to `memunmap'
-/usr/bin/ld: drivers/firmware/google/vpd.o: in function `vpd_probe':
-vpd.c:(.text+0x59d): undefined reference to `memremap'
-/usr/bin/ld: vpd.c:(.text+0x5d3): undefined reference to `memunmap'
-collect2: error: ld returned 1 exit status
-
-Fixes: a28aad66da8b ("firmware: coreboot: Collapse platform drivers into bus core")
-Acked-By: anton ivanov <anton.ivanov@cambridgegreys.com>
-Acked-By: Julius Werner <jwerner@chromium.org>
-Signed-off-by: David Gow <davidgow@google.com>
-Link: https://lore.kernel.org/r/20220225041502.1901806-1-davidgow@google.com
+Fixes: 7499b529d97f ("mmc: rtsx: Use pm_runtime_{get,put}() to handle runtime PM")
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Link: https://lore.kernel.org/r/20220216055435.2335297-1-kai.heng.feng@canonical.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/google/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mmc/host/rtsx_pci_sdmmc.c |   18 ------------------
+ 1 file changed, 18 deletions(-)
 
-diff --git a/drivers/firmware/google/Kconfig b/drivers/firmware/google/Kconfig
-index 931544c9f63d..983e07dc022e 100644
---- a/drivers/firmware/google/Kconfig
-+++ b/drivers/firmware/google/Kconfig
-@@ -21,7 +21,7 @@ config GOOGLE_SMI
+--- a/drivers/mmc/host/rtsx_pci_sdmmc.c
++++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
+@@ -823,7 +823,6 @@ static void sd_request(struct work_struc
+ 	}
  
- config GOOGLE_COREBOOT_TABLE
- 	tristate "Coreboot Table Access"
--	depends on ACPI || OF
-+	depends on HAS_IOMEM && (ACPI || OF)
- 	help
- 	  This option enables the coreboot_table module, which provides other
- 	  firmware modules access to the coreboot table. The coreboot table
--- 
-2.34.1
-
+ 	mutex_lock(&pcr->pcr_mutex);
+-	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -860,8 +859,6 @@ static void sd_request(struct work_struc
+ 			data->bytes_xfered = data->blocks * data->blksz;
+ 	}
+ 
+-	pm_runtime_mark_last_busy(dev);
+-	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+ finish:
+@@ -1093,7 +1090,6 @@ static void sdmmc_set_ios(struct mmc_hos
+ 		return;
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
+-	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -1127,8 +1123,6 @@ static void sdmmc_set_ios(struct mmc_hos
+ 	rtsx_pci_switch_clock(pcr, ios->clock, host->ssc_depth,
+ 			host->initial_mode, host->double_clk, host->vpclk);
+ 
+-	pm_runtime_mark_last_busy(dev);
+-	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ }
+ 
+@@ -1144,7 +1138,6 @@ static int sdmmc_get_ro(struct mmc_host
+ 		return -ENOMEDIUM;
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
+-	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -1154,8 +1147,6 @@ static int sdmmc_get_ro(struct mmc_host
+ 	if (val & SD_WRITE_PROTECT)
+ 		ro = 1;
+ 
+-	pm_runtime_mark_last_busy(dev);
+-	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+ 	return ro;
+@@ -1173,7 +1164,6 @@ static int sdmmc_get_cd(struct mmc_host
+ 		return cd;
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
+-	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -1183,8 +1173,6 @@ static int sdmmc_get_cd(struct mmc_host
+ 	if (val & SD_EXIST)
+ 		cd = 1;
+ 
+-	pm_runtime_mark_last_busy(dev);
+-	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+ 	return cd;
+@@ -1282,7 +1270,6 @@ static int sdmmc_switch_voltage(struct m
+ 		return err;
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
+-	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -1312,8 +1299,6 @@ out:
+ 	err = rtsx_pci_write_register(pcr, SD_BUS_STAT,
+ 			SD_CLK_TOGGLE_EN | SD_CLK_FORCE_STOP, 0);
+ 
+-	pm_runtime_mark_last_busy(dev);
+-	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+ 	return err;
+@@ -1334,7 +1319,6 @@ static int sdmmc_execute_tuning(struct m
+ 		return err;
+ 
+ 	mutex_lock(&pcr->pcr_mutex);
+-	pm_runtime_get_sync(dev);
+ 
+ 	rtsx_pci_start_run(pcr);
+ 
+@@ -1367,8 +1351,6 @@ static int sdmmc_execute_tuning(struct m
+ 		err = sd_change_phase(host, DDR50_RX_PHASE(pcr), true);
+ 
+ out:
+-	pm_runtime_mark_last_busy(dev);
+-	pm_runtime_put_autosuspend(dev);
+ 	mutex_unlock(&pcr->pcr_mutex);
+ 
+ 	return err;
 
 

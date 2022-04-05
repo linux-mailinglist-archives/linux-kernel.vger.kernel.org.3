@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 868374F2DD9
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D874F2D97
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236929AbiDEKGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:06:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45826 "EHLO
+        id S1353490AbiDEKHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:07:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240983AbiDEIcl (ORCPT
+        with ESMTP id S240988AbiDEIcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:32:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1106A94EC;
-        Tue,  5 Apr 2022 01:25:40 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A46DA27E1;
+        Tue,  5 Apr 2022 01:25:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C871B81BC0;
-        Tue,  5 Apr 2022 08:25:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2D85C385A1;
-        Tue,  5 Apr 2022 08:25:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB60060FF5;
+        Tue,  5 Apr 2022 08:25:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A2B7C385A2;
+        Tue,  5 Apr 2022 08:25:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147138;
-        bh=f19IgujV/yw7D/q+fpx39ycuktKtJQPW23eKnN0ZCdQ=;
+        s=korg; t=1649147141;
+        bh=5zlb1hptJ2v/BAudDlnKXkagzh8LBcBz6czfaqR09DE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cgTZpkWWtOLOllwlGPa8SLbkS4MnogXI6nVAB4goYsRyr0lDhgOyzFYP6T2XWqLoG
-         EyoavpdQnFFDozoDpjW/1CpUm2kDoNEgPW+hd1zOXVTkj5k2U1jEg2Er1oq1Fa/xyp
-         dsoMB8VQFDhMxpTFzf+TXvN9NKNMDREs5sdtM4YE=
+        b=VQulTGc140I3uQ7TOA+UU19vLg8DQ6qCaC6nKuO0ISgdi4eMNxhCHEumqNTeeiJsY
+         AOOovy7D4VaaiYWPCYJBRj4MAh8qB3ywsdW3aniH0T7uNa8xWe3bggqGFx8VRldzqU
+         uZsZH/QQNGJPWURhVYa3iM/sU324HuoqyrqWlwz4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, PaX Team <pageexec@freemail.hu>,
+        stable@vger.kernel.org, Wang Hai <wanghai38@huawei.com>,
         "Jason A. Donenfeld" <Jason@zx2c4.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.17 1016/1126] wireguard: queueing: use CFI-safe ptr_ring cleanup function
-Date:   Tue,  5 Apr 2022 09:29:23 +0200
-Message-Id: <20220405070437.308712694@linuxfoundation.org>
+Subject: [PATCH 5.17 1017/1126] wireguard: socket: free skb in send6 when ipv6 is disabled
+Date:   Tue,  5 Apr 2022 09:29:24 +0200
+Message-Id: <20220405070437.337693548@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,44 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+From: Wang Hai <wanghai38@huawei.com>
 
-commit ec59f128a9bd4255798abb1e06ac3b442f46ef68 upstream.
+commit bbbf962d9460194993ee1943a793a0a0af4a7fbf upstream.
 
-We make too nuanced use of ptr_ring to entirely move to the skb_array
-wrappers, but we at least should avoid the naughty function pointer cast
-when cleaning up skbs. Otherwise RAP/CFI will honk at us. This patch
-uses the __skb_array_destroy_skb wrapper for the cleanup, rather than
-directly providing kfree_skb, which is what other drivers in the same
-situation do too.
+I got a memory leak report:
 
-Reported-by: PaX Team <pageexec@freemail.hu>
-Fixes: 886fcee939ad ("wireguard: receive: use ring buffer for incoming handshakes")
+unreferenced object 0xffff8881191fc040 (size 232):
+  comm "kworker/u17:0", pid 23193, jiffies 4295238848 (age 3464.870s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff814c3ef4>] slab_post_alloc_hook+0x84/0x3b0
+    [<ffffffff814c8977>] kmem_cache_alloc_node+0x167/0x340
+    [<ffffffff832974fb>] __alloc_skb+0x1db/0x200
+    [<ffffffff82612b5d>] wg_socket_send_buffer_to_peer+0x3d/0xc0
+    [<ffffffff8260e94a>] wg_packet_send_handshake_initiation+0xfa/0x110
+    [<ffffffff8260ec81>] wg_packet_handshake_send_worker+0x21/0x30
+    [<ffffffff8119c558>] process_one_work+0x2e8/0x770
+    [<ffffffff8119ca2a>] worker_thread+0x4a/0x4b0
+    [<ffffffff811a88e0>] kthread+0x120/0x160
+    [<ffffffff8100242f>] ret_from_fork+0x1f/0x30
+
+In function wg_socket_send_buffer_as_reply_to_skb() or wg_socket_send_
+buffer_to_peer(), the semantics of send6() is required to free skb. But
+when CONFIG_IPV6 is disable, kfree_skb() is missing. This patch adds it
+to fix this bug.
+
+Signed-off-by: Wang Hai <wanghai38@huawei.com>
+Fixes: e7096c131e51 ("net: WireGuard secure network tunnel")
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireguard/queueing.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/wireguard/socket.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/net/wireguard/queueing.c
-+++ b/drivers/net/wireguard/queueing.c
-@@ -4,6 +4,7 @@
-  */
- 
- #include "queueing.h"
-+#include <linux/skb_array.h>
- 
- struct multicore_worker __percpu *
- wg_packet_percpu_multicore_worker_alloc(work_func_t function, void *ptr)
-@@ -42,7 +43,7 @@ void wg_packet_queue_free(struct crypt_q
- {
- 	free_percpu(queue->worker);
- 	WARN_ON(!purge && !__ptr_ring_empty(&queue->ring));
--	ptr_ring_cleanup(&queue->ring, purge ? (void(*)(void*))kfree_skb : NULL);
-+	ptr_ring_cleanup(&queue->ring, purge ? __skb_array_destroy_skb : NULL);
+--- a/drivers/net/wireguard/socket.c
++++ b/drivers/net/wireguard/socket.c
+@@ -160,6 +160,7 @@ out:
+ 	rcu_read_unlock_bh();
+ 	return ret;
+ #else
++	kfree_skb(skb);
+ 	return -EAFNOSUPPORT;
+ #endif
  }
- 
- #define NEXT(skb) ((skb)->prev)
 
 

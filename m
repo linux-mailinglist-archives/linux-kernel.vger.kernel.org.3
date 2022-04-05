@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC7E4F3F79
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 031354F402A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359278AbiDENLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:11:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34664 "EHLO
+        id S238514AbiDET4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 15:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344203AbiDEJSi (ORCPT
+        with ESMTP id S1349431AbiDEJtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:18:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820099E9EF;
-        Tue,  5 Apr 2022 02:05:27 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB2C24955;
+        Tue,  5 Apr 2022 02:45:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E616B818F3;
-        Tue,  5 Apr 2022 09:05:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85B24C385A0;
-        Tue,  5 Apr 2022 09:05:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2902B817D3;
+        Tue,  5 Apr 2022 09:45:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6155AC385A3;
+        Tue,  5 Apr 2022 09:45:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149524;
-        bh=vp5P+tlZ9AwejLKFANiTgrszGOHonIstSV2V0M0I7Kk=;
+        s=korg; t=1649151942;
+        bh=hgwv3Bsh45tJ1pWCJ/OiWav3TISg2Dhm7A/oWtm79mM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aqnCy//8R9edZ3vwq/XYMmZERHy3qaimDcp6bdyOn0wO7MoF9hKc+Rc0UERUHqwoI
-         XCJvSeiIJKkIhU/kGqNrxax5kgZw+PQqKEA3on9hcIDck7iJ9lbaw6Ryn3nsjFjW8r
-         4zF5lh//knalq1g5JXshNdNEcWvhq4KEOkg48JOI=
+        b=fl9tf04lWs5tPrA+aL+N8vv9Fc8itOlYB/NNAL8gb5YTwaedjF41tUTZSIaZqRF8e
+         BKzbVBlMcP9THHJIKLQW8qSUSbEHAcrGOcacA/RNZOcuRePfcZhL7W5wsv6+Vmg9f8
+         OERq4s5Sz0eCrVud3ZMRNuymL6oTKlm18p7FURIM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Dirk Buchwalder <buchwalder@posteo.de>,
+        Robert Marko <robimarko@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0745/1017] net/sched: act_ct: fix ref leak when switching zones
-Date:   Tue,  5 Apr 2022 09:27:38 +0200
-Message-Id: <20220405070416.376431731@linuxfoundation.org>
+Subject: [PATCH 5.15 597/913] clk: qcom: ipq8074: Use floor ops for SDCC1 clock
+Date:   Tue,  5 Apr 2022 09:27:39 +0200
+Message-Id: <20220405070357.737012667@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,63 +57,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+From: Dirk Buchwalder <buchwalder@posteo.de>
 
-[ Upstream commit bcb74e132a76ce0502bb33d5b65533a4ed72d159 ]
+[ Upstream commit b77d8306d84f83d1da68028a68c91da9c867b6f6 ]
 
-When switching zones or network namespaces without doing a ct clear in
-between, it is now leaking a reference to the old ct entry. That's
-because tcf_ct_skb_nfct_cached() returns false and
-tcf_ct_flow_table_lookup() may simply overwrite it.
+Use floor ops on SDCC1 APPS clock in order to round down selected clock
+frequency and avoid overclocking SD/eMMC cards.
 
-The fix is to, as the ct entry is not reusable, free it already at
-tcf_ct_skb_nfct_cached().
+For example, currently HS200 cards were failling tuning as they were
+actually being clocked at 384MHz instead of 192MHz.
+This caused some boards to disable 1.8V I/O and force the eMMC into the
+standard HS mode (50MHz) and that appeared to work despite the eMMC being
+overclocked to 96Mhz in that case.
 
-Reported-by: Florian Westphal <fw@strlen.de>
-Fixes: 2f131de361f6 ("net/sched: act_ct: Fix flow table lookup after ct clear or switching zones")
-Signed-off-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+There was a previous commit to use floor ops on SDCC clocks, but it looks
+to have only covered SDCC2 clock.
+
+Fixes: 9607f6224b39 ("clk: qcom: ipq8074: add PCIE, USB and SDCC clocks")
+
+Signed-off-by: Dirk Buchwalder <buchwalder@posteo.de>
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220210173100.505128-1-robimarko@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sched/act_ct.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ drivers/clk/qcom/gcc-ipq8074.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/sched/act_ct.c b/net/sched/act_ct.c
-index 240b3c5d2eb1..553bf41671a6 100644
---- a/net/sched/act_ct.c
-+++ b/net/sched/act_ct.c
-@@ -583,22 +583,25 @@ static bool tcf_ct_skb_nfct_cached(struct net *net, struct sk_buff *skb,
- 	if (!ct)
- 		return false;
- 	if (!net_eq(net, read_pnet(&ct->ct_net)))
--		return false;
-+		goto drop_ct;
- 	if (nf_ct_zone(ct)->id != zone_id)
--		return false;
-+		goto drop_ct;
+diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
+index b09d99343e09..541016db3c4b 100644
+--- a/drivers/clk/qcom/gcc-ipq8074.c
++++ b/drivers/clk/qcom/gcc-ipq8074.c
+@@ -1074,7 +1074,7 @@ static struct clk_rcg2 sdcc1_apps_clk_src = {
+ 		.name = "sdcc1_apps_clk_src",
+ 		.parent_names = gcc_xo_gpll0_gpll2_gpll0_out_main_div2,
+ 		.num_parents = 4,
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_floor_ops,
+ 	},
+ };
  
- 	/* Force conntrack entry direction. */
- 	if (force && CTINFO2DIR(ctinfo) != IP_CT_DIR_ORIGINAL) {
- 		if (nf_ct_is_confirmed(ct))
- 			nf_ct_kill(ct);
- 
--		nf_ct_put(ct);
--		nf_ct_set(skb, NULL, IP_CT_UNTRACKED);
--
--		return false;
-+		goto drop_ct;
- 	}
- 
- 	return true;
-+
-+drop_ct:
-+	nf_ct_put(ct);
-+	nf_ct_set(skb, NULL, IP_CT_UNTRACKED);
-+
-+	return false;
- }
- 
- /* Trim the skb to the length specified by the IP/IPv6 header,
 -- 
 2.34.1
 

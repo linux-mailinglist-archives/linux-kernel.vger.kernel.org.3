@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A60B74F4C5F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 043994F4E0C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1578316AbiDEXTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58496 "EHLO
+        id S1587305AbiDFAIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358163AbiDEK2C (ORCPT
+        with ESMTP id S1352775AbiDEKFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:28:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374799D4FD;
-        Tue,  5 Apr 2022 03:16:06 -0700 (PDT)
+        Tue, 5 Apr 2022 06:05:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB3EBBE22;
+        Tue,  5 Apr 2022 02:53:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA07E617AC;
-        Tue,  5 Apr 2022 10:16:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D192FC385A0;
-        Tue,  5 Apr 2022 10:16:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 14A7961748;
+        Tue,  5 Apr 2022 09:53:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AE17C385A7;
+        Tue,  5 Apr 2022 09:53:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153765;
-        bh=oQol12NXJTmIhclid5lByyWV5QiK2rwhkoALF3HfbRc=;
+        s=korg; t=1649152428;
+        bh=SKZutM5MYcPInu9uE+l6/j/YSHIv/4wzRWyJA1p9xes=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XFMQ+Dah5PmQGArpTYbp/omJP5yCyplEmzsIERL+8F+QSGUecgJN8MYYRbFQ7wy4S
-         ZqfEXlt2RjjJllKWUf2252o+EdWbW8C1s07tZyFvHesjWlD/Jf1zhRjcDkNiBrC5Hi
-         FoyZV6bFVDFM3nbzKsh5Ksda5NJhG3/uNyLOzJsI=
+        b=mWcQsd720Qxei7LZTGqsWXaKDjXdpUdG1IzUrc0CeKqLM1zD6FRpEKP6FCWeiVTQy
+         RqSToOipqZJKGwjLKZpS2nTuuRwKexKWiWY7x+pmqtrj04ugCgu2tCSl0UCqik8fks
+         ivrKtfGPKE5R0nsBBYFBwe2+yci9hEd9fJ2BGq98=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh@kernel.org>,
-        Scott Branden <scott.branden@broadcom.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 340/599] PCI: Reduce warnings on possible RW1C corruption
+        stable@vger.kernel.org, Ben Gardon <bgardon@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.15 772/913] KVM: x86/mmu: Zap _all_ roots when unmapping gfn range in TDP MMU
 Date:   Tue,  5 Apr 2022 09:30:34 +0200
-Message-Id: <20220405070308.951211820@linuxfoundation.org>
+Message-Id: <20220405070402.973258152@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,71 +55,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+From: Sean Christopherson <seanjc@google.com>
 
-[ Upstream commit 92c45b63ce22c8898aa41806e8d6692bcd577510 ]
+commit d62007edf01f5c11f75d0f4b1e538fc52a5b1982 upstream.
 
-For hardware that only supports 32-bit writes to PCI there is the
-possibility of clearing RW1C (write-one-to-clear) bits. A rate-limited
-messages was introduced by fb2659230120, but rate-limiting is not the best
-choice here. Some devices may not show the warnings they should if another
-device has just produced a bunch of warnings. Also, the number of messages
-can be a nuisance on devices which are otherwise working fine.
+Zap both valid and invalid roots when zapping/unmapping a gfn range, as
+KVM must ensure it holds no references to the freed page after returning
+from the unmap operation.  Most notably, the TDP MMU doesn't zap invalid
+roots in mmu_notifier callbacks.  This leads to use-after-free and other
+issues if the mmu_notifier runs to completion while an invalid root
+zapper yields as KVM fails to honor the requirement that there must be
+_no_ references to the page after the mmu_notifier returns.
 
-Change the ratelimit to a single warning per bus. This ensures no bus is
-'starved' of emitting a warning and also that there isn't a continuous
-stream of warnings. It would be preferable to have a warning per device,
-but the pci_dev structure is not available here, and a lookup from devfn
-would be far too slow.
+The bug is most easily reproduced by hacking KVM to cause a collision
+between set_nx_huge_pages() and kvm_mmu_notifier_release(), but the bug
+exists between kvm_mmu_notifier_invalidate_range_start() and memslot
+updates as well.  Invalidating a root ensures pages aren't accessible by
+the guest, and KVM won't read or write page data itself, but KVM will
+trigger e.g. kvm_set_pfn_dirty() when zapping SPTEs, and thus completing
+a zap of an invalid root _after_ the mmu_notifier returns is fatal.
 
-Suggested-by: Bjorn Helgaas <helgaas@kernel.org>
-Fixes: fb2659230120 ("PCI: Warn on possible RW1C corruption for sub-32 bit config writes")
-Link: https://lore.kernel.org/r/20200806041455.11070-1-mark.tomlinson@alliedtelesis.co.nz
-Signed-off-by: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Acked-by: Scott Branden <scott.branden@broadcom.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+  WARNING: CPU: 24 PID: 1496 at arch/x86/kvm/../../../virt/kvm/kvm_main.c:173 [kvm]
+  RIP: 0010:kvm_is_zone_device_pfn+0x96/0xa0 [kvm]
+  Call Trace:
+   <TASK>
+   kvm_set_pfn_dirty+0xa8/0xe0 [kvm]
+   __handle_changed_spte+0x2ab/0x5e0 [kvm]
+   __handle_changed_spte+0x2ab/0x5e0 [kvm]
+   __handle_changed_spte+0x2ab/0x5e0 [kvm]
+   zap_gfn_range+0x1f3/0x310 [kvm]
+   kvm_tdp_mmu_zap_invalidated_roots+0x50/0x90 [kvm]
+   kvm_mmu_zap_all_fast+0x177/0x1a0 [kvm]
+   set_nx_huge_pages+0xb4/0x190 [kvm]
+   param_attr_store+0x70/0x100
+   module_attr_store+0x19/0x30
+   kernfs_fop_write_iter+0x119/0x1b0
+   new_sync_write+0x11c/0x1b0
+   vfs_write+0x1cc/0x270
+   ksys_write+0x5f/0xe0
+   do_syscall_64+0x38/0xc0
+   entry_SYSCALL_64_after_hwframe+0x44/0xae
+   </TASK>
+
+Fixes: b7cccd397f31 ("KVM: x86/mmu: Fast invalidation for TDP MMU")
+Cc: stable@vger.kernel.org
+Cc: Ben Gardon <bgardon@google.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Message-Id: <20211215011557.399940-4-seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/access.c | 9 ++++++---
- include/linux/pci.h  | 1 +
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ arch/x86/kvm/mmu/tdp_mmu.c |   39 ++++++++++++++++++++++++---------------
+ 1 file changed, 24 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/pci/access.c b/drivers/pci/access.c
-index 46935695cfb9..8d0d1f61c650 100644
---- a/drivers/pci/access.c
-+++ b/drivers/pci/access.c
-@@ -160,9 +160,12 @@ int pci_generic_config_write32(struct pci_bus *bus, unsigned int devfn,
- 	 * write happen to have any RW1C (write-one-to-clear) bits set, we
- 	 * just inadvertently cleared something we shouldn't have.
- 	 */
--	dev_warn_ratelimited(&bus->dev, "%d-byte config write to %04x:%02x:%02x.%d offset %#x may corrupt adjacent RW1C bits\n",
--			     size, pci_domain_nr(bus), bus->number,
--			     PCI_SLOT(devfn), PCI_FUNC(devfn), where);
-+	if (!bus->unsafe_warn) {
-+		dev_warn(&bus->dev, "%d-byte config write to %04x:%02x:%02x.%d offset %#x may corrupt adjacent RW1C bits\n",
-+			 size, pci_domain_nr(bus), bus->number,
-+			 PCI_SLOT(devfn), PCI_FUNC(devfn), where);
-+		bus->unsafe_warn = 1;
-+	}
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -99,15 +99,18 @@ void kvm_tdp_mmu_put_root(struct kvm *kv
+ }
  
- 	mask = ~(((1 << (size * 8)) - 1) << ((where & 0x3) * 8));
- 	tmp = readl(addr) & mask;
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 4519bd12643f..bc5a1150f072 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -638,6 +638,7 @@ struct pci_bus {
- 	struct bin_attribute	*legacy_io;	/* Legacy I/O for this bus */
- 	struct bin_attribute	*legacy_mem;	/* Legacy mem */
- 	unsigned int		is_added:1;
-+	unsigned int		unsafe_warn:1;	/* warned about RW1C config write */
- };
+ /*
+- * Finds the next valid root after root (or the first valid root if root
+- * is NULL), takes a reference on it, and returns that next root. If root
+- * is not NULL, this thread should have already taken a reference on it, and
+- * that reference will be dropped. If no valid root is found, this
+- * function will return NULL.
++ * Returns the next root after @prev_root (or the first root if @prev_root is
++ * NULL).  A reference to the returned root is acquired, and the reference to
++ * @prev_root is released (the caller obviously must hold a reference to
++ * @prev_root if it's non-NULL).
++ *
++ * If @only_valid is true, invalid roots are skipped.
++ *
++ * Returns NULL if the end of tdp_mmu_roots was reached.
+  */
+ static struct kvm_mmu_page *tdp_mmu_next_root(struct kvm *kvm,
+ 					      struct kvm_mmu_page *prev_root,
+-					      bool shared)
++					      bool shared, bool only_valid)
+ {
+ 	struct kvm_mmu_page *next_root;
  
- #define to_pci_bus(n)	container_of(n, struct pci_bus, dev)
--- 
-2.34.1
-
+@@ -122,7 +125,7 @@ static struct kvm_mmu_page *tdp_mmu_next
+ 						   typeof(*next_root), link);
+ 
+ 	while (next_root) {
+-		if (!next_root->role.invalid &&
++		if ((!only_valid || !next_root->role.invalid) &&
+ 		    kvm_tdp_mmu_get_root(kvm, next_root))
+ 			break;
+ 
+@@ -148,13 +151,19 @@ static struct kvm_mmu_page *tdp_mmu_next
+  * mode. In the unlikely event that this thread must free a root, the lock
+  * will be temporarily dropped and reacquired in write mode.
+  */
+-#define for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared)	\
+-	for (_root = tdp_mmu_next_root(_kvm, NULL, _shared);		\
+-	     _root;							\
+-	     _root = tdp_mmu_next_root(_kvm, _root, _shared))		\
+-		if (kvm_mmu_page_as_id(_root) != _as_id) {		\
++#define __for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared, _only_valid)\
++	for (_root = tdp_mmu_next_root(_kvm, NULL, _shared, _only_valid);	\
++	     _root;								\
++	     _root = tdp_mmu_next_root(_kvm, _root, _shared, _only_valid))	\
++		if (kvm_mmu_page_as_id(_root) != _as_id) {			\
+ 		} else
+ 
++#define for_each_valid_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared)	\
++	__for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared, true)
++
++#define for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared)		\
++	__for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared, false)
++
+ #define for_each_tdp_mmu_root(_kvm, _root, _as_id)				\
+ 	list_for_each_entry_rcu(_root, &_kvm->arch.tdp_mmu_roots, link,		\
+ 				lockdep_is_held_type(&kvm->mmu_lock, 0) ||	\
+@@ -1279,7 +1288,7 @@ bool kvm_tdp_mmu_wrprot_slot(struct kvm
+ 
+ 	lockdep_assert_held_read(&kvm->mmu_lock);
+ 
+-	for_each_tdp_mmu_root_yield_safe(kvm, root, slot->as_id, true)
++	for_each_valid_tdp_mmu_root_yield_safe(kvm, root, slot->as_id, true)
+ 		spte_set |= wrprot_gfn_range(kvm, root, slot->base_gfn,
+ 			     slot->base_gfn + slot->npages, min_level);
+ 
+@@ -1350,7 +1359,7 @@ bool kvm_tdp_mmu_clear_dirty_slot(struct
+ 
+ 	lockdep_assert_held_read(&kvm->mmu_lock);
+ 
+-	for_each_tdp_mmu_root_yield_safe(kvm, root, slot->as_id, true)
++	for_each_valid_tdp_mmu_root_yield_safe(kvm, root, slot->as_id, true)
+ 		spte_set |= clear_dirty_gfn_range(kvm, root, slot->base_gfn,
+ 				slot->base_gfn + slot->npages);
+ 
+@@ -1475,7 +1484,7 @@ void kvm_tdp_mmu_zap_collapsible_sptes(s
+ 
+ 	lockdep_assert_held_read(&kvm->mmu_lock);
+ 
+-	for_each_tdp_mmu_root_yield_safe(kvm, root, slot->as_id, true)
++	for_each_valid_tdp_mmu_root_yield_safe(kvm, root, slot->as_id, true)
+ 		zap_collapsible_spte_range(kvm, root, slot);
+ }
+ 
 
 

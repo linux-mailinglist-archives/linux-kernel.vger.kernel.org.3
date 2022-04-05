@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 043994F4E0C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C8D4F4E08
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1587305AbiDFAIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
+        id S1587227AbiDFAIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352775AbiDEKFI (ORCPT
+        with ESMTP id S1358166AbiDEK2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:05:08 -0400
+        Tue, 5 Apr 2022 06:28:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB3EBBE22;
-        Tue,  5 Apr 2022 02:53:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA9D9D4FE;
+        Tue,  5 Apr 2022 03:16:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 14A7961748;
-        Tue,  5 Apr 2022 09:53:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AE17C385A7;
-        Tue,  5 Apr 2022 09:53:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A6A461777;
+        Tue,  5 Apr 2022 10:16:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CBABC385A0;
+        Tue,  5 Apr 2022 10:16:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152428;
-        bh=SKZutM5MYcPInu9uE+l6/j/YSHIv/4wzRWyJA1p9xes=;
+        s=korg; t=1649153767;
+        bh=zZEuxgGk8rvxo6si7nkjBxxalp/3KomTIUr2lNv5mmk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mWcQsd720Qxei7LZTGqsWXaKDjXdpUdG1IzUrc0CeKqLM1zD6FRpEKP6FCWeiVTQy
-         RqSToOipqZJKGwjLKZpS2nTuuRwKexKWiWY7x+pmqtrj04ugCgu2tCSl0UCqik8fks
-         ivrKtfGPKE5R0nsBBYFBwe2+yci9hEd9fJ2BGq98=
+        b=btXYDWlqLgHlOEqR5CF2qZEUFZiywBT6vWZRzZIi9C2cEEgGdaLSt66fyVV2Fg7YL
+         OsBf3kQKwzEBU1grvGIdzT9sJm1c3IkxNP4Bqx2olw5RVe/xaDGnrJdQuxQuAOvYXL
+         aqFNYTOAH8rkYYIEFp+tGsyabfJfCus3m1H6BUew=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ben Gardon <bgardon@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.15 772/913] KVM: x86/mmu: Zap _all_ roots when unmapping gfn range in TDP MMU
-Date:   Tue,  5 Apr 2022 09:30:34 +0200
-Message-Id: <20220405070402.973258152@linuxfoundation.org>
+        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 341/599] net: axienet: fix RX ring refill allocation failure handling
+Date:   Tue,  5 Apr 2022 09:30:35 +0200
+Message-Id: <20220405070308.981244679@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,146 +55,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Robert Hancock <robert.hancock@calian.com>
 
-commit d62007edf01f5c11f75d0f4b1e538fc52a5b1982 upstream.
+[ Upstream commit 7a7d340ba4d9351e4c8847b898a2b996727a922a ]
 
-Zap both valid and invalid roots when zapping/unmapping a gfn range, as
-KVM must ensure it holds no references to the freed page after returning
-from the unmap operation.  Most notably, the TDP MMU doesn't zap invalid
-roots in mmu_notifier callbacks.  This leads to use-after-free and other
-issues if the mmu_notifier runs to completion while an invalid root
-zapper yields as KVM fails to honor the requirement that there must be
-_no_ references to the page after the mmu_notifier returns.
+If a memory allocation error occurred during an attempt to refill a slot
+in the RX ring after the packet was received, the hardware tail pointer
+would still have been updated to point to or past the slot which remained
+marked as previously completed. This would likely result in the DMA engine
+raising an error when it eventually tried to use that slot again.
 
-The bug is most easily reproduced by hacking KVM to cause a collision
-between set_nx_huge_pages() and kvm_mmu_notifier_release(), but the bug
-exists between kvm_mmu_notifier_invalidate_range_start() and memslot
-updates as well.  Invalidating a root ensures pages aren't accessible by
-the guest, and KVM won't read or write page data itself, but KVM will
-trigger e.g. kvm_set_pfn_dirty() when zapping SPTEs, and thus completing
-a zap of an invalid root _after_ the mmu_notifier returns is fatal.
+If a slot cannot be refilled, then just stop processing and do not move
+the tail pointer past it. On the next attempt, we should skip receiving
+the packet from the empty slot and just try to refill it again.
 
-  WARNING: CPU: 24 PID: 1496 at arch/x86/kvm/../../../virt/kvm/kvm_main.c:173 [kvm]
-  RIP: 0010:kvm_is_zone_device_pfn+0x96/0xa0 [kvm]
-  Call Trace:
-   <TASK>
-   kvm_set_pfn_dirty+0xa8/0xe0 [kvm]
-   __handle_changed_spte+0x2ab/0x5e0 [kvm]
-   __handle_changed_spte+0x2ab/0x5e0 [kvm]
-   __handle_changed_spte+0x2ab/0x5e0 [kvm]
-   zap_gfn_range+0x1f3/0x310 [kvm]
-   kvm_tdp_mmu_zap_invalidated_roots+0x50/0x90 [kvm]
-   kvm_mmu_zap_all_fast+0x177/0x1a0 [kvm]
-   set_nx_huge_pages+0xb4/0x190 [kvm]
-   param_attr_store+0x70/0x100
-   module_attr_store+0x19/0x30
-   kernfs_fop_write_iter+0x119/0x1b0
-   new_sync_write+0x11c/0x1b0
-   vfs_write+0x1cc/0x270
-   ksys_write+0x5f/0xe0
-   do_syscall_64+0x38/0xc0
-   entry_SYSCALL_64_after_hwframe+0x44/0xae
-   </TASK>
+This failure mode has not actually been observed, but was found as part
+of other driver updates.
 
-Fixes: b7cccd397f31 ("KVM: x86/mmu: Fast invalidation for TDP MMU")
-Cc: stable@vger.kernel.org
-Cc: Ben Gardon <bgardon@google.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20211215011557.399940-4-seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 8a3b7a252dca ("drivers/net/ethernet/xilinx: added Xilinx AXI Ethernet driver")
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/mmu/tdp_mmu.c |   39 ++++++++++++++++++++++++---------------
- 1 file changed, 24 insertions(+), 15 deletions(-)
+ .../net/ethernet/xilinx/xilinx_axienet_main.c | 72 +++++++++++--------
+ 1 file changed, 42 insertions(+), 30 deletions(-)
 
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -99,15 +99,18 @@ void kvm_tdp_mmu_put_root(struct kvm *kv
- }
+diff --git a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+index 0baf85122f5a..bbdcba88c021 100644
+--- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
++++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+@@ -857,46 +857,53 @@ static void axienet_recv(struct net_device *ndev)
+ 	while ((cur_p->status & XAXIDMA_BD_STS_COMPLETE_MASK)) {
+ 		dma_addr_t phys;
  
- /*
-- * Finds the next valid root after root (or the first valid root if root
-- * is NULL), takes a reference on it, and returns that next root. If root
-- * is not NULL, this thread should have already taken a reference on it, and
-- * that reference will be dropped. If no valid root is found, this
-- * function will return NULL.
-+ * Returns the next root after @prev_root (or the first root if @prev_root is
-+ * NULL).  A reference to the returned root is acquired, and the reference to
-+ * @prev_root is released (the caller obviously must hold a reference to
-+ * @prev_root if it's non-NULL).
-+ *
-+ * If @only_valid is true, invalid roots are skipped.
-+ *
-+ * Returns NULL if the end of tdp_mmu_roots was reached.
-  */
- static struct kvm_mmu_page *tdp_mmu_next_root(struct kvm *kvm,
- 					      struct kvm_mmu_page *prev_root,
--					      bool shared)
-+					      bool shared, bool only_valid)
- {
- 	struct kvm_mmu_page *next_root;
+-		tail_p = lp->rx_bd_p + sizeof(*lp->rx_bd_v) * lp->rx_bd_ci;
+-
+ 		/* Ensure we see complete descriptor update */
+ 		dma_rmb();
+-		phys = desc_get_phys_addr(lp, cur_p);
+-		dma_unmap_single(ndev->dev.parent, phys, lp->max_frm_size,
+-				 DMA_FROM_DEVICE);
  
-@@ -122,7 +125,7 @@ static struct kvm_mmu_page *tdp_mmu_next
- 						   typeof(*next_root), link);
- 
- 	while (next_root) {
--		if (!next_root->role.invalid &&
-+		if ((!only_valid || !next_root->role.invalid) &&
- 		    kvm_tdp_mmu_get_root(kvm, next_root))
- 			break;
- 
-@@ -148,13 +151,19 @@ static struct kvm_mmu_page *tdp_mmu_next
-  * mode. In the unlikely event that this thread must free a root, the lock
-  * will be temporarily dropped and reacquired in write mode.
-  */
--#define for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared)	\
--	for (_root = tdp_mmu_next_root(_kvm, NULL, _shared);		\
--	     _root;							\
--	     _root = tdp_mmu_next_root(_kvm, _root, _shared))		\
--		if (kvm_mmu_page_as_id(_root) != _as_id) {		\
-+#define __for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared, _only_valid)\
-+	for (_root = tdp_mmu_next_root(_kvm, NULL, _shared, _only_valid);	\
-+	     _root;								\
-+	     _root = tdp_mmu_next_root(_kvm, _root, _shared, _only_valid))	\
-+		if (kvm_mmu_page_as_id(_root) != _as_id) {			\
- 		} else
- 
-+#define for_each_valid_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared)	\
-+	__for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared, true)
+ 		skb = cur_p->skb;
+ 		cur_p->skb = NULL;
+-		length = cur_p->app4 & 0x0000FFFF;
+-
+-		skb_put(skb, length);
+-		skb->protocol = eth_type_trans(skb, ndev);
+-		/*skb_checksum_none_assert(skb);*/
+-		skb->ip_summed = CHECKSUM_NONE;
+-
+-		/* if we're doing Rx csum offload, set it up */
+-		if (lp->features & XAE_FEATURE_FULL_RX_CSUM) {
+-			csumstatus = (cur_p->app2 &
+-				      XAE_FULL_CSUM_STATUS_MASK) >> 3;
+-			if ((csumstatus == XAE_IP_TCP_CSUM_VALIDATED) ||
+-			    (csumstatus == XAE_IP_UDP_CSUM_VALIDATED)) {
+-				skb->ip_summed = CHECKSUM_UNNECESSARY;
 +
-+#define for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared)		\
-+	__for_each_tdp_mmu_root_yield_safe(_kvm, _root, _as_id, _shared, false)
++		/* skb could be NULL if a previous pass already received the
++		 * packet for this slot in the ring, but failed to refill it
++		 * with a newly allocated buffer. In this case, don't try to
++		 * receive it again.
++		 */
++		if (likely(skb)) {
++			length = cur_p->app4 & 0x0000FFFF;
 +
- #define for_each_tdp_mmu_root(_kvm, _root, _as_id)				\
- 	list_for_each_entry_rcu(_root, &_kvm->arch.tdp_mmu_roots, link,		\
- 				lockdep_is_held_type(&kvm->mmu_lock, 0) ||	\
-@@ -1279,7 +1288,7 @@ bool kvm_tdp_mmu_wrprot_slot(struct kvm
++			phys = desc_get_phys_addr(lp, cur_p);
++			dma_unmap_single(ndev->dev.parent, phys, lp->max_frm_size,
++					 DMA_FROM_DEVICE);
++
++			skb_put(skb, length);
++			skb->protocol = eth_type_trans(skb, ndev);
++			/*skb_checksum_none_assert(skb);*/
++			skb->ip_summed = CHECKSUM_NONE;
++
++			/* if we're doing Rx csum offload, set it up */
++			if (lp->features & XAE_FEATURE_FULL_RX_CSUM) {
++				csumstatus = (cur_p->app2 &
++					      XAE_FULL_CSUM_STATUS_MASK) >> 3;
++				if (csumstatus == XAE_IP_TCP_CSUM_VALIDATED ||
++				    csumstatus == XAE_IP_UDP_CSUM_VALIDATED) {
++					skb->ip_summed = CHECKSUM_UNNECESSARY;
++				}
++			} else if ((lp->features & XAE_FEATURE_PARTIAL_RX_CSUM) != 0 &&
++				   skb->protocol == htons(ETH_P_IP) &&
++				   skb->len > 64) {
++				skb->csum = be32_to_cpu(cur_p->app3 & 0xFFFF);
++				skb->ip_summed = CHECKSUM_COMPLETE;
+ 			}
+-		} else if ((lp->features & XAE_FEATURE_PARTIAL_RX_CSUM) != 0 &&
+-			   skb->protocol == htons(ETH_P_IP) &&
+-			   skb->len > 64) {
+-			skb->csum = be32_to_cpu(cur_p->app3 & 0xFFFF);
+-			skb->ip_summed = CHECKSUM_COMPLETE;
+-		}
  
- 	lockdep_assert_held_read(&kvm->mmu_lock);
+-		netif_rx(skb);
++			netif_rx(skb);
  
--	for_each_tdp_mmu_root_yield_safe(kvm, root, slot->as_id, true)
-+	for_each_valid_tdp_mmu_root_yield_safe(kvm, root, slot->as_id, true)
- 		spte_set |= wrprot_gfn_range(kvm, root, slot->base_gfn,
- 			     slot->base_gfn + slot->npages, min_level);
+-		size += length;
+-		packets++;
++			size += length;
++			packets++;
++		}
  
-@@ -1350,7 +1359,7 @@ bool kvm_tdp_mmu_clear_dirty_slot(struct
+ 		new_skb = netdev_alloc_skb_ip_align(ndev, lp->max_frm_size);
+ 		if (!new_skb)
+-			return;
++			break;
  
- 	lockdep_assert_held_read(&kvm->mmu_lock);
+ 		phys = dma_map_single(ndev->dev.parent, new_skb->data,
+ 				      lp->max_frm_size,
+@@ -905,7 +912,7 @@ static void axienet_recv(struct net_device *ndev)
+ 			if (net_ratelimit())
+ 				netdev_err(ndev, "RX DMA mapping error\n");
+ 			dev_kfree_skb(new_skb);
+-			return;
++			break;
+ 		}
+ 		desc_set_phys_addr(lp, phys, cur_p);
  
--	for_each_tdp_mmu_root_yield_safe(kvm, root, slot->as_id, true)
-+	for_each_valid_tdp_mmu_root_yield_safe(kvm, root, slot->as_id, true)
- 		spte_set |= clear_dirty_gfn_range(kvm, root, slot->base_gfn,
- 				slot->base_gfn + slot->npages);
+@@ -913,6 +920,11 @@ static void axienet_recv(struct net_device *ndev)
+ 		cur_p->status = 0;
+ 		cur_p->skb = new_skb;
  
-@@ -1475,7 +1484,7 @@ void kvm_tdp_mmu_zap_collapsible_sptes(s
- 
- 	lockdep_assert_held_read(&kvm->mmu_lock);
- 
--	for_each_tdp_mmu_root_yield_safe(kvm, root, slot->as_id, true)
-+	for_each_valid_tdp_mmu_root_yield_safe(kvm, root, slot->as_id, true)
- 		zap_collapsible_spte_range(kvm, root, slot);
- }
- 
++		/* Only update tail_p to mark this slot as usable after it has
++		 * been successfully refilled.
++		 */
++		tail_p = lp->rx_bd_p + sizeof(*lp->rx_bd_v) * lp->rx_bd_ci;
++
+ 		if (++lp->rx_bd_ci >= lp->rx_bd_num)
+ 			lp->rx_bd_ci = 0;
+ 		cur_p = &lp->rx_bd_v[lp->rx_bd_ci];
+-- 
+2.34.1
+
 
 

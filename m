@@ -2,286 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D57264F4426
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EFB64F4750
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443856AbiDEUHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42628 "EHLO
+        id S243663AbiDEVID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345584AbiDENFW (ORCPT
+        with ESMTP id S1352628AbiDENHD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 09:05:22 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B33A71EC9
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 05:06:34 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id bi13-20020a05600c3d8d00b0038c2c33d8f3so1422134wmb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 05:06:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=GiiakbZrYZsutR3hm5vzK0RdBB42qhkHtdNfJL6cDvs=;
-        b=TYnE/GxzA8EPxXb6SWK+ud4FnpjNdMv2uF/9EoHF8vTi9HY3jsHSqvbQUNHgOekbwK
-         ToWxPC57AQQ+BHxjhaXtLerr7cnggd8qf9Ba4+qGai5x3fQ4exDsSDjSljjafvwWy+5P
-         5n1KyDaoUXhF8NBt9dye7zKC9YeGDThwYBdZZW4njMhNVa7SPXRohCKtEG5yVL3o2c2B
-         U259ebNO5Xl3c76G3qM6bT+HSC+tHMX/wO5EaWoNQ5Dt4s54ChhraPF9vca7S9mrVIHT
-         CI2SDNejy3wUeqSqZXP1ptK2oKQj+DZGVSS74qm47og7DfjEffC4Zt/p1ZrUDyiprSrh
-         YrAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=GiiakbZrYZsutR3hm5vzK0RdBB42qhkHtdNfJL6cDvs=;
-        b=bPI0otT8XF51WjTSRtjzZ0oE6HCq6KjK3vbyrGLcNW6+kFi7MgAmo6lD1xxuDk6db0
-         7Uq2Rn6UGPNwftOJbV+psRIJLPn9TYsZSQHNj+PRl3TFoPWz/rwhEsHpkbItFiCeFDqo
-         48xam0/i8KpacO9CB+HzIHaO4KSoTaslrBNv0L7//4ovcdcMePnlhOi/gCiVIanIIJoO
-         0LLbVZj5Cj3X+nj3Ni7XAz7592cw7dqQA91qYcVHJ/LcguuAgmdnJcZjY6x3Kp0ji3ao
-         l3Cg46qt4jAsvfdEF2kHe7Z94AUFDMkkSw4fvLkgktbB0rTlCAnVKRWSfaT1Yv0iKgXY
-         ethQ==
-X-Gm-Message-State: AOAM533YUOlHs0tk0eupzgnWsNCi+L6WmP2Zvcf2dWyY5HpeRf9Wkbmm
-        ripQg8DGAU/Ig3uYZnmEwb+LT/PpXZEUQw==
-X-Google-Smtp-Source: ABdhPJxxDlvoUxgPpV6VA3YC0abV72hR6sZRlpsDSINDZ8Ikb6uizgkQPgeDbPcRBRSDzin9RIA30g==
-X-Received: by 2002:a05:600c:1e1f:b0:38e:7073:3439 with SMTP id ay31-20020a05600c1e1f00b0038e70733439mr2885144wmb.120.1649160392715;
-        Tue, 05 Apr 2022 05:06:32 -0700 (PDT)
-Received: from fedora.lab.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id r16-20020a7bc090000000b0038e73023334sm1994323wmh.2.2022.04.05.05.06.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 05:06:32 -0700 (PDT)
-From:   Patrick Rudolph <patrick.rudolph@9elements.com>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [v7 2/3] i2c: muxes: pca954x: Add MAX735x/MAX736x support
-Date:   Tue,  5 Apr 2022 14:05:50 +0200
-Message-Id: <20220405120552.433415-3-patrick.rudolph@9elements.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405120552.433415-1-patrick.rudolph@9elements.com>
-References: <20220405120552.433415-1-patrick.rudolph@9elements.com>
+        Tue, 5 Apr 2022 09:07:03 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1E48300A;
+        Tue,  5 Apr 2022 05:08:24 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 34FB4210EF;
+        Tue,  5 Apr 2022 12:08:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649160503; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VYOi21VBdrnEfgCIXqKolf+TBqlw4Pd+D8zmojzTZKg=;
+        b=IzlVwj1UBmMOQmHd3Zp7EfAXZmHByCFtW1hb2ofyTRxldgM0qGnGQd6hQt8jCSab/6KcQa
+        DvpaN+BbZ0cPKEbNjPfbufOi006FMFq43iNjeXx+OsbgAgJLj9TyIVm1NfWnLhJysJp1ob
+        x43XW5Auch1IHBKqWUSgRQ4Q6Do+kNI=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 81C8CA3B89;
+        Tue,  5 Apr 2022 12:08:22 +0000 (UTC)
+Date:   Tue, 5 Apr 2022 14:08:21 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        cgroups mailinglist <cgroups@vger.kernel.org>,
+        Ke Wang <ke.wang@unisoc.com>
+Subject: Re: [RFC PATCH] cgroup: introduce dynamic protection for memcg
+Message-ID: <YkwxNaJIg6ptJOYT@dhcp22.suse.cz>
+References: <CAGWkznF7cSyPU0ceYwH6zweJzf-X1bQnS6AJ2-J+WEL0u8jzng@mail.gmail.com>
+ <CAJuCfpHneDZMXO_MmQDPA+igAOdAPRUChiq+zftFXGfDzPHNhQ@mail.gmail.com>
+ <CAGWkznFTQCm0cusVxA_55fu2WfT-w2coVHrT=JA1D_9_2728mQ@mail.gmail.com>
+ <YkqxpEW4m6iU3zMq@dhcp22.suse.cz>
+ <CAGWkznG4L3w=9bpZp8TjyWHmqFyZQk-3m4xCZ96zhHCLPawBgQ@mail.gmail.com>
+ <CAGWkznGMRohE2_at4Qh8KbwSqNmNqOAG2N1EM+7uE9wKqzRm0A@mail.gmail.com>
+ <Ykq7KUleuAg5QnNU@dhcp22.suse.cz>
+ <CAGWkznGbd5TOTHZE8uUhak3SnHqEWx_9QCJVtUFUSg9rk3xYEQ@mail.gmail.com>
+ <Ykrkx4JML4c81gBV@dhcp22.suse.cz>
+ <CAGWkznEaEavCz9GeiYuTqsox2qZK43iQKevt8njkzaHv6KiW-A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGWkznEaEavCz9GeiYuTqsox2qZK43iQKevt8njkzaHv6KiW-A@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the following Maxim chips using the existing PCA954x
-driver:
-- MAX7356
-- MAX7357
-- MAX7358
-- MAX7367
-- MAX7368
-- MAX7369
+On Mon 04-04-22 21:14:40, Zhaoyang Huang wrote:
+[...]
+> Please be noticed that this patch DOES protect the memcg when external
+> pressure is 1GB as fixed low does.
 
-All added Maxim chips behave like the PCA954x, where a single SMBUS byte
-write selects up to 8 channels to be bridged to the primary bus.
+This is getting more and more confusing (at least to me). Could you
+describe the behavior of the reclaim for the following setups/situations?
 
-The MAX7357 and MAX7358 have 6 additional registers called enhanced mode
-in the following paragraphs. While the MAX7357 exposes those registers
-without a special sequence, the MAX7358 requires an unlock sequence.
-The enhanced mode allows to configure optional features which are nice to
-have on a I2C mux, but are not mandatory for it's general operation.
+a) mostly reclaiming a clean page cache - via kswapd
+b) same as above but the direct reclaim is necessary but very
+   lightweight
+c) direct reclaim makes fwd progress but not enough to satisfy the
+   allocation request (so the reclaim has to be retried)
+d) direct reclaim not making progress and low limit protection is
+   ignored.
 
-As I don't have a MAX7358 for testing the special unlock sequence the
-enhanced mode isn't used on the MAX7358, but it could be added later
-if required.
+Say we have several memcgs and only some have low memory protection
+configured. What is the user observable state of the protected group and
+when and how much the protection can be updated?
 
-The MAX7357 enhanced mode is used to configure:
- - Disabled interrupts on bus locked up detection
- - Enable bus locked-up clearing
- - Disconnect only locked bus instead of all channels
+I think it would be also helpful to describe the high level semantic of
+this feature.
 
-While the MAX7357/MAX7358 have interrupt support, they don't act as
-interrupt controller like the PCA9545 does. Thus don't enable IRQ support
-and handle them like the PCA9548.
+> Besides, how does the admin decide
+> the exact number of low/min if it expand from small to even xGB in a
+> quick changing scenario?
 
-Tested using the MAX7357 and verified that the stalled bus is disconnected
-while the other channels remain operational.
+This is not really related, is it? There are different ways to tune for
+the protection.
 
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
----
- drivers/i2c/muxes/Kconfig           |  4 +-
- drivers/i2c/muxes/i2c-mux-pca954x.c | 92 +++++++++++++++++++++++++++--
- 2 files changed, 90 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/i2c/muxes/Kconfig b/drivers/i2c/muxes/Kconfig
-index 1708b1a82da2..2ac99d044199 100644
---- a/drivers/i2c/muxes/Kconfig
-+++ b/drivers/i2c/muxes/Kconfig
-@@ -65,11 +65,11 @@ config I2C_MUX_PCA9541
- 	  will be called i2c-mux-pca9541.
- 
- config I2C_MUX_PCA954x
--	tristate "NXP PCA954x and PCA984x I2C Mux/switches"
-+	tristate "NXP PCA954x/PCA984x and Maxim MAX735x/MAX736x I2C Mux/switches"
- 	depends on GPIOLIB || COMPILE_TEST
- 	help
- 	  If you say yes here you get support for the NXP PCA954x
--	  and PCA984x I2C mux/switch devices.
-+	  and PCA984x and Maxim MAX735x/MAX736x I2C mux/switch devices.
- 
- 	  This driver can also be built as a module.  If so, the module
- 	  will be called i2c-mux-pca954x.
-diff --git a/drivers/i2c/muxes/i2c-mux-pca954x.c b/drivers/i2c/muxes/i2c-mux-pca954x.c
-index 4ad665757dd8..122b7a28fc60 100644
---- a/drivers/i2c/muxes/i2c-mux-pca954x.c
-+++ b/drivers/i2c/muxes/i2c-mux-pca954x.c
-@@ -4,6 +4,7 @@
-  *
-  * Copyright (c) 2008-2009 Rodolfo Giometti <giometti@linux.it>
-  * Copyright (c) 2008-2009 Eurotech S.p.A. <info@eurotech.it>
-+ * Copyright (c) 2022 9elements GmbH <patrick.rudolph@9elements.com>
-  *
-  * This module supports the PCA954x and PCA984x series of I2C multiplexer/switch
-  * chips made by NXP Semiconductors.
-@@ -11,6 +12,12 @@
-  *	 PCA9540, PCA9542, PCA9543, PCA9544, PCA9545, PCA9546, PCA9547,
-  *	 PCA9548, PCA9846, PCA9847, PCA9848 and PCA9849.
-  *
-+ * It's also compatible to Maxims MAX735x I2C switch chips, which are controlled
-+ * as the NXP PCA9548 and the MAX736x chips that act like the PCA9544.
-+ *
-+ * This includes the:
-+ *	 MAX7356, MAX7357, MAX7358, MAX7367, MAX7368 and MAX7369
-+ *
-  * These chips are all controlled via the I2C bus itself, and all have a
-  * single 8-bit register. The upstream "parent" bus fans out to two,
-  * four, or eight downstream busses or channels; which of these
-@@ -50,7 +57,30 @@
- 
- #define PCA954X_IRQ_OFFSET 4
- 
-+/*
-+ * MAX7357 exposes 7 registers without extra commands which allow to configure
-+ * additional features. Disable interrupts, enable bus locked-up clearing,
-+ * isolate only the locked channel instead of all channels.
-+ */
-+#define MAX7357_CONF_INT_ENABLE			BIT(0)
-+#define MAX7357_CONF_FLUSH_OUT			BIT(1)
-+#define MAX7357_CONF_RELEASE_INT		BIT(2)
-+#define MAX7357_CONF_LOCK_UP_CLEAR		BIT(3)
-+#define MAX7357_CONF_DISCON_SINGLE_CHAN		BIT(4)
-+#define MAX7357_CONF_BUS_LOCKUP_DETECTION	BIT(5)
-+#define MAX7357_CONF_ENABLE_BASIC_MODE		BIT(6)
-+#define MAX7357_CONF_PRECONNECT_TEST		BIT(7)
-+
-+#define MAX7357_CONF_DEFAULTS (MAX7357_CONF_FLUSH_OUT | \
-+	 MAX7357_CONF_DISCON_SINGLE_CHAN)
-+
- enum pca_type {
-+	max_7367,
-+	max_7368,
-+	max_7369,
-+	max_7356,
-+	max_7357,
-+	max_7358,
- 	pca_9540,
- 	pca_9542,
- 	pca_9543,
-@@ -69,6 +99,7 @@ struct chip_desc {
- 	u8 nchans;
- 	u8 enable;	/* used for muxes only */
- 	u8 has_irq;
-+	u8 maxim_enhanced_mode;
- 	enum muxtype {
- 		pca954x_ismux = 0,
- 		pca954x_isswi
-@@ -90,8 +121,42 @@ struct pca954x {
- 	raw_spinlock_t lock;
- };
- 
--/* Provide specs for the PCA954x types we know about */
-+/* Provide specs for the PCA954x and MAX735x types we know about */
- static const struct chip_desc chips[] = {
-+	[max_7356] = {
-+		.nchans = 8,
-+		.muxtype = pca954x_isswi,
-+		.id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
-+	},
-+	[max_7357] = {
-+		.nchans = 8,
-+		.muxtype = pca954x_isswi,
-+		.maxim_enhanced_mode = 1,
-+		.id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
-+	},
-+	[max_7358] = {
-+		.nchans = 8,
-+		.muxtype = pca954x_isswi,
-+		.id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
-+	},
-+	[max_7367] = {
-+		.nchans = 4,
-+		.muxtype = pca954x_isswi,
-+		.has_irq = 1,
-+		.id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
-+	},
-+	[max_7368] = {
-+		.nchans = 4,
-+		.muxtype = pca954x_isswi,
-+		.id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
-+	},
-+	[max_7369] = {
-+		.nchans = 4,
-+		.enable = 0x4,
-+		.muxtype = pca954x_ismux,
-+		.has_irq = 1,
-+		.id = { .manufacturer_id = I2C_DEVICE_ID_NONE },
-+	},
- 	[pca_9540] = {
- 		.nchans = 2,
- 		.enable = 0x4,
-@@ -177,6 +242,12 @@ static const struct chip_desc chips[] = {
- };
- 
- static const struct i2c_device_id pca954x_id[] = {
-+	{ "max7356", max_7356 },
-+	{ "max7357", max_7357 },
-+	{ "max7358", max_7358 },
-+	{ "max7367", max_7367 },
-+	{ "max7368", max_7368 },
-+	{ "max7369", max_7369 },
- 	{ "pca9540", pca_9540 },
- 	{ "pca9542", pca_9542 },
- 	{ "pca9543", pca_9543 },
-@@ -194,6 +265,12 @@ static const struct i2c_device_id pca954x_id[] = {
- MODULE_DEVICE_TABLE(i2c, pca954x_id);
- 
- static const struct of_device_id pca954x_of_match[] = {
-+	{ .compatible = "maxim,max7356", .data = &chips[max_7356] },
-+	{ .compatible = "maxim,max7357", .data = &chips[max_7357] },
-+	{ .compatible = "maxim,max7358", .data = &chips[max_7358] },
-+	{ .compatible = "maxim,max7367", .data = &chips[max_7367] },
-+	{ .compatible = "maxim,max7368", .data = &chips[max_7368] },
-+	{ .compatible = "maxim,max7369", .data = &chips[max_7369] },
- 	{ .compatible = "nxp,pca9540", .data = &chips[pca_9540] },
- 	{ .compatible = "nxp,pca9542", .data = &chips[pca_9542] },
- 	{ .compatible = "nxp,pca9543", .data = &chips[pca_9543] },
-@@ -401,9 +478,16 @@ static int pca954x_init(struct i2c_client *client, struct pca954x *data)
- 	else
- 		data->last_chan = 0; /* Disconnect multiplexer */
- 
--	ret = i2c_smbus_write_byte(client, data->last_chan);
--	if (ret < 0)
--		data->last_chan = 0;
-+	if (data->chip->maxim_enhanced_mode) {
-+		ret = i2c_smbus_write_byte_data(client, data->last_chan,
-+						MAX7357_CONF_DEFAULTS);
-+		if (ret < 0)
-+			data->last_chan = 0;
-+	} else {
-+		ret = i2c_smbus_write_byte(client, data->last_chan);
-+		if (ret < 0)
-+			data->last_chan = 0;
-+	}
- 
- 	return ret;
- }
+[...]
 -- 
-2.35.1
-
+Michal Hocko
+SUSE Labs

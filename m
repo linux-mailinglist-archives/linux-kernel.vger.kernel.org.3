@@ -2,135 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2624F20EB
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 068114F213A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbiDECx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 22:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
+        id S230171AbiDECxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 22:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbiDECxF (ORCPT
+        with ESMTP id S230319AbiDECxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 22:53:05 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FA331A29F
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 19:01:06 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id t13so9796497pgn.8
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 19:01:06 -0700 (PDT)
+        Mon, 4 Apr 2022 22:53:13 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488BE1F36CA
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 19:24:16 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2eb888cf7e7so32961877b3.13
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 19:24:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XCPmRc0IVgYgnGswAlG4yXz+KuFMoJ3P6+aO8i17Nyw=;
-        b=JegdvKFJkQly7ZyOveDWGt3k2Kyk57pEOEbrjKjqlmrb8+N+YI46tYuhBKqNuRYMro
-         9/zY4m8gN/H7O3MEMJvKvagY3bW6+TAP61AK+EbqU+iunqW56CxOIdlXHYEePfaLXvHo
-         fAmn8QSljckU4vKvpTPybkSn8jmlyKRYfzgTo3NOlY86VWS27hx7ohejcDgv28D1xnVr
-         QJS6lZE4K8+HG3gDQYEGqHFnqwP1EDMJkpvm9ZHYEDMeeJbT45cpU72jDzpeqMHW8PzC
-         9KoInl5KIBPSzgpVM0H3ep5cUrlvGTHSxLDMjqzVi/UH4VxEDup/tGbViIWle/Lr4I0L
-         t3xQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=RnXh2T/U2DQgOhkSzIbFktnchft1/air72kA5hMo268=;
+        b=RdwMLiCbc2L1okaRCJ5jKZCfuFRsTM9cXzjiSWYLcgbsCu0E+KP0UXHPC/XEeWzI2E
+         HJMdvWG8nDGuw9EJCL1ELqu7XYRGL8uLL1jqYE5tpCUrKnyhaHsUgOxIz4tfX/zbckr6
+         5VxPifMdFSOXgAWNjfZy0BJTka7RxhM8tTmXTeYYdw2jTm6upeOeyb2SyAELkK0sFK5m
+         ynuNMe7aqe6IXZl7zeDaWTlMG2cFJ2psIOMtEV9duqmvJi3p0zUOpGrEaTs7OmhjO7Yg
+         e//dbCIlc+9mSnXF7H0JfJAzZ9fCe1vgs92Ua6a3TMH7UtAmjHMaSwxcK7U9rIuvPAbx
+         Luyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XCPmRc0IVgYgnGswAlG4yXz+KuFMoJ3P6+aO8i17Nyw=;
-        b=gp6zM+yOHAdL/Ogm05curz2IRkzjNCP/p9hOhuXfGmRhEE5tuKJ5MEdgTpQGi7eCxY
-         Ye+leXRgmK/9l0GZnG9G4K8NMq5XI883x+VBMRfjZkmPipU97/TSBvREgU8Rq18pxmbZ
-         Rq+28wDfISVS7xaQ3bABmxXmM5Lcr5qh9IHHMEQWO7+il41LX0dHyLT1KKW0EaNfYrub
-         wOvbrAKD0zv3s3KiBkOODKV0SRHwE8IAYG6cunCv0jTgDeKaN63j/VtJy2pRioPJ7rFR
-         Qyczu7aG9jk9/72l1sR2nvwjSpV0GIhV6dijdGoR1qnPuKm9KxYzf7xFUKEJ9xRrQHn3
-         za8w==
-X-Gm-Message-State: AOAM531DZ916yep6jGlAibn/yfvuNP35JCQ5bt9qg7JV1xkTNnZuVvaS
-        MHGYFyW3YWZ88S/NPAUy//c=
-X-Google-Smtp-Source: ABdhPJx8ODqukr4ThTQP2Zolc7rN01PScQwudBUJ4+CZTh017i28ntS57/D4l+okojym+X/7MmPsCg==
-X-Received: by 2002:a63:b24b:0:b0:398:9894:b8be with SMTP id t11-20020a63b24b000000b003989894b8bemr947415pgo.108.1649124066161;
-        Mon, 04 Apr 2022 19:01:06 -0700 (PDT)
-Received: from hyeyoo ([114.29.24.243])
-        by smtp.gmail.com with ESMTPSA id q27-20020aa7961b000000b004fdf7a4d49esm6458763pfg.170.2022.04.04.19.01.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 19:01:05 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 11:00:58 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Marco Elver <elver@google.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        kernel test robot <oliver.sang@intel.com>,
-        Oliver Glitta <glittao@gmail.com>, lkp@lists.01.org,
-        lkp@intel.com, LKML <linux-kernel@vger.kernel.org>,
-        Imran Khan <imran.f.khan@oracle.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Zqiang <qiang.zhang@windriver.com>, linux-mm@kvack.org
-Subject: Re: [mm/slub] 555b8c8cb3:
- WARNING:at_lib/stackdepot.c:#stack_depot_fetch
-Message-ID: <Ykui2prpzkMvaWBa@hyeyoo>
-References: <20220323090520.GG16885@xsang-OptiPlex-9020>
- <20220324095218.GA2108184@odroid>
- <YkcfNjZJSXNsAlLt@hyeyoo>
- <YkpgjgM/aSXd29uj@hyeyoo>
- <Ykqn2z9UVfxFwiU+@elver.google.com>
- <8368021e-86c3-a93f-b29d-efed02135c41@suse.cz>
- <CANpmjNMupGGbTDD-ZEY=acTbqguvWgLzb1ZVRbG9TyuF50Ch+Q@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RnXh2T/U2DQgOhkSzIbFktnchft1/air72kA5hMo268=;
+        b=UbiThuRXuHthnug5vGl/9qi1fV/ZgK5sMHUMzbTFD2xSLVth3pf+aaG2hykBdCPdPK
+         yRRmIva8nIH2tmpd02yy7HpoBtmLOJhkKKp29I8IY36bwR/twnVxxCcg4cJkYyHnAFVs
+         16M8KVd7pOgZ0K64D/wLZnuAR3cctnHqjuscxoQKV0lvBzbcP4ZXm0Mo0bYN8SSD69g9
+         6wUSCRsfx/zFs8T9zUj0uzNrUwbGxkUiF1+/2vSWffC4ZIHuOJEv6pxYQzL6h8pR8Jqs
+         vwfanFSZryIBWOyrqVYeHGGSHVIAfT2yBio8zMDsA/efMWrmTncepqiM3FYayrQKhalI
+         cJtg==
+X-Gm-Message-State: AOAM533052FnADcHdibDAl0CI9u4Va9EqNVpKlHG+NcsM88hSTmKOE6a
+        vGdpe4U+7Bvt66VOSS7tNeiN1sUIQRY/lZNGOD00cw==
+X-Google-Smtp-Source: ABdhPJySsUEslHirJOU6d+eWhv0nlmjDy80xPo+99g8US0EzUqOSorg2gcZ3kxZNalPl6FYgoXtO5j2kdwqG9ggJCqI=
+X-Received: by 2002:a81:106:0:b0:2d0:e682:8a7a with SMTP id
+ 6-20020a810106000000b002d0e6828a7amr945563ywb.257.1649125455349; Mon, 04 Apr
+ 2022 19:24:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNMupGGbTDD-ZEY=acTbqguvWgLzb1ZVRbG9TyuF50Ch+Q@mail.gmail.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220404054642.3095732-1-tweek@google.com> <YkqtZFuMpYxDBAH+@kroah.com>
+In-Reply-To: <YkqtZFuMpYxDBAH+@kroah.com>
+From:   =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>
+Date:   Tue, 5 Apr 2022 12:23:59 +1000
+Message-ID: <CA+zpnLfA7-eWb8dO3=VsOzyzUa8ycZxmxG9T2bkWVOcFVp4gKQ@mail.gmail.com>
+Subject: Re: [PATCH] firmware_loader: use kernel credentials when reading firmware
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Jeffrey Vander Stoep <jeffv@google.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Alistair Delva <adelva@google.com>,
+        Adam Shih <adamshih@google.com>,
+        SElinux list <selinux@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 05:18:16PM +0200, Marco Elver wrote:
-> On Mon, 4 Apr 2022 at 16:20, Vlastimil Babka <vbabka@suse.cz> wrote:
-> >
-> > On 4/4/22 10:10, Marco Elver wrote:
-> > > On Mon, Apr 04, 2022 at 12:05PM +0900, Hyeonggon Yoo wrote:
-> > > (Maybe CONFIG_KCSAN_STRICT=y is going to yield something? I still doubt
-> > > it thought, this bug is related to corrupted stackdepot handle
-> > > somewhere...)
-> > >
-> > >> I noticed that it is not reproduced when KASAN=y and KFENCE=n (reproduced 0 of 181).
-> > >> and it was reproduced 56 of 196 when KASAN=n and KFENCE=y
-> > >>
-> > >> maybe this issue is related to kfence?
-> >
-> > Hmm kfence seems to be a good lead. If I understand kfence_guarded_alloc()
-> > correctly, it tries to set up something that really looks like a normal slab
-> > page? Especially the part with comment /* Set required slab fields. */
-> > But it doesn't seem to cover the debugging parts that SLUB sets up with
-> > alloc_debug_processing(). This includes alloc stack saving, thus, after
-> > commit 555b8c8cb3, a stackdepot handle setting. It probably normally doesn't
-> > matter as is_kfence_address() redirects processing of kfence-allocated
-> > objects so we don't hit any slub code that expects the debugging parts to be
-> > properly initialized.
-> >
-> > But here we are in mem_dump_obj() -> kmem_dump_obj() -> kmem_obj_info().
-> > Because kmem_valid_obj() returned true, fooled by folio_test_slab()
-> > returning true because of the /* Set required slab fields. */ code.
-> > Yet the illusion is not perfect and we read garbage instead of a valid
-> > stackdepot handle.
-> >
-> > IMHO we should e.g. add the appropriate is_kfence_address() test into
-> > kmem_valid_obj(), to exclude kfence-allocated objects? Sounds much simpler
-> > than trying to extend the illusion further to make kmem_dump_obj() work?
-> > Instead kfence could add its own specific handler to mem_dump_obj() to print
-> > its debugging data?
-> 
-> I think this explanation makes sense!  Indeed, KFENCE already records
-> allocation stacks internally anyway, so it should be straightforward
-> to convince it to just print that.
+On Mon, Apr 4, 2022 at 6:33 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
+> On Mon, Apr 04, 2022 at 03:46:42PM +1000, Thi=C3=A9baud Weksteen wrote:
+> > Device drivers may decide to not load firmware when probed to avoid
+> > slowing down the boot process should the firmware filesystem not be
+> > available yet. In this case, the firmware loading request may be done
+> > when a device file associated with the driver is first accessed. The
+> > credentials of the userspace process accessing the device file may be
+> > used to validate access to the firmware files requested by the driver.
+> > Ensure that the kernel assumes the responsibility of reading the
+> > firmware.
+> >
+> > This was observed on Android for a graphic driver loading their firmwar=
+e
+> > when the device file (e.g. /dev/mali0) was first opened by userspace
+> > (i.e. surfaceflinger). The security context of surfaceflinger was used
+> > to validate the access to the firmware file (e.g.
+> > /vendor/firmware/mali.bin).
+> >
+> > Because previous configurations were relying on the userspace fallback
+> > mechanism, the security context of the userspace daemon (i.e. ueventd)
+> > was consistently used to read firmware files. More devices are found to
+> > use the command line argument firmware_class.path which gives the kerne=
+l
+> > the opportunity to read the firmware directly, hence surfacing this
+> > misattribution.
+> >
+> > Signed-off-by: Thi=C3=A9baud Weksteen <tweek@google.com>
+> > ---
+> >  drivers/base/firmware_loader/main.c | 11 +++++++++++
+> >  1 file changed, 11 insertions(+)
+>
+> Is this a bugfix?  if so, what commit does this fix?  If not, how has
+> this never been a problem in the past (i.e. what changed to cause
+> problems?)
 
-Thank you both! Yeah the explanation makes sense... thats why KASAN/KCSAN couldn't yield anything -- it was not overwritten.
+Not a bug fix. I think this is the combination of 3 factors that
+surfaces the issue:
 
-I'm writing a fix and will test if the bug disappears.
-This may take few days.
+1. As mentioned in the last paragraph of the commit, previously, the
+userspace fallback was used (that is, udev/ueventd would read the
+firmware file so only this process would need the correct permission
+to access the files). More devices are using firmware_class.path=3D
+which causes the kernel to try to load the firmware directly[1].
 
-Thanks!
-Hyeonggon
+2. Drivers are calling request_firmware when handling a userspace
+request (such as open() on a device file). Historically,
+request_firmware seems to have been called when probe() was invoked by
+the kernel.
 
-> Thanks,
-> -- Marco
+3. The precise MAC policy on Android (as opposed to DAC where the
+firmware files are own by root and a root process accesses the device
+file).
+
+Thanks,
+
+[1] https://www.kernel.org/doc/html/v5.17/driver-api/firmware/fw_search_pat=
+h.html
+
+> thanks,
+>
+> greg k-h

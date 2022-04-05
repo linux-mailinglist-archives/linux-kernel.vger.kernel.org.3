@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D918B4F3E6F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5254F4030
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:15:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388966AbiDEPUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
+        id S1388213AbiDEPU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346906AbiDEJpm (ORCPT
+        with ESMTP id S231515AbiDEJpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:45:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AB618379;
-        Tue,  5 Apr 2022 02:32:07 -0700 (PDT)
+        Tue, 5 Apr 2022 05:45:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795D62AE00
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 02:32:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CACE3B81CC1;
-        Tue,  5 Apr 2022 09:32:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E008C385C4;
-        Tue,  5 Apr 2022 09:32:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EDD99B81CBA
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:32:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B6C4C385A3;
+        Tue,  5 Apr 2022 09:32:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649151124;
-        bh=GjmC2BEcN0KsKZ7ydEfVFphIGpjCxpDNSpkEEa64urQ=;
+        s=k20201202; t=1649151125;
+        bh=prxp14Ph7x4eGuDyhsNEtXCkl4YWUf4cu71uu6Q/kVc=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=nNsuW0ERMiz7rPDxZB8Z1DW5F1ZljqyZDRU3LuRnGbPOfIjyDWGqnYMItXQrFk3oQ
-         SL7CUi6P1TQa/VNvIB+wYnsmV8bWHLOT382axLRhlgKaj7kAE7tUxO/34zp8/J7fnF
-         IQEWaMWdTIzBMBA8Ttg03eIbBiuqeij0gayJgsogN8eqH8nXGDeEyPQax3fWtqec11
-         RMK7Qx4jJ/hxsIqqJTC2EFIMx+QPHbQmoFBr54tLn0OZNBWoqwX0azrqZ/sYX4FgD5
-         Zi1xC6asCUFRNOQq5ddKU66DrzQD3IIq8LA7UcbI3KF566PecFxrJyzcVuKfPq8dyh
-         +NX9iwxMFKwZg==
+        b=aUgNJfzsK1Tf/zbkyhG241BqkorRDntFnlVMlqCsMhe67OA4HY5FHGVjOv1nQe2IN
+         ppYRa3/FZfQFnfMYZAJ2Oe8lVus4JYsN7AaEsHSZ0MlR0ux408ziqWxGl3JUDqO1wV
+         8NZuvzTK1c7VQkELiKy+JHobUEegoscyvSh2umRY60J7PORSvDv0v/JSs2G0XBAakO
+         nGyayEoiCEMQITsU58dybDmI1e+VBlOlBF/bnIBsd/WMV0MMtJhnhPXWu+P5CMa1ws
+         37izamC1KComhKNeqrjx4wz3ZYhRzRmfSgN8FBwwQ39NqrwgHnSzrsf5PxSA96Dfnm
+         IDzMgxtd6krkw==
 From:   Mark Brown <broonie@kernel.org>
-To:     robh+dt@kernel.org, johnson.wang@mediatek.com
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220317030402.24894-1-johnson.wang@mediatek.com>
-References: <20220317030402.24894-1-johnson.wang@mediatek.com>
-Subject: Re: [PATCH v2 0/2] Add support for MediaTek PMIC MT6366
-Message-Id: <164915112290.276837.17651997512675348293.b4-ty@kernel.org>
-Date:   Tue, 05 Apr 2022 10:32:02 +0100
+To:     broonie@kernel.org, lgirdwood@gmail.com
+Cc:     linux-kernel@vger.kernel.org
+In-Reply-To: <20220324201854.3107077-1-broonie@kernel.org>
+References: <20220324201854.3107077-1-broonie@kernel.org>
+Subject: Re: [PATCH] regulator: fixed: Remove print on allocation failure
+Message-Id: <164915112476.276837.9420066139945665585.b4-ty@kernel.org>
+Date:   Tue, 05 Apr 2022 10:32:04 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,15 +53,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 17 Mar 2022 11:04:00 +0800, Johnson Wang wrote:
-> This patchset adds support for MediaTek PMIC MT6366.
-> MT6366 is the primary PMIC for MT8186 and probably other SOCs.
+On Thu, 24 Mar 2022 20:18:54 +0000, Mark Brown wrote:
+> OOMs are very verbose, we don't need to print an additional error message
+> when we fail to allocate.
 > 
-> Changes in v2:
-> - rebase on Linux 5.17-rc8
-> - change subject line
 > 
-> [...]
 
 Applied to
 
@@ -72,10 +65,8 @@ Applied to
 
 Thanks!
 
-[1/2] regulator: mt6366: Add support for MT6366 regulator
-      commit: d077002c9d07dc6f64d07a362202a1e1081b2f6c
-[2/2] dt-bindings: regulator: Add BUCK and LDO document for MT6358 and MT6366
-      commit: 417dfad7e4f0501853e05a46742a4e47075f034c
+[1/1] regulator: fixed: Remove print on allocation failure
+      commit: 6c315afe65d05dc6eebf2d6b73a191990aada218
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

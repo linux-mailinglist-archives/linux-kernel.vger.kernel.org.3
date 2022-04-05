@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01A64F45E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6D64F4443
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386624AbiDEMy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40112 "EHLO
+        id S1376655AbiDEUQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343904AbiDEJPJ (ORCPT
+        with ESMTP id S1349090AbiDEJtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:15:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2999157D;
-        Tue,  5 Apr 2022 02:01:21 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B61A995E;
+        Tue,  5 Apr 2022 02:40:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64DC761564;
-        Tue,  5 Apr 2022 09:01:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DFC4C385A0;
-        Tue,  5 Apr 2022 09:01:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4E79B81C19;
+        Tue,  5 Apr 2022 09:40:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35991C385A1;
+        Tue,  5 Apr 2022 09:40:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149280;
-        bh=6xtwrumsABCWlitwow9aJliVJSSME1aC9rJzVcirnrU=;
+        s=korg; t=1649151634;
+        bh=sYf+t7656CgLm8+KoM7bCiP2p1CO2fDUCQ1xVOK+Q7E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EnLJjDWZOtWL99EKVUzMeg++L+CSPowC6CG/EGTqg5O+sKKbK3pnaen3o83/S8UZ6
-         j1Vz0A0wEqfAe6a/adtU2jDHVVNv338hh1sxmVsgKOE8qczjUjSuwYp0CYvi1AhmLY
-         gm2hzVTlL204jF/nIg5YDA1g3cXrPfrtevZFWLa0=
+        b=LNeiZpn9xE5TtThU+hv2K8FqqnP+415pdIfiN1itR0fZyaFkLjat82RnOkRFPuqU4
+         Q37/pPD0Qr8QL+XPFEJXXl6dy3odUX4z8MHPwbQ7LBju97WiqbhWG69Gd2pbh5082C
+         l4Krt8b9pqzd+UBkukEPZfBtISoW5lkSiQq+x4qg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andre Nash <alnash@fb.com>,
-        Neil Spring <ntspring@fb.com>, Wei Wang <weiwan@google.com>,
-        Yuchung Cheng <ycheng@google.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
+        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0632/1017] tcp: ensure PMTU updates are processed during fastopen
-Date:   Tue,  5 Apr 2022 09:25:45 +0200
-Message-Id: <20220405070413.043618621@linuxfoundation.org>
+Subject: [PATCH 5.15 485/913] scsi: pm8001: Fix le32 values handling in pm80xx_chip_ssp_io_req()
+Date:   Tue,  5 Apr 2022 09:25:47 +0200
+Message-Id: <20220405070354.393333268@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,66 +56,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit ed0c99dc0f499ff8b6e75b5ae6092ab42be1ad39 ]
+[ Upstream commit 970404cc5744b1033b6ee601be4ef0e2d1fbcf72 ]
 
-tp->rx_opt.mss_clamp is not populated, yet, during TFO send so we
-rise it to the local MSS. tp->mss_cache is not updated, however:
+Make sure that the __le32 fields of struct ssp_ini_io_start_req are
+manipulated after applying the correct endian conversion. That is, use
+cpu_to_le32() for assigning values and le32_to_cpu() for consulting a field
+value. In particular, make sure that the calculations for the 4G boundary
+check are done using CPU endianness and *not* little endian values. With
+these fixes, many sparse warnings are removed.
 
-tcp_v6_connect():
-  tp->rx_opt.mss_clamp = IPV6_MIN_MTU - headers;
-  tcp_connect():
-     tcp_connect_init():
-       tp->mss_cache = min(mtu, tp->rx_opt.mss_clamp)
-     tcp_send_syn_data():
-       tp->rx_opt.mss_clamp = tp->advmss
+While at it, add blank lines after variable declarations and in some other
+places to make this code more readable.
 
-After recent fixes to ICMPv6 PTB handling we started dropping
-PMTU updates higher than tp->mss_cache. Because of the stale
-tp->mss_cache value PMTU updates during TFO are always dropped.
-
-Thanks to Wei for helping zero in on the problem and the fix!
-
-Fixes: c7bb4b89033b ("ipv6: tcp: drop silly ICMPv6 packet too big messages")
-Reported-by: Andre Nash <alnash@fb.com>
-Reported-by: Neil Spring <ntspring@fb.com>
-Reviewed-by: Wei Wang <weiwan@google.com>
-Acked-by: Yuchung Cheng <ycheng@google.com>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Link: https://lore.kernel.org/r/20220321165957.1769954-1-kuba@kernel.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lore.kernel.org/r/20220220031810.738362-11-damien.lemoal@opensource.wdc.com
+Fixes: 0ecdf00ba6e5 ("[SCSI] pm80xx: 4G boundary fix.")
+Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_output.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/scsi/pm8001/pm80xx_hwi.c | 41 +++++++++++++++++++-------------
+ 1 file changed, 25 insertions(+), 16 deletions(-)
 
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index 2e6e5a70168e..3a8126dfcd4d 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -3719,6 +3719,7 @@ static void tcp_connect_queue_skb(struct sock *sk, struct sk_buff *skb)
-  */
- static int tcp_send_syn_data(struct sock *sk, struct sk_buff *syn)
- {
-+	struct inet_connection_sock *icsk = inet_csk(sk);
- 	struct tcp_sock *tp = tcp_sk(sk);
- 	struct tcp_fastopen_request *fo = tp->fastopen_req;
- 	int space, err = 0;
-@@ -3733,8 +3734,10 @@ static int tcp_send_syn_data(struct sock *sk, struct sk_buff *syn)
- 	 * private TCP options. The cost is reduced data space in SYN :(
- 	 */
- 	tp->rx_opt.mss_clamp = tcp_mss_clamp(tp, tp->rx_opt.mss_clamp);
-+	/* Sync mss_cache after updating the mss_clamp */
-+	tcp_sync_mss(sk, icsk->icsk_pmtu_cookie);
- 
--	space = __tcp_mtu_to_mss(sk, inet_csk(sk)->icsk_pmtu_cookie) -
-+	space = __tcp_mtu_to_mss(sk, icsk->icsk_pmtu_cookie) -
- 		MAX_TCP_OPTION_SPACE;
- 
- 	space = min_t(size_t, space, fo->size);
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index e606a9b1c3af..d7a27627fce0 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -4381,13 +4381,15 @@ static int pm80xx_chip_ssp_io_req(struct pm8001_hba_info *pm8001_ha,
+ 	struct ssp_ini_io_start_req ssp_cmd;
+ 	u32 tag = ccb->ccb_tag;
+ 	int ret;
+-	u64 phys_addr, start_addr, end_addr;
++	u64 phys_addr, end_addr;
+ 	u32 end_addr_high, end_addr_low;
+ 	struct inbound_queue_table *circularQ;
+ 	u32 q_index, cpu_id;
+ 	u32 opc = OPC_INB_SSPINIIOSTART;
++
+ 	memset(&ssp_cmd, 0, sizeof(ssp_cmd));
+ 	memcpy(ssp_cmd.ssp_iu.lun, task->ssp_task.LUN, 8);
++
+ 	/* data address domain added for spcv; set to 0 by host,
+ 	 * used internally by controller
+ 	 * 0 for SAS 1.1 and SAS 2.0 compatible TLR
+@@ -4398,7 +4400,7 @@ static int pm80xx_chip_ssp_io_req(struct pm8001_hba_info *pm8001_ha,
+ 	ssp_cmd.device_id = cpu_to_le32(pm8001_dev->device_id);
+ 	ssp_cmd.tag = cpu_to_le32(tag);
+ 	if (task->ssp_task.enable_first_burst)
+-		ssp_cmd.ssp_iu.efb_prio_attr |= 0x80;
++		ssp_cmd.ssp_iu.efb_prio_attr = 0x80;
+ 	ssp_cmd.ssp_iu.efb_prio_attr |= (task->ssp_task.task_prio << 3);
+ 	ssp_cmd.ssp_iu.efb_prio_attr |= (task->ssp_task.task_attr & 7);
+ 	memcpy(ssp_cmd.ssp_iu.cdb, task->ssp_task.cmd->cmnd,
+@@ -4430,21 +4432,24 @@ static int pm80xx_chip_ssp_io_req(struct pm8001_hba_info *pm8001_ha,
+ 			ssp_cmd.enc_esgl = cpu_to_le32(1<<31);
+ 		} else if (task->num_scatter == 1) {
+ 			u64 dma_addr = sg_dma_address(task->scatter);
++
+ 			ssp_cmd.enc_addr_low =
+ 				cpu_to_le32(lower_32_bits(dma_addr));
+ 			ssp_cmd.enc_addr_high =
+ 				cpu_to_le32(upper_32_bits(dma_addr));
+ 			ssp_cmd.enc_len = cpu_to_le32(task->total_xfer_len);
+ 			ssp_cmd.enc_esgl = 0;
++
+ 			/* Check 4G Boundary */
+-			start_addr = cpu_to_le64(dma_addr);
+-			end_addr = (start_addr + ssp_cmd.enc_len) - 1;
+-			end_addr_low = cpu_to_le32(lower_32_bits(end_addr));
+-			end_addr_high = cpu_to_le32(upper_32_bits(end_addr));
+-			if (end_addr_high != ssp_cmd.enc_addr_high) {
++			end_addr = dma_addr + le32_to_cpu(ssp_cmd.enc_len) - 1;
++			end_addr_low = lower_32_bits(end_addr);
++			end_addr_high = upper_32_bits(end_addr);
++
++			if (end_addr_high != le32_to_cpu(ssp_cmd.enc_addr_high)) {
+ 				pm8001_dbg(pm8001_ha, FAIL,
+ 					   "The sg list address start_addr=0x%016llx data_len=0x%x end_addr_high=0x%08x end_addr_low=0x%08x has crossed 4G boundary\n",
+-					   start_addr, ssp_cmd.enc_len,
++					   dma_addr,
++					   le32_to_cpu(ssp_cmd.enc_len),
+ 					   end_addr_high, end_addr_low);
+ 				pm8001_chip_make_sg(task->scatter, 1,
+ 					ccb->buf_prd);
+@@ -4453,7 +4458,7 @@ static int pm80xx_chip_ssp_io_req(struct pm8001_hba_info *pm8001_ha,
+ 					cpu_to_le32(lower_32_bits(phys_addr));
+ 				ssp_cmd.enc_addr_high =
+ 					cpu_to_le32(upper_32_bits(phys_addr));
+-				ssp_cmd.enc_esgl = cpu_to_le32(1<<31);
++				ssp_cmd.enc_esgl = cpu_to_le32(1U<<31);
+ 			}
+ 		} else if (task->num_scatter == 0) {
+ 			ssp_cmd.enc_addr_low = 0;
+@@ -4461,8 +4466,10 @@ static int pm80xx_chip_ssp_io_req(struct pm8001_hba_info *pm8001_ha,
+ 			ssp_cmd.enc_len = cpu_to_le32(task->total_xfer_len);
+ 			ssp_cmd.enc_esgl = 0;
+ 		}
++
+ 		/* XTS mode. All other fields are 0 */
+-		ssp_cmd.key_cmode = 0x6 << 4;
++		ssp_cmd.key_cmode = cpu_to_le32(0x6 << 4);
++
+ 		/* set tweak values. Should be the start lba */
+ 		ssp_cmd.twk_val0 = cpu_to_le32((task->ssp_task.cmd->cmnd[2] << 24) |
+ 						(task->ssp_task.cmd->cmnd[3] << 16) |
+@@ -4484,20 +4491,22 @@ static int pm80xx_chip_ssp_io_req(struct pm8001_hba_info *pm8001_ha,
+ 			ssp_cmd.esgl = cpu_to_le32(1<<31);
+ 		} else if (task->num_scatter == 1) {
+ 			u64 dma_addr = sg_dma_address(task->scatter);
++
+ 			ssp_cmd.addr_low = cpu_to_le32(lower_32_bits(dma_addr));
+ 			ssp_cmd.addr_high =
+ 				cpu_to_le32(upper_32_bits(dma_addr));
+ 			ssp_cmd.len = cpu_to_le32(task->total_xfer_len);
+ 			ssp_cmd.esgl = 0;
++
+ 			/* Check 4G Boundary */
+-			start_addr = cpu_to_le64(dma_addr);
+-			end_addr = (start_addr + ssp_cmd.len) - 1;
+-			end_addr_low = cpu_to_le32(lower_32_bits(end_addr));
+-			end_addr_high = cpu_to_le32(upper_32_bits(end_addr));
+-			if (end_addr_high != ssp_cmd.addr_high) {
++			end_addr = dma_addr + le32_to_cpu(ssp_cmd.len) - 1;
++			end_addr_low = lower_32_bits(end_addr);
++			end_addr_high = upper_32_bits(end_addr);
++			if (end_addr_high != le32_to_cpu(ssp_cmd.addr_high)) {
+ 				pm8001_dbg(pm8001_ha, FAIL,
+ 					   "The sg list address start_addr=0x%016llx data_len=0x%x end_addr_high=0x%08x end_addr_low=0x%08x has crossed 4G boundary\n",
+-					   start_addr, ssp_cmd.len,
++					   dma_addr,
++					   le32_to_cpu(ssp_cmd.len),
+ 					   end_addr_high, end_addr_low);
+ 				pm8001_chip_make_sg(task->scatter, 1,
+ 					ccb->buf_prd);
 -- 
 2.34.1
 

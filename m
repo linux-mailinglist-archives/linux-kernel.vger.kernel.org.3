@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D004F2DCD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDBC4F2B4F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347170AbiDEKo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
+        id S1353873AbiDEKJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241075AbiDEIcr (ORCPT
+        with ESMTP id S241094AbiDEIcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:32:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A815B91B4;
-        Tue,  5 Apr 2022 01:26:49 -0700 (PDT)
+        Tue, 5 Apr 2022 04:32:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA19140F6;
+        Tue,  5 Apr 2022 01:27:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4B4EBB81BC0;
-        Tue,  5 Apr 2022 08:26:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC1ADC385A1;
-        Tue,  5 Apr 2022 08:26:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D09C461001;
+        Tue,  5 Apr 2022 08:27:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE6B2C385A2;
+        Tue,  5 Apr 2022 08:27:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147207;
-        bh=u23NH34kl7PznmgSrVXT+VDoZ9cUyuQwamW4iHXKBfc=;
+        s=korg; t=1649147237;
+        bh=AxMd18gbofm6w4krU29ftLJswZhLQ32cx6ujG2KM8Xk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S/ylaw7v9wCvo4xUBQ942OI9JxS7MB6l6zAZmZwyAbS9N0h3U4Qlah8BSbJHKc6oU
-         y7t8nUkFlN648Tb9BjHb0Lvyf4qN4o1rebGN11X+irXLACPNoOV9U10iibn8Gc7G/i
-         9rXrStflr5VUWrtgOEFAlTC5kPXZwW+xKRHma3/g=
+        b=A4gmTpRyN1b9/jjzOAekH0kQK8tBhGdPya5qrfToy0H8HkDmW4vh4yiabyemK+vGq
+         xkWZc5UsrSX4UTw3QK21eLqodFvDexafv99XIgs+BOdRxgXzJjaeNnLHQEtHfxRH3M
+         6KwQ8fw89IRTI1c2ePNCRr4kbgwlZzuc0W4Qs3zg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+25ea042ae28f3888727a@syzkaller.appspotmail.com,
-        Eric Dumazet <edumazet@google.com>,
-        David Howells <dhowells@redhat.com>,
-        Jann Horn <jannh@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.17 1039/1126] watch_queue: Free the page array when watch_queue is dismantled
-Date:   Tue,  5 Apr 2022 09:29:46 +0200
-Message-Id: <20220405070437.971764279@linuxfoundation.org>
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 5.17 1044/1126] pinctrl: nuvoton: npcm7xx: Use %zu printk format for ARRAY_SIZE()
+Date:   Tue,  5 Apr 2022 09:29:51 +0200
+Message-Id: <20220405070438.116405741@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -58,52 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
 
-commit b490207017ba237d97b735b2aa66dc241ccd18f5 upstream.
+commit 9d0f18bca3b557ae5d2128661ac06d33b3f45c0a upstream.
 
-Commit 7ea1a0124b6d ("watch_queue: Free the alloc bitmap when the
-watch_queue is torn down") took care of the bitmap, but not the page
-array.
+When compile-testing on 64-bit architectures, GCC complains about the
+mismatch of types between the %d format specifier and value returned by
+ARRAY_LENGTH(). Use %zu, which is correct everywhere.
 
-  BUG: memory leak
-  unreferenced object 0xffff88810d9bc140 (size 32):
-  comm "syz-executor335", pid 3603, jiffies 4294946994 (age 12.840s)
-  hex dump (first 32 bytes):
-    40 a7 40 04 00 ea ff ff 00 00 00 00 00 00 00 00  @.@.............
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-     kmalloc_array include/linux/slab.h:621 [inline]
-     kcalloc include/linux/slab.h:652 [inline]
-     watch_queue_set_size+0x12f/0x2e0 kernel/watch_queue.c:251
-     pipe_ioctl+0x82/0x140 fs/pipe.c:632
-     vfs_ioctl fs/ioctl.c:51 [inline]
-     __do_sys_ioctl fs/ioctl.c:874 [inline]
-     __se_sys_ioctl fs/ioctl.c:860 [inline]
-     __x64_sys_ioctl+0xfc/0x140 fs/ioctl.c:860
-     do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-
-Reported-by: syzbot+25ea042ae28f3888727a@syzkaller.appspotmail.com
-Fixes: c73be61cede5 ("pipe: Add general notification queue support")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Cc: Jann Horn <jannh@google.com>
-Link: https://lore.kernel.org/r/20220322004654.618274-1-eric.dumazet@gmail.com/
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 3b588e43ee5c7 ("pinctrl: nuvoton: add NPCM7xx pinctrl and GPIO driver")
+Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Link: https://lore.kernel.org/r/20220205155332.1308899-2-j.neuschaefer@gmx.net
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/watch_queue.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/kernel/watch_queue.c
-+++ b/kernel/watch_queue.c
-@@ -370,6 +370,7 @@ static void __put_watch_queue(struct kre
+--- a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
++++ b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
+@@ -1560,7 +1560,7 @@ static int npcm7xx_get_groups_count(stru
+ {
+ 	struct npcm7xx_pinctrl *npcm = pinctrl_dev_get_drvdata(pctldev);
  
- 	for (i = 0; i < wqueue->nr_pages; i++)
- 		__free_page(wqueue->notes[i]);
-+	kfree(wqueue->notes);
- 	bitmap_free(wqueue->notes_bitmap);
+-	dev_dbg(npcm->dev, "group size: %d\n", ARRAY_SIZE(npcm7xx_groups));
++	dev_dbg(npcm->dev, "group size: %zu\n", ARRAY_SIZE(npcm7xx_groups));
+ 	return ARRAY_SIZE(npcm7xx_groups);
+ }
  
- 	wfilter = rcu_access_pointer(wqueue->filter);
 
 

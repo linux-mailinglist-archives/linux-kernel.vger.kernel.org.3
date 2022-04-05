@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84ACF4F419F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50A7B4F40D4
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387862AbiDENTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43064 "EHLO
+        id S236452AbiDEURu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344286AbiDEJTE (ORCPT
+        with ESMTP id S1357960AbiDEK1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:19:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C278237DE;
-        Tue,  5 Apr 2022 02:07:21 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96237B6E46;
+        Tue,  5 Apr 2022 03:11:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C5900B80DA1;
-        Tue,  5 Apr 2022 09:07:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34078C385A0;
-        Tue,  5 Apr 2022 09:07:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E898617A4;
+        Tue,  5 Apr 2022 10:11:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 175FBC385A1;
+        Tue,  5 Apr 2022 10:11:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149638;
-        bh=xorRcJWLyDePlbEryOuirjB9N5M1QbwwaFb0JW6nk/c=;
+        s=korg; t=1649153501;
+        bh=yHW2nIW4xOOOvIV8sPoV3gr9Hs17N6DHwCarP2t75uU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fRZqc0EruEqYXXB5NTC5Yd1/wx7Zrkrszgj27h4HLiGPxfUhzjFtKJ3h1NR9jMnB5
-         dPFDjJ7AGgwpg4ar4pNEeQLdeLBa0qHF7WvfVk1h5WXXVhQxhrPt3wuxRKZ8np9639
-         hLe8wUs0N9FJdAN+E8qenM8l+RCBZQcleBZplpwI=
+        b=PEadMo94nGMGpqG+DYy+QVlx7ySCHdst3mEXQt+/v7TCssFnVcteE6DbJasSqYSWi
+         2JPzfTxcprbJm20AQ21AxmX4eabnlh3FH/GTy+nxM48OVkRko8rUDjNL290vRSwvJ5
+         qLawB3shkwIJunRfnu9VoACaC8kt2chKtC6GnhgQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ritesh Harjani <riteshh@linux.ibm.com>,
-        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0786/1017] ext4: correct cluster len and clusters changed accounting in ext4_mb_mark_bb
+Subject: [PATCH 5.10 205/599] soc: qcom: rpmpd: Check for null return of devm_kcalloc
 Date:   Tue,  5 Apr 2022 09:28:19 +0200
-Message-Id: <20220405070417.585711425@linuxfoundation.org>
+Message-Id: <20220405070304.942382196@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,79 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ritesh Harjani <riteshh@linux.ibm.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit a5c0e2fdf7cea535ba03259894dc184e5a4c2800 ]
+[ Upstream commit 5a811126d38f9767a20cc271b34db7c8efc5a46c ]
 
-ext4_mb_mark_bb() currently wrongly calculates cluster len (clen) and
-flex_group->free_clusters. This patch fixes that.
+Because of the possible failure of the allocation, data->domains might
+be NULL pointer and will cause the dereference of the NULL pointer
+later.
+Therefore, it might be better to check it and directly return -ENOMEM
+without releasing data manually if fails, because the comment of the
+devm_kmalloc() says "Memory allocated with this function is
+automatically freed on driver detach.".
 
-Identified based on code review of ext4_mb_mark_bb() function.
-
-Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/a0b035d536bafa88110b74456853774b64c8ac40.1644992609.git.riteshh@linux.ibm.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Fixes: bbe3a66c3f5a ("soc: qcom: rpmpd: Add a Power domain driver to model corners")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20211231094419.1941054-1-jiasheng@iscas.ac.cn
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/mballoc.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+ drivers/soc/qcom/rpmpd.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-index e872ea582555..c0868b82a62f 100644
---- a/fs/ext4/mballoc.c
-+++ b/fs/ext4/mballoc.c
-@@ -3899,10 +3899,11 @@ void ext4_mb_mark_bb(struct super_block *sb, ext4_fsblk_t block,
- 	struct ext4_sb_info *sbi = EXT4_SB(sb);
- 	ext4_group_t group;
- 	ext4_grpblk_t blkoff;
--	int i, clen, err;
-+	int i, err;
- 	int already;
-+	unsigned int clen, clen_changed;
+diff --git a/drivers/soc/qcom/rpmpd.c b/drivers/soc/qcom/rpmpd.c
+index f2168e4259b2..c6084c0d3530 100644
+--- a/drivers/soc/qcom/rpmpd.c
++++ b/drivers/soc/qcom/rpmpd.c
+@@ -387,6 +387,9 @@ static int rpmpd_probe(struct platform_device *pdev)
  
--	clen = EXT4_B2C(sbi, len);
-+	clen = EXT4_NUM_B2C(sbi, len);
+ 	data->domains = devm_kcalloc(&pdev->dev, num, sizeof(*data->domains),
+ 				     GFP_KERNEL);
++	if (!data->domains)
++		return -ENOMEM;
++
+ 	data->num_domains = num;
  
- 	ext4_get_group_no_and_offset(sb, block, &group, &blkoff);
- 	bitmap_bh = ext4_read_block_bitmap(sb, group);
-@@ -3923,6 +3924,7 @@ void ext4_mb_mark_bb(struct super_block *sb, ext4_fsblk_t block,
- 		if (!mb_test_bit(blkoff + i, bitmap_bh->b_data) == !state)
- 			already++;
- 
-+	clen_changed = clen - already;
- 	if (state)
- 		ext4_set_bits(bitmap_bh->b_data, blkoff, clen);
- 	else
-@@ -3935,9 +3937,9 @@ void ext4_mb_mark_bb(struct super_block *sb, ext4_fsblk_t block,
- 						group, gdp));
- 	}
- 	if (state)
--		clen = ext4_free_group_clusters(sb, gdp) - clen + already;
-+		clen = ext4_free_group_clusters(sb, gdp) - clen_changed;
- 	else
--		clen = ext4_free_group_clusters(sb, gdp) + clen - already;
-+		clen = ext4_free_group_clusters(sb, gdp) + clen_changed;
- 
- 	ext4_free_group_clusters_set(sb, gdp, clen);
- 	ext4_block_bitmap_csum_set(sb, group, gdp, bitmap_bh);
-@@ -3947,10 +3949,13 @@ void ext4_mb_mark_bb(struct super_block *sb, ext4_fsblk_t block,
- 
- 	if (sbi->s_log_groups_per_flex) {
- 		ext4_group_t flex_group = ext4_flex_group(sbi, group);
-+		struct flex_groups *fg = sbi_array_rcu_deref(sbi,
-+					   s_flex_groups, flex_group);
- 
--		atomic64_sub(len,
--			     &sbi_array_rcu_deref(sbi, s_flex_groups,
--						  flex_group)->free_clusters);
-+		if (state)
-+			atomic64_sub(clen_changed, &fg->free_clusters);
-+		else
-+			atomic64_add(clen_changed, &fg->free_clusters);
- 	}
- 
- 	err = ext4_handle_dirty_metadata(NULL, NULL, bitmap_bh);
+ 	for (i = 0; i < num; i++) {
 -- 
 2.34.1
 

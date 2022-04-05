@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45AD74F45FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 020554F4638
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388582AbiDEOkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50092 "EHLO
+        id S1388916AbiDEOli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243622AbiDEJkN (ORCPT
+        with ESMTP id S244037AbiDEJlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:40:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3769BAC900;
-        Tue,  5 Apr 2022 02:24:48 -0700 (PDT)
+        Tue, 5 Apr 2022 05:41:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1162CBAB85;
+        Tue,  5 Apr 2022 02:25:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94C5A61659;
-        Tue,  5 Apr 2022 09:24:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5D89C385A2;
-        Tue,  5 Apr 2022 09:24:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B2218B81CA1;
+        Tue,  5 Apr 2022 09:25:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BA28C385A4;
+        Tue,  5 Apr 2022 09:25:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150687;
-        bh=T2hstRTN2DoQMvevAT+LYxm/af106Jsj9SpEV7aDvFA=;
+        s=korg; t=1649150706;
+        bh=0IXNH02d04Pp3qo3nL8AHAf9mxn0yRHztLc0LEJHT3U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SkQJ+u0G0K52H9yar62RE+4Su6im/xbPE0wWg3biitqwKwBIDJ78Ue0J+fHXg7rLd
-         NwPSNePJB6fvh+8JJw2xtGJ+pbFU5J/iQbrDTvxhGj+7gVYce9n18WWDe7qHDPspiP
-         2n3/K3QOnJq5KhH/GV6eBtKxpawqKQqcDFsSy01k=
+        b=bsbO9boT9rs1b+MFc9Ldp5XmeWDtHQri5ClAQUjMMy7vULC66XDZL3zAALq11DPIO
+         eQYBwqeZRnIfjYBOpcU2YPlBsMHVw/VpeYM2Ensrdx2RSaExvMz8ZBUEhy6kgVkNy9
+         RdGCTELOAoZ3dod0rzAJ/KZffKq/TmEnYOfACvEo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH 5.15 144/913] video: fbdev: atari: Atari 2 bpp (STe) palette bugfix
-Date:   Tue,  5 Apr 2022 09:20:06 +0200
-Message-Id: <20220405070344.150928974@linuxfoundation.org>
+        stable@vger.kernel.org, Jocelyn Falempe <jfalempe@redhat.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH 5.15 151/913] mgag200 fix memmapsl configuration in GCTL6 register
+Date:   Tue,  5 Apr 2022 09:20:13 +0200
+Message-Id: <20220405070344.363816649@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,62 +56,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Schmitz <schmitzmic@gmail.com>
+From: Jocelyn Falempe <jfalempe@redhat.com>
 
-commit c8be5edbd36ceed2ff3d6b8f8e40643c3f396ea3 upstream.
+commit 028a73e10705af1ffd51f2537460f616dc58680e upstream.
 
-The code to set the shifter STe palette registers has a long
-standing operator precedence bug, manifesting as colors set
-on a 2 bits per pixel frame buffer coming up with a distinctive
-blue tint.
+On some servers with MGA G200_SE_A (rev 42), booting with Legacy BIOS,
+the hardware hangs when using kdump and kexec into the kdump kernel.
+This happens when the uncompress code tries to write "Decompressing Linux"
+to the VGA Console.
 
-Add parentheses around the calculation of the per-color palette
-data before shifting those into their respective bit field position.
+It can be reproduced by writing to the VGA console (0xB8000) after
+booting to graphic mode, it generates the following error:
 
-This bug goes back a long way (2.4 days at the very least) so there
-won't be a Fixes: tag.
+kernel:NMI: PCI system error (SERR) for reason a0 on CPU 0.
+kernel:Dazed and confused, but trying to continue
 
-Tested on ARAnyM as well on Falcon030 hardware.
+The root cause is the configuration of the MGA GCTL6 register
 
+According to the GCTL6 register documentation:
+
+bit 0 is gcgrmode:
+    0: Enables alpha mode, and the character generator addressing system is
+     activated.
+    1: Enables graphics mode, and the character addressing system is not
+     used.
+
+bit 1 is chainodd even:
+    0: The A0 signal of the memory address bus is used during system memory
+     addressing.
+    1: Allows A0 to be replaced by either the A16 signal of the system
+     address (ifmemmapsl is ‘00’), or by the hpgoddev (MISC<5>, odd/even
+     page select) field, described on page 3-294).
+
+bit 3-2 are memmapsl:
+    Memory map select bits 1 and 0. VGA.
+    These bits select where the video memory is mapped, as shown below:
+        00 => A0000h - BFFFFh
+        01 => A0000h - AFFFFh
+        10 => B0000h - B7FFFh
+        11 => B8000h - BFFFFh
+
+bit 7-4 are reserved.
+
+Current code set it to 0x05 => memmapsl to b01 => 0xa0000 (graphic mode)
+But on x86, the VGA console is at 0xb8000 (text mode)
+In arch/x86/boot/compressed/misc.c debug strings are written to 0xb8000
+As the driver doesn't use this mapping at 0xa0000, it is safe to set it to
+0xb8000 instead, to avoid kernel hang on G200_SE_A rev42, with kexec/kdump.
+
+Thus changing the value 0x05 to 0x0d
+
+Signed-off-by: Jocelyn Falempe <jfalempe@redhat.com>
+Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+Acked-by: Lyude Paul <lyude@redhat.com>
 Cc: stable@vger.kernel.org
-Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Link: https://lore.kernel.org/all/CAMuHMdU3ievhXxKR_xi_v3aumnYW7UNUO6qMdhgfyWTyVSsCkQ@mail.gmail.com
-Tested-by: Michael Schmitz <schmitzmic@gmail.com>
-Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Michael Schmitz <schmitzmic@gmail.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220119102905.1194787-1-jfalempe@redhat.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/video/fbdev/atafb.c |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/gpu/drm/mgag200/mgag200_mode.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/video/fbdev/atafb.c
-+++ b/drivers/video/fbdev/atafb.c
-@@ -1683,9 +1683,9 @@ static int falcon_setcolreg(unsigned int
- 			   ((blue & 0xfc00) >> 8));
- 	if (regno < 16) {
- 		shifter_tt.color_reg[regno] =
--			(((red & 0xe000) >> 13) | ((red & 0x1000) >> 12) << 8) |
--			(((green & 0xe000) >> 13) | ((green & 0x1000) >> 12) << 4) |
--			((blue & 0xe000) >> 13) | ((blue & 0x1000) >> 12);
-+			((((red & 0xe000) >> 13)   | ((red & 0x1000) >> 12)) << 8)   |
-+			((((green & 0xe000) >> 13) | ((green & 0x1000) >> 12)) << 4) |
-+			   ((blue & 0xe000) >> 13) | ((blue & 0x1000) >> 12);
- 		((u32 *)info->pseudo_palette)[regno] = ((red & 0xf800) |
- 						       ((green & 0xfc00) >> 5) |
- 						       ((blue & 0xf800) >> 11));
-@@ -1971,9 +1971,9 @@ static int stste_setcolreg(unsigned int
- 	green >>= 12;
- 	if (ATARIHW_PRESENT(EXTD_SHIFTER))
- 		shifter_tt.color_reg[regno] =
--			(((red & 0xe) >> 1) | ((red & 1) << 3) << 8) |
--			(((green & 0xe) >> 1) | ((green & 1) << 3) << 4) |
--			((blue & 0xe) >> 1) | ((blue & 1) << 3);
-+			((((red & 0xe)   >> 1) | ((red & 1)   << 3)) << 8) |
-+			((((green & 0xe) >> 1) | ((green & 1) << 3)) << 4) |
-+			  ((blue & 0xe)  >> 1) | ((blue & 1)  << 3);
- 	else
- 		shifter_tt.color_reg[regno] =
- 			((red & 0xe) << 7) |
+--- a/drivers/gpu/drm/mgag200/mgag200_mode.c
++++ b/drivers/gpu/drm/mgag200/mgag200_mode.c
+@@ -529,7 +529,10 @@ static void mgag200_set_format_regs(stru
+ 	WREG_GFX(3, 0x00);
+ 	WREG_GFX(4, 0x00);
+ 	WREG_GFX(5, 0x40);
+-	WREG_GFX(6, 0x05);
++	/* GCTL6 should be 0x05, but we configure memmapsl to 0xb8000 (text mode),
++	 * so that it doesn't hang when running kexec/kdump on G200_SE rev42.
++	 */
++	WREG_GFX(6, 0x0d);
+ 	WREG_GFX(7, 0x0f);
+ 	WREG_GFX(8, 0x0f);
+ 
 
 

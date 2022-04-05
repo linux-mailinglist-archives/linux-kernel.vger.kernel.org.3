@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772854F46A2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:13:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A764F473C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349689AbiDEUi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
+        id S1349838AbiDEVEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358257AbiDEK2K (ORCPT
+        with ESMTP id S1352525AbiDEKEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:28:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BA2DF53;
-        Tue,  5 Apr 2022 03:17:31 -0700 (PDT)
+        Tue, 5 Apr 2022 06:04:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7B4BB083;
+        Tue,  5 Apr 2022 02:53:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6792617AC;
-        Tue,  5 Apr 2022 10:17:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA655C385A1;
-        Tue,  5 Apr 2022 10:17:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B317B81B13;
+        Tue,  5 Apr 2022 09:53:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECB4FC385A2;
+        Tue,  5 Apr 2022 09:53:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153850;
-        bh=CciwU1bw+4WCz0Ui3+SMQBEO+ntSeXsekj6+OZdaYfM=;
+        s=korg; t=1649152400;
+        bh=fYxqgkCp60B50lWuU8l5QxRpvkKdNlJ9yR0c897f6Jw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fdS0KzhWyAr1ycsoN4X53GkGI5mEoIJugtCsroW7Q2NgdktML0PccXnwQubxl2spl
-         7jaHZjiVpMOimyoWKjUHTzr0kFWjtuXxSPbWseeINm2/jQtDmemqrjQNtnYDiGMMT0
-         djRFrk9tmKpVw4IAsF47drvuY8FjZ37oAOaOEcwQ=
+        b=T/3Un8Qis2Si3FaPWuUdTm1G7gVBoiwrF3nOEPuPcBY2kwLLZ2P6orZd8kSJ11y5W
+         Lnl56q0DXBhlPynSMDHPR5w1yiKuDt134r6A4WGKrwtxMcXPek3Zy+qXE7NbeQ+u53
+         BYaQdQq7Ms3MN75WH8xJBaYLaknGvNBKoVTtghfw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ping Fang <pifang@redhat.com>,
-        Daniel Henrique Barboza <danielhb413@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Maximilian=20B=C3=B6hm?= <maximilian.boehm@elbmurf.de>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 331/599] powerpc/mm/numa: skip NUMA_NO_NODE onlining in parse_numa_properties()
+Subject: [PATCH 5.15 763/913] media: Revert "media: em28xx: add missing em28xx_close_extension"
 Date:   Tue,  5 Apr 2022 09:30:25 +0200
-Message-Id: <20220405070308.683131039@linuxfoundation.org>
+Message-Id: <20220405070402.703015610@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +58,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Henrique Barboza <danielhb413@gmail.com>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-[ Upstream commit 749ed4a20657bcea66a6e082ca3dc0d228cbec80 ]
+[ Upstream commit fde18c3bac3f964d8333ae53b304d8fee430502b ]
 
-Executing node_set_online() when nid = NUMA_NO_NODE results in an
-undefined behavior. node_set_online() will call node_set_state(), into
-__node_set(), into set_bit(), and since NUMA_NO_NODE is -1 we'll end up
-doing a negative shift operation inside
-arch/powerpc/include/asm/bitops.h. This potential UB was detected
-running a kernel with CONFIG_UBSAN.
+This reverts commit 2c98b8a3458df03abdc6945bbef67ef91d181938.
 
-The behavior was introduced by commit 10f78fd0dabb ("powerpc/numa: Fix a
-regression on memoryless node 0"), where the check for nid > 0 was
-removed to fix a problem that was happening with nid = 0, but the result
-is that now we're trying to online NUMA_NO_NODE nids as well.
+Reverted patch causes problems with Hauppauge WinTV dualHD as Maximilian
+reported [1]. Since quick solution didn't come up let's just revert it
+to make this device work with upstream kernels.
 
-Checking for nid >= 0 will allow node 0 to be onlined while avoiding
-this UB with NUMA_NO_NODE.
+Link: https://lore.kernel.org/all/6a72a37b-e972-187d-0322-16336e12bdc5@elbmurf.de/ [1]
 
-Fixes: 10f78fd0dabb ("powerpc/numa: Fix a regression on memoryless node 0")
-Reported-by: Ping Fang <pifang@redhat.com>
-Signed-off-by: Daniel Henrique Barboza <danielhb413@gmail.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220224182312.1012527-1-danielhb413@gmail.com
+Reported-by: Maximilian Böhm <maximilian.boehm@elbmurf.de>
+Tested-by: Maximilian Böhm <maximilian.boehm@elbmurf.de>
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/mm/numa.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/media/usb/em28xx/em28xx-cards.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/arch/powerpc/mm/numa.c b/arch/powerpc/mm/numa.c
-index 094a1076fd1f..275c60f92a7c 100644
---- a/arch/powerpc/mm/numa.c
-+++ b/arch/powerpc/mm/numa.c
-@@ -742,7 +742,9 @@ static int __init parse_numa_properties(void)
- 			of_node_put(cpu);
- 		}
+diff --git a/drivers/media/usb/em28xx/em28xx-cards.c b/drivers/media/usb/em28xx/em28xx-cards.c
+index c415b1d195c4..92d867fc519c 100644
+--- a/drivers/media/usb/em28xx/em28xx-cards.c
++++ b/drivers/media/usb/em28xx/em28xx-cards.c
+@@ -4145,11 +4145,8 @@ static void em28xx_usb_disconnect(struct usb_interface *intf)
  
--		node_set_online(nid);
-+		/* node_set_online() is an UB if 'nid' is negative */
-+		if (likely(nid >= 0))
-+			node_set_online(nid);
- 	}
+ 	em28xx_close_extension(dev);
  
- 	get_n_mem_cells(&n_mem_addr_cells, &n_mem_size_cells);
+-	if (dev->dev_next) {
+-		em28xx_close_extension(dev->dev_next);
++	if (dev->dev_next)
+ 		em28xx_release_resources(dev->dev_next);
+-	}
+-
+ 	em28xx_release_resources(dev);
+ 
+ 	if (dev->dev_next) {
 -- 
 2.34.1
 

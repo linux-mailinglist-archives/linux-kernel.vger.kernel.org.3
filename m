@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 529F54F2D12
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F408F4F2A9F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240582AbiDEIcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
+        id S239093AbiDEIbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234123AbiDEH6B (ORCPT
+        with ESMTP id S234409AbiDEH6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:58:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE5199685;
-        Tue,  5 Apr 2022 00:51:59 -0700 (PDT)
+        Tue, 5 Apr 2022 03:58:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D322A1442;
+        Tue,  5 Apr 2022 00:52:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0582E61728;
-        Tue,  5 Apr 2022 07:51:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4D7DC340EE;
-        Tue,  5 Apr 2022 07:51:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1EE7AB81BA7;
+        Tue,  5 Apr 2022 07:52:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86913C3410F;
+        Tue,  5 Apr 2022 07:52:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145113;
-        bh=PLJgfYpKDlA2T43Zuce5R0J0Mw2MAn5KvOTzShVlfyU=;
+        s=korg; t=1649145140;
+        bh=DxHVQy1Fc+e0le2fwHX1vbuTw7y/q9K+F6271ZOTKMA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oxC8uSG2V51wNG3f32zzbtsONwLsJpsZI7IDDzjsEcMnHbAn4rCH2ezoxaVmSRfc4
-         a7vUEdDTOQvK60ldoAlssbffqpCxMws6bDqzFv4OvfDtCaIjUGAh6+Pog4pxO0c9Zc
-         jv9FSbUrZXPqOw/O+imn54N6D2KhByWd/E6cjNLo=
+        b=ls2aLnB3g1brMSbfMI49SxI/lzqwJ69B863LDocWpvx2UFI/e4cCZeZOcQ2QGBIMW
+         B1RH1iYl8aDhahQIsP4TDhxug3EJ9Uefi0qCTVR3sMhkUHgkxTFJu7cVc/DVeOS5xu
+         3xY+x1KEpi7xitTNxnr6OwzQsuzs6i8DNxhC0ERc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        "kernelci.org bot" <bot@kernelci.org>,
-        Guenter Roeck <groeck@google.com>,
-        Shuah Khan <shuah@kernel.org>, Borislav Petkov <bp@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0288/1126] selftests, x86: fix how check_cc.sh is being invoked
-Date:   Tue,  5 Apr 2022 09:17:15 +0200
-Message-Id: <20220405070416.067193531@linuxfoundation.org>
+Subject: [PATCH 5.17 0297/1126] media: staging: media: imx: imx7-mipi-csis: Make subdev name unique
+Date:   Tue,  5 Apr 2022 09:17:24 +0200
+Message-Id: <20220405070416.332785193@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -61,71 +59,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guillaume Tucker <guillaume.tucker@collabora.com>
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-[ Upstream commit ef696f93ed9778d570bd5ac58414421cdd4f1aab ]
+[ Upstream commit 5be7f8c91d25089be847a71b336c13b5bb0db772 ]
 
-The $(CC) variable used in Makefiles could contain several arguments
-such as "ccache gcc".  These need to be passed as a single string to
-check_cc.sh, otherwise only the first argument will be used as the
-compiler command.  Without quotes, the $(CC) variable is passed as
-distinct arguments which causes the script to fail to build trivial
-programs.
+When multiple CSIS instances are present in a single graph, they are
+currently all named "imx7-mipi-csis.0", which breaks the entity name
+uniqueness requirement. Fix it by using the device name to create the
+subdev name.
 
-Fix this by adding quotes around $(CC) when calling check_cc.sh to pass
-the whole string as a single argument to the script even if it has
-several words such as "ccache gcc".
-
-Link: https://lkml.kernel.org/r/d0d460d7be0107a69e3c52477761a6fe694c1840.1646991629.git.guillaume.tucker@collabora.com
-Fixes: e9886ace222e ("selftests, x86: Rework x86 target architecture detection")
-Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
-Tested-by: "kernelci.org bot" <bot@kernelci.org>
-Reviewed-by: Guenter Roeck <groeck@google.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Borislav Petkov <bp@suse.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: 7807063b862b ("media: staging/imx7: add MIPI CSI-2 receiver subdev for i.MX7")
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
+Tested-by: Jerome Brunet <jbrunet@baylibre.com> # On i.MX8MP
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/vm/Makefile  | 6 +++---
- tools/testing/selftests/x86/Makefile | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index a14b5b800897..1530c3e0242e 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -51,9 +51,9 @@ TEST_GEN_FILES += split_huge_page_test
- TEST_GEN_FILES += ksm_tests
+diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
+index 2b73fa55c938..9ea723bb5f20 100644
+--- a/drivers/staging/media/imx/imx7-mipi-csis.c
++++ b/drivers/staging/media/imx/imx7-mipi-csis.c
+@@ -32,7 +32,6 @@
+ #include <media/v4l2-subdev.h>
  
- ifeq ($(MACHINE),x86_64)
--CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_32bit_program.c -m32)
--CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_64bit_program.c)
--CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_program.c -no-pie)
-+CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_program.c -m32)
-+CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_64bit_program.c)
-+CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_program.c -no-pie)
+ #define CSIS_DRIVER_NAME			"imx7-mipi-csis"
+-#define CSIS_SUBDEV_NAME			CSIS_DRIVER_NAME
  
- TARGETS := protection_keys
- BINARIES_32 := $(TARGETS:%=%_32)
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index 8a1f62ab3c8e..53df7d3893d3 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -6,9 +6,9 @@ include ../lib.mk
- .PHONY: all all_32 all_64 warn_32bit_failure clean
+ #define CSIS_PAD_SINK				0
+ #define CSIS_PAD_SOURCE				1
+@@ -311,7 +310,6 @@ struct csi_state {
+ 	struct reset_control *mrst;
+ 	struct regulator *mipi_phy_regulator;
+ 	const struct mipi_csis_info *info;
+-	u8 index;
  
- UNAME_M := $(shell uname -m)
--CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
--CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
--CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
-+CAN_BUILD_I386 := $(shell ./check_cc.sh "$(CC)" trivial_32bit_program.c -m32)
-+CAN_BUILD_X86_64 := $(shell ./check_cc.sh "$(CC)" trivial_64bit_program.c)
-+CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
+ 	struct v4l2_subdev sd;
+ 	struct media_pad pads[CSIS_PADS_NUM];
+@@ -1303,8 +1301,8 @@ static int mipi_csis_subdev_init(struct csi_state *state)
  
- TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
- 			check_initial_reg_state sigreturn iopl ioperm \
+ 	v4l2_subdev_init(sd, &mipi_csis_subdev_ops);
+ 	sd->owner = THIS_MODULE;
+-	snprintf(sd->name, sizeof(sd->name), "%s.%d",
+-		 CSIS_SUBDEV_NAME, state->index);
++	snprintf(sd->name, sizeof(sd->name), "csis-%s",
++		 dev_name(state->dev));
+ 
+ 	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+ 	sd->ctrl_handler = NULL;
 -- 
 2.34.1
 

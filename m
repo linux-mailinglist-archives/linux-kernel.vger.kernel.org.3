@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 648B94F43D2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9EE4F4411
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349493AbiDEPLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
+        id S1385038AbiDEMbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbiDEJoJ (ORCPT
+        with ESMTP id S234868AbiDEIOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:44:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4653CC6275;
-        Tue,  5 Apr 2022 02:29:45 -0700 (PDT)
+        Tue, 5 Apr 2022 04:14:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33551986F5;
+        Tue,  5 Apr 2022 01:03:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2EED4B81CAC;
-        Tue,  5 Apr 2022 09:29:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9156EC385A0;
-        Tue,  5 Apr 2022 09:29:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EBF22617D4;
+        Tue,  5 Apr 2022 08:03:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 076E4C385A0;
+        Tue,  5 Apr 2022 08:03:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150982;
-        bh=GDkhXDUtppKjqDANeL6Q/shPJCjo5cy4GQ0T5NVoiQ4=;
+        s=korg; t=1649145789;
+        bh=xKmTIuWGghxPlamgA+4jpkdwdalBgdMukXmT3MDoh0Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xjGZz0/DH1+AwoDIRSHdSTBRq9ZVJ3ySjOTKccPKRxXO+MsCb+4YDdQKGWPWm0emg
-         cewaKCqIwRERijen9j/Swrz1nYvZIpckJF7tpg382CqzofzOLT5dXVPQZpSHxY7e3Z
-         ttruzP9UKO1Rb+wGeHBTHUB+VL8lRPaJ8tTdrWAs=
+        b=oxGEe6a4fcS3d+6/+KsRtIL6YAqBqahdLlk/gTc+ga04568xBkRg5cFBG6uAWwOSw
+         XJTVQYUOB1JoAfm2QxGyOSDqe6JZIvoBEQ31LCmTeEUHqO8H2FtpOXPAveYk/7MN75
+         +tW/UjScEPdmr5T0mlEnsYA9FyNHJyzJz9Wk3TxM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        Alan Tull <atull@opensource.altera.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Dan Williams <dan.j.williams@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 214/913] hwmon: (pmbus) Add mutex to regulator ops
-Date:   Tue,  5 Apr 2022 09:21:16 +0200
-Message-Id: <20220405070346.272729398@linuxfoundation.org>
+Subject: [PATCH 5.17 0530/1126] cxl/core: Fix cxl_probe_component_regs() error message
+Date:   Tue,  5 Apr 2022 09:21:17 +0200
+Message-Id: <20220405070423.188083070@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
+References: <20220405070407.513532867@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,69 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
+From: Dan Williams <dan.j.williams@intel.com>
 
-[ Upstream commit 686d303ee6301261b422ea51e64833d7909a2c36 ]
+[ Upstream commit d621bc2e7282f9955033a6359877fd4ac4be60e1 ]
 
-On PMBUS devices with multiple pages, the regulator ops need to be
-protected with the update mutex. This prevents accidentally changing
-the page in a separate thread while operating on the PMBUS_OPERATION
-register.
+Fix a '\n' vs '/n' typo.
 
-Tested on Infineon xdpe11280 while a separate thread polls for sensor
-data.
-
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-Link: https://lore.kernel.org/r/b991506bcbf665f7af185945f70bf9d5cf04637c.1645804976.git.sylv@sylv.io
-Fixes: ddbb4db4ced1b ("hwmon: (pmbus) Add regulator support")
-Cc: Alan Tull <atull@opensource.altera.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: 08422378c4ad ("cxl/pci: Add HDM decoder capabilities")
+Acked-by: Ben Widawsky <ben.widawsky@intel.com
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Link: https://lore.kernel.org/r/164298418268.3018233.17790073375430834911.stgit@dwillia2-desk3.amr.corp.intel.com
+Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/pmbus/pmbus_core.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ drivers/cxl/core/regs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
-index ac2fbee1ba9c..b1386a4df4cc 100644
---- a/drivers/hwmon/pmbus/pmbus_core.c
-+++ b/drivers/hwmon/pmbus/pmbus_core.c
-@@ -2391,10 +2391,14 @@ static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
- {
- 	struct device *dev = rdev_get_dev(rdev);
- 	struct i2c_client *client = to_i2c_client(dev->parent);
-+	struct pmbus_data *data = i2c_get_clientdata(client);
- 	u8 page = rdev_get_id(rdev);
- 	int ret;
+diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
+index e37e23bf4355..cdc0b75d94f2 100644
+--- a/drivers/cxl/core/regs.c
++++ b/drivers/cxl/core/regs.c
+@@ -49,7 +49,7 @@ void cxl_probe_component_regs(struct device *dev, void __iomem *base,
  
-+	mutex_lock(&data->update_lock);
- 	ret = pmbus_read_byte_data(client, page, PMBUS_OPERATION);
-+	mutex_unlock(&data->update_lock);
-+
- 	if (ret < 0)
- 		return ret;
+ 	if (FIELD_GET(CXL_CM_CAP_HDR_ID_MASK, cap_array) != CM_CAP_HDR_CAP_ID) {
+ 		dev_err(dev,
+-			"Couldn't locate the CXL.cache and CXL.mem capability array header./n");
++			"Couldn't locate the CXL.cache and CXL.mem capability array header.\n");
+ 		return;
+ 	}
  
-@@ -2405,11 +2409,17 @@ static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
- {
- 	struct device *dev = rdev_get_dev(rdev);
- 	struct i2c_client *client = to_i2c_client(dev->parent);
-+	struct pmbus_data *data = i2c_get_clientdata(client);
- 	u8 page = rdev_get_id(rdev);
-+	int ret;
- 
--	return pmbus_update_byte_data(client, page, PMBUS_OPERATION,
--				      PB_OPERATION_CONTROL_ON,
--				      enable ? PB_OPERATION_CONTROL_ON : 0);
-+	mutex_lock(&data->update_lock);
-+	ret = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
-+				     PB_OPERATION_CONTROL_ON,
-+				     enable ? PB_OPERATION_CONTROL_ON : 0);
-+	mutex_unlock(&data->update_lock);
-+
-+	return ret;
- }
- 
- static int pmbus_regulator_enable(struct regulator_dev *rdev)
 -- 
 2.34.1
 

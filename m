@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 701784F4EEB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9227E4F4DBE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233688AbiDEXyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45586 "EHLO
+        id S1582963AbiDEXun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354825AbiDEKQJ (ORCPT
+        with ESMTP id S1349238AbiDEJt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:16:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AC26C954;
-        Tue,  5 Apr 2022 03:03:03 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA272315C;
+        Tue,  5 Apr 2022 02:43:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2785B616E7;
-        Tue,  5 Apr 2022 10:03:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1534EC385A2;
-        Tue,  5 Apr 2022 10:03:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD22B61675;
+        Tue,  5 Apr 2022 09:43:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4BD5C385A1;
+        Tue,  5 Apr 2022 09:43:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152982;
-        bh=rMkDyMAy8tgZhH5NoxgtKM/qQKn45VbcqeVtM9To590=;
+        s=korg; t=1649151787;
+        bh=7Vx2WvST/3UetrRUM4JsvOUg6Uksvk+kePktchHbQIc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XU3z7/xBlMBv9+JScfsburHoY+ilzEgEEv+iWzo6zRceah95bC8bgh8TABhxRyTRb
-         Fwkp0/DFMDbF6PXLNXkE866flGAsD5WlyLgO9kfTE/AZqJSyGgMX4eNu2R/AeKL6rM
-         +6meoq4Isj24bL0CR23TXFdzOtyH8nWh6rZCw474=
+        b=AQbyk6RB/rovKedEwfyVqomq9KQD1X0SLCUfBYT3J0Hltx2WGV9HGjzNLOJryZfTt
+         IZSNikf7fWCwoCDPOUDt6HFQQaIDW7typSr7Mo8qW317eLm2qmN1T57Dg2JoE91Q93
+         5YZU/82u8ecKHU5n9JNTq7psbH3BWARytNhN1B8o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alistair Popple <apopple@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        John Hubbard <jhubbard@nvidia.com>, Zi Yan <ziy@nvidia.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.10 059/599] mm/pages_alloc.c: dont create ZONE_MOVABLE beyond the end of a node
-Date:   Tue,  5 Apr 2022 09:25:53 +0200
-Message-Id: <20220405070300.584276718@linuxfoundation.org>
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        James Morris <jmorris@namei.org>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        tomoyo-dev-en@lists.osdn.me, "Serge E. Hallyn" <serge@hallyn.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 492/913] TOMOYO: fix __setup handlers return values
+Date:   Tue,  5 Apr 2022 09:25:54 +0200
+Message-Id: <20220405070354.602618440@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,105 +59,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alistair Popple <apopple@nvidia.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit ddbc84f3f595cf1fc8234a191193b5d20ad43938 upstream.
+[ Upstream commit 39844b7e3084baecef52d1498b5fa81afa2cefa9 ]
 
-ZONE_MOVABLE uses the remaining memory in each node.  Its starting pfn
-is also aligned to MAX_ORDER_NR_PAGES.  It is possible for the remaining
-memory in a node to be less than MAX_ORDER_NR_PAGES, meaning there is
-not enough room for ZONE_MOVABLE on that node.
+__setup() handlers should return 1 if the parameter is handled.
+Returning 0 causes the entire string to be added to init's
+environment strings (limited to 32 strings), unnecessarily polluting it.
 
-Unfortunately this condition is not checked for.  This leads to
-zone_movable_pfn[] getting set to a pfn greater than the last pfn in a
-node.
+Using the documented strings "TOMOYO_loader=string1" and
+"TOMOYO_trigger=string2" causes an Unknown parameter message:
+  Unknown kernel command line parameters
+    "BOOT_IMAGE=/boot/bzImage-517rc5 TOMOYO_loader=string1 \
+     TOMOYO_trigger=string2", will be passed to user space.
 
-calculate_node_totalpages() then sets zone->present_pages to be greater
-than zone->spanned_pages which is invalid, as spanned_pages represents
-the maximum number of pages in a zone assuming no holes.
+and these strings are added to init's environment string space:
+  Run /sbin/init as init process
+    with arguments:
+     /sbin/init
+    with environment:
+     HOME=/
+     TERM=linux
+     BOOT_IMAGE=/boot/bzImage-517rc5
+     TOMOYO_loader=string1
+     TOMOYO_trigger=string2
 
-Subsequently it is possible free_area_init_core() will observe a zone of
-size zero with present pages.  In this case it will skip setting up the
-zone, including the initialisation of free_lists[].
+With this change, these __setup handlers act as expected,
+and init's environment is not polluted with these strings.
 
-However populated_zone() checks zone->present_pages to see if a zone has
-memory available.  This is used by iterators such as
-walk_zones_in_node().  pagetypeinfo_showfree() uses this to walk the
-free_list of each zone in each node, which are assumed to be initialised
-due to the zone not being empty.
-
-As free_area_init_core() never initialised the free_lists[] this results
-in the following kernel crash when trying to read /proc/pagetypeinfo:
-
-  BUG: kernel NULL pointer dereference, address: 0000000000000000
-  #PF: supervisor read access in kernel mode
-  #PF: error_code(0x0000) - not-present page
-  PGD 0 P4D 0
-  Oops: 0000 [#1] PREEMPT SMP DEBUG_PAGEALLOC NOPTI
-  CPU: 0 PID: 456 Comm: cat Not tainted 5.16.0 #461
-  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-  RIP: 0010:pagetypeinfo_show+0x163/0x460
-  Code: 9e 82 e8 80 57 0e 00 49 8b 06 b9 01 00 00 00 4c 39 f0 75 16 e9 65 02 00 00 48 83 c1 01 48 81 f9 a0 86 01 00 0f 84 48 02 00 00 <48> 8b 00 4c 39 f0 75 e7 48 c7 c2 80 a2 e2 82 48 c7 c6 79 ef e3 82
-  RSP: 0018:ffffc90001c4bd10 EFLAGS: 00010003
-  RAX: 0000000000000000 RBX: ffff88801105f638 RCX: 0000000000000001
-  RDX: 0000000000000001 RSI: 000000000000068b RDI: ffff8880163dc68b
-  RBP: ffffc90001c4bd90 R08: 0000000000000001 R09: ffff8880163dc67e
-  R10: 656c6261766f6d6e R11: 6c6261766f6d6e55 R12: ffff88807ffb4a00
-  R13: ffff88807ffb49f8 R14: ffff88807ffb4580 R15: ffff88807ffb3000
-  FS:  00007f9c83eff5c0(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
-  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  CR2: 0000000000000000 CR3: 0000000013c8e000 CR4: 0000000000350ef0
-  Call Trace:
-   seq_read_iter+0x128/0x460
-   proc_reg_read_iter+0x51/0x80
-   new_sync_read+0x113/0x1a0
-   vfs_read+0x136/0x1d0
-   ksys_read+0x70/0xf0
-   __x64_sys_read+0x1a/0x20
-   do_syscall_64+0x3b/0xc0
-   entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Fix this by checking that the aligned zone_movable_pfn[] does not exceed
-the end of the node, and if it does skip creating a movable zone on this
-node.
-
-Link: https://lkml.kernel.org/r/20220215025831.2113067-1-apopple@nvidia.com
-Fixes: 2a1e274acf0b ("Create the ZONE_MOVABLE zone")
-Signed-off-by: Alistair Popple <apopple@nvidia.com>
-Acked-by: David Hildenbrand <david@redhat.com>
-Acked-by: Mel Gorman <mgorman@techsingularity.net>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Zi Yan <ziy@nvidia.com>
-Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: Oscar Salvador <osalvador@suse.de>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 0e4ae0e0dec63 ("TOMOYO: Make several options configurable.")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: https://lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Cc: James Morris <jmorris@namei.org>
+Cc: Kentaro Takeda <takedakn@nttdata.co.jp>
+Cc: tomoyo-dev-en@lists.osdn.me
+Cc: "Serge E. Hallyn" <serge@hallyn.com>
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- mm/page_alloc.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ security/tomoyo/load_policy.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -7402,10 +7402,17 @@ restart:
+diff --git a/security/tomoyo/load_policy.c b/security/tomoyo/load_policy.c
+index 3445ae6fd479..363b65be87ab 100644
+--- a/security/tomoyo/load_policy.c
++++ b/security/tomoyo/load_policy.c
+@@ -24,7 +24,7 @@ static const char *tomoyo_loader;
+ static int __init tomoyo_loader_setup(char *str)
+ {
+ 	tomoyo_loader = str;
+-	return 0;
++	return 1;
+ }
  
- out2:
- 	/* Align start of ZONE_MOVABLE on all nids to MAX_ORDER_NR_PAGES */
--	for (nid = 0; nid < MAX_NUMNODES; nid++)
-+	for (nid = 0; nid < MAX_NUMNODES; nid++) {
-+		unsigned long start_pfn, end_pfn;
-+
- 		zone_movable_pfn[nid] =
- 			roundup(zone_movable_pfn[nid], MAX_ORDER_NR_PAGES);
+ __setup("TOMOYO_loader=", tomoyo_loader_setup);
+@@ -64,7 +64,7 @@ static const char *tomoyo_trigger;
+ static int __init tomoyo_trigger_setup(char *str)
+ {
+ 	tomoyo_trigger = str;
+-	return 0;
++	return 1;
+ }
  
-+		get_pfn_range_for_nid(nid, &start_pfn, &end_pfn);
-+		if (zone_movable_pfn[nid] >= end_pfn)
-+			zone_movable_pfn[nid] = 0;
-+	}
-+
- out:
- 	/* restore the node_state */
- 	node_states[N_MEMORY] = saved_node_state;
+ __setup("TOMOYO_trigger=", tomoyo_trigger_setup);
+-- 
+2.34.1
+
 
 

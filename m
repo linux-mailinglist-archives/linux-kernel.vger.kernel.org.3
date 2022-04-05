@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB744F4616
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 169904F44CF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381577AbiDEUEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38010 "EHLO
+        id S1384686AbiDENc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352696AbiDEKE5 (ORCPT
+        with ESMTP id S1345777AbiDEJXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:04:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7A7BBE0B;
-        Tue,  5 Apr 2022 02:53:41 -0700 (PDT)
+        Tue, 5 Apr 2022 05:23:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1551191557;
+        Tue,  5 Apr 2022 02:12:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB575616D7;
-        Tue,  5 Apr 2022 09:53:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B421BC385A2;
-        Tue,  5 Apr 2022 09:53:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A876AB81A22;
+        Tue,  5 Apr 2022 09:12:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13105C385A0;
+        Tue,  5 Apr 2022 09:12:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152420;
-        bh=I6aGqWjrqvnZkEehH1G0+jL/Sh2jVVvHMXxT5JjDfXE=;
+        s=korg; t=1649149929;
+        bh=ZQtAJtFT3tYHabqpMHz6Tb1HyIxMzqpBLVOx+C0HNV0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vfnJAl7o6+SYFrsHB+o21lWOdgXWSJsOCMOwtkD8CmtFU5jIqXO5GcGZvwUYuy/MC
-         H3uyVuXFQa1ayMhY4jDIP6OTks2yEIyCQJaIWvuyD61PpZTP+SnjB1IttvcRJvKzHD
-         8YMf0gsLnNKxDNfhNyQDk6Wj78uv3Vim0Ui9f7GA=
+        b=nrFRnH3T9tMBswoZbbLtMLJP8WZ4Yhz2LV050HJ6U0IKIXWHIlR/NlkkbPpQT5KKh
+         tO+saFs7okKEP0PoxjVOVlXFKP+P76T6a0VhkubFnyUY9PxDi4xs5pVud41F2fZ3LJ
+         unFXldNi7e7ixK1xEKJ/2M2XxS+9upMlr/z3m/rs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 743/913] ASoC: madera: Add dependencies on MFD
-Date:   Tue,  5 Apr 2022 09:30:05 +0200
-Message-Id: <20220405070402.106626163@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Arun Easi <aeasi@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.16 0893/1017] scsi: qla2xxx: Fix missed DMA unmap for NVMe ls requests
+Date:   Tue,  5 Apr 2022 09:30:06 +0200
+Message-Id: <20220405070420.735566910@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,60 +57,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
+From: Arun Easi <aeasi@marvell.com>
 
-[ Upstream commit ec29170c724ca30305fc3a19ba2ee73ecac65509 ]
+commit c85ab7d9e27a80e48d5b7d7fb2fe2b0fdb2de523 upstream.
 
-The Madera CODECs use regmap_irq functions but nothing ensures that
-regmap_irq is built into the kernel. Add dependencies on the ASoC
-symbols for the relevant MFD component. There is no point in building
-the ASoC driver if the MFD doesn't support it and the MFD part contains
-the necessary dependencies to ensure everything is built into the
-kernel.
+At NVMe ELS request time, request structure is DMA mapped and never
+unmapped. Fix this by calling the unmap on ELS completion.
 
-Reported-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220203115025.16464-1-ckeepax@opensource.cirrus.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/20220310092604.22950-5-njavali@marvell.com
+Fixes: e84067d74301 ("scsi: qla2xxx: Add FC-NVMe F/W initialization and transport registration")
+Cc: stable@vger.kernel.org
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Signed-off-by: Arun Easi <aeasi@marvell.com>
+Signed-off-by: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/Kconfig | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/scsi/qla2xxx/qla_nvme.c |   17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
-index f12c9b942678..47e675e8bd00 100644
---- a/sound/soc/codecs/Kconfig
-+++ b/sound/soc/codecs/Kconfig
-@@ -690,6 +690,7 @@ config SND_SOC_CS4349
+--- a/drivers/scsi/qla2xxx/qla_nvme.c
++++ b/drivers/scsi/qla2xxx/qla_nvme.c
+@@ -172,6 +172,18 @@ out:
+ 	qla2xxx_rel_qpair_sp(sp->qpair, sp);
+ }
  
- config SND_SOC_CS47L15
- 	tristate
-+	depends on MFD_CS47L15
++static void qla_nvme_ls_unmap(struct srb *sp, struct nvmefc_ls_req *fd)
++{
++	if (sp->flags & SRB_DMA_VALID) {
++		struct srb_iocb *nvme = &sp->u.iocb_cmd;
++		struct qla_hw_data *ha = sp->fcport->vha->hw;
++
++		dma_unmap_single(&ha->pdev->dev, nvme->u.nvme.cmd_dma,
++				 fd->rqstlen, DMA_TO_DEVICE);
++		sp->flags &= ~SRB_DMA_VALID;
++	}
++}
++
+ static void qla_nvme_release_ls_cmd_kref(struct kref *kref)
+ {
+ 	struct srb *sp = container_of(kref, struct srb, cmd_kref);
+@@ -188,6 +200,8 @@ static void qla_nvme_release_ls_cmd_kref
+ 	spin_unlock_irqrestore(&priv->cmd_lock, flags);
  
- config SND_SOC_CS47L24
- 	tristate
-@@ -697,15 +698,19 @@ config SND_SOC_CS47L24
+ 	fd = priv->fd;
++
++	qla_nvme_ls_unmap(sp, fd);
+ 	fd->done(fd, priv->comp_status);
+ out:
+ 	qla2x00_rel_sp(sp);
+@@ -358,6 +372,8 @@ static int qla_nvme_ls_req(struct nvme_f
+ 	dma_sync_single_for_device(&ha->pdev->dev, nvme->u.nvme.cmd_dma,
+ 	    fd->rqstlen, DMA_TO_DEVICE);
  
- config SND_SOC_CS47L35
- 	tristate
-+	depends on MFD_CS47L35
- 
- config SND_SOC_CS47L85
- 	tristate
-+	depends on MFD_CS47L85
- 
- config SND_SOC_CS47L90
- 	tristate
-+	depends on MFD_CS47L90
- 
- config SND_SOC_CS47L92
- 	tristate
-+	depends on MFD_CS47L92
- 
- # Cirrus Logic Quad-Channel ADC
- config SND_SOC_CS53L30
--- 
-2.34.1
-
++	sp->flags |= SRB_DMA_VALID;
++
+ 	rval = qla2x00_start_sp(sp);
+ 	if (rval != QLA_SUCCESS) {
+ 		ql_log(ql_log_warn, vha, 0x700e,
+@@ -365,6 +381,7 @@ static int qla_nvme_ls_req(struct nvme_f
+ 		wake_up(&sp->nvme_ls_waitq);
+ 		sp->priv = NULL;
+ 		priv->sp = NULL;
++		qla_nvme_ls_unmap(sp, fd);
+ 		qla2x00_rel_sp(sp);
+ 		return rval;
+ 	}
 
 

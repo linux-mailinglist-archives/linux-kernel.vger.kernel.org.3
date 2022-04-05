@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A2E64F4E4F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6CE4F4A8E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1588742AbiDFARN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
+        id S245390AbiDEWtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351807AbiDEKDU (ORCPT
+        with ESMTP id S1358024AbiDEK1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:03:20 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D118C75E78;
-        Tue,  5 Apr 2022 02:52:22 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2D8689A2;
+        Tue,  5 Apr 2022 03:13:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0EC91CE1C9C;
-        Tue,  5 Apr 2022 09:52:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23823C385A1;
-        Tue,  5 Apr 2022 09:52:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F0223B81C88;
+        Tue,  5 Apr 2022 10:13:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AD05C385A1;
+        Tue,  5 Apr 2022 10:13:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152337;
-        bh=ys19H8MNgs4LVTR3UqKljfxYa7ypfGSPYdnDYEHmRaA=;
+        s=korg; t=1649153584;
+        bh=ZIOmT5Slk2G++mQSpDt+ZoovSPZ+Y40/5YBoKMtkjkM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c8HJb/mMztprkI5RsfrfX3QGi1bEj2odBwqp/YDPTm2jrOVGTPxoVWs7/chwmfcyR
-         VJRsrjxNTXDgr/i4cQj50X98mdSOzBjMM9wgFMIB/+s+iYpI/wyMeSoiFX3Xa5UYBs
-         AIhdjitrxHo8Yhk+YnRR+Hu5EXbzpwk1fAFPhstQ=
+        b=HbNbov6nPpmtVU4GakahqqLNM2fa3+AOqQ6icYx7FBl9RMQYm9YIrKaEmoU9gwiwB
+         Aw7a98Qw+Y3WY+L87a0+0xdhkEm8HuP24f5+oQ5+s7HqQA1I4lIqcL6hHKhh6c1kkm
+         0iFFQbAjgQnqx0FaN6QgkgjhqHnDX/gnu/Cjm5I0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Holger=20Hoffst=C3=A4tte?= 
-        <holger@applied-asynchrony.com>,
-        Paolo Valente <paolo.valente@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 703/913] Revert "Revert "block, bfq: honor already-setup queue merges""
-Date:   Tue,  5 Apr 2022 09:29:25 +0200
-Message-Id: <20220405070400.907356001@linuxfoundation.org>
+        stable@vger.kernel.org, Shannon Nelson <snelson@pensando.io>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 273/599] ionic: fix type complaint in ionic_dev_cmd_clean()
+Date:   Tue,  5 Apr 2022 09:29:27 +0200
+Message-Id: <20220405070306.962301309@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,73 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Valente <paolo.valente@linaro.org>
+From: Shannon Nelson <snelson@pensando.io>
 
-[ Upstream commit 15729ff8143f8135b03988a100a19e66d7cb7ecd ]
+[ Upstream commit bc0bf9de6f48268f4ee59e57fb42ac751be3ecda ]
 
-A crash [1] happened to be triggered in conjunction with commit
-2d52c58b9c9b ("block, bfq: honor already-setup queue merges"). The
-latter was then reverted by commit ebc69e897e17 ("Revert "block, bfq:
-honor already-setup queue merges""). Yet, the reverted commit was not
-the one introducing the bug. In fact, it actually triggered a UAF
-introduced by a different commit, and now fixed by commit d29bd41428cf
-("block, bfq: reset last_bfqq_created on group change").
+Sparse seems to have gotten a little more picky lately and
+we need to revisit this bit of code to make sparse happy.
 
-So, there is no point in keeping commit 2d52c58b9c9b ("block, bfq:
-honor already-setup queue merges") out. This commit restores it.
+warning: incorrect type in initializer (different address spaces)
+   expected union ionic_dev_cmd_regs *regs
+   got union ionic_dev_cmd_regs [noderef] __iomem *dev_cmd_regs
+warning: incorrect type in argument 2 (different address spaces)
+   expected void [noderef] __iomem *
+   got unsigned int *
+warning: incorrect type in argument 1 (different address spaces)
+   expected void volatile [noderef] __iomem *
+   got union ionic_dev_cmd *
 
-[1] https://bugzilla.kernel.org/show_bug.cgi?id=214503
-
-Reported-by: Holger Hoffstätte <holger@applied-asynchrony.com>
-Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
-Link: https://lore.kernel.org/r/20211125181510.15004-1-paolo.valente@linaro.org
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: d701ec326a31 ("ionic: clean up sparse complaints")
+Signed-off-by: Shannon Nelson <snelson@pensando.io>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/bfq-iosched.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/pensando/ionic/ionic_main.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 9843085cc2c3..63d2d66dece5 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -2662,6 +2662,15 @@ bfq_setup_merge(struct bfq_queue *bfqq, struct bfq_queue *new_bfqq)
- 	 * are likely to increase the throughput.
- 	 */
- 	bfqq->new_bfqq = new_bfqq;
-+	/*
-+	 * The above assignment schedules the following redirections:
-+	 * each time some I/O for bfqq arrives, the process that
-+	 * generated that I/O is disassociated from bfqq and
-+	 * associated with new_bfqq. Here we increases new_bfqq->ref
-+	 * in advance, adding the number of processes that are
-+	 * expected to be associated with new_bfqq as they happen to
-+	 * issue I/O.
-+	 */
- 	new_bfqq->ref += process_refs;
- 	return new_bfqq;
- }
-@@ -2724,6 +2733,10 @@ bfq_setup_cooperator(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+diff --git a/drivers/net/ethernet/pensando/ionic/ionic_main.c b/drivers/net/ethernet/pensando/ionic/ionic_main.c
+index d355676f6c16..e14869a2e24a 100644
+--- a/drivers/net/ethernet/pensando/ionic/ionic_main.c
++++ b/drivers/net/ethernet/pensando/ionic/ionic_main.c
+@@ -311,10 +311,10 @@ int ionic_adminq_post_wait(struct ionic_lif *lif, struct ionic_admin_ctx *ctx)
+ 
+ static void ionic_dev_cmd_clean(struct ionic *ionic)
  {
- 	struct bfq_queue *in_service_bfqq, *new_bfqq;
+-	union __iomem ionic_dev_cmd_regs *regs = ionic->idev.dev_cmd_regs;
++	struct ionic_dev *idev = &ionic->idev;
  
-+	/* if a merge has already been setup, then proceed with that first */
-+	if (bfqq->new_bfqq)
-+		return bfqq->new_bfqq;
-+
- 	/*
- 	 * Check delayed stable merge for rotational or non-queueing
- 	 * devs. For this branch to be executed, bfqq must not be
-@@ -2825,9 +2838,6 @@ bfq_setup_cooperator(struct bfq_data *bfqd, struct bfq_queue *bfqq,
- 	if (bfq_too_late_for_merging(bfqq))
- 		return NULL;
+-	iowrite32(0, &regs->doorbell);
+-	memset_io(&regs->cmd, 0, sizeof(regs->cmd));
++	iowrite32(0, &idev->dev_cmd_regs->doorbell);
++	memset_io(&idev->dev_cmd_regs->cmd, 0, sizeof(idev->dev_cmd_regs->cmd));
+ }
  
--	if (bfqq->new_bfqq)
--		return bfqq->new_bfqq;
--
- 	if (!io_struct || unlikely(bfqq == &bfqd->oom_bfqq))
- 		return NULL;
- 
+ int ionic_dev_cmd_wait(struct ionic *ionic, unsigned long max_seconds)
 -- 
 2.34.1
 

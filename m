@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 004664F46DC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA994F4851
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244016AbiDEUrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:47:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
+        id S1380072AbiDEVgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbiDEKax (ORCPT
+        with ESMTP id S1353968AbiDEKKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:30:53 -0400
+        Tue, 5 Apr 2022 06:10:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C809ADD95C;
-        Tue,  5 Apr 2022 03:18:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5342EC5588;
+        Tue,  5 Apr 2022 02:56:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29EBB6176C;
-        Tue,  5 Apr 2022 10:18:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D6B3C385A1;
-        Tue,  5 Apr 2022 10:18:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5534616E7;
+        Tue,  5 Apr 2022 09:56:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D65C1C385A1;
+        Tue,  5 Apr 2022 09:56:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153904;
-        bh=NvZ6XiU6CdBZxHhjPV1gh5NK0assn0TT6y0lGrOHRPw=;
+        s=korg; t=1649152564;
+        bh=XPMpb65O3CeKvKBW3+kH3pERPeRlgpPUhWQrxjl1KbM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZHkpCQcPAzwDF6s3eeRgOOGx1kiamOp/gWMzgFqKc3Ayr0vDuPhAlQKeJMv1oAqao
-         hOrvBeQlqiTPQy+2y5N2X8PA04//m2NH/gerCW3vuKBxpdM78mPU54fpWt1xwK9lDW
-         5WWfbwY388ARnRD98dh1lw4G849UXUNz4Oca6oLU=
+        b=hHffpIUMnZo17aLj2W8xxobTWBFAIytQcdiXqeI/nL3D98GvdaOGDge6sNWrxaJBq
+         +giAPicgiPwtENdEMIys3eYbFbok+guariogkw2KmgCwM2UyjFCswU5LG/V9tiYG0y
+         4KDRZgjZJQ0uHy056Yra2+ojZNAGQAmKK/w7XAhM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 389/599] pinctrl: renesas: checker: Fix miscalculation of number of states
+        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: [PATCH 5.15 821/913] ubifs: Rectify space amount budget for mkdir/tmpfile operations
 Date:   Tue,  5 Apr 2022 09:31:23 +0200
-Message-Id: <20220405070310.407053245@linuxfoundation.org>
+Message-Id: <20220405070404.440472442@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +54,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+From: Zhihao Cheng <chengzhihao1@huawei.com>
 
-[ Upstream commit de9b861018d46af27a5edff8b6baef35c0c0ad4f ]
+commit a6dab6607d4681d227905d5198710b575dbdb519 upstream.
 
-The checker failed to validate all enum IDs in the description of a
-register with fixed-width register fields, due to a miscalculation of
-the number of described states: each register field of n bits can have
-"1 << n" possible states, not "1".
+UBIFS should make sure the flash has enough space to store dirty (Data
+that is newer than disk) data (in memory), space budget is exactly
+designed to do that. If space budget calculates less data than we need,
+'make_reservation()' will do more work(return -ENOSPC if no free space
+lelf, sometimes we can see "cannot reserve xxx bytes in jhead xxx, error
+-28" in ubifs error messages) with ubifs inodes locked, which may effect
+other syscalls.
 
-Increase SH_PFC_MAX_ENUMS accordingly, now more enum IDs are checked
-(SH-Mobile AG5 has more than 4000 enum IDs defined).
+A simple way to decide how much space do we need when make a budget:
+See how much space is needed by 'make_reservation()' in ubifs_jnl_xxx()
+function according to corresponding operation.
 
-Fixes: 12d057bad683b1c6 ("pinctrl: sh-pfc: checker: Add check for enum ID conflicts")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/6d8a6a05564f38f9d20464c1c17f96e52740cf6a.1645460429.git.geert+renesas@glider.be
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+It's better to report ENOSPC in ubifs_budget_space(), as early as we can.
+
+Fixes: 474b93704f32163 ("ubifs: Implement O_TMPFILE")
+Fixes: 1e51764a3c2ac05 ("UBIFS: add new flash file system")
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/renesas/core.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ fs/ubifs/dir.c |   12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/pinctrl/renesas/core.c b/drivers/pinctrl/renesas/core.c
-index 9d168b90cd28..258972672eda 100644
---- a/drivers/pinctrl/renesas/core.c
-+++ b/drivers/pinctrl/renesas/core.c
-@@ -739,7 +739,7 @@ static int sh_pfc_suspend_init(struct sh_pfc *pfc) { return 0; }
+--- a/fs/ubifs/dir.c
++++ b/fs/ubifs/dir.c
+@@ -428,15 +428,18 @@ static int ubifs_tmpfile(struct user_nam
+ {
+ 	struct inode *inode;
+ 	struct ubifs_info *c = dir->i_sb->s_fs_info;
+-	struct ubifs_budget_req req = { .new_ino = 1, .new_dent = 1};
++	struct ubifs_budget_req req = { .new_ino = 1, .new_dent = 1,
++					.dirtied_ino = 1};
+ 	struct ubifs_budget_req ino_req = { .dirtied_ino = 1 };
+ 	struct ubifs_inode *ui;
+ 	int err, instantiated = 0;
+ 	struct fscrypt_name nm;
  
- #ifdef DEBUG
- #define SH_PFC_MAX_REGS		300
--#define SH_PFC_MAX_ENUMS	3000
-+#define SH_PFC_MAX_ENUMS	5000
+ 	/*
+-	 * Budget request settings: new dirty inode, new direntry,
+-	 * budget for dirtied inode will be released via writeback.
++	 * Budget request settings: new inode, new direntry, changing the
++	 * parent directory inode.
++	 * Allocate budget separately for new dirtied inode, the budget will
++	 * be released via writeback.
+ 	 */
  
- static unsigned int sh_pfc_errors __initdata = 0;
- static unsigned int sh_pfc_warnings __initdata = 0;
-@@ -851,7 +851,8 @@ static void __init sh_pfc_check_cfg_reg(const char *drvname,
- 	sh_pfc_check_reg(drvname, cfg_reg->reg);
+ 	dbg_gen("dent '%pd', mode %#hx in dir ino %lu",
+@@ -979,7 +982,8 @@ static int ubifs_mkdir(struct user_names
+ 	struct ubifs_inode *dir_ui = ubifs_inode(dir);
+ 	struct ubifs_info *c = dir->i_sb->s_fs_info;
+ 	int err, sz_change;
+-	struct ubifs_budget_req req = { .new_ino = 1, .new_dent = 1 };
++	struct ubifs_budget_req req = { .new_ino = 1, .new_dent = 1,
++					.dirtied_ino = 1};
+ 	struct fscrypt_name nm;
  
- 	if (cfg_reg->field_width) {
--		n = cfg_reg->reg_width / cfg_reg->field_width;
-+		fw = cfg_reg->field_width;
-+		n = (cfg_reg->reg_width / fw) << fw;
- 		/* Skip field checks (done at build time) */
- 		goto check_enum_ids;
- 	}
--- 
-2.34.1
-
+ 	/*
 
 

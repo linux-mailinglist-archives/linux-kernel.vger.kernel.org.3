@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE9C4F3863
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AEFA4F3841
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376533AbiDELWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:22:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38062 "EHLO
+        id S1376475AbiDELWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241700AbiDEIsc (ORCPT
+        with ESMTP id S241544AbiDEIsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:48:32 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325C22AE38;
-        Tue,  5 Apr 2022 01:36:50 -0700 (PDT)
-Date:   Tue, 05 Apr 2022 08:36:38 -0000
+        Tue, 5 Apr 2022 04:48:30 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D7F29CA1;
+        Tue,  5 Apr 2022 01:36:44 -0700 (PDT)
+Date:   Tue, 05 Apr 2022 08:36:39 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649147799;
+        s=2020; t=1649147800;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QcaaisSy7yoGqMENp3XASjYCIhZ1dy0KEhiOvSml/rM=;
-        b=0+SAgssOSJBn+nuIEtoTZh2t3SMHH76grHmTrE+JG6cLr4j7fmaKvodTnlZwqlMxVZNG3/
-        dg/vl4flXx7hZ1Kxn2g5NZpABNluW9kMeexO5i1bWyIpcbXK5V9axoOWMliPxsgogaBLDT
-        +FBzQJzC4rmZiKgQPcmSNt9hj1mY1974KFODffLbhJ8qJf4mIzazLSDXmmXQ3mvQK1srOF
-        tAPiRWJjhIym2eA6KYRAieb3aYbZqjsVkeFPhMklFkkkc2KCMM6MCMaqECWMqP7ZRuAJu1
-        D++hvFbmcm3B8tsl885hJZKaCYSKkhCwSIzPJNqwn9YS6Ci+WG+OUyZ8Z0hgkg==
+        bh=6e2iJkeD9BAyrtexCx29/YLmPPgQrYaKKMMH1f5kNFY=;
+        b=T3fYhTNGIYFMiTFJkzVHz65w6orILINqyZtainHt50O30opdV5YwMYyPSGlgoQRB8aG6lZ
+        Sjr+VjA5HqZcOXvOdP5ssl8x1jYE26FQ+kuWEshGs9m8fcexu7Gunk7+QzBu9kykEensB2
+        bOmAOERN7vYcuA3PVXCeZQP9+UGmsibjvExWrCcrVQrEtUAy/dYbUvV6ihosWwTc/1QJKd
+        Bg42bspMA7ZxUsrBCVQnQwaIWemL4w+kvsJShBs+BxmnvLaJ1jzDrbiGupBQXJaLAEptM4
+        lIS68IW05x+j5BXzJJWkxNZgVsKpCaXfoz6VbmT0oOLWrmFK2+smJG5lRGQsdw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649147799;
+        s=2020e; t=1649147800;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QcaaisSy7yoGqMENp3XASjYCIhZ1dy0KEhiOvSml/rM=;
-        b=Lrw4YWtFGKUJUYLf7CQe8NhuxeFh7h8YldBEND6+NV1Jkm+l2BfsR7bMaQ1ArbH3dGU3Am
-        ffEEZ6uJgmJAg/CQ==
+        bh=6e2iJkeD9BAyrtexCx29/YLmPPgQrYaKKMMH1f5kNFY=;
+        b=7CUa6rguA9S3hrGua12J/7pi+DilzGKFN1HGfnBJmGAY/0BkzY6+sivoDRsPKsIvqUGtAX
+        8AvXg6wQnpJOGrAQ==
 From:   "tip-bot2 for Stephane Eranian" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] ACPI: Add perf low power callback
+Subject: [tip: perf/core] perf/x86/amd: Make Zen3 branch sampling opt-in
 Cc:     Stephane Eranian <eranian@google.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220322221517.2510440-9-eranian@google.com>
-References: <20220322221517.2510440-9-eranian@google.com>
+In-Reply-To: <20220322221517.2510440-8-eranian@google.com>
+References: <20220322221517.2510440-8-eranian@google.com>
 MIME-Version: 1.0
-Message-ID: <164914779839.389.6423225128965385864.tip-bot2@tip-bot2>
+Message-ID: <164914779922.389.2109110195997565044.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,107 +67,130 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     2a606a18cd672a16343d146a126721b34cc6adbd
-Gitweb:        https://git.kernel.org/tip/2a606a18cd672a16343d146a126721b34cc6adbd
+Commit-ID:     cc37e520a236069c0de0e7ea455082fa11c73b12
+Gitweb:        https://git.kernel.org/tip/cc37e520a236069c0de0e7ea455082fa11c73b12
 Author:        Stephane Eranian <eranian@google.com>
-AuthorDate:    Tue, 22 Mar 2022 15:15:12 -07:00
+AuthorDate:    Tue, 22 Mar 2022 15:15:11 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 05 Apr 2022 10:24:38 +02:00
 
-ACPI: Add perf low power callback
+perf/x86/amd: Make Zen3 branch sampling opt-in
 
-Add an optional callback needed by some PMU features, e.g., AMD
-BRS, to give a chance to the perf_events code to change its state before
-a CPU goes to low power and after it comes back.
-
-The callback is void when the PERF_NEEDS_LOPWR_CB flag is not set.
-This flag must be set in arch specific perf_event.h header whenever needed.
-When not set, there is no impact on the ACPI code.
+Add a kernel config option CONFIG_PERF_EVENTS_AMD_BRS
+to make the support for AMD Zen3 Branch Sampling (BRS) an opt-in
+compile time option.
 
 Signed-off-by: Stephane Eranian <eranian@google.com>
-[peterz: build fix]
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220322221517.2510440-9-eranian@google.com
+Link: https://lore.kernel.org/r/20220322221517.2510440-8-eranian@google.com
 ---
- drivers/acpi/acpi_pad.c       | 7 +++++++
- drivers/acpi/processor_idle.c | 5 +++++
- include/linux/perf_event.h    | 6 ++++++
- 3 files changed, 18 insertions(+)
+ arch/x86/events/Kconfig      |  8 ++++++-
+ arch/x86/events/amd/Makefile |  3 +-
+ arch/x86/events/perf_event.h | 49 +++++++++++++++++++++++++++--------
+ 3 files changed, 49 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/acpi/acpi_pad.c b/drivers/acpi/acpi_pad.c
-index f45979a..ec0e22a 100644
---- a/drivers/acpi/acpi_pad.c
-+++ b/drivers/acpi/acpi_pad.c
-@@ -17,6 +17,7 @@
- #include <linux/tick.h>
- #include <linux/slab.h>
- #include <linux/acpi.h>
-+#include <linux/perf_event.h>
- #include <asm/mwait.h>
- #include <xen/xen.h>
+diff --git a/arch/x86/events/Kconfig b/arch/x86/events/Kconfig
+index d6cdfe6..09c5696 100644
+--- a/arch/x86/events/Kconfig
++++ b/arch/x86/events/Kconfig
+@@ -44,4 +44,12 @@ config PERF_EVENTS_AMD_UNCORE
  
-@@ -164,6 +165,9 @@ static int power_saving_thread(void *data)
- 				tsc_marked_unstable = 1;
- 			}
- 			local_irq_disable();
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called 'amd-uncore'.
 +
-+			perf_lopwr_cb(true);
++config PERF_EVENTS_AMD_BRS
++	depends on PERF_EVENTS && CPU_SUP_AMD
++	bool "AMD Zen3 Branch Sampling support"
++	help
++	  Enable AMD Zen3 branch sampling support (BRS) which samples up to
++	  16 consecutive taken branches in registers.
 +
- 			tick_broadcast_enable();
- 			tick_broadcast_enter();
- 			stop_critical_timings();
-@@ -172,6 +176,9 @@ static int power_saving_thread(void *data)
+ endmenu
+diff --git a/arch/x86/events/amd/Makefile b/arch/x86/events/amd/Makefile
+index cf323ff..b9f5d46 100644
+--- a/arch/x86/events/amd/Makefile
++++ b/arch/x86/events/amd/Makefile
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+-obj-$(CONFIG_CPU_SUP_AMD)		+= core.o brs.o
++obj-$(CONFIG_CPU_SUP_AMD)		+= core.o
++obj-$(CONFIG_PERF_EVENTS_AMD_BRS)	+= brs.o
+ obj-$(CONFIG_PERF_EVENTS_AMD_POWER)	+= power.o
+ obj-$(CONFIG_X86_LOCAL_APIC)		+= ibs.o
+ obj-$(CONFIG_PERF_EVENTS_AMD_UNCORE)	+= amd-uncore.o
+diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
+index d91ff2c..ef27aee 100644
+--- a/arch/x86/events/perf_event.h
++++ b/arch/x86/events/perf_event.h
+@@ -1218,6 +1218,8 @@ static inline bool fixed_counter_disabled(int i, struct pmu *pmu)
+ #ifdef CONFIG_CPU_SUP_AMD
  
- 			start_critical_timings();
- 			tick_broadcast_exit();
+ int amd_pmu_init(void);
 +
-+			perf_lopwr_cb(false);
-+
- 			local_irq_enable();
++#ifdef CONFIG_PERF_EVENTS_AMD_BRS
+ int amd_brs_init(void);
+ void amd_brs_disable(void);
+ void amd_brs_enable(void);
+@@ -1252,25 +1254,52 @@ static inline void amd_pmu_brs_del(struct perf_event *event)
  
- 			if (time_before(expire_time, jiffies)) {
-diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
-index 32b20ef..05dc0e1 100644
---- a/drivers/acpi/processor_idle.c
-+++ b/drivers/acpi/processor_idle.c
-@@ -21,6 +21,7 @@
- #include <linux/cpuidle.h>
- #include <linux/cpu.h>
- #include <linux/minmax.h>
-+#include <linux/perf_event.h>
- #include <acpi/processor.h>
+ void amd_pmu_brs_sched_task(struct perf_event_context *ctx, bool sched_in);
  
- /*
-@@ -549,6 +550,8 @@ static void wait_for_freeze(void)
-  */
- static void __cpuidle acpi_idle_do_entry(struct acpi_processor_cx *cx)
+-/*
+- * check if BRS is activated on the CPU
+- * active defined as it has non-zero users and DBG_EXT_CFG.BRSEN=1
+- */
+-static inline bool amd_brs_active(void)
++static inline s64 amd_brs_adjust_period(s64 period)
  {
-+	perf_lopwr_cb(true);
-+
- 	if (cx->entry_method == ACPI_CSTATE_FFH) {
- 		/* Call into architectural FFH based C-state */
- 		acpi_processor_ffh_cstate_enter(cx);
-@@ -559,6 +562,8 @@ static void __cpuidle acpi_idle_do_entry(struct acpi_processor_cx *cx)
- 		inb(cx->address);
- 		wait_for_freeze();
- 	}
-+
-+	perf_lopwr_cb(false);
+-	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
++	if (period > x86_pmu.lbr_nr)
++		return period - x86_pmu.lbr_nr;
+ 
+-	return cpuc->brs_active;
++	return period;
++}
++#else
++static inline int amd_brs_init(void)
++{
++	return 0;
  }
++static inline void amd_brs_disable(void) {}
++static inline void amd_brs_enable(void) {}
++static inline void amd_brs_drain(void) {}
++static inline void amd_brs_lopwr_init(void) {}
++static inline void amd_brs_disable_all(void) {}
++static inline int amd_brs_setup_filter(struct perf_event *event)
++{
++	return 0;
++}
++static inline void amd_brs_reset(void) {}
  
- /**
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index a411080..da75956 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -1676,4 +1676,10 @@ typedef int (perf_snapshot_branch_stack_t)(struct perf_branch_entry *entries,
- 					   unsigned int cnt);
- DECLARE_STATIC_CALL(perf_snapshot_branch_stack, perf_snapshot_branch_stack_t);
- 
-+#ifndef PERF_NEEDS_LOPWR_CB
-+static inline void perf_lopwr_cb(bool mode)
+-static inline s64 amd_brs_adjust_period(s64 period)
++static inline void amd_pmu_brs_add(struct perf_event *event)
+ {
+-	if (period > x86_pmu.lbr_nr)
+-		return period - x86_pmu.lbr_nr;
++}
++
++static inline void amd_pmu_brs_del(struct perf_event *event)
 +{
 +}
++
++static inline void amd_pmu_brs_sched_task(struct perf_event_context *ctx, bool sched_in)
++{
++}
+ 
++static inline s64 amd_brs_adjust_period(s64 period)
++{
+ 	return period;
+ }
+ 
++static inline void amd_brs_enable_all(void)
++{
++}
++
 +#endif
 +
- #endif /* _LINUX_PERF_EVENT_H */
+ #else /* CONFIG_CPU_SUP_AMD */
+ 
+ static inline int amd_pmu_init(void)

@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 174C24F505C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 406E14F506A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447484AbiDFBWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44798 "EHLO
+        id S1841735AbiDFBZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238146AbiDEKs3 (ORCPT
+        with ESMTP id S231559AbiDEKwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:48:29 -0400
+        Tue, 5 Apr 2022 06:52:05 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5F766637;
-        Tue,  5 Apr 2022 03:27:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61EF9A7777;
+        Tue,  5 Apr 2022 03:27:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E441B81C8B;
-        Tue,  5 Apr 2022 10:27:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A98F2C385A0;
-        Tue,  5 Apr 2022 10:27:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 19AD9B81C8B;
+        Tue,  5 Apr 2022 10:27:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60BE8C385A0;
+        Tue,  5 Apr 2022 10:27:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154443;
-        bh=2UBjtH0MEE2FicFDl12p8LwJ2ysoYUIk0x3m7+xnpaU=;
+        s=korg; t=1649154476;
+        bh=/UGrkgR647QQXM3GQRZYQjVcQ6Z9E8jtvWs6yNBcuDQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pQLX/vWoc/oRQmpmoMtMJa+EvHW3IghhuIZyiVQshSO82q1eblXiuC3O4SKHWYeJv
-         ROxVLUw6FLcSuAsGA38rvx14jVgGn9rE0whAJRD9wniqJT2AAqe3TY6xMtLzUJt2S4
-         a04axJEjbirXBqdu7SQzvYT+tlKN42SCM2Y5tzio=
+        b=FwfiaJIrxx8wS91ZQCIKtagp9EKMURiHKOyEBmYa3xkYHQizdgU2rygBWVHa5RIfX
+         gLj/4g8CG0uc6yRO1Wgd9V0dRP4QY8ULomzvXyFfBLeGUDFuPbA6FRwdHxf58CGDU7
+         IeeOaQKbRIOuqIHn7HSawAn4OBLSaitEgUBo1HqA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hengqi Chen <hengqi.chen@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yonghong Song <yhs@fb.com>
-Subject: [PATCH 5.10 581/599] bpf: Fix comment for helper bpf_current_task_under_cgroup()
-Date:   Tue,  5 Apr 2022 09:34:35 +0200
-Message-Id: <20220405070316.132877551@linuxfoundation.org>
+        stable@vger.kernel.org, Qiuhao Li <qiuhao@sysec.org>,
+        Gaoning Pan <pgn@zju.edu.cn>, Yongkang Jia <kangel@zju.edu.cn>,
+        syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>
+Subject: [PATCH 5.10 592/599] KVM: x86/mmu: do compare-and-exchange of gPTE via the user address
+Date:   Tue,  5 Apr 2022 09:34:46 +0200
+Message-Id: <20220405070316.457182593@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -55,48 +58,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hengqi Chen <hengqi.chen@gmail.com>
+From: Paolo Bonzini <pbonzini@redhat.com>
 
-commit 58617014405ad5c9f94f464444f4972dabb71ca7 upstream.
+commit 2a8859f373b0a86f0ece8ec8312607eacf12485d upstream.
 
-Fix the descriptions of the return values of helper bpf_current_task_under_cgroup().
+FNAME(cmpxchg_gpte) is an inefficient mess.  It is at least decent if it
+can go through get_user_pages_fast(), but if it cannot then it tries to
+use memremap(); that is not just terribly slow, it is also wrong because
+it assumes that the VM_PFNMAP VMA is contiguous.
 
-Fixes: c6b5fb8690fa ("bpf: add documentation for eBPF helpers (42-50)")
-Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/bpf/20220310155335.1278783-1-hengqi.chen@gmail.com
+The right way to do it would be to do the same thing as
+hva_to_pfn_remapped() does since commit add6a0cd1c5b ("KVM: MMU: try to
+fix up page faults before giving up", 2016-07-05), using follow_pte()
+and fixup_user_fault() to determine the correct address to use for
+memremap().  To do this, one could for example extract hva_to_pfn()
+for use outside virt/kvm/kvm_main.c.  But really there is no reason to
+do that either, because there is already a perfectly valid address to
+do the cmpxchg() on, only it is a userspace address.  That means doing
+user_access_begin()/user_access_end() and writing the code in assembly
+to handle exceptions correctly.  Worse, the guest PTE can be 8-byte
+even on i686 so there is the extra complication of using cmpxchg8b to
+account for.  But at least it is an efficient mess.
+
+(Thanks to Linus for suggesting improvement on the inline assembly).
+
+Reported-by: Qiuhao Li <qiuhao@sysec.org>
+Reported-by: Gaoning Pan <pgn@zju.edu.cn>
+Reported-by: Yongkang Jia <kangel@zju.edu.cn>
+Reported-by: syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
+Debugged-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+Tested-by: Maxim Levitsky <mlevitsk@redhat.com>
+Cc: stable@vger.kernel.org
+Fixes: bd53cb35a3e9 ("X86/KVM: Handle PFNs outside of kernel reach when touching GPTEs")
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/uapi/linux/bpf.h       |    4 ++--
- tools/include/uapi/linux/bpf.h |    4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ arch/x86/kvm/mmu/paging_tmpl.h |   77 +++++++++++++++++++----------------------
+ 1 file changed, 37 insertions(+), 40 deletions(-)
 
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1490,8 +1490,8 @@ union bpf_attr {
-  * 	Return
-  * 		The return value depends on the result of the test, and can be:
-  *
-- *		* 0, if current task belongs to the cgroup2.
-- *		* 1, if current task does not belong to the cgroup2.
-+ *		* 1, if current task belongs to the cgroup2.
-+ *		* 0, if current task does not belong to the cgroup2.
-  * 		* A negative error code, if an error occurred.
-  *
-  * long bpf_skb_change_tail(struct sk_buff *skb, u32 len, u64 flags)
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1490,8 +1490,8 @@ union bpf_attr {
-  * 	Return
-  * 		The return value depends on the result of the test, and can be:
-  *
-- *		* 0, if current task belongs to the cgroup2.
-- *		* 1, if current task does not belong to the cgroup2.
-+ *		* 1, if current task belongs to the cgroup2.
-+ *		* 0, if current task does not belong to the cgroup2.
-  * 		* A negative error code, if an error occurred.
-  *
-  * long bpf_skb_change_tail(struct sk_buff *skb, u32 len, u64 flags)
+--- a/arch/x86/kvm/mmu/paging_tmpl.h
++++ b/arch/x86/kvm/mmu/paging_tmpl.h
+@@ -34,9 +34,8 @@
+ 	#define PT_HAVE_ACCESSED_DIRTY(mmu) true
+ 	#ifdef CONFIG_X86_64
+ 	#define PT_MAX_FULL_LEVELS PT64_ROOT_MAX_LEVEL
+-	#define CMPXCHG cmpxchg
++	#define CMPXCHG "cmpxchgq"
+ 	#else
+-	#define CMPXCHG cmpxchg64
+ 	#define PT_MAX_FULL_LEVELS 2
+ 	#endif
+ #elif PTTYPE == 32
+@@ -52,7 +51,7 @@
+ 	#define PT_GUEST_DIRTY_SHIFT PT_DIRTY_SHIFT
+ 	#define PT_GUEST_ACCESSED_SHIFT PT_ACCESSED_SHIFT
+ 	#define PT_HAVE_ACCESSED_DIRTY(mmu) true
+-	#define CMPXCHG cmpxchg
++	#define CMPXCHG "cmpxchgl"
+ #elif PTTYPE == PTTYPE_EPT
+ 	#define pt_element_t u64
+ 	#define guest_walker guest_walkerEPT
+@@ -65,7 +64,9 @@
+ 	#define PT_GUEST_DIRTY_SHIFT 9
+ 	#define PT_GUEST_ACCESSED_SHIFT 8
+ 	#define PT_HAVE_ACCESSED_DIRTY(mmu) ((mmu)->ept_ad)
+-	#define CMPXCHG cmpxchg64
++	#ifdef CONFIG_X86_64
++	#define CMPXCHG "cmpxchgq"
++	#endif
+ 	#define PT_MAX_FULL_LEVELS PT64_ROOT_MAX_LEVEL
+ #else
+ 	#error Invalid PTTYPE value
+@@ -147,43 +148,39 @@ static int FNAME(cmpxchg_gpte)(struct kv
+ 			       pt_element_t __user *ptep_user, unsigned index,
+ 			       pt_element_t orig_pte, pt_element_t new_pte)
+ {
+-	int npages;
+-	pt_element_t ret;
+-	pt_element_t *table;
+-	struct page *page;
+-
+-	npages = get_user_pages_fast((unsigned long)ptep_user, 1, FOLL_WRITE, &page);
+-	if (likely(npages == 1)) {
+-		table = kmap_atomic(page);
+-		ret = CMPXCHG(&table[index], orig_pte, new_pte);
+-		kunmap_atomic(table);
+-
+-		kvm_release_page_dirty(page);
+-	} else {
+-		struct vm_area_struct *vma;
+-		unsigned long vaddr = (unsigned long)ptep_user & PAGE_MASK;
+-		unsigned long pfn;
+-		unsigned long paddr;
+-
+-		mmap_read_lock(current->mm);
+-		vma = find_vma_intersection(current->mm, vaddr, vaddr + PAGE_SIZE);
+-		if (!vma || !(vma->vm_flags & VM_PFNMAP)) {
+-			mmap_read_unlock(current->mm);
+-			return -EFAULT;
+-		}
+-		pfn = ((vaddr - vma->vm_start) >> PAGE_SHIFT) + vma->vm_pgoff;
+-		paddr = pfn << PAGE_SHIFT;
+-		table = memremap(paddr, PAGE_SIZE, MEMREMAP_WB);
+-		if (!table) {
+-			mmap_read_unlock(current->mm);
+-			return -EFAULT;
+-		}
+-		ret = CMPXCHG(&table[index], orig_pte, new_pte);
+-		memunmap(table);
+-		mmap_read_unlock(current->mm);
+-	}
++	int r = -EFAULT;
++
++	if (!user_access_begin(ptep_user, sizeof(pt_element_t)))
++		return -EFAULT;
++
++#ifdef CMPXCHG
++	asm volatile("1:" LOCK_PREFIX CMPXCHG " %[new], %[ptr]\n"
++		     "mov $0, %[r]\n"
++		     "setnz %b[r]\n"
++		     "2:"
++		     _ASM_EXTABLE_UA(1b, 2b)
++		     : [ptr] "+m" (*ptep_user),
++		       [old] "+a" (orig_pte),
++		       [r] "+q" (r)
++		     : [new] "r" (new_pte)
++		     : "memory");
++#else
++	asm volatile("1:" LOCK_PREFIX "cmpxchg8b %[ptr]\n"
++		     "movl $0, %[r]\n"
++		     "jz 2f\n"
++		     "incl %[r]\n"
++		     "2:"
++		     _ASM_EXTABLE_UA(1b, 2b)
++		     : [ptr] "+m" (*ptep_user),
++		       [old] "+A" (orig_pte),
++		       [r] "+rm" (r)
++		     : [new_lo] "b" ((u32)new_pte),
++		       [new_hi] "c" ((u32)(new_pte >> 32))
++		     : "memory");
++#endif
+ 
+-	return (ret != orig_pte);
++	user_access_end();
++	return r;
+ }
+ 
+ static bool FNAME(prefetch_invalid_gpte)(struct kvm_vcpu *vcpu,
 
 

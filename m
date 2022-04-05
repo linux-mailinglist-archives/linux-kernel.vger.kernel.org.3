@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 812D74F45F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB034F465A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351293AbiDEM3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
+        id S1384261AbiDEM1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235378AbiDEIQG (ORCPT
+        with ESMTP id S235508AbiDEIQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:16:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA565A7777;
-        Tue,  5 Apr 2022 01:03:21 -0700 (PDT)
+        Tue, 5 Apr 2022 04:16:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6AAFB62;
+        Tue,  5 Apr 2022 01:03:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 00A1F6167A;
-        Tue,  5 Apr 2022 08:03:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03905C385A2;
-        Tue,  5 Apr 2022 08:03:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25BF561748;
+        Tue,  5 Apr 2022 08:03:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33D24C385A0;
+        Tue,  5 Apr 2022 08:03:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145800;
-        bh=KcU+EvvaMKoeSHmjbknNqjk35HVV6Awi9HeF5EHSL7E=;
+        s=korg; t=1649145808;
+        bh=DIdp1vSjSwVJv7qS7zn+yQYfahWFNcAaLdLqOMQ+MGs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cl0+KfxBKRDu4z54sQBrLWI2HrNZKEPVWdwDEs7pbJVyIbCFWUO2MnTbiz1IzGncK
-         E2cIDg4m+lixweG7Mj/z6JELgvB9nCXazs8eKLLKfFzn9mJ2CzeafIpMhyDCIZi3r9
-         oOIf30w0EtbKOp9LnnCV85JfEpOpXLewRLywg61c=
+        b=ZIZi5CI2mfsa8v6uZZIP6qwsOM7NX/qBlB2bK15EUBRUaOcsIdkQINQZ+Awyg7E/Y
+         J3BJrmnzijPZltgrid/kJ1PlHyNhigtGHO8UaAP5KbQf3uFhKJJVW7sBbh36+y/Uc6
+         uOU1jnLeAB9Eje3jz4U+VM8aJdv3CmUioM5Dra6U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Tim Gardner <tim.gardner@canonical.com>,
-        Po Liu <po.liu@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0534/1126] net:enetc: allocate CBD ring data memory using DMA coherent methods
-Date:   Tue,  5 Apr 2022 09:21:21 +0200
-Message-Id: <20220405070423.305247382@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0536/1126] rtw88: fix use after free in rtw_hw_scan_update_probe_req()
+Date:   Tue,  5 Apr 2022 09:21:23 +0200
+Message-Id: <20220405070423.364503407@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -57,281 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Po Liu <po.liu@nxp.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit b3a723dbc94a6e38f67669d03b521edd766ad895 ]
+[ Upstream commit a954f29aea5d2cf58feedf83235edf3367229a37 ]
 
-To replace the dma_map_single() stream DMA mapping with DMA coherent
-method dma_alloc_coherent() which is more simple.
+This code needs to use skb_queue_walk_safe() instead of skb_queue_walk()
+because it frees the list iterator.
 
-dma_map_single() found by Tim Gardner not proper. Suggested by Claudiu
-Manoil and Jakub Kicinski to use dma_alloc_coherent(). Discussion at:
-
-https://lore.kernel.org/netdev/AM9PR04MB8397F300DECD3C44D2EBD07796BD9@AM9PR04MB8397.eurprd04.prod.outlook.com/t/
-
-Fixes: 888ae5a3952ba ("net: enetc: add tc flower psfp offload driver")
-cc: Claudiu Manoil <claudiu.manoil@nxp.com>
-Reported-by: Tim Gardner <tim.gardner@canonical.com>
-Signed-off-by: Po Liu <po.liu@nxp.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: d95984b5580d ("rtw88: fix memory overrun and memory leak during hw_scan")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: Ping-Ke Shih <pkshih@realtek.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/20220203082532.GA25151@kili
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/ethernet/freescale/enetc/enetc_qos.c  | 128 +++++++++---------
- 1 file changed, 64 insertions(+), 64 deletions(-)
+ drivers/net/wireless/realtek/rtw88/fw.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/freescale/enetc/enetc_qos.c b/drivers/net/ethernet/freescale/enetc/enetc_qos.c
-index 3555c12edb45..d3d7172e0fcc 100644
---- a/drivers/net/ethernet/freescale/enetc/enetc_qos.c
-+++ b/drivers/net/ethernet/freescale/enetc/enetc_qos.c
-@@ -45,6 +45,7 @@ void enetc_sched_speed_set(struct enetc_ndev_priv *priv, int speed)
- 		      | pspeed);
- }
- 
-+#define ENETC_QOS_ALIGN	64
- static int enetc_setup_taprio(struct net_device *ndev,
- 			      struct tc_taprio_qopt_offload *admin_conf)
- {
-@@ -52,10 +53,11 @@ static int enetc_setup_taprio(struct net_device *ndev,
- 	struct enetc_cbd cbd = {.cmd = 0};
- 	struct tgs_gcl_conf *gcl_config;
- 	struct tgs_gcl_data *gcl_data;
-+	dma_addr_t dma, dma_align;
- 	struct gce *gce;
--	dma_addr_t dma;
- 	u16 data_size;
- 	u16 gcl_len;
-+	void *tmp;
- 	u32 tge;
- 	int err;
- 	int i;
-@@ -82,9 +84,16 @@ static int enetc_setup_taprio(struct net_device *ndev,
- 	gcl_config = &cbd.gcl_conf;
- 
- 	data_size = struct_size(gcl_data, entry, gcl_len);
--	gcl_data = kzalloc(data_size, __GFP_DMA | GFP_KERNEL);
--	if (!gcl_data)
-+	tmp = dma_alloc_coherent(&priv->si->pdev->dev,
-+				 data_size + ENETC_QOS_ALIGN,
-+				 &dma, GFP_KERNEL);
-+	if (!tmp) {
-+		dev_err(&priv->si->pdev->dev,
-+			"DMA mapping of taprio gate list failed!\n");
- 		return -ENOMEM;
-+	}
-+	dma_align = ALIGN(dma, ENETC_QOS_ALIGN);
-+	gcl_data = (struct tgs_gcl_data *)PTR_ALIGN(tmp, ENETC_QOS_ALIGN);
- 
- 	gce = (struct gce *)(gcl_data + 1);
- 
-@@ -110,16 +119,8 @@ static int enetc_setup_taprio(struct net_device *ndev,
- 	cbd.length = cpu_to_le16(data_size);
- 	cbd.status_flags = 0;
- 
--	dma = dma_map_single(&priv->si->pdev->dev, gcl_data,
--			     data_size, DMA_TO_DEVICE);
--	if (dma_mapping_error(&priv->si->pdev->dev, dma)) {
--		netdev_err(priv->si->ndev, "DMA mapping failed!\n");
--		kfree(gcl_data);
--		return -ENOMEM;
--	}
--
--	cbd.addr[0] = cpu_to_le32(lower_32_bits(dma));
--	cbd.addr[1] = cpu_to_le32(upper_32_bits(dma));
-+	cbd.addr[0] = cpu_to_le32(lower_32_bits(dma_align));
-+	cbd.addr[1] = cpu_to_le32(upper_32_bits(dma_align));
- 	cbd.cls = BDCR_CMD_PORT_GCL;
- 	cbd.status_flags = 0;
- 
-@@ -132,8 +133,8 @@ static int enetc_setup_taprio(struct net_device *ndev,
- 			 ENETC_QBV_PTGCR_OFFSET,
- 			 tge & (~ENETC_QBV_TGE));
- 
--	dma_unmap_single(&priv->si->pdev->dev, dma, data_size, DMA_TO_DEVICE);
--	kfree(gcl_data);
-+	dma_free_coherent(&priv->si->pdev->dev, data_size + ENETC_QOS_ALIGN,
-+			  tmp, dma);
- 
- 	return err;
- }
-@@ -463,8 +464,9 @@ static int enetc_streamid_hw_set(struct enetc_ndev_priv *priv,
- 	struct enetc_cbd cbd = {.cmd = 0};
- 	struct streamid_data *si_data;
- 	struct streamid_conf *si_conf;
-+	dma_addr_t dma, dma_align;
- 	u16 data_size;
--	dma_addr_t dma;
-+	void *tmp;
- 	int port;
- 	int err;
- 
-@@ -485,21 +487,20 @@ static int enetc_streamid_hw_set(struct enetc_ndev_priv *priv,
- 	cbd.status_flags = 0;
- 
- 	data_size = sizeof(struct streamid_data);
--	si_data = kzalloc(data_size, __GFP_DMA | GFP_KERNEL);
--	if (!si_data)
-+	tmp = dma_alloc_coherent(&priv->si->pdev->dev,
-+				 data_size + ENETC_QOS_ALIGN,
-+				 &dma, GFP_KERNEL);
-+	if (!tmp) {
-+		dev_err(&priv->si->pdev->dev,
-+			"DMA mapping of stream identify failed!\n");
- 		return -ENOMEM;
--	cbd.length = cpu_to_le16(data_size);
--
--	dma = dma_map_single(&priv->si->pdev->dev, si_data,
--			     data_size, DMA_FROM_DEVICE);
--	if (dma_mapping_error(&priv->si->pdev->dev, dma)) {
--		netdev_err(priv->si->ndev, "DMA mapping failed!\n");
--		err = -ENOMEM;
--		goto out;
- 	}
-+	dma_align = ALIGN(dma, ENETC_QOS_ALIGN);
-+	si_data = (struct streamid_data *)PTR_ALIGN(tmp, ENETC_QOS_ALIGN);
- 
--	cbd.addr[0] = cpu_to_le32(lower_32_bits(dma));
--	cbd.addr[1] = cpu_to_le32(upper_32_bits(dma));
-+	cbd.length = cpu_to_le16(data_size);
-+	cbd.addr[0] = cpu_to_le32(lower_32_bits(dma_align));
-+	cbd.addr[1] = cpu_to_le32(upper_32_bits(dma_align));
- 	eth_broadcast_addr(si_data->dmac);
- 	si_data->vid_vidm_tg = (ENETC_CBDR_SID_VID_MASK
- 			       + ((0x3 << 14) | ENETC_CBDR_SID_VIDM));
-@@ -539,8 +540,8 @@ static int enetc_streamid_hw_set(struct enetc_ndev_priv *priv,
- 
- 	cbd.length = cpu_to_le16(data_size);
- 
--	cbd.addr[0] = cpu_to_le32(lower_32_bits(dma));
--	cbd.addr[1] = cpu_to_le32(upper_32_bits(dma));
-+	cbd.addr[0] = cpu_to_le32(lower_32_bits(dma_align));
-+	cbd.addr[1] = cpu_to_le32(upper_32_bits(dma_align));
- 
- 	/* VIDM default to be 1.
- 	 * VID Match. If set (b1) then the VID must match, otherwise
-@@ -561,10 +562,8 @@ static int enetc_streamid_hw_set(struct enetc_ndev_priv *priv,
- 
- 	err = enetc_send_cmd(priv->si, &cbd);
+diff --git a/drivers/net/wireless/realtek/rtw88/fw.c b/drivers/net/wireless/realtek/rtw88/fw.c
+index ce9535cce723..4c8e5ea5d069 100644
+--- a/drivers/net/wireless/realtek/rtw88/fw.c
++++ b/drivers/net/wireless/realtek/rtw88/fw.c
+@@ -1853,7 +1853,7 @@ static int _rtw_hw_scan_update_probe_req(struct rtw_dev *rtwdev, u8 num_probes,
+ 	rtwdev->scan_info.probe_pg_size = page_offset;
  out:
--	if (!dma_mapping_error(&priv->si->pdev->dev, dma))
--		dma_unmap_single(&priv->si->pdev->dev, dma, data_size, DMA_FROM_DEVICE);
--
--	kfree(si_data);
-+	dma_free_coherent(&priv->si->pdev->dev, data_size + ENETC_QOS_ALIGN,
-+			  tmp, dma);
+ 	kfree(buf);
+-	skb_queue_walk(probe_req_list, skb)
++	skb_queue_walk_safe(probe_req_list, skb, tmp)
+ 		kfree_skb(skb);
  
- 	return err;
- }
-@@ -633,8 +632,9 @@ static int enetc_streamcounter_hw_get(struct enetc_ndev_priv *priv,
+ 	return ret;
+@@ -1864,7 +1864,7 @@ static int rtw_hw_scan_update_probe_req(struct rtw_dev *rtwdev,
  {
- 	struct enetc_cbd cbd = { .cmd = 2 };
- 	struct sfi_counter_data *data_buf;
--	dma_addr_t dma;
-+	dma_addr_t dma, dma_align;
- 	u16 data_size;
-+	void *tmp;
- 	int err;
+ 	struct cfg80211_scan_request *req = rtwvif->scan_req;
+ 	struct sk_buff_head list;
+-	struct sk_buff *skb;
++	struct sk_buff *skb, *tmp;
+ 	u8 num = req->n_ssids, i, bands = 0;
+ 	int ret;
  
- 	cbd.index = cpu_to_le16((u16)index);
-@@ -643,19 +643,19 @@ static int enetc_streamcounter_hw_get(struct enetc_ndev_priv *priv,
- 	cbd.status_flags = 0;
+@@ -1889,7 +1889,7 @@ static int rtw_hw_scan_update_probe_req(struct rtw_dev *rtwdev,
+ 	return _rtw_hw_scan_update_probe_req(rtwdev, num * bands, &list);
  
- 	data_size = sizeof(struct sfi_counter_data);
--	data_buf = kzalloc(data_size, __GFP_DMA | GFP_KERNEL);
--	if (!data_buf)
-+	tmp = dma_alloc_coherent(&priv->si->pdev->dev,
-+				 data_size + ENETC_QOS_ALIGN,
-+				 &dma, GFP_KERNEL);
-+	if (!tmp) {
-+		dev_err(&priv->si->pdev->dev,
-+			"DMA mapping of stream counter failed!\n");
- 		return -ENOMEM;
--
--	dma = dma_map_single(&priv->si->pdev->dev, data_buf,
--			     data_size, DMA_FROM_DEVICE);
--	if (dma_mapping_error(&priv->si->pdev->dev, dma)) {
--		netdev_err(priv->si->ndev, "DMA mapping failed!\n");
--		err = -ENOMEM;
--		goto exit;
- 	}
--	cbd.addr[0] = cpu_to_le32(lower_32_bits(dma));
--	cbd.addr[1] = cpu_to_le32(upper_32_bits(dma));
-+	dma_align = ALIGN(dma, ENETC_QOS_ALIGN);
-+	data_buf = (struct sfi_counter_data *)PTR_ALIGN(tmp, ENETC_QOS_ALIGN);
-+
-+	cbd.addr[0] = cpu_to_le32(lower_32_bits(dma_align));
-+	cbd.addr[1] = cpu_to_le32(upper_32_bits(dma_align));
+ out:
+-	skb_queue_walk(&list, skb)
++	skb_queue_walk_safe(&list, skb, tmp)
+ 		kfree_skb(skb);
  
- 	cbd.length = cpu_to_le16(data_size);
- 
-@@ -684,7 +684,9 @@ static int enetc_streamcounter_hw_get(struct enetc_ndev_priv *priv,
- 				data_buf->flow_meter_dropl;
- 
- exit:
--	kfree(data_buf);
-+	dma_free_coherent(&priv->si->pdev->dev, data_size + ENETC_QOS_ALIGN,
-+			  tmp, dma);
-+
- 	return err;
- }
- 
-@@ -723,9 +725,10 @@ static int enetc_streamgate_hw_set(struct enetc_ndev_priv *priv,
- 	struct sgcl_conf *sgcl_config;
- 	struct sgcl_data *sgcl_data;
- 	struct sgce *sgce;
--	dma_addr_t dma;
-+	dma_addr_t dma, dma_align;
- 	u16 data_size;
- 	int err, i;
-+	void *tmp;
- 	u64 now;
- 
- 	cbd.index = cpu_to_le16(sgi->index);
-@@ -772,24 +775,20 @@ static int enetc_streamgate_hw_set(struct enetc_ndev_priv *priv,
- 	sgcl_config->acl_len = (sgi->num_entries - 1) & 0x3;
- 
- 	data_size = struct_size(sgcl_data, sgcl, sgi->num_entries);
--
--	sgcl_data = kzalloc(data_size, __GFP_DMA | GFP_KERNEL);
--	if (!sgcl_data)
--		return -ENOMEM;
--
--	cbd.length = cpu_to_le16(data_size);
--
--	dma = dma_map_single(&priv->si->pdev->dev,
--			     sgcl_data, data_size,
--			     DMA_FROM_DEVICE);
--	if (dma_mapping_error(&priv->si->pdev->dev, dma)) {
--		netdev_err(priv->si->ndev, "DMA mapping failed!\n");
--		kfree(sgcl_data);
-+	tmp = dma_alloc_coherent(&priv->si->pdev->dev,
-+				 data_size + ENETC_QOS_ALIGN,
-+				 &dma, GFP_KERNEL);
-+	if (!tmp) {
-+		dev_err(&priv->si->pdev->dev,
-+			"DMA mapping of stream counter failed!\n");
- 		return -ENOMEM;
- 	}
-+	dma_align = ALIGN(dma, ENETC_QOS_ALIGN);
-+	sgcl_data = (struct sgcl_data *)PTR_ALIGN(tmp, ENETC_QOS_ALIGN);
- 
--	cbd.addr[0] = cpu_to_le32(lower_32_bits(dma));
--	cbd.addr[1] = cpu_to_le32(upper_32_bits(dma));
-+	cbd.length = cpu_to_le16(data_size);
-+	cbd.addr[0] = cpu_to_le32(lower_32_bits(dma_align));
-+	cbd.addr[1] = cpu_to_le32(upper_32_bits(dma_align));
- 
- 	sgce = &sgcl_data->sgcl[0];
- 
-@@ -844,7 +843,8 @@ static int enetc_streamgate_hw_set(struct enetc_ndev_priv *priv,
- 	err = enetc_send_cmd(priv->si, &cbd);
- 
- exit:
--	kfree(sgcl_data);
-+	dma_free_coherent(&priv->si->pdev->dev, data_size + ENETC_QOS_ALIGN,
-+			  tmp, dma);
- 
- 	return err;
- }
+ 	return ret;
 -- 
 2.34.1
 

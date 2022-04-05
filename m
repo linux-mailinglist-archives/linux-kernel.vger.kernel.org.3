@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880514F30F4
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A1304F30B4
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239254AbiDEJKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45580 "EHLO
+        id S244377AbiDEJJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239515AbiDEIUL (ORCPT
+        with ESMTP id S239522AbiDEIUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:11 -0400
+        Tue, 5 Apr 2022 04:20:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E679EB0;
-        Tue,  5 Apr 2022 01:15:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7197DEBC;
+        Tue,  5 Apr 2022 01:15:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B12E660B0B;
-        Tue,  5 Apr 2022 08:15:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2AA9C385A1;
-        Tue,  5 Apr 2022 08:15:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F568609D0;
+        Tue,  5 Apr 2022 08:15:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CB51C385A1;
+        Tue,  5 Apr 2022 08:15:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146502;
-        bh=R3eMH+O/1A3ZwWuiWMDt9Qc+4Won+DXxAfWIqk0wRgw=;
+        s=korg; t=1649146510;
+        bh=fUELxiGKn9yMltYwLmzgS4G3Cg5zoeW2IXsri3WLId0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yEiMh18W8wd/+RXx5c5DOObcEButHdc6VVV9psEnNLnjMFgoW+HX2VWk5YiycDV65
-         lg2OlIVs9fHpXwqJc70sCVB4ZYqk42kdHtCNi18k3yJ08GTDcY4WFqGpXgBsCofhuS
-         NvDPkB19Cy/k7aYz6/5FJ/IVh06kNLnH1ctkJ+jw=
+        b=NTPgMvElEh8QvSAY8P5hUQGVY3cThh7dv6JTsvlMTXMe/t+fo/KnFa5Tx468Ty+HI
+         Iy6DDFyjAqwttM+XZIT0XegY/zMWr1bvGBSwPJgtQe5QP6H/GKQ15Y9c5Lf7VigXuz
+         fVoShSOGQdj4H9+TpmC0XHp+1iiu43GDXT85j4TI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Randy Dunlap <rdunlap@infradead.org>,
+        stable@vger.kernel.org, NeilBrown <neilb@suse.de>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0786/1126] driver core: dd: fix return value of __setup handler
-Date:   Tue,  5 Apr 2022 09:25:33 +0200
-Message-Id: <20220405070430.646134546@linuxfoundation.org>
+Subject: [PATCH 5.17 0789/1126] SUNRPC/call_alloc: async tasks mustnt block waiting for memory
+Date:   Tue,  5 Apr 2022 09:25:36 +0200
+Message-Id: <20220405070430.732283454@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -57,57 +55,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: NeilBrown <neilb@suse.de>
 
-[ Upstream commit f2aad54703dbe630f9d8b235eb58e8c8cc78f37d ]
+[ Upstream commit c487216bec83b0c5a8803e5c61433d33ad7b104d ]
 
-When "driver_async_probe=nulltty" is used on the kernel boot command line,
-it causes an Unknown parameter message and the string is added to init's
-environment strings, polluting them.
+When memory is short, new worker threads cannot be created and we depend
+on the minimum one rpciod thread to be able to handle everything.
+So it must not block waiting for memory.
 
-  Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc6
-  driver_async_probe=nulltty", will be passed to user space.
+mempools are particularly a problem as memory can only be released back
+to the mempool by an async rpc task running.  If all available
+workqueue threads are waiting on the mempool, no thread is available to
+return anything.
 
- Run /sbin/init as init process
-   with arguments:
-     /sbin/init
-   with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc6
-     driver_async_probe=nulltty
+rpc_malloc() can block, and this might cause deadlocks.
+So check RPC_IS_ASYNC(), rather than RPC_IS_SWAPPER() to determine if
+blocking is acceptable.
 
-Change the return value of the __setup function to 1 to indicate
-that the __setup option has been handled.
-
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Fixes: 1ea61b68d0f8 ("async: Add cmdline option to specify drivers to be async probed")
-Cc: Feng Tang <feng.tang@intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Reviewed-by: Feng Tang <feng.tang@intel.com>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/20220301041829.15137-1-rdunlap@infradead.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: NeilBrown <neilb@suse.de>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/base/dd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/sunrpc/sched.c              | 4 +++-
+ net/sunrpc/xprtrdma/transport.c | 4 +++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index f47cab21430f..752a11d16e26 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -810,7 +810,7 @@ static int __init save_async_options(char *buf)
- 		pr_warn("Too long list of driver names for 'driver_async_probe'!\n");
+diff --git a/net/sunrpc/sched.c b/net/sunrpc/sched.c
+index e2c835482791..d5b6e897f5a5 100644
+--- a/net/sunrpc/sched.c
++++ b/net/sunrpc/sched.c
+@@ -1023,8 +1023,10 @@ int rpc_malloc(struct rpc_task *task)
+ 	struct rpc_buffer *buf;
+ 	gfp_t gfp = GFP_NOFS;
  
- 	strlcpy(async_probe_drv_names, buf, ASYNC_DRV_NAMES_MAX_LEN);
--	return 0;
-+	return 1;
- }
- __setup("driver_async_probe=", save_async_options);
++	if (RPC_IS_ASYNC(task))
++		gfp = GFP_NOWAIT | __GFP_NOWARN;
+ 	if (RPC_IS_SWAPPER(task))
+-		gfp = __GFP_MEMALLOC | GFP_NOWAIT | __GFP_NOWARN;
++		gfp |= __GFP_MEMALLOC;
  
+ 	size += sizeof(struct rpc_buffer);
+ 	if (size <= RPC_BUFFER_MAXSIZE)
+diff --git a/net/sunrpc/xprtrdma/transport.c b/net/sunrpc/xprtrdma/transport.c
+index 42e375dbdadb..5714bf880e95 100644
+--- a/net/sunrpc/xprtrdma/transport.c
++++ b/net/sunrpc/xprtrdma/transport.c
+@@ -570,8 +570,10 @@ xprt_rdma_allocate(struct rpc_task *task)
+ 	gfp_t flags;
+ 
+ 	flags = RPCRDMA_DEF_GFP;
++	if (RPC_IS_ASYNC(task))
++		flags = GFP_NOWAIT | __GFP_NOWARN;
+ 	if (RPC_IS_SWAPPER(task))
+-		flags = __GFP_MEMALLOC | GFP_NOWAIT | __GFP_NOWARN;
++		flags |= __GFP_MEMALLOC;
+ 
+ 	if (!rpcrdma_check_regbuf(r_xprt, req->rl_sendbuf, rqst->rq_callsize,
+ 				  flags))
 -- 
 2.34.1
 

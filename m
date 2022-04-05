@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8124F371C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B87A34F36EF
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348946AbiDELKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53136 "EHLO
+        id S240058AbiDELJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238659AbiDEIaq (ORCPT
+        with ESMTP id S238744AbiDEIa4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:30:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC7B2E0B8;
-        Tue,  5 Apr 2022 01:22:34 -0700 (PDT)
+        Tue, 5 Apr 2022 04:30:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A461E3BA52;
+        Tue,  5 Apr 2022 01:22:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6EA23B81BCF;
-        Tue,  5 Apr 2022 08:22:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1CD9C36AE9;
-        Tue,  5 Apr 2022 08:22:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 44F71B81BC2;
+        Tue,  5 Apr 2022 08:22:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAA99C385A0;
+        Tue,  5 Apr 2022 08:22:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146952;
-        bh=dOC/qeva2LJb0df2IyTGuQKNhvG4/vpycOtEmcS+tso=;
+        s=korg; t=1649146966;
+        bh=KBBEiaudzNuttpozFnSTnTmfgA9wXGUFOKNx4lDwuv0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aO0PKIChRLgHuofJnxl9UOV9O1pX7E9AF+YShuOtnckdrsrzDy3psTwrJs4Xqe7W/
-         S+V1RWk0w1UXoi6m1qJihbuVLP6WTxbfD+gG0KykdDmkzT5SCCSiYdmu6ASXPtMecq
-         egPNvWReZ8KluGSeY0/25/20wZchN3NFNE1w4hBI=
+        b=Z8zfv5IUEG++xVXrUEI2uEwnS3POE+JC45EylOPvZiq+g9dMjHfV2s/NGw6ECdGk3
+         yJylXe7FURDwNQBhnfdH+hvRQfYbOhQTeDbA4c7mTFcHDRgGtScz8Rwa8GVkOtKzc5
+         o4YvEQIk6X4/3v4xVv7vzjQaeQvEXnnRYSSplr40=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0948/1126] media: atomisp: fix bad usage at error handling logic
-Date:   Tue,  5 Apr 2022 09:28:15 +0200
-Message-Id: <20220405070435.332062769@linuxfoundation.org>
+        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.17 0952/1126] KVM: x86/mmu: Use common TDP MMU zap helper for MMU notifier unmap hook
+Date:   Tue,  5 Apr 2022 09:28:19 +0200
+Message-Id: <20220405070435.447273842@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,95 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab@kernel.org>
+From: Sean Christopherson <seanjc@google.com>
 
-[ Upstream commit fc0b582c858ed73f94c8f3375c203ea46f1f7402 ]
+commit 83b83a02073ec8d18c77a9bbe0881d710f7a9d32 upstream.
 
-As warned by sparse:
-	atomisp: drivers/staging/media/atomisp/pci/atomisp_acc.c:508 atomisp_acc_load_extensions() warn: iterator used outside loop: 'acc_fw'
+Use the common TDP MMU zap helper when handling an MMU notifier unmap
+event, the two flows are semantically identical.  Consolidate the code in
+preparation for a future bug fix, as both kvm_tdp_mmu_unmap_gfn_range()
+and __kvm_tdp_mmu_zap_gfn_range() are guilty of not zapping SPTEs in
+invalid roots.
 
-The acc_fw interactor is used outside the loop, at the error handling
-logic. On most cases, this is actually safe there, but, if
-atomisp_css_set_acc_parameters() has an error, an attempt to use it
-will pick an invalid value for acc_fw.
+No functional change intended.
 
-Reported-by: Hans Verkuil <hverkuil@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Message-Id: <20211215011557.399940-2-seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../staging/media/atomisp/pci/atomisp_acc.c   | 28 +++++++++++++------
- 1 file changed, 19 insertions(+), 9 deletions(-)
+ arch/x86/kvm/mmu/tdp_mmu.c |    9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/staging/media/atomisp/pci/atomisp_acc.c b/drivers/staging/media/atomisp/pci/atomisp_acc.c
-index 9a1751895ab0..28cb271663c4 100644
---- a/drivers/staging/media/atomisp/pci/atomisp_acc.c
-+++ b/drivers/staging/media/atomisp/pci/atomisp_acc.c
-@@ -439,6 +439,18 @@ int atomisp_acc_s_mapped_arg(struct atomisp_sub_device *asd,
- 	return 0;
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -1032,13 +1032,8 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcp
+ bool kvm_tdp_mmu_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range,
+ 				 bool flush)
+ {
+-	struct kvm_mmu_page *root;
+-
+-	for_each_tdp_mmu_root_yield_safe(kvm, root, range->slot->as_id, false)
+-		flush = zap_gfn_range(kvm, root, range->start, range->end,
+-				      range->may_block, flush, false);
+-
+-	return flush;
++	return __kvm_tdp_mmu_zap_gfn_range(kvm, range->slot->as_id, range->start,
++					   range->end, range->may_block, flush);
  }
  
-+static void atomisp_acc_unload_some_extensions(struct atomisp_sub_device *asd,
-+					      int i,
-+					      struct atomisp_acc_fw *acc_fw)
-+{
-+	while (--i >= 0) {
-+		if (acc_fw->flags & acc_flag_to_pipe[i].flag) {
-+			atomisp_css_unload_acc_extension(asd, acc_fw->fw,
-+							 acc_flag_to_pipe[i].pipe_id);
-+		}
-+	}
-+}
-+
- /*
-  * Appends the loaded acceleration binary extensions to the
-  * current ISP mode. Must be called just before sh_css_start().
-@@ -479,16 +491,20 @@ int atomisp_acc_load_extensions(struct atomisp_sub_device *asd)
- 								     acc_fw->fw,
- 								     acc_flag_to_pipe[i].pipe_id,
- 								     acc_fw->type);
--				if (ret)
-+				if (ret) {
-+					atomisp_acc_unload_some_extensions(asd, i, acc_fw);
- 					goto error;
-+				}
- 
- 				ext_loaded = true;
- 			}
- 		}
- 
- 		ret = atomisp_css_set_acc_parameters(acc_fw);
--		if (ret < 0)
-+		if (ret < 0) {
-+			atomisp_acc_unload_some_extensions(asd, i, acc_fw);
- 			goto error;
-+		}
- 	}
- 
- 	if (!ext_loaded)
-@@ -497,6 +513,7 @@ int atomisp_acc_load_extensions(struct atomisp_sub_device *asd)
- 	ret = atomisp_css_update_stream(asd);
- 	if (ret) {
- 		dev_err(isp->dev, "%s: update stream failed.\n", __func__);
-+		atomisp_acc_unload_extensions(asd);
- 		goto error;
- 	}
- 
-@@ -504,13 +521,6 @@ int atomisp_acc_load_extensions(struct atomisp_sub_device *asd)
- 	return 0;
- 
- error:
--	while (--i >= 0) {
--		if (acc_fw->flags & acc_flag_to_pipe[i].flag) {
--			atomisp_css_unload_acc_extension(asd, acc_fw->fw,
--							 acc_flag_to_pipe[i].pipe_id);
--		}
--	}
--
- 	list_for_each_entry_continue_reverse(acc_fw, &asd->acc.fw, list) {
- 		if (acc_fw->type != ATOMISP_ACC_FW_LOAD_TYPE_OUTPUT &&
- 		    acc_fw->type != ATOMISP_ACC_FW_LOAD_TYPE_VIEWFINDER)
--- 
-2.34.1
-
+ typedef bool (*tdp_handler_t)(struct kvm *kvm, struct tdp_iter *iter,
 
 

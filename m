@@ -2,48 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2794F43FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0426A4F4478
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241932AbiDEOvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:51:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50326 "EHLO
+        id S240607AbiDEOvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244560AbiDEJl2 (ORCPT
+        with ESMTP id S244570AbiDEJl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:41:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41996BBE09;
-        Tue,  5 Apr 2022 02:27:00 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D35BBE18;
+        Tue,  5 Apr 2022 02:27:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D2E036165C;
-        Tue,  5 Apr 2022 09:26:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B584BC385A2;
-        Tue,  5 Apr 2022 09:26:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06A49B81CAC;
+        Tue,  5 Apr 2022 09:27:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39EC3C385A8;
+        Tue,  5 Apr 2022 09:27:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150819;
-        bh=nYwfEtMFbMAE6czzSoryuRv5ziTITHooF+OvNTqn/1M=;
+        s=korg; t=1649150827;
+        bh=4indgIxOVeCiK3xftlvX5TxwsieTy/0NnuibO7kTWwg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WflVkywDr0T1Fdut3pd1zeI0Vj6Km4nxDkvgZmW8+81ftWgQfgfeVSm7sY1+UjYOi
-         RH9K3IBzBbor1YG0Fy08PULsmGzbvaSNfNOlyAZAwCCACP0G6jNJpVzFN6+9QCP/Ow
-         nVJXcaKMsxHoTDdyiHVWGvKfGkyDvI8OD80qoEig=
+        b=aHtWUZ0aDG550FkBn9kfYOruwh68tPX+8Q00WlZ0aQrasKLnA82hqT+h/8dhaGNRX
+         RYZBIh8MSFzxq2mQrsV98z+9ffHu9FdpNIVVim7Zzf2OGh4dvyNeh38fWm9yVLfQzQ
+         IJi/QxGuM2Yh+5KNo72+OGM0yZodClYcDoD4f8xk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peter Gonda <pgonda@google.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Marc Orr <marcorr@google.com>,
+        stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
-        John Allen <john.allen@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 192/913] crypto: ccp - Ensure psp_ret is always initd in __sev_platform_init_locked()
-Date:   Tue,  5 Apr 2022 09:20:54 +0200
-Message-Id: <20220405070345.613291615@linuxfoundation.org>
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 195/913] crypto: sun8i-ss - really disable hash on A80
+Date:   Tue,  5 Apr 2022 09:20:57 +0200
+Message-Id: <20220405070345.703687177@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -61,45 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Gonda <pgonda@google.com>
+From: Corentin Labbe <clabbe@baylibre.com>
 
-[ Upstream commit 1e1ec11d3ec3134e05d4710f4dee5f9bd05e828d ]
+[ Upstream commit 881fc7fba6c3e7d77d608b9a50b01a89d5e0c61b ]
 
-Initialize psp_ret inside of __sev_platform_init_locked() because there
-are many failure paths with PSP initialization that do not set
-__sev_do_cmd_locked().
+When adding hashes support to sun8i-ss, I have added them only on A83T.
+But I forgot that 0 is a valid algorithm ID, so hashes are enabled on A80 but
+with an incorrect ID.
+Anyway, even with correct IDs, hashes do not work on A80 and I cannot
+find why.
+So let's disable all of them on A80.
 
-Fixes: e423b9d75e77: ("crypto: ccp - Move SEV_INIT retry for corrupted data")
-
-Signed-off-by: Peter Gonda <pgonda@google.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Cc: Tom Lendacky <thomas.lendacky@amd.com>
-Cc: Brijesh Singh <brijesh.singh@amd.com>
-Cc: Marc Orr <marcorr@google.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: John Allen <john.allen@amd.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: linux-crypto@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+Fixes: d9b45418a917 ("crypto: sun8i-ss - support hash algorithms")
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/ccp/sev-dev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-index e2806ca3300a..5040726fc119 100644
---- a/drivers/crypto/ccp/sev-dev.c
-+++ b/drivers/crypto/ccp/sev-dev.c
-@@ -241,7 +241,7 @@ static int __sev_platform_init_locked(int *error)
- 	struct psp_device *psp = psp_master;
- 	struct sev_data_init data;
- 	struct sev_device *sev;
--	int psp_ret, rc = 0;
-+	int psp_ret = -1, rc = 0;
- 
- 	if (!psp || !psp->sev_data)
- 		return -ENODEV;
+diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
+index 80e89066dbd1..319fe3279a71 100644
+--- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
++++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-core.c
+@@ -30,6 +30,8 @@
+ static const struct ss_variant ss_a80_variant = {
+ 	.alg_cipher = { SS_ALG_AES, SS_ALG_DES, SS_ALG_3DES,
+ 	},
++	.alg_hash = { SS_ID_NOTSUPP, SS_ID_NOTSUPP, SS_ID_NOTSUPP, SS_ID_NOTSUPP,
++	},
+ 	.op_mode = { SS_OP_ECB, SS_OP_CBC,
+ 	},
+ 	.ss_clks = {
 -- 
 2.34.1
 

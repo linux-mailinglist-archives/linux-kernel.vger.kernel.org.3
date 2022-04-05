@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 602604F44BE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 347454F4641
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:10:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386028AbiDEMj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:39:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58396 "EHLO
+        id S1345827AbiDEUV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:21:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236535AbiDEJDH (ORCPT
+        with ESMTP id S1348833AbiDEJsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:03:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F10C7B;
-        Tue,  5 Apr 2022 01:54:54 -0700 (PDT)
+        Tue, 5 Apr 2022 05:48:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5679AB3DEC;
+        Tue,  5 Apr 2022 02:36:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E58B361562;
-        Tue,  5 Apr 2022 08:54:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE36CC385A0;
-        Tue,  5 Apr 2022 08:54:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E386361675;
+        Tue,  5 Apr 2022 09:36:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE380C385A2;
+        Tue,  5 Apr 2022 09:36:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148893;
-        bh=7kR5Em9KAFPcdr/UzJk7L2Vdy1QzIZOvLSTG4t3zRps=;
+        s=korg; t=1649151391;
+        bh=SzrysxvBq5ZNLxqpDPYaIE3D44TsoqwU/9BTGFVVG8w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HhhzVP4fNzGh0o+/HHREXrjPVscwkvU8jDb8APttvFgYzX3EQ1FDA1BMowVNJbgvC
-         SxeUhiIcWKIP6uH//IQUjwDwlSLGfROmlNMup2DEr3wapxSrJfjVeyneHqL0R4wEXT
-         plUWhBt2kfzeQfIASUy531AVZHBR0oGAGNX63jcU=
+        b=nyce7OYoMeaoGfSx9h4JKgz8gRHe8w4JiQFBb77lUHtp/UAVI1+3Lt3tMCqrIqnXw
+         ixLQeA2hH2rZn4MtqegRldfb/bZdb5BU9eUH3DWrm5V4KyCPyrpGtI5I9bm7XSvmYI
+         bigut6eLGU4iF7s/n8VQhy//cD6Wshc2o52MONpc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        stable@vger.kernel.org, Meng Tang <tangmeng@uniontech.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0520/1017] drm/msm/dsi/phy: fix 7nm v4.0 settings for C-PHY mode
+Subject: [PATCH 5.15 371/913] ASoC: amd: Fix reference to PCM buffer address
 Date:   Tue,  5 Apr 2022 09:23:53 +0200
-Message-Id: <20220405070409.731669670@linuxfoundation.org>
+Message-Id: <20220405070350.967960528@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,65 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From: Meng Tang <tangmeng@uniontech.com>
 
-[ Upstream commit bb07af2ed2a47dc6c4d0681f275bb27d4f845465 ]
+[ Upstream commit 54e1bf9f6177a3ffbd920474f4481a25361163aa ]
 
-The dsi_7nm_phy_enable() disagrees with downstream for
-glbl_str_swi_cal_sel_ctrl and glbl_hstx_str_ctrl_0 values. Update
-programmed settings to match downstream driver. To remove the
-possibility for such errors in future drop less_than_1500_mhz
-assignment and specify settings explicitly.
+PCM buffers might be allocated dynamically when the buffer
+preallocation failed or a larger buffer is requested, and it's not
+guaranteed that substream->dma_buffer points to the actually used
+buffer.  The driver needs to refer to substream->runtime->dma_addr
+instead for the buffer address.
 
-Fixes: 5ac178381d26 ("drm/msm/dsi: support CPHY mode for 7nm pll/phy")
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Link: https://lore.kernel.org/r/20220217000837.435340-1-dmitry.baryshkov@linaro.org
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Fixes: cab396d8b22c1 ("ASoC: amd: add ACP5x pcm dma driver ops")
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+Link: https://lore.kernel.org/r/20220316091303.9745-1-tangmeng@uniontech.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c | 22 ++++++++++++++--------
- 1 file changed, 14 insertions(+), 8 deletions(-)
+ sound/soc/amd/vangogh/acp5x-pcm-dma.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
-index 36eb6109cb88..6e506feb111f 100644
---- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
-+++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_7nm.c
-@@ -864,20 +864,26 @@ static int dsi_7nm_phy_enable(struct msm_dsi_phy *phy,
- 	/* Alter PHY configurations if data rate less than 1.5GHZ*/
- 	less_than_1500_mhz = (clk_req->bitclk_rate <= 1500000000);
- 
--	/* For C-PHY, no low power settings for lower clk rate */
--	if (phy->cphy_mode)
--		less_than_1500_mhz = false;
--
- 	if (phy->cfg->quirks & DSI_PHY_7NM_QUIRK_V4_1) {
- 		vreg_ctrl_0 = less_than_1500_mhz ? 0x53 : 0x52;
--		glbl_rescode_top_ctrl = less_than_1500_mhz ? 0x3d :  0x00;
--		glbl_rescode_bot_ctrl = less_than_1500_mhz ? 0x39 :  0x3c;
-+		if (phy->cphy_mode) {
-+			glbl_rescode_top_ctrl = 0x00;
-+			glbl_rescode_bot_ctrl = 0x3c;
-+		} else {
-+			glbl_rescode_top_ctrl = less_than_1500_mhz ? 0x3d :  0x00;
-+			glbl_rescode_bot_ctrl = less_than_1500_mhz ? 0x39 :  0x3c;
-+		}
- 		glbl_str_swi_cal_sel_ctrl = 0x00;
- 		glbl_hstx_str_ctrl_0 = 0x88;
- 	} else {
- 		vreg_ctrl_0 = less_than_1500_mhz ? 0x5B : 0x59;
--		glbl_str_swi_cal_sel_ctrl = less_than_1500_mhz ? 0x03 : 0x00;
--		glbl_hstx_str_ctrl_0 = less_than_1500_mhz ? 0x66 : 0x88;
-+		if (phy->cphy_mode) {
-+			glbl_str_swi_cal_sel_ctrl = 0x03;
-+			glbl_hstx_str_ctrl_0 = 0x66;
-+		} else {
-+			glbl_str_swi_cal_sel_ctrl = less_than_1500_mhz ? 0x03 : 0x00;
-+			glbl_hstx_str_ctrl_0 = less_than_1500_mhz ? 0x66 : 0x88;
-+		}
- 		glbl_rescode_top_ctrl = 0x03;
- 		glbl_rescode_bot_ctrl = 0x3c;
+diff --git a/sound/soc/amd/vangogh/acp5x-pcm-dma.c b/sound/soc/amd/vangogh/acp5x-pcm-dma.c
+index f10de38976cb..6abcc2133a2c 100644
+--- a/sound/soc/amd/vangogh/acp5x-pcm-dma.c
++++ b/sound/soc/amd/vangogh/acp5x-pcm-dma.c
+@@ -281,7 +281,7 @@ static int acp5x_dma_hw_params(struct snd_soc_component *component,
+ 		return -EINVAL;
  	}
+ 	size = params_buffer_bytes(params);
+-	rtd->dma_addr = substream->dma_buffer.addr;
++	rtd->dma_addr = substream->runtime->dma_addr;
+ 	rtd->num_pages = (PAGE_ALIGN(size) >> PAGE_SHIFT);
+ 	config_acp5x_dma(rtd, substream->stream);
+ 	return 0;
 -- 
 2.34.1
 

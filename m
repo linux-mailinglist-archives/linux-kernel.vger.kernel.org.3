@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB34B4F47A2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A334F461D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353363AbiDEVOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43050 "EHLO
+        id S1358256AbiDEMvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349064AbiDEJtD (ORCPT
+        with ESMTP id S244321AbiDEJJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C1B9682D;
-        Tue,  5 Apr 2022 02:39:33 -0700 (PDT)
+        Tue, 5 Apr 2022 05:09:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A1211C37;
+        Tue,  5 Apr 2022 01:59:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B0AC615E5;
-        Tue,  5 Apr 2022 09:39:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79E2AC385A3;
-        Tue,  5 Apr 2022 09:39:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A05BBB81A22;
+        Tue,  5 Apr 2022 08:59:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AE4AC385A0;
+        Tue,  5 Apr 2022 08:59:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151572;
-        bh=2w7bBj4tgoZF311c8KSGA9qi0/m+8Nb4Ri8/8MzK1rU=;
+        s=korg; t=1649149155;
+        bh=OcJLTMopdWusYu5YIymkCuBofzSZmG5/MLwLyg2R6U8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qkAFsk7kFXOJbpxooP/SZ1roRzwge+l/DzAvTSRIfjXDn0mpEAELKHLcqFzsx/1+C
-         dq63SbzNELU/JEEVX2LQrbXkb//CUZKHNqT4HQhhBuAkWTWnF4xhrBMuUWQTQJe0b9
-         pXVtk4SciZs/mQkgqBFKC5lZzCd+bZ+SjqmM6M3I=
+        b=OK4zoRRCIPbYTfX6AcHUqi7eVMVtkAwt4gjcYDGgJbYiaLLDdxbCbFJz3m+iasx2V
+         Vn9dUrwKO3Hb5sHKYZim0FSWb8a31NAZFQvK6pVLV9NGW/sz1h3iYnw5RbqByr2Lfm
+         RyahA4oiWCexB7v1uBS3JYU7ewBP3Gh3aOelWJDM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rotem Saado <rotem.saado@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
+        stable@vger.kernel.org, Vaishnavi Bhat <vaish123@in.ibm.com>,
+        Sukadev Bhattiprolu <sukadev@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 465/913] iwlwifi: yoyo: remove DBGI_SRAM address reset writing
+Subject: [PATCH 5.16 0614/1017] ibmvnic: fix race between xmit and reset
 Date:   Tue,  5 Apr 2022 09:25:27 +0200
-Message-Id: <20220405070353.786762755@linuxfoundation.org>
+Message-Id: <20220405070412.508548926@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,52 +56,272 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rotem Saado <rotem.saado@intel.com>
+From: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
 
-[ Upstream commit ce014c9861544bb4e789323d0d8956a5ad262e25 ]
+[ Upstream commit 4219196d1f662cb10a462eb9e076633a3fc31a15 ]
 
-Due to preg protection we cannot write to this register
-while FW is running (when FW in Halt it is ok).
-since we have some cases that we need to dump this
-region while FW is running remove this writing from DRV.
-FW will do this writing.
+There is a race between reset and the transmit paths that can lead to
+ibmvnic_xmit() accessing an scrq after it has been freed in the reset
+path. It can result in a crash like:
 
-Signed-off-by: Rotem Saado <rotem.saado@intel.com>
-Fixes: 89639e06d0f3 ("iwlwifi: yoyo: support for new DBGI_SRAM region")
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Link: https://lore.kernel.org/r/iwlwifi.20220129105618.209f3078bc74.I463530bd2f40daedb39f6d9df987bb7cee209033@changeid
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+	Kernel attempted to read user page (0) - exploit attempt? (uid: 0)
+	BUG: Kernel NULL pointer dereference on read at 0x00000000
+	Faulting instruction address: 0xc0080000016189f8
+	Oops: Kernel access of bad area, sig: 11 [#1]
+	...
+	NIP [c0080000016189f8] ibmvnic_xmit+0x60/0xb60 [ibmvnic]
+	LR [c000000000c0046c] dev_hard_start_xmit+0x11c/0x280
+	Call Trace:
+	[c008000001618f08] ibmvnic_xmit+0x570/0xb60 [ibmvnic] (unreliable)
+	[c000000000c0046c] dev_hard_start_xmit+0x11c/0x280
+	[c000000000c9cfcc] sch_direct_xmit+0xec/0x330
+	[c000000000bfe640] __dev_xmit_skb+0x3a0/0x9d0
+	[c000000000c00ad4] __dev_queue_xmit+0x394/0x730
+	[c008000002db813c] __bond_start_xmit+0x254/0x450 [bonding]
+	[c008000002db8378] bond_start_xmit+0x40/0xc0 [bonding]
+	[c000000000c0046c] dev_hard_start_xmit+0x11c/0x280
+	[c000000000c00ca4] __dev_queue_xmit+0x564/0x730
+	[c000000000cf97e0] neigh_hh_output+0xd0/0x180
+	[c000000000cfa69c] ip_finish_output2+0x31c/0x5c0
+	[c000000000cfd244] __ip_queue_xmit+0x194/0x4f0
+	[c000000000d2a3c4] __tcp_transmit_skb+0x434/0x9b0
+	[c000000000d2d1e0] __tcp_retransmit_skb+0x1d0/0x6a0
+	[c000000000d2d984] tcp_retransmit_skb+0x34/0x130
+	[c000000000d310e8] tcp_retransmit_timer+0x388/0x6d0
+	[c000000000d315ec] tcp_write_timer_handler+0x1bc/0x330
+	[c000000000d317bc] tcp_write_timer+0x5c/0x200
+	[c000000000243270] call_timer_fn+0x50/0x1c0
+	[c000000000243704] __run_timers.part.0+0x324/0x460
+	[c000000000243894] run_timer_softirq+0x54/0xa0
+	[c000000000ea713c] __do_softirq+0x15c/0x3e0
+	[c000000000166258] __irq_exit_rcu+0x158/0x190
+	[c000000000166420] irq_exit+0x20/0x40
+	[c00000000002853c] timer_interrupt+0x14c/0x2b0
+	[c000000000009a00] decrementer_common_virt+0x210/0x220
+	--- interrupt: 900 at plpar_hcall_norets_notrace+0x18/0x2c
+
+The immediate cause of the crash is the access of tx_scrq in the following
+snippet during a reset, where the tx_scrq can be either NULL or an address
+that will soon be invalid:
+
+	ibmvnic_xmit()
+	{
+		...
+		tx_scrq = adapter->tx_scrq[queue_num];
+		txq = netdev_get_tx_queue(netdev, queue_num);
+		ind_bufp = &tx_scrq->ind_buf;
+
+		if (test_bit(0, &adapter->resetting)) {
+		...
+	}
+
+But beyond that, the call to ibmvnic_xmit() itself is not safe during a
+reset and the reset path attempts to avoid this by stopping the queue in
+ibmvnic_cleanup(). However just after the queue was stopped, an in-flight
+ibmvnic_complete_tx() could have restarted the queue even as the reset is
+progressing.
+
+Since the queue was restarted we could get a call to ibmvnic_xmit() which
+can then access the bad tx_scrq (or other fields).
+
+We cannot however simply have ibmvnic_complete_tx() check the ->resetting
+bit and skip starting the queue. This can race at the "back-end" of a good
+reset which just restarted the queue but has not cleared the ->resetting
+bit yet. If we skip restarting the queue due to ->resetting being true,
+the queue would remain stopped indefinitely potentially leading to transmit
+timeouts.
+
+IOW ->resetting is too broad for this purpose. Instead use a new flag
+that indicates whether or not the queues are active. Only the open/
+reset paths control when the queues are active. ibmvnic_complete_tx()
+and others wake up the queue only if the queue is marked active.
+
+So we will have:
+	A. reset/open thread in ibmvnic_cleanup() and __ibmvnic_open()
+
+		->resetting = true
+		->tx_queues_active = false
+		disable tx queues
+		...
+		->tx_queues_active = true
+		start tx queues
+
+	B. Tx interrupt in ibmvnic_complete_tx():
+
+		if (->tx_queues_active)
+			netif_wake_subqueue();
+
+To ensure that ->tx_queues_active and state of the queues are consistent,
+we need a lock which:
+
+	- must also be taken in the interrupt path (ibmvnic_complete_tx())
+	- shared across the multiple queues in the adapter (so they don't
+	  become serialized)
+
+Use rcu_read_lock() and have the reset thread synchronize_rcu() after
+updating the ->tx_queues_active state.
+
+While here, consolidate a few boolean fields in ibmvnic_adapter for
+better alignment.
+
+Based on discussions with Brian King and Dany Madden.
+
+Fixes: 7ed5b31f4a66 ("net/ibmvnic: prevent more than one thread from running in reset")
+Reported-by: Vaishnavi Bhat <vaish123@in.ibm.com>
+Signed-off-by: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/fw/dbg.c   | 2 --
- drivers/net/wireless/intel/iwlwifi/iwl-prph.h | 2 --
- 2 files changed, 4 deletions(-)
+ drivers/net/ethernet/ibm/ibmvnic.c | 63 ++++++++++++++++++++++++------
+ drivers/net/ethernet/ibm/ibmvnic.h |  7 +++-
+ 2 files changed, 55 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/fw/dbg.c b/drivers/net/wireless/intel/iwlwifi/fw/dbg.c
-index 6dcafd0a3d4b..b00cf92c8965 100644
---- a/drivers/net/wireless/intel/iwlwifi/fw/dbg.c
-+++ b/drivers/net/wireless/intel/iwlwifi/fw/dbg.c
-@@ -1532,8 +1532,6 @@ iwl_dump_ini_dbgi_sram_iter(struct iwl_fw_runtime *fwrt,
- 		return -EBUSY;
+diff --git a/drivers/net/ethernet/ibm/ibmvnic.c b/drivers/net/ethernet/ibm/ibmvnic.c
+index a8b65c072f64..82f47bf4d67c 100644
+--- a/drivers/net/ethernet/ibm/ibmvnic.c
++++ b/drivers/net/ethernet/ibm/ibmvnic.c
+@@ -1429,6 +1429,15 @@ static int __ibmvnic_open(struct net_device *netdev)
+ 		return rc;
+ 	}
  
- 	range->range_data_size = reg->dev_addr.size;
--	iwl_write_prph_no_grab(fwrt->trans, DBGI_SRAM_TARGET_ACCESS_CFG,
--			       DBGI_SRAM_TARGET_ACCESS_CFG_RESET_ADDRESS_MSK);
- 	for (i = 0; i < (le32_to_cpu(reg->dev_addr.size) / 4); i++) {
- 		prph_data = iwl_read_prph(fwrt->trans, (i % 2) ?
- 					  DBGI_SRAM_TARGET_ACCESS_RDATA_MSB :
-diff --git a/drivers/net/wireless/intel/iwlwifi/iwl-prph.h b/drivers/net/wireless/intel/iwlwifi/iwl-prph.h
-index d0a7d58336a9..6c4f1c949541 100644
---- a/drivers/net/wireless/intel/iwlwifi/iwl-prph.h
-+++ b/drivers/net/wireless/intel/iwlwifi/iwl-prph.h
-@@ -350,8 +350,6 @@
- #define WFPM_GP2			0xA030B4
++	adapter->tx_queues_active = true;
++
++	/* Since queues were stopped until now, there shouldn't be any
++	 * one in ibmvnic_complete_tx() or ibmvnic_xmit() so maybe we
++	 * don't need the synchronize_rcu()? Leaving it for consistency
++	 * with setting ->tx_queues_active = false.
++	 */
++	synchronize_rcu();
++
+ 	netif_tx_start_all_queues(netdev);
  
- /* DBGI SRAM Register details */
--#define DBGI_SRAM_TARGET_ACCESS_CFG			0x00A2E14C
--#define DBGI_SRAM_TARGET_ACCESS_CFG_RESET_ADDRESS_MSK	0x10000
- #define DBGI_SRAM_TARGET_ACCESS_RDATA_LSB		0x00A2E154
- #define DBGI_SRAM_TARGET_ACCESS_RDATA_MSB		0x00A2E158
+ 	if (prev_state == VNIC_CLOSED) {
+@@ -1603,6 +1612,14 @@ static void ibmvnic_cleanup(struct net_device *netdev)
+ 	struct ibmvnic_adapter *adapter = netdev_priv(netdev);
+ 
+ 	/* ensure that transmissions are stopped if called by do_reset */
++
++	adapter->tx_queues_active = false;
++
++	/* Ensure complete_tx() and ibmvnic_xmit() see ->tx_queues_active
++	 * update so they don't restart a queue after we stop it below.
++	 */
++	synchronize_rcu();
++
+ 	if (test_bit(0, &adapter->resetting))
+ 		netif_tx_disable(netdev);
+ 	else
+@@ -1842,14 +1859,21 @@ static void ibmvnic_tx_scrq_clean_buffer(struct ibmvnic_adapter *adapter,
+ 		tx_buff->skb = NULL;
+ 		adapter->netdev->stats.tx_dropped++;
+ 	}
++
+ 	ind_bufp->index = 0;
++
+ 	if (atomic_sub_return(entries, &tx_scrq->used) <=
+ 	    (adapter->req_tx_entries_per_subcrq / 2) &&
+-	    __netif_subqueue_stopped(adapter->netdev, queue_num) &&
+-	    !test_bit(0, &adapter->resetting)) {
+-		netif_wake_subqueue(adapter->netdev, queue_num);
+-		netdev_dbg(adapter->netdev, "Started queue %d\n",
+-			   queue_num);
++	    __netif_subqueue_stopped(adapter->netdev, queue_num)) {
++		rcu_read_lock();
++
++		if (adapter->tx_queues_active) {
++			netif_wake_subqueue(adapter->netdev, queue_num);
++			netdev_dbg(adapter->netdev, "Started queue %d\n",
++				   queue_num);
++		}
++
++		rcu_read_unlock();
+ 	}
+ }
+ 
+@@ -1904,11 +1928,12 @@ static netdev_tx_t ibmvnic_xmit(struct sk_buff *skb, struct net_device *netdev)
+ 	int index = 0;
+ 	u8 proto = 0;
+ 
+-	tx_scrq = adapter->tx_scrq[queue_num];
+-	txq = netdev_get_tx_queue(netdev, queue_num);
+-	ind_bufp = &tx_scrq->ind_buf;
+-
+-	if (test_bit(0, &adapter->resetting)) {
++	/* If a reset is in progress, drop the packet since
++	 * the scrqs may get torn down. Otherwise use the
++	 * rcu to ensure reset waits for us to complete.
++	 */
++	rcu_read_lock();
++	if (!adapter->tx_queues_active) {
+ 		dev_kfree_skb_any(skb);
+ 
+ 		tx_send_failed++;
+@@ -1917,6 +1942,10 @@ static netdev_tx_t ibmvnic_xmit(struct sk_buff *skb, struct net_device *netdev)
+ 		goto out;
+ 	}
+ 
++	tx_scrq = adapter->tx_scrq[queue_num];
++	txq = netdev_get_tx_queue(netdev, queue_num);
++	ind_bufp = &tx_scrq->ind_buf;
++
+ 	if (ibmvnic_xmit_workarounds(skb, netdev)) {
+ 		tx_dropped++;
+ 		tx_send_failed++;
+@@ -1924,6 +1953,7 @@ static netdev_tx_t ibmvnic_xmit(struct sk_buff *skb, struct net_device *netdev)
+ 		ibmvnic_tx_scrq_flush(adapter, tx_scrq);
+ 		goto out;
+ 	}
++
+ 	if (skb_is_gso(skb))
+ 		tx_pool = &adapter->tso_pool[queue_num];
+ 	else
+@@ -2078,6 +2108,7 @@ static netdev_tx_t ibmvnic_xmit(struct sk_buff *skb, struct net_device *netdev)
+ 		netif_carrier_off(netdev);
+ 	}
+ out:
++	rcu_read_unlock();
+ 	netdev->stats.tx_dropped += tx_dropped;
+ 	netdev->stats.tx_bytes += tx_bytes;
+ 	netdev->stats.tx_packets += tx_packets;
+@@ -3728,9 +3759,15 @@ static int ibmvnic_complete_tx(struct ibmvnic_adapter *adapter,
+ 		    (adapter->req_tx_entries_per_subcrq / 2) &&
+ 		    __netif_subqueue_stopped(adapter->netdev,
+ 					     scrq->pool_index)) {
+-			netif_wake_subqueue(adapter->netdev, scrq->pool_index);
+-			netdev_dbg(adapter->netdev, "Started queue %d\n",
+-				   scrq->pool_index);
++			rcu_read_lock();
++			if (adapter->tx_queues_active) {
++				netif_wake_subqueue(adapter->netdev,
++						    scrq->pool_index);
++				netdev_dbg(adapter->netdev,
++					   "Started queue %d\n",
++					   scrq->pool_index);
++			}
++			rcu_read_unlock();
+ 		}
+ 	}
+ 
+diff --git a/drivers/net/ethernet/ibm/ibmvnic.h b/drivers/net/ethernet/ibm/ibmvnic.h
+index 549a9b7b1a70..1b2bdb85ad67 100644
+--- a/drivers/net/ethernet/ibm/ibmvnic.h
++++ b/drivers/net/ethernet/ibm/ibmvnic.h
+@@ -1009,11 +1009,14 @@ struct ibmvnic_adapter {
+ 	struct work_struct ibmvnic_reset;
+ 	struct delayed_work ibmvnic_delayed_reset;
+ 	unsigned long resetting;
+-	bool napi_enabled, from_passive_init;
+-	bool login_pending;
+ 	/* last device reset time */
+ 	unsigned long last_reset_time;
+ 
++	bool napi_enabled;
++	bool from_passive_init;
++	bool login_pending;
++	/* protected by rcu */
++	bool tx_queues_active;
+ 	bool failover_pending;
+ 	bool force_reset_recovery;
  
 -- 
 2.34.1

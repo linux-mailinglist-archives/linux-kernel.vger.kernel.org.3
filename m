@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455274F41B1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B23834F42EE
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346967AbiDENkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
+        id S238145AbiDENZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345182AbiDEJWU (ORCPT
+        with ESMTP id S1345209AbiDEJWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:22:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC422A705;
-        Tue,  5 Apr 2022 02:09:29 -0700 (PDT)
+        Tue, 5 Apr 2022 05:22:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98D22A279;
+        Tue,  5 Apr 2022 02:09:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 46CC361576;
-        Tue,  5 Apr 2022 09:09:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57194C385A2;
-        Tue,  5 Apr 2022 09:09:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4A57CB81B75;
+        Tue,  5 Apr 2022 09:09:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A34C385A0;
+        Tue,  5 Apr 2022 09:09:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149768;
-        bh=ptLm1CuAHPAby5gzcyPilmATb+VXBfPZiFpNkxN4WFw=;
+        s=korg; t=1649149777;
+        bh=Ho/BjnVNGfweAgBtMiS7dBtzUEAbt0AM1Wjb60i/UUs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cxCSNsGmcnkaXlV+R1IlU3RZEG28t0W611oGfBTEQyXoapoyIL9LJa9yTDSbx1Cur
-         dydAtfp6e1BjYxZxE/JmUSaTfGsV4s9OPzYQGD1aYbGOA0plxhC9V8jOfwhqlZp+tV
-         r2BLh6XB7CJI/S+/IAD+zSSZRXf5sXkenutBXzNg=
+        b=rJrlhjx6HtNl8kX1O9S4Vmp6mh//BgjyYS2eDrFhWaIKnMz5OSg+n75XAi/hDz8Od
+         /0LtaH50NhomImW2XuPidQEbIjxWP6gLq6MU2i2hCIT0izVDErQq4tWM2LRfnc+/KV
+         1rHDAtrw+6MmLInpmGf+jXuC0FPDNBct7gA0L2oc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
+        stable@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0797/1017] btrfs: do not double complete bio on errors during compressed reads
-Date:   Tue,  5 Apr 2022 09:28:30 +0200
-Message-Id: <20220405070417.908377432@linuxfoundation.org>
+Subject: [PATCH 5.16 0799/1017] f2fs: use spin_lock to avoid hang
+Date:   Tue,  5 Apr 2022 09:28:32 +0200
+Message-Id: <20220405070417.968186571@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,128 +55,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josef Bacik <josef@toxicpanda.com>
+From: Jaegeuk Kim <jaegeuk@kernel.org>
 
-[ Upstream commit f9f15de85d74e7eef021af059ca53a15f041cdd8 ]
+[ Upstream commit 98237fcda4a24e67b0a4498c17d5aa4ad4537bc7 ]
 
-I hit some weird panics while fixing up the error handling from
-btrfs_lookup_bio_sums().  Turns out the compression path will complete
-the bio we use if we set up any of the compression bios and then return
-an error, and then btrfs_submit_data_bio() will also call bio_endio() on
-the bio.
+[14696.634553] task:cat             state:D stack:    0 pid:1613738 ppid:1613735 flags:0x00000004
+[14696.638285] Call Trace:
+[14696.639038]  <TASK>
+[14696.640032]  __schedule+0x302/0x930
+[14696.640969]  schedule+0x58/0xd0
+[14696.641799]  schedule_preempt_disabled+0x18/0x30
+[14696.642890]  __mutex_lock.constprop.0+0x2fb/0x4f0
+[14696.644035]  ? mod_objcg_state+0x10c/0x310
+[14696.645040]  ? obj_cgroup_charge+0xe1/0x170
+[14696.646067]  __mutex_lock_slowpath+0x13/0x20
+[14696.647126]  mutex_lock+0x34/0x40
+[14696.648070]  stat_show+0x25/0x17c0 [f2fs]
+[14696.649218]  seq_read_iter+0x120/0x4b0
+[14696.650289]  ? aa_file_perm+0x12a/0x500
+[14696.651357]  ? lru_cache_add+0x1c/0x20
+[14696.652470]  seq_read+0xfd/0x140
+[14696.653445]  full_proxy_read+0x5c/0x80
+[14696.654535]  vfs_read+0xa0/0x1a0
+[14696.655497]  ksys_read+0x67/0xe0
+[14696.656502]  __x64_sys_read+0x1a/0x20
+[14696.657580]  do_syscall_64+0x3b/0xc0
+[14696.658671]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[14696.660068] RIP: 0033:0x7efe39df1cb2
+[14696.661133] RSP: 002b:00007ffc8badd948 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+[14696.662958] RAX: ffffffffffffffda RBX: 0000000000020000 RCX: 00007efe39df1cb2
+[14696.664757] RDX: 0000000000020000 RSI: 00007efe399df000 RDI: 0000000000000003
+[14696.666542] RBP: 00007efe399df000 R08: 00007efe399de010 R09: 00007efe399de010
+[14696.668363] R10: 0000000000000022 R11: 0000000000000246 R12: 0000000000000000
+[14696.670155] R13: 0000000000000003 R14: 0000000000020000 R15: 0000000000020000
+[14696.671965]  </TASK>
+[14696.672826] task:umount          state:D stack:    0 pid:1614985 ppid:1614984 flags:0x00004000
+[14696.674930] Call Trace:
+[14696.675903]  <TASK>
+[14696.676780]  __schedule+0x302/0x930
+[14696.677927]  schedule+0x58/0xd0
+[14696.679019]  schedule_preempt_disabled+0x18/0x30
+[14696.680412]  __mutex_lock.constprop.0+0x2fb/0x4f0
+[14696.681783]  ? destroy_inode+0x65/0x80
+[14696.683006]  __mutex_lock_slowpath+0x13/0x20
+[14696.684305]  mutex_lock+0x34/0x40
+[14696.685442]  f2fs_destroy_stats+0x1e/0x60 [f2fs]
+[14696.686803]  f2fs_put_super+0x158/0x390 [f2fs]
+[14696.688238]  generic_shutdown_super+0x7a/0x120
+[14696.689621]  kill_block_super+0x27/0x50
+[14696.690894]  kill_f2fs_super+0x7f/0x100 [f2fs]
+[14696.692311]  deactivate_locked_super+0x35/0xa0
+[14696.693698]  deactivate_super+0x40/0x50
+[14696.694985]  cleanup_mnt+0x139/0x190
+[14696.696209]  __cleanup_mnt+0x12/0x20
+[14696.697390]  task_work_run+0x64/0xa0
+[14696.698587]  exit_to_user_mode_prepare+0x1b7/0x1c0
+[14696.700053]  syscall_exit_to_user_mode+0x27/0x50
+[14696.701418]  do_syscall_64+0x48/0xc0
+[14696.702630]  entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Fix this by making btrfs_submit_compressed_read() responsible for
-calling bio_endio() on the bio if there are any errors.  Currently it
-was only doing it if we created the compression bios, otherwise it was
-depending on btrfs_submit_data_bio() to do the right thing.  This
-creates the above problem, so fix up btrfs_submit_compressed_read() to
-always call bio_endio() in case of an error, and then simply return from
-btrfs_submit_data_bio() if we had to call
-btrfs_submit_compressed_read().
-
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Reviewed-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/compression.c | 20 ++++++++++++++------
- fs/btrfs/inode.c       |  8 +++++++-
- 2 files changed, 21 insertions(+), 7 deletions(-)
+ fs/f2fs/debug.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/fs/btrfs/compression.c b/fs/btrfs/compression.c
-index 32da97c3c19d..66d6a414b2ca 100644
---- a/fs/btrfs/compression.c
-+++ b/fs/btrfs/compression.c
-@@ -807,7 +807,7 @@ blk_status_t btrfs_submit_compressed_read(struct inode *inode, struct bio *bio,
- 	u64 em_len;
- 	u64 em_start;
- 	struct extent_map *em;
--	blk_status_t ret = BLK_STS_RESOURCE;
-+	blk_status_t ret;
- 	int faili = 0;
- 	u8 *sums;
+diff --git a/fs/f2fs/debug.c b/fs/f2fs/debug.c
+index 07ad0d81f0c5..b449c7a372a4 100644
+--- a/fs/f2fs/debug.c
++++ b/fs/f2fs/debug.c
+@@ -21,7 +21,7 @@
+ #include "gc.h"
  
-@@ -820,14 +820,18 @@ blk_status_t btrfs_submit_compressed_read(struct inode *inode, struct bio *bio,
- 	read_lock(&em_tree->lock);
- 	em = lookup_extent_mapping(em_tree, file_offset, fs_info->sectorsize);
- 	read_unlock(&em_tree->lock);
--	if (!em)
--		return BLK_STS_IOERR;
-+	if (!em) {
-+		ret = BLK_STS_IOERR;
-+		goto out;
-+	}
+ static LIST_HEAD(f2fs_stat_list);
+-static DEFINE_MUTEX(f2fs_stat_mutex);
++static DEFINE_RAW_SPINLOCK(f2fs_stat_lock);
+ #ifdef CONFIG_DEBUG_FS
+ static struct dentry *f2fs_debugfs_root;
+ #endif
+@@ -345,8 +345,9 @@ static int stat_show(struct seq_file *s, void *v)
+ {
+ 	struct f2fs_stat_info *si;
+ 	int i = 0, j = 0;
++	unsigned long flags;
  
- 	ASSERT(em->compress_type != BTRFS_COMPRESS_NONE);
- 	compressed_len = em->block_len;
- 	cb = kmalloc(compressed_bio_size(fs_info, compressed_len), GFP_NOFS);
--	if (!cb)
-+	if (!cb) {
-+		ret = BLK_STS_RESOURCE;
- 		goto out;
-+	}
+-	mutex_lock(&f2fs_stat_mutex);
++	raw_spin_lock_irqsave(&f2fs_stat_lock, flags);
+ 	list_for_each_entry(si, &f2fs_stat_list, stat_list) {
+ 		update_general_status(si->sbi);
  
- 	refcount_set(&cb->pending_sectors, compressed_len >> fs_info->sectorsize_bits);
- 	cb->errors = 0;
-@@ -850,8 +854,10 @@ blk_status_t btrfs_submit_compressed_read(struct inode *inode, struct bio *bio,
- 	nr_pages = DIV_ROUND_UP(compressed_len, PAGE_SIZE);
- 	cb->compressed_pages = kcalloc(nr_pages, sizeof(struct page *),
- 				       GFP_NOFS);
--	if (!cb->compressed_pages)
-+	if (!cb->compressed_pages) {
-+		ret = BLK_STS_RESOURCE;
- 		goto fail1;
-+	}
- 
- 	for (pg_index = 0; pg_index < nr_pages; pg_index++) {
- 		cb->compressed_pages[pg_index] = alloc_page(GFP_NOFS);
-@@ -937,7 +943,7 @@ blk_status_t btrfs_submit_compressed_read(struct inode *inode, struct bio *bio,
- 			comp_bio = NULL;
- 		}
+@@ -574,7 +575,7 @@ static int stat_show(struct seq_file *s, void *v)
+ 		seq_printf(s, "  - paged : %llu KB\n",
+ 				si->page_mem >> 10);
  	}
--	return 0;
-+	return BLK_STS_OK;
- 
- fail2:
- 	while (faili >= 0) {
-@@ -950,6 +956,8 @@ blk_status_t btrfs_submit_compressed_read(struct inode *inode, struct bio *bio,
- 	kfree(cb);
- out:
- 	free_extent_map(em);
-+	bio->bi_status = ret;
-+	bio_endio(bio);
- 	return ret;
- finish_cb:
- 	if (comp_bio) {
-diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
-index cc957cce23a1..68f5a94c82b7 100644
---- a/fs/btrfs/inode.c
-+++ b/fs/btrfs/inode.c
-@@ -2536,10 +2536,15 @@ blk_status_t btrfs_submit_data_bio(struct inode *inode, struct bio *bio,
- 			goto out;
- 
- 		if (bio_flags & EXTENT_BIO_COMPRESSED) {
-+			/*
-+			 * btrfs_submit_compressed_read will handle completing
-+			 * the bio if there were any errors, so just return
-+			 * here.
-+			 */
- 			ret = btrfs_submit_compressed_read(inode, bio,
- 							   mirror_num,
- 							   bio_flags);
--			goto out;
-+			goto out_no_endio;
- 		} else {
- 			/*
- 			 * Lookup bio sums does extra checks around whether we
-@@ -2573,6 +2578,7 @@ blk_status_t btrfs_submit_data_bio(struct inode *inode, struct bio *bio,
- 		bio->bi_status = ret;
- 		bio_endio(bio);
- 	}
-+out_no_endio:
- 	return ret;
+-	mutex_unlock(&f2fs_stat_mutex);
++	raw_spin_unlock_irqrestore(&f2fs_stat_lock, flags);
+ 	return 0;
  }
  
+@@ -585,6 +586,7 @@ int f2fs_build_stats(struct f2fs_sb_info *sbi)
+ {
+ 	struct f2fs_super_block *raw_super = F2FS_RAW_SUPER(sbi);
+ 	struct f2fs_stat_info *si;
++	unsigned long flags;
+ 	int i;
+ 
+ 	si = f2fs_kzalloc(sbi, sizeof(struct f2fs_stat_info), GFP_KERNEL);
+@@ -620,9 +622,9 @@ int f2fs_build_stats(struct f2fs_sb_info *sbi)
+ 	atomic_set(&sbi->max_aw_cnt, 0);
+ 	atomic_set(&sbi->max_vw_cnt, 0);
+ 
+-	mutex_lock(&f2fs_stat_mutex);
++	raw_spin_lock_irqsave(&f2fs_stat_lock, flags);
+ 	list_add_tail(&si->stat_list, &f2fs_stat_list);
+-	mutex_unlock(&f2fs_stat_mutex);
++	raw_spin_unlock_irqrestore(&f2fs_stat_lock, flags);
+ 
+ 	return 0;
+ }
+@@ -630,10 +632,11 @@ int f2fs_build_stats(struct f2fs_sb_info *sbi)
+ void f2fs_destroy_stats(struct f2fs_sb_info *sbi)
+ {
+ 	struct f2fs_stat_info *si = F2FS_STAT(sbi);
++	unsigned long flags;
+ 
+-	mutex_lock(&f2fs_stat_mutex);
++	raw_spin_lock_irqsave(&f2fs_stat_lock, flags);
+ 	list_del(&si->stat_list);
+-	mutex_unlock(&f2fs_stat_mutex);
++	raw_spin_unlock_irqrestore(&f2fs_stat_lock, flags);
+ 
+ 	kfree(si);
+ }
 -- 
 2.34.1
 

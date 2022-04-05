@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB74B4F517C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0DF04F50F6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1846575AbiDFCEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
+        id S1844127AbiDFBpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353548AbiDEKIM (ORCPT
+        with ESMTP id S1358291AbiDEK2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:08:12 -0400
+        Tue, 5 Apr 2022 06:28:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2025C1C92;
-        Tue,  5 Apr 2022 02:55:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F2513FB8;
+        Tue,  5 Apr 2022 03:17:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CE3661500;
-        Tue,  5 Apr 2022 09:55:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90456C385A2;
-        Tue,  5 Apr 2022 09:55:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0796261777;
+        Tue,  5 Apr 2022 10:17:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18708C385A0;
+        Tue,  5 Apr 2022 10:17:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152514;
-        bh=WOTxXQzAn+H/xWxyf4seipZltQdXkhVEK3b7in5mAPY=;
+        s=korg; t=1649153869;
+        bh=STE1V4eBIELbzwjKqO/RVxava5O5udGBwQKcKktC430=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tJ7nRUde9wm+Z1edLwnlG13/LgoLhGRN0c1H9ltgCyRMFibgVE8pn1/if7lkXNOzY
-         y9w+I8BzqPd7lkxijDX+Uoib4Rl5/S+oqSizNwAAbD2qorxg2Ti138gut6aU5NWeLp
-         QCUHW8xgTpWqzoakHNOsqr9RG2oTaAunPvT1chGo=
+        b=N8kEsqRP7gQyhBcFT4VHqM0DPzllUTklF7s04fzrp9YApyldWzTILveCGfHmyGfG1
+         7r2dCMbi6GOkKMC9YpIT80HnQJRZLT2itIxVc0FnFCqEW2Bwg5faCDEN/GO3ri5chf
+         sLMueyqevBAkymZDtFppmtA9/MeTRFBNwIjamWlk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Arun Easi <aeasi@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.15 804/913] scsi: qla2xxx: Fix missed DMA unmap for NVMe ls requests
-Date:   Tue,  5 Apr 2022 09:31:06 +0200
-Message-Id: <20220405070403.932194400@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 377/599] mfd: asic3: Add missing iounmap() on error asic3_mfd_probe
+Date:   Tue,  5 Apr 2022 09:31:11 +0200
+Message-Id: <20220405070310.048907715@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,71 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arun Easi <aeasi@marvell.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit c85ab7d9e27a80e48d5b7d7fb2fe2b0fdb2de523 upstream.
+[ Upstream commit e84ee1a75f944a0fe3c277aaa10c426603d2b0bc ]
 
-At NVMe ELS request time, request structure is DMA mapped and never
-unmapped. Fix this by calling the unmap on ELS completion.
+Add the missing iounmap() before return from asic3_mfd_probe
+in the error handling case.
 
-Link: https://lore.kernel.org/r/20220310092604.22950-5-njavali@marvell.com
-Fixes: e84067d74301 ("scsi: qla2xxx: Add FC-NVMe F/W initialization and transport registration")
-Cc: stable@vger.kernel.org
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Arun Easi <aeasi@marvell.com>
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 64e8867ba809 ("mfd: tmio_mmc hardware abstraction for CNF area")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Link: https://lore.kernel.org/r/20220307072947.5369-1-linmq006@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/qla2xxx/qla_nvme.c |   17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ drivers/mfd/asic3.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
---- a/drivers/scsi/qla2xxx/qla_nvme.c
-+++ b/drivers/scsi/qla2xxx/qla_nvme.c
-@@ -170,6 +170,18 @@ out:
- 	qla2xxx_rel_qpair_sp(sp->qpair, sp);
+diff --git a/drivers/mfd/asic3.c b/drivers/mfd/asic3.c
+index a6bd2134cea2..14e4bbe6a9da 100644
+--- a/drivers/mfd/asic3.c
++++ b/drivers/mfd/asic3.c
+@@ -914,14 +914,14 @@ static int __init asic3_mfd_probe(struct platform_device *pdev,
+ 		ret = mfd_add_devices(&pdev->dev, pdev->id,
+ 			&asic3_cell_ds1wm, 1, mem, asic->irq_base, NULL);
+ 		if (ret < 0)
+-			goto out;
++			goto out_unmap;
+ 	}
+ 
+ 	if (mem_sdio && (irq >= 0)) {
+ 		ret = mfd_add_devices(&pdev->dev, pdev->id,
+ 			&asic3_cell_mmc, 1, mem_sdio, irq, NULL);
+ 		if (ret < 0)
+-			goto out;
++			goto out_unmap;
+ 	}
+ 
+ 	ret = 0;
+@@ -935,8 +935,12 @@ static int __init asic3_mfd_probe(struct platform_device *pdev,
+ 		ret = mfd_add_devices(&pdev->dev, 0,
+ 			asic3_cell_leds, ASIC3_NUM_LEDS, NULL, 0, NULL);
+ 	}
++	return ret;
+ 
+- out:
++out_unmap:
++	if (asic->tmio_cnf)
++		iounmap(asic->tmio_cnf);
++out:
+ 	return ret;
  }
  
-+static void qla_nvme_ls_unmap(struct srb *sp, struct nvmefc_ls_req *fd)
-+{
-+	if (sp->flags & SRB_DMA_VALID) {
-+		struct srb_iocb *nvme = &sp->u.iocb_cmd;
-+		struct qla_hw_data *ha = sp->fcport->vha->hw;
-+
-+		dma_unmap_single(&ha->pdev->dev, nvme->u.nvme.cmd_dma,
-+				 fd->rqstlen, DMA_TO_DEVICE);
-+		sp->flags &= ~SRB_DMA_VALID;
-+	}
-+}
-+
- static void qla_nvme_release_ls_cmd_kref(struct kref *kref)
- {
- 	struct srb *sp = container_of(kref, struct srb, cmd_kref);
-@@ -186,6 +198,8 @@ static void qla_nvme_release_ls_cmd_kref
- 	spin_unlock_irqrestore(&priv->cmd_lock, flags);
- 
- 	fd = priv->fd;
-+
-+	qla_nvme_ls_unmap(sp, fd);
- 	fd->done(fd, priv->comp_status);
- out:
- 	qla2x00_rel_sp(sp);
-@@ -356,6 +370,8 @@ static int qla_nvme_ls_req(struct nvme_f
- 	dma_sync_single_for_device(&ha->pdev->dev, nvme->u.nvme.cmd_dma,
- 	    fd->rqstlen, DMA_TO_DEVICE);
- 
-+	sp->flags |= SRB_DMA_VALID;
-+
- 	rval = qla2x00_start_sp(sp);
- 	if (rval != QLA_SUCCESS) {
- 		ql_log(ql_log_warn, vha, 0x700e,
-@@ -363,6 +379,7 @@ static int qla_nvme_ls_req(struct nvme_f
- 		wake_up(&sp->nvme_ls_waitq);
- 		sp->priv = NULL;
- 		priv->sp = NULL;
-+		qla_nvme_ls_unmap(sp, fd);
- 		qla2x00_rel_sp(sp);
- 		return rval;
- 	}
+-- 
+2.34.1
+
 
 

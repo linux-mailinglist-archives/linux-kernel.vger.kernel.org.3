@@ -2,49 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4184F51A2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9B04F506B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1846643AbiDFCIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:08:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
+        id S1841756AbiDFBZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235821AbiDEKy2 (ORCPT
+        with ESMTP id S1348324AbiDEJrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:54:28 -0400
+        Tue, 5 Apr 2022 05:47:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246BFAA03F;
-        Tue,  5 Apr 2022 03:28:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A36B6C4A5;
+        Tue,  5 Apr 2022 02:33:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABC536141D;
-        Tue,  5 Apr 2022 10:28:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD6B3C385A1;
-        Tue,  5 Apr 2022 10:28:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154499;
-        bh=6lXdB4F7ajIpIWXEskNb8htx+7+Kuya9o2cEDiIKpvg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o5zM2Y6jfYNN7mTY4vhQb9wiIoEtGt7aQTrSUxKyw+kr7gBJUAAYefNV+9LH6ktK0
-         fw4+1cOdS2MAuSA0CZuQD5mvqnmrqfOv+HHonI9yS9lqA8l0bVDL3fmj4ItQIdHDJF
-         DhcY05sWfkJywMwWiIaMMYrqhF2IfvbXpK1ktfWA=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Vijay Balakrishna <vijayb@linux.microsoft.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Will Deacon <will@kernel.org>
-Subject: [PATCH 5.10 599/599] arm64: Do not defer reserve_crashkernel() for platforms with no DMA memory zones
-Date:   Tue,  5 Apr 2022 09:34:53 +0200
-Message-Id: <20220405070316.664535016@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
-User-Agent: quilt/0.66
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 80F3D616AE;
+        Tue,  5 Apr 2022 09:33:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E929C385A3;
+        Tue,  5 Apr 2022 09:33:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649151222;
+        bh=w3c3dan6gpCZQWuTtnrIYnuAybUzjLeMz5IygurzhmA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kgLWiwy+Hds+vv7jtXz+wCEvuU7WwMF35CGW4fvseZE4OkaO0Yd3mlyo8JYC5iVGO
+         uFXJNuwwYiufvhErVF9rtRAmdMAf9QFUlIw7s4KblEqu3jiJThyfpg3Pdj8+c7iwdf
+         UxPLbiN7DMMyuPqEy3eAHogBox9WvZxN+3hMUE1ZTkeIKi7wPxwfHpYUhsa5/P74Ip
+         zvAM9pulY79SC6AVH6lREf4lMS+2cmOaJ9F38NH5jfAM9NjVU3vXQWjDxTkRizs/UN
+         55Sb9mjiEDKfpWKYqFrIicR2UZpZH1V8ZYuPdzHZ2hjvMM4KXrADZ6HtyUUoFAZsj/
+         H8FpvMavHtPzQ==
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Shubham Bansal <illusionist.neo@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>, bpf@vger.kernel.org,
+        kernel-team@fb.com, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH bpf 0/4] kprobes: rethook,ARM,arm64: Replace kretprobe trampoline with rethook
+Date:   Tue,  5 Apr 2022 18:33:35 +0900
+Message-Id: <164915121498.982637.12787715964983738566.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -56,164 +68,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vijay Balakrishna <vijayb@linux.microsoft.com>
+Hello,
 
-commit 031495635b4668f94e964e037ca93d0d38bfde58 upstream.
+Here is a series for replacing kretprobe trampoline with rethook on ARM/arm64.
+This series are applicable to bpf tree (not arm tree) because the basement
+patch is still only on that tree.
 
-The following patches resulted in deferring crash kernel reservation to
-mem_init(), mainly aimed at platforms with DMA memory zones (no IOMMU),
-in particular Raspberry Pi 4.
+Actually, this series includes a trivial bugfix for the arm unwinder to
+initialize an internal data structure([1/4]). This is not critical for
+stack trace, but required for rethook to find LR register on the stack.
+This also have an update for the rethook interface, which allows us to
+check the rethook_hook() failure ([2/4]). This is also required for the
+rethook on arm because unwinder is able to fail.
+The rest of patches are replacing kretprobe trampoline with rethook on
+ARM ([3/4]) and arm64 ([4/4]).
 
-commit 1a8e1cef7603 ("arm64: use both ZONE_DMA and ZONE_DMA32")
-commit 8424ecdde7df ("arm64: mm: Set ZONE_DMA size based on devicetree's dma-ranges")
-commit 0a30c53573b0 ("arm64: mm: Move reserve_crashkernel() into mem_init()")
-commit 2687275a5843 ("arm64: Force NO_BLOCK_MAPPINGS if crashkernel reservation is required")
+Background:
 
-Above changes introduced boot slowdown due to linear map creation for
-all the memory banks with NO_BLOCK_MAPPINGS, see discussion[1].  The proposed
-changes restore crash kernel reservation to earlier behavior thus avoids
-slow boot, particularly for platforms with IOMMU (no DMA memory zones).
+This rethook came from Jiri's request of multiple kprobe for bpf[1].
+He tried to solve an issue that starting bpf with multiple kprobe will
+take a long time because bpf-kprobe will wait for RCU grace period for
+sync rcu events.
 
-Tested changes to confirm no ~150ms boot slowdown on our SoC with IOMMU
-and 8GB memory.  Also tested with ZONE_DMA and/or ZONE_DMA32 configs to confirm
-no regression to deferring scheme of crash kernel memory reservation.
-In both cases successfully collected kernel crash dump.
+Jiri wanted to attach a single bpf handler to multiple kprobes and
+he tried to introduce multiple-probe interface to kprobe. So I asked
+him to use ftrace and kretprobe-like hook if it is only for the
+function entry and exit, instead of adding ad-hoc interface
+to kprobes.
+For this purpose, I introduced the fprobe (kprobe like interface for
+ftrace) with the rethook (this is a generic return hook feature for
+fprobe exit handler)[2].
 
-[1] https://lore.kernel.org/all/9436d033-579b-55fa-9b00-6f4b661c2dd7@linux.microsoft.com/
+[1] https://lore.kernel.org/all/20220104080943.113249-1-jolsa@kernel.org/T/#u
+[2] https://lore.kernel.org/all/164191321766.806991.7930388561276940676.stgit@devnote2/T/#u
 
-Signed-off-by: Vijay Balakrishna <vijayb@linux.microsoft.com>
-Cc: stable@vger.kernel.org
-Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-Link: https://lore.kernel.org/r/1646242689-20744-1-git-send-email-vijayb@linux.microsoft.com
-[will: Add #ifdef CONFIG_KEXEC_CORE guards to fix 'crashk_res' references in allnoconfig build]
-Signed-off-by: Will Deacon <will@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The rethook is basically same as the kretprobe trampoline. I just made
+it decoupled from kprobes. Eventually, the all arch dependent kretprobe
+trampolines will be replaced with the rethook trampoline instead of
+cloning the code.
+
+When I port the rethook for all arch which supports kretprobe, the
+legacy kretprobe specific code (which is for CONFIG_KRETPROBE_ON_RETHOOK=n)
+will be removed eventually.
+
+BTW, the arm Clang support for rethook is for kretprobes only. fprobe
+and ftrace seems not working with Clang yet.
+
+Thank you,
+
 ---
- arch/arm64/mm/init.c |   36 ++++++++++++++++++++++++++++++++----
- arch/arm64/mm/mmu.c  |   32 +++++++++++++++++++++++++++++++-
- 2 files changed, 63 insertions(+), 5 deletions(-)
 
---- a/arch/arm64/mm/init.c
-+++ b/arch/arm64/mm/init.c
-@@ -58,8 +58,34 @@ EXPORT_SYMBOL(memstart_addr);
-  * unless restricted on specific platforms (e.g. 30-bit on Raspberry Pi 4).
-  * In such case, ZONE_DMA32 covers the rest of the 32-bit addressable memory,
-  * otherwise it is empty.
-+ *
-+ * Memory reservation for crash kernel either done early or deferred
-+ * depending on DMA memory zones configs (ZONE_DMA) --
-+ *
-+ * In absence of ZONE_DMA configs arm64_dma_phys_limit initialized
-+ * here instead of max_zone_phys().  This lets early reservation of
-+ * crash kernel memory which has a dependency on arm64_dma_phys_limit.
-+ * Reserving memory early for crash kernel allows linear creation of block
-+ * mappings (greater than page-granularity) for all the memory bank rangs.
-+ * In this scheme a comparatively quicker boot is observed.
-+ *
-+ * If ZONE_DMA configs are defined, crash kernel memory reservation
-+ * is delayed until DMA zone memory range size initilazation performed in
-+ * zone_sizes_init().  The defer is necessary to steer clear of DMA zone
-+ * memory range to avoid overlap allocation.  So crash kernel memory boundaries
-+ * are not known when mapping all bank memory ranges, which otherwise means
-+ * not possible to exclude crash kernel range from creating block mappings
-+ * so page-granularity mappings are created for the entire memory range.
-+ * Hence a slightly slower boot is observed.
-+ *
-+ * Note: Page-granularity mapppings are necessary for crash kernel memory
-+ * range for shrinking its size via /sys/kernel/kexec_crash_size interface.
-  */
--phys_addr_t arm64_dma_phys_limit __ro_after_init;
-+#if IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32)
-+phys_addr_t __ro_after_init arm64_dma_phys_limit;
-+#else
-+phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
-+#endif
- 
- #ifdef CONFIG_KEXEC_CORE
- /*
-@@ -210,8 +236,6 @@ static void __init zone_sizes_init(unsig
- 	if (!arm64_dma_phys_limit)
- 		arm64_dma_phys_limit = dma32_phys_limit;
- #endif
--	if (!arm64_dma_phys_limit)
--		arm64_dma_phys_limit = PHYS_MASK + 1;
- 	max_zone_pfns[ZONE_NORMAL] = max;
- 
- 	free_area_init(max_zone_pfns);
-@@ -407,6 +431,9 @@ void __init arm64_memblock_init(void)
- 
- 	reserve_elfcorehdr();
- 
-+	if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
-+		reserve_crashkernel();
-+
- 	high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
- }
- 
-@@ -451,7 +478,8 @@ void __init bootmem_init(void)
- 	 * request_standard_resources() depends on crashkernel's memory being
- 	 * reserved, so do it here.
- 	 */
--	reserve_crashkernel();
-+	if (IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32))
-+		reserve_crashkernel();
- 
- 	memblock_dump_all();
- }
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@ -501,7 +501,7 @@ static void __init map_mem(pgd_t *pgdp)
- 	int flags = 0;
- 	u64 i;
- 
--	if (rodata_full || crash_mem_map || debug_pagealloc_enabled())
-+	if (rodata_full || debug_pagealloc_enabled())
- 		flags = NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
- 
- 	/*
-@@ -512,6 +512,17 @@ static void __init map_mem(pgd_t *pgdp)
- 	 */
- 	memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
- 
-+#ifdef CONFIG_KEXEC_CORE
-+	if (crash_mem_map) {
-+		if (IS_ENABLED(CONFIG_ZONE_DMA) ||
-+		    IS_ENABLED(CONFIG_ZONE_DMA32))
-+			flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
-+		else if (crashk_res.end)
-+			memblock_mark_nomap(crashk_res.start,
-+					    resource_size(&crashk_res));
-+	}
-+#endif
-+
- 	/* map all the memory banks */
- 	for_each_mem_range(i, &start, &end) {
- 		if (start >= end)
-@@ -538,6 +549,25 @@ static void __init map_mem(pgd_t *pgdp)
- 	__map_memblock(pgdp, kernel_start, kernel_end,
- 		       PAGE_KERNEL, NO_CONT_MAPPINGS);
- 	memblock_clear_nomap(kernel_start, kernel_end - kernel_start);
-+
-+	/*
-+	 * Use page-level mappings here so that we can shrink the region
-+	 * in page granularity and put back unused memory to buddy system
-+	 * through /sys/kernel/kexec_crash_size interface.
-+	 */
-+#ifdef CONFIG_KEXEC_CORE
-+	if (crash_mem_map &&
-+	    !IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)) {
-+		if (crashk_res.end) {
-+			__map_memblock(pgdp, crashk_res.start,
-+				       crashk_res.end + 1,
-+				       PAGE_KERNEL,
-+				       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
-+			memblock_clear_nomap(crashk_res.start,
-+					     resource_size(&crashk_res));
-+		}
-+	}
-+#endif
- }
- 
- void mark_rodata_ro(void)
+Masami Hiramatsu (4):
+      ARM: unwind: Initialize the lr_addr field of unwind_ctrl_block
+      rethook,fprobe,kprobes: Check a failure in the rethook_hook()
+      ARM: rethook: Replace kretprobe trampoline with rethook
+      arm64: rethook: Replace kretprobe trampoline with rethook
 
 
+ arch/arm/Kconfig                              |    1 
+ arch/arm/include/asm/stacktrace.h             |    5 +
+ arch/arm/kernel/stacktrace.c                  |   13 +--
+ arch/arm/kernel/unwind.c                      |    1 
+ arch/arm/probes/Makefile                      |    1 
+ arch/arm/probes/kprobes/core.c                |   62 ------------
+ arch/arm/probes/rethook.c                     |  127 +++++++++++++++++++++++++
+ arch/arm64/Kconfig                            |    1 
+ arch/arm64/include/asm/kprobes.h              |    2 
+ arch/arm64/include/asm/stacktrace.h           |    2 
+ arch/arm64/kernel/Makefile                    |    1 
+ arch/arm64/kernel/probes/Makefile             |    1 
+ arch/arm64/kernel/probes/kprobes.c            |   15 ---
+ arch/arm64/kernel/probes/kprobes_trampoline.S |   86 -----------------
+ arch/arm64/kernel/rethook.c                   |   26 +++++
+ arch/arm64/kernel/rethook_trampoline.S        |   87 +++++++++++++++++
+ arch/arm64/kernel/stacktrace.c                |    9 +-
+ arch/x86/kernel/rethook.c                     |    4 +
+ include/linux/rethook.h                       |    4 -
+ kernel/kprobes.c                              |    8 +-
+ kernel/trace/fprobe.c                         |    5 +
+ kernel/trace/rethook.c                        |   12 ++
+ 22 files changed, 285 insertions(+), 188 deletions(-)
+ create mode 100644 arch/arm/probes/rethook.c
+ delete mode 100644 arch/arm64/kernel/probes/kprobes_trampoline.S
+ create mode 100644 arch/arm64/kernel/rethook.c
+ create mode 100644 arch/arm64/kernel/rethook_trampoline.S
+
+--
+Masami Hiramatsu (Linaro) <mhiramat@kernel.org>

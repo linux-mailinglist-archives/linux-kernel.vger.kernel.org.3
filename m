@@ -2,191 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C72444F44DB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDC64F47B3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352995AbiDEUPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
+        id S231164AbiDEVQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356164AbiDEKXC (ORCPT
+        with ESMTP id S1355436AbiDELOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:23:02 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00800BA332
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 03:07:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649153236; x=1680689236;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=b0DuVQISzMfQ1sFhGZdaekf0nUHMMfZDKdnN+10n/QI=;
-  b=nyB0M+aJ3ZdZ6JPkYtMgDWPH+TU1djPoYa9cJIzUAc8hoX0MOkahXuJC
-   Zyf5nOFfELJMiSiSTNJWmAMYprzMOQbHZqrBab0hAd+GIOUzpd2/zLZvO
-   8jDItr9hNtyVHCq8K2O8PtP2wPn1xU0GoByHHI2dadVk/7wpSf0Kd2k9Y
-   XoC2mKztDqPReQ4sWzuCPymtdYn8oFkwKsgTHBtf1HaVFsorsS1/rAKza
-   gHsV8LL33zL12KR2kFK/O6usTDmYwncMLd9G8bkFShz+Cn206vIugk5YK
-   WglVRhmBBvI3Io1ZiBQVwmdYtmYlAb48vqY3oyXkalN9Bk1HnmtBohvrP
-   w==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="260701852"
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="260701852"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 03:06:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="569817014"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 05 Apr 2022 03:06:57 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbg5R-00031W-8i;
-        Tue, 05 Apr 2022 10:06:57 +0000
-Date:   Tue, 05 Apr 2022 18:06:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/mm] BUILD SUCCESS
- 944fad4583bc8a6d7dd80fbe39db50141da95793
-Message-ID: <624c14a6.fBp+hKjyxFQj1pAh%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 5 Apr 2022 07:14:47 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84F194D62A
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 03:34:44 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id z8so12937958oix.3
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 03:34:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tzmhcp5RxadQONeu9KvciYKiNgXbRJejI1iC090AVWg=;
+        b=Ckyr/H4Efk9eg4/2J/KBC2fSKKkO3KzksdjLcY3RBSzT9NMCmfFcmXQP/tFtKO/470
+         cq+ZnczUI9w3TuhLKpo/lVk0VJYzTyel84GgUrfYKCT9mv2hijbapBsI0e1FG7FrRJmb
+         fLucT+sdtvHXDNR/H3K7C3fno1IoUuh9gjqUQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tzmhcp5RxadQONeu9KvciYKiNgXbRJejI1iC090AVWg=;
+        b=RmAjORmcNhejd4HCi9U9MkW++uipkhHohUZ0DOqWhcMWp1PpRJ6QLXXpIcgk+dNvLW
+         APvLyl4gBLIuAchy1dP7aTu1lojV1CmC52GqPv+6WvnDz75nih5j2GbFojX3UnoewFZa
+         PkTJNI8wQYxS8ih1+nXj7TTgNZw8A78U14uUzunNKWxaXnU1b5apo958lXsLiZtr8fd4
+         Ui0Z4jTn40XxT01p/xR/TeU9LuN3MDhv9ZexdooJQrVqyNnpjIu1I1u1EnbQz5DinpyX
+         /I7Twby5DfMPk4/F1nZPpoehm9JWwl9wGr/qgXt6KGAWsGbTVqVJrVkoAHaEMU7noSkQ
+         BmKQ==
+X-Gm-Message-State: AOAM53171uJSW0SDI7AjSplq7lK/1thR5Yy0GAby7+FftrwjYIUki2fp
+        jNw8ThULr1QUrcoOSWvMv8ComtqdU6cuvogMLtyP9Q==
+X-Google-Smtp-Source: ABdhPJzqoYVSx47i8TUU2SwXKC01iWiGjmQ1+pUIxIWzSlGlgOjCn7FBVo4L4bnb1FUmBmYZzaS59mRu1JbpVJ6Lf+k=
+X-Received: by 2002:a05:6808:1596:b0:2f7:5d89:eec7 with SMTP id
+ t22-20020a056808159600b002f75d89eec7mr1125899oiw.228.1649154883395; Tue, 05
+ Apr 2022 03:34:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220208210824.2238981-1-daniel.vetter@ffwll.ch>
+ <20220208210824.2238981-19-daniel.vetter@ffwll.ch> <4ae20b63-f452-fdb4-ced6-d4968a8d69f0@redhat.com>
+ <Ykv/k/WoVemoCJJA@phenom.ffwll.local> <YkwAhSt9HlbxcuZo@phenom.ffwll.local>
+ <408ffe9b-f09f-dc7e-7f5e-a93b311a06fa@redhat.com> <CAKMK7uHf6H8mhSm6eDHUruWK5Xc2cSPkJUX6v-jpeQfjS19dKw@mail.gmail.com>
+ <e124af06-4f24-277a-543a-82b383f48cea@redhat.com>
+In-Reply-To: <e124af06-4f24-277a-543a-82b383f48cea@redhat.com>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Tue, 5 Apr 2022 12:34:31 +0200
+Message-ID: <CAKMK7uH4GgDQJZguT-k0QmgEAHYHuDEbBtjYje51_Rtqzud0yw@mail.gmail.com>
+Subject: Re: [PATCH v2 18/19] Revert "fbdev: Prevent probing generic drivers
+ if a FB is already registered"
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        linux-fbdev@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Zack Rusin <zackr@vmware.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Ilya Trukhanov <lahvuun@gmail.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Peter Jones <pjones@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/mm
-branch HEAD: 944fad4583bc8a6d7dd80fbe39db50141da95793  x86/fault: Cast an argument to the proper address space in prefetch()
+On Tue, 5 Apr 2022 at 11:52, Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+>
+> On 4/5/22 11:24, Daniel Vetter wrote:
+> > On Tue, 5 Apr 2022 at 11:19, Javier Martinez Canillas
+>
+> [snip]
+>
+> >>
+> >> This is how I think that work, please let me know if you see something
+> >> wrong in my logic:
+> >>
+> >> 1) A PCI device of OF device is registered for the GPU, this attempt to
+> >>    match a registered driver but no driver was registered that match yet.
+> >>
+> >> 2) The efifb driver is built-in, will be initialized according to the link
+> >>    order of the objects under drivers/video and the fbdev driver is registered.
+> >>
+> >>    There is no platform device or PCI/OF device registered that matches.
+> >>
+> >> 3) The DRM driver is built-in, will be initialized according to the link
+> >>    order of the objects under drivers/gpu and the DRM driver is registered.
+> >>
+> >>    This matches the device registered in (1) and the DRM driver probes.
+> >>
+> >> 4) The DRM driver .probe kicks out any conflicting DRM drivers and pdev
+> >>    before registering the DRM device.
+> >>
+> >>    There are no conflicting drivers or platform device at this point.
+> >>
+> >> 5) Latter at some point the drivers/firmware/sysfb.c init function is
+> >>    executed, and this registers a platform device for the generic fb.
+> >>
+> >>    This device matches the efifb driver registered in (2) and the fbdev
+> >>    driver probes.
+> >>
+> >>    Since that happens *after* the DRM driver already matched, probed
+> >>    and registered the DRM device, that is a bug and what the reverted
+> >>    patch worked around.
+> >>
+> >> So we need to prevent (5) if (1) and (3) already happened. Having a flag
+> >> set in the fbdev core somewhere when remove_conflicting_framebuffers()
+> >> is called could be a solution indeed.
+> >>
+> >> That is, the fbdev core needs to know that a DRM driver already probed
+> >> and make register_framebuffer() fail if info->flag & FBINFO_MISC_FIRMWARE
+> >>
+> >> I can attempt to write a patch for that.
+> >
+> > Ah yeah that could be an issue. I think the right fix is to replace
+> > the platform dev unregister with a sysfb_unregister() function in
+> > sysfb.c, which is synced with a common lock with the sysfb_init
+> > function and a small boolean. I think I can type that up quickly for
+> > v3.
+>
+> It's more complicated than that since sysfb is just *one* of the several
+> places where platform devices can be registered for video devices.
+>
+> For instance, the vga16fb driver registers its own platform device in
+> its module_init() function so that can also happen after the conflicting
+> framebuffers (and associated devices) were removed by a DRM driver probe.
+>
+> I tried to minimize the issue for that particular driver with commit:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0499f419b76f
+>
+> But the point stands, it all boils down to the fact that you have two
+> different subsystems registering video drivers and they don't know all
+> about each other to take a proper decision.
+>
+> Right now the drm_aperture_remove_conflicting_framebuffers() call signals
+> in one direction from DRM to fbdev but there isn't a communication in the
+> other direction, from fbdev to DRM.
+>
+> I believe the correct fix would be for the fbdev core to keep a list of
+> the apertures struct that are passed to remove_conflicting_framebuffers(),
+> that way it will know what apertures are not available anymore and prevent
+> to register any fbdev framebuffer that conflicts with one already present.
 
-elapsed time: 880m
+Hm that still feels like reinventing a driver model, badly.
 
-configs tested: 107
-configs skipped: 98
+I think there's two cleaner solutions:
+- move all the firmware driver platform_dev into sysfb.c, and then
+just bind the special cases against that (e.g. offb, vga16fb and all
+these). Then we'd have one sysfb_try_unregister(struct device *dev)
+interface that fbmem.c uses.
+- let fbmem.c call into each of these firmware device providers, which
+means some loops most likely (like we can't call into vga16fb), so
+probably need to move that into fbmem.c and it all gets a bit messy.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> Let me know if you think that makes sense and I can attempt to write a fix.
 
-gcc tested configs:
-i386                          randconfig-c001
-arm                         s3c6400_defconfig
-mips                         db1xxx_defconfig
-openrisc                 simple_smp_defconfig
-arm                         at91_dt_defconfig
-arm                         lpc18xx_defconfig
-sh                           se7343_defconfig
-sh                         ap325rxa_defconfig
-arm                       imx_v6_v7_defconfig
-arc                        vdk_hs38_defconfig
-sh                           se7751_defconfig
-m68k                       m5475evb_defconfig
-sh                          sdk7786_defconfig
-powerpc                        cell_defconfig
-powerpc                      chrp32_defconfig
-csky                             alldefconfig
-mips                    maltaup_xpa_defconfig
-arm                           stm32_defconfig
-powerpc                     pq2fads_defconfig
-powerpc                 mpc837x_mds_defconfig
-arc                           tb10x_defconfig
-mips                       capcella_defconfig
-mips                     loongson1b_defconfig
-arm                          pxa910_defconfig
-openrisc                  or1klitex_defconfig
-mips                           jazz_defconfig
-sh                ecovec24-romimage_defconfig
-sh                     magicpanelr2_defconfig
-sh                        edosk7760_defconfig
-powerpc                     stx_gp3_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220405
-ia64                             allmodconfig
-ia64                             allyesconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-sparc                            allyesconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-nios2                               defconfig
-arc                              allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
+I still think unregistering the platform_dev properly makes the most
+sense, and feels like the most proper linux device model solution
+instead of hacks on top - if the firmware fb is unuseable because a
+native driver has taken over, we should nuke that. And also the
+firmware fb driver would then just bind to that platform_dev if it
+exists, and only if it exists. Also I think it should be the
+responsibility of whichever piece of code that registers these
+platform devices to ensure that platform_dev actually still exists.
+That's why I think pushing all that code into sysfb.c is probably the
+cleanest solution.
 
-clang tested configs:
-x86_64                        randconfig-c007
-i386                          randconfig-c001
-powerpc              randconfig-c003-20220405
-riscv                randconfig-c006-20220405
-mips                 randconfig-c004-20220405
-arm                  randconfig-c002-20220405
-arm                  colibri_pxa300_defconfig
-mips                     loongson1c_defconfig
-arm                        neponset_defconfig
-mips                         tb0219_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a006
-i386                          randconfig-a002
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-hexagon              randconfig-r045-20220405
-riscv                randconfig-r042-20220405
-hexagon              randconfig-r041-20220405
+fbdev predates all that stuff by a lot, hence the hand-rolling.
+
+But maybe Greg has some more thoughts here too?
+-Daniel
+
+>
+> --
+> Best regards,
+>
+> Javier Martinez Canillas
+> Linux Engineering
+> Red Hat
+>
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch

@@ -2,74 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A174F43A0
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 225874F472A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356035AbiDEU1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
+        id S1344184AbiDEVCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444471AbiDEPld (ORCPT
+        with ESMTP id S1444548AbiDEPlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:41:33 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC73C3347;
-        Tue,  5 Apr 2022 07:04:58 -0700 (PDT)
-Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KXq9B2TTJz67nP6;
-        Tue,  5 Apr 2022 22:02:54 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 5 Apr 2022 16:04:55 +0200
-Received: from [10.47.91.157] (10.47.91.157) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 5 Apr
- 2022 15:04:55 +0100
-Message-ID: <5f1d8b3f-0afa-2724-4ff1-f061939c68c5@huawei.com>
-Date:   Tue, 5 Apr 2022 15:04:51 +0100
+        Tue, 5 Apr 2022 11:41:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD03F8ED9
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 07:05:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B8908B81DD4
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 14:05:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BAD1C385A0;
+        Tue,  5 Apr 2022 14:05:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649167542;
+        bh=mLvsbHYwNiYZf89pICUm4u8OqvidTl/bGcsttyjqxKo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u3W3tyKRMH8dJXSiDyRLgs0ecSok+iTVounw+M+iMZl5VAUpyhvOW2/EAz8x3a9Ph
+         lWzhVwrzDy/c3m654NWOv+TTLRUbDmI7Swc/CAkBoJy/n4lZDOzcvEzhhz4+bZATVP
+         qR4Rho0i/6gG6prDeDm9JBXLfwCj81WXqKT5u0oOaOWSI63wqmmS0wgt5whfhXk1eV
+         HP52xl2pYElxpdnJtQjRxC3DALbm1B+QmK+E7SnULuuO0dihly3gJdv7HBI3TD1TxX
+         e9CINfLnp0koNqO3CCRKls2+8OSSvKwORDpDAk8vvgrg0kQDsj1tunZJc1IOm+ENPQ
+         gvZIsxDu38M5w==
+Date:   Tue, 5 Apr 2022 15:05:37 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/10] drivers/spi: Use ARCH_DMA_MINALIGN instead of
+ ARCH_KMALLOC_MINALIGN
+Message-ID: <YkxMsbRidcGaNHEl@sirena.org.uk>
+References: <20220405135758.774016-1-catalin.marinas@arm.com>
+ <20220405135758.774016-6-catalin.marinas@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-To:     <alexandre.truong@arm.com>
-From:   John Garry <john.garry@huawei.com>
-Subject: perf tool: About "perf arm64: Inject missing frames when using 'perf
- record --call-graph=fp'"
-CC:     <linux-perf-users@vger.kernel.org>,
-        "jolsa@kernel.org >> Jiri Olsa" <jolsa@kernel.org>,
-        <german.gomez@arm.com>, <james.clark@arm.com>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.91.157]
-X-ClientProxiedBy: lhreml747-chm.china.huawei.com (10.201.108.197) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sDUXE/n0DhecXB+p"
+Content-Disposition: inline
+In-Reply-To: <20220405135758.774016-6-catalin.marinas@arm.com>
+X-Cookie: diplomacy, n:
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexandre,
 
-I notice that with commit b9f6fbb3b2c2 ("perf arm64: Inject missing 
-frames when using 'perf record --call-graph=fp'") that I get messages 
-spewing the console when running perf record+report, as below:
+--sDUXE/n0DhecXB+p
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-john@ubuntu:~/linux$sudo tools/perf/perf record -ag fio null12.fio
-john@ubuntu:~/linux$sudo tools/perf/perf report > report
-unwind: can't read reg 29
-unwind: can't read reg 29
-unwind: can't read reg 29
-unwind: can't read reg 29
-...
+On Tue, Apr 05, 2022 at 02:57:53PM +0100, Catalin Marinas wrote:
+> ARCH_DMA_MINALIGN represents the minimum (static) alignment for safe DMA
+> operations while ARCH_KMALLOC_MINALIGN is the minimum kmalloc() objects
+> alignment.
 
-Do you know the possible cause? I haven't checked...
+Acked-by: Mark Brown <broonie@kernel.org>
 
-Thanks,
-john
+--sDUXE/n0DhecXB+p
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJMTLAACgkQJNaLcl1U
+h9CZywf8DvQ9It3zlTp1923Nk+sjayiHtSyj0NUz7v2SeU+qBDaEc6uiEV4m62om
+zJ9ZCXULrZCyR8xGlxKJbcY855QVISvit0bVDXHkfh9ui7FstXphjBsPNtEkJPoi
+FM8HmdCCIAT1xWWpFQlC5lIoD127dGaP1mHimjeG/AzLxDGLDaj034XJ5UxyZZa3
+BXVXC3h0/INjNHcvkYLDKFOV6/K6GmFp+z8p4oAbbwjbxPbYkRli+AvpZHesm+Gj
+//rAXzhnd2CRcbF2gJG9peLrLMfYvYBDxIIije9GMxfHi7sZfR+soUBjfriN5BgT
+jgsXumz/fY4fChAJH/ph3U1YIC1f6Q==
+=lFIn
+-----END PGP SIGNATURE-----
+
+--sDUXE/n0DhecXB+p--

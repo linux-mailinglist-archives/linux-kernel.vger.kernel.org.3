@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA474F44CE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 524B44F4599
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384335AbiDEPOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
+        id S1386005AbiDEPP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346652AbiDEJpT (ORCPT
+        with ESMTP id S1346693AbiDEJpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:45:19 -0400
+        Tue, 5 Apr 2022 05:45:21 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1C3DAFF1
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 02:31:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954D736686;
+        Tue,  5 Apr 2022 02:31:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4F8F0B81CB9
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:31:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0D97C385A0;
-        Tue,  5 Apr 2022 09:31:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 49783B81C6E;
+        Tue,  5 Apr 2022 09:31:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46064C385A4;
+        Tue,  5 Apr 2022 09:31:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649151071;
-        bh=6MwsuXDRjEq94GOgLMbEvcC+juAuLqlZNLDbjEN5PaA=;
+        s=k20201202; t=1649151080;
+        bh=wy56N3GzvYwz3j65YfFa+VXSzdPu9MSFvDzmV75JFcI=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=RWsdilXUL4D6CQUAY2ovCLLU77VJ/YRXtyI9C7ydSH4Q2uQych47dCUTcGFCmCnhS
-         WFWeADaoppamZr8C9YR6NSwb7UDd4qtdWGVV/Fz3d0inN7WNtLWHesHucOMMiD7gnR
-         cr++Hwki9rM2P1xDENAIMMEkFDf6KkVcSKCjhO/tIsBVDV7mxhQzj2vlIqKcmb2PrK
-         RPFlLlt47zb/jgNWuse1VYLRVdA9iOjtY5Y2pJpVy2d2lFqo2NRPCeBQD2EJWiXzgW
-         tf3HnPqB7ffFHtJQVMxBZmpX+A+9ADd0HbUFZa21JhuqOHB8IXl3H2QESPHNRKXAM6
-         VrfNOfn0BQjLA==
+        b=Uw9NTNC//zeTxqHZTEt4wLakcW6Vca5oWrRklfwR41ipRkQD1LKGG7M4UAp02aGd3
+         cGdIRa5b6cTKewezf1I9Y0medT9WnPanu8PiTQrk/VtC8ATTFt2pgz4CKGS+gmCrxM
+         Csd12UL4VZTJELkoUiw6KDb4RA7pg8OBIRMN9nRmS/3H8yytd6dRUyFxSqtYL9gWCo
+         h54HRHwAW7L/Pyb3SY1v50Ct+V2TteZDEZbbTQOaIGpOT3HadOvZHRQ+N7N/3yvG8B
+         lGDalUeSuET+N3cxZfsnuSZyLtEc4eG6tT9Vzy6iGmDDrONkzbSDC/FgOL01D8Pz6f
+         2NDkk0PylUgrw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>, steve@sk2.org,
-        support.opensource@diasemi.com
-Cc:     patches@opensource.cirrus.com, wsa@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220325171904.1223539-1-steve@sk2.org>
-References: <20220325171904.1223539-1-steve@sk2.org>
-Subject: Re: [PATCH] ASoC: da7218: use i2c_match_id and simple i2c probe
-Message-Id: <164915106951.276574.12214473275004613648.b4-ty@kernel.org>
-Date:   Tue, 05 Apr 2022 10:31:09 +0100
+To:     xiam0nd.tong@gmail.com, oder_chiou@realtek.com,
+        lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz
+Cc:     derek.fang@realtek.com, stable@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220327081002.12684-1-xiam0nd.tong@gmail.com>
+References: <20220327081002.12684-1-xiam0nd.tong@gmail.com>
+Subject: Re: [PATCH] codecs: rt5682: fix an incorrect NULL check on list iterator
+Message-Id: <164915107801.276574.16249779388452959492.b4-ty@kernel.org>
+Date:   Tue, 05 Apr 2022 10:31:18 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,13 +55,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 25 Mar 2022 18:19:04 +0100, Stephen Kitt wrote:
-> As part of the ongoing i2c transition to the simple probe
-> ("probe_new"), this patch uses i2c_match_id to retrieve the
-> driver_data for the probed device. The id parameter is thus no longer
-> necessary and the simple probe can be used instead.
+On Sun, 27 Mar 2022 16:10:02 +0800, Xiaomeng Tong wrote:
+> The bug is here:
+> 	if (!dai) {
 > 
-> This patch follows the model set by da7218_of_get_id().
+> The list iterator value 'dai' will *always* be set and non-NULL
+> by for_each_component_dais(), so it is incorrect to assume that
+> the iterator value will be NULL if the list is empty or no element
+> is found (In fact, it will be a bogus pointer to an invalid struct
+> object containing the HEAD). Otherwise it will bypass the check
+> 'if (!dai) {' (never call dev_err() and never return -ENODEV;)
+> and lead to invalid memory access lately when calling
+> 'rt5682_set_bclk1_ratio(dai, factor);'.
 > 
 > [...]
 
@@ -71,8 +76,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: da7218: use i2c_match_id and simple i2c probe
-      commit: 5e9058ea2bc6e73aeb54b585af38d043490a8509
+[1/1] codecs: rt5682: fix an incorrect NULL check on list iterator
+      commit: c8618d65007ba68d7891130642d73e89372101e8
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

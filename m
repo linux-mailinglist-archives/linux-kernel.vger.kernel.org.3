@@ -2,72 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED60F4F4923
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8055D4F4ECC
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391007AbiDEWEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39908 "EHLO
+        id S242528AbiDFAhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457699AbiDEQgR (ORCPT
+        with ESMTP id S1457741AbiDEQhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:36:17 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCB868FA4
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:34:18 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id c4so12017966qtx.1
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 09:34:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=I/7fitWwUYRa/nqxsZSRCzVOnNeUu3PD11UtZsLnRJ8=;
-        b=eXZM6SKAlG+lAu6DXMz0sNq8+3x6aYl++T7wY9L9wjz1bsH5phqCK2DQ4KhyhsdbTR
-         xoOG6pNZxAAjGVj2wo6ipFZB0UDbtux/XY5aS40SzMsbtNyGKFy4Wf+RnWANBa45OBkj
-         M411he/1j6Q99+Zg8Bo6kKTVHrGLysaisisuWhVLff4EtpzxPjSj7C1hSP9lQylHyXyT
-         DtSrwhn4uFKCOjB76Lf3K40r+zykMnDW4OhUp/f5f6Y30y5uGnr8W3JNmYCapfttjzWV
-         msg7Df5Apq1xQ74Ut0MACShwSxzHqO1Eh3v6bmvNLtpzE8NCIXdnR7tpwrHCX5rCtoY0
-         4guA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=I/7fitWwUYRa/nqxsZSRCzVOnNeUu3PD11UtZsLnRJ8=;
-        b=eI8g8AVKpubwrciJLuuMi8hlb6YnxtHWNZqfDun95cvneCbEpPxv1A76fB1bwZrmbe
-         O9MmCK70/jerR34JVDlhvEHE9C60GuPLIrIYVIlWpeTkEmsYUWBqiAbrDbb3kiApWTzU
-         DexCYQ4IJuhBpJ6kK2PJk9Gk/AKlvav1RPsW5ViML0uOV0fKaQKwqN4y3MX4MiH8l5PA
-         yKvOHkBzoG1MCX5qvrbNdUG7RGhscVSIyyvVELGtCdCfib2JsEeWifjrKXaXYQ1QiCnl
-         MkDGk3k2EaW8V0avi3KyALBN+X7cctXqKCiYQP4WOmJ/McM0x+LWrqCbkBpWD0Oau2A8
-         1h/g==
-X-Gm-Message-State: AOAM532+R1Q1+KE/Bct5hnBQsprILpCU7UtGwld1bjs3+wuyl8MEy5HB
-        QuWE5iQtnpNIFp4RWLfXUpU7WA==
-X-Google-Smtp-Source: ABdhPJxAZNT5a4c4cN4qPiLdupD1Ba4oT6l2c+SQFCUCdQYqO3W6EIwMWe+bc2JiS3wplzw5gW1qhw==
-X-Received: by 2002:a05:620a:4256:b0:67e:87a1:ffdd with SMTP id w22-20020a05620a425600b0067e87a1ffddmr2715567qko.647.1649176457567;
-        Tue, 05 Apr 2022 09:34:17 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id w1-20020ac857c1000000b002e1e899badesm10552149qta.72.2022.04.05.09.34.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 09:34:17 -0700 (PDT)
-Message-ID: <9c2279c2be98162ef5e986546ef3f680570a2cfe.camel@ndufresne.ca>
-Subject: Re: [PATCH] media: Add P010 video format
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     mchehab@kernel.org, hverkuil@xs4all.nl,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jernej.skrabec@gmail.com, p.zabel@pengutronix.de,
-        kernel@collabora.com
-Date:   Tue, 05 Apr 2022 12:34:16 -0400
-In-Reply-To: <YktNur601fjyCt9i@eze-laptop>
-References: <20220404090116.353034-1-benjamin.gaignard@collabora.com>
-         <YktNur601fjyCt9i@eze-laptop>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
+        Tue, 5 Apr 2022 12:37:41 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D420D0804
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:35:42 -0700 (PDT)
+Date:   Tue, 5 Apr 2022 09:35:34 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1649176540;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oZ9kiXxzTKEJjU33Jcbxu+aPRX7HK5Opx+ZIkgUc6mI=;
+        b=ngs/04UO42BsXVwI5+s5lF20T8mq4FKb/ZIy24q2LGXqGnhCxLfop0TcHmuxiEFpObrnjU
+        tziVsGiBh0Pm99vOJmrweFWzm2QQpQOCxrKeHE+sijVbzIiKCn6NqPdzcRkx5UqGPQ3GHw
+        qLIg5Z5SZQHU2WiWHBFgGfTMySp922g=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Hillf Danton <hdanton@sina.com>, MM <linux-mm@kvack.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Yu Zhao <yuzhao@google.com>,
+        David Hildenbrand <david@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC] mm/vmscan: add periodic slab shrinker
+Message-ID: <Ykxv1j9dxlz1BS5N@carbon.dhcp.thefacebook.com>
+References: <20220402072103.5140-1-hdanton@sina.com>
+ <20220403005618.5263-1-hdanton@sina.com>
+ <20220404010948.GV1609613@dread.disaster.area>
+ <YktCKVbChtC+YjOk@carbon.dhcp.thefacebook.com>
+ <20220405051710.GW1609613@dread.disaster.area>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220405051710.GW1609613@dread.disaster.area>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,214 +58,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le lundi 04 avril 2022 =C3=A0 16:57 -0300, Ezequiel Garcia a =C3=A9crit=C2=
-=A0:
-> On Mon, Apr 04, 2022 at 11:01:16AM +0200, Benjamin Gaignard wrote:
-> > P010 is a YUV format with 10-bits per pixel with interleaved UV.
-> >=20
-> > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> > Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
->=20
-> Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
->=20
-> > ---
-> > Note that P010 is already known in GStreamer, only the mapping with
-> > v4l2 pixel format is missing.
-> >=20
-> > This patch has been acked in this series but never merged:
-> > https://patchwork.kernel.org/project/linux-rockchip/patch/2021061813152=
-6.566762-5-benjamin.gaignard@collabora.com/
-> > After rebased it on v5.18-rc1, resend in standalone mode.
-> >=20
-> >  .../media/v4l/pixfmt-yuv-planar.rst           | 76 +++++++++++++++++++
-> >  drivers/media/v4l2-core/v4l2-common.c         |  1 +
-> >  drivers/media/v4l2-core/v4l2-ioctl.c          |  1 +
-> >  include/uapi/linux/videodev2.h                |  1 +
-> >  4 files changed, 79 insertions(+)
-> >=20
-> > diff --git a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rs=
-t b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> > index 8dff5906639b..6d65c8ac44f0 100644
-> > --- a/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> > +++ b/Documentation/userspace-api/media/v4l/pixfmt-yuv-planar.rst
-> > @@ -102,6 +102,13 @@ All components are stored with the same number of =
-bits per component.
-> >        - 64x32 tiles
-> > =20
-> >          Horizontal Z order
-> > +    * - V4L2_PIX_FMT_P010
-> > +      - 'P010'
-> > +      - 16
-> > +      - 4:2:0
-> > +      - Cb, Cr
-> > +      - No
-> > +      - Linear
-> >      * - V4L2_PIX_FMT_NV12MT_16X16
-> >        - 'VM12'
-> >        - 8
-> > @@ -171,6 +178,7 @@ horizontally.
-> >  .. _V4L2-PIX-FMT-NV21:
-> >  .. _V4L2-PIX-FMT-NV12M:
-> >  .. _V4L2-PIX-FMT-NV21M:
-> > +.. _V4L2-PIX-FMT-P010:
-> > =20
-> >  NV12, NV21, NV12M and NV21M
-> >  ---------------------------
-> > @@ -519,6 +527,74 @@ number of lines as the luma plane.
-> >        - Cb\ :sub:`33`
-> >        - Cr\ :sub:`33`
-> > =20
-> > +.. _V4L2_PIX_FMT_P010:
-> > +
-> > +P010
-> > +----
-> > +
-> > +The number of bytes in one luminance row must be divisible by 16,
-> > +which means there will be padded 0 in the right edge when necessary.
+On Tue, Apr 05, 2022 at 03:17:10PM +1000, Dave Chinner wrote:
+> On Mon, Apr 04, 2022 at 12:08:25PM -0700, Roman Gushchin wrote:
+> > On Mon, Apr 04, 2022 at 11:09:48AM +1000, Dave Chinner wrote:
+> > > i.e. the amount of work that shrinkers need to do in a periodic scan
+> > > is largerly determined by the rate of shrinkable cache memory usage
+> > > growth rather than memory reclaim priority as it is now. Hence there
+> > > needs to be different high level "shrinker needs to do X amount of
+> > > work" calculation for periodic reclaim than there is now.
+> > > 
+> > > e.g. we calculate a rolling average of the size of the cache and a
+> > > rate of change over a series of polling operations (i.e. calling
+> > > ->scan_count) and then when sustained growth is detected we start
+> > > trying to shrink the cache to limit the rate of growth of the cache.
+> > > 
+> > > If the cache keeps growing, then it's objects are being repeatedly
+> > > referenced and it *should* keep growing. If it's one-off objects
+> > > that are causing the growth of the cache and so objects are being
+> > > reclaimed by the shrinker, then matching the periodic shrink scan to
+> > > the growth rate will substantially reduce the rate of growth of that
+> > > cache.
+> > 
+> > A clever idea!
+> > 
+> > It seems like we need to add some stats to the list_lru API or maybe to
+> > the shrinker API (and let list_lru to use it).
+> > E.g. total/scanned/reclaimed, maybe with a time decay
+> > 
+> > I'm also thinking about:
+> > 1) adding a sysfs/debugfs interface to expose shrinkers current size and
+> >    statistics, with an ability to call into the reclaim manually.
+> 
+> I've thought about it, too, and can see where it could be useful.
+> However, when I consider the list_lru memcg integration, I suspect
+> it becomes a "can't see the forest for the trees" problem. We're
+> going to end up with millions of sysfs objects with no obvious way
+> to navigate, iterate or search them if we just take the naive "sysfs
+> object + stats per list_lru instance" approach.
 
-So far in GStreamer we have met two form of P010. One has the short stored =
-in
-little endian, and the other in big endian. Its probably visible in the tab=
-le
-here (sorry can't read tables from text), but it could be nice to put that =
-in
-words if not part of the format name.
+Ok, I'll try to master something and share patches. I assume it would be useful
+to have statistics and be able to trigger a reclaim of a particular shrinker
+without creating a real memory pressure. I anticipate many interesting
+findings in the implementation of individual shrinkers...
 
+> 
+> Also, if you look at commit 6a6b7b77cc0f mm: ("list_lru: transpose the
+> array of per-node per-memcg lru lists") that went into 5.18-rc1,
+> you'll get an idea of the amount of memory overhead just tracking
+> the list_lru x memcg infrastructure consumes at scale:
+> 
+>     I had done a easy test to show the optimization.  I create 10k memory
+>     cgroups and mount 10k filesystems in the systems.  We use free command to
+>     show how many memory does the systems comsumes after this operation (There
+>     are 2 numa nodes in the system).
+> 
+>             +-----------------------+------------------------+
+>             |      condition        |   memory consumption   |
+>             +-----------------------+------------------------+
+>             | without this patchset |        24464 MB        |
+>             +-----------------------+------------------------+
+>             |     after patch 1     |        21957 MB        | <--------+
+>             +-----------------------+------------------------+          |
+>             |     after patch 10    |         6895 MB        |          |
+>             +-----------------------+------------------------+          |
+>             |     after patch 12    |         4367 MB        |          |
+>             +-----------------------+------------------------+          |
+>                                                                         |
+>             The more the number of nodes, the more obvious the effect---+
 
-Microfost seems to only define "little endian" variation.
+Yes, I know, I've reviewed this patchset. However, 10k cgroups _and_ 10k
+mounts look a bit artificial. It's hard to believe that there are 100M
+LRUs containing hot objects. If most of them are cold, it's actually
+a question how to efficiently reclaim them and free the wasted memory.
 
-https://docs.microsoft.com/en-us/windows/win32/medfound/10-bit-and-16-bit-y=
-uv-video-formats
+> 
+> If we now add sysfs objects and stats arrays to each of the
+> list_lrus that we initiate even now on 5.18-rc1, we're going to
+> massively blow out the memory footprint again.
 
-> > +
-> > +.. raw:: latex
-> > +
-> > +    \begingroup
-> > +    \small
-> > +    \setlength{\tabcolsep}{2pt}
-> > +
-> > +.. tabularcolumns:: |p{2.6cm}|p{0.70cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|=
-p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.2=
-2cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|
-> > +
-> > +.. flat-table:: P010 16 Bits per component
-> > +    :header-rows:  2
-> > +    :stub-columns: 0
-> > +
-> > +    * - Identifier
-> > +      - Code
-> > +      - :cspan:`7` Byte 0 in memory
-> > +
-> > +      - :cspan:`7` Byte 1
-> > +    * -
-> > +      -
-> > +      - 7
-> > +      - 6
-> > +      - 5
-> > +      - 4
-> > +      - 3
-> > +      - 2
-> > +      - 1
-> > +      - 0
-> > +
-> > +      - 7
-> > +      - 6
-> > +      - 5
-> > +      - 4
-> > +      - 3
-> > +      - 2
-> > +      - 1
-> > +      - 0
-> > +    * - ``V4L2_PIX_FMT_P010``
-> > +      - 'P010'
-> > +
-> > +      - Y\ :sub:`9`
-> > +      - Y\ :sub:`8`
-> > +      - Y\ :sub:`7`
-> > +      - Y\ :sub:`6`
-> > +      - Y\ :sub:`5`
-> > +      - Y\ :sub:`4`
-> > +      - Y\ :sub:`3`
-> > +      - Y\ :sub:`2`
-> > +
-> > +      - Y\ :sub:`1`
-> > +      - Y\ :sub:`0`
-> > +      - 0
-> > +      - 0
-> > +      - 0
-> > +      - 0
-> > +      - 0
-> > +      - 0
-> > +
-> > +.. raw:: latex
-> > +
-> > +    \endgroup
-> > =20
-> >  Fully Planar YUV Formats
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-> > diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2=
--core/v4l2-common.c
-> > index df34b2a283bc..1e38ad8906a2 100644
-> > --- a/drivers/media/v4l2-core/v4l2-common.c
-> > +++ b/drivers/media/v4l2-core/v4l2-common.c
-> > @@ -266,6 +266,7 @@ const struct v4l2_format_info *v4l2_format_info(u32=
- format)
-> >  		{ .format =3D V4L2_PIX_FMT_NV61,    .pixel_enc =3D V4L2_PIXEL_ENC_YU=
-V, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 1, 2, 0, 0 }, .hdiv =
-=3D 2, .vdiv =3D 1 },
-> >  		{ .format =3D V4L2_PIX_FMT_NV24,    .pixel_enc =3D V4L2_PIXEL_ENC_YU=
-V, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 1, 2, 0, 0 }, .hdiv =
-=3D 1, .vdiv =3D 1 },
-> >  		{ .format =3D V4L2_PIX_FMT_NV42,    .pixel_enc =3D V4L2_PIXEL_ENC_YU=
-V, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 1, 2, 0, 0 }, .hdiv =
-=3D 1, .vdiv =3D 1 },
-> > +		{ .format =3D V4L2_PIX_FMT_P010,    .pixel_enc =3D V4L2_PIXEL_ENC_YU=
-V, .mem_planes =3D 1, .comp_planes =3D 2, .bpp =3D { 2, 2, 0, 0 }, .hdiv =
-=3D 2, .vdiv =3D 1 },
-> > =20
-> >  		{ .format =3D V4L2_PIX_FMT_YUV410,  .pixel_enc =3D V4L2_PIXEL_ENC_YU=
-V, .mem_planes =3D 1, .comp_planes =3D 3, .bpp =3D { 1, 1, 1, 0 }, .hdiv =
-=3D 4, .vdiv =3D 4 },
-> >  		{ .format =3D V4L2_PIX_FMT_YVU410,  .pixel_enc =3D V4L2_PIXEL_ENC_YU=
-V, .mem_planes =3D 1, .comp_planes =3D 3, .bpp =3D { 1, 1, 1, 0 }, .hdiv =
-=3D 4, .vdiv =3D 4 },
-> > diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-=
-core/v4l2-ioctl.c
-> > index 96e307fe3aab..e14d7e1a038e 100644
-> > --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> > +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> > @@ -1301,6 +1301,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc =
-*fmt)
-> >  	case V4L2_PIX_FMT_NV61:		descr =3D "Y/CrCb 4:2:2"; break;
-> >  	case V4L2_PIX_FMT_NV24:		descr =3D "Y/CbCr 4:4:4"; break;
-> >  	case V4L2_PIX_FMT_NV42:		descr =3D "Y/CrCb 4:4:4"; break;
-> > +	case V4L2_PIX_FMT_P010:		descr =3D "10-bit Y/CrCb 4:2:0"; break;
-> >  	case V4L2_PIX_FMT_NV12_4L4:	descr =3D "Y/CbCr 4:2:0 (4x4 Linear)"; br=
-eak;
-> >  	case V4L2_PIX_FMT_NV12_16L16:	descr =3D "Y/CbCr 4:2:0 (16x16 Linear)"=
-; break;
-> >  	case V4L2_PIX_FMT_NV12_32L32:   descr =3D "Y/CbCr 4:2:0 (32x32 Linear=
-)"; break;
-> > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videod=
-ev2.h
-> > index 4c09969e7112..2e451c454db3 100644
-> > --- a/include/uapi/linux/videodev2.h
-> > +++ b/include/uapi/linux/videodev2.h
-> > @@ -601,6 +601,7 @@ struct v4l2_pix_format {
-> >  #define V4L2_PIX_FMT_NV61    v4l2_fourcc('N', 'V', '6', '1') /* 16  Y/=
-CrCb 4:2:2  */
-> >  #define V4L2_PIX_FMT_NV24    v4l2_fourcc('N', 'V', '2', '4') /* 24  Y/=
-CbCr 4:4:4  */
-> >  #define V4L2_PIX_FMT_NV42    v4l2_fourcc('N', 'V', '4', '2') /* 24  Y/=
-CrCb 4:4:4  */
-> > +#define V4L2_PIX_FMT_P010    v4l2_fourcc('P', '0', '1', '0') /* 15  Y/=
-CbCr 4:2:0 10-bit per pixel*/
-> > =20
-> >  /* two non contiguous planes - one Y, one Cr + Cb interleaved  */
-> >  #define V4L2_PIX_FMT_NV12M   v4l2_fourcc('N', 'M', '1', '2') /* 12  Y/=
-CbCr 4:2:0  */
-> > --=20
-> > 2.32.0
-> >=20
+sysfs can be a config option, it doesn't have to be enabled in prod.
+But I agree, because of memory constraints we're very limited in the size
+of statistics which can be used for reclaim decisions.
 
+> 
+> So, nice idea, but I'm not sure we can make it useful and not
+> consume huge amounts of memory....
+> 
+> What might be more useful is a way of getting the kernel to tell us
+> what the, say, 20 biggest slab caches are in the system and then
+> provide a way to selectively shrink them. We generally don't really
+> care about tiny caches, just the ones consuming all the memory. This
+> isn't my idea - Kent has been looking at this because of how useless
+> OOM kill output is for debugging slab cache based OOM triggers. See
+> this branch for an example:
+> 
+> https://evilpiepirate.org/git/bcachefs.git/log/?h=shrinker_to_text
+> 
+> Even a sysfs entry that you echo a number into and it returns
+> the "top N" largest LRU lists. echo -1 into it and it returns every
+> single one if you want all the information.
+> 
+> The whole "one sysfs file, one value" architecture falls completely
+> apart when we might have to indexing *millions* of internal
+> structures with many parameters per structure...
+
+It's a good point, I need to think what can we do here.
+
+Actually, if it's so hard and inefficient for a sysfs interface,
+it also means it's inefficient for the reclaim path. So if we have
+an ability to quickly find beefy LRU lists worth shrinking, it might
+improve the reclaim efficiency too.
+
+Actually, thinking of reducing the memory footprint, it would be great
+to combine LRU's belonging to different superblocks (of the same type).
+Pagecache analogy: we have an LRU for all pagecache pages, it's not
+per-file or per-sb. Not sure how easy/viable it is.
+
+> 
+> > 2) formalizing a reference bit/counter API on the shrinkers level, so that
+> >    shrinker users can explicitly mark objects (re)-"activation".
+> 
+> Not 100% certain what you are refering to here - something to do
+> with active object rotation? Or an active/inactive list split with period
+> demotion like we have for the page LRUs? Or workingset refault
+> detection? Can you explain in more detail?
+
+It's a vague thinking at this point, but you got me right, I was thinking about
+all the listed ideas above. In general I'm trying to understand whether
+the existing model is sufficient for a more or less effective management
+of hot/cold objects and if we can improve it borrowing some ideas from
+the page reclaim code.
+Shadow entries would be great but likely not possible because of the memory
+footprint.
+
+> 
+> > 3) _maybe_ we need to change the shrinkers API from a number of objects to
+> >    bytes, so that releasing a small number of large objects can compete with
+> >    a releasing on many small objects. But I'm not sure.
+> 
+> I think I suggested something similar a long time ago. We have
+> shrinkers that track things other than slab objects. e.g. IIRC the
+> ttm graphics allocator shrinker tracks sets of pages and frees
+> pages, not slab objects. The XFS buffer cache tracks variable sized
+> objects, from 512 bytes to 64KB in length, so the amount of memory
+> it frees is variable even if the number of handles it scans and
+> reclaims is fixed and consistent. Other subsystems have different
+> "non object" shrinker needs as well.
+
+It's true for many objects, because it's not unusual for kernel objects
+to have attached kmallocs or pin other objects in the memory. Unlikely
+we can be 100% accurate, but we might improve the "smoothness" of the
+reclaim process.
+
+> 
+> The long and short of it is that two shrinkers might have the same
+> object count, but one might free 10x the amount of memory than the
+> other for the same amount of shrinking work. Being able to focus
+> reclaim work on caches that can free a lot of memory much more
+> quickly would be a great idea.
+
+Right. It's also about "bytes freed/seeks" ratio. Why would we reclaim
+expensive small objects if there are big and cheap.
+
+> 
+> It also means that a shrinker that scans a fragmented slab can keep
+> going until a set number of slab pages have been freed, rather than
+> a set number of slab objects. We can push reclaim of fragmented slab
+> caches much harder when necessary if we are reclaiming by freed byte
+> counts...
+
+I thought about it, but it's tricky. If all slabs are almost full (fragmentation
+is low), we want to shrink aggressively, otherwise we end up allocating
+more slabs and fragmenting more memory. If slabs are almost empty (fragmentation
+is very high), we also want to shrink more aggressively with a hope to release
+physical memory, as you said. But setting a target in pages is dangerous: slab caches
+can be merged or slab pages can be pinned by objects belonging to a different
+memory cgroup, so it might be not possible to reclaim pages no matter how hard
+we're trying.
+
+> 
+> So, yeah, byte-count based reclaim definitely has merit compared to
+> what we currently do. It's more generic and more flexible...
+
+Great, I'm glad we're on the same page here.
+
+Thank you for the answers, I think it's a really useful discussion!
+
+Roman

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C23474F4821
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 144224F43F2
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238982AbiDEV0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33932 "EHLO
+        id S1389672AbiDENww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352622AbiDEKEs (ORCPT
+        with ESMTP id S1347516AbiDEJ1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:04:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F728BB90C;
-        Tue,  5 Apr 2022 02:53:32 -0700 (PDT)
+        Tue, 5 Apr 2022 05:27:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272B2DF49A;
+        Tue,  5 Apr 2022 02:15:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AEA161753;
-        Tue,  5 Apr 2022 09:53:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A63FC385A7;
-        Tue,  5 Apr 2022 09:53:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2034B81B62;
+        Tue,  5 Apr 2022 09:15:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EADF6C385A0;
+        Tue,  5 Apr 2022 09:15:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152411;
-        bh=jpH1FFqHwA9Rcvx435BbU8+Ijry2x5lxT/g9E4on9Sg=;
+        s=korg; t=1649150130;
+        bh=jl6Snp2v0QTf7bMzCJgP0Dv9BzB/beZVOt0Nxq39c78=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cJHXco2KhevIGCYiGI678m2ahclYGaRLGohEF9q+zhFekWNU//6WVn8ATkDpCJjo0
-         DEniOQOu9Va7+cUOy5516yL0viLhrVIqMU3KulwSUYsSSb0fdKMTYc2faboGOWpyVE
-         hRkeZw3peyCePw0XiS0kpKp7bH1qcPTi6+uCpSrA=
+        b=sQbpsBnZ8BhjwAkaFseItpMRg1DuoLfArKtt4YhEkoyQl7QGU0NTyzSkipvGyPezq
+         KT0Cn1NLjRjQ8OptCr4RlaszAlywdMEKVwkMp9cSuyl3LcUsFEEeK4K/gY65nwMsJw
+         7J7HHIwx2CSeBl/g0oX+NKlGyK2/SxSoDsoLGw44=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 767/913] mmc: host: Return an error when ->enable_sdio_irq() ops is missing
+        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: [PATCH 5.16 0916/1017] ubifs: rename_whiteout: correct old_dir size computing
 Date:   Tue,  5 Apr 2022 09:30:29 +0200
-Message-Id: <20220405070402.823510866@linuxfoundation.org>
+Message-Id: <20220405070421.410357296@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,60 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ulf Hansson <ulf.hansson@linaro.org>
+From: Baokun Li <libaokun1@huawei.com>
 
-[ Upstream commit d6c9219ca1139b74541b2a98cee47a3426d754a9 ]
+commit 705757274599e2e064dd3054aabc74e8af31a095 upstream.
 
-Even if the current WARN() notifies the user that something is severely
-wrong, we can still end up in a PANIC() when trying to invoke the missing
-->enable_sdio_irq() ops. Therefore, let's also return an error code and
-prevent the host from being added.
+When renaming the whiteout file, the old whiteout file is not deleted.
+Therefore, we add the old dentry size to the old dir like XFS.
+Otherwise, an error may be reported due to `fscki->calc_sz != fscki->size`
+in check_indes.
 
-While at it, move the code into a separate function to prepare for
-subsequent changes and for further host caps validations.
-
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Link: https://lore.kernel.org/r/20220303165142.129745-1-ulf.hansson@linaro.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 9e0a1fff8db56ea ("ubifs: Implement RENAME_WHITEOUT")
+Reported-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mmc/core/host.c | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ fs/ubifs/dir.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
-index cf140f4ec864..d739e2b631fe 100644
---- a/drivers/mmc/core/host.c
-+++ b/drivers/mmc/core/host.c
-@@ -588,6 +588,16 @@ struct mmc_host *mmc_alloc_host(int extra, struct device *dev)
- 
- EXPORT_SYMBOL(mmc_alloc_host);
- 
-+static int mmc_validate_host_caps(struct mmc_host *host)
-+{
-+	if (host->caps & MMC_CAP_SDIO_IRQ && !host->ops->enable_sdio_irq) {
-+		dev_warn(host->parent, "missing ->enable_sdio_irq() ops\n");
-+		return -EINVAL;
-+	}
+--- a/fs/ubifs/dir.c
++++ b/fs/ubifs/dir.c
+@@ -1402,6 +1402,9 @@ static int do_rename(struct inode *old_d
+ 			iput(whiteout);
+ 			goto out_release;
+ 		}
 +
-+	return 0;
-+}
-+
- /**
-  *	mmc_add_host - initialise host hardware
-  *	@host: mmc host
-@@ -600,8 +610,9 @@ int mmc_add_host(struct mmc_host *host)
- {
- 	int err;
++		/* Add the old_dentry size to the old_dir size. */
++		old_sz -= CALC_DENT_SIZE(fname_len(&old_nm));
+ 	}
  
--	WARN_ON((host->caps & MMC_CAP_SDIO_IRQ) &&
--		!host->ops->enable_sdio_irq);
-+	err = mmc_validate_host_caps(host);
-+	if (err)
-+		return err;
- 
- 	err = device_add(&host->class_dev);
- 	if (err)
--- 
-2.34.1
-
+ 	lock_4_inodes(old_dir, new_dir, new_inode, whiteout);
 
 

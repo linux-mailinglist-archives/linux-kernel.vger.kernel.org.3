@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F5D4F45F4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DECC14F4754
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379015AbiDEMw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38310 "EHLO
+        id S1344548AbiDEVIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245337AbiDEJLq (ORCPT
+        with ESMTP id S1354560AbiDEKOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:11:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BD32CCBB;
-        Tue,  5 Apr 2022 02:00:05 -0700 (PDT)
+        Tue, 5 Apr 2022 06:14:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81486B0BA;
+        Tue,  5 Apr 2022 03:00:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 92976B81A22;
-        Tue,  5 Apr 2022 09:00:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6623C385A0;
-        Tue,  5 Apr 2022 09:00:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DB7261676;
+        Tue,  5 Apr 2022 10:00:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B710C385A1;
+        Tue,  5 Apr 2022 10:00:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149202;
-        bh=X0rTzsBGeb+2G6pQhnVePEmfjAUos6BVgAr1tfd3tDY=;
+        s=korg; t=1649152852;
+        bh=YcAXeTWc0J/20QqSUfzXau2aqRTILZulL3uxemPHlIs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oXQbq0ySmEJZYBJIwaGB6+hrILvvZuK1gx8JDZhngM1TrZrmgy6s5OOe6qLn36Ex0
-         Ela42VT3a9TwTHX+uMHHaVRlWsHSjcuEp0Pt2XI281wpRCs7rhUyHCI5YvL87ARJwc
-         iYP7XcjnE5X2O9cD1c4Kj8CSPUgroYhD1ZVG4+Qw=
+        b=Ai+UefR7GpFoBcZ+zfqAyXg4RAM7myWFGyMRQ4JmcOQJNmyTG5xJDE6Jm1d3Q6Xvf
+         y/nkioSKiZNZx9UaoXY07yMam40Fkl3Rsbil+Umbs0kOOIGyRxT1lh9zsCyntZwv15
+         VB57d9G59QsaB+sR9fDJSrfLlDrik0rYDq6iIQ1Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>,
-        Xin Xiong <xiongx18@fudan.edu.cn>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        stable@vger.kernel.org,
+        Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0594/1017] mtd: rawnand: atmel: fix refcount issue in atmel_nand_controller_init
+Subject: [PATCH 5.10 013/599] gpio: Revert regression in sysfs-gpio (gpiolib.c)
 Date:   Tue,  5 Apr 2022 09:25:07 +0200
-Message-Id: <20220405070411.909567431@linuxfoundation.org>
+Message-Id: <20220405070259.211158709@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,73 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Xiong <xiongx18@fudan.edu.cn>
+From: Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>
 
-[ Upstream commit fecbd4a317c95d73c849648c406bcf1b6a0ec1cf ]
+[ Upstream commit fc328a7d1fcce263db0b046917a66f3aa6e68719 ]
 
-The reference counting issue happens in several error handling paths
-on a refcounted object "nc->dmac". In these paths, the function simply
-returns the error code, forgetting to balance the reference count of
-"nc->dmac", increased earlier by dma_request_channel(), which may
-cause refcount leaks.
+Some GPIO lines have stopped working after the patch
+commit 2ab73c6d8323f ("gpio: Support GPIO controllers without pin-ranges")
 
-Fix it by decrementing the refcount of specific object in those error
-paths.
+And this has supposedly been fixed in the following patches
+commit 89ad556b7f96a ("gpio: Avoid using pin ranges with !PINCTRL")
+commit 6dbbf84603961 ("gpiolib: Don't free if pin ranges are not defined")
 
-Fixes: f88fc122cc34 ("mtd: nand: Cleanup/rework the atmel_nand driver")
-Co-developed-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Co-developed-by: Xin Tan <tanxin.ctf@gmail.com>
-Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
-Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220304085330.3610-1-xiongx18@fudan.edu.cn
+But an erratic behavior where some GPIO lines work while others do not work
+has been introduced.
+
+This patch reverts those changes so that the sysfs-gpio interface works
+properly again.
+
+Signed-off-by: Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/nand/raw/atmel/nand-controller.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ drivers/gpio/gpiolib.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/drivers/mtd/nand/raw/atmel/nand-controller.c b/drivers/mtd/nand/raw/atmel/nand-controller.c
-index f3276ee9e4fe..ddd93bc38ea6 100644
---- a/drivers/mtd/nand/raw/atmel/nand-controller.c
-+++ b/drivers/mtd/nand/raw/atmel/nand-controller.c
-@@ -2060,13 +2060,15 @@ static int atmel_nand_controller_init(struct atmel_nand_controller *nc,
- 	nc->mck = of_clk_get(dev->parent->of_node, 0);
- 	if (IS_ERR(nc->mck)) {
- 		dev_err(dev, "Failed to retrieve MCK clk\n");
--		return PTR_ERR(nc->mck);
-+		ret = PTR_ERR(nc->mck);
-+		goto out_release_dma;
- 	}
- 
- 	np = of_parse_phandle(dev->parent->of_node, "atmel,smc", 0);
- 	if (!np) {
- 		dev_err(dev, "Missing or invalid atmel,smc property\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto out_release_dma;
- 	}
- 
- 	nc->smc = syscon_node_to_regmap(np);
-@@ -2074,10 +2076,16 @@ static int atmel_nand_controller_init(struct atmel_nand_controller *nc,
- 	if (IS_ERR(nc->smc)) {
- 		ret = PTR_ERR(nc->smc);
- 		dev_err(dev, "Could not get SMC regmap (err = %d)\n", ret);
--		return ret;
-+		goto out_release_dma;
- 	}
- 
- 	return 0;
-+
-+out_release_dma:
-+	if (nc->dmac)
-+		dma_release_channel(nc->dmac);
-+
-+	return ret;
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index 00526fdd7691..bbf34d84636d 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -1804,11 +1804,6 @@ static inline void gpiochip_irqchip_free_valid_mask(struct gpio_chip *gc)
+  */
+ int gpiochip_generic_request(struct gpio_chip *gc, unsigned offset)
+ {
+-#ifdef CONFIG_PINCTRL
+-	if (list_empty(&gc->gpiodev->pin_ranges))
+-		return 0;
+-#endif
+-
+ 	return pinctrl_gpio_request(gc->gpiodev->base + offset);
  }
- 
- static int
+ EXPORT_SYMBOL_GPL(gpiochip_generic_request);
+@@ -1820,11 +1815,6 @@ EXPORT_SYMBOL_GPL(gpiochip_generic_request);
+  */
+ void gpiochip_generic_free(struct gpio_chip *gc, unsigned offset)
+ {
+-#ifdef CONFIG_PINCTRL
+-	if (list_empty(&gc->gpiodev->pin_ranges))
+-		return;
+-#endif
+-
+ 	pinctrl_gpio_free(gc->gpiodev->base + offset);
+ }
+ EXPORT_SYMBOL_GPL(gpiochip_generic_free);
 -- 
 2.34.1
 

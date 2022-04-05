@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DA24F4308
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02CA14F407D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383399AbiDENad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
+        id S1377601AbiDEUEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345347AbiDEJW3 (ORCPT
+        with ESMTP id S1358038AbiDEK14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:22:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A0F47AE4;
-        Tue,  5 Apr 2022 02:10:38 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F1A694B3;
+        Tue,  5 Apr 2022 03:13:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DEF161527;
-        Tue,  5 Apr 2022 09:10:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FCE4C385A0;
-        Tue,  5 Apr 2022 09:10:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45159B81BC5;
+        Tue,  5 Apr 2022 10:13:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A90F3C385A1;
+        Tue,  5 Apr 2022 10:13:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149837;
-        bh=FwQBUKInjP4jnvxbqXA+7tsKrzdHs2KgsX0dQYJAh1Y=;
+        s=korg; t=1649153601;
+        bh=FcVAWg6Iu/UB8Zve+Ak/qOk+BWPewdVuO26u+6lF8xo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uBZX53MTpIwJ0bqRbcnr43MgQHs8bygVwgjJXLIK5sSb89rzi/Zq7nZGYHYEMHhuH
-         7k5B3Ol+msfWkOwW9LfjJA2F6GMp0xVVjrTwmt4nUYHi8edTYhw1egAuBv0737DFrE
-         /knp4++mCbQqedZyC2Wz/jGiNwYRjydc96GePiEQ=
+        b=VKSerCzGio99KKE6fCFO34bnPNrz0eFRmSnW4NRNmO1pxUGlGA/pmST1yh9z70kJk
+         6ZAMH/0E3/PalpOVFTuAEvUp+5VJrMYoV+cCGvpo2Y0cb8TqwI9AfIrQCOddjXKxk3
+         VffWSY3d8fsKvJ/+kdYIkE05+ngaUmt87VfNoAAU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.16 0859/1017] KVM: x86/mmu: Move "invalid" check out of kvm_tdp_mmu_get_root()
-Date:   Tue,  5 Apr 2022 09:29:32 +0200
-Message-Id: <20220405070419.732710256@linuxfoundation.org>
+        stable@vger.kernel.org, Fabiano Rosas <farosas@linux.ibm.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 279/599] KVM: PPC: Fix vmx/vsx mixup in mmio emulation
+Date:   Tue,  5 Apr 2022 09:29:33 +0200
+Message-Id: <20220405070307.138361351@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,70 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Fabiano Rosas <farosas@linux.ibm.com>
 
-commit 04dc4e6ce274fa729feda32aa957b27388a3870c upstream.
+[ Upstream commit b99234b918c6e36b9aa0a5b2981e86b6bd11f8e2 ]
 
-Move the check for an invalid root out of kvm_tdp_mmu_get_root() and into
-the one place it actually matters, tdp_mmu_next_root(), as the other user
-already has an implicit validity check.  A future bug fix will need to
-get references to invalid roots to honor mmu_notifier requests; there's
-no point in forcing what will be a common path to open code getting a
-reference to a root.
+The MMIO emulation code for vector instructions is duplicated between
+VSX and VMX. When emulating VMX we should check the VMX copy size
+instead of the VSX one.
 
-No functional change intended.
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20211215011557.399940-3-seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: acc9eb9305fe ("KVM: PPC: Reimplement LOAD_VMX/STORE_VMX instruction ...")
+Signed-off-by: Fabiano Rosas <farosas@linux.ibm.com>
+Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220125215655.1026224-3-farosas@linux.ibm.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/mmu/tdp_mmu.c |   12 ++++++++++--
- arch/x86/kvm/mmu/tdp_mmu.h |    3 ---
- 2 files changed, 10 insertions(+), 5 deletions(-)
+ arch/powerpc/kvm/powerpc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -121,9 +121,14 @@ static struct kvm_mmu_page *tdp_mmu_next
- 		next_root = list_first_or_null_rcu(&kvm->arch.tdp_mmu_roots,
- 						   typeof(*next_root), link);
- 
--	while (next_root && !kvm_tdp_mmu_get_root(kvm, next_root))
-+	while (next_root) {
-+		if (!next_root->role.invalid &&
-+		    kvm_tdp_mmu_get_root(kvm, next_root))
-+			break;
-+
- 		next_root = list_next_or_null_rcu(&kvm->arch.tdp_mmu_roots,
- 				&next_root->link, typeof(*next_root), link);
-+	}
- 
- 	rcu_read_unlock();
- 
-@@ -200,7 +205,10 @@ hpa_t kvm_tdp_mmu_get_vcpu_root_hpa(stru
- 
- 	role = page_role_for_level(vcpu, vcpu->arch.mmu->shadow_root_level);
- 
--	/* Check for an existing root before allocating a new one. */
-+	/*
-+	 * Check for an existing root before allocating a new one.  Note, the
-+	 * role check prevents consuming an invalid root.
-+	 */
- 	for_each_tdp_mmu_root(kvm, root, kvm_mmu_role_as_id(role)) {
- 		if (root->role.word == role.word &&
- 		    kvm_tdp_mmu_get_root(kvm, root))
---- a/arch/x86/kvm/mmu/tdp_mmu.h
-+++ b/arch/x86/kvm/mmu/tdp_mmu.h
-@@ -10,9 +10,6 @@ hpa_t kvm_tdp_mmu_get_vcpu_root_hpa(stru
- __must_check static inline bool kvm_tdp_mmu_get_root(struct kvm *kvm,
- 						     struct kvm_mmu_page *root)
+diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+index 543db9157f3b..ef8077a739b8 100644
+--- a/arch/powerpc/kvm/powerpc.c
++++ b/arch/powerpc/kvm/powerpc.c
+@@ -1500,7 +1500,7 @@ int kvmppc_handle_vmx_load(struct kvm_vcpu *vcpu,
  {
--	if (root->role.invalid)
--		return false;
--
- 	return refcount_inc_not_zero(&root->tdp_mmu_root_count);
- }
+ 	enum emulation_result emulated = EMULATE_DONE;
  
+-	if (vcpu->arch.mmio_vsx_copy_nums > 2)
++	if (vcpu->arch.mmio_vmx_copy_nums > 2)
+ 		return EMULATE_FAIL;
+ 
+ 	while (vcpu->arch.mmio_vmx_copy_nums) {
+@@ -1597,7 +1597,7 @@ int kvmppc_handle_vmx_store(struct kvm_vcpu *vcpu,
+ 	unsigned int index = rs & KVM_MMIO_REG_MASK;
+ 	enum emulation_result emulated = EMULATE_DONE;
+ 
+-	if (vcpu->arch.mmio_vsx_copy_nums > 2)
++	if (vcpu->arch.mmio_vmx_copy_nums > 2)
+ 		return EMULATE_FAIL;
+ 
+ 	vcpu->arch.io_gpr = rs;
+-- 
+2.34.1
+
 
 

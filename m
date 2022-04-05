@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 387DE4F4EED
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F073D4F4E12
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1583001AbiDEXut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43928 "EHLO
+        id S1587412AbiDFAJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349459AbiDEJtx (ORCPT
+        with ESMTP id S1356659AbiDEKYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6051D1004;
-        Tue,  5 Apr 2022 02:46:27 -0700 (PDT)
+        Tue, 5 Apr 2022 06:24:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1E0BF000;
+        Tue,  5 Apr 2022 03:08:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0B4F61680;
-        Tue,  5 Apr 2022 09:46:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05FB9C385A2;
-        Tue,  5 Apr 2022 09:46:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F91AB81C88;
+        Tue,  5 Apr 2022 10:08:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB1CCC385A1;
+        Tue,  5 Apr 2022 10:08:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151986;
-        bh=0UVw1YIHqiI61x9atIvc1XzjmQZco7kHz8d5msPmZN4=;
+        s=korg; t=1649153321;
+        bh=+62UOCrEQHJW3+mqmQw8Gx2IGV/ruOwHv2oXrxxSxqQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MpJ/eikWk/0kguYsDFk6NpAjyZ9DsBE4mUjy79TCHxXZWrMAIEuJA6dNom4xdqzCP
-         m02c4jLKbz9oqewlNXUvLPlx9MQE7hv+gbjCNCpL1MhlFwY3llpB+Tw381bTkfVE1U
-         UY4/scL9CY+673n0XNMfuytEzfEP8guU4TOGWSLI=
+        b=Ai0cHxiJVVQXvDIZGjLr+UnU0Z8TF5JY70YTlk7AqqcQ6J0YjWFFsQ/7kagW3hvlV
+         IMymiqKHys97HgYkuktz9j630+SBNGX9wn+najUTvH1qcpH4aoCGen7M5BIId43a5c
+         BSSJFB4/gXUN9zQwWyIb38Q0BRuSuVc4/9apuO04=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Taniya Das <tdas@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org, Zhiguo Niu <zhiguo.niu@unisoc.com>,
+        Jing Xia <jing.xia@unisoc.com>, Chao Yu <chao@kernel.org>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 612/913] clk: qcom: clk-rcg2: Update logic to calculate D value for RCG
-Date:   Tue,  5 Apr 2022 09:27:54 +0200
-Message-Id: <20220405070358.186115662@linuxfoundation.org>
+Subject: [PATCH 5.10 181/599] f2fs: fix to avoid potential deadlock
+Date:   Tue,  5 Apr 2022 09:27:55 +0200
+Message-Id: <20220405070304.227278821@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,58 +56,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Taniya Das <tdas@codeaurora.org>
+From: Chao Yu <chao@kernel.org>
 
-[ Upstream commit 58922910add18583d5273c2edcdb9fd7bf4eca02 ]
+[ Upstream commit 344150999b7fc88502a65bbb147a47503eca2033 ]
 
-The display pixel clock has a requirement on certain newer platforms to
-support M/N as (2/3) and the final D value calculated results in
-underflow errors.
-As the current implementation does not check for D value is within
-the accepted range for a given M & N value. Update the logic to
-calculate the final D value based on the range.
+Quoted from Jing Xia's report, there is a potential deadlock may happen
+between kworker and checkpoint as below:
 
-Fixes: 99cbd064b059f ("clk: qcom: Support display RCG clocks")
-Signed-off-by: Taniya Das <tdas@codeaurora.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220227175536.3131-1-tdas@codeaurora.org
+[T:writeback]				[T:checkpoint]
+- wb_writeback
+ - blk_start_plug
+bio contains NodeA was plugged in writeback threads
+					- do_writepages  -- sync write inodeB, inc wb_sync_req[DATA]
+					 - f2fs_write_data_pages
+					  - f2fs_write_single_data_page -- write last dirty page
+					   - f2fs_do_write_data_page
+					    - set_page_writeback  -- clear page dirty flag and
+					    PAGECACHE_TAG_DIRTY tag in radix tree
+					    - f2fs_outplace_write_data
+					     - f2fs_update_data_blkaddr
+					      - f2fs_wait_on_page_writeback -- wait NodeA to writeback here
+					   - inode_dec_dirty_pages
+ - writeback_sb_inodes
+  - writeback_single_inode
+   - do_writepages
+    - f2fs_write_data_pages -- skip writepages due to wb_sync_req[DATA]
+     - wbc->pages_skipped += get_dirty_pages() -- PAGECACHE_TAG_DIRTY is not set but get_dirty_pages() returns one
+  - requeue_inode -- requeue inode to wb->b_dirty queue due to non-zero.pages_skipped
+ - blk_finish_plug
+
+Let's try to avoid deadlock condition by forcing unplugging previous bio via
+blk_finish_plug(current->plug) once we'v skipped writeback in writepages()
+due to valid sbi->wb_sync_req[DATA/NODE].
+
+Fixes: 687de7f1010c ("f2fs: avoid IO split due to mixed WB_SYNC_ALL and WB_SYNC_NONE")
+Signed-off-by: Zhiguo Niu <zhiguo.niu@unisoc.com>
+Signed-off-by: Jing Xia <jing.xia@unisoc.com>
+Signed-off-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/qcom/clk-rcg2.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ fs/f2fs/data.c | 6 +++++-
+ fs/f2fs/node.c | 6 +++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
-index e1b1b426fae4..b831975a9606 100644
---- a/drivers/clk/qcom/clk-rcg2.c
-+++ b/drivers/clk/qcom/clk-rcg2.c
-@@ -264,7 +264,7 @@ static int clk_rcg2_determine_floor_rate(struct clk_hw *hw,
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 1b11a42847c4..d27a92a54447 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -3264,8 +3264,12 @@ static int __f2fs_write_data_pages(struct address_space *mapping,
+ 	/* to avoid spliting IOs due to mixed WB_SYNC_ALL and WB_SYNC_NONE */
+ 	if (wbc->sync_mode == WB_SYNC_ALL)
+ 		atomic_inc(&sbi->wb_sync_req[DATA]);
+-	else if (atomic_read(&sbi->wb_sync_req[DATA]))
++	else if (atomic_read(&sbi->wb_sync_req[DATA])) {
++		/* to avoid potential deadlock */
++		if (current->plug)
++			blk_finish_plug(current->plug);
+ 		goto skip_write;
++	}
  
- static int __clk_rcg2_configure(struct clk_rcg2 *rcg, const struct freq_tbl *f)
- {
--	u32 cfg, mask;
-+	u32 cfg, mask, d_val, not2d_val, n_minus_m;
- 	struct clk_hw *hw = &rcg->clkr.hw;
- 	int ret, index = qcom_find_src_index(hw, rcg->parent_map, f->src);
+ 	if (__should_serialize_io(inode, wbc)) {
+ 		mutex_lock(&sbi->writepages);
+diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
+index 7e625806bd4a..5fa10d0b0068 100644
+--- a/fs/f2fs/node.c
++++ b/fs/f2fs/node.c
+@@ -2055,8 +2055,12 @@ static int f2fs_write_node_pages(struct address_space *mapping,
  
-@@ -283,8 +283,17 @@ static int __clk_rcg2_configure(struct clk_rcg2 *rcg, const struct freq_tbl *f)
- 		if (ret)
- 			return ret;
+ 	if (wbc->sync_mode == WB_SYNC_ALL)
+ 		atomic_inc(&sbi->wb_sync_req[NODE]);
+-	else if (atomic_read(&sbi->wb_sync_req[NODE]))
++	else if (atomic_read(&sbi->wb_sync_req[NODE])) {
++		/* to avoid potential deadlock */
++		if (current->plug)
++			blk_finish_plug(current->plug);
+ 		goto skip_write;
++	}
  
-+		/* Calculate 2d value */
-+		d_val = f->n;
-+
-+		n_minus_m = f->n - f->m;
-+		n_minus_m *= 2;
-+
-+		d_val = clamp_t(u32, d_val, f->m, n_minus_m);
-+		not2d_val = ~d_val & mask;
-+
- 		ret = regmap_update_bits(rcg->clkr.regmap,
--				RCG_D_OFFSET(rcg), mask, ~f->n);
-+				RCG_D_OFFSET(rcg), mask, not2d_val);
- 		if (ret)
- 			return ret;
- 	}
+ 	trace_f2fs_writepages(mapping->host, wbc, NODE);
+ 
 -- 
 2.34.1
 

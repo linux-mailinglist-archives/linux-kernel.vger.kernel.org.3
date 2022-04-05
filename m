@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C72A34F3EF4
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F5D4F428A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389708AbiDEPVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
+        id S1384387AbiDEM10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346999AbiDEJpu (ORCPT
+        with ESMTP id S245197AbiDEIyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:45:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78528DCAAC;
-        Tue,  5 Apr 2022 02:32:14 -0700 (PDT)
+        Tue, 5 Apr 2022 04:54:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B461825F1;
+        Tue,  5 Apr 2022 01:51:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1958DB81CB5;
-        Tue,  5 Apr 2022 09:32:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DCFCC385A0;
-        Tue,  5 Apr 2022 09:32:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 516AF614E5;
+        Tue,  5 Apr 2022 08:51:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60B66C385A1;
+        Tue,  5 Apr 2022 08:51:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151131;
-        bh=3lJ3J/Hn5KmINnLVJmAiRUoqx4L93qq6dyLbb8I1oE8=;
+        s=korg; t=1649148714;
+        bh=pgtCG7ooDhzvfMoixbXxXQ6K0MvWSPBRQdkNanPRTmQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BQWKtwtLe8nraRmN2wkmkzbTdAzArJrvdsZ6P9k5Mcpzv7bWNAIUn3mI4XuxnidEC
-         ie6HPY8ge7zZocFLxsAAnJw46xb+t4jyARI8HPsnROOb5znNilvtrwVxXgRE7uFAjl
-         J2hRCxzJq50YNX0febUii0Spi+amYZo/HpDBQSnM=
+        b=YimBAZTm5/L7D6RrEDGAKBgRCD4na5gn3tLipx7SSxFv7DFkK7+Xao8+GT5CFNNUF
+         md0yloRPPMAqfBeM/pgMXgBhphhgDx9pHfTSd1nr2S+3tW1pRef7yAQb9hMX11HUWD
+         j1s9DkFn7q5uc2oDIksfvTzQYbZ83g+l+l44pSso=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 306/913] ARM: dts: sun8i: v3s: Move the csi1 block to follow address order
+        stable@vger.kernel.org, Sean Wang <sean.wang@mediatek.com>,
+        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0455/1017] mt76: mt7921: set EDCA parameters with the MCU CE command
 Date:   Tue,  5 Apr 2022 09:22:48 +0200
-Message-Id: <20220405070349.028812130@linuxfoundation.org>
+Message-Id: <20220405070407.804539519@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,62 +54,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+From: Sean Wang <sean.wang@mediatek.com>
 
-[ Upstream commit c4af51698c4fb4fc683f2ac67f482cdf9ba2cd13 ]
+[ Upstream commit 66ca1a7b2d5503f561b751abdd6ec6fa96343eb6 ]
 
-The csi1 block node was mistakenly added before the gic node, although
-its address comes after the gic's. Move the node to its correct
-position.
+The command MCU_EXT_CMD_EDCA_UPDATE is not fully supported by the MT7921
+firmware, so we apply CE command MCU_CE_CMD_SET_EDCA_PARAMS instead which
+is supported even in the oldest firmware to properly set up EDCA parameters
+for each AC.
 
-Fixes: 90e048101fa1 ("ARM: dts: sun8i: V3/V3s/S3/S3L: add CSI1 device node")
-Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://lore.kernel.org/r/20220205185429.2278860-2-paul.kocialkowski@bootlin.com
+Fixes: 1c099ab44727 ("mt76: mt7921: add MCU support")
+Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/sun8i-v3s.dtsi | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ .../wireless/mediatek/mt76/mt76_connac_mcu.h  |  1 +
+ .../net/wireless/mediatek/mt76/mt7921/mcu.c   | 49 ++++++++-----------
+ 2 files changed, 22 insertions(+), 28 deletions(-)
 
-diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
-index b30bc1a25ebb..084323d5c61c 100644
---- a/arch/arm/boot/dts/sun8i-v3s.dtsi
-+++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
-@@ -593,6 +593,17 @@
- 			#size-cells = <0>;
- 		};
+diff --git a/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h b/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h
+index 63fc331e98bd..43a8b3651dc2 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h
++++ b/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h
+@@ -599,6 +599,7 @@ enum {
+ 	MCU_CE_CMD_SET_BSS_ABORT = 0x17,
+ 	MCU_CE_CMD_CANCEL_HW_SCAN = 0x1b,
+ 	MCU_CE_CMD_SET_ROC = 0x1c,
++	MCU_CE_CMD_SET_EDCA_PARMS = 0x1d,
+ 	MCU_CE_CMD_SET_P2P_OPPPS = 0x33,
+ 	MCU_CE_CMD_SET_RATE_TX_POWER = 0x5d,
+ 	MCU_CE_CMD_SCHED_SCAN_ENABLE = 0x61,
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/mcu.c b/drivers/net/wireless/mediatek/mt76/mt7921/mcu.c
+index 4c6adbb96955..50c953b08ed0 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7921/mcu.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7921/mcu.c
+@@ -912,33 +912,28 @@ EXPORT_SYMBOL_GPL(mt7921_mcu_exit);
  
-+		gic: interrupt-controller@1c81000 {
-+			compatible = "arm,gic-400";
-+			reg = <0x01c81000 0x1000>,
-+			      <0x01c82000 0x2000>,
-+			      <0x01c84000 0x2000>,
-+			      <0x01c86000 0x2000>;
-+			interrupt-controller;
-+			#interrupt-cells = <3>;
-+			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
-+		};
+ int mt7921_mcu_set_tx(struct mt7921_dev *dev, struct ieee80211_vif *vif)
+ {
+-#define WMM_AIFS_SET		BIT(0)
+-#define WMM_CW_MIN_SET		BIT(1)
+-#define WMM_CW_MAX_SET		BIT(2)
+-#define WMM_TXOP_SET		BIT(3)
+-#define WMM_PARAM_SET		GENMASK(3, 0)
+-#define TX_CMD_MODE		1
++	struct mt7921_vif *mvif = (struct mt7921_vif *)vif->drv_priv;
 +
- 		csi1: camera@1cb4000 {
- 			compatible = "allwinner,sun8i-v3s-csi";
- 			reg = <0x01cb4000 0x3000>;
-@@ -604,16 +615,5 @@
- 			resets = <&ccu RST_BUS_CSI>;
- 			status = "disabled";
- 		};
+ 	struct edca {
+-		u8 queue;
+-		u8 set;
+-		u8 aifs;
+-		u8 cw_min;
++		__le16 cw_min;
+ 		__le16 cw_max;
+ 		__le16 txop;
+-	};
++		__le16 aifs;
++		u8 guardtime;
++		u8 acm;
++	} __packed;
+ 	struct mt7921_mcu_tx {
+-		u8 total;
+-		u8 action;
+-		u8 valid;
+-		u8 mode;
 -
--		gic: interrupt-controller@1c81000 {
--			compatible = "arm,gic-400";
--			reg = <0x01c81000 0x1000>,
--			      <0x01c82000 0x2000>,
--			      <0x01c84000 0x2000>,
--			      <0x01c86000 0x2000>;
--			interrupt-controller;
--			#interrupt-cells = <3>;
--			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
--		};
+ 		struct edca edca[IEEE80211_NUM_ACS];
++		u8 bss_idx;
++		u8 qos;
++		u8 wmm_idx;
++		u8 pad;
+ 	} __packed req = {
+-		.valid = true,
+-		.mode = TX_CMD_MODE,
+-		.total = IEEE80211_NUM_ACS,
++		.bss_idx = mvif->mt76.idx,
++		.qos = vif->bss_conf.qos,
++		.wmm_idx = mvif->mt76.wmm_idx,
  	};
- };
+-	struct mt7921_vif *mvif = (struct mt7921_vif *)vif->drv_priv;
++
+ 	struct mu_edca {
+ 		u8 cw_min;
+ 		u8 cw_max;
+@@ -962,30 +957,29 @@ int mt7921_mcu_set_tx(struct mt7921_dev *dev, struct ieee80211_vif *vif)
+ 		.qos = vif->bss_conf.qos,
+ 		.wmm_idx = mvif->mt76.wmm_idx,
+ 	};
++	int to_aci[] = {1, 0, 2, 3};
+ 	int ac, ret;
+ 
+ 	for (ac = 0; ac < IEEE80211_NUM_ACS; ac++) {
+ 		struct ieee80211_tx_queue_params *q = &mvif->queue_params[ac];
+-		struct edca *e = &req.edca[ac];
++		struct edca *e = &req.edca[to_aci[ac]];
+ 
+-		e->set = WMM_PARAM_SET;
+-		e->queue = ac + mvif->mt76.wmm_idx * MT7921_MAX_WMM_SETS;
+ 		e->aifs = q->aifs;
+ 		e->txop = cpu_to_le16(q->txop);
+ 
+ 		if (q->cw_min)
+-			e->cw_min = fls(q->cw_min);
++			e->cw_min = cpu_to_le16(q->cw_min);
+ 		else
+ 			e->cw_min = 5;
+ 
+ 		if (q->cw_max)
+-			e->cw_max = cpu_to_le16(fls(q->cw_max));
++			e->cw_max = cpu_to_le16(q->cw_max);
+ 		else
+ 			e->cw_max = cpu_to_le16(10);
+ 	}
+ 
+-	ret = mt76_mcu_send_msg(&dev->mt76, MCU_EXT_CMD(EDCA_UPDATE),
+-				&req, sizeof(req), true);
++	ret = mt76_mcu_send_msg(&dev->mt76, MCU_CE_CMD(SET_EDCA_PARMS), &req,
++				sizeof(req), false);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -995,7 +989,6 @@ int mt7921_mcu_set_tx(struct mt7921_dev *dev, struct ieee80211_vif *vif)
+ 	for (ac = 0; ac < IEEE80211_NUM_ACS; ac++) {
+ 		struct ieee80211_he_mu_edca_param_ac_rec *q;
+ 		struct mu_edca *e;
+-		int to_aci[] = {1, 0, 2, 3};
+ 
+ 		if (!mvif->queue_params[ac].mu_edca)
+ 			break;
 -- 
 2.34.1
 

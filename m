@@ -2,49 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DF14F4E87
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA82D4F4B59
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1446782AbiDFAaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44260 "EHLO
+        id S1574287AbiDEWzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457631AbiDEQVD (ORCPT
+        with ESMTP id S1457634AbiDEQWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:21:03 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D2E1AD8A;
-        Tue,  5 Apr 2022 09:19:05 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:35:2589:2a93:190d:b787])
+        Tue, 5 Apr 2022 12:22:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783EA68FB8;
+        Tue,  5 Apr 2022 09:20:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id C40DA608;
-        Tue,  5 Apr 2022 16:19:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net C40DA608
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1649175544; bh=+RhP2wMlIenQpNZ9gtWvA3htzpj/xSyZCWrs4wfF5R4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Dbi7/Icr5no8hLxOP/HvRNkR+/DLgmH7zPFb7qoscjVnFjPXIwCUZvcUGxyjYmjkf
-         Eb3dLtQauUFcK1iSVfxNsN6fqpXptzN04Qsqg8M5tgXbJ/hBwmmCVwPYJqQ+50Eboo
-         4FIowjl5heWiwvfnkmGxpiGd4qxbeRE0A8CXfU6ovmF0tjRdRgzsxldPVHkX0QuOGn
-         0aSxbJM6iAmo9EpNPwOIxYq78sFytT3b57pDxVS9sUD1xzTU6tDpA8GtNFlrwpNUT7
-         HD/ZJ3w7jfwc4WEX5h4YpuiUf75yZmq2zeaMWSiEkkDPiQurl219XAwfH44Fy+aezE
-         l5N1Bufr+zk7A==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Grant Likely <grant.likely@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] Documentation/process: Update ARM contact for embargoed
- hardware issues
-In-Reply-To: <20220324151605.266645-1-catalin.marinas@arm.com>
-References: <20220324151605.266645-1-catalin.marinas@arm.com>
-Date:   Tue, 05 Apr 2022 10:19:04 -0600
-Message-ID: <87h777ec5j.fsf@meer.lwn.net>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33847B81E76;
+        Tue,  5 Apr 2022 16:20:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C1895C385A5;
+        Tue,  5 Apr 2022 16:20:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649175648;
+        bh=9P0bvPQE7TMYUDS1QHIUxX2gPSQ2fjCXf7+fuJtJhZk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=DuxV52lKFd1sgfEeUDu9tOfV6G4bvXzk2hAfEUif0dtsVbADNdPFBYFfsMNXTfLkv
+         VPz+SSuWPJiz/2Pt29cWiLakeKR0SIbLT84b2Pt3E8GKMocCT6NBf1+gMiUYSpZR1U
+         5ZrQH2eFiZTVw6Hwf/VR+BVKI8oRuthYG7GkA2B8QeH761kRvg1kukLjz/SiXVMT8k
+         ogt3jYFymRus/NVEDcAyE5tQwCYaN4j3V/CVD6nPyHAEBZ/PbhYFUHS/ZELeTrdjLp
+         4eNyIQomhhBu43ddy3oWEs94w4OA/uuD9XExE+t+c0XbjFvAE88gftmwPdqD5hhn7h
+         wLsEkzxX4J6Ow==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9972CE85D15;
+        Tue,  5 Apr 2022 16:20:48 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] tracing: Move user_events.h temporarily out of include/uapi
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164917564862.18481.12734568923836492201.git-patchwork-notify@kernel.org>
+Date:   Tue, 05 Apr 2022 16:20:48 +0000
+References: <20220401143903.188384f3@gandalf.local.home>
+In-Reply-To: <20220401143903.188384f3@gandalf.local.home>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, mathieu.desnoyers@efficios.com,
+        beaub@linux.microsoft.com, mhiramat@kernel.org,
+        linux-trace-devel@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, alexei.starovoitov@gmail.com,
+        torvalds@linux-foundation.org, michal.lkml@markovi.net,
+        ndesaulniers@google.com, linux-kbuild@vger.kernel.org,
+        masahiroy@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,35 +62,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Catalin Marinas <catalin.marinas@arm.com> writes:
+Hello:
 
-> With Grant taking a prominent role in Linaro, I will take over as the
-> process ambassador for ARM w.r.t. embargoed hardware issues.
->
-> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Grant Likely <grant.likely@arm.com>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  Documentation/process/embargoed-hardware-issues.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/process/embargoed-hardware-issues.rst b/Documentation/process/embargoed-hardware-issues.rst
-> index 6f8f36e10e8b..41a2afaaea75 100644
-> --- a/Documentation/process/embargoed-hardware-issues.rst
-> +++ b/Documentation/process/embargoed-hardware-issues.rst
-> @@ -244,7 +244,7 @@ disclosure of a particular issue, unless requested by a response team or by
->  an involved disclosed party. The current ambassadors list:
->  
->    ============= ========================================================
-> -  ARM           Grant Likely <grant.likely@arm.com>
-> +  ARM		Catalin Marinas <catalin.marinas@arm.com>
->    AMD		Tom Lendacky <tom.lendacky@amd.com>
->    IBM Z         Christian Borntraeger <borntraeger@de.ibm.com>
->    IBM Power     Anton Blanchard <anton@linux.ibm.com>
+This patch was applied to netdev/net-next.git (master)
+by Steven Rostedt (Google) <rostedt@goodmis.org>:
 
-I've applied this, thanks.
+On Fri, 1 Apr 2022 14:39:03 -0400 you wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> While user_events API is under development and has been marked for broken
+> to not let the API become fixed, move the header file out of the uapi
+> directory. This is to prevent it from being installed, then later changed,
+> and then have an old distro user space update with a new kernel, where
+> applications see the user_events being available, but the old header is in
+> place, and then they get compiled incorrectly.
+> 
+> [...]
 
-I wish I could have added Grant's ack, but that email told me not to...
+Here is the summary with links:
+  - tracing: Move user_events.h temporarily out of include/uapi
+    https://git.kernel.org/netdev/net-next/c/5cfff569cab8
 
-jon
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

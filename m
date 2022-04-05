@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C038D4F338F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C838D4F3530
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243340AbiDEJjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34718 "EHLO
+        id S242216AbiDEJHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239348AbiDEIT7 (ORCPT
+        with ESMTP id S239360AbiDEIUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:19:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CD6BC872;
-        Tue,  5 Apr 2022 01:11:43 -0700 (PDT)
+        Tue, 5 Apr 2022 04:20:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F89BD897;
+        Tue,  5 Apr 2022 01:11:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BD58609AD;
-        Tue,  5 Apr 2022 08:11:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CBFDC385A1;
-        Tue,  5 Apr 2022 08:11:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8FB9CB81B90;
+        Tue,  5 Apr 2022 08:11:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9670C385A0;
+        Tue,  5 Apr 2022 08:11:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146302;
-        bh=EHsZ8E2Brdkpwt7Xp80ysA7vNQCtBemTSOm/CnO5Ew4=;
+        s=korg; t=1649146308;
+        bh=lHHOGHVmr7qWwaPYUHQ99Hm9LnXzzyxu1DtucskLisY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ntj3CCwtWIE5pOZrJLShMWJ2Zng3Zy519OgQjVrwecNi3VJASNRxL+iWdv66N+m27
-         QbX7XGHxwDLM94E5Ef22cn0dcJClJMq7We+pdD9HL5j9vs+TENkkJSJw23i4ZoTm8Z
-         nj4wjIafMPZJaz3SVuf3l69HEPv1hrMGrJZ+wctY=
+        b=GLbKGDLfBZWcJ+kylj0xGw3jOJ2QDi2/tezIO2SZK4STsLBu9C5OLk03QQF3ZiYV7
+         LqqEs/xAMavRgQhq03p6qM+WD2gWlpsaU5sseBoah/vWbPDGmJ6ovQ9LhbFK4DLA5f
+         XDBy3XA5GB5nU6Clf6jeC9VEDW9bnZD7idwqj7G4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jianlin Shi <jishi@redhat.com>,
-        Hangbin Liu <liuhangbin@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Richard Zhu <hongxing.zhu@nxp.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0677/1126] bareudp: use ipv6_mod_enabled to check if IPv6 enabled
-Date:   Tue,  5 Apr 2022 09:23:44 +0200
-Message-Id: <20220405070427.494809987@linuxfoundation.org>
+Subject: [PATCH 5.17 0679/1126] PCI: imx6: Assert i.MX8MM CLKREQ# even if no device present
+Date:   Tue,  5 Apr 2022 09:23:46 +0200
+Message-Id: <20220405070427.551805233@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,90 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangbin Liu <liuhangbin@gmail.com>
+From: Richard Zhu <hongxing.zhu@nxp.com>
 
-[ Upstream commit e077ed58c243afc197bc2a2ba0e1ff61135e4ec2 ]
+[ Upstream commit 45514f78c65cc9a09437f20e180625f94f769863 ]
 
-bareudp_create_sock() use AF_INET6 by default if IPv6 CONFIG enabled.
-But if user start kernel with ipv6.disable=1, the bareudp sock will
-created failed, which cause the interface open failed even with ethertype
-ip. e.g.
+The CLKREQ# signal is an open drain, active low signal that is driven
+low by the remote Endpoint device. But it might not be driven low if no
+Endpoint device is connected.
 
- # ip link add bareudp1 type bareudp dstport 2 ethertype ip
- # ip link set bareudp1 up
- RTNETLINK answers: Address family not supported by protocol
+On i.MX8MM PCIe, phy_init() may fail and system boot may hang if no
+Endpoint is connected to assert CLKREQ#.
 
-Fix it by using ipv6_mod_enabled() to check if IPv6 enabled. There is
-no need to check IS_ENABLED(CONFIG_IPV6) as ipv6_mod_enabled() will
-return false when CONFIG_IPV6 no enabled in include/linux/ipv6.h.
+Handle this as on i.MX8MQ, where we explicitly assert CLKREQ# so the
+PHY can be initialized.
 
-Reported-by: Jianlin Shi <jishi@redhat.com>
-Fixes: 571912c69f0e ("net: UDP tunnel encapsulation module for tunnelling different protocols like MPLS, IP, NSH etc.")
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-Link: https://lore.kernel.org/r/20220315062618.156230-1-liuhangbin@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lore.kernel.org/r/1645672013-8949-1-git-send-email-hongxing.zhu@nxp.com
+Fixes: 178e244cb6e2 ("PCI: imx: Add the imx8mm pcie support")
+Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/bareudp.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+ drivers/pci/controller/dwc/pci-imx6.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/net/bareudp.c b/drivers/net/bareudp.c
-index ba587e5fc24f..683203f87ae2 100644
---- a/drivers/net/bareudp.c
-+++ b/drivers/net/bareudp.c
-@@ -148,14 +148,14 @@ static int bareudp_udp_encap_recv(struct sock *sk, struct sk_buff *skb)
- 	skb_reset_network_header(skb);
- 	skb_reset_mac_header(skb);
- 
--	if (!IS_ENABLED(CONFIG_IPV6) || family == AF_INET)
-+	if (!ipv6_mod_enabled() || family == AF_INET)
- 		err = IP_ECN_decapsulate(oiph, skb);
- 	else
- 		err = IP6_ECN_decapsulate(oiph, skb);
- 
- 	if (unlikely(err)) {
- 		if (log_ecn_error) {
--			if  (!IS_ENABLED(CONFIG_IPV6) || family == AF_INET)
-+			if  (!ipv6_mod_enabled() || family == AF_INET)
- 				net_info_ratelimited("non-ECT from %pI4 "
- 						     "with TOS=%#x\n",
- 						     &((struct iphdr *)oiph)->saddr,
-@@ -221,11 +221,12 @@ static struct socket *bareudp_create_sock(struct net *net, __be16 port)
- 	int err;
- 
- 	memset(&udp_conf, 0, sizeof(udp_conf));
--#if IS_ENABLED(CONFIG_IPV6)
--	udp_conf.family = AF_INET6;
--#else
--	udp_conf.family = AF_INET;
--#endif
-+
-+	if (ipv6_mod_enabled())
-+		udp_conf.family = AF_INET6;
-+	else
-+		udp_conf.family = AF_INET;
-+
- 	udp_conf.local_udp_port = port;
- 	/* Open UDP socket */
- 	err = udp_sock_create(net, &udp_conf, &sock);
-@@ -448,7 +449,7 @@ static netdev_tx_t bareudp_xmit(struct sk_buff *skb, struct net_device *dev)
- 	}
- 
- 	rcu_read_lock();
--	if (IS_ENABLED(CONFIG_IPV6) && info->mode & IP_TUNNEL_INFO_IPV6)
-+	if (ipv6_mod_enabled() && info->mode & IP_TUNNEL_INFO_IPV6)
- 		err = bareudp6_xmit_skb(skb, dev, bareudp, info);
- 	else
- 		err = bareudp_xmit_skb(skb, dev, bareudp, info);
-@@ -478,7 +479,7 @@ static int bareudp_fill_metadata_dst(struct net_device *dev,
- 
- 	use_cache = ip_tunnel_dst_cache_usable(skb, info);
- 
--	if (!IS_ENABLED(CONFIG_IPV6) || ip_tunnel_info_af(info) == AF_INET) {
-+	if (!ipv6_mod_enabled() || ip_tunnel_info_af(info) == AF_INET) {
- 		struct rtable *rt;
- 		__be32 saddr;
- 
+diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
+index 77fc510c6d0d..d09ad4e1f432 100644
+--- a/drivers/pci/controller/dwc/pci-imx6.c
++++ b/drivers/pci/controller/dwc/pci-imx6.c
+@@ -453,10 +453,6 @@ static int imx6_pcie_enable_ref_clk(struct imx6_pcie *imx6_pcie)
+ 	case IMX7D:
+ 		break;
+ 	case IMX8MM:
+-		ret = clk_prepare_enable(imx6_pcie->pcie_aux);
+-		if (ret)
+-			dev_err(dev, "unable to enable pcie_aux clock\n");
+-		break;
+ 	case IMX8MQ:
+ 		ret = clk_prepare_enable(imx6_pcie->pcie_aux);
+ 		if (ret) {
 -- 
 2.34.1
 

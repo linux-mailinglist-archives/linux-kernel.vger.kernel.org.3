@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 428964F4027
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D164F4167
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233662AbiDENPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:15:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60612 "EHLO
+        id S1380936AbiDEUEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344270AbiDEJTD (ORCPT
+        with ESMTP id S1357001AbiDEKZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:19:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7972B22528;
-        Tue,  5 Apr 2022 02:06:43 -0700 (PDT)
+        Tue, 5 Apr 2022 06:25:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6AA1F603;
+        Tue,  5 Apr 2022 03:09:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18A7A614E4;
-        Tue,  5 Apr 2022 09:06:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2194AC385A0;
-        Tue,  5 Apr 2022 09:06:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E02E61500;
+        Tue,  5 Apr 2022 10:09:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38E85C385A1;
+        Tue,  5 Apr 2022 10:09:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149602;
-        bh=0koZQSOLgRW2kaRazCNUDwDk9THdGrokMdcTAp4Ow68=;
+        s=korg; t=1649153361;
+        bh=LUTYwhcnmybB6Lou8IoelB42nJG5tdqzX84/Z0p+xeY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wgxgDKDORwuAkQtHyFBYhn638HBorMGuPeFuWtcVYtMHCxCR706hfMfJ39UYrer46
-         iyFBen7oeaWlpmRW5nZ+S7LmVz5pTQ/fVkFn8ajjstJDNq0NVfCf4M744NDbqUVCZ0
-         7CHijFQc3qiBLzOWMH2Q2T6p6h3TUVsydKlrhHlU=
+        b=PxTvuVB4Y4tNgonqZ/R/oQA9sG6zlCz7IGLTkEL1J4n522bagqh1Fi0rqx4gUoRJJ
+         N9RLELdoU0CwTnmvNSAnpOsQYbKtG5Jin70k6v+MbxV1Oas/61J1H0RtcREn9Q5YH3
+         3OQaCtgQiew2c3hSQniCmDLLb3w+ystVLr2RRSw8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0774/1017] ACPICA: Avoid walking the ACPI Namespace if it is not there
-Date:   Tue,  5 Apr 2022 09:28:07 +0200
-Message-Id: <20220405070417.234521252@linuxfoundation.org>
+Subject: [PATCH 5.10 194/599] media: meson: vdec: potential dereference of null pointer
+Date:   Tue,  5 Apr 2022 09:28:08 +0200
+Message-Id: <20220405070304.615044171@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +57,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 0c9992315e738e7d6e927ef36839a466b080dba6 ]
+[ Upstream commit c8c80c996182239ff9b05eda4db50184cf3b2e99 ]
 
-ACPICA commit b1c3656ef4950098e530be68d4b589584f06cddc
+As the possible failure of the kzalloc(), the 'new_ts' could be NULL
+pointer.
+Therefore, it should be better to check it in order to avoid the
+dereference of the NULL pointer.
+Also, the caller esparser_queue() needs to deal with the return value of
+the amvdec_add_ts().
 
-Prevent acpi_ns_walk_namespace() from crashing when called with
-start_node equal to ACPI_ROOT_OBJECT if the Namespace has not been
-instantiated yet and acpi_gbl_root_node is NULL.
-
-For instance, this can happen if the kernel is run with "acpi=off"
-in the command line.
-
-Link: https://github.com/acpica/acpica/commit/b1c3656ef4950098e530be68d4b589584f06cddc
-Link: https://lore.kernel.org/linux-acpi/CAJZ5v0hJWW_vZ3wwajE7xT38aWjY7cZyvqMJpXHzUL98-SiCVQ@mail.gmail.com/
-Reported-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fixes: 876f123b8956 ("media: meson: vdec: bring up to compliance")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Suggested-by: Neil Armstrong <narmstrong@baylibre.com>
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/acpica/nswalk.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/staging/media/meson/vdec/esparser.c     | 7 ++++++-
+ drivers/staging/media/meson/vdec/vdec_helpers.c | 8 ++++++--
+ drivers/staging/media/meson/vdec/vdec_helpers.h | 4 ++--
+ 3 files changed, 14 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/acpi/acpica/nswalk.c b/drivers/acpi/acpica/nswalk.c
-index 915c2433463d..e7c30ce06e18 100644
---- a/drivers/acpi/acpica/nswalk.c
-+++ b/drivers/acpi/acpica/nswalk.c
-@@ -169,6 +169,9 @@ acpi_ns_walk_namespace(acpi_object_type type,
+diff --git a/drivers/staging/media/meson/vdec/esparser.c b/drivers/staging/media/meson/vdec/esparser.c
+index db7022707ff8..86ccc8937afc 100644
+--- a/drivers/staging/media/meson/vdec/esparser.c
++++ b/drivers/staging/media/meson/vdec/esparser.c
+@@ -328,7 +328,12 @@ esparser_queue(struct amvdec_session *sess, struct vb2_v4l2_buffer *vbuf)
  
- 	if (start_node == ACPI_ROOT_OBJECT) {
- 		start_node = acpi_gbl_root_node;
-+		if (!start_node) {
-+			return_ACPI_STATUS(AE_NO_NAMESPACE);
-+		}
- 	}
+ 	offset = esparser_get_offset(sess);
  
- 	/* Null child means "get first node" */
+-	amvdec_add_ts(sess, vb->timestamp, vbuf->timecode, offset, vbuf->flags);
++	ret = amvdec_add_ts(sess, vb->timestamp, vbuf->timecode, offset, vbuf->flags);
++	if (ret) {
++		v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_ERROR);
++		return ret;
++	}
++
+ 	dev_dbg(core->dev, "esparser: ts = %llu pld_size = %u offset = %08X flags = %08X\n",
+ 		vb->timestamp, payload_size, offset, vbuf->flags);
+ 
+diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.c b/drivers/staging/media/meson/vdec/vdec_helpers.c
+index 7f07a9175815..db4a854e59a3 100644
+--- a/drivers/staging/media/meson/vdec/vdec_helpers.c
++++ b/drivers/staging/media/meson/vdec/vdec_helpers.c
+@@ -227,13 +227,16 @@ int amvdec_set_canvases(struct amvdec_session *sess,
+ }
+ EXPORT_SYMBOL_GPL(amvdec_set_canvases);
+ 
+-void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
+-		   struct v4l2_timecode tc, u32 offset, u32 vbuf_flags)
++int amvdec_add_ts(struct amvdec_session *sess, u64 ts,
++		  struct v4l2_timecode tc, u32 offset, u32 vbuf_flags)
+ {
+ 	struct amvdec_timestamp *new_ts;
+ 	unsigned long flags;
+ 
+ 	new_ts = kzalloc(sizeof(*new_ts), GFP_KERNEL);
++	if (!new_ts)
++		return -ENOMEM;
++
+ 	new_ts->ts = ts;
+ 	new_ts->tc = tc;
+ 	new_ts->offset = offset;
+@@ -242,6 +245,7 @@ void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
+ 	spin_lock_irqsave(&sess->ts_spinlock, flags);
+ 	list_add_tail(&new_ts->list, &sess->timestamps);
+ 	spin_unlock_irqrestore(&sess->ts_spinlock, flags);
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(amvdec_add_ts);
+ 
+diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.h b/drivers/staging/media/meson/vdec/vdec_helpers.h
+index cfaed52ab526..798e5a8a9b3f 100644
+--- a/drivers/staging/media/meson/vdec/vdec_helpers.h
++++ b/drivers/staging/media/meson/vdec/vdec_helpers.h
+@@ -55,8 +55,8 @@ void amvdec_dst_buf_done_offset(struct amvdec_session *sess,
+  * @offset: offset in the VIFIFO where the associated packet was written
+  * @flags the vb2_v4l2_buffer flags
+  */
+-void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
+-		   struct v4l2_timecode tc, u32 offset, u32 flags);
++int amvdec_add_ts(struct amvdec_session *sess, u64 ts,
++		  struct v4l2_timecode tc, u32 offset, u32 flags);
+ void amvdec_remove_ts(struct amvdec_session *sess, u64 ts);
+ 
+ /**
 -- 
 2.34.1
 

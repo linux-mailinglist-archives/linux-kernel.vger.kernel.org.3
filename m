@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA2484F4E53
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 423AB4F4ED2
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1588817AbiDFARc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:17:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36678 "EHLO
+        id S242984AbiDFATs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:19:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354227AbiDEKMT (ORCPT
+        with ESMTP id S236782AbiDEKfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:12:19 -0400
+        Tue, 5 Apr 2022 06:35:46 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D1C5A17D;
-        Tue,  5 Apr 2022 02:59:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661F14AE19;
+        Tue,  5 Apr 2022 03:21:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C511CB81B93;
-        Tue,  5 Apr 2022 09:59:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D788C385A4;
-        Tue,  5 Apr 2022 09:59:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91556B81BC5;
+        Tue,  5 Apr 2022 10:21:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E72CDC385A1;
+        Tue,  5 Apr 2022 10:21:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152753;
-        bh=JVi6iNnNgKNf/3WG5A4crMAJ/xLn832x/mT8K/pZK30=;
+        s=korg; t=1649154099;
+        bh=vYsMLDYVMr0DTK/i9DNXbMo0fVtarin0N+Axfv9aNdA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QVnu9yr2FuqgGne8x6SEqpZhixj0yI2/XM8jd1OB2er6hfxSIgyNsTIMmqHOe0qWb
-         bO7rU72V5yuUHG/ovzrmIMSVLq4jLqqfLCDoI4P9P6Hbyp1TE2tIm941ckaoLcnsXB
-         S2BxKrQsuM3WkKUS68M5Qp+vSolC79vPtzfMYH00=
+        b=NhUJXBcpKhaZf/ljG4jgsnezmajVcY5ohtatF2bWTGXPj+hSAet6sI+S0r5htoVVM
+         WrvXAYqa13gBqV8sYKG4NuwhCcM9Pb1veOaO6kOpHB3c93ek/nGL1SP8z7xnfit73s
+         cN8xhjoKKxNJzaskAKsmFDYSRe5GCRM75gZ8n6lA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 5.15 890/913] media: ov6650: Add try support to selection API operations
+        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 458/599] irqchip/qcom-pdc: Fix broken locking
 Date:   Tue,  5 Apr 2022 09:32:32 +0200
-Message-Id: <20220405070406.500243434@linuxfoundation.org>
+Message-Id: <20220405070312.458810745@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,144 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+From: Marc Zyngier <maz@kernel.org>
 
-commit c74052646496ffe0bc606152e6b9653137020cbf upstream.
+[ Upstream commit a6aca2f460e203781dc41391913cc5b54f4bc0ce ]
 
-Try requests are now only supported by format processing pad operations
-implemented by the driver.  The driver selection API operations
-currently respond to them with -EINVAL.  While that is correct, it
-constraints video device drivers to not use subdevice cropping at all
-while processing user requested active frame size, otherwise their set
-try format results might differ from active.  As a consequence, we
-can't fix set format pad operation as not to touch crop rectangle since
-that would affect users not being able to set arbitrary frame sizes.
-Moreover, without a working set try selection support we are not able
-to use pad config crop rectangle as a reference while processing set
-try format requests.
+pdc_enable_intr() serves as a primitive to qcom_pdc_gic_{en,dis}able,
+and has a raw spinlock for mutual exclusion, which is uses with
+interruptible primitives.
 
-Implement missing try selection support.  Moreover, as it will be now
-possible to maintain the pad config crop rectangle via selection API,
-start using it instead of the active one as a reference while
-processing set try format requests.
+This means that this critical section can itself be interrupted.
+Should the interrupt also be a PDC interrupt, and the endpoint driver
+perform an irq_disable() on that interrupt, we end-up in a deadlock.
 
-is_unscaled_ok() helper, now also called from set selection operation,
-has been just moved up in the source file to avoid a prototype, with no
-functional changes.
+Fix this by using the irqsave/irqrestore variants of the locking
+primitives.
 
-[Sakari Ailus: Rebase on subdev state patches]
-
-Fixes: 717fd5b4907a ("[media] v4l2: replace try_mbus_fmt by set_fmt")
-Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Reviewed-by: Maulik Shah <quic_mkshah@quicinc.com>
+Link: https://lore.kernel.org/r/20220224101226.88373-5-maz@kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/ov6650.c |   54 +++++++++++++++++++++++++++++++++++----------
- 1 file changed, 43 insertions(+), 11 deletions(-)
+ drivers/irqchip/qcom-pdc.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/media/i2c/ov6650.c
-+++ b/drivers/media/i2c/ov6650.c
-@@ -472,9 +472,16 @@ static int ov6650_get_selection(struct v
+diff --git a/drivers/irqchip/qcom-pdc.c b/drivers/irqchip/qcom-pdc.c
+index 5dc63c20b67e..fc747b7f4983 100644
+--- a/drivers/irqchip/qcom-pdc.c
++++ b/drivers/irqchip/qcom-pdc.c
+@@ -74,17 +74,18 @@ static int qcom_pdc_gic_set_irqchip_state(struct irq_data *d,
+ static void pdc_enable_intr(struct irq_data *d, bool on)
  {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
- 	struct ov6650 *priv = to_ov6650(client);
-+	struct v4l2_rect *rect;
+ 	int pin_out = d->hwirq;
++	unsigned long flags;
+ 	u32 index, mask;
+ 	u32 enable;
  
--	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE)
--		return -EINVAL;
-+	if (sel->which == V4L2_SUBDEV_FORMAT_TRY) {
-+		/* pre-select try crop rectangle */
-+		rect = &sd_state->pads->try_crop;
-+
-+	} else {
-+		/* pre-select active crop rectangle */
-+		rect = &priv->rect;
-+	}
+ 	index = pin_out / 32;
+ 	mask = pin_out % 32;
  
- 	switch (sel->target) {
- 	case V4L2_SEL_TGT_CROP_BOUNDS:
-@@ -483,14 +490,22 @@ static int ov6650_get_selection(struct v
- 		sel->r.width = W_CIF;
- 		sel->r.height = H_CIF;
- 		return 0;
-+
- 	case V4L2_SEL_TGT_CROP:
--		sel->r = priv->rect;
-+		/* use selected crop rectangle */
-+		sel->r = *rect;
- 		return 0;
-+
- 	default:
- 		return -EINVAL;
- 	}
+-	raw_spin_lock(&pdc_lock);
++	raw_spin_lock_irqsave(&pdc_lock, flags);
+ 	enable = pdc_reg_read(IRQ_ENABLE_BANK, index);
+ 	enable = on ? ENABLE_INTR(enable, mask) : CLEAR_INTR(enable, mask);
+ 	pdc_reg_write(IRQ_ENABLE_BANK, index, enable);
+-	raw_spin_unlock(&pdc_lock);
++	raw_spin_unlock_irqrestore(&pdc_lock, flags);
  }
  
-+static bool is_unscaled_ok(int width, int height, struct v4l2_rect *rect)
-+{
-+	return width > rect->width >> 1 || height > rect->height >> 1;
-+}
-+
- static void ov6650_bind_align_crop_rectangle(struct v4l2_rect *rect)
- {
- 	v4l_bound_align_image(&rect->width, 2, W_CIF, 1,
-@@ -510,12 +525,30 @@ static int ov6650_set_selection(struct v
- 	struct ov6650 *priv = to_ov6650(client);
- 	int ret;
- 
--	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE ||
--	    sel->target != V4L2_SEL_TGT_CROP)
-+	if (sel->target != V4L2_SEL_TGT_CROP)
- 		return -EINVAL;
- 
- 	ov6650_bind_align_crop_rectangle(&sel->r);
- 
-+	if (sel->which == V4L2_SUBDEV_FORMAT_TRY) {
-+		struct v4l2_rect *crop = &sd_state->pads->try_crop;
-+		struct v4l2_mbus_framefmt *mf = &sd_state->pads->try_fmt;
-+		/* detect current pad config scaling factor */
-+		bool half_scale = !is_unscaled_ok(mf->width, mf->height, crop);
-+
-+		/* store new crop rectangle */
-+		*crop = sel->r;
-+
-+		/* adjust frame size */
-+		mf->width = crop->width >> half_scale;
-+		mf->height = crop->height >> half_scale;
-+
-+		return 0;
-+	}
-+
-+	/* V4L2_SUBDEV_FORMAT_ACTIVE */
-+
-+	/* apply new crop rectangle */
- 	ret = ov6650_reg_write(client, REG_HSTRT, sel->r.left >> 1);
- 	if (!ret) {
- 		priv->rect.width += priv->rect.left - sel->r.left;
-@@ -567,11 +600,6 @@ static int ov6650_get_fmt(struct v4l2_su
- 	return 0;
- }
- 
--static bool is_unscaled_ok(int width, int height, struct v4l2_rect *rect)
--{
--	return width > rect->width >> 1 || height > rect->height >> 1;
--}
--
- #define to_clkrc(div)	((div) - 1)
- 
- /* set the format we will capture in */
-@@ -692,7 +720,11 @@ static int ov6650_set_fmt(struct v4l2_su
- 		break;
- 	}
- 
--	*crop = priv->rect;
-+	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
-+		*crop = sd_state->pads->try_crop;
-+	else
-+		*crop = priv->rect;
-+
- 	half_scale = !is_unscaled_ok(mf->width, mf->height, crop);
- 
- 	/* adjust new crop rectangle position against its current center */
+ static void qcom_pdc_gic_disable(struct irq_data *d)
+-- 
+2.34.1
+
 
 

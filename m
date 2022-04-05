@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A524F2CA1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 021814F2D58
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351871AbiDEKD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
+        id S1352222AbiDEKEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235667AbiDEI1E (ORCPT
+        with ESMTP id S236882AbiDEI2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:27:04 -0400
+        Tue, 5 Apr 2022 04:28:47 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD808140E3;
-        Tue,  5 Apr 2022 01:21:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01A7183B2;
+        Tue,  5 Apr 2022 01:21:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7010EB81BB1;
-        Tue,  5 Apr 2022 08:20:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2289C385A0;
-        Tue,  5 Apr 2022 08:20:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6CA29B81BB1;
+        Tue,  5 Apr 2022 08:21:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8B23C385A0;
+        Tue,  5 Apr 2022 08:21:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146858;
-        bh=TtGlKKB6pKoNSVQoJPN+1EWbLvNggYKF1ltPuI0juXo=;
+        s=korg; t=1649146866;
+        bh=giM/BAivgxJrob6NYPSr1zOqqdEG4sFSemV5nmzN4OM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k8LWdGMNDc5vWaekf/Bz1DyAVgMrHhHeK5hrX3APHcFplL7++bXrKFxltT0DZGZFz
-         KVZKrbAN8fx3S9mxF1sNvtxaDEJwhWtnfJhvsqlk7JYDuJIsZBLQeH2uj+sJhAKzq/
-         6VeC0nT2J1ygSCezMQ7F4jHrN/0WDT1xkCCgJf/o=
+        b=SpEgah5t9XXUemirCRANolQiBqdjFX9DjLKIWMRnwtdZlFFhg1orovDM8y9DL6/Kw
+         JoSuiAGYupsLJlurkr1PHrxxOOh9fD7W255ugyGIDa3dOe0/l14FwETiPBCaQNbM6R
+         10LprArtBXOzZ0CXmZG/dlvbgR0T/XfkQ+gmXwdY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Abel Vesa <abel.vesa@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Jing Yao <yao.jing2@zte.com.cn>, Helge Deller <deller@gmx.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0913/1126] ARM: dts: imx7: Use audio_mclk_post_div instead audio_mclk_root_clk
-Date:   Tue,  5 Apr 2022 09:27:40 +0200
-Message-Id: <20220405070434.322151083@linuxfoundation.org>
+Subject: [PATCH 5.17 0916/1126] video: fbdev: omapfb: panel-tpo-td043mtea1: Use sysfs_emit() instead of snprintf()
+Date:   Tue,  5 Apr 2022 09:27:43 +0200
+Message-Id: <20220405070434.408610570@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,164 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Abel Vesa <abel.vesa@nxp.com>
+From: Jing Yao <yao.jing2@zte.com.cn>
 
-[ Upstream commit 4cb7df64c732b2b9918424095c11660c2a8c4a33 ]
+[ Upstream commit c07a039cbb96748f54c02995bae8131cc9a73b0a ]
 
-The audio_mclk_root_clk was added as a gate with the CCGR121 (0x4790),
-but according to the reference manual, there is no such gate. Moreover,
-the consumer driver of the mentioned clock might gate it and leave
-the ECSPI2 (the true owner of that gate) hanging. So lets use the
-audio_mclk_post_div, which is the parent.
+Use sysfs_emit instead of scnprintf, snprintf or sprintf.
 
-Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Jing Yao <yao.jing2@zte.com.cn>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/imx7-colibri.dtsi     | 4 ++--
- arch/arm/boot/dts/imx7-mba7.dtsi        | 2 +-
- arch/arm/boot/dts/imx7d-nitrogen7.dts   | 2 +-
- arch/arm/boot/dts/imx7d-pico-hobbit.dts | 4 ++--
- arch/arm/boot/dts/imx7d-pico-pi.dts     | 4 ++--
- arch/arm/boot/dts/imx7d-sdb.dts         | 4 ++--
- arch/arm/boot/dts/imx7s-warp.dts        | 4 ++--
- 7 files changed, 12 insertions(+), 12 deletions(-)
+ .../video/fbdev/omap2/omapfb/displays/panel-tpo-td043mtea1.c  | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/imx7-colibri.dtsi b/arch/arm/boot/dts/imx7-colibri.dtsi
-index 62b771c1d5a9..f1c60b0cb143 100644
---- a/arch/arm/boot/dts/imx7-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx7-colibri.dtsi
-@@ -40,7 +40,7 @@
+diff --git a/drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td043mtea1.c b/drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td043mtea1.c
+index afac1d9445aa..57b7d1f49096 100644
+--- a/drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td043mtea1.c
++++ b/drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td043mtea1.c
+@@ -169,7 +169,7 @@ static ssize_t tpo_td043_vmirror_show(struct device *dev,
+ {
+ 	struct panel_drv_data *ddata = dev_get_drvdata(dev);
  
- 		dailink_master: simple-audio-card,codec {
- 			sound-dai = <&codec>;
--			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		};
- 	};
- };
-@@ -293,7 +293,7 @@
- 		compatible = "fsl,sgtl5000";
- 		#sound-dai-cells = <0>;
- 		reg = <0x0a>;
--		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&pinctrl_sai1_mclk>;
- 		VDDA-supply = <&reg_module_3v3_avdd>;
-diff --git a/arch/arm/boot/dts/imx7-mba7.dtsi b/arch/arm/boot/dts/imx7-mba7.dtsi
-index 49086c6b6a0a..3df6dff7734a 100644
---- a/arch/arm/boot/dts/imx7-mba7.dtsi
-+++ b/arch/arm/boot/dts/imx7-mba7.dtsi
-@@ -302,7 +302,7 @@
- 	tlv320aic32x4: audio-codec@18 {
- 		compatible = "ti,tlv320aic32x4";
- 		reg = <0x18>;
--		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		clock-names = "mclk";
- 		ldoin-supply = <&reg_audio_3v3>;
- 		iov-supply = <&reg_audio_3v3>;
-diff --git a/arch/arm/boot/dts/imx7d-nitrogen7.dts b/arch/arm/boot/dts/imx7d-nitrogen7.dts
-index e0751e6ba3c0..a31de900139d 100644
---- a/arch/arm/boot/dts/imx7d-nitrogen7.dts
-+++ b/arch/arm/boot/dts/imx7d-nitrogen7.dts
-@@ -288,7 +288,7 @@
- 	codec: wm8960@1a {
- 		compatible = "wlf,wm8960";
- 		reg = <0x1a>;
--		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		clock-names = "mclk";
- 		wlf,shared-lrclk;
- 	};
-diff --git a/arch/arm/boot/dts/imx7d-pico-hobbit.dts b/arch/arm/boot/dts/imx7d-pico-hobbit.dts
-index 7b2198a9372c..d917dc4f2f22 100644
---- a/arch/arm/boot/dts/imx7d-pico-hobbit.dts
-+++ b/arch/arm/boot/dts/imx7d-pico-hobbit.dts
-@@ -31,7 +31,7 @@
+-	return snprintf(buf, PAGE_SIZE, "%d\n", ddata->vmirror);
++	return sysfs_emit(buf, "%d\n", ddata->vmirror);
+ }
  
- 		dailink_master: simple-audio-card,codec {
- 			sound-dai = <&sgtl5000>;
--			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		};
- 	};
- };
-@@ -41,7 +41,7 @@
- 		#sound-dai-cells = <0>;
- 		reg = <0x0a>;
- 		compatible = "fsl,sgtl5000";
--		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		VDDA-supply = <&reg_2p5v>;
- 		VDDIO-supply = <&reg_vref_1v8>;
- 	};
-diff --git a/arch/arm/boot/dts/imx7d-pico-pi.dts b/arch/arm/boot/dts/imx7d-pico-pi.dts
-index 70bea95c06d8..f263e391e24c 100644
---- a/arch/arm/boot/dts/imx7d-pico-pi.dts
-+++ b/arch/arm/boot/dts/imx7d-pico-pi.dts
-@@ -31,7 +31,7 @@
+ static ssize_t tpo_td043_vmirror_store(struct device *dev,
+@@ -199,7 +199,7 @@ static ssize_t tpo_td043_mode_show(struct device *dev,
+ {
+ 	struct panel_drv_data *ddata = dev_get_drvdata(dev);
  
- 		dailink_master: simple-audio-card,codec {
- 			sound-dai = <&sgtl5000>;
--			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		};
- 	};
- };
-@@ -41,7 +41,7 @@
- 		#sound-dai-cells = <0>;
- 		reg = <0x0a>;
- 		compatible = "fsl,sgtl5000";
--		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		VDDA-supply = <&reg_2p5v>;
- 		VDDIO-supply = <&reg_vref_1v8>;
- 	};
-diff --git a/arch/arm/boot/dts/imx7d-sdb.dts b/arch/arm/boot/dts/imx7d-sdb.dts
-index 7813ef960f6e..f053f5122741 100644
---- a/arch/arm/boot/dts/imx7d-sdb.dts
-+++ b/arch/arm/boot/dts/imx7d-sdb.dts
-@@ -385,14 +385,14 @@
- 	codec: wm8960@1a {
- 		compatible = "wlf,wm8960";
- 		reg = <0x1a>;
--		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		clock-names = "mclk";
- 		wlf,shared-lrclk;
- 		wlf,hp-cfg = <2 2 3>;
- 		wlf,gpio-cfg = <1 3>;
- 		assigned-clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_SRC>,
- 				  <&clks IMX7D_PLL_AUDIO_POST_DIV>,
--				  <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+				  <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		assigned-clock-parents = <&clks IMX7D_PLL_AUDIO_POST_DIV>;
- 		assigned-clock-rates = <0>, <884736000>, <12288000>;
- 	};
-diff --git a/arch/arm/boot/dts/imx7s-warp.dts b/arch/arm/boot/dts/imx7s-warp.dts
-index 4f1edef06c92..e8734d218b9d 100644
---- a/arch/arm/boot/dts/imx7s-warp.dts
-+++ b/arch/arm/boot/dts/imx7s-warp.dts
-@@ -75,7 +75,7 @@
+-	return snprintf(buf, PAGE_SIZE, "%d\n", ddata->mode);
++	return sysfs_emit(buf, "%d\n", ddata->mode);
+ }
  
- 		dailink_master: simple-audio-card,codec {
- 			sound-dai = <&codec>;
--			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+			clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		};
- 	};
- };
-@@ -232,7 +232,7 @@
- 		#sound-dai-cells = <0>;
- 		reg = <0x0a>;
- 		compatible = "fsl,sgtl5000";
--		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_CLK>;
-+		clocks = <&clks IMX7D_AUDIO_MCLK_ROOT_DIV>;
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&pinctrl_sai1_mclk>;
- 		VDDA-supply = <&vgen4_reg>;
+ static ssize_t tpo_td043_mode_store(struct device *dev,
 -- 
 2.34.1
 

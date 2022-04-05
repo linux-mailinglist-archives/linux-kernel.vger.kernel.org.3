@@ -2,48 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB5A4F34CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3824F2E97
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:02:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245182AbiDEJLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:11:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
+        id S1347751AbiDEJ2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:28:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239565AbiDEIUO (ORCPT
+        with ESMTP id S239561AbiDEIUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:20:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D088B2603;
-        Tue,  5 Apr 2022 01:16:18 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272CD260B;
+        Tue,  5 Apr 2022 01:16:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FD5C60B0B;
-        Tue,  5 Apr 2022 08:16:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D6D4C385A0;
-        Tue,  5 Apr 2022 08:16:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD0F0B81B90;
+        Tue,  5 Apr 2022 08:16:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3620AC385A1;
+        Tue,  5 Apr 2022 08:16:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146577;
-        bh=jGIt1ZGHk2ZNqu7SMJGSKzTlEhP30eEkEnh7L+phfIw=;
+        s=korg; t=1649146580;
+        bh=zjOTbd3CARdzRs6xAsD11lBU1bt2Z1JXAl//e9EerwU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M6dW8IfYLBxDgTfWbwl7ikUAOYOKKVSwWpdOva58j+tlhNG9GTT2EX+drYraVkUj6
-         RyLUfBt/GZIA930/ua2PpN9TiDNYofem7Ah1VhcinIOFjlAPXFFk2IEhlL0r1mEzCD
-         qSiFMZsj+I9YRkAz583ODIEhxec6a7i54PplC7XA=
+        b=RQ/SlzzlizttBOMGh5QCNY3dv6wh9OVDpEQav2uRbELtxv82U3M/ksiXdGHUA6ArY
+         FjLoVos8tXPG4YJzURx3f4LFcE9JcIYjgyVuSOeo7Sz0Q5kIumS7xJBq17gWfogHtX
+         lBW1H/CAIOsU4AXE/Jn31rbIWJ2KwR39PaLN8UDU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Shunsuke Nakamura <nakamura.shun@fujitsu.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        stable@vger.kernel.org, Hao Chen <chenhao288@hisilicon.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0814/1126] libperf tests: Fix typo in perf_evlist__open() failure error messages
-Date:   Tue,  5 Apr 2022 09:26:01 +0200
-Message-Id: <20220405070431.457256451@linuxfoundation.org>
+Subject: [PATCH 5.17 0815/1126] net: hns3: fix ethtool tx copybreak buf size indicating not aligned issue
+Date:   Tue,  5 Apr 2022 09:26:02 +0200
+Message-Id: <20220405070431.485883939@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -61,68 +56,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shunsuke Nakamura <nakamura.shun@fujitsu.com>
+From: Hao Chen <chenhao288@hisilicon.com>
 
-[ Upstream commit c2eeac985657f61543e6c5a333b94f3bd18e6b9d ]
+[ Upstream commit 8778372118023e2258612c03573c47efef41d755 ]
 
-This patch corrects typos in error messages. I should be "evlist", not
-"evsel" as the function that fails is perf_evlist__open().
+When use ethtoool set tx copybreak buf size to a large value
+which causes order exceeding 10 or memory is not enough,
+it causes allocating tx copybreak buffer failed and print
+"the active tx spare buf is 0, not enabled tx spare buffer",
+however, use --get-tunable parameter query tx copybreak buf
+size and it indicates setting value not 0.
 
-Fixes: 3ce311afb5583cf3 ("libperf: Move to tools/lib/perf")
-Fixes: a7f3713f6bf207e6 ("libperf tests: Add test_stat_multiplexing test")
-Signed-off-by: Shunsuke Nakamura <nakamura.shun@fujitsu.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Link: http://lore.kernel.org/lkml/20220325043829.224045-2-nakamura.shun@fujitsu.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+So, it's necessary to change the print value from setting
+value to 0.
+
+Set kinfo.tx_spare_buf_size to 0 when set tx copybreak buf size failed.
+
+Fixes: e445f08af2b1 ("net: hns3: add support to set/get tx copybreak buf size via ethtool for hns3 driver")
+Signed-off-by: Hao Chen <chenhao288@hisilicon.com>
+Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/perf/tests/test-evlist.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ .../net/ethernet/hisilicon/hns3/hns3_enet.c   | 20 +++++++++++--------
+ .../ethernet/hisilicon/hns3/hns3_ethtool.c    |  3 ++-
+ 2 files changed, 14 insertions(+), 9 deletions(-)
 
-diff --git a/tools/lib/perf/tests/test-evlist.c b/tools/lib/perf/tests/test-evlist.c
-index fa854c83b7e7..ed616fc19b4f 100644
---- a/tools/lib/perf/tests/test-evlist.c
-+++ b/tools/lib/perf/tests/test-evlist.c
-@@ -69,7 +69,7 @@ static int test_stat_cpu(void)
- 	perf_evlist__set_maps(evlist, cpus, NULL);
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+index babc5d7a3b52..49943775713f 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+@@ -1028,13 +1028,12 @@ static bool hns3_can_use_tx_sgl(struct hns3_enet_ring *ring,
  
- 	err = perf_evlist__open(evlist);
--	__T("failed to open evsel", err == 0);
-+	__T("failed to open evlist", err == 0);
+ static void hns3_init_tx_spare_buffer(struct hns3_enet_ring *ring)
+ {
++	u32 alloc_size = ring->tqp->handle->kinfo.tx_spare_buf_size;
+ 	struct hns3_tx_spare *tx_spare;
+ 	struct page *page;
+-	u32 alloc_size;
+ 	dma_addr_t dma;
+ 	int order;
  
- 	perf_evlist__for_each_evsel(evlist, evsel) {
- 		cpus = perf_evsel__cpus(evsel);
-@@ -130,7 +130,7 @@ static int test_stat_thread(void)
- 	perf_evlist__set_maps(evlist, NULL, threads);
+-	alloc_size = ring->tqp->handle->kinfo.tx_spare_buf_size;
+ 	if (!alloc_size)
+ 		return;
  
- 	err = perf_evlist__open(evlist);
--	__T("failed to open evsel", err == 0);
-+	__T("failed to open evlist", err == 0);
+@@ -1044,30 +1043,35 @@ static void hns3_init_tx_spare_buffer(struct hns3_enet_ring *ring)
+ 	if (!tx_spare) {
+ 		/* The driver still work without the tx spare buffer */
+ 		dev_warn(ring_to_dev(ring), "failed to allocate hns3_tx_spare\n");
+-		return;
++		goto devm_kzalloc_error;
+ 	}
  
- 	perf_evlist__for_each_evsel(evlist, evsel) {
- 		perf_evsel__read(evsel, 0, 0, &counts);
-@@ -187,7 +187,7 @@ static int test_stat_thread_enable(void)
- 	perf_evlist__set_maps(evlist, NULL, threads);
+ 	page = alloc_pages_node(dev_to_node(ring_to_dev(ring)),
+ 				GFP_KERNEL, order);
+ 	if (!page) {
+ 		dev_warn(ring_to_dev(ring), "failed to allocate tx spare pages\n");
+-		devm_kfree(ring_to_dev(ring), tx_spare);
+-		return;
++		goto alloc_pages_error;
+ 	}
  
- 	err = perf_evlist__open(evlist);
--	__T("failed to open evsel", err == 0);
-+	__T("failed to open evlist", err == 0);
+ 	dma = dma_map_page(ring_to_dev(ring), page, 0,
+ 			   PAGE_SIZE << order, DMA_TO_DEVICE);
+ 	if (dma_mapping_error(ring_to_dev(ring), dma)) {
+ 		dev_warn(ring_to_dev(ring), "failed to map pages for tx spare\n");
+-		put_page(page);
+-		devm_kfree(ring_to_dev(ring), tx_spare);
+-		return;
++		goto dma_mapping_error;
+ 	}
  
- 	perf_evlist__for_each_evsel(evlist, evsel) {
- 		perf_evsel__read(evsel, 0, 0, &counts);
-@@ -507,7 +507,7 @@ static int test_stat_multiplexing(void)
- 	perf_evlist__set_maps(evlist, NULL, threads);
+ 	tx_spare->dma = dma;
+ 	tx_spare->buf = page_address(page);
+ 	tx_spare->len = PAGE_SIZE << order;
+ 	ring->tx_spare = tx_spare;
++	return;
++
++dma_mapping_error:
++	put_page(page);
++alloc_pages_error:
++	devm_kfree(ring_to_dev(ring), tx_spare);
++devm_kzalloc_error:
++	ring->tqp->handle->kinfo.tx_spare_buf_size = 0;
+ }
  
- 	err = perf_evlist__open(evlist);
--	__T("failed to open evsel", err == 0);
-+	__T("failed to open evlist", err == 0);
+ /* Use hns3_tx_spare_space() to make sure there is enough buffer
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
+index c06c39ece80d..7591772c9a6b 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
+@@ -1816,7 +1816,8 @@ static int hns3_set_tunable(struct net_device *netdev,
+ 		old_tx_spare_buf_size = h->kinfo.tx_spare_buf_size;
+ 		new_tx_spare_buf_size = *(u32 *)data;
+ 		ret = hns3_set_tx_spare_buf_size(netdev, new_tx_spare_buf_size);
+-		if (ret) {
++		if (ret ||
++		    (!priv->ring->tx_spare && new_tx_spare_buf_size != 0)) {
+ 			int ret1;
  
- 	perf_evlist__enable(evlist);
- 
+ 			netdev_warn(netdev,
 -- 
 2.34.1
 

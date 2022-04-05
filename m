@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC9A4F4383
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC134F3F26
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:57:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352287AbiDEMIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
+        id S1386903AbiDEO0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244466AbiDEIwI (ORCPT
+        with ESMTP id S238956AbiDEJdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BB8D64C2;
-        Tue,  5 Apr 2022 01:41:07 -0700 (PDT)
+        Tue, 5 Apr 2022 05:33:13 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F869659B;
+        Tue,  5 Apr 2022 02:21:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 18838B81B92;
-        Tue,  5 Apr 2022 08:40:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 843D7C385A0;
-        Tue,  5 Apr 2022 08:40:49 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9A0A5CE1C6A;
+        Tue,  5 Apr 2022 09:21:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC0C9C385A0;
+        Tue,  5 Apr 2022 09:21:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148049;
-        bh=nK806L/HXQjI0JbXIYqotYrEiT9JChqTmGRmHJKNS4I=;
+        s=korg; t=1649150471;
+        bh=WaWtMQ1moedWleGc2K2Obq1MHj8BngFuX5HUmVv0cSk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jKdu1ir8SB/e0ciR+/XAH/4DD8U+kMiG3SOA6nj+dGD/EuWtUtCn3AY0fW99y+21/
-         qqk6IDiuuqgEVLvsPg+dEFE7Bo3bAW9p6fNjcmILOZGDwEVwXGsPsQ4Is8ROBAPUjr
-         qu3NnEFvJt4nKPvrKIktYHO0YY/wGL9QoDU1cZwk=
+        b=XH6KaJVqj/62SjNfYpAw+pUoN7RQm0ncNHlYQkD99PQSM1GBj3nu2IuZ0eTJjaiWH
+         keHdp/awUgeItESOVToFI+aVrpyUwlpbUi0NuwhNvBOePdxIp343n57iu6mXAdwNmZ
+         eEuZCi9F2o43Geu8oR22Q8buoDoC/mQ0BzfEMIhM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jianyong Wu <jianyong.wu@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0215/1017] arm64/mm: avoid fixmap race condition when create pud mapping
-Date:   Tue,  5 Apr 2022 09:18:48 +0200
-Message-Id: <20220405070400.633299036@linuxfoundation.org>
+        stable@vger.kernel.org, Pavel Machek <pavel@denx.de>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 5.15 067/913] f2fs: fix to unlock page correctly in error path of is_alive()
+Date:   Tue,  5 Apr 2022 09:18:49 +0200
+Message-Id: <20220405070341.831433895@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,75 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jianyong Wu <jianyong.wu@arm.com>
+From: Chao Yu <chao@kernel.org>
 
-[ Upstream commit ee017ee353506fcec58e481673e4331ff198a80e ]
+commit 6d18762ed5cd549fde74fd0e05d4d87bac5a3beb upstream.
 
-The 'fixmap' is a global resource and is used recursively by
-create pud mapping(), leading to a potential race condition in the
-presence of a concurrent call to alloc_init_pud():
+As Pavel Machek reported in below link [1]:
 
-kernel_init thread                          virtio-mem workqueue thread
-==================                          ===========================
+After commit 77900c45ee5c ("f2fs: fix to do sanity check in is_alive()"),
+node page should be unlock via calling f2fs_put_page() in the error path
+of is_alive(), otherwise, f2fs may hang when it tries to lock the node
+page, fix it.
 
-  alloc_init_pud(...)                       alloc_init_pud(...)
-  pudp = pud_set_fixmap_offset(...)         pudp = pud_set_fixmap_offset(...)
-  READ_ONCE(*pudp)
-  pud_clear_fixmap(...)
-                                            READ_ONCE(*pudp) // CRASH!
+[1] https://lore.kernel.org/stable/20220124203637.GA19321@duo.ucw.cz/
 
-As kernel may sleep during creating pud mapping, introduce a mutex lock to
-serialise use of the fixmap entries by alloc_init_pud(). However, there is
-no need for locking in early boot stage and it doesn't work well with
-KASLR enabled when early boot. So, enable lock when system_state doesn't
-equal to "SYSTEM_BOOTING".
-
-Signed-off-by: Jianyong Wu <jianyong.wu@arm.com>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-Fixes: f4710445458c ("arm64: mm: use fixmap when creating page tables")
-Link: https://lore.kernel.org/r/20220201114400.56885-1-jianyong.wu@arm.com
-Signed-off-by: Will Deacon <will@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 77900c45ee5c ("f2fs: fix to do sanity check in is_alive()")
+Cc: <stable@vger.kernel.org>
+Reported-by: Pavel Machek <pavel@denx.de>
+Signed-off-by: Pavel Machek <pavel@denx.de>
+Signed-off-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/mm/mmu.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ fs/f2fs/gc.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index 044d2021c20c..37b8230cda6a 100644
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@ -63,6 +63,7 @@ static pmd_t bm_pmd[PTRS_PER_PMD] __page_aligned_bss __maybe_unused;
- static pud_t bm_pud[PTRS_PER_PUD] __page_aligned_bss __maybe_unused;
- 
- static DEFINE_SPINLOCK(swapper_pgdir_lock);
-+static DEFINE_MUTEX(fixmap_lock);
- 
- void set_swapper_pgd(pgd_t *pgdp, pgd_t pgd)
- {
-@@ -329,6 +330,12 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1023,8 +1023,10 @@ static bool is_alive(struct f2fs_sb_info
+ 		set_sbi_flag(sbi, SBI_NEED_FSCK);
  	}
- 	BUG_ON(p4d_bad(p4d));
  
-+	/*
-+	 * No need for locking during early boot. And it doesn't work as
-+	 * expected with KASLR enabled.
-+	 */
-+	if (system_state != SYSTEM_BOOTING)
-+		mutex_lock(&fixmap_lock);
- 	pudp = pud_set_fixmap_offset(p4dp, addr);
- 	do {
- 		pud_t old_pud = READ_ONCE(*pudp);
-@@ -359,6 +366,8 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
- 	} while (pudp++, addr = next, addr != end);
+-	if (f2fs_check_nid_range(sbi, dni->ino))
++	if (f2fs_check_nid_range(sbi, dni->ino)) {
++		f2fs_put_page(node_page, 1);
+ 		return false;
++	}
  
- 	pud_clear_fixmap();
-+	if (system_state != SYSTEM_BOOTING)
-+		mutex_unlock(&fixmap_lock);
- }
- 
- static void __create_pgd_mapping(pgd_t *pgdir, phys_addr_t phys,
--- 
-2.34.1
-
+ 	*nofs = ofs_of_node(node_page);
+ 	source_blkaddr = data_blkaddr(NULL, node_page, ofs_in_node);
 
 

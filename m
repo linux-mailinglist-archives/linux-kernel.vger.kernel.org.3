@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCD0E4F428E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13DA04F420F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381183AbiDEMOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
+        id S1381060AbiDEMOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244780AbiDEIwi (ORCPT
+        with ESMTP id S244786AbiDEIwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D36193FD;
-        Tue,  5 Apr 2022 01:43:50 -0700 (PDT)
+        Tue, 5 Apr 2022 04:52:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6741619C26;
+        Tue,  5 Apr 2022 01:43:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EEA3609D0;
-        Tue,  5 Apr 2022 08:43:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EDC7C385A0;
-        Tue,  5 Apr 2022 08:43:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 094FBB81BC5;
+        Tue,  5 Apr 2022 08:43:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68B53C385A1;
+        Tue,  5 Apr 2022 08:43:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148230;
-        bh=YJMAzVKAIvDjpbqE796gnbT2lDaRLxlz3gVlK0XQ2WI=;
+        s=korg; t=1649148232;
+        bh=zQ6/cvteXtzMrMf4i1FbC9Lt4WLK1F3GHD9ApU9xZdM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RNc1vD10nphUMV9fYzRaftEATjyX6wNexwdtc9q/zc7ABcnANQ7FjZEJBCC2a0a+3
-         3vrrfJwoKIhAZgba+guqOkWpV6fTstu9hyIfpZav4Zfn4Rw1I2RANP7GEMyUS0W4kO
-         ILwlbCbLAqyvQYoaaL3pOAvDMk0UlhOkb8IFXfSE=
+        b=iX8Fxiloz32+8hyibUMFb2+hw63q6XAGPg5rChzrUEgqktFQ4Vg/L2vpfe/rTIKvZ
+         NS0/Vn920h4GcnQtBhg4oft1jFnBq+pl8MxtAlHKf2NQQDaAy8Z0MhpxAPwekSp8OB
+         VVUu/R3gQJU8UxqMLGrp7q+orycSUA7fEyVUAcHQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -39,9 +39,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0281/1017] media: camss: csid-170: set the right HALT_CMD when disabled
-Date:   Tue,  5 Apr 2022 09:19:54 +0200
-Message-Id: <20220405070402.609281506@linuxfoundation.org>
+Subject: [PATCH 5.16 0282/1017] media: camss: vfe-170: fix "VFE halt timeout" error
+Date:   Tue,  5 Apr 2022 09:19:55 +0200
+Message-Id: <20220405070402.639652636@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -61,13 +61,13 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jonathan Marek <jonathan@marek.ca>
 
-[ Upstream commit ee780cd7be3b5608550bafe7d5f113db2140e99b ]
+[ Upstream commit 1ce8c48b06f249a9739e36c5d56883f6f49ce047 ]
 
-Use the "HALT_CMD_RESUME_AT_FRAME_BOUNDARY" define instead of a "1" which
-is otherwise confusing, and add a "HALT_CMD_HALT_AT_FRAME_BOUNDARY" which
-is set when disabling.
+This function waits for halt_complete but doesn't do anything to cause
+it to complete, and always hits the "VFE halt timeout" error. Just delete
+this code for now.
 
-Fixes: eebe6d00e9bf ("media: camss: Add support for CSID hardware version Titan 170")
+Fixes: 7319cdf189bb ("media: camss: Add support for VFE hardware version Titan 170")
 Signed-off-by: Jonathan Marek <jonathan@marek.ca>
 Reviewed-by: Robert Foss <robert.foss@linaro.org>
 Tested-by: Julian Grahsl <jgrahsl@snap.com>
@@ -77,33 +77,30 @@ Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/qcom/camss/camss-csid-170.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/media/platform/qcom/camss/camss-vfe-170.c | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/camss/camss-csid-170.c b/drivers/media/platform/qcom/camss/camss-csid-170.c
-index a006c8dbceb1..82f59933ad7b 100644
---- a/drivers/media/platform/qcom/camss/camss-csid-170.c
-+++ b/drivers/media/platform/qcom/camss/camss-csid-170.c
-@@ -105,7 +105,8 @@
- #define CSID_RDI_CTRL(rdi)			((IS_LITE ? 0x208 : 0x308)\
- 						+ 0x100 * (rdi))
- #define		RDI_CTRL_HALT_CMD		0
--#define			ALT_CMD_RESUME_AT_FRAME_BOUNDARY	1
-+#define			HALT_CMD_HALT_AT_FRAME_BOUNDARY		0
-+#define			HALT_CMD_RESUME_AT_FRAME_BOUNDARY	1
- #define		RDI_CTRL_HALT_MODE		2
- 
- #define CSID_RDI_FRM_DROP_PATTERN(rdi)			((IS_LITE ? 0x20C : 0x30C)\
-@@ -444,7 +445,10 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
- 	val |= 1 << CSI2_RX_CFG1_MISR_EN;
- 	writel_relaxed(val, csid->base + CSID_CSI2_RX_CFG1); // csi2_vc_mode_shift_val ?
- 
--	val = 1 << RDI_CTRL_HALT_CMD;
-+	if (enable)
-+		val = HALT_CMD_RESUME_AT_FRAME_BOUNDARY << RDI_CTRL_HALT_CMD;
-+	else
-+		val = HALT_CMD_HALT_AT_FRAME_BOUNDARY << RDI_CTRL_HALT_CMD;
- 	writel_relaxed(val, csid->base + CSID_RDI_CTRL(0));
+diff --git a/drivers/media/platform/qcom/camss/camss-vfe-170.c b/drivers/media/platform/qcom/camss/camss-vfe-170.c
+index 5c083d70d495..af71dc659bb9 100644
+--- a/drivers/media/platform/qcom/camss/camss-vfe-170.c
++++ b/drivers/media/platform/qcom/camss/camss-vfe-170.c
+@@ -402,17 +402,7 @@ static irqreturn_t vfe_isr(int irq, void *dev)
+  */
+ static int vfe_halt(struct vfe_device *vfe)
+ {
+-	unsigned long time;
+-
+-	reinit_completion(&vfe->halt_complete);
+-
+-	time = wait_for_completion_timeout(&vfe->halt_complete,
+-					   msecs_to_jiffies(VFE_HALT_TIMEOUT_MS));
+-	if (!time) {
+-		dev_err(vfe->camss->dev, "VFE halt timeout\n");
+-		return -EIO;
+-	}
+-
++	/* rely on vfe_disable_output() to stop the VFE */
+ 	return 0;
  }
  
 -- 

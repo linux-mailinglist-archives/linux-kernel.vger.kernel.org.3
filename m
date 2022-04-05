@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A13D4F2AC2
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A0B4F2D8D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343623AbiDEI5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:57:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56226 "EHLO
+        id S1344104AbiDEJmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235555AbiDEIQP (ORCPT
+        with ESMTP id S236123AbiDEIQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:16:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1F4B0A;
-        Tue,  5 Apr 2022 01:03:28 -0700 (PDT)
+        Tue, 5 Apr 2022 04:16:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AEB56232;
+        Tue,  5 Apr 2022 01:03:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0678EB81B18;
-        Tue,  5 Apr 2022 08:03:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CBF7C385A4;
-        Tue,  5 Apr 2022 08:03:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 625C5B81BAF;
+        Tue,  5 Apr 2022 08:03:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2958C385A1;
+        Tue,  5 Apr 2022 08:03:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145805;
-        bh=0tnG8i1GQZyMXsloxwbwqj8+PZOJC5u1shC/sV5xwUI=;
+        s=korg; t=1649145817;
+        bh=onA6pjFl4sGyX7aN0bk3e/nopEzBC79EIVPhBS9axjs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P28+5NtjyB9voUKMtNgmPLEYCmN4heGynhANqT+F1T38ETlUHiFy94OdyjqGPJKJc
-         rd1T7Gn02UfYto2ajKX27HzGulTKGjNToEZVA4AuBIpWf50/7wosecBCVxcvq7I9il
-         mqSxeKSfpf/X5XUnDJrl5bT2pL0MeQg/q6eGaMlE=
+        b=Ad1AbMUZsskXiGEgDTfcMI5izLOOWNBmrNMElmPw6Dr0hU2pZ4zEV1STgZaIDj00I
+         h4SHQzAWle+CRcgWQfWWiYou49b8xsumS12CKs28EnNnyFul2Yb8j5jmpPRrNJZLLq
+         yTKHKZ1SPQtnnS1MGl4jI4elf02rY+IJObjzzEpo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0535/1126] libbpf: Fix compilation warning due to mismatched printf format
-Date:   Tue,  5 Apr 2022 09:21:22 +0200
-Message-Id: <20220405070423.334924018@linuxfoundation.org>
+Subject: [PATCH 5.17 0539/1126] libbpf: Fix libbpf.map inheritance chain for LIBBPF_0.7.0
+Date:   Tue,  5 Apr 2022 09:21:26 +0200
+Message-Id: <20220405070423.453075461@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -57,34 +57,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrii Nakryiko <andrii@kernel.org>
 
-[ Upstream commit dc37dc617fabfb1c3a16d49f5d8cc20e9e3608ca ]
+[ Upstream commit d130e954a002b901391037c33b9ae11bae5aaa91 ]
 
-On ppc64le architecture __s64 is long int and requires %ld. Cast to
-ssize_t and use %zd to avoid architecture-specific specifiers.
+Ensure that LIBBPF_0.7.0 inherits everything from LIBBPF_0.6.0.
 
-Fixes: 4172843ed4a3 ("libbpf: Fix signedness bug in btf_dump_array_data()")
+Fixes: dbdd2c7f8cec ("libbpf: Add API to get/set log_level at per-program level")
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20220209063909.1268319-1-andrii@kernel.org
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/20220211205235.2089104-1-andrii@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/btf_dump.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/lib/bpf/libbpf.map | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index 55aed9e398c3..07ebe70d3a30 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -1869,7 +1869,8 @@ static int btf_dump_array_data(struct btf_dump *d,
- 	elem_type = skip_mods_and_typedefs(d->btf, elem_type_id, NULL);
- 	elem_size = btf__resolve_size(d->btf, elem_type_id);
- 	if (elem_size <= 0) {
--		pr_warn("unexpected elem size %lld for array type [%u]\n", elem_size, id);
-+		pr_warn("unexpected elem size %zd for array type [%u]\n",
-+			(ssize_t)elem_size, id);
- 		return -EINVAL;
- 	}
- 
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 529783967793..9a89fdfe4987 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -431,4 +431,4 @@ LIBBPF_0.7.0 {
+ 		libbpf_probe_bpf_map_type;
+ 		libbpf_probe_bpf_prog_type;
+ 		libbpf_set_memlock_rlim_max;
+-};
++} LIBBPF_0.6.0;
 -- 
 2.34.1
 

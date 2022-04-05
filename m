@@ -2,94 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 553414F2279
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 07:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F15084F227F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 07:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiDEFOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 01:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52354 "EHLO
+        id S229743AbiDEFPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 01:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiDEFOA (ORCPT
+        with ESMTP id S229696AbiDEFPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 01:14:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AD3311;
-        Mon,  4 Apr 2022 22:12:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3321E614A9;
-        Tue,  5 Apr 2022 05:12:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 432C9C340F0;
-        Tue,  5 Apr 2022 05:12:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649135521;
-        bh=iIo+zn0pj52zOFFjMSyQhxTcFA5tdRReaLN/oRTDT28=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tDXJAzwrF2zWBJHgbCM1pgN6QUq3umuEMADLIz52ETyZwPEDosIUBjvC2b0qm8JEg
-         0gYuX3lcku22/nCUOpy+TimECUFN5V6lWt7UO4RvvsECsVraPrFQvLm0XTvEtMYNfe
-         Lj3RFsPntssa1rsMaXDai74CekKdklQPTT0KjyYs=
-Date:   Tue, 5 Apr 2022 07:11:59 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        stable@vger.kernel.org, Qiuhao Li <qiuhao@sysec.org>,
-        Gaoning Pan <pgn@zju.edu.cn>, Yongkang Jia <kangel@zju.edu.cn>,
-        syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Subject: Re: [PATCH 5.4 v2] KVM: x86/mmu: do compare-and-exchange of gPTE via
- the user address
-Message-ID: <YkvPn6uWte2YEEbF@kroah.com>
-References: <20220404154913.482520-1-pbonzini@redhat.com>
+        Tue, 5 Apr 2022 01:15:35 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B260494;
+        Mon,  4 Apr 2022 22:13:37 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2e68c95e0f9so124231257b3.0;
+        Mon, 04 Apr 2022 22:13:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=vExsGhbuGDTgRyjW6nsfnayP9D5NmT9wV3d2NDaVDlA=;
+        b=iEEMqo/gdMqZDaeJ8ngvcLvi7M/MxYHDLLBWCCDlrLQkXuvHn/p+mJdjNKyIpLwOEw
+         FgvQxrR7H8h3oyOw1gqXfbWnVogSA4UOn2y46Om0907kQq0XDRBtB5HYe7r8tTSlCXv3
+         5eB99n9v5BBw+gI8AYX6KEKmw/jTsNbBSYkQApZW+79VauduYczHhGcsqXIYPnfMI3LM
+         iH9irl55DqckLefCEkk+T8HaZk2OLu7jGFPuH3cmRm1DrOXqchJKw8iN/aVKT/5v6Mku
+         OYPro0IijdnYdP7K86XPcVDzkmN04uK+UXC8bmH09begZngQunt6FxOWsa2ARxQnaJlX
+         Sh3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=vExsGhbuGDTgRyjW6nsfnayP9D5NmT9wV3d2NDaVDlA=;
+        b=4neNX2ByxjMnOiFdvRoAfstpl09j7dyidB9oww2zGI082roLV8hBGRMaETWHDUMO1O
+         sv+LmBsO8RghFk1GdqRlHAT0zuHU29G0WsOEzK9iZ0qUcWDCdLMHGRk2v9oq9vCj4pDw
+         BfcxWU9D/Vq0D+PrirrMeDLCYL60J3gRLaACc1zGXlWWqYiflOv6+veQy/YbiSLzfeBd
+         cCOL2vhJscTuxcDhDripwTwMpCsbRCfIcIcHGt/NcOkrurgc49VquIQ6+E7JR3zPvgAX
+         BE/TR+oZfN2xk+dsc2wiXJFPvu1hyzsVdVtgzjtY32Hkkk957nEn7vicGyYvBGkHpnSX
+         91QA==
+X-Gm-Message-State: AOAM532W7x6WJIgOD+lWPVdklOemybVWPKGJWyih2tmMrxJLBwcvdsL6
+        U0DL27/YXqlvuu2A+rHGzLGIOXmhDsTPJg0Ml4O0C0SHmmnUKQ==
+X-Google-Smtp-Source: ABdhPJzkKqwaQo8Q3QAxPhyp/Mpg9znQAfCPlsdm3+WUQh6q6jkj8gyvWAI3sawXFa/tnpmEjORexlXzyqTgZx3MXDI=
+X-Received: by 2002:a81:d0d:0:b0:2ea:61b1:181d with SMTP id
+ 13-20020a810d0d000000b002ea61b1181dmr1295727ywn.16.1649135616943; Mon, 04 Apr
+ 2022 22:13:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220404154913.482520-1-pbonzini@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220404172322.32578-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220404172322.32578-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <Yks3Q75ZrUkXSjwz@ninjato> <CA+V-a8skF4h6yhjSFw5PXQEbgKEQt6kMs9bEsO3OCNfE1hu46A@mail.gmail.com>
+ <YkvJXu7Y6Tc68U9e@shikoro>
+In-Reply-To: <YkvJXu7Y6Tc68U9e@shikoro>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 5 Apr 2022 06:13:11 +0100
+Message-ID: <CA+V-a8uPSr6+xcyqmBXZzuPb04v8KLNRou5Y+QvC7ibuAU_2Ng@mail.gmail.com>
+Subject: Re: [PATCH 2/2] mmc: renesas_internal_dmac: Fix typo's
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Pavel Machek <pavel@denx.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 11:49:13AM -0400, Paolo Bonzini wrote:
-> commit 2a8859f373b0a86f0ece8ec8312607eacf12485d upstream.
-> 
-> FNAME(cmpxchg_gpte) is an inefficient mess.  It is at least decent if it
-> can go through get_user_pages_fast(), but if it cannot then it tries to
-> use memremap(); that is not just terribly slow, it is also wrong because
-> it assumes that the VM_PFNMAP VMA is contiguous.
-> 
-> The right way to do it would be to do the same thing as
-> hva_to_pfn_remapped() does since commit add6a0cd1c5b ("KVM: MMU: try to
-> fix up page faults before giving up", 2016-07-05), using follow_pte()
-> and fixup_user_fault() to determine the correct address to use for
-> memremap().  To do this, one could for example extract hva_to_pfn()
-> for use outside virt/kvm/kvm_main.c.  But really there is no reason to
-> do that either, because there is already a perfectly valid address to
-> do the cmpxchg() on, only it is a userspace address.  That means doing
-> user_access_begin()/user_access_end() and writing the code in assembly
-> to handle any exception correctly.  Worse, the guest PTE can be 8-byte
-> even on i686 so there is the extra complication of using cmpxchg8b to
-> account for.  But at least it is an efficient mess.
-> 
-> Reported-by: Qiuhao Li <qiuhao@sysec.org>
-> Reported-by: Gaoning Pan <pgn@zju.edu.cn>
-> Reported-by: Yongkang Jia <kangel@zju.edu.cn>
-> Reported-by: syzbot+6cde2282daa792c49ab8@syzkaller.appspotmail.com
-> Debugged-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-> Tested-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Cc: stable@vger.kernel.org
-> Fixes: bd53cb35a3e9 ("X86/KVM: Handle PFNs outside of kernel reach when touching GPTEs")
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/kvm/paging_tmpl.h | 77 ++++++++++++++++++--------------------
->  1 file changed, 37 insertions(+), 40 deletions(-)
+On Tue, Apr 5, 2022 at 5:45 AM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+>
+>
+> > > > -     /* This DMAC cannot handle if buffer is not 128-bytes alignment */
+> > > > +     /* This DMAC cannot handle if buffer is not 128-bytes aligned */
+> > >
+> > > Well, as we are here now, I think this can be further improved.
+> > >
+> > "The internal DMAC supports 128-bytes aligned buffers only", does this
+> > sound good?
+>
+> I'd think it should be "128 byte aligned"? But I can't explain why, just
+> a gut feeling.
+>
+Fine by me.
 
-Thanks for the fix, now queued up.
+Let me know your thoughts on patch 1/2, I'll send a v2 with updated comment.
 
-greg k-h
+Cheers,
+Prabhakar

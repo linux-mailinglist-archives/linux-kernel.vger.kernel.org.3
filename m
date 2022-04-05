@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29AD44F23EA
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0219A4F23F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231373AbiDEHJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33212 "EHLO
+        id S231388AbiDEHMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiDEHJX (ORCPT
+        with ESMTP id S229963AbiDEHME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:09:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2E4D9C;
-        Tue,  5 Apr 2022 00:07:24 -0700 (PDT)
+        Tue, 5 Apr 2022 03:12:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757D54B1E2;
+        Tue,  5 Apr 2022 00:10:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42483B81BA9;
-        Tue,  5 Apr 2022 07:07:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B934C340F3;
-        Tue,  5 Apr 2022 07:07:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05957615FE;
+        Tue,  5 Apr 2022 07:10:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEBBAC340EE;
+        Tue,  5 Apr 2022 07:10:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649142441;
-        bh=0cm3jeEzLe7N3EP4NGVKWIlZwxIWB2O3sux63BexVRU=;
+        s=k20201202; t=1649142604;
+        bh=R0qfjYmhRyfgzwAdAmpXuqarK6SmFDQ1XokwxK9loxQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ufKGipfKs0Ydlg7WDqtwJeyxrmzd4O0c83H8X4YI+lwm88zVQQC/c3MFVUGPmxz4l
-         SOykwmFobC6jb09nZn5BryixX8NMjG9/jX23q84xRdDnxxJmk5bnc+vPWr9BSocvXU
-         YUdkHVYOKagBt9TUN2CWRgr56EQy2krv3+oM20hoGzY+CrJ/JorbyT53iEXt5gLklj
-         pWMwizLSoCorN+ZmjvHWmDOfPOwQw+Z1COS1Q+s/1EIQcja8XrQheIkB3fG7cQC5y7
-         AZBxc49DdOEfmE8xh3W74/4Tj253iYZ0m0VnHAuidTdiodo7Meb/5Yrg1xgLYya2US
-         +BufrP403Fryg==
-Date:   Tue, 5 Apr 2022 10:08:32 +0300
+        b=d9Eevjye9Rlmz7JV6Frf1lwqsLbud2Y9zSDCIowIUYts0TKrl5ypkN4QO1cgmJaen
+         WMi20mJZrflA2PBUknzisE9r4iZ58n6vkXrUtxSJ/uLjAz52FlmrKvznyxBIJtEDh1
+         tvSP4CGqk8mPiXsxaHeW742OPj+G5lloQf//ajwlrZoZ7pn7OXc0vyU9u6zyNke7MV
+         Wo0smeuYEGKeqjvRfzrMEi3ipSzRYKTA4POp2wPhTHj0112AxsaxrtrvpZrkCtz4R7
+         LAVXEEdp/OEPrXz1uboo0n22UqMFXCWxjlCnAndVVsJDVPEDj+yPkMgxGpBkC+qN6p
+         LfLjiIYihFTHg==
+Date:   Tue, 5 Apr 2022 10:11:15 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Reinette Chatre <reinette.chatre@intel.com>
 Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
@@ -41,14 +41,15 @@ Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
         cathy.zhang@intel.com, cedric.xing@intel.com,
         haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3 18/30] x86/sgx: Support complete page removal
-Message-ID: <Ykvq8Byj7SbXLA0z@kernel.org>
+Subject: Re: [PATCH V3 19/30] x86/sgx: Free up EPC pages directly to support
+ large page ranges
+Message-ID: <Ykvrk4hYvBEnNOOl@kernel.org>
 References: <cover.1648847675.git.reinette.chatre@intel.com>
- <82f8bb1ac50470696e6221c82cdb2807c4e0841c.1648847675.git.reinette.chatre@intel.com>
+ <b3a17e1ce7bcd14db3c28903e8a97f094998ae74.1648847675.git.reinette.chatre@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <82f8bb1ac50470696e6221c82cdb2807c4e0841c.1648847675.git.reinette.chatre@intel.com>
+In-Reply-To: <b3a17e1ce7bcd14db3c28903e8a97f094998ae74.1648847675.git.reinette.chatre@intel.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,277 +60,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 09:49:26AM -0700, Reinette Chatre wrote:
-> The SGX2 page removal flow was introduced in previous patch and is
-> as follows:
-> 1) Change the type of the pages to be removed to SGX_PAGE_TYPE_TRIM
->    using the ioctl() SGX_IOC_ENCLAVE_MODIFY_TYPE introduced in
->    previous patch.
-> 2) Approve the page removal by running ENCLU[EACCEPT] from within
->    the enclave.
-> 3) Initiate actual page removal using the ioctl()
->    SGX_IOC_ENCLAVE_REMOVE_PAGES introduced here.
+On Mon, Apr 04, 2022 at 09:49:27AM -0700, Reinette Chatre wrote:
+> The page reclaimer ensures availability of EPC pages across all
+> enclaves. In support of this it runs independently from the
+> individual enclaves in order to take locks from the different
+> enclaves as it writes pages to swap.
 > 
-> Support the final step of the SGX2 page removal flow with ioctl()
-> SGX_IOC_ENCLAVE_REMOVE_PAGES. With this ioctl() the user specifies
-> a page range that should be removed. All pages in the provided
-> range should have the SGX_PAGE_TYPE_TRIM page type and the request
-> will fail with EPERM (Operation not permitted) if a page that does
-> not have the correct type is encountered. Page removal can fail
-> on any page within the provided range. Support partial success by
-> returning the number of pages that were successfully removed.
+> When needing to load a page from swap an EPC page needs to be
+> available for its contents to be loaded into. Loading an existing
+> enclave page from swap does not reclaim EPC pages directly if
+> none are available, instead the reclaimer is woken when the
+> available EPC pages are found to be below a watermark.
 > 
-> Since actual page removal will succeed even if ENCLU[EACCEPT] was not
-> run from within the enclave the ENCLU[EMODPR] instruction with RWX
-> permissions is used as a no-op mechanism to ensure ENCLU[EACCEPT] was
-> successfully run from within the enclave before the enclave page is
-> removed.
+> When iterating over a large number of pages in an oversubscribed
+> environment there is a race between the reclaimer woken up and
+> EPC pages reclaimed fast enough for the page operations to proceed.
 > 
-> If the user omits running SGX_IOC_ENCLAVE_REMOVE_PAGES the pages will
-> still be removed when the enclave is unloaded.
+> Ensure there are EPC pages available before attempting to load
+> a page that may potentially be pulled from swap into an available
+> EPC page.
 > 
 > Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 > ---
-> Changes since V2:
-> - Adjust ioctl number since removal of
->   SGX_IOC_ENCLAVE_RELAX_PERMISSIONS.
+> No changes since V2
 > 
-> Changes since V1:
-> - Update comments to refer to new ioctl() names SGX_IOC_PAGE_MODT ->
->   SGX_IOC_ENCLAVE_MODIFY_TYPE.
-> - Fix kernel-doc to have () as part of function name.
-> - Change name of ioctl():
->   SGX_IOC_PAGE_REMOVE -> SGX_IOC_ENCLAVE_REMOVE_PAGES (Jarkko).
-> - With the above name change the page removal ioctl() has its name
->   aligned with existing SGX_IOC_ENCLAVE_ADD_PAGES ioctl(). Also align
->   naming of struct and functions:
->   struct sgx_page_remove -> struct sgx_enclave_remove_pages
->   sgx_page_remove() -> sgx_encl_remove_pages()
->   sgx_ioc_page_remove() -> sgx_ioc_enclave_remove_pages()
-> - Use new SGX2 checking helper.
-> - When loading enclave page, make error code consistent with other
->   instances to help user distinguish between permanent and temporary
->   failures.
-> - Move kernel-doc to function that provides documentation for
->   Documentation/x86/sgx.rst.
-> - Remove redundant comment.
-> - Use offset/length validation utility.
-> - Make explicit which member of struct sgx_enclave_remove_pages is for
->   output (Dave).
+> Changes since v1:
+> - Reword commit message.
 > 
->  arch/x86/include/uapi/asm/sgx.h |  21 +++++
->  arch/x86/kernel/cpu/sgx/ioctl.c | 145 ++++++++++++++++++++++++++++++++
->  2 files changed, 166 insertions(+)
+>  arch/x86/kernel/cpu/sgx/ioctl.c | 6 ++++++
+>  arch/x86/kernel/cpu/sgx/main.c  | 6 ++++++
+>  arch/x86/kernel/cpu/sgx/sgx.h   | 1 +
+>  3 files changed, 13 insertions(+)
 > 
-> diff --git a/arch/x86/include/uapi/asm/sgx.h b/arch/x86/include/uapi/asm/sgx.h
-> index 529f4ab28410..feda7f85b2ce 100644
-> --- a/arch/x86/include/uapi/asm/sgx.h
-> +++ b/arch/x86/include/uapi/asm/sgx.h
-> @@ -33,6 +33,8 @@ enum sgx_page_flags {
->  	_IOWR(SGX_MAGIC, 0x05, struct sgx_enclave_restrict_permissions)
->  #define SGX_IOC_ENCLAVE_MODIFY_TYPE \
->  	_IOWR(SGX_MAGIC, 0x06, struct sgx_enclave_modify_type)
-> +#define SGX_IOC_ENCLAVE_REMOVE_PAGES \
-> +	_IOWR(SGX_MAGIC, 0x07, struct sgx_enclave_remove_pages)
->  
->  /**
->   * struct sgx_enclave_create - parameter structure for the
-> @@ -117,6 +119,25 @@ struct sgx_enclave_modify_type {
->  	__u64 count;
->  };
->  
-> +/**
-> + * struct sgx_enclave_remove_pages - %SGX_IOC_ENCLAVE_REMOVE_PAGES parameters
-> + * @offset:	starting page offset (page aligned relative to enclave base
-> + *		address defined in SECS)
-> + * @length:	length of memory (multiple of the page size)
-> + * @count:	(output) bytes successfully changed (multiple of page size)
-> + *
-> + * Regular (PT_REG) or TCS (PT_TCS) can be removed from an initialized
-> + * enclave if the system supports SGX2. First, the %SGX_IOC_ENCLAVE_MODIFY_TYPE
-> + * ioctl() should be used to change the page type to PT_TRIM. After that
-> + * succeeds ENCLU[EACCEPT] should be run from within the enclave and then
-> + * %SGX_IOC_ENCLAVE_REMOVE_PAGES can be used to complete the page removal.
-> + */
-> +struct sgx_enclave_remove_pages {
-> +	__u64 offset;
-> +	__u64 length;
-> +	__u64 count;
-> +};
-> +
->  struct sgx_enclave_run;
->  
->  /**
 > diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
-> index 6f769e67ec2d..515e1961cc02 100644
+> index 515e1961cc02..f88bc1236276 100644
 > --- a/arch/x86/kernel/cpu/sgx/ioctl.c
 > +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-> @@ -1104,6 +1104,148 @@ static long sgx_ioc_enclave_modify_type(struct sgx_encl *encl, void __user *arg)
->  	return ret;
+> @@ -777,6 +777,8 @@ sgx_enclave_restrict_permissions(struct sgx_encl *encl,
+>  	for (c = 0 ; c < modp->length; c += PAGE_SIZE) {
+>  		addr = encl->base + modp->offset + c;
+>  
+> +		sgx_direct_reclaim();
+> +
+>  		mutex_lock(&encl->lock);
+>  
+>  		entry = sgx_encl_load_page(encl, addr);
+> @@ -934,6 +936,8 @@ static long sgx_enclave_modify_type(struct sgx_encl *encl,
+>  	for (c = 0 ; c < modt->length; c += PAGE_SIZE) {
+>  		addr = encl->base + modt->offset + c;
+>  
+> +		sgx_direct_reclaim();
+> +
+>  		mutex_lock(&encl->lock);
+>  
+>  		entry = sgx_encl_load_page(encl, addr);
+> @@ -1129,6 +1133,8 @@ static long sgx_encl_remove_pages(struct sgx_encl *encl,
+>  	for (c = 0 ; c < params->length; c += PAGE_SIZE) {
+>  		addr = encl->base + params->offset + c;
+>  
+> +		sgx_direct_reclaim();
+> +
+>  		mutex_lock(&encl->lock);
+>  
+>  		entry = sgx_encl_load_page(encl, addr);
+> diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+> index 6e2cb7564080..545da16bb3ea 100644
+> --- a/arch/x86/kernel/cpu/sgx/main.c
+> +++ b/arch/x86/kernel/cpu/sgx/main.c
+> @@ -370,6 +370,12 @@ static bool sgx_should_reclaim(unsigned long watermark)
+>  	       !list_empty(&sgx_active_page_list);
 >  }
 >  
-> +/**
-> + * sgx_encl_remove_pages() - Remove trimmed pages from SGX enclave
-> + * @encl:	Enclave to which the pages belong
-> + * @params:	Checked parameters from user on which pages need to be removed
-> + *
-> + * Return:
-> + * - 0:		Success.
-> + * - -errno:	Otherwise.
-> + */
-> +static long sgx_encl_remove_pages(struct sgx_encl *encl,
-> +				  struct sgx_enclave_remove_pages *params)
+> +void sgx_direct_reclaim(void)
 > +{
-> +	struct sgx_encl_page *entry;
-> +	struct sgx_secinfo secinfo;
-> +	unsigned long addr;
-> +	unsigned long c;
-> +	void *epc_virt;
-> +	int ret;
-> +
-> +	memset(&secinfo, 0, sizeof(secinfo));
-> +	secinfo.flags = SGX_SECINFO_R | SGX_SECINFO_W | SGX_SECINFO_X;
-> +
-> +	for (c = 0 ; c < params->length; c += PAGE_SIZE) {
-> +		addr = encl->base + params->offset + c;
-> +
-> +		mutex_lock(&encl->lock);
-> +
-> +		entry = sgx_encl_load_page(encl, addr);
-> +		if (IS_ERR(entry)) {
-> +			ret = PTR_ERR(entry) == -EBUSY ? -EAGAIN : -EFAULT;
-> +			goto out_unlock;
-> +		}
-> +
-> +		if (entry->type != SGX_PAGE_TYPE_TRIM) {
-> +			ret = -EPERM;
-> +			goto out_unlock;
-> +		}
-> +
-> +		/*
-> +		 * ENCLS[EMODPR] is a no-op instruction used to inform if
-> +		 * ENCLU[EACCEPT] was run from within the enclave. If
-> +		 * ENCLS[EMODPR] is run with RWX on a trimmed page that is
-> +		 * not yet accepted then it will return
-> +		 * %SGX_PAGE_NOT_MODIFIABLE, after the trimmed page is
-> +		 * accepted the instruction will encounter a page fault.
-> +		 */
-> +		epc_virt = sgx_get_epc_virt_addr(entry->epc_page);
-> +		ret = __emodpr(&secinfo, epc_virt);
-> +		if (!encls_faulted(ret) || ENCLS_TRAPNR(ret) != X86_TRAP_PF) {
-> +			ret = -EPERM;
-> +			goto out_unlock;
-> +		}
-> +
-> +		if (sgx_unmark_page_reclaimable(entry->epc_page)) {
-> +			ret = -EBUSY;
-> +			goto out_unlock;
-> +		}
-> +
-> +		/*
-> +		 * Do not keep encl->lock because of dependency on
-> +		 * mmap_lock acquired in sgx_zap_enclave_ptes().
-> +		 */
-> +		mutex_unlock(&encl->lock);
-> +
-> +		sgx_zap_enclave_ptes(encl, addr);
-> +
-> +		mutex_lock(&encl->lock);
-> +
-> +		sgx_encl_free_epc_page(entry->epc_page);
-> +		encl->secs_child_cnt--;
-> +		entry->epc_page = NULL;
-> +		xa_erase(&encl->page_array, PFN_DOWN(entry->desc));
-> +		sgx_encl_shrink(encl, NULL);
-> +		kfree(entry);
-> +
-> +		mutex_unlock(&encl->lock);
-> +	}
-> +
-> +	ret = 0;
-> +	goto out;
-> +
-> +out_unlock:
-> +	mutex_unlock(&encl->lock);
-> +out:
-> +	params->count = c;
-> +
-> +	return ret;
+> +	if (sgx_should_reclaim(SGX_NR_LOW_PAGES))
+> +		sgx_reclaim_pages();
 > +}
-> +
-> +/**
-> + * sgx_ioc_enclave_remove_pages() - handler for %SGX_IOC_ENCLAVE_REMOVE_PAGES
-> + * @encl:	an enclave pointer
-> + * @arg:	userspace pointer to &struct sgx_enclave_remove_pages instance
-> + *
-> + * Final step of the flow removing pages from an initialized enclave. The
-> + * complete flow is:
-> + *
-> + * 1) User changes the type of the pages to be removed to %SGX_PAGE_TYPE_TRIM
-> + *    using the %SGX_IOC_ENCLAVE_MODIFY_TYPE ioctl().
-> + * 2) User approves the page removal by running ENCLU[EACCEPT] from within
-> + *    the enclave.
-> + * 3) User initiates actual page removal using the
-> + *    %SGX_IOC_ENCLAVE_REMOVE_PAGES ioctl() that is handled here.
-> + *
-> + * First remove any page table entries pointing to the page and then proceed
-> + * with the actual removal of the enclave page and data in support of it.
-> + *
-> + * VA pages are not affected by this removal. It is thus possible that the
-> + * enclave may end up with more VA pages than needed to support all its
-> + * pages.
-> + *
-> + * Return:
-> + * - 0:		Success
-> + * - -errno:	Otherwise
-> + */
-> +static long sgx_ioc_enclave_remove_pages(struct sgx_encl *encl,
-> +					 void __user *arg)
-> +{
-> +	struct sgx_enclave_remove_pages params;
-> +	long ret;
-> +
-> +	ret = sgx_ioc_sgx2_ready(encl);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (copy_from_user(&params, arg, sizeof(params)))
-> +		return -EFAULT;
-> +
-> +	if (sgx_validate_offset_length(encl, params.offset, params.length))
-> +		return -EINVAL;
-> +
-> +	if (params.count)
-> +		return -EINVAL;
-> +
-> +	ret = sgx_encl_remove_pages(encl, &params);
-> +
-> +	if (copy_to_user(arg, &params, sizeof(params)))
-> +		return -EFAULT;
-> +
-> +	return ret;
-> +}
-> +
->  long sgx_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
->  {
->  	struct sgx_encl *encl = filep->private_data;
-> @@ -1132,6 +1274,9 @@ long sgx_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
->  	case SGX_IOC_ENCLAVE_MODIFY_TYPE:
->  		ret = sgx_ioc_enclave_modify_type(encl, (void __user *)arg);
->  		break;
-> +	case SGX_IOC_ENCLAVE_REMOVE_PAGES:
-> +		ret = sgx_ioc_enclave_remove_pages(encl, (void __user *)arg);
-> +		break;
->  	default:
->  		ret = -ENOIOCTLCMD;
->  		break;
-> -- 
-> 2.25.1
-> 
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-
-It's easy to give these quickly as I've spent at least a month looking at
-this code while working on support for enarx run-time...
+Please, instead open code this to both locations - not enough redundancy
+to be worth of new function. Causes only unnecessary cross-referencing
+when maintaining. Otherwise, I agree with the idea.
 
 BR, Jarkko
+

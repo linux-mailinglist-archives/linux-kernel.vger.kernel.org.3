@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 945504F2B83
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C7D4F2D35
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238523AbiDEJFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:05:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
+        id S1350481AbiDEJ6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237851AbiDEIS2 (ORCPT
+        with ESMTP id S238133AbiDEISl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:18:28 -0400
+        Tue, 5 Apr 2022 04:18:41 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D54BBB7C4D;
-        Tue,  5 Apr 2022 01:07:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97D9B9193;
+        Tue,  5 Apr 2022 01:08:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6BC36B81B18;
-        Tue,  5 Apr 2022 08:07:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B454FC385A0;
-        Tue,  5 Apr 2022 08:07:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BAF65B81BAF;
+        Tue,  5 Apr 2022 08:08:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16544C385A0;
+        Tue,  5 Apr 2022 08:08:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146058;
-        bh=qCT2fERxtkSUg8GxJqtC7W7Qj/xTGFXlgly/YuayjiE=;
+        s=korg; t=1649146085;
+        bh=UjsimMY8mXFbubZ1Ptnk8VmWm4SoyR1XlgZaRQBMXP4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=agCe/HKiIe2PRKs7eqTsaFYHd+MZW1xr0F5pM/HA0AqEfIJ78Gidfo+AKC4/DHq3X
-         WX2TO9PtTn45Q8lvOFzzho5Cf/NnvZFmAMWVp2obPzfIJdjsuiD12X0ktWuEvtOsaz
-         jxYnaCI+EzpRcnUUFNtcWa56yN7PxufOsS7TH9YI=
+        b=YfztPVstWRddSi+2yxfHd5xbwo2IeO0R50BnWjuF4A1zDZYkqcKcjwBuzP5GW9sgS
+         rjTtGQX/Hh5DxcVA0huUYXzTmGP06KHW58PMhsZWSw0xoeUGFPqBjcf+nyAx1pv8Cf
+         QSYKS979xz01XInJd6cqtHciNBWG088Jg0KD7Kxk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0626/1126] KVM: arm64: Enable Cortex-A510 erratum 2077057 by default
-Date:   Tue,  5 Apr 2022 09:22:53 +0200
-Message-Id: <20220405070426.011522620@linuxfoundation.org>
+        stable@vger.kernel.org, Angela Czubak <acz@semihalf.com>,
+        Marek Maslanka <mm@semihalf.com>,
+        Radoslaw Biernacki <rad@semihalf.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0630/1126] Bluetooth: Fix skb allocation in mgmt_remote_name() & mgmt_device_connected()
+Date:   Tue,  5 Apr 2022 09:22:57 +0200
+Message-Id: <20220405070426.128609733@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,37 +57,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Radoslaw Biernacki <rad@semihalf.com>
 
-[ Upstream commit 4c11113c1a3d10f5b617e5d2b9acd8d1d715450f ]
+[ Upstream commit ba17bb62ce415950753c19d16bb43b2bd3701158 ]
 
-The recently added configuration option for Cortex A510 erratum 2077057 does
-not have a "default y" unlike other errata fixes. This appears to simply be
-an oversight since the help text suggests enabling the option if unsure and
-there's nothing in the commit log to suggest it is intentional.
+This patch fixes skb allocation, as lack of space for ev might push skb
+tail beyond its end.
+Also introduce eir_precalc_len() that can be used instead of magic
+numbers for similar eir operations on skb.
 
-Fixes: 1dd498e5e26ad ("KVM: arm64: Workaround Cortex-A510's single-step and PAC trap errata")
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220225184658.172527-1-broonie@kernel.org
+Fixes: cf1bce1de7eeb ("Bluetooth: mgmt: Make use of mgmt_send_event_skb in MGMT_EV_DEVICE_FOUND")
+Fixes: e96741437ef0a ("Bluetooth: mgmt: Make use of mgmt_send_event_skb in MGMT_EV_DEVICE_CONNECTED")
+Signed-off-by: Angela Czubak <acz@semihalf.com>
+Signed-off-by: Marek Maslanka <mm@semihalf.com>
+Signed-off-by: Radoslaw Biernacki <rad@semihalf.com>
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ net/bluetooth/eir.h  |  5 +++++
+ net/bluetooth/mgmt.c | 18 ++++++++----------
+ 2 files changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index c842878f8133..baa0e9bbe754 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -683,6 +683,7 @@ config ARM64_ERRATUM_2051678
+diff --git a/net/bluetooth/eir.h b/net/bluetooth/eir.h
+index 05e2e917fc25..e5876751f07e 100644
+--- a/net/bluetooth/eir.h
++++ b/net/bluetooth/eir.h
+@@ -15,6 +15,11 @@ u8 eir_create_scan_rsp(struct hci_dev *hdev, u8 instance, u8 *ptr);
+ u8 eir_append_local_name(struct hci_dev *hdev, u8 *eir, u8 ad_len);
+ u8 eir_append_appearance(struct hci_dev *hdev, u8 *ptr, u8 ad_len);
  
- config ARM64_ERRATUM_2077057
- 	bool "Cortex-A510: 2077057: workaround software-step corrupting SPSR_EL2"
-+	default y
- 	help
- 	  This option adds the workaround for ARM Cortex-A510 erratum 2077057.
- 	  Affected Cortex-A510 may corrupt SPSR_EL2 when the a step exception is
++static inline u16 eir_precalc_len(u8 data_len)
++{
++	return sizeof(u8) * 2 + data_len;
++}
++
+ static inline u16 eir_append_data(u8 *eir, u16 eir_len, u8 type,
+ 				  u8 *data, u8 data_len)
+ {
+diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
+index 230a7a8196c0..15eab8b968ce 100644
+--- a/net/bluetooth/mgmt.c
++++ b/net/bluetooth/mgmt.c
+@@ -9086,12 +9086,14 @@ void mgmt_device_connected(struct hci_dev *hdev, struct hci_conn *conn,
+ 	u16 eir_len = 0;
+ 	u32 flags = 0;
+ 
++	/* allocate buff for LE or BR/EDR adv */
+ 	if (conn->le_adv_data_len > 0)
+ 		skb = mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_CONNECTED,
+-				     conn->le_adv_data_len);
++				     sizeof(*ev) + conn->le_adv_data_len);
+ 	else
+ 		skb = mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_CONNECTED,
+-				     2 + name_len + 5);
++				     sizeof(*ev) + (name ? eir_precalc_len(name_len) : 0) +
++				     eir_precalc_len(sizeof(conn->dev_class)));
+ 
+ 	ev = skb_put(skb, sizeof(*ev));
+ 	bacpy(&ev->addr.bdaddr, &conn->dst);
+@@ -9707,13 +9709,11 @@ void mgmt_remote_name(struct hci_dev *hdev, bdaddr_t *bdaddr, u8 link_type,
+ {
+ 	struct sk_buff *skb;
+ 	struct mgmt_ev_device_found *ev;
+-	u16 eir_len;
+-	u32 flags;
++	u16 eir_len = 0;
++	u32 flags = 0;
+ 
+-	if (name_len)
+-		skb = mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_FOUND, 2 + name_len);
+-	else
+-		skb = mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_FOUND, 0);
++	skb = mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_FOUND,
++			     sizeof(*ev) + (name ? eir_precalc_len(name_len) : 0));
+ 
+ 	ev = skb_put(skb, sizeof(*ev));
+ 	bacpy(&ev->addr.bdaddr, bdaddr);
+@@ -9723,10 +9723,8 @@ void mgmt_remote_name(struct hci_dev *hdev, bdaddr_t *bdaddr, u8 link_type,
+ 	if (name) {
+ 		eir_len = eir_append_data(ev->eir, 0, EIR_NAME_COMPLETE, name,
+ 					  name_len);
+-		flags = 0;
+ 		skb_put(skb, eir_len);
+ 	} else {
+-		eir_len = 0;
+ 		flags = MGMT_DEV_FOUND_NAME_REQUEST_FAILED;
+ 	}
+ 
 -- 
 2.34.1
 

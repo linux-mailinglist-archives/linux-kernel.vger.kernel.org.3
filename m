@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 790054F49C8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 389E44F4C5A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1450394AbiDEW1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53684 "EHLO
+        id S1578215AbiDEXTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357084AbiDEKZg (ORCPT
+        with ESMTP id S1357137AbiDEKZn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:25:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24AAAC6818;
-        Tue,  5 Apr 2022 03:09:31 -0700 (PDT)
+        Tue, 5 Apr 2022 06:25:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C1F53E0F;
+        Tue,  5 Apr 2022 03:09:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 919B261500;
-        Tue,  5 Apr 2022 10:09:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AAC6C385A1;
-        Tue,  5 Apr 2022 10:09:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22A62616E7;
+        Tue,  5 Apr 2022 10:09:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30C01C385A0;
+        Tue,  5 Apr 2022 10:09:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153370;
-        bh=YHj8iQCd/OzW6n3qVyhCaXbJn2snqvg9rtDApIgkDJ4=;
+        s=korg; t=1649153375;
+        bh=OV47iBJ5fsFk1E4W5Sw81qOODEtHY8MEP71aX2/Lg+A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j97EIoCRX29QQYFj35eX3LJ/aRX8tqasjRQiLZ4p7TdfLN7ebL6aqat6dhu6XEwU/
-         elVswZpSDU0KFMIvtJdsFyrwm165Faq4kcsOcM+tgsNcbrYFb92XPggfQNidEwCcKW
-         SGCjJ8QsToDO2myWSWAnNFF6MpOyOM/H+SsEMceI=
+        b=2sLKwxFYGiKfC5ptjrPslQhJ6s5FYO/a77X6rbvmK56df+3uZXBl6lHZVpAs3mVb5
+         sdOTb9JtGMbIyCDXtascdRG2boR/UT2IuPdVngzOwnbOkI1WZwMFAV2i5vvBHPfuoV
+         843sGPQHJbwucFiZOySyjyAuUNypXpj7nudUHMYQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Z. Liu" <liuzx@knownsec.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 197/599] video: fbdev: matroxfb: set maxvram of vbG200eW to the same as vbG200 to avoid black screen
-Date:   Tue,  5 Apr 2022 09:28:11 +0200
-Message-Id: <20220405070304.703511882@linuxfoundation.org>
+        stable@vger.kernel.org, Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 198/599] video: fbdev: controlfb: Fix set but not used warnings
+Date:   Tue,  5 Apr 2022 09:28:12 +0200
+Message-Id: <20220405070304.732913507@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -54,36 +58,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Z. Liu <liuzx@knownsec.com>
+From: Sam Ravnborg <sam@ravnborg.org>
 
-[ Upstream commit 62d89a7d49afe46e6b9bbe9e23b004ad848dbde4 ]
+[ Upstream commit 4aca4dbcac9d8eed8a8dc15b6883270a20a84218 ]
 
-Start from commit 11be60bd66d54 "matroxfb: add Matrox MGA-G200eW board
-support", when maxvram is 0x800000, monitor become black w/ error message
-said: "The current input timing is not supported by the monitor display.
-Please change your input timing to 1920x1080@60Hz ...".
+The controlfb driver has a number of dummy defines for IO operations.
+They were introduced in commit a07a63b0e24d
+("video: fbdev: controlfb: add COMPILE_TEST support").
 
-Fixes: 11be60bd66d5 ("matroxfb: add Matrox MGA-G200eW board support")
-Signed-off-by: Z. Liu <liuzx@knownsec.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+The write variants did not use their value parameter in the
+dummy versions, resulting in set but not used warnings.
+Fix this by adding "(void)val" to silence the compiler.
+
+Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
+Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: Sam Ravnborg <sam@ravnborg.org>
+Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://patchwork.freedesktop.org/patch/msgid/20201206190247.1861316-13-sam@ravnborg.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/matrox/matroxfb_base.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/video/fbdev/controlfb.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/video/fbdev/matrox/matroxfb_base.c b/drivers/video/fbdev/matrox/matroxfb_base.c
-index 570439b32655..daaa99818d3b 100644
---- a/drivers/video/fbdev/matrox/matroxfb_base.c
-+++ b/drivers/video/fbdev/matrox/matroxfb_base.c
-@@ -1377,7 +1377,7 @@ static struct video_board vbG200 = {
- 	.lowlevel = &matrox_G100
- };
- static struct video_board vbG200eW = {
--	.maxvram = 0x800000,
-+	.maxvram = 0x100000,
- 	.maxdisplayable = 0x800000,
- 	.accelID = FB_ACCEL_MATROX_MGAG200,
- 	.lowlevel = &matrox_G100
+diff --git a/drivers/video/fbdev/controlfb.c b/drivers/video/fbdev/controlfb.c
+index 2df56bd303d2..509311471d51 100644
+--- a/drivers/video/fbdev/controlfb.c
++++ b/drivers/video/fbdev/controlfb.c
+@@ -64,9 +64,9 @@
+ #undef in_le32
+ #undef out_le32
+ #define in_8(addr)		0
+-#define out_8(addr, val)
++#define out_8(addr, val)	(void)(val)
+ #define in_le32(addr)		0
+-#define out_le32(addr, val)
++#define out_le32(addr, val)	(void)(val)
+ #define pgprot_cached_wthru(prot) (prot)
+ #else
+ static void invalid_vram_cache(void __force *addr)
 -- 
 2.34.1
 

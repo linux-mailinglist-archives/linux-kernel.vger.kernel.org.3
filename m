@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF434F4622
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EBF84F44C9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378689AbiDEOHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41004 "EHLO
+        id S240850AbiDEOK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:10:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236373AbiDEJbT (ORCPT
+        with ESMTP id S237015AbiDEJbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:31:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DA0BF7;
-        Tue,  5 Apr 2022 02:19:07 -0700 (PDT)
+        Tue, 5 Apr 2022 05:31:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C250B38;
+        Tue,  5 Apr 2022 02:19:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 97E08B81C69;
-        Tue,  5 Apr 2022 09:19:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAB9BC385A3;
-        Tue,  5 Apr 2022 09:19:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BB9F6144D;
+        Tue,  5 Apr 2022 09:19:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B7B5C385A3;
+        Tue,  5 Apr 2022 09:19:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150345;
-        bh=qYe/uBk0ndVaKY+4X1OhfMJEXd3Z6e/VbB81NnZOuOc=;
+        s=korg; t=1649150351;
+        bh=ivGEGBbfajtNADKngqXaWRmyvtn3LsQ3ufYD1XB+A78=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IMH8nnoewWUeKqhhIUM5cCCDEe+2cNpdSZ577z/cC1CW8VTLPCw5ayed1CRFFlQ9F
-         GVkU7rGXB/3LgqeSfTlVDv2T5ZjKTaQhhwpIfw1NIoRlSq2LDnOw1GZH7LxlYulCnC
-         GvXpFs+hQDtBiVW1YY66hgYnffyDSL1AtOKI5w8Y=
+        b=k29wt/oyYmL3iqbvD7mVEL5KHf3gkjfoljjBGDpmUcoKFsnwkg9tYKXjzNgSN0WjP
+         xQRW02OCmA0/aQ+foTW5nu8KWyha106LEWJvErdhNQkh1HZM6+mWrrqbWWLw212H9D
+         tVP4iMBB6oHG3y6p8lRAcyfjX5edjaw7nZ51jVuA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yosry Ahmed <yosryahmed@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 024/913] selftests: vm: fix clang build error multiple output files
-Date:   Tue,  5 Apr 2022 09:18:06 +0200
-Message-Id: <20220405070340.539745810@linuxfoundation.org>
+        stable@vger.kernel.org, Evan Quan <evan.quan@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH 5.15 026/913] drm/amdgpu: move PX checking into amdgpu_device_ip_early_init
+Date:   Tue,  5 Apr 2022 09:18:08 +0200
+Message-Id: <20220405070340.599642124@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -59,59 +55,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yosry Ahmed <yosryahmed@google.com>
+From: Alex Deucher <alexander.deucher@amd.com>
 
-[ Upstream commit 1c4debc443ef7037dcb7c4f08c33b9caebd21d2e ]
+commit 901e2be20dc55079997ea1885ea77fc72e6826e7 upstream.
 
-When building the vm selftests using clang, some errors are seen due to
-having headers in the compilation command:
+We need to set the APU flag from IP discovery before
+we evaluate this code.
 
-  clang -Wall -I ../../../../usr/include  -no-pie    gup_test.c ../../../../mm/gup_test.h -lrt -lpthread -o .../tools/testing/selftests/vm/gup_test
-  clang: error: cannot specify -o when generating multiple output files
-  make[1]: *** [../lib.mk:146: .../tools/testing/selftests/vm/gup_test] Error 1
-
-Rework to add the header files to LOCAL_HDRS before including ../lib.mk,
-since the dependency is evaluated in '$(OUTPUT)/%:%.c $(LOCAL_HDRS)' in
-file lib.mk.
-
-Link: https://lkml.kernel.org/r/20220304000645.1888133-1-yosryahmed@google.com
-Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Acked-by: Evan Quan <evan.quan@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/vm/Makefile | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |   13 +++++++++++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c    |   11 -----------
+ 2 files changed, 13 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index d9605bd10f2d..acf5eaeef9ff 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -1,6 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- # Makefile for vm selftests
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+@@ -30,6 +30,7 @@
+ #include <linux/module.h>
+ #include <linux/console.h>
+ #include <linux/slab.h>
++#include <linux/pci.h>
  
-+LOCAL_HDRS += $(selfdir)/vm/local_config.h $(top_srcdir)/mm/gup_test.h
+ #include <drm/drm_atomic_helper.h>
+ #include <drm/drm_probe_helper.h>
+@@ -2069,6 +2070,8 @@ out:
+  */
+ static int amdgpu_device_ip_early_init(struct amdgpu_device *adev)
+ {
++	struct drm_device *dev = adev_to_drm(adev);
++	struct pci_dev *parent;
+ 	int i, r;
+ 
+ 	amdgpu_device_enable_virtual_display(adev);
+@@ -2168,6 +2171,16 @@ static int amdgpu_device_ip_early_init(s
+ 		return -EINVAL;
+ 	}
+ 
++	if (amdgpu_has_atpx() &&
++	    (amdgpu_is_atpx_hybrid() ||
++	     amdgpu_has_atpx_dgpu_power_cntl()) &&
++	    ((adev->flags & AMD_IS_APU) == 0) &&
++	    !pci_is_thunderbolt_attached(to_pci_dev(dev->dev)))
++		adev->flags |= AMD_IS_PX;
 +
- include local_config.mk
++	parent = pci_upstream_bridge(adev->pdev);
++	adev->has_pr3 = parent ? pci_pr3_present(parent) : false;
++
+ 	amdgpu_amdkfd_device_probe(adev);
  
- uname_M := $(shell uname -m 2>/dev/null || echo not)
-@@ -139,10 +141,6 @@ endif
+ 	adev->pm.pp_feature = amdgpu_pp_feature_mask;
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c
+@@ -152,21 +152,10 @@ static void amdgpu_get_audio_func(struct
+ int amdgpu_driver_load_kms(struct amdgpu_device *adev, unsigned long flags)
+ {
+ 	struct drm_device *dev;
+-	struct pci_dev *parent;
+ 	int r, acpi_status;
  
- $(OUTPUT)/mlock-random-test $(OUTPUT)/memfd_secret: LDLIBS += -lcap
+ 	dev = adev_to_drm(adev);
  
--$(OUTPUT)/gup_test: ../../../../mm/gup_test.h
+-	if (amdgpu_has_atpx() &&
+-	    (amdgpu_is_atpx_hybrid() ||
+-	     amdgpu_has_atpx_dgpu_power_cntl()) &&
+-	    ((flags & AMD_IS_APU) == 0) &&
+-	    !pci_is_thunderbolt_attached(to_pci_dev(dev->dev)))
+-		flags |= AMD_IS_PX;
 -
--$(OUTPUT)/hmm-tests: local_config.h
+-	parent = pci_upstream_bridge(adev->pdev);
+-	adev->has_pr3 = parent ? pci_pr3_present(parent) : false;
 -
- # HMM_EXTRA_LIBS may get set in local_config.mk, or it may be left empty.
- $(OUTPUT)/hmm-tests: LDLIBS += $(HMM_EXTRA_LIBS)
- 
--- 
-2.34.1
-
+ 	/* amdgpu_device_init should report only fatal error
+ 	 * like memory allocation failure or iomapping failure,
+ 	 * or memory manager initialization failure, it must
 
 

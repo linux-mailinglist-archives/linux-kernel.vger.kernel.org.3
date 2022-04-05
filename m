@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54FEA4F39A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:50:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0FE4F39DC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351045AbiDELgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
+        id S1378808AbiDELjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244703AbiDEIwe (ORCPT
+        with ESMTP id S244723AbiDEIwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978C617E3E;
-        Tue,  5 Apr 2022 01:42:19 -0700 (PDT)
+        Tue, 5 Apr 2022 04:52:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E3319C2B;
+        Tue,  5 Apr 2022 01:42:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E150614E4;
-        Tue,  5 Apr 2022 08:42:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DE83C385A0;
-        Tue,  5 Apr 2022 08:42:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D582609D0;
+        Tue,  5 Apr 2022 08:42:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B21CC385A0;
+        Tue,  5 Apr 2022 08:42:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148138;
-        bh=dXBza7TD+YoPMa9zfIkCunjP9xDZ6gtzlNfgpEIYRcc=;
+        s=korg; t=1649148168;
+        bh=3Im5ZbTV8VowMePxr5eHh7Cs9Smgl/aP7ej0Z09rs6M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R5FGJKi0LjHfyoVkjNjXgF3YqZh9XSHTHVo+29NOoZw4zswMUy4xwhwMVRf30gS9Q
-         HzFs0mVQJ/9ozSwWv1xxRKJnApdNJMx81B8qbyRKbUNTBy/UVdp+CIgf+9C17JpWeG
-         5G3JahzvG4tFaUtKrEcb4aO44re/DqTf5a8fyj84=
+        b=HoO2P0fEYDFiomJckPHovAmGZ3+Ck5MQa9+6IcbEzO6bp4fBxH3uv/eE5OK8XRoPY
+         mMHnmPnOpYxlEtioPeqduMUiVqEQWMc67gm4xLAfBx/W8YssBoPq9K4i3KfcYsQrI1
+         63gvPNAggHOBv6PVn8xEwxvf3kCQsuVNZEJS5cfQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Richard Guy Briggs <rgb@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0221/1017] crypto: rockchip - ECB does not need IV
-Date:   Tue,  5 Apr 2022 09:18:54 +0200
-Message-Id: <20220405070400.811754616@linuxfoundation.org>
+Subject: [PATCH 5.16 0222/1017] audit: log AUDIT_TIME_* records only from rules
+Date:   Tue,  5 Apr 2022 09:18:55 +0200
+Message-Id: <20220405070400.841485460@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,34 +55,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Corentin Labbe <clabbe@baylibre.com>
+From: Richard Guy Briggs <rgb@redhat.com>
 
-[ Upstream commit 973d74e93820d99d8ea203882631c76edab699c9 ]
+[ Upstream commit 272ceeaea355214b301530e262a0df8600bfca95 ]
 
-When loading rockchip crypto module, testmgr complains that ivsize of ecb-des3-ede-rk
-is not the same than generic implementation.
-In fact ECB does not use an IV.
+AUDIT_TIME_* events are generated when there are syscall rules present
+that are not related to time keeping.  This will produce noisy log
+entries that could flood the logs and hide events we really care about.
 
-Fixes: ce0183cb6464b ("crypto: rockchip - switch to skcipher API")
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Rather than immediately produce the AUDIT_TIME_* records, store the data
+in the context and log it at syscall exit time respecting the filter
+rules.
+
+Note: This eats the audit_buffer, unlike any others in show_special().
+
+Please see https://bugzilla.redhat.com/show_bug.cgi?id=1991919
+
+Fixes: 7e8eda734d30 ("ntp: Audit NTP parameters adjustment")
+Fixes: 2d87a0674bd6 ("timekeeping: Audit clock adjustments")
+Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+[PM: fixed style/whitespace issues]
+Signed-off-by: Paul Moore <paul@paul-moore.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/rockchip/rk3288_crypto_skcipher.c | 1 -
- 1 file changed, 1 deletion(-)
+ kernel/audit.h   |  4 +++
+ kernel/auditsc.c | 87 +++++++++++++++++++++++++++++++++++++-----------
+ 2 files changed, 71 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/crypto/rockchip/rk3288_crypto_skcipher.c b/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
-index 1cece1a7d3f0..5bbf0d2722e1 100644
---- a/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
-+++ b/drivers/crypto/rockchip/rk3288_crypto_skcipher.c
-@@ -506,7 +506,6 @@ struct rk_crypto_tmp rk_ecb_des3_ede_alg = {
- 		.exit			= rk_ablk_exit_tfm,
- 		.min_keysize		= DES3_EDE_KEY_SIZE,
- 		.max_keysize		= DES3_EDE_KEY_SIZE,
--		.ivsize			= DES_BLOCK_SIZE,
- 		.setkey			= rk_tdes_setkey,
- 		.encrypt		= rk_des3_ede_ecb_encrypt,
- 		.decrypt		= rk_des3_ede_ecb_decrypt,
+diff --git a/kernel/audit.h b/kernel/audit.h
+index c4498090a5bd..58b66543b4d5 100644
+--- a/kernel/audit.h
++++ b/kernel/audit.h
+@@ -201,6 +201,10 @@ struct audit_context {
+ 		struct {
+ 			char			*name;
+ 		} module;
++		struct {
++			struct audit_ntp_data	ntp_data;
++			struct timespec64	tk_injoffset;
++		} time;
+ 	};
+ 	int fds[2];
+ 	struct audit_proctitle proctitle;
+diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+index 2dc94a0e3447..321904af2311 100644
+--- a/kernel/auditsc.c
++++ b/kernel/auditsc.c
+@@ -1331,6 +1331,53 @@ static void audit_log_fcaps(struct audit_buffer *ab, struct audit_names *name)
+ 			 from_kuid(&init_user_ns, name->fcap.rootid));
+ }
+ 
++static void audit_log_time(struct audit_context *context, struct audit_buffer **ab)
++{
++	const struct audit_ntp_data *ntp = &context->time.ntp_data;
++	const struct timespec64 *tk = &context->time.tk_injoffset;
++	static const char * const ntp_name[] = {
++		"offset",
++		"freq",
++		"status",
++		"tai",
++		"tick",
++		"adjust",
++	};
++	int type;
++
++	if (context->type == AUDIT_TIME_ADJNTPVAL) {
++		for (type = 0; type < AUDIT_NTP_NVALS; type++) {
++			if (ntp->vals[type].newval != ntp->vals[type].oldval) {
++				if (!*ab) {
++					*ab = audit_log_start(context,
++							GFP_KERNEL,
++							AUDIT_TIME_ADJNTPVAL);
++					if (!*ab)
++						return;
++				}
++				audit_log_format(*ab, "op=%s old=%lli new=%lli",
++						 ntp_name[type],
++						 ntp->vals[type].oldval,
++						 ntp->vals[type].newval);
++				audit_log_end(*ab);
++				*ab = NULL;
++			}
++		}
++	}
++	if (tk->tv_sec != 0 || tk->tv_nsec != 0) {
++		if (!*ab) {
++			*ab = audit_log_start(context, GFP_KERNEL,
++					      AUDIT_TIME_INJOFFSET);
++			if (!*ab)
++				return;
++		}
++		audit_log_format(*ab, "sec=%lli nsec=%li",
++				 (long long)tk->tv_sec, tk->tv_nsec);
++		audit_log_end(*ab);
++		*ab = NULL;
++	}
++}
++
+ static void show_special(struct audit_context *context, int *call_panic)
+ {
+ 	struct audit_buffer *ab;
+@@ -1445,6 +1492,11 @@ static void show_special(struct audit_context *context, int *call_panic)
+ 			audit_log_format(ab, "(null)");
+ 
+ 		break;
++	case AUDIT_TIME_ADJNTPVAL:
++	case AUDIT_TIME_INJOFFSET:
++		/* this call deviates from the rest, eating the buffer */
++		audit_log_time(context, &ab);
++		break;
+ 	}
+ 	audit_log_end(ab);
+ }
+@@ -2840,31 +2892,26 @@ void __audit_fanotify(unsigned int response)
+ 
+ void __audit_tk_injoffset(struct timespec64 offset)
+ {
+-	audit_log(audit_context(), GFP_KERNEL, AUDIT_TIME_INJOFFSET,
+-		  "sec=%lli nsec=%li",
+-		  (long long)offset.tv_sec, offset.tv_nsec);
+-}
+-
+-static void audit_log_ntp_val(const struct audit_ntp_data *ad,
+-			      const char *op, enum audit_ntp_type type)
+-{
+-	const struct audit_ntp_val *val = &ad->vals[type];
+-
+-	if (val->newval == val->oldval)
+-		return;
++	struct audit_context *context = audit_context();
+ 
+-	audit_log(audit_context(), GFP_KERNEL, AUDIT_TIME_ADJNTPVAL,
+-		  "op=%s old=%lli new=%lli", op, val->oldval, val->newval);
++	/* only set type if not already set by NTP */
++	if (!context->type)
++		context->type = AUDIT_TIME_INJOFFSET;
++	memcpy(&context->time.tk_injoffset, &offset, sizeof(offset));
+ }
+ 
+ void __audit_ntp_log(const struct audit_ntp_data *ad)
+ {
+-	audit_log_ntp_val(ad, "offset",	AUDIT_NTP_OFFSET);
+-	audit_log_ntp_val(ad, "freq",	AUDIT_NTP_FREQ);
+-	audit_log_ntp_val(ad, "status",	AUDIT_NTP_STATUS);
+-	audit_log_ntp_val(ad, "tai",	AUDIT_NTP_TAI);
+-	audit_log_ntp_val(ad, "tick",	AUDIT_NTP_TICK);
+-	audit_log_ntp_val(ad, "adjust",	AUDIT_NTP_ADJUST);
++	struct audit_context *context = audit_context();
++	int type;
++
++	for (type = 0; type < AUDIT_NTP_NVALS; type++)
++		if (ad->vals[type].newval != ad->vals[type].oldval) {
++			/* unconditionally set type, overwriting TK */
++			context->type = AUDIT_TIME_ADJNTPVAL;
++			memcpy(&context->time.ntp_data, ad, sizeof(*ad));
++			break;
++		}
+ }
+ 
+ void __audit_log_nfcfg(const char *name, u8 af, unsigned int nentries,
 -- 
 2.34.1
 

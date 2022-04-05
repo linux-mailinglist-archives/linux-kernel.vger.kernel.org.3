@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA5B4F4DBD
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 143044F4C75
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1582946AbiDEXuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:50:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        id S242546AbiDEXVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233852AbiDEKfq (ORCPT
+        with ESMTP id S1354228AbiDEKMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:35:46 -0400
+        Tue, 5 Apr 2022 06:12:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE6834AE3E;
-        Tue,  5 Apr 2022 03:21:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D4C5C855;
+        Tue,  5 Apr 2022 02:59:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89D18617CF;
-        Tue,  5 Apr 2022 10:21:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9764CC385A1;
-        Tue,  5 Apr 2022 10:21:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A3FB6616DC;
+        Tue,  5 Apr 2022 09:59:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC3F0C385A1;
+        Tue,  5 Apr 2022 09:59:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154102;
-        bh=oPwSHQLp1ImXKiOXToZAfm2Dne+MpUgu6rZOvYgKQH8=;
+        s=korg; t=1649152759;
+        bh=/yt+JKhK1iOBl6Kc9z8/VMaIFaoyhQMuQvEUN61MtuY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pFw/bbf6iShjCmvLvZHoWIVfRS3mfz1zTM6JQWq226p/MSUzV7gFH87uRfEFHybti
-         KMg3nqgDw2Jj67139rAuF+A3bblrNa/zY/v7RPPR+Lw7j3KIlapvBmpaWeCnFnbxlE
-         4yIYkrn/mwDqGwOpaxR3GB25HknYdxACGBd30RAg=
+        b=jF8upd03V8jXjIqfUla7O/rWBmib81jZtL7oLHTmMyFdNR7L1e/inM6cNFrk1jRyk
+         sf6qXW/pJMXtuB8VOLcLeuvornOgsl/7BYIhkaqCi2lJeG1yaASn3qVrYeEa6TDsAJ
+         aiaE8svDF90k9jU/oblocnAnCD+kZe/vIeK2Rl7A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>,
-        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 459/599] irqchip/nvic: Release nvic_base upon failure
-Date:   Tue,  5 Apr 2022 09:32:33 +0200
-Message-Id: <20220405070312.488457487@linuxfoundation.org>
+        stable@vger.kernel.org, Leilk Liu <leilk.liu@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.15 892/913] spi: mediatek: support tick_delay without enhance_timing
+Date:   Tue,  5 Apr 2022 09:32:34 +0200
+Message-Id: <20220405070406.559580966@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +56,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
+From: Leilk Liu <leilk.liu@mediatek.com>
 
-[ Upstream commit e414c25e3399b2b3d7337dc47abccab5c71b7c8f ]
+commit 03b1be379dcee2e9c866c2a455a1a4a9581b3efd upstream.
 
-smatch warning was reported as below ->
+this patch support tick_delay bit[31:30] without enhance_timing feature.
 
-smatch warnings:
-drivers/irqchip/irq-nvic.c:131 nvic_of_init()
-warn: 'nvic_base' not released on lines: 97.
-
-Release nvic_base upon failure.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220218163303.33344-1-jrdr.linux@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: f84d866ab43f("spi: mediatek: add tick_delay support")
+Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Link: https://lore.kernel.org/r/20220315032411.2826-2-leilk.liu@mediatek.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/irqchip/irq-nvic.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/spi/spi-mt65xx.c |   15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/irqchip/irq-nvic.c b/drivers/irqchip/irq-nvic.c
-index 21cb31ff2bbf..e903c44edb64 100644
---- a/drivers/irqchip/irq-nvic.c
-+++ b/drivers/irqchip/irq-nvic.c
-@@ -94,6 +94,7 @@ static int __init nvic_of_init(struct device_node *node,
+--- a/drivers/spi/spi-mt65xx.c
++++ b/drivers/spi/spi-mt65xx.c
+@@ -43,8 +43,11 @@
+ #define SPI_CFG1_PACKET_LOOP_OFFSET       8
+ #define SPI_CFG1_PACKET_LENGTH_OFFSET     16
+ #define SPI_CFG1_GET_TICK_DLY_OFFSET      29
++#define SPI_CFG1_GET_TICK_DLY_OFFSET_V1   30
  
- 	if (!nvic_irq_domain) {
- 		pr_warn("Failed to allocate irq domain\n");
-+		iounmap(nvic_base);
- 		return -ENOMEM;
- 	}
+ #define SPI_CFG1_GET_TICK_DLY_MASK        0xe0000000
++#define SPI_CFG1_GET_TICK_DLY_MASK_V1     0xc0000000
++
+ #define SPI_CFG1_CS_IDLE_MASK             0xff
+ #define SPI_CFG1_PACKET_LOOP_MASK         0xff00
+ #define SPI_CFG1_PACKET_LENGTH_MASK       0x3ff0000
+@@ -346,9 +349,15 @@ static int mtk_spi_prepare_message(struc
  
-@@ -103,6 +104,7 @@ static int __init nvic_of_init(struct device_node *node,
- 	if (ret) {
- 		pr_warn("Failed to allocate irq chips\n");
- 		irq_domain_remove(nvic_irq_domain);
-+		iounmap(nvic_base);
- 		return ret;
- 	}
+ 	/* tick delay */
+ 	reg_val = readl(mdata->base + SPI_CFG1_REG);
+-	reg_val &= ~SPI_CFG1_GET_TICK_DLY_MASK;
+-	reg_val |= ((chip_config->tick_delay & 0x7)
+-		<< SPI_CFG1_GET_TICK_DLY_OFFSET);
++	if (mdata->dev_comp->enhance_timing) {
++		reg_val &= ~SPI_CFG1_GET_TICK_DLY_MASK;
++		reg_val |= ((chip_config->tick_delay & 0x7)
++			    << SPI_CFG1_GET_TICK_DLY_OFFSET);
++	} else {
++		reg_val &= ~SPI_CFG1_GET_TICK_DLY_MASK_V1;
++		reg_val |= ((chip_config->tick_delay & 0x3)
++			    << SPI_CFG1_GET_TICK_DLY_OFFSET_V1);
++	}
+ 	writel(reg_val, mdata->base + SPI_CFG1_REG);
  
--- 
-2.34.1
-
+ 	/* set hw cs timing */
 
 

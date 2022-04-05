@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3A04F3F68
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0594F4358
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349957AbiDEOzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41744 "EHLO
+        id S1379781AbiDEPN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:13:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343994AbiDEJl5 (ORCPT
+        with ESMTP id S1344743AbiDEJmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:41:57 -0400
+        Tue, 5 Apr 2022 05:42:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CFEBD7F8;
-        Tue,  5 Apr 2022 02:27:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842C6BF009;
+        Tue,  5 Apr 2022 02:28:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97B7D6144D;
-        Tue,  5 Apr 2022 09:27:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7A1FC385A2;
-        Tue,  5 Apr 2022 09:27:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21DC361659;
+        Tue,  5 Apr 2022 09:28:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CE93C385A2;
+        Tue,  5 Apr 2022 09:28:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150850;
-        bh=t7zuJu+RdC6rv7No6foqPNPTASGSj0hg90vUn6Vk3p8=;
+        s=korg; t=1649150880;
+        bh=DaKU9tzGBNC8vhMrAakJ4TImi/mLVIJ8Z1GA0IsQzmQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wWE/Hu97h/mLiW71/kD8FJxs4MLGYnt89BjBKDfYnnPDGIQd4Y5B2ksldwsrDHM5K
-         ahGp3DMhen+yyoaQ+mQ7i8aln+lelrC+TvJSnLJ39eoi5MbdFPj3QZ1ip1Zjm0sIo6
-         kcT6ryja715NNkXBxkt9YbbqHqnDEbfTa7dqJSC4=
+        b=H4iUu7H2UIZS6hZ76uynBSagWAMmeuBrVLZWcqAtnmy72w4uwGDPqdgkUof01Ads8
+         UoXO9gITXPHBxmumVyTUzaqV1/0foAF+aOSJWxqphISZcMhlbnCDVxwPXH4YgTiAda
+         /JmGkZdYgjryMADHZXnCxFRuYMxwkbkJAfgUclhc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, "kernelci.org bot" <bot@kernelci.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 202/913] spi: tegra210-quad: Fix missin IRQ check in tegra_qspi_probe
-Date:   Tue,  5 Apr 2022 09:21:04 +0200
-Message-Id: <20220405070345.913802108@linuxfoundation.org>
+Subject: [PATCH 5.15 207/913] selftests/sgx: Treat CC as one argument
+Date:   Tue,  5 Apr 2022 09:21:09 +0200
+Message-Id: <20220405070346.063840285@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,37 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-[ Upstream commit 47c3e06ed95aa9b74932dbc6b23b544f644faf84 ]
+[ Upstream commit 6170abb21e2380477080b25145da9747ad467d3d ]
 
-This func misses checking for platform_get_irq()'s call and may passes the
-negative error codes to request_threaded_irq(), which takes unsigned IRQ #,
-causing it to fail with -EINVAL, overriding an original error code.
-Stop calling request_threaded_irq() with invalid IRQ #s.
+CC can have multiple sub-strings like "ccache gcc". For check_cc.sh,
+CC needs to be treated like one argument. Put double quotes around it to
+make CC one string and hence one argument.
 
-Fixes: 921fc1838fb0 ("spi: tegra210-quad: Add support for Tegra210 QSPI controller")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220128165956.27821-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 2adcba79e69d ("selftests/x86: Add a selftest for SGX")
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Link: https://lkml.kernel.org/r/20220214184109.3739179-3-usama.anjum@collabora.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-tegra210-quad.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/sgx/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
-index 2354ca1e3858..7967073c1354 100644
---- a/drivers/spi/spi-tegra210-quad.c
-+++ b/drivers/spi/spi-tegra210-quad.c
-@@ -1249,6 +1249,8 @@ static int tegra_qspi_probe(struct platform_device *pdev)
+diff --git a/tools/testing/selftests/sgx/Makefile b/tools/testing/selftests/sgx/Makefile
+index 7f12d55b97f8..472b27ccd7dc 100644
+--- a/tools/testing/selftests/sgx/Makefile
++++ b/tools/testing/selftests/sgx/Makefile
+@@ -4,7 +4,7 @@ include ../lib.mk
  
- 	tqspi->phys = r->start;
- 	qspi_irq = platform_get_irq(pdev, 0);
-+	if (qspi_irq < 0)
-+		return qspi_irq;
- 	tqspi->irq = qspi_irq;
+ .PHONY: all clean
  
- 	tqspi->clk = devm_clk_get(&pdev->dev, "qspi");
+-CAN_BUILD_X86_64 := $(shell ../x86/check_cc.sh $(CC) \
++CAN_BUILD_X86_64 := $(shell ../x86/check_cc.sh "$(CC)" \
+ 			    ../x86/trivial_64bit_program.c)
+ 
+ ifndef OBJCOPY
 -- 
 2.34.1
 

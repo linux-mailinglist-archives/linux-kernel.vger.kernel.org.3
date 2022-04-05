@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F974F4005
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A584F411D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350605AbiDEPYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54030 "EHLO
+        id S240617AbiDEPZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347159AbiDEJqD (ORCPT
+        with ESMTP id S1347201AbiDEJqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:46:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE30DCE2B;
-        Tue,  5 Apr 2022 02:32:33 -0700 (PDT)
+        Tue, 5 Apr 2022 05:46:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF21DD96E;
+        Tue,  5 Apr 2022 02:32:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98173615E5;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A60CB81CB3;
+        Tue,  5 Apr 2022 09:32:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 735BBC385A3;
         Tue,  5 Apr 2022 09:32:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 014EDC385AC;
-        Tue,  5 Apr 2022 09:32:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649151152;
-        bh=JncMrmfzGwPQjE8v5Pu7YmvmRGLYwvdId2BOQWsQm3g=;
+        s=k20201202; t=1649151154;
+        bh=cg99cbuB8hB++j+fhgEa4ZdrqC7Cu38pehUZLH1w4KY=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Lwe2vorGKyGz1bl2S5iuUkKHrbRH7fJipkVD/5CprU9IVf1St+0vLejwdA5JNej4E
-         2TC2gE/DAVvJijHf6f7ncy2/3gEaLoHAFsKOEMM/kJcoGijA1Sth6yuHjqq91Rwqf+
-         a+I311V25B6/YKfySaEQMlVHnDJYeGHiwn/5zvQ29TLp13jMHvPBmA2SjSVWgIx/sC
-         R31xZuDvm8NqXlplbULmp0BI6pXvcUTJyGpEcw8HxQsPBbPfUps8N8ltJIm8vsLyjS
-         KmwSwVK3BXUHZAmyMVJVTBhvJy7fNRutKOlxp+JPb10YAYlr7ZgF/VB9Wbb5O0n5Vx
-         9J/T+CMQJqRNQ==
+        b=IIgjUBS99lYPqvwHgyFLa1h4B+7F7O2C9jIzDXHtBh4yXjL/VM5gyaqNRq/qVMVce
+         i6tJBXscdBWey2Qx0IHyiShR+AkNqxnxyrUSfgVC/JL69cuW1Er4dd+IP/QV2TAFJB
+         5N6HGtShxQqUbmLMshbvgbmhA8NnZK6O+W3oz+XRPr++uL07hQoTwk53wTXuEkQP4R
+         MkssquhUvVngM0wKXwsdAx0jQmvbuojxswkDIgZhOh46AkmfHITAb6TLu8SzVA9M8v
+         5/NLbwjd8FdUqQaDNY7uOhbyytzZJLBA/+DhcN7rYRzuC27tdUnGKwRlxRQ+frUPcM
+         kWO7h/NlW9i4Q==
 From:   Mark Brown <broonie@kernel.org>
-To:     miquel.raynal@bootlin.com, christophe.jaillet@wanadoo.fr
-Cc:     linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-In-Reply-To: <09c81f751241f6ec0bac7a48d4ec814a742e0d17.1648980664.git.christophe.jaillet@wanadoo.fr>
-References: <09c81f751241f6ec0bac7a48d4ec814a742e0d17.1648980664.git.christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH] spi: mxic: Fix an error handling path in mxic_spi_probe()
-Message-Id: <164915115073.276894.2017003822406152149.b4-ty@kernel.org>
-Date:   Tue, 05 Apr 2022 10:32:30 +0100
+To:     leilk.liu@mediatek.com
+Cc:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-spi@vger.kernel.org,
+        matthias.bgg@gmail.com
+In-Reply-To: <20220401071616.8874-1-leilk.liu@mediatek.com>
+References: <20220401071616.8874-1-leilk.liu@mediatek.com>
+Subject: Re: [PATCH V7 0/3] spi: mediatek: add single/quad mode support
+Message-Id: <164915115220.276894.6481675196400953567.b4-ty@kernel.org>
+Date:   Tue, 05 Apr 2022 10:32:32 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,11 +56,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 3 Apr 2022 12:11:13 +0200, Christophe JAILLET wrote:
-> If spi_register_master() fails, we must undo a previous
-> mxic_spi_mem_ecc_probe() call, as already done in the remove function.
+On Fri, 1 Apr 2022 15:16:13 +0800, Leilk Liu wrote:
+> This series of patches are based on spi for-next, and provide 3 patches to support MT7986.
 > 
+> V7:
+> 1. add Reviewed-by: Rob Herring
 > 
+> V6:
+>  1. remove SPI_CFG3_IPM_PIN_MODE_OFFSET.
+>  2. add Reviewed-by: AngeloGioacchino Del Regno
+> 
+> [...]
 
 Applied to
 
@@ -66,8 +74,12 @@ Applied to
 
 Thanks!
 
-[1/1] spi: mxic: Fix an error handling path in mxic_spi_probe()
-      commit: 35d516bdcd92fde46202d06b68df1166760208fd
+[1/3] spi: mediatek: add spi memory support for ipm design
+      commit: 9f763fd20da7d892ffaedac0c58d821922f8a674
+[2/3] dt-bindings: spi: support hclk
+      (no commit info)
+[3/3] spi: mediatek: support hclk
+      commit: a740f4e684c020ea57a8a198a9322d739f7ab6d5
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

@@ -2,99 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723E84F46F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0687E4F475F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:35:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382625AbiDEUy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
+        id S1351291AbiDEVKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573287AbiDESq5 (ORCPT
+        with ESMTP id S1573316AbiDESxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 14:46:57 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4201B8022B
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 11:44:59 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id 7so247609pfu.13
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 11:44:59 -0700 (PDT)
+        Tue, 5 Apr 2022 14:53:43 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A3AB1AA2
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 11:51:44 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-df22f50e0cso374710fac.3
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 11:51:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BSTfu4XeI/ClhpJnOxug8bNrs6bcd1vbhIByuk9Td5A=;
-        b=FZ7CzdGv5IqR9igsKF5aVHLB8MfCD2UE6mGhWdabuDVB/PY75CERc0oW45pyoiFFsx
-         HLCOiljgUTbziKvTX7wZRoZqJ+RJ1Dea8AguoZhgeta2AWxRKKUV2iRUL0l0yDbf+TTN
-         ZiAbWnMeeHTkwk1JvBEs7xviif99t4lQdP3rhF94xjjOWUyQ5IYn9ZUuKyguEbSTvM9X
-         MpsV3tSkSRKbWT/1P6uf6AhXj04ePeO0yF7csRuDTu6ucoAxMuJ3t81XHgVFCM4FFTG+
-         SjX4Baa/CoEtOFP/F5srI+LydtG/vNCqkGlkcYX/sxjcplhmbQiJkxNjpWBgFSDO+Pmx
-         Gc4Q==
+        d=linuxfoundation.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=5LQhptvFdbZ0C3sjhDpLAbcs/GIdoE2HKrU0D1husVM=;
+        b=SBAWX77d+jdUm+o+vqnl+olI+0dd442QoBAJ8p4Yy5WxGYltH0vPA+D7F3oUMH6z9C
+         LcrfY5mR+FU0amxawwfOHcaz5MhQNV1SFInR7+ewsuX5B1R03RZwUJdM1DN42Qt+Qb3j
+         1hh8IYk1Ng97+7Kgee10OuNEK5If0o+wlozzM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BSTfu4XeI/ClhpJnOxug8bNrs6bcd1vbhIByuk9Td5A=;
-        b=whHcqJhYzh/PGJ3jvwRcYlG6XVAWMR0Fm9CuNCZNrNztPQhByxY0cKoFk3i9csQQ0Q
-         oUGBAtqnd7TUSUa7PKUxVBE/g1tZ79+wnInXlQhtW1pmtNikDLUE/Hly4SI6XUhbcMpl
-         qR+ZbstrWgRJSnHy9qdyYOwjAQs8wMoFJut0mfEYXznkwELZ6Hows319wyNXkmLm7SyF
-         dRX6c0vfFdIrVlVaRT6XXLJS009HJezaOJ6CkPdHMxu4JN3JdO/Jomx+dnVxmvELK/GV
-         i6kKQiLZFf/3Fm9VrElQUFXG8RqD4k5bU622RL8KSr6jyL1g8st1eyGqUSLB33i9+e7W
-         +nPA==
-X-Gm-Message-State: AOAM532T09FeichkUbq5IHgY5HHBEHBpmXp1CpRQL6/Yw01wysDe6sN6
-        ZYk47IGUXh51xsL3DSaMOPthjQ==
-X-Google-Smtp-Source: ABdhPJxqBsHYYYQ3r6tsKfeQNVI4VssdMtHw5QBcT84h3Z9HkLEDAYYEQ3XVRsYGURacbMDknChXvg==
-X-Received: by 2002:a65:57ca:0:b0:381:ea8d:4d1f with SMTP id q10-20020a6557ca000000b00381ea8d4d1fmr4102933pgr.143.1649184298506;
-        Tue, 05 Apr 2022 11:44:58 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id j70-20020a638b49000000b003985b5ddaa1sm13887990pge.49.2022.04.05.11.44.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 11:44:57 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 18:44:54 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, mizhang@google.com,
-        David Matlack <dmatlack@google.com>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v2 0/5] KVM: mm: count KVM page table pages in pagetable
- stats
-Message-ID: <YkyOJqTeGRUjtuX1@google.com>
-References: <20220404234154.1251388-1-yosryahmed@google.com>
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=5LQhptvFdbZ0C3sjhDpLAbcs/GIdoE2HKrU0D1husVM=;
+        b=A5CI/dm1fSr9SSN1hXgBEvGaqKNz/v0thi4sSsjfWRoIbrXaMGITAT2eL1UxowtRtS
+         NkwkhwY/eAQYchhg5WER91VBlF6BEC420e2H+DTpokuUrfpiWDumE/o0icyigru2ZZQo
+         EzlH6JpgWdvO+u8kcVzAzllLU8kppKX8umhNmjI4g7P8uHO9JTW3S24QCFTCnJYsjvz5
+         d9zofvy/05qnfk+SB9FDZti3sOQ7I1RMkyb4KJQRXrnsRKjOPZwa8daORJ2JXTY59tmS
+         3mTUoxh9YDVsf8XnkWx3MPocKDEfaRlOZ2ufSQP4Lu5JjJSZ6r3PERlatAWymY0F9j1m
+         JKzA==
+X-Gm-Message-State: AOAM532akydxP5EvU615RnTHpm+yCFeiimGqzOglQJ5+0y4J5SpCTbwU
+        /85UiZit4zAh5uutwHxmrNhadeiMJNMJLA==
+X-Google-Smtp-Source: ABdhPJwi+u7HNJhVQTGZDxxKz5cHq6mQW2Zkj43J2nGB1hYNnpqiKg0YO6qpo1B7p+loLoDAaaM4RQ==
+X-Received: by 2002:a05:6870:c20b:b0:dd:9f25:b736 with SMTP id z11-20020a056870c20b00b000dd9f25b736mr2236137oae.201.1649184703898;
+        Tue, 05 Apr 2022 11:51:43 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id 190-20020a4a0dc7000000b003244ae0bbd5sm5264152oob.7.2022.04.05.11.51.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 11:51:43 -0700 (PDT)
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     tech-board-discuss@lists.linuxfoundation.org, conduct@kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: Linux Kernel Code of Conduct Committee: March 31 2022
+Message-ID: <4401af50-083d-0239-6b7f-3454c8d69fec@linuxfoundation.org>
+Date:   Tue, 5 Apr 2022 12:51:42 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220404234154.1251388-1-yosryahmed@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022, Yosry Ahmed wrote:
-> We keep track of several kernel memory stats (total kernel memory, page
-> tables, stack, vmalloc, etc) on multiple levels (global, per-node,
-> per-memcg, etc). These stats give insights to users to how much memory
-> is used by the kernel and for what purposes.
-> 
-> Currently, memory used by kvm for its page tables is not accounted in
-> the pagetable stats. This patch series accounts the memory pages used by
-> KVM for page tables in those stats.
+Linux Kernel Code of Conduct Committee: March 31, 2022
 
-It's still not obvious to me that piggybacking NR_PAGETABLE is desirable, probably
-because I am quite clueless as to how these stats are used on the backend.  E.g.
-why not have a NR_SECONDARY_PAGETABLE entry to track pages used for secondary MMU
-page tables?
+In the period of October 1, 2021 through March 31, 2022, the Code of
+Conduct Committee received the following reports:
+
+Unacceptable behavior or comments in email: 2
+
+The result of the investigation:
+   - Education and coaching clarifying the Code of Conduct conduct
+     related to normal review process: 2
+
+We would like to thank the Linux kernel community members who have
+supported the adoption of the Code of Conduct and who continue to
+uphold the professional standards of our community. If you have
+questions about this report, please write to <conduct@kernel.org>.
+
+------------------------------------------------------------------
+
+This report and the past Code Of Conduct Committee reports
+can be found on the Code of Conduct website at
+
+https://www.kernel.org/code-of-conduct.html
+
+thanks,
+-- Shuah (On behalf of the Code of Conduct Committee)

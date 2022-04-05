@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0CEC4F4161
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:32:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 717F44F3DA1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379272AbiDEMxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
+        id S1379312AbiDEU2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245656AbiDEJMH (ORCPT
+        with ESMTP id S1354563AbiDEKOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:12:07 -0400
+        Tue, 5 Apr 2022 06:14:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F5D2E6AB;
-        Tue,  5 Apr 2022 02:00:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF626B517;
+        Tue,  5 Apr 2022 03:01:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 343ADB81BAE;
-        Tue,  5 Apr 2022 09:00:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94600C385A1;
-        Tue,  5 Apr 2022 09:00:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 405D9B81C83;
+        Tue,  5 Apr 2022 10:01:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CADEC385A2;
+        Tue,  5 Apr 2022 10:01:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149207;
-        bh=G9wSItxLCZgjfZnR7uj5gjKBWgIkn6R2lQFgCFbyFyg=;
+        s=korg; t=1649152861;
+        bh=nvJSjfUzdyfl7X7w93Dpr0la56OjHvfArrJRZFWJl14=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F5ocbqdgsKbUW85fQcasGombQU/A+ejCKPK7r0XraMWgNC+pU8TST+TO5vDUH7w9f
-         t/aC6JZYmL5o/62MbYI2qpEnzLrpcw1Bn3MaJJdVjs087j29NUwOMbaIISxLZYbuQT
-         vkBd4SwmSdAHxLqydf4o+ctF1OAI6vHKcx+VHxiI=
+        b=LI/x7LIrJ21QjzBQkkyMfkvX0srwgPJigYl0rFUnD0gxs2bERlWT1PytGYUnDuDdA
+         jQzWE6JGD7YulTBqTTd8nwNpDwQvoLApoSLwyEZx8wYw6MRXO4hSPIuI2WYBJausqV
+         d5+SQOPP3ABqLOWej3E+HCHDMHB7ZN5twcM7Ggkk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0596/1017] RDMA/irdma: Prevent some integer underflows
-Date:   Tue,  5 Apr 2022 09:25:09 +0200
-Message-Id: <20220405070411.968901304@linuxfoundation.org>
+        stable@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Michael Walle <michael@walle.cc>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 5.10 016/599] Revert "gpio: Revert regression in sysfs-gpio (gpiolib.c)"
+Date:   Tue,  5 Apr 2022 09:25:10 +0200
+Message-Id: <20220405070259.300045137@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,74 +59,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
 
-[ Upstream commit 6f6dbb819dfc1a35bcb8b709b5c83a3ea8beff75 ]
+[ Upstream commit 56e337f2cf1326323844927a04e9dbce9a244835 ]
 
-My static checker complains that:
+This reverts commit fc328a7d1fcce263db0b046917a66f3aa6e68719.
 
-    drivers/infiniband/hw/irdma/ctrl.c:3605 irdma_sc_ceq_init()
-    warn: can subtract underflow 'info->dev->hmc_fpm_misc.max_ceqs'?
+This commit - while attempting to fix a regression - has caused a number
+of other problems. As the fallout from it is more significant than the
+initial problem itself, revert it for now before we find a correct
+solution.
 
-It appears that "info->dev->hmc_fpm_misc.max_ceqs" comes from the firmware
-in irdma_sc_parse_fpm_query_buf() so, yes, there is a chance that it could
-be zero.  Even if we trust the firmware, it's easy enough to change the
-condition just as a hardenning measure.
-
-Fixes: 3f49d6842569 ("RDMA/irdma: Implement HW Admin Queue OPs")
-Link: https://lore.kernel.org/r/20220307125928.GE16710@kili
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Acked-by: Shiraz Saleem <shiraz.saleem@intel.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Link: https://lore.kernel.org/all/20220314192522.GA3031157@roeck-us.net/
+Link: https://lore.kernel.org/stable/20220314155509.552218-1-michael@walle.cc/
+Link: https://lore.kernel.org/all/20211217153555.9413-1-marcelo.jimenez@gmail.com/
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Reported-and-bisected-by: Guenter Roeck <linux@roeck-us.net>
+Reported-by: Michael Walle <michael@walle.cc>
+Cc: Thorsten Leemhuis <linux@leemhuis.info>
+Cc: Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/irdma/ctrl.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/gpio/gpiolib.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/infiniband/hw/irdma/ctrl.c b/drivers/infiniband/hw/irdma/ctrl.c
-index 7264f8c2f7d5..1d6b578dbd82 100644
---- a/drivers/infiniband/hw/irdma/ctrl.c
-+++ b/drivers/infiniband/hw/irdma/ctrl.c
-@@ -431,7 +431,7 @@ enum irdma_status_code irdma_sc_qp_create(struct irdma_sc_qp *qp, struct irdma_c
- 
- 	cqp = qp->dev->cqp;
- 	if (qp->qp_uk.qp_id < cqp->dev->hw_attrs.min_hw_qp_id ||
--	    qp->qp_uk.qp_id > (cqp->dev->hmc_info->hmc_obj[IRDMA_HMC_IW_QP].max_cnt - 1))
-+	    qp->qp_uk.qp_id >= (cqp->dev->hmc_info->hmc_obj[IRDMA_HMC_IW_QP].max_cnt))
- 		return IRDMA_ERR_INVALID_QP_ID;
- 
- 	wqe = irdma_sc_cqp_get_next_send_wqe(cqp, scratch);
-@@ -2510,10 +2510,10 @@ static enum irdma_status_code irdma_sc_cq_create(struct irdma_sc_cq *cq,
- 	enum irdma_status_code ret_code = 0;
- 
- 	cqp = cq->dev->cqp;
--	if (cq->cq_uk.cq_id > (cqp->dev->hmc_info->hmc_obj[IRDMA_HMC_IW_CQ].max_cnt - 1))
-+	if (cq->cq_uk.cq_id >= (cqp->dev->hmc_info->hmc_obj[IRDMA_HMC_IW_CQ].max_cnt))
- 		return IRDMA_ERR_INVALID_CQ_ID;
- 
--	if (cq->ceq_id > (cq->dev->hmc_fpm_misc.max_ceqs - 1))
-+	if (cq->ceq_id >= (cq->dev->hmc_fpm_misc.max_ceqs))
- 		return IRDMA_ERR_INVALID_CEQ_ID;
- 
- 	ceq = cq->dev->ceq[cq->ceq_id];
-@@ -3615,7 +3615,7 @@ enum irdma_status_code irdma_sc_ceq_init(struct irdma_sc_ceq *ceq,
- 	    info->elem_cnt > info->dev->hw_attrs.max_hw_ceq_size)
- 		return IRDMA_ERR_INVALID_SIZE;
- 
--	if (info->ceq_id > (info->dev->hmc_fpm_misc.max_ceqs - 1))
-+	if (info->ceq_id >= (info->dev->hmc_fpm_misc.max_ceqs))
- 		return IRDMA_ERR_INVALID_CEQ_ID;
- 	pble_obj_cnt = info->dev->hmc_info->hmc_obj[IRDMA_HMC_IW_PBLE].cnt;
- 
-@@ -4164,7 +4164,7 @@ enum irdma_status_code irdma_sc_ccq_init(struct irdma_sc_cq *cq,
- 	    info->num_elem > info->dev->hw_attrs.uk_attrs.max_hw_cq_size)
- 		return IRDMA_ERR_INVALID_SIZE;
- 
--	if (info->ceq_id > (info->dev->hmc_fpm_misc.max_ceqs - 1))
-+	if (info->ceq_id >= (info->dev->hmc_fpm_misc.max_ceqs ))
- 		return IRDMA_ERR_INVALID_CEQ_ID;
- 
- 	pble_obj_cnt = info->dev->hmc_info->hmc_obj[IRDMA_HMC_IW_PBLE].cnt;
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index bbf34d84636d..00526fdd7691 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -1804,6 +1804,11 @@ static inline void gpiochip_irqchip_free_valid_mask(struct gpio_chip *gc)
+  */
+ int gpiochip_generic_request(struct gpio_chip *gc, unsigned offset)
+ {
++#ifdef CONFIG_PINCTRL
++	if (list_empty(&gc->gpiodev->pin_ranges))
++		return 0;
++#endif
++
+ 	return pinctrl_gpio_request(gc->gpiodev->base + offset);
+ }
+ EXPORT_SYMBOL_GPL(gpiochip_generic_request);
+@@ -1815,6 +1820,11 @@ EXPORT_SYMBOL_GPL(gpiochip_generic_request);
+  */
+ void gpiochip_generic_free(struct gpio_chip *gc, unsigned offset)
+ {
++#ifdef CONFIG_PINCTRL
++	if (list_empty(&gc->gpiodev->pin_ranges))
++		return;
++#endif
++
+ 	pinctrl_gpio_free(gc->gpiodev->base + offset);
+ }
+ EXPORT_SYMBOL_GPL(gpiochip_generic_free);
 -- 
 2.34.1
 

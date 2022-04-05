@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 580FC4F454F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5171D4F440C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1452260AbiDEULD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50638 "EHLO
+        id S1347538AbiDEN2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357998AbiDEK1k (ORCPT
+        with ESMTP id S1345242AbiDEJWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38787D5E82;
-        Tue,  5 Apr 2022 03:12:32 -0700 (PDT)
+        Tue, 5 Apr 2022 05:22:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E043586D;
+        Tue,  5 Apr 2022 02:09:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9BF361562;
-        Tue,  5 Apr 2022 10:12:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7C98C385A1;
-        Tue,  5 Apr 2022 10:12:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC616614FC;
+        Tue,  5 Apr 2022 09:09:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CD7BC385A2;
+        Tue,  5 Apr 2022 09:09:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153551;
-        bh=sTL48zmqbZr44JUABz6vF+vf8dWkNx7tKk0S4/J51fY=;
+        s=korg; t=1649149793;
+        bh=yD6j1fnTv8REaI/DYQ4/I9JyKfmStY72PLy1+LTQ6pg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EjZHmCgr2riogcAuKpPvAc7Ug8owit4kr1hyc+u7KHgnouNVSzvEUFFkYNayEKBxT
-         na0xl471xCttiGAMlz6L/64fKZsHrDKOYhkTAzjqjK2beTSaF2OeNXL/ZSGbVF4ncy
-         2Z0n8R9DLzzPPdDt9dwOWpd20kdAxziWl7Z9j5FI=
+        b=XFmGhhY8wqGjxThk7JtdVHcIzd96xQvn+ZCTIR+K04VlqLAda4DOjXYwvq5NQ0Ex3
+         gL1L7vlOIGzqIpsgZVvbvqw78ATWBpcA/mAs3prfGyC7EPM9KwlTYsQlVdkAEuoqGi
+         ZwtWMEEAL5nUnbxcXUq1DbE3IibU1o98gmHmTJUk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 262/599] drm/bridge: Add missing pm_runtime_disable() in __dw_mipi_dsi_probe
-Date:   Tue,  5 Apr 2022 09:29:16 +0200
-Message-Id: <20220405070306.634942843@linuxfoundation.org>
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0844/1017] video: fbdev: sm712fb: Fix crash in smtcfb_write()
+Date:   Tue,  5 Apr 2022 09:29:17 +0200
+Message-Id: <20220405070419.293220424@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +54,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit 96211b7c56b109a52768e6cc5e23a1f79316eca0 ]
+[ Upstream commit 4f01d09b2bbfbcb47b3eb305560a7f4857a32260 ]
 
-If the probe fails, we should use pm_runtime_disable() to balance
-pm_runtime_enable().
-Add missing pm_runtime_disable() for __dw_mipi_dsi_probe.
+When the sm712fb driver writes three bytes to the framebuffer, the
+driver will crash:
 
-Fixes: 46fc51546d44 ("drm/bridge/synopsys: Add MIPI DSI host controller bridge")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220105104113.31415-1-linmq006@gmail.com
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+    BUG: unable to handle page fault for address: ffffc90001ffffff
+    RIP: 0010:smtcfb_write+0x454/0x5b0
+    Call Trace:
+     vfs_write+0x291/0xd60
+     ? do_sys_openat2+0x27d/0x350
+     ? __fget_light+0x54/0x340
+     ksys_write+0xce/0x190
+     do_syscall_64+0x43/0x90
+     entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+Fix it by removing the open-coded endianness fixup-code.
+
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/video/fbdev/sm712fb.c |   21 ++++-----------------
+ 1 file changed, 4 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
-index 6b268f9445b3..376fa6eb46f6 100644
---- a/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
-+++ b/drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c
-@@ -1172,6 +1172,7 @@ __dw_mipi_dsi_probe(struct platform_device *pdev,
- 	ret = mipi_dsi_host_register(&dsi->dsi_host);
- 	if (ret) {
- 		dev_err(dev, "Failed to register MIPI host: %d\n", ret);
-+		pm_runtime_disable(dev);
- 		dw_mipi_dsi_debugfs_remove(dsi);
- 		return ERR_PTR(ret);
+--- a/drivers/video/fbdev/sm712fb.c
++++ b/drivers/video/fbdev/sm712fb.c
+@@ -1119,7 +1119,7 @@ static ssize_t smtcfb_write(struct fb_in
+ 		count = total_size - p;
  	}
--- 
-2.34.1
-
+ 
+-	buffer = kmalloc((count > PAGE_SIZE) ? PAGE_SIZE : count, GFP_KERNEL);
++	buffer = kmalloc(PAGE_SIZE, GFP_KERNEL);
+ 	if (!buffer)
+ 		return -ENOMEM;
+ 
+@@ -1137,24 +1137,11 @@ static ssize_t smtcfb_write(struct fb_in
+ 			break;
+ 		}
+ 
+-		for (i = c >> 2; i--;) {
+-			fb_writel(big_swap(*src), dst++);
++		for (i = (c + 3) >> 2; i--;) {
++			fb_writel(big_swap(*src), dst);
++			dst++;
+ 			src++;
+ 		}
+-		if (c & 3) {
+-			u8 *src8 = (u8 *)src;
+-			u8 __iomem *dst8 = (u8 __iomem *)dst;
+-
+-			for (i = c & 3; i--;) {
+-				if (i & 1) {
+-					fb_writeb(*src8++, ++dst8);
+-				} else {
+-					fb_writeb(*src8++, --dst8);
+-					dst8 += 2;
+-				}
+-			}
+-			dst = (u32 __iomem *)dst8;
+-		}
+ 
+ 		*ppos += c;
+ 		buf += c;
 
 

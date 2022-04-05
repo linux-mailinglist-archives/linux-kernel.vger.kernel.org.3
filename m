@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488B44F4129
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42E564F3E10
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389204AbiDENd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
+        id S1389256AbiDENdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:33:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346365AbiDEJXp (ORCPT
+        with ESMTP id S1346415AbiDEJXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:23:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C706DDA08B;
-        Tue,  5 Apr 2022 02:13:21 -0700 (PDT)
+        Tue, 5 Apr 2022 05:23:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89FBADA0BC;
+        Tue,  5 Apr 2022 02:13:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 086246164D;
-        Tue,  5 Apr 2022 09:13:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B2CFC385A0;
-        Tue,  5 Apr 2022 09:13:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3F3FBB81C97;
+        Tue,  5 Apr 2022 09:13:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88754C385A8;
+        Tue,  5 Apr 2022 09:13:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150000;
-        bh=qIGizFA1So/4gOkhV+bGgAnGtnZEuu2fx1vA0Iew7P0=;
+        s=korg; t=1649150005;
+        bh=UAK0kOTAZzJ3osgfxruwduiyoCZIcrnooyC7WYDw5bQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KnXmdi6/3OJBdcH2cIHVJ7aW/HzUII42SGSIriL8lbrtEiO6W7R4UwO0eOlrvSQP5
-         njXjgWIjqkaAx+jhyMT4nlNMbpg4ekImTXb9bXfKfeTdAS7r894vwG39YaVI2waexD
-         Uagk6ODy7Iget47ci7oyYqPyavY3lo1njDHRixds=
+        b=WXqdvHA5jNZYH3mnvTbdLg1UUmxXdlA+1d7XHqIVHm3MxLWljKwxCUveLk/7BA1X9
+         fwZYpBZ8fReOXONmuM8LoZAmc8SqyPWtY+hJ8/ciwV6BRBwF1BxQECIEfiR0q9M3Rv
+         Gm0R/6BhojNu9LFoihTz+vE/VSyObQHXViGDeLkU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Quinn Tran <qutran@marvell.com>,
         Nilesh Javali <njavali@marvell.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.16 0880/1017] scsi: qla2xxx: Fix premature hw access after PCI error
-Date:   Tue,  5 Apr 2022 09:29:53 +0200
-Message-Id: <20220405070420.355462480@linuxfoundation.org>
+Subject: [PATCH 5.16 0882/1017] scsi: qla2xxx: Fix warning for missing error code
+Date:   Tue,  5 Apr 2022 09:29:55 +0200
+Message-Id: <20220405070420.413895812@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -57,112 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
+From: Nilesh Javali <njavali@marvell.com>
 
-commit e35920ab7874d5e2faeb4f958a74bfa793f1ce5a upstream.
+commit 14cb838d245ae0d523b2f7804af5a02c22e79f5a upstream.
 
-After a recoverable PCI error has been detected and recovered, qla driver
-needs to check to see if the error condition still persist and/or wait
-for the OS to give the resume signal.
+Fix smatch-reported warning message:
 
-Sep  8 22:26:03 localhost kernel: WARNING: CPU: 9 PID: 124606 at qla_tmpl.c:440
-qla27xx_fwdt_entry_t266+0x55/0x60 [qla2xxx]
-Sep  8 22:26:03 localhost kernel: RIP: 0010:qla27xx_fwdt_entry_t266+0x55/0x60
-[qla2xxx]
-Sep  8 22:26:03 localhost kernel: Call Trace:
-Sep  8 22:26:03 localhost kernel: ? qla27xx_walk_template+0xb1/0x1b0 [qla2xxx]
-Sep  8 22:26:03 localhost kernel: ? qla27xx_execute_fwdt_template+0x12a/0x160
-[qla2xxx]
-Sep  8 22:26:03 localhost kernel: ? qla27xx_fwdump+0xa0/0x1c0 [qla2xxx]
-Sep  8 22:26:03 localhost kernel: ? qla2xxx_pci_mmio_enabled+0xfb/0x120
-[qla2xxx]
-Sep  8 22:26:03 localhost kernel: ? report_mmio_enabled+0x44/0x80
-Sep  8 22:26:03 localhost kernel: ? report_slot_reset+0x80/0x80
-Sep  8 22:26:03 localhost kernel: ? pci_walk_bus+0x70/0x90
-Sep  8 22:26:03 localhost kernel: ? aer_dev_correctable_show+0xc0/0xc0
-Sep  8 22:26:03 localhost kernel: ? pcie_do_recovery+0x1bb/0x240
-Sep  8 22:26:03 localhost kernel: ? aer_recover_work_func+0xaa/0xd0
-Sep  8 22:26:03 localhost kernel: ? process_one_work+0x1a7/0x360
-..
-Sep  8 22:26:03 localhost kernel: qla2xxx [0000:42:00.2]-8041:22: detected PCI
-disconnect.
-Sep  8 22:26:03 localhost kernel: qla2xxx [0000:42:00.2]-107ff:22:
-qla27xx_fwdt_entry_t262: dump ram MB failed. Area 5h start 198013h end 198013h
-Sep  8 22:26:03 localhost kernel: qla2xxx [0000:42:00.2]-107ff:22: Unable to
-capture FW dump
-Sep  8 22:26:03 localhost kernel: qla2xxx [0000:42:00.2]-1015:22: cmd=0x0,
-waited 5221 msecs
-Sep  8 22:26:03 localhost kernel: qla2xxx [0000:42:00.2]-680d:22: mmio
-enabled returning.
-Sep  8 22:26:03 localhost kernel: qla2xxx [0000:42:00.2]-d04c:22: MBX
-Command timeout for cmd 0, iocontrol=ffffffff jiffies=10140f2e5
-mb[0-3]=[0xffff 0xffff 0xffff 0xffff]
+drivers/scsi/qla2xxx/qla_target.c:3324 qlt_xmit_response() warn: missing error
+code 'res'
 
-Link: https://lore.kernel.org/r/20220110050218.3958-6-njavali@marvell.com
+Link: https://lore.kernel.org/r/20220110050218.3958-12-njavali@marvell.com
+Fixes: 4a8f71014b4d ("scsi: qla2xxx: Fix unmap of already freed sgl")
 Cc: stable@vger.kernel.org
 Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_os.c   |   10 +++++++++-
- drivers/scsi/qla2xxx/qla_tmpl.c |    9 +++++++--
- 2 files changed, 16 insertions(+), 3 deletions(-)
+ drivers/scsi/qla2xxx/qla_target.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -7639,7 +7639,7 @@ qla2xxx_pci_error_detected(struct pci_de
- 
- 	switch (state) {
- 	case pci_channel_io_normal:
--		ha->flags.eeh_busy = 0;
-+		qla_pci_set_eeh_busy(vha);
- 		if (ql2xmqsupport || ql2xnvmeenable) {
- 			set_bit(QPAIR_ONLINE_CHECK_NEEDED, &vha->dpc_flags);
- 			qla2xxx_wake_dpc(vha);
-@@ -7680,9 +7680,16 @@ qla2xxx_pci_mmio_enabled(struct pci_dev
- 	       "mmio enabled\n");
- 
- 	ha->pci_error_state = QLA_PCI_MMIO_ENABLED;
-+
- 	if (IS_QLA82XX(ha))
- 		return PCI_ERS_RESULT_RECOVERED;
- 
-+	if (qla2x00_isp_reg_stat(ha)) {
-+		ql_log(ql_log_info, base_vha, 0x803f,
-+		    "During mmio enabled, PCI/Register disconnect still detected.\n");
-+		goto out;
-+	}
-+
- 	spin_lock_irqsave(&ha->hardware_lock, flags);
- 	if (IS_QLA2100(ha) || IS_QLA2200(ha)){
- 		stat = rd_reg_word(&reg->hccr);
-@@ -7704,6 +7711,7 @@ qla2xxx_pci_mmio_enabled(struct pci_dev
- 		    "RISC paused -- mmio_enabled, Dumping firmware.\n");
- 		qla2xxx_dump_fw(base_vha);
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -3318,6 +3318,7 @@ int qlt_xmit_response(struct qla_tgt_cmd
+ 			"RESET-RSP online/active/old-count/new-count = %d/%d/%d/%d.\n",
+ 			vha->flags.online, qla2x00_reset_active(vha),
+ 			cmd->reset_count, qpair->chip_reset);
++		res = 0;
+ 		goto out_unmap_unlock;
  	}
-+out:
- 	/* set PCI_ERS_RESULT_NEED_RESET to trigger call to qla2xxx_pci_slot_reset */
- 	ql_dbg(ql_dbg_aer, base_vha, 0x600d,
- 	       "mmio enabled returning.\n");
---- a/drivers/scsi/qla2xxx/qla_tmpl.c
-+++ b/drivers/scsi/qla2xxx/qla_tmpl.c
-@@ -435,8 +435,13 @@ qla27xx_fwdt_entry_t266(struct scsi_qla_
- {
- 	ql_dbg(ql_dbg_misc, vha, 0xd20a,
- 	    "%s: reset risc [%lx]\n", __func__, *len);
--	if (buf)
--		WARN_ON_ONCE(qla24xx_soft_reset(vha->hw) != QLA_SUCCESS);
-+	if (buf) {
-+		if (qla24xx_soft_reset(vha->hw) != QLA_SUCCESS) {
-+			ql_dbg(ql_dbg_async, vha, 0x5001,
-+			    "%s: unable to soft reset\n", __func__);
-+			return INVALID_ENTRY;
-+		}
-+	}
  
- 	return qla27xx_next_entry(ent);
- }
 
 

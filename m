@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5451C4F3C14
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E5B4F38FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382324AbiDEMES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
+        id S1377437AbiDEL3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244101AbiDEIvk (ORCPT
+        with ESMTP id S243671AbiDEIuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:51:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08689D1CFD;
-        Tue,  5 Apr 2022 01:40:20 -0700 (PDT)
+        Tue, 5 Apr 2022 04:50:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1653DF1;
+        Tue,  5 Apr 2022 01:39:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7947DB81C19;
-        Tue,  5 Apr 2022 08:39:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C712CC385A0;
-        Tue,  5 Apr 2022 08:39:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BA6B61003;
+        Tue,  5 Apr 2022 08:39:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85637C385A0;
+        Tue,  5 Apr 2022 08:39:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147955;
-        bh=EUPH0vkDEVeXCVAVBEpenWoJnK05JcGiufawvmrh8I0=;
+        s=korg; t=1649147957;
+        bh=rxSC1Q8UZg6s7D6ZuFhMZ73XWIIqRVLONcnqQ9q8kC4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BfaxsX/NMFlO7nyURaZNyK6rg+8dvysoBS5NSuWOscuJbiwdCApEqX9YutkNm2w6D
-         WDlxKKcEQzaaOzQDeZaFZeVi19MdnbjHhBnD71KK6ZFTQ4DBktmdV78EIppDaUNuwc
-         SOHPV/6ZPJcrrR7SpGHnK7dJ+kNfpHFJ9MxZnKL0=
+        b=SmccdRGUXT24fzpCDrJd+vWQ5/b4OLMxFhYGistHAY1qLkzdbS7uwCPog7yrWp70G
+         XBw0Q4G1J+el8Lx/BBicY8GW6e1kp4/5yVCV2f5NcXDLfHGqqWOVwPVTBPplyN9Tkz
+         eeOj4EXnczGnb+4D3GnKm8VwE0opOXC5/2v6zFaU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Alexander Dahl <ada@thorsis.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>
-Subject: [PATCH 5.16 0155/1017] ARM: dts: at91: sama5d2: Fix PMERRLOC resource size
-Date:   Tue,  5 Apr 2022 09:17:48 +0200
-Message-Id: <20220405070358.813382618@linuxfoundation.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Subject: [PATCH 5.16 0156/1017] ARM: dts: exynos: fix UART3 pins configuration in Exynos5250
+Date:   Tue,  5 Apr 2022 09:17:49 +0200
+Message-Id: <20220405070358.845178264@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,36 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tudor Ambarus <tudor.ambarus@microchip.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-commit 0fb578a529ac7aca326a9fa475b4a6f58a756fda upstream.
+commit 372d7027fed43c8570018e124cf78b89523a1f8e upstream.
 
-PMERRLOC resource size was set to 0x100, which resulted in HSMC_ERRLOCx
-register being truncated to offset x = 21, causing error correction to
-fail if more than 22 bit errors and if 24 or 32 bit error correction
-was supported.
+The gpa1-4 pin was put twice in UART3 pin configuration of Exynos5250,
+instead of proper pin gpa1-5.
 
-Fixes: d9c41bf30cf8 ("ARM: dts: at91: Declare EBI/NAND controllers")
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc: <stable@vger.kernel.org> # 4.13.x
-Acked-by: Alexander Dahl <ada@thorsis.com>
-Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-Link: https://lore.kernel.org/r/20220111132301.906712-1-tudor.ambarus@microchip.com
+Fixes: f8bfe2b050f3 ("ARM: dts: add pin state information in client nodes for Exynos5 platforms")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+Link: https://lore.kernel.org/r/20211230195325.328220-1-krzysztof.kozlowski@canonical.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/sama5d2.dtsi |    2 +-
+ arch/arm/boot/dts/exynos5250-pinctrl.dtsi |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/arm/boot/dts/sama5d2.dtsi
-+++ b/arch/arm/boot/dts/sama5d2.dtsi
-@@ -413,7 +413,7 @@
- 				pmecc: ecc-engine@f8014070 {
- 					compatible = "atmel,sama5d2-pmecc";
- 					reg = <0xf8014070 0x490>,
--					      <0xf8014500 0x100>;
-+					      <0xf8014500 0x200>;
- 				};
- 			};
+--- a/arch/arm/boot/dts/exynos5250-pinctrl.dtsi
++++ b/arch/arm/boot/dts/exynos5250-pinctrl.dtsi
+@@ -260,7 +260,7 @@
+ 	};
  
+ 	uart3_data: uart3-data {
+-		samsung,pins = "gpa1-4", "gpa1-4";
++		samsung,pins = "gpa1-4", "gpa1-5";
+ 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+ 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+ 		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
 
 

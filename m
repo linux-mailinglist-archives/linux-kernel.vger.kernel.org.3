@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FDBD4F33EA
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA49C4F3415
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:25:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242486AbiDEJhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34718 "EHLO
+        id S241812AbiDEJgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239463AbiDEIUG (ORCPT
+        with ESMTP id S239446AbiDEIUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:06 -0400
+        Tue, 5 Apr 2022 04:20:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03DE986EE;
-        Tue,  5 Apr 2022 01:13:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E4C95A0A;
+        Tue,  5 Apr 2022 01:13:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DB0060AFB;
-        Tue,  5 Apr 2022 08:13:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F0F3C385A1;
-        Tue,  5 Apr 2022 08:13:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9DF860B0B;
+        Tue,  5 Apr 2022 08:13:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C55DCC385A1;
+        Tue,  5 Apr 2022 08:13:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146426;
-        bh=rz1R3Hln1ZyvtnKqw/JL9oRCVnhqkFPfspjsdikNATU=;
+        s=korg; t=1649146408;
+        bh=/4hjeViN+EfUTKzkf5o0XiMashHr4EoRfdRaBYxu8NU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Otcn9WHBpHnxvlrWczBWwA9k4n00lCOwJ6+bW/HLcNJA7HTKwHx2W4wIL55OJ4cGz
-         CHU4D8fVzTKChNJzv5Sf8su4tXMI2kuKDksXDpYyl8TCQTn9xTu8Oj2sbB9hgXMXGj
-         nj8DThhMoUYb0lfLa7GpnH4HUPHCo+HxKSAGNaww=
+        b=PpxWhcLkFx4nTj1NSfcN1btz+sdypG3/SfevhzZ1SbQC9HZbVwNQsPe4dwQdcwwgD
+         q1AMEZuX9bf+gYtQIGkR/TOzXknKDkxe1pB+N/sc6I4/60ocA5CgEG7hVngFgBLsa1
+         Yx2O1D7MzIV2u5plfrgMAMn03iZYrVm3KMyA+f9E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Straube <straube.linux@gmail.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0712/1126] staging: r8188eu: release_firmware is not called if allocation fails
-Date:   Tue,  5 Apr 2022 09:24:19 +0200
-Message-Id: <20220405070428.498194340@linuxfoundation.org>
+Subject: [PATCH 5.17 0716/1126] pwm: lpc18xx-sct: Initialize driver data and hardware before pwmchip_add()
+Date:   Tue,  5 Apr 2022 09:24:23 +0200
+Message-Id: <20220405070428.612551099@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -54,42 +57,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Straube <straube.linux@gmail.com>
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-[ Upstream commit 39850edf2befe27bcb3d6c37b6ee76d2ee4df903 ]
+[ Upstream commit 0401f24cd238ae200a23a13925f98de3d2c883b8 ]
 
-In function load_firmware() release_firmware() is not called if the
-allocation of pFirmware->szFwBuffer fails or if fw->size is greater
-than FW_8188E_SIZE.
+When a driver calls pwmchip_add() it has to be prepared to immediately
+get its callbacks called. So move allocation of driver data and hardware
+initialization before the call to pwmchip_add().
 
-Move the call to release_firmware() to the exit label at the end of
-the function to fix this.
+This fixes a potential NULL pointer exception and a race condition on
+register writes.
 
-Fixes: 8cd574e6af54 ("staging: r8188eu: introduce new hal dir for RTL8188eu driver")
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
-Link: https://lore.kernel.org/r/20220107103620.15648-4-straube.linux@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 841e6f90bb78 ("pwm: NXP LPC18xx PWM/SCT driver")
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Signed-off-by: Thierry Reding <thierry.reding@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/r8188eu/hal/rtl8188e_hal_init.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pwm/pwm-lpc18xx-sct.c | 20 +++++++++-----------
+ 1 file changed, 9 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-index b818872e0d19..31a9b7500a7b 100644
---- a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-@@ -538,10 +538,10 @@ static int load_firmware(struct rt_firmware *pFirmware, struct device *device)
+diff --git a/drivers/pwm/pwm-lpc18xx-sct.c b/drivers/pwm/pwm-lpc18xx-sct.c
+index 8e461f3baa05..8cc8ae16553c 100644
+--- a/drivers/pwm/pwm-lpc18xx-sct.c
++++ b/drivers/pwm/pwm-lpc18xx-sct.c
+@@ -395,12 +395,6 @@ static int lpc18xx_pwm_probe(struct platform_device *pdev)
+ 	lpc18xx_pwm_writel(lpc18xx_pwm, LPC18XX_PWM_LIMIT,
+ 			   BIT(lpc18xx_pwm->period_event));
+ 
+-	ret = pwmchip_add(&lpc18xx_pwm->chip);
+-	if (ret < 0) {
+-		dev_err(&pdev->dev, "pwmchip_add failed: %d\n", ret);
+-		goto disable_pwmclk;
+-	}
+-
+ 	for (i = 0; i < lpc18xx_pwm->chip.npwm; i++) {
+ 		struct lpc18xx_pwm_data *data;
+ 
+@@ -410,14 +404,12 @@ static int lpc18xx_pwm_probe(struct platform_device *pdev)
+ 				    GFP_KERNEL);
+ 		if (!data) {
+ 			ret = -ENOMEM;
+-			goto remove_pwmchip;
++			goto disable_pwmclk;
+ 		}
+ 
+ 		pwm_set_chip_data(pwm, data);
  	}
- 	memcpy(pFirmware->szFwBuffer, fw->data, fw->size);
- 	pFirmware->ulFwLength = fw->size;
--	release_firmware(fw);
- 	dev_dbg(device, "!bUsedWoWLANFw, FmrmwareLen:%d+\n", pFirmware->ulFwLength);
  
- Exit:
-+	release_firmware(fw);
- 	return rtStatus;
- }
+-	platform_set_drvdata(pdev, lpc18xx_pwm);
+-
+ 	val = lpc18xx_pwm_readl(lpc18xx_pwm, LPC18XX_PWM_CTRL);
+ 	val &= ~LPC18XX_PWM_BIDIR;
+ 	val &= ~LPC18XX_PWM_CTRL_HALT;
+@@ -425,10 +417,16 @@ static int lpc18xx_pwm_probe(struct platform_device *pdev)
+ 	val |= LPC18XX_PWM_PRE(0);
+ 	lpc18xx_pwm_writel(lpc18xx_pwm, LPC18XX_PWM_CTRL, val);
  
++	ret = pwmchip_add(&lpc18xx_pwm->chip);
++	if (ret < 0) {
++		dev_err(&pdev->dev, "pwmchip_add failed: %d\n", ret);
++		goto disable_pwmclk;
++	}
++
++	platform_set_drvdata(pdev, lpc18xx_pwm);
++
+ 	return 0;
+ 
+-remove_pwmchip:
+-	pwmchip_remove(&lpc18xx_pwm->chip);
+ disable_pwmclk:
+ 	clk_disable_unprepare(lpc18xx_pwm->pwm_clk);
+ 	return ret;
 -- 
 2.34.1
 

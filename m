@@ -2,251 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA204F4E79
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F34614F4B09
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:53:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573004AbiDFAWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46066 "EHLO
+        id S1573826AbiDEWx0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 5 Apr 2022 18:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457862AbiDEQwx (ORCPT
+        with ESMTP id S1457864AbiDEQxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:52:53 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BE5326E6;
-        Tue,  5 Apr 2022 09:50:52 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id b583b31e156ca061; Tue, 5 Apr 2022 18:50:50 +0200
-Received: from kreacher.localnet (unknown [213.134.181.136])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 81B8F66BCB7;
-        Tue,  5 Apr 2022 18:50:49 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Abhishek Sahu <abhsahu@nvidia.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH] PCI: Fix the ACPI power state during runtime resume
-Date:   Tue, 05 Apr 2022 18:50:48 +0200
-Message-ID: <2632919.mvXUDI8C0e@kreacher>
-In-Reply-To: <469a9db5-9868-cb17-dd5c-96ef29193fda@nvidia.com>
-References: <20220204233219.GA228585@bhelgaas> <8f89131c-41a2-02e4-1427-8a5b1704e0ea@nvidia.com> <469a9db5-9868-cb17-dd5c-96ef29193fda@nvidia.com>
+        Tue, 5 Apr 2022 12:53:15 -0400
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FF0326E6
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:51:14 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id k23so24503510ejd.3
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 09:51:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=IPrQE+Xi3gKFHtaa4iFeqv2z1Mz1gUVNTO0GQNazrug=;
+        b=7MoYEpMW8uhJs4XPW8BacZ5qjLb2PeXqwyzQ0K3deVvGUJEcx+gyEl6KT5NNldM298
+         WI9R+z+/YYaUaZxtQt8mFU7HaLSeuHRITaQf8YTo3aaLr40XD+Mn9pADeQ14P5u+kwJF
+         Yy4m7yc/cMkEQSUjlSI5CBjGe8JxV831889R/fBUSeW6cwMU3/8InfiCqB6uHI7T6/r+
+         F6MG3uoycmXMYCEZkwcBv4ZuMBhcuBcNYWf9P8lk2D8ehuv5ay2j7Lk+gMTlBhmgURD3
+         gNDTK/LqJcn1vWjLCwjBUVhvIiSEBakVfMtIF08t730Uhf1mR6kpRO3SiiEhtB8hjSUq
+         WNXg==
+X-Gm-Message-State: AOAM532fh6n9/ywHyFcpbw1R9iDjDs0EcWFSzrKbcqqHhagB3biMqrn9
+        0zo9C5JTfk2KMwKinYcIIqR2FGs2z1vxElhR/asz8g==
+X-Google-Smtp-Source: ABdhPJyZW/jtaBf+smr/b2HpqbwulVx0oqg/WWEhSXUKh3LtpTZgEBwALPc6rzivGSbB+HNhFhDLiW9iIutaI4bUvA0=
+X-Received: by 2002:a17:907:1b20:b0:6da:649b:d99e with SMTP id
+ mp32-20020a1709071b2000b006da649bd99emr4506275ejc.712.1649177473217; Tue, 05
+ Apr 2022 09:51:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <20220405070407.513532867@linuxfoundation.org> <20220405070435.188697055@linuxfoundation.org>
+In-Reply-To: <20220405070435.188697055@linuxfoundation.org>
+From:   Justin Forbes <jforbes@fedoraproject.org>
+Date:   Tue, 5 Apr 2022 11:51:02 -0500
+Message-ID: <CAFxkdAov41sA0V7D82BVophn8Nn6RPyLwPz-VmW5mLOXg1NYEw@mail.gmail.com>
+Subject: Re: [PATCH 5.17 0943/1126] ASoC: Intel: sof_es8336: use NHLT
+ information to set dmic and SSP
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        =?UTF-8?Q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.181.136
-X-CLIENT-HOSTNAME: 213.134.181.136
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejgedguddtudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepteeggfelteegudehueegieekveduleeuledvueefjeefffegfeejudfgteefhefhnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddufedrudefgedrudekuddrudefieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurddufeeipdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheprggshhhsrghhuhesnhhvihguihgrrdgtohhmpdhrtghpthhtohephhgvlhhgrggrsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsghhvghlghgrrghssehgohhoghhlvgdrtghomhdprhgtphhtthhopehlihhnuhigqdhptghisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghp
- thhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhikhgrrdifvghsthgvrhgsvghrgheslhhinhhugidrihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday, April 5, 2022 6:36:34 PM CEST Abhishek Sahu wrote:
-> On 2/8/2022 4:00 PM, Abhishek Sahu wrote:
-> > On 2/8/2022 12:28 AM, Rafael J. Wysocki wrote:
-> >> On Saturday, February 5, 2022 12:32:19 AM CET Bjorn Helgaas wrote:
-> >>> [+cc Rafael, hoping for your review :)
-> >>
-> >> +Mika
-> >>
-> >>> Wonder if we should add something like this to MAINTAINERS so you get
-> >>> cc'd on power-related things:
-> >>>
-> >>> diff --git a/MAINTAINERS b/MAINTAINERS
-> >>> index ea3e6c914384..3d9a211cad5d 100644
-> >>> --- a/MAINTAINERS
-> >>> +++ b/MAINTAINERS
-> >>> @@ -15422,6 +15422,7 @@ F:    include/linux/pm.h
-> >>>  F:   include/linux/pm_*
-> >>>  F:   include/linux/powercap.h
-> >>>  F:   kernel/configs/nopm.config
-> >>> +K:   pci_[a-z_]*power[a-z_]*\(
-> >>
-> >> It seems so, but generally PM patches should be CCed to linux-pm anyway.
-> >>
-> >>>
-> >>>  DYNAMIC THERMAL POWER MANAGEMENT (DTPM)
-> >>>  M:   Daniel Lezcano <daniel.lezcano@kernel.org>
-> >>> ]
-> >>>
-> >>> On Mon, Jan 24, 2022 at 05:51:07PM +0530, Abhishek Sahu wrote:
-> >>>> Consider the following sequence during PCI device runtime
-> >>>> suspend/resume:
-> >>>>
-> >>>> 1. PCI device goes into runtime suspended state. The PCI state
-> >>>>    will be changed to PCI_D0 and then pci_platform_power_transition()
-> >>>>    will be called which changes the ACPI state to ACPI_STATE_D3_HOT.
-> >>
-> >> You mean PCI_D3hot I suppose?
-> >>
-> > 
-> >  Yes. It should be PCI_D3hot here. 
-> > 
-> >>>> 2. Parent bridge goes into runtime suspended state. If parent
-> >>>>    bridge supports D3cold, then it will change the power state of all its
-> >>>>    children to D3cold state and the power will be removed.
-> >>>>
-> >>>> 3. During wake-up time, the bridge will be runtime resumed first
-> >>>>    and pci_power_up() will be called for the bridge. Now, the power
-> >>>>    supply will be resumed.
-> >>>>
-> >>>> 4. pci_resume_bus() will be called which will internally invoke
-> >>>>    pci_restore_standard_config(). pci_update_current_state()
-> >>>>    will read PCI_PM_CTRL register and the current_state will be
-> >>>>    updated to D0.
-> >>>>
-> >>>> In the above process, at step 4, the ACPI device state will still be
-> >>>> ACPI_STATE_D3_HOT since pci_platform_power_transition() is not being
-> >>>> invoked.
-> >>
-> >> I'm not quite following.
-> >>
-> >> I'm assuming that this description applies to the endpoint device that was
-> >> previously put into D3_hot.
-> >>
-> > 
-> >  Yes. This is applicable for endpoint devices which was previously put
-> >  into D3hot.
-> > 
-> >> Since its current state is D3_hot, it is not D0 (in particular) and the
-> >> pci_set_power_state() in pci_restore_standard_config() should put int into
-> >> D0 proper, including the platform firmware part.
-> >>
-> > 
-> >  The pci_restore_standard_config() for endpoint devices are being called
-> >  internally during wake-up of upstream bridge. 
-> > 
-> >  pci_power_up(struct pci_dev *dev)
-> >  {
-> >       ...
-> >       if (dev->runtime_d3cold) {
-> >         /*
-> >          * When powering on a bridge from D3cold, the whole hierarchy
-> >          * may be powered on into D0uninitialized state, resume them to
-> >          * give them a chance to suspend again
-> >          */
-> >         pci_resume_bus(dev->subordinate);
-> >     }
-> >     ...
-> >  }
-> > 
-> >  For the upstream bridge, the above code will trigger the wake-up of
-> >  endpoint devices and then following code will be executed for the
-> >  endpoint devices:
-> > 
-> >  pci_update_current_state(struct pci_dev *dev, pci_power_t state)
-> >  {
-> >     if (platform_pci_get_power_state(dev) == PCI_D3cold ||
-> >         !pci_device_is_present(dev)) {
-> >         dev->current_state = PCI_D3cold;
-> >     } else if (dev->pm_cap) {
-> >         u16 pmcsr;
-> > 
-> >         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> >         dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
-> >     } else {
-> >         dev->current_state = state;
-> >     }
-> >  }
-> > 
-> >  In the above code, the current_state will be set to D0 for the
-> >  endpoint devices since it will go into second block where
-> >  it will read the PM_CTRL register.
-> >  
-> >>>> We need call the pci_platform_power_transition() with state
-> >>>> D0 to change the ACPI state to ACPI_STATE_D0.
-> >>>>
-> >>>> This patch calls pci_power_up() if current power state is D0 inside
-> >>>> pci_restore_standard_config(). This pci_power_up() will change the
-> >>>> ACPI state to ACPI_STATE_D0.
-> >>>>
-> >>>> Following are the steps to confirm:
-> >>>>
-> >>>> Enable the debug prints in acpi_pci_set_power_state()
-> >>>>
-> >>>> 0000:01:00.0 is PCI device and 0000:00:01.0 is parent bridge device
-> >>>>
-> >>>> Before:
-> >>>>
-> >>>> 0000:01:00.0: power state changed by ACPI to D3hot
-> >>>> 0000:00:01.0: power state changed by ACPI to D3cold
-> >>>> 0000:00:01.0: power state changed by ACPI to D0
-> >>>>
-> >>>> After:
-> >>>>
-> >>>> 0000:01:00.0: power state changed by ACPI to D3hot
-> >>>> 0000:00:01.0: power state changed by ACPI to D3cold
-> >>>> 0000:00:01.0: power state changed by ACPI to D0
-> >>>> 0000:01:00.0: power state changed by ACPI to D0
-> >>>>
-> >>>> So with this patch, the PCI device ACPI state is also being
-> >>>> changed to D0.
-> >>>>
-> >>>> Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
-> >>>> ---
-> >>>>  drivers/pci/pci-driver.c | 14 +++++++++++---
-> >>>>  1 file changed, 11 insertions(+), 3 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-> >>>> index 588588cfda48..64e0cca12f16 100644
-> >>>> --- a/drivers/pci/pci-driver.c
-> >>>> +++ b/drivers/pci/pci-driver.c
-> >>>> @@ -521,14 +521,22 @@ static void pci_device_shutdown(struct device *dev)
-> >>>>   */
-> >>>>  static int pci_restore_standard_config(struct pci_dev *pci_dev)
-> >>>>  {
-> >>>> +   int error = 0;
-> >>>>     pci_update_current_state(pci_dev, PCI_UNKNOWN);
-> >>>>
-> >>>>     if (pci_dev->current_state != PCI_D0) {
-> >>>> -           int error = pci_set_power_state(pci_dev, PCI_D0);
-> >>>> -           if (error)
-> >>>> -                   return error;
-> >>>> +           error = pci_set_power_state(pci_dev, PCI_D0);
-> >>>> +   } else {
-> >>>> +           /*
-> >>>> +            * The platform power state can still be non-D0, so this is
-> >>>> +            * required to change the platform power state to D0.
-> >>>> +            */
-> >>
-> >> This really isn't expected to happen.
-> >>
-> >> If the device's power state has been changed to D3hot by ACPI, it is not in D0.
-> >>
-> >> It looks like the state tracking is not working here.
-> >>
-> > 
-> >  The state setting to D0 is happening due to the current logic present in
-> >  pci_update_current_state(). If we can fix the logic in
-> >  pci_update_current_state() to detect this condition and return state D3hot,
-> >  then it should also fix the issue. 
-> > 
-> >  Thanks,
-> >  Abhishek
-> > 
-> 
->  Hi Rafael/Mika,
-> 
->  Could you please help regarding the correct way to fix this issue.
->  I can update the patch accordingly.
+On Tue, Apr 5, 2022 at 4:14 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+>
+> [ Upstream commit 651c304df7f6e3fbb4779527efa3eb128ef91329 ]
+>
+> Since we see a proliferation of devices with various configurations,
+> we want to automatically set the DMIC and SSP information. This patch
+> relies on the information extracted from NHLT and partially reverts
+> existing DMI quirks added by commit a164137ce91a ("ASoC: Intel: add
+> machine driver for SOF+ES8336")
+>
+> Note that NHLT can report multiple SSPs, choosing from the
+> ssp_link_mask in an MSB-first manner was found experimentally to work
+> fine.
+>
+> The only thing that cannot be detected is the GPIO type, and users may
+> want to use the quirk override parameter if the 'wrong' solution is
+> provided.
+>
+> Tested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+> Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
+> Link: https://lore.kernel.org/r/20220308192610.392950-15-pierre-louis.bossart@linux.intel.com
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-I think you can try one of the patches posted recently:
+It seems this patch is missing a dependent patch in the backport,
+specifically commit
+679aa83a0fb70dcbf9e97cbdfd573e6fc8bf9b1a ASoC: soc-acpi: add
+information on I2S/TDM link mask
 
-https://patchwork.kernel.org/project/linux-pm/patch/3623886.MHq7AAxBmi@kreacher/
+sound/soc/intel/boards/sof_es8336.c: In function 'sof_es8336_probe':
+sound/soc/intel/boards/sof_es8336.c:482:32: error: 'struct
+snd_soc_acpi_mach_params' has no member named 'i2s_link_mask'; did you
+mean 'link_mask'?
+  482 |         if (!mach->mach_params.i2s_link_mask) {
+      |                                ^~~~~~~~~~~~~
+      |                                link_mask
+sound/soc/intel/boards/sof_es8336.c:494:39: error: 'struct
+snd_soc_acpi_mach_params' has no member named 'i2s_link_mask'; did you
+mean 'link_mask'?
+  494 |                 if (mach->mach_params.i2s_link_mask & BIT(2))
+      |                                       ^~~~~~~~~~~~~
+      |                                       link_mask
+sound/soc/intel/boards/sof_es8336.c:496:44: error: 'struct
+snd_soc_acpi_mach_params' has no member named 'i2s_link_mask'; did you
+mean 'link_mask'?
+  496 |                 else if (mach->mach_params.i2s_link_mask & BIT(1))
+      |                                            ^~~~~~~~~~~~~
+      |                                            link_mask
+sound/soc/intel/boards/sof_es8336.c:498:45: error: 'struct
+snd_soc_acpi_mach_params' has no member named 'i2s_link_mask'; did you
+mean 'link_mask'?
+  498 |                 else  if (mach->mach_params.i2s_link_mask & BIT(0))
+      |                                             ^~~~~~~~~~~~~
+      |                                             link_mask
+make[4]: *** [scripts/Makefile.build:288:
+sound/soc/intel/boards/sof_es8336.o] Error 1
 
-Thanks!
+Justin
 
-
-
+>  sound/soc/intel/boards/sof_es8336.c | 56 +++++++++++++++++++++--------
+>  1 file changed, 41 insertions(+), 15 deletions(-)
+>
+> diff --git a/sound/soc/intel/boards/sof_es8336.c b/sound/soc/intel/boards/sof_es8336.c
+> index 20d577eaab6d..46e453915f82 100644
+> --- a/sound/soc/intel/boards/sof_es8336.c
+> +++ b/sound/soc/intel/boards/sof_es8336.c
+> @@ -228,24 +228,25 @@ static int sof_es8336_quirk_cb(const struct dmi_system_id *id)
+>         return 1;
+>  }
+>
+> +/*
+> + * this table should only be used to add GPIO or jack-detection quirks
+> + * that cannot be detected from ACPI tables. The SSP and DMIC
+> + * information are providing by the platform driver and are aligned
+> + * with the topology used.
+> + *
+> + * If the GPIO support is missing, the quirk parameter can be used to
+> + * enable speakers. In that case it's recommended to keep the SSP and DMIC
+> + * information consistent, overriding the SSP and DMIC can only be done
+> + * if the topology file is modified as well.
+> + */
+>  static const struct dmi_system_id sof_es8336_quirk_table[] = {
+> -       {
+> -               .callback = sof_es8336_quirk_cb,
+> -               .matches = {
+> -                       DMI_MATCH(DMI_SYS_VENDOR, "CHUWI Innovation And Technology"),
+> -                       DMI_MATCH(DMI_BOARD_NAME, "Hi10 X"),
+> -               },
+> -               .driver_data = (void *)SOF_ES8336_SSP_CODEC(2)
+> -       },
+>         {
+>                 .callback = sof_es8336_quirk_cb,
+>                 .matches = {
+>                         DMI_MATCH(DMI_SYS_VENDOR, "IP3 tech"),
+>                         DMI_MATCH(DMI_BOARD_NAME, "WN1"),
+>                 },
+> -               .driver_data = (void *)(SOF_ES8336_SSP_CODEC(0) |
+> -                                       SOF_ES8336_TGL_GPIO_QUIRK |
+> -                                       SOF_ES8336_ENABLE_DMIC)
+> +               .driver_data = (void *)(SOF_ES8336_TGL_GPIO_QUIRK)
+>         },
+>         {}
+>  };
+> @@ -470,11 +471,33 @@ static int sof_es8336_probe(struct platform_device *pdev)
+>         card = &sof_es8336_card;
+>         card->dev = dev;
+>
+> -       if (!dmi_check_system(sof_es8336_quirk_table))
+> -               quirk = SOF_ES8336_SSP_CODEC(2);
+> +       /* check GPIO DMI quirks */
+> +       dmi_check_system(sof_es8336_quirk_table);
+>
+> -       if (quirk & SOF_ES8336_ENABLE_DMIC)
+> -               dmic_be_num = 2;
+> +       if (!mach->mach_params.i2s_link_mask) {
+> +               dev_warn(dev, "No I2S link information provided, using SSP0. This may need to be modified with the quirk module parameter\n");
+> +       } else {
+> +               /*
+> +                * Set configuration based on platform NHLT.
+> +                * In this machine driver, we can only support one SSP for the
+> +                * ES8336 link, the else-if below are intentional.
+> +                * In some cases multiple SSPs can be reported by NHLT, starting MSB-first
+> +                * seems to pick the right connection.
+> +                */
+> +               unsigned long ssp = 0;
+> +
+> +               if (mach->mach_params.i2s_link_mask & BIT(2))
+> +                       ssp = SOF_ES8336_SSP_CODEC(2);
+> +               else if (mach->mach_params.i2s_link_mask & BIT(1))
+> +                       ssp = SOF_ES8336_SSP_CODEC(1);
+> +               else  if (mach->mach_params.i2s_link_mask & BIT(0))
+> +                       ssp = SOF_ES8336_SSP_CODEC(0);
+> +
+> +               quirk |= ssp;
+> +       }
+> +
+> +       if (mach->mach_params.dmic_num)
+> +               quirk |= SOF_ES8336_ENABLE_DMIC;
+>
+>         if (quirk_override != -1) {
+>                 dev_info(dev, "Overriding quirk 0x%lx => 0x%x\n",
+> @@ -483,6 +506,9 @@ static int sof_es8336_probe(struct platform_device *pdev)
+>         }
+>         log_quirks(dev);
+>
+> +       if (quirk & SOF_ES8336_ENABLE_DMIC)
+> +               dmic_be_num = 2;
+> +
+>         sof_es8336_card.num_links += dmic_be_num + hdmi_num;
+>         dai_links = sof_card_dai_links_create(dev,
+>                                               SOF_ES8336_SSP_CODEC(quirk),
+> --
+> 2.34.1
+>
+>
+>

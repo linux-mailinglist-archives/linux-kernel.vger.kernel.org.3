@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763424F45E5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A344F4418
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243052AbiDEOXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
+        id S1355010AbiDEOYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239360AbiDEJeA (ORCPT
+        with ESMTP id S238894AbiDEJeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:34:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F22DBC;
-        Tue,  5 Apr 2022 02:22:39 -0700 (PDT)
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BC47484B;
+        Tue,  5 Apr 2022 02:22:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA01761654;
-        Tue,  5 Apr 2022 09:22:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9262C385A3;
-        Tue,  5 Apr 2022 09:22:37 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 10323CE1C73;
+        Tue,  5 Apr 2022 09:22:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FF8CC385A2;
+        Tue,  5 Apr 2022 09:22:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150558;
-        bh=hlpP1U3hRUdL97y8XBp95xRS2hJfOceo/PY+X7k/Bs0=;
+        s=korg; t=1649150566;
+        bh=wIXbSc5HBKjTS6Guk8ShP/tnI1ddWwUDYHDXGwN+0sM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G7kzR3WCUgH6tHYHTdB9OM9zmeKGOIwUG4tSf3pBtn35/FWP5f/VjFxZDBwtuU27A
-         sbowyF1qX+WGuyYZB/117nHPvMg2vHBnfbGbW36QhCeWm2b7am1H2CwNoFRW2a9ODg
-         P8QE7jqssgszspZEwFcZou4c7EDzbugAvVpCuSUA=
+        b=E/D8L9WhSCRZToH3vjrJBev8ZIppH0xS7B6NDCy1Tqzz22Q4inMwq9nsTC5KhsxiX
+         GEWeZ0kOpI3XaNMfOy8f5jb+LbucCB7ANOrM3pc0WzazbfE8QuheDgjiJGqEZxeic5
+         rmAIySUjzENFgURpj0qCt5l5IXX+YbHGhu5ePVSg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.15 098/913] cifs: fix NULL ptr dereference in smb2_ioctl_query_info()
-Date:   Tue,  5 Apr 2022 09:19:20 +0200
-Message-Id: <20220405070342.765766021@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+6e5c88838328e99c7e1c@syzkaller.appspotmail.com,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 101/913] ALSA: pcm: Fix potential AB/BA lock with buffer_mutex and mmap_lock
+Date:   Tue,  5 Apr 2022 09:19:23 +0200
+Message-Id: <20220405070342.855446718@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -54,329 +55,209 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paulo Alcantara <pc@cjr.nz>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit d6f5e358452479fa8a773b5c6ccc9e4ec5a20880 upstream.
+commit bc55cfd5718c7c23e5524582e9fa70b4d10f2433 upstream.
 
-When calling smb2_ioctl_query_info() with invalid
-smb_query_info::flags, a NULL ptr dereference is triggered when trying
-to kfree() uninitialised rqst[n].rq_iov array.
+syzbot caught a potential deadlock between the PCM
+runtime->buffer_mutex and the mm->mmap_lock.  It was brought by the
+recent fix to cover the racy read/write and other ioctls, and in that
+commit, I overlooked a (hopefully only) corner case that may take the
+revert lock, namely, the OSS mmap.  The OSS mmap operation
+exceptionally allows to re-configure the parameters inside the OSS
+mmap syscall, where mm->mmap_mutex is already held.  Meanwhile, the
+copy_from/to_user calls at read/write operations also take the
+mm->mmap_lock internally, hence it may lead to a AB/BA deadlock.
 
-This also fixes leaked paths that are created in SMB2_open_init()
-which required SMB2_open_free() to properly free them.
+A similar problem was already seen in the past and we fixed it with a
+refcount (in commit b248371628aa).  The former fix covered only the
+call paths with OSS read/write and OSS ioctls, while we need to cover
+the concurrent access via both ALSA and OSS APIs now.
 
-Here is a small C reproducer that triggers it
+This patch addresses the problem above by replacing the buffer_mutex
+lock in the read/write operations with a refcount similar as we've
+used for OSS.  The new field, runtime->buffer_accessing, keeps the
+number of concurrent read/write operations.  Unlike the former
+buffer_mutex protection, this protects only around the
+copy_from/to_user() calls; the other codes are basically protected by
+the PCM stream lock.  The refcount can be a negative, meaning blocked
+by the ioctls.  If a negative value is seen, the read/write aborts
+with -EBUSY.  In the ioctl side, OTOH, they check this refcount, too,
+and set to a negative value for blocking unless it's already being
+accessed.
 
-	#include <stdio.h>
-	#include <stdlib.h>
-	#include <stdint.h>
-	#include <unistd.h>
-	#include <fcntl.h>
-	#include <sys/ioctl.h>
-
-	#define die(s) perror(s), exit(1)
-	#define QUERY_INFO 0xc018cf07
-
-	int main(int argc, char *argv[])
-	{
-		int fd;
-
-		if (argc < 2)
-			exit(1);
-		fd = open(argv[1], O_RDONLY);
-		if (fd == -1)
-			die("open");
-		if (ioctl(fd, QUERY_INFO, (uint32_t[]) { 0, 0, 0, 4, 0, 0}) == -1)
-			die("ioctl");
-		close(fd);
-		return 0;
-	}
-
-	mount.cifs //srv/share /mnt -o ...
-	gcc repro.c && ./a.out /mnt/f0
-
-	[ 1832.124468] CIFS: VFS: \\w22-dc.zelda.test\test Invalid passthru query flags: 0x4
-	[ 1832.125043] general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN NOPTI
-	[ 1832.125764] KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-	[ 1832.126241] CPU: 3 PID: 1133 Comm: a.out Not tainted 5.17.0-rc8 #2
-	[ 1832.126630] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.15.0-0-g2dd4b9b-rebuilt.opensuse.org 04/01/2014
-	[ 1832.127322] RIP: 0010:smb2_ioctl_query_info+0x7a3/0xe30 [cifs]
-	[ 1832.127749] Code: 00 00 00 fc ff df 48 c1 ea 03 80 3c 02 00 0f 85 6c 05 00 00 48 b8 00 00 00 00 00 fc ff df 4d 8b 74 24 28 4c 89 f2 48 c1 ea 03 <80> 3c 02 00 0f 85 cb 04 00 00 49 8b 3e e8 bb fc fa ff 48 89 da 48
-	[ 1832.128911] RSP: 0018:ffffc90000957b08 EFLAGS: 00010256
-	[ 1832.129243] RAX: dffffc0000000000 RBX: ffff888117e9b850 RCX: ffffffffa020580d
-	[ 1832.129691] RDX: 0000000000000000 RSI: 0000000000000004 RDI: ffffffffa043a2c0
-	[ 1832.130137] RBP: ffff888117e9b878 R08: 0000000000000001 R09: 0000000000000003
-	[ 1832.130585] R10: fffffbfff4087458 R11: 0000000000000001 R12: ffff888117e9b800
-	[ 1832.131037] R13: 00000000ffffffea R14: 0000000000000000 R15: ffff888117e9b8a8
-	[ 1832.131485] FS:  00007fcee9900740(0000) GS:ffff888151a00000(0000) knlGS:0000000000000000
-	[ 1832.131993] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-	[ 1832.132354] CR2: 00007fcee9a1ef5e CR3: 0000000114cd2000 CR4: 0000000000350ee0
-	[ 1832.132801] Call Trace:
-	[ 1832.132962]  <TASK>
-	[ 1832.133104]  ? smb2_query_reparse_tag+0x890/0x890 [cifs]
-	[ 1832.133489]  ? cifs_mapchar+0x460/0x460 [cifs]
-	[ 1832.133822]  ? rcu_read_lock_sched_held+0x3f/0x70
-	[ 1832.134125]  ? cifs_strndup_to_utf16+0x15b/0x250 [cifs]
-	[ 1832.134502]  ? lock_downgrade+0x6f0/0x6f0
-	[ 1832.134760]  ? cifs_convert_path_to_utf16+0x198/0x220 [cifs]
-	[ 1832.135170]  ? smb2_check_message+0x1080/0x1080 [cifs]
-	[ 1832.135545]  cifs_ioctl+0x1577/0x3320 [cifs]
-	[ 1832.135864]  ? lock_downgrade+0x6f0/0x6f0
-	[ 1832.136125]  ? cifs_readdir+0x2e60/0x2e60 [cifs]
-	[ 1832.136468]  ? rcu_read_lock_sched_held+0x3f/0x70
-	[ 1832.136769]  ? __rseq_handle_notify_resume+0x80b/0xbe0
-	[ 1832.137096]  ? __up_read+0x192/0x710
-	[ 1832.137327]  ? __ia32_sys_rseq+0xf0/0xf0
-	[ 1832.137578]  ? __x64_sys_openat+0x11f/0x1d0
-	[ 1832.137850]  __x64_sys_ioctl+0x127/0x190
-	[ 1832.138103]  do_syscall_64+0x3b/0x90
-	[ 1832.138378]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-	[ 1832.138702] RIP: 0033:0x7fcee9a253df
-	[ 1832.138937] Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <41> 89 c0 3d 00 f0 ff ff 77 1f 48 8b 44 24 18 64 48 2b 04 25 28 00
-	[ 1832.140107] RSP: 002b:00007ffeba94a8a0 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-	[ 1832.140606] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fcee9a253df
-	[ 1832.141058] RDX: 00007ffeba94a910 RSI: 00000000c018cf07 RDI: 0000000000000003
-	[ 1832.141503] RBP: 00007ffeba94a930 R08: 00007fcee9b24db0 R09: 00007fcee9b45c4e
-	[ 1832.141948] R10: 00007fcee9918d40 R11: 0000000000000246 R12: 00007ffeba94aa48
-	[ 1832.142396] R13: 0000000000401176 R14: 0000000000403df8 R15: 00007fcee9b78000
-	[ 1832.142851]  </TASK>
-	[ 1832.142994] Modules linked in: cifs cifs_arc4 cifs_md4 bpf_preload [last unloaded: cifs]
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Reported-by: syzbot+6e5c88838328e99c7e1c@syzkaller.appspotmail.com
+Fixes: dca947d4d26d ("ALSA: pcm: Fix races among concurrent read/write and buffer changes")
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/000000000000381a0d05db622a81@google.com
+Link: https://lore.kernel.org/r/20220330120903.4738-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/cifs/smb2ops.c |  124 ++++++++++++++++++++++++++++--------------------------
- 1 file changed, 65 insertions(+), 59 deletions(-)
+ include/sound/pcm.h     |    1 +
+ sound/core/pcm.c        |    1 +
+ sound/core/pcm_lib.c    |    9 +++++----
+ sound/core/pcm_native.c |   39 ++++++++++++++++++++++++++++++++-------
+ 4 files changed, 39 insertions(+), 11 deletions(-)
 
---- a/fs/cifs/smb2ops.c
-+++ b/fs/cifs/smb2ops.c
-@@ -1631,6 +1631,7 @@ smb2_ioctl_query_info(const unsigned int
- 	unsigned int size[2];
- 	void *data[2];
- 	int create_options = is_dir ? CREATE_NOT_FILE : CREATE_NOT_DIR;
-+	void (*free_req1_func)(struct smb_rqst *r);
+--- a/include/sound/pcm.h
++++ b/include/sound/pcm.h
+@@ -399,6 +399,7 @@ struct snd_pcm_runtime {
+ 	struct fasync_struct *fasync;
+ 	bool stop_operating;		/* sync_stop will be called */
+ 	struct mutex buffer_mutex;	/* protect for buffer changes */
++	atomic_t buffer_accessing;	/* >0: in r/w operation, <0: blocked */
  
- 	vars = kzalloc(sizeof(*vars), GFP_ATOMIC);
- 	if (vars == NULL)
-@@ -1640,17 +1641,18 @@ smb2_ioctl_query_info(const unsigned int
+ 	/* -- private section -- */
+ 	void *private_data;
+--- a/sound/core/pcm.c
++++ b/sound/core/pcm.c
+@@ -970,6 +970,7 @@ int snd_pcm_attach_substream(struct snd_
  
- 	resp_buftype[0] = resp_buftype[1] = resp_buftype[2] = CIFS_NO_BUFFER;
+ 	runtime->status->state = SNDRV_PCM_STATE_OPEN;
+ 	mutex_init(&runtime->buffer_mutex);
++	atomic_set(&runtime->buffer_accessing, 0);
  
--	if (copy_from_user(&qi, arg, sizeof(struct smb_query_info)))
--		goto e_fault;
--
-+	if (copy_from_user(&qi, arg, sizeof(struct smb_query_info))) {
-+		rc = -EFAULT;
-+		goto free_vars;
-+	}
- 	if (qi.output_buffer_length > 1024) {
--		kfree(vars);
--		return -EINVAL;
-+		rc = -EINVAL;
-+		goto free_vars;
- 	}
+ 	substream->runtime = runtime;
+ 	substream->private_data = pcm->private_data;
+--- a/sound/core/pcm_lib.c
++++ b/sound/core/pcm_lib.c
+@@ -1905,11 +1905,9 @@ static int wait_for_avail(struct snd_pcm
+ 		if (avail >= runtime->twake)
+ 			break;
+ 		snd_pcm_stream_unlock_irq(substream);
+-		mutex_unlock(&runtime->buffer_mutex);
  
- 	if (!ses || !server) {
--		kfree(vars);
--		return -EIO;
-+		rc = -EIO;
-+		goto free_vars;
- 	}
+ 		tout = schedule_timeout(wait_time);
  
- 	if (smb3_encryption_required(tcon))
-@@ -1659,8 +1661,8 @@ smb2_ioctl_query_info(const unsigned int
- 	if (qi.output_buffer_length) {
- 		buffer = memdup_user(arg + sizeof(struct smb_query_info), qi.output_buffer_length);
- 		if (IS_ERR(buffer)) {
--			kfree(vars);
--			return PTR_ERR(buffer);
-+			rc = PTR_ERR(buffer);
-+			goto free_vars;
+-		mutex_lock(&runtime->buffer_mutex);
+ 		snd_pcm_stream_lock_irq(substream);
+ 		set_current_state(TASK_INTERRUPTIBLE);
+ 		switch (runtime->status->state) {
+@@ -2203,7 +2201,6 @@ snd_pcm_sframes_t __snd_pcm_lib_xfer(str
+ 
+ 	nonblock = !!(substream->f_flags & O_NONBLOCK);
+ 
+-	mutex_lock(&runtime->buffer_mutex);
+ 	snd_pcm_stream_lock_irq(substream);
+ 	err = pcm_accessible_state(runtime);
+ 	if (err < 0)
+@@ -2258,10 +2255,15 @@ snd_pcm_sframes_t __snd_pcm_lib_xfer(str
+ 			err = -EINVAL;
+ 			goto _end_unlock;
  		}
- 	}
- 
-@@ -1699,48 +1701,45 @@ smb2_ioctl_query_info(const unsigned int
- 	rc = SMB2_open_init(tcon, server,
- 			    &rqst[0], &oplock, &oparms, path);
- 	if (rc)
--		goto iqinf_exit;
-+		goto free_output_buffer;
- 	smb2_set_next_command(tcon, &rqst[0]);
- 
- 	/* Query */
- 	if (qi.flags & PASSTHRU_FSCTL) {
- 		/* Can eventually relax perm check since server enforces too */
--		if (!capable(CAP_SYS_ADMIN))
-+		if (!capable(CAP_SYS_ADMIN)) {
- 			rc = -EPERM;
--		else  {
--			rqst[1].rq_iov = &vars->io_iov[0];
--			rqst[1].rq_nvec = SMB2_IOCTL_IOV_SIZE;
--
--			rc = SMB2_ioctl_init(tcon, server,
--					     &rqst[1],
--					     COMPOUND_FID, COMPOUND_FID,
--					     qi.info_type, true, buffer,
--					     qi.output_buffer_length,
--					     CIFSMaxBufSize -
--					     MAX_SMB2_CREATE_RESPONSE_SIZE -
--					     MAX_SMB2_CLOSE_RESPONSE_SIZE);
-+			goto free_open_req;
- 		}
-+		rqst[1].rq_iov = &vars->io_iov[0];
-+		rqst[1].rq_nvec = SMB2_IOCTL_IOV_SIZE;
-+
-+		rc = SMB2_ioctl_init(tcon, server, &rqst[1], COMPOUND_FID, COMPOUND_FID,
-+				     qi.info_type, true, buffer, qi.output_buffer_length,
-+				     CIFSMaxBufSize - MAX_SMB2_CREATE_RESPONSE_SIZE -
-+				     MAX_SMB2_CLOSE_RESPONSE_SIZE);
-+		free_req1_func = SMB2_ioctl_free;
- 	} else if (qi.flags == PASSTHRU_SET_INFO) {
- 		/* Can eventually relax perm check since server enforces too */
--		if (!capable(CAP_SYS_ADMIN))
-+		if (!capable(CAP_SYS_ADMIN)) {
- 			rc = -EPERM;
--		else if (qi.output_buffer_length < 8)
-+			goto free_open_req;
++		if (!atomic_inc_unless_negative(&runtime->buffer_accessing)) {
++			err = -EBUSY;
++			goto _end_unlock;
 +		}
-+		if (qi.output_buffer_length < 8) {
- 			rc = -EINVAL;
--		else {
--			rqst[1].rq_iov = &vars->si_iov[0];
--			rqst[1].rq_nvec = 1;
--
--			/* MS-FSCC 2.4.13 FileEndOfFileInformation */
--			size[0] = 8;
--			data[0] = buffer;
--
--			rc = SMB2_set_info_init(tcon, server,
--					&rqst[1],
--					COMPOUND_FID, COMPOUND_FID,
--					current->tgid,
--					FILE_END_OF_FILE_INFORMATION,
--					SMB2_O_INFO_FILE, 0, data, size);
-+			goto free_open_req;
- 		}
-+		rqst[1].rq_iov = &vars->si_iov[0];
-+		rqst[1].rq_nvec = 1;
-+
-+		/* MS-FSCC 2.4.13 FileEndOfFileInformation */
-+		size[0] = 8;
-+		data[0] = buffer;
-+
-+		rc = SMB2_set_info_init(tcon, server, &rqst[1], COMPOUND_FID, COMPOUND_FID,
-+					current->tgid, FILE_END_OF_FILE_INFORMATION,
-+					SMB2_O_INFO_FILE, 0, data, size);
-+		free_req1_func = SMB2_set_info_free;
- 	} else if (qi.flags == PASSTHRU_QUERY_INFO) {
- 		rqst[1].rq_iov = &vars->qi_iov[0];
- 		rqst[1].rq_nvec = 1;
-@@ -1751,6 +1750,7 @@ smb2_ioctl_query_info(const unsigned int
- 				  qi.info_type, qi.additional_information,
- 				  qi.input_buffer_length,
- 				  qi.output_buffer_length, buffer);
-+		free_req1_func = SMB2_query_info_free;
- 	} else { /* unknown flags */
- 		cifs_tcon_dbg(VFS, "Invalid passthru query flags: 0x%x\n",
- 			      qi.flags);
-@@ -1758,7 +1758,7 @@ smb2_ioctl_query_info(const unsigned int
- 	}
- 
- 	if (rc)
--		goto iqinf_exit;
-+		goto free_open_req;
- 	smb2_set_next_command(tcon, &rqst[1]);
- 	smb2_set_related(&rqst[1]);
- 
-@@ -1769,14 +1769,14 @@ smb2_ioctl_query_info(const unsigned int
- 	rc = SMB2_close_init(tcon, server,
- 			     &rqst[2], COMPOUND_FID, COMPOUND_FID, false);
- 	if (rc)
--		goto iqinf_exit;
-+		goto free_req_1;
- 	smb2_set_related(&rqst[2]);
- 
- 	rc = compound_send_recv(xid, ses, server,
- 				flags, 3, rqst,
- 				resp_buftype, rsp_iov);
- 	if (rc)
--		goto iqinf_exit;
-+		goto out;
- 
- 	/* No need to bump num_remote_opens since handle immediately closed */
- 	if (qi.flags & PASSTHRU_FSCTL) {
-@@ -1786,18 +1786,22 @@ smb2_ioctl_query_info(const unsigned int
- 			qi.input_buffer_length = le32_to_cpu(io_rsp->OutputCount);
- 		if (qi.input_buffer_length > 0 &&
- 		    le32_to_cpu(io_rsp->OutputOffset) + qi.input_buffer_length
--		    > rsp_iov[1].iov_len)
--			goto e_fault;
-+		    > rsp_iov[1].iov_len) {
-+			rc = -EFAULT;
-+			goto out;
-+		}
- 
- 		if (copy_to_user(&pqi->input_buffer_length,
- 				 &qi.input_buffer_length,
--				 sizeof(qi.input_buffer_length)))
--			goto e_fault;
-+				 sizeof(qi.input_buffer_length))) {
-+			rc = -EFAULT;
-+			goto out;
-+		}
- 
- 		if (copy_to_user((void __user *)pqi + sizeof(struct smb_query_info),
- 				 (const void *)io_rsp + le32_to_cpu(io_rsp->OutputOffset),
- 				 qi.input_buffer_length))
--			goto e_fault;
-+			rc = -EFAULT;
- 	} else {
- 		pqi = (struct smb_query_info __user *)arg;
- 		qi_rsp = (struct smb2_query_info_rsp *)rsp_iov[1].iov_base;
-@@ -1805,28 +1809,30 @@ smb2_ioctl_query_info(const unsigned int
- 			qi.input_buffer_length = le32_to_cpu(qi_rsp->OutputBufferLength);
- 		if (copy_to_user(&pqi->input_buffer_length,
- 				 &qi.input_buffer_length,
--				 sizeof(qi.input_buffer_length)))
--			goto e_fault;
-+				 sizeof(qi.input_buffer_length))) {
-+			rc = -EFAULT;
-+			goto out;
-+		}
- 
- 		if (copy_to_user(pqi + 1, qi_rsp->Buffer,
- 				 qi.input_buffer_length))
--			goto e_fault;
-+			rc = -EFAULT;
- 	}
- 
-- iqinf_exit:
--	cifs_small_buf_release(rqst[0].rq_iov[0].iov_base);
--	cifs_small_buf_release(rqst[1].rq_iov[0].iov_base);
--	cifs_small_buf_release(rqst[2].rq_iov[0].iov_base);
-+out:
- 	free_rsp_buf(resp_buftype[0], rsp_iov[0].iov_base);
- 	free_rsp_buf(resp_buftype[1], rsp_iov[1].iov_base);
- 	free_rsp_buf(resp_buftype[2], rsp_iov[2].iov_base);
--	kfree(vars);
-+	SMB2_close_free(&rqst[2]);
-+free_req_1:
-+	free_req1_func(&rqst[1]);
-+free_open_req:
-+	SMB2_open_free(&rqst[0]);
-+free_output_buffer:
- 	kfree(buffer);
-+free_vars:
-+	kfree(vars);
- 	return rc;
--
--e_fault:
--	rc = -EFAULT;
--	goto iqinf_exit;
+ 		snd_pcm_stream_unlock_irq(substream);
+ 		err = writer(substream, appl_ofs, data, offset, frames,
+ 			     transfer);
+ 		snd_pcm_stream_lock_irq(substream);
++		atomic_dec(&runtime->buffer_accessing);
+ 		if (err < 0)
+ 			goto _end_unlock;
+ 		err = pcm_accessible_state(runtime);
+@@ -2291,7 +2293,6 @@ snd_pcm_sframes_t __snd_pcm_lib_xfer(str
+ 	if (xfer > 0 && err >= 0)
+ 		snd_pcm_update_state(substream, runtime);
+ 	snd_pcm_stream_unlock_irq(substream);
+-	mutex_unlock(&runtime->buffer_mutex);
+ 	return xfer > 0 ? (snd_pcm_sframes_t)xfer : err;
+ }
+ EXPORT_SYMBOL(__snd_pcm_lib_xfer);
+--- a/sound/core/pcm_native.c
++++ b/sound/core/pcm_native.c
+@@ -672,6 +672,24 @@ static int snd_pcm_hw_params_choose(stru
+ 	return 0;
  }
  
- static ssize_t
++/* acquire buffer_mutex; if it's in r/w operation, return -EBUSY, otherwise
++ * block the further r/w operations
++ */
++static int snd_pcm_buffer_access_lock(struct snd_pcm_runtime *runtime)
++{
++	if (!atomic_dec_unless_positive(&runtime->buffer_accessing))
++		return -EBUSY;
++	mutex_lock(&runtime->buffer_mutex);
++	return 0; /* keep buffer_mutex, unlocked by below */
++}
++
++/* release buffer_mutex and clear r/w access flag */
++static void snd_pcm_buffer_access_unlock(struct snd_pcm_runtime *runtime)
++{
++	mutex_unlock(&runtime->buffer_mutex);
++	atomic_inc(&runtime->buffer_accessing);
++}
++
+ #if IS_ENABLED(CONFIG_SND_PCM_OSS)
+ #define is_oss_stream(substream)	((substream)->oss.oss)
+ #else
+@@ -682,14 +700,16 @@ static int snd_pcm_hw_params(struct snd_
+ 			     struct snd_pcm_hw_params *params)
+ {
+ 	struct snd_pcm_runtime *runtime;
+-	int err = 0, usecs;
++	int err, usecs;
+ 	unsigned int bits;
+ 	snd_pcm_uframes_t frames;
+ 
+ 	if (PCM_RUNTIME_CHECK(substream))
+ 		return -ENXIO;
+ 	runtime = substream->runtime;
+-	mutex_lock(&runtime->buffer_mutex);
++	err = snd_pcm_buffer_access_lock(runtime);
++	if (err < 0)
++		return err;
+ 	snd_pcm_stream_lock_irq(substream);
+ 	switch (runtime->status->state) {
+ 	case SNDRV_PCM_STATE_OPEN:
+@@ -807,7 +827,7 @@ static int snd_pcm_hw_params(struct snd_
+ 			snd_pcm_lib_free_pages(substream);
+ 	}
+  unlock:
+-	mutex_unlock(&runtime->buffer_mutex);
++	snd_pcm_buffer_access_unlock(runtime);
+ 	return err;
+ }
+ 
+@@ -852,7 +872,9 @@ static int snd_pcm_hw_free(struct snd_pc
+ 	if (PCM_RUNTIME_CHECK(substream))
+ 		return -ENXIO;
+ 	runtime = substream->runtime;
+-	mutex_lock(&runtime->buffer_mutex);
++	result = snd_pcm_buffer_access_lock(runtime);
++	if (result < 0)
++		return result;
+ 	snd_pcm_stream_lock_irq(substream);
+ 	switch (runtime->status->state) {
+ 	case SNDRV_PCM_STATE_SETUP:
+@@ -871,7 +893,7 @@ static int snd_pcm_hw_free(struct snd_pc
+ 	snd_pcm_set_state(substream, SNDRV_PCM_STATE_OPEN);
+ 	cpu_latency_qos_remove_request(&substream->latency_pm_qos_req);
+  unlock:
+-	mutex_unlock(&runtime->buffer_mutex);
++	snd_pcm_buffer_access_unlock(runtime);
+ 	return result;
+ }
+ 
+@@ -1356,12 +1378,15 @@ static int snd_pcm_action_nonatomic(cons
+ 
+ 	/* Guarantee the group members won't change during non-atomic action */
+ 	down_read(&snd_pcm_link_rwsem);
+-	mutex_lock(&substream->runtime->buffer_mutex);
++	res = snd_pcm_buffer_access_lock(substream->runtime);
++	if (res < 0)
++		goto unlock;
+ 	if (snd_pcm_stream_linked(substream))
+ 		res = snd_pcm_action_group(ops, substream, state, false);
+ 	else
+ 		res = snd_pcm_action_single(ops, substream, state);
+-	mutex_unlock(&substream->runtime->buffer_mutex);
++	snd_pcm_buffer_access_unlock(substream->runtime);
++ unlock:
+ 	up_read(&snd_pcm_link_rwsem);
+ 	return res;
+ }
 
 

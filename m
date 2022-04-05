@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828704F48FF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C3984F4F06
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389265AbiDEV7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
+        id S1588013AbiDFALC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349078AbiDEJtE (ORCPT
+        with ESMTP id S1354671AbiDEKPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F5CA9942;
-        Tue,  5 Apr 2022 02:40:07 -0700 (PDT)
+        Tue, 5 Apr 2022 06:15:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D756C483;
+        Tue,  5 Apr 2022 03:02:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52E5461368;
-        Tue,  5 Apr 2022 09:40:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62576C385A1;
-        Tue,  5 Apr 2022 09:40:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62D81B81B7A;
+        Tue,  5 Apr 2022 10:02:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4870C385A1;
+        Tue,  5 Apr 2022 10:02:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151606;
-        bh=iBVVBtu/6C4RfiTBZEiWcq/s64qXIehKCq8+uzO99bE=;
+        s=korg; t=1649152944;
+        bh=xVHp64TaI74NLn8bKNh6ZVRi72OAW/a3LCS5t+EfIKg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kC2MfqGw3nyi9YwBWv4srNjqvUIcF53aeIFYFHtocTYuQbIx+3OJ25phm6ksMC/4X
-         8OLzU5Uy/sqtFSjNTAImqnETqUAAr6o8do3wWvb7DKNSc6HL8dwVoP8+jE93aawB6t
-         LDbBfv2/imyzF95CejdSYu9/IF61kOAVYj7Ho588=
+        b=ZpfMAjGqk+k+XG9lGd0/2UdwM54Rn8Hth8m2l6SpgaVA1Ly0G6Ky24xISPjQPKzmF
+         TdX+nEZXa47o5Eaf9WIgN/DrHlubFfgtppDeVcWjh5iUowxFRlYbZSDcv8SpB6d151
+         TuAU3Pvdfu5GOaVmSkbZXgxcNDImlj4KK/MMInvM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aashish Sharma <shraash@google.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 476/913] dm crypt: fix get_key_size compiler warning if !CONFIG_KEYS
-Date:   Tue,  5 Apr 2022 09:25:38 +0200
-Message-Id: <20220405070354.123432257@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Chuck Lever <chuck.lever@oracle.com>
+Subject: [PATCH 5.10 046/599] NFSD: prevent underflow in nfssvc_decode_writeargs()
+Date:   Tue,  5 Apr 2022 09:25:40 +0200
+Message-Id: <20220405070300.199473865@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aashish Sharma <shraash@google.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 6fc51504388c1a1a53db8faafe9fff78fccc7c87 ]
+commit 184416d4b98509fb4c3d8fc3d6dc1437896cc159 upstream.
 
-Explicitly convert unsigned int in the right of the conditional
-expression to int to match the left side operand and the return type,
-fixing the following compiler warning:
+Smatch complains:
 
-drivers/md/dm-crypt.c:2593:43: warning: signed and unsigned
-type in conditional expression [-Wsign-compare]
+	fs/nfsd/nfsxdr.c:341 nfssvc_decode_writeargs()
+	warn: no lower bound on 'args->len'
 
-Fixes: c538f6ec9f56 ("dm crypt: add ability to use keys from the kernel key retention service")
-Signed-off-by: Aashish Sharma <shraash@google.com>
-Signed-off-by: Mike Snitzer <snitzer@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Change the type to unsigned to prevent this issue.
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/dm-crypt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/nfsd/nfsproc.c |    2 +-
+ fs/nfsd/xdr.h     |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/md/dm-crypt.c b/drivers/md/dm-crypt.c
-index 916b7da16de2..154139bf7d22 100644
---- a/drivers/md/dm-crypt.c
-+++ b/drivers/md/dm-crypt.c
-@@ -2579,7 +2579,7 @@ static int crypt_set_keyring_key(struct crypt_config *cc, const char *key_string
+--- a/fs/nfsd/nfsproc.c
++++ b/fs/nfsd/nfsproc.c
+@@ -223,7 +223,7 @@ nfsd_proc_write(struct svc_rqst *rqstp)
+ 	unsigned long cnt = argp->len;
+ 	unsigned int nvecs;
  
- static int get_key_size(char **key_string)
- {
--	return (*key_string[0] == ':') ? -EINVAL : strlen(*key_string) >> 1;
-+	return (*key_string[0] == ':') ? -EINVAL : (int)(strlen(*key_string) >> 1);
- }
+-	dprintk("nfsd: WRITE    %s %d bytes at %d\n",
++	dprintk("nfsd: WRITE    %s %u bytes at %d\n",
+ 		SVCFH_fmt(&argp->fh),
+ 		argp->len, argp->offset);
  
- #endif /* CONFIG_KEYS */
--- 
-2.34.1
-
+--- a/fs/nfsd/xdr.h
++++ b/fs/nfsd/xdr.h
+@@ -33,7 +33,7 @@ struct nfsd_readargs {
+ struct nfsd_writeargs {
+ 	svc_fh			fh;
+ 	__u32			offset;
+-	int			len;
++	__u32			len;
+ 	struct kvec		first;
+ };
+ 
 
 

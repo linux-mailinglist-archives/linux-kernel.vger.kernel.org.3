@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08DDA4F5150
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 769104F5151
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1845703AbiDFB7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
+        id S1845721AbiDFCAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357942AbiDEK1a (ORCPT
+        with ESMTP id S1357970AbiDEK1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:30 -0400
+        Tue, 5 Apr 2022 06:27:36 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C509939B6;
-        Tue,  5 Apr 2022 03:11:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85520CBE7E;
+        Tue,  5 Apr 2022 03:11:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4B6FB81C88;
-        Tue,  5 Apr 2022 10:11:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11D2CC385A1;
-        Tue,  5 Apr 2022 10:11:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 425DBB81B7A;
+        Tue,  5 Apr 2022 10:11:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACA1BC385A0;
+        Tue,  5 Apr 2022 10:11:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153487;
-        bh=sRY6U65i0znfe3KehcP3ZybCJpLi0ibCWb/vy8ikJbg=;
+        s=korg; t=1649153515;
+        bh=nfhQSG9JWnqT+nUVC4av6L1bI1OYlS6HDqhxDGKd+f0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0ksSywIJvrslXgM9ZFm7DF79ErCOVgdP/eve+Ftl2OAavzAHhFDbmK5KmtgmSTLEh
-         Afd8A0Ic3WIMGdgpsThZo5m2TZ800dUFQf7iZfXIlEwA0X7vQN5RQAKeV56X04AT5h
-         MJCk/q5FkzTFQrexSrcR7uIXYe9IgA6dGPsW0e/0=
+        b=zCNMcuPXTo+WdoZRio9tsKIGf+i4PtKNB3ca0W5caw2g3f9pYIbZFb0iU7zMUvW15
+         rew77Qz9EfRlPekzVPV/AtZO1zn0Mm4dmX/N+skfN7g0z7UX5cc/4/BT8ThaJv6/Jl
+         Ij7hpzMM+70dPmbUJweJZvTSoYRzy16hPdZOG0zs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 238/599] media: vidtv: Check for null return of vzalloc
-Date:   Tue,  5 Apr 2022 09:28:52 +0200
-Message-Id: <20220405070305.922931016@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 242/599] video: fbdev: omapfb: Add missing of_node_put() in dvic_probe_of
+Date:   Tue,  5 Apr 2022 09:28:56 +0200
+Message-Id: <20220405070306.042477767@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -56,68 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit e6a21a14106d9718aa4f8e115b1e474888eeba44 ]
+[ Upstream commit a58c22cfbbf62fefca090334bbd35fd132e92a23 ]
 
-As the possible failure of the vzalloc(), e->encoder_buf might be NULL.
-Therefore, it should be better to check it in order
-to guarantee the success of the initialization.
-If fails, we need to free not only 'e' but also 'e->name'.
-Also, if the allocation for ctx fails, we need to free 'e->encoder_buf'
-else.
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-Fixes: f90cf6079bf6 ("media: vidtv: add a bridge driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: f76ee892a99e ("omapfb: copy omapdss & displays for omapfb")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/test-drivers/vidtv/vidtv_s302m.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_s302m.c b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
-index d79b65854627..4676083cee3b 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_s302m.c
-+++ b/drivers/media/test-drivers/vidtv/vidtv_s302m.c
-@@ -455,6 +455,9 @@ struct vidtv_encoder
- 		e->name = kstrdup(args.name, GFP_KERNEL);
- 
- 	e->encoder_buf = vzalloc(VIDTV_S302M_BUF_SZ);
-+	if (!e->encoder_buf)
-+		goto out_kfree_e;
-+
- 	e->encoder_buf_sz = VIDTV_S302M_BUF_SZ;
- 	e->encoder_buf_offset = 0;
- 
-@@ -467,10 +470,8 @@ struct vidtv_encoder
- 	e->is_video_encoder = false;
- 
- 	ctx = kzalloc(priv_sz, GFP_KERNEL);
--	if (!ctx) {
--		kfree(e);
--		return NULL;
--	}
-+	if (!ctx)
-+		goto out_kfree_buf;
- 
- 	e->ctx = ctx;
- 	ctx->last_duration = 0;
-@@ -498,6 +499,14 @@ struct vidtv_encoder
- 	e->next = NULL;
- 
- 	return e;
-+
-+out_kfree_buf:
-+	kfree(e->encoder_buf);
-+
-+out_kfree_e:
-+	kfree(e->name);
-+	kfree(e);
-+	return NULL;
- }
- 
- void vidtv_s302m_encoder_destroy(struct vidtv_encoder *e)
+diff --git a/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c b/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c
+index b4a1aefff766..777f6d66c28c 100644
+--- a/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c
++++ b/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c
+@@ -251,6 +251,7 @@ static int dvic_probe_of(struct platform_device *pdev)
+ 	adapter_node = of_parse_phandle(node, "ddc-i2c-bus", 0);
+ 	if (adapter_node) {
+ 		adapter = of_get_i2c_adapter_by_node(adapter_node);
++		of_node_put(adapter_node);
+ 		if (adapter == NULL) {
+ 			dev_err(&pdev->dev, "failed to parse ddc-i2c-bus\n");
+ 			omap_dss_put_device(ddata->in);
 -- 
 2.34.1
 

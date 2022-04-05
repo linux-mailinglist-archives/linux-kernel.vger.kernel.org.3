@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25BEE4F4628
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F504F4835
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:00:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380655AbiDEMyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40628 "EHLO
+        id S1349861AbiDEVaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244102AbiDEJOP (ORCPT
+        with ESMTP id S1349229AbiDEJt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:14:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69D73DDF6;
-        Tue,  5 Apr 2022 02:00:38 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F8722BD6;
+        Tue,  5 Apr 2022 02:42:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52797B818F3;
-        Tue,  5 Apr 2022 09:00:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D611C385A0;
-        Tue,  5 Apr 2022 09:00:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5127961576;
+        Tue,  5 Apr 2022 09:42:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62D30C385A1;
+        Tue,  5 Apr 2022 09:42:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149236;
-        bh=ROnrbzz1l46AppRuRx0ztfxHB96FsZrQXsAc4TedgXk=;
+        s=korg; t=1649151777;
+        bh=cQGKMLWxdF5P/yDNlUth6Ig7C50k5+SASMNoZMLOBF8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hu4hLyKGP5TGp0UbFMQf5fyb6XZA4huXEUSByB/m7A+67gG/S8uw6TXscTIXPZNMn
-         8WLyiOFgCWv6Oo0ralos1Kxt6rBirc4QiwjWWk9DhDncKFFDUdayLGCZrhHtsCOcap
-         qcPNiX5H8f7jm/tE/sMaLBO9nVhd0Ktj3iM5AEk8=
+        b=vi8gsU3Ek0XLTw5EQSeCSr+KD6n4J8FpdvNPOpUA0vdMLX4hD+8DO3VgE69Mz+n2e
+         1iWKwaThaS15RLNytYmaUrcbAy2IKKfm1vBY/OCd945TYohOGYaQPWlCLt8GBG00Rt
+         1WjNOj2EGQnXTjW7LvhzUu/m4XmN3Ar36DxSlYJY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
+        stable@vger.kernel.org, Hou Tao <houtao1@huawei.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0644/1017] mxser: fix xmit_buf leak in activate when LSR == 0xff
-Date:   Tue,  5 Apr 2022 09:25:57 +0200
-Message-Id: <20220405070413.399273841@linuxfoundation.org>
+Subject: [PATCH 5.15 499/913] bpf, arm64: Call build_prologue() first in first JIT pass
+Date:   Tue,  5 Apr 2022 09:26:01 +0200
+Message-Id: <20220405070354.812793604@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,74 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiri Slaby <jslaby@suse.cz>
+From: Hou Tao <houtao1@huawei.com>
 
-[ Upstream commit cd3a4907ee334b40d7aa880c7ab310b154fd5cd4 ]
+[ Upstream commit 68e4f238b0e9d3670a1612ad900a6e98b2b3f7dd ]
 
-When LSR is 0xff in ->activate() (rather unlike), we return an error.
-Provided ->shutdown() is not called when ->activate() fails, nothing
-actually frees the buffer in this case.
+BPF line info needs ctx->offset to be the instruction offset in the whole JITed
+image instead of the body itself, so also call build_prologue() first in first
+JIT pass.
 
-Fix this by properly freeing the buffer in a designated label. We jump
-there also from the "!info->type" if now too.
-
-Fixes: 6769140d3047 ("tty: mxser: use the tty_port_open method")
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Link: https://lore.kernel.org/r/20220124071430.14907-6-jslaby@suse.cz
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 37ab566c178d ("bpf: arm64: Enable arm64 jit to provide bpf_line_info")
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20220226121906.5709-2-houtao1@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/mxser.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ arch/arm64/net/bpf_jit_comp.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
-index 39458b42df7b..88d2f16fbf89 100644
---- a/drivers/tty/mxser.c
-+++ b/drivers/tty/mxser.c
-@@ -719,6 +719,7 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
- 	struct mxser_port *info = container_of(port, struct mxser_port, port);
- 	unsigned long page;
- 	unsigned long flags;
-+	int ret;
- 
- 	page = __get_free_page(GFP_KERNEL);
- 	if (!page)
-@@ -728,9 +729,9 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
- 
- 	if (!info->type) {
- 		set_bit(TTY_IO_ERROR, &tty->flags);
--		free_page(page);
- 		spin_unlock_irqrestore(&info->slock, flags);
--		return 0;
-+		ret = 0;
-+		goto err_free_xmit;
- 	}
- 	info->port.xmit_buf = (unsigned char *) page;
- 
-@@ -750,8 +751,10 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
- 		if (capable(CAP_SYS_ADMIN)) {
- 			set_bit(TTY_IO_ERROR, &tty->flags);
- 			return 0;
--		} else
--			return -ENODEV;
-+		}
-+
-+		ret = -ENODEV;
-+		goto err_free_xmit;
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 465c44d0c72f..d13d9e5085a7 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -1042,15 +1042,18 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+ 		goto out_off;
  	}
  
- 	/*
-@@ -796,6 +799,10 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
- 	spin_unlock_irqrestore(&info->slock, flags);
+-	/* 1. Initial fake pass to compute ctx->idx. */
+-
+-	/* Fake pass to fill in ctx->offset. */
+-	if (build_body(&ctx, extra_pass)) {
++	/*
++	 * 1. Initial fake pass to compute ctx->idx and ctx->offset.
++	 *
++	 * BPF line info needs ctx->offset[i] to be the offset of
++	 * instruction[i] in jited image, so build prologue first.
++	 */
++	if (build_prologue(&ctx, was_classic)) {
+ 		prog = orig_prog;
+ 		goto out_off;
+ 	}
  
- 	return 0;
-+err_free_xmit:
-+	free_page(page);
-+	info->port.xmit_buf = NULL;
-+	return ret;
- }
- 
- /*
+-	if (build_prologue(&ctx, was_classic)) {
++	if (build_body(&ctx, extra_pass)) {
+ 		prog = orig_prog;
+ 		goto out_off;
+ 	}
 -- 
 2.34.1
 

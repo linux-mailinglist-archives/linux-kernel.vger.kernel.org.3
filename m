@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 524FA4F462D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BDF94F4536
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358159AbiDEMXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
+        id S1344015AbiDEPKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245052AbiDEIxE (ORCPT
+        with ESMTP id S1345640AbiDEJnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:53:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74AD5F0E;
-        Tue,  5 Apr 2022 01:50:41 -0700 (PDT)
+        Tue, 5 Apr 2022 05:43:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E978C1CBE;
+        Tue,  5 Apr 2022 02:29:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F3DB60FFC;
-        Tue,  5 Apr 2022 08:50:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20845C385A1;
-        Tue,  5 Apr 2022 08:50:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64201B81CAC;
+        Tue,  5 Apr 2022 09:29:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA834C385A0;
+        Tue,  5 Apr 2022 09:29:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148640;
-        bh=f0i/LJ/rej/qlGXRfE9/Nw2sVL0swZ4PvX3YV1//QE0=;
+        s=korg; t=1649150957;
+        bh=xMuBtpSMi0tR4uqVjAuMkRQrPn1kVymN+i1l75YiSig=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hUi3GzexxHoKWF0mwAYBk3rUpnStU+2o56xsl/bwgVSBKFSDlCmxddH2aciHwTrCO
-         rxNJVzNs8oh8l84M5fVrNKxdVHd00Nd58SbRPsqwwjR+ZNApzMQxM4o92ExxXuPquN
-         /lY3znX73PhM5rxIRXCi8pe1hYrcru6CNlDmhHp8=
+        b=nBWUqc2oeU7PLo/X8jlJefJvXVBRqfFRJfCcmQRvUiRwLTVXNa2P1ksF/B2BK9ksO
+         OROciOf4OIHXZc5AUvJPtwh19QUMW8xIIOlSVXQTGM1NnCIhNlb6bEgZ9YfjgXgjHI
+         Vl+mQMycoJSPGUgc/VerCYNSRGPGxtDWsom4IqSA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0389/1017] ASoC: msm8916-wcd-digital: Fix missing clk_disable_unprepare() in msm8916_wcd_digital_probe
-Date:   Tue,  5 Apr 2022 09:21:42 +0200
-Message-Id: <20220405070405.832556221@linuxfoundation.org>
+Subject: [PATCH 5.15 241/913] clocksource: acpi_pm: fix return value of __setup handler
+Date:   Tue,  5 Apr 2022 09:21:43 +0200
+Message-Id: <20220405070347.080719624@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 375a347da4889f64d86e1ab7f4e6702b6e9bf299 ]
+[ Upstream commit 6a861abceecb68497dd82a324fee45a5332dcece ]
 
-Fix the missing clk_disable_unprepare() before return
-from msm8916_wcd_digital_probe in the error handling case.
+__setup() handlers should return 1 to obsolete_checksetup() in
+init/main.c to indicate that the boot option has been handled.
+A return of 0 causes the boot option/value to be listed as an Unknown
+kernel parameter and added to init's (limited) environment strings.
 
-Fixes: 150db8c5afa1 ("ASoC: codecs: Add msm8916-wcd digital codec")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220307084523.28687-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+The __setup() handler interface isn't meant to handle negative return
+values -- they are non-zero, so they mean "handled" (like a return
+value of 1 does), but that's just a quirk. So return 1 from
+parse_pmtmr(). Also print a warning message if kstrtouint() returns
+an error.
+
+Fixes: 6b148507d3d0 ("pmtmr: allow command line override of ioport")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/msm8916-wcd-digital.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/clocksource/acpi_pm.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/codecs/msm8916-wcd-digital.c b/sound/soc/codecs/msm8916-wcd-digital.c
-index fcc10c8bc625..9ad7fc0baf07 100644
---- a/sound/soc/codecs/msm8916-wcd-digital.c
-+++ b/sound/soc/codecs/msm8916-wcd-digital.c
-@@ -1201,7 +1201,7 @@ static int msm8916_wcd_digital_probe(struct platform_device *pdev)
- 	ret = clk_prepare_enable(priv->mclk);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to enable mclk %d\n", ret);
+diff --git a/drivers/clocksource/acpi_pm.c b/drivers/clocksource/acpi_pm.c
+index eb596ff9e7bb..279ddff81ab4 100644
+--- a/drivers/clocksource/acpi_pm.c
++++ b/drivers/clocksource/acpi_pm.c
+@@ -229,8 +229,10 @@ static int __init parse_pmtmr(char *arg)
+ 	int ret;
+ 
+ 	ret = kstrtouint(arg, 16, &base);
+-	if (ret)
 -		return ret;
-+		goto err_clk;
- 	}
++	if (ret) {
++		pr_warn("PMTMR: invalid 'pmtmr=' value: '%s'\n", arg);
++		return 1;
++	}
  
- 	dev_set_drvdata(dev, priv);
-@@ -1209,6 +1209,9 @@ static int msm8916_wcd_digital_probe(struct platform_device *pdev)
- 	return devm_snd_soc_register_component(dev, &msm8916_wcd_digital,
- 				      msm8916_wcd_digital_dai,
- 				      ARRAY_SIZE(msm8916_wcd_digital_dai));
-+err_clk:
-+	clk_disable_unprepare(priv->ahbclk);
-+	return ret;
- }
- 
- static int msm8916_wcd_digital_remove(struct platform_device *pdev)
+ 	pr_info("PMTMR IOPort override: 0x%04x -> 0x%04x\n", pmtmr_ioport,
+ 		base);
 -- 
 2.34.1
 

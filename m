@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1FDB4F490C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D620D4F4B74
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389607AbiDEWCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
+        id S1378123AbiDEW6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357754AbiDEK1K (ORCPT
+        with ESMTP id S1357795AbiDEK1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB2B3669C;
-        Tue,  5 Apr 2022 03:10:42 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7293BA45;
+        Tue,  5 Apr 2022 03:10:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFD356179E;
-        Tue,  5 Apr 2022 10:10:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA459C385A0;
-        Tue,  5 Apr 2022 10:10:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7EBE9B81C88;
+        Tue,  5 Apr 2022 10:10:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6B36C385A1;
+        Tue,  5 Apr 2022 10:10:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153441;
-        bh=YDTpRcSaCATao+L5CmLPyxK92OlmEXkjxf7243VK0CQ=;
+        s=korg; t=1649153444;
+        bh=DGfFICk0ZyhZyp7gehgdnGZsI2rdjdBF6ht5fhvYKxI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rfq6AmorgqP9bUpXce9Se+0Sg8ypmapPU1u2qHlAvNGpNjkBkhz3MQbfqWUqrSX4M
-         npmy8UTjMH4YJGChDsvwjSC1Q+qhJNxpzSyxI2kOVNeSL+Hg2lwKc0HArj2qpz2pds
-         Ff4c+ZUNJTPQOCBI4usfkuyaWv1NRy6Yb/0o/uwY=
+        b=wlode+MLTbTKog4DX8NcPPjrzUdwINwHKj+2iffgYldxSYnje1pkWKZ/bPB5+uue/
+         xbfyZVg1zjJdAY6pSqzX7oonKczXrDPufQrcDJAIKtbkvGSoINNzBIPRwdRdxKffO6
+         sfhWIENZ92NTub7DGcyeKdqvd5N4kEhFDfwXg+8I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 224/599] ALSA: spi: Add check for clk_enable()
-Date:   Tue,  5 Apr 2022 09:28:38 +0200
-Message-Id: <20220405070305.508137239@linuxfoundation.org>
+        stable@vger.kernel.org, Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 225/599] arm64: dts: ns2: Fix spi-cpol and spi-cpha property
+Date:   Tue,  5 Apr 2022 09:28:39 +0200
+Message-Id: <20220405070305.537796972@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -54,90 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Kuldeep Singh <singh.kuldeep87k@gmail.com>
 
-[ Upstream commit ca1697eb09208f0168d94b88b72f57505339cbe5 ]
+[ Upstream commit c953c764e505428f59ffe6afb1c73b89b5b1ac35 ]
 
-As the potential failure of the clk_enable(),
-it should be better to check it and return error
-if fails.
+Broadcom ns2 platform has spi-cpol and spi-cpho properties set
+incorrectly. As per spi-slave-peripheral-prop.yaml, these properties are
+of flag or boolean type and not integer type. Fix the values.
 
-Fixes: 3568459a5113 ("ALSA: at73c213: manage SSC clock")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220228022839.3547266-1-jiasheng@iscas.ac.cn
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: d69dbd9f41a7c (arm64: dts: Add ARM PL022 SPI DT nodes for NS2)
+Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+CC: Ray Jui <rjui@broadcom.com>
+CC: Scott Branden <sbranden@broadcom.com>
+CC: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/spi/at73c213.c | 27 +++++++++++++++++++++------
- 1 file changed, 21 insertions(+), 6 deletions(-)
+ arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/sound/spi/at73c213.c b/sound/spi/at73c213.c
-index 76c0e37a838c..8a2da6b1012e 100644
---- a/sound/spi/at73c213.c
-+++ b/sound/spi/at73c213.c
-@@ -218,7 +218,9 @@ static int snd_at73c213_pcm_open(struct snd_pcm_substream *substream)
- 	runtime->hw = snd_at73c213_playback_hw;
- 	chip->substream = substream;
- 
--	clk_enable(chip->ssc->clk);
-+	err = clk_enable(chip->ssc->clk);
-+	if (err)
-+		return err;
- 
- 	return 0;
- }
-@@ -776,7 +778,9 @@ static int snd_at73c213_chip_init(struct snd_at73c213 *chip)
- 		goto out;
- 
- 	/* Enable DAC master clock. */
--	clk_enable(chip->board->dac_clk);
-+	retval = clk_enable(chip->board->dac_clk);
-+	if (retval)
-+		goto out;
- 
- 	/* Initialize at73c213 on SPI bus. */
- 	retval = snd_at73c213_write_reg(chip, DAC_RST, 0x04);
-@@ -889,7 +893,9 @@ static int snd_at73c213_dev_init(struct snd_card *card,
- 	chip->card = card;
- 	chip->irq = -1;
- 
--	clk_enable(chip->ssc->clk);
-+	retval = clk_enable(chip->ssc->clk);
-+	if (retval)
-+		return retval;
- 
- 	retval = request_irq(irq, snd_at73c213_interrupt, 0, "at73c213", chip);
- 	if (retval) {
-@@ -1008,7 +1014,9 @@ static int snd_at73c213_remove(struct spi_device *spi)
- 	int retval;
- 
- 	/* Stop playback. */
--	clk_enable(chip->ssc->clk);
-+	retval = clk_enable(chip->ssc->clk);
-+	if (retval)
-+		goto out;
- 	ssc_writel(chip->ssc->regs, CR, SSC_BIT(CR_TXDIS));
- 	clk_disable(chip->ssc->clk);
- 
-@@ -1088,9 +1096,16 @@ static int snd_at73c213_resume(struct device *dev)
- {
- 	struct snd_card *card = dev_get_drvdata(dev);
- 	struct snd_at73c213 *chip = card->private_data;
-+	int retval;
- 
--	clk_enable(chip->board->dac_clk);
--	clk_enable(chip->ssc->clk);
-+	retval = clk_enable(chip->board->dac_clk);
-+	if (retval)
-+		return retval;
-+	retval = clk_enable(chip->ssc->clk);
-+	if (retval) {
-+		clk_disable(chip->board->dac_clk);
-+		return retval;
-+	}
- 	ssc_writel(chip->ssc->regs, CR, SSC_BIT(CR_TXEN));
- 
- 	return 0;
+diff --git a/arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts b/arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts
+index ec19fbf928a1..12a4b1c03390 100644
+--- a/arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts
++++ b/arch/arm64/boot/dts/broadcom/northstar2/ns2-svk.dts
+@@ -111,8 +111,8 @@
+ 		compatible = "silabs,si3226x";
+ 		reg = <0>;
+ 		spi-max-frequency = <5000000>;
+-		spi-cpha = <1>;
+-		spi-cpol = <1>;
++		spi-cpha;
++		spi-cpol;
+ 		pl022,hierarchy = <0>;
+ 		pl022,interface = <0>;
+ 		pl022,slave-tx-disable = <0>;
+@@ -135,8 +135,8 @@
+ 		at25,byte-len = <0x8000>;
+ 		at25,addr-mode = <2>;
+ 		at25,page-size = <64>;
+-		spi-cpha = <1>;
+-		spi-cpol = <1>;
++		spi-cpha;
++		spi-cpol;
+ 		pl022,hierarchy = <0>;
+ 		pl022,interface = <0>;
+ 		pl022,slave-tx-disable = <0>;
 -- 
 2.34.1
 

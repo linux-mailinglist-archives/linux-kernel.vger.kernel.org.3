@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1053C4F51B1
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E8B4F5158
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1450182AbiDFCJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50642 "EHLO
+        id S1845891AbiDFCBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358249AbiDEK2K (ORCPT
+        with ESMTP id S1352546AbiDEKEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:28:10 -0400
+        Tue, 5 Apr 2022 06:04:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72529BF56;
-        Tue,  5 Apr 2022 03:17:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB9ABB092;
+        Tue,  5 Apr 2022 02:53:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E92E6176C;
-        Tue,  5 Apr 2022 10:17:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16DA2C385A1;
-        Tue,  5 Apr 2022 10:17:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DBAED61776;
+        Tue,  5 Apr 2022 09:53:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1F2FC385A1;
+        Tue,  5 Apr 2022 09:53:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153847;
-        bh=l99Mt8In48+c+7JJh4arIQJ0SwmWXax74CpxbShDX/A=;
+        s=korg; t=1649152403;
+        bh=GsAv312AdYmmt1e+wMqZIwMIBSqRjZ1+lgs4z1QfSXo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RlH/vpipHZuvw+rMgqeeu05IBGuOMd5eaPdQ4xAFjxV6tETsoZO9nKBd/pTBR13p1
-         AlFOgiKk2nRF/Pp1yrcbvfAyysVUGp9+OwFBR6aYx5AU+JEj4l6ORwexaCSt0Xizv4
-         y/pDCqn2BfaCPUShwU8HfMNWyBN478jQFP59qwfs=
+        b=USSNu4Bod1eaqCo08HDcfGP5gfnunAqIMRtsKJYp2KMD4r4m8shGb2Gz4OupzRZmD
+         hZKcjtDSs1NeoSMbyNYKqydngxzr/NQlxmryj1TDbdn6ZQVy1c4c4Ml6KMqKiRAFvS
+         AAymp4Lj7bG4Uo0TP7WkRazbKJgR0sMCyYvuO65I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xu Kuohai <xukuohai@huawei.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <songliubraving@fb.com>,
+        stable@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 330/599] libbpf: Skip forward declaration when counting duplicated type names
-Date:   Tue,  5 Apr 2022 09:30:24 +0200
-Message-Id: <20220405070308.653121909@linuxfoundation.org>
+Subject: [PATCH 5.15 764/913] media: hdpvr: initialize dev->worker at hdpvr_register_videodev
+Date:   Tue,  5 Apr 2022 09:30:26 +0200
+Message-Id: <20220405070402.732951313@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,52 +57,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Kuohai <xukuohai@huawei.com>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-[ Upstream commit 4226961b0019b2e1612029e8950a9e911affc995 ]
+[ Upstream commit 07922937e9a580825f9965c46fd15e23ba5754b6 ]
 
-Currently if a declaration appears in the BTF before the definition, the
-definition is dumped as a conflicting name, e.g.:
+hdpvr_register_videodev is responsible to initialize a worker in
+hdpvr_device. However, the worker is only initialized at
+hdpvr_start_streaming other than hdpvr_register_videodev.
+When hdpvr_probe does not initialize its worker, the hdpvr_disconnect
+will encounter one WARN in flush_work.The stack trace is as follows:
 
-    $ bpftool btf dump file vmlinux format raw | grep "'unix_sock'"
-    [81287] FWD 'unix_sock' fwd_kind=struct
-    [89336] STRUCT 'unix_sock' size=1024 vlen=14
+ hdpvr_disconnect+0xb8/0xf2 drivers/media/usb/hdpvr/hdpvr-core.c:425
+ usb_unbind_interface+0xbf/0x3a0 drivers/usb/core/driver.c:458
+ __device_release_driver drivers/base/dd.c:1206 [inline]
+ device_release_driver_internal+0x22a/0x230 drivers/base/dd.c:1237
+ bus_remove_device+0x108/0x160 drivers/base/bus.c:529
+ device_del+0x1fe/0x510 drivers/base/core.c:3592
+ usb_disable_device+0xd1/0x1d0 drivers/usb/core/message.c:1419
+ usb_disconnect+0x109/0x330 drivers/usb/core/hub.c:2228
 
-    $ bpftool btf dump file vmlinux format c | grep "struct unix_sock"
-    struct unix_sock;
-    struct unix_sock___2 {	<--- conflict, the "___2" is unexpected
-		    struct unix_sock___2 *unix_sk;
+Fix this by moving the initialization of dev->worker to the starting of
+hdpvr_register_videodev
 
-This causes a compilation error if the dump output is used as a header file.
-
-Fix it by skipping declaration when counting duplicated type names.
-
-Fixes: 351131b51c7a ("libbpf: add btf_dump API for BTF-to-C conversion")
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Song Liu <songliubraving@fb.com>
-Link: https://lore.kernel.org/bpf/20220301053250.1464204-2-xukuohai@huawei.com
+Reported-by: syzkaller <syzkaller@googlegroups.com>
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/btf_dump.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/media/usb/hdpvr/hdpvr-video.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index 0911aea4cdbe..bd22853be4a6 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -1416,6 +1416,11 @@ static const char *btf_dump_resolve_name(struct btf_dump *d, __u32 id,
- 	if (s->name_resolved)
- 		return *cached_name ? *cached_name : orig_name;
+diff --git a/drivers/media/usb/hdpvr/hdpvr-video.c b/drivers/media/usb/hdpvr/hdpvr-video.c
+index 563128d11731..60e57e0f1927 100644
+--- a/drivers/media/usb/hdpvr/hdpvr-video.c
++++ b/drivers/media/usb/hdpvr/hdpvr-video.c
+@@ -308,7 +308,6 @@ static int hdpvr_start_streaming(struct hdpvr_device *dev)
  
-+	if (btf_is_fwd(t) || (btf_is_enum(t) && btf_vlen(t) == 0)) {
-+		s->name_resolved = 1;
-+		return orig_name;
-+	}
+ 	dev->status = STATUS_STREAMING;
+ 
+-	INIT_WORK(&dev->worker, hdpvr_transmit_buffers);
+ 	schedule_work(&dev->worker);
+ 
+ 	v4l2_dbg(MSG_BUFFER, hdpvr_debug, &dev->v4l2_dev,
+@@ -1165,6 +1164,9 @@ int hdpvr_register_videodev(struct hdpvr_device *dev, struct device *parent,
+ 	bool ac3 = dev->flags & HDPVR_FLAG_AC3_CAP;
+ 	int res;
+ 
++	// initialize dev->worker
++	INIT_WORK(&dev->worker, hdpvr_transmit_buffers);
 +
- 	dup_cnt = btf_dump_name_dups(d, name_map, orig_name);
- 	if (dup_cnt > 1) {
- 		const size_t max_len = 256;
+ 	dev->cur_std = V4L2_STD_525_60;
+ 	dev->width = 720;
+ 	dev->height = 480;
 -- 
 2.34.1
 

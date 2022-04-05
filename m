@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F504F4835
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D89B44F480B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349861AbiDEVaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:30:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47444 "EHLO
+        id S230209AbiDEVZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349229AbiDEJt2 (ORCPT
+        with ESMTP id S1349240AbiDEJt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:49:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F8722BD6;
-        Tue,  5 Apr 2022 02:42:58 -0700 (PDT)
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8577523151;
+        Tue,  5 Apr 2022 02:43:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5127961576;
-        Tue,  5 Apr 2022 09:42:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62D30C385A1;
-        Tue,  5 Apr 2022 09:42:57 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E07D9CE1C6F;
+        Tue,  5 Apr 2022 09:43:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C982C385A1;
+        Tue,  5 Apr 2022 09:42:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151777;
-        bh=cQGKMLWxdF5P/yDNlUth6Ig7C50k5+SASMNoZMLOBF8=;
+        s=korg; t=1649151780;
+        bh=ZYk0CNHgZuiWpDdSQFnDnwESFchksbpwfapp1FW5hKk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vi8gsU3Ek0XLTw5EQSeCSr+KD6n4J8FpdvNPOpUA0vdMLX4hD+8DO3VgE69Mz+n2e
-         1iWKwaThaS15RLNytYmaUrcbAy2IKKfm1vBY/OCd945TYohOGYaQPWlCLt8GBG00Rt
-         1WjNOj2EGQnXTjW7LvhzUu/m4XmN3Ar36DxSlYJY=
+        b=NFAAaRgMWXr6lb9vtB9llqDMsghX1jaFFk0ZONzOy7mYxnukHMnRUAZ7PnHfVdNkR
+         /EuohcJvkZvJU77Usg1SaWimYlwZ+5+dDbaOM+Pd+G3zq6dmPwZ0vo0RmjM5dbw6MU
+         PjxuOH657s0WaXAoM7k/FKvBLwy7yb2AZt3DraC8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hou Tao <houtao1@huawei.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 499/913] bpf, arm64: Call build_prologue() first in first JIT pass
-Date:   Tue,  5 Apr 2022 09:26:01 +0200
-Message-Id: <20220405070354.812793604@linuxfoundation.org>
+        stable@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
+        Hou Tao <houtao1@huawei.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 500/913] bpf, arm64: Feed byte-offset into bpf line info
+Date:   Tue,  5 Apr 2022 09:26:02 +0200
+Message-Id: <20220405070354.842042643@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -57,49 +56,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Hou Tao <houtao1@huawei.com>
 
-[ Upstream commit 68e4f238b0e9d3670a1612ad900a6e98b2b3f7dd ]
+[ Upstream commit dda7596c109fc382876118627e29db7607cde35d ]
 
-BPF line info needs ctx->offset to be the instruction offset in the whole JITed
-image instead of the body itself, so also call build_prologue() first in first
-JIT pass.
+insn_to_jit_off passed to bpf_prog_fill_jited_linfo() is calculated in
+instruction granularity instead of bytes granularity, but BPF line info
+requires byte offset.
+
+bpf_prog_fill_jited_linfo() will be the last user of ctx.offset before
+it is freed, so convert the offset into byte-offset before calling into
+bpf_prog_fill_jited_linfo() in order to fix the line info dump on arm64.
 
 Fixes: 37ab566c178d ("bpf: arm64: Enable arm64 jit to provide bpf_line_info")
+Suggested-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20220226121906.5709-2-houtao1@huawei.com
+Link: https://lore.kernel.org/bpf/20220226121906.5709-3-houtao1@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/net/bpf_jit_comp.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ arch/arm64/net/bpf_jit_comp.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 465c44d0c72f..d13d9e5085a7 100644
+index d13d9e5085a7..b56e7bd96594 100644
 --- a/arch/arm64/net/bpf_jit_comp.c
 +++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -1042,15 +1042,18 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 		goto out_off;
- 	}
+@@ -1126,6 +1126,11 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+ 	prog->jited_len = prog_size;
  
--	/* 1. Initial fake pass to compute ctx->idx. */
--
--	/* Fake pass to fill in ctx->offset. */
--	if (build_body(&ctx, extra_pass)) {
-+	/*
-+	 * 1. Initial fake pass to compute ctx->idx and ctx->offset.
-+	 *
-+	 * BPF line info needs ctx->offset[i] to be the offset of
-+	 * instruction[i] in jited image, so build prologue first.
-+	 */
-+	if (build_prologue(&ctx, was_classic)) {
- 		prog = orig_prog;
- 		goto out_off;
- 	}
- 
--	if (build_prologue(&ctx, was_classic)) {
-+	if (build_body(&ctx, extra_pass)) {
- 		prog = orig_prog;
- 		goto out_off;
- 	}
+ 	if (!prog->is_func || extra_pass) {
++		int i;
++
++		/* offset[prog->len] is the size of program */
++		for (i = 0; i <= prog->len; i++)
++			ctx.offset[i] *= AARCH64_INSN_SIZE;
+ 		bpf_prog_fill_jited_linfo(prog, ctx.offset + 1);
+ out_off:
+ 		kfree(ctx.offset);
 -- 
 2.34.1
 

@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37414F4EEA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 234614F4A00
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:36:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1583939AbiDEX5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43898 "EHLO
+        id S1452224AbiDEWbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349071AbiDEJtD (ORCPT
+        with ESMTP id S1349107AbiDEJtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:03 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959B6A94F9;
-        Tue,  5 Apr 2022 02:39:53 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD65AA015;
+        Tue,  5 Apr 2022 02:40:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 789C6CE1C99;
-        Tue,  5 Apr 2022 09:39:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69C0EC385A3;
-        Tue,  5 Apr 2022 09:39:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C781EB81B14;
+        Tue,  5 Apr 2022 09:40:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B72DC385A3;
+        Tue,  5 Apr 2022 09:40:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151589;
-        bh=gTcQxgbW4COQXq5fMU0aviuScxbT25guRukRsR9GfNw=;
+        s=korg; t=1649151656;
+        bh=XSoG/BV4wxZLDa+MVNXRC/TkMgI/vWCpsX4YdueLI9c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Tni8DkpuGHoW/0MkmbmpZDQc6HSTO02kE983DdYgDT9PSH3BA2p8kclHxFka4DMLL
-         fMBC84esS61ENAVsFIDRdG6IkmLL3e7vkf7qNWsOOZrjL5z5UeoSoDKUUpgROBtuE3
-         oFabRj+rVYGrJCXidmK/NxrttvvIoKpWZAmqlX5g=
+        b=qfKZLfeZ2KrUBl6o5JVvE4pKYnWwxY5OJd2nKPj2/wL0vAbmam4U517SKgIwlUigU
+         RVETHxcKgibH+wZerJ7XdSf9fef/rfXsDIElbf1d/zN9iNI9f4yRRRscIijykjgF9Q
+         5PgeyJMuXcOpLusacHsI9tUEZEbxctTVctwVXaLs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 453/913] iommu/ipmmu-vmsa: Check for error num after setting mask
-Date:   Tue,  5 Apr 2022 09:25:15 +0200
-Message-Id: <20220405070353.427613641@linuxfoundation.org>
+        stable@vger.kernel.org, Yiqing Yao <yiqing.yao@amd.com>,
+        Monk Liu <Monk.liu@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 456/913] drm/amd/pm: enable pm sysfs write for one VF mode
+Date:   Tue,  5 Apr 2022 09:25:18 +0200
+Message-Id: <20220405070353.517909734@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,40 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Yiqing Yao <yiqing.yao@amd.com>
 
-[ Upstream commit 1fdbbfd5099f797a4dac05e7ef0192ba4a9c39b4 ]
+[ Upstream commit e610941c45bad75aa839af015c27d236ab6749e5 ]
 
-Because of the possible failure of the dma_supported(), the
-dma_set_mask_and_coherent() may return error num.
-Therefore, it should be better to check it and return the error if
-fails.
+[why]
+pm sysfs should be writable in one VF mode as is in passthrough
 
-Fixes: 1c894225bf5b ("iommu/ipmmu-vmsa: IPMMU device is 40-bit bus master")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Reviewed-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Link: https://lore.kernel.org/r/20220106024302.2574180-1-jiasheng@iscas.ac.cn
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+[how]
+do not remove write access on pm sysfs if device is in one VF mode
+
+Fixes: 11c9cc95f818 ("amdgpu/pm: Make sysfs pm attributes as read-only for VFs")
+Signed-off-by: Yiqing Yao <yiqing.yao@amd.com>
+Reviewed-by: Monk Liu <Monk.liu@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/ipmmu-vmsa.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/amd/pm/amdgpu_pm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/iommu/ipmmu-vmsa.c b/drivers/iommu/ipmmu-vmsa.c
-index d38ff29a76e8..96708cd2757f 100644
---- a/drivers/iommu/ipmmu-vmsa.c
-+++ b/drivers/iommu/ipmmu-vmsa.c
-@@ -982,7 +982,9 @@ static int ipmmu_probe(struct platform_device *pdev)
- 	bitmap_zero(mmu->ctx, IPMMU_CTX_MAX);
- 	mmu->features = of_device_get_match_data(&pdev->dev);
- 	memset(mmu->utlb_ctx, IPMMU_CTX_INVALID, mmu->features->num_utlbs);
--	dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(40));
-+	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(40));
-+	if (ret)
-+		return ret;
+diff --git a/drivers/gpu/drm/amd/pm/amdgpu_pm.c b/drivers/gpu/drm/amd/pm/amdgpu_pm.c
+index 640db5020ccc..6aaf1230655f 100644
+--- a/drivers/gpu/drm/amd/pm/amdgpu_pm.c
++++ b/drivers/gpu/drm/amd/pm/amdgpu_pm.c
+@@ -2117,8 +2117,8 @@ static int default_attr_update(struct amdgpu_device *adev, struct amdgpu_device_
+ 		}
+ 	}
  
- 	/* Map I/O memory and request IRQ. */
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	/* setting should not be allowed from VF */
+-	if (amdgpu_sriov_vf(adev)) {
++	/* setting should not be allowed from VF if not in one VF mode */
++	if (amdgpu_sriov_vf(adev) && !amdgpu_sriov_is_pp_one_vf(adev)) {
+ 		dev_attr->attr.mode &= ~S_IWUGO;
+ 		dev_attr->store = NULL;
+ 	}
 -- 
 2.34.1
 

@@ -2,80 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 518284F4F9A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC1F24F509F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1838747AbiDFA4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37400 "EHLO
+        id S1842599AbiDFBdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239766AbiDEOmF (ORCPT
+        with ESMTP id S242829AbiDEOwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:42:05 -0400
-Received: from gateway23.websitewelcome.com (gateway23.websitewelcome.com [192.185.48.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E6B27CD8
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:18:06 -0700 (PDT)
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway23.websitewelcome.com (Postfix) with ESMTP id 4BB4A15945
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:18:06 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id bj4Qn7J6zdx86bj4QnY5ew; Tue, 05 Apr 2022 08:18:06 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=x+f3jWcojSlFA+ZZ0pJlnzELpcaYSX7f8bbsqUkUiLc=; b=SeH0C6R6Bg1boiO9t0nVHpAKJH
-        LD5kJXC20mkbH2n9LpvZwPvz1L+0YmglCdasF7qeiDMddy6SlslCZxA6Q2na94TAyUP7BwFqVIvEM
-        XHVj+PxWxn8k2PxR/3lAAcgNbOUasmxTUXZZArZkPH/r3IXR1dpK9sDHV7ShrhTUGNgk3acJ7Av6Y
-        rWl7FPSX7ueoF+uQJOZMR1hqiV4k8gf45i8VEHKU/D0JcDdpUjnz3sWrMYjyont9U6qLlApmkDKmP
-        ldwUXYCSwP/QIl4o3Ap9YpeKGU3u/Wrjlb3gHmlEsgQ94VCUUcJee6WZ+uAYGRzFWKCeJTnKlrC1L
-        yLg1Fm7w==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54730)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nbj4P-002s2v-Um; Tue, 05 Apr 2022 13:18:06 +0000
-Message-ID: <dc26e88b-ab7e-755b-13fd-8710883ac80b@roeck-us.net>
-Date:   Tue, 5 Apr 2022 06:18:04 -0700
+        Tue, 5 Apr 2022 10:52:51 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587BDBF97B;
+        Tue,  5 Apr 2022 06:22:08 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id n63-20020a1c2742000000b0038d0c31db6eso1643841wmn.1;
+        Tue, 05 Apr 2022 06:22:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=42pOK9ccsa2jjY6xkX2nlkLQuEWFF7Bk+1tRnHi96GI=;
+        b=elxm4jPIzGaUvukiv9OCU5WC3tOGLd7yKl16vtPMjYLE2D5vFxSu4UENBZY1jkWQd2
+         gOF0EXNlk1Fxq7wWKfP64LZ9Lg/+oqitp28xGmjju2Vkx+Knrdqcy4Vp8fVJHIwrWSUL
+         oou5HkSB9BYIJciPQ6RAN/m4mrcZ2Ef8Cd4iXB6ZbhUp2bCYp7NLp5TiPyJpX248EeJe
+         mGJbHmtfNDMd8HzPL6KNQX2D4U//E4h5ToOjWrCOYb9Ztt3fBVe0WLC6Vn2muqOlHZvQ
+         eXyrZ3aXEr1cM2rg9qsqcyT/cxSuFyF5tX4HiEM9gZC6YRsgcmCuVTyZFh+mPH4cQ9h2
+         rQWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=42pOK9ccsa2jjY6xkX2nlkLQuEWFF7Bk+1tRnHi96GI=;
+        b=za3KDLgHTvQ3fyG+npZJwlssjg/RPBLX6XsdepXB/fSXCBS8TRfRdawDstyomjnuav
+         NHIvEP2DT6H6cFqed9clyAKHrum+dNyHwS9qrsU+lnxugJwlv0eLN8/MHK3UiGUExy9K
+         9X54pe8ZYDpWGPitWQIKS+C/ziyIUH5wJ04hMiips8ReUMZFTEYAN3/OwqvJI3239aG+
+         56iWU2V2Fzd8EXxED0gyE6X8nJj5DZd3Y9tvBtZJ8ylM3Y0zlmaWqeUmOqFBv87Al6+d
+         o7quqwtwaU3ebvFGD4jANuSbC/r1pJ99KxLOFCXzZAuGByRvJhp/oKxc2y9prLRlGfrQ
+         mKlw==
+X-Gm-Message-State: AOAM533lRcqD7hJoHLLWLDxcXs7HP1JD0COEwoMhA3QGYlpLGPu3vWCM
+        kWj4ZH+bsd3IGKRQZ6v2vWdWZnZIVt0=
+X-Google-Smtp-Source: ABdhPJyTin3MLm6VWeXoWs2sztSrpiJP4TM84DHkMzMprxV9AoMxcZavqxVYsbM9sc2yNIC9cEX+RA==
+X-Received: by 2002:a05:600c:6026:b0:38e:746b:9414 with SMTP id az38-20020a05600c602600b0038e746b9414mr3202828wmb.141.1649164926604;
+        Tue, 05 Apr 2022 06:22:06 -0700 (PDT)
+Received: from [10.32.181.87] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
+        by smtp.googlemail.com with ESMTPSA id t4-20020adfe104000000b00205b50f04f0sm11951822wrz.86.2022.04.05.06.22.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 06:22:06 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <aad44bd9-7f5b-58e6-523a-ce9df57bee30@redhat.com>
+Date:   Tue, 5 Apr 2022 15:22:05 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: Linux 5.18-rc1
+Subject: Re: [RFC PATCH v5 039/104] KVM: x86/mmu: Disallow fast page fault on
+ private GPA
 Content-Language: en-US
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-References: <CAHk-=wg6FWL1xjVyHx7DdjD2dHZETA5_=FqqW17Z19X-WTfWSg@mail.gmail.com>
- <20220404022239.GA1186352@roeck-us.net> <YkwzzANkBRzrYAuq@debian>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <YkwzzANkBRzrYAuq@debian>
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
+        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <56693f2e1e5bb1933288272255c662d6d04b94df.1646422845.git.isaku.yamahata@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <56693f2e1e5bb1933288272255c662d6d04b94df.1646422845.git.isaku.yamahata@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nbj4P-002s2v-Um
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54730
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 15
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,30 +81,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/22 05:19, Sudip Mukherjee wrote:
-> On Sun, Apr 03, 2022 at 07:22:39PM -0700, Guenter Roeck wrote:
->> On Sun, Apr 03, 2022 at 03:14:19PM -0700, Linus Torvalds wrote:
->>> So here we are, two weeks later, and the merge window is closed.
->>>
+On 3/4/22 20:48, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
 > 
-> <snip>
+> TDX requires TDX SEAMCALL to operate Secure EPT instead of direct memory
+> access and TDX SEAMCALL is heavy operation.  Fast page fault on private GPA
+> doesn't make sense.  Disallow fast page fault on private GPA.
 > 
->>>
->>> Go test, please,
->>
->> Build results:
->> 	total: 151 pass: 142 fail: 9
->> Failed builds:
->> 	alpha:allmodconfig
->> 	arm:allmodconfig
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>   arch/x86/kvm/mmu/mmu.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
 > 
-> Apart from the ones Guenter reported, arm imote2_defconfig fails due to:
-> 28f74201e37c ("ARM: pxa: remove Intel Imote2 and Stargate 2 boards")
-> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index e9212394a530..d8c1505155b0 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -3185,6 +3185,13 @@ static int fast_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+>   	u64 *sptep = NULL;
+>   	uint retry_count = 0;
+>   
+> +	/*
+> +	 * TDX private mapping doesn't support fast page fault because the EPT
+> +	 * entry needs TDX SEAMCALL. not direct memory access.
 
-Not entirely surprising, since its support was removed with that patch.
-The error is "arm-linux-gnueabi-ld: no machine record defined", which is
-consistent with that removal. So the fix would be to remove that
-configuration file.
+"the EPT entry is read/written with TDX SEAMCALLs instead of direct 
+memory access".
 
-Guenter
+Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+
+> +	 */
+> +	if (kvm_is_private_gpa(vcpu->kvm, fault->addr))
+> +		return ret;
+> +
+>   	if (!page_fault_can_be_fast(fault))
+>   		return ret;
+>   
+

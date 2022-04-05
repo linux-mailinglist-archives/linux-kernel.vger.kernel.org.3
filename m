@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67B784F4286
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 745A64F41DF
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241069AbiDEUMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
+        id S235191AbiDEUYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241036AbiDEKfN (ORCPT
+        with ESMTP id S1354131AbiDEKLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:35:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B50B27CC8;
-        Tue,  5 Apr 2022 03:19:55 -0700 (PDT)
+        Tue, 5 Apr 2022 06:11:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117764D9F5;
+        Tue,  5 Apr 2022 02:57:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECF82616D7;
-        Tue,  5 Apr 2022 10:19:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0164FC385A1;
-        Tue,  5 Apr 2022 10:19:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE6B5B81B13;
+        Tue,  5 Apr 2022 09:57:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B63BC385A2;
+        Tue,  5 Apr 2022 09:57:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153994;
-        bh=6gfAWdI9U0StE8ymHe4orraSOXEmqdLe3VdcBdrBRPc=;
+        s=korg; t=1649152652;
+        bh=APJ33ZcyptEY6LH63toIiRLFoQnqhYnaWleZfgvO5SQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GAEsGEr6bkrN/p9zAjgBD+MulHnP9a4zQzr6jmBLkoFwtK4QcQHInsUYfTclTBkEs
-         eE3Qmn6ozVd3gYGh7cMuO7a2GmASZzcXL7sXZF6lilmWWL/jnh8xAruf+NPlAVUN30
-         IpY4pcOf1982eVlVdflrqyXjMwy50XANhyZ+qcyY=
+        b=eZCIfOwFmF8Xy5HAXjTGoPRS8+3PJkKfSBS2XvPlUolaGzP92qMtqqHBi+hB5S08h
+         IP2KL0QK9Shnx49aBKJIOSgZSzNrhmXiiSQxOhNuxfonVgraCIDOOmgwu1sDVwJEJZ
+         wNGyVGTopW8ROw1oDRoWj9paA6CoBCv5VIuUEwjg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 420/599] pinctrl: mediatek: paris: Fix "argument" argument type for mtk_pinconf_get()
-Date:   Tue,  5 Apr 2022 09:31:54 +0200
-Message-Id: <20220405070311.331861089@linuxfoundation.org>
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: [PATCH 5.15 853/913] ubi: Fix race condition between ctrl_cdev_ioctl and ubi_cdev_ioctl
+Date:   Tue,  5 Apr 2022 09:31:55 +0200
+Message-Id: <20220405070405.397017145@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,44 +55,192 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen-Yu Tsai <wenst@chromium.org>
+From: Baokun Li <libaokun1@huawei.com>
 
-[ Upstream commit 19bce7ce0a593c7024030a0cda9e23facea3c93d ]
+commit 3cbf0e392f173ba0ce425968c8374a6aa3e90f2e upstream.
 
-For mtk_pinconf_get(), the "argument" argument is typically returned by
-pinconf_to_config_argument(), which holds the value for a given pinconf
-parameter. It certainly should not have the type of "enum pin_config_param",
-which describes the type of the pinconf parameter itself.
+Hulk Robot reported a KASAN report about use-after-free:
+ ==================================================================
+ BUG: KASAN: use-after-free in __list_del_entry_valid+0x13d/0x160
+ Read of size 8 at addr ffff888035e37d98 by task ubiattach/1385
+ [...]
+ Call Trace:
+  klist_dec_and_del+0xa7/0x4a0
+  klist_put+0xc7/0x1a0
+  device_del+0x4d4/0xed0
+  cdev_device_del+0x1a/0x80
+  ubi_attach_mtd_dev+0x2951/0x34b0 [ubi]
+  ctrl_cdev_ioctl+0x286/0x2f0 [ubi]
 
-Change the type to u32, which matches the return type of
-pinconf_to_config_argument().
+ Allocated by task 1414:
+  device_add+0x60a/0x18b0
+  cdev_device_add+0x103/0x170
+  ubi_create_volume+0x1118/0x1a10 [ubi]
+  ubi_cdev_ioctl+0xb7f/0x1ba0 [ubi]
 
-Fixes: 805250982bb5 ("pinctrl: mediatek: add pinctrl-paris that implements the vendor dt-bindings")
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Link: https://lore.kernel.org/r/20220308100956.2750295-4-wenst@chromium.org
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+ Freed by task 1385:
+  cdev_device_del+0x1a/0x80
+  ubi_remove_volume+0x438/0x6c0 [ubi]
+  ubi_cdev_ioctl+0xbf4/0x1ba0 [ubi]
+ [...]
+ ==================================================================
+
+The lock held by ctrl_cdev_ioctl is ubi_devices_mutex, but the lock held
+by ubi_cdev_ioctl is ubi->device_mutex. Therefore, the two locks can be
+concurrent.
+
+ctrl_cdev_ioctl contains two operations: ubi_attach and ubi_detach.
+ubi_detach is bug-free because it uses reference counting to prevent
+concurrency. However, uif_init and uif_close in ubi_attach may race with
+ubi_cdev_ioctl.
+
+uif_init will race with ubi_cdev_ioctl as in the following stack.
+           cpu1                   cpu2                  cpu3
+_______________________|________________________|______________________
+ctrl_cdev_ioctl
+ ubi_attach_mtd_dev
+  uif_init
+                           ubi_cdev_ioctl
+                            ubi_create_volume
+                             cdev_device_add
+   ubi_add_volume
+   // sysfs exist
+   kill_volumes
+                                                    ubi_cdev_ioctl
+                                                     ubi_remove_volume
+                                                      cdev_device_del
+                                                       // first free
+    ubi_free_volume
+     cdev_del
+     // double free
+   cdev_device_del
+
+And uif_close will race with ubi_cdev_ioctl as in the following stack.
+           cpu1                   cpu2                  cpu3
+_______________________|________________________|______________________
+ctrl_cdev_ioctl
+ ubi_attach_mtd_dev
+  uif_init
+                           ubi_cdev_ioctl
+                            ubi_create_volume
+                             cdev_device_add
+  ubi_debugfs_init_dev
+  //error goto out_uif;
+  uif_close
+   kill_volumes
+                                                    ubi_cdev_ioctl
+                                                     ubi_remove_volume
+                                                      cdev_device_del
+                                                       // first free
+    ubi_free_volume
+    // double free
+
+The cause of this problem is that commit 714fb87e8bc0 make device
+"available" before it becomes accessible via sysfs. Therefore, we
+roll back the modification. We will fix the race condition between
+ubi device creation and udev by removing ubi_get_device in
+vol_attribute_show and dev_attribute_show.This avoids accessing
+uninitialized ubi_devices[ubi_num].
+
+ubi_get_device is used to prevent devices from being deleted during
+sysfs execution. However, now kernfs ensures that devices will not
+be deleted before all reference counting are released.
+The key process is shown in the following stack.
+
+device_del
+  device_remove_attrs
+    device_remove_groups
+      sysfs_remove_groups
+        sysfs_remove_group
+          remove_files
+            kernfs_remove_by_name
+              kernfs_remove_by_name_ns
+                __kernfs_remove
+                  kernfs_drain
+
+Fixes: 714fb87e8bc0 ("ubi: Fix race condition between ubi device creation and udev")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/mediatek/pinctrl-paris.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/mtd/ubi/build.c |    9 +--------
+ drivers/mtd/ubi/vmt.c   |    8 +-------
+ 2 files changed, 2 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c b/drivers/pinctrl/mediatek/pinctrl-paris.c
-index 4dd5bd2f135e..9b268ad4e1b8 100644
---- a/drivers/pinctrl/mediatek/pinctrl-paris.c
-+++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
-@@ -184,8 +184,7 @@ static int mtk_pinconf_get(struct pinctrl_dev *pctldev,
+--- a/drivers/mtd/ubi/build.c
++++ b/drivers/mtd/ubi/build.c
+@@ -351,9 +351,6 @@ static ssize_t dev_attribute_show(struct
+ 	 * we still can use 'ubi->ubi_num'.
+ 	 */
+ 	ubi = container_of(dev, struct ubi_device, dev);
+-	ubi = ubi_get_device(ubi->ubi_num);
+-	if (!ubi)
+-		return -ENODEV;
+ 
+ 	if (attr == &dev_eraseblock_size)
+ 		ret = sprintf(buf, "%d\n", ubi->leb_size);
+@@ -382,7 +379,6 @@ static ssize_t dev_attribute_show(struct
+ 	else
+ 		ret = -EINVAL;
+ 
+-	ubi_put_device(ubi);
+ 	return ret;
  }
  
- static int mtk_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
--			   enum pin_config_param param,
--			   enum pin_config_param arg)
-+			   enum pin_config_param param, u32 arg)
+@@ -979,9 +975,6 @@ int ubi_attach_mtd_dev(struct mtd_info *
+ 			goto out_detach;
+ 	}
+ 
+-	/* Make device "available" before it becomes accessible via sysfs */
+-	ubi_devices[ubi_num] = ubi;
+-
+ 	err = uif_init(ubi);
+ 	if (err)
+ 		goto out_detach;
+@@ -1026,6 +1019,7 @@ int ubi_attach_mtd_dev(struct mtd_info *
+ 	wake_up_process(ubi->bgt_thread);
+ 	spin_unlock(&ubi->wl_lock);
+ 
++	ubi_devices[ubi_num] = ubi;
+ 	ubi_notify_all(ubi, UBI_VOLUME_ADDED, NULL);
+ 	return ubi_num;
+ 
+@@ -1034,7 +1028,6 @@ out_debugfs:
+ out_uif:
+ 	uif_close(ubi);
+ out_detach:
+-	ubi_devices[ubi_num] = NULL;
+ 	ubi_wl_close(ubi);
+ 	ubi_free_all_volumes(ubi);
+ 	vfree(ubi->vtbl);
+--- a/drivers/mtd/ubi/vmt.c
++++ b/drivers/mtd/ubi/vmt.c
+@@ -56,16 +56,11 @@ static ssize_t vol_attribute_show(struct
  {
- 	struct mtk_pinctrl *hw = pinctrl_dev_get_drvdata(pctldev);
- 	const struct mtk_pin_desc *desc;
--- 
-2.34.1
-
+ 	int ret;
+ 	struct ubi_volume *vol = container_of(dev, struct ubi_volume, dev);
+-	struct ubi_device *ubi;
+-
+-	ubi = ubi_get_device(vol->ubi->ubi_num);
+-	if (!ubi)
+-		return -ENODEV;
++	struct ubi_device *ubi = vol->ubi;
+ 
+ 	spin_lock(&ubi->volumes_lock);
+ 	if (!ubi->volumes[vol->vol_id]) {
+ 		spin_unlock(&ubi->volumes_lock);
+-		ubi_put_device(ubi);
+ 		return -ENODEV;
+ 	}
+ 	/* Take a reference to prevent volume removal */
+@@ -103,7 +98,6 @@ static ssize_t vol_attribute_show(struct
+ 	vol->ref_count -= 1;
+ 	ubi_assert(vol->ref_count >= 0);
+ 	spin_unlock(&ubi->volumes_lock);
+-	ubi_put_device(ubi);
+ 	return ret;
+ }
+ 
 
 

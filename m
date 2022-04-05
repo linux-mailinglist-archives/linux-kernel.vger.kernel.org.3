@@ -2,53 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4254F2467
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97EDC4F24FD
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbiDEHSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55716 "EHLO
+        id S231951AbiDEHoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231588AbiDEHQX (ORCPT
+        with ESMTP id S232011AbiDEHnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:16:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F44B26C1;
-        Tue,  5 Apr 2022 00:14:25 -0700 (PDT)
+        Tue, 5 Apr 2022 03:43:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FB692D00;
+        Tue,  5 Apr 2022 00:40:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0A8861615;
-        Tue,  5 Apr 2022 07:14:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A7FAC34111;
-        Tue,  5 Apr 2022 07:14:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649142864;
-        bh=Ozahyc/w+nU9i7KqLsvrZN14JQ1Eg6uadYyBxIpHozM=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52B3CB81B14;
+        Tue,  5 Apr 2022 07:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA1D2C340EE;
+        Tue,  5 Apr 2022 07:40:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649144415;
+        bh=mB0Uw+Ta0RUr462A5YasP0HwGJ6z9Pkl/WLXCJgaSdg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ys8Cmi6POwUaireIIRTeLhKK+v7o2EqkTGQSRxqajtar5HmxCLoC3GA0eeO2Jdh7f
-         7WhzZ8247EkkROcV33xkAmsA6ZVRM/KJfhGALQlgJAH8DdgD+HuhdZyO2JrLPvyLbD
-         lK6zMp958X6Nu06bQQzZV5xZNo7ixFrZt7ypv7re/+p5ulumO9Mo1qR1WuOjxV7MnT
-         jE2p2eV+1qxQVnMDMWoSQz93kfij6KBuG7JfR+6KNumajqsqAvV6rtsOqZFK7SSRYW
-         eXSdkrbZ3DAxMyJHVNYk03/zfADcWc6XefNmEjDQtImrxrupXdOMLp+0LVQUTeANq7
-         CEq9QZi2uMpyA==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, hch@lst.de, nathan@kernel.org,
-        naresh.kamboju@linaro.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        heiko@sntech.de, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V12 09/20] riscv: compat: Add basic compat data type implementation
-Date:   Tue,  5 Apr 2022 15:13:03 +0800
-Message-Id: <20220405071314.3225832-10-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220405071314.3225832-1-guoren@kernel.org>
-References: <20220405071314.3225832-1-guoren@kernel.org>
+        b=gA8KlK++HnuNEfj726T6I7qvdOEmfxnwMeOo+ZET42nMkx99FOOpV9136b+UPWpvr
+         LE/jnaWB/oZrMiiFrwSI2Rs1+1+eFaz/QwARpH50Ldx2WxbX8toUCtzgWmDsNRtMUd
+         TzcdyTfxMUStqROUbBkG8M64pxFViZ+aJOoJGxdc=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Liam Beguin <liambeguin@gmail.com>,
+        Peter Rosin <peda@axentia.se>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: [PATCH 5.17 0036/1126] iio: inkern: apply consumer scale on IIO_VAL_INT cases
+Date:   Tue,  5 Apr 2022 09:13:03 +0200
+Message-Id: <20220405070408.616252185@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
+References: <20220405070407.513532867@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -60,172 +57,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+From: Liam Beguin <liambeguin@gmail.com>
 
-Implement riscv asm/compat.h for struct compat_xxx,
-is_compat_task, compat_user_regset, regset convert.
+commit 1bca97ff95c732a516ebb68da72814194980e0a5 upstream.
 
-The rv64 compat.h has inherited most of the structs
-from the generic one.
+When a consumer calls iio_read_channel_processed() and the channel has
+an integer scale, the scale channel scale is applied and the processed
+value is returned as expected.
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
+On the other hand, if the consumer calls iio_convert_raw_to_processed()
+the scaling factor requested by the consumer is not applied.
+
+This for example causes the consumer to process mV when expecting uV.
+Make sure to always apply the scaling factor requested by the consumer.
+
+Fixes: 48e44ce0f881 ("iio:inkern: Add function to read the processed value")
+Signed-off-by: Liam Beguin <liambeguin@gmail.com>
+Reviewed-by: Peter Rosin <peda@axentia.se>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Link: https://lore.kernel.org/r/20220108205319.2046348-2-liambeguin@gmail.com
+Cc: <Stable@vger.kernel.org>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/riscv/include/asm/compat.h      | 129 +++++++++++++++++++++++++++
- arch/riscv/include/asm/thread_info.h |   1 +
- 2 files changed, 130 insertions(+)
- create mode 100644 arch/riscv/include/asm/compat.h
+ drivers/iio/inkern.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/riscv/include/asm/compat.h b/arch/riscv/include/asm/compat.h
-new file mode 100644
-index 000000000000..2ac955b51148
---- /dev/null
-+++ b/arch/riscv/include/asm/compat.h
-@@ -0,0 +1,129 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef __ASM_COMPAT_H
-+#define __ASM_COMPAT_H
-+
-+#define COMPAT_UTS_MACHINE	"riscv\0\0"
-+
-+/*
-+ * Architecture specific compatibility types
-+ */
-+#include <linux/types.h>
-+#include <linux/sched.h>
-+#include <linux/sched/task_stack.h>
-+#include <asm-generic/compat.h>
-+
-+static inline int is_compat_task(void)
-+{
-+	return test_thread_flag(TIF_32BIT);
-+}
-+
-+struct compat_user_regs_struct {
-+	compat_ulong_t pc;
-+	compat_ulong_t ra;
-+	compat_ulong_t sp;
-+	compat_ulong_t gp;
-+	compat_ulong_t tp;
-+	compat_ulong_t t0;
-+	compat_ulong_t t1;
-+	compat_ulong_t t2;
-+	compat_ulong_t s0;
-+	compat_ulong_t s1;
-+	compat_ulong_t a0;
-+	compat_ulong_t a1;
-+	compat_ulong_t a2;
-+	compat_ulong_t a3;
-+	compat_ulong_t a4;
-+	compat_ulong_t a5;
-+	compat_ulong_t a6;
-+	compat_ulong_t a7;
-+	compat_ulong_t s2;
-+	compat_ulong_t s3;
-+	compat_ulong_t s4;
-+	compat_ulong_t s5;
-+	compat_ulong_t s6;
-+	compat_ulong_t s7;
-+	compat_ulong_t s8;
-+	compat_ulong_t s9;
-+	compat_ulong_t s10;
-+	compat_ulong_t s11;
-+	compat_ulong_t t3;
-+	compat_ulong_t t4;
-+	compat_ulong_t t5;
-+	compat_ulong_t t6;
-+};
-+
-+static inline void regs_to_cregs(struct compat_user_regs_struct *cregs,
-+				 struct pt_regs *regs)
-+{
-+	cregs->pc	= (compat_ulong_t) regs->epc;
-+	cregs->ra	= (compat_ulong_t) regs->ra;
-+	cregs->sp	= (compat_ulong_t) regs->sp;
-+	cregs->gp	= (compat_ulong_t) regs->gp;
-+	cregs->tp	= (compat_ulong_t) regs->tp;
-+	cregs->t0	= (compat_ulong_t) regs->t0;
-+	cregs->t1	= (compat_ulong_t) regs->t1;
-+	cregs->t2	= (compat_ulong_t) regs->t2;
-+	cregs->s0	= (compat_ulong_t) regs->s0;
-+	cregs->s1	= (compat_ulong_t) regs->s1;
-+	cregs->a0	= (compat_ulong_t) regs->a0;
-+	cregs->a1	= (compat_ulong_t) regs->a1;
-+	cregs->a2	= (compat_ulong_t) regs->a2;
-+	cregs->a3	= (compat_ulong_t) regs->a3;
-+	cregs->a4	= (compat_ulong_t) regs->a4;
-+	cregs->a5	= (compat_ulong_t) regs->a5;
-+	cregs->a6	= (compat_ulong_t) regs->a6;
-+	cregs->a7	= (compat_ulong_t) regs->a7;
-+	cregs->s2	= (compat_ulong_t) regs->s2;
-+	cregs->s3	= (compat_ulong_t) regs->s3;
-+	cregs->s4	= (compat_ulong_t) regs->s4;
-+	cregs->s5	= (compat_ulong_t) regs->s5;
-+	cregs->s6	= (compat_ulong_t) regs->s6;
-+	cregs->s7	= (compat_ulong_t) regs->s7;
-+	cregs->s8	= (compat_ulong_t) regs->s8;
-+	cregs->s9	= (compat_ulong_t) regs->s9;
-+	cregs->s10	= (compat_ulong_t) regs->s10;
-+	cregs->s11	= (compat_ulong_t) regs->s11;
-+	cregs->t3	= (compat_ulong_t) regs->t3;
-+	cregs->t4	= (compat_ulong_t) regs->t4;
-+	cregs->t5	= (compat_ulong_t) regs->t5;
-+	cregs->t6	= (compat_ulong_t) regs->t6;
-+};
-+
-+static inline void cregs_to_regs(struct compat_user_regs_struct *cregs,
-+				 struct pt_regs *regs)
-+{
-+	regs->epc	= (unsigned long) cregs->pc;
-+	regs->ra	= (unsigned long) cregs->ra;
-+	regs->sp	= (unsigned long) cregs->sp;
-+	regs->gp	= (unsigned long) cregs->gp;
-+	regs->tp	= (unsigned long) cregs->tp;
-+	regs->t0	= (unsigned long) cregs->t0;
-+	regs->t1	= (unsigned long) cregs->t1;
-+	regs->t2	= (unsigned long) cregs->t2;
-+	regs->s0	= (unsigned long) cregs->s0;
-+	regs->s1	= (unsigned long) cregs->s1;
-+	regs->a0	= (unsigned long) cregs->a0;
-+	regs->a1	= (unsigned long) cregs->a1;
-+	regs->a2	= (unsigned long) cregs->a2;
-+	regs->a3	= (unsigned long) cregs->a3;
-+	regs->a4	= (unsigned long) cregs->a4;
-+	regs->a5	= (unsigned long) cregs->a5;
-+	regs->a6	= (unsigned long) cregs->a6;
-+	regs->a7	= (unsigned long) cregs->a7;
-+	regs->s2	= (unsigned long) cregs->s2;
-+	regs->s3	= (unsigned long) cregs->s3;
-+	regs->s4	= (unsigned long) cregs->s4;
-+	regs->s5	= (unsigned long) cregs->s5;
-+	regs->s6	= (unsigned long) cregs->s6;
-+	regs->s7	= (unsigned long) cregs->s7;
-+	regs->s8	= (unsigned long) cregs->s8;
-+	regs->s9	= (unsigned long) cregs->s9;
-+	regs->s10	= (unsigned long) cregs->s10;
-+	regs->s11	= (unsigned long) cregs->s11;
-+	regs->t3	= (unsigned long) cregs->t3;
-+	regs->t4	= (unsigned long) cregs->t4;
-+	regs->t5	= (unsigned long) cregs->t5;
-+	regs->t6	= (unsigned long) cregs->t6;
-+};
-+
-+#endif /* __ASM_COMPAT_H */
-diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
-index 74d888c8d631..78933ac04995 100644
---- a/arch/riscv/include/asm/thread_info.h
-+++ b/arch/riscv/include/asm/thread_info.h
-@@ -97,6 +97,7 @@ struct thread_info {
- #define TIF_SECCOMP		8	/* syscall secure computing */
- #define TIF_NOTIFY_SIGNAL	9	/* signal notifications exist */
- #define TIF_UPROBE		10	/* uprobe breakpoint or singlestep */
-+#define TIF_32BIT		11	/* compat-mode 32bit process */
+--- a/drivers/iio/inkern.c
++++ b/drivers/iio/inkern.c
+@@ -616,7 +616,7 @@ static int iio_convert_raw_to_processed_
  
- #define _TIF_SYSCALL_TRACE	(1 << TIF_SYSCALL_TRACE)
- #define _TIF_NOTIFY_RESUME	(1 << TIF_NOTIFY_RESUME)
--- 
-2.25.1
+ 	switch (scale_type) {
+ 	case IIO_VAL_INT:
+-		*processed = raw64 * scale_val;
++		*processed = raw64 * scale_val * scale;
+ 		break;
+ 	case IIO_VAL_INT_PLUS_MICRO:
+ 		if (scale_val2 < 0)
+
 

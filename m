@@ -2,43 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D734F2BAA
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:17:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 529F54F2D12
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241891AbiDEIf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48172 "EHLO
+        id S240582AbiDEIcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233723AbiDEH51 (ORCPT
+        with ESMTP id S234123AbiDEH6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:57:27 -0400
+        Tue, 5 Apr 2022 03:58:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763F0506CC;
-        Tue,  5 Apr 2022 00:51:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE5199685;
+        Tue,  5 Apr 2022 00:51:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A71861728;
-        Tue,  5 Apr 2022 07:51:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FE2AC34111;
-        Tue,  5 Apr 2022 07:51:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0582E61728;
+        Tue,  5 Apr 2022 07:51:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4D7DC340EE;
+        Tue,  5 Apr 2022 07:51:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145083;
-        bh=k107eXAopS3cg/qO3bNvEgkCP2VIeERH0+D1JEhJDRU=;
+        s=korg; t=1649145113;
+        bh=PLJgfYpKDlA2T43Zuce5R0J0Mw2MAn5KvOTzShVlfyU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xnsH4tVNNbdzSIB4YsVs8X/RVUQ+FxqknEF4RwiKAb+F8td5uB0Q61DjBGhVEj6k7
-         x3nSgGGMxW0FyMVXBOGc8Vy6BKs7b6qjjK+PHvVmY7lqbRRbsO+DAeiYOu7G7WY7bH
-         XddtL30wOLRsOqFr/G55FooUqnm/8JDN5669Yf/E=
+        b=oxC8uSG2V51wNG3f32zzbtsONwLsJpsZI7IDDzjsEcMnHbAn4rCH2ezoxaVmSRfc4
+         a7vUEdDTOQvK60ldoAlssbffqpCxMws6bDqzFv4OvfDtCaIjUGAh6+Pog4pxO0c9Zc
+         jv9FSbUrZXPqOw/O+imn54N6D2KhByWd/E6cjNLo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lukas Czerner <lczerner@redhat.com>,
-        Ye Bin <yebin10@huawei.com>, Eric Sandeen <sandeen@redhat.com>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Theodore Tso <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0278/1126] ext4: fix remount with abort option
-Date:   Tue,  5 Apr 2022 09:17:05 +0200
-Message-Id: <20220405070415.770327618@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        "kernelci.org bot" <bot@kernelci.org>,
+        Guenter Roeck <groeck@google.com>,
+        Shuah Khan <shuah@kernel.org>, Borislav Petkov <bp@suse.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0288/1126] selftests, x86: fix how check_cc.sh is being invoked
+Date:   Tue,  5 Apr 2022 09:17:15 +0200
+Message-Id: <20220405070416.067193531@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,101 +61,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Czerner <lczerner@redhat.com>
+From: Guillaume Tucker <guillaume.tucker@collabora.com>
 
-[ Upstream commit e3952fcce1aad934f1322843b564ff86256444b2 ]
+[ Upstream commit ef696f93ed9778d570bd5ac58414421cdd4f1aab ]
 
-After commit 6e47a3cc68fc ("ext4: get rid of super block and sbi from
-handle_mount_ops()") the 'abort' options stopped working. This is
-because we're using ctx_set_mount_flags() helper that's expecting an
-argument with the appropriate bit set, but instead got
-EXT4_MF_FS_ABORTED which is a bit position. ext4_set_mount_flag() is
-using set_bit() while ctx_set_mount_flags() was using bitwise OR.
+The $(CC) variable used in Makefiles could contain several arguments
+such as "ccache gcc".  These need to be passed as a single string to
+check_cc.sh, otherwise only the first argument will be used as the
+compiler command.  Without quotes, the $(CC) variable is passed as
+distinct arguments which causes the script to fail to build trivial
+programs.
 
-Create a separate helper ctx_set_mount_flag() to handle setting the
-mount_flags correctly.
+Fix this by adding quotes around $(CC) when calling check_cc.sh to pass
+the whole string as a single argument to the script even if it has
+several words such as "ccache gcc".
 
-While we're at it clean up the EXT4_SET_CTX macros so that we're only
-creating helpers that we actually use to avoid warnings.
-
-Fixes: 6e47a3cc68fc ("ext4: get rid of super block and sbi from handle_mount_ops()")
-Signed-off-by: Lukas Czerner <lczerner@redhat.com>
-Cc: Ye Bin <yebin10@huawei.com>
-Reviewed-by: Eric Sandeen <sandeen@redhat.com>
-Tested-by: Gabriel Krisman Bertazi <krisman@collabora.com>
-Link: https://lore.kernel.org/r/20220201131345.77591-1-lczerner@redhat.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Link: https://lkml.kernel.org/r/d0d460d7be0107a69e3c52477761a6fe694c1840.1646991629.git.guillaume.tucker@collabora.com
+Fixes: e9886ace222e ("selftests, x86: Rework x86 target architecture detection")
+Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+Tested-by: "kernelci.org bot" <bot@kernelci.org>
+Reviewed-by: Guenter Roeck <groeck@google.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Borislav Petkov <bp@suse.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/super.c | 29 +++++++++++++++++++++--------
- 1 file changed, 21 insertions(+), 8 deletions(-)
+ tools/testing/selftests/vm/Makefile  | 6 +++---
+ tools/testing/selftests/x86/Makefile | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index cd0547fabd79..bed29f96ccc7 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -2045,8 +2045,8 @@ struct ext4_fs_context {
- 	unsigned int	mask_s_mount_opt;
- 	unsigned int	vals_s_mount_opt2;
- 	unsigned int	mask_s_mount_opt2;
--	unsigned int	vals_s_mount_flags;
--	unsigned int	mask_s_mount_flags;
-+	unsigned long	vals_s_mount_flags;
-+	unsigned long	mask_s_mount_flags;
- 	unsigned int	opt_flags;	/* MOPT flags */
- 	unsigned int	spec;
- 	u32		s_max_batch_time;
-@@ -2149,23 +2149,36 @@ static inline void ctx_set_##name(struct ext4_fs_context *ctx,		\
- {									\
- 	ctx->mask_s_##name |= flag;					\
- 	ctx->vals_s_##name |= flag;					\
--}									\
-+}
-+
-+#define EXT4_CLEAR_CTX(name)						\
- static inline void ctx_clear_##name(struct ext4_fs_context *ctx,	\
- 				    unsigned long flag)			\
- {									\
- 	ctx->mask_s_##name |= flag;					\
- 	ctx->vals_s_##name &= ~flag;					\
--}									\
-+}
-+
-+#define EXT4_TEST_CTX(name)						\
- static inline unsigned long						\
- ctx_test_##name(struct ext4_fs_context *ctx, unsigned long flag)	\
- {									\
- 	return (ctx->vals_s_##name & flag);				\
--}									\
-+}
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index a14b5b800897..1530c3e0242e 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -51,9 +51,9 @@ TEST_GEN_FILES += split_huge_page_test
+ TEST_GEN_FILES += ksm_tests
  
--EXT4_SET_CTX(flags);
-+EXT4_SET_CTX(flags); /* set only */
- EXT4_SET_CTX(mount_opt);
-+EXT4_CLEAR_CTX(mount_opt);
-+EXT4_TEST_CTX(mount_opt);
- EXT4_SET_CTX(mount_opt2);
--EXT4_SET_CTX(mount_flags);
-+EXT4_CLEAR_CTX(mount_opt2);
-+EXT4_TEST_CTX(mount_opt2);
-+
-+static inline void ctx_set_mount_flag(struct ext4_fs_context *ctx, int bit)
-+{
-+	set_bit(bit, &ctx->mask_s_mount_flags);
-+	set_bit(bit, &ctx->vals_s_mount_flags);
-+}
+ ifeq ($(MACHINE),x86_64)
+-CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_32bit_program.c -m32)
+-CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_64bit_program.c)
+-CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_program.c -no-pie)
++CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_32bit_program.c -m32)
++CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_64bit_program.c)
++CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh "$(CC)" ../x86/trivial_program.c -no-pie)
  
- static int ext4_parse_param(struct fs_context *fc, struct fs_parameter *param)
- {
-@@ -2235,7 +2248,7 @@ static int ext4_parse_param(struct fs_context *fc, struct fs_parameter *param)
- 			 param->key);
- 		return 0;
- 	case Opt_abort:
--		ctx_set_mount_flags(ctx, EXT4_MF_FS_ABORTED);
-+		ctx_set_mount_flag(ctx, EXT4_MF_FS_ABORTED);
- 		return 0;
- 	case Opt_i_version:
- 		ext4_msg(NULL, KERN_WARNING, deprecated_msg, param->key, "5.20");
+ TARGETS := protection_keys
+ BINARIES_32 := $(TARGETS:%=%_32)
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index 8a1f62ab3c8e..53df7d3893d3 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -6,9 +6,9 @@ include ../lib.mk
+ .PHONY: all all_32 all_64 warn_32bit_failure clean
+ 
+ UNAME_M := $(shell uname -m)
+-CAN_BUILD_I386 := $(shell ./check_cc.sh $(CC) trivial_32bit_program.c -m32)
+-CAN_BUILD_X86_64 := $(shell ./check_cc.sh $(CC) trivial_64bit_program.c)
+-CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh $(CC) trivial_program.c -no-pie)
++CAN_BUILD_I386 := $(shell ./check_cc.sh "$(CC)" trivial_32bit_program.c -m32)
++CAN_BUILD_X86_64 := $(shell ./check_cc.sh "$(CC)" trivial_64bit_program.c)
++CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
+ 
+ TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
+ 			check_initial_reg_state sigreturn iopl ioperm \
 -- 
 2.34.1
 

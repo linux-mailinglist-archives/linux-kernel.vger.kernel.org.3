@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CAE24F2CEB
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23BC54F2E11
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238245AbiDEJEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:04:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
+        id S1351580AbiDEKCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237692AbiDEISM (ORCPT
+        with ESMTP id S237751AbiDEIST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:18:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA61B6E6E;
-        Tue,  5 Apr 2022 01:07:18 -0700 (PDT)
+        Tue, 5 Apr 2022 04:18:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452F8B7155;
+        Tue,  5 Apr 2022 01:07:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59657B81BB1;
-        Tue,  5 Apr 2022 08:07:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7F38C385A1;
-        Tue,  5 Apr 2022 08:07:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B06F3B81B92;
+        Tue,  5 Apr 2022 08:07:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23E4FC385A0;
+        Tue,  5 Apr 2022 08:07:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146036;
-        bh=s09JmQ9OI+DOz27SLimgS/Grem6YGe/jzbDnvQKC2pQ=;
+        s=korg; t=1649146041;
+        bh=CKzhokmJcCTH/MresvNL8KHKGtQixW+DqcBdGRweJug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BVmJpmncfV4U4GMBPMNA09aV5fUdOiR0b/2hfzkzo3wOmBTkcfNV7xyMlgUyfjwOY
-         Rubq63mvHvWvCHxoW+Y/kO/7h6aV2laNFw9XdAugKRUSc80BgJzFDgEAzNIEP2EN81
-         xJrXol93cnLQML5wR0RPg1nWRXHYK7HGV9vccvl0=
+        b=jUHoeIBOFL07imKHNRs89qG46+w6w51zvP17k+yBR48Y51wB1UX9m6HJVk/cO/DBm
+         xzfEa0QrkhFkgxzuu20Bxpu0znCmgthSOeNxt2CNGqaUiJkfDbRSFJhwQYVcUSitBb
+         e7tYf2v1OIb8VX2IRVvOc+etzq0WbESLJFdfHQU8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Thierry Reding <treding@nvidia.com>,
+        stable@vger.kernel.org, Ping Fang <pifang@redhat.com>,
+        Daniel Henrique Barboza <danielhb413@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0618/1126] gpu: host1x: Fix a memory leak in host1x_remove()
-Date:   Tue,  5 Apr 2022 09:22:45 +0200
-Message-Id: <20220405070425.775822539@linuxfoundation.org>
+Subject: [PATCH 5.17 0620/1126] powerpc/mm/numa: skip NUMA_NO_NODE onlining in parse_numa_properties()
+Date:   Tue,  5 Apr 2022 09:22:47 +0200
+Message-Id: <20220405070425.834178411@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,33 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Daniel Henrique Barboza <danielhb413@gmail.com>
 
-[ Upstream commit 025c6643a81564f066d8381b9e2f4603e0f8438f ]
+[ Upstream commit 749ed4a20657bcea66a6e082ca3dc0d228cbec80 ]
 
-Add a missing 'host1x_channel_list_free()' call in the remove function,
-as already done in the error handling path of the probe function.
+Executing node_set_online() when nid = NUMA_NO_NODE results in an
+undefined behavior. node_set_online() will call node_set_state(), into
+__node_set(), into set_bit(), and since NUMA_NO_NODE is -1 we'll end up
+doing a negative shift operation inside
+arch/powerpc/include/asm/bitops.h. This potential UB was detected
+running a kernel with CONFIG_UBSAN.
 
-Fixes: 8474b02531c4 ("gpu: host1x: Refactor channel allocation code")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Thierry Reding <treding@nvidia.com>
+The behavior was introduced by commit 10f78fd0dabb ("powerpc/numa: Fix a
+regression on memoryless node 0"), where the check for nid > 0 was
+removed to fix a problem that was happening with nid = 0, but the result
+is that now we're trying to online NUMA_NO_NODE nids as well.
+
+Checking for nid >= 0 will allow node 0 to be onlined while avoiding
+this UB with NUMA_NO_NODE.
+
+Fixes: 10f78fd0dabb ("powerpc/numa: Fix a regression on memoryless node 0")
+Reported-by: Ping Fang <pifang@redhat.com>
+Signed-off-by: Daniel Henrique Barboza <danielhb413@gmail.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220224182312.1012527-1-danielhb413@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/host1x/dev.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/powerpc/mm/numa.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
-index 9605495f001a..80c685ab3e30 100644
---- a/drivers/gpu/host1x/dev.c
-+++ b/drivers/gpu/host1x/dev.c
-@@ -571,6 +571,7 @@ static int host1x_remove(struct platform_device *pdev)
+diff --git a/arch/powerpc/mm/numa.c b/arch/powerpc/mm/numa.c
+index 9d5f710d2c20..b9b7fefbb64b 100644
+--- a/arch/powerpc/mm/numa.c
++++ b/arch/powerpc/mm/numa.c
+@@ -956,7 +956,9 @@ static int __init parse_numa_properties(void)
+ 			of_node_put(cpu);
+ 		}
  
- 	host1x_intr_deinit(host);
- 	host1x_syncpt_deinit(host);
-+	host1x_channel_list_free(&host->channel_list);
- 	host1x_iommu_exit(host);
- 	host1x_bo_cache_destroy(&host->cache);
+-		node_set_online(nid);
++		/* node_set_online() is an UB if 'nid' is negative */
++		if (likely(nid >= 0))
++			node_set_online(nid);
+ 	}
  
+ 	get_n_mem_cells(&n_mem_addr_cells, &n_mem_size_cells);
 -- 
 2.34.1
 

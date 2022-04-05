@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C374F3465
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 426B24F3215
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347173AbiDEJqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
+        id S1350348AbiDEJ5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:57:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239886AbiDEIVp (ORCPT
+        with ESMTP id S239909AbiDEIVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:21:45 -0400
+        Tue, 5 Apr 2022 04:21:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C376368;
-        Tue,  5 Apr 2022 01:19:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A90865F2;
+        Tue,  5 Apr 2022 01:19:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CA4360B14;
-        Tue,  5 Apr 2022 08:19:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9594C385A8;
-        Tue,  5 Apr 2022 08:19:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F8FE609AD;
+        Tue,  5 Apr 2022 08:19:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5097EC385A2;
+        Tue,  5 Apr 2022 08:19:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146762;
-        bh=pBjIgxy2sbQ3b5Xi7k2taKqFKSHjiJX5s66jWRpPa5s=;
+        s=korg; t=1649146764;
+        bh=P/lxEK3xXgM2nxhjaAHZNVVhYk11eH/eKFXBmOkQsxo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mibJKEzyFvlsP7Z46WRgA06rxKUW+zF090af7GGYIdgGQdBl057MjeNT5sHq4x48P
-         EFJrIWHLcBOTv1lriCZeqzbUI9Ip/2G0ROhJmjO7R5bP81aRYJD4Sl77MpU2jlFDJT
-         AgEoelOkx4PkuBYhqVqzTxmxojkvy/gpYz/loErU=
+        b=xpP1nCveV5RWSzRmUNCPHzci+bkYSzc/lNICGiprsrf0ZEHDncSmik5O4tlZJ4rFk
+         TJVPyewjFxLYST8WM94RDbB31YrY1H/Q+//Ps+bL+VogdWMPl1n2A1fRRiksBvc0Qq
+         UEMgh0Yv5InaQ6DmF32I44oQcT3m4jHTLCwa06Fo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ning Li <lining2020x@163.com>,
-        Tejun Heo <tj@kernel.org>, Chunguang Xu <brookxu@tencent.com>,
-        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0841/1126] block: throttle split bio in case of iops limit
-Date:   Tue,  5 Apr 2022 09:26:28 +0200
-Message-Id: <20220405070432.239336896@linuxfoundation.org>
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0842/1126] memstick/mspro_block: fix handling of read-only devices
+Date:   Tue,  5 Apr 2022 09:26:29 +0200
+Message-Id: <20220405070432.267789464@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,104 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ming Lei <ming.lei@redhat.com>
+From: Christoph Hellwig <hch@lst.de>
 
-[ Upstream commit 9f5ede3c01f9951b0ae7d68b28762ad51d9bacc8 ]
+[ Upstream commit 6dab421bfe06a59bf8f212a72e34673e8acf2018 ]
 
-Commit 111be8839817 ("block-throttle: avoid double charge") marks bio as
-BIO_THROTTLED unconditionally if __blk_throtl_bio() is called on this bio,
-then this bio won't be called into __blk_throtl_bio() any more. This way
-is to avoid double charge in case of bio splitting. It is reasonable for
-read/write throughput limit, but not reasonable for IOPS limit because
-block layer provides io accounting against split bio.
+Use set_disk_ro to propagate the read-only state to the block layer
+instead of checking for it in ->open and leaking a reference in case
+of a read-only device.
 
-Chunguang Xu has already observed this issue and fixed it in commit
-4f1e9630afe6 ("blk-throtl: optimize IOPS throttle for large IO scenarios").
-However, that patch only covers bio splitting in __blk_queue_split(), and
-we have other kind of bio splitting, such as bio_split() &
-submit_bio_noacct() and other ways.
-
-This patch tries to fix the issue in one generic way by always charging
-the bio for iops limit in blk_throtl_bio(). This way is reasonable:
-re-submission & fast-cloned bio is charged if it is submitted to same
-disk/queue, and BIO_THROTTLED will be cleared if bio->bi_bdev is changed.
-
-This new approach can get much more smooth/stable iops limit compared with
-commit 4f1e9630afe6 ("blk-throtl: optimize IOPS throttle for large IO
-scenarios") since that commit can't throttle current split bios actually.
-
-Also this way won't cause new double bio iops charge in
-blk_throtl_dispatch_work_fn() in which blk_throtl_bio() won't be called
-any more.
-
-Reported-by: Ning Li <lining2020x@163.com>
-Acked-by: Tejun Heo <tj@kernel.org>
-Cc: Chunguang Xu <brookxu@tencent.com>
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
-Link: https://lore.kernel.org/r/20220216044514.2903784-7-ming.lei@redhat.com
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220215094514.3828912-4-hch@lst.de
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/blk-merge.c    |  2 --
- block/blk-throttle.c | 10 +++++++---
- block/blk-throttle.h |  2 --
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ drivers/memstick/core/mspro_block.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/block/blk-merge.c b/block/blk-merge.c
-index 47d253f79f32..ea6968313b4a 100644
---- a/block/blk-merge.c
-+++ b/block/blk-merge.c
-@@ -369,8 +369,6 @@ void __blk_queue_split(struct request_queue *q, struct bio **bio,
- 		trace_block_split(split, (*bio)->bi_iter.bi_sector);
- 		submit_bio_noacct(*bio);
- 		*bio = split;
--
--		blk_throtl_charge_bio_split(*bio);
- 	}
- }
+diff --git a/drivers/memstick/core/mspro_block.c b/drivers/memstick/core/mspro_block.c
+index c0450397b673..7ea312f0840e 100644
+--- a/drivers/memstick/core/mspro_block.c
++++ b/drivers/memstick/core/mspro_block.c
+@@ -186,13 +186,8 @@ static int mspro_block_bd_open(struct block_device *bdev, fmode_t mode)
  
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index 7c462c006b26..87769b337fc5 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -808,7 +808,8 @@ static bool tg_with_in_bps_limit(struct throtl_grp *tg, struct bio *bio,
- 	unsigned long jiffy_elapsed, jiffy_wait, jiffy_elapsed_rnd;
- 	unsigned int bio_size = throtl_bio_data_size(bio);
+ 	mutex_lock(&mspro_block_disk_lock);
  
--	if (bps_limit == U64_MAX) {
-+	/* no need to throttle if this bio's bytes have been accounted */
-+	if (bps_limit == U64_MAX || bio_flagged(bio, BIO_THROTTLED)) {
- 		if (wait)
- 			*wait = 0;
- 		return true;
-@@ -920,9 +921,12 @@ static void throtl_charge_bio(struct throtl_grp *tg, struct bio *bio)
- 	unsigned int bio_size = throtl_bio_data_size(bio);
+-	if (msb && msb->card) {
++	if (msb && msb->card)
+ 		msb->usage_count++;
+-		if ((mode & FMODE_WRITE) && msb->read_only)
+-			rc = -EROFS;
+-		else
+-			rc = 0;
+-	}
  
- 	/* Charge the bio to the group */
--	tg->bytes_disp[rw] += bio_size;
-+	if (!bio_flagged(bio, BIO_THROTTLED)) {
-+		tg->bytes_disp[rw] += bio_size;
-+		tg->last_bytes_disp[rw] += bio_size;
-+	}
+ 	mutex_unlock(&mspro_block_disk_lock);
+ 
+@@ -1239,6 +1234,9 @@ static int mspro_block_init_disk(struct memstick_dev *card)
+ 	set_capacity(msb->disk, capacity);
+ 	dev_dbg(&card->dev, "capacity set %ld\n", capacity);
+ 
++	if (msb->read_only)
++		set_disk_ro(msb->disk, true);
 +
- 	tg->io_disp[rw]++;
--	tg->last_bytes_disp[rw] += bio_size;
- 	tg->last_io_disp[rw]++;
- 
- 	/*
-diff --git a/block/blk-throttle.h b/block/blk-throttle.h
-index 175f03abd9e4..cb43f4417d6e 100644
---- a/block/blk-throttle.h
-+++ b/block/blk-throttle.h
-@@ -170,8 +170,6 @@ static inline bool blk_throtl_bio(struct bio *bio)
- {
- 	struct throtl_grp *tg = blkg_to_tg(bio->bi_blkg);
- 
--	if (bio_flagged(bio, BIO_THROTTLED))
--		return false;
- 	if (!tg->has_rules[bio_data_dir(bio)])
- 		return false;
- 
+ 	rc = device_add_disk(&card->dev, msb->disk, NULL);
+ 	if (rc)
+ 		goto out_cleanup_disk;
 -- 
 2.34.1
 

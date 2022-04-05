@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D68E04F3DA6
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 434764F3EB4
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:49:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356333AbiDENH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43856 "EHLO
+        id S1356757AbiDENIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344022AbiDEJQu (ORCPT
+        with ESMTP id S1344026AbiDEJQw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:16:50 -0400
+        Tue, 5 Apr 2022 05:16:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876A71D310;
-        Tue,  5 Apr 2022 02:03:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5B71EED8;
+        Tue,  5 Apr 2022 02:03:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 246E961571;
-        Tue,  5 Apr 2022 09:03:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34940C385A1;
-        Tue,  5 Apr 2022 09:03:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0FEE61003;
+        Tue,  5 Apr 2022 09:03:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF58BC385A1;
+        Tue,  5 Apr 2022 09:03:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149420;
-        bh=AvslXiiGZCRFOeGrGZqo2rx705V5+cRos00EJU0PUxc=;
+        s=korg; t=1649149423;
+        bh=/vXsamBdSnO41BjFWNF63X0LjmmtbeaDPUrPjiNI93w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=La0oRFO6sY0rwoVZlTpeCpU+cWJnjQTxqnQXwv21ba4nVoYsdlxqqI5Yw3f2zlZDv
-         MJ8EsiAAG1g8JykV86MrUPidrFaF03SvbSicFhiG/q4fbsrrs+WxQdvDPCsl50uwKx
-         0RYVQzE6ZopHFyKbMh8mA31H8VW+22ofhH3V149I=
+        b=dtYM2HmN25vmPdUgzWHPKq0m5bbYLsycqePUX8O4uKXiVPq6BPlYarFMSxirWb3/Y
+         R1yr2gBhmE5y6O53O+nSTXUCMEiCuH6TiXjtc44S6XxurzoJNIqKvnLGTgNP6IIpwA
+         jcAUZzrBwRP7t1H8gEN87ACK5ukvDIfsIukzGeEA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yonghua Huang <yonghua.huang@intel.com>,
+        stable@vger.kernel.org,
+        Xiaolong Huang <butterflyhuangxx@gmail.com>,
         Fei Li <fei1.li@intel.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0707/1017] virt: acrn: obtain pa from VMA with PFNMAP flag
-Date:   Tue,  5 Apr 2022 09:27:00 +0200
-Message-Id: <20220405070415.256927941@linuxfoundation.org>
+Subject: [PATCH 5.16 0708/1017] virt: acrn: fix a memory leak in acrn_dev_ioctl()
+Date:   Tue,  5 Apr 2022 09:27:01 +0200
+Message-Id: <20220405070415.286563038@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -54,66 +55,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yonghua Huang <yonghua.huang@intel.com>
+From: Xiaolong Huang <butterflyhuangxx@gmail.com>
 
-[ Upstream commit 8a6e85f75a83d16a71077e41f2720c691f432002 ]
+[ Upstream commit ecd1735f14d6ac868ae5d8b7a2bf193fa11f388b ]
 
- acrn_vm_ram_map can't pin the user pages with VM_PFNMAP flag
- by calling get_user_pages_fast(), the PA(physical pages)
- may be mapped by kernel driver and set PFNMAP flag.
+The vm_param and cpu_regs need to be freed via kfree()
+before return -EINVAL error.
 
- This patch fixes logic to setup EPT mapping for PFN mapped RAM region
- by checking the memory attribute before adding EPT mapping for them.
-
-Fixes: 88f537d5e8dd ("virt: acrn: Introduce EPT mapping management")
-Signed-off-by: Yonghua Huang <yonghua.huang@intel.com>
+Fixes: 9c5137aedd11 ("virt: acrn: Introduce VM management interfaces")
+Fixes: 2ad2aaee1bc9 ("virt: acrn: Introduce an ioctl to set vCPU registers state")
+Signed-off-by: Xiaolong Huang <butterflyhuangxx@gmail.com>
 Signed-off-by: Fei Li <fei1.li@intel.com>
-Link: https://lore.kernel.org/r/20220228022212.419406-1-yonghua.huang@intel.com
+Link: https://lore.kernel.org/r/20220308092047.1008409-1-butterflyhuangxx@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/virt/acrn/mm.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/virt/acrn/hsm.c | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/virt/acrn/mm.c b/drivers/virt/acrn/mm.c
-index c4f2e15c8a2b..3b1b1e7a844b 100644
---- a/drivers/virt/acrn/mm.c
-+++ b/drivers/virt/acrn/mm.c
-@@ -162,10 +162,34 @@ int acrn_vm_ram_map(struct acrn_vm *vm, struct acrn_vm_memmap *memmap)
- 	void *remap_vaddr;
- 	int ret, pinned;
- 	u64 user_vm_pa;
-+	unsigned long pfn;
-+	struct vm_area_struct *vma;
+diff --git a/drivers/virt/acrn/hsm.c b/drivers/virt/acrn/hsm.c
+index 5419794fccf1..423ea888d79a 100644
+--- a/drivers/virt/acrn/hsm.c
++++ b/drivers/virt/acrn/hsm.c
+@@ -136,8 +136,10 @@ static long acrn_dev_ioctl(struct file *filp, unsigned int cmd,
+ 		if (IS_ERR(vm_param))
+ 			return PTR_ERR(vm_param);
  
- 	if (!vm || !memmap)
- 		return -EINVAL;
+-		if ((vm_param->reserved0 | vm_param->reserved1) != 0)
++		if ((vm_param->reserved0 | vm_param->reserved1) != 0) {
++			kfree(vm_param);
+ 			return -EINVAL;
++		}
  
-+	mmap_read_lock(current->mm);
-+	vma = vma_lookup(current->mm, memmap->vma_base);
-+	if (vma && ((vma->vm_flags & VM_PFNMAP) != 0)) {
-+		if ((memmap->vma_base + memmap->len) > vma->vm_end) {
-+			mmap_read_unlock(current->mm);
-+			return -EINVAL;
-+		}
-+
-+		ret = follow_pfn(vma, memmap->vma_base, &pfn);
-+		mmap_read_unlock(current->mm);
-+		if (ret < 0) {
-+			dev_dbg(acrn_dev.this_device,
-+				"Failed to lookup PFN at VMA:%pK.\n", (void *)memmap->vma_base);
-+			return ret;
-+		}
-+
-+		return acrn_mm_region_add(vm, memmap->user_vm_pa,
-+			 PFN_PHYS(pfn), memmap->len,
-+			 ACRN_MEM_TYPE_WB, memmap->attr);
-+	}
-+	mmap_read_unlock(current->mm);
-+
- 	/* Get the page number of the map region */
- 	nr_pages = memmap->len >> PAGE_SHIFT;
- 	pages = vzalloc(nr_pages * sizeof(struct page *));
+ 		vm = acrn_vm_create(vm, vm_param);
+ 		if (!vm) {
+@@ -182,21 +184,29 @@ static long acrn_dev_ioctl(struct file *filp, unsigned int cmd,
+ 			return PTR_ERR(cpu_regs);
+ 
+ 		for (i = 0; i < ARRAY_SIZE(cpu_regs->reserved); i++)
+-			if (cpu_regs->reserved[i])
++			if (cpu_regs->reserved[i]) {
++				kfree(cpu_regs);
+ 				return -EINVAL;
++			}
+ 
+ 		for (i = 0; i < ARRAY_SIZE(cpu_regs->vcpu_regs.reserved_32); i++)
+-			if (cpu_regs->vcpu_regs.reserved_32[i])
++			if (cpu_regs->vcpu_regs.reserved_32[i]) {
++				kfree(cpu_regs);
+ 				return -EINVAL;
++			}
+ 
+ 		for (i = 0; i < ARRAY_SIZE(cpu_regs->vcpu_regs.reserved_64); i++)
+-			if (cpu_regs->vcpu_regs.reserved_64[i])
++			if (cpu_regs->vcpu_regs.reserved_64[i]) {
++				kfree(cpu_regs);
+ 				return -EINVAL;
++			}
+ 
+ 		for (i = 0; i < ARRAY_SIZE(cpu_regs->vcpu_regs.gdt.reserved); i++)
+ 			if (cpu_regs->vcpu_regs.gdt.reserved[i] |
+-			    cpu_regs->vcpu_regs.idt.reserved[i])
++			    cpu_regs->vcpu_regs.idt.reserved[i]) {
++				kfree(cpu_regs);
+ 				return -EINVAL;
++			}
+ 
+ 		ret = hcall_set_vcpu_regs(vm->vmid, virt_to_phys(cpu_regs));
+ 		if (ret < 0)
 -- 
 2.34.1
 

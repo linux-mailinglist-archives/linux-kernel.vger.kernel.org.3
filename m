@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42EA24F43F4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6994F45EE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244634AbiDENEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:04:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40632 "EHLO
+        id S1358303AbiDENJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238821AbiDEJQR (ORCPT
+        with ESMTP id S1344110AbiDEJSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:16:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4443BD1CCC;
-        Tue,  5 Apr 2022 02:01:48 -0700 (PDT)
+        Tue, 5 Apr 2022 05:18:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B5E37A38;
+        Tue,  5 Apr 2022 02:04:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EE601B81A12;
-        Tue,  5 Apr 2022 09:01:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A30AC385A0;
-        Tue,  5 Apr 2022 09:01:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 55791B81B75;
+        Tue,  5 Apr 2022 09:04:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B128FC385A0;
+        Tue,  5 Apr 2022 09:04:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149305;
-        bh=c4RVyvYRsj9YXVP3ghCAxHj+YV5+ROVijwrQU5DYrUM=;
+        s=korg; t=1649149448;
+        bh=wCS0KzKr4oLP5q/Kgg4TSGoEWXx2RJU1a3UmIAGtzOU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2bnFFliwoRLqJGWIFTkqzDx8GPEo2eRxhf6S5f7Jp1KpEtAfLMnomicvgMGB9CvM5
-         nWW1Dndu6CSp0V3jvXQ5OjHUoxdhwkEA9w+9RkpdBDPEJOXs+fB1/U3MbZLWVNB+xl
-         TUmVgerJj1mPiG5BGRxZj95JSuekEKR0yYf34l1o=
+        b=sLWkBkHRkM+s9P/VbqidAGoB6i1ZKF+StVZfOP5p3E3F/Yvw9aOUK6QXSfJaTSMh4
+         fjvdPIDK28ESIfzNDOx+TJn4PFuYoRyPQbtxdea68hgz+hMceS2QAFCgCsFtw8mA/C
+         jeJKIahB4Gde1PSk316XzKMkWYncSX3678wWoZn8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Oded Gabbay <ogabbay@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0667/1017] NFS: Use of mapping_set_error() results in spurious errors
-Date:   Tue,  5 Apr 2022 09:26:20 +0200
-Message-Id: <20220405070414.081004263@linuxfoundation.org>
+Subject: [PATCH 5.16 0670/1017] habanalabs: Add check for pci_enable_device
+Date:   Tue,  5 Apr 2022 09:26:23 +0200
+Message-Id: <20220405070414.169016092@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,39 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 6c984083ec2453dfd3fcf98f392f34500c73e3f2 ]
+[ Upstream commit 9c27896ac1bb83ea5c461ce6f7089d02102a2b21 ]
 
-The use of mapping_set_error() in conjunction with calls to
-filemap_check_errors() is problematic because every error gets reported
-as either an EIO or an ENOSPC by filemap_check_errors() in functions
-such as filemap_write_and_wait() or filemap_write_and_wait_range().
-In almost all cases, we prefer to use the more nuanced wb errors.
+As the potential failure of the pci_enable_device(),
+it should be better to check the return value and return
+error if fails.
 
-Fixes: b8946d7bfb94 ("NFS: Revalidate the file mapping on all fatal writeback errors")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Fixes: 70b2f993ea4a ("habanalabs: create common folder")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/write.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/misc/habanalabs/common/debugfs.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/nfs/write.c b/fs/nfs/write.c
-index 9b7619ce17a7..7a23b4644507 100644
---- a/fs/nfs/write.c
-+++ b/fs/nfs/write.c
-@@ -315,7 +315,10 @@ static void nfs_mapping_set_error(struct page *page, int error)
- 	struct address_space *mapping = page_file_mapping(page);
- 
- 	SetPageError(page);
--	mapping_set_error(mapping, error);
-+	filemap_set_wb_err(mapping, error);
-+	if (mapping->host)
-+		errseq_set(&mapping->host->i_sb->s_wb_err,
-+			   error == -ENOSPC ? -ENOSPC : -EIO);
- 	nfs_set_pageerror(mapping);
- }
- 
+diff --git a/drivers/misc/habanalabs/common/debugfs.c b/drivers/misc/habanalabs/common/debugfs.c
+index 1f2a3dc6c4e2..78a6789ef7cc 100644
+--- a/drivers/misc/habanalabs/common/debugfs.c
++++ b/drivers/misc/habanalabs/common/debugfs.c
+@@ -856,6 +856,8 @@ static ssize_t hl_set_power_state(struct file *f, const char __user *buf,
+ 		pci_set_power_state(hdev->pdev, PCI_D0);
+ 		pci_restore_state(hdev->pdev);
+ 		rc = pci_enable_device(hdev->pdev);
++		if (rc < 0)
++			return rc;
+ 	} else if (value == 2) {
+ 		pci_save_state(hdev->pdev);
+ 		pci_disable_device(hdev->pdev);
 -- 
 2.34.1
 

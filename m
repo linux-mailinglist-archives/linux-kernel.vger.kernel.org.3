@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BAFD4F2E1C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2964F2B32
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243989AbiDEJlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34812 "EHLO
+        id S241643AbiDEJHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239280AbiDEIT5 (ORCPT
+        with ESMTP id S239294AbiDEIT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:19:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2C18020A;
-        Tue,  5 Apr 2022 01:10:51 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575FF6D854;
+        Tue,  5 Apr 2022 01:10:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B5B3F60B0E;
-        Tue,  5 Apr 2022 08:10:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB9C6C385A0;
-        Tue,  5 Apr 2022 08:10:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 029E6B81B90;
+        Tue,  5 Apr 2022 08:10:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D159C385A0;
+        Tue,  5 Apr 2022 08:10:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146250;
-        bh=FLjnvxz8s9HCbZ88y2UuuXe1fMhCc9/YAMzyiL3dHXY=;
+        s=korg; t=1649146252;
+        bh=98aCFofgFx1i2qmaGNmZ2Ir40iIRhlyna9C5ZXP/Y2o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SWpcHLX2tA/nFvJ705goaEVtqpq2ZfZtQHVDhVLJX0JenGAz+hErSYMpRqgY/1Rr/
-         jYkVBxUELYDq9Zw3Kndu965M16ocit3B96wDHKTBdJ0ZYRc+9VoM/pEjS6pQL4jCCt
-         JLddk6ghnMkEyviWZbzoOpy3Alt3uHrFeTNX3JSw=
+        b=Y4k3OFyUnpC3GZFN1VAC/AMhGcm5lTjkCHDpVXsiMM0zNxgR8VyO40VFVIomXj+Q3
+         RdpwrWmyG66VIVbhhklh+yQe3OAUNuL29MK28t+jzCPep/Z2ZRpAc1hX60DDQD7uuQ
+         PkVh5IR8m17dPlggnnxtxhUFr121vvaGCRIz47cY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Roberto=20de=20Souza?= <jose.souza@intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        stable@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0696/1126] drm/i915: Fix renamed struct field
-Date:   Tue,  5 Apr 2022 09:24:03 +0200
-Message-Id: <20220405070428.039590417@linuxfoundation.org>
+Subject: [PATCH 5.17 0697/1126] selftests/bpf/test_lirc_mode2.sh: Exit with proper code
+Date:   Tue,  5 Apr 2022 09:24:04 +0200
+Message-Id: <20220405070428.068045446@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -58,40 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas De Marchi <lucas.demarchi@intel.com>
+From: Hangbin Liu <liuhangbin@gmail.com>
 
-[ Upstream commit 00f4150d27d2c01eaeffe1091fc311a7c0872c69 ]
+[ Upstream commit ec80906b0fbd7be11e3e960813b977b1ffe5f8fe ]
 
-Earlier versions of commit a5b7ef27da60 ("drm/i915: Add struct to hold
-IP version") named "ver" as "arch" and then when it was renamed it
-missed the rename on MEDIA_VER_FULL() since it it's currently not used.
+When test_lirc_mode2_user exec failed, the test report failed but still
+exit with 0. Fix it by exiting with an error code.
 
-Fixes: a5b7ef27da60 ("drm/i915: Add struct to hold IP version")
-Cc: José Roberto de Souza <jose.souza@intel.com>
-Cc: Matt Roper <matthew.d.roper@intel.com>
-Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
-Reviewed-by: José Roberto de Souza <jose.souza@intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220316234538.434357-1-lucas.demarchi@intel.com
-(cherry picked from commit b4ac33b973233dc08a56c8ef9d3c2edeab7a4370)
-Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Another issue is for the LIRCDEV checking. With bash -n, we need to quote
+the variable, or it will always be true. So if test_lirc_mode2_user was
+not run, just exit with skip code.
+
+Fixes: 6bdd533cee9a ("bpf: add selftest for lirc_mode2 type program")
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20220321024149.157861-1-liuhangbin@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/i915/i915_drv.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_lirc_mode2.sh | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/i915/i915_drv.h b/drivers/gpu/drm/i915/i915_drv.h
-index 0c70ab08fc0c..73efed2f30ca 100644
---- a/drivers/gpu/drm/i915/i915_drv.h
-+++ b/drivers/gpu/drm/i915/i915_drv.h
-@@ -1146,7 +1146,7 @@ static inline struct intel_gt *to_gt(struct drm_i915_private *i915)
- 	(GRAPHICS_VER(i915) >= (from) && GRAPHICS_VER(i915) <= (until))
+diff --git a/tools/testing/selftests/bpf/test_lirc_mode2.sh b/tools/testing/selftests/bpf/test_lirc_mode2.sh
+index ec4e15948e40..5252b91f48a1 100755
+--- a/tools/testing/selftests/bpf/test_lirc_mode2.sh
++++ b/tools/testing/selftests/bpf/test_lirc_mode2.sh
+@@ -3,6 +3,7 @@
  
- #define MEDIA_VER(i915)			(INTEL_INFO(i915)->media.ver)
--#define MEDIA_VER_FULL(i915)		IP_VER(INTEL_INFO(i915)->media.arch, \
-+#define MEDIA_VER_FULL(i915)		IP_VER(INTEL_INFO(i915)->media.ver, \
- 					       INTEL_INFO(i915)->media.rel)
- #define IS_MEDIA_VER(i915, from, until) \
- 	(MEDIA_VER(i915) >= (from) && MEDIA_VER(i915) <= (until))
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
++ret=$ksft_skip
+ 
+ msg="skip all tests:"
+ if [ $UID != 0 ]; then
+@@ -25,7 +26,7 @@ do
+ 	fi
+ done
+ 
+-if [ -n $LIRCDEV ];
++if [ -n "$LIRCDEV" ];
+ then
+ 	TYPE=lirc_mode2
+ 	./test_lirc_mode2_user $LIRCDEV $INPUTDEV
+@@ -36,3 +37,5 @@ then
+ 		echo -e ${GREEN}"PASS: $TYPE"${NC}
+ 	fi
+ fi
++
++exit $ret
 -- 
 2.34.1
 

@@ -2,120 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57BF54F20B4
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 04:06:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E954F20AB
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 04:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiDECAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 22:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33122 "EHLO
+        id S229515AbiDEB0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 21:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiDEB75 (ORCPT
+        with ESMTP id S229518AbiDEB0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 21:59:57 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB953568E2
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 18:16:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649121369; x=1680657369;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Vd8a/QnNBSw3XlEeVYk+lJcby3alpNsJHuOnY1+hlpQ=;
-  b=S7OV/KWObLUFXMPkMuIGO+HLdGMLiJZdKo5rzJTE49diyWyvwb+lMRuO
-   WyD0/aMmCgbW7B/UCG4Ja9KpBCmTxFc3TQd/G0iKmu+Jvff8Ucd9nwklt
-   mGUAt0HKxeDZvlO3wu62QLJYrgIzkOYeOwOP0wxUKU2M7sbqQ64Sskv9L
-   rqMogHFCRiLEP4S4aPOyg7Xen7fyGv8MGyKtwMqKda3KAnv7FKxhlGoUN
-   Ngtn5cLdCRlsBiDCZ9F7oQCGFqxLfaaIFqNhiXt2JO+sjuL+5StLZLf7X
-   mQcuOp8sRaOBzyntyFU/G55HiJIKSFiqpyuGVdU4JwuyEyDloe2JcXVNu
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="285591198"
-X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
-   d="scan'208";a="285591198"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 17:23:51 -0700
-X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
-   d="scan'208";a="651686256"
-Received: from cwebber-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.54.91])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 17:23:46 -0700
-Message-ID: <a3d68966dbabc800adabef96b9a7e5d325d5b5f7.camel@intel.com>
-Subject: Re: [PATCHv7.1 02/30] x86/tdx: Provide common base for SEAMCALL and
- TDCALL C wrappers
-From:   Kai Huang <kai.huang@intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        bp@alien8.de
-Cc:     aarcange@redhat.com, ak@linux.intel.com, brijesh.singh@amd.com,
-        dan.j.williams@intel.com, dave.hansen@linux.intel.com,
-        david@redhat.com, hpa@zytor.com, jgross@suse.com,
-        jmattson@google.com, joro@8bytes.org, jpoimboe@redhat.com,
-        knsathya@kernel.org, linux-kernel@vger.kernel.org, luto@kernel.org,
-        mingo@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
-        seanjc@google.com, tglx@linutronix.de, thomas.lendacky@amd.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org
-Date:   Tue, 05 Apr 2022 12:23:44 +1200
-In-Reply-To: <5263978a-19ef-fff3-cc61-b272a833171f@intel.com>
-References: <YjXtK4awY6utz3wE@zn.tnic>
-         <20220321160245.42886-1-kirill.shutemov@linux.intel.com>
-         <9f8f57fdbbf76e70471541dc42b04f8a89be4a56.camel@intel.com>
-         <dd5c52ad-9c61-54c3-6654-7a30c56b1917@intel.com>
-         <2fcd12bb42c7d30f0e7bd09a7f66d76122493b32.camel@intel.com>
-         <5263978a-19ef-fff3-cc61-b272a833171f@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Mon, 4 Apr 2022 21:26:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F456282560;
+        Mon,  4 Apr 2022 17:38:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F128B81ACE;
+        Tue,  5 Apr 2022 00:33:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB376C2BBE4;
+        Tue,  5 Apr 2022 00:33:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649118805;
+        bh=YSFtuUAqB2/ReZ8hG4SKRlDqnAPGKpbCyB9tK2n6JDg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hLVyFlpfDATmZr5XGDrA5o2tW4Uc/njYc3HnyYS97SwPrMihRlv8F5i9GKUHv9kE7
+         zuttzYRilaN1bC1amXThpboMBXg4PIlW6SpLPDvBv419u6QE2v+W+GR15gxy6UeYS6
+         X2hb+RmYygXnGkr11tkfWxwYtokTT8Qwh6W/z/fGwwJsQsm70tYw7LX+MFkBGyeZHq
+         RLIQzG+ChmmiQFwcbQwh1ZSTlQyNJAg+9yr+DEx8Xgz+mWdPXi7Ut+28690acjXHYD
+         D7DdIVKxpJGnqbSTkM5/eWReADCF099Mnj5mMmvVeIjzeJ5tJ64kftaaFGD7CfOygJ
+         j7a0KanXvwr4Q==
+Date:   Mon, 4 Apr 2022 17:33:22 -0700
+From:   Saeed Mahameed <saeed@kernel.org>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>
+Subject: Re: [PATCH mlx5-next 4/5] net/mlx5: Remove tls vs. ktls separation
+ as it is the same
+Message-ID: <20220405003322.afko7uo527w5j3zu@sx1>
+References: <cover.1649073691.git.leonro@nvidia.com>
+ <67e596599edcffb0de43f26551208dfd34ac777e.1649073691.git.leonro@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <67e596599edcffb0de43f26551208dfd34ac777e.1649073691.git.leonro@nvidia.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-04-04 at 17:01 -0700, Dave Hansen wrote:
-> On 4/4/22 16:35, Kai Huang wrote:
-> > Both error code formats defined by P-SEAMLDR and TDX module has some reserved
-> > bits which will never be set to 1.  I think we can just add a simple comment
-> > explaining that and choose a value which has 1 set for those reserved bits (even
-> > doesn't have to be -1). For example:
-> > 
-> > 	/*
-> > 	 * Use -1ULL which will never conflict with any actual error code
-> > 	 * returned by both the P-SEAMLDR and the TDX module to represent
-> > 	 * VMfailInvalid.  Both error code definitions defined by the
-> > 	 * P-SEAMLDR and the TDX module have some reserved bits which will
-> > 	 * never be set to 1.
-> > 	 */
-> > 	#define TDX_SEAMCALL_VMFAILINVALID	GENMASK_ULL(63, 0)
-> 
-> The vague "some reserved bits" magic works for exactly *one* error code.
->  If you ever want to make it two, then you subject some some poor future
-> dope to a trip to TDX documentation purgatory.
-> 
-> All I'm asking is that this code stand on its own.  Just declare what
-> the *ACTUAL* reserved bits are.  Not some vague reference to "some
-> bits".  There are *REAL* documented bits.  Use them, please.
+On 04 Apr 15:08, Leon Romanovsky wrote:
+>From: Leon Romanovsky <leonro@nvidia.com>
+>
+>After removal FPGA TLS, we can remove tls->ktls indirection too,
+>as it is the same thing.
+>
+>Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+>Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+>---
+> .../net/ethernet/mellanox/mlx5/core/Makefile  |  2 +-
+> .../ethernet/mellanox/mlx5/core/en/params.c   |  2 +-
+> .../mellanox/mlx5/core/en_accel/en_accel.h    | 11 +--
+> .../mellanox/mlx5/core/en_accel/ktls.c        | 22 ++++-
+> .../mellanox/mlx5/core/en_accel/ktls.h        | 32 +++++++
+> .../mellanox/mlx5/core/en_accel/ktls_rx.c     |  2 +-
+> .../en_accel/{tls_stats.c => ktls_stats.c}    | 38 ++++-----
+> .../mellanox/mlx5/core/en_accel/ktls_tx.c     | 18 +++-
+> .../mellanox/mlx5/core/en_accel/ktls_txrx.h   | 28 +++++-
+> .../mellanox/mlx5/core/en_accel/tls.c         | 70 ---------------
+> .../mellanox/mlx5/core/en_accel/tls.h         | 85 -------------------
+> .../mellanox/mlx5/core/en_accel/tls_rxtx.c    | 70 ---------------
+> .../mellanox/mlx5/core/en_accel/tls_rxtx.h    | 85 -------------------
+> .../net/ethernet/mellanox/mlx5/core/en_main.c |  8 +-
+> .../net/ethernet/mellanox/mlx5/core/en_rx.c   |  5 +-
+> .../ethernet/mellanox/mlx5/core/en_stats.c    |  8 +-
+> 16 files changed, 130 insertions(+), 356 deletions(-)
+> rename drivers/net/ethernet/mellanox/mlx5/core/en_accel/{tls_stats.c => ktls_stats.c} (76%)
 
-OK.  How about below:
+Why not ktls_*.c => tls_*.c ? 
 
-	/*
-	 * VMfailInvalid happens before any actual internal logic of the
-	 * P-SEAMLDR and the TDX module is reached.  Use a unique value which
-	 * will never conflict with any actual error code returned by both the
-	 * P-SEAMLDR and the TDX module to represent this case.
-	 *
-	 * Both error code definitions of the P-SEAMLDR and the TDX module have
-	 * some reserved bits (bits 61:48 for the TDX module and bits 62:32 for
-	 * the P-SEAMLDR) which will never be set to 1.  Choose -1ULL as it
-will
-	 * never be returned as error code by both of them.
-	 */
-	#define TDX_SEAMCALL_VMFAILINVALID	GENMASK_ULL(63, 0)
+Since we now have one TLS implementation, it would've been easier to maybe
+repurpose TLS to be KTLS only and avoid renaming every TLS to KTLS in all
+functions and files.
 
--- 
-Thanks,
--Kai
+So just keep tls.c and all mlx5_tls_xyz functions and implement ktls
+directly in them, the renaming will be done only on the ktls implementation
+part of the code rather than in every caller.
+
+> delete mode 100644 drivers/net/ethernet/mellanox/mlx5/core/en_accel/tls.c
+> delete mode 100644 drivers/net/ethernet/mellanox/mlx5/core/en_accel/tls.h
+> delete mode 100644 drivers/net/ethernet/mellanox/mlx5/core/en_accel/tls_rxtx.c
+> delete mode 100644 drivers/net/ethernet/mellanox/mlx5/core/en_accel/tls_rxtx.h
+>
+

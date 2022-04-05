@@ -2,304 +2,641 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB1A4F4877
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6EEE4F4CA8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344780AbiDEVkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43882 "EHLO
+        id S1579342AbiDEX1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385438AbiDEPPM (ORCPT
+        with ESMTP id S1385335AbiDEPPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 11:15:12 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE1929830
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:31:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649165492; x=1680701492;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bdphDZ6QVD3o+ex/31eD7W63EBBRI2T9KkGIGM5owj0=;
-  b=dm9x/g6HwzI9a7evYSCIAbnyj39OwiofpnFpQmC/nIoAMOrHrR/neBEe
-   gQVTd0H2y+WZe3jmRxNl4kyi4gHIPHqcq/wijkvKHeMRwq98PNykYltQ2
-   JBf9SNT0UbebqOlpbZsPCM5unud6WCmgIzoCEA6vb8lYTCCY1fdBrvrRZ
-   4Td1Z9NETYpNXCqTnkevv3PrbZKFQiejKOxqvZzpRPORzCqL0VQZd/c8T
-   34sTXKrDfGlGDnhSvkEVTq2GYHxOL3eQxBO0jIMvSV9bWKza1nRTSD7NR
-   QAM7j4tCpOqZZnzZ7xjytsNzn3u/zjNQEexsVxooe8yef2ywc3dj2Zfof
-   A==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="260924662"
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="260924662"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 06:31:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="523461840"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 05 Apr 2022 06:31:30 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbjHN-0003KJ-IF;
-        Tue, 05 Apr 2022 13:31:29 +0000
-Date:   Tue, 5 Apr 2022 21:31:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 37/40]
- fs/netfs/buffered_flush.c:544:56: sparse: sparse: Using plain integer as
- NULL pointer
-Message-ID: <202204052141.yq66Pdxo-lkp@intel.com>
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33503B54E
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:31:36 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id v75so13414708oie.1
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 06:31:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=vY5pnIVo4eMwYUxCKVBQEcU9CNBIJau33Z1kUJk3f8U=;
+        b=VdhCFVGbEdIrzpupJeCw1NzlfY9wBZdFbfbu3+kCDlUcGNISJCGsIeFFPkTdhWjBkQ
+         s9RALUSZlw0T+ZJvFL2+msfIfzw1M0MESEqQx4dlsGTasUr3o/Cxa19UraCYeZ6tvM1x
+         8bSJL+gbPhdLenoHRcRbtBJzeLYFyItmiKRXRiRM+i/41cA2GQ7lB7QqlXk9Orgmiw+6
+         B/yn9JNws7VgAS+Xhms0qw+nBpr9sohLiO4wvBv5iIk5owVAE/HKS4AEbKhGtIW8RbBb
+         kNwAactyDqV75U4EV0+sRTXB61O1jZEDTGawj407qg51C9pemT+Bz4DUkbuA32zdrLX/
+         3Huw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=vY5pnIVo4eMwYUxCKVBQEcU9CNBIJau33Z1kUJk3f8U=;
+        b=dQ/qVx57wXuqXm90H1NVVqup2Vu5Rd40cbauuHVu6OS5jCtJm+qrfw5oqyeSJ18Of+
+         q2o3wsCBmGMR5Fy6rio21+QXvk1+zhvV5S3PrjI8UxOFI84Fc7+IUYGWi8bKrmYBYMsB
+         nIiqi0AXIOUVsdMzl30fBSdNwNd21EEnxv1kpyBjirHldIgi/3k5Z63TrMV75SUp2ANi
+         MDtERbjfsJWNzev8gwJ9dfSYcBCfZiLOWSN3GS4/52WtLemTWNLobLqZ4qBGoNjLSPiC
+         9X5+mOrtH+CLQhvmvycTAUrOfOEttR/yIdXgC8eKdJxs2DgwqdmSnLNyVn7AvsYfRDBs
+         ifzA==
+X-Gm-Message-State: AOAM531bR/o/byyit8N/9H8xdJiIB8FDGjSKonVWvpPvIHCmbjqEtT0b
+        FS/O04AefN/zOQbK0ilFnU+zc+Wa2v29A1GtgT7O8ugZ
+X-Google-Smtp-Source: ABdhPJyFbNu/RPLyemQp74RS6faMAniKPthkodVRC0uqD0x7oqTVVtSD+Fij1L/x/Yt0nf8dqyrhF1YF7584hdpzzp4=
+X-Received: by 2002:a05:6808:df1:b0:2ec:b193:ad6c with SMTP id
+ g49-20020a0568080df100b002ecb193ad6cmr1319256oic.200.1649165496142; Tue, 05
+ Apr 2022 06:31:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220404225710.972071-1-trix@redhat.com> <65f33162-74ff-f205-aea9-3ed84dfddde1@amd.com>
+In-Reply-To: <65f33162-74ff-f205-aea9-3ed84dfddde1@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 5 Apr 2022 09:31:24 -0400
+Message-ID: <CADnq5_PfddyoVibWBXrhTgJ5K=2FHBuhbWN1FFV-TMCTgqnW_A@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/radeon: change si_default_state table from global
+ to static
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     Tom Rix <trix@redhat.com>,
+        "Deucher, Alexander" <alexander.deucher@amd.com>,
+        xinhui pan <Xinhui.Pan@amd.com>,
+        Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   674eea41fc70a740ff83ec590f9833f805852464
-commit: 5e5e24ad5bf0176cea69018da2e7118b84d041f8 [37/40] netfs: Generate a write request from ->writepages()
-config: alpha-randconfig-s032-20220405 (https://download.01.org/0day-ci/archive/20220405/202204052141.yq66Pdxo-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/ammarfaizi2/linux-block/commit/5e5e24ad5bf0176cea69018da2e7118b84d041f8
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout 5e5e24ad5bf0176cea69018da2e7118b84d041f8
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha SHELL=/bin/bash fs/netfs/
+Applied.  Thanks!
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Alex
 
-
-sparse warnings: (new ones prefixed by >>)
->> fs/netfs/buffered_flush.c:544:56: sparse: sparse: Using plain integer as NULL pointer
-   fs/netfs/buffered_flush.c:593:48: sparse: sparse: Using plain integer as NULL pointer
-
-vim +544 fs/netfs/buffered_flush.c
-
-   437	
-   438	/*
-   439	 * Flush some of the dirty queue, transforming a part of a sequence of dirty
-   440	 * regions into a block we can flush.
-   441	 *
-   442	 * A number of things constrain us:
-   443	 *  - The region we write out should not be undergoing modification
-   444	 *  - We may need to expand or split the region for a number of reasons:
-   445	 *    - Filesystem storage block/object size
-   446	 *    - Filesystem RPC size (wsize)
-   447	 *    - Cache block size
-   448	 *    - Cache DIO block size
-   449	 *    - Crypto/compression block size
-   450	 *
-   451	 * This may be entered multiple times simultaneously.  Automatic flushing by
-   452	 * the VM is serialised on I_SYNC, but things like fsync() may enter multiple
-   453	 * times simultaneously.
-   454	 */
-   455	static int netfs_flush_dirty(struct netfs_io_request *wreq,
-   456				     struct writeback_control *wbc,
-   457				     struct netfs_i_context *ctx,
-   458				     struct ma_state *mas,
-   459				     pgoff_t *_first, pgoff_t last,
-   460				     struct netfs_dirty_region *spares[2])
-   461	{
-   462		struct netfs_dirty_region *region;
-   463		struct folio *folio;
-   464		unsigned long long end;
-   465		pgoff_t first = *_first;
-   466		pgoff_t csize = 1UL << ctx->cache_order;
-   467		long ret;
-   468	
-   469		XA_STATE(xas, &wreq->mapping->i_pages, 0);
-   470	
-   471		/* Round out the range we're looking through to accommodate whole cache
-   472		 * blocks.  The cache may only be able to store blocks of that size, in
-   473		 * which case we may need to add non-dirty pages to the buffer too.
-   474		 */
-   475		if (ctx->cache_order) {
-   476			first = round_down(first, csize);
-   477			last = round_up_incl(last, csize);
-   478		}
-   479	
-   480		_enter("%lx-%lx", first, last);
-   481	
-   482		rcu_read_lock();
-   483		mtree_lock(&ctx->dirty_regions);
-   484	
-   485		/* Find the first dirty region that overlaps the requested range */
-   486		mas_set(mas, first);
-   487		do {
-   488			region = mas_find(mas, last);
-   489			if (!region)
-   490				goto found_nothing;
-   491		} while (netfs_mas_is_flushing(region) ||
-   492			 (netfs_mas_is_valid(region) && region->waiting_on_wb));
-   493	
-   494		_debug("query D=%x %lx-%lx",
-   495		       netfs_mas_is_valid(region) ? region->debug_id : 0,
-   496		       mas->index, mas->last);
-   497	
-   498		wreq->first = max(mas->index, first);
-   499		if (wreq->first > 0) {
-   500			/* The first folio might extend backwards beyond the start of
-   501			 * the proposed region - in which case we need to include that
-   502			 * also.  But at least, in such a case, the folio size has to
-   503			 * be an integer multiple of the cache blocksize.
-   504			 */
-   505			if (mas->index < wreq->first) {
-   506				_debug("check folio %lx", wreq->first);
-   507				xas_set(&xas, wreq->first);
-   508				do {
-   509					xas_reset(&xas);
-   510					folio = xas_load(&xas);
-   511				} while (xas_retry(&xas, folio));
-   512	
-   513				if (folio && !xa_is_value(folio)) {
-   514					/* A region span *should not* end in the middle
-   515					 * of a folio.
-   516					 */
-   517					BUG_ON(folio->index < mas->index);
-   518					if (folio->index < wreq->first) {
-   519						wreq->first = folio->index;
-   520						mas_set_range(mas, wreq->first, mas->last);
-   521					}
-   522				}
-   523			}
-   524	
-   525			if (mas->index < wreq->first) {
-   526				pgoff_t saved_last = mas->last;
-   527				_debug("splitf %lx-%lx %lx", mas->index, mas->last, first);
-   528				netfs_split_off_front(ctx, mas, region, &spares[0], first - 1,
-   529						      netfs_dirty_trace_split_off_front);
-   530				mas_set_range(mas, first, saved_last);
-   531			}
-   532	
-   533			wreq->last = mas->last;
-   534		}
-   535	
-   536	
-   537		end = wreq->start = wreq->first * PAGE_SIZE;
-   538		while (mas->last < last) {
-   539			_debug("flip %lx-%lx", mas->index, mas->last);
-   540			wreq->last = mas->last;
-   541			mas_store(mas, netfs_mas_set_flushing(region));
-   542			if (region != NETFS_COPY_TO_CACHE) {
-   543				list_add_tail(&region->flush_link, &wreq->regions);
- > 544				trace_netfs_dirty(ctx, region, 0, mas->index, mas->last,
-   545						  netfs_dirty_trace_flush);
-   546				end = region->to;
-   547			}
-   548	
-   549			region = mas_next(mas, mas->last + 1);
-   550			if (!region || netfs_mas_is_flushing(region) ||
-   551			    region->waiting_on_wb)
-   552				goto no_more;
-   553			if (mas->last >= last)
-   554				break;
-   555			_debug("query+ D=%x %lx-%lx",
-   556			       netfs_mas_is_valid(region) ? region->debug_id : 0,
-   557			       mas->index, mas->last);
-   558		}
-   559	
-   560		/* Deal with the region we're looking at exceeding the specified range.
-   561		 * In such a case, we need to split the region - and the last folio may
-   562		 * extend beyond the end of the proposed region - in which case we need
-   563		 * to include that also.  And, again, the folio size has to be an
-   564		 * integer multiple of the cache blocksize.
-   565		 */
-   566		if (mas->last > last) {
-   567			xas_set(&xas, last);
-   568			do {
-   569				xas_reset(&xas);
-   570				folio = xas_load(&xas);
-   571			} while (xas_retry(&xas, folio));
-   572	
-   573			if (folio && !xa_is_value(folio)) {
-   574				pgoff_t flast = folio_next_index(folio) - 1;
-   575	
-   576				_debug("flast %lx %lx %lx", flast, mas->last, last);
-   577				/* A region span *should not* end in the middle of a folio. */
-   578				BUG_ON(flast > mas->last);
-   579				if (flast > last) {
-   580					last = flast;
-   581					mas_set_range(mas, mas->index, last);
-   582				}
-   583			}
-   584	
-   585			region = netfs_split_off_front(ctx, mas, region, &spares[1], last,
-   586						       netfs_dirty_trace_split_off_back);
-   587		}
-   588	
-   589		wreq->last = mas->last;
-   590		mas_store(mas, netfs_mas_set_flushing(region));
-   591		if (region != NETFS_COPY_TO_CACHE) {
-   592			list_add_tail(&region->flush_link, &wreq->regions);
-   593			trace_netfs_dirty(ctx, region, 0, mas->index, mas->last,
-   594					  netfs_dirty_trace_flush2);
-   595		}
-   596	
-   597	no_more:
-   598		/* We've now got a contiguous span.  Some of the subspans may only need
-   599		 * writing to the cache, whilst others need writing to both the server
-   600		 * and the cache.
-   601		 */
-   602		_debug("span %lx-%lx", wreq->first, wreq->last);
-   603		*_first = last + 1;
-   604		mtree_unlock(&ctx->dirty_regions);
-   605		rcu_read_unlock();
-   606	
-   607		if (wreq->i_size > end)
-   608			end = min_t(unsigned long long, wreq->i_size, (wreq->last + 1) * PAGE_SIZE);
-   609		wreq->len = end - wreq->start;
-   610	
-   611		/* Load the pages into the raw-data buffer and transition them over to
-   612		 * the writeback state.
-   613		 */
-   614		ret = netfs_flush_get_pages(wreq, ctx);
-   615		if (ret < 0)
-   616			goto undo;
-   617	
-   618		if (wreq->buffering == NETFS_ENC_BUFFER_TO_BOUNCE) {
-   619			ret = netfs_alloc_buffer(&wreq->bounce, wreq->first,
-   620						 wreq->last - wreq->first + 1);
-   621			if (ret < 0)
-   622				goto undo;
-   623		}
-   624	
-   625		netfs_writeback_lock(wreq);
-   626		netfs_writeback_start(wreq);
-   627	
-   628		wbc->nr_to_write -= wreq->last - wreq->first + 1;
-   629		*_first = wreq->last + 1;
-   630		_leave(" = %lx [%lx]", wreq->last - wreq->first + 1, *_first);
-   631		return 1;
-   632	
-   633	found_nothing:
-   634		*_first = last + 1;
-   635		mtree_unlock(&ctx->dirty_regions);
-   636		rcu_read_unlock();
-   637		return 0;
-   638	
-   639	undo:
-   640		BUG(); // TODO
-   641	}
-   642	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On Tue, Apr 5, 2022 at 2:04 AM Christian K=C3=B6nig <christian.koenig@amd.c=
+om> wrote:
+>
+> Am 05.04.22 um 00:57 schrieb Tom Rix:
+> > Smatch reports these issues
+> > si_blit_shaders.c:31:11: warning: symbol 'si_default_state'
+> >    was not declared. Should it be static?
+> > si_blit_shaders.c:253:11: warning: symbol 'si_default_size'
+> >    was not declared. Should it be static?
+> >
+> > Both symbols are only used in si.c.  Single file symbols
+> > should be static.  So move the definition of
+> > si_default_state and si_default_size to si_blit_shader.h
+> > and change their storage-class-specifier to static.
+> >
+> > Remove unneeded si_blit_shader.c
+> >
+> > Signed-off-by: Tom Rix <trix@redhat.com>
+>
+> Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+>
+> > ---
+> > v2: move definitions to header
+> >
+> >   drivers/gpu/drm/radeon/Makefile          |   2 +-
+> >   drivers/gpu/drm/radeon/si_blit_shaders.c | 253 ----------------------=
+-
+> >   drivers/gpu/drm/radeon/si_blit_shaders.h | 223 +++++++++++++++++++-
+> >   3 files changed, 222 insertions(+), 256 deletions(-)
+> >   delete mode 100644 drivers/gpu/drm/radeon/si_blit_shaders.c
+> >
+> > diff --git a/drivers/gpu/drm/radeon/Makefile b/drivers/gpu/drm/radeon/M=
+akefile
+> > index 11c97edde54d..664381f4eb07 100644
+> > --- a/drivers/gpu/drm/radeon/Makefile
+> > +++ b/drivers/gpu/drm/radeon/Makefile
+> > @@ -44,7 +44,7 @@ radeon-y +=3D radeon_device.o radeon_asic.o radeon_km=
+s.o \
+> >       evergreen.o evergreen_cs.o evergreen_blit_shaders.o \
+> >       evergreen_hdmi.o radeon_trace_points.o ni.o cayman_blit_shaders.o=
+ \
+> >       atombios_encoders.o radeon_semaphore.o radeon_sa.o atombios_i2c.o=
+ si.o \
+> > -     si_blit_shaders.o radeon_prime.o cik.o cik_blit_shaders.o \
+> > +     radeon_prime.o cik.o cik_blit_shaders.o \
+> >       r600_dpm.o rs780_dpm.o rv6xx_dpm.o rv770_dpm.o rv730_dpm.o rv740_=
+dpm.o \
+> >       rv770_smc.o cypress_dpm.o btc_dpm.o sumo_dpm.o sumo_smc.o trinity=
+_dpm.o \
+> >       trinity_smc.o ni_dpm.o si_smc.o si_dpm.o kv_smc.o kv_dpm.o ci_smc=
+.o \
+> > diff --git a/drivers/gpu/drm/radeon/si_blit_shaders.c b/drivers/gpu/drm=
+/radeon/si_blit_shaders.c
+> > deleted file mode 100644
+> > index ec415e7dfa4b..000000000000
+> > --- a/drivers/gpu/drm/radeon/si_blit_shaders.c
+> > +++ /dev/null
+> > @@ -1,253 +0,0 @@
+> > -/*
+> > - * Copyright 2011 Advanced Micro Devices, Inc.
+> > - *
+> > - * Permission is hereby granted, free of charge, to any person obtaini=
+ng a
+> > - * copy of this software and associated documentation files (the "Soft=
+ware"),
+> > - * to deal in the Software without restriction, including without limi=
+tation
+> > - * the rights to use, copy, modify, merge, publish, distribute, sublic=
+ense,
+> > - * and/or sell copies of the Software, and to permit persons to whom t=
+he
+> > - * Software is furnished to do so, subject to the following conditions=
+:
+> > - *
+> > - * The above copyright notice and this permission notice (including th=
+e next
+> > - * paragraph) shall be included in all copies or substantial portions =
+of the
+> > - * Software.
+> > - *
+> > - * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXP=
+RESS OR
+> > - * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABI=
+LITY,
+> > - * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT =
+SHALL
+> > - * THE COPYRIGHT HOLDER(S) AND/OR ITS SUPPLIERS BE LIABLE FOR ANY CLAI=
+M, DAMAGES OR
+> > - * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWIS=
+E,
+> > - * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE =
+OR OTHER
+> > - * DEALINGS IN THE SOFTWARE.
+> > - *
+> > - * Authors:
+> > - *     Alex Deucher <alexander.deucher@amd.com>
+> > - */
+> > -
+> > -#include <linux/types.h>
+> > -#include <linux/bug.h>
+> > -#include <linux/kernel.h>
+> > -
+> > -const u32 si_default_state[] =3D
+> > -{
+> > -     0xc0066900,
+> > -     0x00000000,
+> > -     0x00000060, /* DB_RENDER_CONTROL */
+> > -     0x00000000, /* DB_COUNT_CONTROL */
+> > -     0x00000000, /* DB_DEPTH_VIEW */
+> > -     0x0000002a, /* DB_RENDER_OVERRIDE */
+> > -     0x00000000, /* DB_RENDER_OVERRIDE2 */
+> > -     0x00000000, /* DB_HTILE_DATA_BASE */
+> > -
+> > -     0xc0046900,
+> > -     0x00000008,
+> > -     0x00000000, /* DB_DEPTH_BOUNDS_MIN */
+> > -     0x00000000, /* DB_DEPTH_BOUNDS_MAX */
+> > -     0x00000000, /* DB_STENCIL_CLEAR */
+> > -     0x00000000, /* DB_DEPTH_CLEAR */
+> > -
+> > -     0xc0036900,
+> > -     0x0000000f,
+> > -     0x00000000, /* DB_DEPTH_INFO */
+> > -     0x00000000, /* DB_Z_INFO */
+> > -     0x00000000, /* DB_STENCIL_INFO */
+> > -
+> > -     0xc0016900,
+> > -     0x00000080,
+> > -     0x00000000, /* PA_SC_WINDOW_OFFSET */
+> > -
+> > -     0xc00d6900,
+> > -     0x00000083,
+> > -     0x0000ffff, /* PA_SC_CLIPRECT_RULE */
+> > -     0x00000000, /* PA_SC_CLIPRECT_0_TL */
+> > -     0x20002000, /* PA_SC_CLIPRECT_0_BR */
+> > -     0x00000000,
+> > -     0x20002000,
+> > -     0x00000000,
+> > -     0x20002000,
+> > -     0x00000000,
+> > -     0x20002000,
+> > -     0xaaaaaaaa, /* PA_SC_EDGERULE */
+> > -     0x00000000, /* PA_SU_HARDWARE_SCREEN_OFFSET */
+> > -     0x0000000f, /* CB_TARGET_MASK */
+> > -     0x0000000f, /* CB_SHADER_MASK */
+> > -
+> > -     0xc0226900,
+> > -     0x00000094,
+> > -     0x80000000, /* PA_SC_VPORT_SCISSOR_0_TL */
+> > -     0x20002000, /* PA_SC_VPORT_SCISSOR_0_BR */
+> > -     0x80000000,
+> > -     0x20002000,
+> > -     0x80000000,
+> > -     0x20002000,
+> > -     0x80000000,
+> > -     0x20002000,
+> > -     0x80000000,
+> > -     0x20002000,
+> > -     0x80000000,
+> > -     0x20002000,
+> > -     0x80000000,
+> > -     0x20002000,
+> > -     0x80000000,
+> > -     0x20002000,
+> > -     0x80000000,
+> > -     0x20002000,
+> > -     0x80000000,
+> > -     0x20002000,
+> > -     0x80000000,
+> > -     0x20002000,
+> > -     0x80000000,
+> > -     0x20002000,
+> > -     0x80000000,
+> > -     0x20002000,
+> > -     0x80000000,
+> > -     0x20002000,
+> > -     0x80000000,
+> > -     0x20002000,
+> > -     0x80000000,
+> > -     0x20002000,
+> > -     0x00000000, /* PA_SC_VPORT_ZMIN_0 */
+> > -     0x3f800000, /* PA_SC_VPORT_ZMAX_0 */
+> > -
+> > -     0xc0026900,
+> > -     0x000000d9,
+> > -     0x00000000, /* CP_RINGID */
+> > -     0x00000000, /* CP_VMID */
+> > -
+> > -     0xc0046900,
+> > -     0x00000100,
+> > -     0xffffffff, /* VGT_MAX_VTX_INDX */
+> > -     0x00000000, /* VGT_MIN_VTX_INDX */
+> > -     0x00000000, /* VGT_INDX_OFFSET */
+> > -     0x00000000, /* VGT_MULTI_PRIM_IB_RESET_INDX */
+> > -
+> > -     0xc0046900,
+> > -     0x00000105,
+> > -     0x00000000, /* CB_BLEND_RED */
+> > -     0x00000000, /* CB_BLEND_GREEN */
+> > -     0x00000000, /* CB_BLEND_BLUE */
+> > -     0x00000000, /* CB_BLEND_ALPHA */
+> > -
+> > -     0xc0016900,
+> > -     0x000001e0,
+> > -     0x00000000, /* CB_BLEND0_CONTROL */
+> > -
+> > -     0xc00e6900,
+> > -     0x00000200,
+> > -     0x00000000, /* DB_DEPTH_CONTROL */
+> > -     0x00000000, /* DB_EQAA */
+> > -     0x00cc0010, /* CB_COLOR_CONTROL */
+> > -     0x00000210, /* DB_SHADER_CONTROL */
+> > -     0x00010000, /* PA_CL_CLIP_CNTL */
+> > -     0x00000004, /* PA_SU_SC_MODE_CNTL */
+> > -     0x00000100, /* PA_CL_VTE_CNTL */
+> > -     0x00000000, /* PA_CL_VS_OUT_CNTL */
+> > -     0x00000000, /* PA_CL_NANINF_CNTL */
+> > -     0x00000000, /* PA_SU_LINE_STIPPLE_CNTL */
+> > -     0x00000000, /* PA_SU_LINE_STIPPLE_SCALE */
+> > -     0x00000000, /* PA_SU_PRIM_FILTER_CNTL */
+> > -     0x00000000, /*  */
+> > -     0x00000000, /*  */
+> > -
+> > -     0xc0116900,
+> > -     0x00000280,
+> > -     0x00000000, /* PA_SU_POINT_SIZE */
+> > -     0x00000000, /* PA_SU_POINT_MINMAX */
+> > -     0x00000008, /* PA_SU_LINE_CNTL */
+> > -     0x00000000, /* PA_SC_LINE_STIPPLE */
+> > -     0x00000000, /* VGT_OUTPUT_PATH_CNTL */
+> > -     0x00000000, /* VGT_HOS_CNTL */
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000, /* VGT_GS_MODE */
+> > -
+> > -     0xc0026900,
+> > -     0x00000292,
+> > -     0x00000000, /* PA_SC_MODE_CNTL_0 */
+> > -     0x00000000, /* PA_SC_MODE_CNTL_1 */
+> > -
+> > -     0xc0016900,
+> > -     0x000002a1,
+> > -     0x00000000, /* VGT_PRIMITIVEID_EN */
+> > -
+> > -     0xc0016900,
+> > -     0x000002a5,
+> > -     0x00000000, /* VGT_MULTI_PRIM_IB_RESET_EN */
+> > -
+> > -     0xc0026900,
+> > -     0x000002a8,
+> > -     0x00000000, /* VGT_INSTANCE_STEP_RATE_0 */
+> > -     0x00000000,
+> > -
+> > -     0xc0026900,
+> > -     0x000002ad,
+> > -     0x00000000, /* VGT_REUSE_OFF */
+> > -     0x00000000,
+> > -
+> > -     0xc0016900,
+> > -     0x000002d5,
+> > -     0x00000000, /* VGT_SHADER_STAGES_EN */
+> > -
+> > -     0xc0016900,
+> > -     0x000002dc,
+> > -     0x0000aa00, /* DB_ALPHA_TO_MASK */
+> > -
+> > -     0xc0066900,
+> > -     0x000002de,
+> > -     0x00000000, /* PA_SU_POLY_OFFSET_DB_FMT_CNTL */
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -
+> > -     0xc0026900,
+> > -     0x000002e5,
+> > -     0x00000000, /* VGT_STRMOUT_CONFIG */
+> > -     0x00000000,
+> > -
+> > -     0xc01b6900,
+> > -     0x000002f5,
+> > -     0x76543210, /* PA_SC_CENTROID_PRIORITY_0 */
+> > -     0xfedcba98, /* PA_SC_CENTROID_PRIORITY_1 */
+> > -     0x00000000, /* PA_SC_LINE_CNTL */
+> > -     0x00000000, /* PA_SC_AA_CONFIG */
+> > -     0x00000005, /* PA_SU_VTX_CNTL */
+> > -     0x3f800000, /* PA_CL_GB_VERT_CLIP_ADJ */
+> > -     0x3f800000, /* PA_CL_GB_VERT_DISC_ADJ */
+> > -     0x3f800000, /* PA_CL_GB_HORZ_CLIP_ADJ */
+> > -     0x3f800000, /* PA_CL_GB_HORZ_DISC_ADJ */
+> > -     0x00000000, /* PA_SC_AA_SAMPLE_LOCS_PIXEL_X0Y0_0 */
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0x00000000,
+> > -     0xffffffff, /* PA_SC_AA_MASK_X0Y0_X1Y0 */
+> > -     0xffffffff,
+> > -
+> > -     0xc0026900,
+> > -     0x00000316,
+> > -     0x0000000e, /* VGT_VERTEX_REUSE_BLOCK_CNTL */
+> > -     0x00000010, /*  */
+> > -};
+> > -
+> > -const u32 si_default_size =3D ARRAY_SIZE(si_default_state);
+> > diff --git a/drivers/gpu/drm/radeon/si_blit_shaders.h b/drivers/gpu/drm=
+/radeon/si_blit_shaders.h
+> > index c739e51e3961..829a2b6228b7 100644
+> > --- a/drivers/gpu/drm/radeon/si_blit_shaders.h
+> > +++ b/drivers/gpu/drm/radeon/si_blit_shaders.h
+> > @@ -25,8 +25,227 @@
+> >   #ifndef SI_BLIT_SHADERS_H
+> >   #define SI_BLIT_SHADERS_H
+> >
+> > -extern const u32 si_default_state[];
+> > +static const u32 si_default_state[] =3D {
+> > +     0xc0066900,
+> > +     0x00000000,
+> > +     0x00000060, /* DB_RENDER_CONTROL */
+> > +     0x00000000, /* DB_COUNT_CONTROL */
+> > +     0x00000000, /* DB_DEPTH_VIEW */
+> > +     0x0000002a, /* DB_RENDER_OVERRIDE */
+> > +     0x00000000, /* DB_RENDER_OVERRIDE2 */
+> > +     0x00000000, /* DB_HTILE_DATA_BASE */
+> >
+> > -extern const u32 si_default_size;
+> > +     0xc0046900,
+> > +     0x00000008,
+> > +     0x00000000, /* DB_DEPTH_BOUNDS_MIN */
+> > +     0x00000000, /* DB_DEPTH_BOUNDS_MAX */
+> > +     0x00000000, /* DB_STENCIL_CLEAR */
+> > +     0x00000000, /* DB_DEPTH_CLEAR */
+> > +
+> > +     0xc0036900,
+> > +     0x0000000f,
+> > +     0x00000000, /* DB_DEPTH_INFO */
+> > +     0x00000000, /* DB_Z_INFO */
+> > +     0x00000000, /* DB_STENCIL_INFO */
+> > +
+> > +     0xc0016900,
+> > +     0x00000080,
+> > +     0x00000000, /* PA_SC_WINDOW_OFFSET */
+> > +
+> > +     0xc00d6900,
+> > +     0x00000083,
+> > +     0x0000ffff, /* PA_SC_CLIPRECT_RULE */
+> > +     0x00000000, /* PA_SC_CLIPRECT_0_TL */
+> > +     0x20002000, /* PA_SC_CLIPRECT_0_BR */
+> > +     0x00000000,
+> > +     0x20002000,
+> > +     0x00000000,
+> > +     0x20002000,
+> > +     0x00000000,
+> > +     0x20002000,
+> > +     0xaaaaaaaa, /* PA_SC_EDGERULE */
+> > +     0x00000000, /* PA_SU_HARDWARE_SCREEN_OFFSET */
+> > +     0x0000000f, /* CB_TARGET_MASK */
+> > +     0x0000000f, /* CB_SHADER_MASK */
+> > +
+> > +     0xc0226900,
+> > +     0x00000094,
+> > +     0x80000000, /* PA_SC_VPORT_SCISSOR_0_TL */
+> > +     0x20002000, /* PA_SC_VPORT_SCISSOR_0_BR */
+> > +     0x80000000,
+> > +     0x20002000,
+> > +     0x80000000,
+> > +     0x20002000,
+> > +     0x80000000,
+> > +     0x20002000,
+> > +     0x80000000,
+> > +     0x20002000,
+> > +     0x80000000,
+> > +     0x20002000,
+> > +     0x80000000,
+> > +     0x20002000,
+> > +     0x80000000,
+> > +     0x20002000,
+> > +     0x80000000,
+> > +     0x20002000,
+> > +     0x80000000,
+> > +     0x20002000,
+> > +     0x80000000,
+> > +     0x20002000,
+> > +     0x80000000,
+> > +     0x20002000,
+> > +     0x80000000,
+> > +     0x20002000,
+> > +     0x80000000,
+> > +     0x20002000,
+> > +     0x80000000,
+> > +     0x20002000,
+> > +     0x80000000,
+> > +     0x20002000,
+> > +     0x00000000, /* PA_SC_VPORT_ZMIN_0 */
+> > +     0x3f800000, /* PA_SC_VPORT_ZMAX_0 */
+> > +
+> > +     0xc0026900,
+> > +     0x000000d9,
+> > +     0x00000000, /* CP_RINGID */
+> > +     0x00000000, /* CP_VMID */
+> > +
+> > +     0xc0046900,
+> > +     0x00000100,
+> > +     0xffffffff, /* VGT_MAX_VTX_INDX */
+> > +     0x00000000, /* VGT_MIN_VTX_INDX */
+> > +     0x00000000, /* VGT_INDX_OFFSET */
+> > +     0x00000000, /* VGT_MULTI_PRIM_IB_RESET_INDX */
+> > +
+> > +     0xc0046900,
+> > +     0x00000105,
+> > +     0x00000000, /* CB_BLEND_RED */
+> > +     0x00000000, /* CB_BLEND_GREEN */
+> > +     0x00000000, /* CB_BLEND_BLUE */
+> > +     0x00000000, /* CB_BLEND_ALPHA */
+> > +
+> > +     0xc0016900,
+> > +     0x000001e0,
+> > +     0x00000000, /* CB_BLEND0_CONTROL */
+> > +
+> > +     0xc00e6900,
+> > +     0x00000200,
+> > +     0x00000000, /* DB_DEPTH_CONTROL */
+> > +     0x00000000, /* DB_EQAA */
+> > +     0x00cc0010, /* CB_COLOR_CONTROL */
+> > +     0x00000210, /* DB_SHADER_CONTROL */
+> > +     0x00010000, /* PA_CL_CLIP_CNTL */
+> > +     0x00000004, /* PA_SU_SC_MODE_CNTL */
+> > +     0x00000100, /* PA_CL_VTE_CNTL */
+> > +     0x00000000, /* PA_CL_VS_OUT_CNTL */
+> > +     0x00000000, /* PA_CL_NANINF_CNTL */
+> > +     0x00000000, /* PA_SU_LINE_STIPPLE_CNTL */
+> > +     0x00000000, /* PA_SU_LINE_STIPPLE_SCALE */
+> > +     0x00000000, /* PA_SU_PRIM_FILTER_CNTL */
+> > +     0x00000000, /*  */
+> > +     0x00000000, /*  */
+> > +
+> > +     0xc0116900,
+> > +     0x00000280,
+> > +     0x00000000, /* PA_SU_POINT_SIZE */
+> > +     0x00000000, /* PA_SU_POINT_MINMAX */
+> > +     0x00000008, /* PA_SU_LINE_CNTL */
+> > +     0x00000000, /* PA_SC_LINE_STIPPLE */
+> > +     0x00000000, /* VGT_OUTPUT_PATH_CNTL */
+> > +     0x00000000, /* VGT_HOS_CNTL */
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000, /* VGT_GS_MODE */
+> > +
+> > +     0xc0026900,
+> > +     0x00000292,
+> > +     0x00000000, /* PA_SC_MODE_CNTL_0 */
+> > +     0x00000000, /* PA_SC_MODE_CNTL_1 */
+> > +
+> > +     0xc0016900,
+> > +     0x000002a1,
+> > +     0x00000000, /* VGT_PRIMITIVEID_EN */
+> > +
+> > +     0xc0016900,
+> > +     0x000002a5,
+> > +     0x00000000, /* VGT_MULTI_PRIM_IB_RESET_EN */
+> > +
+> > +     0xc0026900,
+> > +     0x000002a8,
+> > +     0x00000000, /* VGT_INSTANCE_STEP_RATE_0 */
+> > +     0x00000000,
+> > +
+> > +     0xc0026900,
+> > +     0x000002ad,
+> > +     0x00000000, /* VGT_REUSE_OFF */
+> > +     0x00000000,
+> > +
+> > +     0xc0016900,
+> > +     0x000002d5,
+> > +     0x00000000, /* VGT_SHADER_STAGES_EN */
+> > +
+> > +     0xc0016900,
+> > +     0x000002dc,
+> > +     0x0000aa00, /* DB_ALPHA_TO_MASK */
+> > +
+> > +     0xc0066900,
+> > +     0x000002de,
+> > +     0x00000000, /* PA_SU_POLY_OFFSET_DB_FMT_CNTL */
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +
+> > +     0xc0026900,
+> > +     0x000002e5,
+> > +     0x00000000, /* VGT_STRMOUT_CONFIG */
+> > +     0x00000000,
+> > +
+> > +     0xc01b6900,
+> > +     0x000002f5,
+> > +     0x76543210, /* PA_SC_CENTROID_PRIORITY_0 */
+> > +     0xfedcba98, /* PA_SC_CENTROID_PRIORITY_1 */
+> > +     0x00000000, /* PA_SC_LINE_CNTL */
+> > +     0x00000000, /* PA_SC_AA_CONFIG */
+> > +     0x00000005, /* PA_SU_VTX_CNTL */
+> > +     0x3f800000, /* PA_CL_GB_VERT_CLIP_ADJ */
+> > +     0x3f800000, /* PA_CL_GB_VERT_DISC_ADJ */
+> > +     0x3f800000, /* PA_CL_GB_HORZ_CLIP_ADJ */
+> > +     0x3f800000, /* PA_CL_GB_HORZ_DISC_ADJ */
+> > +     0x00000000, /* PA_SC_AA_SAMPLE_LOCS_PIXEL_X0Y0_0 */
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0x00000000,
+> > +     0xffffffff, /* PA_SC_AA_MASK_X0Y0_X1Y0 */
+> > +     0xffffffff,
+> > +
+> > +     0xc0026900,
+> > +     0x00000316,
+> > +     0x0000000e, /* VGT_VERTEX_REUSE_BLOCK_CNTL */
+> > +     0x00000010, /*  */
+> > +};
+> > +
+> > +static const u32 si_default_size =3D ARRAY_SIZE(si_default_state);
+> >
+> >   #endif
+>

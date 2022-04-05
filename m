@@ -2,115 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF684F217B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A904F21A9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbiDECV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 22:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58908 "EHLO
+        id S230486AbiDEC5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 22:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbiDECVy (ORCPT
+        with ESMTP id S231501AbiDEC4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 22:21:54 -0400
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC8A41856B;
-        Mon,  4 Apr 2022 18:17:08 -0700 (PDT)
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 2351D5xo003801;
-        Tue, 5 Apr 2022 10:13:05 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 2351D5xo003801
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1649121185;
-        bh=1XB8+03FMw6quXMbGDHBGH2OtifIRC6gyEDeKLl9zco=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fykuV1TsMj3k9Ws57DHlBBiTRfCJLa78wHm24isrFs0OYjWLYXMwTpBYPIq4cXIEn
-         HbOl44nWGcfnHr7bWwaB7WnXkTOOfHkk6+jdAmUjgu4Ndoevp2LwXY3h4udSNspNqP
-         vqdDv5VRBBqCoS/VT7h39RpohTeG1pg896jeODp9E4NQh+Sd78v12Z6++gJ6PnlzYP
-         L8It+ZYbHlhIJWQ1iMWnGF8CYqvynrJxAFL6w72QZb8r+++bKVfZ+kTyvQYYPvSiCM
-         SzCvzpqI0sJxlfL/s/jJtSPm/hmJCMC5Aqg82tgHAACtvpK/A51PmBOuRL2dfZPuBp
-         hO3NWsHy8f70Q==
-X-Nifty-SrcIP: [209.85.215.172]
-Received: by mail-pg1-f172.google.com with SMTP id 125so1420894pgc.11;
-        Mon, 04 Apr 2022 18:13:05 -0700 (PDT)
-X-Gm-Message-State: AOAM532dgC25C3ebR1RXPtQl+w0G1FdAUP3WmD0agZ99S01hrjQrrqMB
-        ByahInHY5xGkqtG0ZhB/KcTO780LNK6GweZnrUk=
-X-Google-Smtp-Source: ABdhPJzLBjj4278xvNykiD3w2yfsWF6xRsbcL3Ms+s4YFFRyIBmJxQbqTeWwwPYUkRsLo2sjYt6EdjjfGmwkd6VfZgE=
-X-Received: by 2002:a05:6a00:234f:b0:4fa:f52b:46a1 with SMTP id
- j15-20020a056a00234f00b004faf52b46a1mr1137771pfj.32.1649121184875; Mon, 04
- Apr 2022 18:13:04 -0700 (PDT)
+        Mon, 4 Apr 2022 22:56:43 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CDD4096BA
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 19:06:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649124390; x=1680660390;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=YzdBJ3M54EZS3crIo7do3ZbrEz3YRHCmFK7qH0ZuUxM=;
+  b=IwwzzoyXn80GJ444Db9Yzhr63G++BeTfUBAxkNiqr+aE+SgMqG8xRWxL
+   x8Yc6gGXNoyWwet46LhuLJFqLbPQaNwzVLXydcndrdhcge+2DHXikOrxg
+   X3HeZFhyA8U57mhL9m9f5GkmJbdHn9n16kcXfysUxShJP8t1u0b9Ll1lT
+   G6w0Tfal/+3W53buKNHghdEcyvLM5MwKLWm83Nn2eJ9iWLdbKvdN2+9z8
+   7v6UAyU3iNuH7YfeLA82lXYwFHiO1lX5qt+x6joc8gZ6d+OH9JeBs/rYa
+   VzbYatm8hiUwCZB9S/dv54l5YGtlWbDDbuuAw5cPqARm8BmlZejehyEMP
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="347084589"
+X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
+   d="scan'208";a="347084589"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 18:38:10 -0700
+X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
+   d="scan'208";a="569645614"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.211.208]) ([10.254.211.208])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 18:38:08 -0700
+Message-ID: <806562e6-04b0-9ad9-e3cc-45e0bc12335e@linux.intel.com>
+Date:   Tue, 5 Apr 2022 09:38:05 +0800
 MIME-Version: 1.0
-References: <20220404061948.2111820-1-masahiroy@kernel.org>
- <20220404061948.2111820-3-masahiroy@kernel.org> <YkqhQhJIQEL2qh8C@infradead.org>
- <YkssI2uDHRq41zjw@google.com>
-In-Reply-To: <YkssI2uDHRq41zjw@google.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 5 Apr 2022 10:12:17 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQDD4u5acyG7m4mziz-nz3D2u+ukdZZB+jZah_3JZFMTQ@mail.gmail.com>
-Message-ID: <CAK7LNAQDD4u5acyG7m4mziz-nz3D2u+ukdZZB+jZah_3JZFMTQ@mail.gmail.com>
-Subject: Re: [PATCH 2/8] kbuild: prevent exported headers from including
- <stdlib.h>, <stdbool.h>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Cc:     baolu.lu@linux.intel.com, kernel@collabora.com,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iommu/vt-d: remove unneeded validity check on dev
+Content-Language: en-US
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>
+References: <20220313150337.593650-1-usama.anjum@collabora.com>
+ <ace47a96-4e43-697a-4cfe-04544f014940@collabora.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <ace47a96-4e43-697a-4cfe-04544f014940@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 2:34 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> On Mon, Apr 04, 2022 at 12:41:54AM -0700, Christoph Hellwig wrote:
-> > On Mon, Apr 04, 2022 at 03:19:42PM +0900, Masahiro Yamada wrote:
-> > > If we can make kernel headers self-contained (that is, none of exported
-> > > kernel headers includes system headers), we will be able to add the
-> > > -nostdinc flag, but that is much far from where we stand now.
->
-> This is something I'd like to see done. IMO, the kernel headers should
-> be the independent variable of which the libc is the dependendent
-> variable.
->
-> Android's libc, Bionic, is making use of the UAPI headers. They are
-> doing some rewriting of UAPI headers, but I'd like to see what needs to
-> be upstreamed from there. I just noticed
-> include/uapi/linux/libc-compat.h, which seems like a good place for such
-> compat related issues.
->
-> In particular, having UAPI_HEADER_TESTS depend on CC_CAN_LINK is
-> something I think we can works towards removing. The header tests
-> themselves don't link; they force a dependency on a prebuilt libc
-> sysroot, and they only need the headers from the sysroot because of this
-> existing circular dependency between kernel headers and libc headers.
->
-> I'd be happy to be explicitly cc'ed on changes like this series, going
-> forward. Masahiro, if there's parts you'd like me to help with besides
-> just code review, please let me know how I can help.
+On 2022/4/4 15:52, Muhammad Usama Anjum wrote:
+> Any thoughts?
 
+It looks good to me. I will queue it for v5.19.
 
-I wanted to make uapi headers as self-contained as possible,
-but I did not see much progress.
+Best regards,
+baolu
 
-I just fixed up some low-hanging fruits, but there are still
-many remaining issues.
-
-Thank you very much for your contribution:
-https://lore.kernel.org/all/20220404175448.46200-1-ndesaulniers@google.com/
-
-If you eliminate other issues, that would be appreciated.
-
-
-> >
-> > What is still missing for that?
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+> 
+> On 3/13/22 8:03 PM, Muhammad Usama Anjum wrote:
+>> dev_iommu_priv_get() is being used at the top of this function which
+>> dereferences dev. Dev cannot be NULL after this. Remove the validity
+>> check on dev and simplify the code.
+>>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>>   drivers/iommu/intel/iommu.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+>> index df5c62ecf942b..f79edbbd651a4 100644
+>> --- a/drivers/iommu/intel/iommu.c
+>> +++ b/drivers/iommu/intel/iommu.c
+>> @@ -2502,7 +2502,7 @@ static struct dmar_domain *dmar_insert_one_dev_info(struct intel_iommu *iommu,
+>>   		}
+>>   	}
+>>   
+>> -	if (dev && domain_context_mapping(domain, dev)) {
+>> +	if (domain_context_mapping(domain, dev)) {
+>>   		dev_err(dev, "Domain context map failed\n");
+>>   		dmar_remove_one_dev_info(dev);
+>>   		return NULL;
+> 

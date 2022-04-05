@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E42A4F41C0
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A5B64F3E22
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389162AbiDEPVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
+        id S1389547AbiDEPVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:21:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347073AbiDEJp5 (ORCPT
+        with ESMTP id S1347104AbiDEJqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:45:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33FADCE25;
-        Tue,  5 Apr 2022 02:32:18 -0700 (PDT)
+        Tue, 5 Apr 2022 05:46:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34436D4E3;
+        Tue,  5 Apr 2022 02:32:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA6F6B81CB5;
-        Tue,  5 Apr 2022 09:32:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 117A1C385A9;
-        Tue,  5 Apr 2022 09:32:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E4A8616AE;
+        Tue,  5 Apr 2022 09:32:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 289B6C385A4;
+        Tue,  5 Apr 2022 09:32:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649151136;
-        bh=Ep4IX5zQgCVW0s4Bsx2dOmJ9bxMmB3cMCg3WQ6oFitA=;
+        s=k20201202; t=1649151143;
+        bh=4sUt83BgTOE5J9hysaJUhknfGWeSQ6S+Ynto5f4x3DY=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=DKZLbHrqwXMwQzuR+wNT6n+G+9rXglYwug01mCcWWbXmoIQfO/Vpe70kT0YFazhyK
-         HpOqieISwH+oDXSYGB0qR6MK7w44XVnjMRZxG4zq+FfU+Kc11T9nMNyNbLuzdr+uoE
-         AzuomW8eVIVETeykPaZ/8CHMDyIjMSoNCbYs43EN+sL2GzIRO3QtfI2rF2Xf6RbCHJ
-         oJXDMRIWYXUgwy4POFFvax9loMOSMD3MAgqtqVW3lY5SWBMTsRKqoeTzqqlexxj65r
-         PZzqgRvA9WUKcV4lthROWr0zndnyyXA3K6MzFB4OmMuaT3M/kWHlWtZa6CvyTuJxi4
-         4IA3mMAdxEtnA==
+        b=Pm8J9hUCvcDjpvYrEvJzkvHiV/px742+iYYyeBW9xSpfsX1ALiIM519J15mSPWlvd
+         QCphgPP/Cep4YhtKPiicISTkYl+4QeLqWrMM9BtEeOGkKUQkz13Bqwe1mH2B7FLUuh
+         qdOflx/MdupPABcek0e9lKPBzJ0W2C3RH+pcBZs6o1ZtQfJxUteMyq0/6bUmBDvle8
+         J3eKkdjVEtCmA9yR34C/Vzf62Dzc3IHY5h4d1KGO68Cg+3ph+5E00f8Th72kH75ZMx
+         wLmCgunuohj4lt1ii5+WDdT3GR19VA1SICgtIwC7PlVH1Yt52e35Esoawppjwfqkb5
+         /POA2/BXHzpCw==
 From:   Mark Brown <broonie@kernel.org>
-To:     robh+dt@kernel.org, johnson.wang@mediatek.com
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220401080212.27383-1-johnson.wang@mediatek.com>
-References: <20220401080212.27383-1-johnson.wang@mediatek.com>
-Subject: Re: [RESEND v2 0/2] Add support for MediaTek PMIC MT6366
-Message-Id: <164915113479.276837.8566634203471784091.b4-ty@kernel.org>
-Date:   Tue, 05 Apr 2022 10:32:14 +0100
+To:     leilk.liu@mediatek.com
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, linux-mediatek@lists.infradead.org,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        matthias.bgg@gmail.com
+In-Reply-To: <20220321013922.24067-1-leilk.liu@mediatek.com>
+References: <20220321013922.24067-1-leilk.liu@mediatek.com>
+Subject: Re: [PATCH V6 0/3] spi: mediatek: add single/quad mode support
+Message-Id: <164915114188.276894.4149061684421416704.b4-ty@kernel.org>
+Date:   Tue, 05 Apr 2022 10:32:21 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,29 +56,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 1 Apr 2022 16:02:10 +0800, Johnson Wang wrote:
-> This patchset adds support for MediaTek PMIC MT6366.
-> MT6366 is the primary PMIC for MT8186 and probably other SOCs.
+On Mon, 21 Mar 2022 09:39:19 +0800, Leilk Liu wrote:
+> This series of patches are based on spi for-next, and provide 3 patches to support MT7986.
 > 
-> Resend v2:
-> - rebase on Linux 5.17
+> V6:
+>  1. remove SPI_CFG3_IPM_PIN_MODE_OFFSET.
+>  2. add Reviewed-by: AngeloGioacchino Del Regno
 > 
-> Changes in v2:
-> - rebase on Linux 5.17-rc8
-> - change subject line
+> V5:
+>  1. remove 3 patches that already applied.
+>  2. use devm_clk_get_optional.
+>  3. remove of_mtk_spi_parse_dt()
 > 
 > [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/2] regulator: mt6366: Add support for MT6366 regulator
-      commit: d077002c9d07dc6f64d07a362202a1e1081b2f6c
-[2/2] dt-bindings: regulator: Add BUCK and LDO document for MT6358 and MT6366
-      (no commit info)
+[1/3] spi: mediatek: add spi memory support for ipm design
+      commit: 9f763fd20da7d892ffaedac0c58d821922f8a674
+[2/3] dt-bindings: spi: support hclk
+      commit: a4765dfb80a7333aaac394a5ba20056d11b55636
+[3/3] spi: mediatek: support hclk
+      commit: a740f4e684c020ea57a8a198a9322d739f7ab6d5
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

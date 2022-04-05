@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D09D4F3065
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5354F3281
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353959AbiDEKJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:09:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
+        id S1353937AbiDEKJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241108AbiDEIct (ORCPT
+        with ESMTP id S241105AbiDEIct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:32:49 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA0915722;
-        Tue,  5 Apr 2022 01:27:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F07D15725;
+        Tue,  5 Apr 2022 01:27:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A25FFB81BC6;
-        Tue,  5 Apr 2022 08:27:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECABDC385A1;
-        Tue,  5 Apr 2022 08:27:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 249EAB81BCE;
+        Tue,  5 Apr 2022 08:27:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E7C4C385A1;
+        Tue,  5 Apr 2022 08:27:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147253;
-        bh=YWqVuCc1v5/03qZzY5VpaQBpsKnDFwN/qHAwd//EEZM=;
+        s=korg; t=1649147255;
+        bh=uJf7pj87pn7mUSWMH3sAg8R4hUfURYzVn3VcFRGN990=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I8agCFy2oIiS7fdAmUCUygbGiYdu6jpjeqZKE7FX46Ch5XqfgxbujwYi5MT5qv+C0
-         a0vpTj6AHz70jhy9XcHL0zZp+xZ3KtiTh6vLU/SPpIN2lJjig8FC5mPIze2KVy+IJU
-         wLrvbgKYVlDN2YiQ2k8zjFjauQE6IUw8shS81aI8=
+        b=uq9aXLAOJU8VzPgGX8kLwL6x92z0W4f4lkk6ipm4dfoTl2lhHgMJnJSL2yOYih3Dh
+         EnN58g5K4WAbvLtieaydxteapWcz+YxWqvI/MZACdz2/EZTW04JTACcaF7+blL1A1t
+         5bT2wjl/jsYDijRBtaJwEotk6v7yV1CWFAtYqChI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>
-Subject: [PATCH 5.17 1058/1126] ACPI: CPPC: Avoid out of bounds access when parsing _CPC data
-Date:   Tue,  5 Apr 2022 09:30:05 +0200
-Message-Id: <20220405070438.519234305@linuxfoundation.org>
+        stable@vger.kernel.org, Anirudh Rayabharam <mail@anirudhrb.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>
+Subject: [PATCH 5.17 1059/1126] vhost: handle error while adding split ranges to iotlb
+Date:   Tue,  5 Apr 2022 09:30:06 +0200
+Message-Id: <20220405070438.547533965@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,37 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: Anirudh Rayabharam <mail@anirudhrb.com>
 
-commit 40d8abf364bcab23bc715a9221a3c8623956257b upstream.
+commit 03a91c9af2c42ae14afafb829a4b7e6589ab5892 upstream.
 
-If the NumEntries field in the _CPC return package is less than 2, do
-not attempt to access the "Revision" element of that package, because
-it may not be present then.
+vhost_iotlb_add_range_ctx() handles the range [0, ULONG_MAX] by
+splitting it into two ranges and adding them separately. The return
+value of adding the first range to the iotlb is currently ignored.
+Check the return value and bail out in case of an error.
 
-Fixes: 337aadff8e45 ("ACPI: Introduce CPU performance controls using CPPC")
-BugLink: https://lore.kernel.org/lkml/20220322143534.GC32582@xsang-OptiPlex-9020/
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Huang Rui <ray.huang@amd.com>
+Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
+Link: https://lore.kernel.org/r/20220312141121.4981-1-mail@anirudhrb.com
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Fixes: e2ae38cf3d91 ("vhost: fix hung thread due to erroneous iotlb entries")
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/acpi/cppc_acpi.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/vhost/iotlb.c |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/drivers/acpi/cppc_acpi.c
-+++ b/drivers/acpi/cppc_acpi.c
-@@ -676,6 +676,11 @@ int acpi_cppc_processor_probe(struct acp
- 	cpc_obj = &out_obj->package.elements[0];
- 	if (cpc_obj->type == ACPI_TYPE_INTEGER)	{
- 		num_ent = cpc_obj->integer.value;
-+		if (num_ent <= 1) {
-+			pr_debug("Unexpected _CPC NumEntries value (%d) for CPU:%d\n",
-+				 num_ent, pr->id);
-+			goto out_free;
-+		}
- 	} else {
- 		pr_debug("Unexpected entry type(%d) for NumEntries\n",
- 				cpc_obj->type);
+--- a/drivers/vhost/iotlb.c
++++ b/drivers/vhost/iotlb.c
+@@ -62,8 +62,12 @@ int vhost_iotlb_add_range_ctx(struct vho
+ 	 */
+ 	if (start == 0 && last == ULONG_MAX) {
+ 		u64 mid = last / 2;
++		int err = vhost_iotlb_add_range_ctx(iotlb, start, mid, addr,
++				perm, opaque);
++
++		if (err)
++			return err;
+ 
+-		vhost_iotlb_add_range_ctx(iotlb, start, mid, addr, perm, opaque);
+ 		addr += mid + 1;
+ 		start = mid + 1;
+ 	}
 
 

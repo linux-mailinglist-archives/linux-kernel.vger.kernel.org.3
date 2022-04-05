@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F03624F21A5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:09:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9950E4F2148
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbiDECti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 22:49:38 -0400
+        id S229866AbiDECss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 22:48:48 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbiDECtZ (ORCPT
+        with ESMTP id S230186AbiDECsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 22:49:25 -0400
-Received: from out203-205-251-80.mail.qq.com (out203-205-251-80.mail.qq.com [203.205.251.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B17D298D45
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 19:28:42 -0700 (PDT)
+        Mon, 4 Apr 2022 22:48:39 -0400
+Received: from out203-205-221-192.mail.qq.com (out203-205-221-192.mail.qq.com [203.205.221.192])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9615239971C
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 19:29:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1649125721;
-        bh=Fi5/0/v4H6PMTzI+ECmpUXfpIn/7jccH/60tCObW+vY=;
+        s=s201512; t=1649125766;
+        bh=/3yGeZ7g3ndrgq7ezahWJRS7qUXCaNhhVgCTWOxAzag=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=dFMs8PEXO8k9llYzQr5ju2Phukm0eRjsk+pH72/tWA2I6PGfuEm4naV6vPup/2Y5o
-         YDAeCNHRNFHWoOahV361XYGFGkNuCG0ao3mcocaCTjrXGXBLnIBUHT9x9x0Wbz2yv6
-         IIpiDNIAqvbNbvOrBFEysJ6puI1061EYNvkQrLms=
+        b=hiVX729ojZibzmsVbnRRNjdi7b2WXsBa62yHRFBLvIhxBXuPK2HdBXQQgzH0UL8Na
+         SyWutGcrOT6sb7xMQf0+eRRZ4m/UvcuK9iJ7iHax3QUhsY5qEUOCinmbkPk+brMfl0
+         QdoWEi3pK1qmIlV3So3F+zWUOgFnaw/exPqQmNl4=
 Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrszc9.qq.com (NewEsmtp) with SMTP
-        id 7262DA03; Tue, 05 Apr 2022 10:28:38 +0800
-X-QQ-mid: xmsmtpt1649125718t4dndk6oa
-Message-ID: <tencent_024087572951FED38148303BE79A7094500A@qq.com>
-X-QQ-XMAILINFO: NMnM0wIZ7bQB4eljLfNrvpPvU1VldOJ8f0V9xwoiiMBcWuw4YhAMv+BOCZuRwd
-         CQof1F6sQr0iCWt7GpcUgyZxuZ+tC2pExz4BAMivYbciyw+JLAqoxFlXyZ7c+KkJzUyZK+jCGu79
-         PJUkFY1YkqIohmBpMZGYLVHMf0zM4j12tTx07DcZV/AQzdFVFQaGcE6z8IWX1gjVVrUsymUvLsvo
-         a72yWIliL7JYNXCKzKeQL9fPy7ld7oZ5FjZsjBYE82RZVb7k4g8wuPCXYto3BtzTy6K9jTxZCKKT
-         WRioXyguXfGIFYS9S6idKbeHHTsns2mENlMaujP9QwOpEcLSC/b8dQgrmblypWt22GQnz/XkjEXH
-         xVBUlGEHg7178lr2+x+vh3a9C0CVRxSgQ0Dy2RVHQZKRkJDhpFfdq6caJLCJGUn7ByFlChF0XaGl
-         aKXXKzXqdj+puAA6+pKvQTsx7hjSGgdIgM1IIE2k8GNi1o4wY7f5mweYCReTn1I3+MBtXkW3lV8t
-         Axd4UXNaj/Hi2E6U3v5GdHpLQVqX5k9QREMwm0bmKrbsYVB1I2Wxo4zMvs5p+Qw0voAPNoHhOGgm
-         SIoK0hZHX4B24Lg0VHO+Sk4K5Hz2a2X9usutYorspl3ik5lEYq2JA7SSmlKeAOktmjfmqRX3mLel
-         ItMvs5FOhI6DSEFhuyEaFTUktffXN9vQF+5H+60ysa80cPSET4mvt5p7hYn0F2/ege40RQ2O6/El
-         gMdowXt24AczipQDCxEzi1oWd8HljZhO5z/HsCsw8HXzFfCrPGekcEx72HN5iWAtp84whzeAk7e6
-         AIRsXL59oJnm/MVvDHzG33u0bOfVxVHIElctsDoJ5mRDBLdXC/yDCwweZtuYQz266xu9eKDWj/iv
-         Dl6usD7l2scg5k56+5qNNzu0ERQX9xcn6dU4n2oSFB5F4upAW7YVWqECIOzqxa8MwG6uZU4TvXTA
-         1zMRrZ6ws3cvtNNxKvng==
+        by newxmesmtplogicsvrszb6.qq.com (NewEsmtp) with SMTP
+        id 757B7698; Tue, 05 Apr 2022 10:29:23 +0800
+X-QQ-mid: xmsmtpt1649125763tz7r97vbw
+Message-ID: <tencent_5ACC8CB9131CFA14F7E1514A54FFF520D308@qq.com>
+X-QQ-XMAILINFO: MDPfhejMR4aIUaXnh8SbAwTwpPAr4zJrY0xemmO5ZgY90J4sb4/U2jqT05KAWV
+         G6glXny0sgROGUGBbVUdn27Tw38QXvlDOp8Enm68/axsxQZr/FME463zEIa5Iwg9G5suiHWWQMcP
+         xmmfOhvTfIsgQEMcvk9sQiHAXFTJUroanhaEvI952KT/88nwrNRlqA00pLLpDm1KNQcI6nCk9RF5
+         Yxq94CJ+ei5ptPAGV+7IbZupHsmzu3NB8o9w0tGfP8wxTeBs/zXpcanGCxnlXbc1BVvSqvuVFPJY
+         a0ytrkhcyijw/c6X5KlKpEpmsTemHPWDTqrjGsdYSHk2ZGX6F4JXGkmVKUDoKXKQadVLb4KuuxzB
+         N6ZlGjYX21OwOEGVyyz2DmHlqbSXfRnDYJVVWSe7lkWDYINxh6+OgnYsmZlx3XiLrYgyEkmk1yc2
+         pJzmQ8YhY9lUu6W036SNV6xzQC8mdCdKyi+CRNMTMZSGjqjWphewxu/vIHGuV4WmgLAf60Nye3tI
+         1jhbV87Lk1WNRcbnnuI1wE2X1DbDHeY5ZjnkOOw96/LvosN2nwzsnxfQrvQRtxxunvJGZG4hBrob
+         FZLpnvdgMlBAf0HiFNTj9Ub8EEW+66W233i5kncz5Hkth0MtYlW/hGAo9tvg9rDhfWrFMlBfxMGE
+         fTsIStPUYSARxoRWWjvIz8UrdaEG2J7SA61uuGNPkqzIwm6Oo1ZU5gjqrudsQ54MKKYXboaE76+g
+         Tv7ozgj6ytxDEH8XrpFD9ThvjXmL8lnzy/pGIlpc+zy+y47svDM3WACdZ9k/2f+FOsdqUFeR85rm
+         IJa3f6+mp8RdmS0mHa0RdrxrxJq+QsfRjHFLFanFjjwKx30S+f3Rd1PVPs5WcG6vwK+ksxCMm8rQ
+         VBJsFo23ODnJeVgV5n3OQsQEKZKitEilprmeR500tASyf/eYzxVjHpSAkLuUySBjVbIpzCzg9lBE
+         NvwiYLy2tCGddBTFHygO08AyqRfxUYU+1jXRY4BbnBbiWg8J3ERw==
 From:   xkernel.wang@foxmail.com
 To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH v2 2/3] staging: rtl8712: change the type of _r8712_init_recv_priv()
-Date:   Tue,  5 Apr 2022 10:28:18 +0800
-X-OQ-MSGID: <20220405022818.10970-1-xkernel.wang@foxmail.com>
+Subject: [PATCH v2 3/3] staging: rtl8712: add two validation check in r8712_init_drv_sw()
+Date:   Tue,  5 Apr 2022 10:28:54 +0800
+X-OQ-MSGID: <20220405022854.10991-1-xkernel.wang@foxmail.com>
 In-Reply-To: <tencent_FCEE3D8703C56F78B552FEFF070817736606@qq.com>
 References: <tencent_FCEE3D8703C56F78B552FEFF070817736606@qq.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
         RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,60 +66,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-There is a memory allocation in _r8712_init_recv_priv(). Since the
-original type of this function is void, now it is changed to int to
-make the error of allocation failures propagate to its caller easily.
+_r8712_init_xmit_priv() or _r8712_init_recv_priv() returns -ENOMEM
+when some allocations inside it failed.
+So it is better to check the return status of them.
 
 Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
 ---
 ChangeLog:
-v1->v2 remove kmemleak_not_leak().
- drivers/staging/rtl8712/recv_osdep.h   | 2 +-
- drivers/staging/rtl8712/rtl871x_recv.c | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+v1->v2 adjust the sequence of patches in this series and add error
+handlers in the first patch.
+ drivers/staging/rtl8712/os_intfs.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/rtl8712/recv_osdep.h b/drivers/staging/rtl8712/recv_osdep.h
-index d8c1fa7..f5b97c5 100644
---- a/drivers/staging/rtl8712/recv_osdep.h
-+++ b/drivers/staging/rtl8712/recv_osdep.h
-@@ -18,7 +18,7 @@
- #include "drv_types.h"
- #include <linux/skbuff.h>
- 
--void _r8712_init_recv_priv(struct recv_priv *precvpriv,
-+int _r8712_init_recv_priv(struct recv_priv *precvpriv,
- 			   struct _adapter *padapter);
- void _r8712_free_recv_priv(struct recv_priv *precvpriv);
- void r8712_recv_entry(union recv_frame *precv_frame);
-diff --git a/drivers/staging/rtl8712/rtl871x_recv.c b/drivers/staging/rtl8712/rtl871x_recv.c
-index c23f6b3..3464ee2 100644
---- a/drivers/staging/rtl8712/rtl871x_recv.c
-+++ b/drivers/staging/rtl8712/rtl871x_recv.c
-@@ -44,7 +44,7 @@ void _r8712_init_sta_recv_priv(struct sta_recv_priv *psta_recvpriv)
- 	_init_queue(&psta_recvpriv->defrag_q);
- }
- 
--void _r8712_init_recv_priv(struct recv_priv *precvpriv,
-+int _r8712_init_recv_priv(struct recv_priv *precvpriv,
- 			   struct _adapter *padapter)
- {
- 	sint i;
-@@ -60,8 +60,7 @@ void _r8712_init_recv_priv(struct recv_priv *precvpriv,
- 				sizeof(union recv_frame) + RXFRAME_ALIGN_SZ,
- 				GFP_ATOMIC);
- 	if (!precvpriv->pallocated_frame_buf)
--		return;
--	kmemleak_not_leak(precvpriv->pallocated_frame_buf);
-+		return -ENOMEM;
- 	precvpriv->precv_frame_buf = precvpriv->pallocated_frame_buf +
- 				    RXFRAME_ALIGN_SZ -
- 				    ((addr_t)(precvpriv->pallocated_frame_buf) &
-@@ -77,6 +76,7 @@ void _r8712_init_recv_priv(struct recv_priv *precvpriv,
- 	}
- 	precvpriv->rx_pending_cnt = 1;
- 	r8712_init_recv_priv(precvpriv, padapter);
-+	return 0;
- }
- 
- void _r8712_free_recv_priv(struct recv_priv *precvpriv)
+diff --git a/drivers/staging/rtl8712/os_intfs.c b/drivers/staging/rtl8712/os_intfs.c
+index 1f7ccec..0dbf8c2 100644
+--- a/drivers/staging/rtl8712/os_intfs.c
++++ b/drivers/staging/rtl8712/os_intfs.c
+@@ -308,8 +308,12 @@ int r8712_init_drv_sw(struct _adapter *padapter)
+ 	ret = r8712_init_mlme_priv(padapter);
+ 	if (ret)
+ 		goto free_evt_priv;
+-	_r8712_init_xmit_priv(&padapter->xmitpriv, padapter);
+-	_r8712_init_recv_priv(&padapter->recvpriv, padapter);
++	ret = _r8712_init_xmit_priv(&padapter->xmitpriv, padapter);
++	if (ret)
++		goto free_mlme_priv;
++	ret = _r8712_init_recv_priv(&padapter->recvpriv, padapter);
++	if (ret)
++		goto free_xmit_priv;
+ 	memset((unsigned char *)&padapter->securitypriv, 0,
+ 	       sizeof(struct security_priv));
+ 	timer_setup(&padapter->securitypriv.tkip_timer,
 -- 

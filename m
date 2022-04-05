@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F424F337E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEC434F33D5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:23:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239536AbiDEJND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
+        id S245667AbiDEJMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239618AbiDEIUQ (ORCPT
+        with ESMTP id S239543AbiDEIUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:16 -0400
+        Tue, 5 Apr 2022 04:20:13 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F4D1C6;
-        Tue,  5 Apr 2022 01:17:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B37110E;
+        Tue,  5 Apr 2022 01:15:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 282E6B81B92;
-        Tue,  5 Apr 2022 08:17:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AFC7C385A1;
-        Tue,  5 Apr 2022 08:17:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EB0CDB81B92;
+        Tue,  5 Apr 2022 08:15:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A557C385A1;
+        Tue,  5 Apr 2022 08:15:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146656;
-        bh=TRFzbUO7n22VZ945pdzrqwka/ULHwpD2i4aPT2EBJnU=;
+        s=korg; t=1649146547;
+        bh=ua5vIw0517RX36TBBiaySxjD3XAV6nk60MX+XrVugGY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xYcvcWCEByJwjjJQnlXe7zqYU1sxxTKL90/PRQr6mZjJIwV32faDi8j9oRwXgGEKi
-         uuGdjgYDq3KFKNDu4Js/rjtmymVr7dqIiAUa7iltlg7vpClMVH3HE9TkDYcT1P8RYF
-         VUXd2SRTzQQAhvJ/fvQLFmjB+GVjcodIN7sIOU94=
+        b=O6MbDsqbzkqFiSbjHL53Ojz6/TgyACGs4y/3zw++oVZW5tgrqh/JNHeWZ+TEEU6Z2
+         osCSlrZAHCDoejpyf71/jgQPmW1snLSTkqsnpOBERno/Mq+FjKYIQOp+inEC8QiMR0
+         8J2wU7bKpfOu6RDPHbW2HHAKECZ90CUD4/pTlcWw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0802/1126] vsock/virtio: read the negotiated features before using VQs
-Date:   Tue,  5 Apr 2022 09:25:49 +0200
-Message-Id: <20220405070431.110089321@linuxfoundation.org>
+Subject: [PATCH 5.17 0804/1126] clk: Initialize orphan req_rate
+Date:   Tue,  5 Apr 2022 09:25:51 +0200
+Message-Id: <20220405070431.168654604@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -57,48 +57,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefano Garzarella <sgarzare@redhat.com>
+From: Maxime Ripard <maxime@cerno.tech>
 
-[ Upstream commit c1011c0b3a9c8d2065f425407475cbcc812540b7 ]
+[ Upstream commit 5f7e2af00807f2117650e711a58b7f0e986ce1df ]
 
-Complete the driver configuration, reading the negotiated features,
-before using the VQs in the virtio_vsock_probe().
+When registering a clock that doesn't have a recalc_rate implementation,
+and doesn't have its parent registered yet, we initialize the clk_core
+rate and 'req_rate' fields to 0.
 
-Fixes: 53efbba12cc7 ("virtio/vsock: enable SEQPACKET for transport")
-Suggested-by: Michael S. Tsirkin <mst@redhat.com>
-Reviewed-by: Stefan Hajnoczi <stefanha@redhat.com>
-Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+The rate field is later updated when the parent is registered in
+clk_core_reparent_orphans_nolock() using __clk_recalc_rates(), but the
+'req_rate' field is never updated.
+
+This leads to an issue in clk_set_rate_range() and clk_put(), since
+those functions will call clk_set_rate() with the content of 'req_rate'
+to provide drivers with the opportunity to change the rate based on the
+new boundaries. In this case, we would call clk_set_rate() with a rate
+of 0, effectively enforcing the minimum allowed for this clock whenever
+we would call one of those two functions, even though the actual rate
+might be within range.
+
+Let's fix this by setting 'req_rate' in
+clk_core_reparent_orphans_nolock() with the rate field content just
+updated by the call to __clk_recalc_rates().
+
+Fixes: 1c8e600440c7 ("clk: Add rate constraints to clocks")
+Reported-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com> # T30 Nexus7
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Link: https://lore.kernel.org/r/20220325161144.1901695-2-maxime@cerno.tech
+[sboyd@kernel.org: Reword comment]
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/vmw_vsock/virtio_transport.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/clk/clk.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
-index 3e5513934c9f..3954d3be9083 100644
---- a/net/vmw_vsock/virtio_transport.c
-+++ b/net/vmw_vsock/virtio_transport.c
-@@ -622,6 +622,9 @@ static int virtio_vsock_probe(struct virtio_device *vdev)
- 	INIT_WORK(&vsock->event_work, virtio_transport_event_work);
- 	INIT_WORK(&vsock->send_pkt_work, virtio_transport_send_pkt_work);
- 
-+	if (virtio_has_feature(vdev, VIRTIO_VSOCK_F_SEQPACKET))
-+		vsock->seqpacket_allow = true;
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index fff5edb89d6d..01b64b962e76 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -3456,6 +3456,19 @@ static void clk_core_reparent_orphans_nolock(void)
+ 			__clk_set_parent_after(orphan, parent, NULL);
+ 			__clk_recalc_accuracies(orphan);
+ 			__clk_recalc_rates(orphan, 0);
 +
- 	vdev->priv = vsock;
- 
- 	mutex_lock(&vsock->tx_lock);
-@@ -638,9 +641,6 @@ static int virtio_vsock_probe(struct virtio_device *vdev)
- 	vsock->event_run = true;
- 	mutex_unlock(&vsock->event_lock);
- 
--	if (virtio_has_feature(vdev, VIRTIO_VSOCK_F_SEQPACKET))
--		vsock->seqpacket_allow = true;
--
- 	rcu_assign_pointer(the_virtio_vsock, vsock);
- 
- 	mutex_unlock(&the_virtio_vsock_mutex);
++			/*
++			 * __clk_init_parent() will set the initial req_rate to
++			 * 0 if the clock doesn't have clk_ops::recalc_rate and
++			 * is an orphan when it's registered.
++			 *
++			 * 'req_rate' is used by clk_set_rate_range() and
++			 * clk_put() to trigger a clk_set_rate() call whenever
++			 * the boundaries are modified. Let's make sure
++			 * 'req_rate' is set to something non-zero so that
++			 * clk_set_rate_range() doesn't drop the frequency.
++			 */
++			orphan->req_rate = orphan->rate;
+ 		}
+ 	}
+ }
 -- 
 2.34.1
 

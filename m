@@ -2,50 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A534F2236
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:47:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D29A4F2238
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229569AbiDEEsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 00:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
+        id S229568AbiDEEtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 00:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiDEEsD (ORCPT
+        with ESMTP id S229632AbiDEEtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 00:48:03 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48589694B8
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 21:44:40 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 48876D6E;
-        Mon,  4 Apr 2022 21:44:40 -0700 (PDT)
-Received: from [192.168.0.146] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5F9EE3F5A1;
-        Mon,  4 Apr 2022 21:44:34 -0700 (PDT)
-Message-ID: <d6e2581e-a8ac-4848-2c64-4a221bd03bca@arm.com>
-Date:   Tue, 5 Apr 2022 10:15:02 +0530
+        Tue, 5 Apr 2022 00:49:11 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298499FDD
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 21:45:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=Cbu5imkSxmYw8BD7MxQU3rR2N6h6
+        Y4uRLJS6hFCxJB0=; b=uroHnEP3KHV/eYhuNvbJOVEou/nJHePNgdHzii+CfUnW
+        DrOF4BRUlcjVXePd9soij7tZg5gwyUoyiFcVicC4pcmU4uLK7CTT4VtezkmHUB/c
+        /grlmS+lCSMPyZ1Z/K4xpVkHdRYvRCmlTGqGck35EsxI2Vv1yLMWyUJajG0+raY=
+Received: (qmail 2125024 invoked from network); 5 Apr 2022 06:45:22 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 5 Apr 2022 06:45:22 +0200
+X-UD-Smtp-Session: l3s3148p1@Diph6eDbFNwgAQnoAHlrAKkk7l/QScWc
+Date:   Tue, 5 Apr 2022 06:45:18 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Pavel Machek <pavel@denx.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH 2/2] mmc: renesas_internal_dmac: Fix typo's
+Message-ID: <YkvJXu7Y6Tc68U9e@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        Pavel Machek <pavel@denx.de>, LKML <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220404172322.32578-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220404172322.32578-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <Yks3Q75ZrUkXSjwz@ninjato>
+ <CA+V-a8skF4h6yhjSFw5PXQEbgKEQt6kMs9bEsO3OCNfE1hu46A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 2/2] arm64: mm: hugetlb: Enable
- HUGETLB_PAGE_FREE_VMEMMAP for arm64
-Content-Language: en-US
-To:     Muchun Song <songmuchun@bytedance.com>, will@kernel.org,
-        akpm@linux-foundation.org, david@redhat.com, bodeddub@amazon.com,
-        osalvador@suse.de, mike.kravetz@oracle.com, rientjes@google.com,
-        mark.rutland@arm.com, catalin.marinas@arm.com, james.morse@arm.com,
-        21cnbao@gmail.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, duanxiongchun@bytedance.com,
-        fam.zheng@bytedance.com, smuchun@gmail.com
-References: <20220331065640.5777-1-songmuchun@bytedance.com>
- <20220331065640.5777-2-songmuchun@bytedance.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20220331065640.5777-2-songmuchun@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="XGw+3cSwhZWV2vXx"
+Content-Disposition: inline
+In-Reply-To: <CA+V-a8skF4h6yhjSFw5PXQEbgKEQt6kMs9bEsO3OCNfE1hu46A@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -53,82 +68,43 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--XGw+3cSwhZWV2vXx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 3/31/22 12:26, Muchun Song wrote:
-> 1st concern:
-> '''
-> But what happens when a hot remove section's vmemmap area (which is
-> being teared down) is nearby another vmemmap area which is either created
-> or being destroyed for HugeTLB alloc/free purpose. As you mentioned
-> HugeTLB pages inside the hot remove section might be safe. But what about
-> other HugeTLB areas whose vmemmap area shares page table entries with
-> vmemmap entries for a section being hot removed ? Massive HugeTLB alloc
-> /use/free test cycle using memory just adjacent to a memory hotplug area,
-> which is always added and removed periodically, should be able to expose
-> this problem.
-> '''
-> 
-> Answer: At the time memory is removed, all HugeTLB pages either have been
-> migrated away or dissolved.  So there is no race between memory hot remove
-> and free_huge_page_vmemmap().  Therefore, HugeTLB pages inside the hot
-> remove section is safe.  Let's talk your question "what about other
 
-HugeTLB pages inside the memory range is safe but concern is about the
-vmemmap mapping for the HugeTLB which might share intermediate entries
-with vmemmap mapping for the memory range/section being removed.
+> > > -     /* This DMAC cannot handle if buffer is not 128-bytes alignment */
+> > > +     /* This DMAC cannot handle if buffer is not 128-bytes aligned */
+> >
+> > Well, as we are here now, I think this can be further improved.
+> >
+> "The internal DMAC supports 128-bytes aligned buffers only", does this
+> sound good?
 
-> HugeTLB areas whose vmemmap area shares page table entries with vmemmap
-> entries for a section being hot removed ?", the question is not
+I'd think it should be "128 byte aligned"? But I can't explain why, just
+a gut feeling.
 
-Right.
+Otherwise good!
 
-> established.  The minimal granularity size of hotplug memory 128MB (on
-> arm64, 4k base page), any HugeTLB smaller than 128MB is within a section,
-> then, there is no share PTE page tables between HugeTLB in this section
 
-128MB is the hot removable granularity but, its corresponding vmemmap
-range is smaller i.e (128MB/4K) * sizeof(struct page). Memory section
-getting hot removed (its vmemmap mapping being teared down) along with
-HugeTLB (on another section) vmemmap remap operation, could not collide
-while inside vmemmap mapping areas on init_mm ?
+--XGw+3cSwhZWV2vXx
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> and ones in other sections and a HugeTLB page could not cross two
-> sections.  In this case, the section cannot be freed.  Any HugeTLB bigger
+-----BEGIN PGP SIGNATURE-----
 
-Right, they dont cross into two different sections.
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJLyVoACgkQFA3kzBSg
+KbbStw/9FM9rKMQ30IKzCdiUkW37SCGDxC3zsb4B8ekiSgarbLM4gTKacYLVB0SE
+N8CAHx/Zc33WxgmVXx0UOWmrzN24zEBq1NtH20I0+Bvspl94UZ7XbLq3eJ53fbx+
+1d5vnZFyo0Je5lFGlUy9aKAsMfKG+Jk1lI6uAFsJR8t/D7e0s1b3i9ZUB4U5bFAl
+fHAXT/ZvTl3cnX9vLcoeH+DWZjBYqU42JI4qqof5aVdN+pbDialUOuZvqUyvKHUM
+t9FHV/mKnnGsMOycEX6Cb4hGEB9xNOJjuxXu3gw93WZHH52UQAKG80OFbtdggT/e
+78rIpPlzwDNmYd5QXc1aGECHRfH2jCu5pDitk/8uRjSxs3gKyHe6noaQ4DnYNi8c
+JKG9X6KsQlf+5M3OBgOdRM2Q9sMTv00l07av9dxfTiS52fPEBxIbRlhnoJ7XKEn8
+4NgcNN32sQ5hu2pKQyKpT+o1LQ94K/1m3UHSl26/ggtrWvr3P+ybCKG6lUpElsnm
+q6QV1lBjY+8Iq4Dgx9OSh4a5ZxfTaSjeq/SrDgzkTRiD2nyEs7NCnNrcdZwIbYWA
+q0rSBHDedP0Oqe6JpgcJfOJxTPYPF9T1PItSpp8fYIgVBFmOnzScmp7nRG/E7aPg
+DOSmkYW1svjwtJsWXLvfV7gFs+q847A3STZexo+A8BHc0JJVTVE=
+=lfpM
+-----END PGP SIGNATURE-----
 
-> than 128MB (section size) whose vmemmap pages is an integer multiple of
-> 2MB (PMD-mapped).  As long as:
-> 
->   1) HugeTLBs are naturally aligned, power-of-two sizes
->   2) The HugeTLB size >= the section size
->   3) The HugeTLB size >= the vmemmap leaf mapping size
-> 
-> Then a HugeTLB will not share any leaf page table entries with *anything
-> else*, but will share intermediate entries.  In this case, at the time memory
-> is removed, all HugeTLB pages either have been migrated away or dissolved.
-> So there is also no race between memory hot remove and
-> free_huge_page_vmemmap().
-
-If they just share intermediate entries, free_empty_tables() will not free
-up page table pages, as there will be valid non-zero entries in them. But
-the problem here is not UAF, its accessing wrong entries and crashing while
-de-referncing the pointer. Hence I am wondering if no such scenario can be
-possible.
-
-> 
-> 2nd concern:
-> '''
-> differently, not sure if ptdump would require any synchronization.
-> 
-> Dumping an wrong value is probably okay but crashing because a page table
-> entry is being freed after ptdump acquired the pointer is bad. On arm64,
-> ptdump() is protected against hotremove via [get|put]_online_mems().
-> '''
-> 
-> Answer: The ptdump should be fine since vmemmap_remap_free() only exchanges
-> PTEs or splits the PMD entry (which means allocating a PTE page table).  Both
-> operations do not free any page tables (PTE), so ptdump cannot run into a
-> UAF on any page tables.  The worst case is just dumping an wrong value.
-
-Okay, fair enough. ptdump() might be just okay.
+--XGw+3cSwhZWV2vXx--

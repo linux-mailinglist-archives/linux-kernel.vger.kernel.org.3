@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DFE64F3B72
+	by mail.lfdr.de (Postfix) with ESMTP id 31CC74F3B71
 	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358741AbiDEL4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
+        id S1358680AbiDEL4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244948AbiDEIwt (ORCPT
+        with ESMTP id S244953AbiDEIwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8182D656D;
-        Tue,  5 Apr 2022 01:47:26 -0700 (PDT)
+        Tue, 5 Apr 2022 04:52:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6F119C3F;
+        Tue,  5 Apr 2022 01:47:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28CD9B81A32;
-        Tue,  5 Apr 2022 08:47:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D82CC385A0;
-        Tue,  5 Apr 2022 08:47:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86A28614EB;
+        Tue,  5 Apr 2022 08:47:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9645FC385A1;
+        Tue,  5 Apr 2022 08:47:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148443;
-        bh=DuYmSyEzedX7U/nY9Gg5hYz0dMAKEediBXzyg56hMdA=;
+        s=korg; t=1649148455;
+        bh=1IjPHnjIVZjOabLDm+ybTZPEAtPkmXIKYSb7izvV96I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q1zsiz0GxNi4CH7E/atxmXWIkshJLIMIN9Xj9kb8ajYKmBxG0EJDmwg63/W0bkole
-         SrUM2Qr5nlDNTdetSEqwHDAYeAv9omqSU3h4S2eGDlKVQxdKOSvQARrQYHYEXAAHwt
-         x1z3F2Zpcz1uUOuybNpOd7vW3TftM18toCv9xKME=
+        b=TCuuGVUnV40SAAQtmuf4QasxSHlRGsDlRkkGgI5q+vXk7vGgut/AokOCIkdfX1ADi
+         AKukhsLGxsYyK04M37wRpd0CjSLrOlmc+k4Ocn09Y5L4/UhcCSokZ9rL0HYl3g+IRZ
+         dlhmAqgjdMeAUwrOM/1bRojEnvjVO3cWX1oSVvuE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0360/1017] ASoC: atmel_ssc_dai: Handle errors for clk_enable
-Date:   Tue,  5 Apr 2022 09:21:13 +0200
-Message-Id: <20220405070404.971402857@linuxfoundation.org>
+Subject: [PATCH 5.16 0363/1017] memory: emif: Add check for setup_interrupts
+Date:   Tue,  5 Apr 2022 09:21:16 +0200
+Message-Id: <20220405070405.060427114@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -57,36 +57,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit f9e2ca0640e59d19af0ff285ee5591ed39069b09 ]
+[ Upstream commit fd7bd80b46373887b390852f490f21b07e209498 ]
 
-As the potential failure of the clk_enable(),
-it should be better to check it and return error if fals.
+As the potential failure of the devm_request_threaded_irq(),
+it should be better to check the return value of the
+setup_interrupts() and return error if fails.
 
-Fixes: cbaadf0f90d6 ("ASoC: atmel_ssc_dai: refactor the startup and shutdown")
+Fixes: 68b4aee35d1f ("memory: emif: add interrupt and temperature handling")
 Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220301090637.3776558-1-jiasheng@iscas.ac.cn
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/20220224025444.3256530-1-jiasheng@iscas.ac.cn
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/atmel/atmel_ssc_dai.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/memory/emif.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/atmel/atmel_ssc_dai.c b/sound/soc/atmel/atmel_ssc_dai.c
-index 26e2bc690d86..c1dea8d62416 100644
---- a/sound/soc/atmel/atmel_ssc_dai.c
-+++ b/sound/soc/atmel/atmel_ssc_dai.c
-@@ -280,7 +280,10 @@ static int atmel_ssc_startup(struct snd_pcm_substream *substream,
+diff --git a/drivers/memory/emif.c b/drivers/memory/emif.c
+index 762d0c0f0716..d4d4044e05b3 100644
+--- a/drivers/memory/emif.c
++++ b/drivers/memory/emif.c
+@@ -1117,7 +1117,7 @@ static int __init_or_module emif_probe(struct platform_device *pdev)
+ {
+ 	struct emif_data	*emif;
+ 	struct resource		*res;
+-	int			irq;
++	int			irq, ret;
  
- 	/* Enable PMC peripheral clock for this SSC */
- 	pr_debug("atmel_ssc_dai: Starting clock\n");
--	clk_enable(ssc_p->ssc->clk);
-+	ret = clk_enable(ssc_p->ssc->clk);
+ 	if (pdev->dev.of_node)
+ 		emif = of_get_memory_device_details(pdev->dev.of_node, &pdev->dev);
+@@ -1147,7 +1147,9 @@ static int __init_or_module emif_probe(struct platform_device *pdev)
+ 	emif_onetime_settings(emif);
+ 	emif_debugfs_init(emif);
+ 	disable_and_clear_all_interrupts(emif);
+-	setup_interrupts(emif, irq);
++	ret = setup_interrupts(emif, irq);
 +	if (ret)
-+		return ret;
-+
- 	ssc_p->mck_rate = clk_get_rate(ssc_p->ssc->clk);
++		goto error;
  
- 	/* Reset the SSC unless initialized to keep it in a clean state */
+ 	/* One-time actions taken on probing the first device */
+ 	if (!emif1) {
 -- 
 2.34.1
 

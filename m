@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 903F24F335F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A784F3288
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243913AbiDEJkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
+        id S243952AbiDEJkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239299AbiDEIT5 (ORCPT
+        with ESMTP id S239306AbiDEIT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:19:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A3C81644;
-        Tue,  5 Apr 2022 01:10:57 -0700 (PDT)
+        Tue, 5 Apr 2022 04:19:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA7381679;
+        Tue,  5 Apr 2022 01:11:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F127B81B18;
-        Tue,  5 Apr 2022 08:10:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18C3EC385A0;
-        Tue,  5 Apr 2022 08:10:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 844E3B81A32;
+        Tue,  5 Apr 2022 08:10:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E39D5C385A1;
+        Tue,  5 Apr 2022 08:10:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146255;
-        bh=rYFP1BJ4Qw1ivdKhFqqmw2gOqzma9KK70jJAP0HaOdo=;
+        s=korg; t=1649146258;
+        bh=kyif2DLgMA6iqw9QlsLzO9GurCGw/kuOrr2fhzY+aLo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fbqLZaG4/FLady0jFeP4RvvokjNuaI1V8xKY78PX/J7RVApm8Cc0ortWn/GtDC52y
-         muCAVkxOL1qzEli3vB9nRKwIR/nIv86O0NFK+FoYSeQe+Zzf1yeWutFHWVfsB+2Jej
-         yED+MtFCdZFRR9peizCNtHGoJ/WtBYJpH/x0lDp0=
+        b=bFUmY6cVNGiDBk9UMiN5ueslaxa4c7Pe9KC+TNXzDgK8YKEBB7h279Ex2/9d5+EMA
+         bKg7F+DecqLksGhvvxcViBrIkLwote2DsMDy5DUI30f415/eSiWKPf8OWpLupEOX/K
+         1jfmee36diP0g3HcgQsmwmEMdoPBqSWQB3Jq0eSU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        stable@vger.kernel.org, Mick Lorain <micklorain@protonmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0698/1126] bpftool: Fix print error when show bpf map
-Date:   Tue,  5 Apr 2022 09:24:05 +0200
-Message-Id: <20220405070428.096755911@linuxfoundation.org>
+Subject: [PATCH 5.17 0699/1126] PCI: Avoid broken MSI on SB600 USB devices
+Date:   Tue,  5 Apr 2022 09:24:06 +0200
+Message-Id: <20220405070428.126008163@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,58 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yafang Shao <laoar.shao@gmail.com>
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-[ Upstream commit 1824d8ea75f275a5e69e5f6bc0ffe122ea9b938c ]
+[ Upstream commit 63cd736f449445edcd7f0bcc7d84453e9beec0aa ]
 
-If there is no btf_id or frozen, it will not show the pids, but the pids don't
-depend on any one of them.
+Some ATI SB600 USB adapters advertise MSI, but if INTx is disabled by
+setting PCI_COMMAND_INTX_DISABLE, MSI doesn't work either.  The PCI/PCIe
+specs do not require software to set PCI_COMMAND_INTX_DISABLE when enabling
+MSI, but Linux has done that for many years.
 
-Below is the result after this change:
+Mick reported that 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI
+devices") broke these devices.  Prior to 306c54d0edb6, they used INTx.
+Starting with 306c54d0edb6, they use MSI, and and the fact that Linux sets
+PCI_COMMAND_INTX_DISABLE means both INTx and MSI are disabled on these
+devices.
 
-  $ ./bpftool map show
-  2: lpm_trie  flags 0x1
-	key 8B  value 8B  max_entries 1  memlock 4096B
-	pids systemd(1)
-  3: lpm_trie  flags 0x1
-	key 20B  value 8B  max_entries 1  memlock 4096B
-	pids systemd(1)
+Avoid this SB600 defect by disabling MSI so we use INTx as before.
 
-While before this change, the 'pids systemd(1)' can't be displayed.
-
-Fixes: 9330986c0300 ("bpf: Add bloom filter map implementation")
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20220320060815.7716-1-laoar.shao@gmail.com
+Fixes: 306c54d0edb6 ("usb: hcd: Try MSI interrupts on PCI devices")
+Link: https://lore.kernel.org/r/20220321183446.1108325-1-helgaas@kernel.org
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215690
+Link: https://lore.kernel.org/all/PxIByDyBRcsbpcmVhGSNDFAoUcMmb78ctXCkw6fbpx25TGlCHvA6SJjjFkNr1FfQZMntYPTNyvEnblxzAZ8a6jP9ddLpKeCN6Chi_2FuexU=@protonmail.com/
+Link: https://lore.kernel.org/r/20220314101448.90074-1-andriy.shevchenko@linux.intel.com
+BugLink: https://lore.kernel.org/all/20200702143045.23429-1-andriy.shevchenko@linux.intel.com/
+Reported-by: Mick Lorain <micklorain@protonmail.com>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/bpf/bpftool/map.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/pci/quirks.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index e746642de292..0bba33729c7f 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -620,17 +620,14 @@ static int show_map_close_plain(int fd, struct bpf_map_info *info)
- 					    u32_as_hash_field(info->id))
- 			printf("\n\tpinned %s", (char *)entry->value);
- 	}
--	printf("\n");
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index 65f7f6b0576c..da829274fc66 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -1811,6 +1811,18 @@ static void quirk_alder_ioapic(struct pci_dev *pdev)
+ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL,	PCI_DEVICE_ID_INTEL_EESSC,	quirk_alder_ioapic);
+ #endif
  
- 	if (frozen_str) {
- 		frozen = atoi(frozen_str);
- 		free(frozen_str);
- 	}
- 
--	if (!info->btf_id && !frozen)
--		return 0;
--
--	printf("\t");
-+	if (info->btf_id || frozen)
-+		printf("\n\t");
- 
- 	if (info->btf_id)
- 		printf("btf_id %d", info->btf_id);
++static void quirk_no_msi(struct pci_dev *dev)
++{
++	pci_info(dev, "avoiding MSI to work around a hardware defect\n");
++	dev->no_msi = 1;
++}
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4386, quirk_no_msi);
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4387, quirk_no_msi);
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4388, quirk_no_msi);
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x4389, quirk_no_msi);
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x438a, quirk_no_msi);
++DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x438b, quirk_no_msi);
++
+ static void quirk_pcie_mch(struct pci_dev *pdev)
+ {
+ 	pdev->no_msi = 1;
 -- 
 2.34.1
 

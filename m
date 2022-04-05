@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5464A4F3F88
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B44E4F3E31
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357122AbiDENId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
+        id S1380195AbiDENN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344039AbiDEJQ6 (ORCPT
+        with ESMTP id S1344232AbiDEJSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:16:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA3413E10;
-        Tue,  5 Apr 2022 02:03:52 -0700 (PDT)
+        Tue, 5 Apr 2022 05:18:52 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B35B45AF7;
+        Tue,  5 Apr 2022 02:06:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 205F361003;
-        Tue,  5 Apr 2022 09:03:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32050C385A0;
-        Tue,  5 Apr 2022 09:03:51 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 70E06CE1BF8;
+        Tue,  5 Apr 2022 09:05:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AA12C385A1;
+        Tue,  5 Apr 2022 09:05:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149431;
-        bh=ryI4nmnWCITwgMxyxAhVGbPtmN7Hf4iB4cJjnuFKMfs=;
+        s=korg; t=1649149557;
+        bh=fc6qrim3UwwCoexjObybUivRCYC7le7SVED3R4kDhpI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Lohf1MQbTDkMvVweUrSz6E9G1AxJEKJLfW/i8czryPFEJoOLod3YzwHRIJh+F1mbH
-         awnipcyIiEC31Sdx8EpiU7/WkrGs4REmpthfWco0BHSCCMh9VRWzfcOYRA3LnzbvP+
-         cVIU9jDAxXEL1PSnIM7vLEItOTgXafg5PnKVjoWM=
+        b=O7iuEcjyYGuE/GrW8D+jpN0bZi/VzXxoi5LHlcMza2aovFkVH+jjB//w4lsMfjSdT
+         1mZr7xybt0tdRx75EFpNOEpmbWHNIPTsENn+DMvoALfOvl2gBLQe1Jxlw5esPdsn0Q
+         jt1z5r3YKVRBvozBxPDXZOvRvLI+kTJM1obwgBE8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        anton ivanov <anton.ivanov@cambridgegreys.com>,
-        Julius Werner <jwerner@chromium.org>,
-        David Gow <davidgow@google.com>,
+        stable@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Randy Dunlap <rdunlap@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0710/1017] firmware: google: Properly state IOMEM dependency
-Date:   Tue,  5 Apr 2022 09:27:03 +0200
-Message-Id: <20220405070415.346082419@linuxfoundation.org>
+Subject: [PATCH 5.16 0711/1017] driver core: dd: fix return value of __setup handler
+Date:   Tue,  5 Apr 2022 09:27:04 +0200
+Message-Id: <20220405070415.375128241@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -57,56 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Gow <davidgow@google.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 37fd83916da2e4cae03d350015c82a67b1b334c4 ]
+[ Upstream commit f2aad54703dbe630f9d8b235eb58e8c8cc78f37d ]
 
-The Google Coreboot implementation requires IOMEM functions
-(memmremap, memunmap, devm_memremap), but does not specify this is its
-Kconfig. This results in build errors when HAS_IOMEM is not set, such as
-on some UML configurations:
+When "driver_async_probe=nulltty" is used on the kernel boot command line,
+it causes an Unknown parameter message and the string is added to init's
+environment strings, polluting them.
 
-/usr/bin/ld: drivers/firmware/google/coreboot_table.o: in function `coreboot_table_probe':
-coreboot_table.c:(.text+0x311): undefined reference to `memremap'
-/usr/bin/ld: coreboot_table.c:(.text+0x34e): undefined reference to `memunmap'
-/usr/bin/ld: drivers/firmware/google/memconsole-coreboot.o: in function `memconsole_probe':
-memconsole-coreboot.c:(.text+0x12d): undefined reference to `memremap'
-/usr/bin/ld: memconsole-coreboot.c:(.text+0x17e): undefined reference to `devm_memremap'
-/usr/bin/ld: memconsole-coreboot.c:(.text+0x191): undefined reference to `memunmap'
-/usr/bin/ld: drivers/firmware/google/vpd.o: in function `vpd_section_destroy.isra.0':
-vpd.c:(.text+0x300): undefined reference to `memunmap'
-/usr/bin/ld: drivers/firmware/google/vpd.o: in function `vpd_section_init':
-vpd.c:(.text+0x382): undefined reference to `memremap'
-/usr/bin/ld: vpd.c:(.text+0x459): undefined reference to `memunmap'
-/usr/bin/ld: drivers/firmware/google/vpd.o: in function `vpd_probe':
-vpd.c:(.text+0x59d): undefined reference to `memremap'
-/usr/bin/ld: vpd.c:(.text+0x5d3): undefined reference to `memunmap'
-collect2: error: ld returned 1 exit status
+  Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc6
+  driver_async_probe=nulltty", will be passed to user space.
 
-Fixes: a28aad66da8b ("firmware: coreboot: Collapse platform drivers into bus core")
-Acked-By: anton ivanov <anton.ivanov@cambridgegreys.com>
-Acked-By: Julius Werner <jwerner@chromium.org>
-Signed-off-by: David Gow <davidgow@google.com>
-Link: https://lore.kernel.org/r/20220225041502.1901806-1-davidgow@google.com
+ Run /sbin/init as init process
+   with arguments:
+     /sbin/init
+   with environment:
+     HOME=/
+     TERM=linux
+     BOOT_IMAGE=/boot/bzImage-517rc6
+     driver_async_probe=nulltty
+
+Change the return value of the __setup function to 1 to indicate
+that the __setup option has been handled.
+
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Fixes: 1ea61b68d0f8 ("async: Add cmdline option to specify drivers to be async probed")
+Cc: Feng Tang <feng.tang@intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Reviewed-by: Feng Tang <feng.tang@intel.com>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Link: https://lore.kernel.org/r/20220301041829.15137-1-rdunlap@infradead.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/google/Kconfig | 2 +-
+ drivers/base/dd.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/firmware/google/Kconfig b/drivers/firmware/google/Kconfig
-index 931544c9f63d..983e07dc022e 100644
---- a/drivers/firmware/google/Kconfig
-+++ b/drivers/firmware/google/Kconfig
-@@ -21,7 +21,7 @@ config GOOGLE_SMI
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index 6b6630693201..64ce42b6c6b6 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -809,7 +809,7 @@ static int __init save_async_options(char *buf)
+ 		pr_warn("Too long list of driver names for 'driver_async_probe'!\n");
  
- config GOOGLE_COREBOOT_TABLE
- 	tristate "Coreboot Table Access"
--	depends on ACPI || OF
-+	depends on HAS_IOMEM && (ACPI || OF)
- 	help
- 	  This option enables the coreboot_table module, which provides other
- 	  firmware modules access to the coreboot table. The coreboot table
+ 	strlcpy(async_probe_drv_names, buf, ASYNC_DRV_NAMES_MAX_LEN);
+-	return 0;
++	return 1;
+ }
+ __setup("driver_async_probe=", save_async_options);
+ 
 -- 
 2.34.1
 

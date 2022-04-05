@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F1124F2C9C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BADA4F2BC2
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350410AbiDEJ6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37238 "EHLO
+        id S239166AbiDEJw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238508AbiDEITJ (ORCPT
+        with ESMTP id S238611AbiDEITO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:19:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376ADE033;
-        Tue,  5 Apr 2022 01:09:03 -0700 (PDT)
+        Tue, 5 Apr 2022 04:19:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BAC69CEC;
+        Tue,  5 Apr 2022 01:09:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8810B81A32;
-        Tue,  5 Apr 2022 08:09:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FD3EC385A9;
-        Tue,  5 Apr 2022 08:08:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7997D609AD;
+        Tue,  5 Apr 2022 08:09:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88C22C385A1;
+        Tue,  5 Apr 2022 08:09:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146140;
-        bh=RqH+qzWa/r4CLdWRtLFgQGlxDOZvKu8+nk+j1Be6Jgg=;
+        s=korg; t=1649146151;
+        bh=svLRQWbvKn7fTVcWgCPB7AJ8/y3hrUNuvu3IXuQAygw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JlWLmpsIX1NJol2QA1l6my4+PxxqLmPGqZCbtumDBJ/NW8qMliDVhevLzSaxXfoCx
-         ka1wgGZWYuyGemxUGIju/RxVeToksfL6USld31pFI5L8E3lEtOhaoljyRPBYdHNRZ5
-         bpj6NoPf12lb7klxEAz4tG0QwgypNQqv6G9NlzFE=
+        b=dSFBnwq0zxa162U3v01feXihIsih8aS/4STmb8EW5t1BTSt9PeBpD3k26QZRu5DQZ
+         sCftn8bVrZmMY5OfUexUQIoKdQxPxgiBddpo5JR5zHNFTY9QhNnQRy7/PX6BeO+3iT
+         yMhxw85n0nc0kvRAx4R8gXmGERRM7SHGZ8+eSqFc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        stable@vger.kernel.org, Wang Yufen <wangyufen@huawei.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0657/1126] RDMA/irdma: Prevent some integer underflows
-Date:   Tue,  5 Apr 2022 09:23:24 +0200
-Message-Id: <20220405070426.914833420@linuxfoundation.org>
+Subject: [PATCH 5.17 0660/1126] bpf, sockmap: Fix memleak in sk_psock_queue_msg
+Date:   Tue,  5 Apr 2022 09:23:27 +0200
+Message-Id: <20220405070427.001479253@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,74 +56,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Wang Yufen <wangyufen@huawei.com>
 
-[ Upstream commit 6f6dbb819dfc1a35bcb8b709b5c83a3ea8beff75 ]
+[ Upstream commit 938d3480b92fa5e454b7734294f12a7b75126f09 ]
 
-My static checker complains that:
+If tcp_bpf_sendmsg is running during a tear down operation we may enqueue
+data on the ingress msg queue while tear down is trying to free it.
 
-    drivers/infiniband/hw/irdma/ctrl.c:3605 irdma_sc_ceq_init()
-    warn: can subtract underflow 'info->dev->hmc_fpm_misc.max_ceqs'?
+ sk1 (redirect sk2)                         sk2
+ -------------------                      ---------------
+tcp_bpf_sendmsg()
+ tcp_bpf_send_verdict()
+  tcp_bpf_sendmsg_redir()
+   bpf_tcp_ingress()
+                                          sock_map_close()
+                                           lock_sock()
+    lock_sock() ... blocking
+                                           sk_psock_stop
+                                            sk_psock_clear_state(psock, SK_PSOCK_TX_ENABLED);
+                                           release_sock(sk);
+    lock_sock()
+    sk_mem_charge()
+    get_page()
+    sk_psock_queue_msg()
+     sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED);
+      drop_sk_msg()
+    release_sock()
 
-It appears that "info->dev->hmc_fpm_misc.max_ceqs" comes from the firmware
-in irdma_sc_parse_fpm_query_buf() so, yes, there is a chance that it could
-be zero.  Even if we trust the firmware, it's easy enough to change the
-condition just as a hardenning measure.
+While drop_sk_msg(), the msg has charged memory form sk by sk_mem_charge
+and has sg pages need to put. To fix we use sk_msg_free() and then kfee()
+msg.
 
-Fixes: 3f49d6842569 ("RDMA/irdma: Implement HW Admin Queue OPs")
-Link: https://lore.kernel.org/r/20220307125928.GE16710@kili
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Acked-by: Shiraz Saleem <shiraz.saleem@intel.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+This issue can cause the following info:
+WARNING: CPU: 0 PID: 9202 at net/core/stream.c:205 sk_stream_kill_queues+0xc8/0xe0
+Call Trace:
+ <IRQ>
+ inet_csk_destroy_sock+0x55/0x110
+ tcp_rcv_state_process+0xe5f/0xe90
+ ? sk_filter_trim_cap+0x10d/0x230
+ ? tcp_v4_do_rcv+0x161/0x250
+ tcp_v4_do_rcv+0x161/0x250
+ tcp_v4_rcv+0xc3a/0xce0
+ ip_protocol_deliver_rcu+0x3d/0x230
+ ip_local_deliver_finish+0x54/0x60
+ ip_local_deliver+0xfd/0x110
+ ? ip_protocol_deliver_rcu+0x230/0x230
+ ip_rcv+0xd6/0x100
+ ? ip_local_deliver+0x110/0x110
+ __netif_receive_skb_one_core+0x85/0xa0
+ process_backlog+0xa4/0x160
+ __napi_poll+0x29/0x1b0
+ net_rx_action+0x287/0x300
+ __do_softirq+0xff/0x2fc
+ do_softirq+0x79/0x90
+ </IRQ>
+
+WARNING: CPU: 0 PID: 531 at net/ipv4/af_inet.c:154 inet_sock_destruct+0x175/0x1b0
+Call Trace:
+ <TASK>
+ __sk_destruct+0x24/0x1f0
+ sk_psock_destroy+0x19b/0x1c0
+ process_one_work+0x1b3/0x3c0
+ ? process_one_work+0x3c0/0x3c0
+ worker_thread+0x30/0x350
+ ? process_one_work+0x3c0/0x3c0
+ kthread+0xe6/0x110
+ ? kthread_complete_and_exit+0x20/0x20
+ ret_from_fork+0x22/0x30
+ </TASK>
+
+Fixes: 9635720b7c88 ("bpf, sockmap: Fix memleak on ingress msg enqueue")
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Link: https://lore.kernel.org/bpf/20220304081145.2037182-2-wangyufen@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/irdma/ctrl.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ include/linux/skmsg.h | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/infiniband/hw/irdma/ctrl.c b/drivers/infiniband/hw/irdma/ctrl.c
-index 3141a9c85de5..e7554b6043e4 100644
---- a/drivers/infiniband/hw/irdma/ctrl.c
-+++ b/drivers/infiniband/hw/irdma/ctrl.c
-@@ -433,7 +433,7 @@ enum irdma_status_code irdma_sc_qp_create(struct irdma_sc_qp *qp, struct irdma_c
+diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+index 18a717fe62eb..7f32dd59e751 100644
+--- a/include/linux/skmsg.h
++++ b/include/linux/skmsg.h
+@@ -310,21 +310,16 @@ static inline void sock_drop(struct sock *sk, struct sk_buff *skb)
+ 	kfree_skb(skb);
+ }
  
- 	cqp = qp->dev->cqp;
- 	if (qp->qp_uk.qp_id < cqp->dev->hw_attrs.min_hw_qp_id ||
--	    qp->qp_uk.qp_id > (cqp->dev->hmc_info->hmc_obj[IRDMA_HMC_IW_QP].max_cnt - 1))
-+	    qp->qp_uk.qp_id >= (cqp->dev->hmc_info->hmc_obj[IRDMA_HMC_IW_QP].max_cnt))
- 		return IRDMA_ERR_INVALID_QP_ID;
+-static inline void drop_sk_msg(struct sk_psock *psock, struct sk_msg *msg)
+-{
+-	if (msg->skb)
+-		sock_drop(psock->sk, msg->skb);
+-	kfree(msg);
+-}
+-
+ static inline void sk_psock_queue_msg(struct sk_psock *psock,
+ 				      struct sk_msg *msg)
+ {
+ 	spin_lock_bh(&psock->ingress_lock);
+ 	if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED))
+ 		list_add_tail(&msg->list, &psock->ingress_msg);
+-	else
+-		drop_sk_msg(psock, msg);
++	else {
++		sk_msg_free(psock->sk, msg);
++		kfree(msg);
++	}
+ 	spin_unlock_bh(&psock->ingress_lock);
+ }
  
- 	wqe = irdma_sc_cqp_get_next_send_wqe(cqp, scratch);
-@@ -2512,10 +2512,10 @@ static enum irdma_status_code irdma_sc_cq_create(struct irdma_sc_cq *cq,
- 	enum irdma_status_code ret_code = 0;
- 
- 	cqp = cq->dev->cqp;
--	if (cq->cq_uk.cq_id > (cqp->dev->hmc_info->hmc_obj[IRDMA_HMC_IW_CQ].max_cnt - 1))
-+	if (cq->cq_uk.cq_id >= (cqp->dev->hmc_info->hmc_obj[IRDMA_HMC_IW_CQ].max_cnt))
- 		return IRDMA_ERR_INVALID_CQ_ID;
- 
--	if (cq->ceq_id > (cq->dev->hmc_fpm_misc.max_ceqs - 1))
-+	if (cq->ceq_id >= (cq->dev->hmc_fpm_misc.max_ceqs))
- 		return IRDMA_ERR_INVALID_CEQ_ID;
- 
- 	ceq = cq->dev->ceq[cq->ceq_id];
-@@ -3617,7 +3617,7 @@ enum irdma_status_code irdma_sc_ceq_init(struct irdma_sc_ceq *ceq,
- 	    info->elem_cnt > info->dev->hw_attrs.max_hw_ceq_size)
- 		return IRDMA_ERR_INVALID_SIZE;
- 
--	if (info->ceq_id > (info->dev->hmc_fpm_misc.max_ceqs - 1))
-+	if (info->ceq_id >= (info->dev->hmc_fpm_misc.max_ceqs))
- 		return IRDMA_ERR_INVALID_CEQ_ID;
- 	pble_obj_cnt = info->dev->hmc_info->hmc_obj[IRDMA_HMC_IW_PBLE].cnt;
- 
-@@ -4166,7 +4166,7 @@ enum irdma_status_code irdma_sc_ccq_init(struct irdma_sc_cq *cq,
- 	    info->num_elem > info->dev->hw_attrs.uk_attrs.max_hw_cq_size)
- 		return IRDMA_ERR_INVALID_SIZE;
- 
--	if (info->ceq_id > (info->dev->hmc_fpm_misc.max_ceqs - 1))
-+	if (info->ceq_id >= (info->dev->hmc_fpm_misc.max_ceqs ))
- 		return IRDMA_ERR_INVALID_CEQ_ID;
- 
- 	pble_obj_cnt = info->dev->hmc_info->hmc_obj[IRDMA_HMC_IW_PBLE].cnt;
 -- 
 2.34.1
 

@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E934F3E8A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:44:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCD0E4F428E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389308AbiDEOoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:44:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36330 "EHLO
+        id S1381183AbiDEMOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232709AbiDEJlM (ORCPT
+        with ESMTP id S244780AbiDEIwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:41:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457C0BB096;
-        Tue,  5 Apr 2022 02:25:56 -0700 (PDT)
+        Tue, 5 Apr 2022 04:52:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D36193FD;
+        Tue,  5 Apr 2022 01:43:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D44766165C;
-        Tue,  5 Apr 2022 09:25:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEE9CC385A0;
-        Tue,  5 Apr 2022 09:25:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EEA3609D0;
+        Tue,  5 Apr 2022 08:43:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EDC7C385A0;
+        Tue,  5 Apr 2022 08:43:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150755;
-        bh=xKN4tdAmdWfMVW0Q4IbJ3qKBQwoepPNQp7UqwNDTv4g=;
+        s=korg; t=1649148230;
+        bh=YJMAzVKAIvDjpbqE796gnbT2lDaRLxlz3gVlK0XQ2WI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J0bkmRrZ5XTEdSIhqH7SPSIHNCETKx66t8OxJcoaq1IFtlYvwgBoygI3pYzzn9NPs
-         8Yu0gMk8WwMrq8TzIH4UegsLlgp6XldwHkGxkqMUvbHoeXgddloQkK6o+BZAIJi6Z3
-         y7xVUbEeMDWbunbh8Ry/L2Vx1WsOSADCp4MwPWuI=
+        b=RNc1vD10nphUMV9fYzRaftEATjyX6wNexwdtc9q/zc7ABcnANQ7FjZEJBCC2a0a+3
+         3vrrfJwoKIhAZgba+guqOkWpV6fTstu9hyIfpZav4Zfn4Rw1I2RANP7GEMyUS0W4kO
+         ILwlbCbLAqyvQYoaaL3pOAvDMk0UlhOkb8IFXfSE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bill Messmer <wmessmer@microsoft.com>,
-        Jann Horn <jannh@google.com>, Kees Cook <keescook@chromium.org>
-Subject: [PATCH 5.15 131/913] coredump: Also dump first pages of non-executable ELF libraries
-Date:   Tue,  5 Apr 2022 09:19:53 +0200
-Message-Id: <20220405070343.758405377@linuxfoundation.org>
+        stable@vger.kernel.org, Jonathan Marek <jonathan@marek.ca>,
+        Robert Foss <robert.foss@linaro.org>,
+        Julian Grahsl <jgrahsl@snap.com>,
+        Bryan ODonoghue <bryan.odonoghue@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0281/1017] media: camss: csid-170: set the right HALT_CMD when disabled
+Date:   Tue,  5 Apr 2022 09:19:54 +0200
+Message-Id: <20220405070402.609281506@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,109 +59,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+From: Jonathan Marek <jonathan@marek.ca>
 
-commit 84158b7f6a0624b81800b4e7c90f7fb7fdecf66c upstream.
+[ Upstream commit ee780cd7be3b5608550bafe7d5f113db2140e99b ]
 
-When I rewrote the VMA dumping logic for coredumps, I changed it to
-recognize ELF library mappings based on the file being executable instead
-of the mapping having an ELF header. But turns out, distros ship many ELF
-libraries as non-executable, so the heuristic goes wrong...
+Use the "HALT_CMD_RESUME_AT_FRAME_BOUNDARY" define instead of a "1" which
+is otherwise confusing, and add a "HALT_CMD_HALT_AT_FRAME_BOUNDARY" which
+is set when disabling.
 
-Restore the old behavior where FILTER(ELF_HEADERS) dumps the first page of
-any offset-0 readable mapping that starts with the ELF magic.
-
-This fix is technically layer-breaking a bit, because it checks for
-something ELF-specific in fs/coredump.c; but since we probably want to
-share this between standard ELF and FDPIC ELF anyway, I guess it's fine?
-And this also keeps the change small for backporting.
-
-Cc: stable@vger.kernel.org
-Fixes: 429a22e776a2 ("coredump: rework elf/elf_fdpic vma_dump_size() into common helper")
-Reported-by: Bill Messmer <wmessmer@microsoft.com>
-Signed-off-by: Jann Horn <jannh@google.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20220126025739.2014888-1-jannh@google.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: eebe6d00e9bf ("media: camss: Add support for CSID hardware version Titan 170")
+Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Tested-by: Julian Grahsl <jgrahsl@snap.com>
+Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/coredump.c |   39 ++++++++++++++++++++++++++++++++++-----
- 1 file changed, 34 insertions(+), 5 deletions(-)
+ drivers/media/platform/qcom/camss/camss-csid-170.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -41,6 +41,7 @@
- #include <linux/fs.h>
- #include <linux/path.h>
- #include <linux/timekeeping.h>
-+#include <linux/elf.h>
+diff --git a/drivers/media/platform/qcom/camss/camss-csid-170.c b/drivers/media/platform/qcom/camss/camss-csid-170.c
+index a006c8dbceb1..82f59933ad7b 100644
+--- a/drivers/media/platform/qcom/camss/camss-csid-170.c
++++ b/drivers/media/platform/qcom/camss/camss-csid-170.c
+@@ -105,7 +105,8 @@
+ #define CSID_RDI_CTRL(rdi)			((IS_LITE ? 0x208 : 0x308)\
+ 						+ 0x100 * (rdi))
+ #define		RDI_CTRL_HALT_CMD		0
+-#define			ALT_CMD_RESUME_AT_FRAME_BOUNDARY	1
++#define			HALT_CMD_HALT_AT_FRAME_BOUNDARY		0
++#define			HALT_CMD_RESUME_AT_FRAME_BOUNDARY	1
+ #define		RDI_CTRL_HALT_MODE		2
  
- #include <linux/uaccess.h>
- #include <asm/mmu_context.h>
-@@ -992,6 +993,8 @@ static bool always_dump_vma(struct vm_ar
- 	return false;
+ #define CSID_RDI_FRM_DROP_PATTERN(rdi)			((IS_LITE ? 0x20C : 0x30C)\
+@@ -444,7 +445,10 @@ static void csid_configure_stream(struct csid_device *csid, u8 enable)
+ 	val |= 1 << CSI2_RX_CFG1_MISR_EN;
+ 	writel_relaxed(val, csid->base + CSID_CSI2_RX_CFG1); // csi2_vc_mode_shift_val ?
+ 
+-	val = 1 << RDI_CTRL_HALT_CMD;
++	if (enable)
++		val = HALT_CMD_RESUME_AT_FRAME_BOUNDARY << RDI_CTRL_HALT_CMD;
++	else
++		val = HALT_CMD_HALT_AT_FRAME_BOUNDARY << RDI_CTRL_HALT_CMD;
+ 	writel_relaxed(val, csid->base + CSID_RDI_CTRL(0));
  }
  
-+#define DUMP_SIZE_MAYBE_ELFHDR_PLACEHOLDER 1
-+
- /*
-  * Decide how much of @vma's contents should be included in a core dump.
-  */
-@@ -1051,9 +1054,20 @@ static unsigned long vma_dump_size(struc
- 	 * dump the first page to aid in determining what was mapped here.
- 	 */
- 	if (FILTER(ELF_HEADERS) &&
--	    vma->vm_pgoff == 0 && (vma->vm_flags & VM_READ) &&
--	    (READ_ONCE(file_inode(vma->vm_file)->i_mode) & 0111) != 0)
--		return PAGE_SIZE;
-+	    vma->vm_pgoff == 0 && (vma->vm_flags & VM_READ)) {
-+		if ((READ_ONCE(file_inode(vma->vm_file)->i_mode) & 0111) != 0)
-+			return PAGE_SIZE;
-+
-+		/*
-+		 * ELF libraries aren't always executable.
-+		 * We'll want to check whether the mapping starts with the ELF
-+		 * magic, but not now - we're holding the mmap lock,
-+		 * so copy_from_user() doesn't work here.
-+		 * Use a placeholder instead, and fix it up later in
-+		 * dump_vma_snapshot().
-+		 */
-+		return DUMP_SIZE_MAYBE_ELFHDR_PLACEHOLDER;
-+	}
- 
- #undef	FILTER
- 
-@@ -1128,8 +1142,6 @@ int dump_vma_snapshot(struct coredump_pa
- 		m->end = vma->vm_end;
- 		m->flags = vma->vm_flags;
- 		m->dump_size = vma_dump_size(vma, cprm->mm_flags);
--
--		vma_data_size += m->dump_size;
- 	}
- 
- 	mmap_write_unlock(mm);
-@@ -1139,6 +1151,23 @@ int dump_vma_snapshot(struct coredump_pa
- 		return -EFAULT;
- 	}
- 
-+	for (i = 0; i < *vma_count; i++) {
-+		struct core_vma_metadata *m = (*vma_meta) + i;
-+
-+		if (m->dump_size == DUMP_SIZE_MAYBE_ELFHDR_PLACEHOLDER) {
-+			char elfmag[SELFMAG];
-+
-+			if (copy_from_user(elfmag, (void __user *)m->start, SELFMAG) ||
-+					memcmp(elfmag, ELFMAG, SELFMAG) != 0) {
-+				m->dump_size = 0;
-+			} else {
-+				m->dump_size = PAGE_SIZE;
-+			}
-+		}
-+
-+		vma_data_size += m->dump_size;
-+	}
-+
- 	*vma_data_size_ptr = vma_data_size;
- 	return 0;
- }
+-- 
+2.34.1
+
 
 

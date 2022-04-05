@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE10A4F4A6B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C79B4F497C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1456112AbiDEWpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:45:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47414 "EHLO
+        id S1390859AbiDEWSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:18:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349136AbiDEJtM (ORCPT
+        with ESMTP id S1354898AbiDEKQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5502D119;
-        Tue,  5 Apr 2022 02:41:21 -0700 (PDT)
+        Tue, 5 Apr 2022 06:16:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2503D6F;
+        Tue,  5 Apr 2022 03:03:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 02636B818F3;
-        Tue,  5 Apr 2022 09:41:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68818C385A3;
-        Tue,  5 Apr 2022 09:41:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DBCE761676;
+        Tue,  5 Apr 2022 10:03:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECC6DC385A2;
+        Tue,  5 Apr 2022 10:03:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151678;
-        bh=68/DhO5dODneTJ5vXxjoSOTJudPdbEsjy/axiEHdOHE=;
+        s=korg; t=1649153021;
+        bh=o/wY+3yctkPi5FJvL2q9uklsoW1kryd7x+W0kjRFZwE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p2Epm4jX+KeQZ6zOwxwuoyXi3Y7JG8L2Y5VozBzIr0e//9S89PJVfQbJz5m1uS1g2
-         856+oudDueaiUX54PULLI/SeYQCXZpc+WRce5u/AnXtfFBR38kO6IwdmX3YUw6JmXg
-         gfkniZ4EBtxGZceew028i5VHSVYCDrfDp34+GFvI=
+        b=WnkU0pUHgj5rClZ8GecWVPkkshAlqgZjZvO4VqwxPRuUhfdaamQHRNsBghMx3OMxy
+         WktvYyhfYWOzjqxtxXGBJsfeqgKGGnK2TnrLSrJE+9LcepoEe8pW5q+0vRlVer55QA
+         l2Qib7FFH0nOhfVkp3L8mruKTFk1s5UeAUW/lzwA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mustafa Ismail <mustafa.ismail@intel.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 503/913] RDMA/irdma: Fix Passthrough mode in VM
-Date:   Tue,  5 Apr 2022 09:26:05 +0200
-Message-Id: <20220405070354.931496945@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+6e5c88838328e99c7e1c@syzkaller.appspotmail.com,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.10 072/599] ALSA: pcm: Fix potential AB/BA lock with buffer_mutex and mmap_lock
+Date:   Tue,  5 Apr 2022 09:26:06 +0200
+Message-Id: <20220405070300.968767695@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,81 +55,209 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mustafa Ismail <mustafa.ismail@intel.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit b200189626b5cefbaf8be9cadd7a28215e065bb9 ]
+commit bc55cfd5718c7c23e5524582e9fa70b4d10f2433 upstream.
 
-Using PCI_FUNC macro in a VM, when the device is in passthrough mode does
-not provide the real function instance. This means that currently, devices
-will not probe unless the instance in the VM matches the instance in the
-host.
+syzbot caught a potential deadlock between the PCM
+runtime->buffer_mutex and the mm->mmap_lock.  It was brought by the
+recent fix to cover the racy read/write and other ioctls, and in that
+commit, I overlooked a (hopefully only) corner case that may take the
+revert lock, namely, the OSS mmap.  The OSS mmap operation
+exceptionally allows to re-configure the parameters inside the OSS
+mmap syscall, where mm->mmap_mutex is already held.  Meanwhile, the
+copy_from/to_user calls at read/write operations also take the
+mm->mmap_lock internally, hence it may lead to a AB/BA deadlock.
 
-Fix this by getting the pf_id from the LAN during the probe.
+A similar problem was already seen in the past and we fixed it with a
+refcount (in commit b248371628aa).  The former fix covered only the
+call paths with OSS read/write and OSS ioctls, while we need to cover
+the concurrent access via both ALSA and OSS APIs now.
 
-Fixes: 8498a30e1b94 ("RDMA/irdma: Register auxiliary driver and implement private channel OPs")
-Link: https://lore.kernel.org/r/20220225163211.127-3-shiraz.saleem@intel.com
-Signed-off-by: Mustafa Ismail <mustafa.ismail@intel.com>
-Signed-off-by: Shiraz Saleem <shiraz.saleem@intel.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This patch addresses the problem above by replacing the buffer_mutex
+lock in the read/write operations with a refcount similar as we've
+used for OSS.  The new field, runtime->buffer_accessing, keeps the
+number of concurrent read/write operations.  Unlike the former
+buffer_mutex protection, this protects only around the
+copy_from/to_user() calls; the other codes are basically protected by
+the PCM stream lock.  The refcount can be a negative, meaning blocked
+by the ioctls.  If a negative value is seen, the read/write aborts
+with -EBUSY.  In the ioctl side, OTOH, they check this refcount, too,
+and set to a negative value for blocking unless it's already being
+accessed.
+
+Reported-by: syzbot+6e5c88838328e99c7e1c@syzkaller.appspotmail.com
+Fixes: dca947d4d26d ("ALSA: pcm: Fix races among concurrent read/write and buffer changes")
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/000000000000381a0d05db622a81@google.com
+Link: https://lore.kernel.org/r/20220330120903.4738-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/hw/irdma/hw.c       | 2 +-
- drivers/infiniband/hw/irdma/i40iw_if.c | 1 +
- drivers/infiniband/hw/irdma/main.c     | 1 +
- drivers/infiniband/hw/irdma/main.h     | 1 +
- 4 files changed, 4 insertions(+), 1 deletion(-)
+ include/sound/pcm.h     |    1 +
+ sound/core/pcm.c        |    1 +
+ sound/core/pcm_lib.c    |    9 +++++----
+ sound/core/pcm_native.c |   39 ++++++++++++++++++++++++++++++++-------
+ 4 files changed, 39 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/infiniband/hw/irdma/hw.c b/drivers/infiniband/hw/irdma/hw.c
-index aa119441eb45..4f763e552eae 100644
---- a/drivers/infiniband/hw/irdma/hw.c
-+++ b/drivers/infiniband/hw/irdma/hw.c
-@@ -1608,7 +1608,7 @@ static enum irdma_status_code irdma_initialize_dev(struct irdma_pci_f *rf)
- 	info.fpm_commit_buf = mem.va;
+--- a/include/sound/pcm.h
++++ b/include/sound/pcm.h
+@@ -399,6 +399,7 @@ struct snd_pcm_runtime {
+ 	struct fasync_struct *fasync;
+ 	bool stop_operating;		/* sync_stop will be called */
+ 	struct mutex buffer_mutex;	/* protect for buffer changes */
++	atomic_t buffer_accessing;	/* >0: in r/w operation, <0: blocked */
  
- 	info.bar0 = rf->hw.hw_addr;
--	info.hmc_fn_id = PCI_FUNC(rf->pcidev->devfn);
-+	info.hmc_fn_id = rf->pf_id;
- 	info.hw = &rf->hw;
- 	status = irdma_sc_dev_init(rf->rdma_ver, &rf->sc_dev, &info);
- 	if (status)
-diff --git a/drivers/infiniband/hw/irdma/i40iw_if.c b/drivers/infiniband/hw/irdma/i40iw_if.c
-index d219f64b2c3d..a6f758b61b0c 100644
---- a/drivers/infiniband/hw/irdma/i40iw_if.c
-+++ b/drivers/infiniband/hw/irdma/i40iw_if.c
-@@ -77,6 +77,7 @@ static void i40iw_fill_device_info(struct irdma_device *iwdev, struct i40e_info
- 	rf->rdma_ver = IRDMA_GEN_1;
- 	rf->gen_ops.request_reset = i40iw_request_reset;
- 	rf->pcidev = cdev_info->pcidev;
-+	rf->pf_id = cdev_info->fid;
- 	rf->hw.hw_addr = cdev_info->hw_addr;
- 	rf->cdev = cdev_info;
- 	rf->msix_count = cdev_info->msix_count;
-diff --git a/drivers/infiniband/hw/irdma/main.c b/drivers/infiniband/hw/irdma/main.c
-index 51a41359e0b4..c556a36e7670 100644
---- a/drivers/infiniband/hw/irdma/main.c
-+++ b/drivers/infiniband/hw/irdma/main.c
-@@ -226,6 +226,7 @@ static void irdma_fill_device_info(struct irdma_device *iwdev, struct ice_pf *pf
- 	rf->hw.hw_addr = pf->hw.hw_addr;
- 	rf->pcidev = pf->pdev;
- 	rf->msix_count =  pf->num_rdma_msix;
-+	rf->pf_id = pf->hw.pf_id;
- 	rf->msix_entries = &pf->msix_entries[pf->rdma_base_vector];
- 	rf->default_vsi.vsi_idx = vsi->vsi_num;
- 	rf->protocol_used = IRDMA_ROCE_PROTOCOL_ONLY;
-diff --git a/drivers/infiniband/hw/irdma/main.h b/drivers/infiniband/hw/irdma/main.h
-index 8b215f3cee89..454b4b370386 100644
---- a/drivers/infiniband/hw/irdma/main.h
-+++ b/drivers/infiniband/hw/irdma/main.h
-@@ -257,6 +257,7 @@ struct irdma_pci_f {
- 	u8 *mem_rsrc;
- 	u8 rdma_ver;
- 	u8 rst_to;
-+	u8 pf_id;
- 	enum irdma_protocol_used protocol_used;
- 	u32 sd_type;
- 	u32 msix_count;
--- 
-2.34.1
-
+ 	/* -- private section -- */
+ 	void *private_data;
+--- a/sound/core/pcm.c
++++ b/sound/core/pcm.c
+@@ -970,6 +970,7 @@ int snd_pcm_attach_substream(struct snd_
+ 
+ 	runtime->status->state = SNDRV_PCM_STATE_OPEN;
+ 	mutex_init(&runtime->buffer_mutex);
++	atomic_set(&runtime->buffer_accessing, 0);
+ 
+ 	substream->runtime = runtime;
+ 	substream->private_data = pcm->private_data;
+--- a/sound/core/pcm_lib.c
++++ b/sound/core/pcm_lib.c
+@@ -1871,11 +1871,9 @@ static int wait_for_avail(struct snd_pcm
+ 		if (avail >= runtime->twake)
+ 			break;
+ 		snd_pcm_stream_unlock_irq(substream);
+-		mutex_unlock(&runtime->buffer_mutex);
+ 
+ 		tout = schedule_timeout(wait_time);
+ 
+-		mutex_lock(&runtime->buffer_mutex);
+ 		snd_pcm_stream_lock_irq(substream);
+ 		set_current_state(TASK_INTERRUPTIBLE);
+ 		switch (runtime->status->state) {
+@@ -2169,7 +2167,6 @@ snd_pcm_sframes_t __snd_pcm_lib_xfer(str
+ 
+ 	nonblock = !!(substream->f_flags & O_NONBLOCK);
+ 
+-	mutex_lock(&runtime->buffer_mutex);
+ 	snd_pcm_stream_lock_irq(substream);
+ 	err = pcm_accessible_state(runtime);
+ 	if (err < 0)
+@@ -2224,10 +2221,15 @@ snd_pcm_sframes_t __snd_pcm_lib_xfer(str
+ 			err = -EINVAL;
+ 			goto _end_unlock;
+ 		}
++		if (!atomic_inc_unless_negative(&runtime->buffer_accessing)) {
++			err = -EBUSY;
++			goto _end_unlock;
++		}
+ 		snd_pcm_stream_unlock_irq(substream);
+ 		err = writer(substream, appl_ofs, data, offset, frames,
+ 			     transfer);
+ 		snd_pcm_stream_lock_irq(substream);
++		atomic_dec(&runtime->buffer_accessing);
+ 		if (err < 0)
+ 			goto _end_unlock;
+ 		err = pcm_accessible_state(runtime);
+@@ -2257,7 +2259,6 @@ snd_pcm_sframes_t __snd_pcm_lib_xfer(str
+ 	if (xfer > 0 && err >= 0)
+ 		snd_pcm_update_state(substream, runtime);
+ 	snd_pcm_stream_unlock_irq(substream);
+-	mutex_unlock(&runtime->buffer_mutex);
+ 	return xfer > 0 ? (snd_pcm_sframes_t)xfer : err;
+ }
+ EXPORT_SYMBOL(__snd_pcm_lib_xfer);
+--- a/sound/core/pcm_native.c
++++ b/sound/core/pcm_native.c
+@@ -667,6 +667,24 @@ static int snd_pcm_hw_params_choose(stru
+ 	return 0;
+ }
+ 
++/* acquire buffer_mutex; if it's in r/w operation, return -EBUSY, otherwise
++ * block the further r/w operations
++ */
++static int snd_pcm_buffer_access_lock(struct snd_pcm_runtime *runtime)
++{
++	if (!atomic_dec_unless_positive(&runtime->buffer_accessing))
++		return -EBUSY;
++	mutex_lock(&runtime->buffer_mutex);
++	return 0; /* keep buffer_mutex, unlocked by below */
++}
++
++/* release buffer_mutex and clear r/w access flag */
++static void snd_pcm_buffer_access_unlock(struct snd_pcm_runtime *runtime)
++{
++	mutex_unlock(&runtime->buffer_mutex);
++	atomic_inc(&runtime->buffer_accessing);
++}
++
+ #if IS_ENABLED(CONFIG_SND_PCM_OSS)
+ #define is_oss_stream(substream)	((substream)->oss.oss)
+ #else
+@@ -677,14 +695,16 @@ static int snd_pcm_hw_params(struct snd_
+ 			     struct snd_pcm_hw_params *params)
+ {
+ 	struct snd_pcm_runtime *runtime;
+-	int err = 0, usecs;
++	int err, usecs;
+ 	unsigned int bits;
+ 	snd_pcm_uframes_t frames;
+ 
+ 	if (PCM_RUNTIME_CHECK(substream))
+ 		return -ENXIO;
+ 	runtime = substream->runtime;
+-	mutex_lock(&runtime->buffer_mutex);
++	err = snd_pcm_buffer_access_lock(runtime);
++	if (err < 0)
++		return err;
+ 	snd_pcm_stream_lock_irq(substream);
+ 	switch (runtime->status->state) {
+ 	case SNDRV_PCM_STATE_OPEN:
+@@ -801,7 +821,7 @@ static int snd_pcm_hw_params(struct snd_
+ 			snd_pcm_lib_free_pages(substream);
+ 	}
+  unlock:
+-	mutex_unlock(&runtime->buffer_mutex);
++	snd_pcm_buffer_access_unlock(runtime);
+ 	return err;
+ }
+ 
+@@ -846,7 +866,9 @@ static int snd_pcm_hw_free(struct snd_pc
+ 	if (PCM_RUNTIME_CHECK(substream))
+ 		return -ENXIO;
+ 	runtime = substream->runtime;
+-	mutex_lock(&runtime->buffer_mutex);
++	result = snd_pcm_buffer_access_lock(runtime);
++	if (result < 0)
++		return result;
+ 	snd_pcm_stream_lock_irq(substream);
+ 	switch (runtime->status->state) {
+ 	case SNDRV_PCM_STATE_SETUP:
+@@ -865,7 +887,7 @@ static int snd_pcm_hw_free(struct snd_pc
+ 	snd_pcm_set_state(substream, SNDRV_PCM_STATE_OPEN);
+ 	cpu_latency_qos_remove_request(&substream->latency_pm_qos_req);
+  unlock:
+-	mutex_unlock(&runtime->buffer_mutex);
++	snd_pcm_buffer_access_unlock(runtime);
+ 	return result;
+ }
+ 
+@@ -1350,12 +1372,15 @@ static int snd_pcm_action_nonatomic(cons
+ 
+ 	/* Guarantee the group members won't change during non-atomic action */
+ 	down_read(&snd_pcm_link_rwsem);
+-	mutex_lock(&substream->runtime->buffer_mutex);
++	res = snd_pcm_buffer_access_lock(substream->runtime);
++	if (res < 0)
++		goto unlock;
+ 	if (snd_pcm_stream_linked(substream))
+ 		res = snd_pcm_action_group(ops, substream, state, false);
+ 	else
+ 		res = snd_pcm_action_single(ops, substream, state);
+-	mutex_unlock(&substream->runtime->buffer_mutex);
++	snd_pcm_buffer_access_unlock(substream->runtime);
++ unlock:
+ 	up_read(&snd_pcm_link_rwsem);
+ 	return res;
+ }
 
 

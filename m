@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC4A4F494D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE9D4F4E00
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1441994AbiDEWKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45292 "EHLO
+        id S1586997AbiDFAGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242151AbiDEKcm (ORCPT
+        with ESMTP id S242359AbiDEKcm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 06:32:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A1CDE91E;
-        Tue,  5 Apr 2022 03:18:42 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491D9DE92E;
+        Tue,  5 Apr 2022 03:18:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B77876176C;
-        Tue,  5 Apr 2022 10:18:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C721BC385A1;
-        Tue,  5 Apr 2022 10:18:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7BBDB81C98;
+        Tue,  5 Apr 2022 10:18:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40616C385A0;
+        Tue,  5 Apr 2022 10:18:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153921;
-        bh=xmrh2iJoKtO7Uj8EXFVlXCpuel45WEUN3vbTnItiqJA=;
+        s=korg; t=1649153926;
+        bh=LyU0UCjIMK28Y/+3dy2ewi5N3bhvr2nkJBhF+Msbu9w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KVx+t7TjVqlavXbgp2tgpHBQI7cHukeZ2AsXsmFhiLs2InhV37dmmIl/JBczxq/E4
-         AKsZrQeppBXoKwgKYbZIs3FEkPwo2KeuSTasZ/VgGkrLP915xCkU6cPZy2+3G209O4
-         YPfvSXRpv8aB0D9vRoUVG3CUU+zjx/HrrILWrs2k=
+        b=zHFsjodAqc5T/rW7IHW7DlzEd/KWkwNHWxSvveE/sEqRKffP9WTavSHLi4pMxPetE
+         x/F0xhC1yeN6AZo+H9FpPCh7UKicuHrXxMCypqbfO/0k5diDyVsD15BRAMjI/4+7JU
+         u9CJiDo+cZW/guCD2LSfITTBKhq3lbATOUUrfon8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 394/599] NFS: Use of mapping_set_error() results in spurious errors
-Date:   Tue,  5 Apr 2022 09:31:28 +0200
-Message-Id: <20220405070310.556059052@linuxfoundation.org>
+Subject: [PATCH 5.10 396/599] iio: adc: Add check for devm_request_threaded_irq
+Date:   Tue,  5 Apr 2022 09:31:30 +0200
+Message-Id: <20220405070310.615265669@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -55,39 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 6c984083ec2453dfd3fcf98f392f34500c73e3f2 ]
+[ Upstream commit b30537a4cedcacf0ade2f33ebb7610178ed1e7d7 ]
 
-The use of mapping_set_error() in conjunction with calls to
-filemap_check_errors() is problematic because every error gets reported
-as either an EIO or an ENOSPC by filemap_check_errors() in functions
-such as filemap_write_and_wait() or filemap_write_and_wait_range().
-In almost all cases, we prefer to use the more nuanced wb errors.
+As the potential failure of the devm_request_threaded_irq(),
+it should be better to check the return value and return
+error if fails.
 
-Fixes: b8946d7bfb94 ("NFS: Revalidate the file mapping on all fatal writeback errors")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Fixes: fa659a40b80b ("iio: adc: twl6030-gpadc: Use devm_* API family")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Link: https://lore.kernel.org/r/20220224062849.3280966-1-jiasheng@iscas.ac.cn
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/write.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/iio/adc/twl6030-gpadc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/fs/nfs/write.c b/fs/nfs/write.c
-index bde4c362841f..cc926e69ee9b 100644
---- a/fs/nfs/write.c
-+++ b/fs/nfs/write.c
-@@ -314,7 +314,10 @@ static void nfs_mapping_set_error(struct page *page, int error)
- 	struct address_space *mapping = page_file_mapping(page);
+diff --git a/drivers/iio/adc/twl6030-gpadc.c b/drivers/iio/adc/twl6030-gpadc.c
+index c6416ad795ca..256177b15c51 100644
+--- a/drivers/iio/adc/twl6030-gpadc.c
++++ b/drivers/iio/adc/twl6030-gpadc.c
+@@ -911,6 +911,8 @@ static int twl6030_gpadc_probe(struct platform_device *pdev)
+ 	ret = devm_request_threaded_irq(dev, irq, NULL,
+ 				twl6030_gpadc_irq_handler,
+ 				IRQF_ONESHOT, "twl6030_gpadc", indio_dev);
++	if (ret)
++		return ret;
  
- 	SetPageError(page);
--	mapping_set_error(mapping, error);
-+	filemap_set_wb_err(mapping, error);
-+	if (mapping->host)
-+		errseq_set(&mapping->host->i_sb->s_wb_err,
-+			   error == -ENOSPC ? -ENOSPC : -EIO);
- 	nfs_set_pageerror(mapping);
- }
- 
+ 	ret = twl6030_gpadc_enable_irq(TWL6030_GPADC_RT_SW1_EOC_MASK);
+ 	if (ret < 0) {
 -- 
 2.34.1
 

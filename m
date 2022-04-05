@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CEF34F4A4B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63B564F48F8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:18:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1454931AbiDEWjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
+        id S1388830AbiDEV5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354877AbiDEKQ1 (ORCPT
+        with ESMTP id S1354908AbiDEKQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:16:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E4E6CA4F;
-        Tue,  5 Apr 2022 03:03:17 -0700 (PDT)
+        Tue, 5 Apr 2022 06:16:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D597662;
+        Tue,  5 Apr 2022 03:03:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35D2161673;
-        Tue,  5 Apr 2022 10:03:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40820C385A3;
-        Tue,  5 Apr 2022 10:03:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F22AB81C83;
+        Tue,  5 Apr 2022 10:03:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 678D6C385A2;
+        Tue,  5 Apr 2022 10:03:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152996;
-        bh=Hxo4l3G3ezXXxyeir2RGiMkhpL4xQTk/wS0+4Y5M1K8=;
+        s=korg; t=1649153026;
+        bh=nYF/5LlqJxR+dXjtyHU6EiTxJe3DQ65PTODezaKI2RE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m2QAZQfFMEE34Ce4A49xmE+/fRUDU4rD45RYMdr1rjV1dchP7GQTBV4vYI+WgXHqT
-         h/J3U7WUt+8/AbwQH/mJxqC+8QZysIr7UZXf+JKESGniMYr9Co1LLdLjI8B8myxnlB
-         ilNN8klUVUgtvWce+UEh2CzU/QuiqTRtr3CMIePE=
+        b=q+8Kof/KYd1qeCYVqt/KMXszZ86uqZRyqXIOcNNTsw5huzo0uuOYXbiaSHjFBVlja
+         HMlJ7K4i5MfThCAdCCIbuVEG2VX7xcyTt7aONt2Ajas3YAZfdf9XPLMf2lhEPDS2Sm
+         7nWi+q3m3b+6XnUc/p/5zIcNjMvO6rqYYc/9ehYc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.10 037/599] greybus: svc: fix an error handling bug in gb_svc_hello()
-Date:   Tue,  5 Apr 2022 09:25:31 +0200
-Message-Id: <20220405070259.928010789@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: [PATCH 5.10 038/599] clk: uniphier: Fix fixed-rate initialization
+Date:   Tue,  5 Apr 2022 09:25:32 +0200
+Message-Id: <20220405070259.958975419@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -54,41 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 
-commit 5f8583a3b7552092582a92e7bbd2153319929ad7 upstream.
+commit ca85a66710a8a1f6b0719397225c3e9ee0abb692 upstream.
 
-Cleanup if gb_svc_queue_deferred_request() fails.
+Fixed-rate clocks in UniPhier don't have any parent clocks, however,
+initial data "init.flags" isn't initialized, so it might be determined
+that there is a parent clock for fixed-rate clock.
 
-Link: https://lore.kernel.org/r/20220202072016.GA6748@kili
-Fixes: ee2f2074fdb2 ("greybus: svc: reconfig APBridgeA-Switch link to handle required load")
-Cc: stable@vger.kernel.org      # 4.9
-[johan: fix commit summary prefix and rename label ]
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Link: https://lore.kernel.org/r/20220202113347.1288-2-johan@kernel.org
+This sets init.flags to zero as initialization.
+
+Cc: <stable@vger.kernel.org>
+Fixes: 734d82f4a678 ("clk: uniphier: add core support code for UniPhier clock driver")
+Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Link: https://lore.kernel.org/r/1646808918-30899-1-git-send-email-hayashi.kunihiko@socionext.com
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/greybus/svc.c |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/clk/uniphier/clk-uniphier-fixed-rate.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/greybus/svc.c
-+++ b/drivers/greybus/svc.c
-@@ -866,8 +866,14 @@ static int gb_svc_hello(struct gb_operat
+--- a/drivers/clk/uniphier/clk-uniphier-fixed-rate.c
++++ b/drivers/clk/uniphier/clk-uniphier-fixed-rate.c
+@@ -24,6 +24,7 @@ struct clk_hw *uniphier_clk_register_fix
  
- 	gb_svc_debugfs_init(svc);
+ 	init.name = name;
+ 	init.ops = &clk_fixed_rate_ops;
++	init.flags = 0;
+ 	init.parent_names = NULL;
+ 	init.num_parents = 0;
  
--	return gb_svc_queue_deferred_request(op);
-+	ret = gb_svc_queue_deferred_request(op);
-+	if (ret)
-+		goto err_remove_debugfs;
- 
-+	return 0;
-+
-+err_remove_debugfs:
-+	gb_svc_debugfs_exit(svc);
- err_unregister_device:
- 	gb_svc_watchdog_destroy(svc);
- 	device_del(&svc->dev);
 
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E904F40A9
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:19:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB614F3E7E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377223AbiDENMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
+        id S1388081AbiDENUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344208AbiDEJSi (ORCPT
+        with ESMTP id S1344361AbiDEJTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:18:38 -0400
+        Tue, 5 Apr 2022 05:19:34 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC2F46160;
-        Tue,  5 Apr 2022 02:05:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C8011F;
+        Tue,  5 Apr 2022 02:07:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04E8FB80DA1;
-        Tue,  5 Apr 2022 09:05:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 528F8C385A0;
-        Tue,  5 Apr 2022 09:05:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9EE72B81A12;
+        Tue,  5 Apr 2022 09:07:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E940DC385A1;
+        Tue,  5 Apr 2022 09:07:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149538;
-        bh=3KGFa6EC32xjqdgLhOOEcMv8VXMCN8d2FHi3RO5nQi4=;
+        s=korg; t=1649149674;
+        bh=qBElXJ90QRgQ8W5VnsNr6T5Wz+r+3jv9YBNbGL+C/PI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dFTnPohZziTFSJSK4RzKjZ+Q4q0RtAiKLHWkfsiDNvXcYzN5WlMzltHmX5y5WN8My
-         BfdmSQzcYt31skI/W4pK4oRn0I42L/WXklgjP9lQvq3tixZJhlCVelQuTO3sjFMzA6
-         X7ONEw6FuImwOf9AL2AuAGc5/wB5j3ulsRlHsHGo=
+        b=adNZPA11YHOGWheHySjb7gIBxAO6jT+V8e0kM+DE/1sglWxZTV+bK/udLK4zsLEov
+         U/8EZhtG2D/sDILHttpMvWYxFOzsQDwn/lI9mCYSlR4nn+09tHTCO3RkrKFSRcKC35
+         5XN//MB8YDq9seyGXBeymjUke55v1bN9za1uMzeg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fedor Pchelkin <aissur0002@gmail.com>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.16 0750/1017] fs: fix fd table size alignment properly
-Date:   Tue,  5 Apr 2022 09:27:43 +0200
-Message-Id: <20220405070416.523221428@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+d1e3b1d92d25abf97943@syzkaller.appspotmail.com,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        James Morris <jamorris@linux.microsoft.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0751/1017] LSM: general protection fault in legacy_parse_param
+Date:   Tue,  5 Apr 2022 09:27:44 +0200
+Message-Id: <20220405070416.552864745@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -58,53 +58,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+From: Casey Schaufler <casey@schaufler-ca.com>
 
-[ Upstream commit d888c83fcec75194a8a48ccd283953bdba7b2550 ]
+[ Upstream commit ecff30575b5ad0eda149aadad247b7f75411fd47 ]
 
-Jason Donenfeld reports that my commit 1c24a186398f ("fs: fd tables have
-to be multiples of BITS_PER_LONG") doesn't work, and the reason is an
-embarrassing brown-paper-bag bug.
+The usual LSM hook "bail on fail" scheme doesn't work for cases where
+a security module may return an error code indicating that it does not
+recognize an input.  In this particular case Smack sees a mount option
+that it recognizes, and returns 0. A call to a BPF hook follows, which
+returns -ENOPARAM, which confuses the caller because Smack has processed
+its data.
 
-Yes, we want to align the number of fds to BITS_PER_LONG, and yes, the
-reason they might not be aligned is because the incoming 'max_fd'
-argument might not be aligned.
+The SELinux hook incorrectly returns 1 on success. There was a time
+when this was correct, however the current expectation is that it
+return 0 on success. This is repaired.
 
-But aligining the argument - while simple - will cause a "infinitely
-big" maxfd (eg NR_OPEN_MAX) to just overflow to zero.  Which most
-definitely isn't what we want either.
-
-The obvious fix was always just to do the alignment last, but I had
-moved it earlier just to make the patch smaller and the code look
-simpler.  Duh.  It certainly made _me_ look simple.
-
-Fixes: 1c24a186398f ("fs: fd tables have to be multiples of BITS_PER_LONG")
-Reported-and-tested-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Cc: Fedor Pchelkin <aissur0002@gmail.com>
-Cc: Alexey Khoroshilov <khoroshilov@ispras.ru>
-Cc: Christian Brauner <brauner@kernel.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Reported-by: syzbot+d1e3b1d92d25abf97943@syzkaller.appspotmail.com
+Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+Acked-by: James Morris <jamorris@linux.microsoft.com>
+Signed-off-by: Paul Moore <paul@paul-moore.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/file.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ security/security.c      | 17 +++++++++++++++--
+ security/selinux/hooks.c |  5 ++---
+ 2 files changed, 17 insertions(+), 5 deletions(-)
 
-diff --git a/fs/file.c b/fs/file.c
-index c01c29417ae6..ee9317346702 100644
---- a/fs/file.c
-+++ b/fs/file.c
-@@ -303,10 +303,9 @@ static unsigned int sane_fdtable_size(struct fdtable *fdt, unsigned int max_fds)
- 	unsigned int count;
- 
- 	count = count_open_files(fdt);
--	max_fds = ALIGN(max_fds, BITS_PER_LONG);
- 	if (max_fds < NR_OPEN_DEFAULT)
- 		max_fds = NR_OPEN_DEFAULT;
--	return min(count, max_fds);
-+	return ALIGN(min(count, max_fds), BITS_PER_LONG);
+diff --git a/security/security.c b/security/security.c
+index cf6615b5e820..745a8bf66d91 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -884,9 +884,22 @@ int security_fs_context_dup(struct fs_context *fc, struct fs_context *src_fc)
+ 	return call_int_hook(fs_context_dup, 0, fc, src_fc);
  }
  
- /*
+-int security_fs_context_parse_param(struct fs_context *fc, struct fs_parameter *param)
++int security_fs_context_parse_param(struct fs_context *fc,
++				    struct fs_parameter *param)
+ {
+-	return call_int_hook(fs_context_parse_param, -ENOPARAM, fc, param);
++	struct security_hook_list *hp;
++	int trc;
++	int rc = -ENOPARAM;
++
++	hlist_for_each_entry(hp, &security_hook_heads.fs_context_parse_param,
++			     list) {
++		trc = hp->hook.fs_context_parse_param(fc, param);
++		if (trc == 0)
++			rc = 0;
++		else if (trc != -ENOPARAM)
++			return trc;
++	}
++	return rc;
+ }
+ 
+ int security_sb_alloc(struct super_block *sb)
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 93eac9464c5f..69b0709bd156 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -2916,10 +2916,9 @@ static int selinux_fs_context_parse_param(struct fs_context *fc,
+ 		return opt;
+ 
+ 	rc = selinux_add_opt(opt, param->string, &fc->security);
+-	if (!rc) {
++	if (!rc)
+ 		param->string = NULL;
+-		rc = 1;
+-	}
++
+ 	return rc;
+ }
+ 
 -- 
 2.34.1
 

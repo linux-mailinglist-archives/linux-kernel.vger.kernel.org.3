@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2404F304F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B88D84F32B5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350687AbiDEJ71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56794 "EHLO
+        id S230342AbiDEJpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237960AbiDEISe (ORCPT
+        with ESMTP id S239018AbiDEITo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:18:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A967EB7C6F;
-        Tue,  5 Apr 2022 01:07:48 -0700 (PDT)
+        Tue, 5 Apr 2022 04:19:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615AC75E50;
+        Tue,  5 Apr 2022 01:10:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 74AD1B81BAF;
-        Tue,  5 Apr 2022 08:07:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0256C385A1;
-        Tue,  5 Apr 2022 08:07:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8319608C0;
+        Tue,  5 Apr 2022 08:09:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFCAFC385A0;
+        Tue,  5 Apr 2022 08:09:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146066;
-        bh=67yb1/B6Sg6i3jl64lZRn2eNJU5+LSPF5bkVgEih44E=;
+        s=korg; t=1649146199;
+        bh=jRuCT5omAFi2LWBQ7waYygaem40XsMiPNfLmN5riCA0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E9I8VZO4FXzBrl7e8PLaDPoNzH+1YoIImL6erO8geMW+HNcjyFq4lA3lbSMwUXI1b
-         v/6bbY3nij1oAh2JLSLznAhDaE3iASZMz/ChzODf6SbydsO334XbMtVi0CWv43YZ6+
-         ojigBYoNSoWa9eou63a6Vs/Pq0tA0FH7fgSAER4s=
+        b=vb1jWRP9Ar6kqxoryY+2nWAEUM6fGzLroa4Wt6/8/ubmQUagK41K7Z2pXtC55F4hC
+         bCJe++p8tdJWhtqxAg4tf6BTN/s7qWAPA+DnelQNpjqrQEAQEj0irt9ofqNNa2YFBP
+         di0Q8x0SDD7mlPoQC/iw84+lvmTDWvSc+ALdh5pc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Divya Koppera <Divya.Koppera@microchip.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0628/1126] net: phy: micrel: Fix concurrent register access
-Date:   Tue,  5 Apr 2022 09:22:55 +0200
-Message-Id: <20220405070426.069996732@linuxfoundation.org>
+Subject: [PATCH 5.17 0629/1126] Bluetooth: hci_sync: fix undefined return of hci_disconnect_all_sync()
+Date:   Tue,  5 Apr 2022 09:22:56 +0200
+Message-Id: <20220405070426.099142773@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,73 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Divya Koppera <Divya.Koppera@microchip.com>
+From: Tom Rix <trix@redhat.com>
 
-[ Upstream commit 4488f6b6148045424459ef1d5b153c6895ee1dbb ]
+[ Upstream commit 8cd3c55c629efd91e5f2b3e89d850575c5b90d47 ]
 
-Make Extended page register accessing atomic,
-to overcome unexpected output from register
-reads/writes.
+clang static analysis reports this problem
+hci_sync.c:4428:2: warning: Undefined or garbage value
+  returned to caller
+        return err;
+        ^~~~~~~~~~
 
-Fixes: 7c2dcfa295b1 ("net: phy: micrel: Add support for LAN8804 PHY")
-Signed-off-by: Divya Koppera<Divya.Koppera@microchip.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+If there are no connections this function is a noop but
+err is never set and a false error could be reported.
+Return 0 as other hci_* functions do.
+
+Fixes: 182ee45da083 ("Bluetooth: hci_sync: Rework hci_suspend_notifier")
+Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/micrel.c | 30 ++++++++++++++++--------------
- 1 file changed, 16 insertions(+), 14 deletions(-)
+ net/bluetooth/hci_sync.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-index a7ebcdab415b..281cebc3d00c 100644
---- a/drivers/net/phy/micrel.c
-+++ b/drivers/net/phy/micrel.c
-@@ -1596,11 +1596,13 @@ static int lanphy_read_page_reg(struct phy_device *phydev, int page, u32 addr)
- {
- 	u32 data;
+diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
+index 5e93f37c2e04..405d48c3e63e 100644
+--- a/net/bluetooth/hci_sync.c
++++ b/net/bluetooth/hci_sync.c
+@@ -4432,7 +4432,7 @@ static int hci_disconnect_all_sync(struct hci_dev *hdev, u8 reason)
+ 			return err;
+ 	}
  
--	phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL, page);
--	phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, addr);
--	phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL,
--		  (page | LAN_EXT_PAGE_ACCESS_CTRL_EP_FUNC));
--	data = phy_read(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA);
-+	phy_lock_mdio_bus(phydev);
-+	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL, page);
-+	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, addr);
-+	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL,
-+		    (page | LAN_EXT_PAGE_ACCESS_CTRL_EP_FUNC));
-+	data = __phy_read(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA);
-+	phy_unlock_mdio_bus(phydev);
- 
- 	return data;
- }
-@@ -1608,18 +1610,18 @@ static int lanphy_read_page_reg(struct phy_device *phydev, int page, u32 addr)
- static int lanphy_write_page_reg(struct phy_device *phydev, int page, u16 addr,
- 				 u16 val)
- {
--	phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL, page);
--	phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, addr);
--	phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL,
--		  (page | LAN_EXT_PAGE_ACCESS_CTRL_EP_FUNC));
-+	phy_lock_mdio_bus(phydev);
-+	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL, page);
-+	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, addr);
-+	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL,
-+		    page | LAN_EXT_PAGE_ACCESS_CTRL_EP_FUNC);
- 
--	val = phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, val);
--	if (val) {
-+	val = __phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, val);
-+	if (val != 0)
- 		phydev_err(phydev, "Error: phy_write has returned error %d\n",
- 			   val);
--		return val;
--	}
--	return 0;
-+	phy_unlock_mdio_bus(phydev);
-+	return val;
+-	return err;
++	return 0;
  }
  
- static int lan8814_config_init(struct phy_device *phydev)
+ /* This function perform power off HCI command sequence as follows:
 -- 
 2.34.1
 

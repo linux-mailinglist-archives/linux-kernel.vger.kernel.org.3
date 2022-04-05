@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2534F2E61
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEDA34F29F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 12:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237696AbiDEI3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
+        id S237305AbiDEI3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234613AbiDEH6l (ORCPT
+        with ESMTP id S234641AbiDEH6n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:58:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94659A94C5;
-        Tue,  5 Apr 2022 00:52:59 -0700 (PDT)
+        Tue, 5 Apr 2022 03:58:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74061A94CE;
+        Tue,  5 Apr 2022 00:53:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B7ED2B81B14;
-        Tue,  5 Apr 2022 07:52:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 209B4C34110;
-        Tue,  5 Apr 2022 07:52:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2565D615CD;
+        Tue,  5 Apr 2022 07:53:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35B7CC340EE;
+        Tue,  5 Apr 2022 07:53:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145176;
-        bh=w6IIUKVs89R5LQU7C6a2ZqdX/tYHmHkwDBHZ4jPxnts=;
+        s=korg; t=1649145184;
+        bh=7wnlgHT1RIJpVnS9Yrdz9dgDs8GDXeJxl614hLxTywo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c9u2zBbEx0Die03jb+wy98vvKMRFaritjGyOZtQPs1BjGWTaxE2YtKs9rVJgnxJ5N
-         fUW1/tAg7Vt08TzVEV0y7KuQEmTL0ePwJLSEc36yVM/I+mfNxkgRV9f8MrW3ld9qIo
-         CrTD0uoNOGhf32Qh8IdNNlcMFdOLSIO2xh+crdFI=
+        b=0IbrtZyCEf/Rl8CClKldWQhb6LiJi58B4H4aCrba3XtkaNuuxOAkk7Cugt+rN1fhL
+         c0xqKWIeDWf6Hmp5lfUZdIYDq3evfhg5wzBZB8amIzKS5mMfHeWrKjYF1UJ1/FH2sk
+         ZA2J+OB2K9lk1H43rzR72UHmdH8nTMJxR7uQnEKQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        stable@vger.kernel.org, Jammy Huang <jammy_huang@aspeedtech.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0313/1126] media: v4l: Avoid unaligned access warnings when printing 4cc modifiers
-Date:   Tue,  5 Apr 2022 09:17:40 +0200
-Message-Id: <20220405070416.803405485@linuxfoundation.org>
+Subject: [PATCH 5.17 0316/1126] media: aspeed: Correct value for h-total-pixels
+Date:   Tue,  5 Apr 2022 09:17:43 +0200
+Message-Id: <20220405070416.891900669@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,71 +57,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
+From: Jammy Huang <jammy_huang@aspeedtech.com>
 
-[ Upstream commit 24bb30c8c894ec7213ad810b46e2a6a4c12136c1 ]
+[ Upstream commit 4b732a0016853eaff35944f900b0db66f3914374 ]
 
-Pointers V4L2 pixelformat and dataformat fields in a few packed structs
-are directly passed to printk family of functions. This could result in an
-unaligned access albeit no such possibility appears to exist at the
-moment i.e. this clang warning appears to be a false positive.
+Previous reg-field, 0x98[11:0], stands for the period of the detected
+hsync signal.
+Use the correct reg, 0xa0, to get h-total in pixels.
 
-Address the warning by copying the pixelformat or dataformat value to a
-local variable first.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: e927e1e0f0dd ("v4l: ioctl: Use %p4cc printk modifier to print FourCC codes")
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Fixes: d2b4387f3bdf ("media: platform: Add Aspeed Video Engine driver")
+Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+Reviewed-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/v4l2-core/v4l2-ioctl.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/media/platform/aspeed-video.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 9ac557b8e146..642cb90f457c 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -279,8 +279,8 @@ static void v4l_print_format(const void *arg, bool write_only)
- 	const struct v4l2_vbi_format *vbi;
- 	const struct v4l2_sliced_vbi_format *sliced;
- 	const struct v4l2_window *win;
--	const struct v4l2_sdr_format *sdr;
- 	const struct v4l2_meta_format *meta;
-+	u32 pixelformat;
- 	u32 planes;
- 	unsigned i;
+diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
+index 7a24daf7165a..bdeecde0d997 100644
+--- a/drivers/media/platform/aspeed-video.c
++++ b/drivers/media/platform/aspeed-video.c
+@@ -153,7 +153,7 @@
+ #define  VE_SRC_TB_EDGE_DET_BOT		GENMASK(28, VE_SRC_TB_EDGE_DET_BOT_SHF)
  
-@@ -299,8 +299,9 @@ static void v4l_print_format(const void *arg, bool write_only)
- 	case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
- 	case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
- 		mp = &p->fmt.pix_mp;
-+		pixelformat = mp->pixelformat;
- 		pr_cont(", width=%u, height=%u, format=%p4cc, field=%s, colorspace=%d, num_planes=%u, flags=0x%x, ycbcr_enc=%u, quantization=%u, xfer_func=%u\n",
--			mp->width, mp->height, &mp->pixelformat,
-+			mp->width, mp->height, &pixelformat,
- 			prt_names(mp->field, v4l2_field_names),
- 			mp->colorspace, mp->num_planes, mp->flags,
- 			mp->ycbcr_enc, mp->quantization, mp->xfer_func);
-@@ -343,14 +344,15 @@ static void v4l_print_format(const void *arg, bool write_only)
- 		break;
- 	case V4L2_BUF_TYPE_SDR_CAPTURE:
- 	case V4L2_BUF_TYPE_SDR_OUTPUT:
--		sdr = &p->fmt.sdr;
--		pr_cont(", pixelformat=%p4cc\n", &sdr->pixelformat);
-+		pixelformat = p->fmt.sdr.pixelformat;
-+		pr_cont(", pixelformat=%p4cc\n", &pixelformat);
- 		break;
- 	case V4L2_BUF_TYPE_META_CAPTURE:
- 	case V4L2_BUF_TYPE_META_OUTPUT:
- 		meta = &p->fmt.meta;
-+		pixelformat = meta->dataformat;
- 		pr_cont(", dataformat=%p4cc, buffersize=%u\n",
--			&meta->dataformat, meta->buffersize);
-+			&pixelformat, meta->buffersize);
- 		break;
- 	}
- }
+ #define VE_MODE_DETECT_STATUS		0x098
+-#define  VE_MODE_DETECT_H_PIXELS	GENMASK(11, 0)
++#define  VE_MODE_DETECT_H_PERIOD	GENMASK(11, 0)
+ #define  VE_MODE_DETECT_V_LINES_SHF	16
+ #define  VE_MODE_DETECT_V_LINES		GENMASK(27, VE_MODE_DETECT_V_LINES_SHF)
+ #define  VE_MODE_DETECT_STATUS_VSYNC	BIT(28)
+@@ -164,6 +164,8 @@
+ #define  VE_SYNC_STATUS_VSYNC_SHF	16
+ #define  VE_SYNC_STATUS_VSYNC		GENMASK(27, VE_SYNC_STATUS_VSYNC_SHF)
+ 
++#define VE_H_TOTAL_PIXELS		0x0A0
++
+ #define VE_INTERRUPT_CTRL		0x304
+ #define VE_INTERRUPT_STATUS		0x308
+ #define  VE_INTERRUPT_MODE_DETECT_WD	BIT(0)
+@@ -802,6 +804,7 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
+ 	u32 src_lr_edge;
+ 	u32 src_tb_edge;
+ 	u32 sync;
++	u32 htotal;
+ 	struct v4l2_bt_timings *det = &video->detected_timings;
+ 
+ 	det->width = MIN_WIDTH;
+@@ -847,6 +850,7 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
+ 		src_tb_edge = aspeed_video_read(video, VE_SRC_TB_EDGE_DET);
+ 		mds = aspeed_video_read(video, VE_MODE_DETECT_STATUS);
+ 		sync = aspeed_video_read(video, VE_SYNC_STATUS);
++		htotal = aspeed_video_read(video, VE_H_TOTAL_PIXELS);
+ 
+ 		video->frame_bottom = (src_tb_edge & VE_SRC_TB_EDGE_DET_BOT) >>
+ 			VE_SRC_TB_EDGE_DET_BOT_SHF;
+@@ -863,8 +867,7 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
+ 			VE_SRC_LR_EDGE_DET_RT_SHF;
+ 		video->frame_left = src_lr_edge & VE_SRC_LR_EDGE_DET_LEFT;
+ 		det->hfrontporch = video->frame_left;
+-		det->hbackporch = (mds & VE_MODE_DETECT_H_PIXELS) -
+-			video->frame_right;
++		det->hbackporch = htotal - video->frame_right;
+ 		det->hsync = sync & VE_SYNC_STATUS_HSYNC;
+ 		if (video->frame_left > video->frame_right)
+ 			continue;
 -- 
 2.34.1
 

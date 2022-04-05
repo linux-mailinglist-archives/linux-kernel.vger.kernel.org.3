@@ -2,56 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99F04F43B5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C341C4F4429
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384026AbiDEM1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
+        id S236976AbiDEMzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240830AbiDEIsE (ORCPT
+        with ESMTP id S1343838AbiDEJOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:48:04 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6172611E;
-        Tue,  5 Apr 2022 01:36:28 -0700 (PDT)
-Date:   Tue, 05 Apr 2022 08:36:16 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649147778;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=EG76px1djD7LhuP2FsvVqSe9KJ1HtJ99tnTsa5NZMzM=;
-        b=pRMPOdbf0QVkChK0gP4+YCQuxX3+9WmS97X8OjgfTavV3P4RpeQKlW3Z6mH5xEeo66YKwf
-        NXSw0EuWvnuYD1k3h290JJGp/yjqEL+jxTzQdRORdc8gvzlxryOB8FCktkr03q1AIDTQLJ
-        K5io8KYm7foZk/U1/8zDQO8/FdfW08SKnSD40eW+8t0+v9/BbeX1qFYrlkB0X7oMKgjXV9
-        wektTMWaGEzJ6l++k/BvaAE7gr9gBy4Wmqk16l8Vfo21TEmEGkyINMQFasjnH9Bn6O7NpB
-        rfPkQQ9oj/blbyCRg+RstNgQIMD3d6VLW9xu/wLsIimaVQxMknHCu2l9aibGPg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649147778;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=EG76px1djD7LhuP2FsvVqSe9KJ1HtJ99tnTsa5NZMzM=;
-        b=9dBD20I1CvVQmxYG2prEh5xPyuA5vlSWB/pWNwzTu1xMrpbUKf54pX53d0cY7aYDdg0kby
-        KoWo538drSLmjQDg==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] locking/mutex: Make contention tracepoints more
- consistent wrt adaptive spinning
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Tue, 5 Apr 2022 05:14:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA145473AD
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 02:00:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649149248;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HSO/TqrwqUyxFxKxwKZYjfIE5/lfFHPLnUnqeq3HIT8=;
+        b=IPdPmOQMSEE1XF/C3s3rhtmpiYidgc0eHtQ79DLqtbpk6mmdupX7rgfvsDe7DtZtinAznt
+        mPi3/KHQJmXsXwsqiA+Qr6bN8HitF/QH1GI5K3unwMjv0wR3x66P4Kw8ZzS/Q25CRhqNwZ
+        PLloOe8O6unm8jHKsK9l1lyhiafqOSQ=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-396-F0vFPdh9NFuvtGeoPCMVHQ-1; Tue, 05 Apr 2022 05:00:47 -0400
+X-MC-Unique: F0vFPdh9NFuvtGeoPCMVHQ-1
+Received: by mail-ej1-f69.google.com with SMTP id qb5-20020a1709077e8500b006e7f59d3cc0so2514943ejc.15
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 02:00:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HSO/TqrwqUyxFxKxwKZYjfIE5/lfFHPLnUnqeq3HIT8=;
+        b=FoSVJNI4tf/KLLxHthH4C+9ykWx4IyqL7txeSa5R8rvSenZ9Pn3Bs2+/bxLHohJGjJ
+         RswTcef8gKXMXRLOv2zlADJ6YqWnB3fp8TqfqPkOhwbSGUAYSPoin9WZFqjdscueXmjP
+         yfwpMi9ma5krbqhdfWvyWnhRP2gsUUSeZcjHaL7Qd0TEx4RkSzAjQyGeJ0+ZyBfpn2Sw
+         20ibPh3lSXajZg4s/S4RuAvRlb//iOa3AC25weIpPpr1ANTMr9Fs2PA5Pj4R9/BMSiuQ
+         WZQ8hhiDc0p5RTFlip+GVBNkGgXJAQmZ5uvFmbdqcOgpFkw9zu5ddTBJLKlYg1IsNFDI
+         1Dag==
+X-Gm-Message-State: AOAM533zHOxEETzbVIkuFjESn2UR8NVw7Jmhbyv0iQIe4rw/eRINXJF5
+        t7EAbUXDlH5c7pNbuMaWr2JeCIsQkWk/gqn2fRHX3pOVOJNOdKxHdyxEfdToZAoANqUSL+Th9CZ
+        k37f4Kx2olxjMjePUoxM1xgNs
+X-Received: by 2002:aa7:c946:0:b0:416:226f:f8a6 with SMTP id h6-20020aa7c946000000b00416226ff8a6mr2429358edt.360.1649149245923;
+        Tue, 05 Apr 2022 02:00:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxoDqgawidQhMilYXxAI8B1jQnINDAvkJZhtA332a2gcFfHYdlmk8fXP+9rXPGfmSTwJsmNSQ==
+X-Received: by 2002:aa7:c946:0:b0:416:226f:f8a6 with SMTP id h6-20020aa7c946000000b00416226ff8a6mr2429335edt.360.1649149245754;
+        Tue, 05 Apr 2022 02:00:45 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1? (2001-1c00-0c1e-bf00-1db8-22d3-1bc9-8ca1.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1db8:22d3:1bc9:8ca1])
+        by smtp.gmail.com with ESMTPSA id gn33-20020a1709070d2100b006dfcce8be86sm5235523ejc.225.2022.04.05.02.00.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 02:00:45 -0700 (PDT)
+Message-ID: <168fe6c3-6a7d-4019-16e3-066caf394b8a@redhat.com>
+Date:   Tue, 5 Apr 2022 11:00:44 +0200
 MIME-Version: 1.0
-Message-ID: <164914777661.389.2436402911593584852.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 0/2] Make headphone work on Huawei Matebook D15
+Content-Language: en-US
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jie Yang <yang.jie@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+References: <cover.1649147890.git.mchehab@kernel.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <cover.1649147890.git.mchehab@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,109 +89,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the locking/core branch of tip:
+Hi,
 
-Commit-ID:     dc1f7893a70fe403983bd8492f177bf993940e2c
-Gitweb:        https://git.kernel.org/tip/dc1f7893a70fe403983bd8492f177bf993940e2c
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Wed, 30 Mar 2022 13:06:54 +02:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 05 Apr 2022 10:24:36 +02:00
+On 4/5/22 10:44, Mauro Carvalho Chehab wrote:
+> At Huawei Matebook D15 two different GPIOs are used to control the output:
+> 	- gpio0 controls the speaker output;
+> 	- gpio1 controls the headphone output.
+> 
+> Changing both at the same time cause spurious events that are mis-interpreted
+> as input events, causing troubles on apps. So, a delay is needed before turning
+> on such gpios.
+> 
+> With this patch, plugging a headphone causes a jack event to trigger the speaker
+> supply, powering down the speaker and powering up the headphone output.
+> Removing the headphone also triggers the power supply, powering up the speaker
+> and powering down the headphone.
+> 
+> Mauro Carvalho Chehab (2):
+>   ASoC: Intel: sof_es8336: support a separate gpio to control headphone
+>   ASoC: Intel: sof_es8336: Huawei Matebook D15 uses a headphone gpio
 
-locking/mutex: Make contention tracepoints more consistent wrt adaptive spinning
+There is something weird with the patches here, at least for me in Thunderbird
+both patches show up as nameless attachments to emails with empty bodies.
 
-Have the trace_contention_*() tracepoints consistently include
-adaptive spinning. In order to differentiate between the spinning and
-non-spinning states add LCB_F_MUTEX and combine with LCB_F_SPIN.
+After saving the attachments the patches look good to me, so:
 
-The consequence is that a mutex contention can now triggler multiple
-_begin() tracepoints before triggering an _end().
+Acked-by: Hans de Goede <hdegoede@redhat.com>
 
-Additionally, this fixes one path where mutex would trigger _end()
-without ever seeing a _begin().
+for the series.
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- include/trace/events/lock.h |  4 +++-
- kernel/locking/mutex.c      | 16 ++++++++++++----
- 2 files changed, 15 insertions(+), 5 deletions(-)
+Regards,
 
-diff --git a/include/trace/events/lock.h b/include/trace/events/lock.h
-index b9b6e3e..9ebd081 100644
---- a/include/trace/events/lock.h
-+++ b/include/trace/events/lock.h
-@@ -14,6 +14,7 @@
- #define LCB_F_WRITE	(1U << 2)
- #define LCB_F_RT	(1U << 3)
- #define LCB_F_PERCPU	(1U << 4)
-+#define LCB_F_MUTEX	(1U << 5)
- 
- 
- #ifdef CONFIG_LOCKDEP
-@@ -113,7 +114,8 @@ TRACE_EVENT(contention_begin,
- 				{ LCB_F_READ,		"READ" },
- 				{ LCB_F_WRITE,		"WRITE" },
- 				{ LCB_F_RT,		"RT" },
--				{ LCB_F_PERCPU,		"PERCPU" }
-+				{ LCB_F_PERCPU,		"PERCPU" },
-+				{ LCB_F_MUTEX,		"MUTEX" }
- 			  ))
- );
- 
-diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
-index c88deda..d973fe6 100644
---- a/kernel/locking/mutex.c
-+++ b/kernel/locking/mutex.c
-@@ -602,12 +602,14 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
- 	preempt_disable();
- 	mutex_acquire_nest(&lock->dep_map, subclass, 0, nest_lock, ip);
- 
-+	trace_contention_begin(lock, LCB_F_MUTEX | LCB_F_SPIN);
- 	if (__mutex_trylock(lock) ||
- 	    mutex_optimistic_spin(lock, ww_ctx, NULL)) {
- 		/* got the lock, yay! */
- 		lock_acquired(&lock->dep_map, ip);
- 		if (ww_ctx)
- 			ww_mutex_set_context_fastpath(ww, ww_ctx);
-+		trace_contention_end(lock, 0);
- 		preempt_enable();
- 		return 0;
- 	}
-@@ -644,7 +646,7 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
- 	}
- 
- 	set_current_state(state);
--	trace_contention_begin(lock, 0);
-+	trace_contention_begin(lock, LCB_F_MUTEX);
- 	for (;;) {
- 		bool first;
- 
-@@ -684,10 +686,16 @@ __mutex_lock_common(struct mutex *lock, unsigned int state, unsigned int subclas
- 		 * state back to RUNNING and fall through the next schedule(),
- 		 * or we must see its unlock and acquire.
- 		 */
--		if (__mutex_trylock_or_handoff(lock, first) ||
--		    (first && mutex_optimistic_spin(lock, ww_ctx, &waiter)))
-+		if (__mutex_trylock_or_handoff(lock, first))
- 			break;
- 
-+		if (first) {
-+			trace_contention_begin(lock, LCB_F_MUTEX | LCB_F_SPIN);
-+			if (mutex_optimistic_spin(lock, ww_ctx, &waiter))
-+				break;
-+			trace_contention_begin(lock, LCB_F_MUTEX);
-+		}
-+
- 		raw_spin_lock(&lock->wait_lock);
- 	}
- 	raw_spin_lock(&lock->wait_lock);
-@@ -723,8 +731,8 @@ skip_wait:
- err:
- 	__set_current_state(TASK_RUNNING);
- 	__mutex_remove_waiter(lock, &waiter);
--	trace_contention_end(lock, ret);
- err_early_kill:
-+	trace_contention_end(lock, ret);
- 	raw_spin_unlock(&lock->wait_lock);
- 	debug_mutex_free_waiter(&waiter);
- 	mutex_release(&lock->dep_map, ip);
+Hans
+

@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3921A4F42D7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67B784F4286
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391849AbiDEUGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55166 "EHLO
+        id S241069AbiDEUMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:12:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354112AbiDEKLs (ORCPT
+        with ESMTP id S241036AbiDEKfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:11:48 -0400
+        Tue, 5 Apr 2022 06:35:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD1C4EA06;
-        Tue,  5 Apr 2022 02:57:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B50B27CC8;
+        Tue,  5 Apr 2022 03:19:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C8266167E;
-        Tue,  5 Apr 2022 09:57:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C661C385A2;
-        Tue,  5 Apr 2022 09:57:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ECF82616D7;
+        Tue,  5 Apr 2022 10:19:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0164FC385A1;
+        Tue,  5 Apr 2022 10:19:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152638;
-        bh=oPodn0ztNol+LNm49PEtGqL8jXdiQr3R6lw3KsHDegQ=;
+        s=korg; t=1649153994;
+        bh=6gfAWdI9U0StE8ymHe4orraSOXEmqdLe3VdcBdrBRPc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lDVeZPk8OB7QW65lsOxrG7XOVGEbnzjSEF8a8hAmGoaHrwIWU51fYS4WejHUjtvsS
-         udIxsn46qsR587Wbum+g61hh3muJQ23GzTrgzmY8QN+7Iy4tDlXY+trt1SAQM6lo1s
-         iHE9GDuUF9gBT1b4oaA2mXuDPvkYd2yBklKO3Xuk=
+        b=GAEsGEr6bkrN/p9zAjgBD+MulHnP9a4zQzr6jmBLkoFwtK4QcQHInsUYfTclTBkEs
+         eE3Qmn6ozVd3gYGh7cMuO7a2GmASZzcXL7sXZF6lilmWWL/jnh8xAruf+NPlAVUN30
+         IpY4pcOf1982eVlVdflrqyXjMwy50XANhyZ+qcyY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com, Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 849/913] net: sparx5: uses, depends on BRIDGE or !BRIDGE
-Date:   Tue,  5 Apr 2022 09:31:51 +0200
-Message-Id: <20220405070405.277914895@linuxfoundation.org>
+        stable@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 420/599] pinctrl: mediatek: paris: Fix "argument" argument type for mtk_pinconf_get()
+Date:   Tue,  5 Apr 2022 09:31:54 +0200
+Message-Id: <20220405070311.331861089@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,41 +57,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Chen-Yu Tsai <wenst@chromium.org>
 
-commit f9512d654f62604664251dedd437a22fe484974a upstream.
+[ Upstream commit 19bce7ce0a593c7024030a0cda9e23facea3c93d ]
 
-Fix build errors when BRIDGE=m and SPARX5_SWITCH=y:
+For mtk_pinconf_get(), the "argument" argument is typically returned by
+pinconf_to_config_argument(), which holds the value for a given pinconf
+parameter. It certainly should not have the type of "enum pin_config_param",
+which describes the type of the pinconf parameter itself.
 
-riscv64-linux-ld: drivers/net/ethernet/microchip/sparx5/sparx5_switchdev.o: in function `.L305':
-sparx5_switchdev.c:(.text+0xdb0): undefined reference to `br_vlan_enabled'
-riscv64-linux-ld: drivers/net/ethernet/microchip/sparx5/sparx5_switchdev.o: in function `.L283':
-sparx5_switchdev.c:(.text+0xee0): undefined reference to `br_vlan_enabled'
+Change the type to u32, which matches the return type of
+pinconf_to_config_argument().
 
-Fixes: 3cfa11bac9bb ("net: sparx5: add the basic sparx5 driver")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc: Lars Povlsen <lars.povlsen@microchip.com>
-Cc: Steen Hegelund <Steen.Hegelund@microchip.com>
-Cc: UNGLinuxDriver@microchip.com
-Cc: Paolo Abeni <pabeni@redhat.com>
-Link: https://lore.kernel.org/r/20220330012025.29560-1-rdunlap@infradead.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 805250982bb5 ("pinctrl: mediatek: add pinctrl-paris that implements the vendor dt-bindings")
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Link: https://lore.kernel.org/r/20220308100956.2750295-4-wenst@chromium.org
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/microchip/sparx5/Kconfig |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/pinctrl/mediatek/pinctrl-paris.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/drivers/net/ethernet/microchip/sparx5/Kconfig
-+++ b/drivers/net/ethernet/microchip/sparx5/Kconfig
-@@ -5,6 +5,7 @@ config SPARX5_SWITCH
- 	depends on OF
- 	depends on ARCH_SPARX5 || COMPILE_TEST
- 	depends on PTP_1588_CLOCK_OPTIONAL
-+	depends on BRIDGE || BRIDGE=n
- 	select PHYLINK
- 	select PHY_SPARX5_SERDES
- 	select RESET_CONTROLLER
+diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c b/drivers/pinctrl/mediatek/pinctrl-paris.c
+index 4dd5bd2f135e..9b268ad4e1b8 100644
+--- a/drivers/pinctrl/mediatek/pinctrl-paris.c
++++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
+@@ -184,8 +184,7 @@ static int mtk_pinconf_get(struct pinctrl_dev *pctldev,
+ }
+ 
+ static int mtk_pinconf_set(struct pinctrl_dev *pctldev, unsigned int pin,
+-			   enum pin_config_param param,
+-			   enum pin_config_param arg)
++			   enum pin_config_param param, u32 arg)
+ {
+ 	struct mtk_pinctrl *hw = pinctrl_dev_get_drvdata(pctldev);
+ 	const struct mtk_pin_desc *desc;
+-- 
+2.34.1
+
 
 

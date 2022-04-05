@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293974F4122
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D74554F406C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348783AbiDENFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
+        id S1355236AbiDENHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343987AbiDEJQo (ORCPT
+        with ESMTP id S1343989AbiDEJQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:16:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9550167DB;
-        Tue,  5 Apr 2022 02:02:57 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC8C22A;
+        Tue,  5 Apr 2022 02:03:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2AE5961564;
-        Tue,  5 Apr 2022 09:02:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36EF9C385A1;
-        Tue,  5 Apr 2022 09:02:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9601EB81B75;
+        Tue,  5 Apr 2022 09:03:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E47D2C385A0;
+        Tue,  5 Apr 2022 09:02:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149376;
-        bh=6tQ1SmCuXGWeuod34frKtsQaqkmflRErCJOG0nxktR4=;
+        s=korg; t=1649149379;
+        bh=HYcewj2BuG6dKg1wIJIE7kOiw6YDqyV3kNgUDJ3qnvQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sW6wtUbwlvwj3Kv87EkyOr6cyBwyM8Q3my0BDaMH7k9q+cO4mJZ+csZAEHJ6mHGUd
-         cHCmFEWVzD8xsRZ0McpLsdy2Q+x+LVVLglGlPHgCoEcNOfqUhhQq9MTCt/ERkzfTpz
-         /mkQUdaKeA4tBR1tnrHX6cvdqOXD2AVUyHuosvA4=
+        b=uiuocRYMR8jl/AC7ECqIbYuTSGt41OvWoJT3E876k7ov5YYpqgxqtn/RA9+LSrcp6
+         BwDrFrv0zmyN7Kx3hJ0dq+rtlPb865kJWLo1WV+t2WbFG3Bu3uhPlXIaPgHRqO9ebG
+         pC9cZ0GF7wJ7cjbABckQQkbFi+hzhasLI5EeouQE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sergio Paracuellos <sergio.paracuellos@gmail.com>,
         =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0692/1017] staging: mt7621-dts: fix LEDs and pinctrl on GB-PC1 devicetree
-Date:   Tue,  5 Apr 2022 09:26:45 +0200
-Message-Id: <20220405070414.814756737@linuxfoundation.org>
+Subject: [PATCH 5.16 0693/1017] staging: mt7621-dts: fix formatting
+Date:   Tue,  5 Apr 2022 09:26:46 +0200
+Message-Id: <20220405070414.844178436@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -58,132 +58,107 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-[ Upstream commit 6256e18686158fa49e019297f990f1c1817aabf1 ]
+[ Upstream commit 7eeec44d33f6be7caca4fe9ca4e653cf315a36c1 ]
 
-Fix LED and pinctrl definitions on the GB-PC1 devicetree. Refer to the
-schematics of the device for more information.
+Fix formatting on mt7621.dtsi.
 
-LED fixes:
-- Change GPIO6 LED label from system to power as GPIO6 is connected to
-PLED.
-- Add default-on default-trigger to power LED.
-- Change GPIO8 LED label from status to system as GPIO8 is connected to
-SYS_LED.
-- Add disk-activity default-trigger to system LED.
-- Switch to the color:function naming scheme.
-- Remove lan1 and lan2 LEDs as they don't exist.
-
-Pinctrl fixes:
-- Claim state_default node under pinctrl node.
-- Change pinctrl0 node name to state-default.
-- Change gpio node name to gpio-pinmux to respect
-Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinmux.yaml.
-- Sort pin groups alphabetically.
-
-Misc fixes:
-- Fix formatting.
-- Use the status value "okay".
-- Define hexadecimal addresses in lower case.
-- Make hexadecimal addresses for memory easier to read.
-
-Link: https://github.com/ngiger/GnuBee_Docs/blob/master/GB-PCx/Documents/GB-PC1_V1.0_Schematic.pdf
-Tested-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-Link: https://lore.kernel.org/r/20220311090320.3068-1-arinc.unal@arinc9.com
+Link: https://lore.kernel.org/r/20220125153903.1469-2-arinc.unal@arinc9.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/mt7621-dts/gbpc1.dts | 40 +++++++++++++---------------
- 1 file changed, 18 insertions(+), 22 deletions(-)
+ drivers/staging/mt7621-dts/mt7621.dtsi | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/staging/mt7621-dts/gbpc1.dts b/drivers/staging/mt7621-dts/gbpc1.dts
-index e38a083811e5..5ae94b1ad599 100644
---- a/drivers/staging/mt7621-dts/gbpc1.dts
-+++ b/drivers/staging/mt7621-dts/gbpc1.dts
-@@ -12,7 +12,8 @@
+diff --git a/drivers/staging/mt7621-dts/mt7621.dtsi b/drivers/staging/mt7621-dts/mt7621.dtsi
+index 6d158e4f4b8c..25687f4fa671 100644
+--- a/drivers/staging/mt7621-dts/mt7621.dtsi
++++ b/drivers/staging/mt7621-dts/mt7621.dtsi
+@@ -44,9 +44,9 @@
+ 		regulator-max-microvolt = <3300000>;
+ 		enable-active-high;
+ 		regulator-always-on;
+-	  };
++	};
  
- 	memory@0 {
- 		device_type = "memory";
--		reg = <0x0 0x1c000000>, <0x20000000 0x4000000>;
-+		reg = <0x00000000 0x1c000000>,
-+		      <0x20000000 0x04000000>;
- 	};
+-	  mmc_fixed_1v8_io: fixedregulator@1 {
++	mmc_fixed_1v8_io: fixedregulator@1 {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "mmc_io";
+ 		regulator-min-microvolt = <1800000>;
+@@ -363,17 +363,18 @@
  
- 	chosen {
-@@ -38,24 +39,16 @@
- 	gpio-leds {
- 		compatible = "gpio-leds";
+ 		mediatek,ethsys = <&sysc>;
  
--		system {
--			label = "gb-pc1:green:system";
-+		power {
-+			label = "green:power";
- 			gpios = <&gpio 6 GPIO_ACTIVE_LOW>;
-+			linux,default-trigger = "default-on";
- 		};
- 
--		status {
--			label = "gb-pc1:green:status";
-+		system {
-+			label = "green:system";
- 			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
--		};
 -
--		lan1 {
--			label = "gb-pc1:green:lan1";
--			gpios = <&gpio 24 GPIO_ACTIVE_LOW>;
--		};
--
--		lan2 {
--			label = "gb-pc1:green:lan2";
--			gpios = <&gpio 25 GPIO_ACTIVE_LOW>;
-+			linux,default-trigger = "disk-activity";
- 		};
- 	};
- };
-@@ -95,9 +88,8 @@
- 
- 		partition@50000 {
- 			label = "firmware";
--			reg = <0x50000 0x1FB0000>;
-+			reg = <0x50000 0x1fb0000>;
- 		};
--
- 	};
- };
- 
-@@ -106,9 +98,12 @@
- };
- 
- &pinctrl {
--	state_default: pinctrl0 {
--		default_gpio: gpio {
--			groups = "wdt", "rgmii2", "uart3";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&state_default>;
+ 		gmac0: mac@0 {
+ 			compatible = "mediatek,eth-mac";
+ 			reg = <0>;
+ 			phy-mode = "rgmii";
 +
-+	state_default: state-default {
-+		gpio-pinmux {
-+			groups = "rgmii2", "uart3", "wdt";
- 			function = "gpio";
- 		};
- 	};
-@@ -117,12 +112,13 @@
- &switch0 {
- 	ports {
- 		port@0 {
-+			status = "okay";
- 			label = "ethblack";
--			status = "ok";
+ 			fixed-link {
+ 				speed = <1000>;
+ 				full-duplex;
+ 				pause;
+ 			};
  		};
 +
- 		port@4 {
-+			status = "okay";
- 			label = "ethblue";
--			status = "ok";
+ 		gmac1: mac@1 {
+ 			compatible = "mediatek,eth-mac";
+ 			reg = <1>;
+@@ -381,6 +382,7 @@
+ 			phy-mode = "rgmii-rxid";
+ 			phy-handle = <&phy_external>;
  		};
- 	};
- };
++
+ 		mdio-bus {
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+@@ -411,36 +413,43 @@
+ 					#address-cells = <1>;
+ 					#size-cells = <0>;
+ 					reg = <0>;
++
+ 					port@0 {
+ 						status = "off";
+ 						reg = <0>;
+ 						label = "lan0";
+ 					};
++
+ 					port@1 {
+ 						status = "off";
+ 						reg = <1>;
+ 						label = "lan1";
+ 					};
++
+ 					port@2 {
+ 						status = "off";
+ 						reg = <2>;
+ 						label = "lan2";
+ 					};
++
+ 					port@3 {
+ 						status = "off";
+ 						reg = <3>;
+ 						label = "lan3";
+ 					};
++
+ 					port@4 {
+ 						status = "off";
+ 						reg = <4>;
+ 						label = "lan4";
+ 					};
++
+ 					port@6 {
+ 						reg = <6>;
+ 						label = "cpu";
+ 						ethernet = <&gmac0>;
+ 						phy-mode = "trgmii";
++
+ 						fixed-link {
+ 							speed = <1000>;
+ 							full-duplex;
 -- 
 2.34.1
 

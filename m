@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8CF14F2CF6
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CAE24F2CEB
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238200AbiDEJEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34704 "EHLO
+        id S238245AbiDEJEw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:04:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237632AbiDEISJ (ORCPT
+        with ESMTP id S237692AbiDEISM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:18:09 -0400
+        Tue, 5 Apr 2022 04:18:12 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962D66C481;
-        Tue,  5 Apr 2022 01:07:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA61B6E6E;
+        Tue,  5 Apr 2022 01:07:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06528B81A32;
-        Tue,  5 Apr 2022 08:07:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70141C385A2;
-        Tue,  5 Apr 2022 08:07:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59657B81BB1;
+        Tue,  5 Apr 2022 08:07:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7F38C385A1;
+        Tue,  5 Apr 2022 08:07:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146027;
-        bh=lj0qXKXbZ8KkkuIzi7YMOpyXw5C0icgDlIBqm4UsaJo=;
+        s=korg; t=1649146036;
+        bh=s09JmQ9OI+DOz27SLimgS/Grem6YGe/jzbDnvQKC2pQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OKWAkFjv/tEXRUyn1II4WIExyCWRRlANL18tW0QeCtsnryOF0uSOYEBtlf0JFQs3o
-         sTNcnR9vPeq2JwRD5iUTe65Qo3WGsWFIxspZyyj7wHGgD8rRqviM04dqQzHPZyEH/1
-         znwovNAGNRGp9Wt10JSR73LyQw3puxwf+19LA38A=
+        b=BVmJpmncfV4U4GMBPMNA09aV5fUdOiR0b/2hfzkzo3wOmBTkcfNV7xyMlgUyfjwOY
+         Rubq63mvHvWvCHxoW+Y/kO/7h6aV2laNFw9XdAugKRUSc80BgJzFDgEAzNIEP2EN81
+         xJrXol93cnLQML5wR0RPg1nWRXHYK7HGV9vccvl0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stijn Tintel <stijn@linux-ipv6.be>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <songliubraving@fb.com>,
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Thierry Reding <treding@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0616/1126] libbpf: Fix BPF_MAP_TYPE_PERF_EVENT_ARRAY auto-pinning
-Date:   Tue,  5 Apr 2022 09:22:43 +0200
-Message-Id: <20220405070425.716290506@linuxfoundation.org>
+Subject: [PATCH 5.17 0618/1126] gpu: host1x: Fix a memory leak in host1x_remove()
+Date:   Tue,  5 Apr 2022 09:22:45 +0200
+Message-Id: <20220405070425.775822539@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,130 +56,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stijn Tintel <stijn@linux-ipv6.be>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit a4fbfdd7a160eccaafc093eb5b34f838b1ca0bf0 ]
+[ Upstream commit 025c6643a81564f066d8381b9e2f4603e0f8438f ]
 
-When a BPF map of type BPF_MAP_TYPE_PERF_EVENT_ARRAY doesn't have the
-max_entries parameter set, the map will be created with max_entries set
-to the number of available CPUs. When we try to reuse such a pinned map,
-map_is_reuse_compat will return false, as max_entries in the map
-definition differs from max_entries of the existing map, causing the
-following error:
+Add a missing 'host1x_channel_list_free()' call in the remove function,
+as already done in the error handling path of the probe function.
 
-  libbpf: couldn't reuse pinned map at '/sys/fs/bpf/m_logging': parameter mismatch
-
-Fix this by overwriting max_entries in the map definition. For this to
-work, we need to do this in bpf_object__create_maps, before calling
-bpf_object__reuse_map.
-
-Fixes: 57a00f41644f ("libbpf: Add auto-pinning of maps when loading BPF objects")
-Signed-off-by: Stijn Tintel <stijn@linux-ipv6.be>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Song Liu <songliubraving@fb.com>
-Link: https://lore.kernel.org/bpf/20220225152355.315204-1-stijn@linux-ipv6.be
+Fixes: 8474b02531c4 ("gpu: host1x: Refactor channel allocation code")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 44 ++++++++++++++++++++++++------------------
- 1 file changed, 25 insertions(+), 19 deletions(-)
+ drivers/gpu/host1x/dev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index fdb3536afa7d..94a6a8543cbc 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -4854,7 +4854,6 @@ static int bpf_object__create_map(struct bpf_object *obj, struct bpf_map *map, b
- 	LIBBPF_OPTS(bpf_map_create_opts, create_attr);
- 	struct bpf_map_def *def = &map->def;
- 	const char *map_name = NULL;
--	__u32 max_entries;
- 	int err = 0;
+diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
+index 9605495f001a..80c685ab3e30 100644
+--- a/drivers/gpu/host1x/dev.c
++++ b/drivers/gpu/host1x/dev.c
+@@ -571,6 +571,7 @@ static int host1x_remove(struct platform_device *pdev)
  
- 	if (kernel_supports(obj, FEAT_PROG_NAME))
-@@ -4864,21 +4863,6 @@ static int bpf_object__create_map(struct bpf_object *obj, struct bpf_map *map, b
- 	create_attr.numa_node = map->numa_node;
- 	create_attr.map_extra = map->map_extra;
+ 	host1x_intr_deinit(host);
+ 	host1x_syncpt_deinit(host);
++	host1x_channel_list_free(&host->channel_list);
+ 	host1x_iommu_exit(host);
+ 	host1x_bo_cache_destroy(&host->cache);
  
--	if (def->type == BPF_MAP_TYPE_PERF_EVENT_ARRAY && !def->max_entries) {
--		int nr_cpus;
--
--		nr_cpus = libbpf_num_possible_cpus();
--		if (nr_cpus < 0) {
--			pr_warn("map '%s': failed to determine number of system CPUs: %d\n",
--				map->name, nr_cpus);
--			return nr_cpus;
--		}
--		pr_debug("map '%s': setting size to %d\n", map->name, nr_cpus);
--		max_entries = nr_cpus;
--	} else {
--		max_entries = def->max_entries;
--	}
--
- 	if (bpf_map__is_struct_ops(map))
- 		create_attr.btf_vmlinux_value_type_id = map->btf_vmlinux_value_type_id;
- 
-@@ -4928,7 +4912,7 @@ static int bpf_object__create_map(struct bpf_object *obj, struct bpf_map *map, b
- 
- 	if (obj->gen_loader) {
- 		bpf_gen__map_create(obj->gen_loader, def->type, map_name,
--				    def->key_size, def->value_size, max_entries,
-+				    def->key_size, def->value_size, def->max_entries,
- 				    &create_attr, is_inner ? -1 : map - obj->maps);
- 		/* Pretend to have valid FD to pass various fd >= 0 checks.
- 		 * This fd == 0 will not be used with any syscall and will be reset to -1 eventually.
-@@ -4937,7 +4921,7 @@ static int bpf_object__create_map(struct bpf_object *obj, struct bpf_map *map, b
- 	} else {
- 		map->fd = bpf_map_create(def->type, map_name,
- 					 def->key_size, def->value_size,
--					 max_entries, &create_attr);
-+					 def->max_entries, &create_attr);
- 	}
- 	if (map->fd < 0 && (create_attr.btf_key_type_id ||
- 			    create_attr.btf_value_type_id)) {
-@@ -4954,7 +4938,7 @@ static int bpf_object__create_map(struct bpf_object *obj, struct bpf_map *map, b
- 		map->btf_value_type_id = 0;
- 		map->fd = bpf_map_create(def->type, map_name,
- 					 def->key_size, def->value_size,
--					 max_entries, &create_attr);
-+					 def->max_entries, &create_attr);
- 	}
- 
- 	err = map->fd < 0 ? -errno : 0;
-@@ -5058,6 +5042,24 @@ static int bpf_object_init_prog_arrays(struct bpf_object *obj)
- 	return 0;
- }
- 
-+static int map_set_def_max_entries(struct bpf_map *map)
-+{
-+	if (map->def.type == BPF_MAP_TYPE_PERF_EVENT_ARRAY && !map->def.max_entries) {
-+		int nr_cpus;
-+
-+		nr_cpus = libbpf_num_possible_cpus();
-+		if (nr_cpus < 0) {
-+			pr_warn("map '%s': failed to determine number of system CPUs: %d\n",
-+				map->name, nr_cpus);
-+			return nr_cpus;
-+		}
-+		pr_debug("map '%s': setting size to %d\n", map->name, nr_cpus);
-+		map->def.max_entries = nr_cpus;
-+	}
-+
-+	return 0;
-+}
-+
- static int
- bpf_object__create_maps(struct bpf_object *obj)
- {
-@@ -5090,6 +5092,10 @@ bpf_object__create_maps(struct bpf_object *obj)
- 			continue;
- 		}
- 
-+		err = map_set_def_max_entries(map);
-+		if (err)
-+			goto err_out;
-+
- 		retried = false;
- retry:
- 		if (map->pin_path) {
 -- 
 2.34.1
 

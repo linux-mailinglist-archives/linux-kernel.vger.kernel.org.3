@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F1FB4F50F1
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 309984F50DC
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:28:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353976AbiDFBoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48094 "EHLO
+        id S1843643AbiDFBlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:41:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350855AbiDEKAG (ORCPT
+        with ESMTP id S1358051AbiDEK15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:00:06 -0400
+        Tue, 5 Apr 2022 06:27:57 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D486A424;
-        Tue,  5 Apr 2022 02:51:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0007140A34;
+        Tue,  5 Apr 2022 03:13:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C45F3B81B76;
-        Tue,  5 Apr 2022 09:51:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21942C385A1;
-        Tue,  5 Apr 2022 09:51:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5B64B81C8A;
+        Tue,  5 Apr 2022 10:13:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E91A3C385A1;
+        Tue,  5 Apr 2022 10:13:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152277;
-        bh=VEzzR77h+TVNn8t6F21fg2748P4148M/vVkJolOx9t8=;
+        s=korg; t=1649153632;
+        bh=v41tzQEYNLJXuxNjDPBUuCncp+Z5urm4bH13/AV4ow0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xID2Orn/c/yCt/skZiLipFLfo2X1+Jxoi8Ox+g4SH9cb+8NH2frCtzuLylGnolAPn
-         /Ibgtz1Ox01bG9phhF87kKPSX3zkDwOj8zm3puS7ctrrrZPVNtkeyilWpi2hxncUwk
-         4+KFgveMWBMo+CjQ+iR5lTGyFYJpibcL9fkOElms=
+        b=kG0Srnp4ZYENgSvnjKfDxHoKqx6/ZaFpvxwZGLFM6fY6wDYR9FwIUrx636XZqRYyv
+         lSZTZAD1SZ8CyWXGHB7IEo1oG7r0j43jFJa12/rqGKznzcWT/Ff8MLvUAp1iuPpnIc
+         Bd/4fZbIbPGUJOkUB549WaRLsC2tBTMrYFuMhBiI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>,
-        Anand Jain <anand.jain@oracle.com>,
-        David Sterba <dsterba@suse.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 719/913] btrfs: harden identification of a stale device
-Date:   Tue,  5 Apr 2022 09:29:41 +0200
-Message-Id: <20220405070401.385203742@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Thomas Bracht Laumann Jespersen <t@laumann.xyz>,
+        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 292/599] scripts/dtc: Call pkg-config POSIXly correct
+Date:   Tue,  5 Apr 2022 09:29:46 +0200
+Message-Id: <20220405070307.523171481@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,99 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anand Jain <anand.jain@oracle.com>
+From: Thomas Bracht Laumann Jespersen <t@laumann.xyz>
 
-[ Upstream commit 770c79fb65506fc7c16459855c3839429f46cb32 ]
+[ Upstream commit a8b309ce9760943486e0585285e0125588a31650 ]
 
-Identifying and removing the stale device from the fs_uuids list is done
-by btrfs_free_stale_devices().  btrfs_free_stale_devices() in turn
-depends on device_path_matched() to check if the device appears in more
-than one btrfs_device structure.
+Running with POSIXLY_CORRECT=1 in the environment the scripts/dtc build
+fails, because pkg-config doesn't output anything when the flags come
+after the arguments.
 
-The matching of the device happens by its path, the device path. However,
-when device mapper is in use, the dm device paths are nothing but a link
-to the actual block device, which leads to the device_path_matched()
-failing to match.
-
-Fix this by matching the dev_t as provided by lookup_bdev() instead of
-plain string compare of the device paths.
-
-Reported-by: Josef Bacik <josef@toxicpanda.com>
-Signed-off-by: Anand Jain <anand.jain@oracle.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Fixes: 067c650c456e ("dtc: Use pkg-config to locate libyaml")
+Signed-off-by: Thomas Bracht Laumann Jespersen <t@laumann.xyz>
+Signed-off-by: Rob Herring <robh@kernel.org>
+Link: https://lore.kernel.org/r/20220131112028.7907-1-t@laumann.xyz
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/volumes.c | 45 ++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 38 insertions(+), 7 deletions(-)
+ scripts/dtc/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
-index 06a1a7c2254c..33bd94ee4690 100644
---- a/fs/btrfs/volumes.c
-+++ b/fs/btrfs/volumes.c
-@@ -530,15 +530,48 @@ btrfs_get_bdev_and_sb(const char *device_path, fmode_t flags, void *holder,
- 	return ret;
- }
+diff --git a/scripts/dtc/Makefile b/scripts/dtc/Makefile
+index 4852bf44e913..f1d201782346 100644
+--- a/scripts/dtc/Makefile
++++ b/scripts/dtc/Makefile
+@@ -22,7 +22,7 @@ dtc-objs	+= yamltree.o
+ # To include <yaml.h> installed in a non-default path
+ HOSTCFLAGS_yamltree.o := $(shell pkg-config --cflags yaml-0.1)
+ # To link libyaml installed in a non-default path
+-HOSTLDLIBS_dtc	:= $(shell pkg-config yaml-0.1 --libs)
++HOSTLDLIBS_dtc	:= $(shell pkg-config --libs yaml-0.1)
+ endif
  
--static bool device_path_matched(const char *path, struct btrfs_device *device)
-+/*
-+ * Check if the device in the path matches the device in the given struct device.
-+ *
-+ * Returns:
-+ *   true  If it is the same device.
-+ *   false If it is not the same device or on error.
-+ */
-+static bool device_matched(const struct btrfs_device *device, const char *path)
- {
--	int found;
-+	char *device_name;
-+	dev_t dev_old;
-+	dev_t dev_new;
-+	int ret;
-+
-+	/*
-+	 * If we are looking for a device with the matching dev_t, then skip
-+	 * device without a name (a missing device).
-+	 */
-+	if (!device->name)
-+		return false;
-+
-+	device_name = kzalloc(BTRFS_PATH_NAME_MAX, GFP_KERNEL);
-+	if (!device_name)
-+		return false;
- 
- 	rcu_read_lock();
--	found = strcmp(rcu_str_deref(device->name), path);
-+	scnprintf(device_name, BTRFS_PATH_NAME_MAX, "%s", rcu_str_deref(device->name));
- 	rcu_read_unlock();
- 
--	return found == 0;
-+	ret = lookup_bdev(device_name, &dev_old);
-+	kfree(device_name);
-+	if (ret)
-+		return false;
-+
-+	ret = lookup_bdev(path, &dev_new);
-+	if (ret)
-+		return false;
-+
-+	if (dev_old == dev_new)
-+		return true;
-+
-+	return false;
- }
- 
- /*
-@@ -571,9 +604,7 @@ static int btrfs_free_stale_devices(const char *path,
- 					 &fs_devices->devices, dev_list) {
- 			if (skip_device && skip_device == device)
- 				continue;
--			if (path && !device->name)
--				continue;
--			if (path && !device_path_matched(path, device))
-+			if (path && !device_matched(device, path))
- 				continue;
- 			if (fs_devices->opened) {
- 				/* for an already deleted device return 0 */
+ # Generated files need one more search path to include headers in source tree
 -- 
 2.34.1
 

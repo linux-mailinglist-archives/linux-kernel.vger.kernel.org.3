@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B864A4F3096
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9534F3132
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbiDEKaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45932 "EHLO
+        id S241053AbiDEK2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:28:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241019AbiDEIcn (ORCPT
+        with ESMTP id S241030AbiDEIco (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:32:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F21B1888;
-        Tue,  5 Apr 2022 01:26:01 -0700 (PDT)
+        Tue, 5 Apr 2022 04:32:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A44B53DE;
+        Tue,  5 Apr 2022 01:26:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E12DD60FF7;
-        Tue,  5 Apr 2022 08:26:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0409CC385A1;
-        Tue,  5 Apr 2022 08:25:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 568BFB81BAF;
+        Tue,  5 Apr 2022 08:26:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0452C385A1;
+        Tue,  5 Apr 2022 08:26:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147160;
-        bh=ydGyx4p7///FDvur9+HuzBOOVf6P4H0f186iZTVpZG8=;
+        s=korg; t=1649147163;
+        bh=ddMf/Q2OYNRAJxNBRf3ZcvSR2v8ceJNOuWDRf7eIQjU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KvEcyEZrD/f0amiMEL+RSYCqw/7Nho+m+UzysgRRz17ELmGHr3gzPIyc9AwZ2PFhy
-         acKsZJNQBwZzGSztfXJZzOrTJ3Ky6TDsb6xsoDfSTO6bAuohQvh18g62J/mUzY9/kq
-         eixAbFAWXdspQqL+KgekXY0y9mQ2ZEpmpMdCvVJY=
+        b=q0xKiF+ltz1LTFBSX7p53sfZxG4OGBdz/FvcdxTX16feOg7nJj/rLBlPz6iRgAzdo
+         MRIFCQmifSeZluxkgns/35Hm7lco6jrB/Wi5xr74Beo24sEUqHJx2zUoaKyLBaZKSJ
+         jO17WMDrmv0HeLdCMlumGWlT8KuUAjQXr6QuoKfI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liam Howlett <liam.howlett@oracle.com>,
+        stable@vger.kernel.org, Hugh Dickins <hughd@google.com>,
         "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: [PATCH 5.17 1023/1126] XArray: Include bitmap.h from xarray.h
-Date:   Tue,  5 Apr 2022 09:29:30 +0200
-Message-Id: <20220405070437.510674310@linuxfoundation.org>
+Subject: [PATCH 5.17 1024/1126] XArray: Update the LRU list in xas_split()
+Date:   Tue,  5 Apr 2022 09:29:31 +0200
+Message-Id: <20220405070437.539339237@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,36 +56,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-commit 22f56b8e890d4e2835951b437bb6eeebfd1cb18b upstream.
+commit 3ed4bb77156da0bc732847c8c9df92454c1fbeea upstream.
 
-xas_find_chunk() calls find_next_bit(), which is defined in find.h,
-included from bitmap.h.  Inside the kernel, this isn't a problem because
-bitmap.h is included from cpumask.h which is dragged in (eventually)
-by gfp.h.  When building the test-suite, that doesn't happen, so we need
-to include bitmap.h explicitly.
+When splitting a value entry, we may need to add the new nodes to the LRU
+list and remove the parent node from the LRU list.  The WARN_ON checks
+in shadow_lru_isolate() catch this oversight.  This bug was latent
+until we stopped splitting folios in shrink_page_list() with commit
+820c4e2e6f51 ("mm/vmscan: Free non-shmem folios without splitting them").
+That allows the creation of large shadow entries, and subsequently when
+trying to page in a small page, we will split the large shadow entry
+in __filemap_add_folio().
 
-Fixes: 4ade0818cf04 ("tools: sync tools/bitmap with mother linux")
-Reported-by: Liam Howlett <liam.howlett@oracle.com>
+Fixes: 8fc75643c5e1 ("XArray: add xas_split")
+Reported-by: Hugh Dickins <hughd@google.com>
 Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/xarray.h | 1 +
- 1 file changed, 1 insertion(+)
+ lib/xarray.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/include/linux/xarray.h b/include/linux/xarray.h
-index d6d5da6ed735..66e28bc1a023 100644
---- a/include/linux/xarray.h
-+++ b/include/linux/xarray.h
-@@ -9,6 +9,7 @@
-  * See Documentation/core-api/xarray.rst for how to use the XArray.
-  */
+--- a/lib/xarray.c
++++ b/lib/xarray.c
+@@ -1081,6 +1081,7 @@ void xas_split(struct xa_state *xas, voi
+ 					xa_mk_node(child));
+ 			if (xa_is_value(curr))
+ 				values--;
++			xas_update(xas, child);
+ 		} else {
+ 			unsigned int canon = offset - xas->xa_sibs;
  
-+#include <linux/bitmap.h>
- #include <linux/bug.h>
- #include <linux/compiler.h>
- #include <linux/gfp.h>
--- 
-2.35.1
-
+@@ -1095,6 +1096,7 @@ void xas_split(struct xa_state *xas, voi
+ 	} while (offset-- > xas->xa_offset);
+ 
+ 	node->nr_values += values;
++	xas_update(xas, node);
+ }
+ EXPORT_SYMBOL_GPL(xas_split);
+ #endif
 
 

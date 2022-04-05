@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A674F51B2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE79B4F510D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1458051AbiDFCKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
+        id S235698AbiDFBui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356201AbiDEKXY (ORCPT
+        with ESMTP id S1349300AbiDEJtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:23:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E7BBAB83;
-        Tue,  5 Apr 2022 03:07:39 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:35 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A2A13D4F;
+        Tue,  5 Apr 2022 02:43:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84812B81C88;
-        Tue,  5 Apr 2022 10:07:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE19DC385A1;
-        Tue,  5 Apr 2022 10:07:36 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8A2D7CE1C6F;
+        Tue,  5 Apr 2022 09:43:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F867C385A1;
+        Tue,  5 Apr 2022 09:43:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153257;
-        bh=tK6afXarxi7FhsDLlwqx1kKdUhq4SqCojETP3BwMOyA=;
+        s=korg; t=1649151826;
+        bh=KkqvdNudypKbbtIijKOGeT0cNlIeNDr+yKjHsjcNilc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OJoJhiN2Y45kJaFz3d1ImBT5qQKGyifL6ieS9J7D8JvjiTeJXzuvhpofy1yIz0tia
-         l8ruDMmFVwZP46Joi1EuGNRxG0CuzvOQVfNewJS29/opg4FMk4ThdVVcgWQGc7crd/
-         iL7SGqbAZqKz54/xFAPxqNLAkfrCrp0DduxzwxN0=
+        b=RhYI/sa/H5n1aIiQ9ZHCuZWK2nNuMEbYr/dkOsXnpPQwLAbaPV94mtRSONhQhQcUR
+         P/wqciFanWps6YzUjbO9MELBmvg37NIP7oBDknbE8Wyb4yxaV4sAepUNQaXUCayXBO
+         U3KF+TIL5TVb8fBq7mQwfrkMREGjjPAje8UNqQnI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Hector Martin <marcan@marcan.st>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: [PATCH 5.10 121/599] brcmfmac: pcie: Release firmwares in the brcmf_pcie_setup error path
-Date:   Tue,  5 Apr 2022 09:26:55 +0200
-Message-Id: <20220405070302.439232619@linuxfoundation.org>
+        stable@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 555/913] selftests/bpf: Fix error reporting from sock_fields programs
+Date:   Tue,  5 Apr 2022 09:26:57 +0200
+Message-Id: <20220405070356.482811764@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,36 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hector Martin <marcan@marcan.st>
+From: Jakub Sitnicki <jakub@cloudflare.com>
 
-commit 5e90f0f3ead014867dade7a22f93958119f5efab upstream.
+[ Upstream commit a4c9fe0ed4a13e25e43fcd44d9f89bc19ba8fbb7 ]
 
-This avoids leaking memory if brcmf_chip_get_raminfo fails. Note that
-the CLM blob is released in the device remove path.
+The helper macro that records an error in BPF programs that exercise sock
+fields access has been inadvertently broken by adaptation work that
+happened in commit b18c1f0aa477 ("bpf: selftest: Adapt sock_fields test to
+use skel and global variables").
 
-Fixes: 82f93cf46d60 ("brcmfmac: get chip's default RAM info during PCIe setup")
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Arend van Spriel <arend.vanspriel@broadcom.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Hector Martin <marcan@marcan.st>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220131160713.245637-2-marcan@marcan.st
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+BPF_NOEXIST flag cannot be used to update BPF_MAP_TYPE_ARRAY. The operation
+always fails with -EEXIST, which in turn means the error never gets
+recorded, and the checks for errors always pass.
+
+Revert the change in update flags.
+
+Fixes: b18c1f0aa477 ("bpf: selftest: Adapt sock_fields test to use skel and global variables")
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+Link: https://lore.kernel.org/bpf/20220317113920.1068535-2-jakub@cloudflare.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c |    2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/bpf/progs/test_sock_fields.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pcie.c
-@@ -1775,6 +1775,8 @@ static void brcmf_pcie_setup(struct devi
- 	ret = brcmf_chip_get_raminfo(devinfo->ci);
- 	if (ret) {
- 		brcmf_err(bus, "Failed to get RAM info\n");
-+		release_firmware(fw);
-+		brcmf_fw_nvram_free(nvram);
- 		goto fail;
- 	}
+diff --git a/tools/testing/selftests/bpf/progs/test_sock_fields.c b/tools/testing/selftests/bpf/progs/test_sock_fields.c
+index 81b57b9aaaea..7967348b11af 100644
+--- a/tools/testing/selftests/bpf/progs/test_sock_fields.c
++++ b/tools/testing/selftests/bpf/progs/test_sock_fields.c
+@@ -113,7 +113,7 @@ static void tpcpy(struct bpf_tcp_sock *dst,
  
+ #define RET_LOG() ({						\
+ 	linum = __LINE__;					\
+-	bpf_map_update_elem(&linum_map, &linum_idx, &linum, BPF_NOEXIST);	\
++	bpf_map_update_elem(&linum_map, &linum_idx, &linum, BPF_ANY);	\
+ 	return CG_OK;						\
+ })
+ 
+-- 
+2.34.1
+
 
 

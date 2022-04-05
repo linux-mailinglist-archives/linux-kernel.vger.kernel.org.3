@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D9F4F33A4
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC9E4F2FD4
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345662AbiDEKlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:41:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
+        id S1356294AbiDEKXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241224AbiDEIc4 (ORCPT
+        with ESMTP id S241223AbiDEIc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:32:56 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D63EC4;
-        Tue,  5 Apr 2022 01:29:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF5F2AB;
+        Tue,  5 Apr 2022 01:29:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0852BB81B18;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95BA6B81A32;
+        Tue,  5 Apr 2022 08:29:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BF63C385A2;
         Tue,  5 Apr 2022 08:29:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60FA6C385A1;
-        Tue,  5 Apr 2022 08:29:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147387;
-        bh=tLa8NN/Yoj4VYi5UBfeaoJ1QM4N3G25Do5BZ6upOFJ0=;
+        s=korg; t=1649147390;
+        bh=/yt+JKhK1iOBl6Kc9z8/VMaIFaoyhQMuQvEUN61MtuY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WZgsMzZVkcondMeWnDUc/H7cLPjpLnrBYJL71USkiF4t0IHIFJZaX85Q8WNYDi0ls
-         JZtrQx8g40ch92Wm1TL1LUQD6fxHGzQrCqpyQrZr/9+OtuGC8CE2+27DVGJQaT69DX
-         WuAL2Wvf1HVSXaLzYfO+r+eyCZ4JYN9sz8gOOIRo=
+        b=dAlnEfPTIM68bdQvbC1wtLOpc18vCL51HRTJYf8DyO4BvKZ4QBPo7rQ64GVqMS1Ux
+         iZ/nh1a99IDHG25ftd1I8LaOQ+Ez3ORahJQrPuke/fHVBxxyjqBU2KT5aoYfEzNIH1
+         xd0hKT5ASTe8trrtykhucl2kXbNH+pPOrTzfSo7E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guodong Liu <guodong.liu@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 5.17 1106/1126] pinctrl: canonical rsel resistance selection property
-Date:   Tue,  5 Apr 2022 09:30:53 +0200
-Message-Id: <20220405070439.903221397@linuxfoundation.org>
+        stable@vger.kernel.org, Leilk Liu <leilk.liu@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.17 1107/1126] spi: mediatek: support tick_delay without enhance_timing
+Date:   Tue,  5 Apr 2022 09:30:54 +0200
+Message-Id: <20220405070439.931731785@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -54,31 +56,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guodong Liu <guodong.liu@mediatek.com>
+From: Leilk Liu <leilk.liu@mediatek.com>
 
-commit 7966c5051fc7d52425155ab30ad568d9d97f3b02 upstream.
+commit 03b1be379dcee2e9c866c2a455a1a4a9581b3efd upstream.
 
-Change "mediatek,rsel_resistance_in_si_unit" to "mediatek,rsel-resistance-in-si-unit"
+this patch support tick_delay bit[31:30] without enhance_timing feature.
 
-Fixes: fb34a9ae383a ("pinctrl: mediatek: support rsel feature")
-Signed-off-by: Guodong Liu <guodong.liu@mediatek.com>
-Link: https://lore.kernel.org/r/20220216032124.28067-4-guodong.liu@mediatek.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Fixes: f84d866ab43f("spi: mediatek: add tick_delay support")
+Signed-off-by: Leilk Liu <leilk.liu@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Link: https://lore.kernel.org/r/20220315032411.2826-2-leilk.liu@mediatek.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/mediatek/pinctrl-paris.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-mt65xx.c |   15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
---- a/drivers/pinctrl/mediatek/pinctrl-paris.c
-+++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
-@@ -984,7 +984,7 @@ int mtk_paris_pinctrl_probe(struct platf
- 	hw->nbase = hw->soc->nbase_names;
+--- a/drivers/spi/spi-mt65xx.c
++++ b/drivers/spi/spi-mt65xx.c
+@@ -43,8 +43,11 @@
+ #define SPI_CFG1_PACKET_LOOP_OFFSET       8
+ #define SPI_CFG1_PACKET_LENGTH_OFFSET     16
+ #define SPI_CFG1_GET_TICK_DLY_OFFSET      29
++#define SPI_CFG1_GET_TICK_DLY_OFFSET_V1   30
  
- 	if (of_find_property(hw->dev->of_node,
--			     "mediatek,rsel_resistance_in_si_unit", NULL))
-+			     "mediatek,rsel-resistance-in-si-unit", NULL))
- 		hw->rsel_si_unit = true;
- 	else
- 		hw->rsel_si_unit = false;
+ #define SPI_CFG1_GET_TICK_DLY_MASK        0xe0000000
++#define SPI_CFG1_GET_TICK_DLY_MASK_V1     0xc0000000
++
+ #define SPI_CFG1_CS_IDLE_MASK             0xff
+ #define SPI_CFG1_PACKET_LOOP_MASK         0xff00
+ #define SPI_CFG1_PACKET_LENGTH_MASK       0x3ff0000
+@@ -346,9 +349,15 @@ static int mtk_spi_prepare_message(struc
+ 
+ 	/* tick delay */
+ 	reg_val = readl(mdata->base + SPI_CFG1_REG);
+-	reg_val &= ~SPI_CFG1_GET_TICK_DLY_MASK;
+-	reg_val |= ((chip_config->tick_delay & 0x7)
+-		<< SPI_CFG1_GET_TICK_DLY_OFFSET);
++	if (mdata->dev_comp->enhance_timing) {
++		reg_val &= ~SPI_CFG1_GET_TICK_DLY_MASK;
++		reg_val |= ((chip_config->tick_delay & 0x7)
++			    << SPI_CFG1_GET_TICK_DLY_OFFSET);
++	} else {
++		reg_val &= ~SPI_CFG1_GET_TICK_DLY_MASK_V1;
++		reg_val |= ((chip_config->tick_delay & 0x3)
++			    << SPI_CFG1_GET_TICK_DLY_OFFSET_V1);
++	}
+ 	writel(reg_val, mdata->base + SPI_CFG1_REG);
+ 
+ 	/* set hw cs timing */
 
 

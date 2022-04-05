@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A21A74F3B60
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF87C4F3B66
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352779AbiDELyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
+        id S1355250AbiDELzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244919AbiDEIwr (ORCPT
+        with ESMTP id S244918AbiDEIwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:52:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84B824586;
-        Tue,  5 Apr 2022 01:46:21 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A89C24593;
+        Tue,  5 Apr 2022 01:46:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8807B614EB;
-        Tue,  5 Apr 2022 08:46:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96E55C385A0;
-        Tue,  5 Apr 2022 08:46:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 37DA86117A;
+        Tue,  5 Apr 2022 08:46:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ACFDC385A0;
+        Tue,  5 Apr 2022 08:46:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148381;
-        bh=TdNHD+ThQdFDNYzUnyywSIQFu/8Rmrh1akcMl4pdADg=;
+        s=korg; t=1649148383;
+        bh=K3TAybxi+nsvSrrQJTUFlqvaiEsAWoqPvFcXFTD1X88=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sZQxVep+7F04FN8B945OGAihhN191NAqaqjgqIc7pPqZAJbhMqgEmxvFkBahvzBQ5
-         X99rT5PmhbCWrPiIQ+d5ArAj0nXMXMZwzfIl7/dUnlA3A5U6+IIQUSOEGIk6sJcO7M
-         VujKgTWVo3ZpIFWExSQtqqTe3vbiapKGRJX1orvM=
+        b=pU258fIfQDhA+RUJUhxHZbOJzF6ad4P8iXR7OBiJqqn7PR22S0e9Bax/aeJTtBhI9
+         GWIIWEZHZlMPtSj/wxWDqk4OUlkkqbcS4wheKyTRqdNt7CzOo552sLf2neExR0ahHg
+         qP+6mudkCUcFtK11tMAYlPxpPq8VTjhWPwhIPJIs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        stable@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0335/1017] media: usb: go7007: s2250-board: fix leak in probe()
-Date:   Tue,  5 Apr 2022 09:20:48 +0200
-Message-Id: <20220405070404.226332231@linuxfoundation.org>
+Subject: [PATCH 5.16 0336/1017] media: cedrus: H265: Fix neighbour info buffer size
+Date:   Tue,  5 Apr 2022 09:20:49 +0200
+Message-Id: <20220405070404.256229245@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,55 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-[ Upstream commit 67e4550ecd6164bfbdff54c169e5bbf9ccfaf14d ]
+[ Upstream commit ee8b887329c78971967506f3ac79b9302c9f83c1 ]
 
-Call i2c_unregister_device(audio) on this error path.
+Neighbour info buffer size needs to be 794 kiB in H6. This is actually
+already indirectly mentioned in the comment, but smaller size is used
+nevertheless.
 
-Fixes: d3b2ccd9e307 ("[media] s2250: convert to the control framework")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Increase buffer size to cover H6 needs. Since increase is not that big
+in absolute numbers, it doesn't make sense to complicate logic for older
+generations.
+
+Bug was discovered using iommu, which reported access error when trying
+to play H265 video.
+
+Fixes: 86caab29da78 ("media: cedrus: Add HEVC/H.265 decoding support")
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/go7007/s2250-board.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/staging/media/sunxi/cedrus/cedrus_h265.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/go7007/s2250-board.c b/drivers/media/usb/go7007/s2250-board.c
-index c742cc88fac5..1fa6f10ee157 100644
---- a/drivers/media/usb/go7007/s2250-board.c
-+++ b/drivers/media/usb/go7007/s2250-board.c
-@@ -504,6 +504,7 @@ static int s2250_probe(struct i2c_client *client,
- 	u8 *data;
- 	struct go7007 *go = i2c_get_adapdata(adapter);
- 	struct go7007_usb *usb = go->hpi_context;
-+	int err = -EIO;
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+index 8829a7bab07e..ffade5cbd2e4 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+@@ -23,7 +23,7 @@
+  * Subsequent BSP implementations seem to double the neighbor info buffer size
+  * for the H6 SoC, which may be related to 10 bit H265 support.
+  */
+-#define CEDRUS_H265_NEIGHBOR_INFO_BUF_SIZE	(397 * SZ_1K)
++#define CEDRUS_H265_NEIGHBOR_INFO_BUF_SIZE	(794 * SZ_1K)
+ #define CEDRUS_H265_ENTRY_POINTS_BUF_SIZE	(4 * SZ_1K)
+ #define CEDRUS_H265_MV_COL_BUF_UNIT_CTB_SIZE	160
  
- 	audio = i2c_new_dummy_device(adapter, TLV320_ADDRESS >> 1);
- 	if (IS_ERR(audio))
-@@ -532,11 +533,8 @@ static int s2250_probe(struct i2c_client *client,
- 		V4L2_CID_HUE, -512, 511, 1, 0);
- 	sd->ctrl_handler = &state->hdl;
- 	if (state->hdl.error) {
--		int err = state->hdl.error;
--
--		v4l2_ctrl_handler_free(&state->hdl);
--		kfree(state);
--		return err;
-+		err = state->hdl.error;
-+		goto fail;
- 	}
- 
- 	state->std = V4L2_STD_NTSC;
-@@ -600,7 +598,7 @@ static int s2250_probe(struct i2c_client *client,
- 	i2c_unregister_device(audio);
- 	v4l2_ctrl_handler_free(&state->hdl);
- 	kfree(state);
--	return -EIO;
-+	return err;
- }
- 
- static int s2250_remove(struct i2c_client *client)
 -- 
 2.34.1
 

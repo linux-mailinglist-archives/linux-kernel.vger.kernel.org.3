@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36924F4FF3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D774F5106
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1840183AbiDFBHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
+        id S1451007AbiDFBss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348554AbiDEJsB (ORCPT
+        with ESMTP id S1348718AbiDEJs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BF6748E40;
-        Tue,  5 Apr 2022 02:34:09 -0700 (PDT)
+        Tue, 5 Apr 2022 05:48:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062423DA49;
+        Tue,  5 Apr 2022 02:34:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BC06616D5;
-        Tue,  5 Apr 2022 09:34:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B31FC385A2;
-        Tue,  5 Apr 2022 09:34:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C08AB81B75;
+        Tue,  5 Apr 2022 09:34:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEE96C385A0;
+        Tue,  5 Apr 2022 09:34:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151248;
-        bh=zNQWId7GFV3MSfuKM0SOFMdZIuG2jfxnhD7InNj7Ftg=;
+        s=korg; t=1649151268;
+        bh=rc8mLSdySTkHhTDT/G/y+wzXyw1O2hnBvxEPBV5OB6E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A/MJg2+4wAjzdvuS2TxdJQYsxAVZDdExrbxPXhIrpg1oA6geexMYxi3z9BejJw0p+
-         XIuDc5lPMdFNFXBYcElFFcLZxK6bYl6EmN8b0xtba8N6C/Gwc2lPbE7o5lD5Z+31FW
-         ekGAqHBhJeQDtxDQ9b3QPlAJF3H/hG8RkWtEQyvs=
+        b=0uaKqtVaiK2+BX1xEvpUM8rnnNRMrtVQm/2Hk9qutPE2FfCSCI42D49TPLabTcNE+
+         7VdSd1+cGs/hhD/i/Qt25QvpV71C3ohS6O3T9NAgtHgJYSNCt+yz/pyEdsHymD7FZ6
+         d9gqZTum/WxBT1830glJodFK2tVmQsaA7v3B1lqw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Martin Dauskardt <martin.dauskardt@gmx.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 347/913] media: stk1160: If start stream fails, return buffers with VB2_BUF_STATE_QUEUED
-Date:   Tue,  5 Apr 2022 09:23:29 +0200
-Message-Id: <20220405070350.246863330@linuxfoundation.org>
+Subject: [PATCH 5.15 354/913] ivtv: fix incorrect device_caps for ivtvfb
+Date:   Tue,  5 Apr 2022 09:23:36 +0200
+Message-Id: <20220405070350.456828634@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -58,140 +55,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit fbe04b49a54e31f4321d632270207f0e6304cd16 ]
+[ Upstream commit 25e94139218c0293b4375233c14f2256d7dcfaa8 ]
 
-If the callback 'start_streaming' fails, then all
-queued buffers in the driver should be returned with
-state 'VB2_BUF_STATE_QUEUED'. Currently, they are
-returned with 'VB2_BUF_STATE_ERROR' which is wrong.
-Fix this. This also fixes the warning:
+The VIDIOC_G_FBUF and related overlay ioctls no longer worked (-ENOTTY was
+returned).
 
-[   65.583633] WARNING: CPU: 5 PID: 593 at drivers/media/common/videobuf2/videobuf2-core.c:1612 vb2_start_streaming+0xd4/0x160 [videobuf2_common]
-[   65.585027] Modules linked in: snd_usb_audio snd_hwdep snd_usbmidi_lib snd_rawmidi snd_soc_hdmi_codec dw_hdmi_i2s_audio saa7115 stk1160 videobuf2_vmalloc videobuf2_memops videobuf2_v4l2 videobuf2_common videodev mc crct10dif_ce panfrost snd_soc_simple_card snd_soc_audio_graph_card snd_soc_spdif_tx snd_soc_simple_card_utils gpu_sched phy_rockchip_pcie snd_soc_rockchip_i2s rockchipdrm analogix_dp dw_mipi_dsi dw_hdmi cec drm_kms_helper drm rtc_rk808 rockchip_saradc industrialio_triggered_buffer kfifo_buf rockchip_thermal pcie_rockchip_host ip_tables x_tables ipv6
-[   65.589383] CPU: 5 PID: 593 Comm: v4l2src0:src Tainted: G        W         5.16.0-rc4-62408-g32447129cb30-dirty #14
-[   65.590293] Hardware name: Radxa ROCK Pi 4B (DT)
-[   65.590696] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   65.591304] pc : vb2_start_streaming+0xd4/0x160 [videobuf2_common]
-[   65.591850] lr : vb2_start_streaming+0x6c/0x160 [videobuf2_common]
-[   65.592395] sp : ffff800012bc3ad0
-[   65.592685] x29: ffff800012bc3ad0 x28: 0000000000000000 x27: ffff800012bc3cd8
-[   65.593312] x26: 0000000000000000 x25: ffff00000d8a7800 x24: 0000000040045612
-[   65.593938] x23: ffff800011323000 x22: ffff800012bc3cd8 x21: ffff00000908a8b0
-[   65.594562] x20: ffff00000908a8c8 x19: 00000000fffffff4 x18: ffffffffffffffff
-[   65.595188] x17: 000000040044ffff x16: 00400034b5503510 x15: ffff800011323f78
-[   65.595813] x14: ffff000013163886 x13: ffff000013163885 x12: 00000000000002ce
-[   65.596439] x11: 0000000000000028 x10: 0000000000000001 x9 : 0000000000000228
-[   65.597064] x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : fefefeff726c5e78
-[   65.597690] x5 : ffff800012bc3990 x4 : 0000000000000000 x3 : ffff000009a34880
-[   65.598315] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff000007cd99f0
-[   65.598940] Call trace:
-[   65.599155]  vb2_start_streaming+0xd4/0x160 [videobuf2_common]
-[   65.599672]  vb2_core_streamon+0x17c/0x1a8 [videobuf2_common]
-[   65.600179]  vb2_streamon+0x54/0x88 [videobuf2_v4l2]
-[   65.600619]  vb2_ioctl_streamon+0x54/0x60 [videobuf2_v4l2]
-[   65.601103]  v4l_streamon+0x3c/0x50 [videodev]
-[   65.601521]  __video_do_ioctl+0x1a4/0x428 [videodev]
-[   65.601977]  video_usercopy+0x320/0x828 [videodev]
-[   65.602419]  video_ioctl2+0x3c/0x58 [videodev]
-[   65.602830]  v4l2_ioctl+0x60/0x90 [videodev]
-[   65.603227]  __arm64_sys_ioctl+0xa8/0xe0
-[   65.603576]  invoke_syscall+0x54/0x118
-[   65.603911]  el0_svc_common.constprop.3+0x84/0x100
-[   65.604332]  do_el0_svc+0x34/0xa0
-[   65.604625]  el0_svc+0x1c/0x50
-[   65.604897]  el0t_64_sync_handler+0x88/0xb0
-[   65.605264]  el0t_64_sync+0x16c/0x170
-[   65.605587] ---[ end trace 578e0ba07742170d ]---
+The root cause was the introduction of the caps field in ivtv-driver.h.
+While loading the ivtvfb module would update the video_device device_caps
+field with V4L2_CAP_VIDEO_OUTPUT_OVERLAY it would not update that caps
+field, and that's what the overlay ioctls would look at.
 
-Fixes: 8ac456495a33d ("[media] stk1160: Stop device and unqueue buffers when start_streaming() fails")
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+It's a bad idea to keep information in two places, so drop the caps field
+and only use vdev.device_caps.
+
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Reported-by: Martin Dauskardt <martin.dauskardt@gmx.de>
+Fixes: 2161536516ed (media: media/pci: set device_caps in struct video_device)
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/stk1160/stk1160-core.c |  2 +-
- drivers/media/usb/stk1160/stk1160-v4l.c  | 10 +++++-----
- drivers/media/usb/stk1160/stk1160.h      |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ drivers/media/pci/ivtv/ivtv-driver.h  |  1 -
+ drivers/media/pci/ivtv/ivtv-ioctl.c   | 10 +++++-----
+ drivers/media/pci/ivtv/ivtv-streams.c | 11 ++++-------
+ 3 files changed, 9 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/media/usb/stk1160/stk1160-core.c b/drivers/media/usb/stk1160/stk1160-core.c
-index 4e1698f78818..ce717502ea4c 100644
---- a/drivers/media/usb/stk1160/stk1160-core.c
-+++ b/drivers/media/usb/stk1160/stk1160-core.c
-@@ -403,7 +403,7 @@ static void stk1160_disconnect(struct usb_interface *interface)
- 	/* Here is the only place where isoc get released */
- 	stk1160_uninit_isoc(dev);
+diff --git a/drivers/media/pci/ivtv/ivtv-driver.h b/drivers/media/pci/ivtv/ivtv-driver.h
+index 4cf92dee6527..ce3a7ca51736 100644
+--- a/drivers/media/pci/ivtv/ivtv-driver.h
++++ b/drivers/media/pci/ivtv/ivtv-driver.h
+@@ -330,7 +330,6 @@ struct ivtv_stream {
+ 	struct ivtv *itv;		/* for ease of use */
+ 	const char *name;		/* name of the stream */
+ 	int type;			/* stream type */
+-	u32 caps;			/* V4L2 capabilities */
  
--	stk1160_clear_queue(dev);
-+	stk1160_clear_queue(dev, VB2_BUF_STATE_ERROR);
+ 	struct v4l2_fh *fh;		/* pointer to the streaming filehandle */
+ 	spinlock_t qlock;		/* locks access to the queues */
+diff --git a/drivers/media/pci/ivtv/ivtv-ioctl.c b/drivers/media/pci/ivtv/ivtv-ioctl.c
+index da19b2e95e6c..6d2d3348e321 100644
+--- a/drivers/media/pci/ivtv/ivtv-ioctl.c
++++ b/drivers/media/pci/ivtv/ivtv-ioctl.c
+@@ -438,7 +438,7 @@ static int ivtv_g_fmt_vid_out_overlay(struct file *file, void *fh, struct v4l2_f
+ 	struct ivtv_stream *s = &itv->streams[fh2id(fh)->type];
+ 	struct v4l2_window *winfmt = &fmt->fmt.win;
  
- 	video_unregister_device(&dev->vdev);
- 	v4l2_device_disconnect(&dev->v4l2_dev);
-diff --git a/drivers/media/usb/stk1160/stk1160-v4l.c b/drivers/media/usb/stk1160/stk1160-v4l.c
-index 6a4eb616d516..1aa953469402 100644
---- a/drivers/media/usb/stk1160/stk1160-v4l.c
-+++ b/drivers/media/usb/stk1160/stk1160-v4l.c
-@@ -258,7 +258,7 @@ static int stk1160_start_streaming(struct stk1160 *dev)
- 	stk1160_uninit_isoc(dev);
- out_stop_hw:
- 	usb_set_interface(dev->udev, 0, 0);
--	stk1160_clear_queue(dev);
-+	stk1160_clear_queue(dev, VB2_BUF_STATE_QUEUED);
+-	if (!(s->caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
++	if (!(s->vdev.device_caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
+ 		return -EINVAL;
+ 	if (!itv->osd_video_pbase)
+ 		return -EINVAL;
+@@ -549,7 +549,7 @@ static int ivtv_try_fmt_vid_out_overlay(struct file *file, void *fh, struct v4l2
+ 	u32 chromakey = fmt->fmt.win.chromakey;
+ 	u8 global_alpha = fmt->fmt.win.global_alpha;
  
- 	mutex_unlock(&dev->v4l_lock);
+-	if (!(s->caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
++	if (!(s->vdev.device_caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
+ 		return -EINVAL;
+ 	if (!itv->osd_video_pbase)
+ 		return -EINVAL;
+@@ -1383,7 +1383,7 @@ static int ivtv_g_fbuf(struct file *file, void *fh, struct v4l2_framebuffer *fb)
+ 		0,
+ 	};
  
-@@ -306,7 +306,7 @@ static int stk1160_stop_streaming(struct stk1160 *dev)
+-	if (!(s->caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
++	if (!(s->vdev.device_caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
+ 		return -ENOTTY;
+ 	if (!itv->osd_video_pbase)
+ 		return -ENOTTY;
+@@ -1450,7 +1450,7 @@ static int ivtv_s_fbuf(struct file *file, void *fh, const struct v4l2_framebuffe
+ 	struct ivtv_stream *s = &itv->streams[fh2id(fh)->type];
+ 	struct yuv_playback_info *yi = &itv->yuv_info;
  
- 	stk1160_stop_hw(dev);
+-	if (!(s->caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
++	if (!(s->vdev.device_caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
+ 		return -ENOTTY;
+ 	if (!itv->osd_video_pbase)
+ 		return -ENOTTY;
+@@ -1470,7 +1470,7 @@ static int ivtv_overlay(struct file *file, void *fh, unsigned int on)
+ 	struct ivtv *itv = id->itv;
+ 	struct ivtv_stream *s = &itv->streams[fh2id(fh)->type];
  
--	stk1160_clear_queue(dev);
-+	stk1160_clear_queue(dev, VB2_BUF_STATE_ERROR);
+-	if (!(s->caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
++	if (!(s->vdev.device_caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
+ 		return -ENOTTY;
+ 	if (!itv->osd_video_pbase)
+ 		return -ENOTTY;
+diff --git a/drivers/media/pci/ivtv/ivtv-streams.c b/drivers/media/pci/ivtv/ivtv-streams.c
+index f04ee84bab5f..f9de5d1605fe 100644
+--- a/drivers/media/pci/ivtv/ivtv-streams.c
++++ b/drivers/media/pci/ivtv/ivtv-streams.c
+@@ -176,7 +176,7 @@ static void ivtv_stream_init(struct ivtv *itv, int type)
+ 	s->itv = itv;
+ 	s->type = type;
+ 	s->name = ivtv_stream_info[type].name;
+-	s->caps = ivtv_stream_info[type].v4l2_caps;
++	s->vdev.device_caps = ivtv_stream_info[type].v4l2_caps;
  
- 	stk1160_dbg("streaming stopped\n");
- 
-@@ -745,7 +745,7 @@ static const struct video_device v4l_template = {
- /********************************************************************/
- 
- /* Must be called with both v4l_lock and vb_queue_lock hold */
--void stk1160_clear_queue(struct stk1160 *dev)
-+void stk1160_clear_queue(struct stk1160 *dev, enum vb2_buffer_state vb2_state)
- {
- 	struct stk1160_buffer *buf;
- 	unsigned long flags;
-@@ -756,7 +756,7 @@ void stk1160_clear_queue(struct stk1160 *dev)
- 		buf = list_first_entry(&dev->avail_bufs,
- 			struct stk1160_buffer, list);
- 		list_del(&buf->list);
--		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
-+		vb2_buffer_done(&buf->vb.vb2_buf, vb2_state);
- 		stk1160_dbg("buffer [%p/%d] aborted\n",
- 			    buf, buf->vb.vb2_buf.index);
+ 	if (ivtv_stream_info[type].pio)
+ 		s->dma = PCI_DMA_NONE;
+@@ -299,12 +299,9 @@ static int ivtv_reg_dev(struct ivtv *itv, int type)
+ 		if (s_mpg->vdev.v4l2_dev)
+ 			num = s_mpg->vdev.num + ivtv_stream_info[type].num_offset;
  	}
-@@ -766,7 +766,7 @@ void stk1160_clear_queue(struct stk1160 *dev)
- 		buf = dev->isoc_ctl.buf;
- 		dev->isoc_ctl.buf = NULL;
- 
--		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
-+		vb2_buffer_done(&buf->vb.vb2_buf, vb2_state);
- 		stk1160_dbg("buffer [%p/%d] aborted\n",
- 			    buf, buf->vb.vb2_buf.index);
+-	s->vdev.device_caps = s->caps;
+-	if (itv->osd_video_pbase) {
+-		itv->streams[IVTV_DEC_STREAM_TYPE_YUV].vdev.device_caps |=
+-			V4L2_CAP_VIDEO_OUTPUT_OVERLAY;
+-		itv->streams[IVTV_DEC_STREAM_TYPE_MPG].vdev.device_caps |=
+-			V4L2_CAP_VIDEO_OUTPUT_OVERLAY;
++	if (itv->osd_video_pbase && (type == IVTV_DEC_STREAM_TYPE_YUV ||
++				     type == IVTV_DEC_STREAM_TYPE_MPG)) {
++		s->vdev.device_caps |= V4L2_CAP_VIDEO_OUTPUT_OVERLAY;
+ 		itv->v4l2_cap |= V4L2_CAP_VIDEO_OUTPUT_OVERLAY;
  	}
-diff --git a/drivers/media/usb/stk1160/stk1160.h b/drivers/media/usb/stk1160/stk1160.h
-index a31ea1c80f25..a70963ce8753 100644
---- a/drivers/media/usb/stk1160/stk1160.h
-+++ b/drivers/media/usb/stk1160/stk1160.h
-@@ -166,7 +166,7 @@ struct regval {
- int stk1160_vb2_setup(struct stk1160 *dev);
- int stk1160_video_register(struct stk1160 *dev);
- void stk1160_video_unregister(struct stk1160 *dev);
--void stk1160_clear_queue(struct stk1160 *dev);
-+void stk1160_clear_queue(struct stk1160 *dev, enum vb2_buffer_state vb2_state);
- 
- /* Provided by stk1160-video.c */
- int stk1160_alloc_isoc(struct stk1160 *dev);
+ 	video_set_drvdata(&s->vdev, s);
 -- 
 2.34.1
 

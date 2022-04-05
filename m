@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 942464F2BE4
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 916DD4F2E8B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235732AbiDEJCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54462 "EHLO
+        id S236430AbiDEJCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237168AbiDEIRp (ORCPT
+        with ESMTP id S237211AbiDEIRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:17:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC25EB0D2B;
-        Tue,  5 Apr 2022 01:05:31 -0700 (PDT)
+        Tue, 5 Apr 2022 04:17:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6CDB1A8F;
+        Tue,  5 Apr 2022 01:05:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EE5F6167A;
-        Tue,  5 Apr 2022 08:05:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DDFDC385A0;
-        Tue,  5 Apr 2022 08:05:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 895BD617F1;
+        Tue,  5 Apr 2022 08:05:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 963D5C385A0;
+        Tue,  5 Apr 2022 08:05:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145930;
-        bh=VqGjegZfHHnvDHqgx50NeDfYYPQ+7pDQWp2m+VwfD28=;
+        s=korg; t=1649145941;
+        bh=WkIyOKDRULZo2toajZTCmWISGvM2NhUcVLUv4cnrbRs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U7syJFVFa8QhK38cekiqYQJkEmCiRLf9SQIBNSGfVQ6I0gvWRxMALUGCqsOefDzKp
-         2QrH3/MOetgV+qDG1ub9qAwzFzuZjF5snJ/qSyhaghIerWvyRgcT9xlQ49R0u9Vbeu
-         COLRr/GwfBmXqD0SH2zv4s4iXB7LuIBrwTuPbZGg=
+        b=UXteJkyXzhgqOBIDVMqFCl0V2+1vFY47sr3YaB1GgKHNg4dyy0IGuUf+1gZ6fd4qv
+         yTslozz4h74sipzChhGfXiUm/Zj5fS2PAbfBf9qjSqiK7KzGekVejUreQFNheGo97o
+         81uY49DqqPQIUxtfP58sdsa7+9gCS0iwIBOgnVvI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Abhishek Sahu <abhsahu@nvidia.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
+        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0580/1126] vfio/pci: fix memory leak during D3hot to D0 transition
-Date:   Tue,  5 Apr 2022 09:22:07 +0200
-Message-Id: <20220405070424.656793434@linuxfoundation.org>
+Subject: [PATCH 5.17 0584/1126] scsi: pm8001: Fix command initialization in pm8001_chip_ssp_tm_req()
+Date:   Tue,  5 Apr 2022 09:22:11 +0200
+Message-Id: <20220405070424.774771988@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,64 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Abhishek Sahu <abhsahu@nvidia.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit eadf88ecf6ac7d6a9f47a76c6055d9a1987a8991 ]
+[ Upstream commit cd2268a180117aa8ebb23e090ba204324b2d0e93 ]
 
-If 'vfio_pci_core_device::needs_pm_restore' is set (PCI device does
-not have No_Soft_Reset bit set in its PMCSR config register), then
-the current PCI state will be saved locally in
-'vfio_pci_core_device::pm_save' during D0->D3hot transition and same
-will be restored back during D3hot->D0 transition.
-For saving the PCI state locally, pci_store_saved_state() is being
-used and the pci_load_and_free_saved_state() will free the allocated
-memory.
+The ds_ads_m field of struct ssp_ini_tm_start_req has the type __le32.
+Assigning a value to it should thus use cpu_to_le32(). This fixes the
+sparse warning:
 
-But for reset related IOCTLs, vfio driver calls PCI reset-related
-API's which will internally change the PCI power state back to D0. So,
-when the guest resumes, then it will get the current state as D0 and it
-will skip the call to vfio_pci_set_power_state() for changing the
-power state to D0 explicitly. In this case, the memory pointed by
-'pm_save' will never be freed. In a malicious sequence, the state changing
-to D3hot followed by VFIO_DEVICE_RESET/VFIO_DEVICE_PCI_HOT_RESET can be
-run in a loop and it can cause an OOM situation.
+warning: incorrect type in assignment (different base types)
+   expected restricted __le32 [addressable] [assigned] [usertype] ds_ads_m
+   got int
 
-This patch frees the earlier allocated memory first before overwriting
-'pm_save' to prevent the mentioned memory leak.
-
-Fixes: 51ef3a004b1e ("vfio/pci: Restore device state on PM transition")
-Signed-off-by: Abhishek Sahu <abhsahu@nvidia.com>
-Link: https://lore.kernel.org/r/20220217122107.22434-2-abhsahu@nvidia.com
-Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
+Link: https://lore.kernel.org/r/20220220031810.738362-7-damien.lemoal@opensource.wdc.com
+Fixes: dbf9bfe61571 ("[SCSI] pm8001: add SAS/SATA HBA driver")
+Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/vfio/pci/vfio_pci_core.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/scsi/pm8001/pm8001_hwi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-index f948e6cd2993..87b288affc13 100644
---- a/drivers/vfio/pci/vfio_pci_core.c
-+++ b/drivers/vfio/pci/vfio_pci_core.c
-@@ -228,6 +228,19 @@ int vfio_pci_set_power_state(struct vfio_pci_core_device *vdev, pci_power_t stat
- 	if (!ret) {
- 		/* D3 might be unsupported via quirk, skip unless in D3 */
- 		if (needs_save && pdev->current_state >= PCI_D3hot) {
-+			/*
-+			 * The current PCI state will be saved locally in
-+			 * 'pm_save' during the D3hot transition. When the
-+			 * device state is changed to D0 again with the current
-+			 * function, then pci_store_saved_state() will restore
-+			 * the state and will free the memory pointed by
-+			 * 'pm_save'. There are few cases where the PCI power
-+			 * state can be changed to D0 without the involvement
-+			 * of the driver. For these cases, free the earlier
-+			 * allocated memory first before overwriting 'pm_save'
-+			 * to prevent the memory leak.
-+			 */
-+			kfree(vdev->pm_save);
- 			vdev->pm_save = pci_store_saved_state(pdev);
- 		} else if (needs_restore) {
- 			pci_load_and_free_saved_state(pdev, &vdev->pm_save);
+diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
+index d978f7226206..43c2ab90f711 100644
+--- a/drivers/scsi/pm8001/pm8001_hwi.c
++++ b/drivers/scsi/pm8001/pm8001_hwi.c
+@@ -4626,7 +4626,7 @@ int pm8001_chip_ssp_tm_req(struct pm8001_hba_info *pm8001_ha,
+ 	memcpy(sspTMCmd.lun, task->ssp_task.LUN, 8);
+ 	sspTMCmd.tag = cpu_to_le32(ccb->ccb_tag);
+ 	if (pm8001_ha->chip_id != chip_8001)
+-		sspTMCmd.ds_ads_m = 0x08;
++		sspTMCmd.ds_ads_m = cpu_to_le32(0x08);
+ 	circularQ = &pm8001_ha->inbnd_q_tbl[0];
+ 	ret = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &sspTMCmd,
+ 			sizeof(sspTMCmd), 0);
 -- 
 2.34.1
 

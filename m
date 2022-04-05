@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53B584F4E1F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13EE94F4DED
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1587809AbiDFAK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45206 "EHLO
+        id S1584257AbiDEX6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354455AbiDEKOQ (ORCPT
+        with ESMTP id S242415AbiDEKfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:14:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2109D6A40B;
-        Tue,  5 Apr 2022 03:00:14 -0700 (PDT)
+        Tue, 5 Apr 2022 06:35:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5171C50E0A;
+        Tue,  5 Apr 2022 03:20:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5B23B81C83;
-        Tue,  5 Apr 2022 10:00:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45783C385A2;
-        Tue,  5 Apr 2022 10:00:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF7CF617CC;
+        Tue,  5 Apr 2022 10:20:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1A9AC385A0;
+        Tue,  5 Apr 2022 10:20:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152811;
-        bh=cXOdVAMk32J4N1gPdiJmpCvV4R2T0sic30Sti+cKvt4=;
+        s=korg; t=1649154054;
+        bh=VZA5HgkvbvVbAegIgIjNJx8G0dOWI970jWFfCQLUCcY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KvAzKqB93OO3Y8+X2j8dxYngJHYuxnCbfa9Kqbip8+Lo+kweMGeD3CPMSGQRAWXI+
-         1RjAkOlTiBYU+4mTvXbqhxMNa6aCM98xfifMtAjvWudGr0ubSg+8o6VbzGsQMJ6N+E
-         dOXsSWPjEaSooInXCdMh44jDcAqddmzxygCrHo4I=
+        b=H9bWDgewV89kJz7btB45wcKuNaF7ZuEJ1dOcldFVRmgIPlAIXby+y5u5878B+nm4z
+         LCeg0gfvi8upnw8+m0v2ru5Pa4XdSjdlsOKBj707kywgHYCbsRwmCaj7UdLWLITz0v
+         JbVWmRFPblo6oiGZAddilQI86io7rk1F2Zxwi4Zo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Marco Elver <elver@google.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 872/913] net: preserve skb_end_offset() in skb_unclone_keeptruesize()
+        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 440/599] net: phy: broadcom: Fix brcm_fet_config_init()
 Date:   Tue,  5 Apr 2022 09:32:14 +0200
-Message-Id: <20220405070405.962145994@linuxfoundation.org>
+Message-Id: <20220405070311.925954655@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,165 +55,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-commit 2b88cba55883eaafbc9b7cbff0b2c7cdba71ed01 upstream.
+[ Upstream commit bf8bfc4336f7a34e48b3bbd19b1542bf085bdc3d ]
 
-syzbot found another way to trigger the infamous WARN_ON_ONCE(delta < len)
-in skb_try_coalesce() [1]
+A Broadcom AC201 PHY (same entry as 5241) would be flagged by the
+Broadcom UniMAC MDIO controller as not completing the turn around
+properly since the PHY expects 65 MDC clock cycles to complete a write
+cycle, and the MDIO controller was only sending 64 MDC clock cycles as
+determined by looking at a scope shot.
 
-I was able to root cause the issue to kfence.
+This would make the subsequent read fail with the UniMAC MDIO controller
+command field having MDIO_READ_FAIL set and we would abort the
+brcm_fet_config_init() function and thus not probe the PHY at all.
 
-When kfence is in action, the following assertion is no longer true:
+After issuing a software reset, wait for at least 1ms which is well
+above the 1us reset delay advertised by the datasheet and issue a dummy
+read to let the PHY turn around the line properly. This read
+specifically ignores -EIO which would be returned by MDIO controllers
+checking for the line being turned around.
 
-int size = xxxx;
-void *ptr1 = kmalloc(size, gfp);
-void *ptr2 = kmalloc(size, gfp);
+If we have a genuine reaad failure, the next read of the interrupt
+status register would pick it up anyway.
 
-if (ptr1 && ptr2)
-	ASSERT(ksize(ptr1) == ksize(ptr2));
-
-We attempted to fix these issues in the blamed commits, but forgot
-that TCP was possibly shifting data after skb_unclone_keeptruesize()
-has been used, notably from tcp_retrans_try_collapse().
-
-So we not only need to keep same skb->truesize value,
-we also need to make sure TCP wont fill new tailroom
-that pskb_expand_head() was able to get from a
-addr = kmalloc(...) followed by ksize(addr)
-
-Split skb_unclone_keeptruesize() into two parts:
-
-1) Inline skb_unclone_keeptruesize() for the common case,
-   when skb is not cloned.
-
-2) Out of line __skb_unclone_keeptruesize() for the 'slow path'.
-
-WARNING: CPU: 1 PID: 6490 at net/core/skbuff.c:5295 skb_try_coalesce+0x1235/0x1560 net/core/skbuff.c:5295
-Modules linked in:
-CPU: 1 PID: 6490 Comm: syz-executor161 Not tainted 5.17.0-rc4-syzkaller-00229-g4f12b742eb2b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:skb_try_coalesce+0x1235/0x1560 net/core/skbuff.c:5295
-Code: bf 01 00 00 00 0f b7 c0 89 c6 89 44 24 20 e8 62 24 4e fa 8b 44 24 20 83 e8 01 0f 85 e5 f0 ff ff e9 87 f4 ff ff e8 cb 20 4e fa <0f> 0b e9 06 f9 ff ff e8 af b2 95 fa e9 69 f0 ff ff e8 95 b2 95 fa
-RSP: 0018:ffffc900063af268 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 00000000ffffffd5 RCX: 0000000000000000
-RDX: ffff88806fc05700 RSI: ffffffff872abd55 RDI: 0000000000000003
-RBP: ffff88806e675500 R08: 00000000ffffffd5 R09: 0000000000000000
-R10: ffffffff872ab659 R11: 0000000000000000 R12: ffff88806dd554e8
-R13: ffff88806dd9bac0 R14: ffff88806dd9a2c0 R15: 0000000000000155
-FS:  00007f18014f9700(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020002000 CR3: 000000006be7a000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- tcp_try_coalesce net/ipv4/tcp_input.c:4651 [inline]
- tcp_try_coalesce+0x393/0x920 net/ipv4/tcp_input.c:4630
- tcp_queue_rcv+0x8a/0x6e0 net/ipv4/tcp_input.c:4914
- tcp_data_queue+0x11fd/0x4bb0 net/ipv4/tcp_input.c:5025
- tcp_rcv_established+0x81e/0x1ff0 net/ipv4/tcp_input.c:5947
- tcp_v4_do_rcv+0x65e/0x980 net/ipv4/tcp_ipv4.c:1719
- sk_backlog_rcv include/net/sock.h:1037 [inline]
- __release_sock+0x134/0x3b0 net/core/sock.c:2779
- release_sock+0x54/0x1b0 net/core/sock.c:3311
- sk_wait_data+0x177/0x450 net/core/sock.c:2821
- tcp_recvmsg_locked+0xe28/0x1fd0 net/ipv4/tcp.c:2457
- tcp_recvmsg+0x137/0x610 net/ipv4/tcp.c:2572
- inet_recvmsg+0x11b/0x5e0 net/ipv4/af_inet.c:850
- sock_recvmsg_nosec net/socket.c:948 [inline]
- sock_recvmsg net/socket.c:966 [inline]
- sock_recvmsg net/socket.c:962 [inline]
- ____sys_recvmsg+0x2c4/0x600 net/socket.c:2632
- ___sys_recvmsg+0x127/0x200 net/socket.c:2674
- __sys_recvmsg+0xe2/0x1a0 net/socket.c:2704
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Fixes: c4777efa751d ("net: add and use skb_unclone_keeptruesize() helper")
-Fixes: 097b9146c0e2 ("net: fix up truesize of cloned skb in skb_prepare_for_shift()")
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Marco Elver <elver@google.com>
+Fixes: d7a2ed9248a3 ("broadcom: Add AC131 phy support")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220324232438.1156812-1-f.fainelli@gmail.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/skbuff.h |   18 +++++++++---------
- net/core/skbuff.c      |   32 ++++++++++++++++++++++++++++++++
- 2 files changed, 41 insertions(+), 9 deletions(-)
+ drivers/net/phy/broadcom.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -1684,19 +1684,19 @@ static inline int skb_unclone(struct sk_
- 	return 0;
- }
+diff --git a/drivers/net/phy/broadcom.c b/drivers/net/phy/broadcom.c
+index 644861366d54..0cde17bd743f 100644
+--- a/drivers/net/phy/broadcom.c
++++ b/drivers/net/phy/broadcom.c
+@@ -11,6 +11,7 @@
+  */
  
--/* This variant of skb_unclone() makes sure skb->truesize is not changed */
-+/* This variant of skb_unclone() makes sure skb->truesize
-+ * and skb_end_offset() are not changed, whenever a new skb->head is needed.
-+ *
-+ * Indeed there is no guarantee that ksize(kmalloc(X)) == ksize(kmalloc(X))
-+ * when various debugging features are in place.
-+ */
-+int __skb_unclone_keeptruesize(struct sk_buff *skb, gfp_t pri);
- static inline int skb_unclone_keeptruesize(struct sk_buff *skb, gfp_t pri)
- {
- 	might_sleep_if(gfpflags_allow_blocking(pri));
+ #include "bcm-phy-lib.h"
++#include <linux/delay.h>
+ #include <linux/module.h>
+ #include <linux/phy.h>
+ #include <linux/brcmphy.h>
+@@ -622,6 +623,26 @@ static int brcm_fet_config_init(struct phy_device *phydev)
+ 	if (err < 0)
+ 		return err;
  
--	if (skb_cloned(skb)) {
--		unsigned int save = skb->truesize;
--		int res;
--
--		res = pskb_expand_head(skb, 0, 0, pri);
--		skb->truesize = save;
--		return res;
--	}
-+	if (skb_cloned(skb))
-+		return __skb_unclone_keeptruesize(skb, pri);
- 	return 0;
- }
- 
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -1789,6 +1789,38 @@ struct sk_buff *skb_realloc_headroom(str
- }
- EXPORT_SYMBOL(skb_realloc_headroom);
- 
-+int __skb_unclone_keeptruesize(struct sk_buff *skb, gfp_t pri)
-+{
-+	unsigned int saved_end_offset, saved_truesize;
-+	struct skb_shared_info *shinfo;
-+	int res;
-+
-+	saved_end_offset = skb_end_offset(skb);
-+	saved_truesize = skb->truesize;
-+
-+	res = pskb_expand_head(skb, 0, 0, pri);
-+	if (res)
-+		return res;
-+
-+	skb->truesize = saved_truesize;
-+
-+	if (likely(skb_end_offset(skb) == saved_end_offset))
-+		return 0;
-+
-+	shinfo = skb_shinfo(skb);
-+
-+	/* We are about to change back skb->end,
-+	 * we need to move skb_shinfo() to its new location.
++	/* The datasheet indicates the PHY needs up to 1us to complete a reset,
++	 * build some slack here.
 +	 */
-+	memmove(skb->head + saved_end_offset,
-+		shinfo,
-+		offsetof(struct skb_shared_info, frags[shinfo->nr_frags]));
++	usleep_range(1000, 2000);
 +
-+	skb_set_end_offset(skb, saved_end_offset);
++	/* The PHY requires 65 MDC clock cycles to complete a write operation
++	 * and turnaround the line properly.
++	 *
++	 * We ignore -EIO here as the MDIO controller (e.g.: mdio-bcm-unimac)
++	 * may flag the lack of turn-around as a read failure. This is
++	 * particularly true with this combination since the MDIO controller
++	 * only used 64 MDC cycles. This is not a critical failure in this
++	 * specific case and it has no functional impact otherwise, so we let
++	 * that one go through. If there is a genuine bus error, the next read
++	 * of MII_BRCM_FET_INTREG will error out.
++	 */
++	err = phy_read(phydev, MII_BMCR);
++	if (err < 0 && err != -EIO)
++		return err;
 +
-+	return 0;
-+}
-+
- /**
-  *	skb_expand_head - reallocate header of &sk_buff
-  *	@skb: buffer to reallocate
+ 	reg = phy_read(phydev, MII_BRCM_FET_INTREG);
+ 	if (reg < 0)
+ 		return reg;
+-- 
+2.34.1
+
 
 

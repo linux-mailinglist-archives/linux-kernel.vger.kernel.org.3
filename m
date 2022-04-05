@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1021E4F4FB2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9DE4F4FA9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1839276AbiDFA6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47412 "EHLO
+        id S1839044AbiDFA6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349329AbiDEJtj (ORCPT
+        with ESMTP id S1356120AbiDEKW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B526D2DF1;
-        Tue,  5 Apr 2022 02:44:02 -0700 (PDT)
+        Tue, 5 Apr 2022 06:22:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0750CB6E4A;
+        Tue,  5 Apr 2022 03:06:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F8C9B817D3;
-        Tue,  5 Apr 2022 09:44:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4558C385A1;
-        Tue,  5 Apr 2022 09:43:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 968886172B;
+        Tue,  5 Apr 2022 10:06:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A34EAC385A3;
+        Tue,  5 Apr 2022 10:06:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151840;
-        bh=yrQk/XIIlYNaH6bGJzY3EtFzh7n9iwUU8rSENQg7smo=;
+        s=korg; t=1649153180;
+        bh=gLRfcfw5hLBS9tnt1abhOUV0hMKG5+3gLd24ZnKwaqU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eVjBl1M+hhooItK5YhOnsYKE6vwzMRHy0xqhJE/DPf4WMWYpx/xwYdeBcvAQpwQZL
-         Zg4UTk1kyydtp1nSLh31cUm7Ic3Fvg36JmJGZGKzuqauGjopfyo+4qnThs2vkMjyDa
-         NB4TnoAa++KAraMDS5tQCfKbo1cGtS5mp9wB+1ic=
+        b=WQz0NST+SpZ8D8hkAi4BT4MK6CwEcz9IvKDbd7IO3VjGYGtmEosL/P1/Z167hNVeW
+         8JSqCrl7v8BxB70qRGya9i7XYR27ArwUjrL4UYqUfwGg0X1oCF3UJaKaNItqGO638q
+         nwk25Na83K6Fzs12/bxaYuExdhzFXPuVjrYSW0M4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 560/913] af_netlink: Fix shift out of bounds in group mask calculation
-Date:   Tue,  5 Apr 2022 09:27:02 +0200
-Message-Id: <20220405070356.631304130@linuxfoundation.org>
+Subject: [PATCH 5.10 131/599] hwrng: cavium - HW_RANDOM_CAVIUM should depend on ARCH_THUNDER
+Date:   Tue,  5 Apr 2022 09:27:05 +0200
+Message-Id: <20220405070302.739838362@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,60 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Petr Machata <petrm@nvidia.com>
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 
-[ Upstream commit 0caf6d9922192dd1afa8dc2131abfb4df1443b9f ]
+[ Upstream commit ab7d88549e2f7ae116afd303f32e1950cb790a1d ]
 
-When a netlink message is received, netlink_recvmsg() fills in the address
-of the sender. One of the fields is the 32-bit bitfield nl_groups, which
-carries the multicast group on which the message was received. The least
-significant bit corresponds to group 1, and therefore the highest group
-that the field can represent is 32. Above that, the UB sanitizer flags the
-out-of-bounds shift attempts.
+The Cavium ThunderX Random Number Generator is only present on Cavium
+ThunderX SoCs, and not available as an independent PCIe endpoint.  Hence
+add a dependency on ARCH_THUNDER, to prevent asking the user about this
+driver when configuring a kernel without Cavium Thunder SoC  support.
 
-Which bits end up being set in such case is implementation defined, but
-it's either going to be a wrong non-zero value, or zero, which is at least
-not misleading. Make the latter choice deterministic by always setting to 0
-for higher-numbered multicast groups.
-
-To get information about membership in groups >= 32, userspace is expected
-to use nl_pktinfo control messages[0], which are enabled by NETLINK_PKTINFO
-socket option.
-[0] https://lwn.net/Articles/147608/
-
-The way to trigger this issue is e.g. through monitoring the BRVLAN group:
-
-	# bridge monitor vlan &
-	# ip link add name br type bridge
-
-Which produces the following citation:
-
-	UBSAN: shift-out-of-bounds in net/netlink/af_netlink.c:162:19
-	shift exponent 32 is too large for 32-bit type 'int'
-
-Fixes: f7fa9b10edbb ("[NETLINK]: Support dynamic number of multicast groups per netlink family")
-Signed-off-by: Petr Machata <petrm@nvidia.com>
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
-Link: https://lore.kernel.org/r/2bef6aabf201d1fc16cca139a744700cff9dcb04.1647527635.git.petrm@nvidia.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: cc2f1908c6b8f625 ("hwrng: cavium - Add Cavium HWRNG driver for ThunderX SoC.")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netlink/af_netlink.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/char/hw_random/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-index 81ba8e51e01f..83ca93b32f5f 100644
---- a/net/netlink/af_netlink.c
-+++ b/net/netlink/af_netlink.c
-@@ -157,6 +157,8 @@ EXPORT_SYMBOL(do_trace_netlink_extack);
+diff --git a/drivers/char/hw_random/Kconfig b/drivers/char/hw_random/Kconfig
+index 31d367949fad..a7d9e4600d40 100644
+--- a/drivers/char/hw_random/Kconfig
++++ b/drivers/char/hw_random/Kconfig
+@@ -427,7 +427,7 @@ config HW_RANDOM_MESON
  
- static inline u32 netlink_group_mask(u32 group)
- {
-+	if (group > 32)
-+		return 0;
- 	return group ? 1 << (group - 1) : 0;
- }
- 
+ config HW_RANDOM_CAVIUM
+ 	tristate "Cavium ThunderX Random Number Generator support"
+-	depends on HW_RANDOM && PCI && ARM64
++	depends on HW_RANDOM && PCI && ARCH_THUNDER
+ 	default HW_RANDOM
+ 	help
+ 	  This driver provides kernel-side support for the Random Number
 -- 
 2.34.1
 

@@ -2,52 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4B04F3DAA
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 533B24F438E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239058AbiDEUML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
+        id S1380007AbiDEMxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354826AbiDEKQJ (ORCPT
+        with ESMTP id S1343770AbiDEJMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:16:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF596C95A;
-        Tue,  5 Apr 2022 03:03:07 -0700 (PDT)
+        Tue, 5 Apr 2022 05:12:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAD137014;
+        Tue,  5 Apr 2022 02:00:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77177B81BC0;
-        Tue,  5 Apr 2022 10:03:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9184C385A2;
-        Tue,  5 Apr 2022 10:03:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57A3461573;
+        Tue,  5 Apr 2022 09:00:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 683CCC385A0;
+        Tue,  5 Apr 2022 09:00:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152985;
-        bh=7T3V9Ql41ZXUXe2eHr5kADkK5LhNNXoQgf53a89Czf8=;
+        s=korg; t=1649149227;
+        bh=CZsXfQVEitLbo3MrmYfMFsqvPiQUWiidTgrPcq/y2Mo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XoKYqACQi5ksIOTFMur+8DnXtj5FM7/y6D5345l+RubAeqz/+rNP70fgslsOakE2x
-         PmqMXDTaRBRFvloGrW+kvNEm2ndh/5njpPzktJRIvGO9V/DhR9yYlAMwvqycvXqLiB
-         RfCjUovO3aUB8/aVxLGYBNL4N5umklNdd2uOlv8Y=
+        b=Iz56dPjmugYWzKNCKYlOd8xDc/G8BE9lvnDTI3pYWGQGRxqv1eCMz3yEEMv4ztfrz
+         AHcQ17CuoQnuM+p8m6TJb4cJN4CQ8CCJTMy/qX2+0YL7t0FhvlttD3LYsS5Y3UFSRA
+         cSxI10DcoejlIcly8ktBx4Iq06XYbE6IRrW7FWH8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rik van Riel <riel@surriel.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.10 060/599] mm: invalidate hwpoison page cache page in fault path
+        stable@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0641/1017] clk: renesas: r9a07g044: Update multiplier and divider values for PLL2/3
 Date:   Tue,  5 Apr 2022 09:25:54 +0200
-Message-Id: <20220405070300.613828921@linuxfoundation.org>
+Message-Id: <20220405070413.309747147@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -62,63 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rik van Riel <riel@surriel.com>
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-commit e53ac7374e64dede04d745ff0e70ff5048378d1f upstream.
+[ Upstream commit b289cdecc7c3e25e001cde260c882e4d9a8b0772 ]
 
-Sometimes the page offlining code can leave behind a hwpoisoned clean
-page cache page.  This can lead to programs being killed over and over
-and over again as they fault in the hwpoisoned page, get killed, and
-then get re-spawned by whatever wanted to run them.
+As per the HW manual (Rev.1.00 Sep, 2021) PLL2 and PLL3 should be
+1600 MHz, but with current multiplier and divider values this resulted
+to 1596 MHz.
 
-This is particularly embarrassing when the page was offlined due to
-having too many corrected memory errors.  Now we are killing tasks due
-to them trying to access memory that probably isn't even corrupted.
+This patch updates the multiplier and divider values for PLL2 and PLL3
+so that we get the exact (1600 MHz) values.
 
-This problem can be avoided by invalidating the page from the page fault
-handler, which already has a branch for dealing with these kinds of
-pages.  With this patch we simply pretend the page fault was successful
-if the page was invalidated, return to userspace, incur another page
-fault, read in the file from disk (to a new memory page), and then
-everything works again.
-
-Link: https://lkml.kernel.org/r/20220212213740.423efcea@imladris.surriel.com
-Signed-off-by: Rik van Riel <riel@surriel.com>
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
-Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 17f0ff3d49ff1 ("clk: renesas: Add support for R9A07G044 SoC")
+Suggested-by: Biju Das <biju.das.jz@bp.renesas.com>
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Link: https://lore.kernel.org/r/20211223093223.4725-1-prabhakar.mahadev-lad.rj@bp.renesas.com
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- mm/memory.c |    9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/clk/renesas/r9a07g044-cpg.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3676,11 +3676,16 @@ static vm_fault_t __do_fault(struct vm_f
- 		return ret;
+diff --git a/drivers/clk/renesas/r9a07g044-cpg.c b/drivers/clk/renesas/r9a07g044-cpg.c
+index 47c16265fca9..3e72dd060ffa 100644
+--- a/drivers/clk/renesas/r9a07g044-cpg.c
++++ b/drivers/clk/renesas/r9a07g044-cpg.c
+@@ -78,8 +78,8 @@ static const struct cpg_core_clk r9a07g044_core_clks[] __initconst = {
+ 	DEF_FIXED(".osc", R9A07G044_OSCCLK, CLK_EXTAL, 1, 1),
+ 	DEF_FIXED(".osc_div1000", CLK_OSC_DIV1000, CLK_EXTAL, 1, 1000),
+ 	DEF_SAMPLL(".pll1", CLK_PLL1, CLK_EXTAL, PLL146_CONF(0)),
+-	DEF_FIXED(".pll2", CLK_PLL2, CLK_EXTAL, 133, 2),
+-	DEF_FIXED(".pll3", CLK_PLL3, CLK_EXTAL, 133, 2),
++	DEF_FIXED(".pll2", CLK_PLL2, CLK_EXTAL, 200, 3),
++	DEF_FIXED(".pll3", CLK_PLL3, CLK_EXTAL, 200, 3),
+ 	DEF_FIXED(".pll3_400", CLK_PLL3_400, CLK_PLL3, 1, 4),
+ 	DEF_FIXED(".pll3_533", CLK_PLL3_533, CLK_PLL3, 1, 3),
  
- 	if (unlikely(PageHWPoison(vmf->page))) {
--		if (ret & VM_FAULT_LOCKED)
-+		vm_fault_t poisonret = VM_FAULT_HWPOISON;
-+		if (ret & VM_FAULT_LOCKED) {
-+			/* Retry if a clean page was removed from the cache. */
-+			if (invalidate_inode_page(vmf->page))
-+				poisonret = 0;
- 			unlock_page(vmf->page);
-+		}
- 		put_page(vmf->page);
- 		vmf->page = NULL;
--		return VM_FAULT_HWPOISON;
-+		return poisonret;
- 	}
- 
- 	if (unlikely(!(ret & VM_FAULT_LOCKED)))
+-- 
+2.34.1
+
 
 

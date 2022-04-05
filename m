@@ -2,98 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB304F479F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A174F43A0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352559AbiDEVOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
+        id S1356035AbiDEU1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444188AbiDEPk7 (ORCPT
+        with ESMTP id S1444471AbiDEPld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:40:59 -0400
-Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99939117C;
-        Tue,  5 Apr 2022 07:03:31 -0700 (PDT)
-Received: from grover.. (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-09.nifty.com with ESMTP id 235E2k8K021295;
-        Tue, 5 Apr 2022 23:02:48 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 235E2k8K021295
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1649167368;
-        bh=8ckilN9UB4blZbcYmDCNzJh4V9ShLvfJ5JTGztZasQY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mY6yJ0bcFyc31gsjkbO/eUW6UNMRDhZ/vih7O5ZT3Se2kpUukdNoJOH6wN0wbISoi
-         2nqN4DVb1p78+JOukCm9A7rA5rLjRnfpOuH3M1DWOFSpLKrcVlJuqTpbon7I78aRMB
-         5A+d9XUeASWwLF17FcaW0blC2VECkPfbzA77FZNeBrVPWOHwZxUHZG/OpVCarbDhj6
-         IYgFvJqdAMs6McqDC8mEYcBtOHMjQyLNZx3Bij+H0p4WtugCNMxPAqKA6DOfkQpEgj
-         VDIoMtXlXCC4J7lwPxJEslobIQjv9vQ0/C8UbMQ06G+RM3tM1/7lxCRNiv7NuaUtY2
-         mzu5opxy01K+A==
-X-Nifty-SrcIP: [133.32.177.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH v2 02/10] kbuild: do not remove empty *.symtypes explicitly
-Date:   Tue,  5 Apr 2022 23:02:21 +0900
-Message-Id: <20220405140229.2895394-3-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220405140229.2895394-1-masahiroy@kernel.org>
-References: <20220405140229.2895394-1-masahiroy@kernel.org>
+        Tue, 5 Apr 2022 11:41:33 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC73C3347;
+        Tue,  5 Apr 2022 07:04:58 -0700 (PDT)
+Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KXq9B2TTJz67nP6;
+        Tue,  5 Apr 2022 22:02:54 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 5 Apr 2022 16:04:55 +0200
+Received: from [10.47.91.157] (10.47.91.157) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 5 Apr
+ 2022 15:04:55 +0100
+Message-ID: <5f1d8b3f-0afa-2724-4ff1-f061939c68c5@huawei.com>
+Date:   Tue, 5 Apr 2022 15:04:51 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+To:     <alexandre.truong@arm.com>
+From:   John Garry <john.garry@huawei.com>
+Subject: perf tool: About "perf arm64: Inject missing frames when using 'perf
+ record --call-graph=fp'"
+CC:     <linux-perf-users@vger.kernel.org>,
+        "jolsa@kernel.org >> Jiri Olsa" <jolsa@kernel.org>,
+        <german.gomez@arm.com>, <james.clark@arm.com>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.91.157]
+X-ClientProxiedBy: lhreml747-chm.china.huawei.com (10.201.108.197) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Presumably, 'test -s $@ || rm -f $@' intends to remove the output when
-the genksyms command fails.
+Hi Alexandre,
 
-It is unneeded because .DELETE_ON_ERROR automatically removes the output
-on failure.
+I notice that with commit b9f6fbb3b2c2 ("perf arm64: Inject missing 
+frames when using 'perf record --call-graph=fp'") that I get messages 
+spewing the console when running perf record+report, as below:
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+john@ubuntu:~/linux$sudo tools/perf/perf record -ag fio null12.fio
+john@ubuntu:~/linux$sudo tools/perf/perf report > report
+unwind: can't read reg 29
+unwind: can't read reg 29
+unwind: can't read reg 29
+unwind: can't read reg 29
+...
 
-Changes in v2:
-  - Fix accidental drop of '> /dev/null'
+Do you know the possible cause? I haven't checked...
 
- scripts/Makefile.build | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
-
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 31e0e33dfe5d..3ef2373f0a57 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -135,9 +135,7 @@ genksyms = scripts/genksyms/genksyms		\
- cmd_gensymtypes_c = $(CPP) -D__GENKSYMS__ $(c_flags) $< | $(genksyms)
- 
- quiet_cmd_cc_symtypes_c = SYM $(quiet_modtag) $@
--cmd_cc_symtypes_c =                                                         \
--    $(call cmd_gensymtypes_c,true,$@) >/dev/null;                           \
--    test -s $@ || rm -f $@
-+      cmd_cc_symtypes_c = $(call cmd_gensymtypes_c,true,$@) >/dev/null
- 
- $(obj)/%.symtypes : $(src)/%.c FORCE
- 	$(call cmd,cc_symtypes_c)
-@@ -348,9 +346,7 @@ cmd_gensymtypes_S =                                                         \
-     $(CPP) -D__GENKSYMS__ $(c_flags) -xc - | $(genksyms)
- 
- quiet_cmd_cc_symtypes_S = SYM $(quiet_modtag) $@
--cmd_cc_symtypes_S =                                                         \
--    $(call cmd_gensymtypes_S,true,$@) >/dev/null;                           \
--    test -s $@ || rm -f $@
-+      cmd_cc_symtypes_S = $(call cmd_gensymtypes_S,true,$@) >/dev/null
- 
- $(obj)/%.symtypes : $(src)/%.S FORCE
- 	$(call cmd,cc_symtypes_S)
--- 
-2.32.0
-
+Thanks,
+john

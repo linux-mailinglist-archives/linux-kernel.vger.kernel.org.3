@@ -2,244 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574464F4CEE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2D54F4A79
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1580568AbiDEXef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
+        id S1456895AbiDEWqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241488AbiDEMp0 (ORCPT
+        with ESMTP id S1380217AbiDEMxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 08:45:26 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4E52611E
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 04:48:45 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 1079C1F745;
-        Tue,  5 Apr 2022 11:48:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1649159324; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=FG5W+X6iauWFlicsUD/KFyqhn8yb4pSpN2a+NvHudUE=;
-        b=U+sas9du3g1kGret/F44LxtQJ9gs5N95bX2kvPi+VTiTK5WxnIBohb43yoKrqojPmNWGy1
-        fuSEsvxN3kVlKJssR0JWHyLEUdciVUpPSmWHH0P0v5nkYidRj50rvmG79EsdXgCXjJv+0F
-        5muU73su1r/MZR1LNkD2GBsQqPSnDUA=
-Received: from alley.suse.cz (unknown [10.100.224.162])
-        by relay2.suse.de (Postfix) with ESMTP id 74F23A3BA6;
-        Tue,  5 Apr 2022 11:48:43 +0000 (UTC)
-From:   Petr Mladek <pmladek@suse.com>
-To:     Chris Down <chris@chrisdown.name>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Dave Chinner <david@fromorbit.com>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>
-Subject: [PATCH] printk/index: Printk index feature documentation
-Date:   Tue,  5 Apr 2022 13:48:29 +0200
-Message-Id: <20220405114829.31837-1-pmladek@suse.com>
-X-Mailer: git-send-email 2.26.2
+        Tue, 5 Apr 2022 08:53:41 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D3CE095;
+        Tue,  5 Apr 2022 04:53:38 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2358i9ao002139;
+        Tue, 5 Apr 2022 13:52:58 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=ahMNFWxzpaVmVp3viku9IaBrdSUCBM3LW49uPEPbvxU=;
+ b=AOxt4YrYB/LoekLRTWYYtVuMG3+PLFJzeUn29lBTkGZa3ek7xYQZnOOGVb7exI9rDJGo
+ EmbWbNLQYZU05k5hGR9B9IGQlM9eJJSvNfOBVjVCwj+uCTubQb+U/fzk4qYEbVXJA4Xx
+ OTPm7FsfKjPSWMl5QdTxw+M1nWXQ6trXXL9g4AhGy0kUO1l8YgWsVXg6i4UlKXoeAOyh
+ 2d/dysRHJgXKEM7Vcxe8UUzu8iMDAkxaL3ZM5THKOp8zPn51c3CJ4GyTd1V8rgLB06a/
+ elErddY4//H/Nnoj0AWanhffmXC3EgtYuohqqXd9T+kHG5m2sgHsOt/lc+f+RieA4Kg9 Sw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f6dcgsr66-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 05 Apr 2022 13:52:58 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 09BEE10002A;
+        Tue,  5 Apr 2022 13:52:55 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EFBFF21A239;
+        Tue,  5 Apr 2022 13:52:54 +0200 (CEST)
+Received: from localhost (10.75.127.46) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 5 Apr 2022 13:52:54
+ +0200
+From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <arnaud.pouliquen@foss.st.com>, <linux-kernel@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>
+Subject: [PATCH v2] arm: configs: Configs that had RPMSG_CHAR now get RPMSG_CTRL
+Date:   Tue, 5 Apr 2022 13:52:36 +0200
+Message-ID: <20220405115236.1019955-1-arnaud.pouliquen@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-05_02,2022-04-05_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the printk index feature. The primary motivation is to
-explain that it is not creating KABI from particular printk() calls.
+In the commit 617d32938d1b ("rpmsg: Move the rpmsg control device
+from rpmsg_char to rpmsg_ctrl"), we split the rpmsg_char driver in two.
+By default give everyone who had the old driver enabled the rpmsg_ctrl
+driver too.
 
-Signed-off-by: Petr Mladek <pmladek@suse.com>
-Acked-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
 ---
-Changes against RFC[*]:
 
-  + Updated text by feedback from Darrick.
-  + Updated index.rst and MAINTAINERS.
-  + Tested build of the html documentation.
+This patch is extracted from the series [1] that has been partially
+integrated in the Linux Kernel 5.18-rc1.
 
-Did not add Sergey's ack because there were some changes.
+Update vs previous version:
+- remove "Fixes:" tag in commit, requested by Mathieu Poirier in [2]
 
-[*] https://lore.kernel.org/r/20220330145955.GB4384@pathway.suse.cz
+[1]https://lore.kernel.org/lkml/15be2f08-ba03-2b80-6f53-2056359d5c41@gmail.com/T/
+[2]https://lore.kernel.org/linux-arm-kernel/CANLsYky1_b80qPbgOaLGVYD-GEr21V6C653iGEB7VCU=GbGvAQ@mail.gmail.com/T/
+---
+ arch/arm/configs/qcom_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
- Documentation/core-api/index.rst        |   1 +
- Documentation/core-api/printk-index.rst | 136 ++++++++++++++++++++++++
- MAINTAINERS                             |   1 +
- 3 files changed, 138 insertions(+)
- create mode 100644 Documentation/core-api/printk-index.rst
-
-diff --git a/Documentation/core-api/index.rst b/Documentation/core-api/index.rst
-index 972d46a5ddf6..8a3fce1fe582 100644
---- a/Documentation/core-api/index.rst
-+++ b/Documentation/core-api/index.rst
-@@ -20,6 +20,7 @@ it.
-    workqueue
-    printk-basics
-    printk-formats
-+   printk-index
-    symbol-namespaces
- 
- Data structures and low-level utilities
-diff --git a/Documentation/core-api/printk-index.rst b/Documentation/core-api/printk-index.rst
-new file mode 100644
-index 000000000000..0de380b4a67c
---- /dev/null
-+++ b/Documentation/core-api/printk-index.rst
-@@ -0,0 +1,136 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+============
-+Printk Index
-+============
-+
-+There are many ways how to monitor the state of the system. One important
-+source of information is the system log. It provides a lot of information,
-+including more or less important warnings and error messages.
-+
-+There are monitoring tools that filter and take action based on messages
-+logged.
-+
-+The kernel messages are evolving together with the code. As a result,
-+particular kernel messages are not KABI and never will be!
-+
-+It is a huge challenge for maintaining the system log monitors. It requires
-+knowing what messages were updated in a particular kernel version and why.
-+Finding these changes in the sources would require non-trivial parsers.
-+Also it would require matching the sources with the binary kernel which
-+is not always trivial. Various changes might be backported. Various kernel
-+versions might be used on different monitored systems.
-+
-+This is where the printk index feature might become useful. It provides
-+a dump of printk formats used all over the source code used for the kernel
-+and modules on the running system. It is accessible at runtime via debugfs.
-+
-+The printk index helps to find changes in the message formats. Also it helps
-+to track the strings back to the kernel sources and the related commit.
-+
-+
-+User Interface
-+==============
-+
-+The index of printk formats are split in into separate files. The files are
-+named according to the binaries where the printk formats are built-in. There
-+is always "vmlinux" and optionally also modules, for example::
-+
-+   /sys/kernel/debug/printk/index/vmlinux
-+   /sys/kernel/debug/printk/index/ext4
-+   /sys/kernel/debug/printk/index/scsi_mod
-+
-+Note that only loaded modules are shown. Also printk formats from a module
-+might appear in "vmlinux" when the module is built-in.
-+
-+The content is inspired by the dynamic debug interface and looks like::
-+
-+   $> head -1 /sys/kernel/debug/printk/index/vmlinux; shuf -n 5 vmlinux
-+   # <level[,flags]> filename:line function "format"
-+   <5> block/blk-settings.c:661 disk_stack_limits "%s: Warning: Device %s is misaligned\n"
-+   <4> kernel/trace/trace.c:8296 trace_create_file "Could not create tracefs '%s' entry\n"
-+   <6> arch/x86/kernel/hpet.c:144 _hpet_print_config "hpet: %s(%d):\n"
-+   <6> init/do_mounts.c:605 prepare_namespace "Waiting for root device %s...\n"
-+   <6> drivers/acpi/osl.c:1410 acpi_no_auto_serialize_setup "ACPI: auto-serialization disabled\n"
-+
-+, where the meaning is::
-+
-+   - level: log level
-+   - flags: optional flags: currently only 'c' for KERN_CONT
-+   - filename:line: source filename and line number of the related
-+	printk() call. Note that there are many wrappers, for example,
-+	pr_warn(), pr_warn_once(), dev_warn().
-+   - function: function name where the printk() call is used.
-+   - format: format string
-+
-+The extra information makes it a bit harder to find differences
-+between various kernels. Especially the line number might change
-+very often. On the other hand, it helps a lot to confirm that
-+it is the same string or find the commit that is responsible
-+for eventual changes.
-+
-+
-+printk() Is Not a Stable KABI
-+=============================
-+
-+Several developers are afraid that exporting all these implementation
-+details into the user space will transform particular printk() calls
-+into KABI.
-+
-+But it is exactly the opposite. printk() calls must _not_ be KABI.
-+And the printk index helps user space tools to deal with this.
-+
-+
-+Subsystem specific printk wrappers
-+==================================
-+
-+The printk index is generated using extra metadata that are stored in
-+a dedicated .elf section ".printk_index". It is achieved using macro
-+wrappers doing __printk_index_emit() together with the real printk()
-+call. The same technique is used also for the metadata used by
-+the dynamic debug feature.
-+
-+The metadata are stored for a particular message only when it is printed
-+using these special wrappers. It is implemented for the commonly
-+used printk() calls, including, for example, pr_warn(), or pr_once().
-+
-+Additional changes are necessary for various subsystem specific wrappers
-+that call the original printk() via a common helper function. These needs
-+their own wrappers adding __printk_index_emit().
-+
-+Only few subsystem specific wrappers have been updated so far,
-+for example, dev_printk(). As a result, the printk formats from
-+some subsystes can be missing in the printk index.
-+
-+
-+Subsystem specific prefix
-+=========================
-+
-+The macro pr_fmt() macro allows to define a prefix that is printed
-+before the string generated by the related printk() calls.
-+
-+Subsystem specific wrappers usually add even more complicated
-+prefixes.
-+
-+These prefixes can be stored into the printk index metadata
-+by an optional parameter of __printk_index_emit(). The debugfs
-+interface might then show the printk formats including these prefixes.
-+For example, drivers/acpi/osl.c contains::
-+
-+  #define pr_fmt(fmt) "ACPI: OSL: " fmt
-+
-+  static int __init acpi_no_auto_serialize_setup(char *str)
-+  {
-+	acpi_gbl_auto_serialize_methods = FALSE;
-+	pr_info("Auto-serialization disabled\n");
-+
-+	return 1;
-+  }
-+
-+This results in the following printk index entry::
-+
-+  <6> drivers/acpi/osl.c:1410 acpi_no_auto_serialize_setup "ACPI: auto-serialization disabled\n"
-+
-+It helps matching messages from the real log with printk index.
-+Then the source file name, line number, and function name can
-+be used to match the string with the source code.
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fd768d43e048..ad8625130ea9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15855,6 +15855,7 @@ F:	kernel/printk/
- PRINTK INDEXING
- R:	Chris Down <chris@chrisdown.name>
- S:	Maintained
-+F:	Documentation/core-api/printk-index.rst
- F:	kernel/printk/index.c
- 
- PROC FILESYSTEM
+diff --git a/arch/arm/configs/qcom_defconfig b/arch/arm/configs/qcom_defconfig
+index 9981566f2096..2e7e9a4f31f6 100644
+--- a/arch/arm/configs/qcom_defconfig
++++ b/arch/arm/configs/qcom_defconfig
+@@ -241,6 +241,7 @@ CONFIG_QCOM_Q6V5_PAS=y
+ CONFIG_QCOM_Q6V5_PIL=y
+ CONFIG_QCOM_WCNSS_PIL=y
+ CONFIG_RPMSG_CHAR=y
++CONFIG_RPMSG_CTRL=y
+ CONFIG_RPMSG_QCOM_GLINK_SMEM=y
+ CONFIG_RPMSG_QCOM_SMD=y
+ CONFIG_QCOM_COMMAND_DB=y
 -- 
-2.26.2
+2.25.1
 

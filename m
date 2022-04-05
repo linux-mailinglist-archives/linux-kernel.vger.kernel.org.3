@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D62284F44FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F24514F43A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237604AbiDEOFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58740 "EHLO
+        id S241850AbiDEOLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236078AbiDEJbC (ORCPT
+        with ESMTP id S236210AbiDEJbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:31:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D0922528;
-        Tue,  5 Apr 2022 02:18:17 -0700 (PDT)
+        Tue, 5 Apr 2022 05:31:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBAD76437;
+        Tue,  5 Apr 2022 02:18:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5558A61577;
-        Tue,  5 Apr 2022 09:18:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C17DEC385A7;
-        Tue,  5 Apr 2022 09:18:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 56C2861645;
+        Tue,  5 Apr 2022 09:18:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C77AC385A7;
+        Tue,  5 Apr 2022 09:18:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649150296;
-        bh=Wo392uEawl61tpBst45l5+t1WaSNVll46ELOkHU90ak=;
+        s=k20201202; t=1649150318;
+        bh=w8WO3r1/6EvuoSLPQGBL9Us7xTBObOlHCa40AeXtIeY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jwT5G0+JvjM2OoUCGaf7dYjAeelIXoF2JQyLEDTgg7eL7brW0igNcD8hgCb2+AW/J
-         4tB/4rEj+j3WEKLmckBuSbMUCBHVOx9o+7W0p60kim0EtQLwBJiZSYfvpqvKQJEmc3
-         9tLXDeU2SuIb587y/0UMTLL17i0Sc44upoLNM3s7HAgf1q4h/4tejh5e9aE4UI0SeF
-         C6QSoTcFXYsc/DVQcO0/D7hCJNWWPi6Iv4sUe/g3trQRnePL1vh8UizJTelrDYLrKA
-         VStP18jigA5M4KUgLuDYG9G75F/IELARplzLiX5uAY14Yi8cmfH8rrZNtcq0pdJg0A
-         ZI0Dbpvsr0s+g==
+        b=rqBg3o8zToypF97gy4CjO10o8frcXxeLLjvkd3R7JshwyzFjX3z891APWKWfN4sly
+         T9hfedvmirq5B04qZHDp2J6U01Wd7QGv5SdLcZ2C1+PdaTYZpNIyhK87PGsM3GhFQK
+         xOej3YV44ze7bB3PWJ5UvycQuMWCKhMsOcwPjQVqvPUDr+MqEDhApCb6jhGfK00hAE
+         1YXcpmD18TaPIIcR4F/0i0vc4gMWDj7RYzDU67//ZmDjpceunfuQE3vakSp52t4eHQ
+         nuwvVtRL4in/h4DI+1s+MH6V4eGNDY6oXnAzPWMr37N9aL2KEPI13U8CQgsNfyP0ZA
+         jKC/r0v9HgwpA==
 From:   Arnd Bergmann <arnd@kernel.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>,
         Russell King <linux@armlinux.org.uk>,
@@ -55,10 +55,11 @@ Cc:     Arnd Bergmann <arnd@arndb.de>,
         Stephen Boyd <sboyd@kernel.org>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, patches@opensource.cirrus.com
-Subject: [PATCH 02/12] ARM: ep93xx: renumber interrupts
-Date:   Tue,  5 Apr 2022 11:17:40 +0200
-Message-Id: <20220405091750.3076973-3-arnd@kernel.org>
+        linux-samsung-soc@vger.kernel.org, patches@opensource.cirrus.com,
+        Jason Cooper <jason@lakedaemon.net>
+Subject: [PATCH 06/12] ARM: dove: multiplatform support
+Date:   Tue,  5 Apr 2022 11:17:44 +0200
+Message-Id: <20220405091750.3076973-7-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20220405091750.3076973-1-arnd@kernel.org>
 References: <20220405091750.3076973-1-arnd@kernel.org>
@@ -66,8 +67,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 To:     unlisted-recipients:; (no To-header on input)
@@ -77,168 +78,156 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-With the move to irq domains, no irqchip must start at number 0,
-so shift all the hardwired IRQ numbers by one.
+The dove platform is now ready to be enabled for multiplatform
+support, this patch does the switch over by modifying the Kconfig file,
+the defconfig and removing the last mach/*.h header that becomes obsolete
+with this.
 
-Tested-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+This work was originally done in 2015 as all the ARMv7 machiens
+gove moved over to multiplatform builds, but at the time it conflicted
+with some patches that Russell was trying to upstream, so we
+left it at that.
+
+I hope that there is no longer a need to keep dove separate from the
+rest, so we can either add it to the other ARMv7 platforms, or just
+replace it with the DT based platform code for the same hardware
+in mach-mvebu and remove mach-dove entirely.
+
+Acked-by: Andrew Lunn <andrew@lunn.ch>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Jason Cooper <jason@lakedaemon.net>
+Cc: Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
+Cc: Gregory Clement <gregory.clement@bootlin.com>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/arm/mach-ep93xx/core.c              |   4 +-
- arch/arm/mach-ep93xx/include/mach/irqs.h | 122 ++++++++++++-----------
- 2 files changed, 65 insertions(+), 61 deletions(-)
+ arch/arm/Kconfig                             | 14 --------
+ arch/arm/configs/dove_defconfig              |  2 ++
+ arch/arm/mach-dove/Kconfig                   | 16 ++++++---
+ arch/arm/mach-dove/Makefile                  |  2 ++
+ arch/arm/mach-dove/include/mach/uncompress.h | 34 --------------------
+ 5 files changed, 16 insertions(+), 52 deletions(-)
+ delete mode 100644 arch/arm/mach-dove/include/mach/uncompress.h
 
-diff --git a/arch/arm/mach-ep93xx/core.c b/arch/arm/mach-ep93xx/core.c
-index a3b4e843456a..e4569a5acc3f 100644
---- a/arch/arm/mach-ep93xx/core.c
-+++ b/arch/arm/mach-ep93xx/core.c
-@@ -75,8 +75,8 @@ void __init ep93xx_map_io(void)
-  *************************************************************************/
- void __init ep93xx_init_irq(void)
- {
--	vic_init(EP93XX_VIC1_BASE, 0, EP93XX_VIC1_VALID_IRQ_MASK, 0);
--	vic_init(EP93XX_VIC2_BASE, 32, EP93XX_VIC2_VALID_IRQ_MASK, 0);
-+	vic_init(EP93XX_VIC1_BASE, IRQ_EP93XX_VIC0, EP93XX_VIC1_VALID_IRQ_MASK, 0);
-+	vic_init(EP93XX_VIC2_BASE, IRQ_EP93XX_VIC1, EP93XX_VIC2_VALID_IRQ_MASK, 0);
- }
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index 2bd611beefe1..faf696173af7 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -383,20 +383,6 @@ config ARCH_IXP4XX
+ 	help
+ 	  Support for Intel's IXP4XX (XScale) family of processors.
  
+-config ARCH_DOVE
+-	bool "Marvell Dove"
+-	select CPU_PJ4
+-	select GPIOLIB
+-	select HAVE_PCI
+-	select MVEBU_MBUS
+-	select PINCTRL
+-	select PINCTRL_DOVE
+-	select PLAT_ORION_LEGACY
+-	select SPARSE_IRQ
+-	select PM_GENERIC_DOMAINS if PM
+-	help
+-	  Support for the Marvell Dove SoC 88AP510
+-
+ config ARCH_PXA
+ 	bool "PXA2xx/PXA3xx-based"
+ 	select ARCH_MTD_XIP
+diff --git a/arch/arm/configs/dove_defconfig b/arch/arm/configs/dove_defconfig
+index 33074fdab2ea..f8fb4758f80d 100644
+--- a/arch/arm/configs/dove_defconfig
++++ b/arch/arm/configs/dove_defconfig
+@@ -8,6 +8,8 @@ CONFIG_MODULES=y
+ CONFIG_MODULE_UNLOAD=y
+ # CONFIG_BLK_DEV_BSG is not set
+ CONFIG_PARTITION_ADVANCED=y
++# CONFIG_ARCH_MULTI_V6 is not set
++CONFIG_ARCH_MULTI_V7=y
+ CONFIG_ARCH_DOVE=y
+ CONFIG_MACH_DOVE_DB=y
+ CONFIG_MACH_CM_A510=y
+diff --git a/arch/arm/mach-dove/Kconfig b/arch/arm/mach-dove/Kconfig
+index 7747fe64420a..c30c69c664ea 100644
+--- a/arch/arm/mach-dove/Kconfig
++++ b/arch/arm/mach-dove/Kconfig
+@@ -1,7 +1,17 @@
+ # SPDX-License-Identifier: GPL-2.0
+-if ARCH_DOVE
++menuconfig ARCH_DOVE
++	bool "Marvell Dove" if ARCH_MULTI_V7
++	select CPU_PJ4
++	select GPIOLIB
++	select MVEBU_MBUS
++	select PINCTRL
++	select PINCTRL_DOVE
++	select PLAT_ORION_LEGACY
++	select PM_GENERIC_DOMAINS if PM
++	help
++	  Support for the Marvell Dove SoC 88AP510
  
-diff --git a/arch/arm/mach-ep93xx/include/mach/irqs.h b/arch/arm/mach-ep93xx/include/mach/irqs.h
-index 244daf83ce6d..60c69c4ed7e1 100644
---- a/arch/arm/mach-ep93xx/include/mach/irqs.h
-+++ b/arch/arm/mach-ep93xx/include/mach/irqs.h
-@@ -6,69 +6,73 @@
- #ifndef __ASM_ARCH_IRQS_H
- #define __ASM_ARCH_IRQS_H
+-menu "Marvell Dove Implementations"
++if ARCH_DOVE
  
--#define IRQ_EP93XX_COMMRX		2
--#define IRQ_EP93XX_COMMTX		3
--#define IRQ_EP93XX_TIMER1		4
--#define IRQ_EP93XX_TIMER2		5
--#define IRQ_EP93XX_AACINTR		6
--#define IRQ_EP93XX_DMAM2P0		7
--#define IRQ_EP93XX_DMAM2P1		8
--#define IRQ_EP93XX_DMAM2P2		9
--#define IRQ_EP93XX_DMAM2P3		10
--#define IRQ_EP93XX_DMAM2P4		11
--#define IRQ_EP93XX_DMAM2P5		12
--#define IRQ_EP93XX_DMAM2P6		13
--#define IRQ_EP93XX_DMAM2P7		14
--#define IRQ_EP93XX_DMAM2P8		15
--#define IRQ_EP93XX_DMAM2P9		16
--#define IRQ_EP93XX_DMAM2M0		17
--#define IRQ_EP93XX_DMAM2M1		18
--#define IRQ_EP93XX_GPIO0MUX		19
--#define IRQ_EP93XX_GPIO1MUX		20
--#define IRQ_EP93XX_GPIO2MUX		21
--#define IRQ_EP93XX_GPIO3MUX		22
--#define IRQ_EP93XX_UART1RX		23
--#define IRQ_EP93XX_UART1TX		24
--#define IRQ_EP93XX_UART2RX		25
--#define IRQ_EP93XX_UART2TX		26
--#define IRQ_EP93XX_UART3RX		27
--#define IRQ_EP93XX_UART3TX		28
--#define IRQ_EP93XX_KEY			29
--#define IRQ_EP93XX_TOUCH		30
-+#define IRQ_EP93XX_VIC0			1
+ config DOVE_LEGACY
+ 	bool
+@@ -21,6 +31,4 @@ config MACH_CM_A510
+ 	  Say 'Y' here if you want your kernel to support the
+ 	  CompuLab CM-A510 Board.
+ 
+-endmenu
+-
+ endif
+diff --git a/arch/arm/mach-dove/Makefile b/arch/arm/mach-dove/Makefile
+index cdf163cab738..e83f6492834d 100644
+--- a/arch/arm/mach-dove/Makefile
++++ b/arch/arm/mach-dove/Makefile
+@@ -1,4 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
++ccflags-$(CONFIG_ARCH_MULTIPLATFORM) := -I$(srctree)/arch/arm/plat-orion/include
 +
-+#define IRQ_EP93XX_COMMRX		(IRQ_EP93XX_VIC0 + 2)
-+#define IRQ_EP93XX_COMMTX		(IRQ_EP93XX_VIC0 + 3)
-+#define IRQ_EP93XX_TIMER1		(IRQ_EP93XX_VIC0 + 4)
-+#define IRQ_EP93XX_TIMER2		(IRQ_EP93XX_VIC0 + 5)
-+#define IRQ_EP93XX_AACINTR		(IRQ_EP93XX_VIC0 + 6)
-+#define IRQ_EP93XX_DMAM2P0		(IRQ_EP93XX_VIC0 + 7)
-+#define IRQ_EP93XX_DMAM2P1		(IRQ_EP93XX_VIC0 + 8)
-+#define IRQ_EP93XX_DMAM2P2		(IRQ_EP93XX_VIC0 + 9)
-+#define IRQ_EP93XX_DMAM2P3		(IRQ_EP93XX_VIC0 + 10)
-+#define IRQ_EP93XX_DMAM2P4		(IRQ_EP93XX_VIC0 + 11)
-+#define IRQ_EP93XX_DMAM2P5		(IRQ_EP93XX_VIC0 + 12)
-+#define IRQ_EP93XX_DMAM2P6		(IRQ_EP93XX_VIC0 + 13)
-+#define IRQ_EP93XX_DMAM2P7		(IRQ_EP93XX_VIC0 + 14)
-+#define IRQ_EP93XX_DMAM2P8		(IRQ_EP93XX_VIC0 + 15)
-+#define IRQ_EP93XX_DMAM2P9		(IRQ_EP93XX_VIC0 + 16)
-+#define IRQ_EP93XX_DMAM2M0		(IRQ_EP93XX_VIC0 + 17)
-+#define IRQ_EP93XX_DMAM2M1		(IRQ_EP93XX_VIC0 + 18)
-+#define IRQ_EP93XX_GPIO0MUX		(IRQ_EP93XX_VIC0 + 19)
-+#define IRQ_EP93XX_GPIO1MUX		(IRQ_EP93XX_VIC0 + 20)
-+#define IRQ_EP93XX_GPIO2MUX		(IRQ_EP93XX_VIC0 + 21)
-+#define IRQ_EP93XX_GPIO3MUX		(IRQ_EP93XX_VIC0 + 22)
-+#define IRQ_EP93XX_UART1RX		(IRQ_EP93XX_VIC0 + 23)
-+#define IRQ_EP93XX_UART1TX		(IRQ_EP93XX_VIC0 + 24)
-+#define IRQ_EP93XX_UART2RX		(IRQ_EP93XX_VIC0 + 25)
-+#define IRQ_EP93XX_UART2TX		(IRQ_EP93XX_VIC0 + 26)
-+#define IRQ_EP93XX_UART3RX		(IRQ_EP93XX_VIC0 + 27)
-+#define IRQ_EP93XX_UART3TX		(IRQ_EP93XX_VIC0 + 28)
-+#define IRQ_EP93XX_KEY			(IRQ_EP93XX_VIC0 + 29)
-+#define IRQ_EP93XX_TOUCH		(IRQ_EP93XX_VIC0 + 30)
- #define EP93XX_VIC1_VALID_IRQ_MASK	0x7ffffffc
- 
--#define IRQ_EP93XX_EXT0			32
--#define IRQ_EP93XX_EXT1			33
--#define IRQ_EP93XX_EXT2			34
--#define IRQ_EP93XX_64HZ			35
--#define IRQ_EP93XX_WATCHDOG		36
--#define IRQ_EP93XX_RTC			37
--#define IRQ_EP93XX_IRDA			38
--#define IRQ_EP93XX_ETHERNET		39
--#define IRQ_EP93XX_EXT3			40
--#define IRQ_EP93XX_PROG			41
--#define IRQ_EP93XX_1HZ			42
--#define IRQ_EP93XX_VSYNC		43
--#define IRQ_EP93XX_VIDEO_FIFO		44
--#define IRQ_EP93XX_SSP1RX		45
--#define IRQ_EP93XX_SSP1TX		46
--#define IRQ_EP93XX_GPIO4MUX		47
--#define IRQ_EP93XX_GPIO5MUX		48
--#define IRQ_EP93XX_GPIO6MUX		49
--#define IRQ_EP93XX_GPIO7MUX		50
--#define IRQ_EP93XX_TIMER3		51
--#define IRQ_EP93XX_UART1		52
--#define IRQ_EP93XX_SSP			53
--#define IRQ_EP93XX_UART2		54
--#define IRQ_EP93XX_UART3		55
--#define IRQ_EP93XX_USB			56
--#define IRQ_EP93XX_ETHERNET_PME		57
--#define IRQ_EP93XX_DSP			58
--#define IRQ_EP93XX_GPIO_AB		59
--#define IRQ_EP93XX_SAI			60
-+#define IRQ_EP93XX_VIC1			(IRQ_EP93XX_VIC0 + 32)
-+
-+#define IRQ_EP93XX_EXT0			(IRQ_EP93XX_VIC1 + 0)
-+#define IRQ_EP93XX_EXT1			(IRQ_EP93XX_VIC1 + 1)
-+#define IRQ_EP93XX_EXT2			(IRQ_EP93XX_VIC1 + 2)
-+#define IRQ_EP93XX_64HZ			(IRQ_EP93XX_VIC1 + 3)
-+#define IRQ_EP93XX_WATCHDOG		(IRQ_EP93XX_VIC1 + 4)
-+#define IRQ_EP93XX_RTC			(IRQ_EP93XX_VIC1 + 5)
-+#define IRQ_EP93XX_IRDA			(IRQ_EP93XX_VIC1 + 6)
-+#define IRQ_EP93XX_ETHERNET		(IRQ_EP93XX_VIC1 + 7)
-+#define IRQ_EP93XX_EXT3			(IRQ_EP93XX_VIC1 + 8)
-+#define IRQ_EP93XX_PROG			(IRQ_EP93XX_VIC1 + 9)
-+#define IRQ_EP93XX_1HZ			(IRQ_EP93XX_VIC1 + 10)
-+#define IRQ_EP93XX_VSYNC		(IRQ_EP93XX_VIC1 + 11)
-+#define IRQ_EP93XX_VIDEO_FIFO		(IRQ_EP93XX_VIC1 + 12)
-+#define IRQ_EP93XX_SSP1RX		(IRQ_EP93XX_VIC1 + 13)
-+#define IRQ_EP93XX_SSP1TX		(IRQ_EP93XX_VIC1 + 14)
-+#define IRQ_EP93XX_GPIO4MUX		(IRQ_EP93XX_VIC1 + 15)
-+#define IRQ_EP93XX_GPIO5MUX		(IRQ_EP93XX_VIC1 + 16)
-+#define IRQ_EP93XX_GPIO6MUX		(IRQ_EP93XX_VIC1 + 17)
-+#define IRQ_EP93XX_GPIO7MUX		(IRQ_EP93XX_VIC1 + 18)
-+#define IRQ_EP93XX_TIMER3		(IRQ_EP93XX_VIC1 + 19)
-+#define IRQ_EP93XX_UART1		(IRQ_EP93XX_VIC1 + 20)
-+#define IRQ_EP93XX_SSP			(IRQ_EP93XX_VIC1 + 21)
-+#define IRQ_EP93XX_UART2		(IRQ_EP93XX_VIC1 + 22)
-+#define IRQ_EP93XX_UART3		(IRQ_EP93XX_VIC1 + 23)
-+#define IRQ_EP93XX_USB			(IRQ_EP93XX_VIC1 + 24)
-+#define IRQ_EP93XX_ETHERNET_PME		(IRQ_EP93XX_VIC1 + 25)
-+#define IRQ_EP93XX_DSP			(IRQ_EP93XX_VIC1 + 26)
-+#define IRQ_EP93XX_GPIO_AB		(IRQ_EP93XX_VIC1 + 27)
-+#define IRQ_EP93XX_SAI			(IRQ_EP93XX_VIC1 + 28)
- #define EP93XX_VIC2_VALID_IRQ_MASK	0x1fffffff
- 
--#define NR_EP93XX_IRQS			(64 + 24)
-+#define NR_EP93XX_IRQS			(IRQ_EP93XX_VIC1 + 32 + 24)
- 
- #define EP93XX_BOARD_IRQ(x)		(NR_EP93XX_IRQS + (x))
- #define EP93XX_BOARD_IRQS		32
+ obj-y				+= common.o
+ obj-$(CONFIG_DOVE_LEGACY)	+= irq.o mpp.o
+ obj-$(CONFIG_PCI)		+= pcie.o
+diff --git a/arch/arm/mach-dove/include/mach/uncompress.h b/arch/arm/mach-dove/include/mach/uncompress.h
+deleted file mode 100644
+index ddf873f35e2b..000000000000
+--- a/arch/arm/mach-dove/include/mach/uncompress.h
++++ /dev/null
+@@ -1,34 +0,0 @@
+-/*
+- * This file is licensed under the terms of the GNU General Public
+- * License version 2.  This program is licensed "as is" without any
+- * warranty of any kind, whether express or implied.
+- */
+-
+-#define UART0_PHYS_BASE (0xf1000000 + 0x12000)
+-
+-#define UART_THR ((volatile unsigned char *)(UART0_PHYS_BASE + 0x0))
+-#define UART_LSR ((volatile unsigned char *)(UART0_PHYS_BASE + 0x14))
+-
+-#define LSR_THRE	0x20
+-
+-static inline void putc(const char c)
+-{
+-	int i;
+-
+-	for (i = 0; i < 0x1000; i++) {
+-		/* Transmit fifo not full? */
+-		if (*UART_LSR & LSR_THRE)
+-			break;
+-	}
+-
+-	*UART_THR = c;
+-}
+-
+-static inline void flush(void)
+-{
+-}
+-
+-/*
+- * nothing to do
+- */
+-#define arch_decomp_setup()
 -- 
 2.29.2
 

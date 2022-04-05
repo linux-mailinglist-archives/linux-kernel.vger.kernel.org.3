@@ -2,71 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D75E4F5134
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D05D64F5112
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1845423AbiDFByi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35816 "EHLO
+        id S1844676AbiDFBvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239199AbiDEPBP (ORCPT
+        with ESMTP id S1384078AbiDEPOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:01:15 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4981F27B02
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:23:49 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-df0940c4eeso14342191fac.8
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 06:23:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6ScfzVYhoR0LHfyaru7LJ12VrLihpLGnKs+dyoaqZBU=;
-        b=bwM7MQ2CaERMuk5JUO51JviRs0GLe4rNKdBujPdlUJBzMHbt83Xm1/BfCx2S/bGpkt
-         YAi4FwH9eRFr2dxMt51ZgG7+C31WBhBvTjqU00QRQBbH1NDRlVYSh6TmLsSrrJCiDjkp
-         Mw34VPzQNst68DPRw25PP5suiV8z1xnnYlAQA0ZwO7U1/TEZ5jGaoUeG4pC5keRlIxYo
-         +/n31B07cpDqvUTsSLHD23wv93GjPx0EqFEwA04V5LEVy7aFc+l7KRDV7XkQtwUs77wD
-         yEvxY1cgO1wvyAD4uNRkIBQIDpML2g8ayWb9E1WxSFQJ1NF2wtJYumNNgb5/GIwu8kLy
-         SuOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6ScfzVYhoR0LHfyaru7LJ12VrLihpLGnKs+dyoaqZBU=;
-        b=HTWyo1o61FT6vM/KInIYLYDDozHcuXSGc5EUmIwi3Z5SIvcLdv6lL520tiaoZD3jVX
-         HeP/QFE3ejQ1lHZkVwfYBm+gEVUfx3IJzH8mJzHXaLw/PO7XZwAqbHzN/NH3swzxpdUd
-         Bxo8gIrEaFjourWcDfOS1XaspfLYjf9wNVdCJIggsiS3h/JvqbSnJxw/Q58bnxe2y53O
-         LayzslmoDrMQ2aHcieBqWLRk6dYm0yafSHTFXhDQ0O2b2oVCRkAzM97C+404opzysmrp
-         zCUuH6XvpoX20GE0jyPeMpq81xneYh46pVF+q3e1VGxhMFmv7zb+7w2Q8BH3rQDZwSWU
-         JZMA==
-X-Gm-Message-State: AOAM530bmBg8YPSqArt4Youopf4F2fsnGsIS154kFOEtO5Xy8fqJyY2M
-        BZRhfrj4y5bCDpeIlUPkb6eNOnDbARdDfspbaUM=
-X-Google-Smtp-Source: ABdhPJxsuNcRKCVnvwc6SiCT2E01/8qtrsJ9bRYQ6b3xCmhFmyTyi6bLE+dqO1fRo6Uwjo4tbwo9zjJTJQl8jycO/hg=
-X-Received: by 2002:a05:6870:311d:b0:de:9b6c:362b with SMTP id
- v29-20020a056870311d00b000de9b6c362bmr1416658oaa.200.1649165029203; Tue, 05
- Apr 2022 06:23:49 -0700 (PDT)
+        Tue, 5 Apr 2022 11:14:52 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295A1689A6;
+        Tue,  5 Apr 2022 06:28:51 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id DABBD210DE;
+        Tue,  5 Apr 2022 13:28:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649165329; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=B1KHdOwVSkxc4cwioVl/fqGmb4ILJaNXLeIecIndREU=;
+        b=Jg1tYOq01mB8B0vxbgs4NgOXJtRQr3uDIvlYQoTjvOY7mEVQ3u6at1FQZe9Tw3SE3QbNZ9
+        yZdEcUaKfQVEW+gX5DmsUmWlZ09rfQXT/6A699HqreRbUT5ylyrydwStiI9dbGzoL9EGpI
+        vudzaTBUEUaXlugYM7VcAAseaxSEPf4=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id CF71DA3B87;
+        Tue,  5 Apr 2022 13:28:49 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id B1C70DA80E; Tue,  5 Apr 2022 15:24:48 +0200 (CEST)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs fixes for 5.18-rc2
+Date:   Tue,  5 Apr 2022 15:24:47 +0200
+Message-Id: <cover.1649109877.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220401025930.16365-1-guozhengkui@vivo.com>
-In-Reply-To: <20220401025930.16365-1-guozhengkui@vivo.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 5 Apr 2022 09:23:38 -0400
-Message-ID: <CADnq5_O5K60qP5Khgz7Ja+5yiHHt=juBNBj5o=+AK5CJwyjRRA@mail.gmail.com>
-Subject: Re: [PATCH] drm/radeon: simplify if-if to if-else
-To:     Guo Zhengkui <guozhengkui@vivo.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:RADEON and AMDGPU DRM DRIVERS" 
-        <amd-gfx@lists.freedesktop.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        zhengkui_guo@outlook.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,32 +52,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+Hi,
 
-Alex
+please pull the following fixes for btrfs, thanks.
 
-On Thu, Mar 31, 2022 at 11:00 PM Guo Zhengkui <guozhengkui@vivo.com> wrote:
->
-> Replace `if (!ret)` with `else` for simplification.
->
-> Signed-off-by: Guo Zhengkui <guozhengkui@vivo.com>
-> ---
->  drivers/gpu/drm/radeon/radeon_pm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/radeon/radeon_pm.c b/drivers/gpu/drm/radeon/radeon_pm.c
-> index c67b6ddb29a4..e765abcb3b01 100644
-> --- a/drivers/gpu/drm/radeon/radeon_pm.c
-> +++ b/drivers/gpu/drm/radeon/radeon_pm.c
-> @@ -1629,7 +1629,7 @@ int radeon_pm_late_init(struct radeon_device *rdev)
->                         ret = device_create_file(rdev->dev, &dev_attr_power_method);
->                         if (ret)
->                                 DRM_ERROR("failed to create device file for power method\n");
-> -                       if (!ret)
-> +                       else
->                                 rdev->pm.sysfs_initialized = true;
->                 }
->         }
-> --
-> 2.20.1
->
+- prevent deleting subvolume with active swapfile
+
+- fix qgroup reserve limit calculation overflow
+
+- remove device count in superblock and its item in one transaction so
+  they cant't get out of sync
+
+- skip defragmenting an isolated sector, this could cause some extra IO
+
+- unify handling of mtime/permissions in hole punch with fallocate
+
+- zoned mode fixes:
+  - remove assert checking for only single mode, we have the DUP mode
+    implemented
+
+  - fix potential lockdep warning while traversing devices when checking
+    for zone activation
+
+----------------------------------------------------------------
+The following changes since commit d3e29967079c522ce1c5cab0e9fab2c280b977eb:
+
+  btrfs: zoned: put block group after final usage (2022-03-14 13:13:54 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-5.18-rc1-tag
+
+for you to fetch changes up to 60021bd754c6ca0addc6817994f20290a321d8d6:
+
+  btrfs: prevent subvol with swapfile from being deleted (2022-03-24 17:50:57 +0100)
+
+----------------------------------------------------------------
+Darrick J. Wong (1):
+      btrfs: fix fallocate to use file_modified to update permissions consistently
+
+Ethan Lien (1):
+      btrfs: fix qgroup reserve overflow the qgroup limit
+
+Johannes Thumshirn (2):
+      btrfs: zoned: traverse devices under chunk_mutex in btrfs_can_activate_zone
+      btrfs: zoned: remove left over ASSERT checking for single profile
+
+Josef Bacik (1):
+      btrfs: do not warn for free space inode in cow_file_range
+
+Kaiwen Hu (1):
+      btrfs: prevent subvol with swapfile from being deleted
+
+Qu Wenruo (2):
+      btrfs: remove device item and update super block in the same transaction
+      btrfs: avoid defragging extents whose next extents are not targets
+
+ fs/btrfs/extent_io.h |  2 +-
+ fs/btrfs/file.c      | 13 +++++++++--
+ fs/btrfs/inode.c     | 23 ++++++++++++++++++-
+ fs/btrfs/ioctl.c     | 20 +++++++++++-----
+ fs/btrfs/volumes.c   | 65 ++++++++++++++++++++++------------------------------
+ fs/btrfs/zoned.c     | 13 ++++-------
+ 6 files changed, 81 insertions(+), 55 deletions(-)

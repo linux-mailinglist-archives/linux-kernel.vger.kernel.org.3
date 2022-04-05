@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73AC64F475B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1E04F43D4
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348530AbiDEVJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
+        id S1390624AbiDENmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358028AbiDEK1z (ORCPT
+        with ESMTP id S1345317AbiDEJWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63029689A6;
-        Tue,  5 Apr 2022 03:13:08 -0700 (PDT)
+        Tue, 5 Apr 2022 05:22:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E8E4338C;
+        Tue,  5 Apr 2022 02:10:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2CF461777;
-        Tue,  5 Apr 2022 10:13:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10D1FC385A0;
-        Tue,  5 Apr 2022 10:13:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7489B81A12;
+        Tue,  5 Apr 2022 09:10:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E4F2C385A2;
+        Tue,  5 Apr 2022 09:10:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153587;
-        bh=0C40SgLp/lwFglandYY9iJGkhMxzFWz9IyNwKsYpjig=;
+        s=korg; t=1649149826;
+        bh=dOC/qeva2LJb0df2IyTGuQKNhvG4/vpycOtEmcS+tso=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=quUteL8t85uHezbky+H8CeGFlvc2KLpeBN3XuaVkVEmPxv5kGdNO7XOYNmbwS217l
-         0XawKcyT/JafqUPyuYMmRxgAN7aGr+o87kdrktYsh5aCY7WvKR6L8q2LX1fC15SegU
-         fj4U8QeyPoyuNwLhhJupUk2yD/MPvT78Lm2vjz2A=
+        b=rRMEqPuwWQ3tg9Zr9GxnR8U5d4nxvdssKVR/uYF4k7m07hIC7EBFY5SD/kw9Fdld6
+         aHjjveeA9N0vXhqQgZeJrm0boebnDPnrH26+vMhErU2ADSgva27TEjymyilk2COmo4
+         MRgu3hNaZb29sDjw1LKzfvRcHojI+EJzSHK4uIwQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Qingyang <zhou1615@umn.edu>,
-        Lyude Paul <lyude@redhat.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 274/599] drm/nouveau/acr: Fix undefined behavior in nvkm_acr_hsfw_load_bl()
+        stable@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0855/1017] media: atomisp: fix bad usage at error handling logic
 Date:   Tue,  5 Apr 2022 09:29:28 +0200
-Message-Id: <20220405070306.992187729@linuxfoundation.org>
+Message-Id: <20220405070419.615422796@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,52 +55,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Qingyang <zhou1615@umn.edu>
+From: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-[ Upstream commit 2343bcdb4747d4f418a4daf2e898b94f86c24a59 ]
+[ Upstream commit fc0b582c858ed73f94c8f3375c203ea46f1f7402 ]
 
-In nvkm_acr_hsfw_load_bl(), the return value of kmalloc() is directly
-passed to memcpy(), which could lead to undefined behavior on failure
-of kmalloc().
+As warned by sparse:
+	atomisp: drivers/staging/media/atomisp/pci/atomisp_acc.c:508 atomisp_acc_load_extensions() warn: iterator used outside loop: 'acc_fw'
 
-Fix this bug by using kmemdup() instead of kmalloc()+memcpy().
+The acc_fw interactor is used outside the loop, at the error handling
+logic. On most cases, this is actually safe there, but, if
+atomisp_css_set_acc_parameters() has an error, an attempt to use it
+will pick an invalid value for acc_fw.
 
-This bug was found by a static analyzer.
-
-Builds with 'make allyesconfig' show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: 22dcda45a3d1 ("drm/nouveau/acr: implement new subdev to replace "secure boot"")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-Reviewed-by: Lyude Paul <lyude@redhat.com>
-Signed-off-by: Lyude Paul <lyude@redhat.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220124165856.57022-1-zhou1615@umn.edu
+Reported-by: Hans Verkuil <hverkuil@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ .../staging/media/atomisp/pci/atomisp_acc.c   | 28 +++++++++++++------
+ 1 file changed, 19 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
-index 667fa016496e..a6ea89a5d51a 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/hsfw.c
-@@ -142,11 +142,12 @@ nvkm_acr_hsfw_load_bl(struct nvkm_acr *acr, const char *name, int ver,
- 
- 	hsfw->imem_size = desc->code_size;
- 	hsfw->imem_tag = desc->start_tag;
--	hsfw->imem = kmalloc(desc->code_size, GFP_KERNEL);
--	memcpy(hsfw->imem, data + desc->code_off, desc->code_size);
--
-+	hsfw->imem = kmemdup(data + desc->code_off, desc->code_size, GFP_KERNEL);
- 	nvkm_firmware_put(fw);
--	return 0;
-+	if (!hsfw->imem)
-+		return -ENOMEM;
-+	else
-+		return 0;
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_acc.c b/drivers/staging/media/atomisp/pci/atomisp_acc.c
+index 9a1751895ab0..28cb271663c4 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_acc.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_acc.c
+@@ -439,6 +439,18 @@ int atomisp_acc_s_mapped_arg(struct atomisp_sub_device *asd,
+ 	return 0;
  }
  
- int
++static void atomisp_acc_unload_some_extensions(struct atomisp_sub_device *asd,
++					      int i,
++					      struct atomisp_acc_fw *acc_fw)
++{
++	while (--i >= 0) {
++		if (acc_fw->flags & acc_flag_to_pipe[i].flag) {
++			atomisp_css_unload_acc_extension(asd, acc_fw->fw,
++							 acc_flag_to_pipe[i].pipe_id);
++		}
++	}
++}
++
+ /*
+  * Appends the loaded acceleration binary extensions to the
+  * current ISP mode. Must be called just before sh_css_start().
+@@ -479,16 +491,20 @@ int atomisp_acc_load_extensions(struct atomisp_sub_device *asd)
+ 								     acc_fw->fw,
+ 								     acc_flag_to_pipe[i].pipe_id,
+ 								     acc_fw->type);
+-				if (ret)
++				if (ret) {
++					atomisp_acc_unload_some_extensions(asd, i, acc_fw);
+ 					goto error;
++				}
+ 
+ 				ext_loaded = true;
+ 			}
+ 		}
+ 
+ 		ret = atomisp_css_set_acc_parameters(acc_fw);
+-		if (ret < 0)
++		if (ret < 0) {
++			atomisp_acc_unload_some_extensions(asd, i, acc_fw);
+ 			goto error;
++		}
+ 	}
+ 
+ 	if (!ext_loaded)
+@@ -497,6 +513,7 @@ int atomisp_acc_load_extensions(struct atomisp_sub_device *asd)
+ 	ret = atomisp_css_update_stream(asd);
+ 	if (ret) {
+ 		dev_err(isp->dev, "%s: update stream failed.\n", __func__);
++		atomisp_acc_unload_extensions(asd);
+ 		goto error;
+ 	}
+ 
+@@ -504,13 +521,6 @@ int atomisp_acc_load_extensions(struct atomisp_sub_device *asd)
+ 	return 0;
+ 
+ error:
+-	while (--i >= 0) {
+-		if (acc_fw->flags & acc_flag_to_pipe[i].flag) {
+-			atomisp_css_unload_acc_extension(asd, acc_fw->fw,
+-							 acc_flag_to_pipe[i].pipe_id);
+-		}
+-	}
+-
+ 	list_for_each_entry_continue_reverse(acc_fw, &asd->acc.fw, list) {
+ 		if (acc_fw->type != ATOMISP_ACC_FW_LOAD_TYPE_OUTPUT &&
+ 		    acc_fw->type != ATOMISP_ACC_FW_LOAD_TYPE_VIEWFINDER)
 -- 
 2.34.1
 

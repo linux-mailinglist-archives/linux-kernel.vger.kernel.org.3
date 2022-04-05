@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E72EA4F4264
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BBFE4F40F8
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241807AbiDEN6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:58:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
+        id S240840AbiDEN6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347843AbiDEJ2e (ORCPT
+        with ESMTP id S1347788AbiDEJ2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:28:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD6DDFDF9;
-        Tue,  5 Apr 2022 02:15:49 -0700 (PDT)
+        Tue, 5 Apr 2022 05:28:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74D1DFDF7;
+        Tue,  5 Apr 2022 02:15:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25D81B81C14;
-        Tue,  5 Apr 2022 09:15:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7610BC385A2;
-        Tue,  5 Apr 2022 09:15:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A78D6164E;
+        Tue,  5 Apr 2022 09:15:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30681C385A0;
+        Tue,  5 Apr 2022 09:15:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150144;
-        bh=Ob6Qc/Tu2bMLO6pSa2/DGEYux6T8HjO/eIMbj+L/fFo=;
+        s=korg; t=1649150147;
+        bh=oHWJVGZerJimRvn7YMHPGhT+6D1L6vxaa4SWJ8iflK4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dq/JWBps+j9KPOfjzvVwElEC1fl4MqYlilQGk3R9CuzcjIfzY5ubDzDkBmxlI7qnq
-         npfJLRxdEZAlTty0+qBqfDbdNDq9CR1ZPi7a/pQCgKfCJYWGrL+8CIoJvfIHRjUcjq
-         q5UxgP5WSD1EqsuLiz+EqRO2Gaxlb3YhyVNsOK1I=
+        b=zLzqoQk2OnyTEyTAje164qzVVuPoq6/fUftuSZwWwHSctSUUyFqjAmo2NRzhvvHyP
+         VuT4JN9V/XgSaPBZ3XMjDobej3r/QMbgWe9qVIQ2hZ2C6w9wbnDl1c3zR/ke3rewHr
+         tigkStYTWDfBIcO6uwgbarFTSAiUtN5fUtkWXhEM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.16 0971/1017] mm/mmap: return 1 from stack_guard_gap __setup() handler
-Date:   Tue,  5 Apr 2022 09:31:24 +0200
-Message-Id: <20220405070423.027891655@linuxfoundation.org>
+        Ben Dooks <ben-linux@fluff.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, patches@armlinux.org.uk,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Subject: [PATCH 5.16 0972/1017] ARM: 9187/1: JIVE: fix return value of __setup handler
+Date:   Tue,  5 Apr 2022 09:31:25 +0200
+Message-Id: <20220405070423.057803889@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -59,59 +61,54 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Randy Dunlap <rdunlap@infradead.org>
 
-commit e6d094936988910ce6e8197570f2753898830081 upstream.
+commit 8b2360c7157b462c4870d447d1e65d30ef31f9aa upstream.
 
-__setup() handlers should return 1 if the command line option is handled
-and 0 if not (or maybe never return 0; it just pollutes init's
-environment).  This prevents:
+__setup() handlers should return 1 to obsolete_checksetup() in
+init/main.c to indicate that the boot option has been handled.
+A return of 0 causes the boot option/value to be listed as an Unknown
+kernel parameter and added to init's (limited) argument or environment
+strings. Also, error return codes don't mean anything to
+obsolete_checksetup() -- only non-zero (usually 1) or zero.
+So return 1 from jive_mtdset().
 
-  Unknown kernel command line parameters \
-  "BOOT_IMAGE=/boot/bzImage-517rc5 stack_guard_gap=100", will be \
-  passed to user space.
-
-  Run /sbin/init as init process
-   with arguments:
-     /sbin/init
-   with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc5
-     stack_guard_gap=100
-
-Return 1 to indicate that the boot option has been handled.
-
-Note that there is no warning message if someone enters:
-	stack_guard_gap=anything_invalid
-and 'val' and stack_guard_gap are both set to 0 due to the use of
-simple_strtoul(). This could be improved by using kstrtoxxx() and
-checking for an error.
-
-It appears that having stack_guard_gap == 0 is valid (if unexpected) since
-using "stack_guard_gap=0" on the kernel command line does that.
-
-Link: https://lkml.kernel.org/r/20220222005817.11087-1-rdunlap@infradead.org
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Fixes: 1be7107fbe18e ("mm: larger stack guard gap, between vmas")
+Fixes: 9db829f485c5 ("[ARM] JIVE: Initial machine support for Logitech Jive")
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Cc: Hugh Dickins <hughd@google.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Ben Dooks <ben-linux@fluff.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-samsung-soc@vger.kernel.org
+Cc: patches@armlinux.org.uk
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/mmap.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/mach-s3c/mach-jive.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2550,7 +2550,7 @@ static int __init cmdline_parse_stack_gu
- 	if (!*endptr)
- 		stack_guard_gap = val << PAGE_SHIFT;
+--- a/arch/arm/mach-s3c/mach-jive.c
++++ b/arch/arm/mach-s3c/mach-jive.c
+@@ -236,11 +236,11 @@ static int __init jive_mtdset(char *opti
+ 	unsigned long set;
+ 
+ 	if (options == NULL || options[0] == '\0')
+-		return 0;
++		return 1;
+ 
+ 	if (kstrtoul(options, 10, &set)) {
+ 		printk(KERN_ERR "failed to parse mtdset=%s\n", options);
+-		return 0;
++		return 1;
+ 	}
+ 
+ 	switch (set) {
+@@ -255,7 +255,7 @@ static int __init jive_mtdset(char *opti
+ 		       "using default.", set);
+ 	}
  
 -	return 0;
 +	return 1;
  }
- __setup("stack_guard_gap=", cmdline_parse_stack_guard_gap);
  
+ /* parse the mtdset= option given to the kernel command line */
 
 

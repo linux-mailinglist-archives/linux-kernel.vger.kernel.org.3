@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9384F2AA1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DAA44F2B85
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243798AbiDEJk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
+        id S243392AbiDEJju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239323AbiDEIT6 (ORCPT
+        with ESMTP id S239333AbiDEIT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:19:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8104C83039;
-        Tue,  5 Apr 2022 01:11:07 -0700 (PDT)
+        Tue, 5 Apr 2022 04:19:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32026E284;
+        Tue,  5 Apr 2022 01:11:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20FBE609D0;
-        Tue,  5 Apr 2022 08:11:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E879C385A1;
-        Tue,  5 Apr 2022 08:11:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 754EAB81A32;
+        Tue,  5 Apr 2022 08:11:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C328EC385A0;
+        Tue,  5 Apr 2022 08:11:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146266;
-        bh=UcbfK2jk/zEE7W/iXQTphjNOHZxfRvsQMv1sJPLo4Ck=;
+        s=korg; t=1649146275;
+        bh=h5Nq70pcGsqPB021TQrxeMRcJuiRv7B5yH9iGD2+nD4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I29BU9IlYa53UqS2WGy6FgQInEO0VSIlIwK1T97ZFeVsTrHRd5SrGfmczzodNskUI
-         Yw05yL1HLGKUprd1Y7kjUPDf3oWZxJrsYLo6x+2uk3i6dBj0KRGkT+7yzNOIWndE/P
-         fqM0Ln+JZEUohyJ8/B+bbq4CflBfCFfiLYQBOSAU=
+        b=vdtPQsf/9V4D1mGJIB1B/S/GeUXnDcWfmSXext7yxb0DSmcu0G2EASas1pmJqkQQD
+         V0w58rZ4dHXgzskgYgUQ2joyNpLZaRSjhLMooKPQ0bCQhZ5anZgMYZmnylMFWcLMiT
+         FIqbGlq2tp/Xq9snqlzLcXX32bcq42UMRdYwH7Cw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andre Nash <alnash@fb.com>,
-        Neil Spring <ntspring@fb.com>, Wei Wang <weiwan@google.com>,
-        Yuchung Cheng <ycheng@google.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0701/1126] tcp: ensure PMTU updates are processed during fastopen
-Date:   Tue,  5 Apr 2022 09:24:08 +0200
-Message-Id: <20220405070428.182574662@linuxfoundation.org>
+Subject: [PATCH 5.17 0704/1126] net: wwan: qcom_bam_dmux: fix wrong pointer passed to IS_ERR()
+Date:   Tue,  5 Apr 2022 09:24:11 +0200
+Message-Id: <20220405070428.268770560@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -59,66 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit ed0c99dc0f499ff8b6e75b5ae6092ab42be1ad39 ]
+[ Upstream commit 6b3c74550224c3be24c4cf6ab8c333602b458bff ]
 
-tp->rx_opt.mss_clamp is not populated, yet, during TFO send so we
-rise it to the local MSS. tp->mss_cache is not updated, however:
+It should check dmux->tx after calling dma_request_chan().
 
-tcp_v6_connect():
-  tp->rx_opt.mss_clamp = IPV6_MIN_MTU - headers;
-  tcp_connect():
-     tcp_connect_init():
-       tp->mss_cache = min(mtu, tp->rx_opt.mss_clamp)
-     tcp_send_syn_data():
-       tp->rx_opt.mss_clamp = tp->advmss
-
-After recent fixes to ICMPv6 PTB handling we started dropping
-PMTU updates higher than tp->mss_cache. Because of the stale
-tp->mss_cache value PMTU updates during TFO are always dropped.
-
-Thanks to Wei for helping zero in on the problem and the fix!
-
-Fixes: c7bb4b89033b ("ipv6: tcp: drop silly ICMPv6 packet too big messages")
-Reported-by: Andre Nash <alnash@fb.com>
-Reported-by: Neil Spring <ntspring@fb.com>
-Reviewed-by: Wei Wang <weiwan@google.com>
-Acked-by: Yuchung Cheng <ycheng@google.com>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Link: https://lore.kernel.org/r/20220321165957.1769954-1-kuba@kernel.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 21a0ffd9b38c ("net: wwan: Add Qualcomm BAM-DMUX WWAN network driver")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
+Link: https://lore.kernel.org/r/20220319032450.3288224-1-yangyingliang@huawei.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_output.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/net/wwan/qcom_bam_dmux.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index 5079832af5c1..257780f93305 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -3719,6 +3719,7 @@ static void tcp_connect_queue_skb(struct sock *sk, struct sk_buff *skb)
-  */
- static int tcp_send_syn_data(struct sock *sk, struct sk_buff *syn)
- {
-+	struct inet_connection_sock *icsk = inet_csk(sk);
- 	struct tcp_sock *tp = tcp_sk(sk);
- 	struct tcp_fastopen_request *fo = tp->fastopen_req;
- 	int space, err = 0;
-@@ -3733,8 +3734,10 @@ static int tcp_send_syn_data(struct sock *sk, struct sk_buff *syn)
- 	 * private TCP options. The cost is reduced data space in SYN :(
- 	 */
- 	tp->rx_opt.mss_clamp = tcp_mss_clamp(tp, tp->rx_opt.mss_clamp);
-+	/* Sync mss_cache after updating the mss_clamp */
-+	tcp_sync_mss(sk, icsk->icsk_pmtu_cookie);
+diff --git a/drivers/net/wwan/qcom_bam_dmux.c b/drivers/net/wwan/qcom_bam_dmux.c
+index 5dfa2eba6014..17d46f4d2913 100644
+--- a/drivers/net/wwan/qcom_bam_dmux.c
++++ b/drivers/net/wwan/qcom_bam_dmux.c
+@@ -755,7 +755,7 @@ static int __maybe_unused bam_dmux_runtime_resume(struct device *dev)
+ 		return 0;
  
--	space = __tcp_mtu_to_mss(sk, inet_csk(sk)->icsk_pmtu_cookie) -
-+	space = __tcp_mtu_to_mss(sk, icsk->icsk_pmtu_cookie) -
- 		MAX_TCP_OPTION_SPACE;
- 
- 	space = min_t(size_t, space, fo->size);
+ 	dmux->tx = dma_request_chan(dev, "tx");
+-	if (IS_ERR(dmux->rx)) {
++	if (IS_ERR(dmux->tx)) {
+ 		dev_err(dev, "Failed to request TX DMA channel: %pe\n", dmux->tx);
+ 		dmux->tx = NULL;
+ 		bam_dmux_runtime_suspend(dev);
 -- 
 2.34.1
 

@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E8534F41D5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D5E4F40D7
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384277AbiDEORy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46096 "EHLO
+        id S1387791AbiDEOcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239465AbiDEJdj (ORCPT
+        with ESMTP id S238903AbiDEJdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:33:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F393B2664;
-        Tue,  5 Apr 2022 02:22:06 -0700 (PDT)
+        Tue, 5 Apr 2022 05:33:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A013DB;
+        Tue,  5 Apr 2022 02:20:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 91E45615E4;
-        Tue,  5 Apr 2022 09:22:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3BF6C385A0;
-        Tue,  5 Apr 2022 09:22:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F041B81B75;
+        Tue,  5 Apr 2022 09:20:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E5E8C385A3;
+        Tue,  5 Apr 2022 09:20:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150526;
-        bh=AgZToiac6bMmyg6uCg8RXPD2Hy6sqW76q4xdFjtrAJY=;
+        s=korg; t=1649150420;
+        bh=hiepfgHCUoOr2gSHKgyDZg8utOmO3xMK1AQWFOpqwto=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DHqBoGmxOk3bPIe3fN0nC0J2RMxErS8Nl/mj73HroRj2GYzLlYrtfEI0Ch0wONm81
-         +G3TAnvSi483l4gi2GL2859VY7MJ2NtKtFiZn2rQv/EmD9911Q+WUJ33nZARoIdRhN
-         tSC0VH4JteAgy260jO4IeAlgEoJSvXnoBJLUh/sw=
+        b=cxGp3D6HN6wXyYpj8xegz+HJikfjf4v5a4G1h50RgsGke9vykPLgUYa1FKl8PMHaM
+         nRb4dzySLrMOS/6sCsqtICCq3pQsf5uwDpdz0N2oKbjp/JcgysYowlFpPXQyWrT0hd
+         5da+IYY9ofhCuJPMmrkJN4XftOA5DHDfk+oVnrug=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liam Beguin <liambeguin@gmail.com>,
-        Peter Rosin <peda@axentia.se>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.15 048/913] iio: inkern: make a best effort on offset calculation
-Date:   Tue,  5 Apr 2022 09:18:30 +0200
-Message-Id: <20220405070341.259188719@linuxfoundation.org>
+        stable@vger.kernel.org, Quentin Schulz <foss+kernel@0leil.net>,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Subject: [PATCH 5.15 050/913] clk: rockchip: re-add rational best approximation algorithm to the fractional divider
+Date:   Tue,  5 Apr 2022 09:18:32 +0200
+Message-Id: <20220405070341.320272822@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -57,68 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liam Beguin <liambeguin@gmail.com>
+From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-commit ca85123354e1a65a22170286387b4791997fe864 upstream.
+commit 10b74af310735860510a533433b1d3ab2e05a138 upstream.
 
-iio_convert_raw_to_processed_unlocked() assumes the offset is an
-integer. Make a best effort to get a valid offset value for fractional
-cases without breaking implicit truncations.
+In commit 4e7cf74fa3b2 ("clk: fractional-divider: Export approximation
+algorithm to the CCF users"), the code handling the rational best
+approximation algorithm was replaced by a call to the core
+clk_fractional_divider_general_approximation function which did the same
+thing back then.
 
-Fixes: 48e44ce0f881 ("iio:inkern: Add function to read the processed value")
-Signed-off-by: Liam Beguin <liambeguin@gmail.com>
-Reviewed-by: Peter Rosin <peda@axentia.se>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Link: https://lore.kernel.org/r/20220108205319.2046348-4-liambeguin@gmail.com
-Cc: <Stable@vger.kernel.org>
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+However, in commit 82f53f9ee577 ("clk: fractional-divider: Introduce
+POWER_OF_TWO_PS flag"), this common code was made conditional on
+CLK_FRAC_DIVIDER_POWER_OF_TWO_PS flag which was not added back to the
+rockchip clock driver.
+
+This broke the ltk050h3146w-a2 MIPI DSI display present on a PX30-based
+downstream board.
+
+Let's add the flag to the fractional divider flags so that the original
+and intended behavior is brought back to the rockchip clock drivers.
+
+Fixes: 82f53f9ee577 ("clk: fractional-divider: Introduce POWER_OF_TWO_PS flag")
+Cc: stable@vger.kernel.org
+Cc: Quentin Schulz <foss+kernel@0leil.net>
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Link: https://lore.kernel.org/r/20220131163224.708002-1-quentin.schulz@theobroma-systems.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/inkern.c |   32 +++++++++++++++++++++++++++-----
- 1 file changed, 27 insertions(+), 5 deletions(-)
+ drivers/clk/rockchip/clk.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/iio/inkern.c
-+++ b/drivers/iio/inkern.c
-@@ -578,13 +578,35 @@ EXPORT_SYMBOL_GPL(iio_read_channel_avera
- static int iio_convert_raw_to_processed_unlocked(struct iio_channel *chan,
- 	int raw, int *processed, unsigned int scale)
+--- a/drivers/clk/rockchip/clk.c
++++ b/drivers/clk/rockchip/clk.c
+@@ -180,6 +180,7 @@ static void rockchip_fractional_approxim
+ 		unsigned long rate, unsigned long *parent_rate,
+ 		unsigned long *m, unsigned long *n)
  {
--	int scale_type, scale_val, scale_val2, offset;
-+	int scale_type, scale_val, scale_val2;
-+	int offset_type, offset_val, offset_val2;
- 	s64 raw64 = raw;
--	int ret;
++	struct clk_fractional_divider *fd = to_clk_fd(hw);
+ 	unsigned long p_rate, p_parent_rate;
+ 	struct clk_hw *p_parent;
  
--	ret = iio_channel_read(chan, &offset, NULL, IIO_CHAN_INFO_OFFSET);
--	if (ret >= 0)
--		raw64 += offset;
-+	offset_type = iio_channel_read(chan, &offset_val, &offset_val2,
-+				       IIO_CHAN_INFO_OFFSET);
-+	if (offset_type >= 0) {
-+		switch (offset_type) {
-+		case IIO_VAL_INT:
-+			break;
-+		case IIO_VAL_INT_PLUS_MICRO:
-+		case IIO_VAL_INT_PLUS_NANO:
-+			/*
-+			 * Both IIO_VAL_INT_PLUS_MICRO and IIO_VAL_INT_PLUS_NANO
-+			 * implicitely truncate the offset to it's integer form.
-+			 */
-+			break;
-+		case IIO_VAL_FRACTIONAL:
-+			offset_val /= offset_val2;
-+			break;
-+		case IIO_VAL_FRACTIONAL_LOG2:
-+			offset_val >>= offset_val2;
-+			break;
-+		default:
-+			return -EINVAL;
-+		}
+@@ -190,6 +191,8 @@ static void rockchip_fractional_approxim
+ 		*parent_rate = p_parent_rate;
+ 	}
+ 
++	fd->flags |= CLK_FRAC_DIVIDER_POWER_OF_TWO_PS;
 +
-+		raw64 += offset_val;
-+	}
+ 	clk_fractional_divider_general_approximation(hw, rate, parent_rate, m, n);
+ }
  
- 	scale_type = iio_channel_read(chan, &scale_val, &scale_val2,
- 					IIO_CHAN_INFO_SCALE);
 
 

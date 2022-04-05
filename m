@@ -2,106 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB0024F2323
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 942A14F2320
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:30:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbiDEGcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 02:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbiDEGbx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229918AbiDEGbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 5 Apr 2022 02:31:53 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C16652E40;
-        Mon,  4 Apr 2022 23:29:54 -0700 (PDT)
-Received: from mail-wm1-f50.google.com ([209.85.128.50]) by
- mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MyK5K-1nwLS02Y5k-00yixP; Tue, 05 Apr 2022 08:29:52 +0200
-Received: by mail-wm1-f50.google.com with SMTP id bi13-20020a05600c3d8d00b0038c2c33d8f3so885267wmb.4;
-        Mon, 04 Apr 2022 23:29:52 -0700 (PDT)
-X-Gm-Message-State: AOAM533c1kU5UG6Dgl6fglDxiVSp1JJjXvxLcczK4SI/xToN5JmuqTQh
-        83Pa6gYmQXpqI1hFhegKEkNUrvjiH402fcfij5s=
-X-Google-Smtp-Source: ABdhPJwsEWf6Kh9ZmIXYYN/M9onvtdd1lx+p5bH1oV2EAH9/3o2ZPWJZ3zKpIpvz66ZNFBOP57JnZalCuJjU3V4Z5Fo=
-X-Received: by 2002:a05:600c:4e11:b0:38c:bd19:e72c with SMTP id
- b17-20020a05600c4e1100b0038cbd19e72cmr1618846wmq.174.1649140192243; Mon, 04
- Apr 2022 23:29:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220404061948.2111820-1-masahiroy@kernel.org>
- <20220404061948.2111820-9-masahiroy@kernel.org> <Ykqh3mEy5uY8spe8@infradead.org>
- <CAK8P3a07ZdqA0UBC_qkqzMsZWLUK=Rti3AkFe2VVEWLivuZAqA@mail.gmail.com> <YkvVOLj/Rv4yPf5K@infradead.org>
-In-Reply-To: <YkvVOLj/Rv4yPf5K@infradead.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 5 Apr 2022 08:29:36 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0FjfSyUtv9a9dM7ixsK2oY9VF7WZPvDctn2JRi7A0YyQ@mail.gmail.com>
-Message-ID: <CAK8P3a0FjfSyUtv9a9dM7ixsK2oY9VF7WZPvDctn2JRi7A0YyQ@mail.gmail.com>
-Subject: Re: [PATCH 8/8] virtio_ring.h: do not include <stdint.h> from
- exported header
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        virtualization list <virtualization@lists.linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:97ZUr0yfSVQstYUK4F5LrqXuvIwLfKa2qugu5/vkLljAk+jZE3Z
- h9QkhZuVeQyXBlfEi4q9m8OVXmLRYqaxQCFw5HHBlvfab6AWEGHjT0HM63Gnqz7WXk4LkJF
- MSGz5EvcUPfbD6RtI9I6stN00PRHvGRhHsQ84odKVMpXiC10UwHc//DgYEbqYJ/AWG1yJAq
- I+e8n0XFZzdVmRhw7BA4w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Uoldei0PfR8=:J0+2DU1VyzsYAC1pEJIh0C
- ExQcvuPLetSen3D/9Uptd41/9OP0paBB/B48ZUfbQqnuV5cvZ9UckFInzwl0FMFxo0G6arrs4
- jvC/9zngMkzG6zQeTirlGZx4SwqnYfm2aJAfzjUU+U76MxcH92vXhLlXTepzRO0u9D2ZdmMkO
- ivPEv10nwwkbmlOM0BLc/27vdiQ2ild8IVz5CaNUcaIe2HH7uDbqjpJR82wlC3YziHG2n/i7n
- UzXDiqi7xTTw6Dw4rlkNRitScDienSUDbtoQ7iZhmpKEVSfI7l41C+USDdpydU32IjPXevcyJ
- jLZHBAEbvnmEg86aUt8u6JHyK9CLsITT2SbJc00AEAGbdxWep/Kqc/D2Bl8bwtrZU3y2YlN8z
- ARrCs3YF8brwxZqNEX2caVzMmGPLUsoqm9Ms7CP3UYUdzOkQxjLC8AiW6hGijg1ttPER3aP6C
- nZt055ehRAo+cZP+jZbsjY2HkkOI/UGaEkkAGAM29NuboAng/tIrzSkZKK9enagRBJjDdvTlS
- NwbJzpvxA5OupNjhy6OX6u2wySUTnHvaAF2dZPHLyY7vyZT31qtaprBjXEzglUuLufCyqnsS1
- q8z5EHN942LPNo9FNODjXbuM8a6QZzdyShu8TvaXTojaQONpJ8Rw92Bn+ziI5EZ0DjOUG8AgW
- fnvgIlLUYfIzrkpaAT4bCP/D47tdFxNaJbwjHWPoeeV3F0ILP4NC7vChVqK/NpUFbAco=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229952AbiDEGbu (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 5 Apr 2022 02:31:50 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594B633E04
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 23:29:50 -0700 (PDT)
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220405062947epoutp0106248170ae655acef2aa3f353a7b70bc~i7ENyGNie1964919649epoutp01T
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:29:47 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220405062947epoutp0106248170ae655acef2aa3f353a7b70bc~i7ENyGNie1964919649epoutp01T
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1649140188;
+        bh=3pRWzO6Xf/+EFDKbp+zs9H1SH94tZcH7lVI+Kk4Rq+8=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=sa2grhab8uvJpE8IjG7L4LWs9y+B4fXOYyhxErhiBGj10ijHPaRKFUc4VenqTbutd
+         ydIe1xvGTHLrZe2G8qjjHxYzjWPMnq8Vse9Qr0KlmpRT0/l0vulZRXPEjpAKSv8KGi
+         HCDRHftlkQ2iNXXiNseAZqDOtC7fTDjJHC3XkWpI=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20220405062947epcas1p384012a5de7c0335626086cc06940c3d1~i7ENTk0Jl2146721467epcas1p3L;
+        Tue,  5 Apr 2022 06:29:47 +0000 (GMT)
+Received: from epsmges1p3.samsung.com (unknown [182.195.36.69]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4KXd6K4P8Cz4x9Q2; Tue,  5 Apr
+        2022 06:29:45 +0000 (GMT)
+X-AuditID: b6c32a37-2a5ff70000002578-b0-624be1d9c358
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        71.7E.09592.9D1EB426; Tue,  5 Apr 2022 15:29:45 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v2] dt-bindings: net: snps: remove duplicate name
+Reply-To: dj76.yang@samsung.com
+Sender: Dongjin Yang <dj76.yang@samsung.com>
+From:   Dongjin Yang <dj76.yang@samsung.com>
+To:     "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Moon-Ki Jun <moonki.jun@samsung.com>,
+        Dongjin Yang <dj76.yang@samsung.com>,
+        Sang Min Kim <hypmean.kim@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20220405061922.27343-1-dj76.yang@samsung.com>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220405062945epcms1p7f9fad7f6bf10597e79c3948ba663c817@epcms1p7>
+Date:   Tue, 05 Apr 2022 15:29:45 +0900
+X-CMS-MailID: 20220405062945epcms1p7f9fad7f6bf10597e79c3948ba663c817
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 101P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrCJsWRmVeSWpSXmKPExsWy7bCmru7Nh95JBovvyFm8PKRpMed8C4vF
+        /CPnWC12z1jOZDFz6hlmi5ez7rFZ7H29ld3iwrY+VovLu+awWZxbnGlxbIGYxbfTbxgtWvce
+        YXfg9diy8iaTx6ZVnWwed67tYfN4v+8qm0ffllWMHp83yQWwRWXbZKQmpqQWKaTmJeenZOal
+        2yp5B8c7x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl5gCdqaRQlphTChQKSCwuVtK3synKLy1J
+        VcjILy6xVUotSMkpMC/QK07MLS7NS9fLSy2xMjQwMDIFKkzIzlj7qLRgvURF14NDLA2Md8W7
+        GDk5JARMJN6e7WbpYuTiEBLYwSjxo287axcjBwevgKDE3x3CIDXCAo4Sl591soOEhQTkJT5P
+        rIQI60h0vH3KAhJmE9CSmN2fCDJFRKCfSeLs29tsIA6zwGomicavW9ghdvFKzGgHaQCxpSW2
+        L9/KCGJzClhL3Ow6xwwR15D4sawXyhaVuLn6LTuM/f7YfEYIW0Si9d5ZqBpBiQc/d0PFpSQe
+        NR+AsqslzrX3soMcISHQwChx8PNGNpBLJQT0JXZcNwap4RXwlTja+RasnkVAVWL/3l9Qu1wk
+        Tq69DzafWUBbYtnC18wgrcwCmhLrd+lDTFGWOHKLBearho2/2dHZzAJ8Eu++9rDCxHfMe8IE
+        YStLfG5+zTKBUXkWIpxnIdk1C2HXAkbmVYxiqQXFuempxYYFxvCYTc7P3cQITq5a5jsYp739
+        oHeIkYmD8RCjBAezkghvTpBnkhBvSmJlVWpRfnxRaU5q8SFGU6AvJzJLiSbnA9N7Xkm8oYml
+        gYmZkampoYGFiZI476pppxOFBNITS1KzU1MLUotg+pg4OKUamNL1o25vnmza8/6oif207i9n
+        S5dyrXPS/W9zJa1f1+H1Ea9ff3OZih18brAsZF4+K53/c9PWpJMLg3I8U27PvPk1wU8jaOdb
+        kztzrP7W6k77dF8pt8erMzDF7VxxzY+Uey26H9UeRUp+U/w9/8//aL9ZUrbJvacq3/k9lzun
+        /co/yI1nnsCU8OnGDjl3FAX+/F+35np62sXbTyyqw+1VQi89l67RelFk5Xhn6UuWM4umXZl3
+        USLl9InJZUt6Oe9fVFtt+PL6IsVzgdJ3Y3/vKUu/x3jZQJnNdJ3/fRNJZVYp1nmOr37UcE1d
+        /euCyMmg2TL5PG/WnlmQcL/oiK2ZSN2jO5FeK1z9j81m3xKblaXEUpyRaKjFXFScCAA3czBw
+        NwQAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220405061903epcas2p345f2b2e656b3b1cbe5832e24dd4a67f3
+References: <20220405061922.27343-1-dj76.yang@samsung.com>
+        <CGME20220405061903epcas2p345f2b2e656b3b1cbe5832e24dd4a67f3@epcms1p7>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 7:35 AM Christoph Hellwig <hch@infradead.org> wrote:
->
-> On Mon, Apr 04, 2022 at 10:04:02AM +0200, Arnd Bergmann wrote:
-> > The header is shared between kernel and other projects using virtio, such as
-> > qemu and any boot loaders booting from virtio devices. It's not technically a
-> > /kernel/ ABI, but it is an ABI and for practical reasons the kernel version is
-> > maintained as the master copy if I understand it correctly.
->
-> Besides that fact that as you correctly states these are not a UAPI at
-> all, qemu and bootloades are not specific to Linux and can't require a
-> specific kernel version.  So the same thing we do for file system
-> formats or network protocols applies here:  just copy the damn header.
-> And as stated above any reasonably portable userspace needs to have a
-> copy anyway.
-
-I think the users all have their own copies, at least the ones I could
-find on codesearch.debian.org. However, there are 27 virtio_*.h
-files in include/uapi/linux that probably should stay together for
-the purpose of defining the virtio protocol, and some others might
-be uapi relevant.
-
-I see that at least include/uapi/linux/vhost.h has ioctl() definitions
-in it, and includes the virtio_ring.h header indirectly.
-
-Adding the virtio maintainers to Cc to see if they can provide
-more background on this.
-
-> If it is just as a "master copy" it can live in drivers/virtio/, just
-> like we do for other formats.
-
-It has to be in include/linux/ at least because it's used by a number
-of drivers outside of drivers/virtio/.
-
-        Arnd
+snps,dwmac=C2=A0has=C2=A0duplicated=C2=A0name=C2=A0for=C2=A0loongson,ls2k-d=
+wmac=C2=A0and=0D=0Aloongson,ls7a-dwmac.=0D=0A=C2=A0=0D=0AFixes:=C2=A0682777=
+49a013=C2=A0(=22dt-bindings:=C2=A0dwmac:=C2=A0Add=C2=A0bindings=C2=A0for=C2=
+=A0new=C2=A0Loongson=C2=A0SoC=C2=A0and=C2=A0bridge=C2=A0chip=22)=0D=0ASigne=
+d-off-by:=C2=A0Dongjin=C2=A0Yang=C2=A0<dj76.yang=40samsung.com>=0D=0A---=0D=
+=0ANotes:=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0v2:=C2=A0Update=C2=A0Fix=C2=A0tag=C2=
+=A0and=C2=A0change=C2=A0history.=C2=A0=0D=0A=C2=A0=0D=0A=C2=A0Documentation=
+/devicetree/bindings/net/snps,dwmac.yaml=C2=A0=7C=C2=A06=C2=A0++----=0D=0A=
+=C2=A01=C2=A0file=C2=A0changed,=C2=A02=C2=A0insertions(+),=C2=A04=C2=A0dele=
+tions(-)=0D=0A=C2=A0=0D=0Adiff=C2=A0--git=C2=A0a/Documentation/devicetree/b=
+indings/net/snps,dwmac.yaml=C2=A0b/Documentation/devicetree/bindings/net/sn=
+ps,dwmac.yaml=0D=0Aindex=C2=A02d5248f..36c85eb=C2=A0100644=0D=0A---=C2=A0a/=
+Documentation/devicetree/bindings/net/snps,dwmac.yaml=0D=0A+++=C2=A0b/Docum=
+entation/devicetree/bindings/net/snps,dwmac.yaml=0D=0A=40=40=C2=A0-53,20=C2=
+=A0+53,18=C2=A0=40=40=C2=A0properties:=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0allwinner,sun8i-r40-gmac=0D=0A=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0allwinner,sun8i-v3s-emac=
+=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0allwinne=
+r,sun50i-a64-emac=0D=0A-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=
+=C2=A0loongson,ls2k-dwmac=0D=0A-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0-=C2=A0loongson,ls7a-dwmac=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0-=C2=A0amlogic,meson6-dwmac=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0amlogic,meson8b-dwmac=0D=0A=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0amlogic,meson8m2-dwmac=
+=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0amlogic,=
+meson-gxbb-dwmac=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0-=C2=A0amlogic,meson-axg-dwmac=0D=0A-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0-=C2=A0loongson,ls2k-dwmac=0D=0A-=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0-=C2=A0loongson,ls7a-dwmac=0D=0A=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0ingenic,jz4775-mac=0D=0A=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0ingenic,x1000-mac=0D=0A=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0ingenic,x1600-=
+mac=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0ingen=
+ic,x1830-mac=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=
+=C2=A0ingenic,x2000-mac=0D=0A+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0-=C2=A0loongson,ls2k-dwmac=0D=0A+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0-=C2=A0loongson,ls7a-dwmac=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0-=C2=A0rockchip,px30-gmac=0D=0A=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0rockchip,rk3128-gmac=0D=0A=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0rockchip,rk3228-gmac=0D=
+=0A--=C2=A0=0D=0A2.9.5

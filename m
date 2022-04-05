@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045254F33E2
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2404F304F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351462AbiDEKC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:02:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
+        id S1350687AbiDEJ71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237865AbiDEIS2 (ORCPT
+        with ESMTP id S237960AbiDEISe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:18:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1634B7C53;
-        Tue,  5 Apr 2022 01:07:41 -0700 (PDT)
+        Tue, 5 Apr 2022 04:18:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A967EB7C6F;
+        Tue,  5 Apr 2022 01:07:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69D586167D;
-        Tue,  5 Apr 2022 08:07:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77BCFC385A1;
-        Tue,  5 Apr 2022 08:07:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 74AD1B81BAF;
+        Tue,  5 Apr 2022 08:07:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0256C385A1;
+        Tue,  5 Apr 2022 08:07:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146060;
-        bh=x8e3y/VMMWTKGFja9YZi+iTh0PRvryetCxFkEUBsjgI=;
+        s=korg; t=1649146066;
+        bh=67yb1/B6Sg6i3jl64lZRn2eNJU5+LSPF5bkVgEih44E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OQ8uydqCOAtpWCN5gfRHWrHfynxcKgiB8qiwWMjBK64Lk8cdlC27krUz1QI1YvK+N
-         oVw4pmg6jNtVAJBe/n73WgLS3MU2N8D2ZIY/CFwTaYCicA6SsnasP32X+vsNH1Rn1P
-         xoJa5yt3csKqKHIUNWEBYPb1VyXqk+ZONG0tuk+g=
+        b=E9I8VZO4FXzBrl7e8PLaDPoNzH+1YoIImL6erO8geMW+HNcjyFq4lA3lbSMwUXI1b
+         v/6bbY3nij1oAh2JLSLznAhDaE3iASZMz/ChzODf6SbydsO334XbMtVi0CWv43YZ6+
+         ojigBYoNSoWa9eou63a6Vs/Pq0tA0FH7fgSAER4s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0627/1126] i2c: xiic: Make bus names unique
-Date:   Tue,  5 Apr 2022 09:22:54 +0200
-Message-Id: <20220405070426.040705011@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Divya Koppera <Divya.Koppera@microchip.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0628/1126] net: phy: micrel: Fix concurrent register access
+Date:   Tue,  5 Apr 2022 09:22:55 +0200
+Message-Id: <20220405070426.069996732@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,47 +56,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Divya Koppera <Divya.Koppera@microchip.com>
 
-[ Upstream commit 1d366c2f9df8279df2adbb60471f86fc40a1c39e ]
+[ Upstream commit 4488f6b6148045424459ef1d5b153c6895ee1dbb ]
 
-This driver is for an FPGA logic core, so there can be arbitrarily many
-instances of the bus on a given system. Previously all of the I2C bus
-names were "xiic-i2c" which caused issues with lm_sensors when trying to
-map human-readable names to sensor inputs because it could not properly
-distinguish the busses, for example. Append the platform device name to
-the I2C bus name so it is unique between different instances.
+Make Extended page register accessing atomic,
+to overcome unexpected output from register
+reads/writes.
 
-Fixes: e1d5b6598cdc ("i2c: Add support for Xilinx XPS IIC Bus Interface")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Tested-by: Michal Simek <michal.simek@xilinx.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Fixes: 7c2dcfa295b1 ("net: phy: micrel: Add support for LAN8804 PHY")
+Signed-off-by: Divya Koppera<Divya.Koppera@microchip.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-xiic.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/phy/micrel.c | 30 ++++++++++++++++--------------
+ 1 file changed, 16 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-index eb789cfb9973..ffefe3c482e9 100644
---- a/drivers/i2c/busses/i2c-xiic.c
-+++ b/drivers/i2c/busses/i2c-xiic.c
-@@ -734,7 +734,6 @@ static const struct i2c_adapter_quirks xiic_quirks = {
+diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+index a7ebcdab415b..281cebc3d00c 100644
+--- a/drivers/net/phy/micrel.c
++++ b/drivers/net/phy/micrel.c
+@@ -1596,11 +1596,13 @@ static int lanphy_read_page_reg(struct phy_device *phydev, int page, u32 addr)
+ {
+ 	u32 data;
  
- static const struct i2c_adapter xiic_adapter = {
- 	.owner = THIS_MODULE,
--	.name = DRIVER_NAME,
- 	.class = I2C_CLASS_DEPRECATED,
- 	.algo = &xiic_algorithm,
- 	.quirks = &xiic_quirks,
-@@ -771,6 +770,8 @@ static int xiic_i2c_probe(struct platform_device *pdev)
- 	i2c_set_adapdata(&i2c->adap, i2c);
- 	i2c->adap.dev.parent = &pdev->dev;
- 	i2c->adap.dev.of_node = pdev->dev.of_node;
-+	snprintf(i2c->adap.name, sizeof(i2c->adap.name),
-+		 DRIVER_NAME " %s", pdev->name);
+-	phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL, page);
+-	phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, addr);
+-	phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL,
+-		  (page | LAN_EXT_PAGE_ACCESS_CTRL_EP_FUNC));
+-	data = phy_read(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA);
++	phy_lock_mdio_bus(phydev);
++	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL, page);
++	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, addr);
++	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL,
++		    (page | LAN_EXT_PAGE_ACCESS_CTRL_EP_FUNC));
++	data = __phy_read(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA);
++	phy_unlock_mdio_bus(phydev);
  
- 	mutex_init(&i2c->lock);
+ 	return data;
+ }
+@@ -1608,18 +1610,18 @@ static int lanphy_read_page_reg(struct phy_device *phydev, int page, u32 addr)
+ static int lanphy_write_page_reg(struct phy_device *phydev, int page, u16 addr,
+ 				 u16 val)
+ {
+-	phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL, page);
+-	phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, addr);
+-	phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL,
+-		  (page | LAN_EXT_PAGE_ACCESS_CTRL_EP_FUNC));
++	phy_lock_mdio_bus(phydev);
++	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL, page);
++	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, addr);
++	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL,
++		    page | LAN_EXT_PAGE_ACCESS_CTRL_EP_FUNC);
  
+-	val = phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, val);
+-	if (val) {
++	val = __phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, val);
++	if (val != 0)
+ 		phydev_err(phydev, "Error: phy_write has returned error %d\n",
+ 			   val);
+-		return val;
+-	}
+-	return 0;
++	phy_unlock_mdio_bus(phydev);
++	return val;
+ }
+ 
+ static int lan8814_config_init(struct phy_device *phydev)
 -- 
 2.34.1
 

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E47B4F446D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C87C94F43E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244836AbiDEOAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:00:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44540 "EHLO
+        id S244417AbiDEOFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238452AbiDEJ3Q (ORCPT
+        with ESMTP id S235977AbiDEJbC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:29:16 -0400
+        Tue, 5 Apr 2022 05:31:02 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A09A13E10;
-        Tue,  5 Apr 2022 02:16:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C2E22B14;
+        Tue,  5 Apr 2022 02:18:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4F5BB818F3;
-        Tue,  5 Apr 2022 09:16:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A606C385A2;
-        Tue,  5 Apr 2022 09:16:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9BB83B81B14;
+        Tue,  5 Apr 2022 09:18:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 007DBC385A2;
+        Tue,  5 Apr 2022 09:18:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150215;
-        bh=JVi6iNnNgKNf/3WG5A4crMAJ/xLn832x/mT8K/pZK30=;
+        s=korg; t=1649150298;
+        bh=t5Kjxi8BKChE7cLLOSmUC5fA8BDDzn2f270Eb+wM/pU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I0A2X0Wthm4P73W+IjsmhvdR0G1QZP4zABfhm2kI1xyUrbjG7aIdwqxUWXbuUq61M
-         rYEEvhIs+UwquqkT7MDxGxgORrEjJRo1aaJoVx3JMqnN+zwt1pUeg/J0yt5AZ9LRUW
-         EdBXZZVhA+oZ8VkhFYc8D5syIWcFyJVd7eJrn8H4=
+        b=deGVQcpmuujFtiD2ADXLz563zBSturdWhToUcews/lURECBo1eNm/qyxH4R00fm6V
+         DxzZ/QmPyTeUyenTH2l2d+G4YcEeelJRbxIQsqvG3cnhTSRSjuWhHsjwjBdqznak2F
+         efwQzFCiwxBIsXtS6agfoiVuucL1niwct67IHBmo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 5.16 0994/1017] media: ov6650: Add try support to selection API operations
-Date:   Tue,  5 Apr 2022 09:31:47 +0200
-Message-Id: <20220405070423.709048356@linuxfoundation.org>
+        stable@vger.kernel.org, Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH 5.16 0999/1017] ARM: dts: spear13xx: Update SPI dma properties
+Date:   Tue,  5 Apr 2022 09:31:52 +0200
+Message-Id: <20220405070423.854824634@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,144 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+From: Kuldeep Singh <singh.kuldeep87k@gmail.com>
 
-commit c74052646496ffe0bc606152e6b9653137020cbf upstream.
+commit 31d3687d6017c7ce6061695361598d9cda70807a upstream.
 
-Try requests are now only supported by format processing pad operations
-implemented by the driver.  The driver selection API operations
-currently respond to them with -EINVAL.  While that is correct, it
-constraints video device drivers to not use subdevice cropping at all
-while processing user requested active frame size, otherwise their set
-try format results might differ from active.  As a consequence, we
-can't fix set format pad operation as not to touch crop rectangle since
-that would affect users not being able to set arbitrary frame sizes.
-Moreover, without a working set try selection support we are not able
-to use pad config crop rectangle as a reference while processing set
-try format requests.
+Reorder dmas and dma-names property for spi controller node to make it
+compliant with bindings.
 
-Implement missing try selection support.  Moreover, as it will be now
-possible to maintain the pad config crop rectangle via selection API,
-start using it instead of the active one as a reference while
-processing set try format requests.
-
-is_unscaled_ok() helper, now also called from set selection operation,
-has been just moved up in the source file to avoid a prototype, with no
-functional changes.
-
-[Sakari Ailus: Rebase on subdev state patches]
-
-Fixes: 717fd5b4907a ("[media] v4l2: replace try_mbus_fmt by set_fmt")
-Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 6e8887f60f60 ("ARM: SPEAr13xx: Pass generic DW DMAC platform data from DT")
+Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Link: https://lore.kernel.org/r/20220326042313.97862-2-singh.kuldeep87k@gmail.com'
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/i2c/ov6650.c |   54 +++++++++++++++++++++++++++++++++++----------
- 1 file changed, 43 insertions(+), 11 deletions(-)
+ arch/arm/boot/dts/spear13xx.dtsi |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/media/i2c/ov6650.c
-+++ b/drivers/media/i2c/ov6650.c
-@@ -472,9 +472,16 @@ static int ov6650_get_selection(struct v
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(sd);
- 	struct ov6650 *priv = to_ov6650(client);
-+	struct v4l2_rect *rect;
+--- a/arch/arm/boot/dts/spear13xx.dtsi
++++ b/arch/arm/boot/dts/spear13xx.dtsi
+@@ -284,9 +284,9 @@
+ 				#size-cells = <0>;
+ 				interrupts = <0 31 0x4>;
+ 				status = "disabled";
+-				dmas = <&dwdma0 4 0 0>,
+-					<&dwdma0 5 0 0>;
+-				dma-names = "tx", "rx";
++				dmas = <&dwdma0 5 0 0>,
++					<&dwdma0 4 0 0>;
++				dma-names = "rx", "tx";
+ 			};
  
--	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE)
--		return -EINVAL;
-+	if (sel->which == V4L2_SUBDEV_FORMAT_TRY) {
-+		/* pre-select try crop rectangle */
-+		rect = &sd_state->pads->try_crop;
-+
-+	} else {
-+		/* pre-select active crop rectangle */
-+		rect = &priv->rect;
-+	}
- 
- 	switch (sel->target) {
- 	case V4L2_SEL_TGT_CROP_BOUNDS:
-@@ -483,14 +490,22 @@ static int ov6650_get_selection(struct v
- 		sel->r.width = W_CIF;
- 		sel->r.height = H_CIF;
- 		return 0;
-+
- 	case V4L2_SEL_TGT_CROP:
--		sel->r = priv->rect;
-+		/* use selected crop rectangle */
-+		sel->r = *rect;
- 		return 0;
-+
- 	default:
- 		return -EINVAL;
- 	}
- }
- 
-+static bool is_unscaled_ok(int width, int height, struct v4l2_rect *rect)
-+{
-+	return width > rect->width >> 1 || height > rect->height >> 1;
-+}
-+
- static void ov6650_bind_align_crop_rectangle(struct v4l2_rect *rect)
- {
- 	v4l_bound_align_image(&rect->width, 2, W_CIF, 1,
-@@ -510,12 +525,30 @@ static int ov6650_set_selection(struct v
- 	struct ov6650 *priv = to_ov6650(client);
- 	int ret;
- 
--	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE ||
--	    sel->target != V4L2_SEL_TGT_CROP)
-+	if (sel->target != V4L2_SEL_TGT_CROP)
- 		return -EINVAL;
- 
- 	ov6650_bind_align_crop_rectangle(&sel->r);
- 
-+	if (sel->which == V4L2_SUBDEV_FORMAT_TRY) {
-+		struct v4l2_rect *crop = &sd_state->pads->try_crop;
-+		struct v4l2_mbus_framefmt *mf = &sd_state->pads->try_fmt;
-+		/* detect current pad config scaling factor */
-+		bool half_scale = !is_unscaled_ok(mf->width, mf->height, crop);
-+
-+		/* store new crop rectangle */
-+		*crop = sel->r;
-+
-+		/* adjust frame size */
-+		mf->width = crop->width >> half_scale;
-+		mf->height = crop->height >> half_scale;
-+
-+		return 0;
-+	}
-+
-+	/* V4L2_SUBDEV_FORMAT_ACTIVE */
-+
-+	/* apply new crop rectangle */
- 	ret = ov6650_reg_write(client, REG_HSTRT, sel->r.left >> 1);
- 	if (!ret) {
- 		priv->rect.width += priv->rect.left - sel->r.left;
-@@ -567,11 +600,6 @@ static int ov6650_get_fmt(struct v4l2_su
- 	return 0;
- }
- 
--static bool is_unscaled_ok(int width, int height, struct v4l2_rect *rect)
--{
--	return width > rect->width >> 1 || height > rect->height >> 1;
--}
--
- #define to_clkrc(div)	((div) - 1)
- 
- /* set the format we will capture in */
-@@ -692,7 +720,11 @@ static int ov6650_set_fmt(struct v4l2_su
- 		break;
- 	}
- 
--	*crop = priv->rect;
-+	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
-+		*crop = sd_state->pads->try_crop;
-+	else
-+		*crop = priv->rect;
-+
- 	half_scale = !is_unscaled_ok(mf->width, mf->height, crop);
- 
- 	/* adjust new crop rectangle position against its current center */
+ 			rtc@e0580000 {
 
 

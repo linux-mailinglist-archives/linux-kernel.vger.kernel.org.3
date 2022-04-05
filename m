@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7824E4F4D49
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24BD84F4E25
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1581839AbiDEXlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
+        id S1588052AbiDFALK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358046AbiDEK15 (ORCPT
+        with ESMTP id S1349812AbiDEJvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18091EEC6;
-        Tue,  5 Apr 2022 03:13:44 -0700 (PDT)
+        Tue, 5 Apr 2022 05:51:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AE7205DF;
+        Tue,  5 Apr 2022 02:49:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FC9961562;
-        Tue,  5 Apr 2022 10:13:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70706C385A1;
-        Tue,  5 Apr 2022 10:13:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D4846164D;
+        Tue,  5 Apr 2022 09:49:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FF12C385A2;
+        Tue,  5 Apr 2022 09:49:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153623;
-        bh=LeY3wKEwutDULuXR8eL2wPBlS4V4lm2KrlpDBv17W8M=;
+        s=korg; t=1649152177;
+        bh=PaGBNH3IO+vHhfj5CQrJJiXJVdx0NKXBLXt6WjCBSr8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c6PaARNI1SAfAURk22Vpe5WPpUA/LJc50YkyjUcG0Nfu3JzTj2psU/OEn7oOKVMkc
-         bY20sSO1+lIdkD7iPmzo0L8lBqp7zEMhdsUgNNeYMBEsACrUdhR5jMvtJ8k5NOxucS
-         D/Vrage8NWHmxOitwgVwkeOqOiWmP4p2F1WzfDQ0=
+        b=QvYd8a+I50qT0Zz/4/1FPGAFHo/Pd4RzyvULFWCmUK2dfomYqgC3dpkO+OMWBxOhX
+         FSAe2FvL38uC92SwUAk/lkvNDY69pqPNqI7AJOOSX1BmDi9aZpnSyivvBGnleQnTni
+         P0Yk94V+DpAkgrZDK3ruaee08UkQqwf08utCAI/U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        stable@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Detlev Casanova <detlev.casanova@collabora.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 250/599] ASoC: mxs: Fix error handling in mxs_sgtl5000_probe
-Date:   Tue,  5 Apr 2022 09:29:04 +0200
-Message-Id: <20220405070306.279287250@linuxfoundation.org>
+Subject: [PATCH 5.15 683/913] regulator: rpi-panel: Handle I2C errors/timing to the Atmel
+Date:   Tue,  5 Apr 2022 09:29:05 +0200
+Message-Id: <20220405070400.308334230@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +57,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-[ Upstream commit 6ae0a4d8fec551ec581d620f0eb1fe31f755551c ]
+[ Upstream commit 5665eee7a3800430e7dc3ef6f25722476b603186 ]
 
-This function only calls of_node_put() in the regular path.
-And it will cause refcount leak in error paths.
-For example, when codec_np is NULL, saif_np[0] and saif_np[1]
-are not NULL, it will cause leaks.
+The Atmel is doing some things in the I2C ISR, during which
+period it will not respond to further commands. This is
+particularly true of the POWERON command.
 
-of_node_put() will check if the node pointer is NULL, so we can
-call it directly to release the refcount of regular pointers.
+Increase delays appropriately, and retry should I2C errors be
+reported.
 
-Fixes: e968194b45c4 ("ASoC: mxs: add device tree support for mxs-sgtl5000")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220308020146.26496-1-linmq006@gmail.com
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+Link: https://lore.kernel.org/r/20220124220129.158891-3-detlev.casanova@collabora.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/mxs/mxs-sgtl5000.c | 3 +++
- 1 file changed, 3 insertions(+)
+ .../regulator/rpi-panel-attiny-regulator.c    | 56 +++++++++++++++----
+ 1 file changed, 46 insertions(+), 10 deletions(-)
 
-diff --git a/sound/soc/mxs/mxs-sgtl5000.c b/sound/soc/mxs/mxs-sgtl5000.c
-index a6407f4388de..fb721bc49949 100644
---- a/sound/soc/mxs/mxs-sgtl5000.c
-+++ b/sound/soc/mxs/mxs-sgtl5000.c
-@@ -118,6 +118,9 @@ static int mxs_sgtl5000_probe(struct platform_device *pdev)
- 	codec_np = of_parse_phandle(np, "audio-codec", 0);
- 	if (!saif_np[0] || !saif_np[1] || !codec_np) {
- 		dev_err(&pdev->dev, "phandle missing or invalid\n");
-+		of_node_put(codec_np);
-+		of_node_put(saif_np[0]);
-+		of_node_put(saif_np[1]);
- 		return -EINVAL;
+diff --git a/drivers/regulator/rpi-panel-attiny-regulator.c b/drivers/regulator/rpi-panel-attiny-regulator.c
+index ee46bfbf5eee..991b4730d768 100644
+--- a/drivers/regulator/rpi-panel-attiny-regulator.c
++++ b/drivers/regulator/rpi-panel-attiny-regulator.c
+@@ -37,11 +37,24 @@ static const struct regmap_config attiny_regmap_config = {
+ static int attiny_lcd_power_enable(struct regulator_dev *rdev)
+ {
+ 	unsigned int data;
++	int ret, i;
+ 
+ 	regmap_write(rdev->regmap, REG_POWERON, 1);
++	msleep(80);
++
+ 	/* Wait for nPWRDWN to go low to indicate poweron is done. */
+-	regmap_read_poll_timeout(rdev->regmap, REG_PORTB, data,
+-					data & BIT(0), 10, 1000000);
++	for (i = 0; i < 20; i++) {
++		ret = regmap_read(rdev->regmap, REG_PORTB, &data);
++		if (!ret) {
++			if (data & BIT(0))
++				break;
++		}
++		usleep_range(10000, 12000);
++	}
++	usleep_range(10000, 12000);
++
++	if (ret)
++		pr_err("%s: regmap_read_poll_timeout failed %d\n", __func__, ret);
+ 
+ 	/* Default to the same orientation as the closed source
+ 	 * firmware used for the panel.  Runtime rotation
+@@ -57,23 +70,34 @@ static int attiny_lcd_power_disable(struct regulator_dev *rdev)
+ {
+ 	regmap_write(rdev->regmap, REG_PWM, 0);
+ 	regmap_write(rdev->regmap, REG_POWERON, 0);
+-	udelay(1);
++	msleep(30);
+ 	return 0;
+ }
+ 
+ static int attiny_lcd_power_is_enabled(struct regulator_dev *rdev)
+ {
+ 	unsigned int data;
+-	int ret;
++	int ret, i;
+ 
+-	ret = regmap_read(rdev->regmap, REG_POWERON, &data);
++	for (i = 0; i < 10; i++) {
++		ret = regmap_read(rdev->regmap, REG_POWERON, &data);
++		if (!ret)
++			break;
++		usleep_range(10000, 12000);
++	}
+ 	if (ret < 0)
+ 		return ret;
+ 
+ 	if (!(data & BIT(0)))
+ 		return 0;
+ 
+-	ret = regmap_read(rdev->regmap, REG_PORTB, &data);
++	for (i = 0; i < 10; i++) {
++		ret = regmap_read(rdev->regmap, REG_PORTB, &data);
++		if (!ret)
++			break;
++		usleep_range(10000, 12000);
++	}
++
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -103,20 +127,32 @@ static int attiny_update_status(struct backlight_device *bl)
+ {
+ 	struct regmap *regmap = bl_get_data(bl);
+ 	int brightness = bl->props.brightness;
++	int ret, i;
+ 
+ 	if (bl->props.power != FB_BLANK_UNBLANK ||
+ 	    bl->props.fb_blank != FB_BLANK_UNBLANK)
+ 		brightness = 0;
+ 
+-	return regmap_write(regmap, REG_PWM, brightness);
++	for (i = 0; i < 10; i++) {
++		ret = regmap_write(regmap, REG_PWM, brightness);
++		if (!ret)
++			break;
++	}
++
++	return ret;
+ }
+ 
+ static int attiny_get_brightness(struct backlight_device *bl)
+ {
+ 	struct regmap *regmap = bl_get_data(bl);
+-	int ret, brightness;
++	int ret, brightness, i;
++
++	for (i = 0; i < 10; i++) {
++		ret = regmap_read(regmap, REG_PWM, &brightness);
++		if (!ret)
++			break;
++	}
+ 
+-	ret = regmap_read(regmap, REG_PWM, &brightness);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -166,7 +202,7 @@ static int attiny_i2c_probe(struct i2c_client *i2c,
  	}
  
+ 	regmap_write(regmap, REG_POWERON, 0);
+-	mdelay(1);
++	msleep(30);
+ 
+ 	config.dev = &i2c->dev;
+ 	config.regmap = regmap;
 -- 
 2.34.1
 

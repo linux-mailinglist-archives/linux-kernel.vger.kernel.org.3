@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA844F418D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 770954F400B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357291AbiDEPM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
+        id S1344246AbiDEPKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345697AbiDEJnr (ORCPT
+        with ESMTP id S1345760AbiDEJoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:43:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF4AC5586;
-        Tue,  5 Apr 2022 02:29:36 -0700 (PDT)
+        Tue, 5 Apr 2022 05:44:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2840C55A0;
+        Tue,  5 Apr 2022 02:29:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 349986165E;
-        Tue,  5 Apr 2022 09:29:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4298AC385A2;
-        Tue,  5 Apr 2022 09:29:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 02C38616D6;
+        Tue,  5 Apr 2022 09:29:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12EDFC385A0;
+        Tue,  5 Apr 2022 09:29:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150965;
-        bh=o27kHmOtOvotRFc51Tl3DglrijIVdbuDH53J86XD31o=;
+        s=korg; t=1649150968;
+        bh=M67CU+T4xOG6XH0wlo3yuSohmbR82pONZTeDDfPjaTs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zonLh71yI4hIjwMEfXWO/wNY3PAKzRqQOzl1zBeMBNDLgv4JLdjUL0iC0js8hwKc3
-         AoWmcSu9IB8vZSlh95/BQC85467b9/XRN4R2bPBUxYJhxj75QvSHHqPjXoSMaiYuf+
-         idya2L/zuKR8UVwy8/Ka0SmL5hwSNyx3DKjPfgyA=
+        b=PtbYBiv0paTZSK5d7BW/JrsxpZ5N3ulBDeNOTSW8g1XjR6rQgcHY0RsU6GCo8cmPJ
+         qbdrXHKboKrzmTpjBhmTcLKjQzSdt76ggSOf0XNIiKu8TU8W7y2+ty2OPb4jooGb99
+         YVbOmsqVsdqEzsQdp4WlVgnGBVDNLnIlUAy47E+E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
         Sasha Levin <sashal@kernel.org>,
-        syzbot+d55757faa9b80590767b@syzkaller.appspotmail.com
-Subject: [PATCH 5.15 244/913] watch_queue: Fix NULL dereference in error cleanup
-Date:   Tue,  5 Apr 2022 09:21:46 +0200
-Message-Id: <20220405070347.171054946@linuxfoundation.org>
+        syzbot+6e2de48f06cdb2884bfc@syzkaller.appspotmail.com
+Subject: [PATCH 5.15 245/913] watch_queue: Actually free the watch
+Date:   Tue,  5 Apr 2022 09:21:47 +0200
+Message-Id: <20220405070347.201194687@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -58,64 +57,50 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: David Howells <dhowells@redhat.com>
 
-[ Upstream commit a635415a064e77bcfbf43da413fd9dfe0bbed9cb ]
+[ Upstream commit 3d8dcf278b1ee1eff1e90be848fa2237db4c07a7 ]
 
-In watch_queue_set_size(), the error cleanup code doesn't take account of
-the fact that __free_page() can't handle a NULL pointer when trying to free
-up buffer pages that did get allocated.
+free_watch() does everything barring actually freeing the watch object.  Fix
+this by adding the missing kfree.
 
-Fix this by only calling __free_page() on the pages actually allocated.
+kmemleak produces a report something like the following.  Note that as an
+address can be seen in the first word, the watch would appear to have gone
+through call_rcu().
 
-Without the fix, this can lead to something like the following:
-
-BUG: KASAN: null-ptr-deref in __free_pages+0x1f/0x1b0 mm/page_alloc.c:5473
-Read of size 4 at addr 0000000000000034 by task syz-executor168/3599
-...
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- __kasan_report mm/kasan/report.c:446 [inline]
- kasan_report.cold+0x66/0xdf mm/kasan/report.c:459
- check_region_inline mm/kasan/generic.c:183 [inline]
- kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
- instrument_atomic_read include/linux/instrumented.h:71 [inline]
- atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
- page_ref_count include/linux/page_ref.h:67 [inline]
- put_page_testzero include/linux/mm.h:717 [inline]
- __free_pages+0x1f/0x1b0 mm/page_alloc.c:5473
- watch_queue_set_size+0x499/0x630 kernel/watch_queue.c:275
- pipe_ioctl+0xac/0x2b0 fs/pipe.c:632
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+BUG: memory leak
+unreferenced object 0xffff88810ce4a200 (size 96):
+  comm "syz-executor352", pid 3605, jiffies 4294947473 (age 13.720s)
+  hex dump (first 32 bytes):
+    e0 82 48 0d 81 88 ff ff 00 00 00 00 00 00 00 00  ..H.............
+    80 a2 e4 0c 81 88 ff ff 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff8214e6cc>] kmalloc include/linux/slab.h:581 [inline]
+    [<ffffffff8214e6cc>] kzalloc include/linux/slab.h:714 [inline]
+    [<ffffffff8214e6cc>] keyctl_watch_key+0xec/0x2e0 security/keys/keyctl.c:1800
+    [<ffffffff8214ec84>] __do_sys_keyctl+0x3c4/0x490 security/keys/keyctl.c:2016
+    [<ffffffff84493a25>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff84493a25>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
 
 Fixes: c73be61cede5 ("pipe: Add general notification queue support")
-Reported-and-tested-by: syzbot+d55757faa9b80590767b@syzkaller.appspotmail.com
+Reported-and-tested-by: syzbot+6e2de48f06cdb2884bfc@syzkaller.appspotmail.com
 Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/watch_queue.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/watch_queue.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
-index 055bc20ecdda..12348b41d7ad 100644
+index 12348b41d7ad..38a135d68c05 100644
 --- a/kernel/watch_queue.c
 +++ b/kernel/watch_queue.c
-@@ -274,7 +274,7 @@ long watch_queue_set_size(struct pipe_inode_info *pipe, unsigned int nr_notes)
- 	return 0;
+@@ -398,6 +398,7 @@ static void free_watch(struct rcu_head *rcu)
+ 	put_watch_queue(rcu_access_pointer(watch->queue));
+ 	atomic_dec(&watch->cred->user->nr_watches);
+ 	put_cred(watch->cred);
++	kfree(watch);
+ }
  
- error_p:
--	for (i = 0; i < nr_pages; i++)
-+	while (--i >= 0)
- 		__free_page(pages[i]);
- 	kfree(pages);
- error:
+ static void __put_watch(struct kref *kref)
 -- 
 2.34.1
 

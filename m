@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A1EE4F470A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:27:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1537B4F439D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234159AbiDEU5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
+        id S245237AbiDEUNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354197AbiDEKMP (ORCPT
+        with ESMTP id S243409AbiDEKfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:12:15 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36FDE532E3;
-        Tue,  5 Apr 2022 02:58:28 -0700 (PDT)
+        Tue, 5 Apr 2022 06:35:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A3351326;
+        Tue,  5 Apr 2022 03:21:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9B8FCCE1BF8;
-        Tue,  5 Apr 2022 09:58:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A770C385A2;
-        Tue,  5 Apr 2022 09:58:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93A71B81C98;
+        Tue,  5 Apr 2022 10:21:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03DD2C385A0;
+        Tue,  5 Apr 2022 10:21:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152705;
-        bh=oHWJVGZerJimRvn7YMHPGhT+6D1L6vxaa4SWJ8iflK4=;
+        s=korg; t=1649154065;
+        bh=ycQWrZjQ6til+kCrXM9OxU+VmAfujOA5Ig+3kccmxUw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jXdjmqphU7NP0Vd58QMa1k0EVO/tAUqRWizL2yc+P7YuoyK2Q1QfoYoHlZRXUfYrv
-         IEAyrQZc0JXwfOxXKJB9EDFfdPoZbH/ez188lAydipbFBTTlkbaVrttijzP9cJe2NS
-         CSVY5SS1h+vJ6/GMtfk3k8VFZWIbuy0eTMC2dtWk=
+        b=AB6gJ9jZE+NWbBFrVbBLyNLYxndv6fOTQF/P63p2ZeqPgJKwwfB1FNmk2xK5jWUP/
+         g4PAuKGZcnrg1tHUWFUkpXWIjpRR/rN5gS953zXplBt511xTcwHXp3ghrj1arznS9P
+         taquQeodg45lEs4QHj/9JbLJ3T1fQUl8ABjK5CpY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Ben Dooks <ben-linux@fluff.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, patches@armlinux.org.uk,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: [PATCH 5.15 874/913] ARM: 9187/1: JIVE: fix return value of __setup handler
-Date:   Tue,  5 Apr 2022 09:32:16 +0200
-Message-Id: <20220405070406.021493747@linuxfoundation.org>
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 444/599] NFSv4/pNFS: Fix another issue with a list iterator pointing to the head
+Date:   Tue,  5 Apr 2022 09:32:18 +0200
+Message-Id: <20220405070312.043320138@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,56 +55,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit 8b2360c7157b462c4870d447d1e65d30ef31f9aa upstream.
+[ Upstream commit 7c9d845f0612e5bcd23456a2ec43be8ac43458f1 ]
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) argument or environment
-strings. Also, error return codes don't mean anything to
-obsolete_checksetup() -- only non-zero (usually 1) or zero.
-So return 1 from jive_mtdset().
+In nfs4_callback_devicenotify(), if we don't find a matching entry for
+the deviceid, we're left with a pointer to 'struct nfs_server' that
+actually points to the list of super blocks associated with our struct
+nfs_client.
+Furthermore, even if we have a valid pointer, nothing pins the super
+block, and so the struct nfs_server could end up getting freed while
+we're using it.
 
-Fixes: 9db829f485c5 ("[ARM] JIVE: Initial machine support for Logitech Jive")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Ben Dooks <ben-linux@fluff.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-samsung-soc@vger.kernel.org
-Cc: patches@armlinux.org.uk
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Since all we want is a pointer to the struct pnfs_layoutdriver_type,
+let's skip all the iteration over super blocks, and just use APIs to
+find the layout driver directly.
+
+Reported-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Fixes: 1be5683b03a7 ("pnfs: CB_NOTIFY_DEVICEID")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/mach-s3c/mach-jive.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ fs/nfs/callback_proc.c | 27 +++++++++------------------
+ fs/nfs/pnfs.c          | 11 +++++++++++
+ fs/nfs/pnfs.h          |  2 ++
+ 3 files changed, 22 insertions(+), 18 deletions(-)
 
---- a/arch/arm/mach-s3c/mach-jive.c
-+++ b/arch/arm/mach-s3c/mach-jive.c
-@@ -236,11 +236,11 @@ static int __init jive_mtdset(char *opti
- 	unsigned long set;
+diff --git a/fs/nfs/callback_proc.c b/fs/nfs/callback_proc.c
+index b44219ce60b8..a5209643ac36 100644
+--- a/fs/nfs/callback_proc.c
++++ b/fs/nfs/callback_proc.c
+@@ -353,12 +353,11 @@ __be32 nfs4_callback_devicenotify(void *argp, void *resp,
+ 				  struct cb_process_state *cps)
+ {
+ 	struct cb_devicenotifyargs *args = argp;
++	const struct pnfs_layoutdriver_type *ld = NULL;
+ 	uint32_t i;
+ 	__be32 res = 0;
+-	struct nfs_client *clp = cps->clp;
+-	struct nfs_server *server = NULL;
  
- 	if (options == NULL || options[0] == '\0')
--		return 0;
-+		return 1;
- 
- 	if (kstrtoul(options, 10, &set)) {
- 		printk(KERN_ERR "failed to parse mtdset=%s\n", options);
--		return 0;
-+		return 1;
+-	if (!clp) {
++	if (!cps->clp) {
+ 		res = cpu_to_be32(NFS4ERR_OP_NOT_IN_SESSION);
+ 		goto out;
  	}
+@@ -366,23 +365,15 @@ __be32 nfs4_callback_devicenotify(void *argp, void *resp,
+ 	for (i = 0; i < args->ndevs; i++) {
+ 		struct cb_devicenotifyitem *dev = &args->devs[i];
  
- 	switch (set) {
-@@ -255,7 +255,7 @@ static int __init jive_mtdset(char *opti
- 		       "using default.", set);
+-		if (!server ||
+-		    server->pnfs_curr_ld->id != dev->cbd_layout_type) {
+-			rcu_read_lock();
+-			list_for_each_entry_rcu(server, &clp->cl_superblocks, client_link)
+-				if (server->pnfs_curr_ld &&
+-				    server->pnfs_curr_ld->id == dev->cbd_layout_type) {
+-					rcu_read_unlock();
+-					goto found;
+-				}
+-			rcu_read_unlock();
+-			continue;
++		if (!ld || ld->id != dev->cbd_layout_type) {
++			pnfs_put_layoutdriver(ld);
++			ld = pnfs_find_layoutdriver(dev->cbd_layout_type);
++			if (!ld)
++				continue;
+ 		}
+-
+-	found:
+-		nfs4_delete_deviceid(server->pnfs_curr_ld, clp, &dev->cbd_dev_id);
++		nfs4_delete_deviceid(ld, cps->clp, &dev->cbd_dev_id);
  	}
- 
--	return 0;
-+	return 1;
+-
++	pnfs_put_layoutdriver(ld);
+ out:
+ 	kfree(args->devs);
+ 	return res;
+diff --git a/fs/nfs/pnfs.c b/fs/nfs/pnfs.c
+index 5370e082aded..b3b9eff5d572 100644
+--- a/fs/nfs/pnfs.c
++++ b/fs/nfs/pnfs.c
+@@ -92,6 +92,17 @@ find_pnfs_driver(u32 id)
+ 	return local;
  }
  
- /* parse the mtdset= option given to the kernel command line */
++const struct pnfs_layoutdriver_type *pnfs_find_layoutdriver(u32 id)
++{
++	return find_pnfs_driver(id);
++}
++
++void pnfs_put_layoutdriver(const struct pnfs_layoutdriver_type *ld)
++{
++	if (ld)
++		module_put(ld->owner);
++}
++
+ void
+ unset_pnfs_layoutdriver(struct nfs_server *nfss)
+ {
+diff --git a/fs/nfs/pnfs.h b/fs/nfs/pnfs.h
+index 0212fe32e63a..11d9ed9addc0 100644
+--- a/fs/nfs/pnfs.h
++++ b/fs/nfs/pnfs.h
+@@ -236,6 +236,8 @@ struct pnfs_devicelist {
+ 
+ extern int pnfs_register_layoutdriver(struct pnfs_layoutdriver_type *);
+ extern void pnfs_unregister_layoutdriver(struct pnfs_layoutdriver_type *);
++extern const struct pnfs_layoutdriver_type *pnfs_find_layoutdriver(u32 id);
++extern void pnfs_put_layoutdriver(const struct pnfs_layoutdriver_type *ld);
+ 
+ /* nfs4proc.c */
+ extern size_t max_response_pages(struct nfs_server *server);
+-- 
+2.34.1
+
 
 

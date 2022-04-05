@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86AC04F3791
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1644F3B90
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355907AbiDELPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
+        id S1381258AbiDEL66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237266AbiDEIRw (ORCPT
+        with ESMTP id S245044AbiDEIxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:17:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352BE69CC3;
-        Tue,  5 Apr 2022 01:05:54 -0700 (PDT)
+        Tue, 5 Apr 2022 04:53:03 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92441E89;
+        Tue,  5 Apr 2022 01:50:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4E0A617E9;
-        Tue,  5 Apr 2022 08:05:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6978C385A2;
-        Tue,  5 Apr 2022 08:05:52 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 012EECE1BCE;
+        Tue,  5 Apr 2022 08:50:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18279C385A1;
+        Tue,  5 Apr 2022 08:50:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145953;
-        bh=JWSpzLHpWqKGkFwCTk0nOHoD9KufYRoCj9fLiLPPjJg=;
+        s=korg; t=1649148629;
+        bh=0Dg7CYB7xn8BcJUfpIWrYJsGfvLqYxZJacs/FazW+sQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RZVOVgjNdxEozwO9JKorxs7KgBc0GgvT/LGNwKZ/VBgllZUBG4+HDAT66msKVQ8jX
-         QuilBZ48Ibh1Z3MZp2m1nHlOeahqGdvc60z1UfvxHhpYTxCabhLPRW39MEZG2osNlw
-         eBSEaKV7YZoO7X8Mja3yG/DkEo/xAC+P7QMV/TYI=
+        b=mWQZ0ElD2FC9z4Mr8sMWM0GmyYynq6tqFSXO00TMU6LLXS+vtXHXyn2X6Hzn2AlMS
+         ai+VDM1bZXxZQxWAWzhp/aNCWbEIHkjUNNC4KDWqggi7f+n3aucgWR2RVVzerJ0V4I
+         5dIL/41fI/1SBWHgPr2p2JZBm61jrYos0j2p4Jnk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Shannon Nelson <snelson@pensando.io>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0587/1126] scsi: pm8001: Fix payload initialization in pm80xx_encrypt_update()
-Date:   Tue,  5 Apr 2022 09:22:14 +0200
-Message-Id: <20220405070424.863273674@linuxfoundation.org>
+Subject: [PATCH 5.16 0423/1017] ionic: fix type complaint in ionic_dev_cmd_clean()
+Date:   Tue,  5 Apr 2022 09:22:16 +0200
+Message-Id: <20220405070406.846252958@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
-References: <20220405070407.513532867@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,49 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Shannon Nelson <snelson@pensando.io>
 
-[ Upstream commit f8b12dfb476dad38ce755aaf5e2df46f06f1822e ]
+[ Upstream commit bc0bf9de6f48268f4ee59e57fb42ac751be3ecda ]
 
-All fields of the kek_mgmt_req structure have the type __le32. So make sure
-to use cpu_to_le32() to initialize them. This suppresses the sparse
-warning:
+Sparse seems to have gotten a little more picky lately and
+we need to revisit this bit of code to make sparse happy.
 
-warning: incorrect type in assignment (different base types)
-   expected restricted __le32 [addressable] [assigned] [usertype] new_curidx_ksop
-   got int
+warning: incorrect type in initializer (different address spaces)
+   expected union ionic_dev_cmd_regs *regs
+   got union ionic_dev_cmd_regs [noderef] __iomem *dev_cmd_regs
+warning: incorrect type in argument 2 (different address spaces)
+   expected void [noderef] __iomem *
+   got unsigned int *
+warning: incorrect type in argument 1 (different address spaces)
+   expected void volatile [noderef] __iomem *
+   got union ionic_dev_cmd *
 
-Link: https://lore.kernel.org/r/20220220031810.738362-10-damien.lemoal@opensource.wdc.com
-Fixes: f5860992db55 ("[SCSI] pm80xx: Added SPCv/ve specific hardware functionalities and relevant changes in common files")
-Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: d701ec326a31 ("ionic: clean up sparse complaints")
+Signed-off-by: Shannon Nelson <snelson@pensando.io>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/pm8001/pm80xx_hwi.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/pensando/ionic/ionic_main.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index 19f9fb4da9c1..cbb0cd2e71c1 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -1407,12 +1407,13 @@ static int pm80xx_encrypt_update(struct pm8001_hba_info *pm8001_ha)
- 	/* Currently only one key is used. New KEK index is 1.
- 	 * Current KEK index is 1. Store KEK to NVRAM is 1.
- 	 */
--	payload.new_curidx_ksop = ((1 << 24) | (1 << 16) | (1 << 8) |
--					KEK_MGMT_SUBOP_KEYCARDUPDATE);
-+	payload.new_curidx_ksop =
-+		cpu_to_le32(((1 << 24) | (1 << 16) | (1 << 8) |
-+			     KEK_MGMT_SUBOP_KEYCARDUPDATE));
+diff --git a/drivers/net/ethernet/pensando/ionic/ionic_main.c b/drivers/net/ethernet/pensando/ionic/ionic_main.c
+index 875f4ec42efe..a89ad768e4a0 100644
+--- a/drivers/net/ethernet/pensando/ionic/ionic_main.c
++++ b/drivers/net/ethernet/pensando/ionic/ionic_main.c
+@@ -370,10 +370,10 @@ int ionic_adminq_post_wait_nomsg(struct ionic_lif *lif, struct ionic_admin_ctx *
  
- 	pm8001_dbg(pm8001_ha, DEV,
- 		   "Saving Encryption info to flash. payload 0x%x\n",
--		   payload.new_curidx_ksop);
-+		   le32_to_cpu(payload.new_curidx_ksop));
+ static void ionic_dev_cmd_clean(struct ionic *ionic)
+ {
+-	union __iomem ionic_dev_cmd_regs *regs = ionic->idev.dev_cmd_regs;
++	struct ionic_dev *idev = &ionic->idev;
  
- 	rc = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &payload,
- 			sizeof(payload), 0);
+-	iowrite32(0, &regs->doorbell);
+-	memset_io(&regs->cmd, 0, sizeof(regs->cmd));
++	iowrite32(0, &idev->dev_cmd_regs->doorbell);
++	memset_io(&idev->dev_cmd_regs->cmd, 0, sizeof(idev->dev_cmd_regs->cmd));
+ }
+ 
+ int ionic_dev_cmd_wait(struct ionic *ionic, unsigned long max_seconds)
 -- 
 2.34.1
 

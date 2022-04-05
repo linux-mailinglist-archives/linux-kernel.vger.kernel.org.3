@@ -2,108 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA2D54F4A79
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:44:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA4D4F4D23
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1456895AbiDEWqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
+        id S1581575AbiDEXj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380217AbiDEMxl (ORCPT
+        with ESMTP id S1381309AbiDEMy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 08:53:41 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D3CE095;
-        Tue,  5 Apr 2022 04:53:38 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2358i9ao002139;
-        Tue, 5 Apr 2022 13:52:58 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=ahMNFWxzpaVmVp3viku9IaBrdSUCBM3LW49uPEPbvxU=;
- b=AOxt4YrYB/LoekLRTWYYtVuMG3+PLFJzeUn29lBTkGZa3ek7xYQZnOOGVb7exI9rDJGo
- EmbWbNLQYZU05k5hGR9B9IGQlM9eJJSvNfOBVjVCwj+uCTubQb+U/fzk4qYEbVXJA4Xx
- OTPm7FsfKjPSWMl5QdTxw+M1nWXQ6trXXL9g4AhGy0kUO1l8YgWsVXg6i4UlKXoeAOyh
- 2d/dysRHJgXKEM7Vcxe8UUzu8iMDAkxaL3ZM5THKOp8zPn51c3CJ4GyTd1V8rgLB06a/
- elErddY4//H/Nnoj0AWanhffmXC3EgtYuohqqXd9T+kHG5m2sgHsOt/lc+f+RieA4Kg9 Sw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f6dcgsr66-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 Apr 2022 13:52:58 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 09BEE10002A;
-        Tue,  5 Apr 2022 13:52:55 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EFBFF21A239;
-        Tue,  5 Apr 2022 13:52:54 +0200 (CEST)
-Received: from localhost (10.75.127.46) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 5 Apr 2022 13:52:54
- +0200
-From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <arnaud.pouliquen@foss.st.com>, <linux-kernel@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>
-Subject: [PATCH v2] arm: configs: Configs that had RPMSG_CHAR now get RPMSG_CTRL
-Date:   Tue, 5 Apr 2022 13:52:36 +0200
-Message-ID: <20220405115236.1019955-1-arnaud.pouliquen@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 5 Apr 2022 08:54:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F5202314E
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 04:55:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649159730;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=28KE+M63X+ahVj/a4F3r0KzFPc/lbb3JFcGix4GxqtQ=;
+        b=VO7oSQn5me1rxoKu39wEwt0q1IwLRhtDlRrSIjv014AXitvh+0OfOniiLFSv2I+nsQP+IJ
+        LA3pw+lTybH4BtOJy21IbBlW9sUZ6eVDjQX2tnA8tQmg7IqYpSZLH+zFbuanjfVqZIevL+
+        CHPrUq6zGv2GhoxUjPJ8fKIZWSJY/vo=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-364-0ljUOSMzMnit-GpbjHpPoQ-1; Tue, 05 Apr 2022 07:55:29 -0400
+X-MC-Unique: 0ljUOSMzMnit-GpbjHpPoQ-1
+Received: by mail-wr1-f70.google.com with SMTP id r16-20020adfbb10000000b002060d469943so1398482wrg.4
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 04:55:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=28KE+M63X+ahVj/a4F3r0KzFPc/lbb3JFcGix4GxqtQ=;
+        b=Wo0KS2xNIGh8RMNaFI5WX6AaHEV4usioCg90AKcme7FgBZ2SLIzH0CecCuWHbnpeMW
+         XjLDM9Dvzoj8FdOPomRQ1cB6SS+Kc+gRCEbMSIXZ6W/Tht0SQP/nuD8i0o+Mo9yvJPUe
+         8ryFHsRhHL5jjNE0VgmYx/uulTBs0R2VM+8RJuKtx4pWMC2TYxYblOydqvAntGIKeV+Q
+         J1RdY3CIGgGwnf/F8DhcWIwr2wHMVdFyb0IV8iMB5a9OlG5IosXDoofhGticA9uR5ul2
+         vqbx1Pt2gN71xudRDBAcMQkzqZq3WfqwuauWRh7RT3x1/o0Oe/v5zFHYiYi5CJaib+dT
+         8cqw==
+X-Gm-Message-State: AOAM532M9u+/wp5LgjWDl7+YCuyOqmVLFCBvKLU9mLJKrB5EcnASSX5I
+        H+SLjD0H8gzM13BV7FLeuV7AsXRcFfBMmSs94VM5I0iWG4iUPrYZZXkhkw850PdaLWNdSRwcl1w
+        pFUDlrJ1Lw98khxcxnJBjS0Za
+X-Received: by 2002:a5d:50d2:0:b0:206:b6f:f7db with SMTP id f18-20020a5d50d2000000b002060b6ff7dbmr2452906wrt.248.1649159728269;
+        Tue, 05 Apr 2022 04:55:28 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy1Tka5E6L9URIsWeBley60SCe/IUE6j/uwyJ5KZatVAUY55Lp2TF7WwIu2UssrhlRPLr4P1Q==
+X-Received: by 2002:a5d:50d2:0:b0:206:b6f:f7db with SMTP id f18-20020a5d50d2000000b002060b6ff7dbmr2452885wrt.248.1649159727975;
+        Tue, 05 Apr 2022 04:55:27 -0700 (PDT)
+Received: from redhat.com ([2.52.17.211])
+        by smtp.gmail.com with ESMTPSA id o17-20020a05600c4fd100b0038cd5074c83sm2159309wmq.34.2022.04.05.04.55.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 04:55:27 -0700 (PDT)
+Date:   Tue, 5 Apr 2022 07:55:22 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization list <virtualization@lists.linux-foundation.org>
+Subject: Re: [PATCH 8/8] virtio_ring.h: do not include <stdint.h> from
+ exported header
+Message-ID: <20220405074223-mutt-send-email-mst@kernel.org>
+References: <20220404061948.2111820-1-masahiroy@kernel.org>
+ <20220404061948.2111820-9-masahiroy@kernel.org>
+ <Ykqh3mEy5uY8spe8@infradead.org>
+ <CAK8P3a07ZdqA0UBC_qkqzMsZWLUK=Rti3AkFe2VVEWLivuZAqA@mail.gmail.com>
+ <YkvVOLj/Rv4yPf5K@infradead.org>
+ <CAK8P3a0FjfSyUtv9a9dM7ixsK2oY9VF7WZPvDctn2JRi7A0YyQ@mail.gmail.com>
+ <YkvpT3PFcbgcMCWy@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-05_02,2022-04-05_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkvpT3PFcbgcMCWy@infradead.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the commit 617d32938d1b ("rpmsg: Move the rpmsg control device
-from rpmsg_char to rpmsg_ctrl"), we split the rpmsg_char driver in two.
-By default give everyone who had the old driver enabled the rpmsg_ctrl
-driver too.
+On Tue, Apr 05, 2022 at 12:01:35AM -0700, Christoph Hellwig wrote:
+> On Tue, Apr 05, 2022 at 08:29:36AM +0200, Arnd Bergmann wrote:
+> > I think the users all have their own copies, at least the ones I could
+> > find on codesearch.debian.org. However, there are 27 virtio_*.h
+> > files in include/uapi/linux that probably should stay together for
+> > the purpose of defining the virtio protocol, and some others might
+> > be uapi relevant.
+> > 
+> > I see that at least include/uapi/linux/vhost.h has ioctl() definitions
+> > in it, and includes the virtio_ring.h header indirectly.
+> 
+> Uhh.  We had a somilar mess (but at a smaller scale) in nvme, where
+> the uapi nvme.h contained both the UAPI and the protocol definition.
+> We took a hard break to only have a nvme_ioctl.h in the uapi header
+> and linux/nvme.h for the protocol.  This did break a bit of userspace
+> compilation (but not running obviously) at the time, but really made
+> the headers much easier to main.  Some userspace keeps on copying
+> nvme.h with the protocol definitions.
 
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
----
+So far we are quite happy with the status quo, I don't see any issues
+maintaining the headers. And yes, through vhost and vringh they are part
+of UAPI.
 
-This patch is extracted from the series [1] that has been partially
-integrated in the Linux Kernel 5.18-rc1.
+Yes users have their own copies but they synch with the kernel.
 
-Update vs previous version:
-- remove "Fixes:" tag in commit, requested by Mathieu Poirier in [2]
+That's generally. Specifically the vring_init thing is a legacy thingy
+used by kvmtool and maybe others, and it inits the ring in the way that
+vring/virtio expect.  Has been there since day 1 and we are careful not
+to add more stuff like that, so I don't see a lot of gain from incurring
+this pain for users.
 
-[1]https://lore.kernel.org/lkml/15be2f08-ba03-2b80-6f53-2056359d5c41@gmail.com/T/
-[2]https://lore.kernel.org/linux-arm-kernel/CANLsYky1_b80qPbgOaLGVYD-GEr21V6C653iGEB7VCU=GbGvAQ@mail.gmail.com/T/
----
- arch/arm/configs/qcom_defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm/configs/qcom_defconfig b/arch/arm/configs/qcom_defconfig
-index 9981566f2096..2e7e9a4f31f6 100644
---- a/arch/arm/configs/qcom_defconfig
-+++ b/arch/arm/configs/qcom_defconfig
-@@ -241,6 +241,7 @@ CONFIG_QCOM_Q6V5_PAS=y
- CONFIG_QCOM_Q6V5_PIL=y
- CONFIG_QCOM_WCNSS_PIL=y
- CONFIG_RPMSG_CHAR=y
-+CONFIG_RPMSG_CTRL=y
- CONFIG_RPMSG_QCOM_GLINK_SMEM=y
- CONFIG_RPMSG_QCOM_SMD=y
- CONFIG_QCOM_COMMAND_DB=y
 -- 
-2.25.1
+MST
 

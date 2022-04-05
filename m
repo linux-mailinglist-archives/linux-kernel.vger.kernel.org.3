@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E83434F3DB5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:35:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A59894F41A7
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385229AbiDEMb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
+        id S1385316AbiDEMc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238543AbiDEI5n (ORCPT
+        with ESMTP id S236113AbiDEI6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:57:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EE724594;
-        Tue,  5 Apr 2022 01:53:08 -0700 (PDT)
+        Tue, 5 Apr 2022 04:58:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463EA2497E;
+        Tue,  5 Apr 2022 01:53:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FBF46117A;
-        Tue,  5 Apr 2022 08:53:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E84EC385A0;
-        Tue,  5 Apr 2022 08:53:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A8782B81A0C;
+        Tue,  5 Apr 2022 08:53:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 144FDC385A0;
+        Tue,  5 Apr 2022 08:53:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148787;
-        bh=RU2UcSzhXOx0PlpkB8nfVRVn7CxbRPcmWHXxp5CSZok=;
+        s=korg; t=1649148790;
+        bh=lHH2U2c4N+cimVlUZ+DAFWCbYaHiZ5I3DlIyPSGvxpM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Iq88c6D4nZOz9R+vgLpru1YfPKwuuiq6c33XVtQnjaXLYO4eajstI3VpX39y4osPl
-         HuFZmAxGEOhW8x8f9T8xa7Kn7O4efEGMz4crKW+JvusleOcAonL6apnqjLSmahHWA4
-         0yJdYYzgP/2nFiDOK/3IcORwvdNIilXyaTbUxUVY=
+        b=JBcKJgKj34amFdVBtfNtmWbBMQHaOxqWpasJ1sJQ4hu9KMzY9j86MbKsjVhnlVf8y
+         fcsW8SNBnMUFznyOd6JLbvY6zxBJ8mv23wREH3U6fqrPEXJO0d9sFEHYnSVhv9GCT2
+         FvBWXbDbO+al0gNLyB1PHm2CNhSWd4nKHXuv5eHg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lennert Buytenhek <buytenh@arista.com>,
-        Corinna Vinschen <vinschen@redhat.com>,
+        stable@vger.kernel.org, Corinna Vinschen <vinschen@redhat.com>,
         Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        Dvora Fuxbrumer <dvorax.fuxbrumer@linux.intel.com>,
+        Sandeep Penigalapati <sandeep.penigalapati@intel.com>,
         Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0482/1017] igc: avoid kernel warning when changing RX ring parameters
-Date:   Tue,  5 Apr 2022 09:23:15 +0200
-Message-Id: <20220405070408.606199117@linuxfoundation.org>
+Subject: [PATCH 5.16 0483/1017] igb: refactor XDP registration
+Date:   Tue,  5 Apr 2022 09:23:16 +0200
+Message-Id: <20220405070408.636412639@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -60,73 +59,81 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Corinna Vinschen <vinschen@redhat.com>
 
-[ Upstream commit 453307b569a0d41bddd07f26bf41b784cd82a4c9 ]
+[ Upstream commit e62ad74aa534404b3ee7e250b114a3536ac56987 ]
 
-Calling ethtool changing the RX ring parameters like this:
+On changing the RX ring parameters igb uses a hack to avoid a warning
+when calling xdp_rxq_info_reg via igb_setup_rx_resources.  It just
+clears the struct xdp_rxq_info content.
 
-  $ ethtool -G eth0 rx 1024
+Instead, change this to unregister if we're already registered.  Align
+code to the igc code.
 
-on igc triggers kernel warnings like this:
-
-[  225.198467] ------------[ cut here ]------------
-[  225.198473] Missing unregister, handled but fix driver
-[  225.198485] WARNING: CPU: 7 PID: 959 at net/core/xdp.c:168
-xdp_rxq_info_reg+0x79/0xd0
-[...]
-[  225.198601] Call Trace:
-[  225.198604]  <TASK>
-[  225.198609]  igc_setup_rx_resources+0x3f/0xe0 [igc]
-[  225.198617]  igc_ethtool_set_ringparam+0x30e/0x450 [igc]
-[  225.198626]  ethnl_set_rings+0x18a/0x250
-[  225.198631]  genl_family_rcv_msg_doit+0xca/0x110
-[  225.198637]  genl_rcv_msg+0xce/0x1c0
-[  225.198640]  ? rings_prepare_data+0x60/0x60
-[  225.198644]  ? genl_get_cmd+0xd0/0xd0
-[  225.198647]  netlink_rcv_skb+0x4e/0xf0
-[  225.198652]  genl_rcv+0x24/0x40
-[  225.198655]  netlink_unicast+0x20e/0x330
-[  225.198659]  netlink_sendmsg+0x23f/0x480
-[  225.198663]  sock_sendmsg+0x5b/0x60
-[  225.198667]  __sys_sendto+0xf0/0x160
-[  225.198671]  ? handle_mm_fault+0xb2/0x280
-[  225.198676]  ? do_user_addr_fault+0x1eb/0x690
-[  225.198680]  __x64_sys_sendto+0x20/0x30
-[  225.198683]  do_syscall_64+0x38/0x90
-[  225.198687]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[  225.198693] RIP: 0033:0x7f7ae38ac3aa
-
-igc_ethtool_set_ringparam() copies the igc_ring structure but neglects to
-reset the xdp_rxq_info member before calling igc_setup_rx_resources().
-This in turn calls xdp_rxq_info_reg() with an already registered xdp_rxq_info.
-
-Make sure to unregister the xdp_rxq_info structure first in
-igc_setup_rx_resources.
-
-Fixes: 73f1071c1d29 ("igc: Add support for XDP_TX action")
-Reported-by: Lennert Buytenhek <buytenh@arista.com>
+Fixes: 9cbc948b5a20c ("igb: add XDP support")
 Signed-off-by: Corinna Vinschen <vinschen@redhat.com>
 Acked-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
-Tested-by: Dvora Fuxbrumer <dvorax.fuxbrumer@linux.intel.com>
+Tested-by: Sandeep Penigalapati <sandeep.penigalapati@intel.com>
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/igc/igc_main.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/ethernet/intel/igb/igb_ethtool.c |  4 ----
+ drivers/net/ethernet/intel/igb/igb_main.c    | 19 +++++++++++++------
+ 2 files changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index a156738dc9b6..0000eae0d729 100644
---- a/drivers/net/ethernet/intel/igc/igc_main.c
-+++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -505,6 +505,9 @@ int igc_setup_rx_resources(struct igc_ring *rx_ring)
- 	u8 index = rx_ring->queue_index;
- 	int size, desc_len, res;
+diff --git a/drivers/net/ethernet/intel/igb/igb_ethtool.c b/drivers/net/ethernet/intel/igb/igb_ethtool.c
+index fb1029352c3e..3cbb5a89b336 100644
+--- a/drivers/net/ethernet/intel/igb/igb_ethtool.c
++++ b/drivers/net/ethernet/intel/igb/igb_ethtool.c
+@@ -961,10 +961,6 @@ static int igb_set_ringparam(struct net_device *netdev,
+ 			memcpy(&temp_ring[i], adapter->rx_ring[i],
+ 			       sizeof(struct igb_ring));
  
+-			/* Clear copied XDP RX-queue info */
+-			memset(&temp_ring[i].xdp_rxq, 0,
+-			       sizeof(temp_ring[i].xdp_rxq));
+-
+ 			temp_ring[i].count = new_rx_count;
+ 			err = igb_setup_rx_resources(&temp_ring[i]);
+ 			if (err) {
+diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+index 446894dde182..5034ebb57b65 100644
+--- a/drivers/net/ethernet/intel/igb/igb_main.c
++++ b/drivers/net/ethernet/intel/igb/igb_main.c
+@@ -4352,7 +4352,18 @@ int igb_setup_rx_resources(struct igb_ring *rx_ring)
+ {
+ 	struct igb_adapter *adapter = netdev_priv(rx_ring->netdev);
+ 	struct device *dev = rx_ring->dev;
+-	int size;
++	int size, res;
++
 +	/* XDP RX-queue info */
 +	if (xdp_rxq_info_is_reg(&rx_ring->xdp_rxq))
 +		xdp_rxq_info_unreg(&rx_ring->xdp_rxq);
- 	res = xdp_rxq_info_reg(&rx_ring->xdp_rxq, ndev, index,
- 			       rx_ring->q_vector->napi.napi_id);
- 	if (res < 0) {
++	res = xdp_rxq_info_reg(&rx_ring->xdp_rxq, rx_ring->netdev,
++			       rx_ring->queue_index, 0);
++	if (res < 0) {
++		dev_err(dev, "Failed to register xdp_rxq index %u\n",
++			rx_ring->queue_index);
++		return res;
++	}
+ 
+ 	size = sizeof(struct igb_rx_buffer) * rx_ring->count;
+ 
+@@ -4375,14 +4386,10 @@ int igb_setup_rx_resources(struct igb_ring *rx_ring)
+ 
+ 	rx_ring->xdp_prog = adapter->xdp_prog;
+ 
+-	/* XDP RX-queue info */
+-	if (xdp_rxq_info_reg(&rx_ring->xdp_rxq, rx_ring->netdev,
+-			     rx_ring->queue_index, 0) < 0)
+-		goto err;
+-
+ 	return 0;
+ 
+ err:
++	xdp_rxq_info_unreg(&rx_ring->xdp_rxq);
+ 	vfree(rx_ring->rx_buffer_info);
+ 	rx_ring->rx_buffer_info = NULL;
+ 	dev_err(dev, "Unable to allocate memory for the Rx descriptor ring\n");
 -- 
 2.34.1
 

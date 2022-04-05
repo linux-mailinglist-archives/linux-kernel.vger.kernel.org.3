@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B424F30A7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:32:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3537E4F309A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237311AbiDEJEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:04:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54466 "EHLO
+        id S1352126AbiDEKDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237478AbiDEISD (ORCPT
+        with ESMTP id S237505AbiDEISE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:18:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B504B53F2;
-        Tue,  5 Apr 2022 01:06:24 -0700 (PDT)
+        Tue, 5 Apr 2022 04:18:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7180F69CC6;
+        Tue,  5 Apr 2022 01:06:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C016617EF;
-        Tue,  5 Apr 2022 08:06:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E9BDC385A1;
-        Tue,  5 Apr 2022 08:06:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD260B81A32;
+        Tue,  5 Apr 2022 08:06:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36E8EC385A1;
+        Tue,  5 Apr 2022 08:06:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145983;
-        bh=9n0s1PVnFShGn2pmObyGWleDrpp43npEIx1yGJvstUM=;
+        s=korg; t=1649145986;
+        bh=aIhk6PWvgA5r+4ayB0G884nngyqJ9qOnaKV994l4LlA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Du952JaCwqdfaPwo72AxWllgpGDk8C3erEaCoKQxQB1LGFpQjd/EcTpVhJ11hPmkD
-         8EdtYjsvH+XmV7sfp6BlhaJ1WOMq+PIuJfVXAxP4yxX7DDzCDHyA1YELmEL/HeHBzW
-         7tZtIruWUIfEfJcPnQrQC3JUBhTlbhfa+EnDOQVs=
+        b=Epdz4/K808yleSRRmHh0H8yXKBERlJ+s6H/MLn3rIKCk6/SmX4rvVxdPeXRv8+WsS
+         bvJ448VnjNRKC3B3oIZ3/TMYsle5DGPr49+wWHo0+lzZD6By0phkFEmb/PVPOcfkJf
+         qfFIagehlOF6LlVgEjEzte+FWiqPNpglKt9Rz4ls=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        stable@vger.kernel.org, Sujuan Chen <sujuan.chen@mediatek.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Bo Jiao <Bo.Jiao@mediatek.com>, Felix Fietkau <nbd@nbd.name>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0601/1126] power: supply: sbs-charger: Dont cancel work that is not initialized
-Date:   Tue,  5 Apr 2022 09:22:28 +0200
-Message-Id: <20220405070425.275097515@linuxfoundation.org>
+Subject: [PATCH 5.17 0602/1126] mt76: mt7915: enlarge wcid size to 544
+Date:   Tue,  5 Apr 2022 09:22:29 +0200
+Message-Id: <20220405070425.304342695@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,80 +56,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Bo Jiao <Bo.Jiao@mediatek.com>
 
-[ Upstream commit de85193cff0d94d030a53656d8fcc41794807bef ]
+[ Upstream commit b37d0c9735bc1976f85636e06e07f1a7547d969d ]
 
-This driver can use an interrupt or polling in order get the charger's
-status.
+The mt7916 can support up to 544 wcid entries.
+This is an intermediate patch to add mt7916 support.
 
-When using polling, a delayed work is used.
-
-However, the remove() function unconditionally call
-cancel_delayed_work_sync(), even if the delayed work is not used and is not
-initialized.
-
-In order to fix it, use devm_delayed_work_autocancel() and remove the now
-useless remove() function.
-
-Fixes: feb583e37f8a ("power: supply: add sbs-charger driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Co-developed-by: Sujuan Chen <sujuan.chen@mediatek.com>
+Signed-off-by: Sujuan Chen <sujuan.chen@mediatek.com>
+Co-developed-by: Ryder Lee <ryder.lee@mediatek.com>
+Signed-off-by: Ryder Lee <ryder.lee@mediatek.com>
+Signed-off-by: Bo Jiao <Bo.Jiao@mediatek.com>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/sbs-charger.c | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
+ drivers/net/wireless/mediatek/mt76/mt76.h          | 2 +-
+ drivers/net/wireless/mediatek/mt76/mt7915/init.c   | 2 +-
+ drivers/net/wireless/mediatek/mt76/mt7915/mac.c    | 2 +-
+ drivers/net/wireless/mediatek/mt76/mt7915/mt7915.h | 8 +++++++-
+ 4 files changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/power/supply/sbs-charger.c b/drivers/power/supply/sbs-charger.c
-index 6fa65d118ec1..b08f7d0c4181 100644
---- a/drivers/power/supply/sbs-charger.c
-+++ b/drivers/power/supply/sbs-charger.c
-@@ -18,6 +18,7 @@
- #include <linux/interrupt.h>
- #include <linux/regmap.h>
- #include <linux/bitops.h>
-+#include <linux/devm-helpers.h>
+diff --git a/drivers/net/wireless/mediatek/mt76/mt76.h b/drivers/net/wireless/mediatek/mt76/mt76.h
+index 404c3d1a70d6..1f6f7a44d3f0 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt76.h
++++ b/drivers/net/wireless/mediatek/mt76/mt76.h
+@@ -224,7 +224,7 @@ enum mt76_wcid_flags {
+ 	MT_WCID_FLAG_HDR_TRANS,
+ };
  
- #define SBS_CHARGER_REG_SPEC_INFO		0x11
- #define SBS_CHARGER_REG_STATUS			0x13
-@@ -209,7 +210,12 @@ static int sbs_probe(struct i2c_client *client,
- 		if (ret)
- 			return dev_err_probe(&client->dev, ret, "Failed to request irq\n");
- 	} else {
--		INIT_DELAYED_WORK(&chip->work, sbs_delayed_work);
-+		ret = devm_delayed_work_autocancel(&client->dev, &chip->work,
-+						   sbs_delayed_work);
-+		if (ret)
-+			return dev_err_probe(&client->dev, ret,
-+					     "Failed to init work for polling\n");
-+
- 		schedule_delayed_work(&chip->work,
- 				      msecs_to_jiffies(SBS_CHARGER_POLL_TIME));
- 	}
-@@ -220,15 +226,6 @@ static int sbs_probe(struct i2c_client *client,
- 	return 0;
+-#define MT76_N_WCIDS 288
++#define MT76_N_WCIDS 544
+ 
+ /* stored in ieee80211_tx_info::hw_queue */
+ #define MT_TX_HW_QUEUE_EXT_PHY		BIT(3)
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/init.c b/drivers/net/wireless/mediatek/mt76/mt7915/init.c
+index d054cdecd5f7..29517ca08de0 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7915/init.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7915/init.c
+@@ -399,7 +399,7 @@ static void mt7915_mac_init(struct mt7915_dev *dev)
+ 	/* enable hardware de-agg */
+ 	mt76_set(dev, MT_MDP_DCR0, MT_MDP_DCR0_DAMSDU_EN);
+ 
+-	for (i = 0; i < MT7915_WTBL_SIZE; i++)
++	for (i = 0; i < mt7915_wtbl_size(dev); i++)
+ 		mt7915_mac_wtbl_update(dev, i,
+ 				       MT_WTBL_UPDATE_ADM_COUNT_CLEAR);
+ 	for (i = 0; i < 2; i++)
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/mac.c b/drivers/net/wireless/mediatek/mt76/mt7915/mac.c
+index 12567b653607..db267642924d 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7915/mac.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7915/mac.c
+@@ -1598,7 +1598,7 @@ static void mt7915_mac_add_txs(struct mt7915_dev *dev, void *data)
+ 	if (pid < MT_PACKET_ID_FIRST)
+ 		return;
+ 
+-	if (wcidx >= MT7915_WTBL_SIZE)
++	if (wcidx >= mt7915_wtbl_size(dev))
+ 		return;
+ 
+ 	rcu_read_lock();
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/mt7915.h b/drivers/net/wireless/mediatek/mt76/mt7915/mt7915.h
+index 42d887383e8d..12ca54566461 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7915/mt7915.h
++++ b/drivers/net/wireless/mediatek/mt76/mt7915/mt7915.h
+@@ -12,7 +12,8 @@
+ #define MT7915_MAX_INTERFACES		19
+ #define MT7915_MAX_WMM_SETS		4
+ #define MT7915_WTBL_SIZE		288
+-#define MT7915_WTBL_RESERVED		(MT7915_WTBL_SIZE - 1)
++#define MT7916_WTBL_SIZE		544
++#define MT7915_WTBL_RESERVED		(mt7915_wtbl_size(dev) - 1)
+ #define MT7915_WTBL_STA			(MT7915_WTBL_RESERVED - \
+ 					 MT7915_MAX_INTERFACES)
+ 
+@@ -449,6 +450,11 @@ static inline bool is_mt7915(struct mt76_dev *dev)
+ 	return mt76_chip(dev) == 0x7915;
  }
  
--static int sbs_remove(struct i2c_client *client)
--{
--	struct sbs_info *chip = i2c_get_clientdata(client);
--
--	cancel_delayed_work_sync(&chip->work);
--
--	return 0;
--}
--
- #ifdef CONFIG_OF
- static const struct of_device_id sbs_dt_ids[] = {
- 	{ .compatible = "sbs,sbs-charger" },
-@@ -245,7 +242,6 @@ MODULE_DEVICE_TABLE(i2c, sbs_id);
++static inline u16 mt7915_wtbl_size(struct mt7915_dev *dev)
++{
++	return is_mt7915(&dev->mt76) ? MT7915_WTBL_SIZE : MT7916_WTBL_SIZE;
++}
++
+ void mt7915_dual_hif_set_irq_mask(struct mt7915_dev *dev, bool write_reg,
+ 				  u32 clear, u32 set);
  
- static struct i2c_driver sbs_driver = {
- 	.probe		= sbs_probe,
--	.remove		= sbs_remove,
- 	.id_table	= sbs_id,
- 	.driver = {
- 		.name	= "sbs-charger",
 -- 
 2.34.1
 

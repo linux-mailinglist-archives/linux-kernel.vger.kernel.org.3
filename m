@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44BA54F3F0F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51CC04F4361
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385341AbiDEMce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36638 "EHLO
+        id S1385399AbiDEMc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236039AbiDEI7o (ORCPT
+        with ESMTP id S236233AbiDEJAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:59:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9BD255AD;
-        Tue,  5 Apr 2022 01:53:26 -0700 (PDT)
+        Tue, 5 Apr 2022 05:00:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8802275C4;
+        Tue,  5 Apr 2022 01:53:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 686A961003;
-        Tue,  5 Apr 2022 08:53:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F464C385A1;
-        Tue,  5 Apr 2022 08:53:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87711B81A0C;
+        Tue,  5 Apr 2022 08:53:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3046C385A0;
+        Tue,  5 Apr 2022 08:53:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148804;
-        bh=H9YrjQMoX5Tf6SSBBMB7UlmEDAvSUYEDqi5RKX3WyUU=;
+        s=korg; t=1649148813;
+        bh=4GVNTj2YOOxt86du6z4LnhR8s7JceT8i+SaFiQdlXpA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=drkf5XnCtuu/i0gsjDOculEyi+1o2DbOlrtuiYLSxRZ1BVo+R34bRnkMSLTJXG2Pz
-         lQAm91b3xnda71JxELX7yekbhxCQCQ7lS1q3twzGtpmA0ApL6PqTCwhEa0Mvr3ku7h
-         tDJxg6lJ+4Oxfn1HNrznByckURrggCQUlthQYNr0=
+        b=s0GuW3v2QaRwBWJ9JEQ/SKueWhWsBxUbQUdYuH0aNcDF/5YLgzfs2Z0Bhinfuqc2b
+         s6CNylSOlETRwvP32CPlP3M8Gpdd/EciXEh0ECUSpH145RZv4lH8+jMdZqThZj+Kmn
+         twW6fAQCsK4dJoIhaRxJHDFtldqLdBXIX+bVKwpg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0487/1017] libbpf: Fix signedness bug in btf_dump_array_data()
-Date:   Tue,  5 Apr 2022 09:23:20 +0200
-Message-Id: <20220405070408.754584448@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        =?UTF-8?q?Alex=20Benn=C3=A9e?= <alex.bennee@linaro.org>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0490/1017] cxl/regs: Fix size of CXL Capability Header Register
+Date:   Tue,  5 Apr 2022 09:23:23 +0200
+Message-Id: <20220405070408.843606996@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,45 +58,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-[ Upstream commit 4172843ed4a38f97084032f74f07b2037b5da3a6 ]
+[ Upstream commit 74b0fe80409733055971bbfaf33c80a33fddeeb3 ]
 
-The btf__resolve_size() function returns negative error codes so
-"elem_size" must be signed for the error handling to work.
+In CXL 2.0, 8.2.5.1 CXL Capability Header Register: this register
+is given as 32 bits.
 
-Fixes: 920d16af9b42 ("libbpf: BTF dumper support for typed data")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/bpf/20220208071552.GB10495@kili
+8.2.3 which covers the CXL 2.0 Component registers, including the
+CXL Capability Header Register states that access restrictions
+specified in Section 8.2.2 apply.
+
+8.2.2 includes:
+* A 32 bit register shall be accessed as a 4 Byte quantity.
+...
+If these rules are not followed, the behavior is undefined.
+
+Discovered during review of CXL QEMU emulation. Alex Bennée pointed
+out there was a comment saying that 4 byte registers must be read
+with a 4 byte read, but 8 byte reads were being emulated.
+
+https://lore.kernel.org/qemu-devel/87bkzyd3c7.fsf@linaro.org/
+
+Fixing that, led to this code failing. Whilst a given hardware
+implementation 'might' work with an 8 byte read, it should not be relied
+upon. The QEMU emulation v5 will return 0 and log the wrong access width.
+
+The code moved, so one fixes tag for where this will directly apply and
+also a reference to the earlier introduction of the code for backports.
+
+Fixes: 0f06157e0135 ("cxl/core: Move register mapping infrastructure")
+Fixes: 08422378c4ad ("cxl/pci: Add HDM decoder capabilities")
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Alex Bennée <alex.bennee@linaro.org>
+Reviewed-by: Ben Widawsky <ben.widawsky@intel.com>
+Link: https://lore.kernel.org/r/20220201153437.2873-1-Jonathan.Cameron@huawei.com
+Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/btf_dump.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/cxl/core/regs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
-index 5cae71600631..700dfd362c4a 100644
---- a/tools/lib/bpf/btf_dump.c
-+++ b/tools/lib/bpf/btf_dump.c
-@@ -1839,14 +1839,15 @@ static int btf_dump_array_data(struct btf_dump *d,
+diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
+index b8aa583a7642..2e7027a3fef3 100644
+--- a/drivers/cxl/core/regs.c
++++ b/drivers/cxl/core/regs.c
+@@ -35,7 +35,7 @@ void cxl_probe_component_regs(struct device *dev, void __iomem *base,
+ 			      struct cxl_component_reg_map *map)
  {
- 	const struct btf_array *array = btf_array(t);
- 	const struct btf_type *elem_type;
--	__u32 i, elem_size = 0, elem_type_id;
-+	__u32 i, elem_type_id;
-+	__s64 elem_size;
- 	bool is_array_member;
+ 	int cap, cap_count;
+-	u64 cap_array;
++	u32 cap_array;
  
- 	elem_type_id = array->type;
- 	elem_type = skip_mods_and_typedefs(d->btf, elem_type_id, NULL);
- 	elem_size = btf__resolve_size(d->btf, elem_type_id);
- 	if (elem_size <= 0) {
--		pr_warn("unexpected elem size %d for array type [%u]\n", elem_size, id);
-+		pr_warn("unexpected elem size %lld for array type [%u]\n", elem_size, id);
- 		return -EINVAL;
- 	}
+ 	*map = (struct cxl_component_reg_map) { 0 };
  
+@@ -45,7 +45,7 @@ void cxl_probe_component_regs(struct device *dev, void __iomem *base,
+ 	 */
+ 	base += CXL_CM_OFFSET;
+ 
+-	cap_array = readq(base + CXL_CM_CAP_HDR_OFFSET);
++	cap_array = readl(base + CXL_CM_CAP_HDR_OFFSET);
+ 
+ 	if (FIELD_GET(CXL_CM_CAP_HDR_ID_MASK, cap_array) != CM_CAP_HDR_CAP_ID) {
+ 		dev_err(dev,
 -- 
 2.34.1
 

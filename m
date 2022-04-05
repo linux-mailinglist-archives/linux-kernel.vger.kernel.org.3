@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3AE84F41A3
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B65A94F3ED1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359103AbiDEMwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
+        id S1376735AbiDEMwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244623AbiDEJKG (ORCPT
+        with ESMTP id S244603AbiDEJKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:10:06 -0400
+        Tue, 5 Apr 2022 05:10:05 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE54C2A733;
-        Tue,  5 Apr 2022 01:59:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E9D2AC4E;
+        Tue,  5 Apr 2022 01:59:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 78D6AB81C6D;
-        Tue,  5 Apr 2022 08:59:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9918C385A3;
-        Tue,  5 Apr 2022 08:59:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65652B81BBF;
+        Tue,  5 Apr 2022 08:59:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B26B3C385A0;
+        Tue,  5 Apr 2022 08:59:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149185;
-        bh=33NZsSJJ8AnEe2K5FZo3oYEbB5J35KI4bIowTRDBqLk=;
+        s=korg; t=1649149188;
+        bh=WsW6LYCcpbPQgKzCuxo3ZJJAg7nrkIEDruFN5ptLGag=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JreEPhACiWsa5wZJddk5PeFejCGxrkWK9Mkyj8BSaRVgFHhaFOkzX+3a9IGzGRZSJ
-         U2ix47cZwdATVbN6SsUZoeJdt7aJZgxawO1N+ybyHgyBwY7tOYAvUHyJhw2N3tk07j
-         8ZRPwM0tRnZfqMigIBnem8aRcskTckEHAZN270H4=
+        b=J8ADRWG/Z4AxqrDBKuZ43p/Y4GPm+0qcKg16IPM0OD4GrsRPPOzJ2ELVUNMDMDkYZ
+         ps7lBLj57zoCyZ+C/mNMl0p9lPBreA4HfNafUoh2vosq699HN02dyj1RzKWjb8imza
+         r7ncXYQpLcBdlnAnbKuYzyIhgxCp7zdP2QYW4EHM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lucas Tanure <tanure@linux.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0624/1017] i2c: meson: Fix wrong speed use from probe
-Date:   Tue,  5 Apr 2022 09:25:37 +0200
-Message-Id: <20220405070412.804665775@linuxfoundation.org>
+        stable@vger.kernel.org, Phil Sutter <phil@nwl.cc>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0625/1017] netfilter: conntrack: Add and use nf_ct_set_auto_assign_helper_warned()
+Date:   Tue,  5 Apr 2022 09:25:38 +0200
+Message-Id: <20220405070412.833959655@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,57 +55,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas Tanure <tanure@linux.com>
+From: Phil Sutter <phil@nwl.cc>
 
-[ Upstream commit cb13aa16f34f794a9cee2626862af8a95f0f0ee9 ]
+[ Upstream commit 31d0bb9763efad30377505f3467f958d1ebe1e3d ]
 
-Having meson_i2c_set_clk_div after i2c_add_adapter
-causes issues for client drivers that try to use
-the bus before the requested speed is applied.
+The function sets the pernet boolean to avoid the spurious warning from
+nf_ct_lookup_helper() when assigning conntrack helpers via nftables.
 
-The bus can be used just after i2c_add_adapter, so
-move i2c_add_adapter to the final step as
-meson_i2c_set_clk_div needs to be called before
-the bus is used.
-
-Fixes: 09af1c2fa490 ("i2c: meson: set clock divider in probe instead of setting it for each transfer")
-Signed-off-by: Lucas Tanure <tanure@linux.com>
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Fixes: 1a64edf54f55 ("netfilter: nft_ct: add helper set support")
+Signed-off-by: Phil Sutter <phil@nwl.cc>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-meson.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ include/net/netfilter/nf_conntrack_helper.h | 1 +
+ net/netfilter/nf_conntrack_helper.c         | 6 ++++++
+ net/netfilter/nft_ct.c                      | 3 +++
+ 3 files changed, 10 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-meson.c b/drivers/i2c/busses/i2c-meson.c
-index ef73a42577cc..07eb819072c4 100644
---- a/drivers/i2c/busses/i2c-meson.c
-+++ b/drivers/i2c/busses/i2c-meson.c
-@@ -465,18 +465,18 @@ static int meson_i2c_probe(struct platform_device *pdev)
- 	 */
- 	meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_START, 0);
+diff --git a/include/net/netfilter/nf_conntrack_helper.h b/include/net/netfilter/nf_conntrack_helper.h
+index 37f0fbefb060..9939c366f720 100644
+--- a/include/net/netfilter/nf_conntrack_helper.h
++++ b/include/net/netfilter/nf_conntrack_helper.h
+@@ -177,4 +177,5 @@ void nf_nat_helper_unregister(struct nf_conntrack_nat_helper *nat);
+ int nf_nat_helper_try_module_get(const char *name, u16 l3num,
+ 				 u8 protonum);
+ void nf_nat_helper_put(struct nf_conntrack_helper *helper);
++void nf_ct_set_auto_assign_helper_warned(struct net *net);
+ #endif /*_NF_CONNTRACK_HELPER_H*/
+diff --git a/net/netfilter/nf_conntrack_helper.c b/net/netfilter/nf_conntrack_helper.c
+index ae4488a13c70..ceb38a7b37cb 100644
+--- a/net/netfilter/nf_conntrack_helper.c
++++ b/net/netfilter/nf_conntrack_helper.c
+@@ -556,6 +556,12 @@ static const struct nf_ct_ext_type helper_extend = {
+ 	.id	= NF_CT_EXT_HELPER,
+ };
  
--	ret = i2c_add_adapter(&i2c->adap);
--	if (ret < 0) {
--		clk_disable_unprepare(i2c->clk);
--		return ret;
--	}
--
- 	/* Disable filtering */
- 	meson_i2c_set_mask(i2c, REG_SLAVE_ADDR,
- 			   REG_SLV_SDA_FILTER | REG_SLV_SCL_FILTER, 0);
++void nf_ct_set_auto_assign_helper_warned(struct net *net)
++{
++	nf_ct_pernet(net)->auto_assign_helper_warned = true;
++}
++EXPORT_SYMBOL_GPL(nf_ct_set_auto_assign_helper_warned);
++
+ void nf_conntrack_helper_pernet_init(struct net *net)
+ {
+ 	struct nf_conntrack_net *cnet = nf_ct_pernet(net);
+diff --git a/net/netfilter/nft_ct.c b/net/netfilter/nft_ct.c
+index 99b1de14ff7e..54ecb9fbf2de 100644
+--- a/net/netfilter/nft_ct.c
++++ b/net/netfilter/nft_ct.c
+@@ -1040,6 +1040,9 @@ static int nft_ct_helper_obj_init(const struct nft_ctx *ctx,
+ 	if (err < 0)
+ 		goto err_put_helper;
  
- 	meson_i2c_set_clk_div(i2c, timings.bus_freq_hz);
- 
-+	ret = i2c_add_adapter(&i2c->adap);
-+	if (ret < 0) {
-+		clk_disable_unprepare(i2c->clk);
-+		return ret;
-+	}
++	/* Avoid the bogus warning, helper will be assigned after CT init */
++	nf_ct_set_auto_assign_helper_warned(ctx->net);
 +
  	return 0;
- }
  
+ err_put_helper:
 -- 
 2.34.1
 

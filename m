@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E91A54F2B72
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB5B4F2A8E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244559AbiDEJKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:10:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
+        id S239525AbiDEJKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239530AbiDEIUM (ORCPT
+        with ESMTP id S239533AbiDEIUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0A9F25;
-        Tue,  5 Apr 2022 01:15:22 -0700 (PDT)
+        Tue, 5 Apr 2022 04:20:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22615F5C;
+        Tue,  5 Apr 2022 01:15:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6914860B0E;
-        Tue,  5 Apr 2022 08:15:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 727DFC385A0;
-        Tue,  5 Apr 2022 08:15:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C8302B81B92;
+        Tue,  5 Apr 2022 08:15:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F9AAC385A0;
+        Tue,  5 Apr 2022 08:15:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146521;
-        bh=fb9efia5mVrZlJD4idK/NLmTQmEyTQOi7uyPx6MOOJs=;
+        s=korg; t=1649146528;
+        bh=3A6/wr4Ruqir6XPiFN7OjrQqY55f8efY1tUO+dql6NQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j8n7U2Iq8sjRbt1cIG9yj58Ka+i3nKoy38FN8gv46tgX+YzTyx0B3uMCfjKyPnYi7
-         eq+ZA2PMOYRDfnCXlVfGFCKmvyqCUinfS/AAWZ+lq8iE7Qkh7SulWpBWZ0ukVhdutt
-         OWp5ROO1LF9NzwGZVBl08ymTofoPVJtMhSOMRmEY=
+        b=hnEqj6QZe5APNOBXduUbK96nGLndoV3q5Mo5NYdBhZ/hhDQdTppkXU6vtkN7KCiT6
+         FmYsBzMnXsL3n7SU+gFOdu+wlWoZ+C5bEvJWxMjodtl7ogjw1mBLppk3N/G9kbFDRF
+         OX+mN4naAWVLFWnBYy6MwB7sUe1FNLxHAw6FTYsg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
         Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0757/1126] clk: hisilicon: Terminate clk_div_table with sentinel element
-Date:   Tue,  5 Apr 2022 09:25:04 +0200
-Message-Id: <20220405070429.804312004@linuxfoundation.org>
+Subject: [PATCH 5.17 0758/1126] clk: clps711x: Terminate clk_div_table with sentinel element
+Date:   Tue,  5 Apr 2022 09:25:05 +0200
+Message-Id: <20220405070429.832848741@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -58,35 +58,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
 
-[ Upstream commit 113b261bdf2b4fd34e7769a147a7acd0a4d9137f ]
+[ Upstream commit 8bed4ed5aa3431085d9d27afc35d684856460eda ]
 
 In order that the end of a clk_div_table can be detected, it must be
 terminated with a sentinel element (.div = 0).
 
-Fixes: 6c81966107dc0 ("clk: hisilicon: Add clock driver for hi3559A SoC")
+Fixes: 631c53478973d ("clk: Add CLPS711X clk driver")
 Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-Link: https://lore.kernel.org/r/20220218000922.134857-4-j.neuschaefer@gmx.net
+Link: https://lore.kernel.org/r/20220218000922.134857-5-j.neuschaefer@gmx.net
 Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/hisilicon/clk-hi3559a.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/clk/clk-clps711x.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/clk/hisilicon/clk-hi3559a.c b/drivers/clk/hisilicon/clk-hi3559a.c
-index 56012a3d0219..9ea1a80acbe8 100644
---- a/drivers/clk/hisilicon/clk-hi3559a.c
-+++ b/drivers/clk/hisilicon/clk-hi3559a.c
-@@ -611,8 +611,8 @@ static struct hisi_mux_clock hi3559av100_shub_mux_clks[] = {
+diff --git a/drivers/clk/clk-clps711x.c b/drivers/clk/clk-clps711x.c
+index a2c6486ef170..f8417ee2961a 100644
+--- a/drivers/clk/clk-clps711x.c
++++ b/drivers/clk/clk-clps711x.c
+@@ -28,11 +28,13 @@ static const struct clk_div_table spi_div_table[] = {
+ 	{ .val = 1, .div = 8, },
+ 	{ .val = 2, .div = 2, },
+ 	{ .val = 3, .div = 1, },
++	{ /* sentinel */ }
+ };
  
+ static const struct clk_div_table timer_div_table[] = {
+ 	{ .val = 0, .div = 256, },
+ 	{ .val = 1, .div = 1, },
++	{ /* sentinel */ }
+ };
  
- /* shub div clk */
--static struct clk_div_table shub_spi_clk_table[] = {{0, 8}, {1, 4}, {2, 2}};
--static struct clk_div_table shub_uart_div_clk_table[] = {{1, 8}, {2, 4}};
-+static struct clk_div_table shub_spi_clk_table[] = {{0, 8}, {1, 4}, {2, 2}, {/*sentinel*/}};
-+static struct clk_div_table shub_uart_div_clk_table[] = {{1, 8}, {2, 4}, {/*sentinel*/}};
- 
- static struct hisi_divider_clock hi3559av100_shub_div_clks[] = {
- 	{ HI3559AV100_SHUB_SPI_SOURCE_CLK, "clk_spi_clk", "shub_clk", 0, 0x20, 24, 2,
+ struct clps711x_clk {
 -- 
 2.34.1
 

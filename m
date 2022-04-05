@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 855C94F3410
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE344F34DA
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354651AbiDEKO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:14:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
+        id S1345763AbiDEKmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241204AbiDEIcy (ORCPT
+        with ESMTP id S241202AbiDEIcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:32:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2D217A81;
-        Tue,  5 Apr 2022 01:29:23 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D1A1DA;
+        Tue,  5 Apr 2022 01:29:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A1CC609D0;
-        Tue,  5 Apr 2022 08:29:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C175C385A2;
-        Tue,  5 Apr 2022 08:29:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DBF5D6062B;
+        Tue,  5 Apr 2022 08:29:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E884DC385A2;
+        Tue,  5 Apr 2022 08:29:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147362;
-        bh=Fm93SfOtVMca980+6uyVenif6pThe6aO6Z2kp7al95w=;
+        s=korg; t=1649147365;
+        bh=58RmXMaSK5PuvhFzkytvjVsSYIvGzU7PtUDOIzpbiJs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fyZedaN3ujqrRYFTVzLInBcrZ1dlscSbXIvZw6wUNR+fsjpjGYDk37CShByF4QZG7
-         bW/c2YzT1SqvMYmCyVPxuFut+H/m4Pk5iAmgjQtF6p5G746/nBYL+pyO1VkzEyOcRO
-         Z12jDzlTFNcC4h+fdIJhxuPq2e2inR4zHpUx9/20=
+        b=iBZZxk4AZo1XRshkaBGaIFJSv7bbn2mBq9Ua9noB+P7+aA9L/A/iuhQLsJhmZS+l3
+         MCbCk86yGNH4BHLqVSTsPNYs1ms5wZWEFfsNUPHHD+/kBz2jCCc/cFSB9dydkX3kwn
+         osC52s5D4NSamOI7qqNCcXQ54/8+UHgvYWqdWQcg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 5.17 1098/1126] dt-bindings: pinctrl: pinctrl-microchip-sgpio: Fix example
-Date:   Tue,  5 Apr 2022 09:30:45 +0200
-Message-Id: <20220405070439.670306654@linuxfoundation.org>
+        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: [PATCH 5.17 1099/1126] ubi: fastmap: Return error code if memory allocation fails in add_aeb()
+Date:   Tue,  5 Apr 2022 09:30:46 +0200
+Message-Id: <20220405070439.698946781@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,33 +54,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Horatiu Vultur <horatiu.vultur@microchip.com>
+From: Zhihao Cheng <chengzhihao1@huawei.com>
 
-commit a6ff90f3fbd4d902aad8777f0329cef3a2768bde upstream.
+commit c3c07fc25f37c157fde041b3a0c3dfcb1590cbce upstream.
 
-The blamed commit adds support for irq, but the reqisters for irq are
-outside of the memory size. They are at address 0x108. Therefore update
-the memory size to cover all the registers used by the device.
+Abort fastmap scanning and return error code if memory allocation fails
+in add_aeb(). Otherwise ubi will get wrong peb statistics information
+after scanning.
 
-Fixes: 01a9350bdd49fb ("dt-bindings: pinctrl: pinctrl-microchip-sgpio: Add irq support")
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-Link: https://lore.kernel.org/r/20220204153535.465827-2-horatiu.vultur@microchip.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Fixes: dbb7d2a88d2a7b ("UBI: Add fastmap core")
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/devicetree/bindings/pinctrl/microchip,sparx5-sgpio.yaml |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mtd/ubi/fastmap.c |   28 +++++++++++++++++++---------
+ 1 file changed, 19 insertions(+), 9 deletions(-)
 
---- a/Documentation/devicetree/bindings/pinctrl/microchip,sparx5-sgpio.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/microchip,sparx5-sgpio.yaml
-@@ -145,7 +145,7 @@ examples:
-       clocks = <&sys_clk>;
-       pinctrl-0 = <&sgpio2_pins>;
-       pinctrl-names = "default";
--      reg = <0x1101059c 0x100>;
-+      reg = <0x1101059c 0x118>;
-       microchip,sgpio-port-ranges = <0 0>, <16 18>, <28 31>;
-       bus-frequency = <25000000>;
-       sgpio_in2: gpio@0 {
+--- a/drivers/mtd/ubi/fastmap.c
++++ b/drivers/mtd/ubi/fastmap.c
+@@ -468,7 +468,9 @@ static int scan_pool(struct ubi_device *
+ 			if (err == UBI_IO_FF_BITFLIPS)
+ 				scrub = 1;
+ 
+-			add_aeb(ai, free, pnum, ec, scrub);
++			ret = add_aeb(ai, free, pnum, ec, scrub);
++			if (ret)
++				goto out;
+ 			continue;
+ 		} else if (err == 0 || err == UBI_IO_BITFLIPS) {
+ 			dbg_bld("Found non empty PEB:%i in pool", pnum);
+@@ -638,8 +640,10 @@ static int ubi_attach_fastmap(struct ubi
+ 		if (fm_pos >= fm_size)
+ 			goto fail_bad;
+ 
+-		add_aeb(ai, &ai->free, be32_to_cpu(fmec->pnum),
+-			be32_to_cpu(fmec->ec), 0);
++		ret = add_aeb(ai, &ai->free, be32_to_cpu(fmec->pnum),
++			      be32_to_cpu(fmec->ec), 0);
++		if (ret)
++			goto fail;
+ 	}
+ 
+ 	/* read EC values from used list */
+@@ -649,8 +653,10 @@ static int ubi_attach_fastmap(struct ubi
+ 		if (fm_pos >= fm_size)
+ 			goto fail_bad;
+ 
+-		add_aeb(ai, &used, be32_to_cpu(fmec->pnum),
+-			be32_to_cpu(fmec->ec), 0);
++		ret = add_aeb(ai, &used, be32_to_cpu(fmec->pnum),
++			      be32_to_cpu(fmec->ec), 0);
++		if (ret)
++			goto fail;
+ 	}
+ 
+ 	/* read EC values from scrub list */
+@@ -660,8 +666,10 @@ static int ubi_attach_fastmap(struct ubi
+ 		if (fm_pos >= fm_size)
+ 			goto fail_bad;
+ 
+-		add_aeb(ai, &used, be32_to_cpu(fmec->pnum),
+-			be32_to_cpu(fmec->ec), 1);
++		ret = add_aeb(ai, &used, be32_to_cpu(fmec->pnum),
++			      be32_to_cpu(fmec->ec), 1);
++		if (ret)
++			goto fail;
+ 	}
+ 
+ 	/* read EC values from erase list */
+@@ -671,8 +679,10 @@ static int ubi_attach_fastmap(struct ubi
+ 		if (fm_pos >= fm_size)
+ 			goto fail_bad;
+ 
+-		add_aeb(ai, &ai->erase, be32_to_cpu(fmec->pnum),
+-			be32_to_cpu(fmec->ec), 1);
++		ret = add_aeb(ai, &ai->erase, be32_to_cpu(fmec->pnum),
++			      be32_to_cpu(fmec->ec), 1);
++		if (ret)
++			goto fail;
+ 	}
+ 
+ 	ai->mean_ec = div_u64(ai->ec_sum, ai->ec_count);
 
 

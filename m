@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0904F3EAE
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C614F40F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236279AbiDEOIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
+        id S236965AbiDEOI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236241AbiDEJbN (ORCPT
+        with ESMTP id S236247AbiDEJbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:31:13 -0400
+        Tue, 5 Apr 2022 05:31:14 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83225229;
-        Tue,  5 Apr 2022 02:18:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280F546B30;
+        Tue,  5 Apr 2022 02:18:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B4D5B81C6C;
+        by ams.source.kernel.org (Postfix) with ESMTPS id C79FBB81BBF;
+        Tue,  5 Apr 2022 09:18:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 262E5C385A2;
         Tue,  5 Apr 2022 09:18:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 775AFC385A2;
-        Tue,  5 Apr 2022 09:18:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150325;
-        bh=x8Q4wDzx3/rZ0p91J6o/b9ne1uknoW2iH6CqC6u3gDk=;
+        s=korg; t=1649150328;
+        bh=Gz/VeTBBP33tvFp+j5VVKKb+rCBIgNQIXNdX6PH2aYA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XWxOd33H7WywrBKTmA29mrMkQKV4jlxSCO/TaM9THJVC5Vf0snTKBOjITIp97xdfd
-         VNp8+HayMwhlpNYc0SGSEfSkCHJCDEivEw09qzDmo06Om4ABZF+z1S3Zk2EZXXflw/
-         429v9Q/1X+prBqUZRBD1AXx5iUacoW7Db2gWvBjg=
+        b=TY3AJ14jZRWz1PZ63IiBAXLBUTWrmGSHKFgO6ncJh5D/n4It23/luXRHUVmowghbE
+         eyBA/3kg47W5FxkeOfr8QjNXYUfp6G96xeiU5o6VeTNkSi2G/fCvTWiZLM/+lapvGU
+         eg4WKkhe2dkC9JdaKeVlbA0lvkODLgPn2Wmerfyo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        "Minghao Chi (CGEL ZTE)" <chi.minghao@zte.com.cn>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 018/913] net:mcf8390: Use platform_get_irq() to get the interrupt
-Date:   Tue,  5 Apr 2022 09:18:00 +0200
-Message-Id: <20220405070340.360326897@linuxfoundation.org>
+        stable@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Michael Walle <michael@walle.cc>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH 5.15 019/913] Revert "gpio: Revert regression in sysfs-gpio (gpiolib.c)"
+Date:   Tue,  5 Apr 2022 09:18:01 +0200
+Message-Id: <20220405070340.390677274@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,58 +59,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
 
-[ Upstream commit 2a760554dcba450d3ad61b32375b50ed6d59a87c ]
+[ Upstream commit 56e337f2cf1326323844927a04e9dbce9a244835 ]
 
-It is not recommened to use platform_get_resource(pdev, IORESOURCE_IRQ)
-for requesting IRQ's resources any more, as they can be not ready yet in
-case of DT-booting.
+This reverts commit fc328a7d1fcce263db0b046917a66f3aa6e68719.
 
-platform_get_irq() instead is a recommended way for getting IRQ even if
-it was not retrieved earlier.
+This commit - while attempting to fix a regression - has caused a number
+of other problems. As the fallout from it is more significant than the
+initial problem itself, revert it for now before we find a correct
+solution.
 
-It also makes code simpler because we're getting "int" value right away
-and no conversion from resource to int is required.
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi (CGEL ZTE) <chi.minghao@zte.com.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Link: https://lore.kernel.org/all/20220314192522.GA3031157@roeck-us.net/
+Link: https://lore.kernel.org/stable/20220314155509.552218-1-michael@walle.cc/
+Link: https://lore.kernel.org/all/20211217153555.9413-1-marcelo.jimenez@gmail.com/
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Reported-and-bisected-by: Guenter Roeck <linux@roeck-us.net>
+Reported-by: Michael Walle <michael@walle.cc>
+Cc: Thorsten Leemhuis <linux@leemhuis.info>
+Cc: Marcelo Roberto Jimenez <marcelo.jimenez@gmail.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/8390/mcf8390.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/gpio/gpiolib.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/net/ethernet/8390/mcf8390.c b/drivers/net/ethernet/8390/mcf8390.c
-index 4ad8031ab669..065fdbe66c42 100644
---- a/drivers/net/ethernet/8390/mcf8390.c
-+++ b/drivers/net/ethernet/8390/mcf8390.c
-@@ -406,12 +406,12 @@ static int mcf8390_init(struct net_device *dev)
- static int mcf8390_probe(struct platform_device *pdev)
+diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+index 12b59cdffdf3..358f0ad9d0f8 100644
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -1660,6 +1660,11 @@ static inline void gpiochip_irqchip_free_valid_mask(struct gpio_chip *gc)
+  */
+ int gpiochip_generic_request(struct gpio_chip *gc, unsigned int offset)
  {
- 	struct net_device *dev;
--	struct resource *mem, *irq;
-+	struct resource *mem;
- 	resource_size_t msize;
--	int ret;
-+	int ret, irq;
- 
--	irq = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
--	if (irq == NULL) {
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0) {
- 		dev_err(&pdev->dev, "no IRQ specified?\n");
- 		return -ENXIO;
- 	}
-@@ -434,7 +434,7 @@ static int mcf8390_probe(struct platform_device *pdev)
- 	SET_NETDEV_DEV(dev, &pdev->dev);
- 	platform_set_drvdata(pdev, dev);
- 
--	dev->irq = irq->start;
-+	dev->irq = irq;
- 	dev->base_addr = mem->start;
- 
- 	ret = mcf8390_init(dev);
++#ifdef CONFIG_PINCTRL
++	if (list_empty(&gc->gpiodev->pin_ranges))
++		return 0;
++#endif
++
+ 	return pinctrl_gpio_request(gc->gpiodev->base + offset);
+ }
+ EXPORT_SYMBOL_GPL(gpiochip_generic_request);
+@@ -1671,6 +1676,11 @@ EXPORT_SYMBOL_GPL(gpiochip_generic_request);
+  */
+ void gpiochip_generic_free(struct gpio_chip *gc, unsigned int offset)
+ {
++#ifdef CONFIG_PINCTRL
++	if (list_empty(&gc->gpiodev->pin_ranges))
++		return;
++#endif
++
+ 	pinctrl_gpio_free(gc->gpiodev->base + offset);
+ }
+ EXPORT_SYMBOL_GPL(gpiochip_generic_free);
 -- 
 2.34.1
 

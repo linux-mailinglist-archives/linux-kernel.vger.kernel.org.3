@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4365A4F4B4F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E614F4EFA
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574094AbiDEWy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
+        id S1581639AbiDEXkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348077AbiDEJq5 (ORCPT
+        with ESMTP id S1348793AbiDEJsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:46:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087E6E29E6;
-        Tue,  5 Apr 2022 02:33:16 -0700 (PDT)
+        Tue, 5 Apr 2022 05:48:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B568D7C79B;
+        Tue,  5 Apr 2022 02:35:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 92801B81C6E;
-        Tue,  5 Apr 2022 09:33:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F261EC385A2;
-        Tue,  5 Apr 2022 09:33:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F3BB61675;
+        Tue,  5 Apr 2022 09:35:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 595AEC385A2;
+        Tue,  5 Apr 2022 09:35:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151193;
-        bh=kB6EZkUhqlvX/QoLYePPIfcRULzxTmKzml5wFCIQB7M=;
+        s=korg; t=1649151327;
+        bh=02dv/ZLkwro8smZ+5sfM5x9qxyapHlnEig4S46FWkbY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cyf878OIb5cDB65LMhuIlmUgu3u6VdeAD5h6iH+8Yrd4xCvowELPbI6GPsb5obnwS
-         ZcjupFfJFdDp1WP5MZXk0gEO2zDkV7r3ZRSija13GcvqLGP6qggUvBWsDftKvajQW4
-         sSEhaqyaYlkdpV06EuJxw2PjwIpHFvcg0Y+vclps=
+        b=MoXrMH7ccq4KU9SalWfFHiKjRUxDNCYI0L+EOwa0DsFpLePiHzU+UMp8LpIMXPW2z
+         mMWB4UzRgd4k0CzLcDIpw5DkBZ/6XVGJDXvFeJD8t2VEF56BPHsRtXpbBvoeJnjEr7
+         I4sKv7R7gN+U/dKWHn2Sl5c7v6jktP0Mv1yi+7kk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        stable@vger.kernel.org, Alexey Dobriyan <adobriyan@gmail.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 326/913] selftests/lkdtm: Add UBSAN config
-Date:   Tue,  5 Apr 2022 09:23:08 +0200
-Message-Id: <20220405070349.622423958@linuxfoundation.org>
+Subject: [PATCH 5.15 327/913] lib: uninline simple_strntoull() as well
+Date:   Tue,  5 Apr 2022 09:23:09 +0200
+Message-Id: <20220405070349.652301661@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -57,45 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+From: Alexey Dobriyan <adobriyan@gmail.com>
 
-[ Upstream commit 1900be289b598b2c553b3add13e491c0bb8a8550 ]
+[ Upstream commit 839b395eb9c13ae56ea5fc3ca9802734a72293f0 ]
 
-UBSAN_BOUNDS and UBSAN_TRAP depend on UBSAN config option.
-merge_config.sh script generates following warnings if parent config
-doesn't have UBSAN config already enabled and UBSAN_BOUNDS/UBSAN_TRAP
-config options don't get added to the parent config.
+Codegen become bloated again after simple_strntoull() introduction
 
-Value requested for CONFIG_UBSAN_BOUNDS not in final .config
-Requested value:  CONFIG_UBSAN_BOUNDS=y
-Actual value:
+	add/remove: 0/0 grow/shrink: 0/4 up/down: 0/-224 (-224)
+	Function                                     old     new   delta
+	simple_strtoul                                 5       2      -3
+	simple_strtol                                 23      20      -3
+	simple_strtoull                              119      15    -104
+	simple_strtoll                               155      41    -114
 
-Value requested for CONFIG_UBSAN_TRAP not in final .config
-Requested value:  CONFIG_UBSAN_TRAP=y
-Actual value:
-
-Fix this by including UBSAN config.
-
-Fixes: c75be56e35b2 ("lkdtm/bugs: Add ARRAY_BOUNDS to selftests")
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Acked-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Link: https://lkml.kernel.org/r/YVmlB9yY4lvbNKYt@localhost.localdomain
+Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+Cc: Richard Fitzgerald <rf@opensource.cirrus.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/lkdtm/config | 1 +
- 1 file changed, 1 insertion(+)
+ lib/vsprintf.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/lkdtm/config b/tools/testing/selftests/lkdtm/config
-index 38edea25631b..b642411ceb6c 100644
---- a/tools/testing/selftests/lkdtm/config
-+++ b/tools/testing/selftests/lkdtm/config
-@@ -6,5 +6,6 @@ CONFIG_HARDENED_USERCOPY=y
- # CONFIG_HARDENED_USERCOPY_FALLBACK is not set
- CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT=y
- CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
-+CONFIG_UBSAN=y
- CONFIG_UBSAN_BOUNDS=y
- CONFIG_UBSAN_TRAP=y
+diff --git a/lib/vsprintf.c b/lib/vsprintf.c
+index ec07f6312445..0621bbb20e0f 100644
+--- a/lib/vsprintf.c
++++ b/lib/vsprintf.c
+@@ -54,8 +54,7 @@
+ #include <linux/string_helpers.h>
+ #include "kstrtox.h"
+ 
+-static unsigned long long simple_strntoull(const char *startp, size_t max_chars,
+-					   char **endp, unsigned int base)
++static noinline unsigned long long simple_strntoull(const char *startp, size_t max_chars, char **endp, unsigned int base)
+ {
+ 	const char *cp;
+ 	unsigned long long result = 0ULL;
 -- 
 2.34.1
 

@@ -2,40 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1BF4F42B6
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F35F94F3E87
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1448243AbiDEUJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56644 "EHLO
+        id S1344427AbiDEUOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345283AbiDEKk6 (ORCPT
+        with ESMTP id S1349103AbiDEKuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:40:58 -0400
+        Tue, 5 Apr 2022 06:50:14 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DA4DE7;
-        Tue,  5 Apr 2022 03:26:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACA29D0DA;
+        Tue,  5 Apr 2022 03:27:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C340B81C98;
-        Tue,  5 Apr 2022 10:26:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E929EC385A0;
-        Tue,  5 Apr 2022 10:26:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 817B8B81C8A;
+        Tue,  5 Apr 2022 10:27:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2A2AC385A2;
+        Tue,  5 Apr 2022 10:27:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154385;
-        bh=ZGj5VBh1SRcWeMfkZp6KGVofnGbhrVjoB3rKBC78DsE=;
+        s=korg; t=1649154457;
+        bh=jJ0TtuEEywyViDv3IsnSOZkDwY9Ap0CtXdsjRq+E8iY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bfU79XyZ6qL99jGmhan0g5DE2crSrF2+Xe5lzyBRLqYRIEIiIMJqzIrihM8GfOhlz
-         l38G1VirhlsaB7netOch/h9LYSQj1/B9lqUmUlcUjXVb0SCin1rRt2NEU59m5DFPCF
-         Zus5z7Dit2911L/e+vzQzQRtUNXtGKjuGmFgPgjQ=
+        b=b/o7ZQ2OAqKazCWOe343GrkqNP6vtu6djcXVgLwmZbDha6p/UbIT4iIgY541PwozK
+         f+GuRh7zJTlQdIxSpD2bvhwWIDlNWnmjQYakGgJ481s7boErfbSxOHUEO+kCrYVVxW
+         c3xlCXCUI1ZJlVFiN9kyPXlzjsngVDiBcy3pNUeA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH 5.10 558/599] crypto: arm/aes-neonbs-cbc - Select generic cbc and aes
-Date:   Tue,  5 Apr 2022 09:34:12 +0200
-Message-Id: <20220405070315.447180925@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.10 586/599] ASoC: topology: Allow TLV control to be either read or write
+Date:   Tue,  5 Apr 2022 09:34:40 +0200
+Message-Id: <20220405070316.280008747@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -53,31 +58,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Herbert Xu <herbert@gondor.apana.org.au>
+From: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
 
-commit c8bd296cca3434b13b28b074eaeb78a23284de77 upstream.
+commit feb00b736af64875560f371fe7f58b0b7f239046 upstream.
 
-The algorithm __cbc-aes-neonbs requires a fallback so we need
-to select the config options for them or otherwise it will fail
-to register on boot-up.
+There is no reason to force readwrite access on TLV controls. It can be
+either read, write or both. This is further evidenced in code where it
+performs following checks:
+                if ((k->access & SNDRV_CTL_ELEM_ACCESS_TLV_READ) && !sbe->get)
+                        return -EINVAL;
+                if ((k->access & SNDRV_CTL_ELEM_ACCESS_TLV_WRITE) && !sbe->put)
+                        return -EINVAL;
 
-Fixes: 00b99ad2bac2 ("crypto: arm/aes-neonbs - Use generic cbc...")
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Fixes: 1a3232d2f61d ("ASoC: topology: Add support for TLV bytes controls")
+Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Link: https://lore.kernel.org/r/20220112170030.569712-3-amadeuszx.slawinski@linux.intel.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/crypto/Kconfig |    2 ++
- 1 file changed, 2 insertions(+)
+ sound/soc/soc-topology.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/arch/arm/crypto/Kconfig
-+++ b/arch/arm/crypto/Kconfig
-@@ -83,6 +83,8 @@ config CRYPTO_AES_ARM_BS
- 	depends on KERNEL_MODE_NEON
- 	select CRYPTO_SKCIPHER
- 	select CRYPTO_LIB_AES
-+	select CRYPTO_AES
-+	select CRYPTO_CBC
- 	select CRYPTO_SIMD
- 	help
- 	  Use a faster and more secure NEON based implementation of AES in CBC,
+--- a/sound/soc/soc-topology.c
++++ b/sound/soc/soc-topology.c
+@@ -578,7 +578,8 @@ static int soc_tplg_kcontrol_bind_io(str
+ 
+ 	if (le32_to_cpu(hdr->ops.info) == SND_SOC_TPLG_CTL_BYTES
+ 		&& k->iface & SNDRV_CTL_ELEM_IFACE_MIXER
+-		&& k->access & SNDRV_CTL_ELEM_ACCESS_TLV_READWRITE
++		&& (k->access & SNDRV_CTL_ELEM_ACCESS_TLV_READ
++		    || k->access & SNDRV_CTL_ELEM_ACCESS_TLV_WRITE)
+ 		&& k->access & SNDRV_CTL_ELEM_ACCESS_TLV_CALLBACK) {
+ 		struct soc_bytes_ext *sbe;
+ 		struct snd_soc_tplg_bytes_control *be;
 
 

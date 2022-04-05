@@ -2,138 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064404F4E9A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2834F4EFD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1835778AbiDFAdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
+        id S1581495AbiDEXj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457542AbiDEQIj (ORCPT
+        with ESMTP id S1457534AbiDEQGb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:08:39 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7472608;
-        Tue,  5 Apr 2022 09:06:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649174800; x=1680710800;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=SXP53dhhunwY79FP5ds9zXn0k2FcV+iBvoVhtso/RR8=;
-  b=NNdmkPyB5ykAqXN5BpdFsW+OigaJ/3NnmvP46mO+8waYsAD35IATHtLu
-   ozEsS5PqmHnEfzWbD6IRl8EuesfDuR7O2gLzF/ZJil2vVg4A2xfz4Jq81
-   QKkEX6DlO/nu3i9oWDbf9BBGnXfqBmLIoiZqgJYUud5cUCv4lubppx9zE
-   iD14BsZgKs8IitIxNe4SY9tMuVKjmQmHE5m9kgnjJsb5c5zY4M7YC6SOz
-   mnbO1oZR9FkQVP2Jgbz4IHaNm/YGT030h2Xyx3/8/4wEw8hooOUGLI/x7
-   szJq48L1ies08/ryjRqeY3mxl1tsxCcFWKf1bvDhLMLxQ01Z8MGhQTBXD
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="240723380"
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="240723380"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 09:03:53 -0700
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="657994658"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 09:03:49 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nbleJ-00DSQK-Aw;
-        Tue, 05 Apr 2022 19:03:19 +0300
-Date:   Tue, 5 Apr 2022 19:03:19 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Gilles Buloz <gilles.buloz@kontron.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: Re: [PATCH 1/2] tty: Add lookahead param to receive_buf
-Message-ID: <YkxoR+jA9tDJOqNU@smile.fi.intel.com>
-References: <20220405102437.4842-1-ilpo.jarvinen@linux.intel.com>
- <20220405102437.4842-2-ilpo.jarvinen@linux.intel.com>
+        Tue, 5 Apr 2022 12:06:31 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E76DDA;
+        Tue,  5 Apr 2022 09:04:32 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:35:2589:2a93:190d:b787])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id BDB9B30D;
+        Tue,  5 Apr 2022 16:04:31 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net BDB9B30D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1649174671; bh=TxBmXjw0W5sHQw6Es3eDilnc949OOAkzg4pcLoQ5pHQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=H4wh1pAW3CX+E4t5+ZvJ1Yzlz+YIDiiBS73DsABifoeqlVDs6pNd0teUfo+bFDHt3
+         wxs4VOMCk4RFH/z7SJCbwXlgXIc8uLCHsklfTIjFr+uvWDb7xONGlSP+PE5HPi2gMd
+         wNJaBTBsvvGnPnAeNTH7JGmXk2UuGIxGs1o8jnUhu+cQH9G5nTg37ZNbr92A5ByNED
+         4WLtnJYOOrXKUnDr8Y8NBH1o2yHtcBTjuZ4IrHCq4DNuzust44nzQJlw1kmFPkEyeA
+         XAdFVNf4xdgfL4HuWs8mk0tumHeL1kdZfTv8WfV4ANcLNb22Da+4hpS9ptiy9OrTk7
+         UYPVArPCpiZNQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/2] Documentation: doc-guide: Add missing page titles
+In-Reply-To: <20220329045235.11879-1-bagasdotme@gmail.com>
+References: <20220329045235.11879-1-bagasdotme@gmail.com>
+Date:   Tue, 05 Apr 2022 10:04:30 -0600
+Message-ID: <87sfqrectt.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220405102437.4842-2-ilpo.jarvinen@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 01:24:36PM +0300, Ilpo Järvinen wrote:
-> After lookahead for XON/XOFF characters is added by the next
-> patch, the receive side needs to ensure the flow-control
-> actions are not retaken later on when those same characters
-> get read by TTY.
-> 
-> Thus, pass lookahead count to receive_buf and skip
-> flow-control character actions if already taken for the
-> character in question. Lookahead count will become live after
-> the next patch.
+Bagas Sanjaya <bagasdotme@gmail.com> writes:
 
-...
+> The kernel documentation guidelines [1] lists that there should have page
+> title.
+>
+> Add missing page title for kernel-doc.rst and sphinx.rst, in accordance
+> to the guideline.
+>
+> Changes since v3 [2]:
+>   - Clarify that there is no output differences except formatting
+>     semantics in [1/2]
+>   - Drop Suggested-by trailer from Akira Yokosawa in [1/2] 
+>
+> [1]: https://docs.kernel.org/doc-guide/sphinx.html#specific-guidelines-for-the-kernel-documentation
+> [2]:
+> https://lore.kernel.org/linux-doc/20220328065030.24936-1-bagasdotme@gmail.com/
+>
+> Bagas Sanjaya (2):
+>   Documentation: kernel-doc: Promote two chapter headings to page title
+>   Documentation: sphinx: replace "Introduction" chapter heading with
+>     page title
+>
+>  Documentation/doc-guide/kernel-doc.rst | 2 ++
+>  Documentation/doc-guide/sphinx.rst     | 5 +++--
+>  2 files changed, 5 insertions(+), 2 deletions(-)
 
-> -static void n_tty_receive_char_special(struct tty_struct *tty, unsigned char c)
-> +static void n_tty_receive_char_special(struct tty_struct *tty, unsigned char c,
-> +				       bool lookahead_done)
->  {
->  	struct n_tty_data *ldata = tty->disc_data;
->  
->  	if (I_IXON(tty)) {
->  		if (c == START_CHAR(tty)) {
-> -			start_tty(tty);
-> -			process_echoes(tty);
-> +			if (!lookahead_done) {
-> +				start_tty(tty);
-> +				process_echoes(tty);
-> +			}
->  			return;
->  		}
->  		if (c == STOP_CHAR(tty)) {
-> -			stop_tty(tty);
-> +			if (!lookahead_done)
-> +				stop_tty(tty);
->  			return;
->  		}
+OK, I think this improves the situation overall, so I've applied these,
+thanks.
 
-Wouldn't be cleaner to inside out the conditionals?
-
->  	}
-
-	if (I_IXON(tty)) {
-		if (lookahead_done) {
-			// Can be joined, but I think this is better
-			if (c == START_CHAR(tty))
-				return;
-			if (c == STOP_CHAR(tty))
-				return;
-		} else {
-			if (c == START_CHAR(tty)) {
-				start_tty(tty);
-				process_echoes(tty);
-				return;
-			}
-			if (c == STOP_CHAR(tty)) {
-				stop_tty(tty);
-				return;
-			}
-		}
-	}
-
-In my opinion this will show exactly what's going on when we have
-lookahead_done and when not.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+jon

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBDE24F450D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B58A4F454D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346535AbiDEUOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
+        id S1351009AbiDENG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355400AbiDEKTm (ORCPT
+        with ESMTP id S1343990AbiDEJQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:19:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B5D52B02;
-        Tue,  5 Apr 2022 03:04:52 -0700 (PDT)
+        Tue, 5 Apr 2022 05:16:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB95D8F7D;
+        Tue,  5 Apr 2022 02:02:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27700B81B7A;
-        Tue,  5 Apr 2022 10:04:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60516C385A3;
-        Tue,  5 Apr 2022 10:04:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 828F3B81C19;
+        Tue,  5 Apr 2022 09:02:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0B68C385A0;
+        Tue,  5 Apr 2022 09:02:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153089;
-        bh=WkVJKsAZU6/G2MI9GVZ2hWhJPA+RrSP8pqdwsnsB1Zs=;
+        s=korg; t=1649149341;
+        bh=vW3aZppNUsxHLSbPNy/WFu/pdlhv+bbciT+wAcuOJ0I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VCYLGgzGH+tyynZoKaGx4HxuKZjriv9EVAIowOiwIGKMtWXZ/OcsXbwe0q3Vd/Ilp
-         +v14bK9F2RWyP4UZ/sanwM1xy8V9pXAkkMFMyoEWK/KEI0jRdVMmi284Nf4mxVA3Cl
-         uSCpfDnMZ4q3cGkE3uDu1xldSJfR2S/9Eh3iT8rs=
+        b=Fn8c0hM4sV1Bf38A/GxvceNaD6jVmvZEHPxNBEPL0nhNJGOgFZMxaf6AgpCoNYVD7
+         tWTrSXgOayS+lZX1Pk4cgpLke++1sN+5PGa21/p9IdVC1cpyoJNuw1+G3ywLbi1m7R
+         5vnMWkRixctOXYpYl7iGCQzTMEpltBW1ssZ/6RnI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH 5.10 098/599] video: fbdev: atari: Atari 2 bpp (STe) palette bugfix
-Date:   Tue,  5 Apr 2022 09:26:32 +0200
-Message-Id: <20220405070301.747958724@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0682/1017] remoteproc: qcom_q6v5_mss: Fix some leaks in q6v5_alloc_memory_region
+Date:   Tue,  5 Apr 2022 09:26:35 +0200
+Message-Id: <20220405070414.521899117@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,62 +55,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Schmitz <schmitzmic@gmail.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit c8be5edbd36ceed2ff3d6b8f8e40643c3f396ea3 upstream.
+[ Upstream commit 07a5dcc4bed9d7cae54adf5aa10ff9f037a3204b ]
 
-The code to set the shifter STe palette registers has a long
-standing operator precedence bug, manifesting as colors set
-on a 2 bits per pixel frame buffer coming up with a distinctive
-blue tint.
+The device_node pointer is returned by of_parse_phandle() or
+of_get_child_by_name() with refcount incremented.
+We should use of_node_put() on it when done.
 
-Add parentheses around the calculation of the per-color palette
-data before shifting those into their respective bit field position.
+This function only call of_node_put(node) when of_address_to_resource
+succeeds, missing error cases.
 
-This bug goes back a long way (2.4 days at the very least) so there
-won't be a Fixes: tag.
-
-Tested on ARAnyM as well on Falcon030 hardware.
-
-Cc: stable@vger.kernel.org
-Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Link: https://lore.kernel.org/all/CAMuHMdU3ievhXxKR_xi_v3aumnYW7UNUO6qMdhgfyWTyVSsCkQ@mail.gmail.com
-Tested-by: Michael Schmitz <schmitzmic@gmail.com>
-Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Michael Schmitz <schmitzmic@gmail.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 278d744c46fd ("remoteproc: qcom: Fix potential device node leaks")
+Fixes: 051fb70fd4ea ("remoteproc: qcom: Driver for the self-authenticating Hexagon v5")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220308064522.13804-1-linmq006@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/atafb.c |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/remoteproc/qcom_q6v5_mss.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
---- a/drivers/video/fbdev/atafb.c
-+++ b/drivers/video/fbdev/atafb.c
-@@ -1691,9 +1691,9 @@ static int falcon_setcolreg(unsigned int
- 			   ((blue & 0xfc00) >> 8));
- 	if (regno < 16) {
- 		shifter_tt.color_reg[regno] =
--			(((red & 0xe000) >> 13) | ((red & 0x1000) >> 12) << 8) |
--			(((green & 0xe000) >> 13) | ((green & 0x1000) >> 12) << 4) |
--			((blue & 0xe000) >> 13) | ((blue & 0x1000) >> 12);
-+			((((red & 0xe000) >> 13)   | ((red & 0x1000) >> 12)) << 8)   |
-+			((((green & 0xe000) >> 13) | ((green & 0x1000) >> 12)) << 4) |
-+			   ((blue & 0xe000) >> 13) | ((blue & 0x1000) >> 12);
- 		((u32 *)info->pseudo_palette)[regno] = ((red & 0xf800) |
- 						       ((green & 0xfc00) >> 5) |
- 						       ((blue & 0xf800) >> 11));
-@@ -1979,9 +1979,9 @@ static int stste_setcolreg(unsigned int
- 	green >>= 12;
- 	if (ATARIHW_PRESENT(EXTD_SHIFTER))
- 		shifter_tt.color_reg[regno] =
--			(((red & 0xe) >> 1) | ((red & 1) << 3) << 8) |
--			(((green & 0xe) >> 1) | ((green & 1) << 3) << 4) |
--			((blue & 0xe) >> 1) | ((blue & 1) << 3);
-+			((((red & 0xe)   >> 1) | ((red & 1)   << 3)) << 8) |
-+			((((green & 0xe) >> 1) | ((green & 1) << 3)) << 4) |
-+			  ((blue & 0xe)  >> 1) | ((blue & 1)  << 3);
- 	else
- 		shifter_tt.color_reg[regno] =
- 			((red & 0xe) << 7) |
+diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
+index 43ea8455546c..b9ab91540b00 100644
+--- a/drivers/remoteproc/qcom_q6v5_mss.c
++++ b/drivers/remoteproc/qcom_q6v5_mss.c
+@@ -1806,18 +1806,20 @@ static int q6v5_alloc_memory_region(struct q6v5 *qproc)
+ 	 * reserved memory regions from device's memory-region property.
+ 	 */
+ 	child = of_get_child_by_name(qproc->dev->of_node, "mba");
+-	if (!child)
++	if (!child) {
+ 		node = of_parse_phandle(qproc->dev->of_node,
+ 					"memory-region", 0);
+-	else
++	} else {
+ 		node = of_parse_phandle(child, "memory-region", 0);
++		of_node_put(child);
++	}
+ 
+ 	ret = of_address_to_resource(node, 0, &r);
++	of_node_put(node);
+ 	if (ret) {
+ 		dev_err(qproc->dev, "unable to resolve mba region\n");
+ 		return ret;
+ 	}
+-	of_node_put(node);
+ 
+ 	qproc->mba_phys = r.start;
+ 	qproc->mba_size = resource_size(&r);
+@@ -1828,14 +1830,15 @@ static int q6v5_alloc_memory_region(struct q6v5 *qproc)
+ 	} else {
+ 		child = of_get_child_by_name(qproc->dev->of_node, "mpss");
+ 		node = of_parse_phandle(child, "memory-region", 0);
++		of_node_put(child);
+ 	}
+ 
+ 	ret = of_address_to_resource(node, 0, &r);
++	of_node_put(node);
+ 	if (ret) {
+ 		dev_err(qproc->dev, "unable to resolve mpss region\n");
+ 		return ret;
+ 	}
+-	of_node_put(node);
+ 
+ 	qproc->mpss_phys = qproc->mpss_reloc = r.start;
+ 	qproc->mpss_size = resource_size(&r);
+-- 
+2.34.1
+
 
 

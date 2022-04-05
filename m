@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 851144F23E8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61A714F23E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbiDEHHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
+        id S230215AbiDEHHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiDEHGO (ORCPT
+        with ESMTP id S229761AbiDEHH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:06:14 -0400
+        Tue, 5 Apr 2022 03:07:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A186BDF;
-        Tue,  5 Apr 2022 00:04:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D606AB76;
+        Tue,  5 Apr 2022 00:05:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9A3B6159D;
-        Tue,  5 Apr 2022 07:04:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7326C340F3;
-        Tue,  5 Apr 2022 07:04:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57BF2615DE;
+        Tue,  5 Apr 2022 07:05:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C088C340F3;
+        Tue,  5 Apr 2022 07:05:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649142256;
-        bh=xPCoouKuVD/FCQuSL+zTNSHrzURRvmCXBeKfzIAELoo=;
+        s=k20201202; t=1649142328;
+        bh=iDZXYN3nW83IxRmh0QuxTnMGV7/i5Ew/58Ad7WkP1bI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZZg1WVb+tKu2Mxr/E1Nl7JMdj/PkH1IQRkcZpVMkVMB/CnATO78F9Oajmakc9ErBM
-         BjdEl6xZZjNQFJ9w2GxGVtiYDqVXpuXWk9nwzhXMa193AcQ3qFUkpVDnC45xCpMm5/
-         KrWI9zV6iAVQ6dHr1YCLbqc2EwQuvU5s7MSxJjWwm3/CSF074WwEh5PNYM1gafJyoQ
-         AfjTAuZOI+Zdo18uOp3rn//3g1iSd3DiG3wTBThK+WRQR+fT8YAkyxa+SeBPUSDATH
-         DwLpUjLYtFdDBqWefIjLBo2ukKvM3i5Vw9Llogry27D6zUhU2zQou5MIF+3NOuiKBO
-         yk3VKw3LH0a7A==
-Date:   Tue, 5 Apr 2022 10:05:27 +0300
+        b=Tl4MIlTatuPxvY7n/S0s5DgJQb8ueHoVbiHJY83y5zEEW2jY7NYmCOT29bMTzxJNf
+         omJpd/zeSpkOIc1vWYcO9auMaGBZQhYDrASrSq5oaw15GerPbrT046Gwtk7qBe3pU2
+         hPf1idOeIt03vTF3x3gr3VcyrAdSHbRc1EDSB3gESDQrJlxPPGXO7aniMcGRurNAEd
+         mMRC5zVBfhCg9qoIlS655bmIbc7CsjC/l5tZCKiB+ZsmYeClqyJ5CI7rrAsBFkMCyW
+         /nUpSNsQ1BE+DWoqdMHF9oKWiXXVmRR+vxnT8tIUtMMnPb3diSXl/N70dzxbJlu9LO
+         4BK2bkfN0lYpA==
+Date:   Tue, 5 Apr 2022 10:06:39 +0300
 From:   Jarkko Sakkinen <jarkko@kernel.org>
 To:     Reinette Chatre <reinette.chatre@intel.com>
 Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
@@ -41,15 +41,14 @@ Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
         cathy.zhang@intel.com, cedric.xing@intel.com,
         haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3 16/30] x86/sgx: Tighten accessible memory range after
- enclave initialization
-Message-ID: <YkvqN2eSJJdAuiWE@kernel.org>
+Subject: Re: [PATCH V3 17/30] x86/sgx: Support modifying SGX page type
+Message-ID: <Ykvqf3Ws6jlN5g+p@kernel.org>
 References: <cover.1648847675.git.reinette.chatre@intel.com>
- <9f9e9582029dee93b5b37f2fb4dc062be9fe1fde.1648847675.git.reinette.chatre@intel.com>
+ <bac6e77fe04100d6bfebd4e13aa9b916f82bfea6.1648847675.git.reinette.chatre@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9f9e9582029dee93b5b37f2fb4dc062be9fe1fde.1648847675.git.reinette.chatre@intel.com>
+In-Reply-To: <bac6e77fe04100d6bfebd4e13aa9b916f82bfea6.1648847675.git.reinette.chatre@intel.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,64 +59,364 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 09:49:24AM -0700, Reinette Chatre wrote:
-> Before an enclave is initialized the enclave's memory range is unknown.
-> The enclave's memory range is learned at the time it is created via the
-> SGX_IOC_ENCLAVE_CREATE ioctl() where the provided memory range is
-> obtained from an earlier mmap() of /dev/sgx_enclave. After an enclave
-> is initialized its memory can be mapped into user space (mmap()) from
-> where it can be entered at its defined entry points.
+On Mon, Apr 04, 2022 at 09:49:25AM -0700, Reinette Chatre wrote:
+> Every enclave contains one or more Thread Control Structures (TCS). The
+> TCS contains meta-data used by the hardware to save and restore thread
+> specific information when entering/exiting the enclave. With SGX1 an
+> enclave needs to be created with enough TCSs to support the largest
+> number of threads expecting to use the enclave and enough enclave pages
+> to meet all its anticipated memory demands. In SGX1 all pages remain in
+> the enclave until the enclave is unloaded.
 > 
-> With the enclave's memory range known after it is initialized there is
-> no reason why it should be possible to map memory outside this range.
+> SGX2 introduces a new function, ENCLS[EMODT], that is used to change
+> the type of an enclave page from a regular (SGX_PAGE_TYPE_REG) enclave
+> page to a TCS (SGX_PAGE_TYPE_TCS) page or change the type from a
+> regular (SGX_PAGE_TYPE_REG) or TCS (SGX_PAGE_TYPE_TCS)
+> page to a trimmed (SGX_PAGE_TYPE_TRIM) page (setting it up for later
+> removal).
 > 
-> Lock down access to the initialized enclave's memory range by denying
-> any attempt to map memory outside its memory range.
+> With the existing support of dynamically adding regular enclave pages
+> to an initialized enclave and changing the page type to TCS it is
+> possible to dynamically increase the number of threads supported by an
+> enclave.
 > 
-> Locking down the memory range also makes adding pages to an initialized
-> enclave more efficient. Pages are added to an initialized enclave by
-> accessing memory that belongs to the enclave's memory range but not yet
-> backed by an enclave page. If it is possible for user space to map
-> memory that does not form part of the enclave then an access to this
-> memory would eventually fail. Failures range from a prompt general
-> protection fault if the access was an ENCLU[EACCEPT] from within the
-> enclave, or a page fault via the vDSO if it was another access from
-> within the enclave, or a SIGBUS (also resulting from a page fault) if
-> the access was from outside the enclave.
+> Changing the enclave page type to SGX_PAGE_TYPE_TRIM is the first step
+> of dynamically removing pages from an initialized enclave. The complete
+> page removal flow is:
+> 1) Change the type of the pages to be removed to SGX_PAGE_TYPE_TRIM
+>    using the SGX_IOC_ENCLAVE_MODIFY_TYPE ioctl() introduced here.
+> 2) Approve the page removal by running ENCLU[EACCEPT] from within
+>    the enclave.
+> 3) Initiate actual page removal using the ioctl() introduced in the
+>    following patch.
 > 
-> Disallowing invalid memory to be mapped in the first place avoids
-> preventable failures.
+> Add ioctl() SGX_IOC_ENCLAVE_MODIFY_TYPE to support changing SGX
+> enclave page types within an initialized enclave. With
+> SGX_IOC_ENCLAVE_MODIFY_TYPE the user specifies a page range and the
+> enclave page type to be applied to all pages in the provided range.
+> The ioctl() itself can return an error code based on failures
+> encountered by the kernel. It is also possible for SGX specific
+> failures to be encountered.  Add a result output parameter to
+> communicate the SGX return code. It is possible for the enclave page
+> type change request to fail on any page within the provided range.
+> Support partial success by returning the number of pages that were
+> successfully changed.
+> 
+> After the page type is changed the page continues to be accessible
+> from the kernel perspective with page table entries and internal
+> state. The page may be moved to swap. Any access until ENCLU[EACCEPT]
+> will encounter a page fault with SGX flag set in error code.
 > 
 > Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 > ---
-> No changes since V2
+> Changes since V2:
+> - Adjust ioctl number after removal of SGX_IOC_ENCLAVE_RELAX_PERMISSIONS.
+> - Remove attempt at runtime tracking of EPCM permissions
+>   (sgx_encl_page->vm_run_prot_bits). (Jarkko)
+> - Change names to follow guidance of using detailed names (Jarkko):
+>   struct sgx_enclave_modt -> struct sgx_enclave_modify_type
+>   sgx_enclave_modt() -> sgx_enclave_modify_type()
+>   sgx_ioc_enclave_modt() -> sgx_ioc_enclave_modify_type()
 > 
 > Changes since V1:
-> - Add comment (Jarkko).
+> - Remove the "Earlier changes ..." paragraph (Jarkko).
+> - Change "new ioctl" text to "Add SGX_IOC_ENCLAVE_MOD_TYPE" (Jarkko).
+> - Discussion about EPCM interaction and the EPCM MODIFIED bit is moved
+>   to new patch that introduces the ENCLS[EMODT] wrapper while keeping
+>   the higher level discussion on page accessibility in
+>   this commit log (Jarkko).
+> - Rename SGX_IOC_PAGE_MODT ioctl() to SGX_IOC_ENCLAVE_MODIFY_TYPE
+>   (Jarkko).
+> - Rename struct sgx_page_modt to struct sgx_enclave_modt in support
+>   of ioctl() rename.
+> - Rename sgx_page_modt() to sgx_enclave_modt() and sgx_ioc_page_modt()
+>   to sgx_ioc_enclave_modt() in support of ioctl() rename.
+> - Provide secinfo as parameter to ioctl() instead of just
+>   page type (Jarkko).
+> - Update comments to refer to new ioctl() names.
+> - Use new SGX2 checking helper().
+> - Use ETRACK flow utility.
+> - Move kernel-doc to function that provides documentation for
+>   Documentation/x86/sgx.rst.
+> - Remove redundant comment.
+> - Use offset/length validation utility.
+> - Make explicit which members of struct sgx_enclave_modt are for
+>   output (Dave).
 > 
->  arch/x86/kernel/cpu/sgx/encl.c | 5 +++++
->  1 file changed, 5 insertions(+)
+>  arch/x86/include/uapi/asm/sgx.h |  20 +++
+>  arch/x86/kernel/cpu/sgx/ioctl.c | 209 ++++++++++++++++++++++++++++++++
+>  2 files changed, 229 insertions(+)
 > 
-> diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-> index fa4f947f8496..7909570736a0 100644
-> --- a/arch/x86/kernel/cpu/sgx/encl.c
-> +++ b/arch/x86/kernel/cpu/sgx/encl.c
-> @@ -409,6 +409,11 @@ int sgx_encl_may_map(struct sgx_encl *encl, unsigned long start,
+> diff --git a/arch/x86/include/uapi/asm/sgx.h b/arch/x86/include/uapi/asm/sgx.h
+> index a0a24e94fb27..529f4ab28410 100644
+> --- a/arch/x86/include/uapi/asm/sgx.h
+> +++ b/arch/x86/include/uapi/asm/sgx.h
+> @@ -31,6 +31,8 @@ enum sgx_page_flags {
+>  	_IO(SGX_MAGIC, 0x04)
+>  #define SGX_IOC_ENCLAVE_RESTRICT_PERMISSIONS \
+>  	_IOWR(SGX_MAGIC, 0x05, struct sgx_enclave_restrict_permissions)
+> +#define SGX_IOC_ENCLAVE_MODIFY_TYPE \
+> +	_IOWR(SGX_MAGIC, 0x06, struct sgx_enclave_modify_type)
 >  
->  	XA_STATE(xas, &encl->page_array, PFN_DOWN(start));
+>  /**
+>   * struct sgx_enclave_create - parameter structure for the
+> @@ -97,6 +99,24 @@ struct sgx_enclave_restrict_permissions {
+>  	__u64 count;
+>  };
 >  
-> +	/* Disallow mapping outside enclave's address range. */
-> +	if (test_bit(SGX_ENCL_INITIALIZED, &encl->flags) &&
-> +	    (start < encl->base || end > encl->base + encl->size))
-> +		return -EACCES;
+> +/**
+> + * struct sgx_enclave_modify_type - parameters for %SGX_IOC_ENCLAVE_MODIFY_TYPE
+> + * @offset:	starting page offset (page aligned relative to enclave base
+> + *		address defined in SECS)
+> + * @length:	length of memory (multiple of the page size)
+> + * @secinfo:	address for the SECINFO data containing the new type
+> + *		for pages in range described by @offset and @length
+> + * @result:	(output) SGX result code of ENCLS[EMODT] function
+> + * @count:	(output) bytes successfully changed (multiple of page size)
+> + */
+> +struct sgx_enclave_modify_type {
+> +	__u64 offset;
+> +	__u64 length;
+> +	__u64 secinfo;
+> +	__u64 result;
+> +	__u64 count;
+> +};
 > +
->  	/*
->  	 * Disallow READ_IMPLIES_EXEC tasks as their VMA permissions might
->  	 * conflict with the enclave page permissions.
+>  struct sgx_enclave_run;
+>  
+>  /**
+> diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sgx/ioctl.c
+> index 4d88bfd163e7..6f769e67ec2d 100644
+> --- a/arch/x86/kernel/cpu/sgx/ioctl.c
+> +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
+> @@ -898,6 +898,212 @@ static long sgx_ioc_enclave_restrict_permissions(struct sgx_encl *encl,
+>  	return ret;
+>  }
+>  
+> +/**
+> + * sgx_enclave_modify_type() - Modify type of SGX enclave pages
+> + * @encl:	Enclave to which the pages belong.
+> + * @modt:	Checked parameters from user about which pages need modifying.
+> + * @page_type:	New page type.
+> + *
+> + * Return:
+> + * - 0:		Success
+> + * - -errno:	Otherwise
+> + */
+> +static long sgx_enclave_modify_type(struct sgx_encl *encl,
+> +				    struct sgx_enclave_modify_type *modt,
+> +				    enum sgx_page_type page_type)
+> +{
+> +	unsigned long max_prot_restore;
+> +	struct sgx_encl_page *entry;
+> +	struct sgx_secinfo secinfo;
+> +	unsigned long prot;
+> +	unsigned long addr;
+> +	unsigned long c;
+> +	void *epc_virt;
+> +	int ret;
+> +
+> +	/*
+> +	 * The only new page types allowed by hardware are PT_TCS and PT_TRIM.
+> +	 */
+> +	if (page_type != SGX_PAGE_TYPE_TCS && page_type != SGX_PAGE_TYPE_TRIM)
+> +		return -EINVAL;
+> +
+> +	memset(&secinfo, 0, sizeof(secinfo));
+> +
+> +	secinfo.flags = page_type << 8;
+> +
+> +	for (c = 0 ; c < modt->length; c += PAGE_SIZE) {
+> +		addr = encl->base + modt->offset + c;
+> +
+> +		mutex_lock(&encl->lock);
+> +
+> +		entry = sgx_encl_load_page(encl, addr);
+> +		if (IS_ERR(entry)) {
+> +			ret = PTR_ERR(entry) == -EBUSY ? -EAGAIN : -EFAULT;
+> +			goto out_unlock;
+> +		}
+> +
+> +		/*
+> +		 * Borrow the logic from the Intel SDM. Regular pages
+> +		 * (SGX_PAGE_TYPE_REG) can change type to SGX_PAGE_TYPE_TCS
+> +		 * or SGX_PAGE_TYPE_TRIM but TCS pages can only be trimmed.
+> +		 * CET pages not supported yet.
+> +		 */
+> +		if (!(entry->type == SGX_PAGE_TYPE_REG ||
+> +		      (entry->type == SGX_PAGE_TYPE_TCS &&
+> +		       page_type == SGX_PAGE_TYPE_TRIM))) {
+> +			ret = -EINVAL;
+> +			goto out_unlock;
+> +		}
+> +
+> +		max_prot_restore = entry->vm_max_prot_bits;
+> +
+> +		/*
+> +		 * Once a regular page becomes a TCS page it cannot be
+> +		 * changed back. So the maximum allowed protection reflects
+> +		 * the TCS page that is always RW from kernel perspective but
+> +		 * will be inaccessible from within enclave. Before doing
+> +		 * so, do make sure that the new page type continues to
+> +		 * respect the originally vetted page permissions.
+> +		 */
+> +		if (entry->type == SGX_PAGE_TYPE_REG &&
+> +		    page_type == SGX_PAGE_TYPE_TCS) {
+> +			if (~entry->vm_max_prot_bits & (VM_READ | VM_WRITE)) {
+> +				ret = -EPERM;
+> +				goto out_unlock;
+> +			}
+> +			prot = PROT_READ | PROT_WRITE;
+> +			entry->vm_max_prot_bits = calc_vm_prot_bits(prot, 0);
+> +
+> +			/*
+> +			 * Prevent page from being reclaimed while mutex
+> +			 * is released.
+> +			 */
+> +			if (sgx_unmark_page_reclaimable(entry->epc_page)) {
+> +				ret = -EAGAIN;
+> +				goto out_entry_changed;
+> +			}
+> +
+> +			/*
+> +			 * Do not keep encl->lock because of dependency on
+> +			 * mmap_lock acquired in sgx_zap_enclave_ptes().
+> +			 */
+> +			mutex_unlock(&encl->lock);
+> +
+> +			sgx_zap_enclave_ptes(encl, addr);
+> +
+> +			mutex_lock(&encl->lock);
+> +
+> +			sgx_mark_page_reclaimable(entry->epc_page);
+> +		}
+> +
+> +		/* Change EPC type */
+> +		epc_virt = sgx_get_epc_virt_addr(entry->epc_page);
+> +		ret = __emodt(&secinfo, epc_virt);
+> +		if (encls_faulted(ret)) {
+> +			/*
+> +			 * All possible faults should be avoidable:
+> +			 * parameters have been checked, will only change
+> +			 * valid page types, and no concurrent
+> +			 * SGX1/SGX2 ENCLS instructions since these are
+> +			 * protected with mutex.
+> +			 */
+> +			pr_err_once("EMODT encountered exception %d\n",
+> +				    ENCLS_TRAPNR(ret));
+> +			ret = -EFAULT;
+> +			goto out_entry_changed;
+> +		}
+> +		if (encls_failed(ret)) {
+> +			modt->result = ret;
+> +			ret = -EFAULT;
+> +			goto out_entry_changed;
+> +		}
+> +
+> +		ret = sgx_enclave_etrack(encl);
+> +		if (ret) {
+> +			ret = -EFAULT;
+> +			goto out_unlock;
+> +		}
+> +
+> +		entry->type = page_type;
+> +
+> +		mutex_unlock(&encl->lock);
+> +	}
+> +
+> +	ret = 0;
+> +	goto out;
+> +
+> +out_entry_changed:
+> +	entry->vm_max_prot_bits = max_prot_restore;
+> +out_unlock:
+> +	mutex_unlock(&encl->lock);
+> +out:
+> +	modt->count = c;
+> +
+> +	return ret;
+> +}
+> +
+> +/**
+> + * sgx_ioc_enclave_modify_type() - handler for %SGX_IOC_ENCLAVE_MODIFY_TYPE
+> + * @encl:	an enclave pointer
+> + * @arg:	userspace pointer to a &struct sgx_enclave_modify_type instance
+> + *
+> + * Ability to change the enclave page type supports the following use cases:
+> + *
+> + * * It is possible to add TCS pages to an enclave by changing the type of
+> + *   regular pages (%SGX_PAGE_TYPE_REG) to TCS (%SGX_PAGE_TYPE_TCS) pages.
+> + *   With this support the number of threads supported by an initialized
+> + *   enclave can be increased dynamically.
+> + *
+> + * * Regular or TCS pages can dynamically be removed from an initialized
+> + *   enclave by changing the page type to %SGX_PAGE_TYPE_TRIM. Changing the
+> + *   page type to %SGX_PAGE_TYPE_TRIM marks the page for removal with actual
+> + *   removal done by handler of %SGX_IOC_ENCLAVE_REMOVE_PAGES ioctl() called
+> + *   after ENCLU[EACCEPT] is run on %SGX_PAGE_TYPE_TRIM page from within the
+> + *   enclave.
+> + *
+> + * Return:
+> + * - 0:		Success
+> + * - -errno:	Otherwise
+> + */
+> +static long sgx_ioc_enclave_modify_type(struct sgx_encl *encl, void __user *arg)
+> +{
+> +	struct sgx_enclave_modify_type params;
+> +	enum sgx_page_type page_type;
+> +	struct sgx_secinfo secinfo;
+> +	long ret;
+> +
+> +	ret = sgx_ioc_sgx2_ready(encl);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (copy_from_user(&params, arg, sizeof(params)))
+> +		return -EFAULT;
+> +
+> +	if (sgx_validate_offset_length(encl, params.offset, params.length))
+> +		return -EINVAL;
+> +
+> +	if (copy_from_user(&secinfo, (void __user *)params.secinfo,
+> +			   sizeof(secinfo)))
+> +		return -EFAULT;
+> +
+> +	if (secinfo.flags & ~SGX_SECINFO_PAGE_TYPE_MASK)
+> +		return -EINVAL;
+> +
+> +	if (memchr_inv(secinfo.reserved, 0, sizeof(secinfo.reserved)))
+> +		return -EINVAL;
+> +
+> +	if (params.result || params.count)
+> +		return -EINVAL;
+> +
+> +	page_type = (secinfo.flags & SGX_SECINFO_PAGE_TYPE_MASK) >> 8;
+> +	ret = sgx_enclave_modify_type(encl, &params, page_type);
+> +
+> +	if (copy_to_user(arg, &params, sizeof(params)))
+> +		return -EFAULT;
+> +
+> +	return ret;
+> +}
+> +
+>  long sgx_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
+>  {
+>  	struct sgx_encl *encl = filep->private_data;
+> @@ -923,6 +1129,9 @@ long sgx_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
+>  		ret = sgx_ioc_enclave_restrict_permissions(encl,
+>  							   (void __user *)arg);
+>  		break;
+> +	case SGX_IOC_ENCLAVE_MODIFY_TYPE:
+> +		ret = sgx_ioc_enclave_modify_type(encl, (void __user *)arg);
+> +		break;
+>  	default:
+>  		ret = -ENOIOCTLCMD;
+>  		break;
 > -- 
 > 2.25.1
 > 
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+To be coherent with other names, this should be
+SGX_IOC_ENCLAVE_MODIFY_TYPES.
 
 BR, Jarkko

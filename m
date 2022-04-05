@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB614F3E7E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D5F4F3EE1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388081AbiDENUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
+        id S1381742AbiDENOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344361AbiDEJTe (ORCPT
+        with ESMTP id S1344236AbiDEJSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:19:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C8011F;
-        Tue,  5 Apr 2022 02:07:56 -0700 (PDT)
+        Tue, 5 Apr 2022 05:18:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9731D47545;
+        Tue,  5 Apr 2022 02:06:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9EE72B81A12;
-        Tue,  5 Apr 2022 09:07:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E940DC385A1;
-        Tue,  5 Apr 2022 09:07:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2773161572;
+        Tue,  5 Apr 2022 09:06:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3526AC385A0;
+        Tue,  5 Apr 2022 09:06:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149674;
-        bh=qBElXJ90QRgQ8W5VnsNr6T5Wz+r+3jv9YBNbGL+C/PI=;
+        s=korg; t=1649149560;
+        bh=PaGBNH3IO+vHhfj5CQrJJiXJVdx0NKXBLXt6WjCBSr8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=adNZPA11YHOGWheHySjb7gIBxAO6jT+V8e0kM+DE/1sglWxZTV+bK/udLK4zsLEov
-         U/8EZhtG2D/sDILHttpMvWYxFOzsQDwn/lI9mCYSlR4nn+09tHTCO3RkrKFSRcKC35
-         5XN//MB8YDq9seyGXBeymjUke55v1bN9za1uMzeg=
+        b=V1zU3BOnugZmeyj1XKtOxk5XuJ2WZm7AHF87oAEAQEzqsasYqAcZppHcssQt1JbiW
+         k6Z7d449V/uGkw5rrFiBIWt3ai8aTSzGYWdCRx9aoZDb6VSNkQKjt2T4lQ7cj12ZKY
+         lVGcJiWdyC+KaAOKhNTHryXIdkq9n5HF7lwLuJYs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+d1e3b1d92d25abf97943@syzkaller.appspotmail.com,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        James Morris <jamorris@linux.microsoft.com>,
-        Paul Moore <paul@paul-moore.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Detlev Casanova <detlev.casanova@collabora.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0751/1017] LSM: general protection fault in legacy_parse_param
-Date:   Tue,  5 Apr 2022 09:27:44 +0200
-Message-Id: <20220405070416.552864745@linuxfoundation.org>
+Subject: [PATCH 5.16 0752/1017] regulator: rpi-panel: Handle I2C errors/timing to the Atmel
+Date:   Tue,  5 Apr 2022 09:27:45 +0200
+Message-Id: <20220405070416.582403822@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -58,77 +57,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Casey Schaufler <casey@schaufler-ca.com>
+From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-[ Upstream commit ecff30575b5ad0eda149aadad247b7f75411fd47 ]
+[ Upstream commit 5665eee7a3800430e7dc3ef6f25722476b603186 ]
 
-The usual LSM hook "bail on fail" scheme doesn't work for cases where
-a security module may return an error code indicating that it does not
-recognize an input.  In this particular case Smack sees a mount option
-that it recognizes, and returns 0. A call to a BPF hook follows, which
-returns -ENOPARAM, which confuses the caller because Smack has processed
-its data.
+The Atmel is doing some things in the I2C ISR, during which
+period it will not respond to further commands. This is
+particularly true of the POWERON command.
 
-The SELinux hook incorrectly returns 1 on success. There was a time
-when this was correct, however the current expectation is that it
-return 0 on success. This is repaired.
+Increase delays appropriately, and retry should I2C errors be
+reported.
 
-Reported-by: syzbot+d1e3b1d92d25abf97943@syzkaller.appspotmail.com
-Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-Acked-by: James Morris <jamorris@linux.microsoft.com>
-Signed-off-by: Paul Moore <paul@paul-moore.com>
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+Link: https://lore.kernel.org/r/20220124220129.158891-3-detlev.casanova@collabora.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- security/security.c      | 17 +++++++++++++++--
- security/selinux/hooks.c |  5 ++---
- 2 files changed, 17 insertions(+), 5 deletions(-)
+ .../regulator/rpi-panel-attiny-regulator.c    | 56 +++++++++++++++----
+ 1 file changed, 46 insertions(+), 10 deletions(-)
 
-diff --git a/security/security.c b/security/security.c
-index cf6615b5e820..745a8bf66d91 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -884,9 +884,22 @@ int security_fs_context_dup(struct fs_context *fc, struct fs_context *src_fc)
- 	return call_int_hook(fs_context_dup, 0, fc, src_fc);
- }
- 
--int security_fs_context_parse_param(struct fs_context *fc, struct fs_parameter *param)
-+int security_fs_context_parse_param(struct fs_context *fc,
-+				    struct fs_parameter *param)
+diff --git a/drivers/regulator/rpi-panel-attiny-regulator.c b/drivers/regulator/rpi-panel-attiny-regulator.c
+index ee46bfbf5eee..991b4730d768 100644
+--- a/drivers/regulator/rpi-panel-attiny-regulator.c
++++ b/drivers/regulator/rpi-panel-attiny-regulator.c
+@@ -37,11 +37,24 @@ static const struct regmap_config attiny_regmap_config = {
+ static int attiny_lcd_power_enable(struct regulator_dev *rdev)
  {
--	return call_int_hook(fs_context_parse_param, -ENOPARAM, fc, param);
-+	struct security_hook_list *hp;
-+	int trc;
-+	int rc = -ENOPARAM;
+ 	unsigned int data;
++	int ret, i;
+ 
+ 	regmap_write(rdev->regmap, REG_POWERON, 1);
++	msleep(80);
 +
-+	hlist_for_each_entry(hp, &security_hook_heads.fs_context_parse_param,
-+			     list) {
-+		trc = hp->hook.fs_context_parse_param(fc, param);
-+		if (trc == 0)
-+			rc = 0;
-+		else if (trc != -ENOPARAM)
-+			return trc;
+ 	/* Wait for nPWRDWN to go low to indicate poweron is done. */
+-	regmap_read_poll_timeout(rdev->regmap, REG_PORTB, data,
+-					data & BIT(0), 10, 1000000);
++	for (i = 0; i < 20; i++) {
++		ret = regmap_read(rdev->regmap, REG_PORTB, &data);
++		if (!ret) {
++			if (data & BIT(0))
++				break;
++		}
++		usleep_range(10000, 12000);
 +	}
-+	return rc;
- }
- 
- int security_sb_alloc(struct super_block *sb)
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 93eac9464c5f..69b0709bd156 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -2916,10 +2916,9 @@ static int selinux_fs_context_parse_param(struct fs_context *fc,
- 		return opt;
- 
- 	rc = selinux_add_opt(opt, param->string, &fc->security);
--	if (!rc) {
-+	if (!rc)
- 		param->string = NULL;
--		rc = 1;
--	}
++	usleep_range(10000, 12000);
 +
- 	return rc;
++	if (ret)
++		pr_err("%s: regmap_read_poll_timeout failed %d\n", __func__, ret);
+ 
+ 	/* Default to the same orientation as the closed source
+ 	 * firmware used for the panel.  Runtime rotation
+@@ -57,23 +70,34 @@ static int attiny_lcd_power_disable(struct regulator_dev *rdev)
+ {
+ 	regmap_write(rdev->regmap, REG_PWM, 0);
+ 	regmap_write(rdev->regmap, REG_POWERON, 0);
+-	udelay(1);
++	msleep(30);
+ 	return 0;
  }
  
+ static int attiny_lcd_power_is_enabled(struct regulator_dev *rdev)
+ {
+ 	unsigned int data;
+-	int ret;
++	int ret, i;
+ 
+-	ret = regmap_read(rdev->regmap, REG_POWERON, &data);
++	for (i = 0; i < 10; i++) {
++		ret = regmap_read(rdev->regmap, REG_POWERON, &data);
++		if (!ret)
++			break;
++		usleep_range(10000, 12000);
++	}
+ 	if (ret < 0)
+ 		return ret;
+ 
+ 	if (!(data & BIT(0)))
+ 		return 0;
+ 
+-	ret = regmap_read(rdev->regmap, REG_PORTB, &data);
++	for (i = 0; i < 10; i++) {
++		ret = regmap_read(rdev->regmap, REG_PORTB, &data);
++		if (!ret)
++			break;
++		usleep_range(10000, 12000);
++	}
++
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -103,20 +127,32 @@ static int attiny_update_status(struct backlight_device *bl)
+ {
+ 	struct regmap *regmap = bl_get_data(bl);
+ 	int brightness = bl->props.brightness;
++	int ret, i;
+ 
+ 	if (bl->props.power != FB_BLANK_UNBLANK ||
+ 	    bl->props.fb_blank != FB_BLANK_UNBLANK)
+ 		brightness = 0;
+ 
+-	return regmap_write(regmap, REG_PWM, brightness);
++	for (i = 0; i < 10; i++) {
++		ret = regmap_write(regmap, REG_PWM, brightness);
++		if (!ret)
++			break;
++	}
++
++	return ret;
+ }
+ 
+ static int attiny_get_brightness(struct backlight_device *bl)
+ {
+ 	struct regmap *regmap = bl_get_data(bl);
+-	int ret, brightness;
++	int ret, brightness, i;
++
++	for (i = 0; i < 10; i++) {
++		ret = regmap_read(regmap, REG_PWM, &brightness);
++		if (!ret)
++			break;
++	}
+ 
+-	ret = regmap_read(regmap, REG_PWM, &brightness);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -166,7 +202,7 @@ static int attiny_i2c_probe(struct i2c_client *i2c,
+ 	}
+ 
+ 	regmap_write(regmap, REG_POWERON, 0);
+-	mdelay(1);
++	msleep(30);
+ 
+ 	config.dev = &i2c->dev;
+ 	config.regmap = regmap;
 -- 
 2.34.1
 

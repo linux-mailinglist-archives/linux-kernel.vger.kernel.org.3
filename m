@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D74074F4E1E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0AC34F4E78
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1587781AbiDFAKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
+        id S1455572AbiDFAWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358096AbiDEK16 (ORCPT
+        with ESMTP id S1350939AbiDEKA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0727168302;
-        Tue,  5 Apr 2022 03:15:27 -0700 (PDT)
+        Tue, 5 Apr 2022 06:00:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92BB86B0B1;
+        Tue,  5 Apr 2022 02:51:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 980EC6179E;
-        Tue,  5 Apr 2022 10:15:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B7C6C385A0;
-        Tue,  5 Apr 2022 10:15:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E562661673;
+        Tue,  5 Apr 2022 09:51:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED77DC385A1;
+        Tue,  5 Apr 2022 09:51:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153726;
-        bh=otq49y8QEyJ+LXqzxJkfjS2K0k2wRoeqF2v+AnN+pbU=;
+        s=korg; t=1649152280;
+        bh=vmE0bnZ75a6VCIE9JhhC32nXIyUw3NHWkpsNVT7HH9g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2L+DZyzxD1GzkNNqPKQs7mdo+YZ8VBKzh6tTNdZk1xtVMIKwCFQ/9kCauGlkpBchb
-         GabKWJZd/X9AD2VhOachvxmr2PIpQQdKAiJoyHpIpUcEX8UovlSVrPYdW0GTclkhzJ
-         s+S5p3N1fJ1WNnrQKHs8O2KSbW0zbETWFNYQH6/I=
+        b=jrHHyqXc9RkOhaWaviGyk4AjRkF3p4/ZqTo0wL+Jy04FCrfZAA2YnU+LPbBrRp9SO
+         VqeyTxgTws4tFXHz70sqVZ5S5bo15P2/Ec9SrLFTWlVHjBV1a+SQZDT3c2s1+z6YtV
+         q45ZrGVOvA2THiQVwci/fyltJSH2rGxmriPDjwvU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 287/599] mt76: mt7915: use proper aid value in mt7915_mcu_wtbl_generic_tlv in sta mode
-Date:   Tue,  5 Apr 2022 09:29:41 +0200
-Message-Id: <20220405070307.375354224@linuxfoundation.org>
+        stable@vger.kernel.org, Boris Burkov <boris@bur.io>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 720/913] btrfs: make search_csum_tree return 0 if we get -EFBIG
+Date:   Tue,  5 Apr 2022 09:29:42 +0200
+Message-Id: <20220405070401.415544732@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+From: Josef Bacik <josef@toxicpanda.com>
 
-[ Upstream commit a56b1b0f145ef2d6bb9312dedf3ab8558ef50a5b ]
+[ Upstream commit 03ddb19d2ea745228879b9334f3b550c88acb10a ]
 
-mac80211 provides aid in vif->bss_conf.aid for sta mode and not in
-sta->aid. Fix mt7915_mcu_wtbl_generic_tlv routine using proper value for
-aid in sta mode.
+We can either fail to find a csum entry at all and return -ENOENT, or we
+can find a range that is close, but return -EFBIG.  In essence these
+both mean the same thing when we are doing a lookup for a csum in an
+existing range, we didn't find a csum.  We want to treat both of these
+errors the same way, complain loudly that there wasn't a csum.  This
+currently happens anyway because we do
 
-Fixes: e57b7901469fc ("mt76: add mac80211 driver for MT7915 PCIe-based chipsets")
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+	count = search_csum_tree();
+	if (count <= 0) {
+		// reloc and error handling
+	}
+
+However it forces us to incorrectly treat EIO or ENOMEM errors as on
+disk corruption.  Fix this by returning 0 if we get either -ENOENT or
+-EFBIG from btrfs_lookup_csum() so we can do proper error handling.
+
+Reviewed-by: Boris Burkov <boris@bur.io>
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7915/mcu.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ fs/btrfs/file-item.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-index 9a7f317a098f..6e73964b8b0a 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-@@ -1259,8 +1259,11 @@ mt7915_mcu_wtbl_generic_tlv(struct sk_buff *skb, struct ieee80211_vif *vif,
- 	generic = (struct wtbl_generic *)tlv;
- 
- 	if (sta) {
-+		if (vif->type == NL80211_IFTYPE_STATION)
-+			generic->partial_aid = cpu_to_le16(vif->bss_conf.aid);
-+		else
-+			generic->partial_aid = cpu_to_le16(sta->aid);
- 		memcpy(generic->peer_addr, sta->addr, ETH_ALEN);
--		generic->partial_aid = cpu_to_le16(sta->aid);
- 		generic->muar_idx = mvif->omac_idx;
- 		generic->qos = sta->wme;
- 	} else {
+diff --git a/fs/btrfs/file-item.c b/fs/btrfs/file-item.c
+index 0b9401a5afd3..161a69d7e117 100644
+--- a/fs/btrfs/file-item.c
++++ b/fs/btrfs/file-item.c
+@@ -303,7 +303,7 @@ static int search_csum_tree(struct btrfs_fs_info *fs_info,
+ 	read_extent_buffer(path->nodes[0], dst, (unsigned long)item,
+ 			ret * csum_size);
+ out:
+-	if (ret == -ENOENT)
++	if (ret == -ENOENT || ret == -EFBIG)
+ 		ret = 0;
+ 	return ret;
+ }
 -- 
 2.34.1
 

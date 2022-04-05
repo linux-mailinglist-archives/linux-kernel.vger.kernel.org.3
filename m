@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58CCA4F4EE7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:56:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACFC44F4C39
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1584184AbiDEX6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
+        id S1576729AbiDEXK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573567AbiDETWu (ORCPT
+        with ESMTP id S1573570AbiDETWw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 15:22:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A758D45510;
-        Tue,  5 Apr 2022 12:20:51 -0700 (PDT)
+        Tue, 5 Apr 2022 15:22:52 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4AA47050;
+        Tue,  5 Apr 2022 12:20:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 518B4B81FA5;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4AA77CE1FB6;
+        Tue,  5 Apr 2022 19:20:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18778C385A1;
         Tue,  5 Apr 2022 19:20:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45723C385A3;
-        Tue,  5 Apr 2022 19:20:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649186448;
-        bh=qCvm12JIx5v8brhsRRqgAaDUmWNtAuToWb1JQhAYbW8=;
+        s=k20201202; t=1649186450;
+        bh=4gK8ZAn+TacGcAjwCDK5lhYYnjJ7LL+dT0yZHFaadd0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SwxrTA3uCIbL4tA8yMfT0cPD7wl3GuI5sbVrqhRtENSJOcP1NYHkJRszgzmrzPND6
-         ve67RItoO9TPfHiRp/4p8EPqGMD+sDixjhWof0O7CbrcwBep/lPQCaae6wq/ha7EaH
-         8oKX6xtGJa6077OXqCSpnBvHuQZf1yfXj5QlKVzih2pTctRh5gZrsc83lk5QcxaLfD
-         9iK81wj+QBSLsLRf4FvTPm9ssgjs7El6nAgpvI6697BL1KVKPPrXcNMfqG2ph8a2bT
-         EY4hKqlmPksCW1f08QkuvY+ZRTBZcFjlHDd9zdppS5JRB1i/xHv7hLpKxgwAySTcOB
-         1Bmgy3s3OV5RQ==
+        b=h3vPiIxfkK6OiYb/165G98js1mP4pade1hlyPqwCLOvWG47or0gv3JuZz2PzrhdeW
+         LEGz361/FC7O/xfSPkIV/SJG0WEwEk98VAFZ3Tvk2MFbkwJsljtP1Tueh4ji9g/UpZ
+         WfOKEqy9nSA4+mDWZl+mGCxzFyeYrQSYLvFbhEtBnk2ctUsiJsC+N63QUwbmi9YTdr
+         C7kv5ohRf44g1IoriEV3OgQVzt7/5bWnQ2RpSESLGg1L9erv90p18H0cJ33Sm+/FyI
+         LuATH4VtQJt47boufQaIYAOWq3jdd/BnQHnHQdHz8hD3byTOgfG5bC61qqfGM+MnQ3
+         aaDVyC2xxMFgw==
 From:   Jeff Layton <jlayton@kernel.org>
 To:     idryomov@gmail.com, xiubli@redhat.com
 Cc:     ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
         lhenriques@suse.de
-Subject: [PATCH v13 18/59] ceph: add fscrypt ioctls
-Date:   Tue,  5 Apr 2022 15:19:49 -0400
-Message-Id: <20220405192030.178326-19-jlayton@kernel.org>
+Subject: [PATCH v13 20/59] ceph: make ceph_msdc_build_path use ref-walk
+Date:   Tue,  5 Apr 2022 15:19:51 -0400
+Message-Id: <20220405192030.178326-21-jlayton@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405192030.178326-1-jlayton@kernel.org>
 References: <20220405192030.178326-1-jlayton@kernel.org>
@@ -55,129 +55,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We gate most of the ioctls on MDS feature support. The exception is the
-key removal and status functions that we still want to work if the MDS's
-were to (inexplicably) lose the feature.
+Encryption potentially requires allocation, at which point we'll need to
+be in a non-atomic context. Convert ceph_msdc_build_path to take dentry
+spinlocks and references instead of using rcu_read_lock to walk the
+path.
 
-For the set_policy ioctl, we take Fs caps to ensure that nothing can
-create files in the directory while the ioctl is running. That should
-be enough to ensure that the "empty_dir" check is reliable.
+This is slightly less efficient, and we may want to eventually allow
+using RCU when the leaf dentry isn't encrypted.
 
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- fs/ceph/ioctl.c | 83 +++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 83 insertions(+)
+ fs/ceph/mds_client.c | 35 +++++++++++++++++++----------------
+ 1 file changed, 19 insertions(+), 16 deletions(-)
 
-diff --git a/fs/ceph/ioctl.c b/fs/ceph/ioctl.c
-index 6e061bf62ad4..477ecc667aee 100644
---- a/fs/ceph/ioctl.c
-+++ b/fs/ceph/ioctl.c
-@@ -6,6 +6,7 @@
- #include "mds_client.h"
- #include "ioctl.h"
- #include <linux/ceph/striper.h>
-+#include <linux/fscrypt.h>
- 
- /*
-  * ioctls
-@@ -268,8 +269,54 @@ static long ceph_ioctl_syncio(struct file *file)
- 	return 0;
- }
- 
-+static int vet_mds_for_fscrypt(struct file *file)
-+{
-+	int i, ret = -EOPNOTSUPP;
-+	struct ceph_mds_client	*mdsc = ceph_sb_to_mdsc(file_inode(file)->i_sb);
-+
-+	mutex_lock(&mdsc->mutex);
-+	for (i = 0; i < mdsc->max_sessions; i++) {
-+		struct ceph_mds_session *s = mdsc->sessions[i];
-+
-+		if (!s)
-+			continue;
-+		if (test_bit(CEPHFS_FEATURE_ALTERNATE_NAME, &s->s_features))
-+			ret = 0;
-+		break;
-+	}
-+	mutex_unlock(&mdsc->mutex);
-+	return ret;
-+}
-+
-+static long ceph_set_encryption_policy(struct file *file, unsigned long arg)
-+{
-+	int ret, got = 0;
-+	struct inode *inode = file_inode(file);
-+	struct ceph_inode_info *ci = ceph_inode(inode);
-+
-+	ret = vet_mds_for_fscrypt(file);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Ensure we hold these caps so that we _know_ that the rstats check
-+	 * in the empty_dir check is reliable.
-+	 */
-+	ret = ceph_get_caps(file, CEPH_CAP_FILE_SHARED, 0, -1, &got);
-+	if (ret)
-+		return ret;
-+
-+	ret = fscrypt_ioctl_set_policy(file, (const void __user *)arg);
-+	if (got)
-+		ceph_put_cap_refs(ci, got);
-+
-+	return ret;
-+}
-+
- long ceph_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
+index 2f2f8221eb25..28315053e116 100644
+--- a/fs/ceph/mds_client.c
++++ b/fs/ceph/mds_client.c
+@@ -2398,7 +2398,8 @@ static inline  u64 __get_oldest_tid(struct ceph_mds_client *mdsc)
+ char *ceph_mdsc_build_path(struct dentry *dentry, int *plen, u64 *pbase,
+ 			   int stop_on_nosnap)
  {
-+	int ret;
-+
- 	dout("ioctl file %p cmd %u arg %lu\n", file, cmd, arg);
- 	switch (cmd) {
- 	case CEPH_IOC_GET_LAYOUT:
-@@ -289,6 +336,42 @@ long ceph_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+-	struct dentry *temp;
++	struct dentry *cur;
++	struct inode *inode;
+ 	char *path;
+ 	int pos;
+ 	unsigned seq;
+@@ -2415,34 +2416,35 @@ char *ceph_mdsc_build_path(struct dentry *dentry, int *plen, u64 *pbase,
+ 	path[pos] = '\0';
  
- 	case CEPH_IOC_SYNCIO:
- 		return ceph_ioctl_syncio(file);
-+
-+	case FS_IOC_SET_ENCRYPTION_POLICY:
-+		return ceph_set_encryption_policy(file, arg);
-+
-+	case FS_IOC_GET_ENCRYPTION_POLICY:
-+		ret = vet_mds_for_fscrypt(file);
-+		if (ret)
-+			return ret;
-+		return fscrypt_ioctl_get_policy(file, (void __user *)arg);
-+
-+	case FS_IOC_GET_ENCRYPTION_POLICY_EX:
-+		ret = vet_mds_for_fscrypt(file);
-+		if (ret)
-+			return ret;
-+		return fscrypt_ioctl_get_policy_ex(file, (void __user *)arg);
-+
-+	case FS_IOC_ADD_ENCRYPTION_KEY:
-+		ret = vet_mds_for_fscrypt(file);
-+		if (ret)
-+			return ret;
-+		return fscrypt_ioctl_add_key(file, (void __user *)arg);
-+
-+	case FS_IOC_REMOVE_ENCRYPTION_KEY:
-+		return fscrypt_ioctl_remove_key(file, (void __user *)arg);
-+
-+	case FS_IOC_REMOVE_ENCRYPTION_KEY_ALL_USERS:
-+		return fscrypt_ioctl_remove_key_all_users(file, (void __user *)arg);
-+
-+	case FS_IOC_GET_ENCRYPTION_KEY_STATUS:
-+		return fscrypt_ioctl_get_key_status(file, (void __user *)arg);
-+
-+	case FS_IOC_GET_ENCRYPTION_NONCE:
-+		ret = vet_mds_for_fscrypt(file);
-+		if (ret)
-+			return ret;
-+		return fscrypt_ioctl_get_nonce(file, (void __user *)arg);
+ 	seq = read_seqbegin(&rename_lock);
+-	rcu_read_lock();
+-	temp = dentry;
++	cur = dget(dentry);
+ 	for (;;) {
+-		struct inode *inode;
++		struct dentry *temp;
+ 
+-		spin_lock(&temp->d_lock);
+-		inode = d_inode(temp);
++		spin_lock(&cur->d_lock);
++		inode = d_inode(cur);
+ 		if (inode && ceph_snap(inode) == CEPH_SNAPDIR) {
+ 			dout("build_path path+%d: %p SNAPDIR\n",
+-			     pos, temp);
+-		} else if (stop_on_nosnap && inode && dentry != temp &&
++			     pos, cur);
++		} else if (stop_on_nosnap && inode && dentry != cur &&
+ 			   ceph_snap(inode) == CEPH_NOSNAP) {
+-			spin_unlock(&temp->d_lock);
++			spin_unlock(&cur->d_lock);
+ 			pos++; /* get rid of any prepended '/' */
+ 			break;
+ 		} else {
+-			pos -= temp->d_name.len;
++			pos -= cur->d_name.len;
+ 			if (pos < 0) {
+-				spin_unlock(&temp->d_lock);
++				spin_unlock(&cur->d_lock);
+ 				break;
+ 			}
+-			memcpy(path + pos, temp->d_name.name, temp->d_name.len);
++			memcpy(path + pos, cur->d_name.name, cur->d_name.len);
+ 		}
++		temp = cur;
+ 		spin_unlock(&temp->d_lock);
+-		temp = READ_ONCE(temp->d_parent);
++		cur = dget_parent(temp);
++		dput(temp);
+ 
+ 		/* Are we at the root? */
+-		if (IS_ROOT(temp))
++		if (IS_ROOT(cur))
+ 			break;
+ 
+ 		/* Are we out of buffer? */
+@@ -2451,8 +2453,9 @@ char *ceph_mdsc_build_path(struct dentry *dentry, int *plen, u64 *pbase,
+ 
+ 		path[pos] = '/';
  	}
+-	base = ceph_ino(d_inode(temp));
+-	rcu_read_unlock();
++	inode = d_inode(cur);
++	base = inode ? ceph_ino(inode) : 0;
++	dput(cur);
  
- 	return -ENOTTY;
+ 	if (read_seqretry(&rename_lock, seq))
+ 		goto retry;
 -- 
 2.35.1
 

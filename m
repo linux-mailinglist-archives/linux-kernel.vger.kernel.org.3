@@ -2,101 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A1CB4F45BB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A13C4F4575
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449547AbiDEUK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
+        id S243380AbiDEUUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573173AbiDESHA (ORCPT
+        with ESMTP id S1573179AbiDESJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 14:07:00 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA441F623;
-        Tue,  5 Apr 2022 11:05:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=eK1W6c3cykjE0LliXQwdPpUl4xUEcuaJtmGpAa5ka20=; b=DroHWKqca4Vq4W7PTsU+k7+YsQ
-        +ZiV7XCDx/UOgPCSCA/Ay36KKPaIMOYZZ8GAlXpb8MzCWbQJADXlw26mZaUMWjK16b+PGHCu6OaLr
-        eKp+zBAZikv9jQCkqK4pZeHIPZTe+JjQDxH1SlB/Wxy4nBz+4ihiONMQulZmxiP3SyLRj6QbLBBHw
-        AEdn36e/hEY5DtsEzGeDqE4HAvDSxRI648dXsVbOfih/gyQnaesDl4t9ttLkT53HDVWHDAs7yD0Jv
-        Dl9TvfKQRib/BrEqja3eRnL6whXR/NN5sSHrnpXf3++dEWxEJ73jYMypwMazlVSe4lL/zm0rcubkM
-        OJy6QZwQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nbnXz-006wEx-Ex; Tue, 05 Apr 2022 18:04:55 +0000
-Message-ID: <ac023638-5ce4-1c0b-29e5-e30fc3038e72@infradead.org>
-Date:   Tue, 5 Apr 2022 11:04:51 -0700
+        Tue, 5 Apr 2022 14:09:10 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DF21FA69
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 11:07:09 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-d39f741ba0so182607fac.13
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 11:07:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=p23li6dT00AJl3hRn5GLCpGGZV7Mde/F/ZC6fP/JEqE=;
+        b=BADiZnSp78f9ZfxjlasetO+C2Swva/fEryHvZCHweafMOdoIX0m57hfulFwzprUsBB
+         5NO3j0ERJTi0OIIihE8sjSrXI/ueYUhpzuyzUvDnj/rraSlSTYcBjV3vc+GP9NtnhzkI
+         VM96wegARllDkf3644nEdixuvBQTRlgo0J5z3sG6cbiClK2MFU5FQEMNxQ3kr0ozGy8b
+         H0v0wy7xBeY27WgEwcBToKdEfjz5/a8PRSTPfNS/C9WTKMFTLaYVjUzE1+aWoW7GlT8m
+         l9irSkp9XsXAqCpbUokn14g9EtjANf+Eja8ATrFsehV0xTGHq1NWrkarTq4fmuMSRcMt
+         X6iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=p23li6dT00AJl3hRn5GLCpGGZV7Mde/F/ZC6fP/JEqE=;
+        b=sByAnDbkthCvruWV98By+MTDYbEKZTAKag9vae8Q3EfdfW1efLi+TltR8HNKMcr1RH
+         azFyxS5pUToK7zEyapqiTTXgyc7L8YbkPai17EYuynwPLfeWFBIALBhJpmriSPilzEi2
+         SRQ9MrVccSyXN2E9q4g73G/m9cW4rorDYWDnBHn5aKLOykMKABjmkX1mlaaD0SfmegLg
+         WjuhKnv3sAA41RGoyMHEq9eNg5KIxOuslegxMmSStmi4jMe9iW55E+MeNkIDVstJoMBW
+         j7Lo8DvHWiLWdRg1lya6FSs7z8r6G4OXCW1apqnU4gZfiIXoMDshC9fVNNdXtsiZQ786
+         WVsw==
+X-Gm-Message-State: AOAM530toQgUKDvh8FYweevDJ3JyjOUYBWBfZ/0cfSBpO7edLNZE7pDR
+        Mw+HslKPbFlxb0leBrtOMAxAGyVelltlkZuouQfcNQ==
+X-Google-Smtp-Source: ABdhPJwYioIcf3roWcw+7eBY8YdFqDjjHYzBDCjQs9Td/wpB5Go+w8ufPzRoqDbMsrdiR1b646s6qcFXd+sb+pgP2sE=
+X-Received: by 2002:a05:6870:1709:b0:e1:ea02:2001 with SMTP id
+ h9-20020a056870170900b000e1ea022001mr2164491oae.241.1649182028168; Tue, 05
+ Apr 2022 11:07:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH net] net: micrel: Fix KS8851 Kconfig
-Content-Language: en-US
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        Divya.Koppera@microchip.com, kernel test robot <lkp@intel.com>
-References: <20220405065936.4105272-1-horatiu.vultur@microchip.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220405065936.4105272-1-horatiu.vultur@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAE=gft4a-QL82iFJE_xRQ3JrMmz-KZKWREtz=MghhjFbJeK=8A@mail.gmail.com>
+ <87a6cz39qd.ffs@tglx>
+In-Reply-To: <87a6cz39qd.ffs@tglx>
+From:   Evan Green <evgreen@google.com>
+Date:   Tue, 5 Apr 2022 11:06:31 -0700
+Message-ID: <CAE=gft521_W6uaCBovjr5RJ-RV3vVE2Ex0OV91FxpnuXThYHLA@mail.gmail.com>
+Subject: Re: Lost MSIs during hibernate
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatja@chromium.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 5, 2022 at 7:06 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> Evan!
+>
+> On Mon, Apr 04 2022 at 12:11, Evan Green wrote:
+> > To my surprise, I'm back with another MSI problem, and hoping to get
+> > some advice on how to approach fixing it.
+>
+> Why am I not surprised?
+
+I swear I don't intersect with this stuff that often. Maybe the
+reality is I always intersect with this stuff, it just usually works
+perfectly :)
+
+>
+> > What worries me is those IRQ "no longer affine" messages, as well as
+> > my "EVAN don't touch hw" prints, indicating that requests to change
+> > the MSI are being dropped. These ignored requests are coming in when
+> > we try to migrate all IRQs off of the non-boot CPU, and they get
+> > ignored because all devices are "frozen" at this point, and presumably
+> > not in D0.
+>
+> They are disabled at that point.
+>
+> > To further try and prove that theory, I wrote a script to do the
+> > hibernate prepare image step in a loop, but messed with XHCI's IRQ
+> > affinity beforehand. If I move the IRQ to core 0, so far I have never
+> > seen a hang. But if I move it to another core, I can usually get a
+> > hang in the first attempt. I also very occasionally see wifi splats
+> > when trying this, and those "no longer affine" prints are all the wifi
+> > queue IRQs. So I think a wifi packet coming in at the wrong time can
+> > do the same thing.
+> >
+> > I wanted to see what thoughts you might have on this. Should I try to
+> > make a patch that moves all IRQs to CPU 0 *before* the devices all
+> > freeze? Sounds a little unpleasant. Or should PCI be doing something
+> > different to avoid this combination of "you're not allowed to modify
+> > my MSIs, but I might still generate interrupts that must not be lost"?
+>
+> PCI cannot do much here and moving interrupts around is papering over
+> the underlying problem.
+>
+> xhci_hcd 0000:00:0d.0: EVAN Write MSI 0 fee1e000 4023
+>
+>   This sets up the interrupt when the driver is loaded
+>
+> xhci_hcd 0000:00:14.0: EVAN Write MSI 0 fee01000 4024
+>
+>   Ditto
+>
+> xhci_hcd 0000:00:0d.0: calling pci_pm_freeze+0x0/0xad @ 423, parent: pci0000:00
+> xhci_hcd 0000:00:14.0: calling pci_pm_freeze+0x0/0xad @ 4644, parent: pci0000:00
+> xhci_hcd 0000:00:14.0: pci_pm_freeze+0x0/0xad returned 0 after 0 usecs
+> xhci_hcd 0000:00:0d.0: EVAN Write MSI 0 fee1e000 4023
+> xhci_hcd 0000:00:0d.0: pci_pm_freeze+0x0/0xad returned 0 after 196000 usecs
+>
+> Those freeze() calls end up in xhci_suspend(), which tears down the XHCI
+> and ensures that no interrupts are on flight.
+
+Your hint here about xhci_suspend() was helpful. It turns out this is
+not called in the freeze path, usb_hcd_pci_pm_ops just calls
+check_root_hub_suspended(). The documentation in devices.rst is pretty
+clear about this:
+
+```
+The ``->freeze`` methods should quiesce the device so that it doesn't
+generate IRQs or DMA
+```
+
+So I think you're right that the PM layer is doing everything right
+(though with a bit of a footgun that if you mess up and generate an
+interrupt after freeze it may just be gone forever), and usb core is
+at fault here. I've been testing with this patch (mangled in email),
+and so far the issue seems to be gone:
+
+@@ -614,10 +622,10 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
+        .suspend_noirq  = hcd_pci_suspend_noirq,
+        .resume_noirq   = hcd_pci_resume_noirq,
+        .resume         = hcd_pci_resume,
+-       .freeze         = check_root_hub_suspended,
+-       .freeze_noirq   = check_root_hub_suspended,
+-       .thaw_noirq     = NULL,
+-       .thaw           = NULL,
++       .freeze         = hcd_pci_suspend,
++       .freeze_noirq   = hcd_pci_suspend_noirq,
++       .thaw_noirq     = hcd_pci_resume_noirq,
++       .thaw           = hcd_pci_resume,
+        .poweroff       = hcd_pci_suspend,
+        .poweroff_noirq = hcd_pci_suspend_noirq,
+        .restore_noirq  = hcd_pci_resume_noirq,
 
 
-On 4/4/22 23:59, Horatiu Vultur wrote:
-> KS8851 selects MICREL_PHY, which depends on PTP_1588_CLOCK_OPTIONAL, so
-> make KS8851 also depend on PTP_1588_CLOCK_OPTIONAL.
-> 
-> Fixes kconfig warning and build errors:
-> 
-> WARNING: unmet direct dependencies detected for MICREL_PHY
->   Depends on [m]: NETDEVICES [=y] && PHYLIB [=y] && PTP_1588_CLOCK_OPTIONAL [=m]
->     Selected by [y]:
->       - KS8851 [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_MICREL [=y] && SPI [=y]
-> 
-> ld.lld: error: undefined symbol: ptp_clock_register referenced by micrel.c
-> net/phy/micrel.o:(lan8814_probe) in archive drivers/built-in.a
-> ld.lld: error: undefined symbol: ptp_clock_index referenced by micrel.c
-> net/phy/micrel.o:(lan8814_ts_info) in archive drivers/built-in.a
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Fixes: ece19502834d ("net: phy: micrel: 1588 support for LAN8814 phy")
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+As an aside, one might wonder "why don't we see this everywhere
+then?". I think that's because Intel missed a patch enabling runtime
+pm on one of these XHCI controllers (8086:51ed). See the quirks below,
+that missing 2 on 00:14.0 is XHCI_DEFAULT_PM_RUNTIME_ALLOW:
+# dmesg | grep quirks
+[    2.804073] xhci_hcd 0000:00:0d.0: hcc params 0x20007fc1 hci
+version 0x120 quirks 0x0000000200009810
+[    3.108045] xhci_hcd 0000:00:14.0: hcc params 0x20007fc1 hci
+version 0x120 quirks 0x0000000000009810
 
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+If the XHCI controller were usually in runtime suspend when freeze()
+got called, it would be fully quiesced and would not lose its
+interrupt. I had noticed this earlier, and it did reduce the repro
+rate, but did not reduce it to zero. Now it makes sense why.
 
-Thanks.
+I think I have enough info to go make a USB patch now. Thank you for you help!
+-Evan
 
-> ---
->  drivers/net/ethernet/micrel/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/net/ethernet/micrel/Kconfig b/drivers/net/ethernet/micrel/Kconfig
-> index 1b632cdd7630..830363bafcce 100644
-> --- a/drivers/net/ethernet/micrel/Kconfig
-> +++ b/drivers/net/ethernet/micrel/Kconfig
-> @@ -28,6 +28,7 @@ config KS8842
->  config KS8851
->  	tristate "Micrel KS8851 SPI"
->  	depends on SPI
-> +	depends on PTP_1588_CLOCK_OPTIONAL
->  	select MII
->  	select CRC32
->  	select EEPROM_93CX6
-
--- 
-~Randy
+>
+> xhci_hcd 0000:00:0d.0: calling pci_pm_freeze_noirq+0x0/0xb2 @ 4645, parent: pci0000:00
+> xhci_hcd 0000:00:0d.0: pci_pm_freeze_noirq+0x0/0xb2 returned 0 after 30 usecs
+> xhci_hcd 0000:00:14.0: calling pci_pm_freeze_noirq+0x0/0xb2 @ 4644, parent: pci0000:00
+> xhci_hcd 0000:00:14.0: pci_pm_freeze_noirq+0x0/0xb2 returned 0 after 3118 usecs
+>
+>    Now the devices are disabled and not accessible
+>
+> xhci_hcd 0000:00:14.0: EVAN Don't touch hw 0 fee00000 4024
+> xhci_hcd 0000:00:0d.0: EVAN Don't touch hw 0 fee1e000 4045
+> xhci_hcd 0000:00:0d.0: EVAN Don't touch hw 0 fee00000 4045
+> xhci_hcd 0000:00:14.0: calling pci_pm_thaw_noirq+0x0/0x70 @ 9, parent: pci0000:00
+> xhci_hcd 0000:00:14.0: EVAN Write MSI 0 fee00000 4024
+>
+>    This is the early restore _before_ the XHCI resume code is called
+>    This interrupt is targeted at CPU0 (it's the one which could not be
+>    written above).
+>
+> xhci_hcd 0000:00:14.0: pci_pm_thaw_noirq+0x0/0x70 returned 0 after 5272 usecs
+> xhci_hcd 0000:00:0d.0: calling pci_pm_thaw_noirq+0x0/0x70 @ 1123, parent: pci0000:00
+> xhci_hcd 0000:00:0d.0: EVAN Write MSI 0 fee00000 4045
+>
+>    Ditto
+>
+> xhci_hcd 0000:00:0d.0: pci_pm_thaw_noirq+0x0/0x70 returned 0 after 623 usecs
+> xhci_hcd 0000:00:14.0: calling pci_pm_thaw+0x0/0x7c @ 3856, parent: pci0000:00
+> xhci_hcd 0000:00:14.0: pci_pm_thaw+0x0/0x7c returned 0 after 0 usecs
+> xhci_hcd 0000:00:0d.0: calling pci_pm_thaw+0x0/0x7c @ 4664, parent: pci0000:00
+> xhci_hcd 0000:00:0d.0: pci_pm_thaw+0x0/0x7c returned 0 after 0 usecs
+>
+> That means the suspend/resume logic is doing the right thing.
+>
+> How the XHCI ends up being confused here is a mystery. Cc'ed a few more folks.
+>
+> Thanks,
+>
+>         tglx
+>
+>

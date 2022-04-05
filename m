@@ -2,81 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D2B4F4B15
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B59604F4EC1
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573861AbiDEWxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51998 "EHLO
+        id S1836543AbiDFAge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1458142AbiDERKP (ORCPT
+        with ESMTP id S1572876AbiDERNN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 13:10:15 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BB853E0D
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 10:08:10 -0700 (PDT)
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
+        Tue, 5 Apr 2022 13:13:13 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA1E32989
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 10:11:14 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 3F46B3F7F8
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 17:08:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1649178489;
-        bh=5ihDC8svoYNzIK8hMFPyp1shfnbI2+1sTt6+M9occ8s=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=IUkkLfimBJWf98kUMI2g9SirAuVXQOUPA3bh6YbbqNWxS3lgf7t/5zA6RflitTCXs
-         41HLAJtp1A9U4o7JeMLl9l2TJ6P1vjIfMA8NxvppLlEwoz6u633oTtGVUXNp95nemM
-         IEzCMIzuFKWRs4Q7DgtXA6JvSSBR7RjD8VHQ0nECVlSAtxWxBGxvhBCIvyeGR4La0o
-         ATEwFzYYfPz3ue8rsJfddPbmFOXnsfnKgnuJopniPUIws7tCE0S/2DmJy4EsXEbRD8
-         TI78+BnSjHtKOS9CoceoCh+S7CB2IrkUW4/VVyR0PUDHf3A+xNNhvZORbXJZiuJXe8
-         ZAea2dKoz/1vQ==
-Received: by mail-wr1-f70.google.com with SMTP id e4-20020adfa444000000b002060b7347f8so1774897wra.6
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 10:08:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5ihDC8svoYNzIK8hMFPyp1shfnbI2+1sTt6+M9occ8s=;
-        b=LzdtEnWw6B+LkEinl205j07VAqNbZL90SRMcQM1AaXTamf1AFYNypaR/5CeipNh/rc
-         YJcefi0t2ffxYloQADmqz6DNf6pj36ckRQrKZWcVdt/zUaT2f5cmekpFO3WeIZtjJ3me
-         DTPUcBlkZOHE1YwZoAIaWyQ3HPFPoF1ODiRBbC5GOD8pzZoEo6yH2HOxfGoNGIdLwhqW
-         nKMIQ6Dk03e+acqWqAtRWWYq29ErtjfribZf8XvZ8mGcIa/wxySuqqC70oqejZO2K3Hv
-         t1uW9RPwEPfE4ox6Chbo0K0C8aruZCBnul9PV3ZP/wQULMcfrGOgI1AYGzUnC/063xx+
-         P5ow==
-X-Gm-Message-State: AOAM532NSTiQ3WOfAGk/r19Gm/ZWqa3bz3YkqsWDBm8wvpmXmDo6rPFG
-        I2XrhxURBdxND1yJjoqsbuvWlwsON230+r36pGoOVKBQO/1tqVTs8XNNPM4AolZTUamSyf+ALMk
-        qWRnr7959fzwG916mteYssIEDgHrj+WoDLiTPgOx6t073izQKfAexhInkog==
-X-Received: by 2002:a05:6000:1203:b0:206:1837:b5a8 with SMTP id e3-20020a056000120300b002061837b5a8mr3473856wrx.232.1649178486071;
-        Tue, 05 Apr 2022 10:08:06 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJziuMa66ZbQ9P/QeRUcn9JlFEqtsJOCFfYeHJTQhJe868mBJWdgkEPXXRcbxUGQEfP9hhmpi0r6jO87fnMEX18=
-X-Received: by 2002:a05:6000:1203:b0:206:1837:b5a8 with SMTP id
- e3-20020a056000120300b002061837b5a8mr3473845wrx.232.1649178485847; Tue, 05
- Apr 2022 10:08:05 -0700 (PDT)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BEE1D210FD;
+        Tue,  5 Apr 2022 17:11:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1649178672; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qXZaguQgzHHMZTiLw5gbfQ9kh4XyH0tzaiUaS6uMhFw=;
+        b=P1Niw4x7r4HvoVhVpJmYRniTerVWGNQa6wUn7Ui1YBWr3GPrTv/DDxtfkvC2CYjhu4hPwt
+        vRo+RBTSUTI2wSww9e+aNNtAJDjdZK/C+6YaX98Vj07u/ft/IbH09AI6kOOthu2Z+1MU0T
+        FXIgvSyFmpbK4wYkorchJoof5s0UgxM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1649178672;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qXZaguQgzHHMZTiLw5gbfQ9kh4XyH0tzaiUaS6uMhFw=;
+        b=1mPAQK/8Tc5VWkJTuIOTeqpAAr7YKV2IrbOKQ8iV5kuhxX8JwS1ELK4F58khGigxtSLgop
+        AGReuck+EL/60AAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AB5D113A04;
+        Tue,  5 Apr 2022 17:11:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id AY4eKTB4TGK7HwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 05 Apr 2022 17:11:12 +0000
+Message-ID: <c56564cd-87f0-25c8-bb78-2bb8d8ad2655@suse.cz>
+Date:   Tue, 5 Apr 2022 19:11:12 +0200
 MIME-Version: 1.0
-References: <20220405070354.155796697@linuxfoundation.org> <20220405070400.156176848@linuxfoundation.org>
- <YkxjbVp3W2LeVIeL@xps13.dannf> <Ykx1o2PbNzGlp1ds@kroah.com>
-In-Reply-To: <Ykx1o2PbNzGlp1ds@kroah.com>
-From:   dann frazier <dann.frazier@canonical.com>
-Date:   Tue, 5 Apr 2022 11:07:53 -0600
-Message-ID: <CALdTtnv2w5d0N4ez7JTsxaWMa6v2c5j9-guVjkUq33=UDNFMGA@mail.gmail.com>
-Subject: Re: [PATCH 5.16 0199/1017] PCI: xgene: Revert "PCI: xgene: Fix IB
- window setup"
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Toan Le <toan@os.amperecomputing.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] mm/page_alloc: add same penalty is enough to get
+ round-robin order
+Content-Language: en-US
+To:     Wei Yang <richard.weiyang@gmail.com>, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220123013537.20491-1-richard.weiyang@gmail.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220123013537.20491-1-richard.weiyang@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,58 +74,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 11:00 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Apr 05, 2022 at 09:42:37AM -0600, dann frazier wrote:
-> > On Tue, Apr 05, 2022 at 09:18:32AM +0200, Greg Kroah-Hartman wrote:
-> > > From: Marc Zyngier <maz@kernel.org>
-> > >
-> > > commit 825da4e9cec68713fbb02dc6f71fe1bf65fe8050 upstream.
-> > >
-> > > Commit c7a75d07827a ("PCI: xgene: Fix IB window setup") tried to
-> > > fix the damages that 6dce5aa59e0b ("PCI: xgene: Use inbound resources
-> > > for setup") caused, but actually didn't improve anything for some
-> > > plarforms (at least Mustang and m400 are still broken).
-> > >
-> > > Given that 6dce5aa59e0b has been reverted, revert this patch as well,
-> > > restoring the PCIe support on XGene to its pre-5.5, working state.
-> > >
-> > > Link: https://lore.kernel.org/r/YjN8pT5e6/8cRohQ@xps13.dannf
-> > > Link: https://lore.kernel.org/r/20220321104843.949645-3-maz@kernel.or=
-g
-> > > Fixes: c7a75d07827a ("PCI: xgene: Fix IB window setup")
-> > > Signed-off-by: Marc Zyngier <maz@kernel.org>
-> > > Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> > > Cc: stable@vger.kernel.org
-> > > Cc: Rob Herring <robh@kernel.org>
-> > > Cc: Toan Le <toan@os.amperecomputing.com>
-> > > Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> > > Cc: Krzysztof Wilczy=C5=84ski <kw@linux.com>
-> > > Cc: Bjorn Helgaas <bhelgaas@google.com>
-> > > Cc: St=C3=A9phane Graber <stgraber@ubuntu.com>
-> > > Cc: dann frazier <dann.frazier@canonical.com>
-> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > ---
-> > >  drivers/pci/controller/pci-xgene.c |    2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > Hi Greg,
-> >
-> >   I don't think it makes sense to apply this to 5.10.y, 5.15.y &
-> > 5.16.y w/o also applying a backport of 1874b6d7ab1, because without
-> > that we will regress support for St=C3=A9phane's X-Gene2-based systems.=
- The
-> > backport of 1874b6d7ab1 was rejected for these trees because it doesn't
-> > apply cleanly, but I've just submitted new versions that do.
->
-> Where were those patches sent to?  I don't seem to see them on the
-> stable list, did I miss them?
+On 1/23/22 02:35, Wei Yang wrote:
+> To make node order in round-robin in the same distance group, we add a
+> penalty to the first node we got in each round.
+> 
+> To get a round-robin order in the same distance group, we don't need to
+> decrease the penalty since:
+> 
+>   * find_next_best_node() always iterates node in the same order
+>   * distance matters more then penalty in find_next_best_node()
+>   * in nodes with the same distance, the first one would be picked up
+> 
+> So it is fine to increase same penalty when we get the first node in the
+> same distance group.
 
-These are the message IDs:
-<20220405142505.1268999-1-dann.frazier@canonical.com>
-<20220405153419.1330755-1-dann.frazier@canonical.com>
+With that logic I'm not even sure if we need nr_online_nodes as penalty or
+it could be just 1. Would you know?
 
-I've just bounced them directly to you as well. Thanks Greg!
+> 
+> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+> ---
+>  mm/page_alloc.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index c5952749ad40..f27afd517652 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -6245,13 +6245,12 @@ static void build_thisnode_zonelists(pg_data_t *pgdat)
+>  static void build_zonelists(pg_data_t *pgdat)
+>  {
+>  	static int node_order[MAX_NUMNODES];
+> -	int node, load, nr_nodes = 0;
+> +	int node, nr_nodes = 0;
+>  	nodemask_t used_mask = NODE_MASK_NONE;
+>  	int local_node, prev_node;
+>  
+>  	/* NUMA-aware ordering of nodes */
+>  	local_node = pgdat->node_id;
+> -	load = nr_online_nodes;
+>  	prev_node = local_node;
+>  
+>  	memset(node_order, 0, sizeof(node_order));
+> @@ -6263,11 +6262,10 @@ static void build_zonelists(pg_data_t *pgdat)
+>  		 */
+>  		if (node_distance(local_node, node) !=
+>  		    node_distance(local_node, prev_node))
+> -			node_load[node] += load;
+> +			node_load[node] += nr_online_nodes;
+>  
+>  		node_order[nr_nodes++] = node;
+>  		prev_node = node;
+> -		load--;
+>  	}
+>  
+>  	build_zonelists_in_node_order(pgdat, node_order, nr_nodes);
 
- -dann

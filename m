@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F20904F21DA
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5DA74F21D7
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbiDECnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 22:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49450 "EHLO
+        id S229813AbiDECn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 22:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiDECnG (ORCPT
+        with ESMTP id S229890AbiDECnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 4 Apr 2022 22:43:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A2EB23178DC
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 18:49:01 -0700 (PDT)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B265315AE24
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 18:49:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649123340;
+        s=mimecast20190719; t=1649123342;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Xu2h9LPZD95UgWg3OX67cvf1aND/vrgeeBhE/APRTdQ=;
-        b=KDjDbiebLj463dZtcD2oziRaTvUBtp2CZ4N9glLWvN1cfKgXiBYs0bBd3nBDWTtb2OV3BT
-        5uRklzsc5uOqX7UQEzZNaMi+uMiDO3ad8V8ys8ZcAX8amLJNS/IFjcRnCe4eNvaZU/R1Cl
-        D4j9PCWAGn+uJ2k7VOB6BdGGswcMkro=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=1OYbScRjTNz5QBi4xGatPlRbPmUiT0LOinB85jUkB/M=;
+        b=L/BBwTYeBPsyYH4JiLRV2thymvAaY+vrSAIi67NrTTwBKM8boXGihDQShxCNODnL2UOEAY
+        0ELSrhYIa3phD0eKYKVtVB75NbeydG4JlbKuLGnimj1I0WyiZ2eiNX+yuNCzEpKon47PWv
+        aL8E9Usqd7fRKR3M6iK7lz1H42yDeOA=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-164-SX5xPaY2NFCZ0xzL6qfUfg-1; Mon, 04 Apr 2022 21:48:59 -0400
-X-MC-Unique: SX5xPaY2NFCZ0xzL6qfUfg-1
-Received: by mail-il1-f199.google.com with SMTP id h13-20020a056e021d8d00b002c7fb1ec601so7204222ila.6
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 18:48:59 -0700 (PDT)
+ us-mta-401-PnNWMM54ME6FFusKLR1g5w-1; Mon, 04 Apr 2022 21:49:02 -0400
+X-MC-Unique: PnNWMM54ME6FFusKLR1g5w-1
+Received: by mail-io1-f69.google.com with SMTP id x16-20020a6bfe10000000b006409f03e39eso7462484ioh.7
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 18:49:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Xu2h9LPZD95UgWg3OX67cvf1aND/vrgeeBhE/APRTdQ=;
-        b=uMlauL5KV9l3yICX3creE+o992jTDKd2SpHcL5Y8IvU3bR4BUeeanIeNAm0XKRmAmi
-         EyeY3HEpYrUmdj03SMvRoGYrW0RuiuQF3szOIwcLwZQNCLiKHxAws+xG4DmNxV3as2W/
-         da1+He6mLUessB59Y1MIINsy2Ynij58tjKPaPu90bsBDadQKXAuY49o3J3VSOWqKdUhC
-         pchHf3Waxu1YFPFJ71Ng7F56rCC0NsXlMYE643jk4XRyx7b2SigiF91poLN9O9an3eiD
-         ngKwtPUWgKkggArnyZmXA6krH0tt644zE5n1VOLnbFhJ6wzclE5em8/659Qyz2RDgGjp
-         yHug==
-X-Gm-Message-State: AOAM531e5IjS2IbSZ/DxRya6OtEeHd/hPhfVRW3sF5DN1G9slLUciZY8
-        ScHSG1HgKJ6LDodbsxsikH38c1u752LZbRtCFXwqnYakvWOb6hhWhdmPNbbl+16VJIORNtcwImn
-        sG8AezBkTwrHZALEe2YvxN/pQHzHqBEnPN2gnGFXdGmqELnICS7dwtgoejq3g9M0jBr6wGFOimQ
+        bh=1OYbScRjTNz5QBi4xGatPlRbPmUiT0LOinB85jUkB/M=;
+        b=njevMjeQHqnssYvm05IxuFjGh0Ow5j3csBZ3jVXQlnaSkoBM5AH1dpkmWTnPWl79dV
+         PCPKKwsTtgAEdbbBy+stYOn7kSEuE6Y7XNP0yr8jAoAehIzQUeDVT4qPr/LzuR1DEEFJ
+         zouX1G5BotDBx+M18a9RTFD+urc0s3RDmbiZbU/0TWu/FLL0jYQ3QhLf6PzeywCpH8NK
+         eRSxNII67jBLD6nd6/nbK1vp+UcwDemDA17ancaaU/bEQ8DwkXystq1JtPx664YRddv0
+         MY78IRtPS53XyLyU/k/K+m01Q2qovQq0jzpsLs/ayaDbOuEdTxEdNJPvWhBhv7U0QtbD
+         QBLA==
+X-Gm-Message-State: AOAM5303R+iWCB0l9u3EEkbKj6APeUVYflyPpPo1xou7T9dyqh7ikwgE
+        YZ6RswZq/PboHHUvL0T2j9k1JC4rbPHrWmA3+FIuJmHpL7hMimNViuGeEfMLsIvPftOmXu+Rrqd
+        663UzrpBruFn6UbsYq9G/q9dGCoFYtkXelH68hBIec5kme8MRSHoKVL0mwsWonEymawBdQTDrqw
         ==
-X-Received: by 2002:a05:6638:d87:b0:323:c006:3650 with SMTP id l7-20020a0566380d8700b00323c0063650mr709891jaj.64.1649123338509;
-        Mon, 04 Apr 2022 18:48:58 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwMFmhYcxtKesF8e8jA4ez0VAvz2QlCxEYSpJ9E7Y0EzGtvgbMSWc0UDKb86qoEwbB54Mdr3g==
-X-Received: by 2002:a05:6638:d87:b0:323:c006:3650 with SMTP id l7-20020a0566380d8700b00323c0063650mr709862jaj.64.1649123338140;
-        Mon, 04 Apr 2022 18:48:58 -0700 (PDT)
+X-Received: by 2002:a05:6638:a3a:b0:323:5c6d:ae20 with SMTP id 26-20020a0566380a3a00b003235c6dae20mr735143jao.80.1649123341205;
+        Mon, 04 Apr 2022 18:49:01 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxMAeWuW/3+txDsVV62vki1LADOgkDFuyCvrbdc9Pj11bhRHmjppURbT8nshi8PLqZuUQv4iQ==
+X-Received: by 2002:a05:6638:a3a:b0:323:5c6d:ae20 with SMTP id 26-20020a0566380a3a00b003235c6dae20mr735120jao.80.1649123340991;
+        Mon, 04 Apr 2022 18:49:00 -0700 (PDT)
 Received: from localhost.localdomain (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id u15-20020a92d1cf000000b002ca56804ec4sm473668ilg.23.2022.04.04.18.48.56
+        by smtp.gmail.com with ESMTPSA id l14-20020a05660227ce00b00645ebb013c1sm8287007ios.45.2022.04.04.18.48.59
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 04 Apr 2022 18:48:57 -0700 (PDT)
+        Mon, 04 Apr 2022 18:49:00 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
@@ -70,9 +70,9 @@ Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Axel Rasmussen <axelrasmussen@google.com>,
         Alistair Popple <apopple@nvidia.com>, peterx@redhat.com
-Subject: [PATCH v8 10/23] mm/shmem: Handle uffd-wp during fork()
-Date:   Mon,  4 Apr 2022 21:48:55 -0400
-Message-Id: <20220405014855.14468-1-peterx@redhat.com>
+Subject: [PATCH v8 11/23] mm/hugetlb: Introduce huge pte version of uffd-wp helpers
+Date:   Mon,  4 Apr 2022 21:48:58 -0400
+Message-Id: <20220405014858.14531-1-peterx@redhat.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220405014646.13522-1-peterx@redhat.com>
 References: <20220405014646.13522-1-peterx@redhat.com>
@@ -80,7 +80,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,96 +88,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Normally we skip copy page when fork() for VM_SHARED shmem, but we can't skip
-it anymore if uffd-wp is enabled on dst vma.  This should only happen when the
-src uffd has UFFD_FEATURE_EVENT_FORK enabled on uffd-wp shmem vma, so that
-VM_UFFD_WP will be propagated onto dst vma too, then we should copy the
-pgtables with uffd-wp bit and pte markers, because these information will be
-lost otherwise.
+They will be used in the follow up patches to either check/set/clear uffd-wp
+bit of a huge pte.
 
-Since the condition checks will become even more complicated for deciding
-"whether a vma needs to copy the pgtable during fork()", introduce a helper
-vma_needs_copy() for it, so everything will be clearer.
+So far it reuses all the small pte helpers.  Archs can overwrite these versions
+when necessary (with __HAVE_ARCH_HUGE_PTE_UFFD_WP* macros) in the future.
 
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- mm/memory.c | 49 +++++++++++++++++++++++++++++++++++++++++--------
- 1 file changed, 41 insertions(+), 8 deletions(-)
+ arch/s390/include/asm/hugetlb.h | 15 +++++++++++++++
+ include/asm-generic/hugetlb.h   | 15 +++++++++++++++
+ 2 files changed, 30 insertions(+)
 
-diff --git a/mm/memory.c b/mm/memory.c
-index 1144845ff734..8ba1bb196095 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -867,6 +867,14 @@ copy_nonpresent_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
- 		if (try_restore_exclusive_pte(src_pte, src_vma, addr))
- 			return -EBUSY;
- 		return -ENOENT;
-+	} else if (is_pte_marker_entry(entry)) {
-+		/*
-+		 * We're copying the pgtable should only because dst_vma has
-+		 * uffd-wp enabled, do sanity check.
-+		 */
-+		WARN_ON_ONCE(!userfaultfd_wp(dst_vma));
-+		set_pte_at(dst_mm, addr, dst_pte, pte);
-+		return 0;
- 	}
- 	if (!userfaultfd_wp(dst_vma))
- 		pte = pte_swp_clear_uffd_wp(pte);
-@@ -1221,6 +1229,38 @@ copy_p4d_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma,
- 	return 0;
+diff --git a/arch/s390/include/asm/hugetlb.h b/arch/s390/include/asm/hugetlb.h
+index bea47e7cc6a0..be99eda87f4d 100644
+--- a/arch/s390/include/asm/hugetlb.h
++++ b/arch/s390/include/asm/hugetlb.h
+@@ -115,6 +115,21 @@ static inline pte_t huge_pte_modify(pte_t pte, pgprot_t newprot)
+ 	return pte_modify(pte, newprot);
  }
  
-+/*
-+ * Return true if the vma needs to copy the pgtable during this fork().  Return
-+ * false when we can speed up fork() by allowing lazy page faults later until
-+ * when the child accesses the memory range.
-+ */
-+bool
-+vma_needs_copy(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
++static inline pte_t huge_pte_mkuffd_wp(pte_t pte)
 +{
-+	/*
-+	 * Always copy pgtables when dst_vma has uffd-wp enabled even if it's
-+	 * file-backed (e.g. shmem). Because when uffd-wp is enabled, pgtable
-+	 * contains uffd-wp protection information, that's something we can't
-+	 * retrieve from page cache, and skip copying will lose those info.
-+	 */
-+	if (userfaultfd_wp(dst_vma))
-+		return true;
-+
-+	if (src_vma->vm_flags & (VM_HUGETLB | VM_PFNMAP | VM_MIXEDMAP))
-+		return true;
-+
-+	if (src_vma->anon_vma)
-+		return true;
-+
-+	/*
-+	 * Don't copy ptes where a page fault will fill them correctly.  Fork
-+	 * becomes much lighter when there are big shared or private readonly
-+	 * mappings. The tradeoff is that copy_page_range is more efficient
-+	 * than faulting.
-+	 */
-+	return false;
++	return pte;
 +}
 +
- int
- copy_page_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
++static inline pte_t huge_pte_clear_uffd_wp(pte_t pte)
++{
++	return pte;
++}
++
++static inline int huge_pte_uffd_wp(pte_t pte)
++{
++	return 0;
++}
++
+ static inline bool gigantic_page_runtime_supported(void)
  {
-@@ -1234,14 +1274,7 @@ copy_page_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
- 	bool is_cow;
- 	int ret;
+ 	return true;
+diff --git a/include/asm-generic/hugetlb.h b/include/asm-generic/hugetlb.h
+index f39cad20ffc6..896f341f614d 100644
+--- a/include/asm-generic/hugetlb.h
++++ b/include/asm-generic/hugetlb.h
+@@ -35,6 +35,21 @@ static inline pte_t huge_pte_modify(pte_t pte, pgprot_t newprot)
+ 	return pte_modify(pte, newprot);
+ }
  
--	/*
--	 * Don't copy ptes where a page fault will fill them correctly.
--	 * Fork becomes much lighter when there are big shared or private
--	 * readonly mappings. The tradeoff is that copy_page_range is more
--	 * efficient than faulting.
--	 */
--	if (!(src_vma->vm_flags & (VM_HUGETLB | VM_PFNMAP | VM_MIXEDMAP)) &&
--	    !src_vma->anon_vma)
-+	if (!vma_needs_copy(dst_vma, src_vma))
- 		return 0;
- 
- 	if (is_vm_hugetlb_page(src_vma))
++static inline pte_t huge_pte_mkuffd_wp(pte_t pte)
++{
++	return pte_mkuffd_wp(pte);
++}
++
++static inline pte_t huge_pte_clear_uffd_wp(pte_t pte)
++{
++	return pte_clear_uffd_wp(pte);
++}
++
++static inline int huge_pte_uffd_wp(pte_t pte)
++{
++	return pte_uffd_wp(pte);
++}
++
+ #ifndef __HAVE_ARCH_HUGE_PTE_CLEAR
+ static inline void huge_pte_clear(struct mm_struct *mm, unsigned long addr,
+ 		    pte_t *ptep, unsigned long sz)
 -- 
 2.32.0
 

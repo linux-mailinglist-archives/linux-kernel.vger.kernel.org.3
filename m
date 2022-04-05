@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 765274F26DD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC874F26BA
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233997AbiDEH54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56490 "EHLO
+        id S233789AbiDEH5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:57:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232256AbiDEHq1 (ORCPT
+        with ESMTP id S232517AbiDEHqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:46:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4CF899685;
-        Tue,  5 Apr 2022 00:41:55 -0700 (PDT)
+        Tue, 5 Apr 2022 03:46:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646D6939B3;
+        Tue,  5 Apr 2022 00:42:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C486B81B14;
-        Tue,  5 Apr 2022 07:41:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 688F2C340EE;
-        Tue,  5 Apr 2022 07:41:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF09E6164B;
+        Tue,  5 Apr 2022 07:42:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3CE1C3410F;
+        Tue,  5 Apr 2022 07:42:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144512;
-        bh=pol35tleRDTuGvRqTHMK7qDa4oCsmemWL50nN29IMSY=;
+        s=korg; t=1649144546;
+        bh=upjup/PH9p+NOiB48oXfZdK7fKPqGxjGolVx04MBn/8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zbz0xHQqnBh8A+nl4gL3jm2iV9c50KgQCaCva9/WkfjorALxIKW0UswSYNAg/JS3O
-         2rl/KsKdRB1oNPkVHQPjQzP7A5jAOXtTk7wiak8gmmHp6s0DEyZUuQ4jvj0D/acQav
-         UTzv3JnZ6ObOUn3Ru42FAZvlv4+iCqY+hoCs4N5Q=
+        b=N0SrAXngKlulQ+GeinP1BVx3GVFbzfnOsVUKwumkC4s5jJn0F7hUIzwUE4I2KY5u5
+         C+1ccTB9O1jux0p8Nd5quAf8b6ZWo3/pevcBTKhIrVMrIWJl5piD/mdWCbdgd1783k
+         +mfHWGPT/eVIpp2eff3i1mikQi/usrE7gXm0l5vQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.17 0072/1126] can: usb_8dev: usb_8dev_start_xmit(): fix double dev_kfree_skb() in error path
-Date:   Tue,  5 Apr 2022 09:13:39 +0200
-Message-Id: <20220405070409.683164747@linuxfoundation.org>
+        stable@vger.kernel.org, Shyam Sundar <ssundar@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        James Smart <jsmart2021@gmail.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.17 0083/1126] scsi: scsi_transport_fc: Fix FPIN Link Integrity statistics counters
+Date:   Tue,  5 Apr 2022 09:13:50 +0200
+Message-Id: <20220405070410.005096835@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -54,69 +57,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: James Smart <jsmart2021@gmail.com>
 
-commit 3d3925ff6433f98992685a9679613a2cc97f3ce2 upstream.
+commit 07e0984b96ec1ba8c6de1c092b986b00ea0c114c upstream.
 
-There is no need to call dev_kfree_skb() when usb_submit_urb() fails
-because can_put_echo_skb() deletes original skb and
-can_free_echo_skb() deletes the cloned skb.
+In the original FPIN commit, stats were incremented by the event_count.
+Event_count is the minimum # of events that must occur before an FPIN is
+sent. Thus, its not the actual number of events, and could be significantly
+off (too low) as it doesn't reflect anything not reported.  Rather than
+attempt to count events, have the statistic count how many FPINS cross the
+threshold and were reported.
 
-Fixes: 0024d8ad1639 ("can: usb_8dev: Add support for USB2CAN interface from 8 devices")
-Link: https://lore.kernel.org/all/20220311080614.45229-1-hbh25y@gmail.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Link: https://lore.kernel.org/r/20220301175536.60250-1-jsmart2021@gmail.com
+Fixes: 3dcfe0de5a97 ("scsi: fc: Parse FPIN packets and update statistics")
+Cc: <stable@vger.kernel.org> # v5.11+
+Cc: Shyam Sundar <ssundar@marvell.com>
+Cc: Nilesh Javali <njavali@marvell.com>
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Signed-off-by: James Smart <jsmart2021@gmail.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/usb/usb_8dev.c |   30 ++++++++++++++----------------
- 1 file changed, 14 insertions(+), 16 deletions(-)
+ drivers/scsi/scsi_transport_fc.c |   39 ++++++++++++++++-----------------------
+ 1 file changed, 16 insertions(+), 23 deletions(-)
 
---- a/drivers/net/can/usb/usb_8dev.c
-+++ b/drivers/net/can/usb/usb_8dev.c
-@@ -663,9 +663,20 @@ static netdev_tx_t usb_8dev_start_xmit(s
- 	atomic_inc(&priv->active_tx_urbs);
+--- a/drivers/scsi/scsi_transport_fc.c
++++ b/drivers/scsi/scsi_transport_fc.c
+@@ -34,7 +34,7 @@ static int fc_bsg_hostadd(struct Scsi_Ho
+ static int fc_bsg_rportadd(struct Scsi_Host *, struct fc_rport *);
+ static void fc_bsg_remove(struct request_queue *);
+ static void fc_bsg_goose_queue(struct fc_rport *);
+-static void fc_li_stats_update(struct fc_fn_li_desc *li_desc,
++static void fc_li_stats_update(u16 event_type,
+ 			       struct fc_fpin_stats *stats);
+ static void fc_delivery_stats_update(u32 reason_code,
+ 				     struct fc_fpin_stats *stats);
+@@ -670,42 +670,34 @@ fc_find_rport_by_wwpn(struct Scsi_Host *
+ EXPORT_SYMBOL(fc_find_rport_by_wwpn);
  
- 	err = usb_submit_urb(urb, GFP_ATOMIC);
--	if (unlikely(err))
--		goto failed;
--	else if (atomic_read(&priv->active_tx_urbs) >= MAX_TX_URBS)
-+	if (unlikely(err)) {
-+		can_free_echo_skb(netdev, context->echo_index, NULL);
-+
-+		usb_unanchor_urb(urb);
-+		usb_free_coherent(priv->udev, size, buf, urb->transfer_dma);
-+
-+		atomic_dec(&priv->active_tx_urbs);
-+
-+		if (err == -ENODEV)
-+			netif_device_detach(netdev);
-+		else
-+			netdev_warn(netdev, "failed tx_urb %d\n", err);
-+		stats->tx_dropped++;
-+	} else if (atomic_read(&priv->active_tx_urbs) >= MAX_TX_URBS)
- 		/* Slow down tx path */
- 		netif_stop_queue(netdev);
+ static void
+-fc_li_stats_update(struct fc_fn_li_desc *li_desc,
++fc_li_stats_update(u16 event_type,
+ 		   struct fc_fpin_stats *stats)
+ {
+-	stats->li += be32_to_cpu(li_desc->event_count);
+-	switch (be16_to_cpu(li_desc->event_type)) {
++	stats->li++;
++	switch (event_type) {
+ 	case FPIN_LI_UNKNOWN:
+-		stats->li_failure_unknown +=
+-		    be32_to_cpu(li_desc->event_count);
++		stats->li_failure_unknown++;
+ 		break;
+ 	case FPIN_LI_LINK_FAILURE:
+-		stats->li_link_failure_count +=
+-		    be32_to_cpu(li_desc->event_count);
++		stats->li_link_failure_count++;
+ 		break;
+ 	case FPIN_LI_LOSS_OF_SYNC:
+-		stats->li_loss_of_sync_count +=
+-		    be32_to_cpu(li_desc->event_count);
++		stats->li_loss_of_sync_count++;
+ 		break;
+ 	case FPIN_LI_LOSS_OF_SIG:
+-		stats->li_loss_of_signals_count +=
+-		    be32_to_cpu(li_desc->event_count);
++		stats->li_loss_of_signals_count++;
+ 		break;
+ 	case FPIN_LI_PRIM_SEQ_ERR:
+-		stats->li_prim_seq_err_count +=
+-		    be32_to_cpu(li_desc->event_count);
++		stats->li_prim_seq_err_count++;
+ 		break;
+ 	case FPIN_LI_INVALID_TX_WD:
+-		stats->li_invalid_tx_word_count +=
+-		    be32_to_cpu(li_desc->event_count);
++		stats->li_invalid_tx_word_count++;
+ 		break;
+ 	case FPIN_LI_INVALID_CRC:
+-		stats->li_invalid_crc_count +=
+-		    be32_to_cpu(li_desc->event_count);
++		stats->li_invalid_crc_count++;
+ 		break;
+ 	case FPIN_LI_DEVICE_SPEC:
+-		stats->li_device_specific +=
+-		    be32_to_cpu(li_desc->event_count);
++		stats->li_device_specific++;
+ 		break;
+ 	}
+ }
+@@ -767,6 +759,7 @@ fc_fpin_li_stats_update(struct Scsi_Host
+ 	struct fc_rport *attach_rport = NULL;
+ 	struct fc_host_attrs *fc_host = shost_to_fc_host(shost);
+ 	struct fc_fn_li_desc *li_desc = (struct fc_fn_li_desc *)tlv;
++	u16 event_type = be16_to_cpu(li_desc->event_type);
+ 	u64 wwpn;
  
-@@ -684,19 +695,6 @@ nofreecontext:
+ 	rport = fc_find_rport_by_wwpn(shost,
+@@ -775,7 +768,7 @@ fc_fpin_li_stats_update(struct Scsi_Host
+ 	    (rport->roles & FC_PORT_ROLE_FCP_TARGET ||
+ 	     rport->roles & FC_PORT_ROLE_NVME_TARGET)) {
+ 		attach_rport = rport;
+-		fc_li_stats_update(li_desc, &attach_rport->fpin_stats);
++		fc_li_stats_update(event_type, &attach_rport->fpin_stats);
+ 	}
  
- 	return NETDEV_TX_BUSY;
+ 	if (be32_to_cpu(li_desc->pname_count) > 0) {
+@@ -789,14 +782,14 @@ fc_fpin_li_stats_update(struct Scsi_Host
+ 			    rport->roles & FC_PORT_ROLE_NVME_TARGET)) {
+ 				if (rport == attach_rport)
+ 					continue;
+-				fc_li_stats_update(li_desc,
++				fc_li_stats_update(event_type,
+ 						   &rport->fpin_stats);
+ 			}
+ 		}
+ 	}
  
--failed:
--	can_free_echo_skb(netdev, context->echo_index, NULL);
--
--	usb_unanchor_urb(urb);
--	usb_free_coherent(priv->udev, size, buf, urb->transfer_dma);
--
--	atomic_dec(&priv->active_tx_urbs);
--
--	if (err == -ENODEV)
--		netif_device_detach(netdev);
--	else
--		netdev_warn(netdev, "failed tx_urb %d\n", err);
--
- nomembuf:
- 	usb_free_urb(urb);
+ 	if (fc_host->port_name == be64_to_cpu(li_desc->attached_wwpn))
+-		fc_li_stats_update(li_desc, &fc_host->fpin_stats);
++		fc_li_stats_update(event_type, &fc_host->fpin_stats);
+ }
  
+ /*
 
 

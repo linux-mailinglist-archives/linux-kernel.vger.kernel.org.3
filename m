@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1AD4F31C5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 368CC4F2FFC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351688AbiDEKDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
+        id S238150AbiDEJEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237609AbiDEISI (ORCPT
+        with ESMTP id S237643AbiDEISJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:18:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3170F6C1C7;
-        Tue,  5 Apr 2022 01:07:06 -0700 (PDT)
+        Tue, 5 Apr 2022 04:18:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588D4B6E48;
+        Tue,  5 Apr 2022 01:07:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A6928617EA;
-        Tue,  5 Apr 2022 08:07:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B559DC385A1;
-        Tue,  5 Apr 2022 08:07:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CEF91B81B92;
+        Tue,  5 Apr 2022 08:07:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27DEAC385A0;
+        Tue,  5 Apr 2022 08:07:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146025;
-        bh=DKVtB2reoGnz8z9sAZ2Q4z9b0FFkCB/ipTBser+Q8qk=;
+        s=korg; t=1649146030;
+        bh=sEdwyZKytQP93J9LHq4NnHXmmYIPENRb0QN6Cpzyh2M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EkZDrw592xle9VuBlpohMJRuOX5CfuIOSHeWy+Debi0TYYQtNobByUPv4o0aHZjkf
-         RT4U6t2FP86HuOZ6o+3sXaKjsIaryHrsoJF8kVcZsthrMwq43Uj+fwQ0RUYBxy2JcQ
-         iypnj8kDZ5umMm4V2Mi/qaLuLWzXi6QFqHdpl5is=
+        b=c/v6ca9vWi6OABXqPhSNR4k7JqABXdw7LJsggmQfI2n2fWmRzHgVDxxOHj2UQByrL
+         Rz0yEYUBrM8QqZf9xOruyw+6XaBO9Ti/2tTTaXoZuHYJg0VRSBp/vgSAgN8WzmMyXk
+         KSisvj+wu/rIcGoYOYaZ4aAN+IXc0I2MWJ0dxu1s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mustafa Ismail <mustafa.ismail@intel.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Thierry Reding <treding@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0615/1126] RDMA/irdma: Remove incorrect masking of PD
-Date:   Tue,  5 Apr 2022 09:22:42 +0200
-Message-Id: <20220405070425.686772797@linuxfoundation.org>
+Subject: [PATCH 5.17 0617/1126] gpu: host1x: Fix an error handling path in host1x_probe()
+Date:   Tue,  5 Apr 2022 09:22:44 +0200
+Message-Id: <20220405070425.745515467@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,46 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mustafa Ismail <mustafa.ismail@intel.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 17850f2b0b4b806e47cc44df94186bfc2cdd490b ]
+[ Upstream commit e5d5db1a79a5929b9ced99472f9a748a243d6a69 ]
 
-The PD id is masked with 0x7fff, while PD can be 18 bits for GEN2 HW.
-Remove the masking as it should not be needed and can cause incorrect PD
-id to be used.
+Add the missing 'host1x_bo_cache_destroy()' call in the error handling
+path of the probe, as already done in the remove function.
 
-Fixes: b48c24c2d710 ("RDMA/irdma: Implement device supported verb APIs")
-Link: https://lore.kernel.org/r/20220225163211.127-4-shiraz.saleem@intel.com
-Signed-off-by: Mustafa Ismail <mustafa.ismail@intel.com>
-Signed-off-by: Shiraz Saleem <shiraz.saleem@intel.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+In order to simplify the error handling, move the 'host1x_bo_cache_init()'
+call after all the devm_ function.
+
+Fixes: 1f39b1dfa53c ("drm/tegra: Implement buffer object cache")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/infiniband/hw/irdma/verbs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/host1x/dev.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/infiniband/hw/irdma/verbs.c b/drivers/infiniband/hw/irdma/verbs.c
-index 460e757d3fe6..1bf6404ec834 100644
---- a/drivers/infiniband/hw/irdma/verbs.c
-+++ b/drivers/infiniband/hw/irdma/verbs.c
-@@ -2509,7 +2509,7 @@ static int irdma_dealloc_mw(struct ib_mw *ibmw)
- 	cqp_info = &cqp_request->info;
- 	info = &cqp_info->in.u.dealloc_stag.info;
- 	memset(info, 0, sizeof(*info));
--	info->pd_id = iwpd->sc_pd.pd_id & 0x00007fff;
-+	info->pd_id = iwpd->sc_pd.pd_id;
- 	info->stag_idx = ibmw->rkey >> IRDMA_CQPSQ_STAG_IDX_S;
- 	info->mr = false;
- 	cqp_info->cqp_cmd = IRDMA_OP_DEALLOC_STAG;
-@@ -3021,7 +3021,7 @@ static int irdma_dereg_mr(struct ib_mr *ib_mr, struct ib_udata *udata)
- 	cqp_info = &cqp_request->info;
- 	info = &cqp_info->in.u.dealloc_stag.info;
- 	memset(info, 0, sizeof(*info));
--	info->pd_id = iwpd->sc_pd.pd_id & 0x00007fff;
-+	info->pd_id = iwpd->sc_pd.pd_id;
- 	info->stag_idx = ib_mr->rkey >> IRDMA_CQPSQ_STAG_IDX_S;
- 	info->mr = true;
- 	if (iwpbl->pbl_allocated)
+diff --git a/drivers/gpu/host1x/dev.c b/drivers/gpu/host1x/dev.c
+index 6994f8c0e02e..9605495f001a 100644
+--- a/drivers/gpu/host1x/dev.c
++++ b/drivers/gpu/host1x/dev.c
+@@ -447,7 +447,6 @@ static int host1x_probe(struct platform_device *pdev)
+ 	if (syncpt_irq < 0)
+ 		return syncpt_irq;
+ 
+-	host1x_bo_cache_init(&host->cache);
+ 	mutex_init(&host->devices_lock);
+ 	INIT_LIST_HEAD(&host->devices);
+ 	INIT_LIST_HEAD(&host->list);
+@@ -489,10 +488,12 @@ static int host1x_probe(struct platform_device *pdev)
+ 	if (err)
+ 		return err;
+ 
++	host1x_bo_cache_init(&host->cache);
++
+ 	err = host1x_iommu_init(host);
+ 	if (err < 0) {
+ 		dev_err(&pdev->dev, "failed to setup IOMMU: %d\n", err);
+-		return err;
++		goto destroy_cache;
+ 	}
+ 
+ 	err = host1x_channel_list_init(&host->channel_list,
+@@ -553,6 +554,8 @@ static int host1x_probe(struct platform_device *pdev)
+ 	host1x_channel_list_free(&host->channel_list);
+ iommu_exit:
+ 	host1x_iommu_exit(host);
++destroy_cache:
++	host1x_bo_cache_destroy(&host->cache);
+ 
+ 	return err;
+ }
 -- 
 2.34.1
 

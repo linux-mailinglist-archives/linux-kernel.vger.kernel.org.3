@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2234F4949
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCCF34F49D6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392620AbiDEWKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48204 "EHLO
+        id S1451347AbiDEW3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242810AbiDEKfT (ORCPT
+        with ESMTP id S1358779AbiDELRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:35:19 -0400
+        Tue, 5 Apr 2022 07:17:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0B2522F4;
-        Tue,  5 Apr 2022 03:21:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9253DDFD4F;
+        Tue,  5 Apr 2022 03:19:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C23F8617CA;
-        Tue,  5 Apr 2022 10:21:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCF1FC385A0;
-        Tue,  5 Apr 2022 10:21:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16D5E61676;
+        Tue,  5 Apr 2022 10:19:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F1BBC385A0;
+        Tue,  5 Apr 2022 10:19:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154085;
-        bh=0cxfFW4PAGudJo0W1iePckThDGuRuVdAGovI7HmiBvQ=;
+        s=korg; t=1649153971;
+        bh=unhPyUW8G+l7QGRP3i6xaRJRIbHDnFsEq/nRZi8DT8g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P+wy0Uz01DWecga2c+O6Pii7lEWmQJQz12siLnluW8mWIxYHi+gxL0iVCIih8OueE
-         wkSmj1TUSmQkgPpirJbbmlAe6NCoO0OSqQVZ0Hxt0VZlMmVqUw2AYBghtQ+oK6b4pN
-         Xvv8fWqf3lAIDRR8i39fri8eB5JJ1QrVQD73kILs=
+        b=zp0eYMJopxfUZNSO/JdsEX9HedS237kW97LvLJyt1nsONFxrXyMvTsy8nXQxfADa6
+         GcfHVcIeWwMioguixP/Tzz7MxDZwLR/Bw2um+frgYwq2rC7AIoYkBl5i44RpdwkxGD
+         VypTO9D/d/WrNHBx79b4v86bZvKYYq7fMKRMKkrs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 405/599] remoteproc: qcom: Fix missing of_node_put in adsp_alloc_memory_region
-Date:   Tue,  5 Apr 2022 09:31:39 +0200
-Message-Id: <20220405070310.883645719@linuxfoundation.org>
+Subject: [PATCH 5.10 406/599] remoteproc: qcom_wcnss: Add missing of_node_put() in wcnss_alloc_memory_region
+Date:   Tue,  5 Apr 2022 09:31:40 +0200
+Message-Id: <20220405070310.913272682@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -57,25 +57,25 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 505b5b1616e200042999de715dbe7c1e2735cd65 ]
+[ Upstream commit 8f90161a66bc3d6b9fe8dde4d9028d20eae1b62a ]
 
 The device_node pointer is returned by of_parse_phandle()  with refcount
 incremented. We should use of_node_put() on it when done.
 
-Fixes: dc160e449122 ("remoteproc: qcom: Introduce Non-PAS ADSP PIL driver")
+Fixes: aed361adca9f ("remoteproc: qcom: Introduce WCNSS peripheral image loader")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220308031219.4718-1-linmq006@gmail.com
+Link: https://lore.kernel.org/r/20220308063102.10049-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/remoteproc/qcom_q6v5_adsp.c | 1 +
+ drivers/remoteproc/qcom_wcnss.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c b/drivers/remoteproc/qcom_q6v5_adsp.c
-index 9eb599701f9b..c39138d39cf0 100644
---- a/drivers/remoteproc/qcom_q6v5_adsp.c
-+++ b/drivers/remoteproc/qcom_q6v5_adsp.c
-@@ -406,6 +406,7 @@ static int adsp_alloc_memory_region(struct qcom_adsp *adsp)
+diff --git a/drivers/remoteproc/qcom_wcnss.c b/drivers/remoteproc/qcom_wcnss.c
+index e2573f79a137..67286a4505cd 100644
+--- a/drivers/remoteproc/qcom_wcnss.c
++++ b/drivers/remoteproc/qcom_wcnss.c
+@@ -448,6 +448,7 @@ static int wcnss_alloc_memory_region(struct qcom_wcnss *wcnss)
  	}
  
  	ret = of_address_to_resource(node, 0, &r);

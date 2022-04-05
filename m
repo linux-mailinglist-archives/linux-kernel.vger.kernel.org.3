@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 395F94F49C4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C80424F4F0B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231663AbiDEWZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
+        id S1836688AbiDFAiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358041AbiDEK15 (ORCPT
+        with ESMTP id S1350266AbiDEJ4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310D818B04;
-        Tue,  5 Apr 2022 03:13:32 -0700 (PDT)
+        Tue, 5 Apr 2022 05:56:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590504FC62;
+        Tue,  5 Apr 2022 02:51:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6B01B81C88;
-        Tue,  5 Apr 2022 10:13:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F2D9C385A0;
-        Tue,  5 Apr 2022 10:13:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3EFC616D1;
+        Tue,  5 Apr 2022 09:51:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E03ACC385BB;
+        Tue,  5 Apr 2022 09:51:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153609;
-        bh=WyeADXdrlcdcxuQs7Rbvfpn+khMbsrZAVeSDN+p9oSc=;
+        s=korg; t=1649152261;
+        bh=EEzSTtJhiB4vfmd+xlsYP6HL/LckkspU9kimszDf3zY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Znc3WUF3UbjAk7DTFvRM1IwjadMuH9P2ps5B/B+08AVwPxg08LC74xTdYk/LiZY/o
-         bO60xhqZM2zdC8PHqndI5Ul7ocjQRPiGp85iuyK98esc0okoYBrl/P6lF5WW/hw8fU
-         pHa/3xOvCL3lWPdGIoeRfN2tGlm94ITo+EkALWLE=
+        b=M29knTvPq33BvaPksmPv9gNO7nQOJekSCStI8AEZcWr5L0cF+0/Qj/AKssM7Gj+LK
+         8yKYHk7LiQqli6x9eQ19qv1RaC9JEM0x8Cf7SNGNbXFwJ3tH5rDQxYjR56teTggh4F
+         dZRdOUP2vo2M0FN6CFoVCIBQ8yQ6wCXGWWwo0Jgk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jesper Dangaard Brouer <brouer@redhat.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Kiran Bhandare <kiranx.bhandare@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 281/599] i40e: respect metadata on XSK Rx to skb
-Date:   Tue,  5 Apr 2022 09:29:35 +0200
-Message-Id: <20220405070307.197428318@linuxfoundation.org>
+Subject: [PATCH 5.15 714/913] sched/tracing: Report TASK_RTLOCK_WAIT tasks as TASK_UNINTERRUPTIBLE
+Date:   Tue,  5 Apr 2022 09:29:36 +0200
+Message-Id: <20220405070401.236850024@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,66 +59,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
+From: Valentin Schneider <valentin.schneider@arm.com>
 
-[ Upstream commit 6dba29537c0f639b482bd8f8bbd50ab4ae74b48d ]
+[ Upstream commit 25795ef6299f07ce3838f3253a9cb34f64efcfae ]
 
-For now, if the XDP prog returns XDP_PASS on XSK, the metadata will
-be lost as it doesn't get copied to the skb.
+TASK_RTLOCK_WAIT currently isn't part of TASK_REPORT, thus a task blocking
+on an rtlock will appear as having a task state == 0, IOW TASK_RUNNING.
 
-Copy it along with the frame headers. Account its size on skb
-allocation, and when copying just treat it as a part of the frame
-and do a pull after to "move" it to the "reserved" zone.
+The actual state is saved in p->saved_state, but reading it after reading
+p->__state has a few issues:
+o that could still be TASK_RUNNING in the case of e.g. rt_spin_lock
+o ttwu_state_match() might have changed that to TASK_RUNNING
 
-net_prefetch() xdp->data_meta and align the copy size to speed-up
-memcpy() a little and better match i40e_construct_skb().
+As pointed out by Eric, adding TASK_RTLOCK_WAIT to TASK_REPORT implies
+exposing a new state to userspace tools which way not know what to do with
+them. The only information that needs to be conveyed here is that a task is
+waiting on an rt_mutex, which matches TASK_UNINTERRUPTIBLE - there's no
+need for a new state.
 
-Fixes: 0a714186d3c0 ("i40e: add AF_XDP zero-copy Rx support")
-Suggested-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Suggested-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-Tested-by: Kiran Bhandare <kiranx.bhandare@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Reported-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Link: https://lore.kernel.org/r/20220120162520.570782-3-valentin.schneider@arm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/i40e/i40e_xsk.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ include/linux/sched.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-index d444e38360c1..75e4a698c3db 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-@@ -247,19 +247,25 @@ bool i40e_alloc_rx_buffers_zc(struct i40e_ring *rx_ring, u16 count)
- static struct sk_buff *i40e_construct_skb_zc(struct i40e_ring *rx_ring,
- 					     struct xdp_buff *xdp)
- {
-+	unsigned int totalsize = xdp->data_end - xdp->data_meta;
- 	unsigned int metasize = xdp->data - xdp->data_meta;
--	unsigned int datasize = xdp->data_end - xdp->data;
- 	struct sk_buff *skb;
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 8fcf76fed984..031588cd2ccb 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1626,6 +1626,14 @@ static inline unsigned int __task_state_index(unsigned int tsk_state,
+ 	if (tsk_state == TASK_IDLE)
+ 		state = TASK_REPORT_IDLE;
  
-+	net_prefetch(xdp->data_meta);
++	/*
++	 * We're lying here, but rather than expose a completely new task state
++	 * to userspace, we can make this appear as if the task has gone through
++	 * a regular rt_mutex_lock() call.
++	 */
++	if (tsk_state == TASK_RTLOCK_WAIT)
++		state = TASK_UNINTERRUPTIBLE;
 +
- 	/* allocate a skb to store the frags */
--	skb = __napi_alloc_skb(&rx_ring->q_vector->napi, datasize,
-+	skb = __napi_alloc_skb(&rx_ring->q_vector->napi, totalsize,
- 			       GFP_ATOMIC | __GFP_NOWARN);
- 	if (unlikely(!skb))
- 		return NULL;
+ 	return fls(state);
+ }
  
--	memcpy(__skb_put(skb, datasize), xdp->data, datasize);
--	if (metasize)
-+	memcpy(__skb_put(skb, totalsize), xdp->data_meta,
-+	       ALIGN(totalsize, sizeof(long)));
-+
-+	if (metasize) {
- 		skb_metadata_set(skb, metasize);
-+		__skb_pull(skb, metasize);
-+	}
- 
- 	xsk_buff_free(xdp);
- 	return skb;
 -- 
 2.34.1
 

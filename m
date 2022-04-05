@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F37B4F2C2E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 649B84F2E27
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350816AbiDEJ77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
+        id S1350832AbiDEKAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233927AbiDEIXj (ORCPT
+        with ESMTP id S234095AbiDEIX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:23:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E790210FD3;
-        Tue,  5 Apr 2022 01:19:55 -0700 (PDT)
+        Tue, 5 Apr 2022 04:23:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4460CE52;
+        Tue,  5 Apr 2022 01:20:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64C566093C;
-        Tue,  5 Apr 2022 08:19:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 708DBC385A1;
-        Tue,  5 Apr 2022 08:19:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DDF21B81BB1;
+        Tue,  5 Apr 2022 08:19:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44D89C385A1;
+        Tue,  5 Apr 2022 08:19:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146794;
-        bh=5UMlgXP9Kt7zNY8E5AlJDpLF7i4vLGx8OtzMkKu8RiA=;
+        s=korg; t=1649146797;
+        bh=SCgcK3ystEM4p5FUpeXZzCOdyVTPsuyCpDS+LaZ2TR0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Jq6WhtdS7cbojO3YHzZGw8QQWz9Q3xzaJkvQVRcNqB6EH0i9oBAp0EBg+9522iMFP
-         +oXA++8nVLChxbNoxF9k4WlxyDd4rNnxXaxrNUUYWuMw11aa1dJaq8oWpOJ5Dxlr19
-         qfsNkiNGtWkz+EQ7SOyfYCKbyWOngVUywj2Usfdk=
+        b=npp6nrUDgjySnkltNjgpUfpseKxzaGFlSI/maUnJoH8sfljEgjMCheaF1zMp1On3U
+         KCa1jNwKachALhYzqmcQNvTvftVdscR7W4gCLs4XgptLuv2FRf/JkNxHBGthpIZlW0
+         XjdhLeXd3eT19fZTLyajzLQrFpDXmDyf4J3Xxsck=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        stable@vger.kernel.org, Peiwei Hu <jlu.hpw@foxmail.com>,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0892/1126] media: atmel: atmel-isc-base: report frame sizes as full supported range
-Date:   Tue,  5 Apr 2022 09:27:19 +0200
-Message-Id: <20220405070433.708059274@linuxfoundation.org>
+Subject: [PATCH 5.17 0893/1126] media: ir_toy: free before error exiting
+Date:   Tue,  5 Apr 2022 09:27:20 +0200
+Message-Id: <20220405070433.736738190@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -58,71 +56,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eugen Hristev <eugen.hristev@microchip.com>
+From: Peiwei Hu <jlu.hpw@foxmail.com>
 
-[ Upstream commit 72802a86e11c34e819fbfb38f58c5aef668f833d ]
+[ Upstream commit 52cdb013036391d9d87aba5b4fc49cdfc6ea4b23 ]
 
-The ISC supports a full broad range of frame sizes.
-Until now, the subdevice was queried for possible frame sizes and these
-were reported to the user space.
-However, the ISC should not care about which frame sizes the subdev
-supports, as long as this frame size is supported.
-Thus, report a continuous range from smallest frame size up to the max
-resolution.
+Fix leak in error path.
 
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Peiwei Hu <jlu.hpw@foxmail.com>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/atmel/atmel-isc-base.c | 22 +++++++++----------
- 1 file changed, 10 insertions(+), 12 deletions(-)
+ drivers/media/rc/ir_toy.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/media/platform/atmel/atmel-isc-base.c
-index 660cd0ab6749..24807782c9e5 100644
---- a/drivers/media/platform/atmel/atmel-isc-base.c
-+++ b/drivers/media/platform/atmel/atmel-isc-base.c
-@@ -1369,14 +1369,12 @@ static int isc_enum_framesizes(struct file *file, void *fh,
- 			       struct v4l2_frmsizeenum *fsize)
- {
- 	struct isc_device *isc = video_drvdata(file);
--	struct v4l2_subdev_frame_size_enum fse = {
--		.code = isc->config.sd_format->mbus_code,
--		.index = fsize->index,
--		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
--	};
- 	int ret = -EINVAL;
- 	int i;
+diff --git a/drivers/media/rc/ir_toy.c b/drivers/media/rc/ir_toy.c
+index 7e98e7e3aace..196806709259 100644
+--- a/drivers/media/rc/ir_toy.c
++++ b/drivers/media/rc/ir_toy.c
+@@ -458,7 +458,7 @@ static int irtoy_probe(struct usb_interface *intf,
+ 	err = usb_submit_urb(irtoy->urb_in, GFP_KERNEL);
+ 	if (err != 0) {
+ 		dev_err(irtoy->dev, "fail to submit in urb: %d\n", err);
+-		return err;
++		goto free_rcdev;
+ 	}
  
-+	if (fsize->index)
-+		return -EINVAL;
-+
- 	for (i = 0; i < isc->num_user_formats; i++)
- 		if (isc->user_formats[i]->fourcc == fsize->pixel_format)
- 			ret = 0;
-@@ -1388,14 +1386,14 @@ static int isc_enum_framesizes(struct file *file, void *fh,
- 	if (ret)
- 		return ret;
- 
--	ret = v4l2_subdev_call(isc->current_subdev->sd, pad, enum_frame_size,
--			       NULL, &fse);
--	if (ret)
--		return ret;
-+	fsize->type = V4L2_FRMSIZE_TYPE_CONTINUOUS;
- 
--	fsize->type = V4L2_FRMSIZE_TYPE_DISCRETE;
--	fsize->discrete.width = fse.max_width;
--	fsize->discrete.height = fse.max_height;
-+	fsize->stepwise.min_width = 16;
-+	fsize->stepwise.max_width = isc->max_width;
-+	fsize->stepwise.min_height = 16;
-+	fsize->stepwise.max_height = isc->max_height;
-+	fsize->stepwise.step_width = 1;
-+	fsize->stepwise.step_height = 1;
- 
- 	return 0;
- }
+ 	err = irtoy_setup(irtoy);
 -- 
 2.34.1
 

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1D64F2F0F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5624F329B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:59:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343754AbiDEJMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33820 "EHLO
+        id S1345728AbiDEJnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239596AbiDEIUP (ORCPT
+        with ESMTP id S239600AbiDEIUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:20:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBE5107;
-        Tue,  5 Apr 2022 01:17:02 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AEC83;
+        Tue,  5 Apr 2022 01:17:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF1B860B0A;
-        Tue,  5 Apr 2022 08:17:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECEA3C385A0;
-        Tue,  5 Apr 2022 08:17:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C9394B81BB2;
+        Tue,  5 Apr 2022 08:17:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22650C385A1;
+        Tue,  5 Apr 2022 08:17:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146621;
-        bh=gSKk94JlnT76nQt2YzGKXOMGeTex5ODG6i1MtGdF5n0=;
+        s=korg; t=1649146629;
+        bh=3KGFa6EC32xjqdgLhOOEcMv8VXMCN8d2FHi3RO5nQi4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YLtVEX8bETOpFdCILI0d+RlxCjZB+wGSFjP2xB3YSbkd8jDSD6SNg/DnVGFPrraOZ
-         CfXY4xhkVV6btlvzaFp5bOwzBy+tcourC71grMoORZcgNtGbgSP+93Hm/WUL9dF01T
-         6iOEqwcsFFT0Fh4OqoL5FwVaTz5+I6NkDstuUKfE=
+        b=K30RS9orHTn9vFLpPPhw5nkiFmcumWemH7adAwikgpvgooT4380kxTgMYTdA85Bq1
+         qRHvkZC6xJVtjjAd68LYLxUNIyRca+F5JV6HHg/QdqAdMFV3r+QedADyasQnSPfIqB
+         z+/nNHOyNTjAWpQ0gE7K/FP7twVqap5Ftv4Tolv4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0829/1126] net: dsa: bcm_sf2_cfp: fix an incorrect NULL check on list iterator
-Date:   Tue,  5 Apr 2022 09:26:16 +0200
-Message-Id: <20220405070431.894152817@linuxfoundation.org>
+        stable@vger.kernel.org, Fedor Pchelkin <aissur0002@gmail.com>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 5.17 0832/1126] fs: fix fd table size alignment properly
+Date:   Tue,  5 Apr 2022 09:26:19 +0200
+Message-Id: <20220405070431.979689181@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -57,53 +58,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
 
-[ Upstream commit 6da69b1da130e7d96766042750cd9f902e890eba ]
+[ Upstream commit d888c83fcec75194a8a48ccd283953bdba7b2550 ]
 
-The bug is here:
-	return rule;
+Jason Donenfeld reports that my commit 1c24a186398f ("fs: fd tables have
+to be multiples of BITS_PER_LONG") doesn't work, and the reason is an
+embarrassing brown-paper-bag bug.
 
-The list iterator value 'rule' will *always* be set and non-NULL
-by list_for_each_entry(), so it is incorrect to assume that the
-iterator value will be NULL if the list is empty or no element
-is found.
+Yes, we want to align the number of fds to BITS_PER_LONG, and yes, the
+reason they might not be aligned is because the incoming 'max_fd'
+argument might not be aligned.
 
-To fix the bug, return 'rule' when found, otherwise return NULL.
+But aligining the argument - while simple - will cause a "infinitely
+big" maxfd (eg NR_OPEN_MAX) to just overflow to zero.  Which most
+definitely isn't what we want either.
 
-Fixes: ae7a5aff783c7 ("net: dsa: bcm_sf2: Keep copy of inserted rules")
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Link: https://lore.kernel.org/r/20220328032431.22538-1-xiam0nd.tong@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+The obvious fix was always just to do the alignment last, but I had
+moved it earlier just to make the patch smaller and the code look
+simpler.  Duh.  It certainly made _me_ look simple.
+
+Fixes: 1c24a186398f ("fs: fd tables have to be multiples of BITS_PER_LONG")
+Reported-and-tested-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Cc: Fedor Pchelkin <aissur0002@gmail.com>
+Cc: Alexey Khoroshilov <khoroshilov@ispras.ru>
+Cc: Christian Brauner <brauner@kernel.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/bcm_sf2_cfp.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ fs/file.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/net/dsa/bcm_sf2_cfp.c b/drivers/net/dsa/bcm_sf2_cfp.c
-index a7e2fcf2df2c..edbe5e7f1cb6 100644
---- a/drivers/net/dsa/bcm_sf2_cfp.c
-+++ b/drivers/net/dsa/bcm_sf2_cfp.c
-@@ -567,14 +567,14 @@ static void bcm_sf2_cfp_slice_ipv6(struct bcm_sf2_priv *priv,
- static struct cfp_rule *bcm_sf2_cfp_rule_find(struct bcm_sf2_priv *priv,
- 					      int port, u32 location)
- {
--	struct cfp_rule *rule = NULL;
-+	struct cfp_rule *rule;
+diff --git a/fs/file.c b/fs/file.c
+index c01c29417ae6..ee9317346702 100644
+--- a/fs/file.c
++++ b/fs/file.c
+@@ -303,10 +303,9 @@ static unsigned int sane_fdtable_size(struct fdtable *fdt, unsigned int max_fds)
+ 	unsigned int count;
  
- 	list_for_each_entry(rule, &priv->cfp.rules_list, next) {
- 		if (rule->port == port && rule->fs.location == location)
--			break;
-+			return rule;
- 	}
- 
--	return rule;
-+	return NULL;
+ 	count = count_open_files(fdt);
+-	max_fds = ALIGN(max_fds, BITS_PER_LONG);
+ 	if (max_fds < NR_OPEN_DEFAULT)
+ 		max_fds = NR_OPEN_DEFAULT;
+-	return min(count, max_fds);
++	return ALIGN(min(count, max_fds), BITS_PER_LONG);
  }
  
- static int bcm_sf2_cfp_rule_cmp(struct bcm_sf2_priv *priv, int port,
+ /*
 -- 
 2.34.1
 

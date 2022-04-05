@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93ABA4F425D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 136E54F4208
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381133AbiDEPN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
+        id S1381372AbiDEPOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232992AbiDEJpG (ORCPT
+        with ESMTP id S1346496AbiDEJpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:45:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C63EDA6D0;
-        Tue,  5 Apr 2022 02:30:46 -0700 (PDT)
+        Tue, 5 Apr 2022 05:45:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB913DA6EA;
+        Tue,  5 Apr 2022 02:30:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A8F76165C;
-        Tue,  5 Apr 2022 09:30:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 197CAC385A3;
-        Tue,  5 Apr 2022 09:30:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 742C6B81CB3;
+        Tue,  5 Apr 2022 09:30:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6695C385A0;
+        Tue,  5 Apr 2022 09:30:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151045;
-        bh=eq3ZBF1JZS1UzMpL2QLRecaScYABzVJdy4iizGT45Wo=;
+        s=korg; t=1649151048;
+        bh=ILHz7ulA5x04gj7iYCp96oECxga7eMHwl9e/gQq2a24=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hMOsik+PqZ+PojgyNZCquXFA9UrjY/KuswUL3xNsB8yek+g9DT8C8sEfG0QWHKqNi
-         9325S+uMmi3o7vrxVaWzwRFTlvSOY+tPWH+U9QpsLoo0+aOzlOX3cSaMYF2MCV2dvl
-         MxnnxKbUoWUwsoy5lzN3GACG54jTQOKxglEFeumA=
+        b=saLO13AtUVyYeMBtU9tQMWTG35YsOhXaSIDPB6zF8DK44pZ8C4FFUIpnTEQeXHJDa
+         xl7vi+jLfbcznc9+vLDbUGwQ4Xd14PSiE4m7CEr3C4J/rMNnOCA0TvD9luCqRhQWGr
+         F92R7ENtiqxeh74BgGUGItJnk9FtLxxNQma/TayI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        stable@vger.kernel.org, Ondrej Zary <linux@zary.sk>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 274/913] media: imx: imx8mq-mipi_csi2: fix system resume
-Date:   Tue,  5 Apr 2022 09:22:16 +0200
-Message-Id: <20220405070348.071452687@linuxfoundation.org>
+Subject: [PATCH 5.15 275/913] media: bttv: fix WARNING regression on tunerless devices
+Date:   Tue,  5 Apr 2022 09:22:17 +0200
+Message-Id: <20220405070348.100992793@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -57,171 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Kepplinger <martin.kepplinger@puri.sm>
+From: Ondrej Zary <linux@zary.sk>
 
-[ Upstream commit f0c2ba1ed4ad868331d8c6ea9119669a729b01a9 ]
+[ Upstream commit ef058cc8b7193d15a771272359c7454839ae74ee ]
 
-during system resume, interconnect bandwidth would currently be requested
-even though the device is runtime suspended. This leaves the system in an
-unbalanced state.
+Commit 2161536516ed ("media: media/pci: set device_caps in struct video_device")
+introduced a regression: V4L2_CAP_TUNER is always present in device_caps,
+even when the device has no tuner.
 
-Fix that by only doing that in runtimem pm and splitting up runtime and
-system suspend to be a more readable:
-imx8mq_mipi_csi_pm_*() does the generic things called from system- and
-runtime functions that each do specific things on top.
+This causes a warning:
+WARNING: CPU: 0 PID: 249 at drivers/media/v4l2-core/v4l2-ioctl.c:1102 v4l_querycap+0xa0/0xb0 [videodev]
 
-Fixes: f33fd8d77dd0 ("media: imx: add a driver for i.MX8MQ mipi csi rx phy and controller")
-Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+Fixes: 2161536516ed ("media: media/pci: set device_caps in struct video_device")
+Signed-off-by: Ondrej Zary <linux@zary.sk>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/imx/imx8mq-mipi-csi2.c | 71 +++++++++++++-------
- 1 file changed, 47 insertions(+), 24 deletions(-)
+ drivers/media/pci/bt8xx/bttv-driver.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/imx/imx8mq-mipi-csi2.c b/drivers/staging/media/imx/imx8mq-mipi-csi2.c
-index e9e771717120..1d28313dbed7 100644
---- a/drivers/staging/media/imx/imx8mq-mipi-csi2.c
-+++ b/drivers/staging/media/imx/imx8mq-mipi-csi2.c
-@@ -693,7 +693,7 @@ static int imx8mq_mipi_csi_async_register(struct csi_state *state)
-  * Suspend/resume
-  */
+diff --git a/drivers/media/pci/bt8xx/bttv-driver.c b/drivers/media/pci/bt8xx/bttv-driver.c
+index 0e9df8b35ac6..661ebfa7bf3f 100644
+--- a/drivers/media/pci/bt8xx/bttv-driver.c
++++ b/drivers/media/pci/bt8xx/bttv-driver.c
+@@ -3890,7 +3890,7 @@ static int bttv_register_video(struct bttv *btv)
  
--static int imx8mq_mipi_csi_pm_suspend(struct device *dev, bool runtime)
-+static int imx8mq_mipi_csi_pm_suspend(struct device *dev)
- {
- 	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct csi_state *state = mipi_sd_to_csi2_state(sd);
-@@ -705,36 +705,21 @@ static int imx8mq_mipi_csi_pm_suspend(struct device *dev, bool runtime)
- 		imx8mq_mipi_csi_stop_stream(state);
- 		imx8mq_mipi_csi_clk_disable(state);
- 		state->state &= ~ST_POWERED;
--		if (!runtime)
--			state->state |= ST_SUSPENDED;
- 	}
+ 	/* video */
+ 	vdev_init(btv, &btv->video_dev, &bttv_video_template, "video");
+-	btv->video_dev.device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_TUNER |
++	btv->video_dev.device_caps = V4L2_CAP_VIDEO_CAPTURE |
+ 				     V4L2_CAP_READWRITE | V4L2_CAP_STREAMING;
+ 	if (btv->tuner_type != TUNER_ABSENT)
+ 		btv->video_dev.device_caps |= V4L2_CAP_TUNER;
+@@ -3911,7 +3911,7 @@ static int bttv_register_video(struct bttv *btv)
+ 	/* vbi */
+ 	vdev_init(btv, &btv->vbi_dev, &bttv_video_template, "vbi");
+ 	btv->vbi_dev.device_caps = V4L2_CAP_VBI_CAPTURE | V4L2_CAP_READWRITE |
+-				   V4L2_CAP_STREAMING | V4L2_CAP_TUNER;
++				   V4L2_CAP_STREAMING;
+ 	if (btv->tuner_type != TUNER_ABSENT)
+ 		btv->vbi_dev.device_caps |= V4L2_CAP_TUNER;
  
- 	mutex_unlock(&state->lock);
- 
--	ret = icc_set_bw(state->icc_path, 0, 0);
--	if (ret)
--		dev_err(dev, "icc_set_bw failed with %d\n", ret);
--
- 	return ret ? -EAGAIN : 0;
- }
- 
--static int imx8mq_mipi_csi_pm_resume(struct device *dev, bool runtime)
-+static int imx8mq_mipi_csi_pm_resume(struct device *dev)
- {
- 	struct v4l2_subdev *sd = dev_get_drvdata(dev);
- 	struct csi_state *state = mipi_sd_to_csi2_state(sd);
- 	int ret = 0;
- 
--	ret = icc_set_bw(state->icc_path, 0, state->icc_path_bw);
--	if (ret) {
--		dev_err(dev, "icc_set_bw failed with %d\n", ret);
--		return ret;
--	}
--
- 	mutex_lock(&state->lock);
- 
--	if (!runtime && !(state->state & ST_SUSPENDED))
--		goto unlock;
--
- 	if (!(state->state & ST_POWERED)) {
- 		state->state |= ST_POWERED;
- 		ret = imx8mq_mipi_csi_clk_enable(state);
-@@ -755,22 +740,60 @@ static int imx8mq_mipi_csi_pm_resume(struct device *dev, bool runtime)
- 
- static int __maybe_unused imx8mq_mipi_csi_suspend(struct device *dev)
- {
--	return imx8mq_mipi_csi_pm_suspend(dev, false);
-+	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-+	struct csi_state *state = mipi_sd_to_csi2_state(sd);
-+	int ret;
-+
-+	ret = imx8mq_mipi_csi_pm_suspend(dev);
-+	if (ret)
-+		return ret;
-+
-+	state->state |= ST_SUSPENDED;
-+
-+	return ret;
- }
- 
- static int __maybe_unused imx8mq_mipi_csi_resume(struct device *dev)
- {
--	return imx8mq_mipi_csi_pm_resume(dev, false);
-+	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-+	struct csi_state *state = mipi_sd_to_csi2_state(sd);
-+
-+	if (!(state->state & ST_SUSPENDED))
-+		return 0;
-+
-+	return imx8mq_mipi_csi_pm_resume(dev);
- }
- 
- static int __maybe_unused imx8mq_mipi_csi_runtime_suspend(struct device *dev)
- {
--	return imx8mq_mipi_csi_pm_suspend(dev, true);
-+	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-+	struct csi_state *state = mipi_sd_to_csi2_state(sd);
-+	int ret;
-+
-+	ret = imx8mq_mipi_csi_pm_suspend(dev);
-+	if (ret)
-+		return ret;
-+
-+	ret = icc_set_bw(state->icc_path, 0, 0);
-+	if (ret)
-+		dev_err(dev, "icc_set_bw failed with %d\n", ret);
-+
-+	return ret;
- }
- 
- static int __maybe_unused imx8mq_mipi_csi_runtime_resume(struct device *dev)
- {
--	return imx8mq_mipi_csi_pm_resume(dev, true);
-+	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-+	struct csi_state *state = mipi_sd_to_csi2_state(sd);
-+	int ret;
-+
-+	ret = icc_set_bw(state->icc_path, 0, state->icc_path_bw);
-+	if (ret) {
-+		dev_err(dev, "icc_set_bw failed with %d\n", ret);
-+		return ret;
-+	}
-+
-+	return imx8mq_mipi_csi_pm_resume(dev);
- }
- 
- static const struct dev_pm_ops imx8mq_mipi_csi_pm_ops = {
-@@ -918,7 +941,7 @@ static int imx8mq_mipi_csi_probe(struct platform_device *pdev)
- 	/* Enable runtime PM. */
- 	pm_runtime_enable(dev);
- 	if (!pm_runtime_enabled(dev)) {
--		ret = imx8mq_mipi_csi_pm_resume(dev, true);
-+		ret = imx8mq_mipi_csi_runtime_resume(dev);
- 		if (ret < 0)
- 			goto icc;
- 	}
-@@ -931,7 +954,7 @@ static int imx8mq_mipi_csi_probe(struct platform_device *pdev)
- 
- cleanup:
- 	pm_runtime_disable(&pdev->dev);
--	imx8mq_mipi_csi_pm_suspend(&pdev->dev, true);
-+	imx8mq_mipi_csi_runtime_suspend(&pdev->dev);
- 
- 	media_entity_cleanup(&state->sd.entity);
- 	v4l2_async_notifier_unregister(&state->notifier);
-@@ -955,7 +978,7 @@ static int imx8mq_mipi_csi_remove(struct platform_device *pdev)
- 	v4l2_async_unregister_subdev(&state->sd);
- 
- 	pm_runtime_disable(&pdev->dev);
--	imx8mq_mipi_csi_pm_suspend(&pdev->dev, true);
-+	imx8mq_mipi_csi_runtime_suspend(&pdev->dev);
- 	media_entity_cleanup(&state->sd.entity);
- 	mutex_destroy(&state->lock);
- 	pm_runtime_set_suspended(&pdev->dev);
 -- 
 2.34.1
 

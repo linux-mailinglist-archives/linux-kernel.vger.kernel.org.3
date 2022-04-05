@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F924F5148
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB74B4F517C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1844583AbiDFBuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
+        id S1846575AbiDFCEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243175AbiDEKfe (ORCPT
+        with ESMTP id S1353548AbiDEKIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:35:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D6EDF48C;
-        Tue,  5 Apr 2022 03:19:21 -0700 (PDT)
+        Tue, 5 Apr 2022 06:08:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2025C1C92;
+        Tue,  5 Apr 2022 02:55:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08A86616D7;
-        Tue,  5 Apr 2022 10:19:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13F4EC385A0;
-        Tue,  5 Apr 2022 10:19:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CE3661500;
+        Tue,  5 Apr 2022 09:55:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90456C385A2;
+        Tue,  5 Apr 2022 09:55:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153960;
-        bh=98aCFofgFx1i2qmaGNmZ2Ir40iIRhlyna9C5ZXP/Y2o=;
+        s=korg; t=1649152514;
+        bh=WOTxXQzAn+H/xWxyf4seipZltQdXkhVEK3b7in5mAPY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DT7W85L9l/8uJ/w8EJEN4e2jYe7xtDTgYHWBkwwn1Z6jdWg9lSowIQXu0R2JbvCJ0
-         m9t8KE2EScQM2QNd8lFVHdaHxEt8YAXbJKzJGEwdAx+K5C360VZeF3D3PxyVEwNhwJ
-         9kdnpnUVxgEU9KOhwcXSHsN7EcXAxSWvuJdlpl6s=
+        b=tJ7nRUde9wm+Z1edLwnlG13/LgoLhGRN0c1H9ltgCyRMFibgVE8pn1/if7lkXNOzY
+         y9w+I8BzqPd7lkxijDX+Uoib4Rl5/S+oqSizNwAAbD2qorxg2Ti138gut6aU5NWeLp
+         QCUHW8xgTpWqzoakHNOsqr9RG2oTaAunPvT1chGo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 371/599] selftests/bpf/test_lirc_mode2.sh: Exit with proper code
-Date:   Tue,  5 Apr 2022 09:31:05 +0200
-Message-Id: <20220405070309.870742871@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Arun Easi <aeasi@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.15 804/913] scsi: qla2xxx: Fix missed DMA unmap for NVMe ls requests
+Date:   Tue,  5 Apr 2022 09:31:06 +0200
+Message-Id: <20220405070403.932194400@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,55 +57,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangbin Liu <liuhangbin@gmail.com>
+From: Arun Easi <aeasi@marvell.com>
 
-[ Upstream commit ec80906b0fbd7be11e3e960813b977b1ffe5f8fe ]
+commit c85ab7d9e27a80e48d5b7d7fb2fe2b0fdb2de523 upstream.
 
-When test_lirc_mode2_user exec failed, the test report failed but still
-exit with 0. Fix it by exiting with an error code.
+At NVMe ELS request time, request structure is DMA mapped and never
+unmapped. Fix this by calling the unmap on ELS completion.
 
-Another issue is for the LIRCDEV checking. With bash -n, we need to quote
-the variable, or it will always be true. So if test_lirc_mode2_user was
-not run, just exit with skip code.
-
-Fixes: 6bdd533cee9a ("bpf: add selftest for lirc_mode2 type program")
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20220321024149.157861-1-liuhangbin@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/20220310092604.22950-5-njavali@marvell.com
+Fixes: e84067d74301 ("scsi: qla2xxx: Add FC-NVMe F/W initialization and transport registration")
+Cc: stable@vger.kernel.org
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Signed-off-by: Arun Easi <aeasi@marvell.com>
+Signed-off-by: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/bpf/test_lirc_mode2.sh | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/scsi/qla2xxx/qla_nvme.c |   17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/test_lirc_mode2.sh b/tools/testing/selftests/bpf/test_lirc_mode2.sh
-index ec4e15948e40..5252b91f48a1 100755
---- a/tools/testing/selftests/bpf/test_lirc_mode2.sh
-+++ b/tools/testing/selftests/bpf/test_lirc_mode2.sh
-@@ -3,6 +3,7 @@
+--- a/drivers/scsi/qla2xxx/qla_nvme.c
++++ b/drivers/scsi/qla2xxx/qla_nvme.c
+@@ -170,6 +170,18 @@ out:
+ 	qla2xxx_rel_qpair_sp(sp->qpair, sp);
+ }
  
- # Kselftest framework requirement - SKIP code is 4.
- ksft_skip=4
-+ret=$ksft_skip
- 
- msg="skip all tests:"
- if [ $UID != 0 ]; then
-@@ -25,7 +26,7 @@ do
- 	fi
- done
- 
--if [ -n $LIRCDEV ];
-+if [ -n "$LIRCDEV" ];
- then
- 	TYPE=lirc_mode2
- 	./test_lirc_mode2_user $LIRCDEV $INPUTDEV
-@@ -36,3 +37,5 @@ then
- 		echo -e ${GREEN}"PASS: $TYPE"${NC}
- 	fi
- fi
++static void qla_nvme_ls_unmap(struct srb *sp, struct nvmefc_ls_req *fd)
++{
++	if (sp->flags & SRB_DMA_VALID) {
++		struct srb_iocb *nvme = &sp->u.iocb_cmd;
++		struct qla_hw_data *ha = sp->fcport->vha->hw;
 +
-+exit $ret
--- 
-2.34.1
-
++		dma_unmap_single(&ha->pdev->dev, nvme->u.nvme.cmd_dma,
++				 fd->rqstlen, DMA_TO_DEVICE);
++		sp->flags &= ~SRB_DMA_VALID;
++	}
++}
++
+ static void qla_nvme_release_ls_cmd_kref(struct kref *kref)
+ {
+ 	struct srb *sp = container_of(kref, struct srb, cmd_kref);
+@@ -186,6 +198,8 @@ static void qla_nvme_release_ls_cmd_kref
+ 	spin_unlock_irqrestore(&priv->cmd_lock, flags);
+ 
+ 	fd = priv->fd;
++
++	qla_nvme_ls_unmap(sp, fd);
+ 	fd->done(fd, priv->comp_status);
+ out:
+ 	qla2x00_rel_sp(sp);
+@@ -356,6 +370,8 @@ static int qla_nvme_ls_req(struct nvme_f
+ 	dma_sync_single_for_device(&ha->pdev->dev, nvme->u.nvme.cmd_dma,
+ 	    fd->rqstlen, DMA_TO_DEVICE);
+ 
++	sp->flags |= SRB_DMA_VALID;
++
+ 	rval = qla2x00_start_sp(sp);
+ 	if (rval != QLA_SUCCESS) {
+ 		ql_log(ql_log_warn, vha, 0x700e,
+@@ -363,6 +379,7 @@ static int qla_nvme_ls_req(struct nvme_f
+ 		wake_up(&sp->nvme_ls_waitq);
+ 		sp->priv = NULL;
+ 		priv->sp = NULL;
++		qla_nvme_ls_unmap(sp, fd);
+ 		qla2x00_rel_sp(sp);
+ 		return rval;
+ 	}
 
 

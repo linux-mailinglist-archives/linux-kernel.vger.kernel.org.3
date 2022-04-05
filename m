@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3785F4F3E61
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C72A34F3EF4
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384446AbiDEM1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57302 "EHLO
+        id S1389708AbiDEPVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245187AbiDEIyN (ORCPT
+        with ESMTP id S1346999AbiDEJpu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:54:13 -0400
+        Tue, 5 Apr 2022 05:45:50 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A057E219E;
-        Tue,  5 Apr 2022 01:51:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78528DCAAC;
+        Tue,  5 Apr 2022 02:32:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 47CD5B81B92;
-        Tue,  5 Apr 2022 08:51:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95CE6C385A1;
-        Tue,  5 Apr 2022 08:51:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1958DB81CB5;
+        Tue,  5 Apr 2022 09:32:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DCFCC385A0;
+        Tue,  5 Apr 2022 09:32:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148712;
-        bh=78RxZR77BSioRzFqKK8i55TTw5bKAdRw/UP/KCM/hrI=;
+        s=korg; t=1649151131;
+        bh=3lJ3J/Hn5KmINnLVJmAiRUoqx4L93qq6dyLbb8I1oE8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dfetiqjvxc4c+Lzs4mapGTR7OYx/gFRTyJlsPRqk/fPZ3dzOia0mFyj3zQcs/VL6/
-         lpIrDThafCo9siQR/yOmulDUsaKk2NCyxMY9c2GxWnDZAqzPRtk2veN2jDah8oABgM
-         Ot83z2avJ81xmppBBn38PBMhsaOifQrYcVSDhAtM=
+        b=BQWKtwtLe8nraRmN2wkmkzbTdAzArJrvdsZ6P9k5Mcpzv7bWNAIUn3mI4XuxnidEC
+         ie6HPY8ge7zZocFLxsAAnJw46xb+t4jyARI8HPsnROOb5znNilvtrwVxXgRE7uFAjl
+         J2hRCxzJq50YNX0febUii0Spi+amYZo/HpDBQSnM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Wang <sean.wang@mediatek.com>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0454/1017] mt76: mt76_connac: fix MCU_CE_CMD_SET_ROC definition error
-Date:   Tue,  5 Apr 2022 09:22:47 +0200
-Message-Id: <20220405070407.775336709@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 306/913] ARM: dts: sun8i: v3s: Move the csi1 block to follow address order
+Date:   Tue,  5 Apr 2022 09:22:48 +0200
+Message-Id: <20220405070349.028812130@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +56,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Wang <sean.wang@mediatek.com>
+From: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 
-[ Upstream commit bf9727a27442a50c75b7d99a5088330c578b2a42 ]
+[ Upstream commit c4af51698c4fb4fc683f2ac67f482cdf9ba2cd13 ]
 
-Fixed an MCU_CE_CMD_SET_ROC definition error that occurred from a previous
-refactor work.
+The csi1 block node was mistakenly added before the gic node, although
+its address comes after the gic's. Move the node to its correct
+position.
 
-Fixes: d0e274af2f2e4 ("mt76: mt76_connac: create mcu library")
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Fixes: 90e048101fa1 ("ARM: dts: sun8i: V3/V3s/S3/S3L: add CSI1 device node")
+Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Link: https://lore.kernel.org/r/20220205185429.2278860-2-paul.kocialkowski@bootlin.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/sun8i-v3s.dtsi | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h b/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h
-index acb9a286d354..63fc331e98bd 100644
---- a/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h
-+++ b/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h
-@@ -598,7 +598,7 @@ enum {
- 	MCU_CE_CMD_SET_BSS_CONNECTED = 0x16,
- 	MCU_CE_CMD_SET_BSS_ABORT = 0x17,
- 	MCU_CE_CMD_CANCEL_HW_SCAN = 0x1b,
--	MCU_CE_CMD_SET_ROC = 0x1d,
-+	MCU_CE_CMD_SET_ROC = 0x1c,
- 	MCU_CE_CMD_SET_P2P_OPPPS = 0x33,
- 	MCU_CE_CMD_SET_RATE_TX_POWER = 0x5d,
- 	MCU_CE_CMD_SCHED_SCAN_ENABLE = 0x61,
+diff --git a/arch/arm/boot/dts/sun8i-v3s.dtsi b/arch/arm/boot/dts/sun8i-v3s.dtsi
+index b30bc1a25ebb..084323d5c61c 100644
+--- a/arch/arm/boot/dts/sun8i-v3s.dtsi
++++ b/arch/arm/boot/dts/sun8i-v3s.dtsi
+@@ -593,6 +593,17 @@
+ 			#size-cells = <0>;
+ 		};
+ 
++		gic: interrupt-controller@1c81000 {
++			compatible = "arm,gic-400";
++			reg = <0x01c81000 0x1000>,
++			      <0x01c82000 0x2000>,
++			      <0x01c84000 0x2000>,
++			      <0x01c86000 0x2000>;
++			interrupt-controller;
++			#interrupt-cells = <3>;
++			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
++		};
++
+ 		csi1: camera@1cb4000 {
+ 			compatible = "allwinner,sun8i-v3s-csi";
+ 			reg = <0x01cb4000 0x3000>;
+@@ -604,16 +615,5 @@
+ 			resets = <&ccu RST_BUS_CSI>;
+ 			status = "disabled";
+ 		};
+-
+-		gic: interrupt-controller@1c81000 {
+-			compatible = "arm,gic-400";
+-			reg = <0x01c81000 0x1000>,
+-			      <0x01c82000 0x2000>,
+-			      <0x01c84000 0x2000>,
+-			      <0x01c86000 0x2000>;
+-			interrupt-controller;
+-			#interrupt-cells = <3>;
+-			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
+-		};
+ 	};
+ };
 -- 
 2.34.1
 

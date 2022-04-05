@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D34A44F4DD0
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3CF84F4B78
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1583333AbiDEXwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57674 "EHLO
+        id S1573404AbiDEW7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242159AbiDEKfQ (ORCPT
+        with ESMTP id S1354247AbiDEKMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:35:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C894B36B49;
-        Tue,  5 Apr 2022 03:20:41 -0700 (PDT)
+        Tue, 5 Apr 2022 06:12:38 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0875D5E5;
+        Tue,  5 Apr 2022 02:59:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 652E2616D7;
-        Tue,  5 Apr 2022 10:20:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 745DAC385A1;
-        Tue,  5 Apr 2022 10:20:40 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1C4A0CE1C9D;
+        Tue,  5 Apr 2022 09:59:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F541C385A3;
+        Tue,  5 Apr 2022 09:59:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154040;
-        bh=HQpRMrAehDtWeCK0JY9A9/XHa20QiNq1aSYK6C2zu8A=;
+        s=korg; t=1649152764;
+        bh=+meF9PkKtpTanUbYRtKk8E3df2KpV2NIkMy3Tats4EA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rkOnGlKWBwSJKrjDCSefmzxS8FQWRIi2nKo0p5GZb4twQriwTPBJptxG0ms9714uq
-         DBfibbxkbhYBLGpffn45NDe9ZJBv9PFwAN/FP3OXqDHo2P9jthA2Li03ER0ZANsTfC
-         ryIwb/sqyajIglb0agmjlonB6yASmJPUuBPD4B/k=
+        b=GZnkvJe5at6W2eecfZfGUhu7xeiky2bwaVMsQctIeLzOEpb/LLI74QbJPtUYRJuVV
+         kxnxMDrk6i2YZGqWJfx5Khh7aivLtgFwNnXLHFxFhMN7iU40xU4nPE3vCK/n4g1S3e
+         +D5qGcYOazFPMrPYD2Hdk2mIPXbfP+o8PeUvHC94=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Petr Vorel <petr.vorel@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 435/599] clk: qcom: gcc-msm8994: Fix gpll4 width
+        stable@vger.kernel.org, Will Deacon <will@kernel.org>
+Subject: [PATCH 5.15 867/913] arm64: mm: Drop const from conditional arm64_dma_phys_limit definition
 Date:   Tue,  5 Apr 2022 09:32:09 +0200
-Message-Id: <20220405070311.777210676@linuxfoundation.org>
+Message-Id: <20220405070405.812254309@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,43 +53,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Konrad Dybcio <konrad.dybcio@somainline.org>
+From: Will Deacon <will@kernel.org>
 
-[ Upstream commit 71021db1c532c2545ae53b9ee85b37b7154f51d4 ]
+commit 770093459b9b333380aa71f2c31c60b14895c1df upstream.
 
-The gpll4 postdiv is actually a div4, so make sure that Linux is aware of
-this.
+Commit 031495635b46 ("arm64: Do not defer reserve_crashkernel() for
+platforms with no DMA memory zones") introduced different definitions
+for 'arm64_dma_phys_limit' depending on CONFIG_ZONE_DMA{,32} based on
+a late suggestion from Pasha. Sadly, this results in a build error when
+passing W=1:
 
-This fixes the following error messages:
+  | arch/arm64/mm/init.c:90:19: error: conflicting type qualifiers for 'arm64_dma_phys_limit'
 
- mmc1: Card appears overclocked; req 200000000 Hz, actual 343999999 Hz
- mmc1: Card appears overclocked; req 400000000 Hz, actual 687999999 Hz
+Drop the 'const' for now and use '__ro_after_init' consistently.
 
-Fixes: aec89f78cf01 ("clk: qcom: Add support for msm8994 global clock controller")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Link: https://lore.kernel.org/r/20220319174940.341137-1-konrad.dybcio@somainline.org
-Tested-by: Petr Vorel <petr.vorel@gmail.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/202203090241.aj7paWeX-lkp@intel.com
+Link: https://lore.kernel.org/r/CA+CK2bDbbx=8R=UthkMesWOST8eJMtOGJdfMRTFSwVmo0Vn0EA@mail.gmail.com
+Fixes: 031495635b46 ("arm64: Do not defer reserve_crashkernel() for platforms with no DMA memory zones")
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/clk/qcom/gcc-msm8994.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/mm/init.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/qcom/gcc-msm8994.c b/drivers/clk/qcom/gcc-msm8994.c
-index 144d2ba7a9be..463a444c8a7e 100644
---- a/drivers/clk/qcom/gcc-msm8994.c
-+++ b/drivers/clk/qcom/gcc-msm8994.c
-@@ -108,6 +108,7 @@ static struct clk_alpha_pll gpll4_early = {
+--- a/arch/arm64/mm/init.c
++++ b/arch/arm64/mm/init.c
+@@ -87,7 +87,7 @@ EXPORT_SYMBOL(memstart_addr);
+ #if IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32)
+ phys_addr_t __ro_after_init arm64_dma_phys_limit;
+ #else
+-const phys_addr_t arm64_dma_phys_limit = PHYS_MASK + 1;
++phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
+ #endif
  
- static struct clk_alpha_pll_postdiv gpll4 = {
- 	.offset = 0x1dc0,
-+	.width = 4,
- 	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
- 	.clkr.hw.init = &(struct clk_init_data)
- 	{
--- 
-2.34.1
-
+ #ifdef CONFIG_KEXEC_CORE
 
 

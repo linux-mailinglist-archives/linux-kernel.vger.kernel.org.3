@@ -2,246 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8055D4F4ECC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01BD04F4EB5
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242528AbiDFAhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
+        id S1836355AbiDFAfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457741AbiDEQhl (ORCPT
+        with ESMTP id S1457742AbiDEQi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:37:41 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D420D0804
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:35:42 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 09:35:34 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1649176540;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oZ9kiXxzTKEJjU33Jcbxu+aPRX7HK5Opx+ZIkgUc6mI=;
-        b=ngs/04UO42BsXVwI5+s5lF20T8mq4FKb/ZIy24q2LGXqGnhCxLfop0TcHmuxiEFpObrnjU
-        tziVsGiBh0Pm99vOJmrweFWzm2QQpQOCxrKeHE+sijVbzIiKCn6NqPdzcRkx5UqGPQ3GHw
-        qLIg5Z5SZQHU2WiWHBFgGfTMySp922g=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Hillf Danton <hdanton@sina.com>, MM <linux-mm@kvack.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Stephen Brennan <stephen.s.brennan@oracle.com>,
-        Yu Zhao <yuzhao@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC] mm/vmscan: add periodic slab shrinker
-Message-ID: <Ykxv1j9dxlz1BS5N@carbon.dhcp.thefacebook.com>
-References: <20220402072103.5140-1-hdanton@sina.com>
- <20220403005618.5263-1-hdanton@sina.com>
- <20220404010948.GV1609613@dread.disaster.area>
- <YktCKVbChtC+YjOk@carbon.dhcp.thefacebook.com>
- <20220405051710.GW1609613@dread.disaster.area>
+        Tue, 5 Apr 2022 12:38:28 -0400
+Received: from 20.mo582.mail-out.ovh.net (20.mo582.mail-out.ovh.net [178.32.124.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E67D3737
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:36:29 -0700 (PDT)
+Received: from player696.ha.ovh.net (unknown [10.108.1.191])
+        by mo582.mail-out.ovh.net (Postfix) with ESMTP id 413FE23E49
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 16:36:28 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player696.ha.ovh.net (Postfix) with ESMTPSA id DB1AA1EFDEA11;
+        Tue,  5 Apr 2022 16:36:22 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-103G005435116ba-5cdd-4ff3-a179-c77177e0e200,
+                    8AF55017BACD44284FC599BC4826E0280D36FCC4) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     Kirill Marinushkin <kmarinushkin@birdec.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
+        Stephen Kitt <steve@sk2.org>
+Subject: [PATCH] ASoC: pcm3060: use simple i2c probe function
+Date:   Tue,  5 Apr 2022 18:36:18 +0200
+Message-Id: <20220405163618.2158090-1-steve@sk2.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220405051710.GW1609613@dread.disaster.area>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 8073828232917059206
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejgedgleelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeetgedugfelkeeikeetgeegteevfeeufeetuefgudeiiedthfehtdeffeekvdeffeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrheileeirdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 03:17:10PM +1000, Dave Chinner wrote:
-> On Mon, Apr 04, 2022 at 12:08:25PM -0700, Roman Gushchin wrote:
-> > On Mon, Apr 04, 2022 at 11:09:48AM +1000, Dave Chinner wrote:
-> > > i.e. the amount of work that shrinkers need to do in a periodic scan
-> > > is largerly determined by the rate of shrinkable cache memory usage
-> > > growth rather than memory reclaim priority as it is now. Hence there
-> > > needs to be different high level "shrinker needs to do X amount of
-> > > work" calculation for periodic reclaim than there is now.
-> > > 
-> > > e.g. we calculate a rolling average of the size of the cache and a
-> > > rate of change over a series of polling operations (i.e. calling
-> > > ->scan_count) and then when sustained growth is detected we start
-> > > trying to shrink the cache to limit the rate of growth of the cache.
-> > > 
-> > > If the cache keeps growing, then it's objects are being repeatedly
-> > > referenced and it *should* keep growing. If it's one-off objects
-> > > that are causing the growth of the cache and so objects are being
-> > > reclaimed by the shrinker, then matching the periodic shrink scan to
-> > > the growth rate will substantially reduce the rate of growth of that
-> > > cache.
-> > 
-> > A clever idea!
-> > 
-> > It seems like we need to add some stats to the list_lru API or maybe to
-> > the shrinker API (and let list_lru to use it).
-> > E.g. total/scanned/reclaimed, maybe with a time decay
-> > 
-> > I'm also thinking about:
-> > 1) adding a sysfs/debugfs interface to expose shrinkers current size and
-> >    statistics, with an ability to call into the reclaim manually.
-> 
-> I've thought about it, too, and can see where it could be useful.
-> However, when I consider the list_lru memcg integration, I suspect
-> it becomes a "can't see the forest for the trees" problem. We're
-> going to end up with millions of sysfs objects with no obvious way
-> to navigate, iterate or search them if we just take the naive "sysfs
-> object + stats per list_lru instance" approach.
+The i2c probe functions here don't use the id information provided in
+their second argument, so the single-parameter i2c probe function
+("probe_new") can be used instead.
 
-Ok, I'll try to master something and share patches. I assume it would be useful
-to have statistics and be able to trigger a reclaim of a particular shrinker
-without creating a real memory pressure. I anticipate many interesting
-findings in the implementation of individual shrinkers...
+This avoids scanning the identifier tables during probes.
 
-> 
-> Also, if you look at commit 6a6b7b77cc0f mm: ("list_lru: transpose the
-> array of per-node per-memcg lru lists") that went into 5.18-rc1,
-> you'll get an idea of the amount of memory overhead just tracking
-> the list_lru x memcg infrastructure consumes at scale:
-> 
->     I had done a easy test to show the optimization.  I create 10k memory
->     cgroups and mount 10k filesystems in the systems.  We use free command to
->     show how many memory does the systems comsumes after this operation (There
->     are 2 numa nodes in the system).
-> 
->             +-----------------------+------------------------+
->             |      condition        |   memory consumption   |
->             +-----------------------+------------------------+
->             | without this patchset |        24464 MB        |
->             +-----------------------+------------------------+
->             |     after patch 1     |        21957 MB        | <--------+
->             +-----------------------+------------------------+          |
->             |     after patch 10    |         6895 MB        |          |
->             +-----------------------+------------------------+          |
->             |     after patch 12    |         4367 MB        |          |
->             +-----------------------+------------------------+          |
->                                                                         |
->             The more the number of nodes, the more obvious the effect---+
+Signed-off-by: Stephen Kitt <steve@sk2.org>
+---
+ sound/soc/codecs/pcm3060-i2c.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Yes, I know, I've reviewed this patchset. However, 10k cgroups _and_ 10k
-mounts look a bit artificial. It's hard to believe that there are 100M
-LRUs containing hot objects. If most of them are cold, it's actually
-a question how to efficiently reclaim them and free the wasted memory.
+diff --git a/sound/soc/codecs/pcm3060-i2c.c b/sound/soc/codecs/pcm3060-i2c.c
+index abcdeb922201..2388098eeca3 100644
+--- a/sound/soc/codecs/pcm3060-i2c.c
++++ b/sound/soc/codecs/pcm3060-i2c.c
+@@ -10,8 +10,7 @@
+ 
+ #include "pcm3060.h"
+ 
+-static int pcm3060_i2c_probe(struct i2c_client *i2c,
+-			     const struct i2c_device_id *id)
++static int pcm3060_i2c_probe(struct i2c_client *i2c)
+ {
+ 	struct pcm3060_priv *priv;
+ 
+@@ -50,7 +49,7 @@ static struct i2c_driver pcm3060_i2c_driver = {
+ #endif /* CONFIG_OF */
+ 	},
+ 	.id_table = pcm3060_i2c_id,
+-	.probe = pcm3060_i2c_probe,
++	.probe_new = pcm3060_i2c_probe,
+ };
+ 
+ module_i2c_driver(pcm3060_i2c_driver);
+-- 
+2.27.0
 
-> 
-> If we now add sysfs objects and stats arrays to each of the
-> list_lrus that we initiate even now on 5.18-rc1, we're going to
-> massively blow out the memory footprint again.
-
-sysfs can be a config option, it doesn't have to be enabled in prod.
-But I agree, because of memory constraints we're very limited in the size
-of statistics which can be used for reclaim decisions.
-
-> 
-> So, nice idea, but I'm not sure we can make it useful and not
-> consume huge amounts of memory....
-> 
-> What might be more useful is a way of getting the kernel to tell us
-> what the, say, 20 biggest slab caches are in the system and then
-> provide a way to selectively shrink them. We generally don't really
-> care about tiny caches, just the ones consuming all the memory. This
-> isn't my idea - Kent has been looking at this because of how useless
-> OOM kill output is for debugging slab cache based OOM triggers. See
-> this branch for an example:
-> 
-> https://evilpiepirate.org/git/bcachefs.git/log/?h=shrinker_to_text
-> 
-> Even a sysfs entry that you echo a number into and it returns
-> the "top N" largest LRU lists. echo -1 into it and it returns every
-> single one if you want all the information.
-> 
-> The whole "one sysfs file, one value" architecture falls completely
-> apart when we might have to indexing *millions* of internal
-> structures with many parameters per structure...
-
-It's a good point, I need to think what can we do here.
-
-Actually, if it's so hard and inefficient for a sysfs interface,
-it also means it's inefficient for the reclaim path. So if we have
-an ability to quickly find beefy LRU lists worth shrinking, it might
-improve the reclaim efficiency too.
-
-Actually, thinking of reducing the memory footprint, it would be great
-to combine LRU's belonging to different superblocks (of the same type).
-Pagecache analogy: we have an LRU for all pagecache pages, it's not
-per-file or per-sb. Not sure how easy/viable it is.
-
-> 
-> > 2) formalizing a reference bit/counter API on the shrinkers level, so that
-> >    shrinker users can explicitly mark objects (re)-"activation".
-> 
-> Not 100% certain what you are refering to here - something to do
-> with active object rotation? Or an active/inactive list split with period
-> demotion like we have for the page LRUs? Or workingset refault
-> detection? Can you explain in more detail?
-
-It's a vague thinking at this point, but you got me right, I was thinking about
-all the listed ideas above. In general I'm trying to understand whether
-the existing model is sufficient for a more or less effective management
-of hot/cold objects and if we can improve it borrowing some ideas from
-the page reclaim code.
-Shadow entries would be great but likely not possible because of the memory
-footprint.
-
-> 
-> > 3) _maybe_ we need to change the shrinkers API from a number of objects to
-> >    bytes, so that releasing a small number of large objects can compete with
-> >    a releasing on many small objects. But I'm not sure.
-> 
-> I think I suggested something similar a long time ago. We have
-> shrinkers that track things other than slab objects. e.g. IIRC the
-> ttm graphics allocator shrinker tracks sets of pages and frees
-> pages, not slab objects. The XFS buffer cache tracks variable sized
-> objects, from 512 bytes to 64KB in length, so the amount of memory
-> it frees is variable even if the number of handles it scans and
-> reclaims is fixed and consistent. Other subsystems have different
-> "non object" shrinker needs as well.
-
-It's true for many objects, because it's not unusual for kernel objects
-to have attached kmallocs or pin other objects in the memory. Unlikely
-we can be 100% accurate, but we might improve the "smoothness" of the
-reclaim process.
-
-> 
-> The long and short of it is that two shrinkers might have the same
-> object count, but one might free 10x the amount of memory than the
-> other for the same amount of shrinking work. Being able to focus
-> reclaim work on caches that can free a lot of memory much more
-> quickly would be a great idea.
-
-Right. It's also about "bytes freed/seeks" ratio. Why would we reclaim
-expensive small objects if there are big and cheap.
-
-> 
-> It also means that a shrinker that scans a fragmented slab can keep
-> going until a set number of slab pages have been freed, rather than
-> a set number of slab objects. We can push reclaim of fragmented slab
-> caches much harder when necessary if we are reclaiming by freed byte
-> counts...
-
-I thought about it, but it's tricky. If all slabs are almost full (fragmentation
-is low), we want to shrink aggressively, otherwise we end up allocating
-more slabs and fragmenting more memory. If slabs are almost empty (fragmentation
-is very high), we also want to shrink more aggressively with a hope to release
-physical memory, as you said. But setting a target in pages is dangerous: slab caches
-can be merged or slab pages can be pinned by objects belonging to a different
-memory cgroup, so it might be not possible to reclaim pages no matter how hard
-we're trying.
-
-> 
-> So, yeah, byte-count based reclaim definitely has merit compared to
-> what we currently do. It's more generic and more flexible...
-
-Great, I'm glad we're on the same page here.
-
-Thank you for the answers, I think it's a really useful discussion!
-
-Roman

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2833A4F4E02
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 662194F4E80
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1587026AbiDFAHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
+        id S1456344AbiDFAZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358150AbiDEK2C (ORCPT
+        with ESMTP id S1352745AbiDEKFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:28:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48349D0D5;
-        Tue,  5 Apr 2022 03:15:57 -0700 (PDT)
+        Tue, 5 Apr 2022 06:05:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45974BBE31;
+        Tue,  5 Apr 2022 02:53:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6120161562;
-        Tue,  5 Apr 2022 10:15:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EBB3C385A0;
-        Tue,  5 Apr 2022 10:15:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2854AB81B13;
+        Tue,  5 Apr 2022 09:53:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BEBAC385A2;
+        Tue,  5 Apr 2022 09:53:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153756;
-        bh=/5m4K9ozsZZSGdZVBC2IAddKC+Vx7f/VTOYfoh6haRo=;
+        s=korg; t=1649152422;
+        bh=tTRgRGkVhs4MQfo1x1AjnjCGjBN5nYhl1z3dsRALaTk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aPpg2ZZYeZwK6PqVtzEg6YQQ/Hw8rlIZN4WqM4hpPitxxn0YLvUUlXz16qow1PK4x
-         OQNlrXuGYn/DtjdZHPHpOatcWFLBoSNLQaqgnnc0ZLC6TNd7T90V/2EZ5sDTRUy6d+
-         VOyZKKNcVOp9B516X0iVHoUufRxOtEJeA9bJV1tE=
+        b=O2e9IrvfhCdQqaowO+qnU2S1/3Y5vu4AHaE3CGYMjwTS8Y08wVs/cscrkJikURyvQ
+         Vq18RikC6kKRFwOZqfCEy7pmr9yumz/CH1yfoixR/t2gbETbiQ8K2pK/XFpyt7doB9
+         /awonEX42JmwSLLNv97p2rCKle9W6Xk85id4AoUQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 337/599] power: supply: wm8350-power: Handle error for wm8350_register_irq
-Date:   Tue,  5 Apr 2022 09:30:31 +0200
-Message-Id: <20220405070308.861046944@linuxfoundation.org>
+        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.15 770/913] KVM: x86: Reinitialize context if host userspace toggles EFER.LME
+Date:   Tue,  5 Apr 2022 09:30:32 +0200
+Message-Id: <20220405070402.913373835@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,156 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Paolo Bonzini <pbonzini@redhat.com>
 
-[ Upstream commit b0b14b5ba11bec56fad344a4a0b2e16449cc8b94 ]
+commit d6174299365ddbbf491620c0b8c5ca1a6ef2eea5 upstream.
 
-As the potential failure of the wm8350_register_irq(),
-it should be better to check it and return error if fails.
-Also, use 'free_' in order to avoid same code.
+While the guest runs, EFER.LME cannot change unless CR0.PG is clear, and
+therefore EFER.NX is the only bit that can affect the MMU role.  However,
+set_efer accepts a host-initiated change to EFER.LME even with CR0.PG=1.
+In that case, the MMU has to be reset.
 
-Fixes: 14431aa0c5a4 ("power_supply: Add support for WM8350 PMU")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 11988499e62b ("KVM: x86: Skip EFER vs. guest CPUID checks for host-initiated writes")
+Cc: stable@vger.kernel.org
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/power/supply/wm8350_power.c | 96 ++++++++++++++++++++++++-----
- 1 file changed, 82 insertions(+), 14 deletions(-)
+ arch/x86/kvm/mmu.h |    1 +
+ arch/x86/kvm/x86.c |    3 +--
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/power/supply/wm8350_power.c b/drivers/power/supply/wm8350_power.c
-index e05cee457471..9c46c48dccb1 100644
---- a/drivers/power/supply/wm8350_power.c
-+++ b/drivers/power/supply/wm8350_power.c
-@@ -408,44 +408,112 @@ static const struct power_supply_desc wm8350_usb_desc = {
-  *		Initialisation
-  *********************************************************************/
+--- a/arch/x86/kvm/mmu.h
++++ b/arch/x86/kvm/mmu.h
+@@ -49,6 +49,7 @@
+ 			       X86_CR4_LA57)
  
--static void wm8350_init_charger(struct wm8350 *wm8350)
-+static int wm8350_init_charger(struct wm8350 *wm8350)
+ #define KVM_MMU_CR0_ROLE_BITS (X86_CR0_PG | X86_CR0_WP)
++#define KVM_MMU_EFER_ROLE_BITS (EFER_LME | EFER_NX)
+ 
+ static __always_inline u64 rsvd_bits(int s, int e)
  {
-+	int ret;
-+
- 	/* register our interest in charger events */
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_HOT,
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_HOT,
- 			    wm8350_charger_handler, 0, "Battery hot", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_COLD,
-+	if (ret)
-+		goto err;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_COLD,
- 			    wm8350_charger_handler, 0, "Battery cold", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_FAIL,
-+	if (ret)
-+		goto free_chg_bat_hot;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_FAIL,
- 			    wm8350_charger_handler, 0, "Battery fail", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_TO,
-+	if (ret)
-+		goto free_chg_bat_cold;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_TO,
- 			    wm8350_charger_handler, 0,
- 			    "Charger timeout", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_END,
-+	if (ret)
-+		goto free_chg_bat_fail;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_END,
- 			    wm8350_charger_handler, 0,
- 			    "Charge end", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_START,
-+	if (ret)
-+		goto free_chg_to;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_START,
- 			    wm8350_charger_handler, 0,
- 			    "Charge start", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_FAST_RDY,
-+	if (ret)
-+		goto free_chg_end;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_FAST_RDY,
- 			    wm8350_charger_handler, 0,
- 			    "Fast charge ready", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P9,
-+	if (ret)
-+		goto free_chg_start;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P9,
- 			    wm8350_charger_handler, 0,
- 			    "Battery <3.9V", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P1,
-+	if (ret)
-+		goto free_chg_fast_rdy;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P1,
- 			    wm8350_charger_handler, 0,
- 			    "Battery <3.1V", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_2P85,
-+	if (ret)
-+		goto free_chg_vbatt_lt_3p9;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_2P85,
- 			    wm8350_charger_handler, 0,
- 			    "Battery <2.85V", wm8350);
-+	if (ret)
-+		goto free_chg_vbatt_lt_3p1;
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -1605,8 +1605,7 @@ static int set_efer(struct kvm_vcpu *vcp
+ 		return r;
+ 	}
  
- 	/* and supply change events */
--	wm8350_register_irq(wm8350, WM8350_IRQ_EXT_USB_FB,
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_EXT_USB_FB,
- 			    wm8350_charger_handler, 0, "USB", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_EXT_WALL_FB,
-+	if (ret)
-+		goto free_chg_vbatt_lt_2p85;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_EXT_WALL_FB,
- 			    wm8350_charger_handler, 0, "Wall", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_EXT_BAT_FB,
-+	if (ret)
-+		goto free_ext_usb_fb;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_EXT_BAT_FB,
- 			    wm8350_charger_handler, 0, "Battery", wm8350);
-+	if (ret)
-+		goto free_ext_wall_fb;
-+
-+	return 0;
-+
-+free_ext_wall_fb:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_EXT_WALL_FB, wm8350);
-+free_ext_usb_fb:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_EXT_USB_FB, wm8350);
-+free_chg_vbatt_lt_2p85:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_2P85, wm8350);
-+free_chg_vbatt_lt_3p1:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P1, wm8350);
-+free_chg_vbatt_lt_3p9:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P9, wm8350);
-+free_chg_fast_rdy:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_FAST_RDY, wm8350);
-+free_chg_start:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_START, wm8350);
-+free_chg_end:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_END, wm8350);
-+free_chg_to:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_TO, wm8350);
-+free_chg_bat_fail:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_BAT_FAIL, wm8350);
-+free_chg_bat_cold:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_BAT_COLD, wm8350);
-+free_chg_bat_hot:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_BAT_HOT, wm8350);
-+err:
-+	return ret;
- }
+-	/* Update reserved bits */
+-	if ((efer ^ old_efer) & EFER_NX)
++	if ((efer ^ old_efer) & KVM_MMU_EFER_ROLE_BITS)
+ 		kvm_mmu_reset_context(vcpu);
  
- static void free_charger_irq(struct wm8350 *wm8350)
--- 
-2.34.1
-
+ 	return 0;
 
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0624F5064
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B464F504B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1841639AbiDFBY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
+        id S1390210AbiDFBPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349783AbiDEJv2 (ORCPT
+        with ESMTP id S1358044AbiDEK15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:51:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4021C920;
-        Tue,  5 Apr 2022 02:49:30 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9454D1EAC4;
+        Tue,  5 Apr 2022 03:13:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E6EF6164D;
-        Tue,  5 Apr 2022 09:49:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4397FC385A1;
-        Tue,  5 Apr 2022 09:49:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5414EB81C6C;
+        Tue,  5 Apr 2022 10:13:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 969E8C385A3;
+        Tue,  5 Apr 2022 10:13:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152169;
-        bh=P3NtWkh9h3XTIlElB6Qko8BGssaTAw2AjqJ3aVe94Us=;
+        s=korg; t=1649153621;
+        bh=WXc5P+FY+yKKru4/Q8dltm0MIfbYvaCJM1bU2dmzG2o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E1Ar+iKGxg5v6tsvDpIgZvMeXjJMFRNvh9r79LYgMqxQ47S12MtX5Y1fOZ+5XZjyo
-         nSFPSwmfoJnOd2AjI1QNzUR9l1m0BMipGVxU2OgsIhSoN1Hzjt7lGqlK1ym9kBuC7b
-         1PIG9Ytqu795UsMIs/Qg6/r2MPSS9R+BZ6WcfCvE=
+        b=TujV6WY+/oFlGexysw6s76BLaLZhoB+P6wtZYkL+4MI5DDIGzA2PyJSowVlnIlqhV
+         qUdjPWNv1ZVbmprthDQpyDYONqbHR61RuB7zHv0E2CuOTmW3iCVGtEplECM/a7rW0O
+         b4RsppMWJgNCbtjrK/AbBBJFnd24haf/SAFItaSk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
+        stable@vger.kernel.org,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 680/913] lib/test: use after free in register_test_dev_kmod()
-Date:   Tue,  5 Apr 2022 09:29:02 +0200
-Message-Id: <20220405070400.218521331@linuxfoundation.org>
+Subject: [PATCH 5.10 249/599] ASoC: dmaengine: do not use a NULL prepare_slave_config() callback
+Date:   Tue,  5 Apr 2022 09:29:03 +0200
+Message-Id: <20220405070306.249870526@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,32 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
 
-[ Upstream commit dc0ce6cc4b133f5f2beb8b47dacae13a7d283c2c ]
+[ Upstream commit 9a1e13440a4f2e7566fd4c5eae6a53e6400e08a4 ]
 
-The "test_dev" pointer is freed but then returned to the caller.
+Even if struct snd_dmaengine_pcm_config is used, prepare_slave_config()
+callback might not be set. Check if this callback is set before using it.
 
-Fixes: d9c6a72d6fa2 ("kmod: add test driver to stress test the module loader")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+Fixes: fa654e085300 ("ASoC: dmaengine-pcm: Provide default config")
+Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Link: https://lore.kernel.org/r/20220307122202.2251639-2-codrin.ciubotariu@microchip.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/test_kmod.c | 1 +
- 1 file changed, 1 insertion(+)
+ sound/soc/soc-generic-dmaengine-pcm.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/lib/test_kmod.c b/lib/test_kmod.c
-index ce1589391413..cb800b1d0d99 100644
---- a/lib/test_kmod.c
-+++ b/lib/test_kmod.c
-@@ -1149,6 +1149,7 @@ static struct kmod_test_device *register_test_dev_kmod(void)
- 	if (ret) {
- 		pr_err("could not register misc device: %d\n", ret);
- 		free_test_dev_kmod(test_dev);
-+		test_dev = NULL;
- 		goto out;
- 	}
+diff --git a/sound/soc/soc-generic-dmaengine-pcm.c b/sound/soc/soc-generic-dmaengine-pcm.c
+index 9ef80a48707e..0d100b4e43f7 100644
+--- a/sound/soc/soc-generic-dmaengine-pcm.c
++++ b/sound/soc/soc-generic-dmaengine-pcm.c
+@@ -83,10 +83,10 @@ static int dmaengine_pcm_hw_params(struct snd_soc_component *component,
  
+ 	memset(&slave_config, 0, sizeof(slave_config));
+ 
+-	if (!pcm->config)
+-		prepare_slave_config = snd_dmaengine_pcm_prepare_slave_config;
+-	else
++	if (pcm->config && pcm->config->prepare_slave_config)
+ 		prepare_slave_config = pcm->config->prepare_slave_config;
++	else
++		prepare_slave_config = snd_dmaengine_pcm_prepare_slave_config;
+ 
+ 	if (prepare_slave_config) {
+ 		ret = prepare_slave_config(substream, params, &slave_config);
 -- 
 2.34.1
 

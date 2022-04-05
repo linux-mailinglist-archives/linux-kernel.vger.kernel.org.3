@@ -2,42 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D024F3107
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 219A24F3503
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346635AbiDEJpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37238 "EHLO
+        id S242288AbiDEJHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238917AbiDEITa (ORCPT
+        with ESMTP id S239364AbiDEIUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:19:30 -0400
+        Tue, 5 Apr 2022 04:20:00 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021BE75215;
-        Tue,  5 Apr 2022 01:09:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BADBE9EB;
+        Tue,  5 Apr 2022 01:11:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DD68608C0;
-        Tue,  5 Apr 2022 08:09:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A775C385A0;
-        Tue,  5 Apr 2022 08:09:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F9D960B0B;
+        Tue,  5 Apr 2022 08:11:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C9F9C385A0;
+        Tue,  5 Apr 2022 08:11:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146182;
-        bh=Vge0+JI6dnmSDzj8z8QK4MArKmPEiy+UaJEPPJBued8=;
+        s=korg; t=1649146313;
+        bh=aTqnT2hnmZ63NvztSKRQ9i4po/9pPjtNqmDf8qAzhBk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xhxXitVc3fj3BFoF0HMuruMBC2xemtRhUsUSm3nVB16CsnvQNaaILn6AuaB3zDgpR
-         LZUzOjAxPAPZrzLjcUku5KzWbGU3ERyoKZPKjhO+6W7DzFm3z9EDg+Dq3fyPLg84xw
-         49Hbu1hCDmMrSFpcs8Qtg1euQaoGQIOGfJf8xRW0=
+        b=yE6fYtk1a8Xrrhx2njg4BCckaV++WTfNYQDhA8ekIB80aaIA/31p0XtPw8q+mjhtF
+         BaQ5kk9Qwx9y1n+m9gFSs9Up1Ts9DBmfKESn7SRu/hBWV3iKy8DUsG3wnnmwnzSmNy
+         fWlFosdulwuypjixVziag3XeZJVu6ii7oGAlNfA4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Anshuman Gupta <anshuman.gupta@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Uma Shankar <uma.shankar@intel.com>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        =?UTF-8?q?Jos=C3=A9=20Roberto=20de=20Souza?= <jose.souza@intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0670/1126] powerpc/time: Fix KVM host re-arming a timer beyond decrementer range
-Date:   Tue,  5 Apr 2022 09:23:37 +0200
-Message-Id: <20220405070427.293514868@linuxfoundation.org>
+Subject: [PATCH 5.17 0671/1126] drm/i915/display: Fix HPD short pulse handling for eDP
+Date:   Tue,  5 Apr 2022 09:23:38 +0200
+Message-Id: <20220405070427.321935376@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,44 +60,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicholas Piggin <npiggin@gmail.com>
+From: José Roberto de Souza <jose.souza@intel.com>
 
-[ Upstream commit cf74ff52e352112be78c4c4c3637a37ec36a6608 ]
+[ Upstream commit 3a84fd1ed53582b31e843a152ee3219e9e4ccb8c ]
 
-If the next host timer is beyond decrementer range, timer_rearm_host_dec
-will leave decrementer not programmed. This will not cause a problem for
-the host it will just set the decrementer correctly when the decrementer
-interrupt hits, it seems safer not to leave the next host decrementer
-interrupt timing able to be influenced by a guest.
+Commit 13ea6db2cf24 ("drm/i915/edp: Ignore short pulse when panel
+powered off") completely broke short pulse handling for eDP as it is
+usually generated by sink when it is displaying image and there is
+some error or status that source needs to handle.
 
-This code is only used in the P9 KVM paths so it's unlikely to be hit
-practically unless large decrementer is force disabled in the host.
+When power panel is enabled, this state is enough to power aux
+transactions and VDD override is disabled, so intel_pps_have_power()
+is always returning false causing short pulses to be ignored.
 
-Fixes: 25aa145856cd ("powerpc/time: add API for KVM to re-arm the host timer/decrementer")
-Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220124143930.3923442-2-npiggin@gmail.com
+So here better naming this function that intends to check if aux
+lines are powered to avoid the endless cycle mentioned in the commit
+being fixed and fixing the check for what it is intended.
+
+v2:
+- renamed to intel_pps_have_panel_power_or_vdd()
+- fixed indentation
+
+Fixes: 13ea6db2cf24 ("drm/i915/edp: Ignore short pulse when panel powered off")
+Cc: Anshuman Gupta <anshuman.gupta@intel.com>
+Cc: Jani Nikula <jani.nikula@intel.com>
+Cc: Uma Shankar <uma.shankar@intel.com>
+Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Signed-off-by: José Roberto de Souza <jose.souza@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220311185149.110527-1-jose.souza@intel.com
+(cherry picked from commit 8f0c1c0949b609acfad62b8d5f742a3b5e7b05ab)
+Signed-off-by: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kernel/time.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/i915/display/intel_dp.c  | 2 +-
+ drivers/gpu/drm/i915/display/intel_pps.c | 6 +++---
+ drivers/gpu/drm/i915/display/intel_pps.h | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/arch/powerpc/kernel/time.c b/arch/powerpc/kernel/time.c
-index cd0b8b71ecdd..384f58a3f373 100644
---- a/arch/powerpc/kernel/time.c
-+++ b/arch/powerpc/kernel/time.c
-@@ -582,8 +582,9 @@ void timer_rearm_host_dec(u64 now)
- 		local_paca->irq_happened |= PACA_IRQ_DEC;
- 	} else {
- 		now = *next_tb - now;
--		if (now <= decrementer_max)
--			set_dec_or_work(now);
-+		if (now > decrementer_max)
-+			now = decrementer_max;
-+		set_dec_or_work(now);
- 	}
+diff --git a/drivers/gpu/drm/i915/display/intel_dp.c b/drivers/gpu/drm/i915/display/intel_dp.c
+index b5e2508db1cf..62e763faf0aa 100644
+--- a/drivers/gpu/drm/i915/display/intel_dp.c
++++ b/drivers/gpu/drm/i915/display/intel_dp.c
+@@ -4831,7 +4831,7 @@ intel_dp_hpd_pulse(struct intel_digital_port *dig_port, bool long_hpd)
+ 	struct intel_dp *intel_dp = &dig_port->dp;
+ 
+ 	if (dig_port->base.type == INTEL_OUTPUT_EDP &&
+-	    (long_hpd || !intel_pps_have_power(intel_dp))) {
++	    (long_hpd || !intel_pps_have_panel_power_or_vdd(intel_dp))) {
+ 		/*
+ 		 * vdd off can generate a long/short pulse on eDP which
+ 		 * would require vdd on to handle it, and thus we
+diff --git a/drivers/gpu/drm/i915/display/intel_pps.c b/drivers/gpu/drm/i915/display/intel_pps.c
+index e9c679bb1b2e..5edd188d9747 100644
+--- a/drivers/gpu/drm/i915/display/intel_pps.c
++++ b/drivers/gpu/drm/i915/display/intel_pps.c
+@@ -1075,14 +1075,14 @@ static void intel_pps_vdd_sanitize(struct intel_dp *intel_dp)
+ 	edp_panel_vdd_schedule_off(intel_dp);
  }
- EXPORT_SYMBOL_GPL(timer_rearm_host_dec);
+ 
+-bool intel_pps_have_power(struct intel_dp *intel_dp)
++bool intel_pps_have_panel_power_or_vdd(struct intel_dp *intel_dp)
+ {
+ 	intel_wakeref_t wakeref;
+ 	bool have_power = false;
+ 
+ 	with_intel_pps_lock(intel_dp, wakeref) {
+-		have_power = edp_have_panel_power(intel_dp) &&
+-						  edp_have_panel_vdd(intel_dp);
++		have_power = edp_have_panel_power(intel_dp) ||
++			     edp_have_panel_vdd(intel_dp);
+ 	}
+ 
+ 	return have_power;
+diff --git a/drivers/gpu/drm/i915/display/intel_pps.h b/drivers/gpu/drm/i915/display/intel_pps.h
+index fbb47f6f453e..e64144659d31 100644
+--- a/drivers/gpu/drm/i915/display/intel_pps.h
++++ b/drivers/gpu/drm/i915/display/intel_pps.h
+@@ -37,7 +37,7 @@ void intel_pps_vdd_on(struct intel_dp *intel_dp);
+ void intel_pps_on(struct intel_dp *intel_dp);
+ void intel_pps_off(struct intel_dp *intel_dp);
+ void intel_pps_vdd_off_sync(struct intel_dp *intel_dp);
+-bool intel_pps_have_power(struct intel_dp *intel_dp);
++bool intel_pps_have_panel_power_or_vdd(struct intel_dp *intel_dp);
+ void intel_pps_wait_power_cycle(struct intel_dp *intel_dp);
+ 
+ void intel_pps_init(struct intel_dp *intel_dp);
 -- 
 2.34.1
 

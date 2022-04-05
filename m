@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B344F4549
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2854F4639
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384595AbiDEM1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
+        id S245151AbiDEM3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245222AbiDEIyO (ORCPT
+        with ESMTP id S245491AbiDEI4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:54:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66AFDF61;
-        Tue,  5 Apr 2022 01:52:08 -0700 (PDT)
+        Tue, 5 Apr 2022 04:56:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4829112612;
+        Tue,  5 Apr 2022 01:52:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61F3EB81B92;
-        Tue,  5 Apr 2022 08:52:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAFA2C385A3;
-        Tue,  5 Apr 2022 08:52:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CDEF561564;
+        Tue,  5 Apr 2022 08:52:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D54F8C385A0;
+        Tue,  5 Apr 2022 08:52:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148726;
-        bh=102WwKtEIQn1yw3VASyotwAPtUifQlcdvYxV8n25GLs=;
+        s=korg; t=1649148740;
+        bh=Dt2mtZhWgLtFp2eRKtjPa3UeGltVomVMYbtvDgODKu4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=btctM4cV3e8pTSObE0FD7ng22+BJ6RaNV9xf34UkpZjpKiwefD3GoS1B6hXTM9Rhk
-         RkIy9lFWmVwGd9TmbOEXAj3O3t1UY//y2srGLm95pOmQZTmfpplyjw1L8t5SMIq1CU
-         YGH7w6Ze7xkZwHxzCyl7MVyJDn7g5X9puJWaYOos=
+        b=AdE8arnmlBMH3qUDP3o9IyT6NO4Ua1xHlZiWiTqSo++SqY4dkNOVfGXyWcQPJgSFr
+         eskKOJmstACLv82yzXf6XQVAtKF+rAcz6hSjH0f/Qv7nzyfDPPBbjQPPHMUtMOIhMM
+         cfUhyG2X2JR47JIitzH3ZYb066qG4GP2kau9Qrf0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
         Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0458/1017] mt76: mt7615: fix a leftover race in runtime-pm
-Date:   Tue,  5 Apr 2022 09:22:51 +0200
-Message-Id: <20220405070407.894203771@linuxfoundation.org>
+Subject: [PATCH 5.16 0463/1017] mt76: mt7603: check sta_rates pointer in mt7603_sta_rate_tbl_update
+Date:   Tue,  5 Apr 2022 09:22:56 +0200
+Message-Id: <20220405070408.043003607@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,39 +56,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lorenzo Bianconi <lorenzo@kernel.org>
 
-[ Upstream commit 42ce8d3b623162f3248db50a38359f294e6b06fd ]
+[ Upstream commit fc8e2c707ce11c8ec2e992885b0d53a5e04031ac ]
 
-Fix a possible race in mt7615_pm_power_save_work() if rx/tx napi
-schedules ps_work and we are currently accessing device register
-on a different cpu.
+Check sta_rates pointer value in mt7603_sta_rate_tbl_update routine
+since minstrel_ht_update_rates can fail allocating rates array.
 
-Fixes: db928f1ab9789 ("mt76: mt7663: rely on mt76_connac_pm_ref/mt76_connac_pm_unref in tx/rx napi")
+Fixes: c8846e1015022 ("mt76: add driver for MT7603E and MT7628/7688")
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7615/mac.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/net/wireless/mediatek/mt76/mt7603/main.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7615/mac.c b/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
-index c79abce543f3..ed8f7bc18977 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7615/mac.c
-@@ -2000,6 +2000,14 @@ void mt7615_pm_power_save_work(struct work_struct *work)
- 	    test_bit(MT76_HW_SCHED_SCANNING, &dev->mphy.state))
- 		goto out;
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7603/main.c b/drivers/net/wireless/mediatek/mt76/mt7603/main.c
+index 7ac4cd247a73..689fcee282b3 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7603/main.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7603/main.c
+@@ -623,6 +623,9 @@ mt7603_sta_rate_tbl_update(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
+ 	struct ieee80211_sta_rates *sta_rates = rcu_dereference(sta->rates);
+ 	int i;
  
-+	if (mutex_is_locked(&dev->mt76.mutex))
-+		/* if mt76 mutex is held we should not put the device
-+		 * to sleep since we are currently accessing device
-+		 * register map. We need to wait for the next power_save
-+		 * trigger.
-+		 */
-+		goto out;
++	if (!sta_rates)
++		return;
 +
- 	if (time_is_after_jiffies(dev->pm.last_activity + delta)) {
- 		delta = dev->pm.last_activity + delta - jiffies;
- 		goto out;
+ 	spin_lock_bh(&dev->mt76.lock);
+ 	for (i = 0; i < ARRAY_SIZE(msta->rates); i++) {
+ 		msta->rates[i].idx = sta_rates->rate[i].idx;
 -- 
 2.34.1
 

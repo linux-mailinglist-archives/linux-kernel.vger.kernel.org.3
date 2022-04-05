@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351C64F3ED2
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E63284F4045
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237841AbiDENnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60098 "EHLO
+        id S1390021AbiDENgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:36:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346499AbiDEJXy (ORCPT
+        with ESMTP id S1346605AbiDEJYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:23:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560AADAFEF;
-        Tue,  5 Apr 2022 02:13:45 -0700 (PDT)
+        Tue, 5 Apr 2022 05:24:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D1F9B28;
+        Tue,  5 Apr 2022 02:13:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AB611B81C19;
-        Tue,  5 Apr 2022 09:13:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05EBBC385A3;
-        Tue,  5 Apr 2022 09:13:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 448EFB81C77;
+        Tue,  5 Apr 2022 09:13:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACC27C385A6;
+        Tue,  5 Apr 2022 09:13:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150022;
-        bh=ordbT1ol/NytMCy2eDm57yDhNZz58uR1lbLYcHMG7BA=;
+        s=korg; t=1649150025;
+        bh=1P7dqhC2TaTndTPDyXwVbqmJovUDvfg+vmyr+QM2+nU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Aw4VdKdnC7VhVF5uBurfFp6MOliTWsq2Arw7lmDzI5EJIrVpck4e7q+CNroYc/0Dz
-         AfvhfLV4XdJ23KQ9uZ3DDqghWFdCpL1aRGoiLI4ZApIkAk1y00kqIUKkXctvltWg3A
-         vyxOFEk3Q2nnIJ7YTkpZOPdef0ZwInW1fdvzhfjM=
+        b=PyE5dJAxszd9e6Fk7uDWyJqe3op38l8lFh3icx2Caw6sa405NQxtbEpdKZwGEwiCt
+         3TwIarIsSd/rNxx83t0hoc8oq/M1dQSjaoynyJhroFaJ+TX6a1kDO/gRf4Govi5KIq
+         rfkaFr2/Al0WMZg1QKZ+1Zv7H5I4T1gZcBUzdWqI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: [PATCH 5.16 0927/1017] modpost: restore the warning message for missing symbol versions
-Date:   Tue,  5 Apr 2022 09:30:40 +0200
-Message-Id: <20220405070421.732807647@linuxfoundation.org>
+        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Subject: [PATCH 5.16 0928/1017] rtc: check if __rtc_read_time was successful
+Date:   Tue,  5 Apr 2022 09:30:41 +0200
+Message-Id: <20220405070421.761859139@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,39 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masahiro Yamada <masahiroy@kernel.org>
+From: Tom Rix <trix@redhat.com>
 
-commit bf5c0c2231bcab677e5cdfb7f73e6c79f6d8c2d4 upstream.
+commit 915593a7a663b2ad08b895a5f3ba8b19d89d4ebf upstream.
 
-This log message was accidentally chopped off.
+Clang static analysis reports this issue
+interface.c:810:8: warning: Passed-by-value struct
+  argument contains uninitialized data
+  now = rtc_tm_to_ktime(tm);
+      ^~~~~~~~~~~~~~~~~~~
 
-I was wondering why this happened, but checking the ML log, Mark
-precisely followed my suggestion [1].
+tm is set by a successful call to __rtc_read_time()
+but its return status is not checked.  Check if
+it was successful before setting the enabled flag.
+Move the decl of err to function scope.
 
-I just used "..." because I was too lazy to type the sentence fully.
-Sorry for the confusion.
-
-[1]: https://lore.kernel.org/all/CAK7LNAR6bXXk9-ZzZYpTqzFqdYbQsZHmiWspu27rtsFxvfRuVA@mail.gmail.com/
-
-Fixes: 4a6795933a89 ("kbuild: modpost: Explicitly warn about unprototyped symbols")
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Acked-by: Mark Brown <broonie@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Fixes: 2b2f5ff00f63 ("rtc: interface: ignore expired timers when enqueuing new timers")
+Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Link: https://lore.kernel.org/r/20220326194236.2916310-1-trix@redhat.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- scripts/mod/modpost.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/rtc/interface.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -669,7 +669,7 @@ static void handle_modversion(const stru
- 	unsigned int crc;
+--- a/drivers/rtc/interface.c
++++ b/drivers/rtc/interface.c
+@@ -804,9 +804,13 @@ static int rtc_timer_enqueue(struct rtc_
+ 	struct timerqueue_node *next = timerqueue_getnext(&rtc->timerqueue);
+ 	struct rtc_time tm;
+ 	ktime_t now;
++	int err;
++
++	err = __rtc_read_time(rtc, &tm);
++	if (err)
++		return err;
  
- 	if (sym->st_shndx == SHN_UNDEF) {
--		warn("EXPORT symbol \"%s\" [%s%s] version ...\n"
-+		warn("EXPORT symbol \"%s\" [%s%s] version generation failed, symbol will not be versioned.\n"
- 		     "Is \"%s\" prototyped in <asm/asm-prototypes.h>?\n",
- 		     symname, mod->name, mod->is_vmlinux ? "" : ".ko",
- 		     symname);
+ 	timer->enabled = 1;
+-	__rtc_read_time(rtc, &tm);
+ 	now = rtc_tm_to_ktime(tm);
+ 
+ 	/* Skip over expired timers */
+@@ -820,7 +824,6 @@ static int rtc_timer_enqueue(struct rtc_
+ 	trace_rtc_timer_enqueue(timer);
+ 	if (!next || ktime_before(timer->node.expires, next->expires)) {
+ 		struct rtc_wkalrm alarm;
+-		int err;
+ 
+ 		alarm.time = rtc_ktime_to_tm(timer->node.expires);
+ 		alarm.enabled = 1;
 
 

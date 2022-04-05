@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A3A4F44BD
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 900FF4F4655
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359360AbiDENMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44284 "EHLO
+        id S1378474AbiDENNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344199AbiDEJSh (ORCPT
+        with ESMTP id S1344205AbiDEJSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:18:37 -0400
+        Tue, 5 Apr 2022 05:18:38 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6B09BB96;
-        Tue,  5 Apr 2022 02:05:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F232A0BCD;
+        Tue,  5 Apr 2022 02:05:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC81F61571;
-        Tue,  5 Apr 2022 09:05:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECA80C385A1;
-        Tue,  5 Apr 2022 09:05:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E6E1614E4;
+        Tue,  5 Apr 2022 09:05:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36FCAC385A1;
+        Tue,  5 Apr 2022 09:05:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149519;
-        bh=Me7CbwGB6LaBferc2IlQNNffvc01zJ+0rfh2uBnaN6U=;
+        s=korg; t=1649149527;
+        bh=WDCh1frB76ZgY5mu6uFLH7Bvag6zbMU6kBLWN9Pw2bs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ncSbLvfm1uQiNlC94uvrNolVa35XD+VFXqR5EfvJYE6552R9s2AY1NB7XFh1yk0U9
-         PZr6qMJcZCAdbdQnsjZli30RgccP/ERIJzw5N9NewpiLz6fLWK7UlT+jmHT8GtnfCF
-         dQFWAOjQK1DkbU0HWBUH4nHrYR7hSN9hdFMzkQC0=
+        b=bxEwErh7EdBONUOR+Sb09sytCwAOMLvQh8gC8m5onD+L6MBL8wHYBFCzh3wTlcbo+
+         sdoISKpX3+IwJLq2jiJDEwmb+YUEJw2cRJvDDV9Uft6mYYDLog91tKWYxnDH2G3EV+
+         VDJMnvhcuy3Wn78Uv5eUjAtD2PNgW5SKb7tblS+A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0743/1017] selftests: tls: skip cmsg_to_pipe tests with TLS=n
-Date:   Tue,  5 Apr 2022 09:27:36 +0200
-Message-Id: <20220405070416.317631773@linuxfoundation.org>
+Subject: [PATCH 5.16 0746/1017] NFSv4/pNFS: Fix another issue with a list iterator pointing to the head
+Date:   Tue,  5 Apr 2022 09:27:39 +0200
+Message-Id: <20220405070416.405319305@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -58,48 +55,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit 5c7e49be96ea24776a5b5a07c732c477294add00 ]
+[ Upstream commit 7c9d845f0612e5bcd23456a2ec43be8ac43458f1 ]
 
-These are negative tests, testing TLS code rejects certain
-operations. They won't pass without TLS enabled, pure TCP
-accepts those operations.
+In nfs4_callback_devicenotify(), if we don't find a matching entry for
+the deviceid, we're left with a pointer to 'struct nfs_server' that
+actually points to the list of super blocks associated with our struct
+nfs_client.
+Furthermore, even if we have a valid pointer, nothing pins the super
+block, and so the struct nfs_server could end up getting freed while
+we're using it.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Fixes: d87d67fd61ef ("selftests: tls: test splicing cmsgs")
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Since all we want is a pointer to the struct pnfs_layoutdriver_type,
+let's skip all the iteration over super blocks, and just use APIs to
+find the layout driver directly.
+
+Reported-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Fixes: 1be5683b03a7 ("pnfs: CB_NOTIFY_DEVICEID")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/net/tls.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ fs/nfs/callback_proc.c | 27 +++++++++------------------
+ fs/nfs/pnfs.c          | 11 +++++++++++
+ fs/nfs/pnfs.h          |  2 ++
+ 3 files changed, 22 insertions(+), 18 deletions(-)
 
-diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-index 6e468e0f42f7..5d70b04c482c 100644
---- a/tools/testing/selftests/net/tls.c
-+++ b/tools/testing/selftests/net/tls.c
-@@ -683,6 +683,9 @@ TEST_F(tls, splice_cmsg_to_pipe)
- 	char buf[10];
- 	int p[2];
+diff --git a/fs/nfs/callback_proc.c b/fs/nfs/callback_proc.c
+index c343666d9a42..6464dde03705 100644
+--- a/fs/nfs/callback_proc.c
++++ b/fs/nfs/callback_proc.c
+@@ -358,12 +358,11 @@ __be32 nfs4_callback_devicenotify(void *argp, void *resp,
+ 				  struct cb_process_state *cps)
+ {
+ 	struct cb_devicenotifyargs *args = argp;
++	const struct pnfs_layoutdriver_type *ld = NULL;
+ 	uint32_t i;
+ 	__be32 res = 0;
+-	struct nfs_client *clp = cps->clp;
+-	struct nfs_server *server = NULL;
  
-+	if (self->notls)
-+		SKIP(return, "no TLS support");
-+
- 	ASSERT_GE(pipe(p), 0);
- 	EXPECT_EQ(tls_send_cmsg(self->fd, 100, test_str, send_len, 0), 10);
- 	EXPECT_EQ(splice(self->cfd, NULL, p[1], NULL, send_len, 0), -1);
-@@ -703,6 +706,9 @@ TEST_F(tls, splice_dec_cmsg_to_pipe)
- 	char buf[10];
- 	int p[2];
+-	if (!clp) {
++	if (!cps->clp) {
+ 		res = cpu_to_be32(NFS4ERR_OP_NOT_IN_SESSION);
+ 		goto out;
+ 	}
+@@ -371,23 +370,15 @@ __be32 nfs4_callback_devicenotify(void *argp, void *resp,
+ 	for (i = 0; i < args->ndevs; i++) {
+ 		struct cb_devicenotifyitem *dev = &args->devs[i];
  
-+	if (self->notls)
-+		SKIP(return, "no TLS support");
+-		if (!server ||
+-		    server->pnfs_curr_ld->id != dev->cbd_layout_type) {
+-			rcu_read_lock();
+-			list_for_each_entry_rcu(server, &clp->cl_superblocks, client_link)
+-				if (server->pnfs_curr_ld &&
+-				    server->pnfs_curr_ld->id == dev->cbd_layout_type) {
+-					rcu_read_unlock();
+-					goto found;
+-				}
+-			rcu_read_unlock();
+-			continue;
++		if (!ld || ld->id != dev->cbd_layout_type) {
++			pnfs_put_layoutdriver(ld);
++			ld = pnfs_find_layoutdriver(dev->cbd_layout_type);
++			if (!ld)
++				continue;
+ 		}
+-
+-	found:
+-		nfs4_delete_deviceid(server->pnfs_curr_ld, clp, &dev->cbd_dev_id);
++		nfs4_delete_deviceid(ld, cps->clp, &dev->cbd_dev_id);
+ 	}
+-
++	pnfs_put_layoutdriver(ld);
+ out:
+ 	kfree(args->devs);
+ 	return res;
+diff --git a/fs/nfs/pnfs.c b/fs/nfs/pnfs.c
+index 7c9090a28e5c..7ddd003ab8b1 100644
+--- a/fs/nfs/pnfs.c
++++ b/fs/nfs/pnfs.c
+@@ -92,6 +92,17 @@ find_pnfs_driver(u32 id)
+ 	return local;
+ }
+ 
++const struct pnfs_layoutdriver_type *pnfs_find_layoutdriver(u32 id)
++{
++	return find_pnfs_driver(id);
++}
 +
- 	ASSERT_GE(pipe(p), 0);
- 	EXPECT_EQ(tls_send_cmsg(self->fd, 100, test_str, send_len, 0), 10);
- 	EXPECT_EQ(recv(self->cfd, buf, send_len, 0), -1);
++void pnfs_put_layoutdriver(const struct pnfs_layoutdriver_type *ld)
++{
++	if (ld)
++		module_put(ld->owner);
++}
++
+ void
+ unset_pnfs_layoutdriver(struct nfs_server *nfss)
+ {
+diff --git a/fs/nfs/pnfs.h b/fs/nfs/pnfs.h
+index f4d7548d67b2..07f11489e4e9 100644
+--- a/fs/nfs/pnfs.h
++++ b/fs/nfs/pnfs.h
+@@ -234,6 +234,8 @@ struct pnfs_devicelist {
+ 
+ extern int pnfs_register_layoutdriver(struct pnfs_layoutdriver_type *);
+ extern void pnfs_unregister_layoutdriver(struct pnfs_layoutdriver_type *);
++extern const struct pnfs_layoutdriver_type *pnfs_find_layoutdriver(u32 id);
++extern void pnfs_put_layoutdriver(const struct pnfs_layoutdriver_type *ld);
+ 
+ /* nfs4proc.c */
+ extern size_t max_response_pages(struct nfs_server *server);
 -- 
 2.34.1
 

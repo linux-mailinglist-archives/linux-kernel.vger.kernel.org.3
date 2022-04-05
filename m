@@ -2,53 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A11AF4F243F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 635A54F251C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231565AbiDEHRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58334 "EHLO
+        id S232127AbiDEHpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231633AbiDEHQo (ORCPT
+        with ESMTP id S231950AbiDEHnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:16:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A39E101B;
-        Tue,  5 Apr 2022 00:14:47 -0700 (PDT)
+        Tue, 5 Apr 2022 03:43:33 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB83939A9;
+        Tue,  5 Apr 2022 00:40:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CBF64615FB;
-        Tue,  5 Apr 2022 07:14:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65104C34115;
-        Tue,  5 Apr 2022 07:14:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649142886;
-        bh=czcF1B6lamA2QE0/pzTN2aNL2pufxwZMl+tVG9rkf3I=;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8EE48CE1BDB;
+        Tue,  5 Apr 2022 07:40:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A548CC340EE;
+        Tue,  5 Apr 2022 07:40:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649144426;
+        bh=hiepfgHCUoOr2gSHKgyDZg8utOmO3xMK1AQWFOpqwto=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RJWOm7M3XXGmDosd3qRUX35iFS117oeOyg0m88AcYGHci3soFwkrSnRJkYjLyvBZl
-         BtVhGrOs08GluxiCoLUt3DNWb2a6bdJNfZnZSUmKiTlJKpQJuHNyZtd3UqS80e90Ls
-         aqHLZ0DaYiuEN3aqiOI6n1kQqV/eMeXkopBndYHDnS7tWb8i8xDf0+xh/5jHPpv1UE
-         GjeZk5QASjUzv5VcVqM8QUJfjNTJGaSU4JYxZvjL1dqRqgn6z1MAnjDUyrm898lRdr
-         QZliXcoWVqmMrdJ3VWEErBTHQc7sADJpMGtJVqrDwPQqmu0emi8jBrf9FovTGheWjw
-         /N8GgOqJw9MDQ==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, hch@lst.de, nathan@kernel.org,
-        naresh.kamboju@linaro.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        heiko@sntech.de, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V12 13/20] riscv: compat: process: Add UXL_32 support in start_thread
-Date:   Tue,  5 Apr 2022 15:13:07 +0800
-Message-Id: <20220405071314.3225832-14-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220405071314.3225832-1-guoren@kernel.org>
-References: <20220405071314.3225832-1-guoren@kernel.org>
+        b=GkJr9qC2KCZP+nlnqKrC9pedg74fEqzMJoWoIjYhtYx6ezqePD4DklPcHENSQr+3h
+         IEUVDU7DDq3gFlKwZwaDNchdZAd0615j7tccuVr3XOUBBYbM8Yh0VwOw9y7b2SJ1UX
+         1THFIiwBFTWbPnzUg6PZ/5tCK9+WKC6+agTFJCxI=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Quentin Schulz <foss+kernel@0leil.net>,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Subject: [PATCH 5.17 0040/1126] clk: rockchip: re-add rational best approximation algorithm to the fractional divider
+Date:   Tue,  5 Apr 2022 09:13:07 +0200
+Message-Id: <20220405070408.735525184@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
+References: <20220405070407.513532867@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -60,41 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-If the current task is in COMPAT mode, set SR_UXL_32 in status for
-returning userspace. We need CONFIG _COMPAT to prevent compiling
-errors with rv32 defconfig.
+commit 10b74af310735860510a533433b1d3ab2e05a138 upstream.
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Tested-by: Heiko Stuebner <heiko@sntech.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
+In commit 4e7cf74fa3b2 ("clk: fractional-divider: Export approximation
+algorithm to the CCF users"), the code handling the rational best
+approximation algorithm was replaced by a call to the core
+clk_fractional_divider_general_approximation function which did the same
+thing back then.
+
+However, in commit 82f53f9ee577 ("clk: fractional-divider: Introduce
+POWER_OF_TWO_PS flag"), this common code was made conditional on
+CLK_FRAC_DIVIDER_POWER_OF_TWO_PS flag which was not added back to the
+rockchip clock driver.
+
+This broke the ltk050h3146w-a2 MIPI DSI display present on a PX30-based
+downstream board.
+
+Let's add the flag to the fractional divider flags so that the original
+and intended behavior is brought back to the rockchip clock drivers.
+
+Fixes: 82f53f9ee577 ("clk: fractional-divider: Introduce POWER_OF_TWO_PS flag")
+Cc: stable@vger.kernel.org
+Cc: Quentin Schulz <foss+kernel@0leil.net>
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Link: https://lore.kernel.org/r/20220131163224.708002-1-quentin.schulz@theobroma-systems.com
+Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/riscv/kernel/process.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/clk/rockchip/clk.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-index 504b496787aa..b4421c16198c 100644
---- a/arch/riscv/kernel/process.c
-+++ b/arch/riscv/kernel/process.c
-@@ -98,6 +98,15 @@ void start_thread(struct pt_regs *regs, unsigned long pc,
+--- a/drivers/clk/rockchip/clk.c
++++ b/drivers/clk/rockchip/clk.c
+@@ -180,6 +180,7 @@ static void rockchip_fractional_approxim
+ 		unsigned long rate, unsigned long *parent_rate,
+ 		unsigned long *m, unsigned long *n)
+ {
++	struct clk_fractional_divider *fd = to_clk_fd(hw);
+ 	unsigned long p_rate, p_parent_rate;
+ 	struct clk_hw *p_parent;
+ 
+@@ -190,6 +191,8 @@ static void rockchip_fractional_approxim
+ 		*parent_rate = p_parent_rate;
  	}
- 	regs->epc = pc;
- 	regs->sp = sp;
+ 
++	fd->flags |= CLK_FRAC_DIVIDER_POWER_OF_TWO_PS;
 +
-+#ifdef CONFIG_64BIT
-+	regs->status &= ~SR_UXL;
-+
-+	if (is_compat_task())
-+		regs->status |= SR_UXL_32;
-+	else
-+		regs->status |= SR_UXL_64;
-+#endif
+ 	clk_fractional_divider_general_approximation(hw, rate, parent_rate, m, n);
  }
  
- void flush_thread(void)
--- 
-2.25.1
+
 

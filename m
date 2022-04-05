@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9AA4F46F9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 479F34F457F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382834AbiDEUzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
+        id S1378351AbiDEU2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:28:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573569AbiDETWw (ORCPT
+        with ESMTP id S1573572AbiDETWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 15:22:52 -0400
+        Tue, 5 Apr 2022 15:22:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8616C46652;
-        Tue,  5 Apr 2022 12:20:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE7847551;
+        Tue,  5 Apr 2022 12:20:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22BA5617EE;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F09E260A5F;
+        Tue,  5 Apr 2022 19:20:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1686C385A1;
         Tue,  5 Apr 2022 19:20:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFF06C385A3;
-        Tue,  5 Apr 2022 19:20:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649186452;
-        bh=kyYkU/Dchft4ACwgY94oRFa28SIAQLGaoAiYc1wr4Js=;
+        s=k20201202; t=1649186454;
+        bh=40bz7fgcSkfmSJmWJDKxd9JZxineBbUvX30XOIb7qbk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iAOjDvpPE74286q/P5TJcdZcpkEp7FNy6KNHZRseCCJLqb1zTmDAIV+SZQm+hBWi4
-         Vb68EptgER1RBKv1zpSJD5VAtA5IdIu+Qcv0APwLOyszhQa8/Dsqe7w2boNUKpeLod
-         7cct4kv6h4EeH0dIkAtquhK1V2JYekqb4FFFhApgr/ZbyazLIR2OI1x9mVT5xdRsgq
-         XW1gFIf7PG6AZ2Oxeggv6B6LUtvlnE+SaqEXKekUjsYEpaYQqHW0YItW4gxwMz5eHp
-         sCvWhm17YWahQP9feMct/iu50nDt46RQ7YmTjhslNesBLlccl9IJUEfw1HlzYIAFUN
-         hsx7ahqBtkHBQ==
+        b=ScUndJsO1iIF8TZnZGyatLX8D1Sre9qw03pcugwOP94pa2shH71KCYubeRtwLcte8
+         q9RYFCVt+6ZMZu+QFNAqmtzeaZqPzTNzF+0MMe1HSjLzlKAUfQJOCwSn5IPQyvFZwA
+         Vih4e+llhlS//shafvtvaB0Z5W9Dp2d+KmN/zlOSYwX9QOC2RhLZzyzN8RTJeMrYOv
+         hpyzzA2FW6n9d9mp4bD/8vGRDgPflyQ83mZ5r+BySLJASgExrd54G46yrVdy9Ui5KN
+         DXSaIWV0SsLsQ8K4bfs044u75kf+1m/5jdjNBj+fbaDli3Pysk4GHIOYY/Jhud32+3
+         2fSg1Jk/m2S2Q==
 From:   Jeff Layton <jlayton@kernel.org>
 To:     idryomov@gmail.com, xiubli@redhat.com
 Cc:     ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
         lhenriques@suse.de
-Subject: [PATCH v13 22/59] ceph: send altname in MClientRequest
-Date:   Tue,  5 Apr 2022 15:19:53 -0400
-Message-Id: <20220405192030.178326-23-jlayton@kernel.org>
+Subject: [PATCH v13 24/59] ceph: properly set DCACHE_NOKEY_NAME flag in lookup
+Date:   Tue,  5 Apr 2022 15:19:55 -0400
+Message-Id: <20220405192030.178326-25-jlayton@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405192030.178326-1-jlayton@kernel.org>
 References: <20220405192030.178326-1-jlayton@kernel.org>
@@ -55,156 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the event that we have a filename longer than CEPH_NOHASH_NAME_MAX,
-we'll need to hash the tail of the filename. The client however will
-still need to know the full name of the file if it has a key.
-
-To support this, the MClientRequest field has grown a new alternate_name
-field that we populate with the full (binary) crypttext of the filename.
-This is then transmitted to the clients in readdir or traces as part of
-the dentry lease.
-
-Add support for populating this field when the filenames are very long.
+This is required so that we know to invalidate these dentries when the
+directory is unlocked.
 
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- fs/ceph/mds_client.c | 75 +++++++++++++++++++++++++++++++++++++++++---
- fs/ceph/mds_client.h |  3 ++
- 2 files changed, 73 insertions(+), 5 deletions(-)
+ fs/ceph/dir.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
-index 13367a358a85..0be1668b2c32 100644
---- a/fs/ceph/mds_client.c
-+++ b/fs/ceph/mds_client.c
-@@ -972,6 +972,7 @@ void ceph_mdsc_release_request(struct kref *kref)
- 	if (req->r_pagelist)
- 		ceph_pagelist_release(req->r_pagelist);
- 	kfree(req->r_fscrypt_auth);
-+	kfree(req->r_altname);
- 	put_request_session(req);
- 	ceph_unreserve_caps(req->r_mdsc, &req->r_caps_reservation);
- 	WARN_ON_ONCE(!list_empty(&req->r_wait));
-@@ -2386,6 +2387,63 @@ static inline  u64 __get_oldest_tid(struct ceph_mds_client *mdsc)
- 	return mdsc->oldest_tid;
- }
+diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
+index 8cc7a49ee508..897f8618151b 100644
+--- a/fs/ceph/dir.c
++++ b/fs/ceph/dir.c
+@@ -760,6 +760,17 @@ static struct dentry *ceph_lookup(struct inode *dir, struct dentry *dentry,
+ 	if (dentry->d_name.len > NAME_MAX)
+ 		return ERR_PTR(-ENAMETOOLONG);
  
-+#if IS_ENABLED(CONFIG_FS_ENCRYPTION)
-+static u8 *get_fscrypt_altname(const struct ceph_mds_request *req, u32 *plen)
-+{
-+	struct inode *dir = req->r_parent;
-+	struct dentry *dentry = req->r_dentry;
-+	u8 *cryptbuf = NULL;
-+	u32 len = 0;
-+	int ret = 0;
-+
-+	/* only encode if we have parent and dentry */
-+	if (!dir || !dentry)
-+		goto success;
-+
-+	/* No-op unless this is encrypted */
-+	if (!IS_ENCRYPTED(dir))
-+		goto success;
-+
-+	ret = __fscrypt_prepare_readdir(dir);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	/* No key? Just ignore it. */
-+	if (!fscrypt_has_encryption_key(dir))
-+		goto success;
-+
-+	if (!fscrypt_fname_encrypted_size(dir, dentry->d_name.len, NAME_MAX, &len)) {
-+		WARN_ON_ONCE(1);
-+		return ERR_PTR(-ENAMETOOLONG);
++	if (IS_ENCRYPTED(dir)) {
++		err = __fscrypt_prepare_readdir(dir);
++		if (err)
++			return ERR_PTR(err);
++		if (!fscrypt_has_encryption_key(dir)) {
++			spin_lock(&dentry->d_lock);
++			dentry->d_flags |= DCACHE_NOKEY_NAME;
++			spin_unlock(&dentry->d_lock);
++		}
 +	}
 +
-+	/* No need to append altname if name is short enough */
-+	if (len <= CEPH_NOHASH_NAME_MAX) {
-+		len = 0;
-+		goto success;
-+	}
-+
-+	cryptbuf = kmalloc(len, GFP_KERNEL);
-+	if (!cryptbuf)
-+		return ERR_PTR(-ENOMEM);
-+
-+	ret = fscrypt_fname_encrypt(dir, &dentry->d_name, cryptbuf, len);
-+	if (ret) {
-+		kfree(cryptbuf);
-+		return ERR_PTR(ret);
-+	}
-+success:
-+	*plen = len;
-+	return cryptbuf;
-+}
-+#else
-+static u8 *get_fscrypt_altname(const struct ceph_mds_request *req, u32 *plen)
-+{
-+	*plen = 0;
-+	return NULL;
-+}
-+#endif
-+
- /**
-  * ceph_mdsc_build_path - build a path string to a given dentry
-  * @dentry: dentry to which path should be built
-@@ -2606,14 +2664,15 @@ static void encode_mclientrequest_tail(void **p, const struct ceph_mds_request *
- 	ceph_encode_timespec64(&ts, &req->r_stamp);
- 	ceph_encode_copy(p, &ts, sizeof(ts));
- 
--	/* gid_list */
-+	/* v4: gid_list */
- 	ceph_encode_32(p, req->r_cred->group_info->ngroups);
- 	for (i = 0; i < req->r_cred->group_info->ngroups; i++)
- 		ceph_encode_64(p, from_kgid(&init_user_ns,
- 					    req->r_cred->group_info->gid[i]));
- 
--	/* v5: altname (TODO: skip for now) */
--	ceph_encode_32(p, 0);
-+	/* v5: altname */
-+	ceph_encode_32(p, req->r_altname_len);
-+	ceph_encode_copy(p, req->r_altname, req->r_altname_len);
- 
- 	/* v6: fscrypt_auth and fscrypt_file */
- 	if (req->r_fscrypt_auth) {
-@@ -2669,7 +2728,13 @@ static struct ceph_msg *create_request_message(struct ceph_mds_session *session,
- 		goto out_free1;
- 	}
- 
--	/* head */
-+	req->r_altname = get_fscrypt_altname(req, &req->r_altname_len);
-+	if (IS_ERR(req->r_altname)) {
-+		msg = ERR_CAST(req->r_altname);
-+		req->r_altname = NULL;
-+		goto out_free2;
-+	}
-+
- 	len = legacy ? sizeof(*head) : sizeof(struct ceph_mds_request_head);
- 
- 	/* filepaths */
-@@ -2695,7 +2760,7 @@ static struct ceph_msg *create_request_message(struct ceph_mds_session *session,
- 	len += sizeof(u32) + (sizeof(u64) * req->r_cred->group_info->ngroups);
- 
- 	/* alternate name */
--	len += sizeof(u32);	// TODO
-+	len += sizeof(u32) + req->r_altname_len;
- 
- 	/* fscrypt_auth */
- 	len += sizeof(u32); // fscrypt_auth
-diff --git a/fs/ceph/mds_client.h b/fs/ceph/mds_client.h
-index 2cc75f9ae7c7..cd719691a86d 100644
---- a/fs/ceph/mds_client.h
-+++ b/fs/ceph/mds_client.h
-@@ -290,6 +290,9 @@ struct ceph_mds_request {
- 
- 	struct ceph_fscrypt_auth *r_fscrypt_auth;
- 
-+	u8 *r_altname;		    /* fscrypt binary crypttext for long filenames */
-+	u32 r_altname_len;	    /* length of r_altname */
-+
- 	int r_fmode;        /* file mode, if expecting cap */
- 	int r_request_release_offset;
- 	const struct cred *r_cred;
+ 	/* can we conclude ENOENT locally? */
+ 	if (d_really_is_negative(dentry)) {
+ 		struct ceph_inode_info *ci = ceph_inode(dir);
 -- 
 2.35.1
 

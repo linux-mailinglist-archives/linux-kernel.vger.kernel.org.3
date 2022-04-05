@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03FF64F4353
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 913544F4379
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387668AbiDEOck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40698 "EHLO
+        id S1388457AbiDEOkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237179AbiDEJey (ORCPT
+        with ESMTP id S243493AbiDEJjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:34:54 -0400
+        Tue, 5 Apr 2022 05:39:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C6E888C5;
-        Tue,  5 Apr 2022 02:24:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8926EA995C;
+        Tue,  5 Apr 2022 02:24:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1038161674;
-        Tue,  5 Apr 2022 09:24:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 219EBC385A4;
-        Tue,  5 Apr 2022 09:24:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A8E56165E;
+        Tue,  5 Apr 2022 09:24:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DBC7C385A2;
+        Tue,  5 Apr 2022 09:24:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150651;
-        bh=CivaMEJcjGKzvh+1Jmorpx4K3eBk7/KE099dJ8YzTMc=;
+        s=korg; t=1649150681;
+        bh=QpS2YYsTIegalzF1hZuokgHyHrXdq1B6iPfLMjJv+7g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hM3NgalpK7kdsiQijBdvjhb2EHOudbEk+wLNBAFIyVBK3DVrj/emglQwKtLkjjQvQ
-         Dn/t0hWYiKr9beQYggb5/54LHhiu3/RaxmxCZ25RwzZSC1p06NW0149h7tPs8H57S9
-         Qw0UCq52iX8x/wQJ3whaXPpSJhGzZGEWQ/aBNtl8=
+        b=rjjQpEEB4HyK6WPSRh+L8Mh5TbT+BfyoM3JSnYOa88cbelJi3XkXBiCbsa9Z15srA
+         0K0WraLPiZNDSenHnU2bJNJhPx/Or2ghRIttGF351ONpRVPEnPdjMrhjR92gFBYW0m
+         22hbkGxU8hQHOmzvqUJgmE0i58bpNOoWPq/3tcGU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
         Nishanth Menon <nm@ti.com>
-Subject: [PATCH 5.15 124/913] arm64: dts: ti: k3-am65: Fix gic-v3 compatible regs
-Date:   Tue,  5 Apr 2022 09:19:46 +0200
-Message-Id: <20220405070343.544601532@linuxfoundation.org>
+Subject: [PATCH 5.15 125/913] arm64: dts: ti: k3-j721e: Fix gic-v3 compatible regs
+Date:   Tue,  5 Apr 2022 09:19:47 +0200
+Message-Id: <20220405070343.575867351@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,10 +56,10 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Nishanth Menon <nm@ti.com>
 
-commit 8cae268b70f387ff9e697ccd62fb2384079124e7 upstream.
+commit a06ed27f3bc63ab9e10007dc0118d910908eb045 upstream.
 
 Though GIC ARE option is disabled for no GIC-v2 compatibility,
-Cortex-A53 is free to implement the CPU interface as long as it
+Cortex-A72 is free to implement the CPU interface as long as it
 communicates with the GIC using the stream protocol. This requires
 that the SoC integration mark out the PERIPHBASE[1] as reserved area
 within the SoC. See longer discussion in [2] for further information.
@@ -68,45 +68,45 @@ Update the GIC register map to indicate offsets from PERIPHBASE based
 on [3]. Without doing this, systems like kvm will not function with
 gic-v2 emulation.
 
-[1] https://developer.arm.com/documentation/ddi0500/e/system-control/aarch64-register-descriptions/configuration-base-address-register--el1
+[1] https://developer.arm.com/documentation/100095/0002/system-control/aarch64-register-descriptions/configuration-base-address-register--el1
 [2] https://lore.kernel.org/all/87k0e0tirw.wl-maz@kernel.org/
-[3] https://developer.arm.com/documentation/ddi0500/e/generic-interrupt-controller-cpu-interface/gic-programmers-model/memory-map
+[3] https://developer.arm.com/documentation/100095/0002/way1382452674438
 
 Cc: stable@vger.kernel.org # 5.10+
-Fixes: ea47eed33a3f ("arm64: dts: ti: Add Support for AM654 SoC")
+Fixes: 2d87061e70de ("arm64: dts: ti: Add Support for J721E SoC")
 Reported-by: Marc Zyngier <maz@kernel.org>
 Signed-off-by: Nishanth Menon <nm@ti.com>
 Acked-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220215201008.15235-2-nm@ti.com
+Link: https://lore.kernel.org/r/20220215201008.15235-3-nm@ti.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/ti/k3-am65-main.dtsi |    5 ++++-
- arch/arm64/boot/dts/ti/k3-am65.dtsi      |    1 +
+ arch/arm64/boot/dts/ti/k3-j721e-main.dtsi |    5 ++++-
+ arch/arm64/boot/dts/ti/k3-j721e.dtsi      |    1 +
  2 files changed, 5 insertions(+), 1 deletion(-)
 
---- a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-@@ -35,7 +35,10 @@
+--- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+@@ -76,7 +76,10 @@
  		#interrupt-cells = <3>;
  		interrupt-controller;
  		reg = <0x00 0x01800000 0x00 0x10000>,	/* GICD */
--		      <0x00 0x01880000 0x00 0x90000>;	/* GICR */
-+		      <0x00 0x01880000 0x00 0x90000>,	/* GICR */
+-		      <0x00 0x01900000 0x00 0x100000>;	/* GICR */
++		      <0x00 0x01900000 0x00 0x100000>,	/* GICR */
 +		      <0x00 0x6f000000 0x00 0x2000>,	/* GICC */
 +		      <0x00 0x6f010000 0x00 0x1000>,	/* GICH */
 +		      <0x00 0x6f020000 0x00 0x2000>;	/* GICV */
- 		/*
- 		 * vcpumntirq:
- 		 * virtual CPU interface maintenance interrupt
---- a/arch/arm64/boot/dts/ti/k3-am65.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am65.dtsi
-@@ -84,6 +84,7 @@
- 			 <0x00 0x46000000 0x00 0x46000000 0x00 0x00200000>,
- 			 <0x00 0x47000000 0x00 0x47000000 0x00 0x00068400>,
- 			 <0x00 0x50000000 0x00 0x50000000 0x00 0x8000000>,
-+			 <0x00 0x6f000000 0x00 0x6f000000 0x00 0x00310000>, /* A53 PERIPHBASE */
- 			 <0x00 0x70000000 0x00 0x70000000 0x00 0x200000>,
- 			 <0x05 0x00000000 0x05 0x00000000 0x01 0x0000000>,
- 			 <0x07 0x00000000 0x07 0x00000000 0x01 0x0000000>;
+ 
+ 		/* vcpumntirq: virtual CPU interface maintenance interrupt */
+ 		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+--- a/arch/arm64/boot/dts/ti/k3-j721e.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+@@ -136,6 +136,7 @@
+ 			 <0x00 0x0e000000 0x00 0x0e000000 0x00 0x01800000>, /* PCIe Core*/
+ 			 <0x00 0x10000000 0x00 0x10000000 0x00 0x10000000>, /* PCIe DAT */
+ 			 <0x00 0x64800000 0x00 0x64800000 0x00 0x00800000>, /* C71 */
++			 <0x00 0x6f000000 0x00 0x6f000000 0x00 0x00310000>, /* A72 PERIPHBASE */
+ 			 <0x44 0x00000000 0x44 0x00000000 0x00 0x08000000>, /* PCIe2 DAT */
+ 			 <0x44 0x10000000 0x44 0x10000000 0x00 0x08000000>, /* PCIe3 DAT */
+ 			 <0x4d 0x80800000 0x4d 0x80800000 0x00 0x00800000>, /* C66_0 */
 
 

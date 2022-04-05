@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1954F5137
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF974F50BF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1845522AbiDFBzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
+        id S1843135AbiDFBjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:39:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352823AbiDEKFK (ORCPT
+        with ESMTP id S1358177AbiDEK2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:05:10 -0400
+        Tue, 5 Apr 2022 06:28:04 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8886205EB;
-        Tue,  5 Apr 2022 02:53:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07F89E9D1;
+        Tue,  5 Apr 2022 03:16:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 72B56B81B13;
-        Tue,  5 Apr 2022 09:53:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE215C385A2;
-        Tue,  5 Apr 2022 09:53:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 970CFB81C8B;
+        Tue,  5 Apr 2022 10:16:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E398DC385A1;
+        Tue,  5 Apr 2022 10:16:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152434;
-        bh=OjenJG737FwnU9dz57Y47PpcOUtRbaj0pVKRFDqpTfU=;
+        s=korg; t=1649153779;
+        bh=OujLyIAuJDB01DrksZ7hONiDI8cX9frFQiwTX/GwhKY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IBnNLeRv8D4yOrcCrUaRPh79K26Gkf6X2OLkD1g5SIvai488RgGAlmLU3VCtDrvGy
-         dlvF0kr2Od+WhugOAbZ/9Yxze1duZT8gXxhEgYRxCLacxbvz6PX3ysGKMIcMwwy8qI
-         qlolX6DNVKhV7Cfnnfyv2IoiTudYKVZGH8RiU9Yw=
+        b=Bp8ANPfUvU/O7R+z8c3LxaEeDpW+dCtgNbUYTwnWox71LBTh+teXWPgf+yv6YxiSp
+         zIGxrXY7/1uJ2227/OiYhov5+jLGP+ORYcMrMwuPPapiJ03psMmOjuR4Z3nT7xh7vv
+         durhiCNxILoOJ4X2S9mPfG6t3cPyLWee6x8DF1dI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.15 774/913] KVM: x86: hyper-v: Drop redundant ex parameter from kvm_hv_send_ipi()
-Date:   Tue,  5 Apr 2022 09:30:36 +0200
-Message-Id: <20220405070403.032251066@linuxfoundation.org>
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 344/599] mfd: mc13xxx: Add check for mc13xxx_irq_request
+Date:   Tue,  5 Apr 2022 09:30:38 +0200
+Message-Id: <20220405070309.068088477@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,60 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-commit 50e523dd79f6a856d793ce5711719abe27cffbf2 upstream.
+[ Upstream commit e477e51a41cb5d6034f3c5ea85a71ad4613996b9 ]
 
-'struct kvm_hv_hcall' has all the required information already,
-there's no need to pass 'ex' additionally.
+As the potential failure of the devm_request_threaded_irq(),
+it should be better to check the return value of the
+mc13xxx_irq_request() and return error if fails.
 
-No functional change intended.
-
-Cc: stable@vger.kernel.org # 5.14.x
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Message-Id: <20220222154642.684285-2-vkuznets@redhat.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 8e00593557c3 ("mfd: Add mc13892 support to mc13xxx")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Link: https://lore.kernel.org/r/20220224022331.3208275-1-jiasheng@iscas.ac.cn
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/hyperv.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/mfd/mc13xxx-core.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -1874,7 +1874,7 @@ static void kvm_send_ipi_to_many(struct
- 	}
- }
+diff --git a/drivers/mfd/mc13xxx-core.c b/drivers/mfd/mc13xxx-core.c
+index 1abe7432aad8..e281a9202f11 100644
+--- a/drivers/mfd/mc13xxx-core.c
++++ b/drivers/mfd/mc13xxx-core.c
+@@ -323,8 +323,10 @@ int mc13xxx_adc_do_conversion(struct mc13xxx *mc13xxx, unsigned int mode,
+ 		adc1 |= MC13783_ADC1_ATOX;
  
--static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc, bool ex)
-+static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
- {
- 	struct kvm *kvm = vcpu->kvm;
- 	struct hv_send_ipi_ex send_ipi_ex;
-@@ -1888,7 +1888,7 @@ static u64 kvm_hv_send_ipi(struct kvm_vc
- 	u32 vector;
- 	bool all_cpus;
+ 	dev_dbg(mc13xxx->dev, "%s: request irq\n", __func__);
+-	mc13xxx_irq_request(mc13xxx, MC13XXX_IRQ_ADCDONE,
++	ret = mc13xxx_irq_request(mc13xxx, MC13XXX_IRQ_ADCDONE,
+ 			mc13xxx_handler_adcdone, __func__, &adcdone_data);
++	if (ret)
++		goto out;
  
--	if (!ex) {
-+	if (hc->code == HVCALL_SEND_IPI) {
- 		if (!hc->fast) {
- 			if (unlikely(kvm_read_guest(kvm, hc->ingpa, &send_ipi,
- 						    sizeof(send_ipi))))
-@@ -2278,14 +2278,14 @@ int kvm_hv_hypercall(struct kvm_vcpu *vc
- 			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
- 			break;
- 		}
--		ret = kvm_hv_send_ipi(vcpu, &hc, false);
-+		ret = kvm_hv_send_ipi(vcpu, &hc);
- 		break;
- 	case HVCALL_SEND_IPI_EX:
- 		if (unlikely(hc.fast || hc.rep)) {
- 			ret = HV_STATUS_INVALID_HYPERCALL_INPUT;
- 			break;
- 		}
--		ret = kvm_hv_send_ipi(vcpu, &hc, true);
-+		ret = kvm_hv_send_ipi(vcpu, &hc);
- 		break;
- 	case HVCALL_POST_DEBUG_DATA:
- 	case HVCALL_RETRIEVE_DEBUG_DATA:
+ 	mc13xxx_reg_write(mc13xxx, MC13XXX_ADC0, adc0);
+ 	mc13xxx_reg_write(mc13xxx, MC13XXX_ADC1, adc1);
+-- 
+2.34.1
+
 
 

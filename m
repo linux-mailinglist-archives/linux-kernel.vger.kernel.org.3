@@ -2,131 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623104F222D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A534F2236
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbiDEErS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 00:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
+        id S229569AbiDEEsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 00:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbiDEErC (ORCPT
+        with ESMTP id S229462AbiDEEsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 00:47:02 -0400
-Received: from out203-205-221-235.mail.qq.com (out203-205-221-235.mail.qq.com [203.205.221.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37939BC8C
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 21:43:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1649133800;
-        bh=ZOWmbRSE1ugYDN4B9+8FobQREdvXAlF1kKgzI2u7cr0=;
-        h=From:To:Cc:Subject:Date;
-        b=ZbZyLf6a/g/c+/dbQggekZHwx50vB+fCtgVEcg0tBRKsuB8w5ADhLr22TalAcQFXX
-         dDX1LbLR4fUs2+LrgUBUv04ijUfMa7ZLrKXbpnUxjVmashhWW3bvgNq4LfBKTMbtNw
-         9QlEw7n2MxDwe2P/zd8ifRwd8S54HDzXt4lapJxc=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrsza9.qq.com (NewEsmtp) with SMTP
-        id AD187C0F; Tue, 05 Apr 2022 12:43:17 +0800
-X-QQ-mid: xmsmtpt1649133797tybode3xr
-Message-ID: <tencent_B8048C592777830380A23A7C4409F9DF1305@qq.com>
-X-QQ-XMAILINFO: Nci1v0XuD9lF/UxJPIUnSOW35WJxhNHJ9+ASszE4sLfv8CucVVmCZNiogRzfLA
-         FCueO2kxVwfgM/NnbjiZK+E+XJyJhRwuiBT8F7HDdKMjyH1CChIvlR3Axc1C++TAdWn+UWOmvfmv
-         uF94lvzfEtFV2S7zeuitxu28ku6Rhf/8skdeop9GbjdNtA7sVq9waWY1hedDYT6vinVAYaBc7Hns
-         2c2s3WvD2IPVB2J7qiF0HgGLj2nrIBqKGXlZUcXB+0pVBLoi1PWnrQj/bYQdEBQ0+IvgZqT/eFzx
-         hVuIGMhpi3r8Dj00Cccbdnc8xEqSNLbG0aYf0udQT4bS0kqVB1D7uR12PM/WeD4LeFzYwUIUzib2
-         Tes/qKEpqWiSFbtvV4VFXbK/RwdlCGsJ37J2tQ1PEKDK/WPOfpnLKKlUyBmFFH/8B9xwzy+0zJvw
-         DThKCloCsmnsTdDQGW1mvMhsVM0ITDHUgxlg170tsxA5uDrllGT9EvtZuL3N+FpwNEYTOacQiiIt
-         qear8mS+d6Q/F1TlpQ0D5ZgKgIi2zC+ZGT+chKu4HliSbEFDdP1fBBjI+f6iXgyCZljBzhSmjKH/
-         rRtchvP3GuTO7Mj2sWuxPWMSf79IjRGxWfloPEKsukVhfhnTi+NwdRExQ/XGsFE+E64wnPp+xQ/C
-         SNTRB7YGA8bxyoQknrdgj7WaY4Qp8WLdDuUXwsxUEzuUhtapC/8amBQLRVtxRAlpEHbq15ZqiM1f
-         vEi2c/qQmKPVG7r3r+worYmPOIBbZpdhK5lDk6Q6OcCKh5zjT4HDNmkQdLBmvWUgW5cT24aWrZDR
-         NE9VYuUcR5NE7S29TrUaz4TgTxe+xYejUQuiqixb2aEb3VjNAzW0WrqcomdjVahPMIw1U/3e33OB
-         gXjGbaibi/DfSQx6fyavUq1DanypyU8DEcmMAHMGxqc0wvClVp9m0/OZQqX5iQ4yccM97e2bWcDs
-         ipOKQzFdRCBjEYXM7avw==
-From:   xkernel.wang@foxmail.com
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH] staging: rtl8712: fix a potential memory leak in r871xu_drv_init()
-Date:   Tue,  5 Apr 2022 12:43:07 +0800
-X-OQ-MSGID: <20220405044307.11297-1-xkernel.wang@foxmail.com>
+        Tue, 5 Apr 2022 00:48:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48589694B8
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 21:44:40 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 48876D6E;
+        Mon,  4 Apr 2022 21:44:40 -0700 (PDT)
+Received: from [192.168.0.146] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5F9EE3F5A1;
+        Mon,  4 Apr 2022 21:44:34 -0700 (PDT)
+Message-ID: <d6e2581e-a8ac-4848-2c64-4a221bd03bca@arm.com>
+Date:   Tue, 5 Apr 2022 10:15:02 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v4 2/2] arm64: mm: hugetlb: Enable
+ HUGETLB_PAGE_FREE_VMEMMAP for arm64
+Content-Language: en-US
+To:     Muchun Song <songmuchun@bytedance.com>, will@kernel.org,
+        akpm@linux-foundation.org, david@redhat.com, bodeddub@amazon.com,
+        osalvador@suse.de, mike.kravetz@oracle.com, rientjes@google.com,
+        mark.rutland@arm.com, catalin.marinas@arm.com, james.morse@arm.com,
+        21cnbao@gmail.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, duanxiongchun@bytedance.com,
+        fam.zheng@bytedance.com, smuchun@gmail.com
+References: <20220331065640.5777-1-songmuchun@bytedance.com>
+ <20220331065640.5777-2-songmuchun@bytedance.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220331065640.5777-2-songmuchun@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-In r871xu_drv_init(), if r8712_init_drv_sw() fails, then the memory
-allocated by r8712_alloc_io_queue() in r8712_usb_dvobj_init() is not
-properly released as there is no action will be performed by
-r8712_usb_dvobj_deinit().
-To properly release it, we should call r8712_free_io_queue() in
-r8712_usb_dvobj_deinit().
 
-Besides, in r871xu_dev_remove(), r8712_usb_dvobj_deinit() will be called
-by r871x_dev_unload() under condition `padapter->bup` and
-r8712_free_io_queue() is called by r8712_free_drv_sw().
-However, r8712_usb_dvobj_deinit() does not rely on `padapter->bup` and
-calling r8712_free_io_queue() in r8712_free_drv_sw() is negative for
-better understading the code.
-So I move r8712_usb_dvobj_deinit() into r871xu_dev_remove(), and remove
-r8712_free_io_queue() from r8712_free_drv_sw().
+On 3/31/22 12:26, Muchun Song wrote:
+> 1st concern:
+> '''
+> But what happens when a hot remove section's vmemmap area (which is
+> being teared down) is nearby another vmemmap area which is either created
+> or being destroyed for HugeTLB alloc/free purpose. As you mentioned
+> HugeTLB pages inside the hot remove section might be safe. But what about
+> other HugeTLB areas whose vmemmap area shares page table entries with
+> vmemmap entries for a section being hot removed ? Massive HugeTLB alloc
+> /use/free test cycle using memory just adjacent to a memory hotplug area,
+> which is always added and removed periodically, should be able to expose
+> this problem.
+> '''
+> 
+> Answer: At the time memory is removed, all HugeTLB pages either have been
+> migrated away or dissolved.  So there is no race between memory hot remove
+> and free_huge_page_vmemmap().  Therefore, HugeTLB pages inside the hot
+> remove section is safe.  Let's talk your question "what about other
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
- drivers/staging/rtl8712/os_intfs.c | 1 -
- drivers/staging/rtl8712/usb_intf.c | 6 +++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+HugeTLB pages inside the memory range is safe but concern is about the
+vmemmap mapping for the HugeTLB which might share intermediate entries
+with vmemmap mapping for the memory range/section being removed.
 
-diff --git a/drivers/staging/rtl8712/os_intfs.c b/drivers/staging/rtl8712/os_intfs.c
-index 28b1684..220fed5 100644
---- a/drivers/staging/rtl8712/os_intfs.c
-+++ b/drivers/staging/rtl8712/os_intfs.c
-@@ -348,7 +348,6 @@ void r8712_free_drv_sw(struct _adapter *padapter)
- 	r8712_free_evt_priv(&padapter->evtpriv);
- 	r8712_DeInitSwLeds(padapter);
- 	r8712_free_mlme_priv(&padapter->mlmepriv);
--	r8712_free_io_queue(padapter);
- 	_free_xmit_priv(&padapter->xmitpriv);
- 	_r8712_free_sta_priv(&padapter->stapriv);
- 	_r8712_free_recv_priv(&padapter->recvpriv);
-diff --git a/drivers/staging/rtl8712/usb_intf.c b/drivers/staging/rtl8712/usb_intf.c
-index 8df50e2..8cbd419 100644
---- a/drivers/staging/rtl8712/usb_intf.c
-+++ b/drivers/staging/rtl8712/usb_intf.c
-@@ -265,6 +265,7 @@ static uint r8712_usb_dvobj_init(struct _adapter *padapter)
- 
- static void r8712_usb_dvobj_deinit(struct _adapter *padapter)
- {
-+	r8712_free_io_queue(padapter);
- }
- 
- void rtl871x_intf_stop(struct _adapter *padapter)
-@@ -302,9 +303,6 @@ void r871x_dev_unload(struct _adapter *padapter)
- 			rtl8712_hal_deinit(padapter);
- 		}
- 
--		/*s6.*/
--		if (padapter->dvobj_deinit)
--			padapter->dvobj_deinit(padapter);
- 		padapter->bup = false;
- 	}
- }
-@@ -607,6 +605,8 @@ static void r871xu_dev_remove(struct usb_interface *pusb_intf)
- 	/* Stop driver mlme relation timer */
- 	r8712_stop_drv_timers(padapter);
- 	r871x_dev_unload(padapter);
-+	if (padapter->dvobj_deinit)
-+		padapter->dvobj_deinit(padapter);
- 	r8712_free_drv_sw(padapter);
- 	free_netdev(pnetdev);
- 
--- 
+> HugeTLB areas whose vmemmap area shares page table entries with vmemmap
+> entries for a section being hot removed ?", the question is not
+
+Right.
+
+> established.  The minimal granularity size of hotplug memory 128MB (on
+> arm64, 4k base page), any HugeTLB smaller than 128MB is within a section,
+> then, there is no share PTE page tables between HugeTLB in this section
+
+128MB is the hot removable granularity but, its corresponding vmemmap
+range is smaller i.e (128MB/4K) * sizeof(struct page). Memory section
+getting hot removed (its vmemmap mapping being teared down) along with
+HugeTLB (on another section) vmemmap remap operation, could not collide
+while inside vmemmap mapping areas on init_mm ?
+
+> and ones in other sections and a HugeTLB page could not cross two
+> sections.  In this case, the section cannot be freed.  Any HugeTLB bigger
+
+Right, they dont cross into two different sections.
+
+> than 128MB (section size) whose vmemmap pages is an integer multiple of
+> 2MB (PMD-mapped).  As long as:
+> 
+>   1) HugeTLBs are naturally aligned, power-of-two sizes
+>   2) The HugeTLB size >= the section size
+>   3) The HugeTLB size >= the vmemmap leaf mapping size
+> 
+> Then a HugeTLB will not share any leaf page table entries with *anything
+> else*, but will share intermediate entries.  In this case, at the time memory
+> is removed, all HugeTLB pages either have been migrated away or dissolved.
+> So there is also no race between memory hot remove and
+> free_huge_page_vmemmap().
+
+If they just share intermediate entries, free_empty_tables() will not free
+up page table pages, as there will be valid non-zero entries in them. But
+the problem here is not UAF, its accessing wrong entries and crashing while
+de-referncing the pointer. Hence I am wondering if no such scenario can be
+possible.
+
+> 
+> 2nd concern:
+> '''
+> differently, not sure if ptdump would require any synchronization.
+> 
+> Dumping an wrong value is probably okay but crashing because a page table
+> entry is being freed after ptdump acquired the pointer is bad. On arm64,
+> ptdump() is protected against hotremove via [get|put]_online_mems().
+> '''
+> 
+> Answer: The ptdump should be fine since vmemmap_remap_free() only exchanges
+> PTEs or splits the PMD entry (which means allocating a PTE page table).  Both
+> operations do not free any page tables (PTE), so ptdump cannot run into a
+> UAF on any page tables.  The worst case is just dumping an wrong value.
+
+Okay, fair enough. ptdump() might be just okay.

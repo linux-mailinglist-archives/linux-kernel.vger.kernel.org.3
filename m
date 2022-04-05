@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4361E4F29DE
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 12:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0206D4F2ABC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241417AbiDEIdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
+        id S239826AbiDEIbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:31:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232913AbiDEH4Y (ORCPT
+        with ESMTP id S234396AbiDEH6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:56:24 -0400
+        Tue, 5 Apr 2022 03:58:13 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB1F393FF;
-        Tue,  5 Apr 2022 00:50:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5730D9E9C7;
+        Tue,  5 Apr 2022 00:52:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89879B81BAF;
-        Tue,  5 Apr 2022 07:50:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2ADBC340EE;
-        Tue,  5 Apr 2022 07:50:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 833CFB81B9C;
+        Tue,  5 Apr 2022 07:52:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFC16C34113;
+        Tue,  5 Apr 2022 07:52:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145038;
-        bh=MKRg38jZK8tHFNvKjii0k0eEeqrz1/BymVE0DM+j9RY=;
+        s=korg; t=1649145138;
+        bh=sVR33FUtTlVIApPJsjKgr9pJZo5UOvcNrviZQ+t5OWs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yIjrWm3hPfYmjR4hGRHuFyGLIyN3Hz+f7sYybJNSja6iuMVP/RWL55oTvlubKWSBc
-         9HTzIHwcXWnSd/CWGz8ioNujZqGxLsAUE5Q3qkLopqOFqqK7p6VoSb4bdK5B+9hMk5
-         mtXNmGE6fMgPoyHhc75JYoYdDjiG9u5smy81V7o4=
+        b=V8mznJUwR3qBiYgZ7kBjphq2Z+K2QL3I0t+BI5z0agIvOE6v5yGa3IWKEcjmgef+z
+         ONxe7DJHMaDyA5syzojmS2yTkTE+RRmHIe8bRfV2lZaVZ2taIUPSiXeg1r3xRcxMx8
+         HJSlneFDUX9AFIJtOFnHP16iG1qYuqMd6gRLA0ng=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Chengming Zhou <zhouchengming@bytedance.com>,
-        Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0223/1126] blk-cgroup: set blkg iostat after percpu stat aggregation
-Date:   Tue,  5 Apr 2022 09:16:10 +0200
-Message-Id: <20220405070414.155113290@linuxfoundation.org>
+Subject: [PATCH 5.17 0261/1126] hwrng: nomadik - Change clk_disable to clk_disable_unprepare
+Date:   Tue,  5 Apr 2022 09:16:48 +0200
+Message-Id: <20220405070415.272144540@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,56 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chengming Zhou <zhouchengming@bytedance.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit f122d103b564e5fb7c82de902c6f8f6cbdf50ec9 ]
+[ Upstream commit 7f0f1f3ef62ed7a40e30aff28115bd94c4211d1d ]
 
-Don't need to do blkg_iostat_set for top blkg iostat on each CPU,
-so move it after percpu stat aggregation.
+The corresponding API for clk_prepare_enable is clk_disable_unprepare,
+other than clk_disable_unprepare.
 
-Fixes: ef45fe470e1e ("blk-cgroup: show global disk stats in root cgroup io.stat")
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-Acked-by: Tejun Heo <tj@kernel.org>
-Link: https://lore.kernel.org/r/20220213085902.88884-1-zhouchengming@bytedance.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fix this by changing clk_disable to clk_disable_unprepare.
+
+Fixes: beca35d05cc2 ("hwrng: nomadik - use clk_prepare_enable()")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/blk-cgroup.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/char/hw_random/nomadik-rng.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-index 650f7e27989f..87a1c0c3fa40 100644
---- a/block/blk-cgroup.c
-+++ b/block/blk-cgroup.c
-@@ -857,11 +857,11 @@ static void blkcg_fill_root_iostats(void)
- 			blk_queue_root_blkg(bdev_get_queue(bdev));
- 		struct blkg_iostat tmp;
- 		int cpu;
-+		unsigned long flags;
- 
- 		memset(&tmp, 0, sizeof(tmp));
- 		for_each_possible_cpu(cpu) {
- 			struct disk_stats *cpu_dkstats;
--			unsigned long flags;
- 
- 			cpu_dkstats = per_cpu_ptr(bdev->bd_stats, cpu);
- 			tmp.ios[BLKG_IOSTAT_READ] +=
-@@ -877,11 +877,11 @@ static void blkcg_fill_root_iostats(void)
- 				cpu_dkstats->sectors[STAT_WRITE] << 9;
- 			tmp.bytes[BLKG_IOSTAT_DISCARD] +=
- 				cpu_dkstats->sectors[STAT_DISCARD] << 9;
--
--			flags = u64_stats_update_begin_irqsave(&blkg->iostat.sync);
--			blkg_iostat_set(&blkg->iostat.cur, &tmp);
--			u64_stats_update_end_irqrestore(&blkg->iostat.sync, flags);
- 		}
-+
-+		flags = u64_stats_update_begin_irqsave(&blkg->iostat.sync);
-+		blkg_iostat_set(&blkg->iostat.cur, &tmp);
-+		u64_stats_update_end_irqrestore(&blkg->iostat.sync, flags);
- 	}
+diff --git a/drivers/char/hw_random/nomadik-rng.c b/drivers/char/hw_random/nomadik-rng.c
+index 67947a19aa22..e8f9621e7954 100644
+--- a/drivers/char/hw_random/nomadik-rng.c
++++ b/drivers/char/hw_random/nomadik-rng.c
+@@ -65,14 +65,14 @@ static int nmk_rng_probe(struct amba_device *dev, const struct amba_id *id)
+ out_release:
+ 	amba_release_regions(dev);
+ out_clk:
+-	clk_disable(rng_clk);
++	clk_disable_unprepare(rng_clk);
+ 	return ret;
  }
  
+ static void nmk_rng_remove(struct amba_device *dev)
+ {
+ 	amba_release_regions(dev);
+-	clk_disable(rng_clk);
++	clk_disable_unprepare(rng_clk);
+ }
+ 
+ static const struct amba_id nmk_rng_ids[] = {
 -- 
 2.34.1
 

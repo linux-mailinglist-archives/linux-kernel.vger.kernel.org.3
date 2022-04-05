@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 702044F4E38
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CBB4F49F0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1588216AbiDFAOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:14:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
+        id S1453217AbiDEWcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349204AbiDEJt0 (ORCPT
+        with ESMTP id S1355365AbiDEKTd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:26 -0400
+        Tue, 5 Apr 2022 06:19:33 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67EB02252B;
-        Tue,  5 Apr 2022 02:42:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A700327FEC;
+        Tue,  5 Apr 2022 03:04:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CAFF3B81C19;
-        Tue,  5 Apr 2022 09:42:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B418C385A3;
-        Tue,  5 Apr 2022 09:42:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38758B81BC0;
+        Tue,  5 Apr 2022 10:04:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CEDFC385A2;
+        Tue,  5 Apr 2022 10:04:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151755;
-        bh=coUnbwtMgy4IhV9sRORvYZJQFoFUkg3DcYgYPIf8ovE=;
+        s=korg; t=1649153086;
+        bh=Cw2NlYAm/sub3uTEA3b2qIyrR3JDeMkKrC26amsoKtQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P6zabTxVJm9pBHnFZJ+949wevXnTF4oQpAznZoIjPW9bNT1nDUTBbvyA3iL4VKar0
-         8QVknQGG/2RLbFQM0SGaQVnhMquNRo1WKdAHDXNOePoRfCJlZMYiOCkGSdppCjOThU
-         865uspWnnb3VsLe35ZTRJAbUaikeY5PHEsu9Heqo=
+        b=oHAJy/+PL51AzoM/nN/TOBZmwl/pMjG3u2J+3waXchDLT4BF3+Xkz/WUVQCjvJBad
+         /uLI/rAHmHXnoYQAzr0HqhdXf6s4kt4800yKn+4529B/4tEaq5RupOeEanG4VroTQ4
+         48mr4uFudAR+p/Jo8BT5Z4O4xtAz9IsNhLXR3uRo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 529/913] powerpc: 8xx: fix a return value error in mpc8xx_pic_init
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.10 097/599] video: fbdev: sm712fb: Fix crash in smtcfb_read()
 Date:   Tue,  5 Apr 2022 09:26:31 +0200
-Message-Id: <20220405070355.707719868@linuxfoundation.org>
+Message-Id: <20220405070301.717839647@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +54,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Helge Deller <deller@gmx.de>
 
-[ Upstream commit 3fd46e551f67f4303c3276a0d6cd20baf2d192c4 ]
+commit bd771cf5c4254511cc4abb88f3dab3bd58bdf8e8 upstream.
 
-mpc8xx_pic_init() should return -ENOMEM instead of 0 when
-irq_domain_add_linear() return NULL. This cause mpc8xx_pics_init to continue
-executing even if mpc8xx_pic_host is NULL.
+Zheyu Ma reported this crash in the sm712fb driver when reading
+three bytes from the framebuffer:
 
-Fixes: cc76404feaed ("powerpc/8xx: Fix possible device node reference leak")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220223070223.26845-1-hbh25y@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+ BUG: unable to handle page fault for address: ffffc90001ffffff
+ RIP: 0010:smtcfb_read+0x230/0x3e0
+ Call Trace:
+  vfs_read+0x198/0xa00
+  ? do_sys_openat2+0x27d/0x350
+  ? __fget_light+0x54/0x340
+  ksys_read+0xce/0x190
+  do_syscall_64+0x43/0x90
+
+Fix it by removing the open-coded endianess fixup-code and
+by moving the pointer post decrement out the fb_readl() function.
+
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Tested-by: Zheyu Ma <zheyuma97@gmail.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/platforms/8xx/pic.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/video/fbdev/sm712fb.c |   25 +++++++------------------
+ 1 file changed, 7 insertions(+), 18 deletions(-)
 
-diff --git a/arch/powerpc/platforms/8xx/pic.c b/arch/powerpc/platforms/8xx/pic.c
-index f2ba837249d6..04a6abf14c29 100644
---- a/arch/powerpc/platforms/8xx/pic.c
-+++ b/arch/powerpc/platforms/8xx/pic.c
-@@ -153,6 +153,7 @@ int __init mpc8xx_pic_init(void)
- 	if (mpc8xx_pic_host == NULL) {
- 		printk(KERN_ERR "MPC8xx PIC: failed to allocate irq host!\n");
- 		ret = -ENOMEM;
-+		goto out;
- 	}
+--- a/drivers/video/fbdev/sm712fb.c
++++ b/drivers/video/fbdev/sm712fb.c
+@@ -1047,7 +1047,7 @@ static ssize_t smtcfb_read(struct fb_inf
+ 	if (count + p > total_size)
+ 		count = total_size - p;
  
- 	ret = 0;
--- 
-2.34.1
-
+-	buffer = kmalloc((count > PAGE_SIZE) ? PAGE_SIZE : count, GFP_KERNEL);
++	buffer = kmalloc(PAGE_SIZE, GFP_KERNEL);
+ 	if (!buffer)
+ 		return -ENOMEM;
+ 
+@@ -1059,25 +1059,14 @@ static ssize_t smtcfb_read(struct fb_inf
+ 	while (count) {
+ 		c = (count > PAGE_SIZE) ? PAGE_SIZE : count;
+ 		dst = buffer;
+-		for (i = c >> 2; i--;) {
+-			*dst = fb_readl(src++);
+-			*dst = big_swap(*dst);
++		for (i = (c + 3) >> 2; i--;) {
++			u32 val;
++
++			val = fb_readl(src);
++			*dst = big_swap(val);
++			src++;
+ 			dst++;
+ 		}
+-		if (c & 3) {
+-			u8 *dst8 = (u8 *)dst;
+-			u8 __iomem *src8 = (u8 __iomem *)src;
+-
+-			for (i = c & 3; i--;) {
+-				if (i & 1) {
+-					*dst8++ = fb_readb(++src8);
+-				} else {
+-					*dst8++ = fb_readb(--src8);
+-					src8 += 2;
+-				}
+-			}
+-			src = (u32 __iomem *)src8;
+-		}
+ 
+ 		if (copy_to_user(buf, buffer, c)) {
+ 			err = -EFAULT;
 
 

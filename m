@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 249704F4554
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015E44F463D
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383067AbiDEMR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47606 "EHLO
+        id S1344130AbiDEOzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244970AbiDEIww (ORCPT
+        with ESMTP id S244762AbiDEJli (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839011CB13;
-        Tue,  5 Apr 2022 01:48:08 -0700 (PDT)
+        Tue, 5 Apr 2022 05:41:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0DEBC855;
+        Tue,  5 Apr 2022 02:27:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FCF461509;
-        Tue,  5 Apr 2022 08:48:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3118DC385A1;
-        Tue,  5 Apr 2022 08:48:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB082B81C9D;
+        Tue,  5 Apr 2022 09:27:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B8C3C385A7;
+        Tue,  5 Apr 2022 09:27:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148487;
-        bh=ffree4QTNFS/AnCZEfxj8SDurCR5FE0zgUbDPN8iszM=;
+        s=korg; t=1649150833;
+        bh=o2hdrjC/PgYjbZe3JzicMJHQaxwlPlqG/ztutGUT8Go=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vH/i8zjDCdAsSnZQBGiP7ZFof7pysmPXbRdHvaslMkL695fwW3lbrTNwatxNJ+K4a
-         S1Nl8V5Na2uPEist03yJzWw0wURftb9L6+wHDpxLHXYSmX3MwoOuxaYyA95xpBtnzL
-         CVudvq8Xavht8m0oGfpPLphUhO225VKYBsT0C1AU=
+        b=Zpr62VAnLdtjDft3TOditHKbPfVDVKl72rcYDDRzRvryzoYm+jrRB+Nql4pyq6Qz7
+         mn2/Bl73V+PXR0INexY+yPbFjTqyefb8iURQiYku0I7GG7THhxbXcZIcQaKXGtmRwH
+         Vs/RIfKwX3kyu+NZGpcdFcM7IRnTG3M0+UTu3+ww=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mirela Rabulea <mirela.rabulea@nxp.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        stable@vger.kernel.org, Tomas Paukrt <tomaspaukrt@email.cz>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0346/1017] media: ov5640: Fix set format, v4l2_mbus_pixelcode not updated
+Subject: [PATCH 5.15 197/913] crypto: mxs-dcp - Fix scatterlist processing
 Date:   Tue,  5 Apr 2022 09:20:59 +0200
-Message-Id: <20220405070404.552923884@linuxfoundation.org>
+Message-Id: <20220405070345.763513842@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,78 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mirela Rabulea <mirela.rabulea@nxp.com>
+From: Tomas Paukrt <tomaspaukrt@email.cz>
 
-[ Upstream commit e738f5dd67eb8098d75345908a5e73782d0569a5 ]
+[ Upstream commit 28e9b6d8199a3f124682b143800c2dacdc3d70dd ]
 
-In ov5640_set_fmt, pending_fmt_change will always be false, because the
-sensor format is saved before comparing it with the previous format:
-	fmt = &sensor->fmt;...
-	*fmt = *mbus_fmt;...
-	if (mbus_fmt->code != sensor->fmt.code)
-		sensor->pending_fmt_change = true;
-This causes the sensor to capture with the previous pixelcode.
+This patch fixes a bug in scatterlist processing that may cause incorrect AES block encryption/decryption.
 
-Also, changes might happen even for V4L2_SUBDEV_FORMAT_TRY, so fix that.
-
-Basically, revert back to the state before
-commit 071154499193 ("media: ov5640: Fix set format regression")
-as it was more clear, and then update format even when pixelcode does
-not change, as resolution might change.
-
-Fixes: 071154499193 ("media: ov5640: Fix set format regression")
-Fixes: 6949d864776e ("media: ov5640: do not change mode if format or frame interval is unchanged")
-Fixes: fb98e29ff1ea5 ("media: ov5640: fix mode change regression")
-
-Signed-off-by: Mirela Rabulea <mirela.rabulea@nxp.com>
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-Acked-by: Hugues Fruchet <hugues.fruchet@st.com>
-Tested-by: Hugues Fruchet <hugues.fruchet@st.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Fixes: 2e6d793e1bf0 ("crypto: mxs-dcp - Use sg_mapping_iter to copy data")
+Signed-off-by: Tomas Paukrt <tomaspaukrt@email.cz>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/ov5640.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/crypto/mxs-dcp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index ddbd71394db3..db5a19babe67 100644
---- a/drivers/media/i2c/ov5640.c
-+++ b/drivers/media/i2c/ov5640.c
-@@ -2293,7 +2293,6 @@ static int ov5640_set_fmt(struct v4l2_subdev *sd,
- 	struct ov5640_dev *sensor = to_ov5640_dev(sd);
- 	const struct ov5640_mode_info *new_mode;
- 	struct v4l2_mbus_framefmt *mbus_fmt = &format->format;
--	struct v4l2_mbus_framefmt *fmt;
- 	int ret;
+diff --git a/drivers/crypto/mxs-dcp.c b/drivers/crypto/mxs-dcp.c
+index d19e5ffb5104..d6f9e2fe863d 100644
+--- a/drivers/crypto/mxs-dcp.c
++++ b/drivers/crypto/mxs-dcp.c
+@@ -331,7 +331,7 @@ static int mxs_dcp_aes_block_crypt(struct crypto_async_request *arq)
+ 		memset(key + AES_KEYSIZE_128, 0, AES_KEYSIZE_128);
+ 	}
  
- 	if (format->pad != 0)
-@@ -2311,12 +2310,10 @@ static int ov5640_set_fmt(struct v4l2_subdev *sd,
- 	if (ret)
- 		goto out;
- 
--	if (format->which == V4L2_SUBDEV_FORMAT_TRY)
--		fmt = v4l2_subdev_get_try_format(sd, sd_state, 0);
--	else
--		fmt = &sensor->fmt;
--
--	*fmt = *mbus_fmt;
-+	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
-+		*v4l2_subdev_get_try_format(sd, sd_state, 0) = *mbus_fmt;
-+		goto out;
-+	}
- 
- 	if (new_mode != sensor->current_mode) {
- 		sensor->current_mode = new_mode;
-@@ -2325,6 +2322,9 @@ static int ov5640_set_fmt(struct v4l2_subdev *sd,
- 	if (mbus_fmt->code != sensor->fmt.code)
- 		sensor->pending_fmt_change = true;
- 
-+	/* update format even if code is unchanged, resolution might change */
-+	sensor->fmt = *mbus_fmt;
-+
- 	__v4l2_ctrl_s_ctrl_int64(sensor->ctrls.pixel_rate,
- 				 ov5640_calc_pixel_rate(sensor));
- out:
+-	for_each_sg(req->src, src, sg_nents(src), i) {
++	for_each_sg(req->src, src, sg_nents(req->src), i) {
+ 		src_buf = sg_virt(src);
+ 		len = sg_dma_len(src);
+ 		tlen += len;
 -- 
 2.34.1
 

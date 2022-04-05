@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C90C4F3F1D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD8D4F400D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387689AbiDEOco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
+        id S1388165AbiDEOdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238856AbiDEJdC (ORCPT
+        with ESMTP id S238890AbiDEJdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:33:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C48B48;
-        Tue,  5 Apr 2022 02:20:27 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4397E22;
+        Tue,  5 Apr 2022 02:20:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EE3E6144D;
-        Tue,  5 Apr 2022 09:20:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D505C385A0;
-        Tue,  5 Apr 2022 09:20:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8FD88B81B75;
+        Tue,  5 Apr 2022 09:20:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC10BC385A0;
+        Tue,  5 Apr 2022 09:20:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150426;
-        bh=Os+qxn1DhxDjshDTdAdlcK8Fy8Mz/bgvQq9b255khpM=;
+        s=korg; t=1649150429;
+        bh=1VBBbhxbPqgOccqe/3AVFKFROwjjGJwCABhf+k4mAfs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E1TzdodME7QPIUeOwJwneS9vpA7DBrLZ1K4Dg//Nvm4PDYXCLMk89GluQ9ML8Ayvj
-         lQdaimOGirySgQ0C2nd6oJJcFoD+0knkdqr1zntLCARHd+ZAA5ud6Nak8sbS9QzjU0
-         e+FVCslZM80hTAEIoebSTMB1eEkf1pMtElDKOBGA=
+        b=nU5NKpLG4r+NYXksfdmBRjHmUzzHpO7CuiEgCiXU/4AxpWqQJzY9MI4U2qBK/mG/e
+         SEwebO80/+i+9JY21+YcVSdjvVJW3ogBB7W5lDdGZHA76GCUuNLonTrrpQM+kfrNfI
+         N1RJ8a1urtQ+6iK66JV8AO+iW72BU6dT/6cuXnJA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Jann Horn <jannh@google.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: [PATCH 5.15 052/913] ptrace: Check PTRACE_O_SUSPEND_SECCOMP permission on PTRACE_SEIZE
-Date:   Tue,  5 Apr 2022 09:18:34 +0200
-Message-Id: <20220405070341.379725350@linuxfoundation.org>
+        stable@vger.kernel.org, Ronnie Sahlberg <lsahlber@redhat.com>,
+        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
+        Steve French <stfrench@microsoft.com>
+Subject: [PATCH 5.15 053/913] cifs: fix handlecache and multiuser
+Date:   Tue,  5 Apr 2022 09:18:35 +0200
+Message-Id: <20220405070341.410072988@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,105 +55,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+From: Ronnie Sahlberg <lsahlber@redhat.com>
 
-commit ee1fee900537b5d9560e9f937402de5ddc8412f3 upstream.
+commit 47178c7722ac528ea08aa82c3ef9ffa178962d7a upstream.
 
-Setting PTRACE_O_SUSPEND_SECCOMP is supposed to be a highly privileged
-operation because it allows the tracee to completely bypass all seccomp
-filters on kernels with CONFIG_CHECKPOINT_RESTORE=y. It is only supposed to
-be settable by a process with global CAP_SYS_ADMIN, and only if that
-process is not subject to any seccomp filters at all.
+In multiuser each individual user has their own tcon structure for the
+share and thus their own handle for a cached directory.
+When we umount such a share we much make sure to release the pinned down dentry
+for each such tcon and not just the master tcon.
 
-However, while these permission checks were done on the PTRACE_SETOPTIONS
-path, they were missing on the PTRACE_SEIZE path, which also sets
-user-specified ptrace flags.
+Otherwise we will get nasty warnings on umount that dentries are still in use:
+[ 3459.590047] BUG: Dentry 00000000115c6f41{i=12000000019d95,n=/}  still in use\
+ (2) [unmount of cifs cifs]
+...
+[ 3459.590492] Call Trace:
+[ 3459.590500]  d_walk+0x61/0x2a0
+[ 3459.590518]  ? shrink_lock_dentry.part.0+0xe0/0xe0
+[ 3459.590526]  shrink_dcache_for_umount+0x49/0x110
+[ 3459.590535]  generic_shutdown_super+0x1a/0x110
+[ 3459.590542]  kill_anon_super+0x14/0x30
+[ 3459.590549]  cifs_kill_sb+0xf5/0x104 [cifs]
+[ 3459.590773]  deactivate_locked_super+0x36/0xa0
+[ 3459.590782]  cleanup_mnt+0x131/0x190
+[ 3459.590789]  task_work_run+0x5c/0x90
+[ 3459.590798]  exit_to_user_mode_loop+0x151/0x160
+[ 3459.590809]  exit_to_user_mode_prepare+0x83/0xd0
+[ 3459.590818]  syscall_exit_to_user_mode+0x12/0x30
+[ 3459.590828]  do_syscall_64+0x48/0x90
+[ 3459.590833]  entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Move the permissions checks out into a helper function and let both
-ptrace_attach() and ptrace_setoptions() call it.
-
-Cc: stable@kernel.org
-Fixes: 13c4a90119d2 ("seccomp: add ptrace options for suspend/resume")
-Signed-off-by: Jann Horn <jannh@google.com>
-Link: https://lkml.kernel.org/r/20220319010838.1386861-1-jannh@google.com
-Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
+Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
+Acked-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Cc: stable@vger.kernel.org
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/ptrace.c |   47 ++++++++++++++++++++++++++++++++---------------
- 1 file changed, 32 insertions(+), 15 deletions(-)
+ fs/cifs/cifsfs.c |   13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -371,6 +371,26 @@ bool ptrace_may_access(struct task_struc
- 	return !err;
- }
+--- a/fs/cifs/cifsfs.c
++++ b/fs/cifs/cifsfs.c
+@@ -254,6 +254,9 @@ static void cifs_kill_sb(struct super_bl
+ 	struct cifs_sb_info *cifs_sb = CIFS_SB(sb);
+ 	struct cifs_tcon *tcon;
+ 	struct cached_fid *cfid;
++	struct rb_root *root = &cifs_sb->tlink_tree;
++	struct rb_node *node;
++	struct tcon_link *tlink;
  
-+static int check_ptrace_options(unsigned long data)
-+{
-+	if (data & ~(unsigned long)PTRACE_O_MASK)
-+		return -EINVAL;
-+
-+	if (unlikely(data & PTRACE_O_SUSPEND_SECCOMP)) {
-+		if (!IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) ||
-+		    !IS_ENABLED(CONFIG_SECCOMP))
-+			return -EINVAL;
-+
-+		if (!capable(CAP_SYS_ADMIN))
-+			return -EPERM;
-+
-+		if (seccomp_mode(&current->seccomp) != SECCOMP_MODE_DISABLED ||
-+		    current->ptrace & PT_SUSPEND_SECCOMP)
-+			return -EPERM;
-+	}
-+	return 0;
-+}
-+
- static int ptrace_attach(struct task_struct *task, long request,
- 			 unsigned long addr,
- 			 unsigned long flags)
-@@ -382,8 +402,16 @@ static int ptrace_attach(struct task_str
- 	if (seize) {
- 		if (addr != 0)
- 			goto out;
-+		/*
-+		 * This duplicates the check in check_ptrace_options() because
-+		 * ptrace_attach() and ptrace_setoptions() have historically
-+		 * used different error codes for unknown ptrace options.
-+		 */
- 		if (flags & ~(unsigned long)PTRACE_O_MASK)
- 			goto out;
-+		retval = check_ptrace_options(flags);
-+		if (retval)
-+			return retval;
- 		flags = PT_PTRACED | PT_SEIZED | (flags << PT_OPT_FLAG_SHIFT);
- 	} else {
- 		flags = PT_PTRACED;
-@@ -656,22 +684,11 @@ int ptrace_writedata(struct task_struct
- static int ptrace_setoptions(struct task_struct *child, unsigned long data)
- {
- 	unsigned flags;
-+	int ret;
+ 	/*
+ 	 * We ned to release all dentries for the cached directories
+@@ -263,17 +266,21 @@ static void cifs_kill_sb(struct super_bl
+ 		dput(cifs_sb->root);
+ 		cifs_sb->root = NULL;
+ 	}
+-	tcon = cifs_sb_master_tcon(cifs_sb);
+-	if (tcon) {
++	spin_lock(&cifs_sb->tlink_tree_lock);
++	node = rb_first(root);
++	while (node != NULL) {
++		tlink = rb_entry(node, struct tcon_link, tl_rbnode);
++		tcon = tlink_tcon(tlink);
+ 		cfid = &tcon->crfid;
+ 		mutex_lock(&cfid->fid_mutex);
+ 		if (cfid->dentry) {
+-
+ 			dput(cfid->dentry);
+ 			cfid->dentry = NULL;
+ 		}
+ 		mutex_unlock(&cfid->fid_mutex);
++		node = rb_next(node);
+ 	}
++	spin_unlock(&cifs_sb->tlink_tree_lock);
  
--	if (data & ~(unsigned long)PTRACE_O_MASK)
--		return -EINVAL;
--
--	if (unlikely(data & PTRACE_O_SUSPEND_SECCOMP)) {
--		if (!IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) ||
--		    !IS_ENABLED(CONFIG_SECCOMP))
--			return -EINVAL;
--
--		if (!capable(CAP_SYS_ADMIN))
--			return -EPERM;
--
--		if (seccomp_mode(&current->seccomp) != SECCOMP_MODE_DISABLED ||
--		    current->ptrace & PT_SUSPEND_SECCOMP)
--			return -EPERM;
--	}
-+	ret = check_ptrace_options(data);
-+	if (ret)
-+		return ret;
- 
- 	/* Avoid intermediate state when all opts are cleared */
- 	flags = child->ptrace;
+ 	kill_anon_super(sb);
+ 	cifs_umount(cifs_sb);
 
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8234F37DD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 139E24F3B76
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359611AbiDELUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54464 "EHLO
+        id S1359132AbiDEL4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:56:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236501AbiDEIQq (ORCPT
+        with ESMTP id S244975AbiDEIww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:16:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4A06F4A7;
-        Tue,  5 Apr 2022 01:03:55 -0700 (PDT)
+        Tue, 5 Apr 2022 04:52:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26D71D0D1;
+        Tue,  5 Apr 2022 01:48:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52966B81B18;
-        Tue,  5 Apr 2022 08:03:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE408C385A2;
-        Tue,  5 Apr 2022 08:03:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 417B2614F9;
+        Tue,  5 Apr 2022 08:48:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C9CEC385A1;
+        Tue,  5 Apr 2022 08:48:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145828;
-        bh=EIQ75Iss0C+N32dhwHmXt/LiiU6YMzb9YdD0k8MwtBA=;
+        s=korg; t=1649148501;
+        bh=Ps1nATeswKaRTByy9Vpj0FarmADqO69/M4NEGtVD1Cc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MAloT/prKy8+VJh7QXhjGy9Kg46iPXT9lqijcpNBV7NXDomobOlcsmvkaO6tmRc4N
-         xZFiAAIdx2+qgDRnvp5RWz3rNLIbL6MNsVEw+F4LTzFEYU35I2oeU8vJZ70ZYZFpu7
-         HNoTDDezpOlJhBIUxf0ghz2K6yjxRA6DouXzYy3c=
+        b=0VzTKqrVVBpR4DDQxAYYNTdWVgUpHWxeBsPpS3GOsr/pCUj0q0oSpO2/F43eTZpCe
+         0Fqzc5Ewc9RuzmWa7uAKUjvcS06JlYqdzIMT6GCK4RokIAmBKPnM61uNvEUBkec1N4
+         OiZ2hzfszJ8OYqvMg/s45TVz9Z/Lfsvur6kh7uvs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0543/1126] iommu/ipmmu-vmsa: Check for error num after setting mask
+        stable@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Martin Dauskardt <martin.dauskardt@gmx.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0377/1017] ivtv: fix incorrect device_caps for ivtvfb
 Date:   Tue,  5 Apr 2022 09:21:30 +0200
-Message-Id: <20220405070423.570893217@linuxfoundation.org>
+Message-Id: <20220405070405.476917127@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
-References: <20220405070407.513532867@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +55,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 1fdbbfd5099f797a4dac05e7ef0192ba4a9c39b4 ]
+[ Upstream commit 25e94139218c0293b4375233c14f2256d7dcfaa8 ]
 
-Because of the possible failure of the dma_supported(), the
-dma_set_mask_and_coherent() may return error num.
-Therefore, it should be better to check it and return the error if
-fails.
+The VIDIOC_G_FBUF and related overlay ioctls no longer worked (-ENOTTY was
+returned).
 
-Fixes: 1c894225bf5b ("iommu/ipmmu-vmsa: IPMMU device is 40-bit bus master")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Reviewed-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Link: https://lore.kernel.org/r/20220106024302.2574180-1-jiasheng@iscas.ac.cn
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+The root cause was the introduction of the caps field in ivtv-driver.h.
+While loading the ivtvfb module would update the video_device device_caps
+field with V4L2_CAP_VIDEO_OUTPUT_OVERLAY it would not update that caps
+field, and that's what the overlay ioctls would look at.
+
+It's a bad idea to keep information in two places, so drop the caps field
+and only use vdev.device_caps.
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: Martin Dauskardt <martin.dauskardt@gmx.de>
+Fixes: 2161536516ed (media: media/pci: set device_caps in struct video_device)
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/ipmmu-vmsa.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/media/pci/ivtv/ivtv-driver.h  |  1 -
+ drivers/media/pci/ivtv/ivtv-ioctl.c   | 10 +++++-----
+ drivers/media/pci/ivtv/ivtv-streams.c | 11 ++++-------
+ 3 files changed, 9 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/iommu/ipmmu-vmsa.c b/drivers/iommu/ipmmu-vmsa.c
-index ca752bdc710f..61bd9a3004ed 100644
---- a/drivers/iommu/ipmmu-vmsa.c
-+++ b/drivers/iommu/ipmmu-vmsa.c
-@@ -1006,7 +1006,9 @@ static int ipmmu_probe(struct platform_device *pdev)
- 	bitmap_zero(mmu->ctx, IPMMU_CTX_MAX);
- 	mmu->features = of_device_get_match_data(&pdev->dev);
- 	memset(mmu->utlb_ctx, IPMMU_CTX_INVALID, mmu->features->num_utlbs);
--	dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(40));
-+	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(40));
-+	if (ret)
-+		return ret;
+diff --git a/drivers/media/pci/ivtv/ivtv-driver.h b/drivers/media/pci/ivtv/ivtv-driver.h
+index 4cf92dee6527..ce3a7ca51736 100644
+--- a/drivers/media/pci/ivtv/ivtv-driver.h
++++ b/drivers/media/pci/ivtv/ivtv-driver.h
+@@ -330,7 +330,6 @@ struct ivtv_stream {
+ 	struct ivtv *itv;		/* for ease of use */
+ 	const char *name;		/* name of the stream */
+ 	int type;			/* stream type */
+-	u32 caps;			/* V4L2 capabilities */
  
- 	/* Map I/O memory and request IRQ. */
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	struct v4l2_fh *fh;		/* pointer to the streaming filehandle */
+ 	spinlock_t qlock;		/* locks access to the queues */
+diff --git a/drivers/media/pci/ivtv/ivtv-ioctl.c b/drivers/media/pci/ivtv/ivtv-ioctl.c
+index 0cdf6b3210c2..fee460e2ca86 100644
+--- a/drivers/media/pci/ivtv/ivtv-ioctl.c
++++ b/drivers/media/pci/ivtv/ivtv-ioctl.c
+@@ -438,7 +438,7 @@ static int ivtv_g_fmt_vid_out_overlay(struct file *file, void *fh, struct v4l2_f
+ 	struct ivtv_stream *s = &itv->streams[fh2id(fh)->type];
+ 	struct v4l2_window *winfmt = &fmt->fmt.win;
+ 
+-	if (!(s->caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
++	if (!(s->vdev.device_caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
+ 		return -EINVAL;
+ 	if (!itv->osd_video_pbase)
+ 		return -EINVAL;
+@@ -549,7 +549,7 @@ static int ivtv_try_fmt_vid_out_overlay(struct file *file, void *fh, struct v4l2
+ 	u32 chromakey = fmt->fmt.win.chromakey;
+ 	u8 global_alpha = fmt->fmt.win.global_alpha;
+ 
+-	if (!(s->caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
++	if (!(s->vdev.device_caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
+ 		return -EINVAL;
+ 	if (!itv->osd_video_pbase)
+ 		return -EINVAL;
+@@ -1383,7 +1383,7 @@ static int ivtv_g_fbuf(struct file *file, void *fh, struct v4l2_framebuffer *fb)
+ 		0,
+ 	};
+ 
+-	if (!(s->caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
++	if (!(s->vdev.device_caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
+ 		return -ENOTTY;
+ 	if (!itv->osd_video_pbase)
+ 		return -ENOTTY;
+@@ -1450,7 +1450,7 @@ static int ivtv_s_fbuf(struct file *file, void *fh, const struct v4l2_framebuffe
+ 	struct ivtv_stream *s = &itv->streams[fh2id(fh)->type];
+ 	struct yuv_playback_info *yi = &itv->yuv_info;
+ 
+-	if (!(s->caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
++	if (!(s->vdev.device_caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
+ 		return -ENOTTY;
+ 	if (!itv->osd_video_pbase)
+ 		return -ENOTTY;
+@@ -1470,7 +1470,7 @@ static int ivtv_overlay(struct file *file, void *fh, unsigned int on)
+ 	struct ivtv *itv = id->itv;
+ 	struct ivtv_stream *s = &itv->streams[fh2id(fh)->type];
+ 
+-	if (!(s->caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
++	if (!(s->vdev.device_caps & V4L2_CAP_VIDEO_OUTPUT_OVERLAY))
+ 		return -ENOTTY;
+ 	if (!itv->osd_video_pbase)
+ 		return -ENOTTY;
+diff --git a/drivers/media/pci/ivtv/ivtv-streams.c b/drivers/media/pci/ivtv/ivtv-streams.c
+index 6e455948cc77..13d7d55e6594 100644
+--- a/drivers/media/pci/ivtv/ivtv-streams.c
++++ b/drivers/media/pci/ivtv/ivtv-streams.c
+@@ -176,7 +176,7 @@ static void ivtv_stream_init(struct ivtv *itv, int type)
+ 	s->itv = itv;
+ 	s->type = type;
+ 	s->name = ivtv_stream_info[type].name;
+-	s->caps = ivtv_stream_info[type].v4l2_caps;
++	s->vdev.device_caps = ivtv_stream_info[type].v4l2_caps;
+ 
+ 	if (ivtv_stream_info[type].pio)
+ 		s->dma = DMA_NONE;
+@@ -299,12 +299,9 @@ static int ivtv_reg_dev(struct ivtv *itv, int type)
+ 		if (s_mpg->vdev.v4l2_dev)
+ 			num = s_mpg->vdev.num + ivtv_stream_info[type].num_offset;
+ 	}
+-	s->vdev.device_caps = s->caps;
+-	if (itv->osd_video_pbase) {
+-		itv->streams[IVTV_DEC_STREAM_TYPE_YUV].vdev.device_caps |=
+-			V4L2_CAP_VIDEO_OUTPUT_OVERLAY;
+-		itv->streams[IVTV_DEC_STREAM_TYPE_MPG].vdev.device_caps |=
+-			V4L2_CAP_VIDEO_OUTPUT_OVERLAY;
++	if (itv->osd_video_pbase && (type == IVTV_DEC_STREAM_TYPE_YUV ||
++				     type == IVTV_DEC_STREAM_TYPE_MPG)) {
++		s->vdev.device_caps |= V4L2_CAP_VIDEO_OUTPUT_OVERLAY;
+ 		itv->v4l2_cap |= V4L2_CAP_VIDEO_OUTPUT_OVERLAY;
+ 	}
+ 	video_set_drvdata(&s->vdev, s);
 -- 
 2.34.1
 

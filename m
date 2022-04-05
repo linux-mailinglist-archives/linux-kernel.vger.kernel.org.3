@@ -2,153 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4A84F4E2E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7DA44F48DF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353355AbiDFAMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33822 "EHLO
+        id S1385212AbiDEVxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457608AbiDEQQA (ORCPT
+        with ESMTP id S1457599AbiDEQOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:16:00 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA8719018;
-        Tue,  5 Apr 2022 09:14:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649175241; x=1680711241;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ur19xDOlDI9/rWRs+TqnfwNVLI1D8qVYS/itVUtgTbs=;
-  b=jFvFqMmaNz/WWa5pevdVc4G5pOvCnX2Jah2FBst1sLrf6l3hiAOWyoao
-   ww6Ee/J+I5WNy43gmffTR9dIq4CFtI6fRU5wkZ5bOA+/LN23tJVMhMAAj
-   eAgOVhLDZtP7GWk8CYp8kTdtLxElFoRVzm4Ea1d3FMoNPASw3boETImk6
-   kthX6k06Bzl5Ye5sw8bDD+cxEyEVVhIgTsCA3/ZEorZIhH4ixBykOJXoe
-   YeduQ3TNPJPxrvpIJFJBQ1H+q67O7kUSTn87ZdnhkNLmVaWA2XgzPdN42
-   ot5udIAxb/pve3xN+aFbArqRF1S9dTdedP+e3eTFvbrDtJuDNZsegMKUd
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="258375370"
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="258375370"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 09:11:37 -0700
-X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
-   d="scan'208";a="524055940"
-Received: from smile.fi.intel.com ([10.237.72.59])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 09:11:34 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nbllo-00DSdK-94;
-        Tue, 05 Apr 2022 19:11:04 +0300
-Date:   Tue, 5 Apr 2022 19:11:04 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Gilles Buloz <gilles.buloz@kontron.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: Re: [PATCH 2/2] tty: Implement lookahead to process XON/XOFF timely
-Message-ID: <YkxqGDsURPpkDM5W@smile.fi.intel.com>
-References: <20220405102437.4842-1-ilpo.jarvinen@linux.intel.com>
- <20220405102437.4842-3-ilpo.jarvinen@linux.intel.com>
+        Tue, 5 Apr 2022 12:14:05 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FF315701;
+        Tue,  5 Apr 2022 09:12:07 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 235Dkb0A024619;
+        Tue, 5 Apr 2022 18:11:52 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=YYuFJUbBGAhIAF7jE0NLyDCpsVggjgUfUTeXHBPg+6w=;
+ b=ED8nOSlV3isg8Qq3bH+Bvfd8Zt5/XefkPF98Txb9noYRKAH3Rze4l63NHwHyqa/6URl/
+ lw9ENLxj1Fi62hSYxf3QHs5jELIVPXwwMl2GvTkMLEswQTUWO8npUP6GWqOpLqqRnBc1
+ j32HrcFyGLFc1j8MVcnl3PaIj56tqvgDb3EorPiUaQ4mie5YPtoxtbSyeBQgHQUfE1rm
+ k51gX6HAfaqEDv2u72GkKrYuRuEBreAllIlID8GwFealdE6fX3x03an97GDAl8IPwfQD
+ PYWJmxCyRZJNZWl1ZLQ6GvEHP7T7U7MEIDVl0iXE7K9fUgbSlrcmN/g3VTD4vOajfvuJ +g== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f6dcgu3xw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 05 Apr 2022 18:11:52 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4A0EE10002A;
+        Tue,  5 Apr 2022 18:11:52 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3CE962278AC;
+        Tue,  5 Apr 2022 18:11:52 +0200 (CEST)
+Received: from localhost (10.75.127.50) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 5 Apr 2022 18:11:51
+ +0200
+From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <arnaud.pouliquen@foss.st.com>, <linux-kernel@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>
+Subject: [PATCH v3] arm64: defconfig: Config that had RPMSG_CHAR now gets RPMSG_CTRL
+Date:   Tue, 5 Apr 2022 18:11:14 +0200
+Message-ID: <20220405161114.1107745-1-arnaud.pouliquen@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220405102437.4842-3-ilpo.jarvinen@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-05_04,2022-04-05_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 01:24:37PM +0300, Ilpo Järvinen wrote:
-> When tty is not read from, XON/XOFF may get stuck into an
-> intermediate buffer. As those characters are there to do software
-> flow-control, it is not very useful. In the case where neither end
-> reads from ttys, the receiving ends might not be able receive the
-> XOFF characters and just keep sending more data to the opposite
-> direction. This problem is almost guaranteed to occur with DMA
-> which sends data in large chunks.
-> 
-> If TTY is slow to process characters, that is, eats less than given
-> amount in receive_buf, invoke lookahead for the rest of the chars
-> to process potential XON/XOFF characters.
-> 
-> The guards necessary for ensuring the XON/XOFF character are
-> processed only once were added by the previous patch. All this patch
-> needs to do on that front is to pass the lookahead count (that can
-> now be non-zero) into port->client_ops->receive_buf().
+In the commit 617d32938d1b ("rpmsg: Move the rpmsg control device
+from rpmsg_char to rpmsg_ctrl"), we split the rpmsg_char driver in two.
+By default give everyone who had the old driver enabled the rpmsg_ctrl
+driver too.
 
-...
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+---
 
-> +static bool __n_tty_receive_char_special(struct tty_struct *tty, unsigned char c,
-> +					 bool lookahead_done)
-> +{
-> +	if (!I_IXON(tty))
-> +		return false;
-> +
-> +	if (c == START_CHAR(tty)) {
-> +		if (!lookahead_done) {
-> +			start_tty(tty);
-> +			process_echoes(tty);
-> +		}
-> +		return true;
-> +	}
-> +	if (c == STOP_CHAR(tty)) {
-> +		if (!lookahead_done)
-> +			stop_tty(tty);
-> +		return true;
-> +	}
-> +	return false;
-> +}
+This patch is extracted from the series [1] that has been partially
+integrated in the Linux Kernel 5.18-rc1.
 
-Looking into this I would first make a preparatory patch that splits out
-current code into something like
+Update vs previous version:
+- Add missing "---" separation marker after "Signed-off-by".
 
-static bool __n_tty_receive_char_special_no_lookahead(struct tty_struct *tty, unsigned char c)
-{
-	...current code...
-}
+[1]https://lore.kernel.org/lkml/15be2f08-ba03-2b80-6f53-2056359d5c41@gmail.com/T/
+[2]https://lore.kernel.org/linux-arm-kernel/CANLsYky1_b80qPbgOaLGVYD-GEr21V6C653iGEB7VCU=GbGvAQ@mail.gmail.com/T/
+---
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Then in the patch 1 you add
-
-static bool __n_tty_receive_char_special_lookahead(struct tty_struct *tty, unsigned char c)
-{
-	...
-}
-
-static bool __n_tty_receive_char_special(struct tty_struct *tty, unsigned char c,
-					 bool lookahead_done)
-{
-	if (!I_IXON(tty))
-		return false;
-
-	if (lookahead_done)
-		return _lookahead();
-
-	return _no_lookahead();
-}
-
-?
-
-...
-
-/*
- * Also start multi-line comments with
- * capital letter and finish with
- * grammar period.
- */
-
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 50aa3d75ab4f..3f8906b8a2ca 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -1053,6 +1053,7 @@ CONFIG_QCOM_Q6V5_PAS=m
+ CONFIG_QCOM_SYSMON=m
+ CONFIG_QCOM_WCNSS_PIL=m
+ CONFIG_RPMSG_CHAR=m
++CONFIG_RPMSG_CTRL=m
+ CONFIG_RPMSG_QCOM_GLINK_RPM=y
+ CONFIG_RPMSG_QCOM_GLINK_SMEM=m
+ CONFIG_RPMSG_QCOM_SMD=y
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 

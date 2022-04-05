@@ -2,52 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754944F3DC0
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76EAB4F4237
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352339AbiDEU0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33866 "EHLO
+        id S233477AbiDET60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 15:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242864AbiDEKfe (ORCPT
+        with ESMTP id S1354161AbiDEKMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:35:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686E92B192;
-        Tue,  5 Apr 2022 03:20:14 -0700 (PDT)
+        Tue, 5 Apr 2022 06:12:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BFE517E9;
+        Tue,  5 Apr 2022 02:57:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 044E8617CC;
-        Tue,  5 Apr 2022 10:20:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E07CCC385A1;
-        Tue,  5 Apr 2022 10:20:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 871B4B81B18;
+        Tue,  5 Apr 2022 09:57:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB7E5C385A2;
+        Tue,  5 Apr 2022 09:57:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154013;
-        bh=JCLM8YKiiHyma2HgpUKFb0VzrXsL8iLb6rFhuU6ooFw=;
+        s=korg; t=1649152666;
+        bh=c0v1kwfw9nemCbOgxAxvygAY6BW/Q0cDvVzauxVeYLo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X8cJOmxF6VQXoHqkdC80pu7028J73fUWuda+bVMgr0Hgn/opBdTFJ91v2BTwQOohM
-         VVr2kgUpEJj7nSdDMYVgEWjGYE/lw49ahZRg89z6FWRsq92RY+zzvprkhNuRneXxzF
-         ZiPrptOsI64nuDxMzYpUk8qur/EmQ0dPlzTpm5lc=
+        b=Qtyv4Hk4atwZjbT4DF3YjF8UBWA2Tty8ZsffXkCKCe7b+fRZa7cFcekx/YE4LOs23
+         8quM8zsSWPUmBP9nXo0ZjXx/GTBu3t4ifss4GMYPLbWpq1S8h0AAl9t9IvAlrawAu1
+         lfRKXV4DVkweBUGZfs4Y7RUhAo5BhWgblhRAMPrA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, He Zhe <zhe.he@windriver.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-serial@vger.kernel.org,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 426/599] kgdboc: fix return value of __setup handler
+        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>
+Subject: [PATCH 5.15 858/913] ACPI: CPPC: Avoid out of bounds access when parsing _CPC data
 Date:   Tue,  5 Apr 2022 09:32:00 +0200
-Message-Id: <20220405070311.509873524@linuxfoundation.org>
+Message-Id: <20220405070405.545873390@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -62,76 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-[ Upstream commit ab818c7aa7544bf8d2dd4bdf68878b17a02eb332 ]
+commit 40d8abf364bcab23bc715a9221a3c8623956257b upstream.
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) environment strings.
-So return 1 from kgdboc_option_setup().
+If the NumEntries field in the _CPC return package is less than 2, do
+not attempt to access the "Revision" element of that package, because
+it may not be present then.
 
-Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc7
-  kgdboc=kbd kgdbts=", will be passed to user space.
-
- Run /sbin/init as init process
-   with arguments:
-     /sbin/init
-   with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc7
-     kgdboc=kbd
-     kgdbts=
-
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Fixes: 1bd54d851f50 ("kgdboc: Passing ekgdboc to command line causes panic")
-Fixes: f2d937f3bf00 ("consoles: polling support, kgdboc")
-Cc: He Zhe <zhe.he@windriver.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: kgdb-bugreport@lists.sourceforge.net
-Cc: Jason Wessel <jason.wessel@windriver.com>
-Cc: Daniel Thompson <daniel.thompson@linaro.org>
-Cc: Douglas Anderson <dianders@chromium.org>
-Cc: linux-serial@vger.kernel.org
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/20220309033018.17936-1-rdunlap@infradead.org
+Fixes: 337aadff8e45 ("ACPI: Introduce CPU performance controls using CPPC")
+BugLink: https://lore.kernel.org/lkml/20220322143534.GC32582@xsang-OptiPlex-9020/
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Huang Rui <ray.huang@amd.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/kgdboc.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/acpi/cppc_acpi.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
-index 49d0c7f2b29b..79b7db8580e0 100644
---- a/drivers/tty/serial/kgdboc.c
-+++ b/drivers/tty/serial/kgdboc.c
-@@ -403,16 +403,16 @@ static int kgdboc_option_setup(char *opt)
- {
- 	if (!opt) {
- 		pr_err("config string not provided\n");
--		return -EINVAL;
-+		return 1;
- 	}
- 
- 	if (strlen(opt) >= MAX_CONFIG_LEN) {
- 		pr_err("config string too long\n");
--		return -ENOSPC;
-+		return 1;
- 	}
- 	strcpy(config, opt);
- 
--	return 0;
-+	return 1;
- }
- 
- __setup("kgdboc=", kgdboc_option_setup);
--- 
-2.34.1
-
+--- a/drivers/acpi/cppc_acpi.c
++++ b/drivers/acpi/cppc_acpi.c
+@@ -703,6 +703,11 @@ int acpi_cppc_processor_probe(struct acp
+ 	cpc_obj = &out_obj->package.elements[0];
+ 	if (cpc_obj->type == ACPI_TYPE_INTEGER)	{
+ 		num_ent = cpc_obj->integer.value;
++		if (num_ent <= 1) {
++			pr_debug("Unexpected _CPC NumEntries value (%d) for CPU:%d\n",
++				 num_ent, pr->id);
++			goto out_free;
++		}
+ 	} else {
+ 		pr_debug("Unexpected entry type(%d) for NumEntries\n",
+ 				cpc_obj->type);
 
 

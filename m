@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1354F4A32
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB094F4B67
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1453881AbiDEWhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
+        id S1574511AbiDEW40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351677AbiDEKDL (ORCPT
+        with ESMTP id S1358070AbiDEK15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:03:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302E172E02;
-        Tue,  5 Apr 2022 02:52:05 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4201559A79;
+        Tue,  5 Apr 2022 03:14:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9CE21B81B76;
-        Tue,  5 Apr 2022 09:52:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A49BC385A1;
-        Tue,  5 Apr 2022 09:52:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D32EBB81B7A;
+        Tue,  5 Apr 2022 10:14:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CDAAC385A1;
+        Tue,  5 Apr 2022 10:14:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152323;
-        bh=or7vMsAJ5qPVBHGYQ8AZJOSb3BRjqMrEX/v6pBzhP1A=;
+        s=korg; t=1649153670;
+        bh=ThlCVsXJkFp+URlGyDlaTdGefmxQN9AWHQIK7TJ1LVE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L1uIdMHxhcKrYzA3YOOqDUwOyfzfqgXDi+MIOxLrC+HIFtMWuy/a1GHnatu5kE4Na
-         YNaqOCaQIHgAh2XEPqAY6XavIdfccF6863KcwmL8Z7cbWWA8tyq1RqNyuoD09hOCnz
-         6+nz8oI1LoVPPkfH2PkKW7cihCRFdeRQ0EsxrhRk=
+        b=Jzva5FovJpMqoQLIUbrxoBpPlWsGgoSGfVPLs2NgNAkKAAWuukFW5mgQDVcc4+gzX
+         OhycbQPqY6yT54LJNMF3qlZBnyoXUwq7eey4ZPFegcSTwR/THXDAVGWlAeqw50HYar
+         hzxt+W+ejYRbJ/M+ckiFNl9ABDwxDZPyvkForSXw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Frank Wunderlich <frank-w@public-files.de>,
-        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <jroedel@suse.de>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 734/913] media: iommu/mediatek-v1: Free the existed fwspec if the master dev already has
-Date:   Tue,  5 Apr 2022 09:29:56 +0200
-Message-Id: <20220405070401.833508928@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+Subject: [PATCH 5.10 305/599] drm/msm/dp: populate connector of struct dp_panel
+Date:   Tue,  5 Apr 2022 09:29:59 +0200
+Message-Id: <20220405070307.909912772@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,74 +58,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yong Wu <yong.wu@mediatek.com>
+From: Kuogee Hsieh <quic_khsieh@quicinc.com>
 
-[ Upstream commit 822a2ed8c606caf6a11b1a180b8e46292bd77d71 ]
+[ Upstream commit 5e602f5156910c7b19661699896cb6e3fb94fab9 ]
 
-When the iommu master device enters of_iommu_xlate, the ops may be
-NULL(iommu dev is defered), then it will initialize the fwspec here:
+DP CTS test case 4.2.2.6 has valid edid with bad checksum on purpose
+and expect DP source return correct checksum. During drm edid read,
+correct edid checksum is calculated and stored at
+connector::real_edid_checksum.
 
-[<c0c9c5bc>] (dev_iommu_fwspec_set) from [<c06bda80>]
-(iommu_fwspec_init+0xbc/0xd4)
-[<c06bd9c4>] (iommu_fwspec_init) from [<c06c0db4>]
-(of_iommu_xlate+0x7c/0x12c)
-[<c06c0d38>] (of_iommu_xlate) from [<c06c10e8>]
-(of_iommu_configure+0x144/0x1e8)
+The problem is struct dp_panel::connector never be assigned, instead the
+connector is stored in struct msm_dp::connector. When we run compliance
+testing test case 4.2.2.6 dp_panel_handle_sink_request() won't have a valid
+edid set in struct dp_panel::edid so we'll try to use the connectors
+real_edid_checksum and hit a NULL pointer dereference error because the
+connector pointer is never assigned.
 
-BUT the mtk_iommu_v1.c only supports arm32, the probing flow still is a bit
-weird. We always expect create the fwspec internally. otherwise it will
-enter here and return fail.
+Changes in V2:
+-- populate panel connector at msm_dp_modeset_init() instead of at dp_panel_read_sink_caps()
 
-static int mtk_iommu_create_mapping(struct device *dev,
-				    struct of_phandle_args *args)
-{
-        ...
-	if (!fwspec) {
-	        ....
-	} else if (dev_iommu_fwspec_get(dev)->ops != &mtk_iommu_ops) {
-                >>>>>>>>>>Enter here. return fail.<<<<<<<<<<<<
-		return -EINVAL;
-	}
-	...
-}
+Changes in V3:
+-- remove unhelpful kernel crash trace commit text
+-- remove renaming dp_display parameter to dp
 
-Thus, Free the existed fwspec if the master device already has fwspec.
+Changes in V4:
+-- add more details to commit text
 
-This issue is reported at:
-https://lore.kernel.org/linux-mediatek/trinity-7d9ebdc9-4849-4d93-bfb5-429dcb4ee449-1626253158870@3c-app-gmx-bs01/
+Changes in v10:
+--  group into one series
 
-Reported-by: Frank Wunderlich <frank-w@public-files.de>
-Tested-by: Frank Wunderlich <frank-w@public-files.de> # BPI-R2/MT7623
-Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-Acked-by: Joerg Roedel <jroedel@suse.de>
-Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Changes in v11:
+-- drop drm/msm/dp: dp_link_parse_sink_count() return immediately if aux read
+
+Fixes: 7948fe12d47 ("drm/msm/dp: return correct edid checksum after corrupted edid checksum read")
+Signee-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Link: https://lore.kernel.org/r/1642531648-8448-3-git-send-email-quic_khsieh@quicinc.com
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/mtk_iommu_v1.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/gpu/drm/msm/dp/dp_display.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/iommu/mtk_iommu_v1.c b/drivers/iommu/mtk_iommu_v1.c
-index be22fcf988ce..1467ba1e4417 100644
---- a/drivers/iommu/mtk_iommu_v1.c
-+++ b/drivers/iommu/mtk_iommu_v1.c
-@@ -425,6 +425,15 @@ static struct iommu_device *mtk_iommu_probe_device(struct device *dev)
- 	struct mtk_iommu_data *data;
- 	int err, idx = 0;
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index 66f2ea3d42fc..6cd6934c8c9f 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -1336,6 +1336,7 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+ 			struct drm_encoder *encoder)
+ {
+ 	struct msm_drm_private *priv;
++	struct dp_display_private *dp_priv;
+ 	int ret;
  
-+	/*
-+	 * In the deferred case, free the existed fwspec.
-+	 * Always initialize the fwspec internally.
-+	 */
-+	if (fwspec) {
-+		iommu_fwspec_free(dev);
-+		fwspec = dev_iommu_fwspec_get(dev);
-+	}
+ 	if (WARN_ON(!encoder) || WARN_ON(!dp_display) || WARN_ON(!dev))
+@@ -1344,6 +1345,8 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+ 	priv = dev->dev_private;
+ 	dp_display->drm_dev = dev;
+ 
++	dp_priv = container_of(dp_display, struct dp_display_private, dp_display);
 +
- 	while (!of_parse_phandle_with_args(dev->of_node, "iommus",
- 					   "#iommu-cells",
- 					   idx, &iommu_spec)) {
+ 	ret = dp_display_request_irq(dp_display);
+ 	if (ret) {
+ 		DRM_ERROR("request_irq failed, ret=%d\n", ret);
+@@ -1361,6 +1364,8 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+ 		return ret;
+ 	}
+ 
++	dp_priv->panel->connector = dp_display->connector;
++
+ 	priv->connectors[priv->num_connectors++] = dp_display->connector;
+ 	return 0;
+ }
 -- 
 2.34.1
 

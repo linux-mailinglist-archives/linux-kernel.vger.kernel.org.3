@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770644F3F3F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22BB04F417E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1445666AbiDEUIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56134 "EHLO
+        id S240647AbiDET7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 15:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354477AbiDEKOU (ORCPT
+        with ESMTP id S243776AbiDEKhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:14:20 -0400
+        Tue, 5 Apr 2022 06:37:41 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AC36A426;
-        Tue,  5 Apr 2022 03:00:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EFB55762;
+        Tue,  5 Apr 2022 03:22:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0EE6B81B96;
-        Tue,  5 Apr 2022 10:00:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43392C385A2;
-        Tue,  5 Apr 2022 10:00:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7027CB81C8A;
+        Tue,  5 Apr 2022 10:22:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6161C385A0;
+        Tue,  5 Apr 2022 10:22:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152833;
-        bh=kembSRW7NQwV00BZOi0C5N16H7Aj9inc7Or9Ws7k17U=;
+        s=korg; t=1649154176;
+        bh=/hJvC2gf0i2zGMllIvwBp0yhdrPxL94SQLzsN5wb/G8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lGLfAY8q+zjBYMNK+P8OpZLgIRRjyIF2V3Ts2MV9RjF5vUNFqAjo/CdMd3mz9OCdU
-         e1WMgVYqvq60Pe/s+CCMv/pwNgiNW7TNNl0nLqozuCytu9awQZ8tjpP5aszWtR4Jty
-         wwybYYhjYAnz3PDuqYf7M+phsQNE3JiRM6P2NCZ0=
+        b=wu67r7vTlQZ9ZakBGAB5g6b/AJK1d/87pIphFvjV23I9M9geKzOxLl2TOyx+GNi7p
+         q9ugbzY2ub5e9jxWSTcdz6Og/0edl/Fa3bBkofnlXQp3E8WnwI1Lj6w15XEPoi5ax+
+         zvom8HK82NB71c3VJHa1XGqzLFU/laiqy+UzOyyo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: [PATCH 5.15 912/913] coredump/elf: Pass coredump_params into fill_note_info
-Date:   Tue,  5 Apr 2022 09:32:54 +0200
-Message-Id: <20220405070407.156589363@linuxfoundation.org>
+        stable@vger.kernel.org, Evgeny Novikov <novikov@ispras.ru>,
+        Kirill Shilimanov <kirill.shilimanov@huawei.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 484/599] video: fbdev: w100fb: Reset global state
+Date:   Tue,  5 Apr 2022 09:32:58 +0200
+Message-Id: <20220405070313.232308607@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,107 +55,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric W. Biederman <ebiederm@xmission.com>
+From: Evgeny Novikov <novikov@ispras.ru>
 
-commit 9ec7d3230717b4fe9b6c7afeb4811909c23fa1d7 upstream.
+[ Upstream commit 8738ddcac644964ae128ccd3d80d48773c8d528e ]
 
-Instead of individually passing cprm->siginfo and cprm->regs
-into fill_note_info pass all of struct coredump_params.
+w100fb_probe() did not reset the global state to its initial state. This
+can result in invocation of iounmap() even when there was not the
+appropriate successful call of ioremap(). For instance, this may be the
+case if first probe fails after two successful ioremap() while second
+probe fails when first ioremap() fails. The similar issue is with
+w100fb_remove(). The patch fixes both bugs.
 
-This is preparation to allow fill_files_note to use the existing
-vma snapshot.
+Found by Linux Driver Verification project (linuxtesting.org).
 
-Reviewed-by: Jann Horn <jannh@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
+Co-developed-by: Kirill Shilimanov <kirill.shilimanov@huawei.com>
+Signed-off-by: Kirill Shilimanov <kirill.shilimanov@huawei.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/binfmt_elf.c |   22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ drivers/video/fbdev/w100fb.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -1799,7 +1799,7 @@ static int fill_thread_core_info(struct
- 
- static int fill_note_info(struct elfhdr *elf, int phdrs,
- 			  struct elf_note_info *info,
--			  const kernel_siginfo_t *siginfo, struct pt_regs *regs)
-+			  struct coredump_params *cprm)
- {
- 	struct task_struct *dump_task = current;
- 	const struct user_regset_view *view = task_user_regset_view(dump_task);
-@@ -1871,7 +1871,7 @@ static int fill_note_info(struct elfhdr
- 	 * Now fill in each thread's information.
- 	 */
- 	for (t = info->thread; t != NULL; t = t->next)
--		if (!fill_thread_core_info(t, view, siginfo->si_signo, &info->size))
-+		if (!fill_thread_core_info(t, view, cprm->siginfo->si_signo, &info->size))
- 			return 0;
- 
- 	/*
-@@ -1880,7 +1880,7 @@ static int fill_note_info(struct elfhdr
- 	fill_psinfo(psinfo, dump_task->group_leader, dump_task->mm);
- 	info->size += notesize(&info->psinfo);
- 
--	fill_siginfo_note(&info->signote, &info->csigdata, siginfo);
-+	fill_siginfo_note(&info->signote, &info->csigdata, cprm->siginfo);
- 	info->size += notesize(&info->signote);
- 
- 	fill_auxv_note(&info->auxv, current->mm);
-@@ -2028,7 +2028,7 @@ static int elf_note_info_init(struct elf
- 
- static int fill_note_info(struct elfhdr *elf, int phdrs,
- 			  struct elf_note_info *info,
--			  const kernel_siginfo_t *siginfo, struct pt_regs *regs)
-+			  struct coredump_params *cprm)
- {
- 	struct core_thread *ct;
- 	struct elf_thread_status *ets;
-@@ -2049,13 +2049,13 @@ static int fill_note_info(struct elfhdr
- 	list_for_each_entry(ets, &info->thread_list, list) {
- 		int sz;
- 
--		sz = elf_dump_thread_status(siginfo->si_signo, ets);
-+		sz = elf_dump_thread_status(cprm->siginfo->si_signo, ets);
- 		info->thread_status_size += sz;
+diff --git a/drivers/video/fbdev/w100fb.c b/drivers/video/fbdev/w100fb.c
+index d96ab28f8ce4..4e641a780726 100644
+--- a/drivers/video/fbdev/w100fb.c
++++ b/drivers/video/fbdev/w100fb.c
+@@ -770,12 +770,18 @@ static int w100fb_probe(struct platform_device *pdev)
+ 		fb_dealloc_cmap(&info->cmap);
+ 		kfree(info->pseudo_palette);
  	}
- 	/* now collect the dump for the current */
- 	memset(info->prstatus, 0, sizeof(*info->prstatus));
--	fill_prstatus(&info->prstatus->common, current, siginfo->si_signo);
--	elf_core_copy_regs(&info->prstatus->pr_reg, regs);
-+	fill_prstatus(&info->prstatus->common, current, cprm->siginfo->si_signo);
-+	elf_core_copy_regs(&info->prstatus->pr_reg, cprm->regs);
+-	if (remapped_fbuf != NULL)
++	if (remapped_fbuf != NULL) {
+ 		iounmap(remapped_fbuf);
+-	if (remapped_regs != NULL)
++		remapped_fbuf = NULL;
++	}
++	if (remapped_regs != NULL) {
+ 		iounmap(remapped_regs);
+-	if (remapped_base != NULL)
++		remapped_regs = NULL;
++	}
++	if (remapped_base != NULL) {
+ 		iounmap(remapped_base);
++		remapped_base = NULL;
++	}
+ 	if (info)
+ 		framebuffer_release(info);
+ 	return err;
+@@ -795,8 +801,11 @@ static int w100fb_remove(struct platform_device *pdev)
+ 	fb_dealloc_cmap(&info->cmap);
  
- 	/* Set up header */
- 	fill_elf_header(elf, phdrs, ELF_ARCH, ELF_CORE_EFLAGS);
-@@ -2071,7 +2071,7 @@ static int fill_note_info(struct elfhdr
- 	fill_note(info->notes + 1, "CORE", NT_PRPSINFO,
- 		  sizeof(*info->psinfo), info->psinfo);
+ 	iounmap(remapped_base);
++	remapped_base = NULL;
+ 	iounmap(remapped_regs);
++	remapped_regs = NULL;
+ 	iounmap(remapped_fbuf);
++	remapped_fbuf = NULL;
  
--	fill_siginfo_note(info->notes + 2, &info->csigdata, siginfo);
-+	fill_siginfo_note(info->notes + 2, &info->csigdata, cprm->siginfo);
- 	fill_auxv_note(info->notes + 3, current->mm);
- 	info->numnote = 4;
+ 	framebuffer_release(info);
  
-@@ -2081,8 +2081,8 @@ static int fill_note_info(struct elfhdr
- 	}
- 
- 	/* Try to dump the FPU. */
--	info->prstatus->pr_fpvalid = elf_core_copy_task_fpregs(current, regs,
--							       info->fpu);
-+	info->prstatus->pr_fpvalid =
-+		elf_core_copy_task_fpregs(current, cprm->regs, info->fpu);
- 	if (info->prstatus->pr_fpvalid)
- 		fill_note(info->notes + info->numnote++,
- 			  "CORE", NT_PRFPREG, sizeof(*info->fpu), info->fpu);
-@@ -2195,7 +2195,7 @@ static int elf_core_dump(struct coredump
- 	 * Collect all the non-memory information about the process for the
- 	 * notes.  This also sets up the file header.
- 	 */
--	if (!fill_note_info(&elf, e_phnum, &info, cprm->siginfo, cprm->regs))
-+	if (!fill_note_info(&elf, e_phnum, &info, cprm))
- 		goto end_coredump;
- 
- 	has_dumped = 1;
+-- 
+2.34.1
+
 
 

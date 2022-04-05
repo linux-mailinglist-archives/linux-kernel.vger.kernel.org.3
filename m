@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D11E54F44A9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B87934F46F4
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357450AbiDEN30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
+        id S1380884AbiDEUyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345261AbiDEJWX (ORCPT
+        with ESMTP id S1358004AbiDEK1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:22:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC9A3E5C9;
-        Tue,  5 Apr 2022 02:10:02 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBE9D95DA;
+        Tue,  5 Apr 2022 03:12:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 231E561003;
-        Tue,  5 Apr 2022 09:10:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ADC4C385A2;
-        Tue,  5 Apr 2022 09:10:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD9686179E;
+        Tue,  5 Apr 2022 10:12:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD010C385A1;
+        Tue,  5 Apr 2022 10:12:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149801;
-        bh=GsAv312AdYmmt1e+wMqZIwMIBSqRjZ1+lgs4z1QfSXo=;
+        s=korg; t=1649153565;
+        bh=FoGnhb9slsWkG7IHxkEf3fL8MCz4z4jZ7l1JoxcVH98=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lSeJOBgK80nxw8wQ7vV/hlN/sk36Ya6XJfLyfBK86/tifxY2YR6d33pKl7ldTNRUI
-         8ETtCA2FQ+7qvcjxFPFSZwMRU6UD3ShOTerYlbgiI3s/nj4yT7eQXULNchcMr0tJUy
-         FXInnObAOLhJ49xSXRT9STdqXgNPeeSPUh3GyX5g=
+        b=PzCXB5EWIqWR+v9KClz9TzoCIiGRjsnnDJL2AMQVY1UxZxfv/tgEkOfUsA6TL8Ecu
+         DmgAYK/lElUKaXnovlmTbxj3RqaLleC5miXwThSRwM3IpDtmSYag4NeASfbaggO70I
+         3lV+mnpBrXdODhzBqA2wS6vwJYdgTTu/UsxgOBlo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzkaller <syzkaller@googlegroups.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0847/1017] media: hdpvr: initialize dev->worker at hdpvr_register_videodev
-Date:   Tue,  5 Apr 2022 09:29:20 +0200
-Message-Id: <20220405070419.381404472@linuxfoundation.org>
+Subject: [PATCH 5.10 267/599] libbpf: Fix possible NULL pointer dereference when destroying skeleton
+Date:   Tue,  5 Apr 2022 09:29:21 +0200
+Message-Id: <20220405070306.783329093@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,59 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Yafang Shao <laoar.shao@gmail.com>
 
-[ Upstream commit 07922937e9a580825f9965c46fd15e23ba5754b6 ]
+[ Upstream commit a32ea51a3f17ce6524c9fc19d311e708331c8b5f ]
 
-hdpvr_register_videodev is responsible to initialize a worker in
-hdpvr_device. However, the worker is only initialized at
-hdpvr_start_streaming other than hdpvr_register_videodev.
-When hdpvr_probe does not initialize its worker, the hdpvr_disconnect
-will encounter one WARN in flush_work.The stack trace is as follows:
+When I checked the code in skeleton header file generated with my own
+bpf prog, I found there may be possible NULL pointer dereference when
+destroying skeleton. Then I checked the in-tree bpf progs, finding that is
+a common issue. Let's take the generated samples/bpf/xdp_redirect_cpu.skel.h
+for example. Below is the generated code in
+xdp_redirect_cpu__create_skeleton():
 
- hdpvr_disconnect+0xb8/0xf2 drivers/media/usb/hdpvr/hdpvr-core.c:425
- usb_unbind_interface+0xbf/0x3a0 drivers/usb/core/driver.c:458
- __device_release_driver drivers/base/dd.c:1206 [inline]
- device_release_driver_internal+0x22a/0x230 drivers/base/dd.c:1237
- bus_remove_device+0x108/0x160 drivers/base/bus.c:529
- device_del+0x1fe/0x510 drivers/base/core.c:3592
- usb_disable_device+0xd1/0x1d0 drivers/usb/core/message.c:1419
- usb_disconnect+0x109/0x330 drivers/usb/core/hub.c:2228
+	xdp_redirect_cpu__create_skeleton
+		struct bpf_object_skeleton *s;
+		s = (struct bpf_object_skeleton *)calloc(1, sizeof(*s));
+		if (!s)
+			goto error;
+		...
+	error:
+		bpf_object__destroy_skeleton(s);
+		return  -ENOMEM;
 
-Fix this by moving the initialization of dev->worker to the starting of
-hdpvr_register_videodev
+After goto error, the NULL 's' will be deferenced in
+bpf_object__destroy_skeleton().
 
-Reported-by: syzkaller <syzkaller@googlegroups.com>
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+We can simply fix this issue by just adding a NULL check in
+bpf_object__destroy_skeleton().
+
+Fixes: d66562fba1ce ("libbpf: Add BPF object skeleton support")
+Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/bpf/20220108134739.32541-1-laoar.shao@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/hdpvr/hdpvr-video.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/lib/bpf/libbpf.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/media/usb/hdpvr/hdpvr-video.c b/drivers/media/usb/hdpvr/hdpvr-video.c
-index 563128d11731..60e57e0f1927 100644
---- a/drivers/media/usb/hdpvr/hdpvr-video.c
-+++ b/drivers/media/usb/hdpvr/hdpvr-video.c
-@@ -308,7 +308,6 @@ static int hdpvr_start_streaming(struct hdpvr_device *dev)
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index b337d6f29098..61df26f048d9 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -10923,6 +10923,9 @@ void bpf_object__detach_skeleton(struct bpf_object_skeleton *s)
  
- 	dev->status = STATUS_STREAMING;
- 
--	INIT_WORK(&dev->worker, hdpvr_transmit_buffers);
- 	schedule_work(&dev->worker);
- 
- 	v4l2_dbg(MSG_BUFFER, hdpvr_debug, &dev->v4l2_dev,
-@@ -1165,6 +1164,9 @@ int hdpvr_register_videodev(struct hdpvr_device *dev, struct device *parent,
- 	bool ac3 = dev->flags & HDPVR_FLAG_AC3_CAP;
- 	int res;
- 
-+	// initialize dev->worker
-+	INIT_WORK(&dev->worker, hdpvr_transmit_buffers);
+ void bpf_object__destroy_skeleton(struct bpf_object_skeleton *s)
+ {
++	if (!s)
++		return;
 +
- 	dev->cur_std = V4L2_STD_525_60;
- 	dev->width = 720;
- 	dev->height = 480;
+ 	if (s->progs)
+ 		bpf_object__detach_skeleton(s);
+ 	if (s->obj)
 -- 
 2.34.1
 

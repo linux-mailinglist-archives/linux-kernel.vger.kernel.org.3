@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E15F04F4C9B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:20:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D807D4F49EE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1579094AbiDEX0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
+        id S1452998AbiDEWcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349424AbiDEJtu (ORCPT
+        with ESMTP id S1357129AbiDEKZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D4321252;
-        Tue,  5 Apr 2022 02:45:27 -0700 (PDT)
+        Tue, 5 Apr 2022 06:25:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503D595A18;
+        Tue,  5 Apr 2022 03:09:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A22C861673;
-        Tue,  5 Apr 2022 09:45:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2BBEC385A2;
-        Tue,  5 Apr 2022 09:45:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E30ADB81C98;
+        Tue,  5 Apr 2022 10:09:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F844C385A2;
+        Tue,  5 Apr 2022 10:09:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151926;
-        bh=3AAfmV1E7ZyolsYIXp/JwPHq9XUWn1MBMJ+mufJjPQw=;
+        s=korg; t=1649153372;
+        bh=Wp0hPJ9IukXcUIGFX8IaXuqKEfhpodXZOqo2dOyyxsg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lFVUGV96q5KX3+4hHvBNPGPJ4nZZ5XLDLvcY9ZnyRRzFm2ePkjTosuo1zDTQRkxaP
-         5Ja7ETxlx9y32zzQM5wrWaniUGvaTh4Zqe7kVSvWyP4Z2vpg2+NnLErZukPG8dxNMc
-         xRApdaKOKuPKs4u1pqzTsgpP9FUObJE/vtkJA+kk=
+        b=2G8gDvgpsZnH9KCR9hrfYD7ow3HFT+NQodm7z2EDoTEo4o3SEjIxsw/cUb46ZgKNg
+         5wb2YVbwCS7+sHi+GunXOj85y8kliF8PY7JSlyD5DPrQtW4BgOcgaNRYA+mTDbBJAd
+         q0Tcvd9COxzzvOxffQfRcPOWLD6nwEz7lLrngRnM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?D=C4=81vis=20Mos=C4=81ns?= <davispuh@gmail.com>,
+        John Allen <john.allen@amd.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 592/913] iio: mma8452: Fix probe failing when an i2c_device_id is used
-Date:   Tue,  5 Apr 2022 09:27:34 +0200
-Message-Id: <20220405070357.588190614@linuxfoundation.org>
+Subject: [PATCH 5.10 162/599] crypto: ccp - ccp_dmaengine_unregister release dma channels
+Date:   Tue,  5 Apr 2022 09:27:36 +0200
+Message-Id: <20220405070303.661964995@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,141 +57,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Dāvis Mosāns <davispuh@gmail.com>
 
-[ Upstream commit a47ac019e7e8129b93a0b991e04b2a59872e053d ]
+[ Upstream commit 54cce8ecb9254f971b40a72911c6da403720a2d2 ]
 
-The mma8452_driver declares both of_match_table and i2c_driver.id_table
-match-tables, but its probe() function only checked for of matches.
+ccp_dmaengine_register adds dma_chan->device_node to dma_dev->channels list
+but ccp_dmaengine_unregister didn't remove them.
+That can cause crashes in various dmaengine methods that tries to use dma_dev->channels
 
-Add support for i2c_device_id matches. This fixes the driver not loading
-on some x86 tablets (e.g. the Nextbook Ares 8) where the i2c_client is
-instantiated by platform code using an i2c_device_id.
-
-Drop of_match_ptr() protection to avoid unused warning.
-
-Fixes: c3cdd6e48e35 ("iio: mma8452: refactor for seperating chip specific data")
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20220208124336.511884-1-hdegoede@redhat.com
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: 58ea8abf4904 ("crypto: ccp - Register the CCP as a DMA...")
+Signed-off-by: Dāvis Mosāns <davispuh@gmail.com>
+Acked-by: John Allen <john.allen@amd.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/accel/mma8452.c | 29 ++++++++++++++++++-----------
- 1 file changed, 18 insertions(+), 11 deletions(-)
+ drivers/crypto/ccp/ccp-dmaengine.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/drivers/iio/accel/mma8452.c b/drivers/iio/accel/mma8452.c
-index 09c7f10fefb6..21a99467f364 100644
---- a/drivers/iio/accel/mma8452.c
-+++ b/drivers/iio/accel/mma8452.c
-@@ -176,6 +176,7 @@ static const struct mma8452_event_regs trans_ev_regs = {
-  * @enabled_events:		event flags enabled and handled by this driver
-  */
- struct mma_chip_info {
-+	const char *name;
- 	u8 chip_id;
- 	const struct iio_chan_spec *channels;
- 	int num_channels;
-@@ -1301,6 +1302,7 @@ enum {
+diff --git a/drivers/crypto/ccp/ccp-dmaengine.c b/drivers/crypto/ccp/ccp-dmaengine.c
+index 0770a83bf1a5..b3eea329f840 100644
+--- a/drivers/crypto/ccp/ccp-dmaengine.c
++++ b/drivers/crypto/ccp/ccp-dmaengine.c
+@@ -633,6 +633,20 @@ static int ccp_terminate_all(struct dma_chan *dma_chan)
+ 	return 0;
+ }
  
- static const struct mma_chip_info mma_chip_info_table[] = {
- 	[mma8451] = {
-+		.name = "mma8451",
- 		.chip_id = MMA8451_DEVICE_ID,
- 		.channels = mma8451_channels,
- 		.num_channels = ARRAY_SIZE(mma8451_channels),
-@@ -1325,6 +1327,7 @@ static const struct mma_chip_info mma_chip_info_table[] = {
- 					MMA8452_INT_FF_MT,
- 	},
- 	[mma8452] = {
-+		.name = "mma8452",
- 		.chip_id = MMA8452_DEVICE_ID,
- 		.channels = mma8452_channels,
- 		.num_channels = ARRAY_SIZE(mma8452_channels),
-@@ -1341,6 +1344,7 @@ static const struct mma_chip_info mma_chip_info_table[] = {
- 					MMA8452_INT_FF_MT,
- 	},
- 	[mma8453] = {
-+		.name = "mma8453",
- 		.chip_id = MMA8453_DEVICE_ID,
- 		.channels = mma8453_channels,
- 		.num_channels = ARRAY_SIZE(mma8453_channels),
-@@ -1357,6 +1361,7 @@ static const struct mma_chip_info mma_chip_info_table[] = {
- 					MMA8452_INT_FF_MT,
- 	},
- 	[mma8652] = {
-+		.name = "mma8652",
- 		.chip_id = MMA8652_DEVICE_ID,
- 		.channels = mma8652_channels,
- 		.num_channels = ARRAY_SIZE(mma8652_channels),
-@@ -1366,6 +1371,7 @@ static const struct mma_chip_info mma_chip_info_table[] = {
- 		.enabled_events = MMA8452_INT_FF_MT,
- 	},
- 	[mma8653] = {
-+		.name = "mma8653",
- 		.chip_id = MMA8653_DEVICE_ID,
- 		.channels = mma8653_channels,
- 		.num_channels = ARRAY_SIZE(mma8653_channels),
-@@ -1380,6 +1386,7 @@ static const struct mma_chip_info mma_chip_info_table[] = {
- 		.enabled_events = MMA8452_INT_FF_MT,
- 	},
- 	[fxls8471] = {
-+		.name = "fxls8471",
- 		.chip_id = FXLS8471_DEVICE_ID,
- 		.channels = mma8451_channels,
- 		.num_channels = ARRAY_SIZE(mma8451_channels),
-@@ -1522,13 +1529,6 @@ static int mma8452_probe(struct i2c_client *client,
- 	struct mma8452_data *data;
- 	struct iio_dev *indio_dev;
- 	int ret;
--	const struct of_device_id *match;
--
--	match = of_match_device(mma8452_dt_ids, &client->dev);
--	if (!match) {
--		dev_err(&client->dev, "unknown device model\n");
--		return -ENODEV;
--	}
- 
- 	indio_dev = devm_iio_device_alloc(&client->dev, sizeof(*data));
- 	if (!indio_dev)
-@@ -1537,7 +1537,14 @@ static int mma8452_probe(struct i2c_client *client,
- 	data = iio_priv(indio_dev);
- 	data->client = client;
- 	mutex_init(&data->lock);
--	data->chip_info = match->data;
++static void ccp_dma_release(struct ccp_device *ccp)
++{
++	struct ccp_dma_chan *chan;
++	struct dma_chan *dma_chan;
++	unsigned int i;
 +
-+	data->chip_info = device_get_match_data(&client->dev);
-+	if (!data->chip_info && id) {
-+		data->chip_info = &mma_chip_info_table[id->driver_data];
-+	} else {
-+		dev_err(&client->dev, "unknown device model\n");
-+		return -ENODEV;
++	for (i = 0; i < ccp->cmd_q_count; i++) {
++		chan = ccp->ccp_dma_chan + i;
++		dma_chan = &chan->dma_chan;
++		tasklet_kill(&chan->cleanup_tasklet);
++		list_del_rcu(&dma_chan->device_node);
 +	}
++}
++
+ int ccp_dmaengine_register(struct ccp_device *ccp)
+ {
+ 	struct ccp_dma_chan *chan;
+@@ -737,6 +751,7 @@ int ccp_dmaengine_register(struct ccp_device *ccp)
+ 	return 0;
  
- 	data->vdd_reg = devm_regulator_get(&client->dev, "vdd");
- 	if (IS_ERR(data->vdd_reg))
-@@ -1581,11 +1588,11 @@ static int mma8452_probe(struct i2c_client *client,
- 	}
+ err_reg:
++	ccp_dma_release(ccp);
+ 	kmem_cache_destroy(ccp->dma_desc_cache);
  
- 	dev_info(&client->dev, "registering %s accelerometer; ID 0x%x\n",
--		 match->compatible, data->chip_info->chip_id);
-+		 data->chip_info->name, data->chip_info->chip_id);
+ err_cache:
+@@ -753,6 +768,7 @@ void ccp_dmaengine_unregister(struct ccp_device *ccp)
+ 		return;
  
- 	i2c_set_clientdata(client, indio_dev);
- 	indio_dev->info = &mma8452_info;
--	indio_dev->name = id->name;
-+	indio_dev->name = data->chip_info->name;
- 	indio_dev->modes = INDIO_DIRECT_MODE;
- 	indio_dev->channels = data->chip_info->channels;
- 	indio_dev->num_channels = data->chip_info->num_channels;
-@@ -1810,7 +1817,7 @@ MODULE_DEVICE_TABLE(i2c, mma8452_id);
- static struct i2c_driver mma8452_driver = {
- 	.driver = {
- 		.name	= "mma8452",
--		.of_match_table = of_match_ptr(mma8452_dt_ids),
-+		.of_match_table = mma8452_dt_ids,
- 		.pm	= &mma8452_pm_ops,
- 	},
- 	.probe = mma8452_probe,
+ 	dma_async_device_unregister(dma_dev);
++	ccp_dma_release(ccp);
+ 
+ 	kmem_cache_destroy(ccp->dma_desc_cache);
+ 	kmem_cache_destroy(ccp->dma_cmd_cache);
 -- 
 2.34.1
 

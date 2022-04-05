@@ -2,115 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC054F4B91
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED154F4DCE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1575070AbiDEXCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40972 "EHLO
+        id S1583305AbiDEXwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1456966AbiDEQCf (ORCPT
+        with ESMTP id S1457074AbiDEQCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:02:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C61AFDE02
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:25:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649172339;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8TksMvZLxU5D3wLYdweZNWRXI8BerHHYyfmDHfh4uH8=;
-        b=LJDi9TzNFgedT6ApbPSnY7PYlk32uSzfYfe2NW9ZNs/flh0dzFpJ3YUln0lI1LG3Hhec8k
-        f8/8J9QFD7VyIyg5nur5YjIp7PHuqjdkoPKkt/q2/h11m1syTdOSZ+G17ErqdsSq7WmwCV
-        WUxyk6ZUeNXL8URaWUOncK5lmWu+kMI=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-189-JGcf45s0O-qKYD98qyRAfw-1; Tue, 05 Apr 2022 11:25:38 -0400
-X-MC-Unique: JGcf45s0O-qKYD98qyRAfw-1
-Received: by mail-qv1-f72.google.com with SMTP id j15-20020a05621419cf00b00443ce184f48so7517892qvc.20
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 08:25:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8TksMvZLxU5D3wLYdweZNWRXI8BerHHYyfmDHfh4uH8=;
-        b=y2RQwK5h5CC7bVWkTUkUWWJDRs2SoDNHyT1Dmrt7mzwFFt1ofr7hAHpxJ1rB+BUI2G
-         wtwPbLOQA/bpD0zgpa3J2Dc8Fi+Y+4caqNLUEfduv2sy3jEJ4MHFP1rp85B6bz9DJNM6
-         r4h+IJnYOmjjHkU7AX5yLYwyNAQXn1e608VmtK75hdrrUWZ3116NrqAXxh5a32XnPfom
-         M7S0dMjetoly2c3GDhDT+d6VXRi+1JnoqNAM7iFawB0NgsT/624LN2dFTfvnDSdkz5KZ
-         MlxaSQomk5lv8QDmGRgjOCs5aO34RGW1BfQgWKjlg7FooCwA1WV710djIiQ95b+yr6o2
-         NnTw==
-X-Gm-Message-State: AOAM533EdM6b7Wz6XuaFZOctJIfrg9VFRW/9VudoN0ThXVfWwQN0rplM
-        aliwiTuUizHUhasF28oMsitGnuE5WE1dv4I+GCa/BfydXrV6tKt/6Hz/Zjw2RblaX3HzCHK+7V1
-        sl/opS9u5LUmENpxw9vYLUXRZ
-X-Received: by 2002:a05:620a:1a26:b0:680:ae30:4f3 with SMTP id bk38-20020a05620a1a2600b00680ae3004f3mr2659093qkb.372.1649172338118;
-        Tue, 05 Apr 2022 08:25:38 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyk1CXI1DZ2crMHFuoHw3aJEAaOcePFY/oBq7yxA8t3U2kwtMvwTZgOQ0iyPnS08ku/SZl0Dw==
-X-Received: by 2002:a05:620a:1a26:b0:680:ae30:4f3 with SMTP id bk38-20020a05620a1a2600b00680ae3004f3mr2659069qkb.372.1649172337808;
-        Tue, 05 Apr 2022 08:25:37 -0700 (PDT)
-Received: from [10.32.181.87] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
-        by smtp.googlemail.com with ESMTPSA id 188-20020a3709c5000000b0067b147584c2sm8150698qkj.102.2022.04.05.08.25.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 08:25:37 -0700 (PDT)
-Message-ID: <84d56339-4a8a-6ddb-17cb-12074588ba9c@redhat.com>
-Date:   Tue, 5 Apr 2022 17:25:34 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v5 042/104] KVM: x86/mmu: Track shadow MMIO value/mask
- on a per-VM basis
-Content-Language: en-US
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <b494b94bf2d6a5d841cb76e63e255d4cff906d83.1646422845.git.isaku.yamahata@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <b494b94bf2d6a5d841cb76e63e255d4cff906d83.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 5 Apr 2022 12:02:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0204810CF0F
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:27:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ACD8BB81E50
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 15:27:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5077BC385A1;
+        Tue,  5 Apr 2022 15:27:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649172439;
+        bh=/DCV2yNrKkFlY3sIbdS1XuH+VrVl+6Ab+68ybP9HpLo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MQXOeijMhEla1Cj7eLgmWmBBIFH+rD4Yhwlpz5yfgJEglmi5blaz/z/69bzWNy8Hp
+         Kl8ydUGN/efnr+Anz3HD609aOSf8AXdRpRXkUcQU8BTWc6gu6i9IhO3JNGfI3zAv1t
+         Rrtwe2LSGOGJJc5yhRqqTtJ+xjk+Z6ZSxQ8ViZwNCzAw5dZ/kojGe3S4DshwYwtGl7
+         e30G+K1sCT6iLyV/s37CXqa3kJskUB/MRMiPE39QzkcBOGFqHjS3eaAmO5eeNQCAb/
+         7Wu9BcjYRSmVjbKRVCyqbzNucLjdfXMJS8I8tYYykk8PZOclYMyj4woISfh+zEjaBN
+         ttOKK2YPvID4w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nbl5Q-001sAH-Oh; Tue, 05 Apr 2022 16:27:16 +0100
+Date:   Tue, 05 Apr 2022 16:27:16 +0100
+Message-ID: <87mtgzblez.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     xieming <xieming@kylinos.cn>, sashal@kernel.org,
+        catalin.marinas@arm.com, linux@armlinux.org.uk,
+        linux-kernel@vger.kernel.org, alex.williamson@redhat.com,
+        will@kernel.org, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] kvm/arm64: fixed passthrough gpu into vm on arm64
+In-Reply-To: <20220404170202.GR64706@ziepe.ca>
+References: <20220401090828.614167-1-xieming@kylinos.cn>
+        <87tubcbvgk.wl-maz@kernel.org>
+        <20220404132405.GQ64706@ziepe.ca>
+        <87o81gc3dc.wl-maz@kernel.org>
+        <20220404170202.GR64706@ziepe.ca>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jgg@ziepe.ca, xieming@kylinos.cn, sashal@kernel.org, catalin.marinas@arm.com, linux@armlinux.org.uk, linux-kernel@vger.kernel.org, alex.williamson@redhat.com, will@kernel.org, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/22 20:48, isaku.yamahata@intel.com wrote:
-> +	if (enable_ept) {
-> +		const u64 init_value = enable_tdx ? VMX_EPT_SUPPRESS_VE_BIT : 0ull;
->   		kvm_mmu_set_ept_masks(enable_ept_ad_bits,
-> -				      cpu_has_vmx_ept_execute_only());
-> +				      cpu_has_vmx_ept_execute_only(), init_value);
-> +		kvm_mmu_set_spte_init_value(init_value);
-> +	}
+On Mon, 04 Apr 2022 18:02:02 +0100,
+Jason Gunthorpe <jgg@ziepe.ca> wrote:
+> 
+> On Mon, Apr 04, 2022 at 03:47:11PM +0100, Marc Zyngier wrote:
+> > > I'm guessing it will turn into a SBSA like thing where the ARM ARM is
+> > > kind of vauge but a SOC has to implement Normal-NC in a certain way to
+> > > be functional for the server market.
+> > 
+> > The main issue is that this equivalence isn't architected, so people
+> > can build whatever they want. SBSA means nothing to KVM (or Linux at
+> > large), and there is currently no way to describe which devices are
+> > safe to map as Normal-NC vs Device.
+> 
+> And people have, we know of some ARM SOC's that don't work fully with
+> NORMAL_NC for this usage. That is already a problem for baremetal
+> Linux, let alone KVM..
+> 
+> That is why I likened it to SBSA - if you want to build a server SOC
+> that works with existing server software, you have to support
+> NORMAL_NC in this way. Even if it isn't architected.
 
-I think kvm-intel.ko should use VMX_EPT_SUPPRESS_VE_BIT unconditionally 
-as the init value.  The bit is ignored anyway if the "EPT-violation #VE" 
-execution control is 0.  Otherwise looks good, but I have a couple more 
-crazy ideas:
+I see it the other way around. If it isn't architected (and in this
+case not even detectable in a scalable way), it simply isn't
+supportable by SW.
 
-1) there could even be a test mode where KVM enables the execution 
-control, traps #VE in the exception bitmap, and shouts loudly if it gets 
-a #VE.  That might avoid hard-to-find bugs due to forgetting about 
-VMX_EPT_SUPPRESS_VE_BIT.
+> The KVM challenge, at least, is to support a CPU with working
+> NORMAL_NC to create VM that emulates the same CPU with working
+> NORMAL_NC.
+> 
+> I didn't quite understand your other remarks though - is there a
+> problem here? It seems like yes from the other thread you pointed at?
 
-2) or even, perhaps the init_value for the TDP MMU could set bit 63 
-_unconditionally_, because KVM always sets the NX bit on AMD hardware. 
-That would remove the whole infrastructure to keep shadow_init_value, 
-because it would be constant 0 in mmu.c and constant BIT(63) in tdp_mmu.c.
+The main issue is that we have no idea what the behaviour is on a
+given implementation, and no way to even detect that for a given
+device, NORMAL_NC is a memory type that won't cause any issue.
 
-Sean, what do you think?
+> I would think that KVM should mirror the process page table
+> configuration into the KVM page table and make this into a userspace
+> problem?
 
-Paolo
+But what makes it safe to do this the first place? There are tons of
+HW out there that will simply issue a SError if you generate an
+unaligned access targeting the right device, and letting userspace
+decide on this is simply not acceptable.
 
+> That turns it into a VFIO problem to negotiate with userspace and set
+> the proper pgprot. At least VFIO has a better chance than KVM to
+> consult DT or something to learn about the specific device's
+> properties.
+> 
+> I don't know how VFIO/qemu/etc can make this all work automatically
+> correctly 100% of the time. It seems to me it is the same problem as
+> just basic baremetal "WC" is troubled on ARM in general today. Maybe
+> some tables and a command line option in qemu is the best we can hope
+> for.
+
+Having a firmware description of what can be mapped with what
+attributes would be pretty useful indeed. Not sure how that scales,
+but the platform definitely needs to advertise *something* so that we
+can allow userspace to say something.
+
+> 
+> Long ago I asked that the ARM folks could come with some Linux
+> definition of all the WC-like modes and some arch calls to indicate
+> which one(s) should be used. Nobody seemed interested in doing that,
+> so the above SOC was left non-working in mainline Linux..
+> 
+> > We either have to take userspace's word for it, or rely on some other
+> > heuristics (do this for PCIe, but not anything else). None of which
+> > are entirely safe. Not to mention that no currently available CPU
+> > implements FEAT_DGH.
+> 
+> DHG is an optimization, not a functional requirement. Currently
+> available CPUs use one of the more expensive barriers that are
+> architected to include DHG behavior.
+> 
+> In any event, this is an important optimization. It is why ARMv9 is
+> introducing a new instruction specifically to optmize it.
+
+ARMv9? No, seems like it was introduced in the v8.7 time frame, and
+allowed retroactively from v8.0. N2 has it, but A510 doesn't, while V1
+(an ARMv8.3 part) has it. But at least it is slowly creeping into
+implementations.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

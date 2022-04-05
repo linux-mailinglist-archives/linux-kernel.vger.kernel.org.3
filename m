@@ -2,48 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE394F33A9
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CBB4F2F18
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243006AbiDEJIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
+        id S242435AbiDEJH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239401AbiDEIUD (ORCPT
+        with ESMTP id S239403AbiDEIUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:20:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09A3C682D;
-        Tue,  5 Apr 2022 01:12:30 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1CAC6EE3;
+        Tue,  5 Apr 2022 01:12:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CE8860AFB;
-        Tue,  5 Apr 2022 08:12:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76B21C385A1;
-        Tue,  5 Apr 2022 08:12:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD3B1B81B92;
+        Tue,  5 Apr 2022 08:12:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44960C385A0;
+        Tue,  5 Apr 2022 08:12:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146350;
-        bh=zPCGveBQgJIlDVIMeFHkX0aMMcRrkc0ZJmZXhkmwY1w=;
+        s=korg; t=1649146352;
+        bh=9gVJ8hVCaDqgoBzxse+4FYk1575fvUVWdDSL9iRYPdw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NegGdGIOz7BeNS2tR/XCkzGw4URDZnSGhbUCfyrMt5Z7FlyQI2T+DDFI65cGp+5Jo
-         W/2YX7EwWiCP6+9VJLgP2U5E1GUFwleVFejVPL+AaAAtdPBAv3LoE+0fNB2GX2uRdu
-         DRHWHwBZmpXt/tBQ4BShdzbIkAfN2njGyPnZgz+I=
+        b=PvE7rnbbSddGAFcNPIgDmAEPCKcnAf1TDqy2Zn/e2JpJqSKX5apRYnNvf9Lq585cH
+         jTaA59PTKL+Zj9v5by99lhbsGlnsiajpd0eAfYaEz8rcXuFO1nkpHEZQWhxJZgPPww
+         po+GC8Rd5Ck9fEXWsVqM18I/cu04y+QiXEHTrt7k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
-        Liu Ying <victor.liu@nxp.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0732/1126] phy: dphy: Correct lpx parameter and its derivatives(ta_{get,go,sure})
-Date:   Tue,  5 Apr 2022 09:24:39 +0200
-Message-Id: <20220405070429.076019988@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0733/1126] phy: phy-brcm-usb: fixup BCM4908 support
+Date:   Tue,  5 Apr 2022 09:24:40 +0200
+Message-Id: <20220405070429.105106790@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -61,64 +56,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liu Ying <victor.liu@nxp.com>
+From: Rafał Miłecki <rafal@milecki.pl>
 
-[ Upstream commit 3153fa38e38af566cf6454a03b1dbadaf6f323c0 ]
+[ Upstream commit 32942d33d63d27714ed16a4176e5a99547adb6e0 ]
 
-According to the comment of the function phy_mipi_dphy_get_default_config(),
-it uses minimum D-PHY timings based on MIPI D-PHY specification.  They are
-derived from the valid ranges specified in Section 6.9, Table 14, Page 41
-of the D-PHY specification (v1.2).  The table 14 explicitly mentions that
-the minimum T-LPX parameter is 50 nanoseconds and the minimum TA-SURE
-parameter is T-LPX nanoseconds.  Likewise, the kernel doc of the 'lpx' and
-'ta_sure' members of struct phy_configure_opts_mipi_dphy mentions that
-the minimum values are 50000 picoseconds and @lpx picoseconds respectively.
-Also, the function phy_mipi_dphy_config_validate() checks if cfg->lpx is
-less than 50000 picoseconds and if cfg->ta_sure is less than cfg->lpx,
-which hints the same minimum values.
+Just like every other family BCM4908 should get its own enum value. That
+is required to properly handle it in chipset conditional code.
 
-Without this patch, the function phy_mipi_dphy_get_default_config()
-wrongly sets cfg->lpx to 60000 picoseconds and cfg->ta_sure to 2 * cfg->lpx.
-So, let's correct them to 50000 picoseconds and cfg->lpx respectively.
+The real change is excluding BCM4908 from the PLL reprogramming code
+(see brcmusb_usb3_pll_54mhz()). I'm not sure what's the BCM4908
+reference clock frequency but:
+1. BCM4908 custom driver from Broadcom's SDK doesn't reprogram PLL
+2. Doing that in Linux driver stopped PHY handling some USB 3.0 devices
 
-Note that I've only tested the patch with RM67191 DSI panel on i.MX8mq EVK.
-Help is needed to test with other i.MX8mq, Meson and Rockchip platforms,
-as I don't have the hardwares.
+This change makes USB 3.0 PHY recognize e.g.:
+1. 04e8:6860 - Samsung Electronics Co., Ltd Galaxy series, misc. (MTP mode)
+2. 1058:259f - Western Digital My Passport 259F
 
-Fixes: dddc97e82303 ("phy: dphy: Add configuration helpers")
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-Cc: Neil Armstrong <narmstrong@baylibre.com>
-Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Cc: Kishon Vijay Abraham I <kishon@ti.com>
-Cc: Vinod Koul <vkoul@kernel.org>
-Cc: Heiko Stuebner <heiko@sntech.de>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: Guido Günther <agx@sigxcpu.org>
-Signed-off-by: Liu Ying <victor.liu@nxp.com>
-Link: https://lore.kernel.org/r/20220216071257.1647703-1-victor.liu@nxp.com
+Broadcom's STB SoCs come with a set of SUN_TOP_CTRL_* registers that
+allow reading chip family and product ids. Such a block & register is
+missing on BCM4908 so this commit introduces "compatible" string
+specific binding.
+
+Fixes: 4b402fa8e0b7 ("phy: phy-brcm-usb: support PHY on the BCM4908")
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220218172459.10431-1-zajec5@gmail.com
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/phy-core-mipi-dphy.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/phy/broadcom/phy-brcm-usb-init.c | 36 ++++++++++++++++++++++++
+ drivers/phy/broadcom/phy-brcm-usb-init.h |  1 +
+ drivers/phy/broadcom/phy-brcm-usb.c      | 11 +++++++-
+ 3 files changed, 47 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/phy/phy-core-mipi-dphy.c b/drivers/phy/phy-core-mipi-dphy.c
-index ccb4045685cd..929e86d6558e 100644
---- a/drivers/phy/phy-core-mipi-dphy.c
-+++ b/drivers/phy/phy-core-mipi-dphy.c
-@@ -64,10 +64,10 @@ int phy_mipi_dphy_get_default_config(unsigned long pixel_clock,
- 	cfg->hs_trail = max(4 * 8 * ui, 60000 + 4 * 4 * ui);
+diff --git a/drivers/phy/broadcom/phy-brcm-usb-init.c b/drivers/phy/broadcom/phy-brcm-usb-init.c
+index 9391ab42a12b..dd0f66288fbd 100644
+--- a/drivers/phy/broadcom/phy-brcm-usb-init.c
++++ b/drivers/phy/broadcom/phy-brcm-usb-init.c
+@@ -79,6 +79,7 @@
  
- 	cfg->init = 100;
--	cfg->lpx = 60000;
-+	cfg->lpx = 50000;
- 	cfg->ta_get = 5 * cfg->lpx;
- 	cfg->ta_go = 4 * cfg->lpx;
--	cfg->ta_sure = 2 * cfg->lpx;
-+	cfg->ta_sure = cfg->lpx;
- 	cfg->wakeup = 1000;
+ enum brcm_family_type {
+ 	BRCM_FAMILY_3390A0,
++	BRCM_FAMILY_4908,
+ 	BRCM_FAMILY_7250B0,
+ 	BRCM_FAMILY_7271A0,
+ 	BRCM_FAMILY_7364A0,
+@@ -96,6 +97,7 @@ enum brcm_family_type {
  
- 	cfg->hs_clk_rate = hs_clk_rate;
+ static const char *family_names[BRCM_FAMILY_COUNT] = {
+ 	USB_BRCM_FAMILY(3390A0),
++	USB_BRCM_FAMILY(4908),
+ 	USB_BRCM_FAMILY(7250B0),
+ 	USB_BRCM_FAMILY(7271A0),
+ 	USB_BRCM_FAMILY(7364A0),
+@@ -203,6 +205,27 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
+ 		USB_CTRL_USB_PM_USB20_HC_RESETB_VAR_MASK,
+ 		ENDIAN_SETTINGS, /* USB_CTRL_SETUP ENDIAN bits */
+ 	},
++	/* 4908 */
++	[BRCM_FAMILY_4908] = {
++		0, /* USB_CTRL_SETUP_SCB1_EN_MASK */
++		0, /* USB_CTRL_SETUP_SCB2_EN_MASK */
++		0, /* USB_CTRL_SETUP_SS_EHCI64BIT_EN_MASK */
++		0, /* USB_CTRL_SETUP_STRAP_IPP_SEL_MASK */
++		0, /* USB_CTRL_SETUP_OC3_DISABLE_MASK */
++		0, /* USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK */
++		0, /* USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK */
++		USB_CTRL_USB_PM_XHC_SOFT_RESETB_MASK,
++		USB_CTRL_USB_PM_USB_PWRDN_MASK,
++		0, /* USB_CTRL_USB30_CTL1_XHC_SOFT_RESETB_MASK */
++		0, /* USB_CTRL_USB30_CTL1_USB3_IOC_MASK */
++		0, /* USB_CTRL_USB30_CTL1_USB3_IPP_MASK */
++		0, /* USB_CTRL_USB_DEVICE_CTL1_PORT_MODE_MASK */
++		0, /* USB_CTRL_USB_PM_SOFT_RESET_MASK */
++		0, /* USB_CTRL_SETUP_CC_DRD_MODE_ENABLE_MASK */
++		0, /* USB_CTRL_SETUP_STRAP_CC_DRD_MODE_ENABLE_SEL_MASK */
++		0, /* USB_CTRL_USB_PM_USB20_HC_RESETB_VAR_MASK */
++		0, /* USB_CTRL_SETUP ENDIAN bits */
++	},
+ 	/* 7250b0 */
+ 	[BRCM_FAMILY_7250B0] = {
+ 		USB_CTRL_SETUP_SCB1_EN_MASK,
+@@ -559,6 +582,7 @@ static void brcmusb_usb3_pll_54mhz(struct brcm_usb_init_params *params)
+ 	 */
+ 	switch (params->selected_family) {
+ 	case BRCM_FAMILY_3390A0:
++	case BRCM_FAMILY_4908:
+ 	case BRCM_FAMILY_7250B0:
+ 	case BRCM_FAMILY_7366C0:
+ 	case BRCM_FAMILY_74371A0:
+@@ -1004,6 +1028,18 @@ static const struct brcm_usb_init_ops bcm7445_ops = {
+ 	.set_dual_select = usb_set_dual_select,
+ };
+ 
++void brcm_usb_dvr_init_4908(struct brcm_usb_init_params *params)
++{
++	int fam;
++
++	fam = BRCM_FAMILY_4908;
++	params->selected_family = fam;
++	params->usb_reg_bits_map =
++		&usb_reg_bits_map_table[fam][0];
++	params->family_name = family_names[fam];
++	params->ops = &bcm7445_ops;
++}
++
+ void brcm_usb_dvr_init_7445(struct brcm_usb_init_params *params)
+ {
+ 	int fam;
+diff --git a/drivers/phy/broadcom/phy-brcm-usb-init.h b/drivers/phy/broadcom/phy-brcm-usb-init.h
+index a39f30fa2e99..1ccb5ddab865 100644
+--- a/drivers/phy/broadcom/phy-brcm-usb-init.h
++++ b/drivers/phy/broadcom/phy-brcm-usb-init.h
+@@ -64,6 +64,7 @@ struct  brcm_usb_init_params {
+ 	bool suspend_with_clocks;
+ };
+ 
++void brcm_usb_dvr_init_4908(struct brcm_usb_init_params *params);
+ void brcm_usb_dvr_init_7445(struct brcm_usb_init_params *params);
+ void brcm_usb_dvr_init_7216(struct brcm_usb_init_params *params);
+ void brcm_usb_dvr_init_7211b0(struct brcm_usb_init_params *params);
+diff --git a/drivers/phy/broadcom/phy-brcm-usb.c b/drivers/phy/broadcom/phy-brcm-usb.c
+index 0f1deb6e0eab..2cb3779fcdf8 100644
+--- a/drivers/phy/broadcom/phy-brcm-usb.c
++++ b/drivers/phy/broadcom/phy-brcm-usb.c
+@@ -283,6 +283,15 @@ static const struct attribute_group brcm_usb_phy_group = {
+ 	.attrs = brcm_usb_phy_attrs,
+ };
+ 
++static const struct match_chip_info chip_info_4908 = {
++	.init_func = &brcm_usb_dvr_init_4908,
++	.required_regs = {
++		BRCM_REGS_CTRL,
++		BRCM_REGS_XHCI_EC,
++		-1,
++	},
++};
++
+ static const struct match_chip_info chip_info_7216 = {
+ 	.init_func = &brcm_usb_dvr_init_7216,
+ 	.required_regs = {
+@@ -318,7 +327,7 @@ static const struct match_chip_info chip_info_7445 = {
+ static const struct of_device_id brcm_usb_dt_ids[] = {
+ 	{
+ 		.compatible = "brcm,bcm4908-usb-phy",
+-		.data = &chip_info_7445,
++		.data = &chip_info_4908,
+ 	},
+ 	{
+ 		.compatible = "brcm,bcm7216-usb-phy",
 -- 
 2.34.1
 

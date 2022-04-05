@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E1F4F4106
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77EA44F424D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:43:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389081AbiDEPVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
+        id S1389827AbiDEP11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347021AbiDEJpy (ORCPT
+        with ESMTP id S1347322AbiDEJqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:45:54 -0400
+        Tue, 5 Apr 2022 05:46:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94861DCAB2;
-        Tue,  5 Apr 2022 02:32:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C81DE938;
+        Tue,  5 Apr 2022 02:32:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18A6B61368;
-        Tue,  5 Apr 2022 09:32:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A6EEC385A2;
-        Tue,  5 Apr 2022 09:32:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 804FA6165C;
+        Tue,  5 Apr 2022 09:32:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8490BC385A0;
+        Tue,  5 Apr 2022 09:32:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151134;
-        bh=Znaktkp0TlhhTmv22siN8VXYQMsR80xwUmAM0j+apdc=;
+        s=korg; t=1649151164;
+        bh=lfMoL5Nyc8RJg1qdgYmPYov80y4msIbqIDeHePByH+4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q18bL4XuhWxLox5jJOsAy1UahBegivjT/t0MG+fx8vpq4Jjkh1ClI5B/RJDgz+feO
-         cLt6LVo8NOZBk5RbyJvM28IiSS7k8Qhi09rMzBIHh1x2FlcqLeuubnJwJOYHfrd5sI
-         h49EDUalbGbLRGKr3VJzxcxfCdSC0ssEV9Rce3Ng=
+        b=c6Ez65xHtIkl37RiB/jEfIOVwS7hZvoobcIjwogcSt0imNe2UOI3Wvu1DNrIQ6yd0
+         mOnbCfYHC7OQ7SLoG98DsVnyw9r4Mp4CrAZ9ZD+Gsbnx228MRFj2BELDAWg1JNyTzD
+         A8rovJcuESZXqSYddzqcpv6Y5hYeibiAVEehkVK4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, YueHaibing <yuehaibing@huawei.com>,
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Wang Hai <wanghai38@huawei.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
         Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 289/913] video: fbdev: controlfb: Fix COMPILE_TEST build
-Date:   Tue,  5 Apr 2022 09:22:31 +0200
-Message-Id: <20220405070348.520689482@linuxfoundation.org>
+Subject: [PATCH 5.15 290/913] video: fbdev: smscufx: Fix null-ptr-deref in ufx_usb_probe()
+Date:   Tue,  5 Apr 2022 09:22:32 +0200
+Message-Id: <20220405070348.550368416@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -54,44 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: YueHaibing <yuehaibing@huawei.com>
+From: Wang Hai <wanghai38@huawei.com>
 
-[ Upstream commit 567e44fb51b4f909ae58038a7301352eecea8426 ]
+[ Upstream commit 1791f487f877a9e83d81c8677bd3e7b259e7cb27 ]
 
-If PPC_BOOK3S, PPC_PMAC and PPC32 is n, COMPILE_TEST build fails:
+I got a null-ptr-deref report:
 
-drivers/video/fbdev/controlfb.c:70:0: error: "pgprot_cached_wthru" redefined [-Werror]
- #define pgprot_cached_wthru(prot) (prot)
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+...
+RIP: 0010:fb_destroy_modelist+0x38/0x100
+...
+Call Trace:
+ ufx_usb_probe.cold+0x2b5/0xac1 [smscufx]
+ usb_probe_interface+0x1aa/0x3c0 [usbcore]
+ really_probe+0x167/0x460
+...
+ ret_from_fork+0x1f/0x30
 
-In file included from ./arch/powerpc/include/asm/pgtable.h:20:0,
-                 from ./include/linux/pgtable.h:6,
-                 from ./include/linux/mm.h:33,
-                 from drivers/video/fbdev/controlfb.c:37:
-./arch/powerpc/include/asm/nohash/pgtable.h:243:0: note: this is the location of the previous definition
- #define pgprot_cached_wthru(prot) (__pgprot((pgprot_val(prot) & ~_PAGE_CACHE_CTL) | \
+If fb_alloc_cmap() fails in ufx_usb_probe(), fb_destroy_modelist() will
+be called to destroy modelist in the error handling path. But modelist
+has not been initialized yet, so it will result in null-ptr-deref.
 
-Fixes: a07a63b0e24d ("video: fbdev: controlfb: add COMPILE_TEST support")
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Initialize modelist before calling fb_alloc_cmap() to fix this bug.
+
+Fixes: 3c8a63e22a08 ("Add support for SMSC UFX6000/7000 USB display adapters")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wang Hai <wanghai38@huawei.com>
+Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
 Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/controlfb.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/video/fbdev/smscufx.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/video/fbdev/controlfb.c b/drivers/video/fbdev/controlfb.c
-index 509311471d51..bd59e7b11ed5 100644
---- a/drivers/video/fbdev/controlfb.c
-+++ b/drivers/video/fbdev/controlfb.c
-@@ -67,7 +67,9 @@
- #define out_8(addr, val)	(void)(val)
- #define in_le32(addr)		0
- #define out_le32(addr, val)	(void)(val)
-+#ifndef pgprot_cached_wthru
- #define pgprot_cached_wthru(prot) (prot)
-+#endif
- #else
- static void invalid_vram_cache(void __force *addr)
- {
+diff --git a/drivers/video/fbdev/smscufx.c b/drivers/video/fbdev/smscufx.c
+index bfac3ee4a642..28768c272b73 100644
+--- a/drivers/video/fbdev/smscufx.c
++++ b/drivers/video/fbdev/smscufx.c
+@@ -1656,6 +1656,7 @@ static int ufx_usb_probe(struct usb_interface *interface,
+ 	info->par = dev;
+ 	info->pseudo_palette = dev->pseudo_palette;
+ 	info->fbops = &ufx_ops;
++	INIT_LIST_HEAD(&info->modelist);
+ 
+ 	retval = fb_alloc_cmap(&info->cmap, 256, 0);
+ 	if (retval < 0) {
+@@ -1666,8 +1667,6 @@ static int ufx_usb_probe(struct usb_interface *interface,
+ 	INIT_DELAYED_WORK(&dev->free_framebuffer_work,
+ 			  ufx_free_framebuffer_work);
+ 
+-	INIT_LIST_HEAD(&info->modelist);
+-
+ 	retval = ufx_reg_read(dev, 0x3000, &id_rev);
+ 	check_warn_goto_error(retval, "error %d reading 0x3000 register from device", retval);
+ 	dev_dbg(dev->gdev, "ID_REV register value 0x%08x", id_rev);
 -- 
 2.34.1
 

@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 017B84F44D3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E17804F4542
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353410AbiDEMT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
+        id S1345739AbiDEOzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244988AbiDEIw7 (ORCPT
+        with ESMTP id S1343759AbiDEJlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:59 -0400
+        Tue, 5 Apr 2022 05:41:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DBA3A4;
-        Tue,  5 Apr 2022 01:48:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3ADBD7C0;
+        Tue,  5 Apr 2022 02:27:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB00F61509;
-        Tue,  5 Apr 2022 08:48:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8579C385A1;
-        Tue,  5 Apr 2022 08:48:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E16C616A3;
+        Tue,  5 Apr 2022 09:27:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 586D3C385A0;
+        Tue,  5 Apr 2022 09:27:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148518;
-        bh=TM2CW2otMmrdC61r+VarD9obVtQxh+xCYtRj5/TwWb4=;
+        s=korg; t=1649150841;
+        bh=dJqjmaqKxFV7sUbqP5+pRkKSgwrc/ZXn1ubpRSJTH04=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vF2pGA24MBmwcdw2nxbyeaoIOhZfUz+NBEbJz0y3avlt18CNn/nP7CQDDvxLB5Emo
-         n9V89eyjzKJj6V5aR1hafFcPW4nLahwSEdpfkOPvWgPsP/uw8NJ5HJU4Fx5p57Q+gV
-         U8rY4uu2LlCCtOGaSHVcGNEM9xNE/sekQwbxzi2g=
+        b=DiQGlsILwJu1mEx9YGs0+bBkDCDX8EqBQXknHMru/EPSkn24KVJFkNIpf4y9ObWfU
+         x47OOxOhnf3NZk5ZEP34hUeykLM3aMTCLeyQlYCWUiQw541oALVoGADY9Ey16aouCt
+         zHULhhVKBP2ZDHfjiPKsMNkA3qL21t1TsAz34c0w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        stable@vger.kernel.org, Shijith Thotton <sthotton@marvell.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0347/1017] selftests/lkdtm: Add UBSAN config
-Date:   Tue,  5 Apr 2022 09:21:00 +0200
-Message-Id: <20220405070404.582416841@linuxfoundation.org>
+Subject: [PATCH 5.15 200/913] crypto: octeontx2 - remove CONFIG_DM_CRYPT check
+Date:   Tue,  5 Apr 2022 09:21:02 +0200
+Message-Id: <20220405070345.853750494@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,46 +55,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+From: Shijith Thotton <sthotton@marvell.com>
 
-[ Upstream commit 1900be289b598b2c553b3add13e491c0bb8a8550 ]
+[ Upstream commit 2d841af23ae8f398c85dd1ff2dc24b5ec8ba4569 ]
 
-UBSAN_BOUNDS and UBSAN_TRAP depend on UBSAN config option.
-merge_config.sh script generates following warnings if parent config
-doesn't have UBSAN config already enabled and UBSAN_BOUNDS/UBSAN_TRAP
-config options don't get added to the parent config.
+No issues were found while using the driver with dm-crypt enabled. So
+CONFIG_DM_CRYPT check in the driver can be removed.
 
-Value requested for CONFIG_UBSAN_BOUNDS not in final .config
-Requested value:  CONFIG_UBSAN_BOUNDS=y
-Actual value:
+This also fixes the NULL pointer dereference in driver release if
+CONFIG_DM_CRYPT is enabled.
 
-Value requested for CONFIG_UBSAN_TRAP not in final .config
-Requested value:  CONFIG_UBSAN_TRAP=y
-Actual value:
+...
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
+...
+Call trace:
+ crypto_unregister_alg+0x68/0xfc
+ crypto_unregister_skciphers+0x44/0x60
+ otx2_cpt_crypto_exit+0x100/0x1a0
+ otx2_cptvf_remove+0xf8/0x200
+ pci_device_remove+0x3c/0xd4
+ __device_release_driver+0x188/0x234
+ device_release_driver+0x2c/0x4c
+...
 
-Fix this by including UBSAN config.
-
-Fixes: c75be56e35b2 ("lkdtm/bugs: Add ARRAY_BOUNDS to selftests")
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Acked-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Fixes: 6f03f0e8b6c8 ("crypto: octeontx2 - register with linux crypto framework")
+Signed-off-by: Shijith Thotton <sthotton@marvell.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/lkdtm/config | 1 +
- 1 file changed, 1 insertion(+)
+ .../crypto/marvell/octeontx2/otx2_cptvf_algs.c  | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/lkdtm/config b/tools/testing/selftests/lkdtm/config
-index a26a3fa9e925..8bd847f0463c 100644
---- a/tools/testing/selftests/lkdtm/config
-+++ b/tools/testing/selftests/lkdtm/config
-@@ -6,6 +6,7 @@ CONFIG_HARDENED_USERCOPY=y
- # CONFIG_HARDENED_USERCOPY_FALLBACK is not set
- CONFIG_RANDOMIZE_KSTACK_OFFSET_DEFAULT=y
- CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
-+CONFIG_UBSAN=y
- CONFIG_UBSAN_BOUNDS=y
- CONFIG_UBSAN_TRAP=y
- CONFIG_STACKPROTECTOR_STRONG=y
+diff --git a/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c b/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
+index 877a948469bd..570074e23b60 100644
+--- a/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
++++ b/drivers/crypto/marvell/octeontx2/otx2_cptvf_algs.c
+@@ -1634,16 +1634,13 @@ static inline int cpt_register_algs(void)
+ {
+ 	int i, err = 0;
+ 
+-	if (!IS_ENABLED(CONFIG_DM_CRYPT)) {
+-		for (i = 0; i < ARRAY_SIZE(otx2_cpt_skciphers); i++)
+-			otx2_cpt_skciphers[i].base.cra_flags &=
+-							~CRYPTO_ALG_DEAD;
+-
+-		err = crypto_register_skciphers(otx2_cpt_skciphers,
+-						ARRAY_SIZE(otx2_cpt_skciphers));
+-		if (err)
+-			return err;
+-	}
++	for (i = 0; i < ARRAY_SIZE(otx2_cpt_skciphers); i++)
++		otx2_cpt_skciphers[i].base.cra_flags &= ~CRYPTO_ALG_DEAD;
++
++	err = crypto_register_skciphers(otx2_cpt_skciphers,
++					ARRAY_SIZE(otx2_cpt_skciphers));
++	if (err)
++		return err;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(otx2_cpt_aeads); i++)
+ 		otx2_cpt_aeads[i].base.cra_flags &= ~CRYPTO_ALG_DEAD;
 -- 
 2.34.1
 

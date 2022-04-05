@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE774F4CB2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 692384F4976
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1576664AbiDEXaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34940 "EHLO
+        id S1388224AbiDEWRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:17:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245747AbiDEKjg (ORCPT
+        with ESMTP id S1343740AbiDEKjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:39:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8520CA66E4;
-        Tue,  5 Apr 2022 03:24:28 -0700 (PDT)
+        Tue, 5 Apr 2022 06:39:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652896246;
+        Tue,  5 Apr 2022 03:24:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0400161425;
-        Tue,  5 Apr 2022 10:24:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FAFDC385A0;
-        Tue,  5 Apr 2022 10:24:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07F05B81C8A;
+        Tue,  5 Apr 2022 10:24:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C25EC385A0;
+        Tue,  5 Apr 2022 10:24:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154267;
-        bh=m4hiAk/6h/bxl2cO+xO51ij27/AqALOeX5LrEy91NfA=;
+        s=korg; t=1649154275;
+        bh=xkC4THcyeyD6DsWcBwfm0sleeehwC2J+fOCEexg/DPU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T9dgMV92zGVeJVhH+O8CmxaAdbS3CwKnfmPUyUf4Mwth5VMxlO1d9RqFPcGE1w9po
-         eDW0y2GdS/u5d9lv9S/mEMI/qm/xUyWjvGQhwfj5N2Cq12l5BuvBkDgbIibfG1BDER
-         H4Mk1PNpP0kgiSHTSG63nw6AkXkWlUtqyyqGgLII=
+        b=rT7xaD0+rYS5KtMibT4aAgopm1yLpY98rZqZAtQVRKisKs2+Gje7hin6wwCpVOgKc
+         jMZbzD0N0SWLH/00UesAOtMbWE3nGC3Nv0jevzAlnmoKQfR673RK4hb3Xe6RnRdQYP
+         OVcYEYeEjn8C0U9ztfZ6y7NN0JhdtNUvzTX5RtvE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Quinn Tran <qutran@marvell.com>,
         Nilesh Javali <njavali@marvell.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.10 517/599] scsi: qla2xxx: Fix stuck session in gpdb
-Date:   Tue,  5 Apr 2022 09:33:31 +0200
-Message-Id: <20220405070314.223703023@linuxfoundation.org>
+Subject: [PATCH 5.10 520/599] scsi: qla2xxx: Fix warning for missing error code
+Date:   Tue,  5 Apr 2022 09:33:34 +0200
+Message-Id: <20220405070314.313184067@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -47,50 +46,45 @@ User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
+From: Nilesh Javali <njavali@marvell.com>
 
-commit 725d3a0d31a51c0debf970011e05f585e805165b upstream.
+commit 14cb838d245ae0d523b2f7804af5a02c22e79f5a upstream.
 
-Fix stuck sessions in get port database. When a thread is in the process of
-re-establishing a session, a flag is set to prevent multiple threads /
-triggers from doing the same task. This flag was left on, where any attempt
-to relogin was locked out. Clear this flag, if the attempt has failed.
+Fix smatch-reported warning message:
 
-Link: https://lore.kernel.org/r/20220110050218.3958-4-njavali@marvell.com
+drivers/scsi/qla2xxx/qla_target.c:3324 qlt_xmit_response() warn: missing error
+code 'res'
+
+Link: https://lore.kernel.org/r/20220110050218.3958-12-njavali@marvell.com
+Fixes: 4a8f71014b4d ("scsi: qla2xxx: Fix unmap of already freed sgl")
 Cc: stable@vger.kernel.org
 Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_init.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/scsi/qla2xxx/qla_target.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -1316,9 +1316,9 @@ int qla24xx_async_gpdb(struct scsi_qla_h
- 	if (!vha->flags.online || (fcport->flags & FCF_ASYNC_SENT) ||
- 	    fcport->loop_id == FC_NO_LOOP_ID) {
- 		ql_log(ql_log_warn, vha, 0xffff,
--		    "%s: %8phC - not sending command.\n",
--		    __func__, fcport->port_name);
--		return rval;
-+		    "%s: %8phC online %d flags %x - not sending command.\n",
-+		    __func__, fcport->port_name, vha->flags.online, fcport->flags);
-+		goto done;
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -3256,6 +3256,7 @@ int qlt_xmit_response(struct qla_tgt_cmd
+ 			"RESET-RSP online/active/old-count/new-count = %d/%d/%d/%d.\n",
+ 			vha->flags.online, qla2x00_reset_active(vha),
+ 			cmd->reset_count, qpair->chip_reset);
++		res = 0;
+ 		goto out_unmap_unlock;
  	}
  
- 	sp = qla2x00_get_sp(vha, fcport, GFP_KERNEL);
 
 

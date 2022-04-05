@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D9D4F2109
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5C24F2196
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:09:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbiDECoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 22:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58906 "EHLO
+        id S229888AbiDECoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 22:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiDECnU (ORCPT
+        with ESMTP id S229881AbiDECn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 22:43:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8DFCE388B
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 18:49:09 -0700 (PDT)
+        Mon, 4 Apr 2022 22:43:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A30839E01A
+        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 18:49:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649123349;
+        s=mimecast20190719; t=1649123352;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=95EZeCyII9xxx3gyIQ0ulWF2wAsEmWfCQ2/ndLgG/cw=;
-        b=Fp7AI/alRZXby+WfMaRUNqSLOHb3ML3AYU/Jnp8q17Zna2zLg1FOZ+WMtyKl7Lu8XBFTOQ
-        1x869yngkeDN1TOTfASkMD1U5wzvI4nB/kF9cabejVzzDeqG7ykuWfwSnTqvvzbXmRGcFf
-        aJBAVSIrK0QSswC1TXxnvwGJ8GxxqT4=
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
- [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=cYO5DrzO5I7Lh9p2TuEQvYaoFZvRSzMSA+DH3SoMHTo=;
+        b=hfI+zQZ2Fpc5+9J7Z9vZA74QpYaddqdkrpG0LV/0PEgrHhP6VATbS1Xg5vZYGv75y9mJfG
+        1h82ZTfy8LA9DWJj4FaqryB35ta28lemBLbtTQHYVhdSr/799A+gOlBAyIENs5VLW0YHh3
+        QmPEAZODewV2ZH/JpJlu0X6k4ZJQ02U=
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
+ [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-639-X98yPUgQOqeQUx_o0CL_0w-1; Mon, 04 Apr 2022 21:49:08 -0400
-X-MC-Unique: X98yPUgQOqeQUx_o0CL_0w-1
-Received: by mail-io1-f72.google.com with SMTP id w28-20020a05660205dc00b00645d3cdb0f7so7424115iox.10
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 18:49:08 -0700 (PDT)
+ us-mta-252-Ox7s0Mu4OWaiIjGHp6_6HQ-1; Mon, 04 Apr 2022 21:49:11 -0400
+X-MC-Unique: Ox7s0Mu4OWaiIjGHp6_6HQ-1
+Received: by mail-io1-f69.google.com with SMTP id h10-20020a05660224ca00b0064c77aa4477so7426698ioe.17
+        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 18:49:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=95EZeCyII9xxx3gyIQ0ulWF2wAsEmWfCQ2/ndLgG/cw=;
-        b=G9CE+cOOo7WBdcj+c1x6PzgAdIYo6+S0+phw9Lj2vhwaByPADCLsDECUE8vmTRTShR
-         jEOf4a8uB16i35HEwfMdhSjk1mxgzGBEZHC8krilvz1g1NpkKwfLu/oKPawoaZH/V+60
-         lFxCB0PclIabzQeVP9bOy/SbKKVfygBcgVYER7auqSOactQOZrUZXgLxE3wPh8oqaeGz
-         QrlTzL09zZnhr3NFcrPqpGxdYgIo3KoDtdnBZJn+iLy5qCub9iF1ztc3cXYYT8lDW3pb
-         QLPaYau5+xLOPuGFjyiqn1pXWYrovAH1DUAzrwi16tF8Tg4vMsY2EuRejW5Ce7y8es6j
-         MNdQ==
-X-Gm-Message-State: AOAM530i9GuSyJb8H7N4plPGXl510xG+poHrpgn+7qVVRXGzj6VU4MMI
-        qOT6okACJwXQfZDbLG9s9iW2T3oMCckI/wVdylmY5BUc1BzfLWolUwmefb0GnG6mHp2jxvyTQYS
-        NSBV3sDVkfDnGWt1b44aNc/JHDkyvWcElFOOurZ4XJ4UfxH8B6xNbw8BRnCyOftgHCFRVB8wa9w
+        bh=cYO5DrzO5I7Lh9p2TuEQvYaoFZvRSzMSA+DH3SoMHTo=;
+        b=7SQvukmGTID62w810LkKX048UXSLayUiioMDDEENuzI8f+K1rYkBO/zMKIKJwHpde1
+         OMoZoCzJd5L4aQ4oAuG0aFaUoggqH9BsOgwvfyiY/5m/zX15Qn9HUHQkRxkYrIhep/Ri
+         xbLHGeCqVBvOED5N8kzZuPAH9dd6j1ceSQsl063dJMwhFYIBoxnlk8xQIKT4pUs8EOZn
+         l9/uqcHO6kVSlWpHbklmI/GO1rGIsgpqtkwJdFyfA/5qK4QCfYDeVcprdjjuDbqdrv+h
+         PV8NAEItWrrht+lKzNqdfvsCBXmBAdHWIz4CV+kJHjIS+w+p903A4DNhJn9FApmoWRuv
+         Ak0Q==
+X-Gm-Message-State: AOAM530ir97TpkFR/pdbMJvUnUB9yxK+fiZGKVeBeFmIdsas3pC7sZ+v
+        2eq+sn17B7yymfWt5YOSH2qEZoHLVf5fKYmPBw1IGMWLRY2EyrF1azzhDMvW7bBc/b7f/F0VJam
+        9lHcvj26D1vhZBMYOS+s5XIGYC2XyafHtecKaoZF7xNflaAtiBodgWgKFWpM5H8aXImRNT5Wn1A
         ==
-X-Received: by 2002:a05:6602:13d5:b0:64c:9ef0:65e1 with SMTP id o21-20020a05660213d500b0064c9ef065e1mr588048iov.157.1649123346655;
-        Mon, 04 Apr 2022 18:49:06 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxvBZ1x9YNEIDP6fPb8GcdToNu45lYsI3Q8dcSYoOOQ7uq3K76BU1AVUi+jy6YnevEjPpvOKw==
-X-Received: by 2002:a05:6602:13d5:b0:64c:9ef0:65e1 with SMTP id o21-20020a05660213d500b0064c9ef065e1mr588020iov.157.1649123346392;
-        Mon, 04 Apr 2022 18:49:06 -0700 (PDT)
+X-Received: by 2002:a05:6e02:1aa8:b0:2c9:b67e:170a with SMTP id l8-20020a056e021aa800b002c9b67e170amr627234ilv.254.1649123349557;
+        Mon, 04 Apr 2022 18:49:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzIRnqjIx5iwXEGGjGc+n3hX5DRyLK+ATAlgFSZlW8F/klF7wxFnaQrfq2feLlPULuSJF4kVA==
+X-Received: by 2002:a05:6e02:1aa8:b0:2c9:b67e:170a with SMTP id l8-20020a056e021aa800b002c9b67e170amr627210ilv.254.1649123349195;
+        Mon, 04 Apr 2022 18:49:09 -0700 (PDT)
 Received: from localhost.localdomain (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id b15-20020a05660214cf00b0064cb75d7e97sm7836568iow.53.2022.04.04.18.49.05
+        by smtp.gmail.com with ESMTPSA id u15-20020a92d1cf000000b002ca56804ec4sm473939ilg.23.2022.04.04.18.49.07
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 04 Apr 2022 18:49:06 -0700 (PDT)
+        Mon, 04 Apr 2022 18:49:08 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
@@ -70,9 +70,9 @@ Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Axel Rasmussen <axelrasmussen@google.com>,
         Alistair Popple <apopple@nvidia.com>, peterx@redhat.com
-Subject: [PATCH v8 13/23] mm/hugetlb: Take care of UFFDIO_COPY_MODE_WP
-Date:   Mon,  4 Apr 2022 21:49:04 -0400
-Message-Id: <20220405014904.14643-1-peterx@redhat.com>
+Subject: [PATCH v8 14/23] mm/hugetlb: Handle UFFDIO_WRITEPROTECT
+Date:   Mon,  4 Apr 2022 21:49:06 -0400
+Message-Id: <20220405014906.14708-1-peterx@redhat.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220405014646.13522-1-peterx@redhat.com>
 References: <20220405014646.13522-1-peterx@redhat.com>
@@ -80,7 +80,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,161 +88,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pass the wp_copy variable into hugetlb_mcopy_atomic_pte() thoughout the stack.
-Apply the UFFD_WP bit if UFFDIO_COPY_MODE_WP is with UFFDIO_COPY.
+This starts from passing cp_flags into hugetlb_change_protection() so hugetlb
+will be able to handle MM_CP_UFFD_WP[_RESOLVE] requests.
 
-Hugetlb pages are only managed by hugetlbfs, so we're safe even without setting
-dirty bit in the huge pte if the page is installed as read-only.  However we'd
-better still keep the dirty bit set for a read-only UFFDIO_COPY pte (when
-UFFDIO_COPY_MODE_WP bit is set), not only to match what we do with shmem, but
-also because the page does contain dirty data that the kernel just copied from
-the userspace.
+huge_pte_clear_uffd_wp() is introduced to handle the case where the
+UFFDIO_WRITEPROTECT is requested upon migrating huge page entries.
 
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
  include/linux/hugetlb.h |  6 ++++--
- mm/hugetlb.c            | 29 +++++++++++++++++++++++------
- mm/userfaultfd.c        | 14 +++++++++-----
- 3 files changed, 36 insertions(+), 13 deletions(-)
+ mm/hugetlb.c            | 13 ++++++++++++-
+ mm/mprotect.c           |  3 ++-
+ mm/userfaultfd.c        |  8 ++++++++
+ 4 files changed, 26 insertions(+), 4 deletions(-)
 
 diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 53c1b6082a4c..6347298778b6 100644
+index 6347298778b6..38c5ac28b787 100644
 --- a/include/linux/hugetlb.h
 +++ b/include/linux/hugetlb.h
-@@ -160,7 +160,8 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm, pte_t *dst_pte,
- 				unsigned long dst_addr,
- 				unsigned long src_addr,
- 				enum mcopy_atomic_mode mode,
--				struct page **pagep);
-+				struct page **pagep,
-+				bool wp_copy);
- #endif /* CONFIG_USERFAULTFD */
- bool hugetlb_reserve_pages(struct inode *inode, long from, long to,
- 						struct vm_area_struct *vma,
-@@ -355,7 +356,8 @@ static inline int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
- 						unsigned long dst_addr,
- 						unsigned long src_addr,
- 						enum mcopy_atomic_mode mode,
--						struct page **pagep)
-+						struct page **pagep,
-+						bool wp_copy)
+@@ -210,7 +210,8 @@ struct page *follow_huge_pgd(struct mm_struct *mm, unsigned long address,
+ int pmd_huge(pmd_t pmd);
+ int pud_huge(pud_t pud);
+ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
+-		unsigned long address, unsigned long end, pgprot_t newprot);
++		unsigned long address, unsigned long end, pgprot_t newprot,
++		unsigned long cp_flags);
+ 
+ bool is_hugetlb_entry_migration(pte_t pte);
+ void hugetlb_unshare_all_pmds(struct vm_area_struct *vma);
+@@ -391,7 +392,8 @@ static inline void move_hugetlb_state(struct page *oldpage,
+ 
+ static inline unsigned long hugetlb_change_protection(
+ 			struct vm_area_struct *vma, unsigned long address,
+-			unsigned long end, pgprot_t newprot)
++			unsigned long end, pgprot_t newprot,
++			unsigned long cp_flags)
  {
- 	BUG();
  	return 0;
+ }
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 82df0fcfedf9..c94deead22b2 100644
+index c94deead22b2..2401dd5997b7 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -5795,7 +5795,8 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
- 			    unsigned long dst_addr,
- 			    unsigned long src_addr,
- 			    enum mcopy_atomic_mode mode,
--			    struct page **pagep)
-+			    struct page **pagep,
-+			    bool wp_copy)
+@@ -6207,7 +6207,8 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+ }
+ 
+ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
+-		unsigned long address, unsigned long end, pgprot_t newprot)
++		unsigned long address, unsigned long end,
++		pgprot_t newprot, unsigned long cp_flags)
  {
- 	bool is_continue = (mode == MCOPY_ATOMIC_CONTINUE);
- 	struct hstate *h = hstate_vma(dst_vma);
-@@ -5925,7 +5926,12 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
- 		goto out_release_unlock;
+ 	struct mm_struct *mm = vma->vm_mm;
+ 	unsigned long start = address;
+@@ -6217,6 +6218,8 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
+ 	unsigned long pages = 0;
+ 	bool shared_pmd = false;
+ 	struct mmu_notifier_range range;
++	bool uffd_wp = cp_flags & MM_CP_UFFD_WP;
++	bool uffd_wp_resolve = cp_flags & MM_CP_UFFD_WP_RESOLVE;
  
- 	ret = -EEXIST;
--	if (!huge_pte_none(huge_ptep_get(dst_pte)))
-+	/*
-+	 * We allow to overwrite a pte marker: consider when both MISSING|WP
-+	 * registered, we firstly wr-protect a none pte which has no page cache
-+	 * page backing it, then access the page.
-+	 */
-+	if (!huge_pte_none_mostly(huge_ptep_get(dst_pte)))
- 		goto out_release_unlock;
+ 	/*
+ 	 * In the case of shared PMDs, the area to flush could be beyond
+@@ -6263,6 +6266,10 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
+ 					entry = make_readable_migration_entry(
+ 								swp_offset(entry));
+ 				newpte = swp_entry_to_pte(entry);
++				if (uffd_wp)
++					newpte = pte_swp_mkuffd_wp(newpte);
++				else if (uffd_wp_resolve)
++					newpte = pte_swp_clear_uffd_wp(newpte);
+ 				set_huge_swap_pte_at(mm, address, ptep,
+ 						     newpte, huge_page_size(h));
+ 				pages++;
+@@ -6277,6 +6284,10 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
+ 			old_pte = huge_ptep_modify_prot_start(vma, address, ptep);
+ 			pte = huge_pte_modify(old_pte, newprot);
+ 			pte = arch_make_huge_pte(pte, shift, vma->vm_flags);
++			if (uffd_wp)
++				pte = huge_pte_mkuffd_wp(huge_pte_wrprotect(pte));
++			else if (uffd_wp_resolve)
++				pte = huge_pte_clear_uffd_wp(pte);
+ 			huge_ptep_modify_prot_commit(vma, address, ptep, old_pte, pte);
+ 			pages++;
+ 		}
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index e0a567b66d07..6b0e8c213508 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -455,7 +455,8 @@ unsigned long change_protection(struct vm_area_struct *vma, unsigned long start,
+ 	BUG_ON((cp_flags & MM_CP_UFFD_WP_ALL) == MM_CP_UFFD_WP_ALL);
  
- 	if (vm_shared) {
-@@ -5935,17 +5941,28 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
- 		hugepage_add_new_anon_rmap(page, dst_vma, dst_addr);
- 	}
- 
--	/* For CONTINUE on a non-shared VMA, don't set VM_WRITE for CoW. */
--	if (is_continue && !vm_shared)
-+	/*
-+	 * For either: (1) CONTINUE on a non-shared VMA, or (2) UFFDIO_COPY
-+	 * with wp flag set, don't set pte write bit.
-+	 */
-+	if (wp_copy || (is_continue && !vm_shared))
- 		writable = 0;
+ 	if (is_vm_hugetlb_page(vma))
+-		pages = hugetlb_change_protection(vma, start, end, newprot);
++		pages = hugetlb_change_protection(vma, start, end, newprot,
++						  cp_flags);
  	else
- 		writable = dst_vma->vm_flags & VM_WRITE;
- 
- 	_dst_pte = make_huge_pte(dst_vma, page, writable);
--	if (writable)
--		_dst_pte = huge_pte_mkdirty(_dst_pte);
-+	/*
-+	 * Always mark UFFDIO_COPY page dirty; note that this may not be
-+	 * extremely important for hugetlbfs for now since swapping is not
-+	 * supported, but we should still be clear in that this page cannot be
-+	 * thrown away at will, even if write bit not set.
-+	 */
-+	_dst_pte = huge_pte_mkdirty(_dst_pte);
- 	_dst_pte = pte_mkyoung(_dst_pte);
- 
-+	if (wp_copy)
-+		_dst_pte = huge_pte_mkuffd_wp(_dst_pte);
-+
- 	set_huge_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
- 
- 	(void)huge_ptep_set_access_flags(dst_vma, dst_addr, dst_pte, _dst_pte,
+ 		pages = change_protection_range(vma, start, end, newprot,
+ 						cp_flags);
 diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index b1c875b77fbb..da0b3ed2a6b5 100644
+index da0b3ed2a6b5..58d67f2bf980 100644
 --- a/mm/userfaultfd.c
 +++ b/mm/userfaultfd.c
-@@ -304,7 +304,8 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
- 					      unsigned long dst_start,
- 					      unsigned long src_start,
- 					      unsigned long len,
--					      enum mcopy_atomic_mode mode)
-+					      enum mcopy_atomic_mode mode,
-+					      bool wp_copy)
+@@ -704,6 +704,7 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
+ 			atomic_t *mmap_changing)
  {
- 	int vm_shared = dst_vma->vm_flags & VM_SHARED;
- 	ssize_t err;
-@@ -392,7 +393,7 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
- 		}
+ 	struct vm_area_struct *dst_vma;
++	unsigned long page_mask;
+ 	pgprot_t newprot;
+ 	int err;
  
- 		if (mode != MCOPY_ATOMIC_CONTINUE &&
--		    !huge_pte_none(huge_ptep_get(dst_pte))) {
-+		    !huge_pte_none_mostly(huge_ptep_get(dst_pte))) {
- 			err = -EEXIST;
- 			mutex_unlock(&hugetlb_fault_mutex_table[hash]);
- 			i_mmap_unlock_read(mapping);
-@@ -400,7 +401,8 @@ static __always_inline ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
- 		}
- 
- 		err = hugetlb_mcopy_atomic_pte(dst_mm, dst_pte, dst_vma,
--					       dst_addr, src_addr, mode, &page);
-+					       dst_addr, src_addr, mode, &page,
-+					       wp_copy);
- 
- 		mutex_unlock(&hugetlb_fault_mutex_table[hash]);
- 		i_mmap_unlock_read(mapping);
-@@ -455,7 +457,8 @@ extern ssize_t __mcopy_atomic_hugetlb(struct mm_struct *dst_mm,
- 				      unsigned long dst_start,
- 				      unsigned long src_start,
- 				      unsigned long len,
--				      enum mcopy_atomic_mode mode);
-+				      enum mcopy_atomic_mode mode,
-+				      bool wp_copy);
- #endif /* CONFIG_HUGETLB_PAGE */
- 
- static __always_inline ssize_t mfill_atomic_pte(struct mm_struct *dst_mm,
-@@ -575,7 +578,8 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
- 	 */
- 	if (is_vm_hugetlb_page(dst_vma))
- 		return  __mcopy_atomic_hugetlb(dst_mm, dst_vma, dst_start,
--						src_start, len, mcopy_mode);
-+					       src_start, len, mcopy_mode,
-+					       wp_copy);
- 
- 	if (!vma_is_anonymous(dst_vma) && !vma_is_shmem(dst_vma))
+@@ -740,6 +741,13 @@ int mwriteprotect_range(struct mm_struct *dst_mm, unsigned long start,
+ 	if (!vma_is_anonymous(dst_vma))
  		goto out_unlock;
+ 
++	if (is_vm_hugetlb_page(dst_vma)) {
++		err = -EINVAL;
++		page_mask = vma_kernel_pagesize(dst_vma) - 1;
++		if ((start & page_mask) || (len & page_mask))
++			goto out_unlock;
++	}
++
+ 	if (enable_wp)
+ 		newprot = vm_get_page_prot(dst_vma->vm_flags & ~(VM_WRITE));
+ 	else
 -- 
 2.32.0
 

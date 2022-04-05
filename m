@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 709054F4B8A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:02:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 928DE4F4C7F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574964AbiDEXCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:02:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
+        id S1578520AbiDEXXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357900AbiDEK1Y (ORCPT
+        with ESMTP id S1357914AbiDEK10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9532515BC;
-        Tue,  5 Apr 2022 03:11:09 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9426522DE;
+        Tue,  5 Apr 2022 03:11:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BDD46172B;
-        Tue,  5 Apr 2022 10:11:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22983C385A1;
-        Tue,  5 Apr 2022 10:11:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 34BC1B81C88;
+        Tue,  5 Apr 2022 10:11:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A498BC385A1;
+        Tue,  5 Apr 2022 10:11:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153468;
-        bh=AhpTxZ7Xbf8FRRKK2R0+ENp23MVF1F4aTDQkIWZarUc=;
+        s=korg; t=1649153474;
+        bh=+vNkrn4fO5sUcF7UdHE0tr717ptuDd7aFb+5A8RKrkE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=unv9jZNdUsHRrPN9klg2gmCMAPT4cMwtZi28wUsryuA9QtUSpiHQxWG5PWkC4Tjoe
-         QleZsLsGZ0OvcqSJASXuQ1kSfR3FtesyxVXO0CRVybt/6eb6GuG7ba6N8EJjD3CPu8
-         kK4p9Va55lBKt2bbaLrYHpfan5qOhwaiFGw0y3VY=
+        b=1pfB0kNJy8qm2XTNKjSSq50DSaCo6cGBeXtvj2LhZ2zz6IbRmBF1+cTwR8lc/bh/B
+         +vF4TpGXGx7vIG8xUPJhzrOVtkh4olU91UQX2Cr37gaH5Ufz6YTYtCpfMP4ahZ4UUa
+         2HDjR0AkIn6eOZoSE3o07Giru4kh7jpswC7n9/l0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Jia-Ju Bai <baijiaju1990@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 231/599] ASoC: soc-compress: prevent the potentially use of null pointer
-Date:   Tue,  5 Apr 2022 09:28:45 +0200
-Message-Id: <20220405070305.715516367@linuxfoundation.org>
+Subject: [PATCH 5.10 233/599] memory: emif: check the pointer temp in get_device_details()
+Date:   Tue,  5 Apr 2022 09:28:47 +0200
+Message-Id: <20220405070305.774722704@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -57,63 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Jia-Ju Bai <baijiaju1990@gmail.com>
 
-[ Upstream commit de2c6f98817fa5decb9b7d3b3a8a3ab864c10588 ]
+[ Upstream commit 5b5ab1bfa1898c6d52936a57c25c5ceba2cb2f87 ]
 
-There is one call trace that snd_soc_register_card()
-->snd_soc_bind_card()->soc_init_pcm_runtime()
-->snd_soc_dai_compress_new()->snd_soc_new_compress().
-In the trace the 'codec_dai' transfers from card->dai_link,
-and we can see from the snd_soc_add_pcm_runtime() in
-snd_soc_bind_card() that, if value of card->dai_link->num_codecs
-is 0, then 'codec_dai' could be null pointer caused
-by index out of bound in 'asoc_rtd_to_codec(rtd, 0)'.
-And snd_soc_register_card() is called by various platforms.
-Therefore, it is better to add the check in the case of misusing.
-And because 'cpu_dai' has already checked in soc_init_pcm_runtime(),
-there is no need to check again.
-Adding the check as follow, then if 'codec_dai' is null,
-snd_soc_new_compress() will not pass through the check
-'if (playback + capture != 1)', avoiding the leftover use of
-'codec_dai'.
+The pointer temp is allocated by devm_kzalloc(), so it should be
+checked for error handling.
 
-Fixes: 467fece ("ASoC: soc-dai: move snd_soc_dai_stream_valid() to soc-dai.c")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/1634285633-529368-1-git-send-email-jiasheng@iscas.ac.cn
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 7ec944538dde ("memory: emif: add basic infrastructure for EMIF driver")
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+Link: https://lore.kernel.org/r/20220225132552.27894-1-baijiaju1990@gmail.com
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/soc-compress.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ drivers/memory/emif.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/soc-compress.c b/sound/soc/soc-compress.c
-index 3a6a60215e81..5a1702d926ae 100644
---- a/sound/soc/soc-compress.c
-+++ b/sound/soc/soc-compress.c
-@@ -767,12 +767,14 @@ int snd_soc_new_compress(struct snd_soc_pcm_runtime *rtd, int num)
+diff --git a/drivers/memory/emif.c b/drivers/memory/emif.c
+index 55d4c842fcd9..5a059be3516c 100644
+--- a/drivers/memory/emif.c
++++ b/drivers/memory/emif.c
+@@ -1403,7 +1403,7 @@ static struct emif_data *__init_or_module get_device_details(
+ 	temp	= devm_kzalloc(dev, sizeof(*pd), GFP_KERNEL);
+ 	dev_info = devm_kzalloc(dev, sizeof(*dev_info), GFP_KERNEL);
+ 
+-	if (!emif || !pd || !dev_info) {
++	if (!emif || !temp || !dev_info) {
+ 		dev_err(dev, "%s:%d: allocation error\n", __func__, __LINE__);
+ 		goto error;
  	}
- 
- 	/* check client and interface hw capabilities */
--	if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_PLAYBACK) &&
--	    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_PLAYBACK))
--		playback = 1;
--	if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_CAPTURE) &&
--	    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_CAPTURE))
--		capture = 1;
-+	if (codec_dai) {
-+		if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_PLAYBACK) &&
-+		    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_PLAYBACK))
-+			playback = 1;
-+		if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_CAPTURE) &&
-+		    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_CAPTURE))
-+			capture = 1;
-+	}
- 
- 	/*
- 	 * Compress devices are unidirectional so only one of the directions
 -- 
 2.34.1
 

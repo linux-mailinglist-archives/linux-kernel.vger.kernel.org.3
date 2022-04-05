@@ -2,115 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF304F2182
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF684F217B
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 06:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbiDECVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 4 Apr 2022 22:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
+        id S229690AbiDECV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 4 Apr 2022 22:21:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiDECVQ (ORCPT
+        with ESMTP id S229668AbiDECVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 4 Apr 2022 22:21:16 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116033E9404
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 18:15:58 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id j83so11897180oih.6
-        for <linux-kernel@vger.kernel.org>; Mon, 04 Apr 2022 18:15:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VzJuXZ9eAb1KbZEWv1/dEtK+XWHxhBleYz6kLAiV4gY=;
-        b=DrvygdXalZezWv1MQ0WRDEj5UYJ64eGH5HWGqltOYGkdKAnx/lPrgsAzLeDlQlfReh
-         DLqg5JQUTauq8DJ9XI3od9xUX/XR6rjV9ix4i3/LCFQyrVljE4DUEVF2yrIOrt7BQ5iv
-         eq3r4dTrEsVrQSEXFFacl93v7o+8bElG1jD46buEPbSGemMOD+6uYUipRQADDtyijF3a
-         d6s5ILB0McS8+A9XY6n35Dg0+KouaIpGxGdNXk+upukO8Hou36++SYmi1MSuiz8cRdF4
-         EiXBnZaH+CEYggJQ4lwbRQQEgmBjVqRK62KmdWKfX1C71bb75zSrdYRhyKNzORnej2Lt
-         719g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VzJuXZ9eAb1KbZEWv1/dEtK+XWHxhBleYz6kLAiV4gY=;
-        b=FwRAjNi02PAVKCT4wSXUbM0mHoLtWC9ifNF9dLuOcd1UZxyZUgQGwRlExAgWAmTFsQ
-         afDu4sKZbVm3xNrKnOYuJOK9g2nl4tMXAfUZJfnpPQUXB2fC3/BUHvsWVlDwU4JPW3En
-         5EvVGHFNWvnEaW3vhZmQJMwWgYIYeVR9pKjX5hamJGa+dMQgdpNalBsirXwbAZAfaNHk
-         YN42RETOuwXvbxvI/UJNWUBTBxnUzSMmJvNI+KK91OOKC8g7jf+VqlPX4I4TRtMoMJ3b
-         CcIuItj2E2fHMNCxUw6biSZifeKMxuERxVMT+8egOlVtrtgI4s1g8t0WphIjrwqdX5Lf
-         VSag==
-X-Gm-Message-State: AOAM5331mgD9DhnLoMQNKU4X/2g5Hz1oT/BaDeKa1OaCW/Y2mQNJ9+D6
-        Dw67lBbiT/8HCavN3yez+T4=
-X-Google-Smtp-Source: ABdhPJyotuFQtGaDCSLIsEJnKpCvz+zqmaRK8vQTtrNMYpSYYIZHAm4+PGP/+cy0cBO4nvHgtiffvw==
-X-Received: by 2002:aca:2b0b:0:b0:2da:3ed3:f862 with SMTP id i11-20020aca2b0b000000b002da3ed3f862mr479814oik.65.1649121058510;
-        Mon, 04 Apr 2022 18:10:58 -0700 (PDT)
-Received: from bertie (072-190-140-117.res.spectrum.com. [72.190.140.117])
-        by smtp.gmail.com with ESMTPSA id j4-20020a9d7384000000b005b23499b66dsm5243274otk.23.2022.04.04.18.10.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 18:10:58 -0700 (PDT)
-From:   Rebecca Mckeever <remckee0@gmail.com>
-To:     outreachy@lists.linux.dev
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Rebecca Mckeever <remckee0@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH 2/2] staging: rtl8723bs: combine both sides of conditional statement
-Date:   Mon,  4 Apr 2022 20:10:44 -0500
-Message-Id: <23cfd782614e09f57a514aab68407183702b0a2c.1649120568.git.remckee0@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <cover.1649120568.git.remckee0@gmail.com>
-References: <cover.1649120568.git.remckee0@gmail.com>
+        Mon, 4 Apr 2022 22:21:54 -0400
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC8A41856B;
+        Mon,  4 Apr 2022 18:17:08 -0700 (PDT)
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 2351D5xo003801;
+        Tue, 5 Apr 2022 10:13:05 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 2351D5xo003801
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1649121185;
+        bh=1XB8+03FMw6quXMbGDHBGH2OtifIRC6gyEDeKLl9zco=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=fykuV1TsMj3k9Ws57DHlBBiTRfCJLa78wHm24isrFs0OYjWLYXMwTpBYPIq4cXIEn
+         HbOl44nWGcfnHr7bWwaB7WnXkTOOfHkk6+jdAmUjgu4Ndoevp2LwXY3h4udSNspNqP
+         vqdDv5VRBBqCoS/VT7h39RpohTeG1pg896jeODp9E4NQh+Sd78v12Z6++gJ6PnlzYP
+         L8It+ZYbHlhIJWQ1iMWnGF8CYqvynrJxAFL6w72QZb8r+++bKVfZ+kTyvQYYPvSiCM
+         SzCvzpqI0sJxlfL/s/jJtSPm/hmJCMC5Aqg82tgHAACtvpK/A51PmBOuRL2dfZPuBp
+         hO3NWsHy8f70Q==
+X-Nifty-SrcIP: [209.85.215.172]
+Received: by mail-pg1-f172.google.com with SMTP id 125so1420894pgc.11;
+        Mon, 04 Apr 2022 18:13:05 -0700 (PDT)
+X-Gm-Message-State: AOAM532dgC25C3ebR1RXPtQl+w0G1FdAUP3WmD0agZ99S01hrjQrrqMB
+        ByahInHY5xGkqtG0ZhB/KcTO780LNK6GweZnrUk=
+X-Google-Smtp-Source: ABdhPJzLBjj4278xvNykiD3w2yfsWF6xRsbcL3Ms+s4YFFRyIBmJxQbqTeWwwPYUkRsLo2sjYt6EdjjfGmwkd6VfZgE=
+X-Received: by 2002:a05:6a00:234f:b0:4fa:f52b:46a1 with SMTP id
+ j15-20020a056a00234f00b004faf52b46a1mr1137771pfj.32.1649121184875; Mon, 04
+ Apr 2022 18:13:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220404061948.2111820-1-masahiroy@kernel.org>
+ <20220404061948.2111820-3-masahiroy@kernel.org> <YkqhQhJIQEL2qh8C@infradead.org>
+ <YkssI2uDHRq41zjw@google.com>
+In-Reply-To: <YkssI2uDHRq41zjw@google.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 5 Apr 2022 10:12:17 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQDD4u5acyG7m4mziz-nz3D2u+ukdZZB+jZah_3JZFMTQ@mail.gmail.com>
+Message-ID: <CAK7LNAQDD4u5acyG7m4mziz-nz3D2u+ukdZZB+jZah_3JZFMTQ@mail.gmail.com>
+Subject: Re: [PATCH 2/8] kbuild: prevent exported headers from including
+ <stdlib.h>, <stdbool.h>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both sides of conditional statement are the same except for the comment.
-Additional instances found with git grep.
+On Tue, Apr 5, 2022 at 2:34 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> On Mon, Apr 04, 2022 at 12:41:54AM -0700, Christoph Hellwig wrote:
+> > On Mon, Apr 04, 2022 at 03:19:42PM +0900, Masahiro Yamada wrote:
+> > > If we can make kernel headers self-contained (that is, none of exported
+> > > kernel headers includes system headers), we will be able to add the
+> > > -nostdinc flag, but that is much far from where we stand now.
+>
+> This is something I'd like to see done. IMO, the kernel headers should
+> be the independent variable of which the libc is the dependendent
+> variable.
+>
+> Android's libc, Bionic, is making use of the UAPI headers. They are
+> doing some rewriting of UAPI headers, but I'd like to see what needs to
+> be upstreamed from there. I just noticed
+> include/uapi/linux/libc-compat.h, which seems like a good place for such
+> compat related issues.
+>
+> In particular, having UAPI_HEADER_TESTS depend on CC_CAN_LINK is
+> something I think we can works towards removing. The header tests
+> themselves don't link; they force a dependency on a prebuilt libc
+> sysroot, and they only need the headers from the sysroot because of this
+> existing circular dependency between kernel headers and libc headers.
+>
+> I'd be happy to be explicitly cc'ed on changes like this series, going
+> forward. Masahiro, if there's parts you'd like me to help with besides
+> just code review, please let me know how I can help.
 
-Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
----
- drivers/staging/rtl8723bs/core/rtw_cmd.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/staging/rtl8723bs/core/rtw_cmd.c b/drivers/staging/rtl8723bs/core/rtw_cmd.c
-index c16a2b644296..b4170f64d118 100644
---- a/drivers/staging/rtl8723bs/core/rtw_cmd.c
-+++ b/drivers/staging/rtl8723bs/core/rtw_cmd.c
-@@ -1885,11 +1885,9 @@ void rtw_survey_cmd_callback(struct adapter *padapter,  struct cmd_obj *pcmd)
- {
- 	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
- 
--	if (pcmd->res == H2C_DROPPED) {
-+	if (pcmd->res != H2C_SUCCESS) {
- 		/* TODO: cancel timer and do timeout handler directly... */
- 		_set_timer(&pmlmepriv->scan_to_timer, 1);
--	} else if (pcmd->res != H2C_SUCCESS) {
--		_set_timer(&pmlmepriv->scan_to_timer, 1);
- 	}
- 
- 	/*  free cmd */
-@@ -1915,11 +1913,9 @@ void rtw_joinbss_cmd_callback(struct adapter *padapter,  struct cmd_obj *pcmd)
- {
- 	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
- 
--	if (pcmd->res == H2C_DROPPED) {
-+	if (pcmd->res != H2C_SUCCESS) {
- 		/* TODO: cancel timer and do timeout handler directly... */
- 		_set_timer(&pmlmepriv->assoc_timer, 1);
--	} else if (pcmd->res != H2C_SUCCESS) {
--		_set_timer(&pmlmepriv->assoc_timer, 1);
- 	}
- 
- 	rtw_free_cmd_obj(pcmd);
+I wanted to make uapi headers as self-contained as possible,
+but I did not see much progress.
+
+I just fixed up some low-hanging fruits, but there are still
+many remaining issues.
+
+Thank you very much for your contribution:
+https://lore.kernel.org/all/20220404175448.46200-1-ndesaulniers@google.com/
+
+If you eliminate other issues, that would be appreciated.
+
+
+> >
+> > What is still missing for that?
+
+
+
 -- 
-2.32.0
-
+Best Regards
+Masahiro Yamada

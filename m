@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8C54F3B6F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F1634F3AAB
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358224AbiDEL40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
+        id S1381558AbiDELqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244932AbiDEIws (ORCPT
+        with ESMTP id S244871AbiDEIwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44B324974;
-        Tue,  5 Apr 2022 01:46:54 -0700 (PDT)
+        Tue, 5 Apr 2022 04:52:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D47723BE7;
+        Tue,  5 Apr 2022 01:45:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40B9A614FD;
-        Tue,  5 Apr 2022 08:46:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5145FC385A0;
-        Tue,  5 Apr 2022 08:46:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7EE7B81A32;
+        Tue,  5 Apr 2022 08:45:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D0E7C385A0;
+        Tue,  5 Apr 2022 08:45:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148413;
-        bh=gzrI5m1mpGo1ZohUL07d1Mg3ie4Wh1dm3KyQxDJYnbE=;
+        s=korg; t=1649148309;
+        bh=IdHOfcdyxjUCR1Gm4psyeMpj7chrQvNYmO+IVfQQmTI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xVxeAaneyb2hMwOvzZ4XDRRcjbcqkEEhhUDcCRzhtahSgFaS73C5omONBxxB15s7v
-         TNQrLvFU9CH6c+tPla9PlZvjrOsGVZ1YkaLuBjJ28XxOV/XHRlCENS1yvtimO0Uha7
-         xmz0u7JaRJB8HjiOtmIdPdMWGFFHsmJtTLp2bsAY=
+        b=jlppnTLZ3ExebeDpzRVrd1JjFTMFIgqt+GvPFeB+CIBzmWxGavhtXQZN69+Em7r5F
+         8M3wraFRoNIcw4TGTDpKC7sO5Nw4WzQe0o79y4IswksRFWmFIL+Jylzw3hJsn8lZ8D
+         5/m8w6rlnq2amhw0iqUCjCF7GPn2Zto05DUVq3Lw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
+        stable@vger.kernel.org, Pavel Kubelun <be.dissent@gmail.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0309/1017] arm64: dts: qcom: sc7280: Fix gmu unit address
-Date:   Tue,  5 Apr 2022 09:20:22 +0200
-Message-Id: <20220405070403.448629479@linuxfoundation.org>
+        Sasha Levin <sashal@kernel.org>,
+        Christian Lamparter <chunkeey@gmail.com>
+Subject: [PATCH 5.16 0311/1017] ARM: dts: qcom: ipq4019: fix sleep clock
+Date:   Tue,  5 Apr 2022 09:20:24 +0200
+Message-Id: <20220405070403.507853341@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -57,41 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Douglas Anderson <dianders@chromium.org>
+From: Pavel Kubelun <be.dissent@gmail.com>
 
-[ Upstream commit 142a4d995c6adb6bf5b22166f51b525e83c96661 ]
+[ Upstream commit 3d7e7980993d2c1ae42d3d314040fc2de6a9c45f ]
 
-When processing sc7280 device trees, I can see:
+It seems like sleep_clk was copied from ipq806x.
+Fix ipq40xx sleep_clk to the value QSDK defines.
 
-  Warning (simple_bus_reg): /soc@0/gmu@3d69000:
-    simple-bus unit address format error, expected "3d6a000"
-
-There's a clear typo in the node name. Fix it.
-
-Fixes: 96c471970b7b ("arm64: dts: qcom: sc7280: Add gpu support")
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Link: https://source.codeaurora.org/quic/qsdk/oss/kernel/linux-msm/commit/?id=d92ec59973484acc86dd24b67f10f8911b4b4b7d
+Link: https://patchwork.kernel.org/comment/22721613/
+Fixes: bec6ba4cdf2a ("qcom: ipq4019: Add basic board/dts support for IPQ4019 SoC")
+Suggested-by: Bjorn Andersson <bjorn.andersson@linaro.org> (clock-output-names)
+Signed-off-by: Pavel Kubelun <be.dissent@gmail.com>
+Signed-off-by: Christian Lamparter <chunkeey@gmail.com> (removed clock rename)
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220125144316.v2.1.I19f60014e9be4b9dda4d66b5d56ef3d9600b6e10@changeid
+Link: https://lore.kernel.org/r/20211220170352.34591-1-chunkeey@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/qcom-ipq4019.dtsi | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 6e27a1beaa33..68a5740bc360 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -1785,7 +1785,7 @@
- 			};
+diff --git a/arch/arm/boot/dts/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom-ipq4019.dtsi
+index ff1bdb10ad19..08bc5f46649d 100644
+--- a/arch/arm/boot/dts/qcom-ipq4019.dtsi
++++ b/arch/arm/boot/dts/qcom-ipq4019.dtsi
+@@ -142,7 +142,8 @@
+ 	clocks {
+ 		sleep_clk: sleep_clk {
+ 			compatible = "fixed-clock";
+-			clock-frequency = <32768>;
++			clock-frequency = <32000>;
++			clock-output-names = "gcc_sleep_clk_src";
+ 			#clock-cells = <0>;
  		};
  
--		gmu: gmu@3d69000 {
-+		gmu: gmu@3d6a000 {
- 			compatible="qcom,adreno-gmu-635.0", "qcom,adreno-gmu";
- 			reg = <0 0x03d6a000 0 0x34000>,
- 				<0 0x3de0000 0 0x10000>,
 -- 
 2.34.1
 

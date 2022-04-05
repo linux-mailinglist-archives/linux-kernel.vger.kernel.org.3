@@ -2,195 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E10C24F4F14
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:57:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 995834F4C86
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:19:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1836889AbiDFAkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60386 "EHLO
+        id S1578666AbiDEXY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:24:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443779AbiDEPkR (ORCPT
+        with ESMTP id S1443718AbiDEPkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:40:17 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E286FA19
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:59:32 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id p8so12164900pfh.8
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 06:59:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qFXomhHOlRXcuYSu2VTavCR7TmWd+0G4V458iu5OlvM=;
-        b=OVBa/4kqlzEmoELnAN/0mTt7ddoTItJ9fZOzsluUCzvlxHMR5LlEa27+4wKNj5HY6l
-         +dyO0RsQWJ6qLatkdPD/jGzsPIMYdGh5eFBWWTIrqy0h1UUjAKJB3GK64uXY9mINapJk
-         0WSq0I3m+H1SMzflZQTJAE0Noyhbt0DrGXZACefS+TlygUS6Y46xm/rCU2Jy5t1NGxtt
-         69mho63QClXfvK59CKWQ98iQUiGavxUhtFyoshI6ZrvXjvM4zblZo804r3V54YV533gE
-         +MaxlSgY/vQa/BJGlrV03g4yekDtbsAiXn6KfpaJWjrdIrHAkmYPh1reIhgiPb7vuAsm
-         QcZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qFXomhHOlRXcuYSu2VTavCR7TmWd+0G4V458iu5OlvM=;
-        b=L7FhKadSCYLm2anALYZdHK6qlFIgM4pkvCRZxqc3A9p7VKWEeYdDaD3By49m4AsBck
-         Jp+Ft1SI1NaIjzcJHXhdIKliL7nxZ0zlssmJxUgdRNziWArBn6sesbWh2AqJ7I2BRHLS
-         bONCt/r80+jVceyqNFRuHW0sHy8YbPVBg+munEiV8JikL4uajIU8yRvkufZ8l9vf+o92
-         1B8p+cJonWB2VNJ5reDjft6rrZPSJo5Y+VNUBhhGtQUZVQ48s2Zv+mgEARiw8apwKnnC
-         XCbUPssiNcrhWkS+0EblDWe+nXUrnjwYtCD1sGknvET1EXwWcWHfb8vG7vHc0f4AK1JE
-         AhEA==
-X-Gm-Message-State: AOAM530VIOQzzen2+C8rtmeOletGLII2HYXoGtQbuWfnZW01puosbBa0
-        xD/iJTCbFzDUXJWXtJuUiArd
-X-Google-Smtp-Source: ABdhPJzjAFMtlNNMcn978sSk84yQ8/SjT7VR0/m3/NHEsGVrvtmAG9H/ATIZenHZztmnx3vaqBC0FQ==
-X-Received: by 2002:a05:6a00:27a2:b0:4fa:e893:bb68 with SMTP id bd34-20020a056a0027a200b004fae893bb68mr3688149pfb.82.1649167171771;
-        Tue, 05 Apr 2022 06:59:31 -0700 (PDT)
-Received: from localhost.localdomain ([59.92.98.98])
-        by smtp.gmail.com with ESMTPSA id u14-20020a056a00124e00b004fab8f3245fsm16785402pfi.149.2022.04.05.06.59.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 06:59:31 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        elder@linaro.org, mhi@lists.linux.dev, quic_hemantk@quicinc.com,
-        quic_bbhatt@quicinc.com, quic_jhugo@quicinc.com,
-        bjorn.andersson@linaro.org, dmitry.baryshkov@linaro.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 17/18] bus: mhi: ep: Add support for suspending and resuming channels
-Date:   Tue,  5 Apr 2022 19:27:53 +0530
-Message-Id: <20220405135754.6622-18-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220405135754.6622-1-manivannan.sadhasivam@linaro.org>
-References: <20220405135754.6622-1-manivannan.sadhasivam@linaro.org>
+        Tue, 5 Apr 2022 11:40:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B738814FB99
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:58:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5268C61910
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 13:58:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D18DAC385A4;
+        Tue,  5 Apr 2022 13:58:21 +0000 (UTC)
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 08/10] mm/slab: Allow dynamic kmalloc() minimum alignment
+Date:   Tue,  5 Apr 2022 14:57:56 +0100
+Message-Id: <20220405135758.774016-9-catalin.marinas@arm.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220405135758.774016-1-catalin.marinas@arm.com>
+References: <20220405135758.774016-1-catalin.marinas@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for suspending and resuming the channels in MHI endpoint stack.
-The channels will be moved to the suspended state during M3 state
-transition and will be resumed during M0 transition.
+ARCH_KMALLOC_MINALIGN represents the minimum guaranteed kmalloc()
+alignment but an architecture may require a larger run-time alignment.
+Do not create kmalloc caches smaller than arch_kmalloc_minalign().
 
-Reviewed-by: Alex Elder <elder@linaro.org>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
 ---
- drivers/bus/mhi/ep/internal.h |  2 ++
- drivers/bus/mhi/ep/main.c     | 58 +++++++++++++++++++++++++++++++++++
- drivers/bus/mhi/ep/sm.c       |  5 +++
- 3 files changed, 65 insertions(+)
+ include/linux/slab.h |  2 ++
+ mm/slab.c            |  6 +-----
+ mm/slab.h            |  2 ++
+ mm/slab_common.c     | 33 +++++++++++++++++++++++----------
+ 4 files changed, 28 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/bus/mhi/ep/internal.h b/drivers/bus/mhi/ep/internal.h
-index d201d755560c..a2125fa5fe2f 100644
---- a/drivers/bus/mhi/ep/internal.h
-+++ b/drivers/bus/mhi/ep/internal.h
-@@ -212,5 +212,7 @@ int mhi_ep_set_m0_state(struct mhi_ep_cntrl *mhi_cntrl);
- int mhi_ep_set_m3_state(struct mhi_ep_cntrl *mhi_cntrl);
- int mhi_ep_set_ready_state(struct mhi_ep_cntrl *mhi_cntrl);
- void mhi_ep_handle_syserr(struct mhi_ep_cntrl *mhi_cntrl);
-+void mhi_ep_resume_channels(struct mhi_ep_cntrl *mhi_cntrl);
-+void mhi_ep_suspend_channels(struct mhi_ep_cntrl *mhi_cntrl);
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index d58211bdeceb..2137dba85691 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -332,6 +332,8 @@ enum kmalloc_cache_type {
+ extern struct kmem_cache *
+ kmalloc_caches[NR_KMALLOC_TYPES][KMALLOC_SHIFT_HIGH + 1];
  
- #endif
-diff --git a/drivers/bus/mhi/ep/main.c b/drivers/bus/mhi/ep/main.c
-index 660d1e9791d3..bae5f40ec15e 100644
---- a/drivers/bus/mhi/ep/main.c
-+++ b/drivers/bus/mhi/ep/main.c
-@@ -1097,6 +1097,64 @@ void mhi_ep_power_down(struct mhi_ep_cntrl *mhi_cntrl)
++unsigned int arch_kmalloc_minalign(void);
++
+ /*
+  * Define gfp bits that should not be set for KMALLOC_NORMAL.
+  */
+diff --git a/mm/slab.c b/mm/slab.c
+index b04e40078bdf..4aaeeb9c994d 100644
+--- a/mm/slab.c
++++ b/mm/slab.c
+@@ -1256,11 +1256,7 @@ void __init kmem_cache_init(void)
+ 	 * Initialize the caches that provide memory for the  kmem_cache_node
+ 	 * structures first.  Without this, further allocations will bug.
+ 	 */
+-	kmalloc_caches[KMALLOC_NORMAL][INDEX_NODE] = create_kmalloc_cache(
+-				kmalloc_info[INDEX_NODE].name[KMALLOC_NORMAL],
+-				kmalloc_info[INDEX_NODE].size,
+-				ARCH_KMALLOC_FLAGS, 0,
+-				kmalloc_info[INDEX_NODE].size);
++	new_kmalloc_cache(INDEX_NODE, KMALLOC_NORMAL, ARCH_KMALLOC_FLAGS);
+ 	slab_state = PARTIAL_NODE;
+ 	setup_kmalloc_cache_index_table();
+ 
+diff --git a/mm/slab.h b/mm/slab.h
+index fd7ae2024897..e9238406602a 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -283,6 +283,8 @@ int __kmem_cache_create(struct kmem_cache *, slab_flags_t flags);
+ struct kmem_cache *create_kmalloc_cache(const char *name, unsigned int size,
+ 			slab_flags_t flags, unsigned int useroffset,
+ 			unsigned int usersize);
++void __init new_kmalloc_cache(int idx, enum kmalloc_cache_type type,
++			      slab_flags_t flags);
+ extern void create_boot_cache(struct kmem_cache *, const char *name,
+ 			unsigned int size, slab_flags_t flags,
+ 			unsigned int useroffset, unsigned int usersize);
+diff --git a/mm/slab_common.c b/mm/slab_common.c
+index 6ee64d6208b3..594d8a8a68d0 100644
+--- a/mm/slab_common.c
++++ b/mm/slab_common.c
+@@ -838,9 +838,18 @@ void __init setup_kmalloc_cache_index_table(void)
+ 	}
  }
- EXPORT_SYMBOL_GPL(mhi_ep_power_down);
  
-+void mhi_ep_suspend_channels(struct mhi_ep_cntrl *mhi_cntrl)
+-static void __init
++unsigned int __weak arch_kmalloc_minalign(void)
 +{
-+	struct mhi_ep_chan *mhi_chan;
-+	u32 tmp;
-+	int i;
-+
-+	for (i = 0; i < mhi_cntrl->max_chan; i++) {
-+		mhi_chan = &mhi_cntrl->mhi_chan[i];
-+
-+		if (!mhi_chan->mhi_dev)
-+			continue;
-+
-+		mutex_lock(&mhi_chan->lock);
-+		/* Skip if the channel is not currently running */
-+		tmp = le32_to_cpu(mhi_cntrl->ch_ctx_cache[i].chcfg);
-+		if (FIELD_GET(CHAN_CTX_CHSTATE_MASK, tmp) != MHI_CH_STATE_RUNNING) {
-+			mutex_unlock(&mhi_chan->lock);
-+			continue;
-+		}
-+
-+		dev_dbg(&mhi_chan->mhi_dev->dev, "Suspending channel\n");
-+		/* Set channel state to SUSPENDED */
-+		tmp &= ~CHAN_CTX_CHSTATE_MASK;
-+		tmp |= FIELD_PREP(CHAN_CTX_CHSTATE_MASK, MHI_CH_STATE_SUSPENDED);
-+		mhi_cntrl->ch_ctx_cache[i].chcfg = cpu_to_le32(tmp);
-+		mutex_unlock(&mhi_chan->lock);
-+	}
++	return ARCH_KMALLOC_MINALIGN;
 +}
 +
-+void mhi_ep_resume_channels(struct mhi_ep_cntrl *mhi_cntrl)
-+{
-+	struct mhi_ep_chan *mhi_chan;
-+	u32 tmp;
-+	int i;
-+
-+	for (i = 0; i < mhi_cntrl->max_chan; i++) {
-+		mhi_chan = &mhi_cntrl->mhi_chan[i];
-+
-+		if (!mhi_chan->mhi_dev)
-+			continue;
-+
-+		mutex_lock(&mhi_chan->lock);
-+		/* Skip if the channel is not currently suspended */
-+		tmp = le32_to_cpu(mhi_cntrl->ch_ctx_cache[i].chcfg);
-+		if (FIELD_GET(CHAN_CTX_CHSTATE_MASK, tmp) != MHI_CH_STATE_SUSPENDED) {
-+			mutex_unlock(&mhi_chan->lock);
-+			continue;
-+		}
-+
-+		dev_dbg(&mhi_chan->mhi_dev->dev, "Resuming channel\n");
-+		/* Set channel state to RUNNING */
-+		tmp &= ~CHAN_CTX_CHSTATE_MASK;
-+		tmp |= FIELD_PREP(CHAN_CTX_CHSTATE_MASK, MHI_CH_STATE_RUNNING);
-+		mhi_cntrl->ch_ctx_cache[i].chcfg = cpu_to_le32(tmp);
-+		mutex_unlock(&mhi_chan->lock);
-+	}
-+}
-+
- static void mhi_ep_release_device(struct device *dev)
++void __init
+ new_kmalloc_cache(int idx, enum kmalloc_cache_type type, slab_flags_t flags)
  {
- 	struct mhi_ep_device *mhi_dev = to_mhi_ep_device(dev);
-diff --git a/drivers/bus/mhi/ep/sm.c b/drivers/bus/mhi/ep/sm.c
-index e3865b85399d..3655c19e23c7 100644
---- a/drivers/bus/mhi/ep/sm.c
-+++ b/drivers/bus/mhi/ep/sm.c
-@@ -62,8 +62,11 @@ int mhi_ep_set_m0_state(struct mhi_ep_cntrl *mhi_cntrl)
- 	enum mhi_state old_state;
- 	int ret;
- 
-+	/* If MHI is in M3, resume suspended channels */
- 	spin_lock_bh(&mhi_cntrl->state_lock);
- 	old_state = mhi_cntrl->mhi_state;
-+	if (old_state == MHI_STATE_M3)
-+		mhi_ep_resume_channels(mhi_cntrl);
- 
- 	ret = mhi_ep_set_mhi_state(mhi_cntrl, MHI_STATE_M0);
- 	spin_unlock_bh(&mhi_cntrl->state_lock);
-@@ -106,6 +109,8 @@ int mhi_ep_set_m3_state(struct mhi_ep_cntrl *mhi_cntrl)
- 		return ret;
++	unsigned int minalign = arch_kmalloc_minalign();
++	unsigned int aligned_size = kmalloc_info[idx].size;
++	int aligned_idx = idx;
++
+ 	if (type == KMALLOC_RECLAIM) {
+ 		flags |= SLAB_RECLAIM_ACCOUNT;
+ 	} else if (IS_ENABLED(CONFIG_MEMCG_KMEM) && (type == KMALLOC_CGROUP)) {
+@@ -851,10 +860,17 @@ new_kmalloc_cache(int idx, enum kmalloc_cache_type type, slab_flags_t flags)
+ 		flags |= SLAB_ACCOUNT;
  	}
  
-+	mhi_ep_suspend_channels(mhi_cntrl);
+-	kmalloc_caches[type][idx] = create_kmalloc_cache(
+-					kmalloc_info[idx].name[type],
+-					kmalloc_info[idx].size, flags, 0,
+-					kmalloc_info[idx].size);
++	if (minalign > ARCH_KMALLOC_MINALIGN) {
++		aligned_size = ALIGN(aligned_size, minalign);
++		aligned_idx = __kmalloc_index(aligned_size, false);
++	}
 +
- 	/* Signal host that the device moved to M3 */
- 	ret = mhi_ep_send_state_change_event(mhi_cntrl, MHI_STATE_M3);
- 	if (ret) {
--- 
-2.25.1
-
++	if (!kmalloc_caches[type][aligned_idx])
++		kmalloc_caches[type][aligned_idx] = create_kmalloc_cache(
++					kmalloc_info[aligned_idx].name[type],
++					aligned_size, flags, 0, aligned_size);
++	if (idx != aligned_idx)
++		kmalloc_caches[type][idx] = kmalloc_caches[type][aligned_idx];
+ 
+ 	/*
+ 	 * If CONFIG_MEMCG_KMEM is enabled, disable cache merging for
+@@ -904,11 +920,8 @@ void __init create_kmalloc_caches(slab_flags_t flags)
+ 		struct kmem_cache *s = kmalloc_caches[KMALLOC_NORMAL][i];
+ 
+ 		if (s) {
+-			kmalloc_caches[KMALLOC_DMA][i] = create_kmalloc_cache(
+-				kmalloc_info[i].name[KMALLOC_DMA],
+-				kmalloc_info[i].size,
+-				SLAB_CACHE_DMA | flags, 0,
+-				kmalloc_info[i].size);
++			new_kmalloc_cache(i, KMALLOC_DMA,
++					  SLAB_CACHE_DMA | flags);
+ 		}
+ 	}
+ #endif

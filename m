@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3103A4F459E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 053A44F4859
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385247AbiDEMcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35184 "EHLO
+        id S1380938AbiDEVhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237365AbiDEI6S (ORCPT
+        with ESMTP id S1348321AbiDEJrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:58:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242D624BCE;
-        Tue,  5 Apr 2022 01:53:18 -0700 (PDT)
+        Tue, 5 Apr 2022 05:47:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0C96C49E;
+        Tue,  5 Apr 2022 02:33:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A8BDB81B92;
-        Tue,  5 Apr 2022 08:53:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA196C385A0;
-        Tue,  5 Apr 2022 08:53:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81520B81C86;
+        Tue,  5 Apr 2022 09:33:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9196C385A0;
+        Tue,  5 Apr 2022 09:33:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148796;
-        bh=JYxTO2rIP6G3utofM/I3wsvMma8X+tPaET/r2PEszRU=;
+        s=korg; t=1649151221;
+        bh=4CbGFM1Lbe8DmiPQBMYFTnVQIyjT1+Fi1scJt5CW+h8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CwxoksrzXIQIEYKhL+d1UCMfPECzEeCp3tvwrP5lsHKLYpEZ0Hg6z6OgNhfO8yX5s
-         gCbjbu8U80BKGNEAeYGvyWZBNkMP/RrXTdPc2ajabWD6RRY2gzABHG8QrPqHHsTMhw
-         1lMRK47LlCbg+1tPcXlbm8UWj0cZizWUrzTBGYtA=
+        b=ULvlNA4MPJhFVp9bD5bEM8mi94vTwT9o0Ogaj/HNlNVvZEU8VsbzsphU8LPFIYCrs
+         PvgjAheyZ1Jbqm/WfeHLw2pdLjQsTJ3tJfDPpUHU6pJEBOpPvgRuTO6FkrJh3Cczfx
+         3igQ3ngxin6F3Jce07UqS/cGhcZK+kYMROpdc1z0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0485/1017] PCI: aardvark: Fix reading PCI_EXP_RTSTA_PME bit on emulated bridge
-Date:   Tue,  5 Apr 2022 09:23:18 +0200
-Message-Id: <20220405070408.695551923@linuxfoundation.org>
+Subject: [PATCH 5.15 338/913] ASoC: mxs-saif: Handle errors for clk_enable
+Date:   Tue,  5 Apr 2022 09:23:20 +0200
+Message-Id: <20220405070349.980719157@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,50 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 735f5ae49e1b44742cc63ca9b5c1ffde3e94ba91 ]
+[ Upstream commit 2ecf362d220317debf5da376e0390e9f7a3f7b29 ]
 
-The emulated bridge returns incorrect value for PCI_EXP_RTSTA register
-during readout in advk_pci_bridge_emul_pcie_conf_read() function: the
-correct bit is BIT(16), but we are setting BIT(23), because the code
-does
-  *value = (isr0 & PCIE_MSG_PM_PME_MASK) << 16
-where
-  PCIE_MSG_PM_PME_MASK
-is
-  BIT(7).
+As the potential failure of the clk_enable(),
+it should be better to check it, like mxs_saif_trigger().
 
-The code should probably have been something like
-  *value = (!!(isr0 & PCIE_MSG_PM_PME_MASK)) << 16,
-but we are better of using an if() and using the proper macro for this
-bit.
-
-Link: https://lore.kernel.org/r/20220110015018.26359-15-kabel@kernel.org
-Fixes: 8a3ebd8de328 ("PCI: aardvark: Implement emulated root PCI bridge config space")
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Fixes: d0ba4c014934 ("ASoC: mxs-saif: set a base clock rate for EXTMASTER mode work")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Link: https://lore.kernel.org/r/20220301081717.3727190-1-jiasheng@iscas.ac.cn
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pci-aardvark.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ sound/soc/mxs/mxs-saif.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
-index 7aa6d6336223..a924564fdbbc 100644
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -844,7 +844,9 @@ advk_pci_bridge_emul_pcie_conf_read(struct pci_bridge_emul *bridge,
- 	case PCI_EXP_RTSTA: {
- 		u32 isr0 = advk_readl(pcie, PCIE_ISR0_REG);
- 		u32 msglog = advk_readl(pcie, PCIE_MSG_LOG_REG);
--		*value = (isr0 & PCIE_MSG_PM_PME_MASK) << 16 | (msglog >> 16);
-+		*value = msglog >> 16;
-+		if (isr0 & PCIE_MSG_PM_PME_MASK)
-+			*value |= PCI_EXP_RTSTA_PME;
- 		return PCI_BRIDGE_EMUL_HANDLED;
- 	}
- 
+diff --git a/sound/soc/mxs/mxs-saif.c b/sound/soc/mxs/mxs-saif.c
+index 6a2d24d48964..879c1221a809 100644
+--- a/sound/soc/mxs/mxs-saif.c
++++ b/sound/soc/mxs/mxs-saif.c
+@@ -455,7 +455,10 @@ static int mxs_saif_hw_params(struct snd_pcm_substream *substream,
+ 		* basic clock which should be fast enough for the internal
+ 		* logic.
+ 		*/
+-		clk_enable(saif->clk);
++		ret = clk_enable(saif->clk);
++		if (ret)
++			return ret;
++
+ 		ret = clk_set_rate(saif->clk, 24000000);
+ 		clk_disable(saif->clk);
+ 		if (ret)
 -- 
 2.34.1
 

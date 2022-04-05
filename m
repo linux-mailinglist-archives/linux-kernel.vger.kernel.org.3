@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34B04F2F61
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:11:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E20294F2ED1
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:04:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241300AbiDEIdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51766 "EHLO
+        id S241924AbiDEIgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233418AbiDEH5H (ORCPT
+        with ESMTP id S234042AbiDEH56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:57:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1D747AF4;
-        Tue,  5 Apr 2022 00:51:01 -0700 (PDT)
+        Tue, 5 Apr 2022 03:57:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1BE96826;
+        Tue,  5 Apr 2022 00:51:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECE736172C;
-        Tue,  5 Apr 2022 07:50:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07099C340EE;
-        Tue,  5 Apr 2022 07:50:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A83BB81BB0;
+        Tue,  5 Apr 2022 07:51:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11BCDC36AE3;
+        Tue,  5 Apr 2022 07:51:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145058;
-        bh=RSj97UFE//PTCX00jDoDuPMtwr11f/zKAjzxUqGW5EE=;
+        s=korg; t=1649145099;
+        bh=9w+H9RvQiAqbnv0t89CVqseGyEem3RzhqIHtFB3UxKo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jjaeAQ1IxBq1bSM91jHdnHY9YZHWsCv7UBAb6ThPu9jjth10GhtonkDCgVw4nS+Wx
-         gpuRR2aTskttV96fErwv1zngs3EYt2KigMzPWr3EvrMplFp50AWXoQefoThjZ8C4Nj
-         GI/1jAfcocEmxA7HP6Kdq5eC6j5QU3y5CbhdNzOI=
+        b=OCuENez1Wj5ERpItfjD93VI+jyDjlJ0/J9QOOPbPbmOsPmlhLUkAGhZgzX0XW+rfw
+         +MgNg703yTyScFFKqAOlMNImjsP4jWwHsShHK5KWi1ROQJn7qQwozuG9xzwMWOlwEp
+         HVZBM/IHaB0fdpqYrQ1aKkca4gN7IJTd1+0J01T8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qais Yousef <qais.yousef@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0270/1126] sched/core: Export pelt_thermal_tp
-Date:   Tue,  5 Apr 2022 09:16:57 +0200
-Message-Id: <20220405070415.536147077@linuxfoundation.org>
+        stable@vger.kernel.org,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Mike Marshall <hubcap@omnibond.com>,
+        David Howells <dhowells@redhat.com>
+Subject: [PATCH 5.17 0284/1126] iomap: Fix iomap_invalidatepage tracepoint
+Date:   Tue,  5 Apr 2022 09:17:11 +0200
+Message-Id: <20220405070415.949224018@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,34 +58,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qais Yousef <qais.yousef@arm.com>
+From: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-[ Upstream commit 77cf151b7bbdfa3577b3c3f3a5e267a6c60a263b ]
+[ Upstream commit 1241ebeca3f94b417751cb3ff62454cefdac75bc ]
 
-We can't use this tracepoint in modules without having the symbol
-exported first, fix that.
+This tracepoint is defined to take an offset in the file, not an
+offset in the folio.
 
-Fixes: 765047932f15 ("sched/pelt: Add support to track thermal pressure")
-Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20211028115005.873539-1-qais.yousef@arm.com
+Fixes: 1ac994525b9d ("iomap: Remove pgoff from tracepoints")
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Tested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Tested-by: Mike Marshall <hubcap@omnibond.com> # orangefs
+Tested-by: David Howells <dhowells@redhat.com> # afs
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/sched/core.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/iomap/buffered-io.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 9745613d531c..1620ae8535dc 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -36,6 +36,7 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(pelt_rt_tp);
- EXPORT_TRACEPOINT_SYMBOL_GPL(pelt_dl_tp);
- EXPORT_TRACEPOINT_SYMBOL_GPL(pelt_irq_tp);
- EXPORT_TRACEPOINT_SYMBOL_GPL(pelt_se_tp);
-+EXPORT_TRACEPOINT_SYMBOL_GPL(pelt_thermal_tp);
- EXPORT_TRACEPOINT_SYMBOL_GPL(sched_cpu_capacity_tp);
- EXPORT_TRACEPOINT_SYMBOL_GPL(sched_overutilized_tp);
- EXPORT_TRACEPOINT_SYMBOL_GPL(sched_util_est_cfs_tp);
+diff --git a/fs/iomap/buffered-io.c b/fs/iomap/buffered-io.c
+index 6c51a75d0be6..d020a2e81a24 100644
+--- a/fs/iomap/buffered-io.c
++++ b/fs/iomap/buffered-io.c
+@@ -480,7 +480,8 @@ EXPORT_SYMBOL_GPL(iomap_releasepage);
+ 
+ void iomap_invalidate_folio(struct folio *folio, size_t offset, size_t len)
+ {
+-	trace_iomap_invalidatepage(folio->mapping->host, offset, len);
++	trace_iomap_invalidatepage(folio->mapping->host,
++					folio_pos(folio) + offset, len);
+ 
+ 	/*
+ 	 * If we're invalidating the entire folio, clear the dirty state
 -- 
 2.34.1
 

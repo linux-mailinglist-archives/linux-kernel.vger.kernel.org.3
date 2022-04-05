@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CABBE4F26CC
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0024F265D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235370AbiDEH7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46910 "EHLO
+        id S234527AbiDEH6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233444AbiDEHru (ORCPT
+        with ESMTP id S233483AbiDEHrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:47:50 -0400
+        Tue, 5 Apr 2022 03:47:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8BDA0BD2;
-        Tue,  5 Apr 2022 00:44:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1551992D0A;
+        Tue,  5 Apr 2022 00:44:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 572CA616C3;
-        Tue,  5 Apr 2022 07:44:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DBD5C340EE;
-        Tue,  5 Apr 2022 07:44:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A498C616D9;
+        Tue,  5 Apr 2022 07:44:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADEA9C340EE;
+        Tue,  5 Apr 2022 07:44:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144645;
-        bh=oQCCMyAG9uXwmvosH2y0DN3mABh0AUvwuzkV1JR0Ik0=;
+        s=korg; t=1649144665;
+        bh=La6UeLC9pU0YR/nd2zxsp4eY/JmzDSkVGJeVw5h4l44=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q/AIrLSJ8TzFWYci46Xe5yJPmpQ1s7PJXazM3dXt7Bt3p0eAFmP0QO0mLxopxOEi2
-         vPwGZyy2NG3rd07pMWbv1viShD7w/nV5pCB80IJYQJv0mAuGtHnz8wZhn6woxZR7ip
-         2OD87M6Ef1caqlsH/AM7jnxWdCr3rkwtFbR/WP9o=
+        b=KteBKpMVmt3VmaLHVH94kproFdBi3oUQME6u8gTX//8KZMdHGgm2fMIKYejzTp0LG
+         MILV2ALk+R7nL5GBuX9nXi8EjxCeHAM23ng0lOem/Ly4qTV3raTXn002ZkqfkxRHOR
+         mdAAkFjCbQTXriA94lrqll8xWiakbw7S0oubYlT0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ben Dooks <ben.dooks@codethink.co.uk>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Dimitri John Ledkov <dimitri.ledkov@canonical.com>
-Subject: [PATCH 5.17 0119/1126] PCI: fu740: Force 2.5GT/s for initial device probe
-Date:   Tue,  5 Apr 2022 09:14:26 +0200
-Message-Id: <20220405070411.066405351@linuxfoundation.org>
+        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+Subject: [PATCH 5.17 0125/1126] arm64: dts: ti: k3-j7200: Fix gic-v3 compatible regs
+Date:   Tue,  5 Apr 2022 09:14:32 +0200
+Message-Id: <20220405070411.245025833@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,92 +54,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ben Dooks <ben.dooks@codethink.co.uk>
+From: Nishanth Menon <nm@ti.com>
 
-commit a382c757ec5ef83137a86125f43a4c43dc2ab50b upstream.
+commit 1a307cc299430dd7139d351a3b8941f493dfa885 upstream.
 
-The fu740 PCIe core does not probe any devices on the SiFive Unmatched
-board without this fix (or having U-Boot explicitly start the PCIe via
-either boot-script or user command). The fix is to start the link at
-2.5GT/s speeds and once the link is up then change the maximum speed back
-to the default.
+Though GIC ARE option is disabled for no GIC-v2 compatibility,
+Cortex-A72 is free to implement the CPU interface as long as it
+communicates with the GIC using the stream protocol. This requires
+that the SoC integration mark out the PERIPHBASE[1] as reserved area
+within the SoC. See longer discussion in [2] for further information.
 
-The U-Boot driver claims to set the link-speed to 2.5GT/s to get the probe
-to work (and U-Boot does print link up at 2.5GT/s) in the following code:
-https://source.denx.de/u-boot/u-boot/-/blob/master/drivers/pci/pcie_dw_sifive.c?id=v2022.01#L271
+Update the GIC register map to indicate offsets from PERIPHBASE based
+on [3]. Without doing this, systems like kvm will not function with
+gic-v2 emulation.
 
-Link: https://lore.kernel.org/r/20220318152430.526320-1-ben.dooks@codethink.co.uk
-Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Dimitri John Ledkov <dimitri.ledkov@canonical.com>
+[1] https://developer.arm.com/documentation/100095/0002/system-control/aarch64-register-descriptions/configuration-base-address-register--el1
+[2] https://lore.kernel.org/all/87k0e0tirw.wl-maz@kernel.org/
+[3] https://developer.arm.com/documentation/100095/0002/way1382452674438
+
+Cc: stable@vger.kernel.org
+Fixes: d361ed88455f ("arm64: dts: ti: Add support for J7200 SoC")
+Reported-by: Marc Zyngier <maz@kernel.org>
+Signed-off-by: Nishanth Menon <nm@ti.com>
+Acked-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220215201008.15235-4-nm@ti.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/controller/dwc/pcie-fu740.c |   51 +++++++++++++++++++++++++++++++-
- 1 file changed, 50 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/ti/k3-j7200-main.dtsi |    5 ++++-
+ arch/arm64/boot/dts/ti/k3-j7200.dtsi      |    1 +
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
---- a/drivers/pci/controller/dwc/pcie-fu740.c
-+++ b/drivers/pci/controller/dwc/pcie-fu740.c
-@@ -181,10 +181,59 @@ static int fu740_pcie_start_link(struct
- {
- 	struct device *dev = pci->dev;
- 	struct fu740_pcie *afp = dev_get_drvdata(dev);
-+	u8 cap_exp = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-+	int ret;
-+	u32 orig, tmp;
-+
-+	/*
-+	 * Force 2.5GT/s when starting the link, due to some devices not
-+	 * probing at higher speeds. This happens with the PCIe switch
-+	 * on the Unmatched board when U-Boot has not initialised the PCIe.
-+	 * The fix in U-Boot is to force 2.5GT/s, which then gets cleared
-+	 * by the soft reset done by this driver.
-+	 */
-+	dev_dbg(dev, "cap_exp at %x\n", cap_exp);
-+	dw_pcie_dbi_ro_wr_en(pci);
-+
-+	tmp = dw_pcie_readl_dbi(pci, cap_exp + PCI_EXP_LNKCAP);
-+	orig = tmp & PCI_EXP_LNKCAP_SLS;
-+	tmp &= ~PCI_EXP_LNKCAP_SLS;
-+	tmp |= PCI_EXP_LNKCAP_SLS_2_5GB;
-+	dw_pcie_writel_dbi(pci, cap_exp + PCI_EXP_LNKCAP, tmp);
+--- a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
+@@ -54,7 +54,10 @@
+ 		#interrupt-cells = <3>;
+ 		interrupt-controller;
+ 		reg = <0x00 0x01800000 0x00 0x10000>,	/* GICD */
+-		      <0x00 0x01900000 0x00 0x100000>;	/* GICR */
++		      <0x00 0x01900000 0x00 0x100000>,	/* GICR */
++		      <0x00 0x6f000000 0x00 0x2000>,	/* GICC */
++		      <0x00 0x6f010000 0x00 0x1000>,	/* GICH */
++		      <0x00 0x6f020000 0x00 0x2000>;	/* GICV */
  
- 	/* Enable LTSSM */
- 	writel_relaxed(0x1, afp->mgmt_base + PCIEX8MGMT_APP_LTSSM_ENABLE);
--	return 0;
-+
-+	ret = dw_pcie_wait_for_link(pci);
-+	if (ret) {
-+		dev_err(dev, "error: link did not start\n");
-+		goto err;
-+	}
-+
-+	tmp = dw_pcie_readl_dbi(pci, cap_exp + PCI_EXP_LNKCAP);
-+	if ((tmp & PCI_EXP_LNKCAP_SLS) != orig) {
-+		dev_dbg(dev, "changing speed back to original\n");
-+
-+		tmp &= ~PCI_EXP_LNKCAP_SLS;
-+		tmp |= orig;
-+		dw_pcie_writel_dbi(pci, cap_exp + PCI_EXP_LNKCAP, tmp);
-+
-+		tmp = dw_pcie_readl_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL);
-+		tmp |= PORT_LOGIC_SPEED_CHANGE;
-+		dw_pcie_writel_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL, tmp);
-+
-+		ret = dw_pcie_wait_for_link(pci);
-+		if (ret) {
-+			dev_err(dev, "error: link did not start at new speed\n");
-+			goto err;
-+		}
-+	}
-+
-+	ret = 0;
-+err:
-+	WARN_ON(ret);	/* we assume that errors will be very rare */
-+	dw_pcie_dbi_ro_wr_dis(pci);
-+	return ret;
- }
- 
- static int fu740_pcie_host_init(struct pcie_port *pp)
+ 		/* vcpumntirq: virtual CPU interface maintenance interrupt */
+ 		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+--- a/arch/arm64/boot/dts/ti/k3-j7200.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
+@@ -129,6 +129,7 @@
+ 			 <0x00 0x00a40000 0x00 0x00a40000 0x00 0x00000800>, /* timesync router */
+ 			 <0x00 0x01000000 0x00 0x01000000 0x00 0x0d000000>, /* Most peripherals */
+ 			 <0x00 0x30000000 0x00 0x30000000 0x00 0x0c400000>, /* MAIN NAVSS */
++			 <0x00 0x6f000000 0x00 0x6f000000 0x00 0x00310000>, /* A72 PERIPHBASE */
+ 			 <0x00 0x70000000 0x00 0x70000000 0x00 0x00800000>, /* MSMC RAM */
+ 			 <0x00 0x18000000 0x00 0x18000000 0x00 0x08000000>, /* PCIe1 DAT0 */
+ 			 <0x41 0x00000000 0x41 0x00000000 0x01 0x00000000>, /* PCIe1 DAT1 */
 
 

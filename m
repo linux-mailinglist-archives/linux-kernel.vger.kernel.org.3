@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD414F4C1F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 800064F4D04
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1575901AbiDEXJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:09:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
+        id S1382418AbiDEXhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348991AbiDEJsw (ORCPT
+        with ESMTP id S1354554AbiDEKOj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834DCBE31;
-        Tue,  5 Apr 2022 02:38:44 -0700 (PDT)
+        Tue, 5 Apr 2022 06:14:39 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB046B507;
+        Tue,  5 Apr 2022 03:00:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58F1661576;
-        Tue,  5 Apr 2022 09:38:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5962BC385A0;
-        Tue,  5 Apr 2022 09:38:43 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 17AC7CE0B18;
+        Tue,  5 Apr 2022 10:00:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D5FCC385A1;
+        Tue,  5 Apr 2022 10:00:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151523;
-        bh=mghRcOy3o4v6+YLK0Wj0bD8z7bt/54WK3Tzs5Q7rW7s=;
+        s=korg; t=1649152855;
+        bh=lQb4Mu6T8MYtQv868Z1oDD5YOQPMit2xWh8TfuuwmA4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x8F4HRhio9bDa3jkiu8FHvqYUEJR46jxMx7inv/KvBeXTJafAhNFgmxLIsFDPT2Pa
-         UZBRcVv3BZtEK9QfvkCWm/nHTbO0SHqDbF4yiTJgsP7LRIib0HPJHVyb4Dx5HRLTPl
-         KIFwZS5G0HSlGySaSHr/GzaH3rUBrHhN/GIceBkw=
+        b=z3zRUX8MhsyzG3jmOdGOWOV0QComcqc+zLxyDPGPymySah72VfR+6FCLyQiW3tKCs
+         DnixRgGqMGjDvdTLdPIXs91gDjWKk2LlTWv0gP0hToRzNL1RjYfmpWBUzEXcBN4msS
+         5BjcUUgioN8Gs3vvg49/SCLg2hrT2LLUG1grF1KM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dan Williams <dan.j.williams@intel.com>,
+        stable@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 445/913] cxl/core: Fix cxl_probe_component_regs() error message
-Date:   Tue,  5 Apr 2022 09:25:07 +0200
-Message-Id: <20220405070353.185044148@linuxfoundation.org>
+Subject: [PATCH 5.10 014/599] spi: Fix invalid sgs value
+Date:   Tue,  5 Apr 2022 09:25:08 +0200
+Message-Id: <20220405070259.241084579@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +57,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Williams <dan.j.williams@intel.com>
+From: Biju Das <biju.das.jz@bp.renesas.com>
 
-[ Upstream commit d621bc2e7282f9955033a6359877fd4ac4be60e1 ]
+[ Upstream commit 1a4e53d2fc4f68aa654ad96d13ad042e1a8e8a7d ]
 
-Fix a '\n' vs '/n' typo.
+max_seg_size is unsigned int and it can have a value up to 2^32
+(for eg:-RZ_DMAC driver sets dma_set_max_seg_size as U32_MAX)
+When this value is used in min_t() as an integer type, it becomes
+-1 and the value of sgs becomes 0.
 
-Fixes: 08422378c4ad ("cxl/pci: Add HDM decoder capabilities")
-Acked-by: Ben Widawsky <ben.widawsky@intel.com
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Link: https://lore.kernel.org/r/164298418268.3018233.17790073375430834911.stgit@dwillia2-desk3.amr.corp.intel.com
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+Fix this issue by replacing the 'int' data type with 'unsigned int'
+in min_t().
+
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Link: https://lore.kernel.org/r/20220307184843.9994-1-biju.das.jz@bp.renesas.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cxl/core/regs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
-index 41de4a136ecd..b8aa583a7642 100644
---- a/drivers/cxl/core/regs.c
-+++ b/drivers/cxl/core/regs.c
-@@ -49,7 +49,7 @@ void cxl_probe_component_regs(struct device *dev, void __iomem *base,
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 8c261eac2cee..2396565fc91b 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -881,10 +881,10 @@ int spi_map_buf(struct spi_controller *ctlr, struct device *dev,
+ 	int i, ret;
  
- 	if (FIELD_GET(CXL_CM_CAP_HDR_ID_MASK, cap_array) != CM_CAP_HDR_CAP_ID) {
- 		dev_err(dev,
--			"Couldn't locate the CXL.cache and CXL.mem capability array header./n");
-+			"Couldn't locate the CXL.cache and CXL.mem capability array header.\n");
- 		return;
- 	}
- 
+ 	if (vmalloced_buf || kmap_buf) {
+-		desc_len = min_t(int, max_seg_size, PAGE_SIZE);
++		desc_len = min_t(unsigned int, max_seg_size, PAGE_SIZE);
+ 		sgs = DIV_ROUND_UP(len + offset_in_page(buf), desc_len);
+ 	} else if (virt_addr_valid(buf)) {
+-		desc_len = min_t(int, max_seg_size, ctlr->max_dma_len);
++		desc_len = min_t(unsigned int, max_seg_size, ctlr->max_dma_len);
+ 		sgs = DIV_ROUND_UP(len, desc_len);
+ 	} else {
+ 		return -EINVAL;
 -- 
 2.34.1
 

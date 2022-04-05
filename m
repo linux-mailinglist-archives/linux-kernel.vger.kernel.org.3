@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59AA04F40A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE09C4F4071
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242008AbiDEMhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50744 "EHLO
+        id S1389977AbiDEP3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236402AbiDEJCy (ORCPT
+        with ESMTP id S1347773AbiDEJqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:02:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8DB6B87F;
-        Tue,  5 Apr 2022 01:54:30 -0700 (PDT)
+        Tue, 5 Apr 2022 05:46:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48D7DFDF0;
+        Tue,  5 Apr 2022 02:33:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80D33B81BAE;
-        Tue,  5 Apr 2022 08:54:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D12C2C385A1;
-        Tue,  5 Apr 2022 08:54:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2146C616AE;
+        Tue,  5 Apr 2022 09:33:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31506C385A4;
+        Tue,  5 Apr 2022 09:33:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148868;
-        bh=dsMcLJjHnrn/Oy03/hPtUFYDFcEthjEKA6Eh1V9/n84=;
+        s=korg; t=1649151184;
+        bh=Njj0UwwznX5geIrMDygxrCHcyaL15MibWi9CcWVRjfs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2VbivipZFEawsX4s5Trpl6ejyrGgSRCs53e/s23uW3f0P3YeyNHNgv6FOi9JBpH/i
-         DKOP3vFIV4I0wgvpch7H4mrZDL3U7nZO5y65vNOdM67wPkYLb9FrMfL4fg9xMdJT/z
-         mKc0//SFbKoPgVcHl10ISYif/HTSu9iotrdwzOQg=
+        b=a+ZDlHW6gtuMW3S+CYNXXGAvRbnIuTLUisdey4nD/oDVmWF/T0i6makn9IXbcWPW/
+         hSj0N9s6fThfTD1uoDvkSn1yBkRDKNtUBvtZiCIVRcIhlWEtp11KcJ94rEN2NKEN59
+         eb9kILcabw99OnXgv5WobxlcsdXI0FHtMZo7PLn8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
+        stable@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0472/1017] mac80211: limit bandwidth in HE capabilities
+Subject: [PATCH 5.15 323/913] ASoC: codecs: wcd934x: fix return value of wcd934x_rx_hph_mode_put
 Date:   Tue,  5 Apr 2022 09:23:05 +0200
-Message-Id: <20220405070408.309033101@linuxfoundation.org>
+Message-Id: <20220405070349.532546341@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,153 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
-[ Upstream commit 1f2c104448477512fcf7296df54bfbc3a6f9a765 ]
+[ Upstream commit 4b0bec6088588a120d33db85b1f0d9f096d1df71 ]
 
-If we're limiting bandwidth for some reason such as regulatory
-restrictions, then advertise that limitation just like we do
-for VHT today, so the AP is aware we cannot use the higher BW
-it might be using.
+wcd934x_rx_hph_mode_put currently returns zero eventhough it changes the value.
+Fix this, so that change notifications are sent correctly.
 
-Fixes: 41cbb0f5a295 ("mac80211: add support for HE")
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Link: https://lore.kernel.org/r/iwlwifi.20220202104617.70c8e3e7ee76.If317630de69ff1146bec7d47f5b83038695eb71d@changeid
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+Fixes: 1cde8b822332 ("ASoC: wcd934x: add basic controls")
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Link: https://lore.kernel.org/r/20220222183212.11580-10-srinivas.kandagatla@linaro.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/mac80211/ieee80211_i.h |  2 +-
- net/mac80211/mesh.c        |  2 +-
- net/mac80211/mlme.c        | 11 ++++++++---
- net/mac80211/util.c        | 27 ++++++++++++++++++++++-----
- 4 files changed, 32 insertions(+), 10 deletions(-)
+ sound/soc/codecs/wcd934x.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/net/mac80211/ieee80211_i.h b/net/mac80211/ieee80211_i.h
-index 3354a3b905b8..541723babcf0 100644
---- a/net/mac80211/ieee80211_i.h
-+++ b/net/mac80211/ieee80211_i.h
-@@ -2380,7 +2380,7 @@ u8 *ieee80211_ie_build_vht_cap(u8 *pos, struct ieee80211_sta_vht_cap *vht_cap,
- u8 *ieee80211_ie_build_vht_oper(u8 *pos, struct ieee80211_sta_vht_cap *vht_cap,
- 				const struct cfg80211_chan_def *chandef);
- u8 ieee80211_ie_len_he_cap(struct ieee80211_sub_if_data *sdata, u8 iftype);
--u8 *ieee80211_ie_build_he_cap(u8 *pos,
-+u8 *ieee80211_ie_build_he_cap(u32 disable_flags, u8 *pos,
- 			      const struct ieee80211_sta_he_cap *he_cap,
- 			      u8 *end);
- void ieee80211_ie_build_he_6ghz_cap(struct ieee80211_sub_if_data *sdata,
-diff --git a/net/mac80211/mesh.c b/net/mac80211/mesh.c
-index 15ac08d111ea..6847fdf93439 100644
---- a/net/mac80211/mesh.c
-+++ b/net/mac80211/mesh.c
-@@ -580,7 +580,7 @@ int mesh_add_he_cap_ie(struct ieee80211_sub_if_data *sdata,
- 		return -ENOMEM;
+diff --git a/sound/soc/codecs/wcd934x.c b/sound/soc/codecs/wcd934x.c
+index 68c9d694d379..654d847a050e 100644
+--- a/sound/soc/codecs/wcd934x.c
++++ b/sound/soc/codecs/wcd934x.c
+@@ -3308,13 +3308,16 @@ static int wcd934x_rx_hph_mode_put(struct snd_kcontrol *kc,
  
- 	pos = skb_put(skb, ie_len);
--	ieee80211_ie_build_he_cap(pos, he_cap, pos + ie_len);
-+	ieee80211_ie_build_he_cap(0, pos, he_cap, pos + ie_len);
+ 	mode_val = ucontrol->value.enumerated.item[0];
  
- 	return 0;
- }
-diff --git a/net/mac80211/mlme.c b/net/mac80211/mlme.c
-index 13496ba48514..ce56f23a4a1f 100644
---- a/net/mac80211/mlme.c
-+++ b/net/mac80211/mlme.c
-@@ -630,7 +630,7 @@ static void ieee80211_add_he_ie(struct ieee80211_sub_if_data *sdata,
- 				struct sk_buff *skb,
- 				struct ieee80211_supported_band *sband)
- {
--	u8 *pos;
-+	u8 *pos, *pre_he_pos;
- 	const struct ieee80211_sta_he_cap *he_cap = NULL;
- 	struct ieee80211_chanctx_conf *chanctx_conf;
- 	u8 he_cap_size;
-@@ -647,16 +647,21 @@ static void ieee80211_add_he_ie(struct ieee80211_sub_if_data *sdata,
- 
- 	he_cap = ieee80211_get_he_iftype_cap(sband,
- 					     ieee80211_vif_type_p2p(&sdata->vif));
--	if (!he_cap || !reg_cap)
-+	if (!he_cap || !chanctx_conf || !reg_cap)
- 		return;
- 
-+	/* get a max size estimate */
- 	he_cap_size =
- 		2 + 1 + sizeof(he_cap->he_cap_elem) +
- 		ieee80211_he_mcs_nss_size(&he_cap->he_cap_elem) +
- 		ieee80211_he_ppe_size(he_cap->ppe_thres[0],
- 				      he_cap->he_cap_elem.phy_cap_info);
- 	pos = skb_put(skb, he_cap_size);
--	ieee80211_ie_build_he_cap(pos, he_cap, pos + he_cap_size);
-+	pre_he_pos = pos;
-+	pos = ieee80211_ie_build_he_cap(sdata->u.mgd.flags,
-+					pos, he_cap, pos + he_cap_size);
-+	/* trim excess if any */
-+	skb_trim(skb, skb->len - (pre_he_pos + he_cap_size - pos));
- 
- 	ieee80211_ie_build_he_6ghz_cap(sdata, skb);
- }
-diff --git a/net/mac80211/util.c b/net/mac80211/util.c
-index 0e4e1956bcea..49a9bbb12538 100644
---- a/net/mac80211/util.c
-+++ b/net/mac80211/util.c
-@@ -1961,7 +1961,7 @@ static int ieee80211_build_preq_ies_band(struct ieee80211_sub_if_data *sdata,
- 	if (he_cap &&
- 	    cfg80211_any_usable_channels(local->hw.wiphy, BIT(sband->band),
- 					 IEEE80211_CHAN_NO_HE)) {
--		pos = ieee80211_ie_build_he_cap(pos, he_cap, end);
-+		pos = ieee80211_ie_build_he_cap(0, pos, he_cap, end);
- 		if (!pos)
- 			goto out_err;
++	if (mode_val == wcd->hph_mode)
++		return 0;
++
+ 	if (mode_val == 0) {
+ 		dev_err(wcd->dev, "Invalid HPH Mode, default to ClSH HiFi\n");
+ 		mode_val = CLS_H_LOHIFI;
  	}
-@@ -2905,10 +2905,11 @@ u8 ieee80211_ie_len_he_cap(struct ieee80211_sub_if_data *sdata, u8 iftype)
- 				     he_cap->he_cap_elem.phy_cap_info);
+ 	wcd->hph_mode = mode_val;
+ 
+-	return 0;
++	return 1;
  }
  
--u8 *ieee80211_ie_build_he_cap(u8 *pos,
-+u8 *ieee80211_ie_build_he_cap(u32 disable_flags, u8 *pos,
- 			      const struct ieee80211_sta_he_cap *he_cap,
- 			      u8 *end)
- {
-+	struct ieee80211_he_cap_elem elem;
- 	u8 n;
- 	u8 ie_len;
- 	u8 *orig_pos = pos;
-@@ -2921,7 +2922,23 @@ u8 *ieee80211_ie_build_he_cap(u8 *pos,
- 	if (!he_cap)
- 		return orig_pos;
- 
--	n = ieee80211_he_mcs_nss_size(&he_cap->he_cap_elem);
-+	/* modify on stack first to calculate 'n' and 'ie_len' correctly */
-+	elem = he_cap->he_cap_elem;
-+
-+	if (disable_flags & IEEE80211_STA_DISABLE_40MHZ)
-+		elem.phy_cap_info[0] &=
-+			~(IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_40MHZ_80MHZ_IN_5G |
-+			  IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_40MHZ_IN_2G);
-+
-+	if (disable_flags & IEEE80211_STA_DISABLE_160MHZ)
-+		elem.phy_cap_info[0] &=
-+			~IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_160MHZ_IN_5G;
-+
-+	if (disable_flags & IEEE80211_STA_DISABLE_80P80MHZ)
-+		elem.phy_cap_info[0] &=
-+			~IEEE80211_HE_PHY_CAP0_CHANNEL_WIDTH_SET_80PLUS80_MHZ_IN_5G;
-+
-+	n = ieee80211_he_mcs_nss_size(&elem);
- 	ie_len = 2 + 1 +
- 		 sizeof(he_cap->he_cap_elem) + n +
- 		 ieee80211_he_ppe_size(he_cap->ppe_thres[0],
-@@ -2935,8 +2952,8 @@ u8 *ieee80211_ie_build_he_cap(u8 *pos,
- 	*pos++ = WLAN_EID_EXT_HE_CAPABILITY;
- 
- 	/* Fixed data */
--	memcpy(pos, &he_cap->he_cap_elem, sizeof(he_cap->he_cap_elem));
--	pos += sizeof(he_cap->he_cap_elem);
-+	memcpy(pos, &elem, sizeof(elem));
-+	pos += sizeof(elem);
- 
- 	memcpy(pos, &he_cap->he_mcs_nss_supp, n);
- 	pos += n;
+ static int slim_rx_mux_get(struct snd_kcontrol *kc,
 -- 
 2.34.1
 

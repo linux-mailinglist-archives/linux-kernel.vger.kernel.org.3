@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E98B4F4B50
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16E24F4C81
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574107AbiDEWy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39108 "EHLO
+        id S1578570AbiDEXYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348791AbiDEJsg (ORCPT
+        with ESMTP id S1348903AbiDEJsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321E882D19;
-        Tue,  5 Apr 2022 02:35:33 -0700 (PDT)
+        Tue, 5 Apr 2022 05:48:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C96A2056;
+        Tue,  5 Apr 2022 02:37:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BEC0AB81C6F;
-        Tue,  5 Apr 2022 09:35:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28A58C385A2;
-        Tue,  5 Apr 2022 09:35:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 40408615E5;
+        Tue,  5 Apr 2022 09:37:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FFF2C385A3;
+        Tue,  5 Apr 2022 09:37:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151330;
-        bh=RuudkV80NbnUWQJ3ZBBUJ5p0VXcyoR2tIBAnss2jxn8=;
+        s=korg; t=1649151430;
+        bh=nfzYUEHmVjBI8/t16EA5oHKdr/xnKdTbSxXCL6KLiZk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mUnsIqKsYugCaWtwh9itMfHsRI9xNqT0Fk/ITIPs4booj/R6eVQg0u1GC7TOHBRwl
-         c5qoAGCbm5bJxxLKCAj99it+z4Q83xj86UZlaxnO07Ra7M+T3fVQ4dNP/g9Isr9ULF
-         yx3HEAVSEmBRNd9DwXMHbjfo5grTWiVKV07OzJQQ=
+        b=y2iBKoys3mD+DywKm/l7/QM6wv5Ea60nbTqmFNkSs36+06nt5XoJAzyNfIxkTmTkz
+         7txXhRBYt3sRKnQVKkA/dbn3rC4SIH2tml7TyuTo3HwsEzwxBdMwCO3z6MI0LyBTdW
+         f2V22Mo/lccz7ZR2sxhbKo8pfvxQWlfV4Wu7lVoI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 369/913] ASoC: msm8916-wcd-analog: Fix error handling in pm8916_wcd_analog_spmi_probe
-Date:   Tue,  5 Apr 2022 09:23:51 +0200
-Message-Id: <20220405070350.907531198@linuxfoundation.org>
+        stable@vger.kernel.org, Andre Przywara <andre.przywara@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 373/913] ARM: configs: multi_v5_defconfig: re-enable DRM_PANEL and FB_xxx
+Date:   Tue,  5 Apr 2022 09:23:55 +0200
+Message-Id: <20220405070351.027713984@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,77 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Andre Przywara <andre.przywara@arm.com>
 
-[ Upstream commit 9ebd62d60edcd4d9c75485e5ccd0b79581ad3c49 ]
+[ Upstream commit 9c44d0805f949c56121b4ae6949fb064537bf198 ]
 
-In the error handling path, the clk_prepare_enable() function
-call should be balanced by a corresponding 'clk_disable_unprepare()'
-call , as already done in the remove function.
+Commit 91185d55b32e ("drm: Remove DRM_KMS_FB_HELPER Kconfig option")
+led to de-selection of CONFIG_FB, which was a prerequisite for
+BACKLIGHT_CLASS_DEVICE, which CONFIG_DRM_PANEL_SIMPLE depended on.
+Explicitly set CONFIG_FB, to bring DRM_PANEL_SIMPLE, DRM_PANEL_EDP,
+FB_IMX and FB_ATMEL back into the generated .config.
+This also adds some new FB related features like fonts and the
+framebuffer console.
 
-Fixes: de66b3455023 ("ASoC: codecs: msm8916-wcd-analog: add MBHC support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220316041924.17560-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+See also commit 8c1768967e27 ("ARM: config: mutli v7: Reenable FB
+dependency"), which solved the same problem for multi_v7_defconfig.
+
+This relies on [1], to fix a broken Kconfig dependency.
+
+[1] https://lore.kernel.org/dri-devel/20220315084559.23510-1-tzimmermann@suse.de/raw
+
+Fixes: 91185d55b32e ("drm: Remove DRM_KMS_FB_HELPER Kconfig option")
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Link: https://lore.kernel.org/r/20220317183043.948432-4-andre.przywara@arm.com'
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/msm8916-wcd-analog.c | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
+ arch/arm/configs/multi_v5_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/codecs/msm8916-wcd-analog.c b/sound/soc/codecs/msm8916-wcd-analog.c
-index 3ddd822240e3..971b8360b5b1 100644
---- a/sound/soc/codecs/msm8916-wcd-analog.c
-+++ b/sound/soc/codecs/msm8916-wcd-analog.c
-@@ -1221,8 +1221,10 @@ static int pm8916_wcd_analog_spmi_probe(struct platform_device *pdev)
- 	}
- 
- 	irq = platform_get_irq_byname(pdev, "mbhc_switch_int");
--	if (irq < 0)
--		return irq;
-+	if (irq < 0) {
-+		ret = irq;
-+		goto err_disable_clk;
-+	}
- 
- 	ret = devm_request_threaded_irq(dev, irq, NULL,
- 			       pm8916_mbhc_switch_irq_handler,
-@@ -1234,8 +1236,10 @@ static int pm8916_wcd_analog_spmi_probe(struct platform_device *pdev)
- 
- 	if (priv->mbhc_btn_enabled) {
- 		irq = platform_get_irq_byname(pdev, "mbhc_but_press_det");
--		if (irq < 0)
--			return irq;
-+		if (irq < 0) {
-+			ret = irq;
-+			goto err_disable_clk;
-+		}
- 
- 		ret = devm_request_threaded_irq(dev, irq, NULL,
- 				       mbhc_btn_press_irq_handler,
-@@ -1246,8 +1250,10 @@ static int pm8916_wcd_analog_spmi_probe(struct platform_device *pdev)
- 			dev_err(dev, "cannot request mbhc button press irq\n");
- 
- 		irq = platform_get_irq_byname(pdev, "mbhc_but_rel_det");
--		if (irq < 0)
--			return irq;
-+		if (irq < 0) {
-+			ret = irq;
-+			goto err_disable_clk;
-+		}
- 
- 		ret = devm_request_threaded_irq(dev, irq, NULL,
- 				       mbhc_btn_release_irq_handler,
-@@ -1264,6 +1270,10 @@ static int pm8916_wcd_analog_spmi_probe(struct platform_device *pdev)
- 	return devm_snd_soc_register_component(dev, &pm8916_wcd_analog,
- 				      pm8916_wcd_analog_dai,
- 				      ARRAY_SIZE(pm8916_wcd_analog_dai));
-+
-+err_disable_clk:
-+	clk_disable_unprepare(priv->mclk);
-+	return ret;
- }
- 
- static int pm8916_wcd_analog_spmi_remove(struct platform_device *pdev)
+diff --git a/arch/arm/configs/multi_v5_defconfig b/arch/arm/configs/multi_v5_defconfig
+index 6f789e8483c9..e883cb6dc645 100644
+--- a/arch/arm/configs/multi_v5_defconfig
++++ b/arch/arm/configs/multi_v5_defconfig
+@@ -196,6 +196,7 @@ CONFIG_DRM=y
+ CONFIG_DRM_ATMEL_HLCDC=m
+ CONFIG_DRM_PANEL_SIMPLE=y
+ CONFIG_DRM_ASPEED_GFX=m
++CONFIG_FB=y
+ CONFIG_FB_IMX=y
+ CONFIG_FB_ATMEL=y
+ CONFIG_BACKLIGHT_ATMEL_LCDC=y
 -- 
 2.34.1
 

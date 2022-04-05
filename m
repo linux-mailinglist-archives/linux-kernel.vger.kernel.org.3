@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C7D4F2D35
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:36:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCDE4F2D4C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350481AbiDEJ6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
+        id S239119AbiDEJFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238133AbiDEISl (ORCPT
+        with ESMTP id S238330AbiDEISt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:18:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97D9B9193;
-        Tue,  5 Apr 2022 01:08:08 -0700 (PDT)
+        Tue, 5 Apr 2022 04:18:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A225260F7;
+        Tue,  5 Apr 2022 01:08:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BAF65B81BAF;
-        Tue,  5 Apr 2022 08:08:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16544C385A0;
-        Tue,  5 Apr 2022 08:08:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C3AC608C0;
+        Tue,  5 Apr 2022 08:08:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 402BAC385A2;
+        Tue,  5 Apr 2022 08:08:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146085;
-        bh=UjsimMY8mXFbubZ1Ptnk8VmWm4SoyR1XlgZaRQBMXP4=;
+        s=korg; t=1649146115;
+        bh=/5m4K9ozsZZSGdZVBC2IAddKC+Vx7f/VTOYfoh6haRo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YfztPVstWRddSi+2yxfHd5xbwo2IeO0R50BnWjuF4A1zDZYkqcKcjwBuzP5GW9sgS
-         rjTtGQX/Hh5DxcVA0huUYXzTmGP06KHW58PMhsZWSw0xoeUGFPqBjcf+nyAx1pv8Cf
-         QSYKS979xz01XInJd6cqtHciNBWG088Jg0KD7Kxk=
+        b=uBr1b7MhQJ7zEkQrcb5wFW4/N3axqPSK+06Y1Yjh2OVvNj38mMmcFLpbL3woYEZfK
+         iB4X7cMhqkiITnY9olk6QxumqhoNsp7Fey2zPbs9v/rcqne082vj5zSjkkKaU/B1zP
+         hqFbRvZAS3AY6ux0QBxZSaV3f90Jepr4p+rvFbac=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Angela Czubak <acz@semihalf.com>,
-        Marek Maslanka <mm@semihalf.com>,
-        Radoslaw Biernacki <rad@semihalf.com>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0630/1126] Bluetooth: Fix skb allocation in mgmt_remote_name() & mgmt_device_connected()
-Date:   Tue,  5 Apr 2022 09:22:57 +0200
-Message-Id: <20220405070426.128609733@linuxfoundation.org>
+Subject: [PATCH 5.17 0631/1126] power: supply: wm8350-power: Handle error for wm8350_register_irq
+Date:   Tue,  5 Apr 2022 09:22:58 +0200
+Message-Id: <20220405070426.158130351@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -57,93 +56,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Radoslaw Biernacki <rad@semihalf.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit ba17bb62ce415950753c19d16bb43b2bd3701158 ]
+[ Upstream commit b0b14b5ba11bec56fad344a4a0b2e16449cc8b94 ]
 
-This patch fixes skb allocation, as lack of space for ev might push skb
-tail beyond its end.
-Also introduce eir_precalc_len() that can be used instead of magic
-numbers for similar eir operations on skb.
+As the potential failure of the wm8350_register_irq(),
+it should be better to check it and return error if fails.
+Also, use 'free_' in order to avoid same code.
 
-Fixes: cf1bce1de7eeb ("Bluetooth: mgmt: Make use of mgmt_send_event_skb in MGMT_EV_DEVICE_FOUND")
-Fixes: e96741437ef0a ("Bluetooth: mgmt: Make use of mgmt_send_event_skb in MGMT_EV_DEVICE_CONNECTED")
-Signed-off-by: Angela Czubak <acz@semihalf.com>
-Signed-off-by: Marek Maslanka <mm@semihalf.com>
-Signed-off-by: Radoslaw Biernacki <rad@semihalf.com>
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Fixes: 14431aa0c5a4 ("power_supply: Add support for WM8350 PMU")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/eir.h  |  5 +++++
- net/bluetooth/mgmt.c | 18 ++++++++----------
- 2 files changed, 13 insertions(+), 10 deletions(-)
+ drivers/power/supply/wm8350_power.c | 96 ++++++++++++++++++++++++-----
+ 1 file changed, 82 insertions(+), 14 deletions(-)
 
-diff --git a/net/bluetooth/eir.h b/net/bluetooth/eir.h
-index 05e2e917fc25..e5876751f07e 100644
---- a/net/bluetooth/eir.h
-+++ b/net/bluetooth/eir.h
-@@ -15,6 +15,11 @@ u8 eir_create_scan_rsp(struct hci_dev *hdev, u8 instance, u8 *ptr);
- u8 eir_append_local_name(struct hci_dev *hdev, u8 *eir, u8 ad_len);
- u8 eir_append_appearance(struct hci_dev *hdev, u8 *ptr, u8 ad_len);
+diff --git a/drivers/power/supply/wm8350_power.c b/drivers/power/supply/wm8350_power.c
+index e05cee457471..9c46c48dccb1 100644
+--- a/drivers/power/supply/wm8350_power.c
++++ b/drivers/power/supply/wm8350_power.c
+@@ -408,44 +408,112 @@ static const struct power_supply_desc wm8350_usb_desc = {
+  *		Initialisation
+  *********************************************************************/
  
-+static inline u16 eir_precalc_len(u8 data_len)
-+{
-+	return sizeof(u8) * 2 + data_len;
-+}
+-static void wm8350_init_charger(struct wm8350 *wm8350)
++static int wm8350_init_charger(struct wm8350 *wm8350)
+ {
++	int ret;
 +
- static inline u16 eir_append_data(u8 *eir, u16 eir_len, u8 type,
- 				  u8 *data, u8 data_len)
- {
-diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
-index 230a7a8196c0..15eab8b968ce 100644
---- a/net/bluetooth/mgmt.c
-+++ b/net/bluetooth/mgmt.c
-@@ -9086,12 +9086,14 @@ void mgmt_device_connected(struct hci_dev *hdev, struct hci_conn *conn,
- 	u16 eir_len = 0;
- 	u32 flags = 0;
+ 	/* register our interest in charger events */
+-	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_HOT,
++	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_HOT,
+ 			    wm8350_charger_handler, 0, "Battery hot", wm8350);
+-	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_COLD,
++	if (ret)
++		goto err;
++
++	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_COLD,
+ 			    wm8350_charger_handler, 0, "Battery cold", wm8350);
+-	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_FAIL,
++	if (ret)
++		goto free_chg_bat_hot;
++
++	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_FAIL,
+ 			    wm8350_charger_handler, 0, "Battery fail", wm8350);
+-	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_TO,
++	if (ret)
++		goto free_chg_bat_cold;
++
++	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_TO,
+ 			    wm8350_charger_handler, 0,
+ 			    "Charger timeout", wm8350);
+-	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_END,
++	if (ret)
++		goto free_chg_bat_fail;
++
++	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_END,
+ 			    wm8350_charger_handler, 0,
+ 			    "Charge end", wm8350);
+-	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_START,
++	if (ret)
++		goto free_chg_to;
++
++	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_START,
+ 			    wm8350_charger_handler, 0,
+ 			    "Charge start", wm8350);
+-	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_FAST_RDY,
++	if (ret)
++		goto free_chg_end;
++
++	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_FAST_RDY,
+ 			    wm8350_charger_handler, 0,
+ 			    "Fast charge ready", wm8350);
+-	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P9,
++	if (ret)
++		goto free_chg_start;
++
++	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P9,
+ 			    wm8350_charger_handler, 0,
+ 			    "Battery <3.9V", wm8350);
+-	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P1,
++	if (ret)
++		goto free_chg_fast_rdy;
++
++	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P1,
+ 			    wm8350_charger_handler, 0,
+ 			    "Battery <3.1V", wm8350);
+-	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_2P85,
++	if (ret)
++		goto free_chg_vbatt_lt_3p9;
++
++	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_2P85,
+ 			    wm8350_charger_handler, 0,
+ 			    "Battery <2.85V", wm8350);
++	if (ret)
++		goto free_chg_vbatt_lt_3p1;
  
-+	/* allocate buff for LE or BR/EDR adv */
- 	if (conn->le_adv_data_len > 0)
- 		skb = mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_CONNECTED,
--				     conn->le_adv_data_len);
-+				     sizeof(*ev) + conn->le_adv_data_len);
- 	else
- 		skb = mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_CONNECTED,
--				     2 + name_len + 5);
-+				     sizeof(*ev) + (name ? eir_precalc_len(name_len) : 0) +
-+				     eir_precalc_len(sizeof(conn->dev_class)));
+ 	/* and supply change events */
+-	wm8350_register_irq(wm8350, WM8350_IRQ_EXT_USB_FB,
++	ret = wm8350_register_irq(wm8350, WM8350_IRQ_EXT_USB_FB,
+ 			    wm8350_charger_handler, 0, "USB", wm8350);
+-	wm8350_register_irq(wm8350, WM8350_IRQ_EXT_WALL_FB,
++	if (ret)
++		goto free_chg_vbatt_lt_2p85;
++
++	ret = wm8350_register_irq(wm8350, WM8350_IRQ_EXT_WALL_FB,
+ 			    wm8350_charger_handler, 0, "Wall", wm8350);
+-	wm8350_register_irq(wm8350, WM8350_IRQ_EXT_BAT_FB,
++	if (ret)
++		goto free_ext_usb_fb;
++
++	ret = wm8350_register_irq(wm8350, WM8350_IRQ_EXT_BAT_FB,
+ 			    wm8350_charger_handler, 0, "Battery", wm8350);
++	if (ret)
++		goto free_ext_wall_fb;
++
++	return 0;
++
++free_ext_wall_fb:
++	wm8350_free_irq(wm8350, WM8350_IRQ_EXT_WALL_FB, wm8350);
++free_ext_usb_fb:
++	wm8350_free_irq(wm8350, WM8350_IRQ_EXT_USB_FB, wm8350);
++free_chg_vbatt_lt_2p85:
++	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_2P85, wm8350);
++free_chg_vbatt_lt_3p1:
++	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P1, wm8350);
++free_chg_vbatt_lt_3p9:
++	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P9, wm8350);
++free_chg_fast_rdy:
++	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_FAST_RDY, wm8350);
++free_chg_start:
++	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_START, wm8350);
++free_chg_end:
++	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_END, wm8350);
++free_chg_to:
++	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_TO, wm8350);
++free_chg_bat_fail:
++	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_BAT_FAIL, wm8350);
++free_chg_bat_cold:
++	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_BAT_COLD, wm8350);
++free_chg_bat_hot:
++	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_BAT_HOT, wm8350);
++err:
++	return ret;
+ }
  
- 	ev = skb_put(skb, sizeof(*ev));
- 	bacpy(&ev->addr.bdaddr, &conn->dst);
-@@ -9707,13 +9709,11 @@ void mgmt_remote_name(struct hci_dev *hdev, bdaddr_t *bdaddr, u8 link_type,
- {
- 	struct sk_buff *skb;
- 	struct mgmt_ev_device_found *ev;
--	u16 eir_len;
--	u32 flags;
-+	u16 eir_len = 0;
-+	u32 flags = 0;
- 
--	if (name_len)
--		skb = mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_FOUND, 2 + name_len);
--	else
--		skb = mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_FOUND, 0);
-+	skb = mgmt_alloc_skb(hdev, MGMT_EV_DEVICE_FOUND,
-+			     sizeof(*ev) + (name ? eir_precalc_len(name_len) : 0));
- 
- 	ev = skb_put(skb, sizeof(*ev));
- 	bacpy(&ev->addr.bdaddr, bdaddr);
-@@ -9723,10 +9723,8 @@ void mgmt_remote_name(struct hci_dev *hdev, bdaddr_t *bdaddr, u8 link_type,
- 	if (name) {
- 		eir_len = eir_append_data(ev->eir, 0, EIR_NAME_COMPLETE, name,
- 					  name_len);
--		flags = 0;
- 		skb_put(skb, eir_len);
- 	} else {
--		eir_len = 0;
- 		flags = MGMT_DEV_FOUND_NAME_REQUEST_FAILED;
- 	}
- 
+ static void free_charger_irq(struct wm8350 *wm8350)
 -- 
 2.34.1
 

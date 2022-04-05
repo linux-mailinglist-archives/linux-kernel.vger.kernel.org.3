@@ -2,68 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 511D24F4E50
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 446374F4A7F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1588757AbiDFARO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
+        id S1457465AbiDEWrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382821AbiDEMRA (ORCPT
+        with ESMTP id S1383154AbiDEMY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 08:17:00 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F4CA995D
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 04:29:35 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id g24so16670185lja.7
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 04:29:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=b7Dz2SM4siYuIwun2XwY0DhLNucqTdTNXSHP2yr5LeM=;
-        b=LOZVvXl9gGJ+RVI+ER6bknQlWcr4u1GnvrXJnh2Co/+eTsN7luh1C3Ee0mUUk7al2r
-         t2m4jmv1poxLlbvcPQalpmOl6QF6PZToWLJzEGtxHUHUOow0QixXBBqXN+q6MnnViKK1
-         XsrjEDIsj6GfB6OliOuv4Rt2ysL2QpB9/AcGir/3uX5+WhOM24y3lF/ICwjrems7FBS9
-         NfbOV0Uhv2sP0RxDI3KP2NwHlJNaSJpB8NVxC8piuaUGbuue6AyRmiEXGFL8bVaufne+
-         amNRUjuaCjpTKyTg5WYFGebmAsAk7hpgWJ1iGlXqR6cS7m5MTvQ5/xyYtM497wTWJat3
-         RujQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:from:to:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=b7Dz2SM4siYuIwun2XwY0DhLNucqTdTNXSHP2yr5LeM=;
-        b=7/K0bJmchZyJiL1sJukh+9qGqHNf1r7Kph3Nkj6t/z9IwoOQPwI83QbQnuJlV9HBrx
-         rpfmtGPoMofWYKyLW8nulin0Y7mikQyP7xW9FdxM15XVeAq75NgJqBv6Ngl+a9Rsqiwj
-         13I7ofM12ZK8rVUWRDqK4UaGTkLCKyAyMw4MqLVvBPZXyIhGmauPsFc1I15keGoxq5SU
-         ZCzJwnTs6YEEWmv6CLjmDBpqj9XxJAhVwewLXELeBF/3QCduUI0uZ7vnIOiSvToBJhW9
-         VGBgMuKvu08Bdt/XQ5yZ1MVN4aqK5yt4NHVEDD8hoJwOxsbV9/pFZw5Z5+jzWCiWkV6+
-         flaw==
-X-Gm-Message-State: AOAM532lb13YH7I7sxE8DAGqDvSidkT4c4vlbkdredv4ZW7CwHIrO5E5
-        9p6oMnh/pZyER4MThPM60GfWcI8PoUI=
-X-Google-Smtp-Source: ABdhPJwglmhlytZL6pt8DIvGFjc+vbkjL17UA6JUrkyOQV1Hp23dghj+SmtXzqlQgSqw6XJ9RjxJJw==
-X-Received: by 2002:a2e:150d:0:b0:24b:30d:dae with SMTP id s13-20020a2e150d000000b0024b030d0daemr1822212ljd.23.1649158174017;
-        Tue, 05 Apr 2022 04:29:34 -0700 (PDT)
-Received: from uncleman.upcloud.com (dyjc2gkmpr6qcv38v66ry-4.rev.dnainternet.fi. [2001:14bb:1c5:62a1:4c76:9a28:df91:d69c])
-        by smtp.gmail.com with ESMTPSA id v6-20020a2ea446000000b0024b0abb3984sm1093423ljn.134.2022.04.05.04.29.32
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 04:29:33 -0700 (PDT)
-Sender: =?UTF-8?Q?Ville_Skytt=C3=A4?= <vskytta@gmail.com>
-From:   "=?UTF-8?q?Ville=20Skytt=C3=A4?=" <ville.skytta@iki.fi>
-X-Google-Original-From: =?UTF-8?q?Ville=20Skytt=C3=A4?= <ville.skytta@upcloud.com>
-To:     linux-kernel@vger.kernel.org
-Subject: [PATCH] docs/kernel-parameters: Note nopku AMD applicability
-Date:   Tue,  5 Apr 2022 14:29:32 +0300
-Message-Id: <20220405112932.416098-1-ville.skytta@upcloud.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 5 Apr 2022 08:24:57 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 63D48DA08A;
+        Tue,  5 Apr 2022 04:31:59 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 751C49200BB; Tue,  5 Apr 2022 13:31:58 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 7075E9200B4;
+        Tue,  5 Apr 2022 12:31:58 +0100 (BST)
+Date:   Tue, 5 Apr 2022 12:31:58 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc:     Andrew Powers-Holmes <aholmes@omnom.net>,
+        yaliang.wang@windriver.com, rppt@kernel.org, huangpei@loongson.cn,
+        Andrew Morton <akpm@linux-foundation.org>, kumba@gentoo.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        anshuman.khandual@arm.com, penberg@kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] MIPS: pgalloc: fix memory leak caused by pgd_free()
+In-Reply-To: <20220405104506.GA17085@alpha.franken.de>
+Message-ID: <alpine.DEB.2.21.2204051224560.47162@angie.orcam.me.uk>
+References: <20220310113116.2068859-1-yaliang.wang@windriver.com> <alpine.DEB.2.21.2204021446370.47162@angie.orcam.me.uk> <9cc88b1c-8a8c-95ea-2cf7-31be3b771495@omnom.net> <alpine.DEB.2.21.2204031122020.47162@angie.orcam.me.uk> <b273a9b7-82f7-5883-14d2-973dd005b005@omnom.net>
+ <alpine.DEB.2.21.2204051027490.47162@angie.orcam.me.uk> <20220405104506.GA17085@alpha.franken.de>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,26 +47,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pku is no longer Intel specific.
+On Tue, 5 Apr 2022, Thomas Bogendoerfer wrote:
 
-Signed-off-by: Ville Skyttä <ville.skytta@upcloud.com>
----
- Documentation/admin-guide/kernel-parameters.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> >  NB I think it has to be backported to all the stable branches made since 
+> > the original breakage; i.e. v5.9+ (I haven't kept track of what they are).
+> 
+> the fix has a Fixes tag so it will usually ported to stable/longterm kernels.
+> I already saw it in Greg's patch bombs.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 3f1cc5e317ed..d227539c52fe 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -1120,7 +1120,7 @@
- 			for details.
- 
- 	nopku		[X86] Disable Memory Protection Keys CPU feature found
--			in some Intel CPUs.
-+			in some Intel and AMD CPUs.
- 
- 	<module>.async_probe [KNL]
- 			Enable asynchronous probe on this module.
--- 
-2.25.1
+ Hmm, not all fixes qualify for or indeed are worth backporting and I'd 
+expect those that have no stable annotation to remain on trunk only.  I 
+have been following this principle with my submissions anyway.
 
+ Indeed I can see a backport to 5.17 has literally just been posted in 
+this humongous patch set, but in this case I suspect Greg has just picked 
+this up by hand (thanks, Greg!) having seen this discussion (though how he 
+manages to escape alive through the flood of messages has been astonishing 
+me).
+
+  Maciej

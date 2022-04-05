@@ -2,75 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 143E74F4EF2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 873A04F4DBA
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1582625AbiDEXs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57894 "EHLO
+        id S1582897AbiDEXuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389781AbiDEP0q (ORCPT
+        with ESMTP id S1390737AbiDEPbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:26:46 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28AE1EEA43;
-        Tue,  5 Apr 2022 06:37:32 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id C01181F4512B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649165850;
-        bh=plGTTyi7O6qDtXxCe+h/xQcs9ltHnMhWtxjOqkuVZDA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=c7CbAeTNu93R+wac0xUo8wYt5JHYwVPd64SEqW/SDwK8otS4ZmnyP2OT8Zetat059
-         odFY4s7LLMRKdZx+u9DgJ+6R76/bmNzUrxwpPJMv+KYldaKtX0rVOinXvHBuewmHCd
-         GPiHBfHg9bzOyApLYuAlAGJ54YI1ZvRFGvvu31CzQMNaPh7/FpmEf6WgCoWWVghk0v
-         n7+V4pbW+bbDbiuVhQ74MTamguMKsNtXVYQJBaVZkV4tM1g6haDmp3nJBTJhcq+6me
-         SGNpIoCdUfJATVmysl7Ianu9MVm7k8Y6RobJ0fX1h6SE+SehjaHHxv8XRMMnf90Yif
-         lU13kvmJsV8CA==
-Message-ID: <9999f731-1e95-ef51-4b09-c88222320696@collabora.com>
-Date:   Tue, 5 Apr 2022 15:37:26 +0200
+        Tue, 5 Apr 2022 11:31:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE4247396
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:39:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D364361899
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 13:39:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80635C385A1;
+        Tue,  5 Apr 2022 13:39:01 +0000 (UTC)
+Date:   Tue, 5 Apr 2022 09:38:59 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: vmlinux.o: warning: objtool: stackleak_erase()+0x35: call to
+ ftrace_likely_update() leaves .noinstr.text section
+Message-ID: <20220405093859.05660166@gandalf.local.home>
+In-Reply-To: <20220405080335.GC30877@worktop.programming.kicks-ass.net>
+References: <202204042008.sCQbEmVS-lkp@intel.com>
+        <202204041125.500C28FD8@keescook>
+        <20220404152502.0621caf9@gandalf.local.home>
+        <20220405080335.GC30877@worktop.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] remoteproc: mtk_scp: Fix a potential double free
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <1d15923b4ffb94531435c48482fef276a11b9a67.1648981531.git.christophe.jaillet@wanadoo.fr>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <1d15923b4ffb94531435c48482fef276a11b9a67.1648981531.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 03/04/22 12:25, Christophe JAILLET ha scritto:
-> 'scp->rproc' is allocated using devm_rproc_alloc(), so there is no need
-> to free it explicitly in the remove function.
+On Tue, 5 Apr 2022 10:03:35 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
+
+> > I think I'll just send a patch to nuke the tracer. I'm sure Peter Zijlstra
+> > will be happy when I do that. But I still want the profiler, as I find that
+> > useful.  
 > 
-> Fixes: c1407ac1099a ("remoteproc: mtk_scp: Use devm variant of rproc_alloc()")
+> It'll explode the moment Lai's entry rework goes through. That'll make
+> us run C code before we switch to the kernel address space, so your
+> counters will not exist/be-mapped and *BOOM*.
 
-Hello Cristophe,
-thanks for the patch!
+We could black list those areas. Just add:
 
-I agree with what you're doing here, but you forgot to add your Signed-off-by.
-Please resend it with your signoff, then I will give you my R-b.
-Also, please make sure to add me to the Ccs so that I can see your v2 sooner!
+#define DISABLE_BRANCH_PROFILING at the top of any file and it will not
+do the profiling.
 
-Thanks,
-Angelo
+-- Steve

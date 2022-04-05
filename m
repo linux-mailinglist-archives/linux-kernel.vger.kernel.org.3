@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C66004F508E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 573584F506E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573707AbiDFBaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
+        id S1841807AbiDFBZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349158AbiDEJtQ (ORCPT
+        with ESMTP id S1356071AbiDEKWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:16 -0400
+        Tue, 5 Apr 2022 06:22:51 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3EA55FC4;
-        Tue,  5 Apr 2022 02:41:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144D6B0A4A;
+        Tue,  5 Apr 2022 03:05:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 863C2B81B14;
-        Tue,  5 Apr 2022 09:41:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E89FDC385A1;
-        Tue,  5 Apr 2022 09:41:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE035B81B7A;
+        Tue,  5 Apr 2022 10:05:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E323C385A2;
+        Tue,  5 Apr 2022 10:05:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151706;
-        bh=rSDVb1Qw/QoGBKaqxoDM92isw7IMSbftWVufuClGpmA=;
+        s=korg; t=1649153151;
+        bh=1srLbwnp+33mPNfQrlU4NgdphoWy2lW4na0w7ivP5IM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uwVpl+yS5cK/dkpcvM4iuRp5o/lu9k4jqe0hNkH0Zi5e/l/AUhhohAf1NmqCKsCaT
-         2n5TweWJ0rkncsPDgbDRXW7JkZGtUhZwuqPhPW5uVQMCmoXjkx+2GmfYtKmTtmMcT6
-         BRL4bwuU3cNIfbQ7S0ILomjTMOikZOaB5TxLMjh8=
+        b=rsTmzPp4nG0VL3O7GrslZznBD+dfkzYIglRzgC2nbOzNymg7gSnqYdMLGGWS3iKGH
+         4eRkNibNmSwC+C08j6YpBXSEBeLJoV/zVvDztVO3zZ3umoYXyNgY/cYaq5+Q7iR6ob
+         Ch3y42CEcKoGusyo9/ifUKjgXaO8DzhuX3OPLK48=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 512/913] i2c: xiic: Make bus names unique
-Date:   Tue,  5 Apr 2022 09:26:14 +0200
-Message-Id: <20220405070355.201408006@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 5.10 081/599] can: isotp: sanitize CAN ID checks in isotp_bind()
+Date:   Tue,  5 Apr 2022 09:26:15 +0200
+Message-Id: <20220405070301.236975712@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +56,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-[ Upstream commit 1d366c2f9df8279df2adbb60471f86fc40a1c39e ]
+commit 3ea566422cbde9610c2734980d1286ab681bb40e upstream.
 
-This driver is for an FPGA logic core, so there can be arbitrarily many
-instances of the bus on a given system. Previously all of the I2C bus
-names were "xiic-i2c" which caused issues with lm_sensors when trying to
-map human-readable names to sensor inputs because it could not properly
-distinguish the busses, for example. Append the platform device name to
-the I2C bus name so it is unique between different instances.
+Syzbot created an environment that lead to a state machine status that
+can not be reached with a compliant CAN ID address configuration.
+The provided address information consisted of CAN ID 0x6000001 and 0xC28001
+which both boil down to 11 bit CAN IDs 0x001 in sending and receiving.
 
-Fixes: e1d5b6598cdc ("i2c: Add support for Xilinx XPS IIC Bus Interface")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Tested-by: Michal Simek <michal.simek@xilinx.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Sanitize the SFF/EFF CAN ID values before performing the address checks.
+
+Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
+Link: https://lore.kernel.org/all/20220316164258.54155-1-socketcan@hartkopp.net
+Reported-by: syzbot+2339c27f5c66c652843e@syzkaller.appspotmail.com
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/i2c/busses/i2c-xiic.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/can/isotp.c |   38 ++++++++++++++++++++------------------
+ 1 file changed, 20 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-index bb93db98404e..612343771ce2 100644
---- a/drivers/i2c/busses/i2c-xiic.c
-+++ b/drivers/i2c/busses/i2c-xiic.c
-@@ -756,7 +756,6 @@ static const struct i2c_adapter_quirks xiic_quirks = {
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -1102,6 +1102,7 @@ static int isotp_bind(struct socket *soc
+ 	struct net *net = sock_net(sk);
+ 	int ifindex;
+ 	struct net_device *dev;
++	canid_t tx_id, rx_id;
+ 	int err = 0;
+ 	int notify_enetdown = 0;
+ 	int do_rx_reg = 1;
+@@ -1109,8 +1110,18 @@ static int isotp_bind(struct socket *soc
+ 	if (len < ISOTP_MIN_NAMELEN)
+ 		return -EINVAL;
  
- static const struct i2c_adapter xiic_adapter = {
- 	.owner = THIS_MODULE,
--	.name = DRIVER_NAME,
- 	.class = I2C_CLASS_DEPRECATED,
- 	.algo = &xiic_algorithm,
- 	.quirks = &xiic_quirks,
-@@ -793,6 +792,8 @@ static int xiic_i2c_probe(struct platform_device *pdev)
- 	i2c_set_adapdata(&i2c->adap, i2c);
- 	i2c->adap.dev.parent = &pdev->dev;
- 	i2c->adap.dev.of_node = pdev->dev.of_node;
-+	snprintf(i2c->adap.name, sizeof(i2c->adap.name),
-+		 DRIVER_NAME " %s", pdev->name);
+-	if (addr->can_addr.tp.tx_id & (CAN_ERR_FLAG | CAN_RTR_FLAG))
+-		return -EADDRNOTAVAIL;
++	/* sanitize tx/rx CAN identifiers */
++	tx_id = addr->can_addr.tp.tx_id;
++	if (tx_id & CAN_EFF_FLAG)
++		tx_id &= (CAN_EFF_FLAG | CAN_EFF_MASK);
++	else
++		tx_id &= CAN_SFF_MASK;
++
++	rx_id = addr->can_addr.tp.rx_id;
++	if (rx_id & CAN_EFF_FLAG)
++		rx_id &= (CAN_EFF_FLAG | CAN_EFF_MASK);
++	else
++		rx_id &= CAN_SFF_MASK;
  
- 	mutex_init(&i2c->lock);
- 	init_waitqueue_head(&i2c->wait);
--- 
-2.34.1
-
+ 	if (!addr->can_ifindex)
+ 		return -ENODEV;
+@@ -1122,21 +1133,13 @@ static int isotp_bind(struct socket *soc
+ 		do_rx_reg = 0;
+ 
+ 	/* do not validate rx address for functional addressing */
+-	if (do_rx_reg) {
+-		if (addr->can_addr.tp.rx_id == addr->can_addr.tp.tx_id) {
+-			err = -EADDRNOTAVAIL;
+-			goto out;
+-		}
+-
+-		if (addr->can_addr.tp.rx_id & (CAN_ERR_FLAG | CAN_RTR_FLAG)) {
+-			err = -EADDRNOTAVAIL;
+-			goto out;
+-		}
++	if (do_rx_reg && rx_id == tx_id) {
++		err = -EADDRNOTAVAIL;
++		goto out;
+ 	}
+ 
+ 	if (so->bound && addr->can_ifindex == so->ifindex &&
+-	    addr->can_addr.tp.rx_id == so->rxid &&
+-	    addr->can_addr.tp.tx_id == so->txid)
++	    rx_id == so->rxid && tx_id == so->txid)
+ 		goto out;
+ 
+ 	dev = dev_get_by_index(net, addr->can_ifindex);
+@@ -1160,8 +1163,7 @@ static int isotp_bind(struct socket *soc
+ 	ifindex = dev->ifindex;
+ 
+ 	if (do_rx_reg)
+-		can_rx_register(net, dev, addr->can_addr.tp.rx_id,
+-				SINGLE_MASK(addr->can_addr.tp.rx_id),
++		can_rx_register(net, dev, rx_id, SINGLE_MASK(rx_id),
+ 				isotp_rcv, sk, "isotp", sk);
+ 
+ 	dev_put(dev);
+@@ -1181,8 +1183,8 @@ static int isotp_bind(struct socket *soc
+ 
+ 	/* switch to new settings */
+ 	so->ifindex = ifindex;
+-	so->rxid = addr->can_addr.tp.rx_id;
+-	so->txid = addr->can_addr.tp.tx_id;
++	so->rxid = rx_id;
++	so->txid = tx_id;
+ 	so->bound = 1;
+ 
+ out:
 
 

@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE8C4F484D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD02E4F4630
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356680AbiDEVfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
+        id S1387466AbiDENPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:15:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349584AbiDEJu1 (ORCPT
+        with ESMTP id S1344267AbiDEJTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:50:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A859B;
-        Tue,  5 Apr 2022 02:48:29 -0700 (PDT)
+        Tue, 5 Apr 2022 05:19:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A1E220DE;
+        Tue,  5 Apr 2022 02:06:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8FDDB817D3;
-        Tue,  5 Apr 2022 09:48:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35856C385A2;
-        Tue,  5 Apr 2022 09:48:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FFD461571;
+        Tue,  5 Apr 2022 09:06:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C039C385A1;
+        Tue,  5 Apr 2022 09:06:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152106;
-        bh=GJWTx2va9kVPJ+UsHarwUFYycQHMaT1jG3zkI1xGkhM=;
+        s=korg; t=1649149593;
+        bh=hUw5GvYClpR87kollzuNvmjc3unATiZOHiuZijPqx/s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T6W8Cs4BB1gdE6cJqy2ROGdxvhPagUTCuclfzyV5lHE2zCtIZFy7+QgPAY3NA7ojs
-         3hXEWD2/ANK5oIL+SMh3UzaHYeQePdJ9cY8pUB5b8Sj20DpiBPY2FOExo0zEDQQNkP
-         SRraaANVHnY1veg5NsmqVg8jz6J2usaCu+MnsC4Q=
+        b=KaFJ2kWx1a7RhTHQy1JrDDFcTuIIzkbQlDmEjKCRvJAfaG4R4FBqWjtsAr5y67KKB
+         3Xp8mIkWfyapmUYMzg4k1/DsPS9roWt42ssgWcPyfWQ8GGr7md05RHE/Rlm5mBQiQ7
+         njr2dOFa5k0cmmNWu9dTmd8c0DiFCf5g/mjXmQr0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 620/913] clk: loongson1: Terminate clk_div_table with sentinel element
-Date:   Tue,  5 Apr 2022 09:28:02 +0200
-Message-Id: <20220405070358.424889663@linuxfoundation.org>
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>,
+        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0771/1017] irqchip/nvic: Release nvic_base upon failure
+Date:   Tue,  5 Apr 2022 09:28:04 +0200
+Message-Id: <20220405070417.145962088@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,35 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+From: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
 
-[ Upstream commit 3eb00f89162e80083dfcaa842468b510462cfeaa ]
+[ Upstream commit e414c25e3399b2b3d7337dc47abccab5c71b7c8f ]
 
-In order that the end of a clk_div_table can be detected, it must be
-terminated with a sentinel element (.div = 0).
+smatch warning was reported as below ->
 
-Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
-Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
-Link: https://lore.kernel.org/r/20220218000922.134857-3-j.neuschaefer@gmx.net
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+smatch warnings:
+drivers/irqchip/irq-nvic.c:131 nvic_of_init()
+warn: 'nvic_base' not released on lines: 97.
+
+Release nvic_base upon failure.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220218163303.33344-1-jrdr.linux@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/loongson1/clk-loongson1c.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/irqchip/irq-nvic.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loongson1/clk-loongson1c.c
-index 703f87622cf5..1ebf740380ef 100644
---- a/drivers/clk/loongson1/clk-loongson1c.c
-+++ b/drivers/clk/loongson1/clk-loongson1c.c
-@@ -37,6 +37,7 @@ static const struct clk_div_table ahb_div_table[] = {
- 	[1] = { .val = 1, .div = 4 },
- 	[2] = { .val = 2, .div = 3 },
- 	[3] = { .val = 3, .div = 3 },
-+	[4] = { /* sentinel */ }
- };
+diff --git a/drivers/irqchip/irq-nvic.c b/drivers/irqchip/irq-nvic.c
+index ba4759b3e269..94230306e0ee 100644
+--- a/drivers/irqchip/irq-nvic.c
++++ b/drivers/irqchip/irq-nvic.c
+@@ -107,6 +107,7 @@ static int __init nvic_of_init(struct device_node *node,
  
- void __init ls1x_clk_init(void)
+ 	if (!nvic_irq_domain) {
+ 		pr_warn("Failed to allocate irq domain\n");
++		iounmap(nvic_base);
+ 		return -ENOMEM;
+ 	}
+ 
+@@ -116,6 +117,7 @@ static int __init nvic_of_init(struct device_node *node,
+ 	if (ret) {
+ 		pr_warn("Failed to allocate irq chips\n");
+ 		irq_domain_remove(nvic_irq_domain);
++		iounmap(nvic_base);
+ 		return ret;
+ 	}
+ 
 -- 
 2.34.1
 

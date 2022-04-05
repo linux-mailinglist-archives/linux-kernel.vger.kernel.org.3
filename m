@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6D54F44F5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B54A4F459B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389412AbiDEOox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50288 "EHLO
+        id S1389475AbiDEOo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244306AbiDEJlO (ORCPT
+        with ESMTP id S244363AbiDEJlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:41:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754EFBB0B2;
-        Tue,  5 Apr 2022 02:26:07 -0700 (PDT)
+        Tue, 5 Apr 2022 05:41:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6E79682D;
+        Tue,  5 Apr 2022 02:26:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 047E66164E;
-        Tue,  5 Apr 2022 09:26:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19280C385A2;
-        Tue,  5 Apr 2022 09:26:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8701361659;
+        Tue,  5 Apr 2022 09:26:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CE6BC385A2;
+        Tue,  5 Apr 2022 09:26:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150766;
-        bh=nwj9I4hz2LjdI9ekt63/VjDkSUZQm1L///5e87gCFWg=;
+        s=korg; t=1649150774;
+        bh=LhUdYwK+yijx9j6jaivm7tHTIZ57ZeqRqUb+Y3YUgMg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HqdJhCdgf8oROgseBk7QGjgMaxGfblohV8kckRfMxiMhT/HpdP9N8ZcHK9U6EzZno
-         B0HDtQ/jExfAkVVbdNKNZ6+2pN0GF36PygrhNC7kJVnatUciEQPJWP6G759e3GgPxr
-         hsvZPnIjz3BiqPN0pyJOdYwkEilesYa5LPudWmts=
+        b=zyNZM+597kgtBJgDXDmT+ZOmxysETN3Hp/6OtcVJydSgkOVxm1ctIpiq02kpFlR0F
+         ipwoyOhbiZ6mlb2EKUJSb4GxjXWRvinKDkwfNZntkZYfyZCO9y/mrNJ6b2VTPzVq4I
+         Keb70An6By722OnBrVxKLw7MIr/oMSAZMMhpvxcg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 5.15 166/913] media: venus: venc: Fix h264 8x8 transform control
-Date:   Tue,  5 Apr 2022 09:20:28 +0200
-Message-Id: <20220405070344.823339864@linuxfoundation.org>
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Naohiro Aota <naohiro.aota@wdc.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.15 169/913] btrfs: zoned: mark relocation as writing
+Date:   Tue,  5 Apr 2022 09:20:31 +0200
+Message-Id: <20220405070344.914093002@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,66 +56,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+From: Naohiro Aota <naohiro.aota@wdc.com>
 
-commit 61b3317dd424a3488b6754d7ff8301944d9d17d7 upstream.
+commit ca5e4ea0beaec8bc674121838bf8614c089effb9 upstream.
 
-During encoder driver open controls are initialized via a call
-to v4l2_ctrl_handler_setup which returns EINVAL error for
-V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM v4l2 control. The control
-default value is disabled and because of firmware limitations
-8x8 transform cannot be disabled for the supported HIGH and
-CONSTRAINED_HIGH profiles.
+There is a hung_task issue with running generic/068 on an SMR
+device. The hang occurs while a process is trying to thaw the
+filesystem. The process is trying to take sb->s_umount to thaw the
+FS. The lock is held by fsstress, which calls btrfs_sync_fs() and is
+waiting for an ordered extent to finish. However, as the FS is frozen,
+the ordered extents never finish.
 
-To fix the issue change the control default value to enabled
-(this is fine because the firmware enables 8x8 transform for
-high and constrained_high profiles by default). Also, correct
-the checking of profile ids in s_ctrl from hfi to v4l2 ids.
+Having an ordered extent while the FS is frozen is the root cause of
+the hang. The ordered extent is initiated from btrfs_relocate_chunk()
+which is called from btrfs_reclaim_bgs_work().
 
-cc: stable@vger.kernel.org # 5.15+
-Fixes: bfee75f73c37 ("media: venus: venc: add support for V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM control")
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+This commit adds sb_*_write() around btrfs_relocate_chunk() call
+site. For the usual "btrfs balance" command, we already call it with
+mnt_want_file() in btrfs_ioctl_balance().
+
+Fixes: 18bb8bbf13c1 ("btrfs: zoned: automatically reclaim zones")
+CC: stable@vger.kernel.org # 5.13+
+Link: https://github.com/naota/linux/issues/56
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Signed-off-by: Naohiro Aota <naohiro.aota@wdc.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/platform/qcom/venus/venc.c       |    4 ++--
- drivers/media/platform/qcom/venus/venc_ctrls.c |    6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ fs/btrfs/block-group.c |    8 +++++++-
+ fs/btrfs/volumes.c     |    3 +++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
---- a/drivers/media/platform/qcom/venus/venc.c
-+++ b/drivers/media/platform/qcom/venus/venc.c
-@@ -604,8 +604,8 @@ static int venc_set_properties(struct ve
+--- a/fs/btrfs/block-group.c
++++ b/fs/btrfs/block-group.c
+@@ -1504,8 +1504,12 @@ void btrfs_reclaim_bgs_work(struct work_
+ 	if (!test_bit(BTRFS_FS_OPEN, &fs_info->flags))
+ 		return;
  
- 		ptype = HFI_PROPERTY_PARAM_VENC_H264_TRANSFORM_8X8;
- 		h264_transform.enable_type = 0;
--		if (ctr->profile.h264 == HFI_H264_PROFILE_HIGH ||
--		    ctr->profile.h264 == HFI_H264_PROFILE_CONSTRAINED_HIGH)
-+		if (ctr->profile.h264 == V4L2_MPEG_VIDEO_H264_PROFILE_HIGH ||
-+		    ctr->profile.h264 == V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_HIGH)
- 			h264_transform.enable_type = ctr->h264_8x8_transform;
+-	if (!btrfs_exclop_start(fs_info, BTRFS_EXCLOP_BALANCE))
++	sb_start_write(fs_info->sb);
++
++	if (!btrfs_exclop_start(fs_info, BTRFS_EXCLOP_BALANCE)) {
++		sb_end_write(fs_info->sb);
+ 		return;
++	}
  
- 		ret = hfi_session_set_property(inst, ptype, &h264_transform);
---- a/drivers/media/platform/qcom/venus/venc_ctrls.c
-+++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
-@@ -320,8 +320,8 @@ static int venc_op_s_ctrl(struct v4l2_ct
- 		ctr->intra_refresh_period = ctrl->val;
- 		break;
- 	case V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM:
--		if (ctr->profile.h264 != HFI_H264_PROFILE_HIGH &&
--		    ctr->profile.h264 != HFI_H264_PROFILE_CONSTRAINED_HIGH)
-+		if (ctr->profile.h264 != V4L2_MPEG_VIDEO_H264_PROFILE_HIGH &&
-+		    ctr->profile.h264 != V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_HIGH)
- 			return -EINVAL;
+ 	/*
+ 	 * Long running balances can keep us blocked here for eternity, so
+@@ -1513,6 +1517,7 @@ void btrfs_reclaim_bgs_work(struct work_
+ 	 */
+ 	if (!mutex_trylock(&fs_info->reclaim_bgs_lock)) {
+ 		btrfs_exclop_finish(fs_info);
++		sb_end_write(fs_info->sb);
+ 		return;
+ 	}
  
- 		/*
-@@ -457,7 +457,7 @@ int venc_ctrl_init(struct venus_inst *in
- 			  V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MIN_QP, 1, 51, 1, 1);
+@@ -1581,6 +1586,7 @@ next:
+ 	spin_unlock(&fs_info->unused_bgs_lock);
+ 	mutex_unlock(&fs_info->reclaim_bgs_lock);
+ 	btrfs_exclop_finish(fs_info);
++	sb_end_write(fs_info->sb);
+ }
  
- 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
--			  V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM, 0, 1, 1, 0);
-+			  V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM, 0, 1, 1, 1);
+ void btrfs_reclaim_bgs(struct btrfs_fs_info *fs_info)
+--- a/fs/btrfs/volumes.c
++++ b/fs/btrfs/volumes.c
+@@ -8185,10 +8185,12 @@ static int relocating_repair_kthread(voi
+ 	target = cache->start;
+ 	btrfs_put_block_group(cache);
  
- 	v4l2_ctrl_new_std(&inst->ctrl_handler, &venc_ctrl_ops,
- 			  V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MIN_QP, 1, 51, 1, 1);
++	sb_start_write(fs_info->sb);
+ 	if (!btrfs_exclop_start(fs_info, BTRFS_EXCLOP_BALANCE)) {
+ 		btrfs_info(fs_info,
+ 			   "zoned: skip relocating block group %llu to repair: EBUSY",
+ 			   target);
++		sb_end_write(fs_info->sb);
+ 		return -EBUSY;
+ 	}
+ 
+@@ -8216,6 +8218,7 @@ out:
+ 		btrfs_put_block_group(cache);
+ 	mutex_unlock(&fs_info->reclaim_bgs_lock);
+ 	btrfs_exclop_finish(fs_info);
++	sb_end_write(fs_info->sb);
+ 
+ 	return ret;
+ }
 
 

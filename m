@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CDC94F44F9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 520634F43C0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346288AbiDEM3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
+        id S1383473AbiDEMZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245730AbiDEI4y (ORCPT
+        with ESMTP id S232014AbiDEIxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:56:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9B919C0B;
-        Tue,  5 Apr 2022 01:52:42 -0700 (PDT)
+        Tue, 5 Apr 2022 04:53:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FF6E20E;
+        Tue,  5 Apr 2022 01:51:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 02751B81B75;
-        Tue,  5 Apr 2022 08:52:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65569C385A0;
-        Tue,  5 Apr 2022 08:52:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68286614FD;
+        Tue,  5 Apr 2022 08:51:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77F98C385A1;
+        Tue,  5 Apr 2022 08:51:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148759;
-        bh=6teVxoPhBawGeWELxNYk1AiLJDt6H6dR+P6fL/PEkA8=;
+        s=korg; t=1649148678;
+        bh=yhUfmQ7iuLGgVfcfW/WD7nfKw5/vrSQEykgxUa0+gLA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tHhrAPbWlRY3eS/WAnf5LPpuKVDigGHSt0bJRafZSyL4kRyQ+QsGvB5+6NPVl7w6A
-         Wr413+bF3Bgcq3pUDse8zLEP9H8j0F0PRvOhMafWNTVVbIoO7GH/b69FFDw7Jgn7LO
-         MxHqoAHZtKF9k2wcGuB9m9tnSdiLoM+Ljnb5rdRM=
+        b=KgXfDnY+MDftnqQAS+ppKVmZowN4P17SNnMMY1Ex6IXzqRXJyFqglscv7BN2pNgyE
+         Glbe5/9sWrTpY5FuyAW5Dbz9d5TfSIeC9A0x2oQZoPT3RFd/vAqTKnDy1KrvKFMtIo
+         YFhnGiLgiq2eknigNVKsauWFbKYyOYCrEdPuyIpQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+f83a1df1ed4f67e8d8ad@syzkaller.appspotmail.com,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Sandeep Penigalapati <sandeep.penigalapati@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0433/1017] ath9k_htc: fix uninit value bugs
-Date:   Tue,  5 Apr 2022 09:22:26 +0200
-Message-Id: <20220405070407.147717925@linuxfoundation.org>
+Subject: [PATCH 5.16 0443/1017] ixgbe: pass bi->xdp to ixgbe_construct_skb_zc() directly
+Date:   Tue,  5 Apr 2022 09:22:36 +0200
+Message-Id: <20220405070407.445948031@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -57,98 +58,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
 
-[ Upstream commit d1e0df1c57bd30871dd1c855742a7c346dbca853 ]
+[ Upstream commit 1fbdaa13386804a31eefd3db3c5fe00e80ce9bc3 ]
 
-Syzbot reported 2 KMSAN bugs in ath9k. All of them are caused by missing
-field initialization.
+To not dereference bi->xdp each time in ixgbe_construct_skb_zc(),
+pass bi->xdp as an argument instead of bi. We can also call
+xsk_buff_free() outside of the function as well as assign bi->xdp
+to NULL, which seems to make it closer to its name.
 
-In htc_connect_service() svc_meta_len and pad are not initialized. Based
-on code it looks like in current skb there is no service data, so simply
-initialize svc_meta_len to 0.
-
-htc_issue_send() does not initialize htc_frame_hdr::control array. Based
-on firmware code, it will initialize it by itself, so simply zero whole
-array to make KMSAN happy
-
-Fail logs:
-
-BUG: KMSAN: kernel-usb-infoleak in usb_submit_urb+0x6c1/0x2aa0 drivers/usb/core/urb.c:430
- usb_submit_urb+0x6c1/0x2aa0 drivers/usb/core/urb.c:430
- hif_usb_send_regout drivers/net/wireless/ath/ath9k/hif_usb.c:127 [inline]
- hif_usb_send+0x5f0/0x16f0 drivers/net/wireless/ath/ath9k/hif_usb.c:479
- htc_issue_send drivers/net/wireless/ath/ath9k/htc_hst.c:34 [inline]
- htc_connect_service+0x143e/0x1960 drivers/net/wireless/ath/ath9k/htc_hst.c:275
-...
-
-Uninit was created at:
- slab_post_alloc_hook mm/slab.h:524 [inline]
- slab_alloc_node mm/slub.c:3251 [inline]
- __kmalloc_node_track_caller+0xe0c/0x1510 mm/slub.c:4974
- kmalloc_reserve net/core/skbuff.c:354 [inline]
- __alloc_skb+0x545/0xf90 net/core/skbuff.c:426
- alloc_skb include/linux/skbuff.h:1126 [inline]
- htc_connect_service+0x1029/0x1960 drivers/net/wireless/ath/ath9k/htc_hst.c:258
-...
-
-Bytes 4-7 of 18 are uninitialized
-Memory access of size 18 starts at ffff888027377e00
-
-BUG: KMSAN: kernel-usb-infoleak in usb_submit_urb+0x6c1/0x2aa0 drivers/usb/core/urb.c:430
- usb_submit_urb+0x6c1/0x2aa0 drivers/usb/core/urb.c:430
- hif_usb_send_regout drivers/net/wireless/ath/ath9k/hif_usb.c:127 [inline]
- hif_usb_send+0x5f0/0x16f0 drivers/net/wireless/ath/ath9k/hif_usb.c:479
- htc_issue_send drivers/net/wireless/ath/ath9k/htc_hst.c:34 [inline]
- htc_connect_service+0x143e/0x1960 drivers/net/wireless/ath/ath9k/htc_hst.c:275
-...
-
-Uninit was created at:
- slab_post_alloc_hook mm/slab.h:524 [inline]
- slab_alloc_node mm/slub.c:3251 [inline]
- __kmalloc_node_track_caller+0xe0c/0x1510 mm/slub.c:4974
- kmalloc_reserve net/core/skbuff.c:354 [inline]
- __alloc_skb+0x545/0xf90 net/core/skbuff.c:426
- alloc_skb include/linux/skbuff.h:1126 [inline]
- htc_connect_service+0x1029/0x1960 drivers/net/wireless/ath/ath9k/htc_hst.c:258
-...
-
-Bytes 16-17 of 18 are uninitialized
-Memory access of size 18 starts at ffff888027377e00
-
-Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
-Reported-by: syzbot+f83a1df1ed4f67e8d8ad@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220115122733.11160-1-paskripkin@gmail.com
+Suggested-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Tested-by: Sandeep Penigalapati <sandeep.penigalapati@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath9k/htc_hst.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath9k/htc_hst.c b/drivers/net/wireless/ath/ath9k/htc_hst.c
-index 510e61e97dbc..994ec48b2f66 100644
---- a/drivers/net/wireless/ath/ath9k/htc_hst.c
-+++ b/drivers/net/wireless/ath/ath9k/htc_hst.c
-@@ -30,6 +30,7 @@ static int htc_issue_send(struct htc_target *target, struct sk_buff* skb,
- 	hdr->endpoint_id = epid;
- 	hdr->flags = flags;
- 	hdr->payload_len = cpu_to_be16(len);
-+	memset(hdr->control, 0, sizeof(hdr->control));
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
+index 666ff2c07ab9..ab96d7ce1aa0 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
+@@ -207,26 +207,24 @@ bool ixgbe_alloc_rx_buffers_zc(struct ixgbe_ring *rx_ring, u16 count)
+ }
  
- 	status = target->hif->send(target->hif_dev, endpoint->ul_pipeid, skb);
+ static struct sk_buff *ixgbe_construct_skb_zc(struct ixgbe_ring *rx_ring,
+-					      struct ixgbe_rx_buffer *bi)
++					      const struct xdp_buff *xdp)
+ {
+-	unsigned int metasize = bi->xdp->data - bi->xdp->data_meta;
+-	unsigned int datasize = bi->xdp->data_end - bi->xdp->data;
++	unsigned int metasize = xdp->data - xdp->data_meta;
++	unsigned int datasize = xdp->data_end - xdp->data;
+ 	struct sk_buff *skb;
  
-@@ -272,6 +273,10 @@ int htc_connect_service(struct htc_target *target,
- 	conn_msg->dl_pipeid = endpoint->dl_pipeid;
- 	conn_msg->ul_pipeid = endpoint->ul_pipeid;
+ 	/* allocate a skb to store the frags */
+ 	skb = __napi_alloc_skb(&rx_ring->q_vector->napi,
+-			       bi->xdp->data_end - bi->xdp->data_hard_start,
++			       xdp->data_end - xdp->data_hard_start,
+ 			       GFP_ATOMIC | __GFP_NOWARN);
+ 	if (unlikely(!skb))
+ 		return NULL;
  
-+	/* To prevent infoleak */
-+	conn_msg->svc_meta_len = 0;
-+	conn_msg->pad = 0;
+-	skb_reserve(skb, bi->xdp->data - bi->xdp->data_hard_start);
+-	memcpy(__skb_put(skb, datasize), bi->xdp->data, datasize);
++	skb_reserve(skb, xdp->data - xdp->data_hard_start);
++	memcpy(__skb_put(skb, datasize), xdp->data, datasize);
+ 	if (metasize)
+ 		skb_metadata_set(skb, metasize);
+ 
+-	xsk_buff_free(bi->xdp);
+-	bi->xdp = NULL;
+ 	return skb;
+ }
+ 
+@@ -317,12 +315,15 @@ int ixgbe_clean_rx_irq_zc(struct ixgbe_q_vector *q_vector,
+ 		}
+ 
+ 		/* XDP_PASS path */
+-		skb = ixgbe_construct_skb_zc(rx_ring, bi);
++		skb = ixgbe_construct_skb_zc(rx_ring, bi->xdp);
+ 		if (!skb) {
+ 			rx_ring->rx_stats.alloc_rx_buff_failed++;
+ 			break;
+ 		}
+ 
++		xsk_buff_free(bi->xdp);
++		bi->xdp = NULL;
 +
- 	ret = htc_issue_send(target, skb, skb->len, 0, ENDPOINT0);
- 	if (ret)
- 		goto err;
+ 		cleaned_count++;
+ 		ixgbe_inc_ntc(rx_ring);
+ 
 -- 
 2.34.1
 

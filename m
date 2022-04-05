@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC414F507A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9FA4F50E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1842080AbiDFB05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
+        id S1843759AbiDFBl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234591AbiDEKfQ (ORCPT
+        with ESMTP id S1354451AbiDEKOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:35:16 -0400
+        Tue, 5 Apr 2022 06:14:16 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1305E3B2B7;
-        Tue,  5 Apr 2022 03:20:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4BA69CFE;
+        Tue,  5 Apr 2022 03:00:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1933B81BC5;
-        Tue,  5 Apr 2022 10:20:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F1CBC385A1;
-        Tue,  5 Apr 2022 10:20:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 854FBB81C98;
+        Tue,  5 Apr 2022 10:00:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D30C1C385A2;
+        Tue,  5 Apr 2022 10:00:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154043;
-        bh=iGOaU2i15VbzWQLnZXbCeWm1YGT/GMhnFIK35uqmUXc=;
+        s=korg; t=1649152803;
+        bh=csoXg8xfP54KyRaAROKfOyTrSMX5tlMmyn9Qsmva0YE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ChlkDajjTLZ9qClQdbZ1XsvVy2qGGZ/wg7+7W9ZR2cHIQnnn3hK1DUMxhOdYpD1Jg
-         EwUZQSr2ukc1/1iE4hRJwYRSvgxA8GjaK3+bp7Vmlzvy6tDs32eq2jVQQKVoiNz/vr
-         29VyxtnEC5Y1yRJd/5G+vH6njEl7BFAy/c2HTaZc=
+        b=X84JRmiEiSGR+s+s9QW/aU+fsP89brgJJh7xSk8AUq5YDEndiCU288tyIuFNXjqRJ
+         8r52WAyiu5cXxSchjTAo2O47srO4J25exFOONChXQJGePzt55mXe5PNoFOQM0pp9G9
+         08OS2VxyYu0CDUUA/ZZVoA7qnWvV6kS17cDb/6Ks=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 436/599] clk: Initialize orphan req_rate
-Date:   Tue,  5 Apr 2022 09:32:10 +0200
-Message-Id: <20220405070311.806309623@linuxfoundation.org>
+        stable@vger.kernel.org, Halil Pasic <pasic@linux.ibm.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Christoph Hellwig <hch@lst.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.15 869/913] Reinstate some of "swiotlb: rework "fix info leak with DMA_FROM_DEVICE""
+Date:   Tue,  5 Apr 2022 09:32:11 +0200
+Message-Id: <20220405070405.872766400@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,68 +56,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Linus Torvalds <torvalds@linux-foundation.org>
 
-[ Upstream commit 5f7e2af00807f2117650e711a58b7f0e986ce1df ]
+commit 901c7280ca0d5e2b4a8929fbe0bfb007ac2a6544 upstream.
 
-When registering a clock that doesn't have a recalc_rate implementation,
-and doesn't have its parent registered yet, we initialize the clk_core
-rate and 'req_rate' fields to 0.
+Halil Pasic points out [1] that the full revert of that commit (revert
+in bddac7c1e02b), and that a partial revert that only reverts the
+problematic case, but still keeps some of the cleanups is probably
+better.  ￼
 
-The rate field is later updated when the parent is registered in
-clk_core_reparent_orphans_nolock() using __clk_recalc_rates(), but the
-'req_rate' field is never updated.
+And that partial revert [2] had already been verified by Oleksandr
+Natalenko to also fix the issue, I had just missed that in the long
+discussion.
 
-This leads to an issue in clk_set_rate_range() and clk_put(), since
-those functions will call clk_set_rate() with the content of 'req_rate'
-to provide drivers with the opportunity to change the rate based on the
-new boundaries. In this case, we would call clk_set_rate() with a rate
-of 0, effectively enforcing the minimum allowed for this clock whenever
-we would call one of those two functions, even though the actual rate
-might be within range.
+So let's reinstate the cleanups from commit aa6f8dcbab47 ("swiotlb:
+rework "fix info leak with DMA_FROM_DEVICE""), and effectively only
+revert the part that caused problems.
 
-Let's fix this by setting 'req_rate' in
-clk_core_reparent_orphans_nolock() with the rate field content just
-updated by the call to __clk_recalc_rates().
-
-Fixes: 1c8e600440c7 ("clk: Add rate constraints to clocks")
-Reported-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Tested-by: Dmitry Osipenko <dmitry.osipenko@collabora.com> # T30 Nexus7
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://lore.kernel.org/r/20220325161144.1901695-2-maxime@cerno.tech
-[sboyd@kernel.org: Reword comment]
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/all/20220328013731.017ae3e3.pasic@linux.ibm.com/ [1]
+Link: https://lore.kernel.org/all/20220324055732.GB12078@lst.de/ [2]
+Link: https://lore.kernel.org/all/4386660.LvFx2qVVIh@natalenko.name/ [3]
+Suggested-by: Halil Pasic <pasic@linux.ibm.com>
+Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+Cc: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/clk/clk.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ Documentation/core-api/dma-attributes.rst |    8 --------
+ include/linux/dma-mapping.h               |    8 --------
+ kernel/dma/swiotlb.c                      |   12 ++++++++----
+ 3 files changed, 8 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index b8a0e3d23698..92fc084203b7 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -3384,6 +3384,19 @@ static void clk_core_reparent_orphans_nolock(void)
- 			__clk_set_parent_after(orphan, parent, NULL);
- 			__clk_recalc_accuracies(orphan);
- 			__clk_recalc_rates(orphan, 0);
-+
-+			/*
-+			 * __clk_init_parent() will set the initial req_rate to
-+			 * 0 if the clock doesn't have clk_ops::recalc_rate and
-+			 * is an orphan when it's registered.
-+			 *
-+			 * 'req_rate' is used by clk_set_rate_range() and
-+			 * clk_put() to trigger a clk_set_rate() call whenever
-+			 * the boundaries are modified. Let's make sure
-+			 * 'req_rate' is set to something non-zero so that
-+			 * clk_set_rate_range() doesn't drop the frequency.
-+			 */
-+			orphan->req_rate = orphan->rate;
- 		}
- 	}
+--- a/Documentation/core-api/dma-attributes.rst
++++ b/Documentation/core-api/dma-attributes.rst
+@@ -130,11 +130,3 @@ accesses to DMA buffers in both privileg
+ subsystem that the buffer is fully accessible at the elevated privilege
+ level (and ideally inaccessible or at least read-only at the
+ lesser-privileged levels).
+-
+-DMA_ATTR_OVERWRITE
+-------------------
+-
+-This is a hint to the DMA-mapping subsystem that the device is expected to
+-overwrite the entire mapped size, thus the caller does not require any of the
+-previous buffer contents to be preserved. This allows bounce-buffering
+-implementations to optimise DMA_FROM_DEVICE transfers.
+--- a/include/linux/dma-mapping.h
++++ b/include/linux/dma-mapping.h
+@@ -62,14 +62,6 @@
+ #define DMA_ATTR_PRIVILEGED		(1UL << 9)
+ 
+ /*
+- * This is a hint to the DMA-mapping subsystem that the device is expected
+- * to overwrite the entire mapped size, thus the caller does not require any
+- * of the previous buffer contents to be preserved. This allows
+- * bounce-buffering implementations to optimise DMA_FROM_DEVICE transfers.
+- */
+-#define DMA_ATTR_OVERWRITE		(1UL << 10)
+-
+-/*
+  * A dma_addr_t can hold any valid DMA or bus address for the platform.  It can
+  * be given to a device to use as a DMA source or target.  It is specific to a
+  * given device and there may be a translation between the CPU physical address
+--- a/kernel/dma/swiotlb.c
++++ b/kernel/dma/swiotlb.c
+@@ -578,10 +578,14 @@ phys_addr_t swiotlb_tbl_map_single(struc
+ 	for (i = 0; i < nr_slots(alloc_size + offset); i++)
+ 		mem->slots[index + i].orig_addr = slot_addr(orig_addr, i);
+ 	tlb_addr = slot_addr(mem->start, index) + offset;
+-	if (!(attrs & DMA_ATTR_SKIP_CPU_SYNC) &&
+-	    (!(attrs & DMA_ATTR_OVERWRITE) || dir == DMA_TO_DEVICE ||
+-	    dir == DMA_BIDIRECTIONAL))
+-		swiotlb_bounce(dev, tlb_addr, mapping_size, DMA_TO_DEVICE);
++	/*
++	 * When dir == DMA_FROM_DEVICE we could omit the copy from the orig
++	 * to the tlb buffer, if we knew for sure the device will
++	 * overwirte the entire current content. But we don't. Thus
++	 * unconditional bounce may prevent leaking swiotlb content (i.e.
++	 * kernel memory) to user-space.
++	 */
++	swiotlb_bounce(dev, tlb_addr, mapping_size, DMA_TO_DEVICE);
+ 	return tlb_addr;
  }
--- 
-2.34.1
-
+ 
 
 

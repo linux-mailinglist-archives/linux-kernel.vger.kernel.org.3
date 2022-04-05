@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D224F4F45E8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6738F4F4854
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383673AbiDEUFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
+        id S1380418AbiDEVg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241825AbiDEKcm (ORCPT
+        with ESMTP id S242760AbiDEKfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:32:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15077DE905;
-        Tue,  5 Apr 2022 03:18:41 -0700 (PDT)
+        Tue, 5 Apr 2022 06:35:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C19DF482;
+        Tue,  5 Apr 2022 03:19:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C17A7B81C9B;
-        Tue,  5 Apr 2022 10:18:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1990CC385A0;
-        Tue,  5 Apr 2022 10:18:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39AC5B81C9A;
+        Tue,  5 Apr 2022 10:19:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E114C385A0;
+        Tue,  5 Apr 2022 10:19:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153918;
-        bh=sjwe6HTk+VrskoTOBUJ0owPBc/lWtZnBAMxd+IY/hNY=;
+        s=korg; t=1649153954;
+        bh=33NZsSJJ8AnEe2K5FZo3oYEbB5J35KI4bIowTRDBqLk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pd1K2PC9d9lQv119CSeIEQGQX6xUfiv4WLNMiYvVsRt5FA4TpllsD17aJg+gXVJPC
-         njui2zKmKfYJKpJxTdT2bWbo+CIgiClXJ02URShWt9WMWkmvsEuivJXhMJ//2q6v7F
-         RzreOoIFEtTnRlMOa4C9zzVBkqr/PFjzQA5fqrAQ=
+        b=FhkLbjA2cpZMQz6dOsWXkN87LngXmx6B6iD14rozxioUsCUjY7F63abuuI9BEAbJc
+         ZGHg3KjGXtxu8228Z2cZDWgdIXSqMJY8w9v0TWFO6eRiFYyp3MbYI9ZgmRhIyGiGNh
+         VgzC3rDqAWnchLqp/6AVxbXiVOHOn/ivykpCwyFA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 367/599] ipv4: Fix route lookups when handling ICMP redirects and PMTU updates
-Date:   Tue,  5 Apr 2022 09:31:01 +0200
-Message-Id: <20220405070309.752208890@linuxfoundation.org>
+        stable@vger.kernel.org, Lucas Tanure <tanure@linux.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 369/599] i2c: meson: Fix wrong speed use from probe
+Date:   Tue,  5 Apr 2022 09:31:03 +0200
+Message-Id: <20220405070309.811230187@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -56,113 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guillaume Nault <gnault@redhat.com>
+From: Lucas Tanure <tanure@linux.com>
 
-[ Upstream commit 544b4dd568e3b09c1ab38a759d3187e7abda11a0 ]
+[ Upstream commit cb13aa16f34f794a9cee2626862af8a95f0f0ee9 ]
 
-The PMTU update and ICMP redirect helper functions initialise their fl4
-variable with either __build_flow_key() or build_sk_flow_key(). These
-initialisation functions always set ->flowi4_scope with
-RT_SCOPE_UNIVERSE and might set the ECN bits of ->flowi4_tos. This is
-not a problem when the route lookup is later done via
-ip_route_output_key_hash(), which properly clears the ECN bits from
-->flowi4_tos and initialises ->flowi4_scope based on the RTO_ONLINK
-flag. However, some helpers call fib_lookup() directly, without
-sanitising the tos and scope fields, so the route lookup can fail and,
-as a result, the ICMP redirect or PMTU update aren't taken into
-account.
+Having meson_i2c_set_clk_div after i2c_add_adapter
+causes issues for client drivers that try to use
+the bus before the requested speed is applied.
 
-Fix this by extracting the ->flowi4_tos and ->flowi4_scope sanitisation
-code into ip_rt_fix_tos(), then use this function in handlers that call
-fib_lookup() directly.
+The bus can be used just after i2c_add_adapter, so
+move i2c_add_adapter to the final step as
+meson_i2c_set_clk_div needs to be called before
+the bus is used.
 
-Note 1: We can't sanitise ->flowi4_tos and ->flowi4_scope in a central
-place (like __build_flow_key() or flowi4_init_output()), because
-ip_route_output_key_hash() expects non-sanitised values. When called
-with sanitised values, it can erroneously overwrite RT_SCOPE_LINK with
-RT_SCOPE_UNIVERSE in ->flowi4_scope. Therefore we have to be careful to
-sanitise the values only for those paths that don't call
-ip_route_output_key_hash().
-
-Note 2: The problem is mostly about sanitising ->flowi4_tos. Having
-->flowi4_scope initialised with RT_SCOPE_UNIVERSE instead of
-RT_SCOPE_LINK probably wasn't really a problem: sockets with the
-SOCK_LOCALROUTE flag set (those that'd result in RTO_ONLINK being set)
-normally shouldn't receive ICMP redirects or PMTU updates.
-
-Fixes: 4895c771c7f0 ("ipv4: Add FIB nexthop exceptions.")
-Signed-off-by: Guillaume Nault <gnault@redhat.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 09af1c2fa490 ("i2c: meson: set clock divider in probe instead of setting it for each transfer")
+Signed-off-by: Lucas Tanure <tanure@linux.com>
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/route.c | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ drivers/i2c/busses/i2c-meson.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index ce787c386793..c72d0de8bf71 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -529,6 +529,15 @@ void __ip_select_ident(struct net *net, struct iphdr *iph, int segs)
- }
- EXPORT_SYMBOL(__ip_select_ident);
+diff --git a/drivers/i2c/busses/i2c-meson.c b/drivers/i2c/busses/i2c-meson.c
+index ef73a42577cc..07eb819072c4 100644
+--- a/drivers/i2c/busses/i2c-meson.c
++++ b/drivers/i2c/busses/i2c-meson.c
+@@ -465,18 +465,18 @@ static int meson_i2c_probe(struct platform_device *pdev)
+ 	 */
+ 	meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_START, 0);
  
-+static void ip_rt_fix_tos(struct flowi4 *fl4)
-+{
-+	__u8 tos = RT_FL_TOS(fl4);
+-	ret = i2c_add_adapter(&i2c->adap);
+-	if (ret < 0) {
+-		clk_disable_unprepare(i2c->clk);
+-		return ret;
+-	}
+-
+ 	/* Disable filtering */
+ 	meson_i2c_set_mask(i2c, REG_SLAVE_ADDR,
+ 			   REG_SLV_SDA_FILTER | REG_SLV_SCL_FILTER, 0);
+ 
+ 	meson_i2c_set_clk_div(i2c, timings.bus_freq_hz);
+ 
++	ret = i2c_add_adapter(&i2c->adap);
++	if (ret < 0) {
++		clk_disable_unprepare(i2c->clk);
++		return ret;
++	}
 +
-+	fl4->flowi4_tos = tos & IPTOS_RT_MASK;
-+	fl4->flowi4_scope = tos & RTO_ONLINK ?
-+			    RT_SCOPE_LINK : RT_SCOPE_UNIVERSE;
-+}
-+
- static void __build_flow_key(const struct net *net, struct flowi4 *fl4,
- 			     const struct sock *sk,
- 			     const struct iphdr *iph,
-@@ -853,6 +862,7 @@ static void ip_do_redirect(struct dst_entry *dst, struct sock *sk, struct sk_buf
- 	rt = (struct rtable *) dst;
- 
- 	__build_flow_key(net, &fl4, sk, iph, oif, tos, prot, mark, 0);
-+	ip_rt_fix_tos(&fl4);
- 	__ip_do_redirect(rt, skb, &fl4, true);
+ 	return 0;
  }
  
-@@ -1077,6 +1087,7 @@ static void ip_rt_update_pmtu(struct dst_entry *dst, struct sock *sk,
- 	struct flowi4 fl4;
- 
- 	ip_rt_build_flow_key(&fl4, sk, skb);
-+	ip_rt_fix_tos(&fl4);
- 
- 	/* Don't make lookup fail for bridged encapsulations */
- 	if (skb && netif_is_any_bridge_port(skb->dev))
-@@ -1151,6 +1162,8 @@ void ipv4_sk_update_pmtu(struct sk_buff *skb, struct sock *sk, u32 mtu)
- 			goto out;
- 
- 		new = true;
-+	} else {
-+		ip_rt_fix_tos(&fl4);
- 	}
- 
- 	__ip_rt_update_pmtu((struct rtable *)xfrm_dst_path(&rt->dst), &fl4, mtu);
-@@ -2524,7 +2537,6 @@ static struct rtable *__mkroute_output(const struct fib_result *res,
- struct rtable *ip_route_output_key_hash(struct net *net, struct flowi4 *fl4,
- 					const struct sk_buff *skb)
- {
--	__u8 tos = RT_FL_TOS(fl4);
- 	struct fib_result res = {
- 		.type		= RTN_UNSPEC,
- 		.fi		= NULL,
-@@ -2534,9 +2546,7 @@ struct rtable *ip_route_output_key_hash(struct net *net, struct flowi4 *fl4,
- 	struct rtable *rth;
- 
- 	fl4->flowi4_iif = LOOPBACK_IFINDEX;
--	fl4->flowi4_tos = tos & IPTOS_RT_MASK;
--	fl4->flowi4_scope = ((tos & RTO_ONLINK) ?
--			 RT_SCOPE_LINK : RT_SCOPE_UNIVERSE);
-+	ip_rt_fix_tos(fl4);
- 
- 	rcu_read_lock();
- 	rth = ip_route_output_key_hash_rcu(net, fl4, &res, skb);
 -- 
 2.34.1
 

@@ -2,113 +2,583 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F0DB4F48E7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D974F4C0F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388558AbiDEVyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:54:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
+        id S1575578AbiDEXIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353788AbiDENo4 (ORCPT
+        with ESMTP id S1391219AbiDENrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 09:44:56 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274DD7460F;
-        Tue,  5 Apr 2022 05:43:48 -0700 (PDT)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 235CHRJQ031859;
-        Tue, 5 Apr 2022 12:43:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=rAI9DPKAHICQe84g8ES6PkP9uqydWYaPLKbh1T19Tr0=;
- b=jm9CKIIDw+ylnY+3dqie/JNknZ7iFvIwf+cj4UfmTH+obobIK3jgH3ez322A/xBOQTpJ
- k6nz3XGWFVCCgd2gSw7OulGgS7GTgquO9163seD3RFfQeedStWjTeghOrrdwi8+iIQMt
- coNSK3eBB3g9eCVn4R0ONQIqp4hSqU1s3gvH63OIRMBdQNEbWAz6iRo9vKHJg/CYZkt5
- Ou/rm3BsXjr/yvjj76sTXpf71NPIPaxrjdTD29PC43e6IsyuEyOxJ96JmL8+etSRg0So
- DSNLyTFbwDKnw1po8UTsl9+NT1ynuzPZAn3v1YpfQ2QbBQg8APnSrfpSt/Ndjmg1pNu1 JA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f87jtt1kp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 Apr 2022 12:43:31 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 235Cfk2f005049;
-        Tue, 5 Apr 2022 12:43:31 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3f87jtt1k4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 Apr 2022 12:43:30 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 235CdCvV024714;
-        Tue, 5 Apr 2022 12:43:28 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma01fra.de.ibm.com with ESMTP id 3f6e48vqu2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 Apr 2022 12:43:28 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 235ChPdt46268926
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 5 Apr 2022 12:43:26 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DFB6D4C04E;
-        Tue,  5 Apr 2022 12:43:25 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B09F74C046;
-        Tue,  5 Apr 2022 12:43:24 +0000 (GMT)
-Received: from sig-9-65-85-150.ibm.com (unknown [9.65.85.150])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  5 Apr 2022 12:43:24 +0000 (GMT)
-Message-ID: <6a74d717535179188606dea3c68f56d35a86bac8.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: remove redundant initialization of pointer 'file'.
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Date:   Tue, 05 Apr 2022 08:43:24 -0400
-In-Reply-To: <20220301120732.670168-1-colin.i.king@gmail.com>
-References: <20220301120732.670168-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Tue, 5 Apr 2022 09:47:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 027579F3B6
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 05:44:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649162650;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NKUrN0tZsmCfj+VwfcTkujw1tWWwnH4oIbgR87FskkY=;
+        b=WP/gHigsApC9oEn2d52uLUL63AdP4inNZrcucY8BZa5i3wh68mOBSHc3+sJjUuZ5j0044s
+        aOQnIARtw2iipI3PSKiJogW2xHHUvcmUfrTGKbfqHYPFt6bZlCZ6XYF4+ltGrKvJ80WC5J
+        uO90V28sxZA4Twy4OABbYhM/MZd37z8=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-643-y7glOa60P7KaEoPzhpp1cA-1; Tue, 05 Apr 2022 08:44:07 -0400
+X-MC-Unique: y7glOa60P7KaEoPzhpp1cA-1
+Received: by mail-wm1-f71.google.com with SMTP id bg8-20020a05600c3c8800b0038e6a989925so1985124wmb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 05:44:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NKUrN0tZsmCfj+VwfcTkujw1tWWwnH4oIbgR87FskkY=;
+        b=NHvc3rMrbKU+yaw4AfL8eNXHvu5aAohcuLN9ZhiqbIU2FDgBkJv7UEjsT2+knXraZ9
+         DXN+kzIRfm9I454MT0Q2khVCaCB9g6jy9L0ztKAeaIEfMojaByupGcYwprlQUfVEtk8e
+         ps8LE2Oh/ZPU5R8Or+nwnxnaIXTJF0b9pVIIbEanaDe4u3zUh1ktjVWaCSt9Ba9ZhLTc
+         qAKNPAteyOHqzSCy16RAdt5lVb43Kfr1oYdUoi48YilH/ptfg2isPdfT75ElNFwh8Nka
+         vgPjqEXsD9fdbf6Wm5rdZlgvRd7MoX6DoXHK2MWDZk7CeiW4f8/XI6rFNUfuly1J5olw
+         Ngzw==
+X-Gm-Message-State: AOAM532AP2ADrsbZOC9uC6JfGPjABQgcZ/XcpidNpfdTPzhVvgbCRYBN
+        YHYNa4vz0R7Hw8pj1o4Pesna+fU4gtiv+kcpYNA2LVqQCmH0cxkgxwoKSgFG6O4333W4D5rs37f
+        K/3HxYxJUHDWfxKGZDdvkCj+s
+X-Received: by 2002:a05:600c:3b89:b0:38c:c9d6:ff0e with SMTP id n9-20020a05600c3b8900b0038cc9d6ff0emr3002743wms.77.1649162646550;
+        Tue, 05 Apr 2022 05:44:06 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwmHeDpRbzdWkg7VcJOVGGFhx7Qk5Ijkesl3yJJqxx1YmL5kHBzj0U2dJWaY9emR7xHNxN3JQ==
+X-Received: by 2002:a05:600c:3b89:b0:38c:c9d6:ff0e with SMTP id n9-20020a05600c3b8900b0038cc9d6ff0emr3002714wms.77.1649162646215;
+        Tue, 05 Apr 2022 05:44:06 -0700 (PDT)
+Received: from [10.32.181.87] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
+        by smtp.googlemail.com with ESMTPSA id n66-20020a1ca445000000b0038e785baac7sm2049871wme.11.2022.04.05.05.44.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 05:44:05 -0700 (PDT)
+Message-ID: <aa6afd32-8892-dc8d-3804-3d85dcb0b867@redhat.com>
+Date:   Tue, 5 Apr 2022 14:44:04 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v5 024/104] KVM: TDX: create/destroy VM structure
+Content-Language: en-US
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
+        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <36805b6b6b668669d5205183c338a4020df584dd.1646422845.git.isaku.yamahata@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <36805b6b6b668669d5205183c338a4020df584dd.1646422845.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: NsdwNJRoZr6aEmaX6tRdtRFfzIvI9b2W
-X-Proofpoint-ORIG-GUID: XZKPOxOY116lUQMtlqbIdsA1H3GZh2A1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-05_02,2022-04-05_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 phishscore=0 suspectscore=0 clxscore=1011 bulkscore=0
- priorityscore=1501 mlxscore=0 impostorscore=0 mlxlogscore=643 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204050074
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-01 at 12:07 +0000, Colin Ian King wrote:
-> The pointer 'file' is being initialized with a value that is never read,
-> it is being re-assigned the same value later on closer to where it is
-> being first used. The initialization is redundant and can be removed.
+On 3/4/22 20:48, isaku.yamahata@intel.com wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
 > 
-> Cleans up clang scan build warning:
-> security/integrity/ima/ima_main.c:434:15: warning: Value stored to 'file'
-> during its initialization is never read [deadcode.DeadStores]
+> As the first step to create TDX guest, create/destroy VM struct.  Assign
+> Host Key ID (HKID) to the TDX guest for memory encryption and allocate
+> extra pages for the TDX guest. On destruction, free allocated pages, and
+> HKID.
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Add a second kvm_x86_ops hook in kvm_arch_vm_destroy() to support TDX's
+> destruction path, which needs to first put the VM into a teardown state,
+> then free per-vCPU resources, and finally free per-VM resources.
+> 
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>   arch/x86/kvm/vmx/main.c      |  16 +-
+>   arch/x86/kvm/vmx/tdx.c       | 312 +++++++++++++++++++++++++++++++++++
+>   arch/x86/kvm/vmx/tdx.h       |   2 +
+>   arch/x86/kvm/vmx/tdx_errno.h |   2 +-
+>   arch/x86/kvm/vmx/tdx_ops.h   |   8 +
+>   arch/x86/kvm/vmx/x86_ops.h   |   8 +
+>   6 files changed, 346 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
+> index 6111c6485d8e..5c3a904a30e8 100644
+> --- a/arch/x86/kvm/vmx/main.c
+> +++ b/arch/x86/kvm/vmx/main.c
+> @@ -39,12 +39,24 @@ static int vt_vm_init(struct kvm *kvm)
+>   		ret = tdx_module_setup();
+>   		if (ret)
+>   			return ret;
+> -		return -EOPNOTSUPP;	/* Not ready to create guest TD yet. */
+> +		return tdx_vm_init(kvm);
+>   	}
+>   
+>   	return vmx_vm_init(kvm);
+>   }
+>   
+> +static void vt_mmu_prezap(struct kvm *kvm)
+> +{
+> +	if (is_td(kvm))
+> +		return tdx_mmu_prezap(kvm);
+> +}
 
-thanks,
+Please rename the function to explain what it does, for example 
+tdx_mmu_release_hkid.
 
-Mimi
+Paolo
+
+> +static void vt_vm_free(struct kvm *kvm)
+> +{
+> +	if (is_td(kvm))
+> +		return tdx_vm_free(kvm);
+> +}
+
+> +
+>   struct kvm_x86_ops vt_x86_ops __initdata = {
+>   	.name = "kvm_intel",
+>   
+> @@ -58,6 +70,8 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
+>   	.is_vm_type_supported = vt_is_vm_type_supported,
+>   	.vm_size = sizeof(struct kvm_vmx),
+>   	.vm_init = vt_vm_init,
+> +	.mmu_prezap = vt_mmu_prezap,
+> +	.vm_free = vt_vm_free,
+>   
+>   	.vcpu_create = vmx_vcpu_create,
+>   	.vcpu_free = vmx_vcpu_free,
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> index 1c8222f54764..702953fd365f 100644
+> --- a/arch/x86/kvm/vmx/tdx.c
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -31,14 +31,324 @@ struct tdx_capabilities {
+>   	struct tdx_cpuid_config cpuid_configs[TDX_MAX_NR_CPUID_CONFIGS];
+>   };
+>   
+> +/* KeyID used by TDX module */
+> +static u32 tdx_global_keyid __read_mostly;
+> +
+>   /* Capabilities of KVM + the TDX module. */
+>   struct tdx_capabilities tdx_caps;
+>   
+> +static DEFINE_MUTEX(tdx_lock);
+>   static struct mutex *tdx_mng_key_config_lock;
+>   
+>   static u64 hkid_mask __ro_after_init;
+>   static u8 hkid_start_pos __ro_after_init;
+>   
+> +static __always_inline hpa_t set_hkid_to_hpa(hpa_t pa, u16 hkid)
+> +{
+> +	pa &= ~hkid_mask;
+> +	pa |= (u64)hkid << hkid_start_pos;
+> +
+> +	return pa;
+> +}
+> +
+> +static inline bool is_td_created(struct kvm_tdx *kvm_tdx)
+> +{
+> +	return kvm_tdx->tdr.added;
+> +}
+> +
+> +static inline void tdx_hkid_free(struct kvm_tdx *kvm_tdx)
+> +{
+> +	tdx_keyid_free(kvm_tdx->hkid);
+> +	kvm_tdx->hkid = -1;
+> +}
+> +
+> +static inline bool is_hkid_assigned(struct kvm_tdx *kvm_tdx)
+> +{
+> +	return kvm_tdx->hkid > 0;
+> +}
+> +
+> +static void tdx_clear_page(unsigned long page)
+> +{
+> +	const void *zero_page = (const void *) __va(page_to_phys(ZERO_PAGE(0)));
+> +	unsigned long i;
+> +
+> +	/* Zeroing the page is only necessary for systems with MKTME-i. */
+> +	if (!static_cpu_has(X86_FEATURE_MOVDIR64B))
+> +		return;
+> +
+> +	for (i = 0; i < 4096; i += 64)
+> +		/* MOVDIR64B [rdx], es:rdi */
+> +		asm (".byte 0x66, 0x0f, 0x38, 0xf8, 0x3a"
+> +		     : : "d" (zero_page), "D" (page + i) : "memory");
+> +}
+> +
+> +static int __tdx_reclaim_page(unsigned long va, hpa_t pa, bool do_wb, u16 hkid)
+> +{
+> +	struct tdx_module_output out;
+> +	u64 err;
+> +
+> +	err = tdh_phymem_page_reclaim(pa, &out);
+> +	if (WARN_ON_ONCE(err)) {
+> +		pr_tdx_error(TDH_PHYMEM_PAGE_RECLAIM, err, &out);
+> +		return -EIO;
+> +	}
+> +
+> +	if (do_wb) {
+> +		err = tdh_phymem_page_wbinvd(set_hkid_to_hpa(pa, hkid));
+> +		if (WARN_ON_ONCE(err)) {
+> +			pr_tdx_error(TDH_PHYMEM_PAGE_WBINVD, err, NULL);
+> +			return -EIO;
+> +		}
+> +	}
+> +
+> +	tdx_clear_page(va);
+> +	return 0;
+> +}
+> +
+> +static int tdx_reclaim_page(unsigned long va, hpa_t pa)
+> +{
+> +	return __tdx_reclaim_page(va, pa, false, 0);
+> +}
+> +
+> +static int tdx_alloc_td_page(struct tdx_td_page *page)
+> +{
+> +	page->va = __get_free_page(GFP_KERNEL_ACCOUNT);
+> +	if (!page->va)
+> +		return -ENOMEM;
+> +
+> +	page->pa = __pa(page->va);
+> +	return 0;
+> +}
+> +
+> +static void tdx_mark_td_page_added(struct tdx_td_page *page)
+> +{
+> +	WARN_ON_ONCE(page->added);
+> +	page->added = true;
+> +}
+> +
+> +static void tdx_reclaim_td_page(struct tdx_td_page *page)
+> +{
+> +	if (page->added) {
+> +		if (tdx_reclaim_page(page->va, page->pa))
+> +			return;
+> +
+> +		page->added = false;
+> +	}
+> +	free_page(page->va);
+> +}
+> +
+> +static int tdx_do_tdh_phymem_cache_wb(void *param)
+> +{
+> +	u64 err = 0;
+> +
+> +	/*
+> +	 * We can destroy multiple the guest TDs simultaneously.  Prevent
+> +	 * tdh_phymem_cache_wb from returning TDX_BUSY by serialization.
+> +	 */
+> +	mutex_lock(&tdx_lock);
+> +	do {
+> +		err = tdh_phymem_cache_wb(!!err);
+> +	} while (err == TDX_INTERRUPTED_RESUMABLE);
+> +	mutex_unlock(&tdx_lock);
+> +
+> +	/* Other thread may have done for us. */
+> +	if (err == TDX_NO_HKID_READY_TO_WBCACHE)
+> +		err = TDX_SUCCESS;
+> +	if (WARN_ON_ONCE(err)) {
+> +		pr_tdx_error(TDH_PHYMEM_CACHE_WB, err, NULL);
+> +		return -EIO;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +void tdx_mmu_prezap(struct kvm *kvm)
+> +{
+> +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
+> +	cpumask_var_t packages;
+> +	bool cpumask_allocated;
+> +	u64 err;
+> +	int ret;
+> +	int i;
+> +
+> +	if (!is_hkid_assigned(kvm_tdx))
+> +		return;
+> +
+> +	if (!is_td_created(kvm_tdx))
+> +		goto free_hkid;
+> +
+> +	mutex_lock(&tdx_lock);
+> +	err = tdh_mng_key_reclaimid(kvm_tdx->tdr.pa);
+> +	mutex_unlock(&tdx_lock);
+> +	if (WARN_ON_ONCE(err)) {
+> +		pr_tdx_error(TDH_MNG_KEY_RECLAIMID, err, NULL);
+> +		return;
+> +	}
+> +
+> +	cpumask_allocated = zalloc_cpumask_var(&packages, GFP_KERNEL);
+> +	for_each_online_cpu(i) {
+> +		if (cpumask_allocated &&
+> +			cpumask_test_and_set_cpu(topology_physical_package_id(i),
+> +						packages))
+> +			continue;
+> +
+> +		ret = smp_call_on_cpu(i, tdx_do_tdh_phymem_cache_wb, NULL, 1);
+> +		if (ret)
+> +			break;
+> +	}
+> +	free_cpumask_var(packages);
+> +
+> +	mutex_lock(&tdx_lock);
+> +	err = tdh_mng_key_freeid(kvm_tdx->tdr.pa);
+> +	mutex_unlock(&tdx_lock);
+> +	if (WARN_ON_ONCE(err)) {
+> +		pr_tdx_error(TDH_MNG_KEY_FREEID, err, NULL);
+> +		return;
+> +	}
+> +
+> +free_hkid:
+> +	tdx_hkid_free(kvm_tdx);
+> +}
+> +
+> +void tdx_vm_free(struct kvm *kvm)
+> +{
+> +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
+> +	int i;
+> +
+> +	/* Can't reclaim or free TD pages if teardown failed. */
+> +	if (is_hkid_assigned(kvm_tdx))
+> +		return;
+> +
+> +	for (i = 0; i < tdx_caps.tdcs_nr_pages; i++)
+> +		tdx_reclaim_td_page(&kvm_tdx->tdcs[i]);
+> +	kfree(kvm_tdx->tdcs);
+> +
+> +	if (kvm_tdx->tdr.added &&
+> +		__tdx_reclaim_page(kvm_tdx->tdr.va, kvm_tdx->tdr.pa, true,
+> +				tdx_global_keyid))
+> +		return;
+> +
+> +	free_page(kvm_tdx->tdr.va);
+> +}
+> +
+> +static int tdx_do_tdh_mng_key_config(void *param)
+> +{
+> +	hpa_t *tdr_p = param;
+> +	int cpu, cur_pkg;
+> +	u64 err;
+> +
+> +	cpu = raw_smp_processor_id();
+> +	cur_pkg = topology_physical_package_id(cpu);
+> +
+> +	mutex_lock(&tdx_mng_key_config_lock[cur_pkg]);
+> +	do {
+> +		err = tdh_mng_key_config(*tdr_p);
+> +	} while (err == TDX_KEY_GENERATION_FAILED);
+> +	mutex_unlock(&tdx_mng_key_config_lock[cur_pkg]);
+> +
+> +	if (WARN_ON_ONCE(err)) {
+> +		pr_tdx_error(TDH_MNG_KEY_CONFIG, err, NULL);
+> +		return -EIO;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +int tdx_vm_init(struct kvm *kvm)
+> +{
+> +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
+> +	cpumask_var_t packages;
+> +	int ret, i;
+> +	u64 err;
+> +
+> +	/* vCPUs can't be created until after KVM_TDX_INIT_VM. */
+> +	kvm->max_vcpus = 0;
+> +
+> +	kvm_tdx->hkid = tdx_keyid_alloc();
+> +	if (kvm_tdx->hkid < 0)
+> +		return -EBUSY;
+> +
+> +	ret = tdx_alloc_td_page(&kvm_tdx->tdr);
+> +	if (ret)
+> +		goto free_hkid;
+> +
+> +	kvm_tdx->tdcs = kcalloc(tdx_caps.tdcs_nr_pages, sizeof(*kvm_tdx->tdcs),
+> +				GFP_KERNEL_ACCOUNT);
+> +	if (!kvm_tdx->tdcs)
+> +		goto free_tdr;
+> +	for (i = 0; i < tdx_caps.tdcs_nr_pages; i++) {
+> +		ret = tdx_alloc_td_page(&kvm_tdx->tdcs[i]);
+> +		if (ret)
+> +			goto free_tdcs;
+> +	}
+> +
+> +	mutex_lock(&tdx_lock);
+> +	err = tdh_mng_create(kvm_tdx->tdr.pa, kvm_tdx->hkid);
+> +	mutex_unlock(&tdx_lock);
+> +	if (WARN_ON_ONCE(err)) {
+> +		pr_tdx_error(TDH_MNG_CREATE, err, NULL);
+> +		ret = -EIO;
+> +		goto free_tdcs;
+> +	}
+> +	tdx_mark_td_page_added(&kvm_tdx->tdr);
+> +
+> +	if (!zalloc_cpumask_var(&packages, GFP_KERNEL)) {
+> +		ret = -ENOMEM;
+> +		goto free_tdcs;
+> +	}
+> +	for_each_online_cpu(i) {
+> +		if (cpumask_test_and_set_cpu(topology_physical_package_id(i),
+> +						packages))
+> +			continue;
+> +
+> +		ret = smp_call_on_cpu(i, tdx_do_tdh_mng_key_config,
+> +				&kvm_tdx->tdr.pa, 1);
+> +		if (ret)
+> +			break;
+> +	}
+> +	free_cpumask_var(packages);
+> +	if (ret)
+> +		goto teardown;
+> +
+> +	for (i = 0; i < tdx_caps.tdcs_nr_pages; i++) {
+> +		err = tdh_mng_addcx(kvm_tdx->tdr.pa, kvm_tdx->tdcs[i].pa);
+> +		if (WARN_ON_ONCE(err)) {
+> +			pr_tdx_error(TDH_MNG_ADDCX, err, NULL);
+> +			ret = -EIO;
+> +			goto teardown;
+> +		}
+> +		tdx_mark_td_page_added(&kvm_tdx->tdcs[i]);
+> +	}
+> +
+> +	/*
+> +	 * Note, TDH_MNG_INIT cannot be invoked here.  TDH_MNG_INIT requires a dedicated
+> +	 * ioctl() to define the configure CPUID values for the TD.
+> +	 */
+> +	return 0;
+> +
+> +	/*
+> +	 * The sequence for freeing resources from a partially initialized TD
+> +	 * varies based on where in the initialization flow failure occurred.
+> +	 * Simply use the full teardown and destroy, which naturally play nice
+> +	 * with partial initialization.
+> +	 */
+> +teardown:
+> +	tdx_mmu_prezap(kvm);
+> +	tdx_vm_free(kvm);
+> +	return ret;
+> +
+> +free_tdcs:
+> +	/* @i points at the TDCS page that failed allocation. */
+> +	for (--i; i >= 0; i--)
+> +		free_page(kvm_tdx->tdcs[i].va);
+> +	kfree(kvm_tdx->tdcs);
+> +free_tdr:
+> +	free_page(kvm_tdx->tdr.va);
+> +free_hkid:
+> +	tdx_hkid_free(kvm_tdx);
+> +	return ret;
+> +}
+> +
+>   static int __tdx_module_setup(void)
+>   {
+>   	const struct tdsysinfo_struct *tdsysinfo;
+> @@ -59,6 +369,8 @@ static int __tdx_module_setup(void)
+>   		return ret;
+>   	}
+>   
+> +	tdx_global_keyid = tdx_get_global_keyid();
+> +
+>   	tdsysinfo = tdx_get_sysinfo();
+>   	if (tdx_caps.nr_cpuid_configs > TDX_MAX_NR_CPUID_CONFIGS)
+>   		return -EIO;
+> diff --git a/arch/x86/kvm/vmx/tdx.h b/arch/x86/kvm/vmx/tdx.h
+> index e4bb8831764e..860136ed70f5 100644
+> --- a/arch/x86/kvm/vmx/tdx.h
+> +++ b/arch/x86/kvm/vmx/tdx.h
+> @@ -19,6 +19,8 @@ struct kvm_tdx {
+>   
+>   	struct tdx_td_page tdr;
+>   	struct tdx_td_page *tdcs;
+> +
+> +	int hkid;
+>   };
+>   
+>   struct vcpu_tdx {
+> diff --git a/arch/x86/kvm/vmx/tdx_errno.h b/arch/x86/kvm/vmx/tdx_errno.h
+> index 5c878488795d..590fcfdd1899 100644
+> --- a/arch/x86/kvm/vmx/tdx_errno.h
+> +++ b/arch/x86/kvm/vmx/tdx_errno.h
+> @@ -12,11 +12,11 @@
+>   #define TDX_SUCCESS				0x0000000000000000ULL
+>   #define TDX_NON_RECOVERABLE_VCPU		0x4000000100000000ULL
+>   #define TDX_INTERRUPTED_RESUMABLE		0x8000000300000000ULL
+> -#define TDX_LIFECYCLE_STATE_INCORRECT		0xC000060700000000ULL
+>   #define TDX_VCPU_NOT_ASSOCIATED			0x8000070200000000ULL
+>   #define TDX_KEY_GENERATION_FAILED		0x8000080000000000ULL
+>   #define TDX_KEY_STATE_INCORRECT			0xC000081100000000ULL
+>   #define TDX_KEY_CONFIGURED			0x0000081500000000ULL
+> +#define TDX_NO_HKID_READY_TO_WBCACHE		0x0000082100000000ULL
+>   #define TDX_EPT_WALK_FAILED			0xC0000B0000000000ULL
+>   
+>   /*
+> diff --git a/arch/x86/kvm/vmx/tdx_ops.h b/arch/x86/kvm/vmx/tdx_ops.h
+> index 0bed43879b82..3dd5b4c3f04c 100644
+> --- a/arch/x86/kvm/vmx/tdx_ops.h
+> +++ b/arch/x86/kvm/vmx/tdx_ops.h
+> @@ -6,6 +6,7 @@
+>   
+>   #include <linux/compiler.h>
+>   
+> +#include <asm/cacheflush.h>
+>   #include <asm/asm.h>
+>   #include <asm/kvm_host.h>
+>   
+> @@ -15,8 +16,14 @@
+>   
+>   #ifdef CONFIG_INTEL_TDX_HOST
+>   
+> +static inline void tdx_clflush_page(hpa_t addr)
+> +{
+> +	clflush_cache_range(__va(addr), PAGE_SIZE);
+> +}
+> +
+>   static inline u64 tdh_mng_addcx(hpa_t tdr, hpa_t addr)
+>   {
+> +	tdx_clflush_page(addr);
+>   	return kvm_seamcall(TDH_MNG_ADDCX, addr, tdr, 0, 0, 0, NULL);
+>   }
+>   
+> @@ -56,6 +63,7 @@ static inline u64 tdh_mng_key_config(hpa_t tdr)
+>   
+>   static inline u64 tdh_mng_create(hpa_t tdr, int hkid)
+>   {
+> +	tdx_clflush_page(tdr);
+>   	return kvm_seamcall(TDH_MNG_CREATE, tdr, hkid, 0, 0, 0, NULL);
+>   }
+>   
+> diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
+> index da32b4b86b19..2b2738c768d6 100644
+> --- a/arch/x86/kvm/vmx/x86_ops.h
+> +++ b/arch/x86/kvm/vmx/x86_ops.h
+> @@ -132,12 +132,20 @@ void __init tdx_pre_kvm_init(unsigned int *vcpu_size,
+>   bool tdx_is_vm_type_supported(unsigned long type);
+>   void __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops);
+>   void tdx_hardware_unsetup(void);
+> +
+> +int tdx_vm_init(struct kvm *kvm);
+> +void tdx_mmu_prezap(struct kvm *kvm);
+> +void tdx_vm_free(struct kvm *kvm);
+>   #else
+>   static inline void tdx_pre_kvm_init(
+>   	unsigned int *vcpu_size, unsigned int *vcpu_align, unsigned int *vm_size) {}
+>   static inline bool tdx_is_vm_type_supported(unsigned long type) { return false; }
+>   static inline void tdx_hardware_setup(struct kvm_x86_ops *x86_ops) {}
+>   static inline void tdx_hardware_unsetup(void) {}
+> +
+> +static inline int tdx_vm_init(struct kvm *kvm) { return -EOPNOTSUPP; }
+> +static inline void tdx_mmu_prezap(struct kvm *kvm) {}
+> +static inline void tdx_vm_free(struct kvm *kvm) {}
+>   #endif
+>   
+>   #endif /* __KVM_X86_VMX_X86_OPS_H */
 

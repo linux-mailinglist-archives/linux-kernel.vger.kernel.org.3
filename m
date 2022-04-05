@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0004E4F3B6B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E244F37F5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357118AbiDELzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
+        id S1359755AbiDELUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244962AbiDEIwv (ORCPT
+        with ESMTP id S236218AbiDEIQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E5E1C919;
-        Tue,  5 Apr 2022 01:48:00 -0700 (PDT)
+        Tue, 5 Apr 2022 04:16:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA476E57D;
+        Tue,  5 Apr 2022 01:03:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EFB3561504;
-        Tue,  5 Apr 2022 08:47:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13333C385A0;
-        Tue,  5 Apr 2022 08:47:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BAEF6B81BB3;
+        Tue,  5 Apr 2022 08:03:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18A7AC385A0;
+        Tue,  5 Apr 2022 08:03:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148479;
-        bh=ZcKjEt6Ry86LKqgudNgAN224ICW+X2zUvJ1uGygTV7k=;
+        s=korg; t=1649145825;
+        bh=jLruKmILlgbBgaSZn6Gfot+4tRiKmAdDXmu2BVM3Du4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rIPnLI5a0OZIXxwMRKmm4jn3AzNQnUjQP6R4zMdjYIRm4tEYhhffVWcQkKr6UQvs4
-         90W7+TclU/x1lHFFTTSNrvJJx1d13GBa/frypRAMaFPudSDBH0NwhC/erPvO5FCjKL
-         Jfx1JFWKNzYpIQJBxHeiyWgyqKODNaxFzWKystNk=
+        b=anape+oc2IqCWme6OWL/UZie8XanyIXa+vRfE9H7xLDyXs3CCDpsFpONBNRRSZ1s5
+         p/9OaK82zJuxG16fuV125cuOBcwZZVdXabXLk4w665Otg0zn20+Im2qX/uMq5q+AzZ
+         640803Ut1JLSmferXbWMLh3pLlTqEqm2eOHYEFcY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        David Rhodes <drhodes@opensource.cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0370/1017] ASoC: cs35l41: Fix GPIO2 configuration
-Date:   Tue,  5 Apr 2022 09:21:23 +0200
-Message-Id: <20220405070405.268582532@linuxfoundation.org>
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0542/1126] HID: i2c-hid: fix GET/SET_REPORT for unnumbered reports
+Date:   Tue,  5 Apr 2022 09:21:29 +0200
+Message-Id: <20220405070423.541532287@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
+References: <20220405070407.513532867@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,37 +56,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Rhodes <drhodes@opensource.cirrus.com>
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-[ Upstream commit 03a7895ee701e873c88c06bdb830ff40adb2be73 ]
+[ Upstream commit a5e5e03e94764148a01757b2fa4737d3445c13a6 ]
 
-Fix GPIO2 polarity and direction configuration
+Internally kernel prepends all report buffers, for both numbered and
+unnumbered reports, with report ID, therefore to properly handle unnumbered
+reports we should prepend it ourselves.
 
-Fixes: fe1024d50477b ("ASoC: cs35l41: Combine adjacent register writes")
-Signed-off-by: David Rhodes <drhodes@opensource.cirrus.com>
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220303173059.269657-2-tanureal@opensource.cirrus.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+For the same reason we should skip the first byte of the buffer when
+calling i2c_hid_set_or_send_report() which then will take care of properly
+formatting the transfer buffer based on its separate report ID argument
+along with report payload.
+
+[jkosina@suse.cz: finalize trimmed sentence in changelog as spotted by Benjamin]
+Fixes: 9b5a9ae88573 ("HID: i2c-hid: implement ll_driver transport-layer callbacks")
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Tested-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/cs35l41.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/hid/i2c-hid/i2c-hid-core.c | 32 ++++++++++++++++++++++--------
+ 1 file changed, 24 insertions(+), 8 deletions(-)
 
-diff --git a/sound/soc/codecs/cs35l41.c b/sound/soc/codecs/cs35l41.c
-index 9c4d481f7614..3188a8ba3507 100644
---- a/sound/soc/codecs/cs35l41.c
-+++ b/sound/soc/codecs/cs35l41.c
-@@ -1071,8 +1071,8 @@ static int cs35l41_irq_gpio_config(struct cs35l41_private *cs35l41)
+diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-hid/i2c-hid-core.c
+index 6726567d7297..8d6fc50dab65 100644
+--- a/drivers/hid/i2c-hid/i2c-hid-core.c
++++ b/drivers/hid/i2c-hid/i2c-hid-core.c
+@@ -618,6 +618,17 @@ static int i2c_hid_get_raw_report(struct hid_device *hid,
+ 	if (report_type == HID_OUTPUT_REPORT)
+ 		return -EINVAL;
  
- 	regmap_update_bits(cs35l41->regmap, CS35L41_GPIO2_CTRL1,
- 			   CS35L41_GPIO_POL_MASK | CS35L41_GPIO_DIR_MASK,
--			   irq_gpio_cfg1->irq_pol_inv << CS35L41_GPIO_POL_SHIFT |
--			   !irq_gpio_cfg1->irq_out_en << CS35L41_GPIO_DIR_SHIFT);
-+			   irq_gpio_cfg2->irq_pol_inv << CS35L41_GPIO_POL_SHIFT |
-+			   !irq_gpio_cfg2->irq_out_en << CS35L41_GPIO_DIR_SHIFT);
++	/*
++	 * In case of unnumbered reports the response from the device will
++	 * not have the report ID that the upper layers expect, so we need
++	 * to stash it the buffer ourselves and adjust the data size.
++	 */
++	if (!report_number) {
++		buf[0] = 0;
++		buf++;
++		count--;
++	}
++
+ 	/* +2 bytes to include the size of the reply in the query buffer */
+ 	ask_count = min(count + 2, (size_t)ihid->bufsize);
  
- 	regmap_update_bits(cs35l41->regmap, CS35L41_GPIO_PAD_CONTROL,
- 			   CS35L41_GPIO1_CTRL_MASK | CS35L41_GPIO2_CTRL_MASK,
+@@ -639,6 +650,9 @@ static int i2c_hid_get_raw_report(struct hid_device *hid,
+ 	count = min(count, ret_count - 2);
+ 	memcpy(buf, ihid->rawbuf + 2, count);
+ 
++	if (!report_number)
++		count++;
++
+ 	return count;
+ }
+ 
+@@ -655,17 +669,19 @@ static int i2c_hid_output_raw_report(struct hid_device *hid, __u8 *buf,
+ 
+ 	mutex_lock(&ihid->reset_lock);
+ 
+-	if (report_id) {
+-		buf++;
+-		count--;
+-	}
+-
++	/*
++	 * Note that both numbered and unnumbered reports passed here
++	 * are supposed to have report ID stored in the 1st byte of the
++	 * buffer, so we strip it off unconditionally before passing payload
++	 * to i2c_hid_set_or_send_report which takes care of encoding
++	 * everything properly.
++	 */
+ 	ret = i2c_hid_set_or_send_report(client,
+ 				report_type == HID_FEATURE_REPORT ? 0x03 : 0x02,
+-				report_id, buf, count, use_data);
++				report_id, buf + 1, count - 1, use_data);
+ 
+-	if (report_id && ret >= 0)
+-		ret++; /* add report_id to the number of transfered bytes */
++	if (ret >= 0)
++		ret++; /* add report_id to the number of transferred bytes */
+ 
+ 	mutex_unlock(&ihid->reset_lock);
+ 
 -- 
 2.34.1
 

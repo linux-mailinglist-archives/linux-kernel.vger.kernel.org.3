@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EEDA4F4860
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CA5B4F4505
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381834AbiDEViR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
+        id S1391438AbiDEUGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240531AbiDEKzR (ORCPT
+        with ESMTP id S1349228AbiDEKub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:55:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABFCB1E;
-        Tue,  5 Apr 2022 03:28:32 -0700 (PDT)
+        Tue, 5 Apr 2022 06:50:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AC29E9F6;
+        Tue,  5 Apr 2022 03:27:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 54995B81CBE;
-        Tue,  5 Apr 2022 10:28:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA2AFC385A2;
-        Tue,  5 Apr 2022 10:28:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 466E46141D;
+        Tue,  5 Apr 2022 10:27:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E368C385A6;
+        Tue,  5 Apr 2022 10:27:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154510;
-        bh=PVq3t/od1EUjXkCWRdvUgf+9rluOtlL/JXvHCx8chYk=;
+        s=korg; t=1649154462;
+        bh=lQRtMgDTrcSWyqXbZhsMoWU1a+zIBYvvylab8ih+iEw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JGnPf1sJyNFhtdzo9U+XWCeLXnxITz6W/TAnDWjQgy4hJjslhwPhVTCai/asTKfL9
-         FZv23Sbnez+1Oo3zGn+MQqABmP8BytrOdtA3jpYlrsZU9A0yhp0rRV5o/QFkTYJ4Lj
-         N+DT3gFTvT8Es38/QD+TKNgrbD4ruAWJNhqWbaPE=
+        b=07oYFlwcRp3hqPgD3yfDcAG60IN5z327dFE/2lOEOvbwvsgGKbd07D1THcCocyTZz
+         GD0qSQvlBFxKM+rNNJCuJWR6B8NXrx+bBlVdSrZAv7wk8R/rihpC7/AbPVVJSx3foJ
+         hZmjpHWQof2hYY7XHHM1byCn8e0u80rt2kQzKRbY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.10 574/599] ASoC: soc-compress: Change the check for codec_dai
-Date:   Tue,  5 Apr 2022 09:34:28 +0200
-Message-Id: <20220405070315.923969752@linuxfoundation.org>
+        stable@vger.kernel.org, Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH 5.10 587/599] ARM: dts: spear1340: Update serial node properties
+Date:   Tue,  5 Apr 2022 09:34:41 +0200
+Message-Id: <20220405070316.309838749@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -57,54 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Kuldeep Singh <singh.kuldeep87k@gmail.com>
 
-commit ccb4214f7f2a8b75acf493f31128e464ee1a3536 upstream.
+commit 583d6b0062640def86f3265aa1042ecb6672516e upstream.
 
-It should be better to reverse the check on codec_dai
-and returned early in order to be easier to understand.
+Reorder dma and dma-names property for serial node to make it compliant
+with bindings.
 
-Fixes: de2c6f98817f ("ASoC: soc-compress: prevent the potentially use of null pointer")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Reviewed-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220310030041.1556323-1-jiasheng@iscas.ac.cn
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 6e8887f60f60 ("ARM: SPEAr13xx: Pass generic DW DMAC platform data from DT")
+Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Link: https://lore.kernel.org/r/20220326042313.97862-3-singh.kuldeep87k@gmail.com'
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/soc-compress.c |   19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ arch/arm/boot/dts/spear1340.dtsi |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/sound/soc/soc-compress.c
-+++ b/sound/soc/soc-compress.c
-@@ -766,16 +766,19 @@ int snd_soc_new_compress(struct snd_soc_
- 		return -EINVAL;
- 	}
+--- a/arch/arm/boot/dts/spear1340.dtsi
++++ b/arch/arm/boot/dts/spear1340.dtsi
+@@ -136,9 +136,9 @@
+ 				reg = <0xb4100000 0x1000>;
+ 				interrupts = <0 105 0x4>;
+ 				status = "disabled";
+-				dmas = <&dwdma0 12 0 1>,
+-					<&dwdma0 13 1 0>;
+-				dma-names = "tx", "rx";
++				dmas = <&dwdma0 13 0 1>,
++					<&dwdma0 12 1 0>;
++				dma-names = "rx", "tx";
+ 			};
  
--	/* check client and interface hw capabilities */
--	if (codec_dai) {
--		if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_PLAYBACK) &&
--		    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_PLAYBACK))
--			playback = 1;
--		if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_CAPTURE) &&
--		    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_CAPTURE))
--			capture = 1;
-+	if (!codec_dai) {
-+		dev_err(rtd->card->dev, "Missing codec\n");
-+		return -EINVAL;
- 	}
- 
-+	/* check client and interface hw capabilities */
-+	if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_PLAYBACK) &&
-+	    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_PLAYBACK))
-+		playback = 1;
-+	if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_CAPTURE) &&
-+	    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_CAPTURE))
-+		capture = 1;
-+
- 	/*
- 	 * Compress devices are unidirectional so only one of the directions
- 	 * should be set, check for that (xor)
+ 			thermal@e07008c4 {
 
 

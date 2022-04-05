@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293524F441B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C81984F445E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357759AbiDEMvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49236 "EHLO
+        id S1358425AbiDEMv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244398AbiDEJJ5 (ORCPT
+        with ESMTP id S244572AbiDEJKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:09:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02A32458F;
-        Tue,  5 Apr 2022 01:59:20 -0700 (PDT)
+        Tue, 5 Apr 2022 05:10:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916122716D;
+        Tue,  5 Apr 2022 01:59:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5CF261572;
-        Tue,  5 Apr 2022 08:59:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B55E7C385A0;
-        Tue,  5 Apr 2022 08:59:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4258A614E9;
+        Tue,  5 Apr 2022 08:59:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53563C385A0;
+        Tue,  5 Apr 2022 08:59:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149158;
-        bh=k5xEwT2EpCrvE2/ecRxQ9L6o9jtoomLXGOZUR/EcBEE=;
+        s=korg; t=1649149171;
+        bh=QVXp6p/sKAkxfFAtgWgBEw3F9NYPX2bkUkaiLouRxGQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TXhNEQPD6xr6PdUs3UOgyTgwR7FdIF3xdMCvuBYvA/fOAKvQRdzJQkUDkU1vG82I4
-         hPALmIZKn5FS67/YxFTJkhoLGA77Y46Rv7pRCmS/ZQ3SZxxHdsqF63dAUalNTB26Xu
-         7qSGFHdqTiwwC6kPR7C4syE34BMjd6zdZyMgSIr4=
+        b=qkNVp0J5xt1fD6Yk2MYEAt6f3dY8b9jprJo9IRNKIlcy+VrxarkMpdbax9XcxOmzA
+         w+BkrPsLPV+//atYSMmZEASk1jg6X70e0syKcz9g3wprgQw0o/hSoj+UFXd1OEjnID
+         gVMburylRz1S6Kb37mKnVdUNyl30zQK0IcMU45zc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Mark Chen <markyawenchen@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Yake Yang <yake.yang@mediatek.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0615/1017] af_unix: Fix some data-races around unix_sk(sk)->oob_skb.
-Date:   Tue,  5 Apr 2022 09:25:28 +0200
-Message-Id: <20220405070412.538754687@linuxfoundation.org>
+Subject: [PATCH 5.16 0619/1017] Bluetooth: btmtksdio: Fix kernel oops in btmtksdio_interrupt
+Date:   Tue,  5 Apr 2022 09:25:32 +0200
+Message-Id: <20220405070412.656676419@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,107 +57,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+From: Yake Yang <yake.yang@mediatek.com>
 
-[ Upstream commit e82025c623e2bf04d162bafceb66a59115814479 ]
+[ Upstream commit b062a0b9c1dc1ff63094337dccfe1568d5b62023 ]
 
-Out-of-band data automatically places a "mark" showing wherein the
-sequence the out-of-band data would have been.  If the out-of-band data
-implies cancelling everything sent so far, the "mark" is helpful to flush
-them.  When the socket's read pointer reaches the "mark", the ioctl() below
-sets a non zero value to the arg `atmark`:
+Fix the following kernel oops in btmtksdio_interrrupt
 
-The out-of-band data is queued in sk->sk_receive_queue as well as ordinary
-data and also saved in unix_sk(sk)->oob_skb.  It can be used to test if the
-head of the receive queue is the out-of-band data meaning the socket is at
-the "mark".
+[   14.339134]  btmtksdio_interrupt+0x28/0x54
+[   14.339139]  process_sdio_pending_irqs+0x68/0x1a0
+[   14.339144]  sdio_irq_work+0x40/0x70
+[   14.339154]  process_one_work+0x184/0x39c
+[   14.339160]  worker_thread+0x228/0x3e8
+[   14.339168]  kthread+0x148/0x3ac
+[   14.339176]  ret_from_fork+0x10/0x30
 
-While testing that, unix_ioctl() reads unix_sk(sk)->oob_skb locklessly.
-Thus, all accesses to oob_skb need some basic protection to avoid
-load/store tearing which KCSAN detects when these are called concurrently:
+That happened because hdev->power_on is already called before
+sdio_set_drvdata which btmtksdio_interrupt handler relies on is not
+properly set up.
 
-  - ioctl(fd_a, SIOCATMARK, &atmark, sizeof(atmark))
-  - send(fd_b_connected_to_a, buf, sizeof(buf), MSG_OOB)
+The details are shown as the below: hci_register_dev would run
+queue_work(hdev->req_workqueue, &hdev->power_on) as WQ_HIGHPRI
+workqueue_struct to complete the power-on sequeunce and thus hci_power_on
+may run before sdio_set_drvdata is done in btmtksdio_probe.
 
-BUG: KCSAN: data-race in unix_ioctl / unix_stream_sendmsg
+The hci_dev_do_open in hci_power_on would initialize the device and enable
+the interrupt and thus it is possible that btmtksdio_interrupt is being
+called right before sdio_set_drvdata is filled out.
 
-write to 0xffff888003d9cff0 of 8 bytes by task 175 on cpu 1:
- unix_stream_sendmsg (net/unix/af_unix.c:2087 net/unix/af_unix.c:2191)
- sock_sendmsg (net/socket.c:705 net/socket.c:725)
- __sys_sendto (net/socket.c:2040)
- __x64_sys_sendto (net/socket.c:2048)
- do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
- entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113)
+When btmtksdio_interrupt is being called and sdio_set_drvdata is not filled
+, the kernel oops is going to happen because btmtksdio_interrupt access an
+uninitialized pointer.
 
-read to 0xffff888003d9cff0 of 8 bytes by task 176 on cpu 0:
- unix_ioctl (net/unix/af_unix.c:3101 (discriminator 1))
- sock_do_ioctl (net/socket.c:1128)
- sock_ioctl (net/socket.c:1242)
- __x64_sys_ioctl (fs/ioctl.c:52 fs/ioctl.c:874 fs/ioctl.c:860 fs/ioctl.c:860)
- do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
- entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113)
-
-value changed: 0xffff888003da0c00 -> 0xffff888003da0d00
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 0 PID: 176 Comm: unix_race_oob_i Not tainted 5.17.0-rc5-59529-g83dc4c2af682 #12
-Hardware name: Red Hat KVM, BIOS 1.11.0-2.amzn2 04/01/2014
-
-Fixes: 314001f0bf92 ("af_unix: Add OOB support")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 9aebfd4a2200 ("Bluetooth: mediatek: add support for MediaTek MT7663S and MT7668S SDIO devices")
+Reviewed-by: Mark Chen <markyawenchen@gmail.com>
+Co-developed-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Yake Yang <yake.yang@mediatek.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/unix/af_unix.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+ drivers/bluetooth/btmtksdio.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-index b0bfc78e421c..826ac391a7a4 100644
---- a/net/unix/af_unix.c
-+++ b/net/unix/af_unix.c
-@@ -1996,7 +1996,7 @@ static int queue_oob(struct socket *sock, struct msghdr *msg, struct sock *other
- 	if (ousk->oob_skb)
- 		consume_skb(ousk->oob_skb);
+diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
+index 1cbdeca1fdc4..ff1f5dfbb6db 100644
+--- a/drivers/bluetooth/btmtksdio.c
++++ b/drivers/bluetooth/btmtksdio.c
+@@ -981,6 +981,8 @@ static int btmtksdio_probe(struct sdio_func *func,
+ 	hdev->manufacturer = 70;
+ 	set_bit(HCI_QUIRK_NON_PERSISTENT_SETUP, &hdev->quirks);
  
--	ousk->oob_skb = skb;
-+	WRITE_ONCE(ousk->oob_skb, skb);
++	sdio_set_drvdata(func, bdev);
++
+ 	err = hci_register_dev(hdev);
+ 	if (err < 0) {
+ 		dev_err(&func->dev, "Can't register HCI device\n");
+@@ -988,8 +990,6 @@ static int btmtksdio_probe(struct sdio_func *func,
+ 		return err;
+ 	}
  
- 	scm_stat_add(other, skb);
- 	skb_queue_tail(&other->sk_receive_queue, skb);
-@@ -2514,9 +2514,8 @@ static int unix_stream_recv_urg(struct unix_stream_read_state *state)
- 
- 	oob_skb = u->oob_skb;
- 
--	if (!(state->flags & MSG_PEEK)) {
--		u->oob_skb = NULL;
--	}
-+	if (!(state->flags & MSG_PEEK))
-+		WRITE_ONCE(u->oob_skb, NULL);
- 
- 	unix_state_unlock(sk);
- 
-@@ -2551,7 +2550,7 @@ static struct sk_buff *manage_oob(struct sk_buff *skb, struct sock *sk,
- 				skb = NULL;
- 			} else if (sock_flag(sk, SOCK_URGINLINE)) {
- 				if (!(flags & MSG_PEEK)) {
--					u->oob_skb = NULL;
-+					WRITE_ONCE(u->oob_skb, NULL);
- 					consume_skb(skb);
- 				}
- 			} else if (!(flags & MSG_PEEK)) {
-@@ -3006,11 +3005,10 @@ static int unix_ioctl(struct socket *sock, unsigned int cmd, unsigned long arg)
- 	case SIOCATMARK:
- 		{
- 			struct sk_buff *skb;
--			struct unix_sock *u = unix_sk(sk);
- 			int answ = 0;
- 
- 			skb = skb_peek(&sk->sk_receive_queue);
--			if (skb && skb == u->oob_skb)
-+			if (skb && skb == READ_ONCE(unix_sk(sk)->oob_skb))
- 				answ = 1;
- 			err = put_user(answ, (int __user *)arg);
- 		}
+-	sdio_set_drvdata(func, bdev);
+-
+ 	/* pm_runtime_enable would be done after the firmware is being
+ 	 * downloaded because the core layer probably already enables
+ 	 * runtime PM for this func such as the case host->caps &
 -- 
 2.34.1
 

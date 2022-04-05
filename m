@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE2E4F4925
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9DD54F4ECB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391083AbiDEWEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:04:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
+        id S233639AbiDFAhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354641AbiDEKO5 (ORCPT
+        with ESMTP id S1348969AbiDEJsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:14:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D5F6B0BE;
-        Tue,  5 Apr 2022 03:02:01 -0700 (PDT)
+        Tue, 5 Apr 2022 05:48:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B430A0BFF;
+        Tue,  5 Apr 2022 02:38:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E6BFB818F6;
-        Tue,  5 Apr 2022 10:02:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A596BC385A1;
-        Tue,  5 Apr 2022 10:01:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA29861577;
+        Tue,  5 Apr 2022 09:38:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1732C385A0;
+        Tue,  5 Apr 2022 09:38:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152919;
-        bh=1rGSpeBSpvqcj8+jDNvyQPYJVe85AOM5TdBODRr442U=;
+        s=korg; t=1649151499;
+        bh=iYsyppak5X0PQkSwIxgTeVWMzlqbLKhGuR4Pvhdsn3k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wQKSLGqsO8+nkE8pcebCAYYyGdSwFte02GPuyCGwaAdM7KiFICGq/wN/3zcJoUk94
-         5J1Lg+/c1goZLytefAwaBQxu5daXaGyr5iz6fldIc5EKWVL4gKRY7vh3NFC5NNBoAh
-         CMGWGtP0lkJI3GaOq5WVZgT8LOZmjRek6rB56tNg=
+        b=M9q0tNWvB2XUYctHMlCRIqwmyYPuGUMltC0Xve8yfAVQ8Q/ZcoT8judf7OGfzhZ86
+         oPtsCOody7AHVEprBdkqGy4N+lcSVJSby4k/LJMX3Dql25ZtuRTYIRi3cTJoJAYp+s
+         A+enuTYZKq/75wsiY9/6jwniWmSgFAOGLfbKlCVo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>,
-        "David S. Miller" <davem@davemloft.net>,
-        Pavel Machek <pavel@denx.de>
-Subject: [PATCH 5.10 005/599] netdevice: add the case if dev is NULL
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 437/913] mtd: mchp23k256: Add SPI ID table
 Date:   Tue,  5 Apr 2022 09:24:59 +0200
-Message-Id: <20220405070258.973215990@linuxfoundation.org>
+Message-Id: <20220405070352.944915012@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yajun Deng <yajun.deng@linux.dev>
+From: Mark Brown <broonie@kernel.org>
 
-commit b37a466837393af72fe8bcb8f1436410f3f173f3 upstream.
+[ Upstream commit bc7ee2e34b219da6813c17a1680dd20766648883 ]
 
-Add the case if dev is NULL in dev_{put, hold}, so the caller doesn't
-need to care whether dev is NULL or not.
+Currently autoloading for SPI devices does not use the DT ID table, it uses
+SPI modalises. Supporting OF modalises is going to be difficult if not
+impractical, an attempt was made but has been reverted, so ensure that
+module autoloading works for this driver by adding an id_table listing the
+SPI IDs for everything.
 
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Cc: Pavel Machek <pavel@denx.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 96c8395e2166 ("spi: Revert modalias changes")
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220202143404.16070-3-broonie@kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/netdevice.h |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/mtd/devices/mchp23k256.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -3980,7 +3980,8 @@ void netdev_run_todo(void);
-  */
- static inline void dev_put(struct net_device *dev)
- {
--	this_cpu_dec(*dev->pcpu_refcnt);
-+	if (dev)
-+		this_cpu_dec(*dev->pcpu_refcnt);
- }
+diff --git a/drivers/mtd/devices/mchp23k256.c b/drivers/mtd/devices/mchp23k256.c
+index 77c872fd3d83..7d188cdff6a2 100644
+--- a/drivers/mtd/devices/mchp23k256.c
++++ b/drivers/mtd/devices/mchp23k256.c
+@@ -229,6 +229,19 @@ static const struct of_device_id mchp23k256_of_table[] = {
+ };
+ MODULE_DEVICE_TABLE(of, mchp23k256_of_table);
  
- /**
-@@ -3991,7 +3992,8 @@ static inline void dev_put(struct net_de
-  */
- static inline void dev_hold(struct net_device *dev)
- {
--	this_cpu_inc(*dev->pcpu_refcnt);
-+	if (dev)
-+		this_cpu_inc(*dev->pcpu_refcnt);
- }
++static const struct spi_device_id mchp23k256_spi_ids[] = {
++	{
++		.name = "mchp23k256",
++		.driver_data = (kernel_ulong_t)&mchp23k256_caps,
++	},
++	{
++		.name = "mchp23lcv1024",
++		.driver_data = (kernel_ulong_t)&mchp23lcv1024_caps,
++	},
++	{}
++};
++MODULE_DEVICE_TABLE(spi, mchp23k256_spi_ids);
++
+ static struct spi_driver mchp23k256_driver = {
+ 	.driver = {
+ 		.name	= "mchp23k256",
+@@ -236,6 +249,7 @@ static struct spi_driver mchp23k256_driver = {
+ 	},
+ 	.probe		= mchp23k256_probe,
+ 	.remove		= mchp23k256_remove,
++	.id_table	= mchp23k256_spi_ids,
+ };
  
- /* Carrier loss detection, dial on demand. The functions netif_carrier_on
+ module_spi_driver(mchp23k256_driver);
+-- 
+2.34.1
+
 
 

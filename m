@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D042D4F4DF1
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 545EB4F48BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1583714AbiDEX41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
+        id S1385016AbiDEVsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353420AbiDEKGL (ORCPT
+        with ESMTP id S237533AbiDEKdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:06:11 -0400
+        Tue, 5 Apr 2022 06:33:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8E0BF948;
-        Tue,  5 Apr 2022 02:55:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75603DEBAD;
+        Tue,  5 Apr 2022 03:19:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AED9961676;
-        Tue,  5 Apr 2022 09:55:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAD5DC385A3;
-        Tue,  5 Apr 2022 09:55:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBB8B617CE;
+        Tue,  5 Apr 2022 10:19:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4BF0C385A0;
+        Tue,  5 Apr 2022 10:19:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152501;
-        bh=odIuCAMGXhnwd3yUgdCLGF/DVsHgEPNE7cBDyU7abxM=;
+        s=korg; t=1649153949;
+        bh=lCSdk4p+UKFX1K5vODvPBm8UQRNJlya47e8kZdEbe0w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gEIqaWLTYh8yCel1XiMwci0fEl9Ct2wtvqrwskoXEvXG8MMJdrkmk/VFgJeiCWAeS
-         JpJ3vHA/NbIkfMn64Ww7tA4Ygmi7T32WQ0AwlAHyjDcnvJSx07B/NpqUL2uoyHKXkP
-         yP+TN2rOXZDmV4rNP+z06xfUIL31u2vnEpJ5UmQU=
+        b=vtxrCCm8ckFevYnCzlxz5LQ5p/cTk3c8qsPDXaW4r1uUP4bmvf3wW2HUKTKkNTItx
+         scXwrzH+WXVwDuU1vpiUtVFQWap36bHuETYMngjffARxtl+oqFcWPO/tojQjqnTBys
+         Vut9+Wq+mHfnle7VsXtryx0wRb9k74FPa1Yp9obw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Saurav Kashyap <skashyap@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.15 800/913] scsi: qla2xxx: Suppress a kernel complaint in qla_create_qpair()
+        stable@vger.kernel.org, Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 368/599] af_netlink: Fix shift out of bounds in group mask calculation
 Date:   Tue,  5 Apr 2022 09:31:02 +0200
-Message-Id: <20220405070403.812536725@linuxfoundation.org>
+Message-Id: <20220405070309.781411076@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,64 +56,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Saurav Kashyap <skashyap@marvell.com>
+From: Petr Machata <petrm@nvidia.com>
 
-commit a60447e7d451df42c7bde43af53b34f10f34f469 upstream.
+[ Upstream commit 0caf6d9922192dd1afa8dc2131abfb4df1443b9f ]
 
-[   12.323788] BUG: using smp_processor_id() in preemptible [00000000] code: systemd-udevd/1020
-[   12.332297] caller is qla2xxx_create_qpair+0x32a/0x5d0 [qla2xxx]
-[   12.338417] CPU: 7 PID: 1020 Comm: systemd-udevd Tainted: G          I      --------- ---  5.14.0-29.el9.x86_64 #1
-[   12.348827] Hardware name: Dell Inc. PowerEdge R610/0F0XJ6, BIOS 6.6.0 05/22/2018
-[   12.356356] Call Trace:
-[   12.358821]  dump_stack_lvl+0x34/0x44
-[   12.362514]  check_preemption_disabled+0xd9/0xe0
-[   12.367164]  qla2xxx_create_qpair+0x32a/0x5d0 [qla2xxx]
-[   12.372481]  qla2x00_probe_one+0xa3a/0x1b80 [qla2xxx]
-[   12.377617]  ? _raw_spin_lock_irqsave+0x19/0x40
-[   12.384284]  local_pci_probe+0x42/0x80
-[   12.390162]  ? pci_match_device+0xd7/0x110
-[   12.396366]  pci_device_probe+0xfd/0x1b0
-[   12.402372]  really_probe+0x1e7/0x3e0
-[   12.408114]  __driver_probe_device+0xfe/0x180
-[   12.414544]  driver_probe_device+0x1e/0x90
-[   12.420685]  __driver_attach+0xc0/0x1c0
-[   12.426536]  ? __device_attach_driver+0xe0/0xe0
-[   12.433061]  ? __device_attach_driver+0xe0/0xe0
-[   12.439538]  bus_for_each_dev+0x78/0xc0
-[   12.445294]  bus_add_driver+0x12b/0x1e0
-[   12.451021]  driver_register+0x8f/0xe0
-[   12.456631]  ? 0xffffffffc07bc000
-[   12.461773]  qla2x00_module_init+0x1be/0x229 [qla2xxx]
-[   12.468776]  do_one_initcall+0x44/0x200
-[   12.474401]  ? load_module+0xad3/0xba0
-[   12.479908]  ? kmem_cache_alloc_trace+0x45/0x410
-[   12.486268]  do_init_module+0x5c/0x280
-[   12.491730]  __do_sys_init_module+0x12e/0x1b0
-[   12.497785]  do_syscall_64+0x3b/0x90
-[   12.503029]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[   12.509764] RIP: 0033:0x7f554f73ab2e
+When a netlink message is received, netlink_recvmsg() fills in the address
+of the sender. One of the fields is the 32-bit bitfield nl_groups, which
+carries the multicast group on which the message was received. The least
+significant bit corresponds to group 1, and therefore the highest group
+that the field can represent is 32. Above that, the UB sanitizer flags the
+out-of-bounds shift attempts.
 
-Link: https://lore.kernel.org/r/20220110050218.3958-15-njavali@marvell.com
-Cc: stable@vger.kernel.org
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Which bits end up being set in such case is implementation defined, but
+it's either going to be a wrong non-zero value, or zero, which is at least
+not misleading. Make the latter choice deterministic by always setting to 0
+for higher-numbered multicast groups.
+
+To get information about membership in groups >= 32, userspace is expected
+to use nl_pktinfo control messages[0], which are enabled by NETLINK_PKTINFO
+socket option.
+[0] https://lwn.net/Articles/147608/
+
+The way to trigger this issue is e.g. through monitoring the BRVLAN group:
+
+	# bridge monitor vlan &
+	# ip link add name br type bridge
+
+Which produces the following citation:
+
+	UBSAN: shift-out-of-bounds in net/netlink/af_netlink.c:162:19
+	shift exponent 32 is too large for 32-bit type 'int'
+
+Fixes: f7fa9b10edbb ("[NETLINK]: Support dynamic number of multicast groups per netlink family")
+Signed-off-by: Petr Machata <petrm@nvidia.com>
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Link: https://lore.kernel.org/r/2bef6aabf201d1fc16cca139a744700cff9dcb04.1647527635.git.petrm@nvidia.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/qla2xxx/qla_init.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/netlink/af_netlink.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -9393,7 +9393,7 @@ struct qla_qpair *qla2xxx_create_qpair(s
- 		qpair->rsp->req = qpair->req;
- 		qpair->rsp->qpair = qpair;
- 		/* init qpair to this cpu. Will adjust at run time. */
--		qla_cpu_update(qpair, smp_processor_id());
-+		qla_cpu_update(qpair, raw_smp_processor_id());
+diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+index e55af5c078ac..f37916156ca5 100644
+--- a/net/netlink/af_netlink.c
++++ b/net/netlink/af_netlink.c
+@@ -149,6 +149,8 @@ static const struct rhashtable_params netlink_rhashtable_params;
  
- 		if (IS_T10_PI_CAPABLE(ha) && ql2xenabledif) {
- 			if (ha->fw_attributes & BIT_4)
+ static inline u32 netlink_group_mask(u32 group)
+ {
++	if (group > 32)
++		return 0;
+ 	return group ? 1 << (group - 1) : 0;
+ }
+ 
+-- 
+2.34.1
+
 
 

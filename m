@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 066F34F248F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACB254F2496
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiDEHWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:22:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
+        id S231472AbiDEHW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232117AbiDEHVb (ORCPT
+        with ESMTP id S232147AbiDEHVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:21:31 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F77F64F7
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 00:18:18 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id k124-20020a1ca182000000b0038c9cf6e2a6so1035569wme.0
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 00:18:18 -0700 (PDT)
+        Tue, 5 Apr 2022 03:21:32 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4389718B1A
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 00:18:42 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id q19so10926346wrc.6
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 00:18:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=brainfault-org.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=j5tZD+8M1iPFQIpWPsYamWZAVUcin+PVrYzA4YmgT9M=;
-        b=fwxyiskvlIWhb4yoz+2d8DfK/fDF9kpIsj1v16e5zIvUjuTsRqhCJOFl05KNjnR1dw
-         oonmm9pVay2hFWOiOFAbJ7dn7AHRarZUB51K/rDMrO52UGnRsj0lSzd2lgRxtb+OxIRl
-         IgpXfxAnPI2wpb+5qJeC0MuWD3RZGoIQEZ+ogFkEYpSYTVQw4ABKMBca0ZXnLKFMvEQz
-         QdhofkXfbLPxcHl4i2KJqdCwUeO5sC1D7G1h/tn68KmMvPa0ZOVhXIkAy7QphAYkTazb
-         USrRPCFfrjAaMOaC2mAVwXLODZM++PjK43MI+M9Q3aTBfmuFw1YJzwLkykwbNCFn9o1+
-         X6WQ==
+        bh=SWmIF7kdZQxOjvhVF27iSPZYouYPyeTWvrXCvBCoo6M=;
+        b=0J2XyiFI8hdOaU2qz1ah0ep9G8tAOnRKLZ6ukhI9wkUUo5KnuOQbgSO39MPE+PxSaB
+         9fcCB22vkp4p2Jdpl7epatdu/IwwsG9xRFG2SwyTCN+cpHriPBOGT/AKUPpuWy7fEuiY
+         FzcMI0o+dtoUMfwOq08y1Kw7kpkXYyUZOrIpMNT1feIrO+Rh7tighQYA7aaD6T7QiiSq
+         9DY2OOtK0QP/SEvUIQDPuB8zsSZ0Em0pmi8MMmHCPVlZCGQa75UypwxrnnT+r5toac+U
+         FgCrpJLlWeg1dgw8SkcY9FbRtdnJvx/Upq8B+DHwAntkGhm7NtuJppmAqEy2SBCRcBcZ
+         bHOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=j5tZD+8M1iPFQIpWPsYamWZAVUcin+PVrYzA4YmgT9M=;
-        b=0sqhfuK+Pa+FAWRyG22piCTUPPJSbGb5E2AQBDSHFRzeUwLilN45lAgyvhvcOFOG0t
-         onZdAmxiKJpzFXNlaObKdMmUb0PkTOiqyGuTPWAPVvfPN/3lxK1ykgZeBsRNNUuT/ofp
-         65xlmt68yKaPfPzVWnYaRHAYw6HmytAw1yFjDsVhldZRwn+Lv0h21R/lsl60gb8SB4Jr
-         FoSWfeud6EIwX8u4bNZKU7ZumPbUELCqPRsR5WYJF580VvTOWVIKGGq/D8VvYMc0WMRI
-         bzLk7L+8y6TJ7/NZcJ8RriPDFkWsY3aOhkcur1tE+mZE6RbBbvNy3fncdb3j8+9MnEIu
-         gdZQ==
-X-Gm-Message-State: AOAM530yF2Y5V/VUzRM/gO2iq6tab+GlTIIsC1jzdK/5V4ysoBF+xiq/
-        JsiCBfnV3jYEA9MqPfNxvMLHCv5gOs4939I12wFsiw==
-X-Google-Smtp-Source: ABdhPJwdmM8TCHa4eoVn8sKC+Sod0b/E/a9HSoTDWMUxnS9+yZz84ZdrIE85cb44FScPTht6hP0nLp3dojxP605Lpt4=
-X-Received: by 2002:a05:600c:3c9b:b0:38e:4c59:68b9 with SMTP id
- bg27-20020a05600c3c9b00b0038e4c5968b9mr1754749wmb.105.1649143096491; Tue, 05
- Apr 2022 00:18:16 -0700 (PDT)
+        bh=SWmIF7kdZQxOjvhVF27iSPZYouYPyeTWvrXCvBCoo6M=;
+        b=CvfkPv5sYwIPnRZEW1gwFpH+bWJ9rYRtP3HHk0hfYENiJRZCEaFGbjh2JnGKq7j6nN
+         p03gAyfvChxoHP/1kdf2g4siv90eCg+ZMyRipgJ4SgKi7QB1M0HyMyfcpxKbFaYsnXj1
+         A02N2nWb3JODiezEPVWeUm/IZg2zX9CUXIPFhv7nUDaR5YZNWY9y4dpCzyodJsQdRpRy
+         2qMjOJppIcFJVEhKJX4Y9lq2pXZ0AMmHfkkyKuULPejfR+m9gHzedhsfgyvQzfWe0Zn9
+         7Slx1FgYlOJ3fl1QcoSmLv0MCoGh3SNXiMJdG/ik29DHOyFrPXt+/P1PWrUjEooD9/7N
+         VNDw==
+X-Gm-Message-State: AOAM532YWmbXSKdh2eviegLMREfXJXpZqp059/NZrH4vJePnEH1QjzEy
+        TdDChqHzwAkFkNKnkL+qDx/4DvDiX3paYGyVGBBqVg==
+X-Google-Smtp-Source: ABdhPJxEY7vXcjMbr9oQrtXXmbTMIbRAKE4OTBjGL+A63xeISLJrnIJ5bBgyZuPVxJhL+9+JmuYgJizmKmiifNf9NNM=
+X-Received: by 2002:adf:f88e:0:b0:206:ce5:af99 with SMTP id
+ u14-20020adff88e000000b002060ce5af99mr1455734wrp.313.1649143121363; Tue, 05
+ Apr 2022 00:18:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220329072911.1692766-1-apatel@ventanamicro.com> <20220329072911.1692766-2-apatel@ventanamicro.com>
-In-Reply-To: <20220329072911.1692766-2-apatel@ventanamicro.com>
+References: <20220329072911.1692766-1-apatel@ventanamicro.com> <20220329072911.1692766-3-apatel@ventanamicro.com>
+In-Reply-To: <20220329072911.1692766-3-apatel@ventanamicro.com>
 From:   Anup Patel <anup@brainfault.org>
-Date:   Tue, 5 Apr 2022 12:48:03 +0530
-Message-ID: <CAAhSdy2=q4u9UR7zYks5A-3k1q4srOqk14O3+a14sUS5Qa+Ppg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] KVM: selftests: riscv: Set PTE A and D bits in
- VS-stage page table
+Date:   Tue, 5 Apr 2022 12:48:28 +0530
+Message-ID: <CAAhSdy0ZZAVPr68VK2k+0HQDZHyaCGTv1FgQKHqh2=T1wYzZtg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] KVM: selftests: riscv: Fix alignment of the
+ guest_hang() function
 To:     Anup Patel <apatel@ventanamicro.com>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Atish Patra <atishp@atishpatra.org>,
@@ -77,18 +77,11 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Tue, Mar 29, 2022 at 12:59 PM Anup Patel <apatel@ventanamicro.com> wrote:
 >
-> Supporting hardware updates of PTE A and D bits is optional for any
-> RISC-V implementation so current software strategy is to always set
-> these bits in both G-stage (hypervisor) and VS-stage (guest kernel).
->
-> If PTE A and D bits are not set by software (hypervisor or guest)
-> then RISC-V implementations not supporting hardware updates of these
-> bits will cause traps even for perfectly valid PTEs.
->
-> Based on above explanation, the VS-stage page table created by various
-> KVM selftest applications is not correct because PTE A and D bits are
-> not set. This patch fixes VS-stage page table programming of PTE A and
-> D bits for KVM selftests.
+> The guest_hang() function is used as the default exception handler
+> for various KVM selftests applications by setting it's address in
+> the vstvec CSR. The vstvec CSR requires exception handler base address
+> to be at least 4-byte aligned so this patch fixes alignment of the
+> guest_hang() function.
 >
 > Fixes: 3e06cdf10520 ("KVM: selftests: Add initial support for RISC-V
 > 64-bit")
@@ -100,24 +93,22 @@ Thanks,
 Anup
 
 > ---
->  tools/testing/selftests/kvm/include/riscv/processor.h | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  tools/testing/selftests/kvm/lib/riscv/processor.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h b/tools/testing/selftests/kvm/include/riscv/processor.h
-> index dc284c6bdbc3..eca5c622efd2 100644
-> --- a/tools/testing/selftests/kvm/include/riscv/processor.h
-> +++ b/tools/testing/selftests/kvm/include/riscv/processor.h
-> @@ -101,7 +101,9 @@ static inline void set_reg(struct kvm_vm *vm, uint32_t vcpuid, uint64_t id,
->  #define PGTBL_PTE_WRITE_SHIFT                  2
->  #define PGTBL_PTE_READ_MASK                    0x0000000000000002ULL
->  #define PGTBL_PTE_READ_SHIFT                   1
-> -#define PGTBL_PTE_PERM_MASK                    (PGTBL_PTE_EXECUTE_MASK | \
-> +#define PGTBL_PTE_PERM_MASK                    (PGTBL_PTE_ACCESSED_MASK | \
-> +                                                PGTBL_PTE_DIRTY_MASK | \
-> +                                                PGTBL_PTE_EXECUTE_MASK | \
->                                                  PGTBL_PTE_WRITE_MASK | \
->                                                  PGTBL_PTE_READ_MASK)
->  #define PGTBL_PTE_VALID_MASK                   0x0000000000000001ULL
+> diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
+> index d377f2603d98..3961487a4870 100644
+> --- a/tools/testing/selftests/kvm/lib/riscv/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
+> @@ -268,7 +268,7 @@ void vcpu_dump(FILE *stream, struct kvm_vm *vm, uint32_t vcpuid, uint8_t indent)
+>                 core.regs.t3, core.regs.t4, core.regs.t5, core.regs.t6);
+>  }
+>
+> -static void guest_hang(void)
+> +static void __aligned(16) guest_hang(void)
+>  {
+>         while (1)
+>                 ;
 > --
 > 2.25.1
 >

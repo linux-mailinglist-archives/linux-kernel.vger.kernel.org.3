@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B25F94F503F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD804F50EB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1840978AbiDFBOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
+        id S1844057AbiDFBnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357908AbiDEK1Z (ORCPT
+        with ESMTP id S1350068AbiDEJwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:25 -0400
+        Tue, 5 Apr 2022 05:52:40 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC3752E44;
-        Tue,  5 Apr 2022 03:11:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710EC47AC2;
+        Tue,  5 Apr 2022 02:50:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AAACDB81C8A;
-        Tue,  5 Apr 2022 10:11:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3F8FC385A1;
-        Tue,  5 Apr 2022 10:11:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 28B9CB818F3;
+        Tue,  5 Apr 2022 09:50:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78242C385A1;
+        Tue,  5 Apr 2022 09:50:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153471;
-        bh=J/oTdw4gTIbU4qw4E5l1JZWzyRyCSgOzA8DVNvpbBxI=;
+        s=korg; t=1649152238;
+        bh=BYLceQ27HCG3skTU1Q/nNGBO22BIEfWtYYg8LclAFG0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vlakdZlP5yDryeXz4y+uuRblk2BGdLeKhN3v6G0xSWm99osviRwL+tpc2hZaD63xb
-         Dj5xr/xBkfLYpKYvvmwi0e5i7DDz4ZhG6nUtpwImpOYLFm5EaXxMI3cEgaNSKx0wUx
-         kpcFW9ekXY8c2XcG98YZcZ5v2h9R2wAw7O44amT8=
+        b=Yy+OJjA6OfMiVrL2s+UA0R5TFHOwYvGnkV3NmafU0IWz95CTyl5SoboQLBoJ3/LxR
+         FnT+Ze+rznoieNpy+kECqUiO6zniQzQUceBLJ7M3PfyS/aRIgMJHfglfVjV0LI/LDl
+         WGkneZVC//0BEKUkU6g0aZwZGGlXKlrsu3aSO0pU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        stable@vger.kernel.org, Ido Schimmel <idosch@nvidia.com>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 232/599] memory: emif: Add check for setup_interrupts
-Date:   Tue,  5 Apr 2022 09:28:46 +0200
-Message-Id: <20220405070305.745224529@linuxfoundation.org>
+Subject: [PATCH 5.15 667/913] selftests: test_vxlan_under_vrf: Fix broken test case
+Date:   Tue,  5 Apr 2022 09:28:49 +0200
+Message-Id: <20220405070359.829072423@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +56,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Ido Schimmel <idosch@nvidia.com>
 
-[ Upstream commit fd7bd80b46373887b390852f490f21b07e209498 ]
+[ Upstream commit b50d3b46f84282d795ae3076111acb75ae1031f3 ]
 
-As the potential failure of the devm_request_threaded_irq(),
-it should be better to check the return value of the
-setup_interrupts() and return error if fails.
+The purpose of the last test case is to test VXLAN encapsulation and
+decapsulation when the underlay lookup takes place in a non-default VRF.
+This is achieved by enslaving the physical device of the tunnel to a
+VRF.
 
-Fixes: 68b4aee35d1f ("memory: emif: add interrupt and temperature handling")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220224025444.3256530-1-jiasheng@iscas.ac.cn
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+The binding of the VXLAN UDP socket to the VRF happens when the VXLAN
+device itself is opened, not when its physical device is opened. This
+was also mentioned in the cited commit ("tests that moving the underlay
+from a VRF to another works when down/up the VXLAN interface"), but the
+test did something else.
+
+Fix it by reopening the VXLAN device instead of its physical device.
+
+Before:
+
+ # ./test_vxlan_under_vrf.sh
+ Checking HV connectivity                                           [ OK ]
+ Check VM connectivity through VXLAN (underlay in the default VRF)  [ OK ]
+ Check VM connectivity through VXLAN (underlay in a VRF)            [FAIL]
+
+After:
+
+ # ./test_vxlan_under_vrf.sh
+ Checking HV connectivity                                           [ OK ]
+ Check VM connectivity through VXLAN (underlay in the default VRF)  [ OK ]
+ Check VM connectivity through VXLAN (underlay in a VRF)            [ OK ]
+
+Fixes: 03f1c26b1c56 ("test/net: Add script for VXLAN underlay in a VRF")
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Link: https://lore.kernel.org/r/20220324200514.1638326-1-idosch@nvidia.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/memory/emif.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ tools/testing/selftests/net/test_vxlan_under_vrf.sh | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/memory/emif.c b/drivers/memory/emif.c
-index ddb1879f07d3..55d4c842fcd9 100644
---- a/drivers/memory/emif.c
-+++ b/drivers/memory/emif.c
-@@ -1495,7 +1495,7 @@ static int __init_or_module emif_probe(struct platform_device *pdev)
- {
- 	struct emif_data	*emif;
- 	struct resource		*res;
--	int			irq;
-+	int			irq, ret;
+diff --git a/tools/testing/selftests/net/test_vxlan_under_vrf.sh b/tools/testing/selftests/net/test_vxlan_under_vrf.sh
+index 534c8b7699ab..6fadc8e2f116 100755
+--- a/tools/testing/selftests/net/test_vxlan_under_vrf.sh
++++ b/tools/testing/selftests/net/test_vxlan_under_vrf.sh
+@@ -118,11 +118,11 @@ echo "[ OK ]"
  
- 	if (pdev->dev.of_node)
- 		emif = of_get_memory_device_details(pdev->dev.of_node, &pdev->dev);
-@@ -1526,7 +1526,9 @@ static int __init_or_module emif_probe(struct platform_device *pdev)
- 	emif_onetime_settings(emif);
- 	emif_debugfs_init(emif);
- 	disable_and_clear_all_interrupts(emif);
--	setup_interrupts(emif, irq);
-+	ret = setup_interrupts(emif, irq);
-+	if (ret)
-+		goto error;
+ # Move the underlay to a non-default VRF
+ ip -netns hv-1 link set veth0 vrf vrf-underlay
+-ip -netns hv-1 link set veth0 down
+-ip -netns hv-1 link set veth0 up
++ip -netns hv-1 link set vxlan0 down
++ip -netns hv-1 link set vxlan0 up
+ ip -netns hv-2 link set veth0 vrf vrf-underlay
+-ip -netns hv-2 link set veth0 down
+-ip -netns hv-2 link set veth0 up
++ip -netns hv-2 link set vxlan0 down
++ip -netns hv-2 link set vxlan0 up
  
- 	/* One-time actions taken on probing the first device */
- 	if (!emif1) {
+ echo -n "Check VM connectivity through VXLAN (underlay in a VRF)            "
+ ip netns exec vm-1 ping -c 1 -W 1 10.0.0.2 &> /dev/null || (echo "[FAIL]"; false)
 -- 
 2.34.1
 

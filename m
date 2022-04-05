@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C87D54F4FBB
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 206B54F51B9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345993AbiDFA7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
+        id S1847037AbiDFCM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243451AbiDEKgC (ORCPT
+        with ESMTP id S1354396AbiDEKOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:36:02 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541D653B73;
-        Tue,  5 Apr 2022 03:21:56 -0700 (PDT)
+        Tue, 5 Apr 2022 06:14:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28B168FB6;
+        Tue,  5 Apr 2022 02:59:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C5518CE1C9D;
-        Tue,  5 Apr 2022 10:21:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD4DEC385A1;
-        Tue,  5 Apr 2022 10:21:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DF756172B;
+        Tue,  5 Apr 2022 09:59:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 489DEC385A2;
+        Tue,  5 Apr 2022 09:59:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154113;
-        bh=A/hAMMRh3XJNdD9x1AAtbacK618VtXEYBp3Ix1ZXMfo=;
+        s=korg; t=1649152791;
+        bh=6bkja0LTQHSZqPVobeIryLZm/EoL6/GJ5Tl85AYkTlQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ToM9a8timaHkWFGh2Msw9MGcQzRutO22AXWXSo99BHhN5WHLsMJSoS/qsj7brT+M/
-         To9C+aPukQHXd4UHsQGIpGNKadbToc904pg2YIkN1z1v9KS/tf7dm7NZlDQ6XspiWl
-         HPqlDY3LrdnylwT5VifHHdgvcfVO44+C1eN6ba7Q=
+        b=2sddKG4f34oIp0QGnODJIR9EnUWpjDIMUITWKy658zEGiwHcbXJ4zuSJowiDt5Y+M
+         ExD1bogCAI3hrsIjv19kkmNEefiKwZ6wBQWp6xiBH7+ozjI9ZZ2s66U0fCY5Uz6vhH
+         qzD/os2aT0vRWm+sSwHqMJGrjeDTl5MSrV9oZsUw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Matt Brown <matthew.brown.dev@gmail.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Song Liu <song@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 463/599] lib/raid6/test/Makefile: Use $(pound) instead of \# for Make 4.3
-Date:   Tue,  5 Apr 2022 09:32:37 +0200
-Message-Id: <20220405070312.605610993@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        kernel test robot <lkp@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 5.15 903/913] mmc: rtsx: Fix build errors/warnings for unused variable
+Date:   Tue,  5 Apr 2022 09:32:45 +0200
+Message-Id: <20220405070406.886006401@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,82 +56,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Menzel <pmenzel@molgen.mpg.de>
+From: Ulf Hansson <ulf.hansson@linaro.org>
 
-[ Upstream commit 633174a7046ec3b4572bec24ef98e6ee89bce14b ]
+commit 3dd9a926ec2308e49445f22abef149fc64e9332e upstream.
 
-Buidling raid6test on Ubuntu 21.10 (ppc64le) with GNU Make 4.3 shows the
-errors below:
+The struct device *dev, is no longer needed at various functions, let's
+therefore drop it to fix the build errors/warnings.
 
-    $ cd lib/raid6/test/
-    $ make
-    <stdin>:1:1: error: stray ‘\’ in program
-    <stdin>:1:2: error: stray ‘#’ in program
-    <stdin>:1:11: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ \
-        before ‘<’ token
-
-    [...]
-
-The errors come from the HAS_ALTIVEC test, which fails, and the POWER
-optimized versions are not built. That’s also reason nobody noticed on the
-other architectures.
-
-GNU Make 4.3 does not remove the backslash anymore. From the 4.3 release
-announcment:
-
-> * WARNING: Backward-incompatibility!
->   Number signs (#) appearing inside a macro reference or function invocation
->   no longer introduce comments and should not be escaped with backslashes:
->   thus a call such as:
->     foo := $(shell echo '#')
->   is legal.  Previously the number sign needed to be escaped, for example:
->     foo := $(shell echo '\#')
->   Now this latter will resolve to "\#".  If you want to write makefiles
->   portable to both versions, assign the number sign to a variable:
->     H := \#
->     foo := $(shell echo '$H')
->   This was claimed to be fixed in 3.81, but wasn't, for some reason.
->   To detect this change search for 'nocomment' in the .FEATURES variable.
-
-So, do the same as commit 9564a8cf422d ("Kbuild: fix # escaping in .cmd
-files for future Make") and commit 929bef467771 ("bpf: Use $(pound) instead
-of \# in Makefiles") and define and use a $(pound) variable.
-
-Reference for the change in make:
-https://git.savannah.gnu.org/cgit/make.git/commit/?id=c6966b323811c37acedff05b57
-
-Cc: Matt Brown <matthew.brown.dev@gmail.com>
-Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Signed-off-by: Song Liu <song@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 7570fb41e450 ("mmc: rtsx: Let MMC core handle runtime PM")
+Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Link: https://lore.kernel.org/r/20220301115300.64332-1-ulf.hansson@linaro.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- lib/raid6/test/Makefile | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/mmc/host/rtsx_pci_sdmmc.c |    6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/lib/raid6/test/Makefile b/lib/raid6/test/Makefile
-index a4c7cd74cff5..4fb7700a741b 100644
---- a/lib/raid6/test/Makefile
-+++ b/lib/raid6/test/Makefile
-@@ -4,6 +4,8 @@
- # from userspace.
- #
+--- a/drivers/mmc/host/rtsx_pci_sdmmc.c
++++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
+@@ -806,7 +806,6 @@ static void sd_request(struct work_struc
+ 	struct mmc_request *mrq = host->mrq;
+ 	struct mmc_command *cmd = mrq->cmd;
+ 	struct mmc_data *data = mrq->data;
+-	struct device *dev = &host->pdev->dev;
  
-+pound := \#
-+
- CC	 = gcc
- OPTFLAGS = -O2			# Adjust as desired
- CFLAGS	 = -I.. -I ../../../include -g $(OPTFLAGS)
-@@ -42,7 +44,7 @@ else ifeq ($(HAS_NEON),yes)
-         OBJS   += neon.o neon1.o neon2.o neon4.o neon8.o recov_neon.o recov_neon_inner.o
-         CFLAGS += -DCONFIG_KERNEL_MODE_NEON=1
- else
--        HAS_ALTIVEC := $(shell printf '\#include <altivec.h>\nvector int a;\n' |\
-+        HAS_ALTIVEC := $(shell printf '$(pound)include <altivec.h>\nvector int a;\n' |\
-                          gcc -c -x c - >/dev/null && rm ./-.o && echo yes)
-         ifeq ($(HAS_ALTIVEC),yes)
-                 CFLAGS += -I../../../arch/powerpc/include
--- 
-2.34.1
-
+ 	unsigned int data_size = 0;
+ 	int err;
+@@ -1081,7 +1080,6 @@ static void sdmmc_set_ios(struct mmc_hos
+ {
+ 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
+ 	struct rtsx_pcr *pcr = host->pcr;
+-	struct device *dev = &host->pdev->dev;
+ 
+ 	if (host->eject)
+ 		return;
+@@ -1130,7 +1128,6 @@ static int sdmmc_get_ro(struct mmc_host
+ {
+ 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
+ 	struct rtsx_pcr *pcr = host->pcr;
+-	struct device *dev = &host->pdev->dev;
+ 	int ro = 0;
+ 	u32 val;
+ 
+@@ -1156,7 +1153,6 @@ static int sdmmc_get_cd(struct mmc_host
+ {
+ 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
+ 	struct rtsx_pcr *pcr = host->pcr;
+-	struct device *dev = &host->pdev->dev;
+ 	int cd = 0;
+ 	u32 val;
+ 
+@@ -1255,7 +1251,6 @@ static int sdmmc_switch_voltage(struct m
+ {
+ 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
+ 	struct rtsx_pcr *pcr = host->pcr;
+-	struct device *dev = &host->pdev->dev;
+ 	int err = 0;
+ 	u8 voltage;
+ 
+@@ -1308,7 +1303,6 @@ static int sdmmc_execute_tuning(struct m
+ {
+ 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
+ 	struct rtsx_pcr *pcr = host->pcr;
+-	struct device *dev = &host->pdev->dev;
+ 	int err = 0;
+ 
+ 	if (host->eject)
 
 

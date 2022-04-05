@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 653BE4F3DE1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 303BD4F41FB
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382830AbiDEMRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:17:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50852 "EHLO
+        id S237955AbiDEPDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244966AbiDEIww (ORCPT
+        with ESMTP id S1345059AbiDEJm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:52 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C611CB0A;
-        Tue,  5 Apr 2022 01:48:07 -0700 (PDT)
+        Tue, 5 Apr 2022 05:42:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83399BF973;
+        Tue,  5 Apr 2022 02:28:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 68B0DCE1BF8;
-        Tue,  5 Apr 2022 08:48:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EB2AC385A1;
-        Tue,  5 Apr 2022 08:48:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16CAA616B2;
+        Tue,  5 Apr 2022 09:28:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E261C385A0;
+        Tue,  5 Apr 2022 09:28:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148484;
-        bh=L7t5eCcbxKioBhlB6WdiF/7kW9vwa2XNaTwBhgAO9Cw=;
+        s=korg; t=1649150905;
+        bh=a0d4t+sXv4Wr9/cCzVEovrbCFrTvir/oyRFggdahnEg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UAW0TAwNIjPRJ+Tm4dErDaOuiNS9Hijojc3qROmWylrk2tqTCNo881eEnEMtoWqA4
-         0pfQjwN8HdrkpwS0mvZC0Un9nQIKzzRvPjAr01Yja89OcjayT1rmTy6S15FJiGbjL+
-         N5odf+Plvy4E+vqVde7itBrUMZcDTJ5ziZCORllE=
+        b=oywcZXEGrBkJ36K4YqT+HRL50A+GR0gXMcLJjmQycX4oSIBakDUZIlVZloPmc9iVO
+         J1KQbd5b6v91ISnLpy4r7+QVuC55zy1h4yjXhEJs7YDBO26AWPJ2UdTSXWkBS38qCx
+         IgjZLr+NfYmPg+EXFw6ez3YBvoFyueJSunkUJufo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Corentin Labbe <clabbe@baylibre.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0372/1017] ASoC: atmel: Add missing of_node_put() in at91sam9g20ek_audio_probe
-Date:   Tue,  5 Apr 2022 09:21:25 +0200
-Message-Id: <20220405070405.328164771@linuxfoundation.org>
+Subject: [PATCH 5.15 224/913] crypto: sun8i-ce - call finalize with bh disabled
+Date:   Tue,  5 Apr 2022 09:21:26 +0200
+Message-Id: <20220405070346.572336359@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,36 +55,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Corentin Labbe <clabbe@baylibre.com>
 
-[ Upstream commit f590797fa3c1bccdd19e55441592a23b46aef449 ]
+[ Upstream commit f75a749b6d78aeae2ce90e14fcc4b7b3ba46126d ]
 
-This node pointer is returned by of_parse_phandle() with refcount
-incremented in this function.
-Calling of_node_put() to avoid the refcount leak.
+Doing ipsec produces a spinlock recursion warning.
+This is due to not disabling BH during crypto completion function.
 
-Fixes: 531f67e41dcd ("ASoC: at91sam9g20ek-wm8731: convert to dt support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Link: https://lore.kernel.org/r/20220307124539.1743-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 06f751b61329 ("crypto: allwinner - Add sun8i-ce Crypto Engine")
+Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/atmel/sam9g20_wm8731.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c | 3 +++
+ drivers/crypto/allwinner/sun8i-ce/sun8i-ce-hash.c   | 3 +++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/sound/soc/atmel/sam9g20_wm8731.c b/sound/soc/atmel/sam9g20_wm8731.c
-index 915da92e1ec8..33e43013ff77 100644
---- a/sound/soc/atmel/sam9g20_wm8731.c
-+++ b/sound/soc/atmel/sam9g20_wm8731.c
-@@ -214,6 +214,7 @@ static int at91sam9g20ek_audio_probe(struct platform_device *pdev)
- 	cpu_np = of_parse_phandle(np, "atmel,ssc-controller", 0);
- 	if (!cpu_np) {
- 		dev_err(&pdev->dev, "dai and pcm info missing\n");
-+		of_node_put(codec_np);
- 		return -EINVAL;
- 	}
- 	at91sam9g20ek_dai.cpus->of_node = cpu_np;
+diff --git a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
+index 54ae8d16e493..35e3cadccac2 100644
+--- a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
++++ b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
+@@ -11,6 +11,7 @@
+  * You could find a link for the datasheet in Documentation/arm/sunxi.rst
+  */
+ 
++#include <linux/bottom_half.h>
+ #include <linux/crypto.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/io.h>
+@@ -283,7 +284,9 @@ static int sun8i_ce_cipher_run(struct crypto_engine *engine, void *areq)
+ 
+ 	flow = rctx->flow;
+ 	err = sun8i_ce_run_task(ce, flow, crypto_tfm_alg_name(breq->base.tfm));
++	local_bh_disable();
+ 	crypto_finalize_skcipher_request(engine, breq, err);
++	local_bh_enable();
+ 	return 0;
+ }
+ 
+diff --git a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-hash.c b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-hash.c
+index 88194718a806..859b7522faaa 100644
+--- a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-hash.c
++++ b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-hash.c
+@@ -9,6 +9,7 @@
+  *
+  * You could find the datasheet in Documentation/arm/sunxi.rst
+  */
++#include <linux/bottom_half.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/scatterlist.h>
+@@ -414,6 +415,8 @@ int sun8i_ce_hash_run(struct crypto_engine *engine, void *breq)
+ theend:
+ 	kfree(buf);
+ 	kfree(result);
++	local_bh_disable();
+ 	crypto_finalize_hash_request(engine, breq, err);
++	local_bh_enable();
+ 	return 0;
+ }
 -- 
 2.34.1
 

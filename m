@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 851184F2B42
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50DB94F2A18
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 12:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240154AbiDEIpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
+        id S240338AbiDEIqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233286AbiDEIFo (ORCPT
+        with ESMTP id S233332AbiDEIGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:05:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957DF694B1;
-        Tue,  5 Apr 2022 01:01:34 -0700 (PDT)
+        Tue, 5 Apr 2022 04:06:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064FD6972C;
+        Tue,  5 Apr 2022 01:01:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3BB06B81C13;
-        Tue,  5 Apr 2022 08:01:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E3D7C385A5;
-        Tue,  5 Apr 2022 08:01:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 560F961806;
+        Tue,  5 Apr 2022 08:01:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D9D6C385B2;
+        Tue,  5 Apr 2022 08:01:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145692;
-        bh=T3WSM5QUC07i8cXsMeOyjOuKw7tjfGtr2MmAVWVK/LM=;
+        s=korg; t=1649145700;
+        bh=xZqW6bhmtjzrBnDxdcWjv2+8BAXwYVWbAoDYitT4kk0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LYBKUGRX8gyVLWXnzU+1VjevIKxSFJHt7l8NhvvsNIPbWSLZ8tZuFFbgtMtUz3shg
-         dRdWLcWUB7EtGujW8PhLuYM+6gXw/YiJ0ll/rCrUQXQrcGMt4Wkb5YOCX2IBKKnolJ
-         4WKX2cYlpVX5owj/J+VmtMnA3MoOqDkaMy/anL18=
+        b=vQAKpub3RMBjVgwiiWzqNGRimznDyhUhuT56t6kq/8CrpWIGVbpSDYu1UbK/Qj8U9
+         bYHsGzUHx5SRevlt5/86HSCnapsvnTBUadnioVIxRuWW3ydYCMPDtvOy8AF0tc3ctn
+         fwiU/iHfIQjn4PoqaOMGa8HUjyvqnmnSQnBTUJBg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
         Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0494/1126] mt76: mt7915: use proper aid value in mt7915_mcu_sta_basic_tlv
-Date:   Tue,  5 Apr 2022 09:20:41 +0200
-Message-Id: <20220405070422.127395114@linuxfoundation.org>
+Subject: [PATCH 5.17 0497/1126] mt76: mt7921: do not always disable fw runtime-pm
+Date:   Tue,  5 Apr 2022 09:20:44 +0200
+Message-Id: <20220405070422.215177427@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,47 +56,42 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lorenzo Bianconi <lorenzo@kernel.org>
 
-[ Upstream commit abdb8bc94be4cf68aa71c9a8ee0bad9b3e6f52d3 ]
+[ Upstream commit b44eeb8cbdf2b88f2844f11e4f263b0abed5b5b0 ]
 
-Similar to mt7915_mcu_wtbl_generic_tlv, rely on vif->bss_conf.aid for
-aid in sta mode and not on sta->aid.
+After commit 'd430dffbe9dd ("mt76: mt7921: fix a possible race
+enabling/disabling runtime-pm")', runtime-pm is always disabled in the
+fw even if the user requests to enable it toggling debugfs node since
+mt7921_pm_interface_iter routine will use pm->enable to configure the fw.
+Fix the issue moving enable variable configuration before running
+mt7921_pm_interface_iter routine.
 
-Fixes: e57b7901469fc ("mt76: add mac80211 driver for MT7915 PCIe-based chipsets")
+Fixes: d430dffbe9dd ("mt76: mt7921: fix a possible race enabling/disabling runtime-pm")
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7915/mcu.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-index 38cc50603d20..b2b3b5068789 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7915/mcu.c
-@@ -1322,12 +1322,15 @@ mt7915_mcu_sta_basic_tlv(struct sk_buff *skb, struct ieee80211_vif *vif,
- 	case NL80211_IFTYPE_MESH_POINT:
- 	case NL80211_IFTYPE_AP:
- 		basic->conn_type = cpu_to_le32(CONNECTION_INFRA_STA);
-+		basic->aid = cpu_to_le16(sta->aid);
- 		break;
- 	case NL80211_IFTYPE_STATION:
- 		basic->conn_type = cpu_to_le32(CONNECTION_INFRA_AP);
-+		basic->aid = cpu_to_le16(vif->bss_conf.aid);
- 		break;
- 	case NL80211_IFTYPE_ADHOC:
- 		basic->conn_type = cpu_to_le32(CONNECTION_IBSS_ADHOC);
-+		basic->aid = cpu_to_le16(sta->aid);
- 		break;
- 	default:
- 		WARN_ON(1);
-@@ -1335,7 +1338,6 @@ mt7915_mcu_sta_basic_tlv(struct sk_buff *skb, struct ieee80211_vif *vif,
- 	}
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c b/drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c
+index 86fd7292b229..45a393070e46 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c
+@@ -291,13 +291,12 @@ mt7921_pm_set(void *data, u64 val)
+ 	pm->enable = false;
+ 	mt76_connac_pm_wake(&dev->mphy, pm);
  
- 	memcpy(basic->peer_addr, sta->addr, ETH_ALEN);
--	basic->aid = cpu_to_le16(sta->aid);
- 	basic->qos = sta->wme;
- }
++	pm->enable = val;
+ 	ieee80211_iterate_active_interfaces(mt76_hw(dev),
+ 					    IEEE80211_IFACE_ITER_RESUME_ALL,
+ 					    mt7921_pm_interface_iter, dev);
  
+ 	mt76_connac_mcu_set_deep_sleep(&dev->mt76, pm->ds_enable);
+-
+-	pm->enable = val;
+ 	mt76_connac_power_save_sched(&dev->mphy, pm);
+ out:
+ 	mutex_unlock(&dev->mt76.mutex);
 -- 
 2.34.1
 

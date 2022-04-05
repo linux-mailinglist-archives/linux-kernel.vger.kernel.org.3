@@ -2,42 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA934F46C1
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 477594F47B7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbiDEUnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
+        id S237833AbiDEVRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354277AbiDEKNA (ORCPT
+        with ESMTP id S1354390AbiDEKOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:13:00 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F1F60D8F;
-        Tue,  5 Apr 2022 02:59:30 -0700 (PDT)
+        Tue, 5 Apr 2022 06:14:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C6A6A00A;
+        Tue,  5 Apr 2022 02:59:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D1653CE1C9E;
-        Tue,  5 Apr 2022 09:59:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6A01C385A1;
-        Tue,  5 Apr 2022 09:59:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62F70B818F6;
+        Tue,  5 Apr 2022 09:59:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B095EC385A2;
+        Tue,  5 Apr 2022 09:59:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152767;
-        bh=t5Kjxi8BKChE7cLLOSmUC5fA8BDDzn2f270Eb+wM/pU=;
+        s=korg; t=1649152778;
+        bh=UW7sADSpeZ8uaQdmEsxtEglXjUGyuz+vRPdBIfA1Nvw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wH1n/mVEP00KSnABUyS0dINUSx8keimGUI6S8wrP2azHJCGkhnTHm7j5THZnEZOE0
-         wcVOY0mWrzawpLZafztZpZXtbm8yietPnCqXb9MRbY5XjtDF9t3asdqdwKcZowdXZy
-         lx98qbltOnoViU9grhfeJ1Uh4InKbV95LcSH0vxE=
+        b=A9kNk8AaJDnYXyYx03R0P1kW/0yFqroD5kK9hqaGGKsFrInEOi0WIqoJmIe2F0xgN
+         jL4B0LsxT0lf+8FW/1zkj0y3Tr2tVyJ9VvYFi7+VAISrmkkogNL2rQZW03IYDN1zds
+         k4COxSTzRwuNTt9vj2vtDuYD4WaaZmZsHBHy5mc8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 5.15 894/913] ARM: dts: spear13xx: Update SPI dma properties
-Date:   Tue,  5 Apr 2022 09:32:36 +0200
-Message-Id: <20220405070406.619520572@linuxfoundation.org>
+        stable@vger.kernel.org,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Samuel Iglesias Gonsalvez <siglesias@igalia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.15 898/913] docs: sysctl/kernel: add missing bit to panic_print
+Date:   Tue,  5 Apr 2022 09:32:40 +0200
+Message-Id: <20220405070406.737762271@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,37 +61,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+From: Guilherme G. Piccoli <gpiccoli@igalia.com>
 
-commit 31d3687d6017c7ce6061695361598d9cda70807a upstream.
+commit a1ff1de00db21ecb956213f046b79741b64c6b65 upstream.
 
-Reorder dmas and dma-names property for spi controller node to make it
-compliant with bindings.
+Patch series "Some improvements on panic_print".
 
-Fixes: 6e8887f60f60 ("ARM: SPEAr13xx: Pass generic DW DMAC platform data from DT")
-Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Link: https://lore.kernel.org/r/20220326042313.97862-2-singh.kuldeep87k@gmail.com'
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+This is a mix of a documentation fix with some additions to the
+"panic_print" syscall / parameter.  The goal here is being able to collect
+all CPUs backtraces during a panic event and also to enable "panic_print"
+in a kdump event - details of the reasoning and design choices in the
+patches.
+
+This patch (of 3):
+
+Commit de6da1e8bcf0 ("panic: add an option to replay all the printk
+message in buffer") added a new bit to the sysctl/kernel parameter
+"panic_print", but the documentation was added only in
+kernel-parameters.txt, not in the sysctl guide.
+
+Fix it here by adding bit 5 to sysctl admin-guide documentation.
+
+[rdunlap@infradead.org: fix table format warning]
+  Link: https://lkml.kernel.org/r/20220109055635.6999-1-rdunlap@infradead.org
+
+Link: https://lkml.kernel.org/r/20211109202848.610874-1-gpiccoli@igalia.com
+Link: https://lkml.kernel.org/r/20211109202848.610874-2-gpiccoli@igalia.com
+Fixes: de6da1e8bcf0 ("panic: add an option to replay all the printk message in buffer")
+Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+Reviewed-by: Feng Tang <feng.tang@intel.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Iurii Zaikin <yzaikin@google.com>
+Cc: Samuel Iglesias Gonsalvez <siglesias@igalia.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/spear13xx.dtsi |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ Documentation/admin-guide/sysctl/kernel.rst |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/arch/arm/boot/dts/spear13xx.dtsi
-+++ b/arch/arm/boot/dts/spear13xx.dtsi
-@@ -284,9 +284,9 @@
- 				#size-cells = <0>;
- 				interrupts = <0 31 0x4>;
- 				status = "disabled";
--				dmas = <&dwdma0 4 0 0>,
--					<&dwdma0 5 0 0>;
--				dma-names = "tx", "rx";
-+				dmas = <&dwdma0 5 0 0>,
-+					<&dwdma0 4 0 0>;
-+				dma-names = "rx", "tx";
- 			};
+--- a/Documentation/admin-guide/sysctl/kernel.rst
++++ b/Documentation/admin-guide/sysctl/kernel.rst
+@@ -795,6 +795,7 @@ bit 1  print system memory info
+ bit 2  print timer info
+ bit 3  print locks info if ``CONFIG_LOCKDEP`` is on
+ bit 4  print ftrace buffer
++bit 5  print all printk messages in buffer
+ =====  ============================================
  
- 			rtc@e0580000 {
+ So for example to print tasks and memory info on panic, user can::
 
 

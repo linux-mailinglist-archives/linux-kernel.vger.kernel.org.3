@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F604F51F9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48ADE4F5232
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1849030AbiDFCcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
+        id S1849579AbiDFCjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1441972AbiDEWKZ (ORCPT
+        with ESMTP id S1442091AbiDEWKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 18:10:25 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1D614A93A;
-        Tue,  5 Apr 2022 13:56:19 -0700 (PDT)
-Date:   Tue, 05 Apr 2022 20:56:16 -0000
+        Tue, 5 Apr 2022 18:10:43 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFC128E24;
+        Tue,  5 Apr 2022 13:56:20 -0700 (PDT)
+Date:   Tue, 05 Apr 2022 20:56:17 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649192178;
+        s=2020; t=1649192179;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bVZNz50m5hLuQdgDd7OhfwNRqA0q9OGnmrTCKGq56TA=;
-        b=GMNxM4ZKIQqboBm5Vu3ycSDfyRnDudvMpc2g63+HDqry/GJ0xJ403Q5+1Q2lz28Weg1np7
-        Rjk2rDPZ3zBEY6rcE1X6f2gGlbz0tF5DBG2VRcv0oTdbsK9PrGEM2sChoQ4hMdCRqp7Miv
-        dXtaeERY+zXcKGsuEn+mHbN2dOE6zEJfSS0x+ywnrpor2sooFOLPFLbSh9YmwsP/Rs7vMl
-        vu9pXXjSqDM2/oldI+nppcfafN3XTj2G3NO0/Hevt4ejKyLULNO3FzOEQw6vZJuI1SIIJ8
-        KpAlmEJz9J0Uz4P1p4S1FeGg4jrYtgrsZrWfPrEYpn5wktubRqoOnd1gmwnC3Q==
+        bh=csCYSZXs/k/y3JYV+c94UAameL8Wjh0jsXSIlb67K8Q=;
+        b=Zr4sKJQNms3Vp7nOKsP72FCqJfO4TRJz7omngb9vSBMDJDAf7n74gXj5GCTRs+ZcvFEuIu
+        B5ttCJJzeUrXEtTkG/0L0ajHfAt1bkS/LmBQgbrn3Fo2jDu8phAsjiig+F7HAcAmk3QAlJ
+        iHgjnOgiRjvIfz5lBIBaptu6SVyEjAwY4tZ1jUFMaTpMRbsKBAtUsKYlmx/1Qs7xsHWfj6
+        vxzbZeF8vBco+5medXHnq5IJLbV2gZuyI2Acnm3Dl+T9x4f9eqwpu+999BZn4vYI2cMwz5
+        ZWfp8OL+y3keD/NO2r54CDkk+Q1h4UzF1R813auQG3Reirt/eZtiiVD5RGOW3g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649192178;
+        s=2020e; t=1649192179;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bVZNz50m5hLuQdgDd7OhfwNRqA0q9OGnmrTCKGq56TA=;
-        b=b3xdYyspc0pGjEDAnw+4PHgXW7jrO4QBKXK4X7D2b1gr8Np+L3q6ilTjgeuv0M8z6XNcUY
-        tnPXQ+ZeubH6mEBA==
-From:   "tip-bot2 for Ammar Faizi" <tip-bot2@linutronix.de>
+        bh=csCYSZXs/k/y3JYV+c94UAameL8Wjh0jsXSIlb67K8Q=;
+        b=XzVbtc0PhLoeBULUpsFatERhaBFi0mVkI83ccJvS6jdX6s4U2t3B1GwXQqy3yYn62wiGab
+        nPv+KADNT84x3qCg==
+From:   "tip-bot2 for Smita Koralahalli" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: ras/core] x86/MCE/AMD: Fix memory leak when
- threshold_create_bank() fails
-Cc:     Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Borislav Petkov <bp@suse.de>, <stable@vger.kernel.org>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220329104705.65256-3-ammarfaizi2@gnuweeb.org>
-References: <20220329104705.65256-3-ammarfaizi2@gnuweeb.org>
+Subject: [tip: ras/core] x86/mce: Avoid unnecessary padding in struct mce_bank
+Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        Borislav Petkov <bp@suse.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220225193342.215780-2-Smita.KoralahalliChannabasappa@amd.com>
+References: <20220225193342.215780-2-Smita.KoralahalliChannabasappa@amd.com>
 MIME-Version: 1.0
-Message-ID: <164919217670.389.1735790360584795071.tip-bot2@tip-bot2>
+Message-ID: <164919217791.389.16926889046664512675.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -70,104 +67,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the ras/core branch of tip:
 
-Commit-ID:     e5f28623ceb103e13fc3d7bd45edf9818b227fd0
-Gitweb:        https://git.kernel.org/tip/e5f28623ceb103e13fc3d7bd45edf9818b227fd0
-Author:        Ammar Faizi <ammarfaizi2@gnuweeb.org>
-AuthorDate:    Tue, 29 Mar 2022 17:47:05 +07:00
+Commit-ID:     9f1b19b977ee3cbd3fe9135ff63dbf221eac1d6a
+Gitweb:        https://git.kernel.org/tip/9f1b19b977ee3cbd3fe9135ff63dbf221eac1d6a
+Author:        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+AuthorDate:    Fri, 25 Feb 2022 13:33:40 -06:00
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Tue, 05 Apr 2022 21:24:37 +02:00
+CommitterDate: Tue, 05 Apr 2022 21:23:34 +02:00
 
-x86/MCE/AMD: Fix memory leak when threshold_create_bank() fails
+x86/mce: Avoid unnecessary padding in struct mce_bank
 
-In mce_threshold_create_device(), if threshold_create_bank() fails, the
-previously allocated threshold banks array @bp will be leaked because
-the call to mce_threshold_remove_device() will not free it.
+Convert struct mce_bank member "init" from bool to a bitfield to get rid
+of unnecessary padding.
 
-This happens because mce_threshold_remove_device() fetches the pointer
-through the threshold_banks per-CPU variable but bp is written there
-only after the bank creation is successful, and not before, when
-threshold_create_bank() fails.
+$ pahole -C mce_bank arch/x86/kernel/cpu/mce/core.o
 
-Add a helper which unwinds all the bank creation work previously done
-and pass into it the previously allocated threshold banks array for
-freeing.
+before:
 
-  [ bp: Massage. ]
+  /* size: 16, cachelines: 1, members: 2 */
+  /* padding: 7 */
+  /* last cacheline: 16 bytes */
 
-Fixes: 6458de97fc15 ("x86/mce/amd: Straighten CPU hotplug path")
-Co-developed-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-Co-developed-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+after:
+
+  /* size: 16, cachelines: 1, members: 3 */
+  /* last cacheline: 16 bytes */
+
+No functional changes.
+
+Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220329104705.65256-3-ammarfaizi2@gnuweeb.org
+Link: https://lore.kernel.org/r/20220225193342.215780-2-Smita.KoralahalliChannabasappa@amd.com
 ---
- arch/x86/kernel/cpu/mce/amd.c | 32 +++++++++++++++++++-------------
- 1 file changed, 19 insertions(+), 13 deletions(-)
+ arch/x86/kernel/cpu/mce/core.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 1940d30..1c87501 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -1294,10 +1294,23 @@ out_free:
- 	kfree(bank);
- }
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 981496e..d775fcd 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -69,7 +69,9 @@ DEFINE_PER_CPU_READ_MOSTLY(unsigned int, mce_num_banks);
  
-+static void __threshold_remove_device(struct threshold_bank **bp)
-+{
-+	unsigned int bank, numbanks = this_cpu_read(mce_num_banks);
+ struct mce_bank {
+ 	u64			ctl;			/* subevents to enable */
+-	bool			init;			/* initialise bank? */
 +
-+	for (bank = 0; bank < numbanks; bank++) {
-+		if (!bp[bank])
-+			continue;
-+
-+		threshold_remove_bank(bp[bank]);
-+		bp[bank] = NULL;
-+	}
-+	kfree(bp);
-+}
-+
- int mce_threshold_remove_device(unsigned int cpu)
- {
- 	struct threshold_bank **bp = this_cpu_read(threshold_banks);
--	unsigned int bank, numbanks = this_cpu_read(mce_num_banks);
++	__u64 init			: 1,		/* initialise bank? */
++	      __reserved_1		: 63;
+ };
+ static DEFINE_PER_CPU_READ_MOSTLY(struct mce_bank[MAX_NR_BANKS], mce_banks_array);
  
- 	if (!bp)
- 		return 0;
-@@ -1308,13 +1321,7 @@ int mce_threshold_remove_device(unsigned int cpu)
- 	 */
- 	this_cpu_write(threshold_banks, NULL);
- 
--	for (bank = 0; bank < numbanks; bank++) {
--		if (bp[bank]) {
--			threshold_remove_bank(bp[bank]);
--			bp[bank] = NULL;
--		}
--	}
--	kfree(bp);
-+	__threshold_remove_device(bp);
- 	return 0;
- }
- 
-@@ -1351,15 +1358,14 @@ int mce_threshold_create_device(unsigned int cpu)
- 		if (!(this_cpu_read(bank_map) & (1 << bank)))
- 			continue;
- 		err = threshold_create_bank(bp, cpu, bank);
--		if (err)
--			goto out_err;
-+		if (err) {
-+			__threshold_remove_device(bp);
-+			return err;
-+		}
- 	}
- 	this_cpu_write(threshold_banks, bp);
- 
- 	if (thresholding_irq_en)
- 		mce_threshold_vector = amd_threshold_interrupt;
- 	return 0;
--out_err:
--	mce_threshold_remove_device(cpu);
--	return err;
- }

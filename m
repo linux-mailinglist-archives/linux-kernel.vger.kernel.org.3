@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E394E4F45AC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA2424F46A7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349901AbiDENGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34674 "EHLO
+        id S1357651AbiDEUkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344004AbiDEJQo (ORCPT
+        with ESMTP id S1355248AbiDEKSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:16:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65679101FE;
-        Tue,  5 Apr 2022 02:02:49 -0700 (PDT)
+        Tue, 5 Apr 2022 06:18:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D8FFD3A;
+        Tue,  5 Apr 2022 03:04:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01BD061564;
-        Tue,  5 Apr 2022 09:02:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17C37C385A1;
-        Tue,  5 Apr 2022 09:02:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E633FB81C8B;
+        Tue,  5 Apr 2022 10:04:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 425AEC385A2;
+        Tue,  5 Apr 2022 10:04:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149368;
-        bh=Uei5z8hVMTTP/ef+TzfjM7pNOY5Pj1gxvZnvJmGs/1Y=;
+        s=korg; t=1649153073;
+        bh=CLWf3OMHKzeZvde0sUqk3oNEVx0H7Xs+0c0PJsByIdQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sIkKJzXwVB/kaHmKzUi8HxpwsS+7ZOKh+RLIaBTshTtOJIopYs/6xbz2ufZyH3YTC
-         Dxugq6iyXnxY6ELCpJAHepKRJ6FyUwAah99ewwgLidXK3dQqWQ9Lde1ElrXV9yNH1+
-         NObaWFNIhsTUEc9wlUKvusTUE/AzODtqNOsCLDRU=
+        b=YSm5xkFUkayn6nZEAuWe5/Uqv1Ga1MBxQSR+bKv1Reqj56WS6jYqVbPtBV25L81R3
+         92n/WnjMs3nuATnm8o/FKBlsCkKQ8Mxo/PhFHBmRhO8R64IZqxtI0BpHMeFqw66pu/
+         n7NKasoh0mO4zFUNfeLHfyVclaZsNuiA5Smj3rqk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
-        Martin Kaiser <martin@kaiser.cx>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0672/1017] staging: r8188eu: fix endless loop in recv_func
-Date:   Tue,  5 Apr 2022 09:26:25 +0200
-Message-Id: <20220405070414.227866929@linuxfoundation.org>
+        stable@vger.kernel.org, Pekka Pessi <ppessi@nvidia.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Jassi Brar <jaswinder.singh@linaro.org>
+Subject: [PATCH 5.10 093/599] mailbox: tegra-hsp: Flush whole channel
+Date:   Tue,  5 Apr 2022 09:26:27 +0200
+Message-Id: <20220405070301.595991009@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Kaiser <martin@kaiser.cx>
+From: Pekka Pessi <ppessi@nvidia.com>
 
-[ Upstream commit 1327fcf175fa63d3b7a058b8148ed7714acdc035 ]
+commit 60de2d2dc284e0dd1c2c897d08625bde24ef3454 upstream.
 
-Fix an endless loop in recv_func. If pending_frame is not NULL, we're
-stuck in the while loop forever. We have to call rtw_alloc_recvframe
-each time we loop.
+The txdone can re-fill the mailbox. Keep polling the mailbox during the
+flush until all the messages have been delivered.
 
-Fixes: 15865124feed ("staging: r8188eu: introduce new core dir for RTL8188eu driver")
-Reported-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
-Link: https://lore.kernel.org/r/20220226181457.1138035-4-martin@kaiser.cx
+This fixes an issue with the Tegra Combined UART (TCU) where output can
+get truncated under high traffic load.
+
+Signed-off-by: Pekka Pessi <ppessi@nvidia.com>
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
+Fixes: 91b1b1c3da8a ("mailbox: tegra-hsp: Add support for shared mailboxes")
+Cc: stable@vger.kernel.org
+Signed-off-by: Thierry Reding <treding@nvidia.com>
+Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
+Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/r8188eu/core/rtw_recv.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/mailbox/tegra-hsp.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-index 51a13262a226..d120d61454a3 100644
---- a/drivers/staging/r8188eu/core/rtw_recv.c
-+++ b/drivers/staging/r8188eu/core/rtw_recv.c
-@@ -1853,8 +1853,7 @@ static int recv_func(struct adapter *padapter, struct recv_frame *rframe)
- 		struct recv_frame *pending_frame;
- 		int cnt = 0;
- 
--		pending_frame = rtw_alloc_recvframe(&padapter->recvpriv.uc_swdec_pending_queue);
--		while (pending_frame) {
-+		while ((pending_frame = rtw_alloc_recvframe(&padapter->recvpriv.uc_swdec_pending_queue))) {
- 			cnt++;
- 			recv_func_posthandle(padapter, pending_frame);
+--- a/drivers/mailbox/tegra-hsp.c
++++ b/drivers/mailbox/tegra-hsp.c
+@@ -410,6 +410,11 @@ static int tegra_hsp_mailbox_flush(struc
+ 		value = tegra_hsp_channel_readl(ch, HSP_SM_SHRD_MBOX);
+ 		if ((value & HSP_SM_SHRD_MBOX_FULL) == 0) {
+ 			mbox_chan_txdone(chan, 0);
++
++			/* Wait until channel is empty */
++			if (chan->active_req != NULL)
++				continue;
++
+ 			return 0;
  		}
--- 
-2.34.1
-
+ 
 
 

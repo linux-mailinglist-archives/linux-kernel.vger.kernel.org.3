@@ -2,74 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6EF4F4C2A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED3B74F4E0F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1576489AbiDEXKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
+        id S1587366AbiDFAIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346344AbiDELBP (ORCPT
+        with ESMTP id S1356598AbiDELPg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 07:01:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B9299BF534
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 03:29:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649154573;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=azuyYbBlHpqkJWJQXsWi7U/WoYQgOT7FrtBAFayBwow=;
-        b=STUkJONnbXJ5ExnQxc86t8kx3ysKpMUOamUUr3m5xmDmPIsLV8ccoUMAlOh1MEexa1BTB7
-        I0vGDnhcL16qD5Wx3fW2F73oinR6UQdUogq0YGtTDP9EZcBqYIGdBnORyOwx6UTr6XY7Wt
-        8XMuPdBcyzWGCSjMdsnKx4ho06kxXIY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-568-hM6Z0VhTO6uUdfdQSI1g0g-1; Tue, 05 Apr 2022 06:29:30 -0400
-X-MC-Unique: hM6Z0VhTO6uUdfdQSI1g0g-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 56FBC3822201;
-        Tue,  5 Apr 2022 10:29:28 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.194.75])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 2D53F112D17B;
-        Tue,  5 Apr 2022 10:29:05 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Tue,  5 Apr 2022 12:29:26 +0200 (CEST)
-Date:   Tue, 5 Apr 2022 12:29:03 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: [PATCH v2] ptrace: fix ptrace vs tasklist_lock race on
- PREEMPT_RT.
-Message-ID: <20220405102849.GA2708@redhat.com>
-References: <Yh/b19JikC+Vnm8i@linutronix.de>
- <20220314185429.GA30364@redhat.com>
- <YjBO8yzxdmjTGNiy@linutronix.de>
- <20220315142944.GA22670@redhat.com>
- <YkW55u6u2fo5QmV7@linutronix.de>
- <20220405101026.GB34954@worktop.programming.kicks-ass.net>
+        Tue, 5 Apr 2022 07:15:36 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5F27F239
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 03:36:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649154964; x=1680690964;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=LDJjU9zCF2yUo6JmrZW5kQUAHhzbUQYV3bIsKsJG9dQ=;
+  b=EMfXiqVZYVJrKpm9UqePJXBzXGl2VE42g9GY6xJOIYLD4kyPSr7vCYTc
+   CjlfPPk3tOupB2yDsO8bPCueLb2ZmAIOubXOTi4Mq2zVBhcDaVC+2TQgS
+   M3SY1c5ccgvZ9278o5ebX96FYEekD8mouTzQFMs+B+rn5mhGNvbwgU8dW
+   lvoCvkr/Kp62fw82ics5qsiOAZIx4CR66HyMlxLSh9nCit+DqORI+uz/u
+   JcV2m6Mt940rPcXJIe+7iUPFP4wO3D4jCGYGsYHm/9JiRvPgwnr2THgjH
+   9DaUaeavonyYYOOH8BIJ3/IxUF4+mAdGRi+6/4a0Aq46eOCpAOzYBUClI
+   A==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="260413920"
+X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
+   d="scan'208";a="260413920"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 03:36:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
+   d="scan'208";a="569824757"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 05 Apr 2022 03:36:02 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nbgXZ-00034B-Up;
+        Tue, 05 Apr 2022 10:36:01 +0000
+Date:   Tue, 5 Apr 2022 18:35:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_kvm_aia_v1 9/29] arch/riscv/kernel/smp.c:120:2-3:
+ Unneeded semicolon
+Message-ID: <202204051806.SNUnP4eo-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220405101026.GB34954@worktop.programming.kicks-ass.net>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,18 +62,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/05, Peter Zijlstra wrote:
->
-> As is, I think we can write task_is_stopped() like:
->
-> #define task_is_stopped(task)	((task)->jobctl & JOBCTL_STOP_PENDING)
->
-> Because jobctl is in fact the canonical state.
+tree:   https://github.com/avpatel/linux.git riscv_kvm_aia_v1
+head:   dab41b5c8f55fb8e864a5e10fd181dd0d4443778
+commit: 9951f846b51d68f916cfa08140171cbcc8c0d02b [9/29] RISC-V: Treat IPIs as normal Linux IRQs
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20220405/202204051806.SNUnP4eo-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.2.0
 
-Not really. JOBCTL_STOP_PENDING means that the task should stop.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-And this flag is cleared right before set_special_state(TASK_STOPPED)
-in do_signal_stop(), see task_participate_group_stop().
 
-Oleg.
+cocci warnings: (new ones prefixed by >>)
+>> arch/riscv/kernel/smp.c:120:2-3: Unneeded semicolon
 
+Please review and possibly fold the followup patch.
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

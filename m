@@ -2,123 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C8D4F492C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA9AD4F48E9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391365AbiDEWFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39990 "EHLO
+        id S1388602AbiDEVzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354966AbiDEKQt (ORCPT
+        with ESMTP id S1355795AbiDEKWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:16:49 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0CE140DD
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 03:04:20 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 5 Apr 2022 06:22:05 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5511A0BFF;
+        Tue,  5 Apr 2022 03:05:08 -0700 (PDT)
+Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E4F71210E5;
-        Tue,  5 Apr 2022 10:04:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649153058; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4gd5jq9JA78+ej6U2SXRWQGkkcWFy9lDISdWZvkme7M=;
-        b=QRnYDueTv6FkkyOXeKf43xTyrX0Yg9FflXn2fWwaWwdJFLNu0c6HbZDoY7Ma0C2gSflO6o
-        UmVMyuhlhQbviWmktRTT/xjHDVpE9ymF1UTcNlDEwUuXp04BRAT5vWg0SS8ssrIcxxZUZb
-        Rekl/2oHVTABt8v9B6SLwW/BE7lc1zo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649153058;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4gd5jq9JA78+ej6U2SXRWQGkkcWFy9lDISdWZvkme7M=;
-        b=pM+1pMkGX4wEBvlh5Vkd7pClTEFyjosT5PfCpAt/FqHQtyEktuTgm6u4Ji7qiyMEiDeQzg
-        M8gL++iLBDtrbDBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C049313A04;
-        Tue,  5 Apr 2022 10:04:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id xt8kLiIUTGK2RgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 05 Apr 2022 10:04:18 +0000
-Message-ID: <76c63237-c489-b942-bdd9-5720042f52a9@suse.cz>
-Date:   Tue, 5 Apr 2022 12:04:18 +0200
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 257371EC02B9;
+        Tue,  5 Apr 2022 12:05:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1649153103;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=4VtHZy5uYVYyzEGO3ijQUjRjE/WT3pEW+hUot8IpWSo=;
+        b=pmXxhTvsasP3dTAqvVGXVrLgoQDlT7C3KuTutUtzXiYyERya82ZIG4as/JmGzjWc4jjxRh
+        5QbBDCrxlhvz5n9dej0rM3ZM+rPRb66oFo5VUIU0p7R2mi6TIghCIbvB5D22cerirYTp8R
+        bBpb28CkqK0ncd8c2jmY6C80SEGkPCw=
+Date:   Tue, 5 Apr 2022 12:04:59 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Richard Biener <rguenther@suse.de>
+Cc:     linux-toolchains@vger.kernel.org, Michael Matz <matz@suse.de>,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: older gccs and case labels producing integer constants
+Message-ID: <YkwUS5mNSQAY/ozw@zn.tnic>
+References: <YkwQ6+tIH8GQpuct@zn.tnic>
+ <7o5nn52-nqn1-oo13-s6o9-59r85r91o768@fhfr.qr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/2] mm, slub: change percpu partial accounting from
- objects to pages
-Content-Language: en-US
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     linux-mm@kvack.org, Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Jann Horn <jannh@google.com>, linux-kernel@vger.kernel.org,
-        Roman Gushchin <guro@fb.com>
-References: <20211012134651.11258-1-vbabka@suse.cz>
- <Yja4AlOHkpcKLu59@ip-172-31-19-208.ap-northeast-1.compute.internal>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <Yja4AlOHkpcKLu59@ip-172-31-19-208.ap-northeast-1.compute.internal>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <7o5nn52-nqn1-oo13-s6o9-59r85r91o768@fhfr.qr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/20/22 06:13, Hyeonggon Yoo wrote:
->> While this is no longer a problem in kmemcg context thanks to the accounting
->> rewrite in 5.9, the memory waste is still not ideal and it's questionable
->> whether it makes sense to perform free object count based control when object
->> counts can easily become so much inaccurate. So this patch converts the
->> accounting to be based on number of pages only (which is precise) and removes
->> the page->pobjects field completely. This is also ultimately simpler.
->> 
->> To retain the existing set_cpu_partial() heuristic, first calculate the target
->> number of objects as previously, but then convert it to target number of pages
->> by assuming the pages will be half-filled on average. This assumption might
->> obviously also be inaccurate in practice, but cannot degrade to actual number of
->> pages being equal to the target number of objects.
-> 
-> I have to agree that this half-filled assumption works pretty well and
-> I believe the too-long-partial-list problem has gone. we're controlling
-> its length clearly after this patch.
-> 
-> But my one concern here is that actual number of objects in
-> percpu partial list can be decreased when we cannot allocate high order pages.
-> 
-> e.g.) oo_order(s->oo) is 3 and we can only allocate order-2 page,
-> it can be shortened 2 times in worst case because the accounting logic
-> assumes order of all slab in the percpu partial list is oo_order(s->oo).
+On Tue, Apr 05, 2022 at 11:58:33AM +0200, Richard Biener wrote:
+> also with 'unsigned int i' but that's accepted with GCC 7.  So
+> what do you switch on?
 
-That's true, but let's not forget the percpu partial lists are motivated by
-peak performance in e.g. networking. Once we start having issues allocating
-e.g. order-2 pages due to fragmentation, the system is probably far from
-peak performance already, so this pessimism in slub partial lists is not the
-main concern.
+Ah, right, so it must be some of the gazillion switches. Below's a dump
+from building the asm version of that same file.
 
-> I think using object based accounting, and assuming every slab is
-> half-filled would be more consistent when the system is highly
-> fragmented.
+Can you recognize which one might be causing this?
 
-Based on reasoning above, I doubt it's worth the trouble.
+# GNU C11 (SUSE Linux) version 7.5.0 (x86_64-suse-linux)
+#       compiled by GNU C version 7.5.0, GMP version 6.1.2, MPFR version 4.0.2-p6, MPC version 1.1.0, isl version isl-0.18-GMP
 
-Thanks.
+# GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+# options passed:  -nostdinc -I ./arch/x86/include
+# -I ./arch/x86/include/generated -I ./include -I ./arch/x86/include/uapi
+# -I ./arch/x86/include/generated/uapi -I ./include/uapi
+# -I ./include/generated/uapi -D __KERNEL__ -D CC_USING_FENTRY -D MODULE
+# -D KBUILD_BASENAME="midi" -D KBUILD_MODNAME="snd_usbmidi_lib"
+# -D __KBUILD_MODNAME=kmod_snd_usbmidi_lib
+# -include ./include/linux/compiler-version.h
+# -include ./include/linux/kconfig.h
+# -include ./include/linux/compiler_types.h -MMD sound/usb/.midi.s.d
+# sound/usb/midi.c -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx -m64
+# -mno-80387 -mno-fp-ret-in-387 -mpreferred-stack-boundary=3
+# -mskip-rax-setup -mtune=generic -mno-red-zone -mcmodel=kernel
+# -mindirect-branch=thunk-extern -mindirect-branch-register -mrecord-mcount
+# -mfentry -march=x86-64 -auxbase-strip sound/usb/midi.s -O2 -Wall -Wundef
+# -Werror=strict-prototypes -Wno-trigraphs
+# -Werror=implicit-function-declaration -Werror=implicit-int
+# -Werror=return-type -Wno-format-security -Wno-sign-compare
+# -Wno-frame-address -Wformat-truncation=0 -Wformat-overflow=0
+# -Wframe-larger-than=2048 -Werror -Wimplicit-fallthrough=5 -Wno-main
+# -Wno-unused-but-set-variable -Wunused-const-variable=0
+# -Wdeclaration-after-statement -Wvla -Wno-pointer-sign
+# -Wstringop-overflow=0 -Wno-restrict -Wno-maybe-uninitialized
+# -Werror=date-time -Werror=incompatible-pointer-types
+# -Werror=designated-init -std=gnu11 -p -fno-strict-aliasing -fno-common
+# -fshort-wchar -fno-PIE -falign-jumps=1 -falign-loops=1
+# -fno-asynchronous-unwind-tables -fno-jump-tables
+# -fno-delete-null-pointer-checks -fno-reorder-blocks -fno-ipa-cp-clone
+# -fno-partial-inlining -fstack-protector-strong
+# -fno-stack-clash-protection -fno-inline-functions-called-once
+# -falign-functions=64 -fno-strict-overflow -fstack-check=no
+# -fconserve-stack -fsanitize=bounds -fsanitize=shift
+# -fsanitize=integer-divide-by-zero -fsanitize=bool -fsanitize=enum
+# -fsanitize-coverage=trace-pc -fverbose-asm
+# --param allow-store-data-races=0
+# options enabled:  -falign-labels -fauto-inc-dec -fbranch-count-reg
+# -fcaller-saves -fchkp-check-incomplete-type -fchkp-check-read
+# -fchkp-check-write -fchkp-instrument-calls -fchkp-narrow-bounds
+# -fchkp-optimize -fchkp-store-bounds -fchkp-use-static-bounds
+# -fchkp-use-static-const-bounds -fchkp-use-wrappers -fcode-hoisting
+# -fcombine-stack-adjustments -fcompare-elim -fcprop-registers
+# -fcrossjumping -fcse-follow-jumps -fdefer-pop -fdevirtualize
+# -fdevirtualize-speculatively -fdwarf2-cfi-asm -fearly-inlining
+# -feliminate-unused-debug-types -fexpensive-optimizations
+# -fforward-propagate -ffp-int-builtin-inexact -ffunction-cse -fgcse
+# -fgcse-lm -fgnu-runtime -fgnu-unique -fguess-branch-probability
+# -fhoist-adjacent-loads -fident -fif-conversion -fif-conversion2
+# -findirect-inlining -finline -finline-atomics -finline-small-functions
+# -fipa-bit-cp -fipa-cp -fipa-icf -fipa-icf-functions -fipa-icf-variables
+# -fipa-profile -fipa-pure-const -fipa-reference
+# -fipa-reference-addressable -fipa-sra -fipa-stack-alignment -fipa-vrp
+# -fira-hoist-pressure -fira-share-save-slots -fira-share-spill-slots
+# -fisolate-erroneous-paths-dereference -fivopts -fkeep-static-consts
+# -fleading-underscore -flifetime-dse -flra-remat -flto-odr-type-merging
+# -fmath-errno -fmerge-constants -fmerge-debug-strings
+# -fmove-loop-invariants -fomit-frame-pointer -foptimize-sibling-calls
+# -foptimize-strlen -fpeephole -fpeephole2 -fplt -fprefetch-loop-arrays
+# -fprofile -free -freg-struct-return -freorder-functions
+# -frerun-cse-after-loop -fsanitize-coverage=trace-pc
+# -fsched-critical-path-heuristic -fsched-dep-count-heuristic
+# -fsched-group-heuristic -fsched-interblock -fsched-last-insn-heuristic
+# -fsched-rank-heuristic -fsched-spec -fsched-spec-insn-heuristic
+# -fsched-stalled-insns-dep -fschedule-fusion -fschedule-insns2
+# -fsemantic-interposition -fshow-column -fshrink-wrap
+# -fshrink-wrap-separate -fsigned-zeros -fsplit-ivs-in-unroller
+# -fsplit-wide-types -fssa-backprop -fssa-phiopt -fstack-protector-strong
+# -fstdarg-opt -fstore-merging -fstrict-volatile-bitfields -fsync-libcalls
+# -fthread-jumps -ftoplevel-reorder -ftrapping-math -ftree-bit-ccp
+# -ftree-builtin-call-dce -ftree-ccp -ftree-ch -ftree-coalesce-vars
+# -ftree-copy-prop -ftree-cselim -ftree-dce -ftree-dominator-opts
+# -ftree-dse -ftree-forwprop -ftree-fre -ftree-loop-if-convert
+# -ftree-loop-im -ftree-loop-ivcanon -ftree-loop-optimize
+# -ftree-parallelize-loops= -ftree-phiprop -ftree-pre -ftree-pta
+# -ftree-reassoc -ftree-scev-cprop -ftree-sink -ftree-slsr -ftree-sra
+# -ftree-switch-conversion -ftree-tail-merge -ftree-ter -ftree-vrp
+# -funit-at-a-time -fverbose-asm -fzero-initialized-in-bss
+# -m128bit-long-double -m64 -malign-stringops -mavx256-split-unaligned-load
+# -mavx256-split-unaligned-store -mfentry -mfxsr -mglibc -mieee-fp
+# -mindirect-branch-register -mlong-double-80 -mno-fancy-math-387
+# -mno-red-zone -mno-sse4 -mpush-args -mrecord-mcount -mskip-rax-setup
+# -mtls-direct-seg-refs -mvzeroupper
 
-> Thoughts?
-> 
+-- 
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

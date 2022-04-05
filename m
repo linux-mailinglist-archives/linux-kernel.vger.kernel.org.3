@@ -2,188 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0EE4F46F1
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 723E84F46F8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380434AbiDEUyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38722 "EHLO
+        id S1382625AbiDEUy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573281AbiDESnQ (ORCPT
+        with ESMTP id S1573287AbiDESq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 14:43:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243C53632E;
-        Tue,  5 Apr 2022 11:41:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C791AB81F87;
-        Tue,  5 Apr 2022 18:41:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D3CDC385A0;
-        Tue,  5 Apr 2022 18:41:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649184074;
-        bh=A6Cglr/SX17RIdHYKRyt+DQUM0hwlXEDX/OSPfNNycE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=FQGFEP789xWtWnwcwTXm40YoB6KiidAU6/C+PhRP9bYnU4SCmEb/eawdW2A3baTWh
-         idC9yo3PgnuNan+HF+IwSf0Br9AWKgC4bakOnDHjQ1nBnODA351Sl2Ph+h+0k90njx
-         zgGj+V1ptUowyS6UZxL+FKVDeXWpqZAPHfYFlIbvMUG4YdhmS8cQ7uv4OV13kz/8YV
-         jrpJduVXr3TKJjoJ82KDInuxGQ8btJ+PBPlAF4C3JEFmiyGYmyyd4ay+y/H5J7LRfM
-         EGoXLxEJ9QaY/NQICofIK8o85nGHWd+wNmbU9/g+miJRyX0zXWpJMmN0M3AboP9oj4
-         tOi7tg6DLqqEQ==
-Message-ID: <ddef013dc9ce496ff5840f42cf0651637060b4f2.camel@kernel.org>
-Subject: Re: [PATCH V3 19/30] x86/sgx: Free up EPC pages directly to support
- large page ranges
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
-        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
-        x86@kernel.org, seanjc@google.com, kai.huang@intel.com,
-        cathy.zhang@intel.com, cedric.xing@intel.com,
-        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 05 Apr 2022 21:42:24 +0300
-In-Reply-To: <e118f4c6-7216-15f3-2bda-3a5851b0bcb1@intel.com>
-References: <cover.1648847675.git.reinette.chatre@intel.com>
-         <b3a17e1ce7bcd14db3c28903e8a97f094998ae74.1648847675.git.reinette.chatre@intel.com>
-         <Ykvrk4hYvBEnNOOl@kernel.org>
-         <e118f4c6-7216-15f3-2bda-3a5851b0bcb1@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.42.4 
+        Tue, 5 Apr 2022 14:46:57 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4201B8022B
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 11:44:59 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id 7so247609pfu.13
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 11:44:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=BSTfu4XeI/ClhpJnOxug8bNrs6bcd1vbhIByuk9Td5A=;
+        b=FZ7CzdGv5IqR9igsKF5aVHLB8MfCD2UE6mGhWdabuDVB/PY75CERc0oW45pyoiFFsx
+         HLCOiljgUTbziKvTX7wZRoZqJ+RJ1Dea8AguoZhgeta2AWxRKKUV2iRUL0l0yDbf+TTN
+         ZiAbWnMeeHTkwk1JvBEs7xviif99t4lQdP3rhF94xjjOWUyQ5IYn9ZUuKyguEbSTvM9X
+         MpsV3tSkSRKbWT/1P6uf6AhXj04ePeO0yF7csRuDTu6ucoAxMuJ3t81XHgVFCM4FFTG+
+         SjX4Baa/CoEtOFP/F5srI+LydtG/vNCqkGlkcYX/sxjcplhmbQiJkxNjpWBgFSDO+Pmx
+         Gc4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BSTfu4XeI/ClhpJnOxug8bNrs6bcd1vbhIByuk9Td5A=;
+        b=whHcqJhYzh/PGJ3jvwRcYlG6XVAWMR0Fm9CuNCZNrNztPQhByxY0cKoFk3i9csQQ0Q
+         oUGBAtqnd7TUSUa7PKUxVBE/g1tZ79+wnInXlQhtW1pmtNikDLUE/Hly4SI6XUhbcMpl
+         qR+ZbstrWgRJSnHy9qdyYOwjAQs8wMoFJut0mfEYXznkwELZ6Hows319wyNXkmLm7SyF
+         dRX6c0vfFdIrVlVaRT6XXLJS009HJezaOJ6CkPdHMxu4JN3JdO/Jomx+dnVxmvELK/GV
+         i6kKQiLZFf/3Fm9VrElQUFXG8RqD4k5bU622RL8KSr6jyL1g8st1eyGqUSLB33i9+e7W
+         +nPA==
+X-Gm-Message-State: AOAM532T09FeichkUbq5IHgY5HHBEHBpmXp1CpRQL6/Yw01wysDe6sN6
+        ZYk47IGUXh51xsL3DSaMOPthjQ==
+X-Google-Smtp-Source: ABdhPJxqBsHYYYQ3r6tsKfeQNVI4VssdMtHw5QBcT84h3Z9HkLEDAYYEQ3XVRsYGURacbMDknChXvg==
+X-Received: by 2002:a65:57ca:0:b0:381:ea8d:4d1f with SMTP id q10-20020a6557ca000000b00381ea8d4d1fmr4102933pgr.143.1649184298506;
+        Tue, 05 Apr 2022 11:44:58 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id j70-20020a638b49000000b003985b5ddaa1sm13887990pge.49.2022.04.05.11.44.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 11:44:57 -0700 (PDT)
+Date:   Tue, 5 Apr 2022 18:44:54 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, mizhang@google.com,
+        David Matlack <dmatlack@google.com>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v2 0/5] KVM: mm: count KVM page table pages in pagetable
+ stats
+Message-ID: <YkyOJqTeGRUjtuX1@google.com>
+References: <20220404234154.1251388-1-yosryahmed@google.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220404234154.1251388-1-yosryahmed@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-05 at 10:13 -0700, Reinette Chatre wrote:
-> Hi Jarkko,
->=20
-> On 4/5/2022 12:11 AM, Jarkko Sakkinen wrote:
-> > On Mon, Apr 04, 2022 at 09:49:27AM -0700, Reinette Chatre wrote:
-> > > The page reclaimer ensures availability of EPC pages across all
-> > > enclaves. In support of this it runs independently from the
-> > > individual enclaves in order to take locks from the different
-> > > enclaves as it writes pages to swap.
-> > >=20
-> > > When needing to load a page from swap an EPC page needs to be
-> > > available for its contents to be loaded into. Loading an existing
-> > > enclave page from swap does not reclaim EPC pages directly if
-> > > none are available, instead the reclaimer is woken when the
-> > > available EPC pages are found to be below a watermark.
-> > >=20
-> > > When iterating over a large number of pages in an oversubscribed
-> > > environment there is a race between the reclaimer woken up and
-> > > EPC pages reclaimed fast enough for the page operations to proceed.
-> > >=20
-> > > Ensure there are EPC pages available before attempting to load
-> > > a page that may potentially be pulled from swap into an available
-> > > EPC page.
-> > >=20
-> > > Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-> > > ---
-> > > No changes since V2
-> > >=20
-> > > Changes since v1:
-> > > - Reword commit message.
-> > >=20
-> > > =C2=A0arch/x86/kernel/cpu/sgx/ioctl.c | 6 ++++++
-> > > =C2=A0arch/x86/kernel/cpu/sgx/main.c=C2=A0 | 6 ++++++
-> > > =C2=A0arch/x86/kernel/cpu/sgx/sgx.h=C2=A0=C2=A0 | 1 +
-> > > =C2=A03 files changed, 13 insertions(+)
-> > >=20
-> > > diff --git a/arch/x86/kernel/cpu/sgx/ioctl.c b/arch/x86/kernel/cpu/sg=
-x/ioctl.c
-> > > index 515e1961cc02..f88bc1236276 100644
-> > > --- a/arch/x86/kernel/cpu/sgx/ioctl.c
-> > > +++ b/arch/x86/kernel/cpu/sgx/ioctl.c
-> > > @@ -777,6 +777,8 @@ sgx_enclave_restrict_permissions(struct sgx_encl =
-*encl,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for (c =3D 0 ; c < mo=
-dp->length; c +=3D PAGE_SIZE) {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0addr =3D encl->base + modp->offset + c;
-> > > =C2=A0
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0sgx_direct_reclaim();
-> > > +
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0mutex_lock(&encl->lock);
-> > > =C2=A0
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0entry =3D sgx_encl_load_page(encl, addr);
-> > > @@ -934,6 +936,8 @@ static long sgx_enclave_modify_type(struct sgx_en=
-cl *encl,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for (c =3D 0 ; c < mo=
-dt->length; c +=3D PAGE_SIZE) {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0addr =3D encl->base + modt->offset + c;
-> > > =C2=A0
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0sgx_direct_reclaim();
-> > > +
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0mutex_lock(&encl->lock);
-> > > =C2=A0
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0entry =3D sgx_encl_load_page(encl, addr);
-> > > @@ -1129,6 +1133,8 @@ static long sgx_encl_remove_pages(struct sgx_en=
-cl *encl,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for (c =3D 0 ; c < pa=
-rams->length; c +=3D PAGE_SIZE) {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0addr =3D encl->base + params->offset + c;
-> > > =C2=A0
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0sgx_direct_reclaim();
-> > > +
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0mutex_lock(&encl->lock);
-> > > =C2=A0
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0entry =3D sgx_encl_load_page(encl, addr);
-> > > diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx=
-/main.c
-> > > index 6e2cb7564080..545da16bb3ea 100644
-> > > --- a/arch/x86/kernel/cpu/sgx/main.c
-> > > +++ b/arch/x86/kernel/cpu/sgx/main.c
-> > > @@ -370,6 +370,12 @@ static bool sgx_should_reclaim(unsigned long wat=
-ermark)
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 !list_empty(&sgx_active_page_list);
-> > > =C2=A0}
-> > > =C2=A0
-> > > +void sgx_direct_reclaim(void)
-> > > +{
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (sgx_should_reclaim(SGX=
-_NR_LOW_PAGES))
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0sgx_reclaim_pages();
-> > > +}
-> >=20
-> > Please, instead open code this to both locations - not enough redundanc=
-y
-> > to be worth of new function. Causes only unnecessary cross-referencing
-> > when maintaining. Otherwise, I agree with the idea.
-> >=20
->=20
-> hmmm, that means the heart of the reclaimer (sgx_reclaim_pages()) would b=
-e
-> made available for direct use from everywhere in the driver. I will look =
-into this.
->=20
-> Reinette
->=20
+On Mon, Apr 04, 2022, Yosry Ahmed wrote:
+> We keep track of several kernel memory stats (total kernel memory, page
+> tables, stack, vmalloc, etc) on multiple levels (global, per-node,
+> per-memcg, etc). These stats give insights to users to how much memory
+> is used by the kernel and for what purposes.
+> 
+> Currently, memory used by kvm for its page tables is not accounted in
+> the pagetable stats. This patch series accounts the memory pages used by
+> KVM for page tables in those stats.
 
-It's a valid enough point. Let's keep it as it is :-)
-
-Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-
-BR, Jarkko
+It's still not obvious to me that piggybacking NR_PAGETABLE is desirable, probably
+because I am quite clueless as to how these stats are used on the backend.  E.g.
+why not have a NR_SECONDARY_PAGETABLE entry to track pages used for secondary MMU
+page tables?

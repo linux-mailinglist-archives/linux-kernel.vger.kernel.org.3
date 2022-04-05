@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4A14F4B5D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6674F4CD8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574351AbiDEWzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45472 "EHLO
+        id S1580358AbiDEXeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:34:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354941AbiDEKQg (ORCPT
+        with ESMTP id S1354981AbiDEKQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:16:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C79429CA2;
-        Tue,  5 Apr 2022 03:04:19 -0700 (PDT)
+        Tue, 5 Apr 2022 06:16:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8789DE9F;
+        Tue,  5 Apr 2022 03:04:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5544CB81BC0;
-        Tue,  5 Apr 2022 10:04:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3639C385A2;
-        Tue,  5 Apr 2022 10:04:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E0546174B;
+        Tue,  5 Apr 2022 10:04:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32017C385A2;
+        Tue,  5 Apr 2022 10:04:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153057;
-        bh=ODSRxNeQPv3kjyymodGtEnar1cFgVjua8tmYL335+po=;
+        s=korg; t=1649153062;
+        bh=z3BpInOZg7lcxumibtyoEA2UOYtY6znbUUxMJ1KDSLk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vV4HKGMLFEO5LuyvElHAgX06z+2oULe8kHvtTdClrDHnTyVRD5Y2E5FvqUfUDTHTx
-         mBsBtfGM6eieoz/w/R5PzlcCrAAuwGZd5sKfdRRo7r1GY0E802/+iaOn3Grc2cCS4Y
-         rbW3l5EGbfTgPDv6nIyeFkX8eyF/cA+EZZF0yvqo=
+        b=qcKRcJdX+ymKjtFLlxmtWtPzKKrsMRvLPwF/zEIk08ieiVfzdXOrcudTzLm7Mtapv
+         vq+AN7IeMQlMDqrMIRGdefkNlow2K+QlIGywoAwIIBUcme0749sXJYfVNBUZwbuyN2
+         z19DOl+ANRsoqkFWGpUtwAhpD00IZlnee6n52TVo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        Nishanth Menon <nm@ti.com>
-Subject: [PATCH 5.10 087/599] arm64: dts: ti: k3-j7200: Fix gic-v3 compatible regs
-Date:   Tue,  5 Apr 2022 09:26:21 +0200
-Message-Id: <20220405070301.418580791@linuxfoundation.org>
+        stable@vger.kernel.org, Bill Messmer <wmessmer@microsoft.com>,
+        Jann Horn <jannh@google.com>, Kees Cook <keescook@chromium.org>
+Subject: [PATCH 5.10 089/599] coredump: Also dump first pages of non-executable ELF libraries
+Date:   Tue,  5 Apr 2022 09:26:23 +0200
+Message-Id: <20220405070301.478765187@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -54,59 +54,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nishanth Menon <nm@ti.com>
+From: Jann Horn <jannh@google.com>
 
-commit 1a307cc299430dd7139d351a3b8941f493dfa885 upstream.
+commit 84158b7f6a0624b81800b4e7c90f7fb7fdecf66c upstream.
 
-Though GIC ARE option is disabled for no GIC-v2 compatibility,
-Cortex-A72 is free to implement the CPU interface as long as it
-communicates with the GIC using the stream protocol. This requires
-that the SoC integration mark out the PERIPHBASE[1] as reserved area
-within the SoC. See longer discussion in [2] for further information.
+When I rewrote the VMA dumping logic for coredumps, I changed it to
+recognize ELF library mappings based on the file being executable instead
+of the mapping having an ELF header. But turns out, distros ship many ELF
+libraries as non-executable, so the heuristic goes wrong...
 
-Update the GIC register map to indicate offsets from PERIPHBASE based
-on [3]. Without doing this, systems like kvm will not function with
-gic-v2 emulation.
+Restore the old behavior where FILTER(ELF_HEADERS) dumps the first page of
+any offset-0 readable mapping that starts with the ELF magic.
 
-[1] https://developer.arm.com/documentation/100095/0002/system-control/aarch64-register-descriptions/configuration-base-address-register--el1
-[2] https://lore.kernel.org/all/87k0e0tirw.wl-maz@kernel.org/
-[3] https://developer.arm.com/documentation/100095/0002/way1382452674438
+This fix is technically layer-breaking a bit, because it checks for
+something ELF-specific in fs/coredump.c; but since we probably want to
+share this between standard ELF and FDPIC ELF anyway, I guess it's fine?
+And this also keeps the change small for backporting.
 
 Cc: stable@vger.kernel.org
-Fixes: d361ed88455f ("arm64: dts: ti: Add support for J7200 SoC")
-Reported-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Nishanth Menon <nm@ti.com>
-Acked-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220215201008.15235-4-nm@ti.com
+Fixes: 429a22e776a2 ("coredump: rework elf/elf_fdpic vma_dump_size() into common helper")
+Reported-by: Bill Messmer <wmessmer@microsoft.com>
+Signed-off-by: Jann Horn <jannh@google.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20220126025739.2014888-1-jannh@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/boot/dts/ti/k3-j7200-main.dtsi |    5 ++++-
- arch/arm64/boot/dts/ti/k3-j7200.dtsi      |    1 +
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ fs/coredump.c |   39 ++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 34 insertions(+), 5 deletions(-)
 
---- a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-@@ -47,7 +47,10 @@
- 		#interrupt-cells = <3>;
- 		interrupt-controller;
- 		reg = <0x00 0x01800000 0x00 0x10000>,	/* GICD */
--		      <0x00 0x01900000 0x00 0x100000>;	/* GICR */
-+		      <0x00 0x01900000 0x00 0x100000>,	/* GICR */
-+		      <0x00 0x6f000000 0x00 0x2000>,	/* GICC */
-+		      <0x00 0x6f010000 0x00 0x1000>,	/* GICH */
-+		      <0x00 0x6f020000 0x00 0x2000>;	/* GICV */
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -41,6 +41,7 @@
+ #include <linux/fs.h>
+ #include <linux/path.h>
+ #include <linux/timekeeping.h>
++#include <linux/elf.h>
  
- 		/* vcpumntirq: virtual CPU interface maintenance interrupt */
- 		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
---- a/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-@@ -127,6 +127,7 @@
- 			 <0x00 0x00a40000 0x00 0x00a40000 0x00 0x00000800>, /* timesync router */
- 			 <0x00 0x01000000 0x00 0x01000000 0x00 0x0d000000>, /* Most peripherals */
- 			 <0x00 0x30000000 0x00 0x30000000 0x00 0x0c400000>, /* MAIN NAVSS */
-+			 <0x00 0x6f000000 0x00 0x6f000000 0x00 0x00310000>, /* A72 PERIPHBASE */
- 			 <0x00 0x70000000 0x00 0x70000000 0x00 0x00800000>, /* MSMC RAM */
- 			 <0x00 0x18000000 0x00 0x18000000 0x00 0x08000000>, /* PCIe1 DAT0 */
- 			 <0x41 0x00000000 0x41 0x00000000 0x01 0x00000000>, /* PCIe1 DAT1 */
+ #include <linux/uaccess.h>
+ #include <asm/mmu_context.h>
+@@ -969,6 +970,8 @@ static bool always_dump_vma(struct vm_ar
+ 	return false;
+ }
+ 
++#define DUMP_SIZE_MAYBE_ELFHDR_PLACEHOLDER 1
++
+ /*
+  * Decide how much of @vma's contents should be included in a core dump.
+  */
+@@ -1028,9 +1031,20 @@ static unsigned long vma_dump_size(struc
+ 	 * dump the first page to aid in determining what was mapped here.
+ 	 */
+ 	if (FILTER(ELF_HEADERS) &&
+-	    vma->vm_pgoff == 0 && (vma->vm_flags & VM_READ) &&
+-	    (READ_ONCE(file_inode(vma->vm_file)->i_mode) & 0111) != 0)
+-		return PAGE_SIZE;
++	    vma->vm_pgoff == 0 && (vma->vm_flags & VM_READ)) {
++		if ((READ_ONCE(file_inode(vma->vm_file)->i_mode) & 0111) != 0)
++			return PAGE_SIZE;
++
++		/*
++		 * ELF libraries aren't always executable.
++		 * We'll want to check whether the mapping starts with the ELF
++		 * magic, but not now - we're holding the mmap lock,
++		 * so copy_from_user() doesn't work here.
++		 * Use a placeholder instead, and fix it up later in
++		 * dump_vma_snapshot().
++		 */
++		return DUMP_SIZE_MAYBE_ELFHDR_PLACEHOLDER;
++	}
+ 
+ #undef	FILTER
+ 
+@@ -1105,8 +1119,6 @@ int dump_vma_snapshot(struct coredump_pa
+ 		m->end = vma->vm_end;
+ 		m->flags = vma->vm_flags;
+ 		m->dump_size = vma_dump_size(vma, cprm->mm_flags);
+-
+-		vma_data_size += m->dump_size;
+ 	}
+ 
+ 	mmap_write_unlock(mm);
+@@ -1116,6 +1128,23 @@ int dump_vma_snapshot(struct coredump_pa
+ 		return -EFAULT;
+ 	}
+ 
++	for (i = 0; i < *vma_count; i++) {
++		struct core_vma_metadata *m = (*vma_meta) + i;
++
++		if (m->dump_size == DUMP_SIZE_MAYBE_ELFHDR_PLACEHOLDER) {
++			char elfmag[SELFMAG];
++
++			if (copy_from_user(elfmag, (void __user *)m->start, SELFMAG) ||
++					memcmp(elfmag, ELFMAG, SELFMAG) != 0) {
++				m->dump_size = 0;
++			} else {
++				m->dump_size = PAGE_SIZE;
++			}
++		}
++
++		vma_data_size += m->dump_size;
++	}
++
+ 	*vma_data_size_ptr = vma_data_size;
+ 	return 0;
+ }
 
 

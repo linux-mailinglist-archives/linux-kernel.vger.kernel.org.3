@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 627A14F26E3
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3767B4F2760
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234920AbiDEH7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34204 "EHLO
+        id S235963AbiDEIAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233516AbiDEHry (ORCPT
+        with ESMTP id S232394AbiDEHuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:47:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF6793192;
-        Tue,  5 Apr 2022 00:44:39 -0700 (PDT)
+        Tue, 5 Apr 2022 03:50:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C5C939B6;
+        Tue,  5 Apr 2022 00:47:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0765661607;
-        Tue,  5 Apr 2022 07:44:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DFDEC340EE;
-        Tue,  5 Apr 2022 07:44:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64204616D7;
+        Tue,  5 Apr 2022 07:47:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7412EC3410F;
+        Tue,  5 Apr 2022 07:47:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144678;
-        bh=V+55jqt3IyHFsKthzO2N2W+UTW06gaSYVGI+xjHVEU4=;
+        s=korg; t=1649144827;
+        bh=4JilkGpXUFStr7DuFbAb05Cf5KlVYYVNVPbAujUtgkU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gEnqYt1Ihr0CSSdX5epF7VmQSS6KU7mqMJ4dw6shfBoS9jGybKK5Sm+Rwpst/9KM5
-         jO0sHPI8SpOx5wE5JILpbDAOWGJDvj/H0oqrnTFEPQ653JeVzpnZpMiQMXa97YVaTY
-         6J87uwfQ6030KLwUrRzRwws/6xm9U6krvpngxBTs=
+        b=1h1qLZdS8uttyK6PiR9wJpC1KWpTMucOg72iqvbbO+fciGvmsUKRnLr/bgWKtRj3f
+         rtWPtQ54M1aHW7W+misb6JPrR5hpT3YxP2BBfmVFYt8tnSJ8eaP7EFYnxGj5oIp5RQ
+         NKbXxhzQ7OEticl4d5AiQ8903i0dPRi1fI0BqMnQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mario Limonciello <Mario.Limonciello@amd.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Huang Rui <ray.huang@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 5.17 0130/1126] Revert "ACPI: Pass the same capabilities to the _OSC regardless of the query flag"
-Date:   Tue,  5 Apr 2022 09:14:37 +0200
-Message-Id: <20220405070411.393115006@linuxfoundation.org>
+        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@linux.microsoft.com>
+Subject: [PATCH 5.17 0137/1126] samples/landlock: Fix path_list memory leak
+Date:   Tue,  5 Apr 2022 09:14:44 +0200
+Message-Id: <20220405070411.599909869@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -58,72 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: Tom Rix <trix@redhat.com>
 
-commit 2ca8e6285250c07a2e5a22ecbfd59b5a4ef73484 upstream.
+commit 66b513b7c64a7290c1fbb88e657f7cece992e131 upstream.
 
-Revert commit 159d8c274fd9 ("ACPI: Pass the same capabilities to the
-_OSC regardless of the query flag") which caused legitimate usage
-scenarios (when the platform firmware does not want the OS to control
-certain platform features controlled by the system bus scope _OSC) to
-break and was misguided by some misleading language in the _OSC
-definition in the ACPI specification (in particular, Section 6.2.11.1.3
-"Sequence of _OSC Calls" that contradicts other perts of the _OSC
-definition).
+Clang static analysis reports this error
 
-Link: https://lore.kernel.org/linux-acpi/CAJZ5v0iStA0JmO0H3z+VgQsVuQONVjKPpw0F5HKfiq=Gb6B5yw@mail.gmail.com
-Reported-by: Mario Limonciello <Mario.Limonciello@amd.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Tested-by: Mario Limonciello <mario.limonciello@amd.com>
-Acked-by: Huang Rui <ray.huang@amd.com>
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+sandboxer.c:134:8: warning: Potential leak of memory
+  pointed to by 'path_list'
+        ret = 0;
+              ^
+path_list is allocated in parse_path() but never freed.
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+Link: https://lore.kernel.org/r/20210428213852.2874324-1-trix@redhat.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Mickaël Salaün <mic@linux.microsoft.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/acpi/bus.c |   27 +++++++++++++++++++--------
- 1 file changed, 19 insertions(+), 8 deletions(-)
+ samples/landlock/sandboxer.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/acpi/bus.c
-+++ b/drivers/acpi/bus.c
-@@ -332,21 +332,32 @@ static void acpi_bus_osc_negotiate_platf
- 	if (ACPI_FAILURE(acpi_run_osc(handle, &context)))
- 		return;
+--- a/samples/landlock/sandboxer.c
++++ b/samples/landlock/sandboxer.c
+@@ -134,6 +134,7 @@ static int populate_ruleset(
+ 	ret = 0;
  
--	kfree(context.ret.pointer);
-+	capbuf_ret = context.ret.pointer;
-+	if (context.ret.length <= OSC_SUPPORT_DWORD) {
-+		kfree(context.ret.pointer);
-+		return;
-+	}
- 
--	/* Now run _OSC again with query flag clear */
-+	/*
-+	 * Now run _OSC again with query flag clear and with the caps
-+	 * supported by both the OS and the platform.
-+	 */
- 	capbuf[OSC_QUERY_DWORD] = 0;
-+	capbuf[OSC_SUPPORT_DWORD] = capbuf_ret[OSC_SUPPORT_DWORD];
-+	kfree(context.ret.pointer);
- 
- 	if (ACPI_FAILURE(acpi_run_osc(handle, &context)))
- 		return;
- 
- 	capbuf_ret = context.ret.pointer;
--	osc_sb_apei_support_acked =
--		capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_APEI_SUPPORT;
--	osc_pc_lpi_support_confirmed =
--		capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_PCLPI_SUPPORT;
--	osc_sb_native_usb4_support_confirmed =
--		capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_NATIVE_USB4_SUPPORT;
-+	if (context.ret.length > OSC_SUPPORT_DWORD) {
-+		osc_sb_apei_support_acked =
-+			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_APEI_SUPPORT;
-+		osc_pc_lpi_support_confirmed =
-+			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_PCLPI_SUPPORT;
-+		osc_sb_native_usb4_support_confirmed =
-+			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_NATIVE_USB4_SUPPORT;
-+	}
- 
- 	kfree(context.ret.pointer);
+ out_free_name:
++	free(path_list);
+ 	free(env_path_name);
+ 	return ret;
  }
 
 

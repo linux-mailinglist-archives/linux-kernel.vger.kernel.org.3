@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D35854F441D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A37B34F43B3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:04:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382354AbiDEMO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
+        id S1389100AbiDEOnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244776AbiDEIwi (ORCPT
+        with ESMTP id S244235AbiDEJlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:38 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17267BC4;
-        Tue,  5 Apr 2022 01:43:42 -0700 (PDT)
+        Tue, 5 Apr 2022 05:41:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB908BB08F;
+        Tue,  5 Apr 2022 02:25:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 79A41CE1C6C;
-        Tue,  5 Apr 2022 08:43:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AA3BC385A0;
-        Tue,  5 Apr 2022 08:43:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 662DC61675;
+        Tue,  5 Apr 2022 09:25:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FD09C385A3;
+        Tue,  5 Apr 2022 09:25:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148218;
-        bh=Ts1OsI3ZLCMyHQ1eqGV7NkwX+jLelzLpcnalARBhejs=;
+        s=korg; t=1649150749;
+        bh=V+55jqt3IyHFsKthzO2N2W+UTW06gaSYVGI+xjHVEU4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L6K7aohJJ4RgKNBpj4iZ/yaVmikftQPMzDsohmNDP4rO7zvwTswhfX5BwgSvk+pYw
-         j6PrV2XuR/S5gtplyys2w5+R8ofGxo/rif7R7H8cOO/BxITHEXZFABrOGX2oRYahNE
-         8GsCkU4l7Fpflbl7xwLK2qVh6ENzxI4Kflxyd6F8=
+        b=n6I11yawdkRcod1/MPI0x2APthHuTg36HoA+rb+6YxZ9duFgBVpOAqi6RAB+zODlG
+         9Hgd+FiFLrbvkJjvgI+igNkVAN+sy74SFJGUDK24Xod9SZ0XR2n43Uouhbc26rrbhE
+         qCn4Kf2jIniELqBXk9E5cRJktMale26IcajkkznM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0278/1017] media: staging: media: zoran: fix usage of vb2_dma_contig_set_max_seg_size
+        stable@vger.kernel.org,
+        Mario Limonciello <Mario.Limonciello@amd.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Huang Rui <ray.huang@amd.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH 5.15 129/913] Revert "ACPI: Pass the same capabilities to the _OSC regardless of the query flag"
 Date:   Tue,  5 Apr 2022 09:19:51 +0200
-Message-Id: <20220405070402.519586275@linuxfoundation.org>
+Message-Id: <20220405070343.697628082@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,44 +58,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Corentin Labbe <clabbe@baylibre.com>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-[ Upstream commit 241f5b67fb48def58643f279dfb8468bdd54b443 ]
+commit 2ca8e6285250c07a2e5a22ecbfd59b5a4ef73484 upstream.
 
-vb2_dma_contig_set_max_seg_size need to have a size in parameter and not
-a DMA_BIT_MASK().
-While fixing this issue, also fix error handling of all DMA size
-setting.
+Revert commit 159d8c274fd9 ("ACPI: Pass the same capabilities to the
+_OSC regardless of the query flag") which caused legitimate usage
+scenarios (when the platform firmware does not want the OS to control
+certain platform features controlled by the system bus scope _OSC) to
+break and was misguided by some misleading language in the _OSC
+definition in the ACPI specification (in particular, Section 6.2.11.1.3
+"Sequence of _OSC Calls" that contradicts other perts of the _OSC
+definition).
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: d4ae3689226e5 ("media: zoran: device support only 32bit DMA address")
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/linux-acpi/CAJZ5v0iStA0JmO0H3z+VgQsVuQONVjKPpw0F5HKfiq=Gb6B5yw@mail.gmail.com
+Reported-by: Mario Limonciello <Mario.Limonciello@amd.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Tested-by: Mario Limonciello <mario.limonciello@amd.com>
+Acked-by: Huang Rui <ray.huang@amd.com>
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/staging/media/zoran/zoran_card.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/acpi/bus.c |   27 +++++++++++++++++++--------
+ 1 file changed, 19 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
-index f259585b0689..c578ef3c32f5 100644
---- a/drivers/staging/media/zoran/zoran_card.c
-+++ b/drivers/staging/media/zoran/zoran_card.c
-@@ -1069,8 +1069,10 @@ static int zoran_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+--- a/drivers/acpi/bus.c
++++ b/drivers/acpi/bus.c
+@@ -332,21 +332,32 @@ static void acpi_bus_osc_negotiate_platf
+ 	if (ACPI_FAILURE(acpi_run_osc(handle, &context)))
+ 		return;
  
- 	err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
- 	if (err)
--		return -ENODEV;
--	vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
-+		return err;
-+	err = vb2_dma_contig_set_max_seg_size(&pdev->dev, U32_MAX);
-+	if (err)
-+		return err;
+-	kfree(context.ret.pointer);
++	capbuf_ret = context.ret.pointer;
++	if (context.ret.length <= OSC_SUPPORT_DWORD) {
++		kfree(context.ret.pointer);
++		return;
++	}
  
- 	nr = zoran_num++;
- 	if (nr >= BUZ_MAX) {
--- 
-2.34.1
-
+-	/* Now run _OSC again with query flag clear */
++	/*
++	 * Now run _OSC again with query flag clear and with the caps
++	 * supported by both the OS and the platform.
++	 */
+ 	capbuf[OSC_QUERY_DWORD] = 0;
++	capbuf[OSC_SUPPORT_DWORD] = capbuf_ret[OSC_SUPPORT_DWORD];
++	kfree(context.ret.pointer);
+ 
+ 	if (ACPI_FAILURE(acpi_run_osc(handle, &context)))
+ 		return;
+ 
+ 	capbuf_ret = context.ret.pointer;
+-	osc_sb_apei_support_acked =
+-		capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_APEI_SUPPORT;
+-	osc_pc_lpi_support_confirmed =
+-		capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_PCLPI_SUPPORT;
+-	osc_sb_native_usb4_support_confirmed =
+-		capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_NATIVE_USB4_SUPPORT;
++	if (context.ret.length > OSC_SUPPORT_DWORD) {
++		osc_sb_apei_support_acked =
++			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_APEI_SUPPORT;
++		osc_pc_lpi_support_confirmed =
++			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_PCLPI_SUPPORT;
++		osc_sb_native_usb4_support_confirmed =
++			capbuf_ret[OSC_SUPPORT_DWORD] & OSC_SB_NATIVE_USB4_SUPPORT;
++	}
+ 
+ 	kfree(context.ret.pointer);
+ }
 
 

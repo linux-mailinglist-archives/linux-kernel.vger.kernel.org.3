@@ -2,47 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 000724F250A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46D84F2469
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbiDEHoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:44:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34180 "EHLO
+        id S230269AbiDEHSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:18:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231927AbiDEHnd (ORCPT
+        with ESMTP id S231623AbiDEHQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:43:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E1F93996;
-        Tue,  5 Apr 2022 00:40:25 -0700 (PDT)
+        Tue, 5 Apr 2022 03:16:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BFFC39;
+        Tue,  5 Apr 2022 00:14:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89BB8B81B75;
-        Tue,  5 Apr 2022 07:40:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE2B6C340EE;
-        Tue,  5 Apr 2022 07:40:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144423;
-        bh=Hxo4l3G3ezXXxyeir2RGiMkhpL4xQTk/wS0+4Y5M1K8=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65AF361601;
+        Tue,  5 Apr 2022 07:14:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF36BC34113;
+        Tue,  5 Apr 2022 07:14:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649142880;
+        bh=gOXLC6DbRyujFkrzeUs4smkFmQGScsEUJfldX3jEonk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2NHXgp+yOH3NR18JRzJ9vajkGv3/ksyE2d17HwLlROtol2/Iy3w0ZhupP2voRr4bX
-         7YQ5vxdqKD1vU2Pc3a8rgOIIwWQqPFgHn4T4BDIGxhvQ+xFqF93aoWe2EuNA7RaPOd
-         8u1eXdPdumjwjEoe59tKuZ21QHVAst8KG8ATLSyo=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 5.17 0039/1126] greybus: svc: fix an error handling bug in gb_svc_hello()
-Date:   Tue,  5 Apr 2022 09:13:06 +0200
-Message-Id: <20220405070408.704797898@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
-References: <20220405070407.513532867@linuxfoundation.org>
-User-Agent: quilt/0.66
+        b=L5wXYg3GrUWMbNCmRoYeCmF/qxoGIJJLXKeE6Mbw0wrW+1WnyDyYv9H19aTHIyLFC
+         TYRgGIy44MY0Ly/e5K0YqWVWRe1UIkcdyxBz4J7RIRoRGnVRdWD1BgCONaEfKaw9xq
+         7Scm89/NM18hD5vvjRv0crakwm208oNyFhBr6QNMFO179BmhXzoGBHHtlmCS1rrghE
+         3SCMRU7BjuTmA93/ZG55i4MVEH4fHl9fQCV84fCAWP5c2I51TWbekmZkfwE1vTybiB
+         LYOcB0ZFGBbMcYUHgXBh1+cqzxx2qVHB2fZylhBX2RQswt945mA4TvQACv4y1mbz/m
+         8q9KOJCELlNPQ==
+From:   guoren@kernel.org
+To:     guoren@kernel.org, palmer@dabbelt.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, hch@lst.de, nathan@kernel.org,
+        naresh.kamboju@linaro.org
+Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-parisc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        heiko@sntech.de, Guo Ren <guoren@linux.alibaba.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH V12 12/20] riscv: compat: syscall: Add entry.S implementation
+Date:   Tue,  5 Apr 2022 15:13:06 +0800
+Message-Id: <20220405071314.3225832-13-guoren@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220405071314.3225832-1-guoren@kernel.org>
+References: <20220405071314.3225832-1-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -54,41 +61,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Guo Ren <guoren@linux.alibaba.com>
 
-commit 5f8583a3b7552092582a92e7bbd2153319929ad7 upstream.
+Implement the entry of compat_sys_call_table[] in asm. Ref to
+riscv-privileged spec 4.1.1 Supervisor Status Register (sstatus):
 
-Cleanup if gb_svc_queue_deferred_request() fails.
+ BIT[32:33] = UXL[1:0]:
+ - 1:32
+ - 2:64
+ - 3:128
 
-Link: https://lore.kernel.org/r/20220202072016.GA6748@kili
-Fixes: ee2f2074fdb2 ("greybus: svc: reconfig APBridgeA-Switch link to handle required load")
-Cc: stable@vger.kernel.org      # 4.9
-[johan: fix commit summary prefix and rename label ]
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Link: https://lore.kernel.org/r/20220202113347.1288-2-johan@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+Signed-off-by: Guo Ren <guoren@kernel.org>
+Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+Tested-by: Heiko Stuebner <heiko@sntech.de>
+Cc: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/greybus/svc.c |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ arch/riscv/include/asm/csr.h |  7 +++++++
+ arch/riscv/kernel/entry.S    | 18 ++++++++++++++++--
+ 2 files changed, 23 insertions(+), 2 deletions(-)
 
---- a/drivers/greybus/svc.c
-+++ b/drivers/greybus/svc.c
-@@ -866,8 +866,14 @@ static int gb_svc_hello(struct gb_operat
+diff --git a/arch/riscv/include/asm/csr.h b/arch/riscv/include/asm/csr.h
+index e935f27b10fd..f5d1251fd6c7 100644
+--- a/arch/riscv/include/asm/csr.h
++++ b/arch/riscv/include/asm/csr.h
+@@ -36,6 +36,13 @@
+ #define SR_SD		_AC(0x8000000000000000, UL) /* FS/XS dirty */
+ #endif
  
- 	gb_svc_debugfs_init(svc);
- 
--	return gb_svc_queue_deferred_request(op);
-+	ret = gb_svc_queue_deferred_request(op);
-+	if (ret)
-+		goto err_remove_debugfs;
- 
-+	return 0;
++#ifdef CONFIG_64BIT
++#define SR_UXL		_AC(0x300000000, UL) /* XLEN mask for U-mode */
++#define SR_UXL_32	_AC(0x100000000, UL) /* XLEN = 32 for U-mode */
++#define SR_UXL_64	_AC(0x200000000, UL) /* XLEN = 64 for U-mode */
++#define SR_UXL_SHIFT	32
++#endif
 +
-+err_remove_debugfs:
-+	gb_svc_debugfs_exit(svc);
- err_unregister_device:
- 	gb_svc_watchdog_destroy(svc);
- 	device_del(&svc->dev);
-
+ /* SATP flags */
+ #ifndef CONFIG_64BIT
+ #define SATP_PPN	_AC(0x003FFFFF, UL)
+diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+index c8b9ce274b9a..2e5b88ca11ce 100644
+--- a/arch/riscv/kernel/entry.S
++++ b/arch/riscv/kernel/entry.S
+@@ -207,13 +207,27 @@ check_syscall_nr:
+ 	 * Syscall number held in a7.
+ 	 * If syscall number is above allowed value, redirect to ni_syscall.
+ 	 */
+-	bgeu a7, t0, 1f
++	bgeu a7, t0, 3f
++#ifdef CONFIG_COMPAT
++	REG_L s0, PT_STATUS(sp)
++	srli s0, s0, SR_UXL_SHIFT
++	andi s0, s0, (SR_UXL >> SR_UXL_SHIFT)
++	li t0, (SR_UXL_32 >> SR_UXL_SHIFT)
++	sub t0, s0, t0
++	bnez t0, 1f
++
++	/* Call compat_syscall */
++	la s0, compat_sys_call_table
++	j 2f
++1:
++#endif
+ 	/* Call syscall */
+ 	la s0, sys_call_table
++2:
+ 	slli t0, a7, RISCV_LGPTR
+ 	add s0, s0, t0
+ 	REG_L s0, 0(s0)
+-1:
++3:
+ 	jalr s0
+ 
+ ret_from_syscall:
+-- 
+2.25.1
 

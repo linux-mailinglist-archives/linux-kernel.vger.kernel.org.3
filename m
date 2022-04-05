@@ -2,181 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C5AE4F4F04
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECCE4F4CAF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1589200AbiDFATD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:19:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36682 "EHLO
+        id S1349091AbiDEX2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386145AbiDEOTO (ORCPT
+        with ESMTP id S1386287AbiDEOTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:19:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4BD882BD5
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:08:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649164115;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8SLg2V/rMLaWaYTpjzTRS0k/QFp5WFOGLvjyUFHrKJY=;
-        b=Vyje00f4vebmWZc9RYkLZ3OC01/OSe0zL9Z8mZP2cIxa+p4AvHykIPwBN0CUjsbgxerMUi
-        QGlLFiYo4sWaZ4/YXDenGJc6ay18Ywq4qtX0u5vf/JYQX8lQOag1d0LKgzRv5M9IQYINRn
-        dDCCGi8+OSzkauBGEOhAj4nfsP89ZFE=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-650-lQQ0h4bkOma_4doqQbtq9Q-1; Tue, 05 Apr 2022 09:08:34 -0400
-X-MC-Unique: lQQ0h4bkOma_4doqQbtq9Q-1
-Received: by mail-wm1-f72.google.com with SMTP id h18-20020a05600c351200b0038e82e6321bso178099wmq.5
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 06:08:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8SLg2V/rMLaWaYTpjzTRS0k/QFp5WFOGLvjyUFHrKJY=;
-        b=do49fFQ97AwtdAp8OSDlkZ3InwknJuwsjtwwB/xsQQDPequ84j72D4MUPweO+26nCu
-         AmfGx5L6BMPvvzfmC/CZrxJwB2t7+pX4FpAkxmm7/hq0n9Y3Z4ZXszf+sRBDmJYUnRYp
-         kK9z8M7n12b2t44yQysYbVAdpoCqejY86lpYUNzyWGq40jLL/pWJmsEQ7oDV8cToZUqK
-         REHvguiF487E9P68afgMbuRHBqCAfuFwkRbKkQKfRCOo6bG+1uxAkb6vePJ6CHAIr8ic
-         ti+vKePgQz05/WuvhuFeG7WVOZlcmHBmi91T96CkRCsxflI4ZQI2a1BGeIx0/36o93Wo
-         238Q==
-X-Gm-Message-State: AOAM532ZqCE2Esa6vrE8qD43tT4qAqkusVNukX5+rIIxSJ7q0HNZfTCR
-        OgMiTcL3VUk5fmE0ADtk/SNqHF3pbOszuG3eMpnzz4T87WJwTX7UCPX9k0PBwE1W/aIdEWJFhfE
-        oZPFv4iNMo2+TedM+3OG2hOkD
-X-Received: by 2002:a7b:cd03:0:b0:37b:fc83:a4e2 with SMTP id f3-20020a7bcd03000000b0037bfc83a4e2mr3047620wmj.193.1649164112937;
-        Tue, 05 Apr 2022 06:08:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxw4wTRpI39IlAgBO5ZQoXo4KftgHSb5XxaFNxwDYQkGsSuCa17GkEpnsUsvkMa8CN+RPq1fQ==
-X-Received: by 2002:a7b:cd03:0:b0:37b:fc83:a4e2 with SMTP id f3-20020a7bcd03000000b0037bfc83a4e2mr3047597wmj.193.1649164112715;
-        Tue, 05 Apr 2022 06:08:32 -0700 (PDT)
-Received: from [10.32.181.87] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
-        by smtp.googlemail.com with ESMTPSA id m127-20020a1ca385000000b0038e6e7ac0b5sm2141613wme.38.2022.04.05.06.08.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 06:08:31 -0700 (PDT)
-Message-ID: <5fbf4af9-9e6c-3fc7-c021-869e93662845@redhat.com>
-Date:   Tue, 5 Apr 2022 15:08:30 +0200
+        Tue, 5 Apr 2022 10:19:19 -0400
+Received: from gateway22.websitewelcome.com (gateway22.websitewelcome.com [192.185.47.228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6666512758
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:08:47 -0700 (PDT)
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway22.websitewelcome.com (Postfix) with ESMTP id 246C6115946
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:08:47 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id bivOn93CTHnotbivOnsOwH; Tue, 05 Apr 2022 08:08:47 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=xz6VufNI4MnHhml5UwvXhoCvcF0yDshQWHa/HM/YqoA=; b=GqIHGIW2UMCJm1lZnmUjI7G1KT
+        5236zPjF59olbyzrTlyR57lC81eHcbU4XrSyA4o67ts9zDsg+y9lxc7tc/bcl4C+YIva53hNcLIMp
+        dSFv785YbqteL/2ibwlp7W3Z6qgFfEcGOTlrH7tsUxhAh33G+7iGE04TOABvusVHyQMebpb5f8hfZ
+        IhQ6I2QD3YFezPkSA5AGGTHMxruDvPqYQcBf4NGKno7TQVKkhcRHWUn8oE/NjBfe/5mvsCQiNwtFt
+        J6tPe7l6QiZOuObL2N4eKAb/MFi1Lpsxu8zj+IrSp0BQcgD4WYPUIRwZiEBmVgLUGPQgNElDMD2qe
+        rLqeUkQQ==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54728)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nbivO-002i6Y-7O; Tue, 05 Apr 2022 13:08:46 +0000
+Message-ID: <e80a3eb4-335c-5f8c-dc22-e33176b225da@roeck-us.net>
+Date:   Tue, 5 Apr 2022 06:08:44 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v5 023/104] x86/cpu: Add helper functions to
- allocate/free MKTME keyid
+Subject: Re: [PATCH 5.10 000/599] 5.10.110-rc1 review
 Content-Language: en-US
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <a1d1e4f26c6ef44a557e873be2818e6a03e12038.1646422845.git.isaku.yamahata@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <a1d1e4f26c6ef44a557e873be2818e6a03e12038.1646422845.git.isaku.yamahata@intel.com>
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220405070258.802373272@linuxfoundation.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nbivO-002i6Y-7O
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54728
+X-Source-Auth: linux@roeck-us.net
+X-Email-Count: 12
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/22 20:48, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
+On 4/5/22 00:24, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.110 release.
+> There are 599 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> MKTME keyid is assigned to guest TD.  The memory controller encrypts guest
-> TD memory with key id.  Add helper functions to allocate/free MKTME keyid
-> so that TDX KVM assign keyid.
+> Responses should be made by Thu, 07 Apr 2022 07:01:33 +0000.
+> Anything received after that time might be too late.
 > 
-> Also export MKTME global keyid that is used to encrypt TDX module and its
-> memory.
-> 
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->   arch/x86/include/asm/tdx.h |  6 ++++++
->   arch/x86/virt/vmx/tdx.c    | 33 ++++++++++++++++++++++++++++++++-
->   2 files changed, 38 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-> index 9a8dc6afcb63..73bb472bd515 100644
-> --- a/arch/x86/include/asm/tdx.h
-> +++ b/arch/x86/include/asm/tdx.h
-> @@ -139,6 +139,9 @@ int tdx_detect(void);
->   int tdx_init(void);
->   bool platform_has_tdx(void);
->   const struct tdsysinfo_struct *tdx_get_sysinfo(void);
-> +u32 tdx_get_global_keyid(void);
-> +int tdx_keyid_alloc(void);
-> +void tdx_keyid_free(int keyid);
->   #else
->   static inline void tdx_detect_cpu(struct cpuinfo_x86 *c) { }
->   static inline int tdx_detect(void) { return -ENODEV; }
-> @@ -146,6 +149,9 @@ static inline int tdx_init(void) { return -ENODEV; }
->   static inline bool platform_has_tdx(void) { return false; }
->   struct tdsysinfo_struct;
->   static inline const struct tdsysinfo_struct *tdx_get_sysinfo(void) { return NULL; }
-> +static inline u32 tdx_get_global_keyid(void) { return 0; };
-> +static inline int tdx_keyid_alloc(void) { return -EOPNOTSUPP; }
-> +static inline void tdx_keyid_free(int keyid) { }
->   #endif /* CONFIG_INTEL_TDX_HOST */
->   
->   #endif /* !__ASSEMBLY__ */
-> diff --git a/arch/x86/virt/vmx/tdx.c b/arch/x86/virt/vmx/tdx.c
-> index e45f188479cb..d714106321d4 100644
-> --- a/arch/x86/virt/vmx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx.c
-> @@ -113,7 +113,13 @@ static int tdx_cmr_num;
->   static struct tdsysinfo_struct tdx_sysinfo;
->   
->   /* TDX global KeyID to protect TDX metadata */
-> -static u32 tdx_global_keyid;
-> +static u32 __read_mostly tdx_global_keyid;
-> +
-> +u32 tdx_get_global_keyid(void)
-> +{
-> +	return tdx_global_keyid;
-> +}
-> +EXPORT_SYMBOL_GPL(tdx_get_global_keyid);
->   
->   static bool enable_tdx_host;
->   
-> @@ -189,6 +195,31 @@ static void detect_seam(struct cpuinfo_x86 *c)
->   		detect_seam_ap(c);
->   }
->   
-> +/* TDX KeyID pool */
-> +static DEFINE_IDA(tdx_keyid_pool);
-> +
-> +int tdx_keyid_alloc(void)
-> +{
-> +	if (WARN_ON_ONCE(!tdx_keyid_start || !tdx_keyid_num))
-> +		return -EINVAL;
-> +
-> +	/* The first keyID is reserved for the global key. */
-> +	return ida_alloc_range(&tdx_keyid_pool, tdx_keyid_start + 1,
-> +			       tdx_keyid_start + tdx_keyid_num - 1,
-> +			       GFP_KERNEL);
-> +}
-> +EXPORT_SYMBOL_GPL(tdx_keyid_alloc);
-> +
-> +void tdx_keyid_free(int keyid)
-> +{
-> +	/* keyid = 0 is reserved. */
-> +	if (!keyid || keyid <= 0)
-> +		return;
-> +
-> +	ida_free(&tdx_keyid_pool, keyid);
-> +}
-> +EXPORT_SYMBOL_GPL(tdx_keyid_free);
-> +
->   static void detect_tdx_keyids_bsp(struct cpuinfo_x86 *c)
->   {
->   	u64 keyid_part;
 
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+Building um:defconfig ... failed
+Building csky:defconfig ... failed
+Building microblaze:mmu_defconfig ... failed
+------
+Error log:
 
+fs/binfmt_elf.c: In function 'fill_note_info':
+fs/binfmt_elf.c:2050:45: error: 'siginfo' undeclared (first use in this function)
+  2050 |                 sz = elf_dump_thread_status(siginfo->si_signo, ets);
+       |                                             ^~~~~~~
+fs/binfmt_elf.c:2050:45: note: each undeclared identifier is reported only once for each function it appears in
+fs/binfmt_elf.c:2056:53: error: 'regs' undeclared (first use in this function)
+  2056 |         elf_core_copy_regs(&info->prstatus->pr_reg, regs);
+       |                                                     ^~~~
+
+Build just started, so there are likely going to be more failures.
+
+Guenter

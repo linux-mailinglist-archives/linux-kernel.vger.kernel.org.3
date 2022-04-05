@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A0A4F35F3
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B624F35DC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241341AbiDEK4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53410 "EHLO
+        id S241060AbiDEKzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242107AbiDEIgp (ORCPT
+        with ESMTP id S242160AbiDEIhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:36:45 -0400
+        Tue, 5 Apr 2022 04:37:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEF9186CD;
-        Tue,  5 Apr 2022 01:32:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE36D18E0A;
+        Tue,  5 Apr 2022 01:32:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 55B5E60B0E;
-        Tue,  5 Apr 2022 08:32:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62A5EC385A0;
-        Tue,  5 Apr 2022 08:32:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F338061491;
+        Tue,  5 Apr 2022 08:32:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10FA0C385A1;
+        Tue,  5 Apr 2022 08:32:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147541;
-        bh=tSoeaE+WjF/2U0/bRU+xgk2xTbobXqV74Tlrj1zdDgY=;
+        s=korg; t=1649147544;
+        bh=P35xTf4iwp/DUEsFUMcqfNfZ7QDo6NaErTy6nzlq8/c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u9YDojFQmk4QpWjUNv5TlW5hvkHWGIUoAcWydr2/i51dG2HHMASF060lV8oZ8187C
-         24K01145MO7h2mBV8RMSsJc17YI40EwCpFF6hAOlerwFg9lRAEfFgv9V+a+MTEjvFl
-         i3guvNxSxBLx9AVnVnlTgSsW6AVIPuTX8rvCLaYY=
+        b=JhGtfZH4bTFZkmAfWDj7ecVsg7PSgg5qjB4dIGobjRGeVQ8zKpy+/+PLYN/gCn9Vy
+         gd9Erz/Hi9lT8YqEjBYm276J+6jPvenCyVkhCyi0L+n1WJ12PGD6dru6P9lfLG0zRv
+         gBk6JZk5xc4GflBbm7w5BXhQ/gOnC4+sLC9FKYiA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Michael=20H=C3=BCbner?= <michaelh.95@t-online.de>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0008/1017] HID: Add support for open wheel and no attachment to T300
-Date:   Tue,  5 Apr 2022 09:15:21 +0200
-Message-Id: <20220405070354.418014590@linuxfoundation.org>
+        stable@vger.kernel.org, Lina Wang <lina.wang@mediatek.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0009/1017] xfrm: fix tunnel model fragmentation behavior
+Date:   Tue,  5 Apr 2022 09:15:22 +0200
+Message-Id: <20220405070354.447944502@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,35 +55,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Hübner <michaelh.95@t-online.de>
+From: Lina Wang <lina.wang@mediatek.com>
 
-[ Upstream commit 0a5a587501b54e8c6d86960b047d4491fd40dcf2 ]
+[ Upstream commit 4ff2980b6bd2aa6b4ded3ce3b7c0ccfab29980af ]
 
-Different add ons to the wheel base report different models. Having
-no wheel mounted to the base and using the open wheel attachment is
-added here.
+in tunnel mode, if outer interface(ipv4) is less, it is easily to let
+inner IPV6 mtu be less than 1280. If so, a Packet Too Big ICMPV6 message
+is received. When send again, packets are fragmentized with 1280, they
+are still rejected with ICMPV6(Packet Too Big) by xfrmi_xmit2().
 
-Signed-off-by: Michael Hübner <michaelh.95@t-online.de>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+According to RFC4213 Section3.2.2:
+if (IPv4 path MTU - 20) is less than 1280
+	if packet is larger than 1280 bytes
+		Send ICMPv6 "packet too big" with MTU=1280
+                Drop packet
+        else
+		Encapsulate but do not set the Don't Fragment
+                flag in the IPv4 header.  The resulting IPv4
+                packet might be fragmented by the IPv4 layer
+                on the encapsulator or by some router along
+                the IPv4 path.
+	endif
+else
+	if packet is larger than (IPv4 path MTU - 20)
+        	Send ICMPv6 "packet too big" with
+                MTU = (IPv4 path MTU - 20).
+                Drop packet.
+        else
+                Encapsulate and set the Don't Fragment flag
+                in the IPv4 header.
+        endif
+endif
+Packets should be fragmentized with ipv4 outer interface, so change it.
+
+After it is fragemtized with ipv4, there will be double fragmenation.
+No.48 & No.51 are ipv6 fragment packets, No.48 is double fragmentized,
+then tunneled with IPv4(No.49& No.50), which obey spec. And received peer
+cannot decrypt it rightly.
+
+48              2002::10        2002::11 1296(length) IPv6 fragment (off=0 more=y ident=0xa20da5bc nxt=50)
+49   0x0000 (0) 2002::10        2002::11 1304         IPv6 fragment (off=0 more=y ident=0x7448042c nxt=44)
+50   0x0000 (0) 2002::10        2002::11 200          ESP (SPI=0x00035000)
+51              2002::10        2002::11 180          Echo (ping) request
+52   0x56dc     2002::10        2002::11 248          IPv6 fragment (off=1232 more=n ident=0xa20da5bc nxt=50)
+
+xfrm6_noneed_fragment has fixed above issues. Finally, it acted like below:
+1   0x6206 192.168.1.138   192.168.1.1 1316 Fragmented IP protocol (proto=Encap Security Payload 50, off=0, ID=6206) [Reassembled in #2]
+2   0x6206 2002::10        2002::11    88   IPv6 fragment (off=0 more=y ident=0x1f440778 nxt=50)
+3   0x0000 2002::10        2002::11    248  ICMPv6    Echo (ping) request
+
+Signed-off-by: Lina Wang <lina.wang@mediatek.com>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/hid-thrustmaster.c | 2 ++
- 1 file changed, 2 insertions(+)
+ net/ipv6/xfrm6_output.c   | 16 ++++++++++++++++
+ net/xfrm/xfrm_interface.c |  5 ++++-
+ 2 files changed, 20 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/hid/hid-thrustmaster.c b/drivers/hid/hid-thrustmaster.c
-index 9da4240530dd..c3e6d69fdfbd 100644
---- a/drivers/hid/hid-thrustmaster.c
-+++ b/drivers/hid/hid-thrustmaster.c
-@@ -64,7 +64,9 @@ struct tm_wheel_info {
-  */
- static const struct tm_wheel_info tm_wheels_infos[] = {
- 	{0x0306, 0x0006, "Thrustmaster T150RS"},
-+	{0x0200, 0x0005, "Thrustmaster T300RS (Missing Attachment)"},
- 	{0x0206, 0x0005, "Thrustmaster T300RS"},
-+	{0x0209, 0x0005, "Thrustmaster T300RS (Open Wheel Attachment)"},
- 	{0x0204, 0x0005, "Thrustmaster T300 Ferrari Alcantara Edition"},
- 	{0x0002, 0x0002, "Thrustmaster T500RS"}
- 	//{0x0407, 0x0001, "Thrustmaster TMX"}
+diff --git a/net/ipv6/xfrm6_output.c b/net/ipv6/xfrm6_output.c
+index d0d280077721..ad07904642ca 100644
+--- a/net/ipv6/xfrm6_output.c
++++ b/net/ipv6/xfrm6_output.c
+@@ -45,6 +45,19 @@ static int __xfrm6_output_finish(struct net *net, struct sock *sk, struct sk_buf
+ 	return xfrm_output(sk, skb);
+ }
+ 
++static int xfrm6_noneed_fragment(struct sk_buff *skb)
++{
++	struct frag_hdr *fh;
++	u8 prevhdr = ipv6_hdr(skb)->nexthdr;
++
++	if (prevhdr != NEXTHDR_FRAGMENT)
++		return 0;
++	fh = (struct frag_hdr *)(skb->data + sizeof(struct ipv6hdr));
++	if (fh->nexthdr == NEXTHDR_ESP || fh->nexthdr == NEXTHDR_AUTH)
++		return 1;
++	return 0;
++}
++
+ static int __xfrm6_output(struct net *net, struct sock *sk, struct sk_buff *skb)
+ {
+ 	struct dst_entry *dst = skb_dst(skb);
+@@ -73,6 +86,9 @@ static int __xfrm6_output(struct net *net, struct sock *sk, struct sk_buff *skb)
+ 		xfrm6_local_rxpmtu(skb, mtu);
+ 		kfree_skb(skb);
+ 		return -EMSGSIZE;
++	} else if (toobig && xfrm6_noneed_fragment(skb)) {
++		skb->ignore_df = 1;
++		goto skip_frag;
+ 	} else if (!skb->ignore_df && toobig && skb->sk) {
+ 		xfrm_local_error(skb, mtu);
+ 		kfree_skb(skb);
+diff --git a/net/xfrm/xfrm_interface.c b/net/xfrm/xfrm_interface.c
+index 4e3c62d1ad9e..1e8b26eecb3f 100644
+--- a/net/xfrm/xfrm_interface.c
++++ b/net/xfrm/xfrm_interface.c
+@@ -304,7 +304,10 @@ xfrmi_xmit2(struct sk_buff *skb, struct net_device *dev, struct flowi *fl)
+ 			if (mtu < IPV6_MIN_MTU)
+ 				mtu = IPV6_MIN_MTU;
+ 
+-			icmpv6_ndo_send(skb, ICMPV6_PKT_TOOBIG, 0, mtu);
++			if (skb->len > 1280)
++				icmpv6_ndo_send(skb, ICMPV6_PKT_TOOBIG, 0, mtu);
++			else
++				goto xmit;
+ 		} else {
+ 			if (!(ip_hdr(skb)->frag_off & htons(IP_DF)))
+ 				goto xmit;
 -- 
 2.34.1
 

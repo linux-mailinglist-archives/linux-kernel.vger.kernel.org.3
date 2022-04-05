@@ -2,44 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CD34F430B
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 241AA4F40FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356501AbiDEMJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
+        id S236156AbiDEOT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244720AbiDEIwf (ORCPT
+        with ESMTP id S240011AbiDEJeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B6B1A3A6;
-        Tue,  5 Apr 2022 01:42:44 -0700 (PDT)
+        Tue, 5 Apr 2022 05:34:00 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A2B7DE3B;
+        Tue,  5 Apr 2022 02:23:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 950BD61003;
-        Tue,  5 Apr 2022 08:42:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A698DC385A1;
-        Tue,  5 Apr 2022 08:42:42 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D4153CE1C77;
+        Tue,  5 Apr 2022 09:23:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3A82C385A0;
+        Tue,  5 Apr 2022 09:23:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148163;
-        bh=XEw2Y6drUkp+hZx/0W0mg8thTAFr3EsviwmUE3IGpIg=;
+        s=korg; t=1649150591;
+        bh=odjEBd93PReyGhAg8bd0F+x9rMuWnwtR8XTzfDHioAk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F9bWElkzEQeMk6AibRF/05XJnJFIEKXilf07fnOCq9jFztc0/+pDbqQF/W8RcOaGn
-         5OdoSlzEwAU1N8mYYgzaw+dp2DRqrmoad3OwgoesRxhua6NeTnUVUuMrkDkciRz6Hx
-         gtztgUpT8/fackQEYl2aiDleGXIL7/0NGZBm3AMY=
+        b=1tZC9tiMHsC+jWyDqiShOMOQh466NuVXEjJGMgSK3nTWX9BGQOANEn4DPSShiyNwP
+         ++GvryP/hore94ozqvgE5LYCPnjYFlMF8jWmwZSbjmv5mcevAhOhVvoRnp553ORJzV
+         I3j1hrE8/1ylSP3UdZF+/sTb/hmQNdz1fsC/EmkU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joel Jaeschke <joel.jaeschke@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0256/1017] io_uring: terminate manual loop iterator loop correctly for non-vecs
-Date:   Tue,  5 Apr 2022 09:19:29 +0200
-Message-Id: <20220405070401.862362471@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Charan Teja Kalla <quic_charante@quicinc.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Rientjes <rientjes@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.15 109/913] Revert "mm: madvise: skip unmapped vma holes passed to process_madvise"
+Date:   Tue,  5 Apr 2022 09:19:31 +0200
+Message-Id: <20220405070343.094253192@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,48 +61,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jens Axboe <axboe@kernel.dk>
+From: Charan Teja Kalla <quic_charante@quicinc.com>
 
-[ Upstream commit 5e929367468c8f97cd1ffb0417316cecfebef94b ]
+commit e6b0a7b357659c332231621e4315658d062c23ee upstream.
 
-The fix for not advancing the iterator if we're using fixed buffers is
-broken in that it can hit a condition where we don't terminate the loop.
-This results in io-wq looping forever, asking to read (or write) 0 bytes
-for every subsequent loop.
+This reverts commit 08095d6310a7 ("mm: madvise: skip unmapped vma holes
+passed to process_madvise") as process_madvise() fails to return the
+exact processed bytes in other cases too.
 
-Reported-by: Joel Jaeschke <joel.jaeschke@gmail.com>
-Link: https://github.com/axboe/liburing/issues/549
-Fixes: 16c8d2df7ec0 ("io_uring: ensure symmetry in handling iter types in loop_rw_iter()")
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+As an example: if process_madvise() hits mlocked pages after processing
+some initial bytes passed in [start, end), it just returns EINVAL
+although some bytes are processed.  Thus making an exception only for
+ENOMEM is partially fixing the problem of returning the proper advised
+bytes.
+
+Thus revert this patch and return proper bytes advised.
+
+Link: https://lkml.kernel.org/r/e73da1304a88b6a8a11907045117cccf4c2b8374.1648046642.git.quic_charante@quicinc.com
+Fixes: 08095d6310a7ce ("mm: madvise: skip unmapped vma holes passed to process_madvise")
+Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
+Acked-by: Michal Hocko <mhocko@suse.com>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: David Rientjes <rientjes@google.com>
+Cc: Nadav Amit <nadav.amit@gmail.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/io_uring.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ mm/madvise.c |    9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 974f6fb327e7..2d25c51b8a5d 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -3350,13 +3350,15 @@ static ssize_t loop_rw_iter(int rw, struct io_kiocb *req, struct iov_iter *iter)
- 				ret = nr;
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -1287,16 +1287,9 @@ SYSCALL_DEFINE5(process_madvise, int, pi
+ 
+ 	while (iov_iter_count(&iter)) {
+ 		iovec = iov_iter_iovec(&iter);
+-		/*
+-		 * do_madvise returns ENOMEM if unmapped holes are present
+-		 * in the passed VMA. process_madvise() is expected to skip
+-		 * unmapped holes passed to it in the 'struct iovec' list
+-		 * and not fail because of them. Thus treat -ENOMEM return
+-		 * from do_madvise as valid and continue processing.
+-		 */
+ 		ret = do_madvise(mm, (unsigned long)iovec.iov_base,
+ 					iovec.iov_len, behavior);
+-		if (ret < 0 && ret != -ENOMEM)
++		if (ret < 0)
  			break;
- 		}
-+		ret += nr;
- 		if (!iov_iter_is_bvec(iter)) {
- 			iov_iter_advance(iter, nr);
- 		} else {
--			req->rw.len -= nr;
- 			req->rw.addr += nr;
-+			req->rw.len -= nr;
-+			if (!req->rw.len)
-+				break;
- 		}
--		ret += nr;
- 		if (nr != iovec.iov_len)
- 			break;
+ 		iov_iter_advance(&iter, iovec.iov_len);
  	}
--- 
-2.34.1
-
 
 

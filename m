@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E2C4F48E5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 387634F48DD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388497AbiDEVyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
+        id S1356266AbiDEVwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350057AbiDEJwg (ORCPT
+        with ESMTP id S1357931AbiDEK12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:52:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF68443CC;
-        Tue,  5 Apr 2022 02:50:38 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08F17E583;
+        Tue,  5 Apr 2022 03:11:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63B90B818F3;
-        Tue,  5 Apr 2022 09:50:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0F66C385A2;
-        Tue,  5 Apr 2022 09:50:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF148B81C8A;
+        Tue,  5 Apr 2022 10:11:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63C03C385A0;
+        Tue,  5 Apr 2022 10:11:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152236;
-        bh=GMssu4zTZHeD6W3nJa/GiVI/GBxjrQZSODh9S6qxuN4=;
+        s=korg; t=1649153476;
+        bh=2oZ6o3YYR84xrbyRZvsWvVcONdqA2nZyWHB3WsSIGY8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gFBhlCppI8Su5JNip8CFWOEw6mq7w+oTMmXvwQFey+xL+7cLm+H9ZX3dl7C5lkXQ0
-         C8oYJbAQmok7pxoL4JS7kXh/hNJXgEo6g6GuNMSasYj6zwL++BzrM4pKG/oD9KC8oI
-         x7QYn1xMdktY6WN2N6jbpyy6lxBorqX9B7Ow4zOw=
+        b=P+AsENyt31V1Lp6BR5ATFf6dFLpIVfvE3IgBN7iK5iQOnAJSiQhz6FAVlX1IZ3T2h
+         fo9zs3WMQE2O1plV9738EM99B5GmAz5eYnXRF0GbR9sMmhDM7eP5Z+ru/pKAlz9nvk
+         GydyYMM2Eo2vxVkBIPdCtuxD61PgODBf6E+n5XL4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 666/913] net: phy: broadcom: Fix brcm_fet_config_init()
+        stable@vger.kernel.org, Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 234/599] ALSA: firewire-lib: fix uninitialized flag for AV/C deferred transaction
 Date:   Tue,  5 Apr 2022 09:28:48 +0200
-Message-Id: <20220405070359.799471807@linuxfoundation.org>
+Message-Id: <20220405070305.804021520@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,77 +54,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+From: Takashi Sakamoto <o-takashi@sakamocchi.jp>
 
-[ Upstream commit bf8bfc4336f7a34e48b3bbd19b1542bf085bdc3d ]
+[ Upstream commit bf0cd60b7e33cf221fbe1114e4acb2c828b0af0d ]
 
-A Broadcom AC201 PHY (same entry as 5241) would be flagged by the
-Broadcom UniMAC MDIO controller as not completing the turn around
-properly since the PHY expects 65 MDC clock cycles to complete a write
-cycle, and the MDIO controller was only sending 64 MDC clock cycles as
-determined by looking at a scope shot.
+AV/C deferred transaction was supported at a commit 00a7bb81c20f ("ALSA:
+firewire-lib: Add support for deferred transaction") while 'deferrable'
+flag can be uninitialized for non-control/notify AV/C transactions.
+UBSAN reports it:
 
-This would make the subsequent read fail with the UniMAC MDIO controller
-command field having MDIO_READ_FAIL set and we would abort the
-brcm_fet_config_init() function and thus not probe the PHY at all.
+kernel: ================================================================================
+kernel: UBSAN: invalid-load in /build/linux-aa0B4d/linux-5.15.0/sound/firewire/fcp.c:363:9
+kernel: load of value 158 is not a valid value for type '_Bool'
+kernel: CPU: 3 PID: 182227 Comm: irq/35-firewire Tainted: P           OE     5.15.0-18-generic #18-Ubuntu
+kernel: Hardware name: Gigabyte Technology Co., Ltd. AX370-Gaming 5/AX370-Gaming 5, BIOS F42b 08/01/2019
+kernel: Call Trace:
+kernel:  <IRQ>
+kernel:  show_stack+0x52/0x58
+kernel:  dump_stack_lvl+0x4a/0x5f
+kernel:  dump_stack+0x10/0x12
+kernel:  ubsan_epilogue+0x9/0x45
+kernel:  __ubsan_handle_load_invalid_value.cold+0x44/0x49
+kernel:  fcp_response.part.0.cold+0x1a/0x2b [snd_firewire_lib]
+kernel:  fcp_response+0x28/0x30 [snd_firewire_lib]
+kernel:  fw_core_handle_request+0x230/0x3d0 [firewire_core]
+kernel:  handle_ar_packet+0x1d9/0x200 [firewire_ohci]
+kernel:  ? handle_ar_packet+0x1d9/0x200 [firewire_ohci]
+kernel:  ? transmit_complete_callback+0x9f/0x120 [firewire_core]
+kernel:  ar_context_tasklet+0xa8/0x2e0 [firewire_ohci]
+kernel:  tasklet_action_common.constprop.0+0xea/0xf0
+kernel:  tasklet_action+0x22/0x30
+kernel:  __do_softirq+0xd9/0x2e3
+kernel:  ? irq_finalize_oneshot.part.0+0xf0/0xf0
+kernel:  do_softirq+0x75/0xa0
+kernel:  </IRQ>
+kernel:  <TASK>
+kernel:  __local_bh_enable_ip+0x50/0x60
+kernel:  irq_forced_thread_fn+0x7e/0x90
+kernel:  irq_thread+0xba/0x190
+kernel:  ? irq_thread_fn+0x60/0x60
+kernel:  kthread+0x11e/0x140
+kernel:  ? irq_thread_check_affinity+0xf0/0xf0
+kernel:  ? set_kthread_struct+0x50/0x50
+kernel:  ret_from_fork+0x22/0x30
+kernel:  </TASK>
+kernel: ================================================================================
 
-After issuing a software reset, wait for at least 1ms which is well
-above the 1us reset delay advertised by the datasheet and issue a dummy
-read to let the PHY turn around the line properly. This read
-specifically ignores -EIO which would be returned by MDIO controllers
-checking for the line being turned around.
+This commit fixes the bug. The bug has no disadvantage for the non-
+control/notify AV/C transactions since the flag has an effect for AV/C
+response with INTERIM (0x0f) status which is not used for the transactions
+in AV/C general specification.
 
-If we have a genuine reaad failure, the next read of the interrupt
-status register would pick it up anyway.
-
-Fixes: d7a2ed9248a3 ("broadcom: Add AC131 phy support")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20220324232438.1156812-1-f.fainelli@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 00a7bb81c20f ("ALSA: firewire-lib: Add support for deferred transaction")
+Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Link: https://lore.kernel.org/r/20220304125647.78430-1-o-takashi@sakamocchi.jp
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/broadcom.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ sound/firewire/fcp.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/net/phy/broadcom.c b/drivers/net/phy/broadcom.c
-index db26ff8ce7db..b330efb98209 100644
---- a/drivers/net/phy/broadcom.c
-+++ b/drivers/net/phy/broadcom.c
-@@ -11,6 +11,7 @@
-  */
+diff --git a/sound/firewire/fcp.c b/sound/firewire/fcp.c
+index bbfbebf4affb..df44dd5dc4b2 100644
+--- a/sound/firewire/fcp.c
++++ b/sound/firewire/fcp.c
+@@ -240,9 +240,7 @@ int fcp_avc_transaction(struct fw_unit *unit,
+ 	t.response_match_bytes = response_match_bytes;
+ 	t.state = STATE_PENDING;
+ 	init_waitqueue_head(&t.wait);
+-
+-	if (*(const u8 *)command == 0x00 || *(const u8 *)command == 0x03)
+-		t.deferrable = true;
++	t.deferrable = (*(const u8 *)command == 0x00 || *(const u8 *)command == 0x03);
  
- #include "bcm-phy-lib.h"
-+#include <linux/delay.h>
- #include <linux/module.h>
- #include <linux/phy.h>
- #include <linux/brcmphy.h>
-@@ -553,6 +554,26 @@ static int brcm_fet_config_init(struct phy_device *phydev)
- 	if (err < 0)
- 		return err;
- 
-+	/* The datasheet indicates the PHY needs up to 1us to complete a reset,
-+	 * build some slack here.
-+	 */
-+	usleep_range(1000, 2000);
-+
-+	/* The PHY requires 65 MDC clock cycles to complete a write operation
-+	 * and turnaround the line properly.
-+	 *
-+	 * We ignore -EIO here as the MDIO controller (e.g.: mdio-bcm-unimac)
-+	 * may flag the lack of turn-around as a read failure. This is
-+	 * particularly true with this combination since the MDIO controller
-+	 * only used 64 MDC cycles. This is not a critical failure in this
-+	 * specific case and it has no functional impact otherwise, so we let
-+	 * that one go through. If there is a genuine bus error, the next read
-+	 * of MII_BRCM_FET_INTREG will error out.
-+	 */
-+	err = phy_read(phydev, MII_BMCR);
-+	if (err < 0 && err != -EIO)
-+		return err;
-+
- 	reg = phy_read(phydev, MII_BRCM_FET_INTREG);
- 	if (reg < 0)
- 		return reg;
+ 	spin_lock_irq(&transactions_lock);
+ 	list_add_tail(&t.list, &transactions);
 -- 
 2.34.1
 

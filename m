@@ -2,95 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9ADE4F48B2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2ECF4F4EB2
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384642AbiDEVrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:47:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
+        id S1836302AbiDFAfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382409AbiDEMPE (ORCPT
+        with ESMTP id S1383182AbiDEMZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 08:15:04 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD7DC4E1D;
-        Tue,  5 Apr 2022 04:25:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649157943; x=1680693943;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=1Bi4lSLV0zLBBZOD2CzxtM5qbY8InuCSGS8Woi7tp1Q=;
-  b=L8NfEh774dW5TBxyXsxY6kV9rCtgnx0rfklyQ7/6V5YR9iwhHKS/LXDZ
-   OMyFWy/u1RALQmtl+PSevSyTWk9XW63rY9Ao1OOE/veBsmye5SCO6NhyK
-   cdtfKsiOKnX5QbLx2kaLygw+ct8XQtn9W/QDgiOut1EaHJlDqymlYG/ev
-   W14B/Ag+MDH5y0pX0YaWXsua1CpVH7O5m/bzkYzIDuRZvDlhQmJJSLen2
-   YG9KPz6RegyN9J9NW0f9PlWgrzDqeaL59vkd2Q0jEefdgsaCqGiEwDl6c
-   gBHohyIYWp+HAax2jX0/NXtMUC4lzilVVD/UDBH6IJmWF4Df5ElFakCwS
-   A==;
-X-IronPort-AV: E=Sophos;i="5.90,236,1643698800"; 
-   d="scan'208";a="159346924"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Apr 2022 04:25:42 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 5 Apr 2022 04:25:42 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 5 Apr 2022 04:25:40 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <robh+dt@kernel.org>, <nicolas.ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <p.zabel@pengutronix.de>,
-        <sre@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH 8/8] ARM: dts: at91: sama7g5: add reset-controller node
-Date:   Tue, 5 Apr 2022 14:27:24 +0300
-Message-ID: <20220405112724.2760905-9-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220405112724.2760905-1-claudiu.beznea@microchip.com>
-References: <20220405112724.2760905-1-claudiu.beznea@microchip.com>
+        Tue, 5 Apr 2022 08:25:05 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEDB9FC9;
+        Tue,  5 Apr 2022 04:32:30 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 1DDB81F390;
+        Tue,  5 Apr 2022 11:32:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1649158349; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=B1KHdOwVSkxc4cwioVl/fqGmb4ILJaNXLeIecIndREU=;
+        b=qXT6Q82QAwXEkqmD+YG8GK/DX6LittdLbmMiR0cLdzmaGDoXz2vs56KXY3UgDLM7nnGdzs
+        8azj5l80G5gL32IcbIBHAaccnjnLeu/slYcTyrPAcRTcEmSpJgTaHNcWHaH33+nqwT9exX
+        60vdU01v3DoeL7Nr1m2hr44/kl1TwtY=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 13F1EA3B8A;
+        Tue,  5 Apr 2022 11:32:29 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id F4233DA80E; Tue,  5 Apr 2022 13:28:27 +0200 (CEST)
+Date:   Tue, 5 Apr 2022 13:28:27 +0200
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs fixes for 5.18-rc2
+Message-ID: <cover.1649109877.git.dsterba@suse.com>
+Mail-Followup-To: David Sterba <dsterba@suse.com>,
+        torvalds@linux-foundation.org, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add reset controller node.
+Hi,
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- arch/arm/boot/dts/sama7g5.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+please pull the following fixes for btrfs, thanks.
 
-diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.dtsi
-index eddcfbf4d223..aa0e72d4d2d5 100644
---- a/arch/arm/boot/dts/sama7g5.dtsi
-+++ b/arch/arm/boot/dts/sama7g5.dtsi
-@@ -122,6 +122,13 @@ pmc: pmc@e0018000 {
- 			clock-names = "td_slck", "md_slck", "main_xtal";
- 		};
- 
-+		reset_controller: reset-controller@e001d000 {
-+			compatible = "microchip,sama7g5-rstc";
-+			reg = <0xe001d000 0xc>, <0xe001d0e4 0x4>;
-+			#reset-cells = <1>;
-+			clocks = <&clk32k 0>;
-+		};
-+
- 		shdwc: shdwc@e001d010 {
- 			compatible = "microchip,sama7g5-shdwc", "syscon";
- 			reg = <0xe001d010 0x10>;
--- 
-2.32.0
+- prevent deleting subvolume with active swapfile
 
+- fix qgroup reserve limit calculation overflow
+
+- remove device count in superblock and its item in one transaction so
+  they cant't get out of sync
+
+- skip defragmenting an isolated sector, this could cause some extra IO
+
+- unify handling of mtime/permissions in hole punch with fallocate
+
+- zoned mode fixes:
+  - remove assert checking for only single mode, we have the DUP mode
+    implemented
+
+  - fix potential lockdep warning while traversing devices when checking
+    for zone activation
+
+----------------------------------------------------------------
+The following changes since commit d3e29967079c522ce1c5cab0e9fab2c280b977eb:
+
+  btrfs: zoned: put block group after final usage (2022-03-14 13:13:54 +0100)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-5.18-rc1-tag
+
+for you to fetch changes up to 60021bd754c6ca0addc6817994f20290a321d8d6:
+
+  btrfs: prevent subvol with swapfile from being deleted (2022-03-24 17:50:57 +0100)
+
+----------------------------------------------------------------
+Darrick J. Wong (1):
+      btrfs: fix fallocate to use file_modified to update permissions consistently
+
+Ethan Lien (1):
+      btrfs: fix qgroup reserve overflow the qgroup limit
+
+Johannes Thumshirn (2):
+      btrfs: zoned: traverse devices under chunk_mutex in btrfs_can_activate_zone
+      btrfs: zoned: remove left over ASSERT checking for single profile
+
+Josef Bacik (1):
+      btrfs: do not warn for free space inode in cow_file_range
+
+Kaiwen Hu (1):
+      btrfs: prevent subvol with swapfile from being deleted
+
+Qu Wenruo (2):
+      btrfs: remove device item and update super block in the same transaction
+      btrfs: avoid defragging extents whose next extents are not targets
+
+ fs/btrfs/extent_io.h |  2 +-
+ fs/btrfs/file.c      | 13 +++++++++--
+ fs/btrfs/inode.c     | 23 ++++++++++++++++++-
+ fs/btrfs/ioctl.c     | 20 +++++++++++-----
+ fs/btrfs/volumes.c   | 65 ++++++++++++++++++++++------------------------------
+ fs/btrfs/zoned.c     | 13 ++++-------
+ 6 files changed, 81 insertions(+), 55 deletions(-)

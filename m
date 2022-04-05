@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC7B4F3F12
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:56:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF5BE4F40D8
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386117AbiDEMkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51546 "EHLO
+        id S1386101AbiDEMkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236590AbiDEJDK (ORCPT
+        with ESMTP id S236599AbiDEJDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:03:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9ECDBD;
-        Tue,  5 Apr 2022 01:55:01 -0700 (PDT)
+        Tue, 5 Apr 2022 05:03:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6585AE4F;
+        Tue,  5 Apr 2022 01:55:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25F8EB81BC5;
-        Tue,  5 Apr 2022 08:55:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87B2FC385A1;
-        Tue,  5 Apr 2022 08:54:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17721B81C19;
+        Tue,  5 Apr 2022 08:55:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C42EC385A0;
+        Tue,  5 Apr 2022 08:55:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148898;
-        bh=Y5iazv/oV7OhWApihC2GFnbA0CL+8cL689bRz3QbMdc=;
+        s=korg; t=1649148901;
+        bh=lW0GnhFU2cI0e0ni70gC6pNauWpnvH3ZEvAeWn0F9os=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dBAfvjMjG+MPP6lsgqs8PbV1JaoOSNTizz4t9OkDYlxYHhkehntsA39TyaDTBIU2Y
-         keYvVZuOITOFQQs0izRCwP6O+oa3OlnZ7Fbhh4WhA8AD+AEbJC9LLEE4C7087qIIOd
-         oF+HaywX0o8y7IuXvV7hJQnt12DbUBvqISagWNPY=
+        b=HhhNd1ocEhNEEAi81SdRtfcuUksAxyt9ERamRpI+ruSuwjH5/Ecs2RNz0CO5Lmph1
+         +K1sPlQPjo4lelfk/Sk8CoOFNBr4rKHFASK+Tynb2ZCcH9m0vS2rB9/pkWWnoBYJHc
+         74ttB+Dzb7PpcnsR8GQlJG9J/a9zKWGstL7k4mLo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        stable@vger.kernel.org,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        George Kuruvinakunnel <george.kuruvinakunnel@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0522/1017] drm/msm/dpu: fix dp audio condition
-Date:   Tue,  5 Apr 2022 09:23:55 +0200
-Message-Id: <20220405070409.790712484@linuxfoundation.org>
+Subject: [PATCH 5.16 0523/1017] i40e: remove dead stores on XSK hotpath
+Date:   Tue,  5 Apr 2022 09:23:56 +0200
+Message-Id: <20220405070409.820437020@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -57,39 +59,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
 
-[ Upstream commit 1e0505a5a7a2fea243f8e6d7e13fcde65f9e41bc ]
+[ Upstream commit 7e1b54d07751edcbf23c7211508abf5667b490ee ]
 
-DP audio enablement code which is comparing intf_type,
-DRM_MODE_ENCODER_TMDS (= 2) with DRM_MODE_CONNECTOR_DisplayPort (= 10).
-Which would never succeed. Fix it to check for DRM_MODE_ENCODER_TMDS.
+The 'if (ntu == rx_ring->count)' block in i40e_alloc_rx_buffers_zc()
+was previously residing in the loop, but after introducing the
+batched interface it is used only to wrap-around the NTU descriptor,
+thus no more need to assign 'xdp'.
 
-Fixes: d13e36d7d222 ("drm/msm/dp: add audio support for Display Port on MSM")
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Link: https://lore.kernel.org/r/20220217035358.465904-2-dmitry.baryshkov@linaro.org
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+'cleaned_count' in i40e_clean_rx_irq_zc() was previously being
+incremented in the loop, but after commit f12738b6ec06
+("i40e: remove unnecessary cleaned_count updates") it gets
+assigned only once after it, so the initialization can be dropped.
+
+Fixes: 6aab0bb0c5cd ("i40e: Use the xsk batched rx allocation interface")
+Fixes: f12738b6ec06 ("i40e: remove unnecessary cleaned_count updates")
+Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Tested-by: George Kuruvinakunnel <george.kuruvinakunnel@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-index e7ee4cfb8461..ad27a01c22af 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-@@ -1102,7 +1102,7 @@ static void _dpu_encoder_virt_enable_helper(struct drm_encoder *drm_enc)
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+index 2553b130108d..0e8cf275e084 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+@@ -218,7 +218,6 @@ bool i40e_alloc_rx_buffers_zc(struct i40e_ring *rx_ring, u16 count)
+ 	ntu += nb_buffs;
+ 	if (ntu == rx_ring->count) {
+ 		rx_desc = I40E_RX_DESC(rx_ring, 0);
+-		xdp = i40e_rx_bi(rx_ring, 0);
+ 		ntu = 0;
  	}
  
+@@ -328,11 +327,11 @@ static void i40e_handle_xdp_result_zc(struct i40e_ring *rx_ring,
+ int i40e_clean_rx_irq_zc(struct i40e_ring *rx_ring, int budget)
+ {
+ 	unsigned int total_rx_bytes = 0, total_rx_packets = 0;
+-	u16 cleaned_count = I40E_DESC_UNUSED(rx_ring);
+ 	u16 next_to_clean = rx_ring->next_to_clean;
+ 	u16 count_mask = rx_ring->count - 1;
+ 	unsigned int xdp_res, xdp_xmit = 0;
+ 	bool failure = false;
++	u16 cleaned_count;
  
--	if (dpu_enc->disp_info.intf_type == DRM_MODE_CONNECTOR_DisplayPort &&
-+	if (dpu_enc->disp_info.intf_type == DRM_MODE_ENCODER_TMDS &&
- 		dpu_enc->cur_master->hw_mdptop &&
- 		dpu_enc->cur_master->hw_mdptop->ops.intf_audio_select)
- 		dpu_enc->cur_master->hw_mdptop->ops.intf_audio_select(
+ 	while (likely(total_rx_packets < (unsigned int)budget)) {
+ 		union i40e_rx_desc *rx_desc;
 -- 
 2.34.1
 

@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1804F4436
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F5D4F45F4
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344323AbiDEMth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:49:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
+        id S1379015AbiDEMw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244195AbiDEJJs (ORCPT
+        with ESMTP id S245337AbiDEJLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:09:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9016DBC30;
-        Tue,  5 Apr 2022 01:58:59 -0700 (PDT)
+        Tue, 5 Apr 2022 05:11:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34BD32CCBB;
+        Tue,  5 Apr 2022 02:00:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 681166157A;
-        Tue,  5 Apr 2022 08:58:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79331C385A1;
-        Tue,  5 Apr 2022 08:58:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 92976B81A22;
+        Tue,  5 Apr 2022 09:00:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6623C385A0;
+        Tue,  5 Apr 2022 09:00:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149138;
-        bh=OtMJiNTcTHUQcPH4dSGJwZZlh+3lpDszUo2IbFnk9JM=;
+        s=korg; t=1649149202;
+        bh=X0rTzsBGeb+2G6pQhnVePEmfjAUos6BVgAr1tfd3tDY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YxRKd2PS2xWWv7grxLBhK80POBaMUP4x7fowwxDB1TVu3eG1XlQ8sL/gObrIwGNr+
-         e6/bIbT2Lk3uwJUHVVVeIh3XsRAxVxoPkrjrLsTp5OF8p/UovsmkwA6vFlPnVdhsue
-         5SNFClV59HPl5nnkmjXIgh4VauD5lkIY7RTTvWcc=
+        b=oXQbq0ySmEJZYBJIwaGB6+hrILvvZuK1gx8JDZhngM1TrZrmgy6s5OOe6qLn36Ex0
+         Ela42VT3a9TwTHX+uMHHaVRlWsHSjcuEp0Pt2XI281wpRCs7rhUyHCI5YvL87ARJwc
+         iYP7XcjnE5X2O9cD1c4Kj8CSPUgroYhD1ZVG4+Qw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Xin Tan <tanxin.ctf@gmail.com>,
+        Xin Xiong <xiongx18@fudan.edu.cn>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0591/1017] mips: cdmm: Fix refcount leak in mips_cdmm_phys_base
-Date:   Tue,  5 Apr 2022 09:25:04 +0200
-Message-Id: <20220405070411.821863650@linuxfoundation.org>
+Subject: [PATCH 5.16 0594/1017] mtd: rawnand: atmel: fix refcount issue in atmel_nand_controller_init
+Date:   Tue,  5 Apr 2022 09:25:07 +0200
+Message-Id: <20220405070411.909567431@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,35 +58,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Xin Xiong <xiongx18@fudan.edu.cn>
 
-[ Upstream commit 4528668ca331f7ce5999b7746657b46db5b3b785 ]
+[ Upstream commit fecbd4a317c95d73c849648c406bcf1b6a0ec1cf ]
 
-The of_find_compatible_node() function returns a node pointer with
-refcount incremented, We should use of_node_put() on it when done
-Add the missing of_node_put() to release the refcount.
+The reference counting issue happens in several error handling paths
+on a refcounted object "nc->dmac". In these paths, the function simply
+returns the error code, forgetting to balance the reference count of
+"nc->dmac", increased earlier by dma_request_channel(), which may
+cause refcount leaks.
 
-Fixes: 2121aa3e2312 ("mips: cdmm: Add mti,mips-cdmm dtb node support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Acked-by: Serge Semin <fancer.lancer@gmail.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Fix it by decrementing the refcount of specific object in those error
+paths.
+
+Fixes: f88fc122cc34 ("mtd: nand: Cleanup/rework the atmel_nand driver")
+Co-developed-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+Co-developed-by: Xin Tan <tanxin.ctf@gmail.com>
+Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
+Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
+Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220304085330.3610-1-xiongx18@fudan.edu.cn
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/bus/mips_cdmm.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/mtd/nand/raw/atmel/nand-controller.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/bus/mips_cdmm.c b/drivers/bus/mips_cdmm.c
-index 626dedd110cb..fca0d0669aa9 100644
---- a/drivers/bus/mips_cdmm.c
-+++ b/drivers/bus/mips_cdmm.c
-@@ -351,6 +351,7 @@ phys_addr_t __weak mips_cdmm_phys_base(void)
- 	np = of_find_compatible_node(NULL, NULL, "mti,mips-cdmm");
- 	if (np) {
- 		err = of_address_to_resource(np, 0, &res);
-+		of_node_put(np);
- 		if (!err)
- 			return res.start;
+diff --git a/drivers/mtd/nand/raw/atmel/nand-controller.c b/drivers/mtd/nand/raw/atmel/nand-controller.c
+index f3276ee9e4fe..ddd93bc38ea6 100644
+--- a/drivers/mtd/nand/raw/atmel/nand-controller.c
++++ b/drivers/mtd/nand/raw/atmel/nand-controller.c
+@@ -2060,13 +2060,15 @@ static int atmel_nand_controller_init(struct atmel_nand_controller *nc,
+ 	nc->mck = of_clk_get(dev->parent->of_node, 0);
+ 	if (IS_ERR(nc->mck)) {
+ 		dev_err(dev, "Failed to retrieve MCK clk\n");
+-		return PTR_ERR(nc->mck);
++		ret = PTR_ERR(nc->mck);
++		goto out_release_dma;
  	}
+ 
+ 	np = of_parse_phandle(dev->parent->of_node, "atmel,smc", 0);
+ 	if (!np) {
+ 		dev_err(dev, "Missing or invalid atmel,smc property\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto out_release_dma;
+ 	}
+ 
+ 	nc->smc = syscon_node_to_regmap(np);
+@@ -2074,10 +2076,16 @@ static int atmel_nand_controller_init(struct atmel_nand_controller *nc,
+ 	if (IS_ERR(nc->smc)) {
+ 		ret = PTR_ERR(nc->smc);
+ 		dev_err(dev, "Could not get SMC regmap (err = %d)\n", ret);
+-		return ret;
++		goto out_release_dma;
+ 	}
+ 
+ 	return 0;
++
++out_release_dma:
++	if (nc->dmac)
++		dma_release_channel(nc->dmac);
++
++	return ret;
+ }
+ 
+ static int
 -- 
 2.34.1
 

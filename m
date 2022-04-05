@@ -2,51 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3EBC4F3E9A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 694CF4F3E4E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389022AbiDEOls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41748 "EHLO
+        id S1382767AbiDEMQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244165AbiDEJlJ (ORCPT
+        with ESMTP id S244928AbiDEIws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:41:09 -0400
+        Tue, 5 Apr 2022 04:52:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850F2BABB2;
-        Tue,  5 Apr 2022 02:25:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5B82496D;
+        Tue,  5 Apr 2022 01:46:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22EE96164E;
-        Tue,  5 Apr 2022 09:25:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CD8CC385A0;
-        Tue,  5 Apr 2022 09:25:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B9B4614EB;
+        Tue,  5 Apr 2022 08:46:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E69DC385A1;
+        Tue,  5 Apr 2022 08:46:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150722;
-        bh=qf4ZwozjSQoZIc83YqsJxUrUHToM2owTQGjbfuCX/KU=;
+        s=korg; t=1649148405;
+        bh=zEeKefMZYRslSx40JLS5O+6+t08QoeqPa7ZuL/Iyqg4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EmoXBARIZ7xj0IZzawdm+k2cqzZUTo02txyP3HbmeUr0tnpVHvpOv8iyaRHSDqDIT
-         oxshoyUled4saJ8wtvS23eix+wsNAIxnVZxyKgzK9okkofqFaP8z7epYM2E2CTdvri
-         Z9+o4OYgR8+NsWhxpi8Zk8dOR+SNyRLqEDP82Dfo=
+        b=dYX/11UFk3JDIw6U86VukWm0sX/m7VCz57y4r1gfM2erNge18sv18p/qDty0HOHqf
+         fXIouyizrgDQXLFJNpv5esy4KCDUSlMd/NIb4+rQyVEoxO4P5rsJ2AfRMDvlW0AR2D
+         V8BkUfbdLPpb4mUjR2ine/MM0ZeEOzm2KWCJzNsE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ariadne Conill <ariadne@dereferenced.org>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Rich Felker <dalias@libc.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@kernel.org>
-Subject: [PATCH 5.15 156/913] exec: Force single empty string when argv is empty
-Date:   Tue,  5 Apr 2022 09:20:18 +0200
-Message-Id: <20220405070344.514801608@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0306/1017] video: fbdev: fbcvt.c: fix printing in fb_cvt_print_name()
+Date:   Tue,  5 Apr 2022 09:20:19 +0200
+Message-Id: <20220405070403.359309944@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,129 +54,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit dcd46d897adb70d63e025f175a00a89797d31a43 upstream.
+[ Upstream commit 78482af095abd9f4f29f1aa3fe575d25c6ae3028 ]
 
-Quoting[1] Ariadne Conill:
+This code has two bugs:
+1) "cnt" is 255 but the size of the buffer is 256 so the last byte is
+   not used.
+2) If we try to print more than 255 characters then "cnt" will be
+   negative and that will trigger a WARN() in snprintf(). The fix for
+   this is to use scnprintf() instead of snprintf().
 
-"In several other operating systems, it is a hard requirement that the
-second argument to execve(2) be the name of a program, thus prohibiting
-a scenario where argc < 1. POSIX 2017 also recommends this behaviour,
-but it is not an explicit requirement[2]:
+We can re-write this code to be cleaner:
+1) Rename "offset" to "off" because that's shorter.
+2) Get rid of the "cnt" variable and just use "size - off" directly.
+3) Get rid of the "read" variable and just increment "off" directly.
 
-    The argument arg0 should point to a filename string that is
-    associated with the process being started by one of the exec
-    functions.
-...
-Interestingly, Michael Kerrisk opened an issue about this in 2008[3],
-but there was no consensus to support fixing this issue then.
-Hopefully now that CVE-2021-4034 shows practical exploitative use[4]
-of this bug in a shellcode, we can reconsider.
-
-This issue is being tracked in the KSPP issue tracker[5]."
-
-While the initial code searches[6][7] turned up what appeared to be
-mostly corner case tests, trying to that just reject argv == NULL
-(or an immediately terminated pointer list) quickly started tripping[8]
-existing userspace programs.
-
-The next best approach is forcing a single empty string into argv and
-adjusting argc to match. The number of programs depending on argc == 0
-seems a smaller set than those calling execve with a NULL argv.
-
-Account for the additional stack space in bprm_stack_limits(). Inject an
-empty string when argc == 0 (and set argc = 1). Warn about the case so
-userspace has some notice about the change:
-
-    process './argc0' launched './argc0' with NULL argv: empty string added
-
-Additionally WARN() and reject NULL argv usage for kernel threads.
-
-[1] https://lore.kernel.org/lkml/20220127000724.15106-1-ariadne@dereferenced.org/
-[2] https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html
-[3] https://bugzilla.kernel.org/show_bug.cgi?id=8408
-[4] https://www.qualys.com/2022/01/25/cve-2021-4034/pwnkit.txt
-[5] https://github.com/KSPP/linux/issues/176
-[6] https://codesearch.debian.net/search?q=execve%5C+*%5C%28%5B%5E%2C%5D%2B%2C+*NULL&literal=0
-[7] https://codesearch.debian.net/search?q=execlp%3F%5Cs*%5C%28%5B%5E%2C%5D%2B%2C%5Cs*NULL&literal=0
-[8] https://lore.kernel.org/lkml/20220131144352.GE16385@xsang-OptiPlex-9020/
-
-Reported-by: Ariadne Conill <ariadne@dereferenced.org>
-Reported-by: Michael Kerrisk <mtk.manpages@gmail.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Rich Felker <dalias@libc.org>
-Cc: Eric Biederman <ebiederm@xmission.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org
-Cc: stable@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Acked-by: Christian Brauner <brauner@kernel.org>
-Acked-by: Ariadne Conill <ariadne@dereferenced.org>
-Acked-by: Andy Lutomirski <luto@kernel.org>
-Link: https://lore.kernel.org/r/20220201000947.2453721-1-keescook@chromium.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 96fe6a2109db ("fbdev: Add VESA Coordinated Video Timings (CVT) support")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/exec.c |   26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+ drivers/video/fbdev/core/fbcvt.c | 53 +++++++++++++-------------------
+ 1 file changed, 21 insertions(+), 32 deletions(-)
 
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -494,8 +494,14 @@ static int bprm_stack_limits(struct linu
- 	 * the stack. They aren't stored until much later when we can't
- 	 * signal to the parent that the child has run out of stack space.
- 	 * Instead, calculate it here so it's possible to fail gracefully.
-+	 *
-+	 * In the case of argc = 0, make sure there is space for adding a
-+	 * empty string (which will bump argc to 1), to ensure confused
-+	 * userspace programs don't start processing from argv[1], thinking
-+	 * argc can never be 0, to keep them from walking envp by accident.
-+	 * See do_execveat_common().
- 	 */
--	ptr_size = (bprm->argc + bprm->envc) * sizeof(void *);
-+	ptr_size = (max(bprm->argc, 1) + bprm->envc) * sizeof(void *);
- 	if (limit <= ptr_size)
- 		return -E2BIG;
- 	limit -= ptr_size;
-@@ -1895,6 +1901,9 @@ static int do_execveat_common(int fd, st
- 	}
+diff --git a/drivers/video/fbdev/core/fbcvt.c b/drivers/video/fbdev/core/fbcvt.c
+index 55d2bd0ce5c0..64843464c661 100644
+--- a/drivers/video/fbdev/core/fbcvt.c
++++ b/drivers/video/fbdev/core/fbcvt.c
+@@ -214,9 +214,11 @@ static u32 fb_cvt_aspect_ratio(struct fb_cvt_data *cvt)
+ static void fb_cvt_print_name(struct fb_cvt_data *cvt)
+ {
+ 	u32 pixcount, pixcount_mod;
+-	int cnt = 255, offset = 0, read = 0;
+-	u8 *buf = kzalloc(256, GFP_KERNEL);
++	int size = 256;
++	int off = 0;
++	u8 *buf;
  
- 	retval = count(argv, MAX_ARG_STRINGS);
-+	if (retval == 0)
-+		pr_warn_once("process '%s' launched '%s' with NULL argv: empty string added\n",
-+			     current->comm, bprm->filename);
- 	if (retval < 0)
- 		goto out_free;
- 	bprm->argc = retval;
-@@ -1921,6 +1930,19 @@ static int do_execveat_common(int fd, st
- 	if (retval < 0)
- 		goto out_free;
++	buf = kzalloc(size, GFP_KERNEL);
+ 	if (!buf)
+ 		return;
  
-+	/*
-+	 * When argv is empty, add an empty string ("") as argv[0] to
-+	 * ensure confused userspace programs that start processing
-+	 * from argv[1] won't end up walking envp. See also
-+	 * bprm_stack_limits().
-+	 */
-+	if (bprm->argc == 0) {
-+		retval = copy_string_kernel("", bprm);
-+		if (retval < 0)
-+			goto out_free;
-+		bprm->argc = 1;
-+	}
+@@ -224,43 +226,30 @@ static void fb_cvt_print_name(struct fb_cvt_data *cvt)
+ 	pixcount_mod = (cvt->xres * (cvt->yres/cvt->interlace)) % 1000000;
+ 	pixcount_mod /= 1000;
+ 
+-	read = snprintf(buf+offset, cnt, "fbcvt: %dx%d@%d: CVT Name - ",
+-			cvt->xres, cvt->yres, cvt->refresh);
+-	offset += read;
+-	cnt -= read;
++	off += scnprintf(buf + off, size - off, "fbcvt: %dx%d@%d: CVT Name - ",
++			    cvt->xres, cvt->yres, cvt->refresh);
+ 
+-	if (cvt->status)
+-		snprintf(buf+offset, cnt, "Not a CVT standard - %d.%03d Mega "
+-			 "Pixel Image\n", pixcount, pixcount_mod);
+-	else {
+-		if (pixcount) {
+-			read = snprintf(buf+offset, cnt, "%d", pixcount);
+-			cnt -= read;
+-			offset += read;
+-		}
++	if (cvt->status) {
++		off += scnprintf(buf + off, size - off,
++				 "Not a CVT standard - %d.%03d Mega Pixel Image\n",
++				 pixcount, pixcount_mod);
++	} else {
++		if (pixcount)
++			off += scnprintf(buf + off, size - off, "%d", pixcount);
+ 
+-		read = snprintf(buf+offset, cnt, ".%03dM", pixcount_mod);
+-		cnt -= read;
+-		offset += read;
++		off += scnprintf(buf + off, size - off, ".%03dM", pixcount_mod);
+ 
+ 		if (cvt->aspect_ratio == 0)
+-			read = snprintf(buf+offset, cnt, "3");
++			off += scnprintf(buf + off, size - off, "3");
+ 		else if (cvt->aspect_ratio == 3)
+-			read = snprintf(buf+offset, cnt, "4");
++			off += scnprintf(buf + off, size - off, "4");
+ 		else if (cvt->aspect_ratio == 1 || cvt->aspect_ratio == 4)
+-			read = snprintf(buf+offset, cnt, "9");
++			off += scnprintf(buf + off, size - off, "9");
+ 		else if (cvt->aspect_ratio == 2)
+-			read = snprintf(buf+offset, cnt, "A");
+-		else
+-			read = 0;
+-		cnt -= read;
+-		offset += read;
+-
+-		if (cvt->flags & FB_CVT_FLAG_REDUCED_BLANK) {
+-			read = snprintf(buf+offset, cnt, "-R");
+-			cnt -= read;
+-			offset += read;
+-		}
++			off += scnprintf(buf + off, size - off, "A");
 +
- 	retval = bprm_execve(bprm, fd, filename, flags);
- out_free:
- 	free_bprm(bprm);
-@@ -1949,6 +1971,8 @@ int kernel_execve(const char *kernel_fil
++		if (cvt->flags & FB_CVT_FLAG_REDUCED_BLANK)
++			off += scnprintf(buf + off, size - off, "-R");
  	}
  
- 	retval = count_strings_kernel(argv);
-+	if (WARN_ON_ONCE(retval == 0))
-+		retval = -EINVAL;
- 	if (retval < 0)
- 		goto out_free;
- 	bprm->argc = retval;
+ 	printk(KERN_INFO "%s\n", buf);
+-- 
+2.34.1
+
 
 

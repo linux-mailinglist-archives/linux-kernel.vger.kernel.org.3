@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08DDF4F4752
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D66F74F485F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245331AbiDEVId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
+        id S1381766AbiDEViN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349328AbiDEJtj (ORCPT
+        with ESMTP id S1349333AbiDEJtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:39 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750EA2DC0;
-        Tue,  5 Apr 2022 02:44:00 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332005FD3;
+        Tue,  5 Apr 2022 02:44:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E0F1DCE1C90;
-        Tue,  5 Apr 2022 09:43:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F008BC385A3;
-        Tue,  5 Apr 2022 09:43:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BD1B615E5;
+        Tue,  5 Apr 2022 09:44:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65FA1C385A1;
+        Tue,  5 Apr 2022 09:44:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151837;
-        bh=USIV6tRqy66XOIxfR2N4RULW07jOJN91zpV0+anrASQ=;
+        s=korg; t=1649151845;
+        bh=WsW6LYCcpbPQgKzCuxo3ZJJAg7nrkIEDruFN5ptLGag=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qP2rhGqJaUQHpv25Ux5SBoUHr8GTkRiK6LECx/qM3JhU631wCmxB3fsvMMlidPIrN
-         ubGPQiEFU9bcJMN4uCEtifNemo0/1079jToIdGw6UABbvUWX1DEhWPq5edb0iW4DeR
-         46Cqbd3Xe3Q8cx/xoeaq+jmZ4Csyub0vGDvN1zJk=
+        b=xjqXxcB8ykg3qrypjRYLMaimJxe+X2sZjjBSp++2OBFqGvm5urkZuX2jM+3+CxjSm
+         5+Jy9G4c0VMub8O/UroZCtoURmHUbNGQvICn813PtKvJzhYv5i2skNTpGoKeqfMC8X
+         pF4WqLHOIZ/GH8mkbgs50M0VHoGsZYKsA5EE3keY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Phil Sutter <phil@nwl.cc>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 559/913] ipv4: Fix route lookups when handling ICMP redirects and PMTU updates
-Date:   Tue,  5 Apr 2022 09:27:01 +0200
-Message-Id: <20220405070356.602112699@linuxfoundation.org>
+Subject: [PATCH 5.15 562/913] netfilter: conntrack: Add and use nf_ct_set_auto_assign_helper_warned()
+Date:   Tue,  5 Apr 2022 09:27:04 +0200
+Message-Id: <20220405070356.691019707@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,113 +55,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guillaume Nault <gnault@redhat.com>
+From: Phil Sutter <phil@nwl.cc>
 
-[ Upstream commit 544b4dd568e3b09c1ab38a759d3187e7abda11a0 ]
+[ Upstream commit 31d0bb9763efad30377505f3467f958d1ebe1e3d ]
 
-The PMTU update and ICMP redirect helper functions initialise their fl4
-variable with either __build_flow_key() or build_sk_flow_key(). These
-initialisation functions always set ->flowi4_scope with
-RT_SCOPE_UNIVERSE and might set the ECN bits of ->flowi4_tos. This is
-not a problem when the route lookup is later done via
-ip_route_output_key_hash(), which properly clears the ECN bits from
-->flowi4_tos and initialises ->flowi4_scope based on the RTO_ONLINK
-flag. However, some helpers call fib_lookup() directly, without
-sanitising the tos and scope fields, so the route lookup can fail and,
-as a result, the ICMP redirect or PMTU update aren't taken into
-account.
+The function sets the pernet boolean to avoid the spurious warning from
+nf_ct_lookup_helper() when assigning conntrack helpers via nftables.
 
-Fix this by extracting the ->flowi4_tos and ->flowi4_scope sanitisation
-code into ip_rt_fix_tos(), then use this function in handlers that call
-fib_lookup() directly.
-
-Note 1: We can't sanitise ->flowi4_tos and ->flowi4_scope in a central
-place (like __build_flow_key() or flowi4_init_output()), because
-ip_route_output_key_hash() expects non-sanitised values. When called
-with sanitised values, it can erroneously overwrite RT_SCOPE_LINK with
-RT_SCOPE_UNIVERSE in ->flowi4_scope. Therefore we have to be careful to
-sanitise the values only for those paths that don't call
-ip_route_output_key_hash().
-
-Note 2: The problem is mostly about sanitising ->flowi4_tos. Having
-->flowi4_scope initialised with RT_SCOPE_UNIVERSE instead of
-RT_SCOPE_LINK probably wasn't really a problem: sockets with the
-SOCK_LOCALROUTE flag set (those that'd result in RTO_ONLINK being set)
-normally shouldn't receive ICMP redirects or PMTU updates.
-
-Fixes: 4895c771c7f0 ("ipv4: Add FIB nexthop exceptions.")
-Signed-off-by: Guillaume Nault <gnault@redhat.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 1a64edf54f55 ("netfilter: nft_ct: add helper set support")
+Signed-off-by: Phil Sutter <phil@nwl.cc>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/route.c | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ include/net/netfilter/nf_conntrack_helper.h | 1 +
+ net/netfilter/nf_conntrack_helper.c         | 6 ++++++
+ net/netfilter/nft_ct.c                      | 3 +++
+ 3 files changed, 10 insertions(+)
 
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index 23833660584d..ed9b6842a9a0 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -506,6 +506,15 @@ void __ip_select_ident(struct net *net, struct iphdr *iph, int segs)
- }
- EXPORT_SYMBOL(__ip_select_ident);
+diff --git a/include/net/netfilter/nf_conntrack_helper.h b/include/net/netfilter/nf_conntrack_helper.h
+index 37f0fbefb060..9939c366f720 100644
+--- a/include/net/netfilter/nf_conntrack_helper.h
++++ b/include/net/netfilter/nf_conntrack_helper.h
+@@ -177,4 +177,5 @@ void nf_nat_helper_unregister(struct nf_conntrack_nat_helper *nat);
+ int nf_nat_helper_try_module_get(const char *name, u16 l3num,
+ 				 u8 protonum);
+ void nf_nat_helper_put(struct nf_conntrack_helper *helper);
++void nf_ct_set_auto_assign_helper_warned(struct net *net);
+ #endif /*_NF_CONNTRACK_HELPER_H*/
+diff --git a/net/netfilter/nf_conntrack_helper.c b/net/netfilter/nf_conntrack_helper.c
+index ae4488a13c70..ceb38a7b37cb 100644
+--- a/net/netfilter/nf_conntrack_helper.c
++++ b/net/netfilter/nf_conntrack_helper.c
+@@ -556,6 +556,12 @@ static const struct nf_ct_ext_type helper_extend = {
+ 	.id	= NF_CT_EXT_HELPER,
+ };
  
-+static void ip_rt_fix_tos(struct flowi4 *fl4)
++void nf_ct_set_auto_assign_helper_warned(struct net *net)
 +{
-+	__u8 tos = RT_FL_TOS(fl4);
-+
-+	fl4->flowi4_tos = tos & IPTOS_RT_MASK;
-+	fl4->flowi4_scope = tos & RTO_ONLINK ?
-+			    RT_SCOPE_LINK : RT_SCOPE_UNIVERSE;
++	nf_ct_pernet(net)->auto_assign_helper_warned = true;
 +}
++EXPORT_SYMBOL_GPL(nf_ct_set_auto_assign_helper_warned);
 +
- static void __build_flow_key(const struct net *net, struct flowi4 *fl4,
- 			     const struct sock *sk,
- 			     const struct iphdr *iph,
-@@ -831,6 +840,7 @@ static void ip_do_redirect(struct dst_entry *dst, struct sock *sk, struct sk_buf
- 	rt = (struct rtable *) dst;
- 
- 	__build_flow_key(net, &fl4, sk, iph, oif, tos, prot, mark, 0);
-+	ip_rt_fix_tos(&fl4);
- 	__ip_do_redirect(rt, skb, &fl4, true);
- }
- 
-@@ -1055,6 +1065,7 @@ static void ip_rt_update_pmtu(struct dst_entry *dst, struct sock *sk,
- 	struct flowi4 fl4;
- 
- 	ip_rt_build_flow_key(&fl4, sk, skb);
-+	ip_rt_fix_tos(&fl4);
- 
- 	/* Don't make lookup fail for bridged encapsulations */
- 	if (skb && netif_is_any_bridge_port(skb->dev))
-@@ -1129,6 +1140,8 @@ void ipv4_sk_update_pmtu(struct sk_buff *skb, struct sock *sk, u32 mtu)
- 			goto out;
- 
- 		new = true;
-+	} else {
-+		ip_rt_fix_tos(&fl4);
- 	}
- 
- 	__ip_rt_update_pmtu((struct rtable *)xfrm_dst_path(&rt->dst), &fl4, mtu);
-@@ -2609,7 +2622,6 @@ static struct rtable *__mkroute_output(const struct fib_result *res,
- struct rtable *ip_route_output_key_hash(struct net *net, struct flowi4 *fl4,
- 					const struct sk_buff *skb)
+ void nf_conntrack_helper_pernet_init(struct net *net)
  {
--	__u8 tos = RT_FL_TOS(fl4);
- 	struct fib_result res = {
- 		.type		= RTN_UNSPEC,
- 		.fi		= NULL,
-@@ -2619,9 +2631,7 @@ struct rtable *ip_route_output_key_hash(struct net *net, struct flowi4 *fl4,
- 	struct rtable *rth;
+ 	struct nf_conntrack_net *cnet = nf_ct_pernet(net);
+diff --git a/net/netfilter/nft_ct.c b/net/netfilter/nft_ct.c
+index 99b1de14ff7e..54ecb9fbf2de 100644
+--- a/net/netfilter/nft_ct.c
++++ b/net/netfilter/nft_ct.c
+@@ -1040,6 +1040,9 @@ static int nft_ct_helper_obj_init(const struct nft_ctx *ctx,
+ 	if (err < 0)
+ 		goto err_put_helper;
  
- 	fl4->flowi4_iif = LOOPBACK_IFINDEX;
--	fl4->flowi4_tos = tos & IPTOS_RT_MASK;
--	fl4->flowi4_scope = ((tos & RTO_ONLINK) ?
--			 RT_SCOPE_LINK : RT_SCOPE_UNIVERSE);
-+	ip_rt_fix_tos(fl4);
++	/* Avoid the bogus warning, helper will be assigned after CT init */
++	nf_ct_set_auto_assign_helper_warned(ctx->net);
++
+ 	return 0;
  
- 	rcu_read_lock();
- 	rth = ip_route_output_key_hash_rcu(net, fl4, &res, skb);
+ err_put_helper:
 -- 
 2.34.1
 

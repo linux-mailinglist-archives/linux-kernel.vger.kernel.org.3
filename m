@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30CA94F411E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B21D64F4150
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349323AbiDEOBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
+        id S245187AbiDEOAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237381AbiDEJ3O (ORCPT
+        with ESMTP id S237320AbiDEJ3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:29:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6995CD5E98;
-        Tue,  5 Apr 2022 02:16:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5DAB87F;
+        Tue,  5 Apr 2022 02:16:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 003E161645;
-        Tue,  5 Apr 2022 09:16:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A47AC385A0;
-        Tue,  5 Apr 2022 09:16:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDC99615E4;
+        Tue,  5 Apr 2022 09:16:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE1DEC385A3;
+        Tue,  5 Apr 2022 09:16:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150187;
-        bh=xy9Jh7YCPAtsV0LzYube/oUMsOL+d9K7ShDZMd4Eujc=;
+        s=korg; t=1649150190;
+        bh=b9u20PZhQs/jTWosZgSYdjk7kUpAxmrC0Cj9hgZHClU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QzHUaPb3pXnCOiO146e3wKmTrgBy3cLJKGCo+fT/EP7Je9U02qp3PfdW6Sq4PO0O0
-         ciRW6v7kyMIqQqknVMlIYwJDF1m0ROP57jowsOMNjjKOrg+HxqrIoMAA0MvcpEWaUy
-         p67eJR5/xDlcIhU5x/yoltztAM/tOV7r0hZS2Gd0=
+        b=TOeItpWv0dAzOZrGuOLJqlyCmpnv4x0wzmYK9EuGqgKQs8btMU3zykEp0AAoLdWko
+         QW0Q+yqRstJD2panrzmCc2mfm6Z7FYZ7H4oE+bTBzXaaOtu/joL0lD2WiQn1Keaiu5
+         YAB6IjNULRSvQt61dubw17T6NTzaldPcZkSNeVOQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Rob Herring <robh@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 5.16 0985/1017] media: dt-bindings: media: hynix,hi846: add link-frequencies description
-Date:   Tue,  5 Apr 2022 09:31:38 +0200
-Message-Id: <20220405070423.440754134@linuxfoundation.org>
+        stable@vger.kernel.org, Yong Wu <yong.wu@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Subject: [PATCH 5.16 0986/1017] dt-bindings: memory: mtk-smi: Rename clock to clocks
+Date:   Tue,  5 Apr 2022 09:31:39 +0200
+Message-Id: <20220405070423.470722809@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -58,42 +56,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Kepplinger <martin.kepplinger@puri.sm>
+From: Yong Wu <yong.wu@mediatek.com>
 
-commit a44b8e8c9b2615ea7cf2361cbca3c1dff8119c87 upstream.
+commit 5bf7fa48374eafe29dbb30448a0b0c083853583f upstream.
 
-link-frequencies is required but only mentioned in the example. Add
-it to the description.
+The property "clock" should be rename to "clocks", and delete the "items",
+the minItems/maxItems should not be put under "items".
 
-Fixes: f3ce7200ca18 ("media: dt-bindings: media: document SK Hynix Hi-846 MIPI CSI-2 8M pixel sensor")
-Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 27bb0e42855a ("dt-bindings: memory: mediatek: Convert SMI to DT schema")
+Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+Acked-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Link: https://lore.kernel.org/r/20220113111057.29918-2-yong.wu@mediatek.com
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+ Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml |   28 ++++------
+ Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml   |   14 ++---
+ 2 files changed, 18 insertions(+), 24 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
-index 5d0fc18a2ea2..1e2df8cf2937 100644
---- a/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/hynix,hi846.yaml
-@@ -69,8 +69,11 @@ properties:
-                   - const: 1
-                   - const: 2
+--- a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-common.yaml
+@@ -88,10 +88,9 @@ allOf:
+               - mediatek,mt2701-smi-common
+     then:
+       properties:
+-        clock:
+-          items:
+-            minItems: 3
+-            maxItems: 3
++        clocks:
++          minItems: 3
++          maxItems: 3
+         clock-names:
+           items:
+             - const: apb
+@@ -108,10 +107,9 @@ allOf:
+       required:
+         - mediatek,smi
+       properties:
+-        clock:
+-          items:
+-            minItems: 3
+-            maxItems: 3
++        clocks:
++          minItems: 3
++          maxItems: 3
+         clock-names:
+           items:
+             - const: apb
+@@ -133,10 +131,9 @@ allOf:
  
-+          link-frequencies: true
-+
-         required:
-           - data-lanes
-+          - link-frequencies
+     then:
+       properties:
+-        clock:
+-          items:
+-            minItems: 4
+-            maxItems: 4
++        clocks:
++          minItems: 4
++          maxItems: 4
+         clock-names:
+           items:
+             - const: apb
+@@ -146,10 +143,9 @@ allOf:
  
- required:
-   - compatible
--- 
-2.35.1
-
+     else:  # for gen2 HW that don't have gals
+       properties:
+-        clock:
+-          items:
+-            minItems: 2
+-            maxItems: 2
++        clocks:
++          minItems: 2
++          maxItems: 2
+         clock-names:
+           items:
+             - const: apb
+--- a/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.yaml
+@@ -79,10 +79,9 @@ allOf:
+ 
+     then:
+       properties:
+-        clock:
+-          items:
+-            minItems: 3
+-            maxItems: 3
++        clocks:
++          minItems: 3
++          maxItems: 3
+         clock-names:
+           items:
+             - const: apb
+@@ -91,10 +90,9 @@ allOf:
+ 
+     else:
+       properties:
+-        clock:
+-          items:
+-            minItems: 2
+-            maxItems: 2
++        clocks:
++          minItems: 2
++          maxItems: 2
+         clock-names:
+           items:
+             - const: apb
 
 

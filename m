@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A80754F3E5A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:43:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F23ED4F4137
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344272AbiDENXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:23:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
+        id S1388608AbiDENYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344999AbiDEJWH (ORCPT
+        with ESMTP id S1345104AbiDEJWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:22:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4DBE45;
-        Tue,  5 Apr 2022 02:08:58 -0700 (PDT)
+        Tue, 5 Apr 2022 05:22:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B282193F1;
+        Tue,  5 Apr 2022 02:09:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7F6BB80DA1;
-        Tue,  5 Apr 2022 09:08:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27140C385A0;
-        Tue,  5 Apr 2022 09:08:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48E20B81BAE;
+        Tue,  5 Apr 2022 09:09:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90899C385A2;
+        Tue,  5 Apr 2022 09:09:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149735;
-        bh=FeVBirWUDsSNdHRMTaN1D2cMhlAoxiuriyc5vJocNC0=;
+        s=korg; t=1649149740;
+        bh=9kDFyJtz5aRFD1HOBnwM1kO3is+NlX0c7whwfOn5IIw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O5cJD3KGXaOMmrLoVqBVS/FoqZAqQ9QPL05tKyMFQvXONqWR+aMlPG/Avwz3w1ySh
-         YDZYNpFnCIkSEena8hZG+O3pautJlSWSD/HGKsnbn2qhGAwcYMIHYUVDu4nDfkjR7P
-         C1ls6oHpA3IcjgoV8ZJEDiOn4UwlA1d1D7yBfY4A=
+        b=Oq+5GHs67/ccz9GPY1/s/d9wchY22PE55zPtAnB91GG3K6WFB2tmHTZMNDq+ENrUV
+         U78l8o1AIhh5TqbjX7hrSnKmM704+Fm5IkUx7fEuKdldchFJcR7/usoQ4/+HQCNrTk
+         1YY8S32JZ3PZE8A10adRaDlOJD5yMgRzpkqKDUso=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0822/1017] ASoC: madera: Add dependencies on MFD
-Date:   Tue,  5 Apr 2022 09:28:55 +0200
-Message-Id: <20220405070418.646923318@linuxfoundation.org>
+Subject: [PATCH 5.16 0823/1017] media: atomisp_gmin_platform: Add DMI quirk to not turn AXP ELDO2 regulator off on some boards
+Date:   Tue,  5 Apr 2022 09:28:56 +0200
+Message-Id: <20220405070418.676820023@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,58 +55,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit ec29170c724ca30305fc3a19ba2ee73ecac65509 ]
+[ Upstream commit 2c39a01154ea57d596470afa1d278e3be3b37f6a ]
 
-The Madera CODECs use regmap_irq functions but nothing ensures that
-regmap_irq is built into the kernel. Add dependencies on the ASoC
-symbols for the relevant MFD component. There is no point in building
-the ASoC driver if the MFD doesn't support it and the MFD part contains
-the necessary dependencies to ensure everything is built into the
-kernel.
+The TrekStor SurfTab duo W1 10.1 has a hw bug where turning eldo2 back on
+after having turned it off causes the CPLM3218 ambient-light-sensor on
+the front camera sensor's I2C bus to crash, hanging the bus.
 
-Reported-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220203115025.16464-1-ckeepax@opensource.cirrus.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Add a DMI quirk table for systems on which to leave eldo2 on.
+
+Note an alternative fix is to turn off the CPLM3218 ambient-light-sensor
+as long as the camera sensor is being used, this is what Windows seems
+to do as a workaround (based on analyzing the DSDT). But that is not
+easy to do cleanly under Linux.
+
+Link: https://lore.kernel.org/linux-media/20220116215204.307649-10-hdegoede@redhat.com
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/Kconfig | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../media/atomisp/pci/atomisp_gmin_platform.c  | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
-index 3a610ba183ff..0d4e1fb9befc 100644
---- a/sound/soc/codecs/Kconfig
-+++ b/sound/soc/codecs/Kconfig
-@@ -707,6 +707,7 @@ config SND_SOC_CS4349
+diff --git a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
+index 62dc06e22476..cd0a771454da 100644
+--- a/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
++++ b/drivers/staging/media/atomisp/pci/atomisp_gmin_platform.c
+@@ -729,6 +729,21 @@ static int axp_regulator_set(struct device *dev, struct gmin_subdev *gs,
+ 	return 0;
+ }
  
- config SND_SOC_CS47L15
- 	tristate
-+	depends on MFD_CS47L15
++/*
++ * Some boards contain a hw-bug where turning eldo2 back on after having turned
++ * it off causes the CPLM3218 ambient-light-sensor on the image-sensor's I2C bus
++ * to crash, hanging the bus. Do not turn eldo2 off on these systems.
++ */
++static const struct dmi_system_id axp_leave_eldo2_on_ids[] = {
++	{
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "TrekStor"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "SurfTab duo W1 10.1 (VT4)"),
++		},
++	},
++	{ }
++};
++
+ static int axp_v1p8_on(struct device *dev, struct gmin_subdev *gs)
+ {
+ 	int ret;
+@@ -763,6 +778,9 @@ static int axp_v1p8_off(struct device *dev, struct gmin_subdev *gs)
+ 	if (ret)
+ 		return ret;
  
- config SND_SOC_CS47L24
- 	tristate
-@@ -714,15 +715,19 @@ config SND_SOC_CS47L24
- 
- config SND_SOC_CS47L35
- 	tristate
-+	depends on MFD_CS47L35
- 
- config SND_SOC_CS47L85
- 	tristate
-+	depends on MFD_CS47L85
- 
- config SND_SOC_CS47L90
- 	tristate
-+	depends on MFD_CS47L90
- 
- config SND_SOC_CS47L92
- 	tristate
-+	depends on MFD_CS47L92
- 
- # Cirrus Logic Quad-Channel ADC
- config SND_SOC_CS53L30
++	if (dmi_check_system(axp_leave_eldo2_on_ids))
++		return 0;
++
+ 	ret = axp_regulator_set(dev, gs, gs->eldo2_sel_reg, gs->eldo2_1p8v,
+ 				ELDO_CTRL_REG, gs->eldo2_ctrl_shift, false);
+ 	return ret;
 -- 
 2.34.1
 

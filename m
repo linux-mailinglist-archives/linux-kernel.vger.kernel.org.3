@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09BA44F2CBF
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4628C4F2AAC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243360AbiDEJjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
+        id S243212AbiDEJjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239345AbiDEIT7 (ORCPT
+        with ESMTP id S239363AbiDEIUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:19:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9757BBBE16;
-        Tue,  5 Apr 2022 01:11:39 -0700 (PDT)
+        Tue, 5 Apr 2022 04:20:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D4FBF024;
+        Tue,  5 Apr 2022 01:11:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4F003B81B90;
-        Tue,  5 Apr 2022 08:11:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9698CC385A1;
-        Tue,  5 Apr 2022 08:11:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E614860B0E;
+        Tue,  5 Apr 2022 08:11:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 001E8C385A0;
+        Tue,  5 Apr 2022 08:11:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146297;
-        bh=azqboIJ5y0Yr5IvR820dxE9/va/K/Mt0d4vP8SsaK2I=;
+        s=korg; t=1649146316;
+        bh=UALNzqvcXmqNvJhIT5/hpuibeLTK0XCfJTnwpvzLAw8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o9SzDsGxkfcRNmtP3+Kbo3chSyKYieXCP350NYf4guZup2FMRuGGWr9nP3G5OpHY/
-         KUB8n6/L/q7knQ679vxbLpZ6ntv6oCTEcy4FcxQhiAsaLXNNUlw/FR3PisYjkUiyKu
-         r+BnXKhbzJcaUi656rvwhO+SnP9u9eNa7hbkygL8=
+        b=pr1k1YaI3d1UG/H3f7DM9+ZihIlyjtZZrfaxEcRnhL9ycGi5n01+TIZoMhG3icH/v
+         HroYoLB70XJ52Yzi9ED4PPSdl3BHYXdFMxg+Pfv+WL7KqhBM0KadcOZyO8/M9qJhwD
+         4aInXqNi7BxEXUeaa57dCY8Uhdzz4+/MENFeJocI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        stable@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0711/1126] clk: renesas: r9a07g044: Update multiplier and divider values for PLL2/3
-Date:   Tue,  5 Apr 2022 09:24:18 +0200
-Message-Id: <20220405070428.469608014@linuxfoundation.org>
+Subject: [PATCH 5.17 0713/1126] mxser: fix xmit_buf leak in activate when LSR == 0xff
+Date:   Tue,  5 Apr 2022 09:24:20 +0200
+Message-Id: <20220405070428.526224623@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,42 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+From: Jiri Slaby <jslaby@suse.cz>
 
-[ Upstream commit b289cdecc7c3e25e001cde260c882e4d9a8b0772 ]
+[ Upstream commit cd3a4907ee334b40d7aa880c7ab310b154fd5cd4 ]
 
-As per the HW manual (Rev.1.00 Sep, 2021) PLL2 and PLL3 should be
-1600 MHz, but with current multiplier and divider values this resulted
-to 1596 MHz.
+When LSR is 0xff in ->activate() (rather unlike), we return an error.
+Provided ->shutdown() is not called when ->activate() fails, nothing
+actually frees the buffer in this case.
 
-This patch updates the multiplier and divider values for PLL2 and PLL3
-so that we get the exact (1600 MHz) values.
+Fix this by properly freeing the buffer in a designated label. We jump
+there also from the "!info->type" if now too.
 
-Fixes: 17f0ff3d49ff1 ("clk: renesas: Add support for R9A07G044 SoC")
-Suggested-by: Biju Das <biju.das.jz@bp.renesas.com>
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Link: https://lore.kernel.org/r/20211223093223.4725-1-prabhakar.mahadev-lad.rj@bp.renesas.com
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Fixes: 6769140d3047 ("tty: mxser: use the tty_port_open method")
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Link: https://lore.kernel.org/r/20220124071430.14907-6-jslaby@suse.cz
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/renesas/r9a07g044-cpg.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/tty/mxser.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/clk/renesas/r9a07g044-cpg.c b/drivers/clk/renesas/r9a07g044-cpg.c
-index 79042bf46fe8..46359afef0d4 100644
---- a/drivers/clk/renesas/r9a07g044-cpg.c
-+++ b/drivers/clk/renesas/r9a07g044-cpg.c
-@@ -88,8 +88,8 @@ static const struct cpg_core_clk r9a07g044_core_clks[] __initconst = {
- 	DEF_FIXED(".osc", R9A07G044_OSCCLK, CLK_EXTAL, 1, 1),
- 	DEF_FIXED(".osc_div1000", CLK_OSC_DIV1000, CLK_EXTAL, 1, 1000),
- 	DEF_SAMPLL(".pll1", CLK_PLL1, CLK_EXTAL, PLL146_CONF(0)),
--	DEF_FIXED(".pll2", CLK_PLL2, CLK_EXTAL, 133, 2),
--	DEF_FIXED(".pll3", CLK_PLL3, CLK_EXTAL, 133, 2),
-+	DEF_FIXED(".pll2", CLK_PLL2, CLK_EXTAL, 200, 3),
-+	DEF_FIXED(".pll3", CLK_PLL3, CLK_EXTAL, 200, 3),
- 	DEF_FIXED(".pll3_400", CLK_PLL3_400, CLK_PLL3, 1, 4),
- 	DEF_FIXED(".pll3_533", CLK_PLL3_533, CLK_PLL3, 1, 3),
+diff --git a/drivers/tty/mxser.c b/drivers/tty/mxser.c
+index c858aff721c4..fbb796f83753 100644
+--- a/drivers/tty/mxser.c
++++ b/drivers/tty/mxser.c
+@@ -744,6 +744,7 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
+ 	struct mxser_port *info = container_of(port, struct mxser_port, port);
+ 	unsigned long page;
+ 	unsigned long flags;
++	int ret;
  
+ 	page = __get_free_page(GFP_KERNEL);
+ 	if (!page)
+@@ -753,9 +754,9 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
+ 
+ 	if (!info->type) {
+ 		set_bit(TTY_IO_ERROR, &tty->flags);
+-		free_page(page);
+ 		spin_unlock_irqrestore(&info->slock, flags);
+-		return 0;
++		ret = 0;
++		goto err_free_xmit;
+ 	}
+ 	info->port.xmit_buf = (unsigned char *) page;
+ 
+@@ -775,8 +776,10 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
+ 		if (capable(CAP_SYS_ADMIN)) {
+ 			set_bit(TTY_IO_ERROR, &tty->flags);
+ 			return 0;
+-		} else
+-			return -ENODEV;
++		}
++
++		ret = -ENODEV;
++		goto err_free_xmit;
+ 	}
+ 
+ 	/*
+@@ -821,6 +824,10 @@ static int mxser_activate(struct tty_port *port, struct tty_struct *tty)
+ 	spin_unlock_irqrestore(&info->slock, flags);
+ 
+ 	return 0;
++err_free_xmit:
++	free_page(page);
++	info->port.xmit_buf = NULL;
++	return ret;
+ }
+ 
+ /*
 -- 
 2.34.1
 

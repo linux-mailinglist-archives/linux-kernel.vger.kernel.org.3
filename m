@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAFFB4F2718
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1B1D4F26F3
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235226AbiDEH7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
+        id S232975AbiDEH4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233554AbiDEHr6 (ORCPT
+        with ESMTP id S233556AbiDEHr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 03:47:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7D892867;
-        Tue,  5 Apr 2022 00:45:25 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F5293186;
+        Tue,  5 Apr 2022 00:45:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BD5F616C4;
-        Tue,  5 Apr 2022 07:45:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78C15C340EE;
-        Tue,  5 Apr 2022 07:45:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0CB0616BF;
+        Tue,  5 Apr 2022 07:45:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D44CBC340EE;
+        Tue,  5 Apr 2022 07:45:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144724;
-        bh=8EEY95TxpF936PDJ+mCL90Eb807SR//DOOEt2RlxtWE=;
+        s=korg; t=1649144730;
+        bh=rxSC1Q8UZg6s7D6ZuFhMZ73XWIIqRVLONcnqQ9q8kC4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=buiXvy2BFx1/jGFQWzLv0DgdbTKAPAHo5oA/h+v6tHuQ9DGZgxLa1JlbZ4E5ogfeC
-         hwM1TCtSlhSRzQBWFeMatZYJRIhMDN7P8rDuXJC+RAinG0l/4WJk5fIjN9uKoV+DyP
-         kNMfAaIblFr9CHePEfeD58+PbQSC+MrUVigfkd4w=
+        b=KhEDCQ/o0kuKiECehsfsQfgms55PeBfUSfifHHmSq528ArSFgsIgyyI7wqd7z2qYG
+         EuUCdK+j7xvmTQHA/YAxgLBwHh7gfybj+wcJpuWMJcGvNZ/fQ9i+LP29bVjSK8eITT
+         xlgzWl0Uxv9sRatA4pdZMWh0gNyT2aKtS2s/La3I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>
-Subject: [PATCH 5.17 0149/1126] ARM: dts: at91: sama7g5: Remove unused properties in i2c nodes
-Date:   Tue,  5 Apr 2022 09:14:56 +0200
-Message-Id: <20220405070411.957745687@linuxfoundation.org>
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Subject: [PATCH 5.17 0151/1126] ARM: dts: exynos: fix UART3 pins configuration in Exynos5250
+Date:   Tue,  5 Apr 2022 09:14:58 +0200
+Message-Id: <20220405070412.017330247@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,53 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tudor Ambarus <tudor.ambarus@microchip.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-commit cbb92a7717d2e1c512b7e81c6b22c7298b58a881 upstream.
+commit 372d7027fed43c8570018e124cf78b89523a1f8e upstream.
 
-The "atmel,use-dma-rx", "atmel,use-dma-rx" dt properties are not used by
-the i2c-at91 driver, nor they are defined in the bindings file, thus remove
-them.
+The gpa1-4 pin was put twice in UART3 pin configuration of Exynos5250,
+instead of proper pin gpa1-5.
 
-Cc: stable@vger.kernel.org
-Fixes: 7540629e2fc7 ("ARM: dts: at91: add sama7g5 SoC DT and sama7g5-ek")
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Reviewed-by: Eugen Hristev <eugen.hristev@microchip.com>
-Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-Link: https://lore.kernel.org/r/20220302161854.32177-1-tudor.ambarus@microchip.com
+Fixes: f8bfe2b050f3 ("ARM: dts: add pin state information in client nodes for Exynos5 platforms")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+Link: https://lore.kernel.org/r/20211230195325.328220-1-krzysztof.kozlowski@canonical.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/sama7g5.dtsi |    6 ------
- 1 file changed, 6 deletions(-)
+ arch/arm/boot/dts/exynos5250-pinctrl.dtsi |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/arm/boot/dts/sama7g5.dtsi
-+++ b/arch/arm/boot/dts/sama7g5.dtsi
-@@ -382,8 +382,6 @@
- 				dmas = <&dma0 AT91_XDMAC_DT_PERID(7)>,
- 					<&dma0 AT91_XDMAC_DT_PERID(8)>;
- 				dma-names = "rx", "tx";
--				atmel,use-dma-rx;
--				atmel,use-dma-tx;
- 				status = "disabled";
- 			};
- 		};
-@@ -558,8 +556,6 @@
- 				dmas = <&dma0 AT91_XDMAC_DT_PERID(21)>,
- 					<&dma0 AT91_XDMAC_DT_PERID(22)>;
- 				dma-names = "rx", "tx";
--				atmel,use-dma-rx;
--				atmel,use-dma-tx;
- 				status = "disabled";
- 			};
- 		};
-@@ -584,8 +580,6 @@
- 				dmas = <&dma0 AT91_XDMAC_DT_PERID(23)>,
- 					<&dma0 AT91_XDMAC_DT_PERID(24)>;
- 				dma-names = "rx", "tx";
--				atmel,use-dma-rx;
--				atmel,use-dma-tx;
- 				status = "disabled";
- 			};
- 		};
+--- a/arch/arm/boot/dts/exynos5250-pinctrl.dtsi
++++ b/arch/arm/boot/dts/exynos5250-pinctrl.dtsi
+@@ -260,7 +260,7 @@
+ 	};
+ 
+ 	uart3_data: uart3-data {
+-		samsung,pins = "gpa1-4", "gpa1-4";
++		samsung,pins = "gpa1-4", "gpa1-5";
+ 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+ 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+ 		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
 
 

@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 702054F4475
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C9D24F43A5
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239595AbiDENji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60098 "EHLO
+        id S244897AbiDEN1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345198AbiDEJWV (ORCPT
+        with ESMTP id S1345222AbiDEJWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:22:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3838D2CE13;
-        Tue,  5 Apr 2022 02:09:35 -0700 (PDT)
+        Tue, 5 Apr 2022 05:22:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6982C33A33;
+        Tue,  5 Apr 2022 02:09:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD23661577;
-        Tue,  5 Apr 2022 09:09:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF27FC385A0;
-        Tue,  5 Apr 2022 09:09:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED386B80DA1;
+        Tue,  5 Apr 2022 09:09:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64CB9C385A2;
+        Tue,  5 Apr 2022 09:09:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149774;
-        bh=dfwslQshdOGJvbL0tDsFD7rVh7X7+dHJBiQvqfoAksw=;
+        s=korg; t=1649149779;
+        bh=8OMFyOaAk1BzOs8bd9OEu8SQHWkFyA3dMkqxRl+sTPI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ebmFm1tILaLHhl2FprVv+5sMHi1WeeeXZ5xiCPBblmhxxpIEZmRWHsmZVGt8aAjyE
-         KI7itjlB1udBHKRibY4lWf1Ok1QmjS/4ZAHNy1Zhn7C315uaOsf1TV5NW59bMchOMs
-         Ey9hYthMTv8R8S+HKzIcCWNMeSvBF0vg7lWMj+M4=
+        b=V7q50ER06Jj2HvX+J8kh1lzlOUfTdWQa6sNSMuvAfrgk0RwXoRq0AcM/kPPObm/rI
+         9Gco0wvwsKjafCaU95Bkvz3OtewVL7deBWYEugESQF7U8PuaFTLj0mryA5hn/dhGvT
+         Wo9CrmOUEtuDzIU8D1dAw1dJ3whqG5m0JD3t/pdo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Boris Burkov <boris@bur.io>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
+        stable@vger.kernel.org, Chao Yu <chao.yu@oppo.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0798/1017] btrfs: do not clean up repair bio if submit fails
-Date:   Tue,  5 Apr 2022 09:28:31 +0200
-Message-Id: <20220405070417.937994199@linuxfoundation.org>
+Subject: [PATCH 5.16 0800/1017] f2fs: compress: fix to print raw data size in error path of lz4 decompression
+Date:   Tue,  5 Apr 2022 09:28:33 +0200
+Message-Id: <20220405070417.997536220@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,59 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Josef Bacik <josef@toxicpanda.com>
+From: Chao Yu <chao@kernel.org>
 
-[ Upstream commit 8cbc3001a3264d998d6b6db3e23f935c158abd4d ]
+[ Upstream commit d284af43f703760e261b1601378a0c13a19d5f1f ]
 
-The submit helper will always run bio_endio() on the bio if it fails to
-submit, so cleaning up the bio just leads to a variety of use-after-free
-and NULL pointer dereference bugs because we race with the endio
-function that is cleaning up the bio.  Instead just return BLK_STS_OK as
-the repair function has to continue to process the rest of the pages,
-and the endio for the repair bio will do the appropriate cleanup for the
-page that it was given.
+In lz4_decompress_pages(), if size of decompressed data is not equal to
+expected one, we should print the size rather than size of target buffer
+for decompressed data, fix it.
 
-Reviewed-by: Boris Burkov <boris@bur.io>
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/extent_io.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ fs/f2fs/compress.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
-index c3f466362103..ced0195f3390 100644
---- a/fs/btrfs/extent_io.c
-+++ b/fs/btrfs/extent_io.c
-@@ -2640,7 +2640,6 @@ int btrfs_repair_one_sector(struct inode *inode,
- 	const int icsum = bio_offset >> fs_info->sectorsize_bits;
- 	struct bio *repair_bio;
- 	struct btrfs_bio *repair_bbio;
--	blk_status_t status;
+diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
+index 190a3c4d4c91..ced0fd54658c 100644
+--- a/fs/f2fs/compress.c
++++ b/fs/f2fs/compress.c
+@@ -313,10 +313,9 @@ static int lz4_decompress_pages(struct decompress_io_ctx *dic)
+ 	}
  
- 	btrfs_debug(fs_info,
- 		   "repair read error: read error at %llu", start);
-@@ -2679,13 +2678,13 @@ int btrfs_repair_one_sector(struct inode *inode,
- 		    "repair read error: submitting new read to mirror %d",
- 		    failrec->this_mirror);
- 
--	status = submit_bio_hook(inode, repair_bio, failrec->this_mirror,
--				 failrec->bio_flags);
--	if (status) {
--		free_io_failure(failure_tree, tree, failrec);
--		bio_put(repair_bio);
--	}
--	return blk_status_to_errno(status);
-+	/*
-+	 * At this point we have a bio, so any errors from submit_bio_hook()
-+	 * will be handled by the endio on the repair_bio, so we can't return an
-+	 * error here.
-+	 */
-+	submit_bio_hook(inode, repair_bio, failrec->this_mirror, failrec->bio_flags);
-+	return BLK_STS_OK;
- }
- 
- static void end_page_read(struct page *page, bool uptodate, u64 start, u32 len)
+ 	if (ret != PAGE_SIZE << dic->log_cluster_size) {
+-		printk_ratelimited("%sF2FS-fs (%s): lz4 invalid rlen:%zu, "
++		printk_ratelimited("%sF2FS-fs (%s): lz4 invalid ret:%d, "
+ 					"expected:%lu\n", KERN_ERR,
+-					F2FS_I_SB(dic->inode)->sb->s_id,
+-					dic->rlen,
++					F2FS_I_SB(dic->inode)->sb->s_id, ret,
+ 					PAGE_SIZE << dic->log_cluster_size);
+ 		return -EIO;
+ 	}
 -- 
 2.34.1
 

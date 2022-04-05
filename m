@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC6B4F4588
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B174F4455
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381017AbiDEPNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
+        id S1383249AbiDEMZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346408AbiDEJo7 (ORCPT
+        with ESMTP id S245035AbiDEIxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:44:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764AADA098;
-        Tue,  5 Apr 2022 02:30:35 -0700 (PDT)
+        Tue, 5 Apr 2022 04:53:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B949E4F;
+        Tue,  5 Apr 2022 01:50:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1066A61680;
-        Tue,  5 Apr 2022 09:30:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA17C385A2;
-        Tue,  5 Apr 2022 09:30:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E5397B81BBF;
+        Tue,  5 Apr 2022 08:50:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3213CC385A0;
+        Tue,  5 Apr 2022 08:50:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151034;
-        bh=qHfZR3XOEbdpOjmMWZoUuZZmMk1njjr2FLMPPXofQL0=;
+        s=korg; t=1649148620;
+        bh=Sj/DwQPdk+OkqD45CWF3GBdQWWnxYbtVOIv0SUNhoOs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KtRdRypgfDTaGdCbOm8xerS4XUJY+To2ydVnhTWvvDvxPBF81yz0avqDjMgQ5qwsV
-         0iSc+Rix7PFxgjjEaszNmsXwZTBaRqq7km/x2lpJ/9CWCt155m+qoslPSemf2iMaN8
-         8esyVPcSttwzQHGvt/fPGxiag//FecxFghFueJ1E=
+        b=qINKVppcfjt4DMfBe2kVW/jkbnuVn4lZIrFZ7GodLed0/YlPCrGgkk0HLMd+UdDh4
+         /iaODM7ij8xWWbNMo9aA/BQk3p0m8vdBGHFxGOqzYmCaWIZkj1U9CtHw0Ph6uS8OCo
+         mUogJzgCgLkuYNTLtHhVqQluW8XNp26SJEPHjfzM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 270/913] media: staging: media: imx: imx7-mipi-csis: Make subdev name unique
-Date:   Tue,  5 Apr 2022 09:22:12 +0200
-Message-Id: <20220405070347.951212421@linuxfoundation.org>
+Subject: [PATCH 5.16 0420/1017] selftests, xsk: Fix rx_full stats test
+Date:   Tue,  5 Apr 2022 09:22:13 +0200
+Message-Id: <20220405070406.756369419@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,58 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-[ Upstream commit 5be7f8c91d25089be847a71b336c13b5bb0db772 ]
+[ Upstream commit b4ec6a19231224f6b08dc54ea07da4c4090e8ee3 ]
 
-When multiple CSIS instances are present in a single graph, they are
-currently all named "imx7-mipi-csis.0", which breaks the entity name
-uniqueness requirement. Fix it by using the device name to create the
-subdev name.
+Fix the rx_full stats test so that it correctly reports pass even when
+the fill ring is not full of buffers.
 
-Fixes: 7807063b862b ("media: staging/imx7: add MIPI CSI-2 receiver subdev for i.MX7")
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Rui Miguel Silva <rmfrfs@gmail.com>
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Jerome Brunet <jbrunet@baylibre.com>
-Tested-by: Jerome Brunet <jbrunet@baylibre.com> # On i.MX8MP
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 872a1184dbf2 ("selftests: xsk: Put the same buffer only once in the fill ring")
+Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Tested-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Link: https://lore.kernel.org/bpf/20220121123508.12759-1-magnus.karlsson@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/xdpxceiver.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 41e33535de55..d35e52374116 100644
---- a/drivers/staging/media/imx/imx7-mipi-csis.c
-+++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -32,7 +32,6 @@
- #include <media/v4l2-subdev.h>
- 
- #define CSIS_DRIVER_NAME			"imx7-mipi-csis"
--#define CSIS_SUBDEV_NAME			CSIS_DRIVER_NAME
- 
- #define CSIS_PAD_SINK				0
- #define CSIS_PAD_SOURCE				1
-@@ -311,7 +310,6 @@ struct csi_state {
- 	struct reset_control *mrst;
- 	struct regulator *mipi_phy_regulator;
- 	const struct mipi_csis_info *info;
--	u8 index;
- 
- 	struct v4l2_subdev sd;
- 	struct media_pad pads[CSIS_PADS_NUM];
-@@ -1303,8 +1301,8 @@ static int mipi_csis_subdev_init(struct csi_state *state)
- 
- 	v4l2_subdev_init(sd, &mipi_csis_subdev_ops);
- 	sd->owner = THIS_MODULE;
--	snprintf(sd->name, sizeof(sd->name), "%s.%d",
--		 CSIS_SUBDEV_NAME, state->index);
-+	snprintf(sd->name, sizeof(sd->name), "csis-%s",
-+		 dev_name(state->dev));
- 
- 	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
- 	sd->ctrl_handler = NULL;
+diff --git a/tools/testing/selftests/bpf/xdpxceiver.c b/tools/testing/selftests/bpf/xdpxceiver.c
+index 621342ec30c4..37d4873d9a2e 100644
+--- a/tools/testing/selftests/bpf/xdpxceiver.c
++++ b/tools/testing/selftests/bpf/xdpxceiver.c
+@@ -902,7 +902,10 @@ static bool rx_stats_are_valid(struct ifobject *ifobject)
+ 			return true;
+ 		case STAT_TEST_RX_FULL:
+ 			xsk_stat = stats.rx_ring_full;
+-			expected_stat -= RX_FULL_RXQSIZE;
++			if (ifobject->umem->num_frames < XSK_RING_PROD__DEFAULT_NUM_DESCS)
++				expected_stat = ifobject->umem->num_frames - RX_FULL_RXQSIZE;
++			else
++				expected_stat = XSK_RING_PROD__DEFAULT_NUM_DESCS - RX_FULL_RXQSIZE;
+ 			break;
+ 		case STAT_TEST_RX_FILL_EMPTY:
+ 			xsk_stat = stats.rx_fill_ring_empty_descs;
 -- 
 2.34.1
 

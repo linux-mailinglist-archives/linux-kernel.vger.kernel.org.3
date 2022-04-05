@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB514F4F6B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD07C4F519C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1838004AbiDFAtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:49:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34780 "EHLO
+        id S1453667AbiDFCGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242985AbiDEKfX (ORCPT
+        with ESMTP id S242987AbiDEKfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 06:35:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F42B522D3;
-        Tue,  5 Apr 2022 03:21:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C397F13E3D;
+        Tue,  5 Apr 2022 03:19:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C70761676;
-        Tue,  5 Apr 2022 10:21:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29665C385A0;
-        Tue,  5 Apr 2022 10:21:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F0FF61562;
+        Tue,  5 Apr 2022 10:19:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DD24C385A1;
+        Tue,  5 Apr 2022 10:19:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154079;
-        bh=nCcQDCqkA9cH4A6fJiPyNXrg6fpHBNG8Ok6IbQz4LvM=;
+        s=korg; t=1649153985;
+        bh=Z6OySrSX32Hkx5sPKsLlBhXghDamj+OXKiODTtxYEdk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wDfGtZObKUw//voa6FjqZ2UCeVMgii+ZPd7d763L7rSSAuQl3zHS4su7d3KE6BDNR
-         nKiS5qH4KAnxeV630Sc5p+o3n8phfMLbdNw3SNjfNWB9xHiC0jGEWz/fXkod36AlVX
-         RFwCv7KqF0tDLtnvGJQKVsW7RrpYxNVPEkakN7tQ=
+        b=NbQSyLfGGFD0lPEcryVJDDWNhQuSJeu8T/Z4UcYCSofi1QmX0+cg8p14JNZx7a4bA
+         MdSC/I7okRYDUOx027sITEN3hoXr9vhWx5TnVegpX6+OGlkTxBQCeBs2jAS2IFwCSc
+         dnoBxY00digHOpCvT88micafBTwpWbMzIIBltzbk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        stable@vger.kernel.org,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 413/599] NFS: remove unneeded check in decode_devicenotify_args()
-Date:   Tue,  5 Apr 2022 09:31:47 +0200
-Message-Id: <20220405070311.122819483@linuxfoundation.org>
+Subject: [PATCH 5.10 417/599] staging: mt7621-dts: fix GB-PC2 devicetree
+Date:   Tue,  5 Apr 2022 09:31:51 +0200
+Message-Id: <20220405070311.241220517@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -55,37 +56,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexey Khoroshilov <khoroshilov@ispras.ru>
+From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-[ Upstream commit cb8fac6d2727f79f211e745b16c9abbf4d8be652 ]
+[ Upstream commit 5bc148649cf358d0cccf525452a4efbd4bc89a0f ]
 
-[You don't often get email from khoroshilov@ispras.ru. Learn why this is important at http://aka.ms/LearnAboutSenderIdentification.]
+Fix the GB-PC2 devicetree. Refer to the schematics of the device for more
+information.
 
-Overflow check in not needed anymore after we switch to kmalloc_array().
+GB-PC2 devicetree fixes:
+- Include mt7621.dtsi instead of gbpc1.dts. Add the missing definitions.
+- Remove gpio-leds node as the system LED is not wired to anywhere on
+the board and the power LED is directly wired to GND.
+- Remove uart3 pin group from gpio-pinmux node as it's not used as GPIO.
+- Use reg 7 for the external phy to be on par with
+Documentation/devicetree/bindings/net/dsa/mt7530.txt.
+- Use the status value "okay".
 
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-Fixes: a4f743a6bb20 ("NFSv4.1: Convert open-coded array allocation calls to kmalloc_array()")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Link: https://github.com/ngiger/GnuBee_Docs/blob/master/GB-PCx/Documents/GB-PC2_V1.1_schematic.pdf
+Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Link: https://lore.kernel.org/r/20220311090320.3068-2-arinc.unal@arinc9.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/callback_xdr.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/staging/mt7621-dts/gbpc2.dts | 110 +++++++++++++++++++++++++--
+ 1 file changed, 102 insertions(+), 8 deletions(-)
 
-diff --git a/fs/nfs/callback_xdr.c b/fs/nfs/callback_xdr.c
-index 1725079a0527..ca8a4aa351dc 100644
---- a/fs/nfs/callback_xdr.c
-+++ b/fs/nfs/callback_xdr.c
-@@ -272,10 +272,6 @@ __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
- 	n = ntohl(*p++);
- 	if (n == 0)
- 		goto out;
--	if (n > ULONG_MAX / sizeof(*args->devs)) {
--		status = htonl(NFS4ERR_BADXDR);
--		goto out;
--	}
+diff --git a/drivers/staging/mt7621-dts/gbpc2.dts b/drivers/staging/mt7621-dts/gbpc2.dts
+index f9b69091bfc0..6f6fed071dda 100644
+--- a/drivers/staging/mt7621-dts/gbpc2.dts
++++ b/drivers/staging/mt7621-dts/gbpc2.dts
+@@ -1,27 +1,121 @@
+ /dts-v1/;
  
- 	args->devs = kmalloc_array(n, sizeof(*args->devs), GFP_KERNEL);
- 	if (!args->devs) {
+-#include "gbpc1.dts"
++#include "mt7621.dtsi"
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
+ 
+ / {
+ 	compatible = "gnubee,gb-pc2", "mediatek,mt7621-soc";
+ 	model = "GB-PC2";
++
++	memory@0 {
++		device_type = "memory";
++		reg = <0x00000000 0x1c000000>,
++		      <0x20000000 0x04000000>;
++	};
++
++	chosen {
++		bootargs = "console=ttyS0,57600";
++	};
++
++	palmbus: palmbus@1e000000 {
++		i2c@900 {
++			status = "okay";
++		};
++	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++
++		reset {
++			label = "reset";
++			gpios = <&gpio 18 GPIO_ACTIVE_HIGH>;
++			linux,code = <KEY_RESTART>;
++		};
++	};
+ };
+ 
+-&default_gpio {
+-	groups = "wdt", "uart3";
+-	function = "gpio";
++&sdhci {
++	status = "okay";
++};
++
++&spi0 {
++	status = "okay";
++
++	m25p80@0 {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		compatible = "jedec,spi-nor";
++		reg = <0>;
++		spi-max-frequency = <50000000>;
++		broken-flash-reset;
++
++		partition@0 {
++			label = "u-boot";
++			reg = <0x0 0x30000>;
++			read-only;
++		};
++
++		partition@30000 {
++			label = "u-boot-env";
++			reg = <0x30000 0x10000>;
++			read-only;
++		};
++
++		factory: partition@40000 {
++			label = "factory";
++			reg = <0x40000 0x10000>;
++			read-only;
++		};
++
++		partition@50000 {
++			label = "firmware";
++			reg = <0x50000 0x1fb0000>;
++		};
++	};
++};
++
++&pcie {
++	status = "okay";
++};
++
++&pinctrl {
++	pinctrl-names = "default";
++	pinctrl-0 = <&state_default>;
++
++	state_default: state-default {
++		gpio-pinmux {
++			groups = "wdt";
++			function = "gpio";
++		};
++	};
+ };
+ 
+ &ethernet {
+ 	gmac1: mac@1 {
+-		status = "ok";
+-		phy-handle = <&phy_external>;
++		status = "okay";
++		phy-handle = <&ethphy7>;
+ 	};
+ 
+ 	mdio-bus {
+-		phy_external: ethernet-phy@5 {
+-			reg = <5>;
++		ethphy7: ethernet-phy@7 {
++			reg = <7>;
+ 			phy-mode = "rgmii-rxid";
+ 		};
+ 	};
+ };
++
++&switch0 {
++	ports {
++		port@0 {
++			status = "okay";
++			label = "ethblack";
++		};
++
++		port@4 {
++			status = "okay";
++			label = "ethblue";
++		};
++	};
++};
 -- 
 2.34.1
 

@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530954F2A1D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 12:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B374F2CB0
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347672AbiDEJ2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
+        id S1347647AbiDEJ2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239580AbiDEIUO (ORCPT
+        with ESMTP id S239591AbiDEIUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:14 -0400
+        Tue, 5 Apr 2022 04:20:15 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BB79FD1;
-        Tue,  5 Apr 2022 01:16:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB96119;
+        Tue,  5 Apr 2022 01:16:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF502609D0;
-        Tue,  5 Apr 2022 08:16:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A6C7C385A0;
-        Tue,  5 Apr 2022 08:16:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C3EF60AFB;
+        Tue,  5 Apr 2022 08:16:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADB54C385A2;
+        Tue,  5 Apr 2022 08:16:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146613;
-        bh=Me7CbwGB6LaBferc2IlQNNffvc01zJ+0rfh2uBnaN6U=;
+        s=korg; t=1649146616;
+        bh=dEfiMNHodUedoAdVSKWatF8SIhfkcB5hJTSU9UfBY0Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zziimf3J6ZHtsun5hbwb2TWNHVXvgqmhq9Cjx2dNy/bmP6j+2YxYKZbrswmf5k5oK
-         Lq99HByVJu5GyfG+4n5Pg/O7rNqrAuDNbB+RgYogAxX4kc65oVJnO1zQxMeO3Feim5
-         Nax+bWLZc8wdV83RjcGr3889gihuAZEZaIdl3zzQ=
+        b=HbBlLNcqvG4hc9P+m5C5nx31yS30NnjhhUPlwLq2mP2P7Ct3FRaUK/NMwkKYYCC9C
+         HZRYqo6FO4CWOWRVSA03MIMMLNZ4sBKsrPyhmkbAnxA5y6Q+8w5GdThR0qKMbtwm6v
+         dGSk2OIPQKox9WRCvwE+rRlX2iLZtWGQMx69c8dU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0826/1126] selftests: tls: skip cmsg_to_pipe tests with TLS=n
-Date:   Tue,  5 Apr 2022 09:26:13 +0200
-Message-Id: <20220405070431.808394645@linuxfoundation.org>
+Subject: [PATCH 5.17 0827/1126] net/sched: act_ct: fix ref leak when switching zones
+Date:   Tue,  5 Apr 2022 09:26:14 +0200
+Message-Id: <20220405070431.836758864@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -58,48 +56,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 
-[ Upstream commit 5c7e49be96ea24776a5b5a07c732c477294add00 ]
+[ Upstream commit bcb74e132a76ce0502bb33d5b65533a4ed72d159 ]
 
-These are negative tests, testing TLS code rejects certain
-operations. They won't pass without TLS enabled, pure TCP
-accepts those operations.
+When switching zones or network namespaces without doing a ct clear in
+between, it is now leaking a reference to the old ct entry. That's
+because tcf_ct_skb_nfct_cached() returns false and
+tcf_ct_flow_table_lookup() may simply overwrite it.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Fixes: d87d67fd61ef ("selftests: tls: test splicing cmsgs")
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+The fix is to, as the ct entry is not reusable, free it already at
+tcf_ct_skb_nfct_cached().
+
+Reported-by: Florian Westphal <fw@strlen.de>
+Fixes: 2f131de361f6 ("net/sched: act_ct: Fix flow table lookup after ct clear or switching zones")
+Signed-off-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/net/tls.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ net/sched/act_ct.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-index 6e468e0f42f7..5d70b04c482c 100644
---- a/tools/testing/selftests/net/tls.c
-+++ b/tools/testing/selftests/net/tls.c
-@@ -683,6 +683,9 @@ TEST_F(tls, splice_cmsg_to_pipe)
- 	char buf[10];
- 	int p[2];
+diff --git a/net/sched/act_ct.c b/net/sched/act_ct.c
+index ec19f625863a..25718acc0ff0 100644
+--- a/net/sched/act_ct.c
++++ b/net/sched/act_ct.c
+@@ -605,22 +605,25 @@ static bool tcf_ct_skb_nfct_cached(struct net *net, struct sk_buff *skb,
+ 	if (!ct)
+ 		return false;
+ 	if (!net_eq(net, read_pnet(&ct->ct_net)))
+-		return false;
++		goto drop_ct;
+ 	if (nf_ct_zone(ct)->id != zone_id)
+-		return false;
++		goto drop_ct;
  
-+	if (self->notls)
-+		SKIP(return, "no TLS support");
-+
- 	ASSERT_GE(pipe(p), 0);
- 	EXPECT_EQ(tls_send_cmsg(self->fd, 100, test_str, send_len, 0), 10);
- 	EXPECT_EQ(splice(self->cfd, NULL, p[1], NULL, send_len, 0), -1);
-@@ -703,6 +706,9 @@ TEST_F(tls, splice_dec_cmsg_to_pipe)
- 	char buf[10];
- 	int p[2];
+ 	/* Force conntrack entry direction. */
+ 	if (force && CTINFO2DIR(ctinfo) != IP_CT_DIR_ORIGINAL) {
+ 		if (nf_ct_is_confirmed(ct))
+ 			nf_ct_kill(ct);
  
-+	if (self->notls)
-+		SKIP(return, "no TLS support");
+-		nf_ct_put(ct);
+-		nf_ct_set(skb, NULL, IP_CT_UNTRACKED);
+-
+-		return false;
++		goto drop_ct;
+ 	}
+ 
+ 	return true;
 +
- 	ASSERT_GE(pipe(p), 0);
- 	EXPECT_EQ(tls_send_cmsg(self->fd, 100, test_str, send_len, 0), 10);
- 	EXPECT_EQ(recv(self->cfd, buf, send_len, 0), -1);
++drop_ct:
++	nf_ct_put(ct);
++	nf_ct_set(skb, NULL, IP_CT_UNTRACKED);
++
++	return false;
+ }
+ 
+ /* Trim the skb to the length specified by the IP/IPv6 header,
 -- 
 2.34.1
 

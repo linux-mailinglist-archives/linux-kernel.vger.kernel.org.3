@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3055A4F44C8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D5F4F43E6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239795AbiDEPG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
+        id S244354AbiDEPKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345342AbiDEJnY (ORCPT
+        with ESMTP id S1345315AbiDEJnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:43:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD46C1CA7;
-        Tue,  5 Apr 2022 02:28:41 -0700 (PDT)
+        Tue, 5 Apr 2022 05:43:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40995C1CAF;
+        Tue,  5 Apr 2022 02:28:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 785A8B81CA4;
-        Tue,  5 Apr 2022 09:28:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD733C385A2;
-        Tue,  5 Apr 2022 09:28:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20E56616B8;
+        Tue,  5 Apr 2022 09:28:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E4FBC385A0;
+        Tue,  5 Apr 2022 09:28:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150919;
-        bh=/i6LEHp6MXl/1B5p7zXt1iozGUaMzCHOMQj1xftmfPU=;
+        s=korg; t=1649150927;
+        bh=cDOHcd6ONfY3Vz+ceAFwv+xN7bIZgszIs24tb7wI428=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JBZB81hkqcC3czE8HZmZZCltYXL/v9cgIi3udtFwqM1HQXyUt/W32JImwt07bIHPY
-         JnEfY+ldUGMzozLg9z7ydqvC2sCFsmT+cpOU5LLubwjDhKiMz46qSgwrJGyquHsFJI
-         b5la54OUl/E2I8JzZilIOlpYkCIRCrG/8rHTPY8Y=
+        b=Oc3rKyknmdl27VBczQyUC9Kq+SydQb151jvTGLJduovMGMa1w70hABMUtUhaDK+dY
+         ZBEb48IQ1PCHtemAynn/uSWqXHbM0qcavJ+tvyBZSs+QjbrKWaJwt3dZHNERQVlIIJ
+         8nRwgQGjVNgxs6503++5kAPdgZExCJugQLaJfGlo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Suman Anna <s-anna@ti.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Drew Fustini <dfustini@baylibre.com>,
+        stable@vger.kernel.org,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 228/913] clocksource/drivers/timer-ti-dm: Fix regression from errata i940 fix
-Date:   Tue,  5 Apr 2022 09:21:30 +0200
-Message-Id: <20220405070346.690998149@linuxfoundation.org>
+Subject: [PATCH 5.15 231/913] clocksource/drivers/timer-microchip-pit64b: Use notrace
+Date:   Tue,  5 Apr 2022 09:21:33 +0200
+Message-Id: <20220405070346.780433829@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -49,139 +48,44 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,TVD_SPACE_RATIO,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Drew Fustini <dfustini@baylibre.com>
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-[ Upstream commit bceaae3bac0ce27c549bb050336d8d08abc2ee54 ]
+[ Upstream commit ff10ee97cb203262e88d9c8bc87369cbd4004a0c ]
 
-The existing fix for errata i940 causes a conflict for IPU2 which is
-using timer 3 and 4. From arch/arm/boot/dts/dra7-ipu-dsp-common.dtsi:
+Use notrace for mchp_pit64b_sched_read_clk() to avoid recursive call of
+prepare_ftrace_return() when issuing:
+echo function_graph > /sys/kernel/debug/tracing/current_tracer
 
-  &ipu2 {
-          mboxes = <&mailbox6 &mbox_ipu2_ipc3x>;
-          ti,timers = <&timer3>;
-          ti,watchdog-timers = <&timer4>, <&timer9>;
-  };
-
-The conflict was noticed when booting mainline on the BeagleBoard X15
-which has a TI AM5728 SoC:
-
-  remoteproc remoteproc1: 55020000.ipu is available
-  remoteproc remoteproc1: powering up 55020000.ipu
-  remoteproc remoteproc1: Booting fw image dra7-ipu2-fw.xem4
-  omap-rproc 55020000.ipu: could not get timer platform device
-  omap-rproc 55020000.ipu: omap_rproc_enable_timers failed: -19
-  remoteproc remoteproc1: can't start rproc 55020000.ipu: -19
-
-This change modifies the errata fix to instead use timer 15 and 16 which
-resolves the timer conflict.
-
-It does not appear to introduce any latency regression. Results from
-cyclictest with original errata fix using dmtimer 3 and 4:
-
-  # cyclictest --mlockall --smp --priority=80 --interval=200 --distance=0
-  policy: fifo: loadavg: 0.02 0.03 0.05
-
-  T: 0 ( 1449) P:80 I:200 C: 800368 Min:   0 Act:   32 Avg:   22 Max:  128
-  T: 1 ( 1450) P:80 I:200 C: 800301 Min:   0 Act:   12 Avg:   23 Max:   70
-
-The results after the change to dmtimer 15 and 16:
-
-  # cyclictest --mlockall --smp --priority=80 --interval=200 --distance=0
-  policy: fifo: loadavg: 0.36 0.19 0.07
-
-  T: 0 ( 1711) P:80 I:200 C: 759599 Min:   0 Act:    6 Avg:   22 Max:  108
-  T: 1 ( 1712) P:80 I:200 C: 759539 Min:   0 Act:   19 Avg:   23 Max:   79
-
-Fixes: 25de4ce5ed02 ("clocksource/drivers/timer-ti-dm: Handle dra7 timer wrap errata i940")
-Link: https://lore.kernel.org/linux-omap/YfWsG0p6to3IJuvE@x1/
-Suggested-by: Suman Anna <s-anna@ti.com>
-Reviewed-by: Tony Lindgren <tony@atomide.com>
-Signed-off-by: Drew Fustini <dfustini@baylibre.com>
-Link: https://lore.kernel.org/r/20220204053503.1409162-1-dfustini@baylibre.com
+Fixes: 625022a5f160 ("clocksource/drivers/timer-microchip-pit64b: Add Microchip PIT64B support")
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Link: https://lore.kernel.org/r/20220304133601.2404086-3-claudiu.beznea@microchip.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/dra7-l4.dtsi             | 5 ++---
- arch/arm/boot/dts/dra7.dtsi                | 8 ++++----
- drivers/clocksource/timer-ti-dm-systimer.c | 4 ++--
- 3 files changed, 8 insertions(+), 9 deletions(-)
+ drivers/clocksource/timer-microchip-pit64b.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/dra7-l4.dtsi b/arch/arm/boot/dts/dra7-l4.dtsi
-index 956a26d52a4c..0a11bacffc1f 100644
---- a/arch/arm/boot/dts/dra7-l4.dtsi
-+++ b/arch/arm/boot/dts/dra7-l4.dtsi
-@@ -3482,8 +3482,7 @@
- 				ti,timer-pwm;
- 			};
- 		};
--
--		target-module@2c000 {			/* 0x4882c000, ap 17 02.0 */
-+		timer15_target: target-module@2c000 {	/* 0x4882c000, ap 17 02.0 */
- 			compatible = "ti,sysc-omap4-timer", "ti,sysc";
- 			reg = <0x2c000 0x4>,
- 			      <0x2c010 0x4>;
-@@ -3511,7 +3510,7 @@
- 			};
- 		};
+diff --git a/drivers/clocksource/timer-microchip-pit64b.c b/drivers/clocksource/timer-microchip-pit64b.c
+index cfa4ec7ef396..790d2c9b42a7 100644
+--- a/drivers/clocksource/timer-microchip-pit64b.c
++++ b/drivers/clocksource/timer-microchip-pit64b.c
+@@ -165,7 +165,7 @@ static u64 mchp_pit64b_clksrc_read(struct clocksource *cs)
+ 	return mchp_pit64b_cnt_read(mchp_pit64b_cs_base);
+ }
  
--		target-module@2e000 {			/* 0x4882e000, ap 19 14.0 */
-+		timer16_target: target-module@2e000 {	/* 0x4882e000, ap 19 14.0 */
- 			compatible = "ti,sysc-omap4-timer", "ti,sysc";
- 			reg = <0x2e000 0x4>,
- 			      <0x2e010 0x4>;
-diff --git a/arch/arm/boot/dts/dra7.dtsi b/arch/arm/boot/dts/dra7.dtsi
-index dfc1ef8ef6ae..61a3fb3e2a2f 100644
---- a/arch/arm/boot/dts/dra7.dtsi
-+++ b/arch/arm/boot/dts/dra7.dtsi
-@@ -1320,20 +1320,20 @@
- };
- 
- /* Local timers, see ARM architected timer wrap erratum i940 */
--&timer3_target {
-+&timer15_target {
- 	ti,no-reset-on-init;
- 	ti,no-idle;
- 	timer@0 {
--		assigned-clocks = <&l4per_clkctrl DRA7_L4PER_TIMER3_CLKCTRL 24>;
-+		assigned-clocks = <&l4per3_clkctrl DRA7_L4PER3_TIMER15_CLKCTRL 24>;
- 		assigned-clock-parents = <&timer_sys_clk_div>;
- 	};
- };
- 
--&timer4_target {
-+&timer16_target {
- 	ti,no-reset-on-init;
- 	ti,no-idle;
- 	timer@0 {
--		assigned-clocks = <&l4per_clkctrl DRA7_L4PER_TIMER4_CLKCTRL 24>;
-+		assigned-clocks = <&l4per3_clkctrl DRA7_L4PER3_TIMER16_CLKCTRL 24>;
- 		assigned-clock-parents = <&timer_sys_clk_div>;
- 	};
- };
-diff --git a/drivers/clocksource/timer-ti-dm-systimer.c b/drivers/clocksource/timer-ti-dm-systimer.c
-index 1fccb457fcc5..2737407ff069 100644
---- a/drivers/clocksource/timer-ti-dm-systimer.c
-+++ b/drivers/clocksource/timer-ti-dm-systimer.c
-@@ -694,9 +694,9 @@ static int __init dmtimer_percpu_quirk_init(struct device_node *np, u32 pa)
- 		return 0;
- 	}
- 
--	if (pa == 0x48034000)		/* dra7 dmtimer3 */
-+	if (pa == 0x4882c000)           /* dra7 dmtimer15 */
- 		return dmtimer_percpu_timer_init(np, 0);
--	else if (pa == 0x48036000)	/* dra7 dmtimer4 */
-+	else if (pa == 0x4882e000)      /* dra7 dmtimer16 */
- 		return dmtimer_percpu_timer_init(np, 1);
- 
- 	return 0;
+-static u64 mchp_pit64b_sched_read_clk(void)
++static u64 notrace mchp_pit64b_sched_read_clk(void)
+ {
+ 	return mchp_pit64b_cnt_read(mchp_pit64b_cs_base);
+ }
 -- 
 2.34.1
 

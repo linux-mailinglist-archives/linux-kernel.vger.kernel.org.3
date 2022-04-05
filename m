@@ -2,43 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 622744F511C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C7B4F512A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1844778AbiDFBw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
+        id S1845080AbiDFBx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:53:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353076AbiDEKFf (ORCPT
+        with ESMTP id S1353270AbiDEKF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:05:35 -0400
+        Tue, 5 Apr 2022 06:05:56 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD88BD89E;
-        Tue,  5 Apr 2022 02:54:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9031EBF022;
+        Tue,  5 Apr 2022 02:54:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7D5AB818F3;
-        Tue,  5 Apr 2022 09:54:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 402E5C385A1;
-        Tue,  5 Apr 2022 09:54:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35B27B81B75;
+        Tue,  5 Apr 2022 09:54:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 771D2C385A1;
+        Tue,  5 Apr 2022 09:54:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152453;
-        bh=mR1tmeofvXZvXFXTNTGqMDDZruOzLE65YB5ceqrb8QY=;
+        s=korg; t=1649152476;
+        bh=YlM/FbAVBUssTY6JL+0GyHEKADXKYpFt3MPUZwaeiDw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Oex92d4GgOPgFWv6ig1pKd026+8Eq/x42QduE5WL4ox0U1A2FoavhID1ZZewllM7w
-         YiaFfA6pZw9ST/+WmzSJum2M2dtqUWUdpp8duDj6WWJX8rjxgkjjvDORsl8fx33/gu
-         VU6SwUCREaKbmLK32JVC4EhgazEYY/qhK0VsWFic=
+        b=DLW3iua2dsOcb3WSEftpBBzLxs5ovs0yQTYn7aWXiZCmyRa2/RhsE1teMfVe+IVa9
+         BLsOsHUs6RtbcOpUyvIXf2xafvLm932F/NN0pUDtIWW3WVwqh1MlFfhaTXvGOFKv/D
+         49rhpvCbssIR3z1MUvQQCL8vO2RfQXrfOCBbbjJQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.15 780/913] powerpc/lib/sstep: Fix build errors with newer binutils
-Date:   Tue,  5 Apr 2022 09:30:42 +0200
-Message-Id: <20220405070403.215146406@linuxfoundation.org>
+        stable@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        dri-devel@lists.freedesktop.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Thierry Reding <treding@nvidia.com>
+Subject: [PATCH 5.15 783/913] drm/dp: Fix off-by-one in register cache size
+Date:   Tue,  5 Apr 2022 09:30:45 +0200
+Message-Id: <20220405070403.305271234@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,61 +61,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anders Roxell <anders.roxell@linaro.org>
+From: Kees Cook <keescook@chromium.org>
 
-commit 8219d31effa7be5dbc7ff915d7970672e028c701 upstream.
+commit d4da1f27396fb1dde079447a3612f4f512caed07 upstream.
 
-Building tinyconfig with gcc (Debian 11.2.0-16) and assembler (Debian
-2.37.90.20220207) the following build error shows up:
+The pcon_dsc_dpcd array holds 13 registers (0x92 through 0x9E). Fix the
+math to calculate the max size. Found from a -Warray-bounds build:
 
-  {standard input}: Assembler messages:
-  {standard input}:10576: Error: unrecognized opcode: `stbcx.'
-  {standard input}:10680: Error: unrecognized opcode: `lharx'
-  {standard input}:10694: Error: unrecognized opcode: `lbarx'
+drivers/gpu/drm/drm_dp_helper.c: In function 'drm_dp_pcon_dsc_bpp_incr':
+drivers/gpu/drm/drm_dp_helper.c:3130:28: error: array subscript 12 is outside array bounds of 'const u8[12]' {aka 'const unsigned char[12]'} [-Werror=array-bounds]
+ 3130 |         buf = pcon_dsc_dpcd[DP_PCON_DSC_BPP_INCR - DP_PCON_DSC_ENCODER];
+      |               ~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/drm_dp_helper.c:3126:39: note: while referencing 'pcon_dsc_dpcd'
+ 3126 | int drm_dp_pcon_dsc_bpp_incr(const u8 pcon_dsc_dpcd[DP_PCON_DSC_ENCODER_CAP_SIZE])
+      |                              ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Rework to add assembler directives [1] around the instruction.  The
-problem with this might be that we can trick a power6 into
-single-stepping through an stbcx. for instance, and it will execute that
-in kernel mode.
-
-[1] https://sourceware.org/binutils/docs/as/PowerPC_002dPseudo.html#PowerPC_002dPseudo
-
-Fixes: 350779a29f11 ("powerpc: Handle most loads and stores in instruction emulation code")
-Cc: stable@vger.kernel.org # v4.14+
-Co-developed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-Reviewed-by: Segher Boessenkool <segher@kernel.crashing.org>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220224162215.3406642-3-anders.roxell@linaro.org
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: David Airlie <airlied@linux.ie>
+Cc: dri-devel@lists.freedesktop.org
+Fixes: e2e16da398d9 ("drm/dp_helper: Add support for Configuring DSC for HDMI2.1 Pcon")
+Cc: stable@vger.kernel.org
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Link: https://lore.kernel.org/lkml/20211214001849.GA62559@embeddedor/
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20220105173310.2420598-1-keescook@chromium.org
+Signed-off-by: Thierry Reding <treding@nvidia.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220225035610.2552144-2-keescook@chromium.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/lib/sstep.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ include/drm/drm_dp_helper.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/powerpc/lib/sstep.c
-+++ b/arch/powerpc/lib/sstep.c
-@@ -1014,7 +1014,10 @@ NOKPROBE_SYMBOL(emulate_dcbz);
+--- a/include/drm/drm_dp_helper.h
++++ b/include/drm/drm_dp_helper.h
+@@ -455,7 +455,7 @@ struct drm_panel;
+ # define DP_FEC_BIT_ERROR_COUNT_CAP	    (1 << 3)
  
- #define __put_user_asmx(x, addr, err, op, cr)		\
- 	__asm__ __volatile__(				\
-+		".machine push\n"			\
-+		".machine power8\n"			\
- 		"1:	" op " %2,0,%3\n"		\
-+		".machine pop\n"			\
- 		"	mfcr	%1\n"			\
- 		"2:\n"					\
- 		".section .fixup,\"ax\"\n"		\
-@@ -1027,7 +1030,10 @@ NOKPROBE_SYMBOL(emulate_dcbz);
- 
- #define __get_user_asmx(x, addr, err, op)		\
- 	__asm__ __volatile__(				\
-+		".machine push\n"			\
-+		".machine power8\n"			\
- 		"1:	"op" %1,0,%2\n"			\
-+		".machine pop\n"			\
- 		"2:\n"					\
- 		".section .fixup,\"ax\"\n"		\
- 		"3:	li	%0,%3\n"		\
+ /* DP-HDMI2.1 PCON DSC ENCODER SUPPORT */
+-#define DP_PCON_DSC_ENCODER_CAP_SIZE        0xC	/* 0x9E - 0x92 */
++#define DP_PCON_DSC_ENCODER_CAP_SIZE        0xD	/* 0x92 through 0x9E */
+ #define DP_PCON_DSC_ENCODER                 0x092
+ # define DP_PCON_DSC_ENCODER_SUPPORTED      (1 << 0)
+ # define DP_PCON_DSC_PPS_ENC_OVERRIDE       (1 << 1)
 
 

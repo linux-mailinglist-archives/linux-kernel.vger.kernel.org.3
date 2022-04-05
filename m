@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D67984F4500
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B96B74F44B0
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233752AbiDEN0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:26:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
+        id S1352072AbiDEUPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345163AbiDEJWT (ORCPT
+        with ESMTP id S1349819AbiDEJvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:22:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EA02459F;
-        Tue,  5 Apr 2022 02:09:22 -0700 (PDT)
+        Tue, 5 Apr 2022 05:51:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5098A22284;
+        Tue,  5 Apr 2022 02:49:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9039CB81B75;
-        Tue,  5 Apr 2022 09:09:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3DACC385A0;
-        Tue,  5 Apr 2022 09:09:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D7B4B81B14;
+        Tue,  5 Apr 2022 09:49:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5338EC385A2;
+        Tue,  5 Apr 2022 09:49:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149760;
-        bh=giM/BAivgxJrob6NYPSr1zOqqdEG4sFSemV5nmzN4OM=;
+        s=korg; t=1649152180;
+        bh=Gyix2CQ34Gq69PxjvLdjwTq82hEB1eQcP6V6TXWjEEk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kr25cVmrb+YgGFUeR/h6vgfd9Bd2xrT0U2+jYcHPRERQsuMWv6ShuH6fTd7brub89
-         cer21trH8/QU6/f8dop0nlLFZGKoT/JTqTB1ph433M9EKRQynxkVXmDJE8WJ1TYPQr
-         HzOV56Zt7Fe6QMzRv1bR4G+ldi9AjZjmxJubCvOY=
+        b=yN89FzAXwffcAxjDz+brsHj7sR6lPn1zdz8OFZiTWalbVt55Z+Kg6SoGOQcdS6flC
+         +AFTQD2sSt7b72h/VqXDDnrJSjle60os16EpMpr7XAVmT6IKgSX+wB+htNm4I0eSkx
+         yNMrZNMomAYdJ98356ajLtTZljhwrxG6s1r2xfRs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Jing Yao <yao.jing2@zte.com.cn>, Helge Deller <deller@gmx.de>,
+        stable@vger.kernel.org, Kai Ye <yekai13@huawei.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0830/1017] video: fbdev: omapfb: panel-tpo-td043mtea1: Use sysfs_emit() instead of snprintf()
-Date:   Tue,  5 Apr 2022 09:29:03 +0200
-Message-Id: <20220405070418.881931432@linuxfoundation.org>
+Subject: [PATCH 5.15 684/913] crypto: hisilicon/qm - cleanup warning in qm_vf_read_qos
+Date:   Tue,  5 Apr 2022 09:29:06 +0200
+Message-Id: <20220405070400.337863588@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jing Yao <yao.jing2@zte.com.cn>
+From: Kai Ye <yekai13@huawei.com>
 
-[ Upstream commit c07a039cbb96748f54c02995bae8131cc9a73b0a ]
+[ Upstream commit 05b3bade290d6c940701f97f3233c07cfe27205d ]
 
-Use sysfs_emit instead of scnprintf, snprintf or sprintf.
+The kernel test rebot report this warning: Uninitialized variable: ret.
+The code flow may return value of ret directly. This value is an
+uninitialized variable, here is fix it.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Jing Yao <yao.jing2@zte.com.cn>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Kai Ye <yekai13@huawei.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../video/fbdev/omap2/omapfb/displays/panel-tpo-td043mtea1.c  | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/crypto/hisilicon/qm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td043mtea1.c b/drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td043mtea1.c
-index afac1d9445aa..57b7d1f49096 100644
---- a/drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td043mtea1.c
-+++ b/drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td043mtea1.c
-@@ -169,7 +169,7 @@ static ssize_t tpo_td043_vmirror_show(struct device *dev,
+diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+index ff1122153fbe..b616d2d8e773 100644
+--- a/drivers/crypto/hisilicon/qm.c
++++ b/drivers/crypto/hisilicon/qm.c
+@@ -4107,7 +4107,7 @@ static void qm_vf_get_qos(struct hisi_qm *qm, u32 fun_num)
+ static int qm_vf_read_qos(struct hisi_qm *qm)
  {
- 	struct panel_drv_data *ddata = dev_get_drvdata(dev);
+ 	int cnt = 0;
+-	int ret;
++	int ret = -EINVAL;
  
--	return snprintf(buf, PAGE_SIZE, "%d\n", ddata->vmirror);
-+	return sysfs_emit(buf, "%d\n", ddata->vmirror);
- }
- 
- static ssize_t tpo_td043_vmirror_store(struct device *dev,
-@@ -199,7 +199,7 @@ static ssize_t tpo_td043_mode_show(struct device *dev,
- {
- 	struct panel_drv_data *ddata = dev_get_drvdata(dev);
- 
--	return snprintf(buf, PAGE_SIZE, "%d\n", ddata->mode);
-+	return sysfs_emit(buf, "%d\n", ddata->mode);
- }
- 
- static ssize_t tpo_td043_mode_store(struct device *dev,
+ 	/* reset mailbox qos val */
+ 	qm->mb_qos = 0;
 -- 
 2.34.1
 

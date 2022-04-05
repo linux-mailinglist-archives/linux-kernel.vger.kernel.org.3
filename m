@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C771D4F4229
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F05A4F40A7
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384345AbiDEOSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
+        id S1384233AbiDEORv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239046AbiDEJdU (ORCPT
+        with ESMTP id S239511AbiDEJdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:33:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4824E240AD;
-        Tue,  5 Apr 2022 02:21:45 -0700 (PDT)
+        Tue, 5 Apr 2022 05:33:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06A04DF4C;
+        Tue,  5 Apr 2022 02:22:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D98C061574;
-        Tue,  5 Apr 2022 09:21:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2EABC385A2;
-        Tue,  5 Apr 2022 09:21:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6D5BBB81C6F;
+        Tue,  5 Apr 2022 09:22:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7C17C385A3;
+        Tue,  5 Apr 2022 09:22:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150504;
-        bh=fGvT3tGIHLpDdwH/2c4w009hCnw9IdZ34aVTsfYVZjo=;
+        s=korg; t=1649150534;
+        bh=fKGsAcnGkdDH2Ic2fcQgnLFdX1e9rvKJlOCEFRK4Q3g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BBZ33/xbvpsFl03zWA8RhcEPYYbedXxljSUpBpFGgUQWPLHQHDQyuw21tOwwZ6oBh
-         r4+4lasODEwgsfSgnR8+KPPKQHGyXZmLaxvddJRJvjQuceYBQnDjhyZwBiUCS8IAOI
-         2wNjPvicfSJuruzLzczryjPS5qik+sRJiQI/drpI=
+        b=ngqbBJb23/ghLvG7i1S8bvwsHZvtgQMvEtp+6NLuQoz1aPJfs6X0+930lF/JfrjF/
+         KbomUkBfsjYQ9Sv5nDfbQ0rPKpMTkUhbotqdvJ2ZBYsWDwovZ2y72NE0fS3OygMrl8
+         HtapKGEM8gCAhh1sFhr2u9V2Fruca0tF+2B9Q1cM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 5.15 078/913] can: m_can: m_can_tx_handler(): fix use after free of skb
-Date:   Tue,  5 Apr 2022 09:19:00 +0200
-Message-Id: <20220405070342.161958767@linuxfoundation.org>
+        stable@vger.kernel.org, Minchan Kim <minchan@kernel.org>,
+        Chris Goldsworthy <cgoldswo@codeaurora.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        John Dias <joaodias@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.15 083/913] mm: fs: fix lru_cache_disabled race in bh_lru
+Date:   Tue,  5 Apr 2022 09:19:05 +0200
+Message-Id: <20220405070342.311010162@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -54,44 +58,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Kleine-Budde <mkl@pengutronix.de>
+From: Minchan Kim <minchan@kernel.org>
 
-commit 2e8e79c416aae1de224c0f1860f2e3350fa171f8 upstream.
+commit c0226eb8bde854e016a594a16f5c0d98aca426fa upstream.
 
-can_put_echo_skb() will clone skb then free the skb. Move the
-can_put_echo_skb() for the m_can version 3.0.x directly before the
-start of the xmit in hardware, similar to the 3.1.x branch.
+Check lru_cache_disabled under bh_lru_lock.  Otherwise, it could introduce
+race below and it fails to migrate pages containing buffer_head.
 
-Fixes: 80646733f11c ("can: m_can: update to support CAN FD features")
-Link: https://lore.kernel.org/all/20220317081305.739554-1-mkl@pengutronix.de
-Cc: stable@vger.kernel.org
-Reported-by: Hangyu Hua <hbh25y@gmail.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+   CPU 0					CPU 1
+
+bh_lru_install
+                                       lru_cache_disable
+  lru_cache_disabled = false
+                                       atomic_inc(&lru_disable_count);
+				       invalidate_bh_lrus_cpu of CPU 0
+				       bh_lru_lock
+				       __invalidate_bh_lrus
+				       bh_lru_unlock
+  bh_lru_lock
+  install the bh
+  bh_lru_unlock
+
+WHen this race happens a CMA allocation fails, which is critical for
+the workload which depends on CMA.
+
+Link: https://lkml.kernel.org/r/20220308180709.2017638-1-minchan@kernel.org
+Fixes: 8cc621d2f45d ("mm: fs: invalidate BH LRU during page migration")
+Signed-off-by: Minchan Kim <minchan@kernel.org>
+Cc: Chris Goldsworthy <cgoldswo@codeaurora.org>
+Cc: Marcelo Tosatti <mtosatti@redhat.com>
+Cc: John Dias <joaodias@google.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/m_can/m_can.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ fs/buffer.c |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -1640,8 +1640,6 @@ static netdev_tx_t m_can_tx_handler(stru
- 		if (err)
- 			goto out_fail;
+--- a/fs/buffer.c
++++ b/fs/buffer.c
+@@ -1235,16 +1235,18 @@ static void bh_lru_install(struct buffer
+ 	int i;
  
--		can_put_echo_skb(skb, dev, 0, 0);
+ 	check_irqs_on();
++	bh_lru_lock();
++
+ 	/*
+ 	 * the refcount of buffer_head in bh_lru prevents dropping the
+ 	 * attached page(i.e., try_to_free_buffers) so it could cause
+ 	 * failing page migration.
+ 	 * Skip putting upcoming bh into bh_lru until migration is done.
+ 	 */
+-	if (lru_cache_disabled())
++	if (lru_cache_disabled()) {
++		bh_lru_unlock();
+ 		return;
 -
- 		if (cdev->can.ctrlmode & CAN_CTRLMODE_FD) {
- 			cccr = m_can_read(cdev, M_CAN_CCCR);
- 			cccr &= ~CCCR_CMR_MASK;
-@@ -1658,6 +1656,9 @@ static netdev_tx_t m_can_tx_handler(stru
- 			m_can_write(cdev, M_CAN_CCCR, cccr);
- 		}
- 		m_can_write(cdev, M_CAN_TXBTIE, 0x1);
-+
-+		can_put_echo_skb(skb, dev, 0, 0);
-+
- 		m_can_write(cdev, M_CAN_TXBAR, 0x1);
- 		/* End of xmit function for version 3.0.x */
- 	} else {
+-	bh_lru_lock();
++	}
+ 
+ 	b = this_cpu_ptr(&bh_lrus);
+ 	for (i = 0; i < BH_LRU_SIZE; i++) {
 
 

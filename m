@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B88D84F32B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 414E84F3053
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbiDEJpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:45:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43644 "EHLO
+        id S1346765AbiDEJp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:45:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239018AbiDEITo (ORCPT
+        with ESMTP id S238886AbiDEIT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:19:44 -0400
+        Tue, 5 Apr 2022 04:19:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615AC75E50;
-        Tue,  5 Apr 2022 01:10:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0965174DEC;
+        Tue,  5 Apr 2022 01:09:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8319608C0;
-        Tue,  5 Apr 2022 08:09:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFCAFC385A0;
-        Tue,  5 Apr 2022 08:09:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0714609AD;
+        Tue,  5 Apr 2022 08:09:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFD53C385A0;
+        Tue,  5 Apr 2022 08:09:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146199;
-        bh=jRuCT5omAFi2LWBQ7waYygaem40XsMiPNfLmN5riCA0=;
+        s=korg; t=1649146177;
+        bh=uUCyCdXvLdpZNjhvD5/H8FcoxNfveFCUJrqmtXQXbZw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vb1jWRP9Ar6kqxoryY+2nWAEUM6fGzLroa4Wt6/8/ubmQUagK41K7Z2pXtC55F4hC
-         bCJe++p8tdJWhtqxAg4tf6BTN/s7qWAPA+DnelQNpjqrQEAQEj0irt9ofqNNa2YFBP
-         di0Q8x0SDD7mlPoQC/iw84+lvmTDWvSc+ALdh5pc=
+        b=A5MGGBIkBhXCnlbPV5158stJMvsKzzToS/cshRH7SQAI51ujE+BM4IojQt2DTsJbR
+         +tnMTg4FlIB9UizH4pjfKJndY2wr02gRWwNZIyJtVRnJp2ksAq9Id5bJFWJYuQp+4V
+         dc9wqp12X08LS2AGuDhDbMU05UgOM7SFxa7U6fw0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        stable@vger.kernel.org,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0629/1126] Bluetooth: hci_sync: fix undefined return of hci_disconnect_all_sync()
-Date:   Tue,  5 Apr 2022 09:22:56 +0200
-Message-Id: <20220405070426.099142773@linuxfoundation.org>
+Subject: [PATCH 5.17 0633/1126] IB/hfi1: Allow larger MTU without AIP
+Date:   Tue,  5 Apr 2022 09:23:00 +0200
+Message-Id: <20220405070426.217324246@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,41 +57,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+From: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
 
-[ Upstream commit 8cd3c55c629efd91e5f2b3e89d850575c5b90d47 ]
+[ Upstream commit b135e324d7a2e7fa0a7ef925076136e799b79f44 ]
 
-clang static analysis reports this problem
-hci_sync.c:4428:2: warning: Undefined or garbage value
-  returned to caller
-        return err;
-        ^~~~~~~~~~
+The AIP code signals the phys_mtu in the following query_port()
+fragment:
 
-If there are no connections this function is a noop but
-err is never set and a false error could be reported.
-Return 0 as other hci_* functions do.
+	props->phys_mtu = HFI1_CAP_IS_KSET(AIP) ? hfi1_max_mtu :
+				ib_mtu_enum_to_int(props->max_mtu);
 
-Fixes: 182ee45da083 ("Bluetooth: hci_sync: Rework hci_suspend_notifier")
-Signed-off-by: Tom Rix <trix@redhat.com>
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Using the largest MTU possible should not depend on AIP.
+
+Fix by unconditionally using the hfi1_max_mtu value.
+
+Fixes: 6d72344cf6c4 ("IB/ipoib: Increase ipoib Datagram mode MTU's upper limit")
+Link: https://lore.kernel.org/r/1644348309-174874-1-git-send-email-mike.marciniszyn@cornelisnetworks.com
+Reviewed-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+Signed-off-by: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/hci_sync.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/infiniband/hw/hfi1/verbs.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-index 5e93f37c2e04..405d48c3e63e 100644
---- a/net/bluetooth/hci_sync.c
-+++ b/net/bluetooth/hci_sync.c
-@@ -4432,7 +4432,7 @@ static int hci_disconnect_all_sync(struct hci_dev *hdev, u8 reason)
- 			return err;
- 	}
+diff --git a/drivers/infiniband/hw/hfi1/verbs.c b/drivers/infiniband/hw/hfi1/verbs.c
+index dc9211f3a009..99d0743133ca 100644
+--- a/drivers/infiniband/hw/hfi1/verbs.c
++++ b/drivers/infiniband/hw/hfi1/verbs.c
+@@ -1397,8 +1397,7 @@ static int query_port(struct rvt_dev_info *rdi, u32 port_num,
+ 				      4096 : hfi1_max_mtu), IB_MTU_4096);
+ 	props->active_mtu = !valid_ib_mtu(ppd->ibmtu) ? props->max_mtu :
+ 		mtu_to_enum(ppd->ibmtu, IB_MTU_4096);
+-	props->phys_mtu = HFI1_CAP_IS_KSET(AIP) ? hfi1_max_mtu :
+-				ib_mtu_enum_to_int(props->max_mtu);
++	props->phys_mtu = hfi1_max_mtu;
  
--	return err;
-+	return 0;
+ 	return 0;
  }
- 
- /* This function perform power off HCI command sequence as follows:
 -- 
 2.34.1
 

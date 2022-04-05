@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3DC4F3256
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4CE44F2F44
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238346AbiDEJcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34812 "EHLO
+        id S237133AbiDEJKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239504AbiDEIUI (ORCPT
+        with ESMTP id S239510AbiDEIUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65691B83;
-        Tue,  5 Apr 2022 01:14:48 -0700 (PDT)
+        Tue, 5 Apr 2022 04:20:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EAFE15;
+        Tue,  5 Apr 2022 01:14:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 167CDB81BAC;
+        by ams.source.kernel.org (Postfix) with ESMTPS id BAADDB81B92;
+        Tue,  5 Apr 2022 08:14:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12A55C385A0;
         Tue,  5 Apr 2022 08:14:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66264C385A1;
-        Tue,  5 Apr 2022 08:14:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146485;
-        bh=WcL+NXvQBZHCnmbnNDwWuBj2td89mQiyOMS49zpQNb8=;
+        s=korg; t=1649146488;
+        bh=AvslXiiGZCRFOeGrGZqo2rx705V5+cRos00EJU0PUxc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TGfj6wFfs24JYaCzr9O8vUwdFNM3Cr+ynSwdLaVT3iQrv+hG6UcxSpMHXhPaRILj2
-         Xp1LmP9iz+DLIB9WuvXhlQJlHsZw8RiZrS9ntP0paJBlSukMLiW1hmrqVkRdxXURN3
-         cd7W/kb91YXAJ2z4sy4AFbqoOHvS/BCAIsmkkLas=
+        b=FuavL58HPWG1nmrR0PvoVv1ull4J88129JM3bp8ED1h9h5HxMuBWb1S2ieTH8FtuW
+         m1SfpURopSgTNRwEO5OXBupYK7udJe2JERGL08ROIXiJNpk67NxQWz5/4TeDMMSMZ6
+         VQwtCrj7zG2KtKBDUuTPWVoeZSKIGWRg+m6wJ2yY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gilles Buloz <gilles.buloz@kontron.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0781/1126] serial: 8250: fix XOFF/XON sending when DMA is used
-Date:   Tue,  5 Apr 2022 09:25:28 +0200
-Message-Id: <20220405070430.500467964@linuxfoundation.org>
+        stable@vger.kernel.org, Yonghua Huang <yonghua.huang@intel.com>,
+        Fei Li <fei1.li@intel.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0782/1126] virt: acrn: obtain pa from VMA with PFNMAP flag
+Date:   Tue,  5 Apr 2022 09:25:29 +0200
+Message-Id: <20220405070430.530214321@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,120 +54,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: Yonghua Huang <yonghua.huang@intel.com>
 
-[ Upstream commit f58c252e30cf74f68b0054293adc03b5923b9f0e ]
+[ Upstream commit 8a6e85f75a83d16a71077e41f2720c691f432002 ]
 
-When 8250 UART is using DMA, x_char (XON/XOFF) is never sent
-to the wire. After this change, x_char is injected correctly.
+ acrn_vm_ram_map can't pin the user pages with VM_PFNMAP flag
+ by calling get_user_pages_fast(), the PA(physical pages)
+ may be mapped by kernel driver and set PFNMAP flag.
 
-Create uart_xchar_out() helper for sending the x_char out and
-accounting related to it. It seems that almost every driver
-does these same steps with x_char. Except for 8250, however,
-almost all currently lack .serial_out so they cannot immediately
-take advantage of this new helper.
+ This patch fixes logic to setup EPT mapping for PFN mapped RAM region
+ by checking the memory attribute before adding EPT mapping for them.
 
-The downside of this patch is that it might reintroduce
-the problems some devices faced with mixed DMA/non-DMA transfer
-which caused revert f967fc8f165f (Revert "serial: 8250_dma:
-don't bother DMA with small transfers"). However, the impact
-should be limited to cases with XON/XOFF (that didn't work
-with DMA capable devices to begin with so this problem is not
-very likely to cause a major issue, if any at all).
-
-Fixes: 9ee4b83e51f74 ("serial: 8250: Add support for dmaengine")
-Reported-by: Gilles Buloz <gilles.buloz@kontron.com>
-Tested-by: Gilles Buloz <gilles.buloz@kontron.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220314091432.4288-2-ilpo.jarvinen@linux.intel.com
+Fixes: 88f537d5e8dd ("virt: acrn: Introduce EPT mapping management")
+Signed-off-by: Yonghua Huang <yonghua.huang@intel.com>
+Signed-off-by: Fei Li <fei1.li@intel.com>
+Link: https://lore.kernel.org/r/20220228022212.419406-1-yonghua.huang@intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/8250/8250_dma.c  | 11 ++++++++++-
- drivers/tty/serial/8250/8250_port.c |  4 +---
- drivers/tty/serial/serial_core.c    | 14 ++++++++++++++
- include/linux/serial_core.h         |  2 ++
- 4 files changed, 27 insertions(+), 4 deletions(-)
+ drivers/virt/acrn/mm.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/drivers/tty/serial/8250/8250_dma.c b/drivers/tty/serial/8250/8250_dma.c
-index 890fa7ddaa7f..b3c3f7e5851a 100644
---- a/drivers/tty/serial/8250/8250_dma.c
-+++ b/drivers/tty/serial/8250/8250_dma.c
-@@ -64,10 +64,19 @@ int serial8250_tx_dma(struct uart_8250_port *p)
- 	struct uart_8250_dma		*dma = p->dma;
- 	struct circ_buf			*xmit = &p->port.state->xmit;
- 	struct dma_async_tx_descriptor	*desc;
-+	struct uart_port		*up = &p->port;
- 	int ret;
+diff --git a/drivers/virt/acrn/mm.c b/drivers/virt/acrn/mm.c
+index c4f2e15c8a2b..3b1b1e7a844b 100644
+--- a/drivers/virt/acrn/mm.c
++++ b/drivers/virt/acrn/mm.c
+@@ -162,10 +162,34 @@ int acrn_vm_ram_map(struct acrn_vm *vm, struct acrn_vm_memmap *memmap)
+ 	void *remap_vaddr;
+ 	int ret, pinned;
+ 	u64 user_vm_pa;
++	unsigned long pfn;
++	struct vm_area_struct *vma;
  
--	if (dma->tx_running)
-+	if (dma->tx_running) {
-+		if (up->x_char) {
-+			dmaengine_pause(dma->txchan);
-+			uart_xchar_out(up, UART_TX);
-+			dmaengine_resume(dma->txchan);
+ 	if (!vm || !memmap)
+ 		return -EINVAL;
+ 
++	mmap_read_lock(current->mm);
++	vma = vma_lookup(current->mm, memmap->vma_base);
++	if (vma && ((vma->vm_flags & VM_PFNMAP) != 0)) {
++		if ((memmap->vma_base + memmap->len) > vma->vm_end) {
++			mmap_read_unlock(current->mm);
++			return -EINVAL;
 +		}
- 		return 0;
-+	} else if (up->x_char) {
-+		uart_xchar_out(up, UART_TX);
++
++		ret = follow_pfn(vma, memmap->vma_base, &pfn);
++		mmap_read_unlock(current->mm);
++		if (ret < 0) {
++			dev_dbg(acrn_dev.this_device,
++				"Failed to lookup PFN at VMA:%pK.\n", (void *)memmap->vma_base);
++			return ret;
++		}
++
++		return acrn_mm_region_add(vm, memmap->user_vm_pa,
++			 PFN_PHYS(pfn), memmap->len,
++			 ACRN_MEM_TYPE_WB, memmap->attr);
 +	}
- 
- 	if (uart_tx_stopped(&p->port) || uart_circ_empty(xmit)) {
- 		/* We have been called from __dma_tx_complete() */
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index fd0339d22491..9f116e75956e 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -1819,9 +1819,7 @@ void serial8250_tx_chars(struct uart_8250_port *up)
- 	int count;
- 
- 	if (port->x_char) {
--		serial_out(up, UART_TX, port->x_char);
--		port->icount.tx++;
--		port->x_char = 0;
-+		uart_xchar_out(port, UART_TX);
- 		return;
- 	}
- 	if (uart_tx_stopped(port)) {
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index 0db90be4c3bc..f67540ae2a88 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -644,6 +644,20 @@ static void uart_flush_buffer(struct tty_struct *tty)
- 	tty_port_tty_wakeup(&state->port);
- }
- 
-+/*
-+ * This function performs low-level write of high-priority XON/XOFF
-+ * character and accounting for it.
-+ *
-+ * Requires uart_port to implement .serial_out().
-+ */
-+void uart_xchar_out(struct uart_port *uport, int offset)
-+{
-+	serial_port_out(uport, offset, uport->x_char);
-+	uport->icount.tx++;
-+	uport->x_char = 0;
-+}
-+EXPORT_SYMBOL_GPL(uart_xchar_out);
++	mmap_read_unlock(current->mm);
 +
- /*
-  * This function is used to send a high-priority XON/XOFF character to
-  * the device
-diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
-index c58cc142d23f..8c32935e1059 100644
---- a/include/linux/serial_core.h
-+++ b/include/linux/serial_core.h
-@@ -458,6 +458,8 @@ extern void uart_handle_cts_change(struct uart_port *uport,
- extern void uart_insert_char(struct uart_port *port, unsigned int status,
- 		 unsigned int overrun, unsigned int ch, unsigned int flag);
- 
-+void uart_xchar_out(struct uart_port *uport, int offset);
-+
- #ifdef CONFIG_MAGIC_SYSRQ_SERIAL
- #define SYSRQ_TIMEOUT	(HZ * 5)
- 
+ 	/* Get the page number of the map region */
+ 	nr_pages = memmap->len >> PAGE_SHIFT;
+ 	pages = vzalloc(nr_pages * sizeof(struct page *));
 -- 
 2.34.1
 

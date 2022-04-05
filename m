@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45AAA4F3474
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 130C04F32A4
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236812AbiDEI2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
+        id S237034AbiDEI2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235898AbiDEIAl (ORCPT
+        with ESMTP id S235931AbiDEIAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:00:41 -0400
+        Tue, 5 Apr 2022 04:00:46 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9844925A;
-        Tue,  5 Apr 2022 00:58:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6EB4838D;
+        Tue,  5 Apr 2022 00:58:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 275A9B81B16;
-        Tue,  5 Apr 2022 07:58:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 875D9C340EE;
-        Tue,  5 Apr 2022 07:58:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 933EBB81B14;
+        Tue,  5 Apr 2022 07:58:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E515AC340EE;
+        Tue,  5 Apr 2022 07:58:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145520;
-        bh=jIcYDRqhOPQaS8NDwpkH/FdRN7CSfJSZNAAJHcEtsOQ=;
+        s=korg; t=1649145526;
+        bh=zH4l9z6y8J1WX/sN6BszQgli3CXzxmepCxSY80aVahM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZS+y9HuSIZHfmHOszCzQbKTIiw/tc5UeqV9jeP33KwdFg3YQvgAPjtTisnJxXdy9Z
-         fjne4SQvswtmZlFgXUoDvJdnd/Xgg9/Lb7vdwpc37++0IR87DWNv390nxZp2BvGJIn
-         KgXZb4YTd2hJJrpBk5G3/lGd4s8aoEq5OdfjlokY=
+        b=IwlQ2XVG+HzSgpDeqvWcLd7moOYmBt8Fj3x4x1qq4JUcfvUeLWKlSO4TEjFwK4qZT
+         oMNMKvehXDE5h19SRUnXfNMiLxXWmlwmI/nRj5SkJLApx8ZLMqR5gxF6UUVV8QKb/M
+         NxARHcftEoIKC6VAnj3OanNU6sh01WdQLFO+QVqo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0436/1126] libbpf: Fix possible NULL pointer dereference when destroying skeleton
-Date:   Tue,  5 Apr 2022 09:19:43 +0200
-Message-Id: <20220405070420.421839289@linuxfoundation.org>
+Subject: [PATCH 5.17 0438/1126] ath11k: fix error code in ath11k_qmi_assign_target_mem_chunk()
+Date:   Tue,  5 Apr 2022 09:19:45 +0200
+Message-Id: <20220405070420.480630328@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,56 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yafang Shao <laoar.shao@gmail.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit a32ea51a3f17ce6524c9fc19d311e708331c8b5f ]
+[ Upstream commit c9b41832dc080fa59bad597de94865b3ea2d5bab ]
 
-When I checked the code in skeleton header file generated with my own
-bpf prog, I found there may be possible NULL pointer dereference when
-destroying skeleton. Then I checked the in-tree bpf progs, finding that is
-a common issue. Let's take the generated samples/bpf/xdp_redirect_cpu.skel.h
-for example. Below is the generated code in
-xdp_redirect_cpu__create_skeleton():
+The "ret" vairable is not set at this point.  It could be uninitialized
+or zero.  The correct thing to return is -ENODEV.
 
-	xdp_redirect_cpu__create_skeleton
-		struct bpf_object_skeleton *s;
-		s = (struct bpf_object_skeleton *)calloc(1, sizeof(*s));
-		if (!s)
-			goto error;
-		...
-	error:
-		bpf_object__destroy_skeleton(s);
-		return  -ENOMEM;
-
-After goto error, the NULL 's' will be deferenced in
-bpf_object__destroy_skeleton().
-
-We can simply fix this issue by just adding a NULL check in
-bpf_object__destroy_skeleton().
-
-Fixes: d66562fba1ce ("libbpf: Add BPF object skeleton support")
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20220108134739.32541-1-laoar.shao@gmail.com
+Fixes: 6ac04bdc5edb ("ath11k: Use reserved host DDR addresses from DT for PCI devices")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220111071445.GA11243@kili
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/wireless/ath/ath11k/qmi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 7f10dd501a52..fdb3536afa7d 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -11795,6 +11795,9 @@ void bpf_object__detach_skeleton(struct bpf_object_skeleton *s)
+diff --git a/drivers/net/wireless/ath/ath11k/qmi.c b/drivers/net/wireless/ath/ath11k/qmi.c
+index 42c2ad3e3668..d0701e8eca9c 100644
+--- a/drivers/net/wireless/ath/ath11k/qmi.c
++++ b/drivers/net/wireless/ath/ath11k/qmi.c
+@@ -1932,7 +1932,7 @@ static int ath11k_qmi_assign_target_mem_chunk(struct ath11k_base *ab)
+ 			if (!hremote_node) {
+ 				ath11k_dbg(ab, ATH11K_DBG_QMI,
+ 					   "qmi fail to get hremote_node\n");
+-				return ret;
++				return -ENODEV;
+ 			}
  
- void bpf_object__destroy_skeleton(struct bpf_object_skeleton *s)
- {
-+	if (!s)
-+		return;
-+
- 	if (s->progs)
- 		bpf_object__detach_skeleton(s);
- 	if (s->obj)
+ 			ret = of_address_to_resource(hremote_node, 0, &res);
 -- 
 2.34.1
 

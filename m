@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D46644F315F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C702C4F33C6
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245608AbiDEI41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
+        id S1343534AbiDEI46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234137AbiDEIMQ (ORCPT
+        with ESMTP id S234663AbiDEINu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:12:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F169C6D963;
-        Tue,  5 Apr 2022 01:02:56 -0700 (PDT)
+        Tue, 5 Apr 2022 04:13:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D06D8EB4E;
+        Tue,  5 Apr 2022 01:03:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16552617B4;
-        Tue,  5 Apr 2022 08:02:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F5D7C385A1;
-        Tue,  5 Apr 2022 08:02:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5FD33B81BB1;
+        Tue,  5 Apr 2022 08:03:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADA08C385A2;
+        Tue,  5 Apr 2022 08:03:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145775;
-        bh=9HN7L/AvU5dDBp7W4b2h8uXF/+nuCB18CXbxQwBIn8Q=;
+        s=korg; t=1649145784;
+        bh=jURNLkHfvs90xixxz7QuJxYbOrABtK6FRPQkbVAFdjQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FtgHNSaio4AcJjaQVB4Kf5jT2clXsklJ/pF95mf0oZd1RRQamguEzD7o6+z7Xt7Oy
-         EL7ESAbOgBSapsKXAk8SyRyPHxhrlOa3xEV+NQq9A6N0seTY/WukTLCJ8ZGwVaxN6d
-         YTX9csDQTdIayG+js4NLbtLGgPu/9+6Jr69TvG7E=
+        b=wmDSAnY0/JYY6v03G/rXQ3sStA0wB2ZZPNpRbdKhJSB7oqL8aRumT2hcqUmoxxufo
+         oP2CTXDhqOV5sqHd9y3YyQlh5z/CM83o12l5UCfU0wl3LFWrzoE5dfkUkR0DfmVw0k
+         GDPiWeqkWJz221ew3vPLpp8SF/79USsZiAm7SAnk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0525/1126] PCI: aardvark: Fix reading MSI interrupt number
-Date:   Tue,  5 Apr 2022 09:21:12 +0200
-Message-Id: <20220405070423.040184551@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0528/1126] libbpf: Fix signedness bug in btf_dump_array_data()
+Date:   Tue,  5 Apr 2022 09:21:15 +0200
+Message-Id: <20220405070423.128853815@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -57,60 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 805dfc18dd3d4dd97a987d4406593b5a225b1253 ]
+[ Upstream commit 4172843ed4a38f97084032f74f07b2037b5da3a6 ]
 
-In advk_pcie_handle_msi() it is expected that when bit i in the W1C
-register PCIE_MSI_STATUS_REG is cleared, the PCIE_MSI_PAYLOAD_REG is
-updated to contain the MSI number corresponding to index i.
+The btf__resolve_size() function returns negative error codes so
+"elem_size" must be signed for the error handling to work.
 
-Experiments show that this is not so, and instead PCIE_MSI_PAYLOAD_REG
-always contains the number of the last received MSI, overall.
-
-Do not read PCIE_MSI_PAYLOAD_REG register for determining MSI interrupt
-number. Since Aardvark already forbids more than 32 interrupts and uses
-own allocated hwirq numbers, the msi_idx already corresponds to the
-received MSI number.
-
-Link: https://lore.kernel.org/r/20220110015018.26359-3-kabel@kernel.org
-Fixes: 8c39d710363c ("PCI: aardvark: Add Aardvark PCI host controller driver")
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Fixes: 920d16af9b42 ("libbpf: BTF dumper support for typed data")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/bpf/20220208071552.GB10495@kili
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pci-aardvark.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ tools/lib/bpf/btf_dump.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
-index 4f5b44827d21..10e936363461 100644
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -1388,7 +1388,6 @@ static void advk_pcie_remove_irq_domain(struct advk_pcie *pcie)
- static void advk_pcie_handle_msi(struct advk_pcie *pcie)
+diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+index b9a3260c83cb..55aed9e398c3 100644
+--- a/tools/lib/bpf/btf_dump.c
++++ b/tools/lib/bpf/btf_dump.c
+@@ -1861,14 +1861,15 @@ static int btf_dump_array_data(struct btf_dump *d,
  {
- 	u32 msi_val, msi_mask, msi_status, msi_idx;
--	u16 msi_data;
+ 	const struct btf_array *array = btf_array(t);
+ 	const struct btf_type *elem_type;
+-	__u32 i, elem_size = 0, elem_type_id;
++	__u32 i, elem_type_id;
++	__s64 elem_size;
+ 	bool is_array_member;
  
- 	msi_mask = advk_readl(pcie, PCIE_MSI_MASK_REG);
- 	msi_val = advk_readl(pcie, PCIE_MSI_STATUS_REG);
-@@ -1398,13 +1397,9 @@ static void advk_pcie_handle_msi(struct advk_pcie *pcie)
- 		if (!(BIT(msi_idx) & msi_status))
- 			continue;
- 
--		/*
--		 * msi_idx contains bits [4:0] of the msi_data and msi_data
--		 * contains 16bit MSI interrupt number
--		 */
- 		advk_writel(pcie, BIT(msi_idx), PCIE_MSI_STATUS_REG);
--		msi_data = advk_readl(pcie, PCIE_MSI_PAYLOAD_REG) & PCIE_MSI_DATA_MASK;
--		generic_handle_irq(msi_data);
-+		if (generic_handle_domain_irq(pcie->msi_inner_domain, msi_idx) == -EINVAL)
-+			dev_err_ratelimited(&pcie->pdev->dev, "unexpected MSI 0x%02x\n", msi_idx);
+ 	elem_type_id = array->type;
+ 	elem_type = skip_mods_and_typedefs(d->btf, elem_type_id, NULL);
+ 	elem_size = btf__resolve_size(d->btf, elem_type_id);
+ 	if (elem_size <= 0) {
+-		pr_warn("unexpected elem size %d for array type [%u]\n", elem_size, id);
++		pr_warn("unexpected elem size %lld for array type [%u]\n", elem_size, id);
+ 		return -EINVAL;
  	}
  
- 	advk_writel(pcie, PCIE_ISR0_MSI_INT_PENDING,
 -- 
 2.34.1
 

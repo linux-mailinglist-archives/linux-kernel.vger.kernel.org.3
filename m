@@ -2,35 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E4C4F4B96
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E464F4B92
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:02:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1575186AbiDEXDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43682 "EHLO
+        id S1575111AbiDEXCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1392134AbiDEPfp (ORCPT
+        with ESMTP id S1392156AbiDEPfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:35:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7DF0133D9B
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:46:35 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 76DA0D6E;
-        Tue,  5 Apr 2022 06:46:35 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AEAE63F5A1;
-        Tue,  5 Apr 2022 06:46:34 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     ogabbay@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
-Subject: [PATCH] habanalabs: Stop using iommu_present()
-Date:   Tue,  5 Apr 2022 14:46:31 +0100
-Message-Id: <8201946a5b8b26dab35738b87da24ff27a9f9270.1649166391.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.28.0.dirty
+        Tue, 5 Apr 2022 11:35:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121594833A
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:46:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA5CBB81BA9
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 13:46:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EDF1C385A0;
+        Tue,  5 Apr 2022 13:46:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649166413;
+        bh=pAirV066m2Mk+Gq9JHNPQKz4ZdQFBmx7aDmrA3JqHZs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Kldms96GddMs7OjzLMMO6ih82ytSwJcXHcStrjbrMsbg8HssmGCTXFRBWa4cgC6+L
+         Tg1OxlJBlSK+FkbKC5Jq5GQBlGRVGA07ftRe+osjG6RILregfrNyTQ0tLhKhfRiJdQ
+         i9XFvXJQGTCC7KSdxso/OGukUuDtHscXAhEADDUI=
+Date:   Tue, 5 Apr 2022 15:46:51 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+Cc:     outreachy@lists.linux.dev, Larry.Finger@lwfinger.net,
+        phil@philpotter.co.uk, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] staging: r8188eu: add space around arithmatic sign
+Message-ID: <YkxIS2H0XX6LzDzu@kroah.com>
+References: <860d8e222e2b695ce5cb4f48aa46a7f66e05d8e4.1649082939.git.eng.alaamohamedsoliman.am@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <860d8e222e2b695ce5cb4f48aa46a7f66e05d8e4.1649082939.git.eng.alaamohamedsoliman.am@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -39,96 +52,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Even if an IOMMU might be present for some PCI segment in the system,
-that doesn't necessarily mean it provides translation for the device
-we care about. Replace iommu_present() with a more appropriate check.
+On Mon, Apr 04, 2022 at 04:39:16PM +0200, Alaa Mohamed wrote:
+> Reported by checkpatch:
+> 
+> CHECK: spaces preferred around that '+' , '-' and '*'
+> 
+> Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+> ---
+>  drivers/staging/r8188eu/core/rtw_br_ext.c | 58 +++++++++++------------
+>  1 file changed, 29 insertions(+), 29 deletions(-)
 
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
- drivers/misc/habanalabs/gaudi/gaudi.c | 8 ++++----
- drivers/misc/habanalabs/goya/goya.c   | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+This patch does not apply to my tree and branch.  Please rebase and
+resend it against the staging-next branch of staging.git.
 
-diff --git a/drivers/misc/habanalabs/gaudi/gaudi.c b/drivers/misc/habanalabs/gaudi/gaudi.c
-index 21c2b678ff72..5dc66dc7618e 100644
---- a/drivers/misc/habanalabs/gaudi/gaudi.c
-+++ b/drivers/misc/habanalabs/gaudi/gaudi.c
-@@ -6133,7 +6133,7 @@ static int gaudi_debugfs_read32(struct hl_device *hdev, u64 addr,
- 			rc = -EIO;
- 
- 	} else if (addr >= HOST_PHYS_BASE && addr < host_phys_end &&
--			user_address && !iommu_present(&pci_bus_type)) {
-+			user_address && !device_iommu_mapped(&hdev->pdev->dev)) {
- 
- 		*val = *(u32 *) phys_to_virt(addr - HOST_PHYS_BASE);
- 
-@@ -6176,7 +6176,7 @@ static int gaudi_debugfs_write32(struct hl_device *hdev, u64 addr,
- 			rc = -EIO;
- 
- 	} else if (addr >= HOST_PHYS_BASE && addr < host_phys_end &&
--			user_address && !iommu_present(&pci_bus_type)) {
-+			user_address && !device_iommu_mapped(&hdev->pdev->dev)) {
- 
- 		*(u32 *) phys_to_virt(addr - HOST_PHYS_BASE) = val;
- 
-@@ -6223,7 +6223,7 @@ static int gaudi_debugfs_read64(struct hl_device *hdev, u64 addr,
- 			rc = -EIO;
- 
- 	} else if (addr >= HOST_PHYS_BASE && addr < host_phys_end &&
--			user_address && !iommu_present(&pci_bus_type)) {
-+			user_address && !device_iommu_mapped(&hdev->pdev->dev)) {
- 
- 		*val = *(u64 *) phys_to_virt(addr - HOST_PHYS_BASE);
- 
-@@ -6268,7 +6268,7 @@ static int gaudi_debugfs_write64(struct hl_device *hdev, u64 addr,
- 			rc = -EIO;
- 
- 	} else if (addr >= HOST_PHYS_BASE && addr < host_phys_end &&
--			user_address && !iommu_present(&pci_bus_type)) {
-+			user_address && !device_iommu_mapped(&hdev->pdev->dev)) {
- 
- 		*(u64 *) phys_to_virt(addr - HOST_PHYS_BASE) = val;
- 
-diff --git a/drivers/misc/habanalabs/goya/goya.c b/drivers/misc/habanalabs/goya/goya.c
-index ec9358bcbf0b..0c455bf460f4 100644
---- a/drivers/misc/habanalabs/goya/goya.c
-+++ b/drivers/misc/habanalabs/goya/goya.c
-@@ -4309,7 +4309,7 @@ static int goya_debugfs_read32(struct hl_device *hdev, u64 addr,
- 			rc = -EIO;
- 
- 	} else if (addr >= HOST_PHYS_BASE && addr < host_phys_end &&
--			user_address && !iommu_present(&pci_bus_type)) {
-+			user_address && !device_iommu_mapped(&hdev->pdev->dev)) {
- 		*val = *(u32 *) phys_to_virt(addr - HOST_PHYS_BASE);
- 
- 	} else {
-@@ -4369,7 +4369,7 @@ static int goya_debugfs_write32(struct hl_device *hdev, u64 addr,
- 			rc = -EIO;
- 
- 	} else if (addr >= HOST_PHYS_BASE && addr < host_phys_end &&
--			user_address && !iommu_present(&pci_bus_type)) {
-+			user_address && !device_iommu_mapped(&hdev->pdev->dev)) {
- 		*(u32 *) phys_to_virt(addr - HOST_PHYS_BASE) = val;
- 
- 	} else {
-@@ -4418,7 +4418,7 @@ static int goya_debugfs_read64(struct hl_device *hdev, u64 addr,
- 			rc = -EIO;
- 
- 	} else if (addr >= HOST_PHYS_BASE && addr < host_phys_end &&
--			user_address && !iommu_present(&pci_bus_type)) {
-+			user_address && !device_iommu_mapped(&hdev->pdev->dev)) {
- 		*val = *(u64 *) phys_to_virt(addr - HOST_PHYS_BASE);
- 
- 	} else {
-@@ -4465,7 +4465,7 @@ static int goya_debugfs_write64(struct hl_device *hdev, u64 addr,
- 			rc = -EIO;
- 
- 	} else if (addr >= HOST_PHYS_BASE && addr < host_phys_end &&
--			user_address && !iommu_present(&pci_bus_type)) {
-+			user_address && !device_iommu_mapped(&hdev->pdev->dev)) {
- 		*(u64 *) phys_to_virt(addr - HOST_PHYS_BASE) = val;
- 
- 	} else {
--- 
-2.28.0.dirty
+Patch 2/2 did apply.
 
+thanks,
+
+greg k-h

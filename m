@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A23F4F45B4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4EA04F467C
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377110AbiDEM5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
+        id S244926AbiDEUdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243024AbiDEJIg (ORCPT
+        with ESMTP id S1348933AbiDEJst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:08:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC76C9136E;
-        Tue,  5 Apr 2022 01:57:34 -0700 (PDT)
+        Tue, 5 Apr 2022 05:48:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91AFAEE4F5;
+        Tue,  5 Apr 2022 02:37:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 93D3EB81C6E;
-        Tue,  5 Apr 2022 08:57:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C219C385AF;
-        Tue,  5 Apr 2022 08:57:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43659B818F3;
+        Tue,  5 Apr 2022 09:37:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9262CC385A3;
+        Tue,  5 Apr 2022 09:37:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149051;
-        bh=buYb17ZBaPoIae4E0yY0uhFDTDhV3hELVV3kLUdptVU=;
+        s=korg; t=1649151471;
+        bh=XpmsAD4xhEgbOuUs8TZvtQ1ch/Pwvn1tByAyywoL0Bw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1S17TENZQwrPuhvek+SWWjQ3pJIe0GmP8HRjM/kpiseh3ZRvy9EvzgQN3iln6VNBp
-         6yEwv5HDoaadg2TOqTMOO0HRqrPQZis2ySnmXWuqoQZCB43DKBMKEelAYJ/0kip2Up
-         o1mgG4vYVs7jkB+QW4B2c6BUbA0t8tfC79bzPA+s=
+        b=llurUcY3JuG+d+6uOFa2E6eimRiJ1yXToABnRyXKlAlWRlz18so0OJB4CJdvma227
+         UL6DdpPsXesKPVM8QSRZCk0169fcyS6EeG+u+4gtCgfbmxCfdVcSfmfJQOJeJ7NQ5y
+         2W0UyCv+pSB7hdB/jlL7yMhdvb5MregrJvCVzCQg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        stable@vger.kernel.org, Miroslav Lichvar <mlichvar@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Yangbo Lu <yangbo.lu@nxp.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0576/1017] drm/msm/a6xx: Fix missing ARRAY_SIZE() check
-Date:   Tue,  5 Apr 2022 09:24:49 +0200
-Message-Id: <20220405070411.377743319@linuxfoundation.org>
+Subject: [PATCH 5.15 428/913] ptp: unregister virtual clocks when unregistering physical clock.
+Date:   Tue,  5 Apr 2022 09:24:50 +0200
+Message-Id: <20220405070352.674284738@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +58,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+From: Miroslav Lichvar <mlichvar@redhat.com>
 
-[ Upstream commit cca96584b35765bf9eb5f38ca55a144ea2ba0de4 ]
+[ Upstream commit bfcbb76b0f595ea9ede9f7a218086fef85242f10 ]
 
-Fixes: f6d62d091cfd ("drm/msm/a6xx: add support for Adreno 660 GPU")
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Link: https://lore.kernel.org/r/20220305173405.914989-1-robdclark@gmail.com
+When unregistering a physical clock which has some virtual clocks,
+unregister the virtual clocks with it.
+
+This fixes the following oops, which can be triggered by unloading
+a driver providing a PTP clock when it has enabled virtual clocks:
+
+BUG: unable to handle page fault for address: ffffffffc04fc4d8
+Oops: 0000 [#1] PREEMPT SMP NOPTI
+RIP: 0010:ptp_vclock_read+0x31/0xb0
+Call Trace:
+ timecounter_read+0xf/0x50
+ ptp_vclock_refresh+0x2c/0x50
+ ? ptp_clock_release+0x40/0x40
+ ptp_aux_kworker+0x17/0x30
+ kthread_worker_fn+0x9b/0x240
+ ? kthread_should_park+0x30/0x30
+ kthread+0xe2/0x110
+ ? kthread_complete_and_exit+0x20/0x20
+ ret_from_fork+0x22/0x30
+
+Fixes: 73f37068d540 ("ptp: support ptp physical/virtual clocks conversion")
+Signed-off-by: Miroslav Lichvar <mlichvar@redhat.com>
+Acked-by: Richard Cochran <richardcochran@gmail.com>
+Cc: Yangbo Lu <yangbo.lu@nxp.com>
+Cc: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/ptp/ptp_clock.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index a305ff7e8c6f..f880a59a40fc 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -658,19 +658,23 @@ static void a6xx_set_cp_protect(struct msm_gpu *gpu)
- {
- 	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
- 	const u32 *regs = a6xx_protect;
--	unsigned i, count = ARRAY_SIZE(a6xx_protect), count_max = 32;
--
--	BUILD_BUG_ON(ARRAY_SIZE(a6xx_protect) > 32);
--	BUILD_BUG_ON(ARRAY_SIZE(a650_protect) > 48);
-+	unsigned i, count, count_max;
+diff --git a/drivers/ptp/ptp_clock.c b/drivers/ptp/ptp_clock.c
+index f9b2d66b0443..8a652a367625 100644
+--- a/drivers/ptp/ptp_clock.c
++++ b/drivers/ptp/ptp_clock.c
+@@ -317,11 +317,18 @@ struct ptp_clock *ptp_clock_register(struct ptp_clock_info *info,
+ }
+ EXPORT_SYMBOL(ptp_clock_register);
  
- 	if (adreno_is_a650(adreno_gpu)) {
- 		regs = a650_protect;
- 		count = ARRAY_SIZE(a650_protect);
- 		count_max = 48;
-+		BUILD_BUG_ON(ARRAY_SIZE(a650_protect) > 48);
- 	} else if (adreno_is_a660_family(adreno_gpu)) {
- 		regs = a660_protect;
- 		count = ARRAY_SIZE(a660_protect);
- 		count_max = 48;
-+		BUILD_BUG_ON(ARRAY_SIZE(a660_protect) > 48);
-+	} else {
-+		regs = a6xx_protect;
-+		count = ARRAY_SIZE(a6xx_protect);
-+		count_max = 32;
-+		BUILD_BUG_ON(ARRAY_SIZE(a6xx_protect) > 32);
++static int unregister_vclock(struct device *dev, void *data)
++{
++	struct ptp_clock *ptp = dev_get_drvdata(dev);
++
++	ptp_vclock_unregister(info_to_vclock(ptp->info));
++	return 0;
++}
++
+ int ptp_clock_unregister(struct ptp_clock *ptp)
+ {
+ 	if (ptp_vclock_in_use(ptp)) {
+-		pr_err("ptp: virtual clock in use\n");
+-		return -EBUSY;
++		device_for_each_child(&ptp->dev, NULL, unregister_vclock);
  	}
  
- 	/*
+ 	ptp->defunct = 1;
 -- 
 2.34.1
 

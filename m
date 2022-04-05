@@ -2,178 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D6614F42DC
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C684F4245
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:41:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1451313AbiDEUKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
+        id S1358544AbiDEUQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444196AbiDEPlA (ORCPT
+        with ESMTP id S1444822AbiDEPmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:41:00 -0400
-Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C74B5FD3;
-        Tue,  5 Apr 2022 07:03:31 -0700 (PDT)
-Received: from grover.. (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-09.nifty.com with ESMTP id 235E2k8L021295;
-        Tue, 5 Apr 2022 23:02:48 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 235E2k8L021295
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1649167369;
-        bh=EKCTJzUdUAuHIhmyqzQO5DkjoUd5sMZA3XV4MtVgo6g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MhOn01GySX77Cjemm3oCakRXcI11I2w6P7ivi9W6aTx/LVS2cBOtPIlxCUtLi1XMM
-         UpIEidA/FLeoegbtsbJ4/sdSb+QIYKiholVhbkRs14VfO5a8SmIA5lVXKJEyllOpEN
-         R9mxoFcDJOkucbF9KGVhv4v43bYIPNv/7vtI3Q7J6Pp9ShrpIRo2BqKM2mpYed4G0k
-         n4DMa3IbYZIedsY0Bw2Sx2LKxzSa0bjSFOPCd7++CSU37EnQOmYchsmyyTcqCDuhv1
-         lSnj/CWnQhjiSbrwuViSX9jr9CpwKiZY1MEpzwoGpgw7CUednaT7hqrP27tQm8HsjG
-         pJDiGd/SUxbJA==
-X-Nifty-SrcIP: [133.32.177.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Michal Marek <michal.lkml@markovi.net>
-Subject: [PATCH v2 03/10] modpost: remove useless export_from_sec()
-Date:   Tue,  5 Apr 2022 23:02:22 +0900
-Message-Id: <20220405140229.2895394-4-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220405140229.2895394-1-masahiroy@kernel.org>
-References: <20220405140229.2895394-1-masahiroy@kernel.org>
+        Tue, 5 Apr 2022 11:42:04 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADAE318B258;
+        Tue,  5 Apr 2022 07:06:52 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649167611;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to; bh=i81MASCCDw38dcKZylteUy/3pg50r3ulw2eAeBX1oQs=;
+        b=blb33Z/hkJODAWD0H0EQS/ucph9bnmTVwHRBaB8faYgOxdQiY1v+iBJaTHaNRuekJOtKPN
+        ftfSFYAe47v1dSNmihMBBH1Uu2xNTQVJdwHgnmhPTKiUEX4R9aGzzLCR0dShjccozOAAxp
+        oUI31XXjZk6cepgUaDwHHR6kYrdPUEy1C/4NzSt243SIacCu3JMKAXrZWqTLmqCAfJKtyt
+        Qwqz8k+Xo9itZXJ/J3gtQ2OzmHnvTghPeHmofW/8CsWy0Qp+5G+OH+2EC+BLPl1vpolf5d
+        LVWC3JV9vCMAYgjfutiivuCw3TVl2I1CqCzViZal/pBka4S7ZXg5GBCAdH3Oxg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649167611;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to; bh=i81MASCCDw38dcKZylteUy/3pg50r3ulw2eAeBX1oQs=;
+        b=6qOMCJYfbs8XtKREWwkNMmyZpa/kppvHyluNeM4S50mmbUr3N+rkt67nQ6cuHWbR+xWQR8
+        crbdlICxoSpd+BDQ==
+To:     Evan Green <evgreen@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Rajat Jain <rajatja@chromium.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: Lost MSIs during hibernate
+In-Reply-To: <CAE=gft4a-QL82iFJE_xRQ3JrMmz-KZKWREtz=MghhjFbJeK=8A@mail.gmail.com>
+Date:   Tue, 05 Apr 2022 16:06:50 +0200
+Message-ID: <87a6cz39qd.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With commit 1743694eb235 ("modpost: stop symbol preloading for
-modversion CRC") applied, now export_from_sec() is useless.
+Evan!
 
-handle_symbol() is called for every symbol in the ELF.
+On Mon, Apr 04 2022 at 12:11, Evan Green wrote:
+> To my surprise, I'm back with another MSI problem, and hoping to get
+> some advice on how to approach fixing it.
 
-When 'symname' does not start with "__ksymtab", export_from_sec() is
-called, and the returned value is stored in 'export'.
+Why am I not surprised?
 
-It is used in the last part of handle_symbol():
+> What worries me is those IRQ "no longer affine" messages, as well as
+> my "EVAN don't touch hw" prints, indicating that requests to change
+> the MSI are being dropped. These ignored requests are coming in when
+> we try to migrate all IRQs off of the non-boot CPU, and they get
+> ignored because all devices are "frozen" at this point, and presumably
+> not in D0.
 
-    if (strstarts(symname, "__ksymtab_")) {
-            name = symname + strlen("__ksymtab_");
-            sym_add_exported(name, mod, export);
-    }
+They are disabled at that point.
 
-'export' is used only when 'symname' starts with "__ksymtab_".
+> To further try and prove that theory, I wrote a script to do the
+> hibernate prepare image step in a loop, but messed with XHCI's IRQ
+> affinity beforehand. If I move the IRQ to core 0, so far I have never
+> seen a hang. But if I move it to another core, I can usually get a
+> hang in the first attempt. I also very occasionally see wifi splats
+> when trying this, and those "no longer affine" prints are all the wifi
+> queue IRQs. So I think a wifi packet coming in at the wrong time can
+> do the same thing.
+>
+> I wanted to see what thoughts you might have on this. Should I try to
+> make a patch that moves all IRQs to CPU 0 *before* the devices all
+> freeze? Sounds a little unpleasant. Or should PCI be doing something
+> different to avoid this combination of "you're not allowed to modify
+> my MSIs, but I might still generate interrupts that must not be lost"?
 
-So, the value returned by export_from_sec() is never used.
+PCI cannot do much here and moving interrupts around is papering over
+the underlying problem.
 
-Remove useless export_from_sec(). This makes further cleanups possible.
+xhci_hcd 0000:00:0d.0: EVAN Write MSI 0 fee1e000 4023
 
-I put the temporary code:
+  This sets up the interrupt when the driver is loaded
 
-    export = export_unknown;
+xhci_hcd 0000:00:14.0: EVAN Write MSI 0 fee01000 4024
 
-Otherwise, I would get the compiler warning:
+  Ditto
 
-    warning: 'export' may be used uninitialized in this function [-Wmaybe-uninitialized]
+xhci_hcd 0000:00:0d.0: calling pci_pm_freeze+0x0/0xad @ 423, parent: pci0000:00
+xhci_hcd 0000:00:14.0: calling pci_pm_freeze+0x0/0xad @ 4644, parent: pci0000:00
+xhci_hcd 0000:00:14.0: pci_pm_freeze+0x0/0xad returned 0 after 0 usecs
+xhci_hcd 0000:00:0d.0: EVAN Write MSI 0 fee1e000 4023
+xhci_hcd 0000:00:0d.0: pci_pm_freeze+0x0/0xad returned 0 after 196000 usecs
 
-This is apparently false positive because
+Those freeze() calls end up in xhci_suspend(), which tears down the XHCI
+and ensures that no interrupts are on flight.
 
-    if (strstarts(symname, "__ksymtab_")
+xhci_hcd 0000:00:0d.0: calling pci_pm_freeze_noirq+0x0/0xb2 @ 4645, parent: pci0000:00
+xhci_hcd 0000:00:0d.0: pci_pm_freeze_noirq+0x0/0xb2 returned 0 after 30 usecs
+xhci_hcd 0000:00:14.0: calling pci_pm_freeze_noirq+0x0/0xb2 @ 4644, parent: pci0000:00
+xhci_hcd 0000:00:14.0: pci_pm_freeze_noirq+0x0/0xb2 returned 0 after 3118 usecs
 
-... is a stronger condition than:
+   Now the devices are disabled and not accessible
 
-    if (strstarts(symname, "__ksymtab")
+xhci_hcd 0000:00:14.0: EVAN Don't touch hw 0 fee00000 4024
+xhci_hcd 0000:00:0d.0: EVAN Don't touch hw 0 fee1e000 4045
+xhci_hcd 0000:00:0d.0: EVAN Don't touch hw 0 fee00000 4045
+xhci_hcd 0000:00:14.0: calling pci_pm_thaw_noirq+0x0/0x70 @ 9, parent: pci0000:00
+xhci_hcd 0000:00:14.0: EVAN Write MSI 0 fee00000 4024
 
-Anyway, this part will be cleaned up by the next commit.
+   This is the early restore _before_ the XHCI resume code is called
+   This interrupt is targeted at CPU0 (it's the one which could not be
+   written above).
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
----
+xhci_hcd 0000:00:14.0: pci_pm_thaw_noirq+0x0/0x70 returned 0 after 5272 usecs
+xhci_hcd 0000:00:0d.0: calling pci_pm_thaw_noirq+0x0/0x70 @ 1123, parent: pci0000:00
+xhci_hcd 0000:00:0d.0: EVAN Write MSI 0 fee00000 4045
 
-Changes in v2:
-  - Fix compiler warning
+   Ditto
 
- scripts/mod/modpost.c | 17 ++---------------
- scripts/mod/modpost.h |  4 ----
- 2 files changed, 2 insertions(+), 19 deletions(-)
+xhci_hcd 0000:00:0d.0: pci_pm_thaw_noirq+0x0/0x70 returned 0 after 623 usecs
+xhci_hcd 0000:00:14.0: calling pci_pm_thaw+0x0/0x7c @ 3856, parent: pci0000:00
+xhci_hcd 0000:00:14.0: pci_pm_thaw+0x0/0x7c returned 0 after 0 usecs
+xhci_hcd 0000:00:0d.0: calling pci_pm_thaw+0x0/0x7c @ 4664, parent: pci0000:00
+xhci_hcd 0000:00:0d.0: pci_pm_thaw+0x0/0x7c returned 0 after 0 usecs
 
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index ed9d056d2108..eebb32689816 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -369,16 +369,6 @@ static enum export export_from_secname(struct elf_info *elf, unsigned int sec)
- 		return export_unknown;
- }
- 
--static enum export export_from_sec(struct elf_info *elf, unsigned int sec)
--{
--	if (sec == elf->export_sec)
--		return export_plain;
--	else if (sec == elf->export_gpl_sec)
--		return export_gpl;
--	else
--		return export_unknown;
--}
--
- static const char *namespace_from_kstrtabns(const struct elf_info *info,
- 					    const Elf_Sym *sym)
- {
-@@ -576,10 +566,7 @@ static int parse_elf(struct elf_info *info, const char *filename)
- 				fatal("%s has NOBITS .modinfo\n", filename);
- 			info->modinfo = (void *)hdr + sechdrs[i].sh_offset;
- 			info->modinfo_len = sechdrs[i].sh_size;
--		} else if (strcmp(secname, "__ksymtab") == 0)
--			info->export_sec = i;
--		else if (strcmp(secname, "__ksymtab_gpl") == 0)
--			info->export_gpl_sec = i;
-+		}
- 
- 		if (sechdrs[i].sh_type == SHT_SYMTAB) {
- 			unsigned int sh_link_idx;
-@@ -703,7 +690,7 @@ static void handle_symbol(struct module *mod, struct elf_info *info,
- 	if (strstarts(symname, "__ksymtab"))
- 		export = export_from_secname(info, get_secindex(info, sym));
- 	else
--		export = export_from_sec(info, get_secindex(info, sym));
-+		export = export_unknown;
- 
- 	switch (sym->st_shndx) {
- 	case SHN_COMMON:
-diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
-index 0c47ff95c0e2..a85dcec3669a 100644
---- a/scripts/mod/modpost.h
-+++ b/scripts/mod/modpost.h
-@@ -25,7 +25,6 @@
- #define Elf_Sym     Elf32_Sym
- #define Elf_Addr    Elf32_Addr
- #define Elf_Sword   Elf64_Sword
--#define Elf_Section Elf32_Half
- #define ELF_ST_BIND ELF32_ST_BIND
- #define ELF_ST_TYPE ELF32_ST_TYPE
- 
-@@ -40,7 +39,6 @@
- #define Elf_Sym     Elf64_Sym
- #define Elf_Addr    Elf64_Addr
- #define Elf_Sword   Elf64_Sxword
--#define Elf_Section Elf64_Half
- #define ELF_ST_BIND ELF64_ST_BIND
- #define ELF_ST_TYPE ELF64_ST_TYPE
- 
-@@ -138,8 +136,6 @@ struct elf_info {
- 	Elf_Shdr     *sechdrs;
- 	Elf_Sym      *symtab_start;
- 	Elf_Sym      *symtab_stop;
--	Elf_Section  export_sec;
--	Elf_Section  export_gpl_sec;
- 	char         *strtab;
- 	char	     *modinfo;
- 	unsigned int modinfo_len;
--- 
-2.32.0
+That means the suspend/resume logic is doing the right thing.
+
+How the XHCI ends up being confused here is a mystery. Cc'ed a few more folks.
+
+Thanks,
+
+        tglx
+
 

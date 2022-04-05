@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278FB4F3FDB
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D2284F4130
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353518AbiDEOhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46358 "EHLO
+        id S1380886AbiDEMOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241524AbiDEJgD (ORCPT
+        with ESMTP id S244787AbiDEIwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:36:03 -0400
+        Tue, 5 Apr 2022 04:52:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A5392850;
-        Tue,  5 Apr 2022 02:24:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C071DA6C;
+        Tue,  5 Apr 2022 01:44:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 609B9B81C85;
-        Tue,  5 Apr 2022 09:24:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6157C385C1;
-        Tue,  5 Apr 2022 09:24:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A1249B81BC5;
+        Tue,  5 Apr 2022 08:43:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECACAC385A0;
+        Tue,  5 Apr 2022 08:43:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150657;
-        bh=lzO+z6AoVIcvFgn8IXdAdIOaIsz6Yqp+xI/H9kDkdZA=;
+        s=korg; t=1649148238;
+        bh=LJ9FZay6TadWbgFkmLxOClkerUlpOH54oCSJOw5S7cY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iUGpGwxXCADKA1vPHlfXm6X2qeG6J0GhgTmPYqfBB9KaFW1X+0KiiViTNyqalmgZX
-         PLEWTcG8WBFfYhAKnTAeDyfqQgJcqMKmkXJ17jaW5wdCOwMrrq2PXX3VR1v06ruEwS
-         +yz+09dPLiW2XlX+3xo2rZfqTvLJlAD9ROWcrPb4=
+        b=i4gl4WITz59bAKvwSGSrFgK+dPqXeWv3fPxmWRKMH1RHvKUrISK7GDPNihUQq2/5F
+         Sl8YQUn0C+Kks/AkJGKRKlyp9VRRoR+XpsLOjX6gpaPAJQGKpscBPKr5gHiOM8YefI
+         lL3V9Ja4sM3aMWF/fsFFJ1gpDFYkR6IYjz1PyfRY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Geetika Moolchandani <Geetika.Moolchandani1@ibm.com>,
-        Nageswara R Sastry <rnsastry@linux.ibm.com>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        Ojaswin Mujoo <ojaswin@linux.ibm.com>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.15 134/913] ext4: make mb_optimize_scan performance mount option work with extents
-Date:   Tue,  5 Apr 2022 09:19:56 +0200
-Message-Id: <20220405070343.847448731@linuxfoundation.org>
+        stable@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0284/1017] media: v4l2-mem2mem: Apply DST_QUEUE_OFF_BASE on MMAP buffers across ioctls
+Date:   Tue,  5 Apr 2022 09:19:57 +0200
+Message-Id: <20220405070402.700846450@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,121 +56,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+From: Chen-Yu Tsai <wenst@chromium.org>
 
-commit 077d0c2c78df6f7260cdd015a991327efa44d8ad upstream.
+[ Upstream commit 8310ca94075e784bbb06593cd6c068ee6b6e4ca6 ]
 
-Currently mb_optimize_scan scan feature which improves filesystem
-performance heavily (when FS is fragmented), seems to be not working
-with files with extents (ext4 by default has files with extents).
+DST_QUEUE_OFF_BASE is applied to offset/mem_offset on MMAP capture buffers
+only for the VIDIOC_QUERYBUF ioctl, while the userspace fields (including
+offset/mem_offset) are filled in for VIDIOC_{QUERY,PREPARE,Q,DQ}BUF
+ioctls. This leads to differences in the values presented to userspace.
+If userspace attempts to mmap the capture buffer directly using values
+from DQBUF, it will fail.
 
-This patch fixes that and makes mb_optimize_scan feature work
-for files with extents.
+Move the code that applies the magic offset into a helper, and call
+that helper from all four ioctl entry points.
 
-Below are some performance numbers obtained when allocating a 10M and 100M
-file with and w/o this patch on a filesytem with no 1M contiguous block.
+[hverkuil: drop unnecessary '= 0' in v4l2_m2m_querybuf() for ret]
 
-<perf numbers>
-===============
-Workload: dd if=/dev/urandom of=test conv=fsync bs=1M count=10/100
-
-Time taken
-=====================================================
-no.     Size   without-patch     with-patch    Diff(%)
-1       10M      0m8.401s         0m5.623s     33.06%
-2       100M     1m40.465s        1m14.737s    25.6%
-
-<debug stats>
-=============
-w/o patch:
-  mballoc:
-    reqs: 17056
-    success: 11407
-    groups_scanned: 13643
-    cr0_stats:
-            hits: 37
-            groups_considered: 9472
-            useless_loops: 36
-            bad_suggestions: 0
-    cr1_stats:
-            hits: 11418
-            groups_considered: 908560
-            useless_loops: 1894
-            bad_suggestions: 0
-    cr2_stats:
-            hits: 1873
-            groups_considered: 6913
-            useless_loops: 21
-    cr3_stats:
-            hits: 21
-            groups_considered: 5040
-            useless_loops: 21
-    extents_scanned: 417364
-            goal_hits: 3707
-            2^n_hits: 37
-            breaks: 1873
-            lost: 0
-    buddies_generated: 239/240
-    buddies_time_used: 651080
-    preallocated: 705
-    discarded: 478
-
-with patch:
-  mballoc:
-    reqs: 12768
-    success: 11305
-    groups_scanned: 12768
-    cr0_stats:
-            hits: 1
-            groups_considered: 18
-            useless_loops: 0
-            bad_suggestions: 0
-    cr1_stats:
-            hits: 5829
-            groups_considered: 50626
-            useless_loops: 0
-            bad_suggestions: 0
-    cr2_stats:
-            hits: 6938
-            groups_considered: 580363
-            useless_loops: 0
-    cr3_stats:
-            hits: 0
-            groups_considered: 0
-            useless_loops: 0
-    extents_scanned: 309059
-            goal_hits: 0
-            2^n_hits: 1
-            breaks: 1463
-            lost: 0
-    buddies_generated: 239/240
-    buddies_time_used: 791392
-    preallocated: 673
-    discarded: 446
-
-Fixes: 196e402 (ext4: improve cr 0 / cr 1 group scanning)
-Cc: stable@kernel.org
-Reported-by: Geetika Moolchandani <Geetika.Moolchandani1@ibm.com>
-Reported-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
-Suggested-by: Ritesh Harjani <riteshh@linux.ibm.com>
-Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Link: https://lore.kernel.org/r/fc9a48f7f8dcfc83891a8b21f6dd8cdf056ed810.1646732698.git.ojaswin@linux.ibm.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 7f98639def42 ("V4L/DVB: add memory-to-memory device helper framework for videobuf")
+Fixes: 908a0d7c588e ("[media] v4l: mem2mem: port to videobuf2")
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/mballoc.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/v4l2-core/v4l2-mem2mem.c | 53 ++++++++++++++++++++------
+ 1 file changed, 41 insertions(+), 12 deletions(-)
 
---- a/fs/ext4/mballoc.c
-+++ b/fs/ext4/mballoc.c
-@@ -1000,7 +1000,7 @@ static inline int should_optimize_scan(s
- 		return 0;
- 	if (ac->ac_criteria >= 2)
- 		return 0;
--	if (ext4_test_inode_flag(ac->ac_inode, EXT4_INODE_EXTENTS))
-+	if (!ext4_test_inode_flag(ac->ac_inode, EXT4_INODE_EXTENTS))
- 		return 0;
- 	return 1;
+diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+index e7f4bf5bc8dd..3de683b5e06d 100644
+--- a/drivers/media/v4l2-core/v4l2-mem2mem.c
++++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+@@ -585,19 +585,14 @@ int v4l2_m2m_reqbufs(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
  }
+ EXPORT_SYMBOL_GPL(v4l2_m2m_reqbufs);
+ 
+-int v4l2_m2m_querybuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+-		      struct v4l2_buffer *buf)
++static void v4l2_m2m_adjust_mem_offset(struct vb2_queue *vq,
++				       struct v4l2_buffer *buf)
+ {
+-	struct vb2_queue *vq;
+-	int ret = 0;
+-	unsigned int i;
+-
+-	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
+-	ret = vb2_querybuf(vq, buf);
+-
+ 	/* Adjust MMAP memory offsets for the CAPTURE queue */
+ 	if (buf->memory == V4L2_MEMORY_MMAP && V4L2_TYPE_IS_CAPTURE(vq->type)) {
+ 		if (V4L2_TYPE_IS_MULTIPLANAR(vq->type)) {
++			unsigned int i;
++
+ 			for (i = 0; i < buf->length; ++i)
+ 				buf->m.planes[i].m.mem_offset
+ 					+= DST_QUEUE_OFF_BASE;
+@@ -605,8 +600,23 @@ int v4l2_m2m_querybuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+ 			buf->m.offset += DST_QUEUE_OFF_BASE;
+ 		}
+ 	}
++}
+ 
+-	return ret;
++int v4l2_m2m_querybuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
++		      struct v4l2_buffer *buf)
++{
++	struct vb2_queue *vq;
++	int ret;
++
++	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
++	ret = vb2_querybuf(vq, buf);
++	if (ret)
++		return ret;
++
++	/* Adjust MMAP memory offsets for the CAPTURE queue */
++	v4l2_m2m_adjust_mem_offset(vq, buf);
++
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(v4l2_m2m_querybuf);
+ 
+@@ -763,6 +773,9 @@ int v4l2_m2m_qbuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+ 	if (ret)
+ 		return ret;
+ 
++	/* Adjust MMAP memory offsets for the CAPTURE queue */
++	v4l2_m2m_adjust_mem_offset(vq, buf);
++
+ 	/*
+ 	 * If the capture queue is streaming, but streaming hasn't started
+ 	 * on the device, but was asked to stop, mark the previously queued
+@@ -784,9 +797,17 @@ int v4l2_m2m_dqbuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+ 		   struct v4l2_buffer *buf)
+ {
+ 	struct vb2_queue *vq;
++	int ret;
+ 
+ 	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
+-	return vb2_dqbuf(vq, buf, file->f_flags & O_NONBLOCK);
++	ret = vb2_dqbuf(vq, buf, file->f_flags & O_NONBLOCK);
++	if (ret)
++		return ret;
++
++	/* Adjust MMAP memory offsets for the CAPTURE queue */
++	v4l2_m2m_adjust_mem_offset(vq, buf);
++
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(v4l2_m2m_dqbuf);
+ 
+@@ -795,9 +816,17 @@ int v4l2_m2m_prepare_buf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+ {
+ 	struct video_device *vdev = video_devdata(file);
+ 	struct vb2_queue *vq;
++	int ret;
+ 
+ 	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
+-	return vb2_prepare_buf(vq, vdev->v4l2_dev->mdev, buf);
++	ret = vb2_prepare_buf(vq, vdev->v4l2_dev->mdev, buf);
++	if (ret)
++		return ret;
++
++	/* Adjust MMAP memory offsets for the CAPTURE queue */
++	v4l2_m2m_adjust_mem_offset(vq, buf);
++
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(v4l2_m2m_prepare_buf);
+ 
+-- 
+2.34.1
+
 
 

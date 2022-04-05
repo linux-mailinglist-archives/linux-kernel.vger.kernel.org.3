@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFA094F43D3
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7094F4457
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:14:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243561AbiDEMrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41992 "EHLO
+        id S1378250AbiDEMwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:52:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243461AbiDEJI5 (ORCPT
+        with ESMTP id S243543AbiDEJJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:08:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679BEB53C7;
-        Tue,  5 Apr 2022 01:58:09 -0700 (PDT)
+        Tue, 5 Apr 2022 05:09:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B89B91B0;
+        Tue,  5 Apr 2022 01:58:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05250B80DA1;
-        Tue,  5 Apr 2022 08:58:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46C6AC385B3;
-        Tue,  5 Apr 2022 08:58:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7D4761572;
+        Tue,  5 Apr 2022 08:58:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9145C385A0;
+        Tue,  5 Apr 2022 08:58:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149086;
-        bh=j2lAbKArbsewxVfKvrfs2YygZwshOKUGRDy1GFvJgt8=;
+        s=korg; t=1649149092;
+        bh=kYZhOnBQIEQ5uNY6XMoHEpNf48Uv3rRYsl8kLmBQSDs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IbSDg0LhPp1fKDcNDyerBmGB8xWSCrfRYaS4fwCcQJHEcoeic8LLcdhC9RLxx0nS1
-         9N2Xwo6MoCZb50Ds964cAh9OmRy3kzm9CPUblTkgt7PdAEt8P3WL9lFJCjKkNUxigd
-         92dBuuapeTGp9ozxM49MN+ZoImRMzAx1IKsBvt7I=
+        b=k+YlihSIqIl71Y23T4AE9EOpDNFn1/ldemvHNusYvAhideNyRKi6voZQ8DMucEbkF
+         ROfn2TJQdcYUiPJaYZ2oQ2Xop3eaVP/S7H+PvnxZ8ZqiigL7jwnvtKQHd31G9hxnZK
+         tceIsxDCcqdcRSdCH8q0oRdKQ7ZR6vDbj80ChdK0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nishanth Menon <nm@ti.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        stable@vger.kernel.org, Hou Tao <houtao1@huawei.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0552/1017] drm/bridge: cdns-dsi: Make sure to to create proper aliases for dt
-Date:   Tue,  5 Apr 2022 09:24:25 +0200
-Message-Id: <20220405070410.669620523@linuxfoundation.org>
+Subject: [PATCH 5.16 0553/1017] bpf, arm64: Call build_prologue() first in first JIT pass
+Date:   Tue,  5 Apr 2022 09:24:26 +0200
+Message-Id: <20220405070410.698756494@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,36 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nishanth Menon <nm@ti.com>
+From: Hou Tao <houtao1@huawei.com>
 
-[ Upstream commit ffb5c099aaa13ab7f73c29ea6ae26bce8d7575ae ]
+[ Upstream commit 68e4f238b0e9d3670a1612ad900a6e98b2b3f7dd ]
 
-Add MODULE_DEVICE_TABLE to the device tree table to create required
-aliases needed for module to be loaded with device tree based platform.
+BPF line info needs ctx->offset to be the instruction offset in the whole JITed
+image instead of the body itself, so also call build_prologue() first in first
+JIT pass.
 
-Fixes: e19233955d9e ("drm/bridge: Add Cadence DSI driver")
-Signed-off-by: Nishanth Menon <nm@ti.com>
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20210921174059.17946-1-nm@ti.com
+Fixes: 37ab566c178d ("bpf: arm64: Enable arm64 jit to provide bpf_line_info")
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20220226121906.5709-2-houtao1@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/bridge/cdns-dsi.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/net/bpf_jit_comp.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/cdns-dsi.c b/drivers/gpu/drm/bridge/cdns-dsi.c
-index d8a15c459b42..829e1a144656 100644
---- a/drivers/gpu/drm/bridge/cdns-dsi.c
-+++ b/drivers/gpu/drm/bridge/cdns-dsi.c
-@@ -1284,6 +1284,7 @@ static const struct of_device_id cdns_dsi_of_match[] = {
- 	{ .compatible = "cdns,dsi" },
- 	{ },
- };
-+MODULE_DEVICE_TABLE(of, cdns_dsi_of_match);
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 71ef9dcd9b57..3c6d0d60820f 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -1049,15 +1049,18 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+ 		goto out_off;
+ 	}
  
- static struct platform_driver cdns_dsi_platform_driver = {
- 	.probe  = cdns_dsi_drm_probe,
+-	/* 1. Initial fake pass to compute ctx->idx. */
+-
+-	/* Fake pass to fill in ctx->offset. */
+-	if (build_body(&ctx, extra_pass)) {
++	/*
++	 * 1. Initial fake pass to compute ctx->idx and ctx->offset.
++	 *
++	 * BPF line info needs ctx->offset[i] to be the offset of
++	 * instruction[i] in jited image, so build prologue first.
++	 */
++	if (build_prologue(&ctx, was_classic)) {
+ 		prog = orig_prog;
+ 		goto out_off;
+ 	}
+ 
+-	if (build_prologue(&ctx, was_classic)) {
++	if (build_body(&ctx, extra_pass)) {
+ 		prog = orig_prog;
+ 		goto out_off;
+ 	}
 -- 
 2.34.1
 

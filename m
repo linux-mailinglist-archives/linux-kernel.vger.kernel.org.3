@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2855F4F2D84
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8324F2E66
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357546AbiDEK0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
+        id S1357708AbiDEK1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241111AbiDEIct (ORCPT
+        with ESMTP id S241116AbiDEIcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:32:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C011583E;
-        Tue,  5 Apr 2022 01:27:46 -0700 (PDT)
+        Tue, 5 Apr 2022 04:32:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D13BC08;
+        Tue,  5 Apr 2022 01:27:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35C84B81B13;
-        Tue,  5 Apr 2022 08:27:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99D97C385A2;
-        Tue,  5 Apr 2022 08:27:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E3C560AFB;
+        Tue,  5 Apr 2022 08:27:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B539C385A2;
+        Tue,  5 Apr 2022 08:27:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147264;
-        bh=e8M3m26qr3VKHSlMi/VvMyNC/NrvzXKmemOXvTAkL4s=;
+        s=korg; t=1649147271;
+        bh=957SGL9KQznzdENY4XdnryY6MFqclkMVRwcwl8CH+qQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ASlefjH7DVGX3yrrHJMsotRY8ziNar54VBYwD85HUeeOoTqMx/FSicKcrj4kYaqos
-         BDQKBPXjTyaZ/rsv6oQMqjxZGJtNkTqgob3wo9GsmBl6+cMsP0xbGTHYb7wC/vLJDr
-         ZyHH1lqyU0N8sXNlQbvi1CN2ZSZ/eB3IiUGYZ8mE=
+        b=EpQGnyXgqyjfLkxRWC7OxPM8Fn99PXXf3sLId6xk7S/qwYkV/14GGVZZXugZUVmJE
+         DWdHiuwGAxKQk5H3Z4CGRiN/JnY4zKeNCpkjbZ288vb/uMqorz/vE7esM1a4kup+0+
+         yYiWK/fHgD1z6YYa3SKySr1u2eiGw/oimJbw/YqA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Abhijeet V <abhijeetviswa@gmail.com>
-Subject: [PATCH 5.17 1062/1126] platform/x86: asus-wmi: Fix regression when probing for fan curve control
-Date:   Tue,  5 Apr 2022 09:30:09 +0200
-Message-Id: <20220405070438.633178279@linuxfoundation.org>
+        stable@vger.kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
+        Zeal Robot <zealci@zte.com.cn>, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 5.17 1064/1126] proc: bootconfig: Add null pointer check
+Date:   Tue,  5 Apr 2022 09:30:11 +0200
+Message-Id: <20220405070438.689996007@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -54,39 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-commit d717e4509af0380a94dbc28b61839df39f17e1eb upstream.
+commit bed5b60bf67ccd8957b8c0558fead30c4a3f5d3f upstream.
 
-The fan curve control patches introduced a regression for at least the
-TUF FX506 and possibly other TUF series laptops that do not have support
-for fan curve control.
+kzalloc is a memory allocation function which can return NULL when some
+internal memory errors happen. It is safer to add null pointer check.
 
-As part of the probing process, asus_wmi_evaluate_method_buf is called
-to get the factory default fan curve . The WMI management function
-returns 0 on certain laptops to indicate lack of fan curve control
-instead of ASUS_WMI_UNSUPPORTED_METHOD. This 0 is transformed to
--ENODATA which results in failure when probing.
+Link: https://lkml.kernel.org/r/20220329104004.2376879-1-lv.ruyi@zte.com.cn
 
-Fixes: 0f0ac158d28f ("platform/x86: asus-wmi: Add support for custom fan curves")
-Reported-and-tested-by: Abhijeet V <abhijeetviswa@gmail.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20220205112840.33095-1-hdegoede@redhat.com
+Cc: stable@vger.kernel.org
+Fixes: c1a3c36017d4 ("proc: bootconfig: Add /proc/bootconfig to show boot config list")
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/platform/x86/asus-wmi.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/proc/bootconfig.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/platform/x86/asus-wmi.c
-+++ b/drivers/platform/x86/asus-wmi.c
-@@ -2059,7 +2059,7 @@ static int fan_boost_mode_check_present(
- 	err = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_FAN_BOOST_MODE,
- 				    &result);
- 	if (err) {
--		if (err == -ENODEV)
-+		if (err == -ENODEV || err == -ENODATA)
- 			return 0;
- 		else
- 			return err;
+--- a/fs/proc/bootconfig.c
++++ b/fs/proc/bootconfig.c
+@@ -32,6 +32,8 @@ static int __init copy_xbc_key_value_lis
+ 	int ret = 0;
+ 
+ 	key = kzalloc(XBC_KEYLEN_MAX, GFP_KERNEL);
++	if (!key)
++		return -ENOMEM;
+ 
+ 	xbc_for_each_key_value(leaf, val) {
+ 		ret = xbc_node_compose_key(leaf, key, XBC_KEYLEN_MAX);
 
 

@@ -2,78 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 271934F5233
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2255A4F5235
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1849595AbiDFCjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39398 "EHLO
+        id S1849623AbiDFCjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:39:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1452819AbiDEWc2 (ORCPT
+        with ESMTP id S1452881AbiDEWca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 18:32:28 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02191A3BB;
-        Tue,  5 Apr 2022 14:26:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649193999; x=1680729999;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+oTJs1jfnV9NW0n9SL3+E3IODEjehGaO0faXtMV5Vvo=;
-  b=bggTod5tcaE8W4le11d67CSJn7zWg4hJdb1i4ZVnNMwxYMk9yNjviSIx
-   Xkb70JazRAekFm3YtV3AJ1VnjRfXmPjWPHxRYYWIGQA82a15W0ZG1AB5C
-   +xnNaqypsoxbvMS59UWXX9JOXwd+IM3az0HpHiXoDvp6WlAavV3z+H2oZ
-   ZSFVDR7TYOfeTWoI2kANPXBbjNnJJAFaz3BAUW6dryNo3ysLQ7JuRjQSe
-   7Uw9QYEQ+Wuq+I7sAP7OahdlXoUrVcDyvF0vmo41/Z9bcppoGPjXt0c35
-   sIEY+I29s5pARRqSkcPtDmzH1+yDnCOyZIlIkHLo2k9gu46RVXa1nLURC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="347310054"
-X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="347310054"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 14:26:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,238,1643702400"; 
-   d="scan'208";a="641773595"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 05 Apr 2022 14:26:34 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbqh8-0003ly-3e;
-        Tue, 05 Apr 2022 21:26:34 +0000
-Date:   Wed, 6 Apr 2022 05:25:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Shubham Bansal <illusionist.neo@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, bpf@vger.kernel.org,
-        kernel-team@fb.com, Jiri Olsa <jolsa@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH bpf 4/4] arm64: rethook: Replace kretprobe trampoline
- with rethook
-Message-ID: <202204060512.Pzw5bnTd-lkp@intel.com>
-References: <164915126392.982637.10302202550404803304.stgit@devnote2>
+        Tue, 5 Apr 2022 18:32:30 -0400
+Received: from gateway33.websitewelcome.com (gateway33.websitewelcome.com [192.185.145.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2B31B7A2
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 14:26:55 -0700 (PDT)
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway33.websitewelcome.com (Postfix) with ESMTP id 42CC144535
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 16:26:55 -0500 (CDT)
+Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
+        by cmsmtp with SMTP
+        id bqhTndoec9AGSbqhTnEslY; Tue, 05 Apr 2022 16:26:55 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=roeck-us.net; s=default; h=In-Reply-To:Content-Type:MIME-Version:References
+        :Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding
+        :Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=etLRv605waIPx1DCrS1r2FtQdxwRWlTwRr0MCFi87mQ=; b=sDX58Fsb0AiIgrUpsTvhohwTrE
+        XQ1vZUwbXi1u2XKNWkOabkdtvSY+nJsJnq0jEJWOR2pWup9lL6B1Mma1ENz8pF3G+ncnOQDMBWueO
+        XHkI5kIBI84YfYzO74YAyKDyDKe2FjwoGqgSZffJ5D+JJXb2Jq5ETNOBfe4fmt1CjLYkwcQ+vhYYD
+        Mp+MjiO2y0hQtXtTYWaQgBv5t2HUUiMwf4OS56xwETZ1BcjgDwyOR2rvANhkO7vmxLAVlqJQlomJS
+        A1LWi97vunmvbWJ2N78LVU+fj8RDpGNVebNiU4xgOzx9rtMLQ/EktX2AhgIrfrya8pzpfhsWoBVtB
+        klltifqw==;
+Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:57870 helo=localhost)
+        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@roeck-us.net>)
+        id 1nbqhS-003NqP-K5; Tue, 05 Apr 2022 21:26:54 +0000
+Date:   Tue, 5 Apr 2022 14:26:53 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "moderated list:H8/300 ARCHITECTURE" 
+        <uclinux-h8-devel@lists.sourceforge.jp>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>, Max Filippov <jcmvbkbc@gmail.com>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Subject: Re: [RFC PULL] remove arch/h8300
+Message-ID: <20220405212653.GA2482665@roeck-us.net>
+References: <Yib9F5SqKda/nH9c@infradead.org>
+ <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
+ <YkmWh2tss8nXKqc5@infradead.org>
+ <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <164915126392.982637.10302202550404803304.stgit@devnote2>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - roeck-us.net
+X-BWhitelist: no
+X-Source-IP: 108.223.40.66
+X-Source-L: No
+X-Exim-ID: 1nbqhS-003NqP-K5
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net (localhost) [108.223.40.66]:57870
+X-Source-Auth: guenter@roeck-us.net
+X-Email-Count: 20
+X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,55 +93,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masami,
+On Mon, Apr 04, 2022 at 03:07:06PM +0200, Arnd Bergmann wrote:
+> On Sun, Apr 3, 2022 at 2:43 PM Christoph Hellwig <hch@infradead.org> wrote:
+> >
+> > On Tue, Mar 08, 2022 at 09:19:16AM +0100, Arnd Bergmann wrote:
+> > > If there are no other objections, I'll just queue this up for 5.18 in
+> > > the asm-generic
+> > > tree along with the nds32 removal.
+> >
+> > So it is the last day of te merge window and arch/h8300 is till there.
+> > And checking nw the removal has also not made it to linux-next.  Looks
+> > like it is so stale that even the removal gets ignored :(
+> 
+> I was really hoping that someone else would at least comment.
+> I've queued it up now for 5.19.
+> 
+> Should we garbage-collect some of the other nommu platforms where
+> we're here? Some of them are just as stale:
+> 
+> 1. xtensa nommu has does not compile in mainline and as far as I can
+> tell never did
+>    (there was https://github.com/jcmvbkbc/linux-xtensa/tree/xtensa-5.6-esp32,
+> which
+>    worked at some point, but I don't think there was enough interest
+> to get in merged)
 
-I love your patch! Perhaps something to improve:
+Hmm, I build and test nommu_kc705_defconfig in my test system.
 
-[auto build test WARNING on bpf/master]
+> 
+> 2. arch/sh Hitachi/Renesas sh2 (non-j2) support appears to be in a similar state
+>     to h8300, I don't think anyone would miss it
+> 
+> 8<----- This may we where we want to draw the line ----
+> 
+> 3. arch/sh j2 support was added in 2016 and doesn't see a lot of
+> changes, but I think
+>     Rich still cares about it and wants to add J32 support (with MMU)
+> in the future
+> 
+> 4. m68k Dragonball, Coldfire v2 and Coldfire v3 are just as obsolete as SH2 as
+>    hardware is concerned, but Greg Ungerer keeps maintaining it, along with the
+>    newer Coldfire v4 (with MMU)
+> 
+> 5. K210 was added in 2020. I assume you still want to keep it.
+> 
+> 7. Arm32 has several Cortex-M based platforms that are mainly kept for
+>     legacy users (in particular stm32) or educational value.
+> 
+I do build and test mps2_defconfig with qemu's mps2-an385 emulation.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Masami-Hiramatsu/kprobes-rethook-ARM-arm64-Replace-kretprobe-trampoline-with-rethook/20220405-195153
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
-config: arm64-randconfig-r022-20220405 (https://download.01.org/0day-ci/archive/20220406/202204060512.Pzw5bnTd-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/74084aa7903f112b1c3df1f864d49b15d8aba270
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Masami-Hiramatsu/kprobes-rethook-ARM-arm64-Replace-kretprobe-trampoline-with-rethook/20220405-195153
-        git checkout 74084aa7903f112b1c3df1f864d49b15d8aba270
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+I am not saying that those are actively used, and I don't mind dropping
+them, but they do still work.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/arm64/kernel/rethook.c:11:22: warning: no previous prototype for function 'arch_rethook_trampoline_callback' [-Wmissing-prototypes]
-   unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
-                        ^
-   arch/arm64/kernel/rethook.c:11:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/arch_rethook_trampoline_callback +11 arch/arm64/kernel/rethook.c
-
-     9	
-    10	/* This is called from arch_rethook_trampoline() */
-  > 11	unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
-    12	{
-    13		return rethook_trampoline_handler(regs, regs->regs[29]);
-    14	}
-    15	NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
-    16	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Guenter

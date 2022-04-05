@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6D54F413D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E09C4F417A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344838AbiDEOV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58708 "EHLO
+        id S1356409AbiDEMJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239500AbiDEJeA (ORCPT
+        with ESMTP id S244713AbiDEIwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:34:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DEC17939C;
-        Tue,  5 Apr 2022 02:22:58 -0700 (PDT)
+        Tue, 5 Apr 2022 04:52:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA5D1ADB1;
+        Tue,  5 Apr 2022 01:42:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE2646144D;
-        Tue,  5 Apr 2022 09:22:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CCEDC385A2;
-        Tue,  5 Apr 2022 09:22:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E5306117A;
+        Tue,  5 Apr 2022 08:42:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30685C385A1;
+        Tue,  5 Apr 2022 08:42:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150577;
-        bh=fHq6yezaEyDiwaMdcaDnIeQNeAFcl0kVKFCgE+Qc/VU=;
+        s=korg; t=1649148157;
+        bh=xMuBtpSMi0tR4uqVjAuMkRQrPn1kVymN+i1l75YiSig=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z1tqkUU6DLdbKKhQDsOpK/kXe3R9VA5XLvCFILkjGWo1PKkJjCBjBu+xyuYMPnBf9
-         IeNm23Xnaq4inFwb/kF1h5PscuXzpiVtdRD26KwHJwL0HmE1dZvCNzQvnQhTWzhpOx
-         PjjFSmPpAfPTIIzJKLdnS03kXN6oPNmhYcgqALNc=
+        b=p6owczWL5EsFm6bVraEq3wf+fKmI95m/Jj7rsPLpDojV9mpUDDzs2lNIAqpmkk0KB
+         /t0PBm/d98z8zdQNtd7jw6Imdq9rI61A1IhCTlMwg75QBQyqRtXla5mtQfxDXpz+s+
+         bGTA7J6+O7o9XyjUy4PxVj/1Gt47+fcNoJXppvxg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ali Pouladi <quic_apouladi@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Subject: [PATCH 5.15 104/913] rtc: pl031: fix rtc features null pointer dereference
-Date:   Tue,  5 Apr 2022 09:19:26 +0200
-Message-Id: <20220405070342.944359663@linuxfoundation.org>
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0254/1017] clocksource: acpi_pm: fix return value of __setup handler
+Date:   Tue,  5 Apr 2022 09:19:27 +0200
+Message-Id: <20220405070401.802649863@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ali Pouladi <quic_apouladi@quicinc.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit ea6af39f3da50c86367a71eb3cc674ade3ed244c upstream.
+[ Upstream commit 6a861abceecb68497dd82a324fee45a5332dcece ]
 
-When there is no interrupt line, rtc alarm feature is disabled.
+__setup() handlers should return 1 to obsolete_checksetup() in
+init/main.c to indicate that the boot option has been handled.
+A return of 0 causes the boot option/value to be listed as an Unknown
+kernel parameter and added to init's (limited) environment strings.
 
-The clearing of the alarm feature bit was being done prior to allocations
-of ldata->rtc device, resulting in a null pointer dereference.
+The __setup() handler interface isn't meant to handle negative return
+values -- they are non-zero, so they mean "handled" (like a return
+value of 1 does), but that's just a quirk. So return 1 from
+parse_pmtmr(). Also print a warning message if kstrtouint() returns
+an error.
 
-Clear RTC_FEATURE_ALARM after the rtc device is allocated.
-
-Fixes: d9b0dd54a194 ("rtc: pl031: use RTC_FEATURE_ALARM")
-Cc: stable@vger.kernel.org
-Signed-off-by: Ali Pouladi <quic_apouladi@quicinc.com>
-Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lore.kernel.org/r/20220225161924.274141-1-quic_eberman@quicinc.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 6b148507d3d0 ("pmtmr: allow command line override of ioport")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/rtc/rtc-pl031.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/clocksource/acpi_pm.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/drivers/rtc/rtc-pl031.c
-+++ b/drivers/rtc/rtc-pl031.c
-@@ -350,9 +350,6 @@ static int pl031_probe(struct amba_devic
- 		}
- 	}
+diff --git a/drivers/clocksource/acpi_pm.c b/drivers/clocksource/acpi_pm.c
+index eb596ff9e7bb..279ddff81ab4 100644
+--- a/drivers/clocksource/acpi_pm.c
++++ b/drivers/clocksource/acpi_pm.c
+@@ -229,8 +229,10 @@ static int __init parse_pmtmr(char *arg)
+ 	int ret;
  
--	if (!adev->irq[0])
--		clear_bit(RTC_FEATURE_ALARM, ldata->rtc->features);
--
- 	device_init_wakeup(&adev->dev, true);
- 	ldata->rtc = devm_rtc_allocate_device(&adev->dev);
- 	if (IS_ERR(ldata->rtc)) {
-@@ -360,6 +357,9 @@ static int pl031_probe(struct amba_devic
- 		goto out;
- 	}
+ 	ret = kstrtouint(arg, 16, &base);
+-	if (ret)
+-		return ret;
++	if (ret) {
++		pr_warn("PMTMR: invalid 'pmtmr=' value: '%s'\n", arg);
++		return 1;
++	}
  
-+	if (!adev->irq[0])
-+		clear_bit(RTC_FEATURE_ALARM, ldata->rtc->features);
-+
- 	ldata->rtc->ops = ops;
- 	ldata->rtc->range_min = vendor->range_min;
- 	ldata->rtc->range_max = vendor->range_max;
+ 	pr_info("PMTMR IOPort override: 0x%04x -> 0x%04x\n", pmtmr_ioport,
+ 		base);
+-- 
+2.34.1
+
 
 

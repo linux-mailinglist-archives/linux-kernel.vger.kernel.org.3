@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3599B4F4287
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:44:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 245A54F3F72
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1449126AbiDEUKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
+        id S1390115AbiDENg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:36:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353453AbiDEKGN (ORCPT
+        with ESMTP id S1347194AbiDEJZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:06:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8194BF979;
-        Tue,  5 Apr 2022 02:55:06 -0700 (PDT)
+        Tue, 5 Apr 2022 05:25:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15789DBD1B;
+        Tue,  5 Apr 2022 02:14:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22FD4B818F3;
-        Tue,  5 Apr 2022 09:55:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75321C385A3;
-        Tue,  5 Apr 2022 09:55:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5DED61675;
+        Tue,  5 Apr 2022 09:14:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D09CEC385A0;
+        Tue,  5 Apr 2022 09:14:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152503;
-        bh=JvjyQbqzGBHoo/fnIR59SnE5qGnqo560ZSO1/q6vJIc=;
+        s=korg; t=1649150094;
+        bh=I/i7T7HEoLFH2UMaMusK0AA1SCLAgIME1qWj9t4fiAA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hoOgbezBodw+wT0ewOVqlBWrpkCYnfhg+S6sW6w6NxG7QznKmUxCm/F5R9EWjddch
-         5YETxjSqIOOPj+GEE3PzZp2C/vtH7MktPmR2zXDukwAUCZ3ItvjEEGiorEdJ8+Cs7f
-         rVPbdCjFRp5bLjdNs5egQ95rqQo/db6jT/9Uz2dY=
+        b=2ZMEyi92zZUz+wvcOpTzFOs/iP1BwY5cYPU65x4dmGodwfLlv5DJTbCtxwbtyezOF
+         D9CeI5FJAubiZ7tkmvOhwQJruemfKa7yMcjlR6t7DsT8KtodkMJH7dgrigxLw3vYcs
+         ykk3Aa6pD1LRTMS/VKg1tDQgMQsMfQanL9O46Meg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Quinn Tran <qutran@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.15 801/913] scsi: qla2xxx: Fix disk failure to rediscover
-Date:   Tue,  5 Apr 2022 09:31:03 +0200
-Message-Id: <20220405070403.842354690@linuxfoundation.org>
+        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Subject: [PATCH 5.16 0951/1017] Revert "virtio_pci: harden MSI-X interrupts"
+Date:   Tue,  5 Apr 2022 09:31:04 +0200
+Message-Id: <20220405070422.440629901@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,74 +56,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
+From: Jason Wang <jasowang@redhat.com>
 
-commit 6a45c8e137d4e2c72eecf1ac7cf64f2fdfcead99 upstream.
+commit eb4cecb453a19b34d5454b49532e09e9cb0c1529 upstream.
 
-User experienced some of the LUN failed to get rediscovered after long
-cable pull test. The issue is triggered by a race condition between driver
-setting session online state vs starting the LUN scan process at the same
-time. Current code set the online state after notifying the session is
-available. In this case, trigger to start the LUN scan process happened
-before driver could set the session in online state.  LUN scan ends up with
-failure due to the session online check was failing.
+This reverts commit 9e35276a5344f74d4a3600fc4100b3dd251d5c56. Issue
+were reported for the drivers that are using affinity managed IRQ
+where manually toggling IRQ status is not expected. And we forget to
+enable the interrupts in the restore path as well.
 
-Set the online state before reporting of the availability of the session.
+In the future, we will rework on the interrupt hardening.
 
-Link: https://lore.kernel.org/r/20220310092604.22950-3-njavali@marvell.com
-Fixes: aecf043443d3 ("scsi: qla2xxx: Fix Remote port registration")
-Cc: stable@vger.kernel.org
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Quinn Tran <qutran@marvell.com>
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: 9e35276a5344 ("virtio_pci: harden MSI-X interrupts")
+Reported-by: Marc Zyngier <maz@kernel.org>
+Reported-by: Stefano Garzarella <sgarzare@redhat.com>
+Signed-off-by: Jason Wang <jasowang@redhat.com>
+Link: https://lore.kernel.org/r/20220323031524.6555-2-jasowang@redhat.com
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_init.c |    5 +++--
- drivers/scsi/qla2xxx/qla_nvme.c |    5 +++++
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ drivers/virtio/virtio_pci_common.c |   27 ++++++---------------------
+ drivers/virtio/virtio_pci_common.h |    6 ++----
+ drivers/virtio/virtio_pci_legacy.c |    5 ++---
+ drivers/virtio/virtio_pci_modern.c |    6 ++----
+ 4 files changed, 12 insertions(+), 32 deletions(-)
 
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -5740,6 +5740,8 @@ qla2x00_reg_remote_port(scsi_qla_host_t
- 	if (atomic_read(&fcport->state) == FCS_ONLINE)
- 		return;
+--- a/drivers/virtio/virtio_pci_common.c
++++ b/drivers/virtio/virtio_pci_common.c
+@@ -24,8 +24,8 @@ MODULE_PARM_DESC(force_legacy,
+ 		 "Force legacy mode for transitional virtio 1 devices");
+ #endif
  
-+	qla2x00_set_fcport_state(fcport, FCS_ONLINE);
-+
- 	rport_ids.node_name = wwn_to_u64(fcport->node_name);
- 	rport_ids.port_name = wwn_to_u64(fcport->port_name);
- 	rport_ids.port_id = fcport->d_id.b.domain << 16 |
-@@ -5847,6 +5849,7 @@ qla2x00_update_fcport(scsi_qla_host_t *v
- 		qla2x00_reg_remote_port(vha, fcport);
- 		break;
- 	case MODE_TARGET:
-+		qla2x00_set_fcport_state(fcport, FCS_ONLINE);
- 		if (!vha->vha_tgt.qla_tgt->tgt_stop &&
- 			!vha->vha_tgt.qla_tgt->tgt_stopped)
- 			qlt_fc_port_added(vha, fcport);
-@@ -5861,8 +5864,6 @@ qla2x00_update_fcport(scsi_qla_host_t *v
- 		break;
- 	}
+-/* disable irq handlers */
+-void vp_disable_cbs(struct virtio_device *vdev)
++/* wait for pending irq handlers */
++void vp_synchronize_vectors(struct virtio_device *vdev)
+ {
+ 	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
+ 	int i;
+@@ -34,20 +34,7 @@ void vp_disable_cbs(struct virtio_device
+ 		synchronize_irq(vp_dev->pci_dev->irq);
  
--	qla2x00_set_fcport_state(fcport, FCS_ONLINE);
+ 	for (i = 0; i < vp_dev->msix_vectors; ++i)
+-		disable_irq(pci_irq_vector(vp_dev->pci_dev, i));
+-}
 -
- 	if (IS_IIDMA_CAPABLE(vha->hw) && vha->hw->flags.gpsc_supported) {
- 		if (fcport->id_changed) {
- 			fcport->id_changed = 0;
---- a/drivers/scsi/qla2xxx/qla_nvme.c
-+++ b/drivers/scsi/qla2xxx/qla_nvme.c
-@@ -35,6 +35,11 @@ int qla_nvme_register_remote(struct scsi
- 		(fcport->nvme_flag & NVME_FLAG_REGISTERED))
- 		return 0;
+-/* enable irq handlers */
+-void vp_enable_cbs(struct virtio_device *vdev)
+-{
+-	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
+-	int i;
+-
+-	if (vp_dev->intx_enabled)
+-		return;
+-
+-	for (i = 0; i < vp_dev->msix_vectors; ++i)
+-		enable_irq(pci_irq_vector(vp_dev->pci_dev, i));
++		synchronize_irq(pci_irq_vector(vp_dev->pci_dev, i));
+ }
  
-+	if (atomic_read(&fcport->state) == FCS_ONLINE)
-+		return 0;
-+
-+	qla2x00_set_fcport_state(fcport, FCS_ONLINE);
-+
- 	fcport->nvme_flag &= ~NVME_FLAG_RESETTING;
+ /* the notify function used when creating a virt queue */
+@@ -154,8 +141,7 @@ static int vp_request_msix_vectors(struc
+ 	snprintf(vp_dev->msix_names[v], sizeof *vp_dev->msix_names,
+ 		 "%s-config", name);
+ 	err = request_irq(pci_irq_vector(vp_dev->pci_dev, v),
+-			  vp_config_changed, IRQF_NO_AUTOEN,
+-			  vp_dev->msix_names[v],
++			  vp_config_changed, 0, vp_dev->msix_names[v],
+ 			  vp_dev);
+ 	if (err)
+ 		goto error;
+@@ -174,8 +160,7 @@ static int vp_request_msix_vectors(struc
+ 		snprintf(vp_dev->msix_names[v], sizeof *vp_dev->msix_names,
+ 			 "%s-virtqueues", name);
+ 		err = request_irq(pci_irq_vector(vp_dev->pci_dev, v),
+-				  vp_vring_interrupt, IRQF_NO_AUTOEN,
+-				  vp_dev->msix_names[v],
++				  vp_vring_interrupt, 0, vp_dev->msix_names[v],
+ 				  vp_dev);
+ 		if (err)
+ 			goto error;
+@@ -352,7 +337,7 @@ static int vp_find_vqs_msix(struct virti
+ 			 "%s-%s",
+ 			 dev_name(&vp_dev->vdev.dev), names[i]);
+ 		err = request_irq(pci_irq_vector(vp_dev->pci_dev, msix_vec),
+-				  vring_interrupt, IRQF_NO_AUTOEN,
++				  vring_interrupt, 0,
+ 				  vp_dev->msix_names[msix_vec],
+ 				  vqs[i]);
+ 		if (err)
+--- a/drivers/virtio/virtio_pci_common.h
++++ b/drivers/virtio/virtio_pci_common.h
+@@ -101,10 +101,8 @@ static struct virtio_pci_device *to_vp_d
+ 	return container_of(vdev, struct virtio_pci_device, vdev);
+ }
  
- 	memset(&req, 0, sizeof(struct nvme_fc_port_info));
+-/* disable irq handlers */
+-void vp_disable_cbs(struct virtio_device *vdev);
+-/* enable irq handlers */
+-void vp_enable_cbs(struct virtio_device *vdev);
++/* wait for pending irq handlers */
++void vp_synchronize_vectors(struct virtio_device *vdev);
+ /* the notify function used when creating a virt queue */
+ bool vp_notify(struct virtqueue *vq);
+ /* the config->del_vqs() implementation */
+--- a/drivers/virtio/virtio_pci_legacy.c
++++ b/drivers/virtio/virtio_pci_legacy.c
+@@ -98,8 +98,8 @@ static void vp_reset(struct virtio_devic
+ 	/* Flush out the status write, and flush in device writes,
+ 	 * including MSi-X interrupts, if any. */
+ 	vp_legacy_get_status(&vp_dev->ldev);
+-	/* Disable VQ/configuration callbacks. */
+-	vp_disable_cbs(vdev);
++	/* Flush pending VQ/configuration callbacks. */
++	vp_synchronize_vectors(vdev);
+ }
+ 
+ static u16 vp_config_vector(struct virtio_pci_device *vp_dev, u16 vector)
+@@ -185,7 +185,6 @@ static void del_vq(struct virtio_pci_vq_
+ }
+ 
+ static const struct virtio_config_ops virtio_pci_config_ops = {
+-	.enable_cbs	= vp_enable_cbs,
+ 	.get		= vp_get,
+ 	.set		= vp_set,
+ 	.get_status	= vp_get_status,
+--- a/drivers/virtio/virtio_pci_modern.c
++++ b/drivers/virtio/virtio_pci_modern.c
+@@ -172,8 +172,8 @@ static void vp_reset(struct virtio_devic
+ 	 */
+ 	while (vp_modern_get_status(mdev))
+ 		msleep(1);
+-	/* Disable VQ/configuration callbacks. */
+-	vp_disable_cbs(vdev);
++	/* Flush pending VQ/configuration callbacks. */
++	vp_synchronize_vectors(vdev);
+ }
+ 
+ static u16 vp_config_vector(struct virtio_pci_device *vp_dev, u16 vector)
+@@ -380,7 +380,6 @@ static bool vp_get_shm_region(struct vir
+ }
+ 
+ static const struct virtio_config_ops virtio_pci_config_nodev_ops = {
+-	.enable_cbs	= vp_enable_cbs,
+ 	.get		= NULL,
+ 	.set		= NULL,
+ 	.generation	= vp_generation,
+@@ -398,7 +397,6 @@ static const struct virtio_config_ops vi
+ };
+ 
+ static const struct virtio_config_ops virtio_pci_config_ops = {
+-	.enable_cbs	= vp_enable_cbs,
+ 	.get		= vp_get,
+ 	.set		= vp_set,
+ 	.generation	= vp_generation,
 
 

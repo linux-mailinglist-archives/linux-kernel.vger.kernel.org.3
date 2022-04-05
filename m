@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F5D4F428A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF6234F3E19
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384387AbiDEM10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59318 "EHLO
+        id S1384320AbiDEM1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245197AbiDEIyN (ORCPT
+        with ESMTP id S245196AbiDEIyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:54:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B461825F1;
-        Tue,  5 Apr 2022 01:51:55 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5739F114E;
+        Tue,  5 Apr 2022 01:52:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 516AF614E5;
-        Tue,  5 Apr 2022 08:51:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60B66C385A1;
-        Tue,  5 Apr 2022 08:51:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9A89614E5;
+        Tue,  5 Apr 2022 08:52:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02641C385A1;
+        Tue,  5 Apr 2022 08:51:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148714;
-        bh=pgtCG7ooDhzvfMoixbXxXQ6K0MvWSPBRQdkNanPRTmQ=;
+        s=korg; t=1649148720;
+        bh=xZqW6bhmtjzrBnDxdcWjv2+8BAXwYVWbAoDYitT4kk0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YimBAZTm5/L7D6RrEDGAKBgRCD4na5gn3tLipx7SSxFv7DFkK7+Xao8+GT5CFNNUF
-         md0yloRPPMAqfBeM/pgMXgBhphhgDx9pHfTSd1nr2S+3tW1pRef7yAQb9hMX11HUWD
-         j1s9DkFn7q5uc2oDIksfvTzQYbZ83g+l+l44pSso=
+        b=GNQl/O/Q1rb71iRzTPSfOggBECPh+YvTQfcQOATymqBFYOZFn7ldiYJfB6x7wAzx6
+         ZKT0tGKaCKr6WzjM9CaSXABZxBphulJJ5HXKEytVipy+imNF+jwk1fCwX26RJFJa12
+         OMXJw1W9qdR9p58flyjUxwNGijqAzKqGlBsDTUqo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Wang <sean.wang@mediatek.com>,
+        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
         Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0455/1017] mt76: mt7921: set EDCA parameters with the MCU CE command
-Date:   Tue,  5 Apr 2022 09:22:48 +0200
-Message-Id: <20220405070407.804539519@linuxfoundation.org>
+Subject: [PATCH 5.16 0456/1017] mt76: mt7921: do not always disable fw runtime-pm
+Date:   Tue,  5 Apr 2022 09:22:49 +0200
+Message-Id: <20220405070407.834793000@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -54,134 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Wang <sean.wang@mediatek.com>
+From: Lorenzo Bianconi <lorenzo@kernel.org>
 
-[ Upstream commit 66ca1a7b2d5503f561b751abdd6ec6fa96343eb6 ]
+[ Upstream commit b44eeb8cbdf2b88f2844f11e4f263b0abed5b5b0 ]
 
-The command MCU_EXT_CMD_EDCA_UPDATE is not fully supported by the MT7921
-firmware, so we apply CE command MCU_CE_CMD_SET_EDCA_PARAMS instead which
-is supported even in the oldest firmware to properly set up EDCA parameters
-for each AC.
+After commit 'd430dffbe9dd ("mt76: mt7921: fix a possible race
+enabling/disabling runtime-pm")', runtime-pm is always disabled in the
+fw even if the user requests to enable it toggling debugfs node since
+mt7921_pm_interface_iter routine will use pm->enable to configure the fw.
+Fix the issue moving enable variable configuration before running
+mt7921_pm_interface_iter routine.
 
-Fixes: 1c099ab44727 ("mt76: mt7921: add MCU support")
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+Fixes: d430dffbe9dd ("mt76: mt7921: fix a possible race enabling/disabling runtime-pm")
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../wireless/mediatek/mt76/mt76_connac_mcu.h  |  1 +
- .../net/wireless/mediatek/mt76/mt7921/mcu.c   | 49 ++++++++-----------
- 2 files changed, 22 insertions(+), 28 deletions(-)
+ drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h b/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h
-index 63fc331e98bd..43a8b3651dc2 100644
---- a/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h
-+++ b/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.h
-@@ -599,6 +599,7 @@ enum {
- 	MCU_CE_CMD_SET_BSS_ABORT = 0x17,
- 	MCU_CE_CMD_CANCEL_HW_SCAN = 0x1b,
- 	MCU_CE_CMD_SET_ROC = 0x1c,
-+	MCU_CE_CMD_SET_EDCA_PARMS = 0x1d,
- 	MCU_CE_CMD_SET_P2P_OPPPS = 0x33,
- 	MCU_CE_CMD_SET_RATE_TX_POWER = 0x5d,
- 	MCU_CE_CMD_SCHED_SCAN_ENABLE = 0x61,
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/mcu.c b/drivers/net/wireless/mediatek/mt76/mt7921/mcu.c
-index 4c6adbb96955..50c953b08ed0 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7921/mcu.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7921/mcu.c
-@@ -912,33 +912,28 @@ EXPORT_SYMBOL_GPL(mt7921_mcu_exit);
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c b/drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c
+index 86fd7292b229..45a393070e46 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7921/debugfs.c
+@@ -291,13 +291,12 @@ mt7921_pm_set(void *data, u64 val)
+ 	pm->enable = false;
+ 	mt76_connac_pm_wake(&dev->mphy, pm);
  
- int mt7921_mcu_set_tx(struct mt7921_dev *dev, struct ieee80211_vif *vif)
- {
--#define WMM_AIFS_SET		BIT(0)
--#define WMM_CW_MIN_SET		BIT(1)
--#define WMM_CW_MAX_SET		BIT(2)
--#define WMM_TXOP_SET		BIT(3)
--#define WMM_PARAM_SET		GENMASK(3, 0)
--#define TX_CMD_MODE		1
-+	struct mt7921_vif *mvif = (struct mt7921_vif *)vif->drv_priv;
-+
- 	struct edca {
--		u8 queue;
--		u8 set;
--		u8 aifs;
--		u8 cw_min;
-+		__le16 cw_min;
- 		__le16 cw_max;
- 		__le16 txop;
--	};
-+		__le16 aifs;
-+		u8 guardtime;
-+		u8 acm;
-+	} __packed;
- 	struct mt7921_mcu_tx {
--		u8 total;
--		u8 action;
--		u8 valid;
--		u8 mode;
++	pm->enable = val;
+ 	ieee80211_iterate_active_interfaces(mt76_hw(dev),
+ 					    IEEE80211_IFACE_ITER_RESUME_ALL,
+ 					    mt7921_pm_interface_iter, dev);
+ 
+ 	mt76_connac_mcu_set_deep_sleep(&dev->mt76, pm->ds_enable);
 -
- 		struct edca edca[IEEE80211_NUM_ACS];
-+		u8 bss_idx;
-+		u8 qos;
-+		u8 wmm_idx;
-+		u8 pad;
- 	} __packed req = {
--		.valid = true,
--		.mode = TX_CMD_MODE,
--		.total = IEEE80211_NUM_ACS,
-+		.bss_idx = mvif->mt76.idx,
-+		.qos = vif->bss_conf.qos,
-+		.wmm_idx = mvif->mt76.wmm_idx,
- 	};
--	struct mt7921_vif *mvif = (struct mt7921_vif *)vif->drv_priv;
-+
- 	struct mu_edca {
- 		u8 cw_min;
- 		u8 cw_max;
-@@ -962,30 +957,29 @@ int mt7921_mcu_set_tx(struct mt7921_dev *dev, struct ieee80211_vif *vif)
- 		.qos = vif->bss_conf.qos,
- 		.wmm_idx = mvif->mt76.wmm_idx,
- 	};
-+	int to_aci[] = {1, 0, 2, 3};
- 	int ac, ret;
- 
- 	for (ac = 0; ac < IEEE80211_NUM_ACS; ac++) {
- 		struct ieee80211_tx_queue_params *q = &mvif->queue_params[ac];
--		struct edca *e = &req.edca[ac];
-+		struct edca *e = &req.edca[to_aci[ac]];
- 
--		e->set = WMM_PARAM_SET;
--		e->queue = ac + mvif->mt76.wmm_idx * MT7921_MAX_WMM_SETS;
- 		e->aifs = q->aifs;
- 		e->txop = cpu_to_le16(q->txop);
- 
- 		if (q->cw_min)
--			e->cw_min = fls(q->cw_min);
-+			e->cw_min = cpu_to_le16(q->cw_min);
- 		else
- 			e->cw_min = 5;
- 
- 		if (q->cw_max)
--			e->cw_max = cpu_to_le16(fls(q->cw_max));
-+			e->cw_max = cpu_to_le16(q->cw_max);
- 		else
- 			e->cw_max = cpu_to_le16(10);
- 	}
- 
--	ret = mt76_mcu_send_msg(&dev->mt76, MCU_EXT_CMD(EDCA_UPDATE),
--				&req, sizeof(req), true);
-+	ret = mt76_mcu_send_msg(&dev->mt76, MCU_CE_CMD(SET_EDCA_PARMS), &req,
-+				sizeof(req), false);
- 	if (ret)
- 		return ret;
- 
-@@ -995,7 +989,6 @@ int mt7921_mcu_set_tx(struct mt7921_dev *dev, struct ieee80211_vif *vif)
- 	for (ac = 0; ac < IEEE80211_NUM_ACS; ac++) {
- 		struct ieee80211_he_mu_edca_param_ac_rec *q;
- 		struct mu_edca *e;
--		int to_aci[] = {1, 0, 2, 3};
- 
- 		if (!mvif->queue_params[ac].mu_edca)
- 			break;
+-	pm->enable = val;
+ 	mt76_connac_power_save_sched(&dev->mphy, pm);
+ out:
+ 	mutex_unlock(&dev->mt76.mutex);
 -- 
 2.34.1
 

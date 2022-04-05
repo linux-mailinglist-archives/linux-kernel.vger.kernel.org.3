@@ -2,34 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8794F5029
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A770A4F4F5A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1840674AbiDFBLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54568 "EHLO
+        id S1837741AbiDFAqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:46:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457563AbiDEQKs (ORCPT
+        with ESMTP id S1457567AbiDEQKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:10:48 -0400
+        Tue, 5 Apr 2022 12:10:51 -0400
 Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC7C764F;
-        Tue,  5 Apr 2022 09:08:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704DAB75;
+        Tue,  5 Apr 2022 09:08:52 -0700 (PDT)
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 7687B22247;
-        Tue,  5 Apr 2022 18:08:43 +0200 (CEST)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 3AB2A22258;
+        Tue,  5 Apr 2022 18:08:50 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1649174924;
+        t=1649174930;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=h6X3/D3utwq+kJMZuybBLFCBUbNYycHilQpxUt5aIVA=;
-        b=sb4RLOw06F2OUikWNR7VIXmVEnMHuJWPtX2SRlNJukEY65dgHr+D1emUjY3vKtAHv2GS+9
-        Fj4MmL/WHm5eROQx1OqqoK+XXptio9gUyK3rZzfxlTtLJKsn8u2jd2ussYbLL6sSciesS9
-        3jNOznvAHXDr16PAnTAIF88lO/HUwwg=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VmrF2s9a0zsVi05pMwxqMdgIb42SRoi4+ICmOQzDKGA=;
+        b=aAdNkAzy+Gx9uqzAVUf/+VVLk24DHTm52lb+2xqkypsjx6wUYCLVzYb69BWyhTXOnv+sRf
+        jwiV8Bk1D3kGB/py8GK+w0Uo9JAW1diZZo+i8UmQktiEZFidhOxjJ1aj4DYhBxk9m2tbUB
+        MIWP099YobK4+0dkbWplTKvW9Z39oFw=
 From:   Michael Walle <michael@walle.cc>
 To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
         Nicolas Ferre <nicolas.ferre@microchip.com>
@@ -41,10 +42,12 @@ Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Claudiu Beznea <claudiu.beznea@microchip.com>,
         Tudor.Ambarus@microchip.com, Michael Walle <michael@walle.cc>
-Subject: [PATCH v3 0/7] ARM: dts: lan966x: dtsi improvements and KSwitch D10 support
-Date:   Tue,  5 Apr 2022 18:08:30 +0200
-Message-Id: <20220405160837.4093563-1-michael@walle.cc>
+Subject: [PATCH v3 5/7] ARM: dts: lan966x: add flexcom SPI nodes
+Date:   Tue,  5 Apr 2022 18:08:35 +0200
+Message-Id: <20220405160837.4093563-6-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220405160837.4093563-1-michael@walle.cc>
+References: <20220405160837.4093563-1-michael@walle.cc>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -57,42 +60,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add missing nodes for the flexcom blocks and a node for the SGPIO
-block. Then add basic support for the Kontron KSwitch D10.
+Add all the SPI nodes for the flexcom IP block. Keep them
+disabled by default.
 
-Microchip, please take a closer look at the compatible strings of
-the newly added nodes.
+Signed-off-by: Michael Walle <michael@walle.cc>
+Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+---
+ arch/arm/boot/dts/lan966x.dtsi | 75 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 75 insertions(+)
 
-changes since v2:
- - add second kontron board variant and moved common stuff into a
-   new dtsi
- - moved the uart/i2c nodes inside of the flexcom node
- - moved sgpio child nodes inside of the sgpio node
-
-changes since v1:
- - fixed indendation
- - keep compatible, reg first, move #address-cells and #size-cells
-   towards the end
-
-Michael Walle (7):
-  ARM: dts: lan966x: swap dma channels for crypto node
-  ARM: dts: lan966x: add sgpio node
-  ARM: dts: lan966x: add missing uart DMA channel
-  ARM: dts: lan966x: add all flexcom usart nodes
-  ARM: dts: lan966x: add flexcom SPI nodes
-  ARM: dts: lan966x: add flexcom I2C nodes
-  ARM: dts: lan966x: add basic Kontron KSwitch D10 support
-
- arch/arm/boot/dts/Makefile                    |   4 +-
- ...lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts |  77 ++++++
- .../lan966x-kontron-kswitch-d10-mmt-8g.dts    |  13 +
- .../dts/lan966x-kontron-kswitch-d10-mmt.dtsi  |  75 ++++++
- arch/arm/boot/dts/lan966x.dtsi                | 227 +++++++++++++++++-
- 5 files changed, 392 insertions(+), 4 deletions(-)
- create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts
- create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-8g.dts
- create mode 100644 arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt.dtsi
-
+diff --git a/arch/arm/boot/dts/lan966x.dtsi b/arch/arm/boot/dts/lan966x.dtsi
+index ae3ac08cfc3b..a37f2e58a1c2 100644
+--- a/arch/arm/boot/dts/lan966x.dtsi
++++ b/arch/arm/boot/dts/lan966x.dtsi
+@@ -105,6 +105,21 @@ usart0: serial@200 {
+ 				atmel,fifo-size = <32>;
+ 				status = "disabled";
+ 			};
++
++			spi0: spi@400 {
++				compatible = "atmel,at91rm9200-spi";
++				reg = <0x400 0x200>;
++				interrupts = <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&dma0 AT91_XDMAC_DT_PERID(3)>,
++				       <&dma0 AT91_XDMAC_DT_PERID(2)>;
++				dma-names = "tx", "rx";
++				clocks = <&nic_clk>;
++				clock-names = "spi_clk";
++				atmel,fifo-size = <32>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				status = "disabled";
++			};
+ 		};
+ 
+ 		flx1: flexcom@e0044000 {
+@@ -128,6 +143,21 @@ usart1: serial@200 {
+ 				atmel,fifo-size = <32>;
+ 				status = "disabled";
+ 			};
++
++			spi1: spi@400 {
++				compatible = "atmel,at91rm9200-spi";
++				reg = <0x400 0x200>;
++				interrupts = <GIC_SPI 49 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&dma0 AT91_XDMAC_DT_PERID(5)>,
++				       <&dma0 AT91_XDMAC_DT_PERID(4)>;
++				dma-names = "tx", "rx";
++				clocks = <&nic_clk>;
++				clock-names = "spi_clk";
++				atmel,fifo-size = <32>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				status = "disabled";
++			};
+ 		};
+ 
+ 		trng: rng@e0048000 {
+@@ -168,6 +198,21 @@ usart2: serial@200 {
+ 				atmel,fifo-size = <32>;
+ 				status = "disabled";
+ 			};
++
++			spi2: spi@400 {
++				compatible = "atmel,at91rm9200-spi";
++				reg = <0x400 0x200>;
++				interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&dma0 AT91_XDMAC_DT_PERID(7)>,
++				       <&dma0 AT91_XDMAC_DT_PERID(6)>;
++				dma-names = "tx", "rx";
++				clocks = <&nic_clk>;
++				clock-names = "spi_clk";
++				atmel,fifo-size = <32>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				status = "disabled";
++			};
+ 		};
+ 
+ 		flx3: flexcom@e0064000 {
+@@ -191,6 +236,21 @@ usart3: serial@200 {
+ 				atmel,fifo-size = <32>;
+ 				status = "disabled";
+ 			};
++
++			spi3: spi@400 {
++				compatible = "atmel,at91rm9200-spi";
++				reg = <0x400 0x200>;
++				interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&dma0 AT91_XDMAC_DT_PERID(9)>,
++				       <&dma0 AT91_XDMAC_DT_PERID(8)>;
++				dma-names = "tx", "rx";
++				clocks = <&nic_clk>;
++				clock-names = "spi_clk";
++				atmel,fifo-size = <32>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				status = "disabled";
++			};
+ 		};
+ 
+ 		dma0: dma-controller@e0068000 {
+@@ -233,6 +293,21 @@ usart4: serial@200 {
+ 				atmel,fifo-size = <32>;
+ 				status = "disabled";
+ 			};
++
++			spi4: spi@400 {
++				compatible = "atmel,at91rm9200-spi";
++				reg = <0x400 0x200>;
++				interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
++				dmas = <&dma0 AT91_XDMAC_DT_PERID(11)>,
++				       <&dma0 AT91_XDMAC_DT_PERID(10)>;
++				dma-names = "tx", "rx";
++				clocks = <&nic_clk>;
++				clock-names = "spi_clk";
++				atmel,fifo-size = <32>;
++				#address-cells = <1>;
++				#size-cells = <0>;
++				status = "disabled";
++			};
+ 		};
+ 
+ 		timer0: timer@e008c000 {
 -- 
 2.30.2
 

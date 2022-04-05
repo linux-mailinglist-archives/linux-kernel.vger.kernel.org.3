@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E17214F4036
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DFD84F3D9E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355286AbiDEO4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50288 "EHLO
+        id S1382632AbiDEMQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344477AbiDEJmF (ORCPT
+        with ESMTP id S244897AbiDEIwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:42:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F16BE9C7;
-        Tue,  5 Apr 2022 02:27:46 -0700 (PDT)
+        Tue, 5 Apr 2022 04:52:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F9F2458B;
+        Tue,  5 Apr 2022 01:45:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0CB2B81C6E;
-        Tue,  5 Apr 2022 09:27:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37BB6C385A0;
-        Tue,  5 Apr 2022 09:27:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A4D2B81A32;
+        Tue,  5 Apr 2022 08:45:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 510ECC385A4;
+        Tue,  5 Apr 2022 08:45:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150863;
-        bh=XQzzdibhL0otRHSkdbIMNyKyXU70t8rbk4JAHgEy2QE=;
+        s=korg; t=1649148350;
+        bh=4mNg/F94fD5ePGFoWZAISjOcsN7uVsRt2932zEV02wk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZhvooKbzbUQx943pCD5TtNdk8IXIAiys6v0E3/Db5nvZn2lP49jKJcHb0pAa8V2S4
-         1UXayNxAygKWbAbeUmPWjTbmQU7EhVuP8aM1xRstVdGlqUJGke2WUTBgdQDx+DaNIr
-         WlfYWRxj+YE/FNilEO7u6l1YG6Nhr14mJE/ynt0A=
+        b=outQIfS5CRnkTOG/lzNo5NxL+OjL7LGOMP2YRTxiAIqeRrqdNGGzDncLQpHSb3Tmp
+         nWXlDdmtZgG1Udv/sT5m04xKK5tsfaO16ywMzIw2Hgtkc1+KgQdrX/n6+g9Koy+gjz
+         duYs51evoI5OXXk4p/lSg2h6rlnyLOq7pI1JaDZc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lyude Paul <lyude@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>
-Subject: [PATCH 5.15 176/913] drm/nouveau/backlight: Fix LVDS backlight detection on some laptops
+        stable@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0325/1017] cpuidle: qcom-spm: Check if any CPU is managed by SPM
 Date:   Tue,  5 Apr 2022 09:20:38 +0200
-Message-Id: <20220405070345.127736150@linuxfoundation.org>
+Message-Id: <20220405070403.927275915@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +58,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lyude Paul <lyude@redhat.com>
+From: Stephan Gerhold <stephan@gerhold.net>
 
-commit 6b0076540faffd47f5a899bf12f3528c4f0e726b upstream.
+[ Upstream commit 0ee30ace67e425ab83a1673bf51f50b577328cf9 ]
 
-It seems that some laptops will report having both an eDP and LVDS
-connector, even though only the LVDS connector is actually hooked up. This
-can lead to issues with backlight registration if the eDP connector ends up
-getting registered before the LVDS connector, as the backlight device will
-then be registered to the eDP connector instead of the LVDS connector.
+At the moment, the "qcom-spm-cpuidle" platform device is always created,
+even if none of the CPUs is actually managed by the SPM. On non-qcom
+platforms this will result in infinite probe-deferral due to the
+failing qcom_scm_is_available() call.
 
-So, fix this by only registering the backlight on connectors that are
-reported as being connected.
+To avoid this, look through the CPU DT nodes and check if there is
+actually any CPU managed by a SPM (as indicated by the qcom,saw property).
+It should also be available because e.g. MSM8916 has qcom,saw defined
+but it's typically not enabled with ARM64/PSCI firmwares.
 
-Signed-off-by: Lyude Paul <lyude@redhat.com>
-Fixes: 6eca310e8924 ("drm/nouveau/kms/nv50-: Add basic DPCD backlight support for nouveau")
-Bugzilla: https://gitlab.freedesktop.org/drm/nouveau/-/issues/137
-Cc: <stable@vger.kernel.org> # v5.15+
-Reviewed-by: Karol Herbst <kherbst@redhat.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220204180504.328999-1-lyude@redhat.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This is needed in preparation of a follow-up change that calls
+qcom_scm_set_warm_boot_addr() a single time before registering any
+cpuidle drivers. Otherwise this call might be made even on devices
+that have this driver enabled but actually make use of PSCI.
+
+Fixes: 60f3692b5f0b ("cpuidle: qcom_spm: Detach state machine from main SPM handling")
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Link: https://lore.kernel.org/r/86e3e09f-a8d7-3dff-3fc6-ddd7d30c5d78@samsung.com/
+Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20211201130505.257379-2-stephan@gerhold.net
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/nouveau/nouveau_backlight.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/cpuidle/cpuidle-qcom-spm.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
---- a/drivers/gpu/drm/nouveau/nouveau_backlight.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_backlight.c
-@@ -294,7 +294,8 @@ nv50_backlight_init(struct nouveau_backl
- 	struct nouveau_drm *drm = nouveau_drm(nv_encoder->base.base.dev);
- 	struct nvif_object *device = &drm->client.device.object;
+diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
+index 01e77913a414..5f27dcc6c110 100644
+--- a/drivers/cpuidle/cpuidle-qcom-spm.c
++++ b/drivers/cpuidle/cpuidle-qcom-spm.c
+@@ -155,6 +155,22 @@ static struct platform_driver spm_cpuidle_driver = {
+ 	},
+ };
  
--	if (!nvif_rd32(device, NV50_PDISP_SOR_PWM_CTL(ffs(nv_encoder->dcb->or) - 1)))
-+	if (!nvif_rd32(device, NV50_PDISP_SOR_PWM_CTL(ffs(nv_encoder->dcb->or) - 1)) ||
-+	    nv_conn->base.status != connector_status_connected)
- 		return -ENODEV;
++static bool __init qcom_spm_find_any_cpu(void)
++{
++	struct device_node *cpu_node, *saw_node;
++
++	for_each_of_cpu_node(cpu_node) {
++		saw_node = of_parse_phandle(cpu_node, "qcom,saw", 0);
++		if (of_device_is_available(saw_node)) {
++			of_node_put(saw_node);
++			of_node_put(cpu_node);
++			return true;
++		}
++		of_node_put(saw_node);
++	}
++	return false;
++}
++
+ static int __init qcom_spm_cpuidle_init(void)
+ {
+ 	struct platform_device *pdev;
+@@ -164,6 +180,10 @@ static int __init qcom_spm_cpuidle_init(void)
+ 	if (ret)
+ 		return ret;
  
- 	if (nv_conn->type == DCB_CONNECTOR_eDP) {
++	/* Make sure there is actually any CPU managed by the SPM */
++	if (!qcom_spm_find_any_cpu())
++		return 0;
++
+ 	pdev = platform_device_register_simple("qcom-spm-cpuidle",
+ 					       -1, NULL, 0);
+ 	if (IS_ERR(pdev)) {
+-- 
+2.34.1
+
 
 

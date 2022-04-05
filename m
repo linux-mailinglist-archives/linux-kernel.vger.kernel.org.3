@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB894F33C3
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 230984F3427
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242379AbiDEIhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
+        id S242335AbiDEIhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235738AbiDEIAP (ORCPT
+        with ESMTP id S235659AbiDEH77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:00:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFE82ED73;
-        Tue,  5 Apr 2022 00:58:17 -0700 (PDT)
+        Tue, 5 Apr 2022 03:59:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42F21C13D;
+        Tue,  5 Apr 2022 00:56:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C203E615CD;
-        Tue,  5 Apr 2022 07:58:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2017C340EE;
-        Tue,  5 Apr 2022 07:58:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 60174B81B14;
+        Tue,  5 Apr 2022 07:56:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1838C340EE;
+        Tue,  5 Apr 2022 07:56:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145496;
-        bh=2oZ6o3YYR84xrbyRZvsWvVcONdqA2nZyWHB3WsSIGY8=;
+        s=korg; t=1649145416;
+        bh=KK+VudrWUz/uioNtrgiRdIcswanyWA9dVTY+SNt1vgc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QUFi1WuCmNV3bCMiwKRiOUB9lMJpY1xVbK3fNzirCvD8Ap6vkPStzeVWZ0WsXToue
-         z4a0g1csa5twODMS/lb8fb3fypXgkRnNTbhq+WGpsAerlvDilxnY7wYYFC4pj7Btfw
-         Z6rBaCeNNOndh+nr1LVUrpqjuSOlEl/zOfWz+SGE=
+        b=UgWqn/yb4OcmpYPn0atDGriX7jH9Ld+p69KqHOC5T0mzvKRhTjyGBwmSOMc+pUuXV
+         1qunzY5Z7Ad6z7qWLSJ2q+iIBlh/BtndlSCCncenauv4FJVCshorOfRxcJQcK+Jhoi
+         iX/15QWc0WrKMplF3vzslCLZXaB/GjsxiFqq4XZA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Sakamoto <o-takashi@sakamocchi.jp>,
-        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0388/1126] ALSA: firewire-lib: fix uninitialized flag for AV/C deferred transaction
-Date:   Tue,  5 Apr 2022 09:18:55 +0200
-Message-Id: <20220405070419.016041587@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0398/1126] video: fbdev: omapfb: Add missing of_node_put() in dvic_probe_of
+Date:   Tue,  5 Apr 2022 09:19:05 +0200
+Message-Id: <20220405070419.309826211@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -54,81 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit bf0cd60b7e33cf221fbe1114e4acb2c828b0af0d ]
+[ Upstream commit a58c22cfbbf62fefca090334bbd35fd132e92a23 ]
 
-AV/C deferred transaction was supported at a commit 00a7bb81c20f ("ALSA:
-firewire-lib: Add support for deferred transaction") while 'deferrable'
-flag can be uninitialized for non-control/notify AV/C transactions.
-UBSAN reports it:
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-kernel: ================================================================================
-kernel: UBSAN: invalid-load in /build/linux-aa0B4d/linux-5.15.0/sound/firewire/fcp.c:363:9
-kernel: load of value 158 is not a valid value for type '_Bool'
-kernel: CPU: 3 PID: 182227 Comm: irq/35-firewire Tainted: P           OE     5.15.0-18-generic #18-Ubuntu
-kernel: Hardware name: Gigabyte Technology Co., Ltd. AX370-Gaming 5/AX370-Gaming 5, BIOS F42b 08/01/2019
-kernel: Call Trace:
-kernel:  <IRQ>
-kernel:  show_stack+0x52/0x58
-kernel:  dump_stack_lvl+0x4a/0x5f
-kernel:  dump_stack+0x10/0x12
-kernel:  ubsan_epilogue+0x9/0x45
-kernel:  __ubsan_handle_load_invalid_value.cold+0x44/0x49
-kernel:  fcp_response.part.0.cold+0x1a/0x2b [snd_firewire_lib]
-kernel:  fcp_response+0x28/0x30 [snd_firewire_lib]
-kernel:  fw_core_handle_request+0x230/0x3d0 [firewire_core]
-kernel:  handle_ar_packet+0x1d9/0x200 [firewire_ohci]
-kernel:  ? handle_ar_packet+0x1d9/0x200 [firewire_ohci]
-kernel:  ? transmit_complete_callback+0x9f/0x120 [firewire_core]
-kernel:  ar_context_tasklet+0xa8/0x2e0 [firewire_ohci]
-kernel:  tasklet_action_common.constprop.0+0xea/0xf0
-kernel:  tasklet_action+0x22/0x30
-kernel:  __do_softirq+0xd9/0x2e3
-kernel:  ? irq_finalize_oneshot.part.0+0xf0/0xf0
-kernel:  do_softirq+0x75/0xa0
-kernel:  </IRQ>
-kernel:  <TASK>
-kernel:  __local_bh_enable_ip+0x50/0x60
-kernel:  irq_forced_thread_fn+0x7e/0x90
-kernel:  irq_thread+0xba/0x190
-kernel:  ? irq_thread_fn+0x60/0x60
-kernel:  kthread+0x11e/0x140
-kernel:  ? irq_thread_check_affinity+0xf0/0xf0
-kernel:  ? set_kthread_struct+0x50/0x50
-kernel:  ret_from_fork+0x22/0x30
-kernel:  </TASK>
-kernel: ================================================================================
-
-This commit fixes the bug. The bug has no disadvantage for the non-
-control/notify AV/C transactions since the flag has an effect for AV/C
-response with INTERIM (0x0f) status which is not used for the transactions
-in AV/C general specification.
-
-Fixes: 00a7bb81c20f ("ALSA: firewire-lib: Add support for deferred transaction")
-Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
-Link: https://lore.kernel.org/r/20220304125647.78430-1-o-takashi@sakamocchi.jp
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: f76ee892a99e ("omapfb: copy omapdss & displays for omapfb")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/firewire/fcp.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/sound/firewire/fcp.c b/sound/firewire/fcp.c
-index bbfbebf4affb..df44dd5dc4b2 100644
---- a/sound/firewire/fcp.c
-+++ b/sound/firewire/fcp.c
-@@ -240,9 +240,7 @@ int fcp_avc_transaction(struct fw_unit *unit,
- 	t.response_match_bytes = response_match_bytes;
- 	t.state = STATE_PENDING;
- 	init_waitqueue_head(&t.wait);
--
--	if (*(const u8 *)command == 0x00 || *(const u8 *)command == 0x03)
--		t.deferrable = true;
-+	t.deferrable = (*(const u8 *)command == 0x00 || *(const u8 *)command == 0x03);
- 
- 	spin_lock_irq(&transactions_lock);
- 	list_add_tail(&t.list, &transactions);
+diff --git a/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c b/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c
+index 2fa436475b40..c8ad3ef42bd3 100644
+--- a/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c
++++ b/drivers/video/fbdev/omap2/omapfb/displays/connector-dvi.c
+@@ -246,6 +246,7 @@ static int dvic_probe_of(struct platform_device *pdev)
+ 	adapter_node = of_parse_phandle(node, "ddc-i2c-bus", 0);
+ 	if (adapter_node) {
+ 		adapter = of_get_i2c_adapter_by_node(adapter_node);
++		of_node_put(adapter_node);
+ 		if (adapter == NULL) {
+ 			dev_err(&pdev->dev, "failed to parse ddc-i2c-bus\n");
+ 			omap_dss_put_device(ddata->in);
 -- 
 2.34.1
 

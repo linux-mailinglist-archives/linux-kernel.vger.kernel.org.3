@@ -2,64 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 592724F46F5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A45534F4691
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381136AbiDEUyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48156 "EHLO
+        id S1355179AbiDEUfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457938AbiDERAj (ORCPT
+        with ESMTP id S1457966AbiDERCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 13:00:39 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1DEBC0B;
-        Tue,  5 Apr 2022 09:58:40 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id x16so7269171pfa.10;
-        Tue, 05 Apr 2022 09:58:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZAVOxKCn1rSRBeHkGZiJCt2gkjQ/XAx8tCfYXVtiNfE=;
-        b=BCmXM1EPbsht9Le2RBBahOAvfdS8skESRKaGokKX4zH1mid2b3gkPH+7yeaMUotIkX
-         NbGdGgZUpeiJ3gcEyuIX9YmL6aKRHI0Ro2BaiZ6XjqRP2m7CKlHSuUHTMLX2NSIG2dm5
-         HsJwWqgby3b4336TPjsBa5UN9sDUtcgVUND+DX6y7CTnOXnjiuvnfz0xyouIucQQx+EI
-         nXE6toJv/NMiDw3WCfZ71mrl7R7Bvu+SZDhsJUQUr2Zwo+xGSeq99721WuG2hKNGZbNe
-         wmZS8BuxXvE1kG9ToDalW5HUMb0OuCMOkXO0tPwEiirJb0Sipb6N3gnGMjvO1qWAdbK8
-         GaQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZAVOxKCn1rSRBeHkGZiJCt2gkjQ/XAx8tCfYXVtiNfE=;
-        b=TX6DxWo/6bmRXGnKmJ/u8tK9QHEfnhjVJO5PNn5VogMbLjcTyDntaKwu8/caN7Qnw7
-         fUNkb9SWRwiACWr+99Ranss199s8VtRfTYwxJNCuEbb/M/wMd85KL15Tz/x408goKWKM
-         6FRiasGcT+UIVAGsFhFSghTH/i9TEmbcDsfDuBUP2tPRz+Nd1J7oIAs67pIwlvzVKfR/
-         8UaoRe8ahSoKnOFWRe4aXj/7BeSLhra53pnEP82jbJMCHjnOoFuc7uCkmYYU6nQOXBWN
-         QMItESM4oaAfKMsHwoHIyHvDAKJW94zQqTT+R8fzeNxqWF240BG7710y7NF8Y2F2F0YG
-         yUHQ==
-X-Gm-Message-State: AOAM530fJhgg7s6Zl5HjUu7cKXtMISkAMDqJ0FaZZ/AdZ9LaoUfbc79T
-        0p4zBQ+lcxFrk+SMJ77Lb1dopikzFK9HWB4TskK52FJ2
-X-Google-Smtp-Source: ABdhPJyU0FDyxgvY/9mKwmMNiabrAzWrvWBv7HU1olSNnJVsJwHglQaOPHoTBWnW8V0XuaupQcIHHAgWxERG2jXlLBk=
-X-Received: by 2002:a05:6a00:1c9e:b0:4fa:d946:378b with SMTP id
- y30-20020a056a001c9e00b004fad946378bmr4548697pfw.46.1649177919721; Tue, 05
- Apr 2022 09:58:39 -0700 (PDT)
+        Tue, 5 Apr 2022 13:02:04 -0400
+Received: from 1.mo576.mail-out.ovh.net (1.mo576.mail-out.ovh.net [178.33.251.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE71A8165F
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 10:00:05 -0700 (PDT)
+Received: from player771.ha.ovh.net (unknown [10.110.115.178])
+        by mo576.mail-out.ovh.net (Postfix) with ESMTP id 1B5CD23ED8
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 17:00:04 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player771.ha.ovh.net (Postfix) with ESMTPSA id BF89D293E3800;
+        Tue,  5 Apr 2022 16:59:58 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-106R006437fb18a-a5e4-41d7-ba4a-0e7824ff30f8,
+                    8AF55017BACD44284FC599BC4826E0280D36FCC4) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
+        Stephen Kitt <steve@sk2.org>
+Subject: [PATCH 09/14] ASoC: sta*: use simple i2c probe function
+Date:   Tue,  5 Apr 2022 18:58:31 +0200
+Message-Id: <20220405165836.2165310-10-steve@sk2.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220405165836.2165310-1-steve@sk2.org>
+References: <20220405165836.2165310-1-steve@sk2.org>
 MIME-Version: 1.0
-References: <20220405075531.GB30877@worktop.programming.kicks-ass.net>
-In-Reply-To: <20220405075531.GB30877@worktop.programming.kicks-ass.net>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 5 Apr 2022 09:58:28 -0700
-Message-ID: <CAADnVQJ1_9sBqRngG_J+84whx9j7d7qOSzMaJvhc0evDBQfE3w@mail.gmail.com>
-Subject: Re: [PATCH] x86,bpf: Avoid IBT objtool warning
-To:     Peter Zijlstra <peterz@infradead.org>, bpf <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 8472396801019709062
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejgedguddtgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecuggftrfgrthhtvghrnhepjeelledvfeeiiedutdefveekgeeuheekkedvffegvdehudegkefgjeejkefgueegnecukfhppedtrddtrddtrddtpdekvddrieehrddvhedrvddtudenucevlhhushhtvghrufhiiigvpeehnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeejuddrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehsthgvvhgvsehskhdvrdhorhhgpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,35 +51,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 12:55 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
->
-> Clang can inline emit_indirect_jump() and then folds constants, which
-> results in:
->
->   | vmlinux.o: warning: objtool: emit_bpf_dispatcher()+0x6a4: relocation to !ENDBR: .text.__x86.indirect_thunk+0x40
->   | vmlinux.o: warning: objtool: emit_bpf_dispatcher()+0x67d: relocation to !ENDBR: .text.__x86.indirect_thunk+0x40
->   | vmlinux.o: warning: objtool: emit_bpf_tail_call_indirect()+0x386: relocation to !ENDBR: .text.__x86.indirect_thunk+0x20
->   | vmlinux.o: warning: objtool: emit_bpf_tail_call_indirect()+0x35d: relocation to !ENDBR: .text.__x86.indirect_thunk+0x20
->
-> Suppress the optimization such that it must emit a code reference to
-> the __x86_indirect_thunk_array[] base.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  arch/x86/net/bpf_jit_comp.c |    1 +
->  1 file changed, 1 insertion(+)
->
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -412,6 +412,7 @@ static void emit_indirect_jump(u8 **ppro
->                 EMIT_LFENCE();
->                 EMIT2(0xFF, 0xE0 + reg);
->         } else if (cpu_feature_enabled(X86_FEATURE_RETPOLINE)) {
-> +               OPTIMIZER_HIDE_VAR(reg);
->                 emit_jump(&prog, &__x86_indirect_thunk_array[reg], ip);
->         } else
->  #endif
+The i2c probe functions here don't use the id information provided in
+their second argument, so the single-parameter i2c probe function
+("probe_new") can be used instead.
 
-Looks good. Please cc bpf@vger and all bpf maintainers in the future.
-We can take it through the bpf tree if you prefer.
+This avoids scanning the identifier tables during probes.
+
+Signed-off-by: Stephen Kitt <steve@sk2.org>
+---
+ sound/soc/codecs/sta32x.c | 5 ++---
+ sound/soc/codecs/sta350.c | 5 ++---
+ sound/soc/codecs/sta529.c | 5 ++---
+ 3 files changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/sound/soc/codecs/sta32x.c b/sound/soc/codecs/sta32x.c
+index 86528b930de8..0ba6eab991c4 100644
+--- a/sound/soc/codecs/sta32x.c
++++ b/sound/soc/codecs/sta32x.c
+@@ -1094,8 +1094,7 @@ static int sta32x_probe_dt(struct device *dev, struct sta32x_priv *sta32x)
+ }
+ #endif
+ 
+-static int sta32x_i2c_probe(struct i2c_client *i2c,
+-			    const struct i2c_device_id *id)
++static int sta32x_i2c_probe(struct i2c_client *i2c)
+ {
+ 	struct device *dev = &i2c->dev;
+ 	struct sta32x_priv *sta32x;
+@@ -1175,7 +1174,7 @@ static struct i2c_driver sta32x_i2c_driver = {
+ 		.name = "sta32x",
+ 		.of_match_table = of_match_ptr(st32x_dt_ids),
+ 	},
+-	.probe =    sta32x_i2c_probe,
++	.probe_new = sta32x_i2c_probe,
+ 	.id_table = sta32x_i2c_id,
+ };
+ 
+diff --git a/sound/soc/codecs/sta350.c b/sound/soc/codecs/sta350.c
+index 75d3b0618ab5..1fb370fc0ae3 100644
+--- a/sound/soc/codecs/sta350.c
++++ b/sound/soc/codecs/sta350.c
+@@ -1187,8 +1187,7 @@ static int sta350_probe_dt(struct device *dev, struct sta350_priv *sta350)
+ }
+ #endif
+ 
+-static int sta350_i2c_probe(struct i2c_client *i2c,
+-			    const struct i2c_device_id *id)
++static int sta350_i2c_probe(struct i2c_client *i2c)
+ {
+ 	struct device *dev = &i2c->dev;
+ 	struct sta350_priv *sta350;
+@@ -1263,7 +1262,7 @@ static struct i2c_driver sta350_i2c_driver = {
+ 		.name = "sta350",
+ 		.of_match_table = of_match_ptr(st350_dt_ids),
+ 	},
+-	.probe =    sta350_i2c_probe,
++	.probe_new = sta350_i2c_probe,
+ 	.remove =   sta350_i2c_remove,
+ 	.id_table = sta350_i2c_id,
+ };
+diff --git a/sound/soc/codecs/sta529.c b/sound/soc/codecs/sta529.c
+index 97b5f34027c0..d90e5512a731 100644
+--- a/sound/soc/codecs/sta529.c
++++ b/sound/soc/codecs/sta529.c
+@@ -337,8 +337,7 @@ static const struct regmap_config sta529_regmap = {
+ 	.num_reg_defaults = ARRAY_SIZE(sta529_reg_defaults),
+ };
+ 
+-static int sta529_i2c_probe(struct i2c_client *i2c,
+-			    const struct i2c_device_id *id)
++static int sta529_i2c_probe(struct i2c_client *i2c)
+ {
+ 	struct sta529 *sta529;
+ 	int ret;
+@@ -381,7 +380,7 @@ static struct i2c_driver sta529_i2c_driver = {
+ 		.name = "sta529",
+ 		.of_match_table = sta529_of_match,
+ 	},
+-	.probe		= sta529_i2c_probe,
++	.probe_new	= sta529_i2c_probe,
+ 	.id_table	= sta529_i2c_id,
+ };
+ 
+-- 
+2.27.0
+

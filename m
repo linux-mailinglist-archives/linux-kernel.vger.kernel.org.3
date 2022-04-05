@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D16F4F3027
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE394F33A9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242117AbiDEJHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37238 "EHLO
+        id S243006AbiDEJIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:08:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239393AbiDEIUC (ORCPT
+        with ESMTP id S239401AbiDEIUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3642A8EB4C;
-        Tue,  5 Apr 2022 01:12:27 -0700 (PDT)
+        Tue, 5 Apr 2022 04:20:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09A3C682D;
+        Tue,  5 Apr 2022 01:12:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DAFEAB81B92;
-        Tue,  5 Apr 2022 08:12:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DA97C385A1;
-        Tue,  5 Apr 2022 08:12:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CE8860AFB;
+        Tue,  5 Apr 2022 08:12:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76B21C385A1;
+        Tue,  5 Apr 2022 08:12:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146344;
-        bh=hgwv3Bsh45tJ1pWCJ/OiWav3TISg2Dhm7A/oWtm79mM=;
+        s=korg; t=1649146350;
+        bh=zPCGveBQgJIlDVIMeFHkX0aMMcRrkc0ZJmZXhkmwY1w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MVYcs5i+21EqVA7VdLP6IXmxGE1PtqBM7xu6HyVDaM+bp/x0PzA4SKkFYSUejTyTX
-         KfnA0UlK76fJF4xvBCQf32pv3rO12LKTBn+5y2LIRA7xGrVVDhJhRf1hq9yN/Ugu83
-         H6scyoFGB5BX4lc8Hkb8RRzkSzjtYAAzd5UVhR6w=
+        b=NegGdGIOz7BeNS2tR/XCkzGw4URDZnSGhbUCfyrMt5Z7FlyQI2T+DDFI65cGp+5Jo
+         W/2YX7EwWiCP6+9VJLgP2U5E1GUFwleVFejVPL+AaAAtdPBAv3LoE+0fNB2GX2uRdu
+         DRHWHwBZmpXt/tBQ4BShdzbIkAfN2njGyPnZgz+I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dirk Buchwalder <buchwalder@posteo.de>,
-        Robert Marko <robimarko@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0731/1126] clk: qcom: ipq8074: Use floor ops for SDCC1 clock
-Date:   Tue,  5 Apr 2022 09:24:38 +0200
-Message-Id: <20220405070429.046370460@linuxfoundation.org>
+        stable@vger.kernel.org, Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
+        Liu Ying <victor.liu@nxp.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0732/1126] phy: dphy: Correct lpx parameter and its derivatives(ta_{get,go,sure})
+Date:   Tue,  5 Apr 2022 09:24:39 +0200
+Message-Id: <20220405070429.076019988@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -57,47 +61,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dirk Buchwalder <buchwalder@posteo.de>
+From: Liu Ying <victor.liu@nxp.com>
 
-[ Upstream commit b77d8306d84f83d1da68028a68c91da9c867b6f6 ]
+[ Upstream commit 3153fa38e38af566cf6454a03b1dbadaf6f323c0 ]
 
-Use floor ops on SDCC1 APPS clock in order to round down selected clock
-frequency and avoid overclocking SD/eMMC cards.
+According to the comment of the function phy_mipi_dphy_get_default_config(),
+it uses minimum D-PHY timings based on MIPI D-PHY specification.  They are
+derived from the valid ranges specified in Section 6.9, Table 14, Page 41
+of the D-PHY specification (v1.2).  The table 14 explicitly mentions that
+the minimum T-LPX parameter is 50 nanoseconds and the minimum TA-SURE
+parameter is T-LPX nanoseconds.  Likewise, the kernel doc of the 'lpx' and
+'ta_sure' members of struct phy_configure_opts_mipi_dphy mentions that
+the minimum values are 50000 picoseconds and @lpx picoseconds respectively.
+Also, the function phy_mipi_dphy_config_validate() checks if cfg->lpx is
+less than 50000 picoseconds and if cfg->ta_sure is less than cfg->lpx,
+which hints the same minimum values.
 
-For example, currently HS200 cards were failling tuning as they were
-actually being clocked at 384MHz instead of 192MHz.
-This caused some boards to disable 1.8V I/O and force the eMMC into the
-standard HS mode (50MHz) and that appeared to work despite the eMMC being
-overclocked to 96Mhz in that case.
+Without this patch, the function phy_mipi_dphy_get_default_config()
+wrongly sets cfg->lpx to 60000 picoseconds and cfg->ta_sure to 2 * cfg->lpx.
+So, let's correct them to 50000 picoseconds and cfg->lpx respectively.
 
-There was a previous commit to use floor ops on SDCC clocks, but it looks
-to have only covered SDCC2 clock.
+Note that I've only tested the patch with RM67191 DSI panel on i.MX8mq EVK.
+Help is needed to test with other i.MX8mq, Meson and Rockchip platforms,
+as I don't have the hardwares.
 
-Fixes: 9607f6224b39 ("clk: qcom: ipq8074: add PCIE, USB and SDCC clocks")
-
-Signed-off-by: Dirk Buchwalder <buchwalder@posteo.de>
-Signed-off-by: Robert Marko <robimarko@gmail.com>
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220210173100.505128-1-robimarko@gmail.com
+Fixes: dddc97e82303 ("phy: dphy: Add configuration helpers")
+Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+Cc: Neil Armstrong <narmstrong@baylibre.com>
+Cc: Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Cc: Kishon Vijay Abraham I <kishon@ti.com>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: Heiko Stuebner <heiko@sntech.de>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Guido Günther <agx@sigxcpu.org>
+Signed-off-by: Liu Ying <victor.liu@nxp.com>
+Link: https://lore.kernel.org/r/20220216071257.1647703-1-victor.liu@nxp.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/qcom/gcc-ipq8074.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/phy/phy-core-mipi-dphy.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
-index b09d99343e09..541016db3c4b 100644
---- a/drivers/clk/qcom/gcc-ipq8074.c
-+++ b/drivers/clk/qcom/gcc-ipq8074.c
-@@ -1074,7 +1074,7 @@ static struct clk_rcg2 sdcc1_apps_clk_src = {
- 		.name = "sdcc1_apps_clk_src",
- 		.parent_names = gcc_xo_gpll0_gpll2_gpll0_out_main_div2,
- 		.num_parents = 4,
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_floor_ops,
- 	},
- };
+diff --git a/drivers/phy/phy-core-mipi-dphy.c b/drivers/phy/phy-core-mipi-dphy.c
+index ccb4045685cd..929e86d6558e 100644
+--- a/drivers/phy/phy-core-mipi-dphy.c
++++ b/drivers/phy/phy-core-mipi-dphy.c
+@@ -64,10 +64,10 @@ int phy_mipi_dphy_get_default_config(unsigned long pixel_clock,
+ 	cfg->hs_trail = max(4 * 8 * ui, 60000 + 4 * 4 * ui);
  
+ 	cfg->init = 100;
+-	cfg->lpx = 60000;
++	cfg->lpx = 50000;
+ 	cfg->ta_get = 5 * cfg->lpx;
+ 	cfg->ta_go = 4 * cfg->lpx;
+-	cfg->ta_sure = 2 * cfg->lpx;
++	cfg->ta_sure = cfg->lpx;
+ 	cfg->wakeup = 1000;
+ 
+ 	cfg->hs_clk_rate = hs_clk_rate;
 -- 
 2.34.1
 

@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0544F4947
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E01C24F4EB1
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392500AbiDEWJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
+        id S1836287AbiDFAfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346156AbiDEKm5 (ORCPT
+        with ESMTP id S1349293AbiDEKub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:42:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C0B2ED73;
-        Tue,  5 Apr 2022 03:26:42 -0700 (PDT)
+        Tue, 5 Apr 2022 06:50:31 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8FE9E9E7;
+        Tue,  5 Apr 2022 03:27:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2539561425;
-        Tue,  5 Apr 2022 10:26:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A3DDC385A1;
-        Tue,  5 Apr 2022 10:26:41 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 742C9CE1CA2;
+        Tue,  5 Apr 2022 10:27:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EDB0C385A0;
+        Tue,  5 Apr 2022 10:27:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154401;
-        bh=FjlwNEak2Y5XHLiuM71zpUltWSfxCrU7knvshYNWE0c=;
+        s=korg; t=1649154459;
+        bh=mWbZGA5WjKvN7hL45PwgL8mQv5NxuEjP1BrYZ/g8UvQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iDnunNBzbB/8t05lh/iE0YsK8/wmjnF5YpflpsREQ4iOlykSiqlJXZ+b0zEON9h1q
-         U2bwu7GOoopF61gUDoCB8wicRIXVSiWybBL4h038lgC8NjG/ik5WKIi5ESOkYWAfIh
-         qReaqyU8IzPlEQkROAmKSgp6XY4i/Lz7oKGq4KuY=
+        b=kt9/grcBj1ZTokMUFKUY68dGKeYqF6nR+Yqt1l9AQMRhzYWP7+aiNa/FqMvbjysxr
+         2fF8X1WULEybsP+9ecAv61oG1U3tNezemmDIu3udvmwWATIEdhUFnTWP3D1jGO7n+l
+         vjcDCceDeZiJEpHuwd7XEdjqZW9oC5d10UUOT5+0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: [PATCH 5.10 564/599] ASoC: mediatek: mt6358: add missing EXPORT_SYMBOLs
-Date:   Tue,  5 Apr 2022 09:34:18 +0200
-Message-Id: <20220405070315.625353011@linuxfoundation.org>
+        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>
+Subject: [PATCH 5.10 569/599] ACPI: CPPC: Avoid out of bounds access when parsing _CPC data
+Date:   Tue,  5 Apr 2022 09:34:23 +0200
+Message-Id: <20220405070315.774569917@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -56,60 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiaxin Yu <jiaxin.yu@mediatek.com>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-commit a7663c89f4193dbf717572e46e5a3251940dbdc8 upstream.
+commit 40d8abf364bcab23bc715a9221a3c8623956257b upstream.
 
-Fixes the following build errors when mt6358 is configured as module:
+If the NumEntries field in the _CPC return package is less than 2, do
+not attempt to access the "Revision" element of that package, because
+it may not be present then.
 
->> ERROR: modpost: "mt6358_set_mtkaif_protocol"
->> [sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.ko] undefined!
->> ERROR: modpost: "mt6358_set_mtkaif_protocol"
->> [sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.ko] undefined!
-
-Fixes: 6a8d4198ca80 ("ASoC: mediatek: mt6358: add codec driver")
-Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Link: https://lore.kernel.org/r/20220319120325.11882-1-jiaxin.yu@mediatek.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 337aadff8e45 ("ACPI: Introduce CPU performance controls using CPPC")
+BugLink: https://lore.kernel.org/lkml/20220322143534.GC32582@xsang-OptiPlex-9020/
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Huang Rui <ray.huang@amd.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/codecs/mt6358.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/acpi/cppc_acpi.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
---- a/sound/soc/codecs/mt6358.c
-+++ b/sound/soc/codecs/mt6358.c
-@@ -107,6 +107,7 @@ int mt6358_set_mtkaif_protocol(struct sn
- 	priv->mtkaif_protocol = mtkaif_protocol;
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(mt6358_set_mtkaif_protocol);
- 
- static void playback_gpio_set(struct mt6358_priv *priv)
- {
-@@ -273,6 +274,7 @@ int mt6358_mtkaif_calibration_enable(str
- 			   1 << RG_AUD_PAD_TOP_DAT_MISO_LOOPBACK_SFT);
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(mt6358_mtkaif_calibration_enable);
- 
- int mt6358_mtkaif_calibration_disable(struct snd_soc_component *cmpnt)
- {
-@@ -296,6 +298,7 @@ int mt6358_mtkaif_calibration_disable(st
- 	capture_gpio_reset(priv);
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(mt6358_mtkaif_calibration_disable);
- 
- int mt6358_set_mtkaif_calibration_phase(struct snd_soc_component *cmpnt,
- 					int phase_1, int phase_2)
-@@ -310,6 +313,7 @@ int mt6358_set_mtkaif_calibration_phase(
- 			   phase_2 << RG_AUD_PAD_TOP_PHASE_MODE2_SFT);
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(mt6358_set_mtkaif_calibration_phase);
- 
- /* dl pga gain */
- enum {
+--- a/drivers/acpi/cppc_acpi.c
++++ b/drivers/acpi/cppc_acpi.c
+@@ -719,6 +719,11 @@ int acpi_cppc_processor_probe(struct acp
+ 	cpc_obj = &out_obj->package.elements[0];
+ 	if (cpc_obj->type == ACPI_TYPE_INTEGER)	{
+ 		num_ent = cpc_obj->integer.value;
++		if (num_ent <= 1) {
++			pr_debug("Unexpected _CPC NumEntries value (%d) for CPU:%d\n",
++				 num_ent, pr->id);
++			goto out_free;
++		}
+ 	} else {
+ 		pr_debug("Unexpected entry type(%d) for NumEntries\n",
+ 				cpc_obj->type);
 
 

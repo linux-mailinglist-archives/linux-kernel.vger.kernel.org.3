@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F99B4F2E9F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 521F54F353D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243563AbiDEJJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
+        id S239580AbiDEJdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239483AbiDEIUH (ORCPT
+        with ESMTP id S239484AbiDEIUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:20:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FDF0B0D26;
-        Tue,  5 Apr 2022 01:14:08 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF616986DA;
+        Tue,  5 Apr 2022 01:14:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C3AC60AFB;
-        Tue,  5 Apr 2022 08:14:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADD4FC385A0;
-        Tue,  5 Apr 2022 08:14:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8777B81B90;
+        Tue,  5 Apr 2022 08:14:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56C62C385A0;
+        Tue,  5 Apr 2022 08:14:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146447;
-        bh=WHog4N/cB+r7Q5qVBu/VTZU2oQBTeZ6/4VO5wSsfzc0=;
+        s=korg; t=1649146449;
+        bh=HF9ZRoT/tkCsXNkCLwa2Fgwjnyr+EaDHb18MxA69YD0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GtoolzIK+OJdHI1CLlmRp5Zl5yPEyrNHUl9su5HHf1FFzZ7wllLvddw0cmTsZYMBu
-         A/5V6tECpd14rCoxMXYXdf6qNDSL9soHsscnAUMewCpE9VjkZfq2lPwgZaKQMqQz9+
-         2yxhAVuhCoYYkv8OjOukk1tAxSOP1zYh88NO7mMM=
+        b=N4l6hm4mXy1KKFVqJzNoOFd9dfVXpiIk904vjDvlRdQK7WdhkFGBqicxK/qK1bGAj
+         xWoeVoT+Q6a4Nw7K73Nwoc8QlHmHEfgfTky0cDiJhGHt3CN1ajlBgsdWaL3HCJt9B0
+         Cjl5ZiB6qVzxassrq2WkcknLTMn/DVAEkn8skb4I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Colin Foster <colin.foster@in-advantage.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0768/1126] pinctrl: ocelot: fix duplicate debugfs entry
-Date:   Tue,  5 Apr 2022 09:25:15 +0200
-Message-Id: <20220405070430.125185334@linuxfoundation.org>
+Subject: [PATCH 5.17 0769/1126] pinctrl: mediatek: Fix missing of_node_put() in mtk_pctrl_init
+Date:   Tue,  5 Apr 2022 09:25:16 +0200
+Message-Id: <20220405070430.153831300@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,40 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 359afd90fef3ec9285432f50720c813987df4a89 ]
+[ Upstream commit dab4df9ca919f59e5b9dd84385eaf34d4f20dbb0 ]
 
-This driver can have up to two regmaps. If the second one is registered
-its debugfs entry will have the same name as the first one and the
-following error will be printed:
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-[    2.242568] debugfs: Directory 'e2004064.pinctrl' with parent 'regmap' already present!
-
-Give the second regmap a name to avoid this.
-
-Fixes: 076d9e71bcf8 ("pinctrl: ocelot: convert pinctrl to regmap")
-Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Colin Foster <colin.foster@in-advantage.com>
-Link: https://lore.kernel.org/r/20220216122727.1005041-1-michael@walle.cc
+Fixes: a6df410d420a ("pinctrl: mediatek: Add Pinctrl/GPIO driver for mt8135.")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Link: https://lore.kernel.org/r/20220308071155.21114-1-linmq006@gmail.com
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/pinctrl-ocelot.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/pinctrl/mediatek/pinctrl-mtk-common.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/pinctrl/pinctrl-ocelot.c b/drivers/pinctrl/pinctrl-ocelot.c
-index a719c0bfbc91..9c13a7c90fc3 100644
---- a/drivers/pinctrl/pinctrl-ocelot.c
-+++ b/drivers/pinctrl/pinctrl-ocelot.c
-@@ -1788,6 +1788,7 @@ static struct regmap *ocelot_pinctrl_create_pincfg(struct platform_device *pdev)
- 		.val_bits = 32,
- 		.reg_stride = 4,
- 		.max_register = 32,
-+		.name = "pincfg",
- 	};
- 
- 	base = devm_platform_ioremap_resource(pdev, 1);
+diff --git a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
+index 5f7c421ab6e7..334cb85855a9 100644
+--- a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
++++ b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
+@@ -1038,6 +1038,7 @@ int mtk_pctrl_init(struct platform_device *pdev,
+ 	node = of_parse_phandle(np, "mediatek,pctl-regmap", 0);
+ 	if (node) {
+ 		pctl->regmap1 = syscon_node_to_regmap(node);
++		of_node_put(node);
+ 		if (IS_ERR(pctl->regmap1))
+ 			return PTR_ERR(pctl->regmap1);
+ 	} else if (regmap) {
+@@ -1051,6 +1052,7 @@ int mtk_pctrl_init(struct platform_device *pdev,
+ 	node = of_parse_phandle(np, "mediatek,pctl-regmap", 1);
+ 	if (node) {
+ 		pctl->regmap2 = syscon_node_to_regmap(node);
++		of_node_put(node);
+ 		if (IS_ERR(pctl->regmap2))
+ 			return PTR_ERR(pctl->regmap2);
+ 	}
 -- 
 2.34.1
 

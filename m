@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B9F54F50AC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96AFA4F50C6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1842996AbiDFBfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36104 "EHLO
+        id S1843194AbiDFBj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573565AbiDETWr (ORCPT
+        with ESMTP id S1573576AbiDETW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 15:22:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0685E41996;
-        Tue,  5 Apr 2022 12:20:49 -0700 (PDT)
+        Tue, 5 Apr 2022 15:22:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7AFE4889A;
+        Tue,  5 Apr 2022 12:20:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98746616C5;
-        Tue,  5 Apr 2022 19:20:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C95FC385A0;
-        Tue,  5 Apr 2022 19:20:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64A13B81F6B;
+        Tue,  5 Apr 2022 19:20:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ECA2C385A0;
+        Tue,  5 Apr 2022 19:20:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649186448;
-        bh=ShhHqYfBpf9JsbMiXI8G2iZFROdQeYH5+nM3VSH0nCI=;
+        s=k20201202; t=1649186457;
+        bh=N/e9LH0P+9ERaRrv/8h6/+bh1AE/58FUtmgR2K0k6AM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dKHViOiZAF8ltnCy75v1geQHPUV3YPHu0rqq8dpG7YpkQs61r73lUO9MHKA/dA5Ko
-         vrpOoJP7fgGvLjlJTaYGbR7CQ8IRQvPC+N3DVZd6guEK8PmgfVB8DocSpjjPx0krPa
-         R0DBwmFqMBBu75AWDTpNRyG2oxYljfYQ62sWfo+AXOEWuzgqqIIEVjKvEuv7h8Z9hR
-         lp7eIdcCsZh6wZjN1B61iDKAwVkAAi+Gv/WOGRfdeCkynnTulGP0cWJufpuHaXI2gg
-         Gl1IQRunszg/NxN8kWmKpLZIZByHcPEO5qh1of3y7yVa8gEQc65CigL426u+LAkK6E
-         y1OLcnVKDWgSw==
+        b=BkQMgVqtVVcmOn4SFTLXp3eqkkwWqgM01LaqugEEMa/Z0E0WZalB85lXln5VOofgB
+         +VBdjL4P7czpUrGKJVDm1xZ+1oZmuvnJ46SYhmQUIZ5g2EW0yvZ6qJhBzcW8F6QNQf
+         D0yCi9XOazIZlOj8STdqNAqXwPOrdU8NjJN+au0qdEwtwWbtsLLx0II80FBvOTjWZr
+         b65yavQVgOdFdsEUUB/jxHoAYGtscnB9HxnUyEoPTKj9MGxGP9Fmeas6RVorIARxIH
+         CSFEc3E9RnQNY2aLxYwTFnZHGbJpMEXOUI5RRHR1GNnItbCpbgksWlovrub6LfHRzZ
+         m/j+NL0amlssg==
 From:   Jeff Layton <jlayton@kernel.org>
 To:     idryomov@gmail.com, xiubli@redhat.com
 Cc:     ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
         lhenriques@suse.de
-Subject: [PATCH v13 17/59] ceph: decode alternate_name in lease info
-Date:   Tue,  5 Apr 2022 15:19:48 -0400
-Message-Id: <20220405192030.178326-18-jlayton@kernel.org>
+Subject: [PATCH v13 27/59] ceph: add helpers for converting names for userland presentation
+Date:   Tue,  5 Apr 2022 15:19:58 -0400
+Message-Id: <20220405192030.178326-28-jlayton@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405192030.178326-1-jlayton@kernel.org>
 References: <20220405192030.178326-1-jlayton@kernel.org>
@@ -55,156 +55,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ceph is a bit different from local filesystems, in that we don't want
-to store filenames as raw binary data, since we may also be dealing
-with clients that don't support fscrypt.
-
-We could just base64-encode the encrypted filenames, but that could
-leave us with filenames longer than NAME_MAX. It turns out that the
-MDS doesn't care much about filename length, but the clients do.
-
-To manage this, we've added a new "alternate name" field that can be
-optionally added to any dentry that we'll use to store the binary
-crypttext of the filename if its base64-encoded value will be longer
-than NAME_MAX. When a dentry has one of these names attached, the MDS
-will send it along in the lease info, which we can then store for
-later usage.
+Define a new ceph_fname struct that we can use to carry information
+about encrypted dentry names. Add helpers for working with these
+objects, including ceph_fname_to_usr which formats an encrypted filename
+for userland presentation.
 
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
-Signed-off-by: Xiubo Li <xiubli@redhat.com>
 ---
- fs/ceph/mds_client.c | 43 +++++++++++++++++++++++++++++++++----------
- fs/ceph/mds_client.h | 11 +++++++----
- 2 files changed, 40 insertions(+), 14 deletions(-)
+ fs/ceph/crypto.c | 76 ++++++++++++++++++++++++++++++++++++++++++++++++
+ fs/ceph/crypto.h | 41 ++++++++++++++++++++++++++
+ 2 files changed, 117 insertions(+)
 
-diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
-index dcb800675dec..2f2f8221eb25 100644
---- a/fs/ceph/mds_client.c
-+++ b/fs/ceph/mds_client.c
-@@ -308,27 +308,47 @@ static int parse_reply_info_dir(void **p, void *end,
- 
- static int parse_reply_info_lease(void **p, void *end,
- 				  struct ceph_mds_reply_lease **lease,
--				  u64 features)
-+				  u64 features, u32 *altname_len, u8 **altname)
- {
-+	u8 struct_v;
-+	u32 struct_len;
-+	void *lend;
-+
- 	if (features == (u64)-1) {
--		u8 struct_v, struct_compat;
--		u32 struct_len;
-+		u8 struct_compat;
-+
- 		ceph_decode_8_safe(p, end, struct_v, bad);
- 		ceph_decode_8_safe(p, end, struct_compat, bad);
-+
- 		/* struct_v is expected to be >= 1. we only understand
- 		 * encoding whose struct_compat == 1. */
- 		if (!struct_v || struct_compat != 1)
- 			goto bad;
-+
- 		ceph_decode_32_safe(p, end, struct_len, bad);
--		ceph_decode_need(p, end, struct_len, bad);
--		end = *p + struct_len;
-+	} else {
-+		struct_len = sizeof(**lease);
-+		*altname_len = 0;
-+		*altname = NULL;
- 	}
- 
--	ceph_decode_need(p, end, sizeof(**lease), bad);
-+	lend = *p + struct_len;
-+	ceph_decode_need(p, end, struct_len, bad);
- 	*lease = *p;
- 	*p += sizeof(**lease);
--	if (features == (u64)-1)
--		*p = end;
-+
-+	if (features == (u64)-1) {
-+		if (struct_v >= 2) {
-+			ceph_decode_32_safe(p, end, *altname_len, bad);
-+			ceph_decode_need(p, end, *altname_len, bad);
-+			*altname = *p;
-+			*p += *altname_len;
-+		} else {
-+			*altname = NULL;
-+			*altname_len = 0;
-+		}
-+	}
-+	*p = lend;
- 	return 0;
- bad:
- 	return -EIO;
-@@ -358,7 +378,8 @@ static int parse_reply_info_trace(void **p, void *end,
- 		info->dname = *p;
- 		*p += info->dname_len;
- 
--		err = parse_reply_info_lease(p, end, &info->dlease, features);
-+		err = parse_reply_info_lease(p, end, &info->dlease, features,
-+					     &info->altname_len, &info->altname);
- 		if (err < 0)
- 			goto out_bad;
- 	}
-@@ -425,9 +446,11 @@ static int parse_reply_info_readdir(void **p, void *end,
- 		dout("parsed dir dname '%.*s'\n", rde->name_len, rde->name);
- 
- 		/* dentry lease */
--		err = parse_reply_info_lease(p, end, &rde->lease, features);
-+		err = parse_reply_info_lease(p, end, &rde->lease, features,
-+					     &rde->altname_len, &rde->altname);
- 		if (err)
- 			goto out_bad;
-+
- 		/* inode */
- 		err = parse_reply_info_in(p, end, &rde->inode, features);
- 		if (err < 0)
-diff --git a/fs/ceph/mds_client.h b/fs/ceph/mds_client.h
-index aab3ab284fce..2cc75f9ae7c7 100644
---- a/fs/ceph/mds_client.h
-+++ b/fs/ceph/mds_client.h
-@@ -29,8 +29,8 @@ enum ceph_feature_type {
- 	CEPHFS_FEATURE_MULTI_RECONNECT,
- 	CEPHFS_FEATURE_DELEG_INO,
- 	CEPHFS_FEATURE_METRIC_COLLECT,
--
--	CEPHFS_FEATURE_MAX = CEPHFS_FEATURE_METRIC_COLLECT,
-+	CEPHFS_FEATURE_ALTERNATE_NAME,
-+	CEPHFS_FEATURE_MAX = CEPHFS_FEATURE_ALTERNATE_NAME,
- };
- 
- /*
-@@ -45,8 +45,7 @@ enum ceph_feature_type {
- 	CEPHFS_FEATURE_MULTI_RECONNECT,		\
- 	CEPHFS_FEATURE_DELEG_INO,		\
- 	CEPHFS_FEATURE_METRIC_COLLECT,		\
--						\
--	CEPHFS_FEATURE_MAX,			\
-+	CEPHFS_FEATURE_ALTERNATE_NAME,		\
+diff --git a/fs/ceph/crypto.c b/fs/ceph/crypto.c
+index a6ee2e3160ca..eefeaa721b9d 100644
+--- a/fs/ceph/crypto.c
++++ b/fs/ceph/crypto.c
+@@ -174,3 +174,79 @@ int ceph_encode_encrypted_fname(const struct inode *parent, struct dentry *dentr
+ 	dout("base64-encoded ciphertext name = %.*s\n", elen, buf);
+ 	return elen;
  }
- #define CEPHFS_FEATURES_CLIENT_REQUIRED {}
++
++/**
++ * ceph_fname_to_usr - convert a filename for userland presentation
++ * @fname: ceph_fname to be converted
++ * @tname: temporary name buffer to use for conversion (may be NULL)
++ * @oname: where converted name should be placed
++ * @is_nokey: set to true if key wasn't available during conversion (may be NULL)
++ *
++ * Given a filename (usually from the MDS), format it for presentation to
++ * userland. If @parent is not encrypted, just pass it back as-is.
++ *
++ * Otherwise, base64 decode the string, and then ask fscrypt to format it
++ * for userland presentation.
++ *
++ * Returns 0 on success or negative error code on error.
++ */
++int ceph_fname_to_usr(const struct ceph_fname *fname, struct fscrypt_str *tname,
++		      struct fscrypt_str *oname, bool *is_nokey)
++{
++	int ret;
++	struct fscrypt_str _tname = FSTR_INIT(NULL, 0);
++	struct fscrypt_str iname;
++
++	if (!IS_ENCRYPTED(fname->dir)) {
++		oname->name = fname->name;
++		oname->len = fname->name_len;
++		return 0;
++	}
++
++	/* Sanity check that the resulting name will fit in the buffer */
++	if (fname->name_len > FSCRYPT_BASE64URL_CHARS(NAME_MAX))
++		return -EIO;
++
++	ret = __fscrypt_prepare_readdir(fname->dir);
++	if (ret)
++		return ret;
++
++	/*
++	 * Use the raw dentry name as sent by the MDS instead of
++	 * generating a nokey name via fscrypt.
++	 */
++	if (!fscrypt_has_encryption_key(fname->dir)) {
++		memcpy(oname->name, fname->name, fname->name_len);
++		oname->len = fname->name_len;
++		if (is_nokey)
++			*is_nokey = true;
++		return 0;
++	}
++
++	if (fname->ctext_len == 0) {
++		int declen;
++
++		if (!tname) {
++			ret = fscrypt_fname_alloc_buffer(NAME_MAX, &_tname);
++			if (ret)
++				return ret;
++			tname = &_tname;
++		}
++
++		declen = fscrypt_base64url_decode(fname->name, fname->name_len, tname->name);
++		if (declen <= 0) {
++			ret = -EIO;
++			goto out;
++		}
++		iname.name = tname->name;
++		iname.len = declen;
++	} else {
++		iname.name = fname->ctext;
++		iname.len = fname->ctext_len;
++	}
++
++	ret = fscrypt_fname_disk_to_usr(fname->dir, 0, 0, &iname, oname);
++out:
++	fscrypt_fname_free_buffer(&_tname);
++	return ret;
++}
+diff --git a/fs/ceph/crypto.h b/fs/ceph/crypto.h
+index 9a66a29d5c8b..7e56aded5124 100644
+--- a/fs/ceph/crypto.h
++++ b/fs/ceph/crypto.h
+@@ -13,6 +13,14 @@ struct ceph_fs_client;
+ struct ceph_acl_sec_ctx;
+ struct ceph_mds_request;
  
-@@ -98,7 +97,9 @@ struct ceph_mds_reply_info_in {
++struct ceph_fname {
++	struct inode	*dir;
++	char		*name;		// b64 encoded, possibly hashed
++	unsigned char	*ctext;		// binary crypttext (if any)
++	u32		name_len;	// length of name buffer
++	u32		ctext_len;	// length of crypttext
++};
++
+ struct ceph_fscrypt_auth {
+ 	__le32	cfa_version;
+ 	__le32	cfa_blob_len;
+@@ -61,6 +69,22 @@ int ceph_fscrypt_prepare_context(struct inode *dir, struct inode *inode,
+ void ceph_fscrypt_as_ctx_to_req(struct ceph_mds_request *req, struct ceph_acl_sec_ctx *as);
+ int ceph_encode_encrypted_fname(const struct inode *parent, struct dentry *dentry, char *buf);
  
- struct ceph_mds_reply_dir_entry {
- 	char                          *name;
-+	u8			      *altname;
- 	u32                           name_len;
-+	u32			      altname_len;
- 	struct ceph_mds_reply_lease   *lease;
- 	struct ceph_mds_reply_info_in inode;
- 	loff_t			      offset;
-@@ -122,7 +123,9 @@ struct ceph_mds_reply_info_parsed {
- 	struct ceph_mds_reply_info_in diri, targeti;
- 	struct ceph_mds_reply_dirfrag *dirfrag;
- 	char                          *dname;
-+	u8			      *altname;
- 	u32                           dname_len;
-+	u32                           altname_len;
- 	struct ceph_mds_reply_lease   *dlease;
- 	struct ceph_mds_reply_xattr   xattr_info;
++static inline int ceph_fname_alloc_buffer(struct inode *parent, struct fscrypt_str *fname)
++{
++	if (!IS_ENCRYPTED(parent))
++		return 0;
++	return fscrypt_fname_alloc_buffer(NAME_MAX, fname);
++}
++
++static inline void ceph_fname_free_buffer(struct inode *parent, struct fscrypt_str *fname)
++{
++	if (IS_ENCRYPTED(parent))
++		fscrypt_fname_free_buffer(fname);
++}
++
++int ceph_fname_to_usr(const struct ceph_fname *fname, struct fscrypt_str *tname,
++			struct fscrypt_str *oname, bool *is_nokey);
++
+ #else /* CONFIG_FS_ENCRYPTION */
  
+ static inline void ceph_fscrypt_set_ops(struct super_block *sb)
+@@ -89,6 +113,23 @@ static inline int ceph_encode_encrypted_fname(const struct inode *parent,
+ {
+ 	return -EOPNOTSUPP;
+ }
++
++static inline int ceph_fname_alloc_buffer(struct inode *parent, struct fscrypt_str *fname)
++{
++	return 0;
++}
++
++static inline void ceph_fname_free_buffer(struct inode *parent, struct fscrypt_str *fname)
++{
++}
++
++static inline int ceph_fname_to_usr(const struct ceph_fname *fname, struct fscrypt_str *tname,
++				    struct fscrypt_str *oname, bool *is_nokey)
++{
++	oname->name = fname->name;
++	oname->len = fname->name_len;
++	return 0;
++}
+ #endif /* CONFIG_FS_ENCRYPTION */
+ 
+ #endif
 -- 
 2.35.1
 

@@ -2,114 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ECCE4F4CAF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:20:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7434E4F4E56
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349091AbiDEX2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59146 "EHLO
+        id S1588904AbiDFARr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386287AbiDEOTT (ORCPT
+        with ESMTP id S1387486AbiDEOcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 10:19:19 -0400
-Received: from gateway22.websitewelcome.com (gateway22.websitewelcome.com [192.185.47.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6666512758
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:08:47 -0700 (PDT)
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway22.websitewelcome.com (Postfix) with ESMTP id 246C6115946
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 08:08:47 -0500 (CDT)
-Received: from 162-215-252-75.unifiedlayer.com ([208.91.199.152])
-        by cmsmtp with SMTP
-        id bivOn93CTHnotbivOnsOwH; Tue, 05 Apr 2022 08:08:47 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=roeck-us.net; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=xz6VufNI4MnHhml5UwvXhoCvcF0yDshQWHa/HM/YqoA=; b=GqIHGIW2UMCJm1lZnmUjI7G1KT
-        5236zPjF59olbyzrTlyR57lC81eHcbU4XrSyA4o67ts9zDsg+y9lxc7tc/bcl4C+YIva53hNcLIMp
-        dSFv785YbqteL/2ibwlp7W3Z6qgFfEcGOTlrH7tsUxhAh33G+7iGE04TOABvusVHyQMebpb5f8hfZ
-        IhQ6I2QD3YFezPkSA5AGGTHMxruDvPqYQcBf4NGKno7TQVKkhcRHWUn8oE/NjBfe/5mvsCQiNwtFt
-        J6tPe7l6QiZOuObL2N4eKAb/MFi1Lpsxu8zj+IrSp0BQcgD4WYPUIRwZiEBmVgLUGPQgNElDMD2qe
-        rLqeUkQQ==;
-Received: from 108-223-40-66.lightspeed.sntcca.sbcglobal.net ([108.223.40.66]:54728)
-        by bh-25.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@roeck-us.net>)
-        id 1nbivO-002i6Y-7O; Tue, 05 Apr 2022 13:08:46 +0000
-Message-ID: <e80a3eb4-335c-5f8c-dc22-e33176b225da@roeck-us.net>
-Date:   Tue, 5 Apr 2022 06:08:44 -0700
+        Tue, 5 Apr 2022 10:32:16 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057D815719
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:13:50 -0700 (PDT)
+Received: from [192.168.137.80] (unknown [182.2.74.86])
+        by gnuweeb.org (Postfix) with ESMTPSA id E4BB47E342;
+        Tue,  5 Apr 2022 13:13:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1649164430;
+        bh=byKY6UTz0fK6TWtlSIwQIIwJ8VY6Tz2PXZQNSc6FFwU=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=qB9fXD5WlGBLJdi9FAcUvNx+Ou3+3qfnjcgD/3mYB9HWK/dVCRD7WzbNjjVWn6QEz
+         pWq1umCtX/WFdk2IpK3S6P+oYfjCd4hJlDFEY1fgxeyLhJEZ7umI2rPaluveg/dokC
+         eoG5noGnIYZ0JX1yVB45+Ont8l6x9d/SGFO0VMD9aqhKwYdyKefDbJLwfW+DFD/ILP
+         fmQyW6Iyl6Xp66LL64kwBUJwZ93lWoVJrSx7/EXedy8WTwUPp9RlyG4lboi12Hn9Y6
+         nmBDsvuUx6yR3Inx8i0sx87KlKgQ22fh56HhGddv5aigM2ptQfceZlfiMIpmEhezkk
+         wrDIQQkcCg/Ow==
+Message-ID: <675544de-3369-e26e-65ba-3b28fff5c126@gnuweeb.org>
+Date:   Tue, 5 Apr 2022 20:13:42 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 5.10 000/599] 5.10.110-rc1 review
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220405070258.802373272@linuxfoundation.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+References: <b86541ea-7d96-5a24-1b65-37c24c70d3ff@gnuweeb.org>
+ <f71d132d-02a0-918c-ab2b-3234d0d492a4@arm.com>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Subject: Re: [Linux 5.18-rc1] WARNING: CPU: 1 PID: 0 at
+ kernel/sched/fair.c:3355 update_blocked_averages
+In-Reply-To: <f71d132d-02a0-918c-ab2b-3234d0d492a4@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - bh-25.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - roeck-us.net
-X-BWhitelist: no
-X-Source-IP: 108.223.40.66
-X-Source-L: No
-X-Exim-ID: 1nbivO-002i6Y-7O
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: 108-223-40-66.lightspeed.sntcca.sbcglobal.net [108.223.40.66]:54728
-X-Source-Auth: linux@roeck-us.net
-X-Email-Count: 12
-X-Source-Cap: cm9lY2s7YWN0aXZzdG07YmgtMjUud2ViaG9zdGJveC5uZXQ=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/22 00:24, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.110 release.
-> There are 599 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 4/5/22 7:21 PM, Dietmar Eggemann wrote:
+> Tried to recreate the issue but no success so far. I used you config
+> file, clang-14 and a Xeon CPU E5-2690 v2 (2 sockets 40 CPUs) with 20
+> two-level cgoupv1 taskgroups '/X/Y' with 'hackbench (10 groups, 40 fds)
+> + idling' running in all '/X/Y/'.
 > 
-> Responses should be made by Thu, 07 Apr 2022 07:01:33 +0000.
-> Anything received after that time might be too late.
+> What userspace are you running?
+
+HP Laptop, Intel i7-1165G7, 8 CPUs, with 16 GB of RAM. Ubuntu 21.10. Just for
+daily workstation. Compiling kernel, browsing and coding stuff.
+
+> There seemed to be some pressure on your machine when it happened?
+
+Yeah, might be, I don't fully remember the activity at the time it
+happened, though.
+
+>> <6>[13420.623334][    C7] perf: interrupt took too long (2530 > 2500),
+>> lowering kernel.perf_event_max_sample_rate to 78900
 > 
+> Maybe you could split the SCHED_WARN_ON so we know which signal causes this?
 
-Building um:defconfig ... failed
-Building csky:defconfig ... failed
-Building microblaze:mmu_defconfig ... failed
-------
-Error log:
+OK, I will apply the diff on top of 5.18-rc1 and will start using it for daily
+routine tomorrow morning. Let's see if I can hit this bug again. Will send an
+update later...
 
-fs/binfmt_elf.c: In function 'fill_note_info':
-fs/binfmt_elf.c:2050:45: error: 'siginfo' undeclared (first use in this function)
-  2050 |                 sz = elf_dump_thread_status(siginfo->si_signo, ets);
-       |                                             ^~~~~~~
-fs/binfmt_elf.c:2050:45: note: each undeclared identifier is reported only once for each function it appears in
-fs/binfmt_elf.c:2056:53: error: 'regs' undeclared (first use in this function)
-  2056 |         elf_core_copy_regs(&info->prstatus->pr_reg, regs);
-       |                                                     ^~~~
+Thank you.
 
-Build just started, so there are likely going to be more failures.
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index d4bd299d67ab..0d45e09e5bfc 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -3350,9 +3350,9 @@ static inline bool cfs_rq_is_decayed(struct cfs_rq
+> *cfs_rq)
+>           * Make sure that rounding and/or propagation of PELT values never
+>           * break this.
+>           */
+> -       SCHED_WARN_ON(cfs_rq->avg.load_avg ||
+> -                     cfs_rq->avg.util_avg ||
+> -                     cfs_rq->avg.runnable_avg);
+> +       SCHED_WARN_ON(cfs_rq->avg.load_avg);
+> +       SCHED_WARN_ON(cfs_rq->avg.util_avg);
+> +       SCHED_WARN_ON(cfs_rq->avg.runnable_avg);
+> 
+>          return true;
+>   }
+> 
+> [...]
 
-Guenter
+
+-- 
+Ammar Faizi

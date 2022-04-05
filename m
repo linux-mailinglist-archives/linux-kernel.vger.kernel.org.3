@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99DE04F41D6
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 428964F4027
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:14:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390353AbiDENiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60618 "EHLO
+        id S233662AbiDENPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344265AbiDEJTD (ORCPT
+        with ESMTP id S1344270AbiDEJTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:19:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247C949F20;
-        Tue,  5 Apr 2022 02:06:29 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7972B22528;
+        Tue,  5 Apr 2022 02:06:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B566861571;
-        Tue,  5 Apr 2022 09:06:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA356C385A0;
-        Tue,  5 Apr 2022 09:06:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18A7A614E4;
+        Tue,  5 Apr 2022 09:06:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2194AC385A0;
+        Tue,  5 Apr 2022 09:06:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149588;
-        bh=5KA/8ySZ2n1/KKSMcoJazR7rOJ6n1FuR1d09mg0Xu70=;
+        s=korg; t=1649149602;
+        bh=0koZQSOLgRW2kaRazCNUDwDk9THdGrokMdcTAp4Ow68=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B808LNm8XrNKMn80s/Ouu3/uvKrCvzX9GsK6UTcZEeS6iPupS5PTS119mDJ9qoXNe
-         4sH77yMbTEW6P+d7fcI2zFwjUN/Ob+WXd7pk5PFiUbadkNdEGGp61Vnj6AH+STDI5X
-         HVNbwCOQR6qAtH3Uaj67SDVQogXmpoILpNBy3y3s=
+        b=wgxgDKDORwuAkQtHyFBYhn638HBorMGuPeFuWtcVYtMHCxCR706hfMfJ39UYrer46
+         iyFBen7oeaWlpmRW5nZ+S7LmVz5pTQ/fVkFn8ajjstJDNq0NVfCf4M744NDbqUVCZ0
+         7CHijFQc3qiBLzOWMH2Q2T6p6h3TUVsydKlrhHlU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        Maulik Shah <quic_mkshah@quicinc.com>,
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0770/1017] irqchip/qcom-pdc: Fix broken locking
-Date:   Tue,  5 Apr 2022 09:28:03 +0200
-Message-Id: <20220405070417.115714297@linuxfoundation.org>
+Subject: [PATCH 5.16 0774/1017] ACPICA: Avoid walking the ACPI Namespace if it is not there
+Date:   Tue,  5 Apr 2022 09:28:07 +0200
+Message-Id: <20220405070417.234521252@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,54 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Zyngier <maz@kernel.org>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-[ Upstream commit a6aca2f460e203781dc41391913cc5b54f4bc0ce ]
+[ Upstream commit 0c9992315e738e7d6e927ef36839a466b080dba6 ]
 
-pdc_enable_intr() serves as a primitive to qcom_pdc_gic_{en,dis}able,
-and has a raw spinlock for mutual exclusion, which is uses with
-interruptible primitives.
+ACPICA commit b1c3656ef4950098e530be68d4b589584f06cddc
 
-This means that this critical section can itself be interrupted.
-Should the interrupt also be a PDC interrupt, and the endpoint driver
-perform an irq_disable() on that interrupt, we end-up in a deadlock.
+Prevent acpi_ns_walk_namespace() from crashing when called with
+start_node equal to ACPI_ROOT_OBJECT if the Namespace has not been
+instantiated yet and acpi_gbl_root_node is NULL.
 
-Fix this by using the irqsave/irqrestore variants of the locking
-primitives.
+For instance, this can happen if the kernel is run with "acpi=off"
+in the command line.
 
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Reviewed-by: Maulik Shah <quic_mkshah@quicinc.com>
-Link: https://lore.kernel.org/r/20220224101226.88373-5-maz@kernel.org
+Link: https://github.com/acpica/acpica/commit/b1c3656ef4950098e530be68d4b589584f06cddc
+Link: https://lore.kernel.org/linux-acpi/CAJZ5v0hJWW_vZ3wwajE7xT38aWjY7cZyvqMJpXHzUL98-SiCVQ@mail.gmail.com/
+Reported-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/irqchip/qcom-pdc.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/acpi/acpica/nswalk.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/irqchip/qcom-pdc.c b/drivers/irqchip/qcom-pdc.c
-index 173e6520e06e..c0b457f26ec4 100644
---- a/drivers/irqchip/qcom-pdc.c
-+++ b/drivers/irqchip/qcom-pdc.c
-@@ -56,17 +56,18 @@ static u32 pdc_reg_read(int reg, u32 i)
- static void pdc_enable_intr(struct irq_data *d, bool on)
- {
- 	int pin_out = d->hwirq;
-+	unsigned long flags;
- 	u32 index, mask;
- 	u32 enable;
+diff --git a/drivers/acpi/acpica/nswalk.c b/drivers/acpi/acpica/nswalk.c
+index 915c2433463d..e7c30ce06e18 100644
+--- a/drivers/acpi/acpica/nswalk.c
++++ b/drivers/acpi/acpica/nswalk.c
+@@ -169,6 +169,9 @@ acpi_ns_walk_namespace(acpi_object_type type,
  
- 	index = pin_out / 32;
- 	mask = pin_out % 32;
+ 	if (start_node == ACPI_ROOT_OBJECT) {
+ 		start_node = acpi_gbl_root_node;
++		if (!start_node) {
++			return_ACPI_STATUS(AE_NO_NAMESPACE);
++		}
+ 	}
  
--	raw_spin_lock(&pdc_lock);
-+	raw_spin_lock_irqsave(&pdc_lock, flags);
- 	enable = pdc_reg_read(IRQ_ENABLE_BANK, index);
- 	enable = on ? ENABLE_INTR(enable, mask) : CLEAR_INTR(enable, mask);
- 	pdc_reg_write(IRQ_ENABLE_BANK, index, enable);
--	raw_spin_unlock(&pdc_lock);
-+	raw_spin_unlock_irqrestore(&pdc_lock, flags);
- }
- 
- static void qcom_pdc_gic_disable(struct irq_data *d)
+ 	/* Null child means "get first node" */
 -- 
 2.34.1
 

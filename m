@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F05394F4DFF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA4C4F4965
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1586979AbiDFAGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:06:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
+        id S232589AbiDEWNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349295AbiDEJtf (ORCPT
+        with ESMTP id S1356216AbiDEKXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EF813CC5;
-        Tue,  5 Apr 2022 02:43:45 -0700 (PDT)
+        Tue, 5 Apr 2022 06:23:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0E3BAB87;
+        Tue,  5 Apr 2022 03:07:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AEAA0B81B76;
-        Tue,  5 Apr 2022 09:43:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 043E5C385A3;
-        Tue,  5 Apr 2022 09:43:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6757AB81C88;
+        Tue,  5 Apr 2022 10:07:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1EA2C385A1;
+        Tue,  5 Apr 2022 10:07:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151823;
-        bh=k5xEwT2EpCrvE2/ecRxQ9L6o9jtoomLXGOZUR/EcBEE=;
+        s=korg; t=1649153268;
+        bh=5SKEbDrLT6+O1PlKgj+zrudt8PadU0+bYVvcmroswKE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RnfscOi39nXOoGnCWUqdUi5gY8SM1gGWj+vlka3NWNH8OR1aY9hQbDUWsOYGiB87U
-         7jBmxaH34700WEctNRzp1gwitkl2ySt+YTL+84CNw2JBkF0m+aYfQ+uCnIFfyixtR7
-         ACqjw4R2rKdLdkHNm41BGMnmllsmMNhwvGMlgk10=
+        b=wl1HRdf2VkrSjNrSj//IE136964rDpZFCpYYzHMkoO0ykx80IaUPFaIODYSeCzsJF
+         74S/Qkb4c0q5qKJ2TMQSJQnwKybyBRO/DnlowTxOaMG4h8gw8WnFlOUOTyOVEDlmjH
+         JIyhM/hp5nQi+sjiwvpAaiwAvHullvmCGgpVCSQ0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 554/913] af_unix: Fix some data-races around unix_sk(sk)->oob_skb.
-Date:   Tue,  5 Apr 2022 09:26:56 +0200
-Message-Id: <20220405070356.453123879@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>
+Subject: [PATCH 5.10 124/599] drm/i915/opregion: check port number bounds for SWSCI display power state
+Date:   Tue,  5 Apr 2022 09:26:58 +0200
+Message-Id: <20220405070302.527802109@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,109 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+From: Jani Nikula <jani.nikula@intel.com>
 
-[ Upstream commit e82025c623e2bf04d162bafceb66a59115814479 ]
+commit 24a644ebbfd3b13cda702f98907f9dd123e34bf9 upstream.
 
-Out-of-band data automatically places a "mark" showing wherein the
-sequence the out-of-band data would have been.  If the out-of-band data
-implies cancelling everything sent so far, the "mark" is helpful to flush
-them.  When the socket's read pointer reaches the "mark", the ioctl() below
-sets a non zero value to the arg `atmark`:
+The mapping from enum port to whatever port numbering scheme is used by
+the SWSCI Display Power State Notification is odd, and the memory of it
+has faded. In any case, the parameter only has space for ports numbered
+[0..4], and UBSAN reports bit shift beyond it when the platform has port
+F or more.
 
-The out-of-band data is queued in sk->sk_receive_queue as well as ordinary
-data and also saved in unix_sk(sk)->oob_skb.  It can be used to test if the
-head of the receive queue is the out-of-band data meaning the socket is at
-the "mark".
+Since the SWSCI functionality is supposed to be obsolete for new
+platforms (i.e. ones that might have port F or more), just bail out
+early if the mapped and mangled port number is beyond what the Display
+Power State Notification can support.
 
-While testing that, unix_ioctl() reads unix_sk(sk)->oob_skb locklessly.
-Thus, all accesses to oob_skb need some basic protection to avoid
-load/store tearing which KCSAN detects when these are called concurrently:
-
-  - ioctl(fd_a, SIOCATMARK, &atmark, sizeof(atmark))
-  - send(fd_b_connected_to_a, buf, sizeof(buf), MSG_OOB)
-
-BUG: KCSAN: data-race in unix_ioctl / unix_stream_sendmsg
-
-write to 0xffff888003d9cff0 of 8 bytes by task 175 on cpu 1:
- unix_stream_sendmsg (net/unix/af_unix.c:2087 net/unix/af_unix.c:2191)
- sock_sendmsg (net/socket.c:705 net/socket.c:725)
- __sys_sendto (net/socket.c:2040)
- __x64_sys_sendto (net/socket.c:2048)
- do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
- entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113)
-
-read to 0xffff888003d9cff0 of 8 bytes by task 176 on cpu 0:
- unix_ioctl (net/unix/af_unix.c:3101 (discriminator 1))
- sock_do_ioctl (net/socket.c:1128)
- sock_ioctl (net/socket.c:1242)
- __x64_sys_ioctl (fs/ioctl.c:52 fs/ioctl.c:874 fs/ioctl.c:860 fs/ioctl.c:860)
- do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
- entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113)
-
-value changed: 0xffff888003da0c00 -> 0xffff888003da0d00
-
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 0 PID: 176 Comm: unix_race_oob_i Not tainted 5.17.0-rc5-59529-g83dc4c2af682 #12
-Hardware name: Red Hat KVM, BIOS 1.11.0-2.amzn2 04/01/2014
-
-Fixes: 314001f0bf92 ("af_unix: Add OOB support")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 9c4b0a683193 ("drm/i915: add opregion function to notify bios of encoder enable/disable")
+Cc: <stable@vger.kernel.org> # v3.13+
+Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>
+Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/4800
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/cc363f42d6b5a5932b6d218fefcc8bdfb15dbbe5.1644489329.git.jani.nikula@intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/unix/af_unix.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+ drivers/gpu/drm/i915/display/intel_opregion.c |   15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-index b0bfc78e421c..826ac391a7a4 100644
---- a/net/unix/af_unix.c
-+++ b/net/unix/af_unix.c
-@@ -1996,7 +1996,7 @@ static int queue_oob(struct socket *sock, struct msghdr *msg, struct sock *other
- 	if (ousk->oob_skb)
- 		consume_skb(ousk->oob_skb);
+--- a/drivers/gpu/drm/i915/display/intel_opregion.c
++++ b/drivers/gpu/drm/i915/display/intel_opregion.c
+@@ -376,6 +376,21 @@ int intel_opregion_notify_encoder(struct
+ 		return -EINVAL;
+ 	}
  
--	ousk->oob_skb = skb;
-+	WRITE_ONCE(ousk->oob_skb, skb);
++	/*
++	 * The port numbering and mapping here is bizarre. The now-obsolete
++	 * swsci spec supports ports numbered [0..4]. Port E is handled as a
++	 * special case, but port F and beyond are not. The functionality is
++	 * supposed to be obsolete for new platforms. Just bail out if the port
++	 * number is out of bounds after mapping.
++	 */
++	if (port > 4) {
++		drm_dbg_kms(&dev_priv->drm,
++			    "[ENCODER:%d:%s] port %c (index %u) out of bounds for display power state notification\n",
++			    intel_encoder->base.base.id, intel_encoder->base.name,
++			    port_name(intel_encoder->port), port);
++		return -EINVAL;
++	}
++
+ 	if (!enable)
+ 		parm |= 4 << 8;
  
- 	scm_stat_add(other, skb);
- 	skb_queue_tail(&other->sk_receive_queue, skb);
-@@ -2514,9 +2514,8 @@ static int unix_stream_recv_urg(struct unix_stream_read_state *state)
- 
- 	oob_skb = u->oob_skb;
- 
--	if (!(state->flags & MSG_PEEK)) {
--		u->oob_skb = NULL;
--	}
-+	if (!(state->flags & MSG_PEEK))
-+		WRITE_ONCE(u->oob_skb, NULL);
- 
- 	unix_state_unlock(sk);
- 
-@@ -2551,7 +2550,7 @@ static struct sk_buff *manage_oob(struct sk_buff *skb, struct sock *sk,
- 				skb = NULL;
- 			} else if (sock_flag(sk, SOCK_URGINLINE)) {
- 				if (!(flags & MSG_PEEK)) {
--					u->oob_skb = NULL;
-+					WRITE_ONCE(u->oob_skb, NULL);
- 					consume_skb(skb);
- 				}
- 			} else if (!(flags & MSG_PEEK)) {
-@@ -3006,11 +3005,10 @@ static int unix_ioctl(struct socket *sock, unsigned int cmd, unsigned long arg)
- 	case SIOCATMARK:
- 		{
- 			struct sk_buff *skb;
--			struct unix_sock *u = unix_sk(sk);
- 			int answ = 0;
- 
- 			skb = skb_peek(&sk->sk_receive_queue);
--			if (skb && skb == u->oob_skb)
-+			if (skb && skb == READ_ONCE(unix_sk(sk)->oob_skb))
- 				answ = 1;
- 			err = put_user(answ, (int __user *)arg);
- 		}
--- 
-2.34.1
-
 
 

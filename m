@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA05C4F45D0
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D289D4F455E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235204AbiDEOEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39968 "EHLO
+        id S1344348AbiDEOMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236065AbiDEJbC (ORCPT
+        with ESMTP id S236156AbiDEJbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:31:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F806196;
-        Tue,  5 Apr 2022 02:18:32 -0700 (PDT)
+        Tue, 5 Apr 2022 05:31:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3078D638C;
+        Tue,  5 Apr 2022 02:18:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB26FB81C6A;
-        Tue,  5 Apr 2022 09:18:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3587EC385A2;
-        Tue,  5 Apr 2022 09:18:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4733561576;
+        Tue,  5 Apr 2022 09:18:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5434EC385A3;
+        Tue,  5 Apr 2022 09:18:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150309;
-        bh=1tz85BRyPGOMvfDP+mhL+NlvaU0MnzxPcfsnO1Ze4Lo=;
+        s=korg; t=1649150317;
+        bh=icmzaQjTA2AMAeSYFVcRD2WKyO+/3zIAb8Ggsg0MqkQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NspUMZMctGyMSe15gJDwYgqboL0RmkVLYbqsmLJf5gyUbNpuQRcRb7EStQOD36YY2
-         boqAfH4PMeAUenMkPZYKxGGIOXnnYd6XHA/f89flSfe9KEfC2XS/DeMDdxnWNLQbjS
-         eB4KwXLMLxAQUODSIPJqa6QeeACGEdZrBxsKSnqE=
+        b=y4EV08XUgfUy43TuGczAxpKlfjVhfRuYeoa7JbJ9bsHcq+AiR9mKpfsUhta9k+Po9
+         HWcMipond7iViyx99Tziqhaz7h/mQ33aJwojcZiKnwP9bhoFKLe9cFsAVOFd4L5PM2
+         fEPEXr6U3RJg51dz1aoHX56d/c83lL6nq0Jt/uCE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>,
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 012/913] virtio_console: break out of buf poll on remove
-Date:   Tue,  5 Apr 2022 09:17:54 +0200
-Message-Id: <20220405070340.182574688@linuxfoundation.org>
+Subject: [PATCH 5.15 015/913] ethernet: sun: Free the coherent when failing in probing
+Date:   Tue,  5 Apr 2022 09:17:57 +0200
+Message-Id: <20220405070340.272075166@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -54,53 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael S. Tsirkin <mst@redhat.com>
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-[ Upstream commit 0e7174b9d5877130fec41fb4a16e0c2ee4958d44 ]
+[ Upstream commit bb77bd31c281f70ec77c9c4f584950a779e05cf8 ]
 
-A common pattern for device reset is currently:
-vdev->config->reset(vdev);
-.. cleanup ..
+When the driver fails to register net device, it should free the DMA
+region first, and then do other cleanup.
 
-reset prevents new interrupts from arriving and waits for interrupt
-handlers to finish.
-
-However if - as is common - the handler queues a work request which is
-flushed during the cleanup stage, we have code adding buffers / trying
-to get buffers while device is reset. Not good.
-
-This was reproduced by running
-	modprobe virtio_console
-	modprobe -r virtio_console
-in a loop.
-
-Fix this up by calling virtio_break_device + flush before reset.
-
-Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=1786239
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/char/virtio_console.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/net/ethernet/sun/sunhme.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/char/virtio_console.c b/drivers/char/virtio_console.c
-index 7eaf303a7a86..3adf04766e98 100644
---- a/drivers/char/virtio_console.c
-+++ b/drivers/char/virtio_console.c
-@@ -1956,6 +1956,13 @@ static void virtcons_remove(struct virtio_device *vdev)
- 	list_del(&portdev->list);
- 	spin_unlock_irq(&pdrvdata_lock);
+diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
+index 62f81b0d14ed..b05ee2e0e305 100644
+--- a/drivers/net/ethernet/sun/sunhme.c
++++ b/drivers/net/ethernet/sun/sunhme.c
+@@ -3139,7 +3139,7 @@ static int happy_meal_pci_probe(struct pci_dev *pdev,
+ 	if (err) {
+ 		printk(KERN_ERR "happymeal(PCI): Cannot register net device, "
+ 		       "aborting.\n");
+-		goto err_out_iounmap;
++		goto err_out_free_coherent;
+ 	}
  
-+	/* Device is going away, exit any polling for buffers */
-+	virtio_break_device(vdev);
-+	if (use_multiport(portdev))
-+		flush_work(&portdev->control_work);
-+	else
-+		flush_work(&portdev->config_work);
+ 	pci_set_drvdata(pdev, hp);
+@@ -3172,6 +3172,10 @@ static int happy_meal_pci_probe(struct pci_dev *pdev,
+ 
+ 	return 0;
+ 
++err_out_free_coherent:
++	dma_free_coherent(hp->dma_dev, PAGE_SIZE,
++			  hp->happy_block, hp->hblock_dvma);
 +
- 	/* Disable interrupts for vqs */
- 	vdev->config->reset(vdev);
- 	/* Finish up work that's lined up */
+ err_out_iounmap:
+ 	iounmap(hp->gregs);
+ 
 -- 
 2.34.1
 

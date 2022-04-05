@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 709324F40C3
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D52E84F410A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391149AbiDENrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
+        id S1348052AbiDEUBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347331AbiDEJZ3 (ORCPT
+        with ESMTP id S1358232AbiDEK2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:25:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD7DDD941;
-        Tue,  5 Apr 2022 02:15:10 -0700 (PDT)
+        Tue, 5 Apr 2022 06:28:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 337922BEE;
+        Tue,  5 Apr 2022 03:17:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D38C615E5;
-        Tue,  5 Apr 2022 09:14:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B262C385A0;
-        Tue,  5 Apr 2022 09:14:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC7BAB81C8A;
+        Tue,  5 Apr 2022 10:17:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B6B3C385A0;
+        Tue,  5 Apr 2022 10:17:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150063;
-        bh=yqm4qNRot0W+kBh+mRQCRatH0OJBgYorbLjzeBfhe3Q=;
+        s=korg; t=1649153830;
+        bh=lxz+BQxzObui3/gEC8HfqBpX8a9uvR4SZ5egarfg99A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x87SFKyKRhpGyNv8lsZ+id/nfoC00tWKDYwcB3LIz2RDtpBvYS9hxHkBnGKbZvMVn
-         dQUSwj7PJutpVLrqoUip/RBAzmPwhbGWCWLPi8FYHG6aYhVfFSE9qPNE+dsWINPRCE
-         01V+Jht7M4X7E4VME/grv/FIh3fGATPS+pzIDSwY=
+        b=JD3aqrciyUKv4RPOdGp0IzRRueRiphIT7e0mMNyd+SFU+GV7+eEOhoIVXrMPjRaLD
+         zl8g4zM5CiJ833EEZccGY2UJmx4pGfyVhRn2C6dpnqj2elEfwP3IVdPQhVc/RiieZt
+         7y7IONEJ7gGnhrMmdvINERfBkUdU7Rz95ekRG1wY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Subject: [PATCH 5.16 0941/1017] watchdog: rti-wdt: Add missing pm_runtime_disable() in probe function
-Date:   Tue,  5 Apr 2022 09:30:54 +0200
-Message-Id: <20220405070422.147201922@linuxfoundation.org>
+        stable@vger.kernel.org, Derek Will <derekrobertwill@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 361/599] can: isotp: return -EADDRNOTAVAIL when reading from unbound socket
+Date:   Tue,  5 Apr 2022 09:30:55 +0200
+Message-Id: <20220405070309.574325063@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,33 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Oliver Hartkopp <socketcan@hartkopp.net>
 
-commit d055ef3a2c6919cff504ae3b710c96318d545fd2 upstream.
+[ Upstream commit 30ffd5332e06316bd69a654c06aa033872979b7c ]
 
-If the probe fails, we should use pm_runtime_disable() to balance
-pm_runtime_enable().
+When reading from an unbound can-isotp socket the syscall blocked
+indefinitely. As unbound sockets (without given CAN address information)
+do not make sense anyway we directly return -EADDRNOTAVAIL on read()
+analogue to the known behavior from sendmsg().
 
-Fixes: 2d63908bdbfb ("watchdog: Add K3 RTI watchdog support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20220105092114.23932-1-linmq006@gmail.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: e057dd3fc20f ("can: add ISO 15765-2:2016 transport protocol")
+Link: https://github.com/linux-can/can-utils/issues/349
+Link: https://lore.kernel.org/all/20220316164258.54155-2-socketcan@hartkopp.net
+Suggested-by: Derek Will <derekrobertwill@gmail.com>
+Signed-off-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/watchdog/rti_wdt.c |    1 +
- 1 file changed, 1 insertion(+)
+ net/can/isotp.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/drivers/watchdog/rti_wdt.c
-+++ b/drivers/watchdog/rti_wdt.c
-@@ -228,6 +228,7 @@ static int rti_wdt_probe(struct platform
- 	ret = pm_runtime_get_sync(dev);
- 	if (ret) {
- 		pm_runtime_put_noidle(dev);
-+		pm_runtime_disable(&pdev->dev);
- 		return dev_err_probe(dev, ret, "runtime pm failed\n");
- 	}
+diff --git a/net/can/isotp.c b/net/can/isotp.c
+index d0581dc6a65f..cb5546c186bc 100644
+--- a/net/can/isotp.c
++++ b/net/can/isotp.c
+@@ -1003,12 +1003,16 @@ static int isotp_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
+ {
+ 	struct sock *sk = sock->sk;
+ 	struct sk_buff *skb;
++	struct isotp_sock *so = isotp_sk(sk);
+ 	int err = 0;
+ 	int noblock;
  
+ 	noblock = flags & MSG_DONTWAIT;
+ 	flags &= ~MSG_DONTWAIT;
+ 
++	if (!so->bound)
++		return -EADDRNOTAVAIL;
++
+ 	skb = skb_recv_datagram(sk, flags, noblock, &err);
+ 	if (!skb)
+ 		return err;
+-- 
+2.34.1
+
 
 

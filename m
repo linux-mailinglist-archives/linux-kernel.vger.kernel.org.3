@@ -2,92 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC044F4E75
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DAA24F4C94
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356096AbiDFAU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51158 "EHLO
+        id S1578931AbiDEXZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1443055AbiDEPix (ORCPT
+        with ESMTP id S1443105AbiDEPi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:38:53 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F8F143C7C;
-        Tue,  5 Apr 2022 06:54:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1649166856;
-  x=1680702856;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WhCHZK9GJJLMq21n9Wjs02V4Hy6iol3pV60QmFhYnXI=;
-  b=jOu26AEgH52kLCEHGCDNClrCiuGQsqC0mMbV00LsCQ6D7yvqs5Dp0cZy
-   optIlXUGOYK/V04EhtXgmp6AGk/51aFLQeuyzPywOKdv2JKXA+l+F6zE7
-   jxHOIV1w+04HJPidE7bujX1V1JGCLkwHL1iXL+GF9c51ejPvh7kJHrDJF
-   sWsJXpEG7H3IcBsiHwqDNa1ca2VTQ5eAIIHcwcVTTvxCwHveoCzsrgoBD
-   Qg4rKYHk/O7G0KuyvCJLe6mEPgEtYSv+lMmSdwpvvs1oz0dylwi73F+Ak
-   1fDOQjfbIzc4yDvOAyiXUKMXCl58iv6V6IbDYllLso+PQ6F552TycWKbq
-   w==;
-Date:   Tue, 5 Apr 2022 15:54:12 +0200
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Johannes Berg <johannes@sipsolutions.net>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@axis.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "brendanhiggins@google.com" <brendanhiggins@google.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "a.zummo@towertech.it" <a.zummo@towertech.it>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [RFC v1 01/10] roadtest: import libvhost-user from QEMU
-Message-ID: <20220405135412.GB28574@axis.com>
-References: <20220311162445.346685-1-vincent.whitchurch@axis.com>
- <20220311162445.346685-2-vincent.whitchurch@axis.com>
- <7f405d8d09a83954aa3411eff8b71ee687c7ec33.camel@sipsolutions.net>
+        Tue, 5 Apr 2022 11:38:57 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DA4BC857;
+        Tue,  5 Apr 2022 06:54:39 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2356jiGC029879;
+        Tue, 5 Apr 2022 08:54:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=D7H9GzgzNTUv2SxZBu6ky5Mhjq+9FrGLu3EkwWXFSIo=;
+ b=g2jQs73Qjk38eI+fMIuqbIBkeVF1/x//BzW1DoRLUX5JKXvc1TCbFH5dpjQt+gYWNDZk
+ FaJgSd4VvUCtFWgHk0DaLA47+Liqhj5ThoQ7VPA/KteyHZtY7wWYN2Be4QEwXjA5LXvB
+ yLGM/hdATnIsWHrGXd/XF8TITzLS/k0Gwh1y4dJ1P2CI8RaSgB0i4dfTROnDjao0SLkO
+ hkyVn0i85Nn+Ef4PLpUFaXBH7Y5h/wXOXHkv8bwZ/MDcoZbD039JKg1vguafOmJeZCIV
+ lreIJZhiNE4ex1PsvTswd2iTMMLi74qVeCD86CX1GTmtMe6RQwLE+WGuERHK9tnJpTNu 2g== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3f6kw2brws-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 05 Apr 2022 08:54:25 -0500
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 5 Apr
+ 2022 14:54:23 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.24 via Frontend
+ Transport; Tue, 5 Apr 2022 14:54:23 +0100
+Received: from AUSNPC0LSNW1-debian.cirrus.com (AUSNPC0LSNW1.ad.cirrus.com [198.61.65.88])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id C644E458;
+        Tue,  5 Apr 2022 13:54:22 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <broonie@kernel.org>
+CC:     <robh+dt@kernel.org>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH v2 0/5] ASoC: Add a driver for the Cirrus Logic CS35L45 Smart Amplifier
+Date:   Tue, 5 Apr 2022 14:54:14 +0100
+Message-ID: <20220405135419.1230088-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <7f405d8d09a83954aa3411eff8b71ee687c7ec33.camel@sipsolutions.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: cJo1vpfXBTPYhRk3hu6TOOHFtAt-ZQXd
+X-Proofpoint-GUID: cJo1vpfXBTPYhRk3hu6TOOHFtAt-ZQXd
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 02:00:10PM +0100, Johannes Berg wrote:
-> On Fri, 2022-03-11 at 17:24 +0100, Vincent Whitchurch wrote:
-> > Import the libvhost-user from QEMU for use in the implementation of the
-> > virtio devices in the roadtest backend.
-> 
-> So hm, I wonder if this is the sensible thing to do?
-> 
-> Not that I mind importing qemu code, but:
-> 
->  1) the implementation is rather complex in some places, and has support
->     for a LOT of virtio/vhost-user features that are really not needed
->     in these cases, for performance etc. It's also close to 4k LOC.
+This adds basic audio support for the Cirrus Logic CS35L45 amplifier.
 
-Is this really a problem given that the code is imported as-is?  The
-intention is not to have to make a lot of local modifications to it in
-the kernel tree.  The code is stable and presumably well-tested
-upstream, and upstream maintains it as a separate library (in the QEMU
-source tree though) to encourage reuse.
+The first two patches add two generic helpers to ASoC, and patch 3 is
+a kunit test for patch 2.
 
->  2) the implementation doesn't support time-travel mode which might come
->     in handy
+CHANGES SINCE V1:
+Patch #5:
+ - spi .remove callback now has void return
+ - use new I2C .probe_new callback
+ - force boost-bypass mode as default
 
-True, but I don't see the external time-travel controller stuff being
-too useful for the kinds of tests this framework is targeting.
+James Schulman (1):
+  ASoC: cs35l45: Add driver for Cirrus Logic CS35L45 Smart Amp
+
+Richard Fitzgerald (4):
+  ASoC: soc.h: Add SOC_SINGLE_S_TLV() macro
+  ASoC: soc-utils: Add helper to calculate BCLK from TDM info
+  ASoC: soc-utils: Add kunit test for snd_soc_tdm_params_to_bclk()
+  ASoC: dt-bindings: cs35l45: Cirrus Logic CS35L45 Smart Amp
+
+ .../bindings/sound/cirrus,cs35l45.yaml        |  75 ++
+ MAINTAINERS                                   |   2 +
+ include/dt-bindings/sound/cs35l45.h           |  20 +
+ include/sound/soc.h                           |   4 +
+ sound/soc/Kconfig                             |   9 +-
+ sound/soc/Makefile                            |   5 +
+ sound/soc/codecs/Kconfig                      |  30 +
+ sound/soc/codecs/Makefile                     |   8 +
+ sound/soc/codecs/cs35l45-i2c.c                |  72 ++
+ sound/soc/codecs/cs35l45-spi.c                |  72 ++
+ sound/soc/codecs/cs35l45-tables.c             | 202 +++++
+ sound/soc/codecs/cs35l45.c                    | 693 ++++++++++++++++++
+ sound/soc/codecs/cs35l45.h                    | 217 ++++++
+ sound/soc/soc-utils-test.c                    | 186 +++++
+ sound/soc/soc-utils.c                         |  45 ++
+ 15 files changed, 1639 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/sound/cirrus,cs35l45.yaml
+ create mode 100644 include/dt-bindings/sound/cs35l45.h
+ create mode 100644 sound/soc/codecs/cs35l45-i2c.c
+ create mode 100644 sound/soc/codecs/cs35l45-spi.c
+ create mode 100644 sound/soc/codecs/cs35l45-tables.c
+ create mode 100644 sound/soc/codecs/cs35l45.c
+ create mode 100644 sound/soc/codecs/cs35l45.h
+ create mode 100644 sound/soc/soc-utils-test.c
+
+-- 
+2.30.2
+

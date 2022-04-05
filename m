@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6934F2BF7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD7C4F2E53
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354674AbiDEKPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
+        id S1345600AbiDEKlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241210AbiDEIcy (ORCPT
+        with ESMTP id S241257AbiDEIc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:32:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E0A17AA3;
-        Tue,  5 Apr 2022 01:29:40 -0700 (PDT)
+        Tue, 5 Apr 2022 04:32:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FA462FB;
+        Tue,  5 Apr 2022 01:30:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0544560B0E;
-        Tue,  5 Apr 2022 08:29:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11FA2C385A4;
-        Tue,  5 Apr 2022 08:29:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EF81609D0;
+        Tue,  5 Apr 2022 08:30:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AD9BC385A0;
+        Tue,  5 Apr 2022 08:30:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147379;
-        bh=m6+YIcNMAl0WSXTNagg/1StViclzza+RCB5lABzfnM8=;
+        s=korg; t=1649147454;
+        bh=sJSheh81ofmzuFi2QYxChCQ6v4L0lE96fuuZkjzo0JM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aqqnRB3k3ATJLGjONis/CH6mdVDMu4fNSXXaU8ODFznREu0wHA9crWmA+V4XOKV5M
-         NhF24sdsz/sZm1FnOQXtB3KkFyB7h+NjfmXUjeeXSQoEdbcUVXMdEsH7NdoDRKpeaE
-         nDa25T74f7n2215a8L5NwSwk3z/oszDBZkgK0aZo=
+        b=10DIPGpUf+jBqDeoPQ29tBjO2/QeBQ+pnzQTw+kGfkG6a55MzXOkXS13hMKhRCCZ7
+         y626J6+5Ow2zgRHVb3Ymntz5PqcZamBqTp59fRQUOBf93BnoYJ8X+ih8y3nfppKvcA
+         gm7B0D3utt+5MEUAtGFROfVmjkPmpDuUTMfNifZQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hengqi Chen <hengqi.chen@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yonghong Song <yhs@fb.com>
-Subject: [PATCH 5.17 1086/1126] bpf: Fix comment for helper bpf_current_task_under_cgroup()
-Date:   Tue,  5 Apr 2022 09:30:33 +0200
-Message-Id: <20220405070439.327499448@linuxfoundation.org>
+        stable@vger.kernel.org, Miquel Raynal <miquel.raynal@bootlin.com>,
+        Rob Herring <robh@kernel.org>, Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.17 1091/1126] dt-bindings: spi: mxic: The interrupt property is not mandatory
+Date:   Tue,  5 Apr 2022 09:30:38 +0200
+Message-Id: <20220405070439.470407998@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,48 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hengqi Chen <hengqi.chen@gmail.com>
+From: Miquel Raynal <miquel.raynal@bootlin.com>
 
-commit 58617014405ad5c9f94f464444f4972dabb71ca7 upstream.
+commit 90c204d3195a795f77f5bce767e311dd1c59ca17 upstream.
 
-Fix the descriptions of the return values of helper bpf_current_task_under_cgroup().
+The interrupt property is not mandatory at all, this property should not
+be part of the required properties list, so move it into the optional
+properties list.
 
-Fixes: c6b5fb8690fa ("bpf: add documentation for eBPF helpers (42-50)")
-Signed-off-by: Hengqi Chen <hengqi.chen@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/bpf/20220310155335.1278783-1-hengqi.chen@gmail.com
+Fixes: 326e5c8d4a87 ("dt-binding: spi: Document Macronix controller bindings")
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/linux-mtd/20211216111654.238086-8-miquel.raynal@bootlin.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/uapi/linux/bpf.h       |    4 ++--
- tools/include/uapi/linux/bpf.h |    4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ Documentation/devicetree/bindings/spi/spi-mxic.txt |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -2286,8 +2286,8 @@ union bpf_attr {
-  * 	Return
-  * 		The return value depends on the result of the test, and can be:
-  *
-- *		* 0, if current task belongs to the cgroup2.
-- *		* 1, if current task does not belong to the cgroup2.
-+ *		* 1, if current task belongs to the cgroup2.
-+ *		* 0, if current task does not belong to the cgroup2.
-  * 		* A negative error code, if an error occurred.
-  *
-  * long bpf_skb_change_tail(struct sk_buff *skb, u32 len, u64 flags)
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -2286,8 +2286,8 @@ union bpf_attr {
-  * 	Return
-  * 		The return value depends on the result of the test, and can be:
-  *
-- *		* 0, if current task belongs to the cgroup2.
-- *		* 1, if current task does not belong to the cgroup2.
-+ *		* 1, if current task belongs to the cgroup2.
-+ *		* 0, if current task does not belong to the cgroup2.
-  * 		* A negative error code, if an error occurred.
-  *
-  * long bpf_skb_change_tail(struct sk_buff *skb, u32 len, u64 flags)
+--- a/Documentation/devicetree/bindings/spi/spi-mxic.txt
++++ b/Documentation/devicetree/bindings/spi/spi-mxic.txt
+@@ -8,11 +8,13 @@ Required properties:
+ - reg: should contain 2 entries, one for the registers and one for the direct
+        mapping area
+ - reg-names: should contain "regs" and "dirmap"
+-- interrupts: interrupt line connected to the SPI controller
+ - clock-names: should contain "ps_clk", "send_clk" and "send_dly_clk"
+ - clocks: should contain 3 entries for the "ps_clk", "send_clk" and
+ 	  "send_dly_clk" clocks
+ 
++Optional properties:
++- interrupts: interrupt line connected to the SPI controller
++
+ Example:
+ 
+ 	spi@43c30000 {
 
 

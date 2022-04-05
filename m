@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 867B34F451A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9C34F4530
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387292AbiDENO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38908 "EHLO
+        id S1381551AbiDEU3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344238AbiDEJSz (ORCPT
+        with ESMTP id S1356703AbiDEKYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:18:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBFA496B3;
-        Tue,  5 Apr 2022 02:06:17 -0700 (PDT)
+        Tue, 5 Apr 2022 06:24:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980E9BF502;
+        Tue,  5 Apr 2022 03:08:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE95CB818F3;
-        Tue,  5 Apr 2022 09:06:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BD30C385A3;
-        Tue,  5 Apr 2022 09:06:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3160AB81C8B;
+        Tue,  5 Apr 2022 10:08:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79387C385A6;
+        Tue,  5 Apr 2022 10:08:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149574;
-        bh=W/lcVOcoPY+v/WrwziGHG8JE2ki8hpSfLXopMnCP2oA=;
+        s=korg; t=1649153329;
+        bh=2G8/AqG0+BbaHGBuCW1Wgi9beZzm2Mxp5cB/nqaBBfY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SyrGP4JsAGrCtmBEenWC/UhPCpGRxmPGVOvsiKhtJQJolT+TWi4Ubh+GqhaHF7tAx
-         ul7Eif+3zwI/4r4/T/XPYPQbjCDZjwkG+vmVNkiw/L03zNHW8bj3ht70A8NfCCJlLA
-         zckJ/5XmB4/uZYoJrxmTKOsVgXWv2iEz81b2OQN8=
+        b=1VOVI7ild3F6wRDaJmSopmKa4448/hYMG8TWNY5ch3FfiubAFTa0lLoZSqh6ebF9O
+         iTBcs4K0/82hk8/PL23D++v7IlJ0ZTv40TVqK+yXJAFtNJk61XiQh8ySygHajWaMoH
+         XL3mlSbm4z+/DLjwHkS32YqLN1PCVg6Kefg4cqCQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Fengnan Chang <changfengnan@vivo.com>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0765/1017] powercap/dtpm_cpu: Reset per_cpu variable in the release function
+Subject: [PATCH 5.10 184/599] f2fs: fix compressed file start atomic write may cause data corruption
 Date:   Tue,  5 Apr 2022 09:27:58 +0200
-Message-Id: <20220405070416.969633584@linuxfoundation.org>
+Message-Id: <20220405070304.316914552@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +57,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
+From: Fengnan Chang <changfengnan@vivo.com>
 
-[ Upstream commit 0aea2e4ec2a2bfa2d7e8820e37ba5b5ce04f20a5 ]
+[ Upstream commit 9b56adcf525522e9ffa52471260298d91fc1d395 ]
 
-The release function does not reset the per cpu variable when it is
-called. That will prevent creation again as the variable will be
-already from the previous creation.
+When compressed file has blocks, f2fs_ioc_start_atomic_write will succeed,
+but compressed flag will be remained in inode. If write partial compreseed
+cluster and commit atomic write will cause data corruption.
 
-Fix it by resetting them.
+This is the reproduction process:
+Step 1:
+create a compressed file ,write 64K data , call fsync(), then the blocks
+are write as compressed cluster.
+Step2:
+iotcl(F2FS_IOC_START_ATOMIC_WRITE)  --- this should be fail, but not.
+write page 0 and page 3.
+iotcl(F2FS_IOC_COMMIT_ATOMIC_WRITE)  -- page 0 and 3 write as normal file,
+Step3:
+drop cache.
+read page 0-4   -- Since page 0 has a valid block address, read as
+non-compressed cluster, page 1 and 2 will be filled with compressed data
+or zero.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-Link: https://lore.kernel.org/r/20220130210210.549877-2-daniel.lezcano@linaro.org
+The root cause is, after commit 7eab7a696827 ("f2fs: compress: remove
+unneeded read when rewrite whole cluster"), in step 2, f2fs_write_begin()
+only set target page dirty, and in f2fs_commit_inmem_pages(), we will write
+partial raw pages into compressed cluster, result in corrupting compressed
+cluster layout.
+
+Fixes: 4c8ff7095bef ("f2fs: support data compression")
+Fixes: 7eab7a696827 ("f2fs: compress: remove unneeded read when rewrite whole cluster")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Fengnan Chang <changfengnan@vivo.com>
+Reviewed-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/powercap/dtpm_cpu.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ fs/f2fs/data.c | 2 +-
+ fs/f2fs/file.c | 5 ++++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
-index b740866b228d..1e8cac699646 100644
---- a/drivers/powercap/dtpm_cpu.c
-+++ b/drivers/powercap/dtpm_cpu.c
-@@ -150,10 +150,17 @@ static int update_pd_power_uw(struct dtpm *dtpm)
- static void pd_release(struct dtpm *dtpm)
- {
- 	struct dtpm_cpu *dtpm_cpu = to_dtpm_cpu(dtpm);
-+	struct cpufreq_policy *policy;
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 04e980c58319..b2016fd3a7ca 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -3461,7 +3461,7 @@ static int f2fs_write_begin(struct file *file, struct address_space *mapping,
  
- 	if (freq_qos_request_active(&dtpm_cpu->qos_req))
- 		freq_qos_remove_request(&dtpm_cpu->qos_req);
+ 		*fsdata = NULL;
  
-+	policy = cpufreq_cpu_get(dtpm_cpu->cpu);
-+	if (policy) {
-+		for_each_cpu(dtpm_cpu->cpu, policy->related_cpus)
-+			per_cpu(dtpm_per_cpu, dtpm_cpu->cpu) = NULL;
+-		if (len == PAGE_SIZE)
++		if (len == PAGE_SIZE && !(f2fs_is_atomic_file(inode)))
+ 			goto repeat;
+ 
+ 		ret = f2fs_prepare_compress_overwrite(inode, pagep,
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 1fbaab1f7aba..792f9059d897 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -2035,7 +2035,10 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
+ 
+ 	inode_lock(inode);
+ 
+-	f2fs_disable_compressed_file(inode);
++	if (!f2fs_disable_compressed_file(inode)) {
++		ret = -EINVAL;
++		goto out;
 +	}
-+	
- 	kfree(dtpm_cpu);
- }
  
+ 	if (f2fs_is_atomic_file(inode)) {
+ 		if (is_inode_flag_set(inode, FI_ATOMIC_REVOKE_REQUEST))
 -- 
 2.34.1
 

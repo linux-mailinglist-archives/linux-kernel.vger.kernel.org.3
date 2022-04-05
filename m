@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35C8D4F423A
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 044664F3E39
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:42:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348239AbiDEUWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
+        id S1357017AbiDEMuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349125AbiDEJtM (ORCPT
+        with ESMTP id S244248AbiDEJJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F91EABF63;
-        Tue,  5 Apr 2022 02:41:10 -0700 (PDT)
+        Tue, 5 Apr 2022 05:09:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA29015FCE;
+        Tue,  5 Apr 2022 01:59:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0719B818F3;
-        Tue,  5 Apr 2022 09:41:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B2E0C385A3;
-        Tue,  5 Apr 2022 09:41:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F33A61561;
+        Tue,  5 Apr 2022 08:59:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3022EC385A0;
+        Tue,  5 Apr 2022 08:59:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151667;
-        bh=gLkXz8KQ4nS4VC4V52HBqJya/9x7GRrOlH92dFwRMKI=;
+        s=korg; t=1649149141;
+        bh=ef63SUoVK6J5b3AlqYjE7V+Dbi7YliJ+HCPpNgIERHw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BxUVAXIWoEsX5sz06dP/0JWvsOONIgiHwt8Vi/S+Al4q0YlsQCWd3jzaGOhQwLS2i
-         JDTmYSaM1hFzobvhdBprqd4Pd3Xx7bkWMXgfwmdAss0q6TuP9SrJZDEPALhyEejBnO
-         LR6FQ9Fpd/T2dHPhO3DVhl667K4yWPxs8NQgRCZ4=
+        b=KukfwuQK7dSJeUv/IUbbhhutlAfWcqluZ+tmykLD2Zmkk9OlHJBL+67EqlWB6tk6+
+         G8L12xtFiV4ya4B6hOKckjNFcqZq1vt5svqt3OZjfNeNNkGt4hz4slQqr54rkYxs5k
+         wvFIGzy7hlYMJBfAX6tcHCNkwCVGDo0FGE8flQTQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tong Zhang <ztong0001@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 460/913] dax: make sure inodes are flushed before destroy cache
+Subject: [PATCH 5.16 0609/1017] netfilter: flowtable: Fix QinQ and pppoe support for inet table
 Date:   Tue,  5 Apr 2022 09:25:22 +0200
-Message-Id: <20220405070353.637920523@linuxfoundation.org>
+Message-Id: <20220405070412.357675167@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,49 +54,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tong Zhang <ztong0001@gmail.com>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit a7e8de822e0b1979f08767c751f6c8a9c1d4ad86 ]
+[ Upstream commit 0492d857636e1c52cd71594a723c4b26a7b31978 ]
 
-A bug can be triggered by following command
+nf_flow_offload_inet_hook() does not check for 802.1q and PPPoE.
+Fetch inner ethertype from these encapsulation protocols.
 
-$ modprobe nd_pmem && modprobe -r nd_pmem
-
-[   10.060014] BUG dax_cache (Not tainted): Objects remaining in dax_cache on __kmem_cache_shutdown()
-[   10.060938] Slab 0x0000000085b729ac objects=9 used=1 fp=0x000000004f5ae469 flags=0x200000000010200(slab|head|node)
-[   10.062433] Call Trace:
-[   10.062673]  dump_stack_lvl+0x34/0x44
-[   10.062865]  slab_err+0x90/0xd0
-[   10.063619]  __kmem_cache_shutdown+0x13b/0x2f0
-[   10.063848]  kmem_cache_destroy+0x4a/0x110
-[   10.064058]  __x64_sys_delete_module+0x265/0x300
-
-This is caused by dax_fs_exit() not flushing inodes before destroy cache.
-To fix this issue, call rcu_barrier() before destroy cache.
-
-Signed-off-by: Tong Zhang <ztong0001@gmail.com>
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220212071111.148575-1-ztong0001@gmail.com
-Fixes: 7b6be8444e0f ("dax: refactor dax-fs into a generic provider of 'struct dax_device' instances")
-Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+Fixes: 72efd585f714 ("netfilter: flowtable: add pppoe support")
+Fixes: 4cd91f7c290f ("netfilter: flowtable: add vlan support")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dax/super.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/net/netfilter/nf_flow_table.h | 18 ++++++++++++++++++
+ net/netfilter/nf_flow_table_inet.c    | 17 +++++++++++++++++
+ net/netfilter/nf_flow_table_ip.c      | 18 ------------------
+ 3 files changed, 35 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/dax/super.c b/drivers/dax/super.c
-index fc89e91beea7..7610e4a9ac4e 100644
---- a/drivers/dax/super.c
-+++ b/drivers/dax/super.c
-@@ -678,6 +678,7 @@ static int dax_fs_init(void)
- static void dax_fs_exit(void)
+diff --git a/include/net/netfilter/nf_flow_table.h b/include/net/netfilter/nf_flow_table.h
+index a3647fadf1cc..9f927c44087d 100644
+--- a/include/net/netfilter/nf_flow_table.h
++++ b/include/net/netfilter/nf_flow_table.h
+@@ -10,6 +10,8 @@
+ #include <linux/netfilter/nf_conntrack_tuple_common.h>
+ #include <net/flow_offload.h>
+ #include <net/dst.h>
++#include <linux/if_pppox.h>
++#include <linux/ppp_defs.h>
+ 
+ struct nf_flowtable;
+ struct nf_flow_rule;
+@@ -313,4 +315,20 @@ int nf_flow_rule_route_ipv6(struct net *net, const struct flow_offload *flow,
+ int nf_flow_table_offload_init(void);
+ void nf_flow_table_offload_exit(void);
+ 
++static inline __be16 nf_flow_pppoe_proto(const struct sk_buff *skb)
++{
++	__be16 proto;
++
++	proto = *((__be16 *)(skb_mac_header(skb) + ETH_HLEN +
++			     sizeof(struct pppoe_hdr)));
++	switch (proto) {
++	case htons(PPP_IP):
++		return htons(ETH_P_IP);
++	case htons(PPP_IPV6):
++		return htons(ETH_P_IPV6);
++	}
++
++	return 0;
++}
++
+ #endif /* _NF_FLOW_TABLE_H */
+diff --git a/net/netfilter/nf_flow_table_inet.c b/net/netfilter/nf_flow_table_inet.c
+index bc4126d8ef65..280fdd32965f 100644
+--- a/net/netfilter/nf_flow_table_inet.c
++++ b/net/netfilter/nf_flow_table_inet.c
+@@ -6,12 +6,29 @@
+ #include <linux/rhashtable.h>
+ #include <net/netfilter/nf_flow_table.h>
+ #include <net/netfilter/nf_tables.h>
++#include <linux/if_vlan.h>
+ 
+ static unsigned int
+ nf_flow_offload_inet_hook(void *priv, struct sk_buff *skb,
+ 			  const struct nf_hook_state *state)
  {
- 	kern_unmount(dax_mnt);
-+	rcu_barrier();
- 	kmem_cache_destroy(dax_cache);
++	struct vlan_ethhdr *veth;
++	__be16 proto;
++
+ 	switch (skb->protocol) {
++	case htons(ETH_P_8021Q):
++		veth = (struct vlan_ethhdr *)skb_mac_header(skb);
++		proto = veth->h_vlan_encapsulated_proto;
++		break;
++	case htons(ETH_P_PPP_SES):
++		proto = nf_flow_pppoe_proto(skb);
++		break;
++	default:
++		proto = skb->protocol;
++		break;
++	}
++
++	switch (proto) {
+ 	case htons(ETH_P_IP):
+ 		return nf_flow_offload_ip_hook(priv, skb, state);
+ 	case htons(ETH_P_IPV6):
+diff --git a/net/netfilter/nf_flow_table_ip.c b/net/netfilter/nf_flow_table_ip.c
+index 889cf88d3dba..6257d87c3a56 100644
+--- a/net/netfilter/nf_flow_table_ip.c
++++ b/net/netfilter/nf_flow_table_ip.c
+@@ -8,8 +8,6 @@
+ #include <linux/ipv6.h>
+ #include <linux/netdevice.h>
+ #include <linux/if_ether.h>
+-#include <linux/if_pppox.h>
+-#include <linux/ppp_defs.h>
+ #include <net/ip.h>
+ #include <net/ipv6.h>
+ #include <net/ip6_route.h>
+@@ -239,22 +237,6 @@ static unsigned int nf_flow_xmit_xfrm(struct sk_buff *skb,
+ 	return NF_STOLEN;
  }
  
+-static inline __be16 nf_flow_pppoe_proto(const struct sk_buff *skb)
+-{
+-	__be16 proto;
+-
+-	proto = *((__be16 *)(skb_mac_header(skb) + ETH_HLEN +
+-			     sizeof(struct pppoe_hdr)));
+-	switch (proto) {
+-	case htons(PPP_IP):
+-		return htons(ETH_P_IP);
+-	case htons(PPP_IPV6):
+-		return htons(ETH_P_IPV6);
+-	}
+-
+-	return 0;
+-}
+-
+ static bool nf_flow_skb_encap_protocol(const struct sk_buff *skb, __be16 proto,
+ 				       u32 *offset)
+ {
 -- 
 2.34.1
 

@@ -2,62 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0FC64F229F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 07:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A21D4F22A5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 07:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbiDEFns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 01:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
+        id S229926AbiDEFpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 01:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbiDEFnq (ORCPT
+        with ESMTP id S229731AbiDEFpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 01:43:46 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904F263E8
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 22:41:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649137308; x=1680673308;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=G2BO2/B3jnRoD2tEVHLw9dKyHuY6CFl1kJyzuzD+qdk=;
-  b=Lt2d8/wLVWflgOy0t4TeEERObNkRcEabTmEDDBDYTVB1ked4OF3Zmvw6
-   4lFPSh5eJKS74BMFYJsm7jglFByU/f0mv2ic6XrxIzUU543qVvq2U4pZ+
-   /u4vQnt4VDsxRslRSqXoXkRr+oX2lcI/2hYyUu31hOvsKdFNM5FcAplrW
-   x+Esnw2O3hfylZewvCqSRe9ItIYLdsB3uCLgSYEJGTtK+aMgR+p4wy8ts
-   HGhmSTtk3JOzn7Pp6QcT9iwI7DSkvVQiQrntwFJque4IUyXujPSf5Mur8
-   omYjpKtP1h46adbeI3sRd38xkXchw2/iYT8uTWo8c9l7XBGRe4h0gq6B6
-   g==;
-X-IronPort-AV: E=McAfee;i="6200,9189,10307"; a="347108966"
-X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
-   d="scan'208";a="347108966"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2022 22:41:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,235,1643702400"; 
-   d="scan'208";a="587811921"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 04 Apr 2022 22:41:46 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nbbwn-0002gX-Kv;
-        Tue, 05 Apr 2022 05:41:45 +0000
-Date:   Tue, 5 Apr 2022 13:40:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/netfs-maple 35/40]
- fs/netfs/buffered_write.c:757:6: warning: variable 'spare_region' is used
- uninitialized whenever 'if' condition is true
-Message-ID: <202204051308.qn1GUtl6-lkp@intel.com>
+        Tue, 5 Apr 2022 01:45:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE417F239;
+        Mon,  4 Apr 2022 22:43:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B54261138;
+        Tue,  5 Apr 2022 05:43:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B612C340EE;
+        Tue,  5 Apr 2022 05:43:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649137402;
+        bh=sYFlsSIWnWY7H6pXl64UUXZKTyvh2XfqGMJOM5IlQgc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fcp+rxuW3kUhrT6QyWAoWbVm4gtx9v6BPIBnRjhjNOWlk+PBQBEZq7U+8GTSJmqi6
+         O1yMuk569h4MA00+xc8GC6bj8yJvWHlBNLNa17/FMWGwLaHe6eUDrxeFWtIbqbeoe2
+         /YFEdgjmtbULiQelaDiH+dN85wYw6G8xBoNi6tVJ8m0bBzMwR0FesakeprBPHK0V3P
+         vE9NLKMEb3UveWniUIBkqPzY+dECo7GWpw8Br2Xrz1w6G+QP/GfCjZRuzxYi0bSu8E
+         yw6AW1mc+F+rgEdKcAsllPObIToNnrzM6er3UxBbQk+F6K1hANQQoc7lNACvyFgKYG
+         xe48pp/+sL5tw==
+Date:   Tue, 5 Apr 2022 08:43:17 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Saeed Mahameed <saeed@kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>
+Subject: Re: [PATCH mlx5-next 4/5] net/mlx5: Remove tls vs. ktls separation
+ as it is the same
+Message-ID: <YkvW9SNJeb5VPmeg@unreal>
+References: <cover.1649073691.git.leonro@nvidia.com>
+ <67e596599edcffb0de43f26551208dfd34ac777e.1649073691.git.leonro@nvidia.com>
+ <20220405003322.afko7uo527w5j3zu@sx1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220405003322.afko7uo527w5j3zu@sx1>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,95 +60,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/netfs-maple
-head:   674eea41fc70a740ff83ec590f9833f805852464
-commit: fc20927bc9709523b2a53feee2a52423b9d66456 [35/40] netfs: Allow buffered shared-writeable mmap through netfs_page_mkwrite()
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220405/202204051308.qn1GUtl6-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c4a1b07d0979e7ff20d7d541af666d822d66b566)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/fc20927bc9709523b2a53feee2a52423b9d66456
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/netfs-maple
-        git checkout fc20927bc9709523b2a53feee2a52423b9d66456
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/netfs/
+On Mon, Apr 04, 2022 at 05:33:22PM -0700, Saeed Mahameed wrote:
+> On 04 Apr 15:08, Leon Romanovsky wrote:
+> > From: Leon Romanovsky <leonro@nvidia.com>
+> > 
+> > After removal FPGA TLS, we can remove tls->ktls indirection too,
+> > as it is the same thing.
+> > 
+> > Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+> > Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+> > ---
+> > .../net/ethernet/mellanox/mlx5/core/Makefile  |  2 +-
+> > .../ethernet/mellanox/mlx5/core/en/params.c   |  2 +-
+> > .../mellanox/mlx5/core/en_accel/en_accel.h    | 11 +--
+> > .../mellanox/mlx5/core/en_accel/ktls.c        | 22 ++++-
+> > .../mellanox/mlx5/core/en_accel/ktls.h        | 32 +++++++
+> > .../mellanox/mlx5/core/en_accel/ktls_rx.c     |  2 +-
+> > .../en_accel/{tls_stats.c => ktls_stats.c}    | 38 ++++-----
+> > .../mellanox/mlx5/core/en_accel/ktls_tx.c     | 18 +++-
+> > .../mellanox/mlx5/core/en_accel/ktls_txrx.h   | 28 +++++-
+> > .../mellanox/mlx5/core/en_accel/tls.c         | 70 ---------------
+> > .../mellanox/mlx5/core/en_accel/tls.h         | 85 -------------------
+> > .../mellanox/mlx5/core/en_accel/tls_rxtx.c    | 70 ---------------
+> > .../mellanox/mlx5/core/en_accel/tls_rxtx.h    | 85 -------------------
+> > .../net/ethernet/mellanox/mlx5/core/en_main.c |  8 +-
+> > .../net/ethernet/mellanox/mlx5/core/en_rx.c   |  5 +-
+> > .../ethernet/mellanox/mlx5/core/en_stats.c    |  8 +-
+> > 16 files changed, 130 insertions(+), 356 deletions(-)
+> > rename drivers/net/ethernet/mellanox/mlx5/core/en_accel/{tls_stats.c => ktls_stats.c} (76%)
+> 
+> Why not ktls_*.c => tls_*.c ?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Mostly because other drivers use _ktls_ name for this type of functionality.
+Plus internally, Tariq suggested to squash everything into ktls.
 
-All warnings (new ones prefixed by >>):
+> 
+> Since we now have one TLS implementation, it would've been easier to maybe
+> repurpose TLS to be KTLS only and avoid renaming every TLS to KTLS in all
+> functions and files.
+> 
+> So just keep tls.c and all mlx5_tls_xyz functions and implement ktls
+> directly in them, the renaming will be done only on the ktls implementation
+> part of the code rather than in every caller.
 
->> fs/netfs/buffered_write.c:757:6: warning: variable 'spare_region' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (mas_expected_entries(&mas, 2) < 0) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:793:30: note: uninitialized use occurs here
-           netfs_put_dirty_region(ctx, spare_region, netfs_region_trace_put_discard);
-                                       ^~~~~~~~~~~~
-   fs/netfs/buffered_write.c:757:2: note: remove the 'if' if its condition is always false
-           if (mas_expected_entries(&mas, 2) < 0) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:754:6: warning: variable 'spare_region' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (folio_lock_killable(folio) < 0)
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:793:30: note: uninitialized use occurs here
-           netfs_put_dirty_region(ctx, spare_region, netfs_region_trace_put_discard);
-                                       ^~~~~~~~~~~~
-   fs/netfs/buffered_write.c:754:2: note: remove the 'if' if its condition is always false
-           if (folio_lock_killable(folio) < 0)
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:751:6: warning: variable 'spare_region' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (folio_wait_writeback_killable(folio))
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:793:30: note: uninitialized use occurs here
-           netfs_put_dirty_region(ctx, spare_region, netfs_region_trace_put_discard);
-                                       ^~~~~~~~~~~~
-   fs/netfs/buffered_write.c:751:2: note: remove the 'if' if its condition is always false
-           if (folio_wait_writeback_killable(folio))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/buffered_write.c:734:41: note: initialize the variable 'spare_region' to silence this warning
-           struct netfs_dirty_region *spare_region;
-                                                  ^
-                                                   = NULL
-   3 warnings generated.
+Should I do it or keep this patch as is?
 
+Thanks
 
-vim +757 fs/netfs/buffered_write.c
-
-   727	
-   728	/*
-   729	 * Notification that a previously read-only page is about to become writable.
-   730	 * Note that the caller indicates a single page of a multipage folio.
-   731	 */
-   732	vm_fault_t netfs_page_mkwrite(struct vm_fault *vmf)
-   733	{
-   734		struct netfs_dirty_region *spare_region;
-   735		struct folio *folio = page_folio(vmf->page);
-   736		struct file *file = vmf->vma->vm_file;
-   737		struct inode *inode = file_inode(file);
-   738		struct netfs_i_context *ctx = netfs_i_context(inode);
-   739		vm_fault_t ret = VM_FAULT_RETRY;
-   740		int err;
-   741	
-   742		MA_STATE(mas, &ctx->dirty_regions, vmf->page->index, PAGE_SIZE);
-   743	
-   744		_enter("%lx", folio->index);
-   745	
-   746		if (ctx->ops->validate_for_write(inode, file) < 0)
-   747			return VM_FAULT_SIGBUS;
-   748	
-   749		sb_start_pagefault(inode->i_sb);
-   750	
-   751		if (folio_wait_writeback_killable(folio))
-   752			goto out;
-   753	
-   754		if (folio_lock_killable(folio) < 0)
-   755			goto out;
-   756	
- > 757		if (mas_expected_entries(&mas, 2) < 0) {
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> > delete mode 100644 drivers/net/ethernet/mellanox/mlx5/core/en_accel/tls.c
+> > delete mode 100644 drivers/net/ethernet/mellanox/mlx5/core/en_accel/tls.h
+> > delete mode 100644 drivers/net/ethernet/mellanox/mlx5/core/en_accel/tls_rxtx.c
+> > delete mode 100644 drivers/net/ethernet/mellanox/mlx5/core/en_accel/tls_rxtx.h
+> > 
+> 

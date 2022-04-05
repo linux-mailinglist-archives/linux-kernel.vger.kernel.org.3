@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB724F4468
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F10B4F43BE
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388226AbiDEOdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58718 "EHLO
+        id S1386929AbiDEO2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:28:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238905AbiDEJdC (ORCPT
+        with ESMTP id S238953AbiDEJdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:33:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD5F1081;
-        Tue,  5 Apr 2022 02:20:46 -0700 (PDT)
+        Tue, 5 Apr 2022 05:33:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42EE262FC;
+        Tue,  5 Apr 2022 02:20:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8867B615E4;
-        Tue,  5 Apr 2022 09:20:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9154CC385A0;
-        Tue,  5 Apr 2022 09:20:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1988B81C69;
+        Tue,  5 Apr 2022 09:20:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C2C4C385A0;
+        Tue,  5 Apr 2022 09:20:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150446;
-        bh=GHdBnWH3UX1Xlg0sRoZEr/y66U2ZsPElXuujtK71+AE=;
+        s=korg; t=1649150451;
+        bh=AIwGneCgQREljoh3n2S10EY9Q3wkZzrK2N0v2FayM6A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vIljCNUSFqZ6xuz6Yzzwx1eBULSbCBfqlfktgW9p2nou/MCxn6JpLr6juKResk7ql
-         sP2GBf18Y4j5smc26lYV/h5T1AMBc1VWP/Y6WuxxzcQ1STds2VSbHuZ37REN60xrWG
-         sH/n9D/DAlXJBSyYpwsyUT26k+XjU5V76ST38mv8=
+        b=PwIyu0KOzIoPIfWN9AglB6K3pxZby6h+Rjvi+6Y1hqCpQ1TMg1XCxPnT2wXCuB0q3
+         0VH3ivEcD3eCUkFRXZaS4xVc4F6zrIj0rF1BS+PXAbGatMFRZ5qsQVmBlARTwk/pk6
+         HeR53d/5QuAH0CasLtog5SE3Ty4RL986roHMoc3M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH 5.15 059/913] Documentation: update stable tree link
-Date:   Tue,  5 Apr 2022 09:18:41 +0200
-Message-Id: <20220405070341.592213166@linuxfoundation.org>
+        stable@vger.kernel.org, Ang Tien Sung <tien.sung.ang@intel.com>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Subject: [PATCH 5.15 060/913] firmware: stratix10-svc: add missing callback parameter on RSU
+Date:   Tue,  5 Apr 2022 09:18:42 +0200
+Message-Id: <20220405070341.622007500@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -55,36 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bagas Sanjaya <bagasdotme@gmail.com>
+From: Ang Tien Sung <tien.sung.ang@intel.com>
 
-commit 555d44932c67e617d89bc13c81c7efac5b51fcfa upstream.
+commit b850b7a8b369322adf699ef48ceff4d902525c8c upstream.
 
-The link to stable tree is redirected to
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git. Update
-accordingly.
+Fix a bug whereby, the return response of parameter a1 from an
+SMC call is not properly set to the callback data during an
+INTEL_SIP_SMC_RSU_ERROR command.
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Sasha Levin <sashal@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
+Link: https://lore.kernel.org/lkml/20220216081513.28319-1-tien.sung.ang@intel.com
+Fixes: 6b50d882d38d ("firmware: add remote status update client support")
 Cc: stable@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Link: https://lore.kernel.org/r/20220314113329.485372-6-bagasdotme@gmail.com
+Signed-off-by: Ang Tien Sung <tien.sung.ang@intel.com>
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+Link: https://lore.kernel.org/r/20220223144146.399263-1-dinguyen@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/process/stable-kernel-rules.rst |    2 +-
+ drivers/firmware/stratix10-svc.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/Documentation/process/stable-kernel-rules.rst
-+++ b/Documentation/process/stable-kernel-rules.rst
-@@ -168,7 +168,7 @@ Trees
-  - The finalized and tagged releases of all stable kernels can be found
-    in separate branches per version at:
- 
--	https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-+	https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
- 
-  - The release candidate of all stable kernel versions can be found at:
- 
+--- a/drivers/firmware/stratix10-svc.c
++++ b/drivers/firmware/stratix10-svc.c
+@@ -477,7 +477,7 @@ static int svc_normal_to_secure_thread(v
+ 		case INTEL_SIP_SMC_RSU_ERROR:
+ 			pr_err("%s: STATUS_ERROR\n", __func__);
+ 			cbdata->status = BIT(SVC_STATUS_ERROR);
+-			cbdata->kaddr1 = NULL;
++			cbdata->kaddr1 = &res.a1;
+ 			cbdata->kaddr2 = NULL;
+ 			cbdata->kaddr3 = NULL;
+ 			pdata->chan->scl->receive_cb(pdata->chan->scl, cbdata);
 
 

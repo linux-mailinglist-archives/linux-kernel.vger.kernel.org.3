@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 914E64F4FF2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4184F51A2
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1840163AbiDFBH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
+        id S1846643AbiDFCIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbiDEKxR (ORCPT
+        with ESMTP id S235821AbiDEKy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:53:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F44AA014;
-        Tue,  5 Apr 2022 03:28:16 -0700 (PDT)
+        Tue, 5 Apr 2022 06:54:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246BFAA03F;
+        Tue,  5 Apr 2022 03:28:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1A39B81C9A;
-        Tue,  5 Apr 2022 10:28:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57EA5C385A1;
-        Tue,  5 Apr 2022 10:28:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABC536141D;
+        Tue,  5 Apr 2022 10:28:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD6B3C385A1;
+        Tue,  5 Apr 2022 10:28:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154493;
-        bh=f6cz/MNAsBqwTYBuSFyaQUy+qfrWVrxMZMvcDWc1FAU=;
+        s=korg; t=1649154499;
+        bh=6lXdB4F7ajIpIWXEskNb8htx+7+Kuya9o2cEDiIKpvg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nNGfA3+siTuhFxQBUPUK4FVbRxUDC1LI6V1HjbtAAhRv2wit30Y6rxeQjX85VFYiD
-         YaxJlr3BzliWEvY/A29B/P1ojg/w72NNTmQn3NBIE6mXpR+9Xcy9tZ/rgbib9dFb45
-         zt8f8eB2To0BexL+BbwHFqp+Uzj81Q5AD1qU/X5k=
+        b=o5zM2Y6jfYNN7mTY4vhQb9wiIoEtGt7aQTrSUxKyw+kr7gBJUAAYefNV+9LH6ktK0
+         fw4+1cOdS2MAuSA0CZuQD5mvqnmrqfOv+HHonI9yS9lqA8l0bVDL3fmj4ItQIdHDJF
+         DhcY05sWfkJywMwWiIaMMYrqhF2IfvbXpK1ktfWA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: [PATCH 5.10 597/599] coredump/elf: Pass coredump_params into fill_note_info
-Date:   Tue,  5 Apr 2022 09:34:51 +0200
-Message-Id: <20220405070316.605134581@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Vijay Balakrishna <vijayb@linux.microsoft.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH 5.10 599/599] arm64: Do not defer reserve_crashkernel() for platforms with no DMA memory zones
+Date:   Tue,  5 Apr 2022 09:34:53 +0200
+Message-Id: <20220405070316.664535016@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -55,90 +56,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric W. Biederman <ebiederm@xmission.com>
+From: Vijay Balakrishna <vijayb@linux.microsoft.com>
 
-commit 9ec7d3230717b4fe9b6c7afeb4811909c23fa1d7 upstream.
+commit 031495635b4668f94e964e037ca93d0d38bfde58 upstream.
 
-Instead of individually passing cprm->siginfo and cprm->regs
-into fill_note_info pass all of struct coredump_params.
+The following patches resulted in deferring crash kernel reservation to
+mem_init(), mainly aimed at platforms with DMA memory zones (no IOMMU),
+in particular Raspberry Pi 4.
 
-This is preparation to allow fill_files_note to use the existing
-vma snapshot.
+commit 1a8e1cef7603 ("arm64: use both ZONE_DMA and ZONE_DMA32")
+commit 8424ecdde7df ("arm64: mm: Set ZONE_DMA size based on devicetree's dma-ranges")
+commit 0a30c53573b0 ("arm64: mm: Move reserve_crashkernel() into mem_init()")
+commit 2687275a5843 ("arm64: Force NO_BLOCK_MAPPINGS if crashkernel reservation is required")
 
-Reviewed-by: Jann Horn <jannh@google.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+Above changes introduced boot slowdown due to linear map creation for
+all the memory banks with NO_BLOCK_MAPPINGS, see discussion[1].  The proposed
+changes restore crash kernel reservation to earlier behavior thus avoids
+slow boot, particularly for platforms with IOMMU (no DMA memory zones).
+
+Tested changes to confirm no ~150ms boot slowdown on our SoC with IOMMU
+and 8GB memory.  Also tested with ZONE_DMA and/or ZONE_DMA32 configs to confirm
+no regression to deferring scheme of crash kernel memory reservation.
+In both cases successfully collected kernel crash dump.
+
+[1] https://lore.kernel.org/all/9436d033-579b-55fa-9b00-6f4b661c2dd7@linux.microsoft.com/
+
+Signed-off-by: Vijay Balakrishna <vijayb@linux.microsoft.com>
+Cc: stable@vger.kernel.org
+Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Link: https://lore.kernel.org/r/1646242689-20744-1-git-send-email-vijayb@linux.microsoft.com
+[will: Add #ifdef CONFIG_KEXEC_CORE guards to fix 'crashk_res' references in allnoconfig build]
+Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/binfmt_elf.c |   16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ arch/arm64/mm/init.c |   36 ++++++++++++++++++++++++++++++++----
+ arch/arm64/mm/mmu.c  |   32 +++++++++++++++++++++++++++++++-
+ 2 files changed, 63 insertions(+), 5 deletions(-)
 
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -1797,7 +1797,7 @@ static int fill_thread_core_info(struct
+--- a/arch/arm64/mm/init.c
++++ b/arch/arm64/mm/init.c
+@@ -58,8 +58,34 @@ EXPORT_SYMBOL(memstart_addr);
+  * unless restricted on specific platforms (e.g. 30-bit on Raspberry Pi 4).
+  * In such case, ZONE_DMA32 covers the rest of the 32-bit addressable memory,
+  * otherwise it is empty.
++ *
++ * Memory reservation for crash kernel either done early or deferred
++ * depending on DMA memory zones configs (ZONE_DMA) --
++ *
++ * In absence of ZONE_DMA configs arm64_dma_phys_limit initialized
++ * here instead of max_zone_phys().  This lets early reservation of
++ * crash kernel memory which has a dependency on arm64_dma_phys_limit.
++ * Reserving memory early for crash kernel allows linear creation of block
++ * mappings (greater than page-granularity) for all the memory bank rangs.
++ * In this scheme a comparatively quicker boot is observed.
++ *
++ * If ZONE_DMA configs are defined, crash kernel memory reservation
++ * is delayed until DMA zone memory range size initilazation performed in
++ * zone_sizes_init().  The defer is necessary to steer clear of DMA zone
++ * memory range to avoid overlap allocation.  So crash kernel memory boundaries
++ * are not known when mapping all bank memory ranges, which otherwise means
++ * not possible to exclude crash kernel range from creating block mappings
++ * so page-granularity mappings are created for the entire memory range.
++ * Hence a slightly slower boot is observed.
++ *
++ * Note: Page-granularity mapppings are necessary for crash kernel memory
++ * range for shrinking its size via /sys/kernel/kexec_crash_size interface.
+  */
+-phys_addr_t arm64_dma_phys_limit __ro_after_init;
++#if IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32)
++phys_addr_t __ro_after_init arm64_dma_phys_limit;
++#else
++phys_addr_t __ro_after_init arm64_dma_phys_limit = PHYS_MASK + 1;
++#endif
  
- static int fill_note_info(struct elfhdr *elf, int phdrs,
- 			  struct elf_note_info *info,
--			  const kernel_siginfo_t *siginfo, struct pt_regs *regs)
-+			  struct coredump_params *cprm)
- {
- 	struct task_struct *dump_task = current;
- 	const struct user_regset_view *view = task_user_regset_view(dump_task);
-@@ -1869,7 +1869,7 @@ static int fill_note_info(struct elfhdr
- 	 * Now fill in each thread's information.
+ #ifdef CONFIG_KEXEC_CORE
+ /*
+@@ -210,8 +236,6 @@ static void __init zone_sizes_init(unsig
+ 	if (!arm64_dma_phys_limit)
+ 		arm64_dma_phys_limit = dma32_phys_limit;
+ #endif
+-	if (!arm64_dma_phys_limit)
+-		arm64_dma_phys_limit = PHYS_MASK + 1;
+ 	max_zone_pfns[ZONE_NORMAL] = max;
+ 
+ 	free_area_init(max_zone_pfns);
+@@ -407,6 +431,9 @@ void __init arm64_memblock_init(void)
+ 
+ 	reserve_elfcorehdr();
+ 
++	if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
++		reserve_crashkernel();
++
+ 	high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
+ }
+ 
+@@ -451,7 +478,8 @@ void __init bootmem_init(void)
+ 	 * request_standard_resources() depends on crashkernel's memory being
+ 	 * reserved, so do it here.
  	 */
- 	for (t = info->thread; t != NULL; t = t->next)
--		if (!fill_thread_core_info(t, view, siginfo->si_signo, &info->size))
-+		if (!fill_thread_core_info(t, view, cprm->siginfo->si_signo, &info->size))
- 			return 0;
+-	reserve_crashkernel();
++	if (IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32))
++		reserve_crashkernel();
+ 
+ 	memblock_dump_all();
+ }
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -501,7 +501,7 @@ static void __init map_mem(pgd_t *pgdp)
+ 	int flags = 0;
+ 	u64 i;
+ 
+-	if (rodata_full || crash_mem_map || debug_pagealloc_enabled())
++	if (rodata_full || debug_pagealloc_enabled())
+ 		flags = NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
  
  	/*
-@@ -1878,7 +1878,7 @@ static int fill_note_info(struct elfhdr
- 	fill_psinfo(psinfo, dump_task->group_leader, dump_task->mm);
- 	info->size += notesize(&info->psinfo);
- 
--	fill_siginfo_note(&info->signote, &info->csigdata, siginfo);
-+	fill_siginfo_note(&info->signote, &info->csigdata, cprm->siginfo);
- 	info->size += notesize(&info->signote);
- 
- 	fill_auxv_note(&info->auxv, current->mm);
-@@ -2026,7 +2026,7 @@ static int elf_note_info_init(struct elf
- 
- static int fill_note_info(struct elfhdr *elf, int phdrs,
- 			  struct elf_note_info *info,
--			  const kernel_siginfo_t *siginfo, struct pt_regs *regs)
-+			  struct coredump_params *cprm)
- {
- 	struct core_thread *ct;
- 	struct elf_thread_status *ets;
-@@ -2069,7 +2069,7 @@ static int fill_note_info(struct elfhdr
- 	fill_note(info->notes + 1, "CORE", NT_PRPSINFO,
- 		  sizeof(*info->psinfo), info->psinfo);
- 
--	fill_siginfo_note(info->notes + 2, &info->csigdata, siginfo);
-+	fill_siginfo_note(info->notes + 2, &info->csigdata, cprm->siginfo);
- 	fill_auxv_note(info->notes + 3, current->mm);
- 	info->numnote = 4;
- 
-@@ -2079,8 +2079,8 @@ static int fill_note_info(struct elfhdr
- 	}
- 
- 	/* Try to dump the FPU. */
--	info->prstatus->pr_fpvalid = elf_core_copy_task_fpregs(current, regs,
--							       info->fpu);
-+	info->prstatus->pr_fpvalid =
-+		elf_core_copy_task_fpregs(current, cprm->regs, info->fpu);
- 	if (info->prstatus->pr_fpvalid)
- 		fill_note(info->notes + info->numnote++,
- 			  "CORE", NT_PRFPREG, sizeof(*info->fpu), info->fpu);
-@@ -2193,7 +2193,7 @@ static int elf_core_dump(struct coredump
- 	 * Collect all the non-memory information about the process for the
- 	 * notes.  This also sets up the file header.
+@@ -512,6 +512,17 @@ static void __init map_mem(pgd_t *pgdp)
  	 */
--	if (!fill_note_info(&elf, e_phnum, &info, cprm->siginfo, cprm->regs))
-+	if (!fill_note_info(&elf, e_phnum, &info, cprm))
- 		goto end_coredump;
+ 	memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
  
- 	has_dumped = 1;
++#ifdef CONFIG_KEXEC_CORE
++	if (crash_mem_map) {
++		if (IS_ENABLED(CONFIG_ZONE_DMA) ||
++		    IS_ENABLED(CONFIG_ZONE_DMA32))
++			flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
++		else if (crashk_res.end)
++			memblock_mark_nomap(crashk_res.start,
++					    resource_size(&crashk_res));
++	}
++#endif
++
+ 	/* map all the memory banks */
+ 	for_each_mem_range(i, &start, &end) {
+ 		if (start >= end)
+@@ -538,6 +549,25 @@ static void __init map_mem(pgd_t *pgdp)
+ 	__map_memblock(pgdp, kernel_start, kernel_end,
+ 		       PAGE_KERNEL, NO_CONT_MAPPINGS);
+ 	memblock_clear_nomap(kernel_start, kernel_end - kernel_start);
++
++	/*
++	 * Use page-level mappings here so that we can shrink the region
++	 * in page granularity and put back unused memory to buddy system
++	 * through /sys/kernel/kexec_crash_size interface.
++	 */
++#ifdef CONFIG_KEXEC_CORE
++	if (crash_mem_map &&
++	    !IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)) {
++		if (crashk_res.end) {
++			__map_memblock(pgdp, crashk_res.start,
++				       crashk_res.end + 1,
++				       PAGE_KERNEL,
++				       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
++			memblock_clear_nomap(crashk_res.start,
++					     resource_size(&crashk_res));
++		}
++	}
++#endif
+ }
+ 
+ void mark_rodata_ro(void)
 
 

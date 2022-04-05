@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C87B44F4E85
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CEF34F4A4B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353998AbiDFA3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47618 "EHLO
+        id S1454931AbiDEWjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:39:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349068AbiDEJtD (ORCPT
+        with ESMTP id S1354877AbiDEKQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:03 -0400
+        Tue, 5 Apr 2022 06:16:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CCEA94F4;
-        Tue,  5 Apr 2022 02:39:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E4E6CA4F;
+        Tue,  5 Apr 2022 03:03:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D28B26164D;
-        Tue,  5 Apr 2022 09:39:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3661C385A1;
-        Tue,  5 Apr 2022 09:39:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35D2161673;
+        Tue,  5 Apr 2022 10:03:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40820C385A3;
+        Tue,  5 Apr 2022 10:03:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151581;
-        bh=pUXd/odrjqglX+qTSbsO6wGpyhmHpt2EgqG6TEgFfPs=;
+        s=korg; t=1649152996;
+        bh=Hxo4l3G3ezXXxyeir2RGiMkhpL4xQTk/wS0+4Y5M1K8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bH25kq0dDUCRkCG6rcOhjglLTNBjapineQj2IUi0b9kwPBvg/fpKjprztHER0Qu6y
-         fD9b6JyTCa6agUAIIi3Yh+AQPHDmM1D2F1IZZxahRkhrRdeJE0tZe0Vc9U6GfklOgT
-         vrTdcQlqk/yzkyg/nrV3dMs/sXyTzVQt3L93vSyY=
+        b=m2QAZQfFMEE34Ce4A49xmE+/fRUDU4rD45RYMdr1rjV1dchP7GQTBV4vYI+WgXHqT
+         h/J3U7WUt+8/AbwQH/mJxqC+8QZysIr7UZXf+JKESGniMYr9Co1LLdLjI8B8myxnlB
+         ilNN8klUVUgtvWce+UEh2CzU/QuiqTRtr3CMIePE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 468/913] mtd: rawnand: pl353: Set the nand chip node as the flash node
-Date:   Tue,  5 Apr 2022 09:25:30 +0200
-Message-Id: <20220405070353.876030318@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 5.10 037/599] greybus: svc: fix an error handling bug in gb_svc_hello()
+Date:   Tue,  5 Apr 2022 09:25:31 +0200
+Message-Id: <20220405070259.928010789@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit a1fe2ace2c39dcdc7c053705459a73b7598b1e4f ]
+commit 5f8583a3b7552092582a92e7bbd2153319929ad7 upstream.
 
-In devicetree the flash information is embedded within nand chip node,
-so during nand chip initialization the nand chip node should be passed
-to nand_set_flash_node() api, instead of nand controller node.
+Cleanup if gb_svc_queue_deferred_request() fails.
 
-Fixes: 08d8c62164a3 ("mtd: rawnand: pl353: Add support for the ARM PL353 SMC NAND controller")
-Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220209053427.27676-1-amit.kumar-mahapatra@xilinx.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/20220202072016.GA6748@kili
+Fixes: ee2f2074fdb2 ("greybus: svc: reconfig APBridgeA-Switch link to handle required load")
+Cc: stable@vger.kernel.org      # 4.9
+[johan: fix commit summary prefix and rename label ]
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Link: https://lore.kernel.org/r/20220202113347.1288-2-johan@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mtd/nand/raw/pl35x-nand-controller.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/greybus/svc.c |    8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mtd/nand/raw/pl35x-nand-controller.c b/drivers/mtd/nand/raw/pl35x-nand-controller.c
-index 8a91e069ee2e..3c6f6aff649f 100644
---- a/drivers/mtd/nand/raw/pl35x-nand-controller.c
-+++ b/drivers/mtd/nand/raw/pl35x-nand-controller.c
-@@ -1062,7 +1062,7 @@ static int pl35x_nand_chip_init(struct pl35x_nandc *nfc,
- 	chip->controller = &nfc->controller;
- 	mtd = nand_to_mtd(chip);
- 	mtd->dev.parent = nfc->dev;
--	nand_set_flash_node(chip, nfc->dev->of_node);
-+	nand_set_flash_node(chip, np);
- 	if (!mtd->name) {
- 		mtd->name = devm_kasprintf(nfc->dev, GFP_KERNEL,
- 					   "%s", PL35X_NANDC_DRIVER_NAME);
--- 
-2.34.1
-
+--- a/drivers/greybus/svc.c
++++ b/drivers/greybus/svc.c
+@@ -866,8 +866,14 @@ static int gb_svc_hello(struct gb_operat
+ 
+ 	gb_svc_debugfs_init(svc);
+ 
+-	return gb_svc_queue_deferred_request(op);
++	ret = gb_svc_queue_deferred_request(op);
++	if (ret)
++		goto err_remove_debugfs;
+ 
++	return 0;
++
++err_remove_debugfs:
++	gb_svc_debugfs_exit(svc);
+ err_unregister_device:
+ 	gb_svc_watchdog_destroy(svc);
+ 	device_del(&svc->dev);
 
 

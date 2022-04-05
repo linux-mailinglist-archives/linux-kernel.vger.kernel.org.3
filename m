@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F23E4F4837
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3614F47B2
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378236AbiDEVba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
+        id S234257AbiDEVQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244448AbiDEKiv (ORCPT
+        with ESMTP id S244478AbiDEKiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:38:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8071D1706D;
-        Tue,  5 Apr 2022 03:23:42 -0700 (PDT)
+        Tue, 5 Apr 2022 06:38:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12311F603;
+        Tue,  5 Apr 2022 03:23:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F760B81B18;
-        Tue,  5 Apr 2022 10:23:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95E24C385A2;
-        Tue,  5 Apr 2022 10:23:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CCDD617CE;
+        Tue,  5 Apr 2022 10:23:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 449EDC385A0;
+        Tue,  5 Apr 2022 10:23:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154219;
-        bh=F60sn2dNhMzWGLeWPjD2F3i4dvAVumbpwBD0iIpj0VQ=;
+        s=korg; t=1649154225;
+        bh=cmQjIDOiyu6i0WOxV+vP3qJn8wa2woRKYCESBKH7hvg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hJsuSwmIFwtiK1Anz74cFSbQq6uFfTwFpjXnnxZ/11W9g2X7ArWiIhA6ivDl7VhNZ
-         yWc3N7axNRVmbP1KMH7QjaiSmiRYYDDpQtXWSfUlLhJUSayCYbjaCLiup8X1ykd7H6
-         7CwChmZegGIXa9YozSPf7tMs94ZstbhZWJCQjyxI=
+        b=aebFJ/4a8u7169+GgkfQv64h3KJmcLj4uASFLeXyUpnwNiX9drkKIDbGvp92jpAX9
+         hnK0Ytqw0HJCT3vX6bq8eVlDrOdp8oZhz4fiLa1Ljsf3zmMjdLhJZRP/9gJUCLaTus
+         kAB8533sd+E8tGbIuXKMudCMBmR2useqBL1wf7JA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Arnd Bergmann <arnd@arndb.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 502/599] lib/test_lockup: fix kernel pointer check for separate address spaces
-Date:   Tue,  5 Apr 2022 09:33:16 +0200
-Message-Id: <20220405070313.767428936@linuxfoundation.org>
+Subject: [PATCH 5.10 504/599] ARM: mmp: Fix failure to remove sram device
+Date:   Tue,  5 Apr 2022 09:33:18 +0200
+Message-Id: <20220405070313.827352966@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -54,46 +56,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-[ Upstream commit 5a06fcb15b43d1f7bf740c672950122331cb5655 ]
+[ Upstream commit 4036b29a146b2749af3bb213b003eb69f3e5ecc4 ]
 
-test_kernel_ptr() uses access_ok() to figure out if a given address
-points to user space instead of kernel space. However on architectures
-that set CONFIG_ALTERNATE_USER_ADDRESS_SPACE, a pointer can be valid
-for both, and the check always fails because access_ok() returns true.
+Make sure in .probe() to set driver data before the function is left to
+make it possible in .remove() to undo the actions done.
 
-Make the check for user space pointers conditional on the type of
-address space layout.
+This fixes a potential memory leak and stops returning an error code in
+.remove() that is ignored by the driver core anyhow.
 
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/test_lockup.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ arch/arm/mach-mmp/sram.c | 22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
-diff --git a/lib/test_lockup.c b/lib/test_lockup.c
-index 07f476317187..78a630bbd03d 100644
---- a/lib/test_lockup.c
-+++ b/lib/test_lockup.c
-@@ -417,9 +417,14 @@ static bool test_kernel_ptr(unsigned long addr, int size)
- 		return false;
+diff --git a/arch/arm/mach-mmp/sram.c b/arch/arm/mach-mmp/sram.c
+index 6794e2db1ad5..ecc46c31004f 100644
+--- a/arch/arm/mach-mmp/sram.c
++++ b/arch/arm/mach-mmp/sram.c
+@@ -72,6 +72,8 @@ static int sram_probe(struct platform_device *pdev)
+ 	if (!info)
+ 		return -ENOMEM;
  
- 	/* should be at least readable kernel address */
--	if (access_ok((void __user *)ptr, 1) ||
--	    access_ok((void __user *)ptr + size - 1, 1) ||
--	    get_kernel_nofault(buf, ptr) ||
-+	if (!IS_ENABLED(CONFIG_ALTERNATE_USER_ADDRESS_SPACE) &&
-+	    (access_ok((void __user *)ptr, 1) ||
-+	     access_ok((void __user *)ptr + size - 1, 1))) {
-+		pr_err("user space ptr invalid in kernel: %#lx\n", addr);
-+		return true;
-+	}
++	platform_set_drvdata(pdev, info);
 +
-+	if (get_kernel_nofault(buf, ptr) ||
- 	    get_kernel_nofault(buf, ptr + size - 1)) {
- 		pr_err("invalid kernel ptr: %#lx\n", addr);
- 		return true;
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	if (res == NULL) {
+ 		dev_err(&pdev->dev, "no memory resource defined\n");
+@@ -107,8 +109,6 @@ static int sram_probe(struct platform_device *pdev)
+ 	list_add(&info->node, &sram_bank_list);
+ 	mutex_unlock(&sram_lock);
+ 
+-	platform_set_drvdata(pdev, info);
+-
+ 	dev_info(&pdev->dev, "initialized\n");
+ 	return 0;
+ 
+@@ -127,17 +127,19 @@ static int sram_remove(struct platform_device *pdev)
+ 	struct sram_bank_info *info;
+ 
+ 	info = platform_get_drvdata(pdev);
+-	if (info == NULL)
+-		return -ENODEV;
+ 
+-	mutex_lock(&sram_lock);
+-	list_del(&info->node);
+-	mutex_unlock(&sram_lock);
++	if (info->sram_size) {
++		mutex_lock(&sram_lock);
++		list_del(&info->node);
++		mutex_unlock(&sram_lock);
++
++		gen_pool_destroy(info->gpool);
++		iounmap(info->sram_virt);
++		kfree(info->pool_name);
++	}
+ 
+-	gen_pool_destroy(info->gpool);
+-	iounmap(info->sram_virt);
+-	kfree(info->pool_name);
+ 	kfree(info);
++
+ 	return 0;
+ }
+ 
 -- 
 2.34.1
 

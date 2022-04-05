@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 947EB4F25C0
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D84BB4F2544
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 09:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233010AbiDEHv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 03:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
+        id S231544AbiDEHsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232916AbiDEHrO (ORCPT
+        with ESMTP id S232179AbiDEHpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:47:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E291B9D053;
-        Tue,  5 Apr 2022 00:43:15 -0700 (PDT)
+        Tue, 5 Apr 2022 03:45:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E1A98596;
+        Tue,  5 Apr 2022 00:41:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62DDDB81B92;
-        Tue,  5 Apr 2022 07:43:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FCF8C3410F;
-        Tue,  5 Apr 2022 07:43:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D4A0A616B9;
+        Tue,  5 Apr 2022 07:41:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8E2EC340EE;
+        Tue,  5 Apr 2022 07:41:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144593;
-        bh=k04tRHaCCcaSw16B5b4zqxD/SIoqsMzrPWW5b4SpaUY=;
+        s=korg; t=1649144493;
+        bh=cqoDbNfS7cIZvhG62lrpUgcEf71gpWEOyrTAi8HHzx4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sDkCJ0OhczFfMnt0OSiXEKL3UwI0birB6bn8sYARH72zAyT5hiAT+5qCumL7AqUSA
-         Si484HyimwnLz5ZNMk5mGLFw1Xi5SBTOCiQBO2/k/9N0SuwySP5gsSXLUMqODMBkeS
-         lj6CzjxuZcc8B/NB1c8uOZL7NAKY/KUf1ktIZXWA=
+        b=linSlwvUAj3Wzb4q24rNOdFBEvZgsQS4bki27UZ+V3KloT4KkWiC6QjNYvlNqTPSJ
+         B+CrHaGH2JPMzSULxSr8lvKKsfJzO51WEMuLI4s+khm1pHapHXfonPeHs0jbYr7430
+         4z/erK/y8TmQ+ymV3huExyz70m4vxUs7yq+lFniI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alistair Delva <adelva@google.com>,
-        Rishabh Bhatnagar <rishabhb@codeaurora.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        linux-remoteproc@vger.kernel.org, kernel-team@android.com
-Subject: [PATCH 5.17 0062/1126] remoteproc: Fix count check in rproc_coredump_write()
-Date:   Tue,  5 Apr 2022 09:13:29 +0200
-Message-Id: <20220405070409.390759506@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Chanho Park <chanho61.park@samsung.com>
+Subject: [PATCH 5.17 0065/1126] pinctrl: samsung: drop pin banks references on error paths
+Date:   Tue,  5 Apr 2022 09:13:32 +0200
+Message-Id: <20220405070409.478079719@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -59,41 +56,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alistair Delva <adelva@google.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-commit f89672cc3681952f2d06314981a6b45f8b0045d1 upstream.
+commit 50ebd19e3585b9792e994cfa8cbee8947fe06371 upstream.
 
-Check count for 0, to avoid a potential underflow. Make the check the
-same as the one in rproc_recovery_write().
+The driver iterates over its devicetree children with
+for_each_child_of_node() and stores for later found node pointer.  This
+has to be put in error paths to avoid leak during re-probing.
 
-Fixes: 3afdc59e4390 ("remoteproc: Add coredump debugfs entry")
-Signed-off-by: Alistair Delva <adelva@google.com>
-Cc: Rishabh Bhatnagar <rishabhb@codeaurora.org>
-Cc: stable@vger.kernel.org
-Cc: Ohad Ben-Cohen <ohad@wizery.com>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: Sibi Sankar <sibis@codeaurora.org>
-Cc: linux-remoteproc@vger.kernel.org
-Cc: kernel-team@android.com
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220119232139.1125908-1-adelva@google.com
+Fixes: ab663789d697 ("pinctrl: samsung: Match pin banks with their device nodes")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+Reviewed-by: Chanho Park <chanho61.park@samsung.com>
+Link: https://lore.kernel.org/r/20220111201426.326777-2-krzysztof.kozlowski@canonical.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/remoteproc/remoteproc_debugfs.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pinctrl/samsung/pinctrl-samsung.c |   30 +++++++++++++++++++++++-------
+ 1 file changed, 23 insertions(+), 7 deletions(-)
 
---- a/drivers/remoteproc/remoteproc_debugfs.c
-+++ b/drivers/remoteproc/remoteproc_debugfs.c
-@@ -76,7 +76,7 @@ static ssize_t rproc_coredump_write(stru
- 	int ret, err = 0;
- 	char buf[20];
+--- a/drivers/pinctrl/samsung/pinctrl-samsung.c
++++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
+@@ -1002,6 +1002,16 @@ samsung_pinctrl_get_soc_data_for_of_alia
+ 	return &(of_data->ctrl[id]);
+ }
  
--	if (count > sizeof(buf))
-+	if (count < 1 || count > sizeof(buf))
- 		return -EINVAL;
++static void samsung_banks_of_node_put(struct samsung_pinctrl_drv_data *d)
++{
++	struct samsung_pin_bank *bank;
++	unsigned int i;
++
++	bank = d->pin_banks;
++	for (i = 0; i < d->nr_banks; ++i, ++bank)
++		of_node_put(bank->of_node);
++}
++
+ /* retrieve the soc specific data */
+ static const struct samsung_pin_ctrl *
+ samsung_pinctrl_get_soc_data(struct samsung_pinctrl_drv_data *d,
+@@ -1117,19 +1127,19 @@ static int samsung_pinctrl_probe(struct
+ 	if (ctrl->retention_data) {
+ 		drvdata->retention_ctrl = ctrl->retention_data->init(drvdata,
+ 							  ctrl->retention_data);
+-		if (IS_ERR(drvdata->retention_ctrl))
+-			return PTR_ERR(drvdata->retention_ctrl);
++		if (IS_ERR(drvdata->retention_ctrl)) {
++			ret = PTR_ERR(drvdata->retention_ctrl);
++			goto err_put_banks;
++		}
+ 	}
  
- 	ret = copy_from_user(buf, user_buf, count);
+ 	ret = samsung_pinctrl_register(pdev, drvdata);
+ 	if (ret)
+-		return ret;
++		goto err_put_banks;
+ 
+ 	ret = samsung_gpiolib_register(pdev, drvdata);
+-	if (ret) {
+-		samsung_pinctrl_unregister(pdev, drvdata);
+-		return ret;
+-	}
++	if (ret)
++		goto err_unregister;
+ 
+ 	if (ctrl->eint_gpio_init)
+ 		ctrl->eint_gpio_init(drvdata);
+@@ -1139,6 +1149,12 @@ static int samsung_pinctrl_probe(struct
+ 	platform_set_drvdata(pdev, drvdata);
+ 
+ 	return 0;
++
++err_unregister:
++	samsung_pinctrl_unregister(pdev, drvdata);
++err_put_banks:
++	samsung_banks_of_node_put(drvdata);
++	return ret;
+ }
+ 
+ /*
 
 

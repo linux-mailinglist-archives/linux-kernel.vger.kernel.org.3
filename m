@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A824F4705
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 867B34F451A
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384615AbiDEU4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42166 "EHLO
+        id S1387292AbiDENO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356675AbiDEKYq (ORCPT
+        with ESMTP id S1344238AbiDEJSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:24:46 -0400
+        Tue, 5 Apr 2022 05:18:55 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72604BF024;
-        Tue,  5 Apr 2022 03:08:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBFA496B3;
+        Tue,  5 Apr 2022 02:06:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25A25B81C88;
-        Tue,  5 Apr 2022 10:08:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85AF0C385A1;
-        Tue,  5 Apr 2022 10:08:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE95CB818F3;
+        Tue,  5 Apr 2022 09:06:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BD30C385A3;
+        Tue,  5 Apr 2022 09:06:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153326;
-        bh=n3jyOXKYxe6u5mjO/HkPB5eTqSSy5dyknXVWnH6VdXU=;
+        s=korg; t=1649149574;
+        bh=W/lcVOcoPY+v/WrwziGHG8JE2ki8hpSfLXopMnCP2oA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Eq2aZJor10n/KTYECP5bi8N52CL0uCz7kf11Qz3g5h6POmdhyzn80WeVpmcEoQ5ZD
-         H4ksBUWwbrD14w6TFMppKWM9QxmeDTDZSX2ITX06Lu0/ngP3KR0200nab3RLIe82YA
-         /asQ46WZIuNknsN0l94KUmd5ep2BsP3yk/cGaKN0=
+        b=SyrGP4JsAGrCtmBEenWC/UhPCpGRxmPGVOvsiKhtJQJolT+TWi4Ubh+GqhaHF7tAx
+         ul7Eif+3zwI/4r4/T/XPYPQbjCDZjwkG+vmVNkiw/L03zNHW8bj3ht70A8NfCCJlLA
+         zckJ/5XmB4/uZYoJrxmTKOsVgXWv2iEz81b2OQN8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fengnan Chang <changfengnan@vivo.com>,
-        Chao Yu <yuchao0@huawei.com>, Jaegeuk Kim <jaegeuk@kernel.org>,
+        stable@vger.kernel.org, Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 183/599] f2fs: compress: remove unneeded read when rewrite whole cluster
-Date:   Tue,  5 Apr 2022 09:27:57 +0200
-Message-Id: <20220405070304.287127761@linuxfoundation.org>
+Subject: [PATCH 5.16 0765/1017] powercap/dtpm_cpu: Reset per_cpu variable in the release function
+Date:   Tue,  5 Apr 2022 09:27:58 +0200
+Message-Id: <20220405070416.969633584@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fengnan Chang <changfengnan@vivo.com>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-[ Upstream commit 7eab7a6968278c735b1ca6387056a408f7960265 ]
+[ Upstream commit 0aea2e4ec2a2bfa2d7e8820e37ba5b5ce04f20a5 ]
 
-when we overwrite the whole page in cluster, we don't need read original
-data before write, because after write_end(), writepages() can help to
-load left data in that cluster.
+The release function does not reset the per cpu variable when it is
+called. That will prevent creation again as the variable will be
+already from the previous creation.
 
-Signed-off-by: Fengnan Chang <changfengnan@vivo.com>
-Signed-off-by: Chao Yu <yuchao0@huawei.com>
-Acked-by: Chao Yu <yuchao0@huawei.com>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Fix it by resetting them.
+
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Link: https://lore.kernel.org/r/20220130210210.549877-2-daniel.lezcano@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/f2fs/data.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/powercap/dtpm_cpu.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-index d27a92a54447..04e980c58319 100644
---- a/fs/f2fs/data.c
-+++ b/fs/f2fs/data.c
-@@ -3461,6 +3461,9 @@ static int f2fs_write_begin(struct file *file, struct address_space *mapping,
+diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
+index b740866b228d..1e8cac699646 100644
+--- a/drivers/powercap/dtpm_cpu.c
++++ b/drivers/powercap/dtpm_cpu.c
+@@ -150,10 +150,17 @@ static int update_pd_power_uw(struct dtpm *dtpm)
+ static void pd_release(struct dtpm *dtpm)
+ {
+ 	struct dtpm_cpu *dtpm_cpu = to_dtpm_cpu(dtpm);
++	struct cpufreq_policy *policy;
  
- 		*fsdata = NULL;
+ 	if (freq_qos_request_active(&dtpm_cpu->qos_req))
+ 		freq_qos_remove_request(&dtpm_cpu->qos_req);
  
-+		if (len == PAGE_SIZE)
-+			goto repeat;
-+
- 		ret = f2fs_prepare_compress_overwrite(inode, pagep,
- 							index, fsdata);
- 		if (ret < 0) {
++	policy = cpufreq_cpu_get(dtpm_cpu->cpu);
++	if (policy) {
++		for_each_cpu(dtpm_cpu->cpu, policy->related_cpus)
++			per_cpu(dtpm_per_cpu, dtpm_cpu->cpu) = NULL;
++	}
++	
+ 	kfree(dtpm_cpu);
+ }
+ 
 -- 
 2.34.1
 

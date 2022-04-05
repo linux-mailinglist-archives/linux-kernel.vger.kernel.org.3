@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 502A34F4E0D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:36:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B4D4F4940
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1587326AbiDFAIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:08:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47442 "EHLO
+        id S1391999AbiDEWJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349435AbiDEJtw (ORCPT
+        with ESMTP id S1349436AbiDEJtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:49:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A0C2529B;
-        Tue,  5 Apr 2022 02:45:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F0225EAE;
+        Tue,  5 Apr 2022 02:45:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D916361368;
-        Tue,  5 Apr 2022 09:45:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC76DC385A2;
-        Tue,  5 Apr 2022 09:45:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46E0661673;
+        Tue,  5 Apr 2022 09:45:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C4A1C385A2;
+        Tue,  5 Apr 2022 09:45:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151948;
-        bh=9gVJ8hVCaDqgoBzxse+4FYk1575fvUVWdDSL9iRYPdw=;
+        s=korg; t=1649151953;
+        bh=fbmWagNRxHPIiRN8Gss2tgOhhrkL1vPbW80ajYdC408=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JdoxcJjEZqZ5d03Q3J/9AVcRzv4A1dmhCI3TZrNubSB6EFAtAuPzS+7h7GMIcm9gN
-         OARFZqgldo82AX0voV/mrquSpWkS1KiPVx8SlyBsyEbaFEsIzs9PZFiWtBqaOiuk+a
-         hEV89lZ3eE80zYw3ePYKkaXTBWjKDpfxXLadE8bk=
+        b=yUNCoTkjHSJL8U0nZKO9q7rZTD05m0B6zo8KTSPMfoS6uhW3LG5ZCkWSO+nS4jFyC
+         N00oBOueRPTjUvVlFSKT4XglPPeEjH+FJkxqoWYqN1KDOEs2tjkD7Awpr8drFzZUZW
+         /3n3/4NZBVmVXZgZAxwiOjgloO0YqQ2p5ZZ+/j3I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 599/913] phy: phy-brcm-usb: fixup BCM4908 support
-Date:   Tue,  5 Apr 2022 09:27:41 +0200
-Message-Id: <20220405070357.797366659@linuxfoundation.org>
+        stable@vger.kernel.org, Qing Wang <wangqing@vivo.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 601/913] serial: 8250_lpss: Balance reference count for PCI DMA device
+Date:   Tue,  5 Apr 2022 09:27:43 +0200
+Message-Id: <20220405070357.856906218@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -56,156 +55,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-[ Upstream commit 32942d33d63d27714ed16a4176e5a99547adb6e0 ]
+[ Upstream commit 5318f70da7e82649d794fc27d8a127c22aa3566e ]
 
-Just like every other family BCM4908 should get its own enum value. That
-is required to properly handle it in chipset conditional code.
+The pci_get_slot() increases its reference count, the caller
+must decrement the reference count by calling pci_dev_put().
 
-The real change is excluding BCM4908 from the PLL reprogramming code
-(see brcmusb_usb3_pll_54mhz()). I'm not sure what's the BCM4908
-reference clock frequency but:
-1. BCM4908 custom driver from Broadcom's SDK doesn't reprogram PLL
-2. Doing that in Linux driver stopped PHY handling some USB 3.0 devices
-
-This change makes USB 3.0 PHY recognize e.g.:
-1. 04e8:6860 - Samsung Electronics Co., Ltd Galaxy series, misc. (MTP mode)
-2. 1058:259f - Western Digital My Passport 259F
-
-Broadcom's STB SoCs come with a set of SUN_TOP_CTRL_* registers that
-allow reading chip family and product ids. Such a block & register is
-missing on BCM4908 so this commit introduces "compatible" string
-specific binding.
-
-Fixes: 4b402fa8e0b7 ("phy: phy-brcm-usb: support PHY on the BCM4908")
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20220218172459.10431-1-zajec5@gmail.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Fixes: 9a1870ce812e ("serial: 8250: don't use slave_id of dma_slave_config")
+Depends-on: a13e19cf3dc1 ("serial: 8250_lpss: split LPSS driver to separate module")
+Reported-by: Qing Wang <wangqing@vivo.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Link: https://lore.kernel.org/r/20220223151240.70248-1-andriy.shevchenko@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/broadcom/phy-brcm-usb-init.c | 36 ++++++++++++++++++++++++
- drivers/phy/broadcom/phy-brcm-usb-init.h |  1 +
- drivers/phy/broadcom/phy-brcm-usb.c      | 11 +++++++-
- 3 files changed, 47 insertions(+), 1 deletion(-)
+ drivers/tty/serial/8250/8250_lpss.c | 28 ++++++++++++++++++++++------
+ 1 file changed, 22 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/phy/broadcom/phy-brcm-usb-init.c b/drivers/phy/broadcom/phy-brcm-usb-init.c
-index 9391ab42a12b..dd0f66288fbd 100644
---- a/drivers/phy/broadcom/phy-brcm-usb-init.c
-+++ b/drivers/phy/broadcom/phy-brcm-usb-init.c
-@@ -79,6 +79,7 @@
+diff --git a/drivers/tty/serial/8250/8250_lpss.c b/drivers/tty/serial/8250/8250_lpss.c
+index 848d81e3838c..49ae73f4d3a0 100644
+--- a/drivers/tty/serial/8250/8250_lpss.c
++++ b/drivers/tty/serial/8250/8250_lpss.c
+@@ -121,8 +121,7 @@ static int byt_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
+ {
+ 	struct dw_dma_slave *param = &lpss->dma_param;
+ 	struct pci_dev *pdev = to_pci_dev(port->dev);
+-	unsigned int dma_devfn = PCI_DEVFN(PCI_SLOT(pdev->devfn), 0);
+-	struct pci_dev *dma_dev = pci_get_slot(pdev->bus, dma_devfn);
++	struct pci_dev *dma_dev;
  
- enum brcm_family_type {
- 	BRCM_FAMILY_3390A0,
-+	BRCM_FAMILY_4908,
- 	BRCM_FAMILY_7250B0,
- 	BRCM_FAMILY_7271A0,
- 	BRCM_FAMILY_7364A0,
-@@ -96,6 +97,7 @@ enum brcm_family_type {
+ 	switch (pdev->device) {
+ 	case PCI_DEVICE_ID_INTEL_BYT_UART1:
+@@ -141,6 +140,8 @@ static int byt_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
+ 		return -EINVAL;
+ 	}
  
- static const char *family_names[BRCM_FAMILY_COUNT] = {
- 	USB_BRCM_FAMILY(3390A0),
-+	USB_BRCM_FAMILY(4908),
- 	USB_BRCM_FAMILY(7250B0),
- 	USB_BRCM_FAMILY(7271A0),
- 	USB_BRCM_FAMILY(7364A0),
-@@ -203,6 +205,27 @@ usb_reg_bits_map_table[BRCM_FAMILY_COUNT][USB_CTRL_SELECTOR_COUNT] = {
- 		USB_CTRL_USB_PM_USB20_HC_RESETB_VAR_MASK,
- 		ENDIAN_SETTINGS, /* USB_CTRL_SETUP ENDIAN bits */
- 	},
-+	/* 4908 */
-+	[BRCM_FAMILY_4908] = {
-+		0, /* USB_CTRL_SETUP_SCB1_EN_MASK */
-+		0, /* USB_CTRL_SETUP_SCB2_EN_MASK */
-+		0, /* USB_CTRL_SETUP_SS_EHCI64BIT_EN_MASK */
-+		0, /* USB_CTRL_SETUP_STRAP_IPP_SEL_MASK */
-+		0, /* USB_CTRL_SETUP_OC3_DISABLE_MASK */
-+		0, /* USB_CTRL_PLL_CTL_PLL_IDDQ_PWRDN_MASK */
-+		0, /* USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK */
-+		USB_CTRL_USB_PM_XHC_SOFT_RESETB_MASK,
-+		USB_CTRL_USB_PM_USB_PWRDN_MASK,
-+		0, /* USB_CTRL_USB30_CTL1_XHC_SOFT_RESETB_MASK */
-+		0, /* USB_CTRL_USB30_CTL1_USB3_IOC_MASK */
-+		0, /* USB_CTRL_USB30_CTL1_USB3_IPP_MASK */
-+		0, /* USB_CTRL_USB_DEVICE_CTL1_PORT_MODE_MASK */
-+		0, /* USB_CTRL_USB_PM_SOFT_RESET_MASK */
-+		0, /* USB_CTRL_SETUP_CC_DRD_MODE_ENABLE_MASK */
-+		0, /* USB_CTRL_SETUP_STRAP_CC_DRD_MODE_ENABLE_SEL_MASK */
-+		0, /* USB_CTRL_USB_PM_USB20_HC_RESETB_VAR_MASK */
-+		0, /* USB_CTRL_SETUP ENDIAN bits */
-+	},
- 	/* 7250b0 */
- 	[BRCM_FAMILY_7250B0] = {
- 		USB_CTRL_SETUP_SCB1_EN_MASK,
-@@ -559,6 +582,7 @@ static void brcmusb_usb3_pll_54mhz(struct brcm_usb_init_params *params)
- 	 */
- 	switch (params->selected_family) {
- 	case BRCM_FAMILY_3390A0:
-+	case BRCM_FAMILY_4908:
- 	case BRCM_FAMILY_7250B0:
- 	case BRCM_FAMILY_7366C0:
- 	case BRCM_FAMILY_74371A0:
-@@ -1004,6 +1028,18 @@ static const struct brcm_usb_init_ops bcm7445_ops = {
- 	.set_dual_select = usb_set_dual_select,
- };
- 
-+void brcm_usb_dvr_init_4908(struct brcm_usb_init_params *params)
-+{
-+	int fam;
++	dma_dev = pci_get_slot(pdev->bus, PCI_DEVFN(PCI_SLOT(pdev->devfn), 0));
 +
-+	fam = BRCM_FAMILY_4908;
-+	params->selected_family = fam;
-+	params->usb_reg_bits_map =
-+		&usb_reg_bits_map_table[fam][0];
-+	params->family_name = family_names[fam];
-+	params->ops = &bcm7445_ops;
+ 	param->dma_dev = &dma_dev->dev;
+ 	param->m_master = 0;
+ 	param->p_master = 1;
+@@ -156,6 +157,14 @@ static int byt_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
+ 	return 0;
+ }
+ 
++static void byt_serial_exit(struct lpss8250 *lpss)
++{
++	struct dw_dma_slave *param = &lpss->dma_param;
++
++	/* Paired with pci_get_slot() in the byt_serial_setup() above */
++	put_device(param->dma_dev);
 +}
 +
- void brcm_usb_dvr_init_7445(struct brcm_usb_init_params *params)
+ static int ehl_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
  {
- 	int fam;
-diff --git a/drivers/phy/broadcom/phy-brcm-usb-init.h b/drivers/phy/broadcom/phy-brcm-usb-init.h
-index a39f30fa2e99..1ccb5ddab865 100644
---- a/drivers/phy/broadcom/phy-brcm-usb-init.h
-+++ b/drivers/phy/broadcom/phy-brcm-usb-init.h
-@@ -64,6 +64,7 @@ struct  brcm_usb_init_params {
- 	bool suspend_with_clocks;
- };
+ 	struct uart_8250_dma *dma = &lpss->data.dma;
+@@ -171,6 +180,13 @@ static int ehl_serial_setup(struct lpss8250 *lpss, struct uart_port *port)
+ 	return 0;
+ }
  
-+void brcm_usb_dvr_init_4908(struct brcm_usb_init_params *params);
- void brcm_usb_dvr_init_7445(struct brcm_usb_init_params *params);
- void brcm_usb_dvr_init_7216(struct brcm_usb_init_params *params);
- void brcm_usb_dvr_init_7211b0(struct brcm_usb_init_params *params);
-diff --git a/drivers/phy/broadcom/phy-brcm-usb.c b/drivers/phy/broadcom/phy-brcm-usb.c
-index 0f1deb6e0eab..2cb3779fcdf8 100644
---- a/drivers/phy/broadcom/phy-brcm-usb.c
-+++ b/drivers/phy/broadcom/phy-brcm-usb.c
-@@ -283,6 +283,15 @@ static const struct attribute_group brcm_usb_phy_group = {
- 	.attrs = brcm_usb_phy_attrs,
- };
- 
-+static const struct match_chip_info chip_info_4908 = {
-+	.init_func = &brcm_usb_dvr_init_4908,
-+	.required_regs = {
-+		BRCM_REGS_CTRL,
-+		BRCM_REGS_XHCI_EC,
-+		-1,
-+	},
-+};
++static void ehl_serial_exit(struct lpss8250 *lpss)
++{
++	struct uart_8250_port *up = serial8250_get_port(lpss->data.line);
 +
- static const struct match_chip_info chip_info_7216 = {
- 	.init_func = &brcm_usb_dvr_init_7216,
- 	.required_regs = {
-@@ -318,7 +327,7 @@ static const struct match_chip_info chip_info_7445 = {
- static const struct of_device_id brcm_usb_dt_ids[] = {
- 	{
- 		.compatible = "brcm,bcm4908-usb-phy",
--		.data = &chip_info_7445,
-+		.data = &chip_info_4908,
- 	},
- 	{
- 		.compatible = "brcm,bcm7216-usb-phy",
++	up->dma = NULL;
++}
++
+ #ifdef CONFIG_SERIAL_8250_DMA
+ static const struct dw_dma_platform_data qrk_serial_dma_pdata = {
+ 	.nr_channels = 2,
+@@ -345,8 +361,7 @@ static int lpss8250_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	return 0;
+ 
+ err_exit:
+-	if (lpss->board->exit)
+-		lpss->board->exit(lpss);
++	lpss->board->exit(lpss);
+ 	pci_free_irq_vectors(pdev);
+ 	return ret;
+ }
+@@ -357,8 +372,7 @@ static void lpss8250_remove(struct pci_dev *pdev)
+ 
+ 	serial8250_unregister_port(lpss->data.line);
+ 
+-	if (lpss->board->exit)
+-		lpss->board->exit(lpss);
++	lpss->board->exit(lpss);
+ 	pci_free_irq_vectors(pdev);
+ }
+ 
+@@ -366,12 +380,14 @@ static const struct lpss8250_board byt_board = {
+ 	.freq = 100000000,
+ 	.base_baud = 2764800,
+ 	.setup = byt_serial_setup,
++	.exit = byt_serial_exit,
+ };
+ 
+ static const struct lpss8250_board ehl_board = {
+ 	.freq = 200000000,
+ 	.base_baud = 12500000,
+ 	.setup = ehl_serial_setup,
++	.exit = ehl_serial_exit,
+ };
+ 
+ static const struct lpss8250_board qrk_board = {
 -- 
 2.34.1
 

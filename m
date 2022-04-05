@@ -2,58 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CAA4F2713
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF6844F2846
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233349AbiDEIGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55674 "EHLO
+        id S234151AbiDEIMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232452AbiDEHyC (ORCPT
+        with ESMTP id S233645AbiDEH5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:54:02 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5011EEF2
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 00:49:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qqcBayd3twgxHDzuUCfiVsnYaxI4OFRrgGSkwQ01Fos=; b=AgtzSG9LVE8WJXJrlLh1SM5akI
-        05wDS7s7sM9L/4VBp3vjfCCuF1l73A466G8l5bkfkpvDcrD5DbIQrsDf9/jiORRaofVnUEfxExuKP
-        8JoQ/7RUWSLZCSDz7em+jXPuYpoc9GEgyyGDpu6cGDSR4P0qvBUxl4JhN2kcr10HuqpvrKGD3tDY8
-        LEZEw0aP5J2rv/bCjcZG/OCcUWwajk59uFPzuF4b1WPZXcq2aZ9tzrxKEd3ztkbHY7xURo4hekmUR
-        9a1JKR7lGu6ncIJz1KeRn9jtYARUW1rSFJ9Q6VDAvy6d5xOekd9al9WRYAJXwbMJadMqXWCTtGoBv
-        z9bIE6ag==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nbdvu-006TKy-H3; Tue, 05 Apr 2022 07:48:58 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 14053986B5B; Tue,  5 Apr 2022 09:48:56 +0200 (CEST)
-Date:   Tue, 5 Apr 2022 09:48:55 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "T.J. Alumbaugh" <talumbau@chromium.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        joel@joelfernandes.org
-Subject: Re: sched_core_balance() releasing interrupts with pi_lock held
-Message-ID: <20220405074855.GA30877@worktop.programming.kicks-ass.net>
-References: <20220308161455.036e9933@gandalf.local.home>
- <20220315174606.02959816@gandalf.local.home>
- <20220316202734.GJ8939@worktop.programming.kicks-ass.net>
- <20220316210341.GD14330@worktop.programming.kicks-ass.net>
- <20220321133037.7d0d0c7f@gandalf.local.home>
- <20220329172236.48683eb5@gandalf.local.home>
- <51b21470-cd72-7ae3-6f33-2dd2e1d6b716@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <51b21470-cd72-7ae3-6f33-2dd2e1d6b716@chromium.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Tue, 5 Apr 2022 03:57:21 -0400
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3FE44ECFA;
+        Tue,  5 Apr 2022 00:51:19 -0700 (PDT)
+Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
+  by mx.socionext.com with ESMTP; 05 Apr 2022 16:51:15 +0900
+Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
+        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id A85A92058443;
+        Tue,  5 Apr 2022 16:51:15 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 5 Apr 2022 16:51:15 +0900
+Received: from plum.e01.socionext.com (unknown [10.212.243.119])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 1BFF9B6389;
+        Tue,  5 Apr 2022 16:51:15 +0900 (JST)
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+To:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Subject: [PATCH 1/3] dt-bindings: PCI: designware-ep: Increase maxItems of reg and reg-names
+Date:   Tue,  5 Apr 2022 16:51:00 +0900
+Message-Id: <1649145062-29833-2-git-send-email-hayashi.kunihiko@socionext.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1649145062-29833-1-git-send-email-hayashi.kunihiko@socionext.com>
+References: <1649145062-29833-1-git-send-email-hayashi.kunihiko@socionext.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,36 +49,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 04:17:54PM -0400, T.J. Alumbaugh wrote:
-> 
-> On 3/29/22 17:22, Steven Rostedt wrote:
-> > On Mon, 21 Mar 2022 13:30:37 -0400
-> > Steven Rostedt <rostedt@goodmis.org> wrote:
-> > 
-> > > On Wed, 16 Mar 2022 22:03:41 +0100
-> > > Peter Zijlstra <peterz@infradead.org> wrote:
-> > > 
-> > > > Does something like the below (untested in the extreme) help?
-> > > Hi Peter,
-> > > 
-> > > This has been tested extensively by the ChromeOS team and said that it does
-> > > appear to fix the problem.
-> > > 
-> > > Could you get this into mainline, and tag it for stable so that it can be
-> > > backported to the appropriate stable releases?
-> > > 
-> > > Thanks for the fix!
-> > > 
-> > Hi Peter,
-> > 
-> > I just don't want you to forget about this :-)
-> > 
-> > -- Steve
-> > 
-> Hi Peter,
-> 
-> Just a note that if/when you send this out as a patch, feel free to add:
-> 
-> Tested-by: T.J. Alumbaugh <talumbau@chromium.org>
+UniPhier PCIe EP controller has 5 register mappings (dbi, dbi2, link,
+config and atu), so maxItems of "reg" and "reg-names" should allow 5.
 
-https://lkml.kernel.org/r/20220330160535.GN8939@worktop.programming.kicks-ass.net
+Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+---
+ Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml
+index e59059ab5be0..03f97e7c4089 100644
+--- a/Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml
++++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml
+@@ -28,11 +28,11 @@ properties:
+       versions.
+       For designware core version >= 4.80, it may contain ATU address space.
+     minItems: 2
+-    maxItems: 4
++    maxItems: 5
+ 
+   reg-names:
+     minItems: 2
+-    maxItems: 4
++    maxItems: 5
+     items:
+       enum: [dbi, dbi2, config, atu, addr_space, link, atu_dma, appl]
+ 
+-- 
+2.25.1
+

@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F8694F2B17
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B39F94F2D26
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243830AbiDEJJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34820 "EHLO
+        id S243907AbiDEJJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239498AbiDEIUI (ORCPT
+        with ESMTP id S239499AbiDEIUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:20:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C611B2F;
-        Tue,  5 Apr 2022 01:14:35 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9270B2A;
+        Tue,  5 Apr 2022 01:14:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 861E6609D0;
-        Tue,  5 Apr 2022 08:14:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95A04C385A0;
-        Tue,  5 Apr 2022 08:14:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65AE760AFB;
+        Tue,  5 Apr 2022 08:14:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 705FDC385A0;
+        Tue,  5 Apr 2022 08:14:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146475;
-        bh=xiVxqNXnPrd0umBKGvEaHQFbAeEbjAy7J6xMXFkVXKA=;
+        s=korg; t=1649146477;
+        bh=MyfrGR6SN78HoHqE1W243AQAx11Y7mJpaWheVxSLE9g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uFUIl4m83ZaGB1x0drXX6BueIA7YccekW7XaUuDHWxWTqqQG8Ur8tuXK/3Unolm64
-         p2kGwflIK5WGOFljDEPPrbNrCg9fvV/vxLdHxgPD3aXOVoh4HhLLM4E1p+AbmEoPF5
-         ylxHMo13hvFWepCKRIg2+7g7LUN5zCEiEG8ZB8fA=
+        b=ae8keG81N9kj3ma+IWlHmhdaItk1Mh3yGe4k/8m8cm/TWXP3+2iXJ2UVp2pswdb/h
+         Y6mwfGUDunbosdSAW+LiD6CF1114lfN1xVOoisHD9qMnina0LGm73LBcZr4almzpds
+         TOcSDFcmrWzNG/Nnpgg4NiKXnjCUZ8kG0YwoI2K4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0777/1126] pinctrl/rockchip: Add missing of_node_put() in rockchip_pinctrl_probe
-Date:   Tue,  5 Apr 2022 09:25:24 +0200
-Message-Id: <20220405070430.385573941@linuxfoundation.org>
+Subject: [PATCH 5.17 0778/1126] clk: visconti: prevent array overflow in visconti_clk_register_gates()
+Date:   Tue,  5 Apr 2022 09:25:25 +0200
+Message-Id: <20220405070430.413899080@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,43 +56,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 89388f8730699c259f8090ec435fb43569efe4ac ]
+[ Upstream commit c5601e0720ce1a3ad895f94a5838530edde01ed3 ]
 
-The device_node pointer is returned by of_parse_phandle()  with refcount
-incremented. We should use of_node_put() on it when done.
+This code was using -1 to represent that there was no reset function.
+Unfortunately, the -1 was stored in u8 so the if (clks[i].rs_id >= 0)
+condition was always true.  This lead to an out of bounds access in
+visconti_clk_register_gates().
 
-Fixes: 1e747e59cc4d ("pinctrl: rockchip: base regmap supplied by a syscon")
-Fixes: 14dee8677e19 ("pinctrl: rockchip: let pmu registers be supplied by a syscon")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220307120234.28657-1-linmq006@gmail.com
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Fixes: b4cbe606dc36 ("clk: visconti: Add support common clock driver and reset driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/20220316083533.GA30941@kili
+Acked-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/pinctrl-rockchip.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/clk/visconti/clkc-tmpv770x.c | 2 +-
+ drivers/clk/visconti/clkc.c          | 2 +-
+ drivers/clk/visconti/clkc.h          | 3 +++
+ 3 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pinctrl/pinctrl-rockchip.c b/drivers/pinctrl/pinctrl-rockchip.c
-index d8dd8415fa81..a1b598b86aa9 100644
---- a/drivers/pinctrl/pinctrl-rockchip.c
-+++ b/drivers/pinctrl/pinctrl-rockchip.c
-@@ -2693,6 +2693,7 @@ static int rockchip_pinctrl_probe(struct platform_device *pdev)
- 	node = of_parse_phandle(np, "rockchip,grf", 0);
- 	if (node) {
- 		info->regmap_base = syscon_node_to_regmap(node);
-+		of_node_put(node);
- 		if (IS_ERR(info->regmap_base))
- 			return PTR_ERR(info->regmap_base);
- 	} else {
-@@ -2725,6 +2726,7 @@ static int rockchip_pinctrl_probe(struct platform_device *pdev)
- 	node = of_parse_phandle(np, "rockchip,pmu", 0);
- 	if (node) {
- 		info->regmap_pmu = syscon_node_to_regmap(node);
-+		of_node_put(node);
- 		if (IS_ERR(info->regmap_pmu))
- 			return PTR_ERR(info->regmap_pmu);
- 	}
+diff --git a/drivers/clk/visconti/clkc-tmpv770x.c b/drivers/clk/visconti/clkc-tmpv770x.c
+index c2b2f41a85a4..6c753b2cb558 100644
+--- a/drivers/clk/visconti/clkc-tmpv770x.c
++++ b/drivers/clk/visconti/clkc-tmpv770x.c
+@@ -176,7 +176,7 @@ static const struct visconti_clk_gate_table clk_gate_tables[] = {
+ 	{ TMPV770X_CLK_WRCK, "wrck",
+ 		clks_parent_data, ARRAY_SIZE(clks_parent_data),
+ 		0, 0x68, 0x168, 9, 32,
+-		-1, }, /* No reset */
++		NO_RESET, },
+ 	{ TMPV770X_CLK_PICKMON, "pickmon",
+ 		clks_parent_data, ARRAY_SIZE(clks_parent_data),
+ 		0, 0x10, 0x110, 8, 4,
+diff --git a/drivers/clk/visconti/clkc.c b/drivers/clk/visconti/clkc.c
+index 56a8a4ffebca..d0b193b5d0b3 100644
+--- a/drivers/clk/visconti/clkc.c
++++ b/drivers/clk/visconti/clkc.c
+@@ -147,7 +147,7 @@ int visconti_clk_register_gates(struct visconti_clk_provider *ctx,
+ 		if (!dev_name)
+ 			return -ENOMEM;
+ 
+-		if (clks[i].rs_id >= 0) {
++		if (clks[i].rs_id != NO_RESET) {
+ 			rson_offset = reset[clks[i].rs_id].rson_offset;
+ 			rsoff_offset = reset[clks[i].rs_id].rsoff_offset;
+ 			rs_idx = reset[clks[i].rs_id].rs_idx;
+diff --git a/drivers/clk/visconti/clkc.h b/drivers/clk/visconti/clkc.h
+index 09ed82ff64e4..8756a1ec42ef 100644
+--- a/drivers/clk/visconti/clkc.h
++++ b/drivers/clk/visconti/clkc.h
+@@ -73,4 +73,7 @@ int visconti_clk_register_gates(struct visconti_clk_provider *data,
+ 				 int num_gate,
+ 				 const struct visconti_reset_data *reset,
+ 				 spinlock_t *lock);
++
++#define NO_RESET 0xFF
++
+ #endif /* _VISCONTI_CLKC_H_ */
 -- 
 2.34.1
 

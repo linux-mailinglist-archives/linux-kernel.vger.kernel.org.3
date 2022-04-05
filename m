@@ -2,225 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34614F4B09
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 376F44F4DC6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1573826AbiDEWx0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 5 Apr 2022 18:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
+        id S1583161AbiDEXv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457864AbiDEQxP (ORCPT
+        with ESMTP id S1457865AbiDEQxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:53:15 -0400
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FF0326E6
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:51:14 -0700 (PDT)
-Received: by mail-ej1-f41.google.com with SMTP id k23so24503510ejd.3
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 09:51:14 -0700 (PDT)
+        Tue, 5 Apr 2022 12:53:37 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12C1326E6
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:51:37 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id s7so3870915qtk.6
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 09:51:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DZaRsWyX31QD4hA+oZZqyItqPWIM69HLGIh6hYg0oQE=;
+        b=SKkJTRBQcHwyVWbzY1Q0fFJTZmB73lmVPAnSYhBqVVK1scWpN4Ob8A00UKCaM387r4
+         AfciYNdmHkeH/JlcNCEIyV1xeDIc/xO8CTsUpaQ9Nfm8m45bDswB5zCngl2vpuILNw3p
+         CQ1zD0Vrk72EXS9N1dpOrZ0cMsRqoFy9Avyd7aRjyfzieiSJVwJ72RCA3g7oJFF6OHxk
+         gtWdCx9YOOio9pgRwfesVCtbshpogXUCTFcLuqPtNJmArFM1fFUWc0MMu7tetlaOELml
+         FSV82Fy2929wV82QLNafqtOMhBmRY2JlpLyGnh5N53amH3Rg+Lv9Du2jfa44f15e9Vn8
+         HFxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=IPrQE+Xi3gKFHtaa4iFeqv2z1Mz1gUVNTO0GQNazrug=;
-        b=7MoYEpMW8uhJs4XPW8BacZ5qjLb2PeXqwyzQ0K3deVvGUJEcx+gyEl6KT5NNldM298
-         WI9R+z+/YYaUaZxtQt8mFU7HaLSeuHRITaQf8YTo3aaLr40XD+Mn9pADeQ14P5u+kwJF
-         Yy4m7yc/cMkEQSUjlSI5CBjGe8JxV831889R/fBUSeW6cwMU3/8InfiCqB6uHI7T6/r+
-         F6MG3uoycmXMYCEZkwcBv4ZuMBhcuBcNYWf9P8lk2D8ehuv5ay2j7Lk+gMTlBhmgURD3
-         gNDTK/LqJcn1vWjLCwjBUVhvIiSEBakVfMtIF08t730Uhf1mR6kpRO3SiiEhtB8hjSUq
-         WNXg==
-X-Gm-Message-State: AOAM532fh6n9/ywHyFcpbw1R9iDjDs0EcWFSzrKbcqqHhagB3biMqrn9
-        0zo9C5JTfk2KMwKinYcIIqR2FGs2z1vxElhR/asz8g==
-X-Google-Smtp-Source: ABdhPJyZW/jtaBf+smr/b2HpqbwulVx0oqg/WWEhSXUKh3LtpTZgEBwALPc6rzivGSbB+HNhFhDLiW9iIutaI4bUvA0=
-X-Received: by 2002:a17:907:1b20:b0:6da:649b:d99e with SMTP id
- mp32-20020a1709071b2000b006da649bd99emr4506275ejc.712.1649177473217; Tue, 05
- Apr 2022 09:51:13 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DZaRsWyX31QD4hA+oZZqyItqPWIM69HLGIh6hYg0oQE=;
+        b=FPZg31nTxT7NH6s+gczLIB42jwlhlXQ2qLkfYGXsPEwx19Tugr5UHw2OtIK9X5pjbt
+         Q+QDi8DIj/TIDHpbO2W1sX+C6HLNB0QuYPGc1TMUY8IguK+lljcYM27siDWuTTCLOGgm
+         rJBv6LuQ3xlwgnjvUiRX7DxFPbWsMSncFIysgVMfd8gVQvpEJn2Ugz9U3JKzdDn3lwqq
+         vLnCUq5Nv5A5hgxHSAg18xftIsRlzi6H6Ns7yXR+geIoCLWSpoo4QyF8lM1fgtADRtHR
+         4uslYSlv2L/HA/kohqE6ixhkE58DN/6PFgWlhchQutOZWccxNPESpDZNxo/pZrbFPFei
+         socA==
+X-Gm-Message-State: AOAM532StwFFdoeBGM7BvoUP1DQG0wILRJaArmdqzdvNFPP3nW1c+jPX
+        aL2tVFVCVqQ/lt+pvUb0cpEfIHA4Q1xBXQ==
+X-Google-Smtp-Source: ABdhPJyqiRVuBFpx9bRzvsG3XiF+NGW1XPncA04INZy3n5mHw4hVYOyIPXq4yrbKNu2ipSi3tYvOvg==
+X-Received: by 2002:a05:622a:1d5:b0:2e1:a8b8:3ee8 with SMTP id t21-20020a05622a01d500b002e1a8b83ee8mr3675968qtw.346.1649177497004;
+        Tue, 05 Apr 2022 09:51:37 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id s13-20020a05620a0bcd00b0067afe7dd3ffsm9182055qki.49.2022.04.05.09.51.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 09:51:36 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1nbmP0-00D9J9-QM; Tue, 05 Apr 2022 13:51:34 -0300
+Date:   Tue, 5 Apr 2022 13:51:34 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     xieming <xieming@kylinos.cn>, sashal@kernel.org,
+        catalin.marinas@arm.com, linux@armlinux.org.uk,
+        linux-kernel@vger.kernel.org, alex.williamson@redhat.com,
+        will@kernel.org, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2] kvm/arm64: fixed passthrough gpu into vm on arm64
+Message-ID: <20220405165134.GS64706@ziepe.ca>
+References: <20220401090828.614167-1-xieming@kylinos.cn>
+ <87tubcbvgk.wl-maz@kernel.org>
+ <20220404132405.GQ64706@ziepe.ca>
+ <87o81gc3dc.wl-maz@kernel.org>
+ <20220404170202.GR64706@ziepe.ca>
+ <87mtgzblez.wl-maz@kernel.org>
 MIME-Version: 1.0
-References: <20220405070407.513532867@linuxfoundation.org> <20220405070435.188697055@linuxfoundation.org>
-In-Reply-To: <20220405070435.188697055@linuxfoundation.org>
-From:   Justin Forbes <jforbes@fedoraproject.org>
-Date:   Tue, 5 Apr 2022 11:51:02 -0500
-Message-ID: <CAFxkdAov41sA0V7D82BVophn8Nn6RPyLwPz-VmW5mLOXg1NYEw@mail.gmail.com>
-Subject: Re: [PATCH 5.17 0943/1126] ASoC: Intel: sof_es8336: use NHLT
- information to set dmic and SSP
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        =?UTF-8?Q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87mtgzblez.wl-maz@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 4:14 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
->
-> [ Upstream commit 651c304df7f6e3fbb4779527efa3eb128ef91329 ]
->
-> Since we see a proliferation of devices with various configurations,
-> we want to automatically set the DMIC and SSP information. This patch
-> relies on the information extracted from NHLT and partially reverts
-> existing DMI quirks added by commit a164137ce91a ("ASoC: Intel: add
-> machine driver for SOF+ES8336")
->
-> Note that NHLT can report multiple SSPs, choosing from the
-> ssp_link_mask in an MSB-first manner was found experimentally to work
-> fine.
->
-> The only thing that cannot be detected is the GPIO type, and users may
-> want to use the quirk override parameter if the 'wrong' solution is
-> provided.
->
-> Tested-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-> Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
-> Link: https://lore.kernel.org/r/20220308192610.392950-15-pierre-louis.bossart@linux.intel.com
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+On Tue, Apr 05, 2022 at 04:27:16PM +0100, Marc Zyngier wrote:
+> On Mon, 04 Apr 2022 18:02:02 +0100,
+> Jason Gunthorpe <jgg@ziepe.ca> wrote:
+> > 
+> > On Mon, Apr 04, 2022 at 03:47:11PM +0100, Marc Zyngier wrote:
+> > > > I'm guessing it will turn into a SBSA like thing where the ARM ARM is
+> > > > kind of vauge but a SOC has to implement Normal-NC in a certain way to
+> > > > be functional for the server market.
+> > > 
+> > > The main issue is that this equivalence isn't architected, so people
+> > > can build whatever they want. SBSA means nothing to KVM (or Linux at
+> > > large), and there is currently no way to describe which devices are
+> > > safe to map as Normal-NC vs Device.
+> > 
+> > And people have, we know of some ARM SOC's that don't work fully with
+> > NORMAL_NC for this usage. That is already a problem for baremetal
+> > Linux, let alone KVM..
+> > 
+> > That is why I likened it to SBSA - if you want to build a server SOC
+> > that works with existing server software, you have to support
+> > NORMAL_NC in this way. Even if it isn't architected.
+> 
+> I see it the other way around. If it isn't architected (and in this
+> case not even detectable in a scalable way), it simply isn't
+> supportable by SW.
 
-It seems this patch is missing a dependent patch in the backport,
-specifically commit
-679aa83a0fb70dcbf9e97cbdfd573e6fc8bf9b1a ASoC: soc-acpi: add
-information on I2S/TDM link mask
+Except the software already supports it. Catalin decided NORMAL_NC
+would be how Linux works in 2014 in commit de2db7432917 ("arm64: Make
+DMA coherent and strongly ordered mappings not executable")
 
-sound/soc/intel/boards/sof_es8336.c: In function 'sof_es8336_probe':
-sound/soc/intel/boards/sof_es8336.c:482:32: error: 'struct
-snd_soc_acpi_mach_params' has no member named 'i2s_link_mask'; did you
-mean 'link_mask'?
-  482 |         if (!mach->mach_params.i2s_link_mask) {
-      |                                ^~~~~~~~~~~~~
-      |                                link_mask
-sound/soc/intel/boards/sof_es8336.c:494:39: error: 'struct
-snd_soc_acpi_mach_params' has no member named 'i2s_link_mask'; did you
-mean 'link_mask'?
-  494 |                 if (mach->mach_params.i2s_link_mask & BIT(2))
-      |                                       ^~~~~~~~~~~~~
-      |                                       link_mask
-sound/soc/intel/boards/sof_es8336.c:496:44: error: 'struct
-snd_soc_acpi_mach_params' has no member named 'i2s_link_mask'; did you
-mean 'link_mask'?
-  496 |                 else if (mach->mach_params.i2s_link_mask & BIT(1))
-      |                                            ^~~~~~~~~~~~~
-      |                                            link_mask
-sound/soc/intel/boards/sof_es8336.c:498:45: error: 'struct
-snd_soc_acpi_mach_params' has no member named 'i2s_link_mask'; did you
-mean 'link_mask'?
-  498 |                 else  if (mach->mach_params.i2s_link_mask & BIT(0))
-      |                                             ^~~~~~~~~~~~~
-      |                                             link_mask
-make[4]: *** [scripts/Makefile.build:288:
-sound/soc/intel/boards/sof_es8336.o] Error 1
+There are 47 places under drivers/ that call pgprot_writecombine()
+already, and if you make a "server" kind of chip you are likely to
+encounter these drivers and must support them. Linux has created a
+de-facto spec here.
 
-Justin
+While I agree the current situation in ARM64 is not nice and could be
+improved, it has been supported by SW this way for a long time
+already.
 
->  sound/soc/intel/boards/sof_es8336.c | 56 +++++++++++++++++++++--------
->  1 file changed, 41 insertions(+), 15 deletions(-)
->
-> diff --git a/sound/soc/intel/boards/sof_es8336.c b/sound/soc/intel/boards/sof_es8336.c
-> index 20d577eaab6d..46e453915f82 100644
-> --- a/sound/soc/intel/boards/sof_es8336.c
-> +++ b/sound/soc/intel/boards/sof_es8336.c
-> @@ -228,24 +228,25 @@ static int sof_es8336_quirk_cb(const struct dmi_system_id *id)
->         return 1;
->  }
->
-> +/*
-> + * this table should only be used to add GPIO or jack-detection quirks
-> + * that cannot be detected from ACPI tables. The SSP and DMIC
-> + * information are providing by the platform driver and are aligned
-> + * with the topology used.
-> + *
-> + * If the GPIO support is missing, the quirk parameter can be used to
-> + * enable speakers. In that case it's recommended to keep the SSP and DMIC
-> + * information consistent, overriding the SSP and DMIC can only be done
-> + * if the topology file is modified as well.
-> + */
->  static const struct dmi_system_id sof_es8336_quirk_table[] = {
-> -       {
-> -               .callback = sof_es8336_quirk_cb,
-> -               .matches = {
-> -                       DMI_MATCH(DMI_SYS_VENDOR, "CHUWI Innovation And Technology"),
-> -                       DMI_MATCH(DMI_BOARD_NAME, "Hi10 X"),
-> -               },
-> -               .driver_data = (void *)SOF_ES8336_SSP_CODEC(2)
-> -       },
->         {
->                 .callback = sof_es8336_quirk_cb,
->                 .matches = {
->                         DMI_MATCH(DMI_SYS_VENDOR, "IP3 tech"),
->                         DMI_MATCH(DMI_BOARD_NAME, "WN1"),
->                 },
-> -               .driver_data = (void *)(SOF_ES8336_SSP_CODEC(0) |
-> -                                       SOF_ES8336_TGL_GPIO_QUIRK |
-> -                                       SOF_ES8336_ENABLE_DMIC)
-> +               .driver_data = (void *)(SOF_ES8336_TGL_GPIO_QUIRK)
->         },
->         {}
->  };
-> @@ -470,11 +471,33 @@ static int sof_es8336_probe(struct platform_device *pdev)
->         card = &sof_es8336_card;
->         card->dev = dev;
->
-> -       if (!dmi_check_system(sof_es8336_quirk_table))
-> -               quirk = SOF_ES8336_SSP_CODEC(2);
-> +       /* check GPIO DMI quirks */
-> +       dmi_check_system(sof_es8336_quirk_table);
->
-> -       if (quirk & SOF_ES8336_ENABLE_DMIC)
-> -               dmic_be_num = 2;
-> +       if (!mach->mach_params.i2s_link_mask) {
-> +               dev_warn(dev, "No I2S link information provided, using SSP0. This may need to be modified with the quirk module parameter\n");
-> +       } else {
-> +               /*
-> +                * Set configuration based on platform NHLT.
-> +                * In this machine driver, we can only support one SSP for the
-> +                * ES8336 link, the else-if below are intentional.
-> +                * In some cases multiple SSPs can be reported by NHLT, starting MSB-first
-> +                * seems to pick the right connection.
-> +                */
-> +               unsigned long ssp = 0;
-> +
-> +               if (mach->mach_params.i2s_link_mask & BIT(2))
-> +                       ssp = SOF_ES8336_SSP_CODEC(2);
-> +               else if (mach->mach_params.i2s_link_mask & BIT(1))
-> +                       ssp = SOF_ES8336_SSP_CODEC(1);
-> +               else  if (mach->mach_params.i2s_link_mask & BIT(0))
-> +                       ssp = SOF_ES8336_SSP_CODEC(0);
-> +
-> +               quirk |= ssp;
-> +       }
-> +
-> +       if (mach->mach_params.dmic_num)
-> +               quirk |= SOF_ES8336_ENABLE_DMIC;
->
->         if (quirk_override != -1) {
->                 dev_info(dev, "Overriding quirk 0x%lx => 0x%x\n",
-> @@ -483,6 +506,9 @@ static int sof_es8336_probe(struct platform_device *pdev)
->         }
->         log_quirks(dev);
->
-> +       if (quirk & SOF_ES8336_ENABLE_DMIC)
-> +               dmic_be_num = 2;
-> +
->         sof_es8336_card.num_links += dmic_be_num + hdmi_num;
->         dai_links = sof_card_dai_links_create(dev,
->                                               SOF_ES8336_SSP_CODEC(quirk),
-> --
-> 2.34.1
->
->
->
+> > I didn't quite understand your other remarks though - is there a
+> > problem here? It seems like yes from the other thread you pointed at?
+> 
+> The main issue is that we have no idea what the behaviour is on a
+> given implementation, and no way to even detect that for a given
+> device, NORMAL_NC is a memory type that won't cause any issue.
+
+I agree with this, but that is a driver problem for calling
+pgprot_writecombine() not a KVM problem. vfio is just another driver
+in this sense.
+
+We already have arch_can_pci_mmap_wc() which is a half attempt to
+solve this problem, but ARM64 doesn't wire it up.
+
+We've also gone far enough down this path for long enough that we
+can't break all the existing systems that are working this way
+already. So I expect any future accomodation would be some FW
+indication that NORMAL_NC doesn't work for pgprot_writecombine(),
+probably in DT and probably for an embedded focused chip. Maybe
+combined with a quirk list of non-working CPU IDs or something.
+
+Wire it up to arch_can_pci_mmap_wc() and you hvae something reasonable -
+except that none of the 47 drivers actually use this call
+today. Sigh.
+
+Thanks,
+Jason

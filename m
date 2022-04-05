@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F179E4F50A4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D734F50EA
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1842784AbiDFBep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
+        id S1844025AbiDFBm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349194AbiDEJt0 (ORCPT
+        with ESMTP id S1349506AbiDEKTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:26 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2853521E39;
-        Tue,  5 Apr 2022 02:42:30 -0700 (PDT)
+        Tue, 5 Apr 2022 06:19:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA974140C2;
+        Tue,  5 Apr 2022 03:04:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 074B5CE1C6F;
-        Tue,  5 Apr 2022 09:42:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FE47C385A1;
-        Tue,  5 Apr 2022 09:42:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 246E96167E;
+        Tue,  5 Apr 2022 10:04:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38FD9C385A2;
+        Tue,  5 Apr 2022 10:04:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151747;
-        bh=vC3HpaQC66yZXonEgmL5Uq5YOTH5rq+MgVEPdR036Wo=;
+        s=korg; t=1649153081;
+        bh=65v/Mhq1vJHIlp0/ueHvsif4fe6gAfi+72RU4MfFwZI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qK1FZV5cf/lhr+U1lbjTqBgupu2epqisnZsifQ9rNEJHbJthbDi121r+qvLDvJ81f
-         QH1M4p6MatEDJ5Q427YtR8g11BpzomFWeowXg3KA6OEts+uZ40Cjo2uSEbkIXC37iY
-         j7PbG5dUxw/NlXzNqJ9E9w9Lx6B+WgWJc1zqsMXY=
+        b=Q7acPTJNdWq8cHIvG38SQPnxxvIQn7juIaBpmKRW5A4eH36+Q23gGLpnQXphKjmQ9
+         0IlgEnF7b+ViDVoYksVvLO7ZHfdSBR/sus/LruMsiwrT3gVpk6sBBVD8S+lJ4GIc9S
+         rHguGuR2RX023f3NRXW3hrbkTP+17f3GVzX6CnRg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felix Maurer <fmaurer@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 526/913] selftests/bpf: Make test_lwt_ip_encap more stable and faster
-Date:   Tue,  5 Apr 2022 09:26:28 +0200
-Message-Id: <20220405070355.618225207@linuxfoundation.org>
+        stable@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        Josef Bacik <jbacik@fb.com>, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.10 095/599] block: dont merge across cgroup boundaries if blkcg is enabled
+Date:   Tue,  5 Apr 2022 09:26:29 +0200
+Message-Id: <20220405070301.658077817@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,75 +54,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Felix Maurer <fmaurer@redhat.com>
+From: Tejun Heo <tj@kernel.org>
 
-[ Upstream commit d23a8720327d33616f584d76c80824bfa4699be6 ]
+commit 6b2b04590b51aa4cf395fcd185ce439cab5961dc upstream.
 
-In test_lwt_ip_encap, the ingress IPv6 encap test failed from time to
-time. The failure occured when an IPv4 ping through the IPv6 GRE
-encapsulation did not receive a reply within the timeout. The IPv4 ping
-and the IPv6 ping in the test used different timeouts (1 sec for IPv4
-and 6 sec for IPv6), probably taking into account that IPv6 might need
-longer to successfully complete. However, when IPv4 pings (with the
-short timeout) are encapsulated into the IPv6 tunnel, the delays of IPv6
-apply.
+blk-iocost and iolatency are cgroup aware rq-qos policies but they didn't
+disable merges across different cgroups. This obviously can lead to
+accounting and control errors but more importantly to priority inversions -
+e.g. an IO which belongs to a higher priority cgroup or IO class may end up
+getting throttled incorrectly because it gets merged to an IO issued from a
+low priority cgroup.
 
-The actual reason for the long delays with IPv6 was that the IPv6
-neighbor discovery sometimes did not complete in time. This was caused
-by the outgoing interface only having a tentative link local address,
-i.e., not having completed DAD for that lladdr. The ND was successfully
-retried after 1 sec but that was too late for the ping timeout.
+Fix it by adding blk_cgroup_mergeable() which is called from merge paths and
+rejects cross-cgroup and cross-issue_as_root merges.
 
-The IPv6 addresses for the test were already added with nodad. However,
-for the lladdrs, DAD was still performed. We now disable DAD in the test
-netns completely and just assume that the two lladdrs on each veth pair
-do not collide. This removes all the delays for IPv6 traffic in the
-test.
-
-Without the delays, we can now also reduce the delay of the IPv6 ping to
-1 sec. This makes the whole test complete faster because we don't need
-to wait for the excessive timeout for each IPv6 ping that is supposed
-to fail.
-
-Fixes: 0fde56e4385b0 ("selftests: bpf: add test_lwt_ip_encap selftest")
-Signed-off-by: Felix Maurer <fmaurer@redhat.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/4987d549d48b4e316cd5b3936de69c8d4bc75a4f.1646305899.git.fmaurer@redhat.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Fixes: d70675121546 ("block: introduce blk-iolatency io controller")
+Cc: stable@vger.kernel.org # v4.19+
+Cc: Josef Bacik <jbacik@fb.com>
+Link: https://lore.kernel.org/r/Yi/eE/6zFNyWJ+qd@slm.duckdns.org
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/bpf/test_lwt_ip_encap.sh | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ block/blk-merge.c          |   11 +++++++++++
+ include/linux/blk-cgroup.h |   17 +++++++++++++++++
+ 2 files changed, 28 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/test_lwt_ip_encap.sh b/tools/testing/selftests/bpf/test_lwt_ip_encap.sh
-index b497bb85b667..6c69c42b1d60 100755
---- a/tools/testing/selftests/bpf/test_lwt_ip_encap.sh
-+++ b/tools/testing/selftests/bpf/test_lwt_ip_encap.sh
-@@ -120,6 +120,14 @@ setup()
- 	ip netns exec ${NS2} sysctl -wq net.ipv4.conf.default.rp_filter=0
- 	ip netns exec ${NS3} sysctl -wq net.ipv4.conf.default.rp_filter=0
+--- a/block/blk-merge.c
++++ b/block/blk-merge.c
+@@ -7,6 +7,7 @@
+ #include <linux/bio.h>
+ #include <linux/blkdev.h>
+ #include <linux/scatterlist.h>
++#include <linux/blk-cgroup.h>
  
-+	# disable IPv6 DAD because it sometimes takes too long and fails tests
-+	ip netns exec ${NS1} sysctl -wq net.ipv6.conf.all.accept_dad=0
-+	ip netns exec ${NS2} sysctl -wq net.ipv6.conf.all.accept_dad=0
-+	ip netns exec ${NS3} sysctl -wq net.ipv6.conf.all.accept_dad=0
-+	ip netns exec ${NS1} sysctl -wq net.ipv6.conf.default.accept_dad=0
-+	ip netns exec ${NS2} sysctl -wq net.ipv6.conf.default.accept_dad=0
-+	ip netns exec ${NS3} sysctl -wq net.ipv6.conf.default.accept_dad=0
+ #include <trace/events/block.h>
+ 
+@@ -554,6 +555,9 @@ static inline unsigned int blk_rq_get_ma
+ static inline int ll_new_hw_segment(struct request *req, struct bio *bio,
+ 		unsigned int nr_phys_segs)
+ {
++	if (!blk_cgroup_mergeable(req, bio))
++		goto no_merge;
 +
- 	ip link add veth1 type veth peer name veth2
- 	ip link add veth3 type veth peer name veth4
- 	ip link add veth5 type veth peer name veth6
-@@ -289,7 +297,7 @@ test_ping()
- 		ip netns exec ${NS1} ping  -c 1 -W 1 -I veth1 ${IPv4_DST} 2>&1 > /dev/null
- 		RET=$?
- 	elif [ "${PROTO}" == "IPv6" ] ; then
--		ip netns exec ${NS1} ping6 -c 1 -W 6 -I veth1 ${IPv6_DST} 2>&1 > /dev/null
-+		ip netns exec ${NS1} ping6 -c 1 -W 1 -I veth1 ${IPv6_DST} 2>&1 > /dev/null
- 		RET=$?
- 	else
- 		echo "    test_ping: unknown PROTO: ${PROTO}"
--- 
-2.34.1
-
+ 	if (blk_integrity_merge_bio(req->q, req, bio) == false)
+ 		goto no_merge;
+ 
+@@ -650,6 +654,9 @@ static int ll_merge_requests_fn(struct r
+ 	if (total_phys_segments > blk_rq_get_max_segments(req))
+ 		return 0;
+ 
++	if (!blk_cgroup_mergeable(req, next->bio))
++		return 0;
++
+ 	if (blk_integrity_merge_rq(q, req, next) == false)
+ 		return 0;
+ 
+@@ -861,6 +868,10 @@ bool blk_rq_merge_ok(struct request *rq,
+ 	if (rq->rq_disk != bio->bi_disk)
+ 		return false;
+ 
++	/* don't merge across cgroup boundaries */
++	if (!blk_cgroup_mergeable(rq, bio))
++		return false;
++
+ 	/* only merge integrity protected bio into ditto rq */
+ 	if (blk_integrity_merge_bio(rq->q, rq, bio) == false)
+ 		return false;
+--- a/include/linux/blk-cgroup.h
++++ b/include/linux/blk-cgroup.h
+@@ -24,6 +24,7 @@
+ #include <linux/atomic.h>
+ #include <linux/kthread.h>
+ #include <linux/fs.h>
++#include <linux/blk-mq.h>
+ 
+ /* percpu_counter batch for blkg_[rw]stats, per-cpu drift doesn't matter */
+ #define BLKG_STAT_CPU_BATCH	(INT_MAX / 2)
+@@ -599,6 +600,21 @@ static inline void blkcg_clear_delay(str
+ 		atomic_dec(&blkg->blkcg->css.cgroup->congestion_count);
+ }
+ 
++/**
++ * blk_cgroup_mergeable - Determine whether to allow or disallow merges
++ * @rq: request to merge into
++ * @bio: bio to merge
++ *
++ * @bio and @rq should belong to the same cgroup and their issue_as_root should
++ * match. The latter is necessary as we don't want to throttle e.g. a metadata
++ * update because it happens to be next to a regular IO.
++ */
++static inline bool blk_cgroup_mergeable(struct request *rq, struct bio *bio)
++{
++	return rq->bio->bi_blkg == bio->bi_blkg &&
++		bio_issue_as_root_blkg(rq->bio) == bio_issue_as_root_blkg(bio);
++}
++
+ void blk_cgroup_bio_start(struct bio *bio);
+ void blkcg_add_delay(struct blkcg_gq *blkg, u64 now, u64 delta);
+ void blkcg_schedule_throttle(struct request_queue *q, bool use_memdelay);
+@@ -654,6 +670,7 @@ static inline void blkg_put(struct blkcg
+ static inline bool blkcg_punt_bio_submit(struct bio *bio) { return false; }
+ static inline void blkcg_bio_issue_init(struct bio *bio) { }
+ static inline void blk_cgroup_bio_start(struct bio *bio) { }
++static inline bool blk_cgroup_mergeable(struct request *rq, struct bio *bio) { return true; }
+ 
+ #define blk_queue_for_each_rl(rl, q)	\
+ 	for ((rl) = &(q)->root_rl; (rl); (rl) = NULL)
 
 

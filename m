@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 290D64F3C00
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60E034F3A41
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382250AbiDEMDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41304 "EHLO
+        id S1379455AbiDELlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243883AbiDEIvP (ORCPT
+        with ESMTP id S244802AbiDEIwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:51:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D09D0818;
-        Tue,  5 Apr 2022 01:40:00 -0700 (PDT)
+        Tue, 5 Apr 2022 04:52:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F3622290;
+        Tue,  5 Apr 2022 01:44:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C5FEB81BC0;
-        Tue,  5 Apr 2022 08:39:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3771C385A0;
-        Tue,  5 Apr 2022 08:39:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16889B81B18;
+        Tue,  5 Apr 2022 08:39:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69536C385A1;
+        Tue,  5 Apr 2022 08:39:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147947;
-        bh=4ZYE+YnlX6ZXr0Mpn8C8QagEhJ13qfYl0HC5aYEyi4k=;
+        s=korg; t=1649147949;
+        bh=msW2dI8/ew3KzPd9Z6LM66OajboeTObfOIEWdOuNFlM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cV3WpXyJtCWMArE2Nx7daYJWylZLeWa5vf5tAthDu4EjnCvO/s5FgYtV4vpqXyEYi
-         wR/gk5BKapW9phzULytI1CN9nQLLDYDnFrNE6x8ijjr9ZhvxMTUiEjKr2n6XgDtO3j
-         EFy3YTY16NDPE54RRBh7qPfzuLqf2tuONsa0tDG4=
+        b=p/hAun63090bidYjLshQxyoCJaxxqiT3loTakpZnUdSvJtC84MEvg9u2zv8ABhWLe
+         kErTn6dJCniSFfEuXOonrPwjzF2VBRhEYQxRHzF8ysPau8HuW1698yw0NLJrPb2AeO
+         787MWoJdRIeJ8aFfhxdCys6uBtITYeLSNva98cN0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
-        Johan Hovold <johan@kernel.org>,
-        Lad Prabhakar <prabhakar.csengg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 5.16 0179/1017] media: davinci: vpif: fix use-after-free on driver unbind
-Date:   Tue,  5 Apr 2022 09:18:12 +0200
-Message-Id: <20220405070359.548826855@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Naohiro Aota <naohiro.aota@wdc.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.16 0180/1017] btrfs: zoned: mark relocation as writing
+Date:   Tue,  5 Apr 2022 09:18:13 +0200
+Message-Id: <20220405070359.579413543@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -57,183 +56,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Naohiro Aota <naohiro.aota@wdc.com>
 
-commit 43acb728bbc40169d2e2425e84a80068270974be upstream.
+commit ca5e4ea0beaec8bc674121838bf8614c089effb9 upstream.
 
-The driver allocates and registers two platform device structures during
-probe, but the devices were never deregistered on driver unbind.
+There is a hung_task issue with running generic/068 on an SMR
+device. The hang occurs while a process is trying to thaw the
+filesystem. The process is trying to take sb->s_umount to thaw the
+FS. The lock is held by fsstress, which calls btrfs_sync_fs() and is
+waiting for an ordered extent to finish. However, as the FS is frozen,
+the ordered extents never finish.
 
-This results in a use-after-free on driver unbind as the device
-structures were allocated using devres and would be freed by driver
-core when remove() returns.
+Having an ordered extent while the FS is frozen is the root cause of
+the hang. The ordered extent is initiated from btrfs_relocate_chunk()
+which is called from btrfs_reclaim_bgs_work().
 
-Fix this by adding the missing deregistration calls to the remove()
-callback and failing probe on registration errors.
+This commit adds sb_*_write() around btrfs_relocate_chunk() call
+site. For the usual "btrfs balance" command, we already call it with
+mnt_want_file() in btrfs_ioctl_balance().
 
-Note that the platform device structures must be freed using a proper
-release callback to avoid leaking associated resources like device
-names.
-
-Fixes: 479f7a118105 ("[media] davinci: vpif: adaptions for DT support")
-Cc: stable@vger.kernel.org      # 4.12
-Cc: Kevin Hilman <khilman@baylibre.com>
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Reviewed-by: Lad Prabhakar <prabhakar.csengg@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 18bb8bbf13c1 ("btrfs: zoned: automatically reclaim zones")
+CC: stable@vger.kernel.org # 5.13+
+Link: https://github.com/naota/linux/issues/56
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Signed-off-by: Naohiro Aota <naohiro.aota@wdc.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/platform/davinci/vpif.c |   97 ++++++++++++++++++++++++----------
- 1 file changed, 71 insertions(+), 26 deletions(-)
+ fs/btrfs/block-group.c |    8 +++++++-
+ fs/btrfs/volumes.c     |    3 +++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
---- a/drivers/media/platform/davinci/vpif.c
-+++ b/drivers/media/platform/davinci/vpif.c
-@@ -41,6 +41,11 @@ MODULE_ALIAS("platform:" VPIF_DRIVER_NAM
- #define VPIF_CH2_MAX_MODES	15
- #define VPIF_CH3_MAX_MODES	2
+--- a/fs/btrfs/block-group.c
++++ b/fs/btrfs/block-group.c
+@@ -1521,8 +1521,12 @@ void btrfs_reclaim_bgs_work(struct work_
+ 	if (!test_bit(BTRFS_FS_OPEN, &fs_info->flags))
+ 		return;
  
-+struct vpif_data {
-+	struct platform_device *capture;
-+	struct platform_device *display;
-+};
+-	if (!btrfs_exclop_start(fs_info, BTRFS_EXCLOP_BALANCE))
++	sb_start_write(fs_info->sb);
 +
- DEFINE_SPINLOCK(vpif_lock);
- EXPORT_SYMBOL_GPL(vpif_lock);
++	if (!btrfs_exclop_start(fs_info, BTRFS_EXCLOP_BALANCE)) {
++		sb_end_write(fs_info->sb);
+ 		return;
++	}
  
-@@ -423,17 +428,31 @@ int vpif_channel_getfid(u8 channel_id)
+ 	/*
+ 	 * Long running balances can keep us blocked here for eternity, so
+@@ -1530,6 +1534,7 @@ void btrfs_reclaim_bgs_work(struct work_
+ 	 */
+ 	if (!mutex_trylock(&fs_info->reclaim_bgs_lock)) {
+ 		btrfs_exclop_finish(fs_info);
++		sb_end_write(fs_info->sb);
+ 		return;
+ 	}
+ 
+@@ -1604,6 +1609,7 @@ next:
+ 	spin_unlock(&fs_info->unused_bgs_lock);
+ 	mutex_unlock(&fs_info->reclaim_bgs_lock);
+ 	btrfs_exclop_finish(fs_info);
++	sb_end_write(fs_info->sb);
  }
- EXPORT_SYMBOL(vpif_channel_getfid);
  
-+static void vpif_pdev_release(struct device *dev)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+
-+	kfree(pdev);
-+}
-+
- static int vpif_probe(struct platform_device *pdev)
- {
- 	static struct resource *res_irq;
- 	struct platform_device *pdev_capture, *pdev_display;
- 	struct device_node *endpoint = NULL;
-+	struct vpif_data *data;
- 	int ret;
+ void btrfs_reclaim_bgs(struct btrfs_fs_info *fs_info)
+--- a/fs/btrfs/volumes.c
++++ b/fs/btrfs/volumes.c
+@@ -8263,10 +8263,12 @@ static int relocating_repair_kthread(voi
+ 	target = cache->start;
+ 	btrfs_put_block_group(cache);
  
- 	vpif_base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(vpif_base))
- 		return PTR_ERR(vpif_base);
- 
-+	data = kzalloc(sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	platform_set_drvdata(pdev, data);
-+
- 	pm_runtime_enable(&pdev->dev);
- 	pm_runtime_get(&pdev->dev);
- 
-@@ -461,49 +480,75 @@ static int vpif_probe(struct platform_de
- 		goto err_put_rpm;
++	sb_start_write(fs_info->sb);
+ 	if (!btrfs_exclop_start(fs_info, BTRFS_EXCLOP_BALANCE)) {
+ 		btrfs_info(fs_info,
+ 			   "zoned: skip relocating block group %llu to repair: EBUSY",
+ 			   target);
++		sb_end_write(fs_info->sb);
+ 		return -EBUSY;
  	}
  
--	pdev_capture = devm_kzalloc(&pdev->dev, sizeof(*pdev_capture),
--				    GFP_KERNEL);
--	if (pdev_capture) {
--		pdev_capture->name = "vpif_capture";
--		pdev_capture->id = -1;
--		pdev_capture->resource = res_irq;
--		pdev_capture->num_resources = 1;
--		pdev_capture->dev.dma_mask = pdev->dev.dma_mask;
--		pdev_capture->dev.coherent_dma_mask = pdev->dev.coherent_dma_mask;
--		pdev_capture->dev.parent = &pdev->dev;
--		platform_device_register(pdev_capture);
--	} else {
--		dev_warn(&pdev->dev, "Unable to allocate memory for pdev_capture.\n");
-+	pdev_capture = kzalloc(sizeof(*pdev_capture), GFP_KERNEL);
-+	if (!pdev_capture) {
-+		ret = -ENOMEM;
-+		goto err_put_rpm;
- 	}
- 
--	pdev_display = devm_kzalloc(&pdev->dev, sizeof(*pdev_display),
--				    GFP_KERNEL);
--	if (pdev_display) {
--		pdev_display->name = "vpif_display";
--		pdev_display->id = -1;
--		pdev_display->resource = res_irq;
--		pdev_display->num_resources = 1;
--		pdev_display->dev.dma_mask = pdev->dev.dma_mask;
--		pdev_display->dev.coherent_dma_mask = pdev->dev.coherent_dma_mask;
--		pdev_display->dev.parent = &pdev->dev;
--		platform_device_register(pdev_display);
--	} else {
--		dev_warn(&pdev->dev, "Unable to allocate memory for pdev_display.\n");
-+	pdev_capture->name = "vpif_capture";
-+	pdev_capture->id = -1;
-+	pdev_capture->resource = res_irq;
-+	pdev_capture->num_resources = 1;
-+	pdev_capture->dev.dma_mask = pdev->dev.dma_mask;
-+	pdev_capture->dev.coherent_dma_mask = pdev->dev.coherent_dma_mask;
-+	pdev_capture->dev.parent = &pdev->dev;
-+	pdev_capture->dev.release = vpif_pdev_release;
-+
-+	ret = platform_device_register(pdev_capture);
-+	if (ret)
-+		goto err_put_pdev_capture;
-+
-+	pdev_display = kzalloc(sizeof(*pdev_display), GFP_KERNEL);
-+	if (!pdev_display) {
-+		ret = -ENOMEM;
-+		goto err_put_pdev_capture;
- 	}
- 
-+	pdev_display->name = "vpif_display";
-+	pdev_display->id = -1;
-+	pdev_display->resource = res_irq;
-+	pdev_display->num_resources = 1;
-+	pdev_display->dev.dma_mask = pdev->dev.dma_mask;
-+	pdev_display->dev.coherent_dma_mask = pdev->dev.coherent_dma_mask;
-+	pdev_display->dev.parent = &pdev->dev;
-+	pdev_display->dev.release = vpif_pdev_release;
-+
-+	ret = platform_device_register(pdev_display);
-+	if (ret)
-+		goto err_put_pdev_display;
-+
-+	data->capture = pdev_capture;
-+	data->display = pdev_display;
-+
- 	return 0;
- 
-+err_put_pdev_display:
-+	platform_device_put(pdev_display);
-+err_put_pdev_capture:
-+	platform_device_put(pdev_capture);
- err_put_rpm:
- 	pm_runtime_put(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
-+	kfree(data);
+@@ -8294,6 +8296,7 @@ out:
+ 		btrfs_put_block_group(cache);
+ 	mutex_unlock(&fs_info->reclaim_bgs_lock);
+ 	btrfs_exclop_finish(fs_info);
++	sb_end_write(fs_info->sb);
  
  	return ret;
  }
- 
- static int vpif_remove(struct platform_device *pdev)
- {
-+	struct vpif_data *data = platform_get_drvdata(pdev);
-+
-+	if (data->capture)
-+		platform_device_unregister(data->capture);
-+	if (data->display)
-+		platform_device_unregister(data->display);
-+
- 	pm_runtime_put(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
-+
-+	kfree(data);
-+
- 	return 0;
- }
- 
 
 

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6331D4F45F5
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AAD34F43AF
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238413AbiDEMoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41494 "EHLO
+        id S1349509AbiDEUCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242704AbiDEJIS (ORCPT
+        with ESMTP id S1345179AbiDEJst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:08:18 -0400
+        Tue, 5 Apr 2022 05:48:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DB275E60;
-        Tue,  5 Apr 2022 01:57:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B32EEE4F4;
+        Tue,  5 Apr 2022 02:37:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CD8461577;
-        Tue,  5 Apr 2022 08:57:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C8D6C385A0;
-        Tue,  5 Apr 2022 08:57:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C946D6164D;
+        Tue,  5 Apr 2022 09:37:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4AFEC385A2;
+        Tue,  5 Apr 2022 09:37:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149031;
-        bh=bLgjVcnUj4tcrOszUiESG7XYIWk+hFyD1xAOR+/+N1A=;
+        s=korg; t=1649151469;
+        bh=IbeurulMDdnYp8aYTOTd5w6wDxHc+on3dCF14Ycz08E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pn+WPR+B1GoAyk0PwMbIIZMl6iy59aJ1SXxBsNtIre7/504rdehEvRbUoKa3hfcCA
-         kBkr4jYGz0GbPhMu7leItBi6xUrFb/6GTWz8Wt4mawwaNp7A9vzoCN4NJk8eMiH4Yi
-         FN4ZnE5FjOr+81QBI9W3i0Pj7vmSgE/v4/ZRVTHg=
+        b=TTG8V6lt4aZ8Mo+g1XgfvZNsSfPxn5/tTO2QywfSnGIlm3Ka21TN9lFFdjiJdsPVq
+         p6aHPRNJmOMiHIwnp7MNUuIllhaZc5sgM25nVdzcOrSUQNE6zeeaZ2LgvEBzKmUan+
+         1tUI17In8/a8U9PnYaa3/pfbsetQ4D7Ez1fMYvus=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Divya Koppera <Divya.Koppera@microchip.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0569/1017] net: phy: micrel: Fix concurrent register access
-Date:   Tue,  5 Apr 2022 09:24:42 +0200
-Message-Id: <20220405070411.169298291@linuxfoundation.org>
+        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
+        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 427/913] mt76: mt7615: check sta_rates pointer in mt7615_sta_rate_tbl_update
+Date:   Tue,  5 Apr 2022 09:24:49 +0200
+Message-Id: <20220405070352.644091878@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,74 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Divya Koppera <Divya.Koppera@microchip.com>
+From: Lorenzo Bianconi <lorenzo@kernel.org>
 
-[ Upstream commit 4488f6b6148045424459ef1d5b153c6895ee1dbb ]
+[ Upstream commit 6a6f457ed5fdf6777536c20644a9e42128a50ec2 ]
 
-Make Extended page register accessing atomic,
-to overcome unexpected output from register
-reads/writes.
+Check sta_rates pointer value in mt7615_sta_rate_tbl_update routine
+since minstrel_ht_update_rates can fail allocating rates array.
 
-Fixes: 7c2dcfa295b1 ("net: phy: micrel: Add support for LAN8804 PHY")
-Signed-off-by: Divya Koppera<Divya.Koppera@microchip.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 04b8e65922f63 ("mt76: add mac80211 driver for MT7615 PCIe-based chipsets")
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/micrel.c | 32 +++++++++++++++++---------------
- 1 file changed, 17 insertions(+), 15 deletions(-)
+ drivers/net/wireless/mediatek/mt76/mt7615/main.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-index 76ef4e019ca9..15fe0fa78092 100644
---- a/drivers/net/phy/micrel.c
-+++ b/drivers/net/phy/micrel.c
-@@ -1575,11 +1575,13 @@ static int lanphy_read_page_reg(struct phy_device *phydev, int page, u32 addr)
- {
- 	u32 data;
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7615/main.c b/drivers/net/wireless/mediatek/mt76/mt7615/main.c
+index fc266da54fe7..60a41d082961 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7615/main.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7615/main.c
+@@ -682,6 +682,9 @@ static void mt7615_sta_rate_tbl_update(struct ieee80211_hw *hw,
+ 	struct ieee80211_sta_rates *sta_rates = rcu_dereference(sta->rates);
+ 	int i;
  
--	phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL, page);
--	phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, addr);
--	phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL,
--		  (page | LAN_EXT_PAGE_ACCESS_CTRL_EP_FUNC));
--	data = phy_read(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA);
-+	phy_lock_mdio_bus(phydev);
-+	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL, page);
-+	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, addr);
-+	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL,
-+		    (page | LAN_EXT_PAGE_ACCESS_CTRL_EP_FUNC));
-+	data = __phy_read(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA);
-+	phy_unlock_mdio_bus(phydev);
- 
- 	return data;
- }
-@@ -1587,18 +1589,18 @@ static int lanphy_read_page_reg(struct phy_device *phydev, int page, u32 addr)
- static int lanphy_write_page_reg(struct phy_device *phydev, int page, u16 addr,
- 				 u16 val)
- {
--	phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL, page);
--	phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, addr);
--	phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL,
--		  (page | LAN_EXT_PAGE_ACCESS_CTRL_EP_FUNC));
--
--	val = phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, val);
--	if (val) {
-+	phy_lock_mdio_bus(phydev);
-+	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL, page);
-+	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, addr);
-+	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL,
-+		    page | LAN_EXT_PAGE_ACCESS_CTRL_EP_FUNC);
++	if (!sta_rates)
++		return;
 +
-+	val = __phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, val);
-+	if (val != 0)
- 		phydev_err(phydev, "Error: phy_write has returned error %d\n",
- 			   val);
--		return val;
--	}
--	return 0;
-+	phy_unlock_mdio_bus(phydev);
-+	return val;
- }
- 
- static int lan8804_config_init(struct phy_device *phydev)
+ 	spin_lock_bh(&dev->mt76.lock);
+ 	for (i = 0; i < ARRAY_SIZE(msta->rates); i++) {
+ 		msta->rates[i].idx = sta_rates->rate[i].idx;
 -- 
 2.34.1
 

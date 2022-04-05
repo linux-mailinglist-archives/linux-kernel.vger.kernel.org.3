@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C794F41C1
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 948314F42C7
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384839AbiDENch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43064 "EHLO
+        id S1384400AbiDENcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345771AbiDEJXB (ORCPT
+        with ESMTP id S1345829AbiDEJXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:23:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A718CCFB;
-        Tue,  5 Apr 2022 02:12:08 -0700 (PDT)
+        Tue, 5 Apr 2022 05:23:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90EEA0BF1;
+        Tue,  5 Apr 2022 02:12:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1939B81A12;
-        Tue,  5 Apr 2022 09:12:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AC69C385A3;
-        Tue,  5 Apr 2022 09:12:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 525616164D;
+        Tue,  5 Apr 2022 09:12:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BCB2C385A0;
+        Tue,  5 Apr 2022 09:12:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149926;
-        bh=CtNUPttv43ymyB/SUDL/IvZBJI2TaBEMgGHG76F1Mz0=;
+        s=korg; t=1649149937;
+        bh=Vsh+HEtCiPguM+o61XlDzjkagD1hYteDwNcaJuONtvk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wp3ArhXInp6yc3/7i6/nZAq1mesovDRq+irpz8CmbBb2jS1Vg0tHiX53YWRgudXt6
-         hE3oIajVdHAC3fc04tJO4ks9lO7sGCAMkBnw+kH4KDtwCMQsoFfuFawS7y+IwLE/+W
-         70j4T7QrmuW9V4FgWZcOSnilglBeBEQaXKr6sLQY=
+        b=vLVMaOKtvc72bzliu3kFPwHDA8De6TFYyr4XNPUmXvqv3f47Tu4Ka2OA4CjJqoRXf
+         +SETOZjaQ8Lhss7tBkpoDLJwInQtQHGQwI2bF46k6jwbD8gyGuo+Yl6UMsidQJDWvp
+         Ct/3uSEJsgYoMB6zDwXDTiwkk6zFBcRV64xrRRC4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,9 +37,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Quinn Tran <qutran@marvell.com>,
         Nilesh Javali <njavali@marvell.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.16 0892/1017] scsi: qla2xxx: Fix laggy FC remote port session recovery
-Date:   Tue,  5 Apr 2022 09:30:05 +0200
-Message-Id: <20220405070420.706251110@linuxfoundation.org>
+Subject: [PATCH 5.16 0895/1017] scsi: qla2xxx: Fix N2N inconsistent PLOGI
+Date:   Tue,  5 Apr 2022 09:30:08 +0200
+Message-Id: <20220405070420.793945032@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -59,17 +59,15 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Quinn Tran <qutran@marvell.com>
 
-commit 713b415726f100f6644971e75ebfe1edbef1a390 upstream.
+commit c13ce47c64ea8f14e77eecb40d1e7c2ac667f898 upstream.
 
-For session recovery, driver relies on the dpc thread to initiate certain
-operations. The dpc thread runs exclusively without the Mailbox interface
-being occupied. A recent code change for heartbeat check via mailbox cmd 0
-is preventing the dpc thread from carrying out its operation. This patch
-allows the higher priority error recovery to run first before running the
-lower priority heartbeat check.
+For N2N topology, ELS Passthrough is used to send PLOGI. On failure of ELS
+pass through PLOGI, driver flipped over to using LLIOCB PLOGI for N2N. This
+is not consistent. Delete the session to restart the connection where ELS
+pass through PLOGI would be used consistently.
 
-Link: https://lore.kernel.org/r/20220310092604.22950-9-njavali@marvell.com
-Fixes: d94d8158e184 ("scsi: qla2xxx: Add heartbeat check")
+Link: https://lore.kernel.org/r/20220310092604.22950-7-njavali@marvell.com
+Fixes: c76ae845ea83 ("scsi: qla2xxx: Add error handling for PLOGI ELS passthrough")
 Cc: stable@vger.kernel.org
 Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
 Signed-off-by: Quinn Tran <qutran@marvell.com>
@@ -77,72 +75,39 @@ Signed-off-by: Nilesh Javali <njavali@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_def.h |    1 +
- drivers/scsi/qla2xxx/qla_os.c  |   20 +++++++++++++++++---
- 2 files changed, 18 insertions(+), 3 deletions(-)
+ drivers/scsi/qla2xxx/qla_iocb.c |    8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
---- a/drivers/scsi/qla2xxx/qla_def.h
-+++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -4621,6 +4621,7 @@ struct qla_hw_data {
- 	struct workqueue_struct *wq;
- 	struct work_struct heartbeat_work;
- 	struct qlfc_fw fw_buf;
-+	unsigned long last_heartbeat_run_jiffies;
+--- a/drivers/scsi/qla2xxx/qla_iocb.c
++++ b/drivers/scsi/qla2xxx/qla_iocb.c
+@@ -2943,6 +2943,7 @@ static void qla2x00_els_dcmd2_sp_done(sr
+ 					set_bit(ISP_ABORT_NEEDED,
+ 					    &vha->dpc_flags);
+ 					qla2xxx_wake_dpc(vha);
++					break;
+ 				}
+ 				fallthrough;
+ 			default:
+@@ -2952,9 +2953,7 @@ static void qla2x00_els_dcmd2_sp_done(sr
+ 				    fw_status[0], fw_status[1], fw_status[2]);
  
- 	/* FCP_CMND priority support */
- 	struct qla_fcp_prio_cfg *fcp_prio_cfg;
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -7209,7 +7209,7 @@ skip:
- 	return do_heartbeat;
- }
+ 				fcport->flags &= ~FCF_ASYNC_SENT;
+-				qla2x00_set_fcport_disc_state(fcport,
+-				    DSC_LOGIN_FAILED);
+-				set_bit(RELOGIN_NEEDED, &vha->dpc_flags);
++				qlt_schedule_sess_for_deletion(fcport);
+ 				break;
+ 			}
+ 			break;
+@@ -2966,8 +2965,7 @@ static void qla2x00_els_dcmd2_sp_done(sr
+ 			    fw_status[0], fw_status[1], fw_status[2]);
  
--static void qla_heart_beat(struct scsi_qla_host *vha)
-+static void qla_heart_beat(struct scsi_qla_host *vha, u16 dpc_started)
- {
- 	struct qla_hw_data *ha = vha->hw;
+ 			sp->fcport->flags &= ~FCF_ASYNC_SENT;
+-			qla2x00_set_fcport_disc_state(fcport, DSC_LOGIN_FAILED);
+-			set_bit(RELOGIN_NEEDED, &vha->dpc_flags);
++			qlt_schedule_sess_for_deletion(fcport);
+ 			break;
+ 		}
  
-@@ -7219,8 +7219,19 @@ static void qla_heart_beat(struct scsi_q
- 	if (vha->hw->flags.eeh_busy || qla2x00_chip_is_down(vha))
- 		return;
- 
--	if (qla_do_heartbeat(vha))
-+	/*
-+	 * dpc thread cannot run if heartbeat is running at the same time.
-+	 * We also do not want to starve heartbeat task. Therefore, do
-+	 * heartbeat task at least once every 5 seconds.
-+	 */
-+	if (dpc_started &&
-+	    time_before(jiffies, ha->last_heartbeat_run_jiffies + 5 * HZ))
-+		return;
-+
-+	if (qla_do_heartbeat(vha)) {
-+		ha->last_heartbeat_run_jiffies = jiffies;
- 		queue_work(ha->wq, &ha->heartbeat_work);
-+	}
- }
- 
- /**************************************************************************
-@@ -7411,6 +7422,8 @@ qla2x00_timer(struct timer_list *t)
- 		start_dpc++;
- 	}
- 
-+	/* borrowing w to signify dpc will run */
-+	w = 0;
- 	/* Schedule the DPC routine if needed */
- 	if ((test_bit(ISP_ABORT_NEEDED, &vha->dpc_flags) ||
- 	    test_bit(LOOP_RESYNC_NEEDED, &vha->dpc_flags) ||
-@@ -7443,9 +7456,10 @@ qla2x00_timer(struct timer_list *t)
- 		    test_bit(RELOGIN_NEEDED, &vha->dpc_flags),
- 		    test_bit(PROCESS_PUREX_IOCB, &vha->dpc_flags));
- 		qla2xxx_wake_dpc(vha);
-+		w = 1;
- 	}
- 
--	qla_heart_beat(vha);
-+	qla_heart_beat(vha, w);
- 
- 	qla2x00_restart_timer(vha, WATCH_INTERVAL);
- }
 
 

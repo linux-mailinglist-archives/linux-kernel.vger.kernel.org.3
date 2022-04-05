@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 495C44F45C4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D19BF4F47CD
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386139AbiDEMkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59670 "EHLO
+        id S240377AbiDEVVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236747AbiDEJDe (ORCPT
+        with ESMTP id S1348798AbiDEJsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:03:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A321097;
-        Tue,  5 Apr 2022 01:55:23 -0700 (PDT)
+        Tue, 5 Apr 2022 05:48:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6778B6DE;
+        Tue,  5 Apr 2022 02:35:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55A1AB81BC5;
-        Tue,  5 Apr 2022 08:55:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8BA9C385A0;
-        Tue,  5 Apr 2022 08:55:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AAB1615E5;
+        Tue,  5 Apr 2022 09:35:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D79AC385A0;
+        Tue,  5 Apr 2022 09:35:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148921;
-        bh=L6eP2xInAx8Yc/Dtn99mdaT/6HwILm+CN2lMGkmDi9o=;
+        s=korg; t=1649151341;
+        bh=FM40Sum4E3GKALIV4MiLpgEC9bKb3cKTTuUrE3SrG1U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0pwjraziUoH5xbSKfdzXt5H6RdH6gGhdJFUVNc2MIN7oKYT3Tjb3f3doGxkOa6HRC
-         ElRz6fgn6LC6hm5UE6W741gl3554Y0Lmq6wNacJZKq4k3hSh/2fGL92mobG4EmFz1j
-         /GevsOM0MOjmSI0T0kmkKqaaq5fad2RBmqH2e/9k=
+        b=WWRessIS3RDfxmYtnXMu9StB6qu2hVLiI6DdHpqnmhbAhjwCwloPPR6deOmlTwjj/
+         0FFOBA9ht2H4XWVphl0fcZodVSvEpkHSqMUQL+PEQj5FveqgNAQLgo3MuMffosLbXJ
+         oso6iLWx/6OEA7gupmEqG1ASBdEtQxy1fMVWpBfI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hiral Patel <hiralpat@cisco.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Jagan Teki <jagan@amarulasolutions.com>,
+        Robert Foss <robert.foss@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0529/1017] scsi: fnic: Fix a tracing statement
-Date:   Tue,  5 Apr 2022 09:24:02 +0200
-Message-Id: <20220405070409.996745872@linuxfoundation.org>
+Subject: [PATCH 5.15 381/913] drm: bridge: adv7511: Fix ADV7535 HPD enablement
+Date:   Tue,  5 Apr 2022 09:24:03 +0200
+Message-Id: <20220405070351.267715821@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,38 +55,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bart Van Assche <bvanassche@acm.org>
+From: Jagan Teki <jagan@amarulasolutions.com>
 
-[ Upstream commit 3032ed77a28913203a4fe0ab8f05752331af79b3 ]
+[ Upstream commit 3dbc84a595d17f64f14fcea00120d31e33e98880 ]
 
-Report both the command flags and command state instead of only the
-command state.
+Existing HPD enablement logic is not compatible with ADV7535
+bridge, thus any runtime plug-in of HDMI cable is not working
+on these bridge designs.
 
-Link: https://lore.kernel.org/r/20220218195117.25689-22-bvanassche@acm.org
-Fixes: 4d7007b49d52 ("[SCSI] fnic: Fnic Trace Utility")
-Cc: Hiral Patel <hiralpat@cisco.com>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Unlike other ADV7511 family of bridges, the ADV7535 require
+HPD_OVERRIDE bit to set and reset for proper handling of HPD
+functionality.
+
+Fix it.
+
+Fixes: 8501fe4b14a3 ("drm: bridge: adv7511: Add support for ADV7535")
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220109172949.168167-1-jagan@amarulasolutions.com
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/fnic/fnic_scsi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/bridge/adv7511/adv7511.h     |  1 +
+ drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 29 +++++++++++++++-----
+ 2 files changed, 23 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/fnic/fnic_scsi.c b/drivers/scsi/fnic/fnic_scsi.c
-index 40a52feb315d..65047806a541 100644
---- a/drivers/scsi/fnic/fnic_scsi.c
-+++ b/drivers/scsi/fnic/fnic_scsi.c
-@@ -604,7 +604,7 @@ static int fnic_queuecommand_lck(struct scsi_cmnd *sc)
+diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511.h b/drivers/gpu/drm/bridge/adv7511/adv7511.h
+index 05e3abb5a0c9..1b00dfda6e0d 100644
+--- a/drivers/gpu/drm/bridge/adv7511/adv7511.h
++++ b/drivers/gpu/drm/bridge/adv7511/adv7511.h
+@@ -169,6 +169,7 @@
+ #define ADV7511_PACKET_ENABLE_SPARE2		BIT(1)
+ #define ADV7511_PACKET_ENABLE_SPARE1		BIT(0)
  
- 	FNIC_TRACE(fnic_queuecommand, sc->device->host->host_no,
- 		  tag, sc, io_req, sg_count, cmd_trace,
--		  (((u64)CMD_FLAGS(sc) >> 32) | CMD_STATE(sc)));
-+		  (((u64)CMD_FLAGS(sc) << 32) | CMD_STATE(sc)));
++#define ADV7535_REG_POWER2_HPD_OVERRIDE		BIT(6)
+ #define ADV7511_REG_POWER2_HPD_SRC_MASK		0xc0
+ #define ADV7511_REG_POWER2_HPD_SRC_BOTH		0x00
+ #define ADV7511_REG_POWER2_HPD_SRC_HPD		0x40
+diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+index 76555ae64e9c..c02f3ec60b04 100644
+--- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
++++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
+@@ -351,11 +351,17 @@ static void __adv7511_power_on(struct adv7511 *adv7511)
+ 	 * from standby or are enabled. When the HPD goes low the adv7511 is
+ 	 * reset and the outputs are disabled which might cause the monitor to
+ 	 * go to standby again. To avoid this we ignore the HPD pin for the
+-	 * first few seconds after enabling the output.
++	 * first few seconds after enabling the output. On the other hand
++	 * adv7535 require to enable HPD Override bit for proper HPD.
+ 	 */
+-	regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
+-			   ADV7511_REG_POWER2_HPD_SRC_MASK,
+-			   ADV7511_REG_POWER2_HPD_SRC_NONE);
++	if (adv7511->type == ADV7535)
++		regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
++				   ADV7535_REG_POWER2_HPD_OVERRIDE,
++				   ADV7535_REG_POWER2_HPD_OVERRIDE);
++	else
++		regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
++				   ADV7511_REG_POWER2_HPD_SRC_MASK,
++				   ADV7511_REG_POWER2_HPD_SRC_NONE);
+ }
  
- 	/* if only we issued IO, will we have the io lock */
- 	if (io_lock_acquired)
+ static void adv7511_power_on(struct adv7511 *adv7511)
+@@ -375,6 +381,10 @@ static void adv7511_power_on(struct adv7511 *adv7511)
+ static void __adv7511_power_off(struct adv7511 *adv7511)
+ {
+ 	/* TODO: setup additional power down modes */
++	if (adv7511->type == ADV7535)
++		regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
++				   ADV7535_REG_POWER2_HPD_OVERRIDE, 0);
++
+ 	regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER,
+ 			   ADV7511_POWER_POWER_DOWN,
+ 			   ADV7511_POWER_POWER_DOWN);
+@@ -672,9 +682,14 @@ adv7511_detect(struct adv7511 *adv7511, struct drm_connector *connector)
+ 			status = connector_status_disconnected;
+ 	} else {
+ 		/* Renable HPD sensing */
+-		regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
+-				   ADV7511_REG_POWER2_HPD_SRC_MASK,
+-				   ADV7511_REG_POWER2_HPD_SRC_BOTH);
++		if (adv7511->type == ADV7535)
++			regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
++					   ADV7535_REG_POWER2_HPD_OVERRIDE,
++					   ADV7535_REG_POWER2_HPD_OVERRIDE);
++		else
++			regmap_update_bits(adv7511->regmap, ADV7511_REG_POWER2,
++					   ADV7511_REG_POWER2_HPD_SRC_MASK,
++					   ADV7511_REG_POWER2_HPD_SRC_BOTH);
+ 	}
+ 
+ 	adv7511->status = status;
 -- 
 2.34.1
 

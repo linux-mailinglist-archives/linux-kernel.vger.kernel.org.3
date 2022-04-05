@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96FFC4F4EB9
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8DD4F48A7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1836383AbiDFAgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56328 "EHLO
+        id S1383572AbiDEVpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:45:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350505AbiDEJ6o (ORCPT
+        with ESMTP id S1358095AbiDEK16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:58:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF4D5D199;
-        Tue,  5 Apr 2022 02:51:11 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8107B67D09;
+        Tue,  5 Apr 2022 03:15:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7AB8FB818F3;
-        Tue,  5 Apr 2022 09:51:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8416C385A2;
-        Tue,  5 Apr 2022 09:51:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18C9A6179E;
+        Tue,  5 Apr 2022 10:15:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25081C385A1;
+        Tue,  5 Apr 2022 10:15:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152269;
-        bh=WUIYG6thePESUcULHT5I4qjXkkRS99F3jg0XOg3HOro=;
+        s=korg; t=1649153720;
+        bh=F75QK3b5VpnA6kPG801y/3GqfGHfIZ0qKHqGfPz+aOo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NFnIRTM3WFK0obBwzVDADeF2ErGZLoZErxzBqI9KLZI5pZ/bfqUfgZPFEs2RnaVSq
-         MzUlsmMtABMGwAuLcsSsclurtRIyXrOO0MK7Zq9fp4tXmd6/Fz9vzobFxEx5HVC1Rs
-         gf3uyjusgoDzu7R6l7HRBFkGK/GQnj73GMqlgfO0=
+        b=gaSc3Hiok4biqAqXsVG86fVrfahd7ON0Tolh5RLWeeTUYumjgl3Q4m8o8rgr3p0ay
+         tgWgj3p9GBFVQ8qT8UBuimOjVdenViowKM/do25IgfDycjGU12ECM28ZhAi/rX1kVT
+         zKwPvkiBrtlYqbv6T3y6zAPjDRH9Hqyt5FGbbsOM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dai Ngo <dai.ngo@oracle.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
+        stable@vger.kernel.org,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Madhavan Srinivasan <maddy@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 717/913] NFSD: Fix nfsd_breaker_owns_lease() return values
-Date:   Tue,  5 Apr 2022 09:29:39 +0200
-Message-Id: <20220405070401.326185098@linuxfoundation.org>
+Subject: [PATCH 5.10 286/599] powerpc/perf: Dont use perf_hw_context for trace IMC PMU
+Date:   Tue,  5 Apr 2022 09:29:40 +0200
+Message-Id: <20220405070307.345828570@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chuck Lever <chuck.lever@oracle.com>
+From: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
 
-[ Upstream commit 50719bf3442dd6cd05159e9c98d020b3919ce978 ]
+[ Upstream commit 0198322379c25215b2778482bf1221743a76e2b5 ]
 
-These have been incorrect since the function was introduced.
+Trace IMC (In-Memory collection counters) in powerpc is useful for
+application level profiling.
 
-A proper kerneldoc comment is added since this function, though
-static, is part of an external interface.
+For trace_imc, presently task context (task_ctx_nr) is set to
+perf_hw_context. But perf_hw_context should only be used for CPU PMU.
+See commit 26657848502b ("perf/core: Verify we have a single
+perf_hw_context PMU").
 
-Reported-by: Dai Ngo <dai.ngo@oracle.com>
-Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+So for trace_imc, even though it is per thread PMU, it is preferred to
+use sw_context in order to be able to do application level monitoring.
+Hence change the task_ctx_nr to use perf_sw_context.
+
+Fixes: 012ae244845f ("powerpc/perf: Trace imc PMU functions")
+Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+Reviewed-by: Madhavan Srinivasan <maddy@linux.vnet.ibm.com>
+[mpe: Update subject & incorporate notes into change log, reflow comment]
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220202041837.65968-1-atrajeev@linux.vnet.ibm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfsd/nfs4state.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ arch/powerpc/perf/imc-pmu.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/fs/nfsd/nfs4state.c b/fs/nfsd/nfs4state.c
-index db4a47a280dc..181bc3d9f566 100644
---- a/fs/nfsd/nfs4state.c
-+++ b/fs/nfsd/nfs4state.c
-@@ -4693,6 +4693,14 @@ nfsd_break_deleg_cb(struct file_lock *fl)
- 	return ret;
- }
+diff --git a/arch/powerpc/perf/imc-pmu.c b/arch/powerpc/perf/imc-pmu.c
+index 7b25548ec42b..e8074d7f2401 100644
+--- a/arch/powerpc/perf/imc-pmu.c
++++ b/arch/powerpc/perf/imc-pmu.c
+@@ -1457,7 +1457,11 @@ static int trace_imc_event_init(struct perf_event *event)
  
-+/**
-+ * nfsd_breaker_owns_lease - Check if lease conflict was resolved
-+ * @fl: Lock state to check
-+ *
-+ * Return values:
-+ *   %true: Lease conflict was resolved
-+ *   %false: Lease conflict was not resolved.
-+ */
- static bool nfsd_breaker_owns_lease(struct file_lock *fl)
- {
- 	struct nfs4_delegation *dl = fl->fl_owner;
-@@ -4700,11 +4708,11 @@ static bool nfsd_breaker_owns_lease(struct file_lock *fl)
- 	struct nfs4_client *clp;
+ 	event->hw.idx = -1;
  
- 	if (!i_am_nfsd())
--		return NULL;
-+		return false;
- 	rqst = kthread_data(current);
- 	/* Note rq_prog == NFS_ACL_PROGRAM is also possible: */
- 	if (rqst->rq_prog != NFS_PROGRAM || rqst->rq_vers < 4)
--		return NULL;
-+		return false;
- 	clp = *(rqst->rq_lease_breaker);
- 	return dl->dl_stid.sc_client == clp;
+-	event->pmu->task_ctx_nr = perf_hw_context;
++	/*
++	 * There can only be a single PMU for perf_hw_context events which is assigned to
++	 * core PMU. Hence use "perf_sw_context" for trace_imc.
++	 */
++	event->pmu->task_ctx_nr = perf_sw_context;
+ 	event->destroy = reset_global_refc;
+ 	return 0;
  }
 -- 
 2.34.1

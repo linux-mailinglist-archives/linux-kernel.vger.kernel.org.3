@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FDF34F3DBB
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE2A4F3E21
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380829AbiDENOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
+        id S1379812AbiDENNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344227AbiDEJSu (ORCPT
+        with ESMTP id S1344231AbiDEJSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:18:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E76948E51;
-        Tue,  5 Apr 2022 02:05:53 -0700 (PDT)
+        Tue, 5 Apr 2022 05:18:52 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598B645AF5;
+        Tue,  5 Apr 2022 02:05:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF35C61572;
-        Tue,  5 Apr 2022 09:05:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA20CC385A1;
-        Tue,  5 Apr 2022 09:05:51 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BA403CE1C6E;
+        Tue,  5 Apr 2022 09:05:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0F13C385A0;
+        Tue,  5 Apr 2022 09:05:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149552;
-        bh=YGVaaR9c0okTBwvGolPk7S8tfY+4N8K28BIk4VFhkOY=;
+        s=korg; t=1649149555;
+        bh=xc5tT771KBxay9UwO9nhcapUuxOWzNj8GgPN+OHumyg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JiW2K8teU3mgG/GMriUoWHf3obB2DKr4aPbXaXeihzwnNbaSKro5TecFyNSSODB1D
-         a9q72S3ePXU5BKc97YuSrGV7FDRvyJYgZfDhfuSyzi43ezbtyJkZ4rWps2zxULUjwd
-         nkOJY1stNHPDdG6KHDFO33tptgE2gndix6gJ4HFM=
+        b=zjbjj3GPFuJsyrwlTpYSJB3do3GQAOXGGmce6PIMuZq4WCOVrKSMGD11bHl8FSkYS
+         C4bphL5o12JrgOrGDxVOWMVMyjfKbZbWAT0fEaO8w9Ga9haQI38eBw9nKjYcG7Lffw
+         8+BVxfNzZ9QNCC1c6oSFgABBKLneZiud5rIPu2Tk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Olga Kornievskaia <kolga@netapp.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        stable@vger.kernel.org,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0719/1017] NFSv4.1: dont retry BIND_CONN_TO_SESSION on session error
-Date:   Tue,  5 Apr 2022 09:27:12 +0200
-Message-Id: <20220405070415.610171714@linuxfoundation.org>
+Subject: [PATCH 5.16 0720/1017] kdb: Fix the putarea helper function
+Date:   Tue,  5 Apr 2022 09:27:13 +0200
+Message-Id: <20220405070415.638771221@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,33 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Olga Kornievskaia <kolga@netapp.com>
+From: Daniel Thompson <daniel.thompson@linaro.org>
 
-[ Upstream commit 1d15d121cc2ad4d016a7dc1493132a9696f91fc5 ]
+[ Upstream commit c1cb81429df462eca1b6ba615cddd21dd3103c46 ]
 
-There is no reason to retry the operation if a session error had
-occurred in such case result structure isn't filled out.
+Currently kdb_putarea_size() uses copy_from_kernel_nofault() to write *to*
+arbitrary kernel memory. This is obviously wrong and means the memory
+modify ('mm') command is a serious risk to debugger stability: if we poke
+to a bad address we'll double-fault and lose our debug session.
 
-Fixes: dff58530c4ca ("NFSv4.1: fix handling of backchannel binding in BIND_CONN_TO_SESSION")
-Signed-off-by: Olga Kornievskaia <kolga@netapp.com>
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Fix this the (very) obvious way.
+
+Note that there are two Fixes: tags because the API was renamed and this
+patch will only trivially backport as far as the rename (and this is
+probably enough). Nevertheless Christoph's rename did not introduce this
+problem so I wanted to record that!
+
+Fixes: fe557319aa06 ("maccess: rename probe_kernel_{read,write} to copy_{from,to}_kernel_nofault")
+Fixes: 5d5314d6795f ("kdb: core for kgdb back end (1 of 2)")
+Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Link: https://lore.kernel.org/r/20220128144055.207267-1-daniel.thompson@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/nfs4proc.c | 1 +
- 1 file changed, 1 insertion(+)
+ kernel/debug/kdb/kdb_support.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/nfs/nfs4proc.c b/fs/nfs/nfs4proc.c
-index 0abbbf5d2bdf..5298c3a278c5 100644
---- a/fs/nfs/nfs4proc.c
-+++ b/fs/nfs/nfs4proc.c
-@@ -8275,6 +8275,7 @@ nfs4_bind_one_conn_to_session_done(struct rpc_task *task, void *calldata)
- 	case -NFS4ERR_DEADSESSION:
- 		nfs4_schedule_session_recovery(clp->cl_session,
- 				task->tk_status);
-+		return;
- 	}
- 	if (args->dir == NFS4_CDFC4_FORE_OR_BOTH &&
- 			res->dir != NFS4_CDFS4_BOTH) {
+diff --git a/kernel/debug/kdb/kdb_support.c b/kernel/debug/kdb/kdb_support.c
+index df2bface866e..85cb51c4a17e 100644
+--- a/kernel/debug/kdb/kdb_support.c
++++ b/kernel/debug/kdb/kdb_support.c
+@@ -291,7 +291,7 @@ int kdb_getarea_size(void *res, unsigned long addr, size_t size)
+  */
+ int kdb_putarea_size(unsigned long addr, void *res, size_t size)
+ {
+-	int ret = copy_from_kernel_nofault((char *)addr, (char *)res, size);
++	int ret = copy_to_kernel_nofault((char *)addr, (char *)res, size);
+ 	if (ret) {
+ 		if (!KDB_STATE(SUPPRESS)) {
+ 			kdb_func_printf("Bad address 0x%lx\n", addr);
 -- 
 2.34.1
 

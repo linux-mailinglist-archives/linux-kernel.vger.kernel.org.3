@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C618B4F47FF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F484F46D9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354402AbiDEVYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
+        id S242170AbiDEUqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352028AbiDEKDt (ORCPT
+        with ESMTP id S1358090AbiDEK16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:03:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC375A9950;
-        Tue,  5 Apr 2022 02:52:45 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31CA66FB6;
+        Tue,  5 Apr 2022 03:15:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CC4F6174D;
-        Tue,  5 Apr 2022 09:52:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4090AC385A4;
-        Tue,  5 Apr 2022 09:52:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CE036179E;
+        Tue,  5 Apr 2022 10:15:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F78FC385A0;
+        Tue,  5 Apr 2022 10:15:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152364;
-        bh=hP7Ta8lHWxh6NeT9h5JeWb6KQ3S+wTrRwcg0WqNvRtc=;
+        s=korg; t=1649153717;
+        bh=7Vx2WvST/3UetrRUM4JsvOUg6Uksvk+kePktchHbQIc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DOX81iOK46H6JIOeETbK7Y0LXvcCpBsq/MOJcI4yZJfFh1giBk0lD4TzLTQEPPsQw
-         c3GCsrxH8IVZzK7tIRGHPx6cCq6BaW9+DJlYK8HHX/4ZT2rv7XBMINCCYVdjKq3QNE
-         y/V/2AP0f21I+G6d2lVWvYFaCUePtvqbSBtMNa8E=
+        b=hvFgmS9Q/wbc/nEA0ZbcDBMTCuLpm6SJa92St1uyQMj/jpOxmJ7SYuRoWsqQZPZeb
+         BS/UvrIMlQ9kKeyRLxVNie7MccJDHr+DJ+VemAPZXCC+W+V73foGePp4RU6+fn8sNA
+         hS1HjLfHi3KCOUlKXh047NmgL25OAutkae55PQfM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Jing Yao <yao.jing2@zte.com.cn>, Helge Deller <deller@gmx.de>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        James Morris <jmorris@namei.org>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        tomoyo-dev-en@lists.osdn.me, "Serge E. Hallyn" <serge@hallyn.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 751/913] video: fbdev: udlfb: replace snprintf in show functions with sysfs_emit
-Date:   Tue,  5 Apr 2022 09:30:13 +0200
-Message-Id: <20220405070402.344618103@linuxfoundation.org>
+Subject: [PATCH 5.10 321/599] TOMOYO: fix __setup handlers return values
+Date:   Tue,  5 Apr 2022 09:30:15 +0200
+Message-Id: <20220405070308.385669891@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,60 +59,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jing Yao <yao.jing2@zte.com.cn>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 81a998288956d09d7a7a2303d47e4d60ad55c401 ]
+[ Upstream commit 39844b7e3084baecef52d1498b5fa81afa2cefa9 ]
 
-Use sysfs_emit instead of scnprintf, snprintf or sprintf.
+__setup() handlers should return 1 if the parameter is handled.
+Returning 0 causes the entire string to be added to init's
+environment strings (limited to 32 strings), unnecessarily polluting it.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Jing Yao <yao.jing2@zte.com.cn>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Using the documented strings "TOMOYO_loader=string1" and
+"TOMOYO_trigger=string2" causes an Unknown parameter message:
+  Unknown kernel command line parameters
+    "BOOT_IMAGE=/boot/bzImage-517rc5 TOMOYO_loader=string1 \
+     TOMOYO_trigger=string2", will be passed to user space.
+
+and these strings are added to init's environment string space:
+  Run /sbin/init as init process
+    with arguments:
+     /sbin/init
+    with environment:
+     HOME=/
+     TERM=linux
+     BOOT_IMAGE=/boot/bzImage-517rc5
+     TOMOYO_loader=string1
+     TOMOYO_trigger=string2
+
+With this change, these __setup handlers act as expected,
+and init's environment is not polluted with these strings.
+
+Fixes: 0e4ae0e0dec63 ("TOMOYO: Make several options configurable.")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: https://lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Cc: James Morris <jmorris@namei.org>
+Cc: Kentaro Takeda <takedakn@nttdata.co.jp>
+Cc: tomoyo-dev-en@lists.osdn.me
+Cc: "Serge E. Hallyn" <serge@hallyn.com>
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/udlfb.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ security/tomoyo/load_policy.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/video/fbdev/udlfb.c b/drivers/video/fbdev/udlfb.c
-index b9cdd02c1000..90f48b71fd8f 100644
---- a/drivers/video/fbdev/udlfb.c
-+++ b/drivers/video/fbdev/udlfb.c
-@@ -1426,7 +1426,7 @@ static ssize_t metrics_bytes_rendered_show(struct device *fbdev,
- 				   struct device_attribute *a, char *buf) {
- 	struct fb_info *fb_info = dev_get_drvdata(fbdev);
- 	struct dlfb_data *dlfb = fb_info->par;
--	return snprintf(buf, PAGE_SIZE, "%u\n",
-+	return sysfs_emit(buf, "%u\n",
- 			atomic_read(&dlfb->bytes_rendered));
+diff --git a/security/tomoyo/load_policy.c b/security/tomoyo/load_policy.c
+index 3445ae6fd479..363b65be87ab 100644
+--- a/security/tomoyo/load_policy.c
++++ b/security/tomoyo/load_policy.c
+@@ -24,7 +24,7 @@ static const char *tomoyo_loader;
+ static int __init tomoyo_loader_setup(char *str)
+ {
+ 	tomoyo_loader = str;
+-	return 0;
++	return 1;
  }
  
-@@ -1434,7 +1434,7 @@ static ssize_t metrics_bytes_identical_show(struct device *fbdev,
- 				   struct device_attribute *a, char *buf) {
- 	struct fb_info *fb_info = dev_get_drvdata(fbdev);
- 	struct dlfb_data *dlfb = fb_info->par;
--	return snprintf(buf, PAGE_SIZE, "%u\n",
-+	return sysfs_emit(buf, "%u\n",
- 			atomic_read(&dlfb->bytes_identical));
+ __setup("TOMOYO_loader=", tomoyo_loader_setup);
+@@ -64,7 +64,7 @@ static const char *tomoyo_trigger;
+ static int __init tomoyo_trigger_setup(char *str)
+ {
+ 	tomoyo_trigger = str;
+-	return 0;
++	return 1;
  }
  
-@@ -1442,7 +1442,7 @@ static ssize_t metrics_bytes_sent_show(struct device *fbdev,
- 				   struct device_attribute *a, char *buf) {
- 	struct fb_info *fb_info = dev_get_drvdata(fbdev);
- 	struct dlfb_data *dlfb = fb_info->par;
--	return snprintf(buf, PAGE_SIZE, "%u\n",
-+	return sysfs_emit(buf, "%u\n",
- 			atomic_read(&dlfb->bytes_sent));
- }
- 
-@@ -1450,7 +1450,7 @@ static ssize_t metrics_cpu_kcycles_used_show(struct device *fbdev,
- 				   struct device_attribute *a, char *buf) {
- 	struct fb_info *fb_info = dev_get_drvdata(fbdev);
- 	struct dlfb_data *dlfb = fb_info->par;
--	return snprintf(buf, PAGE_SIZE, "%u\n",
-+	return sysfs_emit(buf, "%u\n",
- 			atomic_read(&dlfb->cpu_kcycles_used));
- }
- 
+ __setup("TOMOYO_trigger=", tomoyo_trigger_setup);
 -- 
 2.34.1
 

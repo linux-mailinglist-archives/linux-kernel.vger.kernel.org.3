@@ -2,105 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0ED14F4F17
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 720C24F4D7E
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1836952AbiDFAlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59722 "EHLO
+        id S231436AbiDEXng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:43:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1445217AbiDEPml (ORCPT
+        with ESMTP id S1445342AbiDEPmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:42:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8C62191437
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 07:08:05 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9388C23A;
-        Tue,  5 Apr 2022 07:08:05 -0700 (PDT)
-Received: from bogus (unknown [10.57.43.163])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 14E7D3F5A1;
-        Tue,  5 Apr 2022 07:08:03 -0700 (PDT)
-Date:   Tue, 5 Apr 2022 15:08:00 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH 1/2] ARM: vexpress/spc: Fix doxygen comments
-Message-ID: <20220405140800.baww2wrow3hdp5ho@bogus>
-References: <20220404130207.1162445-1-sudeep.holla@arm.com>
- <008aae79-4a6c-721f-7ef5-7b73f6d7e000@infradead.org>
+        Tue, 5 Apr 2022 11:42:51 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705A717E05;
+        Tue,  5 Apr 2022 07:08:33 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id E473822247;
+        Tue,  5 Apr 2022 16:08:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1649167711;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+6+1BpQJhWpIwzeox1bohwEoCNti4GjMewSwLvafwXw=;
+        b=FjoEbM8+1cMTX7ixD4Mw3f9fWtrhCqWB0k1AAf2hdMX7f6oCWMT1wXPAY4BKHa7SJ2Uefh
+        nRiJDlkMvxeECN0Hz+B+LZR9gyrz/dw/HfgISScMlZbgJrgFBhpSvJfVcPMr+lyrzY+sRR
+        5CsvQ+iUunnCwjuq9CnFA29BcFB2G4c=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <008aae79-4a6c-721f-7ef5-7b73f6d7e000@infradead.org>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Tue, 05 Apr 2022 16:08:30 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Codrin.Ciubotariu@microchip.com
+Cc:     Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
+        Claudiu.Beznea@microchip.com, sumit.semwal@linaro.org,
+        christian.koenig@amd.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, stable@vger.kernel.org
+Subject: Re: [PATCH] i2c: at91: use dma safe buffers
+In-Reply-To: <74494dda-e0cd-aa73-7e58-e4359c1ba292@microchip.com>
+References: <20220303161724.3324948-1-michael@walle.cc>
+ <46e1be55-9377-75b7-634d-9eadbebc98d7@microchip.com>
+ <bc32f1107786ebcbfb4952e1a6142304@walle.cc>
+ <360914ee-594c-86bc-2436-aa863a67953a@microchip.com>
+ <27f124c9adaf8a4fbdfb7a38456c4a2e@walle.cc>
+ <74494dda-e0cd-aa73-7e58-e4359c1ba292@microchip.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <9e715ed06a28165446e29483cca7e3d0@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy,
+Am 2022-04-05 15:58, schrieb Codrin.Ciubotariu@microchip.com:
+> On 05.04.2022 14:09, Michael Walle wrote:
+>> Am 2022-04-05 12:02, schrieb Codrin.Ciubotariu@microchip.com:
+>>> On 05.04.2022 12:38, Michael Walle wrote:
+>>>> Am 2022-04-05 11:23, schrieb Codrin.Ciubotariu@microchip.com:
+>>>>>> +       if (dev->use_dma) {
+>>>>>> +               dma_buf = i2c_get_dma_safe_msg_buf(m_start, 1);
+>>>>> 
+>>>>> If you want, you could just dev->buf = i2c_get_dma_safe...
+>>>> 
+>>>> But where is the error handling in that case? dev->buf will
+>>>> be NULL, which is eventually passed to dma_map_single().
+>>>> 
+>>>> Also, I need the dma_buf for the i2c_put_dma_safe_msg_buf()
+>>>> call anyway, because dev->buf will be modified during
+>>>> processing.
+>>> 
+>>> You still:
+>>>       if (!dev->buf) {
+>>>               ret = -ENOMEM;
+>>>               goto out;
+>>>       }
+>>> 
+>>> So, at91_do_twi_transfer()/dma_map_single() will not be called.
+>> 
+>> Ahh, I misunderstood you. Yes, but as I said, I need the dma_buf
+>> temporary variable anyway, because dev->buf is modified, eg. see
+>> at91_twi_read_data_dma_callback().
+> at91_twi_read_data_dma_callback() is called as callback if
+> dma_async_issue_pending(dma->chan_rx) is called.
+> dma_async_issue_pending(dma->chan_rx) is called on
+> at91_twi_read_data_dma(), which is called in at91_do_twi_transfer(),
+> which we decided above to skip in case of error.
 
-On Mon, Apr 04, 2022 at 05:21:39PM -0700, Randy Dunlap wrote:
-> Hi--
-> 
-> On 4/4/22 06:02, Sudeep Holla wrote:
-> > Kbuild bot reported the following doxygen build warning:
-> > 
-> >   |  arch/arm/mach-versatile/spc.c:231: warning: This comment starts with
-> >   |		'/**', but isn't a kernel-doc comment.
-> >   |		Refer Documentation/doc-guide/kernel-doc.rst
-> >   |  		* ve_spc_cpu_in_wfi(u32 cpu, u32 cluster)
-> > 
-> > Fix the issue by dropping the parameters specified in the kernel doc.
-> > 
-> > Cc: Liviu Dudau <liviu.dudau@arm.com>
-> > Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Link: https://lore.kernel.org/linux-doc/202204031026.4ogKxt89-lkp@intel.com
-> > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> > ---
-> >  arch/arm/mach-vexpress/spc.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/arm/mach-vexpress/spc.c b/arch/arm/mach-vexpress/spc.c
-> > index 1c6500c4e6a1..8f99d47d4b89 100644
-> > --- a/arch/arm/mach-vexpress/spc.c
-> > +++ b/arch/arm/mach-vexpress/spc.c
-> > @@ -228,7 +228,7 @@ static u32 standbywfi_cpu_mask(u32 cpu, u32 cluster)
-> >  }
-> >  
-> >  /**
-> > - * ve_spc_cpu_in_wfi(u32 cpu, u32 cluster)
-> > + * ve_spc_cpu_in_wfi()
-> 
-> This line still needs a "function short description," e.g.
-> 
-> + * ve_spc_cpu_in_wfi() - fooble the barfloppity
-> 
-> similar to what you did in patch 2/2.
+It is not about errors, you need the exact same pointer you
+got from i2c_get_dma_safe_msg_buf() to be passed to
+i2c_put_dma_safe_msg_buf(). And because (in some cases, it
+isn't really obvious) the dev->buf will be advanced a few
+bytes, I cannot pass dev->buf to i2c_put_dma_safe_msg_buf().
 
-I did this intentionally, I can move only this from the other patch.
-Since I saw few others w/o description, I addressed all at once in the
-second patch and just remove warning reported in this patch. I am fine
-either way.
-
-> 
-> >   *
-> >   * @cpu: mpidr[7:0] bitfield describing CPU affinity level within cluster
-> >   * @cluster: mpidr[15:8] bitfield describing cluster affinity level
-> 
-> and I would s/doxygen/kernel-doc/ for both patches.
-> 
-
-Sure will do.
-
--- 
-Regards,
-Sudeep
+-michael

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 342794F4274
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 327804F419A
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447497AbiDEUJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52170 "EHLO
+        id S1386611AbiDEUFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354202AbiDEKMP (ORCPT
+        with ESMTP id S243466AbiDEKgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:12:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC431546BD;
-        Tue,  5 Apr 2022 02:58:42 -0700 (PDT)
+        Tue, 5 Apr 2022 06:36:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBB3546A5;
+        Tue,  5 Apr 2022 03:22:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78C236167E;
-        Tue,  5 Apr 2022 09:58:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88626C385A2;
-        Tue,  5 Apr 2022 09:58:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14598B81B96;
+        Tue,  5 Apr 2022 10:22:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84B3FC385A0;
+        Tue,  5 Apr 2022 10:22:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152721;
-        bh=ExR9OgwnusTJKSrNCVHWa9/0YVov40hwrNn7KXjpx1I=;
+        s=korg; t=1649154129;
+        bh=o8wKoUb2M1W9qRi7fF9bUG326XYmoANmb7pml3OIOJs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Yy+2KOuWxVRD4QHIBxse8wIfJ8U8CADokoHI4aYeABHIN5calvwBo/6vJXmFvGBb+
-         k73alAwKmaioeAy5dMM9QMDl2RLBhQEBWhwYrEWiOJm6R/izz5OKS5CXLNLSHnNNDM
-         esyerAblxjb691MZnHv556+rjKbNcEkDPGZ+bAiA=
+        b=W/upWr6XmbA7LU08offxO3GPhKjJd2kvwKPj8ucgN4l7TWm92H29JAxOrKeVbf8b/
+         uiEJCe+azpCxK5Lo/q3TpLEqmMk1cTLKAxJvBb5S03ZjwjiTvBE/R0wyD8y3VIcgcU
+         z4ArtYb1ah2Nx98YPSooy/bhSngS0KbRt+w6x3wg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ricky WU <ricky_wu@realtek.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: [PATCH 5.15 880/913] mmc: rtsx: Use pm_runtime_{get,put}() to handle runtime PM
-Date:   Tue,  5 Apr 2022 09:32:22 +0200
-Message-Id: <20220405070406.201272246@linuxfoundation.org>
+        stable@vger.kernel.org, Chris Leech <cleech@redhat.com>,
+        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 468/599] nvme-tcp: lockdep: annotate in-kernel sockets
+Date:   Tue,  5 Apr 2022 09:32:42 +0200
+Message-Id: <20220405070312.754073685@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,220 +54,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+From: Chris Leech <cleech@redhat.com>
 
-commit 7499b529d97f752124fa62fefa1d6d44b371215a upstream.
+[ Upstream commit 841aee4d75f18fdfb53935080b03de0c65e9b92c ]
 
-Commit 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM") doesn't
-use pm_runtime_{get,put}() helpers when it should, so the RPM refcount
-keeps at zero, hence its parent driver, rtsx_pci, has to do lots of
-weird tricks to keep it from runtime suspending.
+Put NVMe/TCP sockets in their own class to avoid some lockdep warnings.
+Sockets created by nvme-tcp are not exposed to user-space, and will not
+trigger certain code paths that the general socket API exposes.
 
-So use those helpers at right places to properly manage runtime PM.
+Lockdep complains about a circular dependency between the socket and
+filesystem locks, because setsockopt can trigger a page fault with a
+socket lock held, but nvme-tcp sends requests on the socket while file
+system locks are held.
 
-Fixes: 5b4258f6721f ("misc: rtsx: rts5249 support runtime PM")
-Cc: Ricky WU <ricky_wu@realtek.com>
-Tested-by: Ricky WU <ricky_wu@realtek.com>
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Link: https://lore.kernel.org/r/20220125055010.1866563-1-kai.heng.feng@canonical.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  ======================================================
+  WARNING: possible circular locking dependency detected
+  5.15.0-rc3 #1 Not tainted
+  ------------------------------------------------------
+  fio/1496 is trying to acquire lock:
+  (sk_lock-AF_INET){+.+.}-{0:0}, at: tcp_sendpage+0x23/0x80
+
+  but task is already holding lock:
+  (&xfs_dir_ilock_class/5){+.+.}-{3:3}, at: xfs_ilock+0xcf/0x290 [xfs]
+
+  which lock already depends on the new lock.
+
+  other info that might help us debug this:
+
+  chain exists of:
+   sk_lock-AF_INET --> sb_internal --> &xfs_dir_ilock_class/5
+
+  Possible unsafe locking scenario:
+
+        CPU0                    CPU1
+        ----                    ----
+   lock(&xfs_dir_ilock_class/5);
+                                lock(sb_internal);
+                                lock(&xfs_dir_ilock_class/5);
+   lock(sk_lock-AF_INET);
+
+  *** DEADLOCK ***
+
+  6 locks held by fio/1496:
+   #0: (sb_writers#13){.+.+}-{0:0}, at: path_openat+0x9fc/0xa20
+   #1: (&inode->i_sb->s_type->i_mutex_dir_key){++++}-{3:3}, at: path_openat+0x296/0xa20
+   #2: (sb_internal){.+.+}-{0:0}, at: xfs_trans_alloc_icreate+0x41/0xd0 [xfs]
+   #3: (&xfs_dir_ilock_class/5){+.+.}-{3:3}, at: xfs_ilock+0xcf/0x290 [xfs]
+   #4: (hctx->srcu){....}-{0:0}, at: hctx_lock+0x51/0xd0
+   #5: (&queue->send_mutex){+.+.}-{3:3}, at: nvme_tcp_queue_rq+0x33e/0x380 [nvme_tcp]
+
+This annotation lets lockdep analyze nvme-tcp controlled sockets
+independently of what the user-space sockets API does.
+
+Link: https://lore.kernel.org/linux-nvme/CAHj4cs9MDYLJ+q+2_GXUK9HxFizv2pxUryUR0toX974M040z7g@mail.gmail.com/
+
+Signed-off-by: Chris Leech <cleech@redhat.com>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/host/rtsx_pci_sdmmc.c |   44 ++++++++++++++++++++++++++++----------
- 1 file changed, 33 insertions(+), 11 deletions(-)
+ drivers/nvme/host/tcp.c | 40 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
---- a/drivers/mmc/host/rtsx_pci_sdmmc.c
-+++ b/drivers/mmc/host/rtsx_pci_sdmmc.c
-@@ -806,6 +806,7 @@ static void sd_request(struct work_struc
- 	struct mmc_request *mrq = host->mrq;
- 	struct mmc_command *cmd = mrq->cmd;
- 	struct mmc_data *data = mrq->data;
-+	struct device *dev = &host->pdev->dev;
+diff --git a/drivers/nvme/host/tcp.c b/drivers/nvme/host/tcp.c
+index 6105894a218a..7e3932033707 100644
+--- a/drivers/nvme/host/tcp.c
++++ b/drivers/nvme/host/tcp.c
+@@ -30,6 +30,44 @@ static int so_priority;
+ module_param(so_priority, int, 0644);
+ MODULE_PARM_DESC(so_priority, "nvme tcp socket optimize priority");
  
- 	unsigned int data_size = 0;
- 	int err;
-@@ -822,6 +823,7 @@ static void sd_request(struct work_struc
- 	}
- 
- 	mutex_lock(&pcr->pcr_mutex);
-+	pm_runtime_get_sync(dev);
- 
- 	rtsx_pci_start_run(pcr);
- 
-@@ -858,6 +860,8 @@ static void sd_request(struct work_struc
- 			data->bytes_xfered = data->blocks * data->blksz;
- 	}
- 
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
- 	mutex_unlock(&pcr->pcr_mutex);
- 
- finish:
-@@ -1080,6 +1084,7 @@ static void sdmmc_set_ios(struct mmc_hos
- {
- 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
- 	struct rtsx_pcr *pcr = host->pcr;
-+	struct device *dev = &host->pdev->dev;
- 
- 	if (host->eject)
- 		return;
-@@ -1088,6 +1093,7 @@ static void sdmmc_set_ios(struct mmc_hos
- 		return;
- 
- 	mutex_lock(&pcr->pcr_mutex);
-+	pm_runtime_get_sync(dev);
- 
- 	rtsx_pci_start_run(pcr);
- 
-@@ -1121,6 +1127,8 @@ static void sdmmc_set_ios(struct mmc_hos
- 	rtsx_pci_switch_clock(pcr, ios->clock, host->ssc_depth,
- 			host->initial_mode, host->double_clk, host->vpclk);
- 
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
- 	mutex_unlock(&pcr->pcr_mutex);
- }
- 
-@@ -1128,6 +1136,7 @@ static int sdmmc_get_ro(struct mmc_host
- {
- 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
- 	struct rtsx_pcr *pcr = host->pcr;
-+	struct device *dev = &host->pdev->dev;
- 	int ro = 0;
- 	u32 val;
- 
-@@ -1135,6 +1144,7 @@ static int sdmmc_get_ro(struct mmc_host
- 		return -ENOMEDIUM;
- 
- 	mutex_lock(&pcr->pcr_mutex);
-+	pm_runtime_get_sync(dev);
- 
- 	rtsx_pci_start_run(pcr);
- 
-@@ -1144,6 +1154,8 @@ static int sdmmc_get_ro(struct mmc_host
- 	if (val & SD_WRITE_PROTECT)
- 		ro = 1;
- 
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
- 	mutex_unlock(&pcr->pcr_mutex);
- 
- 	return ro;
-@@ -1153,6 +1165,7 @@ static int sdmmc_get_cd(struct mmc_host
- {
- 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
- 	struct rtsx_pcr *pcr = host->pcr;
-+	struct device *dev = &host->pdev->dev;
- 	int cd = 0;
- 	u32 val;
- 
-@@ -1160,6 +1173,7 @@ static int sdmmc_get_cd(struct mmc_host
- 		return cd;
- 
- 	mutex_lock(&pcr->pcr_mutex);
-+	pm_runtime_get_sync(dev);
- 
- 	rtsx_pci_start_run(pcr);
- 
-@@ -1169,6 +1183,8 @@ static int sdmmc_get_cd(struct mmc_host
- 	if (val & SD_EXIST)
- 		cd = 1;
- 
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
- 	mutex_unlock(&pcr->pcr_mutex);
- 
- 	return cd;
-@@ -1251,6 +1267,7 @@ static int sdmmc_switch_voltage(struct m
- {
- 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
- 	struct rtsx_pcr *pcr = host->pcr;
-+	struct device *dev = &host->pdev->dev;
- 	int err = 0;
- 	u8 voltage;
- 
-@@ -1265,6 +1282,7 @@ static int sdmmc_switch_voltage(struct m
- 		return err;
- 
- 	mutex_lock(&pcr->pcr_mutex);
-+	pm_runtime_get_sync(dev);
- 
- 	rtsx_pci_start_run(pcr);
- 
-@@ -1294,6 +1312,8 @@ out:
- 	err = rtsx_pci_write_register(pcr, SD_BUS_STAT,
- 			SD_CLK_TOGGLE_EN | SD_CLK_FORCE_STOP, 0);
- 
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
- 	mutex_unlock(&pcr->pcr_mutex);
- 
- 	return err;
-@@ -1303,6 +1323,7 @@ static int sdmmc_execute_tuning(struct m
- {
- 	struct realtek_pci_sdmmc *host = mmc_priv(mmc);
- 	struct rtsx_pcr *pcr = host->pcr;
-+	struct device *dev = &host->pdev->dev;
- 	int err = 0;
- 
- 	if (host->eject)
-@@ -1313,6 +1334,7 @@ static int sdmmc_execute_tuning(struct m
- 		return err;
- 
- 	mutex_lock(&pcr->pcr_mutex);
-+	pm_runtime_get_sync(dev);
- 
- 	rtsx_pci_start_run(pcr);
- 
-@@ -1345,6 +1367,8 @@ static int sdmmc_execute_tuning(struct m
- 		err = sd_change_phase(host, DDR50_RX_PHASE(pcr), true);
- 
- out:
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
- 	mutex_unlock(&pcr->pcr_mutex);
- 
- 	return err;
-@@ -1495,12 +1519,12 @@ static int rtsx_pci_sdmmc_drv_probe(stru
- 
- 	realtek_init_host(host);
- 
--	if (pcr->rtd3_en) {
--		pm_runtime_set_autosuspend_delay(&pdev->dev, 5000);
--		pm_runtime_use_autosuspend(&pdev->dev);
--		pm_runtime_enable(&pdev->dev);
--	}
--
-+	pm_runtime_no_callbacks(&pdev->dev);
-+	pm_runtime_set_active(&pdev->dev);
-+	pm_runtime_enable(&pdev->dev);
-+	pm_runtime_set_autosuspend_delay(&pdev->dev, 200);
-+	pm_runtime_mark_last_busy(&pdev->dev);
-+	pm_runtime_use_autosuspend(&pdev->dev);
- 
- 	mmc_add_host(mmc);
- 
-@@ -1521,11 +1545,6 @@ static int rtsx_pci_sdmmc_drv_remove(str
- 	pcr->slots[RTSX_SD_CARD].card_event = NULL;
- 	mmc = host->mmc;
- 
--	if (pcr->rtd3_en) {
--		pm_runtime_dont_use_autosuspend(&pdev->dev);
--		pm_runtime_disable(&pdev->dev);
--	}
--
- 	cancel_work_sync(&host->work);
- 
- 	mutex_lock(&host->host_mutex);
-@@ -1548,6 +1567,9 @@ static int rtsx_pci_sdmmc_drv_remove(str
- 
- 	flush_work(&host->work);
- 
-+	pm_runtime_dont_use_autosuspend(&pdev->dev);
-+	pm_runtime_disable(&pdev->dev);
++#ifdef CONFIG_DEBUG_LOCK_ALLOC
++/* lockdep can detect a circular dependency of the form
++ *   sk_lock -> mmap_lock (page fault) -> fs locks -> sk_lock
++ * because dependencies are tracked for both nvme-tcp and user contexts. Using
++ * a separate class prevents lockdep from conflating nvme-tcp socket use with
++ * user-space socket API use.
++ */
++static struct lock_class_key nvme_tcp_sk_key[2];
++static struct lock_class_key nvme_tcp_slock_key[2];
 +
- 	mmc_free_host(mmc);
++static void nvme_tcp_reclassify_socket(struct socket *sock)
++{
++	struct sock *sk = sock->sk;
++
++	if (WARN_ON_ONCE(!sock_allow_reclassification(sk)))
++		return;
++
++	switch (sk->sk_family) {
++	case AF_INET:
++		sock_lock_init_class_and_name(sk, "slock-AF_INET-NVME",
++					      &nvme_tcp_slock_key[0],
++					      "sk_lock-AF_INET-NVME",
++					      &nvme_tcp_sk_key[0]);
++		break;
++	case AF_INET6:
++		sock_lock_init_class_and_name(sk, "slock-AF_INET6-NVME",
++					      &nvme_tcp_slock_key[1],
++					      "sk_lock-AF_INET6-NVME",
++					      &nvme_tcp_sk_key[1]);
++		break;
++	default:
++		WARN_ON_ONCE(1);
++	}
++}
++#else
++static void nvme_tcp_reclassify_socket(struct socket *sock) { }
++#endif
++
+ enum nvme_tcp_send_state {
+ 	NVME_TCP_SEND_CMD_PDU = 0,
+ 	NVME_TCP_SEND_H2C_PDU,
+@@ -1422,6 +1460,8 @@ static int nvme_tcp_alloc_queue(struct nvme_ctrl *nctrl,
+ 		goto err_destroy_mutex;
+ 	}
  
- 	dev_dbg(&(pdev->dev),
++	nvme_tcp_reclassify_socket(queue->sock);
++
+ 	/* Single syn retry */
+ 	tcp_sock_set_syncnt(queue->sock->sk, 1);
+ 
+-- 
+2.34.1
+
 
 

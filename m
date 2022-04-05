@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183BB4F2B47
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8304F4F2A49
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 12:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352396AbiDEKEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53140 "EHLO
+        id S1352910AbiDEKFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237186AbiDEI3J (ORCPT
+        with ESMTP id S238931AbiDEIbD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:29:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D9519C39;
-        Tue,  5 Apr 2022 01:21:16 -0700 (PDT)
+        Tue, 5 Apr 2022 04:31:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F8D48E46;
+        Tue,  5 Apr 2022 01:23:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A90C4B81BBC;
-        Tue,  5 Apr 2022 08:21:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC4E5C385A0;
-        Tue,  5 Apr 2022 08:21:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AA8F61453;
+        Tue,  5 Apr 2022 08:23:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B15FC385A4;
+        Tue,  5 Apr 2022 08:23:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146874;
-        bh=93YLaa0zQ7hqgghUl04JHh02d/eZiQqyJBOIBGaKxuc=;
+        s=korg; t=1649146985;
+        bh=2g2qu5ziKFJP1gI8z39vE2mp2FGrydzsCqGT96KerXg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PfxRSfsYV69vJkmDX/9wgmGjhgHVCZ03CI4kcNnTtJHRr2a2v4KN/b3OfjB2d+TQr
-         y/UNu+X15jaOavY6HalitYi7Myj+ZOujWP7989PHyPX+rUPmEFEIsy7kPXDGfDlrz1
-         57E7rCYSrBqrqO2E/nGzWL5FNcoSuXydySdz8RYs=
+        b=hWsGYtibeMBywbWoLWxGsk/p+71lzuooEfr/PolQBfczedbNj5UHxprSjggkgs++2
+         aA/8Tf66PvRjREAaV9ujnk9JJitPmZIlj0BLXPqmIyLFGd1/qAZvHfzifHS6fdGWKS
+         L5+bNQaI8hfPawpuWTVgPkYxbWVNBYOo89C+EjUg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Richard Schleich <rs@noreya.tech>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org, Derek Fang <derek.fang@realtek.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0918/1126] ARM: dts: bcm2711: Add the missing L1/L2 cache information
-Date:   Tue,  5 Apr 2022 09:27:45 +0200
-Message-Id: <20220405070434.466920225@linuxfoundation.org>
+Subject: [PATCH 5.17 0923/1126] ASoC: rt5682s: Fix the wrong jack type detected
+Date:   Tue,  5 Apr 2022 09:27:50 +0200
+Message-Id: <20220405070434.611106560@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,111 +55,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Schleich <rs@noreya.tech>
+From: Derek Fang <derek.fang@realtek.com>
 
-[ Upstream commit 618682b350990f8f1bee718949c4b3858711eb58 ]
+[ Upstream commit c07ac3ee76e5e5506bca9c03fbbb15e40ab28430 ]
 
-This patch fixes the kernel warning
-"cacheinfo: Unable to detect cache hierarchy for CPU 0"
-for the bcm2711 on newer kernel versions.
+Some powers were changed during the jack insert detection and clk's
+enable/disable in CCF.
+If in parallel, the influence has a chance to detect the wrong jack
+type.
 
-Signed-off-by: Richard Schleich <rs@noreya.tech>
-Tested-by: Stefan Wahren <stefan.wahren@i2se.com>
-[florian: Align and remove comments matching property values]
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+We refer to the below commit of the variant codec (rt5682) to fix
+this issue.
+  ASoC: rt5682: Fix deadlock on resume
+
+1. Remove rt5682s_headset_detect in rt5682s_jd_check_handler and
+   use jack_detect_work instead of.
+2. Use dapm mutex used in CCF to protect most of jack_detect_work.
+
+Signed-off-by: Derek Fang <derek.fang@realtek.com>
+Link: https://lore.kernel.org/r/20220223101450.4577-1-derek.fang@realtek.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/bcm2711.dtsi | 50 ++++++++++++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
+ sound/soc/codecs/rt5682s.c | 26 +++++++++-----------------
+ sound/soc/codecs/rt5682s.h |  1 -
+ 2 files changed, 9 insertions(+), 18 deletions(-)
 
-diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
-index 21294f775a20..89af57482bc8 100644
---- a/arch/arm/boot/dts/bcm2711.dtsi
-+++ b/arch/arm/boot/dts/bcm2711.dtsi
-@@ -459,12 +459,26 @@
- 		#size-cells = <0>;
- 		enable-method = "brcm,bcm2836-smp"; // for ARM 32-bit
+diff --git a/sound/soc/codecs/rt5682s.c b/sound/soc/codecs/rt5682s.c
+index 1e662d1be2b3..92b8753f1267 100644
+--- a/sound/soc/codecs/rt5682s.c
++++ b/sound/soc/codecs/rt5682s.c
+@@ -822,6 +822,7 @@ static void rt5682s_jack_detect_handler(struct work_struct *work)
+ {
+ 	struct rt5682s_priv *rt5682s =
+ 		container_of(work, struct rt5682s_priv, jack_detect_work.work);
++	struct snd_soc_dapm_context *dapm;
+ 	int val, btn_type;
  
-+		/* Source for d/i-cache-line-size and d/i-cache-sets
-+		 * https://developer.arm.com/documentation/100095/0003
-+		 * /Level-1-Memory-System/About-the-L1-memory-system?lang=en
-+		 * Source for d/i-cache-size
-+		 * https://www.raspberrypi.com/documentation/computers
-+		 * /processors.html#bcm2711
-+		 */
- 		cpu0: cpu@0 {
- 			device_type = "cpu";
- 			compatible = "arm,cortex-a72";
- 			reg = <0>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0x0 0x000000d8>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <256>; // 32KiB(size)/64(line-size)=512ways/2-way set
-+			i-cache-size = <0xc000>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <256>; // 48KiB(size)/64(line-size)=768ways/3-way set
-+			next-level-cache = <&l2>;
- 		};
+ 	if (!rt5682s->component || !rt5682s->component->card ||
+@@ -832,7 +833,9 @@ static void rt5682s_jack_detect_handler(struct work_struct *work)
+ 		return;
+ 	}
  
- 		cpu1: cpu@1 {
-@@ -473,6 +487,13 @@
- 			reg = <1>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0x0 0x000000e0>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <256>; // 32KiB(size)/64(line-size)=512ways/2-way set
-+			i-cache-size = <0xc000>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <256>; // 48KiB(size)/64(line-size)=768ways/3-way set
-+			next-level-cache = <&l2>;
- 		};
- 
- 		cpu2: cpu@2 {
-@@ -481,6 +502,13 @@
- 			reg = <2>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0x0 0x000000e8>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <256>; // 32KiB(size)/64(line-size)=512ways/2-way set
-+			i-cache-size = <0xc000>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <256>; // 48KiB(size)/64(line-size)=768ways/3-way set
-+			next-level-cache = <&l2>;
- 		};
- 
- 		cpu3: cpu@3 {
-@@ -489,6 +517,28 @@
- 			reg = <3>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0x0 0x000000f0>;
-+			d-cache-size = <0x8000>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <256>; // 32KiB(size)/64(line-size)=512ways/2-way set
-+			i-cache-size = <0xc000>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <256>; // 48KiB(size)/64(line-size)=768ways/3-way set
-+			next-level-cache = <&l2>;
-+		};
+-	mutex_lock(&rt5682s->jdet_mutex);
++	dapm = snd_soc_component_get_dapm(rt5682s->component);
 +
-+		/* Source for d/i-cache-line-size and d/i-cache-sets
-+		 *  https://developer.arm.com/documentation/100095/0003
-+		 *  /Level-2-Memory-System/About-the-L2-memory-system?lang=en
-+		 *  Source for d/i-cache-size
-+		 *  https://www.raspberrypi.com/documentation/computers
-+		 *  /processors.html#bcm2711
-+		 */
-+		l2: l2-cache0 {
-+			compatible = "cache";
-+			cache-size = <0x100000>;
-+			cache-line-size = <64>;
-+			cache-sets = <1024>; // 1MiB(size)/64(line-size)=16384ways/16-way set
-+			cache-level = <2>;
- 		};
- 	};
++	snd_soc_dapm_mutex_lock(dapm);
+ 	mutex_lock(&rt5682s->calibrate_mutex);
  
+ 	val = snd_soc_component_read(rt5682s->component, RT5682S_AJD1_CTRL)
+@@ -889,6 +892,9 @@ static void rt5682s_jack_detect_handler(struct work_struct *work)
+ 		rt5682s->irq_work_delay_time = 50;
+ 	}
+ 
++	mutex_unlock(&rt5682s->calibrate_mutex);
++	snd_soc_dapm_mutex_unlock(dapm);
++
+ 	snd_soc_jack_report(rt5682s->hs_jack, rt5682s->jack_type,
+ 		SND_JACK_HEADSET | SND_JACK_BTN_0 | SND_JACK_BTN_1 |
+ 		SND_JACK_BTN_2 | SND_JACK_BTN_3);
+@@ -898,9 +904,6 @@ static void rt5682s_jack_detect_handler(struct work_struct *work)
+ 		schedule_delayed_work(&rt5682s->jd_check_work, 0);
+ 	else
+ 		cancel_delayed_work_sync(&rt5682s->jd_check_work);
+-
+-	mutex_unlock(&rt5682s->calibrate_mutex);
+-	mutex_unlock(&rt5682s->jdet_mutex);
+ }
+ 
+ static void rt5682s_jd_check_handler(struct work_struct *work)
+@@ -908,14 +911,9 @@ static void rt5682s_jd_check_handler(struct work_struct *work)
+ 	struct rt5682s_priv *rt5682s =
+ 		container_of(work, struct rt5682s_priv, jd_check_work.work);
+ 
+-	if (snd_soc_component_read(rt5682s->component, RT5682S_AJD1_CTRL)
+-		& RT5682S_JDH_RS_MASK) {
++	if (snd_soc_component_read(rt5682s->component, RT5682S_AJD1_CTRL) & RT5682S_JDH_RS_MASK) {
+ 		/* jack out */
+-		rt5682s->jack_type = rt5682s_headset_detect(rt5682s->component, 0);
+-
+-		snd_soc_jack_report(rt5682s->hs_jack, rt5682s->jack_type,
+-			SND_JACK_HEADSET | SND_JACK_BTN_0 | SND_JACK_BTN_1 |
+-			SND_JACK_BTN_2 | SND_JACK_BTN_3);
++		schedule_delayed_work(&rt5682s->jack_detect_work, 0);
+ 	} else {
+ 		schedule_delayed_work(&rt5682s->jd_check_work, 500);
+ 	}
+@@ -1323,7 +1321,6 @@ static int rt5682s_hp_amp_event(struct snd_soc_dapm_widget *w,
+ 		struct snd_kcontrol *kcontrol, int event)
+ {
+ 	struct snd_soc_component *component = snd_soc_dapm_to_component(w->dapm);
+-	struct rt5682s_priv *rt5682s = snd_soc_component_get_drvdata(component);
+ 
+ 	switch (event) {
+ 	case SND_SOC_DAPM_POST_PMU:
+@@ -1339,8 +1336,6 @@ static int rt5682s_hp_amp_event(struct snd_soc_dapm_widget *w,
+ 		snd_soc_component_write(component, RT5682S_BIAS_CUR_CTRL_11, 0x6666);
+ 		snd_soc_component_write(component, RT5682S_BIAS_CUR_CTRL_12, 0xa82a);
+ 
+-		mutex_lock(&rt5682s->jdet_mutex);
+-
+ 		snd_soc_component_update_bits(component, RT5682S_HP_CTRL_2,
+ 			RT5682S_HPO_L_PATH_MASK | RT5682S_HPO_R_PATH_MASK |
+ 			RT5682S_HPO_SEL_IP_EN_SW, RT5682S_HPO_L_PATH_EN |
+@@ -1348,8 +1343,6 @@ static int rt5682s_hp_amp_event(struct snd_soc_dapm_widget *w,
+ 		usleep_range(5000, 10000);
+ 		snd_soc_component_update_bits(component, RT5682S_HP_AMP_DET_CTL_1,
+ 			RT5682S_CP_SW_SIZE_MASK, RT5682S_CP_SW_SIZE_L | RT5682S_CP_SW_SIZE_S);
+-
+-		mutex_unlock(&rt5682s->jdet_mutex);
+ 		break;
+ 
+ 	case SND_SOC_DAPM_POST_PMD:
+@@ -3103,7 +3096,6 @@ static int rt5682s_i2c_probe(struct i2c_client *i2c,
+ 
+ 	mutex_init(&rt5682s->calibrate_mutex);
+ 	mutex_init(&rt5682s->sar_mutex);
+-	mutex_init(&rt5682s->jdet_mutex);
+ 	rt5682s_calibrate(rt5682s);
+ 
+ 	regmap_update_bits(rt5682s->regmap, RT5682S_MICBIAS_2,
+diff --git a/sound/soc/codecs/rt5682s.h b/sound/soc/codecs/rt5682s.h
+index 1bf2ef7ce578..397a2531b6f6 100644
+--- a/sound/soc/codecs/rt5682s.h
++++ b/sound/soc/codecs/rt5682s.h
+@@ -1446,7 +1446,6 @@ struct rt5682s_priv {
+ 	struct delayed_work jd_check_work;
+ 	struct mutex calibrate_mutex;
+ 	struct mutex sar_mutex;
+-	struct mutex jdet_mutex;
+ 
+ #ifdef CONFIG_COMMON_CLK
+ 	struct clk_hw dai_clks_hw[RT5682S_DAI_NUM_CLKS];
 -- 
 2.34.1
 

@@ -2,46 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FF34F2D60
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C0C4F2A43
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 12:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242631AbiDEJhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
+        id S242841AbiDEJiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239427AbiDEIUE (ORCPT
+        with ESMTP id S239429AbiDEIUE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:20:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C5091350;
-        Tue,  5 Apr 2022 01:13:01 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44F991560;
+        Tue,  5 Apr 2022 01:13:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9A1160B0B;
-        Tue,  5 Apr 2022 08:13:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8094C385A2;
-        Tue,  5 Apr 2022 08:12:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5FE76B81A37;
+        Tue,  5 Apr 2022 08:13:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF99BC385A1;
+        Tue,  5 Apr 2022 08:13:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146380;
-        bh=qQXWyRu4TEliDafq6CKePkOIo5nPfDxb/EyW2btOqvo=;
+        s=korg; t=1649146383;
+        bh=nHOg9kX+MbvlIgN8jRKrk4EKwtzKb7SaZy1WfCamDGo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DKn9AjFAgNYTZ8ZY/D1JzgRs5xbfUfELO6+zglFpRfN4qs/k7QeO4sADfq4YUqd5R
-         yvkle/zq2NsKzOAglO2EIUa+nvLfkqdF+L4ZbwWOu5JO6edRyHX5fQmvJf3LbeMlay
-         bFAkWoCQ4MQ2U4M0cAwYloia316aIZpHWcvCF3Bg=
+        b=xBpqGPS9M4zA4+AZ+vLezvVhGaNw2HvwUUEHHsW0MEHGTXkJ5ijjQabioZwHcmD3a
+         bdt9xh4Hg4SRfAgC0dFX5D7KP8rqIzhAfdVgnHfybinGDg8y+CX5zc5twWw/VvLGrA
+         caEEYS+RqAZUh5fZDgFIAOSLpGC4PNj7D0KvheaM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Joerg Roedel <joro@8bytes.org>, Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        iommu@lists.linux-foundation.org,
-        Robin Murphy <robin.murphy@arm.com>,
+        stable@vger.kernel.org, David Wolfe <david.wolfe@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>, Peng Fan <peng.fan@nxp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0742/1126] dma-debug: fix return value of __setup handlers
-Date:   Tue,  5 Apr 2022 09:24:49 +0200
-Message-Id: <20220405070429.365761334@linuxfoundation.org>
+Subject: [PATCH 5.17 0743/1126] clk: imx7d: Remove audio_mclk_root_clk
+Date:   Tue,  5 Apr 2022 09:24:50 +0200
+Message-Id: <20220405070429.394943766@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -59,70 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Abel Vesa <abel.vesa@nxp.com>
 
-[ Upstream commit 80e4390981618e290616dbd06ea190d4576f219d ]
+[ Upstream commit eccac77ede3946c90143447cdc785dc16aec4b24 ]
 
-When valid kernel command line parameters
-  dma_debug=off dma_debug_entries=100
-are used, they are reported as Unknown parameters and added to init's
-environment strings, polluting it.
+The audio_mclk_root_clk was added as a gate with the CCGR121 (0x4790),
+but according to the reference manual, there is no such gate. The
+CCGR121 belongs to ECSPI2 and it is not shared.
 
-  Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc5
-    dma_debug=off dma_debug_entries=100", will be passed to user space.
-
-and
-
- Run /sbin/init as init process
-   with arguments:
-     /sbin/init
-   with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc5
-     dma_debug=off
-     dma_debug_entries=100
-
-Return 1 from these __setup handlers to indicate that the command line
-option has been handled.
-
-Fixes: 59d3daafa1726 ("dma-debug: add kernel command line parameters")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Cc: Joerg Roedel <joro@8bytes.org>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: iommu@lists.linux-foundation.org
-Cc: Robin Murphy <robin.murphy@arm.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Fixes: 8f6d8094b215b57 ("ARM: imx: add imx7d clk tree support")
+Reported-by: David Wolfe <david.wolfe@nxp.com>
+Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+Reviewed-by: Peng Fan <peng.fan@nxp.com>
+Link: https://lore.kernel.org/r/20220127141052.1900174-2-abel.vesa@nxp.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/dma/debug.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/clk/imx/clk-imx7d.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
-index 7a14ca29c377..f8ff598596b8 100644
---- a/kernel/dma/debug.c
-+++ b/kernel/dma/debug.c
-@@ -927,7 +927,7 @@ static __init int dma_debug_cmdline(char *str)
- 		global_disable = true;
- 	}
- 
--	return 0;
-+	return 1;
- }
- 
- static __init int dma_debug_entries_cmdline(char *str)
-@@ -936,7 +936,7 @@ static __init int dma_debug_entries_cmdline(char *str)
- 		return -EINVAL;
- 	if (!get_option(&str, &nr_prealloc_entries))
- 		nr_prealloc_entries = PREALLOC_DMA_DEBUG_ENTRIES;
--	return 0;
-+	return 1;
- }
- 
- __setup("dma_debug=", dma_debug_cmdline);
+diff --git a/drivers/clk/imx/clk-imx7d.c b/drivers/clk/imx/clk-imx7d.c
+index c4e0f1c07192..3f6fd7ef2a68 100644
+--- a/drivers/clk/imx/clk-imx7d.c
++++ b/drivers/clk/imx/clk-imx7d.c
+@@ -849,7 +849,6 @@ static void __init imx7d_clocks_init(struct device_node *ccm_node)
+ 	hws[IMX7D_WDOG4_ROOT_CLK] = imx_clk_hw_gate4("wdog4_root_clk", "wdog_post_div", base + 0x49f0, 0);
+ 	hws[IMX7D_KPP_ROOT_CLK] = imx_clk_hw_gate4("kpp_root_clk", "ipg_root_clk", base + 0x4aa0, 0);
+ 	hws[IMX7D_CSI_MCLK_ROOT_CLK] = imx_clk_hw_gate4("csi_mclk_root_clk", "csi_mclk_post_div", base + 0x4490, 0);
+-	hws[IMX7D_AUDIO_MCLK_ROOT_CLK] = imx_clk_hw_gate4("audio_mclk_root_clk", "audio_mclk_post_div", base + 0x4790, 0);
+ 	hws[IMX7D_WRCLK_ROOT_CLK] = imx_clk_hw_gate4("wrclk_root_clk", "wrclk_post_div", base + 0x47a0, 0);
+ 	hws[IMX7D_USB_CTRL_CLK] = imx_clk_hw_gate4("usb_ctrl_clk", "ahb_root_clk", base + 0x4680, 0);
+ 	hws[IMX7D_USB_PHY1_CLK] = imx_clk_hw_gate4("usb_phy1_clk", "pll_usb1_main_clk", base + 0x46a0, 0);
 -- 
 2.34.1
 

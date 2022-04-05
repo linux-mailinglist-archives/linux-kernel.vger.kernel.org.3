@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B264F4803
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 903574F447B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355397AbiDEVZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
+        id S1445188AbiDEUIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:08:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349474AbiDEJtz (ORCPT
+        with ESMTP id S1356829AbiDEKY5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE3A27CEF;
-        Tue,  5 Apr 2022 02:46:58 -0700 (PDT)
+        Tue, 5 Apr 2022 06:24:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31844C0545;
+        Tue,  5 Apr 2022 03:09:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A195B818F3;
-        Tue,  5 Apr 2022 09:46:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04B70C385A1;
-        Tue,  5 Apr 2022 09:46:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D52C0B81C88;
+        Tue,  5 Apr 2022 10:09:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4325FC385A0;
+        Tue,  5 Apr 2022 10:09:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152016;
-        bh=gNHrehMZgZje2ewnnw7KjUsMgqBeRD6jduXfTGBTdkQ=;
+        s=korg; t=1649153344;
+        bh=ZTic4zvL01xfAw3poXzKuNGU8kOgFdNA7qhJdx2enBQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ji9w8NH86koKxRRmKPJLir9PAhyqJByrPAL9HomQ2X8BNlBuOnufxG6iiiiBsakcQ
-         D33zHaZkgH0ZRWMCyjGskIfHfR2aZOxRsEQqlm7M5//Vq7EJ+S3go4Gp4d+vB9Abjt
-         5+DyrPn6fDhepkuSCv5Q1nFzWkFlLBQO/2YFq/D0=
+        b=oFNLn3bLWEjjp4xIOMkJHeMpHZuG7rifXg92RZLrsdXHMR/N2cLVk+JQuxQzUIKpD
+         jEswL8pt88orwrIecoOzRMW0czLCfUwD0gLVkdFxThoIXpubklkDYmmTm0v9atdM9A
+         1XAqiFY9LB5LKJh29otZ+YkbaSTtWeyFIDqNp0ng=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 617/913] remoteproc: qcom_q6v5_mss: Fix some leaks in q6v5_alloc_memory_region
-Date:   Tue,  5 Apr 2022 09:27:59 +0200
-Message-Id: <20220405070358.335445001@linuxfoundation.org>
+Subject: [PATCH 5.10 188/599] media: v4l2-mem2mem: Apply DST_QUEUE_OFF_BASE on MMAP buffers across ioctls
+Date:   Tue,  5 Apr 2022 09:28:02 +0200
+Message-Id: <20220405070304.436627021@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,72 +56,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Chen-Yu Tsai <wenst@chromium.org>
 
-[ Upstream commit 07a5dcc4bed9d7cae54adf5aa10ff9f037a3204b ]
+[ Upstream commit 8310ca94075e784bbb06593cd6c068ee6b6e4ca6 ]
 
-The device_node pointer is returned by of_parse_phandle() or
-of_get_child_by_name() with refcount incremented.
-We should use of_node_put() on it when done.
+DST_QUEUE_OFF_BASE is applied to offset/mem_offset on MMAP capture buffers
+only for the VIDIOC_QUERYBUF ioctl, while the userspace fields (including
+offset/mem_offset) are filled in for VIDIOC_{QUERY,PREPARE,Q,DQ}BUF
+ioctls. This leads to differences in the values presented to userspace.
+If userspace attempts to mmap the capture buffer directly using values
+from DQBUF, it will fail.
 
-This function only call of_node_put(node) when of_address_to_resource
-succeeds, missing error cases.
+Move the code that applies the magic offset into a helper, and call
+that helper from all four ioctl entry points.
 
-Fixes: 278d744c46fd ("remoteproc: qcom: Fix potential device node leaks")
-Fixes: 051fb70fd4ea ("remoteproc: qcom: Driver for the self-authenticating Hexagon v5")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220308064522.13804-1-linmq006@gmail.com
+[hverkuil: drop unnecessary '= 0' in v4l2_m2m_querybuf() for ret]
+
+Fixes: 7f98639def42 ("V4L/DVB: add memory-to-memory device helper framework for videobuf")
+Fixes: 908a0d7c588e ("[media] v4l: mem2mem: port to videobuf2")
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/remoteproc/qcom_q6v5_mss.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/media/v4l2-core/v4l2-mem2mem.c | 53 ++++++++++++++++++++------
+ 1 file changed, 41 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-index 423b31dfa574..ca1c7387776b 100644
---- a/drivers/remoteproc/qcom_q6v5_mss.c
-+++ b/drivers/remoteproc/qcom_q6v5_mss.c
-@@ -1624,18 +1624,20 @@ static int q6v5_alloc_memory_region(struct q6v5 *qproc)
- 	 * reserved memory regions from device's memory-region property.
- 	 */
- 	child = of_get_child_by_name(qproc->dev->of_node, "mba");
--	if (!child)
-+	if (!child) {
- 		node = of_parse_phandle(qproc->dev->of_node,
- 					"memory-region", 0);
--	else
-+	} else {
- 		node = of_parse_phandle(child, "memory-region", 0);
-+		of_node_put(child);
-+	}
+diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+index b221b4e438a1..73190652c267 100644
+--- a/drivers/media/v4l2-core/v4l2-mem2mem.c
++++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+@@ -585,19 +585,14 @@ int v4l2_m2m_reqbufs(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+ }
+ EXPORT_SYMBOL_GPL(v4l2_m2m_reqbufs);
  
- 	ret = of_address_to_resource(node, 0, &r);
-+	of_node_put(node);
- 	if (ret) {
- 		dev_err(qproc->dev, "unable to resolve mba region\n");
+-int v4l2_m2m_querybuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+-		      struct v4l2_buffer *buf)
++static void v4l2_m2m_adjust_mem_offset(struct vb2_queue *vq,
++				       struct v4l2_buffer *buf)
+ {
+-	struct vb2_queue *vq;
+-	int ret = 0;
+-	unsigned int i;
+-
+-	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
+-	ret = vb2_querybuf(vq, buf);
+-
+ 	/* Adjust MMAP memory offsets for the CAPTURE queue */
+ 	if (buf->memory == V4L2_MEMORY_MMAP && V4L2_TYPE_IS_CAPTURE(vq->type)) {
+ 		if (V4L2_TYPE_IS_MULTIPLANAR(vq->type)) {
++			unsigned int i;
++
+ 			for (i = 0; i < buf->length; ++i)
+ 				buf->m.planes[i].m.mem_offset
+ 					+= DST_QUEUE_OFF_BASE;
+@@ -605,8 +600,23 @@ int v4l2_m2m_querybuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+ 			buf->m.offset += DST_QUEUE_OFF_BASE;
+ 		}
+ 	}
++}
+ 
+-	return ret;
++int v4l2_m2m_querybuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
++		      struct v4l2_buffer *buf)
++{
++	struct vb2_queue *vq;
++	int ret;
++
++	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
++	ret = vb2_querybuf(vq, buf);
++	if (ret)
++		return ret;
++
++	/* Adjust MMAP memory offsets for the CAPTURE queue */
++	v4l2_m2m_adjust_mem_offset(vq, buf);
++
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(v4l2_m2m_querybuf);
+ 
+@@ -763,6 +773,9 @@ int v4l2_m2m_qbuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+ 	if (ret)
  		return ret;
- 	}
--	of_node_put(node);
  
- 	qproc->mba_phys = r.start;
- 	qproc->mba_size = resource_size(&r);
-@@ -1646,14 +1648,15 @@ static int q6v5_alloc_memory_region(struct q6v5 *qproc)
- 	} else {
- 		child = of_get_child_by_name(qproc->dev->of_node, "mpss");
- 		node = of_parse_phandle(child, "memory-region", 0);
-+		of_node_put(child);
- 	}
++	/* Adjust MMAP memory offsets for the CAPTURE queue */
++	v4l2_m2m_adjust_mem_offset(vq, buf);
++
+ 	/*
+ 	 * If the capture queue is streaming, but streaming hasn't started
+ 	 * on the device, but was asked to stop, mark the previously queued
+@@ -784,9 +797,17 @@ int v4l2_m2m_dqbuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+ 		   struct v4l2_buffer *buf)
+ {
+ 	struct vb2_queue *vq;
++	int ret;
  
- 	ret = of_address_to_resource(node, 0, &r);
-+	of_node_put(node);
- 	if (ret) {
- 		dev_err(qproc->dev, "unable to resolve mpss region\n");
- 		return ret;
- 	}
--	of_node_put(node);
+ 	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
+-	return vb2_dqbuf(vq, buf, file->f_flags & O_NONBLOCK);
++	ret = vb2_dqbuf(vq, buf, file->f_flags & O_NONBLOCK);
++	if (ret)
++		return ret;
++
++	/* Adjust MMAP memory offsets for the CAPTURE queue */
++	v4l2_m2m_adjust_mem_offset(vq, buf);
++
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(v4l2_m2m_dqbuf);
  
- 	qproc->mpss_phys = qproc->mpss_reloc = r.start;
- 	qproc->mpss_size = resource_size(&r);
+@@ -795,9 +816,17 @@ int v4l2_m2m_prepare_buf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+ {
+ 	struct video_device *vdev = video_devdata(file);
+ 	struct vb2_queue *vq;
++	int ret;
+ 
+ 	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
+-	return vb2_prepare_buf(vq, vdev->v4l2_dev->mdev, buf);
++	ret = vb2_prepare_buf(vq, vdev->v4l2_dev->mdev, buf);
++	if (ret)
++		return ret;
++
++	/* Adjust MMAP memory offsets for the CAPTURE queue */
++	v4l2_m2m_adjust_mem_offset(vq, buf);
++
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(v4l2_m2m_prepare_buf);
+ 
 -- 
 2.34.1
 

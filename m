@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9884F3A77
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E051D4F3ACF
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381436AbiDELpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
+        id S237308AbiDELst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244875AbiDEIwo (ORCPT
+        with ESMTP id S244874AbiDEIwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:52:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C6D23BEB;
-        Tue,  5 Apr 2022 01:45:15 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664E423BEC;
+        Tue,  5 Apr 2022 01:45:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90121609D0;
-        Tue,  5 Apr 2022 08:45:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3E4BC385A0;
-        Tue,  5 Apr 2022 08:45:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2123AB81A32;
+        Tue,  5 Apr 2022 08:45:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ED6CC385A1;
+        Tue,  5 Apr 2022 08:45:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148315;
-        bh=Yfa6Kmyb+1X+6X/9WKFe5fwbMvb+I65yU3dPuaielFA=;
+        s=korg; t=1649148317;
+        bh=vPVLp60ofXI704P8vIcvQjUYK/V4SPah6vO9kL+FYpo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OMmp1E+EwTF3ggo4+OXuYY07gv5SluOwOqZXfft8FIAmkoTlET/RolSAbA/NgFl18
-         PuavZwvztlLNi6P+XDsks0eoNea4fccTKIraKLmuvJmaTH5R+s+TA7aKRDqKX3JNIZ
-         /qPCgtJMjRkirrZn9gd68smmeeaK53mDjd0O+lAo=
+        b=rVZTaGZFl2sZiwwRoVeCGRCLdVThSAsidIn98qQ6pLQ8dqSkepcINhLe2mK2CYExL
+         FX3Oe3dcjFTHdlsJ8gOu04UURuMwMVIadNRUrwJwfxoAey/dVLxUb4ZVggYhdo3IRr
+         WKitwDEsc9VIqTNdrpF5tEEKvpSNAuW46qa40SRI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0313/1017] soc: qcom: ocmem: Fix missing put_device() call in of_get_ocmem
-Date:   Tue,  5 Apr 2022 09:20:26 +0200
-Message-Id: <20220405070403.567967855@linuxfoundation.org>
+Subject: [PATCH 5.16 0314/1017] soc: qcom: aoss: Fix missing put_device call in qmp_get
+Date:   Tue,  5 Apr 2022 09:20:27 +0200
+Message-Id: <20220405070403.597456413@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -57,33 +58,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 0ff027027e05a866491bbb53494f0e2a61354c85 ]
+[ Upstream commit 4b41a9d0fe3db5f91078a380f62f0572c3ecf2dd ]
 
 The reference taken by 'of_find_device_by_node()' must be released when
 not needed anymore.
-Add the corresponding 'put_device()' in the error handling path.
+Add the corresponding 'put_device()' in the error handling paths.
 
-Fixes: 01f937ffc468 ("soc: qcom: ocmem: don't return NULL in of_get_ocmem")
+Fixes: 8c75d585b931 ("soc: qcom: aoss: Expose send for generic usecase")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220107073126.2335-1-linmq006@gmail.com
+Link: https://lore.kernel.org/r/20220108095931.21527-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/qcom/ocmem.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/soc/qcom/qcom_aoss.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/soc/qcom/ocmem.c b/drivers/soc/qcom/ocmem.c
-index d2dacbbaafbd..97fd24c178f8 100644
---- a/drivers/soc/qcom/ocmem.c
-+++ b/drivers/soc/qcom/ocmem.c
-@@ -206,6 +206,7 @@ struct ocmem *of_get_ocmem(struct device *dev)
- 	ocmem = platform_get_drvdata(pdev);
- 	if (!ocmem) {
- 		dev_err(dev, "Cannot get ocmem\n");
+diff --git a/drivers/soc/qcom/qcom_aoss.c b/drivers/soc/qcom/qcom_aoss.c
+index 34acf58bbb0d..e234d78b33e7 100644
+--- a/drivers/soc/qcom/qcom_aoss.c
++++ b/drivers/soc/qcom/qcom_aoss.c
+@@ -451,7 +451,11 @@ struct qmp *qmp_get(struct device *dev)
+ 
+ 	qmp = platform_get_drvdata(pdev);
+ 
+-	return qmp ? qmp : ERR_PTR(-EPROBE_DEFER);
++	if (!qmp) {
 +		put_device(&pdev->dev);
- 		return ERR_PTR(-ENODEV);
- 	}
- 	return ocmem;
++		return ERR_PTR(-EPROBE_DEFER);
++	}
++	return qmp;
+ }
+ EXPORT_SYMBOL(qmp_get);
+ 
 -- 
 2.34.1
 

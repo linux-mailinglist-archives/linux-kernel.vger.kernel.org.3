@@ -2,238 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81AE34F405F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EA584F42C3
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350839AbiDEOO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 10:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
+        id S1379857AbiDEOPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237332AbiDEJbo (ORCPT
+        with ESMTP id S238315AbiDEJcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:31:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69F929E;
-        Tue,  5 Apr 2022 02:19:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E196B80DA1;
-        Tue,  5 Apr 2022 09:19:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E981C385A2;
-        Tue,  5 Apr 2022 09:19:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649150351;
-        bh=DeQtVM10KaxSTi7JtqRVyZcnxrwnHXMAjUTF+jS4kR0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ifw51FaMc8qRGtx8hI5Ek3EFTkoPpLJADkxkwhSZHQVts8pt5F1u44eCudiVRu/Ds
-         xsqqFWczHvUOpfFrf6GV6ypFNVy7yfY2SOMHp8l44QI3fyiGszJmFQy0UObBXS8bzb
-         A+w+bDU8N+08m6gejQHCT4hbP2YVFFLlQV/cibi4U8GfiEVHIkC5AEfFwvvoRP1tcB
-         eXYcH+5dtw/1I2uD4fe1cYqUpFe9TkjsauKM5hbXcnRW8EsY/ZoZtX1M8Y2fpuW4gX
-         rVWTTfuqMjBDO12V9x4xphk2ydsUCZldjhfDyqRDC56ltN8/uCmEL9AI85uRMMLseV
-         Dx7nO3/uIArBw==
-From:   Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Hubert Feurstein <hubert.feurstein@contec.at>,
-        Lukasz Majewski <lukma@denx.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Imre Kaloz <kaloz@openwrt.org>,
-        Krzysztof Halasa <khalasa@piap.pl>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, patches@opensource.cirrus.com
-Subject: [PATCH 12/12] ARM: ixp4xx: enable multiplatform support
-Date:   Tue,  5 Apr 2022 11:17:50 +0200
-Message-Id: <20220405091750.3076973-13-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220405091750.3076973-1-arnd@kernel.org>
-References: <20220405091750.3076973-1-arnd@kernel.org>
+        Tue, 5 Apr 2022 05:32:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AE17C323
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 02:19:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649150358;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Vwp/klJZ6w8cqXIRnQlGelnzUBW3VqC3Y+5RomljZNo=;
+        b=Uxaf77deKGS0orEQtJwE4NnKzu7gi2p9jy9KUWqp+vdgMvO9bNHJzYucYu0e6ECdvDfqIP
+        W/mRtH53BwFObBHKF7AfW0XI+fcOcyWhg02mxXDEPyHsidPd42gg93fASjufFVoP6cr90O
+        T60J5PW34cdS+xUahIhsLucuqBw9kLU=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-442-neMfMfCoNACIrQ6sHbKuvA-1; Tue, 05 Apr 2022 05:19:17 -0400
+X-MC-Unique: neMfMfCoNACIrQ6sHbKuvA-1
+Received: by mail-wm1-f72.google.com with SMTP id a16-20020a05600c349000b0038e6392a346so990289wmq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 02:19:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Vwp/klJZ6w8cqXIRnQlGelnzUBW3VqC3Y+5RomljZNo=;
+        b=IZMt6QwEpLNWyQYQz1Pby7Q4cE766gDqvsjDF7poDnVW5iKZ2t3/1mDCb2lDjFLw57
+         GTi5Z9ZzP3jEN6Up00QA/22hYMMr2fzBlXt6gP099RfC+LTxOfVmpBB48/Js359+wrEZ
+         A8i0lv32fq+Kn1OH1IdeVRvMxVybmV5phVM+0gWICKtozt0t4aUjte93XzgtQSM3Dr5R
+         7IWmtdxEMhhkRM1TC8Qnx7G5bPUK97zgq6mHUBgFsFztcypR9+//w7k+EA1mY9Sd2pQf
+         yafAofMYkAtWIWs6MCAXoQy1z380KatB6ZF1GEWQb+GqDfQFPyYX+8YzYr3/FHrQYHWu
+         NArw==
+X-Gm-Message-State: AOAM532fVZOjYGWNHG1rrHv+BQ4UroY7Z1DtzsEf54kn+CybJOtZHDxN
+        DDMqPgVbXFXmWhjWUQvVSu0UFgsQM9orU94Owzc3sVMDqM2utrmKOPBAX9qqEW/2po5uB0U1Qmp
+        AuFLxV/5DkSah/pbp2Qny3iac
+X-Received: by 2002:a05:6000:1d9d:b0:206:1cf4:f9a6 with SMTP id bk29-20020a0560001d9d00b002061cf4f9a6mr1914984wrb.492.1649150356447;
+        Tue, 05 Apr 2022 02:19:16 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwLhZGbdLpNdT/GdxUoAqjrwvfb3mcQPDAmjPtZRUifF4rT2Th6dQMMAa/mHgAToD3JKo/uLg==
+X-Received: by 2002:a05:6000:1d9d:b0:206:1cf4:f9a6 with SMTP id bk29-20020a0560001d9d00b002061cf4f9a6mr1914957wrb.492.1649150356175;
+        Tue, 05 Apr 2022 02:19:16 -0700 (PDT)
+Received: from [192.168.1.102] ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id a2-20020a5d53c2000000b0020604b2667asm12159724wrw.81.2022.04.05.02.19.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 02:19:15 -0700 (PDT)
+Message-ID: <408ffe9b-f09f-dc7e-7f5e-a93b311a06fa@redhat.com>
+Date:   Tue, 5 Apr 2022 11:19:14 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 18/19] Revert "fbdev: Prevent probing generic drivers
+ if a FB is already registered"
+Content-Language: en-US
+To:     DRI Development <dri-devel@lists.freedesktop.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        linux-fbdev@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Zack Rusin <zackr@vmware.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Ilya Trukhanov <lahvuun@gmail.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Peter Jones <pjones@redhat.com>
+References: <20220208210824.2238981-1-daniel.vetter@ffwll.ch>
+ <20220208210824.2238981-19-daniel.vetter@ffwll.ch>
+ <4ae20b63-f452-fdb4-ced6-d4968a8d69f0@redhat.com>
+ <Ykv/k/WoVemoCJJA@phenom.ffwll.local> <YkwAhSt9HlbxcuZo@phenom.ffwll.local>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <YkwAhSt9HlbxcuZo@phenom.ffwll.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hello Daniel,
 
-After all the work that Linus Walleij did on this platform, it can be
-part of a generic kernel build as well.
+On 4/5/22 10:40, Daniel Vetter wrote:
+> On Tue, Apr 05, 2022 at 10:36:35AM +0200, Daniel Vetter wrote:
+>> On Wed, Feb 09, 2022 at 01:19:26AM +0100, Javier Martinez Canillas wrote:
+>>> On 2/8/22 22:08, Daniel Vetter wrote:
+>>>> This reverts commit fb561bf9abde49f7e00fdbf9ed2ccf2d86cac8ee.
+>>>>
+>>>> With
+>>>>
+>>>> commit 27599aacbaefcbf2af7b06b0029459bbf682000d
+>>>> Author: Thomas Zimmermann <tzimmermann@suse.de>
+>>>> Date:   Tue Jan 25 10:12:18 2022 +0100
+>>>>
+>>>>     fbdev: Hot-unplug firmware fb devices on forced removal
+>>>>
+>>>> this should be fixed properly and we can remove this somewhat hackish
+>>>> check here (e.g. this won't catch drm drivers if fbdev emulation isn't
+>>>> enabled).
+>>>>
+>>>
+>>> Unfortunately this hack can't be reverted yet. Thomas' patch solves the issue
+>>> of platform devices matched with fbdev drivers to be properly unregistered if
+>>> a DRM driver attempts to remove all the conflicting framebuffers.
+>>>
+>>> But the problem that fb561bf9abde ("fbdev: Prevent probing generic drivers if
+>>> a FB is already registered") worked around is different. It happens when the
+>>> DRM driver is probed before the {efi,simple}fb and other fbdev drivers, the
+>>> kicking out of conflicting framebuffers already happened and these drivers
+>>> will be allowed to probe even when a DRM driver is already present.
+>>>
+>>> We need a clearer way to prevent it, but can't revert fb561bf9abde until that.
+>>
+>> Yeah that entire area is a mess still, ideally we'd have something else
+>> creating the platform devices, and efifb/offb and all these would just
+>> bind against them.
+>>
+>> Hm one idea that just crossed my mind: Could we have a flag in fb_info for
+>> fw drivers, and check this in framebuffer_register? Then at least all the
+>> logic would be in the fbdev core.
+>
 
-Note that there are known bugs in little-endian mode on ixp4xx, and
-no other ARMv5 platform at this point supports big-endian mode, or is
-likely to in the future, so there is limited practical value in this,
-but it helps with build testing and ixp4xx little-endian support may
-get fixed in the future.
+I can't answer right away since I've since forgotten this part of the code
+and will require to do a detailed read to refresh my memory.
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arm/Kconfig                              | 16 ------
- arch/arm/mach-ixp4xx/Kconfig                  | 22 +++++---
- arch/arm/mach-ixp4xx/Makefile.boot            |  4 --
- .../arm/mach-ixp4xx/include/mach/uncompress.h | 54 -------------------
- 4 files changed, 15 insertions(+), 81 deletions(-)
- delete mode 100644 arch/arm/mach-ixp4xx/Makefile.boot
- delete mode 100644 arch/arm/mach-ixp4xx/include/mach/uncompress.h
+I'll answer later but preferred to mention the other question ASAP.
+ 
+> Ok coffee just kicked in, how exactly does your scenario work?
+> 
+> This code I'm reverting here is in the platform_dev->probe function.
+> Thomas' patch removes the platform_dev. How exactly can you still probe
+> against a platform dev if that platform dev is gone?
+>
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 4d98de155e20..db9b9ed5d7c7 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -357,22 +357,6 @@ config ARCH_FOOTBRIDGE
- 	  Support for systems based on the DC21285 companion chip
- 	  ("FootBridge"), such as the Simtec CATS and the Rebel NetWinder.
+Because the platform was not even registered by the time the DRM driver
+probed and all the devices for the conflicting drivers were unregistered.
  
--config ARCH_IXP4XX
--	bool "IXP4xx-based"
--	depends on CPU_BIG_ENDIAN
--	select ARM_PATCH_PHYS_VIRT
--	select CPU_XSCALE
--	select GPIO_IXP4XX
--	select GPIOLIB
--	select HAVE_PCI
--	select IXP4XX_IRQ
--	select IXP4XX_TIMER
--	select SPARSE_IRQ
--	select USB_EHCI_BIG_ENDIAN_DESC
--	select USB_EHCI_BIG_ENDIAN_MMIO
--	help
--	  Support for Intel's IXP4XX (XScale) family of processors.
--
- config ARCH_PXA
- 	bool "PXA2xx/PXA3xx-based"
- 	depends on CPU_LITTLE_ENDIAN
-diff --git a/arch/arm/mach-ixp4xx/Kconfig b/arch/arm/mach-ixp4xx/Kconfig
-index f41ba3f42fc8..dc6ea3c2e3ed 100644
---- a/arch/arm/mach-ixp4xx/Kconfig
-+++ b/arch/arm/mach-ixp4xx/Kconfig
-@@ -1,9 +1,20 @@
- # SPDX-License-Identifier: GPL-2.0-only
--if ARCH_IXP4XX
--
--menu "Intel IXP4xx Implementation Options"
-+menuconfig ARCH_IXP4XX
-+	bool "IXP4xx-based platforms"
-+	depends on ARCH_MULTI_V5
-+	depends on CPU_BIG_ENDIAN
-+	select CPU_XSCALE
-+	select GPIO_IXP4XX
-+	select GPIOLIB
-+	select FORCE_PCI
-+	select IXP4XX_IRQ
-+	select IXP4XX_TIMER
-+	select USB_EHCI_BIG_ENDIAN_DESC
-+	select USB_EHCI_BIG_ENDIAN_MMIO
-+	help
-+	  Support for Intel's IXP4XX (XScale) family of processors.
- 
--comment "IXP4xx Platforms"
-+if ARCH_IXP4XX
- 
- config MACH_IXP4XX_OF
- 	bool
-@@ -12,11 +23,8 @@ config MACH_IXP4XX_OF
- 	select ARM_APPENDED_DTB # Old Redboot bootloaders deployed
- 	select I2C
- 	select I2C_IOP3XX
--	select PCI
- 	select USE_OF
- 	help
- 	  Say 'Y' here to support Device Tree-based IXP4xx platforms.
- 
--endmenu
--
- endif
-diff --git a/arch/arm/mach-ixp4xx/Makefile.boot b/arch/arm/mach-ixp4xx/Makefile.boot
-deleted file mode 100644
-index 9b015bd1ef27..000000000000
---- a/arch/arm/mach-ixp4xx/Makefile.boot
-+++ /dev/null
-@@ -1,4 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0-only
--   zreladdr-y	+= 0x00008000
--params_phys-y	:= 0x00000100
--
-diff --git a/arch/arm/mach-ixp4xx/include/mach/uncompress.h b/arch/arm/mach-ixp4xx/include/mach/uncompress.h
-deleted file mode 100644
-index 09e7663e6a55..000000000000
---- a/arch/arm/mach-ixp4xx/include/mach/uncompress.h
-+++ /dev/null
-@@ -1,54 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * arch/arm/mach-ixp4xx/include/mach/uncompress.h 
-- *
-- * Copyright (C) 2002 Intel Corporation.
-- * Copyright (C) 2003-2004 MontaVista Software, Inc.
-- */
--
--#ifndef _ARCH_UNCOMPRESS_H_
--#define _ARCH_UNCOMPRESS_H_
--
--#include <asm/mach-types.h>
--#include <linux/serial_reg.h>
--
--#define IXP4XX_UART1_BASE_PHYS 0xc8000000
--#define IXP4XX_UART2_BASE_PHYS 0xc8001000
--
--#define TX_DONE (UART_LSR_TEMT|UART_LSR_THRE)
--
--volatile u32* uart_base;
--
--static inline void putc(int c)
--{
--	/* Check THRE and TEMT bits before we transmit the character.
--	 */
--	while ((uart_base[UART_LSR] & TX_DONE) != TX_DONE)
--		barrier();
--
--	*uart_base = c;
--}
--
--static void flush(void)
--{
--}
--
--static __inline__ void __arch_decomp_setup(unsigned long arch_id)
--{
--	/*
--	 * Some boards are using UART2 as console
--	 */
--	if (machine_is_adi_coyote() || machine_is_gtwx5715() ||
--	    machine_is_gateway7001() || machine_is_wg302v2() ||
--	    machine_is_devixp() || machine_is_miccpt() || machine_is_mic256())
--		uart_base = (volatile u32*) IXP4XX_UART2_BASE_PHYS;
--	else
--		uart_base = (volatile u32*) IXP4XX_UART1_BASE_PHYS;
--}
--
--/*
-- * arch_id is a variable in decompress_kernel()
-- */
--#define arch_decomp_setup()	__arch_decomp_setup(arch_id)
--
--#endif
+> Iow, now that I reponder your case after a few weeks I'm no longer sure
+> things work like you claim.
+>
+
+This is how I think that work, please let me know if you see something
+wrong in my logic:
+
+1) A PCI device of OF device is registered for the GPU, this attempt to
+   match a registered driver but no driver was registered that match yet.
+
+2) The efifb driver is built-in, will be initialized according to the link
+   order of the objects under drivers/video and the fbdev driver is registered.
+
+   There is no platform device or PCI/OF device registered that matches.
+
+3) The DRM driver is built-in, will be initialized according to the link
+   order of the objects under drivers/gpu and the DRM driver is registered.
+   
+   This matches the device registered in (1) and the DRM driver probes.
+
+4) The DRM driver .probe kicks out any conflicting DRM drivers and pdev
+   before registering the DRM device.
+
+   There are no conflicting drivers or platform device at this point.
+
+5) Latter at some point the drivers/firmware/sysfb.c init function is
+   executed, and this registers a platform device for the generic fb.
+
+   This device matches the efifb driver registered in (2) and the fbdev
+   driver probes.
+   
+   Since that happens *after* the DRM driver already matched, probed
+   and registered the DRM device, that is a bug and what the reverted
+   patch worked around.
+
+So we need to prevent (5) if (1) and (3) already happened. Having a flag
+set in the fbdev core somewhere when remove_conflicting_framebuffers()
+is called could be a solution indeed.
+
+That is, the fbdev core needs to know that a DRM driver already probed
+and make register_framebuffer() fail if info->flag & FBINFO_MISC_FIRMWARE
+
+I can attempt to write a patch for that.
+
 -- 
-2.29.2
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
 

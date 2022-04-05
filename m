@@ -2,40 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 873A04F4DBA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C58524F49D8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1582897AbiDEXuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
+        id S1451485AbiDEWaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390737AbiDEPbO (ORCPT
+        with ESMTP id S1391188AbiDEPeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:31:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE4247396
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:39:03 -0700 (PDT)
+        Tue, 5 Apr 2022 11:34:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81984C411
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:40:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D364361899
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 13:39:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80635C385A1;
-        Tue,  5 Apr 2022 13:39:01 +0000 (UTC)
-Date:   Tue, 5 Apr 2022 09:38:59 -0400
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F01BB81D69
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 13:40:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D400BC385A0;
+        Tue,  5 Apr 2022 13:40:49 +0000 (UTC)
+Date:   Tue, 5 Apr 2022 09:40:48 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: vmlinux.o: warning: objtool: stackleak_erase()+0x35: call to
- ftrace_likely_update() leaves .noinstr.text section
-Message-ID: <20220405093859.05660166@gandalf.local.home>
-In-Reply-To: <20220405080335.GC30877@worktop.programming.kicks-ass.net>
-References: <202204042008.sCQbEmVS-lkp@intel.com>
-        <202204041125.500C28FD8@keescook>
-        <20220404152502.0621caf9@gandalf.local.home>
-        <20220405080335.GC30877@worktop.programming.kicks-ass.net>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     bigeasy@linutronix.de, linux-kernel@vger.kernel.org
+Subject: Re: Typical PREEMPT_RT .config?
+Message-ID: <20220405094048.30a75670@gandalf.local.home>
+In-Reply-To: <20220404231654.GA3445712@paulmck-ThinkPad-P17-Gen-1>
+References: <20220404231654.GA3445712@paulmck-ThinkPad-P17-Gen-1>
 X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -49,20 +43,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 5 Apr 2022 10:03:35 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
+On Mon, 4 Apr 2022 16:16:54 -0700
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
 
-> > I think I'll just send a patch to nuke the tracer. I'm sure Peter Zijlstra
-> > will be happy when I do that. But I still want the profiler, as I find that
-> > useful.  
-> 
-> It'll explode the moment Lai's entry rework goes through. That'll make
-> us run C code before we switch to the kernel address space, so your
-> counters will not exist/be-mapped and *BOOM*.
+> OK, now that PREEMPT_RT is mostly into mainline, I should probably create
+> an rcutorture scenario more closely reflecting it.  The closest at the
+> moment is probably tools/testing/selftests/rcutorture/configs/rcu/TREE03,
+> but I figured that before beating on it I should check to see if you
+> already have a PREEMPT_RT rcutorture scenario file.
 
-We could black list those areas. Just add:
-
-#define DISABLE_BRANCH_PROFILING at the top of any file and it will not
-do the profiling.
+I don't have one.
 
 -- Steve

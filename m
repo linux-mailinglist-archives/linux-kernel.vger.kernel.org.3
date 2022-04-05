@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4EC84F5078
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB514F4F6B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1842006AbiDFB0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
+        id S1838004AbiDFAtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354085AbiDEKLc (ORCPT
+        with ESMTP id S242985AbiDEKfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:11:32 -0400
+        Tue, 5 Apr 2022 06:35:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A374CD4B;
-        Tue,  5 Apr 2022 02:57:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F42B522D3;
+        Tue,  5 Apr 2022 03:21:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A20C616E7;
-        Tue,  5 Apr 2022 09:57:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A318C385A1;
-        Tue,  5 Apr 2022 09:57:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C70761676;
+        Tue,  5 Apr 2022 10:21:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29665C385A0;
+        Tue,  5 Apr 2022 10:21:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152627;
-        bh=WEzZA7KphCwxsPg16crtXDZyTJfB5qhlsaeZdSfVPQE=;
+        s=korg; t=1649154079;
+        bh=nCcQDCqkA9cH4A6fJiPyNXrg6fpHBNG8Ok6IbQz4LvM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rIIiU1yRaONXvbLdOX2AqMMjjBqmygcXC9mRIsEycejPEEnjztoz5XAkDgOu7mkwG
-         mFQ7RU18/UgnbfEaUGhBuxhgtXv8/0BbkhyCXblxG+QPJSmGsFdInV5bI6jBw5e3ez
-         wWDc0oxabKuMx1fLkdb11BJ63RzQqPYv44HkwCLY=
+        b=wDfGtZObKUw//voa6FjqZ2UCeVMgii+ZPd7d763L7rSSAuQl3zHS4su7d3KE6BDNR
+         nKiS5qH4KAnxeV630Sc5p+o3n8phfMLbdNw3SNjfNWB9xHiC0jGEWz/fXkod36AlVX
+         RFwCv7KqF0tDLtnvGJQKVsW7RrpYxNVPEkakN7tQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH 5.15 845/913] crypto: arm/aes-neonbs-cbc - Select generic cbc and aes
+        stable@vger.kernel.org, Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 413/599] NFS: remove unneeded check in decode_devicenotify_args()
 Date:   Tue,  5 Apr 2022 09:31:47 +0200
-Message-Id: <20220405070405.157449708@linuxfoundation.org>
+Message-Id: <20220405070311.122819483@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,31 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Herbert Xu <herbert@gondor.apana.org.au>
+From: Alexey Khoroshilov <khoroshilov@ispras.ru>
 
-commit c8bd296cca3434b13b28b074eaeb78a23284de77 upstream.
+[ Upstream commit cb8fac6d2727f79f211e745b16c9abbf4d8be652 ]
 
-The algorithm __cbc-aes-neonbs requires a fallback so we need
-to select the config options for them or otherwise it will fail
-to register on boot-up.
+[You don't often get email from khoroshilov@ispras.ru. Learn why this is important at http://aka.ms/LearnAboutSenderIdentification.]
 
-Fixes: 00b99ad2bac2 ("crypto: arm/aes-neonbs - Use generic cbc...")
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Overflow check in not needed anymore after we switch to kmalloc_array().
+
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+Fixes: a4f743a6bb20 ("NFSv4.1: Convert open-coded array allocation calls to kmalloc_array()")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/crypto/Kconfig |    2 ++
- 1 file changed, 2 insertions(+)
+ fs/nfs/callback_xdr.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
---- a/arch/arm/crypto/Kconfig
-+++ b/arch/arm/crypto/Kconfig
-@@ -102,6 +102,8 @@ config CRYPTO_AES_ARM_BS
- 	depends on KERNEL_MODE_NEON
- 	select CRYPTO_SKCIPHER
- 	select CRYPTO_LIB_AES
-+	select CRYPTO_AES
-+	select CRYPTO_CBC
- 	select CRYPTO_SIMD
- 	help
- 	  Use a faster and more secure NEON based implementation of AES in CBC,
+diff --git a/fs/nfs/callback_xdr.c b/fs/nfs/callback_xdr.c
+index 1725079a0527..ca8a4aa351dc 100644
+--- a/fs/nfs/callback_xdr.c
++++ b/fs/nfs/callback_xdr.c
+@@ -272,10 +272,6 @@ __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
+ 	n = ntohl(*p++);
+ 	if (n == 0)
+ 		goto out;
+-	if (n > ULONG_MAX / sizeof(*args->devs)) {
+-		status = htonl(NFS4ERR_BADXDR);
+-		goto out;
+-	}
+ 
+ 	args->devs = kmalloc_array(n, sizeof(*args->devs), GFP_KERNEL);
+ 	if (!args->devs) {
+-- 
+2.34.1
+
 
 

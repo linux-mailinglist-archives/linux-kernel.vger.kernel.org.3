@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2744F2F09
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:05:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D16F4F3027
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242981AbiDEJim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46054 "EHLO
+        id S242117AbiDEJHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239392AbiDEIUC (ORCPT
+        with ESMTP id S239393AbiDEIUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:20:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216FBC4E03;
-        Tue,  5 Apr 2022 01:12:17 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3642A8EB4C;
+        Tue,  5 Apr 2022 01:12:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B09A760B0E;
-        Tue,  5 Apr 2022 08:12:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD124C385A0;
-        Tue,  5 Apr 2022 08:12:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DAFEAB81B92;
+        Tue,  5 Apr 2022 08:12:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DA97C385A1;
+        Tue,  5 Apr 2022 08:12:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146336;
-        bh=mmZ2Jvn5IljWceAQxbq/am6ExJcO/DLxJptcZiszCck=;
+        s=korg; t=1649146344;
+        bh=hgwv3Bsh45tJ1pWCJ/OiWav3TISg2Dhm7A/oWtm79mM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b77YDsQRImN3TueRKprczzLFxQHTRS6oJR5rk5vxa9b7nZ4zUDm68FVT+iLZKJ6w5
-         HDLAOHRegqf404kxM1GEse7VddlGnRQA2skcpCwl1EHlIWh/ojtsN92c0EloW+6a9a
-         qb6zTVNTUNOCpaw7/UDNRPKi9ZW0kvzs9yttKYrk=
+        b=MVYcs5i+21EqVA7VdLP6IXmxGE1PtqBM7xu6HyVDaM+bp/x0PzA4SKkFYSUejTyTX
+         KfnA0UlK76fJF4xvBCQf32pv3rO12LKTBn+5y2LIRA7xGrVVDhJhRf1hq9yN/Ugu83
+         H6scyoFGB5BX4lc8Hkb8RRzkSzjtYAAzd5UVhR6w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        stable@vger.kernel.org, Dirk Buchwalder <buchwalder@posteo.de>,
+        Robert Marko <robimarko@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0728/1126] clk: renesas: r8a779f0: Fix RSW2 clock divider
-Date:   Tue,  5 Apr 2022 09:24:35 +0200
-Message-Id: <20220405070428.960190253@linuxfoundation.org>
+Subject: [PATCH 5.17 0731/1126] clk: qcom: ipq8074: Use floor ops for SDCC1 clock
+Date:   Tue,  5 Apr 2022 09:24:38 +0200
+Message-Id: <20220405070429.046370460@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,38 +57,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+From: Dirk Buchwalder <buchwalder@posteo.de>
 
-[ Upstream commit 691419f90f7fb8a6f247b477cb539644e11431da ]
+[ Upstream commit b77d8306d84f83d1da68028a68c91da9c867b6f6 ]
 
-According to Section 8.1.2 Figure 8.1.1 ("Block Diagram of CPG"), Note
-22 ("RSW2 divider"), and Table 8.1.4d ("Lists of CPG clocks generated
-from CPGMA1"), the RSwitch2 and PCI Express clock is generated from PLL5
-by dividing by two, followed by the RSW2 divider.  As PLL5 runs at 3200
-MHz, and RSW2 is fixed to 320 MHz, the RSW2 divider must be 5.
+Use floor ops on SDCC1 APPS clock in order to round down selected clock
+frequency and avoid overclocking SD/eMMC cards.
 
-Correct the parent and the fixed divider.
+For example, currently HS200 cards were failling tuning as they were
+actually being clocked at 384MHz instead of 192MHz.
+This caused some boards to disable 1.8V I/O and force the eMMC into the
+standard HS mode (50MHz) and that appeared to work despite the eMMC being
+overclocked to 96Mhz in that case.
 
-Fixes: 24aaff6a6ce4c4de ("clk: renesas: cpg-mssr: Add support for R-Car S4-8")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/d6a406f31e6f02f892e0253f4e8a9a2f68fd652e.1641566003.git.geert+renesas@glider.be
+There was a previous commit to use floor ops on SDCC clocks, but it looks
+to have only covered SDCC2 clock.
+
+Fixes: 9607f6224b39 ("clk: qcom: ipq8074: add PCIE, USB and SDCC clocks")
+
+Signed-off-by: Dirk Buchwalder <buchwalder@posteo.de>
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220210173100.505128-1-robimarko@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/renesas/r8a779f0-cpg-mssr.c | 2 +-
+ drivers/clk/qcom/gcc-ipq8074.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/renesas/r8a779f0-cpg-mssr.c b/drivers/clk/renesas/r8a779f0-cpg-mssr.c
-index e6ec02c2c2a8..344957d533d8 100644
---- a/drivers/clk/renesas/r8a779f0-cpg-mssr.c
-+++ b/drivers/clk/renesas/r8a779f0-cpg-mssr.c
-@@ -103,7 +103,7 @@ static const struct cpg_core_clk r8a779f0_core_clks[] __initconst = {
- 	DEF_FIXED("s0d12_hsc",	R8A779F0_CLK_S0D12_HSC,	CLK_S0,		12, 1),
- 	DEF_FIXED("cl16m_hsc",	R8A779F0_CLK_CL16M_HSC,	CLK_S0,		48, 1),
- 	DEF_FIXED("s0d2_cc",	R8A779F0_CLK_S0D2_CC,	CLK_S0,		2, 1),
--	DEF_FIXED("rsw2",	R8A779F0_CLK_RSW2,	CLK_PLL5,	2, 1),
-+	DEF_FIXED("rsw2",	R8A779F0_CLK_RSW2,	CLK_PLL5_DIV2,	5, 1),
- 	DEF_FIXED("cbfusa",	R8A779F0_CLK_CBFUSA,	CLK_EXTAL,	2, 1),
- 	DEF_FIXED("cpex",	R8A779F0_CLK_CPEX,	CLK_EXTAL,	2, 1),
+diff --git a/drivers/clk/qcom/gcc-ipq8074.c b/drivers/clk/qcom/gcc-ipq8074.c
+index b09d99343e09..541016db3c4b 100644
+--- a/drivers/clk/qcom/gcc-ipq8074.c
++++ b/drivers/clk/qcom/gcc-ipq8074.c
+@@ -1074,7 +1074,7 @@ static struct clk_rcg2 sdcc1_apps_clk_src = {
+ 		.name = "sdcc1_apps_clk_src",
+ 		.parent_names = gcc_xo_gpll0_gpll2_gpll0_out_main_div2,
+ 		.num_parents = 4,
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_floor_ops,
+ 	},
+ };
  
 -- 
 2.34.1

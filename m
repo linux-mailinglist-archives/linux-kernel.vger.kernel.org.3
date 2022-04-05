@@ -2,120 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A934F4A36
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B893F4F48C6
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1454052AbiDEWhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34704 "EHLO
+        id S1385892AbiDEVuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1572975AbiDERi3 (ORCPT
+        with ESMTP id S1572978AbiDERjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 13:38:29 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9A6B8202
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 10:36:29 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id h11so18095903ljb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 10:36:29 -0700 (PDT)
+        Tue, 5 Apr 2022 13:39:24 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18994B8203
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 10:37:25 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id y32so9262073lfa.6
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 10:37:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hKOYgRsFR0laaLuRCNcCw4kzlI2NLR4gbF3cCQ5uqJo=;
-        b=BVr2YLDF7/GGyceZtEIm5ngSV0ZtewWefzWQMZJrDgToXi9Raa7zKK44DLjRVzPSqP
-         rsZLh6unBOu9b8DWnbG/ulO/wlcI8YZUN880shObyr6Um/tVfTBF3cpDo2m1IIKVXFXc
-         zuEn6HEaMmx6K8GTOTGE4Mblhp0TiZE2FitQh5Rr8gfwTotRoebmdrpUBkbSJQqBH8oj
-         W1xHElC1X+BR49CMwpETUiRpdxyPiM6vQ59CHEktyrUKPaIaztu332GBp/js3CB90ZAn
-         r78X3f+ujP//edJmpYijII+/KADwpeHvELEGDupRr4+0b1KDmJ35cLhgmUM4MdeHvqp9
-         rfDw==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FbbKQlV6u6KKQgV3kF0cSGptF4idzq+5FojEhxitZgw=;
+        b=dZ4XXEaJnpTbQNQk046zF6zDvjCUN0Cv1mS/hPtBMnKZaaN5nR3MO1fx0X2r36ErIJ
+         NFjVv+WN61WB6ydyCfBXQab73AARWTP69mMuJ4Z1v/ekYSBKIDAbOp4JYqco+Bai/m9M
+         xlyXw37jjONTNQfZFUJHuN1SQRQoNMyJtm2ac=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hKOYgRsFR0laaLuRCNcCw4kzlI2NLR4gbF3cCQ5uqJo=;
-        b=0JSYmqfoFhsvXI90WHtgPkA1/AT0y7s3iP58rb9Twg6AYJq35Q919S5jnXI/l3Hc8G
-         xqBgrRDm3t2hboKXOuiZ13NPlwo8BK0jxq4N4Zb3reUhu5BlC/6GypUoLxe3cuPx1SKp
-         CEiVRUlB8TRYp+XZl5zOWv/jdclPWIqJrWX8LhO8uVYFSU7ThYEjLy+UUfDnd1rtG4Vu
-         ml09q4S3fQW3JDUU8RSFQeDiAHAyUKRNMu5uGnzU4hhUC7vfKVDrm0Prl1boKNCHJ+nc
-         03jZVJNfheIzcVZJjXYXjpIMitC/40E+l7IK+0wndRdd+ThDxaX+d+mDRw7SQflqsOjD
-         nTdA==
-X-Gm-Message-State: AOAM5302mvcsr7aJhOHQwrrrbRMKHbfnbrCcsyMTZ6hjbdJhWVSd9jOT
-        FWEZzYontzq73iAleLB3GwM=
-X-Google-Smtp-Source: ABdhPJx9gURcfFhpkbU9G9qwJXgvTRqcQU7EZfhQn5YZ/YhwpA3vtsYFCnXigwEL5XUSIkyEiMsvQQ==
-X-Received: by 2002:a2e:a490:0:b0:249:894b:ce20 with SMTP id h16-20020a2ea490000000b00249894bce20mr2753320lji.301.1649180187930;
-        Tue, 05 Apr 2022 10:36:27 -0700 (PDT)
-Received: from noname.. ([2a02:2698:8c2a:226e:6d9:f5ff:fecb:a8ab])
-        by smtp.googlemail.com with ESMTPSA id j11-20020a196e0b000000b0044a3f007893sm1563825lfc.286.2022.04.05.10.36.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 10:36:27 -0700 (PDT)
-From:   Grigory Vasilyev <h0tc0d3@gmail.com>
-To:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Melissa Wen <mwen@igalia.com>
-Cc:     Grigory Vasilyev <h0tc0d3@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Jiawei Gu <Jiawei.Gu@amd.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/amdgpu: Senseless code and unnecessary memset
-Date:   Tue,  5 Apr 2022 20:36:31 +0300
-Message-Id: <20220405173632.2663-1-h0tc0d3@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FbbKQlV6u6KKQgV3kF0cSGptF4idzq+5FojEhxitZgw=;
+        b=Rlu9kbc1rQR68RNL3QetQwsoXXK256ARxHfnUkLRWXzwdXyTg9gNntWiIqtnlE9ge/
+         ug1KsMhVlWfrK4j01GBYq9bJa2jM/FmVGAurR9CZ+Sun8w4hcyZX/PXLM4XLRUi75MKO
+         VXS0Abh7HoPaMebjlsq21jyFBb9P8Z+fJa6Xi5JYRu3NTdSgF1/vVBqq6dIE7EMd8RA0
+         SGYmHTjgdOsW+z6dEwIK8f3H+louqPpFSaoYNTh4JwI2N75uLh0PFMlC7kgI6CkE0mDf
+         X+kO7Q7D8vCdSFvx7ouJUwL9hqUhzkt7b+0HGxuyGZ+/Y7vkh8khREYHELKriHc4F0+n
+         11ZA==
+X-Gm-Message-State: AOAM532X9Yrya0YDuU4pWBcG/R5rWcw5DXsdH5Yw3ny2DA0HmVBsAbI+
+        cNrxbtX5XqmJgSjRLD6kR0oKsJRG1V5D+/6aKJI=
+X-Google-Smtp-Source: ABdhPJxiKPhnWAiroPFaSrdtxTb19hBpokrFwUJ1oDsSNyCQHxYmdRWsevCHhD9HYrvADcdJnCG4Sw==
+X-Received: by 2002:a05:6512:3b0a:b0:44a:2e21:ef25 with SMTP id f10-20020a0565123b0a00b0044a2e21ef25mr3327241lfv.333.1649180243024;
+        Tue, 05 Apr 2022 10:37:23 -0700 (PDT)
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com. [209.85.167.49])
+        by smtp.gmail.com with ESMTPSA id q28-20020ac24a7c000000b0044ade90e498sm1464971lfp.144.2022.04.05.10.37.21
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Apr 2022 10:37:22 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id k21so24570264lfe.4
+        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 10:37:21 -0700 (PDT)
+X-Received: by 2002:a05:6512:3c93:b0:44b:4ba:c334 with SMTP id
+ h19-20020a0565123c9300b0044b04bac334mr3435604lfv.27.1649180241247; Tue, 05
+ Apr 2022 10:37:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220405140906.222350-1-Jason@zx2c4.com>
+In-Reply-To: <20220405140906.222350-1-Jason@zx2c4.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 5 Apr 2022 10:37:05 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjFSsa7ZTFOiDCpZbwQsCKdAo3KFetSpGCjusqjjcb2XA@mail.gmail.com>
+Message-ID: <CAHk-=wjFSsa7ZTFOiDCpZbwQsCKdAo3KFetSpGCjusqjjcb2XA@mail.gmail.com>
+Subject: Re: [PATCH] random: opportunistically initialize on /dev/urandom reads
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using memset on local arrays before exiting the function is pointless.
-Compilator will remove this code. Also for local arrays is preferable to
-use {0} instead of memset. Mistakes are often made when working with
-memset.
+On Tue, Apr 5, 2022 at 7:10 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+>
+> Practically speaking, this means that at least on x86, /dev/urandom
+> becomes safe. Probably other architectures with working cycle counters
+> will also become safe. And architectures with slow or broken cycle
+> counters at least won't be affected at all by this change.
 
-Signed-off-by: Grigory Vasilyev <h0tc0d3@gmail.com>
----
- drivers/gpu/drm/amd/amdgpu/atom.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+I think this is a good change, as it's a bit pointless to warn about
+uninitialized random data if we can just initialize it.
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/atom.c b/drivers/gpu/drm/amd/amdgpu/atom.c
-index be9d61bcb8ae..537e48fbbe6b 100644
---- a/drivers/gpu/drm/amd/amdgpu/atom.c
-+++ b/drivers/gpu/drm/amd/amdgpu/atom.c
-@@ -1538,11 +1538,9 @@ struct atom_context *amdgpu_atom_parse(struct card_info *card, void *bios)
- int amdgpu_atom_asic_init(struct atom_context *ctx)
- {
- 	int hwi = CU16(ctx->data_table + ATOM_DATA_FWI_PTR);
--	uint32_t ps[16];
-+	uint32_t ps[16] = {0};
- 	int ret;
- 
--	memset(ps, 0, 64);
--
- 	ps[0] = cpu_to_le32(CU32(hwi + ATOM_FWI_DEFSCLK_PTR));
- 	ps[1] = cpu_to_le32(CU32(hwi + ATOM_FWI_DEFMCLK_PTR));
- 	if (!ps[0] || !ps[1])
-@@ -1551,10 +1549,6 @@ int amdgpu_atom_asic_init(struct atom_context *ctx)
- 	if (!CU16(ctx->cmd_table + 4 + 2 * ATOM_CMD_INIT))
- 		return 1;
- 	ret = amdgpu_atom_execute_table(ctx, ATOM_CMD_INIT, ps);
--	if (ret)
--		return ret;
--
--	memset(ps, 0, 64);
- 
- 	return ret;
- }
--- 
-2.35.1
+I do wonder if it wouldn't be better to perhaps move this all into
+wait_for_random_bytes(), though, and add an argument to that function
+for "no delay".
 
+Because I think we should at the same time also add a warning to
+wait_for_random_bytes() for the "uhhhuh, it timed out".
+
+Right now wait_for_random_bytes() returns an error that most people
+then just ignore. Including drivers/net/wireguard/cookie.c.
+
+So instead of returning an error that nobody can do much about, how
+about we move the warning code into wait_for_random_bytes()?
+
+And make that urandom_read() call the same wait_for_random_bytes()
+that random_read() calls, just with GRND_NONBLOCK as an argument?
+
+Not a big deal. Your patch is fine by me too.
+
+                    Linus

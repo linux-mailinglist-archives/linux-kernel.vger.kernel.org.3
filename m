@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3AB14F4730
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6331D4F45F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346212AbiDEVDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:03:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
+        id S238413AbiDEMoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348920AbiDEJsr (ORCPT
+        with ESMTP id S242704AbiDEJIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC42EE4EC;
-        Tue,  5 Apr 2022 02:37:30 -0700 (PDT)
+        Tue, 5 Apr 2022 05:08:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DB275E60;
+        Tue,  5 Apr 2022 01:57:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2925961368;
-        Tue,  5 Apr 2022 09:37:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39A09C385A2;
-        Tue,  5 Apr 2022 09:37:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CD8461577;
+        Tue,  5 Apr 2022 08:57:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C8D6C385A0;
+        Tue,  5 Apr 2022 08:57:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151449;
-        bh=ksj7NaMP7Eh/EV7FFmcfWjOot3c2gY7+vG8k34T7j4o=;
+        s=korg; t=1649149031;
+        bh=bLgjVcnUj4tcrOszUiESG7XYIWk+hFyD1xAOR+/+N1A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gj6422Wb9976BZXx8dytej13MlfV/NY/kv48UuXqTi3J1+KNMhTXXxc4FWrpoPt3S
-         qIy4Iv5+2yiXEEF3GIoPJiFUrPNtssQ4YMGTxJvdK+9JWIq9Kq8iFyc1ty+crU0Dqg
-         gysFOl8Opwdgwute6G+HTFLl4SKLDhbzTbwUm1x4=
+        b=pn+WPR+B1GoAyk0PwMbIIZMl6iy59aJ1SXxBsNtIre7/504rdehEvRbUoKa3hfcCA
+         kBkr4jYGz0GbPhMu7leItBi6xUrFb/6GTWz8Wt4mawwaNp7A9vzoCN4NJk8eMiH4Yi
+         FN4ZnE5FjOr+81QBI9W3i0Pj7vmSgE/v4/ZRVTHg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Madhavan Srinivasan <maddy@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        Divya Koppera <Divya.Koppera@microchip.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 420/913] powerpc/perf: Dont use perf_hw_context for trace IMC PMU
+Subject: [PATCH 5.16 0569/1017] net: phy: micrel: Fix concurrent register access
 Date:   Tue,  5 Apr 2022 09:24:42 +0200
-Message-Id: <20220405070352.435852317@linuxfoundation.org>
+Message-Id: <20220405070411.169298291@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,50 +56,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+From: Divya Koppera <Divya.Koppera@microchip.com>
 
-[ Upstream commit 0198322379c25215b2778482bf1221743a76e2b5 ]
+[ Upstream commit 4488f6b6148045424459ef1d5b153c6895ee1dbb ]
 
-Trace IMC (In-Memory collection counters) in powerpc is useful for
-application level profiling.
+Make Extended page register accessing atomic,
+to overcome unexpected output from register
+reads/writes.
 
-For trace_imc, presently task context (task_ctx_nr) is set to
-perf_hw_context. But perf_hw_context should only be used for CPU PMU.
-See commit 26657848502b ("perf/core: Verify we have a single
-perf_hw_context PMU").
-
-So for trace_imc, even though it is per thread PMU, it is preferred to
-use sw_context in order to be able to do application level monitoring.
-Hence change the task_ctx_nr to use perf_sw_context.
-
-Fixes: 012ae244845f ("powerpc/perf: Trace imc PMU functions")
-Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Reviewed-by: Madhavan Srinivasan <maddy@linux.vnet.ibm.com>
-[mpe: Update subject & incorporate notes into change log, reflow comment]
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220202041837.65968-1-atrajeev@linux.vnet.ibm.com
+Fixes: 7c2dcfa295b1 ("net: phy: micrel: Add support for LAN8804 PHY")
+Signed-off-by: Divya Koppera<Divya.Koppera@microchip.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/perf/imc-pmu.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/net/phy/micrel.c | 32 +++++++++++++++++---------------
+ 1 file changed, 17 insertions(+), 15 deletions(-)
 
-diff --git a/arch/powerpc/perf/imc-pmu.c b/arch/powerpc/perf/imc-pmu.c
-index e106909ff9c3..e7583fbcc8fa 100644
---- a/arch/powerpc/perf/imc-pmu.c
-+++ b/arch/powerpc/perf/imc-pmu.c
-@@ -1457,7 +1457,11 @@ static int trace_imc_event_init(struct perf_event *event)
+diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+index 76ef4e019ca9..15fe0fa78092 100644
+--- a/drivers/net/phy/micrel.c
++++ b/drivers/net/phy/micrel.c
+@@ -1575,11 +1575,13 @@ static int lanphy_read_page_reg(struct phy_device *phydev, int page, u32 addr)
+ {
+ 	u32 data;
  
- 	event->hw.idx = -1;
+-	phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL, page);
+-	phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, addr);
+-	phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL,
+-		  (page | LAN_EXT_PAGE_ACCESS_CTRL_EP_FUNC));
+-	data = phy_read(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA);
++	phy_lock_mdio_bus(phydev);
++	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL, page);
++	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, addr);
++	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL,
++		    (page | LAN_EXT_PAGE_ACCESS_CTRL_EP_FUNC));
++	data = __phy_read(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA);
++	phy_unlock_mdio_bus(phydev);
  
--	event->pmu->task_ctx_nr = perf_hw_context;
-+	/*
-+	 * There can only be a single PMU for perf_hw_context events which is assigned to
-+	 * core PMU. Hence use "perf_sw_context" for trace_imc.
-+	 */
-+	event->pmu->task_ctx_nr = perf_sw_context;
- 	event->destroy = reset_global_refc;
- 	return 0;
+ 	return data;
  }
+@@ -1587,18 +1589,18 @@ static int lanphy_read_page_reg(struct phy_device *phydev, int page, u32 addr)
+ static int lanphy_write_page_reg(struct phy_device *phydev, int page, u16 addr,
+ 				 u16 val)
+ {
+-	phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL, page);
+-	phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, addr);
+-	phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL,
+-		  (page | LAN_EXT_PAGE_ACCESS_CTRL_EP_FUNC));
+-
+-	val = phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, val);
+-	if (val) {
++	phy_lock_mdio_bus(phydev);
++	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL, page);
++	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, addr);
++	__phy_write(phydev, LAN_EXT_PAGE_ACCESS_CONTROL,
++		    page | LAN_EXT_PAGE_ACCESS_CTRL_EP_FUNC);
++
++	val = __phy_write(phydev, LAN_EXT_PAGE_ACCESS_ADDRESS_DATA, val);
++	if (val != 0)
+ 		phydev_err(phydev, "Error: phy_write has returned error %d\n",
+ 			   val);
+-		return val;
+-	}
+-	return 0;
++	phy_unlock_mdio_bus(phydev);
++	return val;
+ }
+ 
+ static int lan8804_config_init(struct phy_device *phydev)
 -- 
 2.34.1
 

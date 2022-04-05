@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A054F3B9C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 962154F38FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381886AbiDEL75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38468 "EHLO
+        id S1377457AbiDEL3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243323AbiDEIuV (ORCPT
+        with ESMTP id S243670AbiDEIuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:50:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFB913D35;
-        Tue,  5 Apr 2022 01:38:38 -0700 (PDT)
+        Tue, 5 Apr 2022 04:50:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858F9DCB;
+        Tue,  5 Apr 2022 01:39:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4FD54B81BBF;
-        Tue,  5 Apr 2022 08:38:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1E43C385A2;
-        Tue,  5 Apr 2022 08:38:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43EA861532;
+        Tue,  5 Apr 2022 08:38:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 542F6C385A0;
+        Tue,  5 Apr 2022 08:38:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147917;
-        bh=FUcnqxzjXH5u3vbw4nDqrygn9TouK/7YERh2EEo0v3w=;
+        s=korg; t=1649147919;
+        bh=lyl/QYeOAOaVkyrba6LwCYjzbpaPtg3ddCAsSWp4+5E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hZ9KVrrS8pTFxDNNc5Q65OIpjrwYAB8d18F3eEpK+sHKicqm5LY0EihkZzJ1UDiar
-         7XViUCsZKb7TCbysWjdAaEaglZftF4nJHldTCDT1mIU1RG8qorxKvX6BVlPj2+kYt4
-         8wKwc/STja53WA7WF3ZpkZgH9SV9ywjmigvYV0H8=
+        b=QFOV3GbLMAzdtni8Tyorq6DnHs4iUWoZdZuQ3P2VFAcHUzBocVV1VjljRbqHCoIRC
+         Qmmc9ZkbQ/QyO3i2kZrua8UkaDm0CvxfyAhkl8BqSiG8Y6HVRVrF3Jz6tAYNBfL2Yk
+         x+U2vVKdVjlxEya3c254hrRwkRJTMhlwUpWgiC0k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mingzhe Zou <mingzhe.zou@easystack.cn>,
-        Coly Li <colyli@suse.de>
-Subject: [PATCH 5.16 0169/1017] bcache: fixup multiple threads crash
-Date:   Tue,  5 Apr 2022 09:18:02 +0200
-Message-Id: <20220405070359.242350780@linuxfoundation.org>
+        stable@vger.kernel.org, Shawn Guo <shawn.guo@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 5.16 0170/1017] PM: domains: Fix sleep-in-atomic bug caused by genpd_debug_remove()
+Date:   Tue,  5 Apr 2022 09:18:03 +0200
+Message-Id: <20220405070359.272949027@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -54,67 +55,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mingzhe Zou <mingzhe.zou@easystack.cn>
+From: Shawn Guo <shawn.guo@linaro.org>
 
-commit 887554ab96588de2917b6c8c73e552da082e5368 upstream.
+commit f6bfe8b5b2c2a5ac8bd2fc7bca3706e6c3fc26d8 upstream.
 
-When multiple threads to check btree nodes in parallel, the main
-thread wait for all threads to stop or CACHE_SET_IO_DISABLE flag:
+When a genpd with GENPD_FLAG_IRQ_SAFE gets removed, the following
+sleep-in-atomic bug will be seen, as genpd_debug_remove() will be called
+with a spinlock being held.
 
-wait_event_interruptible(check_state->wait,
-                         atomic_read(&check_state->started) == 0 ||
-                         test_bit(CACHE_SET_IO_DISABLE, &c->flags));
+[    0.029183] BUG: sleeping function called from invalid context at kernel/locking/rwsem.c:1460
+[    0.029204] in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 1, name: swapper/0
+[    0.029219] preempt_count: 1, expected: 0
+[    0.029230] CPU: 1 PID: 1 Comm: swapper/0 Not tainted 5.17.0-rc4+ #489
+[    0.029245] Hardware name: Thundercomm TurboX CM2290 (DT)
+[    0.029256] Call trace:
+[    0.029265]  dump_backtrace.part.0+0xbc/0xd0
+[    0.029285]  show_stack+0x3c/0xa0
+[    0.029298]  dump_stack_lvl+0x7c/0xa0
+[    0.029311]  dump_stack+0x18/0x34
+[    0.029323]  __might_resched+0x10c/0x13c
+[    0.029338]  __might_sleep+0x4c/0x80
+[    0.029351]  down_read+0x24/0xd0
+[    0.029363]  lookup_one_len_unlocked+0x9c/0xcc
+[    0.029379]  lookup_positive_unlocked+0x10/0x50
+[    0.029392]  debugfs_lookup+0x68/0xac
+[    0.029406]  genpd_remove.part.0+0x12c/0x1b4
+[    0.029419]  of_genpd_remove_last+0xa8/0xd4
+[    0.029434]  psci_cpuidle_domain_probe+0x174/0x53c
+[    0.029449]  platform_probe+0x68/0xe0
+[    0.029462]  really_probe+0x190/0x430
+[    0.029473]  __driver_probe_device+0x90/0x18c
+[    0.029485]  driver_probe_device+0x40/0xe0
+[    0.029497]  __driver_attach+0xf4/0x1d0
+[    0.029508]  bus_for_each_dev+0x70/0xd0
+[    0.029523]  driver_attach+0x24/0x30
+[    0.029534]  bus_add_driver+0x164/0x22c
+[    0.029545]  driver_register+0x78/0x130
+[    0.029556]  __platform_driver_register+0x28/0x34
+[    0.029569]  psci_idle_init_domains+0x1c/0x28
+[    0.029583]  do_one_initcall+0x50/0x1b0
+[    0.029595]  kernel_init_freeable+0x214/0x280
+[    0.029609]  kernel_init+0x2c/0x13c
+[    0.029622]  ret_from_fork+0x10/0x20
 
-However, the bch_btree_node_read and bch_btree_node_read_done
-maybe call bch_cache_set_error, then the CACHE_SET_IO_DISABLE
-will be set. If the flag already set, the main thread return
-error. At the same time, maybe some threads still running and
-read NULL pointer, the kernel will crash.
+It doesn't seem necessary to call genpd_debug_remove() with the lock, so
+move it out from locking to fix the problem.
 
-This patch change the event wait condition, the main thread must
-wait for all threads to stop.
-
-Fixes: 8e7102273f597 ("bcache: make bch_btree_check() to be multithreaded")
-Signed-off-by: Mingzhe Zou <mingzhe.zou@easystack.cn>
-Cc: stable@vger.kernel.org # v5.7+
-Signed-off-by: Coly Li <colyli@suse.de>
+Fixes: 718072ceb211 ("PM: domains: create debugfs nodes when adding power domains")
+Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: 5.11+ <stable@vger.kernel.org> # 5.11+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/bcache/btree.c     |    6 ++++--
- drivers/md/bcache/writeback.c |    6 ++++--
- 2 files changed, 8 insertions(+), 4 deletions(-)
+ drivers/base/power/domain.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/md/bcache/btree.c
-+++ b/drivers/md/bcache/btree.c
-@@ -2060,9 +2060,11 @@ int bch_btree_check(struct cache_set *c)
- 		}
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -2058,9 +2058,9 @@ static int genpd_remove(struct generic_p
+ 		kfree(link);
  	}
  
-+	/*
-+	 * Must wait for all threads to stop.
-+	 */
- 	wait_event_interruptible(check_state->wait,
--				 atomic_read(&check_state->started) == 0 ||
--				  test_bit(CACHE_SET_IO_DISABLE, &c->flags));
-+				 atomic_read(&check_state->started) == 0);
- 
- 	for (i = 0; i < check_state->total_threads; i++) {
- 		if (check_state->infos[i].result) {
---- a/drivers/md/bcache/writeback.c
-+++ b/drivers/md/bcache/writeback.c
-@@ -998,9 +998,11 @@ void bch_sectors_dirty_init(struct bcach
- 		}
- 	}
- 
-+	/*
-+	 * Must wait for all threads to stop.
-+	 */
- 	wait_event_interruptible(state->wait,
--		 atomic_read(&state->started) == 0 ||
--		 test_bit(CACHE_SET_IO_DISABLE, &c->flags));
-+		 atomic_read(&state->started) == 0);
- 
- out:
- 	kfree(state);
+-	genpd_debug_remove(genpd);
+ 	list_del(&genpd->gpd_list_node);
+ 	genpd_unlock(genpd);
++	genpd_debug_remove(genpd);
+ 	cancel_work_sync(&genpd->power_off_work);
+ 	if (genpd_is_cpu_domain(genpd))
+ 		free_cpumask_var(genpd->cpus);
 
 

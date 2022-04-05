@@ -2,197 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 787CB4F4E98
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B224F4E7F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1835746AbiDFAdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
+        id S1455231AbiDFAZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446442AbiDEPoh (ORCPT
+        with ESMTP id S1446545AbiDEPos (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:44:37 -0400
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E95E183BB;
-        Tue,  5 Apr 2022 07:16:08 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-2eba37104a2so8618977b3.0;
-        Tue, 05 Apr 2022 07:16:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fkdGzGxa3fNmTPp0+kgh9EkuzHnHkxjgFCsDVXBvjaU=;
-        b=VQvCIpCRPIB98olLkOHtGVDwN3Q0xVE1o5YJSq5q57aCFyziY6pSZZGs7sanMd3ySc
-         DJxOSBFn8LMQVrawvCbybhkog82JodY2uM65c3vAVCXrZLH2rnTJ4zaDeSAfAESmQp9V
-         zZ3tJmpti7ujS/VD+pwd88IpOStYDccDcj6N3387AIetDbM2aWAagYqzP2HpjjjVHk1H
-         Nl6vdQ/FdWTQeSVlumGh/IiBqP5NU7oHVp5slIce1dca7pdUYwf8VNbR/LJ7fFe++zob
-         wjpUT8g04+or081xRU1kY4VJC3zYVfUbjMZsISUtw/LLM7ZxRcSqASWmyDEnzIX+ZvWk
-         k3Vw==
-X-Gm-Message-State: AOAM533EDtNTq2h3hnd6fj8MlvXhS2PdZGgE57DPukEuW8fq0qzm65cl
-        AnIET8/Eza8l1T9n0DmNpojOUFz4JwylqWvuTPmsQVMV
-X-Google-Smtp-Source: ABdhPJwYyG2qs2nkdY44U307850mhvob8xD23++y4sv/KhP60pQm3PWpGwJe2/kAl46cJzEZmP50eHk5LIecIkqNRWU=
-X-Received: by 2002:a81:1b97:0:b0:2db:640f:49d8 with SMTP id
- b145-20020a811b97000000b002db640f49d8mr2768279ywb.326.1649168167397; Tue, 05
- Apr 2022 07:16:07 -0700 (PDT)
+        Tue, 5 Apr 2022 11:44:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B6A220E6;
+        Tue,  5 Apr 2022 07:17:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3A6860B0E;
+        Tue,  5 Apr 2022 14:17:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B25BEC385A6;
+        Tue,  5 Apr 2022 14:17:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649168267;
+        bh=MGKEOKuzG/zvLfWYpwbNWne2VYHu0gGNwDsvDh8cPyw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jPqroh2EK0MDuPgb5WnacCf6ssZHd95lDMSvChNGm9ZJ2nxe9+1xVISwVR1W77n7L
+         cdrLs31WHH+F0ZSAp8+eDIIhyK1D+5oOwGGfYe5TuF4MbSv5lJZF2/1ezRv3TWRAal
+         Qi4GZhfZai8uFU71eo9PKZPO7K5gkNmv931k48ZSHn5zD6Wci2PXCZNL4EUGuiSVHw
+         Y+JugbJ6g7lkPZAVu+8LZDe50CFE/R/Cfk5jUFN0GT27J5J1pHGsm1ILDxjWhUk956
+         52g791GTXf7nJry3EMVA/2dO28tDf2u6kjCfWNsjhPvsg0XsRDquQFbXWpy3k46Iw6
+         NRVwdMSGty9/A==
+Date:   Tue, 5 Apr 2022 15:17:41 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Satya Priya <quic_c_skakit@quicinc.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        quic_collinsd@quicinc.com, quic_subbaram@quicinc.com,
+        quic_jprakash@quicinc.com
+Subject: Re: [PATCH V9 4/6] regulator: Add a regulator driver for the PM8008
+ PMIC
+Message-ID: <YkxPhcgBU3/5zu/P@sirena.org.uk>
+References: <1649166633-25872-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1649166633-25872-5-git-send-email-quic_c_skakit@quicinc.com>
 MIME-Version: 1.0
-References: <1649139253-26656-1-git-send-email-liuxp11@chinatelecom.cn>
-In-Reply-To: <1649139253-26656-1-git-send-email-liuxp11@chinatelecom.cn>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 5 Apr 2022 16:15:56 +0200
-Message-ID: <CAJZ5v0ikprR41nugj0-ekK3F4KkYtMBYjC+-h813wq2d9puMPA@mail.gmail.com>
-Subject: Re: [PATCH v2] ACPI: APEI: fix missing erst record id
-To:     Liu Xinpeng <liuxp11@chinatelecom.cn>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Borislav Petkov <bp@alien8.de>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Robert Moore <robert.moore@intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8dPCbrnld0sz6d93"
+Content-Disposition: inline
+In-Reply-To: <1649166633-25872-5-git-send-email-quic_c_skakit@quicinc.com>
+X-Cookie: diplomacy, n:
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-APEI reviewers, your input is needed here.
 
-On Tue, Apr 5, 2022 at 8:14 AM Liu Xinpeng <liuxp11@chinatelecom.cn> wrote:
->
-> record_id is in the erst_record_id_cache but not in storage,so
-> erst_read will return -ENOENT, and then goto retry_next,
-> erst_get_record_id_next skip a record_id. This can result in
-> printing the records just in the cache.
->
-> A reproducer of the problem(retry many times):
->
-> [root@localhost erst-inject]# ./erst-inject -c 0xaaaaa00011
-> [root@localhost erst-inject]# ./erst-inject -p
-> rc: 273
-> rcd sig: CPER
-> rcd id: 0xaaaaa00012
-> rc: 273
-> rcd sig: CPER
-> rcd id: 0xaaaaa00013
-> rc: 273
-> rcd sig: CPER
-> rcd id: 0xaaaaa00014
-> [root@localhost erst-inject]# ./erst-inject -i 0xaaaaa000006
-> [root@localhost erst-inject]# ./erst-inject -i 0xaaaaa000007
-> [root@localhost erst-inject]# ./erst-inject -i 0xaaaaa000008
-> [root@localhost erst-inject]# ./erst-inject -p
-> rc: 273
-> rcd sig: CPER
-> rcd id: 0xaaaaa00012
-> rc: 273
-> rcd sig: CPER
-> rcd id: 0xaaaaa00013
-> rc: 273
-> rcd sig: CPER
-> rcd id: 0xaaaaa00014
-> [root@localhost erst-inject]# ./erst-inject -n
-> total error record count: 6
->
-> Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
-> ---
->  drivers/acpi/apei/erst-dbg.c |  4 +++-
->  drivers/acpi/apei/erst.c     | 34 +++++++++++++++++++++++++++++++---
->  include/acpi/apei.h          |  1 +
->  3 files changed, 35 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/acpi/apei/erst-dbg.c b/drivers/acpi/apei/erst-dbg.c
-> index c740f0faad39..5b8164280a17 100644
-> --- a/drivers/acpi/apei/erst-dbg.c
-> +++ b/drivers/acpi/apei/erst-dbg.c
-> @@ -113,8 +113,10 @@ static ssize_t erst_dbg_read(struct file *filp, char __user *ubuf,
->  retry:
->         rc = len = erst_read(id, erst_dbg_buf, erst_dbg_buf_len);
->         /* The record may be cleared by others, try read next record */
-> -       if (rc == -ENOENT)
-> +       if (rc == -ENOENT) {
-> +               erst_clear_cache(id);
->                 goto retry_next;
-> +       }
->         if (rc < 0)
->                 goto out;
->         if (len > ERST_DBG_RECORD_LEN_MAX) {
-> diff --git a/drivers/acpi/apei/erst.c b/drivers/acpi/apei/erst.c
-> index 698d67cee052..07d69dc7fd62 100644
-> --- a/drivers/acpi/apei/erst.c
-> +++ b/drivers/acpi/apei/erst.c
-> @@ -856,6 +856,31 @@ ssize_t erst_read(u64 record_id, struct cper_record_header *record,
->  }
->  EXPORT_SYMBOL_GPL(erst_read);
->
-> +int erst_clear_cache(u64 record_id)
-> +{
-> +       int rc, i;
-> +       u64 *entries;
-> +
-> +       if (erst_disable)
-> +               return -ENODEV;
-> +
-> +       rc = mutex_lock_interruptible(&erst_record_id_cache.lock);
-> +       if (rc)
-> +               return rc;
-> +
-> +       entries = erst_record_id_cache.entries;
-> +       for (i = 0; i < erst_record_id_cache.len; i++) {
-> +               if (entries[i] == record_id)
-> +                       entries[i] = APEI_ERST_INVALID_RECORD_ID;
-> +       }
-> +       __erst_record_id_cache_compact();
-> +
-> +       mutex_unlock(&erst_record_id_cache.lock);
-> +
-> +       return rc;
-> +}
-> +EXPORT_SYMBOL_GPL(erst_clear_cache);
-> +
->  int erst_clear(u64 record_id)
->  {
->         int rc, i;
-> @@ -998,14 +1023,17 @@ static ssize_t erst_reader(struct pstore_record *record)
->
->         len = erst_read(record_id, &rcd->hdr, rcd_len);
->         /* The record may be cleared by others, try read next record */
-> -       if (len == -ENOENT)
-> +       if (len == -ENOENT) {
-> +               erst_clear_cache(record_id);
->                 goto skip;
-> -       else if (len < 0 || len < sizeof(*rcd)) {
-> +       } else if (len < 0 || len < sizeof(*rcd)) {
->                 rc = -EIO;
->                 goto out;
->         }
-> -       if (!guid_equal(&rcd->hdr.creator_id, &CPER_CREATOR_PSTORE))
-> +       if (!guid_equal(&rcd->hdr.creator_id, &CPER_CREATOR_PSTORE)) {
-> +               erst_clear_cache(record_id);
->                 goto skip;
-> +       }
->
->         record->buf = kmalloc(len, GFP_KERNEL);
->         if (record->buf == NULL) {
-> diff --git a/include/acpi/apei.h b/include/acpi/apei.h
-> index afaca3a075e8..f8c11ff4115a 100644
-> --- a/include/acpi/apei.h
-> +++ b/include/acpi/apei.h
-> @@ -47,6 +47,7 @@ void erst_get_record_id_end(void);
->  ssize_t erst_read(u64 record_id, struct cper_record_header *record,
->                   size_t buflen);
->  int erst_clear(u64 record_id);
-> +int erst_clear_cache(u64 record_id);
->
->  int arch_apei_enable_cmcff(struct acpi_hest_header *hest_hdr, void *data);
->  void arch_apei_report_mem_error(int sev, struct cper_sec_mem_err *mem_err);
-> --
-> 2.23.0
->
+--8dPCbrnld0sz6d93
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Tue, Apr 05, 2022 at 07:20:31PM +0530, Satya Priya wrote:
+
+> +#include <linux/regulator/driver.h>
+> +#include <linux/regulator/machine.h>
+
+Why does the driver need machine.h?  That's usually a bug, though I
+didn't spot anywhere where it's used so it's probably just an extra
+header.
+
+> +	.set_voltage_sel	= pm8008_regulator_set_voltage,
+> +	.get_voltage		= pm8008_regulator_get_voltage,
+
+You shouldn't mix and match the selector and non-selector operations,
+since the device just takes a voltage you may as well just use the
+non-selector version for both.
+
+Otherwise this all looks good, just those two minor points.
+
+--8dPCbrnld0sz6d93
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJMT4QACgkQJNaLcl1U
+h9Bdqwf/cnfMmHDYBGxtxH531FkOi4AeNT824yzuUtVFoHINPdPqnSCCwvXipYpl
+L30uSZNKRSR2QOZ/M9jBxvKc5z+IsAYrkke05aYIWQM/oM/EdOFLvxNR/tVufCML
+wdZteUHPdYrx2NbuwHFEUvdFM/RoC3DKMvkn8FJgeSHi2831V6ubErKw7fp71AkV
+12zOtGw0i0fTApbzzhdOAXQPgWuPlnxuFCcr5dnWy0TcY0v8Gf1991tsyv9hSfVj
+mcHHSqNc3UjqDCNMdWRfOoJXjImyTfQ0oKi5abrw4F+A5FY3JpnOU07qJHm5QgKM
+8naBiSlmOAkzS3JIMaAPDvk9tcTYbQ==
+=hFPV
+-----END PGP SIGNATURE-----
+
+--8dPCbrnld0sz6d93--

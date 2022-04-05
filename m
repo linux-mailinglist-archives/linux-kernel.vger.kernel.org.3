@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6764F4298
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CDD4F3E45
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232163AbiDEMlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
+        id S1386341AbiDEMlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:41:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238413AbiDEJFD (ORCPT
+        with ESMTP id S238691AbiDEJFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:05:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F772FE75;
-        Tue,  5 Apr 2022 01:55:58 -0700 (PDT)
+        Tue, 5 Apr 2022 05:05:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086B53526C;
+        Tue,  5 Apr 2022 01:56:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 209C7614E4;
-        Tue,  5 Apr 2022 08:55:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A3F3C385A1;
-        Tue,  5 Apr 2022 08:55:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1C723B81C19;
+        Tue,  5 Apr 2022 08:56:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 873CEC385A0;
+        Tue,  5 Apr 2022 08:56:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148957;
-        bh=kseVb9iJ6OvlNooBTvY7IHJklc5qGVwqkw1XALp37OQ=;
+        s=korg; t=1649148962;
+        bh=CsXFAbQiXAE7EdhvgvZvfFnE7JeU66yXTWJIbyY8xH0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gZ+7/W8joFhwWZdR/hgjXDim5CiWEgTJhLrFPuMafS1gGOcrQxYk4kRwVVeIHl4Bu
-         ex0ZDVCXZG1HRgEptFL7PYzuCKBCoExF7oQ14qTcI2S9c0OXZ00Laqxs/yaF2OAl/m
-         XA+1BlKZMi5ZhD9EmIMJ355oefTkvPS3Br8FMqF8=
+        b=mlM/37FVPBCMvBMrZuNpSIUocfUr0PAe4ZDJIOL7XNaw1NbZDphhXjotV9Sc/dlUJ
+         jYxWmbnVPPBdilEtFKIUaA3Rf9UJjz7esO19qXnJ77/cGTMA1jggWynGmJmTPq0pRf
+         idM3dny0zd5ozDaviPO+BLojagV+d+x1ocR36+fU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Aharon Landau <aharonl@nvidia.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0541/1017] net: dsa: realtek-smi: fix kdoc warnings
-Date:   Tue,  5 Apr 2022 09:24:14 +0200
-Message-Id: <20220405070410.347730704@linuxfoundation.org>
+Subject: [PATCH 5.16 0543/1017] RDMA/mlx5: Fix the flow of a miss in the allocation of a cache ODP MR
+Date:   Tue,  5 Apr 2022 09:24:16 +0200
+Message-Id: <20220405070410.405695968@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,56 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Angelo Daros de Luca <luizluca@gmail.com>
+From: Aharon Landau <aharonl@nvidia.com>
 
-[ Upstream commit 0f0c6da03ba37739901ca5db4361c1ef1ae9463f ]
+[ Upstream commit 2f0e60d5e9f96341a0c8a01be8878cdb3b29ff20 ]
 
-Removed kdoc mark for incomplete struct description.
-Added a return description for rtl8366rb_drop_untagged.
+When an ODP MR cache entry is empty and trying to allocate it, increment
+the ent->miss counter and call to queue_adjust_cache_locked() to verify
+the entry is balanced.
 
-Signed-off-by: Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: aad719dcf379 ("RDMA/mlx5: Allow MRs to be created in the cache synchronously")
+Link: https://lore.kernel.org/r/09503e295276dcacc92cb1d8aef1ad0961c99dc1.1644947594.git.leonro@nvidia.com
+Signed-off-by: Aharon Landau <aharonl@nvidia.com>
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/realtek-smi-core.h | 4 ++--
- drivers/net/dsa/rtl8366rb.c        | 2 ++
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ drivers/infiniband/hw/mlx5/mr.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/dsa/realtek-smi-core.h b/drivers/net/dsa/realtek-smi-core.h
-index 5bfa53e2480a..faed387d8db3 100644
---- a/drivers/net/dsa/realtek-smi-core.h
-+++ b/drivers/net/dsa/realtek-smi-core.h
-@@ -25,7 +25,7 @@ struct rtl8366_mib_counter {
- 	const char	*name;
- };
- 
--/**
-+/*
-  * struct rtl8366_vlan_mc - Virtual LAN member configuration
-  */
- struct rtl8366_vlan_mc {
-@@ -74,7 +74,7 @@ struct realtek_smi {
- 	void			*chip_data; /* Per-chip extra variant data */
- };
- 
--/**
-+/*
-  * struct realtek_smi_ops - vtable for the per-SMI-chiptype operations
-  * @detect: detects the chiptype
-  */
-diff --git a/drivers/net/dsa/rtl8366rb.c b/drivers/net/dsa/rtl8366rb.c
-index 03deacd83e61..2a523a33529b 100644
---- a/drivers/net/dsa/rtl8366rb.c
-+++ b/drivers/net/dsa/rtl8366rb.c
-@@ -1251,6 +1251,8 @@ rtl8366rb_port_bridge_leave(struct dsa_switch *ds, int port,
-  * @smi: SMI state container
-  * @port: the port to drop untagged and C-tagged frames on
-  * @drop: whether to drop or pass untagged and C-tagged frames
-+ *
-+ * Return: zero for success, a negative number on error.
-  */
- static int rtl8366rb_drop_untagged(struct realtek_smi *smi, int port, bool drop)
- {
+diff --git a/drivers/infiniband/hw/mlx5/mr.c b/drivers/infiniband/hw/mlx5/mr.c
+index 157d862fb864..2910d7833313 100644
+--- a/drivers/infiniband/hw/mlx5/mr.c
++++ b/drivers/infiniband/hw/mlx5/mr.c
+@@ -585,6 +585,8 @@ struct mlx5_ib_mr *mlx5_mr_cache_alloc(struct mlx5_ib_dev *dev,
+ 	ent = &cache->ent[entry];
+ 	spin_lock_irq(&ent->lock);
+ 	if (list_empty(&ent->head)) {
++		queue_adjust_cache_locked(ent);
++		ent->miss++;
+ 		spin_unlock_irq(&ent->lock);
+ 		mr = create_cache_mr(ent);
+ 		if (IS_ERR(mr))
 -- 
 2.34.1
 

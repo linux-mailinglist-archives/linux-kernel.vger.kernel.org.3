@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E574F46B8
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F39CC4F4447
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382264AbiDEUlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
+        id S1385384AbiDEMcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233184AbiDEJri (ORCPT
+        with ESMTP id S236306AbiDEJAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:47:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776716E35E;
-        Tue,  5 Apr 2022 02:33:52 -0700 (PDT)
+        Tue, 5 Apr 2022 05:00:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB19227B0B;
+        Tue,  5 Apr 2022 01:53:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF268B81C8B;
-        Tue,  5 Apr 2022 09:33:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EBB4C385A2;
-        Tue,  5 Apr 2022 09:33:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64D61B81A0C;
+        Tue,  5 Apr 2022 08:53:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB89AC385A0;
+        Tue,  5 Apr 2022 08:53:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151229;
-        bh=cFO6HgVokv2VEw7zhA3ChtpY/z8hbwaLiKRnodb+Hl4=;
+        s=korg; t=1649148816;
+        bh=lV6EBOGewZHCd5VMUrW8PRk5eQIcU0mARBrrtRPH+v0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S7e/uhRn6bXU4HopxZxbCkwBLs8KSzreoNLIEZ4knaE4qnvwktp1pVhn1L7xD/VjW
-         XNfyIeTFz/VrZ/GIzFUecSMf0hFzncMw2mDr5tqcsoVC2/zUqDvd3YULoQrVnwFw9d
-         slSzj3s6ovTKw24mTcmSJsB+WXPDoeVhKvy5jFNg=
+        b=rQUoFoulTvw/Laf66qf9ngHZA7u3ijAF4auSkpkC/Mr3RPKrt2ly6i1zPnZcanKGS
+         dn1dJVRx19NI8Q5IvICgjAd9z4REUL4K2FU8QGn8UZpjHpQ++ZwuXr2KzEgAHrBZx7
+         4RCL6bWX+k/OjkYABPmXL+/uvYeUM8isgubo2KDA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Tim Gardner <tim.gardner@canonical.com>,
+        Po Liu <po.liu@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 341/913] ASoC: soc-compress: prevent the potentially use of null pointer
-Date:   Tue,  5 Apr 2022 09:23:23 +0200
-Message-Id: <20220405070350.069350755@linuxfoundation.org>
+Subject: [PATCH 5.16 0491/1017] net:enetc: allocate CBD ring data memory using DMA coherent methods
+Date:   Tue,  5 Apr 2022 09:23:24 +0200
+Message-Id: <20220405070408.874371613@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,63 +57,281 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Po Liu <po.liu@nxp.com>
 
-[ Upstream commit de2c6f98817fa5decb9b7d3b3a8a3ab864c10588 ]
+[ Upstream commit b3a723dbc94a6e38f67669d03b521edd766ad895 ]
 
-There is one call trace that snd_soc_register_card()
-->snd_soc_bind_card()->soc_init_pcm_runtime()
-->snd_soc_dai_compress_new()->snd_soc_new_compress().
-In the trace the 'codec_dai' transfers from card->dai_link,
-and we can see from the snd_soc_add_pcm_runtime() in
-snd_soc_bind_card() that, if value of card->dai_link->num_codecs
-is 0, then 'codec_dai' could be null pointer caused
-by index out of bound in 'asoc_rtd_to_codec(rtd, 0)'.
-And snd_soc_register_card() is called by various platforms.
-Therefore, it is better to add the check in the case of misusing.
-And because 'cpu_dai' has already checked in soc_init_pcm_runtime(),
-there is no need to check again.
-Adding the check as follow, then if 'codec_dai' is null,
-snd_soc_new_compress() will not pass through the check
-'if (playback + capture != 1)', avoiding the leftover use of
-'codec_dai'.
+To replace the dma_map_single() stream DMA mapping with DMA coherent
+method dma_alloc_coherent() which is more simple.
 
-Fixes: 467fece ("ASoC: soc-dai: move snd_soc_dai_stream_valid() to soc-dai.c")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/1634285633-529368-1-git-send-email-jiasheng@iscas.ac.cn
-Signed-off-by: Mark Brown <broonie@kernel.org>
+dma_map_single() found by Tim Gardner not proper. Suggested by Claudiu
+Manoil and Jakub Kicinski to use dma_alloc_coherent(). Discussion at:
+
+https://lore.kernel.org/netdev/AM9PR04MB8397F300DECD3C44D2EBD07796BD9@AM9PR04MB8397.eurprd04.prod.outlook.com/t/
+
+Fixes: 888ae5a3952ba ("net: enetc: add tc flower psfp offload driver")
+cc: Claudiu Manoil <claudiu.manoil@nxp.com>
+Reported-by: Tim Gardner <tim.gardner@canonical.com>
+Signed-off-by: Po Liu <po.liu@nxp.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/soc-compress.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ .../net/ethernet/freescale/enetc/enetc_qos.c  | 128 +++++++++---------
+ 1 file changed, 64 insertions(+), 64 deletions(-)
 
-diff --git a/sound/soc/soc-compress.c b/sound/soc/soc-compress.c
-index 36060800e9bd..b3c64f87e054 100644
---- a/sound/soc/soc-compress.c
-+++ b/sound/soc/soc-compress.c
-@@ -535,12 +535,14 @@ int snd_soc_new_compress(struct snd_soc_pcm_runtime *rtd, int num)
- 	}
+diff --git a/drivers/net/ethernet/freescale/enetc/enetc_qos.c b/drivers/net/ethernet/freescale/enetc/enetc_qos.c
+index 0536d2c76fbc..d779dde522c8 100644
+--- a/drivers/net/ethernet/freescale/enetc/enetc_qos.c
++++ b/drivers/net/ethernet/freescale/enetc/enetc_qos.c
+@@ -45,6 +45,7 @@ void enetc_sched_speed_set(struct enetc_ndev_priv *priv, int speed)
+ 		      | pspeed);
+ }
  
- 	/* check client and interface hw capabilities */
--	if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_PLAYBACK) &&
--	    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_PLAYBACK))
--		playback = 1;
--	if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_CAPTURE) &&
--	    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_CAPTURE))
--		capture = 1;
-+	if (codec_dai) {
-+		if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_PLAYBACK) &&
-+		    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_PLAYBACK))
-+			playback = 1;
-+		if (snd_soc_dai_stream_valid(codec_dai, SNDRV_PCM_STREAM_CAPTURE) &&
-+		    snd_soc_dai_stream_valid(cpu_dai,   SNDRV_PCM_STREAM_CAPTURE))
-+			capture = 1;
++#define ENETC_QOS_ALIGN	64
+ static int enetc_setup_taprio(struct net_device *ndev,
+ 			      struct tc_taprio_qopt_offload *admin_conf)
+ {
+@@ -52,10 +53,11 @@ static int enetc_setup_taprio(struct net_device *ndev,
+ 	struct enetc_cbd cbd = {.cmd = 0};
+ 	struct tgs_gcl_conf *gcl_config;
+ 	struct tgs_gcl_data *gcl_data;
++	dma_addr_t dma, dma_align;
+ 	struct gce *gce;
+-	dma_addr_t dma;
+ 	u16 data_size;
+ 	u16 gcl_len;
++	void *tmp;
+ 	u32 tge;
+ 	int err;
+ 	int i;
+@@ -82,9 +84,16 @@ static int enetc_setup_taprio(struct net_device *ndev,
+ 	gcl_config = &cbd.gcl_conf;
+ 
+ 	data_size = struct_size(gcl_data, entry, gcl_len);
+-	gcl_data = kzalloc(data_size, __GFP_DMA | GFP_KERNEL);
+-	if (!gcl_data)
++	tmp = dma_alloc_coherent(&priv->si->pdev->dev,
++				 data_size + ENETC_QOS_ALIGN,
++				 &dma, GFP_KERNEL);
++	if (!tmp) {
++		dev_err(&priv->si->pdev->dev,
++			"DMA mapping of taprio gate list failed!\n");
+ 		return -ENOMEM;
 +	}
++	dma_align = ALIGN(dma, ENETC_QOS_ALIGN);
++	gcl_data = (struct tgs_gcl_data *)PTR_ALIGN(tmp, ENETC_QOS_ALIGN);
  
- 	/*
- 	 * Compress devices are unidirectional so only one of the directions
+ 	gce = (struct gce *)(gcl_data + 1);
+ 
+@@ -110,16 +119,8 @@ static int enetc_setup_taprio(struct net_device *ndev,
+ 	cbd.length = cpu_to_le16(data_size);
+ 	cbd.status_flags = 0;
+ 
+-	dma = dma_map_single(&priv->si->pdev->dev, gcl_data,
+-			     data_size, DMA_TO_DEVICE);
+-	if (dma_mapping_error(&priv->si->pdev->dev, dma)) {
+-		netdev_err(priv->si->ndev, "DMA mapping failed!\n");
+-		kfree(gcl_data);
+-		return -ENOMEM;
+-	}
+-
+-	cbd.addr[0] = cpu_to_le32(lower_32_bits(dma));
+-	cbd.addr[1] = cpu_to_le32(upper_32_bits(dma));
++	cbd.addr[0] = cpu_to_le32(lower_32_bits(dma_align));
++	cbd.addr[1] = cpu_to_le32(upper_32_bits(dma_align));
+ 	cbd.cls = BDCR_CMD_PORT_GCL;
+ 	cbd.status_flags = 0;
+ 
+@@ -132,8 +133,8 @@ static int enetc_setup_taprio(struct net_device *ndev,
+ 			 ENETC_QBV_PTGCR_OFFSET,
+ 			 tge & (~ENETC_QBV_TGE));
+ 
+-	dma_unmap_single(&priv->si->pdev->dev, dma, data_size, DMA_TO_DEVICE);
+-	kfree(gcl_data);
++	dma_free_coherent(&priv->si->pdev->dev, data_size + ENETC_QOS_ALIGN,
++			  tmp, dma);
+ 
+ 	return err;
+ }
+@@ -463,8 +464,9 @@ static int enetc_streamid_hw_set(struct enetc_ndev_priv *priv,
+ 	struct enetc_cbd cbd = {.cmd = 0};
+ 	struct streamid_data *si_data;
+ 	struct streamid_conf *si_conf;
++	dma_addr_t dma, dma_align;
+ 	u16 data_size;
+-	dma_addr_t dma;
++	void *tmp;
+ 	int port;
+ 	int err;
+ 
+@@ -485,21 +487,20 @@ static int enetc_streamid_hw_set(struct enetc_ndev_priv *priv,
+ 	cbd.status_flags = 0;
+ 
+ 	data_size = sizeof(struct streamid_data);
+-	si_data = kzalloc(data_size, __GFP_DMA | GFP_KERNEL);
+-	if (!si_data)
++	tmp = dma_alloc_coherent(&priv->si->pdev->dev,
++				 data_size + ENETC_QOS_ALIGN,
++				 &dma, GFP_KERNEL);
++	if (!tmp) {
++		dev_err(&priv->si->pdev->dev,
++			"DMA mapping of stream identify failed!\n");
+ 		return -ENOMEM;
+-	cbd.length = cpu_to_le16(data_size);
+-
+-	dma = dma_map_single(&priv->si->pdev->dev, si_data,
+-			     data_size, DMA_FROM_DEVICE);
+-	if (dma_mapping_error(&priv->si->pdev->dev, dma)) {
+-		netdev_err(priv->si->ndev, "DMA mapping failed!\n");
+-		err = -ENOMEM;
+-		goto out;
+ 	}
++	dma_align = ALIGN(dma, ENETC_QOS_ALIGN);
++	si_data = (struct streamid_data *)PTR_ALIGN(tmp, ENETC_QOS_ALIGN);
+ 
+-	cbd.addr[0] = cpu_to_le32(lower_32_bits(dma));
+-	cbd.addr[1] = cpu_to_le32(upper_32_bits(dma));
++	cbd.length = cpu_to_le16(data_size);
++	cbd.addr[0] = cpu_to_le32(lower_32_bits(dma_align));
++	cbd.addr[1] = cpu_to_le32(upper_32_bits(dma_align));
+ 	eth_broadcast_addr(si_data->dmac);
+ 	si_data->vid_vidm_tg = (ENETC_CBDR_SID_VID_MASK
+ 			       + ((0x3 << 14) | ENETC_CBDR_SID_VIDM));
+@@ -539,8 +540,8 @@ static int enetc_streamid_hw_set(struct enetc_ndev_priv *priv,
+ 
+ 	cbd.length = cpu_to_le16(data_size);
+ 
+-	cbd.addr[0] = cpu_to_le32(lower_32_bits(dma));
+-	cbd.addr[1] = cpu_to_le32(upper_32_bits(dma));
++	cbd.addr[0] = cpu_to_le32(lower_32_bits(dma_align));
++	cbd.addr[1] = cpu_to_le32(upper_32_bits(dma_align));
+ 
+ 	/* VIDM default to be 1.
+ 	 * VID Match. If set (b1) then the VID must match, otherwise
+@@ -561,10 +562,8 @@ static int enetc_streamid_hw_set(struct enetc_ndev_priv *priv,
+ 
+ 	err = enetc_send_cmd(priv->si, &cbd);
+ out:
+-	if (!dma_mapping_error(&priv->si->pdev->dev, dma))
+-		dma_unmap_single(&priv->si->pdev->dev, dma, data_size, DMA_FROM_DEVICE);
+-
+-	kfree(si_data);
++	dma_free_coherent(&priv->si->pdev->dev, data_size + ENETC_QOS_ALIGN,
++			  tmp, dma);
+ 
+ 	return err;
+ }
+@@ -633,8 +632,9 @@ static int enetc_streamcounter_hw_get(struct enetc_ndev_priv *priv,
+ {
+ 	struct enetc_cbd cbd = { .cmd = 2 };
+ 	struct sfi_counter_data *data_buf;
+-	dma_addr_t dma;
++	dma_addr_t dma, dma_align;
+ 	u16 data_size;
++	void *tmp;
+ 	int err;
+ 
+ 	cbd.index = cpu_to_le16((u16)index);
+@@ -643,19 +643,19 @@ static int enetc_streamcounter_hw_get(struct enetc_ndev_priv *priv,
+ 	cbd.status_flags = 0;
+ 
+ 	data_size = sizeof(struct sfi_counter_data);
+-	data_buf = kzalloc(data_size, __GFP_DMA | GFP_KERNEL);
+-	if (!data_buf)
++	tmp = dma_alloc_coherent(&priv->si->pdev->dev,
++				 data_size + ENETC_QOS_ALIGN,
++				 &dma, GFP_KERNEL);
++	if (!tmp) {
++		dev_err(&priv->si->pdev->dev,
++			"DMA mapping of stream counter failed!\n");
+ 		return -ENOMEM;
+-
+-	dma = dma_map_single(&priv->si->pdev->dev, data_buf,
+-			     data_size, DMA_FROM_DEVICE);
+-	if (dma_mapping_error(&priv->si->pdev->dev, dma)) {
+-		netdev_err(priv->si->ndev, "DMA mapping failed!\n");
+-		err = -ENOMEM;
+-		goto exit;
+ 	}
+-	cbd.addr[0] = cpu_to_le32(lower_32_bits(dma));
+-	cbd.addr[1] = cpu_to_le32(upper_32_bits(dma));
++	dma_align = ALIGN(dma, ENETC_QOS_ALIGN);
++	data_buf = (struct sfi_counter_data *)PTR_ALIGN(tmp, ENETC_QOS_ALIGN);
++
++	cbd.addr[0] = cpu_to_le32(lower_32_bits(dma_align));
++	cbd.addr[1] = cpu_to_le32(upper_32_bits(dma_align));
+ 
+ 	cbd.length = cpu_to_le16(data_size);
+ 
+@@ -684,7 +684,9 @@ static int enetc_streamcounter_hw_get(struct enetc_ndev_priv *priv,
+ 				data_buf->flow_meter_dropl;
+ 
+ exit:
+-	kfree(data_buf);
++	dma_free_coherent(&priv->si->pdev->dev, data_size + ENETC_QOS_ALIGN,
++			  tmp, dma);
++
+ 	return err;
+ }
+ 
+@@ -723,9 +725,10 @@ static int enetc_streamgate_hw_set(struct enetc_ndev_priv *priv,
+ 	struct sgcl_conf *sgcl_config;
+ 	struct sgcl_data *sgcl_data;
+ 	struct sgce *sgce;
+-	dma_addr_t dma;
++	dma_addr_t dma, dma_align;
+ 	u16 data_size;
+ 	int err, i;
++	void *tmp;
+ 	u64 now;
+ 
+ 	cbd.index = cpu_to_le16(sgi->index);
+@@ -772,24 +775,20 @@ static int enetc_streamgate_hw_set(struct enetc_ndev_priv *priv,
+ 	sgcl_config->acl_len = (sgi->num_entries - 1) & 0x3;
+ 
+ 	data_size = struct_size(sgcl_data, sgcl, sgi->num_entries);
+-
+-	sgcl_data = kzalloc(data_size, __GFP_DMA | GFP_KERNEL);
+-	if (!sgcl_data)
+-		return -ENOMEM;
+-
+-	cbd.length = cpu_to_le16(data_size);
+-
+-	dma = dma_map_single(&priv->si->pdev->dev,
+-			     sgcl_data, data_size,
+-			     DMA_FROM_DEVICE);
+-	if (dma_mapping_error(&priv->si->pdev->dev, dma)) {
+-		netdev_err(priv->si->ndev, "DMA mapping failed!\n");
+-		kfree(sgcl_data);
++	tmp = dma_alloc_coherent(&priv->si->pdev->dev,
++				 data_size + ENETC_QOS_ALIGN,
++				 &dma, GFP_KERNEL);
++	if (!tmp) {
++		dev_err(&priv->si->pdev->dev,
++			"DMA mapping of stream counter failed!\n");
+ 		return -ENOMEM;
+ 	}
++	dma_align = ALIGN(dma, ENETC_QOS_ALIGN);
++	sgcl_data = (struct sgcl_data *)PTR_ALIGN(tmp, ENETC_QOS_ALIGN);
+ 
+-	cbd.addr[0] = cpu_to_le32(lower_32_bits(dma));
+-	cbd.addr[1] = cpu_to_le32(upper_32_bits(dma));
++	cbd.length = cpu_to_le16(data_size);
++	cbd.addr[0] = cpu_to_le32(lower_32_bits(dma_align));
++	cbd.addr[1] = cpu_to_le32(upper_32_bits(dma_align));
+ 
+ 	sgce = &sgcl_data->sgcl[0];
+ 
+@@ -844,7 +843,8 @@ static int enetc_streamgate_hw_set(struct enetc_ndev_priv *priv,
+ 	err = enetc_send_cmd(priv->si, &cbd);
+ 
+ exit:
+-	kfree(sgcl_data);
++	dma_free_coherent(&priv->si->pdev->dev, data_size + ENETC_QOS_ALIGN,
++			  tmp, dma);
+ 
+ 	return err;
+ }
 -- 
 2.34.1
 

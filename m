@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC1B4F2C3D
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D22FE4F2DDA
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347863AbiDEJ2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34694 "EHLO
+        id S1345256AbiDEJnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239568AbiDEIUO (ORCPT
+        with ESMTP id S239569AbiDEIUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:20:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F230637C;
-        Tue,  5 Apr 2022 01:16:35 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8EA63DE;
+        Tue,  5 Apr 2022 01:16:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E040060AFB;
-        Tue,  5 Apr 2022 08:16:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC09FC385A0;
-        Tue,  5 Apr 2022 08:16:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9C22B81A37;
+        Tue,  5 Apr 2022 08:16:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E763C385A0;
+        Tue,  5 Apr 2022 08:16:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146594;
-        bh=3vrI8pCC5hsfYQTqMh0KYOwxXZBB+PboDIZ3er8Rfk0=;
+        s=korg; t=1649146602;
+        bh=BKFbN78+A/5yk54tSfiWqE/xHZibpiB0gV7vX3QvTg4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CYXTDSIhEP4p0DXG3B2VhoOqhDPfCbaDXFFC40bgOlNdrpca9pBliMUCdSK8WTNvA
-         f3iF8wGwNBfth+LXNNP1FkSmfcjG8EdPf1zjqgVWf2ge09uptnyhmXKGxMJLKZDjGL
-         djgzqdtH4g2/Ztcyj4C6wME2O56Wh+eRo/SKI6GU=
+        b=aGs4a+L6sLIOkhN0EaWx3EZ6oZddSuffx5V4icbMCBTzaOr4xkZnnfOxUdtd52hP0
+         eUfuhM+wUxklnPWsBNGCFrKMegQydIyjPEG5SP/1m9Qeisda0k59beK3WGjifaV7WH
+         Xmg4RRRXB64Z+oNAtWrm/8n2dfzcAjqP4V9P4Wuk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guangbin Huang <huangguangbin2@huawei.com>,
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        Lin Ma <linma@zju.edu.cn>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0820/1126] net: hns3: fix phy can not link up when autoneg off and reset
-Date:   Tue,  5 Apr 2022 09:26:07 +0200
-Message-Id: <20220405070431.631781398@linuxfoundation.org>
+Subject: [PATCH 5.17 0823/1126] net/x25: Fix null-ptr-deref caused by x25_disconnect
+Date:   Tue,  5 Apr 2022 09:26:10 +0200
+Message-Id: <20220405070431.717596799@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,54 +56,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guangbin Huang <huangguangbin2@huawei.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit ad0ecaef6a2c07e67ef9fe163c007f7b3dad8643 ]
+[ Upstream commit 7781607938c8371d4c2b243527430241c62e39c2 ]
 
-Currently, function hclge_mdio_read() will return 0 if during reset(the
-cmd state will be set to disable).
+When the link layer is terminating, x25->neighbour will be set to NULL
+in x25_disconnect(). As a result, it could cause null-ptr-deref bugs in
+x25_sendmsg(),x25_recvmsg() and x25_connect(). One of the bugs is
+shown below.
 
-If use general phy driver, the phy_state_machine() will update phy speed
-every second in function genphy_read_status_fixed() when PHY is set to
-autoneg off, no matter of link down or link up.
+    (Thread 1)                 |  (Thread 2)
+x25_link_terminated()          | x25_recvmsg()
+ x25_kill_by_neigh()           |  ...
+  x25_disconnect()             |  lock_sock(sk)
+   ...                         |  ...
+   x25->neighbour = NULL //(1) |
+   ...                         |  x25->neighbour->extended //(2)
 
-If phy driver happens to read BMCR register during reset, phy speed will
-be updated to 10Mpbs as BMCR register value is 0. So it may call phy can
-not link up if previous speed is not 10Mpbs.
+The code sets NULL to x25->neighbour in position (1) and dereferences
+x25->neighbour in position (2), which could cause null-ptr-deref bug.
 
-To fix this problem, function hclge_mdio_read() should return -EBUSY if
-the cmd state is disable. So does function hclge_mdio_write().
+This patch adds lock_sock() in x25_kill_by_neigh() in order to synchronize
+with x25_sendmsg(), x25_recvmsg() and x25_connect(). What`s more, the
+sock held by lock_sock() is not NULL, because it is extracted from x25_list
+and uses x25_list_lock to synchronize.
 
-Fixes: 1c1249380992 ("net: hns3: bugfix for hclge_mdio_write and hclge_mdio_read")
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+Fixes: 4becb7ee5b3d ("net/x25: Fix x25_neigh refcnt leak when x25 disconnect")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Reviewed-by: Lin Ma <linma@zju.edu.cn>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mdio.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/x25/af_x25.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mdio.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mdio.c
-index 63d2be4349e3..03d63b6a9b2b 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mdio.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_mdio.c
-@@ -48,7 +48,7 @@ static int hclge_mdio_write(struct mii_bus *bus, int phyid, int regnum,
- 	int ret;
+diff --git a/net/x25/af_x25.c b/net/x25/af_x25.c
+index 3583354a7d7f..3a171828638b 100644
+--- a/net/x25/af_x25.c
++++ b/net/x25/af_x25.c
+@@ -1765,10 +1765,15 @@ void x25_kill_by_neigh(struct x25_neigh *nb)
  
- 	if (test_bit(HCLGE_COMM_STATE_CMD_DISABLE, &hdev->hw.hw.comm_state))
--		return 0;
-+		return -EBUSY;
+ 	write_lock_bh(&x25_list_lock);
  
- 	hclge_cmd_setup_basic_desc(&desc, HCLGE_OPC_MDIO_CONFIG, false);
+-	sk_for_each(s, &x25_list)
+-		if (x25_sk(s)->neighbour == nb)
++	sk_for_each(s, &x25_list) {
++		if (x25_sk(s)->neighbour == nb) {
++			write_unlock_bh(&x25_list_lock);
++			lock_sock(s);
+ 			x25_disconnect(s, ENETUNREACH, 0, 0);
+-
++			release_sock(s);
++			write_lock_bh(&x25_list_lock);
++		}
++	}
+ 	write_unlock_bh(&x25_list_lock);
  
-@@ -86,7 +86,7 @@ static int hclge_mdio_read(struct mii_bus *bus, int phyid, int regnum)
- 	int ret;
- 
- 	if (test_bit(HCLGE_COMM_STATE_CMD_DISABLE, &hdev->hw.hw.comm_state))
--		return 0;
-+		return -EBUSY;
- 
- 	hclge_cmd_setup_basic_desc(&desc, HCLGE_OPC_MDIO_CONFIG, true);
- 
+ 	/* Remove any related forwards */
 -- 
 2.34.1
 

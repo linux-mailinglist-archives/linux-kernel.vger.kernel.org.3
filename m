@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C6A4F34F0
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF1F64F3563
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346219AbiDEJom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:44:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
+        id S243011AbiDEJio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239746AbiDEIUp (ORCPT
+        with ESMTP id S239763AbiDEIUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AEA1384;
-        Tue,  5 Apr 2022 01:18:45 -0700 (PDT)
+        Tue, 5 Apr 2022 04:20:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B08B2F;
+        Tue,  5 Apr 2022 01:18:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3AB20B81A37;
-        Tue,  5 Apr 2022 08:18:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9932CC385A1;
-        Tue,  5 Apr 2022 08:18:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39C8860B0F;
+        Tue,  5 Apr 2022 08:18:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 471BCC385A0;
+        Tue,  5 Apr 2022 08:18:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146723;
-        bh=TzN9S2c1jJpI9v8G0EpdcxObJsrqJKiqIfBV48VR++4=;
+        s=korg; t=1649146728;
+        bh=PPyB38zuBoAibvBuvbbADfl/549D/slCttl/tVe3DZc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NK6H9fBCQPENzYrp1LxYzq1JCIITvtC7XJYN5I5J00I0EI0HJDVvDOQ2IwCYw+0IZ
-         c2Rx8WkNX0G5VScIt4oM/2a6cbdnabpPQY05mFTrFUdsMpZv5KpTo3BzxxJK+ZyruD
-         H486/BYhuobWJSbGOqvdK6H8ChGzrk0Bq4owuc7w=
+        b=qmucHt7tXFR1H0A//7oIwDEuf4mAPOXVF5sDWppA7FJaC8If/9S77KHhsNbVHFum6
+         zgQ3ZFAlMvchaOaadlnC8MlECV9RJPuiIgsILfyaFuX/3G6btRuWO+0r4tKnuKWE7H
+         jLo0UqYpCHm12cIb43Ha9WD0kJ5B3SjuaSRrGSx8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, John David Anglin <dave.anglin@bell.net>,
         Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0865/1126] parisc: Fix non-access data TLB cache flush faults
-Date:   Tue,  5 Apr 2022 09:26:52 +0200
-Message-Id: <20220405070432.927657842@linuxfoundation.org>
+Subject: [PATCH 5.17 0866/1126] parisc: Fix handling off probe non-access faults
+Date:   Tue,  5 Apr 2022 09:26:53 +0200
+Message-Id: <20220405070432.956643666@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,88 +56,164 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: John David Anglin <dave.anglin@bell.net>
 
-[ Upstream commit f839e5f1cef36ce268950c387129b1bfefdaebc9 ]
+[ Upstream commit e00b0a2ab8ec019c344e53bfc76e31c18bb587b7 ]
 
-When a page is not present, we get non-access data TLB faults from
-the fdc and fic instructions in flush_user_dcache_range_asm and
-flush_user_icache_range_asm. When these occur, the cache line is
-not invalidated and potentially we get memory corruption. The
-problem was hidden by the nullification of the flush instructions.
+Currently, the parisc kernel does not fully support non-access TLB
+fault handling for probe instructions. In the fast path, we set the
+target register to zero if it is not a shadowed register. The slow
+path is not implemented, so we call do_page_fault. The architecture
+indicates that non-access faults should not cause a page fault from
+disk.
 
-These faults also affect performance. With pa8800/pa8900 processors,
-there will be 32 faults per 4 KB page since the cache line is 128
-bytes.  There will be more faults with earlier processors.
+This change adds to code to provide non-access fault support for
+probe instructions. It also modifies the handling of faults on
+userspace so that if the address lies in a valid VMA and the access
+type matches that for the VMA, the probe target register is set to
+one. Otherwise, the target register is set to zero.
 
-The problem is fixed by using flush_cache_pages(). It does the flush
-using a tmp alias mapping.
+This was done to make probe instructions more useful for userspace.
+Probe instructions are not very useful if they set the target register
+to zero whenever a page is not present in memory. Nominally, the
+purpose of the probe instruction is determine whether read or write
+access to a given address is allowed.
 
-The flush_cache_pages() call in flush_cache_range() flushed too
-large a range.
+This fixes a problem in function pointer comparison noticed in the
+glibc testsuite (stdio-common/tst-vfprintf-user-type). The same
+problem is likely in glibc (_dl_lookup_address).
 
-V2: Remove unnecessary preempt_disable() and preempt_enable() calls.
+V2 adds flush and lpa instruction support to handle_nadtlb_fault.
 
 Signed-off-by: John David Anglin <dave.anglin@bell.net>
 Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/parisc/kernel/cache.c | 28 +---------------------------
- 1 file changed, 1 insertion(+), 27 deletions(-)
+ arch/parisc/include/asm/traps.h |  1 +
+ arch/parisc/kernel/traps.c      |  2 +
+ arch/parisc/mm/fault.c          | 89 +++++++++++++++++++++++++++++++++
+ 3 files changed, 92 insertions(+)
 
-diff --git a/arch/parisc/kernel/cache.c b/arch/parisc/kernel/cache.c
-index 94150b91c96f..bce71cefe572 100644
---- a/arch/parisc/kernel/cache.c
-+++ b/arch/parisc/kernel/cache.c
-@@ -558,15 +558,6 @@ static void flush_cache_pages(struct vm_area_struct *vma, struct mm_struct *mm,
+diff --git a/arch/parisc/include/asm/traps.h b/arch/parisc/include/asm/traps.h
+index 34619f010c63..0ccdb738a9a3 100644
+--- a/arch/parisc/include/asm/traps.h
++++ b/arch/parisc/include/asm/traps.h
+@@ -18,6 +18,7 @@ unsigned long parisc_acctyp(unsigned long code, unsigned int inst);
+ const char *trap_name(unsigned long code);
+ void do_page_fault(struct pt_regs *regs, unsigned long code,
+ 		unsigned long address);
++int handle_nadtlb_fault(struct pt_regs *regs);
+ #endif
+ 
+ #endif
+diff --git a/arch/parisc/kernel/traps.c b/arch/parisc/kernel/traps.c
+index b6fdebddc8e9..39576a9245c7 100644
+--- a/arch/parisc/kernel/traps.c
++++ b/arch/parisc/kernel/traps.c
+@@ -662,6 +662,8 @@ void notrace handle_interruption(int code, struct pt_regs *regs)
+ 			 by hand. Technically we need to emulate:
+ 			 fdc,fdce,pdc,"fic,4f",prober,probeir,probew, probeiw
+ 		*/
++		if (code == 17 && handle_nadtlb_fault(regs))
++			return;
+ 		fault_address = regs->ior;
+ 		fault_space = regs->isr;
+ 		break;
+diff --git a/arch/parisc/mm/fault.c b/arch/parisc/mm/fault.c
+index e9eabf8f14d7..f114e102aaf2 100644
+--- a/arch/parisc/mm/fault.c
++++ b/arch/parisc/mm/fault.c
+@@ -425,3 +425,92 @@ void do_page_fault(struct pt_regs *regs, unsigned long code,
  	}
+ 	pagefault_out_of_memory();
  }
- 
--static void flush_user_cache_tlb(struct vm_area_struct *vma,
--				 unsigned long start, unsigned long end)
--{
--	flush_user_dcache_range_asm(start, end);
--	if (vma->vm_flags & VM_EXEC)
--		flush_user_icache_range_asm(start, end);
--	flush_tlb_range(vma, start, end);
--}
--
- void flush_cache_mm(struct mm_struct *mm)
- {
- 	struct vm_area_struct *vma;
-@@ -581,17 +572,8 @@ void flush_cache_mm(struct mm_struct *mm)
- 		return;
- 	}
- 
--	preempt_disable();
--	if (mm->context == mfsp(3)) {
--		for (vma = mm->mmap; vma; vma = vma->vm_next)
--			flush_user_cache_tlb(vma, vma->vm_start, vma->vm_end);
--		preempt_enable();
--		return;
--	}
--
- 	for (vma = mm->mmap; vma; vma = vma->vm_next)
- 		flush_cache_pages(vma, mm, vma->vm_start, vma->vm_end);
--	preempt_enable();
- }
- 
- void flush_cache_range(struct vm_area_struct *vma,
-@@ -605,15 +587,7 @@ void flush_cache_range(struct vm_area_struct *vma,
- 		return;
- 	}
- 
--	preempt_disable();
--	if (vma->vm_mm->context == mfsp(3)) {
--		flush_user_cache_tlb(vma, start, end);
--		preempt_enable();
--		return;
--	}
--
--	flush_cache_pages(vma, vma->vm_mm, vma->vm_start, vma->vm_end);
--	preempt_enable();
-+	flush_cache_pages(vma, vma->vm_mm, start, end);
- }
- 
- void
++
++/* Handle non-access data TLB miss faults.
++ *
++ * For probe instructions, accesses to userspace are considered allowed
++ * if they lie in a valid VMA and the access type matches. We are not
++ * allowed to handle MM faults here so there may be situations where an
++ * actual access would fail even though a probe was successful.
++ */
++int
++handle_nadtlb_fault(struct pt_regs *regs)
++{
++	unsigned long insn = regs->iir;
++	int breg, treg, xreg, val = 0;
++	struct vm_area_struct *vma, *prev_vma;
++	struct task_struct *tsk;
++	struct mm_struct *mm;
++	unsigned long address;
++	unsigned long acc_type;
++
++	switch (insn & 0x380) {
++	case 0x280:
++		/* FDC instruction */
++		fallthrough;
++	case 0x380:
++		/* PDC and FIC instructions */
++		if (printk_ratelimit()) {
++			pr_warn("BUG: nullifying cache flush/purge instruction\n");
++			show_regs(regs);
++		}
++		if (insn & 0x20) {
++			/* Base modification */
++			breg = (insn >> 21) & 0x1f;
++			xreg = (insn >> 16) & 0x1f;
++			if (breg && xreg)
++				regs->gr[breg] += regs->gr[xreg];
++		}
++		regs->gr[0] |= PSW_N;
++		return 1;
++
++	case 0x180:
++		/* PROBE instruction */
++		treg = insn & 0x1f;
++		if (regs->isr) {
++			tsk = current;
++			mm = tsk->mm;
++			if (mm) {
++				/* Search for VMA */
++				address = regs->ior;
++				mmap_read_lock(mm);
++				vma = find_vma_prev(mm, address, &prev_vma);
++				mmap_read_unlock(mm);
++
++				/*
++				 * Check if access to the VMA is okay.
++				 * We don't allow for stack expansion.
++				 */
++				acc_type = (insn & 0x40) ? VM_WRITE : VM_READ;
++				if (vma
++				    && address >= vma->vm_start
++				    && (vma->vm_flags & acc_type) == acc_type)
++					val = 1;
++			}
++		}
++		if (treg)
++			regs->gr[treg] = val;
++		regs->gr[0] |= PSW_N;
++		return 1;
++
++	case 0x300:
++		/* LPA instruction */
++		if (insn & 0x20) {
++			/* Base modification */
++			breg = (insn >> 21) & 0x1f;
++			xreg = (insn >> 16) & 0x1f;
++			if (breg && xreg)
++				regs->gr[breg] += regs->gr[xreg];
++		}
++		treg = insn & 0x1f;
++		if (treg)
++			regs->gr[treg] = 0;
++		regs->gr[0] |= PSW_N;
++		return 1;
++
++	default:
++		break;
++	}
++
++	return 0;
++}
 -- 
 2.34.1
 

@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A854F5071
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A45104F50CA
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1841879AbiDFB0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46864 "EHLO
+        id S1843281AbiDFBkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354828AbiDEKQJ (ORCPT
+        with ESMTP id S1349234AbiDEJt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:16:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05476C93D;
-        Tue,  5 Apr 2022 03:02:59 -0700 (PDT)
+        Tue, 5 Apr 2022 05:49:28 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE5C2315A;
+        Tue,  5 Apr 2022 02:43:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B0B0B81BC0;
-        Tue,  5 Apr 2022 10:02:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E368CC385A2;
-        Tue,  5 Apr 2022 10:02:56 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E7703CE1C9A;
+        Tue,  5 Apr 2022 09:43:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBFA7C385A1;
+        Tue,  5 Apr 2022 09:43:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152977;
-        bh=5IqUjJTSOJ5iA71G3v7PMy802c6wfxcw7Yd0aVsWReA=;
+        s=korg; t=1649151784;
+        bh=LABUxwGsSf8f16KtAggIODD2UvfCYR9smfcdlXAbjvY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mJjKbHsoO3GUe++/kLFqcD2SzKBmBUqiFEDb8vXvjWpYciufNHxT/8uo7stwnI10o
-         9mew8m/PYgT+gm6dmgC2uR6a+xON2tq5Xc2bnMtJikUtvh5kR70S/+iK4R961Ku7Lg
-         7V9+I0K7LToev98L+SW8DIWLk05bxFuWYcxK+vH0=
+        b=TA2ERNzJ+T/7HqHeHHQ/uzRcW5ixg2wd5i05gXpnpY2nnReGl1avpxtegcRqIle0t
+         86kcpJWVoqaHvMFskV1Rac6U7k91ZlxpPbfoTfpL3ji/7/7dz7nK/U/kkhIIhsHoYV
+         Bf61m/YBBAu7IMNOa8muWlimDGUbKN3554spPC+A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baokun Li <libaokun1@huawei.com>,
-        Richard Weinberger <richard@nod.at>
-Subject: [PATCH 5.10 057/599] jffs2: fix memory leak in jffs2_do_mount_fs
-Date:   Tue,  5 Apr 2022 09:25:51 +0200
-Message-Id: <20220405070300.524656148@linuxfoundation.org>
+        stable@vger.kernel.org, Elza Mathew <elza.mathew@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 501/913] xsk: Fix race at socket teardown
+Date:   Tue,  5 Apr 2022 09:26:03 +0200
+Message-Id: <20220405070354.872303182@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,71 +57,243 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baokun Li <libaokun1@huawei.com>
+From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-commit d051cef784de4d54835f6b6836d98a8f6935772c upstream.
+[ Upstream commit 18b1ab7aa76bde181bdb1ab19a87fa9523c32f21 ]
 
-If jffs2_build_filesystem() in jffs2_do_mount_fs() returns an error,
-we can observe the following kmemleak report:
+Fix a race in the xsk socket teardown code that can lead to a NULL pointer
+dereference splat. The current xsk unbind code in xsk_unbind_dev() starts by
+setting xs->state to XSK_UNBOUND, sets xs->dev to NULL and then waits for any
+NAPI processing to terminate using synchronize_net(). After that, the release
+code starts to tear down the socket state and free allocated memory.
 
---------------------------------------------
-unreferenced object 0xffff88811b25a640 (size 64):
-  comm "mount", pid 691, jiffies 4294957728 (age 71.952s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffffa493be24>] kmem_cache_alloc_trace+0x584/0x880
-    [<ffffffffa5423a06>] jffs2_sum_init+0x86/0x130
-    [<ffffffffa5400e58>] jffs2_do_mount_fs+0x798/0xac0
-    [<ffffffffa540acf3>] jffs2_do_fill_super+0x383/0xc30
-    [<ffffffffa540c00a>] jffs2_fill_super+0x2ea/0x4c0
-    [...]
-unreferenced object 0xffff88812c760000 (size 65536):
-  comm "mount", pid 691, jiffies 4294957728 (age 71.952s)
-  hex dump (first 32 bytes):
-    bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb  ................
-    bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb  ................
-  backtrace:
-    [<ffffffffa493a449>] __kmalloc+0x6b9/0x910
-    [<ffffffffa5423a57>] jffs2_sum_init+0xd7/0x130
-    [<ffffffffa5400e58>] jffs2_do_mount_fs+0x798/0xac0
-    [<ffffffffa540acf3>] jffs2_do_fill_super+0x383/0xc30
-    [<ffffffffa540c00a>] jffs2_fill_super+0x2ea/0x4c0
-    [...]
---------------------------------------------
+  BUG: kernel NULL pointer dereference, address: 00000000000000c0
+  PGD 8000000932469067 P4D 8000000932469067 PUD 0
+  Oops: 0000 [#1] PREEMPT SMP PTI
+  CPU: 25 PID: 69132 Comm: grpcpp_sync_ser Tainted: G          I       5.16.0+ #2
+  Hardware name: Dell Inc. PowerEdge R730/0599V5, BIOS 1.2.10 03/09/2015
+  RIP: 0010:__xsk_sendmsg+0x2c/0x690
+  [...]
+  RSP: 0018:ffffa2348bd13d50 EFLAGS: 00010246
+  RAX: 0000000000000000 RBX: 0000000000000040 RCX: ffff8d5fc632d258
+  RDX: 0000000000400000 RSI: ffffa2348bd13e10 RDI: ffff8d5fc5489800
+  RBP: ffffa2348bd13db0 R08: 0000000000000000 R09: 00007ffffffff000
+  R10: 0000000000000000 R11: 0000000000000000 R12: ffff8d5fc5489800
+  R13: ffff8d5fcb0f5140 R14: ffff8d5fcb0f5140 R15: 0000000000000000
+  FS:  00007f991cff9400(0000) GS:ffff8d6f1f700000(0000) knlGS:0000000000000000
+  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  CR2: 00000000000000c0 CR3: 0000000114888005 CR4: 00000000001706e0
+  Call Trace:
+  <TASK>
+  ? aa_sk_perm+0x43/0x1b0
+  xsk_sendmsg+0xf0/0x110
+  sock_sendmsg+0x65/0x70
+  __sys_sendto+0x113/0x190
+  ? debug_smp_processor_id+0x17/0x20
+  ? fpregs_assert_state_consistent+0x23/0x50
+  ? exit_to_user_mode_prepare+0xa5/0x1d0
+  __x64_sys_sendto+0x29/0x30
+  do_syscall_64+0x3b/0xc0
+  entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-This is because the resources allocated in jffs2_sum_init() are not
-released. Call jffs2_sum_exit() to release these resources to solve
-the problem.
+There are two problems with the current code. First, setting xs->dev to NULL
+before waiting for all users to stop using the socket is not correct. The
+entry to the data plane functions xsk_poll(), xsk_sendmsg(), and xsk_recvmsg()
+are all guarded by a test that xs->state is in the state XSK_BOUND and if not,
+it returns right away. But one process might have passed this test but still
+have not gotten to the point in which it uses xs->dev in the code. In this
+interim, a second process executing xsk_unbind_dev() might have set xs->dev to
+NULL which will lead to a crash for the first process. The solution here is
+just to get rid of this NULL assignment since it is not used anymore. Before
+commit 42fddcc7c64b ("xsk: use state member for socket synchronization"),
+xs->dev was the gatekeeper to admit processes into the data plane functions,
+but it was replaced with the state variable xs->state in the aforementioned
+commit.
 
-Fixes: e631ddba5887 ("[JFFS2] Add erase block summary support (mount time improvement)")
-Cc: stable@vger.kernel.org
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The second problem is that synchronize_net() does not wait for any process in
+xsk_poll(), xsk_sendmsg(), or xsk_recvmsg() to complete, which means that the
+state they rely on might be cleaned up prematurely. This can happen when the
+notifier gets called (at driver unload for example) as it uses xsk_unbind_dev().
+Solve this by extending the RCU critical region from just the ndo_xsk_wakeup
+to the whole functions mentioned above, so that both the test of xs->state ==
+XSK_BOUND and the last use of any member of xs is covered by the RCU critical
+section. This will guarantee that when synchronize_net() completes, there will
+be no processes left executing xsk_poll(), xsk_sendmsg(), or xsk_recvmsg() and
+state can be cleaned up safely. Note that we need to drop the RCU lock for the
+skb xmit path as it uses functions that might sleep. Due to this, we have to
+retest the xs->state after we grab the mutex that protects the skb xmit code
+from, among a number of things, an xsk_unbind_dev() being executed from the
+notifier at the same time.
+
+Fixes: 42fddcc7c64b ("xsk: use state member for socket synchronization")
+Reported-by: Elza Mathew <elza.mathew@intel.com>
+Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Björn Töpel <bjorn@kernel.org>
+Link: https://lore.kernel.org/bpf/20220228094552.10134-1-magnus.karlsson@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/jffs2/build.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ net/xdp/xsk.c | 69 +++++++++++++++++++++++++++++++++++++--------------
+ 1 file changed, 50 insertions(+), 19 deletions(-)
 
---- a/fs/jffs2/build.c
-+++ b/fs/jffs2/build.c
-@@ -415,13 +415,15 @@ int jffs2_do_mount_fs(struct jffs2_sb_in
- 		jffs2_free_ino_caches(c);
- 		jffs2_free_raw_node_refs(c);
- 		ret = -EIO;
--		goto out_free;
-+		goto out_sum_exit;
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index d6b500dc4208..426e287431d2 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -418,18 +418,8 @@ EXPORT_SYMBOL(xsk_tx_peek_release_desc_batch);
+ static int xsk_wakeup(struct xdp_sock *xs, u8 flags)
+ {
+ 	struct net_device *dev = xs->dev;
+-	int err;
+-
+-	rcu_read_lock();
+-	err = dev->netdev_ops->ndo_xsk_wakeup(dev, xs->queue_id, flags);
+-	rcu_read_unlock();
+-
+-	return err;
+-}
+ 
+-static int xsk_zc_xmit(struct xdp_sock *xs)
+-{
+-	return xsk_wakeup(xs, XDP_WAKEUP_TX);
++	return dev->netdev_ops->ndo_xsk_wakeup(dev, xs->queue_id, flags);
+ }
+ 
+ static void xsk_destruct_skb(struct sk_buff *skb)
+@@ -548,6 +538,12 @@ static int xsk_generic_xmit(struct sock *sk)
+ 
+ 	mutex_lock(&xs->mutex);
+ 
++	/* Since we dropped the RCU read lock, the socket state might have changed. */
++	if (unlikely(!xsk_is_bound(xs))) {
++		err = -ENXIO;
++		goto out;
++	}
++
+ 	if (xs->queue_id >= xs->dev->real_num_tx_queues)
+ 		goto out;
+ 
+@@ -611,16 +607,26 @@ static int xsk_generic_xmit(struct sock *sk)
+ 	return err;
+ }
+ 
+-static int __xsk_sendmsg(struct sock *sk)
++static int xsk_xmit(struct sock *sk)
+ {
+ 	struct xdp_sock *xs = xdp_sk(sk);
++	int ret;
+ 
+ 	if (unlikely(!(xs->dev->flags & IFF_UP)))
+ 		return -ENETDOWN;
+ 	if (unlikely(!xs->tx))
+ 		return -ENOBUFS;
+ 
+-	return xs->zc ? xsk_zc_xmit(xs) : xsk_generic_xmit(sk);
++	if (xs->zc)
++		return xsk_wakeup(xs, XDP_WAKEUP_TX);
++
++	/* Drop the RCU lock since the SKB path might sleep. */
++	rcu_read_unlock();
++	ret = xsk_generic_xmit(sk);
++	/* Reaquire RCU lock before going into common code. */
++	rcu_read_lock();
++
++	return ret;
+ }
+ 
+ static bool xsk_no_wakeup(struct sock *sk)
+@@ -634,7 +640,7 @@ static bool xsk_no_wakeup(struct sock *sk)
+ #endif
+ }
+ 
+-static int xsk_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
++static int __xsk_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
+ {
+ 	bool need_wait = !(m->msg_flags & MSG_DONTWAIT);
+ 	struct sock *sk = sock->sk;
+@@ -654,11 +660,22 @@ static int xsk_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
+ 
+ 	pool = xs->pool;
+ 	if (pool->cached_need_wakeup & XDP_WAKEUP_TX)
+-		return __xsk_sendmsg(sk);
++		return xsk_xmit(sk);
+ 	return 0;
+ }
+ 
+-static int xsk_recvmsg(struct socket *sock, struct msghdr *m, size_t len, int flags)
++static int xsk_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
++{
++	int ret;
++
++	rcu_read_lock();
++	ret = __xsk_sendmsg(sock, m, total_len);
++	rcu_read_unlock();
++
++	return ret;
++}
++
++static int __xsk_recvmsg(struct socket *sock, struct msghdr *m, size_t len, int flags)
+ {
+ 	bool need_wait = !(flags & MSG_DONTWAIT);
+ 	struct sock *sk = sock->sk;
+@@ -684,6 +701,17 @@ static int xsk_recvmsg(struct socket *sock, struct msghdr *m, size_t len, int fl
+ 	return 0;
+ }
+ 
++static int xsk_recvmsg(struct socket *sock, struct msghdr *m, size_t len, int flags)
++{
++	int ret;
++
++	rcu_read_lock();
++	ret = __xsk_recvmsg(sock, m, len, flags);
++	rcu_read_unlock();
++
++	return ret;
++}
++
+ static __poll_t xsk_poll(struct file *file, struct socket *sock,
+ 			     struct poll_table_struct *wait)
+ {
+@@ -694,8 +722,11 @@ static __poll_t xsk_poll(struct file *file, struct socket *sock,
+ 
+ 	sock_poll_wait(file, sock, wait);
+ 
+-	if (unlikely(!xsk_is_bound(xs)))
++	rcu_read_lock();
++	if (unlikely(!xsk_is_bound(xs))) {
++		rcu_read_unlock();
+ 		return mask;
++	}
+ 
+ 	pool = xs->pool;
+ 
+@@ -704,7 +735,7 @@ static __poll_t xsk_poll(struct file *file, struct socket *sock,
+ 			xsk_wakeup(xs, pool->cached_need_wakeup);
+ 		else
+ 			/* Poll needs to drive Tx also in copy mode */
+-			__xsk_sendmsg(sk);
++			xsk_xmit(sk);
  	}
  
- 	jffs2_calc_trigger_levels(c);
+ 	if (xs->rx && !xskq_prod_is_empty(xs->rx))
+@@ -712,6 +743,7 @@ static __poll_t xsk_poll(struct file *file, struct socket *sock,
+ 	if (xs->tx && xsk_tx_writeable(xs))
+ 		mask |= EPOLLOUT | EPOLLWRNORM;
  
- 	return 0;
++	rcu_read_unlock();
+ 	return mask;
+ }
  
-+ out_sum_exit:
-+	jffs2_sum_exit(c);
-  out_free:
- 	kvfree(c->blocks);
+@@ -743,7 +775,6 @@ static void xsk_unbind_dev(struct xdp_sock *xs)
  
+ 	/* Wait for driver to stop using the xdp socket. */
+ 	xp_del_xsk(xs->pool, xs);
+-	xs->dev = NULL;
+ 	synchronize_net();
+ 	dev_put(dev);
+ }
+-- 
+2.34.1
+
 
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B87934F46F4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECEC54F47C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380884AbiDEUyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50616 "EHLO
+        id S234861AbiDEVUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 17:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358004AbiDEK1m (ORCPT
+        with ESMTP id S1351905AbiDEKD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:42 -0400
+        Tue, 5 Apr 2022 06:03:29 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBE9D95DA;
-        Tue,  5 Apr 2022 03:12:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E114BA2069;
+        Tue,  5 Apr 2022 02:52:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD9686179E;
-        Tue,  5 Apr 2022 10:12:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD010C385A1;
-        Tue,  5 Apr 2022 10:12:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 175B361750;
+        Tue,  5 Apr 2022 09:52:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21732C385A2;
+        Tue,  5 Apr 2022 09:52:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153565;
-        bh=FoGnhb9slsWkG7IHxkEf3fL8MCz4z4jZ7l1JoxcVH98=;
+        s=korg; t=1649152356;
+        bh=v1V7OgQ9ZfL/uDAaRTe7sePn9Z+Wh9PgpBSkw0TQrrs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PzCXB5EWIqWR+v9KClz9TzoCIiGRjsnnDJL2AMQVY1UxZxfv/tgEkOfUsA6TL8Ecu
-         DmgAYK/lElUKaXnovlmTbxj3RqaLleC5miXwThSRwM3IpDtmSYag4NeASfbaggO70I
-         3lV+mnpBrXdODhzBqA2wS6vwJYdgTTu/UsxgOBlo=
+        b=nf4cRbjJgBAlqtk/6QdigGLeYTDCVFoT5wMHsefby2U+KQFotqoenuexeZFpHEagj
+         DbBeqJsSDSPDY2qE+DwEBlJsY7+GfDh7FUsbhqeIj6zNBQuu4ZZu4ME4HsBU/g3Bue
+         hh/Ol2KyPvDEc5A5w99N6a1Hgy0WpAs+N2hdWiA4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yafang Shao <laoar.shao@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        stable@vger.kernel.org, Akira Kawata <akirakawata1@gmail.com>,
+        kernel test robot <lkp@intel.com>,
+        Kees Cook <keescook@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 267/599] libbpf: Fix possible NULL pointer dereference when destroying skeleton
+Subject: [PATCH 5.15 699/913] fs/binfmt_elf: Fix AT_PHDR for unusual ELF files
 Date:   Tue,  5 Apr 2022 09:29:21 +0200
-Message-Id: <20220405070306.783329093@linuxfoundation.org>
+Message-Id: <20220405070400.787359881@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +56,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yafang Shao <laoar.shao@gmail.com>
+From: Akira Kawata <akirakawata1@gmail.com>
 
-[ Upstream commit a32ea51a3f17ce6524c9fc19d311e708331c8b5f ]
+[ Upstream commit 0da1d5002745cdc721bc018b582a8a9704d56c42 ]
 
-When I checked the code in skeleton header file generated with my own
-bpf prog, I found there may be possible NULL pointer dereference when
-destroying skeleton. Then I checked the in-tree bpf progs, finding that is
-a common issue. Let's take the generated samples/bpf/xdp_redirect_cpu.skel.h
-for example. Below is the generated code in
-xdp_redirect_cpu__create_skeleton():
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=197921
 
-	xdp_redirect_cpu__create_skeleton
-		struct bpf_object_skeleton *s;
-		s = (struct bpf_object_skeleton *)calloc(1, sizeof(*s));
-		if (!s)
-			goto error;
-		...
-	error:
-		bpf_object__destroy_skeleton(s);
-		return  -ENOMEM;
+As pointed out in the discussion of buglink, we cannot calculate AT_PHDR
+as the sum of load_addr and exec->e_phoff.
 
-After goto error, the NULL 's' will be deferenced in
-bpf_object__destroy_skeleton().
+: The AT_PHDR of ELF auxiliary vectors should point to the memory address
+: of program header. But binfmt_elf.c calculates this address as follows:
+:
+: NEW_AUX_ENT(AT_PHDR, load_addr + exec->e_phoff);
+:
+: which is wrong since e_phoff is the file offset of program header and
+: load_addr is the memory base address from PT_LOAD entry.
+:
+: The ld.so uses AT_PHDR as the memory address of program header. In normal
+: case, since the e_phoff is usually 64 and in the first PT_LOAD region, it
+: is the correct program header address.
+:
+: But if the address of program header isn't equal to the first PT_LOAD
+: address + e_phoff (e.g.  Put the program header in other non-consecutive
+: PT_LOAD region), ld.so will try to read program header from wrong address
+: then crash or use incorrect program header.
 
-We can simply fix this issue by just adding a NULL check in
-bpf_object__destroy_skeleton().
+This is because exec->e_phoff
+is the offset of PHDRs in the file and the address of PHDRs in the
+memory may differ from it. This patch fixes the bug by calculating the
+address of program headers from PT_LOADs directly.
 
-Fixes: d66562fba1ce ("libbpf: Add BPF object skeleton support")
-Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20220108134739.32541-1-laoar.shao@gmail.com
+Signed-off-by: Akira Kawata <akirakawata1@gmail.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Acked-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20220127124014.338760-2-akirakawata1@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 3 +++
- 1 file changed, 3 insertions(+)
+ fs/binfmt_elf.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index b337d6f29098..61df26f048d9 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -10923,6 +10923,9 @@ void bpf_object__detach_skeleton(struct bpf_object_skeleton *s)
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+index a813b70f594e..3f6a7cac68fd 100644
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -170,8 +170,8 @@ static int padzero(unsigned long elf_bss)
  
- void bpf_object__destroy_skeleton(struct bpf_object_skeleton *s)
+ static int
+ create_elf_tables(struct linux_binprm *bprm, const struct elfhdr *exec,
+-		unsigned long load_addr, unsigned long interp_load_addr,
+-		unsigned long e_entry)
++		unsigned long interp_load_addr,
++		unsigned long e_entry, unsigned long phdr_addr)
  {
-+	if (!s)
-+		return;
+ 	struct mm_struct *mm = current->mm;
+ 	unsigned long p = bprm->p;
+@@ -257,7 +257,7 @@ create_elf_tables(struct linux_binprm *bprm, const struct elfhdr *exec,
+ 	NEW_AUX_ENT(AT_HWCAP, ELF_HWCAP);
+ 	NEW_AUX_ENT(AT_PAGESZ, ELF_EXEC_PAGESIZE);
+ 	NEW_AUX_ENT(AT_CLKTCK, CLOCKS_PER_SEC);
+-	NEW_AUX_ENT(AT_PHDR, load_addr + exec->e_phoff);
++	NEW_AUX_ENT(AT_PHDR, phdr_addr);
+ 	NEW_AUX_ENT(AT_PHENT, sizeof(struct elf_phdr));
+ 	NEW_AUX_ENT(AT_PHNUM, exec->e_phnum);
+ 	NEW_AUX_ENT(AT_BASE, interp_load_addr);
+@@ -823,7 +823,7 @@ static int parse_elf_properties(struct file *f, const struct elf_phdr *phdr,
+ static int load_elf_binary(struct linux_binprm *bprm)
+ {
+ 	struct file *interpreter = NULL; /* to shut gcc up */
+- 	unsigned long load_addr = 0, load_bias = 0;
++	unsigned long load_addr, load_bias = 0, phdr_addr = 0;
+ 	int load_addr_set = 0;
+ 	unsigned long error;
+ 	struct elf_phdr *elf_ppnt, *elf_phdata, *interp_elf_phdata = NULL;
+@@ -1156,6 +1156,17 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 				reloc_func_desc = load_bias;
+ 			}
+ 		}
 +
- 	if (s->progs)
- 		bpf_object__detach_skeleton(s);
- 	if (s->obj)
++		/*
++		 * Figure out which segment in the file contains the Program
++		 * Header table, and map to the associated memory address.
++		 */
++		if (elf_ppnt->p_offset <= elf_ex->e_phoff &&
++		    elf_ex->e_phoff < elf_ppnt->p_offset + elf_ppnt->p_filesz) {
++			phdr_addr = elf_ex->e_phoff - elf_ppnt->p_offset +
++				    elf_ppnt->p_vaddr;
++		}
++
+ 		k = elf_ppnt->p_vaddr;
+ 		if ((elf_ppnt->p_flags & PF_X) && k < start_code)
+ 			start_code = k;
+@@ -1191,6 +1202,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 	}
+ 
+ 	e_entry = elf_ex->e_entry + load_bias;
++	phdr_addr += load_bias;
+ 	elf_bss += load_bias;
+ 	elf_brk += load_bias;
+ 	start_code += load_bias;
+@@ -1254,8 +1266,8 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 		goto out;
+ #endif /* ARCH_HAS_SETUP_ADDITIONAL_PAGES */
+ 
+-	retval = create_elf_tables(bprm, elf_ex,
+-			  load_addr, interp_load_addr, e_entry);
++	retval = create_elf_tables(bprm, elf_ex, interp_load_addr,
++				   e_entry, phdr_addr);
+ 	if (retval < 0)
+ 		goto out;
+ 
 -- 
 2.34.1
 

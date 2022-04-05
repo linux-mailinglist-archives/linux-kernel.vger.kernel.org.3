@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB3F4F44C4
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C1D4F4471
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384465AbiDENcU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
+        id S1389279AbiDENdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345815AbiDEJXD (ORCPT
+        with ESMTP id S1346396AbiDEJXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:23:03 -0400
+        Tue, 5 Apr 2022 05:23:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139E19F6C8;
-        Tue,  5 Apr 2022 02:12:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2C0DA09A;
+        Tue,  5 Apr 2022 02:13:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FFF3615E5;
-        Tue,  5 Apr 2022 09:12:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FEADC385A0;
-        Tue,  5 Apr 2022 09:12:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACAA1615E5;
+        Tue,  5 Apr 2022 09:13:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCFE0C385A2;
+        Tue,  5 Apr 2022 09:13:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149934;
-        bh=BBrYdWG++MCLrSKzmXHsgOOi+WKZDpUEzM+K/Ckpuzk=;
+        s=korg; t=1649150003;
+        bh=TEt6u2v2p7dI5no1Pgbez4k7Gzktp4YSlW5alzX4JkU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O3AZt9CfWXCFATLnR2WXKGi6oFmlV3LKR/H/VGoJgQBf0Ak4mCFWyp7rVrwS1kGp9
-         iF3ebIKS29AGvUaJCtN8S4J4eJzquUI79eC7LqPMjcTcQPhoWi/GXyHWA7kVM7H9FX
-         oZ0o4Ha90E3UBwcprNEufJbbFlgtsP0IDD5Am+68=
+        b=JOMgdS4Itj8oFFq2OfnLYMsHHdyA2CcW9sBIkHzheMLxMw2TouWoRHuAytFLW7Lmb
+         P8L1cM823Vj8vHE2e9su1MYqTQumlweujd3kYh8CopqiCJg1Rtp/sESsDNY1tqvLvl
+         dwCfNmIkCyIeD01S34yA6rf+yqJZ60s8l3NBxrZM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Quinn Tran <qutran@marvell.com>,
+        Bikash Hazarika <bhazarika@marvell.com>,
         Nilesh Javali <njavali@marvell.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.16 0877/1017] scsi: qla2xxx: Fix stuck session in gpdb
-Date:   Tue,  5 Apr 2022 09:29:50 +0200
-Message-Id: <20220405070420.267537180@linuxfoundation.org>
+Subject: [PATCH 5.16 0881/1017] scsi: qla2xxx: Fix wrong FDMI data for 64G adapter
+Date:   Tue,  5 Apr 2022 09:29:54 +0200
+Message-Id: <20220405070420.384917030@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -47,50 +47,50 @@ User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
+From: Bikash Hazarika <bhazarika@marvell.com>
 
-commit 725d3a0d31a51c0debf970011e05f585e805165b upstream.
+commit 1cfbbacbee2d6ea3816386a483e3c7a96e5bd657 upstream.
 
-Fix stuck sessions in get port database. When a thread is in the process of
-re-establishing a session, a flag is set to prevent multiple threads /
-triggers from doing the same task. This flag was left on, where any attempt
-to relogin was locked out. Clear this flag, if the attempt has failed.
+Corrected transmission speed mask values for FC.
 
-Link: https://lore.kernel.org/r/20220110050218.3958-4-njavali@marvell.com
+Supported Speed: 16 32 20 Gb/s ===> Should be 64 instead of 20
+Supported Speed: 16G 32G 48G   ===> Should be 64G instead of 48G
+
+Link: https://lore.kernel.org/r/20220110050218.3958-9-njavali@marvell.com
 Cc: stable@vger.kernel.org
 Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Signed-off-by: Quinn Tran <qutran@marvell.com>
+Signed-off-by: Bikash Hazarika <bhazarika@marvell.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_init.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/scsi/qla2xxx/qla_def.h |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -1332,9 +1332,9 @@ int qla24xx_async_gpdb(struct scsi_qla_h
- 	if (!vha->flags.online || (fcport->flags & FCF_ASYNC_SENT) ||
- 	    fcport->loop_id == FC_NO_LOOP_ID) {
- 		ql_log(ql_log_warn, vha, 0xffff,
--		    "%s: %8phC - not sending command.\n",
--		    __func__, fcport->port_name);
--		return rval;
-+		    "%s: %8phC online %d flags %x - not sending command.\n",
-+		    __func__, fcport->port_name, vha->flags.online, fcport->flags);
-+		goto done;
- 	}
+--- a/drivers/scsi/qla2xxx/qla_def.h
++++ b/drivers/scsi/qla2xxx/qla_def.h
+@@ -2891,7 +2891,11 @@ struct ct_fdmi2_hba_attributes {
+ #define FDMI_PORT_SPEED_8GB		0x10
+ #define FDMI_PORT_SPEED_16GB		0x20
+ #define FDMI_PORT_SPEED_32GB		0x40
+-#define FDMI_PORT_SPEED_64GB		0x80
++#define FDMI_PORT_SPEED_20GB		0x80
++#define FDMI_PORT_SPEED_40GB		0x100
++#define FDMI_PORT_SPEED_128GB		0x200
++#define FDMI_PORT_SPEED_64GB		0x400
++#define FDMI_PORT_SPEED_256GB		0x800
+ #define FDMI_PORT_SPEED_UNKNOWN		0x8000
  
- 	sp = qla2x00_get_sp(vha, fcport, GFP_KERNEL);
+ #define FC_CLASS_2	0x04
 
 

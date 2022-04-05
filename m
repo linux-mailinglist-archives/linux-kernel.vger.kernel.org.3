@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBAB4F4FAF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 898294F5067
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1839184AbiDFA6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60268 "EHLO
+        id S1841692AbiDFBZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356136AbiDEKW7 (ORCPT
+        with ESMTP id S1349273AbiDEJtd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:22:59 -0400
+        Tue, 5 Apr 2022 05:49:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D53B8205;
-        Tue,  5 Apr 2022 03:06:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1BA26FA;
+        Tue,  5 Apr 2022 02:43:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 007C26172B;
-        Tue,  5 Apr 2022 10:06:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1533BC385A1;
-        Tue,  5 Apr 2022 10:06:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C97C615E5;
+        Tue,  5 Apr 2022 09:43:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD491C385A2;
+        Tue,  5 Apr 2022 09:43:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153196;
-        bh=2eXIeeRexCOuSEo8b3vylFyzhx8jNayZAmwbHZPfjpM=;
+        s=korg; t=1649151815;
+        bh=hcHNfnlR3uq16SdqCxgn15X9mJ344yk9MYVAcYO4ANQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YaKNiIlOd0pHE1gSJjqFn//1vKvGB8uQXfDan7EleO0XkoGI2x/EyC2V37hAt9o9I
-         84pjNpOXRwB4riJeBUr0+vwKOOM3Abf9D7q7T6Y8sliXJefqZp4kFlCU3TOftgeh2I
-         kQcLxmPq1e9Jkv9QpW1I+gmZW4KXNDH14RB6E1Hg=
+        b=PPpgchgOtd9Zdn2YxDCmNOpXFYp9bVxvstpWgt5VEO3pfv2ROiBb9r+j1KMUJSybQ
+         AMBecLsl4XwKmtXsD+v/t1+0VUvzspJSTsgxpQNBZSZG4+qSiHXrmVopCiYx4dC9FX
+         iHfvmrMH1/YHPoQkYodCmvKtDI3DnTjVUPUC2DFA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH 5.10 119/599] xtensa: fix xtensa_wsr always writing 0
-Date:   Tue,  5 Apr 2022 09:26:53 +0200
-Message-Id: <20220405070302.380374239@linuxfoundation.org>
+        stable@vger.kernel.org, Jianlin Shi <jishi@redhat.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 552/913] bareudp: use ipv6_mod_enabled to check if IPv6 enabled
+Date:   Tue,  5 Apr 2022 09:26:54 +0200
+Message-Id: <20220405070356.393753958@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,38 +56,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Max Filippov <jcmvbkbc@gmail.com>
+From: Hangbin Liu <liuhangbin@gmail.com>
 
-commit a3d0245c58f962ee99d4440ea0eaf45fb7f5a5cc upstream.
+[ Upstream commit e077ed58c243afc197bc2a2ba0e1ff61135e4ec2 ]
 
-The commit cad6fade6e78 ("xtensa: clean up WSR*/RSR*/get_sr/set_sr")
-replaced 'WSR' macro in the function xtensa_wsr with 'xtensa_set_sr',
-but variable 'v' in the xtensa_set_sr body shadowed the argument 'v'
-passed to it, resulting in wrong value written to debug registers.
+bareudp_create_sock() use AF_INET6 by default if IPv6 CONFIG enabled.
+But if user start kernel with ipv6.disable=1, the bareudp sock will
+created failed, which cause the interface open failed even with ethertype
+ip. e.g.
 
-Fix that by removing intermediate variable from the xtensa_set_sr
-macro body.
+ # ip link add bareudp1 type bareudp dstport 2 ethertype ip
+ # ip link set bareudp1 up
+ RTNETLINK answers: Address family not supported by protocol
 
-Cc: stable@vger.kernel.org
-Fixes: cad6fade6e78 ("xtensa: clean up WSR*/RSR*/get_sr/set_sr")
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fix it by using ipv6_mod_enabled() to check if IPv6 enabled. There is
+no need to check IS_ENABLED(CONFIG_IPV6) as ipv6_mod_enabled() will
+return false when CONFIG_IPV6 no enabled in include/linux/ipv6.h.
+
+Reported-by: Jianlin Shi <jishi@redhat.com>
+Fixes: 571912c69f0e ("net: UDP tunnel encapsulation module for tunnelling different protocols like MPLS, IP, NSH etc.")
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+Link: https://lore.kernel.org/r/20220315062618.156230-1-liuhangbin@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/xtensa/include/asm/processor.h |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/bareudp.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
---- a/arch/xtensa/include/asm/processor.h
-+++ b/arch/xtensa/include/asm/processor.h
-@@ -226,8 +226,8 @@ extern unsigned long get_wchan(struct ta
+diff --git a/drivers/net/bareudp.c b/drivers/net/bareudp.c
+index 54e321a695ce..98c915943f32 100644
+--- a/drivers/net/bareudp.c
++++ b/drivers/net/bareudp.c
+@@ -141,14 +141,14 @@ static int bareudp_udp_encap_recv(struct sock *sk, struct sk_buff *skb)
+ 	skb_reset_network_header(skb);
+ 	skb_reset_mac_header(skb);
  
- #define xtensa_set_sr(x, sr) \
- 	({ \
--	 unsigned int v = (unsigned int)(x); \
--	 __asm__ __volatile__ ("wsr %0, "__stringify(sr) :: "a"(v)); \
-+	 __asm__ __volatile__ ("wsr %0, "__stringify(sr) :: \
-+			       "a"((unsigned int)(x))); \
- 	 })
+-	if (!IS_ENABLED(CONFIG_IPV6) || family == AF_INET)
++	if (!ipv6_mod_enabled() || family == AF_INET)
+ 		err = IP_ECN_decapsulate(oiph, skb);
+ 	else
+ 		err = IP6_ECN_decapsulate(oiph, skb);
  
- #define xtensa_get_sr(sr) \
+ 	if (unlikely(err)) {
+ 		if (log_ecn_error) {
+-			if  (!IS_ENABLED(CONFIG_IPV6) || family == AF_INET)
++			if  (!ipv6_mod_enabled() || family == AF_INET)
+ 				net_info_ratelimited("non-ECT from %pI4 "
+ 						     "with TOS=%#x\n",
+ 						     &((struct iphdr *)oiph)->saddr,
+@@ -214,11 +214,12 @@ static struct socket *bareudp_create_sock(struct net *net, __be16 port)
+ 	int err;
+ 
+ 	memset(&udp_conf, 0, sizeof(udp_conf));
+-#if IS_ENABLED(CONFIG_IPV6)
+-	udp_conf.family = AF_INET6;
+-#else
+-	udp_conf.family = AF_INET;
+-#endif
++
++	if (ipv6_mod_enabled())
++		udp_conf.family = AF_INET6;
++	else
++		udp_conf.family = AF_INET;
++
+ 	udp_conf.local_udp_port = port;
+ 	/* Open UDP socket */
+ 	err = udp_sock_create(net, &udp_conf, &sock);
+@@ -441,7 +442,7 @@ static netdev_tx_t bareudp_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	}
+ 
+ 	rcu_read_lock();
+-	if (IS_ENABLED(CONFIG_IPV6) && info->mode & IP_TUNNEL_INFO_IPV6)
++	if (ipv6_mod_enabled() && info->mode & IP_TUNNEL_INFO_IPV6)
+ 		err = bareudp6_xmit_skb(skb, dev, bareudp, info);
+ 	else
+ 		err = bareudp_xmit_skb(skb, dev, bareudp, info);
+@@ -471,7 +472,7 @@ static int bareudp_fill_metadata_dst(struct net_device *dev,
+ 
+ 	use_cache = ip_tunnel_dst_cache_usable(skb, info);
+ 
+-	if (!IS_ENABLED(CONFIG_IPV6) || ip_tunnel_info_af(info) == AF_INET) {
++	if (!ipv6_mod_enabled() || ip_tunnel_info_af(info) == AF_INET) {
+ 		struct rtable *rt;
+ 		__be32 saddr;
+ 
+-- 
+2.34.1
+
 
 

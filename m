@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 647044F284F
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A5804F284E
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234410AbiDEINH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48172 "EHLO
+        id S234389AbiDEINB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234011AbiDEH54 (ORCPT
+        with ESMTP id S233975AbiDEH5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:57:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C150995493;
-        Tue,  5 Apr 2022 00:51:46 -0700 (PDT)
+        Tue, 5 Apr 2022 03:57:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AA1939AF;
+        Tue,  5 Apr 2022 00:51:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00177B81BAF;
-        Tue,  5 Apr 2022 07:51:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FAC3C36AE2;
-        Tue,  5 Apr 2022 07:51:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75897B81B90;
+        Tue,  5 Apr 2022 07:51:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6806C3410F;
+        Tue,  5 Apr 2022 07:51:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145096;
-        bh=PZMsmzT6BSo0SeQiQCTkI9aQkCqrgOpS7jo8q0bRA3g=;
+        s=korg; t=1649145102;
+        bh=oHVFxPkpSQYF4vQXl0hmS/0XMzT+M/SqED4Ids4AGWo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=09QhgCn2RNWO1nELDetAkxFe4cCAs9j0B6bDS19aKCwpbPMDX26QARstiisHxkEJ4
-         nb8HcYAKoMvfT6NVhcl2mPz0IRjfBMeqkL5fMv1y8mmQT3172Z7wLcW13/o98sJnt/
-         J40gfqlbS4UK2eS5NMR4SLmwSZb+RiCrXVRT+7Xw=
+        b=vwo6vvNLrKYJYz7AOc6FI2StfYu5A+mFjpZT5qyN9XR6QSIw8pCC3MS3AurrevFGK
+         wHDKzlOLBSRNaEKSKlB+ONMS+JCsJatSXrF05o9w7HK6QAA02Re08Hbx+BO/FjWuhm
+         xbqSiqfLY5Nzu8c7SrYIbfIxuMZOA/uQTuo/KWc0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
-        David Sterba <dsterba@suse.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0283/1126] btrfs: fix unexpected error path when reflinking an inline extent
-Date:   Tue,  5 Apr 2022 09:17:10 +0200
-Message-Id: <20220405070415.917263053@linuxfoundation.org>
+        stable@vger.kernel.org, Dongliang Mu <mudongliangabcd@gmail.com>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>,
+        Chao Yu <chao@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 0285/1126] fs: erofs: add sanity check for kobject in erofs_unregister_sysfs
+Date:   Tue,  5 Apr 2022 09:17:12 +0200
+Message-Id: <20220405070415.978906974@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,48 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Filipe Manana <fdmanana@suse.com>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-[ Upstream commit 1f4613cdbe7739ce291554b316bff8e551383389 ]
+[ Upstream commit a942da24abc5839c11a8fc2a4b7cb268ea94ba54 ]
 
-When reflinking an inline extent, we assert that its file offset is 0 and
-that its uncompressed length is not greater than the sector size. We then
-return an error if one of those conditions is not satisfied. However we
-use a return statement, which results in returning from btrfs_clone()
-without freeing the path and buffer that were allocated before, as well as
-not clearing the flag BTRFS_INODE_NO_DELALLOC_FLUSH for the destination
-inode.
+Syzkaller hit 'WARNING: kobject bug in erofs_unregister_sysfs'. This bug
+is triggered by injecting fault in kobject_init_and_add of
+erofs_unregister_sysfs.
 
-Fix that by jumping to the 'out' label instead, and also add a WARN_ON()
-for each condition so that in case assertions are disabled, we get to
-known which of the unexpected conditions triggered the error.
+Fix this by adding sanity check for kobject in erofs_unregister_sysfs
 
-Fixes: a61e1e0df9f321 ("Btrfs: simplify inline extent handling when doing reflinks")
-Signed-off-by: Filipe Manana <fdmanana@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Note that I've tested the patch and the crash does not occur any more.
+
+Link: https://lore.kernel.org/r/20220315132814.12332-1-dzm91@hust.edu.cn
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Fixes: 168e9a76200c ("erofs: add sysfs interface")
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+Reviewed-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/reflink.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ fs/erofs/sysfs.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/fs/btrfs/reflink.c b/fs/btrfs/reflink.c
-index a3930da4eb3f..e437238cc603 100644
---- a/fs/btrfs/reflink.c
-+++ b/fs/btrfs/reflink.c
-@@ -505,8 +505,11 @@ static int btrfs_clone(struct inode *src, struct inode *inode,
- 			 */
- 			ASSERT(key.offset == 0);
- 			ASSERT(datal <= fs_info->sectorsize);
--			if (key.offset != 0 || datal > fs_info->sectorsize)
--				return -EUCLEAN;
-+			if (WARN_ON(key.offset != 0) ||
-+			    WARN_ON(datal > fs_info->sectorsize)) {
-+				ret = -EUCLEAN;
-+				goto out;
-+			}
+diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
+index dac252bc9228..f3babf1e6608 100644
+--- a/fs/erofs/sysfs.c
++++ b/fs/erofs/sysfs.c
+@@ -221,9 +221,11 @@ void erofs_unregister_sysfs(struct super_block *sb)
+ {
+ 	struct erofs_sb_info *sbi = EROFS_SB(sb);
  
- 			ret = clone_copy_inline_extent(inode, path, &new_key,
- 						       drop_start, datal, size,
+-	kobject_del(&sbi->s_kobj);
+-	kobject_put(&sbi->s_kobj);
+-	wait_for_completion(&sbi->s_kobj_unregister);
++	if (sbi->s_kobj.state_in_sysfs) {
++		kobject_del(&sbi->s_kobj);
++		kobject_put(&sbi->s_kobj);
++		wait_for_completion(&sbi->s_kobj_unregister);
++	}
+ }
+ 
+ int __init erofs_init_sysfs(void)
 -- 
 2.34.1
 

@@ -2,54 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8744F4A5E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D013B4F4954
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234397AbiDEWlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
+        id S1442433AbiDEWK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457620AbiDEQSS (ORCPT
+        with ESMTP id S1457625AbiDEQTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:18:18 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F566193D3
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:16:19 -0700 (PDT)
+        Tue, 5 Apr 2022 12:19:42 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FD4193D3
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:17:43 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id EED1C210F1;
-        Tue,  5 Apr 2022 16:16:17 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTP id A07211F37D;
+        Tue,  5 Apr 2022 16:17:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1649175377; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1649175462; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=1ZOY9F/5g5PeZhpDl0566aC7WZpwSzJmzpmgZjPPJCs=;
-        b=pM1EpMtmCVxrKZFrB9tLqjrLE/6GD5oYc2vVk5dgZvS3rczpy1QwsGUxs5Ek+3YtY8ypfz
-        tndqeVZDbPxz0CSEDVeYltfZSc705g9k9/oUkNgPkMsIZsu9pYe2B52yB/LAVhQp7mcElm
-        shSt4QJMq65o/v3icBKz/C+vagGCyPQ=
+        bh=i5jWb08T0RxS89hDAMTR9oLVSxo0c9WfDhnxBD/u/5s=;
+        b=0O8C9QNrGERCkFNQON7oAKUQUHnC0Y8NVVLvN9SzKVjpS+Jvt0sJLuDKWlYnZjnAewJqER
+        MnVdri7fjg6cDddHVFAFH9Gfpx6gSDdRmYGBHoieIj1OhsY2ct11Z2dMrFJYqdUIoKJwOz
+        X9DwCDlZDww8R0/uhNeMaZo4rC5WFr8=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1649175377;
+        s=susede2_ed25519; t=1649175462;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=1ZOY9F/5g5PeZhpDl0566aC7WZpwSzJmzpmgZjPPJCs=;
-        b=4Tej+bvG48jBLEq/iHWdONwEYnh5u0NpMsK9fU3f845V8jHN/awTO0gI5ReSv3mI0p3/Yr
-        e8FE95qhuVdKaOBw==
+        bh=i5jWb08T0RxS89hDAMTR9oLVSxo0c9WfDhnxBD/u/5s=;
+        b=am4tIWb8GphVIN0zBVgh8YNpMkPO8GF9t/KZkjCpsJ/utR+1XTDM0ARoDyimAh1qCXD12q
+        i7e1Radr9iPx/fAg==
 Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
-        by relay2.suse.de (Postfix) with ESMTP id CF989A3B83;
-        Tue,  5 Apr 2022 16:16:17 +0000 (UTC)
-Date:   Tue, 05 Apr 2022 18:16:17 +0200
-Message-ID: <s5hilrn5wvi.wl-tiwai@suse.de>
+        by relay2.suse.de (Postfix) with ESMTP id 89B85A3B96;
+        Tue,  5 Apr 2022 16:17:42 +0000 (UTC)
+Date:   Tue, 05 Apr 2022 18:17:42 +0200
+Message-ID: <s5hh7775wt5.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
-Subject: Re: [PATCH 02/11] ALSA: usb-audio: Fix undefined behavior due to shift overflowing the constant
-In-Reply-To: <Ykxo+0p5IeeM7mge@zn.tnic>
-References: <20220405151517.29753-1-bp@alien8.de>
-        <20220405151517.29753-3-bp@alien8.de>
-        <s5hwng35yvz.wl-tiwai@suse.de>
-        <Ykxo+0p5IeeM7mge@zn.tnic>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     perex@perex.cz, tiwai@suse.com, iommu@lists.linux-foundation.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] ALSA: emu10k1: Stop using iommu_present()
+In-Reply-To: <9b506b4a4fe8a7f40aa8bad1aafc82426cf3dd92.1649165210.git.robin.murphy@arm.com>
+References: <9b506b4a4fe8a7f40aa8bad1aafc82426cf3dd92.1649165210.git.robin.murphy@arm.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
  FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
  (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -65,18 +61,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 05 Apr 2022 18:06:19 +0200,
-Borislav Petkov wrote:
+On Tue, 05 Apr 2022 15:27:54 +0200,
+Robin Murphy wrote:
 > 
-> On Tue, Apr 05, 2022 at 05:32:48PM +0200, Takashi Iwai wrote:
-> > > +#define USB_ID(vendor, product) ((((unsigned int)vendor) << 16) | (product))
-> > 
-> > Parentheses are needed around vendor (as usual for a macro).
-> > Could you resubmit with it?
+> iommu_get_domain_for_dev() is already perfectly happy to return NULL
+> if the given device has no IOMMU. Drop the unnecessary check in favour
+> of just handling that condition appropriately.
 > 
-> Or you can fix it up while applying. :)
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> ---
+> 
+> v2: Get "!domain" condition right
 
-If you prefer, sure.
+Applied now.  Thanks.
 
 
 Takashi

@@ -2,43 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0574F2D99
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E66754F2BF9
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239768AbiDEJFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
+        id S240257AbiDEJGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238389AbiDEITD (ORCPT
+        with ESMTP id S238418AbiDEITF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:19:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51185FE3;
-        Tue,  5 Apr 2022 01:08:44 -0700 (PDT)
+        Tue, 5 Apr 2022 04:19:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A19AE47;
+        Tue,  5 Apr 2022 01:08:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B38360919;
-        Tue,  5 Apr 2022 08:08:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B8E0C385A1;
-        Tue,  5 Apr 2022 08:08:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1C5060919;
+        Tue,  5 Apr 2022 08:08:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA073C385A3;
+        Tue,  5 Apr 2022 08:08:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146123;
-        bh=u8PxMLCYo4rYp2EXONipyGluuU3I5q0QkRQTH2Ha+LM=;
+        s=korg; t=1649146129;
+        bh=KYXEhnswZ9GlBv57VQWGUAbK4dX9BNkHI4d1xHGhTd8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aLTWkoG+cfNCvyLaENYLfF3fsRaTbQWDO39fmsPTlUf01RWLR7PP10ke0TmkKs6j1
-         l04o0mxkPDJhRVr8z4yEe9R55fgLRxQGbGdJeKZhcUToLo2iN/hjkH4BYNRLGhiC92
-         766XUIbsTDXQkQjJcFFb8Mun9NAipKHSYb9EoQ68=
+        b=cvrjZRdXtN0/DPLyPj6DFe14/nNS+FGHNrW3UndPDO+9ILva1LxQf6qfcnAdCT2wv
+         0dfYKc2SjCCS2Fnq48ozG/nYsGdEJAhn98NFkcH8FFljq+cWr339yQXHpf4NxSge3o
+         yNTGFIKWI8nXX5XSvtsoKaKDzx8mICIyAHXJ5Ahk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Jeff Johnson <quic_jjohnson@quicinc.com>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Phil Sutter <n0-1@freewrt.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Daniel Walter <dwalter@google.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0651/1126] ath10k: Fix error handling in ath10k_setup_msa_resources
-Date:   Tue,  5 Apr 2022 09:23:18 +0200
-Message-Id: <20220405070426.739189547@linuxfoundation.org>
+Subject: [PATCH 5.17 0653/1126] MIPS: RB532: fix return value of __setup handler
+Date:   Tue,  5 Apr 2022 09:23:20 +0200
+Message-Id: <20220405070426.797315131@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,43 +62,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 9747a78d5f758a5284751a10aee13c30d02bd5f1 ]
+[ Upstream commit 8755d57ba1ff910666572fab9e32890e8cc6ed3b ]
 
-The device_node pointer is returned by of_parse_phandle() with refcount
-incremented. We should use of_node_put() on it when done.
+__setup() handlers should return 1 to obsolete_checksetup() in
+init/main.c to indicate that the boot option has been handled.
+A return of 0 causes the boot option/value to be listed as an Unknown
+kernel parameter and added to init's (limited) argument or environment
+strings. Also, error return codes don't mean anything to
+obsolete_checksetup() -- only non-zero (usually 1) or zero.
+So return 1 from setup_kmac().
 
-This function only calls of_node_put() in the regular path.
-And it will cause refcount leak in error path.
-
-Fixes: 727fec790ead ("ath10k: Setup the msa resources before qmi init")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Jeff Johnson <quic_jjohnson@quicinc.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220308070238.19295-1-linmq006@gmail.com
+Fixes: 9e21c7e40b7e ("MIPS: RB532: Replace parse_mac_addr() with mac_pton().")
+Fixes: 73b4390fb234 ("[MIPS] Routerboard 532: Support for base system")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+From: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Phil Sutter <n0-1@freewrt.org>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Daniel Walter <dwalter@google.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath10k/snoc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/rb532/devices.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath10k/snoc.c b/drivers/net/wireless/ath/ath10k/snoc.c
-index 9513ab696fff..f79dd9a71690 100644
---- a/drivers/net/wireless/ath/ath10k/snoc.c
-+++ b/drivers/net/wireless/ath/ath10k/snoc.c
-@@ -1556,11 +1556,11 @@ static int ath10k_setup_msa_resources(struct ath10k *ar, u32 msa_size)
- 	node = of_parse_phandle(dev->of_node, "memory-region", 0);
- 	if (node) {
- 		ret = of_address_to_resource(node, 0, &r);
-+		of_node_put(node);
- 		if (ret) {
- 			dev_err(dev, "failed to resolve msa fixed region\n");
- 			return ret;
- 		}
--		of_node_put(node);
+diff --git a/arch/mips/rb532/devices.c b/arch/mips/rb532/devices.c
+index 04684990e28e..b7f6f782d9a1 100644
+--- a/arch/mips/rb532/devices.c
++++ b/arch/mips/rb532/devices.c
+@@ -301,11 +301,9 @@ static int __init plat_setup_devices(void)
+ static int __init setup_kmac(char *s)
+ {
+ 	printk(KERN_INFO "korina mac = %s\n", s);
+-	if (!mac_pton(s, korina_dev0_data.mac)) {
++	if (!mac_pton(s, korina_dev0_data.mac))
+ 		printk(KERN_ERR "Invalid mac\n");
+-		return -EINVAL;
+-	}
+-	return 0;
++	return 1;
+ }
  
- 		ar->msa.paddr = r.start;
- 		ar->msa.mem_size = resource_size(&r);
+ __setup("kmac=", setup_kmac);
 -- 
 2.34.1
 

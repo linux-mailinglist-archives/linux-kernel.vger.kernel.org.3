@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D564F4085
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2324F3E17
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238929AbiDEMMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
+        id S1351488AbiDEO4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 10:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244759AbiDEIwh (ORCPT
+        with ESMTP id S244295AbiDEJlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:52:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3731D323;
-        Tue,  5 Apr 2022 01:43:24 -0700 (PDT)
+        Tue, 5 Apr 2022 05:41:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA127BB0A3;
+        Tue,  5 Apr 2022 02:26:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91312B81A32;
-        Tue,  5 Apr 2022 08:43:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B649C385A0;
-        Tue,  5 Apr 2022 08:43:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6819F6165C;
+        Tue,  5 Apr 2022 09:26:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75385C385A0;
+        Tue,  5 Apr 2022 09:26:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148202;
-        bh=f2TE95cmaLwf4mI8zvdr2vVpjO4xQUs/2IcFqLWNt1g=;
+        s=korg; t=1649150760;
+        bh=9XcM0C1skRBFfRnxRk7Z+cajpzXiJDVLI1QQNgGD96I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fjvTOgB3dtAX1SBpK9YAkBMLhfu3JeUgTPVSoHuQQMEexme3QoQAo9Jese9norKQQ
-         MN1OyQ10oV9cCt3awkvkbf1GlSi3lWXiZpuWqMP8Rqf1iTSWVdKL5FbGRgaEAIpVzT
-         Z9ZEeEjuNzGAfc62ShOpGn06zJRB3TQdWMUq++m4=
+        b=rh2wxqx60W3vDl1xR1AAkZ5CIauICiDFN1h1apq5U20dQQY6q4ZSazuKFQzZNUVqb
+         naqTThBmqeck4lqCy2RPcs5wwu4VW6s/UqsK1UNWnHGwbpyRD56Q/77TIjhgVqofHt
+         Z7wA/kT2gwtkHr8biFeijyDWKySlm2G7jXHfi1C8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
-        David Sterba <dsterba@suse.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0272/1017] btrfs: fix unexpected error path when reflinking an inline extent
+        stable@vger.kernel.org, Jordan Crouse <jordan@cosmicpenguin.net>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH 5.15 123/913] arm64: dts: qcom: sm8250: Fix MSI IRQ for PCIe1 and PCIe2
 Date:   Tue,  5 Apr 2022 09:19:45 +0200
-Message-Id: <20220405070402.340137634@linuxfoundation.org>
+Message-Id: <20220405070343.514843428@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Filipe Manana <fdmanana@suse.com>
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-[ Upstream commit 1f4613cdbe7739ce291554b316bff8e551383389 ]
+commit 1b7101e8124b450f2d6a35591e9cbb478c143ace upstream.
 
-When reflinking an inline extent, we assert that its file offset is 0 and
-that its uncompressed length is not greater than the sector size. We then
-return an error if one of those conditions is not satisfied. However we
-use a return statement, which results in returning from btrfs_clone()
-without freeing the path and buffer that were allocated before, as well as
-not clearing the flag BTRFS_INODE_NO_DELALLOC_FLUSH for the destination
-inode.
+Fix the MSI IRQ used for PCIe instances 1 and 2.
 
-Fix that by jumping to the 'out' label instead, and also add a WARN_ON()
-for each condition so that in case assertions are disabled, we get to
-known which of the unexpected conditions triggered the error.
-
-Fixes: a61e1e0df9f321 ("Btrfs: simplify inline extent handling when doing reflinks")
-Signed-off-by: Filipe Manana <fdmanana@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: e53bdfc00977 ("arm64: dts: qcom: sm8250: Add PCIe support")
+Reported-by: Jordan Crouse <jordan@cosmicpenguin.net>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220112035556.5108-1-manivannan.sadhasivam@linaro.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/reflink.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/sm8250.dtsi |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/btrfs/reflink.c b/fs/btrfs/reflink.c
-index e0f93b357548..157d72e330d6 100644
---- a/fs/btrfs/reflink.c
-+++ b/fs/btrfs/reflink.c
-@@ -505,8 +505,11 @@ static int btrfs_clone(struct inode *src, struct inode *inode,
- 			 */
- 			ASSERT(key.offset == 0);
- 			ASSERT(datal <= fs_info->sectorsize);
--			if (key.offset != 0 || datal > fs_info->sectorsize)
--				return -EUCLEAN;
-+			if (WARN_ON(key.offset != 0) ||
-+			    WARN_ON(datal > fs_info->sectorsize)) {
-+				ret = -EUCLEAN;
-+				goto out;
-+			}
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -1495,7 +1495,7 @@
+ 			ranges = <0x01000000 0x0 0x40200000 0x0 0x40200000 0x0 0x100000>,
+ 				 <0x02000000 0x0 0x40300000 0x0 0x40300000 0x0 0x1fd00000>;
  
- 			ret = clone_copy_inline_extent(inode, path, &new_key,
- 						       drop_start, datal, size,
--- 
-2.34.1
-
+-			interrupts = <GIC_SPI 306 IRQ_TYPE_EDGE_RISING>;
++			interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>;
+ 			interrupt-names = "msi";
+ 			#interrupt-cells = <1>;
+ 			interrupt-map-mask = <0 0 0 0x7>;
+@@ -1601,7 +1601,7 @@
+ 			ranges = <0x01000000 0x0 0x64200000 0x0 0x64200000 0x0 0x100000>,
+ 				 <0x02000000 0x0 0x64300000 0x0 0x64300000 0x0 0x3d00000>;
+ 
+-			interrupts = <GIC_SPI 236 IRQ_TYPE_EDGE_RISING>;
++			interrupts = <GIC_SPI 243 IRQ_TYPE_LEVEL_HIGH>;
+ 			interrupt-names = "msi";
+ 			#interrupt-cells = <1>;
+ 			interrupt-map-mask = <0 0 0 0x7>;
 
 

@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E6F94F465D
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2AE94F44A8
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359040AbiDENKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
+        id S1358954AbiDENJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344159AbiDEJS1 (ORCPT
+        with ESMTP id S1344163AbiDEJS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:18:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2620B5B3D3;
-        Tue,  5 Apr 2022 02:04:45 -0700 (PDT)
+        Tue, 5 Apr 2022 05:18:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A315F8CB;
+        Tue,  5 Apr 2022 02:04:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B51F8614E4;
-        Tue,  5 Apr 2022 09:04:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE5F8C385A1;
-        Tue,  5 Apr 2022 09:04:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CF54AB81BAE;
+        Tue,  5 Apr 2022 09:04:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F9CBC385A0;
+        Tue,  5 Apr 2022 09:04:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149484;
-        bh=2R99bVrCP0tjVddYJvZrWRKY00NA2/UxWhsgD5k3QFo=;
+        s=korg; t=1649149489;
+        bh=9EuO7UVHxSLp8WUNHOXpL3UyGhIzosuk62e3w+V64/g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F0FrIYhx+Adn3mY7QlmwD2sTvkDkJV96Eq4ClnbzRWNLFQeggb4fM2vwTOP/lmmZM
-         ih3s9/2UwvbF6JrBt9doYozq10obfCGDKKrEoap2Q85jwQyLMB+esszluQLCc43Ou8
-         4nFXk/JIAE62dKZs37elvxbWDccFCayEVz4qbnVA=
+        b=xfHW1cDCG601ngfhGGekvP6DsNj2cVHQD7/6NtApfAKKPK8CMD0SlAvsQPOeARMok
+         ttuzmnn7ywzxxvPFZViJoj+c9gkORrRzezcdDYxurkbfLM0vS9SbZTrtbXF5g+sX6b
+         Mckg6bLj6qppbc1rwey4+aksu1Q5j1alyvQyD6zg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guangbin Huang <huangguangbin2@huawei.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0731/1017] net: hns3: add vlan list lock to protect vlan list
-Date:   Tue,  5 Apr 2022 09:27:24 +0200
-Message-Id: <20220405070415.965539838@linuxfoundation.org>
+Subject: [PATCH 5.16 0733/1017] net: hns3: refine the process when PF set VF VLAN
+Date:   Tue,  5 Apr 2022 09:27:26 +0200
+Message-Id: <20220405070416.024458185@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -58,178 +58,88 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jian Shen <shenjian15@huawei.com>
 
-[ Upstream commit 1932a624ab88ff407d1a1d567fe581faa15dc725 ]
+[ Upstream commit 190cd8a72b0181c543ecada6243be3a50636941b ]
 
-When adding port base VLAN, vf VLAN need to remove from HW and modify
-the vlan state in vf VLAN list as false. If the periodicity task is
-freeing the same node, it may cause "use after free" error.
-This patch adds a vlan list lock to protect the vlan list.
+Currently, when PF set VF VLAN, it sends notify mailbox to VF
+if VF alive. VF stop its traffic, and send request mailbox
+to PF, then PF updates VF VLAN. It's a bit complex. If VF is
+killed before sending request, PF will not set VF VLAN without
+any log.
 
-Fixes: c6075b193462 ("net: hns3: Record VF vlan tables")
+This patch refines the process, PF can set VF VLAN direclty,
+and then notify the VF. If VF is resetting at that time, the
+notify may be dropped, so VF should query it after reset finished.
+
+Fixes: 92f11ea177cd ("net: hns3: fix set port based VLAN issue for VF")
 Signed-off-by: Jian Shen <shenjian15@huawei.com>
 Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../hisilicon/hns3/hns3pf/hclge_main.c        | 38 +++++++++++++++++--
- .../hisilicon/hns3/hns3pf/hclge_main.h        |  1 +
- 2 files changed, 35 insertions(+), 4 deletions(-)
+ .../hisilicon/hns3/hns3pf/hclge_main.c         | 18 +++++++++++++-----
+ .../hisilicon/hns3/hns3vf/hclgevf_main.c       |  5 +++++
+ 2 files changed, 18 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-index 0338b4ffa003..3ba24c6d004d 100644
+index 9866e5c1a71b..cf3c798e5400 100644
 --- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
 +++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-@@ -10237,19 +10237,28 @@ static void hclge_add_vport_vlan_table(struct hclge_vport *vport, u16 vlan_id,
- 				       bool writen_to_tbl)
- {
- 	struct hclge_vport_vlan_cfg *vlan, *tmp;
-+	struct hclge_dev *hdev = vport->back;
+@@ -9449,11 +9449,16 @@ static int hclge_set_vf_mac(struct hnae3_handle *handle, int vf,
  
--	list_for_each_entry_safe(vlan, tmp, &vport->vlan_list, node)
--		if (vlan->vlan_id == vlan_id)
-+	mutex_lock(&hdev->vport_lock);
-+
-+	list_for_each_entry_safe(vlan, tmp, &vport->vlan_list, node) {
-+		if (vlan->vlan_id == vlan_id) {
-+			mutex_unlock(&hdev->vport_lock);
- 			return;
-+		}
-+	}
+ 	ether_addr_copy(vport->vf_info.mac, mac_addr);
  
- 	vlan = kzalloc(sizeof(*vlan), GFP_KERNEL);
--	if (!vlan)
-+	if (!vlan) {
-+		mutex_unlock(&hdev->vport_lock);
- 		return;
-+	}
- 
- 	vlan->hd_tbl_status = writen_to_tbl;
- 	vlan->vlan_id = vlan_id;
- 
- 	list_add_tail(&vlan->node, &vport->vlan_list);
-+	mutex_unlock(&hdev->vport_lock);
- }
- 
- static int hclge_add_vport_all_vlan_table(struct hclge_vport *vport)
-@@ -10258,6 +10267,8 @@ static int hclge_add_vport_all_vlan_table(struct hclge_vport *vport)
- 	struct hclge_dev *hdev = vport->back;
- 	int ret;
- 
-+	mutex_lock(&hdev->vport_lock);
-+
- 	list_for_each_entry_safe(vlan, tmp, &vport->vlan_list, node) {
- 		if (!vlan->hd_tbl_status) {
- 			ret = hclge_set_vlan_filter_hw(hdev, htons(ETH_P_8021Q),
-@@ -10267,12 +10278,16 @@ static int hclge_add_vport_all_vlan_table(struct hclge_vport *vport)
- 				dev_err(&hdev->pdev->dev,
- 					"restore vport vlan list failed, ret=%d\n",
- 					ret);
-+
-+				mutex_unlock(&hdev->vport_lock);
- 				return ret;
- 			}
- 		}
- 		vlan->hd_tbl_status = true;
++	/* there is a timewindow for PF to know VF unalive, it may
++	 * cause send mailbox fail, but it doesn't matter, VF will
++	 * query it when reinit.
++	 */
+ 	if (test_bit(HCLGE_VPORT_STATE_ALIVE, &vport->state)) {
+ 		dev_info(&hdev->pdev->dev,
+ 			 "MAC of VF %d has been set to %s, and it will be reinitialized!\n",
+ 			 vf, format_mac_addr);
+-		return hclge_inform_reset_assert_to_vf(vport);
++		(void)hclge_inform_reset_assert_to_vf(vport);
++		return 0;
  	}
  
-+	mutex_unlock(&hdev->vport_lock);
-+
+ 	dev_info(&hdev->pdev->dev, "MAC of VF %d has been set to %s\n",
+@@ -10681,14 +10686,17 @@ static int hclge_set_vf_vlan_filter(struct hnae3_handle *handle, int vfid,
+ 		return ret;
+ 	}
+ 
+-	/* for DEVICE_VERSION_V3, vf doesn't need to know about the port based
++	/* there is a timewindow for PF to know VF unalive, it may
++	 * cause send mailbox fail, but it doesn't matter, VF will
++	 * query it when reinit.
++	 * for DEVICE_VERSION_V3, vf doesn't need to know about the port based
+ 	 * VLAN state.
+ 	 */
+ 	if (ae_dev->dev_version < HNAE3_DEVICE_VERSION_V3 &&
+ 	    test_bit(HCLGE_VPORT_STATE_ALIVE, &vport->state))
+-		hclge_push_vf_port_base_vlan_info(&hdev->vport[0],
+-						  vport->vport_id, state,
+-						  &vlan_info);
++		(void)hclge_push_vf_port_base_vlan_info(&hdev->vport[0],
++							vport->vport_id,
++							state, &vlan_info);
+ 
  	return 0;
  }
- 
-@@ -10282,6 +10297,8 @@ static void hclge_rm_vport_vlan_table(struct hclge_vport *vport, u16 vlan_id,
- 	struct hclge_vport_vlan_cfg *vlan, *tmp;
- 	struct hclge_dev *hdev = vport->back;
- 
-+	mutex_lock(&hdev->vport_lock);
-+
- 	list_for_each_entry_safe(vlan, tmp, &vport->vlan_list, node) {
- 		if (vlan->vlan_id == vlan_id) {
- 			if (is_write_tbl && vlan->hd_tbl_status)
-@@ -10296,6 +10313,8 @@ static void hclge_rm_vport_vlan_table(struct hclge_vport *vport, u16 vlan_id,
- 			break;
- 		}
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c
+index 4d3d14b637c0..7e30bad08356 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3vf/hclgevf_main.c
+@@ -3344,6 +3344,11 @@ static int hclgevf_reset_hdev(struct hclgevf_dev *hdev)
+ 		return ret;
  	}
+ 
++	/* get current port based vlan state from PF */
++	ret = hclgevf_get_port_base_vlan_filter_state(hdev);
++	if (ret)
++		return ret;
 +
-+	mutex_unlock(&hdev->vport_lock);
- }
+ 	set_bit(HCLGEVF_STATE_PROMISC_CHANGED, &hdev->state);
  
- void hclge_rm_vport_all_vlan_table(struct hclge_vport *vport, bool is_del_list)
-@@ -10303,6 +10322,8 @@ void hclge_rm_vport_all_vlan_table(struct hclge_vport *vport, bool is_del_list)
- 	struct hclge_vport_vlan_cfg *vlan, *tmp;
- 	struct hclge_dev *hdev = vport->back;
- 
-+	mutex_lock(&hdev->vport_lock);
-+
- 	list_for_each_entry_safe(vlan, tmp, &vport->vlan_list, node) {
- 		if (vlan->hd_tbl_status)
- 			hclge_set_vlan_filter_hw(hdev,
-@@ -10318,6 +10339,7 @@ void hclge_rm_vport_all_vlan_table(struct hclge_vport *vport, bool is_del_list)
- 		}
- 	}
- 	clear_bit(vport->vport_id, hdev->vf_vlan_full);
-+	mutex_unlock(&hdev->vport_lock);
- }
- 
- void hclge_uninit_vport_vlan_table(struct hclge_dev *hdev)
-@@ -10326,6 +10348,8 @@ void hclge_uninit_vport_vlan_table(struct hclge_dev *hdev)
- 	struct hclge_vport *vport;
- 	int i;
- 
-+	mutex_lock(&hdev->vport_lock);
-+
- 	for (i = 0; i < hdev->num_alloc_vport; i++) {
- 		vport = &hdev->vport[i];
- 		list_for_each_entry_safe(vlan, tmp, &vport->vlan_list, node) {
-@@ -10333,6 +10357,8 @@ void hclge_uninit_vport_vlan_table(struct hclge_dev *hdev)
- 			kfree(vlan);
- 		}
- 	}
-+
-+	mutex_unlock(&hdev->vport_lock);
- }
- 
- void hclge_restore_vport_port_base_vlan_config(struct hclge_dev *hdev)
-@@ -10372,6 +10398,8 @@ void hclge_restore_vport_vlan_table(struct hclge_vport *vport)
- 	struct hclge_dev *hdev = vport->back;
- 	int ret;
- 
-+	mutex_lock(&hdev->vport_lock);
-+
- 	if (vport->port_base_vlan_cfg.state == HNAE3_PORT_BASE_VLAN_DISABLE) {
- 		list_for_each_entry_safe(vlan, tmp, &vport->vlan_list, node) {
- 			ret = hclge_set_vlan_filter_hw(hdev, htons(ETH_P_8021Q),
-@@ -10382,6 +10410,8 @@ void hclge_restore_vport_vlan_table(struct hclge_vport *vport)
- 			vlan->hd_tbl_status = true;
- 		}
- 	}
-+
-+	mutex_unlock(&hdev->vport_lock);
- }
- 
- /* For global reset and imp reset, hardware will clear the mac table,
-@@ -12279,8 +12309,8 @@ static void hclge_uninit_ae_dev(struct hnae3_ae_dev *ae_dev)
- 	hclge_misc_irq_uninit(hdev);
- 	hclge_devlink_uninit(hdev);
- 	hclge_pci_uninit(hdev);
--	mutex_destroy(&hdev->vport_lock);
- 	hclge_uninit_vport_vlan_table(hdev);
-+	mutex_destroy(&hdev->vport_lock);
- 	ae_dev->priv = NULL;
- }
- 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.h b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.h
-index 801268b61e96..c841cce2d025 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.h
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.h
-@@ -1087,6 +1087,7 @@ struct hclge_vport {
- 	spinlock_t mac_list_lock; /* protect mac address need to add/detele */
- 	struct list_head uc_mac_list;   /* Store VF unicast table */
- 	struct list_head mc_mac_list;   /* Store VF multicast table */
-+
- 	struct list_head vlan_list;     /* Store VF vlan table */
- };
- 
+ 	hclgevf_init_rxd_adv_layout(hdev);
 -- 
 2.34.1
 

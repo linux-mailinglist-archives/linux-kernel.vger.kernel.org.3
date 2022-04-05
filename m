@@ -2,135 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B85894F4FA7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 223784F50B7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1839018AbiDFA5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:57:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
+        id S1450955AbiDFBhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353651AbiDENHS (ORCPT
+        with ESMTP id S1347253AbiDENKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 09:07:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B6CBE167FB
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 05:09:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649160547;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wTHcEPqS4WZU3twPg6xFE08lBamScSNylvPFU0OFzg4=;
-        b=B22yoDcAQRw1Vts9MS32ITUwy6/UdIQ7uF0jPjzo2fFQaRHzVqGAn71l4WMdwI/YPiS89+
-        VvY3SfUBiwMAyAjYMm6S9kxg4PAoSF9c6EwSkPoSPbjowUITMpZVVChSxOzPRFTcT2QVh4
-        YSPIN3GXs0jObkOHHKj5boFHVd/tEDA=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-517-e07P-Z4CN0KVFs4JtRw1Yg-1; Tue, 05 Apr 2022 08:09:06 -0400
-X-MC-Unique: e07P-Z4CN0KVFs4JtRw1Yg-1
-Received: by mail-qv1-f70.google.com with SMTP id kc2-20020a056214410200b00443e6240ba1so2626076qvb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 05:09:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=wTHcEPqS4WZU3twPg6xFE08lBamScSNylvPFU0OFzg4=;
-        b=Kn75rhpukTIRxXSo8wNc6TrjHhfsHB7Gi8Hgx1pWtkaz/BTrpyckhh+VFQAUwAgyoX
-         l236x1Zzn/V6HopQ5upC15iaxwlGKPnyEBf3+qAxGKUCAajnnEFwAeoEzM8OkH5w7wd5
-         j+pPe+GYcXiRZt4DP2sc5Y8eTUpDNlnJTh5g9Zcgwdklvr76PULhNsX+4CX763kRRgqA
-         kbrRqtDNP6VU3HbHObXf2EXRQnHBaBGmZDEQu5jAap9W9M2uoqbAtqS0Cx2CM+K8eOUQ
-         1NVv4Bk7ZzJAS+sRQoh82tC5bhvMYqvh9W2RzvtrvJaGganV7V4xsP7WE1j2BpfVhRiC
-         ZxGA==
-X-Gm-Message-State: AOAM533JiTGLQf1yQ3dgUAu0+NsNJWKvAx1e/3Q0+Fyyczo2pgnhzN4b
-        h3rQmrolYHGhPhOQojr1b0mP6hqbxwkLajjV1FhFDH4MdVx2t5Lil/3/VgeGg6HSa7GCGlXzBs8
-        J7ewkMkSR+s5iZGxtXCeu9F7U
-X-Received: by 2002:ac8:4e8b:0:b0:2e2:129b:35f1 with SMTP id 11-20020ac84e8b000000b002e2129b35f1mr2557099qtp.387.1649160546383;
-        Tue, 05 Apr 2022 05:09:06 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwX7HhPj5mEGcuqhZHuJX+RbnyZLGTfgVtl7WdedWYWbPlNoy2uZL3YMCqfNCIwWRAhYtFenA==
-X-Received: by 2002:ac8:4e8b:0:b0:2e2:129b:35f1 with SMTP id 11-20020ac84e8b000000b002e2129b35f1mr2557071qtp.387.1649160546126;
-        Tue, 05 Apr 2022 05:09:06 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id c20-20020a05622a059400b002e1d59e68f3sm10850768qtb.48.2022.04.05.05.09.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Apr 2022 05:09:05 -0700 (PDT)
-Subject: Re: [PATCH v4 2/2] hwmon: intel-m10-bmc-hwmon: use
- devm_hwmon_sanitize_name()
-To:     Michael Walle <michael@walle.cc>, Xu Yilun <yilun.xu@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, David Laight <David.Laight@ACULAB.COM>
-References: <20220405092452.4033674-1-michael@walle.cc>
- <20220405092452.4033674-3-michael@walle.cc>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <155156e6-e258-78dd-441a-7faad4afde3c@redhat.com>
-Date:   Tue, 5 Apr 2022 05:09:03 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Tue, 5 Apr 2022 09:10:44 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D1BA6E37
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 05:12:19 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KXmjY3Stqz9sTJ;
+        Tue,  5 Apr 2022 14:12:17 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id XwgVdGL26zT2; Tue,  5 Apr 2022 14:12:17 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KXmjY2RwLz9sT7;
+        Tue,  5 Apr 2022 14:12:17 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 3B5928B779;
+        Tue,  5 Apr 2022 14:12:17 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id ZJexvocFpr6n; Tue,  5 Apr 2022 14:12:17 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0CF288B774;
+        Tue,  5 Apr 2022 14:12:17 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 235CCBIV352496
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 5 Apr 2022 14:12:11 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 235CCB6d352495;
+        Tue, 5 Apr 2022 14:12:11 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH 4/5] powerpc/8xx: Remove mpc8xx_pics_init()
+Date:   Tue,  5 Apr 2022 14:12:03 +0200
+Message-Id: <58300782fe882417695235d42e5fbdeeb6f3cea2.1649160685.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <d3a7dc832d905bed14b35d83410cdb69a7ba20e8.1649160685.git.christophe.leroy@csgroup.eu>
+References: <d3a7dc832d905bed14b35d83410cdb69a7ba20e8.1649160685.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-In-Reply-To: <20220405092452.4033674-3-michael@walle.cc>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1649160722; l=4798; s=20211009; h=from:subject:message-id; bh=pY1fhlB4drjwk/3+pxQE7CefbR+wPtLpYYs8Ip+Getc=; b=cnwhGRM1PoqJ4/7lR965xpIoTBOZKzsRUaeO3R2kujou6NOwDmd07g2hhNk2MeOMOgVuKi2uI/7W faJDjc5VCaPvYOmA1cDXB8ndKTNGG1NqnLHEWr4kSPaK/4sGqQ8h
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+mpc8xx_pics_init() is now only a trampoline to
+mpc8xx_pic_init().
 
-On 4/5/22 2:24 AM, Michael Walle wrote:
-> Instead of open-coding the bad characters replacement in the hwmon name,
-> use the new devm_hwmon_sanitize_name().
->
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> Acked-by: Xu Yilun <yilun.xu@intel.com>
-> ---
->   drivers/hwmon/intel-m10-bmc-hwmon.c | 11 +++--------
->   1 file changed, 3 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/hwmon/intel-m10-bmc-hwmon.c b/drivers/hwmon/intel-m10-bmc-hwmon.c
-> index 7a08e4c44a4b..6e82f7200d1c 100644
-> --- a/drivers/hwmon/intel-m10-bmc-hwmon.c
-> +++ b/drivers/hwmon/intel-m10-bmc-hwmon.c
-> @@ -515,7 +515,6 @@ static int m10bmc_hwmon_probe(struct platform_device *pdev)
->   	struct intel_m10bmc *m10bmc = dev_get_drvdata(pdev->dev.parent);
->   	struct device *hwmon_dev, *dev = &pdev->dev;
->   	struct m10bmc_hwmon *hw;
-> -	int i;
->   
->   	hw = devm_kzalloc(dev, sizeof(*hw), GFP_KERNEL);
->   	if (!hw)
-> @@ -528,13 +527,9 @@ static int m10bmc_hwmon_probe(struct platform_device *pdev)
->   	hw->chip.info = hw->bdata->hinfo;
->   	hw->chip.ops = &m10bmc_hwmon_ops;
->   
-> -	hw->hw_name = devm_kstrdup(dev, id->name, GFP_KERNEL);
-> -	if (!hw->hw_name)
-> -		return -ENOMEM;
-> -
-> -	for (i = 0; hw->hw_name[i]; i++)
-> -		if (hwmon_is_bad_char(hw->hw_name[i]))
-> -			hw->hw_name[i] = '_';
-> +	hw->hw_name = devm_hwmon_sanitize_name(dev, id->name);
-> +	if (IS_ERR(hw->hw_name))
-> +		return PTR_ERR(hw->hw_name);
-Reviewed-by: Tom Rix <trix@redhat.com>
->   
->   	hwmon_dev = devm_hwmon_device_register_with_info(dev, hw->hw_name,
->   							 hw, &hw->chip, NULL);
+Remove mpc8xx_pics_init() and use mpc8xx_pic_init()
+directly.
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/platforms/8xx/adder875.c        |  2 +-
+ arch/powerpc/platforms/8xx/ep88xc.c          |  2 +-
+ arch/powerpc/platforms/8xx/m8xx_setup.c      | 14 --------------
+ arch/powerpc/platforms/8xx/mpc86xads_setup.c |  2 +-
+ arch/powerpc/platforms/8xx/mpc885ads_setup.c |  2 +-
+ arch/powerpc/platforms/8xx/mpc8xx.h          |  1 -
+ arch/powerpc/platforms/8xx/tqm8xx_setup.c    |  2 +-
+ 7 files changed, 5 insertions(+), 20 deletions(-)
+
+diff --git a/arch/powerpc/platforms/8xx/adder875.c b/arch/powerpc/platforms/8xx/adder875.c
+index 651486acb896..9b5c0c181fa3 100644
+--- a/arch/powerpc/platforms/8xx/adder875.c
++++ b/arch/powerpc/platforms/8xx/adder875.c
+@@ -104,7 +104,7 @@ define_machine(adder875) {
+ 	.name = "Adder MPC875",
+ 	.probe = adder875_probe,
+ 	.setup_arch = adder875_setup,
+-	.init_IRQ = mpc8xx_pics_init,
++	.init_IRQ = mpc8xx_pic_init,
+ 	.get_irq = mpc8xx_get_irq,
+ 	.restart = mpc8xx_restart,
+ 	.calibrate_decr = generic_calibrate_decr,
+diff --git a/arch/powerpc/platforms/8xx/ep88xc.c b/arch/powerpc/platforms/8xx/ep88xc.c
+index ebcf34a14789..7526ef88bd33 100644
+--- a/arch/powerpc/platforms/8xx/ep88xc.c
++++ b/arch/powerpc/platforms/8xx/ep88xc.c
+@@ -166,7 +166,7 @@ define_machine(ep88xc) {
+ 	.name = "Embedded Planet EP88xC",
+ 	.probe = ep88xc_probe,
+ 	.setup_arch = ep88xc_setup_arch,
+-	.init_IRQ = mpc8xx_pics_init,
++	.init_IRQ = mpc8xx_pic_init,
+ 	.get_irq	= mpc8xx_get_irq,
+ 	.restart = mpc8xx_restart,
+ 	.calibrate_decr = mpc8xx_calibrate_decr,
+diff --git a/arch/powerpc/platforms/8xx/m8xx_setup.c b/arch/powerpc/platforms/8xx/m8xx_setup.c
+index a03ba0ad7312..15a09b15aaa4 100644
+--- a/arch/powerpc/platforms/8xx/m8xx_setup.c
++++ b/arch/powerpc/platforms/8xx/m8xx_setup.c
+@@ -204,17 +204,3 @@ void __noreturn mpc8xx_restart(char *cmd)
+ 	in_8(&clk_r->res[0]);
+ 	panic("Restart failed\n");
+ }
+-
+-/* Initialize the internal interrupt controllers.  The number of
+- * interrupts supported can vary with the processor type, and the
+- * 82xx family can have up to 64.
+- * External interrupts can be either edge or level triggered, and
+- * need to be initialized by the appropriate driver.
+- */
+-void __init mpc8xx_pics_init(void)
+-{
+-	if (mpc8xx_pic_init()) {
+-		printk(KERN_ERR "Failed interrupt 8xx controller  initialization\n");
+-		return;
+-	}
+-}
+diff --git a/arch/powerpc/platforms/8xx/mpc86xads_setup.c b/arch/powerpc/platforms/8xx/mpc86xads_setup.c
+index 8d02f5ff4481..a82d69e8bb01 100644
+--- a/arch/powerpc/platforms/8xx/mpc86xads_setup.c
++++ b/arch/powerpc/platforms/8xx/mpc86xads_setup.c
+@@ -140,7 +140,7 @@ define_machine(mpc86x_ads) {
+ 	.name			= "MPC86x ADS",
+ 	.probe			= mpc86xads_probe,
+ 	.setup_arch		= mpc86xads_setup_arch,
+-	.init_IRQ		= mpc8xx_pics_init,
++	.init_IRQ		= mpc8xx_pic_init,
+ 	.get_irq		= mpc8xx_get_irq,
+ 	.restart		= mpc8xx_restart,
+ 	.calibrate_decr		= mpc8xx_calibrate_decr,
+diff --git a/arch/powerpc/platforms/8xx/mpc885ads_setup.c b/arch/powerpc/platforms/8xx/mpc885ads_setup.c
+index a0c83c1905c6..e02290175a19 100644
+--- a/arch/powerpc/platforms/8xx/mpc885ads_setup.c
++++ b/arch/powerpc/platforms/8xx/mpc885ads_setup.c
+@@ -216,7 +216,7 @@ define_machine(mpc885_ads) {
+ 	.name			= "Freescale MPC885 ADS",
+ 	.probe			= mpc885ads_probe,
+ 	.setup_arch		= mpc885ads_setup_arch,
+-	.init_IRQ		= mpc8xx_pics_init,
++	.init_IRQ		= mpc8xx_pic_init,
+ 	.get_irq		= mpc8xx_get_irq,
+ 	.restart		= mpc8xx_restart,
+ 	.calibrate_decr		= mpc8xx_calibrate_decr,
+diff --git a/arch/powerpc/platforms/8xx/mpc8xx.h b/arch/powerpc/platforms/8xx/mpc8xx.h
+index 31cc2ecace42..79fae3324866 100644
+--- a/arch/powerpc/platforms/8xx/mpc8xx.h
++++ b/arch/powerpc/platforms/8xx/mpc8xx.h
+@@ -15,7 +15,6 @@ extern void __noreturn mpc8xx_restart(char *cmd);
+ extern void mpc8xx_calibrate_decr(void);
+ extern int mpc8xx_set_rtc_time(struct rtc_time *tm);
+ extern void mpc8xx_get_rtc_time(struct rtc_time *tm);
+-extern void mpc8xx_pics_init(void);
+ extern unsigned int mpc8xx_get_irq(void);
+ 
+ #endif /* __MPC8xx_H */
+diff --git a/arch/powerpc/platforms/8xx/tqm8xx_setup.c b/arch/powerpc/platforms/8xx/tqm8xx_setup.c
+index 4cea8b1afa44..7f1131545da1 100644
+--- a/arch/powerpc/platforms/8xx/tqm8xx_setup.c
++++ b/arch/powerpc/platforms/8xx/tqm8xx_setup.c
+@@ -142,7 +142,7 @@ define_machine(tqm8xx) {
+ 	.name			= "TQM8xx",
+ 	.probe			= tqm8xx_probe,
+ 	.setup_arch		= tqm8xx_setup_arch,
+-	.init_IRQ		= mpc8xx_pics_init,
++	.init_IRQ		= mpc8xx_pic_init,
+ 	.get_irq		= mpc8xx_get_irq,
+ 	.restart		= mpc8xx_restart,
+ 	.calibrate_decr		= mpc8xx_calibrate_decr,
+-- 
+2.35.1
 

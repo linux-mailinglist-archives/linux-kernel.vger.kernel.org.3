@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 466B34F4A69
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2214F4C17
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1455985AbiDEWoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36324 "EHLO
+        id S1575762AbiDEXJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348777AbiDEJsf (ORCPT
+        with ESMTP id S1348918AbiDEJsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D356A412;
-        Tue,  5 Apr 2022 02:35:06 -0700 (PDT)
+        Tue, 5 Apr 2022 05:48:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46B89D0DB;
+        Tue,  5 Apr 2022 02:37:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A8DE61680;
-        Tue,  5 Apr 2022 09:35:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70981C385A2;
-        Tue,  5 Apr 2022 09:35:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7889AB81B14;
+        Tue,  5 Apr 2022 09:37:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4F75C385A2;
+        Tue,  5 Apr 2022 09:37:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151305;
-        bh=f0i/LJ/rej/qlGXRfE9/Nw2sVL0swZ4PvX3YV1//QE0=;
+        s=korg; t=1649151444;
+        bh=IvyBkfbeIWILmVXwush284Vcs9+1LeJ2nOw1//Ki3mQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fa33y3vc0+bqFVaSekMHmTPxtrhw4J9+g15GhgUHsHJZW2gUnm7fZPhmReibA1BN4
-         kUqiE8H/6j0YlxayYcGUi/ZAb5sU8twsDlzElznA+Ob3bbaGT1Xo4zZesv2o8/abnj
-         uSumr+BifsEHi6j2xD+ID2xHlCPdeu8yEBcO8JI4=
+        b=Hkct2b7Xoe+xH0QFVYFDISsO9IzNJa+1dSLdDy112GFaRh2igLHhtAd938tZDYQED
+         +qznEuckX7xJYcOQZjT4khf+GcILWLlJ0w7aYmJqDRFiHVrWbW9FPuTsDnw3A7+VXk
+         BgwwwQAKhEbJADKyQvGHOm0+FE/sy1Ihch4+zS4I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 366/913] ASoC: msm8916-wcd-digital: Fix missing clk_disable_unprepare() in msm8916_wcd_digital_probe
-Date:   Tue,  5 Apr 2022 09:23:48 +0200
-Message-Id: <20220405070350.817089346@linuxfoundation.org>
+Subject: [PATCH 5.15 368/913] ASoC: atmel: Fix error handling in sam9x5_wm8731_driver_probe
+Date:   Tue,  5 Apr 2022 09:23:50 +0200
+Message-Id: <20220405070350.877465536@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -57,43 +58,67 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 375a347da4889f64d86e1ab7f4e6702b6e9bf299 ]
+[ Upstream commit 740dc3e846537c3743da98bf106f376023fd085c ]
 
-Fix the missing clk_disable_unprepare() before return
-from msm8916_wcd_digital_probe in the error handling case.
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-Fixes: 150db8c5afa1 ("ASoC: codecs: Add msm8916-wcd digital codec")
+This function only calls of_node_put() in the regular path.
+And it will cause refcount leak in error path.
+
+Fixes: fdbcb3cba54b ("ASoC: atmel: machine driver for at91sam9x5-wm8731 boards")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220307084523.28687-1-linmq006@gmail.com
+Reviewed-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
+Link: https://lore.kernel.org/r/20220316111530.4551-1-linmq006@gmail.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/msm8916-wcd-digital.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ sound/soc/atmel/sam9x5_wm8731.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/sound/soc/codecs/msm8916-wcd-digital.c b/sound/soc/codecs/msm8916-wcd-digital.c
-index fcc10c8bc625..9ad7fc0baf07 100644
---- a/sound/soc/codecs/msm8916-wcd-digital.c
-+++ b/sound/soc/codecs/msm8916-wcd-digital.c
-@@ -1201,7 +1201,7 @@ static int msm8916_wcd_digital_probe(struct platform_device *pdev)
- 	ret = clk_prepare_enable(priv->mclk);
- 	if (ret < 0) {
- 		dev_err(dev, "failed to enable mclk %d\n", ret);
--		return ret;
-+		goto err_clk;
+diff --git a/sound/soc/atmel/sam9x5_wm8731.c b/sound/soc/atmel/sam9x5_wm8731.c
+index 7745250fd743..529604a06c53 100644
+--- a/sound/soc/atmel/sam9x5_wm8731.c
++++ b/sound/soc/atmel/sam9x5_wm8731.c
+@@ -142,7 +142,7 @@ static int sam9x5_wm8731_driver_probe(struct platform_device *pdev)
+ 	if (!cpu_np) {
+ 		dev_err(&pdev->dev, "atmel,ssc-controller node missing\n");
+ 		ret = -EINVAL;
+-		goto out;
++		goto out_put_codec_np;
+ 	}
+ 	dai->cpus->of_node = cpu_np;
+ 	dai->platforms->of_node = cpu_np;
+@@ -153,12 +153,9 @@ static int sam9x5_wm8731_driver_probe(struct platform_device *pdev)
+ 	if (ret != 0) {
+ 		dev_err(&pdev->dev, "Failed to set SSC %d for audio: %d\n",
+ 			ret, priv->ssc_id);
+-		goto out;
++		goto out_put_cpu_np;
  	}
  
- 	dev_set_drvdata(dev, priv);
-@@ -1209,6 +1209,9 @@ static int msm8916_wcd_digital_probe(struct platform_device *pdev)
- 	return devm_snd_soc_register_component(dev, &msm8916_wcd_digital,
- 				      msm8916_wcd_digital_dai,
- 				      ARRAY_SIZE(msm8916_wcd_digital_dai));
-+err_clk:
-+	clk_disable_unprepare(priv->ahbclk);
-+	return ret;
- }
+-	of_node_put(codec_np);
+-	of_node_put(cpu_np);
+-
+ 	ret = devm_snd_soc_register_card(&pdev->dev, card);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Platform device allocation failed\n");
+@@ -167,10 +164,14 @@ static int sam9x5_wm8731_driver_probe(struct platform_device *pdev)
  
- static int msm8916_wcd_digital_remove(struct platform_device *pdev)
+ 	dev_dbg(&pdev->dev, "%s ok\n", __func__);
+ 
+-	return ret;
++	goto out_put_cpu_np;
+ 
+ out_put_audio:
+ 	atmel_ssc_put_audio(priv->ssc_id);
++out_put_cpu_np:
++	of_node_put(cpu_np);
++out_put_codec_np:
++	of_node_put(codec_np);
+ out:
+ 	return ret;
+ }
 -- 
 2.34.1
 

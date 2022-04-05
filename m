@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791B04F493F
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A2E64F4E4F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391926AbiDEWI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
+        id S1588742AbiDFARN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:17:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358010AbiDEK1n (ORCPT
+        with ESMTP id S1351807AbiDEKDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:27:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2FBDA6E8;
-        Tue,  5 Apr 2022 03:12:53 -0700 (PDT)
+        Tue, 5 Apr 2022 06:03:20 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D118C75E78;
+        Tue,  5 Apr 2022 02:52:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF1E4B81BC5;
-        Tue,  5 Apr 2022 10:12:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30867C385A0;
-        Tue,  5 Apr 2022 10:12:50 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0EC91CE1C9C;
+        Tue,  5 Apr 2022 09:52:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23823C385A1;
+        Tue,  5 Apr 2022 09:52:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153570;
-        bh=K4HnywraBUnPEWGJzdB751IfLGz1lbcbvOEYdLz463c=;
+        s=korg; t=1649152337;
+        bh=ys19H8MNgs4LVTR3UqKljfxYa7ypfGSPYdnDYEHmRaA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=czhyGyESKg1XxDiXQtq2ZaTV9PGuAj41tybkD3WVaOoM/Y2vm7uZb1gABVac/a8fU
-         O2loCAtslCkTk4PxPwzHSLImScHyFSJBjrwsa6cOk/FOkqr9T8Cry28lflgFtRwNnQ
-         0+wQ6gmQU2dWD1Y1+tJE4D5eC0ADILUcvxg/5QXw=
+        b=c8HJb/mMztprkI5RsfrfX3QGi1bEj2odBwqp/YDPTm2jrOVGTPxoVWs7/chwmfcyR
+         VJRsrjxNTXDgr/i4cQj50X98mdSOzBjMM9wgFMIB/+s+iYpI/wyMeSoiFX3Xa5UYBs
+         AIhdjitrxHo8Yhk+YnRR+Hu5EXbzpwk1fAFPhstQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yiru Xu <xyru1999@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 269/599] Bluetooth: hci_serdev: call init_rwsem() before p->open()
-Date:   Tue,  5 Apr 2022 09:29:23 +0200
-Message-Id: <20220405070306.841348371@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Holger=20Hoffst=C3=A4tte?= 
+        <holger@applied-asynchrony.com>,
+        Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 703/913] Revert "Revert "block, bfq: honor already-setup queue merges""
+Date:   Tue,  5 Apr 2022 09:29:25 +0200
+Message-Id: <20220405070400.907356001@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,69 +57,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Paolo Valente <paolo.valente@linaro.org>
 
-[ Upstream commit 9d7cbe2b9cf5f650067df4f402fdd799d4bbb4e1 ]
+[ Upstream commit 15729ff8143f8135b03988a100a19e66d7cb7ecd ]
 
-kvartet reported, that hci_uart_tx_wakeup() uses uninitialized rwsem.
-The problem was in wrong place for percpu_init_rwsem() call.
+A crash [1] happened to be triggered in conjunction with commit
+2d52c58b9c9b ("block, bfq: honor already-setup queue merges"). The
+latter was then reverted by commit ebc69e897e17 ("Revert "block, bfq:
+honor already-setup queue merges""). Yet, the reverted commit was not
+the one introducing the bug. In fact, it actually triggered a UAF
+introduced by a different commit, and now fixed by commit d29bd41428cf
+("block, bfq: reset last_bfqq_created on group change").
 
-hci_uart_proto::open() may register a timer whose callback may call
-hci_uart_tx_wakeup(). There is a chance, that hci_uart_register_device()
-thread won't be fast enough to call percpu_init_rwsem().
+So, there is no point in keeping commit 2d52c58b9c9b ("block, bfq:
+honor already-setup queue merges") out. This commit restores it.
 
-Fix it my moving percpu_init_rwsem() call before p->open().
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=214503
 
-INFO: trying to register non-static key.
-The code is fine but needs lockdep annotation, or maybe
-you didn't initialize this object before use?
-turning off the locking correctness validator.
-CPU: 2 PID: 18524 Comm: syz-executor.5 Not tainted 5.16.0-rc6 #9
-...
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- assign_lock_key kernel/locking/lockdep.c:951 [inline]
- register_lock_class+0x148d/0x1950 kernel/locking/lockdep.c:1263
- __lock_acquire+0x106/0x57e0 kernel/locking/lockdep.c:4906
- lock_acquire kernel/locking/lockdep.c:5637 [inline]
- lock_acquire+0x1ab/0x520 kernel/locking/lockdep.c:5602
- percpu_down_read_trylock include/linux/percpu-rwsem.h:92 [inline]
- hci_uart_tx_wakeup+0x12e/0x490 drivers/bluetooth/hci_ldisc.c:124
- h5_timed_event+0x32f/0x6a0 drivers/bluetooth/hci_h5.c:188
- call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1421
-
-Fixes: d73e17281665 ("Bluetooth: hci_serdev: Init hci_uart proto_lock to avoid oops")
-Reported-by: Yiru Xu <xyru1999@gmail.com>
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Reported-by: Holger Hoffstätte <holger@applied-asynchrony.com>
+Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
+Link: https://lore.kernel.org/r/20211125181510.15004-1-paolo.valente@linaro.org
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/bluetooth/hci_serdev.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ block/bfq-iosched.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/bluetooth/hci_serdev.c b/drivers/bluetooth/hci_serdev.c
-index 9e03402ef1b3..e9a44ab3812d 100644
---- a/drivers/bluetooth/hci_serdev.c
-+++ b/drivers/bluetooth/hci_serdev.c
-@@ -305,6 +305,8 @@ int hci_uart_register_device(struct hci_uart *hu,
- 	if (err)
- 		return err;
+diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+index 9843085cc2c3..63d2d66dece5 100644
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -2662,6 +2662,15 @@ bfq_setup_merge(struct bfq_queue *bfqq, struct bfq_queue *new_bfqq)
+ 	 * are likely to increase the throughput.
+ 	 */
+ 	bfqq->new_bfqq = new_bfqq;
++	/*
++	 * The above assignment schedules the following redirections:
++	 * each time some I/O for bfqq arrives, the process that
++	 * generated that I/O is disassociated from bfqq and
++	 * associated with new_bfqq. Here we increases new_bfqq->ref
++	 * in advance, adding the number of processes that are
++	 * expected to be associated with new_bfqq as they happen to
++	 * issue I/O.
++	 */
+ 	new_bfqq->ref += process_refs;
+ 	return new_bfqq;
+ }
+@@ -2724,6 +2733,10 @@ bfq_setup_cooperator(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+ {
+ 	struct bfq_queue *in_service_bfqq, *new_bfqq;
  
-+	percpu_init_rwsem(&hu->proto_lock);
++	/* if a merge has already been setup, then proceed with that first */
++	if (bfqq->new_bfqq)
++		return bfqq->new_bfqq;
 +
- 	err = p->open(hu);
- 	if (err)
- 		goto err_open;
-@@ -327,7 +329,6 @@ int hci_uart_register_device(struct hci_uart *hu,
+ 	/*
+ 	 * Check delayed stable merge for rotational or non-queueing
+ 	 * devs. For this branch to be executed, bfqq must not be
+@@ -2825,9 +2838,6 @@ bfq_setup_cooperator(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+ 	if (bfq_too_late_for_merging(bfqq))
+ 		return NULL;
  
- 	INIT_WORK(&hu->init_ready, hci_uart_init_work);
- 	INIT_WORK(&hu->write_work, hci_uart_write_work);
--	percpu_init_rwsem(&hu->proto_lock);
+-	if (bfqq->new_bfqq)
+-		return bfqq->new_bfqq;
+-
+ 	if (!io_struct || unlikely(bfqq == &bfqd->oom_bfqq))
+ 		return NULL;
  
- 	/* Only when vendor specific setup callback is provided, consider
- 	 * the manufacturer information valid. This avoids filling in the
 -- 
 2.34.1
 

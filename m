@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15B4D4F3E2E
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:42:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 417854F4273
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378218AbiDEPNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 11:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
+        id S1380713AbiDEMYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:24:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346290AbiDEJoq (ORCPT
+        with ESMTP id S245039AbiDEIxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:44:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE14BD95C2;
-        Tue,  5 Apr 2022 02:30:20 -0700 (PDT)
+        Tue, 5 Apr 2022 04:53:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D426CFD;
+        Tue,  5 Apr 2022 01:50:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A6E0B81C9A;
-        Tue,  5 Apr 2022 09:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC29DC385A2;
-        Tue,  5 Apr 2022 09:30:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28DAF61509;
+        Tue,  5 Apr 2022 08:50:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B594C385A0;
+        Tue,  5 Apr 2022 08:50:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151018;
-        bh=Ts1OsI3ZLCMyHQ1eqGV7NkwX+jLelzLpcnalARBhejs=;
+        s=korg; t=1649148603;
+        bh=DqpbXeSy2wz6V4vXfGJ2xZky/5rTxcMKW6nSQNRNDwA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m7mGqPBx2zwMgxffWBwtxPP8BweY32laHwcRXQ+1DTQxo5RMopG6761DBjZvCpWsk
-         DGqiWj2Kfhu2PiSYkx55MFgGylTFTbIoQ2WV/KnurlrYq7c/5ueBdwA3md7gX0mmMG
-         R7+k8qagiJ9SWTZDBBuJ/fgaJC+xokE7GD6eoDt8=
+        b=QEADStvl/VPjk1FsXKhTyE3SfzkD+Ks1CaB7t8cNvixzdtL8RveZKWYVNxCWxidTo
+         mWkmnXJJueDWncQxSFeUK27k9a7CGNvaebfY8CZHJ9sVf2M9Q+vQ/s+dJmk9XSAEhc
+         qT6CCk2HK0C7t1ZottUmuxLEBALKBw2HvqqzwETY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 265/913] media: staging: media: zoran: fix usage of vb2_dma_contig_set_max_seg_size
+Subject: [PATCH 5.16 0414/1017] drm/locking: fix drm_modeset_acquire_ctx kernel-doc
 Date:   Tue,  5 Apr 2022 09:22:07 +0200
-Message-Id: <20220405070347.799767305@linuxfoundation.org>
+Message-Id: <20220405070406.577801428@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,42 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Corentin Labbe <clabbe@baylibre.com>
+From: Jani Nikula <jani.nikula@intel.com>
 
-[ Upstream commit 241f5b67fb48def58643f279dfb8468bdd54b443 ]
+[ Upstream commit 6f043b5969a4d6d385ca429388ded37e30e0d179 ]
 
-vb2_dma_contig_set_max_seg_size need to have a size in parameter and not
-a DMA_BIT_MASK().
-While fixing this issue, also fix error handling of all DMA size
-setting.
+The stack_depot member was added without kernel-doc, leading to below
+warning. Fix it.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: d4ae3689226e5 ("media: zoran: device support only 32bit DMA address")
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+./include/drm/drm_modeset_lock.h:74: warning: Function parameter or
+member 'stack_depot' not described in 'drm_modeset_acquire_ctx'
+
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Fixes: cd06ab2fd48f ("drm/locking: add backtrace for locking contended locks without backoff")
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Tested-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220120094856.3004147-1-jani.nikula@intel.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/zoran/zoran_card.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ include/drm/drm_modeset_lock.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
-index f259585b0689..c578ef3c32f5 100644
---- a/drivers/staging/media/zoran/zoran_card.c
-+++ b/drivers/staging/media/zoran/zoran_card.c
-@@ -1069,8 +1069,10 @@ static int zoran_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 
- 	err = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
- 	if (err)
--		return -ENODEV;
--	vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
-+		return err;
-+	err = vb2_dma_contig_set_max_seg_size(&pdev->dev, U32_MAX);
-+	if (err)
-+		return err;
- 
- 	nr = zoran_num++;
- 	if (nr >= BUZ_MAX) {
+diff --git a/include/drm/drm_modeset_lock.h b/include/drm/drm_modeset_lock.h
+index b84693fbd2b5..ec4f543c3d95 100644
+--- a/include/drm/drm_modeset_lock.h
++++ b/include/drm/drm_modeset_lock.h
+@@ -34,6 +34,7 @@ struct drm_modeset_lock;
+  * struct drm_modeset_acquire_ctx - locking context (see ww_acquire_ctx)
+  * @ww_ctx: base acquire ctx
+  * @contended: used internally for -EDEADLK handling
++ * @stack_depot: used internally for contention debugging
+  * @locked: list of held locks
+  * @trylock_only: trylock mode used in atomic contexts/panic notifiers
+  * @interruptible: whether interruptible locking should be used.
 -- 
 2.34.1
 

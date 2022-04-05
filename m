@@ -2,116 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC0A4F4C46
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB4514F4EFC
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1577829AbiDEXRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42656 "EHLO
+        id S1581516AbiDEXjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457915AbiDEQ7M (ORCPT
+        with ESMTP id S1457916AbiDEQ7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:59:12 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C618B4A915;
-        Tue,  5 Apr 2022 09:57:13 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 742f0ee565e3f865; Tue, 5 Apr 2022 18:57:12 +0200
-Received: from kreacher.localnet (unknown [213.134.181.136])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 5 Apr 2022 12:59:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BDA5D1A3
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 09:57:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 8220B66BCB7;
-        Tue,  5 Apr 2022 18:57:11 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Subject: [PATCH v1] ACPI: bus: Eliminate acpi_bus_get_device()
-Date:   Tue, 05 Apr 2022 18:57:10 +0200
-Message-ID: <5817980.lOV4Wx5bFT@kreacher>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 929BD615AF
+        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 16:57:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4B99C385A1;
+        Tue,  5 Apr 2022 16:57:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649177866;
+        bh=TKj/Gdf3upOujc9HOwY9/yVgEBOdEJpY7NOsYt4MUt0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=sLjhPxKBSrpwXS5A8EWIIkEak001fUnpZol7Yuk6pHxjC+lRXq/aT1HSu+2Di5ICa
+         OQ+7e+yMEXVdVtBMaHZfWOxrefF1fJ/Q+4DWRfT10DZdwQeb0lGxfvH8U9BuHT0b0K
+         R92RQ//OsY4L5MM1nv4aeIxBerZ0OKBGmbk69yHjbfZAVFDxWR+BKIIPWFPnmUPCG6
+         kDqNmZhTdlsAbqwQ9y2CQVTBbCfYA/JGuI+/083okepz6UcZCkySf36XBlxlOedyzy
+         tatiOSITnJV4Q/h1mBT8oJmONJgctog+CC1z4a9m5uuK6YTBG6yc4owenwoh91Mu0P
+         8GrQzujSWGXsg==
+Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1nbmUx-002uYS-EY; Tue, 05 Apr 2022 18:57:43 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     alsa-devel@alsa-project.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        "Hans de Goede" <hdegoede@redhat.com>,
+        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jie Yang <yang.jie@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 2/3] ASoC: Intel: sof_es8336: support a separate gpio to control headphone
+Date:   Tue,  5 Apr 2022 18:57:33 +0200
+Message-Id: <535454c0c598a8454487fe29b164527370e2db81.1649177516.git.mchehab@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <cover.1649177516.git.mchehab@kernel.org>
+References: <cover.1649177516.git.mchehab@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.181.136
-X-CLIENT-HOSTNAME: 213.134.181.136
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudejgedguddtfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhephfegtdffjeehkeegleejveevtdeugfffieeijeduuddtkefgjedvheeujeejtedvnecukfhppedvudefrddufeegrddukedurddufeeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekuddrudefiedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegsrhhoohhnihgvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhsphhisehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Some devices may use both gpio0 and gpio1 to independently switch
+the speaker and the headphone.
 
-Replace the last instance of acpi_bus_get_device(), added recently
-by commit 87e59b36e5e2 ("spi: Support selection of the index of the
-ACPI Spi Resource before alloc"), with acpi_fetch_acpi_dev() and
-finally drop acpi_bus_get_device() that has no more users.
+Add support for that.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Acked-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
- drivers/acpi/scan.c     |   13 -------------
- drivers/spi/spi.c       |    3 ++-
- include/acpi/acpi_bus.h |    1 -
- 3 files changed, 2 insertions(+), 15 deletions(-)
 
-Index: linux-pm/drivers/spi/spi.c
-===================================================================
---- linux-pm.orig/drivers/spi/spi.c
-+++ linux-pm/drivers/spi/spi.c
-@@ -2406,7 +2406,8 @@ static int acpi_spi_add_resource(struct
- 			} else {
- 				struct acpi_device *adev;
+See [PATCH v3 0/3] at: https://lore.kernel.org/all/cover.1649177516.git.mchehab@kernel.org/
+
+ sound/soc/intel/boards/sof_es8336.c | 59 ++++++++++++++++++++++++-----
+ 1 file changed, 49 insertions(+), 10 deletions(-)
+
+diff --git a/sound/soc/intel/boards/sof_es8336.c b/sound/soc/intel/boards/sof_es8336.c
+index e4829a376b79..d15a58666cc6 100644
+--- a/sound/soc/intel/boards/sof_es8336.c
++++ b/sound/soc/intel/boards/sof_es8336.c
+@@ -30,6 +30,7 @@
+ #define SOF_ES8336_SPEAKERS_EN_GPIO1_QUIRK	BIT(4)
+ #define SOF_ES8336_ENABLE_DMIC			BIT(5)
+ #define SOF_ES8336_JD_INVERTED			BIT(6)
++#define SOF_ES8336_HEADPHONE_GPIO		BIT(7)
  
--				if (acpi_bus_get_device(parent_handle, &adev))
-+				adev = acpi_fetch_acpi_dev(parent_handle);
-+				if (!adev)
- 					return -ENODEV;
+ static unsigned long quirk;
  
- 				ctlr = acpi_spi_find_controller_by_adev(adev);
-Index: linux-pm/include/acpi/acpi_bus.h
-===================================================================
---- linux-pm.orig/include/acpi/acpi_bus.h
-+++ linux-pm/include/acpi/acpi_bus.h
-@@ -511,7 +511,6 @@ extern int unregister_acpi_notifier(stru
-  * External Functions
-  */
+@@ -39,7 +40,7 @@ MODULE_PARM_DESC(quirk, "Board-specific quirk override");
  
--int acpi_bus_get_device(acpi_handle handle, struct acpi_device **device);
- struct acpi_device *acpi_fetch_acpi_dev(acpi_handle handle);
- acpi_status acpi_bus_get_status_handle(acpi_handle handle,
- 				       unsigned long long *sta);
-Index: linux-pm/drivers/acpi/scan.c
-===================================================================
---- linux-pm.orig/drivers/acpi/scan.c
-+++ linux-pm/drivers/acpi/scan.c
-@@ -588,19 +588,6 @@ static struct acpi_device *handle_to_dev
- 	return adev;
+ struct sof_es8336_private {
+ 	struct device *codec_dev;
+-	struct gpio_desc *gpio_speakers;
++	struct gpio_desc *gpio_speakers, *gpio_headphone;
+ 	struct snd_soc_jack jack;
+ 	struct list_head hdmi_pcm_list;
+ 	bool speaker_en;
+@@ -51,15 +52,27 @@ struct sof_hdmi_pcm {
+ 	int device;
+ };
+ 
+-static const struct acpi_gpio_params speakers_enable_gpio0 = { 0, 0, true };
++static const struct acpi_gpio_params enable_gpio0 = { 0, 0, true };
++static const struct acpi_gpio_params enable_gpio1 = { 1, 0, true };
++
+ static const struct acpi_gpio_mapping acpi_speakers_enable_gpio0[] = {
+-	{ "speakers-enable-gpios", &speakers_enable_gpio0, 1 },
++	{ "speakers-enable-gpios", &enable_gpio0, 1 },
+ 	{ }
+ };
+ 
+-static const struct acpi_gpio_params speakers_enable_gpio1 = { 1, 0, true };
+ static const struct acpi_gpio_mapping acpi_speakers_enable_gpio1[] = {
+-	{ "speakers-enable-gpios", &speakers_enable_gpio1, 1 },
++	{ "speakers-enable-gpios", &enable_gpio1, 1 },
++};
++
++static const struct acpi_gpio_mapping acpi_enable_both_gpios[] = {
++	{ "speakers-enable-gpios", &enable_gpio0, 1 },
++	{ "headphone-enable-gpios", &enable_gpio1, 1 },
++	{ }
++};
++
++static const struct acpi_gpio_mapping acpi_enable_both_gpios_rev_order[] = {
++	{ "speakers-enable-gpios", &enable_gpio1, 1 },
++	{ "headphone-enable-gpios", &enable_gpio0, 1 },
+ 	{ }
+ };
+ 
+@@ -73,6 +86,8 @@ static void log_quirks(struct device *dev)
+ 		dev_info(dev, "quirk DMIC enabled\n");
+ 	if (quirk & SOF_ES8336_SPEAKERS_EN_GPIO1_QUIRK)
+ 		dev_info(dev, "Speakers GPIO1 quirk enabled\n");
++	if (quirk & SOF_ES8336_HEADPHONE_GPIO)
++		dev_info(dev, "quirk headphone GPIO enabled\n");
+ 	if (quirk & SOF_ES8336_JD_INVERTED)
+ 		dev_info(dev, "quirk JD inverted enabled\n");
+ }
+@@ -83,13 +98,24 @@ static int sof_es8316_speaker_power_event(struct snd_soc_dapm_widget *w,
+ 	struct snd_soc_card *card = w->dapm->card;
+ 	struct sof_es8336_private *priv = snd_soc_card_get_drvdata(card);
+ 
++	if (priv->speaker_en == !SND_SOC_DAPM_EVENT_ON(event))
++		return 0;
++
++	priv->speaker_en = !SND_SOC_DAPM_EVENT_ON(event);
++
+ 	if (SND_SOC_DAPM_EVENT_ON(event))
+-		priv->speaker_en = false;
+-	else
+-		priv->speaker_en = true;
++		msleep(70);
+ 
+ 	gpiod_set_value_cansleep(priv->gpio_speakers, priv->speaker_en);
+ 
++	if (!(quirk & SOF_ES8336_HEADPHONE_GPIO))
++		return 0;
++
++	if (SND_SOC_DAPM_EVENT_ON(event))
++		msleep(70);
++
++	gpiod_set_value_cansleep(priv->gpio_headphone, priv->speaker_en);
++
+ 	return 0;
  }
  
--int acpi_bus_get_device(acpi_handle handle, struct acpi_device **device)
--{
--	if (!device)
--		return -EINVAL;
--
--	*device = handle_to_device(handle, NULL);
--	if (!*device)
--		return -ENODEV;
--
--	return 0;
--}
--EXPORT_SYMBOL(acpi_bus_get_device);
--
- /**
-  * acpi_fetch_acpi_dev - Retrieve ACPI device object.
-  * @handle: ACPI handle associated with the requested ACPI device object.
-
-
+@@ -114,7 +140,7 @@ static const struct snd_soc_dapm_route sof_es8316_audio_map[] = {
+ 
+ 	/*
+ 	 * There is no separate speaker output instead the speakers are muxed to
+-	 * the HP outputs. The mux is controlled by the "Speaker Power" supply.
++	 * the HP outputs. The mux is controlled Speaker and/or headphone switch.
+ 	 */
+ 	{"Speaker", NULL, "HPOL"},
+ 	{"Speaker", NULL, "HPOR"},
+@@ -233,8 +259,14 @@ static int sof_es8336_quirk_cb(const struct dmi_system_id *id)
+ {
+ 	quirk = (unsigned long)id->driver_data;
+ 
+-	if (quirk & SOF_ES8336_SPEAKERS_EN_GPIO1_QUIRK)
++	if (quirk & SOF_ES8336_HEADPHONE_GPIO) {
++		if (quirk & SOF_ES8336_SPEAKERS_EN_GPIO1_QUIRK)
++			gpio_mapping = acpi_enable_both_gpios;
++		else
++			gpio_mapping = acpi_enable_both_gpios_rev_order;
++	} else if (quirk & SOF_ES8336_SPEAKERS_EN_GPIO1_QUIRK) {
+ 		gpio_mapping = acpi_speakers_enable_gpio1;
++	}
+ 
+ 	return 1;
+ }
+@@ -592,6 +624,13 @@ static int sof_es8336_probe(struct platform_device *pdev)
+ 		goto err_put_codec;
+ 	}
+ 
++	priv->gpio_headphone = gpiod_get_optional(codec_dev, "headphone-enable", GPIOD_OUT_LOW);
++	if (IS_ERR(priv->gpio_headphone)) {
++		ret = dev_err_probe(dev, PTR_ERR(priv->gpio_headphone),
++				    "could not get headphone-enable GPIO\n");
++		goto err_put_codec;
++	}
++
+ 	INIT_LIST_HEAD(&priv->hdmi_pcm_list);
+ 
+ 	snd_soc_card_set_drvdata(card, priv);
+-- 
+2.35.1
 

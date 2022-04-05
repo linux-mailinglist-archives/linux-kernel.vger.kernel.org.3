@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B110F4F510A
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A854F5071
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240331AbiDFBt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:49:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
+        id S1841879AbiDFB0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349093AbiDEJtH (ORCPT
+        with ESMTP id S1354828AbiDEKQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48D5A997B;
-        Tue,  5 Apr 2022 02:40:43 -0700 (PDT)
+        Tue, 5 Apr 2022 06:16:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05476C93D;
+        Tue,  5 Apr 2022 03:02:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7ED47615E5;
-        Tue,  5 Apr 2022 09:40:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CB81C385A1;
-        Tue,  5 Apr 2022 09:40:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B0B0B81BC0;
+        Tue,  5 Apr 2022 10:02:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E368CC385A2;
+        Tue,  5 Apr 2022 10:02:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151642;
-        bh=DwB2ZYIjRLq6uHjl6PjkyIYEq5MCOtS3jKxUxecKv2I=;
+        s=korg; t=1649152977;
+        bh=5IqUjJTSOJ5iA71G3v7PMy802c6wfxcw7Yd0aVsWReA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D4TT/QQ43G82QBJd/iOQJqDhOHht0CNkYcIybMo7ten6uKy9XCa+CInjBUD+zsdIL
-         XTOKcy4Fe3SnodapQ5lCDCh3cIU1JLgKnDaOh4Uo8dMS0GmZXSFSW/y8EqqBEJqgp5
-         dwJkYowf3FjXmb8TRpnlxQyrVh/Vl0BfH0EoDwfg=
+        b=mJjKbHsoO3GUe++/kLFqcD2SzKBmBUqiFEDb8vXvjWpYciufNHxT/8uo7stwnI10o
+         9mew8m/PYgT+gm6dmgC2uR6a+xON2tq5Xc2bnMtJikUtvh5kR70S/+iK4R961Ku7Lg
+         7V9+I0K7LToev98L+SW8DIWLk05bxFuWYcxK+vH0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 488/913] scsi: pm8001: Fix NCQ NON DATA command completion handling
-Date:   Tue,  5 Apr 2022 09:25:50 +0200
-Message-Id: <20220405070354.483151646@linuxfoundation.org>
+        stable@vger.kernel.org, Baokun Li <libaokun1@huawei.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: [PATCH 5.10 057/599] jffs2: fix memory leak in jffs2_do_mount_fs
+Date:   Tue,  5 Apr 2022 09:25:51 +0200
+Message-Id: <20220405070300.524656148@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,61 +54,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Baokun Li <libaokun1@huawei.com>
 
-[ Upstream commit 1d6736c3e162061dc811c76e605f35ef3234bffa ]
+commit d051cef784de4d54835f6b6836d98a8f6935772c upstream.
 
-NCQ NON DATA is an NCQ command with the DMA_NONE DMA direction and so a
-register-device-to-host-FIS response is expected for it.
+If jffs2_build_filesystem() in jffs2_do_mount_fs() returns an error,
+we can observe the following kmemleak report:
 
-However, for an IO_SUCCESS case, mpi_sata_completion() expects a
-set-device-bits-FIS for any ata task with an use_ncq field true, which
-includes NCQ NON DATA commands.
+--------------------------------------------
+unreferenced object 0xffff88811b25a640 (size 64):
+  comm "mount", pid 691, jiffies 4294957728 (age 71.952s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffffa493be24>] kmem_cache_alloc_trace+0x584/0x880
+    [<ffffffffa5423a06>] jffs2_sum_init+0x86/0x130
+    [<ffffffffa5400e58>] jffs2_do_mount_fs+0x798/0xac0
+    [<ffffffffa540acf3>] jffs2_do_fill_super+0x383/0xc30
+    [<ffffffffa540c00a>] jffs2_fill_super+0x2ea/0x4c0
+    [...]
+unreferenced object 0xffff88812c760000 (size 65536):
+  comm "mount", pid 691, jiffies 4294957728 (age 71.952s)
+  hex dump (first 32 bytes):
+    bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb  ................
+    bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb  ................
+  backtrace:
+    [<ffffffffa493a449>] __kmalloc+0x6b9/0x910
+    [<ffffffffa5423a57>] jffs2_sum_init+0xd7/0x130
+    [<ffffffffa5400e58>] jffs2_do_mount_fs+0x798/0xac0
+    [<ffffffffa540acf3>] jffs2_do_fill_super+0x383/0xc30
+    [<ffffffffa540c00a>] jffs2_fill_super+0x2ea/0x4c0
+    [...]
+--------------------------------------------
 
-Fix this to correctly treat NCQ NON DATA commands as non-data by also
-testing for the DMA_NONE DMA direction.
+This is because the resources allocated in jffs2_sum_init() are not
+released. Call jffs2_sum_exit() to release these resources to solve
+the problem.
 
-Link: https://lore.kernel.org/r/20220220031810.738362-16-damien.lemoal@opensource.wdc.com
-Fixes: dbf9bfe61571 ("[SCSI] pm8001: add SAS/SATA HBA driver")
-Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: e631ddba5887 ("[JFFS2] Add erase block summary support (mount time improvement)")
+Cc: stable@vger.kernel.org
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/pm8001/pm8001_hwi.c | 3 ++-
- drivers/scsi/pm8001/pm80xx_hwi.c | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ fs/jffs2/build.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-index e9c77c945752..d50eb22b2506 100644
---- a/drivers/scsi/pm8001/pm8001_hwi.c
-+++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -2421,7 +2421,8 @@ mpi_sata_completion(struct pm8001_hba_info *pm8001_ha, void *piomb)
- 				len = sizeof(struct pio_setup_fis);
- 				pm8001_dbg(pm8001_ha, IO,
- 					   "PIO read len = %d\n", len);
--			} else if (t->ata_task.use_ncq) {
-+			} else if (t->ata_task.use_ncq &&
-+				   t->data_dir != DMA_NONE) {
- 				len = sizeof(struct set_dev_bits_fis);
- 				pm8001_dbg(pm8001_ha, IO, "FPDMA len = %d\n",
- 					   len);
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index 043a2cc4d4de..3c2f2fbdb432 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -2518,7 +2518,8 @@ mpi_sata_completion(struct pm8001_hba_info *pm8001_ha,
- 				len = sizeof(struct pio_setup_fis);
- 				pm8001_dbg(pm8001_ha, IO,
- 					   "PIO read len = %d\n", len);
--			} else if (t->ata_task.use_ncq) {
-+			} else if (t->ata_task.use_ncq &&
-+				   t->data_dir != DMA_NONE) {
- 				len = sizeof(struct set_dev_bits_fis);
- 				pm8001_dbg(pm8001_ha, IO, "FPDMA len = %d\n",
- 					   len);
--- 
-2.34.1
-
+--- a/fs/jffs2/build.c
++++ b/fs/jffs2/build.c
+@@ -415,13 +415,15 @@ int jffs2_do_mount_fs(struct jffs2_sb_in
+ 		jffs2_free_ino_caches(c);
+ 		jffs2_free_raw_node_refs(c);
+ 		ret = -EIO;
+-		goto out_free;
++		goto out_sum_exit;
+ 	}
+ 
+ 	jffs2_calc_trigger_levels(c);
+ 
+ 	return 0;
+ 
++ out_sum_exit:
++	jffs2_sum_exit(c);
+  out_free:
+ 	kvfree(c->blocks);
+ 
 
 

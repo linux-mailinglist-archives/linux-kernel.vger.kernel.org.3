@@ -2,94 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5250A4F4F4B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B1E4F4E39
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1837125AbiDFAox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 20:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
+        id S1588231AbiDFAO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1572944AbiDERWt (ORCPT
+        with ESMTP id S1572956AbiDER1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 13:22:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716BA14012;
-        Tue,  5 Apr 2022 10:20:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 060AE618AC;
-        Tue,  5 Apr 2022 17:20:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41A8EC385A0;
-        Tue,  5 Apr 2022 17:20:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649179250;
-        bh=YZsDubBk95nu3x04zmH9B6wkAN+uWc38CMrzjI/URwo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KLe5zgl1jn3/c4ZIruCMaO136A64eBcLm5MtWPZC5gKsaFML8XL5Qi/qHPHGunbPu
-         Cn8MAg+bYIIerAENAO5CthwJdbxgxY+JcPPv4dVyDz+8Gg7Lq8nJ8U2qhQJckYp5/I
-         8LVvPIeKrguyAUUzrF2cs0KvpoJRHxAnHmVLSP+dK4TTgnuRG+2y8vms+tDW2akJeY
-         MyB0qBwaj662d6Ir3juQcKyHhkbEKASlApUUa2Qp5cQfBpFjfZIBOpwotaaMeLoacP
-         F1Zyd4PQllzcMItH1uB2cRecYBbnUYYrNrqW9PY+Dw2KKmenqYfIQIBME36MLFZ1aq
-         5xVovTJYeXidQ==
-Date:   Tue, 5 Apr 2022 10:20:49 -0700
-From:   Saeed Mahameed <saeed@kernel.org>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>
-Subject: Re: [PATCH mlx5-next 4/5] net/mlx5: Remove tls vs. ktls separation
- as it is the same
-Message-ID: <20220405172049.slomqla4pmnyczbj@sx1>
-References: <cover.1649073691.git.leonro@nvidia.com>
- <67e596599edcffb0de43f26551208dfd34ac777e.1649073691.git.leonro@nvidia.com>
- <20220405003322.afko7uo527w5j3zu@sx1>
- <YkvW9SNJeb5VPmeg@unreal>
+        Tue, 5 Apr 2022 13:27:13 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377A318378;
+        Tue,  5 Apr 2022 10:25:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649179515; x=1680715515;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=tby6oKK3JVUxlZzYdf5ed1y/wZs9gYYk5yFKCDN1HZg=;
+  b=Gt5QqY71asenE8KEihaKWCkItV1rvRRg1/1D95jskDMRPSd693UBpuA2
+   6EeVKnqBeJruLKYP3T0+fn4F7HZOdfL0XNI1n2xN0Y/9z9peNXK4vYF+A
+   ccIkAG0aaxyuk2JapMDhbBZ4oh+iuVsasutj3B96F9MSegOj+VvQ7k17K
+   8JDY2ktQx2WQ1+AakrBZuEi+2epWqfsBK8pAZcy5TjyDV65Oln+yXYg++
+   elUpY00wjPsmDQMAOgw8p/y68Jr4AgJAmp/2ZDjLpar2Kpq0UsFdKiCpz
+   O/51nVpcOynjECVITQILcrLRC6/R2c+dhz74LE+rlGfcxlVZGp/S0hkKZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6200,9189,10308"; a="260805737"
+X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
+   d="scan'208";a="260805737"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 10:25:14 -0700
+X-IronPort-AV: E=Sophos;i="5.90,236,1643702400"; 
+   d="scan'208";a="549147373"
+Received: from nldesimo-desk1.amr.corp.intel.com (HELO [10.212.148.3]) ([10.212.148.3])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Apr 2022 10:25:13 -0700
+Message-ID: <f8d92685-27dd-e7ef-ce0d-100a285aec4b@intel.com>
+Date:   Tue, 5 Apr 2022 10:25:15 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <YkvW9SNJeb5VPmeg@unreal>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     dave.hansen@linux.intel.com, tglx@linutronix.de, bp@alien8.de,
+        luto@kernel.org, mingo@redhat.com, linux-sgx@vger.kernel.org,
+        x86@kernel.org, seanjc@google.com, kai.huang@intel.com,
+        cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+References: <cover.1648847675.git.reinette.chatre@intel.com>
+ <b3a17e1ce7bcd14db3c28903e8a97f094998ae74.1648847675.git.reinette.chatre@intel.com>
+ <Ykvrk4hYvBEnNOOl@kernel.org>
+ <e118f4c6-7216-15f3-2bda-3a5851b0bcb1@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH V3 19/30] x86/sgx: Free up EPC pages directly to support
+ large page ranges
+In-Reply-To: <e118f4c6-7216-15f3-2bda-3a5851b0bcb1@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05 Apr 08:43, Leon Romanovsky wrote:
->On Mon, Apr 04, 2022 at 05:33:22PM -0700, Saeed Mahameed wrote:
->> On 04 Apr 15:08, Leon Romanovsky wrote:
->> > From: Leon Romanovsky <leonro@nvidia.com>
->> >
->> > After removal FPGA TLS, we can remove tls->ktls indirection too,
->> > as it is the same thing.
-
-[...]
-
-> > rename drivers/net/ethernet/mellanox/mlx5/core/en_accel/{tls_stats.c => ktls_stats.c} (76%)
+On 4/5/22 10:13, Reinette Chatre wrote:
+>>> +void sgx_direct_reclaim(void)
+>>> +{
+>>> +	if (sgx_should_reclaim(SGX_NR_LOW_PAGES))
+>>> +		sgx_reclaim_pages();
+>>> +}
+>> Please, instead open code this to both locations - not enough redundancy
+>> to be worth of new function. Causes only unnecessary cross-referencing
+>> when maintaining. Otherwise, I agree with the idea.
 >>
->> Why not ktls_*.c => tls_*.c ?
->
->Mostly because other drivers use _ktls_ name for this type of functionality.
->Plus internally, Tariq suggested to squash everything into ktls.
->
->>
->> Since we now have one TLS implementation, it would've been easier to maybe
->> repurpose TLS to be KTLS only and avoid renaming every TLS to KTLS in all
->> functions and files.
->>
->> So just keep tls.c and all mlx5_tls_xyz functions and implement ktls
->> directly in them, the renaming will be done only on the ktls implementation
->> part of the code rather than in every caller.
->
->Should I do it or keep this patch as is?
->
+> hmmm, that means the heart of the reclaimer (sgx_reclaim_pages()) would be
+> made available for direct use from everywhere in the driver. I will look into this.
 
-Keep it, i don't have any strong feeling about this,
-I just wanted to reduce the patch size.
+I like the change.  It's not about reducing code redundancy, it's about
+*describing* what the code does.  Each location could have:
 
+	/* Enter direct SGX reclaim: */
+	if (sgx_should_reclaim(SGX_NR_LOW_PAGES))
+		sgx_reclaim_pages();
+
+Or, it could just be:
+
+	sgx_direct_reclaim();
+
+Which also provides a logical choke point to add comments, like:
+
+/*
+ * sgx_direct_reclaim() should be called in locations where SGX
+ * memory resources might be low and might be needed in order
+ * to make forward progress.
+ */
+void sgx_direct_reclaim(void)
+{
+	...

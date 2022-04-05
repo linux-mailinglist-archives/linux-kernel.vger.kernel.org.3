@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 705864F3043
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF834F34F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235177AbiDEJBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
+        id S235581AbiDEJCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237098AbiDEIRm (ORCPT
+        with ESMTP id S237133AbiDEIRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:17:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEF7B0A78;
-        Tue,  5 Apr 2022 01:05:15 -0700 (PDT)
+        Tue, 5 Apr 2022 04:17:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9421F689A6;
+        Tue,  5 Apr 2022 01:05:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F606B81B7F;
-        Tue,  5 Apr 2022 08:05:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7432DC385A0;
-        Tue,  5 Apr 2022 08:05:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A519617ED;
+        Tue,  5 Apr 2022 08:05:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14F96C385A0;
+        Tue,  5 Apr 2022 08:05:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145913;
-        bh=ljUjy9uEyUDi5nyMnpEevzcnbDv8DuDLWbtgaNltjds=;
+        s=korg; t=1649145922;
+        bh=JtOMfaEbVXd2i/CdfdprYFI1BoQI8cBSV7rn34byu2U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=djXNG+eGf37DvkWcSTB/M6hGOApa8EJmZIULGJkV/GuGdjI1tJ3m1syjuwkP1uDdF
-         SzZNgKG/McUqGzvzhqbpZ+ES++vcLfrh6py3Ud8bQUQ+87Giz8NZEvcOjwuVhdaF+d
-         hOclGo5OAWA6IODmoOJjHdDEL4cmZlb+PEnqS6bY=
+        b=QQBnMmkyEHa4EQyd2Z+0Vv59TERPYjrAyyI2XuwWSnCr8qDkgatJL/PXBhgxD+Ei+
+         GxHgNDYUbnHOgF+hgPm3thdkEERuh8HqZaTKjhrKmeGguoZesaW4EuoniQGKTdDRhP
+         kGJfy74sUB/LNrHzIXVcsjmiSYHaX86vSQIdQjjc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
+        stable@vger.kernel.org,
+        Rameshkumar Sundaram <quic_ramess@quicinc.com>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0575/1126] drm/msm/dp: fix panel bridge attachment
-Date:   Tue,  5 Apr 2022 09:22:02 +0200
-Message-Id: <20220405070424.509757897@linuxfoundation.org>
+Subject: [PATCH 5.17 0577/1126] ath11k: Invalidate cached reo ring entry before accessing it
+Date:   Tue,  5 Apr 2022 09:22:04 +0200
+Message-Id: <20220405070424.568803354@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,70 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From: Rameshkumar Sundaram <quic_ramess@quicinc.com>
 
-[ Upstream commit 4d793a02c4967ab14d4ae5e86a51ee02ed78921a ]
+[ Upstream commit f2180ccb52b5fd0876291ad2df37e2898cac18cf ]
 
-In commit 8a3b4c17f863 ("drm/msm/dp: employ bridge mechanism for display
-enable and disable") the DP driver received a drm_bridge instance, which
-is always attached to the encoder as a root bridge. However it conflicts
-with the panel_bridge support for eDP panels. The panel bridge attaches
-to the encoder before the "dp" bridge (DP driver's drm_bridge instance
-created in msm_dp_bridge_init()) has a chance to do so. Change
-panel bridge attachment to come after the "dp" bridge attachment (and to
-use it as a previous bridge).
+REO2SW ring descriptor is currently allocated in cacheable memory.
+While reaping reo ring entries on second trial after updating head
+pointer, first entry is not invalidated before accessing it.
 
-Fixes: 8a3b4c17f863 ("drm/msm/dp: employ bridge mechanism for display enable and disable")
-Cc: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Tested-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Link: https://lore.kernel.org/r/20220211224006.1797846-2-dmitry.baryshkov@linaro.org
-[db: fixed commit message according to Stephen's suggestions]
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+This results in host reaping and using cached descriptor which is
+already overwritten in memory by DMA device (HW).
+Since the contents of descriptor(buffer id, peer info and other information
+bits) are outdated host throws errors like below while parsing corresponding
+MSDU's and drops them.
+
+[347712.048904] ath11k_pci 0004:01:00.0: msdu_done bit in attention is not set
+[349173.355503] ath11k_pci 0004:01:00.0: frame rx with invalid buf_id 962
+
+Move the try_again: label above  ath11k_hal_srng_access_begin()
+so that first entry will be invalidated and prefetched.
+
+Tested-on: QCN9074 hw1.0 PCI WLAN.HK.2.5.0.1-01100-QCAHKSWPL_SILICONZ-1
+
+Fixes: 6452f0a3d565 ("ath11k: allocate dst ring descriptors from cacheable memory")
+Signed-off-by: Rameshkumar Sundaram <quic_ramess@quicinc.com>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/1645000354-32558-1-git-send-email-quic_ramess@quicinc.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/dp/dp_drm.c | 21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+ drivers/net/wireless/ath/ath11k/dp_rx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
-index d4d360d19eba..26ef41a4c1b6 100644
---- a/drivers/gpu/drm/msm/dp/dp_drm.c
-+++ b/drivers/gpu/drm/msm/dp/dp_drm.c
-@@ -169,16 +169,6 @@ struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
+diff --git a/drivers/net/wireless/ath/ath11k/dp_rx.c b/drivers/net/wireless/ath/ath11k/dp_rx.c
+index c212a789421e..e432f8dc05d6 100644
+--- a/drivers/net/wireless/ath/ath11k/dp_rx.c
++++ b/drivers/net/wireless/ath/ath11k/dp_rx.c
+@@ -2642,9 +2642,9 @@ int ath11k_dp_process_rx(struct ath11k_base *ab, int ring_id,
  
- 	drm_connector_attach_encoder(connector, dp_display->encoder);
+ 	spin_lock_bh(&srng->lock);
  
--	if (dp_display->panel_bridge) {
--		ret = drm_bridge_attach(dp_display->encoder,
--					dp_display->panel_bridge, NULL,
--					DRM_BRIDGE_ATTACH_NO_CONNECTOR);
--		if (ret < 0) {
--			DRM_ERROR("failed to attach panel bridge: %d\n", ret);
--			return ERR_PTR(ret);
--		}
--	}
--
- 	return connector;
- }
++try_again:
+ 	ath11k_hal_srng_access_begin(ab, srng);
  
-@@ -246,5 +236,16 @@ struct drm_bridge *msm_dp_bridge_init(struct msm_dp *dp_display, struct drm_devi
- 		return ERR_PTR(rc);
- 	}
- 
-+	if (dp_display->panel_bridge) {
-+		rc = drm_bridge_attach(dp_display->encoder,
-+					dp_display->panel_bridge, bridge,
-+					DRM_BRIDGE_ATTACH_NO_CONNECTOR);
-+		if (rc < 0) {
-+			DRM_ERROR("failed to attach panel bridge: %d\n", rc);
-+			drm_bridge_remove(bridge);
-+			return ERR_PTR(rc);
-+		}
-+	}
-+
- 	return bridge;
- }
+-try_again:
+ 	while (likely(desc =
+ 	      (struct hal_reo_dest_ring *)ath11k_hal_srng_dst_get_next_entry(ab,
+ 									     srng))) {
 -- 
 2.34.1
 

@@ -2,86 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCDC24F40F7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C0F4F3E77
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1441841AbiDEUHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:07:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
+        id S240166AbiDEUSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354632AbiDENH2 (ORCPT
+        with ESMTP id S1387456AbiDENPN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 09:07:28 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4A4222B2;
-        Tue,  5 Apr 2022 05:09:57 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 8DC8022247;
-        Tue,  5 Apr 2022 14:09:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1649160595;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=N3QegVmrV1duTmro584pVd3S+Weu0aeOJNo5pVDKL/g=;
-        b=b6AzGRPwXUkUocumc/PNKiR8cbZZ5gdSpF5XNLOzJ6dkBWvgO3nBiip2cWD9JVhff1tyah
-        IvofnNScb4uzbrOmQE+9ZJfHSmkyEdgTKMrT4GmcpyqfbN8REAWC5qR4g/cdXc/++hn1Wq
-        34bMgfY+8B7cuY0DoEk0GBnuP6bkIAg=
-From:   Michael Walle <michael@walle.cc>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>
-Subject: [PATCH net-next v3 0/3] net: phy: mscc-miim: add MDIO bus frequency support
-Date:   Tue,  5 Apr 2022 14:09:48 +0200
-Message-Id: <20220405120951.4044875-1-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
+        Tue, 5 Apr 2022 09:15:13 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1BB3512BF9F;
+        Tue,  5 Apr 2022 05:20:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D6BDBD6E;
+        Tue,  5 Apr 2022 05:20:03 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 014163F5A1;
+        Tue,  5 Apr 2022 05:20:02 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     benve@cisco.com, neescoba@cisco.com, jgg@ziepe.ca
+Cc:     linux-rdma@vger.kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] RDMA/usnic: Stop using iommu_present()
+Date:   Tue,  5 Apr 2022 13:19:59 +0100
+Message-Id: <f707b4248e1d33b6d2c7f1d7c94febb802cf9890.1649161199.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.28.0.dirty
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce MDIO bus frequency support. This way the board can have a
-faster (or maybe slower) bus frequency than the hardware default.
+Even if an IOMMU might be present for some PCI segment in the system,
+that doesn't necessarily mean it provides translation for the device(s)
+we care about. Replace iommu_present() with a more appropriate check at
+probe time, and garbage-collect the resulting empty init function.
 
-changes since v2:
- - resend, no RFC anymore, because net-next is open again
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+---
+ drivers/infiniband/hw/usnic/usnic_ib_main.c | 11 +++++------
+ drivers/infiniband/hw/usnic/usnic_uiom.c    | 10 ----------
+ drivers/infiniband/hw/usnic/usnic_uiom.h    |  1 -
+ 3 files changed, 5 insertions(+), 17 deletions(-)
 
-changes since v1:
- - fail probe if clock-frequency is set, but not clock is given
- - rename clk_freq to bus_freq
- - add maxItems to interrupts property
- - put compatible and reg first in the example
-
-Michael Walle (3):
-  dt-bindings: net: convert mscc-miim to YAML format
-  dt-bindings: net: mscc-miim: add clock and clock-frequency
-  net: phy: mscc-miim: add support to set MDIO bus frequency
-
- .../devicetree/bindings/net/mscc,miim.yaml    | 61 +++++++++++++++++++
- .../devicetree/bindings/net/mscc-miim.txt     | 26 --------
- drivers/net/mdio/mdio-mscc-miim.c             | 58 +++++++++++++++++-
- 3 files changed, 117 insertions(+), 28 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/net/mscc,miim.yaml
- delete mode 100644 Documentation/devicetree/bindings/net/mscc-miim.txt
-
+diff --git a/drivers/infiniband/hw/usnic/usnic_ib_main.c b/drivers/infiniband/hw/usnic/usnic_ib_main.c
+index d346dd48e731..46653ad56f5a 100644
+--- a/drivers/infiniband/hw/usnic/usnic_ib_main.c
++++ b/drivers/infiniband/hw/usnic/usnic_ib_main.c
+@@ -534,6 +534,11 @@ static int usnic_ib_pci_probe(struct pci_dev *pdev,
+ 	struct usnic_ib_vf *vf;
+ 	enum usnic_vnic_res_type res_type;
+ 
++	if (!device_iommu_mapped(&pdev->dev)) {
++		usnic_err("IOMMU required but not present or enabled.  USNIC QPs will not function w/o enabling IOMMU\n");
++		return -EPERM;
++	}
++
+ 	vf = kzalloc(sizeof(*vf), GFP_KERNEL);
+ 	if (!vf)
+ 		return -ENOMEM;
+@@ -642,12 +647,6 @@ static int __init usnic_ib_init(void)
+ 
+ 	printk_once(KERN_INFO "%s", usnic_version);
+ 
+-	err = usnic_uiom_init(DRV_NAME);
+-	if (err) {
+-		usnic_err("Unable to initialize umem with err %d\n", err);
+-		return err;
+-	}
+-
+ 	err = pci_register_driver(&usnic_ib_pci_driver);
+ 	if (err) {
+ 		usnic_err("Unable to register with PCI\n");
+diff --git a/drivers/infiniband/hw/usnic/usnic_uiom.c b/drivers/infiniband/hw/usnic/usnic_uiom.c
+index 760b254ba42d..8c48027614a1 100644
+--- a/drivers/infiniband/hw/usnic/usnic_uiom.c
++++ b/drivers/infiniband/hw/usnic/usnic_uiom.c
+@@ -556,13 +556,3 @@ void usnic_uiom_free_dev_list(struct device **devs)
+ {
+ 	kfree(devs);
+ }
+-
+-int usnic_uiom_init(char *drv_name)
+-{
+-	if (!iommu_present(&pci_bus_type)) {
+-		usnic_err("IOMMU required but not present or enabled.  USNIC QPs will not function w/o enabling IOMMU\n");
+-		return -EPERM;
+-	}
+-
+-	return 0;
+-}
+diff --git a/drivers/infiniband/hw/usnic/usnic_uiom.h b/drivers/infiniband/hw/usnic/usnic_uiom.h
+index 7ec8991ace67..9407522179e9 100644
+--- a/drivers/infiniband/hw/usnic/usnic_uiom.h
++++ b/drivers/infiniband/hw/usnic/usnic_uiom.h
+@@ -91,5 +91,4 @@ struct usnic_uiom_reg *usnic_uiom_reg_get(struct usnic_uiom_pd *pd,
+ 						unsigned long addr, size_t size,
+ 						int access, int dmasync);
+ void usnic_uiom_reg_release(struct usnic_uiom_reg *uiomr);
+-int usnic_uiom_init(char *drv_name);
+ #endif /* USNIC_UIOM_H_ */
 -- 
-2.30.2
+2.28.0.dirty
 

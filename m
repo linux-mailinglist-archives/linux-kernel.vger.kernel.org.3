@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 586464F4BEC
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4AC4F4AB9
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:50:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1457945AbiDEXHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
+        id S1448460AbiDEWvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349085AbiDEJtG (ORCPT
+        with ESMTP id S1349086AbiDEJtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 05:49:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACCEA9957;
-        Tue,  5 Apr 2022 02:40:26 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F2DA9958;
+        Tue,  5 Apr 2022 02:40:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D76BDB81C14;
-        Tue,  5 Apr 2022 09:40:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B2D8C385A1;
-        Tue,  5 Apr 2022 09:40:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64546B81B14;
+        Tue,  5 Apr 2022 09:40:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3007C385A1;
+        Tue,  5 Apr 2022 09:40:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151623;
-        bh=2qwiJmnx37qZrjF2BfWvJ3zWu1bYMpI5eeMXH9PglFE=;
+        s=korg; t=1649151626;
+        bh=/fOvHyfuNZxEjQinF8Uu0DrUexcyDz192XnxFGsCerg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=guChPGv7uZDwiRO4mLYOMoD5SxkMSB5mA7BERtaSTwhDWR3+REVMX3ODZ8T5QtZNa
-         YhprtWj9mlwLLNu+FWtqNckBxUmGH22pDFQinf6JfgzTp80IS4ksdVga/JfhLxS2Ro
-         F7vHLLZfNwvZPvJYBga0XNx4+/mXWXhgHZyGK1JE=
+        b=mtxXlqVzXztEh0xDI+kuXGQUTPCNAp7vLwVEtUl04dmxSHAY8GbLtiOsbrxR8MDBG
+         EzuzEfq0H2vgmRaIfoWvenE64HLpxAsYxMIaBpoywm0IEd+D1lAIrviITWJKc7nKXd
+         N0nQLjGHxNnoGKG08wldJcq2uS890P8MfEP5bZWk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
+        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
+        Jack Wang <jinpu.wang@ionos.com>,
         Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 481/913] scsi: pm8001: Fix command initialization in pm8001_chip_ssp_tm_req()
-Date:   Tue,  5 Apr 2022 09:25:43 +0200
-Message-Id: <20220405070354.273841744@linuxfoundation.org>
+Subject: [PATCH 5.15 482/913] scsi: pm8001: Fix payload initialization in pm80xx_set_thermal_config()
+Date:   Tue,  5 Apr 2022 09:25:44 +0200
+Message-Id: <20220405070354.303822296@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
 References: <20220405070339.801210740@linuxfoundation.org>
@@ -58,39 +59,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit cd2268a180117aa8ebb23e090ba204324b2d0e93 ]
+[ Upstream commit bb225b12dbcc82d53d637d10b8d70b64494f8c16 ]
 
-The ds_ads_m field of struct ssp_ini_tm_start_req has the type __le32.
-Assigning a value to it should thus use cpu_to_le32(). This fixes the
-sparse warning:
+The fields of the set_ctrl_cfg_req structure have the __le32 type, so use
+cpu_to_le32() to assign them. This removes the sparse warnings:
 
 warning: incorrect type in assignment (different base types)
-   expected restricted __le32 [addressable] [assigned] [usertype] ds_ads_m
-   got int
+    expected restricted __le32
+    got unsigned int
 
-Link: https://lore.kernel.org/r/20220220031810.738362-7-damien.lemoal@opensource.wdc.com
-Fixes: dbf9bfe61571 ("[SCSI] pm8001: add SAS/SATA HBA driver")
+Link: https://lore.kernel.org/r/20220220031810.738362-8-damien.lemoal@opensource.wdc.com
+Fixes: 842784e0d15b ("pm80xx: Update For Thermal Page Code")
+Fixes: f5860992db55 ("[SCSI] pm80xx: Added SPCv/ve specific hardware functionalities and relevant changes in common files")
+Reviewed-by: John Garry <john.garry@huawei.com>
 Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
 Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/pm8001/pm8001_hwi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/pm8001/pm80xx_hwi.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-index 1e1630a1a97c..bad0c8b8cbe1 100644
---- a/drivers/scsi/pm8001/pm8001_hwi.c
-+++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -4633,7 +4633,7 @@ int pm8001_chip_ssp_tm_req(struct pm8001_hba_info *pm8001_ha,
- 	memcpy(sspTMCmd.lun, task->ssp_task.LUN, 8);
- 	sspTMCmd.tag = cpu_to_le32(ccb->ccb_tag);
- 	if (pm8001_ha->chip_id != chip_8001)
--		sspTMCmd.ds_ads_m = 0x08;
-+		sspTMCmd.ds_ads_m = cpu_to_le32(0x08);
- 	circularQ = &pm8001_ha->inbnd_q_tbl[0];
- 	ret = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &sspTMCmd,
- 			sizeof(sspTMCmd), 0);
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index 11887ac8ad0f..ed6b5e7c2136 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -1202,9 +1202,11 @@ pm80xx_set_thermal_config(struct pm8001_hba_info *pm8001_ha)
+ 	else
+ 		page_code = THERMAL_PAGE_CODE_8H;
+ 
+-	payload.cfg_pg[0] = (THERMAL_LOG_ENABLE << 9) |
+-				(THERMAL_ENABLE << 8) | page_code;
+-	payload.cfg_pg[1] = (LTEMPHIL << 24) | (RTEMPHIL << 8);
++	payload.cfg_pg[0] =
++		cpu_to_le32((THERMAL_LOG_ENABLE << 9) |
++			    (THERMAL_ENABLE << 8) | page_code);
++	payload.cfg_pg[1] =
++		cpu_to_le32((LTEMPHIL << 24) | (RTEMPHIL << 8));
+ 
+ 	pm8001_dbg(pm8001_ha, DEV,
+ 		   "Setting up thermal config. cfg_pg 0 0x%x cfg_pg 1 0x%x\n",
 -- 
 2.34.1
 

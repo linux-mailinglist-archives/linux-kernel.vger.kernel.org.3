@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB964F4B80
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B3D4F49EB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1574770AbiDEXBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:01:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50238 "EHLO
+        id S1452699AbiDEWcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238546AbiDEKfQ (ORCPT
+        with ESMTP id S1354448AbiDEKOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:35:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477E73D4BC;
-        Tue,  5 Apr 2022 03:20:47 -0700 (PDT)
+        Tue, 5 Apr 2022 06:14:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7906A00F;
+        Tue,  5 Apr 2022 03:00:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8D3D616D7;
-        Tue,  5 Apr 2022 10:20:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F08E3C385A1;
-        Tue,  5 Apr 2022 10:20:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFA8861673;
+        Tue,  5 Apr 2022 10:00:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7F42C385A2;
+        Tue,  5 Apr 2022 10:00:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154046;
-        bh=tz5dKMKdWhwlPogvpzcTJlJIFOcl7X9ZbyiFjU7lt1E=;
+        s=korg; t=1649152806;
+        bh=fDZBkgfQJbLSlDY1z2xrIeM592mx6ZfxBOfycW6/WwU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=06NHh+Vn1kbk2oxjCxuEssMdYZfkpb0TMGB1zra1sToQVeIi1MhYwGWyKJdfQQPYi
-         Fmf/9klvIBr1+VkHniMHtcetoFV/nYm16J+n8SP4TcEGt4yMcJxHhXzPbl3T0ThL7q
-         wp++7KXDHk05vvgqIK10oBLE+NSOBWl5n2CqIbew=
+        b=DOz1cXl2/4EmmL5b9ykMcCgBTedlE65/UwZnyDBpZJLBcMzZxOy9BfVinN6LTHowm
+         XBet6zPyCHP8y56758+c9j4KIWyha8avwN4QdDfKBU+3ZMiBM1guQQjDVOhXWichgQ
+         5XE91sjEPvs/fZ4C+X0eOWvCxvpSIW1iDM6e2p8o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 437/599] xen: fix is_xen_pmu()
-Date:   Tue,  5 Apr 2022 09:32:11 +0200
-Message-Id: <20220405070311.836925618@linuxfoundation.org>
+        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 5.15 870/913] tracing: Have type enum modifications copy the strings
+Date:   Tue,  5 Apr 2022 09:32:12 +0200
+Message-Id: <20220405070405.902546505@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,124 +55,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-[ Upstream commit de2ae403b4c0e79a3410e63bc448542fbb9f9bfc ]
+commit 795301d3c28996219d555023ac6863401b6076bc upstream.
 
-is_xen_pmu() is taking the cpu number as parameter, but it is not using
-it. Instead it just tests whether the Xen PMU initialization on the
-current cpu did succeed. As this test is done by checking a percpu
-pointer, preemption needs to be disabled in order to avoid switching
-the cpu while doing the test. While resuming from suspend() this seems
-not to be the case:
+When an enum is used in the visible parts of a trace event that is
+exported to user space, the user space applications like perf and
+trace-cmd do not have a way to know what the value of the enum is. To
+solve this, at boot up (or module load) the printk formats are modified to
+replace the enum with their numeric value in the string output.
 
-[   88.082751] ACPI: PM: Low-level resume complete
-[   88.087933] ACPI: EC: EC started
-[   88.091464] ACPI: PM: Restoring platform NVS memory
-[   88.097166] xen_acpi_processor: Uploading Xen processor PM info
-[   88.103850] Enabling non-boot CPUs ...
-[   88.108128] installing Xen timer for CPU 1
-[   88.112763] BUG: using smp_processor_id() in preemptible [00000000] code: systemd-sleep/7138
-[   88.122256] caller is is_xen_pmu+0x12/0x30
-[   88.126937] CPU: 0 PID: 7138 Comm: systemd-sleep Tainted: G        W         5.16.13-2.fc32.qubes.x86_64 #1
-[   88.137939] Hardware name: Star Labs StarBook/StarBook, BIOS 7.97 03/21/2022
-[   88.145930] Call Trace:
-[   88.148757]  <TASK>
-[   88.151193]  dump_stack_lvl+0x48/0x5e
-[   88.155381]  check_preemption_disabled+0xde/0xe0
-[   88.160641]  is_xen_pmu+0x12/0x30
-[   88.164441]  xen_smp_intr_init_pv+0x75/0x100
+Array fields of the event are defined by [<nr-elements>] in the type
+portion of the format file so that the user space parsers can correctly
+parse the array into the appropriate size chunks. But in some trace
+events, an enum is used in defining the size of the array, which once
+again breaks the parsing of user space tooling.
 
-Fix that by replacing is_xen_pmu() by a simple boolean variable which
-reflects the Xen PMU initialization state on cpu 0.
+This was solved the same way as the print formats were, but it modified
+the type strings of the trace event. This caused crashes in some
+architectures because, as supposed to the print string, is a const string
+value. This was not detected on x86, as it appears that const strings are
+still writable (at least in boot up), but other architectures this is not
+the case, and writing to a const string will cause a kernel fault.
 
-Modify xen_pmu_init() to return early in case it is being called for a
-cpu other than cpu 0 and the boolean variable not being set.
+To fix this, use kstrdup() to copy the type before modifying it. If the
+trace event is for the core kernel there's no need to free it because the
+string will be in use for the life of the machine being on line. For
+modules, create a link list to store all the strings being allocated for
+modules and when the module is removed, free them.
 
-Fixes: bf6dfb154d93 ("xen/PMU: PMU emulation code")
-Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Link: https://lore.kernel.org/r/20220325142002.31789-1-jgross@suse.com
-Signed-off-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/all/yt9dr1706b4i.fsf@linux.ibm.com/
+Link: https://lkml.kernel.org/r/20220318153432.3984b871@gandalf.local.home
+
+Tested-by: Marc Zyngier <maz@kernel.org>
+Tested-by: Sven Schnelle <svens@linux.ibm.com>
+Reported-by: Sven Schnelle <svens@linux.ibm.com>
+Fixes: b3bc8547d3be ("tracing: Have TRACE_DEFINE_ENUM affect trace event types as well")
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/xen/pmu.c    | 10 ++++------
- arch/x86/xen/pmu.h    |  3 ++-
- arch/x86/xen/smp_pv.c |  2 +-
- 3 files changed, 7 insertions(+), 8 deletions(-)
+ kernel/trace/trace_events.c |   62 +++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 61 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/xen/pmu.c b/arch/x86/xen/pmu.c
-index e13b0b49fcdf..d7249f4c90f1 100644
---- a/arch/x86/xen/pmu.c
-+++ b/arch/x86/xen/pmu.c
-@@ -512,10 +512,7 @@ irqreturn_t xen_pmu_irq_handler(int irq, void *dev_id)
- 	return ret;
+--- a/kernel/trace/trace_events.c
++++ b/kernel/trace/trace_events.c
+@@ -40,6 +40,14 @@ static LIST_HEAD(ftrace_generic_fields);
+ static LIST_HEAD(ftrace_common_fields);
+ static bool eventdir_initialized;
+ 
++static LIST_HEAD(module_strings);
++
++struct module_string {
++	struct list_head	next;
++	struct module		*module;
++	char			*str;
++};
++
+ #define GFP_TRACE (GFP_KERNEL | __GFP_ZERO)
+ 
+ static struct kmem_cache *field_cachep;
+@@ -2637,14 +2645,40 @@ static void update_event_printk(struct t
+ 	}
  }
  
--bool is_xen_pmu(int cpu)
--{
--	return (get_xenpmu_data() != NULL);
--}
-+bool is_xen_pmu;
- 
- void xen_pmu_init(int cpu)
- {
-@@ -526,7 +523,7 @@ void xen_pmu_init(int cpu)
- 
- 	BUILD_BUG_ON(sizeof(struct xen_pmu_data) > PAGE_SIZE);
- 
--	if (xen_hvm_domain())
-+	if (xen_hvm_domain() || (cpu != 0 && !is_xen_pmu))
- 		return;
- 
- 	xenpmu_data = (struct xen_pmu_data *)get_zeroed_page(GFP_KERNEL);
-@@ -547,7 +544,8 @@ void xen_pmu_init(int cpu)
- 	per_cpu(xenpmu_shared, cpu).xenpmu_data = xenpmu_data;
- 	per_cpu(xenpmu_shared, cpu).flags = 0;
- 
--	if (cpu == 0) {
-+	if (!is_xen_pmu) {
-+		is_xen_pmu = true;
- 		perf_register_guest_info_callbacks(&xen_guest_cbs);
- 		xen_pmu_arch_init();
- 	}
-diff --git a/arch/x86/xen/pmu.h b/arch/x86/xen/pmu.h
-index 0e83a160589b..65c58894fc79 100644
---- a/arch/x86/xen/pmu.h
-+++ b/arch/x86/xen/pmu.h
-@@ -4,6 +4,8 @@
- 
- #include <xen/interface/xenpmu.h>
- 
-+extern bool is_xen_pmu;
++static void add_str_to_module(struct module *module, char *str)
++{
++	struct module_string *modstr;
 +
- irqreturn_t xen_pmu_irq_handler(int irq, void *dev_id);
- #ifdef CONFIG_XEN_HAVE_VPMU
- void xen_pmu_init(int cpu);
-@@ -12,7 +14,6 @@ void xen_pmu_finish(int cpu);
- static inline void xen_pmu_init(int cpu) {}
- static inline void xen_pmu_finish(int cpu) {}
- #endif
--bool is_xen_pmu(int cpu);
- bool pmu_msr_read(unsigned int msr, uint64_t *val, int *err);
- bool pmu_msr_write(unsigned int msr, uint32_t low, uint32_t high, int *err);
- int pmu_apic_update(uint32_t reg);
-diff --git a/arch/x86/xen/smp_pv.c b/arch/x86/xen/smp_pv.c
-index 8f9e7e2407c8..35b6d15d874d 100644
---- a/arch/x86/xen/smp_pv.c
-+++ b/arch/x86/xen/smp_pv.c
-@@ -130,7 +130,7 @@ int xen_smp_intr_init_pv(unsigned int cpu)
- 	per_cpu(xen_irq_work, cpu).irq = rc;
- 	per_cpu(xen_irq_work, cpu).name = callfunc_name;
++	modstr = kmalloc(sizeof(*modstr), GFP_KERNEL);
++
++	/*
++	 * If we failed to allocate memory here, then we'll just
++	 * let the str memory leak when the module is removed.
++	 * If this fails to allocate, there's worse problems than
++	 * a leaked string on module removal.
++	 */
++	if (WARN_ON_ONCE(!modstr))
++		return;
++
++	modstr->module = module;
++	modstr->str = str;
++
++	list_add(&modstr->next, &module_strings);
++}
++
+ static void update_event_fields(struct trace_event_call *call,
+ 				struct trace_eval_map *map)
+ {
+ 	struct ftrace_event_field *field;
+ 	struct list_head *head;
+ 	char *ptr;
++	char *str;
+ 	int len = strlen(map->eval_string);
  
--	if (is_xen_pmu(cpu)) {
-+	if (is_xen_pmu) {
- 		pmu_name = kasprintf(GFP_KERNEL, "pmu%d", cpu);
- 		rc = bind_virq_to_irqhandler(VIRQ_XENPMU, cpu,
- 					     xen_pmu_irq_handler,
--- 
-2.34.1
-
++	/* Dynamic events should never have field maps */
++	if (WARN_ON_ONCE(call->flags & TRACE_EVENT_FL_DYNAMIC))
++		return;
++
+ 	head = trace_get_fields(call);
+ 	list_for_each_entry(field, head, link) {
+ 		ptr = strchr(field->type, '[');
+@@ -2658,9 +2692,26 @@ static void update_event_fields(struct t
+ 		if (strncmp(map->eval_string, ptr, len) != 0)
+ 			continue;
+ 
++		str = kstrdup(field->type, GFP_KERNEL);
++		if (WARN_ON_ONCE(!str))
++			return;
++		ptr = str + (ptr - field->type);
+ 		ptr = eval_replace(ptr, map, len);
+ 		/* enum/sizeof string smaller than value */
+-		WARN_ON_ONCE(!ptr);
++		if (WARN_ON_ONCE(!ptr)) {
++			kfree(str);
++			continue;
++		}
++
++		/*
++		 * If the event is part of a module, then we need to free the string
++		 * when the module is removed. Otherwise, it will stay allocated
++		 * until a reboot.
++		 */
++		if (call->module)
++			add_str_to_module(call->module, str);
++
++		field->type = str;
+ 	}
+ }
+ 
+@@ -2883,6 +2934,7 @@ static void trace_module_add_events(stru
+ static void trace_module_remove_events(struct module *mod)
+ {
+ 	struct trace_event_call *call, *p;
++	struct module_string *modstr, *m;
+ 
+ 	down_write(&trace_event_sem);
+ 	list_for_each_entry_safe(call, p, &ftrace_events, list) {
+@@ -2891,6 +2943,14 @@ static void trace_module_remove_events(s
+ 		if (call->module == mod)
+ 			__trace_remove_event_call(call);
+ 	}
++	/* Check for any strings allocade for this module */
++	list_for_each_entry_safe(modstr, m, &module_strings, next) {
++		if (modstr->module != mod)
++			continue;
++		list_del(&modstr->next);
++		kfree(modstr->str);
++		kfree(modstr);
++	}
+ 	up_write(&trace_event_sem);
+ 
+ 	/*
 
 

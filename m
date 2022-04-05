@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4FAF4F4362
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:58:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 555AB4F4285
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1450550AbiDEUKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:10:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33866 "EHLO
+        id S1377055AbiDEUQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245744AbiDEKjg (ORCPT
+        with ESMTP id S1345062AbiDEKki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:39:36 -0400
+        Tue, 5 Apr 2022 06:40:38 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95370A5EA9;
-        Tue,  5 Apr 2022 03:24:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7942D1DD;
+        Tue,  5 Apr 2022 03:25:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 31C066141B;
-        Tue,  5 Apr 2022 10:24:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 428FEC385A0;
-        Tue,  5 Apr 2022 10:24:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1364461425;
+        Tue,  5 Apr 2022 10:25:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25D48C385A1;
+        Tue,  5 Apr 2022 10:25:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154264;
-        bh=7uyU7E8nxC0nXViS7KVUZ+a1glED64j3pQUfJQJfqB4=;
+        s=korg; t=1649154341;
+        bh=mBhkGzge+YmeScS62HOzglT0cjxFaSZ64hvkxzZxzlM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HrbfMGZUKNoy0wX6J+3cZ4PHfy+oXBoWzPE/loGIMjJBJhonqJCV7MFoxbAeOMKti
-         MQK/w7eNK4mplM56VFusWBpL+acRZRpMgUbHIdOqyeWH0h5Wq5o5q7TTpkECT3KIRl
-         WYFO3HULeC0FdiKvTlGDzCErWG5HZGzTtgxzA48I=
+        b=UQbK3TB+w6wj92JlLy5T2xsx1MsCmfLWDjY5q06EkundG073GRgyVuONkylp3qUT2
+         mKt2lTc6CYMbNXAH0vHFJZmnnEZlXho6Cn0/0gZrAzwmsppA/y+nDyTyUHjphcGiPW
+         IxMWdyR0eZyLWLzljWm5Gv3WN8cQot3qhkhOL3A0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.10 516/599] powerpc: Fix build errors with newer binutils
-Date:   Tue,  5 Apr 2022 09:33:30 +0200
-Message-Id: <20220405070314.194613614@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Arun Easi <aeasi@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.10 528/599] scsi: qla2xxx: Fix missed DMA unmap for NVMe ls requests
+Date:   Tue,  5 Apr 2022 09:33:42 +0200
+Message-Id: <20220405070314.552683110@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
 References: <20220405070258.802373272@linuxfoundation.org>
@@ -56,164 +57,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anders Roxell <anders.roxell@linaro.org>
+From: Arun Easi <aeasi@marvell.com>
 
-commit 8667d0d64dd1f84fd41b5897fd87fa9113ae05e3 upstream.
+commit c85ab7d9e27a80e48d5b7d7fb2fe2b0fdb2de523 upstream.
 
-Building tinyconfig with gcc (Debian 11.2.0-16) and assembler (Debian
-2.37.90.20220207) the following build error shows up:
+At NVMe ELS request time, request structure is DMA mapped and never
+unmapped. Fix this by calling the unmap on ELS completion.
 
-  {standard input}: Assembler messages:
-  {standard input}:1190: Error: unrecognized opcode: `stbcix'
-  {standard input}:1433: Error: unrecognized opcode: `lwzcix'
-  {standard input}:1453: Error: unrecognized opcode: `stbcix'
-  {standard input}:1460: Error: unrecognized opcode: `stwcix'
-  {standard input}:1596: Error: unrecognized opcode: `stbcix'
-  ...
-
-Rework to add assembler directives [1] around the instruction. Going
-through them one by one shows that the changes should be safe.  Like
-__get_user_atomic_128_aligned() is only called in p9_hmi_special_emu(),
-which according to the name is specific to power9.  And __raw_rm_read*()
-are only called in things that are powernv or book3s_hv specific.
-
-[1] https://sourceware.org/binutils/docs/as/PowerPC_002dPseudo.html#PowerPC_002dPseudo
-
+Link: https://lore.kernel.org/r/20220310092604.22950-5-njavali@marvell.com
+Fixes: e84067d74301 ("scsi: qla2xxx: Add FC-NVMe F/W initialization and transport registration")
 Cc: stable@vger.kernel.org
-Co-developed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-Reviewed-by: Segher Boessenkool <segher@kernel.crashing.org>
-[mpe: Make commit subject more descriptive]
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220224162215.3406642-2-anders.roxell@linaro.org
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Signed-off-by: Arun Easi <aeasi@marvell.com>
+Signed-off-by: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/include/asm/io.h        |   40 ++++++++++++++++++++++++++++-------
- arch/powerpc/include/asm/uaccess.h   |    3 ++
- arch/powerpc/platforms/powernv/rng.c |    6 ++++-
- 3 files changed, 40 insertions(+), 9 deletions(-)
+ drivers/scsi/qla2xxx/qla_nvme.c |   17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
---- a/arch/powerpc/include/asm/io.h
-+++ b/arch/powerpc/include/asm/io.h
-@@ -344,25 +344,37 @@ static inline void __raw_writeq_be(unsig
-  */
- static inline void __raw_rm_writeb(u8 val, volatile void __iomem *paddr)
- {
--	__asm__ __volatile__("stbcix %0,0,%1"
-+	__asm__ __volatile__(".machine push;   \
-+			      .machine power6; \
-+			      stbcix %0,0,%1;  \
-+			      .machine pop;"
- 		: : "r" (val), "r" (paddr) : "memory");
+--- a/drivers/scsi/qla2xxx/qla_nvme.c
++++ b/drivers/scsi/qla2xxx/qla_nvme.c
+@@ -170,6 +170,18 @@ out:
+ 	qla2xxx_rel_qpair_sp(sp->qpair, sp);
  }
  
- static inline void __raw_rm_writew(u16 val, volatile void __iomem *paddr)
++static void qla_nvme_ls_unmap(struct srb *sp, struct nvmefc_ls_req *fd)
++{
++	if (sp->flags & SRB_DMA_VALID) {
++		struct srb_iocb *nvme = &sp->u.iocb_cmd;
++		struct qla_hw_data *ha = sp->fcport->vha->hw;
++
++		dma_unmap_single(&ha->pdev->dev, nvme->u.nvme.cmd_dma,
++				 fd->rqstlen, DMA_TO_DEVICE);
++		sp->flags &= ~SRB_DMA_VALID;
++	}
++}
++
+ static void qla_nvme_release_ls_cmd_kref(struct kref *kref)
  {
--	__asm__ __volatile__("sthcix %0,0,%1"
-+	__asm__ __volatile__(".machine push;   \
-+			      .machine power6; \
-+			      sthcix %0,0,%1;  \
-+			      .machine pop;"
- 		: : "r" (val), "r" (paddr) : "memory");
- }
+ 	struct srb *sp = container_of(kref, struct srb, cmd_kref);
+@@ -186,6 +198,8 @@ static void qla_nvme_release_ls_cmd_kref
+ 	spin_unlock_irqrestore(&priv->cmd_lock, flags);
  
- static inline void __raw_rm_writel(u32 val, volatile void __iomem *paddr)
- {
--	__asm__ __volatile__("stwcix %0,0,%1"
-+	__asm__ __volatile__(".machine push;   \
-+			      .machine power6; \
-+			      stwcix %0,0,%1;  \
-+			      .machine pop;"
- 		: : "r" (val), "r" (paddr) : "memory");
- }
+ 	fd = priv->fd;
++
++	qla_nvme_ls_unmap(sp, fd);
+ 	fd->done(fd, priv->comp_status);
+ out:
+ 	qla2x00_rel_sp(sp);
+@@ -332,6 +346,8 @@ static int qla_nvme_ls_req(struct nvme_f
+ 	dma_sync_single_for_device(&ha->pdev->dev, nvme->u.nvme.cmd_dma,
+ 	    fd->rqstlen, DMA_TO_DEVICE);
  
- static inline void __raw_rm_writeq(u64 val, volatile void __iomem *paddr)
- {
--	__asm__ __volatile__("stdcix %0,0,%1"
-+	__asm__ __volatile__(".machine push;   \
-+			      .machine power6; \
-+			      stdcix %0,0,%1;  \
-+			      .machine pop;"
- 		: : "r" (val), "r" (paddr) : "memory");
- }
- 
-@@ -374,7 +386,10 @@ static inline void __raw_rm_writeq_be(u6
- static inline u8 __raw_rm_readb(volatile void __iomem *paddr)
- {
- 	u8 ret;
--	__asm__ __volatile__("lbzcix %0,0, %1"
-+	__asm__ __volatile__(".machine push;   \
-+			      .machine power6; \
-+			      lbzcix %0,0, %1; \
-+			      .machine pop;"
- 			     : "=r" (ret) : "r" (paddr) : "memory");
- 	return ret;
- }
-@@ -382,7 +397,10 @@ static inline u8 __raw_rm_readb(volatile
- static inline u16 __raw_rm_readw(volatile void __iomem *paddr)
- {
- 	u16 ret;
--	__asm__ __volatile__("lhzcix %0,0, %1"
-+	__asm__ __volatile__(".machine push;   \
-+			      .machine power6; \
-+			      lhzcix %0,0, %1; \
-+			      .machine pop;"
- 			     : "=r" (ret) : "r" (paddr) : "memory");
- 	return ret;
- }
-@@ -390,7 +408,10 @@ static inline u16 __raw_rm_readw(volatil
- static inline u32 __raw_rm_readl(volatile void __iomem *paddr)
- {
- 	u32 ret;
--	__asm__ __volatile__("lwzcix %0,0, %1"
-+	__asm__ __volatile__(".machine push;   \
-+			      .machine power6; \
-+			      lwzcix %0,0, %1; \
-+			      .machine pop;"
- 			     : "=r" (ret) : "r" (paddr) : "memory");
- 	return ret;
- }
-@@ -398,7 +419,10 @@ static inline u32 __raw_rm_readl(volatil
- static inline u64 __raw_rm_readq(volatile void __iomem *paddr)
- {
- 	u64 ret;
--	__asm__ __volatile__("ldcix %0,0, %1"
-+	__asm__ __volatile__(".machine push;   \
-+			      .machine power6; \
-+			      ldcix %0,0, %1;  \
-+			      .machine pop;"
- 			     : "=r" (ret) : "r" (paddr) : "memory");
- 	return ret;
- }
---- a/arch/powerpc/include/asm/uaccess.h
-+++ b/arch/powerpc/include/asm/uaccess.h
-@@ -229,8 +229,11 @@ extern long __get_user_bad(void);
-  */
- #define __get_user_atomic_128_aligned(kaddr, uaddr, err)		\
- 	__asm__ __volatile__(				\
-+		".machine push\n"			\
-+		".machine altivec\n"			\
- 		"1:	lvx  0,0,%1	# get user\n"	\
- 		" 	stvx 0,0,%2	# put kernel\n"	\
-+		".machine pop\n"			\
- 		"2:\n"					\
- 		".section .fixup,\"ax\"\n"		\
- 		"3:	li %0,%3\n"			\
---- a/arch/powerpc/platforms/powernv/rng.c
-+++ b/arch/powerpc/platforms/powernv/rng.c
-@@ -43,7 +43,11 @@ static unsigned long rng_whiten(struct p
- 	unsigned long parity;
- 
- 	/* Calculate the parity of the value */
--	asm ("popcntd %0,%1" : "=r" (parity) : "r" (val));
-+	asm (".machine push;   \
-+	      .machine power7; \
-+	      popcntd %0,%1;   \
-+	      .machine pop;"
-+	     : "=r" (parity) : "r" (val));
- 
- 	/* xor our value with the previous mask */
- 	val ^= rng->mask;
++	sp->flags |= SRB_DMA_VALID;
++
+ 	rval = qla2x00_start_sp(sp);
+ 	if (rval != QLA_SUCCESS) {
+ 		ql_log(ql_log_warn, vha, 0x700e,
+@@ -339,6 +355,7 @@ static int qla_nvme_ls_req(struct nvme_f
+ 		wake_up(&sp->nvme_ls_waitq);
+ 		sp->priv = NULL;
+ 		priv->sp = NULL;
++		qla_nvme_ls_unmap(sp, fd);
+ 		qla2x00_rel_sp(sp);
+ 		return rval;
+ 	}
 
 

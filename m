@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E77074F42DB
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3599B4F4287
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390968AbiDENqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
+        id S1449126AbiDEUKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347188AbiDEJZU (ORCPT
+        with ESMTP id S1353453AbiDEKGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:25:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7493DBD1A;
-        Tue,  5 Apr 2022 02:14:55 -0700 (PDT)
+        Tue, 5 Apr 2022 06:06:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8194BF979;
+        Tue,  5 Apr 2022 02:55:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0562D61663;
-        Tue,  5 Apr 2022 09:14:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 192E4C385A0;
-        Tue,  5 Apr 2022 09:14:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 22FD4B818F3;
+        Tue,  5 Apr 2022 09:55:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75321C385A3;
+        Tue,  5 Apr 2022 09:55:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150091;
-        bh=yMDw+3Dl6/Eb0dGKBwer0nh7Fx6ro0c+hSAlN+Glybo=;
+        s=korg; t=1649152503;
+        bh=JvjyQbqzGBHoo/fnIR59SnE5qGnqo560ZSO1/q6vJIc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aG8H11vtS+zoSRyNA3ri+nS4Dl4/Pxg0Wx98IjlHBdel7vMHlkzQ3g93j6q167Opt
-         nCA0eGw2LlUkVqrh2u+c6EfADuLPAf34bGpkUcwEo02+0ZU/V9tXEa93if7K0yKMAN
-         r+X/Re+kU9g9yerkZidGjtO/cFY5sEYwc21Bd+rs=
+        b=hoOgbezBodw+wT0ewOVqlBWrpkCYnfhg+S6sW6w6NxG7QznKmUxCm/F5R9EWjddch
+         5YETxjSqIOOPj+GEE3PzZp2C/vtH7MktPmR2zXDukwAUCZ3ItvjEEGiorEdJ8+Cs7f
+         rVPbdCjFRp5bLjdNs5egQ95rqQo/db6jT/9Uz2dY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Subject: [PATCH 5.16 0950/1017] Revert "virtio-pci: harden INTX interrupts"
+        stable@vger.kernel.org,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Quinn Tran <qutran@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.15 801/913] scsi: qla2xxx: Fix disk failure to rediscover
 Date:   Tue,  5 Apr 2022 09:31:03 +0200
-Message-Id: <20220405070422.411415860@linuxfoundation.org>
+Message-Id: <20220405070403.842354690@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,81 +57,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason Wang <jasowang@redhat.com>
+From: Quinn Tran <qutran@marvell.com>
 
-commit 7b79edfb862d6b1ecc66479419ae67a7db2d02e3 upstream.
+commit 6a45c8e137d4e2c72eecf1ac7cf64f2fdfcead99 upstream.
 
-This reverts commit 080cd7c3ac8701081d143a15ba17dd9475313188. Since
-the MSI-X interrupts hardening will be reverted in the next patch. We
-will rework the interrupt hardening in the future.
+User experienced some of the LUN failed to get rediscovered after long
+cable pull test. The issue is triggered by a race condition between driver
+setting session online state vs starting the LUN scan process at the same
+time. Current code set the online state after notifying the session is
+available. In this case, trigger to start the LUN scan process happened
+before driver could set the session in online state.  LUN scan ends up with
+failure due to the session online check was failing.
 
-Fixes: 080cd7c3ac87 ("virtio-pci: harden INTX interrupts")
-Signed-off-by: Jason Wang <jasowang@redhat.com>
-Link: https://lore.kernel.org/r/20220323031524.6555-1-jasowang@redhat.com
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Set the online state before reporting of the availability of the session.
+
+Link: https://lore.kernel.org/r/20220310092604.22950-3-njavali@marvell.com
+Fixes: aecf043443d3 ("scsi: qla2xxx: Fix Remote port registration")
+Cc: stable@vger.kernel.org
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Signed-off-by: Quinn Tran <qutran@marvell.com>
+Signed-off-by: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/virtio/virtio_pci_common.c |   23 ++---------------------
- drivers/virtio/virtio_pci_common.h |    1 -
- 2 files changed, 2 insertions(+), 22 deletions(-)
+ drivers/scsi/qla2xxx/qla_init.c |    5 +++--
+ drivers/scsi/qla2xxx/qla_nvme.c |    5 +++++
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
---- a/drivers/virtio/virtio_pci_common.c
-+++ b/drivers/virtio/virtio_pci_common.c
-@@ -30,16 +30,8 @@ void vp_disable_cbs(struct virtio_device
- 	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
- 	int i;
- 
--	if (vp_dev->intx_enabled) {
--		/*
--		 * The below synchronize() guarantees that any
--		 * interrupt for this line arriving after
--		 * synchronize_irq() has completed is guaranteed to see
--		 * intx_soft_enabled == false.
--		 */
--		WRITE_ONCE(vp_dev->intx_soft_enabled, false);
-+	if (vp_dev->intx_enabled)
- 		synchronize_irq(vp_dev->pci_dev->irq);
--	}
- 
- 	for (i = 0; i < vp_dev->msix_vectors; ++i)
- 		disable_irq(pci_irq_vector(vp_dev->pci_dev, i));
-@@ -51,16 +43,8 @@ void vp_enable_cbs(struct virtio_device
- 	struct virtio_pci_device *vp_dev = to_vp_device(vdev);
- 	int i;
- 
--	if (vp_dev->intx_enabled) {
--		disable_irq(vp_dev->pci_dev->irq);
--		/*
--		 * The above disable_irq() provides TSO ordering and
--		 * as such promotes the below store to store-release.
--		 */
--		WRITE_ONCE(vp_dev->intx_soft_enabled, true);
--		enable_irq(vp_dev->pci_dev->irq);
-+	if (vp_dev->intx_enabled)
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -5740,6 +5740,8 @@ qla2x00_reg_remote_port(scsi_qla_host_t
+ 	if (atomic_read(&fcport->state) == FCS_ONLINE)
  		return;
--	}
  
- 	for (i = 0; i < vp_dev->msix_vectors; ++i)
- 		enable_irq(pci_irq_vector(vp_dev->pci_dev, i));
-@@ -113,9 +97,6 @@ static irqreturn_t vp_interrupt(int irq,
- 	struct virtio_pci_device *vp_dev = opaque;
- 	u8 isr;
++	qla2x00_set_fcport_state(fcport, FCS_ONLINE);
++
+ 	rport_ids.node_name = wwn_to_u64(fcport->node_name);
+ 	rport_ids.port_name = wwn_to_u64(fcport->port_name);
+ 	rport_ids.port_id = fcport->d_id.b.domain << 16 |
+@@ -5847,6 +5849,7 @@ qla2x00_update_fcport(scsi_qla_host_t *v
+ 		qla2x00_reg_remote_port(vha, fcport);
+ 		break;
+ 	case MODE_TARGET:
++		qla2x00_set_fcport_state(fcport, FCS_ONLINE);
+ 		if (!vha->vha_tgt.qla_tgt->tgt_stop &&
+ 			!vha->vha_tgt.qla_tgt->tgt_stopped)
+ 			qlt_fc_port_added(vha, fcport);
+@@ -5861,8 +5864,6 @@ qla2x00_update_fcport(scsi_qla_host_t *v
+ 		break;
+ 	}
  
--	if (!READ_ONCE(vp_dev->intx_soft_enabled))
--		return IRQ_NONE;
+-	qla2x00_set_fcport_state(fcport, FCS_ONLINE);
 -
- 	/* reading the ISR has the effect of also clearing it so it's very
- 	 * important to save off the value. */
- 	isr = ioread8(vp_dev->isr);
---- a/drivers/virtio/virtio_pci_common.h
-+++ b/drivers/virtio/virtio_pci_common.h
-@@ -63,7 +63,6 @@ struct virtio_pci_device {
- 	/* MSI-X support */
- 	int msix_enabled;
- 	int intx_enabled;
--	bool intx_soft_enabled;
- 	cpumask_var_t *msix_affinity_masks;
- 	/* Name strings for interrupts. This size should be enough,
- 	 * and I'm too lazy to allocate each name separately. */
+ 	if (IS_IIDMA_CAPABLE(vha->hw) && vha->hw->flags.gpsc_supported) {
+ 		if (fcport->id_changed) {
+ 			fcport->id_changed = 0;
+--- a/drivers/scsi/qla2xxx/qla_nvme.c
++++ b/drivers/scsi/qla2xxx/qla_nvme.c
+@@ -35,6 +35,11 @@ int qla_nvme_register_remote(struct scsi
+ 		(fcport->nvme_flag & NVME_FLAG_REGISTERED))
+ 		return 0;
+ 
++	if (atomic_read(&fcport->state) == FCS_ONLINE)
++		return 0;
++
++	qla2x00_set_fcport_state(fcport, FCS_ONLINE);
++
+ 	fcport->nvme_flag &= ~NVME_FLAG_RESETTING;
+ 
+ 	memset(&req, 0, sizeof(struct nvme_fc_port_info));
 
 

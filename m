@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA3F4F37D8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 16:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32CE94F3B96
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359582AbiDELUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 07:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
+        id S1381756AbiDEL7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 07:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236635AbiDEIQx (ORCPT
+        with ESMTP id S245057AbiDEIxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:16:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD64AC916;
-        Tue,  5 Apr 2022 01:04:26 -0700 (PDT)
+        Tue, 5 Apr 2022 04:53:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F74F76;
+        Tue,  5 Apr 2022 01:50:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E5FE6167A;
-        Tue,  5 Apr 2022 08:04:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BC5EC385A1;
-        Tue,  5 Apr 2022 08:04:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A006B81BBF;
+        Tue,  5 Apr 2022 08:50:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE210C385A0;
+        Tue,  5 Apr 2022 08:50:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145863;
-        bh=44+/UR9a/KL4i0Hp8WLt/w0fWfsdce7H2UPnoORDWCI=;
+        s=korg; t=1649148651;
+        bh=RuudkV80NbnUWQJ3ZBBUJ5p0VXcyoR2tIBAnss2jxn8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XHbhMyMQfHk57ztHVg6yQ71GBeAwYcNiDGwwI7IzZ+vNXyF7WXS2T8Ska+8cKnDyf
-         1wmueIQzXrOk/NS34yZqXRqU3vy/IZdt2d+C+erdZskgOkNsof+S35qiIU7DGXm3m8
-         8dykTKZsTj0fciHyq6n5Hzu5Q0byWIJfSyAaKIRE=
+        b=y+5HSTldipMgndUHybpyArCf1H8eEkbTfjbGyxf/ZS+3W/xAxQRqmNoH3hYgCzgJw
+         sO6f6aJLraM82JIcwzOTGlqSlOoXumgjK5AWOjcufdPTXwec0r35TgSTkwJ/poMXCV
+         gytzNH+UcPDsvI5C28jIX+RnSmmuWHDMJT2BWKHo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Luca Coelho <luciano.coelho@intel.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0558/1126] iwlwifi: mvm: dont iterate unadded vifs when handling FW SMPS req
-Date:   Tue,  5 Apr 2022 09:21:45 +0200
-Message-Id: <20220405070424.012256645@linuxfoundation.org>
+Subject: [PATCH 5.16 0393/1017] ASoC: msm8916-wcd-analog: Fix error handling in pm8916_wcd_analog_spmi_probe
+Date:   Tue,  5 Apr 2022 09:21:46 +0200
+Message-Id: <20220405070405.951366644@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
-References: <20220405070407.513532867@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +55,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luca Coelho <luciano.coelho@intel.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 8a265d1a619c16400406c9d598411850ee104aed ]
+[ Upstream commit 9ebd62d60edcd4d9c75485e5ccd0b79581ad3c49 ]
 
-We may not have all the interfaces added to the driver when we get the
-THERMAL_DUAL_CHAIN_REQUEST notification from the FW, so instead of
-iterating all vifs to update SMPS, iterate only the ones that are
-already assigned.  The interfaces that were not assigned yet, will be
-updated accordingly when we start using them.
+In the error handling path, the clk_prepare_enable() function
+call should be balanced by a corresponding 'clk_disable_unprepare()'
+call , as already done in the remove function.
 
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Fixes: 2a7ce54ccc23 ("iwlwifi: mvm: honour firmware SMPS requests")
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
-Link: https://lore.kernel.org/r/iwlwifi.20220129105618.9416aade2ba0.I0b71142f89e3f158aa058a1dfb2517c8c1fa3726@changeid
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Fixes: de66b3455023 ("ASoC: codecs: msm8916-wcd-analog: add MBHC support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220316041924.17560-1-linmq006@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/mvm/ops.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ sound/soc/codecs/msm8916-wcd-analog.c | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/ops.c b/drivers/net/wireless/intel/iwlwifi/mvm/ops.c
-index 1f8b97995b94..069d54501e30 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/ops.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/ops.c
-@@ -235,7 +235,8 @@ static void iwl_mvm_rx_thermal_dual_chain_req(struct iwl_mvm *mvm,
- 	 */
- 	mvm->fw_static_smps_request =
- 		req->event == cpu_to_le32(THERMAL_DUAL_CHAIN_REQ_DISABLE);
--	ieee80211_iterate_interfaces(mvm->hw, IEEE80211_IFACE_ITER_NORMAL,
-+	ieee80211_iterate_interfaces(mvm->hw,
-+				     IEEE80211_IFACE_SKIP_SDATA_NOT_IN_DRIVER,
- 				     iwl_mvm_intf_dual_chain_req, NULL);
+diff --git a/sound/soc/codecs/msm8916-wcd-analog.c b/sound/soc/codecs/msm8916-wcd-analog.c
+index 3ddd822240e3..971b8360b5b1 100644
+--- a/sound/soc/codecs/msm8916-wcd-analog.c
++++ b/sound/soc/codecs/msm8916-wcd-analog.c
+@@ -1221,8 +1221,10 @@ static int pm8916_wcd_analog_spmi_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	irq = platform_get_irq_byname(pdev, "mbhc_switch_int");
+-	if (irq < 0)
+-		return irq;
++	if (irq < 0) {
++		ret = irq;
++		goto err_disable_clk;
++	}
+ 
+ 	ret = devm_request_threaded_irq(dev, irq, NULL,
+ 			       pm8916_mbhc_switch_irq_handler,
+@@ -1234,8 +1236,10 @@ static int pm8916_wcd_analog_spmi_probe(struct platform_device *pdev)
+ 
+ 	if (priv->mbhc_btn_enabled) {
+ 		irq = platform_get_irq_byname(pdev, "mbhc_but_press_det");
+-		if (irq < 0)
+-			return irq;
++		if (irq < 0) {
++			ret = irq;
++			goto err_disable_clk;
++		}
+ 
+ 		ret = devm_request_threaded_irq(dev, irq, NULL,
+ 				       mbhc_btn_press_irq_handler,
+@@ -1246,8 +1250,10 @@ static int pm8916_wcd_analog_spmi_probe(struct platform_device *pdev)
+ 			dev_err(dev, "cannot request mbhc button press irq\n");
+ 
+ 		irq = platform_get_irq_byname(pdev, "mbhc_but_rel_det");
+-		if (irq < 0)
+-			return irq;
++		if (irq < 0) {
++			ret = irq;
++			goto err_disable_clk;
++		}
+ 
+ 		ret = devm_request_threaded_irq(dev, irq, NULL,
+ 				       mbhc_btn_release_irq_handler,
+@@ -1264,6 +1270,10 @@ static int pm8916_wcd_analog_spmi_probe(struct platform_device *pdev)
+ 	return devm_snd_soc_register_component(dev, &pm8916_wcd_analog,
+ 				      pm8916_wcd_analog_dai,
+ 				      ARRAY_SIZE(pm8916_wcd_analog_dai));
++
++err_disable_clk:
++	clk_disable_unprepare(priv->mclk);
++	return ret;
  }
  
+ static int pm8916_wcd_analog_spmi_remove(struct platform_device *pdev)
 -- 
 2.34.1
 

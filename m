@@ -2,53 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2758D4F4EF0
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:56:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58AF44F4A45
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1582672AbiDEXtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47304 "EHLO
+        id S1454662AbiDEWjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356743AbiDEKYx (ORCPT
+        with ESMTP id S1349489AbiDEJt5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:24:53 -0400
+        Tue, 5 Apr 2022 05:49:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB38BF038;
-        Tue,  5 Apr 2022 03:08:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4362725C5;
+        Tue,  5 Apr 2022 02:47:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E06FB616E7;
-        Tue,  5 Apr 2022 10:08:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B811CC385A1;
-        Tue,  5 Apr 2022 10:08:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D37D461577;
+        Tue,  5 Apr 2022 09:47:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9395C385A1;
+        Tue,  5 Apr 2022 09:47:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649153335;
-        bh=/kvIRSziW0x3o2dd/pwWaUBnYSKR0XEkNQf4oUXD/mg=;
+        s=korg; t=1649152046;
+        bh=2valnc8op0vBurNY+QIL/EnW2wscb8NHYd9VGwj8E/o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MfcGJ4pqJaIKfGYf4/to/RLNrrfk9oMRUmP5s8ctSVmxncZeycQ53YXiWzidZlk8X
-         kimZ7UM0Lahtogi5Kztl96MF5QTELoyt48mOStaUd5uKX/E6lBfxZ9E1Trk3ogXnpD
-         H4fhwVbVVLWsPrHATT7j2NprzMtO7aGp+LNQSITo=
+        b=INjGMO3aO5Aoi3Pl6X3h6bPrWEme141kaEbzbv2Uprhb9IyMYQGbvqud2NbP9ipb5
+         1yh3lJoAdGPg9x96ffgo81t8KvzbgnBNK0D4CKke2s/neGqPOTDy1Pc/zokxJhqj5T
+         RvfW2Np033w3uLwoRjTd2jDyHa7EgDCoNAaPmrQs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peng Liu <liupeng256@huawei.com>,
-        Marco Elver <elver@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Wang Kefeng <wangkefeng.wang@huawei.com>,
-        David Gow <davidgow@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Dan Williams <dan.j.williams@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 186/599] kunit: make kunit_test_timeout compatible with comment
+Subject: [PATCH 5.15 618/913] nvdimm/region: Fix default alignment for small regions
 Date:   Tue,  5 Apr 2022 09:28:00 +0200
-Message-Id: <20220405070304.377083259@linuxfoundation.org>
+Message-Id: <20220405070358.365277244@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -63,46 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Liu <liupeng256@huawei.com>
+From: Dan Williams <dan.j.williams@intel.com>
 
-[ Upstream commit bdd015f7b71b92c2e4ecabac689642cc72553e04 ]
+[ Upstream commit d9d290d7e659e9db3e4518040cc18b97f5535f4a ]
 
-In function kunit_test_timeout, it is declared "300 * MSEC_PER_SEC"
-represent 5min.  However, it is wrong when dealing with arm64 whose
-default HZ = 250, or some other situations.  Use msecs_to_jiffies to fix
-this, and kunit_test_timeout will work as desired.
+In preparation for removing BLK aperture support the NVDIMM unit tests
+discovered that the default alignment can be set higher than the
+capacity of the region. Fall back to PAGE_SIZE in that case.
 
-Link: https://lkml.kernel.org/r/20220309083753.1561921-3-liupeng256@huawei.com
-Fixes: 5f3e06208920 ("kunit: test: add support for test abort")
-Signed-off-by: Peng Liu <liupeng256@huawei.com>
-Reviewed-by: Marco Elver <elver@google.com>
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Tested-by: Brendan Higgins <brendanhiggins@google.com>
-Cc: Alexander Potapenko <glider@google.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>
-Cc: Wang Kefeng <wangkefeng.wang@huawei.com>
-Cc: David Gow <davidgow@google.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Given this has not been seen in the wild, elide notifying -stable.
+
+Fixes: 2522afb86a8c ("libnvdimm/region: Introduce an 'align' attribute")
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/164688416128.2879318.17890707310125575258.stgit@dwillia2-desk3.amr.corp.intel.com
+Signed-off-by: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/kunit/try-catch.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/nvdimm/region_devs.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
-index 0dd434e40487..71e5c5853099 100644
---- a/lib/kunit/try-catch.c
-+++ b/lib/kunit/try-catch.c
-@@ -52,7 +52,7 @@ static unsigned long kunit_test_timeout(void)
- 	 * If tests timeout due to exceeding sysctl_hung_task_timeout_secs,
- 	 * the task will be killed and an oops generated.
- 	 */
--	return 300 * MSEC_PER_SEC; /* 5 min */
-+	return 300 * msecs_to_jiffies(MSEC_PER_SEC); /* 5 min */
- }
+diff --git a/drivers/nvdimm/region_devs.c b/drivers/nvdimm/region_devs.c
+index 9ccf3d608799..70ad891a76ba 100644
+--- a/drivers/nvdimm/region_devs.c
++++ b/drivers/nvdimm/region_devs.c
+@@ -1025,6 +1025,9 @@ static unsigned long default_align(struct nd_region *nd_region)
+ 		}
+ 	}
  
- void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
++	if (nd_region->ndr_size < MEMREMAP_COMPAT_ALIGN_MAX)
++		align = PAGE_SIZE;
++
+ 	mappings = max_t(u16, 1, nd_region->ndr_mappings);
+ 	div_u64_rem(align, mappings, &remainder);
+ 	if (remainder)
 -- 
 2.34.1
 

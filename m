@@ -2,50 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF164F4321
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 395F54F4125
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1390309AbiDENiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34662 "EHLO
+        id S1359261AbiDENKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344186AbiDEJSg (ORCPT
+        with ESMTP id S1344192AbiDEJSh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:18:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D38145AF4;
-        Tue,  5 Apr 2022 02:05:04 -0700 (PDT)
+        Tue, 5 Apr 2022 05:18:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643024091C;
+        Tue,  5 Apr 2022 02:05:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D60661003;
-        Tue,  5 Apr 2022 09:05:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A7F1C385A1;
-        Tue,  5 Apr 2022 09:05:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 03B3C61003;
+        Tue,  5 Apr 2022 09:05:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 147CCC385A0;
+        Tue,  5 Apr 2022 09:05:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149503;
-        bh=skwGjJleA6WjxDdMKnkBNDhJLVUBgPnr7tJN0zUUfos=;
+        s=korg; t=1649149508;
+        bh=BKFbN78+A/5yk54tSfiWqE/xHZibpiB0gV7vX3QvTg4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QXvxoxEgpMag4CYBUuKx4v2rGeSrMHfoCyXQhSz03VhkNZ38bF57DguK5NqDOlaGA
-         yFkvGfD8UcxWohut6JkzjgJKWseiD5lT8t6gKoBfzZolBWXgko3tUgrDLsGTRKc20V
-         7ml9GtvGhU3m0XzYhFc63BDQX5U6a/ZOlGrQ48GY=
+        b=uM/doR/AvMWwFz4AYcp38bRg5N+zb2j9hlCH8m8mGK5RKeUFB9dZH5g/w6j5hphv8
+         WwelXwT9yJw/noene5xqOPmGF0lStca/uXLWSocdbS5+yvx6czlGGMzQlI2urZmnTK
+         80ijXll0RIstwjLBpnis/qslda2NGVJJC8w0jD4A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        UNGLinuxDriver@microchip.com,
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        Lin Ma <linma@zju.edu.cn>,
         "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Steen Hegelund <steen.hegelund@microchip.com>,
-        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0738/1017] net: sparx5: depends on PTP_1588_CLOCK_OPTIONAL
-Date:   Tue,  5 Apr 2022 09:27:31 +0200
-Message-Id: <20220405070416.170738806@linuxfoundation.org>
+Subject: [PATCH 5.16 0740/1017] net/x25: Fix null-ptr-deref caused by x25_disconnect
+Date:   Tue,  5 Apr 2022 09:27:33 +0200
+Message-Id: <20220405070416.229821462@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -63,54 +56,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit 08be6b13db23f68146c600dd5adfd92e99d9ec6e ]
+[ Upstream commit 7781607938c8371d4c2b243527430241c62e39c2 ]
 
-Fix build errors when PTP_1588_CLOCK=m and SPARX5_SWTICH=y.
+When the link layer is terminating, x25->neighbour will be set to NULL
+in x25_disconnect(). As a result, it could cause null-ptr-deref bugs in
+x25_sendmsg(),x25_recvmsg() and x25_connect(). One of the bugs is
+shown below.
 
-arc-linux-ld: drivers/net/ethernet/microchip/sparx5/sparx5_ethtool.o: in function `sparx5_get_ts_info':
-sparx5_ethtool.c:(.text+0x146): undefined reference to `ptp_clock_index'
-arc-linux-ld: sparx5_ethtool.c:(.text+0x146): undefined reference to `ptp_clock_index'
-arc-linux-ld: drivers/net/ethernet/microchip/sparx5/sparx5_ptp.o: in function `sparx5_ptp_init':
-sparx5_ptp.c:(.text+0xd56): undefined reference to `ptp_clock_register'
-arc-linux-ld: sparx5_ptp.c:(.text+0xd56): undefined reference to `ptp_clock_register'
-arc-linux-ld: drivers/net/ethernet/microchip/sparx5/sparx5_ptp.o: in function `sparx5_ptp_deinit':
-sparx5_ptp.c:(.text+0xf30): undefined reference to `ptp_clock_unregister'
-arc-linux-ld: sparx5_ptp.c:(.text+0xf30): undefined reference to `ptp_clock_unregister'
-arc-linux-ld: sparx5_ptp.c:(.text+0xf38): undefined reference to `ptp_clock_unregister'
-arc-linux-ld: sparx5_ptp.c:(.text+0xf46): undefined reference to `ptp_clock_unregister'
-arc-linux-ld: drivers/net/ethernet/microchip/sparx5/sparx5_ptp.o:sparx5_ptp.c:(.text+0xf46): more undefined references to `ptp_clock_unregister' follow
+    (Thread 1)                 |  (Thread 2)
+x25_link_terminated()          | x25_recvmsg()
+ x25_kill_by_neigh()           |  ...
+  x25_disconnect()             |  lock_sock(sk)
+   ...                         |  ...
+   x25->neighbour = NULL //(1) |
+   ...                         |  x25->neighbour->extended //(2)
 
-Fixes: 3cfa11bac9bb ("net: sparx5: add the basic sparx5 driver")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc: UNGLinuxDriver@microchip.com
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Steen Hegelund <steen.hegelund@microchip.com>
-Cc: Bjarni Jonasson <bjarni.jonasson@microchip.com>
-Cc: Lars Povlsen <lars.povlsen@microchip.com>
+The code sets NULL to x25->neighbour in position (1) and dereferences
+x25->neighbour in position (2), which could cause null-ptr-deref bug.
+
+This patch adds lock_sock() in x25_kill_by_neigh() in order to synchronize
+with x25_sendmsg(), x25_recvmsg() and x25_connect(). What`s more, the
+sock held by lock_sock() is not NULL, because it is extracted from x25_list
+and uses x25_list_lock to synchronize.
+
+Fixes: 4becb7ee5b3d ("net/x25: Fix x25_neigh refcnt leak when x25 disconnect")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Reviewed-by: Lin Ma <linma@zju.edu.cn>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/microchip/sparx5/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ net/x25/af_x25.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/microchip/sparx5/Kconfig b/drivers/net/ethernet/microchip/sparx5/Kconfig
-index 7bdbb2d09a14..85b24edb65d5 100644
---- a/drivers/net/ethernet/microchip/sparx5/Kconfig
-+++ b/drivers/net/ethernet/microchip/sparx5/Kconfig
-@@ -4,6 +4,7 @@ config SPARX5_SWITCH
- 	depends on HAS_IOMEM
- 	depends on OF
- 	depends on ARCH_SPARX5 || COMPILE_TEST
-+	depends on PTP_1588_CLOCK_OPTIONAL
- 	select PHYLINK
- 	select PHY_SPARX5_SERDES
- 	select RESET_CONTROLLER
+diff --git a/net/x25/af_x25.c b/net/x25/af_x25.c
+index 3583354a7d7f..3a171828638b 100644
+--- a/net/x25/af_x25.c
++++ b/net/x25/af_x25.c
+@@ -1765,10 +1765,15 @@ void x25_kill_by_neigh(struct x25_neigh *nb)
+ 
+ 	write_lock_bh(&x25_list_lock);
+ 
+-	sk_for_each(s, &x25_list)
+-		if (x25_sk(s)->neighbour == nb)
++	sk_for_each(s, &x25_list) {
++		if (x25_sk(s)->neighbour == nb) {
++			write_unlock_bh(&x25_list_lock);
++			lock_sock(s);
+ 			x25_disconnect(s, ENETUNREACH, 0, 0);
+-
++			release_sock(s);
++			write_lock_bh(&x25_list_lock);
++		}
++	}
+ 	write_unlock_bh(&x25_list_lock);
+ 
+ 	/* Remove any related forwards */
 -- 
 2.34.1
 

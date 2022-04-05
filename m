@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B6F4F4C29
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 473954F4A4F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1576459AbiDEXKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
+        id S1455053AbiDEWkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:40:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243864AbiDEKhs (ORCPT
+        with ESMTP id S1354200AbiDEKMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:37:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0736E7BD;
-        Tue,  5 Apr 2022 03:23:19 -0700 (PDT)
+        Tue, 5 Apr 2022 06:12:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DFE54182;
+        Tue,  5 Apr 2022 02:58:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A13B1616D7;
-        Tue,  5 Apr 2022 10:23:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2F31C385A1;
-        Tue,  5 Apr 2022 10:23:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79944B817D3;
+        Tue,  5 Apr 2022 09:58:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E39A2C385A1;
+        Tue,  5 Apr 2022 09:58:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154198;
-        bh=/GE3itW8H5N1d3k8ul41yxIrIxzjmHcnGvC2im5uJmY=;
+        s=korg; t=1649152713;
+        bh=+I1kIkWfWuQyDHUH07N7TM2+SinRMRMesn+il5ED1Oo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HysIdRe8YRr0UntGqx9CnHowacZ0zBqf686fI7fUqQohcUcDOPnVrcsU68HblCprz
-         yaOevwpI5YT5dphRRVTTj1lUruynEJc0SoexiEo1HbxDDsPT/+OcQYv0Lh/QPupnXx
-         mOtDARo6LZguLHKckjyLGkWZZd/0Y1WdPIOGou2I=
+        b=1O1tsJTAogyfBZ1rbX7Q9SBJU0k6b+2r4o4l1IqYK3bOGcThvxdyT4Xa0F9EuUbw7
+         P9wPha+fadGwaSqdF48/4rzEabQsRoOvMkXhP4lOTcQMqDKkVKBuaGiKFFvgtW3WHA
+         q5Ik+sZTOOqBHQheTyM8zJWjMGHlXQq4kdM4AdWE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 445/599] net: dsa: bcm_sf2_cfp: fix an incorrect NULL check on list iterator
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 877/913] af_unix: Support POLLPRI for OOB.
 Date:   Tue,  5 Apr 2022 09:32:19 +0200
-Message-Id: <20220405070312.073422957@linuxfoundation.org>
+Message-Id: <20220405070406.111282097@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,55 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
 
-[ Upstream commit 6da69b1da130e7d96766042750cd9f902e890eba ]
+commit d9a232d435dcc966738b0f414a86f7edf4f4c8c4 upstream.
 
-The bug is here:
-	return rule;
+The commit 314001f0bf92 ("af_unix: Add OOB support") introduced OOB for
+AF_UNIX, but it lacks some changes for POLLPRI.  Let's add the missing
+piece.
 
-The list iterator value 'rule' will *always* be set and non-NULL
-by list_for_each_entry(), so it is incorrect to assume that the
-iterator value will be NULL if the list is empty or no element
-is found.
+In the selftest, normal datagrams are sent followed by OOB data, so this
+commit replaces `POLLIN | POLLPRI` with just `POLLPRI` in the first test
+case.
 
-To fix the bug, return 'rule' when found, otherwise return NULL.
-
-Fixes: ae7a5aff783c7 ("net: dsa: bcm_sf2: Keep copy of inserted rules")
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Link: https://lore.kernel.org/r/20220328032431.22538-1-xiam0nd.tong@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 314001f0bf92 ("af_unix: Add OOB support")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/dsa/bcm_sf2_cfp.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ net/unix/af_unix.c                                  |    4 ++++
+ tools/testing/selftests/net/af_unix/test_unix_oob.c |    6 +++---
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/dsa/bcm_sf2_cfp.c b/drivers/net/dsa/bcm_sf2_cfp.c
-index d82cee5d9202..cbf44fc7d03a 100644
---- a/drivers/net/dsa/bcm_sf2_cfp.c
-+++ b/drivers/net/dsa/bcm_sf2_cfp.c
-@@ -567,14 +567,14 @@ static void bcm_sf2_cfp_slice_ipv6(struct bcm_sf2_priv *priv,
- static struct cfp_rule *bcm_sf2_cfp_rule_find(struct bcm_sf2_priv *priv,
- 					      int port, u32 location)
- {
--	struct cfp_rule *rule = NULL;
-+	struct cfp_rule *rule;
+--- a/net/unix/af_unix.c
++++ b/net/unix/af_unix.c
+@@ -3049,6 +3049,10 @@ static __poll_t unix_poll(struct file *f
+ 		mask |= EPOLLIN | EPOLLRDNORM;
+ 	if (sk_is_readable(sk))
+ 		mask |= EPOLLIN | EPOLLRDNORM;
++#if IS_ENABLED(CONFIG_AF_UNIX_OOB)
++	if (READ_ONCE(unix_sk(sk)->oob_skb))
++		mask |= EPOLLPRI;
++#endif
  
- 	list_for_each_entry(rule, &priv->cfp.rules_list, next) {
- 		if (rule->port == port && rule->fs.location == location)
--			break;
-+			return rule;
- 	}
+ 	/* Connection-based need to check for termination and startup */
+ 	if ((sk->sk_type == SOCK_STREAM || sk->sk_type == SOCK_SEQPACKET) &&
+--- a/tools/testing/selftests/net/af_unix/test_unix_oob.c
++++ b/tools/testing/selftests/net/af_unix/test_unix_oob.c
+@@ -218,10 +218,10 @@ main(int argc, char **argv)
  
--	return rule;
-+	return NULL;
- }
- 
- static int bcm_sf2_cfp_rule_cmp(struct bcm_sf2_priv *priv, int port,
--- 
-2.34.1
-
+ 	/* Test 1:
+ 	 * veriyf that SIGURG is
+-	 * delivered and 63 bytes are
+-	 * read and oob is '@'
++	 * delivered, 63 bytes are
++	 * read, oob is '@', and POLLPRI works.
+ 	 */
+-	wait_for_data(pfd, POLLIN | POLLPRI);
++	wait_for_data(pfd, POLLPRI);
+ 	read_oob(pfd, &oob);
+ 	len = read_data(pfd, buf, 1024);
+ 	if (!signal_recvd || len != 63 || oob != '@') {
 
 

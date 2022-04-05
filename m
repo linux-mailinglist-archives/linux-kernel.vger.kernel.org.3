@@ -2,41 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E9534F3132
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9484F4F32B3
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:00:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241053AbiDEK2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
+        id S1358169AbiDEK2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241030AbiDEIco (ORCPT
+        with ESMTP id S241058AbiDEIcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:32:44 -0400
+        Tue, 5 Apr 2022 04:32:46 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A44B53DE;
-        Tue,  5 Apr 2022 01:26:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8424FB7C7C;
+        Tue,  5 Apr 2022 01:26:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 568BFB81BAF;
-        Tue,  5 Apr 2022 08:26:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0452C385A1;
-        Tue,  5 Apr 2022 08:26:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3382CB81BB1;
+        Tue,  5 Apr 2022 08:26:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 980D4C385A2;
+        Tue,  5 Apr 2022 08:26:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147163;
-        bh=ddMf/Q2OYNRAJxNBRf3ZcvSR2v8ceJNOuWDRf7eIQjU=;
+        s=korg; t=1649147177;
+        bh=TXAqIdFMEEkScL85/37F5/yeRh/4iZdkkLq9HqytGa8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q0xKiF+ltz1LTFBSX7p53sfZxG4OGBdz/FvcdxTX16feOg7nJj/rLBlPz6iRgAzdo
-         MRIFCQmifSeZluxkgns/35Hm7lco6jrB/Wi5xr74Beo24sEUqHJx2zUoaKyLBaZKSJ
-         jO17WMDrmv0HeLdCMlumGWlT8KuUAjQXr6QuoKfI=
+        b=LQcilQWJXya6mjReHbV//yGvNvg7ejB6Y8fPl3IZxw7luRh4890T+H3JAQFOxkfq7
+         jX3eQVFepsoXFnvBb8kEDW5jOxWpD1HLYhV1x6yMfcQcGA2thmG2WQySMShS/eq5lO
+         droya/RAvbbY+oh2syOgo2p2tSTfgl6mnD3n0tQU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: [PATCH 5.17 1024/1126] XArray: Update the LRU list in xas_split()
-Date:   Tue,  5 Apr 2022 09:29:31 +0200
-Message-Id: <20220405070437.539339237@linuxfoundation.org>
+        stable@vger.kernel.org, Andreas Gruenbacher <agruenba@redhat.com>
+Subject: [PATCH 5.17 1029/1126] gfs2: gfs2_setattr_size error path fix
+Date:   Tue,  5 Apr 2022 09:29:36 +0200
+Message-Id: <20220405070437.682711332@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -54,44 +53,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matthew Wilcox (Oracle) <willy@infradead.org>
+From: Andreas Gruenbacher <agruenba@redhat.com>
 
-commit 3ed4bb77156da0bc732847c8c9df92454c1fbeea upstream.
+commit 7336905a89f19173bf9301cd50a24421162f417c upstream.
 
-When splitting a value entry, we may need to add the new nodes to the LRU
-list and remove the parent node from the LRU list.  The WARN_ON checks
-in shadow_lru_isolate() catch this oversight.  This bug was latent
-until we stopped splitting folios in shrink_page_list() with commit
-820c4e2e6f51 ("mm/vmscan: Free non-shmem folios without splitting them").
-That allows the creation of large shadow entries, and subsequently when
-trying to page in a small page, we will split the large shadow entry
-in __filemap_add_folio().
+When gfs2_setattr_size() fails, it calls gfs2_rs_delete(ip, NULL) to get
+rid of any reservations the inode may have.  Instead, it should pass in
+the inode's write count as the second parameter to allow
+gfs2_rs_delete() to figure out if the inode has any writers left.
 
-Fixes: 8fc75643c5e1 ("XArray: add xas_split")
-Reported-by: Hugh Dickins <hughd@google.com>
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+In a next step, there are two instances of gfs2_rs_delete(ip, NULL) left
+where we know that there can be no other users of the inode.  Replace
+those with gfs2_rs_deltree(&ip->i_res) to avoid the unnecessary write
+count check.
+
+With that, gfs2_rs_delete() is only called with the inode's actual write
+count, so get rid of the second parameter.
+
+Fixes: a097dc7e24cb ("GFS2: Make rgrp reservations part of the gfs2_inode structure")
+Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- lib/xarray.c |    2 ++
- 1 file changed, 2 insertions(+)
+ fs/gfs2/bmap.c  |    2 +-
+ fs/gfs2/file.c  |    2 +-
+ fs/gfs2/inode.c |    2 +-
+ fs/gfs2/rgrp.c  |    7 ++++---
+ fs/gfs2/rgrp.h  |    2 +-
+ fs/gfs2/super.c |    2 +-
+ 6 files changed, 9 insertions(+), 8 deletions(-)
 
---- a/lib/xarray.c
-+++ b/lib/xarray.c
-@@ -1081,6 +1081,7 @@ void xas_split(struct xa_state *xas, voi
- 					xa_mk_node(child));
- 			if (xa_is_value(curr))
- 				values--;
-+			xas_update(xas, child);
- 		} else {
- 			unsigned int canon = offset - xas->xa_sibs;
+--- a/fs/gfs2/bmap.c
++++ b/fs/gfs2/bmap.c
+@@ -2146,7 +2146,7 @@ int gfs2_setattr_size(struct inode *inod
  
-@@ -1095,6 +1096,7 @@ void xas_split(struct xa_state *xas, voi
- 	} while (offset-- > xas->xa_offset);
- 
- 	node->nr_values += values;
-+	xas_update(xas, node);
+ 	ret = do_shrink(inode, newsize);
+ out:
+-	gfs2_rs_delete(ip, NULL);
++	gfs2_rs_delete(ip);
+ 	gfs2_qa_put(ip);
+ 	return ret;
  }
- EXPORT_SYMBOL_GPL(xas_split);
- #endif
+--- a/fs/gfs2/file.c
++++ b/fs/gfs2/file.c
+@@ -706,7 +706,7 @@ static int gfs2_release(struct inode *in
+ 
+ 	if (file->f_mode & FMODE_WRITE) {
+ 		if (gfs2_rs_active(&ip->i_res))
+-			gfs2_rs_delete(ip, &inode->i_writecount);
++			gfs2_rs_delete(ip);
+ 		gfs2_qa_put(ip);
+ 	}
+ 	return 0;
+--- a/fs/gfs2/inode.c
++++ b/fs/gfs2/inode.c
+@@ -793,7 +793,7 @@ fail_free_inode:
+ 		if (free_vfs_inode) /* else evict will do the put for us */
+ 			gfs2_glock_put(ip->i_gl);
+ 	}
+-	gfs2_rs_delete(ip, NULL);
++	gfs2_rs_deltree(&ip->i_res);
+ 	gfs2_qa_put(ip);
+ fail_free_acls:
+ 	posix_acl_release(default_acl);
+--- a/fs/gfs2/rgrp.c
++++ b/fs/gfs2/rgrp.c
+@@ -680,13 +680,14 @@ void gfs2_rs_deltree(struct gfs2_blkrese
+ /**
+  * gfs2_rs_delete - delete a multi-block reservation
+  * @ip: The inode for this reservation
+- * @wcount: The inode's write count, or NULL
+  *
+  */
+-void gfs2_rs_delete(struct gfs2_inode *ip, atomic_t *wcount)
++void gfs2_rs_delete(struct gfs2_inode *ip)
+ {
++	struct inode *inode = &ip->i_inode;
++
+ 	down_write(&ip->i_rw_mutex);
+-	if ((wcount == NULL) || (atomic_read(wcount) <= 1))
++	if (atomic_read(&inode->i_writecount) <= 1)
+ 		gfs2_rs_deltree(&ip->i_res);
+ 	up_write(&ip->i_rw_mutex);
+ }
+--- a/fs/gfs2/rgrp.h
++++ b/fs/gfs2/rgrp.h
+@@ -45,7 +45,7 @@ extern int gfs2_alloc_blocks(struct gfs2
+ 			     bool dinode, u64 *generation);
+ 
+ extern void gfs2_rs_deltree(struct gfs2_blkreserv *rs);
+-extern void gfs2_rs_delete(struct gfs2_inode *ip, atomic_t *wcount);
++extern void gfs2_rs_delete(struct gfs2_inode *ip);
+ extern void __gfs2_free_blocks(struct gfs2_inode *ip, struct gfs2_rgrpd *rgd,
+ 			       u64 bstart, u32 blen, int meta);
+ extern void gfs2_free_meta(struct gfs2_inode *ip, struct gfs2_rgrpd *rgd,
+--- a/fs/gfs2/super.c
++++ b/fs/gfs2/super.c
+@@ -1396,7 +1396,7 @@ out:
+ 	truncate_inode_pages_final(&inode->i_data);
+ 	if (ip->i_qadata)
+ 		gfs2_assert_warn(sdp, ip->i_qadata->qa_ref == 0);
+-	gfs2_rs_delete(ip, NULL);
++	gfs2_rs_deltree(&ip->i_res);
+ 	gfs2_ordered_del_inode(ip);
+ 	clear_inode(inode);
+ 	gfs2_dir_hash_inval(ip);
 
 

@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2385F4F41C9
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0F64F425C
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357386AbiDEMvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:51:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
+        id S1359192AbiDEMwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244506AbiDEJKB (ORCPT
+        with ESMTP id S244617AbiDEJKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:10:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4067F29CBD;
-        Tue,  5 Apr 2022 01:59:42 -0700 (PDT)
+        Tue, 5 Apr 2022 05:10:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F49528E15;
+        Tue,  5 Apr 2022 01:59:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4F60EB81A12;
-        Tue,  5 Apr 2022 08:59:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA050C385A1;
-        Tue,  5 Apr 2022 08:59:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DAF561511;
+        Tue,  5 Apr 2022 08:59:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61F49C385A1;
+        Tue,  5 Apr 2022 08:59:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149177;
-        bh=60e7xbI6l1AgworDfHKiS/uO80AU3QEf7uiVgTT5KeY=;
+        s=korg; t=1649149179;
+        bh=esgjwmrZ5kBd4/B0Bw3DPlQwcEwy3TAWV6aAgv1vpXo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YAVCYcgXfu3JC0nTpW+d83UKmp8GFSPLPqbeiK2m2xhkJePRCk44Ya8XBBB3wuXtT
-         9VWhJjBBEFUjK3GQabxKqKHaMTRuisMliQtQpi4M7zNubmcMwnFVnPsS1KqALtF6dK
-         gHLVaQDy7/NLiYrX3GfW5JmVwB8gyLGwiA457Vnk=
+        b=Rs3syQeFw/LdlbzRblKuchNQejfkJfLnEiCvYExE0QYkYMsvFje0aqWN02JdF4Qjk
+         Kw9B+fLe3UrMYSoWoKYz2ZFILMpidkjgtWKTVmtsdpQ/0D2V6XJbMyOdA7LAFiSQy0
+         eG12YOYa6eUaLGM/esZu2WLkTVL7+a4W7dx+WmyY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
+        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Yonglong Li <liyonglong@chinatelecom.cn>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0621/1017] ipv4: Fix route lookups when handling ICMP redirects and PMTU updates
-Date:   Tue,  5 Apr 2022 09:25:34 +0200
-Message-Id: <20220405070412.716397649@linuxfoundation.org>
+Subject: [PATCH 5.16 0622/1017] mptcp: Fix crash due to tcp_tsorted_anchor was initialized before release skb
+Date:   Tue,  5 Apr 2022 09:25:35 +0200
+Message-Id: <20220405070412.745832297@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,113 +57,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guillaume Nault <gnault@redhat.com>
+From: Yonglong Li <liyonglong@chinatelecom.cn>
 
-[ Upstream commit 544b4dd568e3b09c1ab38a759d3187e7abda11a0 ]
+[ Upstream commit 3ef3905aa3b5b3e222ee6eb0210bfd999417a8cc ]
 
-The PMTU update and ICMP redirect helper functions initialise their fl4
-variable with either __build_flow_key() or build_sk_flow_key(). These
-initialisation functions always set ->flowi4_scope with
-RT_SCOPE_UNIVERSE and might set the ECN bits of ->flowi4_tos. This is
-not a problem when the route lookup is later done via
-ip_route_output_key_hash(), which properly clears the ECN bits from
-->flowi4_tos and initialises ->flowi4_scope based on the RTO_ONLINK
-flag. However, some helpers call fib_lookup() directly, without
-sanitising the tos and scope fields, so the route lookup can fail and,
-as a result, the ICMP redirect or PMTU update aren't taken into
-account.
+Got crash when doing pressure test of mptcp:
 
-Fix this by extracting the ->flowi4_tos and ->flowi4_scope sanitisation
-code into ip_rt_fix_tos(), then use this function in handlers that call
-fib_lookup() directly.
+===========================================================================
+dst_release: dst:ffffa06ce6e5c058 refcnt:-1
+kernel tried to execute NX-protected page - exploit attempt? (uid: 0)
+BUG: unable to handle kernel paging request at ffffa06ce6e5c058
+PGD 190a01067 P4D 190a01067 PUD 43fffb067 PMD 22e403063 PTE 8000000226e5c063
+Oops: 0011 [#1] SMP PTI
+CPU: 7 PID: 7823 Comm: kworker/7:0 Kdump: loaded Tainted: G            E
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.2.1 04/01/2014
+Call Trace:
+ ? skb_release_head_state+0x68/0x100
+ ? skb_release_all+0xe/0x30
+ ? kfree_skb+0x32/0xa0
+ ? mptcp_sendmsg_frag+0x57e/0x750
+ ? __mptcp_retrans+0x21b/0x3c0
+ ? __switch_to_asm+0x35/0x70
+ ? mptcp_worker+0x25e/0x320
+ ? process_one_work+0x1a7/0x360
+ ? worker_thread+0x30/0x390
+ ? create_worker+0x1a0/0x1a0
+ ? kthread+0x112/0x130
+ ? kthread_flush_work_fn+0x10/0x10
+ ? ret_from_fork+0x35/0x40
+===========================================================================
 
-Note 1: We can't sanitise ->flowi4_tos and ->flowi4_scope in a central
-place (like __build_flow_key() or flowi4_init_output()), because
-ip_route_output_key_hash() expects non-sanitised values. When called
-with sanitised values, it can erroneously overwrite RT_SCOPE_LINK with
-RT_SCOPE_UNIVERSE in ->flowi4_scope. Therefore we have to be careful to
-sanitise the values only for those paths that don't call
-ip_route_output_key_hash().
+In __mptcp_alloc_tx_skb skb was allocated and skb->tcp_tsorted_anchor will
+be initialized, in under memory pressure situation sk_wmem_schedule will
+return false and then kfree_skb. In this case skb->_skb_refdst is not null
+because_skb_refdst and tcp_tsorted_anchor are stored in the same mem, and
+kfree_skb will try to release dst and cause crash.
 
-Note 2: The problem is mostly about sanitising ->flowi4_tos. Having
-->flowi4_scope initialised with RT_SCOPE_UNIVERSE instead of
-RT_SCOPE_LINK probably wasn't really a problem: sockets with the
-SOCK_LOCALROUTE flag set (those that'd result in RTO_ONLINK being set)
-normally shouldn't receive ICMP redirects or PMTU updates.
-
-Fixes: 4895c771c7f0 ("ipv4: Add FIB nexthop exceptions.")
-Signed-off-by: Guillaume Nault <gnault@redhat.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
+Fixes: f70cad1085d1 ("mptcp: stop relying on tcp_tx_skb_cache")
+Reviewed-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Yonglong Li <liyonglong@chinatelecom.cn>
+Signed-off-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Link: https://lore.kernel.org/r/20220317220953.426024-1-mathew.j.martineau@linux.intel.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/route.c | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ net/mptcp/protocol.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index 2c30c599cc16..750e229b7c49 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -498,6 +498,15 @@ void __ip_select_ident(struct net *net, struct iphdr *iph, int segs)
- }
- EXPORT_SYMBOL(__ip_select_ident);
- 
-+static void ip_rt_fix_tos(struct flowi4 *fl4)
-+{
-+	__u8 tos = RT_FL_TOS(fl4);
-+
-+	fl4->flowi4_tos = tos & IPTOS_RT_MASK;
-+	fl4->flowi4_scope = tos & RTO_ONLINK ?
-+			    RT_SCOPE_LINK : RT_SCOPE_UNIVERSE;
-+}
-+
- static void __build_flow_key(const struct net *net, struct flowi4 *fl4,
- 			     const struct sock *sk,
- 			     const struct iphdr *iph,
-@@ -823,6 +832,7 @@ static void ip_do_redirect(struct dst_entry *dst, struct sock *sk, struct sk_buf
- 	rt = (struct rtable *) dst;
- 
- 	__build_flow_key(net, &fl4, sk, iph, oif, tos, prot, mark, 0);
-+	ip_rt_fix_tos(&fl4);
- 	__ip_do_redirect(rt, skb, &fl4, true);
- }
- 
-@@ -1047,6 +1057,7 @@ static void ip_rt_update_pmtu(struct dst_entry *dst, struct sock *sk,
- 	struct flowi4 fl4;
- 
- 	ip_rt_build_flow_key(&fl4, sk, skb);
-+	ip_rt_fix_tos(&fl4);
- 
- 	/* Don't make lookup fail for bridged encapsulations */
- 	if (skb && netif_is_any_bridge_port(skb->dev))
-@@ -1121,6 +1132,8 @@ void ipv4_sk_update_pmtu(struct sk_buff *skb, struct sock *sk, u32 mtu)
- 			goto out;
- 
- 		new = true;
-+	} else {
-+		ip_rt_fix_tos(&fl4);
+diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
+index 7566c9dc6681..1784e528704a 100644
+--- a/net/mptcp/protocol.c
++++ b/net/mptcp/protocol.c
+@@ -1202,6 +1202,7 @@ static struct sk_buff *__mptcp_alloc_tx_skb(struct sock *sk, struct sock *ssk, g
+ 		tcp_skb_entail(ssk, skb);
+ 		return skb;
  	}
- 
- 	__ip_rt_update_pmtu((struct rtable *)xfrm_dst_path(&rt->dst), &fl4, mtu);
-@@ -2601,7 +2614,6 @@ static struct rtable *__mkroute_output(const struct fib_result *res,
- struct rtable *ip_route_output_key_hash(struct net *net, struct flowi4 *fl4,
- 					const struct sk_buff *skb)
- {
--	__u8 tos = RT_FL_TOS(fl4);
- 	struct fib_result res = {
- 		.type		= RTN_UNSPEC,
- 		.fi		= NULL,
-@@ -2611,9 +2623,7 @@ struct rtable *ip_route_output_key_hash(struct net *net, struct flowi4 *fl4,
- 	struct rtable *rth;
- 
- 	fl4->flowi4_iif = LOOPBACK_IFINDEX;
--	fl4->flowi4_tos = tos & IPTOS_RT_MASK;
--	fl4->flowi4_scope = ((tos & RTO_ONLINK) ?
--			 RT_SCOPE_LINK : RT_SCOPE_UNIVERSE);
-+	ip_rt_fix_tos(fl4);
- 
- 	rcu_read_lock();
- 	rth = ip_route_output_key_hash_rcu(net, fl4, &res, skb);
++	tcp_skb_tsorted_anchor_cleanup(skb);
+ 	kfree_skb(skb);
+ 	return NULL;
+ }
 -- 
 2.34.1
 

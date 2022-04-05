@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9FA4F50E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CCCA4F504F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1843759AbiDFBl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45148 "EHLO
+        id S1456598AbiDFBRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354451AbiDEKOQ (ORCPT
+        with ESMTP id S242773AbiDEKfS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:14:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4BA69CFE;
-        Tue,  5 Apr 2022 03:00:05 -0700 (PDT)
+        Tue, 5 Apr 2022 06:35:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81CB51306;
+        Tue,  5 Apr 2022 03:21:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 854FBB81C98;
-        Tue,  5 Apr 2022 10:00:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D30C1C385A2;
-        Tue,  5 Apr 2022 10:00:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 735A7617CE;
+        Tue,  5 Apr 2022 10:21:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F967C385A1;
+        Tue,  5 Apr 2022 10:20:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152803;
-        bh=csoXg8xfP54KyRaAROKfOyTrSMX5tlMmyn9Qsmva0YE=;
+        s=korg; t=1649154059;
+        bh=eI/tG81nC1saJgPatTgG7icD/lGlD5gWAo+K+jBtukE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X84JRmiEiSGR+s+s9QW/aU+fsP89brgJJh7xSk8AUq5YDEndiCU288tyIuFNXjqRJ
-         8r52WAyiu5cXxSchjTAo2O47srO4J25exFOONChXQJGePzt55mXe5PNoFOQM0pp9G9
-         08OS2VxyYu0CDUUA/ZZVoA7qnWvV6kS17cDb/6Ks=
+        b=MOEgYBclB7JmTivePSsBROi/2JgL0iDwJ+ky9wgYnfuKSI+LQpSnqRcbSM58D79RI
+         BjjXVHYJUakJgVZXXyTrOfGG1W18szop3cGOTCwCgFjzUe8+WpjI20BHraLEDdN2e9
+         gWv+4PFnDPDUGtwf7qaIGZ+oRtYb8xZErW/LqDt0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Halil Pasic <pasic@linux.ibm.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Christoph Hellwig <hch@lst.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.15 869/913] Reinstate some of "swiotlb: rework "fix info leak with DMA_FROM_DEVICE""
-Date:   Tue,  5 Apr 2022 09:32:11 +0200
-Message-Id: <20220405070405.872766400@linuxfoundation.org>
+        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 442/599] qlcnic: dcb: default to returning -EOPNOTSUPP
+Date:   Tue,  5 Apr 2022 09:32:16 +0200
+Message-Id: <20220405070311.985087713@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,88 +55,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+From: Tom Rix <trix@redhat.com>
 
-commit 901c7280ca0d5e2b4a8929fbe0bfb007ac2a6544 upstream.
+[ Upstream commit 1521db37f0d42334a88e8ff28198a27d1ed5cd7b ]
 
-Halil Pasic points out [1] that the full revert of that commit (revert
-in bddac7c1e02b), and that a partial revert that only reverts the
-problematic case, but still keeps some of the cleanups is probably
-better.  ￼
+Clang static analysis reports this issue
+qlcnic_dcb.c:382:10: warning: Assigned value is
+  garbage or undefined
+  mbx_out = *val;
+          ^ ~~~~
 
-And that partial revert [2] had already been verified by Oleksandr
-Natalenko to also fix the issue, I had just missed that in the long
-discussion.
+val is set in the qlcnic_dcb_query_hw_capability() wrapper.
+If there is no query_hw_capability op in dcp, success is
+returned without setting the val.
 
-So let's reinstate the cleanups from commit aa6f8dcbab47 ("swiotlb:
-rework "fix info leak with DMA_FROM_DEVICE""), and effectively only
-revert the part that caused problems.
+For this and similar wrappers, return -EOPNOTSUPP.
 
-Link: https://lore.kernel.org/all/20220328013731.017ae3e3.pasic@linux.ibm.com/ [1]
-Link: https://lore.kernel.org/all/20220324055732.GB12078@lst.de/ [2]
-Link: https://lore.kernel.org/all/4386660.LvFx2qVVIh@natalenko.name/ [3]
-Suggested-by: Halil Pasic <pasic@linux.ibm.com>
-Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-Cc: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 14d385b99059 ("qlcnic: dcb: Query adapter DCB capabilities.")
+Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/core-api/dma-attributes.rst |    8 --------
- include/linux/dma-mapping.h               |    8 --------
- kernel/dma/swiotlb.c                      |   12 ++++++++----
- 3 files changed, 8 insertions(+), 20 deletions(-)
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
---- a/Documentation/core-api/dma-attributes.rst
-+++ b/Documentation/core-api/dma-attributes.rst
-@@ -130,11 +130,3 @@ accesses to DMA buffers in both privileg
- subsystem that the buffer is fully accessible at the elevated privilege
- level (and ideally inaccessible or at least read-only at the
- lesser-privileged levels).
--
--DMA_ATTR_OVERWRITE
--------------------
--
--This is a hint to the DMA-mapping subsystem that the device is expected to
--overwrite the entire mapped size, thus the caller does not require any of the
--previous buffer contents to be preserved. This allows bounce-buffering
--implementations to optimise DMA_FROM_DEVICE transfers.
---- a/include/linux/dma-mapping.h
-+++ b/include/linux/dma-mapping.h
-@@ -62,14 +62,6 @@
- #define DMA_ATTR_PRIVILEGED		(1UL << 9)
+diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
+index 5d79ee4370bc..7519773eaca6 100644
+--- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
++++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
+@@ -51,7 +51,7 @@ static inline int qlcnic_dcb_get_hw_capability(struct qlcnic_dcb *dcb)
+ 	if (dcb && dcb->ops->get_hw_capability)
+ 		return dcb->ops->get_hw_capability(dcb);
  
- /*
-- * This is a hint to the DMA-mapping subsystem that the device is expected
-- * to overwrite the entire mapped size, thus the caller does not require any
-- * of the previous buffer contents to be preserved. This allows
-- * bounce-buffering implementations to optimise DMA_FROM_DEVICE transfers.
-- */
--#define DMA_ATTR_OVERWRITE		(1UL << 10)
--
--/*
-  * A dma_addr_t can hold any valid DMA or bus address for the platform.  It can
-  * be given to a device to use as a DMA source or target.  It is specific to a
-  * given device and there may be a translation between the CPU physical address
---- a/kernel/dma/swiotlb.c
-+++ b/kernel/dma/swiotlb.c
-@@ -578,10 +578,14 @@ phys_addr_t swiotlb_tbl_map_single(struc
- 	for (i = 0; i < nr_slots(alloc_size + offset); i++)
- 		mem->slots[index + i].orig_addr = slot_addr(orig_addr, i);
- 	tlb_addr = slot_addr(mem->start, index) + offset;
--	if (!(attrs & DMA_ATTR_SKIP_CPU_SYNC) &&
--	    (!(attrs & DMA_ATTR_OVERWRITE) || dir == DMA_TO_DEVICE ||
--	    dir == DMA_BIDIRECTIONAL))
--		swiotlb_bounce(dev, tlb_addr, mapping_size, DMA_TO_DEVICE);
-+	/*
-+	 * When dir == DMA_FROM_DEVICE we could omit the copy from the orig
-+	 * to the tlb buffer, if we knew for sure the device will
-+	 * overwirte the entire current content. But we don't. Thus
-+	 * unconditional bounce may prevent leaking swiotlb content (i.e.
-+	 * kernel memory) to user-space.
-+	 */
-+	swiotlb_bounce(dev, tlb_addr, mapping_size, DMA_TO_DEVICE);
- 	return tlb_addr;
+-	return 0;
++	return -EOPNOTSUPP;
  }
  
+ static inline void qlcnic_dcb_free(struct qlcnic_dcb *dcb)
+@@ -65,7 +65,7 @@ static inline int qlcnic_dcb_attach(struct qlcnic_dcb *dcb)
+ 	if (dcb && dcb->ops->attach)
+ 		return dcb->ops->attach(dcb);
+ 
+-	return 0;
++	return -EOPNOTSUPP;
+ }
+ 
+ static inline int
+@@ -74,7 +74,7 @@ qlcnic_dcb_query_hw_capability(struct qlcnic_dcb *dcb, char *buf)
+ 	if (dcb && dcb->ops->query_hw_capability)
+ 		return dcb->ops->query_hw_capability(dcb, buf);
+ 
+-	return 0;
++	return -EOPNOTSUPP;
+ }
+ 
+ static inline void qlcnic_dcb_get_info(struct qlcnic_dcb *dcb)
+@@ -89,7 +89,7 @@ qlcnic_dcb_query_cee_param(struct qlcnic_dcb *dcb, char *buf, u8 type)
+ 	if (dcb && dcb->ops->query_cee_param)
+ 		return dcb->ops->query_cee_param(dcb, buf, type);
+ 
+-	return 0;
++	return -EOPNOTSUPP;
+ }
+ 
+ static inline int qlcnic_dcb_get_cee_cfg(struct qlcnic_dcb *dcb)
+@@ -97,7 +97,7 @@ static inline int qlcnic_dcb_get_cee_cfg(struct qlcnic_dcb *dcb)
+ 	if (dcb && dcb->ops->get_cee_cfg)
+ 		return dcb->ops->get_cee_cfg(dcb);
+ 
+-	return 0;
++	return -EOPNOTSUPP;
+ }
+ 
+ static inline void qlcnic_dcb_aen_handler(struct qlcnic_dcb *dcb, void *msg)
+-- 
+2.34.1
+
 
 

@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6908F4F2C97
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 154AF4F2E60
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350200AbiDEKvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 06:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
+        id S1353128AbiDEKFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 06:05:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240301AbiDEIbv (ORCPT
+        with ESMTP id S240294AbiDEIbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:31:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DAD6B0B4;
-        Tue,  5 Apr 2022 01:23:57 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2856C952;
+        Tue,  5 Apr 2022 01:24:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52909B81B92;
-        Tue,  5 Apr 2022 08:23:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3BCEC385B3;
-        Tue,  5 Apr 2022 08:23:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBACD61188;
+        Tue,  5 Apr 2022 08:24:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAF20C385A5;
+        Tue,  5 Apr 2022 08:23:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147029;
-        bh=UAK0kOTAZzJ3osgfxruwduiyoCZIcrnooyC7WYDw5bQ=;
+        s=korg; t=1649147040;
+        bh=kO3WJ73DitG29cTikD/o9Ep73Mwj4s1IjAcA6DnvDcs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LyTu0x24ca7zi5e12dmMYPS3Bx8Y4lMqHlC2sAwLQNuxNQGA/zZ8Law0GZ/HEXcHj
-         VvFAJ/BdarjMsP/DoORFk1YugrA3zE1C9aUibd6UMDbJcSH2koQg1dtiyEGIFcnNCP
-         a2iJyceoT0Vg+pqpxWHms34XQj7UmXJoJ+nUNDbg=
+        b=Q6bd6hSaf9mPz8yfnxKY5/ccOIITMHwD36XlN8Dpg7IYquLWwwyV8nseGCG8sYaI3
+         K+6JhMgbEcJr/5tR8KeIHVpTT9sW3c2Knx+Pk2kFfDP3yJLHX3IRAiS19brco0nUCi
+         NADPfVInT2Nu7mGEdfL0UXHxwqrantcA4SbPyYgw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
         Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.17 0977/1126] scsi: qla2xxx: Fix warning for missing error code
-Date:   Tue,  5 Apr 2022 09:28:44 +0200
-Message-Id: <20220405070436.179606239@linuxfoundation.org>
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Joe Carnuccio <joe.carnuccio@cavium.com>,
+        Nilesh Javali <njavali@marvell.com>
+Subject: [PATCH 5.17 0980/1126] scsi: qla2xxx: Fix T10 PI tag escape and IP guard options for 28XX adapters
+Date:   Tue,  5 Apr 2022 09:28:47 +0200
+Message-Id: <20220405070436.265883637@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,35 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nilesh Javali <njavali@marvell.com>
+From: Joe Carnuccio <joe.carnuccio@cavium.com>
 
-commit 14cb838d245ae0d523b2f7804af5a02c22e79f5a upstream.
+commit 4c103a802c69fca63976af6b372ccba39ed74370 upstream.
 
-Fix smatch-reported warning message:
+28XX adapters are capable of detecting both T10 PI tag escape values as
+well as IP guard. This was missed due to the adapter type missed in the
+corresponding macros. Fix this by adding support for 28xx in those macros.
 
-drivers/scsi/qla2xxx/qla_target.c:3324 qlt_xmit_response() warn: missing error
-code 'res'
-
-Link: https://lore.kernel.org/r/20220110050218.3958-12-njavali@marvell.com
-Fixes: 4a8f71014b4d ("scsi: qla2xxx: Fix unmap of already freed sgl")
+Link: https://lore.kernel.org/r/20220110050218.3958-14-njavali@marvell.com
 Cc: stable@vger.kernel.org
 Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Tested-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Joe Carnuccio <joe.carnuccio@cavium.com>
 Signed-off-by: Nilesh Javali <njavali@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/qla2xxx/qla_target.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/scsi/qla2xxx/qla_def.h |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/drivers/scsi/qla2xxx/qla_target.c
-+++ b/drivers/scsi/qla2xxx/qla_target.c
-@@ -3318,6 +3318,7 @@ int qlt_xmit_response(struct qla_tgt_cmd
- 			"RESET-RSP online/active/old-count/new-count = %d/%d/%d/%d.\n",
- 			vha->flags.online, qla2x00_reset_active(vha),
- 			cmd->reset_count, qpair->chip_reset);
-+		res = 0;
- 		goto out_unmap_unlock;
- 	}
+--- a/drivers/scsi/qla2xxx/qla_def.h
++++ b/drivers/scsi/qla2xxx/qla_def.h
+@@ -4271,8 +4271,10 @@ struct qla_hw_data {
+ #define QLA_ABTS_WAIT_ENABLED(_sp) \
+ 	(QLA_NVME_IOS(_sp) && QLA_ABTS_FW_ENABLED(_sp->fcport->vha->hw))
  
+-#define IS_PI_UNINIT_CAPABLE(ha)	(IS_QLA83XX(ha) || IS_QLA27XX(ha))
+-#define IS_PI_IPGUARD_CAPABLE(ha)	(IS_QLA83XX(ha) || IS_QLA27XX(ha))
++#define IS_PI_UNINIT_CAPABLE(ha)	(IS_QLA83XX(ha) || IS_QLA27XX(ha) || \
++					 IS_QLA28XX(ha))
++#define IS_PI_IPGUARD_CAPABLE(ha)	(IS_QLA83XX(ha) || IS_QLA27XX(ha) || \
++					 IS_QLA28XX(ha))
+ #define IS_PI_DIFB_DIX0_CAPABLE(ha)	(0)
+ #define IS_PI_SPLIT_DET_CAPABLE_HBA(ha)	(IS_QLA83XX(ha) || IS_QLA27XX(ha) || \
+ 					IS_QLA28XX(ha))
 
 

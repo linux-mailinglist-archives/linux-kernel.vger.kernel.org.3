@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F19184F2E55
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE7C4F2C3F
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242262AbiDEJgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
+        id S241011AbiDEJf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239438AbiDEIUF (ORCPT
+        with ESMTP id S239449AbiDEIUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 5 Apr 2022 04:20:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B3A9398C;
-        Tue,  5 Apr 2022 01:13:15 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000CDCF5;
+        Tue,  5 Apr 2022 01:13:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D05B560AFB;
-        Tue,  5 Apr 2022 08:13:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF731C385A0;
-        Tue,  5 Apr 2022 08:13:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DAE2609D0;
+        Tue,  5 Apr 2022 08:13:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EEC6C385A1;
+        Tue,  5 Apr 2022 08:13:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146394;
-        bh=jQPU+iVWdRJO/Zf9E9j5Fx4xuwiHUlqhxnNThXYz8Sc=;
+        s=korg; t=1649146410;
+        bh=0wYuwAGChqOKzuYEF8sOFnPeHw7YKkRvAICZaEhGM7E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VsddOF/2RcfeV+ofsFX2gGtRyLuM53XJ1QivF6eBuN3oxvSQLlGalOSRq8d6ValYF
-         rzdred21d/gM0nQLQ18jCBQpLlsm5petPNTlnqbZeDzDaQWA73683MPzCOssRXZBYS
-         j/EzBkf6wfkJ4/TyJ7r9KKqFTFyc5OO3vT50vfAA=
+        b=BV486yau5Yd4L7+pyVuYYzqI+7YAE0N23Q+dqr64I3IOgfK7HAV5ZMMYwZMIYjkSc
+         cswE0V2laSS0nbeffhlKWJH9bq5yurec+OvpSJNcKBZzPNMtX3CFnjdbWExoy8deyy
+         6Vl1qeCnZeKnoBN28AJsjBjNhMDzP1zWD0HMtUZo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Taniya Das <tdas@codeaurora.org>,
-        Stephen Boyd <sboyd@kernel.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0747/1126] clk: qcom: clk-rcg2: Update the frac table for pixel clock
-Date:   Tue,  5 Apr 2022 09:24:54 +0200
-Message-Id: <20220405070429.509602682@linuxfoundation.org>
+Subject: [PATCH 5.17 0752/1126] remoteproc: qcom_wcnss: Add missing of_node_put() in wcnss_alloc_memory_region
+Date:   Tue,  5 Apr 2022 09:24:59 +0200
+Message-Id: <20220405070429.659193757@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -56,34 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Taniya Das <tdas@codeaurora.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit b527358cb4cd58a8279c9062b0786f1fab628fdc ]
+[ Upstream commit 8f90161a66bc3d6b9fe8dde4d9028d20eae1b62a ]
 
-Support the new numerator and denominator for pixel clock on SM8350 and
-support rgb101010, RGB888 use cases on SM8450.
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-Fixes: 99cbd064b059f ("clk: qcom: Support display RCG clocks")
-Signed-off-by: Taniya Das <tdas@codeaurora.org>
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Fixes: aed361adca9f ("remoteproc: qcom: Introduce WCNSS peripheral image loader")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220227175536.3131-2-tdas@codeaurora.org
+Link: https://lore.kernel.org/r/20220308063102.10049-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/qcom/clk-rcg2.c | 1 +
+ drivers/remoteproc/qcom_wcnss.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
-index b831975a9606..f675fd969c4d 100644
---- a/drivers/clk/qcom/clk-rcg2.c
-+++ b/drivers/clk/qcom/clk-rcg2.c
-@@ -729,6 +729,7 @@ static const struct frac_entry frac_table_pixel[] = {
- 	{ 2, 9 },
- 	{ 4, 9 },
- 	{ 1, 1 },
-+	{ 2, 3 },
- 	{ }
- };
+diff --git a/drivers/remoteproc/qcom_wcnss.c b/drivers/remoteproc/qcom_wcnss.c
+index 80bbafee9846..9a223d394087 100644
+--- a/drivers/remoteproc/qcom_wcnss.c
++++ b/drivers/remoteproc/qcom_wcnss.c
+@@ -500,6 +500,7 @@ static int wcnss_alloc_memory_region(struct qcom_wcnss *wcnss)
+ 	}
+ 
+ 	ret = of_address_to_resource(node, 0, &r);
++	of_node_put(node);
+ 	if (ret)
+ 		return ret;
  
 -- 
 2.34.1

@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065584F2E7C
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52FE24F2AB4
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 13:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236581AbiDEJbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 05:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43750 "EHLO
+        id S244184AbiDEJJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 05:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239514AbiDEIUK (ORCPT
+        with ESMTP id S239518AbiDEIUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:20:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3CDE99;
-        Tue,  5 Apr 2022 01:14:57 -0700 (PDT)
+        Tue, 5 Apr 2022 04:20:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87530E8E;
+        Tue,  5 Apr 2022 01:15:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AA7260AFB;
-        Tue,  5 Apr 2022 08:14:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B56BC385A0;
-        Tue,  5 Apr 2022 08:14:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40F4EB81B90;
+        Tue,  5 Apr 2022 08:15:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FC83C385A1;
+        Tue,  5 Apr 2022 08:15:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649146496;
-        bh=pLIQlGkUzPkW36H+QN7RfbIl6w439D/LXITrrVw3+x8=;
+        s=korg; t=1649146505;
+        bh=PIt3LItMcm9I/B27+MH1ot3tWgjOcbN9tmyl/YHXUp0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AaRuFHjGSATiSB8XvSJjQR88ChSzrRBQAX3/JGQAQMPr5+DcHzGPxWbm7Ctb6pvkr
-         6Ag7KLokAm+PyiM92rGuP3gdcnKihnmdDgSHFOW2OJWABbVrO80wTDSOx4pqw7dgug
-         qfF3n6n+cMAo9YhTM1wnW5P/E80QRZwKDrPZKikg=
+        b=Z3OY9A+Sr8Macqm8tsJ3ndrcv2ytaYQ7ad2g6D86T0dIjagIvFjYMu3T97COsYUjb
+         r3NT7lV5g/y3dQD7OuV0RvNqKvDoDtkXC+A2Hf8q+brHJTlXcnI9DJysKGDtHRUy/Y
+         pKA4PuFwGZ7fFyL9+OabV/pcuoxtIq7xEiTHOXgg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Randy Dunlap <rdunlap@infradead.org>,
+        stable@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        Alexandre Truong <alexandre.truong@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0784/1126] kgdbts: fix return value of __setup handler
-Date:   Tue,  5 Apr 2022 09:25:31 +0200
-Message-Id: <20220405070430.588165488@linuxfoundation.org>
+Subject: [PATCH 5.17 0787/1126] perf test arm64: Test unwinding using fame-pointer (fp) mode
+Date:   Tue,  5 Apr 2022 09:25:34 +0200
+Message-Id: <20220405070430.674767402@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -60,63 +61,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: German Gomez <german.gomez@arm.com>
 
-[ Upstream commit 96c9e802c64014a7716865332d732cc9c7f24593 ]
+[ Upstream commit cd6382d82752737e43ef3617bb9e72913d2b1d47 ]
 
-__setup() handlers should return 1 to indicate that the boot option
-has been handled. A return of 0 causes the boot option/value to be
-listed as an Unknown kernel parameter and added to init's (limited)
-environment strings. So return 1 from kgdbts_option_setup().
+Add a shell script to check that the call-graphs generated using frame
+pointers (--call-graph fp) are complete and not missing leaf functions:
 
-Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc7
-  kgdboc=kbd kgdbts=", will be passed to user space.
+  | $ perf test 88 -v
+  |  88: Check Arm64 callgraphs are complete in fp mode                  :
+  | --- start ---
+  | test child forked, pid 8734
+  |  + Compiling test program (/tmp/test_program.Cz3yL)...
+  |  + Recording (PID=8749)...
+  |  + Stopping perf-record...
+  | test_program.Cz
+  |                  728 leaf
+  |                  753 parent
+  |                  76c main
+  | test child finished with 0
+  | ---- end ----
+  | Check Arm SPE callgraphs are complete in fp mode: Ok
 
- Run /sbin/init as init process
-   with arguments:
-     /sbin/init
-   with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc7
-     kgdboc=kbd
-     kgdbts=
+It's supposed to work with both unwinders:
 
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Fixes: e8d31c204e36 ("kgdb: add kgdb internal test suite")
-Cc: kgdb-bugreport@lists.sourceforge.net
-Cc: Jason Wessel <jason.wessel@windriver.com>
-Cc: Daniel Thompson <daniel.thompson@linaro.org>
-Cc: Douglas Anderson <dianders@chromium.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/20220308033255.22118-1-rdunlap@infradead.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  | $ make                # for libunwind (default)
+  | $ make NO_LIBUNWIND=1 # for libdw
+
+Tester notes:
+
+Ran it on N1SDP and it passes, and it fails if b9f6fbb3b2c29736 ("perf
+arm64: Inject missing frames when using 'perf record --call-graph=fp'")
+isn't applied.
+
+Fixes: b9f6fbb3b2c29736 ("perf arm64: Inject missing frames when using 'perf record --call-graph=fp'")
+Suggested-by: Jiri Olsa <jolsa@kernel.org>
+Reviewed-by: James Clark <james.clark@arm.com>
+Tested-by: James Clark <james.clark@arm.com>
+Signed-off-by: German Gomez <german.gomez@arm.com>
+Cc: Alexandre Truong <alexandre.truong@arm.com>
+Cc: Leo Yan <leo.yan@linaro.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Link: https://lore.kernel.org/r/20220316172015.98000-1-german.gomez@arm.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/kgdbts.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../perf/tests/shell/test_arm_callgraph_fp.sh | 68 +++++++++++++++++++
+ 1 file changed, 68 insertions(+)
+ create mode 100755 tools/perf/tests/shell/test_arm_callgraph_fp.sh
 
-diff --git a/drivers/misc/kgdbts.c b/drivers/misc/kgdbts.c
-index 67c5b452dd35..88b91ad8e541 100644
---- a/drivers/misc/kgdbts.c
-+++ b/drivers/misc/kgdbts.c
-@@ -1070,10 +1070,10 @@ static int kgdbts_option_setup(char *opt)
- {
- 	if (strlen(opt) >= MAX_CONFIG_LEN) {
- 		printk(KERN_ERR "kgdbts: config string too long\n");
--		return -ENOSPC;
-+		return 1;
- 	}
- 	strcpy(config, opt);
--	return 0;
-+	return 1;
- }
- 
- __setup("kgdbts=", kgdbts_option_setup);
+diff --git a/tools/perf/tests/shell/test_arm_callgraph_fp.sh b/tools/perf/tests/shell/test_arm_callgraph_fp.sh
+new file mode 100755
+index 000000000000..6ffbb27afaba
+--- /dev/null
++++ b/tools/perf/tests/shell/test_arm_callgraph_fp.sh
+@@ -0,0 +1,68 @@
++#!/bin/sh
++# Check Arm64 callgraphs are complete in fp mode
++# SPDX-License-Identifier: GPL-2.0
++
++lscpu | grep -q "aarch64" || exit 2
++
++if ! [ -x "$(command -v cc)" ]; then
++	echo "failed: no compiler, install gcc"
++	exit 2
++fi
++
++PERF_DATA=$(mktemp /tmp/__perf_test.perf.data.XXXXX)
++TEST_PROGRAM_SOURCE=$(mktemp /tmp/test_program.XXXXX.c)
++TEST_PROGRAM=$(mktemp /tmp/test_program.XXXXX)
++
++cleanup_files()
++{
++	rm -f $PERF_DATA
++	rm -f $TEST_PROGRAM_SOURCE
++	rm -f $TEST_PROGRAM
++}
++
++trap cleanup_files exit term int
++
++cat << EOF > $TEST_PROGRAM_SOURCE
++int a = 0;
++void leaf(void) {
++  for (;;)
++    a += a;
++}
++void parent(void) {
++  leaf();
++}
++int main(void) {
++  parent();
++  return 0;
++}
++EOF
++
++echo " + Compiling test program ($TEST_PROGRAM)..."
++
++CFLAGS="-g -O0 -fno-inline -fno-omit-frame-pointer"
++cc $CFLAGS $TEST_PROGRAM_SOURCE -o $TEST_PROGRAM || exit 1
++
++# Add a 1 second delay to skip samples that are not in the leaf() function
++perf record -o $PERF_DATA --call-graph fp -e cycles//u -D 1000 -- $TEST_PROGRAM 2> /dev/null &
++PID=$!
++
++echo " + Recording (PID=$PID)..."
++sleep 2
++echo " + Stopping perf-record..."
++
++kill $PID
++wait $PID
++
++# expected perf-script output:
++#
++# program
++# 	728 leaf
++# 	753 parent
++# 	76c main
++# ...
++
++perf script -i $PERF_DATA -F comm,ip,sym | head -n4
++perf script -i $PERF_DATA -F comm,ip,sym | head -n4 | \
++	awk '{ if ($2 != "") sym[i++] = $2 } END { if (sym[0] != "leaf" ||
++						       sym[1] != "parent" ||
++						       sym[2] != "main") exit 1 }'
 -- 
 2.34.1
 

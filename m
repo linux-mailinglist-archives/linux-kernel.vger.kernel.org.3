@@ -2,66 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 911914F51BA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03FB04F4FAB
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1847055AbiDFCMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
+        id S1839073AbiDFA6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378484AbiDENNT (ORCPT
+        with ESMTP id S1380317AbiDENOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 09:13:19 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A500B45056
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 05:13:37 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6EB9ED6E;
-        Tue,  5 Apr 2022 05:13:37 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9F7643F5A1;
-        Tue,  5 Apr 2022 05:13:36 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     perex@perex.cz, tiwai@suse.com
-Cc:     iommu@lists.linux-foundation.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ALSA: emu10k1: Stop using iommu_present()
-Date:   Tue,  5 Apr 2022 13:13:33 +0100
-Message-Id: <5ac9b54285b2189b848da2595408eb3cae8e5e9d.1649160813.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.28.0.dirty
+        Tue, 5 Apr 2022 09:14:01 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54880123BE5;
+        Tue,  5 Apr 2022 05:16:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1649161001;
+  x=1680697001;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=x4YcHLziIrEggw9HG5I5fbaW8iCdF7u9wJBMUjziEm8=;
+  b=meQxV9f1p1HxnA3LmMRvs8ovRZ0drYp0I+KKJAUcs7eP7q68kAO9jRvG
+   5xgBBynyHeSrU7SC+XYDy/gOfaOKCoOMUwNmTum1YmqLNFA/tDU1wNG0Z
+   fKawQ0pdr4asecovTbrHWQE7JdFkJUI8dpn60dfWZXB5pY789qCwPJxbZ
+   ctjRS89ABOnJilYZeMhLr4HxnA1XPBXRDCJS+lZF6iyuCH6nP8Cn+qkBD
+   ONmlhg8GdVyC8ip3m1a5cQfJf+j7yBDSyKxykIETTWeFKKkXiOaXC98cF
+   BWAO6Sr1S1y0r2wLxBnfjegIeqJXA4gA+j6MctVnwViaHh7A0LoFMPJU4
+   w==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     <wsa@kernel.org>
+CC:     <kernel@axis.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <krzk+dt@kernel.org>, <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 2/2] i2c: core: support no-detect property
+Date:   Tue, 5 Apr 2022 14:16:27 +0200
+Message-ID: <20220405121627.1560949-3-vincent.whitchurch@axis.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220405121627.1560949-1-vincent.whitchurch@axis.com>
+References: <20220405121627.1560949-1-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-iommu_get_domain_for_dev() is already perfectly happy to return NULL
-if the given device has no IOMMU. Drop the unnecessary check.
+If the devicetree specifies the no-detect property, we can avoid calling
+drivers' detect callback and wasting time probing for devices which do
+not exist.
 
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 ---
- sound/pci/emu10k1/emu10k1_main.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/i2c/i2c-core-base.c | 8 +++++++-
+ include/linux/i2c.h         | 1 +
+ 2 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/sound/pci/emu10k1/emu10k1_main.c b/sound/pci/emu10k1/emu10k1_main.c
-index 86cc1ca025e4..5ffab343b89c 100644
---- a/sound/pci/emu10k1/emu10k1_main.c
-+++ b/sound/pci/emu10k1/emu10k1_main.c
-@@ -1751,9 +1751,6 @@ static void snd_emu10k1_detect_iommu(struct snd_emu10k1 *emu)
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index d43db2c3876e..d43025b84546 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -1341,7 +1341,8 @@ static int i2c_do_add_adapter(struct i2c_driver *driver,
+ 			      struct i2c_adapter *adap)
+ {
+ 	/* Detect supported devices on that bus, and instantiate them */
+-	i2c_detect(adap, driver);
++	if (adap->detect)
++		i2c_detect(adap, driver);
  
- 	emu->iommu_workaround = false;
+ 	return 0;
+ }
+@@ -1432,6 +1433,7 @@ EXPORT_SYMBOL_GPL(i2c_handle_smbus_host_notify);
  
--	if (!iommu_present(emu->card->dev->bus))
--		return;
--
- 	domain = iommu_get_domain_for_dev(emu->card->dev);
- 	if (domain && domain->type == IOMMU_DOMAIN_IDENTITY)
- 		return;
+ static int i2c_register_adapter(struct i2c_adapter *adap)
+ {
++	struct device_node *np = adap->dev.of_node;
+ 	int res = -EINVAL;
+ 
+ 	/* Can't register until after driver model init */
+@@ -1502,6 +1504,10 @@ static int i2c_register_adapter(struct i2c_adapter *adap)
+ 			 "Failed to create compatibility class link\n");
+ #endif
+ 
++	adap->detect = true;
++	if (np && of_property_read_bool(np, "no-detect"))
++		adap->detect = false;
++
+ 	/* create pre-declared device nodes */
+ 	of_i2c_register_devices(adap);
+ 	i2c_acpi_install_space_handler(adap);
+diff --git a/include/linux/i2c.h b/include/linux/i2c.h
+index fbda5ada2afc..8fad5fe85685 100644
+--- a/include/linux/i2c.h
++++ b/include/linux/i2c.h
+@@ -728,6 +728,7 @@ struct i2c_adapter {
+ 	struct rt_mutex bus_lock;
+ 	struct rt_mutex mux_lock;
+ 
++	bool detect;
+ 	int timeout;			/* in jiffies */
+ 	int retries;
+ 	struct device dev;		/* the adapter device */
 -- 
-2.28.0.dirty
+2.34.1
 

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB7564F512E
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16AA54F511B
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1845242AbiDFByH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:54:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
+        id S1844752AbiDFBwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 21:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1573588AbiDETXK (ORCPT
+        with ESMTP id S1573594AbiDETXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 15:23:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AC14BB9E;
-        Tue,  5 Apr 2022 12:21:10 -0700 (PDT)
+        Tue, 5 Apr 2022 15:23:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB3B4C788;
+        Tue,  5 Apr 2022 12:21:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AB8761899;
-        Tue,  5 Apr 2022 19:21:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FD4CC385A0;
-        Tue,  5 Apr 2022 19:21:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE896618CD;
+        Tue,  5 Apr 2022 19:21:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A36F0C385A5;
+        Tue,  5 Apr 2022 19:21:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649186469;
-        bh=PDf3viSS4Mrr2b1LxuraoL8yqmsI0zQ6OYJs90Hla08=;
+        s=k20201202; t=1649186474;
+        bh=X1L6/wSKaDTpim1XpoJnpAgGMETaa+8EmWzAIXZ00gU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oHkKb0zOXEGuXDRiw+PFtURhv5EVKSUUB/pEPOSwoTvrDKMMkparT8Yo9oxfzEdL7
-         bvqrG7PYDMEL/jj4n/I1QjdBPH5Iz5sKnujn5kmgM+FsE1GbkM4ubK5HYbiB5i5GRt
-         2GcheSsP2jMI0mhKOO25nWlz8HuwFSYd4XZYRKqNMBMfZji8WIC2CWZPrnd+ZW5RDK
-         4Pr63v2KKhS0GKMKuMiM7gSXx76ok2+wQrXigURfS7r4uJ3XEuk8lChHl/M0dM9RFe
-         lBusEbXaxGN9jNBzLuuXFfJasFxbyPQbDFs7VY/qr/PCYY6ZIgcswU24BwK29WyORq
-         YTE1HezVsEIQQ==
+        b=WAbgfrhtoy5Sg+CRvEU3jPw5dlTccrhLVEjqBezzHxrwoRfdA4Sugg7I5/we2/5qh
+         VjYiVx+SkN6deDnpy0CG/hTJ1D+OKnWhYD4PZ8/UjNQ66ynQ+QgAuKhx3sTXRBeJ/m
+         6eO+VQsKQMYYNaWLSpcocP93NoL3TE+hDJLx4uZT/NDQkLnxHCBEC+Mrw4ncARdX09
+         YYQK3BfJs0lsBHx7P/esthLyd9mG/NTAtIpGUc8c4y7jF6rT4JUpFWvO2CMiqg8iPR
+         nAvtMobnrz25BZm33+RP4eG7bwJr3SQ2w0nGpqPAnQ/dmiS5kcj2Ma4UDtX7CdIZtH
+         UrOzn7R1rr4Jg==
 From:   Jeff Layton <jlayton@kernel.org>
 To:     idryomov@gmail.com, xiubli@redhat.com
 Cc:     ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
         lhenriques@suse.de
-Subject: [PATCH v13 41/59] ceph: get file size from fscrypt_file when present in inode traces
-Date:   Tue,  5 Apr 2022 15:20:12 -0400
-Message-Id: <20220405192030.178326-42-jlayton@kernel.org>
+Subject: [PATCH v13 46/59] ceph: add object version support for sync read
+Date:   Tue,  5 Apr 2022 15:20:17 -0400
+Message-Id: <20220405192030.178326-47-jlayton@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405192030.178326-1-jlayton@kernel.org>
 References: <20220405192030.178326-1-jlayton@kernel.org>
@@ -55,52 +55,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we get an inode trace from the MDS, grab the fscrypt_file field if
-the inode is encrypted, and use it to populate the i_size field instead
-of the regular inode size field.
+From: Xiubo Li <xiubli@redhat.com>
 
+Always return the last object's version.
+
+Signed-off-by: Xiubo Li <xiubli@redhat.com>
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- fs/ceph/inode.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+ fs/ceph/file.c  | 12 ++++++++++--
+ fs/ceph/super.h |  3 ++-
+ 2 files changed, 12 insertions(+), 3 deletions(-)
 
-diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
-index b9454721c976..f2a59306e4a6 100644
---- a/fs/ceph/inode.c
-+++ b/fs/ceph/inode.c
-@@ -1024,6 +1024,7 @@ int ceph_fill_inode(struct inode *inode, struct page *locked_page,
+diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+index c4300381851e..175a59277726 100644
+--- a/fs/ceph/file.c
++++ b/fs/ceph/file.c
+@@ -928,7 +928,8 @@ enum {
+  * only return a short read to the caller if we hit EOF.
+  */
+ ssize_t __ceph_sync_read(struct inode *inode, loff_t *ki_pos,
+-			 struct iov_iter *to, int *retry_op)
++			 struct iov_iter *to, int *retry_op,
++			 u64 *last_objver)
+ {
+ 	struct ceph_inode_info *ci = ceph_inode(inode);
+ 	struct ceph_fs_client *fsc = ceph_inode_to_client(inode);
+@@ -938,6 +939,7 @@ ssize_t __ceph_sync_read(struct inode *inode, loff_t *ki_pos,
+ 	u64 len = iov_iter_count(to);
+ 	u64 i_size = i_size_read(inode);
+ 	bool sparse = ceph_test_mount_opt(fsc, SPARSEREAD);
++	u64 objver = 0;
  
- 	if (new_version ||
- 	    (new_issued & (CEPH_CAP_ANY_FILE_RD | CEPH_CAP_ANY_FILE_WR))) {
-+		u64 size = le64_to_cpu(info->size);
- 		s64 old_pool = ci->i_layout.pool_id;
- 		struct ceph_string *old_ns;
+ 	dout("sync_read on inode %p %llx~%llx\n", inode, *ki_pos, len);
  
-@@ -1037,10 +1038,21 @@ int ceph_fill_inode(struct inode *inode, struct page *locked_page,
+@@ -1008,6 +1010,9 @@ ssize_t __ceph_sync_read(struct inode *inode, loff_t *ki_pos,
+ 					 req->r_end_latency,
+ 					 len, ret);
  
- 		pool_ns = old_ns;
- 
-+		if (IS_ENCRYPTED(inode) && size && (iinfo->fscrypt_file_len == sizeof(__le64))) {
-+			u64 fsize = __le64_to_cpu(*(__le64 *)iinfo->fscrypt_file);
++		if (ret > 0)
++			objver = req->r_version;
 +
-+			if (size == round_up(fsize, CEPH_FSCRYPT_BLOCK_SIZE)) {
-+				size = fsize;
-+			} else {
-+				pr_warn("fscrypt size mismatch: size=%llu fscrypt_file=%llu, discarding fscrypt_file size.\n",
-+					info->size, size);
-+			}
-+		}
+ 		i_size = i_size_read(inode);
+ 		dout("sync_read %llu~%llu got %zd i_size %llu%s\n",
+ 		     off, len, ret, i_size, (more ? " MORE" : ""));
+@@ -1069,6 +1074,9 @@ ssize_t __ceph_sync_read(struct inode *inode, loff_t *ki_pos,
+ 		}
+ 	}
+ 
++	if (last_objver && ret > 0)
++		*last_objver = objver;
 +
- 		queue_trunc = ceph_fill_file_size(inode, issued,
--					le32_to_cpu(info->truncate_seq),
--					le64_to_cpu(info->truncate_size),
--					le64_to_cpu(info->size));
-+						  le32_to_cpu(info->truncate_seq),
-+						  le64_to_cpu(info->truncate_size),
-+						  size);
- 		/* only update max_size on auth cap */
- 		if ((info->cap.flags & CEPH_CAP_FLAG_AUTH) &&
- 		    ci->i_max_size != le64_to_cpu(info->max_size)) {
+ 	dout("sync_read result %zd retry_op %d\n", ret, *retry_op);
+ 	return ret;
+ }
+@@ -1082,7 +1090,7 @@ static ssize_t ceph_sync_read(struct kiocb *iocb, struct iov_iter *to,
+ 	dout("sync_read on file %p %llx~%zx %s\n", file, iocb->ki_pos,
+ 	     iov_iter_count(to), (file->f_flags & O_DIRECT) ? "O_DIRECT" : "");
+ 
+-	return __ceph_sync_read(inode, &iocb->ki_pos, to, retry_op);
++	return __ceph_sync_read(inode, &iocb->ki_pos, to, retry_op, NULL);
+ }
+ 
+ struct ceph_aio_request {
+diff --git a/fs/ceph/super.h b/fs/ceph/super.h
+index d7ab820aed34..9809bc97b89e 100644
+--- a/fs/ceph/super.h
++++ b/fs/ceph/super.h
+@@ -1259,7 +1259,8 @@ extern int ceph_open(struct inode *inode, struct file *file);
+ extern int ceph_atomic_open(struct inode *dir, struct dentry *dentry,
+ 			    struct file *file, unsigned flags, umode_t mode);
+ extern ssize_t __ceph_sync_read(struct inode *inode, loff_t *ki_pos,
+-				struct iov_iter *to, int *retry_op);
++				struct iov_iter *to, int *retry_op,
++				u64 *last_objver);
+ extern int ceph_release(struct inode *inode, struct file *filp);
+ extern void ceph_fill_inline_data(struct inode *inode, struct page *locked_page,
+ 				  char *data, size_t len);
 -- 
 2.35.1
 

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E980F4F26BD
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 590094F269D
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 10:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235784AbiDEIAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55722 "EHLO
+        id S233626AbiDEH5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 03:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232163AbiDEHpp (ORCPT
+        with ESMTP id S232846AbiDEHrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 03:45:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7850798583;
-        Tue,  5 Apr 2022 00:41:30 -0700 (PDT)
+        Tue, 5 Apr 2022 03:47:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7549BAEC;
+        Tue,  5 Apr 2022 00:43:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27038B81B14;
-        Tue,  5 Apr 2022 07:41:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80AD7C340EE;
-        Tue,  5 Apr 2022 07:41:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B17B616EA;
+        Tue,  5 Apr 2022 07:43:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19CE4C340EE;
+        Tue,  5 Apr 2022 07:43:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649144487;
-        bh=meluS99HA5DD5fXgZELnG9CkrcTjeQOpPRk3nRfkcqw=;
+        s=korg; t=1649144587;
+        bh=4iUmOk5/GozwDpgKi7hLyUraN9Mogw+oxDftcgffzLY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AP5aflc+T/4VmfDlMMHZFnJS2czIbAO/2LAkZw3hivjMKFtlCx92VpGZ72D9KmJZ/
-         c+73T73lllSgeYKViPCfX6gaxBSg3sJ6lg11+Xky9oWZn6N1jB9jAhCLULkPHWCA3h
-         xoe6/Czuns8joBPOSbJzwRMCpvNQOUdoAlF8b5wM=
+        b=PgQdAV8tfFGFou52P6HqvILeclFd3xTGE9jlRkkMQUJKveA5e/kKgmlB4heHd6SHC
+         6Y40IMBYoMIkdVZl5lLL3u3s0z1wiSWUFcVarW66SFZvH0IuxX04YZjYI5+IPEZ3m/
+         zi+tYjK1aiTSXKr5XwBOlYfiU/Htg/oGMGmmMPhc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>
-Subject: [PATCH 5.17 0055/1126] SUNRPC: Do not dereference non-socket transports in sysfs
-Date:   Tue,  5 Apr 2022 09:13:22 +0200
-Message-Id: <20220405070409.182334839@linuxfoundation.org>
+        stable@vger.kernel.org, Juhyung Park <qkrwngud825@gmail.com>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 5.17 0060/1126] f2fs: quota: fix loop condition at f2fs_quota_sync()
+Date:   Tue,  5 Apr 2022 09:13:27 +0200
+Message-Id: <20220405070409.331238945@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -54,213 +54,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Juhyung Park <qkrwngud825@gmail.com>
 
-commit 421ab1be43bd015ffe744f4ea25df4f19d1ce6fe upstream.
+commit 680af5b824a52faa819167628665804a14f0e0df upstream.
 
-Do not cast the struct xprt to a sock_xprt unless we know it is a UDP or
-TCP transport. Otherwise the call to lock the mutex will scribble over
-whatever structure is actually there. This has been seen to cause hard
-system lockups when the underlying transport was RDMA.
+cnt should be passed to sb_has_quota_active() instead of type to check
+active quota properly.
 
-Fixes: b49ea673e119 ("SUNRPC: lock against ->sock changing during sysfs read")
-Cc: stable@vger.kernel.org
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Moreover, when the type is -1, the compiler with enough inline knowledge
+can discard sb_has_quota_active() check altogether, causing a NULL pointer
+dereference at the following inode_lock(dqopt->files[cnt]):
+
+[    2.796010] Unable to handle kernel NULL pointer dereference at virtual address 00000000000000a0
+[    2.796024] Mem abort info:
+[    2.796025]   ESR = 0x96000005
+[    2.796028]   EC = 0x25: DABT (current EL), IL = 32 bits
+[    2.796029]   SET = 0, FnV = 0
+[    2.796031]   EA = 0, S1PTW = 0
+[    2.796032] Data abort info:
+[    2.796034]   ISV = 0, ISS = 0x00000005
+[    2.796035]   CM = 0, WnR = 0
+[    2.796046] user pgtable: 4k pages, 39-bit VAs, pgdp=00000003370d1000
+[    2.796048] [00000000000000a0] pgd=0000000000000000, pud=0000000000000000
+[    2.796051] Internal error: Oops: 96000005 [#1] PREEMPT SMP
+[    2.796056] CPU: 7 PID: 640 Comm: f2fs_ckpt-259:7 Tainted: G S                5.4.179-arter97-r8-64666-g2f16e087f9d8 #1
+[    2.796057] Hardware name: Qualcomm Technologies, Inc. Lahaina MTP lemonadep (DT)
+[    2.796059] pstate: 80c00005 (Nzcv daif +PAN +UAO)
+[    2.796065] pc : down_write+0x28/0x70
+[    2.796070] lr : f2fs_quota_sync+0x100/0x294
+[    2.796071] sp : ffffffa3f48ffc30
+[    2.796073] x29: ffffffa3f48ffc30 x28: 0000000000000000
+[    2.796075] x27: ffffffa3f6d718b8 x26: ffffffa415fe9d80
+[    2.796077] x25: ffffffa3f7290048 x24: 0000000000000001
+[    2.796078] x23: 0000000000000000 x22: ffffffa3f7290000
+[    2.796080] x21: ffffffa3f72904a0 x20: ffffffa3f7290110
+[    2.796081] x19: ffffffa3f77a9800 x18: ffffffc020aae038
+[    2.796083] x17: ffffffa40e38e040 x16: ffffffa40e38e6d0
+[    2.796085] x15: ffffffa40e38e6cc x14: ffffffa40e38e6d0
+[    2.796086] x13: 00000000000004f6 x12: 00162c44ff493000
+[    2.796088] x11: 0000000000000400 x10: ffffffa40e38c948
+[    2.796090] x9 : 0000000000000000 x8 : 00000000000000a0
+[    2.796091] x7 : 0000000000000000 x6 : 0000d1060f00002a
+[    2.796093] x5 : ffffffa3f48ff718 x4 : 000000000000000d
+[    2.796094] x3 : 00000000060c0000 x2 : 0000000000000001
+[    2.796096] x1 : 0000000000000000 x0 : 00000000000000a0
+[    2.796098] Call trace:
+[    2.796100]  down_write+0x28/0x70
+[    2.796102]  f2fs_quota_sync+0x100/0x294
+[    2.796104]  block_operations+0x120/0x204
+[    2.796106]  f2fs_write_checkpoint+0x11c/0x520
+[    2.796107]  __checkpoint_and_complete_reqs+0x7c/0xd34
+[    2.796109]  issue_checkpoint_thread+0x6c/0xb8
+[    2.796112]  kthread+0x138/0x414
+[    2.796114]  ret_from_fork+0x10/0x18
+[    2.796117] Code: aa0803e0 aa1f03e1 52800022 aa0103e9 (c8e97d02)
+[    2.796120] ---[ end trace 96e942e8eb6a0b53 ]---
+[    2.800116] Kernel panic - not syncing: Fatal exception
+[    2.800120] SMP: stopping secondary CPUs
+
+Fixes: 9de71ede81e6 ("f2fs: quota: fix potential deadlock")
+Cc: <stable@vger.kernel.org> # v5.15+
+Signed-off-by: Juhyung Park <qkrwngud825@gmail.com>
+Reviewed-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/sunrpc/xprt.h     |    3 ++
- include/linux/sunrpc/xprtsock.h |    1 
- net/sunrpc/sysfs.c              |   55 +++++++++++++++++++---------------------
- net/sunrpc/xprtsock.c           |   26 +++++++++++++++++-
- 4 files changed, 54 insertions(+), 31 deletions(-)
+ fs/f2fs/super.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/include/linux/sunrpc/xprt.h
-+++ b/include/linux/sunrpc/xprt.h
-@@ -139,6 +139,9 @@ struct rpc_xprt_ops {
- 	void		(*rpcbind)(struct rpc_task *task);
- 	void		(*set_port)(struct rpc_xprt *xprt, unsigned short port);
- 	void		(*connect)(struct rpc_xprt *xprt, struct rpc_task *task);
-+	int		(*get_srcaddr)(struct rpc_xprt *xprt, char *buf,
-+				       size_t buflen);
-+	unsigned short	(*get_srcport)(struct rpc_xprt *xprt);
- 	int		(*buf_alloc)(struct rpc_task *task);
- 	void		(*buf_free)(struct rpc_task *task);
- 	void		(*prepare_request)(struct rpc_rqst *req);
---- a/include/linux/sunrpc/xprtsock.h
-+++ b/include/linux/sunrpc/xprtsock.h
-@@ -10,7 +10,6 @@
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -2688,7 +2688,7 @@ int f2fs_quota_sync(struct super_block *
+ 	struct f2fs_sb_info *sbi = F2FS_SB(sb);
+ 	struct quota_info *dqopt = sb_dqopt(sb);
+ 	int cnt;
+-	int ret;
++	int ret = 0;
  
- int		init_socket_xprt(void);
- void		cleanup_socket_xprt(void);
--unsigned short	get_srcport(struct rpc_xprt *);
+ 	/*
+ 	 * Now when everything is written we can discard the pagecache so
+@@ -2699,8 +2699,8 @@ int f2fs_quota_sync(struct super_block *
+ 		if (type != -1 && cnt != type)
+ 			continue;
  
- #define RPC_MIN_RESVPORT	(1U)
- #define RPC_MAX_RESVPORT	(65535U)
---- a/net/sunrpc/sysfs.c
-+++ b/net/sunrpc/sysfs.c
-@@ -97,7 +97,7 @@ static ssize_t rpc_sysfs_xprt_dstaddr_sh
- 		return 0;
- 	ret = sprintf(buf, "%s\n", xprt->address_strings[RPC_DISPLAY_ADDR]);
- 	xprt_put(xprt);
--	return ret + 1;
-+	return ret;
- }
+-		if (!sb_has_quota_active(sb, type))
+-			return 0;
++		if (!sb_has_quota_active(sb, cnt))
++			continue;
  
- static ssize_t rpc_sysfs_xprt_srcaddr_show(struct kobject *kobj,
-@@ -105,33 +105,31 @@ static ssize_t rpc_sysfs_xprt_srcaddr_sh
- 					   char *buf)
- {
- 	struct rpc_xprt *xprt = rpc_sysfs_xprt_kobj_get_xprt(kobj);
--	struct sockaddr_storage saddr;
--	struct sock_xprt *sock;
--	ssize_t ret = -1;
-+	size_t buflen = PAGE_SIZE;
-+	ssize_t ret = -ENOTSOCK;
+ 		inode_lock(dqopt->files[cnt]);
  
- 	if (!xprt || !xprt_connected(xprt)) {
--		xprt_put(xprt);
--		return -ENOTCONN;
-+		ret = -ENOTCONN;
-+	} else if (xprt->ops->get_srcaddr) {
-+		ret = xprt->ops->get_srcaddr(xprt, buf, buflen);
-+		if (ret > 0) {
-+			if (ret < buflen - 1) {
-+				buf[ret] = '\n';
-+				ret++;
-+				buf[ret] = '\0';
-+			}
-+		}
- 	}
--
--	sock = container_of(xprt, struct sock_xprt, xprt);
--	mutex_lock(&sock->recv_mutex);
--	if (sock->sock == NULL ||
--	    kernel_getsockname(sock->sock, (struct sockaddr *)&saddr) < 0)
--		goto out;
--
--	ret = sprintf(buf, "%pISc\n", &saddr);
--out:
--	mutex_unlock(&sock->recv_mutex);
- 	xprt_put(xprt);
--	return ret + 1;
-+	return ret;
- }
- 
- static ssize_t rpc_sysfs_xprt_info_show(struct kobject *kobj,
--					struct kobj_attribute *attr,
--					char *buf)
-+					struct kobj_attribute *attr, char *buf)
- {
- 	struct rpc_xprt *xprt = rpc_sysfs_xprt_kobj_get_xprt(kobj);
-+	unsigned short srcport = 0;
-+	size_t buflen = PAGE_SIZE;
- 	ssize_t ret;
- 
- 	if (!xprt || !xprt_connected(xprt)) {
-@@ -139,7 +137,11 @@ static ssize_t rpc_sysfs_xprt_info_show(
- 		return -ENOTCONN;
- 	}
- 
--	ret = sprintf(buf, "last_used=%lu\ncur_cong=%lu\ncong_win=%lu\n"
-+	if (xprt->ops->get_srcport)
-+		srcport = xprt->ops->get_srcport(xprt);
-+
-+	ret = snprintf(buf, buflen,
-+		       "last_used=%lu\ncur_cong=%lu\ncong_win=%lu\n"
- 		       "max_num_slots=%u\nmin_num_slots=%u\nnum_reqs=%u\n"
- 		       "binding_q_len=%u\nsending_q_len=%u\npending_q_len=%u\n"
- 		       "backlog_q_len=%u\nmain_xprt=%d\nsrc_port=%u\n"
-@@ -147,14 +149,11 @@ static ssize_t rpc_sysfs_xprt_info_show(
- 		       xprt->last_used, xprt->cong, xprt->cwnd, xprt->max_reqs,
- 		       xprt->min_reqs, xprt->num_reqs, xprt->binding.qlen,
- 		       xprt->sending.qlen, xprt->pending.qlen,
--		       xprt->backlog.qlen, xprt->main,
--		       (xprt->xprt_class->ident == XPRT_TRANSPORT_TCP) ?
--		       get_srcport(xprt) : 0,
-+		       xprt->backlog.qlen, xprt->main, srcport,
- 		       atomic_long_read(&xprt->queuelen),
--		       (xprt->xprt_class->ident == XPRT_TRANSPORT_TCP) ?
--				xprt->address_strings[RPC_DISPLAY_PORT] : "0");
-+		       xprt->address_strings[RPC_DISPLAY_PORT]);
- 	xprt_put(xprt);
--	return ret + 1;
-+	return ret;
- }
- 
- static ssize_t rpc_sysfs_xprt_state_show(struct kobject *kobj,
-@@ -201,7 +200,7 @@ static ssize_t rpc_sysfs_xprt_state_show
- 	}
- 
- 	xprt_put(xprt);
--	return ret + 1;
-+	return ret;
- }
- 
- static ssize_t rpc_sysfs_xprt_switch_info_show(struct kobject *kobj,
-@@ -220,7 +219,7 @@ static ssize_t rpc_sysfs_xprt_switch_inf
- 		      xprt_switch->xps_nunique_destaddr_xprts,
- 		      atomic_long_read(&xprt_switch->xps_queuelen));
- 	xprt_switch_put(xprt_switch);
--	return ret + 1;
-+	return ret;
- }
- 
- static ssize_t rpc_sysfs_xprt_dstaddr_store(struct kobject *kobj,
---- a/net/sunrpc/xprtsock.c
-+++ b/net/sunrpc/xprtsock.c
-@@ -1638,7 +1638,7 @@ static int xs_get_srcport(struct sock_xp
- 	return port;
- }
- 
--unsigned short get_srcport(struct rpc_xprt *xprt)
-+static unsigned short xs_sock_srcport(struct rpc_xprt *xprt)
- {
- 	struct sock_xprt *sock = container_of(xprt, struct sock_xprt, xprt);
- 	unsigned short ret = 0;
-@@ -1648,7 +1648,25 @@ unsigned short get_srcport(struct rpc_xp
- 	mutex_unlock(&sock->recv_mutex);
- 	return ret;
- }
--EXPORT_SYMBOL(get_srcport);
-+
-+static int xs_sock_srcaddr(struct rpc_xprt *xprt, char *buf, size_t buflen)
-+{
-+	struct sock_xprt *sock = container_of(xprt, struct sock_xprt, xprt);
-+	union {
-+		struct sockaddr sa;
-+		struct sockaddr_storage st;
-+	} saddr;
-+	int ret = -ENOTCONN;
-+
-+	mutex_lock(&sock->recv_mutex);
-+	if (sock->sock) {
-+		ret = kernel_getsockname(sock->sock, &saddr.sa);
-+		if (ret >= 0)
-+			ret = snprintf(buf, buflen, "%pISc", &saddr.sa);
-+	}
-+	mutex_unlock(&sock->recv_mutex);
-+	return ret;
-+}
- 
- static unsigned short xs_next_srcport(struct sock_xprt *transport, unsigned short port)
- {
-@@ -2621,6 +2639,8 @@ static const struct rpc_xprt_ops xs_udp_
- 	.rpcbind		= rpcb_getport_async,
- 	.set_port		= xs_set_port,
- 	.connect		= xs_connect,
-+	.get_srcaddr		= xs_sock_srcaddr,
-+	.get_srcport		= xs_sock_srcport,
- 	.buf_alloc		= rpc_malloc,
- 	.buf_free		= rpc_free,
- 	.send_request		= xs_udp_send_request,
-@@ -2643,6 +2663,8 @@ static const struct rpc_xprt_ops xs_tcp_
- 	.rpcbind		= rpcb_getport_async,
- 	.set_port		= xs_set_port,
- 	.connect		= xs_connect,
-+	.get_srcaddr		= xs_sock_srcaddr,
-+	.get_srcport		= xs_sock_srcport,
- 	.buf_alloc		= rpc_malloc,
- 	.buf_free		= rpc_free,
- 	.prepare_request	= xs_stream_prepare_request,
 
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2CD64F43CF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A76BC4F4712
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376741AbiDEMnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
+        id S233152AbiDEU6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242091AbiDEJHe (ORCPT
+        with ESMTP id S1348752AbiDEJsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:07:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AC553A5A;
-        Tue,  5 Apr 2022 01:56:41 -0700 (PDT)
+        Tue, 5 Apr 2022 05:48:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B303E4833A;
+        Tue,  5 Apr 2022 02:34:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF60561574;
-        Tue,  5 Apr 2022 08:56:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6D66C385A1;
-        Tue,  5 Apr 2022 08:56:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 639FEB81C82;
+        Tue,  5 Apr 2022 09:34:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC275C385A2;
+        Tue,  5 Apr 2022 09:34:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148993;
-        bh=DjFW1lrQlmsuzivQOKwibklUM5SrWybqRkEPZWtbFdY=;
+        s=korg; t=1649151288;
+        bh=3WCk8sBpIkZCS0IofelWfKv101rypvwobF2dXzA2GKA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y3H6wzOijD/6SUAXkz9VFzQS3QaHZpeKkZ3VY2AsdxmvzM/p41A0WuLowwMwYq6fv
-         x4H+0zsb8c97ggc+gEXFzmJmrcz3ywd5z/jg97HmVi1s7f290GTPJ8CviKILQbeK7o
-         SmG5hcYPCk4OxpBH85aSBOMJ2yyeETDDzGcEKlXk=
+        b=zRkJjstNbmpfo5bDWwOhNP9GZ72Lv5XoNmCOtPf14SAV+YVkdN278q7pOhNAT9OX4
+         ND1m2u2TtXf80MRcv5zEo172YEAnYGFBxS92sZPEJt6cTLRHClb/TNyB1SMU49QDY6
+         8tYAAUxR9d4mIK1P03i4fhhg6mdI09kqhtJmniNo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Luca Coelho <luciano.coelho@intel.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0508/1017] iwlwifi: mvm: Dont call iwl_mvm_sta_from_mac80211() with NULL sta
-Date:   Tue,  5 Apr 2022 09:23:41 +0200
-Message-Id: <20220405070409.379668707@linuxfoundation.org>
+Subject: [PATCH 5.15 360/913] ASoC: rk817: Fix missing clk_disable_unprepare() in rk817_platform_probe
+Date:   Tue,  5 Apr 2022 09:23:42 +0200
+Message-Id: <20220405070350.637046054@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 30d17c12b0895e15ce22ebc1f52a4ff02df6dbc6 ]
+[ Upstream commit a6b44a2518a08348bd0f0401e4d2b99233bbabc2 ]
 
-The recent fix for NULL sta in iwl_mvm_get_tx_rate() still has a call
-of iwl_mvm_sta_from_mac80211() that may be called with NULL sta.
-Although this practically only points to the address and the actual
-access doesn't happen due to the conditional evaluation at a later
-point, it looks a bit flaky.
+Fix the missing clk_disable_unprepare() before return
+from rk817_platform_probe() in the error handling case.
 
-This patch drops the temporary variable above and evaluates
-iwm_mvm_sta_from_mac80211() directly for avoiding confusions.
-
-Fixes: d599f714b73e ("iwlwifi: mvm: don't crash on invalid rate w/o STA")
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Link: https://lore.kernel.org/r/20220121114024.10454-1-tiwai@suse.de
-Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Fixes: 0d6a04da9b25 ("ASoC: Add Rockchip rk817 audio CODEC support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Tested-by: Chris Morgan <macromorgan@hotmail.com>
+Link: https://lore.kernel.org/r/20220307090146.4104-1-linmq006@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/intel/iwlwifi/mvm/tx.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ sound/soc/codecs/rk817_codec.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/tx.c b/drivers/net/wireless/intel/iwlwifi/mvm/tx.c
-index 0f96d422d6e0..bbd394a7b531 100644
---- a/drivers/net/wireless/intel/iwlwifi/mvm/tx.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mvm/tx.c
-@@ -272,15 +272,14 @@ static u32 iwl_mvm_get_tx_rate(struct iwl_mvm *mvm,
- 
- 	/* info->control is only relevant for non HW rate control */
- 	if (!ieee80211_hw_check(mvm->hw, HAS_RATE_CONTROL)) {
--		struct iwl_mvm_sta *mvmsta = iwl_mvm_sta_from_mac80211(sta);
--
- 		/* HT rate doesn't make sense for a non data frame */
- 		WARN_ONCE(info->control.rates[0].flags & IEEE80211_TX_RC_MCS &&
- 			  !ieee80211_is_data(fc),
- 			  "Got a HT rate (flags:0x%x/mcs:%d/fc:0x%x/state:%d) for a non data frame\n",
- 			  info->control.rates[0].flags,
- 			  info->control.rates[0].idx,
--			  le16_to_cpu(fc), sta ? mvmsta->sta_state : -1);
-+			  le16_to_cpu(fc),
-+			  sta ? iwl_mvm_sta_from_mac80211(sta)->sta_state : -1);
- 
- 		rate_idx = info->control.rates[0].idx;
+diff --git a/sound/soc/codecs/rk817_codec.c b/sound/soc/codecs/rk817_codec.c
+index 03f24edfe4f6..8fffe378618d 100644
+--- a/sound/soc/codecs/rk817_codec.c
++++ b/sound/soc/codecs/rk817_codec.c
+@@ -508,12 +508,14 @@ static int rk817_platform_probe(struct platform_device *pdev)
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "%s() register codec error %d\n",
+ 			__func__, ret);
+-		goto err_;
++		goto err_clk;
  	}
+ 
+ 	return 0;
+-err_:
+ 
++err_clk:
++	clk_disable_unprepare(rk817_codec_data->mclk);
++err_:
+ 	return ret;
+ }
+ 
 -- 
 2.34.1
 

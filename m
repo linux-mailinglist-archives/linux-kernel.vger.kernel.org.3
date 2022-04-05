@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F564F47BA
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3314F46B2
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242954AbiDEVSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41900 "EHLO
+        id S1380518AbiDEUlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1572985AbiDERkR (ORCPT
+        with ESMTP id S1572990AbiDERmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 13:40:17 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE86CB8202
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 10:38:18 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id n9so6805009plc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 05 Apr 2022 10:38:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Io1IzG6hmJITuaZIDTYDYzvTfnNkY/lRuamDnYEiYog=;
-        b=iz/lmMITgXQh0MqUOEQiFr6dsc0sTdIPypLCCvAym9JOaLdEYvr9t3x/gutfUpMmCz
-         YB+c3zyDyI9Wl9NnnLHeqzzbgLg5x/vuuv3yvbSQZ617dXn+sAi8kVRb4YiSh8/NjB0Q
-         cr2BhhDA/xuNawlnZ0rK+d9gHXVD67lZMQ6rlXU456ABQwE/ClXPwbq7/Cxz6bgfuspc
-         OTehuW8IHfKzC8rrjyVr91xIYR4urF/R+UNHsxqcwR71gfvero52Uj+Em5/icX/Vza7x
-         0sNNcdda6Nt3Wak7MkP7XRlddpBgHPjxen/fJAFVjChFfKpN3jJ4Wj4F5J1N6rdoJS14
-         jQPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Io1IzG6hmJITuaZIDTYDYzvTfnNkY/lRuamDnYEiYog=;
-        b=JcZ1H9LEkmUgrO0i9tIgm1Ogv1DsAc/H60x7WMyvZNTO5JYBKpnAcc6z+3QnV18BHY
-         XKi3Ltq4SCWvD/r/q0a/FBBJHqEWdk7Yy1/um3gnQ6e/Gh3YOP3CkHUO21Mv5c7n3Py9
-         AP98L+EG1t9fQG+pwUQ2jNkexe0KeC9SyyL5B23l2WDVbZqD/rQYyqG7LMLhNxMr9mJd
-         TP9cKdWi4ZvMww1I7PhvmY2E9O6nmUtX8t3RlcNgDt7baHO5XElBwMLHSVVSIHBsFGqt
-         MIwzlTq2QBWgCpMmQACCoptp5vAfgN7Ef/uoxSBAMQ2FKVx1W9vGZqUyuc3VAAEjO7+0
-         IxGA==
-X-Gm-Message-State: AOAM533rnHMOxfGoUc5jXdDmLPk+HgcakjZCNgC2o6/5QTOIygQQAJNK
-        1EWcpo028IXs1fK2ppPn9bA=
-X-Google-Smtp-Source: ABdhPJz8bWFNWl/yMS3gIRE+9LtjVYBYlTCCD9NPyLbTvdXKCpqIJrQ8mAH5ylinjXsk21ZNuzNM7Q==
-X-Received: by 2002:a17:902:a9c5:b0:156:32bf:b526 with SMTP id b5-20020a170902a9c500b0015632bfb526mr4687173plr.46.1649180298344;
-        Tue, 05 Apr 2022 10:38:18 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id t15-20020a63b70f000000b00381510608e9sm13966302pgf.14.2022.04.05.10.38.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Apr 2022 10:38:17 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        virtualization@lists.linux-foundation.org (open list:VIRTIO GPU DRIVER),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/virtio: Add execbuf flag to request no fence-event
-Date:   Tue,  5 Apr 2022 10:39:18 -0700
-Message-Id: <20220405173918.1000846-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 5 Apr 2022 13:42:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD0CB91A9;
+        Tue,  5 Apr 2022 10:40:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C87B2B81EE4;
+        Tue,  5 Apr 2022 17:40:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DE80C385A5;
+        Tue,  5 Apr 2022 17:40:22 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="l5nk+/So"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1649180419;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=g0RO67IsWiIRaN00UqFYvLKhwvI+fUHEG0ABd2diEis=;
+        b=l5nk+/SosryNFeCI8Q3/zfn/1LKLIZ8iHNi0rWYpFF9VVP95xzSuUSaCeLdoYQkJEAW0tE
+        kVmXmGeXBm9MymcZj9wHJdPoluQWl0OlJ0/plpBuDm6i+bOD2Xw0QNgqAXdr7H3fH6QB/T
+        ELTGJJRAbEbfoYJuQprLKzX4+XLRzWg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 06d65d9d (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 5 Apr 2022 17:40:19 +0000 (UTC)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2eb3db5b172so98410467b3.6;
+        Tue, 05 Apr 2022 10:40:18 -0700 (PDT)
+X-Gm-Message-State: AOAM5329HlC9en2GZtJvQeYFLDdjfNZrykRp3x2o7tlluQxm5HqFxtaO
+        z1r6Sw5l0lTxaIBWZkQB0qAFMwgYYKFU1a0NDG4=
+X-Google-Smtp-Source: ABdhPJxggra8RefXSrqyMfsPxHjGbqamYdiF4pGdnuRqzip50DYJhkIIVyQbHYUw3VWFO95SfIXgZtdOlibRkkfvs9I=
+X-Received: by 2002:a81:f00c:0:b0:2e9:d949:c189 with SMTP id
+ p12-20020a81f00c000000b002e9d949c189mr3637965ywm.2.1649180418428; Tue, 05 Apr
+ 2022 10:40:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Received: by 2002:a05:7110:470c:b0:173:a80b:3ec5 with HTTP; Tue, 5 Apr 2022
+ 10:40:17 -0700 (PDT)
+In-Reply-To: <202204051016.4E9DD89@keescook>
+References: <CAHmME9otYi4pCzZwSGnK40dp1QMRVPxp+DBysVuLXUKkXinAxg@mail.gmail.com>
+ <20220403204036.1269562-1-Jason@zx2c4.com> <202204041144.96FC64A8@keescook>
+ <Ykt1cj0wPKEsHL2q@zx2c4.com> <202204041953.D7E0BA15@keescook>
+ <CAHmME9rC-pmi3K=w06-bOsHP5=tPv9CS51hr69P1C5tmvHf_mA@mail.gmail.com> <202204051016.4E9DD89@keescook>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 5 Apr 2022 19:40:17 +0200
+X-Gmail-Original-Message-ID: <CAHmME9pV4SdoSyMq4kax3w3Vu1nPxjO3faCZKq8d0RDo8t731g@mail.gmail.com>
+Message-ID: <CAHmME9pV4SdoSyMq4kax3w3Vu1nPxjO3faCZKq8d0RDo8t731g@mail.gmail.com>
+Subject: Re: [PATCH v2] gcc-plugins: latent_entropy: use /dev/urandom
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, PaX Team <pageexec@freemail.hu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,54 +70,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+Hi Kees,
 
-It would have been cleaner to have a flag to *request* the fence event.
-But that ship has sailed.  So add a flag so that userspace which doesn't
-care about the events can opt-out.
+On 4/5/22, Kees Cook <keescook@chromium.org> wrote:
+> v3 uses a different check for the -f option, though? Isn't that
+> preferred over the v2 method?
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/virtio/virtgpu_ioctl.c | 8 +++++---
- include/uapi/drm/virtgpu_drm.h         | 2 ++
- 2 files changed, 7 insertions(+), 3 deletions(-)
+Based on the code comments, I assume this is gcc upstream's intended
+method. It strikes me as worse, though, because that variable, when
+it's not set to -1, is set to: `local_tick = (unsigned) tv.tv_sec *
+1000 + tv.tv_usec / 1000;` which is on occasion unlucky and hits -1
+too. But maybe that's a bug in gcc that should be fixed instead? I
+don't know really. But anyway that's why I'm /also/ more into that
+aspect of v2.
 
-diff --git a/drivers/gpu/drm/virtio/virtgpu_ioctl.c b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
-index 3a8078f2ee27..09f1aa263f91 100644
---- a/drivers/gpu/drm/virtio/virtgpu_ioctl.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_ioctl.c
-@@ -225,9 +225,11 @@ static int virtio_gpu_execbuffer_ioctl(struct drm_device *dev, void *data,
- 		goto out_unresv;
- 	}
- 
--	ret = virtio_gpu_fence_event_create(dev, file, out_fence, ring_idx);
--	if (ret)
--		goto out_unresv;
-+	if (!(exbuf->flags & VIRTGPU_EXECBUF_NO_EVENT)) {
-+		ret = virtio_gpu_fence_event_create(dev, file, out_fence, ring_idx);
-+		if (ret)
-+			goto out_unresv;
-+	}
- 
- 	if (out_fence_fd >= 0) {
- 		sync_file = sync_file_create(&out_fence->f);
-diff --git a/include/uapi/drm/virtgpu_drm.h b/include/uapi/drm/virtgpu_drm.h
-index 0512fde5e697..d06cac3407cc 100644
---- a/include/uapi/drm/virtgpu_drm.h
-+++ b/include/uapi/drm/virtgpu_drm.h
-@@ -52,10 +52,12 @@ extern "C" {
- #define VIRTGPU_EXECBUF_FENCE_FD_IN	0x01
- #define VIRTGPU_EXECBUF_FENCE_FD_OUT	0x02
- #define VIRTGPU_EXECBUF_RING_IDX	0x04
-+#define VIRTGPU_EXECBUF_NO_EVENT	0x08
- #define VIRTGPU_EXECBUF_FLAGS  (\
- 		VIRTGPU_EXECBUF_FENCE_FD_IN |\
- 		VIRTGPU_EXECBUF_FENCE_FD_OUT |\
- 		VIRTGPU_EXECBUF_RING_IDX |\
-+		VIRTGPU_EXECBUF_NO_EVENT |\
- 		0)
- 
- struct drm_virtgpu_map {
--- 
-2.35.1
+> Also, I did some quick benchmarking, and any difference in runtime is
+> completely lost in the noise, so that's good.
 
+Oh good to hear. So my 2k buffer is fine then.
+
+Jason

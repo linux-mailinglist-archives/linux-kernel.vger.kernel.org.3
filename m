@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E374F3368
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 15:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0CF4F31B2
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 14:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238591AbiDEIan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 04:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50276 "EHLO
+        id S240358AbiDEIby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 04:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236011AbiDEIBG (ORCPT
+        with ESMTP id S236084AbiDEIBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:01:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F328D4B1F7;
-        Tue,  5 Apr 2022 00:59:06 -0700 (PDT)
+        Tue, 5 Apr 2022 04:01:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5225A49FB3;
+        Tue,  5 Apr 2022 00:59:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F2D761748;
-        Tue,  5 Apr 2022 07:59:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B936C340EE;
-        Tue,  5 Apr 2022 07:59:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2842B81B7F;
+        Tue,  5 Apr 2022 07:59:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 623D5C340EE;
+        Tue,  5 Apr 2022 07:59:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649145546;
-        bh=zazOJ9lM/Dvj6CJxUo215DlrE669HBaoTJDJ7TEdNHA=;
+        s=korg; t=1649145556;
+        bh=V6Suz//XJZMYQ70bJZmNicQGPlgpqpYOtVsGgnsQ4/Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v6E0Jad1vNBhCJ6/iIic+iQHFAsLbUJqF8u/C+lhptHbhZaOxNx6InoXEf4SF35IB
-         eyEe1ZlbnjRAxGoN9bhvHuP3KEkgrPYn8L2C0aushSV/gE1PL5fu0XxaAofbFF4wN+
-         +xdW5L/WKL/byli6jfff9/OF5UV2WBiTQ07BALGY=
+        b=0FNYJcsX6MWgJ8US4ofHT04ZKPp/BE31QyIOVcAKG31c2sGV8i3EPSzBX7r1T9iGC
+         LcvmrqbBAKOGImSypIeChhRtAENH7wYWBMaDaL/IiXLB/Lo+2oTz6CpRb9y8e1M58X
+         XHMgnwunb2hiygg4HCikAMR5yMb0dXyKu28YXhs8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tedd Ho-Jeong An <tedd.an@intel.com>,
+        stable@vger.kernel.org, Sean Wang <sean.wang@mediatek.com>,
+        Mark Chen <mark-yw.chen@mediatek.com>,
         Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 0444/1126] Bluetooth: btintel: Fix WBS setting for Intel legacy ROM products
-Date:   Tue,  5 Apr 2022 09:19:51 +0200
-Message-Id: <20220405070420.656476328@linuxfoundation.org>
+Subject: [PATCH 5.17 0448/1126] Bluetooth: btmtksdio: refactor btmtksdio_runtime_[suspend|resume]()
+Date:   Tue,  5 Apr 2022 09:19:55 +0200
+Message-Id: <20220405070420.774164414@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070407.513532867@linuxfoundation.org>
 References: <20220405070407.513532867@linuxfoundation.org>
@@ -55,91 +56,194 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tedd Ho-Jeong An <tedd.an@intel.com>
+From: Mark Chen <mark-yw.chen@mediatek.com>
 
-[ Upstream commit 55235304c2560d4a94ccfff2a47ea927b4114064 ]
+[ Upstream commit c7e301d7c85544607ccc52ca5f26d20c59485342 ]
 
-This patch adds the flag to identify the Intel legacy ROM products that
-don't support WBS like WP and StP.
+Refactor btmtksdio_runtime_[suspend|resume]() to create the common
+funcitons btmtksdio_[fw|drv]_pmctrl() shared with btmtksdio_[open|close]()
+to avoid the redundant code as well.
 
-Fixes: 3df4dfbec0f29 ("Bluetooth: btintel: Move hci quirks to setup routine")
-Signed-off-by: Tedd Ho-Jeong An <tedd.an@intel.com>
+This is also a prerequisite patch for the incoming patches.
+
+Co-developed-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Mark Chen <mark-yw.chen@mediatek.com>
 Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/bluetooth/btintel.c | 11 ++++++++---
- drivers/bluetooth/btintel.h |  1 +
- drivers/bluetooth/btusb.c   |  6 ++++++
- 3 files changed, 15 insertions(+), 3 deletions(-)
+ drivers/bluetooth/btmtksdio.c | 94 ++++++++++++++++++++---------------
+ 1 file changed, 53 insertions(+), 41 deletions(-)
 
-diff --git a/drivers/bluetooth/btintel.c b/drivers/bluetooth/btintel.c
-index 1a4f8b227eac..06514ed66022 100644
---- a/drivers/bluetooth/btintel.c
-+++ b/drivers/bluetooth/btintel.c
-@@ -2428,10 +2428,15 @@ static int btintel_setup_combined(struct hci_dev *hdev)
+diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
+index c05578b52d33..cf757574fb63 100644
+--- a/drivers/bluetooth/btmtksdio.c
++++ b/drivers/bluetooth/btmtksdio.c
+@@ -282,6 +282,54 @@ static u32 btmtksdio_drv_own_query(struct btmtksdio_dev *bdev)
+ 	return sdio_readl(bdev->func, MTK_REG_CHLPCR, NULL);
+ }
  
- 			/* Apply the device specific HCI quirks
- 			 *
--			 * WBS for SdP - SdP and Stp have a same hw_varaint but
--			 * different fw_variant
-+			 * WBS for SdP - For the Legacy ROM products, only SdP
-+			 * supports the WBS. But the version information is not
-+			 * enough to use here because the StP2 and SdP have same
-+			 * hw_variant and fw_variant. So, this flag is set by
-+			 * the transport driver (btusb) based on the HW info
-+			 * (idProduct)
- 			 */
--			if (ver.hw_variant == 0x08 && ver.fw_variant == 0x22)
-+			if (!btintel_test_flag(hdev,
-+					       INTEL_ROM_LEGACY_NO_WBS_SUPPORT))
- 				set_bit(HCI_QUIRK_WIDEBAND_SPEECH_SUPPORTED,
- 					&hdev->quirks);
- 
-diff --git a/drivers/bluetooth/btintel.h b/drivers/bluetooth/btintel.h
-index c9b24e9299e2..e0060e58573c 100644
---- a/drivers/bluetooth/btintel.h
-+++ b/drivers/bluetooth/btintel.h
-@@ -152,6 +152,7 @@ enum {
- 	INTEL_BROKEN_INITIAL_NCMD,
- 	INTEL_BROKEN_SHUTDOWN_LED,
- 	INTEL_ROM_LEGACY,
-+	INTEL_ROM_LEGACY_NO_WBS_SUPPORT,
- 
- 	__INTEL_NUM_FLAGS,
- };
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index 19d5686f8a2a..2afbd87d77c9 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -62,6 +62,7 @@ static struct usb_driver btusb_driver;
- #define BTUSB_QCA_WCN6855	0x1000000
- #define BTUSB_INTEL_BROKEN_SHUTDOWN_LED	0x2000000
- #define BTUSB_INTEL_BROKEN_INITIAL_NCMD 0x4000000
-+#define BTUSB_INTEL_NO_WBS_SUPPORT	0x8000000
- 
- static const struct usb_device_id btusb_table[] = {
- 	/* Generic Bluetooth USB device */
-@@ -385,9 +386,11 @@ static const struct usb_device_id blacklist_table[] = {
- 	{ USB_DEVICE(0x8087, 0x0033), .driver_info = BTUSB_INTEL_COMBINED },
- 	{ USB_DEVICE(0x8087, 0x07da), .driver_info = BTUSB_CSR },
- 	{ USB_DEVICE(0x8087, 0x07dc), .driver_info = BTUSB_INTEL_COMBINED |
-+						     BTUSB_INTEL_NO_WBS_SUPPORT |
- 						     BTUSB_INTEL_BROKEN_INITIAL_NCMD |
- 						     BTUSB_INTEL_BROKEN_SHUTDOWN_LED },
- 	{ USB_DEVICE(0x8087, 0x0a2a), .driver_info = BTUSB_INTEL_COMBINED |
-+						     BTUSB_INTEL_NO_WBS_SUPPORT |
- 						     BTUSB_INTEL_BROKEN_SHUTDOWN_LED },
- 	{ USB_DEVICE(0x8087, 0x0a2b), .driver_info = BTUSB_INTEL_COMBINED },
- 	{ USB_DEVICE(0x8087, 0x0aa7), .driver_info = BTUSB_INTEL_COMBINED |
-@@ -3743,6 +3746,9 @@ static int btusb_probe(struct usb_interface *intf,
- 		hdev->send = btusb_send_frame_intel;
- 		hdev->cmd_timeout = btusb_intel_cmd_timeout;
- 
-+		if (id->driver_info & BTUSB_INTEL_NO_WBS_SUPPORT)
-+			btintel_set_flag(hdev, INTEL_ROM_LEGACY_NO_WBS_SUPPORT);
++static int btmtksdio_fw_pmctrl(struct btmtksdio_dev *bdev)
++{
++	u32 status;
++	int err;
 +
- 		if (id->driver_info & BTUSB_INTEL_BROKEN_INITIAL_NCMD)
- 			btintel_set_flag(hdev, INTEL_BROKEN_INITIAL_NCMD);
++	sdio_claim_host(bdev->func);
++
++	/* Return ownership to the device */
++	sdio_writel(bdev->func, C_FW_OWN_REQ_SET, MTK_REG_CHLPCR, &err);
++	if (err < 0)
++		goto out;
++
++	err = readx_poll_timeout(btmtksdio_drv_own_query, bdev, status,
++				 !(status & C_COM_DRV_OWN), 2000, 1000000);
++
++out:
++	sdio_release_host(bdev->func);
++
++	if (err < 0)
++		bt_dev_err(bdev->hdev, "Cannot return ownership to device");
++
++	return err;
++}
++
++static int btmtksdio_drv_pmctrl(struct btmtksdio_dev *bdev)
++{
++	u32 status;
++	int err;
++
++	sdio_claim_host(bdev->func);
++
++	/* Get ownership from the device */
++	sdio_writel(bdev->func, C_FW_OWN_REQ_CLR, MTK_REG_CHLPCR, &err);
++	if (err < 0)
++		goto out;
++
++	err = readx_poll_timeout(btmtksdio_drv_own_query, bdev, status,
++				 status & C_COM_DRV_OWN, 2000, 1000000);
++
++out:
++	sdio_release_host(bdev->func);
++
++	if (err < 0)
++		bt_dev_err(bdev->hdev, "Cannot get ownership from device");
++
++	return err;
++}
++
+ static int btmtksdio_recv_event(struct hci_dev *hdev, struct sk_buff *skb)
+ {
+ 	struct btmtksdio_dev *bdev = hci_get_drvdata(hdev);
+@@ -541,7 +589,7 @@ static void btmtksdio_interrupt(struct sdio_func *func)
+ static int btmtksdio_open(struct hci_dev *hdev)
+ {
+ 	struct btmtksdio_dev *bdev = hci_get_drvdata(hdev);
+-	u32 status, val;
++	u32 val;
+ 	int err;
+ 
+ 	sdio_claim_host(bdev->func);
+@@ -552,18 +600,10 @@ static int btmtksdio_open(struct hci_dev *hdev)
+ 
+ 	set_bit(BTMTKSDIO_FUNC_ENABLED, &bdev->tx_state);
+ 
+-	/* Get ownership from the device */
+-	sdio_writel(bdev->func, C_FW_OWN_REQ_CLR, MTK_REG_CHLPCR, &err);
++	err = btmtksdio_drv_pmctrl(bdev);
+ 	if (err < 0)
+ 		goto err_disable_func;
+ 
+-	err = readx_poll_timeout(btmtksdio_drv_own_query, bdev, status,
+-				 status & C_COM_DRV_OWN, 2000, 1000000);
+-	if (err < 0) {
+-		bt_dev_err(bdev->hdev, "Cannot get ownership from device");
+-		goto err_disable_func;
+-	}
+-
+ 	/* Disable interrupt & mask out all interrupt sources */
+ 	sdio_writel(bdev->func, C_INT_EN_CLR, MTK_REG_CHLPCR, &err);
+ 	if (err < 0)
+@@ -633,8 +673,6 @@ static int btmtksdio_open(struct hci_dev *hdev)
+ static int btmtksdio_close(struct hci_dev *hdev)
+ {
+ 	struct btmtksdio_dev *bdev = hci_get_drvdata(hdev);
+-	u32 status;
+-	int err;
+ 
+ 	sdio_claim_host(bdev->func);
+ 
+@@ -645,13 +683,7 @@ static int btmtksdio_close(struct hci_dev *hdev)
+ 
+ 	cancel_work_sync(&bdev->txrx_work);
+ 
+-	/* Return ownership to the device */
+-	sdio_writel(bdev->func, C_FW_OWN_REQ_SET, MTK_REG_CHLPCR, NULL);
+-
+-	err = readx_poll_timeout(btmtksdio_drv_own_query, bdev, status,
+-				 !(status & C_COM_DRV_OWN), 2000, 1000000);
+-	if (err < 0)
+-		bt_dev_err(bdev->hdev, "Cannot return ownership to device");
++	btmtksdio_fw_pmctrl(bdev);
+ 
+ 	clear_bit(BTMTKSDIO_FUNC_ENABLED, &bdev->tx_state);
+ 	sdio_disable_func(bdev->func);
+@@ -1077,7 +1109,6 @@ static int btmtksdio_runtime_suspend(struct device *dev)
+ {
+ 	struct sdio_func *func = dev_to_sdio_func(dev);
+ 	struct btmtksdio_dev *bdev;
+-	u32 status;
+ 	int err;
+ 
+ 	bdev = sdio_get_drvdata(func);
+@@ -1089,19 +1120,10 @@ static int btmtksdio_runtime_suspend(struct device *dev)
+ 
+ 	sdio_set_host_pm_flags(func, MMC_PM_KEEP_POWER);
+ 
+-	sdio_claim_host(bdev->func);
+-
+-	sdio_writel(bdev->func, C_FW_OWN_REQ_SET, MTK_REG_CHLPCR, &err);
+-	if (err < 0)
+-		goto out;
++	err = btmtksdio_fw_pmctrl(bdev);
+ 
+-	err = readx_poll_timeout(btmtksdio_drv_own_query, bdev, status,
+-				 !(status & C_COM_DRV_OWN), 2000, 1000000);
+-out:
+ 	bt_dev_info(bdev->hdev, "status (%d) return ownership to device", err);
+ 
+-	sdio_release_host(bdev->func);
+-
+ 	return err;
+ }
+ 
+@@ -1109,7 +1131,6 @@ static int btmtksdio_runtime_resume(struct device *dev)
+ {
+ 	struct sdio_func *func = dev_to_sdio_func(dev);
+ 	struct btmtksdio_dev *bdev;
+-	u32 status;
+ 	int err;
+ 
+ 	bdev = sdio_get_drvdata(func);
+@@ -1119,19 +1140,10 @@ static int btmtksdio_runtime_resume(struct device *dev)
+ 	if (!test_bit(BTMTKSDIO_FUNC_ENABLED, &bdev->tx_state))
+ 		return 0;
+ 
+-	sdio_claim_host(bdev->func);
+-
+-	sdio_writel(bdev->func, C_FW_OWN_REQ_CLR, MTK_REG_CHLPCR, &err);
+-	if (err < 0)
+-		goto out;
++	err = btmtksdio_drv_pmctrl(bdev);
+ 
+-	err = readx_poll_timeout(btmtksdio_drv_own_query, bdev, status,
+-				 status & C_COM_DRV_OWN, 2000, 1000000);
+-out:
+ 	bt_dev_info(bdev->hdev, "status (%d) get ownership from device", err);
+ 
+-	sdio_release_host(bdev->func);
+-
+ 	return err;
+ }
  
 -- 
 2.34.1

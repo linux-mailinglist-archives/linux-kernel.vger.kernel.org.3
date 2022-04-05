@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82E1E4F51E7
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C942A4F5256
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389237AbiDFC0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 22:26:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39956 "EHLO
+        id S1849531AbiDFCii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 22:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237138AbiDEVRT (ORCPT
+        with ESMTP id S1443090AbiDEWUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 17:17:19 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0D470F5A;
-        Tue,  5 Apr 2022 13:44:45 -0700 (PDT)
+        Tue, 5 Apr 2022 18:20:08 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8324F6A019;
+        Tue,  5 Apr 2022 13:44:46 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: nicolas)
-        with ESMTPSA id D73C21F4480B
+        with ESMTPSA id 40C121F44815
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649191483;
-        bh=CR0Uld+xP65yR8nRZHFwyooNDEbFE3R+SnqsqiS63yI=;
+        s=mail; t=1649191485;
+        bh=BQPoxOAZCWnxNCOeZo2D/Nd5xmmLaOzP4aXydtQmwEk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R1zrHd5GzMeP0J2r7wzyt2CkELpIBsCmOdeHajueB6w5uHTNNWbd4xrBwSg190YC+
-         qY9zVQtj18o/NTCY0jLPY85TF3yzf+XJO0Elce1b+V1heD0cWT4ysV67/1xCV8TU+2
-         5rTXQRQdJ4AtPATChiiDib8i2siED0BdVw4mVnKHzVdlF001F7tVA0twPF3TzhVMfX
-         hkyvfIM3+cp1smEMdMkdVj5LR7+sVunPEGagcRiTLsB/E7je3yWVONTlMyGV1oSzlf
-         GM/XRLeNlsAeZlHDlOyf91V1mmnhgBrzISaxJyW3Tx+XjXdbkk7DSE759UZxiwIs0f
-         zhMWWNLlKKXNQ==
+        b=J5XvJnJIzIJfIFfb3ak7r7VPBkRqlaoIV/jCoXCH50D/P7pqPnPXqyM39DEQ9yG3L
+         SSDRtkJ18illFj2TYXHW+fKdI7vkQWqVoRxsOet2NGbFrAZ6YTAVrj4KQLlILTDppO
+         1B+iGxU0krR3w+KndsAJFdCXeKtZjLIMGx3STHhwA8VMZWfdYnUPtmlAV+NNt4xHwl
+         p2cWanOAbE1nesWo4jdAKR6z0IUVt/9B6MEz7ia/t/CJnMgMkMY3xC3LHke3EKH1OW
+         FjEzbT0YrpgnoJv8nyhF+2SNFbQw27NInq8YsIQFatMbKeMdB2jlnAbLniTyzidHch
+         Sp8W2TVEKTvQg==
 From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
         Sebastian Fricke <sebastian.fricke@collabora.com>,
         Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
         linux-media@vger.kernel.org
-Subject: [PATCH v3 02/24] media: v4l2-mem2mem: Trace on implicit un-hold
-Date:   Tue,  5 Apr 2022 16:44:03 -0400
-Message-Id: <20220405204426.259074-3-nicolas.dufresne@collabora.com>
+Subject: [PATCH v3 03/24] media: videobuf2-v4l2: Warn on holding buffers without support
+Date:   Tue,  5 Apr 2022 16:44:04 -0400
+Message-Id: <20220405204426.259074-4-nicolas.dufresne@collabora.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
 References: <20220405204426.259074-1-nicolas.dufresne@collabora.com>
@@ -52,29 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the timestamp of the src buffer differs from the timestamp of a held
-dst buffer, the held buffer is implicitly removed and marked as done.
-Add a trace to help debugging if someone hits that case.
+From: Sebastian Fricke <sebastian.fricke@collabora.com>
 
+Using V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF flag without specifying the
+subsystem flag VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF, results in
+silently ignoring it.
+Warn the user via a debug print when the flag is requested but ignored
+by the videobuf2 framework.
+
+Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reviewed-by: Sebastian Fricke <sebastian.fricke@collabora.com>
 Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 ---
- drivers/media/v4l2-core/v4l2-mem2mem.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/common/videobuf2/videobuf2-v4l2.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
-index 675e22895ebe..d1d29d6ab024 100644
---- a/drivers/media/v4l2-core/v4l2-mem2mem.c
-+++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-@@ -336,6 +336,7 @@ static void __v4l2_m2m_try_queue(struct v4l2_m2m_dev *m2m_dev,
- 	if (src && dst && dst->is_held &&
- 	    dst->vb2_buf.copied_timestamp &&
- 	    dst->vb2_buf.timestamp != src->vb2_buf.timestamp) {
-+		dprintk("Timestamp mismatch, returning held capture buffer\n");
- 		dst->is_held = false;
- 		v4l2_m2m_dst_buf_remove(m2m_ctx);
- 		v4l2_m2m_buf_done(dst, VB2_BUF_STATE_DONE);
+diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+index 6edf4508c636..812c8d1962e0 100644
+--- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
++++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+@@ -329,8 +329,13 @@ static int vb2_fill_vb2_v4l2_buffer(struct vb2_buffer *vb, struct v4l2_buffer *b
+ 		 */
+ 		vbuf->flags &= ~V4L2_BUF_FLAG_TIMECODE;
+ 		vbuf->field = b->field;
+-		if (!(q->subsystem_flags & VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF))
++		if (!(q->subsystem_flags & VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF)) {
++			if (vbuf->flags & V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF)
++				dprintk(q, 1,
++					"Request holding buffer (%d), unsupported on output queue\n",
++					b->index);
+ 			vbuf->flags &= ~V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF;
++		}
+ 	} else {
+ 		/* Zero any output buffer flags as this is a capture buffer */
+ 		vbuf->flags &= ~V4L2_BUFFER_OUT_FLAGS;
 -- 
 2.34.1
 

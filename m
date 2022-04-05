@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E05A04F3BC8
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D464F3BEB
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 17:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244932AbiDEMB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38350 "EHLO
+        id S1382179AbiDEMDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243058AbiDEItt (ORCPT
+        with ESMTP id S243274AbiDEIuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:49:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112859A981;
-        Tue,  5 Apr 2022 01:38:13 -0700 (PDT)
+        Tue, 5 Apr 2022 04:50:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4C212A82;
+        Tue,  5 Apr 2022 01:38:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE9D7B81C14;
-        Tue,  5 Apr 2022 08:37:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34611C385AC;
-        Tue,  5 Apr 2022 08:37:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85DE9614E5;
+        Tue,  5 Apr 2022 08:37:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91DB0C385A0;
+        Tue,  5 Apr 2022 08:37:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649147869;
-        bh=Z7Iazl7/bScHJMF92CdAuqvWcfVT7b/g3XtcPxhvL6M=;
+        s=korg; t=1649147874;
+        bh=Cw2NlYAm/sub3uTEA3b2qIyrR3JDeMkKrC26amsoKtQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S5FU2F/qchRc1AHfUc+KyAtindXZSi/5NYJ9Hfn9CWr1XazsWzi74HJoQ7xS1sDCU
-         lMoedHX2lOcrPaFY/bnzU0lws/KlkQYNU621GYUdZmgkFpumYzoGU/fely7EKlNva8
-         M8T5c9yxXlDdZ7o+xgFu5i2TxVfxJ4B/B4ZYO0H8=
+        b=giPofauEkR82o5KTt4SaFEzge6imnZO4bbsJRwgNuNnOfsuPAoPigN23SwVcwxJcJ
+         Ujr857Hjh8ZE1fwiczus0IfLVq5IHLhKv3yq6cLMoSGEcV2cMejhFV6tK4AymRxugC
+         NWlinx1jQerjsqpYWcwCWlQzUkxyJF2Z0aTnvMJc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>,
-        Zack Rusin <zackr@vmware.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: [PATCH 5.16 0150/1017] fbdev: Hot-unplug firmware fb devices on forced removal
-Date:   Tue,  5 Apr 2022 09:17:43 +0200
-Message-Id: <20220405070358.660297344@linuxfoundation.org>
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Helge Deller <deller@gmx.de>
+Subject: [PATCH 5.16 0151/1017] video: fbdev: sm712fb: Fix crash in smtcfb_read()
+Date:   Tue,  5 Apr 2022 09:17:44 +0200
+Message-Id: <20220405070358.691303918@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -56,119 +54,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Zimmermann <tzimmermann@suse.de>
+From: Helge Deller <deller@gmx.de>
 
-commit 27599aacbaefcbf2af7b06b0029459bbf682000d upstream.
+commit bd771cf5c4254511cc4abb88f3dab3bd58bdf8e8 upstream.
 
-Hot-unplug all firmware-framebuffer devices as part of removing
-them via remove_conflicting_framebuffers() et al. Releases all
-memory regions to be acquired by native drivers.
+Zheyu Ma reported this crash in the sm712fb driver when reading
+three bytes from the framebuffer:
 
-Firmware, such as EFI, install a framebuffer while posting the
-computer. After removing the firmware-framebuffer device from fbdev,
-a native driver takes over the hardware and the firmware framebuffer
-becomes invalid.
+ BUG: unable to handle page fault for address: ffffc90001ffffff
+ RIP: 0010:smtcfb_read+0x230/0x3e0
+ Call Trace:
+  vfs_read+0x198/0xa00
+  ? do_sys_openat2+0x27d/0x350
+  ? __fget_light+0x54/0x340
+  ksys_read+0xce/0x190
+  do_syscall_64+0x43/0x90
 
-Firmware-framebuffer drivers, specifically simplefb, don't release
-their device from Linux' device hierarchy. It still owns the firmware
-framebuffer and blocks the native drivers from loading. This has been
-observed in the vmwgfx driver. [1]
+Fix it by removing the open-coded endianess fixup-code and
+by moving the pointer post decrement out the fb_readl() function.
 
-Initiating a device removal (i.e., hot unplug) as part of
-remove_conflicting_framebuffers() removes the underlying device and
-returns the memory range to the system.
-
-[1] https://lore.kernel.org/dri-devel/20220117180359.18114-1-zack@kde.org/
-
-v2:
-	* rename variable 'dev' to 'device' (Javier)
-
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Reported-by: Zack Rusin <zackr@vmware.com>
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-Reviewed-by: Zack Rusin <zackr@vmware.com>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-CC: stable@vger.kernel.org # v5.11+
-Link: https://patchwork.freedesktop.org/patch/msgid/20220125091222.21457-2-tzimmermann@suse.de
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Tested-by: Zheyu Ma <zheyuma97@gmail.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/video/fbdev/core/fbmem.c |   29 ++++++++++++++++++++++++++---
- include/linux/fb.h               |    1 +
- 2 files changed, 27 insertions(+), 3 deletions(-)
+ drivers/video/fbdev/sm712fb.c |   25 +++++++------------------
+ 1 file changed, 7 insertions(+), 18 deletions(-)
 
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -25,6 +25,7 @@
- #include <linux/init.h>
- #include <linux/linux_logo.h>
- #include <linux/proc_fs.h>
-+#include <linux/platform_device.h>
- #include <linux/seq_file.h>
- #include <linux/console.h>
- #include <linux/kmod.h>
-@@ -1557,18 +1558,36 @@ static void do_remove_conflicting_frameb
- 	/* check all firmware fbs and kick off if the base addr overlaps */
- 	for_each_registered_fb(i) {
- 		struct apertures_struct *gen_aper;
-+		struct device *device;
+--- a/drivers/video/fbdev/sm712fb.c
++++ b/drivers/video/fbdev/sm712fb.c
+@@ -1047,7 +1047,7 @@ static ssize_t smtcfb_read(struct fb_inf
+ 	if (count + p > total_size)
+ 		count = total_size - p;
  
- 		if (!(registered_fb[i]->flags & FBINFO_MISC_FIRMWARE))
- 			continue;
+-	buffer = kmalloc((count > PAGE_SIZE) ? PAGE_SIZE : count, GFP_KERNEL);
++	buffer = kmalloc(PAGE_SIZE, GFP_KERNEL);
+ 	if (!buffer)
+ 		return -ENOMEM;
  
- 		gen_aper = registered_fb[i]->apertures;
-+		device = registered_fb[i]->device;
- 		if (fb_do_apertures_overlap(gen_aper, a) ||
- 			(primary && gen_aper && gen_aper->count &&
- 			 gen_aper->ranges[0].base == VGA_FB_PHYS)) {
- 
- 			printk(KERN_INFO "fb%d: switching to %s from %s\n",
- 			       i, name, registered_fb[i]->fix.id);
--			do_unregister_framebuffer(registered_fb[i]);
+@@ -1059,25 +1059,14 @@ static ssize_t smtcfb_read(struct fb_inf
+ 	while (count) {
+ 		c = (count > PAGE_SIZE) ? PAGE_SIZE : count;
+ 		dst = buffer;
+-		for (i = c >> 2; i--;) {
+-			*dst = fb_readl(src++);
+-			*dst = big_swap(*dst);
++		for (i = (c + 3) >> 2; i--;) {
++			u32 val;
 +
-+			/*
-+			 * If we kick-out a firmware driver, we also want to remove
-+			 * the underlying platform device, such as simple-framebuffer,
-+			 * VESA, EFI, etc. A native driver will then be able to
-+			 * allocate the memory range.
-+			 *
-+			 * If it's not a platform device, at least print a warning. A
-+			 * fix would add code to remove the device from the system.
-+			 */
-+			if (dev_is_platform(device)) {
-+				registered_fb[i]->forced_out = true;
-+				platform_device_unregister(to_platform_device(device));
-+			} else {
-+				pr_warn("fb%d: cannot remove device\n", i);
-+				do_unregister_framebuffer(registered_fb[i]);
-+			}
++			val = fb_readl(src);
++			*dst = big_swap(val);
++			src++;
+ 			dst++;
  		}
- 	}
- }
-@@ -1898,9 +1917,13 @@ EXPORT_SYMBOL(register_framebuffer);
- void
- unregister_framebuffer(struct fb_info *fb_info)
- {
--	mutex_lock(&registration_lock);
-+	bool forced_out = fb_info->forced_out;
-+
-+	if (!forced_out)
-+		mutex_lock(&registration_lock);
- 	do_unregister_framebuffer(fb_info);
--	mutex_unlock(&registration_lock);
-+	if (!forced_out)
-+		mutex_unlock(&registration_lock);
- }
- EXPORT_SYMBOL(unregister_framebuffer);
+-		if (c & 3) {
+-			u8 *dst8 = (u8 *)dst;
+-			u8 __iomem *src8 = (u8 __iomem *)src;
+-
+-			for (i = c & 3; i--;) {
+-				if (i & 1) {
+-					*dst8++ = fb_readb(++src8);
+-				} else {
+-					*dst8++ = fb_readb(--src8);
+-					src8 += 2;
+-				}
+-			}
+-			src = (u32 __iomem *)src8;
+-		}
  
---- a/include/linux/fb.h
-+++ b/include/linux/fb.h
-@@ -502,6 +502,7 @@ struct fb_info {
- 	} *apertures;
- 
- 	bool skip_vt_switch; /* no VT switch on suspend/resume required */
-+	bool forced_out; /* set when being removed by another driver */
- };
- 
- static inline struct apertures_struct *alloc_apertures(unsigned int max_num) {
+ 		if (copy_to_user(buf, buffer, c)) {
+ 			err = -EFAULT;
 
 

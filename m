@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698E84F3DB7
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 22:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 265F14F40B5
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384830AbiDEM2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58134 "EHLO
+        id S1389906AbiDEP2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 11:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245540AbiDEI4O (ORCPT
+        with ESMTP id S1347389AbiDEJqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 04:56:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AF812AA0;
-        Tue,  5 Apr 2022 01:52:24 -0700 (PDT)
+        Tue, 5 Apr 2022 05:46:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B56CDEBAE;
+        Tue,  5 Apr 2022 02:32:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0EEF609D0;
-        Tue,  5 Apr 2022 08:52:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD22CC385A0;
-        Tue,  5 Apr 2022 08:52:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E8372616FD;
+        Tue,  5 Apr 2022 09:32:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08358C36AF8;
+        Tue,  5 Apr 2022 09:32:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649148743;
-        bh=mzkj7bdPyPwyHELeTDKpXc4Xr4tRKHgjWC3TkZCHIe4=;
+        s=korg; t=1649151173;
+        bh=FmdlVGqSYd/pxyUzpz1oSO1KapXiygYg74xNI4J9JIs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1PRibyI14UVWIBqK2MwrhN1ojtS7jEmiKz4Cs5R5ixTxRmgggzeOU3QQdNp0/iiMW
-         YIH9KIWfWXVVD1ykqiAE2Q6GKIxvwttEeh/kda1XYFxc28OTw5wkBaiM5Vm0Xdds+5
-         J5Nk+DV8/OKgBH7JAyn8F5a7X5NITb4CES5ma+Pg=
+        b=EFfug5ZuUEfIyizPI7WWrkFVQj1HMv5H3XKj6oCulmhKb+QqaLtcXJ8DlLsXrcLyp
+         jVeL4vA5S9ufpFLgZ57VTBw/jLWXK0r0IMdd2pXQWnQZq0/BOJCr3VUJFwTc/JhAfJ
+         xokITEGt0meHo9yJuUDmsKTigajHaovX6cCpNJm8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0464/1017] mt76: mt7615: check sta_rates pointer in mt7615_sta_rate_tbl_update
-Date:   Tue,  5 Apr 2022 09:22:57 +0200
-Message-Id: <20220405070408.072775283@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 319/913] ASoC: codecs: va-macro: fix accessing array out of bounds for enum type
+Date:   Tue,  5 Apr 2022 09:23:01 +0200
+Message-Id: <20220405070349.413354436@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
-[ Upstream commit 6a6f457ed5fdf6777536c20644a9e42128a50ec2 ]
+[ Upstream commit 0ea5eff7c6063a8f124188424f8e4c6727f35051 ]
 
-Check sta_rates pointer value in mt7615_sta_rate_tbl_update routine
-since minstrel_ht_update_rates can fail allocating rates array.
+Accessing enums using integer would result in array out of bounds access
+on platforms like aarch64 where sizeof(long) is 8 compared to enum size
+which is 4 bytes.
 
-Fixes: 04b8e65922f63 ("mt76: add mac80211 driver for MT7615 PCIe-based chipsets")
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Fixes: 908e6b1df26e ("ASoC: codecs: lpass-va-macro: Add support to VA Macro")
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Link: https://lore.kernel.org/r/20220222183212.11580-5-srinivas.kandagatla@linaro.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7615/main.c | 3 +++
- 1 file changed, 3 insertions(+)
+ sound/soc/codecs/lpass-va-macro.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7615/main.c b/drivers/net/wireless/mediatek/mt76/mt7615/main.c
-index 1fdcada157d6..18a320d00d8d 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7615/main.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7615/main.c
-@@ -686,6 +686,9 @@ static void mt7615_sta_rate_tbl_update(struct ieee80211_hw *hw,
- 	struct ieee80211_sta_rates *sta_rates = rcu_dereference(sta->rates);
- 	int i;
+diff --git a/sound/soc/codecs/lpass-va-macro.c b/sound/soc/codecs/lpass-va-macro.c
+index 56c93f4465c9..08702a21212c 100644
+--- a/sound/soc/codecs/lpass-va-macro.c
++++ b/sound/soc/codecs/lpass-va-macro.c
+@@ -780,7 +780,7 @@ static int va_macro_dec_mode_get(struct snd_kcontrol *kcontrol,
+ 	struct soc_enum *e = (struct soc_enum *)kcontrol->private_value;
+ 	int path = e->shift_l;
  
-+	if (!sta_rates)
-+		return;
-+
- 	spin_lock_bh(&dev->mt76.lock);
- 	for (i = 0; i < ARRAY_SIZE(msta->rates); i++) {
- 		msta->rates[i].idx = sta_rates->rate[i].idx;
+-	ucontrol->value.integer.value[0] = va->dec_mode[path];
++	ucontrol->value.enumerated.item[0] = va->dec_mode[path];
+ 
+ 	return 0;
+ }
+@@ -789,7 +789,7 @@ static int va_macro_dec_mode_put(struct snd_kcontrol *kcontrol,
+ 				 struct snd_ctl_elem_value *ucontrol)
+ {
+ 	struct snd_soc_component *comp = snd_soc_kcontrol_component(kcontrol);
+-	int value = ucontrol->value.integer.value[0];
++	int value = ucontrol->value.enumerated.item[0];
+ 	struct soc_enum *e = (struct soc_enum *)kcontrol->private_value;
+ 	int path = e->shift_l;
+ 	struct va_macro *va = snd_soc_component_get_drvdata(comp);
 -- 
 2.34.1
 

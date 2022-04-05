@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4284F448B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0AA84F4640
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234265AbiDENxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:53:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44964 "EHLO
+        id S1385442AbiDENwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 09:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347393AbiDEJ0M (ORCPT
+        with ESMTP id S1347543AbiDEJ11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:26:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7673C9682D;
-        Tue,  5 Apr 2022 02:15:28 -0700 (PDT)
+        Tue, 5 Apr 2022 05:27:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D661DE916;
+        Tue,  5 Apr 2022 02:15:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5694861576;
-        Tue,  5 Apr 2022 09:15:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61FA4C385A0;
-        Tue,  5 Apr 2022 09:15:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E61F8B81C6A;
+        Tue,  5 Apr 2022 09:15:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5207AC385A2;
+        Tue,  5 Apr 2022 09:15:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649150110;
-        bh=uJf7pj87pn7mUSWMH3sAg8R4hUfURYzVn3VcFRGN990=;
+        s=korg; t=1649150113;
+        bh=MOk/RdGK+fojtYaaJuzFPNg01OhU29vMlA4QzjbvP3Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V1C4j26T7gnyJA8QLDh/4cv3NGCO3yyQKF66ikTrb/JGvxI7D9ZEQtjo7Z24E/AGy
-         JFSF4CmTVRtqN4N7HWlPWTmiSxR16dfjSWvMCIu1T8924kr2eSR0Alk51UEB8c0/Ix
-         kZMUhgECtqe399Urav8e7ojDHy+5NKLZRVLo8WK8=
+        b=YDVPdhfzMeGdr2oVw4liHn4zGV9dseEakbh+2Sdc5Y4L07wN7xlCzqA7arfCcRc1X
+         gTGJQJt6BYs1DbfXZFdj7dtAmw/BDXBPByTRNB2a3mYEtHwBsEDEilCkIrRJnu5fcR
+         nE3SqVm52SGyY6z6nLMITKJOUWZDH2wYKIK1ew/I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Anirudh Rayabharam <mail@anirudhrb.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>
-Subject: [PATCH 5.16 0956/1017] vhost: handle error while adding split ranges to iotlb
-Date:   Tue,  5 Apr 2022 09:31:09 +0200
-Message-Id: <20220405070422.586330529@linuxfoundation.org>
+        stable@vger.kernel.org, Jon Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.16 0957/1017] spi: Fix Tegra QSPI example
+Date:   Tue,  5 Apr 2022 09:31:10 +0200
+Message-Id: <20220405070422.615815858@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -55,40 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anirudh Rayabharam <mail@anirudhrb.com>
+From: Jon Hunter <jonathanh@nvidia.com>
 
-commit 03a91c9af2c42ae14afafb829a4b7e6589ab5892 upstream.
+commit 320689a1b543ca1396b3ed43bb18045e4a7ffd79 upstream.
 
-vhost_iotlb_add_range_ctx() handles the range [0, ULONG_MAX] by
-splitting it into two ranges and adding them separately. The return
-value of adding the first range to the iotlb is currently ignored.
-Check the return value and bail out in case of an error.
+When running dt_binding_check on the nvidia,tegra210-quad.yaml binding
+document the following error is reported ...
 
-Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
-Link: https://lore.kernel.org/r/20220312141121.4981-1-mail@anirudhrb.com
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-Fixes: e2ae38cf3d91 ("vhost: fix hung thread due to erroneous iotlb entries")
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+ nvidia,tegra210-quad.example.dt.yaml:0:0: /example-0/spi@70410000/flash@0:
+ 	failed to match any schema with compatible: ['spi-nor']
+
+Update the example in the binding document to fix the above error.
+
+Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+Fixes: 9684752e5fe3 ("dt-bindings: spi: Add Tegra Quad SPI device tree  binding")
+Link: https://lore.kernel.org/r/20220307113529.315685-1-jonathanh@nvidia.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/vhost/iotlb.c |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/vhost/iotlb.c
-+++ b/drivers/vhost/iotlb.c
-@@ -62,8 +62,12 @@ int vhost_iotlb_add_range_ctx(struct vho
- 	 */
- 	if (start == 0 && last == ULONG_MAX) {
- 		u64 mid = last / 2;
-+		int err = vhost_iotlb_add_range_ctx(iotlb, start, mid, addr,
-+				perm, opaque);
-+
-+		if (err)
-+			return err;
+--- a/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml
++++ b/Documentation/devicetree/bindings/spi/nvidia,tegra210-quad.yaml
+@@ -106,7 +106,7 @@ examples:
+             dma-names = "rx", "tx";
  
--		vhost_iotlb_add_range_ctx(iotlb, start, mid, addr, perm, opaque);
- 		addr += mid + 1;
- 		start = mid + 1;
- 	}
+             flash@0 {
+-                    compatible = "spi-nor";
++                    compatible = "jedec,spi-nor";
+                     reg = <0>;
+                     spi-max-frequency = <104000000>;
+                     spi-tx-bus-width = <2>;
 
 

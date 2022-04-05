@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01BA94F503B
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01FC94F4F9F
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 04:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1840854AbiDFBNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 21:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
+        id S1838870AbiDFA5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 20:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353238AbiDEKFy (ORCPT
+        with ESMTP id S1358091AbiDEK16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:05:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBA5BF013;
-        Tue,  5 Apr 2022 02:54:33 -0700 (PDT)
+        Tue, 5 Apr 2022 06:27:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6191F66C8C;
+        Tue,  5 Apr 2022 03:15:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04F6DB81B75;
-        Tue,  5 Apr 2022 09:54:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 522AEC385A2;
-        Tue,  5 Apr 2022 09:54:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 011C7617AC;
+        Tue,  5 Apr 2022 10:15:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D952C385A1;
+        Tue,  5 Apr 2022 10:15:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152470;
-        bh=+wq173W039LLwt49okhsC1cU/Yg0EMixvemiQqA7vmw=;
+        s=korg; t=1649153712;
+        bh=do5Wi18Fah0j3dGa06fMFlms+yMjfqPHRKwBB8HgvdQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WpA6pHgW9WB1IDeoN6xs9kbF5K/z/cSTVhI1/DgZjKxOkqbtd/0pmlEH61v2zrGix
-         hmMEHHPkwA3HDOx1ILVJAqHrcqFBtZx9FBrqJIOPe0WLdEB1cwNHBRSNsDX3oU5LPM
-         72TtKws/5+/36Z/ReNmy9jFsuex9CjhBkztD1jos=
+        b=bj33oiR0A/3U9oB6aw/mdcjk6e0+mJaONbeSV1N34tW1RLfz5QqVU5/LYzPRKg7Kz
+         Wa0wQy3QAU0TSbSrQdztNP0nvFF83r000mEwimUKswByW00G5uLLfhx7N3lgBsJbyL
+         GkRKbKMwJT0J8uJZJFwirqX1WrezXmezCNSJE14Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Jing Yao <yao.jing2@zte.com.cn>, Helge Deller <deller@gmx.de>,
+        stable@vger.kernel.org, Aharon Landau <aharonl@nvidia.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 749/913] video: fbdev: omapfb: panel-dsi-cm: Use sysfs_emit() instead of snprintf()
-Date:   Tue,  5 Apr 2022 09:30:11 +0200
-Message-Id: <20220405070402.284851176@linuxfoundation.org>
+Subject: [PATCH 5.10 319/599] RDMA/mlx5: Fix the flow of a miss in the allocation of a cache ODP MR
+Date:   Tue,  5 Apr 2022 09:30:13 +0200
+Message-Id: <20220405070308.325820580@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,60 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jing Yao <yao.jing2@zte.com.cn>
+From: Aharon Landau <aharonl@nvidia.com>
 
-[ Upstream commit f63658a59c3d439c8ad7b290f8ec270980e0f384 ]
+[ Upstream commit 2f0e60d5e9f96341a0c8a01be8878cdb3b29ff20 ]
 
-Use sysfs_emit instead of scnprintf, snprintf or sprintf.
+When an ODP MR cache entry is empty and trying to allocate it, increment
+the ent->miss counter and call to queue_adjust_cache_locked() to verify
+the entry is balanced.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Jing Yao <yao.jing2@zte.com.cn>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Fixes: aad719dcf379 ("RDMA/mlx5: Allow MRs to be created in the cache synchronously")
+Link: https://lore.kernel.org/r/09503e295276dcacc92cb1d8aef1ad0961c99dc1.1644947594.git.leonro@nvidia.com
+Signed-off-by: Aharon Landau <aharonl@nvidia.com>
+Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/infiniband/hw/mlx5/mr.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c b/drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c
-index 4b0793abdd84..a2c7c5cb1523 100644
---- a/drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c
-+++ b/drivers/video/fbdev/omap2/omapfb/displays/panel-dsi-cm.c
-@@ -409,7 +409,7 @@ static ssize_t dsicm_num_errors_show(struct device *dev,
- 	if (r)
- 		return r;
- 
--	return snprintf(buf, PAGE_SIZE, "%d\n", errors);
-+	return sysfs_emit(buf, "%d\n", errors);
- }
- 
- static ssize_t dsicm_hw_revision_show(struct device *dev,
-@@ -439,7 +439,7 @@ static ssize_t dsicm_hw_revision_show(struct device *dev,
- 	if (r)
- 		return r;
- 
--	return snprintf(buf, PAGE_SIZE, "%02x.%02x.%02x\n", id1, id2, id3);
-+	return sysfs_emit(buf, "%02x.%02x.%02x\n", id1, id2, id3);
- }
- 
- static ssize_t dsicm_store_ulps(struct device *dev,
-@@ -487,7 +487,7 @@ static ssize_t dsicm_show_ulps(struct device *dev,
- 	t = ddata->ulps_enabled;
- 	mutex_unlock(&ddata->lock);
- 
--	return snprintf(buf, PAGE_SIZE, "%u\n", t);
-+	return sysfs_emit(buf, "%u\n", t);
- }
- 
- static ssize_t dsicm_store_ulps_timeout(struct device *dev,
-@@ -532,7 +532,7 @@ static ssize_t dsicm_show_ulps_timeout(struct device *dev,
- 	t = ddata->ulps_timeout;
- 	mutex_unlock(&ddata->lock);
- 
--	return snprintf(buf, PAGE_SIZE, "%u\n", t);
-+	return sysfs_emit(buf, "%u\n", t);
- }
- 
- static DEVICE_ATTR(num_dsi_errors, S_IRUGO, dsicm_num_errors_show, NULL);
+diff --git a/drivers/infiniband/hw/mlx5/mr.c b/drivers/infiniband/hw/mlx5/mr.c
+index 19346693c1da..6cd0cbd4fc9f 100644
+--- a/drivers/infiniband/hw/mlx5/mr.c
++++ b/drivers/infiniband/hw/mlx5/mr.c
+@@ -575,6 +575,8 @@ struct mlx5_ib_mr *mlx5_mr_cache_alloc(struct mlx5_ib_dev *dev,
+ 	ent = &cache->ent[entry];
+ 	spin_lock_irq(&ent->lock);
+ 	if (list_empty(&ent->head)) {
++		queue_adjust_cache_locked(ent);
++		ent->miss++;
+ 		spin_unlock_irq(&ent->lock);
+ 		mr = create_cache_mr(ent);
+ 		if (IS_ERR(mr))
 -- 
 2.34.1
 

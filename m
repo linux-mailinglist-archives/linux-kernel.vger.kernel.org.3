@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA8B4F4004
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8064F4003
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 23:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377194AbiDEMw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 08:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41890 "EHLO
+        id S1349316AbiDEMs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243786AbiDEJJQ (ORCPT
+        with ESMTP id S243806AbiDEJJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:09:16 -0400
+        Tue, 5 Apr 2022 05:09:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7B0CC528;
-        Tue,  5 Apr 2022 01:58:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BF8C7F;
+        Tue,  5 Apr 2022 01:58:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A306061574;
-        Tue,  5 Apr 2022 08:58:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A775EC385A0;
-        Tue,  5 Apr 2022 08:58:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AC4361594;
+        Tue,  5 Apr 2022 08:58:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B777C385A8;
+        Tue,  5 Apr 2022 08:58:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149117;
-        bh=bMpDvhUZHs/Rk+rEvjrWU1xOX5yG+D1BVOcQTkPZsC8=;
+        s=korg; t=1649149119;
+        bh=vZCYosMR3xAeEcqaIxxhaQzuSAuF9vWSVdw/VukUcbY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vqAk8VpbyMSw/hJtAAgk3AY9vmBF853r6/22bESykGIp03/VtD+KAsdy7uEyQempQ
-         bCslzJdSFeO/FZPmAMtwyQs+nFytq4vhvNJe8TRApm/UbVBc7Mrzqy0mZBLLx4tAEb
-         jhBGCQc/E+bn0Qkq3vf3PYLOgsFYv9lGGhkmc/cg=
+        b=Qgef9G6xTu7DjiJe3WKC7Tn9qII7H5VrISoBSLM/wJy3ny3LIfB3/AKxnI3X02Cz0
+         qtWP2yeI15DQqqpNFxmOjQ2yTrwpYVi4+wFLoE+sJXBHiaR7OtsZoiBT02x0M6qnq8
+         /RRAjIJ1fWIgVNpOUxrzPZP2rJ9/7aXDlZqFcvdI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         John Fastabend <john.fastabend@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0601/1017] bpf, sockmap: Fix more uncharged while msg has more_data
-Date:   Tue,  5 Apr 2022 09:25:14 +0200
-Message-Id: <20220405070412.118002939@linuxfoundation.org>
+Subject: [PATCH 5.16 0602/1017] bpf, sockmap: Fix double uncharge the mem of sk_msg
+Date:   Tue,  5 Apr 2022 09:25:15 +0200
+Message-Id: <20220405070412.147578366@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
 References: <20220405070354.155796697@linuxfoundation.org>
@@ -58,47 +58,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Wang Yufen <wangyufen@huawei.com>
 
-[ Upstream commit 84472b436e760ba439e1969a9e3c5ae7c86de39d ]
+[ Upstream commit 2486ab434b2c2a14e9237296db00b1e1b7ae3273 ]
 
-In tcp_bpf_send_verdict(), if msg has more data after
-tcp_bpf_sendmsg_redir():
+If tcp_bpf_sendmsg is running during a tear down operation, psock may be
+freed.
 
-tcp_bpf_send_verdict()
- tosend = msg->sg.size  //msg->sg.size = 22220
- case __SK_REDIRECT:
-  sk_msg_return()  //uncharged msg->sg.size(22220) sk->sk_forward_alloc
-  tcp_bpf_sendmsg_redir() //after tcp_bpf_sendmsg_redir, msg->sg.size=11000
- goto more_data;
- tosend = msg->sg.size  //msg->sg.size = 11000
- case __SK_REDIRECT:
-  sk_msg_return()  //uncharged msg->sg.size(11000) to sk->sk_forward_alloc
+tcp_bpf_sendmsg()
+ tcp_bpf_send_verdict()
+  sk_msg_return()
+  tcp_bpf_sendmsg_redir()
+   unlikely(!psock))
+     sk_msg_free()
 
-The msg->sg.size(11000) has been uncharged twice, to fix we can charge the
-remaining msg->sg.size before goto more data.
+The mem of msg has been uncharged in tcp_bpf_send_verdict() by
+sk_msg_return(), and would be uncharged by sk_msg_free() again. When psock
+is null, we can simply returning an error code, this would then trigger
+the sk_msg_free_nocharge in the error path of __SK_REDIRECT and would have
+the side effect of throwing an error up to user space. This would be a
+slight change in behavior from user side but would look the same as an
+error if the redirect on the socket threw an error.
 
 This issue can cause the following info:
-WARNING: CPU: 0 PID: 9860 at net/core/stream.c:208 sk_stream_kill_queues+0xd4/0x1a0
-Call Trace:
- <TASK>
- inet_csk_destroy_sock+0x55/0x110
- __tcp_close+0x279/0x470
- tcp_close+0x1f/0x60
- inet_release+0x3f/0x80
- __sock_release+0x3d/0xb0
- sock_close+0x11/0x20
- __fput+0x92/0x250
- task_work_run+0x6a/0xa0
- do_exit+0x33b/0xb60
- do_group_exit+0x2f/0xa0
- get_signal+0xb6/0x950
- arch_do_signal_or_restart+0xac/0x2a0
- ? vfs_write+0x237/0x290
- exit_to_user_mode_prepare+0xa9/0x200
- syscall_exit_to_user_mode+0x12/0x30
- do_syscall_64+0x46/0x80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
- </TASK>
-
 WARNING: CPU: 0 PID: 2136 at net/ipv4/af_inet.c:155 inet_sock_destruct+0x13c/0x260
 Call Trace:
  <TASK>
@@ -116,38 +96,30 @@ Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
 Signed-off-by: Wang Yufen <wangyufen@huawei.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Acked-by: John Fastabend <john.fastabend@gmail.com>
-Link: https://lore.kernel.org/bpf/20220304081145.2037182-4-wangyufen@huawei.com
+Link: https://lore.kernel.org/bpf/20220304081145.2037182-5-wangyufen@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_bpf.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ net/ipv4/tcp_bpf.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
 diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index 9b9b02052fd3..304800c60427 100644
+index 304800c60427..1cdcb4df0eb7 100644
 --- a/net/ipv4/tcp_bpf.c
 +++ b/net/ipv4/tcp_bpf.c
-@@ -335,7 +335,7 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
- 			cork = true;
- 			psock->cork = NULL;
- 		}
--		sk_msg_return(sk, msg, tosend);
-+		sk_msg_return(sk, msg, msg->sg.size);
- 		release_sock(sk);
+@@ -138,10 +138,9 @@ int tcp_bpf_sendmsg_redir(struct sock *sk, struct sk_msg *msg,
+ 	struct sk_psock *psock = sk_psock_get(sk);
+ 	int ret;
  
- 		ret = tcp_bpf_sendmsg_redir(sk_redir, msg, tosend, flags);
-@@ -375,8 +375,11 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
- 		}
- 		if (msg &&
- 		    msg->sg.data[msg->sg.start].page_link &&
--		    msg->sg.data[msg->sg.start].length)
-+		    msg->sg.data[msg->sg.start].length) {
-+			if (eval == __SK_REDIRECT)
-+				sk_mem_charge(sk, msg->sg.size);
- 			goto more_data;
-+		}
- 	}
- 	return ret;
- }
+-	if (unlikely(!psock)) {
+-		sk_msg_free(sk, msg);
+-		return 0;
+-	}
++	if (unlikely(!psock))
++		return -EPIPE;
++
+ 	ret = ingress ? bpf_tcp_ingress(sk, psock, msg, bytes, flags) :
+ 			tcp_bpf_push_locked(sk, msg, bytes, flags, false);
+ 	sk_psock_put(sk, psock);
 -- 
 2.34.1
 

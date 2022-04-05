@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE2834F4751
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F7F4F46B7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:18:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244821AbiDEVIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 17:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56862 "EHLO
+        id S1382033AbiDEUlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350678AbiDEJ70 (ORCPT
+        with ESMTP id S1358011AbiDEK1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:59:26 -0400
+        Tue, 5 Apr 2022 06:27:44 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FF8694B2;
-        Tue,  5 Apr 2022 02:51:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E970DAFFE;
+        Tue,  5 Apr 2022 03:12:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1CB19B818F3;
-        Tue,  5 Apr 2022 09:51:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6683CC385A4;
-        Tue,  5 Apr 2022 09:51:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B15D7B81B7A;
+        Tue,  5 Apr 2022 10:12:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0FDFC385A1;
+        Tue,  5 Apr 2022 10:12:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649152274;
-        bh=0koZQSOLgRW2kaRazCNUDwDk9THdGrokMdcTAp4Ow68=;
+        s=korg; t=1649153573;
+        bh=xZFlO/Ssj0ilwMz4LbbFsHCf7q/ubFY/jXMHM64j43U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z+JKPD9Wloufx0TbxUPd7M3rVyB9mv6vIzT6rJHPHdyZu+A0iQtha12TALTp62Ato
-         nHV2ApFWpq5Z0UUc5B3Xz0hXYRAF38GIomI6wlFf+QOylpgw/iHEcBUjshD0Pbtkx8
-         GOOdrLGZedrFWZKL1YRZOEcNBh61UTAivE0c+hBk=
+        b=ThsHE9m42eWnyGwgYxc3E9z/8eyboWOtqME2o/q+uXhPIKL/OSH7P8fDkZJd83jBD
+         IW5xQHlyqfzPsHlFt8VY2EiW7v99NT1YGe8cBEiuU0rlfYe97kCnIXdYT65nzpUfmm
+         QKBfyqhBM/omWYfdjkVzLE/O0tqJIeVSlFChtQrI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 701/913] ACPICA: Avoid walking the ACPI Namespace if it is not there
-Date:   Tue,  5 Apr 2022 09:29:23 +0200
-Message-Id: <20220405070400.847273897@linuxfoundation.org>
+Subject: [PATCH 5.10 270/599] mtd: onenand: Check for error irq
+Date:   Tue,  5 Apr 2022 09:29:24 +0200
+Message-Id: <20220405070306.872195422@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 0c9992315e738e7d6e927ef36839a466b080dba6 ]
+[ Upstream commit 3e68f331c8c759c0daa31cc92c3449b23119a215 ]
 
-ACPICA commit b1c3656ef4950098e530be68d4b589584f06cddc
+For the possible failure of the platform_get_irq(), the returned irq
+could be error number and will finally cause the failure of the
+request_irq().
+Consider that platform_get_irq() can now in certain cases return
+-EPROBE_DEFER, and the consequences of letting request_irq() effectively
+convert that into -EINVAL, even at probe time rather than later on.
+So it might be better to check just now.
 
-Prevent acpi_ns_walk_namespace() from crashing when called with
-start_node equal to ACPI_ROOT_OBJECT if the Namespace has not been
-instantiated yet and acpi_gbl_root_node is NULL.
-
-For instance, this can happen if the kernel is run with "acpi=off"
-in the command line.
-
-Link: https://github.com/acpica/acpica/commit/b1c3656ef4950098e530be68d4b589584f06cddc
-Link: https://lore.kernel.org/linux-acpi/CAJZ5v0hJWW_vZ3wwajE7xT38aWjY7cZyvqMJpXHzUL98-SiCVQ@mail.gmail.com/
-Reported-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fixes: 2c22120fbd01 ("MTD: OneNAND: interrupt based wait support")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220104162658.1988142-1-jiasheng@iscas.ac.cn
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/acpica/nswalk.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/mtd/nand/onenand/generic.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/acpi/acpica/nswalk.c b/drivers/acpi/acpica/nswalk.c
-index 915c2433463d..e7c30ce06e18 100644
---- a/drivers/acpi/acpica/nswalk.c
-+++ b/drivers/acpi/acpica/nswalk.c
-@@ -169,6 +169,9 @@ acpi_ns_walk_namespace(acpi_object_type type,
- 
- 	if (start_node == ACPI_ROOT_OBJECT) {
- 		start_node = acpi_gbl_root_node;
-+		if (!start_node) {
-+			return_ACPI_STATUS(AE_NO_NAMESPACE);
-+		}
+diff --git a/drivers/mtd/nand/onenand/generic.c b/drivers/mtd/nand/onenand/generic.c
+index 8b6f4da5d720..a4b8b65fe15f 100644
+--- a/drivers/mtd/nand/onenand/generic.c
++++ b/drivers/mtd/nand/onenand/generic.c
+@@ -53,7 +53,12 @@ static int generic_onenand_probe(struct platform_device *pdev)
  	}
  
- 	/* Null child means "get first node" */
+ 	info->onenand.mmcontrol = pdata ? pdata->mmcontrol : NULL;
+-	info->onenand.irq = platform_get_irq(pdev, 0);
++
++	err = platform_get_irq(pdev, 0);
++	if (err < 0)
++		goto out_iounmap;
++
++	info->onenand.irq = err;
+ 
+ 	info->mtd.dev.parent = &pdev->dev;
+ 	info->mtd.priv = &info->onenand;
 -- 
 2.34.1
 

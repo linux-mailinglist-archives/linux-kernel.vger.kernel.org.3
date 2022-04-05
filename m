@@ -2,147 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 942A14F2320
-	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C82824F2329
+	for <lists+linux-kernel@lfdr.de>; Tue,  5 Apr 2022 08:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiDEGbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 02:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
+        id S230223AbiDEGfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 02:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiDEGbu (ORCPT
+        with ESMTP id S229892AbiDEGfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 02:31:50 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594B633E04
-        for <linux-kernel@vger.kernel.org>; Mon,  4 Apr 2022 23:29:50 -0700 (PDT)
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220405062947epoutp0106248170ae655acef2aa3f353a7b70bc~i7ENyGNie1964919649epoutp01T
-        for <linux-kernel@vger.kernel.org>; Tue,  5 Apr 2022 06:29:47 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220405062947epoutp0106248170ae655acef2aa3f353a7b70bc~i7ENyGNie1964919649epoutp01T
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1649140188;
-        bh=3pRWzO6Xf/+EFDKbp+zs9H1SH94tZcH7lVI+Kk4Rq+8=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=sa2grhab8uvJpE8IjG7L4LWs9y+B4fXOYyhxErhiBGj10ijHPaRKFUc4VenqTbutd
-         ydIe1xvGTHLrZe2G8qjjHxYzjWPMnq8Vse9Qr0KlmpRT0/l0vulZRXPEjpAKSv8KGi
-         HCDRHftlkQ2iNXXiNseAZqDOtC7fTDjJHC3XkWpI=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20220405062947epcas1p384012a5de7c0335626086cc06940c3d1~i7ENTk0Jl2146721467epcas1p3L;
-        Tue,  5 Apr 2022 06:29:47 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.36.69]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4KXd6K4P8Cz4x9Q2; Tue,  5 Apr
-        2022 06:29:45 +0000 (GMT)
-X-AuditID: b6c32a37-2a5ff70000002578-b0-624be1d9c358
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        71.7E.09592.9D1EB426; Tue,  5 Apr 2022 15:29:45 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH v2] dt-bindings: net: snps: remove duplicate name
-Reply-To: dj76.yang@samsung.com
-Sender: Dongjin Yang <dj76.yang@samsung.com>
-From:   Dongjin Yang <dj76.yang@samsung.com>
-To:     "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Moon-Ki Jun <moonki.jun@samsung.com>,
-        Dongjin Yang <dj76.yang@samsung.com>,
-        Sang Min Kim <hypmean.kim@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20220405061922.27343-1-dj76.yang@samsung.com>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20220405062945epcms1p7f9fad7f6bf10597e79c3948ba663c817@epcms1p7>
-Date:   Tue, 05 Apr 2022 15:29:45 +0900
-X-CMS-MailID: 20220405062945epcms1p7f9fad7f6bf10597e79c3948ba663c817
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-CMS-TYPE: 101P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrCJsWRmVeSWpSXmKPExsWy7bCmru7Nh95JBovvyFm8PKRpMed8C4vF
-        /CPnWC12z1jOZDFz6hlmi5ez7rFZ7H29ld3iwrY+VovLu+awWZxbnGlxbIGYxbfTbxgtWvce
-        YXfg9diy8iaTx6ZVnWwed67tYfN4v+8qm0ffllWMHp83yQWwRWXbZKQmpqQWKaTmJeenZOal
-        2yp5B8c7x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl5gCdqaRQlphTChQKSCwuVtK3synKLy1J
-        VcjILy6xVUotSMkpMC/QK07MLS7NS9fLSy2xMjQwMDIFKkzIzlj7qLRgvURF14NDLA2Md8W7
-        GDk5JARMJN6e7WbpYuTiEBLYwSjxo287axcjBwevgKDE3x3CIDXCAo4Sl591soOEhQTkJT5P
-        rIQI60h0vH3KAhJmE9CSmN2fCDJFRKCfSeLs29tsIA6zwGomicavW9ghdvFKzGgHaQCxpSW2
-        L9/KCGJzClhL3Ow6xwwR15D4sawXyhaVuLn6LTuM/f7YfEYIW0Si9d5ZqBpBiQc/d0PFpSQe
-        NR+AsqslzrX3soMcISHQwChx8PNGNpBLJQT0JXZcNwap4RXwlTja+RasnkVAVWL/3l9Qu1wk
-        Tq69DzafWUBbYtnC18wgrcwCmhLrd+lDTFGWOHKLBearho2/2dHZzAJ8Eu++9rDCxHfMe8IE
-        YStLfG5+zTKBUXkWIpxnIdk1C2HXAkbmVYxiqQXFuempxYYFxvCYTc7P3cQITq5a5jsYp739
-        oHeIkYmD8RCjBAezkghvTpBnkhBvSmJlVWpRfnxRaU5q8SFGU6AvJzJLiSbnA9N7Xkm8oYml
-        gYmZkampoYGFiZI476pppxOFBNITS1KzU1MLUotg+pg4OKUamNL1o25vnmza8/6oif207i9n
-        S5dyrXPS/W9zJa1f1+H1Ea9ff3OZih18brAsZF4+K53/c9PWpJMLg3I8U27PvPk1wU8jaOdb
-        kztzrP7W6k77dF8pt8erMzDF7VxxzY+Uey26H9UeRUp+U/w9/8//aL9ZUrbJvacq3/k9lzun
-        /co/yI1nnsCU8OnGDjl3FAX+/F+35np62sXbTyyqw+1VQi89l67RelFk5Xhn6UuWM4umXZl3
-        USLl9InJZUt6Oe9fVFtt+PL6IsVzgdJ3Y3/vKUu/x3jZQJnNdJ3/fRNJZVYp1nmOr37UcE1d
-        /euCyMmg2TL5PG/WnlmQcL/oiK2ZSN2jO5FeK1z9j81m3xKblaXEUpyRaKjFXFScCAA3czBw
-        NwQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220405061903epcas2p345f2b2e656b3b1cbe5832e24dd4a67f3
-References: <20220405061922.27343-1-dj76.yang@samsung.com>
-        <CGME20220405061903epcas2p345f2b2e656b3b1cbe5832e24dd4a67f3@epcms1p7>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 5 Apr 2022 02:35:07 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBCCB33E04;
+        Mon,  4 Apr 2022 23:33:09 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id A823B1F38A;
+        Tue,  5 Apr 2022 06:33:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649140388; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JcfhvICtJKCeKtW0oDjbSh0bSoohtfR7AsJWT9Fe+Qk=;
+        b=TCf1NmCD9p71no+4W81Ap0MxKs2S06umdVz2r7Ctc5x/gVLAFQQL7/Ir+p1587/+0lbhQn
+        ciAUmhG5gz66/BH5CWz8y+scggh8LZoejV3OBaUvLtng80XsaW1CEh1PjPvpfmYGdLWqDJ
+        dHHbxZOUrUcRcEJ1KLlwe2Zen2IIH5A=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649140388;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JcfhvICtJKCeKtW0oDjbSh0bSoohtfR7AsJWT9Fe+Qk=;
+        b=x+47IxFd44rN4kifJgGsO/zhoXSz8FiCMndz9YlJNs2QSun4oAkhMhu27773xlrnWC/j3+
+        qyI6WMuT3vNwLpCg==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 90777A3B82;
+        Tue,  5 Apr 2022 06:33:08 +0000 (UTC)
+Date:   Tue, 05 Apr 2022 08:33:08 +0200
+Message-ID: <s5hee2c82fv.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mohan Kumar D <mkumard@nvidia.com>
+Cc:     tiwai@suse.com, perex@perex.cz, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, spujar@nvidia.com,
+        alsa-devel@alsa-project.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda/tegra: Fix hda Jack detection
+In-Reply-To: <a6964809-ad10-aca8-0776-011c9e6b318d@nvidia.com>
+References: <20220405032607.8489-1-mkumard@nvidia.com>
+        <s5hfsms843u.wl-tiwai@suse.de>
+        <a6964809-ad10-aca8-0776-011c9e6b318d@nvidia.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-snps,dwmac=C2=A0has=C2=A0duplicated=C2=A0name=C2=A0for=C2=A0loongson,ls2k-d=
-wmac=C2=A0and=0D=0Aloongson,ls7a-dwmac.=0D=0A=C2=A0=0D=0AFixes:=C2=A0682777=
-49a013=C2=A0(=22dt-bindings:=C2=A0dwmac:=C2=A0Add=C2=A0bindings=C2=A0for=C2=
-=A0new=C2=A0Loongson=C2=A0SoC=C2=A0and=C2=A0bridge=C2=A0chip=22)=0D=0ASigne=
-d-off-by:=C2=A0Dongjin=C2=A0Yang=C2=A0<dj76.yang=40samsung.com>=0D=0A---=0D=
-=0ANotes:=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0v2:=C2=A0Update=C2=A0Fix=C2=A0tag=C2=
-=A0and=C2=A0change=C2=A0history.=C2=A0=0D=0A=C2=A0=0D=0A=C2=A0Documentation=
-/devicetree/bindings/net/snps,dwmac.yaml=C2=A0=7C=C2=A06=C2=A0++----=0D=0A=
-=C2=A01=C2=A0file=C2=A0changed,=C2=A02=C2=A0insertions(+),=C2=A04=C2=A0dele=
-tions(-)=0D=0A=C2=A0=0D=0Adiff=C2=A0--git=C2=A0a/Documentation/devicetree/b=
-indings/net/snps,dwmac.yaml=C2=A0b/Documentation/devicetree/bindings/net/sn=
-ps,dwmac.yaml=0D=0Aindex=C2=A02d5248f..36c85eb=C2=A0100644=0D=0A---=C2=A0a/=
-Documentation/devicetree/bindings/net/snps,dwmac.yaml=0D=0A+++=C2=A0b/Docum=
-entation/devicetree/bindings/net/snps,dwmac.yaml=0D=0A=40=40=C2=A0-53,20=C2=
-=A0+53,18=C2=A0=40=40=C2=A0properties:=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0allwinner,sun8i-r40-gmac=0D=0A=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0allwinner,sun8i-v3s-emac=
-=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0allwinne=
-r,sun50i-a64-emac=0D=0A-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=
-=C2=A0loongson,ls2k-dwmac=0D=0A-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0-=C2=A0loongson,ls7a-dwmac=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0-=C2=A0amlogic,meson6-dwmac=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0amlogic,meson8b-dwmac=0D=0A=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0amlogic,meson8m2-dwmac=
-=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0amlogic,=
-meson-gxbb-dwmac=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0-=C2=A0amlogic,meson-axg-dwmac=0D=0A-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0-=C2=A0loongson,ls2k-dwmac=0D=0A-=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0-=C2=A0loongson,ls7a-dwmac=0D=0A=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0ingenic,jz4775-mac=0D=0A=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0ingenic,x1000-mac=0D=0A=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0ingenic,x1600-=
-mac=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0ingen=
-ic,x1830-mac=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=
-=C2=A0ingenic,x2000-mac=0D=0A+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0-=C2=A0loongson,ls2k-dwmac=0D=0A+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0-=C2=A0loongson,ls7a-dwmac=0D=0A=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0-=C2=A0rockchip,px30-gmac=0D=0A=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0rockchip,rk3128-gmac=0D=0A=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-=C2=A0rockchip,rk3228-gmac=0D=
-=0A--=C2=A0=0D=0A2.9.5
+On Tue, 05 Apr 2022 08:05:03 +0200,
+Mohan Kumar D wrote:
+> 
+> 
+> On 4/5/2022 11:27 AM, Takashi Iwai wrote:
+> > External email: Use caution opening links or attachments
+> >
+> >
+> > On Tue, 05 Apr 2022 05:26:07 +0200,
+> > Mohan Kumar wrote:
+> >> Tegra HDA Jack detection logic doesn't work when the HDACODEC
+> >> in runtime suspended state as unsol event won't be triggered
+> >> during D3 state. As pulseaudio server in userspace rely on the
+> >> jack mixer control status to show the audio devices in gui and
+> >> any display sink device hotplug event during D3 state will never
+> >> updates the jack status which will result in no audio device option
+> >> available in userspace settings.
+> >>
+> >> The possible option available to resolve this issue for multiple
+> >> tegra platforms is to use Jack polling method for every 5 seconds.
+> >> Also to make Jack detection work seamlessly the Jack worker thread
+> >> needs to run continuously after HDA sound card registered
+> >> irrespective of whether HDMI sink device connected or not, but the
+> >> Jack state update call happens only when Codec is not powered on.
+> >>
+> >> Signed-off-by: Mohan Kumar <mkumard@nvidia.com>
+> > Hmm, any reason not to use the standard jackpoll stuff that is already
+> > implemented in HD-audio controller side?  That is, doesn't the
+> > following oneliner work instead?
+> The reason is, the Jack poll thread implemented in hda_codec.c runs
+> only when HDACODEC is in runtime resume state. But the problem trying
+> resolve here is something opposite, bcaz when hdacodec is in runtime
+> resume state unsol event would work but not during suspend state. So
+> either need to make some changes on hda_codec.c specific to tegra or
+> make it on tegra specific driver. So I went with second option.
+
+Well, the current behavior of jackpoll is intentional, so that it
+avoids the unnecessary power up at the runtime PM suspend.  And your
+requirement is rather opposite, and it's not Tegra-specific at all --
+you just prefer the jack notification over the power saving.
+
+So, implementing the feature in HD-audio core side would make more
+sense (and it's simpler), something like below.
+
+BTW, which codec needs this?  If it's about HDMI, doesn't the audio
+component work?  At least nouveau has it, and I thought Nvidia binary
+driver does poke the driver at hotplug by opening the proc file or
+such.
+
+
+Takashi
+
+-- 8< --
+--- a/include/sound/hda_codec.h
++++ b/include/sound/hda_codec.h
+@@ -59,6 +59,7 @@ struct hda_bus {
+ 	unsigned int no_response_fallback:1; /* don't fallback at RIRB error */
+ 	unsigned int bus_probing :1;	/* during probing process */
+ 	unsigned int keep_power:1;	/* keep power up for notification */
++	unsigned int jackpoll_in_suspend:1; /* keep jack polling during runtime suspend */
+ 
+ 	int primary_dig_out_type;	/* primary digital out PCM type */
+ 	unsigned int mixer_assigned;	/* codec addr for mixer name */
+--- a/sound/pci/hda/hda_codec.c
++++ b/sound/pci/hda/hda_codec.c
+@@ -2935,7 +2935,9 @@ static int hda_codec_runtime_suspend(struct device *dev)
+ 	if (!codec->card)
+ 		return 0;
+ 
+-	cancel_delayed_work_sync(&codec->jackpoll_work);
++	if (!codec->bus->jackpoll_in_suspend &&
++	    dev->power.power_state != PMSG_ON)
++		cancel_delayed_work_sync(&codec->jackpoll_work);
+ 	state = hda_call_codec_suspend(codec);
+ 	if (codec->link_down_at_suspend ||
+ 	    (codec_has_clkstop(codec) && codec_has_epss(codec) &&
+--- a/sound/pci/hda/hda_tegra.c
++++ b/sound/pci/hda/hda_tegra.c
+@@ -421,6 +421,8 @@ static int hda_tegra_create(struct snd_card *card,
+ 	chip->driver_type = driver_caps & 0xff;
+ 	chip->dev_index = 0;
+ 	INIT_LIST_HEAD(&chip->pcm_list);
++	chip->jackpoll_interval = msecs_to_jiffies(5000);
++	chip->jackpoll_in_resume = 1;
+ 
+ 	chip->codec_probe_mask = -1;
+ 

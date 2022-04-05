@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3253E4F466C
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F00F4F46E7
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 01:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244764AbiDENEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 09:04:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60606 "EHLO
+        id S1378054AbiDEUw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 16:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242542AbiDEJQR (ORCPT
+        with ESMTP id S1349092AbiDEJtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:16:17 -0400
+        Tue, 5 Apr 2022 05:49:07 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C081D3AD1;
-        Tue,  5 Apr 2022 02:01:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F757A9979;
+        Tue,  5 Apr 2022 02:40:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 385BC61562;
-        Tue,  5 Apr 2022 09:01:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CB0AC385A3;
-        Tue,  5 Apr 2022 09:01:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C381861368;
+        Tue,  5 Apr 2022 09:40:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9D48C385A2;
+        Tue,  5 Apr 2022 09:40:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649149316;
-        bh=Uqapr5P17Sv4fI+1b5OJTs44048ts5T1CAzqAFqOcrs=;
+        s=korg; t=1649151640;
+        bh=4+OOZNBD90ZNePompwNJGdjG59rQyPZqbutp8dZK1EA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E3Fux2HqfNTi39CbYItzUSBjg40lrUTKEHn+AD6X3OYRMVo2kTF602uF85iyomPXH
-         2CIwf8xXNIr43zvNkmMH8qiCkAo8/SexSlKJDy4epHAbYTl+DfJGaDCehbiWioZFyq
-         Fl7Q+N5/wghT+6qL2vk44aiN+jzunGFhTi/cRD/g=
+        b=jg62MQWUY8Wc0EBVq1GuUy8GMxl3YILYGbnrCltOIkLlb7b2SPrE3Oy1f8ZFXMorS
+         /HiUN+4RPQEWwXZsmHVc+zUSSwO7B4cSKPy/5FLN97dGim/AipkWiCh4TmjnZOfkiZ
+         5JM51aP2REjBv4I2pqMRFf0rIG6V7O4aTdP1dy4c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 0634/1017] net: dsa: fix panic on shutdown if multi-chip tree failed to probe
-Date:   Tue,  5 Apr 2022 09:25:47 +0200
-Message-Id: <20220405070413.103148911@linuxfoundation.org>
+Subject: [PATCH 5.15 487/913] scsi: pm8001: Fix NCQ NON DATA command task initialization
+Date:   Tue,  5 Apr 2022 09:25:49 +0200
+Message-Id: <20220405070354.453440981@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
-References: <20220405070354.155796697@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,62 +56,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit 8fd36358ce82382519b50b05f437493e1e00c4a9 ]
+[ Upstream commit aa028141ab0bc62c44a84d42f09db35d82df82a2 ]
 
-DSA probing is atypical because a tree of devices must probe all at
-once, so out of N switches which call dsa_tree_setup_routing_table()
-during probe, for (N - 1) of them, "complete" will return false and they
-will exit probing early. The Nth switch will set up the whole tree on
-their behalf.
+In the pm8001_chip_sata_req() and pm80xx_chip_sata_req() functions, all
+tasks with a DMA direction of DMA_NONE (no data transfer) are initialized
+using the ATAP value 0x04. However, NCQ NON DATA commands, while being
+DMA_NONE commands are NCQ commands and need to be initialized using the
+value 0x07 for ATAP, similarly to other NCQ commands.
 
-The implication is that for (N - 1) switches, the driver binds to the
-device successfully, without doing anything. When the driver is bound,
-the ->shutdown() method may run. But if the Nth switch has failed to
-initialize the tree, there is nothing to do for the (N - 1) driver
-instances, since the slave devices have not been created, etc. Moreover,
-dsa_switch_shutdown() expects that the calling @ds has been in fact
-initialized, so it jumps at dereferencing the various data structures,
-which is incorrect.
+Make sure that NCQ NON DATA command tasks are initialized similarly to
+other NCQ commands by also testing the task "use_ncq" field in addition to
+the DMA direction. While at it, reorganize the code into a chain of if -
+else if - else to avoid useless affectations and debug messages.
 
-Avoid the ensuing NULL pointer dereferences by simply checking whether
-the Nth switch has previously set "ds->setup = true" for the switch
-which is currently shutting down. The entire setup is serialized under
-dsa2_mutex which we already hold.
-
-Fixes: 0650bf52b31f ("net: dsa: be compatible with masters which unregister on shutdown")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Link: https://lore.kernel.org/r/20220318195443.275026-1-vladimir.oltean@nxp.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lore.kernel.org/r/20220220031810.738362-15-damien.lemoal@opensource.wdc.com
+Fixes: dbf9bfe61571 ("[SCSI] pm8001: add SAS/SATA HBA driver")
+Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/dsa/dsa2.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/scsi/pm8001/pm8001_hwi.c | 14 +++++++-------
+ drivers/scsi/pm8001/pm80xx_hwi.c | 13 ++++++-------
+ 2 files changed, 13 insertions(+), 14 deletions(-)
 
-diff --git a/net/dsa/dsa2.c b/net/dsa/dsa2.c
-index e64ef196a984..ff29a5a3e4c1 100644
---- a/net/dsa/dsa2.c
-+++ b/net/dsa/dsa2.c
-@@ -1613,6 +1613,10 @@ void dsa_switch_shutdown(struct dsa_switch *ds)
- 	struct dsa_port *dp;
- 
- 	mutex_lock(&dsa2_mutex);
+diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
+index bad0c8b8cbe1..e9c77c945752 100644
+--- a/drivers/scsi/pm8001/pm8001_hwi.c
++++ b/drivers/scsi/pm8001/pm8001_hwi.c
+@@ -4278,22 +4278,22 @@ static int pm8001_chip_sata_req(struct pm8001_hba_info *pm8001_ha,
+ 	u32  opc = OPC_INB_SATA_HOST_OPSTART;
+ 	memset(&sata_cmd, 0, sizeof(sata_cmd));
+ 	circularQ = &pm8001_ha->inbnd_q_tbl[0];
+-	if (task->data_dir == DMA_NONE) {
 +
-+	if (!ds->setup)
-+		goto out;
-+
- 	rtnl_lock();
++	if (task->data_dir == DMA_NONE && !task->ata_task.use_ncq) {
+ 		ATAP = 0x04;  /* no data*/
+ 		pm8001_dbg(pm8001_ha, IO, "no data\n");
+ 	} else if (likely(!task->ata_task.device_control_reg_update)) {
+-		if (task->ata_task.dma_xfer) {
++		if (task->ata_task.use_ncq &&
++		    dev->sata_dev.class != ATA_DEV_ATAPI) {
++			ATAP = 0x07; /* FPDMA */
++			pm8001_dbg(pm8001_ha, IO, "FPDMA\n");
++		} else if (task->ata_task.dma_xfer) {
+ 			ATAP = 0x06; /* DMA */
+ 			pm8001_dbg(pm8001_ha, IO, "DMA\n");
+ 		} else {
+ 			ATAP = 0x05; /* PIO*/
+ 			pm8001_dbg(pm8001_ha, IO, "PIO\n");
+ 		}
+-		if (task->ata_task.use_ncq &&
+-			dev->sata_dev.class != ATA_DEV_ATAPI) {
+-			ATAP = 0x07; /* FPDMA */
+-			pm8001_dbg(pm8001_ha, IO, "FPDMA\n");
+-		}
+ 	}
+ 	if (task->ata_task.use_ncq && pm8001_get_ncq_tag(task, &hdr_tag)) {
+ 		task->ata_task.fis.sector_count |= (u8) (hdr_tag << 3);
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index c6e4812e6591..043a2cc4d4de 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -4552,22 +4552,21 @@ static int pm80xx_chip_sata_req(struct pm8001_hba_info *pm8001_ha,
+ 	q_index = (u32) (cpu_id) % (pm8001_ha->max_q_num);
+ 	circularQ = &pm8001_ha->inbnd_q_tbl[q_index];
  
- 	dsa_switch_for_each_user_port(dp, ds) {
-@@ -1629,6 +1633,7 @@ void dsa_switch_shutdown(struct dsa_switch *ds)
- 		dp->master->dsa_ptr = NULL;
- 
- 	rtnl_unlock();
-+out:
- 	mutex_unlock(&dsa2_mutex);
- }
- EXPORT_SYMBOL_GPL(dsa_switch_shutdown);
+-	if (task->data_dir == DMA_NONE) {
++	if (task->data_dir == DMA_NONE && !task->ata_task.use_ncq) {
+ 		ATAP = 0x04; /* no data*/
+ 		pm8001_dbg(pm8001_ha, IO, "no data\n");
+ 	} else if (likely(!task->ata_task.device_control_reg_update)) {
+-		if (task->ata_task.dma_xfer) {
++		if (task->ata_task.use_ncq &&
++		    dev->sata_dev.class != ATA_DEV_ATAPI) {
++			ATAP = 0x07; /* FPDMA */
++			pm8001_dbg(pm8001_ha, IO, "FPDMA\n");
++		} else if (task->ata_task.dma_xfer) {
+ 			ATAP = 0x06; /* DMA */
+ 			pm8001_dbg(pm8001_ha, IO, "DMA\n");
+ 		} else {
+ 			ATAP = 0x05; /* PIO*/
+ 			pm8001_dbg(pm8001_ha, IO, "PIO\n");
+ 		}
+-		if (task->ata_task.use_ncq &&
+-		    dev->sata_dev.class != ATA_DEV_ATAPI) {
+-			ATAP = 0x07; /* FPDMA */
+-			pm8001_dbg(pm8001_ha, IO, "FPDMA\n");
+-		}
+ 	}
+ 	if (task->ata_task.use_ncq && pm8001_get_ncq_tag(task, &hdr_tag)) {
+ 		task->ata_task.fis.sector_count |= (u8) (hdr_tag << 3);
 -- 
 2.34.1
 

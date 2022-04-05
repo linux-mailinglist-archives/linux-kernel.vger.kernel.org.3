@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AAD34F43AF
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A23F4F45B4
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 00:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349509AbiDEUCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 16:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
+        id S1377110AbiDEM5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 08:57:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345179AbiDEJst (ORCPT
+        with ESMTP id S243024AbiDEJIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:48:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B32EEE4F4;
-        Tue,  5 Apr 2022 02:37:50 -0700 (PDT)
+        Tue, 5 Apr 2022 05:08:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC76C9136E;
+        Tue,  5 Apr 2022 01:57:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C946D6164D;
-        Tue,  5 Apr 2022 09:37:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4AFEC385A2;
-        Tue,  5 Apr 2022 09:37:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93D3EB81C6E;
+        Tue,  5 Apr 2022 08:57:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C219C385AF;
+        Tue,  5 Apr 2022 08:57:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151469;
-        bh=IbeurulMDdnYp8aYTOTd5w6wDxHc+on3dCF14Ycz08E=;
+        s=korg; t=1649149051;
+        bh=buYb17ZBaPoIae4E0yY0uhFDTDhV3hELVV3kLUdptVU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TTG8V6lt4aZ8Mo+g1XgfvZNsSfPxn5/tTO2QywfSnGIlm3Ka21TN9lFFdjiJdsPVq
-         p6aHPRNJmOMiHIwnp7MNUuIllhaZc5sgM25nVdzcOrSUQNE6zeeaZ2LgvEBzKmUan+
-         1tUI17In8/a8U9PnYaa3/pfbsetQ4D7Ez1fMYvus=
+        b=1S17TENZQwrPuhvek+SWWjQ3pJIe0GmP8HRjM/kpiseh3ZRvy9EvzgQN3iln6VNBp
+         6yEwv5HDoaadg2TOqTMOO0HRqrPQZis2ySnmXWuqoQZCB43DKBMKEelAYJ/0kip2Up
+         o1mgG4vYVs7jkB+QW4B2c6BUbA0t8tfC79bzPA+s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 427/913] mt76: mt7615: check sta_rates pointer in mt7615_sta_rate_tbl_update
+        stable@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 0576/1017] drm/msm/a6xx: Fix missing ARRAY_SIZE() check
 Date:   Tue,  5 Apr 2022 09:24:49 +0200
-Message-Id: <20220405070352.644091878@linuxfoundation.org>
+Message-Id: <20220405070411.377743319@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070354.155796697@linuxfoundation.org>
+References: <20220405070354.155796697@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+From: Rob Clark <robdclark@chromium.org>
 
-[ Upstream commit 6a6f457ed5fdf6777536c20644a9e42128a50ec2 ]
+[ Upstream commit cca96584b35765bf9eb5f38ca55a144ea2ba0de4 ]
 
-Check sta_rates pointer value in mt7615_sta_rate_tbl_update routine
-since minstrel_ht_update_rates can fail allocating rates array.
-
-Fixes: 04b8e65922f63 ("mt76: add mac80211 driver for MT7615 PCIe-based chipsets")
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Fixes: f6d62d091cfd ("drm/msm/a6xx: add support for Adreno 660 GPU")
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://lore.kernel.org/r/20220305173405.914989-1-robdclark@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7615/main.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7615/main.c b/drivers/net/wireless/mediatek/mt76/mt7615/main.c
-index fc266da54fe7..60a41d082961 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7615/main.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7615/main.c
-@@ -682,6 +682,9 @@ static void mt7615_sta_rate_tbl_update(struct ieee80211_hw *hw,
- 	struct ieee80211_sta_rates *sta_rates = rcu_dereference(sta->rates);
- 	int i;
+diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+index a305ff7e8c6f..f880a59a40fc 100644
+--- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+@@ -658,19 +658,23 @@ static void a6xx_set_cp_protect(struct msm_gpu *gpu)
+ {
+ 	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+ 	const u32 *regs = a6xx_protect;
+-	unsigned i, count = ARRAY_SIZE(a6xx_protect), count_max = 32;
+-
+-	BUILD_BUG_ON(ARRAY_SIZE(a6xx_protect) > 32);
+-	BUILD_BUG_ON(ARRAY_SIZE(a650_protect) > 48);
++	unsigned i, count, count_max;
  
-+	if (!sta_rates)
-+		return;
-+
- 	spin_lock_bh(&dev->mt76.lock);
- 	for (i = 0; i < ARRAY_SIZE(msta->rates); i++) {
- 		msta->rates[i].idx = sta_rates->rate[i].idx;
+ 	if (adreno_is_a650(adreno_gpu)) {
+ 		regs = a650_protect;
+ 		count = ARRAY_SIZE(a650_protect);
+ 		count_max = 48;
++		BUILD_BUG_ON(ARRAY_SIZE(a650_protect) > 48);
+ 	} else if (adreno_is_a660_family(adreno_gpu)) {
+ 		regs = a660_protect;
+ 		count = ARRAY_SIZE(a660_protect);
+ 		count_max = 48;
++		BUILD_BUG_ON(ARRAY_SIZE(a660_protect) > 48);
++	} else {
++		regs = a6xx_protect;
++		count = ARRAY_SIZE(a6xx_protect);
++		count_max = 32;
++		BUILD_BUG_ON(ARRAY_SIZE(a6xx_protect) > 32);
+ 	}
+ 
+ 	/*
 -- 
 2.34.1
 

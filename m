@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 356F84F49FD
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:36:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 826FE4F49BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 02:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbiDEWdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 18:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
+        id S1444614AbiDEWVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 18:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241193AbiDEKfO (ORCPT
+        with ESMTP id S1354038AbiDEKLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 06:35:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA042ED52;
-        Tue,  5 Apr 2022 03:20:09 -0700 (PDT)
+        Tue, 5 Apr 2022 06:11:03 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DE14EA0E;
+        Tue,  5 Apr 2022 02:56:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B30D61562;
-        Tue,  5 Apr 2022 10:20:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB404C385A1;
-        Tue,  5 Apr 2022 10:20:07 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BDC49CE1C6C;
+        Tue,  5 Apr 2022 09:56:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7306C385A1;
+        Tue,  5 Apr 2022 09:56:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649154008;
-        bh=WuiZDXzW10IXMqLSxUvHD09+kba4VO2cYPxqhgPX/4g=;
+        s=korg; t=1649152614;
+        bh=MqcuQlCLSDPmfpd9nc6ZNmdw5gMlElT4C8r6bpkHERc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dChtciv9G3UCw8JRgCP1QxaPT8636jireI3n8Yt7R3AHhPUd5VqtA5QGgt5bUDUje
-         1pOewl5MiPxvvoOCQ8Xp/MeaOawhuMFOwouwl8ASb8TlVlhrnj6OTyi30XzphZgb5v
-         45+pshG7oAXG6r/tK3oNQVDmuE0Y5FBy5lvoKoD4=
+        b=hDGnKxYf4Yl/f4aVFRlDg/g5VLs+K3Sk0r5qqISgbfB2rC2S1TR6oDATyOi1vs/iO
+         2TqZ8yBnVdMFqZzA6wq1V7CzaMiRFMWJQRkpUCXKhv/K6QLD0Wd/JIMCWYO5e5qu1N
+         n4kLHAl2SrHwy8oD1S1XRVRawk3SKLA5SUfHzWbU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 407/599] remoteproc: qcom_q6v5_mss: Fix some leaks in q6v5_alloc_memory_region
-Date:   Tue,  5 Apr 2022 09:31:41 +0200
-Message-Id: <20220405070310.943153483@linuxfoundation.org>
+        stable@vger.kernel.org, Guangbin Huang <huangguangbin2@huawei.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 5.15 841/913] net: hns3: fix software vlan talbe of vlan 0 inconsistent with hardware
+Date:   Tue,  5 Apr 2022 09:31:43 +0200
+Message-Id: <20220405070405.038514426@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
-References: <20220405070258.802373272@linuxfoundation.org>
+In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
+References: <20220405070339.801210740@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,74 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Guangbin Huang <huangguangbin2@huawei.com>
 
-[ Upstream commit 07a5dcc4bed9d7cae54adf5aa10ff9f037a3204b ]
+commit 7ed258f12ec5ce855f15cdfb5710361dc82fe899 upstream.
 
-The device_node pointer is returned by of_parse_phandle() or
-of_get_child_by_name() with refcount incremented.
-We should use of_node_put() on it when done.
+When user delete vlan 0, as driver will not delete vlan 0 for hardware in
+function hclge_set_vlan_filter_hw(), so vlan 0 in software vlan talbe should
+not be deleted.
 
-This function only call of_node_put(node) when of_address_to_resource
-succeeds, missing error cases.
-
-Fixes: 278d744c46fd ("remoteproc: qcom: Fix potential device node leaks")
-Fixes: 051fb70fd4ea ("remoteproc: qcom: Driver for the self-authenticating Hexagon v5")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220308064522.13804-1-linmq006@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: fe4144d47eef ("net: hns3: sync VLAN filter entries when kill VLAN ID failed")
+Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/remoteproc/qcom_q6v5_mss.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-index ebc3e755bcbc..1b3aa84e36e7 100644
---- a/drivers/remoteproc/qcom_q6v5_mss.c
-+++ b/drivers/remoteproc/qcom_q6v5_mss.c
-@@ -1594,18 +1594,20 @@ static int q6v5_alloc_memory_region(struct q6v5 *qproc)
- 	 * reserved memory regions from device's memory-region property.
- 	 */
- 	child = of_get_child_by_name(qproc->dev->of_node, "mba");
--	if (!child)
-+	if (!child) {
- 		node = of_parse_phandle(qproc->dev->of_node,
- 					"memory-region", 0);
--	else
-+	} else {
- 		node = of_parse_phandle(child, "memory-region", 0);
-+		of_node_put(child);
-+	}
- 
- 	ret = of_address_to_resource(node, 0, &r);
-+	of_node_put(node);
- 	if (ret) {
- 		dev_err(qproc->dev, "unable to resolve mba region\n");
- 		return ret;
- 	}
--	of_node_put(node);
- 
- 	qproc->mba_phys = r.start;
- 	qproc->mba_size = resource_size(&r);
-@@ -1622,14 +1624,15 @@ static int q6v5_alloc_memory_region(struct q6v5 *qproc)
- 	} else {
- 		child = of_get_child_by_name(qproc->dev->of_node, "mpss");
- 		node = of_parse_phandle(child, "memory-region", 0);
-+		of_node_put(child);
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
+@@ -10595,11 +10595,11 @@ int hclge_set_vlan_filter(struct hnae3_h
  	}
  
- 	ret = of_address_to_resource(node, 0, &r);
-+	of_node_put(node);
- 	if (ret) {
- 		dev_err(qproc->dev, "unable to resolve mpss region\n");
- 		return ret;
- 	}
--	of_node_put(node);
- 
- 	qproc->mpss_phys = qproc->mpss_reloc = r.start;
- 	qproc->mpss_size = resource_size(&r);
--- 
-2.34.1
-
+ 	if (!ret) {
+-		if (is_kill)
+-			hclge_rm_vport_vlan_table(vport, vlan_id, false);
+-		else
++		if (!is_kill)
+ 			hclge_add_vport_vlan_table(vport, vlan_id,
+ 						   writen_to_tbl);
++		else if (is_kill && vlan_id != 0)
++			hclge_rm_vport_vlan_table(vport, vlan_id, false);
+ 	} else if (is_kill) {
+ 		/* when remove hw vlan filter failed, record the vlan id,
+ 		 * and try to remove it from hw later, to be consistence
 
 

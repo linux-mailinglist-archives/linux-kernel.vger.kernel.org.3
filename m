@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D4A4F4CC2
-	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D3B4F4CB3
+	for <lists+linux-kernel@lfdr.de>; Wed,  6 Apr 2022 03:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1579648AbiDEXcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 5 Apr 2022 19:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39344 "EHLO
+        id S1577204AbiDEXaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 5 Apr 2022 19:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349165AbiDEJtQ (ORCPT
+        with ESMTP id S1356087AbiDEKWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 5 Apr 2022 05:49:16 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEFB64CC;
-        Tue,  5 Apr 2022 02:41:57 -0700 (PDT)
+        Tue, 5 Apr 2022 06:22:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60621B0A68;
+        Tue,  5 Apr 2022 03:06:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CD357CE1C99;
-        Tue,  5 Apr 2022 09:41:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9E36C385A2;
-        Tue,  5 Apr 2022 09:41:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F10C8616E7;
+        Tue,  5 Apr 2022 10:06:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ACE6C385A1;
+        Tue,  5 Apr 2022 10:05:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649151714;
-        bh=68lRu9Iwrr+Nxnuvq2RnpXFUx1MpHDRgecROVpoboCI=;
+        s=korg; t=1649153160;
+        bh=Kd1EwI8DEHPHhzj8Tdinpg96Cd7BY48Ei1VqwLuA90w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SGKP+lB5w5n7cmz1ZKYelxqhXLre0bPjv3onlIanLfBeMZc/wkCulMZX4W5/KLN7s
-         9sXqRZM49osGctuSYIXvrDqLTQPsFVoOe5yk9orKOG6o6CB+1ppjFDydFFHPpyhv6/
-         DGQSNaChgEdVkCyMJMDelHx/ntfjckuaPGnsdCXM=
+        b=2lzwdQaSFBGS/4AkWoJaz1/chsZQwNRFGNn2wwBg9xqJMjWFFi9aq0NXvzwE6iBTc
+         GF+hrCUYZKbqX9IVF4wqpuJvL/+6v1I9a+aIoGLrH8mO4XTTrd2T8thR6CdQeRtLGL
+         OqS5QTZdzdguUYuX9OUJm2XkzPyB46lFWhhDVF5o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 515/913] IB/hfi1: Allow larger MTU without AIP
-Date:   Tue,  5 Apr 2022 09:26:17 +0200
-Message-Id: <20220405070355.290973807@linuxfoundation.org>
+        stable@vger.kernel.org, David Engraf <david.engraf@sysgo.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>
+Subject: [PATCH 5.10 084/599] arm64: signal: nofpsimd: Do not allocate fp/simd context when not available
+Date:   Tue,  5 Apr 2022 09:26:18 +0200
+Message-Id: <20220405070301.326435854@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220405070339.801210740@linuxfoundation.org>
-References: <20220405070339.801210740@linuxfoundation.org>
+In-Reply-To: <20220405070258.802373272@linuxfoundation.org>
+References: <20220405070258.802373272@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,46 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
+From: David Engraf <david.engraf@sysgo.com>
 
-[ Upstream commit b135e324d7a2e7fa0a7ef925076136e799b79f44 ]
+commit 0a32c88ddb9af30e8a16d41d7b9b824c27d29459 upstream.
 
-The AIP code signals the phys_mtu in the following query_port()
-fragment:
+Commit 6d502b6ba1b2 ("arm64: signal: nofpsimd: Handle fp/simd context for
+signal frames") introduced saving the fp/simd context for signal handling
+only when support is available. But setup_sigframe_layout() always
+reserves memory for fp/simd context. The additional memory is not touched
+because preserve_fpsimd_context() is not called and thus the magic is
+invalid.
 
-	props->phys_mtu = HFI1_CAP_IS_KSET(AIP) ? hfi1_max_mtu :
-				ib_mtu_enum_to_int(props->max_mtu);
+This may lead to an error when parse_user_sigframe() checks the fp/simd
+area and does not find a valid magic number.
 
-Using the largest MTU possible should not depend on AIP.
-
-Fix by unconditionally using the hfi1_max_mtu value.
-
-Fixes: 6d72344cf6c4 ("IB/ipoib: Increase ipoib Datagram mode MTU's upper limit")
-Link: https://lore.kernel.org/r/1644348309-174874-1-git-send-email-mike.marciniszyn@cornelisnetworks.com
-Reviewed-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Signed-off-by: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: David Engraf <david.engraf@sysgo.com>
+Reviwed-by: Mark Brown <broonie@kernel.org>
+Fixes: 6d502b6ba1b267b3 ("arm64: signal: nofpsimd: Handle fp/simd context for signal frames")
+Cc: <stable@vger.kernel.org> # 5.6.x
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Link: https://lore.kernel.org/r/20220225104008.820289-1-david.engraf@sysgo.com
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/hw/hfi1/verbs.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/arm64/kernel/signal.c |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/infiniband/hw/hfi1/verbs.c b/drivers/infiniband/hw/hfi1/verbs.c
-index 26bea51869bf..ef8e0bdacb51 100644
---- a/drivers/infiniband/hw/hfi1/verbs.c
-+++ b/drivers/infiniband/hw/hfi1/verbs.c
-@@ -1397,8 +1397,7 @@ static int query_port(struct rvt_dev_info *rdi, u32 port_num,
- 				      4096 : hfi1_max_mtu), IB_MTU_4096);
- 	props->active_mtu = !valid_ib_mtu(ppd->ibmtu) ? props->max_mtu :
- 		mtu_to_enum(ppd->ibmtu, IB_MTU_4096);
--	props->phys_mtu = HFI1_CAP_IS_KSET(AIP) ? hfi1_max_mtu :
--				ib_mtu_enum_to_int(props->max_mtu);
-+	props->phys_mtu = hfi1_max_mtu;
+--- a/arch/arm64/kernel/signal.c
++++ b/arch/arm64/kernel/signal.c
+@@ -572,10 +572,12 @@ static int setup_sigframe_layout(struct
+ {
+ 	int err;
  
- 	return 0;
- }
--- 
-2.34.1
-
+-	err = sigframe_alloc(user, &user->fpsimd_offset,
+-			     sizeof(struct fpsimd_context));
+-	if (err)
+-		return err;
++	if (system_supports_fpsimd()) {
++		err = sigframe_alloc(user, &user->fpsimd_offset,
++				     sizeof(struct fpsimd_context));
++		if (err)
++			return err;
++	}
+ 
+ 	/* fault information, if valid */
+ 	if (add_all || current->thread.fault_code) {
 
 
